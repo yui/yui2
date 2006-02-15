@@ -1,0 +1,22 @@
+This is the root for 2.x development.  It currently contains the following
+directories:
+
+util - all utility projects:
+* animation
+* connection
+* dragdrop
+* dom
+* event
+
+widget - all widget projects:
+* autocomplete
+* calendar
+* menu
+* overlay
+* slider
+* treeview
+
+css - all CSS-specific projects
+* font
+* grid
+* reset

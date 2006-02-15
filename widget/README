@@ -1,0 +1,18 @@
+This is the directory for all YUI widgets.
+
+The current util projects are:
+
+* autocomplete
+* calendar
+* menu
+* overlay
+* slider
+* treeview
+
+Please observe the following pattern when checking in your projects:
+
+yahoo/presentation/widget/calendar
+yahoo/presentation/widget/calendar/src
+yahoo/presentation/widget/calendar/build
+yahoo/presentation/widget/calendar/docs
+yahoo/presentation/widget/calendar/examples
