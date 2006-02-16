@@ -1,0 +1,1101 @@
+
+<html>
+<head>
+	<title>JavaScript Documentation - </title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Slider</a></h3>
+
+	<div class="breadcrumbs">
+		
+			
+			
+			
+			
+			
+			
+			
+				<a href="./index.html">Slider</a>
+				&gt;
+				<strong>YAHOO.widget.Slider</strong>
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+	
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.widget.html">
+								YAHOO.widget</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Slider.html">
+								YAHOO.widget.Slider</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.SliderThumb.html">
+								YAHOO.widget.SliderThumb</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-Slider.js.html">
+								Slider.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div id="pri">
+        <div class="main">
+	
+		<h2>Class YAHOO.widget.Slider</h2>
+		<pre>Object
+   |
+   +--YAHOO.util.DragDrop
+         |
+         +--<b>YAHOO.widget.Slider</b>
+</pre>
+		
+		
+	
+		<hr />
+		
+		<!-- Class definition -->
+		<div class="class-def">
+			<div class="class-name">
+				<span class="class-attribs">
+					
+				</span>
+				<span class="class-type">class</span>
+				<b>YAHOO.widget.Slider</b>
+			</div>
+			<div class="class-extends">
+				
+					<dd>extends YAHOO.util.DragDrop</dd>
+				
+			</div>
+		</div>
+			
+		
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+		
+		<!-- ======== QUICK LINKS ======== -->
+		<div class="quick-links">
+			<strong>Quick Links:</strong>&nbsp;
+			
+			
+				<a href="#field_summary">Field Summary</a>
+				|
+			
+			
+				<a href="#constructor_summary">Constructor Summary</a>
+				|
+			
+			
+				<a href="#methodSummary">Method Summary</a> |
+				<a href="#methodDetails">Method Details</a>
+			
+		</div>
+		<!-- ======== END QUICK LINKS ======== -->
+
+		<!-- ======== NESTED CLASS SUMMARY ======== -->
+		
+		<!-- ======== END NESTED CLASS SUMMARY ======== -->
+
+		<!-- =========== FIELD SUMMARY =========== -->
+		
+			<div class="section field summaries">
+				<h3><a name="field_summary">Field Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+					
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#animate">animate</a>
+								</code>
+								<div class="description">
+									Flag that determines if the thumb will animate when moved&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">int[]</td>
+							<td class="spec">
+								<code>
+									<a href="#baselinePos">baselinePos</a>
+								</code>
+								<div class="description">
+									The basline position of the background element, used
+ to determine if the background has moved since the last
+ operation.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">Slider</td>
+							<td class="spec">
+								<code>
+									<a href="#thumb">thumb</a>
+								</code>
+								<div class="description">
+									a YAHOO.widget.SliderThumb instance that we will use to 
+ reposition the thumb when the background is clicked&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">Coordinate</td>
+							<td class="spec">
+								<code>
+									<a href="#thumbCenterPoint">thumbCenterPoint</a>
+								</code>
+								<div class="description">
+									the center of the slider element is stored so we can position 
+ place it in the correct position when the background is clicked&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">int</td>
+							<td class="spec">
+								<code>
+									<a href="#tickPause">tickPause</a>
+								</code>
+								<div class="description">
+									Adjustment factor for tick animation, the more ticks, the
+ faster the animation (by default)&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#ANIM_AVAIL">ANIM_AVAIL</a>
+								</code>
+								<div class="description">
+									By default, animation is available if the animation library is detected.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+					</table>
+				</div>
+			</div>
+		
+				
+		
+		<!-- =========== END FIELD SUMMARY =========== -->
+
+
+		<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+		
+			<div class="section contructor summaries">
+				<h3><a name="constructor_summary">Constructor Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<code class="spec">
+						<a href="YAHOO.widget.Slider.html#YAHOO.widget.Slider()">YAHOO.widget.Slider</a>
+					</code>
+					<div class="description">
+						A DragDrop implementation that can be used as a background for a
+ slider.&nbsp;
+					</div>
+				</div>
+			</div>
+		
+		<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
+
+
+		<!-- ========== METHOD SUMMARY =========== -->
+		
+			<div class="section method summaries">
+				<h3><a name="methodSummary">Method Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+							<tr>
+								<td class="flags">int</td>
+								<td class="spec">
+									<code>
+										<a href="#getValue">getValue</a>
+										()
+									</code>
+									<div class="description">
+										Returns the slider's thumb offset from the start position&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">int</td>
+								<td class="spec">
+									<code>
+										<a href="#getXValue">getXValue</a>
+										()
+									</code>
+									<div class="description">
+										Returns the slider's thumb X offset from the start position&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">int</td>
+								<td class="spec">
+									<code>
+										<a href="#getYValue">getYValue</a>
+										()
+									</code>
+									<div class="description">
+										Returns the slider's thumb Y offset from the start position&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#lock">lock</a>
+										()
+									</code>
+									<div class="description">
+										Lock the slider, overrides YAHOO.util.DragDrop&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#onChange">onChange</a>
+										(firstOffset, secondOffset)
+									</code>
+									<div class="description">
+										Event that fires when the value of the slider has changed&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#onSlideEnd">onSlideEnd</a>
+										()
+									</code>
+									<div class="description">
+										Event that fires at the end of a slider thumb move&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#onSlideStart">onSlideStart</a>
+										()
+									</code>
+									<div class="description">
+										Event that fires when the at the beginning of the slider thumb move&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">boolean</td>
+								<td class="spec">
+									<code>
+										<a href="#setRegionValue">setRegionValue</a>
+										(&lt;int&gt; newOffset, &lt;int&gt; newOffset2, skipAnim)
+									</code>
+									<div class="description">
+										Provides a way to set the value of the region slider in code.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">boolean</td>
+								<td class="spec">
+									<code>
+										<a href="#setValue">setValue</a>
+										(&lt;int&gt; newOffset, skipAnim)
+									</code>
+									<div class="description">
+										Provides a way to set the value of the slider in code.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#unlock">unlock</a>
+										()
+									</code>
+									<div class="description">
+										Unlock the slider, overrides YAHOO.util.DragDrop&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">boolean</td>
+								<td class="spec">
+									<code>
+										<a href="#verifyOffset">verifyOffset</a>
+										()
+									</code>
+									<div class="description">
+										Checks the background position element position.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Slider</td>
+								<td class="spec">
+									<code>
+										<a href="#getHorizSlider">getHorizSlider</a>
+										(&lt;String&gt; sBGElId, &lt;String&gt; sHandleElId, &lt;int&gt; iLeft, &lt;int&gt; iRight, &lt;int&gt; iTickSize)
+									</code>
+									<div class="description">
+										Factory method for creating a horizontal slider&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Slider</td>
+								<td class="spec">
+									<code>
+										<a href="#getSliderRegion">getSliderRegion</a>
+										(&lt;String&gt; sBGElId, &lt;String&gt; sHandleElId, &lt;int&gt; iLeft, &lt;int&gt; iRight, &lt;int&gt; iUp, &lt;int&gt; iDown, &lt;int&gt; iTickSize)
+									</code>
+									<div class="description">
+										Factory method for creating a slider region like the one in the color
+ picker example&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Slider</td>
+								<td class="spec">
+									<code>
+										<a href="#getVertSlider">getVertSlider</a>
+										(&lt;String&gt; sBGElId, &lt;String&gt; sHandleElId, &lt;int&gt; iUp, &lt;int&gt; iDown, &lt;int&gt; iTickSize)
+									</code>
+									<div class="description">
+										Factory method for creating a vertical slider&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		<!-- ========== END METHOD SUMMARY =========== -->
+
+
+		<!-- ============ FIELD DETAIL START =========== -->
+		
+			<div class="section field details">
+				<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					
+						<h4><a name="animate">animate</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>animate</strong>
+							</code>
+							<div class="description">
+								Flag that determines if the thumb will animate when moved
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="baselinePos">baselinePos</a></h4>
+						<div class="detail">
+							<code>
+								int[]
+								&nbsp;
+								<strong>baselinePos</strong>
+							</code>
+							<div class="description">
+								The basline position of the background element, used
+ to determine if the background has moved since the last
+ operation.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="thumb">thumb</a></h4>
+						<div class="detail">
+							<code>
+								Slider
+								&nbsp;
+								<strong>thumb</strong>
+							</code>
+							<div class="description">
+								a YAHOO.widget.SliderThumb instance that we will use to 
+ reposition the thumb when the background is clicked
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="thumbCenterPoint">thumbCenterPoint</a></h4>
+						<div class="detail">
+							<code>
+								Coordinate
+								&nbsp;
+								<strong>thumbCenterPoint</strong>
+							</code>
+							<div class="description">
+								the center of the slider element is stored so we can position 
+ place it in the correct position when the background is clicked
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="tickPause">tickPause</a></h4>
+						<div class="detail">
+							<code>
+								int
+								&nbsp;
+								<strong>tickPause</strong>
+							</code>
+							<div class="description">
+								Adjustment factor for tick animation, the more ticks, the
+ faster the animation (by default)
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="ANIM_AVAIL">ANIM_AVAIL</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>ANIM_AVAIL</strong>
+							</code>
+							<div class="description">
+								By default, animation is available if the animation library is detected.
+							</div>
+						</div>
+						<hr />
+					
+				</div>
+			</div>
+		
+		<!-- ============ FIELD DETAIL END =========== -->
+
+		<!-- ========= CONSTRUCTOR DETAIL START ======== -->
+		
+			<div class="section constructor details">
+				<h3><a name="constructor_detail">Constructor Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<h4><a name="YAHOO.widget.Slider()">YAHOO.widget.Slider</a></h4>
+					<div class="detail">
+						<code>
+							<strong>YAHOO.widget.Slider</strong>
+							()
+						</code>
+						<div class="description">
+							
+								A DragDrop implementation that can be used as a background for a
+ slider.  It takes a reference to the thumb instance 
+ so it can delegate some of the events to it.  The goal is to make the 
+ thumb jump to the location on the background when the background is 
+ clicked.
+							
+							
+							
+								<dl>
+									<dt>Parameters:</dt>
+									
+										<dd>
+											<code>id</code> - 
+											 the id of the element linked to this instance  
+										</dd>
+									
+										<dd>
+											<code>sGroup</code> - 
+											 the group of related DragDrop items
+										</dd>
+									
+								</dl>
+							
+							
+							
+							
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		
+		<!-- ========= CONSTRUCTOR DETAIL END ======== -->
+
+
+		<!-- ============ METHOD DETAIL START ========== -->
+		
+			<div class="section method details">
+				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					
+						<h4><a name="getValue">getValue</a></h4>
+						<div class="detail">
+							<code>
+								int 
+								<strong>getValue</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Returns the slider's thumb offset from the start position
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> the current value</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getXValue">getXValue</a></h4>
+						<div class="detail">
+							<code>
+								int 
+								<strong>getXValue</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Returns the slider's thumb X offset from the start position
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> the current horizontal offset</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getYValue">getYValue</a></h4>
+						<div class="detail">
+							<code>
+								int 
+								<strong>getYValue</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Returns the slider's thumb Y offset from the start position
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> the current vertical offset</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="lock">lock</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>lock</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Lock the slider, overrides YAHOO.util.DragDrop
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="onChange">onChange</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>onChange</strong>
+								(firstOffset, secondOffset)
+							</code>
+									
+							<div class="description">
+								
+									Event that fires when the value of the slider has changed
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>offsetFromStart</code> - 
+												 the number of pixels the thumb has moved  from its start position    
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="onSlideEnd">onSlideEnd</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>onSlideEnd</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Event that fires at the end of a slider thumb move
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="onSlideStart">onSlideStart</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>onSlideStart</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Event that fires when the at the beginning of the slider thumb move
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="setRegionValue">setRegionValue</a></h4>
+						<div class="detail">
+							<code>
+								boolean 
+								<strong>setRegionValue</strong>
+								(&lt;int&gt; newOffset, &lt;int&gt; newOffset2, skipAnim)
+							</code>
+									
+							<div class="description">
+								
+									Provides a way to set the value of the region slider in code.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>newOffset</code> - 
+												 the number of pixels the thumb should be  positioned away from the initial start point   
+											</dd>
+										
+											<dd>
+												<code>newOffset2</code> - 
+												 the number of pixels the thumb should be  positioned away from the initial start point (y axis for region)  
+											</dd>
+										
+											<dd>
+												<code>skip</code> - 
+												 animation set to true to disable the animation  for this move action (but not others).  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> true if the move was performed, false if it failed</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="setValue">setValue</a></h4>
+						<div class="detail">
+							<code>
+								boolean 
+								<strong>setValue</strong>
+								(&lt;int&gt; newOffset, skipAnim)
+							</code>
+									
+							<div class="description">
+								
+									Provides a way to set the value of the slider in code.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>newOffset</code> - 
+												 the number of pixels the thumb should be  positioned away from the initial start point   
+											</dd>
+										
+											<dd>
+												<code>skip</code> - 
+												 animation set to true to disable the animation  for this move action (but not others).  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> true if the move was performed, false if it failed</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="unlock">unlock</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>unlock</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Unlock the slider, overrides YAHOO.util.DragDrop
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="verifyOffset">verifyOffset</a></h4>
+						<div class="detail">
+							<code>
+								boolean 
+								<strong>verifyOffset</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Checks the background position element position.  If it has moved from the
+ baseline position, the constraints for the thumb are reset
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> True if the offset is the same as the baseline.</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getHorizSlider">getHorizSlider</a></h4>
+						<div class="detail">
+							<code>
+								Slider 
+								<strong>getHorizSlider</strong>
+								(&lt;String&gt; sBGElId, &lt;String&gt; sHandleElId, &lt;int&gt; iLeft, &lt;int&gt; iRight, &lt;int&gt; iTickSize)
+							</code>
+									
+							<div class="description">
+								
+									Factory method for creating a horizontal slider
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>sBGElId</code> - 
+												 the id of the slider's background element  
+											</dd>
+										
+											<dd>
+												<code>sHandleElId</code> - 
+												 the id of the thumb element  
+											</dd>
+										
+											<dd>
+												<code>iLeft</code> - 
+												 the number of pixels the element can move left  
+											</dd>
+										
+											<dd>
+												<code>iRight</code> - 
+												 the number of pixels the element can move right  
+											</dd>
+										
+											<dd>
+												<code>iTickSize</code> - 
+												 optional parameter for specifying that the element   should move a certain number pixels at a time.  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> a horizontal slider control</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getSliderRegion">getSliderRegion</a></h4>
+						<div class="detail">
+							<code>
+								Slider 
+								<strong>getSliderRegion</strong>
+								(&lt;String&gt; sBGElId, &lt;String&gt; sHandleElId, &lt;int&gt; iLeft, &lt;int&gt; iRight, &lt;int&gt; iUp, &lt;int&gt; iDown, &lt;int&gt; iTickSize)
+							</code>
+									
+							<div class="description">
+								
+									Factory method for creating a slider region like the one in the color
+ picker example
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>sBGElId</code> - 
+												 the id of the slider's background element  
+											</dd>
+										
+											<dd>
+												<code>sHandleElId</code> - 
+												 the id of the thumb element  
+											</dd>
+										
+											<dd>
+												<code>iLeft</code> - 
+												 the number of pixels the element can move left  
+											</dd>
+										
+											<dd>
+												<code>iRight</code> - 
+												 the number of pixels the element can move right  
+											</dd>
+										
+											<dd>
+												<code>iUp</code> - 
+												 the number of pixels the element can move up  
+											</dd>
+										
+											<dd>
+												<code>iDown</code> - 
+												 the number of pixels the element can move down  
+											</dd>
+										
+											<dd>
+												<code>iTickSize</code> - 
+												 optional parameter for specifying that the element   should move a certain number pixels at a time.  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> a slider region control</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getVertSlider">getVertSlider</a></h4>
+						<div class="detail">
+							<code>
+								Slider 
+								<strong>getVertSlider</strong>
+								(&lt;String&gt; sBGElId, &lt;String&gt; sHandleElId, &lt;int&gt; iUp, &lt;int&gt; iDown, &lt;int&gt; iTickSize)
+							</code>
+									
+							<div class="description">
+								
+									Factory method for creating a vertical slider
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>sBGElId</code> - 
+												 the id of the slider's background element  
+											</dd>
+										
+											<dd>
+												<code>sHandleElId</code> - 
+												 the id of the thumb element  
+											</dd>
+										
+											<dd>
+												<code>iUp</code> - 
+												 the number of pixels the element can move up  
+											</dd>
+										
+											<dd>
+												<code>iDown</code> - 
+												 the number of pixels the element can move down  
+											</dd>
+										
+											<dd>
+												<code>iTickSize</code> - 
+												 optional parameter for specifying that the element   should move a certain number pixels at a time.  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> a vertical slider control</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+				</div>
+			</div>
+		
+		<!-- ============ METHOD DETAIL END ========== -->
+		</div>
+	</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+</div>
+
+
+</body>
+</html>
