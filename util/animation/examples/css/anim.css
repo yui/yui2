@@ -1,0 +1,44 @@
+/* "Copyright (c) 2006 Yahoo! Inc. All rights reserved." */
+body {
+   margin:0;
+}
+
+#doc {
+   margin:10px;
+}
+
+#anim, #motion, #end {
+   background:#ccc;
+   width:10px;
+   height:10px;
+}
+
+#motion {
+   font-size:0;
+}
+
+#size {
+   background:#ccc;
+   font:100%/1.2em arial;
+   width:300px;
+   height:300px;
+}
+
+#scroll {
+   background:#ccc;
+   font:100%/1.2em arial;
+   width:400px;
+   height:200px;
+   overflow:auto;
+}
+
+#scroll p {
+   width:600px;
+}
+
+#end {
+   background:red;
+   font-size:0;
+   position:absolute;
+   left:300px;top:300px;
+}
