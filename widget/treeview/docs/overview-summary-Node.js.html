@@ -621,6 +621,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
             // type p=plus(expand), m=minus(collapase), n=none(no children)</span>
             var type = <span class="literal">"n"</span>;
             <span class="reserved">if</span> (<span class="reserved">this</span>.hasChildren(true) || <span class="reserved">this</span>.isDynamic()) {
+<span class="comment">            // if (this.hasChildren(true)) {</span>
                 type = (<span class="reserved">this</span>.expanded) ? <span class="literal">"m"</span> : <span class="literal">"p"</span>;
             }
 
@@ -893,6 +894,13 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
      */</span>
     getNodeHtml: <span class="reserved">function</span>() { 
         <span class="reserved">return</span> <span class="literal">""</span>; 
+    },
+
+    <span class="comment">/**
+     * Re-renders the html for this node and its children
+     */</span>
+    refresh: <span class="reserved">function</span>() {
+        <span class="reserved">this</span>.loadComplete();
     }
 
 };

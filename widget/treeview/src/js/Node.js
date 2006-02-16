@@ -380,8 +380,8 @@ YAHOO.widget.Node.prototype = {
 
             // type p=plus(expand), m=minus(collapase), n=none(no children)
             var type = "n";
-            // if (this.hasChildren(true) || this.isDynamic()) {
-            if (this.hasChildren(true)) {
+            if (this.hasChildren(true) || this.isDynamic()) {
+            // if (this.hasChildren(true)) {
                 type = (this.expanded) ? "m" : "p";
             }
 

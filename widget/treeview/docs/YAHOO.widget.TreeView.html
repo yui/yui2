@@ -282,7 +282,7 @@
 									<a href="#nodeCount">nodeCount</a>
 								</code>
 								<div class="description">
-									The total number of nodes in this tree&nbsp;
+									Count of all nodes in all trees&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -482,6 +482,20 @@
 							</tr>
 						
 							<tr>
+								<td class="flags">boolean</td>
+								<td class="spec">
+									<code>
+										<a href="#removeNode">removeNode</a>
+										(node)
+									</code>
+									<div class="description">
+										Removes the node and its children, and refreshes
+ the branch of the tree that was affected.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
@@ -635,7 +649,7 @@
 								<strong>nodeCount</strong>
 							</code>
 							<div class="description">
-								The total number of nodes in this tree
+								Count of all nodes in all trees
 							</div>
 						</div>
 						<hr />
@@ -1013,6 +1027,41 @@
 										
 									</dl>
 								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="removeNode">removeNode</a></h4>
+						<div class="detail">
+							<code>
+								boolean 
+								<strong>removeNode</strong>
+								(node)
+							</code>
+									
+							<div class="description">
+								
+									Removes the node and its children, and refreshes
+ the branch of the tree that was affected.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>The</code> - 
+												 node to remove  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> False is there was a problem, true otherwise.</dd>
+									</dl>
 								
 								
 							</div>

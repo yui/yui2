@@ -15,7 +15,7 @@ YAHOO.widget.TreeView = function(id) {
 };
 
 /**
- * The total number of nodes in this tree
+ * Count of all nodes in all trees
  * @type int
  */
 YAHOO.widget.TreeView.nodeCount = 0;
@@ -172,7 +172,7 @@ YAHOO.widget.TreeView.prototype = {
     init: function(id) {
 
         this.id = id;
-        this._nodes = new Array();
+        this._nodes = [];
 
         // store a global reference
         YAHOO.widget.TreeView.trees[id] = this;
@@ -274,6 +274,56 @@ YAHOO.widget.TreeView.prototype = {
         }
 
         return null;
+    },
+
+    /**
+     * Removes the node and its children, and refreshes
+     * the branch of the tree that was affected.
+     * @param {Node} The node to remove
+     * @return {boolean} False is there was a problem, true otherwise.
+     */
+    removeNode: function(node) { 
+
+        // Don't delete the root node
+        if (node.isRoot()) {
+            return false;
+        }
+
+        var p = node.parent;
+        p = p && p.parent;
+
+        // Delete the node and its children
+        this._deleteNode(node);
+
+        // Refresh the parent of the parent
+        p.refresh();
+
+        return true;
+    },
+
+    /**
+     * Deletes the node and recurses children
+     * @private
+     */
+    _deleteNode: function(node) { 
+        var p = node.parent;
+        for (var i=0;i<node.children.length;++i) {
+            this._deleteNode(node.children[i]);
+        }
+
+        // Update the parent's collection of children
+        var a = [];
+
+        for (i=0;i<p.children.length;++i) {
+            if (p.children[i] != node) {
+                a[a.length] = p.children[i];
+            }
+        }
+
+        p.children = a;
+
+        // Update the tree's node collection 
+        delete this._nodes[node.index];
     },
 
     /**
@@ -763,6 +813,7 @@ YAHOO.widget.Node.prototype = {
             // type p=plus(expand), m=minus(collapase), n=none(no children)
             var type = "n";
             if (this.hasChildren(true) || this.isDynamic()) {
+            // if (this.hasChildren(true)) {
                 type = (this.expanded) ? "m" : "p";
             }
 
@@ -1026,6 +1077,13 @@ YAHOO.widget.Node.prototype = {
      */
     getNodeHtml: function() { 
         return ""; 
+    },
+
+    /**
+     * Re-renders the html for this node and its children
+     */
+    refresh: function() {
+        this.loadComplete();
     }
 
 };
