@@ -1,0 +1,918 @@
+
+<html>
+<head>
+	<title>JavaScript Documentation - Node.js</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">TreeView</a></h3>
+
+	<div class="breadcrumbs">
+		
+			
+			
+			
+				<a href="./index.html">TreeView</a>
+				&gt;
+				<strong>Node.js</strong>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.widget.html">
+								YAHOO.widget</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.HTMLNode.html">
+								YAHOO.widget.HTMLNode</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.MenuNode.html">
+								YAHOO.widget.MenuNode</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Node.html">
+								YAHOO.widget.Node</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.RootNode.html">
+								YAHOO.widget.RootNode</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.TextNode.html">
+								YAHOO.widget.TextNode</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.TreeView.html">
+								YAHOO.widget.TreeView</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.TVAnim.html">
+								YAHOO.widget.TVAnim</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.TVFadeIn.html">
+								YAHOO.widget.TVFadeIn</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.TVFadeOut.html">
+								YAHOO.widget.TVFadeOut</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-HTMLNode.js.html">
+								HTMLNode.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-MenuNode.js.html">
+								MenuNode.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Node.js.html">
+								Node.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-RootNode.js.html">
+								RootNode.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-TextNode.js.html">
+								TextNode.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-TreeView.js.html">
+								TreeView.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-TVAnim.js.html">
+								TVAnim.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-TVFadeIn.js.html">
+								TVFadeIn.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-TVFadeOut.js.html">
+								TVFadeOut.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div class="main">
+			
+		
+		
+			
+			   <h2>Node.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+		
+		
+		
+		
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+				
+					
+						<a href="#classSummary">Class Summary</a> |
+					
+					
+				
+				
+				
+					<a href="#source">Source Code</a>
+				
+			</div>
+		
+			
+				<div class="section class summaries">
+					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+			
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+						<tr>
+							<td class="name">
+								<a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a>
+							</td>
+							<td class="overview">&nbsp;</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		
+		
+		
+		
+			<div class="section source">
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<pre class="sourceview"><span class="comment">/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */</span>
+
+<span class="comment">/**
+ * The base class for all tree nodes.  The node's presentation and behavior in
+ * response to mouse events is handled in Node subclasses.
+ *
+ * <span class="attrib">@param</span> oData {object} a string or object containing the data that will
+ * be used to render this node
+ * <span class="attrib">@param</span> oParent {Node} this node's parent node
+ * <span class="attrib">@param</span> expanded {boolean} the initial expanded/collapsed state
+ * <span class="attrib">@constructor</span>
+ */</span>
+YAHOO.widget.Node = <span class="reserved">function</span>(oData, oParent, expanded) {
+	<span class="reserved">if</span> (oParent) { <span class="reserved">this</span>.init(oData, oParent, expanded); }
+};
+
+YAHOO.widget.Node.<span class="reserved">prototype</span> = {
+
+    <span class="comment">/**
+     * The index for this instance obtained from global counter in YAHOO.widget.TreeView.
+     *
+     * <span class="attrib">@type</span> int
+     */</span>
+    index: 0,
+
+    <span class="comment">/**
+     * This node's child node collection.
+     *
+     * <span class="attrib">@type</span> Node[] 
+     */</span>
+    children: null,
+
+    <span class="comment">/**
+     * Tree instance this node is part of
+     *
+     * <span class="attrib">@type</span> TreeView
+     */</span>
+    tree: null,
+
+    <span class="comment">/**
+     * The data linked to this node.  This can be any object or primitive
+     * value, and the data can be used in getNodeHtml().
+     *
+     * <span class="attrib">@type</span> object
+     */</span>
+    data: null,
+
+    <span class="comment">/**
+     * Parent node
+     *
+     * <span class="attrib">@type</span> Node
+     */</span>
+    parent: null,
+
+    <span class="comment">/**
+     * The depth of this node.  We start at -1 for the root node.
+     *
+     * <span class="attrib">@type</span> int
+     */</span>
+    depth: -1,
+
+    <span class="comment">/**
+     * The href for the node's label.  If one is not specified, the href will
+     * be set so that it toggles the node.
+     *
+     * <span class="attrib">@type</span> string
+     */</span>
+    href: null,
+
+    <span class="comment">/**
+     * The label href target, defaults to current window
+     *
+     * <span class="attrib">@type</span> string
+     */</span>
+    target: <span class="literal">"_self"</span>,
+
+    <span class="comment">/**
+     * The node's expanded/collapsed state
+     *
+     * <span class="attrib">@type</span> boolean
+     */</span>
+    expanded: false,
+
+    <span class="comment">/**
+     * Can multiple children be expanded at once?
+     *
+     * <span class="attrib">@type</span> boolean
+     */</span>
+    multiExpand: true,
+
+    <span class="comment">/**
+     * Should we render children for a collapsed node?  It is possible that the
+     * implementer will want to render the hidden data...  <span class="attrib">@todo</span> verify that we 
+     * need this, and implement it if we do.
+     *
+     * <span class="attrib">@type</span> boolean
+     */</span>
+    renderHidden: false,
+
+    <span class="comment">/**
+     * Flag that is set to true the first time this node's children are rendered.
+     *
+     * <span class="attrib">@type</span> boolean
+     */</span>
+    childrenRendered: false,
+
+    <span class="comment">/**
+     * This node's previous sibling
+     *
+     * <span class="attrib">@type</span> Node
+     */</span>
+    previousSibling: null,
+
+    <span class="comment">/**
+     * This node's next sibling
+     *
+     * <span class="attrib">@type</span> Node
+     */</span>
+    nextSibling: null,
+
+    <span class="comment">/**
+     * We can set the node up to call an external method to get the child
+     * data dynamically.
+     *
+     * <span class="attrib">@type</span> boolean
+     * <span class="attrib">@private</span>
+     */</span>
+    _dynLoad: false,
+
+    <span class="comment">/**
+     * Function to execute when we need to get this node's child data.
+     *
+     * <span class="attrib">@type</span> function
+     */</span>
+    dataLoader: null,
+
+    <span class="comment">/**
+     * This is true for dynamically loading nodes while waiting for the
+     * callback to return.
+     *
+     * <span class="attrib">@type</span> boolean
+     */</span>
+    isLoading: false,
+
+    <span class="comment">/**
+     * The toggle/branch icon will not show if this is set to false.  This
+     * could be useful if the implementer wants to have the child contain
+     * extra info about the parent, rather than an actual node.
+     *
+     * <span class="attrib">@type</span> boolean
+     */</span>
+    hasIcon: true,
+
+    <span class="comment">/**
+     * Initializes this node, gets some of the properties from the parent
+     *
+     * <span class="attrib">@param</span> oData {object} a string or object containing the data that will
+     * be used to render this node
+     * <span class="attrib">@param</span> oParent {Node} this node's parent node
+     * <span class="attrib">@param</span> expanded {boolean} the initial expanded/collapsed state
+     */</span>
+    init: <span class="reserved">function</span>(oData, oParent, expanded) {
+        <span class="reserved">this</span>.data		= oData;
+        <span class="reserved">this</span>.children	= [];
+        <span class="reserved">this</span>.index		= YAHOO.widget.TreeView.nodeCount;
+        ++YAHOO.widget.TreeView.nodeCount;
+        <span class="reserved">this</span>.logger		= new ygLogger(<span class="literal">"Node"</span>);
+        <span class="reserved">this</span>.expanded	= expanded;
+<span class="comment">
+        // oParent should never be null except when we create the root node.</span>
+        <span class="reserved">if</span> (oParent) {
+            <span class="reserved">this</span>.tree			= oParent.tree;
+            <span class="reserved">this</span>.parent			= oParent;
+            <span class="reserved">this</span>.href			= <span class="literal">"javascript:"</span> + <span class="reserved">this</span>.getToggleLink();
+            <span class="reserved">this</span>.depth			= oParent.depth + 1;
+            <span class="reserved">this</span>.multiExpand	= oParent.multiExpand;
+
+            oParent.appendChild(<span class="reserved">this</span>);
+        }
+    },
+
+    <span class="comment">/**
+     * Appends a node to the child collection.
+     *
+     * <span class="attrib">@param</span> node {Node} the new node
+     * <span class="attrib">@return</span> {Node} the child node
+     * <span class="attrib">@private</span>
+     */</span>
+    appendChild: <span class="reserved">function</span>(node) {
+        <span class="reserved">if</span> (<span class="reserved">this</span>.hasChildren()) {
+            var sib = <span class="reserved">this</span>.children[<span class="reserved">this</span>.children.length - 1];
+            sib.nextSibling = node;
+            node.previousSibling = sib;
+        }
+
+        <span class="reserved">this</span>.tree.regNode(node);
+        <span class="reserved">this</span>.children[<span class="reserved">this</span>.children.length] = node;
+        <span class="reserved">return</span> node;
+
+    },
+
+    <span class="comment">/**
+     * Returns a node array of this node's siblings, null if none.
+     *
+     * <span class="attrib">@return</span> Node[]
+     */</span>
+    getSiblings: <span class="reserved">function</span>() {
+        <span class="reserved">return</span> <span class="reserved">this</span>.parent.children;
+    },
+
+    <span class="comment">/**
+     * Shows this node's children
+     */</span>
+    showChildren: <span class="reserved">function</span>() {
+        <span class="reserved">if</span> (!<span class="reserved">this</span>.tree.animateExpand(<span class="reserved">this</span>.getChildrenEl())) {
+            <span class="reserved">if</span> (<span class="reserved">this</span>.hasChildren()) {
+                <span class="reserved">this</span>.getChildrenEl().style.display = <span class="literal">""</span>;
+            }
+        }
+    },
+
+    <span class="comment">/**
+     * Hides this node's children
+     */</span>
+    hideChildren: <span class="reserved">function</span>() {
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"hiding "</span> + <span class="reserved">this</span>.index);
+
+        <span class="reserved">if</span> (!<span class="reserved">this</span>.tree.animateCollapse(<span class="reserved">this</span>.getChildrenEl())) {
+            <span class="reserved">this</span>.getChildrenEl().style.display = <span class="literal">"none"</span>;
+        }
+    },
+
+    <span class="comment">/**
+     * Returns the id for this node's container div
+     *
+     * <span class="attrib">@return</span> {string} the element id
+     */</span>
+    getElId: <span class="reserved">function</span>() {
+        <span class="reserved">return</span> <span class="literal">"ygtv"</span> + <span class="reserved">this</span>.index;
+    },
+
+    <span class="comment">/**
+     * Returns the id for this node's children div
+     *
+     * <span class="attrib">@return</span> {string} the element id for this node's children div
+     */</span>
+    getChildrenElId: <span class="reserved">function</span>() {
+        <span class="reserved">return</span> <span class="literal">"ygtvc"</span> + <span class="reserved">this</span>.index;
+    },
+
+    <span class="comment">/**
+     * Returns the id for this node's toggle element
+     *
+     * <span class="attrib">@return</span> {string} the toggel element id
+     */</span>
+    getToggleElId: <span class="reserved">function</span>() {
+        <span class="reserved">return</span> <span class="literal">"ygtvt"</span> + <span class="reserved">this</span>.index;
+    },
+
+    <span class="comment">/**
+     * Returns this node's container html element
+     *
+     * <span class="attrib">@return</span> {HTMLElement} the container html element
+     */</span>
+    getEl: <span class="reserved">function</span>() {
+        <span class="reserved">return</span> document.getElementById(<span class="reserved">this</span>.getElId());
+    },
+
+    <span class="comment">/**
+     * Returns the div that was generated for this node's children
+     *
+     * <span class="attrib">@return</span> {HTMLElement} this node's children div
+     */</span>
+    getChildrenEl: <span class="reserved">function</span>() {
+        <span class="reserved">return</span> document.getElementById(<span class="reserved">this</span>.getChildrenElId());
+    },
+
+    <span class="comment">/**
+     * Returns the element that is being used for this node's toggle.
+     *
+     * <span class="attrib">@return</span> {HTMLElement} this node's toggel html element
+     */</span>
+    getToggleEl: <span class="reserved">function</span>() {
+        <span class="reserved">return</span> document.getElementById(<span class="reserved">this</span>.getToggleElId());
+    },
+
+    <span class="comment">/**
+     * Generates the link that will invoke this node's toggle method
+     *
+     * <span class="attrib">@return</span> {string} the javascript url for toggling this node
+     */</span>
+    getToggleLink: <span class="reserved">function</span>() {
+        <span class="reserved">return</span> <span class="literal">"YAHOO.widget.TreeView.getNode(\'"</span> + <span class="reserved">this</span>.tree.id + <span class="literal">"\',"</span> + 
+            <span class="reserved">this</span>.index + <span class="literal">").toggle()"</span>;
+    },
+
+    <span class="comment">/**
+     * Hides this nodes children (creating them if necessary), changes the
+     * toggle style.
+     */</span>
+    collapse: <span class="reserved">function</span>() {
+<span class="comment">        // Only collapse if currently expanded</span>
+        <span class="reserved">if</span> (!<span class="reserved">this</span>.expanded) { <span class="reserved">return</span>; }
+
+        <span class="reserved">if</span> (!<span class="reserved">this</span>.getEl()) {
+            <span class="reserved">this</span>.expanded = false;
+            <span class="reserved">return</span>;
+        }
+<span class="comment">
+        // hide the child div</span>
+        <span class="reserved">this</span>.hideChildren();
+        <span class="reserved">this</span>.expanded = false;
+
+        <span class="reserved">if</span> (<span class="reserved">this</span>.hasIcon) {
+            <span class="reserved">this</span>.getToggleEl().className = <span class="reserved">this</span>.getStyle();
+        }
+<span class="comment">
+        // fire the collapse event handler</span>
+        <span class="reserved">this</span>.tree.onCollapse(<span class="reserved">this</span>);
+    },
+
+    <span class="comment">/**
+     * Shows this nodes children (creating them if necessary), changes the
+     * toggle style, and collapses its siblings if multiExpand is not set.
+     */</span>
+    expand: <span class="reserved">function</span>() {
+<span class="comment">        // Only expand if currently collapsed.</span>
+        <span class="reserved">if</span> (<span class="reserved">this</span>.expanded) { <span class="reserved">return</span>; }
+
+        <span class="reserved">if</span> (!<span class="reserved">this</span>.getEl()) {
+            <span class="reserved">this</span>.expanded = true;
+            <span class="reserved">return</span>;
+        }
+
+        <span class="reserved">if</span> (! <span class="reserved">this</span>.childrenRendered) {
+            <span class="reserved">this</span>.getChildrenEl().innerHTML = <span class="reserved">this</span>.renderChildren();
+        }
+
+        <span class="reserved">this</span>.expanded = true;
+        <span class="reserved">if</span> (<span class="reserved">this</span>.hasIcon) {
+            <span class="reserved">this</span>.getToggleEl().className = <span class="reserved">this</span>.getStyle();
+        }
+<span class="comment">
+        // We do an extra check for children here because the lazy</span>
+<span class="comment">        // load feature can expose nodes that have no children.</span>
+<span class="comment">
+        // if (!this.hasChildren()) {</span>
+        <span class="reserved">if</span> (<span class="reserved">this</span>.isLoading) {
+            <span class="reserved">this</span>.expanded = false;
+            <span class="reserved">return</span>;
+        }
+
+        <span class="reserved">if</span> (! <span class="reserved">this</span>.multiExpand) {
+            var sibs = <span class="reserved">this</span>.getSiblings();
+            <span class="reserved">for</span> (var i=0; i&lt;sibs.length; ++i) {
+                <span class="reserved">if</span> (sibs[i] != <span class="reserved">this</span> &amp;&amp; sibs[i].expanded) { 
+                    sibs[i].collapse(); 
+                }
+            }
+        }
+
+        <span class="reserved">this</span>.showChildren();
+<span class="comment">
+        // fire the expand event handler</span>
+        <span class="reserved">this</span>.tree.onExpand(<span class="reserved">this</span>);
+    },
+
+    <span class="comment">/**
+     * Returns the css style name for the toggle
+     *
+     * <span class="attrib">@return</span> {string} the css class for this node's toggle
+     */</span>
+    getStyle: <span class="reserved">function</span>() {
+        <span class="reserved">if</span> (<span class="reserved">this</span>.isLoading) {
+            <span class="reserved">this</span>.logger.debug(<span class="literal">"returning the loading icon"</span>);
+            <span class="reserved">return</span> <span class="literal">"ygtvloading"</span>;
+        } <span class="reserved">else</span> {
+<span class="comment">            // location top or bottom, middle nodes also get the top style</span>
+            var loc = (<span class="reserved">this</span>.nextSibling) ? <span class="literal">"t"</span> : <span class="literal">"l"</span>;
+<span class="comment">
+            // type p=plus(expand), m=minus(collapase), n=none(no children)</span>
+            var type = <span class="literal">"n"</span>;
+            <span class="reserved">if</span> (<span class="reserved">this</span>.hasChildren(true) || <span class="reserved">this</span>.isDynamic()) {
+                type = (<span class="reserved">this</span>.expanded) ? <span class="literal">"m"</span> : <span class="literal">"p"</span>;
+            }
+
+            <span class="reserved">this</span>.logger.debug(<span class="literal">"ygtv"</span> + loc + type);
+            <span class="reserved">return</span> <span class="literal">"ygtv"</span> + loc + type;
+        }
+    },
+
+    <span class="comment">/**
+     * Returns the hover style for the icon
+     * <span class="attrib">@return</span> {string} the css class hover state
+     */</span>
+    getHoverStyle: <span class="reserved">function</span>() { 
+        var s = <span class="reserved">this</span>.getStyle();
+        <span class="reserved">if</span> (<span class="reserved">this</span>.hasChildren(true) &amp;&amp; !<span class="reserved">this</span>.isLoading) { 
+            s += <span class="literal">"h"</span>; 
+        }
+        <span class="reserved">return</span> s;
+    },
+
+    <span class="comment">/**
+     * Recursively expands all of this node's children.
+     */</span>
+    expandAll: <span class="reserved">function</span>() { 
+        <span class="reserved">for</span> (var i=0;i&lt;<span class="reserved">this</span>.children.length;++i) {
+            var c = <span class="reserved">this</span>.children[i];
+            <span class="reserved">if</span> (c.isDynamic()) {
+                alert(<span class="literal">"Not supported (lazy load + expand all)"</span>);
+                break;
+            } <span class="reserved">else</span> <span class="reserved">if</span> (! c.multiExpand) {
+                alert(<span class="literal">"Not supported (no multi-expand + expand all)"</span>);
+                break;
+            } <span class="reserved">else</span> {
+                c.expand();
+                c.expandAll();
+            }
+        }
+    },
+
+    <span class="comment">/**
+     * Recursively collapses all of this node's children.
+     */</span>
+    collapseAll: <span class="reserved">function</span>() { 
+        <span class="reserved">for</span> (var i=0;i&lt;<span class="reserved">this</span>.children.length;++i) {
+            <span class="reserved">this</span>.children[i].collapse();
+            <span class="reserved">this</span>.children[i].collapseAll();
+        }
+    },
+
+    <span class="comment">/**
+     * Configures this node for dynamically obtaining the child data
+     * when the node is first expanded.
+     *
+     * <span class="attrib">@param</span> fmDataLoader {function} the function that will be used to get the data.
+     */</span>
+    setDynamicLoad: <span class="reserved">function</span>(fnDataLoader) { 
+        <span class="reserved">this</span>.dataLoader = fnDataLoader;
+        <span class="reserved">this</span>._dynLoad = true;
+    },
+
+    <span class="comment">/**
+     * Evaluates if this node is the root node of the tree
+     *
+     * <span class="attrib">@return</span> {boolean} true if this is the root node
+     */</span>
+    isRoot: <span class="reserved">function</span>() { 
+        <span class="reserved">return</span> (<span class="reserved">this</span> == <span class="reserved">this</span>.tree.root);
+    },
+
+    <span class="comment">/**
+     * Evaluates if this node's children should be loaded dynamically.  Looks for
+     * the property both in this instance and the root node.  If the tree is
+     * defined to load all children dynamically, the data callback function is
+     * defined in the root node
+     *
+     * <span class="attrib">@return</span> {boolean} true if this node's children are to be loaded dynamically
+     */</span>
+    isDynamic: <span class="reserved">function</span>() { 
+        var lazy = (!<span class="reserved">this</span>.isRoot() &amp;&amp; (<span class="reserved">this</span>._dynLoad || <span class="reserved">this</span>.tree.root._dynLoad));
+<span class="comment">        // this.logger.debug("isDynamic: " + lazy);</span>
+        <span class="reserved">return</span> lazy;
+    },
+
+    <span class="comment">/**
+     * Checks if this node has children.  If this node is lazy-loading and the
+     * children have not been rendered, we do not know whether or not there
+     * are actual children.  In most cases, we need to assume that there are
+     * children (for instance, the toggle needs to show the expandable 
+     * presentation state).  In other times we want to know if there are rendered
+     * children.  For the latter, "checkForLazyLoad" should be false.
+     *
+     * <span class="attrib">@param</span> checkForLazyLoad {boolean} should we check for unloaded children?
+     * <span class="attrib">@return</span> {boolean} true if this has children or if it might and we are
+     * checking for this condition.
+     */</span>
+    hasChildren: <span class="reserved">function</span>(checkForLazyLoad) { 
+        <span class="reserved">return</span> ( <span class="reserved">this</span>.children.length &gt; 0 || 
+                (checkForLazyLoad &amp;&amp; <span class="reserved">this</span>.isDynamic() &amp;&amp; !<span class="reserved">this</span>.childrenRendered) );
+    },
+
+    <span class="comment">/**
+     * Expands if node is collapsed, collapses otherwise.
+     */</span>
+    toggle: <span class="reserved">function</span>() {
+        <span class="reserved">if</span> (!<span class="reserved">this</span>.tree.locked &amp;&amp; ( <span class="reserved">this</span>.hasChildren(true) || <span class="reserved">this</span>.isDynamic()) ) {
+            <span class="reserved">if</span> (<span class="reserved">this</span>.expanded) { <span class="reserved">this</span>.collapse(); } <span class="reserved">else</span> { <span class="reserved">this</span>.expand(); }
+        }
+    },
+
+    <span class="comment">/**
+     * Returns the markup for this node and its children.
+     *
+     * <span class="attrib">@return</span> {string} the markup for this node and its expanded children.
+     */</span>
+    getHtml: <span class="reserved">function</span>() {
+        var sb = [];
+        sb[sb.length] = <span class="literal">'&lt;div class="ygtvitem" id="'</span> + <span class="reserved">this</span>.getElId() + <span class="literal">'"&gt;'</span>;
+        sb[sb.length] = <span class="reserved">this</span>.getNodeHtml();
+        sb[sb.length] = <span class="reserved">this</span>.getChildrenHtml();
+        sb[sb.length] = <span class="literal">'&lt;/div&gt;'</span>;
+        <span class="reserved">return</span> sb.join(<span class="literal">""</span>);
+    },
+
+    <span class="comment">/**
+     * Called when first rendering the tree.  We always build the div that will
+     * contain this nodes children, but we don't render the children themselves
+     * unless this node is expanded.
+     *
+     * <span class="attrib">@return</span> {string} the children container div html and any expanded children
+     * <span class="attrib">@private</span>
+     */</span>
+    getChildrenHtml: <span class="reserved">function</span>() {
+        var sb = [];
+        sb[sb.length] = <span class="literal">'&lt;div class="ygtvchildren"'</span>;
+        sb[sb.length] = <span class="literal">' id="'</span> + <span class="reserved">this</span>.getChildrenElId() + <span class="literal">'"'</span>;
+        <span class="reserved">if</span> (!<span class="reserved">this</span>.expanded) {
+            sb[sb.length] = <span class="literal">' style="display:none;"'</span>;
+        }
+        sb[sb.length] = <span class="literal">'&gt;'</span>;
+<span class="comment">
+        // Don't render the actual child node HTML unless this node is expanded.</span>
+        <span class="reserved">if</span> (<span class="reserved">this</span>.hasChildren(true) &amp;&amp; <span class="reserved">this</span>.expanded) {
+            sb[sb.length] = <span class="reserved">this</span>.renderChildren();
+        }
+
+        sb[sb.length] = <span class="literal">'&lt;/div&gt;'</span>;
+
+        <span class="reserved">return</span> sb.join(<span class="literal">""</span>);
+    },
+
+    <span class="comment">/**
+     * Generates the markup for the child nodes.  This is not done until the node
+     * is expanded.
+     *
+     * <span class="attrib">@return</span> {string} the html for this node's children
+     * <span class="attrib">@private</span>
+     */</span>
+    renderChildren: <span class="reserved">function</span>() {
+
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"rendering children for "</span> + <span class="reserved">this</span>.index);
+
+        var node = <span class="reserved">this</span>;
+
+        <span class="reserved">if</span> (<span class="reserved">this</span>.isDynamic() &amp;&amp; !<span class="reserved">this</span>.childrenRendered) {
+            <span class="reserved">this</span>.isLoading = true;
+            <span class="reserved">this</span>.tree.locked = true;
+
+            <span class="reserved">if</span> (<span class="reserved">this</span>.dataLoader) {
+                <span class="reserved">this</span>.logger.debug(<span class="literal">"Using dynamic loader defined for this node"</span>);
+                setTimeout( 
+                    <span class="reserved">function</span>() {
+                        node.dataLoader(node, 
+                            <span class="reserved">function</span>() { 
+                                node.loadComplete(); 
+                            });
+                    }, 10);
+                
+            } <span class="reserved">else</span> <span class="reserved">if</span> (<span class="reserved">this</span>.tree.root.dataLoader) {
+                <span class="reserved">this</span>.logger.debug(<span class="literal">"Using the tree-level dynamic loader"</span>);
+
+                setTimeout( 
+                    <span class="reserved">function</span>() {
+                        node.tree.root.dataLoader(node, 
+                            <span class="reserved">function</span>() { 
+                                node.loadComplete(); 
+                            });
+                    }, 10);
+
+            } <span class="reserved">else</span> {
+                <span class="reserved">this</span>.logger.debug(<span class="literal">"no loader found"</span>);
+                <span class="reserved">return</span> <span class="literal">"Error: data loader not found or not specified."</span>;
+            }
+
+            <span class="reserved">return</span> <span class="literal">""</span>;
+
+        } <span class="reserved">else</span> {
+            <span class="reserved">return</span> <span class="reserved">this</span>.completeRender();
+        }
+    },
+
+    <span class="comment">/**
+     * Called when we know we have all the child data.
+     * <span class="attrib">@return</span> {string} children html
+     */</span>
+    completeRender: <span class="reserved">function</span>() {
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"renderComplete: "</span> + <span class="reserved">this</span>.index);
+        var sb = [];
+
+        <span class="reserved">for</span> (var i=0; i &lt; <span class="reserved">this</span>.children.length; ++i) {
+            sb[sb.length] = <span class="reserved">this</span>.children[i].getHtml();
+        }
+        
+        <span class="reserved">this</span>.childrenRendered = true;
+
+        <span class="reserved">return</span> sb.join(<span class="literal">""</span>);
+    },
+
+    <span class="comment">/**
+     * Load complete is the callback function we pass to the data provider
+     * in dynamic load situations.
+     */</span>
+    loadComplete: <span class="reserved">function</span>() {
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"loadComplete: "</span> + <span class="reserved">this</span>.index);
+        <span class="reserved">this</span>.getChildrenEl().innerHTML = <span class="reserved">this</span>.completeRender();
+        <span class="reserved">this</span>.isLoading = false;
+        <span class="reserved">this</span>.expand();
+        <span class="reserved">this</span>.tree.locked = false;
+    },
+
+    <span class="comment">/**
+     * Returns this node's ancestor at the specified depth.
+     *
+     * <span class="attrib">@param</span> {int} depth the depth of the ancestor.
+     * <span class="attrib">@return</span> {Node} the ancestor
+     */</span>
+    getAncestor: <span class="reserved">function</span>(depth) {
+        <span class="reserved">if</span> (depth &gt;= <span class="reserved">this</span>.depth || depth &lt; 0)  {
+            <span class="reserved">this</span>.logger.debug(<span class="literal">"illegal getAncestor depth: "</span> + depth);
+            <span class="reserved">return</span> null;
+        }
+
+        var p = <span class="reserved">this</span>.parent;
+        
+        <span class="reserved">while</span> (p.depth &gt; depth) {
+            p = p.parent;
+        }
+
+        <span class="reserved">return</span> p;
+    },
+
+    <span class="comment">/**
+     * Returns the css class for the spacer at the specified depth for
+     * this node.  If this node's ancestor at the specified depth
+     * has a next sibling the presentation is different than if it
+     * does not have a next sibling
+     *
+     * <span class="attrib">@param</span> {int} depth the depth of the ancestor.
+     * <span class="attrib">@return</span> {string} the css class for the spacer
+     */</span>
+    getDepthStyle: <span class="reserved">function</span>(depth) {
+        <span class="reserved">return</span> (<span class="reserved">this</span>.getAncestor(depth).nextSibling) ? 
+            <span class="literal">"ygtvdepthcell"</span> : <span class="literal">"ygtvblankdepthcell"</span>;
+    },
+
+    <span class="comment">/**
+     * Get the markup for the node.  This is designed to be overrided so that we can
+     * support different types of nodes.
+     *
+     * <span class="attrib">@return</span> {string} The HTML that will render this node.
+     */</span>
+    getNodeHtml: <span class="reserved">function</span>() { 
+        <span class="reserved">return</span> <span class="literal">""</span>; 
+    }
+
+};
+
+</pre>
+			</div>
+		
+	</div>
+</div>
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+</div>
+
+
+</body>
+</html>

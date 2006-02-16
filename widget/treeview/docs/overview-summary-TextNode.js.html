@@ -1,0 +1,393 @@
+
+<html>
+<head>
+	<title>JavaScript Documentation - TextNode.js</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">TreeView</a></h3>
+
+	<div class="breadcrumbs">
+		
+			
+			
+			
+				<a href="./index.html">TreeView</a>
+				&gt;
+				<strong>TextNode.js</strong>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.widget.html">
+								YAHOO.widget</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.HTMLNode.html">
+								YAHOO.widget.HTMLNode</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.MenuNode.html">
+								YAHOO.widget.MenuNode</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Node.html">
+								YAHOO.widget.Node</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.RootNode.html">
+								YAHOO.widget.RootNode</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.TextNode.html">
+								YAHOO.widget.TextNode</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.TreeView.html">
+								YAHOO.widget.TreeView</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.TVAnim.html">
+								YAHOO.widget.TVAnim</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.TVFadeIn.html">
+								YAHOO.widget.TVFadeIn</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.TVFadeOut.html">
+								YAHOO.widget.TVFadeOut</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-HTMLNode.js.html">
+								HTMLNode.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-MenuNode.js.html">
+								MenuNode.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Node.js.html">
+								Node.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-RootNode.js.html">
+								RootNode.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-TextNode.js.html">
+								TextNode.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-TreeView.js.html">
+								TreeView.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-TVAnim.js.html">
+								TVAnim.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-TVFadeIn.js.html">
+								TVFadeIn.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-TVFadeOut.js.html">
+								TVFadeOut.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div class="main">
+			
+		
+		
+			
+			   <h2>TextNode.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+		
+		
+		
+		
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+				
+					
+						<a href="#classSummary">Class Summary</a> |
+					
+					
+				
+				
+				
+					<a href="#source">Source Code</a>
+				
+			</div>
+		
+			
+				<div class="section class summaries">
+					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+			
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+						<tr>
+							<td class="name">
+								<a href="YAHOO.widget.TextNode.html">YAHOO.widget.TextNode</a>
+							</td>
+							<td class="overview">&nbsp;</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		
+		
+		
+		
+			<div class="section source">
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<pre class="sourceview"><span class="comment">/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */</span>
+
+<span class="comment">/**
+ * The default node presentation.  The first parameter should be
+ * either a string that will be used as the node's label, or an object
+ * that has a string propery called label.  By default, the clicking the
+ * label will toggle the expanded/collapsed state of the node.  By
+ * changing the href property of the instance, this behavior can be
+ * changed so that the label will go to the specified href.
+ *
+ * <span class="attrib">@extends</span> YAHOO.widget.Node
+ * <span class="attrib">@constructor</span>
+ * <span class="attrib">@param</span> oData {object} a string or object containing the data that will
+ * be used to render this node
+ * <span class="attrib">@param</span> oParent {YAHOO.widget.Node} this node's parent node
+ * <span class="attrib">@param</span> expanded {boolean} the initial expanded/collapsed state
+ */</span>
+YAHOO.widget.TextNode = <span class="reserved">function</span>(oData, oParent, expanded) {
+	<span class="reserved">if</span> (oParent) { 
+		<span class="reserved">this</span>.init(oData, oParent, expanded);
+		<span class="reserved">this</span>.setUpLabel(oData);
+	}
+};
+
+YAHOO.widget.TextNode.<span class="reserved">prototype</span> = new YAHOO.widget.Node();
+
+<span class="comment">/**
+ * The CSS class for the label href.  Defaults to ygtvlabel, but can be
+ * overridden to provide a custom presentation for a specific node.
+ *
+ * <span class="attrib">@type</span> string
+ */</span>
+YAHOO.widget.TextNode.<span class="reserved">prototype</span>.labelStyle = <span class="literal">"ygtvlabel"</span>;
+
+<span class="comment">/**
+ * The derived element id of the label for this node
+ *
+ * <span class="attrib">@type</span> string
+ */</span>
+YAHOO.widget.TextNode.<span class="reserved">prototype</span>.labelElId = null;
+
+<span class="comment">/**
+ * The text for the label.  It is assumed that the oData parameter will
+ * either be a string that will be used as the label, or an object that
+ * has a property called "label" that we will use.
+ *
+ * <span class="attrib">@type</span> string
+ */</span>
+YAHOO.widget.TextNode.<span class="reserved">prototype</span>.label = null;
+
+<span class="comment">/**
+ * Sets up the node label
+ * 
+ * <span class="attrib">@param</span> oData string containing the label, or an object with a label property
+ */</span>
+YAHOO.widget.TextNode.<span class="reserved">prototype</span>.setUpLabel = <span class="reserved">function</span>(oData) { 
+	<span class="reserved">if</span> (typeof oData == <span class="literal">"string"</span>) {
+		oData = { label: oData };
+	}
+	<span class="reserved">this</span>.label = oData.label;
+<span class="comment">	
+	// update the link</span>
+	<span class="reserved">if</span> (oData.href) {
+		<span class="reserved">this</span>.href = oData.href;
+	}
+<span class="comment">
+	// set the target</span>
+	<span class="reserved">if</span> (oData.target) {
+		<span class="reserved">this</span>.target = oData.target;
+	}
+
+	<span class="reserved">this</span>.labelElId = <span class="literal">"ygtvlabelel"</span> + <span class="reserved">this</span>.index;
+};
+
+<span class="comment">/**
+ * Returns the label element
+ *
+ * <span class="attrib">@return</span> {object} the element
+ */</span>
+YAHOO.widget.TextNode.<span class="reserved">prototype</span>.getLabelEl = <span class="reserved">function</span>() { 
+	<span class="reserved">return</span> document.getElementById(<span class="reserved">this</span>.labelElId);
+};
+<span class="comment">
+// overrides YAHOO.widget.Node</span>
+YAHOO.widget.TextNode.<span class="reserved">prototype</span>.getNodeHtml = <span class="reserved">function</span>() { 
+	var sb = new Array();
+
+	sb[sb.length] = <span class="literal">'&lt;table border="0" cellpadding="0" cellspacing="0"&gt;'</span>;
+	sb[sb.length] = <span class="literal">'&lt;tr&gt;'</span>;
+	
+	<span class="reserved">for</span> (i=0;i&lt;<span class="reserved">this</span>.depth;++i) {
+<span class="comment">		// sb[sb.length] = '&lt;td class="ygtvdepthcell"&gt;&amp;nbsp;&lt;/td&gt;';</span>
+		sb[sb.length] = <span class="literal">'&lt;td class="'</span> + <span class="reserved">this</span>.getDepthStyle(i) + <span class="literal">'"&gt;&amp;nbsp;&lt;/td&gt;'</span>;
+	}
+
+	var getNode = <span class="literal">'YAHOO.widget.TreeView.getNode(\'</span><span class="literal">' +
+					this.tree.id + '</span>\<span class="literal">','</span> + <span class="reserved">this</span>.index + <span class="literal">')'</span>;
+
+	sb[sb.length] = <span class="literal">'&lt;td'</span>;
+<span class="comment">	// sb[sb.length] = ' onselectstart="return false"';</span>
+	sb[sb.length] = <span class="literal">' id="'</span> + <span class="reserved">this</span>.getToggleElId() + <span class="literal">'"'</span>;
+	sb[sb.length] = <span class="literal">' class="'</span> + <span class="reserved">this</span>.getStyle() + <span class="literal">'"'</span>;
+	<span class="reserved">if</span> (<span class="reserved">this</span>.hasChildren(true)) {
+		sb[sb.length] = <span class="literal">' onmouseover="this.className='</span>;
+		sb[sb.length] = getNode + <span class="literal">'.getHoverStyle()"'</span>;
+		sb[sb.length] = <span class="literal">' onmouseout="this.className='</span>;
+		sb[sb.length] = getNode + <span class="literal">'.getStyle()"'</span>;
+	}
+	sb[sb.length] = <span class="literal">' onclick="javascript:'</span> + <span class="reserved">this</span>.getToggleLink() + <span class="literal">'"&gt;&amp;nbsp;'</span>;
+	sb[sb.length] = <span class="literal">'&lt;/td&gt;'</span>;
+	sb[sb.length] = <span class="literal">'&lt;td&gt;'</span>;
+	sb[sb.length] = <span class="literal">'&lt;a'</span>;
+	sb[sb.length] = <span class="literal">' id="'</span> + <span class="reserved">this</span>.labelElId + <span class="literal">'"'</span>;
+	sb[sb.length] = <span class="literal">' class="'</span> + <span class="reserved">this</span>.labelStyle + <span class="literal">'"'</span>;
+	sb[sb.length] = <span class="literal">' href="'</span> + <span class="reserved">this</span>.href + <span class="literal">'"'</span>;
+	sb[sb.length] = <span class="literal">' target="'</span> + <span class="reserved">this</span>.target + <span class="literal">'"'</span>;
+	<span class="reserved">if</span> (<span class="reserved">this</span>.hasChildren(true)) {
+		sb[sb.length] = <span class="literal">' onmouseover="document.getElementById(\'</span><span class="literal">';
+		sb[sb.length] = this.getToggleElId() + '</span>\<span class="literal">').className='</span>;
+		sb[sb.length] = getNode + <span class="literal">'.getHoverStyle()"'</span>;
+		sb[sb.length] = <span class="literal">' onmouseout="document.getElementById(\'</span><span class="literal">';
+		sb[sb.length] = this.getToggleElId() + '</span>\<span class="literal">').className='</span>;
+		sb[sb.length] = getNode + <span class="literal">'.getStyle()"'</span>;
+	}
+	sb[sb.length] = <span class="literal">' &gt;'</span>;
+	sb[sb.length] = <span class="reserved">this</span>.label;
+	sb[sb.length] = <span class="literal">'&lt;/a&gt;'</span>;
+	sb[sb.length] = <span class="literal">'&lt;/td&gt;'</span>;
+	sb[sb.length] = <span class="literal">'&lt;/tr&gt;'</span>;
+	sb[sb.length] = <span class="literal">'&lt;/table&gt;'</span>;
+
+	<span class="reserved">return</span> sb.join(<span class="literal">""</span>);
+};
+
+</pre>
+			</div>
+		
+	</div>
+</div>
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+</div>
+
+
+</body>
+</html>

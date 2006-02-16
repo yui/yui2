@@ -1,0 +1,275 @@
+
+<html>
+<head>
+	<title>JavaScript Documentation - TVAnim.js</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">TreeView</a></h3>
+
+	<div class="breadcrumbs">
+		
+			
+			
+			
+				<a href="./index.html">TreeView</a>
+				&gt;
+				<strong>TVAnim.js</strong>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.widget.html">
+								YAHOO.widget</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.HTMLNode.html">
+								YAHOO.widget.HTMLNode</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.MenuNode.html">
+								YAHOO.widget.MenuNode</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Node.html">
+								YAHOO.widget.Node</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.RootNode.html">
+								YAHOO.widget.RootNode</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.TextNode.html">
+								YAHOO.widget.TextNode</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.TreeView.html">
+								YAHOO.widget.TreeView</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.TVAnim.html">
+								YAHOO.widget.TVAnim</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.TVFadeIn.html">
+								YAHOO.widget.TVFadeIn</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.TVFadeOut.html">
+								YAHOO.widget.TVFadeOut</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-HTMLNode.js.html">
+								HTMLNode.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-MenuNode.js.html">
+								MenuNode.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Node.js.html">
+								Node.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-RootNode.js.html">
+								RootNode.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-TextNode.js.html">
+								TextNode.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-TreeView.js.html">
+								TreeView.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-TVAnim.js.html">
+								TVAnim.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-TVFadeIn.js.html">
+								TVFadeIn.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-TVFadeOut.js.html">
+								TVFadeOut.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div class="main">
+			
+		
+		
+			
+			   <h2>TVAnim.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+		
+		
+		
+		
+		
+		
+		
+		
+		
+			<div class="section source">
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<pre class="sourceview"><span class="comment">/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */</span>
+
+<span class="comment">/**
+ * A static factory class for tree view expand/collapse animations
+ *
+ * <span class="attrib">@constructor</span>
+ */</span>
+YAHOO.widget.TVAnim = new <span class="reserved">function</span>() {
+	<span class="comment">/**
+	 * Constant for the fade in animation
+	 * 
+	 * <span class="attrib">@type</span> string
+	 */</span>
+	<span class="reserved">this</span>.FADE_IN  = <span class="literal">"YAHOO.widget.TVFadeIn"</span>;
+
+	<span class="comment">/**
+	 * Constant for the fade out animation
+	 * 
+	 * <span class="attrib">@type</span> string
+	 */</span>
+	<span class="reserved">this</span>.FADE_OUT = <span class="literal">"YAHOO.widget.TVFadeOut"</span>;
+
+	<span class="comment">/**
+	 * Returns a ygAnim instance of the given type
+	 *
+	 * <span class="attrib">@param</span> type {string} the type of animation
+	 * <span class="attrib">@param</span> el {HTMLElement} the element to element (probably the children div)
+	 * <span class="attrib">@param</span> callback {function} function to invoke when the animation is done.
+	 * <span class="attrib">@return</span> {YAHOO.util.Animation} the animation instance
+	 */</span>
+	<span class="reserved">this</span>.getAnim = <span class="reserved">function</span>(type, el, callback) {
+		switch (type) {
+			case <span class="reserved">this</span>.FADE_IN:	<span class="reserved">return</span> new YAHOO.widget.TVFadeIn(el, callback);
+			case <span class="reserved">this</span>.FADE_OUT:	<span class="reserved">return</span> new YAHOO.widget.TVFadeOut(el, callback);
+			default:			<span class="reserved">return</span> null;
+		}
+	};
+
+	<span class="comment">/**
+	 * Returns true if the specified animation class is available
+	 *
+	 * <span class="attrib">@param</span> type {string} the type of animation
+	 * <span class="attrib">@return</span> {boolean} true if valid, false if not
+	 */</span>
+	<span class="reserved">this</span>.isValid = <span class="reserved">function</span>(type) {
+		<span class="reserved">return</span> ( <span class="literal">"undefined"</span> != eval(<span class="literal">"typeof "</span> + type) );
+	};
+};
+
+</pre>
+			</div>
+		
+	</div>
+</div>
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+</div>
+
+
+</body>
+</html>
