@@ -1,0 +1,226 @@
+/* Menu styles */
+
+
+/*
+    Matches a Menu instance
+*/
+
+div.yuimenu {
+
+    display:none;
+    position:absolute;
+    background-color:#ccc;
+    border:solid 1px #999;
+    padding:1px;
+
+    /*
+         IE (5.5. and 6) expression for:
+         -------------------------------
+         .yuimenu>.yuimenu
+    */
+
+    _behavior:expression(
+
+        void(
+            this.IsDirectDescendant = (
+                this.parentNode && 
+                this.parentNode.className.indexOf("yuimenu") > -1
+            )
+        ),
+
+        void(this.style.display = this.IsDirectDescendant ? "block" : ""),
+        void(this.style.position = this.IsDirectDescendant ? "static" : ""),
+        void(this.style.borderWidth = this.IsDirectDescendant ? "1px 0 0 0" : ""),
+        void(this.style.padding = this.IsDirectDescendant ? "1px" : ""),
+        void(this.runtimeStyle.behavior = "none")
+
+    );
+    
+}
+
+
+/*
+    Matches a Menu instance that is a direct descendant of a Menu instance
+*/
+
+div.yuimenu>div.yuimenu {
+
+    display:block;
+    position:static;
+    border-width:1px 0 0 0;
+    padding:0;
+
+}
+
+
+/*
+    Matches a Menu instance that is the first direct descendant of a 
+    Menu instance
+*/
+
+div.yuimenu>div.first {
+
+    border-width:0;
+
+}
+
+
+/*
+     IE (5.5. and 6) expression for:
+     -------------------------------
+    .yuimenu>.yuimenu.first
+*/
+
+div.yuimenu.first {
+
+    _behavior:expression(
+
+        void(
+            this.IsFirstDirectDescendant = (
+                this.parentNode && 
+                this.parentNode.firstChild == this && 
+                this.parentNode.className.indexOf("yuimenu") > -1            
+            )
+        ),
+
+        void(this.style.display = this.IsFirstDirectDescendant ? "block" : ""),
+        void(this.style.position = this.IsFirstDirectDescendant ? "static" : ""),
+        void(this.style.borderWidth = this.IsFirstDirectDescendant ? "0" : ""),
+        void(this.style.padding = this.IsFirstDirectDescendant ? "1px" : ""),
+        void(this.runtimeStyle.behavior = "none")
+
+   );
+
+}
+
+
+/* Matches a Menu that is the first child of a Menu instance */
+
+div.yuimenu div.first {
+
+}
+
+
+/* Matches a Menu that is the last child of a Menu instance */
+
+div.yuimenu div.last {
+
+}
+
+
+/* Matches the UL inside a Menu instance */
+
+div.yuimenu ul {
+
+    list-style-type:none;
+    margin:0;
+    padding:10px 0;
+
+}
+
+
+/* MenuItem styles */
+
+
+/* Matches a MenuItem instance */
+
+div.yuimenu li {
+
+    padding:2px 24px 2px 24px;
+    cursor:pointer;
+    cursor:hand;
+    white-space:nowrap;
+    text-align:left;
+    
+}
+
+
+/* Matches the help text for a MenuItem instance */
+
+div.yuimenu li em {
+
+    margin:0 0 0 40px;
+
+}
+
+div.yuimenu li a em {
+
+    margin:0;
+
+}
+
+div.yuimenu li a {
+    
+    color:#000;
+    text-decoration:none;
+    
+}
+
+
+/* Matches the sub menu indicator for a MenuItem instance */
+
+div.yuimenu li img {
+
+    margin:0 -14px 0 10px;
+    border:0;
+
+}
+
+div.yuimenu li.hassubmenu,
+div.yuimenu li.hashelptext {
+
+    text-align:right;
+
+}
+
+div.yuimenu li.hassubmenu:after,
+div.yuimenu li.hashelptext:after {
+
+    content:'.';
+    clear:both;
+    visibility:hidden;
+
+}
+
+div.yuimenu li.hassubmenu a.hassubmenu,
+div.yuimenu li.hashelptext a.hashelptext {
+
+    float:left;
+
+}
+
+
+/* Matches focused and selected MenuItem instances */
+
+div.yuimenu li.focus,
+div.yuimenu li.selected {
+
+    background-color:#039;
+
+}
+
+div.yuimenu li.focus a.focus,
+div.yuimenu li.focus em.focus,
+div.yuimenu li.selected a.selected,
+div.yuimenu li.selected em.selected {
+
+    color:#fff;
+
+}
+
+
+/* Matches disabled MenuItem instances */
+
+div.yuimenu li.disabled {
+
+    cursor:default;
+
+}
+
+div.yuimenu li.disabled a.disabled,
+div.yuimenu li.disabled em.disabled {
+
+    color:#999;
+    cursor:default;
+    
+}
