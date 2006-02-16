@@ -1,0 +1,398 @@
+
+<html>
+<head>
+	<title>JavaScript Documentation - DDProxy.js</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Drag and Drop</a></h3>
+
+	<div class="breadcrumbs">
+		
+			
+			
+			
+				<a href="./index.html">Drag and Drop</a>
+				&gt;
+				<strong>DDProxy.js</strong>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DD.html">
+								YAHOO.util.DD</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DDProxy.html">
+								YAHOO.util.DDProxy</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DDTarget.html">
+								YAHOO.util.DDTarget</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DragDrop.html">
+								YAHOO.util.DragDrop</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DragDropMgr.html">
+								YAHOO.util.DragDropMgr</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-DD.js.html">
+								DD.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DDProxy.js.html">
+								DDProxy.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DDTarget.js.html">
+								DDTarget.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DragDrop.js.html">
+								DragDrop.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DragDropMgr.js.html">
+								DragDropMgr.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div class="main">
+			
+		
+		
+			
+			   <h2>DDProxy.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+		
+		
+		
+		
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+				
+					
+						<a href="#classSummary">Class Summary</a> |
+					
+					
+				
+				
+				
+					<a href="#source">Source Code</a>
+				
+			</div>
+		
+			
+				<div class="section class summaries">
+					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+			
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+						<tr>
+							<td class="name">
+								<a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a>
+							</td>
+							<td class="overview">&nbsp;</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		
+		
+		
+		
+			<div class="section source">
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<pre class="sourceview"><span class="comment">/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */</span>
+
+<span class="comment">/**
+ * A DragDrop implementation that inserts an empty, bordered div into
+ * the document that follows the cursor during drag operations.  At the time of
+ * the click, the frame div is resized to the dimensions of the linked html
+ * element, and moved to the exact location of the linked element.
+ *
+ * References to the "frame" element refer to the single proxy element that
+ * was created to be dragged in place of all DDProxy elements on the
+ * page.
+ *
+ * <span class="attrib">@extends</span> YAHOO.util.DD
+ * <span class="attrib">@constructor</span>
+ * <span class="attrib">@param</span> {String} id the id of the linked html element
+ * <span class="attrib">@param</span> {String} sGroup the group of related DragDrop objects
+ */</span>
+YAHOO.util.DDProxy = <span class="reserved">function</span>(id, sGroup) {
+    <span class="reserved">if</span> (id) {
+        <span class="reserved">this</span>.init(id, sGroup);
+        <span class="reserved">this</span>.initFrame(); 
+        <span class="reserved">this</span>.logger.setModuleName(<span class="literal">"DDProxy"</span>);
+    }
+};
+
+YAHOO.util.DDProxy.<span class="reserved">prototype</span> = new YAHOO.util.DD();
+
+<span class="comment">/**
+ * A reference to the one proxy div element we create for all instances of this 
+ * class
+ *
+ * <span class="attrib">@type</span> HTMLElement
+ */</span>
+YAHOO.util.DDProxy.frameDiv = null;
+
+<span class="comment">/**
+ * the drag frame div id
+ *
+ * <span class="attrib">@type</span> String
+ */</span>
+YAHOO.util.DDProxy.dragElId = <span class="literal">"ygddfdiv"</span>;
+
+<span class="comment">/**
+ * The border width of the frame.  This is used when we resize the frame to
+ * the size of the linked element.  We substract the border width to make
+ * the div the correct size.
+ *
+ * <span class="attrib">@TODO</span> find a better way to handle this
+ *
+ * <span class="attrib">@type</span> int
+ */</span>
+YAHOO.util.DDProxy.<span class="reserved">prototype</span>.borderWidth = 2;
+
+<span class="comment">/**
+ * By default we resize the drag frame to be the same size as the element
+ * we want to drag (this is to get the frame effect).  We can turn it off
+ * if we want a different behavior (ex: ygDDMy2)
+ *
+ * <span class="attrib">@type</span> boolean
+ */</span>
+YAHOO.util.DDProxy.<span class="reserved">prototype</span>.resizeFrame = true;
+
+<span class="comment">/**
+ * By default the frame is positioned exactly where the drag element is, so
+ * we use the cursor offset provided by YAHOO.util.DD.  Another option that works only if
+ * you do not have constraints on the obj is to have the drag frame centered
+ * around the cursor.  Set centerFrame to true for this effect.  Ex: 
+ * ygDDMy2
+ *
+ * <span class="attrib">@type</span> boolean
+ */</span>
+YAHOO.util.DDProxy.<span class="reserved">prototype</span>.centerFrame = false;
+
+<span class="comment">/**
+ * Create the drag frame if needed
+ */</span>
+YAHOO.util.DDProxy.createFrame = <span class="reserved">function</span>() {
+    var THIS = YAHOO.util.DDProxy;
+
+    <span class="reserved">if</span> (!document || !document.body) {
+        setTimeout(THIS.createFrame, 50);
+        <span class="reserved">return</span>;
+    }
+
+    <span class="reserved">if</span> (!THIS.frameDiv) {
+        THIS.frameDiv = document.createElement(<span class="literal">"div"</span>);
+        THIS.frameDiv.id = THIS.dragElId;
+        var s = THIS.frameDiv.style;
+        s.position = <span class="literal">"absolute"</span>;
+        s.visibility = <span class="literal">"hidden"</span>;
+        s.cursor = <span class="literal">"move"</span>;
+        s.border = <span class="literal">"2px solid #aaa"</span>;
+        s.zIndex = 999;
+
+        document.body.appendChild(THIS.frameDiv);
+    }
+};
+
+<span class="comment">/**
+ * Initialization for the drag frame element.  Must be called in the
+ * constructor of all subclasses
+ */</span>
+YAHOO.util.DDProxy.<span class="reserved">prototype</span>.initFrame = <span class="reserved">function</span>() {
+    YAHOO.util.DDProxy.createFrame();
+    <span class="reserved">this</span>.setDragElId(YAHOO.util.DDProxy.dragElId);
+    <span class="reserved">this</span>.useAbsMath = true;
+};
+
+<span class="comment">/**
+ * Resizes the drag frame to the dimensions of the clicked object, positions 
+ * it over the object, and finally displays it
+ *
+ * <span class="attrib">@param</span> {int} iPageX X click position
+ * <span class="attrib">@param</span> {int} iPageY Y click position
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.util.DDProxy.<span class="reserved">prototype</span>.showFrame = <span class="reserved">function</span>(iPageX, iPageY) {
+    var el = <span class="reserved">this</span>.getEl();
+
+    var s = <span class="reserved">this</span>.getDragEl().style;
+
+    <span class="reserved">if</span> (<span class="reserved">this</span>.resizeFrame) {
+        s.width = (parseInt(el.offsetWidth) - (2*<span class="reserved">this</span>.borderWidth)) + <span class="literal">"px"</span>;
+        s.height = (parseInt(el.offsetHeight) - (2*<span class="reserved">this</span>.borderWidth)) + <span class="literal">"px"</span>;
+    }
+
+    <span class="reserved">if</span> (<span class="reserved">this</span>.centerFrame) {
+        <span class="reserved">this</span>.setDelta(Math.round(parseInt(s.width)/2), 
+                Math.round(parseInt(s.width)/2));
+    }
+
+    <span class="reserved">this</span>.setDragElPos(iPageX, iPageY);
+
+    s.visibility = <span class="literal">""</span>;
+};
+<span class="comment">
+// overrides YAHOO.util.DragDrop</span>
+YAHOO.util.DDProxy.<span class="reserved">prototype</span>.b4MouseDown = <span class="reserved">function</span>(e) {
+    var x = YAHOO.util.Event.getPageX(e);
+    var y = YAHOO.util.Event.getPageY(e);
+    <span class="reserved">this</span>.autoOffset(x, y);
+    <span class="reserved">this</span>.setDragElPos(x, y);
+};
+<span class="comment">
+// overrides YAHOO.util.DragDrop</span>
+YAHOO.util.DDProxy.<span class="reserved">prototype</span>.b4StartDrag = <span class="reserved">function</span>(x, y) {
+<span class="comment">    // show the drag frame</span>
+    <span class="reserved">this</span>.logger.debug(<span class="literal">"start drag show frame, x: "</span> + x + <span class="literal">", y: "</span> + y);
+    <span class="reserved">this</span>.showFrame(x, y);
+};
+<span class="comment">
+// overrides YAHOO.util.DragDrop</span>
+YAHOO.util.DDProxy.<span class="reserved">prototype</span>.b4EndDrag = <span class="reserved">function</span>(e) {
+    <span class="reserved">this</span>.logger.debug(<span class="reserved">this</span>.id + <span class="literal">" b4EndDrag"</span>);
+<span class="comment">
+    // hide the drag frame</span>
+    var s = <span class="reserved">this</span>.getDragEl().style;
+    s.visibility = <span class="literal">"hidden"</span>;
+};
+<span class="comment">
+// overrides YAHOO.util.DragDrop</span>
+<span class="comment">// By default we try to move the element to the last location of the frame.  </span>
+<span class="comment">// This is so that the default behavior mirrors that of YAHOO.util.DD.  </span>
+YAHOO.util.DDProxy.<span class="reserved">prototype</span>.endDrag = <span class="reserved">function</span>(e) {
+    <span class="reserved">this</span>.logger.debug(<span class="reserved">this</span>.id + <span class="literal">" endDrag"</span>);
+    var lel = <span class="reserved">this</span>.getEl();
+    var del = <span class="reserved">this</span>.getDragEl();
+<span class="comment">
+    // Show the drag frame briefly so we can get its position</span>
+    del.style.visibility = <span class="literal">""</span>;
+<span class="comment">
+    // Hide the linked element before the move to get around a Safari </span>
+<span class="comment">    // rendering bug.</span>
+    lel.style.visibility = <span class="literal">"hidden"</span>;
+    YAHOO.util.DDM.moveToEl(lel, del);
+    del.style.visibility = <span class="literal">"hidden"</span>;
+    lel.style.visibility = <span class="literal">""</span>;
+};
+
+</pre>
+			</div>
+		
+	</div>
+</div>
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+</div>
+
+
+</body>
+</html>

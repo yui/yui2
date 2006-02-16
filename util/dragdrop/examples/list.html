@@ -1,0 +1,171 @@
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Yahoo! UI Library - Drag and Drop</title><link rel="stylesheet" type="text/css" media="screen" href="./css/screen.css"><!--[if IE]><link rel="stylesheet" type="text/css" href="./css/ie.css" /><![endif]--></head>  
+<script type="text/javascript" src="js/YAHOO.js" ></script>
+<script type="text/javascript" src="js/log.js" ></script>
+<script type="text/javascript" src="js/event.js" ></script>
+<script type="text/javascript" src="js/dom-raw.js"></script>
+
+<script type="text/javascript" src="js/dragdrop.js" ></script>
+		<script type="text/javascript" src="js/ygDDOnTop.js" ></script>
+		<script type="text/javascript" src="js/ygDDSwap.js" ></script>
+		<script type="text/javascript" src="js/ygDDMy.js" ></script>
+		<script type="text/javascript" src="js/ygDDMy2.js" ></script>
+		<script type="text/javascript" src="js/ygDDList.js" ></script>
+		<script type="text/javascript" src="js/ygDDPlayer.js" ></script>
+
+	
+<script type="text/javascript">
+
+	// var gLogger = new ygLogger("test_noimpl.php");
+	var dd = []
+	
+	function dragDropInit() {
+		if (typeof(ygLogger) != "undefined") {
+			ygLogger.init(document.getElementById("logDiv"));
+		}
+
+		var i = 0;
+		for (j=0;j < 20;++j) {
+			dd[i++] = new ygDDList("li" + j);
+			dd[i++] = new ygDDList("li" + (j + 20));
+			dd[i++] = new ygDDList("li" + (j + 40), "right");
+		}
+
+		dd[i++] = new ygDDListBoundary("hidden1");
+		dd[i++] = new ygDDListBoundary("hidden2");
+		dd[i++] = new ygDDListBoundary("hidden3", "right");
+
+		// dd11 = new ygDDList("li11");
+		// dd11.addToGroup("right");
+		// dd12 = new ygDDList("li12");
+		// dd12.addToGroup("right");
+        YAHOO.util.DDM.mode = document.getElementById("ddmode").selectedIndex;
+	}
+	
+	YAHOO.util.Event.addListener(window, "load", dragDropInit);
+	// YAHOO.util.DDM.useCache = false;
+	
+</script>
+<body>
+<div id="pageTitle">
+	<h3>Drag and Drop - DDProxy</h3>
+</div>
+
+
+<img src="img/logo.gif" style="position:absolute;top:5px;left:5px" />
+
+<div id="container">
+  <div id="containerTop">
+    <div id="header">
+      <h1>
+</h1>
+      <h4>&nbsp;</h4>
+    </div>
+    <div id="main">
+
+
+<div id="rightbar">
+
+<div id="rightBarPad">
+<h3>Examples</h3>
+
+<div id="linkage">
+<ul>
+<li><a href="drag.html?mode=dist">Drag test</a></li>
+<li><a href="ontop.html?mode=dist">Always on top test</a></li>
+<li><a href="proxy.html?mode=dist">Framed test</a> </li>
+<li><a href="list.html?mode=dist">Sortable List</a> </li>
+<li><a href="slider.html?mode=dist">Slider</a></li>
+<li><a href="multihandle.html?mode=dist">Multiple Handles</a></li>
+<li><a href="targetable.html?mode=dist">Targetable Affordance</a></li>
+<li><a href="grid.html?mode=dist">Grid</a></li>
+
+</ul>
+
+</div> 
+
+<script type="text/javascript">
+	
+	function toggleygLogger(el) {
+		if (el.value == "Disable Logger") {
+			ygLogger.disable();
+			el.value = "Enable Logger";
+		} else {
+			ygLogger.enable();
+			el.value = "Disable Logger";
+		}
+	}
+
+	// ygLogger.disable();
+</script>
+
+
+<h3><input type="button" style="font-size:80%"
+		onclick="javascript:void(toggleygLogger(this))" value="Disable Logger" />&nbsp;
+	<input type="button" style="font-size:80%"
+		onclick="javascript:void(document.getElementById('logDiv').innerHTML='')" value="Clear" />
+</h3>
+<div id="logDiv" style="font-family:Arial, Helvetica, sans-serif;position:relative;overflow:auto;text-align:left;z-index:998;font-size:84%;width:100%;top:0px; height:280px;"></div>
+
+</div>
+<div style="font-size:82%;background-color:#cccccc;padding:5px;line-height:14px">Note: click the Disable Logger button to make the drag operation less choppy</div>
+
+</div>
+
+
+  <div id="content">
+    <form name="dragDropForm" action="javscript:;">
+	<div class="newsItem">
+	  <h3>Sortable List</h3>
+	  <p>
+	    This example extends
+		DDProxy
+		to implement a sortable list.  When a list item is dragged past the center
+		of another list item, it is inserted before that item.
+		The items in the first two columns can interact with items in the other
+		column.  The items in the third column are defined as a separate group,
+		so they can only interact with other items in the third column.
+	  </p>
+
+        Mode: 
+        <select id="ddmode" onchange="YAHOO.util.DDM.mode = this.selectedIndex">
+          <option value="0" selected>Point</point>
+          <option value="1">Intersect</point>
+        </select>
+
+	<table border="0">
+	<tr>
+	<td style="border:1px solid #dddddd">
+	<ul>
+		<li id="hidden6" class="sortList" style="visibility:hidden;">Hidden</li>
+		<li id="li0" class="sortList" style="color: #000000">li 0</li><li id="li1" class="sortList" style="color: #000000">li 1</li><li id="li2" class="sortList" style="color: #000000">li 2</li><li id="li3" class="sortList" style="color: #000000">li 3</li><li id="li4" class="sortList" style="color: #000000">li 4</li><li id="li5" class="sortList" style="color: #000000">li 5</li><li id="li6" class="sortList" style="color: #000000">li 6</li><li id="li7" class="sortList" style="color: #000000">li 7</li><li id="li8" class="sortList" style="color: #000000">li 8</li><li id="li9" class="sortList" style="color: #000000">li 9</li><li id="li10" class="sortList" style="color: #000000">li 10</li><li id="li11" class="sortList" style="color: #000000">li 11</li><li id="li12" class="sortList" style="color: #000000">li 12</li><li id="li13" class="sortList" style="color: #000000">li 13</li><li id="li14" class="sortList" style="color: #000000">li 14</li><li id="li15" class="sortList" style="color: #000000">li 15</li><li id="li16" class="sortList" style="color: #000000">li 16</li><li id="li17" class="sortList" style="color: #000000">li 17</li><li id="li18" class="sortList" style="color: #000000">li 18</li><li id="li19" class="sortList" style="color: #000000">li 19</li>		<li id="hidden1" style="visibility:hidden;">Hidden</li>
+
+	</ul>
+	</td>
+
+	<td>&nbsp;</td>
+<td style="border:1px solid #dddddd">
+	<ul>
+		<li id="hidden5" class="sortList" style="visibility:hidden;">Hidden</li>
+		<li id="li20" class="sortList" style="color: #000000">li 20</li><li id="li21" class="sortList" style="color: #000000">li 21</li><li id="li22" class="sortList" style="color: #000000">li 22</li><li id="li23" class="sortList" style="color: #000000">li 23</li><li id="li24" class="sortList" style="color: #000000">li 24</li><li id="li25" class="sortList" style="color: #000000">li 25</li><li id="li26" class="sortList" style="color: #000000">li 26</li><li id="li27" class="sortList" style="color: #000000">li 27</li><li id="li28" class="sortList" style="color: #000000">li 28</li><li id="li29" class="sortList" style="color: #000000">li 29</li><li id="li30" class="sortList" style="color: #000000">li 30</li><li id="li31" class="sortList" style="color: #000000">li 31</li><li id="li32" class="sortList" style="color: #000000">li 32</li><li id="li33" class="sortList" style="color: #000000">li 33</li><li id="li34" class="sortList" style="color: #000000">li 34</li><li id="li35" class="sortList" style="color: #000000">li 35</li><li id="li36" class="sortList" style="color: #000000">li 36</li><li id="li37" class="sortList" style="color: #000000">li 37</li><li id="li38" class="sortList" style="color: #000000">li 38</li><li id="li39" class="sortList" style="color: #000000">li 39</li>
+		<li id="hidden2" class="sortList" style="visibility:hidden;">Hidden</li>
+	</ul>
+	</td>
+
+	<td>&nbsp;</td>
+<td style="background-color:#eeeeee;border:1px solid #dddddd">
+	<ul>
+		<li id="hidden4" class="sortList" style="visibility:hidden;">Hidden</li>
+		<li id="li40" class="sortList" style="color: #000000">li 40</li><li id="li41" class="sortList" style="color: #000000">li 41</li><li id="li42" class="sortList" style="color: #000000">li 42</li><li id="li43" class="sortList" style="color: #000000">li 43</li><li id="li44" class="sortList" style="color: #000000">li 44</li><li id="li45" class="sortList" style="color: #000000">li 45</li><li id="li46" class="sortList" style="color: #000000">li 46</li><li id="li47" class="sortList" style="color: #000000">li 47</li><li id="li48" class="sortList" style="color: #000000">li 48</li><li id="li49" class="sortList" style="color: #000000">li 49</li><li id="li50" class="sortList" style="color: #000000">li 50</li><li id="li51" class="sortList" style="color: #000000">li 51</li><li id="li52" class="sortList" style="color: #000000">li 52</li><li id="li53" class="sortList" style="color: #000000">li 53</li><li id="li54" class="sortList" style="color: #000000">li 54</li><li id="li55" class="sortList" style="color: #000000">li 55</li><li id="li56" class="sortList" style="color: #000000">li 56</li><li id="li57" class="sortList" style="color: #000000">li 57</li><li id="li58" class="sortList" style="color: #000000">li 58</li><li id="li59" class="sortList" style="color: #000000">li 59</li>		<li id="hidden3" class="sortList" style="visibility:hidden;">Hidden</li>
+	</ul>
+	</td>
+
+	</tr>
+	</table>
+
+	</div>
+	</form>
+  </div>
+	
+      <div id="footerContainer">        <div id="footer">          <p>&nbsp;</p>        </div>      </div>    </div>  </div></div>  </body>
+</html>
+ 
