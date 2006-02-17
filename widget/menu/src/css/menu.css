@@ -199,6 +199,12 @@ div.yuimenu li.selected {
 
 }
 
+div.yuimenu li.focus a.focus {
+
+    text-decoration:underline;
+
+}
+
 div.yuimenu li.focus a.focus,
 div.yuimenu li.focus em.focus,
 div.yuimenu li.selected a.selected,
