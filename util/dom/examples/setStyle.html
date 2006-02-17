@@ -1,11 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>DOM Example: setXY</title>
+<title>DOM Example: setStyle</title>
 <script type="text/javascript" src="js/YAHOO.js"></script>
 <script type="text/javascript" src="js/event.js"></script>
 
-<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dom_2.0.0-b1.js"></script>
+<script src="../build/dom.js"></script>
 
 <script type="text/javascript">
 YAHOO.namespace('example.dom');
@@ -27,9 +27,9 @@ YAHOO.util.Event.addListener(window, 'load', YAHOO.example.dom.init);
 
 <body>
 <div id="doc">
-   <h1>DOM Example: setXY</h1>
+   <h1>DOM Example: setStyle</h1>
    <p>This example demonstrates how to use Dom.setStyle to set the opacity of an element.</p>
-   <p>Click anywhere and the element will move to the click point.</p>
+   <p>Click anywhere to set the element's opacity.</p>
    <div id="fade">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat </div>
 </div>
 
