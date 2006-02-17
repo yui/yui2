@@ -13,13 +13,13 @@ YAHOO.widget.MenuItem.prototype = {
     // Constants
 
     SUBMENU_INDICATOR_IMAGE_URL: 
-        "http://competitor.corp.yahoo.com/menu/src/images/arrow.gif",
+        "../src/img/arrow.gif",
 
     FOCUSED_SUBMENU_INDICATOR_IMAGE_URL: 
-        "http://competitor.corp.yahoo.com/menu/src/images/arrow_focus.gif",
+        "../src/img/arrow_focus.gif",
 
     DISABLED_SUBMENU_INDICATOR_IMAGE_URL: 
-        "http://competitor.corp.yahoo.com/menu/src/images/arrow_disabled.gif",
+        "../src/img/arrow_disabled.gif",
 
     COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT: "Collapsed.  Click to expand.",
     EXPANDED_SUBMENU_INDICATOR_ALT_TEXT: "Expanded.  Click to collapse.",
@@ -413,6 +413,12 @@ YAHOO.widget.MenuItem.prototype = {
         if(typeof p_bSelected == "boolean" && !this._bDisabled) {
 
             this._bSelected = p_bSelected;
+
+            if(this._oSrcElement && this._oSrcElement.tagName == "OPTION") {
+
+                this._oSrcElement.selected = this._bSelected;
+
+            }
 
             if(this._oLI) {
             
