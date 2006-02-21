@@ -40,7 +40,15 @@ YAHOO.widget.Menu.prototype = {
 
         if(typeof p_nIndex == "number") {
 
+            var nIndex = this._nIndex;
+
             this._nIndex = p_nIndex;
+
+            if(nIndex != p_nIndex) {
+
+                this.propertyChangeEvent.fire("index", p_nIndex);
+
+            }
             
         }
 
@@ -56,7 +64,15 @@ YAHOO.widget.Menu.prototype = {
 
         if(typeof p_bRendered == "boolean") {
 
+            var bRendered = this._bRendered;
+
             this._bRendered = p_bRendered;
+
+            if(bRendered != p_bRendered) {
+
+                this.propertyChangeEvent.fire("rendered", p_bRendered);
+
+            }
 
         }
 
@@ -72,7 +88,15 @@ YAHOO.widget.Menu.prototype = {
 
         if(typeof p_sCSSClassName == "string") {
 
+            var sCSSClassName = this._sCSSClassName;
+
             this._sCSSClassName = p_sCSSClassName;
+
+            if(sCSSClassName != p_sCSSClassName) {
+
+                this.propertyChangeEvent.fire("cssclassname", p_sCSSClassName);
+
+            }
 
         }
 
@@ -88,7 +112,15 @@ YAHOO.widget.Menu.prototype = {
 
         if(p_oParent && (p_oParent._Menu || p_oParent._MenuItem)) {
 
+            var oParent = this._oParent;
+
             this._oParent = p_oParent;
+
+            if(oParent != p_oParent) {
+
+                this.propertyChangeEvent.fire("parent", p_oParent);
+
+            }
 
         }
 
@@ -108,7 +140,15 @@ YAHOO.widget.Menu.prototype = {
             p_oMenuItem != this._oActiveMenuItem 
         ) {
 
+            var oActiveMenuItem = this._oActiveMenuItem;
+
             this._oActiveMenuItem = p_oMenuItem;
+
+            if(oActiveMenuItem != p_oMenuItem) {
+
+                this.propertyChangeEvent.fire("activemenuitem", p_oMenuItem);
+
+            }
 
         }
 
@@ -236,9 +276,17 @@ YAHOO.widget.Menu.prototype = {
 
             p_oArray.splice(p_nIndex, 0, p_oItem);
 
-            p_oItem.setIndex(p_nIndex);
-
             p_oItem.setParent(this);
+
+
+            // Update the index property of each member        
+    
+            var i = p_oArray.length-1;
+    
+            do {
+                p_oArray[i].setIndex(i);
+            }
+            while(i--);
 
         }
         else {
@@ -259,14 +307,16 @@ YAHOO.widget.Menu.prototype = {
 
         var aArray = p_oArray.splice(p_nIndex, 1);
 
+
         // Update the index property of each member        
 
         var i = p_oArray.length-1;
 
         do {
-            p_oArray[i]._nIndex = i;
+            p_oArray[i].setIndex(i);
         }
         while(i--);
+
 
         // Return a reference to the item that was removed
 
@@ -599,6 +649,9 @@ YAHOO.widget.Menu.prototype = {
             this.mouseDownEvent = new CustomEvent("mouseDownEvent", this);
             this.mouseUpEvent = new CustomEvent("mouseUpEvent", this);
             this.clickEvent = new CustomEvent("clickEvent", this);
+            this.propertyChangeEvent = 
+                    new CustomEvent("propertyChangeEvent", this);
+
 
             // Subscribe to custom events
 
@@ -613,6 +666,7 @@ YAHOO.widget.Menu.prototype = {
             this.mouseDownEvent.subscribe(this.onMouseDown, this);
             this.mouseUpEvent.subscribe(this.onMouseUp, this);
             this.clickEvent.subscribe(this.onClick, this);
+            this.propertyChangeEvent.subscribe(this.onPropertyChange, this);
 
             MenuManager.addMenu(this);
 
@@ -749,7 +803,7 @@ YAHOO.widget.Menu.prototype = {
 
     },
 
-    render: function() {
+    render: function(p_bHideSourceElement) {
 
         if(
             (!this._bRendered) && 
@@ -787,16 +841,35 @@ YAHOO.widget.Menu.prototype = {
 
                 if(this._oSrcElement) {
 
-                    var oParentNode = this._oSrcElement.parentNode;
-                    oParentNode.removeChild(this._oSrcElement);                    
+                    if(p_bHideSourceElement) {
+
+                        this._oSrcElement.style.display = "none";
+
+                    }
+                    else {
+
+                        var oParentNode = this._oSrcElement.parentNode;
+                        oParentNode.removeChild(this._oSrcElement);                    
+
+                    }
 
                 }
 
             }
             else if(this._oSrcElement) {
 
-                var oParentNode = this._oSrcElement.parentNode;
-                oParentNode.replaceChild(this._oDIV, this._oSrcElement);
+                if(p_bHideSourceElement) {
+
+                    this._oSrcElement.style.display = "none";
+
+                }
+                else {
+
+                    var oParentNode = this._oSrcElement.parentNode;
+                    oParentNode.replaceChild(this._oDIV, this._oSrcElement);
+
+
+                }
 
             }
 
@@ -832,7 +905,7 @@ YAHOO.widget.Menu.prototype = {
     
     show: function() {
 
-        if(!this._bVisible) {
+        if(!this._bVisible && this._oDIV) {
 
             this.beforeShowEvent.fire(this);
 
@@ -1143,6 +1216,10 @@ YAHOO.widget.Menu.prototype = {
     
     onClick: function(p_sType, p_aArguments, p_oMenu) {
     
+    },
+
+    onPropertyChange: function(p_sType, p_aArguments, p_oMenuItem) {
+
     }
 
 }

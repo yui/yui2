@@ -55,8 +55,16 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(typeof p_nIndex == "number") {
 
+            var nIndex = this._nIndex;
+
             this._nIndex = p_nIndex;
             
+            if(nIndex != p_nIndex) {
+
+                this.propertyChangeEvent.fire("index", p_nIndex);
+
+            }
+
         }
 
     },
@@ -71,7 +79,15 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(typeof p_bRendered == "boolean") {
 
+            var bRendered = this._bRendered;
+
             this._bRendered = p_bRendered;
+
+            if(bRendered != p_bRendered) {
+
+                this.propertyChangeEvent.fire("rendered", p_bRendered);
+
+            }
 
         }
 
@@ -87,7 +103,15 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(p_oMenu && p_oMenu._Menu) {
 
+            var oParent = this._oParent;
+
             this._oParent = p_oMenu;
+
+            if(oParent != p_oMenu) {
+
+                this.propertyChangeEvent.fire("parent", p_oMenu);
+
+            }
 
         }
 
@@ -103,9 +127,18 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(p_oMenu && p_oMenu._Menu) {
 
+            var oSubMenu = this._oSubMenu;
+
             this._oSubMenu = p_oMenu;
+
             p_oMenu.setParent(this);
             
+            if(oSubMenu != p_oMenu) {
+
+                this.propertyChangeEvent.fire("submenu", p_oMenu);
+
+            }
+
         }
 
     },
@@ -132,7 +165,15 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(p_oValue) {
 
+            var oValue = this._oValue;
+
             this._oValue = p_oValue;
+
+            if(oValue != p_oValue) {
+
+                this.propertyChangeEvent.fire("value", p_oValue);
+
+            }
 
         }
 
@@ -148,11 +189,19 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(typeof p_sText == "string") {
 
+            var sText = this._sText;
+
             this._sText = p_sText;
 
             if(this._oText) {
 
                 this._oText.nodeValue = this._sText;
+
+            }
+
+            if(sText != p_sText) {
+
+                this.propertyChangeEvent.fire("text", p_sText);
 
             }
 
@@ -169,6 +218,8 @@ YAHOO.widget.MenuItem.prototype = {
     setHelpText: function(p_sHelpText) {
 
         if(typeof p_sHelpText == "string") {
+
+            var sHelpText = this._sHelpText;
 
             this._sHelpText = p_sHelpText;
 
@@ -211,6 +262,12 @@ YAHOO.widget.MenuItem.prototype = {
 
             }
 
+            if(sHelpText != p_sHelpText) {
+
+                this.propertyChangeEvent.fire("helptext", p_sHelpText);
+
+            }
+
         }
 
     },
@@ -225,11 +282,19 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(typeof p_sURL == "string") {
 
+            var sURL = this._sURL;
+
             this._sURL = p_sURL;
 
             if(this._oAnchor) {
 
                 this._oAnchor.setAttribute("href", this._sURL);
+
+            }
+
+            if(sURL != p_sURL) {
+
+                this.propertyChangeEvent.fire("url", p_sURL);
 
             }
 
@@ -246,6 +311,8 @@ YAHOO.widget.MenuItem.prototype = {
     setEmphasis: function(p_bEmphasis) {
 
         if(typeof p_bEmphasis == "boolean") {
+
+            var bEmphasis = this._bEmphasis;
 
             this._bEmphasis = p_bEmphasis;
 
@@ -284,6 +351,12 @@ YAHOO.widget.MenuItem.prototype = {
 
             }
 
+            if(bEmphasis != p_bEmphasis) {
+
+                this.propertyChangeEvent.fire("emphasis", p_bEmphasis);
+
+            }
+
         }         
 
     },
@@ -297,6 +370,8 @@ YAHOO.widget.MenuItem.prototype = {
     setStrongEmphasis: function(p_bStrongEmphasis) {
 
         if(typeof p_bStrongEmphasis == "boolean") {
+
+            var bStrongEmphasis = this._bStrongEmphasis;
 
             this._bStrongEmphasis = p_bStrongEmphasis;
 
@@ -335,6 +410,15 @@ YAHOO.widget.MenuItem.prototype = {
 
             }
 
+            if(bStrongEmphasis != p_bStrongEmphasis) {
+
+                this.propertyChangeEvent.fire(
+                    "strongemphasis", 
+                    p_bStrongEmphasis
+                );
+
+            }
+
         }         
 
     },
@@ -348,6 +432,8 @@ YAHOO.widget.MenuItem.prototype = {
     setDisabled: function(p_bDisabled) {
 
         if(typeof p_bDisabled == "boolean") {
+
+            var bDisabled = p_bDisabled;
 
             this._bDisabled = p_bDisabled;
 
@@ -398,6 +484,12 @@ YAHOO.widget.MenuItem.prototype = {
 
             }
 
+            if(bDisabled != p_bDisabled) {
+
+                this.propertyChangeEvent.fire("disabled", p_bDisabled);
+
+            }
+
         }        
 
     },
@@ -412,13 +504,9 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(typeof p_bSelected == "boolean" && !this._bDisabled) {
 
+            var bSelected = this._bSelected;
+
             this._bSelected = p_bSelected;
-
-            if(this._oSrcElement && this._oSrcElement.tagName == "OPTION") {
-
-                this._oSrcElement.selected = this._bSelected;
-
-            }
 
             if(this._oLI) {
             
@@ -452,6 +540,12 @@ YAHOO.widget.MenuItem.prototype = {
                         this.SUBMENU_INDICATOR_IMAGE_URL;
     
                 }
+
+            }
+
+            if(bSelected != p_bSelected) {
+
+                this.propertyChangeEvent.fire("selected", p_bSelected);
 
             }
 
@@ -1218,6 +1312,10 @@ YAHOO.widget.MenuItem.prototype = {
 
     init: function(p_oObject) {
 
+        var CustomEvent = YAHOO.util.CustomEvent;
+
+        this.propertyChangeEvent = new CustomEvent("propertyChangeEvent", this);
+
         if(p_oObject.tagName) {
 
             switch(p_oObject.tagName) {
@@ -1580,7 +1678,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         // Create custom events
 
-        var CustomEvent = YAHOO.util.CustomEvent;
+
 
         this.renderEvent = new CustomEvent("renderEvent", this);
         this.destroyEvent = new CustomEvent("destroyEvent", this);
@@ -1594,6 +1692,7 @@ YAHOO.widget.MenuItem.prototype = {
         this.keyUpEvent = new CustomEvent("keyUpEvent", this);
         this.focusEvent = new CustomEvent("focusEvent", this);
         this.blurEvent = new CustomEvent("blurEvent", this);
+
 
 
         // Subscribe to custom events
@@ -1610,6 +1709,7 @@ YAHOO.widget.MenuItem.prototype = {
         this.keyUpEvent.subscribe(this.onKeyUp, this);
         this.focusEvent.subscribe(this.onFocus, this);
         this.blurEvent.subscribe(this.onBlur, this);
+        this.propertyChangeEvent.subscribe(this.onPropertyChange, this);
 
     },
 
@@ -2035,6 +2135,10 @@ YAHOO.widget.MenuItem.prototype = {
     },
     
     onBlur: function(p_sType, p_aArguments, p_oMenuItem) {
+
+    },
+
+    onPropertyChange: function(p_sType, p_aArguments, p_oMenuItem) {
 
     }
 
