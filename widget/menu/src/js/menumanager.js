@@ -8,7 +8,7 @@ YAHOO.widget.MenuManager = function () {
 
     function addItem(p_oCollection, p_oItem) {
 
-          p_oCollection[p_oItem.getId()] = p_oItem;
+          p_oCollection[p_oItem.id] = p_oItem;
 
     }
 
