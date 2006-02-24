@@ -7,7 +7,7 @@
 
 div.yuimenu {
 
-    display:none;
+    visibility:hidden;
     position:absolute;
     background-color:#ccc;
     border:solid 1px #999;
@@ -16,22 +16,23 @@ div.yuimenu {
     /*
          IE (5.5. and 6) expression for:
          -------------------------------
-         .yuimenu>.yuimenu
+         div.yuimenu div.bd>div.yuimenu
     */
 
     _behavior:expression(
 
         void(
-            this.IsDirectDescendant = (
+            this.IsGroupMember = (
                 this.parentNode && 
-                this.parentNode.className.indexOf("yuimenu") > -1
+                this.parentNode.parentNode && 
+                this.parentNode.parentNode.className.indexOf("yuimenu") > -1
             )
         ),
 
-        void(this.style.display = this.IsDirectDescendant ? "block" : ""),
-        void(this.style.position = this.IsDirectDescendant ? "static" : ""),
-        void(this.style.borderWidth = this.IsDirectDescendant ? "1px 0 0 0" : ""),
-        void(this.style.padding = this.IsDirectDescendant ? "1px" : ""),
+        void(this.style.visibility = this.IsGroupMember ? "visible" : ""),
+        void(this.style.position = this.IsGroupMember ? "static" : ""),
+        void(this.style.borderWidth = this.IsGroupMember ? "1px 0 0 0" : ""),
+        void(this.style.padding = this.IsGroupMember ? "1px" : ""),
         void(this.runtimeStyle.behavior = "none")
 
     );
@@ -40,12 +41,12 @@ div.yuimenu {
 
 
 /*
-    Matches a Menu instance that is a direct descendant of a Menu instance
+    Matches a Menu instance that is a member of a group
 */
 
-div.yuimenu>div.yuimenu {
+div.yuimenu div.bd>div.yuimenu {
 
-    display:block;
+    visibility:visible;
     position:static;
     border-width:1px 0 0 0;
     padding:0;
@@ -54,11 +55,10 @@ div.yuimenu>div.yuimenu {
 
 
 /*
-    Matches a Menu instance that is the first direct descendant of a 
-    Menu instance
+    Matches the first Menu instance in a group of Menus
 */
 
-div.yuimenu>div.first {
+div.yuimenu div.bd>div.first {
 
     border-width:0;
 
@@ -66,44 +66,31 @@ div.yuimenu>div.first {
 
 
 /*
-     IE (5.5. and 6) expression for:
-     -------------------------------
-    .yuimenu>.yuimenu.first
+    IE (5.5. and 6) expression for:
+    -------------------------------
+    div.yuimenu div.bd>div.first
 */
 
-div.yuimenu.first {
+div.first {
 
     _behavior:expression(
 
         void(
-            this.IsFirstDirectDescendant = (
+            this.IsFirstGroupMember = (
                 this.parentNode && 
-                this.parentNode.firstChild == this && 
-                this.parentNode.className.indexOf("yuimenu") > -1            
+                this.parentNode.parentNode && 
+                this.parentNode.parentNode.firstChild.firstChild == this && 
+                this.parentNode.parentNode.className.indexOf("yuimenu") > -1            
             )
         ),
 
-        void(this.style.display = this.IsFirstDirectDescendant ? "block" : ""),
-        void(this.style.position = this.IsFirstDirectDescendant ? "static" : ""),
-        void(this.style.borderWidth = this.IsFirstDirectDescendant ? "0" : ""),
-        void(this.style.padding = this.IsFirstDirectDescendant ? "1px" : ""),
+        void(this.style.visibility = this.IsFirstGroupMember ? "visible" : ""),
+        void(this.style.position = this.IsFirstGroupMember ? "static" : ""),
+        void(this.style.borderWidth = this.IsFirstGroupMember ? "0" : ""),
+        void(this.style.padding = this.IsFirstGroupMember ? "1px" : ""),
         void(this.runtimeStyle.behavior = "none")
 
    );
-
-}
-
-
-/* Matches a Menu that is the first child of a Menu instance */
-
-div.yuimenu div.first {
-
-}
-
-
-/* Matches a Menu that is the last child of a Menu instance */
-
-div.yuimenu div.last {
 
 }
 
