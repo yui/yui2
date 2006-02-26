@@ -1,8 +1,8 @@
-YAHOO.widget.MenuItem = function (p_oObject) {
+YAHOO.widget.MenuItem = function(p_oObject, p_oUserConfig) {
 
     if(p_oObject) {
 
-        this.init(p_oObject);
+        this.init(p_oObject, p_oUserConfig);
 
     }
 
@@ -26,1315 +26,1234 @@ YAHOO.widget.MenuItem.prototype = {
     DISABLED_SUBMENU_INDICATOR_ALT_TEXT: "Disabled.",
 
 
-    // Private properties
+    // Public properties
 
-    _nIndex: null,
-    _bRendered: false,
-    _oParent: null,
-    _oSubMenu: null,
-    _oLI: null,
-    _oAnchor: null,
-    _oText: null,
-    _oHelpTextEM: null,
-    _oSubMenuIndicatorIMG: null,
-    _oSrcElement: null,
-    _oValue: null,
-    _sText: null,
-    _sHelpText: null,
-    _sURL: null,
-    _bEmphasis: false,
-    _bStrongEmphasis: false,
-    _bDisabled: false,
-    _bSelected: false,
+    index: null,
+    parent: null,
+    element: null,
+    srcElement: null,
     _MenuItem: true,
 
+    init: function(p_oObject, p_oUserConfig) {
 
-    // Public property accessor methods
 
-    setIndex: function(p_nIndex) {
+        // Private member variables
 
-        if(typeof p_nIndex == "number") {
+        var m_oAnchor,
+            m_oText,
+            m_oHelpTextEM,
+            m_oSubMenuIndicatorIMG,
+            m_oSubMenu: null,
+            m_oDom = YAHOO.util.Dom,
+            me = this;
 
-            var nIndex = this._nIndex;
 
-            this._nIndex = p_nIndex;
+        // Private methods
+
+        var checkString = function(p_oValue) {
+
+            return (typeof p_oValue == "string");
+
+        };
+
+        var checkDOMNode = function(p_oValue) {
+
+            return (p_oValue && p_oValue.tagName);
+
+        };
+
+        var createRootNodeStructure = function() {
+
+            me.element = document.createElement("li");
+
+            m_oText = document.createTextNode("");
+
+            m_oAnchor = document.createElement("a");
+            m_oAnchor.appendChild(m_oText);
+
+            me.element.appendChild(m_oAnchor);            
+
+        };
+
+        var createSubMenuIndicator = function() {
+    
+            m_oSubMenuIndicatorIMG = document.createElement("img");
+    
+            if(me.cfg.getConfigProperty("disabled")) {
+    
+                m_oSubMenuIndicatorIMG.src = 
+                    me.DISABLED_SUBMENU_INDICATOR_IMAGE_URL;
+    
+                m_oSubMenuIndicatorIMG.alt = 
+                    me.DISABLED_SUBMENU_INDICATOR_ALT_TEXT;
+    
+            }
+            else {
+    
+                m_oSubMenuIndicatorIMG.src = 
+                    me.SUBMENU_INDICATOR_IMAGE_URL;
+    
+                m_oSubMenuIndicatorIMG.alt = 
+                    me.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
+    
+            }
+    
+            oDom.addClass(me.element, "hassubmenu");
+            oDom.addClass(m_oAnchor, "hassubmenu");      
             
-            if(nIndex != p_nIndex) {
-
-                this.propertyChangeEvent.fire("index", p_nIndex);
-
-            }
-
-        }
-
-    },
-
-    getIndex: function() {
-
-        return (this._nIndex);
-
-    },
-
-    setRendered: function(p_bRendered) {
-
-        if(typeof p_bRendered == "boolean") {
-
-            var bRendered = this._bRendered;
-
-            this._bRendered = p_bRendered;
-
-            if(bRendered != p_bRendered) {
-
-                this.propertyChangeEvent.fire("rendered", p_bRendered);
-
-            }
-
-        }
-
-    },
-
-    isRendered: function() {
-
-        return (this._bRendered);
-
-    },
-
-    setParent: function(p_oMenu) {
-
-        if(p_oMenu && p_oMenu._Menu) {
-
-            var oParent = this._oParent;
-
-            this._oParent = p_oMenu;
-
-            if(oParent != p_oMenu) {
-
-                this.propertyChangeEvent.fire("parent", p_oMenu);
-
-            }
-
-        }
-
-    },
-
-    getParent: function() {
-
-        return (this._oParent);
-
-    },
-
-    setSubMenu: function(p_oMenu) {
-
-        if(p_oMenu && p_oMenu._Menu) {
-
-            var oSubMenu = this._oSubMenu;
-
-            this._oSubMenu = p_oMenu;
-
-            p_oMenu.setParent(this);
-            
-            if(oSubMenu != p_oMenu) {
-
-                this.propertyChangeEvent.fire("submenu", p_oMenu);
-
-            }
-
-        }
-
-    },
-
-    getSubMenu: function() {
-
-       return (this._oSubMenu);
-
-    },
-
-    getElement: function() {
-
-        return (this._oLI);
-
-    },
-
-    getSrcElement: function() {
-
-        return (this._oSrcElement);
-
-    },
+            me.element.appendChild(m_oSubMenuIndicatorIMG);
     
-    setValue: function(p_oValue) {
+        };
 
-        if(p_oValue) {
-
-            var oValue = this._oValue;
-
-            this._oValue = p_oValue;
-
-            if(oValue != p_oValue) {
-
-                this.propertyChangeEvent.fire("value", p_oValue);
-
-            }
-
-        }
-
-    },
-
-    getValue: function() {
-
-        return (this._oValue);
-
-    },
-
-    setText: function(p_sText) {
-
-        if(typeof p_sText == "string") {
-
-            var sText = this._sText;
-
-            this._sText = p_sText;
-
-            if(this._oText) {
-
-                this._oText.nodeValue = this._sText;
-
-            }
-
-            if(sText != p_sText) {
-
-                this.propertyChangeEvent.fire("text", p_sText);
-
-            }
-
-        }
-
-    },
-
-    getText: function() {
-
-        return (this._sText);
-
-    },
-
-    setHelpText: function(p_sHelpText) {
-
-        if(typeof p_sHelpText == "string") {
-
-            var sHelpText = this._sHelpText;
-
-            this._sHelpText = p_sHelpText;
-
-            if(this._oLI) {
-
-                if(this._oHelpTextEM) {
+        var focusSubMenuFirstMenuItem = function() {
     
-                    if(p_sHelpText.length == 0) {
+            var oMenuItem;
     
-                        this._removeClass(this._oLI, "hashelptext");
-                        this._removeClass(this._oAnchor, "hashelptext"); 
+            if(m_oSubMenu.getSubMenus().length > 0) {
+    
+                oMenuItem = m_oSubMenu.getSubMenu(0).getMenuItem(0);
+    
+            }
+            else {
+    
+                oMenuItem = m_oSubMenu.getMenuItem(0);
+    
+            }
+    
+            if(oMenuItem) {
+    
+                oMenuItem.focus();
+    
+            }        
+    
+        };
 
-                        this._oLI.removeChild(this._oHelpTextEM);
-                        this._oHelpTextEM = null;
+        var getNextEnabledMenuItem = function(p_nMenuItemIndex, p_oMenu) {
+    
+            var oNextMenuItem;
+    
+            if(
+                p_nMenuItemIndex < (p_oMenu.getMenuItems().length - 1)
+            ) {
+    
+                oNextMenuItem = p_oMenu.getMenuItem((p_nMenuItemIndex+1));
+    
+            }
+            else {
+    
+                // Check if this Menu instance is a member of a group
+    
+                var oParent = p_oMenu.parent;
+    
+                if(oParent && oParent._Menu) {
+    
+                    var oNextMenu, nNextMenuIndex;
+    
+                    if(
+                        p_oMenu.index < 
+                        (oParent.getSubMenus().length - 1)
+                    ) {
+    
+                        nNextMenuIndex = p_oMenu.index + 1;
     
                     }
                     else {
     
-                        this._oHelpTextEM.innerHTML = this._sText;
+                        nNextMenuIndex = 0;
+    
+                    }
+    
+                    oNextMenu = oParent.getSubMenu(nNextMenuIndex);
+    
+                    if(oNextMenu) {
+    
+                        // Retrieve the first MenuItem instance in 
+                        // the next Menu
+    
+                        oNextMenuItem = oNextMenu.getMenuItem(0);
     
                     }
     
                 }
                 else {
+    
+                    // Retrieve the first MenuItem instance in the next
+                    // parent Menu
+    
+                    oNextMenuItem = p_oMenu.getMenuItem(0);                    
+    
+                }
+    
+            }
+    
+    
+            if(oNextMenuItem) {
+    
+                if(oNextMenuItem.isDisabled()) {
+    
+                    return getNextEnabledMenuItem(
+                                oNextMenuItem.index, 
+                                oNextMenuItem.parent
+                            );
+    
+                }
+                else {
+    
+                    return oNextMenuItem;
+    
+                }
+    
+            }
+    
+        };
 
-                    this._addClass(this._oLI, "hashelptext");
-                    this._addClass(this._oAnchor, "hashelptext"); 
+        var getPreviousEnabledMenuItem = function(p_nMenuItemIndex, p_oMenu) {
+    
+            var oPreviousMenuItem;
+    
+            if(p_nMenuItemIndex > 0) {
+    
+                oPreviousMenuItem = p_oMenu.getMenuItem((p_nMenuItemIndex-1));
+    
+            }
+            else {
+    
+                // Check if this Menu instance is a member of a group
+    
+                var oParent = p_oMenu.parent;
+    
+                if(oParent && oParent._Menu) {
+    
+                    var oPreviousMenu, nPreviousMenuIndex;
+    
+                    if(p_oMenu.index > 0) {
+    
+                        nPreviousMenuIndex = p_oMenu.index - 1;
+    
+                    }
+                    else {
+    
+                        nPreviousMenuIndex = oParent.getSubMenus().length - 1;
+    
+                    }
+    
+                    oPreviousMenu = oParent.getSubMenu(nPreviousMenuIndex);
+    
+                    if(oPreviousMenu) {
+    
+                        // Retrieve the last MenuItem instance in 
+                        // the previous Menu
+    
+                        oPreviousMenuItem = 
+                            oPreviousMenu.getMenuItem(
+                                (oPreviousMenu.getMenuItems().length - 1)
+                            );
+    
+                    }
+    
+                }
+                else {
+    
+                    // Retrieve the last MenuItem instance in the 
+                    // parent Menu
+    
+                    oPreviousMenuItem = 
+                        p_oMenu.getMenuItem(
+                            (p_oMenu.getMenuItems().length - 1)
+                        );                    
+    
+                }
+    
+            }
+    
+            if(oPreviousMenuItem) {
+    
+                if(oPreviousMenuItem.isDisabled()) {
+    
+                    return getPreviousEnabledMenuItem(
+                                oPreviousMenuItem.index,
+                                oPreviousMenuItem.parent
+                            );
+    
+                }
+                else {
+    
+                    return oPreviousMenuItem;
+    
+                }
+    
+            }
+    
+        };
+
+
+        // Private DOM event handlers
+    
+        var elementMouseOver = function(p_oEvent, p_oMenuItem) {
+    
+            if(!this.cfg.getConfigProperty("disabled")) {
+    
+                this.focus();
+        
+                if(m_oSubMenu) {
+        
+                    this.showSubMenu();
+        
+                }
+        
+                this.mouseOverEvent.fire(p_oEvent, this);
+    
+            }
+        
+        };
+
+        var elementMouseOut = function(p_oEvent, p_oMenuItem) {
+    
+            if(!this.cfg.getConfigProperty("disabled")) {
+    
+                if(m_oSubMenu && m_oSubMenu.isVisible()) {
+                    
+                    var oRelatedTarget = 
+                            YAHOO.util.Event.getRelatedTarget(p_oEvent),
+                        oDIV;
+            
+                    if(oRelatedTarget) {
+            
+                        switch(oRelatedTarget.tagName) {
+            
+                            case "A":
+            
+                                oDIV = 
+                                    oRelatedTarget.parentNode.parentNode.parentNode;
+            
+                            break;
+            
+                            case "EM":
+                            case "STRONG":
+            
+                                oDIV = 
+                                    oRelatedTarget.parentNode.parentNode.parentNode.parentNode;
+            
+                            break;
+            
+                            case "LI":
+            
+                                oDIV = oRelatedTarget.parentNode.parentNode;
+            
+                            break;
+            
+                            case "UL":
+            
+                                oDIV = oRelatedTarget.parentNode;
+            
+                            break;
+            
+                            case "DIV":
                 
-                    var oHelpText = document.createElement("em");
-                    oHelpText.innerHTML = this._sText;
+                                oDIV = oRelatedTarget;
+            
+                            break;
+            
+                        }
+                    
+                    }
+        
+                    if(
+                        oDIV && 
+                        (
+                            oDIV == m_oSubMenu.element ||
+                            oDIV.parentNode == m_oSubMenu.element
+                        )
+                    ) {
+                        
+                        this.cfg.setConfigProperty("selected", true);
 
-                    this._oLI.insertBefore(
-                        oHelpText,
-                        this._oSubMenuIndicatorIMG
+        
+                    }
+                    else {
+        
+                        m_oSubMenu.hide();
+                        this.blur();
+        
+                    }
+        
+                }
+                else {
+        
+                    this.blur();
+        
+                }
+        
+                this.mouseOutEvent.fire(p_oEvent, this);
+        
+            }
+    
+        };
+
+        var elementMouseDown = function(p_oEvent, p_oMenuItem) {
+    
+            if(!this.cfg.getConfigProperty("disabled")) {
+    
+                this.mouseDownEvent.fire(p_oEvent, this);
+    
+                return true;
+    
+            }
+    
+        };
+
+        var elementMouseUp = function(p_oEvent, p_oMenuItem) {
+    
+            if(!this.cfg.getConfigProperty("disabled")) {
+    
+                this.mouseUpEvent.fire(p_oEvent, this);
+    
+                return true;
+    
+            }
+    
+        };
+
+        var elementClick = function(p_oEvent, p_oMenuItem) {
+    
+            if(!this.cfg.getConfigProperty("disabled")) {
+    
+                var oTarget = YAHOO.util.Event.getTarget(p_oEvent, true);
+    
+                if(oTarget == m_oSubMenuIndicatorIMG) {
+    
+                    if(m_oSubMenu.isVisible()) {
+    
+                        this.hideSubMenu();
+    
+                        this.focus();
+    
+                    }
+                    else {
+    
+                        this.cfg.setConfigProperty("selected", true);
+                        
+                        this.showSubMenu();
+    
+                        focusSubMenuFirstMenuItem();
+    
+                    }
+    
+                }
+    
+    
+                this.clickEvent.fire(p_oEvent, this);
+    
+                return true;
+    
+            }
+    
+        };
+
+        var anchorKeyDown = function(p_oEvent, p_oMenuItem) {
+    
+            if(!this.cfg.getConfigProperty("disabled")) {
+    
+                switch(p_oEvent.keyCode) {
+        
+                    // up arrow
+        
+                    case 38:
+        
+                        var oMenuItem = 
+                            getPreviousEnabledMenuItem(
+                                this.index,
+                                this.parent
+                            );
+                
+                        if(oMenuItem) {
+                
+                            oMenuItem.focus();
+        
+                            // Prevent the keydown event from scrolling the 
+                            // window up
+    
+                            YAHOO.util.Event.preventDefault(p_oEvent);
+            
+                        }
+        
+                    break;
+        
+        
+                    // down arrow
+        
+                    case 40:
+        
+                        var oMenuItem = 
+                            getNextEnabledMenuItem(
+                                this.index, 
+                                this.parent
+                            );
+                
+                        if(oMenuItem) {
+                
+                            oMenuItem.focus();
+        
+                            // Prevent the keydown event from scrolling the 
+                            // window down
+                            YAHOO.util.Event.preventDefault(p_oEvent);
+            
+                        }
+        
+                    break;
+        
+        
+                    // Right arrow
+        
+                    case 39:
+        
+                        if(m_oSubMenu) {
+                        
+                            this.showSubMenu();
+    
+                            focusSubMenuFirstMenuItem();
+    
+                            this.cfg.setConfigProperty("selected", true);
+        
+                            // Prevent the keydown event from scrolling the
+                            // window right
+                            YAHOO.util.Event.preventDefault(p_oEvent);
+        
+                        }
+        
+                    break;
+                  
+                    
+                    // Left arrow and Esc key
+        
+                    case 37:
+                    case 27:
+        
+                        var oParentMenu = this.parent;
+        
+                        if(
+                            oParentMenu.parent && 
+                            oParentMenu.parent._Menu
+                        ) {
+        
+                            oParentMenu = oParentMenu.parent;
+        
+                        }
+        
+                        var oMenuItem = oParentMenu.parent;
+        
+                        oParentMenu.hide();
+        
+                        if(oMenuItem) {
+        
+                            oMenuItem.cfg.setConfigProperty("selected", true);
+                            oMenuItem.focus();
+        
+                        }
+        
+                        YAHOO.util.Event.preventDefault(p_oEvent);
+        
+                    break;
+        
+                }
+        
+                this.keyDownEvent.fire(p_oEvent, this);
+    
+            }
+        
+        };
+    
+        var anchorKeyUp = function(p_oEvent, p_oMenuItem) {
+    
+            if(!this.cfg.getConfigProperty("disabled")) {
+        
+                this.keyUpEvent.fire(p_oEvent, this);
+    
+            }
+    
+        };
+        
+        var anchorKeyPress = function(p_oEvent, p_oMenuItem) {
+    
+            if(!this.cfg.getConfigProperty("disabled")) {
+    
+                // Prevent the navigation keys from scrolling the page
+    
+                switch(p_oEvent.keyCode) {
+    
+                    case 27: // Esc
+                    case 37: // Left
+                    case 38: // Up    
+                    case 39: // Right
+                    case 40: // Down
+    
+                        YAHOO.util.Event.preventDefault(p_oEvent);
+    
+                    break;
+    
+                }
+    
+                this.keyPressEvent.fire(p_oEvent, this);
+    
+            }
+    
+        };
+
+        var anchorFocus = function(p_oEvent, p_oMenuItem) {
+    
+            if(!this.cfg.getConfigProperty("disabled")) {
+    
+                var oParent = this.parent.parent,
+                    oActiveMenuItem;
+                
+    
+                if(oParent && oParent._Menu) {
+        
+                    oActiveMenuItem = oParent.getActiveMenuItem();
+                
+                }
+                else {
+                
+                    oActiveMenuItem = this.parent.getActiveMenuItem();
+                
+                }
+           
+            
+                if(oActiveMenuItem && oActiveMenuItem != this) {
+        
+                    if(oActiveMenuItem.cfg.getConfigProperty("selected")) {
+
+                        oActiveMenuItem.cfg.setConfigProperty(
+                            "selected", 
+                            false
+                        );
+            
+                    }
+            
+                    var oSubMenu = 
+                        oActiveMenuItem.cfg.getConfigProperty("submenu");
+            
+                    if(oSubMenu && oSubMenu.cfg.getConfigProperty("visible")) {
+            
+                        oSubMenu.hide();
+            
+                    }
+        
+                }
+            
+                oDom.addClass(this.element, "focus");
+                oDom.addClass(m_oAnchor, "focus");
+    
+                if(m_oHelpTextEM) {
+    
+                    oDom.addClass(m_oHelpTextEM, "focus");
+    
+                }
+    
+                if(m_oSubMenu) {
+        
+                    m_oSubMenuIndicatorIMG.src = 
+                        this.FOCUSED_SUBMENU_INDICATOR_IMAGE_URL;
+        
+                }                
+    
+                this.focusEvent.fire(p_oEvent, this);
+    
+            }
+    
+        };
+
+        var anchorBlur = function(p_oEvent, p_oMenuItem) {
+    
+            if(!this.cfg.getConfigProperty("disabled")) {
+    
+                oDom.removeClass(this.element, "focus");
+                oDom.removeClass(m_oAnchor, "focus");
+    
+                if(m_oHelpTextEM) {
+    
+                    oDom.removeClass(m_oHelpTextEM, "focus");
+    
+                }
+    
+                if(m_oSubMenu && !this.cfg.getConfigProperty("selected")) {
+        
+                    m_oSubMenuIndicatorIMG.src = 
+                        this.SUBMENU_INDICATOR_IMAGE_URL;
+    
+                }
+        
+                this.blurEvent.fire(p_oEvent, this);
+    
+            }
+    
+        };
+
+
+        // Privileged methods
+
+        this.initDefaultConfig = function() {
+    
+            this.cfg = new YAHOO.util.Config(this);
+    
+    
+            // Add properties //
+    
+            this.cfg.addConfigProperty(
+                "text", 
+                null, 
+                this.configText, 
+                checkString
+            );
+    
+            this.cfg.addConfigProperty(
+                "value", 
+                null
+            );
+    
+            this.cfg.addConfigProperty(
+                "helptext", 
+                null, 
+                this.configHelpText 
+            );
+    
+            this.cfg.addConfigProperty(
+                "url", 
+                null, 
+                this.configURL
+            );
+    
+            this.cfg.addConfigProperty(
+                "emphasis", 
+                false, 
+                this.configEmphasis, 
+                this.cfg.checkBoolean
+            );
+    
+            this.cfg.addConfigProperty(
+                "strongemphasis", 
+                false, 
+                this.configStrongEmphasis, 
+                this.cfg.checkBoolean
+            );
+    
+            this.cfg.addConfigProperty(
+                "disabled", 
+                false, 
+                this.configDisabled, 
+                this.cfg.checkBoolean
+            );
+        
+            this.cfg.addConfigProperty(
+                "selected", 
+                false, 
+                this.configSelected, 
+                this.cfg.checkBoolean
+            );
+
+            this.cfg.addConfigProperty(
+                "submenu", 
+                null, 
+                this.configSubMenu
+            );
+    
+        };
+    
+        this.configText = function(p_sType, p_aArguments, p_oObject) {
+    
+            var sText = p_aArguments[0];
+
+
+            if(m_oText) {
+
+                m_oText.nodeValue = sText;
+
+            }
+    
+        };
+    
+        this.configHelpText = function(p_sType, p_aArguments, p_oObject) {
+    
+            var oHelpText = args[0];
+
+
+            var removeHelpText = function() {
+
+                m_oDom.removeClass(this.element, "hashelptext");
+                m_oDom.removeClass(m_oAnchor, "hashelptext"); 
+
+                this.element.removeChild(m_oHelpTextEM);
+                m_oHelpTextEM = null;
+
+            };
+
+
+            if(checkDOMNode(oHelpText)) {
+
+                if(m_oHelpTextEM) {
+
+                    var oParentNode = m_oHelpTextEM.parentNode;
+                    oParentNode.replaceChild(oHelpText, m_oHelpTextEM);
+
+                }
+                else {
+
+                    this.element.insertBefore(
+                        m_oHelpTextEM, 
+                        m_oSubMenuIndicatorIMG
                     );
 
-                    this._oHelpTextEM = oHelpText;
+                }
+
+                m_oDom.addClass(this.element, "hashelptext");
+                m_oDom.addClass(m_oAnchor, "hashelptext");
+
+            }
+            else if(checkString(oHelpText)) {
+
+                if(oHelpText.length == 0) {
+
+                    removeHelpText();
+
+                }
+                else {
+
+                    if(!m_oHelpTextEM) {
+
+                        m_oHelpTextEM = document.createElement("em");
+
+                    }
+
+                    m_oHelpTextEM.innerHTML = oHelpText;
+
+                    m_oDom.addClass(this.element, "hashelptext");
+                    m_oDom.addClass(m_oAnchor, "hashelptext");
 
                 }
 
             }
+            else if(!oHelpText && m_oHelpTextEM) {
 
-            if(sHelpText != p_sHelpText) {
+                removeHelpText();
 
-                this.propertyChangeEvent.fire("helptext", p_sHelpText);
+            }
+    
+        };
+    
+        this.configURL = function(p_sType, p_aArguments, p_oObject) {
+    
+            var sURL = p_aArguments[0];
+
+
+            if(sURL.length > 0) {
+
+                m_oAnchor.setAttribute("href", sURL);
+
+            }
+            else {
+
+                m_oAnchor.removeAttribute("href");
+    
+            }
+
+        };
+    
+        this.configEmphasis = function(p_sType, p_aArguments, p_oObject) {
+    
+            var bEmphasis = p_aArguments[0];
+    
+
+            if(bEmphasis && this.cfg.getConfigProperty("strongemphasis")) {
+
+                this.cfg.setConfigProperty("strongemphasis", false);
 
             }
 
-        }
 
-    },
-
-    getHelpText: function() {
-
-        return (this._sHelpText);
-
-    },
-
-    setURL: function(p_sURL) {
-
-        if(typeof p_sURL == "string") {
-
-            var sURL = this._sURL;
-
-            this._sURL = p_sURL;
-
-            if(this._oAnchor) {
-
-                this._oAnchor.setAttribute("href", this._sURL);
-
-            }
-
-            if(sURL != p_sURL) {
-
-                this.propertyChangeEvent.fire("url", p_sURL);
-
-            }
-
-        } 
-
-    },
-
-    getURL: function() {
-
-        return (this._sURL);
-
-    },
-
-    setEmphasis: function(p_bEmphasis) {
-
-        if(typeof p_bEmphasis == "boolean") {
-
-            var bEmphasis = this._bEmphasis;
-
-            this._bEmphasis = p_bEmphasis;
-
-            if(this._bStrongEmphasis && this._bEmphasis) {
-
-                this.setStrongEmphasis(false);
-
-            }
-
-            if(this._oAnchor) {
+            if(m_oAnchor) {
 
                 var oEM;
 
-                if(this._bEmphasis) {
+                if(bEmphasis) {
 
                     oEM = document.createElement("em");
-                    oEM.appendChild(this._oText);
+                    oEM.appendChild(m_oText);
 
-                    this._oAnchor.appendChild(oEM);
+                    m_oAnchor.appendChild(oEM);
 
                 }
                 else {
 
-                    oEM = this._oAnchor.firstChild;
+                    if(
+                        m_oAnchor.firstChild && 
+                        m_oAnchor.firstChild.nodeType == 1 && 
+                        m_oAnchor.firstChild.tagName == "EM"
+                    ) {
 
-                    if(oEM.nodeType != 1) {
-                        
-                        oEM = this._oAnchor.childNodes[1];
+                        oEM = m_oAnchor.firstChild;
+
+                    }
+                    else if(
+                        m_oAnchor.childNodes[1] && 
+                        m_oAnchor.childNodes[1].nodeType == 1 &&
+                        m_oAnchor.childNodes[1].tagName == "EM"
+                    ) {
+
+                        oEM = m_oAnchor.childNodes[1];
 
                     }
 
-                    this._oAnchor.removeChild(oEM);
-                    this._oAnchor.appendChild(this._oText);
+
+                    m_oAnchor.removeChild(oEM);
+                    m_oAnchor.appendChild(m_oText);
 
                 }
 
             }
+    
+        };
+    
+        this.configStrongEmphasis = function(p_sType, p_aArguments, p_oObject) {
+    
+            var bStrongEmphasis = p_aArguments[0];
+    
 
-            if(bEmphasis != p_bEmphasis) {
+            if(bStrongEmphasis && this.cfg.getConfigProperty("emphasis")) {
 
-                this.propertyChangeEvent.fire("emphasis", p_bEmphasis);
-
-            }
-
-        }         
-
-    },
-
-    hasEmphasis: function() {
-
-        return (this._bEmphasis);
-
-    },
-
-    setStrongEmphasis: function(p_bStrongEmphasis) {
-
-        if(typeof p_bStrongEmphasis == "boolean") {
-
-            var bStrongEmphasis = this._bStrongEmphasis;
-
-            this._bStrongEmphasis = p_bStrongEmphasis;
-
-            if(this._bEmphasis && this._bStrongEmphasis) {
-
-                this.setEmphasis(false);
+                this.cfg.setConfigProperty("emphasis", false);
 
             }
 
-            if(this._oAnchor) {
+            if(m_oAnchor) {
 
                 var oStrong;
 
-                if(this._bStrongEmphasis) {
+                if(bStrongEmphasis) {
 
                     oStrong = document.createElement("strong");
-                    oStrong.appendChild(this._oText);
+                    oStrong.appendChild(m_oText);
 
-                    this._oAnchor.appendChild(oStrong);
+                    m_oAnchor.appendChild(oStrong);
 
                 }
                 else {
 
-                    oStrong = this._oAnchor.firstChild;
+                    if(
+                        m_oAnchor.firstChild && 
+                        m_oAnchor.firstChild.nodeType == 1 && 
+                        m_oAnchor.firstChild.tagName == "STRONG"
+                    ) {
 
-                    if(oStrong.nodeType != 1) {
-                        
-                        oStrong = this._oAnchor.childNodes[1];
+                        oStrong = m_oAnchor.firstChild;
+
+                    }
+                    else if(
+                        m_oAnchor.childNodes[1] && 
+                        m_oAnchor.childNodes[1].nodeType == 1 &&
+                        m_oAnchor.childNodes[1].tagName == "STRONG"
+                    ) {
+
+                        oStrong = m_oAnchor.childNodes[1];
 
                     }
 
-                    this._oAnchor.removeChild(oStrong);
-                    this._oAnchor.appendChild(this._oText);
+                    m_oAnchor.removeChild(oStrong);
+                    m_oAnchor.appendChild(m_oText);
 
                 }
 
             }
+    
+        };
+    
+        this.configDisabled = function(p_sType, p_aArguments, p_oObject) {
+    
+            var bDisabled = p_aArguments[0];
+    
 
-            if(bStrongEmphasis != p_bStrongEmphasis) {
+            if(bDisabled) {
 
-                this.propertyChangeEvent.fire(
-                    "strongemphasis", 
-                    p_bStrongEmphasis
+                this.cfg.setConfigProperty("selected", false);
+
+                m_oAnchor.removeAttribute("href");
+                m_oAnchor.removeAttribute("tabIndex");
+
+                m_oDom.addClass(this.element, "disabled");
+                m_oDom.addClass(m_oAnchor, "disabled");
+
+                if(m_oHelpTextEM) {
+
+                    m_oDom.addClass(m_oHelpTextEM, "disabled");
+
+                }
+
+                m_oSubMenuIndicatorIMG.src = 
+                    this.DISABLED_SUBMENU_INDICATOR_IMAGE_URL;
+
+                m_oSubMenuIndicatorIMG.alt = 
+                    this.DISABLED_SUBMENU_INDICATOR_ALT_TEXT;
+
+            }
+            else {
+
+                m_oAnchor.setAttribute(
+                    "href", 
+                    this.cfg.getConfigProperty("url")
                 );
 
-            }
+                m_oAnchor.setAttribute("tabIndex", 0);
 
-        }         
+                m_oDom.removeClass(this.element, "disabled");
+                m_oDom.removeClass(m_oAnchor, "disabled");
 
-    },
+                if(m_oHelpTextEM) {
 
-    hasStrongEmphasis: function() {
-
-        return (this._bStrongEmphasis);
-
-    },
-
-    setDisabled: function(p_bDisabled) {
-
-        if(typeof p_bDisabled == "boolean") {
-
-            var bDisabled = p_bDisabled;
-
-            this._bDisabled = p_bDisabled;
-
-            if(this._oLI) {
-            
-                if(this._bDisabled) {
-
-                    this._oAnchor.removeAttribute("href");
-                    this._oAnchor.removeAttribute("tabIndex");
-    
-                    this._addClass(this._oLI, "disabled");
-                    this._addClass(this._oAnchor, "disabled");
-
-                    if(this._oHelpTextEM) {
-
-                        this._addClass(this._oHelpTextEM, "disabled");
-
-                    }
-
-                    this._oSubMenuIndicatorIMG.src = 
-                        this.DISABLED_SUBMENU_INDICATOR_IMAGE_URL;
-
-                    this._oSubMenuIndicatorIMG.alt = 
-                        this.DISABLED_SUBMENU_INDICATOR_ALT_TEXT;
-    
-                }
-                else {
-    
-                    this._oAnchor.setAttribute("href", this._sURL);
-                    this._oAnchor.setAttribute("tabIndex", 0);
-
-                    this._removeClass(this._oLI, "disabled");
-                    this._removeClass(this._oAnchor, "disabled");
-
-                    if(this._oHelpTextEM) {
-
-                        this._removeClass(this._oHelpTextEM, "disabled");
-
-                    }
-
-                    this._oSubMenuIndicatorIMG.src = 
-                        this.SUBMENU_INDICATOR_IMAGE_URL;
-
-                    this._oSubMenuIndicatorIMG.alt = 
-                        this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
-    
-                }
-
-            }
-
-            if(bDisabled != p_bDisabled) {
-
-                this.propertyChangeEvent.fire("disabled", p_bDisabled);
-
-            }
-
-        }        
-
-    },
-
-    isDisabled: function() {
-
-        return (this._bDisabled);
-
-    },
-
-    setSelected: function(p_bSelected) {
-
-        if(typeof p_bSelected == "boolean" && !this._bDisabled) {
-
-            var bSelected = this._bSelected;
-
-            this._bSelected = p_bSelected;
-
-            if(this._oLI) {
-            
-                if(this._bSelected) {
-    
-                    this._addClass(this._oLI, "selected");
-                    this._addClass(this._oAnchor, "selected");
-
-                    if(this._oHelpTextEM) {
-
-                        this._addClass(this._oHelpTextEM, "selected");
-
-                    }
-
-                    this._oSubMenuIndicatorIMG.src = 
-                        this.FOCUSED_SUBMENU_INDICATOR_IMAGE_URL;
-    
-                }
-                else {
-    
-                    this._removeClass(this._oLI, "selected");
-                    this._removeClass(this._oAnchor, "selected");
-
-                    if(this._oHelpTextEM) {
-
-                        this._removeClass(this._oHelpTextEM, "selected");
-
-                    }
-
-                    this._oSubMenuIndicatorIMG.src = 
-                        this.SUBMENU_INDICATOR_IMAGE_URL;
-    
-                }
-
-            }
-
-            if(bSelected != p_bSelected) {
-
-                this.propertyChangeEvent.fire("selected", p_bSelected);
-
-            }
-
-        }
-
-    },
-
-    isSelected: function() {
-
-        return (this._bSelected);
-
-    },
-
-
-    // Private methods
-
-    _addClass: function(p_oElement, p_sClassName) {
-
-        if(!this._classContains(p_oElement, p_sClassName)) {
-
-            this._removeBehavior(p_oElement);
-
-            p_oElement.className = 
-                (p_oElement.className ? p_oElement.className + " " : "") + 
-                p_sClassName;
-
-        }
-        
-    },
-    
-    _classContains: function(p_oElement, p_sClassName) {
-
-        return (
-            p_oElement.className ? 
-            p_oElement.className.indexOf(p_sClassName)+1 : false
-        );
-
-    },
-
-    _removeClass: function(p_oElement, p_sClassName) {
-
-        if(this._classContains(p_oElement, p_sClassName)) {
-
-            this._removeBehavior(p_oElement);
-
-            var oRegExp = 
-                new RegExp("("+p_sClassName+")|("+p_sClassName+")","g");
-
-            p_oElement.className = p_oElement.className.replace(oRegExp,"");
-
-        }
-
-    },
-
-    _removeBehavior: function(p_oElement) {
-    
-        if(p_oElement.runtimeStyle) {
-
-            p_oElement.runtimeStyle.behavior = "";
-        
-        }        
-    
-    },
-
-    _createSubMenuIndicator: function() {
-
-        var oSubMenuIndicatorImage = document.createElement("img");
-
-        if(this._bDisabled) {
-
-            oSubMenuIndicatorImage.src = 
-                this.DISABLED_SUBMENU_INDICATOR_IMAGE_URL;
-
-            oSubMenuIndicatorImage.alt = 
-                this.DISABLED_SUBMENU_INDICATOR_ALT_TEXT;
-
-        }
-        else {
-
-            oSubMenuIndicatorImage.src = 
-                this.SUBMENU_INDICATOR_IMAGE_URL;
-
-            oSubMenuIndicatorImage.alt = 
-                this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
-
-        }
-
-        this._addClass(this._oLI, "hassubmenu");
-        this._addClass(this._oAnchor, "hassubmenu");        
-        
-        this._oLI.appendChild(oSubMenuIndicatorImage);
-
-        this._oSubMenuIndicatorIMG = oSubMenuIndicatorImage;
-
-    },
-
-    _focusSubMenuFirstMenuItem: function() {
-
-        var oMenuItem;
-
-        if(this._oSubMenu.getSubMenus().length > 0) {
-
-            oMenuItem = this._oSubMenu.getSubMenu(0).getMenuItem(0);
-
-        }
-        else {
-
-            oMenuItem = this._oSubMenu.getMenuItem(0);
-
-        }
-
-        if(oMenuItem) {
-
-            oMenuItem.focus();
-
-        }        
-
-    },
-
-    _getNextEnabledMenuItem: function(p_nMenuItemIndex, p_oMenu) {
-
-        var oNextMenuItem;
-
-        if(
-            p_nMenuItemIndex < (p_oMenu.getMenuItems().length - 1)
-        ) {
-
-            oNextMenuItem = p_oMenu.getMenuItem((p_nMenuItemIndex+1));
-
-        }
-        else {
-
-            // Check if this Menu instance is a member of a group
-
-            var oParent = p_oMenu.getParent();
-
-            if(oParent && oParent._Menu) {
-
-                var oNextMenu, nNextMenuIndex;
-
-                if(
-                    p_oMenu.getIndex() < 
-                    (oParent.getSubMenus().length - 1)
-                ) {
-
-                    nNextMenuIndex = p_oMenu.getIndex() + 1;
-
-                }
-                else {
-
-                    nNextMenuIndex = 0;
+                    m_oDom.removeClass(m_oHelpTextEM, "disabled");
 
                 }
 
-                oNextMenu = oParent.getSubMenu(nNextMenuIndex);
+                m_oSubMenuIndicatorIMG.src = 
+                    this.SUBMENU_INDICATOR_IMAGE_URL;
 
-                if(oNextMenu) {
+                m_oSubMenuIndicatorIMG.alt = 
+                    this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
 
-                    // Retrieve the first MenuItem instance in 
-                    // the next Menu
+            }    
+    
+        };
+    
+        this.configSelected = function(p_sType, p_aArguments, p_oObject) {
+    
+            var bSelected = p_aArguments[0];
 
-                    oNextMenuItem = oNextMenu.getMenuItem(0);
+
+            if(bSelected) {
+
+                m_oDom.addClass(this.element, "selected");
+                m_oDom.addClass(m_oAnchor, "selected");
+
+                if(m_oHelpTextEM) {
+
+                    m_oDom.addClass(m_oHelpTextEM, "selected");
 
                 }
 
-            }
-            else {
-
-                // Retrieve the first MenuItem instance in the next
-                // parent Menu
-
-                oNextMenuItem = p_oMenu.getMenuItem(0);                    
-
-            }
-
-        }
-
-
-        if(oNextMenuItem) {
-
-            if(oNextMenuItem.isDisabled()) {
-
-                return this._getNextEnabledMenuItem(
-                            oNextMenuItem.getIndex(), 
-                            oNextMenuItem.getParent()
-                        );
-
-            }
-            else {
-
-                return oNextMenuItem;
-
-            }
-
-        }
-
-    },
-
-    _getPreviousEnabledMenuItem: function(p_nMenuItemIndex, p_oMenu) {
-
-        var oPreviousMenuItem;
-
-        if(p_nMenuItemIndex > 0) {
-
-            oPreviousMenuItem = p_oMenu.getMenuItem((p_nMenuItemIndex-1));
-
-        }
-        else {
-
-            // Check if this Menu instance is a member of a group
-
-            var oParent = p_oMenu.getParent();
-
-            if(oParent && oParent._Menu) {
-
-                var oPreviousMenu, nPreviousMenuIndex;
-
-                if(p_oMenu.getIndex() > 0) {
-
-                    nPreviousMenuIndex = p_oMenu.getIndex() - 1;
-
-                }
-                else {
-
-                    nPreviousMenuIndex = oParent.getSubMenus().length - 1;
-
-                }
-
-                oPreviousMenu = oParent.getSubMenu(nPreviousMenuIndex);
-
-                if(oPreviousMenu) {
-
-                    // Retrieve the last MenuItem instance in 
-                    // the previous Menu
-
-                    oPreviousMenuItem = 
-                        oPreviousMenu.getMenuItem(
-                            (oPreviousMenu.getMenuItems().length - 1)
-                        );
-
-                }
-
-            }
-            else {
-
-                // Retrieve the last MenuItem instance in the 
-                // parent Menu
-
-                oPreviousMenuItem = 
-                    p_oMenu.getMenuItem(
-                        (p_oMenu.getMenuItems().length - 1)
-                    );                    
-
-            }
-
-        }
-
-        if(oPreviousMenuItem) {
-
-            if(oPreviousMenuItem.isDisabled()) {
-
-                return this._getPreviousEnabledMenuItem(
-                            oPreviousMenuItem.getIndex(),
-                            oPreviousMenuItem.getParent()
-                        );
-
-            }
-            else {
-
-                return oPreviousMenuItem;
-
-            }
-
-        }
-
-    },
-
-    _assignDOMEventHandlers: function() {
-
-        var oEventUtil = YAHOO.util.Event;
-
-        oEventUtil.addListener(
-            this._oLI, 
-            "mouseover", 
-            this._elementMouseOver, 
-            this,
-            true
-        );
-
-        oEventUtil.addListener(
-            this._oLI, 
-            "mouseout", 
-            this._elementMouseOut, 
-            this,
-            true
-        );
-
-        oEventUtil.addListener(
-            this._oLI, 
-            "mousedown", 
-            this._elementMouseDown, 
-            this,
-            true
-        );
-
-        oEventUtil.addListener(
-            this._oLI, 
-            "mouseup", 
-            this._elementMouseUp, 
-            this,
-            true
-        );
-
-        oEventUtil.addListener(
-            this._oLI, 
-            "click", 
-            this._elementClick, 
-            this,
-            true
-        );
-
-        oEventUtil.addListener(
-            this._oAnchor, 
-            "keydown", 
-            this._anchorKeyDown, 
-            this,
-            true
-        );
-
-        oEventUtil.addListener(
-            this._oAnchor, 
-            "keyup", 
-            this._anchorKeyUp, 
-            this,
-            true
-        );
-
-        oEventUtil.addListener(
-            this._oAnchor, 
-            "keypress", 
-            this._anchorKeyPress, 
-            this,
-            true
-        );
-
-        oEventUtil.addListener(
-            this._oAnchor, 
-            "focus", 
-            this._anchorFocus, 
-            this,
-            true
-        );
-
-        oEventUtil.addListener(
-            this._oAnchor, 
-            "blur", 
-            this._anchorBlur,
-            this,
-            true
-        );
-
-    },
-
-
-    // Private DOM event handlers
-
-    _elementMouseOver: function(p_oEvent, p_oMenuItem) {
-
-        if(!this._bDisabled) {
-
-            this.focus();
-    
-            if(!this._bDisabled && this._oSubMenu) {
-    
-                this.showSubMenu();
-    
-            }
-    
-            this.mouseOverEvent.fire(p_oEvent, this);
-
-        }
-    
-    },
-
-    _elementMouseOut: function(p_oEvent, p_oMenuItem) {
-
-        if(!this._bDisabled) {
-
-            if(this._oSubMenu && this._oSubMenu.isVisible()) {
-                
-                var oRelatedTarget = 
-                        YAHOO.util.Event.getRelatedTarget(p_oEvent),
-                    oDIV;
-        
-                if(oRelatedTarget) {
-        
-                    switch(oRelatedTarget.tagName) {
-        
-                        case "A":
-        
-                            oDIV = 
-                                oRelatedTarget.parentNode.parentNode.parentNode;
-        
-                        break;
-        
-                        case "EM":
-                        case "STRONG":
-        
-                            oDIV = 
-                                oRelatedTarget.parentNode.parentNode.parentNode.parentNode;
-        
-                        break;
-        
-                        case "LI":
-        
-                            oDIV = oRelatedTarget.parentNode.parentNode;
-        
-                        break;
-        
-                        case "UL":
-        
-                            oDIV = oRelatedTarget.parentNode;
-        
-                        break;
-        
-                        case "DIV":
-            
-                            oDIV = oRelatedTarget;
-        
-                        break;
-        
-                    }
-                
-                }
-    
-                if(
-                    oDIV && 
-                    (
-                        oDIV == this._oSubMenu.getElement() ||
-                        oDIV.parentNode == this._oSubMenu.getElement()
-                    )
-                ) {
-                    
-                    this.setSelected(true);
-    
-                }
-                else {
-    
-                    this._oSubMenu.hide();
-                    this.blur();
-    
-                }
-    
-            }
-            else {
-    
-                this.blur();
-    
-            }
-    
-            this.mouseOutEvent.fire(p_oEvent, this);
-    
-        }
-
-    },
-
-    _elementMouseDown: function(p_oEvent, p_oMenuItem) {
-
-        if(!this._bDisabled) {
-
-            this.mouseDownEvent.fire(p_oEvent, this);
-
-            return true;
-
-        }
-
-    },
-
-    _elementMouseUp: function(p_oEvent, p_oMenuItem) {
-
-        if(!this._bDisabled) {
-
-            this.mouseUpEvent.fire(p_oEvent, this);
-
-            return true;
-
-        }
-
-    },
-
-    _elementClick: function(p_oEvent, p_oMenuItem) {
-
-        if(!this._bDisabled) {
-
-            var oTarget = YAHOO.util.Event.getTarget(p_oEvent, true);
-
-            if(oTarget == this._oSubMenuIndicatorIMG) {
-
-                if(this._oSubMenu.isVisible()) {
-
-                    this.hideSubMenu();
-
-                    this.focus();
-
-                }
-                else {
-
-                    this.setSelected(true);
-                    
-                    this.showSubMenu();
-
-                    this._focusSubMenuFirstMenuItem();
-
-                }
-
-            }
-
-
-            this.clickEvent.fire(p_oEvent, this);
-
-            return true;
-
-        }
-
-    },
-
-    _anchorKeyDown: function(p_oEvent, p_oMenuItem) {
-
-        if(!this._bDisabled) {
-
-            switch(p_oEvent.keyCode) {
-    
-                // up arrow
-    
-                case 38:
-    
-                    var oMenuItem = 
-                        this._getPreviousEnabledMenuItem(
-                            this._nIndex,
-                            this._oParent
-                        );
-            
-                    if(oMenuItem) {
-            
-                        oMenuItem.focus();
-    
-                        // Prevent the keydown event from scrolling the 
-                        // window up
-
-                        YAHOO.util.Event.preventDefault(p_oEvent);
-        
-                    }
-    
-                break;
-    
-    
-                // down arrow
-    
-                case 40:
-    
-                    var oMenuItem = 
-                        this._getNextEnabledMenuItem(
-                            this._nIndex, 
-                            this._oParent
-                        );
-            
-                    if(oMenuItem) {
-            
-                        oMenuItem.focus();
-    
-                        // Prevent the keydown event from scrolling the 
-                        // window down
-                        YAHOO.util.Event.preventDefault(p_oEvent);
-        
-                    }
-    
-                break;
-    
-    
-                // Right arrow
-    
-                case 39:
-    
-                    if(this._oSubMenu) {
-                    
-                        this.showSubMenu();
-
-                        this._focusSubMenuFirstMenuItem();
-
-                        this.setSelected(true);
-    
-                        // Prevent the keydown event from scrolling the
-                        // window right
-                        YAHOO.util.Event.preventDefault(p_oEvent);
-    
-                    }
-    
-                break;
-              
-                
-                // Left arrow and Esc key
-    
-                case 37:
-                case 27:
-    
-                    var oParentMenu = this._oParent;
-    
-                    if(
-                        oParentMenu.getParent() && 
-                        oParentMenu.getParent()._Menu
-                    ) {
-    
-                        oParentMenu = oParentMenu.getParent();
-    
-                    }
-    
-                    var oMenuItem = oParentMenu.getParent();
-    
-                    oParentMenu.hide();
-    
-                    if(oMenuItem) {
-    
-                        oMenuItem.setSelected(false);
-                        oMenuItem.focus();
-    
-                    }
-    
-                    YAHOO.util.Event.preventDefault(p_oEvent);
-    
-                break;
-    
-            }
-    
-            this.keyDownEvent.fire(p_oEvent, this);
-
-        }
-    
-    },
-    
-    _anchorKeyUp: function(p_oEvent, p_oMenuItem) {
-
-        if(!this._bDisabled) {
-    
-            this.keyUpEvent.fire(p_oEvent, this);
-
-        }
-
-    },
-    
-    _anchorKeyPress: function(p_oEvent, p_oMenuItem) {
-
-        if(!this._bDisabled) {
-
-            // Prevent the navigation keys from scrolling the page
-
-            switch(p_oEvent.keyCode) {
-
-                case 27: // Esc
-                case 37: // Left
-                case 38: // Up    
-                case 39: // Right
-                case 40: // Down
-
-                    YAHOO.util.Event.preventDefault(p_oEvent);
-
-                break;
-
-            }
-
-            this.keyPressEvent.fire(p_oEvent, this);
-
-        }
-
-    },
-
-    _anchorFocus: function(p_oEvent, p_oMenuItem) {
-
-        if(!this._bDisabled) {
-
-            var oParent = this._oParent.getParent(),
-                oActiveMenuItem;
-            
-
-            if(oParent && oParent._Menu) {
-    
-                oActiveMenuItem = oParent.getActiveMenuItem();
-            
-            }
-            else {
-            
-                oActiveMenuItem = this._oParent.getActiveMenuItem();
-            
-            }
-       
-        
-            if(oActiveMenuItem && oActiveMenuItem != this) {
-    
-                if(oActiveMenuItem.isSelected()) {
-        
-                    oActiveMenuItem.setSelected(false);
-        
-                }
-        
-                var oSubMenu = oActiveMenuItem.getSubMenu();
-        
-                if(oSubMenu && oSubMenu.isVisible()) {
-        
-                    oSubMenu.hide();
-        
-                }
-    
-            }
-        
-            this._addClass(this._oLI, "focus");
-            this._addClass(this._oAnchor, "focus");
-
-            if(this._oHelpTextEM) {
-
-                this._addClass(this._oHelpTextEM, "focus");
-
-            }
-
-            if(this._oSubMenu) {
-    
-                this._oSubMenuIndicatorIMG.src = 
+                m_oSubMenuIndicatorIMG.src = 
                     this.FOCUSED_SUBMENU_INDICATOR_IMAGE_URL;
-    
-            }                
-
-            this.focusEvent.fire(p_oEvent, this);
-
-        }
-
-    },
-
-    _anchorBlur: function(p_oEvent, p_oMenuItem) {
-
-        if(!this._bDisabled) {
-
-            this._removeClass(this._oLI, "focus");
-            this._removeClass(this._oAnchor, "focus");
-
-            if(this._oHelpTextEM) {
-
-                this._removeClass(this._oHelpTextEM, "focus");
 
             }
+            else {
 
-            if(this._oSubMenu && !this.isSelected()) {
-    
-                this._oSubMenuIndicatorIMG.src = 
+                m_oDom.removeClass(this.element, "selected");
+                m_oDom.removeClass(m_oAnchor, "selected");
+
+                if(m_oHelpTextEM) {
+
+                    oDom.removeClass(m_oHelpTextEM, "selected");
+
+                }
+
+                m_oSubMenuIndicatorIMG.src = 
                     this.SUBMENU_INDICATOR_IMAGE_URL;
 
             }
     
-            this.blurEvent.fire(p_oEvent, this);
+    
+        };
+
+        this.configSubMenu = function(p_sType, p_aArguments, p_oObject) {
+
+            var oMenu = p_aArguments[0];
+
+            m_oSubMenu = oMenu;
+
+            oMenu.parent = this;
+
+            if(oMenu) {
+
+                m_oDom.addClass(this.element, "hassubmenu");
+                m_oDom.addClass(oAnchor, "hassubmenu");
+
+                createSubMenuIndicator();
+
+            }
+            else {
+
+                m_oDom.removeClass(this.element, "hassubmenu");
+                m_oDom.removeClass(oAnchor, "hassubmenu");
+
+                this.element.removeChild(m_oSubMenuIndicatorIMG);
+
+            }
+
+        };
+
+        this.focus = function() {
+    
+            if(!this.cfg.getConfigProperty("disabled") && m_oAnchor) {
+    
+                m_oAnchor.focus();
+    
+            }
+    
+        };
+    
+        this.blur = function() {
+    
+            if(!this.cfg.getConfigProperty("disabled") && m_oAnchor) {
+    
+                m_oAnchor.blur();
+    
+            }
+    
+        };
+
+        this.showSubMenu = function() {
+    
+            if(m_oSubMenu) {
+    
+                m_oSubMenu.element.style.visibility = "hidden";
+    
+                m_oSubMenu.show();
+    
+                var oParentMenu = this.parent;
+                
+                if(oParentMenu.parent && oParentMenu.parent._Menu) {
+    
+                    oParentMenu = oParentMenu.parent;
+                
+                }
+    
+                var aMenuItemPos = YAHOO.util.Dom.getXY(this.element),
+                    nMenuItemPageX = aMenuItemPos[0],
+                    nMenuItemPageY = aMenuItemPos[1],
+                    nMenuItemOffsetWidth = this.element.offsetWidth,
+                    nParentMenuRightPos = (nMenuItemPageX + nMenuItemOffsetWidth),
+                    nSubMenuOffsetWidth = m_oSubMenu.element.offsetWidth,
+                    nSubMenuOffsetHeight = m_oSubMenu.element.offsetHeight;
+    
+                var oSubMenuDIV = m_oSubMenu.element;
+    
+                oSubMenuDIV.style.left = "";
+                oSubMenuDIV.style.right = "";
+                oSubMenuDIV.style.top = "";
+                oSubMenuDIV.style.bottom = "";
+    
+                // Set the top position
+    
+                if(
+                    (nMenuItemPageY + nSubMenuOffsetHeight) >
+                    YAHOO.util.Dom.getClientHeight()
+                ) {
+    
+                    var nTopPos = (nMenuItemPageY - nSubMenuOffsetHeight);
+    
+                    if(nTopPos < 0) {
+    
+                        m_oSubMenu.setTopPos(this.element.offsetTop);
+                    
+                    }
+                    else {
+    
+                        m_oSubMenu.setBottomPos(
+                            (
+                                oParentMenu.element.offsetHeight - 
+                                (this.element.offsetTop + this.element.offsetHeight) 
+                            )
+                        );
+    
+                    }                
+               
+                }
+                else {
+    
+                    m_oSubMenu.setTopPos(this.element.offsetTop);
+                
+                }
+    
+    
+                // Set the left position
+    
+                if(
+                    (nParentMenuRightPos + nSubMenuOffsetWidth) > 
+                    YAHOO.util.Dom.getClientWidth()
+                ) {
+                
+                    if(nMenuItemPageX > nSubMenuOffsetWidth) {
+    
+                        m_oSubMenu.setRightPos(nMenuItemOffsetWidth);
+    
+                    }
+                    else {
+    
+                        m_oSubMenu.setLeftPos(nMenuItemOffsetWidth);
+                    
+                    }
+    
+                }
+                else {
+    
+                    m_oSubMenu.setLeftPos(nMenuItemOffsetWidth);
+                
+                }
+    
+                m_oSubMenu.element.style.visibility = "visible";
+                
+                m_oSubMenuIndicatorIMG.alt = 
+                    this.EXPANDED_SUBMENU_INDICATOR_ALT_TEXT;
+    
+            }
+    
+        };
+
+        this.hideSubMenu = function() {
+    
+            if(m_oSubMenu) {
+    
+                m_oSubMenuIndicatorIMG.alt = 
+                    this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
+    
+                m_oSubMenu.hide();
+    
+            }
+    
+        };
+
+
+        // Begin constructor logic
+
+        this.initDefaultConfig();
+
+
+        if(checkString(p_oObject)) {
+
+            createRootNodeStructure();
+
+            this.cfg.setConfigProperty("text", p_oObject);
 
         }
-
-    },
-
-
-    // Public methods
-
-    init: function(p_oObject) {
-
-        var CustomEvent = YAHOO.util.CustomEvent;
-
-        this.propertyChangeEvent = new CustomEvent("propertyChangeEvent", this);
-
-        if(p_oObject.tagName) {
+        else if(checkDOMNode(p_oObject)) {
 
             switch(p_oObject.tagName) {
 
                 case "OPTION":
 
-                    this._sText = p_oObject.text;
-                    this._oValue = p_oObject.value;
-                    this._oSrcElement = p_oObject;
+                    createRootNodeStructure();
+
+                    this.cfg.setConfigProperty("text", p_oObject.text);
+                    this.cfg.setConfigProperty("value", p_oObject.value);
+
+                    this.srcElement = p_oObject;
 
                     if(p_oObject.disabled || p_oObject.parentNode.disabled) {
 
-                        this._bDisabled = true;
+                        this.cfg.setConfigProperty("disabled", true);
 
                     }
 
                     if(p_oObject.selected) {
 
-                        this._bSelected = true;
+                        this.cfg.setConfigProperty("selected", true);
 
                     }
 
@@ -1342,12 +1261,15 @@ YAHOO.widget.MenuItem.prototype = {
 
                 case "OPTGROUP":
 
-                    this._sText = p_oObject.label;
-                    this._oSrcElement = p_oObject;
+                    createRootNodeStructure();
+
+                    this.cfg.setConfigProperty("text", p_oObject.label);
+
+                    this.srcElement = p_oObject;
 
                     if(p_oObject.disabled || p_oObject.parentNode.disabled) {
 
-                        this._bDisabled = true;
+                        this.cfg.setConfigProperty("disabled", true);
 
                     }
 
@@ -1359,7 +1281,9 @@ YAHOO.widget.MenuItem.prototype = {
 
                     // Get the anchor node (if it exists)
 
-                    var oAnchor = null;
+                    var oAnchor = null,
+                        sURL = null,
+                        sText = null;
 
                     if(
                         p_oObject.firstChild && 
@@ -1381,15 +1305,15 @@ YAHOO.widget.MenuItem.prototype = {
                     }
 
 
-                    // Set the "text" and/or the "URL" properties
+                    // Capture the "text" and/or the "URL"
 
                     if(oAnchor) {
 
-                        this._sURL = oAnchor.getAttribute("href");                        
+                        sURL = oAnchor.getAttribute("href");                        
 
                         if(oAnchor.innerText) {
                 
-                            this._sText = oAnchor.innerText;
+                            sText = oAnchor.innerText;
                 
                         }
                         else {
@@ -1399,19 +1323,19 @@ YAHOO.widget.MenuItem.prototype = {
                 
                             oRange.selectNodeContents(oAnchor);
                 
-                            this._sText = oRange.toString();             
+                            sText = oRange.toString();             
                 
                         }
 
                     }
                     else {
 
-                        this._sText = p_oObject.firstChild.nodeValue;
+                        sText = p_oObject.firstChild.nodeValue;
 
                     }
 
 
-                    this._oSrcElement = p_oObject;
+                    this.srcElement = p_oObject;
 
 
                     // Check for the "bring your own HTML" scenario
@@ -1421,56 +1345,35 @@ YAHOO.widget.MenuItem.prototype = {
                         p_oObject.parentNode && 
                         p_oObject.parentNode.parentNode && 
                         p_oObject.parentNode.parentNode.tagName == "DIV" && 
-                        this._classContains(
+                        m_oDom.hasClass(
                             p_oObject.parentNode.parentNode, 
                             "yuimenu"
                         )
                     ) {
 
+                        this.element = p_oObject;
+                        m_oAnchor = oAnchor;
+
+
                         // Remove the "focus" class since a MenuItem cannot
                         // be focused by default
 
-                        this._removeClass(p_oObject, "focus");
-                        this._removeClass(oAnchor, "focus");
+                        m_oDom.removeClass(this.element, "focus");
+                        m_oDom.removeClass(oAnchor, "focus");
 
 
                         // Check to see if the MenuItem is disabled
 
-                        if(this._classContains(p_oObject, "disabled")) {
+                        var bDisabled = 
+                            m_oDom.hasClass(this.element, "disabled");
+
+
+                        // Check to see if the MenuItem should be selected 
+                        // by default
+
+                        var bSelected = 
+                            m_oDom.hasClass(this.element, "selected");
     
-                            this._bDisabled = true;
-
-                            oAnchor.removeAttribute("href");
-                            oAnchor.removeAttribute("tabIndex");
-
-                            // Propagate the "disabled" class to the anchor
-                            // if it isn't already applied
-
-                            this._addClass(oAnchor, "disabled");
-
-
-                            // Remove the "selected" class since a disabled 
-                            // MenuItem cannot be selected
-
-                            this._removeClass(p_oObject, "selected");
-                            this._removeClass(oAnchor, "selected");
-        
-                        }
-    
-    
-                        if(this._classContains(p_oObject, "selected")) {
-    
-                            this._bSelected = true;
-
-
-                            // Propagate the "selected" class to the anchor
-                            // if it isn't already applied
-    
-                            this._addClass(oAnchor, "selected");
-
-                        }
-
-
 
                         // Check if emphasis has been applied to the MenuItem
 
@@ -1496,24 +1399,26 @@ YAHOO.widget.MenuItem.prototype = {
 
                         // Determine if the MenuItem has emphasis
 
+                        var bEmphasis = false,
+                            bStrongEmphasis = false;
+
                         if(oEmphasisNode) {
 
-                            // Set a reference to the text node for the 
-                            // "getText" and "setText" methods
+                            // Set a reference to the text node 
 
-                            this._oText = oEmphasisNode.firstChild;
+                            m_oText = oEmphasisNode.firstChild;
 
                             switch(oEmphasisNode.tagName) {
     
                                 case "EM":
     
-                                    this._bEmphasis = true;
+                                    bEmphasis = true;
     
                                 break;
     
                                 case "STRONG":
     
-                                    this._bStrongEmphasis = true;
+                                    bStrongEmphasis = true;
     
                                 break;
     
@@ -1522,11 +1427,9 @@ YAHOO.widget.MenuItem.prototype = {
                         }
                         else {
 
+                            // Set a reference to the text node 
 
-                            // Set a reference to the text node for the 
-                            // "getText" and "setText" methods
-
-                            this._oText = oAnchor.firstChild;
+                            m_oText = oAnchor.firstChild;
 
                         }
 
@@ -1558,164 +1461,184 @@ YAHOO.widget.MenuItem.prototype = {
 
                         if(oHelpText) {
 
+                            m_oHelpTextEM = oHelpText;
+
                             // Propagate the "hashelptext" class to the LI
                             // and anchor if it isn't already applied
                             
-                            this._addClass(p_oObject, "hashelptext");
-                            this._addClass(oAnchor, "hashelptext");
-
-                            this._sHelpText = oHelpText.innerHTML;
-                            this._oHelpTextEM = oHelpText;
-
-                            if(this._bDisabled) {
-
-                                // Propagate the "disabled" class to the EM
-                                // if it isn't already applied
-
-                                this._addClass(oHelpText, "disabled");
-
-
-                                // Remove the "selected" class if it exists
-                                // because disabled MenuItems cannot be selected
-
-                                this._removeClass(oHelpText, "selected");
-
-                            }
-                            else if (this._bSelected){
-
-                                // Propagate the "selected" class to the EM
-                                // if it isn't already applied
-
-                                this._addClass(oHelpText, "selected");
-
-                            }
+                            m_oDom.addClass(this.element, "hashelptext");
+                            m_oDom.addClass(oAnchor, "hashelptext");
 
 
                             // Remove the "focus" class if it exists
                             // because MenuItems cannot be focused by default
 
-                            this._removeClass(oHelpText, "focus");
+                            m_oDom.removeClass(oHelpText, "focus");
 
                         }
 
-                        this._oAnchor = oAnchor;
-                        this._oLI = p_oObject;
+
+                        /*
+                            Set these properties silently to sync up the 
+                            configuration object without making changes to the 
+                            element's DOM
+                        */ 
+
+                        this.cfg.setConfigProperty("text", sText, true);
+                        this.cfg.setConfigProperty("helptext", oHelpText, true);
+                        this.cfg.setConfigProperty("url", sURL, true);
+                        this.cfg.setConfigProperty("emphasis", bEmphasis, true);
+                        this.cfg.setConfigProperty(
+                            "strongemphasis", 
+                            bStrongEmphasis, 
+                            true
+                        );
 
 
-                        // Add the sub Menu arrow indicator if a sub Menu exists
+                        /*
+                            The "selected" and "disabled" properties are not set
+                            silently to ensure that the associated class names
+                            are applied correctly to the DOM elements
+                        */ 
 
-                        var aULs = p_oObject.getElementsByTagName("ul");
-
-                        if(aULs.length > 0) {
-
-                            this._createSubMenuIndicator();
-
-                        }
-
-                        this._assignDOMEventHandlers();
+                        this.cfg.setConfigProperty("selected", bSelected);
+                        this.cfg.setConfigProperty("disabled", bDisabled);
                     
                     }
+                    else {
+
+                        createRootNodeStructure();
+
+                        this.cfg.setConfigProperty("text", sText);
+                        this.cfg.setConfigProperty("url", sURL);
+
+                    }
+
 
                     this.initSubTree();
 
                 break;
 
-            }
+            }            
 
         }
-        else if(typeof p_oObject == "string") {
 
-            this._sText = p_oObject;
 
-        }
-        else if(p_oObject.text) {
+        if(this.element) {
 
-            this._sText = p_oObject.text;
-
-            if(p_oObject.helptext) {
-
-                this.setHelpText(p_oObject.helptext);
-
-            }
-
-            if(p_oObject.value) {
-
-                this._oValue = p_oObject.value;
-
-            }
-
-            if(p_oObject.url) {
-
-                this._sURL = p_oObject.url;
-
-            }
-
-            if(p_oObject.emphasis) {
+            var oEventUtil = YAHOO.util.Event;
     
-                this.setEmphasis(p_oObject.emphasis);
+            oEventUtil.addListener(
+                this.element, 
+                "mouseover", 
+                elementMouseOver, 
+                this,
+                true
+            );
     
-            }
+            oEventUtil.addListener(
+                this.element, 
+                "mouseout", 
+                elementMouseOut, 
+                this,
+                true
+            );
+    
+            oEventUtil.addListener(
+                this.element, 
+                "mousedown", 
+                elementMouseDown, 
+                this,
+                true
+            );
+    
+            oEventUtil.addListener(
+                this.element, 
+                "mouseup", 
+                elementMouseUp, 
+                this,
+                true
+            );
+    
+            oEventUtil.addListener(
+                this.element, 
+                "click", 
+                elementClick, 
+                this,
+                true
+            );
+    
+            oEventUtil.addListener(
+                m_oAnchor, 
+                "keydown", 
+                anchorKeyDown, 
+                this,
+                true
+            );
+    
+            oEventUtil.addListener(
+                m_oAnchor, 
+                "keyup", 
+                anchorKeyUp, 
+                this,
+                true
+            );
+    
+            oEventUtil.addListener(
+                m_oAnchor, 
+                "keypress", 
+                anchorKeyPress, 
+                this,
+                true
+            );
+    
+            oEventUtil.addListener(
+                m_oAnchor, 
+                "focus", 
+                anchorFocus, 
+                this,
+                true
+            );
+    
+            oEventUtil.addListener(
+                m_oAnchor, 
+                "blur", 
+                anchorBlur,
+                this,
+                true
+            );            
 
-            if(p_oObject.strongemphasis) {
 
-                this.setStrongEmphasis(p_oObject.strongemphasis);
+            // Create custom events
+    
+            var CustomEvent = YAHOO.util.CustomEvent;
+    
+            this.destroyEvent = new CustomEvent("destroyEvent", this);
+            this.mouseOverEvent = new CustomEvent("mouseOverEvent", this);
+            this.mouseOutEvent = new CustomEvent("mouseOutEvent", this);
+            this.mouseDownEvent = new CustomEvent("mouseDownEvent", this);
+            this.mouseUpEvent = new CustomEvent("mouseUpEvent", this);
+            this.clickEvent = new CustomEvent("clickEvent", this);
+            this.keyPressEvent = new CustomEvent("keyPressEvent", this);
+            this.keyDownEvent = new CustomEvent("keyDownEvent", this);
+            this.keyUpEvent = new CustomEvent("keyUpEvent", this);
+            this.focusEvent = new CustomEvent("focusEvent", this);
+            this.blurEvent = new CustomEvent("blurEvent", this);
 
-            }
 
-            if(p_oObject.disabled) {
-
-                this.setDisabled(p_oObject.disabled);
-
-            }
-            else if(p_oObject.selected) {
-
-                this.setSelected(p_oObject.selected);
-
-            }
+            if(p_oUserConfig) {
+    
+                this.cfg.applyConfig(p_oUserConfig);
+    
+            }        
 
         }
-
-
-        // Create custom events
-
-
-
-        this.renderEvent = new CustomEvent("renderEvent", this);
-        this.destroyEvent = new CustomEvent("destroyEvent", this);
-        this.mouseOverEvent = new CustomEvent("mouseOverEvent", this);
-        this.mouseOutEvent = new CustomEvent("mouseOutEvent", this);
-        this.mouseDownEvent = new CustomEvent("mouseDownEvent", this);
-        this.mouseUpEvent = new CustomEvent("mouseUpEvent", this);
-        this.clickEvent = new CustomEvent("clickEvent", this);
-        this.keyPressEvent = new CustomEvent("keyPressEvent", this);
-        this.keyDownEvent = new CustomEvent("keyDownEvent", this);
-        this.keyUpEvent = new CustomEvent("keyUpEvent", this);
-        this.focusEvent = new CustomEvent("focusEvent", this);
-        this.blurEvent = new CustomEvent("blurEvent", this);
-
-
-
-        // Subscribe to custom events
-
-        this.renderEvent.subscribe(this.onRender, this);
-        this.destroyEvent.subscribe(this.onDestroy, this);
-        this.mouseOverEvent.subscribe(this.onMouseOver, this);
-        this.mouseOutEvent.subscribe(this.onMouseOut, this);
-        this.mouseDownEvent.subscribe(this.onMouseDown, this);
-        this.mouseUpEvent.subscribe(this.onMouseUp, this);
-        this.clickEvent.subscribe(this.onClick, this);
-        this.keyPressEvent.subscribe(this.onKeyPress, this);
-        this.keyDownEvent.subscribe(this.onKeyDown, this);
-        this.keyUpEvent.subscribe(this.onKeyUp, this);
-        this.focusEvent.subscribe(this.onFocus, this);
-        this.blurEvent.subscribe(this.onBlur, this);
-        this.propertyChangeEvent.subscribe(this.onPropertyChange, this);
 
     },
 
     initSubTree: function() {
 
-        var aChildNodes = this._oSrcElement.childNodes,
+        var aChildNodes = this.srcElement.childNodes,
             nChildNodes = aChildNodes.length,
             MenuManager = YAHOO.widget.MenuManager,
             Menu = YAHOO.widget.Menu,
@@ -1738,7 +1661,10 @@ YAHOO.widget.MenuItem.prototype = {
             
                         case "DIV":
             
-                            this.setSubMenu((new Menu(oNode)));
+                            this.cfg.setConfigProperty(
+                                "submenu", 
+                                (new Menu(oNode))
+                            );
             
                         break;
      
@@ -1763,13 +1689,16 @@ YAHOO.widget.MenuItem.prototype = {
 
             if(aOptions.length > 0) {
     
-                this.setSubMenu((new Menu(MenuManager.createMenuId())));
-    
+                this.cfg.setConfigProperty(
+                    "submenu", 
+                    (new Menu(MenuManager.createMenuId()))
+                );
+
                 var nOptions = aOptions.length;
     
                 for(var n=0; n<nOptions; n++) {
     
-                    this._oSubMenu.addMenuItem((new MenuItem(aOptions[n])));
+                    m_oSubMenu.addMenuItem((new MenuItem(aOptions[n])));
     
                 }
     
@@ -1788,13 +1717,19 @@ YAHOO.widget.MenuItem.prototype = {
                         oMenu.addSubMenu((new Menu(aULs[n])));
         
                     }
-        
-                    this.setSubMenu(oMenu);
+
+                    this.cfg.setConfigProperty(
+                        "submenu", 
+                        oMenu
+                    );
                 
                 }
                 else {
 
-                    this.setSubMenu((new Menu(aULs[0])));
+                    this.cfg.setConfigProperty(
+                        "submenu", 
+                        (new Menu(aULs[0]))
+                    );
                 
                 }
     
@@ -1804,341 +1739,21 @@ YAHOO.widget.MenuItem.prototype = {
 
     },
 
-    render: function() {
+    destory: function() {
 
-        if(!this._bRendered && this._sText && this._sText.length > 0) {
+        if(this.element) {
 
-            var oLI = document.createElement("li"),
-                oAnchor = document.createElement("a"),
-                oTextNode = document.createTextNode(this._sText);
+            var oParentNode = this.element
 
-
-            if(this._nIndex == 0) {
-
-                this._addClass(oLI, "first");
-
-            }
-    
-
-            if(this._nIndex == (this._oParent.getMenuItems().length-1)) {
-
-                this._addClass(oLI, "last");
-
-            }
-
-
-            if(this._bDisabled) {
-    
-                this._addClass(oLI, "disabled");
-                this._addClass(oAnchor, "disabled");
-    
-            }
-            else {
-
-                if(this._sURL) {
-
-                    oAnchor.setAttribute("href", this._sURL);
-    
-                }
-    
-                oAnchor.setAttribute("tabIndex", 0);
-
-
-                if(this._bSelected) {
-        
-                    this._addClass(oLI, "selected");
-                    this._addClass(oAnchor, "selected");
-        
-                }
-
-            }
-
-
-            if(this._bEmphasis) {
-    
-                var oEM = document.createElement("em");
-                
-                oEM.appendChild(oTextNode);
-                oAnchor.appendChild(oEM);
-    
-            }
-            else if(this._bStrongEmphasis) {
-
-                var oStrong = document.createElement("strong");
-                
-                oStrong.appendChild(oTextNode);
-                oAnchor.appendChild(oStrong);
-
-            }
-            else {
-    
-                oAnchor.appendChild(oTextNode);
-    
-            }
-    
-
-            oLI.appendChild(oAnchor);
-
-
-            if(this._sHelpText && this._sHelpText.length > 0) {
-
-                var oHelpText = document.createElement("em");
-                oHelpText.innerHTML = this._sHelpText;
-
-
-                if(this._bDisabled) {
-
-                    this._addClass(oHelpText, "disabled");
-
-                }
-                else if(this._bSelected) {
-
-                    this._addClass(oHelpText, "selected");
-
-                }
-
-                this._addClass(oLI, "hashelptext");
-                this._addClass(oAnchor, "hashelptext");
-
-                oLI.appendChild(oHelpText);
-
-                this._oHelpTextEM = oHelpText;
-
-            }
-
-
-            this._oParent.getListNode().appendChild(oLI);
-
-
-            this._oLI = oLI;
-            this._oAnchor = oAnchor;
-            this._oText = oTextNode;
-
-
-            if(this._oSubMenu) {
-
-                this._addClass(oLI, "hassubmenu");
-                this._addClass(oAnchor, "hassubmenu");
-
-                this._createSubMenuIndicator();
-                this._oSubMenu.render();
-    
-            }
-
-
-            this._assignDOMEventHandlers();
-
-
-            this._bRendered = true;
-
-
-            this.renderEvent.fire(this);
-
-        }
-
-    },
-
-    destroy: function() {
-
-        if(this._bRendered) {
-
-            var oParentNode = this._oLI.parentNode;
-    
             if(oParentNode) {
-   
-                oParentNode.removeChild(this._oLI);
-    
+
+                oParentNode.removeChild(this.element);
+
                 this.destroyEvent.fire(this);
 
             }
 
         }
-
-    },
-
-    focus: function() {
-
-        if(!this._bDisabled && this._oAnchor) {
-
-            this._oAnchor.focus();
-
-        }
-
-    },
-
-    blur: function() {
-
-        if(!this._bDisabled && this._oAnchor) {
-
-            this._oAnchor.blur();
-
-        }
-
-    },
-
-    showSubMenu: function() {
-
-        if(this._oSubMenu) {
-
-            this._oSubMenu.getElement().style.visibility = "hidden";
-
-            this._oSubMenu.show();
-
-            var oParentMenu = this.getParent();
-            
-            if(oParentMenu.getParent() && oParentMenu.getParent()._Menu) {
-
-                oParentMenu = oParentMenu.getParent();
-            
-            }
-
-            var aMenuItemPos = YAHOO.util.Dom.getXY(this._oLI),
-                nMenuItemPageX = aMenuItemPos[0],
-                nMenuItemPageY = aMenuItemPos[1],
-                nMenuItemOffsetWidth = this._oLI.offsetWidth,
-                nParentMenuRightPos = (nMenuItemPageX + nMenuItemOffsetWidth),
-                nSubMenuOffsetWidth = this._oSubMenu.getElement().offsetWidth,
-                nSubMenuOffsetHeight = this._oSubMenu.getElement().offsetHeight;
-
-            var oSubMenuDIV = this._oSubMenu.getElement();
-
-            oSubMenuDIV.style.left = "";
-            oSubMenuDIV.style.right = "";
-            oSubMenuDIV.style.top = "";
-            oSubMenuDIV.style.bottom = "";
-
-            // Set the top position
-
-            if(
-                (nMenuItemPageY + nSubMenuOffsetHeight) >
-                YAHOO.util.Dom.getClientHeight()
-            ) {
-
-                var nTopPos = (nMenuItemPageY - nSubMenuOffsetHeight);
-
-                if(nTopPos < 0) {
-
-                    this._oSubMenu.setTopPos(this._oLI.offsetTop);
-                
-                }
-                else {
-
-                    this._oSubMenu.setBottomPos(
-                        (
-                            oParentMenu.getElement().offsetHeight - 
-                            (this._oLI.offsetTop + this._oLI.offsetHeight) 
-                        )
-                    );
-
-                }                
-           
-            }
-            else {
-
-                this._oSubMenu.setTopPos(this._oLI.offsetTop);
-            
-            }
-
-
-            // Set the left position
-
-            if(
-                (nParentMenuRightPos + nSubMenuOffsetWidth) > 
-                YAHOO.util.Dom.getClientWidth()
-            ) {
-            
-                if(nMenuItemPageX > nSubMenuOffsetWidth) {
-
-                    this._oSubMenu.setRightPos(nMenuItemOffsetWidth);
-
-                }
-                else {
-
-                    this._oSubMenu.setLeftPos(nMenuItemOffsetWidth);
-                
-                }
-
-            }
-            else {
-
-                this._oSubMenu.setLeftPos(nMenuItemOffsetWidth);
-            
-            }
-
-            this._oSubMenu.getElement().style.visibility = "visible";
-            
-            this._oSubMenuIndicatorIMG.alt = 
-                this.EXPANDED_SUBMENU_INDICATOR_ALT_TEXT;
-
-        }
-
-    },
-
-    hideSubMenu: function() {
-
-        if(this._oSubMenu) {
-
-            this._oSubMenuIndicatorIMG.alt = 
-                this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
-
-            this._oSubMenu.hide();
-
-        }
-
-    },
-
-
-    // Event handlers
-
-    onRender: function(p_sType, p_aArguments, p_oMenuItem) {
-
-    },
-
-    onDestroy: function(p_sType, p_aArguments, p_oMenuItem) {
-
-    },
-
-    onMouseOver: function(p_sType, p_aArguments, p_oMenuItem) {
-
-    },
-    
-    onMouseOut: function(p_sType, p_aArguments, p_oMenuItem) {
-
-    },
-    
-    onMouseDown: function(p_sType, p_aArguments, p_oMenuItem) {
-
-    },
-    
-    onMouseUp: function(p_sType, p_aArguments, p_oMenuItem) {
-    
-    },
-    
-    onClick: function(p_sType, p_aArguments, p_oMenuItem) {
-
-    },
-    
-    onKeyDown: function(p_sType, p_aArguments, p_oMenuItem) {
-    
-    },
-    
-    onKeyUp: function(p_sType, p_aArguments, p_oMenuItem) {
-    
-    },
-    
-    onKeyPress: function(p_sType, p_aArguments, p_oMenuItem) {
-
-    },
-
-    onFocus: function(p_sType, p_aArguments, p_oMenuItem) {
-
-    },
-    
-    onBlur: function(p_sType, p_aArguments, p_oMenuItem) {
-
-    },
-
-    onPropertyChange: function(p_sType, p_aArguments, p_oMenuItem) {
 
     }
 
