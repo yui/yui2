@@ -20,15 +20,14 @@ YAHOO.widget.Menu.superclass = YAHOO.widget.Overlay.prototype;
 // Public properties
 
 YAHOO.widget.Menu.prototype.index = null;
-YAHOO.widget.Menu.prototype.rendered = false;
 YAHOO.widget.Menu.prototype.cssClassName = "yuimenu";
 YAHOO.widget.Menu.prototype.parent = null;
 YAHOO.widget.Menu.prototype.activeMenuItem = null;
-YAHOO.widget.Menu.prototype.listElement = null;
 YAHOO.widget.Menu.prototype.srcElement = null;
-YAHOO.widget.Menu.prototype.visible = false;
 YAHOO.widget.Menu.prototype._Menu = true;
 
+
+// Public methods
 
 YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
@@ -40,9 +39,23 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 	YAHOO.widget.Menu.superclass.init.call(this, p_oElement);  
 
 
-    var MenuManager = YAHOO.widget.MenuManager,
-        aMenuItems = [],
-        aSubMenus = [],
+    // Private member variables
+
+    var m_aMenuItems = [],
+        m_aSubMenus = [],
+        m_oListElement,
+
+
+        // Create a reference to the MenuManager singleton
+
+        m_oMenuManager = YAHOO.widget.MenuManager, 
+
+
+        /*
+            Create a reference to the current context so that private methods
+            have access to class members
+        */    
+
         me = this;
 
 
@@ -57,14 +70,9 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             p_oItem.parent = me;
 
 
-            // Update the index property of each member
-    
-            var i = p_oArray.length-1;
-    
-            do {
-                p_oArray[i].index = i;
-            }
-            while(i--);
+            // Update the index and className properties of each member        
+            
+            updateArrayItemProperties(p_oArray);
 
         }
         else {
@@ -77,6 +85,12 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
             p_oItem.parent = me;
 
+            if(nIndex == 0) {
+
+                YAHOO.util.Dom.addClass(p_oItem.element, "first");
+
+            }
+
         }
 
     };
@@ -86,27 +100,21 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         var aArray = p_oArray.splice(p_nIndex, 1);
 
 
-        // Update the index property of each member        
-
-        var i = p_oArray.length-1;
-
-        do {
-            p_oArray[i].index = i;
-        }
-        while(i--);
+        // Update the index and className properties of each member        
+        
+        updateArrayItemProperties(p_oArray);
 
 
         // Return a reference to the item that was removed
 
-        return (aArray[0]);
+        return aArray[0];
 
     };
     
     var removeArrayItemByValue = function(p_oArray, p_oItem) {
 
-        var nIndex = -1;        
-
-        var i = p_oArray.length-1;
+        var nIndex = -1,
+            i = p_oArray.length-1;
 
         do {
 
@@ -122,9 +130,43 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         if(nIndex > -1) {
 
-            return (removeArrayItemByIndex(p_oArray, nIndex));
+            return removeArrayItemByIndex(p_oArray, nIndex);
 
         }      
+
+    };
+
+    var updateArrayItemProperties = function(p_oArray) {
+
+        var oDom = YAHOO.util.Dom,
+            i = p_oArray.length-1;
+
+
+        // Update the index and className properties of each member        
+
+        do {
+
+            p_oArray[i].index = i;
+
+            switch(i) {
+
+                case 0:
+
+                    oDom.addClass(p_oArray[i].element, "first");
+
+                break;
+
+                default:
+
+                    oDom.removeClass(p_oArray[i].element, "first");
+
+
+                break;
+
+            }
+
+        }
+        while(i--);
 
     };
 
@@ -183,6 +225,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         }
 
     };
+
 
     // Private DOM event handlers
 
@@ -265,20 +308,20 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         if(this.parent && this.parent._Menu) {
 
             this.parent.activeMenuItem = p_aArguments[1];
-            YAHOO.widget.MenuManager.setActiveMenu(this.parent);
+            m_oMenuManager.setActiveMenu(this.parent);
         
         }
         else {
 
             this.activeMenuItem = p_aArguments[1];
-            YAHOO.widget.MenuManager.setActiveMenu(this);
+            m_oMenuManager.setActiveMenu(this);
 
         }    
 
     };
 
 
-    // Priveledged methods
+    // Privileged methods
 
     this.addMenuItem = function(p_oMenuItem, p_nIndex) {
 
@@ -290,7 +333,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                 true
             );
 
-            addArrayItem(aMenuItems, p_oMenuItem, p_nIndex);
+            addArrayItem(m_aMenuItems, p_oMenuItem, p_nIndex);
 
         }
 
@@ -305,13 +348,13 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             if(p_oObject._MenuItem) {
 
                 oMenuItem = 
-                    removeArrayItemByValue(aMenuItems, p_oObject);           
+                    removeArrayItemByValue(m_aMenuItems, p_oObject);           
 
             }
             else if(typeof p_oObject == "number") {
 
                 oMenuItem = 
-                    removeArrayItemByIndex(aMenuItems, p_oObject);
+                    removeArrayItemByIndex(m_aMenuItems, p_oObject);
 
             }
 
@@ -327,7 +370,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         
     this.getMenuItems = function() {
 
-        return aMenuItems;
+        return m_aMenuItems;
 
     };
 
@@ -335,7 +378,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         if(typeof p_nIndex == "number") {
 
-            return aMenuItems[p_nIndex];
+            return m_aMenuItems[p_nIndex];
 
         }
 
@@ -345,7 +388,9 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         if(p_oMenu && p_oMenu._Menu) {
 
-            addArrayItem(aSubMenus, p_oMenu, p_nIndex);
+            p_oMenu.cfg.setConfigProperty("iframe", false);
+
+            addArrayItem(m_aSubMenus, p_oMenu, p_nIndex);
 
         }
 
@@ -359,12 +404,12 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
             if(p_oObject._Menu) {
 
-                oMenu = removeArrayItemByValue(aSubMenus, p_oObject);           
+                oMenu = removeArrayItemByValue(m_aSubMenus, p_oObject);           
 
             }
             else if(typeof p_oObject == "number") {
 
-                oMenu = removeArrayItemByIndex(aSubMenus, p_oObject);
+                oMenu = removeArrayItemByIndex(m_aSubMenus, p_oObject);
 
             }
 
@@ -380,7 +425,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         
     this.getSubMenus = function() {
 
-        return aSubMenus;
+        return m_aSubMenus;
 
     };
 
@@ -388,7 +433,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         if(typeof p_nIndex == "number") {
 
-            return aSubMenus[p_nIndex];
+            return m_aSubMenus[p_nIndex];
 
         }
 
@@ -396,13 +441,25 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     this.renderMenuItems = function() {
     
-        if(aMenuItems.length > 0) {            
+        if(m_aMenuItems.length > 0) {            
     
-            var nMenuItems = aMenuItems.length;
+            var nMenuItems = m_aMenuItems.length
+                oMenuItem,
+                oSubMenu;
     
             for(var i=0; i<nMenuItems; i++) {
     
-                aMenuItems[i].render();
+                oMenuItem = m_aMenuItems[i];
+                
+                m_oListElement.appendChild(oMenuItem.element);
+
+                oSubMenu = oMenuItem.cfg.getConfigProperty("submenu")
+
+                if(oSubMenu) {
+
+                    oSubMenu.render();
+
+                }
     
             }
     
@@ -412,13 +469,18 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
     this.renderSubMenus = function() {
     
-        if(aSubMenus.length > 0) {
+        if(m_aSubMenus.length > 0) {
     
-            var nSubMenus = aSubMenus.length;
+            var nSubMenus = m_aSubMenus.length,
+                oMenu;
     
             for(var i=0; i<nSubMenus; i++) {
     
-                aSubMenus[i].render();
+                oMenu = m_aSubMenus[i];
+
+                oMenu.render();
+
+                oMenu.appendTo(this.body);
     
             }
     
@@ -426,92 +488,59 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
     };
     
-    this.render = function(p_bHideSourceElement) {
-    
-        if(!this.rendered) {
-    
-            var oDom = YAHOO.util.Dom;
-
-            //removeBehavior();
-                    
-            oDom.addClass(this.element, this.cssClassName);
+    this.render = function(p_bAppendToNode, p_bHideSourceElement) {
+   
+        var oDom = YAHOO.util.Dom;
+               
+        oDom.addClass(this.element, this.cssClassName);
 
 
-            if(this.parent) {
+        /*
+            If the menu contains MenuItem instances, create the list element 
+            (UL) and append it to the body of the module
+        */        
 
-                /*
-                    Apply the "first" class (to mimic the "first-child" 
-                    pseudo-class) if the Menu is the first child of a member 
-                    of a group
-                */ 
-
-                if(
-                    this.parent._Menu && 
-                    this.parent.getSubMenus().length > 0 && 
-                    this.index == 0
-                ) {
-
-                    //removeBehavior();
-
-                    oDom.addClass(this.element, "first");
-
-                }
-
-                this.parent.body.appendChild(this.element);
-
-            }    
-    
-            /*
-                If the menu contains MenuItem instances, create the list element 
-                (UL) and append it to the body of the module
-            */        
-    
-            if(aMenuItems.length > 0) {
-            
-                var oUL = document.createElement("ul");
-                oDIV.appendChild(oUL);
-            
-                this.setBodyContent(oUL);
-    
-                this.listElement = oUL;
-    
-            }
-    
-            this.setBodyContent("MENU ID: " + this.id);
-
-    
-            /*
-                Determine whether to hide or destory the source element
-            */ 
-    
-            if(this.srcElement) {
-    
-                if(p_bHideSourceElement) {
+        if(m_aMenuItems.length > 0 && !m_oListElement) {
         
-                    this.srcElement.style.display = "none";
+            var oUL = document.createElement("ul");
+            oDIV.appendChild(oUL);
         
-                }
-                else {
-        
-                    var oParentNode = this.srcElement.parentNode;
-                    oParentNode.removeChild(this.srcElement);
-        
-                }
-    
-            }
-    
-            this.renderMenuItems();
-    
-            this.renderSubMenus();
-    
-            this.rendered = true;
+            this.setBodyContent(oUL);
 
+            m_oListElement = oUL;
 
-            // Continue with the superclass implementation
-    
-            YAHOO.widget.Overlay.superclass.render.call(this);
-    
         }
+
+
+        /*
+            Determine whether to hide or destory the source element
+        */ 
+
+        if(this.srcElement) {
+
+            if(p_bHideSourceElement) {
+    
+                this.srcElement.style.display = "none";
+    
+            }
+            else {
+    
+                var oParentNode = this.srcElement.parentNode;
+                oParentNode.removeChild(this.srcElement);
+    
+            }
+
+        }
+
+        this.renderMenuItems();
+
+
+        // Continue with the superclass implementation of this method
+
+        YAHOO.widget.Overlay.superclass.render.call(this, p_bAppendToNode);
+
+
+        this.renderSubMenus();
     
     };
 
@@ -520,24 +549,24 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
         var val = args[0];
 
-        if (! val) {
+        if (!val) {
     
             YAHOO.util.Dom.setStyle(
-                (me.container || me.element), 
+                (this.container || this.element), 
                 "visibility", 
                 "hidden"
             );
     
             var oActiveMenuItem;
         
-            if(me.parent && me.parent._Menu) {
+            if(this.parent && this.parent._Menu) {
         
-                oActiveMenuItem = me.parent.activeMenuItem;
+                oActiveMenuItem = this.parent.activeMenuItem;
             
             }
             else {
             
-                oActiveMenuItem = me.activeMenuItem;
+                oActiveMenuItem = this.activeMenuItem;
             
             }
             
@@ -551,7 +580,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         
                 var oSubMenu = oActiveMenuItem.getSubMenu();
         
-                if(oSubMenu && oSubMenu.visible) {
+                if(oSubMenu && oSubMenu.getConfigProperty("visible")) {
         
                     oSubMenu.hide();
         
@@ -561,47 +590,47 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
         } else {
     
-            if(me.parent && me.parent._MenuItem) {
+            if(this.parent && this.parent._MenuItem) {
             
-                clearParentMenuWidth(me.parent);
+                clearParentMenuWidth(this.parent);
             
             }
             
             YAHOO.util.Dom.setStyle(
-                (me.container || me.element), 
+                (this.container || this.element), 
                 "visibility", 
                 "visible"
             );
     
-            if(me.element.style.width.length == 0) {
+            if(this.element.style.width.length == 0) {
     
                 var oDom = YAHOO.util.Dom;
     
                 var nBorderWidth = 
                     parseInt(
-                        oDom.getStyle(me.element, "borderLeftWidth"), 
+                        oDom.getStyle(this.element, "borderLeftWidth"), 
                         10
                     );
     
                 nBorderWidth += 
                     parseInt(
-                        oDom.getStyle(me.element, "borderRightWidth"), 
+                        oDom.getStyle(this.element, "borderRightWidth"), 
                         10
                     );
     
                 var nPadding = 
                     parseInt(
-                        oDom.getStyle(me.element, "paddingLeft"), 
+                        oDom.getStyle(this.element, "paddingLeft"), 
                         10
                     );
     
                 nPadding += 
                     parseInt(
-                        oDom.getStyle(me.element, "paddingRight"), 
+                        oDom.getStyle(this.element, "paddingRight"), 
                         10
                     );
     
-                var nWidth = me.element.offsetWidth;
+                var nWidth = this.element.offsetWidth;
     
                 if(
                     document.compatMode && 
@@ -612,13 +641,13 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
                 }
                 
-                me.element.style.width = nWidth + "px";
+                this.element.style.width = nWidth + "px";
                 
             }
     
-            if(me.parent && me.parent._MenuItem) {
+            if(this.parent && this.parent._MenuItem) {
             
-                setParentMenuWidth(me.parent);
+                setParentMenuWidth(this.parent);
     
             }
     
@@ -646,7 +675,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                         this.element.firstChild.tagName == "UL"
                     ) {
 
-                        this.listElement = this.element.firstChild;
+                        m_oListElement = this.element.firstChild;
 
                     }
                     else if(
@@ -655,7 +684,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                         this.element.childNodes[1].tagName == "UL"
                     ) {
 
-                        this.listElement = this.element.childNodes[1];
+                        m_oListElement = this.element.childNodes[1];
 
                     }
 
@@ -667,9 +696,38 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
             case "UL":
             case "SELECT":
-            case "OPTGROUP":
 
                 this.srcElement = this.element;
+
+
+                /*
+    
+                    If the source element is not a standard module, give the 
+                    standard module a unique id so that both elements can be
+                    referenced seperately
+    
+                */
+
+                if(this.id == this.srcElement.id) {
+
+                    this.id = m_oMenuManager.createMenuId();
+                    this.element.id = this.id;
+        
+                }
+
+            break;
+
+
+            /*
+
+                If the element supplied is not a UL, SELECT, or a standard 
+                module, exit right away.
+
+            */
+
+            default:
+
+                return false;
 
             break;
 
@@ -683,15 +741,8 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         if(!this.id) {
 
-            this.id = MenuManager.createMenuId();
+            this.id = m_oMenuManager.createMenuId();
             this.element.id = this.id;
-
-        }
-
-
-        if(this.srcElement) {
-
-            this.initSubTree();
 
         }
 
@@ -751,12 +802,12 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         this.mouseUpEvent = new CustomEvent("mouseUpEvent", this);
         this.clickEvent = new CustomEvent("clickEvent", this);
 
-        MenuManager.addMenu(this);
+        m_oMenuManager.addMenu(this);
 
 
         if (p_oUserConfig) {
     
-            this.applyConfig(p_oUserConfig);
+            this.cfg.applyConfig(p_oUserConfig);
     
         }
 
