@@ -10,8 +10,7 @@ version 0.9.0
  * callback function you create.
  * @ class
  */
-YAHOO.util.Connect = {};
-
+YAHOO.namespace('Connect');
 YAHOO.util.Connect =
 {
   /**
@@ -40,7 +39,7 @@ YAHOO.util.Connect =
   * @private
   * @type boolean
   */
-	_isFormPost:false,
+	_isFormSubmit:false,
 
  /**
   * Property modified by setForm() to the HTML form POST body.
@@ -49,14 +48,21 @@ YAHOO.util.Connect =
   */
 	_sFormData:null,
 
+ /**
+  * Collection of polling references to the polling mechanism in handleReadyState.
+  * @private
+  * @type string
+  */
+	_poll:[],
+
   /**
    * The polling frequency, in milliseconds, for HandleReadyState.
    * when attempting to determine a transaction's XHR  readyState.
-   * The default is 300 milliseconds.
+   * The default is 250 milliseconds.
    * @private
    * @type int
    */
-	_polling_interval:300,
+	_polling_interval:250,
 
   /**
    * A transaction counter that increments the transaction id for each transaction.
@@ -76,6 +82,19 @@ YAHOO.util.Connect =
 	setProgId:function(id)
 	{
 		this.msxml_progid.unshift(id);
+	},
+
+  /**
+   * Member to modify the default polling interval of 250ms.
+   * @public
+   * @param {int} i The polling interval in milliseconds.
+   * @return void
+   */
+	setPollingInterval:function(i)
+	{
+		if(typeof i == 'number' && isFinite(i)){
+			this._polling_interval = i;
+		}
 	},
 
   /**
@@ -116,7 +135,7 @@ YAHOO.util.Connect =
 	},
 
   /**
-   * This method is called by asyncRequest and syncRequest to create a
+   * This method is called by asyncRequest to create a
    * valid connection object for the transaction.  It also passes a
    * transaction id and increments the transaction id counter.
    * @private
@@ -153,23 +172,26 @@ YAHOO.util.Connect =
    */
 	asyncRequest:function(method, uri, callback, postData)
 	{
-		var errorObj;
 		var o = this.getConnectionObject();
 
 		if(!o){
 			return null;
 		}
 		else{
-			var oConn = this;
+			if(this._isFormSubmit){
+				if(method == 'GET'){
+					uri += "?" +  this._sFormData;
+				}
+				else if(method == 'POST'){
+					postData =  this._sFormData;
+				}
+				this._isFormSubmit = false;
+			}
 
 			o.conn.open(method, uri, true);
 		    this.handleReadyState(o, callback);
 
-			if(this._isFormPost){
-				postData = this._sFormData;
-				this._isFormPost = false;
-			}
-			else if(postData){
+			if(postData){
 				this.initHeader('Content-Type','application/x-www-form-urlencoded');
 			}
 
@@ -178,6 +200,7 @@ YAHOO.util.Connect =
 			if(this._http_header.length>0){
 				this.setHeader(o);
 			}
+
 			postData?o.conn.send(postData):o.conn.send(null);
 
 			return o;
@@ -199,11 +222,12 @@ YAHOO.util.Connect =
 	handleReadyState:function(o, callback)
 	{
 		var oConn = this;
-		var poll = window.setInterval(
+		this._poll[o.tId] = window.setInterval(
 			function(){
-				if(o.conn.readyState==4){
+				if(o.conn && o.conn.readyState == 4){
+					window.clearInterval(oConn._poll[o.tId]);
+					oConn._poll.splice(o.tId);
 					oConn.handleTransactionResponse(o, callback);
-					window.clearInterval(poll);
 				}
 			}
 		,this._polling_interval);
@@ -222,6 +246,12 @@ YAHOO.util.Connect =
    */
 	handleTransactionResponse:function(o, callback)
 	{
+		// If no valid callback is provided, then do not process any callback handling.
+		if(!callback){
+			this.releaseObject(o);
+			return;
+		}
+
 		var httpStatus;
 		var responseObject;
 
@@ -242,6 +272,8 @@ YAHOO.util.Connect =
 					callback.success(responseObject);
 				}
 				else{
+					// If a scope property is defined, the callback will be fired from
+					// the context of the object.
 					callback.success.apply(callback.scope, [responseObject]);
 				}
 			}
@@ -287,8 +319,8 @@ YAHOO.util.Connect =
 
   /**
    * This method evaluates the server response, creates and returns the results via
-   * its properties.  Success and failure cases(and exceptions) will differ in their defined properties
-   * but property "type" will confirm the transaction's status.
+   * its properties.  Success and failure cases will differ in the response
+   * object's property values.
    * @private
    * @param {object} o The connection object
    * @param {} callbackArg User-defined arguments to be passed to the callback
@@ -315,8 +347,8 @@ YAHOO.util.Connect =
   /**
    * If a transaction cannot be completed due to dropped or closed connections,
    * there may be not be enough information to build a full response object.
-   * The object's property "type" value will be "failure", and two additional
-   * unique, properties are added - errorCode and errorText.
+   * The failure callback will be fired and this specific condition can be identified
+   * by a status property value of 0.
    * @private
    * @param {int} tId Transaction Id
    * @param callbackArg The user-defined arguments
@@ -384,7 +416,7 @@ YAHOO.util.Connect =
 		this._sFormData = '';
 		var oForm = document.forms[formName];
 		var oElement, elName, elValue;
-		// iterate over the form elements collection to construct the
+		// Iterate over the form elements collection to construct the
 		// label-value pairs.
 		for (var i=0; i<oForm.elements.length; i++){
 			oElement = oForm.elements[i];
@@ -417,8 +449,7 @@ YAHOO.util.Connect =
 			}
 		}
 		this._sFormData = this._sFormData.substr(0, this._sFormData.length - 1);
-		this._isFormPost = true;
-		this.initHeader('Content-Type','application/x-www-form-urlencoded');
+		this._isFormSubmit = true;
 	},
 
   /**
@@ -430,6 +461,8 @@ YAHOO.util.Connect =
 	abort:function(o)
 	{
 		if(this.isCallInProgress(o)){
+			window.clearInterval(this._poll[o.tId]);
+			o.conn._poll.splice(o.tId);
 			o.conn.abort();
 			this.releaseObject(o);
 		}
@@ -444,8 +477,13 @@ YAHOO.util.Connect =
    */
 	isCallInProgress:function(o)
 	{
-		if(o){
+		// if the XHR object assigned to the transaction has not been dereferenced,
+		// then check its readyState status.  Otherwise, return false.
+		if(o.conn){
 			return o.conn.readyState != 4 && o.conn.readyState != 0;
+		}
+		else{
+			return false;
 		}
 	},
 
