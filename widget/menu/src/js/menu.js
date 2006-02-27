@@ -43,6 +43,9 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         m_oMenuManager = YAHOO.widget.MenuManager, 
 
+        // Create a reference to the Dom singleton
+
+        m_oDom = YAHOO.util.Dom,
 
         /*
             Create a reference to the current context so that private methods
@@ -80,7 +83,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
             if(nIndex == 0) {
 
-                YAHOO.util.Dom.addClass(p_oItem.element, "first");
+                m_oDom.addClass(p_oItem.element, "first");
 
             }
 
@@ -131,8 +134,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     var updateArrayItemProperties = function(p_oArray) {
 
-        var oDom = YAHOO.util.Dom,
-            i = p_oArray.length-1;
+        var i = p_oArray.length-1;
 
 
         // Update the index and className properties of each member        
@@ -145,13 +147,13 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
                 case 0:
 
-                    oDom.addClass(p_oArray[i].element, "first");
+                    m_oDom.addClass(p_oArray[i].element, "first");
 
                 break;
 
                 default:
 
-                    oDom.removeClass(p_oArray[i].element, "first");
+                    m_oDom.removeClass(p_oArray[i].element, "first");
 
 
                 break;
@@ -165,25 +167,25 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     var clearParentMenuWidth = function(p_oMenuItem) {
 
-        var oParentMenu = p_oMenuItem.getParent(),
+        var oParentMenu = p_oMenuItem.parent,
             oParentMenuDIV;
         
-        if(oParentMenu.getParent() && oParentMenu.getParent()._Menu) { 
+        if(oParentMenu.parent && oParentMenu.parent._Menu) { 
         
-            oParentMenu = oParentMenu.getParent();
+            oParentMenu = oParentMenu.parent;
             
         }
 
-        oParentMenuDIV = oParentMenu.getElement();
+        oParentMenuDIV = oParentMenu.element;
 
         oParentMenu.pixelWidth = 
-            YAHOO.util.Dom.getStyle(oParentMenuDIV, "width");
+            m_oDom.getStyle(oParentMenuDIV, "width");
 
         oParentMenuDIV.style.width = "100%";
 
-        if(oParentMenu.getParent()) {
+        if(oParentMenu.parent) {
         
-            return clearParentMenuWidth(oParentMenu.getParent());
+            return clearParentMenuWidth(oParentMenu.parent);
         
         }
 
@@ -191,19 +193,19 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     var setParentMenuWidth = function(p_oMenuItem) {
 
-        var oParentMenu = p_oMenuItem.getParent();
+        var oParentMenu = p_oMenuItem.parent;
 
-        if(oParentMenu.getParent() && oParentMenu.getParent()._Menu) { 
+        if(oParentMenu.parent && oParentMenu.parent._Menu) { 
         
-            oParentMenu = oParentMenu.getParent();
+            oParentMenu = oParentMenu.parent;
             
         }
 
-        oParentMenu.getElement().style.width = oParentMenu.pixelWidth;
+        oParentMenu.element.style.width = oParentMenu.pixelWidth;
             
-        if(oParentMenu.getParent()) {
+        if(oParentMenu.parent) {
         
-            return setParentMenuWidth(oParentMenu.getParent());
+            return setParentMenuWidth(oParentMenu.parent);
         
         }
     
@@ -217,6 +219,80 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
         }
 
+    };
+
+    var initSubTree = function(p_aNodeList) {
+    
+        var oNode,
+            Menu = YAHOO.widget.Menu,
+            MenuItem = YAHOO.widget.MenuItem;
+    
+        for (var i=0; (oNode = p_aNodeList[i]); i++) {
+        
+            switch(oNode.tagName) {
+    
+                case "LI":
+                case "OPTGROUP":
+                case "OPTION":
+                
+                    me.addMenuItem((new MenuItem(oNode)));
+    
+                break;
+    
+                case "UL":
+
+                    if(
+                        oNode.parentNode && 
+                        oNode.parentNode.parentNode && 
+                        oNode.parentNode.parentNode.tagName == "DIV" && 
+                        m_oDom.hasClass(oNode.parentNode.parentNode, "yuimenu")
+                    ) {
+    
+                        var oLI;
+    
+                        for (var n=0; (oLI = oNode.childNodes[n]); n++) {
+    
+                            if(oLI.nodeType == 1) {
+    
+                                me.addMenuItem((new MenuItem(oLI)));
+    
+                            }
+    
+                        }
+    
+                    }
+                    else {
+    
+                        me.addSubMenu((new Menu(oNode)));
+    
+                    }
+    
+                break;
+    
+                case "DIV":
+    
+                    if(
+                        oNode.parentNode &&
+                        oNode.parentNode.tagName == "DIV" &&
+                        m_oDom.hasClass(oNode.parentNode, "yuimenu") && 
+                        m_oDom.hasClass(oNode, "bd")
+                    ) {
+
+                        return initSubTree(oNode.childNodes);
+
+                    }
+                    else {                  
+
+                        me.addSubMenu((new Menu(oNode)));
+    
+                    }
+
+                break;
+    
+            }
+        
+        }
+    
     };
 
 
@@ -450,7 +526,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
                 if(oSubMenu) {
 
-                    oSubMenu.render();
+                    oSubMenu.render(oMenuItem.element);
 
                 }
     
@@ -464,17 +540,14 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
         if(m_aSubMenus.length > 0) {
     
-            var nSubMenus = m_aSubMenus.length,
-                oMenu;
-    
+            var nSubMenus = m_aSubMenus.length;
+
             for(var i=0; i<nSubMenus; i++) {
-    
-                oMenu = m_aSubMenus[i];
 
-                oMenu.render();
+                m_aSubMenus[i].render();
 
-                oMenu.appendTo(this.body);
-    
+                this.setBodyContent(m_aSubMenus[i].element);
+
             }
     
         }
@@ -483,9 +556,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
     this.render = function(p_bAppendToNode, p_bHideSourceElement) {
    
-        var oDom = YAHOO.util.Dom;
-               
-        oDom.addClass(this.element, this.cssClassName);
+        m_oDom.addClass(this.element, this.cssClassName);
 
 
         /*
@@ -527,13 +598,13 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         this.renderMenuItems();
 
+        this.renderSubMenus();
+
 
         // Continue with the superclass implementation of this method
 
         YAHOO.widget.Overlay.superclass.render.call(this, p_bAppendToNode);
 
-
-        this.renderSubMenus();
     
     };
 
@@ -544,10 +615,10 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         if (!val) {
     
-            YAHOO.util.Dom.setStyle(
+            m_oDom.setStyle(
                 (this.container || this.element), 
-                "visibility", 
-                "hidden"
+                "display", 
+                "none"
             );
     
             var oActiveMenuItem;
@@ -565,15 +636,15 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             
             if(oActiveMenuItem) {
         
-                if(oActiveMenuItem.isSelected()) {
+                if(oActiveMenuItem.cfg.getConfigProperty("selected")) {
         
                     oActiveMenuItem.setSelected(false);
         
                 }
         
-                var oSubMenu = oActiveMenuItem.getSubMenu();
+                var oSubMenu = oActiveMenuItem.cfg.getConfigProperty("submenu");
         
-                if(oSubMenu && oSubMenu.getConfigProperty("visible")) {
+                if(oSubMenu && oSubMenu.cfg.getConfigProperty("visible")) {
         
                     oSubMenu.hide();
         
@@ -589,37 +660,35 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             
             }
             
-            YAHOO.util.Dom.setStyle(
+            m_oDom.setStyle(
                 (this.container || this.element), 
-                "visibility", 
-                "visible"
+                "display", 
+                "block"
             );
     
             if(this.element.style.width.length == 0) {
     
-                var oDom = YAHOO.util.Dom;
-    
                 var nBorderWidth = 
                     parseInt(
-                        oDom.getStyle(this.element, "borderLeftWidth"), 
+                        m_oDom.getStyle(this.element, "borderLeftWidth"), 
                         10
                     );
     
                 nBorderWidth += 
                     parseInt(
-                        oDom.getStyle(this.element, "borderRightWidth"), 
+                        m_oDom.getStyle(this.element, "borderRightWidth"), 
                         10
                     );
     
                 var nPadding = 
                     parseInt(
-                        oDom.getStyle(this.element, "paddingLeft"), 
+                        m_oDom.getStyle(this.element, "paddingLeft"), 
                         10
                     );
     
                 nPadding += 
                     parseInt(
-                        oDom.getStyle(this.element, "paddingRight"), 
+                        m_oDom.getStyle(this.element, "paddingRight"), 
                         10
                     );
     
@@ -671,8 +740,8 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         switch(oElement.tagName) {
     
             case "DIV":
-    
-                if(YAHOO.util.Dom.hasClass(oElement, "yuimenu")) {
+
+                if(m_oDom.hasClass(oElement, "yuimenu")) {
     
                     this.srcElement = oElement;
     
@@ -755,7 +824,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         if(this.srcElement) {
 
-            this.initSubTree();
+            initSubTree(this.srcElement.childNodes);
 
         }
 
@@ -823,65 +892,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
         }
 
-    }
-
-};
-
-YAHOO.widget.Menu.prototype.initSubTree = function() {
-
-    var oNode,
-        Menu = YAHOO.widget.Menu,
-        MenuItem = YAHOO.widget.MenuItem;
-
-    for (var i=0; (oNode = this.srcElement.childNodes[i]); i++) {
-    
-        switch(oNode.tagName) {
-
-            case "LI":
-            case "OPTGROUP":
-            case "OPTION":
-            
-                this.addMenuItem((new MenuItem(oNode)));
-
-            break;
-
-            case "UL":
-
-                if(
-                    oNode.parentNode && 
-                    oNode.parentNode.tagName == "DIV" && 
-                    YAHOO.util.Dom.hasClass(oNode.parentNode, "yuimenu")
-                ) {
-
-                    var oLI;
-
-                    for (var n=0; (oLI = oNode.childNodes[n]); n++) {
-
-                        if(oLI.nodeType == 1) {
-
-                            this.addMenuItem((new MenuItem(oLI)));
-
-                        }
-
-                    }
-
-                }
-                else {
-
-                    this.addSubMenu((new Menu(oNode)));
-
-                }
-
-            break;
-
-            case "DIV":
-
-                this.addSubMenu((new Menu(oNode)));
-
-            break;
-
-        }
-    
     }
 
 };

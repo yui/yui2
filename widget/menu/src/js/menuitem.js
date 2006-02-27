@@ -251,6 +251,109 @@ YAHOO.widget.MenuItem.prototype = {
     
         };
 
+        var initSubTree = function() {
+    
+            var aChildNodes = me.srcElement.childNodes,
+                nChildNodes = aChildNodes.length,
+                MenuManager = YAHOO.widget.MenuManager,
+                Menu = YAHOO.widget.Menu,
+                MenuItem = YAHOO.widget.MenuItem;
+    
+    
+            if(nChildNodes > 0) {
+    
+                var oNode,
+                    aULs = [],
+                    aOptions = [];
+        
+                for(var i=0; i<nChildNodes; i++) {
+                
+                    oNode = aChildNodes[i];
+                
+                    if(oNode.nodeType == 1) {
+                
+                        switch(oNode.tagName) {
+                
+                            case "DIV":
+                
+                                me.cfg.setConfigProperty(
+                                    "submenu", 
+                                    (new Menu(oNode))
+                                );
+                
+                            break;
+         
+                            case "OPTION":
+        
+                                aOptions[aOptions.length] = oNode;
+        
+                            break;
+               
+                            case "UL":
+                                
+                                aULs[aULs.length] = oNode;
+                
+                            break;
+                
+                        }
+        
+                    }
+                
+                }        
+    
+    
+                if(aOptions.length > 0) {
+        
+                    me.cfg.setConfigProperty(
+                        "submenu", 
+                        (new Menu(MenuManager.createMenuId()))
+                    );
+    
+                    var nOptions = aOptions.length;
+        
+                    for(var n=0; n<nOptions; n++) {
+        
+                        m_oSubMenu.addMenuItem((new MenuItem(aOptions[n])));
+        
+                    }
+        
+                }
+        
+    
+                if(aULs.length > 0) {
+        
+                    if(aULs.length > 1) {
+    
+                        var oMenu = new Menu(MenuManager.createMenuId()),
+                            nULs = aULs.length;
+            
+                        for(var n=0; n<nULs; n++) {
+            
+                            oMenu.addSubMenu((new Menu(aULs[n])));
+            
+                        }
+    
+                        me.cfg.setConfigProperty(
+                            "submenu", 
+                            oMenu
+                        );
+                    
+                    }
+                    else {
+    
+                        me.cfg.setConfigProperty(
+                            "submenu", 
+                            (new Menu(aULs[0]))
+                        );
+                    
+                    }
+        
+                }        
+    
+            }
+    
+        };
+
 
         // Private DOM event handlers
     
@@ -276,7 +379,7 @@ YAHOO.widget.MenuItem.prototype = {
     
             if(!this.cfg.getConfigProperty("disabled")) {
     
-                if(m_oSubMenu && m_oSubMenu.isVisible()) {
+                if(m_oSubMenu && m_oSubMenu.cfg.getConfigProperty("visible")) {
                     
                     var oRelatedTarget = 
                             YAHOO.util.Event.getRelatedTarget(p_oEvent),
@@ -387,7 +490,7 @@ YAHOO.widget.MenuItem.prototype = {
     
                 if(oTarget == m_oSubMenuIndicatorIMG) {
     
-                    if(m_oSubMenu.isVisible()) {
+                    if(m_oSubMenu.cfg.getConfigProperty("visible")) {
     
                         this.hideSubMenu();
     
@@ -653,10 +756,6 @@ YAHOO.widget.MenuItem.prototype = {
             }
     
         };
-
-
-
-
 
 
         // Privileged methods
@@ -1159,10 +1258,28 @@ YAHOO.widget.MenuItem.prototype = {
         this.showSubMenu = function() {
     
             if(m_oSubMenu) {
-    
-                m_oSubMenu.element.style.visibility = "hidden";
-    
+
+                var aMenuItemPosition = m_oDom.getXY(this.element),
+                    nMenuItemOffsetHeight =  this.element.offsetHeight,
+                    nMenuItemOffsetWidth = this.element.offsetWidth;
+
+                var aSubMenuPosition = [ 
+
+                    (aMenuItemPosition[0]+nMenuItemOffsetWidth),
+                    (aMenuItemPosition[1])
+
+                ];
+
+                m_oSubMenu.cfg.setConfigProperty("xy", aSubMenuPosition);
+                
+
+
+
                 m_oSubMenu.show();
+
+                return;
+
+                m_oSubMenu.element.style.visibility = "hidden";
     
                 var oParentMenu = this.parent;
                 
@@ -1249,6 +1366,8 @@ YAHOO.widget.MenuItem.prototype = {
                 
                 m_oSubMenuIndicatorIMG.alt = 
                     this.EXPANDED_SUBMENU_INDICATOR_ALT_TEXT;
+
+
     
             }
     
@@ -1321,7 +1440,7 @@ YAHOO.widget.MenuItem.prototype = {
 
                     }
 
-                    this.initSubTree();
+                    initSubTree();
 
                 break;
 
@@ -1563,7 +1682,7 @@ YAHOO.widget.MenuItem.prototype = {
                     }
 
 
-                    this.initSubTree();
+                    initSubTree();
 
                 break;
 
@@ -1677,109 +1796,6 @@ YAHOO.widget.MenuItem.prototype = {
             if(p_oUserConfig) {
     
                 this.cfg.applyConfig(p_oUserConfig);
-    
-            }        
-
-        }
-
-    },
-
-    initSubTree: function() {
-
-        var aChildNodes = this.srcElement.childNodes,
-            nChildNodes = aChildNodes.length,
-            MenuManager = YAHOO.widget.MenuManager,
-            Menu = YAHOO.widget.Menu,
-            MenuItem = YAHOO.widget.MenuItem;
-
-
-        if(nChildNodes > 0) {
-
-            var oNode,
-                aULs = [],
-                aOptions = [];
-    
-            for(var i=0; i<nChildNodes; i++) {
-            
-                oNode = aChildNodes[i];
-            
-                if(oNode.nodeType == 1) {
-            
-                    switch(oNode.tagName) {
-            
-                        case "DIV":
-            
-                            this.cfg.setConfigProperty(
-                                "submenu", 
-                                (new Menu(oNode))
-                            );
-            
-                        break;
-     
-                        case "OPTION":
-    
-                            aOptions[aOptions.length] = oNode;
-    
-                        break;
-           
-                        case "UL":
-                            
-                            aULs[aULs.length] = oNode;
-            
-                        break;
-            
-                    }
-    
-                }
-            
-            }        
-
-
-            if(aOptions.length > 0) {
-    
-                this.cfg.setConfigProperty(
-                    "submenu", 
-                    (new Menu(MenuManager.createMenuId()))
-                );
-
-                var nOptions = aOptions.length;
-    
-                for(var n=0; n<nOptions; n++) {
-    
-                    m_oSubMenu.addMenuItem((new MenuItem(aOptions[n])));
-    
-                }
-    
-            }
-    
-
-            if(aULs.length > 0) {
-    
-                if(aULs.length > 1) {
-
-                    var oMenu = new Menu(MenuManager.createMenuId()),
-                        nULs = aULs.length;
-        
-                    for(var n=0; n<nULs; n++) {
-        
-                        oMenu.addSubMenu((new Menu(aULs[n])));
-        
-                    }
-
-                    this.cfg.setConfigProperty(
-                        "submenu", 
-                        oMenu
-                    );
-                
-                }
-                else {
-
-                    this.cfg.setConfigProperty(
-                        "submenu", 
-                        (new Menu(aULs[0]))
-                    );
-                
-                }
     
             }        
 
