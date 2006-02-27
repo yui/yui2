@@ -31,13 +31,6 @@ YAHOO.widget.Menu.prototype._Menu = true;
 
 YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
-    /* 
-        Note that we don't pass the user config in here yet because we only 
-        want it executed once, at the lowest subclass level
-    */ 
-
-	YAHOO.widget.Menu.superclass.init.call(this, p_oElement);  
-
 
     // Private member variables
 
@@ -443,7 +436,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
         if(m_aMenuItems.length > 0) {            
     
-            var nMenuItems = m_aMenuItems.length
+            var nMenuItems = m_aMenuItems.length,
                 oMenuItem,
                 oSubMenu;
     
@@ -453,7 +446,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                 
                 m_oListElement.appendChild(oMenuItem.element);
 
-                oSubMenu = oMenuItem.cfg.getConfigProperty("submenu")
+                oSubMenu = oMenuItem.cfg.getConfigProperty("submenu");
 
                 if(oSubMenu) {
 
@@ -503,7 +496,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         if(m_aMenuItems.length > 0 && !m_oListElement) {
         
             var oUL = document.createElement("ul");
-            oDIV.appendChild(oUL);
+            this.element.appendChild(oUL);
         
             this.setBodyContent(oUL);
 
@@ -546,7 +539,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
 
    this.configVisible = function(type, args, me) {
-    
+   
         var val = args[0];
 
         if (!val) {
@@ -656,96 +649,115 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     };
 
 
-    if(this.element) {
+    // Begin constructor logic
 
-        switch(this.element.tagName) {
+    var oElement;
 
+
+    if(typeof p_oElement == "string") {
+
+        oElement = document.getElementById(p_oElement);
+
+    }
+    else if(p_oElement.tagName) {
+
+        oElement = p_oElement;
+
+    }
+
+
+    if(oElement) {
+
+        switch(oElement.tagName) {
+    
             case "DIV":
-
-                if(YAHOO.util.Dom.hasClass(this.element, "yuimenu")) {
-
-                    this.srcElement = this.element;
-                    
-
+    
+                if(YAHOO.util.Dom.hasClass(oElement, "yuimenu")) {
+    
+                    this.srcElement = oElement;
+    
+    
+                    /* 
+                        Note that we don't pass the user config in here yet 
+                        because we only want it executed once, at the lowest 
+                        subclass level
+                    */ 
+                
+                    YAHOO.widget.Menu.superclass.init.call(this, oElement); 
+    
+    
                     // Get the list node (UL) if it exists
-
+    
                     if(
                         this.element.firstChild && 
                         this.element.firstChild.nodeType == 1 && 
                         this.element.firstChild.tagName == "UL"
                     ) {
-
+    
                         m_oListElement = this.element.firstChild;
-
+    
                     }
                     else if(
                         this.element.childNodes[1] && 
                         this.element.childNodes[1].nodeType == 1 &&
                         this.element.childNodes[1].tagName == "UL"
                     ) {
-
+    
                         m_oListElement = this.element.childNodes[1];
-
+    
                     }
-
-
+    
+    
                 }
-
+    
             break;
-
-
+    
             case "UL":
             case "SELECT":
-
-                this.srcElement = this.element;
-
-
+    
+                this.srcElement = oElement;
+    
+    
                 /*
-    
-                    If the source element is not a standard module, give the 
-                    standard module a unique id so that both elements can be
-                    referenced seperately
-    
+                    The source element is not something that we can use 
+                    outright, so we need to create a new Overlay
                 */
-
-                if(this.id == this.srcElement.id) {
-
-                    this.id = m_oMenuManager.createMenuId();
-                    this.element.id = this.id;
-        
-                }
-
+    
+                var sId = m_oMenuManager.createMenuId();
+    
+    
+                /* 
+                    Note that we don't pass the user config in here yet 
+                    because we only want it executed once, at the lowest 
+                    subclass level
+                */ 
+            
+                YAHOO.widget.Menu.superclass.init.call(this, sId); 
+    
             break;
-
-
-            /*
-
-                If the element supplied is not a UL, SELECT, or a standard 
-                module, exit right away.
-
-            */
-
-            default:
-
-                return false;
-
-            break;
-
+    
         }
 
+    }
+    else {
 
-        /*
-            Check to make sure that the element has an id. If not, use the 
-            MenuManager to create a new id for the element.
+        /* 
+            Note that we don't pass the user config in here yet 
+            because we only want it executed once, at the lowest 
+            subclass level
         */ 
+    
+        YAHOO.widget.Menu.superclass.init.call(this, p_oElement);
 
-        if(!this.id) {
+    }
 
-            this.id = m_oMenuManager.createMenuId();
-            this.element.id = this.id;
+    if(this.element) {
+
+        if(this.srcElement) {
+
+            this.initSubTree();
 
         }
-
 
         var oEventUtil = YAHOO.util.Event,
             CustomEvent = YAHOO.util.CustomEvent;
@@ -805,7 +817,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         m_oMenuManager.addMenu(this);
 
 
-        if (p_oUserConfig) {
+        if(p_oUserConfig) {
     
             this.cfg.applyConfig(p_oUserConfig);
     
