@@ -24,6 +24,8 @@ YAHOO.widget.Menu.prototype.cssClassName = "yuimenu";
 YAHOO.widget.Menu.prototype.parent = null;
 YAHOO.widget.Menu.prototype.activeMenuItem = null;
 YAHOO.widget.Menu.prototype.srcElement = null;
+YAHOO.widget.Menu.prototype.keepInViewport = true;
+
 YAHOO.widget.Menu.prototype._Menu = true;
 
 
@@ -609,50 +611,11 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     };
 
 
-   this.configVisible = function(type, args, me) {
+   this.configVisible = function(p_sType, p_aArguments, p_oObject) {
    
-        var val = args[0];
+        var bVisible = p_aArguments[0];
 
-        if (!val) {
-    
-            m_oDom.setStyle(
-                (this.container || this.element), 
-                "display", 
-                "none"
-            );
-    
-            var oActiveMenuItem;
-        
-            if(this.parent && this.parent._Menu) {
-        
-                oActiveMenuItem = this.parent.activeMenuItem;
-            
-            }
-            else {
-            
-                oActiveMenuItem = this.activeMenuItem;
-            
-            }
-            
-            if(oActiveMenuItem) {
-        
-                if(oActiveMenuItem.cfg.getConfigProperty("selected")) {
-        
-                    oActiveMenuItem.setSelected(false);
-        
-                }
-        
-                var oSubMenu = oActiveMenuItem.cfg.getConfigProperty("submenu");
-        
-                if(oSubMenu && oSubMenu.cfg.getConfigProperty("visible")) {
-        
-                    oSubMenu.hide();
-        
-                }
-        
-            }
-    
-        } else {
+        if (bVisible) {
     
             if(this.parent && this.parent._MenuItem) {
             
@@ -710,7 +673,51 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             if(this.parent && this.parent._MenuItem) {
             
                 setParentMenuWidth(this.parent);
+
+
+
     
+            }
+
+    
+        } else {
+    
+            m_oDom.setStyle(
+                (this.container || this.element), 
+                "display", 
+                "none"
+            );
+    
+            var oActiveMenuItem;
+        
+            if(this.parent && this.parent._Menu) {
+        
+                oActiveMenuItem = this.parent.activeMenuItem;
+            
+            }
+            else {
+            
+                oActiveMenuItem = this.activeMenuItem;
+            
+            }
+            
+            if(oActiveMenuItem) {
+        
+                if(oActiveMenuItem.cfg.getConfigProperty("selected")) {
+        
+                    oActiveMenuItem.cfg.setConfigProperty("selected", false)
+        
+                }
+        
+                var oSubMenu = 
+                    oActiveMenuItem.cfg.getConfigProperty("submenu");
+        
+                if(oSubMenu && oSubMenu.cfg.getConfigProperty("visible")) {
+        
+                    oSubMenu.hide();
+        
+                }
+        
             }
     
         }
