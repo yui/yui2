@@ -1259,115 +1259,29 @@ YAHOO.widget.MenuItem.prototype = {
     
             if(m_oSubMenu) {
 
-                var aMenuItemPosition = m_oDom.getXY(this.element),
-                    nMenuItemOffsetHeight =  this.element.offsetHeight,
-                    nMenuItemOffsetWidth = this.element.offsetWidth;
+                var aMenuItemPosition = m_oDom.getXY(this.element);
+                    aSubMenuPosition = [];
 
-                var aSubMenuPosition = [ 
 
-                    (aMenuItemPosition[0]+nMenuItemOffsetWidth),
-                    (aMenuItemPosition[1])
+                // Calculate the x position
+                
+                aSubMenuPosition[0] = 
+                    (aMenuItemPosition[0] + this.element.offsetWidth);
 
-                ];
+
+                // Calculate the y position
+    
+                aSubMenuPosition[1] = aMenuItemPosition[1];
+
+
+                // Position the menu
 
                 m_oSubMenu.cfg.setConfigProperty("xy", aSubMenuPosition);
-                
 
+                m_oSubMenu.cfg.setConfigProperty("visible", true);
 
-
-                m_oSubMenu.show();
-
-                return;
-
-                m_oSubMenu.element.style.visibility = "hidden";
-    
-                var oParentMenu = this.parent;
-                
-                if(oParentMenu.parent && oParentMenu.parent._Menu) {
-    
-                    oParentMenu = oParentMenu.parent;
-                
-                }
-    
-                var aMenuItemPos = YAHOO.util.Dom.getXY(this.element),
-                    nMenuItemPageX = aMenuItemPos[0],
-                    nMenuItemPageY = aMenuItemPos[1],
-                    nMenuItemOffsetWidth = this.element.offsetWidth,
-                    nParentMenuRightPos = (nMenuItemPageX + nMenuItemOffsetWidth),
-                    nSubMenuOffsetWidth = m_oSubMenu.element.offsetWidth,
-                    nSubMenuOffsetHeight = m_oSubMenu.element.offsetHeight;
-    
-                var oSubMenuDIV = m_oSubMenu.element;
-    
-                oSubMenuDIV.style.left = "";
-                oSubMenuDIV.style.right = "";
-                oSubMenuDIV.style.top = "";
-                oSubMenuDIV.style.bottom = "";
-    
-                // Set the top position
-    
-                if(
-                    (nMenuItemPageY + nSubMenuOffsetHeight) >
-                    YAHOO.util.Dom.getClientHeight()
-                ) {
-    
-                    var nTopPos = (nMenuItemPageY - nSubMenuOffsetHeight);
-    
-                    if(nTopPos < 0) {
-    
-                        m_oSubMenu.setTopPos(this.element.offsetTop);
-                    
-                    }
-                    else {
-    
-                        m_oSubMenu.setBottomPos(
-                            (
-                                oParentMenu.element.offsetHeight - 
-                                (this.element.offsetTop + this.element.offsetHeight) 
-                            )
-                        );
-    
-                    }                
-               
-                }
-                else {
-    
-                    m_oSubMenu.setTopPos(this.element.offsetTop);
-                
-                }
-    
-    
-                // Set the left position
-    
-                if(
-                    (nParentMenuRightPos + nSubMenuOffsetWidth) > 
-                    YAHOO.util.Dom.getClientWidth()
-                ) {
-                
-                    if(nMenuItemPageX > nSubMenuOffsetWidth) {
-    
-                        m_oSubMenu.setRightPos(nMenuItemOffsetWidth);
-    
-                    }
-                    else {
-    
-                        m_oSubMenu.setLeftPos(nMenuItemOffsetWidth);
-                    
-                    }
-    
-                }
-                else {
-    
-                    m_oSubMenu.setLeftPos(nMenuItemOffsetWidth);
-                
-                }
-    
-                m_oSubMenu.element.style.visibility = "visible";
-                
                 m_oSubMenuIndicatorIMG.alt = 
                     this.EXPANDED_SUBMENU_INDICATOR_ALT_TEXT;
-
-
     
             }
     
@@ -1803,7 +1717,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     },
 
-    destory: function() {
+    destroy: function() {
 
         if(this.element) {
 

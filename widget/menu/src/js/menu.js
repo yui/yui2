@@ -675,7 +675,51 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                 setParentMenuWidth(this.parent);
 
 
+                if(this.keepInViewport) {
+    
+                    /*
+                        Hide the Menu while the positioning is calculated to 
+                        reduce flicker
+                    */
+    
+                    var aCurrentPosition = this.cfg.getConfigProperty("xy"),
+                        nX = aCurrentPosition[0],
+                        nY = aCurrentPosition[1],
+                        nOffsetWidth = this.element.offsetWidth,
+                        nOffsetHeight = this.element.offsetHeight;
+    
 
+                    /*
+                        If the current position will place the Menu outside 
+                        the viewport and there is room to place it elsewhere
+                        then reset the "x" and "y" properties to do so
+                    */
+
+    
+                    if(
+                        ((nX + nOffsetWidth) > m_oDom.getClientWidth()) &&
+                        (nX > nOffsetWidth)
+                    ) {
+
+//                        m_oDom.setX(this.element, (nX-nOffsetWidth));
+        
+                        this.cfg.setConfigProperty("x", (nX - nOffsetWidth));
+
+                    }
+
+    
+                    if(
+                        ((nY + nOffsetHeight) > m_oDom.getClientHeight()) &&
+                        (nY > nOffsetHeight)
+                    ) {
+        
+//                        m_oDom.setY(this.element, (nY - nOffsetHeight));
+
+                        this.cfg.setConfigProperty("y", (nY - nOffsetHeight));
+                   
+                    }
+    
+                }
     
             }
 
