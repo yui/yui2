@@ -40,6 +40,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         m_aSubMenus = [],
         m_oListElement,
 
+        m_oEventUtil = YAHOO.util.Event,
 
         // Create a reference to the MenuManager singleton
 
@@ -167,7 +168,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     };
 
-    var clearParentMenuWidth = function(p_oMenuItem) {
+    var expandParentMenuWidth = function(p_oMenuItem) {
 
         var oParentMenu = p_oMenuItem.parent,
             oParentMenuDIV;
@@ -180,20 +181,19 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         oParentMenuDIV = oParentMenu.element;
 
-        oParentMenu.pixelWidth = 
-            m_oDom.getStyle(oParentMenuDIV, "width");
+        oParentMenu.pixelWidth = m_oDom.getStyle(oParentMenuDIV, "width");
 
         oParentMenuDIV.style.width = "100%";
 
         if(oParentMenu.parent) {
         
-            return clearParentMenuWidth(oParentMenu.parent);
+            return expandParentMenuWidth(oParentMenu.parent);
         
         }
 
     };
 
-    var setParentMenuWidth = function(p_oMenuItem) {
+    var collapseParentMenuWidth = function(p_oMenuItem) {
 
         var oParentMenu = p_oMenuItem.parent;
 
@@ -203,11 +203,16 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             
         }
 
-        oParentMenu.element.style.width = oParentMenu.pixelWidth;
+        /*
+            Set width via the "setProperty" method to ensure that the iframe's
+            dimensions are sync'd to the width of the Menu
+        */
+
+        oParentMenu.cfg.setProperty("width", oParentMenu.pixelWidth);
             
         if(oParentMenu.parent) {
         
-            return setParentMenuWidth(oParentMenu.parent);
+            return collapseParentMenuWidth(oParentMenu.parent);
         
         }
     
@@ -304,7 +309,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         if(!this.parent || this.parent._MenuItem) {
         
-            YAHOO.util.Event.stopPropagation(p_oEvent);
+            m_oEventUtil.stopPropagation(p_oEvent);
 
         }
         
@@ -316,7 +321,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         if(!this.parent || this.parent._MenuItem) {
         
-            YAHOO.util.Event.stopPropagation(p_oEvent);
+            m_oEventUtil.stopPropagation(p_oEvent);
 
         }
 
@@ -328,7 +333,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         if(!this.parent || this.parent._MenuItem) {
 
-            YAHOO.util.Event.stopPropagation(p_oEvent);
+            m_oEventUtil.stopPropagation(p_oEvent);
 
         }
 
@@ -342,7 +347,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         if(!this.parent || this.parent._MenuItem) {
         
-            YAHOO.util.Event.stopPropagation(p_oEvent);
+            m_oEventUtil.stopPropagation(p_oEvent);
 
         }
 
@@ -354,14 +359,14 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         
     var elementClick = function(p_oEvent, p_oMenu) {
 
-        var oTarget = YAHOO.util.Event.getTarget(p_oEvent, true);
+        var oTarget = m_oEventUtil.getTarget(p_oEvent, true);
 
         if(
             (!this.parent || this.parent._MenuItem) && 
             oTarget.tagName != "A"
         ) {
         
-            YAHOO.util.Event.stopPropagation(p_oEvent);
+            m_oEventUtil.stopPropagation(p_oEvent);
 
         }
 
@@ -459,7 +464,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         if(p_oMenu && p_oMenu._Menu) {
 
-            p_oMenu.cfg.setConfigProperty("iframe", false);
+            p_oMenu.cfg.setProperty("iframe", false);
 
             addArrayItem(m_aSubMenus, p_oMenu, p_nIndex);
 
@@ -524,7 +529,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                 
                 m_oListElement.appendChild(oMenuItem.element);
 
-                oSubMenu = oMenuItem.cfg.getConfigProperty("submenu");
+                oSubMenu = oMenuItem.cfg.getProperty("submenu");
 
                 if(oSubMenu) {
 
@@ -546,9 +551,9 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
             for(var i=0; i<nSubMenus; i++) {
 
-                m_aSubMenus[i].render();
+                this.appendToBody(m_aSubMenus[i].element);
 
-                this.setBodyContent(m_aSubMenus[i].element);
+                m_aSubMenus[i].render();
 
             }
     
@@ -571,7 +576,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             var oUL = document.createElement("ul");
             this.element.appendChild(oUL);
         
-            this.setBodyContent(oUL);
+            this.setBody(oUL);
 
             m_oListElement = oUL;
 
@@ -605,7 +610,8 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         // Continue with the superclass implementation of this method
 
-        YAHOO.widget.Overlay.superclass.render.call(this, p_bAppendToNode);
+        YAHOO.widget.Menu.superclass.render.call(this, p_bAppendToNode);
+
 
     
     };
@@ -619,15 +625,12 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
             if(this.parent && this.parent._MenuItem) {
             
-                clearParentMenuWidth(this.parent);
+                expandParentMenuWidth(this.parent);
             
             }
             
-            m_oDom.setStyle(
-                (this.container || this.element), 
-                "display", 
-                "block"
-            );
+            this.element.style.visibility = "hidden";
+            this.element.style.display = "block";
     
             if(this.element.style.width.length == 0) {
     
@@ -672,65 +675,75 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
             if(this.parent && this.parent._MenuItem) {
             
-                setParentMenuWidth(this.parent);
-
-
-                if(this.keepInViewport) {
-    
-                    /*
-                        Hide the Menu while the positioning is calculated to 
-                        reduce flicker
-                    */
-    
-                    var aCurrentPosition = this.cfg.getConfigProperty("xy"),
-                        nX = aCurrentPosition[0],
-                        nY = aCurrentPosition[1],
-                        nOffsetWidth = this.element.offsetWidth,
-                        nOffsetHeight = this.element.offsetHeight;
-    
-
-                    /*
-                        If the current position will place the Menu outside 
-                        the viewport and there is room to place it elsewhere
-                        then reset the "x" and "y" properties to do so
-                    */
-
-    
-                    if(
-                        ((nX + nOffsetWidth) > m_oDom.getClientWidth()) &&
-                        (nX > nOffsetWidth)
-                    ) {
-
-//                        m_oDom.setX(this.element, (nX-nOffsetWidth));
-        
-                        this.cfg.setConfigProperty("x", (nX - nOffsetWidth));
-
-                    }
-
-    
-                    if(
-                        ((nY + nOffsetHeight) > m_oDom.getClientHeight()) &&
-                        (nY > nOffsetHeight)
-                    ) {
-        
-//                        m_oDom.setY(this.element, (nY - nOffsetHeight));
-
-                        this.cfg.setConfigProperty("y", (nY - nOffsetHeight));
-                   
-                    }
-    
-                }
+                collapseParentMenuWidth(this.parent);
     
             }
+
+
+            if(this.keepInViewport) {
+
+                /*
+                    Hide the Menu while the positioning is calculated to 
+                    reduce flicker
+                */
+
+                var aCurrentPosition = this.cfg.getProperty("xy"),
+                    nX = aCurrentPosition[0],
+                    nY = aCurrentPosition[1],
+                    nOffsetWidth = this.element.offsetWidth,
+                    nOffsetHeight = this.element.offsetHeight;
+
+
+                /*
+                    If the current position will place the Menu outside 
+                    the viewport and there is room to place it elsewhere
+                    then reset the "x" and "y" properties to do so
+                */
+
+
+                if(
+                    ((nX + nOffsetWidth) > m_oDom.getClientWidth()) &&
+                    (nX > nOffsetWidth)
+                ) {
+    
+                    this.cfg.setProperty("x", (nX - nOffsetWidth));
+
+                }
+
+
+                if(
+                    ((nY + nOffsetHeight) > m_oDom.getClientHeight()) &&
+                    (nY > nOffsetHeight)
+                ) {
+
+                    if(this.parent && this.parent._MenuItem) {
+
+                        this.cfg.setProperty(
+                            "y", 
+                            (
+                                (nY + this.parent.element.offsetHeight) - 
+                                nOffsetHeight
+                            )
+                        );
+
+                    }
+                    else {
+
+                        this.cfg.setProperty("y", (nY - nOffsetHeight));
+
+                    }
+               
+                }
+
+            }
+
+
+            this.element.style.visibility = "visible";
 
     
         } else {
     
-            m_oDom.setStyle(
-                (this.container || this.element), 
-                "display", 
-                "none"
-            );
+            this.element.style.display = "none";
     
             var oActiveMenuItem;
         
@@ -747,16 +760,16 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             
             if(oActiveMenuItem) {
         
-                if(oActiveMenuItem.cfg.getConfigProperty("selected")) {
+                if(oActiveMenuItem.cfg.getProperty("selected")) {
         
-                    oActiveMenuItem.cfg.setConfigProperty("selected", false)
+                    oActiveMenuItem.cfg.setProperty("selected", false)
         
                 }
         
                 var oSubMenu = 
-                    oActiveMenuItem.cfg.getConfigProperty("submenu");
+                    oActiveMenuItem.cfg.getProperty("submenu");
         
-                if(oSubMenu && oSubMenu.cfg.getConfigProperty("visible")) {
+                if(oSubMenu && oSubMenu.cfg.getProperty("visible")) {
         
                     oSubMenu.hide();
         
@@ -795,7 +808,13 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                 if(m_oDom.hasClass(oElement, "yuimenu")) {
     
                     this.srcElement = oElement;
-    
+   
+                    if(!oElement.id) {
+
+                        oElement.id = m_oMenuManager.createMenuId();
+
+                    }
+ 
     
                     /* 
                         Note that we don't pass the user config in here yet 
@@ -803,7 +822,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                         subclass level
                     */ 
                 
-                    YAHOO.widget.Menu.superclass.init.call(this, oElement); 
+                    YAHOO.widget.Menu.superclass.init.call(this, oElement.id); 
     
     
                     // Get the list node (UL) if it exists
@@ -826,7 +845,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                         m_oListElement = this.element.childNodes[1];
     
                     }
-    
     
                 }
     
@@ -879,13 +897,12 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         }
 
-        var oEventUtil = YAHOO.util.Event,
-            CustomEvent = YAHOO.util.CustomEvent;
+        var CustomEvent = YAHOO.util.CustomEvent;
 
 
         // Assign DOM event handlers
 
-        oEventUtil.addListener(
+        m_oEventUtil.addListener(
             this.element, 
             "mouseover", 
             elementMouseOver, 
@@ -893,7 +910,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             true
         );
 
-        oEventUtil.addListener(
+        m_oEventUtil.addListener(
             this.element, 
             "mouseout", 
             elementMouseOut, 
@@ -901,7 +918,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             true
         );
 
-        oEventUtil.addListener(
+        m_oEventUtil.addListener(
             this.element, 
             "mousedown", 
             elementMouseDown, 
@@ -909,7 +926,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             true
         );
 
-        oEventUtil.addListener(
+        m_oEventUtil.addListener(
             this.element, 
             "mouseup", 
             elementMouseUp, 
@@ -917,7 +934,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             true
         );
 
-        oEventUtil.addListener(
+        m_oEventUtil.addListener(
             this.element, 
             "click", 
             elementClick, 

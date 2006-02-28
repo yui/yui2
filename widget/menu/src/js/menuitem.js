@@ -40,6 +40,7 @@ YAHOO.widget.MenuItem.prototype = {
             m_oSubMenuIndicatorIMG,
             m_oSubMenu = null,
             m_oDom = YAHOO.util.Dom,
+            m_oEventUtil = YAHOO.util.Event,
             me = this;
 
 
@@ -154,7 +155,7 @@ YAHOO.widget.MenuItem.prototype = {
     
             if(oNextMenuItem) {
     
-                if(oNextMenuItem.cfg.getConfigProperty("disabled")) {
+                if(oNextMenuItem.cfg.getProperty("disabled")) {
     
                     return getNextEnabledMenuItem(
                                 oNextMenuItem.index, 
@@ -233,7 +234,7 @@ YAHOO.widget.MenuItem.prototype = {
     
             if(oPreviousMenuItem) {
     
-                if(oPreviousMenuItem.cfg.getConfigProperty("disabled")) {
+                if(oPreviousMenuItem.cfg.getProperty("disabled")) {
     
                     return getPreviousEnabledMenuItem(
                                 oPreviousMenuItem.index,
@@ -276,7 +277,7 @@ YAHOO.widget.MenuItem.prototype = {
                 
                             case "DIV":
                 
-                                me.cfg.setConfigProperty(
+                                me.cfg.setProperty(
                                     "submenu", 
                                     (new Menu(oNode))
                                 );
@@ -304,7 +305,7 @@ YAHOO.widget.MenuItem.prototype = {
     
                 if(aOptions.length > 0) {
         
-                    me.cfg.setConfigProperty(
+                    me.cfg.setProperty(
                         "submenu", 
                         (new Menu(MenuManager.createMenuId()))
                     );
@@ -333,7 +334,7 @@ YAHOO.widget.MenuItem.prototype = {
             
                         }
     
-                        me.cfg.setConfigProperty(
+                        me.cfg.setProperty(
                             "submenu", 
                             oMenu
                         );
@@ -341,7 +342,7 @@ YAHOO.widget.MenuItem.prototype = {
                     }
                     else {
     
-                        me.cfg.setConfigProperty(
+                        me.cfg.setProperty(
                             "submenu", 
                             (new Menu(aULs[0]))
                         );
@@ -359,7 +360,7 @@ YAHOO.widget.MenuItem.prototype = {
     
         var elementMouseOver = function(p_oEvent, p_oMenuItem) {
     
-            if(!this.cfg.getConfigProperty("disabled")) {
+            if(!this.cfg.getProperty("disabled")) {
     
                 this.focus();
         
@@ -377,12 +378,12 @@ YAHOO.widget.MenuItem.prototype = {
 
         var elementMouseOut = function(p_oEvent, p_oMenuItem) {
     
-            if(!this.cfg.getConfigProperty("disabled")) {
+            if(!this.cfg.getProperty("disabled")) {
     
-                if(m_oSubMenu && m_oSubMenu.cfg.getConfigProperty("visible")) {
+                if(m_oSubMenu && m_oSubMenu.cfg.getProperty("visible")) {
                     
                     var oRelatedTarget = 
-                            YAHOO.util.Event.getRelatedTarget(p_oEvent),
+                            m_oEventUtil.getRelatedTarget(p_oEvent),
                         oDIV;
             
                     if(oRelatedTarget) {
@@ -392,7 +393,7 @@ YAHOO.widget.MenuItem.prototype = {
                             case "A":
             
                                 oDIV = 
-                                    oRelatedTarget.parentNode.parentNode.parentNode;
+                                    oRelatedTarget.parentNode.parentNode.parentNode.parentNode;
             
                             break;
             
@@ -400,26 +401,32 @@ YAHOO.widget.MenuItem.prototype = {
                             case "STRONG":
             
                                 oDIV = 
-                                    oRelatedTarget.parentNode.parentNode.parentNode.parentNode;
+                                    oRelatedTarget.parentNode.parentNode.parentNode.parentNode.parentNode;
             
                             break;
             
                             case "LI":
             
-                                oDIV = oRelatedTarget.parentNode.parentNode;
+                                oDIV = oRelatedTarget.parentNode.parentNode.parentNode;
             
                             break;
             
                             case "UL":
             
-                                oDIV = oRelatedTarget.parentNode;
+                                oDIV = oRelatedTarget.parentNode.parentNode;
             
                             break;
             
                             case "DIV":
-                
+
                                 oDIV = oRelatedTarget;
-            
+                
+                                if(m_oDom.hasClass(oDIV, "bd")) {
+
+                                    oDIV = oRelatedTarget.parentNode;
+
+                                }
+        
                             break;
             
                         }
@@ -434,8 +441,7 @@ YAHOO.widget.MenuItem.prototype = {
                         )
                     ) {
                         
-                        this.cfg.setConfigProperty("selected", true);
-
+                        this.cfg.setProperty("selected", true);
         
                     }
                     else {
@@ -460,7 +466,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         var elementMouseDown = function(p_oEvent, p_oMenuItem) {
     
-            if(!this.cfg.getConfigProperty("disabled")) {
+            if(!this.cfg.getProperty("disabled")) {
     
                 this.mouseDownEvent.fire(p_oEvent, this);
     
@@ -472,7 +478,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         var elementMouseUp = function(p_oEvent, p_oMenuItem) {
     
-            if(!this.cfg.getConfigProperty("disabled")) {
+            if(!this.cfg.getProperty("disabled")) {
     
                 this.mouseUpEvent.fire(p_oEvent, this);
     
@@ -484,13 +490,13 @@ YAHOO.widget.MenuItem.prototype = {
 
         var elementClick = function(p_oEvent, p_oMenuItem) {
     
-            if(!this.cfg.getConfigProperty("disabled")) {
+            if(!this.cfg.getProperty("disabled")) {
     
-                var oTarget = YAHOO.util.Event.getTarget(p_oEvent, true);
+                var oTarget = m_oEventUtil.getTarget(p_oEvent, true);
     
                 if(oTarget == m_oSubMenuIndicatorIMG) {
     
-                    if(m_oSubMenu.cfg.getConfigProperty("visible")) {
+                    if(m_oSubMenu.cfg.getProperty("visible")) {
     
                         this.hideSubMenu();
     
@@ -499,7 +505,7 @@ YAHOO.widget.MenuItem.prototype = {
                     }
                     else {
     
-                        this.cfg.setConfigProperty("selected", true);
+                        this.cfg.setProperty("selected", true);
                         
                         this.showSubMenu();
     
@@ -520,7 +526,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         var anchorKeyDown = function(p_oEvent, p_oMenuItem) {
     
-            if(!this.cfg.getConfigProperty("disabled")) {
+            if(!this.cfg.getProperty("disabled")) {
     
                 switch(p_oEvent.keyCode) {
         
@@ -541,7 +547,7 @@ YAHOO.widget.MenuItem.prototype = {
                             // Prevent the keydown event from scrolling the 
                             // window up
     
-                            YAHOO.util.Event.preventDefault(p_oEvent);
+                            m_oEventUtil.preventDefault(p_oEvent);
             
                         }
         
@@ -564,7 +570,7 @@ YAHOO.widget.MenuItem.prototype = {
         
                             // Prevent the keydown event from scrolling the 
                             // window down
-                            YAHOO.util.Event.preventDefault(p_oEvent);
+                            m_oEventUtil.preventDefault(p_oEvent);
             
                         }
         
@@ -581,11 +587,11 @@ YAHOO.widget.MenuItem.prototype = {
     
                             focusSubMenuFirstMenuItem();
     
-                            this.cfg.setConfigProperty("selected", true);
+                            this.cfg.setProperty("selected", true);
         
                             // Prevent the keydown event from scrolling the
                             // window right
-                            YAHOO.util.Event.preventDefault(p_oEvent);
+                            m_oEventUtil.preventDefault(p_oEvent);
         
                         }
         
@@ -614,12 +620,12 @@ YAHOO.widget.MenuItem.prototype = {
         
                         if(oMenuItem) {
         
-                            oMenuItem.cfg.setConfigProperty("selected", true);
+                            oMenuItem.cfg.setProperty("selected", true);
                             oMenuItem.focus();
         
                         }
         
-                        YAHOO.util.Event.preventDefault(p_oEvent);
+                        m_oEventUtil.preventDefault(p_oEvent);
         
                     break;
         
@@ -633,7 +639,7 @@ YAHOO.widget.MenuItem.prototype = {
     
         var anchorKeyUp = function(p_oEvent, p_oMenuItem) {
     
-            if(!this.cfg.getConfigProperty("disabled")) {
+            if(!this.cfg.getProperty("disabled")) {
         
                 this.keyUpEvent.fire(p_oEvent, this);
     
@@ -643,7 +649,7 @@ YAHOO.widget.MenuItem.prototype = {
         
         var anchorKeyPress = function(p_oEvent, p_oMenuItem) {
     
-            if(!this.cfg.getConfigProperty("disabled")) {
+            if(!this.cfg.getProperty("disabled")) {
     
                 // Prevent the navigation keys from scrolling the page
     
@@ -655,7 +661,7 @@ YAHOO.widget.MenuItem.prototype = {
                     case 39: // Right
                     case 40: // Down
     
-                        YAHOO.util.Event.preventDefault(p_oEvent);
+                        m_oEventUtil.preventDefault(p_oEvent);
     
                     break;
     
@@ -669,7 +675,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         var anchorFocus = function(p_oEvent, p_oMenuItem) {
     
-            if(!this.cfg.getConfigProperty("disabled")) {
+            if(!this.cfg.getProperty("disabled")) {
     
                 var oParent = this.parent.parent,
                     oActiveMenuItem;
@@ -689,9 +695,9 @@ YAHOO.widget.MenuItem.prototype = {
             
                 if(oActiveMenuItem && oActiveMenuItem != this) {
         
-                    if(oActiveMenuItem.cfg.getConfigProperty("selected")) {
+                    if(oActiveMenuItem.cfg.getProperty("selected")) {
 
-                        oActiveMenuItem.cfg.setConfigProperty(
+                        oActiveMenuItem.cfg.setProperty(
                             "selected", 
                             false
                         );
@@ -699,9 +705,9 @@ YAHOO.widget.MenuItem.prototype = {
                     }
             
                     var oSubMenu = 
-                        oActiveMenuItem.cfg.getConfigProperty("submenu");
+                        oActiveMenuItem.cfg.getProperty("submenu");
             
-                    if(oSubMenu && oSubMenu.cfg.getConfigProperty("visible")) {
+                    if(oSubMenu && oSubMenu.cfg.getProperty("visible")) {
             
                         oSubMenu.hide();
             
@@ -733,7 +739,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         var anchorBlur = function(p_oEvent, p_oMenuItem) {
     
-            if(!this.cfg.getConfigProperty("disabled")) {
+            if(!this.cfg.getProperty("disabled")) {
     
                 m_oDom.removeClass(this.element, "focus");
                 m_oDom.removeClass(m_oAnchor, "focus");
@@ -744,7 +750,7 @@ YAHOO.widget.MenuItem.prototype = {
     
                 }
     
-                if(m_oSubMenu && !this.cfg.getConfigProperty("selected")) {
+                if(m_oSubMenu && !this.cfg.getProperty("selected")) {
         
                     m_oSubMenuIndicatorIMG.src = 
                         this.SUBMENU_INDICATOR_IMAGE_URL;
@@ -754,82 +760,6 @@ YAHOO.widget.MenuItem.prototype = {
                 this.blurEvent.fire(p_oEvent, this);
     
             }
-    
-        };
-
-
-        // Privileged methods
-
-        this.initDefaultConfig = function() {
-    
-            this.cfg = new YAHOO.util.Config(this);
-    
-    
-            // Add properties //
-    
-            this.cfg.addConfigProperty(
-                "text", 
-                null, 
-                this.configText, 
-                checkString,
-                true
-            );
-    
-            this.cfg.addConfigProperty(
-                "helptext", 
-                null, 
-                this.configHelpText,
-                null,
-                true
-            );
-    
-            this.cfg.addConfigProperty(
-                "url", 
-                null, 
-                this.configURL,
-                null,
-                true
-            );
-    
-            this.cfg.addConfigProperty(
-                "emphasis", 
-                false, 
-                this.configEmphasis, 
-                this.cfg.checkBoolean,
-                true
-            );
-    
-            this.cfg.addConfigProperty(
-                "strongemphasis", 
-                false, 
-                this.configStrongEmphasis, 
-                this.cfg.checkBoolean,
-                true
-            );
-    
-            this.cfg.addConfigProperty(
-                "disabled", 
-                false, 
-                this.configDisabled, 
-                this.cfg.checkBoolean,
-                true
-            );
-        
-            this.cfg.addConfigProperty(
-                "selected", 
-                false, 
-                this.configSelected, 
-                this.cfg.checkBoolean,
-                true
-            );
-
-            this.cfg.addConfigProperty(
-                "submenu", 
-                null, 
-                this.configSubMenu,
-                null,
-                true
-            );
     
         };
     
@@ -856,13 +786,13 @@ YAHOO.widget.MenuItem.prototype = {
                 m_oDom.addClass(me.element, "hashelptext");
                 m_oDom.addClass(m_oAnchor, "hashelptext");
 
-                if(me.cfg.getConfigProperty("disabled")) {
+                if(me.cfg.getProperty("disabled")) {
 
                     me.cfg.refireEvent("disabled");
 
                 }
 
-                if(me.cfg.getConfigProperty("selected")) {
+                if(me.cfg.getProperty("selected")) {
 
                     me.cfg.refireEvent("selected");
 
@@ -961,9 +891,9 @@ YAHOO.widget.MenuItem.prototype = {
             var bEmphasis = p_aArguments[0];
     
 
-            if(bEmphasis && this.cfg.getConfigProperty("strongemphasis")) {
+            if(bEmphasis && this.cfg.getProperty("strongemphasis")) {
 
-                this.cfg.setConfigProperty("strongemphasis", false);
+                this.cfg.setProperty("strongemphasis", false);
 
             }
 
@@ -1016,9 +946,9 @@ YAHOO.widget.MenuItem.prototype = {
             var bStrongEmphasis = p_aArguments[0];
     
 
-            if(bStrongEmphasis && this.cfg.getConfigProperty("emphasis")) {
+            if(bStrongEmphasis && this.cfg.getProperty("emphasis")) {
 
-                this.cfg.setConfigProperty("emphasis", false);
+                this.cfg.setProperty("emphasis", false);
 
             }
 
@@ -1071,7 +1001,7 @@ YAHOO.widget.MenuItem.prototype = {
 
             if(bDisabled) {
 
-                this.cfg.setConfigProperty("selected", false);
+                this.cfg.setProperty("selected", false);
 
                 m_oAnchor.removeAttribute("href");
                 m_oAnchor.removeAttribute("tabIndex");
@@ -1100,7 +1030,7 @@ YAHOO.widget.MenuItem.prototype = {
 
                 m_oAnchor.setAttribute(
                     "href", 
-                    this.cfg.getConfigProperty("url")
+                    this.cfg.getProperty("url")
                 );
 
                 m_oAnchor.setAttribute("tabIndex", 0);
@@ -1204,14 +1134,14 @@ YAHOO.widget.MenuItem.prototype = {
                     this.element.appendChild(m_oSubMenuIndicatorIMG);
 
 
-                    if(this.cfg.getConfigProperty("disabled")) {
+                    if(this.cfg.getProperty("disabled")) {
     
                         this.cfg.refireEvent("disabled");
     
                     }
     
 
-                    if(this.cfg.getConfigProperty("selected")) {
+                    if(this.cfg.getProperty("selected")) {
     
                         this.cfg.refireEvent("selected");
     
@@ -1237,7 +1167,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         this.focus = function() {
     
-            if(!this.cfg.getConfigProperty("disabled") && m_oAnchor) {
+            if(!this.cfg.getProperty("disabled") && m_oAnchor) {
     
                 m_oAnchor.focus();
     
@@ -1247,7 +1177,7 @@ YAHOO.widget.MenuItem.prototype = {
     
         this.blur = function() {
     
-            if(!this.cfg.getConfigProperty("disabled") && m_oAnchor) {
+            if(!this.cfg.getProperty("disabled") && m_oAnchor) {
     
                 m_oAnchor.blur();
     
@@ -1276,9 +1206,16 @@ YAHOO.widget.MenuItem.prototype = {
 
                 // Position the menu
 
-                m_oSubMenu.cfg.setConfigProperty("xy", aSubMenuPosition);
+                m_oSubMenu.style.visibility = "hidden";
+                m_oSubMenu.style.display = "block";
 
-                m_oSubMenu.cfg.setConfigProperty("visible", true);
+                m_oSubMenu.cfg.setProperty("xy", aSubMenuPosition);
+
+                m_oSubMenu.style.display = "none";
+                m_oSubMenu.style.visibility = "visible";
+
+
+                m_oSubMenu.cfg.setProperty("visible", true);
 
                 m_oSubMenuIndicatorIMG.alt = 
                     this.EXPANDED_SUBMENU_INDICATOR_ALT_TEXT;
@@ -1303,14 +1240,56 @@ YAHOO.widget.MenuItem.prototype = {
 
         // Begin constructor logic
 
-        this.initDefaultConfig();
+
+        // Create the config object
+
+        this.cfg = new YAHOO.util.Config(this);
+
+
+        // Define the config properties
+
+        this.cfg.addProperty("text", null, this.configText, checkString);
+
+        this.cfg.addProperty("helptext", null, this.configHelpText);
+            
+        this.cfg.addProperty("url", null, this.configURL);
+
+        this.cfg.addProperty(
+            "emphasis", 
+            false, 
+            this.configEmphasis, 
+            this.cfg.checkBoolean
+        );
+
+        this.cfg.addProperty(
+            "strongemphasis", 
+            false, 
+            this.configStrongEmphasis, 
+            this.cfg.checkBoolean
+        );
+
+        this.cfg.addProperty(
+            "disabled", 
+            false, 
+            this.configDisabled, 
+            this.cfg.checkBoolean
+        );
+    
+        this.cfg.addProperty(
+            "selected", 
+            false, 
+            this.configSelected, 
+            this.cfg.checkBoolean
+        );
+
+        this.cfg.addProperty("submenu", null, this.configSubMenu);
 
 
         if(checkString(p_oObject)) {
 
             createRootNodeStructure();
 
-            this.cfg.setConfigProperty("text", p_oObject);
+            this.cfg.setProperty("text", p_oObject);
 
         }
         else if(checkDOMNode(p_oObject)) {
@@ -1321,20 +1300,20 @@ YAHOO.widget.MenuItem.prototype = {
 
                     createRootNodeStructure();
 
-                    this.cfg.setConfigProperty("text", p_oObject.text);
-                    this.cfg.setConfigProperty("value", p_oObject.value);
+                    this.cfg.setProperty("text", p_oObject.text);
+                    this.cfg.setProperty("value", p_oObject.value);
 
                     this.srcElement = p_oObject;
 
                     if(p_oObject.disabled || p_oObject.parentNode.disabled) {
 
-                        this.cfg.setConfigProperty("disabled", true);
+                        this.cfg.setProperty("disabled", true);
 
                     }
 
                     if(p_oObject.selected) {
 
-                        this.cfg.setConfigProperty("selected", true);
+                        this.cfg.setProperty("selected", true);
 
                     }
 
@@ -1344,13 +1323,13 @@ YAHOO.widget.MenuItem.prototype = {
 
                     createRootNodeStructure();
 
-                    this.cfg.setConfigProperty("text", p_oObject.label);
+                    this.cfg.setProperty("text", p_oObject.label);
 
                     this.srcElement = p_oObject;
 
                     if(p_oObject.disabled || p_oObject.parentNode.disabled) {
 
-                        this.cfg.setConfigProperty("disabled", true);
+                        this.cfg.setProperty("disabled", true);
 
                     }
 
@@ -1565,11 +1544,11 @@ YAHOO.widget.MenuItem.prototype = {
                             element's DOM
                         */ 
 
-                        this.cfg.setConfigProperty("text", sText, true);
-                        this.cfg.setConfigProperty("helptext", oHelpText, true);
-                        this.cfg.setConfigProperty("url", sURL, true);
-                        this.cfg.setConfigProperty("emphasis", bEmphasis, true);
-                        this.cfg.setConfigProperty(
+                        this.cfg.setProperty("text", sText, true);
+                        this.cfg.setProperty("helptext", oHelpText, true);
+                        this.cfg.setProperty("url", sURL, true);
+                        this.cfg.setProperty("emphasis", bEmphasis, true);
+                        this.cfg.setProperty(
                             "strongemphasis", 
                             bStrongEmphasis, 
                             true
@@ -1582,16 +1561,16 @@ YAHOO.widget.MenuItem.prototype = {
                             are applied correctly to the DOM elements
                         */ 
 
-                        this.cfg.setConfigProperty("selected", bSelected);
-                        this.cfg.setConfigProperty("disabled", bDisabled);
+                        this.cfg.setProperty("selected", bSelected);
+                        this.cfg.setProperty("disabled", bDisabled);
                     
                     }
                     else {
 
                         createRootNodeStructure();
 
-                        this.cfg.setConfigProperty("text", sText);
-                        this.cfg.setConfigProperty("url", sURL);
+                        this.cfg.setProperty("text", sText);
+                        this.cfg.setProperty("url", sURL);
 
                     }
 
@@ -1607,9 +1586,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(this.element) {
 
-            var oEventUtil = YAHOO.util.Event;
-    
-            oEventUtil.addListener(
+            m_oEventUtil.addListener(
                 this.element, 
                 "mouseover", 
                 elementMouseOver, 
@@ -1617,7 +1594,7 @@ YAHOO.widget.MenuItem.prototype = {
                 true
             );
     
-            oEventUtil.addListener(
+            m_oEventUtil.addListener(
                 this.element, 
                 "mouseout", 
                 elementMouseOut, 
@@ -1625,7 +1602,7 @@ YAHOO.widget.MenuItem.prototype = {
                 true
             );
     
-            oEventUtil.addListener(
+            m_oEventUtil.addListener(
                 this.element, 
                 "mousedown", 
                 elementMouseDown, 
@@ -1633,7 +1610,7 @@ YAHOO.widget.MenuItem.prototype = {
                 true
             );
     
-            oEventUtil.addListener(
+            m_oEventUtil.addListener(
                 this.element, 
                 "mouseup", 
                 elementMouseUp, 
@@ -1641,7 +1618,7 @@ YAHOO.widget.MenuItem.prototype = {
                 true
             );
     
-            oEventUtil.addListener(
+            m_oEventUtil.addListener(
                 this.element, 
                 "click", 
                 elementClick, 
@@ -1649,7 +1626,7 @@ YAHOO.widget.MenuItem.prototype = {
                 true
             );
     
-            oEventUtil.addListener(
+            m_oEventUtil.addListener(
                 m_oAnchor, 
                 "keydown", 
                 anchorKeyDown, 
@@ -1657,7 +1634,7 @@ YAHOO.widget.MenuItem.prototype = {
                 true
             );
     
-            oEventUtil.addListener(
+            m_oEventUtil.addListener(
                 m_oAnchor, 
                 "keyup", 
                 anchorKeyUp, 
@@ -1665,7 +1642,7 @@ YAHOO.widget.MenuItem.prototype = {
                 true
             );
     
-            oEventUtil.addListener(
+            m_oEventUtil.addListener(
                 m_oAnchor, 
                 "keypress", 
                 anchorKeyPress, 
@@ -1673,7 +1650,7 @@ YAHOO.widget.MenuItem.prototype = {
                 true
             );
     
-            oEventUtil.addListener(
+            m_oEventUtil.addListener(
                 m_oAnchor, 
                 "focus", 
                 anchorFocus, 
@@ -1681,7 +1658,7 @@ YAHOO.widget.MenuItem.prototype = {
                 true
             );
     
-            oEventUtil.addListener(
+            m_oEventUtil.addListener(
                 m_oAnchor, 
                 "blur", 
                 anchorBlur,
