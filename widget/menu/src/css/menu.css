@@ -7,7 +7,8 @@
 
 div.yuimenu {
 
-    display:none;
+    z-index:1;
+    visibility:hidden;
     position:absolute;
     background-color:#ccc;
     border:solid 1px #999;
@@ -29,7 +30,7 @@ div.yuimenu {
             )
         ),
 
-        void(this.style.display = this.IsGroupMember ? "block" : ""),
+        void(this.style.visibility = this.IsGroupMember ? "inherit" : ""),
         void(this.style.position = this.IsGroupMember ? "static" : ""),
         void(this.style.borderWidth = this.IsGroupMember ? "1px 0 0 0" : ""),
         void(this.style.padding = this.IsGroupMember ? "1px" : ""),
@@ -44,9 +45,9 @@ div.yuimenu {
     Matches a Menu instance that is a member of a group
 */
 
-div.yuimenu div.bd>div.yuimenu {
+div.yuimenu>div.bd>div.yuimenu {
 
-    display:block;
+    visibility:inherit;
     position:static;
     border-width:1px 0 0 0;
     padding:0;
@@ -58,7 +59,7 @@ div.yuimenu div.bd>div.yuimenu {
     Matches the first Menu instance in a group of Menus
 */
 
-div.yuimenu div.bd>div.first {
+div.yuimenu>div.bd>div.first {
 
     border-width:0;
 
@@ -84,7 +85,7 @@ div.first {
             )
         ),
 
-        void(this.style.display = this.IsFirstGroupMember ? "block" : ""),
+        void(this.style.visibility = this.IsFirstGroupMember ? "inherit" : ""),
         void(this.style.position = this.IsFirstGroupMember ? "static" : ""),
         void(this.style.borderWidth = this.IsFirstGroupMember ? "0" : ""),
         void(this.style.padding = this.IsFirstGroupMember ? "1px" : ""),
@@ -118,7 +119,7 @@ div.yuimenu li {
     cursor:hand;
     white-space:nowrap;
     text-align:left;
-    
+
 }
 
 
@@ -150,7 +151,8 @@ div.yuimenu li img {
 
     margin:0 -14px 0 10px;
     border:0;
-
+    *margin-top:-.75em;
+    
 }
 
 div.yuimenu li.hassubmenu,
@@ -173,6 +175,7 @@ div.yuimenu li.hassubmenu a.hassubmenu,
 div.yuimenu li.hashelptext a.hashelptext {
 
     float:left;
+    text-align:left;
 
 }
 

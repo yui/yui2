@@ -379,87 +379,58 @@ YAHOO.widget.MenuItem.prototype = {
         var elementMouseOut = function(p_oEvent, p_oMenuItem) {
     
             if(!this.cfg.getProperty("disabled")) {
-    
-                if(m_oSubMenu && m_oSubMenu.cfg.getProperty("visible")) {
                     
-                    var oRelatedTarget = 
-                            m_oEventUtil.getRelatedTarget(p_oEvent),
-                        oDIV;
-            
-                    if(oRelatedTarget) {
-            
-                        switch(oRelatedTarget.tagName) {
-            
-                            case "A":
-            
-                                oDIV = 
-                                    oRelatedTarget.parentNode.parentNode.parentNode.parentNode;
-            
-                            break;
-            
-                            case "EM":
-                            case "STRONG":
-            
-                                oDIV = 
-                                    oRelatedTarget.parentNode.parentNode.parentNode.parentNode.parentNode;
-            
-                            break;
-            
-                            case "LI":
-            
-                                oDIV = oRelatedTarget.parentNode.parentNode.parentNode;
-            
-                            break;
-            
-                            case "UL":
-            
-                                oDIV = oRelatedTarget.parentNode.parentNode;
-            
-                            break;
-            
-                            case "DIV":
+                var oRelatedTarget = m_oEventUtil.getRelatedTarget(p_oEvent),
+                    oNode = oRelatedTarget,
+                    bElementMouseOut = true,
+                    bShowSubMenu = false;
 
-                                oDIV = oRelatedTarget;
-                
-                                if(m_oDom.hasClass(oDIV, "bd")) {
+                do {
 
-                                    oDIV = oRelatedTarget.parentNode;
+                    if(m_oSubMenu && oNode == m_oSubMenu.element) {
 
-                                }
-        
-                            break;
-            
-                        }
-                    
+                        bShowSubMenu = true;
+
                     }
-        
-                    if(
-                        oDIV && 
-                        (
-                            oDIV == m_oSubMenu.element ||
-                            oDIV.parentNode == m_oSubMenu.element
-                        )
-                    ) {
-                        
-                        this.cfg.setProperty("selected", true);
-        
+
+                    if(oNode == this.element) {
+
+                        bElementMouseOut = false;
+                        break;
+
                     }
-                    else {
-        
+
+                    oNode = oNode.parentNode;
+
+                }
+                while(oNode);
+
+
+                if(bElementMouseOut) {
+
+                    // Real mouseout
+
+                    if(m_oSubMenu && m_oSubMenu.cfg.getProperty("visible")) {
+
                         m_oSubMenu.hide();
-                        this.blur();
-        
+                
                     }
-        
-                }
-                else {
-        
+
                     this.blur();
-        
+
+                    this.cfg.setProperty("selected", false);
+
                 }
-        
+                else if(bShowSubMenu) {
+
+                    // don't hide
+
+                    this.cfg.setProperty("selected", true);
+
+                }
+
                 this.mouseOutEvent.fire(p_oEvent, this);
-        
+
             }
     
         };
@@ -872,17 +843,13 @@ YAHOO.widget.MenuItem.prototype = {
     
             var sURL = p_aArguments[0];
 
+            if(!sURL) {
 
-            if(sURL && sURL.length > 0) {
-
-                m_oAnchor.setAttribute("href", sURL);
+                sURL = "#";
 
             }
-            else {
 
-                m_oAnchor.removeAttribute("href");
-    
-            }
+            m_oAnchor.setAttribute("href", sURL);
 
         };
     
@@ -1189,7 +1156,7 @@ YAHOO.widget.MenuItem.prototype = {
     
             if(m_oSubMenu) {
 
-                var aMenuItemPosition = m_oDom.getXY(this.element);
+                var aMenuItemPosition = m_oDom.getXY(this.element),
                     aSubMenuPosition = [];
 
 
@@ -1206,16 +1173,10 @@ YAHOO.widget.MenuItem.prototype = {
 
                 // Position the menu
 
-                m_oSubMenu.style.visibility = "hidden";
-                m_oSubMenu.style.display = "block";
-
                 m_oSubMenu.cfg.setProperty("xy", aSubMenuPosition);
+               
 
-                m_oSubMenu.style.display = "none";
-                m_oSubMenu.style.visibility = "visible";
-
-
-                m_oSubMenu.cfg.setProperty("visible", true);
+                m_oSubMenu.show();
 
                 m_oSubMenuIndicatorIMG.alt = 
                     this.EXPANDED_SUBMENU_INDICATOR_ALT_TEXT;
@@ -1402,18 +1363,28 @@ YAHOO.widget.MenuItem.prototype = {
 
                     if(
                         oAnchor && 
-                        p_oObject.parentNode && 
+                        p_oObject.parentNode && // UL check
+
+                        // body node check
                         p_oObject.parentNode.parentNode && 
                         p_oObject.parentNode.parentNode.tagName == "DIV" && 
                         m_oDom.hasClass(
                             p_oObject.parentNode.parentNode, 
+                            "bd"
+                        ) &&
+
+                        // Root node check
+                        p_oObject.parentNode.parentNode.parentNode && 
+                        p_oObject.parentNode.parentNode.parentNode.tagName == "DIV" && 
+                        m_oDom.hasClass(
+                            p_oObject.parentNode.parentNode.parentNode, 
                             "yuimenu"
                         )
                     ) {
 
                         this.element = p_oObject;
                         m_oAnchor = oAnchor;
-
+                        
 
                         // Remove the "focus" class since a MenuItem cannot
                         // be focused by default

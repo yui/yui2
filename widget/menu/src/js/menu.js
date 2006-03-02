@@ -24,8 +24,6 @@ YAHOO.widget.Menu.prototype.cssClassName = "yuimenu";
 YAHOO.widget.Menu.prototype.parent = null;
 YAHOO.widget.Menu.prototype.activeMenuItem = null;
 YAHOO.widget.Menu.prototype.srcElement = null;
-YAHOO.widget.Menu.prototype.keepInViewport = true;
-
 YAHOO.widget.Menu.prototype._Menu = true;
 
 
@@ -50,10 +48,45 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         m_oDom = YAHOO.util.Dom,
 
+        m_sUserAgent = navigator.userAgent.toLowerCase(),
+
+        m_sBrowser = function() {
+
+            var m_sUserAgent = navigator.userAgent.toLowerCase();
+            
+            if(m_sUserAgent.indexOf('opera') != -1) {
+
+                return 'opera';
+
+            }
+            else if(m_sUserAgent.indexOf('msie') != -1) {
+
+                return 'ie';
+
+            }
+            else if(m_sUserAgent.indexOf('safari') != -1) {
+
+                return 'safari';
+
+            }
+            else if(m_sUserAgent.indexOf('gecko') != -1) {
+
+                return 'gecko';
+
+            }
+            else {
+
+                return false;
+
+            }
+
+        }(),
+
+
         /*
             Create a reference to the current context so that private methods
             have access to class members
-        */    
+        */ 
 
         me = this;
 
@@ -150,6 +183,12 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
                 case 0:
 
+                    if(p_oArray[i]._Menu) {
+
+                        p_oArray[i].element.runtimeStyle.behavior = "";
+
+                    }
+
                     m_oDom.addClass(p_oArray[i].element, "first");
 
                 break;
@@ -181,7 +220,15 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         oParentMenuDIV = oParentMenu.element;
 
+        // Capture the currnet width of the element
+
         oParentMenu.pixelWidth = m_oDom.getStyle(oParentMenuDIV, "width");
+
+
+        /*
+            Expand the width of the element to 100% so as to not constrain the 
+            width of the sub menu
+        */
 
         oParentMenuDIV.style.width = "100%";
 
@@ -203,29 +250,14 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             
         }
 
-        /*
-            Set width via the "setProperty" method to ensure that the iframe's
-            dimensions are sync'd to the width of the Menu
-        */
+        oParentMenu.element.style.width = oParentMenu.pixelWidth; 
 
-        oParentMenu.cfg.setProperty("width", oParentMenu.pixelWidth);
-            
         if(oParentMenu.parent) {
         
             return collapseParentMenuWidth(oParentMenu.parent);
         
         }
     
-    };
-    
-    var removeBehavior = function() {
-
-        if(me.element.runtimeStyle) {
-    
-            me.element.runtimeStyle.behavior = "";
-    
-        }
-
     };
 
     var initSubTree = function(p_aNodeList) {
@@ -533,7 +565,9 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
                 if(oSubMenu) {
 
-                    oSubMenu.render(oMenuItem.element);
+                    oSubMenu.render();
+
+                    oMenuItem.element.appendChild(oSubMenu.element);
 
                 }
     
@@ -562,7 +596,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     };
     
     this.render = function(p_bAppendToNode, p_bHideSourceElement) {
-   
+
         m_oDom.addClass(this.element, this.cssClassName);
 
 
@@ -611,8 +645,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         // Continue with the superclass implementation of this method
 
         YAHOO.widget.Menu.superclass.render.call(this, p_bAppendToNode);
-
-
     
     };
 
@@ -622,15 +654,14 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         var bVisible = p_aArguments[0];
 
         if (bVisible) {
-    
-            if(this.parent && this.parent._MenuItem) {
-            
+
+
+            if(this.parent) {
+
                 expandParentMenuWidth(this.parent);
-            
+
             }
             
-            this.element.style.visibility = "hidden";
-            this.element.style.display = "block";
     
             if(this.element.style.width.length == 0) {
     
@@ -660,6 +691,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
                 var nWidth = this.element.offsetWidth;
     
+
                 if(
                     document.compatMode && 
                     document.compatMode == "CSS1Compat"
@@ -668,82 +700,40 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                     nWidth = nWidth - (nBorderWidth + nPadding);
     
                 }
-                
-                this.element.style.width = nWidth + "px";
+
+                this.cfg.setProperty("width", (nWidth+"px"));
                 
             }
     
-            if(this.parent && this.parent._MenuItem) {
+
+            if(this.parent) {
             
                 collapseParentMenuWidth(this.parent);
     
             }
 
 
-            if(this.keepInViewport) {
-
-                /*
-                    Hide the Menu while the positioning is calculated to 
-                    reduce flicker
-                */
-
-                var aCurrentPosition = this.cfg.getProperty("xy"),
-                    nX = aCurrentPosition[0],
-                    nY = aCurrentPosition[1],
-                    nOffsetWidth = this.element.offsetWidth,
-                    nOffsetHeight = this.element.offsetHeight;
-
-
-                /*
-                    If the current position will place the Menu outside 
-                    the viewport and there is room to place it elsewhere
-                    then reset the "x" and "y" properties to do so
-                */
-
-
-                if(
-                    ((nX + nOffsetWidth) > m_oDom.getClientWidth()) &&
-                    (nX > nOffsetWidth)
-                ) {
+            // Continue with the superclass implementation of this method
     
-                    this.cfg.setProperty("x", (nX - nOffsetWidth));
-
-                }
-
-
-                if(
-                    ((nY + nOffsetHeight) > m_oDom.getClientHeight()) &&
-                    (nY > nOffsetHeight)
-                ) {
-
-                    if(this.parent && this.parent._MenuItem) {
-
-                        this.cfg.setProperty(
-                            "y", 
-                            (
-                                (nY + this.parent.element.offsetHeight) - 
-                                nOffsetHeight
-                            )
-                        );
-
-                    }
-                    else {
-
-                        this.cfg.setProperty("y", (nY - nOffsetHeight));
-
-                    }
-               
-                }
-
-            }
-
-
-            this.element.style.visibility = "visible";
+            YAHOO.widget.Menu.superclass.configVisible.call(
+                this, 
+                p_sType, 
+                p_aArguments, 
+                p_oObject
+            );
 
     
         } else {
     
-            this.element.style.display = "none";
+            // Continue with the superclass implementation of this method
+    
+            YAHOO.widget.Menu.superclass.configVisible.call(
+                this, 
+                p_sType, 
+                p_aArguments, 
+                p_oObject
+            );
+
     
             var oActiveMenuItem;
         
@@ -891,12 +881,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     if(this.element) {
 
-        if(this.srcElement) {
-
-            initSubTree(this.srcElement.childNodes);
-
-        }
-
         var CustomEvent = YAHOO.util.CustomEvent;
 
 
@@ -958,6 +942,12 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
             this.cfg.applyConfig(p_oUserConfig);
     
+        }
+
+        if(this.srcElement) {
+
+            initSubTree(this.srcElement.childNodes);
+
         }
 
     }
