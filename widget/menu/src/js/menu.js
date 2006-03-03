@@ -207,59 +207,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     };
 
-    var expandParentMenuWidth = function(p_oMenuItem) {
-
-        var oParentMenu = p_oMenuItem.parent,
-            oParentMenuDIV;
-        
-        if(oParentMenu.parent && oParentMenu.parent._Menu) { 
-        
-            oParentMenu = oParentMenu.parent;
-            
-        }
-
-        oParentMenuDIV = oParentMenu.element;
-
-        // Capture the currnet width of the element
-
-        oParentMenu.pixelWidth = m_oDom.getStyle(oParentMenuDIV, "width");
-
-
-        /*
-            Expand the width of the element to 100% so as to not constrain the 
-            width of the sub menu
-        */
-
-        oParentMenuDIV.style.width = "100%";
-
-        if(oParentMenu.parent) {
-        
-            return expandParentMenuWidth(oParentMenu.parent);
-        
-        }
-
-    };
-
-    var collapseParentMenuWidth = function(p_oMenuItem) {
-
-        var oParentMenu = p_oMenuItem.parent;
-
-        if(oParentMenu.parent && oParentMenu.parent._Menu) { 
-        
-            oParentMenu = oParentMenu.parent;
-            
-        }
-
-        oParentMenu.element.style.width = oParentMenu.pixelWidth; 
-
-        if(oParentMenu.parent) {
-        
-            return collapseParentMenuWidth(oParentMenu.parent);
-        
-        }
-    
-    };
-
     var initSubTree = function(p_aNodeList) {
     
         var oNode,
@@ -314,7 +261,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                         oNode.parentNode &&
                         oNode.parentNode.tagName == "DIV" &&
                         m_oDom.hasClass(oNode.parentNode, "yuimenu") && 
-                        m_oDom.hasClass(oNode, "bd")
+                        m_oDom.hasClass(oNode, "bd") 
                     ) {
 
                         return initSubTree(oNode.childNodes);
@@ -331,7 +278,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             }
         
         }
-    
+
     };
 
 
@@ -345,7 +292,36 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         }
         
-        this.mouseOverEvent.fire(p_oEvent, this);
+
+        var oRelatedTarget = m_oEventUtil.getRelatedTarget(p_oEvent),
+            oNode = oRelatedTarget,
+            bElementMouseOver = true;
+    
+    
+        if(oNode) {
+    
+            do {
+    
+                if(oNode == this.element) {
+    
+                    bElementMouseOver = false;
+                    break;
+    
+                }
+    
+                oNode = oNode.parentNode;
+    
+            }
+            while(oNode);
+    
+        }
+    
+    
+        if(bElementMouseOver) {
+    
+            this.mouseOverEvent.fire(p_oEvent, this);
+    
+        }
     
     };
 
@@ -357,7 +333,36 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         }
 
-        this.mouseOutEvent.fire(p_oEvent, this);
+
+        var oRelatedTarget = m_oEventUtil.getRelatedTarget(p_oEvent),
+            oNode = oRelatedTarget,
+            bElementMouseOut = true;
+    
+    
+        if(oNode) {
+    
+            do {
+    
+                if(oNode == this.element) {
+    
+                    bElementMouseOut = false;
+                    break;
+    
+                }
+    
+                oNode = oNode.parentNode;
+    
+            }
+            while(oNode);
+    
+        }
+    
+    
+        if(bElementMouseOut) {
+    
+            this.mouseOutEvent.fire(p_oEvent, this);
+    
+        }
     
     };
 
@@ -428,6 +433,23 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     };
 
+    var menuItemConfigChange = function(p_sType, p_aArguments, p_oMenu) {
+
+        var sProperty = p_aArguments[0][0];
+
+        switch(sProperty) {
+
+            case "text":
+            case "helptext":
+
+                this.cfg.refireEvent("width");
+
+            break;
+
+        }
+
+    };
+
 
     // Privileged methods
 
@@ -441,7 +463,15 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                 true
             );
 
+            p_oMenuItem.cfg.configChangedEvent.subscribe(
+                menuItemConfigChange, 
+                this, 
+                true
+            );
+
             addArrayItem(m_aMenuItems, p_oMenuItem, p_nIndex);
+
+            this.cfg.refireEvent("constraintoviewport");
 
         }
 
@@ -494,11 +524,20 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     this.addSubMenu = function(p_oMenu, p_nIndex) {
 
-        if(p_oMenu && p_oMenu._Menu) {
+        if(
+            p_oMenu && 
+            p_oMenu._Menu && 
+            (
+                (!this.parent || (this.parent && this.parent._MenuItem)) &&
+                (p_oMenu.getSubMenus().length == 0)
+            )
+        ) {
 
             p_oMenu.cfg.setProperty("iframe", false);
 
             addArrayItem(m_aSubMenus, p_oMenu, p_nIndex);
+
+            this.cfg.refireEvent("constraintoviewport");
 
         }
 
@@ -566,8 +605,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                 if(oSubMenu) {
 
                     oSubMenu.render();
-
-                    oMenuItem.element.appendChild(oSubMenu.element);
 
                 }
     
@@ -648,69 +685,176 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
     };
 
+    this.configConstrainToViewport = function(p_sType, p_aArguments, p_oObject) {
 
-   this.configVisible = function(p_sType, p_aArguments, p_oObject) {
+        var bConstrainToViewport = p_aArguments[0];
+
+        if(bConstrainToViewport) {
+
+            this.beforeMoveEvent.subscribe(this.enforceConstraints, this, true);
+
+        } else {
+
+            this.beforeMoveEvent.unsubscribe(this.enforceConstraints, this);
+
+        }
+
+        if(m_aMenuItems.length > 0) {
+
+            var i = m_aMenuItems.length - 1,
+                oSubMenu;
+    
+            do {
+
+                oSubMenu = m_aMenuItems[i].cfg.getProperty("submenu");
+
+                if(oSubMenu) {
+
+                    oSubMenu.cfg.setProperty(
+                        "constraintoviewport", 
+                        bConstrainToViewport
+                    );
+
+                }
+
+            }
+            while(i--);
+
+        }
+
+        if(m_aSubMenus.length > 0) {
+
+            var i = m_aSubMenus.length - 1;
+    
+            do {
+
+                m_aSubMenus[i].cfg.setProperty(
+                    "constraintoviewport", 
+                    bConstrainToViewport
+                );
+
+            }
+            while(i--);
+
+        }
+
+    };
+
+
+    this.enforceConstraints = function(type, args, obj) {
+    
+        var pos = args[0];
+        
+        var x = pos[0];
+        var y = pos[1];
+    
+        var offsetHeight = this.element.offsetHeight;
+        var offsetWidth = this.element.offsetWidth;
+    
+        var viewPortWidth = YAHOO.util.Dom.getClientWidth();
+        var viewPortHeight = YAHOO.util.Dom.getClientHeight();
+    
+        var scrollX = window.scrollX || document.body.scrollLeft;
+        var scrollY = window.scrollY || document.body.scrollTop;
+    
+        var topConstraint = scrollY;
+        var leftConstraint = scrollX;
+        var bottomConstraint = scrollY + viewPortHeight - offsetHeight;
+        var rightConstraint = scrollX + viewPortWidth - offsetWidth;
+
+        var bSubMenu = (this.parent && this.parent._MenuItem);
+
+        if (x < 10) {
+
+            x = leftConstraint;
+
+        } else if ((x + offsetWidth) > viewPortWidth) {
+
+            if(
+                bSubMenu && 
+                ((x-this.parent.element.offsetWidth) > offsetWidth)
+            ) {
+    
+                x = (x - (this.parent.element.offsetWidth + offsetWidth));
+    
+            }
+            else {
+
+                x = rightConstraint;
+
+            }
+
+        }
+
+        if (y < 10) {
+
+            y = topConstraint;
+
+        } else if (y > bottomConstraint) {
+
+            if(bSubMenu && (y > offsetHeight)) {
+
+                y = ((y + this.parent.element.offsetHeight) - offsetHeight);
+
+            }
+            else {
+
+                y = bottomConstraint;
+
+            }
+
+        }
+ 
+        this.cfg.setProperty("x", x, true);
+        this.cfg.setProperty("y", y, true);
+    
+    };
+
+
+    this.configWidth = function(p_sType, p_aArguments, p_oObject) {
+
+        var sWidth = p_aArguments[0];
+
+        if(this.parent) {
+
+            var oMenuElementClone = this.element.cloneNode(true);
+
+            m_oDom.setStyle(oMenuElementClone, "auto");
+
+            document.body.appendChild(oMenuElementClone);
+
+            var sWidth = m_oDom.getStyle(oMenuElementClone, "width");
+
+            document.body.removeChild(oMenuElementClone);
+
+            p_aArguments[0] = sWidth;
+
+        }
+        else {
+
+            p_aArguments[0] = "auto";
+
+        }
+   
+
+        // Continue with the superclass implementation of this method
+
+        YAHOO.widget.Menu.superclass.configWidth.call(
+            this, 
+            p_sType, 
+            p_aArguments, 
+            p_oObject
+        );
+
+    };
+
+    this.configVisible = function(p_sType, p_aArguments, p_oObject) {
    
         var bVisible = p_aArguments[0];
 
         if (bVisible) {
 
-
-            if(this.parent) {
-
-                expandParentMenuWidth(this.parent);
-
-            }
-            
-    
-            if(this.element.style.width.length == 0) {
-    
-                var nBorderWidth = 
-                    parseInt(
-                        m_oDom.getStyle(this.element, "borderLeftWidth"), 
-                        10
-                    );
-    
-                nBorderWidth += 
-                    parseInt(
-                        m_oDom.getStyle(this.element, "borderRightWidth"), 
-                        10
-                    );
-    
-                var nPadding = 
-                    parseInt(
-                        m_oDom.getStyle(this.element, "paddingLeft"), 
-                        10
-                    );
-    
-                nPadding += 
-                    parseInt(
-                        m_oDom.getStyle(this.element, "paddingRight"), 
-                        10
-                    );
-    
-                var nWidth = this.element.offsetWidth;
-    
-
-                if(
-                    document.compatMode && 
-                    document.compatMode == "CSS1Compat"
-                ) {
-    
-                    nWidth = nWidth - (nBorderWidth + nPadding);
-    
-                }
-
-                this.cfg.setProperty("width", (nWidth+"px"));
-                
-            }
-    
-
-            if(this.parent) {
-            
-                collapseParentMenuWidth(this.parent);
-    
-            }
+            this.cfg.refireEvent("width");
 
 
             // Continue with the superclass implementation of this method
@@ -756,8 +900,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         
                 }
         
-                var oSubMenu = 
-                    oActiveMenuItem.cfg.getProperty("submenu");
+                var oSubMenu = oActiveMenuItem.cfg.getProperty("submenu");
         
                 if(oSubMenu && oSubMenu.cfg.getProperty("visible")) {
         
@@ -796,7 +939,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             case "DIV":
 
                 if(m_oDom.hasClass(oElement, "yuimenu")) {
-    
+
                     this.srcElement = oElement;
    
                     if(!oElement.id) {

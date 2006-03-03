@@ -34,10 +34,10 @@ YAHOO.widget.MenuItem.prototype = {
 
         // Private member variables
 
-        var m_oAnchor,
-            m_oText,
-            m_oHelpTextEM,
-            m_oSubMenuIndicatorIMG,
+        var m_oAnchor = null,
+            m_oText = null,
+            m_oHelpTextEM = null,
+            m_oSubMenuIndicatorIMG = null,
             m_oSubMenu = null,
             m_oDom = YAHOO.util.Dom,
             m_oEventUtil = YAHOO.util.Event,
@@ -361,16 +361,44 @@ YAHOO.widget.MenuItem.prototype = {
         var elementMouseOver = function(p_oEvent, p_oMenuItem) {
     
             if(!this.cfg.getProperty("disabled")) {
+
+                var oRelatedTarget = m_oEventUtil.getRelatedTarget(p_oEvent),
+                    oNode = oRelatedTarget,
+                    bElementMouseOver = true;
+
+
+                if(oNode) {
+
+                    do {
     
-                this.focus();
-        
-                if(m_oSubMenu) {
-        
-                    this.showSubMenu();
-        
+                        if(oNode == this.element) {
+    
+                            bElementMouseOver = false;
+                            break;
+    
+                        }
+    
+                        oNode = oNode.parentNode;
+    
+                    }
+                    while(oNode);
+
                 }
-        
-                this.mouseOverEvent.fire(p_oEvent, this);
+
+
+                if(bElementMouseOver) {
+    
+                    this.focus();
+            
+                    if(m_oSubMenu) {
+            
+                        this.showSubMenu();
+            
+                    }
+            
+                    this.mouseOverEvent.fire(p_oEvent, this);
+
+                }
     
             }
         
@@ -385,26 +413,29 @@ YAHOO.widget.MenuItem.prototype = {
                     bElementMouseOut = true,
                     bShowSubMenu = false;
 
-                do {
+                if(oNode) {
 
-                    if(m_oSubMenu && oNode == m_oSubMenu.element) {
-
-                        bShowSubMenu = true;
-
+                    do {
+    
+                        if(m_oSubMenu && oNode == m_oSubMenu.element) {
+    
+                            bShowSubMenu = true;
+    
+                        }
+    
+                        if(oNode == this.element) {
+    
+                            bElementMouseOut = false;
+                            break;
+    
+                        }
+    
+                        oNode = oNode.parentNode;
+    
                     }
-
-                    if(oNode == this.element) {
-
-                        bElementMouseOut = false;
-                        break;
-
-                    }
-
-                    oNode = oNode.parentNode;
+                    while(oNode);
 
                 }
-                while(oNode);
-
 
                 if(bElementMouseOut) {
 
@@ -420,6 +451,8 @@ YAHOO.widget.MenuItem.prototype = {
 
                     this.cfg.setProperty("selected", false);
 
+                    this.mouseOutEvent.fire(p_oEvent, this);
+
                 }
                 else if(bShowSubMenu) {
 
@@ -428,8 +461,6 @@ YAHOO.widget.MenuItem.prototype = {
                     this.cfg.setProperty("selected", true);
 
                 }
-
-                this.mouseOutEvent.fire(p_oEvent, this);
 
             }
     
@@ -1076,14 +1107,12 @@ YAHOO.widget.MenuItem.prototype = {
 
             var oMenu = p_aArguments[0];
 
-            m_oSubMenu = oMenu;
-
-            oMenu.parent = this;
-
             if(oMenu) {
 
-                m_oDom.addClass(this.element, "hassubmenu");
-                m_oDom.addClass(m_oAnchor, "hassubmenu");
+                oMenu.parent = this;
+
+                m_oSubMenu = oMenu;
+
 
                 if(!m_oSubMenuIndicatorIMG) { 
 
@@ -1094,12 +1123,14 @@ YAHOO.widget.MenuItem.prototype = {
         
                     m_oSubMenuIndicatorIMG.alt = 
                         this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
-            
-                    m_oDom.addClass(this.element, "hassubmenu");
-                    m_oDom.addClass(m_oAnchor, "hassubmenu");      
-                    
-                    this.element.appendChild(m_oSubMenuIndicatorIMG);
 
+
+                    this.element.appendChild(m_oSubMenuIndicatorIMG);
+                    this.element.appendChild(m_oSubMenu.element); 
+
+                    m_oDom.addClass(this.element, "hassubmenu");
+                    m_oDom.addClass(m_oAnchor, "hassubmenu");
+                    
 
                     if(this.cfg.getProperty("disabled")) {
     
@@ -1114,6 +1145,7 @@ YAHOO.widget.MenuItem.prototype = {
     
                     }                
 
+
                 }
 
             }
@@ -1125,6 +1157,12 @@ YAHOO.widget.MenuItem.prototype = {
                 if(m_oSubMenuIndicatorIMG) {
 
                     this.element.removeChild(m_oSubMenuIndicatorIMG);
+
+                }
+
+                if(m_oSubMenu) {
+
+                    this.element.removeChild(m_oSubMenu);                    
 
                 }
 
@@ -1175,7 +1213,6 @@ YAHOO.widget.MenuItem.prototype = {
 
                 m_oSubMenu.cfg.setProperty("xy", aSubMenuPosition);
                
-
                 m_oSubMenu.show();
 
                 m_oSubMenuIndicatorIMG.alt = 
@@ -1494,17 +1531,32 @@ YAHOO.widget.MenuItem.prototype = {
 
                             m_oHelpTextEM = oHelpText;
 
-                            // Propagate the "hashelptext" class to the LI
-                            // and anchor if it isn't already applied
+                            /*
+                                Propagate the "hashelptext" class to the LI and 
+                                anchor if it isn't already applied
+                            */
                             
                             m_oDom.addClass(this.element, "hashelptext");
                             m_oDom.addClass(oAnchor, "hashelptext");
 
 
-                            // Remove the "focus" class if it exists
-                            // because MenuItems cannot be focused by default
+                            /* 
+                                Remove the "focus" class if it exists because 
+                                MenuItems cannot be focused by default
+                            */ 
 
                             m_oDom.removeClass(oHelpText, "focus");
+
+                        }
+                        else {
+
+                            /* 
+                                Remove the "hashelptext" class if it exists but
+                                there is no help text present
+                            */
+
+                            m_oDom.removeClass(this.element, "hashelptext");
+                            m_oDom.removeClass(oAnchor, "hashelptext");
 
                         }
 
