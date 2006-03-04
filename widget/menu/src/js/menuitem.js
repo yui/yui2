@@ -40,6 +40,41 @@ YAHOO.widget.MenuItem.prototype = {
             m_oSubMenuIndicatorIMG = null,
             m_oSubMenu = null,
             m_oDom = YAHOO.util.Dom,
+
+            m_sUserAgent = navigator.userAgent.toLowerCase(),
+    
+            m_sBrowser = function() {
+    
+                var m_sUserAgent = navigator.userAgent.toLowerCase();
+                
+                if(m_sUserAgent.indexOf('opera') != -1) {
+    
+                    return 'opera';
+    
+                }
+                else if(m_sUserAgent.indexOf('msie') != -1) {
+    
+                    return 'ie';
+    
+                }
+                else if(m_sUserAgent.indexOf('safari') != -1) {
+    
+                    return 'safari';
+    
+                }
+                else if(m_sUserAgent.indexOf('gecko') != -1) {
+    
+                    return 'gecko';
+    
+                }
+                else {
+    
+                    return false;
+    
+                }
+    
+            }(),
+
             m_oEventUtil = YAHOO.util.Event,
             me = this;
 
@@ -389,7 +424,9 @@ YAHOO.widget.MenuItem.prototype = {
                 if(bElementMouseOver) {
     
                     this.focus();
-            
+
+
+
                     if(m_oSubMenu) {
             
                         this.showSubMenu();
@@ -516,7 +553,14 @@ YAHOO.widget.MenuItem.prototype = {
                     }
     
                 }
-    
+
+                var sURL = this.cfg.getProperty("url");
+
+                if(sURL) {
+
+                    document.location = sURL;
+
+                }
     
                 this.clickEvent.fire(p_oEvent, this);
     
@@ -1113,10 +1157,17 @@ YAHOO.widget.MenuItem.prototype = {
 
                 m_oSubMenu = oMenu;
 
+                if(!m_oSubMenu.element.parentNode) {
+
+                    this.element.appendChild(m_oSubMenu.element);
+
+                }
 
                 if(!m_oSubMenuIndicatorIMG) { 
 
                     m_oSubMenuIndicatorIMG = document.createElement("img");
+
+                    this.element.appendChild(m_oSubMenuIndicatorIMG);
             
                     m_oSubMenuIndicatorIMG.src = 
                         this.SUBMENU_INDICATOR_IMAGE_URL;
@@ -1124,20 +1175,11 @@ YAHOO.widget.MenuItem.prototype = {
                     m_oSubMenuIndicatorIMG.alt = 
                         this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
 
-
-                    this.element.appendChild(m_oSubMenuIndicatorIMG);
-                    this.element.appendChild(m_oSubMenu.element); 
-
-                    m_oDom.addClass(this.element, "hassubmenu");
-                    m_oDom.addClass(m_oAnchor, "hassubmenu");
-                    
-
                     if(this.cfg.getProperty("disabled")) {
     
                         this.cfg.refireEvent("disabled");
     
                     }
-    
 
                     if(this.cfg.getProperty("selected")) {
     
@@ -1145,8 +1187,10 @@ YAHOO.widget.MenuItem.prototype = {
     
                     }                
 
-
                 }
+
+                m_oDom.addClass(this.element, "hassubmenu");
+                m_oDom.addClass(m_oAnchor, "hassubmenu");
 
             }
             else {
@@ -1173,8 +1217,21 @@ YAHOO.widget.MenuItem.prototype = {
         this.focus = function() {
     
             if(!this.cfg.getProperty("disabled") && m_oAnchor) {
-    
+
                 m_oAnchor.focus();
+
+                if(
+                    m_sBrowser == "opera" && 
+                    m_sUserAgent.indexOf("8.5") != -1
+                ) {
+    
+                    var oEvent = document.createEvent("UIEvents");
+                    oEvent.initUIEvent("focus", true, false, window, null);
+    
+                    m_oAnchor.dispatchEvent(oEvent);
+        
+                }
+
     
             }
     
@@ -1183,8 +1240,20 @@ YAHOO.widget.MenuItem.prototype = {
         this.blur = function() {
     
             if(!this.cfg.getProperty("disabled") && m_oAnchor) {
-    
+
                 m_oAnchor.blur();
+
+                if(
+                    m_sBrowser == "opera" && 
+                    m_sUserAgent.indexOf("8.5") != -1
+                ) {
+
+                    var oEvent = document.createEvent("UIEvents");
+                    oEvent.initUIEvent("blur", true, false, window, null);
+
+                    m_oAnchor.dispatchEvent(oEvent);
+
+                }
     
             }
     
@@ -1282,6 +1351,11 @@ YAHOO.widget.MenuItem.prototype = {
 
         this.cfg.addProperty("submenu", null, this.configSubMenu);
 
+        this.cfg.addProperty(
+            "initsubmenus", 
+            ((p_oUserConfig && (!p_oUserConfig.initsubmenus)) ? false : true)
+        );
+
 
         if(checkString(p_oObject)) {
 
@@ -1331,7 +1405,11 @@ YAHOO.widget.MenuItem.prototype = {
 
                     }
 
-                    initSubTree();
+                    if(this.cfg.getProperty("initsubmenus")) {
+
+                        initSubTree();
+
+                    }
 
                 break;
 
@@ -1597,8 +1675,11 @@ YAHOO.widget.MenuItem.prototype = {
 
                     }
 
+                    if(this.cfg.getProperty("initsubmenus")) {
 
-                    initSubTree();
+                        initSubTree();
+
+                    }
 
                 break;
 

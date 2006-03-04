@@ -221,7 +221,17 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                 case "OPTGROUP":
                 case "OPTION":
                 
-                    me.addMenuItem((new MenuItem(oNode)));
+                    me.addMenuItem(
+                        (
+                            new MenuItem(
+                                oNode, 
+                                { 
+                                    initsubmenus: 
+                                        (me.cfg.getProperty("initsubmenus"))
+                                }
+                            )
+                        )
+                    );
     
                 break;
     
@@ -240,7 +250,21 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
                             if(oLI.nodeType == 1) {
     
-                                me.addMenuItem((new MenuItem(oLI)));
+                                me.addMenuItem(
+                                    (
+                                        new MenuItem(
+                                            oLI,
+                                            {
+                                                initsubmenus: 
+                                                    (
+                                                        me.cfg.getProperty(
+                                                            "initsubmenus"
+                                                        )
+                                                    )
+                                            }
+                                        )
+                                    )
+                                );
     
                             }
     
@@ -249,7 +273,21 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                     }
                     else {
     
-                        me.addSubMenu((new Menu(oNode)));
+                        me.addSubMenu(
+                            (
+                                new Menu(
+                                    oNode, 
+                                    {
+                                        initsubmenus: 
+                                            (
+                                                me.cfg.getProperty(
+                                                    "initsubmenus"
+                                                )
+                                            )
+                                    }
+                                )
+                            )
+                        );
     
                     }
     
@@ -269,7 +307,21 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                     }
                     else {                  
 
-                        me.addSubMenu((new Menu(oNode)));
+                        me.addSubMenu(
+                            (
+                                new Menu(
+                                    oNode, 
+                                    {
+                                        initsubmenus: 
+                                            (
+                                                me.cfg.getProperty(
+                                                    "initsubmenus"
+                                                )
+                                            )
+                                    }
+                                )
+                            )
+                        );
     
                     }
 
@@ -685,61 +737,13 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
     };
 
-    this.configConstrainToViewport = function(p_sType, p_aArguments, p_oObject) {
+    this.initDefaultConfig = function() {
 
-        var bConstrainToViewport = p_aArguments[0];
+    	YAHOO.widget.Menu.superclass.initDefaultConfig.call(this);
 
-        if(bConstrainToViewport) {
-
-            this.beforeMoveEvent.subscribe(this.enforceConstraints, this, true);
-
-        } else {
-
-            this.beforeMoveEvent.unsubscribe(this.enforceConstraints, this);
-
-        }
-
-        if(m_aMenuItems.length > 0) {
-
-            var i = m_aMenuItems.length - 1,
-                oSubMenu;
-    
-            do {
-
-                oSubMenu = m_aMenuItems[i].cfg.getProperty("submenu");
-
-                if(oSubMenu) {
-
-                    oSubMenu.cfg.setProperty(
-                        "constraintoviewport", 
-                        bConstrainToViewport
-                    );
-
-                }
-
-            }
-            while(i--);
-
-        }
-
-        if(m_aSubMenus.length > 0) {
-
-            var i = m_aSubMenus.length - 1;
-    
-            do {
-
-                m_aSubMenus[i].cfg.setProperty(
-                    "constraintoviewport", 
-                    bConstrainToViewport
-                );
-
-            }
-            while(i--);
-
-        }
+        this.cfg.addProperty("initsubmenus", true);
 
     };
-
 
     this.enforceConstraints = function(type, args, obj) {
     
@@ -810,18 +814,82 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
     };
 
+    this.configConstrainToViewport = 
+
+        function(p_sType, p_aArguments, p_oObject) {
+
+        var bConstrainToViewport = p_aArguments[0];
+
+        if(bConstrainToViewport) {
+
+            this.beforeMoveEvent.subscribe(
+                this.enforceConstraints, 
+                this, 
+                true
+            );
+
+        } else {
+
+            this.beforeMoveEvent.unsubscribe(this.enforceConstraints, this);
+
+        }
+
+        if(m_aMenuItems.length > 0) {
+
+            var i = m_aMenuItems.length - 1,
+                oSubMenu;
+    
+            do {
+
+                oSubMenu = m_aMenuItems[i].cfg.getProperty("submenu");
+
+                if(oSubMenu) {
+
+                    oSubMenu.cfg.setProperty(
+                        "constraintoviewport", 
+                        bConstrainToViewport
+                    );
+
+                }
+
+            }
+            while(i--);
+
+        }
+
+        if(m_aSubMenus.length > 0) {
+
+            var i = m_aSubMenus.length - 1;
+    
+            do {
+
+                m_aSubMenus[i].cfg.setProperty(
+                    "constraintoviewport", 
+                    bConstrainToViewport
+                );
+
+            }
+            while(i--);
+
+        }
+
+    };
+
+    
+    // Event handlers for configuration properties
 
     this.configWidth = function(p_sType, p_aArguments, p_oObject) {
-
-        var sWidth = p_aArguments[0];
 
         if(this.parent) {
 
             var oMenuElementClone = this.element.cloneNode(true);
-
-            m_oDom.setStyle(oMenuElementClone, "auto");
-
             document.body.appendChild(oMenuElementClone);
+
+            m_oDom.setStyle(
+                oMenuElementClone, 
+                "width", 
+                (m_sBrowser == "opera" ? "auto" : "")
+            );
 
             var sWidth = m_oDom.getStyle(oMenuElementClone, "width");
 
@@ -832,7 +900,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         }
         else {
 
-            p_aArguments[0] = "auto";
+            p_aArguments[0] = m_oDom.getStyle(this.element, "width");
 
         }
    
