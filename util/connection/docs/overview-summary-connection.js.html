@@ -12,31 +12,31 @@
 	<h3><a href="./index.html">Connection Manager</a></h3>
 
 	<div class="breadcrumbs">
-
-
-
-
+					
+			
+			
+			
 				<a href="./index.html">Connection Manager</a>
 				&gt;
 				<strong>connection.js</strong>
-
-
-
-
-
-
-
-
-
-
-
-
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
 	</div>
 </div>
 
 <div id="body">
-
-
+	
+	
 	<div class="nav">
 		<div class="module resources">
 			<ul class="content">
@@ -44,58 +44,60 @@
 				<li><a href="index-all.html">Element Index</a></li>
 			</ul>
 		</div>
-
-
+		
+		
 			<div class="module">
 				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
 				<ul class="content">
-
+					
 						<li>
 							<a href="YAHOO.util.Connect.html">
 								YAHOO.util.Connect</a>
 						</li>
-
+					
 				</ul>
 			</div>
-
-
-
+		
+		
+		
 			<div class="module">
 				<h4><a href="./overview-summary.html">Files</a></h4>
-				<ul class="content">
-
+				<ul class="content">		
+					
 						<li>
 							<a href="overview-summary-connection.js.html">
 								connection.js</a>
 						</li>
-
+					
 				</ul>
 			</div>
-
+		
 	</div>
-
+	
 	<div class="main">
-
-
-
-
+			
+		
+		
+			
 			   <h2>connection.js</h2>
-
-
-
-
-
-
-
-
-
-
-
+			
+			
+		
+		
+		
+		
+		
+		
+		
+		
+		
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<pre class="sourceview"><span class="comment">/*
-Copyright (c) 2006 Yahoo! Inc. All rights reserved.
-version 0.9.0
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version 0.10.0
 */</span>
 
 <span class="comment">/**
@@ -105,9 +107,8 @@ version 0.9.0
  * callback function you create.
  * @ class
  */</span>
-YAHOO.util.Connect = {};
 
-YAHOO.util.Connect =
+YAHOO.util.Connect.<span class="reserved">prototype</span> =
 {
   <span class="comment">/**
    * Array of  MSFT ActiveX ids for XMLHttpRequest.
@@ -135,7 +136,7 @@ YAHOO.util.Connect =
   * <span class="attrib">@private</span>
   * <span class="attrib">@type</span> boolean
   */</span>
-	_isFormPost:false,
+	_isFormSubmit:false,
 
  <span class="comment">/**
   * Property modified by setForm() to the HTML form POST body.
@@ -144,14 +145,21 @@ YAHOO.util.Connect =
   */</span>
 	_sFormData:null,
 
+ <span class="comment">/**
+  * Collection of polling references to the polling mechanism in handleReadyState.
+  * <span class="attrib">@private</span>
+  * <span class="attrib">@type</span> string
+  */</span>
+	_poll:[],
+
   <span class="comment">/**
    * The polling frequency, in milliseconds, for HandleReadyState.
    * when attempting to determine a transaction's XHR  readyState.
-   * The default is 300 milliseconds.
+   * The default is 50 milliseconds.
    * <span class="attrib">@private</span>
    * <span class="attrib">@type</span> int
    */</span>
-	_polling_interval:300,
+	_polling_interval:50,
 
   <span class="comment">/**
    * A transaction counter that increments the transaction id for each transaction.
@@ -174,12 +182,24 @@ YAHOO.util.Connect =
 	},
 
   <span class="comment">/**
+   * Member to modify the default polling interval.
+   * <span class="attrib">@public</span>
+   * <span class="attrib">@param</span> {int} i The polling interval in milliseconds.
+   * <span class="attrib">@return</span> void
+   */</span>
+	setPollingInterval:<span class="reserved">function</span>(i)
+	{
+		<span class="reserved">if</span>(typeof i == <span class="literal">'number'</span> &amp;&amp; isFinite(i)){
+			<span class="reserved">this</span>._polling_interval = i;
+		}
+	},
+
+  <span class="comment">/**
    * Instantiates a XMLHttpRequest object and returns an object with two properties:
    * the XMLHttpRequest instance and the transaction id.
    * <span class="attrib">@private</span>
    * <span class="attrib">@param</span> {int} transactionId Property containing the transaction id for this transaction.
    * <span class="attrib">@return</span> connection object
-   * <span class="attrib">@type</span> object
    */</span>
 	createXhrObject:<span class="reserved">function</span>(transactionId)
 	{
@@ -188,7 +208,7 @@ YAHOO.util.Connect =
 		{
 <span class="comment">			// Instantiates XMLHttpRequest in non-IE browsers and assigns to http.</span>
 			http = new XMLHttpRequest();
-<span class="comment">			//  Object literal with http and id properties</span>
+<span class="comment">			//  Object literal with http and tId properties</span>
 			obj = { conn:http, tId:transactionId };
 		}
 		catch(e)
@@ -198,8 +218,11 @@ YAHOO.util.Connect =
 				{
 <span class="comment">					// Instantiates XMLHttpRequest for IE and assign to http.</span>
 					http = new ActiveXObject(<span class="reserved">this</span>._msxml_progid[i]);
-<span class="comment">					//  Object literal with http and id properties</span>
-					obj = { conn:http, tId:transactionId };
+					<span class="reserved">if</span>(http){
+<span class="comment">					//  Object literal with http and tId properties</span>
+						obj = { conn:http, tId:transactionId };
+						break;
+					}
 				}
 				catch(e){}
 			}
@@ -211,7 +234,7 @@ YAHOO.util.Connect =
 	},
 
   <span class="comment">/**
-   * This method is called by asyncRequest and syncRequest to create a
+   * This method is called by asyncRequest to create a
    * valid connection object for the transaction.  It also passes a
    * transaction id and increments the transaction id counter.
    * <span class="attrib">@private</span>
@@ -248,23 +271,28 @@ YAHOO.util.Connect =
    */</span>
 	asyncRequest:<span class="reserved">function</span>(method, uri, callback, postData)
 	{
-		var errorObj;
 		var o = <span class="reserved">this</span>.getConnectionObject();
 
 		<span class="reserved">if</span>(!o){
 			<span class="reserved">return</span> null;
 		}
 		<span class="reserved">else</span>{
-			var oConn = <span class="reserved">this</span>;
-
+			<span class="reserved">if</span>(<span class="reserved">this</span>._isFormSubmit){
+<span class="comment">				//If the specified HTTP method is GET, setForm() will return an</span>
+<span class="comment">				//encoded string that is concatenated to the uri to</span>
+<span class="comment">				//create a querystring.</span>
+				<span class="reserved">if</span>(method == <span class="literal">'GET'</span>){
+					uri += <span class="literal">"?"</span> +  <span class="reserved">this</span>._sFormData;
+				}
+				<span class="reserved">else</span> <span class="reserved">if</span>(method == <span class="literal">'POST'</span>){
+					postData =  <span class="reserved">this</span>._sFormData;
+				}
+				<span class="reserved">this</span>._isFormSubmit = false;
+			}
 			o.conn.open(method, uri, true);
 		    <span class="reserved">this</span>.handleReadyState(o, callback);
 
-			<span class="reserved">if</span>(<span class="reserved">this</span>._isFormPost){
-				postData = <span class="reserved">this</span>._sFormData;
-				<span class="reserved">this</span>._isFormPost = false;
-			}
-			<span class="reserved">else</span> <span class="reserved">if</span>(postData){
+			<span class="reserved">if</span>(postData){
 				<span class="reserved">this</span>.initHeader(<span class="literal">'Content-Type'</span>,<span class="literal">'application/x-www-form-urlencoded'</span>);
 			}
 <span class="comment">
@@ -273,8 +301,8 @@ YAHOO.util.Connect =
 			<span class="reserved">if</span>(<span class="reserved">this</span>._http_header.length&gt;0){
 				<span class="reserved">this</span>.setHeader(o);
 			}
-			postData?o.conn.send(postData):o.conn.send(null);
 
+			postData?o.conn.send(postData):o.conn.send(null);
 			<span class="reserved">return</span> o;
 		}
 	},
@@ -294,11 +322,12 @@ YAHOO.util.Connect =
 	handleReadyState:<span class="reserved">function</span>(o, callback)
 	{
 		var oConn = <span class="reserved">this</span>;
-		var poll = window.setInterval(
+		<span class="reserved">this</span>._poll[o.tId] = window.setInterval(
 			<span class="reserved">function</span>(){
-				<span class="reserved">if</span>(o.conn.readyState==4){
+				<span class="reserved">if</span>(o.conn &amp;&amp; o.conn.readyState == 4){
+					window.clearInterval(oConn._poll[o.tId]);
+					oConn._poll.splice(o.tId);
 					oConn.handleTransactionResponse(o, callback);
-					window.clearInterval(poll);
 				}
 			}
 		,<span class="reserved">this</span>._polling_interval);
@@ -317,6 +346,12 @@ YAHOO.util.Connect =
    */</span>
 	handleTransactionResponse:<span class="reserved">function</span>(o, callback)
 	{
+<span class="comment">		// If no valid callback is provided, then do not process any callback handling.</span>
+		<span class="reserved">if</span>(!callback){
+			<span class="reserved">this</span>.releaseObject(o);
+			<span class="reserved">return</span>;
+		}
+
 		var httpStatus;
 		var responseObject;
 
@@ -337,6 +372,8 @@ YAHOO.util.Connect =
 					callback.success(responseObject);
 				}
 				<span class="reserved">else</span>{
+<span class="comment">					// If a scope property is defined, the callback will be fired from</span>
+<span class="comment">					// the context of the object.</span>
 					callback.success.apply(callback.scope, [responseObject]);
 				}
 			}
@@ -382,8 +419,8 @@ YAHOO.util.Connect =
 
   <span class="comment">/**
    * This method evaluates the server response, creates and returns the results via
-   * its properties.  Success and failure cases(and exceptions) will differ in their defined properties
-   * but property "type" will confirm the transaction's status.
+   * its properties.  Success and failure cases will differ in the response
+   * object's property values.
    * <span class="attrib">@private</span>
    * <span class="attrib">@param</span> {object} o The connection object
    * <span class="attrib">@param</span> {} callbackArg User-defined arguments to be passed to the callback
@@ -393,11 +430,22 @@ YAHOO.util.Connect =
 	createResponseObject:<span class="reserved">function</span>(o, callbackArg)
 	{
 		var obj = {};
+		var headerObj = {};
+
+		var headerStr = o.conn.getAllResponseHeaders();
+		var header = headerStr.split(<span class="literal">"\n"</span>);
+		<span class="reserved">for</span>(var i=0; i &lt; header.length; i++){
+			var delimitPos = header[i].indexOf(<span class="literal">':'</span>);
+			<span class="reserved">if</span>(delimitPos != -1){
+				headerObj[header[i].substring(0,delimitPos)] = header[i].substring(delimitPos+1);
+			}
+		}
 
 		obj.tId = o.tId;
 		obj.status = o.conn.status;
 		obj.statusText = o.conn.statusText;
-		obj.allResponseHeaders = o.conn.getAllResponseHeaders();
+		obj.getResponseHeader = headerObj;
+		obj.getAllResponseHeaders = headerStr;
 		obj.responseText = o.conn.responseText;
 		obj.responseXML = o.conn.responseXML;
 		<span class="reserved">if</span>(callbackArg){
@@ -410,8 +458,8 @@ YAHOO.util.Connect =
   <span class="comment">/**
    * If a transaction cannot be completed due to dropped or closed connections,
    * there may be not be enough information to build a full response object.
-   * The object's property "type" value will be "failure", and two additional
-   * unique, properties are added - errorCode and errorText.
+   * The failure callback will be fired and this specific condition can be identified
+   * by a status property value of 0.
    * <span class="attrib">@private</span>
    * <span class="attrib">@param</span> {int} tId Transaction Id
    * <span class="attrib">@param</span> callbackArg The user-defined arguments
@@ -479,7 +527,7 @@ YAHOO.util.Connect =
 		<span class="reserved">this</span>._sFormData = <span class="literal">''</span>;
 		var oForm = document.forms[formName];
 		var oElement, elName, elValue;
-<span class="comment">		// iterate over the form elements collection to construct the</span>
+<span class="comment">		// Iterate over the form elements collection to construct the</span>
 <span class="comment">		// label-value pairs.</span>
 		<span class="reserved">for</span> (var i=0; i&lt;oForm.elements.length; i++){
 			oElement = oForm.elements[i];
@@ -512,8 +560,7 @@ YAHOO.util.Connect =
 			}
 		}
 		<span class="reserved">this</span>._sFormData = <span class="reserved">this</span>._sFormData.substr(0, <span class="reserved">this</span>._sFormData.length - 1);
-		<span class="reserved">this</span>._isFormPost = true;
-		<span class="reserved">this</span>.initHeader(<span class="literal">'Content-Type'</span>,<span class="literal">'application/x-www-form-urlencoded'</span>);
+		<span class="reserved">this</span>._isFormSubmit = true;
 	},
 
   <span class="comment">/**
@@ -525,8 +572,15 @@ YAHOO.util.Connect =
 	abort:<span class="reserved">function</span>(o)
 	{
 		<span class="reserved">if</span>(<span class="reserved">this</span>.isCallInProgress(o)){
+			window.clearInterval(<span class="reserved">this</span>._poll[o.tId]);
+			o.conn._poll.splice(o.tId);
 			o.conn.abort();
 			<span class="reserved">this</span>.releaseObject(o);
+
+			<span class="reserved">return</span> true;
+		}
+		<span class="reserved">else</span>{
+			<span class="reserved">return</span> false;
 		}
 	},
 
@@ -539,8 +593,14 @@ YAHOO.util.Connect =
    */</span>
 	isCallInProgress:<span class="reserved">function</span>(o)
 	{
-		<span class="reserved">if</span>(o){
+<span class="comment">		// if the XHR object assigned to the transaction has not been dereferenced,</span>
+<span class="comment">		// then check its readyState status.  Otherwise, return false.</span>
+		<span class="reserved">if</span>(o.conn){
 			<span class="reserved">return</span> o.conn.readyState != 4 &amp;&amp; o.conn.readyState != 0;
+		}
+		<span class="reserved">else</span>{
+<span class="comment">			//The XHR object has been destroyed.</span>
+			<span class="reserved">return</span> false;
 		}
 	},
 
@@ -559,7 +619,7 @@ YAHOO.util.Connect =
 	}
 }</pre>
 			</div>
-
+		
 	</div>
 </div>
 
@@ -570,8 +630,10 @@ YAHOO.util.Connect =
 	<br />
 	Yahoo! Confidential.
 	<br /><br />
-	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">
+	JSDoc</a>
 </div>
+
 
 
 </body>
