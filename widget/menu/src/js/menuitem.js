@@ -532,39 +532,66 @@ YAHOO.widget.MenuItem.prototype = {
             if(!this.cfg.getProperty("disabled")) {
     
                 var oTarget = m_oEventUtil.getTarget(p_oEvent, true);
-    
-                if(oTarget == m_oSubMenuIndicatorIMG) {
-    
-                    if(m_oSubMenu.cfg.getProperty("visible")) {
-    
-                        this.hideSubMenu();
-    
-                        this.focus();
-    
+
+
+                if(oTarget == m_oAnchor) {
+
+                    if(this.cfg.getProperty("url")) {
+
+                        return true; // Needed to tell Safari to follow the link
+
                     }
                     else {
-    
-                        this.cfg.setProperty("selected", true);
-                        
-                        this.showSubMenu();
-    
-                        focusSubMenuFirstMenuItem();
-    
+
+                        m_oEventUtil.preventDefault(p_oEvent);
+        
+                        return false;
+
                     }
-    
+
                 }
+                else {
 
-                var sURL = this.cfg.getProperty("url");
+                    if(oTarget == m_oSubMenuIndicatorIMG) {
 
-                if(sURL) {
+                        if(m_oSubMenu.cfg.getProperty("visible")) {
+        
+                            this.hideSubMenu();
+        
+                            this.focus();
+        
+                        }
+                        else {
+        
+                            this.cfg.setProperty("selected", true);
+                            
+                            this.showSubMenu();
+        
+                            focusSubMenuFirstMenuItem();
+        
+                        }
 
-                    document.location = sURL;
+                    }
+                    else {
+
+                        //this.focus();
+
+                        if(m_oAnchor.dispatchEvent) {
+    
+                            m_oAnchor.dispatchEvent(p_oEvent);
+    
+                        }
+                        else if(m_oAnchor.fireEvent) {
+    
+                            m_oAnchor.fireEvent("onclick", p_oEvent);
+    
+                        }
+
+                    }
 
                 }
     
                 this.clickEvent.fire(p_oEvent, this);
-    
-                return true;
     
             }
     
@@ -1802,7 +1829,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(this.element) {
 
-            var oParentNode = this.element
+            var oParentNode = this.element;
 
             if(oParentNode) {
 

@@ -1,10 +1,10 @@
 YAHOO.widget.MenuManager = function () {
 
-    var m_oActiveMenu = null;
-    var m_oMenus = {};
-    var m_oVisibleMenus = {};
-    var m_aMenuIds = [];
-    var m_sMenuIdBase = "yuimenu";
+    var m_oActiveMenu = null,
+        m_oMenus = {},
+        m_oVisibleMenus = {},
+        m_aMenuIds = [],
+        m_sMenuIdBase = "yuimenu";
 
     function addItem(p_oCollection, p_oItem) {
 
@@ -113,13 +113,13 @@ YAHOO.widget.MenuManager = function () {
 
         },
 
-        getActiveMenu : function() {
+        getActiveMenu: function() {
 
             return m_oActiveMenu;
 
         },
 
-        addMenu : function(p_oMenu) {
+        addMenu: function(p_oMenu) {
 
             if(p_oMenu) {
 
@@ -134,14 +134,14 @@ YAHOO.widget.MenuManager = function () {
 
         },
 
-        removeMenu : function(p_oValue) {
+        removeMenu: function(p_oValue) {
 
             removeItem(m_oMenus, p_oValue);
             removeItem(m_oVisibleMenus, p_oValue);
 
         },
 
-        hideVisibleMenus : function() {
+        hideVisibleMenus: function() {
 
             for(var i in m_oVisibleMenus) {
 
@@ -153,13 +153,13 @@ YAHOO.widget.MenuManager = function () {
 
         },
 
-        getMenus : function() {
+        getMenus: function() {
 
             return m_oMenus;
 
         },
 
-        getMenu : function(p_sElementId) {
+        getMenu: function(p_sElementId) {
 
             if(p_sElementId && m_oMenus[p_sElementId]) {
 
@@ -169,7 +169,7 @@ YAHOO.widget.MenuManager = function () {
 
         },
 
-        getVisibleMenus : function() {
+        getVisibleMenus: function() {
 
             return m_oVisibleMenus;
 
