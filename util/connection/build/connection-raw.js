@@ -1,6 +1,6 @@
 /*
 Copyright (c) 2006 Yahoo! Inc. All rights reserved.
-version 0.9.0
+version 0.10.0
 */
 
 /**
@@ -58,11 +58,11 @@ YAHOO.util.Connect =
   /**
    * The polling frequency, in milliseconds, for HandleReadyState.
    * when attempting to determine a transaction's XHR  readyState.
-   * The default is 250 milliseconds.
+   * The default is 50 milliseconds.
    * @private
    * @type int
    */
-	_polling_interval:250,
+	_polling_interval:50,
 
   /**
    * A transaction counter that increments the transaction id for each transaction.
@@ -85,7 +85,7 @@ YAHOO.util.Connect =
 	},
 
   /**
-   * Member to modify the default polling interval of 250ms.
+   * Member to modify the default polling interval.
    * @public
    * @param {int} i The polling interval in milliseconds.
    * @return void
@@ -103,7 +103,6 @@ YAHOO.util.Connect =
    * @private
    * @param {int} transactionId Property containing the transaction id for this transaction.
    * @return connection object
-   * @type object
    */
 	createXhrObject:function(transactionId)
 	{
@@ -112,7 +111,7 @@ YAHOO.util.Connect =
 		{
 			// Instantiates XMLHttpRequest in non-IE browsers and assigns to http.
 			http = new XMLHttpRequest();
-			//  Object literal with http and id properties
+			//  Object literal with http and tId properties
 			obj = { conn:http, tId:transactionId };
 		}
 		catch(e)
@@ -122,8 +121,11 @@ YAHOO.util.Connect =
 				{
 					// Instantiates XMLHttpRequest for IE and assign to http.
 					http = new ActiveXObject(this._msxml_progid[i]);
-					//  Object literal with http and id properties
-					obj = { conn:http, tId:transactionId };
+					if(http){
+					//  Object literal with http and tId properties
+						obj = { conn:http, tId:transactionId };
+						break;
+					}
 				}
 				catch(e){}
 			}
@@ -179,6 +181,9 @@ YAHOO.util.Connect =
 		}
 		else{
 			if(this._isFormSubmit){
+				//If the specified HTTP method is GET, setForm() will return an
+				//encoded string that is concatenated to the uri to
+				//create a querystring.
 				if(method == 'GET'){
 					uri += "?" +  this._sFormData;
 				}
@@ -187,7 +192,6 @@ YAHOO.util.Connect =
 				}
 				this._isFormSubmit = false;
 			}
-
 			o.conn.open(method, uri, true);
 		    this.handleReadyState(o, callback);
 
@@ -202,7 +206,6 @@ YAHOO.util.Connect =
 			}
 
 			postData?o.conn.send(postData):o.conn.send(null);
-
 			return o;
 		}
 	},
@@ -330,11 +333,22 @@ YAHOO.util.Connect =
 	createResponseObject:function(o, callbackArg)
 	{
 		var obj = {};
+		var headerObj = {};
+
+		var headerStr = o.conn.getAllResponseHeaders();
+		var header = headerStr.split("\n");
+		for(var i=0; i < header.length; i++){
+			var delimitPos = header[i].indexOf(':');
+			if(delimitPos != -1){
+				headerObj[header[i].substring(0,delimitPos)] = header[i].substring(delimitPos+1);
+			}
+		}
 
 		obj.tId = o.tId;
 		obj.status = o.conn.status;
 		obj.statusText = o.conn.statusText;
-		obj.allResponseHeaders = o.conn.getAllResponseHeaders();
+		obj.getResponseHeader = headerObj;
+		obj.getAllResponseHeaders = headerStr;
 		obj.responseText = o.conn.responseText;
 		obj.responseXML = o.conn.responseXML;
 		if(callbackArg){
@@ -465,6 +479,11 @@ YAHOO.util.Connect =
 			o.conn._poll.splice(o.tId);
 			o.conn.abort();
 			this.releaseObject(o);
+
+			return true;
+		}
+		else{
+			return false;
 		}
 	},
 
@@ -483,6 +502,7 @@ YAHOO.util.Connect =
 			return o.conn.readyState != 4 && o.conn.readyState != 0;
 		}
 		else{
+			//The XHR object has been destroyed.
 			return false;
 		}
 	},
