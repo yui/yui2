@@ -226,7 +226,37 @@ if (!YAHOO.util.Event) {
          */
         var legacyHandlers = [];
 
+        /**
+         * The number of times to poll after window.onload.  This number is
+         * increased if additional late-bound handlers are requested after
+         * the page load.
+         * @private
+         */
+        var retryCount = 0;
+
+        /**
+         * onAvailable listeners
+         * @private
+         */
+        var onAvailStack = [];
+
         return { // PREPROCESS
+
+            /**
+             * The number of times we should look for elements that are not
+             * in the DOM at the time the event is requested after the document
+             * has been loaded.  The default is 200@50 ms, so it will poll
+             * for 10 seconds or until all outstanding handlers are bound
+             * (whichever comes first).
+             * @type int
+             */
+            POLL_RETRYS: 200,
+
+            /**
+             * The poll interval in milliseconds
+             * @type int
+             */
+            POLL_INTERVAL: 50,
 
             /**
              * Element to bind, int constant
@@ -272,16 +302,68 @@ if (!YAHOO.util.Event) {
              * handler.  There is not a capabilities check we can use here.
              * @private
              */
-            isSafari: (navigator.userAgent.match(/safari/gi)),
+            isSafari: (/Safari|Konqueror|KHTML/gi).test(navigator.userAgent),
 
             /**
-             * @private
              * IE detection needed to properly calculate pageX and pageY.  
              * capabilities checking didn't seem to work because another 
              * browser that does not provide the properties have the values 
              * calculated in a different manner than IE.
+             * @private
              */
-            isIE: (!this.isSafari && navigator.userAgent.match(/msie/gi)),
+            isIE: (!this.isSafari && !navigator.userAgent.match(/opera/gi) && 
+                    navigator.userAgent.match(/msie/gi)),
+
+            /**
+             * @private
+             */
+            addDelayedListener: function(el, sType, fn, oScope, bOverride) {
+                delayedListeners[delayedListeners.length] =
+                    [el, sType, fn, oScope, bOverride];
+
+                // If this happens after the inital page load, we need to
+                // reset the poll counter so that we continue to search for
+                // the element for a fixed period of time.
+                if (loadComplete) {
+                    retryCount = this.POLL_RETRYS;
+                    this.startTimeout(0);
+                    // this._tryPreloadAttach();
+                }
+            },
+
+            /**
+             * @private
+             */
+            startTimeout: function(interval) {
+                var i = (interval || interval === 0) ? interval : this.POLL_INTERVAL;
+                this.timeout = setTimeout("YAHOO.util.Event._tryPreloadAttach()", i);
+            },
+
+            /**
+             * Executes the supplied callback when the item with the supplied
+             * id is found.  This is meant to be used to execute behavior as
+             * soon as possible as the page loads.  If you use this after the
+             * initial page load it will poll for a fixed time for the element.
+             * The number of times it will poll and the frequency are
+             * configurable.  By default it will poll for 10 seconds.
+             * @param {string} p_id the id of the element to look for.
+             * @param {function} p_fn what to execute when the element is found.
+             * @param {object} p_obj an optional object to be passed back as
+             * a parameter to p_fn.
+             * @param {boolean} p_override If set to true, p_fn will execute
+             * in the scope of p_obj
+             *
+             */
+            onAvailable: function(p_id, p_fn, p_obj, p_override) {
+                onAvailStack.push( { id:       p_id, 
+                                     fn:       p_fn, 
+                                     obj:      p_obj, 
+                                     override: p_override } );
+
+                retryCount = this.POLL_RETRYS;
+                this.startTimeout(0);
+                // this._tryPreloadAttach();
+            },
 
             /**
              * Appends an event handler
@@ -313,6 +395,7 @@ if (!YAHOO.util.Event) {
                     return ok;
 
                 } else if (typeof el == "string") {
+                    var oEl = this.getEl(el);
                     // If the el argument is a string, we assume it is 
                     // actually the id of the element.  If the page is loaded
                     // we convert el to the actual element, otherwise we 
@@ -320,12 +403,15 @@ if (!YAHOO.util.Event) {
 
                     // check to see if we need to delay hooking up the event 
                     // until after the page loads.
-                    if (loadComplete) {
-                        el = this.getEl(el);
+                    if (loadComplete && oEl) {
+                        el = oEl;
                     } else {
                         // defer adding the event until onload fires
-                        delayedListeners[delayedListeners.length] =
-                            [el, sType, fn, oScope, bOverride];
+                        this.addDelayedListener(el, 
+                                                sType, 
+                                                fn, 
+                                                oScope, 
+                                                bOverride);
 
                         return true;
                     }
@@ -411,7 +497,6 @@ if (!YAHOO.util.Event) {
              * @private
              */
             fireLegacyEvent: function(e, legacyIndex) {
-                // alert("fireLegacyEvent " + legacyIndex);
                 var ok = true;
 
                 // var el = legacyEvents[YAHOO.util.Event.EL];
@@ -419,7 +504,6 @@ if (!YAHOO.util.Event) {
                 /* this is not working because the property may get populated
                 // fire the event we replaced, if it exists
                 var origHandler = legacyEvents[2];
-                alert(origHandler);
                 if (origHandler && origHandler.call) {
                     var ret = origHandler.call(el, e);
                     ok = (ret);
@@ -429,7 +513,6 @@ if (!YAHOO.util.Event) {
                 var le = legacyHandlers[legacyIndex];
                 for (i=0; i < le.length; ++i) {
                     var index = le[i];
-                    // alert(index);
                     if (index) {
                         var li = listeners[index];
                         if ( li && li[this.WFN] ) {
@@ -441,7 +524,6 @@ if (!YAHOO.util.Event) {
                             // the array
                             delete le[i];
                         }
-                        // alert(ok);
                     }
                 }
 
@@ -513,7 +595,6 @@ if (!YAHOO.util.Event) {
 
                 if (el.removeEventListener) {
                     el.removeEventListener(sType, cacheItem[this.WFN], false);
-                    // alert("adsf");
                 } else if (el.detachEvent) {
                     el.detachEvent("on" + sType, cacheItem[this.WFN]);
                 }
@@ -579,6 +660,14 @@ if (!YAHOO.util.Event) {
                 }
 
                 return y;
+            },
+
+            /**
+             * Returns the pageX and pageY properties as an indexed array.
+             * @type int[]
+             */
+            getXY: function(ev) {
+                return [this.getPageX(ev), this.getPageY(ev)];
             },
 
             /**
@@ -716,8 +805,6 @@ if (!YAHOO.util.Event) {
              * @private
              */
             _isValidCollection: function(o) {
-                // alert(o.constructor.toString())
-                // alert(typeof o)
 
                 return ( o                    && // o is something
                          o.length             && // o is indexed
@@ -792,11 +879,24 @@ if (!YAHOO.util.Event) {
              */
             _tryPreloadAttach: function() {
 
+                if (this.locked) {
+                    return false;
+                }
+
+                this.locked = true;
+
+
                 // keep trying until after the page is loaded.  We need to 
                 // check the page load state prior to trying to bind the 
                 // elements so that we can be certain all elements have been 
                 // tested appropriately
                 var tryAgain = !loadComplete;
+                if (!tryAgain) {
+                    tryAgain = (retryCount > 0);
+                }
+
+                // Delayed listeners
+                var stillDelayed = [];
 
                 for (var i=0; i < delayedListeners.length; ++i) {
                     var d = delayedListeners[i];
@@ -812,13 +912,40 @@ if (!YAHOO.util.Event) {
                             this.on(el, d[this.TYPE], d[this.FN], 
                                     d[this.SCOPE], d[this.ADJ_SCOPE]);
                             delete delayedListeners[i];
+                        } else {
+                            stillDelayed.push(d);
                         }
                     }
                 }
 
-                if (tryAgain) {
-                    setTimeout("YAHOO.util.Event._tryPreloadAttach()", 50);
+                delayedListeners = stillDelayed;
+
+                // onAvailable
+                notAvail = [];
+                for (i=0; i < onAvailStack.length; ++i) {
+                    var item = onAvailStack[i];
+                    if (item) {
+                        el = this.getEl(item.id);
+
+                        if (el) {
+                            var scope = (item.override) ? item.obj : el;
+                            item.fn.call(scope, item.obj);
+                            delete onAvailStack[i];
+                        } else {
+                            notAvail.push(item);
+                        }
+                    }
                 }
+
+                retryCount = (stillDelayed.length === 0 && 
+                                    notAvail.length === 0) ? 0 : retryCount - 1;
+
+                if (tryAgain) {
+                    this.startTimeout();
+                }
+
+                this.locked = false;
+
             },
 
             /**
