@@ -17,10 +17,10 @@
  * have an icon
  */
 YAHOO.widget.HTMLNode = function(oData, oParent, expanded, hasIcon) {
-	if (oParent) { 
-		this.init(oData, oParent, expanded);
-		this.initContent(oData, hasIcon);
-	}
+    if (oParent) { 
+        this.init(oData, oParent, expanded);
+        this.initContent(oData, hasIcon);
+    }
 };
 
 YAHOO.widget.HTMLNode.prototype = new YAHOO.widget.Node();
@@ -55,13 +55,13 @@ YAHOO.widget.HTMLNode.prototype.content = null;
  * icon or not
  */
 YAHOO.widget.HTMLNode.prototype.initContent = function(oData, hasIcon) { 
-	if (typeof oData == "string") {
-		oData = { html: oData };
-	}
+    if (typeof oData == "string") {
+        oData = { html: oData };
+    }
 
-	this.html = oData.html;
-	this.contentElId = "ygtvcontentel" + this.index;
-	this.hasIcon = hasIcon;
+    this.html = oData.html;
+    this.contentElId = "ygtvcontentel" + this.index;
+    this.hasIcon = hasIcon;
 };
 
 /**
@@ -70,45 +70,45 @@ YAHOO.widget.HTMLNode.prototype.initContent = function(oData, hasIcon) {
  * @return {HTMLElement} the element
  */
 YAHOO.widget.HTMLNode.prototype.getContentEl = function() { 
-	return document.getElementById(this.contentElId);
+    return document.getElementById(this.contentElId);
 };
 
 // overrides YAHOO.widget.Node
 YAHOO.widget.HTMLNode.prototype.getNodeHtml = function() { 
-	var sb = new Array();
+    var sb = new Array();
 
-	sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0">';
-	sb[sb.length] = '<tr>';
-	
-	for (i=0;i<this.depth;++i) {
-		sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&nbsp;</td>';
-	}
+    sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0">';
+    sb[sb.length] = '<tr>';
+    
+    for (i=0;i<this.depth;++i) {
+        sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&nbsp;</td>';
+    }
 
-	if (this.hasIcon) {
-		sb[sb.length] = '<td';
-		sb[sb.length] = ' id="' + this.getToggleElId() + '"';
-		sb[sb.length] = ' class="' + this.getStyle() + '"';
-		sb[sb.length] = ' onclick="javascript:' + this.getToggleLink() + '">&nbsp;';
-		if (this.hasChildren(true)) {
-			sb[sb.length] = ' onmouseover="this.className=';
-			sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
-			sb[sb.length] = this.tree.id + '\',' + this.index +  ').getHoverStyle()"';
-			sb[sb.length] = ' onmouseout="this.className=';
-			sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
-			sb[sb.length] = this.tree.id + '\',' + this.index +  ').getStyle()"';
-		}
-		sb[sb.length] = '</td>';
-	}
+    if (this.hasIcon) {
+        sb[sb.length] = '<td';
+        sb[sb.length] = ' id="' + this.getToggleElId() + '"';
+        sb[sb.length] = ' class="' + this.getStyle() + '"';
+        sb[sb.length] = ' onclick="javascript:' + this.getToggleLink() + '"';
+        if (this.hasChildren(true)) {
+            sb[sb.length] = ' onmouseover="this.className=';
+            sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
+            sb[sb.length] = this.tree.id + '\',' + this.index +  ').getHoverStyle()"';
+            sb[sb.length] = ' onmouseout="this.className=';
+            sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
+            sb[sb.length] = this.tree.id + '\',' + this.index +  ').getStyle()"';
+        }
+        sb[sb.length] = '>&nbsp;</td>';
+    }
 
-	sb[sb.length] = '<td';
-	sb[sb.length] = ' id="' + this.contentElId + '"';
-	sb[sb.length] = ' class="' + this.contentStyle + '"';
-	sb[sb.length] = ' >';
-	sb[sb.length] = this.html;
-	sb[sb.length] = '</td>';
-	sb[sb.length] = '</tr>';
-	sb[sb.length] = '</table>';
+    sb[sb.length] = '<td';
+    sb[sb.length] = ' id="' + this.contentElId + '"';
+    sb[sb.length] = ' class="' + this.contentStyle + '"';
+    sb[sb.length] = ' >';
+    sb[sb.length] = this.html;
+    sb[sb.length] = '</td>';
+    sb[sb.length] = '</tr>';
+    sb[sb.length] = '</table>';
 
-	return sb.join("");
+    return sb.join("");
 };
 

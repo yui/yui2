@@ -69,6 +69,10 @@ YAHOO.widget.TextNode.prototype.setUpLabel = function(oData) {
 		this.target = oData.target;
 	}
 
+    if (oData.style) {
+        this.labelStyle = oData.style;
+    }
+
 	this.labelElId = "ygtvlabelel" + this.index;
 };
 

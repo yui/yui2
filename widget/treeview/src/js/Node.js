@@ -152,6 +152,15 @@ YAHOO.widget.Node.prototype = {
     hasIcon: true,
 
     /**
+     * Used to configure what happens when a dynamic load node is expanded
+     * and we discover that it does not have children.  By default, it is
+     * treated as if it still could have children (plus/minus icon).  Set
+     * iconMode to have it display like a leaf node instead.
+     * @type int
+     */
+    iconMode: 0,
+
+    /**
      * Initializes this node, gets some of the properties from the parent
      *
      * @param oData {object} a string or object containing the data that will
@@ -371,6 +380,9 @@ YAHOO.widget.Node.prototype = {
      * @return {string} the css class for this node's toggle
      */
     getStyle: function() {
+            this.logger.debug("No children, " + 
+                    " isDyanmic: " + this.isDynamic() + 
+                    " expanded: " + this.expanded);
         if (this.isLoading) {
             this.logger.debug("returning the loading icon");
             return "ygtvloading";
@@ -380,7 +392,7 @@ YAHOO.widget.Node.prototype = {
 
             // type p=plus(expand), m=minus(collapase), n=none(no children)
             var type = "n";
-            if (this.hasChildren(true) || this.isDynamic()) {
+            if (this.hasChildren(true) || (this.isDynamic() && !this.getIconMode())) {
             // if (this.hasChildren(true)) {
                 type = (this.expanded) ? "m" : "p";
             }
@@ -433,13 +445,27 @@ YAHOO.widget.Node.prototype = {
 
     /**
      * Configures this node for dynamically obtaining the child data
-     * when the node is first expanded.
+     * when the node is first expanded.  Calling it without the callback
+     * will turn off dynamic load for the node.
      *
      * @param fmDataLoader {function} the function that will be used to get the data.
+     * @param iconMode {int} configures the icon that is displayed when a dynamic
+     * load node is expanded the first time without children.  By default, the 
+     * "collapse" icon will be used.  If set to 1, the leaf node icon will be
+     * displayed.
      */
-    setDynamicLoad: function(fnDataLoader) { 
-        this.dataLoader = fnDataLoader;
-        this._dynLoad = true;
+    setDynamicLoad: function(fnDataLoader, iconMode) { 
+        if (fnDataLoader) {
+            this.dataLoader = fnDataLoader;
+            this._dynLoad = true;
+        } else {
+            this.dataLoader = null;
+            this._dynLoad = false;
+        }
+
+        if (iconMode) {
+            this.iconMode = iconMode;
+        }
     },
 
     /**
@@ -463,6 +489,10 @@ YAHOO.widget.Node.prototype = {
         var lazy = (!this.isRoot() && (this._dynLoad || this.tree.root._dynLoad));
         // this.logger.debug("isDynamic: " + lazy);
         return lazy;
+    },
+
+    getIconMode: function() {
+        return (this.iconMode || this.tree.root.iconMode);
     },
 
     /**

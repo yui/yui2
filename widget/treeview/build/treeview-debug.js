@@ -222,11 +222,13 @@ YAHOO.widget.TreeView.prototype = {
      * Configures this tree to dynamically load all child data
      *
      * @param {function} fnDataLoader the function that will be called to get the data
+     * @param iconMode {int} configures the icon that is displayed when a dynamic
+     * load node is expanded the first time without children.  By default, the 
+     * "collapse" icon will be used.  If set to 1, the leaf node icon will be
+     * displayed.
      */
-    setDynamicLoad: function(fnDataLoader) { 
-        // this.root.dataLoader = fnDataLoader;
-        // this.root._dynLoad = true;
-        this.root.setDynamicLoad(fnDataLoader);
+    setDynamicLoad: function(fnDataLoader, iconMode) { 
+        this.root.setDynamicLoad(fnDataLoader, iconMode);
     },
 
     /**
@@ -595,6 +597,15 @@ YAHOO.widget.Node.prototype = {
     hasIcon: true,
 
     /**
+     * Used to configure what happens when a dynamic load node is expanded
+     * and we discover that it does not have children.  By default, it is
+     * treated as if it still could have children (plus/minus icon).  Set
+     * iconMode to have it display like a leaf node instead.
+     * @type int
+     */
+    iconMode: 0,
+
+    /**
      * Initializes this node, gets some of the properties from the parent
      *
      * @param oData {object} a string or object containing the data that will
@@ -814,6 +825,9 @@ YAHOO.widget.Node.prototype = {
      * @return {string} the css class for this node's toggle
      */
     getStyle: function() {
+            this.logger.debug("No children, " + 
+                    " isDyanmic: " + this.isDynamic() + 
+                    " expanded: " + this.expanded);
         if (this.isLoading) {
             this.logger.debug("returning the loading icon");
             return "ygtvloading";
@@ -823,7 +837,7 @@ YAHOO.widget.Node.prototype = {
 
             // type p=plus(expand), m=minus(collapase), n=none(no children)
             var type = "n";
-            if (this.hasChildren(true) || this.isDynamic()) {
+            if (this.hasChildren(true) || (this.isDynamic() && !this.getIconMode())) {
             // if (this.hasChildren(true)) {
                 type = (this.expanded) ? "m" : "p";
             }
@@ -876,13 +890,27 @@ YAHOO.widget.Node.prototype = {
 
     /**
      * Configures this node for dynamically obtaining the child data
-     * when the node is first expanded.
+     * when the node is first expanded.  Calling it without the callback
+     * will turn off dynamic load for the node.
      *
      * @param fmDataLoader {function} the function that will be used to get the data.
+     * @param iconMode {int} configures the icon that is displayed when a dynamic
+     * load node is expanded the first time without children.  By default, the 
+     * "collapse" icon will be used.  If set to 1, the leaf node icon will be
+     * displayed.
      */
-    setDynamicLoad: function(fnDataLoader) { 
-        this.dataLoader = fnDataLoader;
-        this._dynLoad = true;
+    setDynamicLoad: function(fnDataLoader, iconMode) { 
+        if (fnDataLoader) {
+            this.dataLoader = fnDataLoader;
+            this._dynLoad = true;
+        } else {
+            this.dataLoader = null;
+            this._dynLoad = false;
+        }
+
+        if (iconMode) {
+            this.iconMode = iconMode;
+        }
     },
 
     /**
@@ -906,6 +934,10 @@ YAHOO.widget.Node.prototype = {
         var lazy = (!this.isRoot() && (this._dynLoad || this.tree.root._dynLoad));
         // this.logger.debug("isDynamic: " + lazy);
         return lazy;
+    },
+
+    getIconMode: function() {
+        return (this.iconMode || this.tree.root.iconMode);
     },
 
     /**
@@ -1209,6 +1241,10 @@ YAHOO.widget.TextNode.prototype.setUpLabel = function(oData) {
 		this.target = oData.target;
 	}
 
+    if (oData.style) {
+        this.labelStyle = oData.style;
+    }
+
 	this.labelElId = "ygtvlabelel" + this.index;
 };
 
@@ -1315,10 +1351,10 @@ YAHOO.widget.MenuNode.prototype = new YAHOO.widget.TextNode();
  * have an icon
  */
 YAHOO.widget.HTMLNode = function(oData, oParent, expanded, hasIcon) {
-	if (oParent) { 
-		this.init(oData, oParent, expanded);
-		this.initContent(oData, hasIcon);
-	}
+    if (oParent) { 
+        this.init(oData, oParent, expanded);
+        this.initContent(oData, hasIcon);
+    }
 };
 
 YAHOO.widget.HTMLNode.prototype = new YAHOO.widget.Node();
@@ -1353,13 +1389,13 @@ YAHOO.widget.HTMLNode.prototype.content = null;
  * icon or not
  */
 YAHOO.widget.HTMLNode.prototype.initContent = function(oData, hasIcon) { 
-	if (typeof oData == "string") {
-		oData = { html: oData };
-	}
+    if (typeof oData == "string") {
+        oData = { html: oData };
+    }
 
-	this.html = oData.html;
-	this.contentElId = "ygtvcontentel" + this.index;
-	this.hasIcon = hasIcon;
+    this.html = oData.html;
+    this.contentElId = "ygtvcontentel" + this.index;
+    this.hasIcon = hasIcon;
 };
 
 /**
@@ -1368,46 +1404,46 @@ YAHOO.widget.HTMLNode.prototype.initContent = function(oData, hasIcon) {
  * @return {HTMLElement} the element
  */
 YAHOO.widget.HTMLNode.prototype.getContentEl = function() { 
-	return document.getElementById(this.contentElId);
+    return document.getElementById(this.contentElId);
 };
 
 // overrides YAHOO.widget.Node
 YAHOO.widget.HTMLNode.prototype.getNodeHtml = function() { 
-	var sb = new Array();
+    var sb = new Array();
 
-	sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0">';
-	sb[sb.length] = '<tr>';
-	
-	for (i=0;i<this.depth;++i) {
-		sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&nbsp;</td>';
-	}
+    sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0">';
+    sb[sb.length] = '<tr>';
+    
+    for (i=0;i<this.depth;++i) {
+        sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&nbsp;</td>';
+    }
 
-	if (this.hasIcon) {
-		sb[sb.length] = '<td';
-		sb[sb.length] = ' id="' + this.getToggleElId() + '"';
-		sb[sb.length] = ' class="' + this.getStyle() + '"';
-		sb[sb.length] = ' onclick="javascript:' + this.getToggleLink() + '">&nbsp;';
-		if (this.hasChildren(true)) {
-			sb[sb.length] = ' onmouseover="this.className=';
-			sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
-			sb[sb.length] = this.tree.id + '\',' + this.index +  ').getHoverStyle()"';
-			sb[sb.length] = ' onmouseout="this.className=';
-			sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
-			sb[sb.length] = this.tree.id + '\',' + this.index +  ').getStyle()"';
-		}
-		sb[sb.length] = '</td>';
-	}
+    if (this.hasIcon) {
+        sb[sb.length] = '<td';
+        sb[sb.length] = ' id="' + this.getToggleElId() + '"';
+        sb[sb.length] = ' class="' + this.getStyle() + '"';
+        sb[sb.length] = ' onclick="javascript:' + this.getToggleLink() + '"';
+        if (this.hasChildren(true)) {
+            sb[sb.length] = ' onmouseover="this.className=';
+            sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
+            sb[sb.length] = this.tree.id + '\',' + this.index +  ').getHoverStyle()"';
+            sb[sb.length] = ' onmouseout="this.className=';
+            sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
+            sb[sb.length] = this.tree.id + '\',' + this.index +  ').getStyle()"';
+        }
+        sb[sb.length] = '>&nbsp;</td>';
+    }
 
-	sb[sb.length] = '<td';
-	sb[sb.length] = ' id="' + this.contentElId + '"';
-	sb[sb.length] = ' class="' + this.contentStyle + '"';
-	sb[sb.length] = ' >';
-	sb[sb.length] = this.html;
-	sb[sb.length] = '</td>';
-	sb[sb.length] = '</tr>';
-	sb[sb.length] = '</table>';
+    sb[sb.length] = '<td';
+    sb[sb.length] = ' id="' + this.contentElId + '"';
+    sb[sb.length] = ' class="' + this.contentStyle + '"';
+    sb[sb.length] = ' >';
+    sb[sb.length] = this.html;
+    sb[sb.length] = '</td>';
+    sb[sb.length] = '</tr>';
+    sb[sb.length] = '</table>';
 
-	return sb.join("");
+    return sb.join("");
 };
 
 /* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */

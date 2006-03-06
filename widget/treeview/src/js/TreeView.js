@@ -222,11 +222,13 @@ YAHOO.widget.TreeView.prototype = {
      * Configures this tree to dynamically load all child data
      *
      * @param {function} fnDataLoader the function that will be called to get the data
+     * @param iconMode {int} configures the icon that is displayed when a dynamic
+     * load node is expanded the first time without children.  By default, the 
+     * "collapse" icon will be used.  If set to 1, the leaf node icon will be
+     * displayed.
      */
-    setDynamicLoad: function(fnDataLoader) { 
-        // this.root.dataLoader = fnDataLoader;
-        // this.root._dynLoad = true;
-        this.root.setDynamicLoad(fnDataLoader);
+    setDynamicLoad: function(fnDataLoader, iconMode) { 
+        this.root.setDynamicLoad(fnDataLoader, iconMode);
     },
 
     /**
