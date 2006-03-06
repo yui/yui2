@@ -73,7 +73,7 @@ YAHOO.widget.Menu.prototype.parent = null;
 
 
 /**
-* Returns the active MenuItem instance.
+* Returns a pointer to the MenuItem instance that has focus.
 * @type {YAHOO.widget.MenuItem}
 */
 YAHOO.widget.Menu.prototype.activeMenuItem = null;
@@ -209,6 +209,42 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
 
     // Private methods
+
+    /**
+    * Determines if an object is a string
+    * @member YAHOO.widget.Menu
+    * @private
+    * @param {Object} p_oObject The object to be evaluated.
+    * @return Returns true if the object is a string.
+    * @type Boolean
+    */
+    var checkString = function(p_oObject) {
+
+        return (typeof p_oObject == "string");
+
+    };
+
+
+    /**
+    * Determines if the value is one of the supported positions.
+    * @member YAHOO.widget.Menu
+    * @private
+    * @param {Object} p_sPosition The object to be evaluated.
+    * @return Returns true if the position is supported.
+    * @type Boolean
+    */
+    var checkPosition = function(p_sPosition) {
+
+        if(checkString(p_sPosition)) {
+
+            var sPosition = p_sPosition.toLowerCase();
+
+            return ("absolute,relative,static".indexOf(sPosition) != -1);
+
+        }
+
+    };
+
 
     /**
     * Adds an item to an array.  Used to manage a Menu's collection of  
@@ -729,23 +765,58 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the event 
     * was fired.
-    * @param {YAHOO.widget.Menu} p_oMenu The parent Menu instance for the 
-    * MenuItem that fired the event.
+    * @param {YAHOO.widget.MenuItem} p_oMenuItem The MenuItem instance
+    * that fired the event.
     */
     var onMenuItemFocus = function(p_sType, p_aArguments, p_oMenuItem) {
-    
-        if(this.parent && this.parent._Menu) {
 
-            this.parent.activeMenuItem = p_oMenuItem;
-            m_oMenuManager.activeMenu = this.parent;
+        if(me.parent && me.parent._Menu) {
+
+            me.parent.activeMenuItem = p_oMenuItem;
+            m_oMenuManager.activeMenu = me.parent;
         
         }
         else {
 
-            this.activeMenuItem = p_oMenuItem;
-            m_oMenuManager.activeMenu = this;
+            me.activeMenuItem = p_oMenuItem;
+            m_oMenuManager.activeMenu = me;
 
         }    
+
+    };
+
+
+    /**
+    * "blur" YAHOO.util.CustomEvent handler for the Menu's
+    * MenuItem instance(s).
+    * @member YAHOO.widget.Menu
+    * @private
+    * @param {String} p_sType The name of the event that was fired.
+    * @param {Array} p_aArguments Collection of arguments sent when the event 
+    * was fired.
+    * @param {YAHOO.widget.MenuItem} p_oMenuItem The MenuItem instance 
+    * that fired the event.
+    */
+    var onMenuItemBlur = function(p_sType, p_aArguments, p_oMenuItem) {
+
+        var oSubMenu = p_oMenuItem.cfg.getProperty("submenu");
+
+        if(!oSubMenu || (oSubMenu && !oSubMenu.cfg.getProperty("visible"))) {
+
+            if(me.parent && me.parent._Menu) {
+    
+                me.parent.activeMenuItem = null;
+                m_oMenuManager.activeMenu = null;
+            
+            }
+            else {
+    
+                me.activeMenuItem = null;
+                m_oMenuManager.activeMenu = null;
+    
+            }            
+
+        }
 
     };
 
@@ -770,7 +841,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             case "text":
             case "helptext":
 
-                this.cfg.refireEvent("width");
+                me.cfg.refireEvent("width");
 
             break;
 
@@ -792,16 +863,12 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         if(p_oMenuItem && p_oMenuItem._MenuItem) {
 
-            p_oMenuItem.focusEvent.subscribe(
-                onMenuItemFocus, 
-                p_oMenuItem,
-                true
-            );
+            p_oMenuItem.focusEvent.subscribe(onMenuItemFocus, p_oMenuItem);
+            p_oMenuItem.blurEvent.subscribe(onMenuItemBlur, p_oMenuItem);
 
             p_oMenuItem.cfg.configChangedEvent.subscribe(
                 onMenuItemConfigChange,
-                p_oMenuItem, 
-                true
+                p_oMenuItem
             );
 
             addArrayItem(m_aMenuItems, p_oMenuItem, p_nIndex);
@@ -928,7 +995,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
             if(p_oObject._Menu) {
 
-                oMenu = removeArrayItemByValue(m_aSubMenus, p_oObject);           
+                oMenu = removeArrayItemByValue(m_aSubMenus, p_oObject);
 
             }
             else if(typeof p_oObject == "number") {
@@ -990,25 +1057,52 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
         if(m_aMenuItems.length > 0) {            
     
-            var nMenuItems = m_aMenuItems.length,
-                oMenuItem,
-                oSubMenu;
-    
-            for(var i=0; i<nMenuItems; i++) {
-    
-                oMenuItem = m_aMenuItems[i];
-                
-                m_oListElement.appendChild(oMenuItem.element);
+            var nMenuItems = m_aMenuItems.length;
 
-                oSubMenu = oMenuItem.cfg.getProperty("submenu");
+            for(var i=0; i<nMenuItems; i++) {
+
+                m_oListElement.appendChild(m_aMenuItems[i].element);
+    
+            }
+
+
+            if(m_sBrowser == "opera") {
+
+                var oUL = m_oListElement.cloneNode(true),
+                    oDIV = document.createElement("div"),
+                    oBody = oDIV.cloneNode(false);
+    
+                oDIV.className = this.CSS_CLASS_NAME;
+                oBody.className = "bd";
+    
+                oBody.appendChild(oUL);
+                oDIV.appendChild(oBody);
+                    
+                document.body.appendChild(oDIV);
+    
+                var sWidth = oUL.offsetWidth + "px";
+                m_oListElement.style.width = sWidth;
+    
+                document.body.removeChild(oDIV);
+
+            }
+
+
+            var i = m_aMenuItems.length - 1, 
+                oSubMenu;
+
+            do {
+
+                oSubMenu = m_aMenuItems[i].cfg.getProperty("submenu");
 
                 if(oSubMenu) {
 
-                    oSubMenu.render();
+                    oSubMenu.render(m_aMenuItems[i].element);
 
                 }
     
             }
+            while(i--);
     
         }
     
@@ -1029,7 +1123,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
                 this.appendToBody(m_aSubMenus[i].element);
 
-                m_aSubMenus[i].render();
+                m_aSubMenus[i].render(this.body);
 
             }
     
@@ -1062,8 +1156,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         if(m_aMenuItems.length > 0 && !m_oListElement) {
         
             var oUL = document.createElement("ul");
-            this.element.appendChild(oUL);
-        
+       
             this.setBody(oUL);
 
             m_oListElement = oUL;
@@ -1075,7 +1168,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             Determine whether to hide or destory the source element
         */ 
 
-        if(this.srcElement) {
+        if(this.srcElement && this.srcElement.tagName != "DIV") {
 
             if(p_bHideSourceElement) {
     
@@ -1083,7 +1176,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
             }
             else {
-    
+
                 var oParentNode = this.srcElement.parentNode;
                 oParentNode.removeChild(this.srcElement);
     
@@ -1106,7 +1199,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 	/**
 	* Keeps the Menu in the viewport.
     * @member YAHOO.widget.Menu
-    * @see YAHOO.widget.Overlay#initDefaultConfig
+    * @see YAHOO.widget.Overlay#enforceConstraints
 	*/
     this.enforceConstraints = function(type, args, obj) {
     
@@ -1190,10 +1283,72 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         this.cfg.addProperty("initsubmenus", true);
 
+        this.cfg.addProperty(
+            "position", 
+            "absolute", 
+            this.configPosition, 
+            checkPosition, 
+            this.element
+        );
+
     };
 
 
     // Event handlers for configuration properties
+
+
+	/**
+	* Event handler for when the "position" configuration property of a
+    * Menu changes.
+    * @member YAHOO.widget.Menu
+    * @param {String} p_sType The name of the event that was fired.
+    * @param {Array} p_aArguments Collection of arguments sent when the event 
+    * was fired.
+    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance fired the event.
+    * @see YAHOO.widget.Overlay#configIframe
+	*/
+    this.configPosition = function(p_sType, p_aArguments, p_oMenu) {
+
+        var sPosition = p_aArguments[0];
+
+        if(sPosition) {
+
+            m_oDom.setStyle(this.element, "position", sPosition);
+
+        }
+
+    };
+
+
+	/**
+	* Event handler for when the "iframe" configuration property of a
+    * Menu changes.
+    * @member YAHOO.widget.Menu
+    * @param {String} p_sType The name of the event that was fired.
+    * @param {Array} p_aArguments Collection of arguments sent when the event 
+    * was fired.
+    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance fired the event.
+    * @see YAHOO.widget.Overlay#configIframe
+	*/
+    this.configIframe = function(p_sType, p_aArguments, p_oMenu) {
+
+        YAHOO.widget.Menu.superclass.configIframe.call(
+            this, 
+            p_sType, 
+            p_aArguments, 
+            p_oMenu
+        );
+
+        var sPosition = m_oDom.getStyle(this.element, "position");
+
+		if(this.iframe && (sPosition == "static" || sPosition == "relative")) {
+
+			this.iframe.style.display = "none";
+
+		}
+
+    };
+
 
 	/**
 	* Event handler for when the "constraintoviewport" configuration
@@ -1273,22 +1428,55 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     * @param {Array} p_aArguments Collection of arguments sent when the event 
     * was fired.
     * @param {YAHOO.widget.Menu} p_oMenu The Menu instance fired the event.
-    * @see YAHOO.widget.Overlay#configVisible
+    * @see YAHOO.widget.Overlay#configWidth
 	*/
     this.configWidth = function(p_sType, p_aArguments, p_oMenu) {
 
-        if(this.parent) {
+        if(this.parent && !this.parent._Menu) {
+
+            // Reset the width of the object
+            m_oDom.setStyle(this.element, "width", "auto");
 
             var oMenuElementClone = this.element.cloneNode(true);
             document.body.appendChild(oMenuElementClone);
+    
+            var nBorderWidth = 
+                parseInt(
+                    m_oDom.getStyle(oMenuElementClone, "borderLeftWidth"), 
+                    10
+                );
 
-            m_oDom.setStyle(
-                oMenuElementClone, 
-                "width", 
-                (m_sBrowser == "opera" ? "auto" : "")
-            );
+            nBorderWidth += 
+                parseInt(
+                    m_oDom.getStyle(oMenuElementClone, "borderRightWidth"), 
+                    10
+                );
 
-            var sWidth = m_oDom.getStyle(oMenuElementClone, "width");
+            var nPadding = 
+                parseInt(
+                    m_oDom.getStyle(oMenuElementClone, "paddingLeft"), 
+                    10
+                );
+
+            nPadding += 
+                parseInt(
+                    m_oDom.getStyle(oMenuElementClone, "paddingRight"), 
+                    10
+                );
+    
+
+            var nWidth = oMenuElementClone.offsetWidth;
+
+            if(
+                document.compatMode && 
+                document.compatMode == "CSS1Compat"
+            ) {
+
+                nWidth = nWidth - (nBorderWidth + nPadding);
+
+            }
+
+            var sWidth = nWidth + "px";
 
             document.body.removeChild(oMenuElementClone);
 
@@ -1300,7 +1488,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             p_aArguments[0] = m_oDom.getStyle(this.element, "width");
 
         }
-   
 
         // Continue with the superclass implementation of this method
 
@@ -1331,7 +1518,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         if (bVisible) {
 
             this.cfg.refireEvent("width");
-
 
             // Continue with the superclass implementation of this method
     
@@ -1437,24 +1623,28 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                     // Get the list node (UL) if it exists
     
                     if(
-                        this.element.firstChild && 
-                        this.element.firstChild.nodeType == 1 && 
-                        this.element.firstChild.tagName == "UL"
+                        this.body.firstChild && 
+                        this.body.firstChild.nodeType == 1 && 
+                        this.body.firstChild.tagName == "UL"
                     ) {
     
-                        m_oListElement = this.element.firstChild;
+                        m_oListElement = this.body.firstChild;
     
                     }
                     else if(
-                        this.element.childNodes[1] && 
-                        this.element.childNodes[1].nodeType == 1 &&
-                        this.element.childNodes[1].tagName == "UL"
+                        this.body.childNodes[1] && 
+                        this.body.childNodes[1].nodeType == 1 &&
+                        this.body.childNodes[1].tagName == "UL"
                     ) {
     
-                        m_oListElement = this.element.childNodes[1];
+                        m_oListElement = this.body.childNodes[1];
     
                     }
-    
+
+                    var sPosition = m_oDom.getStyle(this.element, "position");
+
+                    this.cfg.setProperty("position", sPosition, true);
+
                 }
     
             break;
@@ -1599,7 +1789,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
 
         m_oMenuManager.addMenu(this);
-
 
         if(p_oUserConfig) {
     

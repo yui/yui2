@@ -3,7 +3,7 @@
 * instance that is created.
 * @constructor
 */
-YAHOO.widget.MenuManager = function () {
+YAHOO.widget.MenuManager = function() {
 
     /**
     * Collection of Menu instances.
@@ -168,8 +168,6 @@ YAHOO.widget.MenuManager = function () {
         if(p_oMenu) {
 
             addItem(m_oVisibleMenus, p_oMenu);
-
-            me.activeMenu = p_oMenu;
             
         }
 
@@ -191,9 +189,37 @@ YAHOO.widget.MenuManager = function () {
 
     };
 
+    /**
+    * "configvisible" YAHOO.util.CustomEvent handler for the Menu's "visible" 
+    * configuration property.
+    * @member YAHOO.widget.MenuManager
+    * @private
+    * @param {String} p_sType The name of the event that was fired.
+    * @param {Array} p_aArguments Collection of arguments sent when the 
+    * event was fired.
+    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
+    */
+    var onMenuConfigVisible = function(p_sType, p_aArguments, p_oMenu) {
+
+        var bVisible = p_aArguments[0];
+
+        if(bVisible) {
+
+            addItem(m_oVisibleMenus, p_oMenu);
+
+        }
+        else {
+
+            removeItem(m_oVisibleMenus, p_oMenu);
+
+        }
+
+    };
+
 
     /**
-    * Returns the currently active Menu.
+    * Returns the currently active Menu.  A Menu instance becomes active 
+    * when one of it's MenuItem instances recieves focus.
     * @member YAHOO.widget.MenuManager
     * @type {YAHOO.widget.Menu}
     */
@@ -230,7 +256,11 @@ YAHOO.widget.MenuManager = function () {
                 p_oMenu.showEvent.subscribe(onMenuShow, p_oMenu);
                 p_oMenu.hideEvent.subscribe(onMenuHide, p_oMenu);
 
-                me.activeMenu = p_oMenu;
+                p_oMenu.cfg.subscribeToConfigEvent(
+                    "visible", 
+                    onMenuConfigVisible, 
+                    p_oMenu
+                );
 
             }
 

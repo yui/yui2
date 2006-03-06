@@ -34,7 +34,7 @@ YAHOO.widget.MenuItem.prototype = {
     * @type String
     */
     SUBMENU_INDICATOR_IMAGE_URL: 
-        "http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/alt1/menuarorght9_nrm_1.gif",
+        "../src/img/menuarorght9_nrm_1.gif",
 
 
     /**
@@ -44,7 +44,7 @@ YAHOO.widget.MenuItem.prototype = {
     * @type String
     */
     FOCUSED_SUBMENU_INDICATOR_IMAGE_URL: 
-        "http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/alt1/menuarorght9_hov_1.gif",
+        "../src/img/menuarorght9_hov_1.gif",
 
 
     /**
@@ -54,7 +54,7 @@ YAHOO.widget.MenuItem.prototype = {
     * @type String
     */
     DISABLED_SUBMENU_INDICATOR_IMAGE_URL: 
-        "http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/alt1/menuarorght9_dim_1.gif",
+        "../src/img/menuarorght9_dim_1.gif",
 
 
     /**
@@ -540,7 +540,7 @@ YAHOO.widget.MenuItem.prototype = {
     
             var aChildNodes = me.srcElement.childNodes,
                 nChildNodes = aChildNodes.length,
-                MenuManager = YAHOO.widget.MenuManager,
+                oMenuManager = YAHOO.widget.MenuManager,
                 Menu = YAHOO.widget.Menu,
                 MenuItem = YAHOO.widget.MenuItem;
     
@@ -591,7 +591,7 @@ YAHOO.widget.MenuItem.prototype = {
         
                     me.cfg.setProperty(
                         "submenu", 
-                        (new Menu(MenuManager.createMenuId()))
+                        (new Menu(oMenuManager.createMenuId()))
                     );
     
                     var nOptions = aOptions.length;
@@ -609,7 +609,7 @@ YAHOO.widget.MenuItem.prototype = {
         
                     if(aULs.length > 1) {
     
-                        var oMenu = new Menu(MenuManager.createMenuId()),
+                        var oMenu = new Menu(oMenuManager.createMenuId()),
                             nULs = aULs.length;
             
                         for(var n=0; n<nULs; n++) {
@@ -682,7 +682,6 @@ YAHOO.widget.MenuItem.prototype = {
                 if(bElementMouseOver) {
     
                     this.focus();
-
 
 
                     if(m_oSubMenu) {
@@ -993,9 +992,16 @@ YAHOO.widget.MenuItem.prototype = {
         
                         }
         
+                        if(
+                            oParentMenu.cfg.getProperty("position") == 
+                                "absolute"
+                        ) {
+
+                            oParentMenu.hide();
+
+                        }
+
                         var oMenuItem = oParentMenu.parent;
-        
-                        oParentMenu.hide();
         
                         if(oMenuItem) {
         
@@ -1113,8 +1119,7 @@ YAHOO.widget.MenuItem.prototype = {
             
                     }
             
-                    var oSubMenu = 
-                        oActiveMenuItem.cfg.getProperty("submenu");
+                    var oSubMenu = oActiveMenuItem.cfg.getProperty("submenu");
             
                     if(oSubMenu && oSubMenu.cfg.getProperty("visible")) {
             
@@ -1123,6 +1128,10 @@ YAHOO.widget.MenuItem.prototype = {
                     }
         
                 }
+
+                // Deselect the MenuItem instance since an item should not
+                // have both classes at once
+                this.cfg.setProperty("selected", false);
             
                 m_oDom.addClass(this.element, "focus");
                 m_oDom.addClass(m_oAnchor, "focus");
@@ -1612,11 +1621,8 @@ YAHOO.widget.MenuItem.prototype = {
 
                 m_oSubMenu = oMenu;
 
-                if(!m_oSubMenu.element.parentNode) {
-
-                    this.element.appendChild(m_oSubMenu.element);
-
-                }
+                m_oDom.addClass(this.element, "hassubmenu");
+                m_oDom.addClass(m_oAnchor, "hassubmenu");
 
                 if(!m_oSubMenuIndicatorIMG) { 
 
@@ -1644,8 +1650,11 @@ YAHOO.widget.MenuItem.prototype = {
 
                 }
 
-                m_oDom.addClass(this.element, "hassubmenu");
-                m_oDom.addClass(m_oAnchor, "hassubmenu");
+                if(!m_oSubMenu.element.parentNode) {
+
+                    this.element.appendChild(m_oSubMenu.element);
+
+                }
 
             }
             else {
