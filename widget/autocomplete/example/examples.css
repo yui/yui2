@@ -1,0 +1,13 @@
+    h1 {font-size:144%;}
+    h2 {font-size:129%;}
+    h3 {font-size:114%;}
+    h4 {font-size:100%;}
+    body {margin:1em;}
+    ul {width:80%;}
+    dl {padding:1em;}
+    
+    #ylogo {top:10px;left:10px;}
+    #title {position:absolute;top:10px;left:90px;}
+    #bd h1,h2,h3,p{margin:1em;}
+    #logger {position:relative;background:#ddd;border:1px solid #000;float:right;margin:1em;width:30em;height:50em;overflow:auto;padding:.5em;}
+    #panel {width:33%;background:#DEDEDE;border:1px solid #000;margin:1em;padding:1em;}

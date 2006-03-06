@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>AutoComplete Widget :: Customizable Example</title>
+<link rel="stylesheet" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/reset_0.9.0.css" type="text/css" />
+<link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/fonts_0.9.1.css" />
+<link rel="stylesheet" type="text/css" href="./examples.css" />
+    
+<style type="text/css">
+    #statesdiv {position:relative;width:15em;margin:1em;} /* set width of widget here*/
+    #statesinput {position:relative;width:100%;height:1.2em;}
+    #statescontainer {position:relative;bottom:4px;right:4px;width:100%;border:1px solid #404040;background:#fff;font-size:85%;overflow:hidden;display:none;}
+    #statescontainer ul {position:relative;width:100%;padding:5px 0;list-style:none;}
+    #statescontainer li {padding:0 5px;cursor:default;white-space:nowrap;display:block;}
+    #statescontainer li.highlight {background:#ff0;}
+    #statesshadow {position:absolute;width:100%;margin:.3em;z-index:5;background:#a0a0a0;}
+</style>
+</head>
+
+<body>
+<div id="hd">
+    <div id="ylogo"><img src="./logo.gif" width="65" height="38" alt="Y!" /></div>
+    <div id="title"><h1><a href="./">AutoComplete Widget</a> :: JS Function States</h1></div>
+</div>
+
+<div id="bd">
+    <!-- Logger begins -->
+    <div id="logger">
+    <p>Welcome to AutoComplete.</p>
+    </div>
+    <!-- Logger ends -->
+
+    <!-- Content begins -->
+    <h3>DataSource</h3>
+    <p>This DataSource instance points to an in-memory JavaScript function that
+    results in an array. The function queries against an in-memory object
+    literal of data that holds the 50 US states and their corresponding postal
+    abbreviations.</p>
+
+    <h3>AutoComplete</h3>
+    <p>Since the DataSource for this example is already loaded into memory,
+    queries should be very fast to return data. Therefore, the AutoComplete
+    instance is configured to have a query delay of zero seconds. The
+    AutoComplete instance is also configured to display two data fields in its
+    container: the state and its corresponding postal abbreviation.</p>
+
+    <!-- AutoComplete begins -->
+    <div id="statesdiv">
+        <form onsubmit="return false;">
+        <h4>Find a state:</h4>
+        <input id="statesinput" type="text">
+        <div id="statesshadow"><div id="statescontainer"></div></div>
+        <form>
+    </div> 
+    <!-- AutoComplete ends -->
+    
+    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
+    Sed eu enim in neque nonummy suscipit. Sed non metus. Aliquam pretium, massa
+    quis vulputate aliquam, felis enim vehicula nisl, ut pharetra arcu nunc
+    vitae leo. Morbi rhoncus ullamcorper quam. Maecenas vel velit. Praesent
+    ultricies placerat mauris. Nunc posuere aliquam ligula. Nunc mi ligula,
+    rutrum eget, consequat ac, cursus non, tortor. Pellentesque ante metus,
+    mattis pharetra, lobortis in, pulvinar nec, felis. Cras fringilla. Cras
+    consequat. Nullam faucibus. Vivamus tincidunt porttitor leo. Etiam est mi,
+    dictum nec, vehicula id, ultricies ac, nibh. Mauris felis.</p>
+
+    <p>Nulla sit amet mi eu lacus tempus volutpat. Phasellus tincidunt hendrerit
+    quam. Maecenas lorem felis, viverra non, varius ut, ultrices et, mi.
+    Phasellus vehicula nunc eu tellus. Duis rutrum justo eu odio. Ut facilisis
+    nisl at purus. Maecenas turpis neque, adipiscing in, fringilla vitae, congue
+    sed, ipsum. Sed condimentum eros eu leo dignissim ultricies. Pellentesque
+    eros nulla, tempus ut, gravida at, vulputate at, metus. Maecenas enim metus,
+    suscipit eget, commodo vel, euismod ac, leo. Curabitur id nulla. Phasellus
+    euismod mi ut enim. Ut molestie bibendum odio.</p>
+    <!-- Content ends -->
+
+<!-- Libary begins -->
+<script src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/yahoo_2.0.0-b2.js"></script>
+<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/dom_2.0.0-b1.js"></script>
+<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/event_2.0.0-b1.js"></script>
+<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/connection_2.0.0-b1.js"></script>
+<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/animation_2.0.0-b1.js"></script>
+<script src="../src/js/DataSource.js"></script>
+<script src="../src/js/AutoComplete.js"></script>
+<!-- Library ends -->
+
+<!-- In-memory JS dataset begins-->
+<script src="./states_jsfunction.js"></script>
+<!-- In-memory JS dataset ends-->
+
+
+<script>
+<!--
+    function autoCompInit() {
+        // Instantiate data source    
+        oACDS = new YAHOO.widget.DS_JSFunction(getStates);
+        
+        // Instantiate auto complete
+        oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
+        oAutoComp.queryDelay = 0;
+        oAutoComp.formatResult = function(oResultItem, sQuery) {
+            var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";
+            return (sMarkup);
+        };
+                
+        // Subscribe to custom events
+        oACDS.queryEvent.subscribe(myOnQuery);
+        oACDS.cacheQueryEvent.subscribe(myOnCacheQuery);
+        oACDS.getResultsEvent.subscribe(myOnGetResults);
+        oACDS.getCachedResultsEvent.subscribe(myOnGetCachedResults);
+        oACDS.dataErrorEvent.subscribe(myOnDataError);
+        oACDS.dataSourceErrorEvent.subscribe(myOnDataSourceError);
+        oACDS.cacheFlushEvent.subscribe(myOnCacheFlush);
+
+        oAutoComp.textboxFocusEvent.subscribe(myOnTextboxFocus);
+        oAutoComp.textboxBlurEvent.subscribe(myOnTextboxBlur);
+        oAutoComp.textboxUpdateEvent.subscribe(myOnTextboxUpdate);
+        oAutoComp.containerExpandEvent.subscribe(myOnContainerExpand);
+        oAutoComp.containerCollapseEvent.subscribe(myOnContainerCollapse);
+        oAutoComp.itemMouseToEvent.subscribe(myOnItemMouseTo);
+        oAutoComp.itemMouseFromEvent.subscribe(myOnItemMouseFrom);
+        oAutoComp.itemArrowToEvent.subscribe(myOnItemArrowTo);
+        oAutoComp.itemArrowFromEvent.subscribe(myOnItemArrowFrom);
+        oAutoComp.itemSelectEvent.subscribe(myOnItemSelect);
+        oAutoComp.selectionClearEvent.subscribe(myOnSelectionClear);
+        oAutoComp.autoCompleteErrorEvent.subscribe(myOnAutoCompleteError);
+
+        // Define custom event handlers
+        function myOnQuery(sType, aArgs) {
+            var oDataSource = aArgs[0];
+            var oParent = aArgs[1];
+            var sQuery = aArgs[2];
+            doLog("Data source for " + oParent.getName() + " made source query for '" + sQuery + "'.");
+        }
+
+        function myOnCacheQuery(sType, aArgs) {
+            var oDataSource = aArgs[0];
+            var oParent = aArgs[1];
+            var sQuery = aArgs[2];
+            doLog("Data source for " + oParent.getName() + " made cache query for '" + sQuery + "'.");
+        }
+
+        function myOnGetResults(sType, aArgs) {
+            var oDataSource = aArgs[0];
+            var oParent = aArgs[1];
+            var sQuery = aArgs[2];
+            var aResults = aArgs[3];
+            doLog("Data source for " + oParent.getName() + " got " + aResults.length + " results from source.");
+        }
+
+        function myOnGetCachedResults(sType, aArgs) {
+            var oDataSource = aArgs[0];
+            var oParent = aArgs[1];
+            var sQuery = aArgs[2];
+            var aResults = aArgs[3];
+            doLog("Data source for " + oParent.getName() + " got " + aResults.length + " results from cache.");
+        }
+
+        function myOnDataError(sType, aArgs) {
+            var oDataSource = aArgs[0];
+            var oParent = aArgs[1];
+            var sQuery = aArgs[2];
+            var sMessage = aArgs[3];
+            doLog("Data source for " + oParent.getName() + " experienced a data retrieval error: " + sMessage);
+        }
+
+        function myOnDataSourceError(sType, aArgs) {
+            var oDataSource = aArgs[0];
+            var oParent = aArgs[1];
+            var sMessage = aArgs[2];
+            doLog("Data source for " + oParent.getName() + " experienced a data source object error: " + sMessage);
+        }
+
+        function myOnCacheFlush(sType, aArgs) {
+            var oDataSource = aArgs[0];
+            doLog(" cache flush complete.");
+        };
+
+        function myOnTextboxFocus(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            doLog(oAutoComp.getName() + " has been engaged.");
+        };
+
+        function myOnTextboxBlur(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            doLog(oAutoComp.getName() + " has been disengaged.");
+        };
+
+        function myOnTextboxUpdate(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var sResultKey = aArgs[1];
+            doLog(oAutoComp.getName() + " has been updated with '" + sResultKey+"'.");
+        };
+        function myOnContainerExpand(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            doLog(oAutoComp.getName() + " container expanded.");
+        };
+
+        function myOnContainerCollapse(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            doLog(oAutoComp.getName() + " container collapsed.");
+        };
+
+        function myOnItemMouseTo(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var oItem = aArgs[1];
+            doLog(oAutoComp.getName() + " moused to " + oItem.id);
+        }
+
+        function myOnItemMouseFrom(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var oItem = aArgs[1];
+            doLog(oAutoComp.getName() + " moused away from " + oItem.id);
+        }
+
+        function myOnItemArrowTo(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var oItem = aArgs[1];
+            doLog(oAutoComp.getName() + " arrowed to " + oItem.id);
+        }
+
+        function myOnItemArrowFrom(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var oItem = aArgs[1];
+            doLog(oAutoComp.getName() + " arrowed away from " + oItem.id);
+        }
+
+        function myOnItemSelect(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var oItem = aArgs[1];
+            var sMsg = (oItem) ? oItem.id : "a non-query-result";
+            doLog(oAutoComp.getName() + " selected " + sMsg);
+        }
+
+        function myOnSelectionClear(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            doLog(oAutoComp.getName() + " had to clear an invalid selection.");
+        };
+
+        function myOnAutoCompleteError(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            doLog(oAutoComp.getName() + " experienced an error.");
+        }
+    }
+    
+    YAHOO.util.Event.addListener(this,'load',autoCompInit);
+    
+    // Logging
+    var logger = document.getElementById("logger");
+
+    function doLog(string) {
+        var date = new Date();
+        var timestamp = date.getTime();
+        logger.innerHTML = "<p>"+timestamp+" "+string+"</p>"+logger.innerHTML;
+    }
+//-->
+</script>
+</div>
+</body>
+</html>
