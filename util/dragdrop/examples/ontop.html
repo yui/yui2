@@ -1,53 +1,125 @@
-  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Yahoo! UI Library - Drag and Drop</title><link rel="stylesheet" type="text/css" media="screen" href="./css/screen.css"><!--[if IE]><link rel="stylesheet" type="text/css" href="./css/ie.css" /><![endif]--></head>  
-<script type="text/javascript" src="js/YAHOO.js" ></script>
+  <!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<head>
+<title>Yahoo! UI Library - Drag and Drop</title>
+<link rel="stylesheet" type="text/css" href="./css/screen.css">
+</head>
+  
+<body>
+
+<script type="text/javascript" src="js/yahoo.js" ></script>
 <script type="text/javascript" src="js/log.js" ></script>
+<!--
+<script type="text/javascript" src="/Event.dev/src/Event.js" ></script>
+-->
 <script type="text/javascript" src="js/event.js" ></script>
 <script type="text/javascript" src="js/dom-raw.js"></script>
+<script type="text/javascript" src="js/animation-raw.js"></script>
 
 <script type="text/javascript" src="js/dragdrop.js" ></script>
-		<script type="text/javascript" src="js/ygDDOnTop.js" ></script>
-		<script type="text/javascript" src="js/ygDDSwap.js" ></script>
-		<script type="text/javascript" src="js/ygDDMy.js" ></script>
-		<script type="text/javascript" src="js/ygDDMy2.js" ></script>
-		<script type="text/javascript" src="js/ygDDList.js" ></script>
-		<script type="text/javascript" src="js/ygDDPlayer.js" ></script>
+        <script type="text/javascript" src="js/DDOnTop.js" ></script>
+        <script type="text/javascript" src="js/DDSwap.js" ></script>
+        <script type="text/javascript" src="js/DDMy.js" ></script>
+        <script type="text/javascript" src="js/DDMy2.js" ></script>
+        <script type="text/javascript" src="js/DDList.js" ></script>
+        <script type="text/javascript" src="js/DDPlayer.js" ></script>
+        <script type="text/javascript" src="js/DDResize.js" ></script>
 
-	
+    
 <script type="text/javascript" language="JavaScript">
-	var dd, dd2, dd3;
-	function dragDropInit() {
-		if (typeof(ygLogger) != "undefined") {
-			ygLogger.init(document.getElementById("logDiv"));
-            var gLogger = new ygLogger("test_draggable.php");
-		}
 
-		dd = new ygDDOnTop("dragDiv1");
-		dd2 = new ygDDOnTop("dragDiv2");
-		dd3 = new ygDDOnTop("dragDiv3");
-	}
-	
-	YAHOO.util.Event.addListener(window, "load", dragDropInit);
-	
+YAHOO.example.DDApp = function() {
+    var dd, dd2, dd3;
+
+    return {
+        init: function() {
+            if (typeof(ygLogger) != "undefined") {
+                ygLogger.init(document.getElementById("logDiv"));
+                var gLogger = new ygLogger("DDApp");
+            }
+
+            dd = new YAHOO.example.DDOnTop("dragDiv1");
+            dd.addInvalidHandleId("excludeid3");
+            dd.addInvalidHandleClass("excludeclass2");
+
+            dd2 = new YAHOO.example.DDOnTop("dragDiv2");
+            // dd2.setPadding(-10);
+            dd2.setXConstraint(100, 100);
+            dd2.setYConstraint(0, 0);
+
+            dd3 = new YAHOO.example.DDOnTop("dragDiv3");
+        }
+    };
+} ();
+
+YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
+    
 </script>
-<body>
-<div id="pageTitle">
-	<h3>Drag and Drop - DD</h3>
-</div>
+<style type="text/css">
 
+#dragDiv1 {
+    background:url(img/sq1.png) 0 0 no-repeat;
+    background-color:#6D739A;top:240px; left:105px;
+}
+#excludeid1 {
+    position:absolute; top:20px; left:20px;height:20px;width:20px;
+    background-color:#333333;
+}
+#excludeid2 {
+    position:absolute; top:40px; left:40px;height:20px;width:20px;
+    background-color:#333333;
+}
+#excludeid3 {
+    position:absolute; top:60px; left:60px;height:20px;width:20px;
+    background-color:#333333;
+}
+#maskDiv {
+    position: absolute; top:0px; left: 0px; width:100px; height:20px;
+}
 
+#dragDiv2 {
+    background:url(img/sq2.png) 0 0 no-repeat;background-color:#566F4E;
+    top:350px; left:215px;
+}
+
+#dragDiv3 {
+    background:url(img/sq3.png) 0 0 no-repeat;background-color:#7E5B60;
+    top:460px; left:325px;
+}
+
+</style>
+<div id="pageTitle"><h3>Drag and Drop - DD</h3></div>
 
   
-<img src="img/logo.gif" style="position:absolute;top:5px;left:5px" />
+<style type="text/css">
+
+    #logDiv {
+        font-family:Arial, Helvetica, sans-serif;
+        position:relative;overflow:auto;text-align:left;z-index:998;
+        font-size:84%;width:100%;top:0px; height:280px;
+    }
+
+    #logFooter { 
+        font-size:82%;background-color:#cccccc;padding:5px;line-height:14px 
+    }
+
+    #ylogo { 
+        position:absolute;top:5px;left:5px; 
+    }
+
+    #logHeader input {
+        font-size:80%;
+    }
+
+</style>
+
+<img id="ylogo" src="img/logo.gif" />
 
 <div id="container">
-  <div id="containerTop">
-    <div id="header">
-      <h1>
-</h1>
-      <h4>&nbsp;</h4>
-    </div>
-    <div id="main">
-
+<div id="containerTop">
+<div id="header">
+<h4>&nbsp;</h4>
+</div>
+<div id="main">
 
 <div id="rightbar">
 
@@ -64,62 +136,89 @@
 <li><a href="multihandle.html?mode=dist">Multiple Handles</a></li>
 <li><a href="targetable.html?mode=dist">Targetable Affordance</a></li>
 <li><a href="grid.html?mode=dist">Grid</a></li>
+<li><a href="resize.html?mode=dist">Resize Pane</a></li>
 
 </ul>
-
 </div> 
 
 <script type="text/javascript">
-	
-	function toggleygLogger(el) {
-		if (el.value == "Disable Logger") {
-			ygLogger.disable();
-			el.value = "Enable Logger";
-		} else {
-			ygLogger.enable();
-			el.value = "Disable Logger";
-		}
-	}
 
-	// ygLogger.disable();
+YAHOO.example.logApp = function() {
+    var divId;
+    return {
+        toggle: function() {
+            if (this.value == "Disable Logger") {
+                ygLogger.disable();
+                this.value = "Enable Logger";
+            } else {
+                ygLogger.enable();
+                this.value = "Disable Logger";
+            }
+        },
+
+        clear: function() {
+            document.getElementById(divId).innerHTML='';
+        },
+
+        init: function(p_divId, p_toggleElId, p_clearElId) {
+            divId = p_divId
+            YAHOO.util.Event.on(p_toggleElId, "click", this.toggle);
+            YAHOO.util.Event.on(p_clearElId,  "click", this.clear);
+        }
+    };
+} (); 
+
+YAHOO.example.logApp.init("logDiv", "toggleButton", "clearButton");
+
 </script>
 
-
-<h3><input type="button" style="font-size:80%"
-		onclick="javascript:void(toggleygLogger(this))" value="Disable Logger" />&nbsp;
-	<input type="button" style="font-size:80%"
-		onclick="javascript:void(document.getElementById('logDiv').innerHTML='')" value="Clear" />
+<h3 id="logHeader">
+  <input type="button" id="toggleButton" value="Disable Logger" />&nbsp;
+  <input type="button" id="clearButton"  value="Clear" />
 </h3>
-<div id="logDiv" style="font-family:Arial, Helvetica, sans-serif;position:relative;overflow:auto;text-align:left;z-index:998;font-size:84%;width:100%;top:0px; height:280px;"></div>
+<div id="logDiv"></div>
+</div>
+<div id="logFooter">Note: click the Disable Logger button to make the drag operation less choppy</div>
 
 </div>
-<div style="font-size:82%;background-color:#cccccc;padding:5px;line-height:14px">Note: click the Disable Logger button to make the drag operation less choppy</div>
-
-</div>
-
-
-
 
   <div id="content">
     <form name="dragDropForm" action="javscript:;">
-	<div class="newsItem">
-	  <h3>Dragged object is on top</h3>
-	  <p>
-	    This example is identical to the basic drag and drop implementation, 
-		YAHOO.util.DD,
-		but we have extended it so that the square that is being dragged is positioned
-		on top of the others.
-	  </p>
-	  <div id="workArea" style="height:420px">&nbsp;</div>
-	  <p>&nbsp;</p>
-	</div>
-	</form>
+    <div class="newsItem">
+      <h3>Dragged object is on top</h3>
+      <p>
+        This example is identical to the basic drag and drop implementation, 
+        YAHOO.util.DD,
+        but we have extended it so that the square that is being dragged is positioned
+        on top of the others.
+      </p>
+      <div id="workArea">&nbsp;</div>
+      <p>&nbsp;</p>
+    </div>
+    </form>
   </div>
-	
-	
-        <div id="footerContainer">        <div id="footer">          <p>&nbsp;</p>        </div>      </div>    </div>  </div></div>  	<div id="dragDiv1" class="testSquare" style="background:url(img/sq1.png) 0 0 no-repeat;background-color:#6D739A;top:240px; left:105px ">ygDDOnTop</div>
-	<div id="dragDiv2" class="testSquare" style="background:url(img/sq2.png) 0 0 no-repeat;background-color:#566F4E;top:350px; left:215px">ygDDOnTop</div>
-	<div id="dragDiv3" class="testSquare" style="background:url(img/sq3.png) 0 0 no-repeat;background-color:#7E5B60;top:460px; left:325px">ygDDOnTop</div>
+    
+        <div id="footerContainer">
+        <div id="footer">
+          <p>&nbsp;</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div id="dragDiv1" class="testSquare">
+        DDOnTop
+        <div id="excludeid1" class="excludeclass1">&nbsp;</div>
+        <div id="excludeid2" class="excludeclass2">&nbsp;</div>
+        <div id="excludeid3" class="excludeclass1">&nbsp;</div>
+        <div id="maskDiv">&nbsp;</div>
+    </div>
+    <div id="dragDiv2" class="testSquare">
+        <a href="#">DDOnTop</a>
+    </div>
+    <div id="dragDiv3" class="testSquare">DDOnTop</div>
  
-    </body>
-  </html>
+  </body>
+</html>

@@ -80,10 +80,23 @@ YAHOO.util.DragDrop.prototype = {
     handleElId: null, 
 
     /**
-     * An array of HTML tags that will be ignored if clicked.
-     * @type string[]
+     * An associative array of HTML tags that will be ignored if clicked.
+     * @type {string: string}
      */
     invalidHandleTypes: null, 
+
+    /**
+     * An associative array of ids for elements that will be ignored if clicked
+     * @type {string: string}
+     */
+    invalidHandleIds: null, 
+
+    /**
+     * An indexted array of css class names for elements that will be ignored
+     * if clicked.
+     * @type string[]
+     */
+    invalidHandleClasses: null, 
 
     /**
      * The linked element's absolute X position at the time the drag was 
@@ -108,7 +121,7 @@ YAHOO.util.DragDrop.prototype = {
      * related.  Instances only get events when interacting with other 
      * DragDrop object in the same group.  This lets us define multiple 
      * groups using a single DragDrop subclass if we want.
-     * @type string[]
+     * @type {string: string}
      */
     groups: null,
 
@@ -238,6 +251,12 @@ YAHOO.util.DragDrop.prototype = {
     primaryButtonOnly: true,
 
     /**
+     * The availabe property is false until the linked dom element is accessible.
+     * @type boolean
+     */
+    available: false,
+
+    /**
      * Code that executes immediately before the startDrag event
      * @private
      */
@@ -365,6 +384,14 @@ YAHOO.util.DragDrop.prototype = {
      * @param {Event} e
      */
     onMouseUp: function(e) { /* override this */ },
+   
+    /**
+     * Override the onAvailable method to do what is needed after the initial
+     * position was determined.
+     */
+    onAvailable: function () { 
+        this.logger.debug("onAvailable (base)"); 
+    },
 
     /**
      * Returns a reference to the linked element
@@ -433,23 +460,38 @@ YAHOO.util.DragDrop.prototype = {
         this.setDragElId(id); 
 
         // by default, clicked anchors will not start drag operations
-        this.invalidHandleTypes = {a : "a"};
+        this.invalidHandleTypes = {A : "A"};
+        this.invalidHandleIds = {};
+        this.invalidHandleClasses = [];
 
         // We don't want to register this as the handle with the manager
         // so we just set the id rather than calling the setter
         this.handleElId = id;
 
         // cache the position of the element if we can
-        if (document && document.body) {
-            this.setInitPosition();
-        }
+        // if (document && document.body) {
+            // this.setInitPosition();
+        // }
+
+        // var self = this;
+        YAHOO.util.Event.onAvailable(id, this.handleOnAvailable, this, true);
 
         // add to an interaction group
         this.addToGroup((sGroup) ? sGroup : "default");
-
     },
 
     /**
+     * Executed when the linked element is available
+     * @private
+     */
+    handleOnAvailable: function() {
+        this.logger.debug("handleOnAvailable");
+        this.available = true;
+        this.resetConstraints();
+        this.onAvailable();
+    },
+
+     /**
      * Configures the padding for the target zone in px.  Effectively expands
      * (or reduces) the virtual object size for targeting calculations.  
      * Supports css-style shorthand; if only one parameter is passed, all sides
@@ -492,6 +534,9 @@ YAHOO.util.DragDrop.prototype = {
 
         this.lastPageX = p[0];
         this.lastPageY = p[1];
+
+        this.logger.debug(this.id + " inital position: " + this.initPageX + 
+                ", " + this.initPageY);
 
         this.setStartPosition(p);
     },
@@ -593,7 +638,6 @@ YAHOO.util.DragDrop.prototype = {
 
         var EU = YAHOO.util.Event;
 
-        
         var button = e.which || e.button;
         this.logger.debug("button: " + button);
 
@@ -620,7 +664,7 @@ YAHOO.util.DragDrop.prototype = {
         var pt = new YAHOO.util.Point(EU.getPageX(e), EU.getPageY(e));
         if ( this.DDM.isOverTarget(pt, this) )  {
 
-            this.logger.debug("click is legit");
+            this.logger.debug("click is over target");
 
             //  check to see if the handle was clicked
             var srcEl = EU.getTarget(e);
@@ -628,6 +672,8 @@ YAHOO.util.DragDrop.prototype = {
             if (this.isValidHandleChild(srcEl) &&
                     (this.id == this.handleElId || 
                      this.DDM.handleWasClicked(srcEl, this.id)) ) {
+
+                this.logger.debug("click was a valid handle");
 
                 // set the initial element position
                 this.setStartPosition();
@@ -657,13 +703,52 @@ YAHOO.util.DragDrop.prototype = {
     },
 
     /**
+     * Lets you to specify an element id for a child of a drag handle
+     * that should not initiate a drag
+     * @param {string} id the element id of the element you wish to ignore
+     */
+    addInvalidHandleId: function(id) {
+        this.invalidHandleIds[id] = id;
+    },
+
+
+    /**
+     * Lets you specify a css class of elements that will not initiate a drag
+     * @param {string} cssClass the class of the elements you wish to ignore
+     */
+    addInvalidHandleClass: function(cssClass) {
+        this.invalidHandleClasses.push(cssClass);
+    },
+
+    /**
      * Unsets an excluded tag name set by addInvalidHandleType
      * 
      * @param {string} tagName the type of element to unexclude
      */
     removeInvalidHandleType: function(tagName) {
         var type = tagName.toUpperCase();
-        this.invalidHandleTypes[type] = null;
+        // this.invalidHandleTypes[type] = null;
+        delete this.invalidHandleTypes[type];
+    },
+    
+    /**
+     * Unsets an invalid handle id
+     * @param {string} the id of the element to re-enable
+     */
+    removeInvalidHandleId: function(id) {
+        delete this.invalidHandleIds[id];
+    },
+
+    /**
+     * Unsets an invalid css class
+     * @param {string} the class of the element(s) you wish to re-enable
+     */
+    removeInvalidHandleClass: function(cssClass) {
+        for (var i=0; i < this.invalidHandleClasses.length; ++i) {
+            if (this.invalidHandleClasses[i] == cssClass) {
+                delete this.invalidHandleClasses[i];
+            }
+        }
     },
 
     /**
@@ -673,14 +758,28 @@ YAHOO.util.DragDrop.prototype = {
      * @return {boolean} true if this is a valid tag type, false if not
      */
     isValidHandleChild: function(node) {
-        var type = node.nodeName;
+        // var type = node.nodeName;
 
-        if (type == "#text") {
-            // this.logger.debug("text node, getting parent node type");
-            type = node.parentNode.nodeName;
+        // if (type == "#text") {
+            // // this.logger.debug("text node, getting parent node type");
+            // type = node.parentNode.nodeName;
+        // }
+
+        var valid = true;
+        var n = (node.nodeName == "#text") ? node.parentNode : node;
+        valid = valid && !this.invalidHandleTypes[n.nodeName];
+        valid = valid && !this.invalidHandleIds[n.id];
+
+        for (var i=0; valid && i < this.invalidHandleClasses.length; ++i) {
+            valid = !YAHOO.util.Dom.hasClass(n, this.invalidHandleClasses[i]);
         }
 
-        return (!this.invalidHandleTypes[type]);
+        this.logger.debug("Valid handle? ... " + valid);
+
+        return valid;
+
+        //return ( !(this.invalidHandleTypes[n.nodeName] || 
+                    //this.invalidHandleIds[n.id]) );
     },
 
     /**
@@ -802,19 +901,24 @@ YAHOO.util.DragDrop.prototype = {
      */
     resetConstraints: function() {
 
-        this.logger.debug("init pagexy: " + this.initPageX + ", " + 
-        this.initPageY);
-        this.logger.debug("last pagexy: " + this.lastPageX + ", " + 
-        this.lastPageY);
+        this.logger.debug("resetConstraints");
 
-        // figure out how much this thing has moved
-        var dx = (this.maintainOffset) ? this.lastPageX - this.initPageX : 0;
-        var dy = (this.maintainOffset) ? this.lastPageY - this.initPageY : 0;
+        // Maintain offsets if necessary
+        if (this.initPageX || this.initPageX === 0) {
+            this.logger.debug("init pagexy: " + this.initPageX + ", " + 
+                               this.initPageY);
+            this.logger.debug("last pagexy: " + this.lastPageX + ", " + 
+                               this.lastPageY);
+            // figure out how much this thing has moved
+            var dx = (this.maintainOffset) ? this.lastPageX - this.initPageX : 0;
+            var dy = (this.maintainOffset) ? this.lastPageY - this.initPageY : 0;
 
-        // this.logger.debug("diff: " + dx + ", " + dy);
+            this.setInitPosition(dx, dy);
 
-        // reset the initial location
-        this.setInitPosition(dx, dy);
+        // This is the first time we have detected the element's position
+        } else {
+            this.setInitPosition();
+        }
 
         if (this.constrainX) {
             this.setXConstraint( this.leftConstraint, 

@@ -1,109 +1,85 @@
-  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Yahoo! UI Library - Drag and Drop</title><link rel="stylesheet" type="text/css" media="screen" href="./css/screen.css"><!--[if IE]><link rel="stylesheet" type="text/css" href="./css/ie.css" /><![endif]--></head>
+<!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<head>
+<title>Yahoo! UI Library - Drag and Drop</title>
+<link rel="stylesheet" type="text/css" href="./css/screen.css">
+</head>
 
 <body>
 
-<script type="text/javascript" language="JavaScript">
-    window.TEST = "a test";
-</script>
-
-  <iframe name='prpanel' src='http://speed.pointroll.com/PointRoll/Media/banners/tran1x1.gif' frameborder='no' marginheight=0 marginwidth=0 style='height:0;width:0'></iframe>
-
-<script type="text/javascript" src="js/YAHOO.js" ></script>
+<script type="text/javascript" src="js/yahoo.js" ></script>
 <script type="text/javascript" src="js/log.js" ></script>
+<!--
+<script type="text/javascript" src="/Event.dev/src/Event.js" ></script>
+-->
 <script type="text/javascript" src="js/event.js" ></script>
 <script type="text/javascript" src="js/dom-raw.js"></script>
+<script type="text/javascript" src="js/animation-raw.js"></script>
 
 <script type="text/javascript" src="js/dragdrop.js" ></script>
-		<script type="text/javascript" src="js/ygDDOnTop.js" ></script>
-		<script type="text/javascript" src="js/ygDDSwap.js" ></script>
-		<script type="text/javascript" src="js/ygDDMy.js" ></script>
-		<script type="text/javascript" src="js/ygDDMy2.js" ></script>
-		<script type="text/javascript" src="js/ygDDList.js" ></script>
-		<script type="text/javascript" src="js/ygDDPlayer.js" ></script>
+        <script type="text/javascript" src="js/DDOnTop.js" ></script>
+        <script type="text/javascript" src="js/DDSwap.js" ></script>
+        <script type="text/javascript" src="js/DDMy.js" ></script>
+        <script type="text/javascript" src="js/DDMy2.js" ></script>
+        <script type="text/javascript" src="js/DDList.js" ></script>
+        <script type="text/javascript" src="js/DDPlayer.js" ></script>
+        <script type="text/javascript" src="js/DDResize.js" ></script>
 
-	
+    
 <script type="text/javascript" language="JavaScript">
 
-    // alert( window.addEventListener );
-    //window.onload = windowonload;
-    // window.addEventListener("load", windowonload, false);
-    // YAHOO.util.Event.on(window, "load", windowonload);
-    
-    function prRoll() {
-        gLogger.debug("prRoll");
+YAHOO.example.DDApp = function() {
+    var logger = new ygLogger("DDApp");
+    var dd, dd2, dd3;
+
+    function handleKeypress(e) {
+        alert("asdf");
+        logger.debug("keypress");
+        YAHOO.util.Event.stopEvent(e);
+        e.cancel = true;
+        return false;
     }
 
-    
+    function initPointMode() {
 
-    function windowonload() {
-        alert("windowonload");
-        gLogger.debug("trying to output window test");
-        gLogger.debug(window.TEST);
+        logger.debug("point mode");
+
+        unreg();
+
+        YAHOO.util.DDM.mode = YAHOO.util.DDM.POINT;
+
+        dd = new YAHOO.example.DDSwap("dragDiv1");
+        // dd.setPadding(10);
+
+        dd2 = new YAHOO.example.DDSwap("dragDiv2");
+        dd2.addInvalidHandleType("input");
+        // dd2.setPadding(10, 20, 30, 40);
+
+        dd3 = new YAHOO.example.DDSwap("dragDiv3");
+        // dd3.setPadding(10, 40);
+        // dd3.setPadding(10, 0, 20, 40);
+
+
     }
 
+    function initIntersectMode() {
 
-    // document.captureEvents(Event.MOUSEMOVE);
-    // document.onmousemove=prRoll;
+        logger.debug("intersect mode");
 
-/*
+        unreg();
 
-    // prototype.js compat test
+        YAHOO.util.DDM.mode = YAHOO.util.DDM.INTERSECT;
 
-    var Foo = function(prop) {
-        this.prop = prop;
-    };
+        dd = new YAHOO.example.DDSwap_i("dragDiv1");
+        //dd.setPadding(10);
 
-    Foo.prototype.getProp = function() {
-        return this.prop;
-    };
+        dd2 = new YAHOO.example.DDSwap_i("dragDiv2");
+        dd2.addInvalidHandleType("input");
+        //dd2.setPadding(10, 20, 30, 40);
 
-    var foos = [];
-    foos["a"] = new Foo("a");
-    foos["b"] = new Foo("b");
-    foos["c"] = new Foo("c");
-
-    // works without prototype.js, but causes a js error if prototype.js is included
-    for (var i in foos) {
-        alert(foos[i].getProp());
+        dd3 = new YAHOO.example.DDSwap_i("dragDiv3");
+        // dd3.setPadding(10, 40);
+        //dd3.setPadding(10, 0, 20, 40);
     }
-
-    // always works
-    for (var i in foos) {
-        var foo = foos[i];
-        if (foo && foo.getProp) {
-            alert(foo.getProp());
-        }
-    }
-*/
-
-	var gLogger = new ygLogger("test_draggable.php");
-	var dd, dd2, dd3;
-	function dragDropInit() {
-
-    // alert(document.body.runtimeStyle)
-		if (typeof(ygLogger) != "undefined") {
-			ygLogger.init(document.getElementById("logDiv"));
-		}
-
-        YAHOO.util.Event.on("testtext", "keydown", handleKeypress);
-        initPointMode();
-	}
-
-	function testGetElement() {
-		var testobj = document.getElementById("nonexistingelementid");
-		gLogger.debug(testobj);
-	}
-
-    function lock() { 
-        dd.lock(); 
-		dd2.setXConstraint(100, 100);
-		dd2.setYConstraint(100, 100);
-    }
-
-    function unlock() { dd.unlock(); }
-	
-
-	YAHOO.util.Event.addListener(window, "load", dragDropInit);
 
     function unreg() {
         if (dd) dd.unreg();
@@ -111,74 +87,39 @@
         if (dd3) dd3.unreg();
     }
 
-    function changeMode(val) {
-        if (val == 1) {
-            initIntersectMode();
-        } else {
+    return {
+        init: function() {
+
+            if (typeof(ygLogger) != "undefined") {
+                ygLogger.init(document.getElementById("logDiv"));
+            }
+
+            YAHOO.util.Event.on("testtext", "keydown", handleKeypress);
             initPointMode();
+        },
+
+        lock: function() { 
+            dd.lock(); 
+            dd2.setXConstraint(100, 100);
+            dd2.setYConstraint(100, 100);
+        },
+
+        unlock: function() { 
+                    dd.unlock(); 
+        },
+        changeMode: function(val) {
+            if (val == 1) {
+                initIntersectMode();
+            } else {
+                initPointMode();
+            }
         }
-    }
 
-    function initPointMode() {
-
-        gLogger.debug("point mode");
-
-        unreg();
-
-        YAHOO.util.DDM.mode = YAHOO.util.DDM.POINT;
-
-		dd = new ygDDSwap("dragDiv1");
-		// dd.setPadding(10);
-
-		dd2 = new ygDDSwap("dragDiv2");
-		dd2.addInvalidHandleType("input");
-		// dd2.setPadding(10, 20, 30, 40);
-
-		dd3 = new ygDDSwap("dragDiv3");
-		// dd3.setPadding(10, 40);
-		// dd3.setPadding(10, 0, 20, 40);
+    };
+}();
 
 
-    }
-
-    function initIntersectMode() {
-
-        gLogger.debug("intersect mode");
-
-        unreg();
-
-        YAHOO.util.DDM.mode = YAHOO.util.DDM.INTERSECT;
-
-		dd = new ygDDSwap_i("dragDiv1");
-		//dd.setPadding(10);
-
-		dd2 = new ygDDSwap_i("dragDiv2");
-		dd2.addInvalidHandleType("input");
-		//dd2.setPadding(10, 20, 30, 40);
-
-		dd3 = new ygDDSwap_i("dragDiv3");
-		// dd3.setPadding(10, 40);
-		//dd3.setPadding(10, 0, 20, 40);
-    }
-
-    function handleKeypress(e) {
-        gLogger.debug("keypress");
-        YAHOO.util.Event.stopEvent(e);
-        e.cancel = true;
-        return false;
-    }
-
-function innerHTMLOrphan() {
-    document.getElementById('wrapperDiv').innerHTML='';
-}
-
-function displayNone() {
-
-    var el = document.getElementById("dragDiv1");
-    gLogger.debug("before:" + el.offsetWidth);
-    el.style.display = "none";
-    gLogger.debug("after:" + el.offsetWidth);
-}
+YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
 
 </script>
 
@@ -187,17 +128,36 @@ function displayNone() {
 </div>
 
   
-<img src="img/logo.gif" style="position:absolute;top:5px;left:5px" />
+<style type="text/css">
+
+    #logDiv {
+        font-family:Arial, Helvetica, sans-serif;
+        position:relative;overflow:auto;text-align:left;z-index:998;
+        font-size:84%;width:100%;top:0px; height:280px;
+    }
+
+    #logFooter { 
+        font-size:82%;background-color:#cccccc;padding:5px;line-height:14px 
+    }
+
+    #ylogo { 
+        position:absolute;top:5px;left:5px; 
+    }
+
+    #logHeader input {
+        font-size:80%;
+    }
+
+</style>
+
+<img id="ylogo" src="img/logo.gif" />
 
 <div id="container">
-  <div id="containerTop">
-    <div id="header">
-      <h1>
-</h1>
-      <h4>&nbsp;</h4>
-    </div>
-    <div id="main">
-
+<div id="containerTop">
+<div id="header">
+<h4>&nbsp;</h4>
+</div>
+<div id="main">
 
 <div id="rightbar">
 
@@ -214,54 +174,61 @@ function displayNone() {
 <li><a href="multihandle.html?mode=dist">Multiple Handles</a></li>
 <li><a href="targetable.html?mode=dist">Targetable Affordance</a></li>
 <li><a href="grid.html?mode=dist">Grid</a></li>
+<li><a href="resize.html?mode=dist">Resize Pane</a></li>
 
 </ul>
-
 </div> 
 
 <script type="text/javascript">
-	
-	function toggleygLogger(el) {
-		if (el.value == "Disable Logger") {
-			ygLogger.disable();
-			el.value = "Enable Logger";
-		} else {
-			ygLogger.enable();
-			el.value = "Disable Logger";
-		}
-	}
 
-	// ygLogger.disable();
+YAHOO.example.logApp = function() {
+    var divId;
+    return {
+        toggle: function() {
+            if (this.value == "Disable Logger") {
+                ygLogger.disable();
+                this.value = "Enable Logger";
+            } else {
+                ygLogger.enable();
+                this.value = "Disable Logger";
+            }
+        },
+
+        clear: function() {
+            document.getElementById(divId).innerHTML='';
+        },
+
+        init: function(p_divId, p_toggleElId, p_clearElId) {
+            divId = p_divId
+            YAHOO.util.Event.on(p_toggleElId, "click", this.toggle);
+            YAHOO.util.Event.on(p_clearElId,  "click", this.clear);
+        }
+    };
+} (); 
+
+YAHOO.example.logApp.init("logDiv", "toggleButton", "clearButton");
+
 </script>
 
-
-<h3><input type="button" style="font-size:80%"
-		onclick="javascript:void(toggleygLogger(this))" value="Disable Logger" />&nbsp;
-	<input type="button" style="font-size:80%"
-		onclick="javascript:void(document.getElementById('logDiv').innerHTML='')" value="Clear" />
+<h3 id="logHeader">
+  <input type="button" id="toggleButton" value="Disable Logger" />&nbsp;
+  <input type="button" id="clearButton"  value="Clear" />
 </h3>
-<div id="logDiv" style="font-family:Arial, Helvetica, sans-serif;position:relative;overflow:auto;text-align:left;z-index:998;font-size:84%;width:100%;top:0px; height:280px;"></div>
+<div id="logDiv"></div>
+</div>
+<div id="logFooter">Note: click the Disable Logger button to make the drag operation less choppy</div>
 
 </div>
-<div style="font-size:82%;background-color:#cccccc;padding:5px;line-height:14px">Note: click the Disable Logger button to make the drag operation less choppy</div>
-
-</div>
-
 
   <div id="content">
     <form name="dragDropForm" action="javscript:;">
 	<div class="newsItem">
 	  <h3>Proxy</h3>
 
-      <!--
 	  <a href="javascript:YAHOO.util.DDM._onUnload()">Unload test</a>
-	  <a href="javascript:testGetElement()">GetElementtest</a>
 	  <a href="javascript:lock()">lock</a>
 	  <a href="javascript:unlock()">unlock</a>
 	  <a href="javascript:dd.unreg()">Unreg test</a>
-	  <a href="javascript:innerHTMLOrphan()">innerHTML test</a>
-	  <a href="javascript:displayNone()">displayNone offsetWidth test</a>
-      -->
 	  <p>
 	    This example builds on
 		<a href="../test/test_draggable.php?mode=dist">YAHOO.util.DD</a>.
@@ -272,36 +239,42 @@ function displayNone() {
 		event handler was implemented so that the elements swap positions if one is dropped
 		on another.
         Mode: 
-        <select onchange="changeMode(this.selectedIndex)">
+        <select onchange="YAHOO.example.DDApp.changeMode(this.selectedIndex)">
           <option value="0" selected>Point</point>
           <option value="1">Intersect</point>
         </select>
 
-        <!--
         <input name="testtext" id="testtext" type="text" />
-        -->
 
 	  </p>
-
 
 	</div>
 	</form>
   </div>
 	
-        <div id="footerContainer">        <div id="footer">          <p>&nbsp;</p>        </div>      </div>    </div>  </div></div>  
+        <div id="footerContainer">
+        <div id="footer">
+          <p>&nbsp;</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
 <!--
 <div id="wrapperDiv" style="position:relative;width:400px;top:200px;height:200px;overflow:auto">
 -->
 
-<div id="dragDiv1" class="testSquare" style="background:url(img/sq1.png) 0 0 no-repeat;background-color:#6D739A;top:270px; left:105px ">ygDDSwap</div>
+<div id="dragDiv1" class="testSquare" style="background:url(img/sq1.png) 0 0 no-repeat;background-color:#6D739A;top:270px; left:105px ">DDSwap</div>
 <div id="dragDiv2" class="testSquare" style="background:url(img/sq2.png) 0 0 no-repeat;background-color:#566F4E;top:350px; left:215px">
-ygDDSwap
+DDSwap
 <!--
 <input type="text" name="testinput" />
 -->
 </div>
 <div id="wrapperDiv">
-  <div id="dragDiv3" class="testSquare" style="background:url(img/sq3.png) 0 0 no-repeat;background-color:#7E5B60;top:430px; left:325px">ygDDSwap</div>
+  <div id="dragDiv3" class="testSquare" style="background:url(img/sq3.png) 0 0 no-repeat;background-color:#7E5B60;top:430px; left:325px">DDSwap</div>
 </div>
 
 <!--

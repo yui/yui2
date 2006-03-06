@@ -12,7 +12,7 @@ form { padding: 0; margin: 0; }
 .input { width: 85px; font-size: 9px; }
 .submit { font-size: 9px; }
 #pageTitle { position:absolute;top:0px;left:90px; }
-#pageTitle H3 {	font-size:14pt; color:#666666 }
+#pageTitle H3 { font-size:14pt; color:#666666 }
 #header h1 { float:left; margin-top: 19px; margin-left: 50px; border: 0px solid Green; }
 #header h1 a { display: block; height: 19px; text-decoration: none; }
 #header { height:  60px; border: 0px solid #CFFB00; margin-bottom:0px; padding: 4px; }
@@ -102,6 +102,8 @@ form { padding: 0; margin: 0; }
     text-shadow: 4px 4px 0px #C3C7CA;
     }
  
+
+#ylogo { position:absolute;top:5px;left:5px; }
 
 /* slider */
 

@@ -220,11 +220,13 @@ YAHOO.widget.Slider = <span class="reserved">function</span>(sElementId, sGroup,
 		 * <span class="attrib">@type</span> int
 		 */</span>
 		<span class="reserved">this</span>.tickPause = 40;
-		<span class="reserved">if</span> (oThumb._isHoriz &amp;&amp; oThumb.xTicks) {
+		<span class="reserved">if</span> (oThumb._isHoriz &amp;&amp; oThumb.xTicks &amp;&amp; oThumb.xTicks.length) {
 			<span class="reserved">this</span>.tickPause = Math.round(360 / oThumb.xTicks.length);
-		} <span class="reserved">else</span> <span class="reserved">if</span> (oThumb.yTicks) {
+		} <span class="reserved">else</span> <span class="reserved">if</span> (oThumb.yTicks &amp;&amp; oThumb.yTicks.length) {
 			<span class="reserved">this</span>.tickPause = Math.round(360 / oThumb.yTicks.length);
 		}
+
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"tickPause: "</span> + <span class="reserved">this</span>.tickPause);
 <span class="comment">
 		// delegate thumb methods</span>
 		oThumb.onMouseDown = <span class="reserved">function</span> () { <span class="reserved">return</span> self.focus(); };
@@ -233,12 +235,15 @@ YAHOO.widget.Slider = <span class="reserved">function</span>(sElementId, sGroup,
 <span class="comment">		// oThumb.unlock = function() { self.unlock(); };</span>
 		oThumb.onMouseUp = <span class="reserved">function</span>() { self.onMouseUp(); };
 		oThumb.onDrag = <span class="reserved">function</span>() { self.fireEvents(); };
+		oThumb.onAvailable = <span class="reserved">function</span>() { <span class="reserved">return</span> self.setStartSliderState(); };
 	}
-<span class="comment">
-    // this.maintainOffset = true;</span>
 };
 
 YAHOO.widget.Slider.<span class="reserved">prototype</span> = new YAHOO.util.DragDrop();
+<span class="comment">
+// YAHOO.widget.Slider.prototype.onAvailable = function() {</span>
+<span class="comment">    // this.logger.debug("bg avail");</span>
+<span class="comment">// };</span>
 
 <span class="comment">/**
  * Factory method for creating a horizontal slider
@@ -303,6 +308,23 @@ YAHOO.widget.Slider.getSliderRegion =
  */</span>
 YAHOO.widget.Slider.ANIM_AVAIL = true;
 
+YAHOO.widget.Slider.<span class="reserved">prototype</span>.setStartSliderState = <span class="reserved">function</span>() {
+    <span class="reserved">this</span>.logger.debug(<span class="literal">"Fixing state"</span>);
+    <span class="reserved">if</span> (<span class="reserved">this</span>.thumb._isRegion) {
+        <span class="reserved">if</span> (<span class="reserved">this</span>.deferredSetRegionValue) {
+            <span class="reserved">this</span>.setRegionValue.apply(<span class="reserved">this</span>, <span class="reserved">this</span>.deferredSetRegionValue);
+        } <span class="reserved">else</span> {
+            <span class="reserved">this</span>.setRegionValue(0, 0, true);
+        }
+    } <span class="reserved">else</span> {
+        <span class="reserved">if</span> (<span class="reserved">this</span>.deferredSetValue) {
+            <span class="reserved">this</span>.setValue.apply(<span class="reserved">this</span>, <span class="reserved">this</span>.deferredSetValue);
+        } <span class="reserved">else</span> {
+            <span class="reserved">this</span>.setValue(0, true);
+        }
+    }
+};
+
 <span class="comment">/**
  * Lock the slider, overrides YAHOO.util.DragDrop
  */</span>
@@ -354,7 +376,6 @@ YAHOO.widget.Slider.<span class="reserved">prototype</span>.focus = <span class=
     <span class="reserved">if</span> (<span class="reserved">this</span>.isLocked()) {
         <span class="reserved">return</span> false;
     } <span class="reserved">else</span> {
-
         <span class="reserved">this</span>.onSlideStart();
 	    <span class="reserved">return</span> true;
     }
@@ -439,6 +460,12 @@ YAHOO.widget.Slider.<span class="reserved">prototype</span>.onThumbChange = <spa
  * <span class="attrib">@return</span> {boolean} true if the move was performed, false if it failed
  */</span>
 YAHOO.widget.Slider.<span class="reserved">prototype</span>.setValue = <span class="reserved">function</span>(newOffset, skipAnim) {
+    <span class="reserved">this</span>.logger.debug(<span class="literal">"setValue "</span> + newOffset);
+
+    <span class="reserved">if</span> (!<span class="reserved">this</span>.thumb.available) {
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"defer setValue until after onAvailble"</span>);
+        <span class="reserved">this</span>.deferredSetValue = arguments;
+    }
 
     <span class="reserved">if</span> (<span class="reserved">this</span>.isLocked()) {
         <span class="reserved">this</span>.logger.debug(<span class="literal">"Can't set the value, the control is locked"</span>);
@@ -478,6 +505,10 @@ YAHOO.widget.Slider.<span class="reserved">prototype</span>.setValue = <span cla
  */</span>
 YAHOO.widget.Slider.<span class="reserved">prototype</span>.setRegionValue = <span class="reserved">function</span>(newOffset, newOffset2, skipAnim) {
 
+    <span class="reserved">if</span> (!<span class="reserved">this</span>.thumb.available) {
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"defer setRegionValue until after onAvailble"</span>);
+        <span class="reserved">this</span>.deferredSetRegionValue = arguments;
+    }
     <span class="reserved">if</span> (<span class="reserved">this</span>.isLocked()) {
         <span class="reserved">this</span>.logger.debug(<span class="literal">"Can't set the value, the control is locked"</span>);
         <span class="reserved">return</span> false;
@@ -508,6 +539,7 @@ YAHOO.widget.Slider.<span class="reserved">prototype</span>.setRegionValue = <sp
 YAHOO.widget.Slider.<span class="reserved">prototype</span>.verifyOffset = <span class="reserved">function</span>() {
 
     var newPos = YAHOO.util.Dom.getXY(<span class="reserved">this</span>.getEl());
+    <span class="reserved">this</span>.logger.debug(<span class="literal">"newPos: "</span> + newPos);
 
     <span class="reserved">if</span> (newPos[0] != <span class="reserved">this</span>.baselinePos[0] || newPos[1] != <span class="reserved">this</span>.baselinePos[1]) {
         <span class="reserved">this</span>.logger.debug(<span class="literal">"background moved, resetting constraints"</span>);
@@ -530,6 +562,11 @@ YAHOO.widget.Slider.<span class="reserved">prototype</span>.verifyOffset = <span
  * <span class="attrib">@private</span>
  */</span>
 YAHOO.widget.Slider.<span class="reserved">prototype</span>.moveThumb = <span class="reserved">function</span>(x, y, skipAnim) {
+
+    <span class="reserved">if</span> (!<span class="reserved">this</span>.thumb.available) {
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"thumb is not available yet, aborting move"</span>);
+        <span class="reserved">return</span>;
+    }
 
 	<span class="reserved">this</span>.logger.debug(<span class="literal">"move thumb, x: "</span>  + x + <span class="literal">", y: "</span> + y);
 
@@ -560,7 +597,6 @@ YAHOO.widget.Slider.<span class="reserved">prototype</span>.moveThumb = <span cl
 
 		var oAnim = new YAHOO.util.Motion( 
                 t.id, { points: { to: p } }, 0.4, YAHOO.util.Easing.easeOut );
-
 
 		oAnim.onComplete.subscribe( <span class="reserved">function</span>() { self.endAnim(); } );
 		oAnim.animate();
@@ -599,11 +635,11 @@ YAHOO.widget.Slider.<span class="reserved">prototype</span>.moveOneTick = <span 
 	} <span class="reserved">else</span> {
         nextCoord = <span class="reserved">this</span>._getNextY(curCoord, finalCoord);
 	}
-<span class="comment">
-	// this.logger.debug("moveOneTick: " + </span>
-<span class="comment">			// " finalCoord: " + finalCoord +</span>
-<span class="comment">			// " curCoord: " + curCoord +</span>
-<span class="comment">			// " nextCoord: " + nextCoord);</span>
+
+	<span class="reserved">this</span>.logger.debug(<span class="literal">"moveOneTick: "</span> + 
+			<span class="literal">" finalCoord: "</span> + finalCoord +
+			<span class="literal">" curCoord: "</span> + curCoord +
+			<span class="literal">" nextCoord: "</span> + nextCoord);
 
 	<span class="reserved">if</span> (nextCoord) {
 <span class="comment">
@@ -636,6 +672,7 @@ YAHOO.widget.Slider.<span class="reserved">prototype</span>.moveOneTick = <span 
  * <span class="attrib">@private</span>/
  */</span>
 YAHOO.widget.Slider.<span class="reserved">prototype</span>._getNextX = <span class="reserved">function</span>(curCoord, finalCoord) {
+    <span class="reserved">this</span>.logger.debug(<span class="literal">"getNextX: "</span> + curCoord + <span class="literal">", "</span> + finalCoord);
     var t = <span class="reserved">this</span>.thumb;
 <span class="comment">    //var thresh = t.tickSize;</span>
 <span class="comment">    // var thresh = t.tickSize + (Math.floor(t.tickSize/2));</span>
@@ -770,7 +807,7 @@ YAHOO.widget.Slider.<span class="reserved">prototype</span>.fireEvents = <span c
 		} <span class="reserved">else</span> {
 			var newVal = t.getValue();
 			<span class="reserved">if</span> (newVal != <span class="reserved">this</span>.previousVal) {
-<span class="comment">				// this.logger.debug("Firing onchange");</span>
+				<span class="reserved">this</span>.logger.debug(<span class="literal">"Firing onchange: "</span> + newVal);
 				<span class="reserved">this</span>.onChange( newVal );
 			}
 			<span class="reserved">this</span>.previousVal = newVal;
@@ -800,6 +837,7 @@ YAHOO.widget.Slider.<span class="reserved">prototype</span>.fireEvents = <span c
  * should move a certain number pixels at a time.
  */</span>
 YAHOO.widget.SliderThumb = <span class="reserved">function</span>(id, sGroup, iLeft, iRight, iUp, iDown, iTickSize) {
+
 	<span class="reserved">if</span> (id) {
 		<span class="reserved">this</span>.init(id, sGroup);
 
@@ -814,7 +852,6 @@ YAHOO.widget.SliderThumb = <span class="reserved">function</span>(id, sGroup, iL
 		 */</span>
 		<span class="reserved">this</span>.logger = new ygLogger(<span class="literal">"SliderThumb "</span> + id);
 
-		<span class="reserved">this</span>.initSlider(iLeft, iRight, iUp, iDown, iTickSize);
 	}
 
 	<span class="comment">/**
@@ -837,9 +874,18 @@ YAHOO.widget.SliderThumb = <span class="reserved">function</span>(id, sGroup, iL
      */</span>
     <span class="reserved">this</span>.maintainOffset = true;
 
+	<span class="reserved">this</span>.initSlider(iLeft, iRight, iUp, iDown, iTickSize);
+
 };
 
 YAHOO.widget.SliderThumb.<span class="reserved">prototype</span> = new YAHOO.util.DD();
+<span class="comment">
+// YAHOO.widget.SliderThumb.prototype.onAvailable = function() {</span>
+<span class="comment">    // this.logger.debug("thumb onAvailable");</span>
+<span class="comment">    // var el = this.getEl();</span>
+<span class="comment">    // YAHOO.util.Dom.setXY(el, YAHOO.util.Dom.getXY(el));</span>
+<span class="comment">    // this.startOffset = this.getOffsetFromParent();</span>
+<span class="comment">// }</span>
 
 <span class="comment">/**
  * Returns the difference between the location of the thumb and its parent.
@@ -904,12 +950,19 @@ YAHOO.widget.SliderThumb.<span class="reserved">prototype</span>._graduated = fa
  *
  * <span class="attrib">@param</span> {int} iLeft the number of pixels the element can move left
  * <span class="attrib">@param</span> {int} iRight the number of pixels the element can move right
- * <span class="attrib">@param</span> {String} sValElId the id of the element used for the value display
+ * <span class="attrib">@param</span> {int} iUp the number of pixels the element can move up
+ * <span class="attrib">@param</span> {int} iDown the number of pixels the element can move down
+ * <span class="attrib">@param</span> {int} iTickSize the width of the tick interval.
  */</span>
 YAHOO.widget.SliderThumb.<span class="reserved">prototype</span>.initSlider = <span class="reserved">function</span> (iLeft, iRight, iUp, iDown, 
 		iTickSize) {
-
-	<span class="reserved">this</span>.logger.debug(<span class="literal">"Slider init"</span>);
+<span class="comment">
+	// this.logger.debug("Slider init: "  + </span>
+<span class="comment">            // "iLeft: " + iLeft + </span>
+<span class="comment">            // ",iRight: " + iRight + </span>
+<span class="comment">            // ",iUp: " + iUp + </span>
+<span class="comment">            // ",iDown: " + iDown + </span>
+<span class="comment">            // ",iTickSize: " + iTickSize);</span>
 
 	<span class="reserved">this</span>.setXConstraint(iLeft, iRight, iTickSize);
 	<span class="reserved">this</span>.setYConstraint(iUp, iDown, iTickSize);
@@ -926,6 +979,7 @@ YAHOO.widget.SliderThumb.<span class="reserved">prototype</span>.initSlider = <s
 <span class="comment">
     // this.parentPos = YAHOO.util.getXY(this.parentElId);</span>
     <span class="reserved">this</span>.startOffset = <span class="reserved">this</span>.getOffsetFromParent();
+<span class="comment">    //alert(this.getValue());</span>
 };
 
 <span class="comment">/**

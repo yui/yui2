@@ -311,8 +311,8 @@
 								<td class="spec">
 									<code>
 										<a href="#initSlider">initSlider</a>
-										(&lt;int&gt; iLeft, &lt;int&gt; iRight, iUp, iDown, 
-		iTickSize)
+										(&lt;int&gt; iLeft, &lt;int&gt; iRight, &lt;int&gt; iUp, &lt;int&gt; iDown, 
+		&lt;int&gt; iTickSize)
 									</code>
 									<div class="description">
 										Set up the slider, must be called in the constructor of all subclasses&nbsp;
@@ -569,8 +569,8 @@
 							<code>
 								void 
 								<strong>initSlider</strong>
-								(&lt;int&gt; iLeft, &lt;int&gt; iRight, iUp, iDown, 
-		iTickSize)
+								(&lt;int&gt; iLeft, &lt;int&gt; iRight, &lt;int&gt; iUp, &lt;int&gt; iDown, 
+		&lt;int&gt; iTickSize)
 							</code>
 									
 							<div class="description">
@@ -592,8 +592,18 @@
 											</dd>
 										
 											<dd>
-												<code>sValElId</code> - 
-												 the id of the element used for the value display    
+												<code>iUp</code> - 
+												 the number of pixels the element can move up  
+											</dd>
+										
+											<dd>
+												<code>iDown</code> - 
+												 the number of pixels the element can move down  
+											</dd>
+										
+											<dd>
+												<code>iTickSize</code> - 
+												 the width of the tick interval.    
 											</dd>
 										
 									</dl>

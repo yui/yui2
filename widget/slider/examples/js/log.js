@@ -27,6 +27,8 @@ ygLogger.init = function(oHostElement) {
 	} else {
 		// create element or create window?
 	}
+
+    ygLogger.consoleAvail = printfire("Testing for console");
 };
 
 ygLogger.prototype.setModuleName = function(sModuleName) {
@@ -43,18 +45,39 @@ ygLogger.prototype.debug = function() {
 		ygLogger.lastLog = newTime;
 
 		for (var i = 0; i < arguments.length; i++) {
+            var dateStr;
+            if (newDate.toLocaleTimeString) {
+				dateStr = newDate.toLocaleTimeString();
+            } else {
+				dateStr = newDate.toString();
+            }
+
 			ygLogger.logStack[ygLogger.logStack.length] = 
 					timeStamp + " ms(" + totalSeconds + ") " + 
-					newDate.toLocaleTimeString() + "<br />" + 
-					this.logName + ": <b>" + arguments[i] + "</b>";
+					dateStr + " " +
+					this.logName + ": " + arguments[i];
 		}
 
 		if (ygLogger.logTimeout == null) {
 			ygLogger.logTimeout = setTimeout("ygLogger._outputMessages()" , 1);
 		}
-
 	}
 };
+
+function printfire()
+{
+    if (document.createEvent) {
+        try {
+            printfire.args = arguments;
+            var ev = document.createEvent("Events");
+            ev.initEvent("printfire", false, true);
+            dispatchEvent(ev);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+}
 
 ygLogger.disable = function() {
 	ygLogger.DEBUG_ENABLED = false;
@@ -68,6 +91,13 @@ ygLogger.enable = function() {
 };
 
 ygLogger._outputMessages = function() {
+
+    if (ygLogger.consoleAvail) {
+        for (var i = 0; i < ygLogger.logStack.length; i++) {
+            printfire(ygLogger.logStack[i]);
+        }
+    } 
+
 	if (ygLogger.targetEl != null) {
 
 		for (var i = 0; i < ygLogger.logStack.length; i++) {

@@ -16,16 +16,11 @@ if (!YAHOO.util.DragDropMgr) {
     YAHOO.util.DragDropMgr = new function() {
 
         /**
-         * utility package shorthand
-         * @private
-         */
-        var UTIL = YAHOO.util;
-
-        /**
          * Two dimensional Array of registered DragDrop objects.  The first 
          * dimension is the DragDrop item group, the second the DragDrop 
          * object.
          *
+         * @type {string: string}
          * @private
          */
         this.ids = {};
@@ -35,6 +30,7 @@ if (!YAHOO.util.DragDropMgr) {
          * if the element that generated the mousedown event is actually the 
          * handle and not the html element itself.
          *
+         * @type {string: string}
          * @private
          */
         this.handleIds = {};
@@ -158,18 +154,19 @@ if (!YAHOO.util.DragDropMgr) {
          */
         this._onLoad = function() {
 
-            this._execOnAll("setInitPosition", []);
+            // Switched to onAvailable in 2.0.1 (in DragDrop.initTarget)
+            // this._execOnAll("setInitPosition", []);
 
             this.logger = new ygLogger("DragDropMgr");
             this.logger.debug("DDM onload");
 
-            var EU = UTIL.Event;
+            var EU = YAHOO.util.Event;
 
-            EU.addListener(document, "mouseup",   this.handleMouseUp, this, true);
-            EU.addListener(document, "mousemove", this.handleMouseMove, this, true);
-            EU.addListener(window,   "unload",    this._onUnload, this, true);
-            EU.addListener(window,   "resize",    this._onResize, this, true);
-            // EU.addListener(window,   "mouseout",    this._test);
+            EU.on(document, "mouseup",   this.handleMouseUp, this, true);
+            EU.on(document, "mousemove", this.handleMouseMove, this, true);
+            EU.on(window,   "unload",    this._onUnload, this, true);
+            EU.on(window,   "resize",    this._onResize, this, true);
+            // EU.on(window,   "mouseout",    this._test);
 
             this.initalized = true;
 
@@ -414,14 +411,17 @@ if (!YAHOO.util.DragDropMgr) {
          * @private
          */
         this.handleMouseDown = function(e, oDD) {
+
+            this.currentTarget = YAHOO.util.Event.getTarget(e);
+
             this.logger.debug("mousedown - adding event handlers");
             this.dragCurrent = oDD;
 
             var el = oDD.getEl();
 
             // track start position
-            this.startX = UTIL.Event.getPageX(e);
-            this.startY = UTIL.Event.getPageY(e);
+            this.startX = YAHOO.util.Event.getPageX(e);
+            this.startY = YAHOO.util.Event.getPageY(e);
 
             this.deltaX = this.startX - el.offsetLeft;
             this.deltaY = this.startY - el.offsetTop;
@@ -485,11 +485,11 @@ if (!YAHOO.util.DragDropMgr) {
          */
         this.stopEvent = function(e) {
             if (this.stopPropagation) {
-                UTIL.Event.stopPropagation(e);
+                YAHOO.util.Event.stopPropagation(e);
             }
 
             if (this.preventDefault) {
-                UTIL.Event.preventDefault(e);
+                YAHOO.util.Event.preventDefault(e);
             }
         };
 
@@ -543,15 +543,15 @@ if (!YAHOO.util.DragDropMgr) {
             // this.logger.debug("which: " + e.which + ", button: "+ e.button);
 
             // check for IE mouseup outside of page boundary
-            if (UTIL.Event.isIE && !e.button) {
+            if (YAHOO.util.Event.isIE && !e.button) {
+                this.logger.debug("button failure");
                 this.stopEvent(e);
                 return this.handleMouseUp(e);
-                // this.logger.debug("button failure");
             }
 
             if (!this.dragThreshMet) {
-                var diffX = Math.abs(this.startX - UTIL.Event.getPageX(e));
-                var diffY = Math.abs(this.startY - UTIL.Event.getPageY(e));
+                var diffX = Math.abs(this.startX - YAHOO.util.Event.getPageX(e));
+                var diffY = Math.abs(this.startY - YAHOO.util.Event.getPageY(e));
                 // this.logger.debug("diffX: " + diffX + "diffY: " + diffY);
                 if (diffX > this.clickPixelThresh || 
                             diffY > this.clickPixelThresh) {
@@ -586,8 +586,8 @@ if (!YAHOO.util.DragDropMgr) {
                 return;
             }
 
-            var x = UTIL.Event.getPageX(e);
-            var y = UTIL.Event.getPageY(e);
+            var x = YAHOO.util.Event.getPageX(e);
+            var y = YAHOO.util.Event.getPageY(e);
             var pt = new YAHOO.util.Point(x,y);
 
             // cache the previous dragOver array
@@ -682,21 +682,21 @@ if (!YAHOO.util.DragDropMgr) {
                  
                 // fire enter events
                 for (i=0; i < enterEvts.length; ++i) {
-                    this.logger.debug(dc.id + " dragEnter " + enterEvts[i].id);
+                    this.logger.debug(dc.id + " onDragEnter " + enterEvts[i].id);
                     // dc.b4DragEnter(e, oDD.id);
                     dc.onDragEnter(e, enterEvts[i].id);
                 }
          
                 // fire over events
                 for (i=0; i < overEvts.length; ++i) {
-                    this.logger.debug(dc.id + " dragOver " + overEvts[i].id);
+                    this.logger.debug(dc.id + " onDragOver " + overEvts[i].id);
                     dc.b4DragOver(e, overEvts[i].id);
                     dc.onDragOver(e, overEvts[i].id);
                 }
 
                 // fire drop events
                 for (i=0; i < dropEvts.length; ++i) {
-                    this.logger.debug(dc.id + " dragDrop " + dropEvts[i].id);
+                    this.logger.debug(dc.id + " dropped on " + dropEvts[i].id);
                     dc.b4DragDrop(e, dropEvts[i].id);
                     dc.onDragDrop(e, dropEvts[i].id);
                 }
@@ -1118,7 +1118,7 @@ if (!YAHOO.util.DragDropMgr) {
          * an error if this file is loaded before the Event Utility.
          */
         this._addListeners = function() {
-            if ( UTIL.Event &&
+            if ( YAHOO.util.Event  &&
                  document          &&
                  document.body        ) {
 

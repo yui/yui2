@@ -7,15 +7,28 @@
 <head>
 <title>Yahoo! UI Library - Slider Widget</title>
 <link rel="stylesheet" type="text/css" href="css/screen.css">
-<style type="text/css">
-</style>
-</head>
+<script type="text/javascript" src="js/YAHOO.js" ></script>
+<script type="text/javascript" src="js/log.js" ></script>
+<script type="text/javascript" src="js/event.js" ></script>
+<script type="text/javascript" src="js/color.js" ></script>
+<script type="text/javascript" src="js/key.js" ></script>
+<script type="text/javascript" src="js/animation-raw.js" ></script>
+<script type="text/javascript" src="js/dom-raw.js" ></script>
+<script type="text/javascript" src="js/dragdrop.js" ></script>
+<!--
+<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/event_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dom_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="/DragDrop.dev/js/dragdrop/build/dragdrop-debug.js" ></script>
+<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dragdrop_2.0.0-b1.js" ></script>
+-->
+
+<script type="text/javascript" src="js/slider.js" ></script></head>
 <body> 
 <div id="pageTitle"><h3>Slider Widget</h3></div> 
 
 <div id="container">
   <div id="containerTop">
-    <div id="header"><img src="img/logo.gif" vspace="4" hspace="4" /></div>
+    <div id="header"><img id="ylogo" src="img/logo.gif" /></div>
 	<div id="main">
 
 		<div id="content"> 
@@ -33,12 +46,10 @@
 				of drag and drop; it will "snap" to the tick marks spaced
 				25 pixels apart.
 			  </p>
-              <!--
 			  <p>
-				<a href="javascript:slider1.lock()">Lock</a>
-				<a href="javascript:slider1.unlock()">Unlock</a>
+				<a href="javascript:slider2.lock()">Lock</a>
+				<a href="javascript:slider2.unlock()">Unlock</a>
 			  </p>
-              -->
 
               <div id="vertWrapper">
                 <div 
@@ -51,7 +62,7 @@
                  state:valuemax="200"
                  title="Vertical Slider" 
                  onkeypress="return handleVertSliderKey(this, YAHOO.util.Event.getEvent(event))" >
-                   <div id="vertHandleDiv"><img src="img/vertSlider.png"></div> 
+                   <div id="vertHandleDiv"><img src="img/vertSlider.png" /></div> 
                 </div>
 
                 <div id="vertValueDiv">
@@ -73,7 +84,7 @@
                  state:valuemax="100"
                  title="Horizontal Slider" 
                  onkeypress="return handleHorizSliderKey(this, YAHOO.util.Event.getEvent(event))" >
-               <div id="horizHandleDiv" ><img src="img/horizSlider.png"></div> 
+               <div id="horizHandleDiv" ><img src="img/horizSlider.png" /></div> 
               </div> 
 
             <div id="horizValueDiv">
@@ -105,12 +116,12 @@
         <div id="pickerPanel" class="dragPanel">
             <h4 id="pickerHandle">&nbsp;</h4>
             <div id="pickerDiv">
-              <img id="pickerbg" src="img/pickerbg.png" alt="">
-              <div id="selector"><img src="img/select.gif"></div> 
+              <img id="pickerbg" src="img/pickerbg.png" alt="" />
+              <div id="selector"><img src="img/select.gif" /></div> 
             </div>
 
              <div id="hueBg">
-              <div id="hueThumb"><img src="img/hline.png"></div> 
+              <div id="hueThumb"><img src="img/hline.png" /></div> 
             </div> 
 
             <div id="pickervaldiv">
@@ -155,15 +166,15 @@
 <div id="rgbPanel" class="dragPanel">
 	<h4 id="rgbHandle">&nbsp;</h4>
 	<div id="rBG" class="bg">
-	  <div id="rthumb" class="thumb"><img src="img/vline.png"></div> 
+	  <div id="rthumb" class="thumb"><img src="img/vline.png" /></div> 
 	</div> 
 
 	<div id="gBG" class="bg">
-	  <div id="gthumb" class="thumb"><img src="img/vline.png"></div> 
+	  <div id="gthumb" class="thumb"><img src="img/vline.png" /></div> 
 	</div> 
 
 	<div id="bBG" class="bg">
-	  <div id="bthumb" class="thumb"><img src="img/vline.png"></div> 
+	  <div id="bthumb" class="thumb"><img src="img/vline.png" /></div> 
 	</div> 
 
 
@@ -211,16 +222,7 @@
 		</div> 
      
 
-<script type="text/javascript" src="js/YAHOO.js" ></script>
-<script type="text/javascript" src="js/log.js" ></script>
-<script type="text/javascript" src="js/color.js" ></script>
-<script type="text/javascript" src="js/key.js" ></script>
-<script type="text/javascript" src="js/event.js" ></script>
-<script type="text/javascript" src="js/dom-raw.js" ></script>
-<script type="text/javascript" src="js/animation-raw.js" ></script>
-<script type="text/javascript" src="js/dragdrop.js" ></script>
 
-<script type="text/javascript" src="js/slider.js" ></script>
 <script type="text/javascript">
 
 	var hue;

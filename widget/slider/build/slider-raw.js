@@ -73,11 +73,12 @@ YAHOO.widget.Slider = function(sElementId, sGroup, oThumb) {
 		 * @type int
 		 */
 		this.tickPause = 40;
-		if (oThumb._isHoriz && oThumb.xTicks) {
+		if (oThumb._isHoriz && oThumb.xTicks && oThumb.xTicks.length) {
 			this.tickPause = Math.round(360 / oThumb.xTicks.length);
-		} else if (oThumb.yTicks) {
+		} else if (oThumb.yTicks && oThumb.yTicks.length) {
 			this.tickPause = Math.round(360 / oThumb.yTicks.length);
 		}
+
 
 		// delegate thumb methods
 		oThumb.onMouseDown = function () { return self.focus(); };
@@ -86,17 +87,14 @@ YAHOO.widget.Slider = function(sElementId, sGroup, oThumb) {
 		// oThumb.unlock = function() { self.unlock(); };
 		oThumb.onMouseUp = function() { self.onMouseUp(); };
 		oThumb.onDrag = function() { self.fireEvents(); };
-
-        // Fix state
-        if (oThumb._isRegion) {
-            this.setRegionValue(0,0);
-        } else {
-            this.setValue(0);
-        }
+		oThumb.onAvailable = function() { return self.setStartSliderState(); };
 	}
 };
 
 YAHOO.widget.Slider.prototype = new YAHOO.util.DragDrop();
+
+// YAHOO.widget.Slider.prototype.onAvailable = function() {
+// };
 
 /**
  * Factory method for creating a horizontal slider
@@ -160,6 +158,22 @@ YAHOO.widget.Slider.getSliderRegion =
  * @type boolean
  */
 YAHOO.widget.Slider.ANIM_AVAIL = true;
+
+YAHOO.widget.Slider.prototype.setStartSliderState = function() {
+    if (this.thumb._isRegion) {
+        if (this.deferredSetRegionValue) {
+            this.setRegionValue.apply(this, this.deferredSetRegionValue);
+        } else {
+            this.setRegionValue(0, 0, true);
+        }
+    } else {
+        if (this.deferredSetValue) {
+            this.setValue.apply(this, this.deferredSetValue);
+        } else {
+            this.setValue(0, true);
+        }
+    }
+};
 
 /**
  * Lock the slider, overrides YAHOO.util.DragDrop
@@ -290,6 +304,10 @@ YAHOO.widget.Slider.prototype.onThumbChange = function () {
  */
 YAHOO.widget.Slider.prototype.setValue = function(newOffset, skipAnim) {
 
+    if (!this.thumb.available) {
+        this.deferredSetValue = arguments;
+    }
+
     if (this.isLocked()) {
         return false;
     }
@@ -326,6 +344,9 @@ YAHOO.widget.Slider.prototype.setValue = function(newOffset, skipAnim) {
  */
 YAHOO.widget.Slider.prototype.setRegionValue = function(newOffset, newOffset2, skipAnim) {
 
+    if (!this.thumb.available) {
+        this.deferredSetRegionValue = arguments;
+    }
     if (this.isLocked()) {
         return false;
     }
@@ -375,6 +396,10 @@ YAHOO.widget.Slider.prototype.verifyOffset = function() {
  * @private
  */
 YAHOO.widget.Slider.prototype.moveThumb = function(x, y, skipAnim) {
+
+    if (!this.thumb.available) {
+        return;
+    }
 
 
     this.verifyOffset();
@@ -671,6 +696,12 @@ YAHOO.widget.SliderThumb = function(id, sGroup, iLeft, iRight, iUp, iDown, iTick
 };
 
 YAHOO.widget.SliderThumb.prototype = new YAHOO.util.DD();
+
+// YAHOO.widget.SliderThumb.prototype.onAvailable = function() {
+    // var el = this.getEl();
+    // YAHOO.util.Dom.setXY(el, YAHOO.util.Dom.getXY(el));
+    // this.startOffset = this.getOffsetFromParent();
+// }
 
 /**
  * Returns the difference between the location of the thumb and its parent.
