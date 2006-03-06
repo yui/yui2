@@ -334,6 +334,19 @@
 							<td class="flags">int</td>
 							<td class="spec">
 								<code>
+									<a href="#iconMode">iconMode</a>
+								</code>
+								<div class="description">
+									Used to configure what happens when a dynamic load node is expanded
+ and we discover that it does not have children.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">int</td>
+							<td class="spec">
+								<code>
 									<a href="#index">index</a>
 								</code>
 								<div class="description">
@@ -648,6 +661,19 @@
 								<td class="flags">Object</td>
 								<td class="spec">
 									<code>
+										<a href="#getIconMode">getIconMode</a>
+										()
+									</code>
+									<div class="description">
+										&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
 										<a href="#getNodeHtml">getNodeHtml</a>
 										()
 									</code>
@@ -819,7 +845,7 @@
 								<td class="spec">
 									<code>
 										<a href="#setDynamicLoad">setDynamicLoad</a>
-										(fnDataLoader)
+										(fnDataLoader, iconMode)
 									</code>
 									<div class="description">
 										Configures this node for dynamically obtaining the child data
@@ -960,6 +986,22 @@
 							<div class="description">
 								The href for the node's label.  If one is not specified, the href will
  be set so that it toggles the node.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="iconMode">iconMode</a></h4>
+						<div class="detail">
+							<code>
+								int
+								&nbsp;
+								<strong>iconMode</strong>
+							</code>
+							<div class="description">
+								Used to configure what happens when a dynamic load node is expanded
+ and we discover that it does not have children.  By default, it is
+ treated as if it still could have children (plus/minus icon).  Set
+ iconMode to have it display like a leaf node instead.
 							</div>
 						</div>
 						<hr />
@@ -1461,6 +1503,23 @@
 						</div>
 						<hr />
 					
+						<h4><a name="getIconMode">getIconMode</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>getIconMode</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="getNodeHtml">getNodeHtml</a></h4>
 						<div class="detail">
 							<code>
@@ -1798,21 +1857,27 @@
 							<code>
 								void 
 								<strong>setDynamicLoad</strong>
-								(fnDataLoader)
+								(fnDataLoader, iconMode)
 							</code>
 									
 							<div class="description">
 								
 									Configures this node for dynamically obtaining the child data
- when the node is first expanded.
+ when the node is first expanded.  Calling it without the callback
+ will turn off dynamic load for the node.
 								
 								
 									<dl>
 										<dt>Parameters:</dt>
 										
 											<dd>
+												<code>iconMode</code> - 
+												 {int} configures the icon that is displayed when a dynamic  load node is expanded the first time without children.  By default, the   "collapse" icon will be used.  If set to 1, the leaf node icon will be  displayed.        
+											</dd>
+										
+											<dd>
 												<code>fmDataLoader</code> - 
-												 {function} the function that will be used to get the data.        
+												 {function} the function that will be used to get the data.  
 											</dd>
 										
 									</dl>

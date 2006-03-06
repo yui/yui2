@@ -513,7 +513,7 @@
 								<td class="spec">
 									<code>
 										<a href="#setDynamicLoad">setDynamicLoad</a>
-										(&lt;function&gt; fnDataLoader)
+										(&lt;function&gt; fnDataLoader, iconMode)
 									</code>
 									<div class="description">
 										Configures this tree to dynamically load all child data&nbsp;
@@ -1102,7 +1102,7 @@
 							<code>
 								void 
 								<strong>setDynamicLoad</strong>
-								(&lt;function&gt; fnDataLoader)
+								(&lt;function&gt; fnDataLoader, iconMode)
 							</code>
 									
 							<div class="description">
@@ -1115,7 +1115,12 @@
 										
 											<dd>
 												<code>fnDataLoader</code> - 
-												 the function that will be called to get the data        
+												 the function that will be called to get the data  
+											</dd>
+										
+											<dd>
+												<code>iconMode</code> - 
+												 {int} configures the icon that is displayed when a dynamic  load node is expanded the first time without children.  By default, the   "collapse" icon will be used.  If set to 1, the leaf node icon will be  displayed.        
 											</dd>
 										
 									</dl>

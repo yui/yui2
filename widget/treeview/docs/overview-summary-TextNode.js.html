@@ -309,6 +309,10 @@ YAHOO.widget.TextNode.<span class="reserved">prototype</span>.setUpLabel = <span
 		<span class="reserved">this</span>.target = oData.target;
 	}
 
+    <span class="reserved">if</span> (oData.style) {
+        <span class="reserved">this</span>.labelStyle = oData.style;
+    }
+
 	<span class="reserved">this</span>.labelElId = <span class="literal">"ygtvlabelel"</span> + <span class="reserved">this</span>.index;
 };
 

@@ -257,10 +257,10 @@
  * have an icon
  */</span>
 YAHOO.widget.HTMLNode = <span class="reserved">function</span>(oData, oParent, expanded, hasIcon) {
-	<span class="reserved">if</span> (oParent) { 
-		<span class="reserved">this</span>.init(oData, oParent, expanded);
-		<span class="reserved">this</span>.initContent(oData, hasIcon);
-	}
+    <span class="reserved">if</span> (oParent) { 
+        <span class="reserved">this</span>.init(oData, oParent, expanded);
+        <span class="reserved">this</span>.initContent(oData, hasIcon);
+    }
 };
 
 YAHOO.widget.HTMLNode.<span class="reserved">prototype</span> = new YAHOO.widget.Node();
@@ -295,13 +295,13 @@ YAHOO.widget.HTMLNode.<span class="reserved">prototype</span>.content = null;
  * icon or not
  */</span>
 YAHOO.widget.HTMLNode.<span class="reserved">prototype</span>.initContent = <span class="reserved">function</span>(oData, hasIcon) { 
-	<span class="reserved">if</span> (typeof oData == <span class="literal">"string"</span>) {
-		oData = { html: oData };
-	}
+    <span class="reserved">if</span> (typeof oData == <span class="literal">"string"</span>) {
+        oData = { html: oData };
+    }
 
-	<span class="reserved">this</span>.html = oData.html;
-	<span class="reserved">this</span>.contentElId = <span class="literal">"ygtvcontentel"</span> + <span class="reserved">this</span>.index;
-	<span class="reserved">this</span>.hasIcon = hasIcon;
+    <span class="reserved">this</span>.html = oData.html;
+    <span class="reserved">this</span>.contentElId = <span class="literal">"ygtvcontentel"</span> + <span class="reserved">this</span>.index;
+    <span class="reserved">this</span>.hasIcon = hasIcon;
 };
 
 <span class="comment">/**
@@ -310,46 +310,46 @@ YAHOO.widget.HTMLNode.<span class="reserved">prototype</span>.initContent = <spa
  * <span class="attrib">@return</span> {HTMLElement} the element
  */</span>
 YAHOO.widget.HTMLNode.<span class="reserved">prototype</span>.getContentEl = <span class="reserved">function</span>() { 
-	<span class="reserved">return</span> document.getElementById(<span class="reserved">this</span>.contentElId);
+    <span class="reserved">return</span> document.getElementById(<span class="reserved">this</span>.contentElId);
 };
 <span class="comment">
 // overrides YAHOO.widget.Node</span>
 YAHOO.widget.HTMLNode.<span class="reserved">prototype</span>.getNodeHtml = <span class="reserved">function</span>() { 
-	var sb = new Array();
+    var sb = new Array();
 
-	sb[sb.length] = <span class="literal">'&lt;table border="0" cellpadding="0" cellspacing="0"&gt;'</span>;
-	sb[sb.length] = <span class="literal">'&lt;tr&gt;'</span>;
-	
-	<span class="reserved">for</span> (i=0;i&lt;<span class="reserved">this</span>.depth;++i) {
-		sb[sb.length] = <span class="literal">'&lt;td class="'</span> + <span class="reserved">this</span>.getDepthStyle(i) + <span class="literal">'"&gt;&amp;nbsp;&lt;/td&gt;'</span>;
-	}
+    sb[sb.length] = <span class="literal">'&lt;table border="0" cellpadding="0" cellspacing="0"&gt;'</span>;
+    sb[sb.length] = <span class="literal">'&lt;tr&gt;'</span>;
+    
+    <span class="reserved">for</span> (i=0;i&lt;<span class="reserved">this</span>.depth;++i) {
+        sb[sb.length] = <span class="literal">'&lt;td class="'</span> + <span class="reserved">this</span>.getDepthStyle(i) + <span class="literal">'"&gt;&amp;nbsp;&lt;/td&gt;'</span>;
+    }
 
-	<span class="reserved">if</span> (<span class="reserved">this</span>.hasIcon) {
-		sb[sb.length] = <span class="literal">'&lt;td'</span>;
-		sb[sb.length] = <span class="literal">' id="'</span> + <span class="reserved">this</span>.getToggleElId() + <span class="literal">'"'</span>;
-		sb[sb.length] = <span class="literal">' class="'</span> + <span class="reserved">this</span>.getStyle() + <span class="literal">'"'</span>;
-		sb[sb.length] = <span class="literal">' onclick="javascript:'</span> + <span class="reserved">this</span>.getToggleLink() + <span class="literal">'"&gt;&amp;nbsp;'</span>;
-		<span class="reserved">if</span> (<span class="reserved">this</span>.hasChildren(true)) {
-			sb[sb.length] = <span class="literal">' onmouseover="this.className='</span>;
-			sb[sb.length] = <span class="literal">'YAHOO.widget.TreeView.getNode(\'</span><span class="literal">';
-			sb[sb.length] = this.tree.id + '</span>\<span class="literal">','</span> + <span class="reserved">this</span>.index +  <span class="literal">').getHoverStyle()"'</span>;
-			sb[sb.length] = <span class="literal">' onmouseout="this.className='</span>;
-			sb[sb.length] = <span class="literal">'YAHOO.widget.TreeView.getNode(\'</span><span class="literal">';
-			sb[sb.length] = this.tree.id + '</span>\<span class="literal">','</span> + <span class="reserved">this</span>.index +  <span class="literal">').getStyle()"'</span>;
-		}
-		sb[sb.length] = <span class="literal">'&lt;/td&gt;'</span>;
-	}
+    <span class="reserved">if</span> (<span class="reserved">this</span>.hasIcon) {
+        sb[sb.length] = <span class="literal">'&lt;td'</span>;
+        sb[sb.length] = <span class="literal">' id="'</span> + <span class="reserved">this</span>.getToggleElId() + <span class="literal">'"'</span>;
+        sb[sb.length] = <span class="literal">' class="'</span> + <span class="reserved">this</span>.getStyle() + <span class="literal">'"'</span>;
+        sb[sb.length] = <span class="literal">' onclick="javascript:'</span> + <span class="reserved">this</span>.getToggleLink() + <span class="literal">'"'</span>;
+        <span class="reserved">if</span> (<span class="reserved">this</span>.hasChildren(true)) {
+            sb[sb.length] = <span class="literal">' onmouseover="this.className='</span>;
+            sb[sb.length] = <span class="literal">'YAHOO.widget.TreeView.getNode(\'</span><span class="literal">';
+            sb[sb.length] = this.tree.id + '</span>\<span class="literal">','</span> + <span class="reserved">this</span>.index +  <span class="literal">').getHoverStyle()"'</span>;
+            sb[sb.length] = <span class="literal">' onmouseout="this.className='</span>;
+            sb[sb.length] = <span class="literal">'YAHOO.widget.TreeView.getNode(\'</span><span class="literal">';
+            sb[sb.length] = this.tree.id + '</span>\<span class="literal">','</span> + <span class="reserved">this</span>.index +  <span class="literal">').getStyle()"'</span>;
+        }
+        sb[sb.length] = <span class="literal">'&gt;&amp;nbsp;&lt;/td&gt;'</span>;
+    }
 
-	sb[sb.length] = <span class="literal">'&lt;td'</span>;
-	sb[sb.length] = <span class="literal">' id="'</span> + <span class="reserved">this</span>.contentElId + <span class="literal">'"'</span>;
-	sb[sb.length] = <span class="literal">' class="'</span> + <span class="reserved">this</span>.contentStyle + <span class="literal">'"'</span>;
-	sb[sb.length] = <span class="literal">' &gt;'</span>;
-	sb[sb.length] = <span class="reserved">this</span>.html;
-	sb[sb.length] = <span class="literal">'&lt;/td&gt;'</span>;
-	sb[sb.length] = <span class="literal">'&lt;/tr&gt;'</span>;
-	sb[sb.length] = <span class="literal">'&lt;/table&gt;'</span>;
+    sb[sb.length] = <span class="literal">'&lt;td'</span>;
+    sb[sb.length] = <span class="literal">' id="'</span> + <span class="reserved">this</span>.contentElId + <span class="literal">'"'</span>;
+    sb[sb.length] = <span class="literal">' class="'</span> + <span class="reserved">this</span>.contentStyle + <span class="literal">'"'</span>;
+    sb[sb.length] = <span class="literal">' &gt;'</span>;
+    sb[sb.length] = <span class="reserved">this</span>.html;
+    sb[sb.length] = <span class="literal">'&lt;/td&gt;'</span>;
+    sb[sb.length] = <span class="literal">'&lt;/tr&gt;'</span>;
+    sb[sb.length] = <span class="literal">'&lt;/table&gt;'</span>;
 
-	<span class="reserved">return</span> sb.join(<span class="literal">""</span>);
+    <span class="reserved">return</span> sb.join(<span class="literal">""</span>);
 };
 
 </pre>

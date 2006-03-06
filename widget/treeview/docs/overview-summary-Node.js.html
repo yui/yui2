@@ -392,6 +392,15 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
     hasIcon: true,
 
     <span class="comment">/**
+     * Used to configure what happens when a dynamic load node is expanded
+     * and we discover that it does not have children.  By default, it is
+     * treated as if it still could have children (plus/minus icon).  Set
+     * iconMode to have it display like a leaf node instead.
+     * <span class="attrib">@type</span> int
+     */</span>
+    iconMode: 0,
+
+    <span class="comment">/**
      * Initializes this node, gets some of the properties from the parent
      *
      * <span class="attrib">@param</span> oData {object} a string or object containing the data that will
@@ -611,6 +620,9 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
      * <span class="attrib">@return</span> {string} the css class for this node's toggle
      */</span>
     getStyle: <span class="reserved">function</span>() {
+            <span class="reserved">this</span>.logger.debug(<span class="literal">"No children, "</span> + 
+                    <span class="literal">" isDyanmic: "</span> + <span class="reserved">this</span>.isDynamic() + 
+                    <span class="literal">" expanded: "</span> + <span class="reserved">this</span>.expanded);
         <span class="reserved">if</span> (<span class="reserved">this</span>.isLoading) {
             <span class="reserved">this</span>.logger.debug(<span class="literal">"returning the loading icon"</span>);
             <span class="reserved">return</span> <span class="literal">"ygtvloading"</span>;
@@ -620,7 +632,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
 <span class="comment">
             // type p=plus(expand), m=minus(collapase), n=none(no children)</span>
             var type = <span class="literal">"n"</span>;
-            <span class="reserved">if</span> (<span class="reserved">this</span>.hasChildren(true) || <span class="reserved">this</span>.isDynamic()) {
+            <span class="reserved">if</span> (<span class="reserved">this</span>.hasChildren(true) || (<span class="reserved">this</span>.isDynamic() &amp;&amp; !<span class="reserved">this</span>.getIconMode())) {
 <span class="comment">            // if (this.hasChildren(true)) {</span>
                 type = (<span class="reserved">this</span>.expanded) ? <span class="literal">"m"</span> : <span class="literal">"p"</span>;
             }
@@ -673,13 +685,27 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
 
     <span class="comment">/**
      * Configures this node for dynamically obtaining the child data
-     * when the node is first expanded.
+     * when the node is first expanded.  Calling it without the callback
+     * will turn off dynamic load for the node.
      *
      * <span class="attrib">@param</span> fmDataLoader {function} the function that will be used to get the data.
+     * <span class="attrib">@param</span> iconMode {int} configures the icon that is displayed when a dynamic
+     * load node is expanded the first time without children.  By default, the 
+     * "collapse" icon will be used.  If set to 1, the leaf node icon will be
+     * displayed.
      */</span>
-    setDynamicLoad: <span class="reserved">function</span>(fnDataLoader) { 
-        <span class="reserved">this</span>.dataLoader = fnDataLoader;
-        <span class="reserved">this</span>._dynLoad = true;
+    setDynamicLoad: <span class="reserved">function</span>(fnDataLoader, iconMode) { 
+        <span class="reserved">if</span> (fnDataLoader) {
+            <span class="reserved">this</span>.dataLoader = fnDataLoader;
+            <span class="reserved">this</span>._dynLoad = true;
+        } <span class="reserved">else</span> {
+            <span class="reserved">this</span>.dataLoader = null;
+            <span class="reserved">this</span>._dynLoad = false;
+        }
+
+        <span class="reserved">if</span> (iconMode) {
+            <span class="reserved">this</span>.iconMode = iconMode;
+        }
     },
 
     <span class="comment">/**
@@ -703,6 +729,10 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
         var lazy = (!<span class="reserved">this</span>.isRoot() &amp;&amp; (<span class="reserved">this</span>._dynLoad || <span class="reserved">this</span>.tree.root._dynLoad));
 <span class="comment">        // this.logger.debug("isDynamic: " + lazy);</span>
         <span class="reserved">return</span> lazy;
+    },
+
+    getIconMode: <span class="reserved">function</span>() {
+        <span class="reserved">return</span> (<span class="reserved">this</span>.iconMode || <span class="reserved">this</span>.tree.root.iconMode);
     },
 
     <span class="comment">/**
