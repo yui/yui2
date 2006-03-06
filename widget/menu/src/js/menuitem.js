@@ -34,7 +34,7 @@ YAHOO.widget.MenuItem.prototype = {
     * @type String
     */
     SUBMENU_INDICATOR_IMAGE_URL: 
-        "../src/img/menuarorght9_nrm_1.gif",
+        "http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/alt1/menuarorght9_nrm_1.gif",
 
 
     /**
@@ -44,7 +44,7 @@ YAHOO.widget.MenuItem.prototype = {
     * @type String
     */
     FOCUSED_SUBMENU_INDICATOR_IMAGE_URL: 
-        "../src/img/menuarorght9_hov_1.gif",
+        "http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/alt1/menuarorght9_hov_1.gif",
 
 
     /**
@@ -54,7 +54,7 @@ YAHOO.widget.MenuItem.prototype = {
     * @type String
     */
     DISABLED_SUBMENU_INDICATOR_IMAGE_URL: 
-        "../src/img/menuarorght9_dim_1.gif",
+        "http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/alt1/menuarorght9_dim_1.gif",
 
 
     /**
