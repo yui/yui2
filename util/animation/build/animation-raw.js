@@ -3,7 +3,7 @@ Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 Version: 0.10.0
-* /
+*/
 
 /**
  *
@@ -78,7 +78,7 @@ YAHOO.util.Anim.prototype = {
     * @type Object
     * @member
     */
-   defaultUnits: {},
+   defaultUnits: { opacity: ' ' },
 
    /**
     * @param {String or HTMLElement} el Reference to the element that will be animated
@@ -228,7 +228,7 @@ YAHOO.util.Anim.prototype = {
          }
 
          defaultValues[attribute] = val;
-      }
+      };
       
       /**
        * Returns the default value for the given attribute.
@@ -408,7 +408,7 @@ Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 Version: 0.10.0
-* /
+*/
 
 /**
  * @class Handles animation queueing and threading.
@@ -554,7 +554,7 @@ Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 Version: 0.10.0
-* /
+*/
 
 /**
  *
@@ -599,7 +599,7 @@ Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 Version: 0.10.0
-* /
+*/
 
 /**
  * @class Class for defining the acceleration rate and path of animations.
@@ -706,7 +706,7 @@ Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 Version: 0.10.0
-* /
+*/
 
 /**
  * @class Anim subclass for moving elements along a path defined by the "points" member of "attributes".  All "points" are arrays with x, y coordinates.
@@ -888,7 +888,7 @@ Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 Version: 0.10.0
-* /
+*/
 
 /**
  * @class Anim subclass for scrolling elements to a position defined by the "scroll" member of "attributes".  All "scroll" members are arrays with x, y scroll positions.
@@ -944,7 +944,7 @@ YAHOO.util.Scroll.prototype.doMethod = function(attribute, start, end) {
       val = this.method(this.currentFrame, start, end - start, this.totalFrames);
    }
    return val;
-}
+};
 
 /**
  * Returns current value of the attribute.

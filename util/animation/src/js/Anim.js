@@ -3,7 +3,7 @@ Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 Version: 0.10.0
-* /
+*/
 
 /**
  *
@@ -78,7 +78,7 @@ YAHOO.util.Anim.prototype = {
     * @type Object
     * @member
     */
-   defaultUnits: {},
+   defaultUnits: { opacity: ' ' },
 
    /**
     * @param {String or HTMLElement} el Reference to the element that will be animated
