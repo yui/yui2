@@ -144,7 +144,7 @@ return false;}
 YAHOO.widget.Cal_Core=YAHOO.widget.Calendar_Core;YAHOO.namespace("YAHOO.widget");YAHOO.widget.CalendarGroup=function(pageCount,id,containerId,monthyear,selected){if(arguments.length>0)
 {this.init(pageCount,id,containerId,monthyear,selected);}}
 YAHOO.widget.CalendarGroup.prototype.init=function(pageCount,id,containerId,monthyear,selected){this.id=id;this.selectedDates=new Array();this.containerId=containerId;this.pageCount=pageCount;this.pages=new Array();for(var p=0;p<pageCount;++p)
-{var cal=this.constructChild(id+"_"+p,this.containerId+"_"+p,monthyear,selected);cal.parent=this;cal.index=p;cal.pageDate.setMonth(cal.pageDate.getMonth()+p);cal._pageDateOrig=new Date(cal.pageDate.getFullYear(),cal.pageDate.getMonth(),cal.pageDate.getDate());this.pages.push(cal);}
+{var cal=this.constructChild(id+"_"+p,this.containerId+"_"+p,monthyear,selected);cal.parent=this;cal.index=p;cal.pageDate.setMonth(cal.pageDate.getMonth()+p);cal._pageDate=new Date(cal.pageDate.getFullYear(),cal.pageDate.getMonth(),cal.pageDate.getDate());this.pages.push(cal);}
 this.doNextMonth=function(e,calGroup){calGroup.nextMonth();}
 this.doPreviousMonth=function(e,calGroup){calGroup.previousMonth();}};YAHOO.widget.CalendarGroup.prototype.setChildFunction=function(fnName,fn){for(var p=0;p<this.pageCount;++p){this.pages[p][fnName]=fn;}}
 YAHOO.widget.CalendarGroup.prototype.callChildFunction=function(fnName,args){for(var p=0;p<this.pageCount;++p){var page=this.pages[p];if(page[fnName]){var fn=page[fnName];fn.call(page,args);}}}
