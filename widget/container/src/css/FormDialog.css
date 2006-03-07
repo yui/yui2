@@ -1,0 +1,40 @@
+.form-dialog form {
+	margin:0;
+}
+
+.form-dialog .ft {
+	text-align:right;
+	margin-top:10px;
+	clear:both;
+}
+
+.button-group button {
+	font:100 76% verdana;
+	text-decoration:none;
+	background-color: #E4E4E4;
+	color: #333;
+	cursor: hand;
+	vertical-align: middle;
+	border: 2px solid #797979;
+	border-top-color:#FFF;
+	border-left-color:#FFF;
+	margin:2px;
+	padding:2px;
+}
+
+.button-group button.default {
+	font-weight:bold;
+}
+
+.button-group button:hover, .button-group button.hover { 
+	border:2px solid #90A029;
+	background-color:#EBF09E;
+	border-top-color:#FFF;
+	border-left-color:#FFF;
+}
+.button-group button:active { 
+	border:2px solid #E4E4E4;
+	background-color:#BBB;
+	border-top-color:#333;
+	border-left-color:#333;
+}

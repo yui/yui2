@@ -1,0 +1,91 @@
+body.masked select, .panel.drag select {
+	visibility:hidden;
+}
+
+.mask {
+    z-index:0;   
+    display:none;
+    position:absolute;
+    top:0;
+    left:0;
+    width:110%;
+    height:100%;
+    background-color:#CCC;
+    -moz-opacity: 0.5;
+    opacity:.50;
+    filter: alpha(opacity=50);
+    }
+.mask[id]{ /* IE6 and below Can't See This */
+    position:fixed;
+}
+
+.panel-container {
+	position:absolute;
+	z-index:6;
+	visibility:hidden;
+	overflow:visible;
+	padding:3px;
+}
+
+.panel-container .shadow {
+	position:relative;
+	background-color:#CCC;
+	left:3px;top:3px;
+	z-index:-1;
+}
+
+.panel-container .matte {
+	position:relative;
+	background-color:#FFF;
+	left:-3px;top:-3px;
+	z-index:-1;
+}
+
+
+.panel {
+	border-collapse:separate;
+	position:absolute;
+	left:0px;top:0px;
+	font:13px Arial;
+	background-color:#FFF;
+	border:1px solid #000;
+	z-index:1;
+	margin:3px;
+	visibility:hidden;
+}
+
+.panel .hd {
+	cursor:move;
+	background-color:#3d77cb;
+	color:#FFF;
+	height:12px;
+	font-size:11px;
+	border:1px solid #FFF;
+	border-bottom:1px solid #000;
+	font-weight:bold;
+	margin-bottom:5px;
+	padding:4px;
+}
+
+.panel .bd {
+	padding:5px;
+}
+
+.panel .bd p {
+	margin:0 0 1em;
+}
+
+.panel .close {
+	position:absolute;
+	top:5px;
+	right:4px;
+	z-index:6;
+	height:14px;
+	width:14px;
+	margin:0px;
+	padding:0px;
+	background-image:url(http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/alt3/close12_1.gif);
+	background-repeat:no-repeat;
+	cursor:pointer;
+	visibility:inherit;
+}
