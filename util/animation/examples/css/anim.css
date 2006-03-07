@@ -10,15 +10,19 @@ body {
    font:small arial;
 }
 
+h1 {
+   color:#666;
+   margin:0;
+   font:bold 150% palatino, georgia;
+}
+
 #hd img {
    vertical-align:middle;
 }
 
-h1 {
-   color:#666;
+#hd h1 {
    display:inline;
    margin:0 0 0 20px;
-   font:bold 150% palatino, georgia;
    vertical-align:middle;
 }
 
