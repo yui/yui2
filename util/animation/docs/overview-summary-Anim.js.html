@@ -18,7 +18,8 @@
 
 	<div class="breadcrumbs">
 		
-			
+			<a href="javascript: alert('This location is TBD');">Home</a>
+			&gt;
 			
 			
 			
@@ -56,11 +57,6 @@
 			<div class="module">
 				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
 				<ul class="content">
-					
-						<li>
-							<a href="YAHOO.util.html">
-								YAHOO.util</a>
-						</li>
 					
 						<li>
 							<a href="YAHOO.util.Anim.html">
@@ -173,39 +169,6 @@
 		
 		
 		
-			<div class="quick-links">
-				<strong>Quick Links:</strong>&nbsp;
-				
-					
-						<a href="#classSummary">Class Summary</a> |
-					
-					
-				
-				
-				
-					<a href="#source">Source Code</a>
-				
-			</div>
-		
-			
-				<div class="section class summaries">
-					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-			
-				<div class="content">
-					<table border="1" cellpadding="3" cellspacing="0">
-						
-						<tr>
-							<td class="name">
-								<a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a>
-							</td>
-							<td class="overview">Base animation class that provides the interface for building animated effects.</td>
-						</tr>
-						
-					</table>
-				</div>
-			</div>
-		
-		
 		
 		
 		
@@ -213,16 +176,27 @@
 		
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<pre class="sourceview"><span class="comment">/**
+				<pre class="sourceview"><span class="comment">/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version: 0.10.0
+* /
+
+// NOTE: this version modified for documentation, not for real use
+
+/**
+ *
  * Base class for animated DOM objects.
  * <span class="attrib">@class</span> Base animation class that provides the interface for building animated effects.
- * &lt;p&gt;Usage: &lt;code&gt;var myAnim = new YAHOO.util.Anim(el, { width: { from: 10, to: 100 } }, 1, YAHOO.util.Easing.easeOut);&lt;/code&gt;&lt;/p&gt;
+ * &lt;p&gt;Usage: var myAnim = new YAHOO.util.Anim(el, { width: { from: 10, to: 100 } }, 1, YAHOO.util.Easing.easeOut);&lt;/p&gt;
  * <span class="attrib">@requires</span> YAHOO.util.AnimMgr
  * <span class="attrib">@requires</span> YAHOO.util.Easing
  * <span class="attrib">@requires</span> YAHOO.util.Dom
  * <span class="attrib">@requires</span> YAHOO.util.Event
+ * <span class="attrib">@requires</span> YAHOO.util.CustomEvent
  * <span class="attrib">@constructor</span>
- * <span class="attrib">@param</span> {HTMLElement | String} el Reference to the element that will be animated
+ * <span class="attrib">@param</span> {String or HTMLElement} el Reference to the element that will be animated
  * <span class="attrib">@param</span> {Object} attributes The attribute(s) to be animated.  
  * Each attribute is an object with at minimum a "to" or "by" member defined.  
  * Additional optional members are "from" (defaults to current value), "units" (defaults to "px").  
@@ -231,9 +205,8 @@
  * <span class="attrib">@param</span> {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
  */</span>
 
-<span class="comment">// NOTE: This version modified to conform with JSDoc, not valid as src file</span>
 YAHOO.util.Anim = <span class="reserved">function</span>(el, attributes, duration, method) 
-{  
+{
    <span class="reserved">if</span> (el) {
       <span class="reserved">this</span>.init(el, attributes, duration, method); 
    }
@@ -246,6 +219,7 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
     * <span class="attrib">@param</span> {Number} start The value this attribute should start from for this animation.
     * <span class="attrib">@param</span> {Number} end  The value this attribute should end at for this animation.
     * <span class="attrib">@return</span> {Number} The Value to be applied to the attribute.
+    * <span class="attrib">@member</span>
     */</span>
    doMethod: <span class="reserved">function</span>(attribute, start, end) {
       <span class="reserved">return</span> <span class="reserved">this</span>.method(<span class="reserved">this</span>.currentFrame, start, end - start, <span class="reserved">this</span>.totalFrames);
@@ -256,6 +230,7 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
     * <span class="attrib">@param</span> {String} attribute The name of the attribute.
     * <span class="attrib">@param</span> {Number} val The value to be applied to the attribute.
     * <span class="attrib">@param</span> {String} unit The unit ('px', '%', etc.) of the value.
+    * <span class="attrib">@member</span>
     */</span>
    setAttribute: <span class="reserved">function</span>(attribute, val, unit) {
       YAHOO.util.Dom.setStyle(<span class="reserved">this</span>.getEl(), attribute, val + unit); 
@@ -265,25 +240,29 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
     * Returns current value of the attribute.
     * <span class="attrib">@param</span> {String} attribute The name of the attribute.
     * <span class="attrib">@return</span> {Number} val The current value of the attribute.
+    * <span class="attrib">@member</span>
     */</span>
    getAttribute: <span class="reserved">function</span>(attribute) {
       <span class="reserved">return</span> parseFloat( YAHOO.util.Dom.getStyle(<span class="reserved">this</span>.getEl(), attribute));
    },
    
    <span class="comment">/**
-    * Per attribute units that should be used by default.
-    * <span class="attrib">@type</span> Object
-    */</span>
-   defaultUnits: null,
-   
-   <span class="comment">/**
     * The default unit to use for all attributes if not defined per attribute.
+    * defaults to 'px'
     * <span class="attrib">@type</span> String
+    * <span class="attrib">@member</span>
     */</span>
    defaultUnit: <span class="literal">'px'</span>,
+   
+   <span class="comment">/**
+    * Per attribute units that should be used by default.
+    * <span class="attrib">@type</span> Object
+    * <span class="attrib">@member</span>
+    */</span>
+   defaultUnits: {},
 
    <span class="comment">/**
-    * <span class="attrib">@param</span> {HTMLElement | String} el Reference to the element that will be animated
+    * <span class="attrib">@param</span> {String or HTMLElement} el Reference to the element that will be animated
     * <span class="attrib">@param</span> {Object} attributes The attribute(s) to be animated.  
     * Each attribute is an object with at minimum a "to" or "by" member defined.  
     * Additional optional members are "from" (defaults to current value), "units" (defaults to "px").  
@@ -291,7 +270,7 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
     * <span class="attrib">@param</span> {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
     * <span class="attrib">@param</span> {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
     */</span> 
-   init: <span class="reserved">function</span>(el, attributes, duration, method) {  
+   init: <span class="reserved">function</span>(el, attributes, duration, method) {
    
       <span class="comment">/**
        * Whether or not the animation is running.
@@ -341,6 +320,7 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
        * If "to" is supplied, the animation will end with the attribute at that value.  
        * If "by" is supplied, the animation will end at that value plus its starting value. 
        * If both are supplied, "to" is used, and "by" is ignored. 
+       * <span class="attrib">@member</span> YAHOO#util#Anim
        * Optional additional member include "from" (the value the attribute should start animating from, defaults to current value), and "unit" (the units to apply to the values).
        * <span class="attrib">@type</span> Object
        */</span>
@@ -349,6 +329,7 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
       <span class="comment">/**
        * The length of the animation.  Defaults to "1" (second).
        * <span class="attrib">@type</span> Number
+       * <span class="attrib">@member</span>
        */</span>
       <span class="reserved">this</span>.duration = duration || 1;
       
@@ -356,6 +337,7 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
        * The method that will provide values to the attribute(s) during the animation. 
        * Defaults to "YAHOO.util.Easing.easeNone".
        * <span class="attrib">@type</span> Function
+       * <span class="attrib">@member</span>
        */</span>
       <span class="reserved">this</span>.method = method || YAHOO.util.Easing.easeNone;
 
@@ -363,6 +345,7 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
        * Whether or not the duration should be treated as seconds.
        * Defaults to true.
        * <span class="attrib">@type</span> Boolean
+       * <span class="attrib">@member</span>
        */</span>
       <span class="reserved">this</span>.useSeconds = true; <span class="comment">// default to seconds</span>
       
@@ -370,6 +353,7 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
        * The location of the current animation on the timeline.
        * In time-based animations, this is used by AnimMgr to ensure the animation finishes on time.
        * <span class="attrib">@type</span> Int
+       * <span class="attrib">@member</span>
        */</span>
       <span class="reserved">this</span>.currentFrame = 0;
       
@@ -377,6 +361,7 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
        * The total number of frames to be executed.
        * In time-based animations, this is used by AnimMgr to ensure the animation finishes on time.
        * <span class="attrib">@type</span> Int
+       * <span class="attrib">@member</span>
        */</span>
       <span class="reserved">this</span>.totalFrames = YAHOO.util.AnimMgr.fps;
       
@@ -384,6 +369,7 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
       <span class="comment">/**
        * Returns a reference to the animated element.
        * <span class="attrib">@return</span> {HTMLElement}
+       * <span class="attrib">@member</span>
        */</span>
       <span class="reserved">this</span>.getEl = <span class="reserved">function</span>() { <span class="reserved">return</span> el; };
       
@@ -392,9 +378,10 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
        * Sets the default value to be used when "from" is not supplied.
        * <span class="attrib">@param</span> {String} attribute The attribute being set.
        * <span class="attrib">@param</span> {Number} val The default value to be applied to the attribute.
+       * <span class="attrib">@member</span>
        */</span>
       <span class="reserved">this</span>.setDefault = <span class="reserved">function</span>(attribute, val) {
-         <span class="reserved">if</span> ( isNaN(val) ) { <span class="comment">// if 'auto' or other non-number, set defaults for well known attributes, zero for others</span>
+         <span class="reserved">if</span> ( val.constructor != Array &amp;&amp; (val == <span class="literal">'auto'</span> || isNaN(val)) ) { <span class="comment">// if 'auto' or NaN, set defaults for well known attributes, zero for others</span>
             switch(attribute) {
                case<span class="literal">'width'</span>:
                   val = el.clientWidth || el.offsetWidth; <span class="comment">// computed width</span>
@@ -427,6 +414,7 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
       <span class="comment">/**
        * Returns the default value for the given attribute.
        * <span class="attrib">@param</span> {String} attribute The attribute whose value will be returned.
+       * <span class="attrib">@member</span>
        */</span>      
       <span class="reserved">this</span>.getDefault = <span class="reserved">function</span>(attribute) {
          <span class="reserved">return</span> defaultValues[attribute];
@@ -435,6 +423,7 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
       <span class="comment">/**
        * Checks whether the element is currently animated.
        * <span class="attrib">@return</span> {Boolean} current value of isAnimated.
+       * <span class="attrib">@member</span>       
        */</span>
       <span class="reserved">this</span>.isAnimated = <span class="reserved">function</span>() {
          <span class="reserved">return</span> isAnimated;
@@ -443,6 +432,7 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
       <span class="comment">/**
        * Returns the animation start time.
        * <span class="attrib">@return</span> {Date} current value of startTime.
+       * <span class="attrib">@member</span>       
        */</span>
       <span class="reserved">this</span>.getStartTime = <span class="reserved">function</span>() {
          <span class="reserved">return</span> startTime;
@@ -450,11 +440,15 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
       
       <span class="comment">/**
        * Starts the animation by registering it with the animation manager.
+       * <span class="attrib">@member</span>       
        */</span>
       <span class="reserved">this</span>.animate = <span class="reserved">function</span>() {
-         <span class="reserved">this</span>.onBeforeStart.fire();
+         <span class="reserved">if</span> ( <span class="reserved">this</span>.isAnimated() ) { <span class="reserved">return</span> false; }
          
-         <span class="reserved">this</span>.totalFrames = ( <span class="reserved">this</span>.useSeconds ) ? YAHOO.util.AnimMgr.fps * <span class="reserved">this</span>.duration : <span class="reserved">this</span>.duration;
+         <span class="reserved">this</span>.onStart.fire();
+         <span class="reserved">this</span>._onStart.fire();
+         
+         <span class="reserved">this</span>.totalFrames = ( <span class="reserved">this</span>.useSeconds ) ? Math.ceil(YAHOO.util.AnimMgr.fps * <span class="reserved">this</span>.duration) : <span class="reserved">this</span>.duration;
          YAHOO.util.AnimMgr.registerElement(<span class="reserved">this</span>);
          
          <span class="comment">// get starting values or use defaults</span>
@@ -470,18 +464,15 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
          isAnimated = true;
          actualFrames = 0;
          startTime = new Date();   
-         
-         var data = {
-            time: startTime
-         };
-         
-         <span class="reserved">this</span>.onStart.fire(data);
       };
         
       <span class="comment">/**
        * Stops the animation.  Normally called by AnimMgr when animation completes.
+       * <span class="attrib">@member</span>   
        */</span> 
       <span class="reserved">this</span>.stop = <span class="reserved">function</span>() {
+         <span class="reserved">if</span> ( !<span class="reserved">this</span>.isAnimated() ) { <span class="reserved">return</span> false; } 
+         
          <span class="reserved">this</span>.currentFrame = 0;
          
          endTime = new Date();
@@ -519,11 +510,24 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
                start = <span class="reserved">this</span>.getDefault(attribute);
             }
    
+
             <span class="comment">// To beats by, per SMIL 2.1 spec</span>
             <span class="reserved">if</span> (typeof attributes[attribute][<span class="literal">'to'</span>] != <span class="literal">'undefined'</span>) {
                end = attributes[attribute][<span class="literal">'to'</span>];
-            } <span class="reserved">else</span> <span class="reserved">if</span> (typeof attributes[attribute][<span class="literal">'by'</span>] != <span class="literal">'undefined'</span>) {
-               end = start + attributes[attribute][<span class="literal">'by'</span>];
+            } 
+            <span class="reserved">else</span> <span class="reserved">if</span> (typeof attributes[attribute][<span class="literal">'by'</span>] != <span class="literal">'undefined'</span>) 
+            {
+               <span class="reserved">if</span> (typeof start !== <span class="literal">'string'</span>) {
+                  end = [];
+                  <span class="reserved">for</span> (var i = 0, len = start.length; i &lt; len; ++i)
+                  {
+                     end[i] = start[i] + attributes[attribute][<span class="literal">'by'</span>][i];
+                  }
+               }
+               <span class="reserved">else</span>
+               {
+                  end = start + attributes[attribute][<span class="literal">'by'</span>];
+               }
             }
    
             <span class="comment">// if end is null, dont change value</span>
@@ -551,13 +555,15 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
       
       <span class="comment">/**
        * Custom event that fires when animation begins
-       * Listen via subscribe method
+       * Listen via subscribe method (e.g. myAnim.onStart.subscribe(someFunction)
+       * <span class="attrib">@member</span>
        */</span>   
       <span class="reserved">this</span>.onStart = new YAHOO.util.CustomEvent(<span class="literal">'start'</span>, <span class="reserved">this</span>);
       
       <span class="comment">/**
        * Custom event that fires between each frame
-       * Listen via subscribe method
+       * Listen via subscribe method (e.g. myAnim.onTween.subscribe(someFunction)
+       * <span class="attrib">@member</span>
        */</span>
       <span class="reserved">this</span>.onTween = new YAHOO.util.CustomEvent(<span class="literal">'tween'</span>, <span class="reserved">this</span>);
       
@@ -569,7 +575,8 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
       
       <span class="comment">/**
        * Custom event that fires when animation ends
-       * Listen via subscribe method       
+       * Listen via subscribe method (e.g. myAnim.onComplete.subscribe(someFunction)
+       * <span class="attrib">@member</span>
        */</span>
       <span class="reserved">this</span>.onComplete = new YAHOO.util.CustomEvent(<span class="literal">'complete'</span>, <span class="reserved">this</span>);
 
@@ -578,69 +585,59 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
 };
 
 <span class="comment">/**
- * Custom event that fires when animation begins.
- * Listen via "subscribe" method.
- * DO NOT OVERRIDE (please)
- */</span>   
-YAHOO.util.Anim.<span class="reserved">prototype</span>.onStart = new YAHOO.util.CustomEvent(<span class="literal">'start'</span>, <span class="reserved">this</span>);
-
-<span class="comment">/**
- * Custom event that fires between each frame.
- * Listen via "subscribe" method.
- * DO NOT OVERRIDE (please)
+ * Per attribute units that should be used by default.
+ * set to { opacity: ' ' } by default
+ * <span class="attrib">@type</span> Object
  */</span>
-YAHOO.util.Anim.<span class="reserved">prototype</span>.onTween = new YAHOO.util.CustomEvent(<span class="literal">'tween'</span>, <span class="reserved">this</span>);
-
-<span class="comment">/**
- * Custom event that fires when animation ends.
- * Listen via "subscribe" method.
- * DO NOT OVERRIDE (please)
- */</span>
-YAHOO.util.Anim.<span class="reserved">prototype</span>.onComplete = new YAHOO.util.CustomEvent(<span class="literal">'complete'</span>, <span class="reserved">this</span>);
+YAHOO.util.Anim.<span class="reserved">prototype</span>.defaultUnits = {},
 
 <span class="comment">/**
  * The collection of attributes to be animated.  
- * &lt;p&gt;Example: &lt;code&gt;this.attributes.width = { from: 10, to: 100 }&lt;/code&gt;&lt;/p&gt;
- * &lt;p&gt;Each attribute must have at least a "to" or "by" defined in order to animate.  &lt;/p&gt;
- * &lt;p&gt;If "to" is supplied, the animation will end with the attribute at that value.  &lt;/p&gt;
- * &lt;p&gt;If "by" is supplied, the animation will end at that value plus its starting value. &lt;/p&gt;
- * &lt;p&gt;If both are supplied, "to" is used, and "by" is ignored. &lt;/p&gt;
+ * Each attribute must have at least a "to" or "by" defined in order to animate.  
+ * If "to" is supplied, the animation will end with the attribute at that value.  
+ * If "by" is supplied, the animation will end at that value plus its starting value. 
+ * If both are supplied, "to" is used, and "by" is ignored. 
  * Optional additional member include "from" (the value the attribute should start animating from, defaults to current value), and "unit" (the units to apply to the values).
  * <span class="attrib">@type</span> Object
  */</span>
-YAHOO.util.Anim.<span class="reserved">prototype</span>.attributes = {};
+YAHOO.util.Anim.<span class="reserved">prototype</span>.attributes = attributes || {};
 
 <span class="comment">/**
  * The length of the animation.  Defaults to "1" (second).
  * <span class="attrib">@type</span> Number
+ * <span class="attrib">@member</span>
  */</span>
-YAHOO.util.Anim.<span class="reserved">prototype</span>.duration = 1;
+YAHOO.util.Anim.<span class="reserved">prototype</span>.duration = duration || 1;
 
 <span class="comment">/**
  * The method that will provide values to the attribute(s) during the animation. 
  * Defaults to "YAHOO.util.Easing.easeNone".
  * <span class="attrib">@type</span> Function
+ * <span class="attrib">@member</span>
  */</span>
-YAHOO.util.Anim.<span class="reserved">prototype</span>.method = YAHOO.util.Easing.easeNone;
+YAHOO.util.Anim.<span class="reserved">prototype</span>.method = method || YAHOO.util.Easing.easeNone;
 
 <span class="comment">/**
  * Whether or not the duration should be treated as seconds.
  * Defaults to true.
  * <span class="attrib">@type</span> Boolean
+ * <span class="attrib">@member</span>
  */</span>
 YAHOO.util.Anim.<span class="reserved">prototype</span>.useSeconds = true; <span class="comment">// default to seconds</span>
 
 <span class="comment">/**
  * The location of the current animation on the timeline.
- * In time-based animations, this is used by AnimMgr to ensure the animation finishes on time.
+ * In time-based animations, YAHOO.util.Anim.prototype is used by AnimMgr to ensure the animation finishes on time.
  * <span class="attrib">@type</span> Int
+ * <span class="attrib">@member</span>
  */</span>
 YAHOO.util.Anim.<span class="reserved">prototype</span>.currentFrame = 0;
 
 <span class="comment">/**
  * The total number of frames to be executed.
- * In time-based animations, this is used by AnimMgr to ensure the animation finishes on time.
+ * In time-based animations, YAHOO.util.Anim.prototype is used by AnimMgr to ensure the animation finishes on time.
  * <span class="attrib">@type</span> Int
+ * <span class="attrib">@member</span>
  */</span>
 YAHOO.util.Anim.<span class="reserved">prototype</span>.totalFrames = YAHOO.util.AnimMgr.fps;
 
@@ -648,6 +645,7 @@ YAHOO.util.Anim.<span class="reserved">prototype</span>.totalFrames = YAHOO.util
 <span class="comment">/**
  * Returns a reference to the animated element.
  * <span class="attrib">@return</span> {HTMLElement}
+ * <span class="attrib">@member</span>
  */</span>
 YAHOO.util.Anim.<span class="reserved">prototype</span>.getEl = <span class="reserved">function</span>() { <span class="reserved">return</span> el; };
 
@@ -656,9 +654,10 @@ YAHOO.util.Anim.<span class="reserved">prototype</span>.getEl = <span class="res
  * Sets the default value to be used when "from" is not supplied.
  * <span class="attrib">@param</span> {String} attribute The attribute being set.
  * <span class="attrib">@param</span> {Number} val The default value to be applied to the attribute.
+ * <span class="attrib">@member</span>
  */</span>
 YAHOO.util.Anim.<span class="reserved">prototype</span>.setDefault = <span class="reserved">function</span>(attribute, val) {
-   <span class="reserved">if</span> ( isNaN(val) ) { <span class="comment">// if 'auto' or other non-number, set defaults for well known attributes, zero for others</span>
+   <span class="reserved">if</span> ( val.constructor != Array &amp;&amp; (val == <span class="literal">'auto'</span> || isNaN(val)) ) { <span class="comment">// if 'auto' or NaN, set defaults for well known attributes, zero for others</span>
       switch(attribute) {
          case<span class="literal">'width'</span>:
             val = el.clientWidth || el.offsetWidth; <span class="comment">// computed width</span>
@@ -691,6 +690,7 @@ YAHOO.util.Anim.<span class="reserved">prototype</span>.setDefault = <span class
 <span class="comment">/**
  * Returns the default value for the given attribute.
  * <span class="attrib">@param</span> {String} attribute The attribute whose value will be returned.
+ * <span class="attrib">@member</span>
  */</span>      
 YAHOO.util.Anim.<span class="reserved">prototype</span>.getDefault = <span class="reserved">function</span>(attribute) {
    <span class="reserved">return</span> defaultValues[attribute];
@@ -699,6 +699,7 @@ YAHOO.util.Anim.<span class="reserved">prototype</span>.getDefault = <span class
 <span class="comment">/**
  * Checks whether the element is currently animated.
  * <span class="attrib">@return</span> {Boolean} current value of isAnimated.
+ * <span class="attrib">@member</span>       
  */</span>
 YAHOO.util.Anim.<span class="reserved">prototype</span>.isAnimated = <span class="reserved">function</span>() {
    <span class="reserved">return</span> isAnimated;
@@ -707,6 +708,7 @@ YAHOO.util.Anim.<span class="reserved">prototype</span>.isAnimated = <span class
 <span class="comment">/**
  * Returns the animation start time.
  * <span class="attrib">@return</span> {Date} current value of startTime.
+ * <span class="attrib">@member</span>       
  */</span>
 YAHOO.util.Anim.<span class="reserved">prototype</span>.getStartTime = <span class="reserved">function</span>() {
    <span class="reserved">return</span> startTime;
@@ -714,39 +716,39 @@ YAHOO.util.Anim.<span class="reserved">prototype</span>.getStartTime = <span cla
 
 <span class="comment">/**
  * Starts the animation by registering it with the animation manager.
+ * <span class="attrib">@member</span>       
  */</span>
 YAHOO.util.Anim.<span class="reserved">prototype</span>.animate = <span class="reserved">function</span>() {
-   <span class="reserved">this</span>.onBeforeStart.fire();
+   <span class="reserved">if</span> ( YAHOO.util.Anim.<span class="reserved">prototype</span>.isAnimated() ) { <span class="reserved">return</span> false; }
    
-   <span class="reserved">this</span>.totalFrames = ( <span class="reserved">this</span>.useSeconds ) ? YAHOO.util.AnimMgr.fps * <span class="reserved">this</span>.duration : <span class="reserved">this</span>.duration;
-   YAHOO.util.AnimMgr.registerElement(<span class="reserved">this</span>);
+   YAHOO.util.Anim.<span class="reserved">prototype</span>.onStart.fire();
+   YAHOO.util.Anim.<span class="reserved">prototype</span>._onStart.fire();
+   
+   YAHOO.util.Anim.<span class="reserved">prototype</span>.totalFrames = ( YAHOO.util.Anim.<span class="reserved">prototype</span>.useSeconds ) ? Math.ceil(YAHOO.util.AnimMgr.fps * YAHOO.util.Anim.<span class="reserved">prototype</span>.duration) : YAHOO.util.Anim.<span class="reserved">prototype</span>.duration;
+   YAHOO.util.AnimMgr.registerElement(YAHOO.util.Anim.<span class="reserved">prototype</span>);
    
    <span class="comment">// get starting values or use defaults</span>
-   var attributes = <span class="reserved">this</span>.attributes;
-   var el = <span class="reserved">this</span>.getEl();
+   var attributes = YAHOO.util.Anim.<span class="reserved">prototype</span>.attributes;
+   var el = YAHOO.util.Anim.<span class="reserved">prototype</span>.getEl();
    var val;
    
    <span class="reserved">for</span> (var attribute in attributes) {
-      val = <span class="reserved">this</span>.getAttribute(attribute);
-      <span class="reserved">this</span>.setDefault(attribute, val);
+      val = YAHOO.util.Anim.<span class="reserved">prototype</span>.getAttribute(attribute);
+      YAHOO.util.Anim.<span class="reserved">prototype</span>.setDefault(attribute, val);
    }
    
    isAnimated = true;
    actualFrames = 0;
    startTime = new Date();   
-   
-   var data = {
-      time: startTime
-   };
-   
-   <span class="reserved">this</span>.onStart.fire(data);
 };
   
 <span class="comment">/**
  * Stops the animation.  Normally called by AnimMgr when animation completes.
  */</span> 
 YAHOO.util.Anim.<span class="reserved">prototype</span>.stop = <span class="reserved">function</span>() {
-   <span class="reserved">this</span>.currentFrame = 0;
+   <span class="reserved">if</span> ( !YAHOO.util.Anim.<span class="reserved">prototype</span>.isAnimated() ) { <span class="reserved">return</span> false; } 
+   
+   YAHOO.util.Anim.<span class="reserved">prototype</span>.currentFrame = 0;
    
    endTime = new Date();
    
@@ -754,14 +756,36 @@ YAHOO.util.Anim.<span class="reserved">prototype</span>.stop = <span class="rese
       time: endTime,
       duration: endTime - startTime,
       frames: actualFrames,
-      fps: actualFrames / <span class="reserved">this</span>.duration
+      fps: actualFrames / YAHOO.util.Anim.<span class="reserved">prototype</span>.duration
    };
 
    isAnimated = false;  
    actualFrames = 0;
    
-   <span class="reserved">this</span>.onComplete.fire(data);
+   YAHOO.util.Anim.<span class="reserved">prototype</span>.onComplete.fire(data);
 };
+
+<span class="comment">/**
+* Custom event that fires when animation begins
+* Listen via subscribe method - usage: "myAnim.onStart.subscribe(someFunction)"
+* <span class="attrib">@member</span>
+*/</span>   
+YAHOO.util.Anim.<span class="reserved">prototype</span>.onStart = new YAHOO.util.CustomEvent(<span class="literal">'start'</span>, <span class="reserved">this</span>);
+
+<span class="comment">/**
+* Custom event that fires between each frame
+* Listen via subscribe method - usage: "myAnim.onTween.subscribe(someFunction)"
+* <span class="attrib">@member</span>
+*/</span>
+YAHOO.util.Anim.<span class="reserved">prototype</span>.onTween = new YAHOO.util.CustomEvent(<span class="literal">'tween'</span>, <span class="reserved">this</span>);
+
+<span class="comment">/**
+* Custom event that fires when animation ends
+* Listen via subscribe method - usage: "myAnim.onComplete.subscribe(someFunction)"
+* <span class="attrib">@member</span>
+*/</span>
+YAHOO.util.Anim.<span class="reserved">prototype</span>.onComplete = new YAHOO.util.CustomEvent(<span class="literal">'complete'</span>, <span class="reserved">this</span>);
+
 </pre>
 			</div>
 		

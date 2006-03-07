@@ -1,4 +1,10 @@
-// Copyright (c) 2006 Yahoo! Inc. All rights reserved.
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version: 0.10.0
+* /
+
 /**
  *
  * Base class for animated DOM objects.
@@ -8,8 +14,9 @@
  * @requires YAHOO.util.Easing
  * @requires YAHOO.util.Dom
  * @requires YAHOO.util.Event
+ * @requires YAHOO.util.CustomEvent
  * @constructor
- * @param {HTMLElement | String} el Reference to the element that will be animated
+ * @param {String or HTMLElement} el Reference to the element that will be animated
  * @param {Object} attributes The attribute(s) to be animated.  
  * Each attribute is an object with at minimum a "to" or "by" member defined.  
  * Additional optional members are "from" (defaults to current value), "units" (defaults to "px").  
@@ -17,8 +24,9 @@
  * @param {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
  * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
  */
+
 YAHOO.util.Anim = function(el, attributes, duration, method) 
-{  
+{
    if (el) {
       this.init(el, attributes, duration, method); 
    }
@@ -31,6 +39,7 @@ YAHOO.util.Anim.prototype = {
     * @param {Number} start The value this attribute should start from for this animation.
     * @param {Number} end  The value this attribute should end at for this animation.
     * @return {Number} The Value to be applied to the attribute.
+    * @member
     */
    doMethod: function(attribute, start, end) {
       return this.method(this.currentFrame, start, end - start, this.totalFrames);
@@ -41,6 +50,7 @@ YAHOO.util.Anim.prototype = {
     * @param {String} attribute The name of the attribute.
     * @param {Number} val The value to be applied to the attribute.
     * @param {String} unit The unit ('px', '%', etc.) of the value.
+    * @member
     */
    setAttribute: function(attribute, val, unit) {
       YAHOO.util.Dom.setStyle(this.getEl(), attribute, val + unit); 
@@ -50,27 +60,28 @@ YAHOO.util.Anim.prototype = {
     * Returns current value of the attribute.
     * @param {String} attribute The name of the attribute.
     * @return {Number} val The current value of the attribute.
+    * @member
     */
    getAttribute: function(attribute) {
       return parseFloat( YAHOO.util.Dom.getStyle(this.getEl(), attribute));
    },
    
    /**
-    * Per attribute units that should be used by default.
-    * @type {Object}
-    */
-   defaultUnits: {
-      opacity: ' '
-   },
-   
-   /**
     * The default unit to use for all attributes if not defined per attribute.
-    * @type {String}
+    * @type String
+    * @member
     */
    defaultUnit: 'px',
+   
+   /**
+    * Per attribute units that should be used by default.
+    * @type Object
+    * @member
+    */
+   defaultUnits: {},
 
    /**
-    * @param {HTMLElement | String} el Reference to the element that will be animated
+    * @param {String or HTMLElement} el Reference to the element that will be animated
     * @param {Object} attributes The attribute(s) to be animated.  
     * Each attribute is an object with at minimum a "to" or "by" member defined.  
     * Additional optional members are "from" (defaults to current value), "units" (defaults to "px").  
@@ -78,47 +89,47 @@ YAHOO.util.Anim.prototype = {
     * @param {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
     * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
     */ 
-   init: function(el, attributes, duration, method) {  
+   init: function(el, attributes, duration, method) {
    
       /**
        * Whether or not the animation is running.
        * @private
-       * @type {Boolen}
+       * @type Boolean
        */
       var isAnimated = false;
       
       /**
        * A Date object that is created when the animation begins.
        * @private
-       * @type {Date}
+       * @type Date
        */
       var startTime = null;
       
       /**
        * A Date object that is created when the animation ends.
        * @private
-       * @type {Date}
+       * @type Date
        */
       var endTime = null;
       
       /**
        * The number of frames this animation was able to execute.
        * @private
-       * @type {Int}
+       * @type Int
        */
       var actualFrames = 0;
       
       /**
        * The attribute values that will be used if no "from" is supplied.
        * @private
-       * @type {Object}
+       * @type Object
        */
       var defaultValues = {};      
 
       /**
        * The element to be animated.
        * @private
-       * @type {HTMLElement}
+       * @type HTMLElement
        */
       el = YAHOO.util.Dom.get(el);
       
@@ -128,42 +139,48 @@ YAHOO.util.Anim.prototype = {
        * If "to" is supplied, the animation will end with the attribute at that value.  
        * If "by" is supplied, the animation will end at that value plus its starting value. 
        * If both are supplied, "to" is used, and "by" is ignored. 
+       * @member YAHOO#util#Anim
        * Optional additional member include "from" (the value the attribute should start animating from, defaults to current value), and "unit" (the units to apply to the values).
-       * @type {Object}
+       * @type Object
        */
       this.attributes = attributes || {};
       
       /**
        * The length of the animation.  Defaults to "1" (second).
-       * @type {Number}
+       * @type Number
+       * @member
        */
       this.duration = duration || 1;
       
       /**
        * The method that will provide values to the attribute(s) during the animation. 
        * Defaults to "YAHOO.util.Easing.easeNone".
-       * @type {Function}
+       * @type Function
+       * @member
        */
       this.method = method || YAHOO.util.Easing.easeNone;
 
       /**
        * Whether or not the duration should be treated as seconds.
        * Defaults to true.
-       * @type {Boolean}
+       * @type Boolean
+       * @member
        */
       this.useSeconds = true; // default to seconds
       
       /**
        * The location of the current animation on the timeline.
        * In time-based animations, this is used by AnimMgr to ensure the animation finishes on time.
-       * @type {Int}
+       * @type Int
+       * @member
        */
       this.currentFrame = 0;
       
       /**
        * The total number of frames to be executed.
        * In time-based animations, this is used by AnimMgr to ensure the animation finishes on time.
-       * @type {Int}
+       * @type Int
+       * @member
        */
       this.totalFrames = YAHOO.util.AnimMgr.fps;
       
@@ -171,6 +188,7 @@ YAHOO.util.Anim.prototype = {
       /**
        * Returns a reference to the animated element.
        * @return {HTMLElement}
+       * @member
        */
       this.getEl = function() { return el; };
       
@@ -179,9 +197,10 @@ YAHOO.util.Anim.prototype = {
        * Sets the default value to be used when "from" is not supplied.
        * @param {String} attribute The attribute being set.
        * @param {Number} val The default value to be applied to the attribute.
+       * @member
        */
       this.setDefault = function(attribute, val) {
-         if ( val == 'auto' ) { // if 'auto' set defaults for well known attributes, zero for others
+         if ( val.constructor != Array && (val == 'auto' || isNaN(val)) ) { // if 'auto' or NaN, set defaults for well known attributes, zero for others
             switch(attribute) {
                case'width':
                   val = el.clientWidth || el.offsetWidth; // computed width
@@ -209,11 +228,12 @@ YAHOO.util.Anim.prototype = {
          }
 
          defaultValues[attribute] = val;
-      };
+      }
       
       /**
        * Returns the default value for the given attribute.
        * @param {String} attribute The attribute whose value will be returned.
+       * @member
        */      
       this.getDefault = function(attribute) {
          return defaultValues[attribute];
@@ -222,6 +242,7 @@ YAHOO.util.Anim.prototype = {
       /**
        * Checks whether the element is currently animated.
        * @return {Boolean} current value of isAnimated.
+       * @member       
        */
       this.isAnimated = function() {
          return isAnimated;
@@ -230,6 +251,7 @@ YAHOO.util.Anim.prototype = {
       /**
        * Returns the animation start time.
        * @return {Date} current value of startTime.
+       * @member       
        */
       this.getStartTime = function() {
          return startTime;
@@ -237,8 +259,11 @@ YAHOO.util.Anim.prototype = {
       
       /**
        * Starts the animation by registering it with the animation manager.
+       * @member       
        */
       this.animate = function() {
+         if ( this.isAnimated() ) { return false; }
+         
          this.onStart.fire();
          this._onStart.fire();
          
@@ -262,8 +287,11 @@ YAHOO.util.Anim.prototype = {
         
       /**
        * Stops the animation.  Normally called by AnimMgr when animation completes.
+       * @member YAHOO.util.Anim    
        */ 
       this.stop = function() {
+         if ( !this.isAnimated() ) { return false; } 
+         
          this.currentFrame = 0;
          
          endTime = new Date();
@@ -301,11 +329,24 @@ YAHOO.util.Anim.prototype = {
                start = this.getDefault(attribute);
             }
    
+
             // To beats by, per SMIL 2.1 spec
             if (typeof attributes[attribute]['to'] != 'undefined') {
                end = attributes[attribute]['to'];
-            } else if (typeof attributes[attribute]['by'] != 'undefined') {
-               end = start + attributes[attribute]['by'];
+            } 
+            else if (typeof attributes[attribute]['by'] != 'undefined') 
+            {
+               if (typeof start !== 'string') {
+                  end = [];
+                  for (var i = 0, len = start.length; i < len; ++i)
+                  {
+                     end[i] = start[i] + attributes[attribute]['by'][i];
+                  }
+               }
+               else
+               {
+                  end = start + attributes[attribute]['by'];
+               }
             }
    
             // if end is null, dont change value
@@ -333,13 +374,15 @@ YAHOO.util.Anim.prototype = {
       
       /**
        * Custom event that fires when animation begins
-       * Listen via subscribe method
+       * Listen via subscribe method (e.g. myAnim.onStart.subscribe(someFunction)
+       * @member
        */   
       this.onStart = new YAHOO.util.CustomEvent('start', this);
       
       /**
        * Custom event that fires between each frame
-       * Listen via subscribe method
+       * Listen via subscribe method (e.g. myAnim.onTween.subscribe(someFunction)
+       * @member
        */
       this.onTween = new YAHOO.util.CustomEvent('tween', this);
       
@@ -351,13 +394,21 @@ YAHOO.util.Anim.prototype = {
       
       /**
        * Custom event that fires when animation ends
-       * Listen via subscribe method       
+       * Listen via subscribe method (e.g. myAnim.onComplete.subscribe(someFunction)
+       * @member
        */
       this.onComplete = new YAHOO.util.CustomEvent('complete', this);
 
       this._onTween.subscribe(onTween);
    }
 };
+
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version: 0.10.0
+* /
 
 /**
  * @class Handles animation queueing and threading.
@@ -496,7 +547,14 @@ YAHOO.util.AnimMgr = new function() {
          tween.currentFrame += tweak;     
       }
    };
-};
+}
+
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version: 0.10.0
+* /
 
 /**
  *
@@ -507,13 +565,13 @@ YAHOO.util.Bezier = new function()
 {
    /**
     * Get the current position of the animated element based on t.
-    * @param {array} points An array containing Bezier points.
     * Each point is an array of "x" and "y" values (0 = x, 1 = y)
     * At least 2 points are required (start and end).
     * First point is start. Last point is end.
     * Additional control points are optional.    
-    * @param {float} t Basis for determining current position (0 < t < 1)
-    * @return {object} An object containing int x and y member data
+    * @param {Array} points An array containing Bezier points
+    * @param {Number} t A number between 0 and 1 which is the basis for determining current position
+    * @return {Array} An array containing int x and y member data
     */
    this.getPosition = function(points, t)
    {  
@@ -535,6 +593,13 @@ YAHOO.util.Bezier = new function()
    
    };
 };
+
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version: 0.10.0
+* /
 
 /**
  * @class Class for defining the acceleration rate and path of animations.
@@ -636,6 +701,13 @@ YAHOO.util.Easing = new function() {
    };
 };
 
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version: 0.10.0
+* /
+
 /**
  * @class Anim subclass for moving elements along a path defined by the "points" member of "attributes".  All "points" are arrays with x, y coordinates.
  * <p>Usage: <code>var myAnim = new YAHOO.util.Motion(el, { points: { to: [800, 800] } }, 1, YAHOO.util.Easing.easeOut);</code></p>
@@ -645,8 +717,9 @@ YAHOO.util.Easing = new function() {
  * @requires YAHOO.util.Bezier
  * @requires YAHOO.util.Dom
  * @requires YAHOO.util.Event
+ * @requires YAHOO.util.CustomEvent 
  * @constructor
- * @param {HTMLElement | String} el Reference to the element that will be animated
+ * @param {String or HTMLElement} el Reference to the element that will be animated
  * @param {Object} attributes The attribute(s) to be animated.  
  * Each attribute is an object with at minimum a "to" or "by" member defined.  
  * Additional optional members are "from" (defaults to current value), "units" (defaults to "px").  
@@ -729,7 +802,7 @@ YAHOO.util.Motion.prototype.setAttribute = function(attribute, val, unit) {
 };
 
 /**
- * @param {HTMLElement | String} el Reference to the element that will be animated
+ * @param {String or HTMLElement} el Reference to the element that will be animated
  * @param {Object} attributes The attribute(s) to be animated.  
  * Each attribute is an object with at minimum a "to" or "by" member defined.  
  * Additional optional members are "from" (defaults to current value), "units" (defaults to "px").  
@@ -810,6 +883,13 @@ YAHOO.util.Motion.prototype.initMotion = function(el, attributes, duration, meth
    this._onStart.subscribe(onStart);
 };
 
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version: 0.10.0
+* /
+
 /**
  * @class Anim subclass for scrolling elements to a position defined by the "scroll" member of "attributes".  All "scroll" members are arrays with x, y scroll positions.
  * <p>Usage: <code>var myAnim = new YAHOO.util.Scroll(el, { scroll: { to: [0, 800] } }, 1, YAHOO.util.Easing.easeOut);</code></p>
@@ -819,8 +899,9 @@ YAHOO.util.Motion.prototype.initMotion = function(el, attributes, duration, meth
  * @requires YAHOO.util.Bezier
  * @requires YAHOO.util.Dom
  * @requires YAHOO.util.Event
+ * @requires YAHOO.util.CustomEvent 
  * @constructor
- * @param {HTMLElement | String} el Reference to the element that will be animated
+ * @param {String or HTMLElement} el Reference to the element that will be animated
  * @param {Object} attributes The attribute(s) to be animated.  
  * Each attribute is an object with at minimum a "to" or "by" member defined.  
  * Additional optional members are "from" (defaults to current value), "units" (defaults to "px").  
@@ -863,7 +944,7 @@ YAHOO.util.Scroll.prototype.doMethod = function(attribute, start, end) {
       val = this.method(this.currentFrame, start, end - start, this.totalFrames);
    }
    return val;
-};
+}
 
 /**
  * Returns current value of the attribute.
@@ -899,4 +980,3 @@ YAHOO.util.Scroll.prototype.setAttribute = function(attribute, val, unit) {
       YAHOO.util.Dom.setStyle(el, attribute, val + unit); 
    }
 };
-

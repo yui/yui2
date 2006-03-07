@@ -1,4 +1,10 @@
-// Copyright (c) 2006 Yahoo! Inc. All rights reserved.
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version: 0.10.0
+* /
+
 /**
  *
  * @class Used to calculate Bezier splines for any number of control points.
@@ -8,13 +14,13 @@ YAHOO.util.Bezier = new function()
 {
    /**
     * Get the current position of the animated element based on t.
-    * @param {array} points An array containing Bezier points.
     * Each point is an array of "x" and "y" values (0 = x, 1 = y)
     * At least 2 points are required (start and end).
     * First point is start. Last point is end.
     * Additional control points are optional.    
-    * @param {float} t Basis for determining current position (0 < t < 1)
-    * @return {object} An object containing int x and y member data
+    * @param {Array} points An array containing Bezier points
+    * @param {Number} t A number between 0 and 1 which is the basis for determining current position
+    * @return {Array} An array containing int x and y member data
     */
    this.getPosition = function(points, t)
    {  

@@ -1,4 +1,10 @@
-// Copyright (c) 2006 Yahoo! Inc. All rights reserved.
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version: 0.10.0
+* /
+
 /**
  * @class Provides helper methods for DOM elements.
  */
@@ -6,7 +12,7 @@ YAHOO.util.Dom = new function() {
 
    /**
     * Returns an HTMLElement reference
-    * @param {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * @param {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     * @return {HTMLElement} A DOM reference to an HTML element.
     */
    this.get = function(el) {
@@ -19,7 +25,7 @@ YAHOO.util.Dom = new function() {
 
    /**
     * Normalizes currentStyle and ComputedStyle.
-    * @param {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * @param {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     * @param {String} property The style property whose value is returned.
     * @return {String} The current value of the style property.
     */
@@ -67,7 +73,7 @@ YAHOO.util.Dom = new function() {
 
    /**
     * Wrapper for setting style properties of HTMLElements.  Normalizes "opacity" across modern browsers.
-    * @param {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * @param {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     * @param {String} property The style property to be set.
     * @param {String} val The value to apply to the given property.
     */
@@ -94,7 +100,7 @@ YAHOO.util.Dom = new function() {
    
    /**
     * Gets the current position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-    * @param {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * @param {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     */
    this.getXY = function(el) {
       el = this.get(el);
@@ -135,12 +141,13 @@ YAHOO.util.Dom = new function() {
             }
          }
          
-         // opera & (safari absolute) incorrectly account for body offsetTop
+         // opera (& safari absolute) incorrectly account for body offsetTop
          var ua = navigator.userAgent.toLowerCase();
          if (
             ua.indexOf('opera') != -1 
             || ( ua.indexOf('safari') != -1 && this.getStyle(el, 'position') == 'absolute' ) 
          ) {
+            pos[0] -= document.body.offsetLeft;
             pos[1] -= document.body.offsetTop;
          } 
       }
@@ -161,7 +168,7 @@ YAHOO.util.Dom = new function() {
    
    /**
     * Gets the current X position of an element based on page coordinates.  The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-    * @param {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * @param {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     */
    this.getX = function(el) {
       return this.getXY(el)[0];
@@ -169,7 +176,7 @@ YAHOO.util.Dom = new function() {
    
    /**
     * Gets the current Y position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-    * @param {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * @param {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     */
    this.getY = function(el) {
       return this.getXY(el)[1];
@@ -178,7 +185,7 @@ YAHOO.util.Dom = new function() {
    /**
     * Set the position of an html element in page coordinates, regardless of how the element is positioned.
     * The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-    * @param {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * @param {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     * @param {array} pos Contains X & Y values for new position (coordinates are page-based)
     */
    this.setXY = function(el, pos, noRetry) {
@@ -214,7 +221,7 @@ YAHOO.util.Dom = new function() {
    /**
     * Set the X position of an html element in page coordinates, regardless of how the element is positioned.
     * The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-    * @param {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * @param {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     * @param {Int} x to use as the X coordinate.
     */
    this.setX = function(el, x) {
@@ -224,7 +231,7 @@ YAHOO.util.Dom = new function() {
    /**
     * Set the Y position of an html element in page coordinates, regardless of how the element is positioned.
     * The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-    * @param {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * @param {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     * @param {Int} Value to use as the Y coordinate.
     */
    this.setY = function(el, y) {
@@ -234,7 +241,7 @@ YAHOO.util.Dom = new function() {
    /**
     * Returns the region position of the given element.
     * The element must be part of the DOM tree to have a region (display:none or elements not appended return false).
-    * @param {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * @param {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     * @return {Region} A Region instance containing "top, left, bottom, right" member data.
     */
    this.getRegion = function(el) {
@@ -264,7 +271,57 @@ YAHOO.util.Dom = new function() {
          || document.body.clientHeight
       );
    };
+   
+   this.getElementsByClassName = function(className, tag, root) {
+      root = root || document;
+		tag = tag || '*';
+      var nodes = [];
+      var elements = root.getElementsByTagName(tag);
+      var re = new RegExp('\\b' + className + '\\b');
+
+		for ( var i = 0, len = elements.length; i < len; ++i) {
+         if ( re.test(elements[i]['className']) ) {
+            nodes[nodes.length] = elements[i];
+         }
+      }
+      
+      return nodes;
+   }; 
+
+   this.hasClass = function(el, className) {
+      el = this.get(el);
+      var re = new RegExp('\\b' + className + '\\b');
+      return re.test(el['className']);
+   };
+
+   this.addClass = function(el, className) {
+      if (this.hasClass(el, className)) { return false; } // already present
+      
+      el = this.get(el);
+      el['className'] = [el['className'],className].join(' ');
+      
+      return true;
+   };
+
+   this.removeClass = function(el, className) {
+      if (!this.hasClass(el, className)) { return false; } // not present
+      
+      el = this.get(el);
+      var re = new RegExp('\\b' + className + '\\b');
+      var c = el['className'];
+      
+      el['className'] = c.replace( re, '');
+      
+      return true;
+   };
 };
+
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version: 0.10.0
+* /
 
 /**
  * @class A region is a representation of an object on a grid.  It is defined
@@ -316,6 +373,8 @@ YAHOO.util.Region.prototype.contains = function(region) {
              region.right  <= this.right  && 
              region.top    >= this.top    && 
              region.bottom <= this.bottom    );
+
+    // this.logger.debug("does " + this + " contain " + region + " ... " + ret);
 };
 
 /**
@@ -373,7 +432,7 @@ YAHOO.util.Region.prototype.toString = function() {
              ", b: "    + this.bottom + 
              ", l: "    + this.left   + 
              "}" );
-};
+}
 
 /**
  * Returns a region that is occupied by the DOM element

@@ -13,6 +13,7 @@ YAHOO.namespace('example.anim');
 YAHOO.example.anim.init = function() {        
 
    var endPoint = YAHOO.util.Dom.getXY('end');
+   
    var attributes = {
       points: { to: endPoint }
    }
@@ -23,8 +24,7 @@ YAHOO.example.anim.init = function() {
       return false;
    }
    
-   YAHOO.util.Event.addListener(document, 'click', animate);
-      
+   YAHOO.util.Event.addListener(document, 'click', animate); 
 }
 
 YAHOO.util.Event.addListener(window, 'load', YAHOO.example.anim.init);

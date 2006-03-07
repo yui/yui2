@@ -14,16 +14,17 @@
 
 <div id="header">
 	<h1>JavaScript Documentation</h1>
-	<h3><a href="./index.html">DOM Utility</a></h3>
+	<h3><a href="./index.html">Dom Utility</a></h3>
 
 	<div class="breadcrumbs">
 		
+			<a href="javascript: alert('This location is TBD');">Home</a>
+			&gt;
 			
 			
 			
 			
-			
-				<a href="./index.html">DOM Utility</a>
+				<a href="./index.html">Dom Utility</a>
 				&gt;
 				<strong>Dom.js</strong>
 			
@@ -145,14 +146,21 @@
 		
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<pre class="sourceview"><span class="comment">/**
+				<pre class="sourceview"><span class="comment">/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version: 0.10.0
+* /
+
+/**
  * <span class="attrib">@class</span> Provides helper methods for DOM elements.
  */</span>
 YAHOO.util.Dom = new <span class="reserved">function</span>() {
 
    <span class="comment">/**
     * Returns an HTMLElement reference
-    * <span class="attrib">@param</span> {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * <span class="attrib">@param</span> {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     * <span class="attrib">@return</span> {HTMLElement} A DOM reference to an HTML element.
     */</span>
    <span class="reserved">this</span>.get = <span class="reserved">function</span>(el) {
@@ -165,7 +173,7 @@ YAHOO.util.Dom = new <span class="reserved">function</span>() {
 
    <span class="comment">/**
     * Normalizes currentStyle and ComputedStyle.
-    * <span class="attrib">@param</span> {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * <span class="attrib">@param</span> {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     * <span class="attrib">@param</span> {String} property The style property whose value is returned.
     * <span class="attrib">@return</span> {String} The current value of the style property.
     */</span>
@@ -213,7 +221,7 @@ YAHOO.util.Dom = new <span class="reserved">function</span>() {
 
    <span class="comment">/**
     * Wrapper for setting style properties of HTMLElements.  Normalizes "opacity" across modern browsers.
-    * <span class="attrib">@param</span> {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * <span class="attrib">@param</span> {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     * <span class="attrib">@param</span> {String} property The style property to be set.
     * <span class="attrib">@param</span> {String} val The value to apply to the given property.
     */</span>
@@ -240,7 +248,7 @@ YAHOO.util.Dom = new <span class="reserved">function</span>() {
    
    <span class="comment">/**
     * Gets the current position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-    * <span class="attrib">@param</span> {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * <span class="attrib">@param</span> {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     */</span>
    <span class="reserved">this</span>.getXY = <span class="reserved">function</span>(el) {
       el = <span class="reserved">this</span>.get(el);
@@ -281,12 +289,13 @@ YAHOO.util.Dom = new <span class="reserved">function</span>() {
             }
          }
          
-         <span class="comment">// opera &amp; (safari absolute) incorrectly account for body offsetTop</span>
+         <span class="comment">// opera (&amp; safari absolute) incorrectly account for body offsetTop</span>
          var ua = navigator.userAgent.toLowerCase();
          <span class="reserved">if</span> (
             ua.indexOf(<span class="literal">'opera'</span>) != -1 
             || ( ua.indexOf(<span class="literal">'safari'</span>) != -1 &amp;&amp; <span class="reserved">this</span>.getStyle(el, <span class="literal">'position'</span>) == <span class="literal">'absolute'</span> ) 
          ) {
+            pos[0] -= document.body.offsetLeft;
             pos[1] -= document.body.offsetTop;
          } 
       }
@@ -307,7 +316,7 @@ YAHOO.util.Dom = new <span class="reserved">function</span>() {
    
    <span class="comment">/**
     * Gets the current X position of an element based on page coordinates.  The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-    * <span class="attrib">@param</span> {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * <span class="attrib">@param</span> {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     */</span>
    <span class="reserved">this</span>.getX = <span class="reserved">function</span>(el) {
       <span class="reserved">return</span> <span class="reserved">this</span>.getXY(el)[0];
@@ -315,7 +324,7 @@ YAHOO.util.Dom = new <span class="reserved">function</span>() {
    
    <span class="comment">/**
     * Gets the current Y position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-    * <span class="attrib">@param</span> {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * <span class="attrib">@param</span> {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     */</span>
    <span class="reserved">this</span>.getY = <span class="reserved">function</span>(el) {
       <span class="reserved">return</span> <span class="reserved">this</span>.getXY(el)[1];
@@ -324,15 +333,18 @@ YAHOO.util.Dom = new <span class="reserved">function</span>() {
    <span class="comment">/**
     * Set the position of an html element in page coordinates, regardless of how the element is positioned.
     * The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-    * <span class="attrib">@param</span> {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * <span class="attrib">@param</span> {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     * <span class="attrib">@param</span> {array} pos Contains X &amp; Y values for new position (coordinates are page-based)
     */</span>
    <span class="reserved">this</span>.setXY = <span class="reserved">function</span>(el, pos, noRetry) {
       el = <span class="reserved">this</span>.get(el);
       var pageXY = YAHOO.util.Dom.getXY(el);
       <span class="reserved">if</span> (pageXY === false) { <span class="reserved">return</span> false; } <span class="comment">// has to be part of doc to have pageXY</span>
+
+      <span class="reserved">if</span> (<span class="reserved">this</span>.getStyle(el, <span class="literal">'position'</span>) == <span class="literal">'static'</span>) { <span class="comment">// default to relative</span>
+         <span class="reserved">this</span>.setStyle(el, <span class="literal">'position'</span>, <span class="literal">'relative'</span>);
+      }
       
-      <span class="comment">//debug(el.offsetWidth);</span>
       var delta = [
          parseInt( YAHOO.util.Dom.getStyle(el, <span class="literal">'left'</span>), 10 ),
          parseInt( YAHOO.util.Dom.getStyle(el, <span class="literal">'top'</span>), 10 )
@@ -357,7 +369,7 @@ YAHOO.util.Dom = new <span class="reserved">function</span>() {
    <span class="comment">/**
     * Set the X position of an html element in page coordinates, regardless of how the element is positioned.
     * The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-    * <span class="attrib">@param</span> {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * <span class="attrib">@param</span> {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     * <span class="attrib">@param</span> {Int} x to use as the X coordinate.
     */</span>
    <span class="reserved">this</span>.setX = <span class="reserved">function</span>(el, x) {
@@ -367,7 +379,7 @@ YAHOO.util.Dom = new <span class="reserved">function</span>() {
    <span class="comment">/**
     * Set the Y position of an html element in page coordinates, regardless of how the element is positioned.
     * The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-    * <span class="attrib">@param</span> {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * <span class="attrib">@param</span> {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     * <span class="attrib">@param</span> {Int} Value to use as the Y coordinate.
     */</span>
    <span class="reserved">this</span>.setY = <span class="reserved">function</span>(el, y) {
@@ -377,7 +389,7 @@ YAHOO.util.Dom = new <span class="reserved">function</span>() {
    <span class="comment">/**
     * Returns the region position of the given element.
     * The element must be part of the DOM tree to have a region (display:none or elements not appended return false).
-    * <span class="attrib">@param</span> {String | HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+    * <span class="attrib">@param</span> {String or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
     * <span class="attrib">@return</span> {Region} A Region instance containing "top, left, bottom, right" member data.
     */</span>
    <span class="reserved">this</span>.getRegion = <span class="reserved">function</span>(el) {
@@ -406,6 +418,49 @@ YAHOO.util.Dom = new <span class="reserved">function</span>() {
          || document.documentElement.clientHeight
          || document.body.clientHeight
       );
+   };
+   
+   <span class="reserved">this</span>.getElementsByClassName = <span class="reserved">function</span>(className, tag, root) {
+      root = root || document;
+		tag = tag || <span class="literal">'*'</span>;
+      var nodes = [];
+      var elements = root.getElementsByTagName(tag);
+      var re = new RegExp(<span class="literal">'\\b'</span> + className + <span class="literal">'\\b'</span>);
+
+		<span class="reserved">for</span> ( var i = 0, len = elements.length; i &lt; len; ++i) {
+         <span class="reserved">if</span> ( re.test(elements[i][<span class="literal">'className'</span>]) ) {
+            nodes[nodes.length] = elements[i];
+         }
+      }
+      
+      <span class="reserved">return</span> nodes;
+   }; 
+
+   <span class="reserved">this</span>.hasClass = <span class="reserved">function</span>(el, className) {
+      el = <span class="reserved">this</span>.get(el);
+      var re = new RegExp(<span class="literal">'\\b'</span> + className + <span class="literal">'\\b'</span>);
+      <span class="reserved">return</span> re.test(el[<span class="literal">'className'</span>]);
+   };
+
+   <span class="reserved">this</span>.addClass = <span class="reserved">function</span>(el, className) {
+      <span class="reserved">if</span> (<span class="reserved">this</span>.hasClass(el, className)) { <span class="reserved">return</span> false; } <span class="comment">// already present</span>
+      
+      el = <span class="reserved">this</span>.get(el);
+      el[<span class="literal">'className'</span>] = [el[<span class="literal">'className'</span>],className].join(<span class="literal">' '</span>);
+      
+      <span class="reserved">return</span> true;
+   };
+
+   <span class="reserved">this</span>.removeClass = <span class="reserved">function</span>(el, className) {
+      <span class="reserved">if</span> (!<span class="reserved">this</span>.hasClass(el, className)) { <span class="reserved">return</span> false; } <span class="comment">// not present</span>
+      
+      el = <span class="reserved">this</span>.get(el);
+      var re = new RegExp(<span class="literal">'\\b'</span> + className + <span class="literal">'\\b'</span>);
+      var c = el[<span class="literal">'className'</span>];
+      
+      el[<span class="literal">'className'</span>] = c.replace( re, <span class="literal">''</span>);
+      
+      <span class="reserved">return</span> true;
    };
 };
 </pre>

@@ -16,7 +16,7 @@ h1, h2, h3, h4 { margin: 0; padding: 0; }
 #body { min-width: 600px; }
 
 /* Side nav */
-#body .nav { width: 11em; float:left;position:relative; }
+#body .nav { width: 13em; float:left;position:relative; }
 #body .nav .module { background: #EBE9E9; margin: 0 0 15px 0; padding: 0; }
 #body .nav .module h4 { padding: 3px 5px; border-bottom: #947DB2 1px solid; }
 #body .nav .module h4 A { color: #000; text-decoration: none; }
@@ -28,8 +28,8 @@ h1, h2, h3, h4 { margin: 0; padding: 0; }
 #body .nav .module.resources UL { font-size: 85%; padding: 7px 7px 7px 20px; list-style-type: square; color: #947DB2; }
 
 /* Body Content */
-#pri { float:left; width:100%; margin-left: -11em; min-width: 435px; }
-#body .main {margin-left: 11em; padding-left: 1em; } 
+#pri { float:left; width:100%; margin-left: -13em; min-width: 435px; }
+#body .main {margin-left: 13em; padding-left: 1em; } 
 
 #body .class-def { margin: 10px 0; }
 #body .class-def div { margin: 5px 0; }

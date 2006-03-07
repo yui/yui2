@@ -1,4 +1,10 @@
-// Copyright (c) 2006 Yahoo! Inc. All rights reserved.
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version: 0.10.0
+* /
+
 /**
  * @class A region is a representation of an object on a grid.  It is defined
  * by the top, right, bottom, left extents, so is rectangular by default.  If 
