@@ -1,0 +1,7 @@
+#bgImg {
+	margin-left:75px;
+	filter:alpha(opacity=50);
+	-moz-opacity:.50;
+	opacity:.50;
+	z-index:0;
+}

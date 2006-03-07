@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+
+	<title>Yahoo! Calendar Widget - Single-Select Implementation</title>
+	
+	<link rel="stylesheet" href="../../src/css/calendar.css" type="text/css">
+	<link rel="stylesheet" href="../css/examples.css" type="text/css">
+	
+	<script type="text/javascript" src="../js/YAHOO.js"></script>
+	<!--<script type="text/javascript" src="../js/event.js" ></script>-->
+	<script type="text/javascript" src="http://feelbuild-mac.corp.yahoo.com/Event.dev/js/event/build/event.js"></script>
+	<script type="text/javascript" src="../../build/calendar_2.0.0-b1.js"></script>
+	
+	<script language="javascript">
+		var cal1;
+
+		function init() {
+			cal1 = new YAHOO.widget.Calendar("cal1","cal1Container");
+			cal1.render();
+		}
+	</script>
+
+	
+
+</head>
+
+<body onload="init()">
+	<img id="logo" src="../img/logo.gif"/>
+	
+	<div id="pageTitle">
+		<h3>Calendar Widget</h3>
+	</div>
+
+	<div class="column left">
+		<h4>Default Single-Select Implementation</h4>
+
+		<p>The default Calendar implementation is a single-select 1-up calendar view that defaults to the current month and year. The basic calendar can be implemented by declaring a variable to represent the calendar, and passing the calendar's ID to the Calendar constructor:</p>
+<xmp>var cal1;
+function init() {
+   cal1 = new YAHOO.widget.Calendar("cal1", "cal1Container");
+   cal1.render();
+}</xmp>
+		<p>The Calendar object should be instantiated after the body has been rendered, so that a reference to the container element that will contain the calendar can be obtained. The container element can reside anywhere within the body.</p>
+<xmp><div id="cal1Container"></div></xmp>
+		</div>
+		
+
+		<div class="column right">
+			<div style="margin-left:auto;margin-right:auto;width:150px">
+			<div id="cal1Container"></div>
+			<div style="margin-left:auto;margin-right:auto;text-align:center;width:150px;clear:both">
+				<a href="javascript:cal1.reset()" class="navLink" style="font-size:12px;text-decoration:underline">reset</a>|
+				<a href="javascript:alert(cal1.getSelectedDates())" class="navLink" style="font-size:12px;text-decoration:underline">what's selected?</a>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
