@@ -1,4 +1,10 @@
-// Copyright (c) 2006 Yahoo! Inc. All rights reserved.
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version: 0.10.0
+* /
+
 /**
  * @class Anim subclass for scrolling elements to a position defined by the "scroll" member of "attributes".  All "scroll" members are arrays with x, y scroll positions.
  * <p>Usage: <code>var myAnim = new YAHOO.util.Scroll(el, { scroll: { to: [0, 800] } }, 1, YAHOO.util.Easing.easeOut);</code></p>
@@ -8,8 +14,9 @@
  * @requires YAHOO.util.Bezier
  * @requires YAHOO.util.Dom
  * @requires YAHOO.util.Event
+ * @requires YAHOO.util.CustomEvent 
  * @constructor
- * @param {HTMLElement | String} el Reference to the element that will be animated
+ * @param {String or HTMLElement} el Reference to the element that will be animated
  * @param {Object} attributes The attribute(s) to be animated.  
  * Each attribute is an object with at minimum a "to" or "by" member defined.  
  * Additional optional members are "from" (defaults to current value), "units" (defaults to "px").  
