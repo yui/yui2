@@ -166,15 +166,15 @@ YAHOO.widget.Slider.prototype.setStartSliderState = function() {
     this.logger.debug("Fixing state");
     if (this.thumb._isRegion) {
         if (this.deferredSetRegionValue) {
-            this.setRegionValue.apply(this, this.deferredSetRegionValue);
+            this.setRegionValue.apply(this, this.deferredSetRegionValue, true);
         } else {
             this.setRegionValue(0, 0, true);
         }
     } else {
         if (this.deferredSetValue) {
-            this.setValue.apply(this, this.deferredSetValue);
+            this.setValue.apply(this, this.deferredSetValue, true);
         } else {
-            this.setValue(0, true);
+            this.setValue(0, true, true);
         }
     }
 };
@@ -309,11 +309,12 @@ YAHOO.widget.Slider.prototype.onThumbChange = function () {
  *
  * @param {int} newOffset the number of pixels the thumb should be
  * positioned away from the initial start point 
- * @param {boolean} skip animation set to true to disable the animation
+ * @param {boolean} skipAnim set to true to disable the animation
  * for this move action (but not others).
+ * @param {boolean} force ignore the locked setting and set value anyway
  * @return {boolean} true if the move was performed, false if it failed
  */
-YAHOO.widget.Slider.prototype.setValue = function(newOffset, skipAnim) {
+YAHOO.widget.Slider.prototype.setValue = function(newOffset, skipAnim, force) {
     this.logger.debug("setValue " + newOffset);
 
     if (!this.thumb.available) {
@@ -321,7 +322,7 @@ YAHOO.widget.Slider.prototype.setValue = function(newOffset, skipAnim) {
         this.deferredSetValue = arguments;
     }
 
-    if (this.isLocked()) {
+    if (this.isLocked() && !force) {
         this.logger.debug("Can't set the value, the control is locked");
         return false;
     }
@@ -353,8 +354,9 @@ YAHOO.widget.Slider.prototype.setValue = function(newOffset, skipAnim) {
  * positioned away from the initial start point 
  * @param {int} newOffset2 the number of pixels the thumb should be
  * positioned away from the initial start point (y axis for region)
- * @param {boolean} skip animation set to true to disable the animation
+ * @param {boolean} skipAnim set to true to disable the animation
  * for this move action (but not others).
+ * @param {boolean} force ignore the locked setting and set value anyway
  * @return {boolean} true if the move was performed, false if it failed
  */
 YAHOO.widget.Slider.prototype.setRegionValue = function(newOffset, newOffset2, skipAnim) {
@@ -363,7 +365,7 @@ YAHOO.widget.Slider.prototype.setRegionValue = function(newOffset, newOffset2, s
         this.logger.debug("defer setRegionValue until after onAvailble");
         this.deferredSetRegionValue = arguments;
     }
-    if (this.isLocked()) {
+    if (this.isLocked() && !force) {
         this.logger.debug("Can't set the value, the control is locked");
         return false;
     }
