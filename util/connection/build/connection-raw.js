@@ -2,7 +2,6 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version: 0.10.0
 */
 
 /**
@@ -12,7 +11,6 @@ Version: 0.10.0
  * callback function you create.
  * @ class
  */
-YAHOO.namespace('Connect');
 YAHOO.util.Connect =
 {
   /**
@@ -478,7 +476,7 @@ YAHOO.util.Connect =
 	{
 		if(this.isCallInProgress(o)){
 			window.clearInterval(this._poll[o.tId]);
-			o.conn._poll.splice(o.tId);
+			this._poll.splice(o.tId);
 			o.conn.abort();
 			this.releaseObject(o);
 
