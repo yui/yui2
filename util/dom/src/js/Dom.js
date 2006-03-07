@@ -277,7 +277,7 @@ YAHOO.util.Dom = new function() {
 		tag = tag || '*';
       var nodes = [];
       var elements = root.getElementsByTagName(tag);
-      var re = new RegExp('\\b' + className + '\\b');
+      var re = new RegExp('(^|\\s)' + className + '(\\s|$)');
 
 		for ( var i = 0, len = elements.length; i < len; ++i) {
          if ( re.test(elements[i]['className']) ) {
@@ -290,7 +290,7 @@ YAHOO.util.Dom = new function() {
 
    this.hasClass = function(el, className) {
       el = this.get(el);
-      var re = new RegExp('\\b' + className + '\\b');
+      var re = new RegExp('(^|\\s)' + className + '(\\s|$)');
       return re.test(el['className']);
    };
 
@@ -307,7 +307,7 @@ YAHOO.util.Dom = new function() {
       if (!this.hasClass(el, className)) { return false; } // not present
       
       el = this.get(el);
-      var re = new RegExp('\\b' + className + '\\b');
+      var re = new RegExp('(^|\\s)' + className + '(\\s|$)');
       var c = el['className'];
       
       el['className'] = c.replace( re, '');
