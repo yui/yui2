@@ -1,14 +1,15 @@
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+*/
+
 /**
 * @class The Menu class allows you to create menus that can overlay other 
 * elements on the page.
 * @constructor
 * @extends YAHOO.widget.Overlay
 * @base YAHOO.widget.Overlay
-* @requires YAHOO.util.Dom
-* @requires YAHOO.util.Event
-* @requires YAHOO.util.CustomEvent
-* @requires YAHOO.widget.MenuManager
-* @requires YAHOO.widget.MenuItem
 * @param {String/HTMLElement} p_oElement String id or HTMLElement 
 * (either HTMLUListElement, HTMLSelectElement or HTMLDivElement) of the 
 * source HTMLElement node.
@@ -93,7 +94,6 @@ YAHOO.widget.Menu.prototype.srcElement = null;
 * The Menu class's initialization method. This method is automatically called 
 * by the constructor, and sets up all DOM references for pre-existing markup, 
 * and creates required markup if it is not already present.
-* @member YAHOO.widget.Menu
 * @param {String/HTMLElement} p_oElement String id or HTMLElement 
 * (either HTMLUListElement, HTMLSelectElement or HTMLDivElement) of the 
 * source HTMLElement node.
@@ -212,7 +212,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     /**
     * Determines if an object is a string
-    * @member YAHOO.widget.Menu
     * @private
     * @param {Object} p_oObject The object to be evaluated.
     * @return Returns true if the object is a string.
@@ -227,7 +226,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     /**
     * Determines if the value is one of the supported positions.
-    * @member YAHOO.widget.Menu
     * @private
     * @param {Object} p_sPosition The object to be evaluated.
     * @return Returns true if the position is supported.
@@ -249,7 +247,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     /**
     * Adds an item to an array.  Used to manage a Menu's collection of  
     * Menu and MenuItem instances.
-    * @member YAHOO.widget.Menu
     * @private
     * @param {Array} p_oArray The array instance to be modified.
     * @param {YAHOO.widget.Menu/YAHOO.widget.MenuItem} p_oItem The Menu or 
@@ -295,7 +292,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     /**
     * Removes an item at the specified index from an array.  Used to manage a 
     * Menu's collection of Menus and MenuItem instances.
-    * @member YAHOO.widget.Menu
     * @private
     * @param {Array} p_oArray The array instance to be modified.
     * @param {Number} p_nIndex  Index at which the Menu or MenuItem should 
@@ -323,7 +319,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     /**
     * Removes an item from an array.  Used to manage a Menu's collection of 
     * Menus and MenuItem instances.
-    * @member YAHOO.widget.Menu
     * @private
     * @param {Array} p_oArray The array instance to be modified.
     * @param {YAHOO.widget.Menu/YAHOO.widget.MenuItem} p_oItem The Menu or
@@ -361,7 +356,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     * Updates the index and className properties of Menu and MenuItem instances 
     * that are added and removed from the Menu.  Used to manage a Menu's 
     * collection of submenus and MenuItem instances.
-    * @member YAHOO.widget.Menu
     * @private
     * @param {Array} p_oArray Array of Menu or MenuItem instances.
     */
@@ -408,7 +402,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     /**
     * Iterates the source element's childNodes collection and uses the child 
     * nodes to instantiate Menu and MenuItem instances.
-    * @member YAHOO.widget.Menu
     * @private
     * @param {Array} p_aNodeList Collection of HTML Elements and TextNode 
     * objects that are direct descendants of the Menu's source element.
@@ -544,7 +537,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     /**
     * "mouseover" event handler for the Menu's root HTMLDivElement.
-    * @member YAHOO.widget.Menu
     * @private
     * @param {Event} p_oEvent Event object passed back by the 
     * event utility (YAHOO.util.Event).
@@ -606,7 +598,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     /**
     * "mouseout" event handler for the Menu's root HTMLDivElement.
-    * @member YAHOO.widget.Menu
     * @private
     * @param {Event} p_oEvent Event object passed back by the 
     * event utility (YAHOO.util.Event).
@@ -668,7 +659,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     /**
     * "mousedown" event handler for the Menu's root HTMLDivElement.
-    * @member YAHOO.widget.Menu
     * @private
     * @param {Event} p_oEvent Event object passed back by the 
     * event utility (YAHOO.util.Event).
@@ -698,7 +688,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     /**
     * "mouseup" event handler for the Menu's root HTMLDivElement.
-    * @member YAHOO.widget.Menu
     * @private
     * @param {Event} p_oEvent Event object passed back by the 
     * event utility (YAHOO.util.Event).
@@ -728,7 +717,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     /**
     * "click" Event handler for the Menu's root HTMLDivElement.
-    * @member YAHOO.widget.Menu
     * @private
     * @param {Event} p_oEvent Event object passed back by the 
     * event utility (YAHOO.util.Event).
@@ -760,7 +748,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     /**
     * "focus" YAHOO.util.CustomEvent handler for the Menu's
     * MenuItem instance(s).
-    * @member YAHOO.widget.Menu
     * @private
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the event 
@@ -789,7 +776,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     /**
     * "blur" YAHOO.util.CustomEvent handler for the Menu's
     * MenuItem instance(s).
-    * @member YAHOO.widget.Menu
     * @private
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the event 
@@ -824,7 +810,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     /**
     * "configchange" YAHOO.util.CustomEvent handler for the Menu's 
     * MenuItem instance(s).
-    * @member YAHOO.widget.Menu
     * @private
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the 
@@ -854,7 +839,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     /**
     * Appends the specified MenuItem instance to a Menu instance.
-    * @member YAHOO.widget.Menu
     * @param {YAHOO.widget.MenuItem} p_oMenuItem MenuItem instance to be added.
     * @param {Number} p_nIndex Optional. Number indicating the ordinal position 
     * at which the MenuItem should be added.
@@ -880,7 +864,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     /**
     * Removes the specified MenuItem instance from a Menu instance.
-    * @member YAHOO.widget.Menu
     * @param {YAHOO.widget.MenuItem/Number} p_oObject MenuItem or index of the
     * MenuItem instance to be removed.
     * @return Returns the MenuItem that was removed from the Menu.
@@ -920,7 +903,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     /**
     * Returns an array of MenuItem instances.
-    * @member YAHOO.widget.Menu
     * @return Returns an array of MenuItem instances.
     * @type Array
     */        
@@ -933,7 +915,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     /**
     * Removes the specified MenuItem instance from a Menu instance.
-    * @member YAHOO.widget.Menu
     * @param {Number} p_nIndex Number indicating the ordinal position of the 
     * Menu instance to be retrieved.
     * @return Returns the MenuItem at the specified index.
@@ -952,7 +933,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     /**
     * Appends the specified Menu instance as a submenu of a Menu instance.
-    * @member YAHOO.widget.Menu
     * @param {YAHOO.widget.MenuItem} p_oMenu Menu instance to be added.
     * @param {Number} p_nIndex Optional. Number indicating the ordinal
     * position at which the Menu should be added.
@@ -981,7 +961,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     /**
     * Removes the specified Menu instance from a Menu instance.
-    * @member YAHOO.widget.Menu
     * @param {YAHOO.widget.Menu/Number} p_oObject Menu instance or index of
     * the Menu instance to be removed.
     * @return Returns the Menu that was removed from the Menu.
@@ -1019,7 +998,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     /**
     * Returns an array of Menu instances.
-    * @member YAHOO.widget.Menu
     * @return Returns an array of Menu instances.
     * @type Array
     */        
@@ -1032,7 +1010,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     /**
     * Removes the specified Menu instance from a Menu instance.
-    * @member YAHOO.widget.Menu
     * @param {Number} p_nIndex Number indicating the ordinal position of the
     * Menu instance to be retrieved.
     * @return Returns the Menu at the specified index.
@@ -1051,7 +1028,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     /**
     * Iterates the Menu's collection of MenuItem instances and renders them.
-    * @member YAHOO.widget.Menu
     */
     this.renderMenuItems = function() {
     
@@ -1111,7 +1087,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     /**
     * Iterates the Menu's collection of Menu instances and renders them.
-    * @member YAHOO.widget.Menu
     */
     this.renderSubMenus = function() {
     
@@ -1136,7 +1111,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 	* Renders the Menu by inserting the elements that are not already in the 
     * main Module format into their correct places. Optionally appends the 
     * Menu to the specified node prior to the render's execution.
-    * @member YAHOO.widget.Menu
 	* @param {String/HTMLElement} p_bAppendToNode The element or element id to 
     * that the Module should be appended to prior to rendering.
     * @param {Boolean} p_bHideSourceElement Boolean indicating if the source
@@ -1198,7 +1172,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
 	/**
 	* Keeps the Menu in the viewport.
-    * @member YAHOO.widget.Menu
     * @see YAHOO.widget.Overlay#enforceConstraints
 	*/
     this.enforceConstraints = function(type, args, obj) {
@@ -1274,7 +1247,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 	/**
 	* Initializes the custom events for Menu which are fired automatically
     * at appropriate times by the Menu class.
-    * @member YAHOO.widget.Menu
     * @see YAHOO.widget.Overlay#initDefaultConfig
 	*/
     this.initDefaultConfig = function() {
@@ -1300,7 +1272,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 	/**
 	* Event handler for when the "position" configuration property of a
     * Menu changes.
-    * @member YAHOO.widget.Menu
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the event 
     * was fired.
@@ -1323,7 +1294,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 	/**
 	* Event handler for when the "iframe" configuration property of a
     * Menu changes.
-    * @member YAHOO.widget.Menu
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the event 
     * was fired.
@@ -1353,7 +1323,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 	/**
 	* Event handler for when the "constraintoviewport" configuration
     * property of a Menu changes. 
-    * @member YAHOO.widget.Menu
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the event 
     * was fired.
@@ -1423,7 +1392,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 	/**
 	* Event handler for when the "width" configuration property of a
     * Menu changes. 
-    * @member YAHOO.widget.Menu
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the event 
     * was fired.
@@ -1504,7 +1472,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 	/**
 	* Event handler for when the "visible" configuration property of a
     * Menu changes. 
-    * @member YAHOO.widget.Menu
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the event 
     * was fired.
@@ -1741,7 +1708,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         /**
         * Fires when the mouse has entered a Menu instance.  Passes back the 
         * DOM Event object as an argument.
-        * @member YAHOO.widget.Menu
         * @type {YAHOO.util.CustomEvent}
         * @see YAHOO.util.CustomEvent
         */
@@ -1751,7 +1717,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         /**
         * Fires when the mouse has left a Menu instance.  Passes back the DOM 
         * Event object as an argument.
-        * @member YAHOO.widget.Menu
         * @type {YAHOO.util.CustomEvent}
         * @see YAHOO.util.CustomEvent
         */
@@ -1761,7 +1726,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         /**
         * Fires when the user clicks the on a Menu instance.  Passes back the 
         * DOM Event object as an argument.
-        * @member YAHOO.widget.Menu
         * @type {YAHOO.util.CustomEvent}
         * @see YAHOO.util.CustomEvent
         */
@@ -1771,7 +1735,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         /**
         * Fires when the user releases a mouse button while the mouse is over 
         * a Menu instance.  Passes back the DOM Event object as an argument.
-        * @member YAHOO.widget.Menu
         * @type {YAHOO.util.CustomEvent}
         * @see YAHOO.util.CustomEvent
         */
@@ -1781,7 +1744,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         /**
         * Fires when the user clicks the on a Menu instance.  Passes back the 
         * DOM Event object as an argument.
-        * @member YAHOO.widget.Menu
         * @type {YAHOO.util.CustomEvent}
         * @see YAHOO.util.CustomEvent
         */

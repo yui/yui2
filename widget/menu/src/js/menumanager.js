@@ -1,3 +1,9 @@
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+*/
+
 /**
 * @class The MenuManager is a singleton class that helps manage every Menu
 * instance that is created.
@@ -33,16 +39,25 @@ YAHOO.widget.MenuManager = function() {
         * @private
         * @type {String}
         */
-        m_sMenuIdBase = "yuimenu",
+        m_sMenuIdBase = "yuimenu";
 
 
-        /**
-        * Reference to the current context so that private methods have access 
-        * to class members
-        * @private
-        * @type {YAHOO.widget.MenuManager}
-        */
-        me = this;
+    /**
+    * Returns the currently active Menu.  A Menu instance becomes active 
+    * when one of it's MenuItem instances recieves focus.
+    * @member YAHOO.widget.MenuManager
+    * @type {YAHOO.widget.Menu}
+    */
+    this.activeMenu = null;
+
+
+    /**
+    * Reference to the current context so that private methods have access 
+    * to class members
+    * @private
+    * @type {YAHOO.widget.MenuManager}
+    */
+    var me = this;
 
 
     // Private methods
@@ -50,7 +65,6 @@ YAHOO.widget.MenuManager = function() {
     /**
     * Adds an item to a collection.  Used to manage a the collection of  
     * Menu and visible Menu instances.
-    * @member YAHOO.widget.MenuManager
     * @private
     * @param {Object} p_oCollection The object instance to be modified.
     * @param {YAHOO.widget.Menu} p_oItem The Menu instance to be added.
@@ -65,7 +79,6 @@ YAHOO.widget.MenuManager = function() {
     /**
     * Removes an item from a collection.  Used to manage a the collection of  
     * Menu and visible Menu instances.
-    * @member YAHOO.widget.MenuManager
     * @private
     * @param {Object} p_oCollection The object instance to be modified.
     * @param {String/YAHOO.widget.Menu} p_oValue String id of or object
@@ -101,7 +114,6 @@ YAHOO.widget.MenuManager = function() {
     /**
     * Removes an item from a collection.  Used to manage a the collection of  
     * Menu and visible Menu instances.
-    * @member YAHOO.widget.MenuManager
     * @private
     * @param {Object} p_oCollection The object instance to be modified.
     * @param {String} p_sElementId String id of the Menu to be removed.
@@ -125,7 +137,6 @@ YAHOO.widget.MenuManager = function() {
     /**
     * Removes an item from a collection.  Used to manage a the collection of  
     * Menu and visible Menu instances.
-    * @member YAHOO.widget.MenuManager
     * @private
     * @param {Object} p_oCollection The object instance to be modified.
     * @param {YAHOO.widget.Menu} p_oItem Object reference for the Menu
@@ -156,7 +167,6 @@ YAHOO.widget.MenuManager = function() {
 
     /**
     * "show" YAHOO.util.CustomEvent handler for each Menu instance.
-    * @member YAHOO.widget.MenuManager
     * @private
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the 
@@ -176,7 +186,6 @@ YAHOO.widget.MenuManager = function() {
 
     /**
     * "hide" YAHOO.util.CustomEvent handler for each Menu instance.
-    * @member YAHOO.widget.MenuManager
     * @private
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the 
@@ -192,7 +201,6 @@ YAHOO.widget.MenuManager = function() {
     /**
     * "configvisible" YAHOO.util.CustomEvent handler for the Menu's "visible" 
     * configuration property.
-    * @member YAHOO.widget.MenuManager
     * @private
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the 
@@ -217,19 +225,12 @@ YAHOO.widget.MenuManager = function() {
     };
 
 
-    /**
-    * Returns the currently active Menu.  A Menu instance becomes active 
-    * when one of it's MenuItem instances recieves focus.
-    * @member YAHOO.widget.MenuManager
-    * @type {YAHOO.widget.Menu}
-    */
-    me.activeMenu = null;
+
 
     return {
 
         /**
         * Generates a unique id for a Menu instance.
-        * @member YAHOO.widget.MenuManager
         * @return Returns a new id
         * @type {String}
         */
@@ -244,7 +245,6 @@ YAHOO.widget.MenuManager = function() {
 
         /**
         * Registers a Menu instance.
-        * @member YAHOO.widget.MenuManager
         * @param {YAHOO.widget.Menu} p_oMenu The Menu instance to be added.
         */
         addMenu: function(p_oMenu) {
@@ -270,7 +270,6 @@ YAHOO.widget.MenuManager = function() {
         /**
         * Removes the Menu from the known list of Menu and visible
         * Menu instances.
-        * @member YAHOO.widget.MenuManager
         * @param {String/YAHOO.widget.Menu} p_oValue String id of or object
         * reference for the Menu instance to be removed.
         */
@@ -284,7 +283,6 @@ YAHOO.widget.MenuManager = function() {
 
         /**
         * Hides all visible Menu instances.
-        * @member YAHOO.widget.MenuManager
         */
         hideVisibleMenus: function() {
 
@@ -301,7 +299,6 @@ YAHOO.widget.MenuManager = function() {
 
         /**
         * Returns a collection of all of the registered Menu instances.
-        * @member YAHOO.widget.MenuManager
         * @return Returns a collection Menu instances.
         * @type Object
         */
@@ -314,7 +311,6 @@ YAHOO.widget.MenuManager = function() {
 
         /**
         * Returns the Menu instance with the specified id.
-        * @member YAHOO.widget.MenuManager
         * @return Returns a Menu instance.
         * @type YAHOO.widget.Menu
         */
@@ -331,7 +327,6 @@ YAHOO.widget.MenuManager = function() {
 
         /**
         * Returns a collection of all of the visible Menu instances.
-        * @member YAHOO.widget.MenuManager
         * @return Returns a collection Menu instances.
         * @type Object
         */

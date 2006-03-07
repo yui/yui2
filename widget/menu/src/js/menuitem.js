@@ -1,11 +1,12 @@
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+*/
+
 /**
 * @class The MenuItem class allows you to create and modify an item for an Menu.
 * @constructor
-* @requires YAHOO.util.Dom
-* @requires YAHOO.util.Event
-* @requires YAHOO.util.CustomEvent
-* @requires YAHOO.widget.MenuManager
-* @requires YAHOO.widget.Menu
 * @param {String/HTMLElement} p_oObject String or HTMLElement 
 * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
 * source HTMLElement node.
@@ -137,7 +138,6 @@ YAHOO.widget.MenuItem.prototype = {
     * called by the constructor, and sets up all DOM references for
     * pre-existing markup, and creates required markup if it is not
     * already present.
-    * @member YAHOO.widget.MenuItem
     * @param {String/HTMLElement} p_oObject String or HTMLElement 
     * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
     * source HTMLElement node.
@@ -268,7 +268,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * Determines if an object is a string
-        * @member YAHOO.widget.MenuItem
         * @private
         * @param {Object} p_oObject The object to be evaluated.
         * @return Returns true if the object is a string.
@@ -283,7 +282,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * Determines if an object is an HTMLElement.
-        * @member YAHOO.widget.MenuItem
         * @private
         * @param {Object} p_oObject The object to be evaluated.
         * @return Returns true if the object is an HTMLElement.
@@ -298,7 +296,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * Creates the core DOM structure for a MenuItem instance.
-        * @member YAHOO.widget.MenuItem
         * @private
         */
         var createRootNodeStructure = function() {
@@ -309,6 +306,8 @@ YAHOO.widget.MenuItem.prototype = {
 
             m_oAnchor = document.createElement("a");
             m_oAnchor.appendChild(m_oText);
+            
+            me.cfg.refireEvent("url");
 
             me.element.appendChild(m_oAnchor);            
 
@@ -318,7 +317,6 @@ YAHOO.widget.MenuItem.prototype = {
         /**
         * Sets focus to the first MenuItem instance of a MenuItem
         * instances's submenu.
-        * @member YAHOO.widget.MenuItem
         * @private
         */
         var focusSubMenuFirstMenuItem = function() {
@@ -348,7 +346,6 @@ YAHOO.widget.MenuItem.prototype = {
         /**
         * Finds the next enabled MenuItem instance in a Menu instance 
         * relative to the specified MenuItem index.
-        * @member YAHOO.widget.MenuItem
         * @private
         * @param {Number} p_nMenuItemIndex The index to begin the search.
         * @param {YAHOO.widget.Menu} p_oMenu A Menu instance to search.
@@ -442,7 +439,6 @@ YAHOO.widget.MenuItem.prototype = {
         /**
         * Finds the previous enabled MenuItem instance in a Menu instance 
         * relative to the specified MenuItem index.
-        * @member YAHOO.widget.MenuItem
         * @private
         * @param {Number} p_nMenuItemIndex The index to begin the search.
         * @param {YAHOO.widget.Menu} p_oMenu A Menu instance to search.
@@ -533,7 +529,6 @@ YAHOO.widget.MenuItem.prototype = {
         /**
         * Iterates the source element's childNodes collection and uses the  
         * child nodes to instantiate Menu and MenuItem instances.
-        * @member YAHOO.widget.MenuItem
         * @private
         */
         var initSubTree = function() {
@@ -644,7 +639,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * "mouseover" event handler for the MenuItem's HTMLLIElement.
-        * @member YAHOO.widget.MenuItem
         * @private
         * @param {Event} p_oEvent Event object passed back by the 
         * event utility (YAHOO.util.Event).
@@ -701,7 +695,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * "mouseout" event handler for the MenuItem's HTMLLIElement.
-        * @member YAHOO.widget.MenuItem
         * @private
         * @param {Event} p_oEvent Event object passed back by the 
         * event utility (YAHOO.util.Event).
@@ -773,7 +766,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * "mousedown" event handler for the MenuItem's HTMLLIElement.
-        * @member YAHOO.widget.MenuItem
         * @private
         * @param {Event} p_oEvent Event object passed back by the 
         * event utility (YAHOO.util.Event).
@@ -795,7 +787,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * "mouseup" event handler for the MenuItem's HTMLLIElement.
-        * @member YAHOO.widget.MenuItem
         * @private
         * @param {Event} p_oEvent Event object passed back by the 
         * event utility (YAHOO.util.Event).
@@ -817,7 +808,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * "click" event handler for the MenuItem's HTMLLIElement.
-        * @member YAHOO.widget.MenuItem
         * @private
         * @param {Event} p_oEvent Event object passed back by the 
         * event utility (YAHOO.util.Event).
@@ -834,7 +824,7 @@ YAHOO.widget.MenuItem.prototype = {
 
                 if(oTarget == m_oAnchor) {
 
-                    if(sURL) {
+                    if(sURL && sURL != "#") {
 
                         return true; // Needed to tell Safari to follow the link
 
@@ -870,7 +860,7 @@ YAHOO.widget.MenuItem.prototype = {
                         }
 
                     }
-                    else if(sURL) {
+                    else if(sURL && sURL != "#") {
 
                         document.location = sURL;
 
@@ -887,7 +877,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * "keydown" event handler for the MenuItem's HTMLAnchorElement.
-        * @member YAHOO.widget.MenuItem
         * @private
         * @param {Event} p_oEvent Event object passed back by the 
         * event utility (YAHOO.util.Event).
@@ -1025,7 +1014,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * "keyup" event handler for the MenuItem's HTMLAnchorElement.
-        * @member YAHOO.widget.MenuItem
         * @private
         * @param {Event} p_oEvent Event object passed back by the 
         * event utility (YAHOO.util.Event).
@@ -1045,7 +1033,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * "keypress" event handler for the MenuItem's HTMLAnchorElement.
-        * @member YAHOO.widget.MenuItem
         * @private
         * @param {Event} p_oEvent Event object passed back by the 
         * event utility (YAHOO.util.Event).
@@ -1081,7 +1068,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * "focus" event handler for the MenuItem's HTMLAnchorElement.
-        * @member YAHOO.widget.MenuItem
         * @private
         * @param {Event} p_oEvent Event object passed back by the 
         * event utility (YAHOO.util.Event).
@@ -1158,7 +1144,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * "blur" event handler for the MenuItem's HTMLAnchorElement.
-        * @member YAHOO.widget.MenuItem
         * @private
         * @param {Event} p_oEvent Event object passed back by the 
         * event utility (YAHOO.util.Event).
@@ -1197,7 +1182,6 @@ YAHOO.widget.MenuItem.prototype = {
         /**
         * Event handler for when the "text" configuration property of
         * a MenuItem instance changes. 
-        * @member YAHOO.widget.MenuItem
         * @param {String} p_sType The name of the event that was fired.
         * @param {Array} p_aArguments Collection of arguments sent when the 
         * event was fired.
@@ -1220,7 +1204,6 @@ YAHOO.widget.MenuItem.prototype = {
         /**
         * Event handler for when the "helptext" configuration property of
         * a MenuItem instance changes. 
-        * @member YAHOO.widget.MenuItem
         * @param {String} p_sType The name of the event that was fired.
         * @param {Array} p_aArguments Collection of arguments sent when the 
         * event was fired.
@@ -1322,7 +1305,6 @@ YAHOO.widget.MenuItem.prototype = {
         /**
         * Event handler for when the "url" configuration property of
         * a MenuItem instance changes.  
-        * @member YAHOO.widget.MenuItem
         * @param {String} p_sType The name of the event that was fired.
         * @param {Array} p_aArguments Collection of arguments sent when the 
         * event was fired.
@@ -1346,7 +1328,6 @@ YAHOO.widget.MenuItem.prototype = {
         /**
         * Event handler for when the "emphasis" configuration property of
         * a MenuItem instance changes.  
-        * @member YAHOO.widget.MenuItem
         * @param {String} p_sType The name of the event that was fired.
         * @param {Array} p_aArguments Collection of arguments sent when the 
         * event was fired.
@@ -1411,7 +1392,6 @@ YAHOO.widget.MenuItem.prototype = {
         /**
         * Event handler for when the "strongemphasis" configuration property of
         * a MenuItem instance changes. 
-        * @member YAHOO.widget.MenuItem
         * @param {String} p_sType The name of the event that was fired.
         * @param {Array} p_aArguments Collection of arguments sent when the 
         * event was fired.
@@ -1474,7 +1454,6 @@ YAHOO.widget.MenuItem.prototype = {
         /**
         * Event handler for when the "disabled" configuration property of
         * a MenuItem instance changes. 
-        * @member YAHOO.widget.MenuItem
         * @param {String} p_sType The name of the event that was fired.
         * @param {Array} p_aArguments Collection of arguments sent when the 
         * event was fired.
@@ -1548,7 +1527,6 @@ YAHOO.widget.MenuItem.prototype = {
         /**
         * Event handler for when the "selected" configuration property of
         * a MenuItem instance changes. 
-        * @member YAHOO.widget.MenuItem
         * @param {String} p_sType The name of the event that was fired.
         * @param {Array} p_aArguments Collection of arguments sent when the 
         * event was fired.
@@ -1605,7 +1583,6 @@ YAHOO.widget.MenuItem.prototype = {
         /**
         * Event handler for when the "submenu" configuration property of
         * a MenuItem instance changes. 
-        * @member YAHOO.widget.MenuItem
         * @param {String} p_sType The name of the event that was fired.
         * @param {Array} p_aArguments Collection of arguments sent when the 
         * event was fired.
@@ -1682,7 +1659,6 @@ YAHOO.widget.MenuItem.prototype = {
         /**
         * Causes a MenuItem instance to receive the focus and fires the
         * focus event.
-        * @member YAHOO.widget.MenuItem
         */
         this.focus = function() {
     
@@ -1710,7 +1686,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * Causes a MenuItem instance to lose focus and fires the onblur event.
-        * @member YAHOO.widget.MenuItem
         */    
         this.blur = function() {
     
@@ -1737,7 +1712,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * Displays the submenu for a MenuItem instance.
-        * @member YAHOO.widget.MenuItem
         */
         this.showSubMenu = function() {
     
@@ -1774,7 +1748,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * Displays the submenu for a MenuItem instance.
-        * @member YAHOO.widget.MenuItem
         */
         this.hideSubMenu = function() {
     
@@ -1804,7 +1777,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         this.cfg.addProperty("helptext", null, this.configHelpText);
             
-        this.cfg.addProperty("url", null, this.configURL);
+        this.cfg.addProperty("url", "#", this.configURL);
 
         this.cfg.addProperty(
             "emphasis", 
@@ -2267,7 +2240,6 @@ YAHOO.widget.MenuItem.prototype = {
             /**
             * Fires when a MenuItem instances's HTMLLIElement is removed from
             * it's parent HTMLUListElement node.
-            * @member YAHOO.widget.MenuItem
             * @type {YAHOO.util.CustomEvent}
             * @see YAHOO.util.CustomEvent
             */
@@ -2277,7 +2249,6 @@ YAHOO.widget.MenuItem.prototype = {
             /**
             * Fires when the mouse has entered a MenuItem instance.  Passes
             * back the DOM Event object as an argument.
-            * @member YAHOO.widget.MenuItem
             * @type {YAHOO.util.CustomEvent}
             * @see YAHOO.util.CustomEvent
             */
@@ -2287,7 +2258,6 @@ YAHOO.widget.MenuItem.prototype = {
             /**
             * Fires when the mouse has left a MenuItem instance.  Passes back  
             * the DOM Event object as an argument.
-            * @member YAHOO.widget.MenuItem
             * @type {YAHOO.util.CustomEvent}
             * @see YAHOO.util.CustomEvent
             */
@@ -2297,7 +2267,6 @@ YAHOO.widget.MenuItem.prototype = {
             /**
             * Fires when the user clicks the on a MenuItem instance.  Passes 
             * back the DOM Event object as an argument.
-            * @member YAHOO.widget.MenuItem
             * @type {YAHOO.util.CustomEvent}
             * @see YAHOO.util.CustomEvent
             */
@@ -2308,7 +2277,6 @@ YAHOO.widget.MenuItem.prototype = {
             * Fires when the user releases a mouse button while the mouse is 
             * over a MenuItem instance.  Passes back the DOM Event object as
             * an argument.
-            * @member YAHOO.widget.MenuItem
             * @type {YAHOO.util.CustomEvent}
             * @see YAHOO.util.CustomEvent
             */
@@ -2318,7 +2286,6 @@ YAHOO.widget.MenuItem.prototype = {
             /**
             * Fires when the user clicks the on a MenuItem instance.  Passes 
             * back the DOM Event object as an argument.
-            * @member YAHOO.widget.MenuItem
             * @type {YAHOO.util.CustomEvent}
             * @see YAHOO.util.CustomEvent
             */
@@ -2328,7 +2295,6 @@ YAHOO.widget.MenuItem.prototype = {
             /**
             * Fires when the user presses an alphanumeric key.  Passes back the 
             * DOM Event object as an argument.
-            * @member YAHOO.widget.MenuItem
             * @type {YAHOO.util.CustomEvent}
             * @see YAHOO.util.CustomEvent
             */
@@ -2338,7 +2304,6 @@ YAHOO.widget.MenuItem.prototype = {
             /**
             * Fires when the user presses a key.  Passes back the DOM Event 
             * object as an argument.
-            * @member YAHOO.widget.MenuItem
             * @type {YAHOO.util.CustomEvent}
             * @see YAHOO.util.CustomEvent
             */
@@ -2348,7 +2313,6 @@ YAHOO.widget.MenuItem.prototype = {
             /**
             * Fires when the user releases a key.  Passes back the DOM Event 
             * object as an argument.
-            * @member YAHOO.widget.MenuItem
             * @type {YAHOO.util.CustomEvent}
             * @see YAHOO.util.CustomEvent
             */
@@ -2358,7 +2322,6 @@ YAHOO.widget.MenuItem.prototype = {
             /**
             * Fires when a MenuItem instance receives focus.  Passes back the 
             * DOM Event object as an argument.
-            * @member YAHOO.widget.MenuItem
             * @type {YAHOO.util.CustomEvent}
             * @see YAHOO.util.CustomEvent
             */
@@ -2368,7 +2331,6 @@ YAHOO.widget.MenuItem.prototype = {
             /**
             * Fires when a MenuItem instance loses the input focus.  Passes 
             * back the DOM Event object as an argument.
-            * @member YAHOO.widget.MenuItem
             * @type {YAHOO.util.CustomEvent}
             * @see YAHOO.util.CustomEvent
             */
@@ -2389,7 +2351,6 @@ YAHOO.widget.MenuItem.prototype = {
 	/**
 	* Removes a MenuItem instance's HTMLLIElement from it's parent
     * HTMLUListElement node.
-    * @member YAHOO.widget.MenuItem
 	*/
     destroy: function() {
 
