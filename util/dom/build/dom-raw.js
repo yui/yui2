@@ -3,7 +3,7 @@ Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 Version: 0.10.0
-* /
+*/
 
 /**
  * @class Provides helper methods for DOM elements.
@@ -321,7 +321,7 @@ Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 Version: 0.10.0
-* /
+*/
 
 /**
  * @class A region is a representation of an object on a grid.  It is defined
@@ -432,7 +432,7 @@ YAHOO.util.Region.prototype.toString = function() {
              ", b: "    + this.bottom + 
              ", l: "    + this.left   + 
              "}" );
-}
+};
 
 /**
  * Returns a region that is occupied by the DOM element
