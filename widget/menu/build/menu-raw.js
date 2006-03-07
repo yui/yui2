@@ -338,7 +338,9 @@ YAHOO.widget.MenuManager = function() {
 
     };
 
-} ();/**
+} ();
+
+/**
 * @class The Menu class allows you to create menus that can overlay other 
 * elements on the page.
 * @constructor
@@ -2101,6 +2103,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     }
 
 };
+
 /**
 * @class The MenuItem class allows you to create and modify an item for an Menu.
 * @constructor
