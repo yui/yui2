@@ -1,0 +1,280 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>YAHOO.widget.Overlay</title>
+
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/yahoo_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/event_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/dom_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/animation_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/dragdrop_2.0.0-b1.js" ></script>
+
+<link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/fonts_0.9.0.css" />
+<link rel="stylesheet" type="text/css" href="css/example.css" />
+
+<script src="../build/js/container-raw.js"></script>
+
+<style>
+body {
+	background-color:#EEE;
+}
+
+div {
+	margin:5px;
+}
+
+.overlay {
+	position:absolute;
+	border:1px solid black;
+	background-color:#FFFFFF;
+	z-index:10;
+}
+
+#bodybox {
+	width:500px;
+	height:350px;
+}
+
+select {
+	display:block;
+	margin:5px;
+}
+</style>
+
+<script language="javascript">
+
+	var overlayPredef;
+	var overlayDynamic;
+	var overlayContainer;
+
+	var sub1;
+	var sub2;
+	var sub3;
+	var sub4;
+
+	function init() {
+
+		var onClick = function(type, args, obj) {
+			var zIndex = YAHOO.util.Dom.getStyle(this.element, "zIndex");
+			alert(zIndex);
+		}
+
+		// This represents a overlay already on the page
+		// *****************************************************************
+			//debugger;
+			overlayPredef = new YAHOO.widget.Overlay("oPredef", {x:100, y:150} );
+			//if (getBrowser() == "ie") overlayPredef.setProperty("iframe",true);
+			
+			//YAHOO.
+
+			overlayPredef.render();
+
+			var dd2 = new YAHOO.util.DD(overlayPredef.element.id, "panel");
+			dd2.onDrag = function() {
+				overlayPredef.cfg.refireEvent("iframe");
+			}
+			dd2.setXConstraint(overlayPredef.element.offsetLeft-10, overlayPredef.element.offsetRight-10);
+			dd2.setYConstraint(overlayPredef.element.offsetTop-10, overlayPredef.element.offsetBottom);
+
+
+		// *****************************************************************
+
+		// This represents a overlay with a container, but no body content defined
+		// *****************************************************************
+			overlayContainer = new YAHOO.widget.Overlay("oHybrid", {x:100, y:550} );
+			//if (getBrowser() == "ie") overlayContainer.setProperty("iframe",true);
+
+			overlayContainer.setHeaderContent("Hybrid Container Header Override");
+			overlayContainer.setBodyContent(document.createTextNode("Hybrid Container Body"));
+
+			overlayContainer.render();
+
+			var dd3 = new YAHOO.util.DD(overlayContainer.element.id, "panel");
+			dd3.onDrag = function() {
+				overlayContainer.cfg.refireEvent("iframe");
+			}
+			dd3.setXConstraint(overlayContainer.element.offsetLeft-10, overlayContainer.element.offsetRight-10);
+			dd3.setYConstraint(overlayContainer.element.offsetTop-10, overlayContainer.element.offsetBottom);
+
+		// *****************************************************************
+
+		// *****************************************************************
+
+		// This represents a overlay created completely on the fly
+		// *****************************************************************
+			overlayDynamic = new YAHOO.widget.Overlay("oDynamic", {visible:true, x:100, y:350} );
+			//if (getBrowser() == "ie") overlayDynamic.setProperty("iframe",true);
+
+			overlayDynamic.style.fontWeight = "bold";
+			overlayDynamic.element.className = "overlay";
+
+			// Dynamically create a header, using an element
+			overlayDynamic.setHeaderContent(document.createTextNode("Dynamic Header"));
+
+			// Dynamically create a body, using text
+			//overlayDynamic.setBodyContent("<em>Dynamic Body</em>");
+			
+
+			// Dynamically create a footer
+			var href = document.createElement("A");
+			href.href = "#";
+			href.appendChild(document.createTextNode("Dynamic footer!"));
+			overlayDynamic.setFooterContent(href);
+
+			overlayDynamic.appendTo(document.body);
+			overlayDynamic.render();
+
+			var dd1 = new YAHOO.util.DD(overlayDynamic.element.id, "panel");
+			dd1.onDrag = function() {
+				overlayDynamic.cfg.refireEvent("iframe");
+			}
+
+			dd1.setXConstraint(overlayDynamic.element.offsetLeft-10, overlayDynamic.element.offsetRight-10);
+			dd1.setYConstraint(overlayDynamic.element.offsetTop-10, overlayDynamic.element.offsetBottom);		
+
+			
+
+			sub1 = new YAHOO.widget.Overlay("sub1", {visible:true});
+			//sub1.style.position = "absolute";
+			sub1.setBodyContent("sub1");
+			sub1.render(overlayDynamic.element);
+
+
+			sub2 = new YAHOO.widget.Overlay("sub2", {visible:true});
+			//sub2.style.position = "absolute";
+			sub2.setBodyContent("sub2");
+			sub2.render(overlayDynamic.element);
+
+			sub2a = new YAHOO.widget.Overlay("sub2a", {visible:true});
+			//sub2.style.position = "absolute";
+			sub2a.setBodyContent("sub2a");
+			sub2a.render(sub2.element);
+
+			sub2b = new YAHOO.widget.Overlay("sub2b", {visible:true});
+			//sub2.style.position = "absolute";
+			sub2b.setBodyContent("sub2b");
+			sub2b.render(sub2.element);
+
+			sub3 = new YAHOO.widget.Overlay("sub3", {visible:true});
+			//sub3.style.position = "absolute";
+			sub3.setBodyContent("sub3");
+			sub3.render(overlayDynamic.element);
+
+			sub4 = new YAHOO.widget.Overlay("sub4", {visible:true});
+			//sub4.style.position = "absolute";
+			sub4.setBodyContent("sub4");
+			sub4.render(overlayDynamic.element);
+	
+
+			
+			overlayDynamic.render();
+
+			
+			overlayDynamic.cfg.refresh();
+
+
+
+
+
+
+
+
+		var button1 = document.getElementById("btn1");
+		button1.onclick = render;
+
+		var button2 = document.getElementById("btn2");
+		button2.onclick = hideAll;
+
+		var button3 = document.getElementById("btn3");
+		button3.onclick = showAll;
+
+		var button4 = document.getElementById("btn4");
+		button4.onclick = moveAll;
+
+
+/*
+
+
+*/
+	}
+
+	function render() {
+		overlayPredef.render();
+		
+		//overlayDynamic.renderEvent.subscribe(fixPos, overlayDynamic);
+
+		// Add the dynamic footer to the page
+		
+		//overlayDynamic.appendTo(document.body);
+		//overlayDynamic.render(document.body);
+
+
+		//overlayDynamic.refresh();
+
+		overlayContainer.render();
+
+		this.style.visibility = "hidden";
+	}
+
+
+
+	function showAll() {
+		overlayPredef.show();
+		overlayDynamic.show();
+		overlayContainer.show();
+	}
+	
+	function hideAll() {
+		overlayPredef.hide();
+		overlayDynamic.hide();
+		overlayContainer.hide();
+	}
+	
+	function moveAll() {
+		overlayPredef.moveTo(200,200);
+		overlayDynamic.moveTo(300,300);
+		overlayContainer.moveTo(400,400);
+	}
+
+
+
+</script>
+</head>
+<body onload="init()">
+	<div class="homeLink">
+		<a href="index.html">&lt; Home</a>
+	</div>
+	<div class="box">
+		<div class="hd">
+			<h1>Overlay Example</h1>
+		</div>
+		<div class="bd">
+			<button id="btn1">Render</button>
+			<button id="btn2">Hide</button>
+			<button id="btn3">Show</button>
+			<button id="btn4">Move +50</button>
+		</div>
+		<div class="ft"></div>
+	</div>
+
+			<div id="oPredef" class="overlay">
+				<div class="hd">Predefined Module Header</div>
+				<div class="bd">Predefined Module Body</div>
+			</div>
+
+			<div id="oHybrid" class="overlay">
+				<div class="hd">Hybrid Container Header (some dynamic)</div>
+				<div class="ft">Hybrid Container Footer</div>
+			</div>
+
+	<select>
+		<option>The ever-frustrating &lt;select&gt;</option>
+	</select>
+
+	<object width="425" height="350" style="z-index:0">
+	<param name="movie" value="http://www.youtube.com/v/FU7xXLtAI-I"></param>
+	<param name="wmode" value="transparent"></param>
+	<embed src="http://www.youtube.com/v/FU7xXLtAI-I" type="application/x-shockwave-flash" width="425" height="350" wmode="transparent"></embed></object>
+</body>
+</html>

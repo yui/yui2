@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>YAHOO.widget.Dialog</title>
+
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/yahoo_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/event_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://ue.corp.yahoo.com/msweeney/dev/platform/2.0/util/dom/build/dom-raw.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/animation_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/dragdrop_2.0.0-b1.js" ></script>
+
+<link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/fonts_0.9.0.css" />
+<link rel="stylesheet" type="text/css" href="css/example.css" />
+<link rel="stylesheet" type="text/css" href="../build/css/container.css" />
+
+<script src="../build/js/container-raw.js"></script>
+
+<script language="javascript">
+	var dlg;
+	var dlgButtons;
+
+	function handleOK(e, obj) {
+		alert("That wasn't so bad!");
+		obj.hide();
+	}
+
+	function handleCancel(e, obj) {
+		obj.hide();
+	}
+
+	function init() {
+		dlg = new YAHOO.widget.Dialog("dlg", { width: "20em", fixedcenter: true, constraintoviewport: false, modal : true, icon : YAHOO.widget.Dialog.ICON_WARN });
+		
+		dlg.cfg.setProperty("buttons",  { 
+				"OK": { handler : handleOK, isDefault : true },
+				"Cancel": { handler : handleCancel } 
+				}
+		);
+		dlg.render();
+	}
+
+	YAHOO.util.Event.addListener(window, "load", init);
+
+</script>
+</head>
+<body>
+	<div class="homeLink">
+		<a href="index.html">&lt; Home</a>
+	</div>
+
+
+	<div class="box">
+		<div class="hd">
+			<h1>Dialog Example</h1>
+		</div>
+		<div class="bd">
+			<p>Dialog is an implementation of <a href="panel.html">Panel</a> that behaves like an OS dialog. Dialog is used for asking the user a simple question that usually involves a Yes/No or OK/Cancel response.</p> 
+			
+			<p>Two sets of buttons with handlers are built into the Dialog object: a set for OK/Cancel and a set for Yes/No, which respectively call the handleOKClick/handleCancelClick and handleYesClick/handleNoClick DOM events that are built-in.
+			</p>
+
+			<p>The code to instantiate this Dialog example looks like this:
+				<code>dlg = new YAHOO.widget.Dialog("dlg", { width: "20em", fixedcenter: true, constraintoviewport: false, modal : true, icon : YAHOO.widget.Dialog.ICON_WARN });</code>
+				Next, we wire up the buttons using a simple JSON structure that points to local handles for each button:
+				<code>				
+				dlg.cfg.setProperty("buttons",  { 
+						"OK": { handler : handleOK, isDefault : true },
+						"Cancel": { handler : handleCancel } 
+						}
+				);
+				</code>
+			</p>
+
+			<button onclick="dlg.show()">Show me a dialog</button>
+			<select>
+				<option>&lt;select&gt;</option>
+			</select>
+		</div>
+		<div class="ft"></div>
+	</div>
+
+	<div id="dlg" class="panel dialog">
+		<div class="hd">
+			Warning!
+		</div>
+		<div class="bd">
+		Are you sure you want to do this? Doing so may be painful.
+		</div>
+	</div>
+
+</body>
+</html>

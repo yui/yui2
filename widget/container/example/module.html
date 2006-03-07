@@ -1,0 +1,248 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>YAHOO.widget.Module</title>
+
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/yahoo_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/event_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/dom_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/animation_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/dragdrop_2.0.0-b1.js" ></script>
+
+<link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/fonts_0.9.0.css" />
+<link rel="stylesheet" type="text/css" href="css/example.css" />
+
+<script src="../build/js/container-raw.js"></script>
+
+<style>
+
+div.module {
+	margin:5px;
+	padding:5px;
+	border:1px solid red;
+	background-color:#FFFFFF;
+} 
+
+#modbuild, #modmodify {
+	border:1px solid #000;
+	margin:5px;
+}
+
+#modbuild .bd, #modmodify .bd {
+	padding:5px;
+}
+
+#modbuild .hd, #modmodify .hd {
+	background-color:#3d77cb;
+	color:#FFF;
+	height:12px;
+	font-size:11px;
+	border:1px solid #FFF;
+	border-bottom:1px solid #000;
+	font-weight:bold;
+	margin-bottom:5px;
+	padding:4px;
+}
+</style>
+
+<script language="javascript">
+
+	var modulePredef;
+	var modulePartial;
+
+	var build;
+	var modify;
+
+	var modules = [];
+
+	function init() {
+
+		build = new YAHOO.widget.Module( "modbuild", { visible:true });
+		build.render();
+
+		modify = new YAHOO.widget.Module( "modmodify", { visible:true });
+		modify.render();
+
+		// This represents a module already on the page
+		// *****************************************************************
+			modulePredef = new YAHOO.widget.Module("mPredef");
+			modules["mPredef"] = modulePredef;
+
+		// *****************************************************************
+
+		// This represents a module with a container, but no body content defined
+		// *****************************************************************
+			modulePartial = new YAHOO.widget.Module("mPartial");
+			modules["mPartial"] = modulePartial;
+			modulePartial.setBody("This is the body that was dynamically added to the partially marked up module.");
+
+		// *****************************************************************
+
+			myDynamicModule = new YAHOO.widget.Module("myDynamicModule");
+			modules["myDynamicModule"] = myDynamicModule;
+
+			myDynamicModule.element.className = "module";
+			myDynamicModule.setBody("Here's some body content.");
+			myDynamicModule.render(document.getElementById("dynamic"));
+
+		var btnRender = document.getElementById("btnRender");
+		btnRender.onclick = render;
+		var btnShow = document.getElementById("btnShow");
+		btnShow.onclick = showAll;
+		var btnHide = document.getElementById("btnHide");
+		btnHide.onclick = hideAll;
+	}
+
+
+
+	function render() {
+		for (var i in modules) {
+			var m = modules[i];
+			m.render();
+		}
+	}
+
+	function buildDynamic(form) {
+		// This represents a module created completely on the fly
+		// *****************************************************************
+		
+			var id = form["id"].value;
+			var mod = new YAHOO.widget.Module(id);
+
+			mod.setHeader(form["header"].value + " (id: " + mod.id + ")");
+			mod.setBody(form["body"].value);
+			mod.setFooter(form["footer"].value);	
+			
+			mod.element.className = "module";
+			mod.render(document.getElementById("dynamic"));
+
+			modules[id] = mod;
+	}
+
+	function changeModule(form) {
+		var id = form["modid"].value;
+		var mod = modules[id];
+		mod.setHeader(form["modheader"].value);
+		mod.setBody(form["modbody"].value);
+		mod.setFooter(form["modfooter"].value);
+		mod.render();
+	}
+
+	function getModule(form) {
+		var id = form["modid"].value;
+		var mod = modules[id];
+		if (mod.header) {
+			form["modheader"].value = mod.header.innerHTML;
+		}
+		if (mod.body) {
+			form["modbody"].value = mod.body.innerHTML;
+		}
+		if (mod.footer) {
+			form["modfooter"].value = mod.footer.innerHTML;
+		}
+		
+	}
+
+	function hideAll() {
+		for (var i in modules) {
+			var m = modules[i];
+			m.hide();
+		}
+	}
+
+	function showAll() {
+		for (var i in modules) {
+			var m = modules[i];
+			m.show();
+		}
+	}
+
+	YAHOO.util.Event.addListener(window, "load", init);
+
+</script>
+</head>
+<body>
+	<div class="homeLink">
+		<a href="index.html">&lt; Home</a>
+	</div>
+
+	<div class="box">
+		<div class="hd">
+			<h1>Module Example</h1>
+		</div>
+		<div class="bd">
+		
+			<button id="btnRender">Render All</button>
+			<button id="btnHide">Hide All</button>
+			<button id="btnShow">Show All</button>
+
+			<div id="content">
+				<p>A Module is an object representation of Yahoo!'s Standard Module Format. A Module can optionally contain three elements (but must include at least one): a header, a body, and a footer, each which are denoted by CSS classes: "hd", "bd", and "ft" respectively. An empty module would look like this:</p>
+<xmp><div id="myModule">
+   <div class="hd"></div>
+   <div class="bd"></div>
+   <div class="ft"></div>
+</div></xmp>
+				<p>Modules can be constructed by attaching the Module object to pre-existing markup, or dynamically creating them from scratch and appending them to the DOM. The code to create a Module around that markup would look as simple as this:
+					<code>myModule = new YAHOO.widget.Module("myModule");</code>
+				</p>
+				<p>A Module can be dynamically created by passing the arbitrary ID of the Module to create into the constructor, setting some content, and rendering the Module using the render method, passing in the node that the Module should be appended to, as in this example:
+					<code>
+						myDynamicModule = new YAHOO.widget.Module("myDynamicModule");<br/>
+						myDynamicModule.setBody("Here's some body content.");<br/>
+						myDynamicModule.render(document.getElementById("dynamic"));<br/>
+					</code>
+				</p>
+				<p>Here are some example modules, including the one from above:</p>
+			</div>
+
+			<div id="mPredef" class="module">
+				<div class="hd">Predefined Module (id: mPredef)</div>
+				<div class="bd">This is a predefined module. All the markup is already present in the document.</div>
+				<div class="ft">Predefined Module Footer</div>
+			</div>
+
+			<div id="mPartial" class="module">
+				<div class="hd">Partially Marked Up Module (id: mPartial)</div>
+				<div class="ft">Partially Marked Up Module Footer</div>
+			</div>
+
+			<div id="dynamic"></div>
+
+	<div id="modbuild">
+		<div class="hd">Build a Dynamic Module</div>
+		<div class="bd">
+			<form onsubmit="return false">
+				<div class="create">
+					<label for="id">ID:</label><input type="textbox" id="id" value="myModule" /><br/>
+					<label for="header">Header content:</label><input type="textbox" id="header" /><br/>
+					<label for="body">Body content:</label><input type="textbox" id="body" /><br/>
+					<label for="footer">Footer content:</label><input type="textbox" id="footer" /><br/>
+					<div class="buttonset"><button onclick="buildDynamic(this.form)">create and render!</button></div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div id="modmodify">
+		<div class="hd">Modify an Existing Module</div>
+		<div class="bd">
+			<form onsubmit="return false">
+				<div class="create">
+					<label for="modid">ID:</label><input type="textbox" id="modid" /><button onclick="getModule(this.form)">retrieve module</button><br/>
+					<label for="modheader">Header content:</label><input type="textbox" id="modheader" /><br/>
+					<label for="modbody">Body content:</label><input type="textbox" id="modbody" /><br/>
+					<label for="modfooter">Footer content:</label><input type="textbox" id="modfooter" /><br/>
+					<div class="buttonset"><button onclick="changeModule(this.form)">change it!</button></div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+		</div>
+		<div class="ft"></div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>YAHOO.widget.Panel</title>
+
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/yahoo_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/event_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://ue.corp.yahoo.com/msweeney/dev/platform/2.0/util/dom/build/dom-raw.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/animation_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/dragdrop_2.0.0-b1.js" ></script>
+
+<link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/fonts_0.9.0.css" />
+<link rel="stylesheet" type="text/css" href="css/example.css" />
+
+<link rel="stylesheet" type="text/css" href="../build/css/container.css" />
+
+<script src="../build/js/container-raw.js"></script>
+
+<script language="javascript">
+	var panel;
+	function init() {
+		panel = new YAHOO.widget.Panel("win", { width:"400px", fixedcenter: true, constraintoviewport: true, underlay:"shadow", close:true, visible:false, draggable:true } );
+
+		panel.render();
+	}
+
+	YAHOO.util.Event.addListener(window, "load", init);
+</script>
+</head>
+<body>
+	<div class="homeLink">
+		<a href="index.html">&lt; Home</a>
+	</div>
+
+	<div class="box">
+		<div class="hd">
+			<h1>Panel Example</h1>
+		</div>
+		<div class="bd">
+			<p>A Panel is a configurable Overlay which behaves like a traditional OS window, and includes built-in drag & drop, a close icon, an underlay (shadow or matte) and built-in modality. To instantiate a Panel against existing markup, the constructor is very similar to the one used for Overlay. The example here is instantiated using this constructor:
+				<code>win = new YAHOO.widget.Panel("win", { width:"400px", fixedcenter: true, constraintoviewport: true, underlay:"shadow", close:true, visible:false, draggable:true } );</code>
+			</p>
+
+			<p>Panel, like its base classes, features dynamic configuration. Try executing the code below to change the underlay style to matte:
+				<code>panel.cfg.setProperty("underlay","matte");<button onclick="panel.cfg.setProperty('underlay','matte');">try it!</button></code>
+			</p>
+			<button onclick="panel.show()">Show the Panel</button>
+			<select>
+				<option>&lt;select&gt;</option>
+			</select>
+		</div>
+	</div>
+
+
+
+
+<div id="win" class="panel">
+		<div class="hd">Pamela Anderson Takes Aim at KFC</div>
+		<div class="bd">
+			<img style="margin-right:5px" src="http://us.news3.yimg.com/us.i2.yimg.com/p/net/20060113/capt.3ec50d196f01b070b2ae4ffc9309cc79.pjpeg?x=180&y=260&sig=DDOegMGl4sdC6bVQq5CEPg--" width="100" align="left">
+		
+		<div id="storybody">
+	<div class="storyhdr">
+		<p><span>
+By ROGER ALFORD, Associated Press Writer
+</span>
+<em class="timedate">Fri Jan 13,  9:31 AM ET</em>
+</p>
+		<div class="spacer"></div>
+	</div>
+
+<p>
+FRANKFORT, Ky. - <span style="background: transparent none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;" class="yqlink">
+
+<a href="http://search.news.yahoo.com/search/news/?p=Pamela+Anderson" onclick="activateYQinl(this);return false;" class="yqimgins" title="Related information on Pamela Anderson">Pamela Anderson</a></span> is leading a charge to remove a bust of KFC founder Colonel Harland Sanders from the state Capitol.
+</p>
+
+<p>The actress called the Kentucky native's likeness "a monument to cruelty" to chickens in a statement issued by People for the Ethical Treatment of Animals, the animal rights group.</p>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

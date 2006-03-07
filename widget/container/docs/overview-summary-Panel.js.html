@@ -1,0 +1,675 @@
+
+<html>
+<head>
+	<title>
+		JavaScript Documentation - 
+		
+			Panel.js
+		
+	</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Container Components</a></h3>
+
+	<div class="breadcrumbs">
+		
+
+			
+			
+			
+			
+				<a href="./index.html">Container Components</a>
+				&gt;
+				<strong>Panel.js</strong>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+
+					
+						<li>
+							<a href="YAHOO.util.Config.html">
+								YAHOO.util.Config</a>
+						</li>
+					
+
+					
+						<li>
+							<a href="YAHOO.widget.Dialog.html">
+								YAHOO.widget.Dialog</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.FormDialog.html">
+								YAHOO.widget.FormDialog</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Module.html">
+								YAHOO.widget.Module</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Overlay.html">
+								YAHOO.widget.Overlay</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Panel.html">
+								YAHOO.widget.Panel</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Tooltip.html">
+								YAHOO.widget.Tooltip</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-Config.js.html">
+								Config.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Dialog.js.html">
+								Dialog.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-FormDialog.js.html">
+								FormDialog.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Module.js.html">
+								Module.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Overlay.js.html">
+								Overlay.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Panel.js.html">
+								Panel.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Tooltip.js.html">
+								Tooltip.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div class="main">
+			
+		
+		
+			
+			   <h2>Panel.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+		
+		
+		
+		
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+				
+					
+						<a href="#classSummary">Class Summary</a> |
+					
+					
+				
+				
+				
+					<a href="#source">Source Code</a>
+				
+			</div>
+		
+			
+				<div class="section class summaries">
+					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+			
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+						<tr>
+							<td class="name">
+								<a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a>
+							</td>
+							<td class="overview">Panel is an implementation of Overlay that behaves like an OS window, with a draggable header and an optional close icon at the top right.</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		
+		
+		
+		
+			<div class="section source">
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<pre class="sourceview"><span class="comment">/**
+* <span class="attrib">@class</span>
+* Panel is an implementation of Overlay that behaves like an OS window, with a draggable header and an optional close icon at the top right.
+* <span class="attrib">@param</span> {string}	el	The element ID representing the Panel &lt;em&gt;OR&lt;/em&gt;
+* <span class="attrib">@param</span> {Element}	el	The element representing the Panel
+* <span class="attrib">@param</span> {object}	userConfig	The configuration object literal containing the configuration that should be set for this Panel. See configuration documentation for more details.
+* <span class="attrib">@constructor</span>
+*/</span>
+YAHOO.widget.Panel = <span class="reserved">function</span>(el, userConfig) {
+	<span class="reserved">if</span> (arguments.length &gt; 0)
+	{
+		YAHOO.widget.Panel.superclass.constructor.call(<span class="reserved">this</span>, el, userConfig);
+	}
+}
+
+YAHOO.widget.Panel.<span class="reserved">prototype</span> = new YAHOO.widget.Overlay();
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.constructor = YAHOO.widget.Panel;
+
+<span class="comment">/**
+* Reference to the Panel's superclass, Overlay
+* <span class="attrib">@type</span> class
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.Panel.superclass = YAHOO.widget.Overlay.<span class="reserved">prototype</span>;
+
+<span class="comment">/*
+* The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
+* <span class="attrib">@param</span> {string}	el	The element ID representing the Overlay &lt;em&gt;OR&lt;/em&gt;
+* <span class="attrib">@param</span> {Element}	el	The element representing the Overlay
+* <span class="attrib">@param</span> {object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.init = <span class="reserved">function</span>(el, userConfig) {
+	YAHOO.widget.Panel.superclass.init.call(<span class="reserved">this</span>, el<span class="comment">/*, userConfig*/</span>);  <span class="comment">// Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level</span>
+
+	<span class="reserved">this</span>.buildContainer()							
+	YAHOO.util.Dom.addClass(<span class="reserved">this</span>.element, <span class="literal">"panel"</span>);
+
+	<span class="reserved">if</span> (userConfig) {
+		<span class="reserved">this</span>.cfg.applyConfig(userConfig, true);
+	}
+}
+
+<span class="comment">/**
+* Initializes the class's configurable properties which can be changed using the Panel's Config object (cfg).
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.initDefaultConfig = <span class="reserved">function</span>() {
+	YAHOO.widget.Panel.superclass.initDefaultConfig.call(<span class="reserved">this</span>);
+
+	<span class="comment">// Add panel config properties //</span>
+	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"close"</span>,	true,	<span class="reserved">this</span>.configClose,	<span class="reserved">this</span>.cfg.checkBoolean);
+	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"draggable"</span>, true,	<span class="reserved">this</span>.configDraggable,	<span class="reserved">this</span>.cfg.checkBoolean);
+	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"fixedcenter"</span>, false, <span class="reserved">this</span>.configFixedCenter, <span class="reserved">this</span>.cfg.checkBoolean);
+
+	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"animate"</span>,		true,	null,	<span class="reserved">this</span>.cfg.checkBoolean);
+	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"fadeintime"</span>,	0.25,	null,	<span class="reserved">this</span>.cfg.checkNumber);
+	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"fadeouttime"</span>,	0.25,	null,	<span class="reserved">this</span>.cfg.checkNumber);
+
+	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"underlay"</span>,	<span class="literal">"shadow"</span>, <span class="reserved">this</span>.configUnderlay, null);
+	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"modal"</span>,	false,	<span class="reserved">this</span>.configModal,	<span class="reserved">this</span>.cfg.checkBoolean);
+}
+
+<span class="comment">// BEGIN BUILT-IN PROPERTY EVENT HANDLERS //</span>
+
+<span class="comment">/**
+* The default event handler fired when the "visible" property is changed. The fading animation of the Panel, if enabled, is also handled within this method.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.configVisible = <span class="reserved">function</span>(type, args, obj) {
+	var val = args[0];
+
+	YAHOO.util.Dom.setStyle(<span class="reserved">this</span>.element, <span class="literal">"visibility"</span>, <span class="literal">"inherit"</span>);
+
+	<span class="reserved">if</span> (<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"animate"</span>)) { <span class="comment">// Animation</span>
+		var inTime = <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"fadeintime"</span>);
+		var outTime = <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"fadeouttime"</span>);
+		
+		var currentVis = YAHOO.util.Dom.getStyle(<span class="reserved">this</span>.container, <span class="literal">"visibility"</span>);
+		
+		var shadow = <span class="reserved">this</span>.shadow;
+		var iframe = <span class="reserved">this</span>.iframe;
+
+		<span class="reserved">if</span> (val) { <span class="comment">// Fade in if not showing</span>
+			<span class="reserved">if</span> (currentVis == <span class="literal">"hidden"</span>) {
+
+				<span class="reserved">if</span> (shadow &amp;&amp; shadow.style.filter) {
+					shadow.style.filter = null;
+				}
+
+				var fadeIn = new YAHOO.util.Anim(<span class="reserved">this</span>.container, {opacity: {to: 1} }, inTime);
+				fadeIn.onStart.subscribe(<span class="reserved">function</span>() {
+					<span class="reserved">this</span>.getEl().style.visibility = <span class="literal">"visible"</span>;
+					
+					<span class="reserved">if</span> (iframe) {
+						YAHOO.util.Dom.setStyle(iframe, <span class="literal">"visibility"</span>, <span class="literal">"visible"</span>);
+					}
+					YAHOO.util.Dom.setStyle(<span class="reserved">this</span>.getEl(), <span class="literal">"opacity"</span>, 0);				
+				});
+				fadeIn.onComplete.subscribe(<span class="reserved">function</span>() {
+					<span class="reserved">if</span> (<span class="reserved">this</span>.getEl().style.filter) {
+						<span class="reserved">this</span>.getEl().style.filter = null;
+					}				
+					<span class="reserved">if</span> (shadow) {
+						YAHOO.util.Dom.setStyle(shadow, <span class="literal">"opacity"</span>, .5);
+					}
+				});
+
+				fadeIn.animate();
+			}
+		} <span class="reserved">else</span> { <span class="comment">// Fade out if showing</span>
+			<span class="reserved">if</span> (currentVis == <span class="literal">"visible"</span>) {
+				<span class="reserved">if</span> (shadow &amp;&amp; shadow.style.filter) {
+					shadow.style.filter = null;
+				}
+
+				var fadeOut = new YAHOO.util.Anim(<span class="reserved">this</span>.container, {opacity: {to: 0} }, outTime)
+
+				fadeOut.onComplete.subscribe(<span class="reserved">function</span>() {
+					<span class="reserved">this</span>.getEl().style.visibility = <span class="literal">"hidden"</span>;
+
+					<span class="reserved">if</span> (<span class="reserved">this</span>.getEl().style.filter) {
+						<span class="reserved">this</span>.getEl().style.filter = null;
+					}
+					<span class="reserved">if</span> (iframe) {
+						YAHOO.util.Dom.setStyle(iframe, <span class="literal">"visibility"</span>, <span class="literal">"hidden"</span>);
+					}			
+				});
+				fadeOut.animate();
+			}
+		}
+	} <span class="reserved">else</span> { <span class="comment">// No animation</span>
+		<span class="reserved">if</span> (val) {
+			YAHOO.util.Dom.setStyle((<span class="reserved">this</span>.container), <span class="literal">"visibility"</span>, <span class="literal">"visible"</span>);
+			<span class="reserved">if</span> (<span class="reserved">this</span>.iframe) {
+				YAHOO.util.Dom.setStyle(<span class="reserved">this</span>.iframe, <span class="literal">"visibility"</span>, <span class="literal">"visible"</span>);
+			}
+		} <span class="reserved">else</span> {
+			YAHOO.util.Dom.setStyle((<span class="reserved">this</span>.container), <span class="literal">"visibility"</span>, <span class="literal">"hidden"</span>);
+			<span class="reserved">if</span> (<span class="reserved">this</span>.iframe) {
+				YAHOO.util.Dom.setStyle(<span class="reserved">this</span>.iframe, <span class="literal">"visibility"</span>, <span class="literal">"hidden"</span>);
+			}
+		}
+	}
+}
+
+<span class="comment">/**
+* The default event handler fired when the "height" property is changed.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.configHeight = <span class="reserved">function</span>(type, args, obj) {
+	YAHOO.widget.Panel.superclass.configHeight.call(<span class="reserved">this</span>, type, args, obj);
+	<span class="reserved">this</span>.cfg.refireEvent(<span class="literal">"underlay"</span>);
+}
+
+<span class="comment">/**
+* The default event handler fired when the "width" property is changed.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.configWidth = <span class="reserved">function</span>(type, args, obj) {
+	YAHOO.widget.Panel.superclass.configWidth.call(<span class="reserved">this</span>, type, args, obj);
+	<span class="reserved">this</span>.cfg.refireEvent(<span class="literal">"underlay"</span>);
+}
+
+<span class="comment">/**
+* The default event handler fired when the "close" property is changed. The method controls the appending or hiding of the close icon at the top right of the Panel.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.configClose = <span class="reserved">function</span>(type, args, obj) {
+	var val = args[0];
+
+	var doHide = <span class="reserved">function</span>(e, obj) {
+		obj.hide();
+	}
+
+	<span class="reserved">if</span> (val) {
+		<span class="reserved">if</span> (! <span class="reserved">this</span>.close) {
+			<span class="reserved">this</span>.close = document.createElement(<span class="literal">"DIV"</span>);
+			<span class="reserved">this</span>.close.className = <span class="literal">"close"</span>;
+			<span class="reserved">this</span>.close.innerHTML = <span class="literal">"&amp;nbsp;"</span>;
+			<span class="reserved">this</span>.element.appendChild(<span class="reserved">this</span>.close);
+			YAHOO.util.Event.addListener(<span class="reserved">this</span>.close, <span class="literal">"click"</span>, doHide, <span class="reserved">this</span>);	
+		} <span class="reserved">else</span> {
+			<span class="reserved">this</span>.close.style.display = <span class="literal">"block"</span>;
+		}
+	} <span class="reserved">else</span> {
+		<span class="reserved">if</span> (<span class="reserved">this</span>.close) {
+			<span class="reserved">this</span>.close.style.display = <span class="literal">"none"</span>;
+		}
+	}
+}
+
+<span class="comment">/**
+* The default event handler fired when the "draggable" property is changed.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.configDraggable = <span class="reserved">function</span>(type, args, obj) {
+	var val = args[0];
+	<span class="reserved">if</span> (val) {
+		<span class="reserved">if</span> (! <span class="reserved">this</span>.header) {
+			<span class="reserved">this</span>.setHeader(<span class="literal">"&amp;nbsp;"</span>);
+			<span class="reserved">this</span>.render();
+		}
+		<span class="reserved">this</span>.registerDragDrop();
+		<span class="reserved">this</span>.dd.onDrag = <span class="reserved">function</span>() {
+			obj.syncPosition();
+		}
+	} <span class="reserved">else</span> {
+		<span class="reserved">if</span> (<span class="reserved">this</span>.dd) {
+			<span class="reserved">this</span>.dd.unreg();
+		}
+		<span class="reserved">if</span> (<span class="reserved">this</span>.header) {
+			YAHOO.util.Dom.setStyle(<span class="reserved">this</span>.header, <span class="literal">"cursor"</span>,<span class="literal">"default"</span>);
+		}
+	}
+}
+
+<span class="comment">/**
+* The default event handler fired when the "underlay" property is changed.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.configUnderlay = <span class="reserved">function</span>(type, args, obj) {
+	var val = args[0];
+
+	switch (val.toLowerCase()) {
+		case <span class="literal">"shadow"</span>:
+			<span class="reserved">this</span>.element.style.position = <span class="literal">"absolute"</span>;
+			<span class="reserved">if</span> (! <span class="reserved">this</span>.shadow) { <span class="comment">// create if not already in DOM</span>
+				<span class="reserved">this</span>.shadow = document.createElement(<span class="literal">"DIV"</span>);
+				<span class="reserved">this</span>.shadow.className = <span class="literal">"shadow"</span>;
+				<span class="reserved">this</span>.shadow.innerHTML = <span class="literal">"&amp;nbsp;"</span>;
+				
+				YAHOO.util.Dom.setStyle(<span class="reserved">this</span>.shadow, <span class="literal">"opacity"</span>, <span class="literal">".5"</span>);
+
+				<span class="reserved">this</span>.container.appendChild(<span class="reserved">this</span>.shadow);
+			} 
+			<span class="reserved">this</span>.sizeShadow();
+			<span class="reserved">this</span>.shadow.style.display = <span class="literal">"block"</span>;
+			<span class="reserved">if</span> (<span class="reserved">this</span>.matte) {
+				<span class="reserved">this</span>.matte.style.display = <span class="literal">"none"</span>;
+			}
+			break;
+		case <span class="literal">"matte"</span>:
+			<span class="reserved">this</span>.element.style.position = <span class="literal">"absolute"</span>;
+			<span class="reserved">if</span> (! <span class="reserved">this</span>.matte) { <span class="comment">// create if not already in DOM</span>
+				<span class="reserved">this</span>.matte = document.createElement(<span class="literal">"DIV"</span>);
+				<span class="reserved">this</span>.matte.className = <span class="literal">"matte"</span>;
+				<span class="reserved">this</span>.matte.innerHTML = <span class="literal">"&amp;nbsp;"</span>;
+				<span class="reserved">this</span>.container.appendChild(<span class="reserved">this</span>.matte);
+			}
+			<span class="reserved">this</span>.sizeMatte();
+			<span class="reserved">this</span>.matte.style.display = <span class="literal">"block"</span>;
+			<span class="reserved">if</span> (<span class="reserved">this</span>.shadow) {
+				<span class="reserved">this</span>.shadow.style.display = <span class="literal">"none"</span>;
+			}
+			break;
+		case <span class="literal">"none"</span>:
+		default:
+			<span class="reserved">this</span>.element.style.position = <span class="literal">"relative"</span>;
+
+			<span class="reserved">if</span> (<span class="reserved">this</span>.shadow) {
+				<span class="reserved">this</span>.shadow.style.display = <span class="literal">"none"</span>;
+			}
+			<span class="reserved">if</span> (<span class="reserved">this</span>.matte) {
+				<span class="reserved">this</span>.matte.style.display = <span class="literal">"none"</span>;
+			}
+			break;
+	}
+}
+
+<span class="comment">/**
+* The default event handler fired when the "modal" property is changed. This handler subscribes or unsubscribes to the show and hide events to handle the display or hide of the modality mask.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.configModal = <span class="reserved">function</span>(type, args, obj) {
+	var val = args[0];
+	<span class="reserved">if</span> (val) {
+		<span class="reserved">this</span>.buildMask();
+		<span class="reserved">this</span>.showEvent.subscribe(<span class="reserved">this</span>.showMask, <span class="reserved">this</span>, true);
+		<span class="reserved">this</span>.hideEvent.subscribe(<span class="reserved">this</span>.hideMask, <span class="reserved">this</span>, true);
+	} <span class="reserved">else</span> {
+		<span class="reserved">this</span>.showEvent.unsubscribe(<span class="reserved">this</span>.showMask, <span class="reserved">this</span>);
+		<span class="reserved">this</span>.hideEvent.unsubscribe(<span class="reserved">this</span>.hideMask, <span class="reserved">this</span>);
+	}
+}
+
+<span class="comment">/**
+* The default event handler fired when the "fixedcenter" property is changed.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.configFixedCenter = <span class="reserved">function</span>(type, args, obj) {
+	var val = args[0];
+	<span class="reserved">if</span> (val) {
+		var elementWidth = <span class="reserved">this</span>.element.offsetWidth;
+		var elementHeight = <span class="reserved">this</span>.element.offsetHeight;
+
+		<span class="reserved">this</span>.container.style.left = <span class="literal">"50%"</span>;
+		<span class="reserved">this</span>.container.style.marginLeft = <span class="literal">"-"</span> + (elementWidth/2) + <span class="literal">"px"</span>;
+
+		<span class="reserved">this</span>.container.style.top = <span class="literal">"50%"</span>;
+		<span class="reserved">this</span>.container.style.marginTop = <span class="literal">"-"</span> + (elementHeight/2) + <span class="literal">"px"</span>;
+	} <span class="reserved">else</span> {
+		<span class="reserved">this</span>.syncPosition();
+	}
+}
+
+<span class="comment">// END BUILT-IN PROPERTY EVENT HANDLERS //</span>
+
+<span class="comment">/**
+* Synchronizes the Panel's "xy", "x", and "y" properties with the Panel's position in the DOM. This is primarily used to update position information during drag &amp; drop.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.syncPosition = <span class="reserved">function</span>() {
+	var pos = YAHOO.util.Dom.getXY(<span class="reserved">this</span>.container);
+	<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"xy"</span>, pos);
+}
+
+<span class="comment">/**
+* Builds the wrapping container around the Panel that is used for positioning the shadow and matte underlays. The container element is assigned to a  local instance variable called container, and the element is reinserted inside of it.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.buildContainer = <span class="reserved">function</span>() {
+	var elementParent = <span class="reserved">this</span>.element.parentNode;
+	
+	<span class="reserved">this</span>.container = document.createElement(<span class="literal">"DIV"</span>);
+	<span class="reserved">this</span>.container.className = <span class="literal">"panel-container"</span>;
+	<span class="reserved">this</span>.container.id = <span class="reserved">this</span>.element.id + <span class="literal">"_c"</span>;
+	elementParent.insertBefore(<span class="reserved">this</span>.container, <span class="reserved">this</span>.element);
+
+	<span class="reserved">this</span>.container.appendChild(<span class="reserved">this</span>.element);
+}
+
+<span class="comment">/**
+* Adjusts the size of the shadow based no the size of the element.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.sizeShadow = <span class="reserved">function</span>() {
+	<span class="reserved">if</span> (<span class="reserved">this</span>.shadow) {
+		<span class="reserved">this</span>.shadow.style.width = <span class="reserved">this</span>.element.offsetWidth + <span class="literal">"px"</span>;
+		<span class="reserved">this</span>.shadow.style.height = <span class="reserved">this</span>.element.offsetHeight + <span class="literal">"px"</span>;
+	}
+}
+
+<span class="comment">/**
+* Adjusts the size of the matte based no the size of the element.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.sizeMatte = <span class="reserved">function</span>() {
+	<span class="reserved">if</span> (<span class="reserved">this</span>.matte) {
+		<span class="reserved">this</span>.matte.style.width = <span class="reserved">this</span>.element.offsetWidth + 6 + <span class="literal">"px"</span>;
+		<span class="reserved">this</span>.matte.style.height = <span class="reserved">this</span>.element.offsetHeight + 6 + <span class="literal">"px"</span>;
+	}
+}
+
+<span class="comment">/**
+* Centers the container in the viewport.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.center = <span class="reserved">function</span>() {
+
+	var scrollX = window.scrollX || document.body.scrollLeft;
+	var scrollY = window.scrollY || document.body.scrollTop;
+
+	var viewPortWidth = YAHOO.util.Dom.getClientWidth();
+	var viewPortHeight = YAHOO.util.Dom.getClientHeight();
+
+	var elementWidth = <span class="reserved">this</span>.element.offsetWidth;
+	var elementHeight = <span class="reserved">this</span>.element.offsetHeight;
+
+	var x = (viewPortWidth / 2) - (elementWidth / 2) + scrollX;
+	var y = (viewPortHeight / 2) - (elementHeight / 2) + scrollY;
+	
+	<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"xy"</span>, [x,y]);
+}
+
+<span class="comment">/**
+* Registers the Panel's header for drag &amp; drop capability.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.registerDragDrop = <span class="reserved">function</span>() {
+	<span class="reserved">if</span> (<span class="reserved">this</span>.header) {
+		<span class="reserved">this</span>.dd = new YAHOO.util.DD(<span class="reserved">this</span>.container.id, <span class="literal">"panel"</span>);
+
+		<span class="reserved">if</span> (! <span class="reserved">this</span>.header.id) {
+			<span class="reserved">this</span>.header.id = <span class="reserved">this</span>.id + <span class="literal">"_h"</span>;
+		}
+		<span class="reserved">this</span>.dd.setHandleElId(<span class="reserved">this</span>.header.id);
+		<span class="reserved">this</span>.dd.addInvalidHandleType(<span class="literal">"INPUT"</span>);
+		<span class="reserved">this</span>.dd.addInvalidHandleType(<span class="literal">"SELECT"</span>);
+		<span class="reserved">this</span>.dd.addInvalidHandleType(<span class="literal">"TEXTAREA"</span>);
+	}
+}
+
+<span class="comment">/**
+* Builds the mask that is laid over the document when the Panel is configured to be modal.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.buildMask = <span class="reserved">function</span>() {
+	<span class="reserved">if</span> (! <span class="reserved">this</span>.mask) {
+		<span class="reserved">this</span>.mask = document.createElement(<span class="literal">"DIV"</span>);
+		<span class="reserved">this</span>.mask.className = <span class="literal">"mask"</span>;
+		<span class="reserved">this</span>.mask.innerHTML = <span class="literal">"&amp;nbsp;"</span>;
+
+		var maskClick = <span class="reserved">function</span>(e, obj) {
+			YAHOO.util.Event.stopEvent(e);
+		}
+
+		YAHOO.util.Event.addListener(<span class="reserved">this</span>.mask, maskClick, <span class="reserved">this</span>);
+
+		<span class="reserved">if</span> (<span class="reserved">this</span>.browser == <span class="literal">"opera"</span>) {
+			<span class="reserved">this</span>.mask.style.backgroundColor = <span class="literal">"transparent"</span>;
+		}
+		document.body.appendChild(<span class="reserved">this</span>.mask);
+	}
+}
+
+<span class="comment">/**
+* Hides the modality mask.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.hideMask = <span class="reserved">function</span>() {
+	<span class="reserved">this</span>.mask.style.display = <span class="literal">"none"</span>;
+
+	var bod = document.getElementsByTagName(<span class="literal">'body'</span>)[0];
+	bod.style.height = <span class="literal">'auto'</span>;
+	bod.style.overflow = <span class="literal">'auto'</span>;
+
+	YAHOO.util.Dom.removeClass(bod, <span class="literal">"masked"</span>);
+
+	var htm = document.getElementsByTagName(<span class="literal">'html'</span>)[0];
+	htm.style.height = <span class="literal">'auto'</span>;
+	htm.style.overflow = <span class="literal">'auto'</span>;
+}
+
+<span class="comment">/**
+* Shows the modality mask.
+*/</span>
+YAHOO.widget.Panel.<span class="reserved">prototype</span>.showMask = <span class="reserved">function</span>() {
+	var bod = document.getElementsByTagName(<span class="literal">'body'</span>)[0];
+	bod.style.height = <span class="literal">'100%'</span>;
+	bod.style.overflow = <span class="literal">'hidden'</span>;
+
+	var htm = document.getElementsByTagName(<span class="literal">'html'</span>)[0];
+	htm.style.height = <span class="literal">'100%'</span>;
+	htm.style.overflow = <span class="literal">'hidden'</span>;
+
+	YAHOO.util.Dom.addClass(bod, <span class="literal">"masked"</span>);
+
+	<span class="reserved">this</span>.mask.style.display = <span class="literal">"block"</span>;
+}</pre>
+			</div>
+		
+	</div>
+</div>
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	<br />
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+	version 1.9.5.8
+</div>
+
+
+</body>
+</html>

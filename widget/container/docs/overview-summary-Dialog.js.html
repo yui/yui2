@@ -1,0 +1,503 @@
+
+<html>
+<head>
+	<title>
+		JavaScript Documentation - 
+		
+			Dialog.js
+		
+	</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Container Components</a></h3>
+
+	<div class="breadcrumbs">
+		
+
+			
+			
+			
+			
+				<a href="./index.html">Container Components</a>
+				&gt;
+				<strong>Dialog.js</strong>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+
+					
+						<li>
+							<a href="YAHOO.util.Config.html">
+								YAHOO.util.Config</a>
+						</li>
+					
+
+					
+						<li>
+							<a href="YAHOO.widget.Dialog.html">
+								YAHOO.widget.Dialog</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.FormDialog.html">
+								YAHOO.widget.FormDialog</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Module.html">
+								YAHOO.widget.Module</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Overlay.html">
+								YAHOO.widget.Overlay</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Panel.html">
+								YAHOO.widget.Panel</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Tooltip.html">
+								YAHOO.widget.Tooltip</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-Config.js.html">
+								Config.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Dialog.js.html">
+								Dialog.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-FormDialog.js.html">
+								FormDialog.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Module.js.html">
+								Module.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Overlay.js.html">
+								Overlay.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Panel.js.html">
+								Panel.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Tooltip.js.html">
+								Tooltip.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div class="main">
+			
+		
+		
+			
+			   <h2>Dialog.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+		
+		
+		
+		
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+				
+					
+						<a href="#classSummary">Class Summary</a> |
+					
+					
+				
+				
+				
+					<a href="#source">Source Code</a>
+				
+			</div>
+		
+			
+				<div class="section class summaries">
+					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+			
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+						<tr>
+							<td class="name">
+								<a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a>
+							</td>
+							<td class="overview">Dialog is an implementation of Panel that behaves like an OS dialog.</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		
+		
+		
+		
+			<div class="section source">
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<pre class="sourceview"><span class="comment">/**
+* <span class="attrib">@class</span>
+* Dialog is an implementation of Panel that behaves like an OS dialog. Built-in functionality for buttons with event handlers is included, and button sets can be build dynamically, or the preincluded ones for OK/Cancel and Yes/No can be utilized.
+* <span class="attrib">@param</span> {string}	el	The element ID representing the Dialog &lt;em&gt;OR&lt;/em&gt;
+* <span class="attrib">@param</span> {Element}	el	The element representing the Dialog
+* <span class="attrib">@param</span> {object}	userConfig	The configuration object literal containing the configuration that should be set for this Dialog. See configuration documentation for more details.
+* <span class="attrib">@constructor</span>
+*/</span>
+YAHOO.widget.Dialog = <span class="reserved">function</span>(el, userConfig) {
+	<span class="reserved">if</span> (arguments.length &gt; 0)
+	{
+		YAHOO.widget.Dialog.superclass.constructor.call(<span class="reserved">this</span>, el, userConfig);
+	}
+}
+
+YAHOO.widget.Dialog.<span class="reserved">prototype</span> = new YAHOO.widget.Panel();
+YAHOO.widget.Dialog.<span class="reserved">prototype</span>.constructor = YAHOO.widget.Dialog;
+
+<span class="comment">/**
+* Reference to the Dialog's superclass, Panel
+* <span class="attrib">@type</span> class
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.Dialog.superclass = YAHOO.widget.Panel.<span class="reserved">prototype</span>;
+
+<span class="comment">/**
+* Constant for the standard network icon for a blocking action
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.Dialog.ICON_BLOCK = <span class="literal">"http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/bsc/blck16_1.gif"</span>;
+
+<span class="comment">/**
+* Constant for the standard network icon for alarm
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.Dialog.ICON_ALARM = <span class="literal">"http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/bsc/alrt16_1.gif"</span>;
+
+<span class="comment">/**
+* Constant for the standard network icon for help
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.Dialog.ICON_HELP  = <span class="literal">"http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/bsc/hlp16_1.gif"</span>;
+
+<span class="comment">/**
+* Constant for the standard network icon for info
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.Dialog.ICON_INFO  = <span class="literal">"http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/bsc/info16_1.gif"</span>;
+
+<span class="comment">/**
+* Constant for the standard network icon for warn
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.Dialog.ICON_WARN  = <span class="literal">"http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/bsc/warn16_1.gif"</span>;
+
+<span class="comment">/**
+* Constant for the standard network icon for a tip
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.Dialog.ICON_TIP   = <span class="literal">"http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/bsc/tip16_1.gif"</span>;
+
+<span class="comment">/**
+* Initializes the class's configurable properties which can be changed using the Dialog's Config object (cfg).
+*/</span>
+YAHOO.widget.Dialog.<span class="reserved">prototype</span>.initDefaultConfig = <span class="reserved">function</span>() {
+	YAHOO.widget.Dialog.superclass.initDefaultConfig.call(<span class="reserved">this</span>);
+
+	<span class="comment">// Add dialog config properties //</span>
+	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"icon"</span>,	<span class="literal">"none"</span>,		<span class="reserved">this</span>.configIcon);
+	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"buttons"</span>,	<span class="literal">"none"</span>,		<span class="reserved">this</span>.configButtons);
+}
+
+<span class="comment">/**
+* Initializes the custom events for Dialog which are fired automatically at appropriate times by the Dialog class.
+*/</span>
+YAHOO.widget.Dialog.<span class="reserved">prototype</span>.initEvents = <span class="reserved">function</span>() {
+	YAHOO.widget.Dialog.superclass.initEvents.call(<span class="reserved">this</span>);
+	<span class="reserved">this</span>.buttonClickEvent = new YAHOO.util.CustomEvent(<span class="literal">"buttonClick"</span>, <span class="reserved">this</span>);
+}
+
+<span class="comment">/*
+* The Dialog initialization method, which is executed for Dialog and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
+* <span class="attrib">@param</span> {string}	el	The element ID representing the Dialog &lt;em&gt;OR&lt;/em&gt;
+* <span class="attrib">@param</span> {Element}	el	The element representing the Dialog
+* <span class="attrib">@param</span> {object}	userConfig	The configuration object literal containing the configuration that should be set for this Dialog. See configuration documentation for more details.
+*/</span>
+YAHOO.widget.Dialog.<span class="reserved">prototype</span>.init = <span class="reserved">function</span>(el, userConfig) {
+	YAHOO.widget.Dialog.superclass.init.call(<span class="reserved">this</span>, el<span class="comment">/*, userConfig*/</span>);  <span class="comment">// Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level</span>
+
+	<span class="comment">/**
+	* Built-in button set for OK/Cancel buttons
+	* <span class="attrib">@type</span> object
+	*/</span>
+	<span class="reserved">this</span>.BUTTONS_OKCANCEL = { 
+				<span class="literal">"OK"</span>: {
+					handler : <span class="reserved">this</span>.handleOKClick,
+					isDefault : true
+				},
+				<span class="literal">"Cancel"</span>: {
+					handler : <span class="reserved">this</span>.handleCancelClick
+				} };
+	<span class="comment">/**
+	* Built-in button set for Yes/No buttons
+	* <span class="attrib">@type</span> object
+	*/</span>
+	<span class="reserved">this</span>.BUTTONS_YESNO = { 
+				<span class="literal">"Yes"</span>: {
+					handler : <span class="reserved">this</span>.handleYesClick,
+					isDefault : true
+				},
+				<span class="literal">"No"</span>: {
+					handler : <span class="reserved">this</span>.handleNoClick
+				} };
+
+	<span class="reserved">this</span>.showEvent.subscribe(<span class="reserved">this</span>.focusDefault, <span class="reserved">this</span>, true);
+
+	<span class="reserved">if</span> (userConfig) {
+		<span class="reserved">this</span>.cfg.applyConfig(userConfig, true);
+	}
+	
+	<span class="reserved">this</span>.cfg.applyConfig({ close:false, visible:false });
+}
+
+
+<span class="comment">// BEGIN BUILT-IN PROPERTY EVENT HANDLERS //</span>
+
+<span class="comment">/**
+* The default event handler for the "icon" configuration property
+*/</span>
+YAHOO.widget.Dialog.<span class="reserved">prototype</span>.configIcon = <span class="reserved">function</span>(type, args, obj) {
+	var iconURL = args[0];
+	<span class="reserved">if</span> (iconURL &amp;&amp; iconURL != <span class="literal">"none"</span>) {
+		<span class="reserved">if</span> (! <span class="reserved">this</span>.icon) {
+			<span class="reserved">this</span>.icon = document.createElement(<span class="literal">"DIV"</span>);
+
+			var firstChild = <span class="reserved">this</span>.body.firstChild;
+			<span class="reserved">if</span> (firstChild) {
+				<span class="reserved">this</span>.body.insertBefore(<span class="reserved">this</span>.icon, firstChild);
+			} <span class="reserved">else</span> {
+				<span class="reserved">this</span>.body.appendChild(<span class="reserved">this</span>.icon);
+			}	
+		} <span class="reserved">else</span> {
+			<span class="reserved">this</span>.icon.style.display = <span class="literal">"block"</span>;
+		}
+		
+		<span class="reserved">this</span>.icon.className = <span class="literal">"icon"</span>;
+		<span class="reserved">this</span>.icon.style.backgroundImage = <span class="literal">"url("</span> + iconURL + <span class="literal">")"</span>;
+		<span class="reserved">this</span>.icon.style.height = <span class="reserved">this</span>.body.offsetHeight + <span class="literal">"px"</span>;
+
+	} <span class="reserved">else</span> {
+		<span class="reserved">if</span> (<span class="reserved">this</span>.icon) {
+			<span class="reserved">this</span>.icon.style.display = <span class="literal">"none"</span>;
+		}
+	}
+}
+
+<span class="comment">/**
+* The default event handler for the "buttons" configuration property
+*/</span>
+YAHOO.widget.Dialog.<span class="reserved">prototype</span>.configButtons = <span class="reserved">function</span>(type, args, obj) {
+	var buttons = args[0];
+	<span class="reserved">if</span> (buttons != <span class="literal">"none"</span>) {
+		<span class="reserved">if</span> (! <span class="reserved">this</span>.buttonSet) {
+			<span class="reserved">this</span>.buttonSet = document.createElement(<span class="literal">"SPAN"</span>);
+			<span class="reserved">this</span>.buttonSet.className = <span class="literal">"button-group"</span>;
+		}
+		
+		<span class="reserved">this</span>.buttonSet.innerHTML = <span class="literal">""</span>;
+
+		<span class="reserved">if</span> (buttons == <span class="literal">"okcancel"</span>) {
+			buttons = <span class="reserved">this</span>.BUTTONS_OKCANCEL;
+		} <span class="reserved">else</span> <span class="reserved">if</span> (buttons == <span class="literal">"yesno"</span>) {
+			buttons = <span class="reserved">this</span>.BUTTONS_YESNO;
+		}
+
+		<span class="reserved">this</span>.buttons = buttons;
+
+		<span class="reserved">for</span> (var text in buttons) {
+			var button = buttons[text];
+			var htmlButton = document.createElement(<span class="literal">"BUTTON"</span>);
+
+			<span class="reserved">if</span> (button.isDefault) {
+				htmlButton.className = <span class="literal">"default"</span>;
+			}
+
+			htmlButton.appendChild(document.createTextNode(text));
+			YAHOO.util.Event.addListener(htmlButton, <span class="literal">"click"</span>, button.handler, <span class="reserved">this</span>);
+			<span class="reserved">this</span>.buttonSet.appendChild(htmlButton);
+
+			button.htmlButton = htmlButton;
+
+			<span class="reserved">if</span> (<span class="reserved">this</span>.browser == <span class="literal">"ie"</span>) {
+				<span class="reserved">this</span>.buttonSet = <span class="reserved">this</span>.buttonSet.cloneNode(true);
+			}
+		}
+		<span class="reserved">this</span>.setFooter(<span class="reserved">this</span>.buttonSet);
+	} <span class="reserved">else</span> {
+		<span class="reserved">if</span> (<span class="reserved">this</span>.buttonSet)	{
+			<span class="reserved">this</span>.buttonSet.style.display = <span class="literal">"none"</span>;
+		}
+	}
+	<span class="reserved">this</span>.cfg.refireEvent(<span class="literal">"underlay"</span>);
+}
+
+<span class="comment">/**
+* Sets the focus to the button that is designated as the default. By default, his handler is executed when the show event is fired.
+*/</span>
+YAHOO.widget.Dialog.<span class="reserved">prototype</span>.focusDefault = <span class="reserved">function</span>(type, args, obj) {
+	<span class="reserved">for</span> (var text in <span class="reserved">this</span>.buttons) {
+		var button = <span class="reserved">this</span>.buttons[text];
+		<span class="reserved">if</span> (button.isDefault) {
+			button.htmlButton.focus();
+		}
+	}	
+}
+
+<span class="comment">// END BUILT-IN PROPERTY EVENT HANDLERS //</span>
+
+<span class="comment">// BEGIN BUILT-IN DOM EVENT HANDLERS //</span>
+
+
+<span class="comment">/**
+* The default event handler fired when the user clicks OK in the built-in button set
+* <span class="attrib">@param</span> {DOMEvent} e	The current DOM event
+* <span class="attrib">@param</span> {object}	obj	The object argument, in this case, the Dialog itself
+*/</span>
+YAHOO.widget.Dialog.<span class="reserved">prototype</span>.handleOKClick = <span class="reserved">function</span>(e, obj) { }
+
+<span class="comment">/**
+* The default event handler fired when the user clicks Cancel in the built-in button set
+* <span class="attrib">@param</span> {DOMEvent} e	The current DOM event
+* <span class="attrib">@param</span> {object}	obj	The object argument, in this case, the Dialog itself
+*/</span>
+YAHOO.widget.Dialog.<span class="reserved">prototype</span>.handleCancelClick = <span class="reserved">function</span>(e, obj) {
+	obj.hide();
+}
+
+<span class="comment">/**
+* The default event handler fired when the user clicks Yes in the built-in button set
+* <span class="attrib">@param</span> {DOMEvent} e	The current DOM event
+* <span class="attrib">@param</span> {object}	obj	The object argument, in this case, the Dialog itself
+*/</span>
+YAHOO.widget.Dialog.<span class="reserved">prototype</span>.handleYesClick = <span class="reserved">function</span>(e, obj) { }
+
+<span class="comment">/**
+* The default event handler fired when the user clicks No in the built-in button set
+* <span class="attrib">@param</span> {DOMEvent} e	The current DOM event
+* <span class="attrib">@param</span> {object}	obj	The object argument, in this case, the Dialog itself
+*/</span>
+YAHOO.widget.Dialog.<span class="reserved">prototype</span>.handleNoClick = <span class="reserved">function</span>(e, obj) {
+	obj.hide();
+}
+
+<span class="comment">// END BUILT-IN DOM EVENT HANDLERS //</span></pre>
+			</div>
+		
+	</div>
+</div>
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	<br />
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+	version 1.9.5.8
+</div>
+
+
+</body>
+</html>

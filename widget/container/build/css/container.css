@@ -1,0 +1,153 @@
+body.masked select, .panel.drag select {
+	visibility:hidden;
+}
+
+.mask {
+    z-index:0;   
+    display:none;
+    position:absolute;
+    top:0;
+    left:0;
+    width:110%;
+    height:100%;
+    background-color:#CCC;
+    -moz-opacity: 0.5;
+    opacity:.50;
+    filter: alpha(opacity=50);
+    }
+.mask[id]{ /* IE6 and below Can't See This */
+    position:fixed;
+}
+
+.panel-container {
+	position:absolute;
+	z-index:6;
+	visibility:hidden;
+	overflow:visible;
+	padding:3px;
+}
+
+.panel-container .shadow {
+	position:relative;
+	background-color:#CCC;
+	left:3px;top:3px;
+	z-index:-1;
+}
+
+.panel-container .matte {
+	position:relative;
+	background-color:#FFF;
+	left:-3px;top:-3px;
+	z-index:-1;
+}
+
+
+.panel {
+	border-collapse:separate;
+	position:absolute;
+	left:0px;top:0px;
+	font:13px Arial;
+	background-color:#FFF;
+	border:1px solid #000;
+	z-index:1;
+	margin:3px;
+	visibility:hidden;
+}
+
+.panel .hd {
+	cursor:move;
+	background-color:#3d77cb;
+	color:#FFF;
+	height:12px;
+	font-size:11px;
+	border:1px solid #FFF;
+	border-bottom:1px solid #000;
+	font-weight:bold;
+	margin-bottom:5px;
+	padding:4px;
+}
+
+.panel .bd {
+	padding:5px;
+}
+
+.panel .bd p {
+	margin:0 0 1em;
+}
+
+.panel .close {
+	position:absolute;
+	top:5px;
+	right:4px;
+	z-index:6;
+	height:12px;
+	width:12px;
+	margin:0px;
+	padding:0px;
+	background-image:url(http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/alt3/close12_1.gif);
+	background-repeat:no-repeat;
+	cursor:pointer;
+	visibility:inherit;
+}
+
+.dialog .bd .icon {
+	background-repeat:no-repeat;
+	width:16px;
+	height:16px;
+	margin-right:10px;
+	float:left;
+}
+
+.dialog .ft, .form-dialog .ft {
+	padding-bottom:5px;
+	padding-right:5px;
+	text-align:right;
+}
+
+.form-dialog form {
+	margin:0;
+}
+
+.button-group button {
+	font:100 76% verdana;
+	text-decoration:none;
+	background-color: #E4E4E4;
+	color: #333;
+	cursor: hand;
+	vertical-align: middle;
+	border: 2px solid #797979;
+	border-top-color:#FFF;
+	border-left-color:#FFF;
+	margin:2px;
+	padding:2px;
+}
+
+.button-group button.default {
+	font-weight:bold;
+}
+
+.button-group button:hover, .button-group button.hover { 
+	border:2px solid #90A029;
+	background-color:#EBF09E;
+	border-top-color:#FFF;
+	border-left-color:#FFF;
+}
+
+.button-group button:active { 
+	border:2px solid #E4E4E4;
+	background-color:#BBB;
+	border-top-color:#333;
+	border-left-color:#333;
+}
+
+.tt {
+	color:#333;
+	background-color:#FDFFB4;
+	font-family:arial,helvetica,verdana,sans-serif;
+	font-size:1em;
+	position:absolute;
+	padding:2px;
+	border:1px solid #FCC90D;
+	font:11px sans-serif;
+	width:auto;
+}

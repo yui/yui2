@@ -1,0 +1,299 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>YAHOO.widget.Overlay</title>
+
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/yahoo_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/event_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://ue.corp.yahoo.com/msweeney/dev/platform/2.0/util/dom/build/dom-raw.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/animation_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/dragdrop_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/connection_2.0.0-b1.js" ></script>
+
+<link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/fonts_0.9.0.css" />
+<link rel="stylesheet" type="text/css" href="css/example.css" />
+
+<link rel="stylesheet" type="text/css" href="../build/css/container.css" />
+
+<script src="../build/js/container-raw.js"></script>
+
+<style>
+
+.overlay {
+	position:absolute;
+	visibility:hidden;
+	border:1px solid black;
+	background-color:#FFFFFF;
+	z-index:10;
+	padding:5px;
+}
+
+select {
+	display:block;
+	margin:5px;
+}
+
+</style>
+
+<script language="javascript">
+
+	var overlayPredef;
+	var overlayDynamic;
+	var overlayContainer;
+
+	var build;
+	var modify;
+
+	var modules = [];
+
+	function init() {
+		
+		build = new YAHOO.widget.Panel( "build", { visible:true, close:false, x:433, y:302, width:"325px" });
+		build.render();
+
+		modify = new YAHOO.widget.Panel( "modify", { visible:true, close:false, x:433, y:500, width:"475px" });
+		modify.render();
+		// This represents a overlay already on the page
+		// *****************************************************************
+			//debugger;
+
+			overlayPredef = new YAHOO.widget.Overlay("oPredef", {x:100, y:150} );
+			//if (getBrowser() == "ie") overlayPredef.setProperty("iframe",true);
+			
+			//YAHOO.
+
+			overlayPredef.render();
+
+			modules["oPredef"] = overlayPredef;
+		// *****************************************************************
+
+		// This represents a overlay created completely on the fly
+		// *****************************************************************
+			overlayDynamic = new YAHOO.widget.Overlay("oDynamic", {visible: true, x:100, y:350} );
+			//if (getBrowser() == "ie") overlayDynamic.setProperty("iframe",true);
+
+			overlayDynamic.element.style.fontWeight = "bold";
+			overlayDynamic.element.className = "overlay";
+
+			// Dynamically create a header, using an element
+			overlayDynamic.setHeader(document.createTextNode("Dynamic Header"));
+
+			// Dynamically create a body, using text
+			overlayDynamic.setBody("<em>Dynamic Body</em>");
+
+			// Dynamically create a footer
+			var href = document.createElement("A");
+			href.href = "#";
+			href.appendChild(document.createTextNode("Dynamic footer!"));
+			overlayDynamic.setFooter(href);
+
+			//overlayDynamic.cfg.setProperty("width","auto");
+
+			overlayDynamic.render(document.body);
+
+			modules["oDynamic"] = overlayDynamic;
+
+		// *****************************************************************
+
+		// This represents a overlay with a container, but no body content defined
+		// *****************************************************************
+			overlayContainer = new YAHOO.widget.Overlay("oPartial", {x:100, y:550} );
+			//if (getBrowser() == "ie") overlayContainer.setProperty("iframe",true);
+
+			overlayContainer.setHeader("Hybrid Container Header Override");
+			overlayContainer.setBody(document.createTextNode("Partial Container Body"));
+
+			overlayContainer.render();
+
+			modules["oPartial"] = overlayContainer;
+
+		// *****************************************************************
+
+
+		var button2 = document.getElementById("btn2");
+		button2.onclick = hideAll;
+
+		var button3 = document.getElementById("btn3");
+		button3.onclick = showAll;
+
+		var button4 = document.getElementById("btn4");
+		button4.onclick = moveAll;
+
+		var dd1 = new YAHOO.util.DD(overlayDynamic.element.id, "panel");
+		dd1.onDrag = function() {
+			overlayDynamic.cfg.refireEvent("iframe");
+				var pos = YAHOO.util.Dom.getXY(overlayDynamic.element);
+				overlayDynamic.cfg.setProperty("xy", pos);
+		}
+
+		var dd2 = new YAHOO.util.DD(overlayPredef.element.id, "panel");
+		dd2.onDrag = function() {
+			overlayPredef.cfg.refireEvent("iframe");
+				var pos = YAHOO.util.Dom.getXY(overlayPredef.element);
+				overlayPredef.cfg.setProperty("xy", pos);
+		}
+
+		var dd3 = new YAHOO.util.DD(overlayContainer.element.id, "panel");
+		dd3.onDrag = function() {
+			overlayContainer.cfg.refireEvent("iframe");
+				var pos = YAHOO.util.Dom.getXY(overlayContainer.element);
+				overlayContainer.cfg.setProperty("xy", pos);
+		}
+
+	}
+
+
+	function hideAll() {
+		for (var i in modules) {
+			var m = modules[i];
+			m.hide();
+		}
+	}
+
+	function showAll() {
+		for (var i in modules) {
+			var m = modules[i];
+			m.show();
+		}
+	}
+	
+	function moveAll() {
+		for (var i in modules) {
+			var m = modules[i];
+			var xy = m.cfg.getProperty("xy");
+			m.cfg.setProperty("xy", [xy[0]+25,xy[1]+25]);
+		}
+	}
+
+	function resetAll() {
+		for (var i in modules) {
+			var m = modules[i];
+			m.cfg.reset();
+		}
+	}
+
+	function buildDynamic(form) {
+		// This represents a module created completely on the fly
+		// *****************************************************************
+		
+			var id = form["id"].value;
+			var x = parseInt(form["x"].value);
+			var y = parseInt(form["y"].value);
+
+			var mod = new YAHOO.widget.Overlay(id, {visible: true, x:x, y:y});
+
+			mod.setHeader(form["header"].value + " (id: " + mod.id + ")");
+			mod.setBody(form["body"].value);
+			mod.setFooter(form["footer"].value);	
+			
+			mod.element.className = "overlay";
+
+			mod.render(document.body);
+
+			var dd = new YAHOO.util.DD(mod.element.id, "panel");
+			dd.onDrag = function() {
+				mod.cfg.refireEvent("iframe");
+				var pos = YAHOO.util.Dom.getXY(mod.element);
+				mod.cfg.setProperty("xy", pos);
+			}
+
+			modules[id] = mod;
+	}
+
+	function changeModule(form) {
+		var id = form["modid"].value;
+		var mod = modules[id];
+		mod.setHeader(form["modheader"].value);
+		mod.setBody(form["modbody"].value);
+		mod.setFooter(form["modfooter"].value);
+	}
+
+	function getModule(form) {
+		var id = form["modid"].value;
+		var mod = modules[id];
+		form["modheader"].value = mod.header.innerHTML;
+		form["modbody"].value = mod.body.innerHTML;
+		form["modfooter"].value = mod.footer.innerHTML;
+	}
+
+	YAHOO.util.Event.addListener(window, "load", init);
+
+</script>
+</head>
+<body>
+	<div class="homeLink">
+		<a href="index.html">&lt; Home</a>
+	</div>
+	<div class="box">
+		<div class="hd">
+			<h1>Overlay Example</h1>
+		</div>
+		<div class="bd">
+			<button id="btn2">Hide All</button>
+			<button id="btn3">Show All</button>
+			<button id="btn4">Move All</button>
+			<button id="btn5" onclick="resetAll()">Reset All</button>
+		</div>
+		<p>An Overlay is a <a href="module.html">Module</a> that is positioned to float above document content. It contains no default behavior or styling, but has several properties for manipulating its size and position. Overlay is extended to create subclasses like <a href="tooltip.html">Tooltip</a>, <a href="panel.html">Panel</a>, and <a href="dialog.html">Dialog</a>.</p>
+		<p>In this example, there are three draggable overlays that are displayed, two of which are already completely or partially marked up, and one which is dynamically created using JavaScript alone.</p>
+		<p>Each overlay automatically has a hidden IFRAME element wired underneath it when the browser is Internet Explorer, so that the overlays can be positioned above SELECT elements without the SELECT bleeding through. The IFRAME also ensures that the overlay can be positioned above Flash elements easily.</p>
+	</div>
+
+	<div id="oPredef" class="overlay">
+		<div class="hd">Predefined Module Header</div>
+		<div class="bd">Predefined Module Body</div>
+	</div>
+
+	<div id="oPartial" class="overlay">
+		<div class="hd">Partial Container Header (some dynamic)</div>
+		<div class="ft">Partial Container Footer</div>
+	</div>
+
+	<select>
+		<option>This is a &lt;select&gt; element.</option>
+	</select>
+
+	<object width="425" height="350" style="z-index:0">
+		<param name="movie" value="http://www.youtube.com/v/FU7xXLtAI-I"></param>
+		<param name="wmode" value="transparent"></param>
+		<embed src="http://www.youtube.com/v/FU7xXLtAI-I" type="application/x-shockwave-flash" width="425" height="350" wmode="transparent"></embed>
+	</object>	
+	
+
+
+	<div id="build">
+		<div class="hd">Build a dynamic Overlay</div>
+		<div class="bd">
+			<form onsubmit="return false">
+				<div class="create">
+					<label for="id">ID:</label><input type="textbox" id="id" value="myModule" /><br/>
+					<label for="header">Header content:</label><input type="textbox" id="header" /><br/>
+					<label for="body">Body content:</label><input type="textbox" id="body" /><br/>
+					<label for="footer">Footer content:</label><input type="textbox" id="footer" /><br/>
+					<label for="x">Position:</label>x:<input type="textbox" id="x" style="width:50px" />, y:<input type="textbox" id="y"  style="width:50px"/><br/>
+					<div class="buttonset"><button onclick="buildDynamic(this.form)">create and render!</button></div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div id="modify">
+		<div class="hd">Modify an Overlay</div>
+		<div class="bd">
+			<form onsubmit="return false">
+				<div class="create">
+					<label for="modid">ID:</label><input type="textbox" id="modid" /><button onclick="getModule(this.form)">retrieve module</button><br/>
+					<label for="modheader">Header content:</label><input type="textbox" id="modheader" /><br/>
+					<label for="modbody">Body content:</label><input type="textbox" id="modbody" /><br/>
+					<label for="modfooter">Footer content:</label><input type="textbox" id="modfooter" /><br/>
+					<div class="buttonset"><button onclick="changeModule(this.form)">change it!</button></div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,637 @@
+
+<html>
+<head>
+	<title>
+		JavaScript Documentation - 
+		
+			Module.js
+		
+	</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Container Components</a></h3>
+
+	<div class="breadcrumbs">
+		
+
+			
+			
+			
+			
+				<a href="./index.html">Container Components</a>
+				&gt;
+				<strong>Module.js</strong>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+
+					
+						<li>
+							<a href="YAHOO.util.Config.html">
+								YAHOO.util.Config</a>
+						</li>
+					
+
+					
+						<li>
+							<a href="YAHOO.widget.Dialog.html">
+								YAHOO.widget.Dialog</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.FormDialog.html">
+								YAHOO.widget.FormDialog</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Module.html">
+								YAHOO.widget.Module</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Overlay.html">
+								YAHOO.widget.Overlay</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Panel.html">
+								YAHOO.widget.Panel</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Tooltip.html">
+								YAHOO.widget.Tooltip</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-Config.js.html">
+								Config.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Dialog.js.html">
+								Dialog.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-FormDialog.js.html">
+								FormDialog.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Module.js.html">
+								Module.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Overlay.js.html">
+								Overlay.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Panel.js.html">
+								Panel.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Tooltip.js.html">
+								Tooltip.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div class="main">
+			
+		
+		
+			
+			   <h2>Module.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+		
+		
+		
+		
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+				
+					
+						<a href="#classSummary">Class Summary</a> |
+					
+					
+				
+				
+				
+					<a href="#source">Source Code</a>
+				
+			</div>
+		
+			
+				<div class="section class summaries">
+					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+			
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+						<tr>
+							<td class="name">
+								<a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a>
+							</td>
+							<td class="overview">Module is a JavaScript representation of the Standard Module Format.</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		
+		
+		
+		
+			<div class="section source">
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<pre class="sourceview"><span class="comment">/**
+* <span class="attrib">@class</span> 
+* Module is a JavaScript representation of the Standard Module Format. Standard Module Format is a simple standard for markup containers where child nodes representing the header, body, and footer of the content are denoted using the CSS classes "hd", "bd", and "ft" respectively. Module is the base class for all other classes in the YUI Container package.
+* <span class="attrib">@param</span> {string}	el	The element ID representing the Module &lt;em&gt;OR&lt;/em&gt;
+* <span class="attrib">@param</span> {Element}	el	The element representing the Module
+* <span class="attrib">@param</span> {object}	userConfig	The configuration object literal containing the configuration that should be set for this module. See configuration documentation for more details.
+* <span class="attrib">@constructor</span>
+*/</span>
+YAHOO.widget.Module = <span class="reserved">function</span>(el, userConfig) {
+	<span class="reserved">if</span> (el) { 
+		<span class="reserved">this</span>.init(el, userConfig); 
+	}
+}
+
+<span class="comment">/**
+* Constant representing the module header
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.Module.CSS_HEADER = <span class="literal">"hd"</span>;
+
+<span class="comment">/**
+* Constant representing the module body
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.Module.CSS_BODY   = <span class="literal">"bd"</span>;
+
+<span class="comment">/**
+* Constant representing the module footer
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.Module.CSS_FOOTER = <span class="literal">"ft"</span>;
+
+YAHOO.widget.Module.<span class="reserved">prototype</span> = {
+
+	<span class="comment">/**
+	* The class's constructor function
+	* <span class="attrib">@type</span> function
+	*/</span>
+	constructor : YAHOO.widget.Module,
+
+	<span class="comment">/**
+	* The main module element that contains the header, body, and footer
+	* <span class="attrib">@type</span> Element
+	*/</span>
+	element : null, 
+
+	<span class="comment">/**
+	* The header element, denoted with CSS class "hd"
+	* <span class="attrib">@type</span> Element
+	*/</span>
+	header : null,
+
+	<span class="comment">/**
+	* The body element, denoted with CSS class "bd"
+	* <span class="attrib">@type</span> Element
+	*/</span>
+	body : null,
+
+	<span class="comment">/**
+	* The footer element, denoted with CSS class "ft"
+	* <span class="attrib">@type</span> Element
+	*/</span>
+	footer : null,
+
+	<span class="comment">/**
+	* Array of elements
+	* <span class="attrib">@type</span> Element[]
+	*/</span>
+	childNodesInDOM : null,
+
+	<span class="comment">/**
+	* Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
+	*/</span>
+	initEvents : <span class="reserved">function</span>() {
+		<span class="reserved">this</span>.appendEvent		= new YAHOO.util.CustomEvent(<span class="literal">"append"</span>);
+		<span class="reserved">this</span>.beforeRenderEvent	= new YAHOO.util.CustomEvent(<span class="literal">"beforeRender"</span>);
+		<span class="reserved">this</span>.renderEvent		= new YAHOO.util.CustomEvent(<span class="literal">"render"</span>);
+
+		<span class="reserved">this</span>.changeHeaderEvent	= new YAHOO.util.CustomEvent(<span class="literal">"changeHeader"</span>);
+		<span class="reserved">this</span>.changeBodyEvent	= new YAHOO.util.CustomEvent(<span class="literal">"changeBody"</span>);
+		<span class="reserved">this</span>.changeFooterEvent	= new YAHOO.util.CustomEvent(<span class="literal">"changeFooter"</span>);
+
+		<span class="reserved">this</span>.changeContentEvent = new YAHOO.util.CustomEvent(<span class="literal">"changeContent"</span>);
+
+		<span class="reserved">this</span>.destroyEvent		= new YAHOO.util.CustomEvent(<span class="literal">"destroy"</span>);
+		<span class="reserved">this</span>.beforeShowEvent	= new YAHOO.util.CustomEvent(<span class="literal">"beforeShow"</span>, <span class="reserved">this</span>);
+		<span class="reserved">this</span>.showEvent			= new YAHOO.util.CustomEvent(<span class="literal">"show"</span>, <span class="reserved">this</span>);
+		<span class="reserved">this</span>.beforeHideEvent	= new YAHOO.util.CustomEvent(<span class="literal">"beforeHide"</span>, <span class="reserved">this</span>);
+		<span class="reserved">this</span>.hideEvent			= new YAHOO.util.CustomEvent(<span class="literal">"hide"</span>, <span class="reserved">this</span>);
+	}, 
+
+	<span class="comment">/**
+	* Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
+	*/</span>
+	initDefaultConfig : <span class="reserved">function</span>() {
+		<span class="reserved">this</span>.cfg = new YAHOO.util.Config(<span class="reserved">this</span>);
+
+		<span class="comment">// Add properties //</span>
+		<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"visible"</span>, null, <span class="reserved">this</span>.configVisible, <span class="reserved">this</span>.cfg.checkBoolean, <span class="reserved">this</span>.element, true);
+	},
+
+	<span class="comment">/**
+	* The Module class's initialization method, which is executed for Module and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
+	* <span class="attrib">@param</span> {string}	el	The element ID representing the Module &lt;em&gt;OR&lt;/em&gt;
+	* <span class="attrib">@param</span> {Element}	el	The element representing the Module
+	* <span class="attrib">@param</span> {object}	userConfig	The configuration object literal containing the configuration that should be set for this module. See configuration documentation for more details.
+	*/</span>
+	init : <span class="reserved">function</span>(el, userConfig) {
+
+		<span class="reserved">if</span> (typeof el == <span class="literal">"string"</span>)
+		{
+			var elId = el;
+
+			el = document.getElementById(el);
+			<span class="reserved">if</span> (! el)
+			{
+				el = document.createElement(<span class="literal">"DIV"</span>);
+				el.id = elId;
+			}
+		}
+
+		<span class="reserved">this</span>.element = el;
+		<span class="reserved">this</span>.id = el.id;
+		
+		<span class="reserved">this</span>.childNodesInDOM = [null,null,null];
+
+		var childNodes = <span class="reserved">this</span>.element.childNodes;
+
+		<span class="reserved">if</span> (childNodes)
+		{
+			<span class="reserved">for</span> (var i=0;i&lt;childNodes.length;i++)
+			{
+				var child = childNodes[i];
+				switch (child.className)
+				{
+					case YAHOO.widget.Module.CSS_HEADER:
+						<span class="reserved">this</span>.header = child;
+						<span class="reserved">this</span>.childNodesInDOM[0] = child;
+						break;
+					case YAHOO.widget.Module.CSS_BODY:
+						<span class="reserved">this</span>.body = child;
+						<span class="reserved">this</span>.childNodesInDOM[1] = child;
+						break;
+					case YAHOO.widget.Module.CSS_FOOTER:
+						<span class="reserved">this</span>.footer = child;
+						<span class="reserved">this</span>.childNodesInDOM[2] = child;
+						break;
+				}
+			}
+		}
+
+		<span class="reserved">this</span>.initEvents();
+		<span class="reserved">this</span>.initDefaultConfig();
+		
+		<span class="reserved">if</span> (userConfig) {
+			<span class="reserved">this</span>.cfg.applyConfig(userConfig);
+		}
+	},
+
+	<span class="comment">/**
+	* Sets the Module's header content to the HTML specified, or appends the passed element to the header. If no header is present, one will be automatically created.
+	* <span class="attrib">@param</span> {string}	headerContent	The HTML used to set the header &lt;em&gt;OR&lt;/em&gt;
+	* <span class="attrib">@param</span> {Element}	headerContent	The Element to append to the header
+	*/</span>	
+	setHeader : <span class="reserved">function</span>(headerContent) {
+		<span class="reserved">if</span> (! <span class="reserved">this</span>.header) {
+			<span class="reserved">this</span>.header = document.createElement(<span class="literal">"DIV"</span>);
+			<span class="reserved">this</span>.header.className = YAHOO.widget.Module.CSS_HEADER;
+		}
+		
+		<span class="reserved">if</span> (typeof headerContent == <span class="literal">"string"</span>) {
+			<span class="reserved">this</span>.header.innerHTML = headerContent;
+		} <span class="reserved">else</span> {
+			<span class="reserved">this</span>.header.innerHTML = <span class="literal">""</span>;
+			<span class="reserved">this</span>.header.appendChild(headerContent);
+		}
+
+		<span class="reserved">this</span>.changeHeaderEvent.fire(headerContent);
+		<span class="reserved">this</span>.changeContentEvent.fire();
+	},
+
+	<span class="comment">/**
+	* Appends the passed element to the header. If no header is present, one will be automatically created.
+	* <span class="attrib">@param</span> {Element}	element	The element to append to the header
+	*/</span>	
+	appendToHeader : <span class="reserved">function</span>(element) {
+		<span class="reserved">if</span> (! <span class="reserved">this</span>.header) {
+			<span class="reserved">this</span>.header = document.createElement(<span class="literal">"DIV"</span>);
+			<span class="reserved">this</span>.header.className = YAHOO.widget.Module.CSS_HEADER;
+		}
+		
+		<span class="reserved">this</span>.header.appendChild(element);
+		<span class="reserved">this</span>.changeHeaderEvent.fire(element);
+		<span class="reserved">this</span>.changeContentEvent.fire();
+	},
+
+	<span class="comment">/**
+	* Sets the Module's body content to the HTML specified, or appends the passed element to the body. If no body is present, one will be automatically created.
+	* <span class="attrib">@param</span> {string}	bodyContent	The HTML used to set the body &lt;em&gt;OR&lt;/em&gt;
+	* <span class="attrib">@param</span> {Element}	bodyContent	The Element to append to the body
+	*/</span>		
+	setBody : <span class="reserved">function</span>(bodyContent) {
+		<span class="reserved">if</span> (! <span class="reserved">this</span>.body) {
+			<span class="reserved">this</span>.body = document.createElement(<span class="literal">"DIV"</span>);
+			<span class="reserved">this</span>.body.className = YAHOO.widget.Module.CSS_BODY;
+		}
+
+		<span class="reserved">if</span> (typeof bodyContent == <span class="literal">"string"</span>)
+		{
+			<span class="reserved">this</span>.body.innerHTML = bodyContent;
+		} <span class="reserved">else</span> {
+			<span class="reserved">this</span>.body.innerHTML = <span class="literal">""</span>;
+			<span class="reserved">this</span>.body.appendChild(bodyContent);
+		}
+
+		<span class="reserved">this</span>.changeBodyEvent.fire(bodyContent);
+		<span class="reserved">this</span>.changeContentEvent.fire();
+	},
+
+	<span class="comment">/**
+	* Appends the passed element to the body. If no body is present, one will be automatically created.
+	* <span class="attrib">@param</span> {Element}	element	The element to append to the body
+	*/</span>
+	appendToBody : <span class="reserved">function</span>(element) {
+		<span class="reserved">if</span> (! <span class="reserved">this</span>.body) {
+			<span class="reserved">this</span>.body = document.createElement(<span class="literal">"DIV"</span>);
+			<span class="reserved">this</span>.body.className = YAHOO.widget.Module.CSS_BODY;
+		}
+
+		<span class="reserved">this</span>.body.appendChild(element);
+		<span class="reserved">this</span>.changeBodyEvent.fire(element);
+		<span class="reserved">this</span>.changeContentEvent.fire();
+	},
+
+	<span class="comment">/**
+	* Sets the Module's footer content to the HTML specified, or appends the passed element to the footer. If no footer is present, one will be automatically created.
+	* <span class="attrib">@param</span> {string}	footerContent	The HTML used to set the footer &lt;em&gt;OR&lt;/em&gt;
+	* <span class="attrib">@param</span> {Element}	footerContent	The Element to append to the footer
+	*/</span>	
+	setFooter : <span class="reserved">function</span>(footerContent) {
+		<span class="reserved">if</span> (! <span class="reserved">this</span>.footer) {
+			<span class="reserved">this</span>.footer = document.createElement(<span class="literal">"DIV"</span>);
+			<span class="reserved">this</span>.footer.className = YAHOO.widget.Module.CSS_FOOTER;
+		}
+
+		<span class="reserved">if</span> (typeof footerContent == <span class="literal">"string"</span>)
+		{
+			<span class="reserved">this</span>.footer.innerHTML = footerContent;
+		} <span class="reserved">else</span> {
+			<span class="reserved">this</span>.footer.innerHTML = <span class="literal">""</span>;
+			<span class="reserved">this</span>.footer.appendChild(footerContent);
+		}
+
+		<span class="reserved">this</span>.changeFooterEvent.fire(footerContent);
+		<span class="reserved">this</span>.changeContentEvent.fire();
+	},
+
+	<span class="comment">/**
+	* Appends the passed element to the footer. If no footer is present, one will be automatically created.
+	* <span class="attrib">@param</span> {Element}	element	The element to append to the footer
+	*/</span>
+	appendToFooter : <span class="reserved">function</span>(element) {
+		<span class="reserved">if</span> (! <span class="reserved">this</span>.footer) {
+			<span class="reserved">this</span>.footer = document.createElement(<span class="literal">"DIV"</span>);
+			<span class="reserved">this</span>.footer.className = YAHOO.widget.Module.CSS_FOOTER;
+		}
+
+		<span class="reserved">this</span>.footer.appendChild(element);
+		<span class="reserved">this</span>.changeFooterEvent.fire(element);
+		<span class="reserved">this</span>.changeContentEvent.fire();
+	},
+
+	<span class="comment">/**
+	* Renders the Module by inserting the elements that are not already in the main Module into their correct places. Optionally appends the Module to the specified node prior to the render's execution. NOTE: For Modules without existing markup, the appendToNode argument is REQUIRED. If this argument is ommitted and the current element is not present in the document, the function will return false, indicating that the render was a failure.
+	* <span class="attrib">@param</span> {string}	appendToNode	The element id to which the Module should be appended to prior to rendering &lt;em&gt;OR&lt;/em&gt;
+	* <span class="attrib">@param</span> {Element}	appendToNode	The element to which the Module should be appended to prior to rendering	
+	* <span class="attrib">@return</span> {boolean} Success or failure of the render
+	*/</span>
+	render : <span class="reserved">function</span>(appendToNode) {
+		<span class="reserved">this</span>.beforeRenderEvent.fire();
+
+		var me = <span class="reserved">this</span>;
+		var appendTo = <span class="reserved">function</span>(element) {
+			<span class="reserved">if</span> (typeof element == <span class="literal">"string"</span>) {
+				element = document.getElementById(element);
+			}
+			
+			<span class="reserved">if</span> (element) {
+				element.appendChild(me.element);
+				me.appendEvent.fire();
+			}
+		}
+
+		<span class="reserved">if</span> (appendToNode) {
+			<span class="reserved">if</span> (typeof appendToNode == <span class="literal">"string"</span>) {
+				el = document.getElementById(el);
+				<span class="reserved">if</span> (! el) {
+					el = document.createElement(<span class="literal">"DIV"</span>);
+					el.id = elId;
+				}
+			}
+			appendTo(appendToNode);
+		} <span class="reserved">else</span> { <span class="comment">// No node was passed in. If the element is not pre-marked up, this fails</span>
+			<span class="reserved">if</span> (! YAHOO.util.Dom._elementInDom(<span class="reserved">this</span>.element)) {
+				<span class="reserved">return</span> false;
+			}
+		}
+
+		<span class="comment">// Need to get everything into the DOM if it isn't already</span>
+		
+		<span class="reserved">if</span> ((! <span class="reserved">this</span>.childNodesInDOM[0]) &amp;&amp; <span class="reserved">this</span>.header) {
+			<span class="comment">// There is a header, but it's not in the DOM yet... need to add it</span>
+			var firstChild = <span class="reserved">this</span>.element.firstChild;
+			<span class="reserved">if</span> (firstChild) { <span class="comment">// Insert before first child if exists</span>
+				<span class="reserved">this</span>.element.insertBefore(<span class="reserved">this</span>.header, firstChild);
+			} <span class="reserved">else</span> { <span class="comment">// Append to empty body because there are no children</span>
+				<span class="reserved">this</span>.element.appendChild(<span class="reserved">this</span>.header);
+			}
+		}
+
+		<span class="reserved">if</span> ((! <span class="reserved">this</span>.childNodesInDOM[1]) &amp;&amp; <span class="reserved">this</span>.body) {
+			<span class="comment">// There is a body, but it's not in the DOM yet... need to add it</span>
+			<span class="reserved">if</span> (<span class="reserved">this</span>.childNodesInDOM[2]) { <span class="comment">// Insert before footer if exists in DOM</span>
+				<span class="reserved">this</span>.element.insertBefore(<span class="reserved">this</span>.body, <span class="reserved">this</span>.childNodesInDOM[2]);
+			} <span class="reserved">else</span> { <span class="comment">// Append to element because there is no footer</span>
+				<span class="reserved">this</span>.element.appendChild(<span class="reserved">this</span>.body);
+			}
+		}
+
+		<span class="reserved">if</span> ((! <span class="reserved">this</span>.childNodesInDOM[2]) &amp;&amp; <span class="reserved">this</span>.footer) {
+			<span class="comment">// There is a footer, but it's not in the DOM yet... need to add it</span>
+			<span class="reserved">this</span>.element.appendChild(<span class="reserved">this</span>.footer);
+		}
+		
+		<span class="reserved">this</span>.cfg.fireDeferredEvents();
+		<span class="reserved">this</span>.renderEvent.fire();
+
+		<span class="reserved">return</span> true;
+	},
+
+	<span class="comment">/**
+	* Removes the Module element from the DOM and sets all child elements to null.
+	*/</span>
+	destroy : <span class="reserved">function</span>() {
+		<span class="reserved">if</span> (<span class="reserved">this</span>.element) {
+			var parent = <span class="reserved">this</span>.element.parentNode;
+		}
+		<span class="reserved">if</span> (parent) {
+			parent.removeChild(<span class="reserved">this</span>.element);
+		}
+
+		<span class="reserved">this</span>.element = null;
+		<span class="reserved">this</span>.header = null;
+		<span class="reserved">this</span>.body = null;
+		<span class="reserved">this</span>.footer = null;
+
+		<span class="reserved">this</span>.destroyEvent.fire();
+	},
+
+	<span class="comment">/**
+	* Shows the Module element by setting the visible configuration property to true. Also fires two events: beforeShowEvent prior to the visibility change, and showEvent after.
+	*/</span>
+	show : <span class="reserved">function</span>() {
+		<span class="reserved">this</span>.beforeShowEvent.fire();
+		<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"visible"</span>, true);
+		<span class="reserved">this</span>.showEvent.fire();
+	},
+
+	<span class="comment">/**
+	* Hides the Module element by setting the visible configuration property to false. Also fires two events: beforeHideEvent prior to the visibility change, and hideEvent after.
+	*/</span>
+	hide : <span class="reserved">function</span>() {
+		<span class="reserved">this</span>.beforeHideEvent.fire();
+		<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"visible"</span>, false);
+		<span class="reserved">this</span>.hideEvent.fire();
+	},
+
+	<span class="comment">// BUILT-IN EVENT HANDLERS FOR MODULE //</span>
+
+	<span class="comment">/**
+	* Default event handler for changing the visibility property of a Module. By default, this is achieved by switching the "display" style between "block" and "none".
+	*/</span>
+	configVisible : <span class="reserved">function</span>(type, args, obj) {
+		var visible = args[0];
+		<span class="reserved">if</span> (visible) {
+			YAHOO.util.Dom.setStyle(<span class="reserved">this</span>.element, <span class="literal">"display"</span>, <span class="literal">"block"</span>);
+		} <span class="reserved">else</span> {
+			YAHOO.util.Dom.setStyle(<span class="reserved">this</span>.element, <span class="literal">"display"</span>, <span class="literal">"none"</span>);
+		}
+	}
+}</pre>
+			</div>
+		
+	</div>
+</div>
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	<br />
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+	version 1.9.5.8
+</div>
+
+
+</body>
+</html>
