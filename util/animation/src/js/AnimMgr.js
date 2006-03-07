@@ -142,4 +142,4 @@ YAHOO.util.AnimMgr = new function() {
          tween.currentFrame += tweak;     
       }
    };
-}
+};

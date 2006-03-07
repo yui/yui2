@@ -59,7 +59,7 @@ YAHOO.util.Scroll.prototype.doMethod = function(attribute, start, end) {
       val = this.method(this.currentFrame, start, end - start, this.totalFrames);
    }
    return val;
-}
+};
 
 /**
  * Returns current value of the attribute.
@@ -95,6 +95,4 @@ YAHOO.util.Scroll.prototype.setAttribute = function(attribute, val, unit) {
       YAHOO.util.Dom.setStyle(el, attribute, val + unit); 
    }
 };
-
-
 
