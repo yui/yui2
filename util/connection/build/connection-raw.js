@@ -190,6 +190,7 @@ YAHOO.util.Connect =
 				else if(method == 'POST'){
 					postData =  this._sFormData;
 				}
+				this._sFormData = '';
 				this._isFormSubmit = false;
 			}
 			o.conn.open(method, uri, true);
@@ -427,42 +428,7 @@ YAHOO.util.Connect =
    */
 	setForm:function(formName)
 	{
-		this._sFormData = '';
-		var oForm = document.forms[formName];
-		var oElement, elName, elValue;
-		// Iterate over the form elements collection to construct the
-		// label-value pairs.
-		for (var i=0; i<oForm.elements.length; i++){
-			oElement = oForm.elements[i];
-			elName = oForm.elements[i].name;
-			elValue = oForm.elements[i].value;
-			switch (oElement.type)
-			{
-				case 'select-multiple':
-					for(var j=0; j<oElement.options.length; j++){
-						if(oElement.options[j].selected){
-							this._sFormData += encodeURIComponent(elName) + '=' + encodeURIComponent(oElement.options[j].value) + '&';
-						}
-					}
-					break;
-				case 'radio':
-				case 'checkbox':
-					if(oElement.checked){
-						this._sFormData += encodeURIComponent(elName) + '=' + encodeURIComponent(elValue) + '&';
-					}
-					break;
-				case 'file':
-				// stub case as XMLHttpRequest will only send the file path as a string.
-					break;
-				case undefined:
-				// stub case for fieldset element which returns undefined.
-					break;
-				default:
-					this._sFormData += encodeURIComponent(elName) + '=' + encodeURIComponent(elValue) + '&';
-					break;
-			}
-		}
-		this._sFormData = this._sFormData.substr(0, this._sFormData.length - 1);
+		this._sFormData = YAHOO.util.Form.setForm(formName);
 		this._isFormSubmit = true;
 	},
 
