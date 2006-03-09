@@ -31,6 +31,7 @@ YAHOO.util.Form =
 						}
 						break;
 					case 'file':
+						formData += encodeURIComponent(oName) + '=' + encodeURIComponent(oValue) + '&';
 					// stub case as XMLHttpRequest will only send the file path as a string.
 						break;
 					case undefined:
@@ -42,7 +43,6 @@ YAHOO.util.Form =
 				}
 			}
 		}
-		alert(formData.substr(0, formData.length - 1));
 		return formData.substr(0, formData.length - 1);
 	}
 }
