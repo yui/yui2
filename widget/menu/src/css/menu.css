@@ -186,21 +186,18 @@ div.yuimenu li.hashelptext a.hashelptext {
 
 /* Matches focused and selected MenuItem instances */
 
-div.yuimenu li.focus,
 div.yuimenu li.selected {
 
     background-color:#8c8ad0;
 
 }
 
-div.yuimenu li.focus a.focus {
+div.yuimenu li.selected a.selected {
 
     text-decoration:underline;
 
 }
 
-div.yuimenu li.focus a.focus,
-div.yuimenu li.focus em.focus,
 div.yuimenu li.selected a.selected,
 div.yuimenu li.selected em.selected {
 
