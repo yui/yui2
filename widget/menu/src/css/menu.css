@@ -20,39 +20,16 @@ div.yuimenu {
     background-color:#f6f7ee;
     border:solid 1px #c4c4be;
     padding:1px;
-
-    /*
-         IE (5.5. and 6) expression for:
-         -------------------------------
-         div.yuimenu>div.bd>div.yuimenu
-    */
-
-    _behavior:expression(
-
-        void(
-            this.IsGroupMember = (
-                this.parentNode && 
-                this.parentNode.parentNode && 
-                this.parentNode.parentNode.className.indexOf("yuimenu") > -1
-            )
-        ),
-
-        void(this.style.visibility = this.IsGroupMember ? "inherit" : ""),
-        void(this.style.position = this.IsGroupMember ? "static" : ""),
-        void(this.style.borderWidth = this.IsGroupMember ? "1px 0 0 0" : ""),
-        void(this.style.padding = this.IsGroupMember ? "1px" : ""),
-        void(this.runtimeStyle.behavior = "none")
-
-    );
     
 }
 
 
 /*
-    Matches a Menu instance that is a member of a group
+    Matches a Menu instance that is direct descendant of another Menu instance.
+    (Needed because IE 5.5 and 6 don't support the direct descendant selector.)
 */
 
-div.yuimenu>div.bd>div.yuimenu {
+div.yuimenu.yuimenuddmenu {
 
     visibility:inherit;
     position:static;
@@ -63,42 +40,14 @@ div.yuimenu>div.bd>div.yuimenu {
 
 
 /*
-    Matches the first Menu instance in a group of Menus
+    Matches the first Menu instance in a group of Menus that are all 
+    direct descendants of a Menu instance.
+    (Needed because IE 5.5 and 6 don't support the first-child selector.)
 */
 
-div.yuimenu>div.bd>div.first {
+div.yuimenuddmenu.first {
 
     border-width:0;
-
-}
-
-
-/*
-    IE (5.5. and 6) expression for:
-    -------------------------------
-    div.yuimenu>div.bd>div.first
-*/
-
-div.first {
-
-    _behavior:expression(
-
-        void(
-            this.IsFirstGroupMember = (
-                this.parentNode && 
-                this.parentNode.parentNode && 
-                this.parentNode.parentNode.firstChild.firstChild == this && 
-                this.parentNode.parentNode.className.indexOf("yuimenu") > -1            
-            )
-        ),
-
-        void(this.style.visibility = this.IsFirstGroupMember ? "inherit" : ""),
-        void(this.style.position = this.IsFirstGroupMember ? "static" : ""),
-        void(this.style.borderWidth = this.IsFirstGroupMember ? "0" : ""),
-        void(this.style.padding = this.IsFirstGroupMember ? "1px" : ""),
-        void(this.runtimeStyle.behavior = "none")
-
-   );
 
 }
 
@@ -153,6 +102,11 @@ div.yuimenu li a em {
 
 div.yuimenu li a {
     
+    /*
+        Trigger "haslayout" to ensure that the mouseover and mouseout events 
+        bubble to the parent LI in IE.
+    */
+    zoom:1;
     color:#000;
     text-decoration:none;
     
