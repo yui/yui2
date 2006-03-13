@@ -1095,20 +1095,8 @@ YAHOO.widget.MenuItem.prototype = {
 
                 m_oAnchor.focus();
 
-                if(
-                    m_sBrowser == "opera" && 
-                    m_sUserAgent.indexOf("8.5") != -1
-                ) {
-    
-                    var oEvent = document.createEvent("UIEvents");
-                    oEvent.initUIEvent("focus", true, false, window, null);
-    
-                    m_oAnchor.dispatchEvent(oEvent);
-        
-                }
-
                 this.focusEvent.fire();
-    
+  
             }
     
         };
@@ -1122,18 +1110,6 @@ YAHOO.widget.MenuItem.prototype = {
             if(!this.cfg.getProperty("disabled") && m_oAnchor) {
 
                 m_oAnchor.blur();
-
-                if(
-                    m_sBrowser == "opera" && 
-                    m_sUserAgent.indexOf("8.5") != -1
-                ) {
-
-                    var oEvent = document.createEvent("UIEvents");
-                    oEvent.initUIEvent("blur", true, false, window, null);
-
-                    m_oAnchor.dispatchEvent(oEvent);
-
-                }
 
                 this.blurEvent.fire();
     
