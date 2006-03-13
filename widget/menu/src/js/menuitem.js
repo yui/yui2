@@ -22,7 +22,7 @@ YAHOO.widget.MenuItem = function(p_oObject, p_oUserConfig) {
 
     }
 
-}
+};
 
 YAHOO.widget.MenuItem.prototype = {
 
@@ -83,6 +83,15 @@ YAHOO.widget.MenuItem.prototype = {
     * @type String
     */
     DISABLED_SUBMENU_INDICATOR_ALT_TEXT: "Disabled.",
+
+
+    /**
+    * Constant representing the CSS class(es) to be applied to the root 
+    * HTMLLIElement of the MenuItem.
+    * @final
+    * @type String
+    */
+    CSS_CLASS_NAME: "yuimenuitem",
 
 
     /**
@@ -155,6 +164,22 @@ YAHOO.widget.MenuItem.prototype = {
     * documentation for more details.
     */
     init: function(p_oObject, p_oUserConfig) {
+
+        /**
+        * Constant representing the type of Menu to instantiate when creating 
+        * submenu instances.
+        * @final
+        * @type YAHOO.widget.Menu
+        */
+        this.SUBMENU_TYPE = YAHOO.widget.Menu;
+        
+        /**
+        * Constant representing the type of Menu to instantiate when creating 
+        * MenuItem instances.
+        * @final
+        * @type YAHOO.widget.MenuItem
+        */
+        this.MENUITEM_TYPE = YAHOO.widget.MenuItem;
 
 
         // Private member variables
@@ -324,8 +349,8 @@ YAHOO.widget.MenuItem.prototype = {
             var aChildNodes = me.srcElement.childNodes,
                 nChildNodes = aChildNodes.length,
                 oMenuManager = YAHOO.widget.MenuManager,
-                Menu = YAHOO.widget.Menu,
-                MenuItem = YAHOO.widget.MenuItem;
+                Menu = me.SUBMENU_TYPE,
+                MenuItem = me.MENUITEM_TYPE;
     
     
             if(nChildNodes > 0) {
@@ -515,7 +540,7 @@ YAHOO.widget.MenuItem.prototype = {
             }
             else if(checkString(oHelpText)) {
 
-                if(oHelpText.length == 0) {
+                if(oHelpText.length === 0) {
 
                     removeHelpText();
 
@@ -1461,7 +1486,7 @@ YAHOO.widget.MenuItem.prototype = {
                             oAnchor.nextSibling.nextSibling.tagName == "EM"
                         ) {
 
-                            oHelpText =  oAnchor.nextSibling.nextSibling
+                            oHelpText =  oAnchor.nextSibling.nextSibling;
 
                         }
 
@@ -1543,6 +1568,10 @@ YAHOO.widget.MenuItem.prototype = {
 
 
         if(this.element) {
+
+
+            m_oDom.addClass(this.element, this.CSS_CLASS_NAME);
+
 
             // Create custom events
     
@@ -1667,7 +1696,24 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(this.element) {
 
-            var oParentNode = this.element;
+            // Remove CustomEvent listeners
+    
+            this.mouseOverEvent.unsubscribeAll();
+            this.mouseOutEvent.unsubscribeAll();
+            this.mouseDownEvent.unsubscribeAll();
+            this.mouseUpEvent.unsubscribeAll();
+            this.clickEvent.unsubscribeAll();
+            this.keyPressEvent.unsubscribeAll();
+            this.keyDownEvent.unsubscribeAll();
+            this.keyUpEvent.unsubscribeAll();
+            this.focusEvent.unsubscribeAll();
+            this.blurEvent.unsubscribeAll();
+            this.cfg.configChangedEvent.unsubscribeAll();
+
+
+            // Remove the element from the parent node
+
+            var oParentNode = this.element.parentNode;
 
             if(oParentNode) {
 
@@ -1677,8 +1723,10 @@ YAHOO.widget.MenuItem.prototype = {
 
             }
 
+            this.destroyEvent.unsubscribeAll();
+
         }
 
     }
 
-}
+};
