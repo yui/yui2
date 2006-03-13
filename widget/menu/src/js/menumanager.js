@@ -1,3 +1,18 @@
+function printfire() {
+    if (document.createEvent) {
+        try {
+            printfire.args = arguments;
+            var ev = document.createEvent("Events");
+            ev.initEvent("printfire", false, true);
+            dispatchEvent(ev);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+}
+
+
 /*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:

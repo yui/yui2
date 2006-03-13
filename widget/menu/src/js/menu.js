@@ -13,9 +13,9 @@ http://developer.yahoo.net/yui/license.txt
 * @param {String/HTMLElement} p_oElement String id or HTMLElement 
 * (either HTMLUListElement, HTMLSelectElement or HTMLDivElement) of the 
 * source HTMLElement node.
-* @param {Object} p_oUserConfig Optional. The configuration object literal containing 
-* the configuration that should be set for this Menu. See configuration 
-* documentation for more details.
+* @param {Object} p_oUserConfig Optional. The configuration object literal 
+* containing the configuration that should be set for this Menu. See 
+* configuration documentation for more details.
 */
 YAHOO.widget.Menu = function(p_oElement, p_oUserConfig) {
 
@@ -74,13 +74,6 @@ YAHOO.widget.Menu.prototype.parent = null;
 
 
 /**
-* Returns a pointer to the MenuItem instance that has focus.
-* @type {YAHOO.widget.MenuItem}
-*/
-YAHOO.widget.Menu.prototype.activeMenuItem = null;
-
-
-/**
 * Returns the HTMLElement (either HTMLUListElement, HTMLSelectElement or 
 * HTMLDivElement) used create the Menu instance.
 * @type {HTMLUListElement/HTMLSelectElement/HTMLDivElement}
@@ -118,7 +111,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         * @private
         * @type {Array}
         */
-        m_aSubMenus = [],
+        m_aSubmenus = [],
 
 
         /**
@@ -127,6 +120,22 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         * @type {HTMLUListElement}
         */
         m_oListElement,
+
+
+        /**
+        * The HTMLLIElement node that is currently the target of a DOM event
+        * @private
+        * @type {HTMLLIElement}
+        */
+        m_oCurrentMenuItemLI,
+
+
+        /**
+        * The HTMLDIVElement node that is currently the target of a DOM event
+        * @private
+        * @type {HTMLDIVElement}
+        */
+        m_oCurrentMenuDIV,
 
 
         /**
@@ -198,6 +207,12 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         }(),
 
+
+        /**
+        * Reference to the MenuItem instance that has focus.
+        * @type {YAHOO.widget.MenuItem}
+        */
+        m_oActiveMenuItem,
 
         /**
         * Reference to the current context so that private methods have access 
@@ -275,6 +290,8 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             p_oArray[nIndex] = p_oItem;
 
             p_oItem.index = nIndex;
+
+            p_oItem.element.setAttribute("index", nIndex);
 
             p_oItem.parent = me;
 
@@ -369,6 +386,8 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         do {
 
             p_oArray[i].index = i;
+
+            p_oArray[i].element.setAttribute("index", i);
 
             switch(i) {
 
@@ -472,7 +491,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                     }
                     else {
     
-                        me.addSubMenu(
+                        me.addSubmenu(
                             (
                                 new Menu(
                                     oNode, 
@@ -506,7 +525,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                     }
                     else {                  
 
-                        me.addSubMenu(
+                        me.addSubmenu(
                             (
                                 new Menu(
                                     oNode, 
@@ -551,8 +570,8 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             the event easier for the user.
         */
 
-        if(!this.parent || this.parent._MenuItem) {
-        
+        if(!me.parent || me.parent._MenuItem) {
+            
             m_oEventUtil.stopPropagation(p_oEvent);
 
         }
@@ -563,34 +582,80 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             to make handling the MouseOver event easier for the user.
         */
 
-        var oRelatedTarget = m_oEventUtil.getRelatedTarget(p_oEvent),
-            oNode = oRelatedTarget,
-            bElementMouseOver = true;
+        var oTarget = m_oEventUtil.getTarget(p_oEvent, true);
+
+        if(!m_oCurrentMenuDIV && oTarget == this.element) {
+
+            m_oCurrentMenuDIV = this.element;
+            me.mouseOverEvent.fire(p_oEvent);
+
+        }
     
-    
-        if(oNode) {
-    
+        if(!m_oCurrentMenuItemLI) {
+
+            var oNode = oTarget;
+        
             do {
+
+                if(
+                    oNode && 
+                    oNode.tagName == "LI" && 
+                    oNode.parentNode.parentNode.parentNode == me.element
+                ) {
+
+                    m_oCurrentMenuItemLI = oNode;
+
+                    var nIndex = parseInt(oNode.getAttribute("index"), 10),
+                        oMenuItem = m_aMenuItems[nIndex];
+        
+                    if(oMenuItem && !oMenuItem.cfg.getProperty("disabled")) {
     
-                if(oNode == this.element) {
+                        // Fire the associated custom event
     
-                    bElementMouseOver = false;
+                        oMenuItem.mouseDownEvent.fire(p_oEvent);
+
+                        var oActiveMenuItem = 
+                                oMenuItem.parent.getActiveMenuItem();
+                    
+                        if(oActiveMenuItem && oActiveMenuItem != oMenuItem) {
+                
+                            if(oActiveMenuItem.cfg.getProperty("selected")) {
+                
+                                oActiveMenuItem.cfg.setProperty(
+                                    "selected", 
+                                    false
+                                );
+                    
+                            }
+                    
+                            var oSubmenu = 
+                                    oActiveMenuItem.cfg.getProperty("submenu");
+                    
+                            if(oSubmenu) {
+                    
+                                oSubmenu.hide();
+                    
+                            }
+                
+                        }
+                
+                        oMenuItem.cfg.setProperty("selected", true);
+                
+                        oMenuItem.focus();
+
+                        onMenuItemLIMouseOver(oMenuItem);
+    
+                    }
+
                     break;
-    
+
                 }
-    
+
                 oNode = oNode.parentNode;
     
             }
             while(oNode);
-    
-        }
-    
-    
-        if(bElementMouseOver) {
-    
-            this.mouseOverEvent.fire(p_oEvent);
-    
+
         }
     
     };
@@ -612,32 +677,35 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             the event easier for the user.
         */
 
-        if(!this.parent || this.parent._MenuItem) {
-        
+        if(!me.parent || me.parent._MenuItem) {
+            
             m_oEventUtil.stopPropagation(p_oEvent);
 
         }
 
-
-        /*
-            Calculate when the mouse has left the Menu's root HTMLDivElement 
-            to make handling the MouseOver event easier for the user.
-        */
-
         var oRelatedTarget = m_oEventUtil.getRelatedTarget(p_oEvent),
-            oNode = oRelatedTarget,
-            bElementMouseOut = true;
+            bLIMouseOut = true,
+            bDIVMouseOut = true;
+            
+        if((m_oCurrentMenuItemLI || m_oCurrentMenuDIV)  && oRelatedTarget) {
     
-    
-        if(oNode) {
-    
+            var oNode = oRelatedTarget;
+        
             do {
     
-                if(oNode == this.element) {
+                if(
+                    oNode == m_oCurrentMenuItemLI && 
+                    oNode.parentNode.parentNode.parentNode == me.element
+                ) {
     
-                    bElementMouseOut = false;
+                    bLIMouseOut = false;
+    
+                }
+    
+                if(oNode == m_oCurrentMenuDIV) {
+    
+                    bDIVMouseOut = false;
                     break;
-    
                 }
     
                 oNode = oNode.parentNode;
@@ -645,12 +713,34 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             }
             while(oNode);
     
+        }        
+    
+        if(m_oCurrentMenuItemLI && bLIMouseOut) {
+
+            var nIndex = parseInt(m_oCurrentMenuItemLI.getAttribute("index"), 10),
+                oMenuItem = m_aMenuItems[nIndex];
+
+            if(oMenuItem && !oMenuItem.cfg.getProperty("disabled")) {
+
+                // Fire the associated custom event
+
+                oMenuItem.mouseOutEvent.fire(p_oEvent);
+
+                oMenuItem.cfg.setProperty("selected", false);
+
+                onMenuItemLIMouseOut(oMenuItem);
+
+            }
+
+            m_oCurrentMenuItemLI = null;
+    
         }
     
+        if(m_oCurrentMenuDIV && bDIVMouseOut) {
     
-        if(bElementMouseOut) {
-    
-            this.mouseOutEvent.fire(p_oEvent);
+            me.mouseOutEvent.fire(p_oEvent);
+
+            m_oCurrentMenuDIV = null;
     
         }
     
@@ -673,15 +763,53 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             the event easier for the user.
         */
 
-        if(!this.parent || this.parent._MenuItem) {
-
+        if(!me.parent || me.parent._MenuItem) {
+            
             m_oEventUtil.stopPropagation(p_oEvent);
 
         }
 
-        this.mouseDownEvent.fire(p_oEvent);
 
-        return true;
+        /*
+            Check if the target was a DOM element that is a part of a 
+            MenuItem instance and (if so), fire the associated custom event.
+        */    
+
+        var oTarget = m_oEventUtil.getTarget(p_oEvent, true),
+            oNode = oTarget;
+    
+        do {
+
+            if(
+                oNode && 
+                oNode.tagName == "LI" && 
+                oNode.parentNode.parentNode.parentNode == me.element
+            ) {
+
+                var nIndex = parseInt(oNode.getAttribute("index"), 10),
+                    oMenuItem = m_aMenuItems[nIndex];
+    
+                if(oMenuItem && !oMenuItem.cfg.getProperty("disabled")) {
+
+                    // Fire the associated custom event
+
+                    oMenuItem.mouseDownEvent.fire(p_oEvent);
+
+                }
+
+                break;
+
+            }
+
+            oNode = oNode.parentNode;
+
+        }
+        while(oNode);
+
+
+        // Fire the associated custom event
+
+        me.mouseDownEvent.fire(p_oEvent);
 
     };
 
@@ -702,15 +830,53 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             the event easier for the user.
         */
 
-        if(!this.parent || this.parent._MenuItem) {
-        
+        if(!me.parent || me.parent._MenuItem) {
+            
             m_oEventUtil.stopPropagation(p_oEvent);
 
         }
 
-        this.mouseUpEvent.fire(p_oEvent);
 
-        return true;
+        /*
+            Check if the target was a DOM element that is a part of a 
+            MenuItem instance and (if so), fire the associated custom event.
+        */    
+
+        var oTarget = m_oEventUtil.getTarget(p_oEvent, true),
+            oNode = oTarget;
+    
+        do {
+
+            if(
+                oNode && 
+                oNode.tagName == "LI" && 
+                oNode.parentNode.parentNode.parentNode == me.element
+            ) {
+
+                var nIndex = parseInt(oNode.getAttribute("index"), 10),
+                    oMenuItem = m_aMenuItems[nIndex];
+    
+                if(oMenuItem && !oMenuItem.cfg.getProperty("disabled")) {
+
+                    // Fire the associated custom event
+
+                    oMenuItem.mouseUpEvent.fire(p_oEvent);
+
+                }
+
+                break;
+
+            }
+
+            oNode = oNode.parentNode;
+
+        }
+        while(oNode);
+
+
+        // Fire the associated custom event
+
+        me.mouseUpEvent.fire(p_oEvent);
 
     };
 
@@ -725,21 +891,514 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     */         
     var onElementClick = function(p_oEvent, p_oMenu) {
 
+        /*
+            Because Menus can be embedded in eachother, stop the 
+            propagation of the event at each Menu instance to make handling 
+            the event easier for the user.
+        */
+
         var oTarget = m_oEventUtil.getTarget(p_oEvent, true);
 
-        if(
-            (!this.parent || this.parent._MenuItem) && 
-            oTarget.tagName != "A"
-        ) {
-        
+        if((!this.parent || this.parent._MenuItem) && oTarget.tagName != "A") {
+
+            /*
+                Don't stop propagation of the event for anchors so that Safari
+                can follow the URL
+            */
+
             m_oEventUtil.stopPropagation(p_oEvent);
 
         }
 
-        this.clickEvent.fire(p_oEvent);
 
-        return true;
+        /*
+            Check if the target was a DOM element that is a part of a 
+            MenuItem instance and (if so), fire the associated custom event.
+        */
+
+        var oNode = oTarget;
     
+        do {
+
+            if(
+                oNode && 
+                oNode.tagName == "LI" && 
+                oNode.parentNode.parentNode.parentNode == me.element
+            ) {
+
+                var nIndex = parseInt(oNode.getAttribute("index"), 10),
+                    oMenuItem = m_aMenuItems[nIndex];
+    
+                if(oMenuItem && !oMenuItem.cfg.getProperty("disabled")) {
+
+                    // Fire the associated custom event
+
+                    oMenuItem.clickEvent.fire(p_oEvent);    
+
+
+                    var sURL = oMenuItem.cfg.getProperty("url");
+
+
+                    if(oTarget.tagName == "A") {
+
+                        if(sURL && sURL != "#") {
+
+                            // Needed to tell Safari to follow the link                        
+
+                            return true;
+            
+                        }
+                        else {
+
+                            // Prevent the browser from following the link
+            
+                            m_oEventUtil.preventDefault(p_oEvent);
+                        
+                            // Needed to tell Safari to NOT follow the link
+
+                            return false;
+            
+                        }                
+
+                    }
+                    else {
+
+                        var oSubmenu = oMenuItem.cfg.getProperty("submenu");
+    
+                        if(oTarget == oMenuItem.subMenuIndicator && oSubmenu) {
+            
+                            if(oSubmenu.cfg.getProperty("visible")) {
+                
+                                oMenuItem.hideSubmenu();
+                
+                                oMenuItem.focus();
+                
+                            }
+                            else {
+                
+                                oMenuItem.cfg.setProperty("selected", true);
+                                
+                                oMenuItem.showSubmenu();
+                
+                                oSubmenu.setInitialSelection();
+                                oSubmenu.setInitialFocus();
+                
+                            }                
+            
+                        }
+                        else if(sURL && sURL != "#") {
+                            
+                            document.location = sURL;
+
+                        }
+
+                    }
+
+                }
+
+                break;
+
+            }
+
+            oNode = oNode.parentNode;
+
+        }
+        while(oNode);
+
+
+        // Fire the associated custom event
+
+        me.clickEvent.fire(p_oEvent);
+    
+    };
+    
+
+    /**
+    * "keydown" Event handler for the Menu's root HTMLDivElement.
+    * @private
+    * @param {Event} p_oEvent Event object passed back by the 
+    * event utility (YAHOO.util.Event).
+    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance corresponding to the 
+    * HTMLDivElement that fired the event.
+    */         
+    var onElementKeyDown = function(p_oEvent, p_oMenu) {
+
+        /*
+            Because Menus can be embedded in eachother, stop the 
+            propagation of the event at each Menu instance to make handling 
+            the event easier for the user.
+        */
+
+        if(!me.parent || me.parent._MenuItem) {
+
+            m_oEventUtil.stopPropagation(p_oEvent);
+
+        }
+
+
+        /*
+            Check if the target was a DOM element that is a part of a 
+            MenuItem instance and (if so), fire the associated custom event.
+        */
+
+        var oTarget = m_oEventUtil.getTarget(p_oEvent, true);
+
+        if(
+            oTarget.tagName == "A" && 
+            oTarget.parentNode.parentNode.parentNode.parentNode == me.element
+        ) {
+
+            var nIndex = parseInt(oTarget.parentNode.getAttribute("index"), 10),
+                oMenuItem = m_aMenuItems[nIndex];
+    
+            if(oMenuItem && !oMenuItem.cfg.getProperty("disabled")) {
+    
+                // Fire the associated custom event
+
+                oMenuItem.keyDownEvent.fire(p_oEvent);
+    
+                onMenuItemAnchorKeyDown(p_oEvent, oMenuItem);
+    
+            }
+
+        }
+
+
+        // Fire the associated custom event
+
+        me.keyDownEvent.fire(p_oEvent);
+    
+    };
+
+
+    /**
+    * "keyup" Event handler for the Menu's root HTMLDivElement.
+    * @private
+    * @param {Event} p_oEvent Event object passed back by the 
+    * event utility (YAHOO.util.Event).
+    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance corresponding to the 
+    * HTMLDivElement that fired the event.
+    */         
+    var onElementKeyUp = function(p_oEvent, p_oMenu) {
+
+        /*
+            Because Menus can be embedded in eachother, stop the 
+            propagation of the event at each Menu instance to make handling 
+            the event easier for the user.
+        */
+
+        if(!me.parent || me.parent._MenuItem) {
+
+            m_oEventUtil.stopPropagation(p_oEvent);
+
+        }
+
+
+        /*
+            Check if the target was a DOM element that is a part of a 
+            MenuItem instance and (if so), fire the associated custom event.
+        */
+
+        var oTarget = m_oEventUtil.getTarget(p_oEvent, true);
+
+        if(
+            oTarget.tagName == "A" && 
+            oTarget.parentNode.parentNode.parentNode.parentNode == me.element
+        ) {
+
+            var nIndex = parseInt(oTarget.parentNode.getAttribute("index"), 10),
+                oMenuItem = m_aMenuItems[nIndex];
+    
+            if(oMenuItem && !oMenuItem.cfg.getProperty("disabled")) {
+
+                // Fire the associated custom event
+
+                oMenuItem.keyUpEvent.fire(p_oEvent);
+
+            }
+
+        }
+
+
+        // Fire the associated custom event
+
+        me.keyUpEvent.fire(p_oEvent);
+    
+    };
+
+
+    /**
+    * "keypress" Event handler for the Menu's root HTMLDivElement.
+    * @private
+    * @param {Event} p_oEvent Event object passed back by the 
+    * event utility (YAHOO.util.Event).
+    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance corresponding to the 
+    * HTMLDivElement that fired the event.
+    */         
+    var onElementKeyPress = function(p_oEvent, p_oMenu) {
+
+        /*
+            Because Menus can be embedded in eachother, stop the 
+            propagation of the event at each Menu instance to make handling 
+            the event easier for the user.
+        */
+
+        if(!me.parent || me.parent._MenuItem) {
+
+            m_oEventUtil.stopPropagation(p_oEvent);
+
+        }
+
+
+        /*
+            Check if the target was a DOM element that is a part of a 
+            MenuItem instance and (if so), fire the associated custom event.
+        */
+
+        var oTarget = m_oEventUtil.getTarget(p_oEvent, true);
+
+        if(
+            oTarget.tagName == "A" && 
+            oTarget.parentNode.parentNode.parentNode.parentNode == me.element
+        ) {
+
+            var nIndex = parseInt(oTarget.parentNode.getAttribute("index"), 10),
+                oMenuItem = m_aMenuItems[nIndex];
+    
+            if(oMenuItem && !oMenuItem.cfg.getProperty("disabled")) {
+
+                // Fire the associated custom event
+    
+                oMenuItem.keyPressEvent.fire(p_oEvent);
+    
+                onMenuItemAnchorKeyPress(p_oEvent, oMenuItem);
+    
+            }
+
+        }
+
+
+        // Fire the associated custom event
+
+        me.keyPressEvent.fire(p_oEvent);
+    
+    };
+
+
+
+    var onMenuItemLIMouseOver = function(p_oMenuItem) {
+
+        var oSubmenu = p_oMenuItem.cfg.getProperty("submenu");
+
+        if(oSubmenu) {
+
+            p_oMenuItem.showSubmenu();
+
+        }
+    
+    };
+    
+
+    var onMenuItemLIMouseOut = function(p_oMenuItem) {
+
+        var oSubmenu = p_oMenuItem.cfg.getProperty("submenu");
+            
+        if(oSubmenu) {
+
+            oSubmenu.hide();
+
+        }
+    
+    };
+
+
+    var onMenuItemAnchorKeyDown = function(p_oEvent, p_oMenuItem) {
+    
+        switch(p_oEvent.keyCode) {
+
+            case 38:    // Up arrow
+    
+                var oActiveMenuItem = p_oMenuItem.parent.getActiveMenuItem();
+
+                if(
+                    p_oMenuItem == oActiveMenuItem && 
+                    !p_oMenuItem.cfg.getProperty("selected")
+                ) {
+
+                    p_oMenuItem.cfg.setProperty("selected", true);
+
+                }
+                else {
+
+                    var oNextMenuItem = p_oMenuItem.getPreviousEnabledSibling();
+
+                    if(oNextMenuItem) {
+
+                        var oSubmenu = p_oMenuItem.cfg.getProperty("submenu");
+                
+                        if(oSubmenu) {
+                
+                            oSubmenu.hide();
+                
+                        }
+
+                        p_oMenuItem.cfg.setProperty("selected", false);
+
+                        oNextMenuItem.cfg.setProperty("selected", true);
+            
+                        oNextMenuItem.focus();
+            
+    
+                        /*
+                            Prevent the keydown event from scrolling the 
+                            window up
+                        */ 
+
+                        m_oEventUtil.preventDefault(p_oEvent);
+        
+                    }
+
+                }
+
+            break;
+
+            
+            case 9:     // Tab
+            case 40:    // Down arrow
+
+                var oActiveMenuItem = p_oMenuItem.parent.getActiveMenuItem();
+
+                if(
+                    p_oMenuItem == oActiveMenuItem && 
+                    !p_oMenuItem.cfg.getProperty("selected")
+                ) {
+
+                    p_oMenuItem.cfg.setProperty("selected", true);
+
+                }
+                else {
+
+                    var oNextMenuItem;
+    
+                    if(p_oEvent.shiftKey) {
+
+                        oNextMenuItem = 
+                            p_oMenuItem.getPreviousEnabledSibling();
+
+                    }
+                    else {
+
+                        oNextMenuItem = 
+                            p_oMenuItem.getNextEnabledSibling();
+
+                    }
+            
+                    if(oNextMenuItem) {
+
+                        var oSubmenu = p_oMenuItem.cfg.getProperty("submenu");
+                
+                        if(oSubmenu) {
+                
+                            oSubmenu.hide();
+                
+                        }
+
+                        p_oMenuItem.cfg.setProperty("selected", false);
+
+                        oNextMenuItem.cfg.setProperty("selected", true);
+            
+                        oNextMenuItem.focus();
+    
+                        /*
+                            Prevent the keydown event from scrolling the 
+                            window down
+                        */ 
+
+                        m_oEventUtil.preventDefault(p_oEvent);
+        
+                    }
+
+                }
+
+            break;
+            
+
+            case 39:    // Right arrow
+
+                var oSubmenu = p_oMenuItem.cfg.getProperty("submenu");
+
+                if(oSubmenu) {
+
+                    p_oMenuItem.showSubmenu();
+
+                    oSubmenu.setInitialSelection();
+                    oSubmenu.setInitialFocus();
+
+
+                    /*
+                        Prevent the keydown event from scrolling the 
+                        window right
+                    */
+
+                    m_oEventUtil.preventDefault(p_oEvent);
+
+                }
+
+            break;
+            
+
+            case 37:    // Left arrow
+            case 27:    // Esc key
+    
+                var oParentMenu = p_oMenuItem.parent;
+
+                if(oParentMenu.parent && oParentMenu.parent._Menu) {
+
+                    oParentMenu = oParentMenu.parent;
+
+                }
+
+                if(oParentMenu.cfg.getProperty("position") == "absolute") {
+
+                    oParentMenu.hide();
+
+                }
+
+                var oMenuItem = oParentMenu.parent;
+
+                if(oMenuItem) {
+
+                    oMenuItem.focus();
+
+                }
+
+                m_oEventUtil.preventDefault(p_oEvent);
+
+            break;
+
+        }
+
+    };
+
+
+    var onMenuItemAnchorKeyPress = function(p_oEvent, p_oMenuItem) {
+
+        // Prevent the navigation keys from scrolling the page
+
+        switch(p_oEvent.keyCode) {
+
+            case 27: // Esc
+            case 37: // Left
+            case 38: // Up    
+            case 39: // Right
+            case 40: // Down
+
+                m_oEventUtil.preventDefault(p_oEvent);
+
+            break;
+
+        }
+
     };
 
 
@@ -757,18 +1416,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     */
     var onMenuItemFocus = function(p_sType, p_aArguments, p_oMenuItem) {
 
-        if(me.parent && me.parent._Menu) {
-
-            me.parent.activeMenuItem = p_oMenuItem;
-            m_oMenuManager.activeMenu = me.parent;
-        
-        }
-        else {
-
-            me.activeMenuItem = p_oMenuItem;
-            m_oMenuManager.activeMenu = me;
-
-        }    
+        me.setActiveMenuItem(p_oMenuItem);
 
     };
 
@@ -785,22 +1433,11 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     */
     var onMenuItemBlur = function(p_sType, p_aArguments, p_oMenuItem) {
 
-        var oSubMenu = p_oMenuItem.cfg.getProperty("submenu");
+        var oSubmenu = p_oMenuItem.cfg.getProperty("submenu");
 
-        if(!oSubMenu || (oSubMenu && !oSubMenu.cfg.getProperty("visible"))) {
+        if(!oSubmenu || (oSubmenu && !oSubmenu.cfg.getProperty("visible"))) {
 
-            if(me.parent && me.parent._Menu) {
-    
-                me.parent.activeMenuItem = null;
-                m_oMenuManager.activeMenu = null;
-            
-            }
-            else {
-    
-                me.activeMenuItem = null;
-                m_oMenuManager.activeMenu = null;
-    
-            }            
+            me.setActiveMenuItem(null);
 
         }
 
@@ -937,20 +1574,20 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     * @param {Number} p_nIndex Optional. Number indicating the ordinal
     * position at which the Menu should be added.
     */
-    this.addSubMenu = function(p_oMenu, p_nIndex) {
+    this.addSubmenu = function(p_oMenu, p_nIndex) {
 
         if(
             p_oMenu && 
             p_oMenu._Menu && 
             (
                 (!this.parent || (this.parent && this.parent._MenuItem)) &&
-                (p_oMenu.getSubMenus().length == 0)
+                (p_oMenu.getSubmenus().length == 0)
             )
         ) {
 
             p_oMenu.cfg.setProperty("iframe", false);
 
-            addArrayItem(m_aSubMenus, p_oMenu, p_nIndex);
+            addArrayItem(m_aSubmenus, p_oMenu, p_nIndex);
 
             this.cfg.refireEvent("constraintoviewport");
 
@@ -966,7 +1603,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     * @return Returns the Menu that was removed from the Menu.
     * @type YAHOO.widget.Menu
     */        
-    this.removeSubMenu = function(p_oObject) {
+    this.removeSubmenu = function(p_oObject) {
 
         if(typeof p_oObject != "undefined") {
 
@@ -974,12 +1611,12 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
             if(p_oObject._Menu) {
 
-                oMenu = removeArrayItemByValue(m_aSubMenus, p_oObject);
+                oMenu = removeArrayItemByValue(m_aSubmenus, p_oObject);
 
             }
             else if(typeof p_oObject == "number") {
 
-                oMenu = removeArrayItemByIndex(m_aSubMenus, p_oObject);
+                oMenu = removeArrayItemByIndex(m_aSubmenus, p_oObject);
 
             }
 
@@ -1001,9 +1638,9 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     * @return Returns an array of Menu instances.
     * @type Array
     */        
-    this.getSubMenus = function() {
+    this.getSubmenus = function() {
 
-        return m_aSubMenus;
+        return m_aSubmenus;
 
     };
 
@@ -1015,11 +1652,11 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     * @return Returns the Menu at the specified index.
     * @type YAHOO.widget.Menu
     */
-    this.getSubMenu = function(p_nIndex) {
+    this.getSubmenu = function(p_nIndex) {
 
         if(typeof p_nIndex == "number") {
 
-            return m_aSubMenus[p_nIndex];
+            return m_aSubmenus[p_nIndex];
 
         }
 
@@ -1065,15 +1702,15 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
 
             var i = m_aMenuItems.length - 1, 
-                oSubMenu;
+                oSubmenu;
 
             do {
 
-                oSubMenu = m_aMenuItems[i].cfg.getProperty("submenu");
+                oSubmenu = m_aMenuItems[i].cfg.getProperty("submenu");
 
-                if(oSubMenu) {
+                if(oSubmenu) {
 
-                    oSubMenu.render(m_aMenuItems[i].element);
+                    oSubmenu.render(m_aMenuItems[i].element);
 
                 }
     
@@ -1088,17 +1725,17 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     /**
     * Iterates the Menu's collection of Menu instances and renders them.
     */
-    this.renderSubMenus = function() {
+    this.renderSubmenus = function() {
     
-        if(m_aSubMenus.length > 0) {
+        if(m_aSubmenus.length > 0) {
     
-            var nSubMenus = m_aSubMenus.length;
+            var nSubmenus = m_aSubmenus.length;
 
-            for(var i=0; i<nSubMenus; i++) {
+            for(var i=0; i<nSubmenus; i++) {
 
-                this.appendToBody(m_aSubMenus[i].element);
+                this.appendToBody(m_aSubmenus[i].element);
 
-                m_aSubMenus[i].render(this.body);
+                m_aSubmenus[i].render(this.body);
 
             }
     
@@ -1160,7 +1797,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         this.renderMenuItems();
 
-        this.renderSubMenus();
+        this.renderSubmenus();
 
 
         // Continue with the superclass implementation of this method
@@ -1195,7 +1832,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         var bottomConstraint = scrollY + viewPortHeight - offsetHeight;
         var rightConstraint = scrollX + viewPortWidth - offsetWidth;
 
-        var bSubMenu = (this.parent && this.parent._MenuItem);
+        var bSubmenu = (this.parent && this.parent._MenuItem);
 
         if (x < 10) {
 
@@ -1204,7 +1841,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         } else if ((x + offsetWidth) > viewPortWidth) {
 
             if(
-                bSubMenu && 
+                bSubmenu && 
                 ((x-this.parent.element.offsetWidth) > offsetWidth)
             ) {
     
@@ -1225,7 +1862,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         } else if (y > bottomConstraint) {
 
-            if(bSubMenu && (y > offsetHeight)) {
+            if(bSubmenu && (y > offsetHeight)) {
 
                 y = ((y + this.parent.element.offsetHeight) - offsetHeight);
 
@@ -1264,6 +1901,122 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         );
 
     };
+
+
+    /**
+    * Sets focus to the first enabled MenuItem instance.
+    * @private
+    */
+    this.setInitialFocus = function() {
+
+        var oMenuItem;
+
+        if(this.getSubmenus().length > 0) {
+
+            oMenuItem = this.getSubmenu(0).getMenuItem(0);
+
+        }
+        else {
+
+            oMenuItem = this.getMenuItem(0);
+
+        }
+
+        if(oMenuItem) {
+
+            if(oMenuItem.cfg.getProperty("disabled")) {
+
+                oMenuItem = oMenuItem.getNextEnabledSibling();
+
+            }
+
+            oMenuItem.focus();
+
+        }        
+
+    };
+
+
+    /**
+    * Set the "selected" configuration property of the first enabled
+    * MenuItem instance to "true."
+    * @private
+    */
+    this.setInitialSelection = function() {
+
+        var oMenuItem;
+
+        if(this.getSubmenus().length > 0) {
+
+            oMenuItem = this.getSubmenu(0).getMenuItem(0);
+
+        }
+        else {
+
+            oMenuItem = this.getMenuItem(0);
+
+        }
+
+        if(oMenuItem) {
+
+            if(oMenuItem.cfg.getProperty("disabled")) {
+
+                oMenuItem = oMenuItem.getNextEnabledSibling();
+
+            }
+
+            oMenuItem.cfg.setProperty("selected", true);
+
+        }        
+
+    };
+
+
+    this.setActiveMenuItem = function(p_oMenuItem) {
+
+        if(this.parent && this.parent._Menu) {
+
+            this.parent.setActiveMenuItem(p_oMenuItem);
+       
+        }
+        else {
+
+            if(p_oMenuItem && p_oMenuItem._MenuItem) {
+        
+                m_oActiveMenuItem = p_oMenuItem;
+                m_oMenuManager.activeMenu = this;
+
+            }
+            else {
+
+                m_oActiveMenuItem = null;
+                m_oMenuManager.activeMenu = null;
+
+            }
+        
+        }
+
+    };
+
+
+    this.getActiveMenuItem = function() {
+
+        if(this.parent && this.parent._Menu) {
+
+            return this.parent.getActiveMenuItem();
+        
+        }
+        else {
+        
+            return m_oActiveMenuItem;
+        
+        }
+
+    };
+
+
+
+
 
 
     // Event handlers for configuration properties
@@ -1350,15 +2103,15 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         if(m_aMenuItems.length > 0) {
 
             var i = m_aMenuItems.length - 1,
-                oSubMenu;
+                oSubmenu;
     
             do {
 
-                oSubMenu = m_aMenuItems[i].cfg.getProperty("submenu");
+                oSubmenu = m_aMenuItems[i].cfg.getProperty("submenu");
 
-                if(oSubMenu) {
+                if(oSubmenu) {
 
-                    oSubMenu.cfg.setProperty(
+                    oSubmenu.cfg.setProperty(
                         "constraintoviewport", 
                         bConstrainToViewport
                     );
@@ -1370,13 +2123,13 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         }
 
-        if(m_aSubMenus.length > 0) {
+        if(m_aSubmenus.length > 0) {
 
-            var i = m_aSubMenus.length - 1;
+            var i = m_aSubmenus.length - 1;
     
             do {
 
-                m_aSubMenus[i].cfg.setProperty(
+                m_aSubmenus[i].cfg.setProperty(
                     "constraintoviewport", 
                     bConstrainToViewport
                 );
@@ -1508,18 +2261,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             );
 
     
-            var oActiveMenuItem;
-        
-            if(this.parent && this.parent._Menu) {
-        
-                oActiveMenuItem = this.parent.activeMenuItem;
-            
-            }
-            else {
-            
-                oActiveMenuItem = this.activeMenuItem;
-            
-            }
+            var oActiveMenuItem = this.getActiveMenuItem();
             
             if(oActiveMenuItem) {
         
@@ -1529,11 +2271,11 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         
                 }
         
-                var oSubMenu = oActiveMenuItem.cfg.getProperty("submenu");
+                var oSubmenu = oActiveMenuItem.cfg.getProperty("submenu");
         
-                if(oSubMenu && oSubMenu.cfg.getProperty("visible")) {
+                if(oSubmenu && oSubmenu.cfg.getProperty("visible")) {
         
-                    oSubMenu.hide();
+                    oSubmenu.hide();
         
                 }
         
@@ -1699,6 +2441,30 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
             true
         );
 
+        m_oEventUtil.addListener(
+            this.element, 
+            "keydown", 
+            onElementKeyDown, 
+            this,
+            true
+        );
+
+        m_oEventUtil.addListener(
+            this.element, 
+            "keyup", 
+            onElementKeyUp, 
+            this,
+            true
+        );
+
+        m_oEventUtil.addListener(
+            this.element, 
+            "keypress", 
+            onElementKeyPress, 
+            this,
+            true
+        );
+
 
         // Create custom events
 
@@ -1748,6 +2514,33 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         * @see YAHOO.util.CustomEvent
         */
         this.clickEvent = new CustomEvent("clickEvent", this);
+
+
+        /**
+        * Fires when the user presses an alphanumeric key.  Passes back the 
+        * DOM Event object as an argument.
+        * @type {YAHOO.util.CustomEvent}
+        * @see YAHOO.util.CustomEvent
+        */
+        this.keyPressEvent = new CustomEvent("keyPressEvent", this);
+
+
+        /**
+        * Fires when the user presses a key.  Passes back the DOM Event 
+        * object as an argument.
+        * @type {YAHOO.util.CustomEvent}
+        * @see YAHOO.util.CustomEvent
+        */
+        this.keyDownEvent = new CustomEvent("keyDownEvent", this);
+
+
+        /**
+        * Fires when the user releases a key.  Passes back the DOM Event 
+        * object as an argument.
+        * @type {YAHOO.util.CustomEvent}
+        * @see YAHOO.util.CustomEvent
+        */
+        this.keyUpEvent = new CustomEvent("keyUpEvent", this);
 
 
         m_oMenuManager.addMenu(this);
