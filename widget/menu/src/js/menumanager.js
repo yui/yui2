@@ -69,11 +69,11 @@ YAHOO.widget.MenuManager = function() {
     * @param {Object} p_oCollection The object instance to be modified.
     * @param {YAHOO.widget.Menu} p_oItem The Menu instance to be added.
     */
-    var addItem = function(p_oCollection, p_oItem) {
+    function addItem(p_oCollection, p_oItem) {
 
           p_oCollection[p_oItem.id] = p_oItem;
 
-    };
+    }
 
 
     /**
@@ -84,7 +84,7 @@ YAHOO.widget.MenuManager = function() {
     * @param {String/YAHOO.widget.Menu} p_oValue String id of or object
     * reference for the Menu instance to be removed.
     */
-    var removeItem = function(p_oCollection, p_oValue) {
+    function removeItem(p_oCollection, p_oValue) {
 
         if(p_oValue) {
 
@@ -108,7 +108,7 @@ YAHOO.widget.MenuManager = function() {
 
         }        
 
-    };
+    }
 
 
     /**
@@ -118,7 +118,7 @@ YAHOO.widget.MenuManager = function() {
     * @param {Object} p_oCollection The object instance to be modified.
     * @param {String} p_sElementId String id of the Menu to be removed.
     */
-    var removeItemByKey = function(p_oCollection, p_sElementId) {
+    function removeItemByKey(p_oCollection, p_sElementId) {
 
         var oItem = null;
         
@@ -131,7 +131,7 @@ YAHOO.widget.MenuManager = function() {
 
         return oItem;
 
-    };
+    }
 
 
     /**
@@ -142,7 +142,7 @@ YAHOO.widget.MenuManager = function() {
     * @param {YAHOO.widget.Menu} p_oItem Object reference for the Menu
     * instance to be removed.
     */
-    var removeItemByValue = function(p_oCollection, p_oItem) {
+    function removeItemByValue(p_oCollection, p_oItem) {
 
         var oItem = null;
 
@@ -160,7 +160,7 @@ YAHOO.widget.MenuManager = function() {
 
         return oItem;
 
-    };
+    }
 
 
     // Private CustomEvent event handlers
@@ -173,7 +173,7 @@ YAHOO.widget.MenuManager = function() {
     * event was fired.
     * @param {YAHOO.widget.Menu} p_oMenu The Menu that fired the event.
     */
-    var onMenuShow = function(p_sType, p_aArguments, p_oMenu) {
+    function onMenuShow(p_sType, p_aArguments, p_oMenu) {
 
         if(p_oMenu) {
 
@@ -181,7 +181,7 @@ YAHOO.widget.MenuManager = function() {
             
         }
 
-    };
+    }
 
 
     /**
@@ -192,11 +192,11 @@ YAHOO.widget.MenuManager = function() {
     * event was fired.
     * @param {YAHOO.widget.Menu} p_oMenu The Menu that fired the event.
     */
-    var onMenuHide = function(p_sType, p_aArguments, p_oMenu) {
+    function onMenuHide(p_sType, p_aArguments, p_oMenu) {
 
         removeItem(m_oVisibleMenus, p_oMenu);
 
-    };
+    }
 
     /**
     * "configvisible" YAHOO.util.CustomEvent handler for the Menu's "visible" 
@@ -207,7 +207,7 @@ YAHOO.widget.MenuManager = function() {
     * event was fired.
     * @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
     */
-    var onMenuConfigVisible = function(p_sType, p_aArguments, p_oMenu) {
+    function onMenuConfigVisible(p_sType, p_aArguments, p_oMenu) {
 
         var bVisible = p_aArguments[0];
 
@@ -222,9 +222,7 @@ YAHOO.widget.MenuManager = function() {
 
         }
 
-    };
-
-
+    }
 
 
     return {

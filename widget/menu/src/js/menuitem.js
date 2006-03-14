@@ -298,11 +298,11 @@ YAHOO.widget.MenuItem.prototype = {
         * @return Returns true if the object is a string.
         * @type Boolean
         */
-        var checkString = function(p_oObject) {
+        function checkString(p_oObject) {
 
             return (typeof p_oObject == "string");
 
-        };
+        }
 
 
         /**
@@ -312,18 +312,18 @@ YAHOO.widget.MenuItem.prototype = {
         * @return Returns true if the object is an HTMLElement.
         * @type Boolean
         */
-        var checkDOMNode = function(p_oObject) {
+        function checkDOMNode(p_oObject) {
 
             return (p_oObject && p_oObject.tagName);
 
-        };
+        }
 
 
         /**
         * Creates the core DOM structure for a MenuItem instance.
         * @private
         */
-        var createRootNodeStructure = function() {
+        function createRootNodeStructure() {
 
             me.element = document.createElement("li");
 
@@ -336,7 +336,7 @@ YAHOO.widget.MenuItem.prototype = {
 
             me.element.appendChild(m_oAnchor);            
 
-        };
+        }
 
 
         /**
@@ -344,7 +344,7 @@ YAHOO.widget.MenuItem.prototype = {
         * child nodes to instantiate Menu and MenuItem instances.
         * @private
         */
-        var initSubTree = function() {
+        function initSubTree() {
     
             var aChildNodes = me.srcElement.childNodes,
                 nChildNodes = aChildNodes.length,
@@ -445,7 +445,7 @@ YAHOO.widget.MenuItem.prototype = {
     
             }
     
-        };
+        }
     
 
         // Event handlers for configuration properties
@@ -486,7 +486,7 @@ YAHOO.widget.MenuItem.prototype = {
             var oHelpText = p_aArguments[0];
 
 
-            var initHelpText = function() {
+            function initHelpText() {
 
                 m_oDom.addClass(me.element, "hashelptext");
                 m_oDom.addClass(m_oAnchor, "hashelptext");
@@ -503,9 +503,9 @@ YAHOO.widget.MenuItem.prototype = {
 
                 }                
 
-            };
+            }
 
-            var removeHelpText = function() {
+            function removeHelpText() {
 
                 m_oDom.removeClass(me.element, "hashelptext");
                 m_oDom.removeClass(m_oAnchor, "hashelptext"); 
@@ -513,7 +513,7 @@ YAHOO.widget.MenuItem.prototype = {
                 me.element.removeChild(m_oHelpTextEM);
                 m_oHelpTextEM = null;
 
-            };
+            }
 
 
             if(checkDOMNode(oHelpText)) {
