@@ -123,13 +123,13 @@ YAHOO.util.DDProxy.prototype.showFrame = function(iPageX, iPageY) {
     var s = this.getDragEl().style;
 
     if (this.resizeFrame) {
-        s.width = (parseInt(el.offsetWidth) - (2*this.borderWidth)) + "px";
-        s.height = (parseInt(el.offsetHeight) - (2*this.borderWidth)) + "px";
+        s.width = (parseInt(el.offsetWidth, 10) - (2*this.borderWidth)) + "px";
+        s.height = (parseInt(el.offsetHeight, 10) - (2*this.borderWidth)) + "px";
     }
 
     if (this.centerFrame) {
-        this.setDelta(Math.round(parseInt(s.width)/2), 
-                Math.round(parseInt(s.width)/2));
+        this.setDelta(Math.round(parseInt(s.width, 10)/2), 
+                Math.round(parseInt(s.width, 10)/2));
     }
 
     this.setDragElPos(iPageX, iPageY);

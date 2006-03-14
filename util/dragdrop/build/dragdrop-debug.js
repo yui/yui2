@@ -1410,8 +1410,8 @@ if (!YAHOO.util.DragDropMgr) {
             this.dragThreshMet = false;
 
             this.clickTimeout = setTimeout( 
-               "var DDM=YAHOO.util.DDM;DDM.startDrag(DDM.startX, DDM.startY)", 
-               this.clickTimeThresh );
+                    function() { DDM.startDrag(DDM.startX, DDM.startY); }, 
+                    this.clickTimeThresh );
         };
 
         /**
@@ -2099,20 +2099,18 @@ if (!YAHOO.util.DragDropMgr) {
          * an error if this file is loaded before the Event Utility.
          */
         this._addListeners = function() {
-            if ( YAHOO.util.Event  &&
-                 document          &&
-                 document.body        ) {
-
+            if ( YAHOO.util.Event && document ) {
                 this._onLoad();
             } else {
-                if (this._timeoutCount > 500) {
+                if (this._timeoutCount > 1000) {
                     this.logger.debug("DragDrop requires the Event Utility");
                 } else {
-                    setTimeout("YAHOO.util.DDM._addListeners()", 10);
-                    this._timeoutCount += 1;
+                    setTimeout(YAHOO.util.DDM._addListeners, 10);
+                    if (document && document.body) {
+                        this._timeoutCount += 1;
+                    }
                 }
             }
-
         };
 
         /**
@@ -2144,7 +2142,7 @@ if (!YAHOO.util.DragDropMgr) {
             return false;
         };
 
-    };
+    } ();
 
     // shorter alias, save a few bytes
     YAHOO.util.DDM = YAHOO.util.DragDropMgr;
@@ -2566,13 +2564,13 @@ YAHOO.util.DDProxy.prototype.showFrame = function(iPageX, iPageY) {
     var s = this.getDragEl().style;
 
     if (this.resizeFrame) {
-        s.width = (parseInt(el.offsetWidth) - (2*this.borderWidth)) + "px";
-        s.height = (parseInt(el.offsetHeight) - (2*this.borderWidth)) + "px";
+        s.width = (parseInt(el.offsetWidth, 10) - (2*this.borderWidth)) + "px";
+        s.height = (parseInt(el.offsetHeight, 10) - (2*this.borderWidth)) + "px";
     }
 
     if (this.centerFrame) {
-        this.setDelta(Math.round(parseInt(s.width)/2), 
-                Math.round(parseInt(s.width)/2));
+        this.setDelta(Math.round(parseInt(s.width, 10)/2), 
+                Math.round(parseInt(s.width, 10)/2));
     }
 
     this.setDragElPos(iPageX, iPageY);

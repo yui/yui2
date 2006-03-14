@@ -429,8 +429,8 @@ if (!YAHOO.util.DragDropMgr) {
             this.dragThreshMet = false;
 
             this.clickTimeout = setTimeout( 
-               "var DDM=YAHOO.util.DDM;DDM.startDrag(DDM.startX, DDM.startY)", 
-               this.clickTimeThresh );
+                    function() { DDM.startDrag(DDM.startX, DDM.startY); }, 
+                    this.clickTimeThresh );
         };
 
         /**
@@ -1118,20 +1118,18 @@ if (!YAHOO.util.DragDropMgr) {
          * an error if this file is loaded before the Event Utility.
          */
         this._addListeners = function() {
-            if ( YAHOO.util.Event  &&
-                 document          &&
-                 document.body        ) {
-
+            if ( YAHOO.util.Event && document ) {
                 this._onLoad();
             } else {
-                if (this._timeoutCount > 500) {
+                if (this._timeoutCount > 1000) {
                     this.logger.debug("DragDrop requires the Event Utility");
                 } else {
-                    setTimeout("YAHOO.util.DDM._addListeners()", 10);
-                    this._timeoutCount += 1;
+                    setTimeout(YAHOO.util.DDM._addListeners, 10);
+                    if (document && document.body) {
+                        this._timeoutCount += 1;
+                    }
                 }
             }
-
         };
 
         /**
@@ -1163,7 +1161,7 @@ if (!YAHOO.util.DragDropMgr) {
             return false;
         };
 
-    };
+    } ();
 
     // shorter alias, save a few bytes
     YAHOO.util.DDM = YAHOO.util.DragDropMgr;
