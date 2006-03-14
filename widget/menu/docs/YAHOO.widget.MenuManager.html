@@ -9,7 +9,7 @@
 
 <div id="header">
 	<h1>JavaScript Documentation</h1>
-	<h3><a href="./index.html">Menu</a></h3>
+	<h3><a href="./index.html">Yahoo! Menuing Library</a></h3>
 
 	<div class="breadcrumbs">
 					
@@ -20,7 +20,7 @@
 			
 			
 			
-				<a href="./index.html">Menu</a>
+				<a href="./index.html">Yahoo! Menuing Library</a>
 				&gt;
 				<strong>YAHOO.widget.MenuManager</strong>
 			
@@ -78,6 +78,21 @@
 			<div class="module">
 				<h4><a href="./overview-summary.html">Files</a></h4>
 				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-._menu.js.html">
+								._menu.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-._menuitem.js.html">
+								._menuitem.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-._menumanager.js.html">
+								._menumanager.js</a>
+						</li>
 					
 						<li>
 							<a href="overview-summary-menu.js.html">
@@ -190,67 +205,6 @@
 							</td>
 						</tr>
 					
-						<tr>
-							<td class="flags">Object</td>
-							<td class="spec">
-								<code>
-									<a href="#bVisible">bVisible</a>
-								</code>
-								<div class="description">
-									&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">{Object}</td>
-							<td class="spec">
-								<code>
-									<a href="#m_oMenus">m_oMenus</a>
-								</code>
-								<div class="description">
-									Collection of Menu instances.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">{YAHOO.widget.MenuManager}</td>
-							<td class="spec">
-								<code>
-									<a href="#me">me</a>
-								</code>
-								<div class="description">
-									Reference to the current context so that private methods have access 
- to class members&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">Object</td>
-							<td class="spec">
-								<code>
-									<a href="#oItem">oItem</a>
-								</code>
-								<div class="description">
-									&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">Object</td>
-							<td class="spec">
-								<code>
-									<a href="#sMenuId">sMenuId</a>
-								</code>
-								<div class="description">
-									&nbsp;
-								</div>
-							</td>
-						</tr>
-					
 					</table>
 				</div>
 			</div>
@@ -283,19 +237,6 @@
 				<h3><a name="methodSummary">Method Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
 					<table border="1" cellpadding="3" cellspacing="0">
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#addItem">addItem</a>
-										(&lt;Object&gt; p_oCollection, &lt;<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>&gt; p_oItem)
-									</code>
-									<div class="description">
-										Adds an item to a collection.&nbsp;
-									</div>
-								</td>
-							</tr>
 						
 							<tr>
 								<td class="flags">void</td>
@@ -379,85 +320,6 @@
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
-										<a href="#onMenuConfigVisible">onMenuConfigVisible</a>
-										(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, &lt;<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>&gt; p_oMenu)
-									</code>
-									<div class="description">
-										"configvisible" YAHOO.util.CustomEvent handler for the Menu's "visible" 
- configuration property.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#onMenuHide">onMenuHide</a>
-										(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, &lt;<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>&gt; p_oMenu)
-									</code>
-									<div class="description">
-										"hide" YAHOO.util.CustomEvent handler for each Menu instance.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#onMenuShow">onMenuShow</a>
-										(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, &lt;<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>&gt; p_oMenu)
-									</code>
-									<div class="description">
-										"show" YAHOO.util.CustomEvent handler for each Menu instance.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#removeItem">removeItem</a>
-										(&lt;Object&gt; p_oCollection, p_oValue)
-									</code>
-									<div class="description">
-										Removes an item from a collection.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">Object</td>
-								<td class="spec">
-									<code>
-										<a href="#removeItemByKey">removeItemByKey</a>
-										(&lt;Object&gt; p_oCollection, &lt;String&gt; p_sElementId)
-									</code>
-									<div class="description">
-										Removes an item from a collection.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">Object</td>
-								<td class="spec">
-									<code>
-										<a href="#removeItemByValue">removeItemByValue</a>
-										(&lt;Object&gt; p_oCollection, &lt;<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>&gt; p_oItem)
-									</code>
-									<div class="description">
-										Removes an item from a collection.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
 										<a href="#removeMenu">removeMenu</a>
 										(p_oValue)
 									</code>
@@ -493,72 +355,6 @@
 							<div class="description">
 								Returns the currently active Menu.  A Menu instance becomes active 
  when one of it's MenuItem instances recieves focus.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="bVisible">bVisible</a></h4>
-						<div class="detail">
-							<code>
-								Object
-								&nbsp;
-								<strong>bVisible</strong>
-							</code>
-							<div class="description">
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="m_oMenus">m_oMenus</a></h4>
-						<div class="detail">
-							<code>
-								{Object}
-								&nbsp;
-								<strong>m_oMenus</strong>
-							</code>
-							<div class="description">
-								Collection of Menu instances.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="me">me</a></h4>
-						<div class="detail">
-							<code>
-								{YAHOO.widget.MenuManager}
-								&nbsp;
-								<strong>me</strong>
-							</code>
-							<div class="description">
-								Reference to the current context so that private methods have access 
- to class members
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="oItem">oItem</a></h4>
-						<div class="detail">
-							<code>
-								Object
-								&nbsp;
-								<strong>oItem</strong>
-							</code>
-							<div class="description">
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="sMenuId">sMenuId</a></h4>
-						<div class="detail">
-							<code>
-								Object
-								&nbsp;
-								<strong>sMenuId</strong>
-							</code>
-							<div class="description">
-								
 							</div>
 						</div>
 						<hr />
@@ -600,41 +396,6 @@
 			<div class="section method details">
 				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
-					
-						<h4><a name="addItem">addItem</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>addItem</strong>
-								(&lt;Object&gt; p_oCollection, &lt;<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>&gt; p_oItem)
-							</code>
-									
-							<div class="description">
-								
-									Adds an item to a collection.  Used to manage a the collection of  
- Menu and visible Menu instances.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>p_oCollection</code> - 
-												 The object instance to be modified.  
-											</dd>
-										
-											<dd>
-												<code>p_oItem</code> - 
-												 The Menu instance to be added.       
-											</dd>
-										
-									</dl>
-								
-								
-								
-							</div>
-						</div>
-						<hr />
 					
 						<h4><a name="addMenu">addMenu</a></h4>
 						<div class="detail">
@@ -773,229 +534,6 @@
 								
 									Hides all visible Menu instances.
 								
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="onMenuConfigVisible">onMenuConfigVisible</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>onMenuConfigVisible</strong>
-								(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, &lt;<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>&gt; p_oMenu)
-							</code>
-									
-							<div class="description">
-								
-									"configvisible" YAHOO.util.CustomEvent handler for the Menu's "visible" 
- configuration property.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>p_sType</code> - 
-												 The name of the event that was fired.  
-											</dd>
-										
-											<dd>
-												<code>p_aArguments</code> - 
-												 Collection of arguments sent when the   event was fired.  
-											</dd>
-										
-											<dd>
-												<code>p_oMenu</code> - 
-												 The Menu instance that fired the event.       
-											</dd>
-										
-									</dl>
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="onMenuHide">onMenuHide</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>onMenuHide</strong>
-								(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, &lt;<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>&gt; p_oMenu)
-							</code>
-									
-							<div class="description">
-								
-									"hide" YAHOO.util.CustomEvent handler for each Menu instance.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>p_sType</code> - 
-												 The name of the event that was fired.  
-											</dd>
-										
-											<dd>
-												<code>p_aArguments</code> - 
-												 Collection of arguments sent when the   event was fired.  
-											</dd>
-										
-											<dd>
-												<code>p_oMenu</code> - 
-												 The Menu that fired the event.       
-											</dd>
-										
-									</dl>
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="onMenuShow">onMenuShow</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>onMenuShow</strong>
-								(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, &lt;<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>&gt; p_oMenu)
-							</code>
-									
-							<div class="description">
-								
-									"show" YAHOO.util.CustomEvent handler for each Menu instance.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>p_sType</code> - 
-												 The name of the event that was fired.  
-											</dd>
-										
-											<dd>
-												<code>p_aArguments</code> - 
-												 Collection of arguments sent when the   event was fired.  
-											</dd>
-										
-											<dd>
-												<code>p_oMenu</code> - 
-												 The Menu that fired the event.       
-											</dd>
-										
-									</dl>
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="removeItem">removeItem</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>removeItem</strong>
-								(&lt;Object&gt; p_oCollection, p_oValue)
-							</code>
-									
-							<div class="description">
-								
-									Removes an item from a collection.  Used to manage a the collection of  
- Menu and visible Menu instances.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>p_oCollection</code> - 
-												 The object instance to be modified.  
-											</dd>
-										
-											<dd>
-												<code>String</code> - 
-												/YAHOO.widget.Menu} p_oValue String id of or object  reference for the Menu instance to be removed.       
-											</dd>
-										
-									</dl>
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="removeItemByKey">removeItemByKey</a></h4>
-						<div class="detail">
-							<code>
-								Object 
-								<strong>removeItemByKey</strong>
-								(&lt;Object&gt; p_oCollection, &lt;String&gt; p_sElementId)
-							</code>
-									
-							<div class="description">
-								
-									Removes an item from a collection.  Used to manage a the collection of  
- Menu and visible Menu instances.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>p_oCollection</code> - 
-												 The object instance to be modified.  
-											</dd>
-										
-											<dd>
-												<code>p_sElementId</code> - 
-												 String id of the Menu to be removed.       
-											</dd>
-										
-									</dl>
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="removeItemByValue">removeItemByValue</a></h4>
-						<div class="detail">
-							<code>
-								Object 
-								<strong>removeItemByValue</strong>
-								(&lt;Object&gt; p_oCollection, &lt;<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>&gt; p_oItem)
-							</code>
-									
-							<div class="description">
-								
-									Removes an item from a collection.  Used to manage a the collection of  
- Menu and visible Menu instances.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>p_oCollection</code> - 
-												 The object instance to be modified.  
-											</dd>
-										
-											<dd>
-												<code>p_oItem</code> - 
-												 Object reference for the Menu  instance to be removed.       
-											</dd>
-										
-									</dl>
 								
 								
 								

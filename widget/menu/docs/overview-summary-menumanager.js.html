@@ -9,14 +9,14 @@
 
 <div id="header">
 	<h1>JavaScript Documentation</h1>
-	<h3><a href="./index.html">Menu</a></h3>
+	<h3><a href="./index.html">Yahoo! Menuing Library</a></h3>
 
 	<div class="breadcrumbs">
 					
 			
 			
 			
-				<a href="./index.html">Menu</a>
+				<a href="./index.html">Yahoo! Menuing Library</a>
 				&gt;
 				<strong>menumanager.js</strong>
 			
@@ -78,6 +78,21 @@
 			<div class="module">
 				<h4><a href="./overview-summary.html">Files</a></h4>
 				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-._menu.js.html">
+								._menu.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-._menuitem.js.html">
+								._menuitem.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-._menumanager.js.html">
+								._menumanager.js</a>
+						</li>
 					
 						<li>
 							<a href="overview-summary-menu.js.html">
@@ -248,11 +263,11 @@ YAHOO.widget.MenuManager = <span class="reserved">function</span>() {
     * <span class="attrib">@param</span> {Object} p_oCollection The object instance to be modified.
     * <span class="attrib">@param</span> {YAHOO.widget.Menu} p_oItem The Menu instance to be added.
     */</span>
-    var addItem = <span class="reserved">function</span>(p_oCollection, p_oItem) {
+    <span class="reserved">function</span> addItem(p_oCollection, p_oItem) {
 
           p_oCollection[p_oItem.id] = p_oItem;
 
-    };
+    }
 
 
     <span class="comment">/**
@@ -263,7 +278,7 @@ YAHOO.widget.MenuManager = <span class="reserved">function</span>() {
     * <span class="attrib">@param</span> {String/YAHOO.widget.Menu} p_oValue String id of or object
     * reference for the Menu instance to be removed.
     */</span>
-    var removeItem = <span class="reserved">function</span>(p_oCollection, p_oValue) {
+    <span class="reserved">function</span> removeItem(p_oCollection, p_oValue) {
 
         <span class="reserved">if</span>(p_oValue) {
 
@@ -287,7 +302,7 @@ YAHOO.widget.MenuManager = <span class="reserved">function</span>() {
 
         }        
 
-    };
+    }
 
 
     <span class="comment">/**
@@ -297,7 +312,7 @@ YAHOO.widget.MenuManager = <span class="reserved">function</span>() {
     * <span class="attrib">@param</span> {Object} p_oCollection The object instance to be modified.
     * <span class="attrib">@param</span> {String} p_sElementId String id of the Menu to be removed.
     */</span>
-    var removeItemByKey = <span class="reserved">function</span>(p_oCollection, p_sElementId) {
+    <span class="reserved">function</span> removeItemByKey(p_oCollection, p_sElementId) {
 
         var oItem = null;
         
@@ -310,7 +325,7 @@ YAHOO.widget.MenuManager = <span class="reserved">function</span>() {
 
         <span class="reserved">return</span> oItem;
 
-    };
+    }
 
 
     <span class="comment">/**
@@ -321,7 +336,7 @@ YAHOO.widget.MenuManager = <span class="reserved">function</span>() {
     * <span class="attrib">@param</span> {YAHOO.widget.Menu} p_oItem Object reference for the Menu
     * instance to be removed.
     */</span>
-    var removeItemByValue = <span class="reserved">function</span>(p_oCollection, p_oItem) {
+    <span class="reserved">function</span> removeItemByValue(p_oCollection, p_oItem) {
 
         var oItem = null;
 
@@ -339,7 +354,7 @@ YAHOO.widget.MenuManager = <span class="reserved">function</span>() {
 
         <span class="reserved">return</span> oItem;
 
-    };
+    }
 <span class="comment">
 
     // Private CustomEvent event handlers</span>
@@ -352,7 +367,7 @@ YAHOO.widget.MenuManager = <span class="reserved">function</span>() {
     * event was fired.
     * <span class="attrib">@param</span> {YAHOO.widget.Menu} p_oMenu The Menu that fired the event.
     */</span>
-    var onMenuShow = <span class="reserved">function</span>(p_sType, p_aArguments, p_oMenu) {
+    <span class="reserved">function</span> onMenuShow(p_sType, p_aArguments, p_oMenu) {
 
         <span class="reserved">if</span>(p_oMenu) {
 
@@ -360,7 +375,7 @@ YAHOO.widget.MenuManager = <span class="reserved">function</span>() {
             
         }
 
-    };
+    }
 
 
     <span class="comment">/**
@@ -371,11 +386,11 @@ YAHOO.widget.MenuManager = <span class="reserved">function</span>() {
     * event was fired.
     * <span class="attrib">@param</span> {YAHOO.widget.Menu} p_oMenu The Menu that fired the event.
     */</span>
-    var onMenuHide = <span class="reserved">function</span>(p_sType, p_aArguments, p_oMenu) {
+    <span class="reserved">function</span> onMenuHide(p_sType, p_aArguments, p_oMenu) {
 
         removeItem(m_oVisibleMenus, p_oMenu);
 
-    };
+    }
 
     <span class="comment">/**
     * "configvisible" YAHOO.util.CustomEvent handler for the Menu's "visible" 
@@ -386,7 +401,7 @@ YAHOO.widget.MenuManager = <span class="reserved">function</span>() {
     * event was fired.
     * <span class="attrib">@param</span> {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
     */</span>
-    var onMenuConfigVisible = <span class="reserved">function</span>(p_sType, p_aArguments, p_oMenu) {
+    <span class="reserved">function</span> onMenuConfigVisible(p_sType, p_aArguments, p_oMenu) {
 
         var bVisible = p_aArguments[0];
 
@@ -401,14 +416,8 @@ YAHOO.widget.MenuManager = <span class="reserved">function</span>() {
 
         }
 
-    };
+    }
 
-
-
-    <span class="comment">/*
-        This is just a hack to get JSDoc to pick up the public members.
-        Actual source code is "return = {"
-    */</span>
     YAHOO.widget.MenuManager.<span class="reserved">prototype</span> = {
 
         <span class="comment">/**

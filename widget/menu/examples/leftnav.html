@@ -1,0 +1,426 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>Left Nav Exmaple</title>
+
+        <!-- CSS for fonts and grids -->
+        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/reset_2.0.0-b2.css">
+        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/fonts_2.0.0-b2.css">
+        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/grids_2.0.0-b2.css">
+        
+        <!-- CSS for Menu -->
+        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/menu/css/menu_2.0.1-b2.css">
+
+        <style type="text/css">
+
+            #menu0 {
+
+                position:static;
+
+            }
+
+        </style>
+
+        <!-- Namespace source file -->
+        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/yahoo_2.0.0-b2.js"></script>
+        
+        <!-- Dependency source files -->
+        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dom_2.0.0-b2.js"></script>
+        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/event_2.0.0-b2.js"></script>
+        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/container/container_core_2.0.0-b2.js"></script>
+        
+        <!-- Menu source file -->
+        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/menu/menu_2.0.1-b2.js"></script>
+
+        <script type="text/javascript">
+
+            /*
+                Create a subclass of Menu to define default behaviors for
+                each submenu instance created.
+            */
+            var LeftNavSubmenu = function(p_oElement, p_oUserConfig) {
+            
+                if (arguments.length > 0) {
+            
+                    LeftNavSubmenu.superclass.constructor.call(
+                        this, 
+                        p_oElement, 
+                        p_oUserConfig
+                    );
+            
+                }
+            
+            }
+            
+            LeftNavSubmenu.prototype = new YAHOO.widget.Menu();
+            LeftNavSubmenu.prototype.constructor = YAHOO.widget.LeftNavSubmenu;
+            LeftNavSubmenu.superclass = YAHOO.widget.Menu.prototype;
+
+            LeftNavSubmenu.prototype.init = function(p_oElement, p_oUserConfig) {
+
+                LeftNavSubmenu.superclass.init.call(
+                    this, 
+                    p_oElement, 
+                    p_oUserConfig
+                );                
+
+                var oTimer;
+
+                /*
+                    Handler for each "LeftNavSubmenu" instance's mouseOverEvent
+                */
+                var oOnMouseOver = function(p_sType, p_aArguments, p_oMenu) {
+
+                    if(oTimer) {
+    
+                        window.clearTimeout(oTimer);
+
+                    }
+
+                };
+
+                /*
+                    Handler for each "LeftNavSubmenu" instance's mouseOutEvent
+                */
+                var oOnMouseOut = function(p_sType, p_aArguments, p_oMenu) {
+
+                    function hideMenu() {
+
+                        p_oMenu.hide();
+
+                        p_oMenu.parent.cfg.setProperty("selected", false);
+
+                    }
+
+                    oTimer = window.setTimeout(hideMenu, 750);
+
+                };
+
+
+                // Subscribe the handlers to the menu's events
+
+                this.mouseOverEvent.subscribe(oOnMouseOver, this);
+                this.mouseOutEvent.subscribe(oOnMouseOut, this);
+
+            }
+
+            function onDocumentClick(p_oEvent) {
+
+                YAHOO.widget.MenuManager.hideVisibleMenus();
+
+                YAHOO.widget.MenuManager.getMenu("menu0").show();
+
+            }
+           
+            function onWindowLoad() {
+
+                // Create the root menu
+
+                var oLeftNav = new YAHOO.widget.Menu(
+                    "menu0", 
+                    { 
+                        // Make the root visible by default
+                        visible:true,
+
+                        /*
+                            Since each submenu will be of a different class 
+                            (LeftNavSubmenu), we want to set the
+                            "initsubmenus" configuration property to "false"
+                            to ensure that the root menu's constructor
+                            doesn't automatically iterate all of the
+                            child nodes of element "menu0" and instantiate
+                            submenus of type "Menu" directly. 
+                        */
+                        initsubmenus:false
+                    }
+                );
+
+
+                /*
+                    Append the submenu instances to their corresponding 
+                    MenuItem instances
+                */
+
+                oLeftNav.getMenuItem(0).cfg.setProperty(
+                    "submenu", (new LeftNavSubmenu("menu1"))
+                ); 
+
+                oLeftNav.getMenuItem(1).cfg.setProperty(
+                    "submenu", (new LeftNavSubmenu("menu2"))
+                );
+
+                oLeftNav.getMenuItem(2).cfg.setProperty(
+                    "submenu", (new LeftNavSubmenu("menu3"))
+                );
+
+                oLeftNav.getMenuItem(3).cfg.setProperty(
+                    "submenu", (new LeftNavSubmenu("menu4"))
+                );
+
+                oLeftNav.getMenuItem(4).cfg.setProperty(
+                    "submenu", (new LeftNavSubmenu("menu5"))
+                );
+
+                oLeftNav.getMenuItem(5).cfg.setProperty(
+                    "submenu", (new LeftNavSubmenu("menu6"))
+                ); 
+
+                oLeftNav.getMenuItem(6).cfg.setProperty(
+                    "submenu", (new LeftNavSubmenu("menu7"))
+                );
+
+                oLeftNav.getMenuItem(7).cfg.setProperty(
+                    "submenu", (new LeftNavSubmenu("menu8"))
+                );
+
+                oLeftNav.getMenuItem(8).cfg.setProperty(
+                    "submenu", (new LeftNavSubmenu("menu9"))
+                );
+
+                oLeftNav.getMenuItem(9).cfg.setProperty(
+                    "submenu", (new LeftNavSubmenu("menu10"))
+                );
+
+
+                // Render the menu and associated submenus
+
+                oLeftNav.render();
+
+                YAHOO.util.Event.addListener(
+                    document, 
+                    "click", 
+                    onDocumentClick
+                );
+
+            }
+
+            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            
+        </script>
+    </head>
+    <body id="yahoo-com">
+        <div id="doc" class="yui-t1">
+            <div id="hd">
+                <!-- start: your content here -->
+                
+                    <p>MASTHEAD: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metus. Nunc quam elit, posuere nec, auctor in, rhoncus quis, dui. Aliquam erat volutpat. Ut dignissim, massa sit amet dignissim cursus, quam lacus feugiat.</p>
+        
+                <!-- end: your content here -->
+            </div>
+            <div id="bd">
+
+                <!-- start: primary column from outer template -->
+                <div id="yui-main">
+                    <div class="yui-b">
+                        <!-- start: stack grids here -->
+                                
+                            <p>PRIMARY: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metus. Nunc quam elit, posuere nec, auctor in, rhoncus quis, dui. Aliquam erat volutpat. Ut dignissim, massa sit amet dignissim cursus, quam lacus feugiat dolor, id aliquam leo tortor eget odio. Pellentesque orci arcu, eleifend at, iaculis sit amet, posuere eu, lorem. Aliquam erat volutpat. Phasellus vulputate. Vivamus id erat. Nulla facilisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Nunc gravida. Ut euismod, tortor eget convallis ullamcorper, arcu odio egestas pede, ut ornare urna elit vitae mauris. Aenean ullamcorper eros a lacus. Curabitur egestas tempus lectus. Donec et lectus et purus dapibus feugiat. Sed sit amet diam. Etiam ipsum leo, facilisis ac, rutrum nec, dignissim quis, tellus. Sed eleifend.</p>
+                        
+                        <!-- end: stack grids here -->
+                    </div>
+                </div>
+                <!-- end: primary column from outer template -->
+
+                <!-- start: secondary column from outer template -->
+                <div class="yui-b">
+
+                    <div id="menu0" class="yuimenu">
+                        <div class="bd">
+                            <ul>
+                                <li><a href="#">Menu Item 0</a>
+                                    <div id="menu1" class="yuimenu">
+                                        <div class="bd">
+                                            <ul>
+                                                <li><a href="#">Menu Item 0 - Submenu Item 0</a></li>
+                                                <li><a href="#">Menu Item 0 - Submenu Item 1</a></li>
+                                                <li><a href="#">Menu Item 0 - Submenu Item 2</a></li>
+                                                <li><a href="#">Menu Item 0 - Submenu Item 3</a></li>
+                                                <li><a href="#">Menu Item 0 - Submenu Item 4</a></li>
+                                                <li><a href="#">Menu Item 0 - Submenu Item 5</a></li>
+                                                <li><a href="#">Menu Item 0 - Submenu Item 6</a></li>
+                                                <li><a href="#">Menu Item 0 - Submenu Item 7</a></li>
+                                                <li><a href="#">Menu Item 0 - Submenu Item 8</a></li>
+                                                <li><a href="#">Menu Item 0 - Submenu Item 9</a></li>
+                                            </ul>            
+                                        </div>
+                                    </div>                                
+                                </li>
+                                <li><a href="#">Menu Item 1</a>
+                                    <div id="menu2" class="yuimenu">
+                                        <div class="bd">
+                                            <ul>
+                                                <li><a href="#">Menu Item 1 - Submenu Item 0</a></li>
+                                                <li><a href="#">Menu Item 1 - Submenu Item 1</a></li>
+                                                <li><a href="#">Menu Item 1 - Submenu Item 2</a></li>
+                                                <li><a href="#">Menu Item 1 - Submenu Item 3</a></li>
+                                                <li><a href="#">Menu Item 1 - Submenu Item 4</a></li>
+                                                <li><a href="#">Menu Item 1 - Submenu Item 5</a></li>
+                                                <li><a href="#">Menu Item 1 - Submenu Item 6</a></li>
+                                                <li><a href="#">Menu Item 1 - Submenu Item 7</a></li>
+                                                <li><a href="#">Menu Item 1 - Submenu Item 8</a></li>
+                                                <li><a href="#">Menu Item 1 - Submenu Item 9</a></li>
+                                            </ul>            
+                                        </div>
+                                    </div>                                
+                                </li>
+                                <li><a href="#">Menu Item 2</a>
+                                    <div id="menu3" class="yuimenu">
+                                        <div class="bd">
+                                            <ul>
+                                                <li><a href="#">Menu Item 2 - Submenu Item 0</a></li>
+                                                <li><a href="#">Menu Item 2 - Submenu Item 1</a></li>
+                                                <li><a href="#">Menu Item 2 - Submenu Item 2</a></li>
+                                                <li><a href="#">Menu Item 2 - Submenu Item 3</a></li>
+                                                <li><a href="#">Menu Item 2 - Submenu Item 4</a></li>
+                                                <li><a href="#">Menu Item 2 - Submenu Item 5</a></li>
+                                                <li><a href="#">Menu Item 2 - Submenu Item 6</a></li>
+                                                <li><a href="#">Menu Item 2 - Submenu Item 7</a></li>
+                                                <li><a href="#">Menu Item 2 - Submenu Item 8</a></li>
+                                                <li><a href="#">Menu Item 2 - Submenu Item 9</a></li>
+                                            </ul>            
+                                        </div>
+                                    </div>                                
+                                </li>
+                                <li><a href="#">Menu Item 3</a>
+                                    <div id="menu4" class="yuimenu">
+                                        <div class="bd">
+                                            <ul>
+                                                <li><a href="#">Menu Item 3 - Submenu Item 0</a></li>
+                                                <li><a href="#">Menu Item 3 - Submenu Item 1</a></li>
+                                                <li><a href="#">Menu Item 3 - Submenu Item 2</a></li>
+                                                <li><a href="#">Menu Item 3 - Submenu Item 3</a></li>
+                                                <li><a href="#">Menu Item 3 - Submenu Item 4</a></li>
+                                                <li><a href="#">Menu Item 3 - Submenu Item 5</a></li>
+                                                <li><a href="#">Menu Item 3 - Submenu Item 6</a></li>
+                                                <li><a href="#">Menu Item 3 - Submenu Item 7</a></li>
+                                                <li><a href="#">Menu Item 3 - Submenu Item 8</a></li>
+                                                <li><a href="#">Menu Item 3 - Submenu Item 9</a></li>
+                                            </ul>            
+                                        </div>
+                                    </div>                                
+                                </li>
+                                <li><a href="#">Menu Item 4</a>
+                                    <div id="menu5" class="yuimenu">
+                                        <div class="bd">
+                                            <ul>
+                                                <li><a href="#">Menu Item 4 - Submenu Item 0</a></li>
+                                                <li><a href="#">Menu Item 4 - Submenu Item 1</a></li>
+                                                <li><a href="#">Menu Item 4 - Submenu Item 2</a></li>
+                                                <li><a href="#">Menu Item 4 - Submenu Item 3</a></li>
+                                                <li><a href="#">Menu Item 4 - Submenu Item 4</a></li>
+                                                <li><a href="#">Menu Item 4 - Submenu Item 5</a></li>
+                                                <li><a href="#">Menu Item 4 - Submenu Item 6</a></li>
+                                                <li><a href="#">Menu Item 4 - Submenu Item 7</a></li>
+                                                <li><a href="#">Menu Item 4 - Submenu Item 8</a></li>
+                                                <li><a href="#">Menu Item 4 - Submenu Item 9</a></li>
+                                            </ul>            
+                                        </div>
+                                    </div>                                
+                                </li>
+                                <li><a href="#">Menu Item 5</a>
+                                    <div id="menu6" class="yuimenu">
+                                        <div class="bd">
+                                            <ul>
+                                                <li><a href="#">Menu Item 5 - Submenu Item 0</a></li>
+                                                <li><a href="#">Menu Item 5 - Submenu Item 1</a></li>
+                                                <li><a href="#">Menu Item 5 - Submenu Item 2</a></li>
+                                                <li><a href="#">Menu Item 5 - Submenu Item 3</a></li>
+                                                <li><a href="#">Menu Item 5 - Submenu Item 4</a></li>
+                                                <li><a href="#">Menu Item 5 - Submenu Item 5</a></li>
+                                                <li><a href="#">Menu Item 5 - Submenu Item 6</a></li>
+                                                <li><a href="#">Menu Item 5 - Submenu Item 7</a></li>
+                                                <li><a href="#">Menu Item 5 - Submenu Item 8</a></li>
+                                                <li><a href="#">Menu Item 5 - Submenu Item 9</a></li>
+                                            </ul>            
+                                        </div>
+                                    </div>                                
+                                </li>
+                                <li><a href="#">Menu Item 6</a>
+                                    <div id="menu7" class="yuimenu">
+                                        <div class="bd">
+                                            <ul>
+                                                <li><a href="#">Menu Item 6 - Submenu Item 0</a></li>
+                                                <li><a href="#">Menu Item 6 - Submenu Item 1</a></li>
+                                                <li><a href="#">Menu Item 6 - Submenu Item 2</a></li>
+                                                <li><a href="#">Menu Item 6 - Submenu Item 3</a></li>
+                                                <li><a href="#">Menu Item 6 - Submenu Item 4</a></li>
+                                                <li><a href="#">Menu Item 6 - Submenu Item 5</a></li>
+                                                <li><a href="#">Menu Item 6 - Submenu Item 6</a></li>
+                                                <li><a href="#">Menu Item 6 - Submenu Item 7</a></li>
+                                                <li><a href="#">Menu Item 6 - Submenu Item 8</a></li>
+                                                <li><a href="#">Menu Item 6 - Submenu Item 9</a></li>
+                                            </ul>            
+                                        </div>
+                                    </div>                                
+                                </li>
+                                <li><a href="#">Menu Item 7</a>
+                                    <div id="menu8" class="yuimenu">
+                                        <div class="bd">
+                                            <ul>
+                                                <li><a href="#">Menu Item 7 - Submenu Item 0</a></li>
+                                                <li><a href="#">Menu Item 7 - Submenu Item 1</a></li>
+                                                <li><a href="#">Menu Item 7 - Submenu Item 2</a></li>
+                                                <li><a href="#">Menu Item 7 - Submenu Item 3</a></li>
+                                                <li><a href="#">Menu Item 7 - Submenu Item 4</a></li>
+                                                <li><a href="#">Menu Item 7 - Submenu Item 5</a></li>
+                                                <li><a href="#">Menu Item 7 - Submenu Item 6</a></li>
+                                                <li><a href="#">Menu Item 7 - Submenu Item 7</a></li>
+                                                <li><a href="#">Menu Item 7 - Submenu Item 8</a></li>
+                                                <li><a href="#">Menu Item 7 - Submenu Item 9</a></li>
+                                            </ul>            
+                                        </div>
+                                    </div>                                
+                                </li>
+                                <li><a href="#">Menu Item 8</a>
+                                    <div id="menu9" class="yuimenu">
+                                        <div class="bd">
+                                            <ul>
+                                                <li><a href="#">Menu Item 8 - Submenu Item 0</a></li>
+                                                <li><a href="#">Menu Item 8 - Submenu Item 1</a></li>
+                                                <li><a href="#">Menu Item 8 - Submenu Item 2</a></li>
+                                                <li><a href="#">Menu Item 8 - Submenu Item 3</a></li>
+                                                <li><a href="#">Menu Item 8 - Submenu Item 4</a></li>
+                                                <li><a href="#">Menu Item 8 - Submenu Item 5</a></li>
+                                                <li><a href="#">Menu Item 8 - Submenu Item 6</a></li>
+                                                <li><a href="#">Menu Item 8 - Submenu Item 7</a></li>
+                                                <li><a href="#">Menu Item 8 - Submenu Item 8</a></li>
+                                                <li><a href="#">Menu Item 8 - Submenu Item 9</a></li>
+                                            </ul>            
+                                        </div>
+                                    </div>                                
+                                </li>
+                                <li><a href="#">Menu Item 9</a>
+                                    <div id="menu10" class="yuimenu">
+                                        <div class="bd">
+                                            <ul>
+                                                <li><a href="#">Menu Item 9 - Submenu Item 0</a></li>
+                                                <li><a href="#">Menu Item 9 - Submenu Item 1</a></li>
+                                                <li><a href="#">Menu Item 9 - Submenu Item 2</a></li>
+                                                <li><a href="#">Menu Item 9 - Submenu Item 3</a></li>
+                                                <li><a href="#">Menu Item 9 - Submenu Item 4</a></li>
+                                                <li><a href="#">Menu Item 9 - Submenu Item 5</a></li>
+                                                <li><a href="#">Menu Item 9 - Submenu Item 6</a></li>
+                                                <li><a href="#">Menu Item 9 - Submenu Item 7</a></li>
+                                                <li><a href="#">Menu Item 9 - Submenu Item 8</a></li>
+                                                <li><a href="#">Menu Item 9 - Submenu Item 9</a></li>
+                                            </ul>            
+                                        </div>
+                                    </div>                                
+                                </li>
+                            </ul>            
+                        </div>
+                    </div>
+                    
+                </div>
+                <!-- end: secondary column from outer template -->
+            </div>
+            <div id="ft">
+
+                <p>FOOTER: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metus. Nunc quam elit, posuere nec, auctor in, rhoncus quis, dui. Aliquam erat volutpat. Ut dignissim, massa sit amet dignissim cursus, quam lacus feugiat.</p>
+
+            </div>
+        </div>
+    </body>
+</html>

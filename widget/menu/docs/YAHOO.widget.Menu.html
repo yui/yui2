@@ -9,7 +9,7 @@
 
 <div id="header">
 	<h1>JavaScript Documentation</h1>
-	<h3><a href="./index.html">Menu</a></h3>
+	<h3><a href="./index.html">Yahoo! Menuing Library</a></h3>
 
 	<div class="breadcrumbs">
 					
@@ -20,7 +20,7 @@
 			
 			
 			
-				<a href="./index.html">Menu</a>
+				<a href="./index.html">Yahoo! Menuing Library</a>
 				&gt;
 				<strong>YAHOO.widget.Menu</strong>
 			
@@ -78,6 +78,21 @@
 			<div class="module">
 				<h4><a href="./overview-summary.html">Files</a></h4>
 				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-._menu.js.html">
+								._menu.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-._menuitem.js.html">
+								._menuitem.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-._menumanager.js.html">
+								._menumanager.js</a>
+						</li>
 					
 						<li>
 							<a href="overview-summary-menu.js.html">
@@ -189,20 +204,8 @@
 									<a href="#_Menu">_Menu</a>
 								</code>
 								<div class="description">
-									Used to identify a Menu instance's type as Menu since looking the constructor
+									Used to identify a Menu instance's type as Menu since looking the constructor 
  property will not be reliable if Menu is subclassed.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">{YAHOO.widget.MenuItem}</td>
-							<td class="spec">
-								<code>
-									<a href="#activeMenuItem">activeMenuItem</a>
-								</code>
-								<div class="description">
-									Returns a pointer to the MenuItem instance that has focus.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -226,7 +229,7 @@
 									<a href="#CSS_CLASS_NAME">CSS_CLASS_NAME</a>
 								</code>
 								<div class="description">
-									Constant representing the CSS class(es) to be applied to the root
+									Constant representing the CSS class(es) to be applied to the root 
  HTMLDivElement of the Menu.&nbsp;
 								</div>
 							</td>
@@ -239,8 +242,57 @@
 									<a href="#index">index</a>
 								</code>
 								<div class="description">
-									Returns the ordinal position of a Menu instance relative to other
+									Returns the ordinal position of a Menu instance relative to other 
  Menus inside it's parent Menu instance.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">{YAHOO.util.CustomEvent}</td>
+							<td class="spec">
+								<code>
+									<a href="#keyDownEvent">keyDownEvent</a>
+								</code>
+								<div class="description">
+									Fires when the user presses a key.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">{YAHOO.util.CustomEvent}</td>
+							<td class="spec">
+								<code>
+									<a href="#keyPressEvent">keyPressEvent</a>
+								</code>
+								<div class="description">
+									Fires when the user presses an alphanumeric key.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">{YAHOO.util.CustomEvent}</td>
+							<td class="spec">
+								<code>
+									<a href="#keyUpEvent">keyUpEvent</a>
+								</code>
+								<div class="description">
+									Fires when the user releases a key.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags"><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></td>
+							<td class="spec">
+								<code>
+									<a href="#MENUITEM_TYPE">MENUITEM_TYPE</a>
+								</code>
+								<div class="description">
+									Constant representing the type of Menu to instantiate when creating 
+ MenuItem instances.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -288,7 +340,7 @@
 									<a href="#mouseUpEvent">mouseUpEvent</a>
 								</code>
 								<div class="description">
-									Fires when the user releases a mouse button while the mouse is over
+									Fires when the user releases a mouse button while the mouse is over 
  a Menu instance.&nbsp;
 								</div>
 							</td>
@@ -313,8 +365,21 @@
 									<a href="#srcElement">srcElement</a>
 								</code>
 								<div class="description">
-									Returns the HTMLElement (either HTMLUListElement, HTMLSelectElement or
+									Returns the HTMLElement (either HTMLUListElement, HTMLSelectElement or 
  HTMLDivElement) used create the Menu instance.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags"><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></td>
+							<td class="spec">
+								<code>
+									<a href="#SUBMENU_TYPE">SUBMENU_TYPE</a>
+								</code>
+								<div class="description">
+									Constant representing the type of Menu to instantiate when creating 
+ submenu instances.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -381,7 +446,7 @@
 								<td class="flags">Object</td>
 								<td class="spec">
 									<code>
-										<a href="#addSubMenu">addSubMenu</a>
+										<a href="#addSubmenu">addSubmenu</a>
 										(&lt;<a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>&gt; p_oMenu, &lt;Number&gt; p_nIndex)
 									</code>
 									<div class="description">
@@ -400,6 +465,20 @@
 									<div class="description">
 										Event handler for when the "constraintoviewport" configuration
  property of a Menu changes.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#configHelpText">configHelpText</a>
+										(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, p_oObject)
+									</code>
+									<div class="description">
+										Event handler for when the "helptext" configuration property of
+ a MenuItem instance changes.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -436,6 +515,34 @@
 								<td class="flags">Object</td>
 								<td class="spec">
 									<code>
+										<a href="#configSubmenu">configSubmenu</a>
+										(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, p_oObject)
+									</code>
+									<div class="description">
+										Event handler for when the "submenu" configuration property of
+ a MenuItem instance changes.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#configText">configText</a>
+										(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, p_oObject)
+									</code>
+									<div class="description">
+										Event handler for when the "text" configuration property of
+ a MenuItem instance changes.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
 										<a href="#configVisible">configVisible</a>
 										(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, &lt;<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>&gt; p_oMenu)
 									</code>
@@ -464,11 +571,38 @@
 								<td class="flags">Object</td>
 								<td class="spec">
 									<code>
+										<a href="#destroy">destroy</a>
+										()
+									</code>
+									<div class="description">
+										Removes the Menu instance's element from the DOM and sets all child 
+ elements to null.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
 										<a href="#enforceConstraints">enforceConstraints</a>
 										(type, args, obj)
 									</code>
 									<div class="description">
 										Keeps the Menu in the viewport.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags"><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></td>
+								<td class="spec">
+									<code>
+										<a href="#getActiveMenuItem">getActiveMenuItem</a>
+										()
+									</code>
+									<div class="description">
+										Returns the MenuItem instance that has focus.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -503,7 +637,7 @@
 								<td class="flags"><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></td>
 								<td class="spec">
 									<code>
-										<a href="#getSubMenu">getSubMenu</a>
+										<a href="#getSubmenu">getSubmenu</a>
 										(&lt;Number&gt; p_nIndex)
 									</code>
 									<div class="description">
@@ -516,7 +650,7 @@
 								<td class="flags">Array</td>
 								<td class="spec">
 									<code>
-										<a href="#getSubMenus">getSubMenus</a>
+										<a href="#getSubmenus">getSubmenus</a>
 										()
 									</code>
 									<div class="description">
@@ -569,7 +703,7 @@
 								<td class="flags"><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></td>
 								<td class="spec">
 									<code>
-										<a href="#removeSubMenu">removeSubMenu</a>
+										<a href="#removeSubmenu">removeSubmenu</a>
 										(p_oObject)
 									</code>
 									<div class="description">
@@ -586,7 +720,7 @@
 										(p_bAppendToNode, &lt;Boolean&gt; p_bHideSourceElement)
 									</code>
 									<div class="description">
-										Renders the Menu by inserting the elements that are not already in the
+										Renders the Menu by inserting the elements that are not already in the 
  main Module format into their correct places.&nbsp;
 									</div>
 								</td>
@@ -609,11 +743,52 @@
 								<td class="flags">Object</td>
 								<td class="spec">
 									<code>
-										<a href="#renderSubMenus">renderSubMenus</a>
+										<a href="#renderSubmenus">renderSubmenus</a>
 										()
 									</code>
 									<div class="description">
 										Iterates the Menu's collection of Menu instances and renders them.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#setActiveMenuItem">setActiveMenuItem</a>
+										(&lt;<a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>&gt; p_oMenuItem)
+									</code>
+									<div class="description">
+										Sets the specified MenuItem instance as a Menu instance's active
+ MenuItem instance&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#setInitialFocus">setInitialFocus</a>
+										()
+									</code>
+									<div class="description">
+										Sets focus to a Menu instance's first enabled MenuItem instance.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#setInitialSelection">setInitialSelection</a>
+										()
+									</code>
+									<div class="description">
+										Sets the "selected" configuration property of a Menu instance's first
+ enabled MenuItem instance to "true."&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -641,21 +816,8 @@
 								<strong>_Menu</strong>
 							</code>
 							<div class="description">
-								Used to identify a Menu instance's type as Menu since looking the constructor
+								Used to identify a Menu instance's type as Menu since looking the constructor 
  property will not be reliable if Menu is subclassed.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="activeMenuItem">activeMenuItem</a></h4>
-						<div class="detail">
-							<code>
-								{YAHOO.widget.MenuItem}
-								&nbsp;
-								<strong>activeMenuItem</strong>
-							</code>
-							<div class="description">
-								Returns a pointer to the MenuItem instance that has focus.
 							</div>
 						</div>
 						<hr />
@@ -668,7 +830,7 @@
 								<strong>clickEvent</strong>
 							</code>
 							<div class="description">
-								Fires when the user clicks the on a Menu instance.  Passes back the
+								Fires when the user clicks the on a Menu instance.  Passes back the 
  DOM Event object as an argument.
 							</div>
 						</div>
@@ -682,7 +844,7 @@
 								<strong>CSS_CLASS_NAME</strong>
 							</code>
 							<div class="description">
-								Constant representing the CSS class(es) to be applied to the root
+								Constant representing the CSS class(es) to be applied to the root 
  HTMLDivElement of the Menu.
 							</div>
 						</div>
@@ -696,8 +858,64 @@
 								<strong>index</strong>
 							</code>
 							<div class="description">
-								Returns the ordinal position of a Menu instance relative to other
+								Returns the ordinal position of a Menu instance relative to other 
  Menus inside it's parent Menu instance.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="keyDownEvent">keyDownEvent</a></h4>
+						<div class="detail">
+							<code>
+								{YAHOO.util.CustomEvent}
+								&nbsp;
+								<strong>keyDownEvent</strong>
+							</code>
+							<div class="description">
+								Fires when the user presses a key.  Passes back the DOM Event 
+ object as an argument.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="keyPressEvent">keyPressEvent</a></h4>
+						<div class="detail">
+							<code>
+								{YAHOO.util.CustomEvent}
+								&nbsp;
+								<strong>keyPressEvent</strong>
+							</code>
+							<div class="description">
+								Fires when the user presses an alphanumeric key.  Passes back the 
+ DOM Event object as an argument.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="keyUpEvent">keyUpEvent</a></h4>
+						<div class="detail">
+							<code>
+								{YAHOO.util.CustomEvent}
+								&nbsp;
+								<strong>keyUpEvent</strong>
+							</code>
+							<div class="description">
+								Fires when the user releases a key.  Passes back the DOM Event 
+ object as an argument.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="MENUITEM_TYPE">MENUITEM_TYPE</a></h4>
+						<div class="detail">
+							<code>
+								<a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>
+								&nbsp;
+								<strong>MENUITEM_TYPE</strong>
+							</code>
+							<div class="description">
+								Constant representing the type of Menu to instantiate when creating 
+ MenuItem instances.
 							</div>
 						</div>
 						<hr />
@@ -710,7 +928,7 @@
 								<strong>mouseDownEvent</strong>
 							</code>
 							<div class="description">
-								Fires when the user clicks the on a Menu instance.  Passes back the
+								Fires when the user clicks the on a Menu instance.  Passes back the 
  DOM Event object as an argument.
 							</div>
 						</div>
@@ -724,7 +942,7 @@
 								<strong>mouseOutEvent</strong>
 							</code>
 							<div class="description">
-								Fires when the mouse has left a Menu instance.  Passes back the DOM
+								Fires when the mouse has left a Menu instance.  Passes back the DOM 
  Event object as an argument.
 							</div>
 						</div>
@@ -738,7 +956,7 @@
 								<strong>mouseOverEvent</strong>
 							</code>
 							<div class="description">
-								Fires when the mouse has entered a Menu instance.  Passes back the
+								Fires when the mouse has entered a Menu instance.  Passes back the 
  DOM Event object as an argument.
 							</div>
 						</div>
@@ -752,7 +970,7 @@
 								<strong>mouseUpEvent</strong>
 							</code>
 							<div class="description">
-								Fires when the user releases a mouse button while the mouse is over
+								Fires when the user releases a mouse button while the mouse is over 
  a Menu instance.  Passes back the DOM Event object as an argument.
 							</div>
 						</div>
@@ -779,8 +997,22 @@
 								<strong>srcElement</strong>
 							</code>
 							<div class="description">
-								Returns the HTMLElement (either HTMLUListElement, HTMLSelectElement or
+								Returns the HTMLElement (either HTMLUListElement, HTMLSelectElement or 
  HTMLDivElement) used create the Menu instance.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="SUBMENU_TYPE">SUBMENU_TYPE</a></h4>
+						<div class="detail">
+							<code>
+								<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>
+								&nbsp;
+								<strong>SUBMENU_TYPE</strong>
+							</code>
+							<div class="description">
+								Constant representing the type of Menu to instantiate when creating 
+ submenu instances.
 							</div>
 						</div>
 						<hr />
@@ -823,12 +1055,12 @@
 									
 										<dd>
 											<code>String</code> - 
-											/HTMLElement} p_oElement String id or HTMLElement  (either HTMLUListElement, HTMLSelectElement or HTMLDivElement) of the  source HTMLElement node.  
+											/HTMLElement} p_oElement String id or HTMLElement   (either HTMLUListElement, HTMLSelectElement or HTMLDivElement) of the   source HTMLElement node.  
 										</dd>
 									
 										<dd>
 											<code>p_oUserConfig</code> - 
-											 Optional. The configuration object literal containing  the configuration that should be set for this Menu. See configuration  documentation for more details.
+											 Optional. The configuration object literal   containing the configuration that should be set for this Menu. See   configuration documentation for more details.
 										</dd>
 									
 								</dl>
@@ -874,7 +1106,7 @@
 										
 											<dd>
 												<code>p_nIndex</code> - 
-												 Optional. Number indicating the ordinal position  at which the MenuItem should be added.
+												 Optional. Number indicating the ordinal position   at which the MenuItem should be added.
 											</dd>
 										
 									</dl>
@@ -885,11 +1117,11 @@
 						</div>
 						<hr />
 					
-						<h4><a name="addSubMenu">addSubMenu</a></h4>
+						<h4><a name="addSubmenu">addSubmenu</a></h4>
 						<div class="detail">
 							<code>
 								Object 
-								<strong>addSubMenu</strong>
+								<strong>addSubmenu</strong>
 								(&lt;<a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>&gt; p_oMenu, &lt;Number&gt; p_nIndex)
 							</code>
 									
@@ -943,7 +1175,47 @@
 										
 											<dd>
 												<code>p_aArguments</code> - 
-												 Collection of arguments sent when the event  was fired.  
+												 Collection of arguments sent when the event   was fired.  
+											</dd>
+										
+											<dd>
+												<code>p_oMenu</code> - 
+												 The Menu instance fired the event.
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="configHelpText">configHelpText</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>configHelpText</strong>
+								(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, p_oObject)
+							</code>
+									
+							<div class="description">
+								
+									Event handler for when the "helptext" configuration property of
+ a MenuItem instance changes.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>p_sType</code> - 
+												 The name of the event that was fired.  
+											</dd>
+										
+											<dd>
+												<code>p_aArguments</code> - 
+												 Collection of arguments sent when the   event was fired.  
 											</dd>
 										
 											<dd>
@@ -983,7 +1255,7 @@
 										
 											<dd>
 												<code>p_aArguments</code> - 
-												 Collection of arguments sent when the event  was fired.  
+												 Collection of arguments sent when the event   was fired.  
 											</dd>
 										
 											<dd>
@@ -1023,7 +1295,87 @@
 										
 											<dd>
 												<code>p_aArguments</code> - 
-												 Collection of arguments sent when the event  was fired.  
+												 Collection of arguments sent when the event   was fired.  
+											</dd>
+										
+											<dd>
+												<code>p_oMenu</code> - 
+												 The Menu instance fired the event.
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="configSubmenu">configSubmenu</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>configSubmenu</strong>
+								(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, p_oObject)
+							</code>
+									
+							<div class="description">
+								
+									Event handler for when the "submenu" configuration property of
+ a MenuItem instance changes.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>p_sType</code> - 
+												 The name of the event that was fired.  
+											</dd>
+										
+											<dd>
+												<code>p_aArguments</code> - 
+												 Collection of arguments sent when the   event was fired.  
+											</dd>
+										
+											<dd>
+												<code>p_oMenu</code> - 
+												 The Menu instance fired the event.
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="configText">configText</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>configText</strong>
+								(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, p_oObject)
+							</code>
+									
+							<div class="description">
+								
+									Event handler for when the "text" configuration property of
+ a MenuItem instance changes.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>p_sType</code> - 
+												 The name of the event that was fired.  
+											</dd>
+										
+											<dd>
+												<code>p_aArguments</code> - 
+												 Collection of arguments sent when the   event was fired.  
 											</dd>
 										
 											<dd>
@@ -1063,7 +1415,7 @@
 										
 											<dd>
 												<code>p_aArguments</code> - 
-												 Collection of arguments sent when the event  was fired.  
+												 Collection of arguments sent when the event   was fired.  
 											</dd>
 										
 											<dd>
@@ -1103,7 +1455,7 @@
 										
 											<dd>
 												<code>p_aArguments</code> - 
-												 Collection of arguments sent when the event  was fired.  
+												 Collection of arguments sent when the event   was fired.  
 											</dd>
 										
 											<dd>
@@ -1112,6 +1464,26 @@
 											</dd>
 										
 									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="destroy">destroy</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>destroy</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Removes the Menu instance's element from the DOM and sets all child 
+ elements to null.
+								
 								
 								
 								
@@ -1138,6 +1510,30 @@
 						</div>
 						<hr />
 					
+						<h4><a name="getActiveMenuItem">getActiveMenuItem</a></h4>
+						<div class="detail">
+							<code>
+								<a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a> 
+								<strong>getActiveMenuItem</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Returns the MenuItem instance that has focus.
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd>Returns a MenuItem instance.  </dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="getMenuItem">getMenuItem</a></h4>
 						<div class="detail">
 							<code>
@@ -1156,7 +1552,7 @@
 										
 											<dd>
 												<code>p_nIndex</code> - 
-												 Number indicating the ordinal position of the  Menu instance to be retrieved.  
+												 Number indicating the ordinal position of the   Menu instance to be retrieved.  
 											</dd>
 										
 									</dl>
@@ -1196,11 +1592,11 @@
 						</div>
 						<hr />
 					
-						<h4><a name="getSubMenu">getSubMenu</a></h4>
+						<h4><a name="getSubmenu">getSubmenu</a></h4>
 						<div class="detail">
 							<code>
 								<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a> 
-								<strong>getSubMenu</strong>
+								<strong>getSubmenu</strong>
 								(&lt;Number&gt; p_nIndex)
 							</code>
 									
@@ -1230,11 +1626,11 @@
 						</div>
 						<hr />
 					
-						<h4><a name="getSubMenus">getSubMenus</a></h4>
+						<h4><a name="getSubmenus">getSubmenus</a></h4>
 						<div class="detail">
 							<code>
 								Array 
-								<strong>getSubMenus</strong>
+								<strong>getSubmenus</strong>
 								()
 							</code>
 									
@@ -1264,8 +1660,8 @@
 									
 							<div class="description">
 								
-									The Menu class's initialization method. This method is automatically called
- by the constructor, and sets up all DOM references for pre-existing markup,
+									The Menu class's initialization method. This method is automatically called 
+ by the constructor, and sets up all DOM references for pre-existing markup, 
  and creates required markup if it is not already present.
 								
 								
@@ -1274,12 +1670,12 @@
 										
 											<dd>
 												<code>p_oUserConfig</code> - 
-												 The configuration object literal containing  the configuration that should be set for this Menu. See configuration  documentation for more details.
+												 The configuration object literal containing   the configuration that should be set for this Menu. See configuration   documentation for more details.
 											</dd>
 										
 											<dd>
 												<code>String</code> - 
-												/HTMLElement} p_oElement String id or HTMLElement  (either HTMLUListElement, HTMLSelectElement or HTMLDivElement) of the  source HTMLElement node.  
+												/HTMLElement} p_oElement String id or HTMLElement   (either HTMLUListElement, HTMLSelectElement or HTMLDivElement) of the   source HTMLElement node.  
 											</dd>
 										
 									</dl>
@@ -1344,11 +1740,11 @@
 						</div>
 						<hr />
 					
-						<h4><a name="removeSubMenu">removeSubMenu</a></h4>
+						<h4><a name="removeSubmenu">removeSubmenu</a></h4>
 						<div class="detail">
 							<code>
 								<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a> 
-								<strong>removeSubMenu</strong>
+								<strong>removeSubmenu</strong>
 								(p_oObject)
 							</code>
 									
@@ -1388,8 +1784,8 @@
 									
 							<div class="description">
 								
-									Renders the Menu by inserting the elements that are not already in the
- main Module format into their correct places. Optionally appends the
+									Renders the Menu by inserting the elements that are not already in the 
+ main Module format into their correct places. Optionally appends the 
  Menu to the specified node prior to the render's execution.
 								
 								
@@ -1403,7 +1799,7 @@
 										
 											<dd>
 												<code>String</code> - 
-												/HTMLElement} p_bAppendToNode The element or element id to  that the Module should be appended to prior to rendering.  
+												/HTMLElement} p_bAppendToNode The element or element id to   that the Module should be appended to prior to rendering.  
 											</dd>
 										
 									</dl>
@@ -1433,17 +1829,86 @@
 						</div>
 						<hr />
 					
-						<h4><a name="renderSubMenus">renderSubMenus</a></h4>
+						<h4><a name="renderSubmenus">renderSubmenus</a></h4>
 						<div class="detail">
 							<code>
 								Object 
-								<strong>renderSubMenus</strong>
+								<strong>renderSubmenus</strong>
 								()
 							</code>
 									
 							<div class="description">
 								
 									Iterates the Menu's collection of Menu instances and renders them.
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="setActiveMenuItem">setActiveMenuItem</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>setActiveMenuItem</strong>
+								(&lt;<a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>&gt; p_oMenuItem)
+							</code>
+									
+							<div class="description">
+								
+									Sets the specified MenuItem instance as a Menu instance's active
+ MenuItem instance
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>p_oMenuItem</code> - 
+												 A MenuItem instance
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="setInitialFocus">setInitialFocus</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>setInitialFocus</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Sets focus to a Menu instance's first enabled MenuItem instance.
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="setInitialSelection">setInitialSelection</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>setInitialSelection</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Sets the "selected" configuration property of a Menu instance's first
+ enabled MenuItem instance to "true."
 								
 								
 								
