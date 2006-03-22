@@ -557,7 +557,14 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
     var aSchema = this.schema;
     var aResults = [];
     var bError = false;
-    
+
+    // Strip out comment at the end of results
+    var nEnd = (this.responseStripAfter != "") ?
+        oResponse.indexOf(this.responseStripAfter) : -1;
+    if(nEnd != -1) {
+        oResponse = oResponse.substring(0,nEnd);
+    }
+
     switch (this.responseFormat) {
         case this.TYPE_JSON:
             if(window.JSON) {
@@ -638,12 +645,6 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
             break;
         case this.TYPE_FLAT:
             if(oResponse.length > 0) {
-                // Strip out comment at the end of results
-                var nEnd = oResponse.indexOf(this.responseStripAfter);
-                if(nEnd != -1) {
-                    oResponse = oResponse.substring(0,nEnd);
-                }
-
                 // Delete the last line delimiter at the end of the data if it exists
                 var newLength = oResponse.length-aSchema[0].length;
                 if(oResponse.substr(newLength) == aSchema[0]) {
