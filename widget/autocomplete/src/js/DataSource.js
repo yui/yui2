@@ -577,9 +577,8 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                     // eval is necessary here since aSchema[0] is of unknown depth
                     var jsonListParsed = eval("jsonObjParsed." + aSchema[0]);
                     for(var i = jsonListParsed.length-1; i >= 0 ; i--) {
-                        // eval is probably not necessary here
-                        //jsonListParsed[i][0] = eval("jsonListParsed[i]." + aSchema[1]);
-                        jsonListParsed[i][0] = jsonListParsed[i][aSchema[1]];
+                        // eval is necessary here since aSchema[1] is of unknown depth
+                        jsonListParsed[i][0] = eval("jsonListParsed[i]." + aSchema[1]);
                         aResults[i] = jsonListParsed[i];
                     }
                     break;

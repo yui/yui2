@@ -98,7 +98,7 @@ var oResponse=null;var oSelf=this;var responseSuccess=function(oResp){if(!isXML)
 else{oResp=oResp.responseXML;}
 if(oResp===null){oSelf.dataErrorEvent.fire(oSelf,oParent,sQuery,oSelf.ERROR_DATANULL);return;}
 var resultObj={};resultObj.query=decodeURI(sQuery);resultObj.results=oSelf.parseResponse(sQuery,oResp,oParent);oSelf._addCacheElem(resultObj);oCallbackFn(sQuery,resultObj.results,oParent);};var responseFailure=function(oResp){oSelf.dataErrorEvent.fire(oSelf,oParent,sQuery,oSelf.ERROR_DATAXHR);return;};var oCallback={success:responseSuccess,failure:responseFailure};YAHOO.util.Connect.asyncRequest("GET",sUri,oCallback,null);};YAHOO.widget.DS_XHR.prototype.parseResponse=function(sQuery,oResponse,oParent){var aSchema=this.schema;var aResults=[];var bError=false;switch(this.responseFormat){case this.TYPE_JSON:if(window.JSON){var jsonObjParsed=JSON.parse(oResponse);if(!jsonObjParsed){bError=true;break;}
-else{var jsonListParsed=eval("jsonObjParsed."+aSchema[0]);for(var i=jsonListParsed.length-1;i>=0;i--){jsonListParsed[i][0]=jsonListParsed[i][aSchema[1]];aResults[i]=jsonListParsed[i];}
+else{var jsonListParsed=eval("jsonObjParsed."+aSchema[0]);for(var i=jsonListParsed.length-1;i>=0;i--){jsonListParsed[i][0] = eval("jsonListParsed[i]." + aSchema[1]);aResults[i]=jsonListParsed[i];}
 break;}}
 else{try{while(oResponse.substring(0,1)==" "){oResponse=oResponse.substring(1,oResponse.length);}
 if((oResponse.indexOf("{}")===0)||(oResponse.indexOf("{")<0)){break;}
