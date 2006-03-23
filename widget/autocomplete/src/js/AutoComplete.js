@@ -214,8 +214,10 @@ YAHOO.widget.AutoComplete.prototype.getListIds = function() {
  * @param {string} sHeader HTML markup for container header
  */
 YAHOO.widget.AutoComplete.prototype.setHeader = function(sHeader) {
-    this._oHeader.innerHTML = sHeader;
-    this._oHeader.style.display = "block";
+    if(sHeader) {
+        this._oHeader.innerHTML = sHeader;
+        this._oHeader.style.display = "block";
+    }
 };
 
 /**
@@ -225,8 +227,10 @@ YAHOO.widget.AutoComplete.prototype.setHeader = function(sHeader) {
  * @param {string} sFooter HTML markup for container footer
  */
 YAHOO.widget.AutoComplete.prototype.setFooter = function(sFooter) {
-    this._oFooter.innerHTML = sFooter;
-    this._oFooter.style.display = "block";
+    if(sFooter) {
+        this._oFooter.innerHTML = sFooter;
+        this._oFooter.style.display = "block";
+    }
 };
 
 /**
