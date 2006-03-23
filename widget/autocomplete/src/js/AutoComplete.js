@@ -1050,7 +1050,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
             var oItemi = document.getElementById(aItems[i]);
             var oResultItemi = aResults[i];
             oItemi.innerHTML = oSelf.formatResult(oResultItemi, sCurQuery);
-            oItemi.style.display = "block";
+            oItemi.style.display = "list-item";
             oItemi._sResultKey = oResultItemi[0];
             oItemi._oResultData = oResultItemi;
             
