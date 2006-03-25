@@ -88,7 +88,7 @@ YAHOO.widget.MenuManager = function() {
 
         if(p_oValue) {
 
-            if(p_oValue._Menu) {
+            if(p_oValue instanceof YAHOO.widget.Menu) {
 
                 oItem = removeItemByValue(p_oCollection, p_oValue);
 
