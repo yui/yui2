@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Logger Widget :: Writing Logs</title>
+<link rel="stylesheet" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/reset_0.9.0.css" type="text/css" />
+<link rel="stylesheet" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/fonts_0.9.1.css" type="text/css"  />
+<link rel="stylesheet" href="./css/examples.css" type="text/css" />
+
+<style type="text/css">
+    #ylogger {position:relative;float:right;width:30%;margin:1em;padding:1em;background-color:#AAA;border:1px solid black;font-family:monospace;font-size:77%;}
+    #ylogger p {margin:1px;padding:.1em;}
+    #ylogger button {font-family:monospace;font-size:77%;}
+    #ylogger #ylog_hd {margin-bottom:.5em;cursor:move;background-color:#575757;color:#FFF;padding:.5em;}
+    #ylogger #ylog_hd #ylog_collapse {position:relative;float:right;}
+    #ylogger #ylog_bd {position:relative;width:100%;height:20em;overflow:auto;background-color:#FFF;border:1px solid gray;}
+    #ylogger #ylog_ft {margin-top:.5em;}
+    #ylogger #ylog_ft #ylog_btns {position:relative;float:right;}
+    #ylogger .info {background-color:#A7CC25;} /* A7CC25 green */
+    #ylogger .warn {background-color:#F58516;} /* F58516 orange */
+    #ylogger .error {background-color:#E32F0B;} /* E32F0B red */
+    #ylogger .time {background-color:#A6C9D7;} /* A6C9D7 blue */
+    #ylogger .window {background-color:#F2E886;} /* F2E886 tan  */
+    
+    /* custom style for custom log type */
+    #ylogger .foobar {background-color:#AAA;} /* AAA grey  */
+    
+    #content .ylog_input {width:40%;}
+</style>
+</head>
+
+<body>
+<div id="hd">
+    <div id="ylogo"><img src="./img/logo.gif" width="65" height="38" alt="Y!" /></div>
+    <div id="title"><h1><a href="./index.html">Logger Widget</a> :: Writing Logs</h1></div>
+</div>
+
+<div id="bd">
+    <!-- Logger begins -->
+    <div id="ylogger"></div>
+    <!-- Logger ends -->
+    
+    <!-- Content begins -->
+    <div id="content">
+        <h3>Custom Logger Example</h3>
+        <p>This is an example of a custom Logger implementation. First we
+        instantiate a Logwriter object and then use that to write our messages.</p>
+
+        <p><input id="ylog_inputinfo" class="ylog_input" type="text" value="Log an info message.">
+            <button id="btn_loginfo">Log</button></p>
+        <p><input id="ylog_inputwarn" class="ylog_input" type="text" value="Log a warning.">
+            <button id="btn_logwarn">Log</button></p>
+        <p><input id="ylog_inputerror" class="ylog_input" type="text" value="Log an error.">
+            <button id="btn_logerror">Log</button></p>
+        <p><input id="ylog_inputtime" class="ylog_input" type="text" value="Log a timing message.">
+            <button id="btn_logtime">Log</button></p>
+        <p><input id="ylog_inputwindow" class="ylog_input" type="text" value="Log a window error.">
+            <button onclick="someUndefinedFunction();">Log</button></p>
+        <p><input id="ylog_inputcustommsg" class="ylog_input" type="text" value="Log a custom type message.">
+            <input id="ylog_inputcustomtype" type="text" value="myType">
+            <button id="btn_logcustom">Log</button></p>
+
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
+        Sed eu enim in neque nonummy suscipit. Sed non metus. Aliquam pretium, massa
+        quis vulputate aliquam, felis enim vehicula nisl, ut pharetra arcu nunc
+        vitae leo. Morbi rhoncus ullamcorper quam. Maecenas vel velit. Praesent
+        ultricies placerat mauris. Nunc posuere aliquam ligula. Nunc mi ligula,
+        rutrum eget, consequat ac, cursus non, tortor. Pellentesque ante metus,
+        mattis pharetra, lobortis in, pulvinar nec, felis. Cras fringilla. Cras
+        consequat. Nullam faucibus. Vivamus tincidunt porttitor leo. Etiam est mi,
+        dictum nec, vehicula id, ultricies ac, nibh. Mauris felis.</p>
+
+        <p>Nulla sit amet mi eu lacus tempus volutpat. Phasellus tincidunt hendrerit
+        quam. Maecenas lorem felis, viverra non, varius ut, ultrices et, mi.
+        Phasellus vehicula nunc eu tellus. Duis rutrum justo eu odio. Ut facilisis
+        nisl at purus. Maecenas turpis neque, adipiscing in, fringilla vitae, congue
+        sed, ipsum. Sed condimentum eros eu leo dignissim ultricies. Pellentesque
+        eros nulla, tempus ut, gravida at, vulputate at, metus. Maecenas enim metus,
+        suscipit eget, commodo vel, euismod ac, leo. Curabitur id nulla. Phasellus
+        euismod mi ut enim. Ut molestie bibendum odio.</p>
+    </div>
+    <!-- Content ends -->
+    
+<!-- Libary begins -->
+<script src="./js/YAHOO.js"></script>
+<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/dom_2.0.0-b1.js"></script>
+<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/event_2.0.0-b2.js"></script>
+<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/dragdrop_2.0.1-b2.js"></script>
+<script src="../src/js/Logger.js"></script>
+<script src="../src/js/Logwriter.js"></script>
+<!-- Library ends -->
+
+<script>
+<!--
+    // You can call the global function YAHOO.log function anytime
+    YAHOO.log("Yahoo! is great"); // defaults to type "info"
+    YAHOO.log("Yahoo! is great", "info");
+    YAHOO.log("Yahoo! is great", "warn");
+    YAHOO.log("Yahoo! is great", "error");
+    YAHOO.log("Yahoo! is great", "time");
+    YAHOO.log("Yahoo! is great", "foobar");
+
+    // Or you can instantiate your own logwriter to track messages...
+    // ...first instantiate a logwriter with the category "myLog"
+    var myLogger = new YAHOO.logger("myClass");
+
+    // ...now these log messages will be from "myClass"
+    myLogger.log("My class is great"); // defaults to type "info"
+    myLogger.log("My class is great", "info");
+    myLogger.log("My class is great", "warn");
+    myLogger.log("My class is great", "error");
+    myLogger.log("My class is great", "time");
+    myLogger.log("My class is great", "foobar");
+    myLogger.log("My class needs a custom type: myWarn", "myWarn");
+
+    function myClassInit() {
+        // Set up a bunch of interesting moments that cause log messages to be written
+        YAHOO.util.Event.addListener(document.getElementById('btn_loginfo'),'click',onLogInfoClick);
+        function onLogInfoClick() {
+            myLogger.log(document.getElementById('ylog_inputinfo').value,'info');
+        }
+        YAHOO.util.Event.addListener(document.getElementById('btn_logwarn'),'click',onLogWarnClick);
+        function onLogWarnClick() {
+            myLogger.log(document.getElementById('ylog_inputwarn').value,'warn');
+        }
+        YAHOO.util.Event.addListener(document.getElementById('btn_logerror'),'click',onLogErrorClick);
+        function onLogErrorClick() {
+            myLogger.log(document.getElementById('ylog_inputerror').value,'error');
+        }
+        YAHOO.util.Event.addListener(document.getElementById('btn_logtime'),'click',onLogTimeClick);
+        function onLogTimeClick() {
+            myLogger.log(document.getElementById('ylog_inputtime').value,'time');
+        }
+        YAHOO.util.Event.addListener(document.getElementById('btn_logcustom'),'click',onLogCustomClick);
+        function onLogCustomClick() {;
+            myLogger.log(document.getElementById('ylog_inputcustommsg').value,document.getElementById('ylog_inputcustomtype').value);
+        }
+    }
+
+    YAHOO.util.Event.addListener(this,'load',myClassInit);
+    // Initialize logger to output the messages to your screen
+    YAHOO.widget.Logger.show("ylogger");
+//-->
+</script>
+</div>
+</body>
+</html>
