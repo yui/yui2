@@ -1241,7 +1241,7 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
         // Clone container to grab current size offscreen
         var oClone = oContainer.cloneNode(true);
         oContainer.parentNode.appendChild(oClone);
-        oClone.style.marginLeft = "-9000px";
+        oClone.style.top = "-9000px";
         oClone.style.display = "block";
         
         // Current size of the container is the EXPANDED size
