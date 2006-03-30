@@ -155,26 +155,21 @@ YAHOO.widget.MenuItem.prototype = {
     * @type {YAHOO.util.Dom}
     */
     _oDom: YAHOO.util.Dom,
-    
-    
-    /**
-    * Reference to the Event utility singleton.
-    * @private
-    * @type {YAHOO.util.Event}
-    */
-    _oEventUtil: YAHOO.util.Event,
-
-
 
 
     // Public properties
 
     /**
-    * Returns the ordinal position of a MenuItem instance relative to other 
-    * MenuItems inside it's parent Menu instance.
+    * Returns the ordinal position of a MenuItem instance in a group.
     * @type Number
     */
     index: null,
+
+    /**
+    * Returns the index of the group to which a MenuItem instance belongs.
+    * @type Number
+    */
+    groupIndex: null,
 
 
     /**
@@ -210,7 +205,7 @@ YAHOO.widget.MenuItem.prototype = {
     * Reference to the HTMLImageElement used to create the submenu
     * indicator for a MenuItem instance.
     * @private
-    * @type {HTMLAnchorElement}
+    * @type {HTMLImageElement}
     */
     subMenuIndicator: null,
 
@@ -485,6 +480,12 @@ YAHOO.widget.MenuItem.prototype = {
 
                         sURL = oAnchor.getAttribute("href");                        
 
+                        if(sURL == document.location) {
+
+                            sURL = "#";
+
+                        }
+
                         if(oAnchor.innerText) {
                 
                             sText = oAnchor.innerText;
@@ -510,196 +511,161 @@ YAHOO.widget.MenuItem.prototype = {
 
 
                     this.srcElement = p_oObject;
+                    this.element = p_oObject;
+                    this._oAnchor = oAnchor;
 
 
-                    // Check for the "bring your own HTML" scenario
+                    // Check to see if the MenuItem is disabled
+
+                    var bDisabled = 
+                        this._oDom.hasClass(this.element, "disabled");
+
+
+                    /*
+                        Check to see if the MenuItem should be selected 
+                        by default
+                    */ 
+
+                    var bSelected = 
+                        this._oDom.hasClass(this.element, "selected");
+    
+
+                    // Check if emphasis has been applied to the MenuItem
+
+                    var oEmphasisNode; // Either EM or STRONG
 
                     if(
-                        oAnchor && 
-                        p_oObject.parentNode && // UL check
-
-                        // body node check
-                        p_oObject.parentNode.parentNode && 
-                        p_oObject.parentNode.parentNode.tagName == "DIV" && 
-                        this._oDom.hasClass(
-                            p_oObject.parentNode.parentNode, 
-                            "bd"
-                        ) &&
-
-                        // Root node check
-                        p_oObject.parentNode.parentNode.parentNode && 
-                        p_oObject.parentNode.parentNode.parentNode.tagName == "DIV" && 
-                        this._oDom.hasClass(
-                            p_oObject.parentNode.parentNode.parentNode, 
-                            "yuimenu"
-                        )
+                        oAnchor.firstChild && 
+                        oAnchor.firstChild.nodeType == 1
                     ) {
 
-                        this.element = p_oObject;
-                        this._oAnchor = oAnchor;
+                        oEmphasisNode = oAnchor.firstChild;
+
+                    }
+                    else if(
+                        oAnchor.childNodes[1] && 
+                        oAnchor.childNodes[1].nodeType == 1
+                    ) {
+
+                        oEmphasisNode = oAnchor.childNodes[1];
+
+                    }
 
 
-                        // Check to see if the MenuItem is disabled
+                    // Determine if the MenuItem has emphasis
 
-                        var bDisabled = 
-                            this._oDom.hasClass(this.element, "disabled");
+                    var bEmphasis = false,
+                        bStrongEmphasis = false;
 
+                    if(oEmphasisNode) {
 
-                        /*
-                            Check to see if the MenuItem should be selected 
-                            by default
-                        */ 
+                        // Set a reference to the text node 
 
-                        var bSelected = 
-                            this._oDom.hasClass(this.element, "selected");
-    
+                        this._oText = oEmphasisNode.firstChild;
 
-                        // Check if emphasis has been applied to the MenuItem
+                        switch(oEmphasisNode.tagName) {
 
-                        var oEmphasisNode; // Either EM or STRONG
+                            case "EM":
 
-                        if(
-                            oAnchor.firstChild && 
-                            oAnchor.firstChild.nodeType == 1
-                        ) {
-    
-                            oEmphasisNode = oAnchor.firstChild;
-    
-                        }
-                        else if(
-                            oAnchor.childNodes[1] && 
-                            oAnchor.childNodes[1].nodeType == 1
-                        ) {
+                                bEmphasis = true;
 
-                            oEmphasisNode = oAnchor.childNodes[1];
+                            break;
 
-                        }
+                            case "STRONG":
 
+                                bStrongEmphasis = true;
 
-                        // Determine if the MenuItem has emphasis
-
-                        var bEmphasis = false,
-                            bStrongEmphasis = false;
-
-                        if(oEmphasisNode) {
-
-                            // Set a reference to the text node 
-
-                            this._oText = oEmphasisNode.firstChild;
-
-                            switch(oEmphasisNode.tagName) {
-    
-                                case "EM":
-    
-                                    bEmphasis = true;
-    
-                                break;
-    
-                                case "STRONG":
-    
-                                    bStrongEmphasis = true;
-    
-                                break;
-    
-                            }
-
-                        }
-                        else {
-
-                            // Set a reference to the text node 
-
-                            this._oText = oAnchor.firstChild;
+                            break;
 
                         }
 
-
-                        // Check for the "help text" node (EM)
-
-                        var oHelpText = null;
-
-                        if(
-                            oAnchor.nextSibling &&
-                            oAnchor.nextSibling.nodeType == 1 &&
-                            oAnchor.nextSibling.tagName == "EM"
-                        ) {
-
-                            oHelpText = oAnchor.nextSibling;
-
-                        }
-                        else if(
-                            oAnchor.nextSibling &&
-                            oAnchor.nextSibling.nextSibling &&
-                            oAnchor.nextSibling.nextSibling.nodeType == 1 &&
-                            oAnchor.nextSibling.nextSibling.tagName == "EM"
-                        ) {
-
-                            oHelpText =  oAnchor.nextSibling.nextSibling;
-
-                        }
-
-
-                        if(oHelpText) {
-
-                            this._oHelpTextEM = oHelpText;
-
-                            /*
-                                Propagate the "hashelptext" class to the LI and 
-                                anchor if it isn't already applied
-                            */
-                            
-                            this._oDom.addClass(this.element, "hashelptext");
-                            this._oDom.addClass(oAnchor, "hashelptext");
-
-
-                        }
-                        else {
-
-                            /* 
-                                Remove the "hashelptext" class if it exists but
-                                there is no help text present
-                            */
-
-                            this._oDom.removeClass(this.element, "hashelptext");
-                            this._oDom.removeClass(oAnchor, "hashelptext");
-
-                        }
-
-
-                        /*
-                            Set these properties silently to sync up the 
-                            configuration object without making changes to the 
-                            element's DOM
-                        */ 
-
-                        this.cfg.setProperty("text", sText, true);
-                        this.cfg.setProperty("helptext", oHelpText, true);
-                        this.cfg.setProperty("url", sURL, true);
-                        this.cfg.setProperty("emphasis", bEmphasis, true);
-                        this.cfg.setProperty(
-                            "strongemphasis", 
-                            bStrongEmphasis, 
-                            true
-                        );
-
-
-                        /*
-                            The "selected" and "disabled" properties are not set
-                            silently to ensure that the associated class names
-                            are applied correctly to the DOM elements
-                        */ 
-
-                        this.cfg.setProperty("selected", bSelected);
-                        this.cfg.setProperty("disabled", bDisabled);
-                    
                     }
                     else {
 
-                        this._createRootNodeStructure();
+                        // Set a reference to the text node 
 
-                        this.cfg.setProperty("text", sText);
-                        this.cfg.setProperty("url", sURL);
+                        this._oText = oAnchor.firstChild;
 
                     }
+
+
+                    // Check for the "help text" node (EM)
+
+                    var oHelpText = null;
+
+                    if(
+                        oAnchor.nextSibling &&
+                        oAnchor.nextSibling.nodeType == 1 &&
+                        oAnchor.nextSibling.tagName == "EM"
+                    ) {
+
+                        oHelpText = oAnchor.nextSibling;
+
+                    }
+                    else if(
+                        oAnchor.nextSibling &&
+                        oAnchor.nextSibling.nextSibling &&
+                        oAnchor.nextSibling.nextSibling.nodeType == 1 &&
+                        oAnchor.nextSibling.nextSibling.tagName == "EM"
+                    ) {
+
+                        oHelpText =  oAnchor.nextSibling.nextSibling;
+
+                    }
+
+
+                    if(oHelpText) {
+
+                        this._oHelpTextEM = oHelpText;
+
+                        /*
+                            Propagate the "hashelptext" class to the LI and 
+                            anchor if it isn't already applied
+                        */
+                        
+                        this._oDom.addClass(this.element, "hashelptext");
+                        this._oDom.addClass(oAnchor, "hashelptext");
+
+
+                    }
+                    else {
+
+                        /* 
+                            Remove the "hashelptext" class if it exists but
+                            there is no help text present
+                        */
+
+                        this._oDom.removeClass(this.element, "hashelptext");
+                        this._oDom.removeClass(oAnchor, "hashelptext");
+
+                    }
+
+
+                    /*
+                        Set these properties silently to sync up the 
+                        configuration object without making changes to the 
+                        element's DOM
+                    */ 
+
+                    this.cfg.setProperty("text", sText, true);
+                    this.cfg.setProperty("helptext", oHelpText, true);
+                    this.cfg.setProperty("url", sURL, true);
+                    this.cfg.setProperty("emphasis", bEmphasis, true);
+                    this.cfg.setProperty(
+                        "strongemphasis", 
+                        bStrongEmphasis, 
+                        true
+                    );
+
+
+                    /*
+                        The "selected" and "disabled" properties are not set
+                        silently to ensure that the associated class names
+                        are applied correctly to the DOM elements
+                    */ 
+
+                    this.cfg.setProperty("selected", bSelected);
+                    this.cfg.setProperty("disabled", bDisabled);
 
                     if(this.cfg.getProperty("initsubmenus")) {
 
@@ -805,15 +771,13 @@ YAHOO.widget.MenuItem.prototype = {
     */
     _initSubTree: function() {
 
-        var oMenuManager = YAHOO.widget.MenuManager,
-            Menu = this.SUBMENU_TYPE,
+        var Menu = this.SUBMENU_TYPE,
             MenuItem = this.MENUITEM_TYPE;
 
 
         if(this.srcElement.childNodes.length > 0) {
 
             var oNode = this.srcElement.firstChild,
-                aULs = [],
                 aOptions = [];
 
             do {
@@ -832,12 +796,6 @@ YAHOO.widget.MenuItem.prototype = {
 
                     break;
        
-                    case "UL":
-                        
-                        aULs[aULs.length] = oNode;
-        
-                    break;
-        
                 }
             
             }        
@@ -850,7 +808,7 @@ YAHOO.widget.MenuItem.prototype = {
     
                 this.cfg.setProperty(
                     "submenu", 
-                    (new Menu(oMenuManager.createMenuId()))
+                    (new Menu(this._oDom.generateId()))
                 );
     
                 for(var n=0; n<nOptions; n++) {
@@ -860,37 +818,6 @@ YAHOO.widget.MenuItem.prototype = {
                 }
     
             }
-
-
-            var nULs = aULs.length;
-
-            if(nULs > 0) {
-    
-                switch(nULs) {
-
-                    case 1:
-
-                        this.cfg.setProperty("submenu", (new Menu(aULs[0])));
-
-                    break;
-
-                    default:
-
-                        var oMenu = new Menu(oMenuManager.createMenuId());
-            
-                        for(var n=0; n<nULs; n++) {
-            
-                            oMenu.addSubmenu((new Menu(aULs[n])));
-            
-                        }
-    
-                        this.cfg.setProperty("submenu", oMenu);
-
-                    break;
-
-                }
-    
-            }        
 
         }
 
@@ -935,21 +862,22 @@ YAHOO.widget.MenuItem.prototype = {
 
         var oHelpText = p_aArguments[0];
 
+        var me = this;
 
         function initHelpText() {
 
-            this._oDom.addClass(this.element, "hashelptext");
-            this._oDom.addClass(this._oAnchor, "hashelptext");
+            me._oDom.addClass(me.element, "hashelptext");
+            me._oDom.addClass(me._oAnchor, "hashelptext");
 
-            if(this.cfg.getProperty("disabled")) {
+            if(me.cfg.getProperty("disabled")) {
 
-                this.cfg.refireEvent("disabled");
+                me.cfg.refireEvent("disabled");
 
             }
 
-            if(this.cfg.getProperty("selected")) {
+            if(me.cfg.getProperty("selected")) {
 
-                this.cfg.refireEvent("selected");
+                me.cfg.refireEvent("selected");
 
             }                
 
@@ -957,11 +885,11 @@ YAHOO.widget.MenuItem.prototype = {
 
         function removeHelpText() {
 
-            this._oDom.removeClass(this.element, "hashelptext");
-            this._oDom.removeClass(this._oAnchor, "hashelptext"); 
+            me._oDom.removeClass(me.element, "hashelptext");
+            me._oDom.removeClass(me._oAnchor, "hashelptext"); 
 
-            this.element.removeChild(this._oHelpTextEM);
-            this._oHelpTextEM = null;
+            me.element.removeChild(me._oHelpTextEM);
+            me._oHelpTextEM = null;
 
         }
 
@@ -1205,7 +1133,7 @@ YAHOO.widget.MenuItem.prototype = {
             if(this.subMenuIndicator) {
 
                 this.subMenuIndicator.src = 
-                    this.DISABLED_SUBMENU_INDICATOR_IMAGE_URL;
+                    document.getElementById("yuidisabledsubmenuindicator").src;
 
                 this.subMenuIndicator.alt = 
                     this.DISABLED_SUBMENU_INDICATOR_ALT_TEXT;
@@ -1396,17 +1324,11 @@ YAHOO.widget.MenuItem.prototype = {
 
             }
 
-            if(!this._oSubmenu.element.parentNode) {
-
-                this.element.appendChild(this._oSubmenu.element);
-
-            }
-
         }
         else {
 
             this._oDom.removeClass(this.element, "hassubmenu");
-            this._oDom.removeClass(oAnchor, "hassubmenu");
+            this._oDom.removeClass(this._oAnchor, "hassubmenu");
 
             if(this.subMenuIndicator) {
 
@@ -1416,7 +1338,7 @@ YAHOO.widget.MenuItem.prototype = {
 
             if(this._oSubmenu) {
 
-                this.element.removeChild(this._oSubmenu);                    
+                this._oSubmenu.destroy();
 
             }
 
@@ -1436,79 +1358,56 @@ YAHOO.widget.MenuItem.prototype = {
     */
     getNextEnabledSibling: function() {
 
-        var oNextMenuItem;
+        function getNextArrayItem(p_aArray, p_nStartIndex) {
 
-        if(this.index < (this.parent.getMenuItems().length - 1)) {
+            return p_aArray[p_nStartIndex] || 
+                getNextArrayItem(p_aArray, (p_nStartIndex+1));
 
-            oNextMenuItem = this.parent.getMenuItem((this.index+1));
+        }
+
+
+        var aMenuItemGroups = this.parent.getMenuItemGroups(),
+            oNextMenuItem;
+
+
+        if(this.index < (aMenuItemGroups[this.groupIndex].length - 1)) {
+
+            oNextMenuItem = 
+                getNextArrayItem(
+                    aMenuItemGroups[this.groupIndex], 
+                    (this.index+1)
+                );
 
         }
         else {
 
-            // Check if this Menu instance is a member of a group
+            var nNextGroupIndex;
 
-            var oParent = this.parent.parent;
+            if(this.groupIndex < (aMenuItemGroups.length - 1)) {
 
-            if(oParent && oParent instanceof YAHOO.widget.Menu) {
-
-                var oNextMenu, nNextMenuIndex;
-
-                if(this.parent.index < (oParent.getSubmenus().length - 1)) {
-
-                    nNextMenuIndex = this.parent.index + 1;
-
-                }
-                else {
-
-                    nNextMenuIndex = 0;
-
-                }
-
-                oNextMenu = oParent.getSubmenu(nNextMenuIndex);
-
-                if(oNextMenu) {
-
-                    /*
-                        Retrieve the first MenuItem instance in 
-                        the next Menu
-                    */ 
-
-                    oNextMenuItem = oNextMenu.getMenuItem(0);
-
-                }
+                nNextGroupIndex = this.groupIndex + 1;
 
             }
             else {
 
-                /*
-                    Retrieve the first MenuItem instance in the next 
-                    parent Menu
-                */ 
-
-                oNextMenuItem = this.parent.getMenuItem(0);                    
+                nNextGroupIndex = 0;
 
             }
+
+            var aNextGroup = getNextArrayItem(aMenuItemGroups, nNextGroupIndex);
+
+            /*
+                Retrieve the first MenuItem instance in the next group
+            */ 
+
+            oNextMenuItem = getNextArrayItem(aNextGroup, 0);
 
         }
 
-
-        if(oNextMenuItem) {
-
-            if(oNextMenuItem.cfg.getProperty("disabled")) {
-
-                return oNextMenuItem.getNextEnabledSibling();
-
-            }
-            else {
-
-                return oNextMenuItem;
-
-            }
-
-        }
+        return oNextMenuItem.cfg.getProperty("disabled") ? 
+                    oNextMenuItem.getNextEnabledSibling() : oNextMenuItem;
 
     },
-
 
     /**
     * Finds the previous enabled MenuItem instance in a Menu instance 
@@ -1517,78 +1416,50 @@ YAHOO.widget.MenuItem.prototype = {
     */
     getPreviousEnabledSibling: function() {
 
-        var oPreviousMenuItem;
+        function getPreviousArrayItem(p_aArray, p_nStartIndex) {
 
-        if(this.index > 0) {
+            return p_aArray[p_nStartIndex] || 
+                getPreviousArrayItem(p_aArray, (p_nStartIndex-1));
 
-            oPreviousMenuItem = this.parent.getMenuItem((this.index-1));
+        }
+
+        function getFirstItemIndex(p_aArray, p_nStartIndex) {
+
+            return p_aArray[p_nStartIndex] ? 
+                p_nStartIndex : getFirstItemIndex(p_aArray, (p_nStartIndex+1));
+
+        }
+
+        var aMenuItemGroups = this.parent.getMenuItemGroups(),
+            oPreviousMenuItem;
+
+        if(this.index > getFirstItemIndex(aMenuItemGroups[this.groupIndex], 0)) {
+
+            oPreviousMenuItem = getPreviousArrayItem(aMenuItemGroups[this.groupIndex], (this.index-1));
 
         }
         else {
 
-            // Check if this Menu instance is a member of a group
+            var nPreviousGroupIndex;
 
-            var oParent = this.parent.parent;
+            if(this.groupIndex > getFirstItemIndex(aMenuItemGroups, 0)) {
 
-            if(oParent && oParent instanceof YAHOO.widget.Menu) {
-
-                var oPreviousMenu, nPreviousMenuIndex;
-
-                if(this.parent.index > 0) {
-
-                    nPreviousMenuIndex = this.parent.index - 1;
-
-                }
-                else {
-
-                    nPreviousMenuIndex = oParent.getSubmenus().length - 1;
-
-                }
-
-                oPreviousMenu = oParent.getSubmenu(nPreviousMenuIndex);
-
-                if(oPreviousMenu) {
-
-                    /*
-                        Retrieve the last MenuItem instance in 
-                        the previous Menu
-                    */ 
-
-                    oPreviousMenuItem = 
-                        oPreviousMenu.getMenuItem(
-                            (oPreviousMenu.getMenuItems().length - 1)
-                        );
-
-                }
+                nPreviousGroupIndex = this.groupIndex - 1;
 
             }
             else {
 
-                // Retrieve the last MenuItem instance in the parent Menu
-
-                oPreviousMenuItem = 
-                    this.parent.getMenuItem(
-                        (this.parent.getMenuItems().length - 1)
-                    );                    
+                nPreviousGroupIndex = aMenuItemGroups.length - 1;
 
             }
+
+            var aPreviousGroup = getPreviousArrayItem(aMenuItemGroups, nPreviousGroupIndex);
+
+            oPreviousMenuItem = getPreviousArrayItem(aPreviousGroup, (aPreviousGroup.length - 1));
 
         }
 
-        if(oPreviousMenuItem) {
-
-            if(oPreviousMenuItem.cfg.getProperty("disabled")) {
-
-                return oPreviousMenuItem.getPreviousEnabledSibling();
-
-            }
-            else {
-
-                return oPreviousMenuItem;
-
-            }
-
-        }
+        return oPreviousMenuItem.cfg.getProperty("disabled") ? oPreviousMenuItem.getPreviousEnabledSibling() : oPreviousMenuItem;
 
     },
 
@@ -1601,15 +1472,13 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(!this.cfg.getProperty("disabled") && this._oAnchor) {
 
-
-            var oActiveMenuItem = this.parent.getActiveMenuItem();
+            var oActiveMenuItem = this.parent.activeMenuItem;
 
             if(oActiveMenuItem) {
 
                 oActiveMenuItem.blur();
 
             }
-
 
             this._oAnchor.focus();
 
@@ -1630,59 +1499,6 @@ YAHOO.widget.MenuItem.prototype = {
             this._oAnchor.blur();
 
             this.blurEvent.fire();
-
-        }
-
-    },
-
-
-    /**
-    * Displays the submenu for a MenuItem instance.
-    */
-    showSubmenu: function() {
-
-        if(this._oSubmenu) {
-
-            var aMenuItemPosition = this._oDom.getXY(this.element),
-                aSubmenuPosition = [];
-
-
-            // Calculate the x position
-            
-            aSubmenuPosition[0] = 
-                (aMenuItemPosition[0] + this.element.offsetWidth);
-
-
-            // Calculate the y position
-
-            aSubmenuPosition[1] = aMenuItemPosition[1];
-
-
-            // Position the menu
-
-            this._oSubmenu.cfg.setProperty("xy", aSubmenuPosition);
-           
-            this._oSubmenu.show();
-
-            this.subMenuIndicator.alt = 
-                this.EXPANDED_SUBMENU_INDICATOR_ALT_TEXT;
-
-        }
-
-    },
-
-
-    /**
-    * Displays the submenu for a MenuItem instance.
-    */
-    hideSubmenu: function() {
-
-        if(this._oSubmenu) {
-
-            this.subMenuIndicator.alt = 
-                this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
-
-            this._oSubmenu.hide();
 
         }
 

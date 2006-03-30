@@ -23,42 +23,21 @@ div.yuimenu {
     
 }
 
-
-/*
-    Matches a Menu instance that is direct descendant of another Menu instance.
-    (Needed because IE 5.5 and 6 don't support the direct descendant selector.)
-*/
-
-div.yuimenu.yuimenuddmenu {
-
-    visibility:inherit;
-    position:static;
-    border-width:1px 0 0 0;
-    padding:0;
-
-}
-
-
-/*
-    Matches the first Menu instance in a group of Menus that are all 
-    direct descendants of a Menu instance.
-    (Needed because IE 5.5 and 6 don't support the first-child selector.)
-*/
-
-div.yuimenuddmenu.first {
-
-    border-width:0;
-
-}
-
-
 /* Matches the UL inside a Menu instance */
 
 div.yuimenu ul {
 
+    border:solid 1px #c4c4be;
+    border-width:1px 0 0 0;
     list-style-type:none;
     margin:0;
     padding:10px 0;
+
+}
+
+div.yuimenu ul.first {
+
+    border-width:0;
 
 }
 
