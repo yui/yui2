@@ -13,7 +13,7 @@
     #statescontainer ul {position:relative;width:100%;padding:5px 0;list-style:none;}
     #statescontainer li {padding:0 5px;cursor:default;white-space:nowrap;display:list-item;}
     #statescontainer li.highlight {background:#ff0;}
-    #statesshadow {position:absolute;width:100%;margin:.3em;z-index:5;background:#a0a0a0;}
+    #statesshadow {position:absolute;width:100%;*width:auto;_width:100%;margin:.3em;z-index:5;background:#a0a0a0;} /* bug 614383 workaround for ie7 */
 </style>
 </head>
 
