@@ -43,23 +43,11 @@ YAHOO.namespace("widget");
 YAHOO.namespace("example");
 
 /**
- * Global logger object
+ * Global log method.
  */
-YAHOO.logger = function(sName) {
+YAHOO.log = function(sMsg,sCategory) {
     if(YAHOO.widget.Logger) {
-        return new YAHOO.widget.Logwriter(sName);
-    }
-    else {
-        return false;
-    }
-};
-
-/**
- * Global log method. Validates for namespace.
- */
-YAHOO.log = function(sMsg,sType) {
-    if(YAHOO.widget.Logger) {
-        YAHOO.widget.Logger.log(null, sMsg,sType);
+        YAHOO.widget.Logger.log(null, sMsg, sCategory);
     }
     else return false;
 };

@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
 
 <style type="text/css">
-    #ylogger {position:relative;float:right;width:30%;margin:1em;padding:1em;background-color:#AAA;border:1px solid black;font-family:monospace;font-size:77%;}
+    #ylogger {position:fixed;float:right;top:50%;width:30%;margin:1em;padding:1em;background-color:#AAA;border:1px solid black;font-family:monospace;font-size:77%;}
     #ylogger p {margin:1px;padding:.1em;}
     #ylogger button {font-family:monospace;font-size:77%;}
     #ylogger #ylog_hd {margin-bottom:.5em;cursor:move;background-color:#575757;color:#FFF;padding:.5em;}
@@ -35,6 +35,10 @@
 </div>
 
 <div id="bd">
+    <!-- Logger begins -->
+    <div id="ylogger"></div>
+    <!-- Logger ends -->
+
     <!-- Content begins -->
     <div id="content">
         <h3>Default Logger Example</h3>
@@ -83,14 +87,16 @@
 <script src="http://makeover.corp.yahoo.com/lib/common/utils/2/event_2.0.0-b2.js"></script>
 <script src="http://makeover.corp.yahoo.com/lib/common/utils/2/dragdrop_2.0.1-b2.js"></script>
 <script src="../src/js/Logger.js"></script>
+<script src="../src/js/LogReader.js"></script>
 <!-- Library ends -->
 
 <script>
 <!--
-    function showLogger() {
-        YAHOO.widget.Logger.show();
+    function initLogReader() {
+        myLogReader1 = new YAHOO.widget.LogReader();
+        myLogReader2 = new YAHOO.widget.LogReader("ylogger");
     }
-    YAHOO.util.Event.addListener(this,'load',showLogger);
+    YAHOO.util.Event.addListener(this,'load',initLogReader);
 //-->
 </script>
 </div>
