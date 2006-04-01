@@ -101,15 +101,6 @@ YAHOO.widget.MenuItem.prototype = {
     * @type YAHOO.widget.Menu
     */
     SUBMENU_TYPE: null,
-    
-    
-    /**
-    * Constant representing the type of Menu to instantiate when creating 
-    * MenuItem instances.
-    * @final
-    * @type YAHOO.widget.MenuItem
-    */
-    MENUITEM_TYPE: null,
 
 
     // Private member variables
@@ -158,6 +149,13 @@ YAHOO.widget.MenuItem.prototype = {
 
 
     // Public properties
+
+	/**
+	* The class's constructor function
+	* @type YAHOO.widget.MenuItem
+	*/
+	constructor : YAHOO.widget.MenuItem,
+
 
     /**
     * Returns the ordinal position of a MenuItem instance in a group.
@@ -331,12 +329,6 @@ YAHOO.widget.MenuItem.prototype = {
         if(!this.SUBMENU_TYPE) {
     
             this.SUBMENU_TYPE = YAHOO.widget.Menu;
-    
-        }
-
-        if(!this.MENUITEM_TYPE) {
-    
-            this.MENUITEM_TYPE = YAHOO.widget.MenuItem;
     
         }
 
@@ -772,7 +764,7 @@ YAHOO.widget.MenuItem.prototype = {
     _initSubTree: function() {
 
         var Menu = this.SUBMENU_TYPE,
-            MenuItem = this.MENUITEM_TYPE;
+            MenuItem = Menu.MENUITEM_TYPE;
 
 
         if(this.srcElement.childNodes.length > 0) {
@@ -1481,6 +1473,21 @@ YAHOO.widget.MenuItem.prototype = {
             }
 
             this._oAnchor.focus();
+
+            /*
+                Opera 8.5 doesn't always focus the anchor if a MenuItem
+                instance has a submenu, this is fixed by calling "focus"
+                twice.
+            */
+            if(
+                this.parent && 
+                this.parent.browser == "opera" && 
+                this._oSubmenu
+            ) {
+
+                this._oAnchor.focus();
+
+            }
 
             this.focusEvent.fire();
 

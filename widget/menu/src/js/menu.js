@@ -945,7 +945,7 @@ YAHOO.widget.Menu.prototype._onElementMouseOver = function(p_oEvent, p_oMenu) {
 
     var oTarget = this._oEventUtil.getTarget(p_oEvent, true);
 
-    if(!this._oCurrentMenuDIV && oTarget == this.element) {
+    if(!this._oCurrentMenuDIV && this._oDom.isAncestor(this.element, oTarget)) {
 
         this._oCurrentMenuDIV = this.element;
 
