@@ -399,8 +399,10 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.getListIds = <
  * <span class="attrib">@param</span> {string} sHeader HTML markup for container header
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.setHeader = <span class="reserved">function</span>(sHeader) {
-    <span class="reserved">this</span>._oHeader.innerHTML = sHeader;
-    <span class="reserved">this</span>._oHeader.style.display = <span class="literal">"block"</span>;
+    if(sHeader) {
+        <span class="reserved">this</span>._oHeader.innerHTML = sHeader;
+        <span class="reserved">this</span>._oHeader.style.display = <span class="literal">"block"</span>;
+    }
 };
 
 <span class="comment">/**
@@ -410,8 +412,10 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.setHeader = <s
  * <span class="attrib">@param</span> {string} sFooter HTML markup for container footer
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.setFooter = <span class="reserved">function</span>(sFooter) {
-    <span class="reserved">this</span>._oFooter.innerHTML = sFooter;
-    <span class="reserved">this</span>._oFooter.style.display = <span class="literal">"block"</span>;
+    if(sFooter) {
+        <span class="reserved">this</span>._oFooter.innerHTML = sFooter;
+        <span class="reserved">this</span>._oFooter.style.display = <span class="literal">"block"</span>;
+    }
 };
 
 <span class="comment">/**
@@ -1235,7 +1239,7 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._populateList 
             var oItemi = document.getElementById(aItems[i]);
             var oResultItemi = aResults[i];
             oItemi.innerHTML = oSelf.formatResult(oResultItemi, sCurQuery);
-            oItemi.style.display = <span class="literal">"block"</span>;
+            oItemi.style.display = <span class="literal">"list-item"</span>;
             oItemi._sResultKey = oResultItemi[0];
             oItemi._oResultData = oResultItemi;
             
@@ -1422,7 +1426,7 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._toggleContain
         // Clone container to grab current size offscreen</span>
         var oClone = oContainer.cloneNode(true);
         oContainer.parentNode.appendChild(oClone);
-        oClone.style.marginLeft = <span class="literal">"-9000px"</span>;
+        oClone.style.top = <span class="literal">"-9000px"</span>;
         oClone.style.display = <span class="literal">"block"</span>;
 <span class="comment">        
         // Current size of the container is the EXPANDED size</span>

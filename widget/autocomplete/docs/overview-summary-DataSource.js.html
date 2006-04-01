@@ -555,6 +555,9 @@ YAHOO.widget.DataSource.<span class="reserved">prototype</span>._doQueryCache = 
                         break;
                     }
                 }
+                <span class="reserved"></span>(bMatchFound) {
+                    break;
+                }
             }
         }
 <span class="comment">        
@@ -764,6 +767,13 @@ YAHOO.widget.DS_XHR.<span class="reserved">prototype</span>.parseResponse = <spa
     var aResults = [];
     var bError = false;
     
+    // Strip out comment at the end of results
+    var nEnd = ((this.responseStripAfter != "") && (oResponse.indexOf)) ?
+        oResponse.indexOf(this.responseStripAfter) : -1;
+    if(nEnd != -1) {
+        oResponse = oResponse.substring(0,nEnd);
+    }
+
     switch (this.responseFormat) {
         case this.TYPE_JSON:
             if(window.JSON) {
@@ -776,9 +786,8 @@ YAHOO.widget.DS_XHR.<span class="reserved">prototype</span>.parseResponse = <spa
                     // eval is necessary here since aSchema[0] is of unknown depth
                     var jsonListParsed = eval("jsonObjParsed." + aSchema[0]);
                     for(var i = jsonListParsed.length-1; i >= 0 ; i--) {
-                        // eval is probably not necessary here
-                        //jsonListParsed[i][0] = eval("jsonListParsed[i]." + aSchema[1]);
-                        jsonListParsed[i][0] = jsonListParsed[i][aSchema[1]];
+                        // eval is necessary here since aSchema[1] is of unknown depth
+                        jsonListParsed[i][0] = eval("jsonListParsed[i]." + aSchema[1]);
                         aResults[i] = jsonListParsed[i];
                     }
                     break;
@@ -844,12 +853,6 @@ YAHOO.widget.DS_XHR.<span class="reserved">prototype</span>.parseResponse = <spa
             break;
         case this.TYPE_FLAT:
             if(oResponse.length > 0) {
-                // Strip out comment at the end of results
-                var nEnd = oResponse.indexOf(this.responseStripAfter);
-                if(nEnd != -1) {
-                    oResponse = oResponse.substring(0,nEnd);
-                }
-
                 // Delete the last line delimiter at the end of the data if it exists
                 var newLength = oResponse.length-aSchema[0].length;
                 if(oResponse.substr(newLength) == aSchema[0]) {

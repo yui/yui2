@@ -1,7 +1,6 @@
 /**
  * Copyright (c) 2006, Yahoo! Inc. All rights reserved.
  */
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -218,8 +217,10 @@ YAHOO.widget.AutoComplete.prototype.getListIds = function() {
  * @param {string} sHeader HTML markup for container header
  */
 YAHOO.widget.AutoComplete.prototype.setHeader = function(sHeader) {
-    this._oHeader.innerHTML = sHeader;
-    this._oHeader.style.display = "block";
+    if(sHeader) {
+        this._oHeader.innerHTML = sHeader;
+        this._oHeader.style.display = "block";
+    }
 };
 
 /**
@@ -229,8 +230,10 @@ YAHOO.widget.AutoComplete.prototype.setHeader = function(sHeader) {
  * @param {string} sFooter HTML markup for container footer
  */
 YAHOO.widget.AutoComplete.prototype.setFooter = function(sFooter) {
-    this._oFooter.innerHTML = sFooter;
-    this._oFooter.style.display = "block";
+    if(sFooter) {
+        this._oFooter.innerHTML = sFooter;
+        this._oFooter.style.display = "block";
+    }
 };
 
 /**
@@ -1054,7 +1057,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
             var oItemi = document.getElementById(aItems[i]);
             var oResultItemi = aResults[i];
             oItemi.innerHTML = oSelf.formatResult(oResultItemi, sCurQuery);
-            oItemi.style.display = "block";
+            oItemi.style.display = "list-item";
             oItemi._sResultKey = oResultItemi[0];
             oItemi._oResultData = oResultItemi;
 
@@ -1241,7 +1244,7 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
         // Clone container to grab current size offscreen
         var oClone = oContainer.cloneNode(true);
         oContainer.parentNode.appendChild(oClone);
-        oClone.style.marginLeft = "-9000px";
+        oClone.style.top = "-9000px";
         oClone.style.display = "block";
 
         // Current size of the container is the EXPANDED size
@@ -1784,20 +1787,22 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
     // If cache is enabled...
     if((this.maxCacheEntries > 0) && aCache && (nCacheLength > 0)) {
         this.cacheQueryEvent.fire(this, oParent, sQuery);
+        // If case is unimportant, normalize query now instead of in loops
         if(!this.queryMatchCase) {
             var sOrigQuery = sQuery;
             sQuery = sQuery.toLowerCase();
         }
 
-        // Loop through each cached element's sQuery property...
+        // Loop through each cached element's query property...
         for(var i = nCacheLength-1; i >= 0; i--) {
             var resultObj = aCache[i];
             var aAllResultItems = resultObj.results;
+            // If case is unimportant, normalize match key for comparison
             var matchKey = (!this.queryMatchCase) ?
                 encodeURI(resultObj.query.toLowerCase()):
                 encodeURI(resultObj.query);
 
-            // If a cached sQuery exactly matches the query...
+            // If a cached match key exactly matches the query...
             if(matchKey == sQuery) {
                     // Stash all result objects into aResult[] and stop looping through the cache.
                     bMatchFound = true;
@@ -1815,7 +1820,7 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
             }
             // Else if this query is not an exact match and subset matching is enabled...
             else if(this.queryMatchSubset) {
-                // Loop through substrings of each cached element's sQuery property...
+                // Loop through substrings of each cached element's query property...
                 for(var j = sQuery.length-1; j >= 0 ; j--) {
                     var subQuery = sQuery.substr(0,j);
 
@@ -1847,6 +1852,9 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
                         this._addCacheElem(resultObj);
                         break;
                     }
+                }
+                if(bMatchFound) {
+                    break;
                 }
             }
         }
@@ -2057,6 +2065,13 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
     var aResults = [];
     var bError = false;
 
+    // Strip out comment at the end of results
+    var nEnd = ((this.responseStripAfter != "") && (oResponse.indexOf)) ?
+        oResponse.indexOf(this.responseStripAfter) : -1;
+    if(nEnd != -1) {
+        oResponse = oResponse.substring(0,nEnd);
+    }
+
     switch (this.responseFormat) {
         case this.TYPE_JSON:
             if(window.JSON) {
@@ -2069,9 +2084,8 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                     // eval is necessary here since aSchema[0] is of unknown depth
                     var jsonListParsed = eval("jsonObjParsed." + aSchema[0]);
                     for(var i = jsonListParsed.length-1; i >= 0 ; i--) {
-                        // eval is probably not necessary here
-                        //jsonListParsed[i][0] = eval("jsonListParsed[i]." + aSchema[1]);
-                        jsonListParsed[i][0] = jsonListParsed[i][aSchema[1]];
+                        // eval is necessary here since aSchema[1] is of unknown depth
+                        jsonListParsed[i][0] = eval("jsonListParsed[i]." + aSchema[1]);
                         aResults[i] = jsonListParsed[i];
                     }
                     break;
@@ -2137,12 +2151,6 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
             break;
         case this.TYPE_FLAT:
             if(oResponse.length > 0) {
-                // Strip out comment at the end of results
-                var nEnd = oResponse.indexOf(this.responseStripAfter);
-                if(nEnd != -1) {
-                    oResponse = oResponse.substring(0,nEnd);
-                }
-
                 // Delete the last line delimiter at the end of the data if it exists
                 var newLength = oResponse.length-aSchema[0].length;
                 if(oResponse.substr(newLength) == aSchema[0]) {
