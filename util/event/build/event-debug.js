@@ -1,4 +1,8 @@
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+*/
 
 /**
  * The CustomEvent class lets you define events for your application
@@ -33,7 +37,7 @@ YAHOO.util.CustomEvent = function(type, oScope) {
 
     // Register with the event utility for automatic cleanup.  Made optional
     // so that CustomEvent can be used independently of pe.event
-    if (YAHOO.util["Event"]) { 
+    if (YAHOO.util.Event) { 
         YAHOO.util.Event.regCE(this);
     }
 };
@@ -58,7 +62,7 @@ YAHOO.util.CustomEvent.prototype = {
      */
     unsubscribe: function(fn, obj) {
         var found = false;
-        for (var i=0; i<this.subscribers.length; ++i) {
+        for (var i=0, len=this.subscribers.length; i<len; ++i) {
             var s = this.subscribers[i];
             if (s && s.contains(fn, obj)) {
                 this._delete(i);
@@ -82,7 +86,7 @@ YAHOO.util.CustomEvent.prototype = {
      * @param {Array} an arbitrary set of parameters to pass to the handler
      */
     fire: function() {
-        for (var i=0; i<this.subscribers.length; ++i) {
+        for (var i=0, len=this.subscribers.length; i<len; ++i) {
             var s = this.subscribers[i];
             if (s) {
                 var scope = (s.override) ? s.obj : this.scope;
@@ -95,7 +99,7 @@ YAHOO.util.CustomEvent.prototype = {
      * Removes all listeners
      */
     unsubscribeAll: function() {
-        for (var i=0; i<this.subscribers.length; ++i) {
+        for (var i=0, len=this.subscribers.length; i<len; ++i) {
             this._delete(i);
         }
     },
@@ -161,7 +165,11 @@ YAHOO.util.Subscriber.prototype.contains = function(fn, obj) {
     return (this.fn == fn && this.obj == obj);
 };
 
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+*/
 
 // Only load this library once.  If it is loaded a second time, existing
 // events cannot be detached.
@@ -226,6 +234,8 @@ if (!YAHOO.util.Event) {
          */
         var legacyHandlers = [];
 
+        var legacyMap = [];
+
         /**
          * The number of times to poll after window.onload.  This number is
          * increased if additional late-bound handlers are requested after
@@ -239,6 +249,20 @@ if (!YAHOO.util.Event) {
          * @private
          */
         var onAvailStack = [];
+
+        /**
+         * static counter for the auto id generation
+         * @private
+         */
+        var counter = 0;
+
+        /**
+         * Map key is elementid + event type, used to speed lookup of cached
+         * listeners
+         * @private
+         */
+        var listenerMap = {};
+
 
         return { // PREPROCESS
 
@@ -335,8 +359,9 @@ if (!YAHOO.util.Event) {
              * @private
              */
             startTimeout: function(interval) {
-                var i = (interval || interval === 0) ? interval : this.POLL_INTERVAL;
-                this.timeout = setTimeout("YAHOO.util.Event._tryPreloadAttach()", i);
+                var self = this;
+                var callback = function() { self._tryPreloadAttach(); };
+                this.timeout = setTimeout(callback, interval);
             },
 
             /**
@@ -382,10 +407,15 @@ if (!YAHOO.util.Event) {
              */
             addListener: function(el, sType, fn, oScope, bOverride) {
 
+                if (!fn || !fn.call) {
+                    // this.logger.debug("Error, function is not valid " + fn);
+                    return false;
+                }
+
                 // The el argument can be an array of elements or element ids.
                 if ( this._isValidCollection(el)) {
                     var ok = true;
-                    for (var i=0; i< el.length; ++i) {
+                    for (var i=0, len=el.length; i<len; ++i) {
                         ok = ( this.on(el[i], 
                                        sType, 
                                        fn, 
@@ -417,8 +447,7 @@ if (!YAHOO.util.Event) {
                     }
                 }
 
-                // Element should be an html element or an array if we get 
-                // here.
+                // Element should be an html element if we get here
                 if (!el) {
                     // this.logger.debug("unable to attach event " + sType);
                     return false;
@@ -450,14 +479,22 @@ if (!YAHOO.util.Event) {
 
                 var li = [el, sType, fn, wrappedFn, scope];
                 var index = listeners.length;
+
                 // cache the listener so we can try to automatically unload
                 listeners[index] = li;
 
+                // map the listener for quick lookup
+                this.mapListener(el, sType, fn, index);
+
                 if (this.useLegacyEvent(el, sType)) {
                     var legacyIndex = this.getLegacyIndex(el, sType);
+
                     if (legacyIndex == -1) {
 
                         legacyIndex = legacyEvents.length;
+
+                        legacyMap[el.id + sType] = legacyIndex;
+
                         // cache the signature for the DOM0 event, and 
                         // include the existing handler for the event, if any
                         legacyEvents[legacyIndex] = 
@@ -466,7 +503,7 @@ if (!YAHOO.util.Event) {
 
                         el["on" + sType] = 
                             function(e) {
-                                YAHOO.util.Event.fireLegacyEvent(
+                                return YAHOO.util.Event.fireLegacyEvent(
                                     YAHOO.util.Event.getEvent(e), legacyIndex);
                             };
                     }
@@ -517,7 +554,7 @@ if (!YAHOO.util.Event) {
                 */
 
                 var le = legacyHandlers[legacyIndex];
-                for (i=0; i < le.length; ++i) {
+                for (var i=0, len=le.length; i<len; ++i) {
                     var index = le[i];
                     // this.logger.debug(index);
                     if (index) {
@@ -544,14 +581,21 @@ if (!YAHOO.util.Event) {
              * @private
              */
             getLegacyIndex: function(el, sType) {
+                /*
                 for (var i=0; i < legacyEvents.length; ++i) {
                     var le = legacyEvents[i];
                     if (le && le[0] == el && le[1] == sType) {
                         return i;
                     }
                 }
+                */
 
-                return -1;
+                var key = this.generateId(el) + sType;
+                if (typeof legacyMap[key] == "undefined") { 
+                    return -1;
+                } else {
+                    return legacyMap[key];
+                }
             },
 
             /**
@@ -569,13 +613,20 @@ if (!YAHOO.util.Event) {
              * Removes an event handler
              *
              * @param {Object} el the html element or the id of the element to 
-             * assign the event to.
+             * remove the event from.
              * @param {String} sType the type of event to remove
              * @param {Function} fn the method the event invokes
-             * @return {boolean} true if the unbind was successful, false 
+             * @param {int} index optional parameter for the index to remove.
+             *                    Saves having to look it up if it is known.
+             * @return {boolean} true if the action was successful, false 
              * otherwise
              */
-            removeListener: function(el, sType, fn) {
+            removeListener: function(el, sType, fn, index) {
+
+                if (!fn || !fn.call) {
+                    // this.logger.debug("Error, function is not valid " + fn);
+                    return false;
+                }
 
                 // The el argument can be a string
                 if (typeof el == "string") {
@@ -583,14 +634,34 @@ if (!YAHOO.util.Event) {
                 // The el argument can be an array of elements or element ids.
                 } else if ( this._isValidCollection(el)) {
                     var ok = true;
-                    for (var i=0; i< el.length; ++i) {
+                    for (var i=0, len=el.length; i<len; ++i) {
                         ok = ( this.removeListener(el[i], sType, fn) && ok );
                     }
                     return ok;
                 }
 
+                if ("unload" == sType) {
+
+                    for (i=0, len=unloadListeners.length; i<len; i++) {
+                        var li = unloadListeners[i];
+                        if (li && 
+                            li[0] == el && 
+                            li[1] == sType && 
+                            li[2] == fn) {
+                                delete unloadListeners[i];
+                                return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+
                 var cacheItem = null;
-                var index = this._getCacheIndex(el, sType, fn);
+
+                if ("undefined" == typeof index) {
+                    index = this._getCacheIndex(el, sType, fn);
+                }
 
                 if (index >= 0) {
                     cacheItem = listeners[index];
@@ -787,7 +858,7 @@ if (!YAHOO.util.Event) {
              * @return {int} the event's charCode
              */
             getCharCode: function(ev) {
-                return ev.charCode || (ev.type == "keypress") ? ev.keyCode : 0;
+                return ev.charCode || ((ev.type == "keypress") ? ev.keyCode : 0);
             },
 
             /**
@@ -795,6 +866,7 @@ if (!YAHOO.util.Event) {
              * Locating the saved event handler data by function ref
              */
             _getCacheIndex: function(el, sType, fn) {
+                /*
                 for (var i=0; i< listeners.length; ++i) {
                     var li = listeners[i];
                     if ( li                 && 
@@ -804,8 +876,47 @@ if (!YAHOO.util.Event) {
                         return i;
                     }
                 }
+                */
+                var key = el.id + sType;
+                if (!listenerMap[key]) {
+                    return -1;
+                } else {
+                    for (var i=0, len=listenerMap[key].length; i<len; ++i) {
+                        var item = listenerMap[key][i];
+                        if (item.fn == fn) {
+                            return item.index;
+                        }
+                    }
+                }
 
                 return -1;
+            },
+
+            /**
+             * Creates an ID for the element if it does not already have one.
+             */
+            generateId: function(el) {
+                var id = el.id;
+
+                if (!id) {
+                    id = "yui-event-auto-id-" + (counter++);
+                    el.id = id;
+                }
+
+                return id;
+            },
+
+
+            /**
+             * @private
+             */
+            mapListener: function(p_el, p_sType, p_fn, p_index) {
+                var key = this.generateId(p_el) + p_sType;
+                if (!listenerMap[key]) {
+                    listenerMap[key] = [];
+                }
+
+                listenerMap[key].push( { fn: p_fn, index: p_index } );
             },
 
             /**
@@ -832,44 +943,20 @@ if (!YAHOO.util.Event) {
             },
 
             /**
-             * @private
-             * DOM element cache
-             */
-            elCache: {},
-
-            /**
              * We cache elements bound by id because when the unload event 
              * fires, we can no longer use document.getElementById
              * @private
              */
             getEl: function(id) {
-                /*
-                // this is a problem when replaced via document.getElementById
-                if (! this.elCache[id]) {
-                    try {
-                        var el = document.getElementById(id);
-                        if (el) {
-                            this.elCache[id] = el;
-                        }
-                    } catch (er) {
-                        // this.logger.debug("document obj not currently 
-                        // available");
-                    }
-                }
-                return this.elCache[id];
-                */
-
                 return document.getElementById(id);
             },
 
             /**
              * Clears the element cache
+             * @private
+             * @deprecated
              */
-            clearCache: function() {
-                for (i in this.elCache) {
-                    delete this.elCache[i];
-                }
-            },
+            clearCache: function() { },
 
             /**
              * Called by CustomEvent instances to provide a handle to the 
@@ -919,7 +1006,7 @@ if (!YAHOO.util.Event) {
                 // Delayed listeners
                 var stillDelayed = [];
 
-                for (var i=0; i < delayedListeners.length; ++i) {
+                for (var i=0, len=delayedListeners.length; i<len; ++i) {
                     var d = delayedListeners[i];
                     // There may be a race condition here, so we need to 
                     // verify the array element is usable.
@@ -944,7 +1031,7 @@ if (!YAHOO.util.Event) {
 
                 // onAvailable
                 notAvail = [];
-                for (i=0; i < onAvailStack.length; ++i) {
+                for (i=0, len=onAvailStack.length; i<len; ++i) {
                     var item = onAvailStack[i];
                     if (item) {
                         el = this.getEl(item.id);
@@ -963,7 +1050,7 @@ if (!YAHOO.util.Event) {
                                     notAvail.length === 0) ? 0 : retryCount - 1;
 
                 if (tryAgain) {
-                    this.startTimeout();
+                    this.startTimeout(this.POLL_INTERVAL);
                 }
 
                 this.locked = false;
@@ -972,11 +1059,23 @@ if (!YAHOO.util.Event) {
 
             /**
              * Removes all listeners registered by pe.event.  Called 
-             * automatically during the unload event.
+             * automatically during the unload event.  While the primary
+             * reason to do this is to work around the IE memory leak
+             * problem, the code was originally exected for all browsers
+             * in case they could benefit as well.  As it turns out, 
+             * Safari grinds to a halt if you have a large number of
+             * listeners to remove.  Now the unload code only runs
+             * automatically for IE.  The force parameter was added
+             * so that it is possible to force this code to execute in
+             * non-IE browsers.
+             * @param {Event} e The unload event
+             * @param me YAHOO.util.Event
+             * @param force set to true to run the unload code in non-IE
+             * browsers
              * @private
              */
-            _unload: function(e, me) {
-                for (var i=0; i < unloadListeners.length; ++i) {
+            _unload: function(e, me, force) {
+                for (var i=0, len=unloadListeners.length; i<len; ++i) {
                     var l = unloadListeners[i];
                     if (l) {
                         var scope = (l[this.ADJ_SCOPE]) ? l[this.SCOPE]: window;
@@ -984,29 +1083,34 @@ if (!YAHOO.util.Event) {
                     }
                 }
 
-                if (listeners && listeners.length > 0) {
-                    for (i = 0; i < listeners.length; ++i) {
-                        l = listeners[i];
-                        if (l) {
-                            this.removeListener(l[this.EL], l[this.TYPE], 
-                                    l[this.FN]);
+                // if (this.isIE || force) {
+                    // if (listeners && listeners.length > 0) {
+                    len = listeners.length;
+                    if (len) {
+                        for (i=0; i<len; ++i) {
+                            l = listeners[i];
+                            if (l) {
+                                this.removeListener(l[this.EL], l[this.TYPE], 
+                                        l[this.FN], i);
+                            }
                         }
+
+                        this.clearCache();
                     }
 
-                    this.clearCache();
-                }
+                    for (i=0, len=customEvents.length; i<len; ++i) {
+                        customEvents[i].unsubscribeAll();
+                        delete customEvents[i];
+                    }
 
-                for (i = 0; i < customEvents.length; ++i) {
-                    customEvents[i].unsubscribeAll();
-                    delete customEvents[i];
-                }
+                    for (i=0, len=legacyEvents.length; i<len; ++i) {
+                        // dereference the element
+                        // delete legacyEvents[i][0];
 
-                for (i = 0; i < legacyEvents.length; ++i) {
-                    // dereference the element
-                    delete legacyEvents[i][0];
-                    // delete the array item
-                    delete legacyEvents[i];
-                }
+                        // delete the array item
+                        delete legacyEvents[i];
+                    }
+                //}
             },
 
             /**
