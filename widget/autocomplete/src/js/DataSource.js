@@ -285,20 +285,22 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
     // If cache is enabled...
     if((this.maxCacheEntries > 0) && aCache && (nCacheLength > 0)) {
         this.cacheQueryEvent.fire(this, oParent, sQuery);
+        // If case is unimportant, normalize query now instead of in loops
         if(!this.queryMatchCase) {
             var sOrigQuery = sQuery;
             sQuery = sQuery.toLowerCase();
         }
 
-        // Loop through each cached element's sQuery property...
+        // Loop through each cached element's query property...
         for(var i = nCacheLength-1; i >= 0; i--) {
             var resultObj = aCache[i];
             var aAllResultItems = resultObj.results;
+            // If case is unimportant, normalize match key for comparison
             var matchKey = (!this.queryMatchCase) ?
                 encodeURI(resultObj.query.toLowerCase()):
                 encodeURI(resultObj.query);
             
-            // If a cached sQuery exactly matches the query...
+            // If a cached match key exactly matches the query...
             if(matchKey == sQuery) {
                     // Stash all result objects into aResult[] and stop looping through the cache.
                     bMatchFound = true;
@@ -316,7 +318,7 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
             }
             // Else if this query is not an exact match and subset matching is enabled...
             else if(this.queryMatchSubset) {
-                // Loop through substrings of each cached element's sQuery property...
+                // Loop through substrings of each cached element's query property...
                 for(var j = sQuery.length-1; j >= 0 ; j--) {
                     var subQuery = sQuery.substr(0,j);
                     
@@ -348,6 +350,9 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
                         this._addCacheElem(resultObj);
                         break;
                     }
+                }
+                if(bMatchFound) {
+                    break;
                 }
             }
         }
