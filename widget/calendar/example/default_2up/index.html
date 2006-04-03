@@ -6,18 +6,27 @@
 	<title> Yahoo! Travel Calendar</title>
 
 	
-	<link rel="stylesheet" href="../../src/css/calendar.css" type="text/css">
-	<link rel="stylesheet" href="../css/examples.css" type="text/css">
+	<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/yahoo_2.0.0-b3.js" ></script>
+	<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/event_2.0.0-b3.js" ></script>
+	<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dom_2.0.2-b3.js" ></script>
 	
-	<script type="text/javascript" src="../js/YAHOO.js"></script>
-	<script type="text/javascript" src="../js/event.js" ></script>
-	<script type="text/javascript" src="../../build/calendar_raw-dev.js"></script>
+	<link rel="stylesheet" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/calendar/css/calendar_2.0.0-b3.css" type="text/css">	
+	<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/calendar/calendar_2.0.0-b3.js"></script>
 	
 	<script language="javascript">
 		var cal1;
 		var cal2;
 
+		var dbg;
+
+		function debug(text) {
+			dbg.appendChild(document.createTextNode(text));
+			dbg.appendChild(document.createElement("BR"));
+		}
+
 		function init() {
+			dbg = document.getElementById("debug");
+
 			this.today = new Date();
 
 			var thisMonth = this.today.getMonth();
@@ -383,6 +392,7 @@
 		
 		<div id="container1" style="position:absolute;display:none"></div>
 		<div id="container2" style="position:absolute;display:none"></div>
+		<div id="debug"></div>
 	</body>
 
 

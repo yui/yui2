@@ -2,15 +2,16 @@
 <html>
 <head>
 
-	<title>Yahoo! Calendar Widget - Single-Select Implementation</title>
+	<title>Yahoo! Calendar Widget - Row Hover Implementation</title>
 	
-	<link rel="stylesheet" href="../../src/css/calendar.css" type="text/css">
+	<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/yahoo_2.0.0-b3.js" ></script>
+	<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/event_2.0.0-b3.js" ></script>
+	<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dom_2.0.2-b3.js" ></script>
+	
+	<link rel="stylesheet" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/calendar/css/calendar_2.0.0-b3.css" type="text/css">	
+	<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/calendar/calendar_2.0.0-b3.js"></script>
+
 	<link rel="stylesheet" href="../css/examples.css" type="text/css">
-	
-	<script type="text/javascript" src="../js/YAHOO.js"></script>
-	<!--<script type="text/javascript" src="../js/event.js" ></script>-->
-	<script type="text/javascript" src="http://feelbuild-mac.corp.yahoo.com/Event.dev/js/event/build/event.js"></script>
-	<script type="text/javascript" src="../../build/calendar_2.0.0-b1.js"></script>
 	
 	<style> 
 		/* highlight the whole row */
@@ -34,7 +35,6 @@
 			border:1px solid #E0E0E0;
 		}
 	</style>
-
 
 	<script language="javascript">
 		var cal1;
@@ -76,16 +76,59 @@
 	</div>
 
 	<div class="column left">
-		<h4>Default Single-Select Implementation</h4>
+		<h4>Row Highlight Implementation</h4>
 
-		<p>The default Calendar implementation is a single-select 1-up calendar view that defaults to the current month and year. The basic calendar can be implemented by declaring a variable to represent the calendar, and passing the calendar's ID to the Calendar constructor:</p>
-<xmp>var cal1;
-function init() {
-   cal1 = new YAHOO.widget.Calendar("cal1", "cal1Container");
-   cal1.render();
-}</xmp>
-		<p>The Calendar object should be instantiated after the body has been rendered, so that a reference to the container element that will contain the calendar can be obtained. The container element can reside anywhere within the body.</p>
-<xmp><div id="cal1Container"></div></xmp>
+		<p>This example shows how to highlight the row of the current hover date, using CSS and some minor JavaScript event changes:</p>
+<xmp><style> 
+	/* highlight the whole row */
+	.calendar tr:hover td.calcell, .hilite-row .calcell {
+		background-color:yellow;
+	}
+
+	/* highlight the current cell in the standard highlight color */
+	.calendar tr:hover td:hover, .hilite-row .calcellhover {
+		cursor:pointer;
+		color:#FFF;
+		background-color:#FF9900;
+		border:1px solid #FF9900;
+	}
+
+	/* make sure out of month cells don't highlight too */
+	.calendar tr:hover td.oom, .hilite-row .calcell.oom {
+		cursor:default;
+		color:#999;
+		background-color:#EEE;
+		border:1px solid #E0E0E0;
+	}
+</style>
+
+<script language="javascript">
+	var cal1;
+
+	function init() {
+		cal1 = new YAHOO.widget.Calendar("cal1","cal1Container");
+		
+		/* Override the doCellMouseOver function (used for IE) to add row highlighting) */
+		cal1.doCellMouseOver = function(e, cal) {
+			var cell = this;
+			var row = cell.parentNode;
+
+			YAHOO.widget.Calendar_Core.prependCssClass(this, cal.Style.CSS_CELL_HOVER);
+			YAHOO.widget.Calendar_Core.prependCssClass(row, "hilite-row");
+		}
+
+		/* Override the doCellMouseOut function (used for IE) to remove row highlighting) */
+		cal1.doCellMouseOut = function(e, cal) {
+			var cell = this;
+			var row = cell.parentNode;
+
+			YAHOO.widget.Calendar_Core.removeCssClass(this, cal.Style.CSS_CELL_HOVER);
+			YAHOO.widget.Calendar_Core.removeCssClass(row, "hilite-row");
+		}
+
+		cal1.render();
+	}
+</script></xmp>
 		</div>
 		
 
