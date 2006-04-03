@@ -63,6 +63,16 @@
 	background-color:#FFF;
 }
 
+.calendar.wait .calcell {
+	color:#999;
+	background-color:#CCC;
+}
+
+.calendar.wait .calcell a {
+	color:#999;
+	font-style:italic;
+}
+
 .calcell a {
 	color:#003DB8;
 	text-decoration:none;
@@ -72,7 +82,7 @@
 	border:1px solid #000;
 }
 
-.calcell.oom, .calcell.oom:hover {
+.calcell.oom, td.calcell.oom:hover {
 	cursor:default;
 	color:#999;
 	background-color:#EEE;
@@ -85,14 +95,14 @@
 	border:1px solid #FF9900;
 }
 
-.calcell:hover, .calcell.calcellhover {
+td.calcell:hover, td.calcell.calcellhover {
 	cursor:pointer;
 	color:#FFF;
 	background-color:#FF9900;
 	border:1px solid #FF9900;
 }
 
-.calcell.calcellhover a, .calcell:hover a {
+td.calcell.calcellhover a, td.calcell:hover a {
 	color:#FFF;
 }
 
