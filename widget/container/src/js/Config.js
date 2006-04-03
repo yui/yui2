@@ -271,3 +271,20 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 	}
 }
+/**
+* Checks to see if the passed element is actually present in the DOM.
+* @param	{Element}	element	The element to be checked for DOM presence.
+* @return	{boolean}	true, if the element is present in the DOM
+*/
+YAHOO.util.Dom._elementInDom = function(element) {
+	var parentNode = element.parentNode;
+	if (! parentNode) {
+		return false;
+	} else {
+		if (parentNode.tagName == "HTML") {
+			return true;
+		} else {
+			return YAHOO.util.Dom._elementInDom(parentNode);
+		}
+	}
+}
