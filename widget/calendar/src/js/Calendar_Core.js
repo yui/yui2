@@ -217,8 +217,6 @@ YAHOO.widget.Calendar_Core.prototype = {
 	* @type HTMLTableCellElement
 	*/	
 	headerCell : null
-
-
 };
 
 
@@ -296,26 +294,29 @@ YAHOO.widget.Calendar_Core.prototype.wireDefaultEvents = function() {
 	this.doSelectCell = function(e, cal) {		
 		var cell = this;
 		var index = cell.index;
-
-		if (cal.Options.MULTI_SELECT) {
-			var link = cell.getElementsByTagName("A")[0];
-			link.blur();
-			
-			var cellDate = cal.cellDates[index];
-			var cellDateIndex = cal._indexOfSelectedFieldArray(cellDate);
-			
-			if (cellDateIndex > -1)
-			{	
-				cal.deselectCell(index);
+		var d = cal.cellDates[index];
+		var date = new Date(d[0],d[1]-1,d[2]);
+		
+		if (! cal.isDateOOM(date)) {
+			if (cal.Options.MULTI_SELECT) {
+				var link = cell.getElementsByTagName("A")[0];
+				link.blur();
+				
+				var cellDate = cal.cellDates[index];
+				var cellDateIndex = cal._indexOfSelectedFieldArray(cellDate);
+				
+				if (cellDateIndex > -1)
+				{	
+					cal.deselectCell(index);
+				} else {
+					cal.selectCell(index);
+				}	
+				
 			} else {
+				var link = cell.getElementsByTagName("A")[0];
+				link.blur()
 				cal.selectCell(index);
-			}	
-			
-		} else {
-			var link = cell.getElementsByTagName("A")[0];
-			link.blur()
-			
-			cal.selectCell(index);
+			}
 		}
 	}
 
@@ -326,7 +327,14 @@ YAHOO.widget.Calendar_Core.prototype.wireDefaultEvents = function() {
 	* @private
 	*/
 	this.doCellMouseOver = function(e, cal) {
-		YAHOO.widget.Calendar_Core.prependCssClass(this, cal.Style.CSS_CELL_HOVER);
+		var cell = this;
+		var index = cell.index;
+		var d = cal.cellDates[index];
+		var date = new Date(d[0],d[1]-1,d[2]);
+	
+		if (! cal.isDateOOM(date)) {
+			YAHOO.widget.Calendar_Core.prependCssClass(cell, cal.Style.CSS_CELL_HOVER);
+		}
 	}
 
 	/**
@@ -531,7 +539,7 @@ YAHOO.widget.Calendar_Core.prototype.setupConfig = function() {
 * or create new ones. Values can be explicitly set as follows:
 * <blockquote><code>
 *	this.Config.Style.CSS_CELL = "newcalcell";
-*	this.Config.Locale.MONTHS_SHORT = ["Jan", "Fév", "Mars", "Avr", "Mai", "Juin", "Juil", "Août", "Sept", "Oct", "Nov", "Déc"];
+*	this.Config.Locale.MONTHS_SHORT = ["Jan", "Fv", "Mars", "Avr", "Mai", "Juin", "Juil", "Aot", "Sept", "Oct", "Nov", "Dc"];
 * </code></blockquote>
 */
 YAHOO.widget.Calendar_Core.prototype.customConfig = function() { };
@@ -666,8 +674,12 @@ YAHOO.widget.Calendar_Core.prototype.buildShellBody = function() {
 				cell = document.createElement("TD");
 				this.cells[this.cells.length] = cell;
 				YAHOO.widget.Calendar_Core.setCssClasses(cell, [this.Style.CSS_CELL]);
+				YAHOO.util.Event.addListener(cell, "click", this.doSelectCell, this);
+				if (YAHOO.widget.Calendar_Core._getBrowser() == "ie") {
+					YAHOO.util.Event.addListener(cell, "mouseover", this.doCellMouseOver, this);
+					YAHOO.util.Event.addListener(cell, "mouseout", this.doCellMouseOut, this);
+				}
 			}
-			
 			row.appendChild(cell);
 		}
 		this.tbody.appendChild(row);
@@ -768,15 +780,8 @@ YAHOO.widget.Calendar_Core.prototype.renderBody = function(workingDate) {
 		var cellRenderers = new Array();
 		
 		var cell = this.cells[c];
-	
 		this.clearElement(cell);
-		
-		YAHOO.util.Event.removeListener(cell, "click", this.doSelectCell);
-		if (YAHOO.widget.Calendar_Core._getBrowser() == "ie") {
-			YAHOO.util.Event.removeListener(cell, "mouseover", this.doCellMouseOver);
-			YAHOO.util.Event.removeListener(cell, "mouseout", this.doCellMouseOut);
-		}
-		
+
 		cell.index = c;
 		cell.id = this.id + "_cell" + c;
 		
@@ -1058,19 +1063,8 @@ YAHOO.widget.Calendar_Core.prototype.renderCellDefault = function(workingDate, c
 	link.href="javascript:void(null);";
 	link.name=this.id+"__"+workingDate.getFullYear()+"_"+(workingDate.getMonth()+1)+"_"+workingDate.getDate();
 
-	//link.onclick = this._selectEventLink;
-	//cell.onclick = this.doSelectCell;
-	
-	YAHOO.util.Event.addListener(cell, "click", this.doSelectCell, this);
-	if (YAHOO.widget.Calendar_Core._getBrowser() == "ie") {
-		YAHOO.util.Event.addListener(cell, "mouseover", this.doCellMouseOver, this);
-		YAHOO.util.Event.addListener(cell, "mouseout", this.doCellMouseOut, this);
-	}
 	link.appendChild(document.createTextNode(this.buildDayLabel(workingDate)));
 	cell.appendChild(link);
-	
-	//cell.onmouseover = this.doCellMouseOver;
-	//cell.onmouseout = this.doCellMouseOut;
 };
 
 YAHOO.widget.Calendar_Core.prototype.renderCellStyleHighlight1 = function(workingDate, cell) {
@@ -1553,7 +1547,18 @@ YAHOO.widget.Calendar_Core.prototype.onDeselect = function() { };
 /**
 * Event executed when the user navigates to a different calendar page.
 */
-YAHOO.widget.Calendar_Core.prototype.onChangePage = function() { this.render(); };
+YAHOO.widget.Calendar_Core.prototype.onChangePage = function() {
+		var me = this;
+
+		this.renderHeader();
+		if (this.renderProcId) {
+			clearTimeout(this.renderProcId);
+		}
+		this.renderProcId = setTimeout(function() {
+											me.render();
+											me.renderProcId = null;
+										}, 1);
+};
 
 /**
 * Event executed when the calendar widget is rendered.
