@@ -2,7 +2,7 @@
 Copyright (c) 2006 Yahoo! Inc. All rights reserved.
 version 0.10.0
 */
-YAHOO.namespace('Connect');YAHOO.util.Connect={_msxml_progid:['MSXML2.XMLHTTP.5.0','MSXML2.XMLHTTP.4.0','MSXML2.XMLHTTP.3.0','MSXML2.XMLHTTP','Microsoft.XMLHTTP'],_http_header:[],_isFormSubmit:false,_sFormData:null,_poll:[],_polling_interval:50,_transaction_id:0,setProgId:function(id)
+YAHOO.util.Connect={_msxml_progid:['MSXML2.XMLHTTP.5.0','MSXML2.XMLHTTP.4.0','MSXML2.XMLHTTP.3.0','MSXML2.XMLHTTP','Microsoft.XMLHTTP'],_http_header:[],_isFormSubmit:false,_sFormData:null,_poll:[],_polling_interval:50,_transaction_id:0,setProgId:function(id)
 {this.msxml_progid.unshift(id);},setPollingInterval:function(i)
 {if(typeof i=='number'&&isFinite(i)){this._polling_interval=i;}},createXhrObject:function(transactionId)
 {var obj,http;try
