@@ -2,7 +2,6 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version: 0.10.0
 * @class
 * FormDialog is an implementation of Panel that can be used to submit form data. Built-in functionality for buttons with event handlers is included, and button sets can be build dynamically, or the preincluded ones for Submit/Cancel and OK/Cancel can be utilized. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
 * @param {string}	el	The element ID representing the FormDialog <em>OR</em>
@@ -11,8 +10,7 @@ Version: 0.10.0
 * @constructor
 */
 YAHOO.widget.FormDialog = function(el, userConfig) {
-	if (arguments.length > 0)
-	{
+	if (arguments.length > 0) {
 		YAHOO.widget.FormDialog.superclass.constructor.call(this, el, userConfig);
 	}
 }
@@ -27,6 +25,12 @@ YAHOO.widget.FormDialog.prototype.constructor = YAHOO.widget.FormDialog;
 */
 YAHOO.widget.FormDialog.superclass = YAHOO.widget.Panel.prototype;
 
+/**
+* Constant representing the default CSS class used for a FormDialog
+* @type string
+* @final
+*/
+YAHOO.widget.FormDialog.CSS_FORMDIALOG = "form-dialog";
 
 /**
 * Initializes the class's configurable properties which can be changed using the FormDialog's Config object (cfg).
@@ -94,8 +98,8 @@ YAHOO.widget.FormDialog.prototype.initDefaultConfig = function() {
 												});
 
 	this.cfg.addProperty("buttons",		"none",	this.configButtons);
-	this.cfg.addProperty("onsuccess",	null,	this.configOnSuccess);
-	this.cfg.addProperty("onfailure",	null,	this.configOnFailure);
+	this.cfg.addProperty("onsuccess",	null,	this.configOnSuccess, null, null, true);
+	this.cfg.addProperty("onfailure",	null,	this.configOnFailure, null, null, true);
 }
 
 /**
@@ -104,13 +108,13 @@ YAHOO.widget.FormDialog.prototype.initDefaultConfig = function() {
 YAHOO.widget.FormDialog.prototype.initEvents = function() {
 	YAHOO.widget.FormDialog.superclass.initEvents.call(this);
 
-	this.submitEvent = new YAHOO.util.CustomEvent("submit");
+	this.submitEvent		= new YAHOO.util.CustomEvent("submit");
 
-	this.manualSubmitEvent = new YAHOO.util.CustomEvent("manualSubmit");
-	this.asyncSubmitEvent = new YAHOO.util.CustomEvent("asyncSubmit");
-	this.formSubmitEvent = new YAHOO.util.CustomEvent("formSubmit");
+	this.manualSubmitEvent	= new YAHOO.util.CustomEvent("manualSubmit");
+	this.asyncSubmitEvent	= new YAHOO.util.CustomEvent("asyncSubmit");
+	this.formSubmitEvent	= new YAHOO.util.CustomEvent("formSubmit");
 
-	this.cancelEvent = new YAHOO.util.CustomEvent("cancel");
+	this.cancelEvent		= new YAHOO.util.CustomEvent("cancel");
 }
 
 /*
@@ -121,32 +125,37 @@ YAHOO.widget.FormDialog.prototype.initEvents = function() {
 */
 YAHOO.widget.FormDialog.prototype.init = function(el, userConfig) {
 	YAHOO.widget.FormDialog.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
-	
+
+	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.FormDialog.CSS_FORMDIALOG);
+
 	/**
 	* Built-in button set for OK/Cancel buttons
-	* @type object
+	* @type Array
 	*/	
-	this.BUTTONS_OKCANCEL = { 
-				"OK": {
+	this.BUTTONS_OKCANCEL = [ 
+				{	text : "OK",
 					handler : this.handleSubmitClick,
 					isDefault : true
 				},
-				"Cancel": {
+				{	text : "Cancel",
 					handler : this.handleCancelClick
-				} };
+				}];
 
 	/**
 	* Built-in button set for Submit/Cancel buttons
-	* @type object
+	* @type Array
 	*/
-	this.BUTTONS_SUBMITCANCEL = { 
-				"Submit": {
+	this.BUTTONS_SUBMITCANCEL = [ 
+				{	text : "Submit",
 					handler : this.handleSubmitClick,
 					isDefault : true
 				},
-				"Cancel": {
+				{	text : "Cancel",
 					handler : this.handleCancelClick
-				} };
+				}];
+
+
+	var me = this;
 
 	/**
 	* Reference to the form 
@@ -160,14 +169,26 @@ YAHOO.widget.FormDialog.prototype.init = function(el, userConfig) {
 												var form = this.element.getElementsByTagName("FORM")[0];
 												if (form) {
 													this.form = form;
+													if (this.cfg.getProperty("modal")) {
+														this.preventBackTab = new YAHOO.util.KeyListener(this.form[0], { shift:true, keys:9 }, {fn:me.focusLastButton, scope:me, correctScope:true});
+														this.showEvent.subscribe(this.preventBackTab.enable, this.preventBackTab, true);
+														this.hideEvent.subscribe(this.preventBackTab.disable, this.preventBackTab, true);
+													}
 												}
 											 }, this, true);
 	}
 
 	this.showEvent.subscribe(this.focusFirstField, this, true);
+	this.beforeHideEvent.subscribe(this.blurButtons, this, true);
 
 	if (userConfig) {
 		this.cfg.applyConfig(userConfig);
+	}
+
+	if (this.cfg.getProperty("modal") && this.form) {
+		this.preventBackTab = new YAHOO.util.KeyListener(this.form[0], { shift:true, keys:9 }, {fn:me.focusLastButton, scope:me, correctScope:true} );
+		this.showEvent.subscribe(this.preventBackTab.enable, this.preventBackTab, true);
+		this.hideEvent.subscribe(this.preventBackTab.disable, this.preventBackTab, true);
 	}
 }
 
@@ -180,9 +201,9 @@ YAHOO.widget.FormDialog.prototype.init = function(el, userConfig) {
 YAHOO.widget.FormDialog.prototype.configButtons = function(type, args, obj) {
 	var buttons = args[0];
 	if (buttons != "none") {
-		this.buttonSet = null;
-		this.buttonSet = document.createElement("SPAN");
-		this.buttonSet.className = "button-group";
+		this.buttonSpan = null;
+		this.buttonSpan = document.createElement("SPAN");
+		this.buttonSpan.className = "button-group";
 		
 		if (buttons == "okcancel") {
 			buttons = this.BUTTONS_OKCANCEL;
@@ -190,8 +211,8 @@ YAHOO.widget.FormDialog.prototype.configButtons = function(type, args, obj) {
 			buttons = this.BUTTONS_SUBMITCANCEL;
 		}
 
-		for (var text in buttons) {
-			var button = buttons[text];
+		for (var b=0;b<buttons.length;b++) {
+			var button = buttons[b];
 			var htmlButton = document.createElement("BUTTON");
 
 			if (button.isDefault) {
@@ -199,18 +220,31 @@ YAHOO.widget.FormDialog.prototype.configButtons = function(type, args, obj) {
 				this.defaultHtmlButton = htmlButton;
 			}
 
-			htmlButton.appendChild(document.createTextNode(text));
+			htmlButton.appendChild(document.createTextNode(button.text));
 			YAHOO.util.Event.addListener(htmlButton, "click", button.handler, this);
-			this.buttonSet.appendChild(htmlButton);
+			
+			var me = this;
 
+			if (b == (buttons.length-1)) {
+				if (this.cfg.getProperty("modal")) {
+					this.restrictFocus = new YAHOO.util.KeyListener(htmlButton, { shift:false, keys:9 }, {fn:me.focusFirstField,scope:me,correctScope:true} );
+					this.showEvent.subscribe(this.restrictFocus.enable, this.restrictFocus, true);
+					this.hideEvent.subscribe(this.restrictFocus.disable, this.restrictFocus, true);
+					this.restrictFocus.enable();
+				}
+			}
+
+			this.buttonSpan.appendChild(htmlButton);		
 			button.htmlButton = htmlButton;
 		}
-		this.setFooter(this.buttonSet);
+
+		this.setFooter(this.buttonSpan);
 	} else {
-		if (this.buttonSet)	{
-			this.buttonSet.style.display = "none";
+		if (this.buttonSpan)	{
+			this.buttonSpan.style.display = "none";
 		}
 	}
+	this.cfg.refireEvent("iframe");
 	this.cfg.refireEvent("underlay");
 }
 
@@ -220,6 +254,45 @@ YAHOO.widget.FormDialog.prototype.configButtons = function(type, args, obj) {
 YAHOO.widget.FormDialog.prototype.focusFirstField = function(type, args, obj) {
 	if (this.form) {
 		this.form[0].focus();
+	}
+}
+
+/**
+* Sets the focus to the button that is designated as the default. By default, his handler is executed when the show event is fired.
+*/
+YAHOO.widget.FormDialog.prototype.focusDefault = function() {
+	this.defaultHtmlButton.focus();
+}
+
+/**
+* Blurs all the html buttons
+*/
+YAHOO.widget.FormDialog.prototype.blurButtons = function() {
+	var buttons = this.cfg.getProperty("buttons");
+	if (buttons) {
+		var html = buttons[0].htmlButton;
+		html.blur();
+	}
+}
+
+/**
+* Sets the focus to the first button in the button list
+*/
+YAHOO.widget.FormDialog.prototype.focusFirstButton = function() {
+	var buttons = this.cfg.getProperty("buttons");
+	if (buttons) {
+		var html = buttons[0].htmlButton;
+		html.focus();
+	}
+}
+/**
+* Sets the focus to the last button in the button list
+*/
+YAHOO.widget.FormDialog.prototype.focusLastButton = function() {
+	var buttons = this.cfg.getProperty("buttons");
+	if (buttons) {
+		var html = buttons[buttons.length-1].htmlButton;
+		html.focus();
 	}
 }
 
@@ -242,8 +315,7 @@ YAHOO.widget.FormDialog.prototype.handleSubmitClick = function(e, obj) {
 * @param {object}	obj	The object argument, in this case, the FormDialog itself
 */
 YAHOO.widget.FormDialog.prototype.handleCancelClick = function(e, obj) {
-	obj.cancelEvent.fire();
-	obj.hide();
+	obj.cancel();
 }
 
 // END BUILT-IN DOM EVENT HANDLERS //
@@ -267,6 +339,14 @@ YAHOO.widget.FormDialog.prototype.submit = function() {
 	} else {
 		return false;
 	}
+}
+
+/**
+* Executes the cancel of the FormDialog followed by a hide.
+*/
+YAHOO.widget.FormDialog.prototype.cancel = function() {
+	this.cancelEvent.fire();
+	this.hide();	
 }
 
 /**
