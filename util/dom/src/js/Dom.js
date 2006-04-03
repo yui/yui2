@@ -7,8 +7,11 @@ http://developer.yahoo.net/yui/license.txt
 /**
  * @class Provides helper methods for DOM elements.
  */
-YAHOO.util.Dom = function() {}
-YAHOO.util.Dom.prototype = {
+YAHOO.util.Dom = function() {
+   var ua = navigator.userAgent.toLowerCase();
+   var id_counter = 0;
+   
+   return {
       /**
        * Returns an HTMLElement reference
        * @param {String/HTMLElement/Array} el Accepts a string to use as an ID for getting a DOM reference, an actual DOM reference, or an Array of IDs and/or HTMLElements.
@@ -71,7 +74,7 @@ YAHOO.util.Dom.prototype = {
             {  // convert camelCase to hyphen-case
                
                var converted = '';
-               for(i = 0, len = property.length;i < len; ++i) {
+               for(var i = 0, len = property.length;i < len; ++i) {
                   if (property.charAt(i) == property.charAt(i).toUpperCase()) 
                   {
                      converted = converted + '-' + property.charAt(i).toLowerCase();
@@ -80,7 +83,7 @@ YAHOO.util.Dom.prototype = {
                   }
                }
                
-               if (dv.getComputedStyle(el, '').getPropertyValue(converted)) {
+               if (dv.getComputedStyle(el, '') && dv.getComputedStyle(el, '').getPropertyValue(converted)) {
                   value = dv.getComputedStyle(el, '').getPropertyValue(converted);
                }
             }
@@ -93,7 +96,7 @@ YAHOO.util.Dom.prototype = {
    
       /**
        * Wrapper for setting style properties of HTMLElements.  Normalizes "opacity" across modern browsers.
-       * @param {String/HTMLElement/Arra a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+       * @param {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
        * @param {String} property The style property to be set.
        * @param {String} val The value to apply to the given property.
        */
@@ -123,7 +126,7 @@ YAHOO.util.Dom.prototype = {
       
       /**
        * Gets the current position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-       * @param {String/HTMLElement/Arra a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
+       * @param {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
        @ return {Array} The XY position of the element(s)
        */
       getXY: function(el) {
@@ -188,7 +191,7 @@ YAHOO.util.Dom.prototype = {
       
       /**
        * Gets the current X position of an element based on page coordinates.  The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-       * @param {String/HTMLElement/Arra a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
+       * @param {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
        * @return {String/Array} The X position of the element(s)
        */
       getX: function(el) {
@@ -197,7 +200,7 @@ YAHOO.util.Dom.prototype = {
       
       /**
        * Gets the current Y position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-       * @param {String/HTMLElement/Arra a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
+       * @param {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
        * @return {String/Array} The Y position of the element(s)
        */
       getY: function(el) {
@@ -207,14 +210,14 @@ YAHOO.util.Dom.prototype = {
       /**
        * Set the position of an html element in page coordinates, regardless of how the element is positioned.
        * The element(s) must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-       * @param {String/HTMLElement/Arra a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
+       * @param {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
        * @param {Array} pos Contains X & Y values for new position (coordinates are page-based)
        * @param {Boolean} noRetry By default we try and set the position a second time if the first fails
        */
       setXY: function(el, pos, noRetry) {
          var f = function(el, self) {
    
-            var style_pos = self.getStyle(el, 'position')
+            var style_pos = self.getStyle(el, 'position');
             if (style_pos == 'static') { // default to relative
                self.setStyle(el, 'position', 'relative');
                style_pos = 'relative';
@@ -244,7 +247,7 @@ YAHOO.util.Dom.prototype = {
       
             // if retry is true, try one more time if we miss
             if (!noRetry && (newXY[0] != pos[0] || newXY[1] != pos[1]) ) {
-               var retry = function() { YAHOO.util.Dom.setXY(el, pos, true) };
+               var retry = function() { YAHOO.util.Dom.setXY(el, pos, true); };
                setTimeout(retry, 0); // "delay" for IE resize timing issue
             }
          };
@@ -255,7 +258,7 @@ YAHOO.util.Dom.prototype = {
       /**
        * Set the X position of an html element in page coordinates, regardless of how the element is positioned.
        * The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-       * @param {String/HTMLElement/Arra a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+       * @param {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
        * @param {Int} x to use as the X coordinate for the element(s).
        */
       setX: function(el, x) {
@@ -265,7 +268,7 @@ YAHOO.util.Dom.prototype = {
       /**
        * Set the Y position of an html element in page coordinates, regardless of how the element is positioned.
        * The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-       * @param {String/HTMLElement/Arra a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+       * @param {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
        * @param {Int} x to use as the Y coordinate for the element(s).
        */
       setY: function(el, y) {
@@ -275,7 +278,7 @@ YAHOO.util.Dom.prototype = {
       /**
        * Returns the region position of the given element.
        * The element must be part of the DOM tree to have a region (display:none or elements not appended return false).
-       * @param {String/HTMLElement/Arra a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+       * @param {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
        * @return {Region/Array} A Region or array of Region instances containing "top, left, bottom, right" member data.
        */
       getRegion: function(el) {
@@ -404,7 +407,7 @@ YAHOO.util.Dom.prototype = {
             if (!el.id) { el.id = prefix + id_counter++; } // dont override existing
             
             return el.id;
-         }
+         };
          
          return this.batch(el, f, this);
       },
@@ -507,5 +510,5 @@ YAHOO.util.Dom.prototype = {
          
          return collection;
       }
-   }
-
+   };
+}();
