@@ -2,7 +2,6 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version: 0.10.0
 * @class 
 * Module is a JavaScript representation of the Standard Module Format. Standard Module Format is a simple standard for markup containers where child nodes representing the header, body, and footer of the content are denoted using the CSS classes "hd", "bd", and "ft" respectively. Module is the base class for all other classes in the YUI Container package.
 * @param {string}	el	The element ID representing the Module <em>OR</em>
@@ -15,6 +14,16 @@ YAHOO.widget.Module = function(el, userConfig) {
 		this.init(el, userConfig); 
 	}
 }
+
+YAHOO.widget.Module.IMG_ROOT = "http://us.i1.yimg.com/us.yimg.com/i/";
+YAHOO.widget.Module.IMG_ROOT_SSL = "https://a248.e.akamai.net/sec.yimg.com/i/";
+
+/**
+* Constant for the default CSS class name that represents a Module
+* @type string
+* @final
+*/
+YAHOO.widget.Module.CSS_MODULE = "module";
 
 /**
 * Constant representing the module header
@@ -70,40 +79,104 @@ YAHOO.widget.Module.prototype = {
 	footer : null,
 
 	/**
+	* The id of the element
+	* @type string
+	*/
+	id : null,
+
+	/**
 	* Array of elements
 	* @type Element[]
 	*/
 	childNodesInDOM : null,
 
 	/**
+	* The string representing the image root
+	* @type string
+	*/
+	imageRoot : YAHOO.widget.Module.IMG_ROOT,
+
+	/**
+	* Array of OverlayEffects to use when showing and hiding the Module
+	* @type YAHOO.widget.OverlayEffect[]
+	*/
+	effects : new Array(),
+
+	/**
 	* Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
 	*/
 	initEvents : function() {
-		this.appendEvent		= new YAHOO.util.CustomEvent("append");
-		this.beforeRenderEvent	= new YAHOO.util.CustomEvent("beforeRender");
-		this.renderEvent		= new YAHOO.util.CustomEvent("render");
 
-		this.changeHeaderEvent	= new YAHOO.util.CustomEvent("changeHeader");
-		this.changeBodyEvent	= new YAHOO.util.CustomEvent("changeBody");
-		this.changeFooterEvent	= new YAHOO.util.CustomEvent("changeFooter");
+		this.beforeInitModuleEvent	= new YAHOO.util.CustomEvent("beforeInitModule");
+		this.initModuleEvent		= new YAHOO.util.CustomEvent("initModule");
 
-		this.changeContentEvent = new YAHOO.util.CustomEvent("changeContent");
+		this.appendEvent			= new YAHOO.util.CustomEvent("append");
+		this.beforeRenderEvent		= new YAHOO.util.CustomEvent("beforeRender");
+		this.renderEvent			= new YAHOO.util.CustomEvent("render");
 
-		this.destroyEvent		= new YAHOO.util.CustomEvent("destroy");
-		this.beforeShowEvent	= new YAHOO.util.CustomEvent("beforeShow", this);
-		this.showEvent			= new YAHOO.util.CustomEvent("show", this);
-		this.beforeHideEvent	= new YAHOO.util.CustomEvent("beforeHide", this);
-		this.hideEvent			= new YAHOO.util.CustomEvent("hide", this);
+		this.changeHeaderEvent		= new YAHOO.util.CustomEvent("changeHeader");
+		this.changeBodyEvent		= new YAHOO.util.CustomEvent("changeBody");
+		this.changeFooterEvent		= new YAHOO.util.CustomEvent("changeFooter");
+
+		this.changeContentEvent		= new YAHOO.util.CustomEvent("changeContent");
+
+		this.destroyEvent			= new YAHOO.util.CustomEvent("destroy");
+		this.beforeShowEvent		= new YAHOO.util.CustomEvent("beforeShow", this);
+		this.showEvent				= new YAHOO.util.CustomEvent("show", this);
+		this.beforeHideEvent		= new YAHOO.util.CustomEvent("beforeHide", this);
+		this.hideEvent				= new YAHOO.util.CustomEvent("hide", this);
+
+		this.resizeEvent			= new YAHOO.util.CustomEvent("resize", this);
 	}, 
 
 	/**
 	* Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
 	*/
 	initDefaultConfig : function() {
-		this.cfg = new YAHOO.util.Config(this);
-
 		// Add properties //
+
+		var ua = navigator.userAgent.toLowerCase();
+
+		this.platform = function() {
+			if (ua.indexOf("windows") != -1 || ua.indexOf("win32") != -1) {
+				return "windows";
+			} else if (ua.indexOf("macintosh") != -1) {
+				return "mac";
+			} else {
+				return false;
+			}
+		}();
+
+		/**
+		* A string representing the current browser, as determined by the user-agent
+		* @type string
+		*/
+		this.browser = function() {
+			  if (ua.indexOf('opera')!=-1) { // Opera (check first in case of spoof)
+				 return 'opera';
+			  } else if (ua.indexOf('msie 7')!=-1) { // IE7
+				 return 'ie7';
+			  } else if (ua.indexOf('msie') !=-1) { // IE
+				 return 'ie';
+			  } else if (ua.indexOf('safari')!=-1) { // Safari (check before Gecko because it includes "like Gecko")
+				 return 'safari';
+			  } else if (ua.indexOf('gecko') != -1) { // Gecko
+				 return 'gecko';
+			  } else {
+				 return false;
+			  }
+		}();
+
+		if (window.location.href.toLowerCase().indexOf("https") == 0) {
+			this.imageRoot = YAHOO.widget.Module.IMG_ROOT_SSL;
+			this.isSecure = true;
+		} else {
+			this.isSecure = false;
+		}
+
 		this.cfg.addProperty("visible", null, this.configVisible, this.cfg.checkBoolean, this.element, true);
+		this.cfg.addProperty("effect");
+		this.cfg.addProperty("monitorresize", true, this.configMonitorResize);
 	},
 
 	/**
@@ -114,32 +187,36 @@ YAHOO.widget.Module.prototype = {
 	*/
 	init : function(el, userConfig) {
 
-		if (typeof el == "string")
-		{
+		this.cfg = new YAHOO.util.Config(this);
+
+		this.initEvents();
+		
+		this.beforeInitModuleEvent.fire(el);
+
+		if (typeof el == "string") {
 			var elId = el;
 
 			el = document.getElementById(el);
-			if (! el)
-			{
+			if (! el) {
 				el = document.createElement("DIV");
 				el.id = elId;
 			}
 		}
 
 		this.element = el;
-		this.id = el.id;
+		
+		if (el.id) {
+			this.id = el.id;
+		} 
 		
 		this.childNodesInDOM = [null,null,null];
 
 		var childNodes = this.element.childNodes;
 
-		if (childNodes)
-		{
-			for (var i=0;i<childNodes.length;i++)
-			{
+		if (childNodes) {
+			for (var i=0;i<childNodes.length;i++) {
 				var child = childNodes[i];
-				switch (child.className)
-				{
+				switch (child.className) {
 					case YAHOO.widget.Module.CSS_HEADER:
 						this.header = child;
 						this.childNodesInDOM[0] = child;
@@ -156,13 +233,41 @@ YAHOO.widget.Module.prototype = {
 			}
 		}
 
-		this.initEvents();
 		this.initDefaultConfig();
-		
+
+		YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Module.CSS_MODULE);
+
 		if (userConfig) {
 			this.cfg.applyConfig(userConfig);
 		}
+
+		this.initModuleEvent.fire(this.element);
 	},
+
+	/**
+	* Initialized an empty DOM element that is placed out of the visible area that can be used to detect text resize.
+	*/
+	initResizeMonitor : function() {
+		var resizeMonitor = document.getElementById("_yuiResizeMonitor");
+		if (! resizeMonitor) {
+			resizeMonitor = document.createElement("DIV");
+			resizeMonitor.style.position = "absolute";
+			resizeMonitor.id = "_yuiResizeMonitor";
+			resizeMonitor.style.width = "1em";
+			resizeMonitor.style.height = "1em";
+			resizeMonitor.style.top = "-1000px";
+			resizeMonitor.style.left = "-1000px";
+			resizeMonitor.innerHTML = "&nbsp;";
+			document.body.appendChild(resizeMonitor);
+		}
+		this.resizeMonitor = resizeMonitor;
+		YAHOO.util.Event.addListener(this.resizeMonitor, "resize", this.onDomResize, this, true);
+	},
+
+	/**
+	* Event handler fired when the resize monitor element is resized.
+	*/
+	onDomResize : function(e, obj) { },
 
 	/**
 	* Sets the Module's header content to the HTML specified, or appends the passed element to the header. If no header is present, one will be automatically created.
@@ -250,8 +355,7 @@ YAHOO.widget.Module.prototype = {
 			this.footer.className = YAHOO.widget.Module.CSS_FOOTER;
 		}
 
-		if (typeof footerContent == "string")
-		{
+		if (typeof footerContent == "string") {
 			this.footer.innerHTML = footerContent;
 		} else {
 			this.footer.innerHTML = "";
@@ -308,7 +412,7 @@ YAHOO.widget.Module.prototype = {
 			}
 			appendTo(appendToNode);
 		} else { // No node was passed in. If the element is not pre-marked up, this fails
-			if (! YAHOO.util.Dom._elementInDom(this.element)) {
+			if (! YAHOO.util.Dom.inDocument(this.element)) {
 				return false;
 			}
 		}
@@ -340,8 +444,8 @@ YAHOO.widget.Module.prototype = {
 		}
 		
 		this.cfg.fireDeferredEvents();
-		this.renderEvent.fire();
 
+		this.renderEvent.fire();
 		return true;
 	},
 
@@ -393,6 +497,19 @@ YAHOO.widget.Module.prototype = {
 			YAHOO.util.Dom.setStyle(this.element, "display", "block");
 		} else {
 			YAHOO.util.Dom.setStyle(this.element, "display", "none");
+		}
+	},
+
+	/**
+	* Default event handler for the "monitorresize" configuration property
+	*/
+	configMonitorResize : function(type, args, obj) {
+		var monitor = args[0];
+		if (monitor) {
+			this.initResizeMonitor();
+		} else {
+			YAHOO.util.Event.removeListener(this.resizeMonitor, "resize", this.onDomResize);
+			this.resizeMonitor = null;
 		}
 	}
 }
