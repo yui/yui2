@@ -11,8 +11,7 @@ http://developer.yahoo.net/yui/license.txt
 * @extends YAHOO.widget.Overlay
 * @base YAHOO.widget.Overlay
 * @param {String/HTMLElement} p_oElement String id or HTMLElement 
-* (either HTMLUListElement, HTMLSelectElement or HTMLDivElement) of the 
-* source HTMLElement node.
+* (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
 * @param {Object} p_oUserConfig Optional. The configuration object literal 
 * containing the configuration that should be set for this Menu. See 
 * configuration documentation for more details.
@@ -45,9 +44,12 @@ YAHOO.widget.Menu.superclass = YAHOO.widget.Overlay.prototype;
 */
 YAHOO.widget.Menu.prototype.CSS_CLASS_NAME = "yuimenu";
 
+
 /**
-* Constant representing the type of Menu to instantiate when creating 
-* MenuItem instances.
+* Constant representing the type of MenuItem to instantiate when creating 
+* MenuItem instances from parsing the child nodes (either HTMLLIElement, 
+* HTMLOptGroupElement or HTMLOptionElement) of the Menu's DOM.  The default 
+* is YAHOO.widget.MenuItem.
 * @final
 * @type YAHOO.widget.MenuItem
 */
@@ -57,7 +59,7 @@ YAHOO.widget.Menu.prototype.MENUITEM_TYPE = null;
 // Private properties
 
 /**
-* Array of MenuItem instances.
+* Multi-dimensional array of MenuItem instances.
 * @private
 * @type {Array}
 */
@@ -65,28 +67,12 @@ YAHOO.widget.Menu.prototype._aMenuItemGroups = null;
 
 
 /**
-* An array of HTMLUListElements, each of which is the parent a MenuItem
-* instance's HTMLLIElement node
+* An array of HTMLUListElements, each of which is the parent node of a MenuItem
+* instance's HTMLLIElement node.
 * @private
 * @type {Array}
 */
 YAHOO.widget.Menu.prototype._aListElements = null;
-
-
-/**
-* The HTMLLIElement node that is currently the target of a DOM event
-* @private
-* @type {HTMLLIElement}
-*/
-YAHOO.widget.Menu.prototype._oCurrentMenuItemLI = null;
-
-
-/**
-* The HTMLDIVElement node that is currently the target of a DOM event
-* @private
-* @type {HTMLDIVElement}
-*/
-YAHOO.widget.Menu.prototype._oCurrentMenuDIV = null;
 
 
 /**
@@ -106,14 +92,38 @@ YAHOO.widget.Menu.prototype._oDom = YAHOO.util.Dom;
 
 
 /**
+* Reference to the MenuItem instance the mouse is currently over.
+* @private
+* @type {YAHOO.widget.MenuItem}
+*/
+YAHOO.widget.Menu.prototype._oCurrentMenuItem = null;
+
+
+/** 
+* The current state of the Menu's "mouseover" event
+* @private
+* @type {Boolean}
+*/
+YAHOO.widget.Menu.prototype._bFiredMouseOverEvent = false;
+
+
+/** 
+* The current state of the Menu's "mouseout" event
+* @private
+* @type {Boolean}
+*/
+YAHOO.widget.Menu.prototype._bFiredMouseOutEvent = false;
+
+
+// Public properties
+
+
+/**
 * Reference to the MenuItem instance that has focus.
 * @private
 * @type {YAHOO.widget.MenuItem}
 */
 YAHOO.widget.Menu.prototype.activeMenuItem = null;
-
-
-// Public properties
 
 
 /**
@@ -153,7 +163,7 @@ YAHOO.widget.Menu.prototype.mouseOutEvent = null;
 
 
 /**
-* Fires when the user clicks the on a Menu instance.  Passes back the 
+* Fires when the user mouses down on a Menu instance.  Passes back the 
 * DOM Event object as an argument.
 * @type {YAHOO.util.CustomEvent}
 * @see YAHOO.util.CustomEvent
@@ -211,8 +221,7 @@ YAHOO.widget.Menu.prototype.keyUpEvent = null;
 * by the constructor, and sets up all DOM references for pre-existing markup, 
 * and creates required markup if it is not already present.
 * @param {String/HTMLElement} p_oElement String id or HTMLElement 
-* (either HTMLUListElement, HTMLSelectElement or HTMLDivElement) of the 
-* source HTMLElement node.
+* (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
 * @param {Object} p_oUserConfig The configuration object literal containing 
 * the configuration that should be set for this Menu. See configuration 
 * documentation for more details.
@@ -551,7 +560,16 @@ YAHOO.widget.Menu.prototype._addMenuItemToGroup = function(p_nGroupIndex, p_oMen
 
         if(oMenuItem) {
 
-            if(!oMenuItem.element.parentNode) {
+            if(
+                !oMenuItem.element.parentNode || 
+
+                // Check if the parentNode is a document fragment
+
+                (
+                    oMenuItem.element.parentNode && 
+                    oMenuItem.element.parentNode.nodeType == 11
+                )
+            ) {
 
                 this._aListElements[nGroupIndex].appendChild(oMenuItem.element);
 
@@ -738,7 +756,7 @@ YAHOO.widget.Menu.prototype._updateMenuItemProperties = function(p_nGroupIndex) 
 
 
 /**
-* Creates a new MenuItem group and it's associated HTMLUlElement node 
+* Creates a new MenuItem group (array) and it's associated HTMLUlElement node 
 * @private
 * @param {Number} p_nIndex Number indicating the group to create.
 * @return A MenuItem group.
@@ -799,7 +817,7 @@ YAHOO.widget.Menu.prototype._subscribeSubMenuToRenderEvent = function(p_oMenuIte
 
 
 /**
-* Subscribes to the specified MenuItem instance's Custom Events.
+* Subscribes a Menu instance to the specified MenuItem instance's Custom Events.
 * @private
 * @param {YAHOO.widget.MenuItem} p_oMenuItem The MenuItem instance to listen
 * for events on.
@@ -945,17 +963,26 @@ YAHOO.widget.Menu.prototype._onElementMouseOver = function(p_oEvent, p_oMenu) {
 
     var oTarget = this._oEventUtil.getTarget(p_oEvent, true);
 
-    if(!this._oCurrentMenuDIV && this._oDom.isAncestor(this.element, oTarget)) {
 
-        this._oCurrentMenuDIV = this.element;
+    if(
+        (
+            oTarget == this.element || 
+            this._oDom.isAncestor(this.element, oTarget)
+        )  && 
+        !this._bFiredMouseOverEvent
+    ) {
 
         // Fire the associated custom event
 
         this.mouseOverEvent.fire(p_oEvent);
 
+        this._bFiredMouseOverEvent = true;
+        this._bFiredMouseOutEvent = false;
+
     }
 
-    if(!this._oCurrentMenuItemLI) {
+
+    if(!this._oCurrentMenuItem) {
 
         var oNode = oTarget;
     
@@ -967,18 +994,40 @@ YAHOO.widget.Menu.prototype._onElementMouseOver = function(p_oEvent, p_oMenu) {
                 oNode.parentNode.parentNode.parentNode == this.element
             ) {
 
-                this._oCurrentMenuItemLI = oNode;
-
                 var nGroupIndex = parseInt(oNode.getAttribute("groupindex"), 10),
                     nIndex = parseInt(oNode.getAttribute("index"), 10),
                     oMenuItem = this._aMenuItemGroups[nGroupIndex][nIndex];
-    
+
                 if(oMenuItem && !oMenuItem.cfg.getProperty("disabled")) {
+
+                    // Keep a reference to the MenuItem
+    
+                    this._oCurrentMenuItem = oMenuItem;
+
 
                     // Fire the associated custom event
 
                     oMenuItem.mouseOverEvent.fire(p_oEvent);
             
+
+                    // Deselect the previously active MenuItem
+
+                    if(this.activeMenuItem && this.activeMenuItem != oMenuItem) {
+            
+                        if(this.activeMenuItem.cfg.getProperty("selected")) {
+            
+                            this.activeMenuItem.cfg.setProperty(
+                                "selected", 
+                                false
+                            );
+                
+                        }
+            
+                    }
+
+
+                    // Select and focus the current MenuItem
+
                     oMenuItem.cfg.setProperty("selected", true);
             
                     oMenuItem.focus();
@@ -1016,63 +1065,67 @@ YAHOO.widget.Menu.prototype._onElementMouseOut = function(p_oEvent, p_oMenu) {
     this._oEventUtil.stopPropagation(p_oEvent);
 
 
-    var oRelatedTarget = this._oEventUtil.getRelatedTarget(p_oEvent),
-        bLIMouseOut = true,
-        bDIVMouseOut = true;
-        
-    if((this._oCurrentMenuItemLI || this._oCurrentMenuDIV)  && oRelatedTarget) {
+    var oRelatedTarget = this._oEventUtil.getRelatedTarget(p_oEvent);
 
-        var oNode = oRelatedTarget;
-    
-        do {
+    var bLIMouseOut = true;
+    var bMovingToSubmenu = false;
 
-            if(
-                oNode == this._oCurrentMenuItemLI && 
-                oNode.parentNode.parentNode.parentNode == this.element
-            ) {
+    if(this._oCurrentMenuItem && oRelatedTarget) {
 
-                bLIMouseOut = false;
+        if(
+            oRelatedTarget == this._oCurrentMenuItem.element || 
+            this._oDom.isAncestor(this._oCurrentMenuItem.element, oRelatedTarget)
+        ) {
 
-            }
-
-            if(oNode == this._oCurrentMenuDIV) {
-
-                bDIVMouseOut = false;
-                break;
-            }
-
-        }
-        while((oNode = oNode.parentNode));
-
-    }        
-
-    if(this._oCurrentMenuItemLI && bLIMouseOut) {
-
-        var nGroupIndex = parseInt(this._oCurrentMenuItemLI.getAttribute("groupindex"), 10),
-            nIndex = parseInt(this._oCurrentMenuItemLI.getAttribute("index"), 10),
-            oMenuItem = this._aMenuItemGroups[nGroupIndex][nIndex];
-
-        if(oMenuItem && !oMenuItem.cfg.getProperty("disabled")) {
-
-            // Fire the associated custom event
-
-            oMenuItem.mouseOutEvent.fire(p_oEvent);
-
-            oMenuItem.cfg.setProperty("selected", false);
+            bLIMouseOut = false;
 
         }
 
-        this._oCurrentMenuItemLI = null;
+
+        var oSubmenu = this._oCurrentMenuItem.cfg.getProperty("submenu");
+
+        if(
+            oSubmenu && 
+            (
+                oRelatedTarget == oSubmenu.element ||
+                this._oDom.isAncestor(oSubmenu.element, oRelatedTarget)
+            )
+        ) {
+
+            bMovingToSubmenu = true;
+
+        }
 
     }
 
-    if(this._oCurrentMenuDIV && bDIVMouseOut) {
+
+    if(this._oCurrentMenuItem && (bLIMouseOut || bMovingToSubmenu)) {
+
+        // Fire the associated custom event
+
+        this._oCurrentMenuItem.mouseOutEvent.fire(p_oEvent);
+
+        this._oCurrentMenuItem.cfg.setProperty("selected", false);
+
+        this._oCurrentMenuItem = null;
+
+    }
+
+
+    if(
+        !this._bFiredMouseOutEvent && 
+        (
+            !this._oDom.isAncestor(this.element, oRelatedTarget) ||
+            bMovingToSubmenu
+        )
+    ) {
 
         // Fire the associated custom event
 
         this.mouseOutEvent.fire(p_oEvent);
 
-        this._oCurrentMenuDIV = null;
+        this._bFiredMouseOutEvent = true;
+        this._bFiredMouseOverEvent = false;
 
     }
 
@@ -1483,7 +1536,7 @@ YAHOO.widget.Menu.prototype._onElementKeyPress = function(p_oEvent, p_oMenu) {
 
 /**
 * "render" YAHOO.util.CustomEvent handler for a Menu instance.  Calls the 
-* render method of each of a Menu instance's submenus.
+* render method of a Menu instance's submenus.
 * @private
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArguments Collection of arguments sent when the event 
@@ -1504,8 +1557,8 @@ YAHOO.widget.Menu.prototype._onRender = function(p_sType, p_aArguments, p_oMenu)
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArguments Collection of arguments sent when the event 
 * was fired.
-* @param {YAHOO.widget.MenuItem} p_oMenuItem The MenuItem instance
-* that fired the event.
+* @param {Array} p_aObjects Array containing the current Menu instance and the 
+* MenuItem instance that fired the event.
 */
 YAHOO.widget.Menu.prototype._onMenuItemFocus = function(p_sType, p_aArguments, p_aObjects) {
 
@@ -1524,8 +1577,8 @@ YAHOO.widget.Menu.prototype._onMenuItemFocus = function(p_sType, p_aArguments, p
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArguments Collection of arguments sent when the event 
 * was fired.
-* @param {YAHOO.widget.MenuItem} p_oMenuItem The MenuItem instance 
-* that fired the event.
+* @param {Array} p_aObjects Array containing the current Menu instance and the 
+* MenuItem instance that fired the event.
 */
 YAHOO.widget.Menu.prototype._onMenuItemBlur = function(p_sType, p_aArguments, p_aObjects) {
 
@@ -1549,8 +1602,8 @@ YAHOO.widget.Menu.prototype._onMenuItemBlur = function(p_sType, p_aArguments, p_
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArguments Collection of arguments sent when the 
 * event was fired.
-* @param {YAHOO.widget.Menu} p_oMenu The parent Menu instance for the 
-* MenuItem that fired the event.
+* @param {Array} p_aObjects Array containing the current Menu instance and the 
+* MenuItem instance that fired the event.
 */
 YAHOO.widget.Menu.prototype._onMenuItemConfigChange = function(p_sType, p_aArguments, p_aObjects) {
 
@@ -1575,17 +1628,27 @@ YAHOO.widget.Menu.prototype._onMenuItemConfigChange = function(p_sType, p_aArgum
         case "text":
         case "helptext":
 
-            var oClone = me.element.cloneNode(true);
+            /*
+                A change to a MenuItem instance's "text" or "helptext"
+                configuration properties requires the width of the parent
+                Menu instance to be recalculated.
+            */
 
-            me._oDom.setStyle(oClone, "width", "");
+            if(me.element.style.width) {
 
-            document.body.appendChild(oClone);
+                var oClone = me.element.cloneNode(true);
+    
+                me._oDom.setStyle(oClone, "width", "");
+    
+                document.body.appendChild(oClone);
+    
+                var sWidth = oClone.offsetWidth + "px";
 
-            var sWidth = oClone.offsetWidth + "px";
+                me._oDom.setStyle(me.element, "width", sWidth);
+    
+                document.body.removeChild(oClone);
 
-            document.body.removeChild(oClone);
-
-            me._oDom.setStyle(me.element, "width", sWidth);
+            }
 
         break;
 
@@ -1677,7 +1740,7 @@ YAHOO.widget.Menu.prototype.removeMenuItem = function(p_oObject, p_nGroupIndex) 
 
 
 /**
-* Returns an array of all of a Menu's MenuItem instances.
+* Returns a multi-dimensional array of all of a Menu's MenuItem instances.
 * @return An array of MenuItem instances.
 * @type Array
 */        
@@ -1729,6 +1792,11 @@ YAHOO.widget.Menu.prototype.render = function(p_oAppendToNode, p_bHideSourceElem
     this.beforeRenderEvent.fire();
 
 
+    /*
+        Append all of the HTMLUListElement nodes (and their child HTMLLIElement)
+        nodes to the body of the module.
+    */
+
     var nListElements = this._aListElements.length;
 
     if(nListElements > 0) {
@@ -1747,7 +1815,16 @@ YAHOO.widget.Menu.prototype.render = function(p_oAppendToNode, p_bHideSourceElem
         
                 }
 
-                if(!this._aListElements[i].parentNode) {
+                if(
+                    !this._aListElements[i].parentNode ||
+
+                    // Check if the parentNode is a document fragment
+
+                    (
+                        this._aListElements[i].parentNode && 
+                        this._aListElements[i].parentNode.nodeType == 11
+                    )
+                ) {
 
                     this.appendToBody(this._aListElements[i]);
 
@@ -1761,7 +1838,6 @@ YAHOO.widget.Menu.prototype.render = function(p_oAppendToNode, p_bHideSourceElem
         while(i < nListElements);
 
     }
-
 
 
     // Need to get everything into the DOM if it isn't already
@@ -1783,6 +1859,7 @@ YAHOO.widget.Menu.prototype.render = function(p_oAppendToNode, p_bHideSourceElem
 
     }
 
+
     if((!this.childNodesInDOM[1]) && this.body) {
 
         // There is a body, but it's not in the DOM yet... need to add it
@@ -1798,6 +1875,7 @@ YAHOO.widget.Menu.prototype.render = function(p_oAppendToNode, p_bHideSourceElem
         }
 
     }
+
 
     if((!this.childNodesInDOM[2]) && this.footer) {
 
@@ -1909,9 +1987,7 @@ YAHOO.widget.Menu.prototype.render = function(p_oAppendToNode, p_bHideSourceElem
         appendTo(p_oAppendToNode);
 
 
-        /*
-            Put the submenu indicator images back in place.
-        */
+        // Put the submenu indicator images back in place.
 
         if(aMenuItemNodes.length > 0) {
 
@@ -1929,10 +2005,18 @@ YAHOO.widget.Menu.prototype.render = function(p_oAppendToNode, p_bHideSourceElem
         }
 
 
-    } else { // No node was passed in. If the element is not pre-marked up, this fails
+    }
+    else {
 
-        if (! YAHOO.util.Dom._elementInDom(this.element)) {
+        /*
+            No node was passed in. If the element is not already in the 
+            document, this fails.
+        */
+
+        if(!YAHOO.util.Dom._elementInDom(this.element)) {
+
             return false;
+
         }
 
     }

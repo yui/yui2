@@ -96,9 +96,10 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * Constant representing the type of Menu to instantiate when creating 
-    * submenu instances.
+    * Menu instances from parsing the child nodes (either HTMLSelectElement or 
+    * HTMLDivElement) of the MenuItem's DOM.  The default is YAHOO.widget.Menu.
     * @final
-    * @type YAHOO.widget.Menu
+    * @type YAHOO.widget.MenuItem
     */
     SUBMENU_TYPE: null,
 
@@ -115,7 +116,7 @@ YAHOO.widget.MenuItem.prototype = {
     
 
     /**
-    * Reference to the Text node of the MenuItem's core internal
+    * Reference to the text node of the MenuItem's core internal
     * DOM structure.
     * @private
     * @type {Text}
@@ -162,6 +163,7 @@ YAHOO.widget.MenuItem.prototype = {
     * @type Number
     */
     index: null,
+
 
     /**
     * Returns the index of the group to which a MenuItem instance belongs.
@@ -238,7 +240,7 @@ YAHOO.widget.MenuItem.prototype = {
 
 
     /**
-    * Fires when the user clicks the on a MenuItem instance.  Passes 
+    * Fires when the user mouses down on a MenuItem instance.  Passes 
     * back the DOM Event object as an argument.
     * @type {YAHOO.util.CustomEvent}
     * @see YAHOO.util.CustomEvent
@@ -308,7 +310,6 @@ YAHOO.widget.MenuItem.prototype = {
     * @see YAHOO.util.CustomEvent
     */
     blurEvent: null,
-
 
 
     /**
@@ -826,9 +827,10 @@ YAHOO.widget.MenuItem.prototype = {
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the 
     * event was fired.
-    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance fired the event.
+    * @param {YAHOO.widget.MenuItem} p_oMenuItem The MenuItem instance fired
+    * the event.
     */
-    configText: function(p_sType, p_aArguments, p_oObject) {
+    configText: function(p_sType, p_aArguments, p_oMenuItem) {
 
         var sText = p_aArguments[0];
 
@@ -848,9 +850,10 @@ YAHOO.widget.MenuItem.prototype = {
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the 
     * event was fired.
-    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance fired the event.
+    * @param {YAHOO.widget.MenuItem} p_oMenuItem The MenuItem instance fired
+    * the event.
     */    
-    configHelpText: function(p_sType, p_aArguments, p_oObject) {
+    configHelpText: function(p_sType, p_aArguments, p_oMenuItem) {
 
         var oHelpText = p_aArguments[0];
 
@@ -950,9 +953,10 @@ YAHOO.widget.MenuItem.prototype = {
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the 
     * event was fired.
-    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance fired the event.
+    * @param {YAHOO.widget.MenuItem} p_oMenuItem The MenuItem instance fired
+    * the event.
     */    
-    configURL: function(p_sType, p_aArguments, p_oObject) {
+    configURL: function(p_sType, p_aArguments, p_oMenuItem) {
 
         var sURL = p_aArguments[0];
 
@@ -973,9 +977,10 @@ YAHOO.widget.MenuItem.prototype = {
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the 
     * event was fired.
-    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance fired the event.
+    * @param {YAHOO.widget.MenuItem} p_oMenuItem The MenuItem instance fired
+    * the event.
     */    
-    configEmphasis: function(p_sType, p_aArguments, p_oObject) {
+    configEmphasis: function(p_sType, p_aArguments, p_oMenuItem) {
 
         var bEmphasis = p_aArguments[0];
 
@@ -1037,9 +1042,10 @@ YAHOO.widget.MenuItem.prototype = {
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the 
     * event was fired.
-    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance fired the event.
+    * @param {YAHOO.widget.MenuItem} p_oMenuItem The MenuItem instance fired
+    * the event.
     */    
-    configStrongEmphasis: function(p_sType, p_aArguments, p_oObject) {
+    configStrongEmphasis: function(p_sType, p_aArguments, p_oMenuItem) {
 
         var bStrongEmphasis = p_aArguments[0];
 
@@ -1099,9 +1105,10 @@ YAHOO.widget.MenuItem.prototype = {
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the 
     * event was fired.
-    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance fired the event.
+    * @param {YAHOO.widget.MenuItem} p_oMenuItem The MenuItem instance fired
+    * the event.
     */    
-    configDisabled: function(p_sType, p_aArguments, p_oObject) {
+    configDisabled: function(p_sType, p_aArguments, p_oMenuItem) {
 
         var bDisabled = p_aArguments[0];
 
@@ -1172,9 +1179,10 @@ YAHOO.widget.MenuItem.prototype = {
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the 
     * event was fired.
-    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance fired the event.
+    * @param {YAHOO.widget.MenuItem} p_oMenuItem The MenuItem instance fired
+    * the event.
     */    
-    configSelected: function(p_sType, p_aArguments, p_oObject) {
+    configSelected: function(p_sType, p_aArguments, p_oMenuItem) {
 
         var bSelected = p_aArguments[0];
 
@@ -1228,9 +1236,10 @@ YAHOO.widget.MenuItem.prototype = {
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArguments Collection of arguments sent when the 
     * event was fired.
-    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance fired the event.
+    * @param {YAHOO.widget.MenuItem} p_oMenuItem The MenuItem instance fired
+    * the event.
     */
-    configSubmenu: function(p_sType, p_aArguments, p_oObject) {
+    configSubmenu: function(p_sType, p_aArguments, p_oMenuItem) {
 
         var oMenu = p_aArguments[0];
 
@@ -1350,56 +1359,61 @@ YAHOO.widget.MenuItem.prototype = {
     */
     getNextEnabledSibling: function() {
 
-        function getNextArrayItem(p_aArray, p_nStartIndex) {
+        if(this.parent instanceof YAHOO.widget.Menu) {
 
-            return p_aArray[p_nStartIndex] || 
-                getNextArrayItem(p_aArray, (p_nStartIndex+1));
-
-        }
-
-
-        var aMenuItemGroups = this.parent.getMenuItemGroups(),
-            oNextMenuItem;
-
-
-        if(this.index < (aMenuItemGroups[this.groupIndex].length - 1)) {
-
-            oNextMenuItem = 
-                getNextArrayItem(
-                    aMenuItemGroups[this.groupIndex], 
-                    (this.index+1)
-                );
-
-        }
-        else {
-
-            var nNextGroupIndex;
-
-            if(this.groupIndex < (aMenuItemGroups.length - 1)) {
-
-                nNextGroupIndex = this.groupIndex + 1;
-
+            function getNextArrayItem(p_aArray, p_nStartIndex) {
+    
+                return p_aArray[p_nStartIndex] || 
+                    getNextArrayItem(p_aArray, (p_nStartIndex+1));
+    
+            }
+    
+    
+            var aMenuItemGroups = this.parent.getMenuItemGroups(),
+                oNextMenuItem;
+    
+    
+            if(this.index < (aMenuItemGroups[this.groupIndex].length - 1)) {
+    
+                oNextMenuItem = 
+                    getNextArrayItem(
+                        aMenuItemGroups[this.groupIndex], 
+                        (this.index+1)
+                    );
+    
             }
             else {
-
-                nNextGroupIndex = 0;
-
+    
+                var nNextGroupIndex;
+    
+                if(this.groupIndex < (aMenuItemGroups.length - 1)) {
+    
+                    nNextGroupIndex = this.groupIndex + 1;
+    
+                }
+                else {
+    
+                    nNextGroupIndex = 0;
+    
+                }
+    
+                var aNextGroup = getNextArrayItem(aMenuItemGroups, nNextGroupIndex);
+    
+                /*
+                    Retrieve the first MenuItem instance in the next group
+                */ 
+    
+                oNextMenuItem = getNextArrayItem(aNextGroup, 0);
+    
             }
-
-            var aNextGroup = getNextArrayItem(aMenuItemGroups, nNextGroupIndex);
-
-            /*
-                Retrieve the first MenuItem instance in the next group
-            */ 
-
-            oNextMenuItem = getNextArrayItem(aNextGroup, 0);
+    
+            return oNextMenuItem.cfg.getProperty("disabled") ? 
+                        oNextMenuItem.getNextEnabledSibling() : oNextMenuItem;
 
         }
 
-        return oNextMenuItem.cfg.getProperty("disabled") ? 
-                    oNextMenuItem.getNextEnabledSibling() : oNextMenuItem;
-
     },
+
 
     /**
     * Finds the previous enabled MenuItem instance in a Menu instance 
@@ -1408,50 +1422,54 @@ YAHOO.widget.MenuItem.prototype = {
     */
     getPreviousEnabledSibling: function() {
 
-        function getPreviousArrayItem(p_aArray, p_nStartIndex) {
+        if(this.parent instanceof YAHOO.widget.Menu) {
 
-            return p_aArray[p_nStartIndex] || 
-                getPreviousArrayItem(p_aArray, (p_nStartIndex-1));
-
-        }
-
-        function getFirstItemIndex(p_aArray, p_nStartIndex) {
-
-            return p_aArray[p_nStartIndex] ? 
-                p_nStartIndex : getFirstItemIndex(p_aArray, (p_nStartIndex+1));
-
-        }
-
-        var aMenuItemGroups = this.parent.getMenuItemGroups(),
-            oPreviousMenuItem;
-
-        if(this.index > getFirstItemIndex(aMenuItemGroups[this.groupIndex], 0)) {
-
-            oPreviousMenuItem = getPreviousArrayItem(aMenuItemGroups[this.groupIndex], (this.index-1));
-
-        }
-        else {
-
-            var nPreviousGroupIndex;
-
-            if(this.groupIndex > getFirstItemIndex(aMenuItemGroups, 0)) {
-
-                nPreviousGroupIndex = this.groupIndex - 1;
-
+            function getPreviousArrayItem(p_aArray, p_nStartIndex) {
+    
+                return p_aArray[p_nStartIndex] || 
+                    getPreviousArrayItem(p_aArray, (p_nStartIndex-1));
+    
+            }
+    
+            function getFirstItemIndex(p_aArray, p_nStartIndex) {
+    
+                return p_aArray[p_nStartIndex] ? 
+                    p_nStartIndex : getFirstItemIndex(p_aArray, (p_nStartIndex+1));
+    
+            }
+    
+            var aMenuItemGroups = this.parent.getMenuItemGroups(),
+                oPreviousMenuItem;
+    
+            if(this.index > getFirstItemIndex(aMenuItemGroups[this.groupIndex], 0)) {
+    
+                oPreviousMenuItem = getPreviousArrayItem(aMenuItemGroups[this.groupIndex], (this.index-1));
+    
             }
             else {
-
-                nPreviousGroupIndex = aMenuItemGroups.length - 1;
-
+    
+                var nPreviousGroupIndex;
+    
+                if(this.groupIndex > getFirstItemIndex(aMenuItemGroups, 0)) {
+    
+                    nPreviousGroupIndex = this.groupIndex - 1;
+    
+                }
+                else {
+    
+                    nPreviousGroupIndex = aMenuItemGroups.length - 1;
+    
+                }
+    
+                var aPreviousGroup = getPreviousArrayItem(aMenuItemGroups, nPreviousGroupIndex);
+    
+                oPreviousMenuItem = getPreviousArrayItem(aPreviousGroup, (aPreviousGroup.length - 1));
+    
             }
-
-            var aPreviousGroup = getPreviousArrayItem(aMenuItemGroups, nPreviousGroupIndex);
-
-            oPreviousMenuItem = getPreviousArrayItem(aPreviousGroup, (aPreviousGroup.length - 1));
+    
+            return oPreviousMenuItem.cfg.getProperty("disabled") ? oPreviousMenuItem.getPreviousEnabledSibling() : oPreviousMenuItem;
 
         }
-
-        return oPreviousMenuItem.cfg.getProperty("disabled") ? oPreviousMenuItem.getPreviousEnabledSibling() : oPreviousMenuItem;
 
     },
 
@@ -1462,7 +1480,11 @@ YAHOO.widget.MenuItem.prototype = {
     */
     focus: function() {
 
-        if(!this.cfg.getProperty("disabled") && this._oAnchor) {
+        if(
+            !this.cfg.getProperty("disabled") && 
+            this.parent && 
+            this.parent.cfg.getProperty("visible")
+        ) {
 
             var oActiveMenuItem = this.parent.activeMenuItem;
 
@@ -1501,7 +1523,11 @@ YAHOO.widget.MenuItem.prototype = {
     */    
     blur: function() {
 
-        if(!this.cfg.getProperty("disabled") && this._oAnchor) {
+        if(
+            !this.cfg.getProperty("disabled") && 
+            this.parent && 
+            this.parent.cfg.getProperty("visible")
+        ) {
 
             this._oAnchor.blur();
 
