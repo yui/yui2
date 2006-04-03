@@ -99,9 +99,20 @@ YAHOO.widget.MenuItem.prototype = {
     * Menu instances from parsing the child nodes (either HTMLSelectElement or 
     * HTMLDivElement) of the MenuItem's DOM.  The default is YAHOO.widget.Menu.
     * @final
-    * @type YAHOO.widget.MenuItem
+    * @type YAHOO.widget.Menu
     */
     SUBMENU_TYPE: null,
+
+
+    /**
+    * Constant representing the type of MenuItem to instantiate when creating 
+    * MenuItem instances from parsing the child nodes (either HTMLLIElement, 
+    * HTMLOptGroupElement or HTMLOptionElement) of the MenuItem's DOM.  The 
+    * default is YAHOO.widget.MenuItem.
+    * @final
+    * @type YAHOO.widget.MenuItem
+    */
+    MENUITEM_TYPE: null,
 
 
     // Private member variables
@@ -330,6 +341,12 @@ YAHOO.widget.MenuItem.prototype = {
         if(!this.SUBMENU_TYPE) {
     
             this.SUBMENU_TYPE = YAHOO.widget.Menu;
+    
+        }
+
+        if(!this.MENUITEM_TYPE) {
+    
+            this.MENUITEM_TYPE = YAHOO.widget.MenuItem;
     
         }
 
@@ -765,7 +782,7 @@ YAHOO.widget.MenuItem.prototype = {
     _initSubTree: function() {
 
         var Menu = this.SUBMENU_TYPE,
-            MenuItem = Menu.MENUITEM_TYPE;
+            MenuItem = this.MENUITEM_TYPE;
 
 
         if(this.srcElement.childNodes.length > 0) {

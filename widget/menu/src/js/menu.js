@@ -2274,6 +2274,57 @@ YAHOO.widget.Menu.prototype.setInitialSelection = function() {
 
 
 /**
+* The default event handler fired when the "fixedcenter" property is changed.
+*/
+YAHOO.widget.Menu.prototype.configFixedCenter = function(type, args, obj) {
+
+	var val = args[0];
+	var me = this;
+
+	var refireIframe = function(e, obj) {
+		setTimeout(function() {
+			me.cfg.refireEvent("iframe");
+		}, 0);	
+	}
+
+	if (val) {
+
+		this.center();
+		if (YAHOO.util.Event._getCacheIndex(window, "resize", this.center) == -1) {
+			YAHOO.util.Event.addListener(window, "resize", this.center, this, true);
+		}
+		if (YAHOO.util.Event._getCacheIndex(window, "resize", refireIframe) == -1) {
+			YAHOO.util.Event.addListener(window, "resize", refireIframe, this, true);
+		}
+		if (YAHOO.util.Event._getCacheIndex(window, "scroll", this.center) == -1) {
+			YAHOO.util.Event.addListener(window, "scroll", this.center, this, true);
+		}
+		if (YAHOO.util.Event._getCacheIndex(window, "scroll", refireIframe) == -1) {
+			YAHOO.util.Event.addListener(window, "scroll", refireIframe, this, true);
+		}
+
+	} else {
+
+		YAHOO.util.Event.removeListener(window, "resize", this.center);
+		YAHOO.util.Event.removeListener(window, "resize", refireIframe);
+		YAHOO.util.Event.removeListener(window, "scroll", this.center);
+		YAHOO.util.Event.removeListener(window, "scroll", refireIframe);
+
+
+        var sPosition = this._oDom.getStyle(this.element, "position");
+    
+        if(this.iframe && sPosition == "absolute") {
+    
+		  this.syncPosition();
+    
+        }
+
+	}
+
+};
+
+
+/**
 * Event handler for when the "iframe" configuration property of a
 * Menu changes.
 * @param {String} p_sType The name of the event that was fired.
