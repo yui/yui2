@@ -327,7 +327,7 @@ YAHOO.widget.TextNode.<span class="reserved">prototype</span>.getLabelEl = <span
 <span class="comment">
 // overrides YAHOO.widget.Node</span>
 YAHOO.widget.TextNode.<span class="reserved">prototype</span>.getNodeHtml = <span class="reserved">function</span>() { 
-	var sb = new Array();
+	var sb = [];
 
 	sb[sb.length] = <span class="literal">'&lt;table border="0" cellpadding="0" cellspacing="0"&gt;'</span>;
 	sb[sb.length] = <span class="literal">'&lt;tr&gt;'</span>;
@@ -350,7 +350,21 @@ YAHOO.widget.TextNode.<span class="reserved">prototype</span>.getNodeHtml = <spa
 		sb[sb.length] = <span class="literal">' onmouseout="this.className='</span>;
 		sb[sb.length] = getNode + <span class="literal">'.getStyle()"'</span>;
 	}
-	sb[sb.length] = <span class="literal">' onclick="javascript:'</span> + <span class="reserved">this</span>.getToggleLink() + <span class="literal">'"&gt;&amp;nbsp;'</span>;
+	sb[sb.length] = <span class="literal">' onclick="javascript:'</span> + <span class="reserved">this</span>.getToggleLink() + <span class="literal">'"&gt;'</span>;
+
+    <span class="comment">/*
+	sb[sb.length] = '&lt;img id="' + this.getSpacerId() + '"';
+    sb[sb.length] = ' alt=""';
+    sb[sb.length] = ' tabindex=0';
+    sb[sb.length] = ' src="' + this.spacerPath + '"';
+    sb[sb.length] = ' title="' + this.getStateText() + '"';
+    sb[sb.length] = ' class="ygtvspacer"';
+    // sb[sb.length] = ' onkeypress="return ' + getNode + '".onKeyPress()"';
+    sb[sb.length] = ' /&gt;';
+    */</span>
+
+	sb[sb.length] = <span class="literal">'&amp;nbsp;'</span>;
+
 	sb[sb.length] = <span class="literal">'&lt;/td&gt;'</span>;
 	sb[sb.length] = <span class="literal">'&lt;td&gt;'</span>;
 	sb[sb.length] = <span class="literal">'&lt;a'</span>;
@@ -358,6 +372,7 @@ YAHOO.widget.TextNode.<span class="reserved">prototype</span>.getNodeHtml = <spa
 	sb[sb.length] = <span class="literal">' class="'</span> + <span class="reserved">this</span>.labelStyle + <span class="literal">'"'</span>;
 	sb[sb.length] = <span class="literal">' href="'</span> + <span class="reserved">this</span>.href + <span class="literal">'"'</span>;
 	sb[sb.length] = <span class="literal">' target="'</span> + <span class="reserved">this</span>.target + <span class="literal">'"'</span>;
+	sb[sb.length] = <span class="literal">' onclick="return '</span> + getNode + <span class="literal">'.onLabelClick('</span> + getNode +<span class="literal">')"'</span>;
 	<span class="reserved">if</span> (<span class="reserved">this</span>.hasChildren(true)) {
 		sb[sb.length] = <span class="literal">' onmouseover="document.getElementById(\'</span><span class="literal">';
 		sb[sb.length] = this.getToggleElId() + '</span>\<span class="literal">').className='</span>;
@@ -376,6 +391,17 @@ YAHOO.widget.TextNode.<span class="reserved">prototype</span>.getNodeHtml = <spa
 	<span class="reserved">return</span> sb.join(<span class="literal">""</span>);
 };
 
+
+<span class="comment">/**
+ * Executed when the label is clicked
+ * <span class="attrib">@param</span> me {Node} this node
+ * <span class="attrib">@scope</span> the anchor tag clicked
+ * <span class="attrib">@return</span> false to cancel the anchor click
+ */</span>
+YAHOO.widget.TextNode.<span class="reserved">prototype</span>.onLabelClick = <span class="reserved">function</span>(me) { 
+    me.logger.debug(<span class="literal">"onLabelClick "</span> + <span class="reserved">this</span>.label);
+<span class="comment">    //return true;</span>
+};
 </pre>
 			</div>
 		

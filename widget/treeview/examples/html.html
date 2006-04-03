@@ -6,12 +6,12 @@
 <link rel="stylesheet" type="text/css" href="css/screen.css">
 </head>
   
-<body onload="treeInit()">
+<body>
 
 <link rel="stylesheet" type="text/css" href="css/default/tree.css">
 
 <div id="pageTitle">
-	<h3>Tree Control</h3>
+    <h3>Tree Control</h3>
 </div>
 
 
@@ -74,22 +74,22 @@
 
   <div id="content">
     <form name="mainForm" action="javscript:;">
-	<div class="newsItem">
-	  <h3>HTML Node</h3>
-	  <p>
-		
-	  </p>
+    <div class="newsItem">
+      <h3>HTML Node</h3>
+      <p>
+        
+      </p>
 
-	  <div id="expandcontractdiv">
-		<a href="javascript:tree.expandAll()">Expand all</a>
-		<a href="javascript:tree.collapseAll()">Collapse all</a>
-	  </div>
-	  <div id="treeDiv1"></div>
+      <div id="expandcontractdiv">
+        <a href="javascript:tree.expandAll()">Expand all</a>
+        <a href="javascript:tree.collapseAll()">Collapse all</a>
+      </div>
+      <div id="treeDiv1"></div>
 
-	</div>
-	</form>
+    </div>
+    </form>
   </div>
-	
+    
       <div id="footerContainer">
         <div id="footer">
           <p>&nbsp;</p>
@@ -99,77 +99,90 @@
   </div>
 </div>
 
-
-
 <script type="text/javascript" src="js/YAHOO.js" ></script>
 <script type="text/javascript" src="js/log.js"></script>
+<!--
+<script type="text/javascript" src="/Event.dev/src/Event.js"></script>
+-->
 <script type="text/javascript" src="js/event.js"></script>
 <script type="text/javascript" src="js/connect.js"></script>
 <script type="text/javascript" src="js/animation-raw.js"></script>
 <script type="text/javascript" src="js/dom-raw.js"></script>
+<script type="text/javascript" src="js/dragdrop-debug.js"></script>
 
 
 <script type="text/javascript" src="js/treeview.js" ></script>
 <script type="text/javascript" src="js/TaskNode.js"></script>
+<script type="text/javascript" src="js/CheckOnClickNode.js"></script>
 
 <script type="text/javascript">
 
-	var gLogger;
-	var tree;
-	var nodes = new Array();
-	var nodeIndex = 0;
-	
-	function treeInit() {
-		if (typeof(ygLogger) != "undefined") {
-			ygLogger.init(document.getElementById("logDiv"));
-			gLogger = new ygLogger("basic.php");
-		}
+var tree, gLogger;
 
-		buildRandomTextNodeTree();
-	}
-	
-	function buildRandomTextNodeTree() {
-		tree = new YAHOO.widget.TreeView("treeDiv1");
+function treeInit() {
+    if (typeof(ygLogger) != "undefined") {
+        ygLogger.init(document.getElementById("logDiv"));
+        gLogger = new ygLogger("basic.php");
+    }
 
-		for (var i = 0; i < Math.floor((Math.random()*4) + 3); i++) {
-			var tmpNode = new YAHOO.widget.TextNode("label-" + i, tree.getRoot(), false);
-			buildRandomTextBranch(tmpNode);
-		}
+    buildRandomTextNodeTree();
+}
 
-		tree.draw();
-	}
+function buildRandomTextNodeTree() {
+    tree = new YAHOO.widget.TreeView("treeDiv1");
 
-	var callback = null;
+    for (var i = 0; i < Math.floor((Math.random()*4) + 3); i++) {
+        var tmpNode = new YAHOO.widget.TextNode("label-" + i, tree.getRoot(), false);
+        buildRandomTextBranch(tmpNode);
+    }
 
-	function buildRandomTextBranch(node) {
-		if (node.depth < 3) {
-			gLogger.debug("buildRandomTextBranch: " + node.index);
-			for ( var i = 0; i < Math.floor(Math.random() * 4) + 1 ; i++ ) {
-				var tmpNode = new YAHOO.widget.TextNode(node.label + "-" + i, node, false);
-				if (node.depth == 2) {
-					buildRandomHTMLBranch(tmpNode);
-				} else {
-					buildRandomTextBranch(tmpNode);
-				}
-			}
-		}
-	}
+    tree.draw();
+}
 
-	function buildRandomHTMLBranch(node) {
-		gLogger.debug("buildRandomHTMLBranch: " + node.index);
+var callback = null;
 
-			var html = '<div id="asdf' + nodeIndex + '"' + 
-						' style="border:1px solid #aaaaaa; ' +
-						' height:100px; width:200px; ' +
-						' margin-bottom:10px; ' +
-						' background-color: #c5dbfc">' +
-						'Info ' + (nodeIndex++) + '</div>';
+function buildRandomTextBranch(node) {
+    if (node.depth < 3) {
+        gLogger.debug("buildRandomTextBranch: " + node.index);
+        for ( var i = 0; i < Math.floor(Math.random() * 4) + 1 ; i++ ) {
+            var tmpNode = new YAHOO.widget.TextNode(node.label + "-" + i, node, false);
+            if (node.depth == 2) {
+                buildRandomHTMLBranch(tmpNode);
+            } else {
+                buildRandomTextBranch(tmpNode);
+            }
+        }
+    }
+}
 
-			var tmpNode = new YAHOO.widget.HTMLNode(html, node, false, false);
-	}
+var counter = 0;
+function buildRandomHTMLBranch(node) {
+    gLogger.debug("buildRandomHTMLBranch: " + node.index);
+
+    var id = "htmlnode_" + counter++;
+
+    var html = '<div id="' + id + '"' + 
+                ' onmouseover="enableDragDrop(this, \'' + id + '\')"' + 
+                ' style="border:1px solid #aaaaaa; ' +
+                ' position:relative; ' +
+                ' height:100px; width:200px; ' +
+                ' margin-bottom:10px; ' +
+                ' background-color: #c5dbfc">' +
+                'Info ' + id + '</div>';
+
+    // new YAHOO.widget.HTMLNode(html, node, false, true);
+    new YAHOO.widget.HTMLNode(html, node, false, false);
+}
+
+function enableDragDrop(el, id) {
+    new YAHOO.util.DD(id);
+    el.onmouseover = null;
+}
+
+YAHOO.util.Event.addListener(window, "load", treeInit);
 
 </script>
 
-  </body>
+</body>
 </html>
  

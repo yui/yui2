@@ -3,6 +3,11 @@
 <head>
 <title>Yahoo! UI Library - Tree Control</title>
 <link rel="stylesheet" type="text/css" href="css/screen.css">
+<style type="text/css">
+    .emLabel, .emLabel:link, .emLabel:visited, .emLabel:hover { 
+        font-weight: bold;
+    }
+</style>
 </head>
   
 <body onload="treeInit()">
@@ -104,14 +109,19 @@
 
 <script type="text/javascript" src="js/YAHOO.js" ></script>
 <script type="text/javascript" src="js/log.js"></script>
+<!--
+<script type="text/javascript" src="/Event.dev/src/Event.js"></script>
+-->
 <script type="text/javascript" src="js/event.js"></script>
 <script type="text/javascript" src="js/connect.js"></script>
 <script type="text/javascript" src="js/animation-raw.js"></script>
 <script type="text/javascript" src="js/dom-raw.js"></script>
+<script type="text/javascript" src="js/dragdrop-debug.js"></script>
 
 
 <script type="text/javascript" src="js/treeview.js" ></script>
 <script type="text/javascript" src="js/TaskNode.js"></script>
+<script type="text/javascript" src="js/CheckOnClickNode.js"></script>
 
 <script type="text/javascript">
 
@@ -161,12 +171,22 @@
 				for (var k =0; k < Math.floor(Math.random()*6) + 1; k++) { 
 					thisId = nodeIndex++;
 					thisLabel = l2 + "-" + k;
+
+                    /*
 					var data = {
 							id: thisId,
 							label: thisLabel, 
 							href: "javascript:onLabelClick(" + thisId + ")" 
 						}
+*/
+
+					var data = {
+							label: thisLabel, 
+                            href: "javascript:void(window.open('http://www.yahoo.com'))" 
+						}
 					nodes[thisId] = new YAHOO.widget.TextNode(data, p2, false);
+                    nodes[thisId].labelStyle = "emLabel";
+
 					// nodes[thisId] = new YAHOO.widget.MenuNode(thisLabel, p2, false);
 				}
 

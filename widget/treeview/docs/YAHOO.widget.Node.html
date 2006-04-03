@@ -265,7 +265,8 @@
 									<a href="#childrenRendered">childrenRendered</a>
 								</code>
 								<div class="description">
-									Flag that is set to true the first time this node's children are rendered.&nbsp;
+									This flag is set to true when the html is generated for this node's
+ children, and set to false when new children are added.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -290,6 +291,19 @@
 								</code>
 								<div class="description">
 									Function to execute when we need to get this node's child data.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#dynamicLoadCompelete">dynamicLoadCompelete</a>
+								</code>
+								<div class="description">
+									Dynamically loaded nodes only fetch the data the first time they are
+ expanded.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -835,7 +849,7 @@
 										()
 									</code>
 									<div class="description">
-										Re-renders the html for this node and its children&nbsp;
+										Regenerates the html for this node and its children.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -916,7 +930,8 @@
 								<strong>childrenRendered</strong>
 							</code>
 							<div class="description">
-								Flag that is set to true the first time this node's children are rendered.
+								This flag is set to true when the html is generated for this node's
+ children, and set to false when new children are added.
 							</div>
 						</div>
 						<hr />
@@ -944,6 +959,20 @@
 							</code>
 							<div class="description">
 								Function to execute when we need to get this node's child data.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="dynamicLoadCompelete">dynamicLoadCompelete</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>dynamicLoadCompelete</strong>
+							</code>
+							<div class="description">
+								Dynamically loaded nodes only fetch the data the first time they are
+ expanded.  This flag is set to true once the data has been fetched.
 							</div>
 						</div>
 						<hr />
@@ -1609,7 +1638,7 @@
 								
 									<dl>
 										<dt>Returns:</dt>
-										<dd> this node's toggel html element</dd>
+										<dd> this node's toggle html element</dd>
 									</dl>
 								
 								
@@ -1843,7 +1872,8 @@
 									
 							<div class="description">
 								
-									Re-renders the html for this node and its children
+									Regenerates the html for this node and its children.  To be used when the
+ node is expanded and new children have been added.
 								
 								
 								

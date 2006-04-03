@@ -87,7 +87,7 @@ YAHOO.widget.TextNode.prototype.getLabelEl = function() {
 
 // overrides YAHOO.widget.Node
 YAHOO.widget.TextNode.prototype.getNodeHtml = function() { 
-	var sb = new Array();
+	var sb = [];
 
 	sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0">';
 	sb[sb.length] = '<tr>';
@@ -110,7 +110,21 @@ YAHOO.widget.TextNode.prototype.getNodeHtml = function() {
 		sb[sb.length] = ' onmouseout="this.className=';
 		sb[sb.length] = getNode + '.getStyle()"';
 	}
-	sb[sb.length] = ' onclick="javascript:' + this.getToggleLink() + '">&nbsp;';
+	sb[sb.length] = ' onclick="javascript:' + this.getToggleLink() + '">';
+
+    /*
+	sb[sb.length] = '<img id="' + this.getSpacerId() + '"';
+    sb[sb.length] = ' alt=""';
+    sb[sb.length] = ' tabindex=0';
+    sb[sb.length] = ' src="' + this.spacerPath + '"';
+    sb[sb.length] = ' title="' + this.getStateText() + '"';
+    sb[sb.length] = ' class="ygtvspacer"';
+    // sb[sb.length] = ' onkeypress="return ' + getNode + '".onKeyPress()"';
+    sb[sb.length] = ' />';
+    */
+
+	sb[sb.length] = '&nbsp;';
+
 	sb[sb.length] = '</td>';
 	sb[sb.length] = '<td>';
 	sb[sb.length] = '<a';
@@ -118,6 +132,7 @@ YAHOO.widget.TextNode.prototype.getNodeHtml = function() {
 	sb[sb.length] = ' class="' + this.labelStyle + '"';
 	sb[sb.length] = ' href="' + this.href + '"';
 	sb[sb.length] = ' target="' + this.target + '"';
+	sb[sb.length] = ' onclick="return ' + getNode + '.onLabelClick(' + getNode +')"';
 	if (this.hasChildren(true)) {
 		sb[sb.length] = ' onmouseover="document.getElementById(\'';
 		sb[sb.length] = this.getToggleElId() + '\').className=';
@@ -136,3 +151,14 @@ YAHOO.widget.TextNode.prototype.getNodeHtml = function() {
 	return sb.join("");
 };
 
+
+/**
+ * Executed when the label is clicked
+ * @param me {Node} this node
+ * @scope the anchor tag clicked
+ * @return false to cancel the anchor click
+ */
+YAHOO.widget.TextNode.prototype.onLabelClick = function(me) { 
+    me.logger.debug("onLabelClick " + this.label);
+    //return true;
+};

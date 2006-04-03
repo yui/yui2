@@ -6,7 +6,7 @@
  * there currently is no way to change this.
  *
  * @constructor
- * @todo prune, graft, reload, repaint
+ * @todo graft (appendBefore, appendAfter)
  * @param {string} id The id of the element that the tree will be inserted
  * into.
  */
@@ -289,9 +289,10 @@ YAHOO.widget.TreeView.prototype = {
      * Removes the node and its children, and refreshes
      * the branch of the tree that was affected.
      * @param {Node} The node to remove
+     * @param {boolean} autoRefresh automatically refreshes tree if true
      * @return {boolean} False is there was a problem, true otherwise.
      */
-    removeNode: function(node) { 
+    removeNode: function(node, autoRefresh) { 
 
         // Don't delete the root node
         if (node.isRoot()) {
@@ -299,13 +300,17 @@ YAHOO.widget.TreeView.prototype = {
         }
 
         var p = node.parent;
-        p = p && p.parent;
+        if (p.parent) {
+            p = p.parent;
+        }
 
         // Delete the node and its children
         this._deleteNode(node);
 
         // Refresh the parent of the parent
-        p.refresh();
+        if (autoRefresh && p && p.childrenRendered) {
+            p.refresh();
+        }
 
         return true;
     },
@@ -316,20 +321,29 @@ YAHOO.widget.TreeView.prototype = {
      */
     _deleteNode: function(node) { 
         var p = node.parent;
-        for (var i=0;i<node.children.length;++i) {
+        for (var i=0, len=node.children.length;i<len;++i) {
             this._deleteNode(node.children[i]);
         }
 
         // Update the parent's collection of children
         var a = [];
 
-        for (i=0;i<p.children.length;++i) {
+        for (i=0, len=p.children.length;i<len;++i) {
             if (p.children[i] != node) {
                 a[a.length] = p.children[i];
             }
         }
 
         p.children = a;
+
+         // Update the sibling relationship                                                                                                                       
+        if (node.previousSibling) {                                                                                                                              
+            node.previousSibling.nextSibling = node.nextSibling;                                                                                                   
+        }                                                                                                                                                        
+
+        if (node.nextSibling) {                                                                                                                                  
+            node.nextSibling.previousSibling = node.previousSibling;                                                                                               
+        }
 
         // Update the tree's node collection 
         delete this._nodes[node.index];

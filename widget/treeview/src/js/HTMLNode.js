@@ -75,7 +75,7 @@ YAHOO.widget.HTMLNode.prototype.getContentEl = function() {
 
 // overrides YAHOO.widget.Node
 YAHOO.widget.HTMLNode.prototype.getNodeHtml = function() { 
-    var sb = new Array();
+    var sb = [];
 
     sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0">';
     sb[sb.length] = '<tr>';

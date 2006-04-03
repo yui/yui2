@@ -338,11 +338,18 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
     renderHidden: false,
 
     <span class="comment">/**
-     * Flag that is set to true the first time this node's children are rendered.
-     *
+     * This flag is set to true when the html is generated for this node's
+     * children, and set to false when new children are added.
      * <span class="attrib">@type</span> boolean
      */</span>
     childrenRendered: false,
+
+    <span class="comment">/**
+     * Dynamically loaded nodes only fetch the data the first time they are
+     * expanded.  This flag is set to true once the data has been fetched.
+     * <span class="attrib">@type</span> boolean
+     */</span>
+    dynamicLoadCompelete: false,
 
     <span class="comment">/**
      * This node's previous sibling
@@ -400,6 +407,13 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
      */</span>
     iconMode: 0,
 
+    <span class="comment">/*
+    spacerPath: "http://us.i1.yimg.com/us.yimg.com/i/space.gif",
+    expandedText: "Expanded",
+    collapsedText: "Collapsed",
+    loadingText: "Loading",
+    */</span>
+
     <span class="comment">/**
      * Initializes this node, gets some of the properties from the parent
      *
@@ -434,6 +448,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
      * <span class="attrib">@param</span> node {Node} the new node
      * <span class="attrib">@return</span> {Node} the child node
      * <span class="attrib">@private</span>
+     * <span class="attrib">@TODO</span> insertBefore, insertAfter
      */</span>
     appendChild: <span class="reserved">function</span>(node) {
         <span class="reserved">if</span> (<span class="reserved">this</span>.hasChildren()) {
@@ -444,6 +459,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
 
         <span class="reserved">this</span>.tree.regNode(node);
         <span class="reserved">this</span>.children[<span class="reserved">this</span>.children.length] = node;
+        <span class="reserved">this</span>.childrenRendered = false;
         <span class="reserved">return</span> node;
 
     },
@@ -506,9 +522,20 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
         <span class="reserved">return</span> <span class="literal">"ygtvt"</span> + <span class="reserved">this</span>.index;
     },
 
+
+    <span class="comment">/**
+     * Returns the id for this node's spacer image.  The spacer is positioned
+     * over the toggle and provides feedback for screen readers.
+     * <span class="attrib">@return</span> {string} the id for the spacer image
+     */</span>
+    <span class="comment">/*
+    getSpacerId: function() {
+        return "ygtvspacer" + this.index;
+    }, 
+    */</span>
+
     <span class="comment">/**
      * Returns this node's container html element
-     *
      * <span class="attrib">@return</span> {HTMLElement} the container html element
      */</span>
     getEl: <span class="reserved">function</span>() {
@@ -517,7 +544,6 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
 
     <span class="comment">/**
      * Returns the div that was generated for this node's children
-     *
      * <span class="attrib">@return</span> {HTMLElement} this node's children div
      */</span>
     getChildrenEl: <span class="reserved">function</span>() {
@@ -526,16 +552,40 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
 
     <span class="comment">/**
      * Returns the element that is being used for this node's toggle.
-     *
-     * <span class="attrib">@return</span> {HTMLElement} this node's toggel html element
+     * <span class="attrib">@return</span> {HTMLElement} this node's toggle html element
      */</span>
     getToggleEl: <span class="reserved">function</span>() {
         <span class="reserved">return</span> document.getElementById(<span class="reserved">this</span>.getToggleElId());
     },
 
     <span class="comment">/**
+     * Returns the element that is being used for this node's spacer.
+     * <span class="attrib">@return</span> {HTMLElement} this node's spacer html element
+     */</span>
+    <span class="comment">/*
+    getSpacer: function() {
+        return document.getElementById( this.getSpacerId() ) || {};
+    },
+    */</span>
+
+    <span class="comment">/*
+    getStateText: function() {
+        if (this.isLoading) {
+            return this.loadingText;
+        } else if (this.hasChildren(true)) {
+            if (this.expanded) {
+                return this.expandedText;
+            } else {
+                return this.collapsedText;
+            }
+        } else {
+            return "";
+        }
+    },
+    */</span>
+
+    <span class="comment">/**
      * Generates the link that will invoke this node's toggle method
-     *
      * <span class="attrib">@return</span> {string} the javascript url for toggling this node
      */</span>
     getToggleLink: <span class="reserved">function</span>() {
@@ -550,6 +600,14 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
     collapse: <span class="reserved">function</span>() {
 <span class="comment">        // Only collapse if currently expanded</span>
         <span class="reserved">if</span> (!<span class="reserved">this</span>.expanded) { <span class="reserved">return</span>; }
+<span class="comment">
+        // fire the collapse event handler</span>
+        var ret = <span class="reserved">this</span>.tree.onCollapse(<span class="reserved">this</span>);
+
+        <span class="reserved">if</span> (<span class="literal">"undefined"</span> != typeof ret &amp;&amp; !ret) {
+            <span class="reserved">this</span>.logger.debug(<span class="literal">"Collapse was stopped by the event handler"</span>);
+            <span class="reserved">return</span>;
+        }
 
         <span class="reserved">if</span> (!<span class="reserved">this</span>.getEl()) {
             <span class="reserved">this</span>.expanded = false;
@@ -564,8 +622,8 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
             <span class="reserved">this</span>.getToggleEl().className = <span class="reserved">this</span>.getStyle();
         }
 <span class="comment">
-        // fire the collapse event handler</span>
-        <span class="reserved">this</span>.tree.onCollapse(<span class="reserved">this</span>);
+        // this.getSpacer().title = this.getStateText();</span>
+
     },
 
     <span class="comment">/**
@@ -575,6 +633,14 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
     expand: <span class="reserved">function</span>() {
 <span class="comment">        // Only expand if currently collapsed.</span>
         <span class="reserved">if</span> (<span class="reserved">this</span>.expanded) { <span class="reserved">return</span>; }
+<span class="comment">
+        // fire the expand event handler</span>
+        var ret = <span class="reserved">this</span>.tree.onExpand(<span class="reserved">this</span>);
+
+        <span class="reserved">if</span> (<span class="literal">"undefined"</span> != typeof ret &amp;&amp; !ret) {
+            <span class="reserved">this</span>.logger.debug(<span class="literal">"Expand was stopped by the event handler"</span>);
+            <span class="reserved">return</span>;
+        }
 
         <span class="reserved">if</span> (!<span class="reserved">this</span>.getEl()) {
             <span class="reserved">this</span>.expanded = true;
@@ -582,13 +648,18 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
         }
 
         <span class="reserved">if</span> (! <span class="reserved">this</span>.childrenRendered) {
+            <span class="reserved">this</span>.logger.debug(<span class="literal">"children not rendered yet"</span>);
             <span class="reserved">this</span>.getChildrenEl().innerHTML = <span class="reserved">this</span>.renderChildren();
+        } <span class="reserved">else</span> {
+            <span class="reserved">this</span>.logger.debug(<span class="literal">"CHILDREN RENDERED"</span>);
         }
 
         <span class="reserved">this</span>.expanded = true;
         <span class="reserved">if</span> (<span class="reserved">this</span>.hasIcon) {
             <span class="reserved">this</span>.getToggleEl().className = <span class="reserved">this</span>.getStyle();
         }
+<span class="comment">
+        // this.getSpacer().title = this.getStateText();</span>
 <span class="comment">
         // We do an extra check for children here because the lazy</span>
 <span class="comment">        // load feature can expose nodes that have no children.</span>
@@ -609,9 +680,6 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
         }
 
         <span class="reserved">this</span>.showChildren();
-<span class="comment">
-        // fire the expand event handler</span>
-        <span class="reserved">this</span>.tree.onExpand(<span class="reserved">this</span>);
     },
 
     <span class="comment">/**
@@ -620,9 +688,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
      * <span class="attrib">@return</span> {string} the css class for this node's toggle
      */</span>
     getStyle: <span class="reserved">function</span>() {
-            <span class="reserved">this</span>.logger.debug(<span class="literal">"No children, "</span> + 
-                    <span class="literal">" isDyanmic: "</span> + <span class="reserved">this</span>.isDynamic() + 
-                    <span class="literal">" expanded: "</span> + <span class="reserved">this</span>.expanded);
+<span class="comment">        // this.logger.debug("No children, " + " isDyanmic: " + this.isDynamic() + " expanded: " + this.expanded);</span>
         <span class="reserved">if</span> (<span class="reserved">this</span>.isLoading) {
             <span class="reserved">this</span>.logger.debug(<span class="literal">"returning the loading icon"</span>);
             <span class="reserved">return</span> <span class="literal">"ygtvloading"</span>;
@@ -636,8 +702,8 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
 <span class="comment">            // if (this.hasChildren(true)) {</span>
                 type = (<span class="reserved">this</span>.expanded) ? <span class="literal">"m"</span> : <span class="literal">"p"</span>;
             }
-
-            <span class="reserved">this</span>.logger.debug(<span class="literal">"ygtv"</span> + loc + type);
+<span class="comment">
+            // this.logger.debug("ygtv" + loc + type);</span>
             <span class="reserved">return</span> <span class="literal">"ygtv"</span> + loc + type;
         }
     },
@@ -749,7 +815,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
      */</span>
     hasChildren: <span class="reserved">function</span>(checkForLazyLoad) { 
         <span class="reserved">return</span> ( <span class="reserved">this</span>.children.length &gt; 0 || 
-                (checkForLazyLoad &amp;&amp; <span class="reserved">this</span>.isDynamic() &amp;&amp; !<span class="reserved">this</span>.childrenRendered) );
+                (checkForLazyLoad &amp;&amp; <span class="reserved">this</span>.isDynamic() &amp;&amp; !<span class="reserved">this</span>.dynamicLoadComplete) );
     },
 
     <span class="comment">/**
@@ -784,6 +850,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
      * <span class="attrib">@private</span>
      */</span>
     getChildrenHtml: <span class="reserved">function</span>() {
+
         var sb = [];
         sb[sb.length] = <span class="literal">'&lt;div class="ygtvchildren"'</span>;
         sb[sb.length] = <span class="literal">' id="'</span> + <span class="reserved">this</span>.getChildrenElId() + <span class="literal">'"'</span>;
@@ -793,7 +860,8 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
         sb[sb.length] = <span class="literal">'&gt;'</span>;
 <span class="comment">
         // Don't render the actual child node HTML unless this node is expanded.</span>
-        <span class="reserved">if</span> (<span class="reserved">this</span>.hasChildren(true) &amp;&amp; <span class="reserved">this</span>.expanded) {
+        <span class="reserved">if</span> ( (<span class="reserved">this</span>.hasChildren(true) &amp;&amp; <span class="reserved">this</span>.expanded) ||
+                (<span class="reserved">this</span>.renderHidden &amp;&amp; !<span class="reserved">this</span>.isDynamic()) ) {
             sb[sb.length] = <span class="reserved">this</span>.renderChildren();
         }
 
@@ -815,12 +883,13 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
 
         var node = <span class="reserved">this</span>;
 
-        <span class="reserved">if</span> (<span class="reserved">this</span>.isDynamic() &amp;&amp; !<span class="reserved">this</span>.childrenRendered) {
+        <span class="reserved">if</span> (<span class="reserved">this</span>.isDynamic() &amp;&amp; !<span class="reserved">this</span>.dynamicLoadComplete) {
             <span class="reserved">this</span>.isLoading = true;
             <span class="reserved">this</span>.tree.locked = true;
 
             <span class="reserved">if</span> (<span class="reserved">this</span>.dataLoader) {
                 <span class="reserved">this</span>.logger.debug(<span class="literal">"Using dynamic loader defined for this node"</span>);
+
                 setTimeout( 
                     <span class="reserved">function</span>() {
                         node.dataLoader(node, 
@@ -857,10 +926,11 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
      * <span class="attrib">@return</span> {string} children html
      */</span>
     completeRender: <span class="reserved">function</span>() {
-        <span class="reserved">this</span>.logger.debug(<span class="literal">"renderComplete: "</span> + <span class="reserved">this</span>.index);
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"completeRender: "</span> + <span class="reserved">this</span>.index + <span class="literal">", # of children: "</span> + <span class="reserved">this</span>.children.length);
         var sb = [];
 
         <span class="reserved">for</span> (var i=0; i &lt; <span class="reserved">this</span>.children.length; ++i) {
+            <span class="reserved">this</span>.children[i].childrenRendered = false;
             sb[sb.length] = <span class="reserved">this</span>.children[i].getHtml();
         }
         
@@ -876,6 +946,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
     loadComplete: <span class="reserved">function</span>() {
         <span class="reserved">this</span>.logger.debug(<span class="literal">"loadComplete: "</span> + <span class="reserved">this</span>.index);
         <span class="reserved">this</span>.getChildrenEl().innerHTML = <span class="reserved">this</span>.completeRender();
+        <span class="reserved">this</span>.dynamicLoadComplete = true;
         <span class="reserved">this</span>.isLoading = false;
         <span class="reserved">this</span>.expand();
         <span class="reserved">this</span>.tree.locked = false;
@@ -927,10 +998,12 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
     },
 
     <span class="comment">/**
-     * Re-renders the html for this node and its children
+     * Regenerates the html for this node and its children.  To be used when the
+     * node is expanded and new children have been added.
      */</span>
     refresh: <span class="reserved">function</span>() {
-        <span class="reserved">this</span>.loadComplete();
+<span class="comment">        // this.loadComplete();</span>
+        <span class="reserved">this</span>.getChildrenEl().innerHTML = <span class="reserved">this</span>.completeRender();
     }
 
 };

@@ -1,8 +1,8 @@
 /* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
 
 /**
- * Emulates OmniOutliner's task view.  The check box marks a task complete.
- * It is a simulated form field with three states ...
+ * The check box marks a task complete.  It is a simulated form field 
+ * with three states ...
  * 0=unchecked, 1=some children checked, 2=all children checked
  * When a task is clicked, the state of the nodes and parent and children
  * are updated, and this behavior cascades.
@@ -22,6 +22,9 @@ YAHOO.widget.TaskNode = function(oData, oParent, expanded, checked) {
 		this.init(oData, oParent, expanded);
 		this.setUpLabel(oData);
 		this.checked = checked;
+        if (checked && checked === true) {
+            this.check();
+        }
 	}
 };
 
@@ -37,7 +40,7 @@ YAHOO.widget.TaskNode.prototype.checked = false;
 
 /**
  * checkState
- * 0=unchecked, * 1=some children checked, 2=all children checked
+ * 0=unchecked, 1=some children checked, 2=all children checked
  *
  * @type int
  */

@@ -214,13 +214,10 @@
 			<strong>Quick Links:</strong>&nbsp;
 			
 			
-				<a href="#field_summary">Field Summary</a>
+			
+				<a href="#constructor_summary">Constructor Summary</a>
 				
 			
-			
-			
-				<a href="#methodSummary">Method Summary</a> |
-				<a href="#methodDetails">Method Details</a>
 			
 		</div>
 		<!-- ======== END QUICK LINKS ======== -->
@@ -231,39 +228,6 @@
 
 		<!-- =========== FIELD SUMMARY =========== -->
 		
-			<div class="section field summaries">
-				<h3><a name="field_summary">Field Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<table border="1" cellpadding="3" cellspacing="0">
-					
-						<tr>
-							<td class="flags">string</td>
-							<td class="spec">
-								<code>
-									<a href="#FADE_IN">FADE_IN</a>
-								</code>
-								<div class="description">
-									Constant for the fade in animation&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">string</td>
-							<td class="spec">
-								<code>
-									<a href="#FADE_OUT">FADE_OUT</a>
-								</code>
-								<div class="description">
-									Constant for the fade out animation&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-					</table>
-				</div>
-			</div>
-		
 				
 		
 		<!-- =========== END FIELD SUMMARY =========== -->
@@ -271,45 +235,22 @@
 
 		<!-- ======== CONSTRUCTOR SUMMARY ======== -->
 		
+			<div class="section contructor summaries">
+				<h3><a name="constructor_summary">Constructor Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<code class="spec">
+						<a href="YAHOO.widget.TVAnim.html#YAHOO.widget.TVAnim()">YAHOO.widget.TVAnim</a>
+					</code>
+					<div class="description">
+						A static factory class for tree view expand/collapse animations&nbsp;
+					</div>
+				</div>
+			</div>
+		
 		<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
 
 
 		<!-- ========== METHOD SUMMARY =========== -->
-		
-			<div class="section method summaries">
-				<h3><a name="methodSummary">Method Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<table border="1" cellpadding="3" cellspacing="0">
-						
-							<tr>
-								<td class="flags">Object</td>
-								<td class="spec">
-									<code>
-										<a href="#getAnim">getAnim</a>
-										(type, el, callback)
-									</code>
-									<div class="description">
-										Returns a ygAnim instance of the given type&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">boolean</td>
-								<td class="spec">
-									<code>
-										<a href="#isValid">isValid</a>
-										(type)
-									</code>
-									<div class="description">
-										Returns true if the specified animation class is available&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-					</table>
-				</div>
-			</div>
 		
 		
 		
@@ -317,39 +258,6 @@
 
 
 		<!-- ============ FIELD DETAIL START =========== -->
-		
-			<div class="section field details">
-				<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					
-						<h4><a name="FADE_IN">FADE_IN</a></h4>
-						<div class="detail">
-							<code>
-								string
-								&nbsp;
-								<strong>FADE_IN</strong>
-							</code>
-							<div class="description">
-								Constant for the fade in animation
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="FADE_OUT">FADE_OUT</a></h4>
-						<div class="detail">
-							<code>
-								string
-								&nbsp;
-								<strong>FADE_OUT</strong>
-							</code>
-							<div class="description">
-								Constant for the fade out animation
-							</div>
-						</div>
-						<hr />
-					
-				</div>
-			</div>
 		
 		<!-- ============ FIELD DETAIL END =========== -->
 
@@ -362,9 +270,11 @@
 					<div class="detail">
 						<code>
 							<strong>YAHOO.widget.TVAnim</strong>
-							
+							()
 						</code>
 						<div class="description">
+							
+								A static factory class for tree view expand/collapse animations
 							
 							
 							
@@ -381,91 +291,6 @@
 
 
 		<!-- ============ METHOD DETAIL START ========== -->
-		
-			<div class="section method details">
-				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					
-						<h4><a name="getAnim">getAnim</a></h4>
-						<div class="detail">
-							<code>
-								Object 
-								<strong>getAnim</strong>
-								(type, el, callback)
-							</code>
-									
-							<div class="description">
-								
-									Returns a ygAnim instance of the given type
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>type</code> - 
-												 {string} the type of animation  
-											</dd>
-										
-											<dd>
-												<code>el</code> - 
-												 {HTMLElement} the element to element (probably the children div)  
-											</dd>
-										
-											<dd>
-												<code>callback</code> - 
-												 {function} function to invoke when the animation is done.  
-											</dd>
-										
-									</dl>
-								
-								
-									<dl>
-										<dt>Returns:</dt>
-										<dd>{YAHOO.util.Animation} the animation instance</dd>
-									</dl>
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="isValid">isValid</a></h4>
-						<div class="detail">
-							<code>
-								boolean 
-								<strong>isValid</strong>
-								(type)
-							</code>
-									
-							<div class="description">
-								
-									Returns true if the specified animation class is available
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>type</code> - 
-												 {string} the type of animation  
-											</dd>
-										
-									</dl>
-								
-								
-									<dl>
-										<dt>Returns:</dt>
-										<dd> true if valid, false if not</dd>
-									</dl>
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-				</div>
-			</div>
 		
 		<!-- ============ METHOD DETAIL END ========== -->
 		</div>

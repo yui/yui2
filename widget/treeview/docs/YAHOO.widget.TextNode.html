@@ -296,7 +296,7 @@
 				<div class="section field inheritance">
 					<h3>Fields inherited from class <a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 					<div class="content">
-								<code><a href="YAHOO.widget.Node.html#index">index</a>, <a href="YAHOO.widget.Node.html#children">children</a>, <a href="YAHOO.widget.Node.html#tree">tree</a>, <a href="YAHOO.widget.Node.html#data">data</a>, <a href="YAHOO.widget.Node.html#parent">parent</a>, <a href="YAHOO.widget.Node.html#href">href</a>, <a href="YAHOO.widget.Node.html#target">target</a>, <a href="YAHOO.widget.Node.html#expanded">expanded</a>, <a href="YAHOO.widget.Node.html#multiExpand">multiExpand</a>, <a href="YAHOO.widget.Node.html#renderHidden">renderHidden</a>, <a href="YAHOO.widget.Node.html#childrenRendered">childrenRendered</a>, <a href="YAHOO.widget.Node.html#previousSibling">previousSibling</a>, <a href="YAHOO.widget.Node.html#nextSibling">nextSibling</a>, <a href="YAHOO.widget.Node.html#dataLoader">dataLoader</a>, <a href="YAHOO.widget.Node.html#isLoading">isLoading</a>, <a href="YAHOO.widget.Node.html#hasIcon">hasIcon</a>, <a href="YAHOO.widget.Node.html#iconMode">iconMode</a></code>
+								<code><a href="YAHOO.widget.Node.html#index">index</a>, <a href="YAHOO.widget.Node.html#children">children</a>, <a href="YAHOO.widget.Node.html#tree">tree</a>, <a href="YAHOO.widget.Node.html#data">data</a>, <a href="YAHOO.widget.Node.html#parent">parent</a>, <a href="YAHOO.widget.Node.html#href">href</a>, <a href="YAHOO.widget.Node.html#target">target</a>, <a href="YAHOO.widget.Node.html#expanded">expanded</a>, <a href="YAHOO.widget.Node.html#multiExpand">multiExpand</a>, <a href="YAHOO.widget.Node.html#renderHidden">renderHidden</a>, <a href="YAHOO.widget.Node.html#childrenRendered">childrenRendered</a>, <a href="YAHOO.widget.Node.html#dynamicLoadCompelete">dynamicLoadCompelete</a>, <a href="YAHOO.widget.Node.html#previousSibling">previousSibling</a>, <a href="YAHOO.widget.Node.html#nextSibling">nextSibling</a>, <a href="YAHOO.widget.Node.html#dataLoader">dataLoader</a>, <a href="YAHOO.widget.Node.html#isLoading">isLoading</a>, <a href="YAHOO.widget.Node.html#hasIcon">hasIcon</a>, <a href="YAHOO.widget.Node.html#iconMode">iconMode</a></code>
 					</div>
 				</div>
 			
@@ -350,6 +350,19 @@
 									</code>
 									<div class="description">
 										Get the markup for the node.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#onLabelClick">onLabelClick</a>
+										(me)
+									</code>
+									<div class="description">
+										Executed when the label is clicked&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -538,6 +551,40 @@
 									<dl>
 										<dt>Returns:</dt>
 										<dd> The HTML that will render this node.</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="onLabelClick">onLabelClick</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>onLabelClick</strong>
+								(me)
+							</code>
+									
+							<div class="description">
+								
+									Executed when the label is clicked
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>me</code> - 
+												 {Node} this node  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd>false to cancel the anchor click</dd>
 									</dl>
 								
 								

@@ -98,11 +98,18 @@ YAHOO.widget.Node.prototype = {
     renderHidden: false,
 
     /**
-     * Flag that is set to true the first time this node's children are rendered.
-     *
+     * This flag is set to true when the html is generated for this node's
+     * children, and set to false when new children are added.
      * @type boolean
      */
     childrenRendered: false,
+
+    /**
+     * Dynamically loaded nodes only fetch the data the first time they are
+     * expanded.  This flag is set to true once the data has been fetched.
+     * @type boolean
+     */
+    dynamicLoadCompelete: false,
 
     /**
      * This node's previous sibling
@@ -160,6 +167,13 @@ YAHOO.widget.Node.prototype = {
      */
     iconMode: 0,
 
+    /*
+    spacerPath: "http://us.i1.yimg.com/us.yimg.com/i/space.gif",
+    expandedText: "Expanded",
+    collapsedText: "Collapsed",
+    loadingText: "Loading",
+    */
+
     /**
      * Initializes this node, gets some of the properties from the parent
      *
@@ -194,6 +208,7 @@ YAHOO.widget.Node.prototype = {
      * @param node {Node} the new node
      * @return {Node} the child node
      * @private
+     * @TODO insertBefore, insertAfter
      */
     appendChild: function(node) {
         if (this.hasChildren()) {
@@ -204,6 +219,7 @@ YAHOO.widget.Node.prototype = {
 
         this.tree.regNode(node);
         this.children[this.children.length] = node;
+        this.childrenRendered = false;
         return node;
 
     },
@@ -266,9 +282,20 @@ YAHOO.widget.Node.prototype = {
         return "ygtvt" + this.index;
     },
 
+
+    /**
+     * Returns the id for this node's spacer image.  The spacer is positioned
+     * over the toggle and provides feedback for screen readers.
+     * @return {string} the id for the spacer image
+     */
+    /*
+    getSpacerId: function() {
+        return "ygtvspacer" + this.index;
+    }, 
+    */
+
     /**
      * Returns this node's container html element
-     *
      * @return {HTMLElement} the container html element
      */
     getEl: function() {
@@ -277,7 +304,6 @@ YAHOO.widget.Node.prototype = {
 
     /**
      * Returns the div that was generated for this node's children
-     *
      * @return {HTMLElement} this node's children div
      */
     getChildrenEl: function() {
@@ -286,16 +312,40 @@ YAHOO.widget.Node.prototype = {
 
     /**
      * Returns the element that is being used for this node's toggle.
-     *
-     * @return {HTMLElement} this node's toggel html element
+     * @return {HTMLElement} this node's toggle html element
      */
     getToggleEl: function() {
         return document.getElementById(this.getToggleElId());
     },
 
     /**
+     * Returns the element that is being used for this node's spacer.
+     * @return {HTMLElement} this node's spacer html element
+     */
+    /*
+    getSpacer: function() {
+        return document.getElementById( this.getSpacerId() ) || {};
+    },
+    */
+
+    /*
+    getStateText: function() {
+        if (this.isLoading) {
+            return this.loadingText;
+        } else if (this.hasChildren(true)) {
+            if (this.expanded) {
+                return this.expandedText;
+            } else {
+                return this.collapsedText;
+            }
+        } else {
+            return "";
+        }
+    },
+    */
+
+    /**
      * Generates the link that will invoke this node's toggle method
-     *
      * @return {string} the javascript url for toggling this node
      */
     getToggleLink: function() {
@@ -311,6 +361,14 @@ YAHOO.widget.Node.prototype = {
         // Only collapse if currently expanded
         if (!this.expanded) { return; }
 
+        // fire the collapse event handler
+        var ret = this.tree.onCollapse(this);
+
+        if ("undefined" != typeof ret && !ret) {
+            this.logger.debug("Collapse was stopped by the event handler");
+            return;
+        }
+
         if (!this.getEl()) {
             this.expanded = false;
             return;
@@ -324,8 +382,8 @@ YAHOO.widget.Node.prototype = {
             this.getToggleEl().className = this.getStyle();
         }
 
-        // fire the collapse event handler
-        this.tree.onCollapse(this);
+        // this.getSpacer().title = this.getStateText();
+
     },
 
     /**
@@ -336,19 +394,32 @@ YAHOO.widget.Node.prototype = {
         // Only expand if currently collapsed.
         if (this.expanded) { return; }
 
+        // fire the expand event handler
+        var ret = this.tree.onExpand(this);
+
+        if ("undefined" != typeof ret && !ret) {
+            this.logger.debug("Expand was stopped by the event handler");
+            return;
+        }
+
         if (!this.getEl()) {
             this.expanded = true;
             return;
         }
 
         if (! this.childrenRendered) {
+            this.logger.debug("children not rendered yet");
             this.getChildrenEl().innerHTML = this.renderChildren();
+        } else {
+            this.logger.debug("CHILDREN RENDERED");
         }
 
         this.expanded = true;
         if (this.hasIcon) {
             this.getToggleEl().className = this.getStyle();
         }
+
+        // this.getSpacer().title = this.getStateText();
 
         // We do an extra check for children here because the lazy
         // load feature can expose nodes that have no children.
@@ -369,9 +440,6 @@ YAHOO.widget.Node.prototype = {
         }
 
         this.showChildren();
-
-        // fire the expand event handler
-        this.tree.onExpand(this);
     },
 
     /**
@@ -380,9 +448,7 @@ YAHOO.widget.Node.prototype = {
      * @return {string} the css class for this node's toggle
      */
     getStyle: function() {
-            this.logger.debug("No children, " + 
-                    " isDyanmic: " + this.isDynamic() + 
-                    " expanded: " + this.expanded);
+        // this.logger.debug("No children, " + " isDyanmic: " + this.isDynamic() + " expanded: " + this.expanded);
         if (this.isLoading) {
             this.logger.debug("returning the loading icon");
             return "ygtvloading";
@@ -397,7 +463,7 @@ YAHOO.widget.Node.prototype = {
                 type = (this.expanded) ? "m" : "p";
             }
 
-            this.logger.debug("ygtv" + loc + type);
+            // this.logger.debug("ygtv" + loc + type);
             return "ygtv" + loc + type;
         }
     },
@@ -509,7 +575,7 @@ YAHOO.widget.Node.prototype = {
      */
     hasChildren: function(checkForLazyLoad) { 
         return ( this.children.length > 0 || 
-                (checkForLazyLoad && this.isDynamic() && !this.childrenRendered) );
+                (checkForLazyLoad && this.isDynamic() && !this.dynamicLoadComplete) );
     },
 
     /**
@@ -544,6 +610,7 @@ YAHOO.widget.Node.prototype = {
      * @private
      */
     getChildrenHtml: function() {
+
         var sb = [];
         sb[sb.length] = '<div class="ygtvchildren"';
         sb[sb.length] = ' id="' + this.getChildrenElId() + '"';
@@ -553,7 +620,8 @@ YAHOO.widget.Node.prototype = {
         sb[sb.length] = '>';
 
         // Don't render the actual child node HTML unless this node is expanded.
-        if (this.hasChildren(true) && this.expanded) {
+        if ( (this.hasChildren(true) && this.expanded) ||
+                (this.renderHidden && !this.isDynamic()) ) {
             sb[sb.length] = this.renderChildren();
         }
 
@@ -575,12 +643,13 @@ YAHOO.widget.Node.prototype = {
 
         var node = this;
 
-        if (this.isDynamic() && !this.childrenRendered) {
+        if (this.isDynamic() && !this.dynamicLoadComplete) {
             this.isLoading = true;
             this.tree.locked = true;
 
             if (this.dataLoader) {
                 this.logger.debug("Using dynamic loader defined for this node");
+
                 setTimeout( 
                     function() {
                         node.dataLoader(node, 
@@ -617,10 +686,11 @@ YAHOO.widget.Node.prototype = {
      * @return {string} children html
      */
     completeRender: function() {
-        this.logger.debug("renderComplete: " + this.index);
+        this.logger.debug("completeRender: " + this.index + ", # of children: " + this.children.length);
         var sb = [];
 
         for (var i=0; i < this.children.length; ++i) {
+            this.children[i].childrenRendered = false;
             sb[sb.length] = this.children[i].getHtml();
         }
         
@@ -636,6 +706,7 @@ YAHOO.widget.Node.prototype = {
     loadComplete: function() {
         this.logger.debug("loadComplete: " + this.index);
         this.getChildrenEl().innerHTML = this.completeRender();
+        this.dynamicLoadComplete = true;
         this.isLoading = false;
         this.expand();
         this.tree.locked = false;
@@ -687,10 +758,12 @@ YAHOO.widget.Node.prototype = {
     },
 
     /**
-     * Re-renders the html for this node and its children
+     * Regenerates the html for this node and its children.  To be used when the
+     * node is expanded and new children have been added.
      */
     refresh: function() {
-        this.loadComplete();
+        // this.loadComplete();
+        this.getChildrenEl().innerHTML = this.completeRender();
     }
 
 };

@@ -6,7 +6,7 @@
  * there currently is no way to change this.
  *
  * @constructor
- * @todo prune, graft, reload, repaint
+ * @todo graft (appendBefore, appendAfter)
  * @param {string} id The id of the element that the tree will be inserted
  * into.
  */
@@ -289,9 +289,10 @@ YAHOO.widget.TreeView.prototype = {
      * Removes the node and its children, and refreshes
      * the branch of the tree that was affected.
      * @param {Node} The node to remove
+     * @param {boolean} autoRefresh automatically refreshes tree if true
      * @return {boolean} False is there was a problem, true otherwise.
      */
-    removeNode: function(node) { 
+    removeNode: function(node, autoRefresh) { 
 
         // Don't delete the root node
         if (node.isRoot()) {
@@ -299,13 +300,17 @@ YAHOO.widget.TreeView.prototype = {
         }
 
         var p = node.parent;
-        p = p && p.parent;
+        if (p.parent) {
+            p = p.parent;
+        }
 
         // Delete the node and its children
         this._deleteNode(node);
 
         // Refresh the parent of the parent
-        p.refresh();
+        if (autoRefresh && p && p.childrenRendered) {
+            p.refresh();
+        }
 
         return true;
     },
@@ -316,20 +321,29 @@ YAHOO.widget.TreeView.prototype = {
      */
     _deleteNode: function(node) { 
         var p = node.parent;
-        for (var i=0;i<node.children.length;++i) {
+        for (var i=0, len=node.children.length;i<len;++i) {
             this._deleteNode(node.children[i]);
         }
 
         // Update the parent's collection of children
         var a = [];
 
-        for (i=0;i<p.children.length;++i) {
+        for (i=0, len=p.children.length;i<len;++i) {
             if (p.children[i] != node) {
                 a[a.length] = p.children[i];
             }
         }
 
         p.children = a;
+
+         // Update the sibling relationship                                                                                                                       
+        if (node.previousSibling) {                                                                                                                              
+            node.previousSibling.nextSibling = node.nextSibling;                                                                                                   
+        }                                                                                                                                                        
+
+        if (node.nextSibling) {                                                                                                                                  
+            node.nextSibling.previousSibling = node.previousSibling;                                                                                               
+        }
 
         // Update the tree's node collection 
         delete this._nodes[node.index];
@@ -543,11 +557,18 @@ YAHOO.widget.Node.prototype = {
     renderHidden: false,
 
     /**
-     * Flag that is set to true the first time this node's children are rendered.
-     *
+     * This flag is set to true when the html is generated for this node's
+     * children, and set to false when new children are added.
      * @type boolean
      */
     childrenRendered: false,
+
+    /**
+     * Dynamically loaded nodes only fetch the data the first time they are
+     * expanded.  This flag is set to true once the data has been fetched.
+     * @type boolean
+     */
+    dynamicLoadCompelete: false,
 
     /**
      * This node's previous sibling
@@ -605,6 +626,13 @@ YAHOO.widget.Node.prototype = {
      */
     iconMode: 0,
 
+    /*
+    spacerPath: "http://us.i1.yimg.com/us.yimg.com/i/space.gif",
+    expandedText: "Expanded",
+    collapsedText: "Collapsed",
+    loadingText: "Loading",
+    */
+
     /**
      * Initializes this node, gets some of the properties from the parent
      *
@@ -639,6 +667,7 @@ YAHOO.widget.Node.prototype = {
      * @param node {Node} the new node
      * @return {Node} the child node
      * @private
+     * @TODO insertBefore, insertAfter
      */
     appendChild: function(node) {
         if (this.hasChildren()) {
@@ -649,6 +678,7 @@ YAHOO.widget.Node.prototype = {
 
         this.tree.regNode(node);
         this.children[this.children.length] = node;
+        this.childrenRendered = false;
         return node;
 
     },
@@ -711,9 +741,20 @@ YAHOO.widget.Node.prototype = {
         return "ygtvt" + this.index;
     },
 
+
+    /**
+     * Returns the id for this node's spacer image.  The spacer is positioned
+     * over the toggle and provides feedback for screen readers.
+     * @return {string} the id for the spacer image
+     */
+    /*
+    getSpacerId: function() {
+        return "ygtvspacer" + this.index;
+    }, 
+    */
+
     /**
      * Returns this node's container html element
-     *
      * @return {HTMLElement} the container html element
      */
     getEl: function() {
@@ -722,7 +763,6 @@ YAHOO.widget.Node.prototype = {
 
     /**
      * Returns the div that was generated for this node's children
-     *
      * @return {HTMLElement} this node's children div
      */
     getChildrenEl: function() {
@@ -731,16 +771,40 @@ YAHOO.widget.Node.prototype = {
 
     /**
      * Returns the element that is being used for this node's toggle.
-     *
-     * @return {HTMLElement} this node's toggel html element
+     * @return {HTMLElement} this node's toggle html element
      */
     getToggleEl: function() {
         return document.getElementById(this.getToggleElId());
     },
 
     /**
+     * Returns the element that is being used for this node's spacer.
+     * @return {HTMLElement} this node's spacer html element
+     */
+    /*
+    getSpacer: function() {
+        return document.getElementById( this.getSpacerId() ) || {};
+    },
+    */
+
+    /*
+    getStateText: function() {
+        if (this.isLoading) {
+            return this.loadingText;
+        } else if (this.hasChildren(true)) {
+            if (this.expanded) {
+                return this.expandedText;
+            } else {
+                return this.collapsedText;
+            }
+        } else {
+            return "";
+        }
+    },
+    */
+
+    /**
      * Generates the link that will invoke this node's toggle method
-     *
      * @return {string} the javascript url for toggling this node
      */
     getToggleLink: function() {
@@ -756,6 +820,14 @@ YAHOO.widget.Node.prototype = {
         // Only collapse if currently expanded
         if (!this.expanded) { return; }
 
+        // fire the collapse event handler
+        var ret = this.tree.onCollapse(this);
+
+        if ("undefined" != typeof ret && !ret) {
+            this.logger.debug("Collapse was stopped by the event handler");
+            return;
+        }
+
         if (!this.getEl()) {
             this.expanded = false;
             return;
@@ -769,8 +841,8 @@ YAHOO.widget.Node.prototype = {
             this.getToggleEl().className = this.getStyle();
         }
 
-        // fire the collapse event handler
-        this.tree.onCollapse(this);
+        // this.getSpacer().title = this.getStateText();
+
     },
 
     /**
@@ -781,19 +853,32 @@ YAHOO.widget.Node.prototype = {
         // Only expand if currently collapsed.
         if (this.expanded) { return; }
 
+        // fire the expand event handler
+        var ret = this.tree.onExpand(this);
+
+        if ("undefined" != typeof ret && !ret) {
+            this.logger.debug("Expand was stopped by the event handler");
+            return;
+        }
+
         if (!this.getEl()) {
             this.expanded = true;
             return;
         }
 
         if (! this.childrenRendered) {
+            this.logger.debug("children not rendered yet");
             this.getChildrenEl().innerHTML = this.renderChildren();
+        } else {
+            this.logger.debug("CHILDREN RENDERED");
         }
 
         this.expanded = true;
         if (this.hasIcon) {
             this.getToggleEl().className = this.getStyle();
         }
+
+        // this.getSpacer().title = this.getStateText();
 
         // We do an extra check for children here because the lazy
         // load feature can expose nodes that have no children.
@@ -814,9 +899,6 @@ YAHOO.widget.Node.prototype = {
         }
 
         this.showChildren();
-
-        // fire the expand event handler
-        this.tree.onExpand(this);
     },
 
     /**
@@ -825,9 +907,7 @@ YAHOO.widget.Node.prototype = {
      * @return {string} the css class for this node's toggle
      */
     getStyle: function() {
-            this.logger.debug("No children, " + 
-                    " isDyanmic: " + this.isDynamic() + 
-                    " expanded: " + this.expanded);
+        // this.logger.debug("No children, " + " isDyanmic: " + this.isDynamic() + " expanded: " + this.expanded);
         if (this.isLoading) {
             this.logger.debug("returning the loading icon");
             return "ygtvloading";
@@ -842,7 +922,7 @@ YAHOO.widget.Node.prototype = {
                 type = (this.expanded) ? "m" : "p";
             }
 
-            this.logger.debug("ygtv" + loc + type);
+            // this.logger.debug("ygtv" + loc + type);
             return "ygtv" + loc + type;
         }
     },
@@ -954,7 +1034,7 @@ YAHOO.widget.Node.prototype = {
      */
     hasChildren: function(checkForLazyLoad) { 
         return ( this.children.length > 0 || 
-                (checkForLazyLoad && this.isDynamic() && !this.childrenRendered) );
+                (checkForLazyLoad && this.isDynamic() && !this.dynamicLoadComplete) );
     },
 
     /**
@@ -989,6 +1069,7 @@ YAHOO.widget.Node.prototype = {
      * @private
      */
     getChildrenHtml: function() {
+
         var sb = [];
         sb[sb.length] = '<div class="ygtvchildren"';
         sb[sb.length] = ' id="' + this.getChildrenElId() + '"';
@@ -998,7 +1079,8 @@ YAHOO.widget.Node.prototype = {
         sb[sb.length] = '>';
 
         // Don't render the actual child node HTML unless this node is expanded.
-        if (this.hasChildren(true) && this.expanded) {
+        if ( (this.hasChildren(true) && this.expanded) ||
+                (this.renderHidden && !this.isDynamic()) ) {
             sb[sb.length] = this.renderChildren();
         }
 
@@ -1020,12 +1102,13 @@ YAHOO.widget.Node.prototype = {
 
         var node = this;
 
-        if (this.isDynamic() && !this.childrenRendered) {
+        if (this.isDynamic() && !this.dynamicLoadComplete) {
             this.isLoading = true;
             this.tree.locked = true;
 
             if (this.dataLoader) {
                 this.logger.debug("Using dynamic loader defined for this node");
+
                 setTimeout( 
                     function() {
                         node.dataLoader(node, 
@@ -1062,10 +1145,11 @@ YAHOO.widget.Node.prototype = {
      * @return {string} children html
      */
     completeRender: function() {
-        this.logger.debug("renderComplete: " + this.index);
+        this.logger.debug("completeRender: " + this.index + ", # of children: " + this.children.length);
         var sb = [];
 
         for (var i=0; i < this.children.length; ++i) {
+            this.children[i].childrenRendered = false;
             sb[sb.length] = this.children[i].getHtml();
         }
         
@@ -1081,6 +1165,7 @@ YAHOO.widget.Node.prototype = {
     loadComplete: function() {
         this.logger.debug("loadComplete: " + this.index);
         this.getChildrenEl().innerHTML = this.completeRender();
+        this.dynamicLoadComplete = true;
         this.isLoading = false;
         this.expand();
         this.tree.locked = false;
@@ -1132,10 +1217,12 @@ YAHOO.widget.Node.prototype = {
     },
 
     /**
-     * Re-renders the html for this node and its children
+     * Regenerates the html for this node and its children.  To be used when the
+     * node is expanded and new children have been added.
      */
     refresh: function() {
-        this.loadComplete();
+        // this.loadComplete();
+        this.getChildrenEl().innerHTML = this.completeRender();
     }
 
 };
@@ -1259,7 +1346,7 @@ YAHOO.widget.TextNode.prototype.getLabelEl = function() {
 
 // overrides YAHOO.widget.Node
 YAHOO.widget.TextNode.prototype.getNodeHtml = function() { 
-	var sb = new Array();
+	var sb = [];
 
 	sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0">';
 	sb[sb.length] = '<tr>';
@@ -1282,7 +1369,21 @@ YAHOO.widget.TextNode.prototype.getNodeHtml = function() {
 		sb[sb.length] = ' onmouseout="this.className=';
 		sb[sb.length] = getNode + '.getStyle()"';
 	}
-	sb[sb.length] = ' onclick="javascript:' + this.getToggleLink() + '">&nbsp;';
+	sb[sb.length] = ' onclick="javascript:' + this.getToggleLink() + '">';
+
+    /*
+	sb[sb.length] = '<img id="' + this.getSpacerId() + '"';
+    sb[sb.length] = ' alt=""';
+    sb[sb.length] = ' tabindex=0';
+    sb[sb.length] = ' src="' + this.spacerPath + '"';
+    sb[sb.length] = ' title="' + this.getStateText() + '"';
+    sb[sb.length] = ' class="ygtvspacer"';
+    // sb[sb.length] = ' onkeypress="return ' + getNode + '".onKeyPress()"';
+    sb[sb.length] = ' />';
+    */
+
+	sb[sb.length] = '&nbsp;';
+
 	sb[sb.length] = '</td>';
 	sb[sb.length] = '<td>';
 	sb[sb.length] = '<a';
@@ -1290,6 +1391,7 @@ YAHOO.widget.TextNode.prototype.getNodeHtml = function() {
 	sb[sb.length] = ' class="' + this.labelStyle + '"';
 	sb[sb.length] = ' href="' + this.href + '"';
 	sb[sb.length] = ' target="' + this.target + '"';
+	sb[sb.length] = ' onclick="return ' + getNode + '.onLabelClick(' + getNode +')"';
 	if (this.hasChildren(true)) {
 		sb[sb.length] = ' onmouseover="document.getElementById(\'';
 		sb[sb.length] = this.getToggleElId() + '\').className=';
@@ -1308,6 +1410,17 @@ YAHOO.widget.TextNode.prototype.getNodeHtml = function() {
 	return sb.join("");
 };
 
+
+/**
+ * Executed when the label is clicked
+ * @param me {Node} this node
+ * @scope the anchor tag clicked
+ * @return false to cancel the anchor click
+ */
+YAHOO.widget.TextNode.prototype.onLabelClick = function(me) { 
+    me.logger.debug("onLabelClick " + this.label);
+    //return true;
+};
 /* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
 
 /**
@@ -1409,7 +1522,7 @@ YAHOO.widget.HTMLNode.prototype.getContentEl = function() {
 
 // overrides YAHOO.widget.Node
 YAHOO.widget.HTMLNode.prototype.getNodeHtml = function() { 
-    var sb = new Array();
+    var sb = [];
 
     sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0">';
     sb[sb.length] = '<tr>';
@@ -1453,47 +1566,49 @@ YAHOO.widget.HTMLNode.prototype.getNodeHtml = function() {
  *
  * @constructor
  */
-YAHOO.widget.TVAnim = new function() {
-	/**
-	 * Constant for the fade in animation
-	 * 
-	 * @type string
-	 */
-	this.FADE_IN  = "YAHOO.widget.TVFadeIn";
+YAHOO.widget.TVAnim = function() {
+    return {
+        /**
+         * Constant for the fade in animation
+         * 
+         * @type string
+         */
+        FADE_IN: "TVFadeIn",
 
-	/**
-	 * Constant for the fade out animation
-	 * 
-	 * @type string
-	 */
-	this.FADE_OUT = "YAHOO.widget.TVFadeOut";
+        /**
+         * Constant for the fade out animation
+         * 
+         * @type string
+         */
+        FADE_OUT: "TVFadeOut",
 
-	/**
-	 * Returns a ygAnim instance of the given type
-	 *
-	 * @param type {string} the type of animation
-	 * @param el {HTMLElement} the element to element (probably the children div)
-	 * @param callback {function} function to invoke when the animation is done.
-	 * @return {YAHOO.util.Animation} the animation instance
-	 */
-	this.getAnim = function(type, el, callback) {
-		switch (type) {
-			case this.FADE_IN:	return new YAHOO.widget.TVFadeIn(el, callback);
-			case this.FADE_OUT:	return new YAHOO.widget.TVFadeOut(el, callback);
-			default:			return null;
-		}
-	};
+        /**
+         * Returns a ygAnim instance of the given type
+         *
+         * @param type {string} the type of animation
+         * @param el {HTMLElement} the element to element (probably the children div)
+         * @param callback {function} function to invoke when the animation is done.
+         * @return {YAHOO.util.Animation} the animation instance
+         */
+        getAnim: function(type, el, callback) {
+            if (YAHOO.widget[type]) {
+                return new YAHOO.widget[type](el, callback);
+            } else {
+                return null;
+            }
+        },
 
-	/**
-	 * Returns true if the specified animation class is available
-	 *
-	 * @param type {string} the type of animation
-	 * @return {boolean} true if valid, false if not
-	 */
-	this.isValid = function(type) {
-		return ( "undefined" != eval("typeof " + type) );
-	};
-};
+        /**
+         * Returns true if the specified animation class is available
+         *
+         * @param type {string} the type of animation
+         * @return {boolean} true if valid, false if not
+         */
+        isValid: function(type) {
+            return (YAHOO.widget[type]);
+        }
+    };
+} ();
 
 /* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
 

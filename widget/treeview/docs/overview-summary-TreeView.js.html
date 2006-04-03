@@ -246,7 +246,7 @@
  * there currently is no way to change this.
  *
  * <span class="attrib">@constructor</span>
- * <span class="attrib">@todo</span> prune, graft, reload, repaint
+ * <span class="attrib">@todo</span> graft (appendBefore, appendAfter)
  * <span class="attrib">@param</span> {string} id The id of the element that the tree will be inserted
  * into.
  */</span>
@@ -529,9 +529,10 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
      * Removes the node and its children, and refreshes
      * the branch of the tree that was affected.
      * <span class="attrib">@param</span> {Node} The node to remove
+     * <span class="attrib">@param</span> {boolean} autoRefresh automatically refreshes tree if true
      * <span class="attrib">@return</span> {boolean} False is there was a problem, true otherwise.
      */</span>
-    removeNode: <span class="reserved">function</span>(node) { 
+    removeNode: <span class="reserved">function</span>(node, autoRefresh) { 
 <span class="comment">
         // Don't delete the root node</span>
         <span class="reserved">if</span> (node.isRoot()) {
@@ -539,13 +540,17 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
         }
 
         var p = node.parent;
-        p = p &amp;&amp; p.parent;
+        <span class="reserved">if</span> (p.parent) {
+            p = p.parent;
+        }
 <span class="comment">
         // Delete the node and its children</span>
         <span class="reserved">this</span>._deleteNode(node);
 <span class="comment">
         // Refresh the parent of the parent</span>
-        p.refresh();
+        <span class="reserved">if</span> (autoRefresh &amp;&amp; p &amp;&amp; p.childrenRendered) {
+            p.refresh();
+        }
 
         <span class="reserved">return</span> true;
     },
@@ -556,20 +561,29 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
      */</span>
     _deleteNode: <span class="reserved">function</span>(node) { 
         var p = node.parent;
-        <span class="reserved">for</span> (var i=0;i&lt;node.children.length;++i) {
+        <span class="reserved">for</span> (var i=0, len=node.children.length;i&lt;len;++i) {
             <span class="reserved">this</span>._deleteNode(node.children[i]);
         }
 <span class="comment">
         // Update the parent's collection of children</span>
         var a = [];
 
-        <span class="reserved">for</span> (i=0;i&lt;p.children.length;++i) {
+        <span class="reserved">for</span> (i=0, len=p.children.length;i&lt;len;++i) {
             <span class="reserved">if</span> (p.children[i] != node) {
                 a[a.length] = p.children[i];
             }
         }
 
         p.children = a;
+<span class="comment">
+         // Update the sibling relationship                                                                                                                       </span>
+        <span class="reserved">if</span> (node.previousSibling) {                                                                                                                              
+            node.previousSibling.nextSibling = node.nextSibling;                                                                                                   
+        }                                                                                                                                                        
+
+        <span class="reserved">if</span> (node.nextSibling) {                                                                                                                                  
+            node.nextSibling.previousSibling = node.previousSibling;                                                                                               
+        }
 <span class="comment">
         // Update the tree's node collection </span>
         delete <span class="reserved">this</span>._nodes[node.index];
