@@ -83,7 +83,7 @@ YAHOO.util.Dom = function() {
                   }
                }
                
-               if (dv.getComputedStyle(el, '').getPropertyValue(converted)) {
+               if (dv.getComputedStyle(el, '') && dv.getComputedStyle(el, '').getPropertyValue(converted)) {
                   value = dv.getComputedStyle(el, '').getPropertyValue(converted);
                }
             }
