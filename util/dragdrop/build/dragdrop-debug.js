@@ -427,7 +427,7 @@ YAHOO.util.DragDrop.prototype = {
      */
     init: function(id, sGroup) {
         this.initTarget(id, sGroup);
-        YAHOO.util.Event.addListener(id, "mousedown", 
+        YAHOO.util.Event.addListener(this.id, "mousedown", 
                                           this.handleMouseDown, this, true);
     },
 
@@ -460,7 +460,7 @@ YAHOO.util.DragDrop.prototype = {
         this.setDragElId(id); 
 
         // by default, clicked anchors will not start drag operations
-        this.invalidHandleTypes = {A : "A"};
+        this.invalidHandleTypes = { A: "A" };
         this.invalidHandleIds = {};
         this.invalidHandleClasses = [];
 
@@ -744,7 +744,7 @@ YAHOO.util.DragDrop.prototype = {
      * @param {string} the class of the element(s) you wish to re-enable
      */
     removeInvalidHandleClass: function(cssClass) {
-        for (var i=0; i < this.invalidHandleClasses.length; ++i) {
+        for (var i=0, len=this.invalidHandleClasses.length; i<len; ++i) {
             if (this.invalidHandleClasses[i] == cssClass) {
                 delete this.invalidHandleClasses[i];
             }
@@ -770,7 +770,7 @@ YAHOO.util.DragDrop.prototype = {
         valid = valid && !this.invalidHandleTypes[n.nodeName];
         valid = valid && !this.invalidHandleIds[n.id];
 
-        for (var i=0; valid && i < this.invalidHandleClasses.length; ++i) {
+        for (var i=0, len=this.invalidHandleClasses.length; valid && i<len; ++i) {
             valid = !YAHOO.util.Dom.hasClass(n, this.invalidHandleClasses[i]);
         }
 
@@ -954,7 +954,7 @@ YAHOO.util.DragDrop.prototype = {
             // tick.
             return tickArray[0];
         } else {
-            for (var i = 0; i < tickArray.length; ++i) {
+            for (var i=0, len=tickArray.length; i<len; ++i) {
                 var next = i + 1;
                 if (tickArray[next] && tickArray[next] >= val) {
                     var diff1 = val - tickArray[i];
@@ -1332,7 +1332,7 @@ if (!YAHOO.util.DragDropMgr) {
          */
         this.isLegalTarget = function (oDD, oTargetDD) {
             var targets = this.getRelated(oDD);
-            for (var i =0;i<targets.length;++i) {
+            for (var i=0, len=targets.length;i<len;++i) {
                 if (targets[i].id == oTargetDD.id) {
                     return true;
                 }
@@ -1410,7 +1410,10 @@ if (!YAHOO.util.DragDropMgr) {
             this.dragThreshMet = false;
 
             this.clickTimeout = setTimeout( 
-                    function() { DDM.startDrag(DDM.startX, DDM.startY); }, 
+                    function() { 
+                        var DDM = YAHOO.util.DDM;
+                        DDM.startDrag(DDM.startX, DDM.startY); 
+                    }, 
                     this.clickTimeThresh );
         };
 
@@ -1634,49 +1637,50 @@ if (!YAHOO.util.DragDropMgr) {
             }
 
             if (this.mode) {
-                if (outEvts.length > 0) {
+                if (outEvts.length) {
                     dc.b4DragOut(e, outEvts);
                     dc.onDragOut(e, outEvts);
                 }
 
-                if (enterEvts.length > 0) {
+                if (enterEvts.length) {
                     dc.onDragEnter(e, enterEvts);
                 }
 
-                if (overEvts.length > 0) {
+                if (overEvts.length) {
                     dc.b4DragOver(e, overEvts);
                     dc.onDragOver(e, overEvts);
                 }
 
-                if (dropEvts.length > 0) {
+                if (dropEvts.length) {
                     dc.b4DragDrop(e, dropEvts);
                     dc.onDragDrop(e, dropEvts);
                 }
 
             } else {
                 // fire dragout events
-                for (i=0; i < outEvts.length; ++i) {
+                var len = 0;
+                for (i=0, len=outEvts.length; i<len; ++i) {
                     this.logger.debug(dc.id+" onDragOut: " + outEvts[i].id);
                     dc.b4DragOut(e, outEvts[i].id);
                     dc.onDragOut(e, outEvts[i].id);
                 }
                  
                 // fire enter events
-                for (i=0; i < enterEvts.length; ++i) {
+                for (i=0,len=enterEvts.length; i<len; ++i) {
                     this.logger.debug(dc.id + " onDragEnter " + enterEvts[i].id);
                     // dc.b4DragEnter(e, oDD.id);
                     dc.onDragEnter(e, enterEvts[i].id);
                 }
          
                 // fire over events
-                for (i=0; i < overEvts.length; ++i) {
+                for (i=0,len=overEvts.length; i<len; ++i) {
                     this.logger.debug(dc.id + " onDragOver " + overEvts[i].id);
                     dc.b4DragOver(e, overEvts[i].id);
                     dc.onDragOver(e, overEvts[i].id);
                 }
 
                 // fire drop events
-                for (i=0; i < dropEvts.length; ++i) {
+                for (i=0, len=dropEvts.length; i<len; ++i) {
                     this.logger.debug(dc.id + " dropped on " + dropEvts[i].id);
                     dc.b4DragDrop(e, dropEvts[i].id);
                     dc.onDragDrop(e, dropEvts[i].id);
@@ -1705,11 +1709,13 @@ if (!YAHOO.util.DragDropMgr) {
             // If there is only one item, it wins
             //} else if (dds.length == 1) {
 
-            if (dds.length == 1) {
+            var len = dds.length;
+
+            if (len == 1) {
                 winner = dds[0];
             } else {
                 // Loop through the targeted items
-                for (var i=0; i<dds.length; ++i) {
+                for (var i=0; i<len; ++i) {
                     var dd = dds[i];
                     // If the cursor is over the object, it wins.  If the 
                     // cursor is over multiple matches, the first one we come
@@ -1855,8 +1861,16 @@ if (!YAHOO.util.DragDropMgr) {
             // if (this.INTERSECT == this.mode) {
             if (intersect) {
 
-                var curRegion = 
-                    YAHOO.util.Region.getRegion(this.dragCurrent.getDragEl());
+                // var curRegion = 
+                  //   YAHOO.util.Region.getRegion(
+                  //   this.dragCurrent.getDragEl());
+                //this.logger.debug("pt: " + pt + "dc: " + this.dragCurrent.diffX + ", " + this.dragCurrent.diffY )
+                var el = this.dragCurrent.getDragEl();
+                var x = pt.x - this.dragCurrent.deltaX;
+                var y = pt.y - this.dragCurrent.deltaY;
+                var curRegion = new YAHOO.util.Region( y, x + el.offsetWidth,
+                                                       y + el.offsetHeight, x );
+
                 var overlap = curRegion.intersect(loc);
 
                 if (overlap) {
@@ -2004,7 +2018,7 @@ if (!YAHOO.util.DragDropMgr) {
                 // the node reference order for the swap is a little tricky. 
                 var p = n2.parentNode;
                 var s = n2.nextSibling;
-                n1.parentNode.replaceChild(n2,n1);
+                n1.parentNode.replaceChild(n2, n1);
                 p.insertBefore(n1,s);
             }
         };
@@ -2029,16 +2043,10 @@ if (!YAHOO.util.DragDropMgr) {
          * @param {HTMLElement} el          the element
          * @param {string}      styleProp   the style property
          * @return {string}     The value of the style property
+         * @deprecated, use YAHOO.util.Dom.getStyle
          */
         this.getStyle = function(el, styleProp) {
-            if (el.style.styleProp) {
-                return el.style.styleProp;
-            } else if (el.currentStyle) {
-                return el.currentStyle[styleProp];
-            } else if (document.defaultView) {
-                return document.defaultView.getComputedStyle(el, null).
-                    getPropertyValue(styleProp);
-            }
+            return YAHOO.util.Dom.getStyle(el, styleProp);
         };
 
         /**
@@ -2534,8 +2542,8 @@ YAHOO.util.DDProxy.createFrame = function() {
         s.cursor = "move";
         s.border = "2px solid #aaa";
         s.zIndex = 999;
-
         document.body.appendChild(THIS.frameDiv);
+
     }
 };
 

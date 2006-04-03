@@ -93,8 +93,8 @@ YAHOO.util.DDProxy.createFrame = function() {
         s.cursor = "move";
         s.border = "2px solid #aaa";
         s.zIndex = 999;
-
         document.body.appendChild(THIS.frameDiv);
+
     }
 };
 

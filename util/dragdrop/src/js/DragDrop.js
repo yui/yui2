@@ -427,7 +427,7 @@ YAHOO.util.DragDrop.prototype = {
      */
     init: function(id, sGroup) {
         this.initTarget(id, sGroup);
-        YAHOO.util.Event.addListener(id, "mousedown", 
+        YAHOO.util.Event.addListener(this.id, "mousedown", 
                                           this.handleMouseDown, this, true);
     },
 
@@ -460,7 +460,7 @@ YAHOO.util.DragDrop.prototype = {
         this.setDragElId(id); 
 
         // by default, clicked anchors will not start drag operations
-        this.invalidHandleTypes = {A : "A"};
+        this.invalidHandleTypes = { A: "A" };
         this.invalidHandleIds = {};
         this.invalidHandleClasses = [];
 
@@ -744,7 +744,7 @@ YAHOO.util.DragDrop.prototype = {
      * @param {string} the class of the element(s) you wish to re-enable
      */
     removeInvalidHandleClass: function(cssClass) {
-        for (var i=0; i < this.invalidHandleClasses.length; ++i) {
+        for (var i=0, len=this.invalidHandleClasses.length; i<len; ++i) {
             if (this.invalidHandleClasses[i] == cssClass) {
                 delete this.invalidHandleClasses[i];
             }
@@ -770,7 +770,7 @@ YAHOO.util.DragDrop.prototype = {
         valid = valid && !this.invalidHandleTypes[n.nodeName];
         valid = valid && !this.invalidHandleIds[n.id];
 
-        for (var i=0; valid && i < this.invalidHandleClasses.length; ++i) {
+        for (var i=0, len=this.invalidHandleClasses.length; valid && i<len; ++i) {
             valid = !YAHOO.util.Dom.hasClass(n, this.invalidHandleClasses[i]);
         }
 
@@ -954,7 +954,7 @@ YAHOO.util.DragDrop.prototype = {
             // tick.
             return tickArray[0];
         } else {
-            for (var i = 0; i < tickArray.length; ++i) {
+            for (var i=0, len=tickArray.length; i<len; ++i) {
                 var next = i + 1;
                 if (tickArray[next] && tickArray[next] >= val) {
                     var diff1 = val - tickArray[i];
