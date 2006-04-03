@@ -6,142 +6,137 @@
 
 <script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/yahoo_2.0.0-b2.js" ></script>
 <script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/event_2.0.0-b2.js" ></script>
-<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/dom_2.0.0-b2.js" ></script>
+<script type="text/javascript" src="http://ue.corp.yahoo.com/msweeney/dev/platform/2.0/util/dom/build/dom-raw.js" ></script>
 <script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/animation_2.0.0-b2.js" ></script>
 <script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/utils/2/dragdrop_2.0.0-b2.js" ></script>
 
 <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/fonts_0.9.0.css" />
 <link rel="stylesheet" type="text/css" href="css/example.css" />
 
-<script type="text/javascript" src="http://makeover.corp.yahoo.com/lib/common/widgets/2/container/container_2.0.0-b2.js"></script>
+<link rel="stylesheet" type="text/css" href="../build/css/container.css" />
+
+<script type="text/javascript" src="../src/js/Config.js"></script>
+<script type="text/javascript" src="../src/js/Module.js"></script>
 
 <style>
 
-div.module {
+.module {
 	margin:5px;
 	padding:5px;
 	border:1px solid red;
 	background-color:#FFFFFF;
 } 
-
-#modbuild, #modmodify {
-	border:1px solid #000;
-	margin:5px;
+div.overlayform {
+	width:700px;
+	border:1px solid black;
+	background-color:#FFF;
 }
 
-#modbuild .bd, #modmodify .bd {
+div.overlayform .formheader {
 	padding:5px;
+	font-weight:bold;
+	background-color:#D92121;
+	color:#FFF;
+
 }
 
-#modbuild .hd, #modmodify .hd {
-	background-color:#3d77cb;
-	color:#FFF;
-	height:12px;
-	font-size:11px;
-	border:1px solid #FFF;
-	border-bottom:1px solid #000;
-	font-weight:bold;
-	margin-bottom:5px;
-	padding:4px;
+div.overlayform textarea {
+	width:450px;
+	height:50px;
 }
+
+div.overlayform button {
+	float:right;
+	margin-right:10px
+}
+
+div.row {
+	clear:both;
+	vertical-align:middle;
+	padding-bottom:5px;
+}
+
+div.row.header {
+	font-weight:bold;
+	background-color:#666;
+	color:#FFF;
+	vertical-align:middle;
+	height:1em;
+}
+
+div.row.first {
+	margin-top:5px;
+}
+
+div.row.last {
+	margin-bottom:5px;
+}
+
+div.row div.label {
+	float: left;
+	width: 125px;
+	margin-right:10px;
+	text-align: right;
+	vertical-align:middle;
+}
+
+div.row div.formw {
+	float: left;
+	text-align: left;
+	vertical-align:middle;
+} 
 </style>
 
 <script language="javascript">
-
-	var modulePredef;
-	var modulePartial;
-
-	var build;
-	var modify;
+	
+	var mPredefined;
+	var mDynamic;
+	var mChangedAtRuntime;
 
 	var modules = [];
 
 	function init() {
-
-		build = new YAHOO.widget.Module( "modbuild", { visible:true });
-		build.render();
-
-		modify = new YAHOO.widget.Module( "modmodify", { visible:true });
-		modify.render();
-
-		// This represents a module already on the page
+		
 		// *****************************************************************
-			modulePredef = new YAHOO.widget.Module("mPredef");
-			modules["mPredef"] = modulePredef;
-
+		// This represents a Overlay already on the page
 		// *****************************************************************
 
-		// This represents a module with a container, but no body content defined
-		// *****************************************************************
-			modulePartial = new YAHOO.widget.Module("mPartial");
-			modules["mPartial"] = modulePartial;
-			modulePartial.setBody("This is the body that was dynamically added to the partially marked up module.");
+			mPredefined = new YAHOO.widget.Module("mPredefined", {visible:true} );
+			mPredefined.render();
 
 		// *****************************************************************
+		// This represents an Overlay completely pre-constructed from code
+		// *****************************************************************
 
-			myDynamicModule = new YAHOO.widget.Module("myDynamicModule");
-			modules["myDynamicModule"] = myDynamicModule;
+			mDynamic = new YAHOO.widget.Module("mDynamic", {visible:true} );
 
-			myDynamicModule.element.className = "module";
-			myDynamicModule.setBody("Here's some body content.");
-			myDynamicModule.render(document.getElementById("dynamic"));
+			mDynamic.setHeader("Completely dynamic overlay");
+			mDynamic.setBody("I was created completely at runtime!");
 
-		var btnRender = document.getElementById("btnRender");
-		btnRender.onclick = render;
+			mDynamic.render(document.getElementById("mainBody"));
+
+		// *****************************************************************
+		// This represents a overlay with a container, but no body content defined
+		// *****************************************************************
+			mChangedAtRuntime = new YAHOO.widget.Module("mChangedAtRuntime", {visible:true} );
+
+			mChangedAtRuntime.setHeader("I was changed at runtime!");
+			mChangedAtRuntime.setBody("<b>My original markup text was replaced at runtime with this text.</b>");
+			mChangedAtRuntime.setFooter("The footer was changed too!");
+
+			mChangedAtRuntime.render();
+		// *****************************************************************
+
+		modules["mPredefined"] = mPredefined;
+		modules["mDynamic"] = mDynamic;
+		modules["mChangedAtRuntime"] = mChangedAtRuntime;
+
+
 		var btnShow = document.getElementById("btnShow");
 		btnShow.onclick = showAll;
+
 		var btnHide = document.getElementById("btnHide");
 		btnHide.onclick = hideAll;
-	}
-
-
-
-	function render() {
-		for (var i in modules) {
-			var m = modules[i];
-			m.render();
-		}
-	}
-
-	function buildDynamic(form) {
-		// This represents a module created completely on the fly
-		// *****************************************************************
-		
-			var id = form["id"].value;
-			var mod = new YAHOO.widget.Module(id);
-
-			mod.setHeader(form["header"].value + " (id: " + mod.id + ")");
-			mod.setBody(form["body"].value);
-			mod.setFooter(form["footer"].value);	
-			
-			mod.element.className = "module";
-			mod.render(document.getElementById("dynamic"));
-
-			modules[id] = mod;
-	}
-
-	function changeModule(form) {
-		var id = form["modid"].value;
-		var mod = modules[id];
-		mod.setHeader(form["modheader"].value);
-		mod.setBody(form["modbody"].value);
-		mod.setFooter(form["modfooter"].value);
-		mod.render();
-	}
-
-	function getModule(form) {
-		var id = form["modid"].value;
-		var mod = modules[id];
-		if (mod.header) {
-			form["modheader"].value = mod.header.innerHTML;
-		}
-		if (mod.body) {
-			form["modbody"].value = mod.body.innerHTML;
-		}
-		if (mod.footer) {
-			form["modfooter"].value = mod.footer.innerHTML;
-		}
-		
 	}
 
 	function hideAll() {
@@ -155,6 +150,47 @@ div.module {
 		for (var i in modules) {
 			var m = modules[i];
 			m.show();
+		}
+	}
+	function create() {
+		var form = document.forms["overlayform"];
+
+		// get form values
+		var id = form["id"].value;
+		
+		var header = form["header"].value;
+		var body = form["body"].value;
+		var footer = form["footer"].value;
+
+		var visible = form["visible"].checked;
+
+		var args = {};
+		args.visible = visible;
+
+		var newMod;
+		var isNew = true;
+
+		if (modules[id]) {
+			newMod = modules[id];
+			newMod.cfg.applyConfig(args);
+			isNew = false;
+		} else {
+			newMod = new YAHOO.widget.Module(id, args);
+			modules[id] = newMod;
+		}
+
+		if (header) {
+			newMod.setHeader(header);
+		}
+		if (body) {
+			newMod.setBody(body);
+		}
+		if (footer) {
+			newMod.setFooter(footer);
+		}
+		
+		if (isNew) {
+			newMod.render(document.getElementById("mainBody"));
 		}
 	}
 
@@ -171,9 +207,8 @@ div.module {
 		<div class="hd">
 			<h1>Module Example</h1>
 		</div>
-		<div class="bd">
+		<div class="bd" id="mainBody">
 		
-			<button id="btnRender">Render All</button>
 			<button id="btnHide">Hide All</button>
 			<button id="btnShow">Show All</button>
 
@@ -197,52 +232,60 @@ div.module {
 				<p>Here are some example modules, including the one from above:</p>
 			</div>
 
-			<div id="mPredef" class="module">
-				<div class="hd">Predefined Module (id: mPredef)</div>
-				<div class="bd">This is a predefined module. All the markup is already present in the document.</div>
-				<div class="ft">Predefined Module Footer</div>
-			</div>
+	<div id="mPredefined" class="module">
+		<div class="hd">Predefined Module Header</div>
+		<div class="bd">I was created using simple predefined markup.</div>
+		<div class="ft">Predefined Module Footer</div>
+	</div>
 
-			<div id="mPartial" class="module">
-				<div class="hd">Partially Marked Up Module (id: mPartial)</div>
-				<div class="ft">Partially Marked Up Module Footer</div>
-			</div>
-
+	<div id="mChangedAtRuntime" class="module">
+		<div class="hd">Placeholder Header</div>
+		<div class="bd">This is only placeholder text in the markup.</div>
+		<div class="ft">Placeholder Footer</div>
+	</div>
 			<div id="dynamic"></div>
-
-	<div id="modbuild">
-		<div class="hd">Build a Dynamic Module</div>
-		<div class="bd">
-			<form onsubmit="return false">
-				<div class="create">
-					<label for="id">ID:</label><input type="textbox" id="id" value="myModule" /><br/>
-					<label for="header">Header content:</label><input type="textbox" id="header" /><br/>
-					<label for="body">Body content:</label><input type="textbox" id="body" /><br/>
-					<label for="footer">Footer content:</label><input type="textbox" id="footer" /><br/>
-					<div class="buttonset"><button onclick="buildDynamic(this.form)">create and render!</button></div>
-				</div>
-			</form>
-		</div>
-	</div>
-
-	<div id="modmodify">
-		<div class="hd">Modify an Existing Module</div>
-		<div class="bd">
-			<form onsubmit="return false">
-				<div class="create">
-					<label for="modid">ID:</label><input type="textbox" id="modid" /><button onclick="getModule(this.form)">retrieve module</button><br/>
-					<label for="modheader">Header content:</label><input type="textbox" id="modheader" /><br/>
-					<label for="modbody">Body content:</label><input type="textbox" id="modbody" /><br/>
-					<label for="modfooter">Footer content:</label><input type="textbox" id="modfooter" /><br/>
-					<div class="buttonset"><button onclick="changeModule(this.form)">change it!</button></div>
-				</div>
-			</form>
-		</div>
-	</div>
-
 
 		</div>
 		<div class="ft"></div>
 	</div>
+
+<form onsubmit="return false" id="overlayform">
+<div class="overlayform">
+
+	<div class="formheader">
+      Create / Modify a Dynamic Module
+    </div>
+
+	<div class="row header">
+      <div class="label" style="text-align:center">Property</div><div class="formw">Value</div>
+    </div>
+
+	<div class="row first">
+      <div class="label">ID</div><div class="formw"><input type="text" name="id" /></div>
+    </div>
+
+	<div class="row">
+      <div class="label">Visible</div><div class="formw"><input type="checkbox" name="visible" value="checkbox" checked="true"/></div>
+    </div>
+
+	<div class="row first">
+      <div class="label">Header</div><div class="formw"><textarea name="header"></textarea></div>
+    </div>
+
+	<div class="row first">
+      <div class="label">Body</div><div class="formw"><textarea name="body"></textarea></div>
+    </div>
+
+	<div class="row first">
+      <div class="label">Footer</div><div class="formw"><textarea name="footer"></textarea></div>
+    </div>
+
+	<div class="row last">
+      <div class="label"></div><div class="formw"><button onclick="create()">create/modify my overlay</button></div>
+	</div>
+
+</div>
+</form>
+
 </body>
 </html>

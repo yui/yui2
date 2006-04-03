@@ -1,11 +1,11 @@
 .tt {
+	visibility:hidden;
+	position:absolute;
 	color:#333;
 	background-color:#FDFFB4;
 	font-family:arial,helvetica,verdana,sans-serif;
-	font-size:1em;
-	position:absolute;
 	padding:2px;
 	border:1px solid #FCC90D;
-	font:11px sans-serif;
+	font:100% sans-serif;
 	width:auto;
 }

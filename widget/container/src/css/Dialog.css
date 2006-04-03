@@ -6,7 +6,7 @@
 	float:left;
 }
 
-.dialog .ft {
+.dialog .ft, .form-dialog .ft {
 	padding-bottom:5px;
 	padding-right:5px;
 	text-align:right;
@@ -36,6 +36,7 @@
 	border-top-color:#FFF;
 	border-left-color:#FFF;
 }
+
 .button-group button:active { 
 	border:2px solid #E4E4E4;
 	background-color:#BBB;

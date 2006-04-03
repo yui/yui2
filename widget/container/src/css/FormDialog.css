@@ -1,11 +1,11 @@
-.form-dialog form {
-	margin:0;
+.form-dialog .ft {
+	padding-bottom:5px;
+	padding-right:5px;
+	text-align:right;
 }
 
-.form-dialog .ft {
-	text-align:right;
-	margin-top:10px;
-	clear:both;
+.form-dialog form {
+	margin:0;
 }
 
 .button-group button {
