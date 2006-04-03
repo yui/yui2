@@ -147,6 +147,14 @@
 	
 	
 	
+		<div class="summary">
+			<p>
+				Provides helper methods for DOM elements.
+  
+
+			</p>
+		</div>
+	
 </div>
 
 			
@@ -186,6 +194,18 @@
 	
 			<!-- ======== CONSTRUCTOR SUMMARY ======== -->
 			
+				<div class="section contructor summaries">
+					<h3><a name="constructor_summary">Constructor Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+					<div class="content">
+						<code class="spec">
+							<a href="YAHOO.util.Dom.html#YAHOO.util.Dom()">YAHOO.util.Dom</a>
+						</code>
+						<div class="description">
+							&nbsp;
+						</div>
+					</div>
+				</div>
+			
 			<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
 	
 	
@@ -197,27 +217,53 @@
 						<table border="1" cellpadding="3" cellspacing="0">
 							
 								<tr>
-									<td class="flags">Object</td>
+									<td class="flags">void</td>
 									<td class="spec">
 										<code>
 											<a href="#addClass">addClass</a>
-											(el, className)
+											(&lt;String/HTMLElement/Array&gt; el, &lt;String&gt; className)
 										</code>
 										<div class="description">
-											&nbsp;
+											Adds a class name to a given element or collection of elements&nbsp;
 										</div>
 									</td>
 								</tr>
 							
 								<tr>
-									<td class="flags">HTMLElement</td>
+									<td class="flags">Object/Array</td>
+									<td class="spec">
+										<code>
+											<a href="#batch">batch</a>
+											(&lt;String/HTMLElement/Array&gt; el, &lt;String&gt; method, o)
+										</code>
+										<div class="description">
+											Returns the element(s) that have had the supplied method applied.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">String/Array</td>
+									<td class="spec">
+										<code>
+											<a href="#generateId">generateId</a>
+											(&lt;String/HTMLElement/Array&gt; el, &lt;String&gt; prefix)
+										</code>
+										<div class="description">
+											Generates a unique ID&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Object/Array</td>
 									<td class="spec">
 										<code>
 											<a href="#get">get</a>
-											(el)
+											(&lt;String/HTMLElement/Array&gt; el)
 										</code>
 										<div class="description">
-											Returns an HTMLElement reference&nbsp;
+											Returns an HTMLElement object or array of objects
 										</div>
 									</td>
 								</tr>
@@ -249,24 +295,39 @@
 								</tr>
 							
 								<tr>
-									<td class="flags">Object</td>
+									<td class="flags">Array</td>
 									<td class="spec">
 										<code>
-											<a href="#getElementsByClassName">getElementsByClassName</a>
-											(className, tag, root)
+											<a href="#getElementsBy">getElementsBy</a>
+											(&lt;Function&gt; method, &lt;String&gt; tag, &lt;String/HTMLElement&gt; root)
 										</code>
 										<div class="description">
-											&nbsp;
+											Returns a array of HTMLElements that pass the test applied by supplied boolean method.
+ For <strong>optimized performance</strong>, include a <strong>tag</strong> and/or <strong>root node</strong> when possible.
 										</div>
 									</td>
 								</tr>
 							
 								<tr>
-									<td class="flags">Region</td>
+									<td class="flags">Array</td>
+									<td class="spec">
+										<code>
+											<a href="#getElementsByClassName">getElementsByClassName</a>
+											(&lt;String&gt; className, &lt;String&gt; tag, &lt;String/HTMLElement&gt; root)
+										</code>
+										<div class="description">
+											Returns a array of HTMLElements with the given class.
+ For <strong>optimized performance</strong>, include a <strong>tag</strong> and/or <strong>root node</strong> when possible.
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Object</td>
 									<td class="spec">
 										<code>
 											<a href="#getRegion">getRegion</a>
-											(el)
+											(&lt;String/HTMLElement/Array&gt; el)
 										</code>
 										<div class="description">
 											Returns the region position of the given element.&nbsp;
@@ -275,11 +336,11 @@
 								</tr>
 							
 								<tr>
-									<td class="flags">String</td>
+									<td class="flags">String/Array</td>
 									<td class="spec">
 										<code>
 											<a href="#getStyle">getStyle</a>
-											(el, &lt;String&gt; property)
+											(&lt;String/HTMLElement/Array&gt; el, &lt;String&gt; property)
 										</code>
 										<div class="description">
 											Normalizes currentStyle and ComputedStyle.&nbsp;
@@ -288,66 +349,105 @@
 								</tr>
 							
 								<tr>
-									<td class="flags">Object</td>
+									<td class="flags">Int/Array</td>
 									<td class="spec">
 										<code>
 											<a href="#getX">getX</a>
-											(el)
+											(&lt;String/HTMLElement/Array&gt; el)
 										</code>
 										<div class="description">
-											Gets the current X position of an element based on page coordinates.&nbsp;
+											Gets the current X position of the element(s) based on page coordinates.&nbsp;
 										</div>
 									</td>
 								</tr>
 							
 								<tr>
-									<td class="flags">Object</td>
+									<td class="flags">Array</td>
 									<td class="spec">
 										<code>
 											<a href="#getXY">getXY</a>
-											(el)
+											(&lt;String/HTMLElement/Array&gt; el)
 										</code>
 										<div class="description">
-											Gets the current position of an element based on page coordinates.&nbsp;
+											Gets the current position of the element(s) based on page coordinates.&nbsp;
 										</div>
 									</td>
 								</tr>
 							
 								<tr>
-									<td class="flags">Object</td>
+									<td class="flags">Int/Array</td>
 									<td class="spec">
 										<code>
 											<a href="#getY">getY</a>
-											(el)
+											(&lt;String/HTMLElement/Array&gt; el)
 										</code>
 										<div class="description">
-											Gets the current Y position of an element based on page coordinates.&nbsp;
+											Gets the current Y position of the element(s) based on page coordinates.&nbsp;
 										</div>
 									</td>
 								</tr>
 							
 								<tr>
-									<td class="flags">Object</td>
+									<td class="flags">Boolean/Array</td>
 									<td class="spec">
 										<code>
 											<a href="#hasClass">hasClass</a>
-											(el, className)
+											(&lt;String/HTMLElement/Array&gt; el, &lt;String&gt; className)
 										</code>
 										<div class="description">
-											&nbsp;
+											Determines whether the element(s) has the given className&nbsp;
 										</div>
 									</td>
 								</tr>
 							
 								<tr>
-									<td class="flags">Object</td>
+									<td class="flags">Boolean/Array</td>
+									<td class="spec">
+										<code>
+											<a href="#inDocument">inDocument</a>
+											(&lt;String/HTMLElement/Array&gt; el)
+										</code>
+										<div class="description">
+											Determines whether the element(s) is present in the current document&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Boolean</td>
+									<td class="spec">
+										<code>
+											<a href="#isAncestor">isAncestor</a>
+											(haystack, needle)
+										</code>
+										<div class="description">
+											Determines whether an HTMLElement is an ancestor of another HTMLElement in the DOM hierarchy&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
 									<td class="spec">
 										<code>
 											<a href="#removeClass">removeClass</a>
-											(el, className)
+											(&lt;String/HTMLElement/Array&gt; el, &lt;String&gt; className)
 										</code>
 										<div class="description">
-											&nbsp;
+											Removes a class name from a given element or collection of elements&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#replaceClass">replaceClass</a>
+											(&lt;String/HTMLElement/Array&gt; el, &lt;String&gt; oldClassName, &lt;String&gt; newClassName)
+										</code>
+										<div class="description">
+											Replace a class with another class for a given element or collection of elements.&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -357,7 +457,7 @@
 									<td class="spec">
 										<code>
 											<a href="#setStyle">setStyle</a>
-											(el, &lt;String&gt; property, &lt;String&gt; val)
+											(&lt;String/HTMLElement/Array&gt; el, &lt;String&gt; property, &lt;String&gt; val)
 										</code>
 										<div class="description">
 											Wrapper for setting style properties of HTMLElements.&nbsp;
@@ -366,40 +466,40 @@
 								</tr>
 							
 								<tr>
-									<td class="flags">Object</td>
+									<td class="flags">void</td>
 									<td class="spec">
 										<code>
 											<a href="#setX">setX</a>
-											(el, &lt;Int&gt; x)
+											(&lt;String/HTMLElement/Array&gt; el, &lt;Int&gt; x)
 										</code>
 										<div class="description">
-											Set the X position of an html element in page coordinates, regardless of how the element is positioned.&nbsp;
+											Set the X position of the element(s) in page coordinates, regardless of how the element is positioned.&nbsp;
 										</div>
 									</td>
 								</tr>
 							
 								<tr>
-									<td class="flags">Object</td>
+									<td class="flags">void</td>
 									<td class="spec">
 										<code>
 											<a href="#setXY">setXY</a>
-											(el, &lt;array&gt; pos, noRetry)
+											(&lt;String/HTMLElement/Array&gt; el, &lt;Array&gt; pos, &lt;Boolean&gt; noRetry)
 										</code>
 										<div class="description">
-											Set the position of an html element in page coordinates, regardless of how the element is positioned.&nbsp;
+											Set the position of the element(s) in page coordinates, regardless of how the element is positioned.&nbsp;
 										</div>
 									</td>
 								</tr>
 							
 								<tr>
-									<td class="flags">Object</td>
+									<td class="flags">void</td>
 									<td class="spec">
 										<code>
 											<a href="#setY">setY</a>
-											(el, y)
+											(&lt;String/HTMLElement/Array&gt; el, &lt;Int&gt; y)
 										</code>
 										<div class="description">
-											Set the Y position of an html element in page coordinates, regardless of how the element is positioned.&nbsp;
+											Set the Y position of the element(s) in page coordinates, regardless of how the element is positioned.&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -426,7 +526,7 @@
 						<div class="detail">
 							<code>
 								<strong>YAHOO.util.Dom</strong>
-								
+								()
 							</code>
 							<div class="description">
 								
@@ -454,14 +554,117 @@
 							<h4><a name="addClass">addClass</a></h4>
 							<div class="detail">
 								<code>
-									Object 
+									void 
 									<strong>addClass</strong>
-									(el, className)
+									(&lt;String/HTMLElement/Array&gt; el, &lt;String&gt; className)
 								</code>
 										
 								<div class="description">
 									
+										Adds a class name to a given element or collection of elements
 									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>className</code> - 
+													 the class name to add to the class attribute       
+												</dd>
+											
+												<dd>
+													<code>el</code> - 
+													The element or collection of elements to add the class to  
+												</dd>
+											
+										</dl>
+									
+									
+															
+	
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="batch">batch</a></h4>
+							<div class="detail">
+								<code>
+									Object 
+									<strong>batch</strong>
+									(&lt;String/HTMLElement/Array&gt; el, &lt;String&gt; method, o)
+								</code>
+										
+								<div class="description">
+									
+										Returns an array of elements that have had the supplied method applied.
+ The method is called with the element(s) as the first arg, and the optional param as the second ( <strong><code>method(el, o)</code></strong> )
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>method</code> - 
+													 The method to apply to the element(s)  
+												</dd>
+											
+												<dd>
+													<code>el</code> -  (optional) An element or array of elements to apply the method to  
+												</dd>
+											
+												<dd>
+													<code>o</code> - 
+													(optional) An optional arg that is passed to the supplied method  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>The element(s) with the method applied</dd>
+										</dl>
+									
+															
+	
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="generateId">generateId</a></h4>
+							<div class="detail">
+								<code>
+									Object 
+									<strong>generateId</strong>
+									(&lt;String/HTMLElement/Array&gt; el, &lt;String&gt; prefix)
+								</code>
+										
+								<div class="description">
+									
+										Generates a unique ID
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>prefix</code> - 
+													 (optional) an optional prefix to use (defaults to "yui-gen")  
+												</dd>
+											
+												<dd>
+													<code>el</code> -  (optional) An optional element array of elements to add an ID to (no ID is added if one is already present)  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>The generated ID, or array of generated IDs (or original ID if already present on an element)</dd>
+										</dl>
 									
 															
 	
@@ -473,9 +676,9 @@
 							<h4><a name="get">get</a></h4>
 							<div class="detail">
 								<code>
-									HTMLElement 
+									Object 
 									<strong>get</strong>
-									(el)
+									(&lt;String/HTMLElement/Array&gt; el)
 								</code>
 										
 								<div class="description">
@@ -487,8 +690,8 @@
 											<dt>Parameters:</dt>
 											
 												<dd>
-													<code>String</code> - 
-													 or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.  
+													<code>el</code> - 
+													Accepts a string to use as an ID for getting a DOM reference, an actual DOM reference, or an Array of IDs and/or HTMLElements.  
 												</dd>
 											
 										</dl>
@@ -496,7 +699,7 @@
 									
 										<dl>
 											<dt>Returns:</dt>
-											<dd> A DOM reference to an HTML element.</dd>
+											<dd>A DOM reference to an HTML element or an array of HTMLElements.</dd>
 										</dl>
 									
 															
@@ -558,17 +761,90 @@
 							</div>
 							<hr />
 						
-							<h4><a name="getElementsByClassName">getElementsByClassName</a></h4>
+							<h4><a name="getElementsBy">getElementsBy</a></h4>
 							<div class="detail">
 								<code>
-									Object 
-									<strong>getElementsByClassName</strong>
-									(className, tag, root)
+									Array 
+									<strong>getElementsBy</strong>
+									(&lt;Function&gt; method, &lt;String&gt; &lt;String&gt; tag, &lt;String/HTMLElement&gt; root)
 								</code>
 										
 								<div class="description">
 									
+										Returns a array of HTMLElements that pass the test applied by supplied boolean method.
+ For <strong>optimized performance</strong>, include a <strong>tag</strong> and/or <strong>root node</strong> when possible.
 									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>method</code> - 
+													 A boolean method to test elements with  
+												</dd>
+											
+												<dd>
+													<code>tag</code> - 
+													 (optional) The tag name of the elements being collected  
+												</dd>
+											
+												<dd>
+													<code>root</code> - 
+													(optional) The HTMLElement or an ID to use as the starting point
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd> An array of elements that pass the boolean method test</dd>
+										</dl>
+	
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="getElementsByClassName">getElementsByClassName</a></h4>
+							<div class="detail">
+								<code>
+									Array 
+									<strong>getElementsByClassName</strong>
+									(&lt;String&gt; className, &lt;String&gt; &lt;String&gt; tag, &lt;String/HTMLElement&gt; root)
+								</code>
+										
+								<div class="description">
+									
+										Returns a array of HTMLElements with the given class
+ For <strong>optimized performance</strong>, include a <strong>tag</strong> and/or <strong>root node</strong> when possible.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>className</code> - 
+													 The class name to match against  
+												</dd>
+											
+												<dd>
+													<code>tag</code> - 
+													 (optional) The tag name of the elements being collected  
+												</dd>
+											
+												<dd>
+													<code>root</code> - 
+													(optional) An HTMLElement or an ID to use as the starting point   
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd> An array of elements that have the given class name</dd>
+										</dl>
 									
 															
 	
@@ -580,23 +856,23 @@
 							<h4><a name="getRegion">getRegion</a></h4>
 							<div class="detail">
 								<code>
-									Region 
+									Object 
 									<strong>getRegion</strong>
-									(el)
+									(&lt;String/HTMLElement/Array&gt; el)
 								</code>
 										
 								<div class="description">
 									
 										Returns the region position of the given element.
- The element must be part of the DOM tree to have a region (display:none or elements not appended return false).
+ The element must be part of the DOM tree to have a region (elements with display = none or not appended to document return false).
 									
 									
 										<dl>
 											<dt>Parameters:</dt>
 											
 												<dd>
-													<code>String</code> - 
-													 or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.  
+													<code>el</code> - 
+													Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.  
 												</dd>
 											
 										</dl>
@@ -604,7 +880,7 @@
 									
 										<dl>
 											<dt>Returns:</dt>
-											<dd> A Region instance containing "top, left, bottom, right" member data.</dd>
+											<dd>A Region or array of Region instances containing "top, left, bottom, right" member data.</dd>
 										</dl>
 									
 															
@@ -617,14 +893,14 @@
 							<h4><a name="getStyle">getStyle</a></h4>
 							<div class="detail">
 								<code>
-									String 
+									String/Array 
 									<strong>getStyle</strong>
-									(el, &lt;String&gt; property)
+									(&lt;String/HTMLElement/Array&gt; el, &lt;String&gt; property)
 								</code>
 										
 								<div class="description">
 									
-										Normalizes currentStyle and ComputedStyle.
+										Normalizes currentStyle and ComputedStyle. <strong>Multiple word properties use camelCase (backgroundColor)</strong>.
 									
 									
 										<dl>
@@ -636,8 +912,8 @@
 												</dd>
 											
 												<dd>
-													<code>String</code> - 
-													 or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.  
+													<code>el</code> - 
+													Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.  
 												</dd>
 											
 										</dl>
@@ -645,7 +921,7 @@
 									
 										<dl>
 											<dt>Returns:</dt>
-											<dd> The current value of the style property.</dd>
+											<dd>The current value of the style property for the element(s).</dd>
 										</dl>
 									
 															
@@ -658,26 +934,31 @@
 							<h4><a name="getX">getX</a></h4>
 							<div class="detail">
 								<code>
-									Object 
+									Int/Array 
 									<strong>getX</strong>
-									(el)
+									(&lt;String/HTMLElement/Array&gt; el)
 								</code>
 										
 								<div class="description">
 									
-										Gets the current X position of an element based on page coordinates.  The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+										Gets the current X position of an element based on page coordinates.  <strong>The element must be part of the DOM tree to have page coordinates</strong> (elements with display = none or not appended to document return false).
 									
 									
 										<dl>
 											<dt>Parameters:</dt>
 											
 												<dd>
-													<code>String</code> - 
-													 or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+													<code>el</code> - 
+													Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements  
 												</dd>
 											
 										</dl>
 									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>The X position of the element(s)</dd>
+										</dl>
 									
 															
 	
@@ -689,22 +970,22 @@
 							<h4><a name="getXY">getXY</a></h4>
 							<div class="detail">
 								<code>
-									Object 
+									Array 
 									<strong>getXY</strong>
-									(el)
+									(&lt;String/HTMLElement/Array&gt; el)
 								</code>
 										
 								<div class="description">
 									
-										Gets the current position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+										Gets the current position of an element based on page coordinates.  <strong>The element must be part of the DOM tree to have page coordinates</strong> (elements with display = none or not appended to document return false).
 									
 									
 										<dl>
 											<dt>Parameters:</dt>
 											
 												<dd>
-													<code>String</code> - 
-													 or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+													<code>el</code> - 
+													Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements     
 												</dd>
 											
 										</dl>
@@ -720,22 +1001,179 @@
 							<h4><a name="getY">getY</a></h4>
 							<div class="detail">
 								<code>
-									Object 
+									Int/Array 
 									<strong>getY</strong>
-									(el)
+									(&lt;String/HTMLElement/Array&gt; el)
 								</code>
 										
 								<div class="description">
 									
-										Gets the current Y position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+										Gets the current Y position of an element based on page coordinates.  <strong>The element must be part of the DOM tree to have page coordinates</strong> (elements with display = none or not appended to document return false).
 									
 									
 										<dl>
 											<dt>Parameters:</dt>
 											
 												<dd>
-													<code>String</code> - 
-													 or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.
+													<code>el</code> - 
+													Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>The Y position of the element(s)</dd>
+										</dl>
+									
+															
+	
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="hasClass">hasClass</a></h4>
+							<div class="detail">
+								<code>
+									Boolean/Array 
+									<strong>hasClass</strong>
+									(&lt;String/HTMLElement/Array&gt; el, &lt;String&gt; className)
+								</code>
+										
+								<div class="description">
+									
+										Determines whether an HTMLElement has the given className
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>className</code> - 
+													 the class name to search for  
+												</dd>
+											
+												<dd>
+													<code>el</code> -  The element or collection to test  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>A boolean value or array of boolean values</dd>
+										</dl>
+									
+															
+	
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="inDocument">inDocument</a></h4>
+							<div class="detail">
+								<code>
+									Boolean 
+									<strong>inDocument</strong>
+									(&lt;String/HTMLElement/Array&gt; el)
+								</code>
+										
+								<div class="description">
+									
+										Determines whether an HTMLElement is present in the current document
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>el</code> - 
+													The element to search for  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd> Whether or not the element is present in the current document</dd>
+										</dl>
+									
+															
+	
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="isAncestor">isAncestor</a></h4>
+							<div class="detail">
+								<code>
+									Boolean 
+									<strong>isAncestor</strong>
+									(&lt;String/HTMLElement&gt; haystack, &lt;String/HTMLElement&gt; needle)
+								</code>
+										
+								<div class="description">
+									
+										Determines whether an HTMLElement is an ancestor of another HTML element in the DOM hierarchy
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>haystack</code> - 
+													The possible ancestor  
+												</dd>
+											
+												<dd>
+													<code>needle</code> - 
+													The possible descendent  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd> Whether or not the haystack is an ancestor of needle</dd>
+										</dl>
+									
+															
+	
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="removeClass">removeClass</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>removeClass</strong>
+									(&lt;String/HTMLElement/Array&gt; el, &lt;String&gt; className)
+								</code>
+										
+								<div class="description">
+									
+										Removes a class name from a given element or collection of elements
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>className</code> - 
+													 the class name to remove from the class attribute       
+												</dd>
+											
+												<dd>
+													<code>el</code> -  The element or collection to remove the class from  
 												</dd>
 											
 										</dl>
@@ -748,35 +1186,38 @@
 							</div>
 							<hr />
 						
-							<h4><a name="hasClass">hasClass</a></h4>
+							<h4><a name="replaceClass">replaceClass</a></h4>
 							<div class="detail">
 								<code>
-									Object 
-									<strong>hasClass</strong>
-									(el, className)
+									void 
+									<strong>replaceClass</strong>
+									(&lt;String/HTMLElement/Array&gt; el, &lt;String&gt; oldClassName, &lt;String&gt; newClassName)
 								</code>
 										
 								<div class="description">
 									
+										Replace a class with another class for a given element or collection of elements.
+ If no oldClassName is present, the newClassName is simply added.
 									
 									
-															
-	
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="removeClass">removeClass</a></h4>
-							<div class="detail">
-								<code>
-									Object 
-									<strong>removeClass</strong>
-									(el, className)
-								</code>
-										
-								<div class="description">
-									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>oldClassName</code> - 
+													 the class name to be replaced  
+												</dd>
+											
+												<dd>
+													<code>newClassName</code> - 
+													 the class name that will be replacing the old class name       
+												</dd>
+											
+												<dd>
+													<code>el</code> -  The element or collection to remove the class from  
+												</dd>
+											
+										</dl>
 									
 									
 															
@@ -791,12 +1232,12 @@
 								<code>
 									void 
 									<strong>setStyle</strong>
-									(el, &lt;String&gt; property, &lt;String&gt; val)
+									(&lt;String/HTMLElement/Array&gt; el, &lt;String&gt; property, &lt;String&gt; val)
 								</code>
 										
 								<div class="description">
 									
-										Wrapper for setting style properties of HTMLElements.  Normalizes "opacity" across modern browsers.
+										Wrapper for setting style properties of HTMLElements.  Normalizes "opacity" across modern browsers.  <strong>Multiple word properties use camelCase (backgroundColor)</strong>.
 									
 									
 										<dl>
@@ -813,8 +1254,8 @@
 												</dd>
 											
 												<dd>
-													<code>String</code> - 
-													 or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.  
+													<code>el</code> - 
+													Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.  
 												</dd>
 											
 										</dl>
@@ -830,15 +1271,15 @@
 							<h4><a name="setX">setX</a></h4>
 							<div class="detail">
 								<code>
-									Object 
+									void 
 									<strong>setX</strong>
-									(el, &lt;Int&gt; x)
+									(&lt;String/HTMLElement/Array&gt; el, &lt;Int&gt; x)
 								</code>
 										
 								<div class="description">
 									
 										Set the X position of an html element in page coordinates, regardless of how the element is positioned.
- The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+<strong>The element must be part of the DOM tree to have page coordinates</strong> (elements with display = none or not appended to document return false).
 									
 									
 										<dl>
@@ -846,12 +1287,12 @@
 											
 												<dd>
 													<code>x</code> - 
-													 to use as the X coordinate.
+													 to use as the X coordinate for the element(s).       
 												</dd>
 											
 												<dd>
-													<code>String</code> - 
-													 or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.  
+													<code>el</code> - 
+													Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.  
 												</dd>
 											
 										</dl>
@@ -867,15 +1308,15 @@
 							<h4><a name="setXY">setXY</a></h4>
 							<div class="detail">
 								<code>
-									Object 
+									void 
 									<strong>setXY</strong>
-									(el, &lt;array&gt; pos, noRetry)
+									(&lt;String/HTMLElement/Array&gt; el, &lt;Array&gt; pos, &lt;Boolean&gt; noRetry)
 								</code>
 										
 								<div class="description">
 									
 										Set the position of an html element in page coordinates, regardless of how the element is positioned.
- The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+<strong>The element must be part of the DOM tree to have page coordinates</strong> (elements with display = none or not appended to document return false).
 									
 									
 										<dl>
@@ -883,12 +1324,17 @@
 											
 												<dd>
 													<code>pos</code> - 
-													 Contains X & Y values for new position (coordinates are page-based)
+													 Contains X & Y values for new position (coordinates are page-based)  
 												</dd>
 											
 												<dd>
-													<code>String</code> - 
-													 or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.  
+													<code>noRetry</code> - 
+													 By default we try and set the position a second time if the first fails       
+												</dd>
+											
+												<dd>
+													<code>el</code> - 
+													Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements  
 												</dd>
 											
 										</dl>
@@ -904,28 +1350,28 @@
 							<h4><a name="setY">setY</a></h4>
 							<div class="detail">
 								<code>
-									Object 
+									void 
 									<strong>setY</strong>
-									(el, y)
+									(&lt;String/HTMLElement/Array&gt; el, &lt;Int&gt; y)
 								</code>
 										
 								<div class="description">
 									
 										Set the Y position of an html element in page coordinates, regardless of how the element is positioned.
- The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+<strong>The element must be part of the DOM tree to have page coordinates</strong> (elements with display = none or not appended to document return false).
 									
 									
 										<dl>
 											<dt>Parameters:</dt>
 											
 												<dd>
-													<code>String</code> - 
-													 or HTMLElement} Accepts either a string to use as an ID for getting a DOM reference, or an actual DOM reference.  
+													<code>el</code> - 
+													Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.  
 												</dd>
 											
 												<dd>
-													<code>Value</code> - 
-													 to use as the Y coordinate.
+													<code>x</code> - 
+													 to use as the Y coordinate for the element(s).       
 												</dd>
 											
 										</dl>
