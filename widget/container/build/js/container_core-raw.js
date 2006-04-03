@@ -998,7 +998,7 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 * The default event handler fired when the "fixedcenter" property is changed.
 */
 YAHOO.widget.Overlay.prototype.configFixedCenter = function(type, args, obj) {
-	var val = args[0]
+	var val = args[0];
 	var me = this;
 
 	var refireIframe = function(e, obj) {
