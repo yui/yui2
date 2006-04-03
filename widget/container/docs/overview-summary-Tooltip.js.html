@@ -14,7 +14,7 @@
 
 <div id="header">
 	<h1>JavaScript Documentation</h1>
-	<h3><a href="./index.html">Container Components</a></h3>
+	<h3><a href="./index.html">YUI Containers</a></h3>
 
 	<div class="breadcrumbs">
 		
@@ -23,7 +23,7 @@
 			
 			
 			
-				<a href="./index.html">Container Components</a>
+				<a href="./index.html">YUI Containers</a>
 				&gt;
 				<strong>Tooltip.js</strong>
 			
@@ -64,6 +64,11 @@
 								YAHOO.util.Config</a>
 						</li>
 					
+						<li>
+							<a href="YAHOO.util.KeyListener.html">
+								YAHOO.util.KeyListener</a>
+						</li>
+					
 
 					
 						<li>
@@ -84,6 +89,16 @@
 						<li>
 							<a href="YAHOO.widget.Overlay.html">
 								YAHOO.widget.Overlay</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayEffect.html">
+								YAHOO.widget.OverlayEffect</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayManager.html">
+								YAHOO.widget.OverlayManager</a>
 						</li>
 					
 						<li>
@@ -121,6 +136,11 @@
 						</li>
 					
 						<li>
+							<a href="overview-summary-KeyListener.js.html">
+								KeyListener.js</a>
+						</li>
+					
+						<li>
 							<a href="overview-summary-Module.js.html">
 								Module.js</a>
 						</li>
@@ -128,6 +148,16 @@
 						<li>
 							<a href="overview-summary-Overlay.js.html">
 								Overlay.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayEffect.js.html">
+								OverlayEffect.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayManager.js.html">
+								OverlayManager.js</a>
 						</li>
 					
 						<li>
@@ -224,6 +254,9 @@
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<pre class="sourceview"><span class="comment">/**
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
 * <span class="attrib">@class</span>
 * Tooltip is an implementation of Overlay that behaves like an OS tooltip, displaying when the user mouses over a particular element, and disappearing on mouse out.
 * <span class="attrib">@param</span> {string}	el	The element ID representing the Tooltip &lt;em&gt;OR&lt;/em&gt;
@@ -261,18 +294,25 @@ YAHOO.widget.Tooltip.CSS_TOOLTIP = <span class="literal">"tt"</span>;
 * <span class="attrib">@param</span> {object}	userConfig	The configuration object literal containing the configuration that should be set for this Tooltip. See configuration documentation for more details.
 */</span>
 YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.init = <span class="reserved">function</span>(el, userConfig) {
-	YAHOO.widget.Overlay.superclass.init.call(<span class="reserved">this</span>, el<span class="comment">/*, userConfig*/</span>);  <span class="comment">// Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level</span>
-	
-	<span class="reserved">this</span>.element.className = YAHOO.widget.Tooltip.CSS_TOOLTIP;
+	<span class="reserved">if</span> (document.readyState &amp;&amp; document.readyState != <span class="literal">"complete"</span>) {
+		var deferredInit = <span class="reserved">function</span>() {
+			<span class="reserved">this</span>.init(el, userConfig);
+		}
+		YAHOO.util.Event.addListener(window, <span class="literal">"load"</span>, deferredInit, <span class="reserved">this</span>, true);
+	} <span class="reserved">else</span> {
+		YAHOO.widget.Tooltip.superclass.init.call(<span class="reserved">this</span>, el);
 
-	<span class="reserved">if</span> (userConfig) {
-		<span class="reserved">this</span>.cfg.applyConfig(userConfig);
+		YAHOO.util.Dom.addClass(<span class="reserved">this</span>.element, YAHOO.widget.Tooltip.CSS_TOOLTIP);
+
+		<span class="reserved">if</span> (userConfig) {
+			<span class="reserved">this</span>.cfg.applyConfig(userConfig);
+		}
+
+		<span class="reserved">this</span>.moveEvent.subscribe(<span class="reserved">this</span>.preventOverlap, <span class="reserved">this</span>, true);
+		<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"visible"</span>,false);
+		<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"constraintoviewport"</span>,true);
+		<span class="reserved">this</span>.render(<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"container"</span>));
 	}
-
-	<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"visible"</span>,false);
-	<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"constraintoviewport"</span>,true);
-
-	<span class="reserved">this</span>.render(document.body);
 }
 
 <span class="comment">/**
@@ -281,12 +321,12 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.init = <span class=
 YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.initDefaultConfig = <span class="reserved">function</span>() {
 	YAHOO.widget.Tooltip.superclass.initDefaultConfig.call(<span class="reserved">this</span>);
 	
-	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"showdelay"</span>,			2000,	<span class="reserved">this</span>.configShowDelay,			<span class="reserved">this</span>.cfg.checkNumber);
+	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"showdelay"</span>,			200,	<span class="reserved">this</span>.configShowDelay,			<span class="reserved">this</span>.cfg.checkNumber);
 	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"autodismissdelay"</span>,	5000,	<span class="reserved">this</span>.configAutoDismissDelay,	<span class="reserved">this</span>.cfg.checkNumber);
 	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"hidedelay"</span>,			250,	<span class="reserved">this</span>.configHideDelay,			<span class="reserved">this</span>.cfg.checkNumber);
 
-	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"text"</span>,	null, <span class="reserved">this</span>.configText,		null, null, true);
-	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"context"</span>,	null, <span class="reserved">this</span>.configContext,	null, null, true);
+	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"text"</span>,				null,	<span class="reserved">this</span>.configText,				null, null, true);
+	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"container"</span>,			document.body, <span class="reserved">this</span>.configContainer);
 }
 
 <span class="comment">// BEGIN BUILT-IN PROPERTY EVENT HANDLERS //</span>
@@ -297,8 +337,17 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.initDefaultConfig =
 YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.configText = <span class="reserved">function</span>(type, args, obj) {
 	var text = args[0];
 	<span class="reserved">if</span> (text) {
-		<span class="reserved">this</span>.text = text;
-		<span class="reserved">this</span>.setBody(<span class="reserved">this</span>.text);
+		<span class="reserved">this</span>.setBody(text);
+	}
+}
+
+<span class="comment">/**
+* The default event handler fired when the "container" property is changed.
+*/</span>
+YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.configContainer = <span class="reserved">function</span>(type, args, obj) {
+	var container = args[0];
+	<span class="reserved">if</span> (typeof container == <span class="literal">'string'</span>) {
+		<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"container"</span>, document.getElementById(container), true);
 	}
 }
 
@@ -309,17 +358,17 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.configContext = <sp
 	var context = args[0];
 	<span class="reserved">if</span> (context) {
 		<span class="reserved">if</span> (typeof context == <span class="literal">"string"</span>) {
-			<span class="reserved">this</span>.context = document.getElementById(context);
-		} <span class="reserved">else</span> {
-			<span class="reserved">this</span>.context = context;
+			<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"context"</span>, document.getElementById(context), true);
+		}
+		
+		var contextElement = <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"context"</span>);
+
+		<span class="reserved">if</span> (contextElement &amp;&amp; contextElement.title &amp;&amp; ! <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"text"</span>)) {
+			<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"text"</span>, contextElement.title);
 		}
 
-		<span class="reserved">if</span> (<span class="reserved">this</span>.context &amp;&amp; <span class="reserved">this</span>.context.title &amp;&amp; ! <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"text"</span>)) {
-			<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"text"</span>, <span class="reserved">this</span>.context.title);
-		}
-
-		YAHOO.util.Event.addListener(<span class="reserved">this</span>.context, <span class="literal">"mouseover"</span>, <span class="reserved">this</span>.onContextMouseOver, <span class="reserved">this</span>);
-		YAHOO.util.Event.addListener(<span class="reserved">this</span>.context, <span class="literal">"mouseout"</span>, <span class="reserved">this</span>.onContextMouseOut, <span class="reserved">this</span>);
+		YAHOO.util.Event.addListener(contextElement, <span class="literal">"mouseover"</span>, <span class="reserved">this</span>.onContextMouseOver, <span class="reserved">this</span>);
+		YAHOO.util.Event.addListener(contextElement, <span class="literal">"mouseout"</span>, <span class="reserved">this</span>.onContextMouseOut, <span class="reserved">this</span>);
 	}
 }
 
@@ -336,11 +385,12 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.onContextMouseOver 
 	<span class="reserved">if</span> (! obj) {
 		obj = <span class="reserved">this</span>;
 	}
-
 	
-	<span class="reserved">if</span> (obj.context.title) {
-		obj.tempTitle = obj.context.title;
-		obj.context.title = <span class="literal">""</span>;
+	var context = obj.cfg.getProperty(<span class="literal">"context"</span>);
+	
+	<span class="reserved">if</span> (context.title) {
+		obj.tempTitle = context.title;
+		context.title = <span class="literal">""</span>;
 	}
 
 	<span class="comment">/**
@@ -351,7 +401,7 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.onContextMouseOver 
 }
 
 <span class="comment">/**
-* The default event handler fired when the user mouses out of thhe context element.
+* The default event handler fired when the user mouses out of the context element.
 * <span class="attrib">@param</span> {DOMEvent} e	The current DOM event
 * <span class="attrib">@param</span> {object}	obj	The object argument
 */</span>
@@ -359,9 +409,11 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.onContextMouseOut =
 	<span class="reserved">if</span> (! obj) {
 		obj = <span class="reserved">this</span>;
 	}
-	
+
+	var context = obj.cfg.getProperty(<span class="literal">"context"</span>);
+
 	<span class="reserved">if</span> (obj.tempTitle) {
-		obj.context.title = obj.tempTitle;
+		context.title = obj.tempTitle;
 	}
 	
 	<span class="reserved">if</span> (<span class="reserved">this</span>.procId) {
@@ -381,16 +433,19 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.onContextMouseOut =
 * <span class="attrib">@return</span> {int}	The process ID of the timeout function associated with doShow
 */</span>
 YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.doShow = <span class="reserved">function</span>(e) {
+
 	var pageX = YAHOO.util.Event.getPageX(e);
-	var pageY = YAHOO.util.Event.getPageY(e);	
+	var pageY = YAHOO.util.Event.getPageY(e);
+	
+	var context = <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"context"</span>);
+	var yOffset = 25;
+	<span class="reserved">if</span> (<span class="reserved">this</span>.browser == <span class="literal">"opera"</span> &amp;&amp; context.tagName == <span class="literal">"A"</span>) {
+		yOffset += 12;
+	}
 
 	var me = <span class="reserved">this</span>;
 	<span class="reserved">return</span> setTimeout(
 		<span class="reserved">function</span>() {
-			var yOffset = 25;
-			<span class="reserved">if</span> (me.browser == <span class="literal">"opera"</span> &amp;&amp; me.context.tagName == <span class="literal">"A"</span>) {
-				yOffset += 12;
-			}
 			me.moveTo(pageX, pageY + yOffset);
 			me.show();
 			me.doHide();
@@ -410,6 +465,24 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.doHide = <span clas
 		<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"autodismissdelay"</span>));
 }
 
+<span class="comment">/**
+* Fired when the Tooltip is moved, this event handler is used to prevent the Tooltip from overlapping with its context element.
+*/</span>
+YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.preventOverlap = <span class="reserved">function</span>(type, args, obj) {
+	var pos = args[0];
+	var x = pos[0];
+	var y = pos[1];
+
+	var elementRegion = YAHOO.util.Dom.getRegion(<span class="reserved">this</span>.element);
+	var contextRegion = YAHOO.util.Dom.getRegion(<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"context"</span>));
+	
+	var intersection = contextRegion.intersect(elementRegion);
+	<span class="reserved">if</span> (intersection) { <span class="comment">// they overlap</span>
+		var overlapHeight = intersection.bottom - intersection.top;
+		y = (y - overlapHeight - 10);
+		<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"y"</span>, y);
+	}
+}
 </pre>
 			</div>
 		
@@ -419,8 +492,9 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.doHide = <span clas
 
 <div id="footer">
 	<hr />
-	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
 	<br />
+	Yahoo! Confidential.
 	<br /><br />
 	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
 	version 1.9.5.8

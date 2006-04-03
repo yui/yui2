@@ -14,7 +14,7 @@
 
 <div id="header">
 	<h1>JavaScript Documentation</h1>
-	<h3><a href="./index.html">Container Components</a></h3>
+	<h3><a href="./index.html">YUI Containers</a></h3>
 
 	<div class="breadcrumbs">
 		
@@ -27,7 +27,7 @@
 			
 			
 			
-				<a href="./index.html">Container Components</a>
+				<a href="./index.html">YUI Containers</a>
 				&gt;
 				<strong>YAHOO.widget.Overlay</strong>
 			
@@ -64,6 +64,11 @@
 								YAHOO.util.Config</a>
 						</li>
 					
+						<li>
+							<a href="YAHOO.util.KeyListener.html">
+								YAHOO.util.KeyListener</a>
+						</li>
+					
 
 					
 						<li>
@@ -84,6 +89,16 @@
 						<li>
 							<a href="YAHOO.widget.Overlay.html">
 								YAHOO.widget.Overlay</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayEffect.html">
+								YAHOO.widget.OverlayEffect</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayManager.html">
+								YAHOO.widget.OverlayManager</a>
 						</li>
 					
 						<li>
@@ -121,6 +136,11 @@
 						</li>
 					
 						<li>
+							<a href="overview-summary-KeyListener.js.html">
+								KeyListener.js</a>
+						</li>
+					
+						<li>
 							<a href="overview-summary-Module.js.html">
 								Module.js</a>
 						</li>
@@ -128,6 +148,16 @@
 						<li>
 							<a href="overview-summary-Overlay.js.html">
 								Overlay.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayEffect.js.html">
+								OverlayEffect.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayManager.js.html">
+								OverlayManager.js</a>
 						</li>
 					
 						<li>
@@ -236,6 +266,54 @@
 						<table border="1" cellpadding="3" cellspacing="0">
 						
 							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#BOTTOM_LEFT">BOTTOM_LEFT</a>
+									</code>
+									<div class="description">
+										Constant representing the top bottom left corner of an element, used for configuring the context element alignment&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#BOTTOM_RIGHT">BOTTOM_RIGHT</a>
+									</code>
+									<div class="description">
+										Constant representing the bottom right corner of an element, used for configuring the context element alignment&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#CSS_OVERLAY">CSS_OVERLAY</a>
+									</code>
+									<div class="description">
+										Constant representing the default CSS class used for an Overlay&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#IFRAME_SRC">IFRAME_SRC</a>
+									</code>
+									<div class="description">
+										The URL of the blank image that will be placed in the iframe&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
 								<td class="flags">class</td>
 								<td class="spec">
 									<code>
@@ -243,6 +321,30 @@
 									</code>
 									<div class="description">
 										Reference to the Overlay's superclass, Module&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#TOP_LEFT">TOP_LEFT</a>
+									</code>
+									<div class="description">
+										Constant representing the top left corner of an element, used for configuring the context element alignment&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#TOP_RIGHT">TOP_RIGHT</a>
+									</code>
+									<div class="description">
+										Constant representing the top right corner of an element, used for configuring the context element alignment&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -257,7 +359,7 @@
 					<div class="section field inheritance">
 						<h3>Fields inherited from class <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 						<div class="content">
-							<code><a href="YAHOO.widget.Module.html#element">element</a>, <a href="YAHOO.widget.Module.html#header">header</a>, <a href="YAHOO.widget.Module.html#body">body</a>, <a href="YAHOO.widget.Module.html#footer">footer</a>, <a href="YAHOO.widget.Module.html#childNodesInDOM">childNodesInDOM</a></code>
+							<code><a href="YAHOO.widget.Module.html#element">element</a>, <a href="YAHOO.widget.Module.html#header">header</a>, <a href="YAHOO.widget.Module.html#body">body</a>, <a href="YAHOO.widget.Module.html#footer">footer</a>, <a href="YAHOO.widget.Module.html#id">id</a>, <a href="YAHOO.widget.Module.html#childNodesInDOM">childNodesInDOM</a>, <a href="YAHOO.widget.Module.html#imageRoot">imageRoot</a>, <a href="YAHOO.widget.Module.html#effects">effects</a></code>
 						</div>
 					</div>
 				
@@ -274,7 +376,7 @@
 							<a href="YAHOO.widget.Overlay.html#YAHOO.widget.Overlay()">YAHOO.widget.Overlay</a>
 						</code>
 						<div class="description">
-							Overlay is a Module that is absolutely positioned above the page flow.&nbsp;
+							Copyright (c) 2006, Yahoo!&nbsp;
 						</div>
 					</div>
 				</div>
@@ -293,11 +395,63 @@
 									<td class="flags">void</td>
 									<td class="spec">
 										<code>
+											<a href="#align">align</a>
+											(&lt;string&gt; elementAlign, &lt;string&gt; contextAlign)
+										</code>
+										<div class="description">
+											Aligns the Overlay to its context element using the specified corner points (represented by the constants TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, and BOTTOM_RIGHT.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#center">center</a>
+											()
+										</code>
+										<div class="description">
+											Centers the container in the viewport.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
 											<a href="#configConstrainToViewport">configConstrainToViewport</a>
 											(type, args, obj)
 										</code>
 										<div class="description">
 											The default event handler fired when the "constraintoviewport" property is changed.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#configContext">configContext</a>
+											(type, args, obj)
+										</code>
+										<div class="description">
+											The default event handler fired when the "context" property is changed.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#configFixedCenter">configFixedCenter</a>
+											(type, args, obj)
+										</code>
+										<div class="description">
+											The default event handler fired when the "fixedcenter" property is changed.&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -471,6 +625,32 @@
 									</td>
 								</tr>
 							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#onDomResize">onDomResize</a>
+											(e, obj)
+										</code>
+										<div class="description">
+											Event handler fired when the resize monitor element is resized.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#syncPosition">syncPosition</a>
+											()
+										</code>
+										<div class="description">
+											Synchronizes the Panel's "xy", "x", and "y" properties with the Panel's position in the DOM.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
 						</table>
 					</div>
 				</div>
@@ -480,7 +660,7 @@
 				<div class="section method inheritance">
 					<h3>Methods inherited from class  <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></h3>
 					<div class="content">
-						<code><a href="YAHOO.widget.Module.html#setHeader">setHeader</a>, <a href="YAHOO.widget.Module.html#appendToHeader">appendToHeader</a>, <a href="YAHOO.widget.Module.html#setBody">setBody</a>, <a href="YAHOO.widget.Module.html#appendToBody">appendToBody</a>, <a href="YAHOO.widget.Module.html#setFooter">setFooter</a>, <a href="YAHOO.widget.Module.html#appendToFooter">appendToFooter</a>, <a href="YAHOO.widget.Module.html#render">render</a>, <a href="YAHOO.widget.Module.html#destroy">destroy</a>, <a href="YAHOO.widget.Module.html#show">show</a>, <a href="YAHOO.widget.Module.html#hide">hide</a></code>
+						<code><a href="YAHOO.widget.Module.html#initResizeMonitor">initResizeMonitor</a>, <a href="YAHOO.widget.Module.html#setHeader">setHeader</a>, <a href="YAHOO.widget.Module.html#appendToHeader">appendToHeader</a>, <a href="YAHOO.widget.Module.html#setBody">setBody</a>, <a href="YAHOO.widget.Module.html#appendToBody">appendToBody</a>, <a href="YAHOO.widget.Module.html#setFooter">setFooter</a>, <a href="YAHOO.widget.Module.html#appendToFooter">appendToFooter</a>, <a href="YAHOO.widget.Module.html#render">render</a>, <a href="YAHOO.widget.Module.html#destroy">destroy</a>, <a href="YAHOO.widget.Module.html#show">show</a>, <a href="YAHOO.widget.Module.html#hide">hide</a>, <a href="YAHOO.widget.Module.html#configMonitorResize">configMonitorResize</a></code>
 					</div>
 				</div>
 			
@@ -493,6 +673,58 @@
 					<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 					<div class="content">
 						
+							<h4><a name="BOTTOM_LEFT">BOTTOM_LEFT</a></h4>
+							<div class="detail">
+								<code>
+									string
+									&nbsp;
+									<strong>BOTTOM_LEFT</strong>
+								</code>
+								<div class="description">
+									Constant representing the top bottom left corner of an element, used for configuring the context element alignment
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="BOTTOM_RIGHT">BOTTOM_RIGHT</a></h4>
+							<div class="detail">
+								<code>
+									string
+									&nbsp;
+									<strong>BOTTOM_RIGHT</strong>
+								</code>
+								<div class="description">
+									Constant representing the bottom right corner of an element, used for configuring the context element alignment
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="CSS_OVERLAY">CSS_OVERLAY</a></h4>
+							<div class="detail">
+								<code>
+									string
+									&nbsp;
+									<strong>CSS_OVERLAY</strong>
+								</code>
+								<div class="description">
+									Constant representing the default CSS class used for an Overlay
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="IFRAME_SRC">IFRAME_SRC</a></h4>
+							<div class="detail">
+								<code>
+									string
+									&nbsp;
+									<strong>IFRAME_SRC</strong>
+								</code>
+								<div class="description">
+									The URL of the blank image that will be placed in the iframe
+								</div>
+							</div>
+							<hr />
+						
 							<h4><a name="superclass">superclass</a></h4>
 							<div class="detail">
 								<code>
@@ -502,6 +734,32 @@
 								</code>
 								<div class="description">
 									Reference to the Overlay's superclass, Module
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="TOP_LEFT">TOP_LEFT</a></h4>
+							<div class="detail">
+								<code>
+									string
+									&nbsp;
+									<strong>TOP_LEFT</strong>
+								</code>
+								<div class="description">
+									Constant representing the top left corner of an element, used for configuring the context element alignment
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="TOP_RIGHT">TOP_RIGHT</a></h4>
+							<div class="detail">
+								<code>
+									string
+									&nbsp;
+									<strong>TOP_RIGHT</strong>
+								</code>
+								<div class="description">
+									Constant representing the top right corner of an element, used for configuring the context element alignment
 								</div>
 							</div>
 							<hr />
@@ -524,8 +782,9 @@
 							</code>
 							<div class="description">
 								
-									Overlay is a Module that is absolutely positioned above the page flow. It has convenience methods for positioning and sizing, as well as options for controlling zIndex and constraining the Overlay's position to the current visible viewport. Overlay also contains a dynamicly generated IFRAME which is placed beneath it for Internet Explorer 6 and 5.x so that it will be properly rendered above SELECT elements.
- 
+									Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
 								
 								
 								
@@ -553,7 +812,7 @@
 								
 								
 								
-									HASH(0x1d74fd0)
+									HASH(0x1d41a7c)
 								
 							</div>
 						</div>
@@ -568,6 +827,63 @@
 				<div class="section method details">
 					<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 					<div class="content">
+						
+							<h4><a name="align">align</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>align</strong>
+									(&lt;string&gt; elementAlign, &lt;string&gt; contextAlign)
+								</code>
+										
+								<div class="description">
+									
+										Aligns the Overlay to its context element using the specified corner points (represented by the constants TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, and BOTTOM_RIGHT.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>elementAlign</code> - 
+															The string representing the corner of the Overlay that should be aligned to the context element  
+												</dd>
+											
+												<dd>
+													<code>contextAlign</code> - 
+															The corner of the context element that the elementAlign corner should stick to.   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1d60ab4)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="center">center</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>center</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Centers the container in the viewport.
+									
+									
+									
+									
+										HASH(0x1d60c88)
+									
+								</div>
+							</div>
+							<hr />
 						
 							<h4><a name="configConstrainToViewport">configConstrainToViewport</a></h4>
 							<div class="detail">
@@ -584,7 +900,49 @@
 									
 									
 									
-										HASH(0x1d75210)
+										HASH(0x1d60f10)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="configContext">configContext</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>configContext</strong>
+									(type, args, obj)
+								</code>
+										
+								<div class="description">
+									
+										The default event handler fired when the "context" property is changed.
+									
+									
+									
+									
+										HASH(0x1d614ec)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="configFixedCenter">configFixedCenter</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>configFixedCenter</strong>
+									(type, args, obj)
+								</code>
+										
+								<div class="description">
+									
+										The default event handler fired when the "fixedcenter" property is changed.
+									
+									
+									
+									
+										HASH(0x1dab98c)
 									
 								</div>
 							</div>
@@ -605,7 +963,7 @@
 									
 									
 									
-										HASH(0x1d752f4)
+										HASH(0x1dabaac)
 									
 								</div>
 							</div>
@@ -626,7 +984,7 @@
 									
 									
 									
-										HASH(0x1d75eac)
+										HASH(0x1dabbcc)
 									
 								</div>
 							</div>
@@ -642,12 +1000,12 @@
 										
 								<div class="description">
 									
-										The default event handler fired when the "visible" property is changed.
+										The default event handler fired when the "visible" property is changed. The fading animation of the Panel, if enabled, is also handled within this method.
 									
 									
 									
 									
-										HASH(0x1d7563c)
+										HASH(0x1dabcec)
 									
 								</div>
 							</div>
@@ -668,7 +1026,7 @@
 									
 									
 									
-										HASH(0x1d75690)
+										HASH(0x1dabe0c)
 									
 								</div>
 							</div>
@@ -689,7 +1047,7 @@
 									
 									
 									
-										HASH(0x1d75978)
+										HASH(0x1dabf2c)
 									
 								</div>
 							</div>
@@ -710,7 +1068,7 @@
 									
 									
 									
-										HASH(0x1d75b34)
+										HASH(0x1dd4030)
 									
 								</div>
 							</div>
@@ -731,7 +1089,7 @@
 									
 									
 									
-										HASH(0x1d8d6fc)
+										HASH(0x1dd4150)
 									
 								</div>
 							</div>
@@ -752,7 +1110,7 @@
 									
 									
 									
-										HASH(0x1d8dabc)
+										HASH(0x1dd4270)
 									
 								</div>
 							</div>
@@ -773,7 +1131,7 @@
 									
 									
 									
-										HASH(0x1d8dbdc)
+										HASH(0x1dd4390)
 									
 								</div>
 							</div>
@@ -814,7 +1172,7 @@
 									
 									
 									
-										HASH(0x1d8dcf0)
+										HASH(0x1dd44a4)
 									
 								</div>
 							</div>
@@ -835,7 +1193,7 @@
 									
 									
 									
-										HASH(0x1d8de88)
+										HASH(0x1dd463c)
 									
 								</div>
 							</div>
@@ -856,7 +1214,7 @@
 									
 									
 									
-										HASH(0x1d8dfa8)
+										HASH(0x1dd475c)
 									
 								</div>
 							</div>
@@ -892,7 +1250,49 @@
 									
 									
 									
-										HASH(0x1d8e0bc)
+										HASH(0x1dd4870)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="onDomResize">onDomResize</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>onDomResize</strong>
+									(e, obj)
+								</code>
+										
+								<div class="description">
+									
+										Event handler fired when the resize monitor element is resized.
+									
+									
+									
+									
+										HASH(0x1dd49e4)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="syncPosition">syncPosition</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>syncPosition</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Synchronizes the Panel's "xy", "x", and "y" properties with the Panel's position in the DOM. This is primarily used to update position information during drag & drop.
+									
+									
+									
+									
+										HASH(0x1dd4b04)
 									
 								</div>
 							</div>
@@ -910,8 +1310,9 @@
 
 <div id="footer">
 	<hr />
-	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
 	<br />
+	Yahoo! Confidential.
 	<br /><br />
 	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
 	version 1.9.5.8

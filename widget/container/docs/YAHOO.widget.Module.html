@@ -14,7 +14,7 @@
 
 <div id="header">
 	<h1>JavaScript Documentation</h1>
-	<h3><a href="./index.html">Container Components</a></h3>
+	<h3><a href="./index.html">YUI Containers</a></h3>
 
 	<div class="breadcrumbs">
 		
@@ -27,7 +27,7 @@
 			
 			
 			
-				<a href="./index.html">Container Components</a>
+				<a href="./index.html">YUI Containers</a>
 				&gt;
 				<strong>YAHOO.widget.Module</strong>
 			
@@ -64,6 +64,11 @@
 								YAHOO.util.Config</a>
 						</li>
 					
+						<li>
+							<a href="YAHOO.util.KeyListener.html">
+								YAHOO.util.KeyListener</a>
+						</li>
+					
 
 					
 						<li>
@@ -84,6 +89,16 @@
 						<li>
 							<a href="YAHOO.widget.Overlay.html">
 								YAHOO.widget.Overlay</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayEffect.html">
+								YAHOO.widget.OverlayEffect</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayManager.html">
+								YAHOO.widget.OverlayManager</a>
 						</li>
 					
 						<li>
@@ -121,6 +136,11 @@
 						</li>
 					
 						<li>
+							<a href="overview-summary-KeyListener.js.html">
+								KeyListener.js</a>
+						</li>
+					
+						<li>
 							<a href="overview-summary-Module.js.html">
 								Module.js</a>
 						</li>
@@ -128,6 +148,16 @@
 						<li>
 							<a href="overview-summary-Overlay.js.html">
 								Overlay.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayEffect.js.html">
+								OverlayEffect.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayManager.js.html">
+								OverlayManager.js</a>
 						</li>
 					
 						<li>
@@ -256,6 +286,18 @@
 							</tr>
 						
 							<tr>
+								<td class="flags">YAHOO.widget.OverlayEffect[]</td>
+								<td class="spec">
+									<code>
+										<a href="#effects">effects</a>
+									</code>
+									<div class="description">
+										Array of OverlayEffects to use when showing and hiding the Module&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
 								<td class="flags">Element</td>
 								<td class="spec">
 									<code>
@@ -287,6 +329,30 @@
 									</code>
 									<div class="description">
 										The header element, denoted with CSS class "hd"&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#id">id</a>
+									</code>
+									<div class="description">
+										The id of the element&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#imageRoot">imageRoot</a>
+									</code>
+									<div class="description">
+										The string representing the image root&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -327,6 +393,42 @@
 								</td>
 							</tr>
 						
+							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#CSS_MODULE">CSS_MODULE</a>
+									</code>
+									<div class="description">
+										Constant for the default CSS class name that represents a Module&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#IMG_ROOT">IMG_ROOT</a>
+									</code>
+									<div class="description">
+										&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#IMG_ROOT_SSL">IMG_ROOT_SSL</a>
+									</code>
+									<div class="description">
+										&nbsp;
+									</div>
+								</td>
+							</tr>
+						
 						</table>
 					</div>
 				</div>
@@ -345,7 +447,7 @@
 							<a href="YAHOO.widget.Module.html#YAHOO.widget.Module()">YAHOO.widget.Module</a>
 						</code>
 						<div class="description">
-							Module is a JavaScript representation of the Standard Module Format.&nbsp;
+							Copyright (c) 2006, Yahoo!&nbsp;
 						</div>
 					</div>
 				</div>
@@ -395,6 +497,19 @@
 										</code>
 										<div class="description">
 											Appends the passed element to the header.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#configMonitorResize">configMonitorResize</a>
+											(type, args, obj)
+										</code>
+										<div class="description">
+											Default event handler for the "monitorresize" configuration property&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -473,6 +588,32 @@
 										</code>
 										<div class="description">
 											Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#initResizeMonitor">initResizeMonitor</a>
+											()
+										</code>
+										<div class="description">
+											Initialized an empty DOM element that is placed out of the visible area that can be used to detect text resize.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#onDomResize">onDomResize</a>
+											(e, obj)
+										</code>
+										<div class="description">
+											Event handler fired when the resize monitor element is resized.&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -583,6 +724,19 @@
 							</div>
 							<hr />
 						
+							<h4><a name="effects">effects</a></h4>
+							<div class="detail">
+								<code>
+									YAHOO.widget.OverlayEffect[]
+									&nbsp;
+									<strong>effects</strong>
+								</code>
+								<div class="description">
+									Array of OverlayEffects to use when showing and hiding the Module
+								</div>
+							</div>
+							<hr />
+						
 							<h4><a name="element">element</a></h4>
 							<div class="detail">
 								<code>
@@ -618,6 +772,32 @@
 								</code>
 								<div class="description">
 									The header element, denoted with CSS class "hd"
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="id">id</a></h4>
+							<div class="detail">
+								<code>
+									string
+									&nbsp;
+									<strong>id</strong>
+								</code>
+								<div class="description">
+									The id of the element
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="imageRoot">imageRoot</a></h4>
+							<div class="detail">
+								<code>
+									string
+									&nbsp;
+									<strong>imageRoot</strong>
+								</code>
+								<div class="description">
+									The string representing the image root
 								</div>
 							</div>
 							<hr />
@@ -661,6 +841,45 @@
 							</div>
 							<hr />
 						
+							<h4><a name="CSS_MODULE">CSS_MODULE</a></h4>
+							<div class="detail">
+								<code>
+									string
+									&nbsp;
+									<strong>CSS_MODULE</strong>
+								</code>
+								<div class="description">
+									Constant for the default CSS class name that represents a Module
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="IMG_ROOT">IMG_ROOT</a></h4>
+							<div class="detail">
+								<code>
+									Object
+									&nbsp;
+									<strong>IMG_ROOT</strong>
+								</code>
+								<div class="description">
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="IMG_ROOT_SSL">IMG_ROOT_SSL</a></h4>
+							<div class="detail">
+								<code>
+									Object
+									&nbsp;
+									<strong>IMG_ROOT_SSL</strong>
+								</code>
+								<div class="description">
+									
+								</div>
+							</div>
+							<hr />
+						
 					</div>
 				</div>
 			
@@ -679,8 +898,9 @@
 							</code>
 							<div class="description">
 								
-									Module is a JavaScript representation of the Standard Module Format. Standard Module Format is a simple standard for markup containers where child nodes representing the header, body, and footer of the content are denoted using the CSS classes "hd", "bd", and "ft" respectively. Module is the base class for all other classes in the YUI Container package.
- 
+									Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
 								
 								
 								
@@ -708,7 +928,7 @@
 								
 								
 								
-									HASH(0x1c8d3d8)
+									HASH(0x1cf9f4c)
 								
 							</div>
 						</div>
@@ -749,7 +969,7 @@
 									
 									
 									
-										HASH(0x1d229d0)
+										HASH(0x1d618dc)
 									
 								</div>
 							</div>
@@ -780,7 +1000,7 @@
 									
 									
 									
-										HASH(0x1d6cab0)
+										HASH(0x1d5f010)
 									
 								</div>
 							</div>
@@ -811,7 +1031,28 @@
 									
 									
 									
-										HASH(0x1d27428)
+										HASH(0x1d5f148)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="configMonitorResize">configMonitorResize</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>configMonitorResize</strong>
+									(type, args, obj)
+								</code>
+										
+								<div class="description">
+									
+										Default event handler for the "monitorresize" configuration property
+									
+									
+									
+									
+										HASH(0x1d5f28c)
 									
 								</div>
 							</div>
@@ -832,7 +1073,7 @@
 									
 									
 									
-										HASH(0x1d27830)
+										HASH(0x1d5f3ac)
 									
 								</div>
 							</div>
@@ -853,7 +1094,7 @@
 									
 									
 									
-										HASH(0x1d75f24)
+										HASH(0x1d5f4cc)
 									
 								</div>
 							</div>
@@ -874,7 +1115,7 @@
 									
 									
 									
-										HASH(0x1da1048)
+										HASH(0x1d5f5ec)
 									
 								</div>
 							</div>
@@ -915,7 +1156,7 @@
 									
 									
 									
-										HASH(0x1da115c)
+										HASH(0x1d5f700)
 									
 								</div>
 							</div>
@@ -936,7 +1177,7 @@
 									
 									
 									
-										HASH(0x1da12f4)
+										HASH(0x1d5f898)
 									
 								</div>
 							</div>
@@ -957,7 +1198,49 @@
 									
 									
 									
-										HASH(0x1da1414)
+										HASH(0x1d5f9b8)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="initResizeMonitor">initResizeMonitor</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>initResizeMonitor</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Initialized an empty DOM element that is placed out of the visible area that can be used to detect text resize.
+									
+									
+									
+									
+										HASH(0x1d5fad8)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="onDomResize">onDomResize</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>onDomResize</strong>
+									(e, obj)
+								</code>
+										
+								<div class="description">
+									
+										Event handler fired when the resize monitor element is resized.
+									
+									
+									
+									
+										HASH(0x1d5fbf8)
 									
 								</div>
 							</div>
@@ -998,7 +1281,7 @@
 										</dl>
 									
 									
-										HASH(0x1da1510)
+										HASH(0x1d5fcf4)
 									
 								</div>
 							</div>
@@ -1034,7 +1317,7 @@
 									
 									
 									
-										HASH(0x1da166c)
+										HASH(0x1d5fe50)
 									
 								</div>
 							</div>
@@ -1070,7 +1353,7 @@
 									
 									
 									
-										HASH(0x1da17d4)
+										HASH(0x1d5ffb8)
 									
 								</div>
 							</div>
@@ -1106,7 +1389,7 @@
 									
 									
 									
-										HASH(0x1da193c)
+										HASH(0x1dab14c)
 									
 								</div>
 							</div>
@@ -1127,7 +1410,7 @@
 									
 									
 									
-										HASH(0x1da1ab0)
+										HASH(0x1dab2c0)
 									
 								</div>
 							</div>
@@ -1145,8 +1428,9 @@
 
 <div id="footer">
 	<hr />
-	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
 	<br />
+	Yahoo! Confidential.
 	<br /><br />
 	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
 	version 1.9.5.8

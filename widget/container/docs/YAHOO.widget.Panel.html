@@ -14,7 +14,7 @@
 
 <div id="header">
 	<h1>JavaScript Documentation</h1>
-	<h3><a href="./index.html">Container Components</a></h3>
+	<h3><a href="./index.html">YUI Containers</a></h3>
 
 	<div class="breadcrumbs">
 		
@@ -27,7 +27,7 @@
 			
 			
 			
-				<a href="./index.html">Container Components</a>
+				<a href="./index.html">YUI Containers</a>
 				&gt;
 				<strong>YAHOO.widget.Panel</strong>
 			
@@ -64,6 +64,11 @@
 								YAHOO.util.Config</a>
 						</li>
 					
+						<li>
+							<a href="YAHOO.util.KeyListener.html">
+								YAHOO.util.KeyListener</a>
+						</li>
+					
 
 					
 						<li>
@@ -84,6 +89,16 @@
 						<li>
 							<a href="YAHOO.widget.Overlay.html">
 								YAHOO.widget.Overlay</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayEffect.html">
+								YAHOO.widget.OverlayEffect</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayManager.html">
+								YAHOO.widget.OverlayManager</a>
 						</li>
 					
 						<li>
@@ -121,6 +136,11 @@
 						</li>
 					
 						<li>
+							<a href="overview-summary-KeyListener.js.html">
+								KeyListener.js</a>
+						</li>
+					
+						<li>
 							<a href="overview-summary-Module.js.html">
 								Module.js</a>
 						</li>
@@ -128,6 +148,16 @@
 						<li>
 							<a href="overview-summary-Overlay.js.html">
 								Overlay.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayEffect.js.html">
+								OverlayEffect.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayManager.js.html">
+								OverlayManager.js</a>
 						</li>
 					
 						<li>
@@ -238,6 +268,18 @@
 						<table border="1" cellpadding="3" cellspacing="0">
 						
 							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#CSS_PANEL">CSS_PANEL</a>
+									</code>
+									<div class="description">
+										Constant representing the default CSS class used for a Panel&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
 								<td class="flags">class</td>
 								<td class="spec">
 									<code>
@@ -259,7 +301,7 @@
 					<div class="section field inheritance">
 						<h3>Fields inherited from class <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 						<div class="content">
-							<code><a href="YAHOO.widget.Module.html#element">element</a>, <a href="YAHOO.widget.Module.html#header">header</a>, <a href="YAHOO.widget.Module.html#body">body</a>, <a href="YAHOO.widget.Module.html#footer">footer</a>, <a href="YAHOO.widget.Module.html#childNodesInDOM">childNodesInDOM</a></code>
+							<code><a href="YAHOO.widget.Module.html#element">element</a>, <a href="YAHOO.widget.Module.html#header">header</a>, <a href="YAHOO.widget.Module.html#body">body</a>, <a href="YAHOO.widget.Module.html#footer">footer</a>, <a href="YAHOO.widget.Module.html#id">id</a>, <a href="YAHOO.widget.Module.html#childNodesInDOM">childNodesInDOM</a>, <a href="YAHOO.widget.Module.html#imageRoot">imageRoot</a>, <a href="YAHOO.widget.Module.html#effects">effects</a></code>
 						</div>
 					</div>
 				
@@ -276,7 +318,7 @@
 							<a href="YAHOO.widget.Panel.html#YAHOO.widget.Panel()">YAHOO.widget.Panel</a>
 						</code>
 						<div class="description">
-							Panel is an implementation of Overlay that behaves like an OS window, with a draggable header and an optional close icon at the top right.&nbsp;
+							Copyright (c) 2006, Yahoo!&nbsp;
 						</div>
 					</div>
 				</div>
@@ -295,19 +337,6 @@
 									<td class="flags">void</td>
 									<td class="spec">
 										<code>
-											<a href="#buildContainer">buildContainer</a>
-											()
-										</code>
-										<div class="description">
-											Builds the wrapping container around the Panel that is used for positioning the shadow and matte underlays.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
 											<a href="#buildMask">buildMask</a>
 											()
 										</code>
@@ -321,11 +350,11 @@
 									<td class="flags">void</td>
 									<td class="spec">
 										<code>
-											<a href="#center">center</a>
+											<a href="#buildWrapper">buildWrapper</a>
 											()
 										</code>
 										<div class="description">
-											Centers the container in the viewport.&nbsp;
+											Builds the wrapping container around the Panel that is used for positioning the shadow and matte underlays.&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -360,11 +389,11 @@
 									<td class="flags">void</td>
 									<td class="spec">
 										<code>
-											<a href="#configFixedCenter">configFixedCenter</a>
+											<a href="#configHeight">configHeight</a>
 											(type, args, obj)
 										</code>
 										<div class="description">
-											The default event handler fired when the "fixedcenter" property is changed.&nbsp;
+											The default event handler fired when the "height" property is changed.&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -373,11 +402,11 @@
 									<td class="flags">void</td>
 									<td class="spec">
 										<code>
-											<a href="#configHeight">configHeight</a>
+											<a href="#configkeyListeners">configkeyListeners</a>
 											(type, args, obj)
 										</code>
 										<div class="description">
-											The default event handler fired when the "height" property is changed.&nbsp;
+											&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -404,19 +433,6 @@
 										</code>
 										<div class="description">
 											The default event handler fired when the "underlay" property is changed.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#configVisible">configVisible</a>
-											(type, args, obj)
-										</code>
-										<div class="description">
-											The default event handler fired when the "visible" property is changed.&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -477,11 +493,63 @@
 									<td class="flags">void</td>
 									<td class="spec">
 										<code>
+											<a href="#initEvents">initEvents</a>
+											()
+										</code>
+										<div class="description">
+											Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#onDomResize">onDomResize</a>
+											(e, obj)
+										</code>
+										<div class="description">
+											Event handler fired when the resize monitor element is resized.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#onWindowResize">onWindowResize</a>
+											(e, obj)
+										</code>
+										<div class="description">
+											&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
 											<a href="#registerDragDrop">registerDragDrop</a>
 											()
 										</code>
 										<div class="description">
 											Registers the Panel's header for drag & drop capability.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Object</td>
+									<td class="spec">
+										<code>
+											<a href="#render">render</a>
+											(&lt;string&gt; &lt;Element&gt; appendToNode)
+										</code>
+										<div class="description">
+											Renders the Module by inserting the elements that are not already in the main Module into their correct places.&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -503,11 +571,11 @@
 									<td class="flags">void</td>
 									<td class="spec">
 										<code>
-											<a href="#sizeMatte">sizeMatte</a>
+											<a href="#sizeMask">sizeMask</a>
 											()
 										</code>
 										<div class="description">
-											Adjusts the size of the matte based no the size of the element.&nbsp;
+											&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -516,24 +584,11 @@
 									<td class="flags">void</td>
 									<td class="spec">
 										<code>
-											<a href="#sizeShadow">sizeShadow</a>
+											<a href="#sizeUnderlay">sizeUnderlay</a>
 											()
 										</code>
 										<div class="description">
 											Adjusts the size of the shadow based no the size of the element.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#syncPosition">syncPosition</a>
-											()
-										</code>
-										<div class="description">
-											Synchronizes the Panel's "xy", "x", and "y" properties with the Panel's position in the DOM.&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -547,14 +602,14 @@
 				<div class="section method inheritance">
 					<h3>Methods inherited from class  <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></h3>
 					<div class="content">
-						<code><a href="YAHOO.widget.Overlay.html#initEvents">initEvents</a>, <a href="YAHOO.widget.Overlay.html#moveTo">moveTo</a>, <a href="YAHOO.widget.Overlay.html#configzIndex">configzIndex</a>, <a href="YAHOO.widget.Overlay.html#configXY">configXY</a>, <a href="YAHOO.widget.Overlay.html#configX">configX</a>, <a href="YAHOO.widget.Overlay.html#configY">configY</a>, <a href="YAHOO.widget.Overlay.html#configIframe">configIframe</a>, <a href="YAHOO.widget.Overlay.html#configConstrainToViewport">configConstrainToViewport</a>, <a href="YAHOO.widget.Overlay.html#enforceConstraints">enforceConstraints</a></code>
+						<code><a href="YAHOO.widget.Overlay.html#moveTo">moveTo</a>, <a href="YAHOO.widget.Overlay.html#configVisible">configVisible</a>, <a href="YAHOO.widget.Overlay.html#configFixedCenter">configFixedCenter</a>, <a href="YAHOO.widget.Overlay.html#configzIndex">configzIndex</a>, <a href="YAHOO.widget.Overlay.html#configXY">configXY</a>, <a href="YAHOO.widget.Overlay.html#configX">configX</a>, <a href="YAHOO.widget.Overlay.html#configY">configY</a>, <a href="YAHOO.widget.Overlay.html#configIframe">configIframe</a>, <a href="YAHOO.widget.Overlay.html#configConstrainToViewport">configConstrainToViewport</a>, <a href="YAHOO.widget.Overlay.html#configContext">configContext</a>, <a href="YAHOO.widget.Overlay.html#align">align</a>, <a href="YAHOO.widget.Overlay.html#enforceConstraints">enforceConstraints</a>, <a href="YAHOO.widget.Overlay.html#center">center</a>, <a href="YAHOO.widget.Overlay.html#syncPosition">syncPosition</a></code>
 					</div>
 				</div>
 			
 				<div class="section method inheritance">
 					<h3>Methods inherited from class  <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></h3>
 					<div class="content">
-						<code><a href="YAHOO.widget.Module.html#setHeader">setHeader</a>, <a href="YAHOO.widget.Module.html#appendToHeader">appendToHeader</a>, <a href="YAHOO.widget.Module.html#setBody">setBody</a>, <a href="YAHOO.widget.Module.html#appendToBody">appendToBody</a>, <a href="YAHOO.widget.Module.html#setFooter">setFooter</a>, <a href="YAHOO.widget.Module.html#appendToFooter">appendToFooter</a>, <a href="YAHOO.widget.Module.html#render">render</a>, <a href="YAHOO.widget.Module.html#destroy">destroy</a>, <a href="YAHOO.widget.Module.html#show">show</a>, <a href="YAHOO.widget.Module.html#hide">hide</a></code>
+						<code><a href="YAHOO.widget.Module.html#initResizeMonitor">initResizeMonitor</a>, <a href="YAHOO.widget.Module.html#setHeader">setHeader</a>, <a href="YAHOO.widget.Module.html#appendToHeader">appendToHeader</a>, <a href="YAHOO.widget.Module.html#setBody">setBody</a>, <a href="YAHOO.widget.Module.html#appendToBody">appendToBody</a>, <a href="YAHOO.widget.Module.html#setFooter">setFooter</a>, <a href="YAHOO.widget.Module.html#appendToFooter">appendToFooter</a>, <a href="YAHOO.widget.Module.html#destroy">destroy</a>, <a href="YAHOO.widget.Module.html#show">show</a>, <a href="YAHOO.widget.Module.html#hide">hide</a>, <a href="YAHOO.widget.Module.html#configMonitorResize">configMonitorResize</a></code>
 					</div>
 				</div>
 			
@@ -566,6 +621,19 @@
 				<div class="section field details">
 					<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 					<div class="content">
+						
+							<h4><a name="CSS_PANEL">CSS_PANEL</a></h4>
+							<div class="detail">
+								<code>
+									string
+									&nbsp;
+									<strong>CSS_PANEL</strong>
+								</code>
+								<div class="description">
+									Constant representing the default CSS class used for a Panel
+								</div>
+							</div>
+							<hr />
 						
 							<h4><a name="superclass">superclass</a></h4>
 							<div class="detail">
@@ -598,8 +666,9 @@
 							</code>
 							<div class="description">
 								
-									Panel is an implementation of Overlay that behaves like an OS window, with a draggable header and an optional close icon at the top right.
- 
+									Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
 								
 								
 								
@@ -627,7 +696,7 @@
 								
 								
 								
-									HASH(0x1d2255c)
+									HASH(0x1d5f064)
 								
 							</div>
 						</div>
@@ -642,27 +711,6 @@
 				<div class="section method details">
 					<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 					<div class="content">
-						
-							<h4><a name="buildContainer">buildContainer</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>buildContainer</strong>
-									()
-								</code>
-										
-								<div class="description">
-									
-										Builds the wrapping container around the Panel that is used for positioning the shadow and matte underlays. The container element is assigned to a  local instance variable called container, and the element is reinserted inside of it.
-									
-									
-									
-									
-										HASH(0x1d27c44)
-									
-								</div>
-							</div>
-							<hr />
 						
 							<h4><a name="buildMask">buildMask</a></h4>
 							<div class="detail">
@@ -679,28 +727,28 @@
 									
 									
 									
-										HASH(0x1d6ca98)
+										HASH(0x1d5f688)
 									
 								</div>
 							</div>
 							<hr />
 						
-							<h4><a name="center">center</a></h4>
+							<h4><a name="buildWrapper">buildWrapper</a></h4>
 							<div class="detail">
 								<code>
 									void 
-									<strong>center</strong>
+									<strong>buildWrapper</strong>
 									()
 								</code>
 										
 								<div class="description">
 									
-										Centers the container in the viewport.
+										Builds the wrapping container around the Panel that is used for positioning the shadow and matte underlays. The container element is assigned to a  local instance variable called container, and the element is reinserted inside of it.
 									
 									
 									
 									
-										HASH(0x1d273f8)
+										HASH(0x1d5f82c)
 									
 								</div>
 							</div>
@@ -721,7 +769,7 @@
 									
 									
 									
-										HASH(0x1da0fc4)
+										HASH(0x1d5fb80)
 									
 								</div>
 							</div>
@@ -742,28 +790,7 @@
 									
 									
 									
-										HASH(0x1d8d618)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="configFixedCenter">configFixedCenter</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>configFixedCenter</strong>
-									(type, args, obj)
-								</code>
-										
-								<div class="description">
-									
-										The default event handler fired when the "fixedcenter" property is changed.
-									
-									
-									
-									
-										HASH(0x1da1228)
+										HASH(0x1d5fcb8)
 									
 								</div>
 							</div>
@@ -784,7 +811,26 @@
 									
 									
 									
-										HASH(0x1da14b0)
+										HASH(0x1d5fe98)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="configkeyListeners">configkeyListeners</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>configkeyListeners</strong>
+									(type, args, obj)
+								</code>
+										
+								<div class="description">
+									
+									
+									
+									
+										HASH(0x1dab038)
 									
 								</div>
 							</div>
@@ -805,7 +851,7 @@
 									
 									
 									
-										HASH(0x1da1570)
+										HASH(0x1dab1dc)
 									
 								</div>
 							</div>
@@ -826,28 +872,7 @@
 									
 									
 									
-										HASH(0x1da16c0)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="configVisible">configVisible</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>configVisible</strong>
-									(type, args, obj)
-								</code>
-										
-								<div class="description">
-									
-										The default event handler fired when the "visible" property is changed. The fading animation of the Panel, if enabled, is also handled within this method.
-									
-									
-									
-									
-										HASH(0x1da187c)
+										HASH(0x1d6e2d8)
 									
 								</div>
 							</div>
@@ -868,7 +893,7 @@
 									
 									
 									
-										HASH(0x1da1984)
+										HASH(0x1dd40e4)
 									
 								</div>
 							</div>
@@ -889,7 +914,7 @@
 									
 									
 									
-										HASH(0x1d7005c)
+										HASH(0x1dd463c)
 									
 								</div>
 							</div>
@@ -930,7 +955,7 @@
 									
 									
 									
-										HASH(0x1d70410)
+										HASH(0x1dd47ec)
 									
 								</div>
 							</div>
@@ -951,7 +976,68 @@
 									
 									
 									
-										HASH(0x1d705a8)
+										HASH(0x1dd4a8c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="initEvents">initEvents</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>initEvents</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
+									
+									
+									
+									
+										HASH(0x1d6e68c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="onDomResize">onDomResize</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>onDomResize</strong>
+									(e, obj)
+								</code>
+										
+								<div class="description">
+									
+										Event handler fired when the resize monitor element is resized.
+									
+									
+									
+									
+										HASH(0x1d6ea4c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="onWindowResize">onWindowResize</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>onWindowResize</strong>
+									(e, obj)
+								</code>
+										
+								<div class="description">
+									
+									
+									
+									
+										HASH(0x1d6eb6c)
 									
 								</div>
 							</div>
@@ -972,7 +1058,48 @@
 									
 									
 									
-										HASH(0x1d706c8)
+										HASH(0x1d6ec8c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="render">render</a></h4>
+							<div class="detail">
+								<code>
+									Object 
+									<strong>render</strong>
+									(&lt;string&gt; &lt;Element&gt; appendToNode)
+								</code>
+										
+								<div class="description">
+									
+										Renders the Module by inserting the elements that are not already in the main Module into their correct places. Optionally appends the Module to the specified node prior to the render's execution. YAHOO.widget.Module.prototype.NOTE = For;Modules without existing markup, the appendToNode argument is REQUIRED. If this argument is ommitted and the current element is not present in the document, the function will return false, indicating that the render was a failure.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>appendToNode</code> - 
+														The element id to which the Module should be appended to prior to rendering <em>OR</em>  
+												</dd>
+											
+												<dd>
+													<code>appendToNode</code> - 
+														The element to which the Module should be appended to prior to rendering	  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd> Success or failure of the render</dd>
+										</dl>
+									
+									
+										HASH(0x1d6ed88)
 									
 								</div>
 							</div>
@@ -993,38 +1120,36 @@
 									
 									
 									
-										HASH(0x1d707e8)
+										HASH(0x1d6eed8)
 									
 								</div>
 							</div>
 							<hr />
 						
-							<h4><a name="sizeMatte">sizeMatte</a></h4>
+							<h4><a name="sizeMask">sizeMask</a></h4>
 							<div class="detail">
 								<code>
 									void 
-									<strong>sizeMatte</strong>
+									<strong>sizeMask</strong>
 									()
 								</code>
 										
 								<div class="description">
 									
-										Adjusts the size of the matte based no the size of the element.
 									
 									
 									
-									
-										HASH(0x1d70908)
+										HASH(0x1d6eff8)
 									
 								</div>
 							</div>
 							<hr />
 						
-							<h4><a name="sizeShadow">sizeShadow</a></h4>
+							<h4><a name="sizeUnderlay">sizeUnderlay</a></h4>
 							<div class="detail">
 								<code>
 									void 
-									<strong>sizeShadow</strong>
+									<strong>sizeUnderlay</strong>
 									()
 								</code>
 										
@@ -1035,28 +1160,7 @@
 									
 									
 									
-										HASH(0x1d70a28)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="syncPosition">syncPosition</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>syncPosition</strong>
-									()
-								</code>
-										
-								<div class="description">
-									
-										Synchronizes the Panel's "xy", "x", and "y" properties with the Panel's position in the DOM. This is primarily used to update position information during drag & drop.
-									
-									
-									
-									
-										HASH(0x1d70b48)
+										HASH(0x1d9fd9c)
 									
 								</div>
 							</div>
@@ -1074,8 +1178,9 @@
 
 <div id="footer">
 	<hr />
-	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
 	<br />
+	Yahoo! Confidential.
 	<br /><br />
 	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
 	version 1.9.5.8

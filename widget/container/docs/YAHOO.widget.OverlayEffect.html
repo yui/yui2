@@ -4,7 +4,7 @@
 	<title>
 		JavaScript Documentation - 
 		
-			YAHOO.widget.Tooltip
+			YAHOO.widget.OverlayEffect
 		
 	</title>
 	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
@@ -29,7 +29,7 @@
 			
 				<a href="./index.html">YUI Containers</a>
 				&gt;
-				<strong>YAHOO.widget.Tooltip</strong>
+				<strong>YAHOO.widget.OverlayEffect</strong>
 			
 			
 			
@@ -178,14 +178,10 @@
 	<div id="pri">
 		<div class="main">
 			
-			<h2>Class YAHOO.widget.Tooltip</h2>
+			<h2>Class YAHOO.widget.OverlayEffect</h2>
 			<pre>Object
    |
-   +--<a href='YAHOO.widget.Module.html'>YAHOO.widget.Module</a>
-         |
-         +--<a href='YAHOO.widget.Overlay.html'>YAHOO.widget.Overlay</a>
-               |
-               +--<b>YAHOO.widget.Tooltip</b>
+   +--<b>YAHOO.widget.OverlayEffect</b>
 </pre>
 			
 			
@@ -199,11 +195,9 @@
 						
 					</span>
 					<span class="class-type">class</span>
-					<b>YAHOO.widget.Tooltip</b>
+					<b>YAHOO.widget.OverlayEffect</b>
 				</div>
 				<div class="class-extends">
-					
-						<dd>extends <a href='YAHOO.widget.Overlay.html'>YAHOO.widget.Overlay</a></dd>
 					
 				</div>
 			</div>
@@ -261,25 +255,97 @@
 						<table border="1" cellpadding="3" cellspacing="0">
 						
 							<tr>
-								<td class="flags">string</td>
+								<td class="flags">Object</td>
 								<td class="spec">
 									<code>
-										<a href="#CSS_TOOLTIP">CSS_TOOLTIP</a>
+										<a href="#animateInCompleteEvent">animateInCompleteEvent</a>
 									</code>
 									<div class="description">
-										Constant representing the Tooltip CSS class&nbsp;
+										&nbsp;
 									</div>
 								</td>
 							</tr>
 						
 							<tr>
-								<td class="flags">class</td>
+								<td class="flags">Object</td>
 								<td class="spec">
 									<code>
-										<a href="#superclass">superclass</a>
+										<a href="#animateOutCompleteEvent">animateOutCompleteEvent</a>
 									</code>
 									<div class="description">
-										Reference to the Tooltip's superclass, Overlay&nbsp;
+										&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#attrIn">attrIn</a>
+									</code>
+									<div class="description">
+										&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#attrOut">attrOut</a>
+									</code>
+									<div class="description">
+										&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#beforeAnimateInEvent">beforeAnimateInEvent</a>
+									</code>
+									<div class="description">
+										&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#beforeAnimateOutEvent">beforeAnimateOutEvent</a>
+									</code>
+									<div class="description">
+										&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#overlay">overlay</a>
+									</code>
+									<div class="description">
+										&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#targetElement">targetElement</a>
+									</code>
+									<div class="description">
+										&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -290,15 +356,6 @@
 			
 					
 			
-				
-					<div class="section field inheritance">
-						<h3>Fields inherited from class <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-						<div class="content">
-							<code><a href="YAHOO.widget.Module.html#element">element</a>, <a href="YAHOO.widget.Module.html#header">header</a>, <a href="YAHOO.widget.Module.html#body">body</a>, <a href="YAHOO.widget.Module.html#footer">footer</a>, <a href="YAHOO.widget.Module.html#id">id</a>, <a href="YAHOO.widget.Module.html#childNodesInDOM">childNodesInDOM</a>, <a href="YAHOO.widget.Module.html#imageRoot">imageRoot</a>, <a href="YAHOO.widget.Module.html#effects">effects</a></code>
-						</div>
-					</div>
-				
-			
 			<!-- =========== END FIELD SUMMARY =========== -->
 	
 	
@@ -308,7 +365,7 @@
 					<h3><a name="constructor_summary">Constructor Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 					<div class="content">
 						<code class="spec">
-							<a href="YAHOO.widget.Tooltip.html#YAHOO.widget.Tooltip()">YAHOO.widget.Tooltip</a>
+							<a href="YAHOO.widget.OverlayEffect.html#YAHOO.widget.OverlayEffect()">YAHOO.widget.OverlayEffect</a>
 						</code>
 						<div class="description">
 							Copyright (c) 2006, Yahoo!&nbsp;
@@ -330,63 +387,102 @@
 									<td class="flags">void</td>
 									<td class="spec">
 										<code>
-											<a href="#configContainer">configContainer</a>
-											(type, args, obj)
-										</code>
-										<div class="description">
-											The default event handler fired when the "container" property is changed.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#configContext">configContext</a>
-											(type, args, obj)
-										</code>
-										<div class="description">
-											The default event handler fired when the "context" property is changed.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#configText">configText</a>
-											(type, args, obj)
-										</code>
-										<div class="description">
-											The default event handler fired when the "text" property is changed.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#doHide">doHide</a>
+											<a href="#animateIn">animateIn</a>
 											()
 										</code>
 										<div class="description">
-											Sets the timeout for the auto-dismiss delay, which by default is 5 seconds, meaning that a tooltip will automatically dismiss itself after 5 seconds of being displayed.&nbsp;
+											Triggers the in-animation.&nbsp;
 										</div>
 									</td>
 								</tr>
 							
 								<tr>
-									<td class="flags">int</td>
+									<td class="flags">void</td>
 									<td class="spec">
 										<code>
-											<a href="#doShow">doShow</a>
-											(&lt;DOMEvent&gt; e)
+											<a href="#animateOut">animateOut</a>
+											()
 										</code>
 										<div class="description">
-											Processes the showing of the Tooltip by setting the timeout delay and offset of the Tooltip.&nbsp;
+											Triggers the out-animation.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#handleCompleteAnimateIn">handleCompleteAnimateIn</a>
+											(type, args, obj)
+										</code>
+										<div class="description">
+											The default onComplete handler for the in-animation.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#handleCompleteAnimateOut">handleCompleteAnimateOut</a>
+											(type, args, obj)
+										</code>
+										<div class="description">
+											The default onComplete handler for the out-animation.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#handleStartAnimateIn">handleStartAnimateIn</a>
+											(type, args, obj)
+										</code>
+										<div class="description">
+											The default onStart handler for the in-animation.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#handleStartAnimateOut">handleStartAnimateOut</a>
+											(type, args, obj)
+										</code>
+										<div class="description">
+											The default onStart handler for the out-animation.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#handleTweenAnimateIn">handleTweenAnimateIn</a>
+											(type, args, obj)
+										</code>
+										<div class="description">
+											The default onTween handler for the in-animation.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#handleTweenAnimateOut">handleTweenAnimateOut</a>
+											(type, args, obj)
+										</code>
+										<div class="description">
+											The default onTween handler for the out-animation.&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -396,62 +492,49 @@
 									<td class="spec">
 										<code>
 											<a href="#init">init</a>
-											(&lt;string&gt; &lt;Element&gt; el, &lt;object&gt; userConfig)
+											(animClass)
 										</code>
 										<div class="description">
-											The Module class's initialization method, which is executed for Module and all of its subclasses.&nbsp;
+											Initializes the animation classes and events.&nbsp;
 										</div>
 									</td>
 								</tr>
 							
 								<tr>
-									<td class="flags">void</td>
+									<td class="flags">OverlayEffect</td>
 									<td class="spec">
 										<code>
-											<a href="#initDefaultConfig">initDefaultConfig</a>
-											()
+											<a href="#EXPAND_H">EXPAND_H</a>
+											(overlay, dur)
 										</code>
 										<div class="description">
-											Initializes the class's configurable properties which can be changed using the Overlay's Config object (cfg).&nbsp;
+											A pre-configured OverlayEffect instance that can be used for expanding an overlay in and out horizontally.&nbsp;
 										</div>
 									</td>
 								</tr>
 							
 								<tr>
-									<td class="flags">void</td>
+									<td class="flags">OverlayEffect</td>
 									<td class="spec">
 										<code>
-											<a href="#onContextMouseOut">onContextMouseOut</a>
-											(&lt;DOMEvent&gt; e, &lt;object&gt; obj)
+											<a href="#FADE">FADE</a>
+											(overlay, dur)
 										</code>
 										<div class="description">
-											The default event handler fired when the user mouses out of the context element.&nbsp;
+											A pre-configured OverlayEffect instance that can be used for fading an overlay in and out.&nbsp;
 										</div>
 									</td>
 								</tr>
 							
 								<tr>
-									<td class="flags">void</td>
+									<td class="flags">OverlayEffect</td>
 									<td class="spec">
 										<code>
-											<a href="#onContextMouseOver">onContextMouseOver</a>
-											(&lt;DOMEvent&gt; e, &lt;object&gt; obj)
+											<a href="#SLIDE">SLIDE</a>
+											(overlay, dur)
 										</code>
 										<div class="description">
-											The default event handler fired when the user mouses over the context element.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#preventOverlap">preventOverlap</a>
-											(type, args, obj)
-										</code>
-										<div class="description">
-											Fired when the Tooltip is moved, this event handler is used to prevent the Tooltip from overlapping with its context element.&nbsp;
+											A pre-configured OverlayEffect instance that can be used for sliding an overlay in and out.&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -462,20 +545,6 @@
 			
 			
 			
-				<div class="section method inheritance">
-					<h3>Methods inherited from class  <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></h3>
-					<div class="content">
-						<code><a href="YAHOO.widget.Overlay.html#initEvents">initEvents</a>, <a href="YAHOO.widget.Overlay.html#moveTo">moveTo</a>, <a href="YAHOO.widget.Overlay.html#configVisible">configVisible</a>, <a href="YAHOO.widget.Overlay.html#configFixedCenter">configFixedCenter</a>, <a href="YAHOO.widget.Overlay.html#configHeight">configHeight</a>, <a href="YAHOO.widget.Overlay.html#configWidth">configWidth</a>, <a href="YAHOO.widget.Overlay.html#configzIndex">configzIndex</a>, <a href="YAHOO.widget.Overlay.html#configXY">configXY</a>, <a href="YAHOO.widget.Overlay.html#configX">configX</a>, <a href="YAHOO.widget.Overlay.html#configY">configY</a>, <a href="YAHOO.widget.Overlay.html#configIframe">configIframe</a>, <a href="YAHOO.widget.Overlay.html#configConstrainToViewport">configConstrainToViewport</a>, <a href="YAHOO.widget.Overlay.html#align">align</a>, <a href="YAHOO.widget.Overlay.html#enforceConstraints">enforceConstraints</a>, <a href="YAHOO.widget.Overlay.html#center">center</a>, <a href="YAHOO.widget.Overlay.html#syncPosition">syncPosition</a>, <a href="YAHOO.widget.Overlay.html#onDomResize">onDomResize</a></code>
-					</div>
-				</div>
-			
-				<div class="section method inheritance">
-					<h3>Methods inherited from class  <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></h3>
-					<div class="content">
-						<code><a href="YAHOO.widget.Module.html#initResizeMonitor">initResizeMonitor</a>, <a href="YAHOO.widget.Module.html#setHeader">setHeader</a>, <a href="YAHOO.widget.Module.html#appendToHeader">appendToHeader</a>, <a href="YAHOO.widget.Module.html#setBody">setBody</a>, <a href="YAHOO.widget.Module.html#appendToBody">appendToBody</a>, <a href="YAHOO.widget.Module.html#setFooter">setFooter</a>, <a href="YAHOO.widget.Module.html#appendToFooter">appendToFooter</a>, <a href="YAHOO.widget.Module.html#render">render</a>, <a href="YAHOO.widget.Module.html#destroy">destroy</a>, <a href="YAHOO.widget.Module.html#show">show</a>, <a href="YAHOO.widget.Module.html#hide">hide</a>, <a href="YAHOO.widget.Module.html#configMonitorResize">configMonitorResize</a></code>
-					</div>
-				</div>
-			
 			<!-- ========== END METHOD SUMMARY =========== -->
 	
 	
@@ -485,28 +554,106 @@
 					<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 					<div class="content">
 						
-							<h4><a name="CSS_TOOLTIP">CSS_TOOLTIP</a></h4>
+							<h4><a name="animateInCompleteEvent">animateInCompleteEvent</a></h4>
 							<div class="detail">
 								<code>
-									string
+									Object
 									&nbsp;
-									<strong>CSS_TOOLTIP</strong>
+									<strong>animateInCompleteEvent</strong>
 								</code>
 								<div class="description">
-									Constant representing the Tooltip CSS class
+									
 								</div>
 							</div>
 							<hr />
 						
-							<h4><a name="superclass">superclass</a></h4>
+							<h4><a name="animateOutCompleteEvent">animateOutCompleteEvent</a></h4>
 							<div class="detail">
 								<code>
-									class
+									Object
 									&nbsp;
-									<strong>superclass</strong>
+									<strong>animateOutCompleteEvent</strong>
 								</code>
 								<div class="description">
-									Reference to the Tooltip's superclass, Overlay
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="attrIn">attrIn</a></h4>
+							<div class="detail">
+								<code>
+									Object
+									&nbsp;
+									<strong>attrIn</strong>
+								</code>
+								<div class="description">
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="attrOut">attrOut</a></h4>
+							<div class="detail">
+								<code>
+									Object
+									&nbsp;
+									<strong>attrOut</strong>
+								</code>
+								<div class="description">
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="beforeAnimateInEvent">beforeAnimateInEvent</a></h4>
+							<div class="detail">
+								<code>
+									Object
+									&nbsp;
+									<strong>beforeAnimateInEvent</strong>
+								</code>
+								<div class="description">
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="beforeAnimateOutEvent">beforeAnimateOutEvent</a></h4>
+							<div class="detail">
+								<code>
+									Object
+									&nbsp;
+									<strong>beforeAnimateOutEvent</strong>
+								</code>
+								<div class="description">
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="overlay">overlay</a></h4>
+							<div class="detail">
+								<code>
+									Object
+									&nbsp;
+									<strong>overlay</strong>
+								</code>
+								<div class="description">
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="targetElement">targetElement</a></h4>
+							<div class="detail">
+								<code>
+									Object
+									&nbsp;
+									<strong>targetElement</strong>
+								</code>
+								<div class="description">
+									
 								</div>
 							</div>
 							<hr />
@@ -521,10 +668,10 @@
 				<div class="section constructor details">
 					<h3><a name="constructor_detail">Constructor Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 					<div class="content">
-						<h4><a name="YAHOO.widget.Tooltip()">YAHOO.widget.Tooltip</a></h4>
+						<h4><a name="YAHOO.widget.OverlayEffect()">YAHOO.widget.OverlayEffect</a></h4>
 						<div class="detail">
 							<code>
-								<strong>YAHOO.widget.Tooltip</strong>
+								<strong>YAHOO.widget.OverlayEffect</strong>
 								()
 							</code>
 							<div class="description">
@@ -539,18 +686,23 @@ http://developer.yahoo.net/yui/license.txt
 										<dt>Parameters:</dt>
 										
 											<dd>
-												<code>el</code> - 
-													The element ID representing the Tooltip <em>OR</em>  
+												<code>overlay</code> - 
+														The Overlay that the animation should be associated with  
 											</dd>
 										
 											<dd>
-												<code>el</code> - 
-													The element representing the Tooltip  
+												<code>attrIn</code> - 
+														The object literal representing the animation arguments to be used for the animate-in transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).  
 											</dd>
 										
 											<dd>
-												<code>userConfig</code> - 
-													The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.  
+												<code>attrOut</code> - 
+														The object literal representing the animation arguments to be used for the animate-out transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).  
+											</dd>
+										
+											<dd>
+												<code>targetElement</code> - 
+													Optional. The target element that should be animated during the transition. Defaults to overlay.element.  
 											</dd>
 										
 									</dl>
@@ -559,7 +711,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1d78574)
+									HASH(0x1d4c4ec)
 								
 							</div>
 						</div>
@@ -575,121 +727,169 @@ http://developer.yahoo.net/yui/license.txt
 					<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 					<div class="content">
 						
-							<h4><a name="configContainer">configContainer</a></h4>
+							<h4><a name="animateIn">animateIn</a></h4>
 							<div class="detail">
 								<code>
 									void 
-									<strong>configContainer</strong>
-									(type, args, obj)
-								</code>
-										
-								<div class="description">
-									
-										The default event handler fired when the "container" property is changed.
-									
-									
-									
-									
-										HASH(0x1d5f2bc)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="configContext">configContext</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>configContext</strong>
-									(type, args, obj)
-								</code>
-										
-								<div class="description">
-									
-										The default event handler fired when the "context" property is changed.
-									
-									
-									
-									
-										HASH(0x1d41e6c)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="configText">configText</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>configText</strong>
-									(type, args, obj)
-								</code>
-										
-								<div class="description">
-									
-										The default event handler fired when the "text" property is changed.
-									
-									
-									
-									
-										HASH(0x1d60d84)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="doHide">doHide</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>doHide</strong>
+									<strong>animateIn</strong>
 									()
 								</code>
 										
 								<div class="description">
 									
-										Sets the timeout for the auto-dismiss delay, which by default is 5 seconds, meaning that a tooltip will automatically dismiss itself after 5 seconds of being displayed.
+										Triggers the in-animation.
 									
 									
 									
 									
-										HASH(0x1d60e2c)
+										HASH(0x1d5f244)
 									
 								</div>
 							</div>
 							<hr />
 						
-							<h4><a name="doShow">doShow</a></h4>
+							<h4><a name="animateOut">animateOut</a></h4>
 							<div class="detail">
 								<code>
-									int 
-									<strong>doShow</strong>
-									(&lt;DOMEvent&gt; e)
+									void 
+									<strong>animateOut</strong>
+									()
 								</code>
 										
 								<div class="description">
 									
-										Processes the showing of the Tooltip by setting the timeout delay and offset of the Tooltip.
+										Triggers the out-animation.
 									
 									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>e</code> - 
-														The current DOM event  
-												</dd>
-											
-										</dl>
 									
 									
-										<dl>
-											<dt>Returns:</dt>
-											<dd>	The process ID of the timeout function associated with doShow</dd>
-										</dl>
+										HASH(0x1d5f340)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="handleCompleteAnimateIn">handleCompleteAnimateIn</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>handleCompleteAnimateIn</strong>
+									(type, args, obj)
+								</code>
+										
+								<div class="description">
+									
+										The default onComplete handler for the in-animation.
 									
 									
-										HASH(0x1dab9b0)
+									
+									
+										HASH(0x1d5f508)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="handleCompleteAnimateOut">handleCompleteAnimateOut</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>handleCompleteAnimateOut</strong>
+									(type, args, obj)
+								</code>
+										
+								<div class="description">
+									
+										The default onComplete handler for the out-animation.
+									
+									
+									
+									
+										HASH(0x1d5f640)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="handleStartAnimateIn">handleStartAnimateIn</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>handleStartAnimateIn</strong>
+									(type, args, obj)
+								</code>
+										
+								<div class="description">
+									
+										The default onStart handler for the in-animation.
+									
+									
+									
+									
+										HASH(0x1d5f7a8)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="handleStartAnimateOut">handleStartAnimateOut</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>handleStartAnimateOut</strong>
+									(type, args, obj)
+								</code>
+										
+								<div class="description">
+									
+										The default onStart handler for the out-animation.
+									
+									
+									
+									
+										HASH(0x1d5f9f4)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="handleTweenAnimateIn">handleTweenAnimateIn</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>handleTweenAnimateIn</strong>
+									(type, args, obj)
+								</code>
+										
+								<div class="description">
+									
+										The default onTween handler for the in-animation.
+									
+									
+									
+									
+										HASH(0x1d5fb2c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="handleTweenAnimateOut">handleTweenAnimateOut</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>handleTweenAnimateOut</strong>
+									(type, args, obj)
+								</code>
+										
+								<div class="description">
+									
+										The default onTween handler for the out-animation.
+									
+									
+									
+									
+										HASH(0x1d5fde4)
 									
 								</div>
 							</div>
@@ -700,151 +900,135 @@ http://developer.yahoo.net/yui/license.txt
 								<code>
 									void 
 									<strong>init</strong>
-									(&lt;string&gt; &lt;Element&gt; el, &lt;object&gt; userConfig)
+									(animClass)
 								</code>
 										
 								<div class="description">
 									
-										The Module class's initialization method, which is executed for Module and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
+										Initializes the animation classes and events.
 									
 									
 										<dl>
 											<dt>Parameters:</dt>
 											
 												<dd>
-													<code>el</code> - 
-														The element ID representing the Module <em>OR</em>  
-												</dd>
-											
-												<dd>
-													<code>el</code> - 
-														The element representing the Module  
-												</dd>
-											
-												<dd>
-													<code>userConfig</code> - 
-														The configuration object literal containing the configuration that should be set for this module. See configuration documentation for more details. 	  
+													<code>Optional</code> - 
+													. The animation class to instantiate. Defaults to YAHOO.util.Anim. Other options include YAHOO.util.Motion.   
 												</dd>
 											
 										</dl>
 									
 									
 									
-										HASH(0x1dabb3c)
+										HASH(0x1d5ff4c)
 									
 								</div>
 							</div>
 							<hr />
 						
-							<h4><a name="initDefaultConfig">initDefaultConfig</a></h4>
+							<h4><a name="EXPAND_H">EXPAND_H</a></h4>
 							<div class="detail">
 								<code>
-									void 
-									<strong>initDefaultConfig</strong>
-									()
+									OverlayEffect 
+									<strong>EXPAND_H</strong>
+									(overlay, dur)
 								</code>
 										
 								<div class="description">
 									
-										Initializes the class's configurable properties which can be changed using the Overlay's Config object (cfg).
-									
-									
-									
-									
-										HASH(0x1d787d8)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="onContextMouseOut">onContextMouseOut</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>onContextMouseOut</strong>
-									(&lt;DOMEvent&gt; e, &lt;object&gt; obj)
-								</code>
-										
-								<div class="description">
-									
-										The default event handler fired when the user mouses out of the context element.
+										A pre-configured OverlayEffect instance that can be used for expanding an overlay in and out horizontally.
 									
 									
 										<dl>
 											<dt>Parameters:</dt>
 											
 												<dd>
-													<code>e</code> - 
-														The current DOM event  
+													<code>The</code> - 
+													 Overlay object to animate  
 												</dd>
 											
 												<dd>
-													<code>obj</code> - 
-														The object argument   
+													<code>The</code> - 
+													 duration of the animation  
 												</dd>
 											
 										</dl>
 									
 									
 									
-										HASH(0x1d788ec)
+										HASH(0x1dab0ec)
 									
 								</div>
 							</div>
 							<hr />
 						
-							<h4><a name="onContextMouseOver">onContextMouseOver</a></h4>
+							<h4><a name="FADE">FADE</a></h4>
 							<div class="detail">
 								<code>
-									void 
-									<strong>onContextMouseOver</strong>
-									(&lt;DOMEvent&gt; e, &lt;object&gt; obj)
+									OverlayEffect 
+									<strong>FADE</strong>
+									(overlay, dur)
 								</code>
 										
 								<div class="description">
 									
-										The default event handler fired when the user mouses over the context element.
+										A pre-configured OverlayEffect instance that can be used for fading an overlay in and out.
 									
 									
 										<dl>
 											<dt>Parameters:</dt>
 											
 												<dd>
-													<code>e</code> - 
-														The current DOM event  
+													<code>The</code> - 
+													 Overlay object to animate  
 												</dd>
 											
 												<dd>
-													<code>obj</code> - 
-														The object argument   
+													<code>The</code> - 
+													 duration of the animation  
 												</dd>
 											
 										</dl>
 									
 									
 									
-										HASH(0x1d78a54)
+										HASH(0x1dab1f4)
 									
 								</div>
 							</div>
 							<hr />
 						
-							<h4><a name="preventOverlap">preventOverlap</a></h4>
+							<h4><a name="SLIDE">SLIDE</a></h4>
 							<div class="detail">
 								<code>
-									void 
-									<strong>preventOverlap</strong>
-									(type, args, obj)
+									OverlayEffect 
+									<strong>SLIDE</strong>
+									(overlay, dur)
 								</code>
 										
 								<div class="description">
 									
-										Fired when the Tooltip is moved, this event handler is used to prevent the Tooltip from overlapping with its context element.
+										A pre-configured OverlayEffect instance that can be used for sliding an overlay in and out.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>The</code> - 
+													 Overlay object to animate  
+												</dd>
+											
+												<dd>
+													<code>The</code> - 
+													 duration of the animation  
+												</dd>
+											
+										</dl>
 									
 									
 									
-									
-										HASH(0x1d78bc8)
+										HASH(0x1d6e2a8)
 									
 								</div>
 							</div>

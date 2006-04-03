@@ -14,7 +14,7 @@
 
 <div id="header">
 	<h1>JavaScript Documentation</h1>
-	<h3><a href="./index.html">Container Components</a></h3>
+	<h3><a href="./index.html">YUI Containers</a></h3>
 
 	<div class="breadcrumbs">
 		
@@ -23,7 +23,7 @@
 			
 			
 			
-				<a href="./index.html">Container Components</a>
+				<a href="./index.html">YUI Containers</a>
 				&gt;
 				<strong>Config.js</strong>
 			
@@ -64,6 +64,11 @@
 								YAHOO.util.Config</a>
 						</li>
 					
+						<li>
+							<a href="YAHOO.util.KeyListener.html">
+								YAHOO.util.KeyListener</a>
+						</li>
+					
 
 					
 						<li>
@@ -84,6 +89,16 @@
 						<li>
 							<a href="YAHOO.widget.Overlay.html">
 								YAHOO.widget.Overlay</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayEffect.html">
+								YAHOO.widget.OverlayEffect</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayManager.html">
+								YAHOO.widget.OverlayManager</a>
 						</li>
 					
 						<li>
@@ -121,6 +136,11 @@
 						</li>
 					
 						<li>
+							<a href="overview-summary-KeyListener.js.html">
+								KeyListener.js</a>
+						</li>
+					
+						<li>
 							<a href="overview-summary-Module.js.html">
 								Module.js</a>
 						</li>
@@ -128,6 +148,16 @@
 						<li>
 							<a href="overview-summary-Overlay.js.html">
 								Overlay.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayEffect.js.html">
+								OverlayEffect.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayManager.js.html">
+								OverlayManager.js</a>
 						</li>
 					
 						<li>
@@ -224,6 +254,9 @@
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<pre class="sourceview"><span class="comment">/**
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
 * <span class="attrib">@class</span> 
 * Config is a utility used within an object to allow the implementer to maintain a list of local configuration properties and listen for changes to those properties dynamically using CustomEvent. The initial values are also maintained so that the configuration can be reset at any given point to its initial state.
 * <span class="attrib">@param</span> {object}	owner	The owner object to which this Config object belongs
@@ -258,7 +291,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 	* <span class="attrib">@param</span> {value}	object		The value of the correct type for the property
 	*/</span> 
 	var fireEvent = <span class="reserved">function</span>(key, property, value) {
-		<span class="reserved">if</span> (property.dependentElement &amp;&amp; ! YAHOO.util.Dom._elementInDom(property.dependentElement)) { <span class="comment">// Can't fire this event yet</span>
+		<span class="reserved">if</span> (property.dependentElement &amp;&amp; ! YAHOO.util.Dom.inDocument(property.dependentElement)) { <span class="comment">// Can't fire this event yet</span>
 			deferredEvents[key] = { args : value };
 			<span class="reserved">return</span> true;
 		} <span class="reserved">else</span> {
@@ -305,10 +338,12 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 	*/</span>
 	<span class="reserved">this</span>.getConfig = <span class="reserved">function</span>() {
 		var cfg = {};
-
-		<span class="reserved">for</span> (var prop in config)
-		{
-			cfg[prop] = config[prop].value;
+			
+		<span class="reserved">for</span> (var prop in config) {
+			var property = config[prop]
+			<span class="reserved">if</span> (property != undefined &amp;&amp; property.event) {
+				cfg[prop] = property.value;
+			}
 		}
 		
 		<span class="reserved">return</span> cfg;
@@ -321,8 +356,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 	*/</span>
 	<span class="reserved">this</span>.getProperty = <span class="reserved">function</span>(key) {
 		var property = config[key];
-		<span class="reserved">if</span> (property != undefined)
-		{
+		<span class="reserved">if</span> (property != undefined &amp;&amp; property.event) {
 			<span class="reserved">return</span> property.value;
 		} <span class="reserved">else</span> {
 			<span class="reserved">return</span> undefined;
@@ -336,8 +370,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 	*/</span>	
 	<span class="reserved">this</span>.getDefault = <span class="reserved">function</span>(key) {
 		var property = config[key];
-		<span class="reserved">if</span> (property != undefined)
-		{
+		<span class="reserved">if</span> (property != undefined &amp;&amp; property.event) {
 			<span class="reserved">return</span> property.defaultValue;
 		} <span class="reserved">else</span> {
 			<span class="reserved">return</span> undefined;
@@ -350,7 +383,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 	*/</span>
 	<span class="reserved">this</span>.resetProperty = <span class="reserved">function</span>(key) {
 		var property = config[key];
-		<span class="reserved">if</span> (property != undefined) {
+		<span class="reserved">if</span> (property != undefined &amp;&amp; property.event) {
 			<span class="reserved">this</span>.setProperty(key, initialConfig[key].value);
 		} <span class="reserved">else</span> {
 			<span class="reserved">return</span> undefined;
@@ -366,8 +399,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 	*/</span>
 	<span class="reserved">this</span>.setProperty = <span class="reserved">function</span>(key, value, silent) {
 		var property = config[key];
-		<span class="reserved">if</span> (property != undefined)
-		{
+		<span class="reserved">if</span> (property != undefined &amp;&amp; property.event) {
 			<span class="reserved">if</span> (property.validator &amp;&amp; ! property.validator(value)) { <span class="comment">// validator</span>
 				<span class="reserved">return</span> false;
 			} <span class="reserved">else</span> {
@@ -394,7 +426,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 	*/</span>
 	<span class="reserved">this</span>.refireEvent = <span class="reserved">function</span>(key) {
 		var property = config[key];
-		<span class="reserved">if</span> (property != undefined) {
+		<span class="reserved">if</span> (property != undefined &amp;&amp; property.event) {
 			fireEvent(key, property, property.value);
 		}
 	}
@@ -413,7 +445,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 		}
 		<span class="reserved">for</span> (var prop in userConfig) {
 			var property = config[prop];
-			<span class="reserved">if</span> (property != undefined) {
+			<span class="reserved">if</span> (property != undefined &amp;&amp; property.event) {
 				fireEvent(prop, property, userConfig[prop]);
 			}
 		}
@@ -446,7 +478,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 	*/</span>
 	<span class="reserved">this</span>.subscribeToConfigEvent = <span class="reserved">function</span>(key, handler, obj, override) {
 		var property = config[key];
-		<span class="reserved">if</span> (property != undefined) {
+		<span class="reserved">if</span> (property != undefined &amp;&amp; property.event) {
 			property.event.subscribe(handler, obj, override);
 			<span class="reserved">return</span> true;
 		} <span class="reserved">else</span> {
@@ -460,7 +492,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 	<span class="reserved">this</span>.fireDeferredEvents = <span class="reserved">function</span>() {
 		<span class="reserved">for</span> (var prop in deferredEvents) {
 			var property = config[prop];
-			<span class="reserved">if</span> (property != undefined) {
+			<span class="reserved">if</span> (property != undefined &amp;&amp; property.event) {
 				fireEvent(prop, property, deferredEvents[prop].args);
 			}
 		}
@@ -474,8 +506,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 	* <span class="attrib">@return</span>	{boolean}	true, if the value is valid
 	*/</span>
 	<span class="reserved">this</span>.checkBoolean = <span class="reserved">function</span>(val) {
-		<span class="reserved">if</span> (typeof val == <span class="literal">'boolean'</span>)
-		{
+		<span class="reserved">if</span> (typeof val == <span class="literal">'boolean'</span>) {
 			<span class="reserved">return</span> true;
 		} <span class="reserved">else</span> {
 			<span class="reserved">return</span> false;
@@ -488,15 +519,13 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 	* <span class="attrib">@return</span>	{boolean}	true, if the value is valid
 	*/</span>
 	<span class="reserved">this</span>.checkNumber = <span class="reserved">function</span>(val) {
-		<span class="reserved">if</span> (isNaN(val))
-		{
+		<span class="reserved">if</span> (isNaN(val)) {
 			<span class="reserved">return</span> false;
 		} <span class="reserved">else</span> {
 			<span class="reserved">return</span> true;
 		}
 	}
 }
-
 <span class="comment">/**
 * Checks to see if the passed element is actually present in the DOM.
 * <span class="attrib">@param</span>	{Element}	element	The element to be checked for DOM presence.
@@ -523,8 +552,9 @@ YAHOO.util.Dom._elementInDom = <span class="reserved">function</span>(element) {
 
 <div id="footer">
 	<hr />
-	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
 	<br />
+	Yahoo! Confidential.
 	<br /><br />
 	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
 	version 1.9.5.8

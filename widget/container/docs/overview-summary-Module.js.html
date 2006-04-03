@@ -14,7 +14,7 @@
 
 <div id="header">
 	<h1>JavaScript Documentation</h1>
-	<h3><a href="./index.html">Container Components</a></h3>
+	<h3><a href="./index.html">YUI Containers</a></h3>
 
 	<div class="breadcrumbs">
 		
@@ -23,7 +23,7 @@
 			
 			
 			
-				<a href="./index.html">Container Components</a>
+				<a href="./index.html">YUI Containers</a>
 				&gt;
 				<strong>Module.js</strong>
 			
@@ -64,6 +64,11 @@
 								YAHOO.util.Config</a>
 						</li>
 					
+						<li>
+							<a href="YAHOO.util.KeyListener.html">
+								YAHOO.util.KeyListener</a>
+						</li>
+					
 
 					
 						<li>
@@ -84,6 +89,16 @@
 						<li>
 							<a href="YAHOO.widget.Overlay.html">
 								YAHOO.widget.Overlay</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayEffect.html">
+								YAHOO.widget.OverlayEffect</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayManager.html">
+								YAHOO.widget.OverlayManager</a>
 						</li>
 					
 						<li>
@@ -121,6 +136,11 @@
 						</li>
 					
 						<li>
+							<a href="overview-summary-KeyListener.js.html">
+								KeyListener.js</a>
+						</li>
+					
+						<li>
 							<a href="overview-summary-Module.js.html">
 								Module.js</a>
 						</li>
@@ -128,6 +148,16 @@
 						<li>
 							<a href="overview-summary-Overlay.js.html">
 								Overlay.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayEffect.js.html">
+								OverlayEffect.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayManager.js.html">
+								OverlayManager.js</a>
 						</li>
 					
 						<li>
@@ -224,6 +254,9 @@
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<pre class="sourceview"><span class="comment">/**
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
 * <span class="attrib">@class</span> 
 * Module is a JavaScript representation of the Standard Module Format. Standard Module Format is a simple standard for markup containers where child nodes representing the header, body, and footer of the content are denoted using the CSS classes "hd", "bd", and "ft" respectively. Module is the base class for all other classes in the YUI Container package.
 * <span class="attrib">@param</span> {string}	el	The element ID representing the Module &lt;em&gt;OR&lt;/em&gt;
@@ -236,6 +269,16 @@ YAHOO.widget.Module = <span class="reserved">function</span>(el, userConfig) {
 		<span class="reserved">this</span>.init(el, userConfig); 
 	}
 }
+
+YAHOO.widget.Module.IMG_ROOT = <span class="literal">"http://us.i1.yimg.com/us.yimg.com/i/"</span>;
+YAHOO.widget.Module.IMG_ROOT_SSL = <span class="literal">"https://a248.e.akamai.net/sec.yimg.com/i/"</span>;
+
+<span class="comment">/**
+* Constant for the default CSS class name that represents a Module
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.Module.CSS_MODULE = <span class="literal">"module"</span>;
 
 <span class="comment">/**
 * Constant representing the module header
@@ -291,40 +334,104 @@ YAHOO.widget.Module.<span class="reserved">prototype</span> = {
 	footer : null,
 
 	<span class="comment">/**
+	* The id of the element
+	* <span class="attrib">@type</span> string
+	*/</span>
+	id : null,
+
+	<span class="comment">/**
 	* Array of elements
 	* <span class="attrib">@type</span> Element[]
 	*/</span>
 	childNodesInDOM : null,
 
 	<span class="comment">/**
+	* The string representing the image root
+	* <span class="attrib">@type</span> string
+	*/</span>
+	imageRoot : YAHOO.widget.Module.IMG_ROOT,
+
+	<span class="comment">/**
+	* Array of OverlayEffects to use when showing and hiding the Module
+	* <span class="attrib">@type</span> YAHOO.widget.OverlayEffect[]
+	*/</span>
+	effects : new Array(),
+
+	<span class="comment">/**
 	* Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
 	*/</span>
 	initEvents : <span class="reserved">function</span>() {
-		<span class="reserved">this</span>.appendEvent		= new YAHOO.util.CustomEvent(<span class="literal">"append"</span>);
-		<span class="reserved">this</span>.beforeRenderEvent	= new YAHOO.util.CustomEvent(<span class="literal">"beforeRender"</span>);
-		<span class="reserved">this</span>.renderEvent		= new YAHOO.util.CustomEvent(<span class="literal">"render"</span>);
 
-		<span class="reserved">this</span>.changeHeaderEvent	= new YAHOO.util.CustomEvent(<span class="literal">"changeHeader"</span>);
-		<span class="reserved">this</span>.changeBodyEvent	= new YAHOO.util.CustomEvent(<span class="literal">"changeBody"</span>);
-		<span class="reserved">this</span>.changeFooterEvent	= new YAHOO.util.CustomEvent(<span class="literal">"changeFooter"</span>);
+		<span class="reserved">this</span>.beforeInitModuleEvent	= new YAHOO.util.CustomEvent(<span class="literal">"beforeInitModule"</span>);
+		<span class="reserved">this</span>.initModuleEvent		= new YAHOO.util.CustomEvent(<span class="literal">"initModule"</span>);
 
-		<span class="reserved">this</span>.changeContentEvent = new YAHOO.util.CustomEvent(<span class="literal">"changeContent"</span>);
+		<span class="reserved">this</span>.appendEvent			= new YAHOO.util.CustomEvent(<span class="literal">"append"</span>);
+		<span class="reserved">this</span>.beforeRenderEvent		= new YAHOO.util.CustomEvent(<span class="literal">"beforeRender"</span>);
+		<span class="reserved">this</span>.renderEvent			= new YAHOO.util.CustomEvent(<span class="literal">"render"</span>);
 
-		<span class="reserved">this</span>.destroyEvent		= new YAHOO.util.CustomEvent(<span class="literal">"destroy"</span>);
-		<span class="reserved">this</span>.beforeShowEvent	= new YAHOO.util.CustomEvent(<span class="literal">"beforeShow"</span>, <span class="reserved">this</span>);
-		<span class="reserved">this</span>.showEvent			= new YAHOO.util.CustomEvent(<span class="literal">"show"</span>, <span class="reserved">this</span>);
-		<span class="reserved">this</span>.beforeHideEvent	= new YAHOO.util.CustomEvent(<span class="literal">"beforeHide"</span>, <span class="reserved">this</span>);
-		<span class="reserved">this</span>.hideEvent			= new YAHOO.util.CustomEvent(<span class="literal">"hide"</span>, <span class="reserved">this</span>);
+		<span class="reserved">this</span>.changeHeaderEvent		= new YAHOO.util.CustomEvent(<span class="literal">"changeHeader"</span>);
+		<span class="reserved">this</span>.changeBodyEvent		= new YAHOO.util.CustomEvent(<span class="literal">"changeBody"</span>);
+		<span class="reserved">this</span>.changeFooterEvent		= new YAHOO.util.CustomEvent(<span class="literal">"changeFooter"</span>);
+
+		<span class="reserved">this</span>.changeContentEvent		= new YAHOO.util.CustomEvent(<span class="literal">"changeContent"</span>);
+
+		<span class="reserved">this</span>.destroyEvent			= new YAHOO.util.CustomEvent(<span class="literal">"destroy"</span>);
+		<span class="reserved">this</span>.beforeShowEvent		= new YAHOO.util.CustomEvent(<span class="literal">"beforeShow"</span>, <span class="reserved">this</span>);
+		<span class="reserved">this</span>.showEvent				= new YAHOO.util.CustomEvent(<span class="literal">"show"</span>, <span class="reserved">this</span>);
+		<span class="reserved">this</span>.beforeHideEvent		= new YAHOO.util.CustomEvent(<span class="literal">"beforeHide"</span>, <span class="reserved">this</span>);
+		<span class="reserved">this</span>.hideEvent				= new YAHOO.util.CustomEvent(<span class="literal">"hide"</span>, <span class="reserved">this</span>);
+
+		<span class="reserved">this</span>.resizeEvent			= new YAHOO.util.CustomEvent(<span class="literal">"resize"</span>, <span class="reserved">this</span>);
 	}, 
 
 	<span class="comment">/**
 	* Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
 	*/</span>
 	initDefaultConfig : <span class="reserved">function</span>() {
-		<span class="reserved">this</span>.cfg = new YAHOO.util.Config(<span class="reserved">this</span>);
-
 		<span class="comment">// Add properties //</span>
+
+		var ua = navigator.userAgent.toLowerCase();
+
+		<span class="reserved">this</span>.platform = <span class="reserved">function</span>() {
+			<span class="reserved">if</span> (ua.indexOf(<span class="literal">"windows"</span>) != -1 || ua.indexOf(<span class="literal">"win32"</span>) != -1) {
+				<span class="reserved">return</span> <span class="literal">"windows"</span>;
+			} <span class="reserved">else</span> <span class="reserved">if</span> (ua.indexOf(<span class="literal">"macintosh"</span>) != -1) {
+				<span class="reserved">return</span> <span class="literal">"mac"</span>;
+			} <span class="reserved">else</span> {
+				<span class="reserved">return</span> false;
+			}
+		}();
+
+		<span class="comment">/**
+		* A string representing the current browser, as determined by the user-agent
+		* <span class="attrib">@type</span> string
+		*/</span>
+		<span class="reserved">this</span>.browser = <span class="reserved">function</span>() {
+			  <span class="reserved">if</span> (ua.indexOf(<span class="literal">'opera'</span>)!=-1) { <span class="comment">// Opera (check first in case of spoof)</span>
+				 <span class="reserved">return</span> <span class="literal">'opera'</span>;
+			  } <span class="reserved">else</span> <span class="reserved">if</span> (ua.indexOf(<span class="literal">'msie 7'</span>)!=-1) { <span class="comment">// IE7</span>
+				 <span class="reserved">return</span> <span class="literal">'ie7'</span>;
+			  } <span class="reserved">else</span> <span class="reserved">if</span> (ua.indexOf(<span class="literal">'msie'</span>) !=-1) { <span class="comment">// IE</span>
+				 <span class="reserved">return</span> <span class="literal">'ie'</span>;
+			  } <span class="reserved">else</span> <span class="reserved">if</span> (ua.indexOf(<span class="literal">'safari'</span>)!=-1) { <span class="comment">// Safari (check before Gecko because it includes "like Gecko")</span>
+				 <span class="reserved">return</span> <span class="literal">'safari'</span>;
+			  } <span class="reserved">else</span> <span class="reserved">if</span> (ua.indexOf(<span class="literal">'gecko'</span>) != -1) { <span class="comment">// Gecko</span>
+				 <span class="reserved">return</span> <span class="literal">'gecko'</span>;
+			  } <span class="reserved">else</span> {
+				 <span class="reserved">return</span> false;
+			  }
+		}();
+
+		<span class="reserved">if</span> (window.location.href.toLowerCase().indexOf(<span class="literal">"https"</span>) == 0) {
+			<span class="reserved">this</span>.imageRoot = YAHOO.widget.Module.IMG_ROOT_SSL;
+			<span class="reserved">this</span>.isSecure = true;
+		} <span class="reserved">else</span> {
+			<span class="reserved">this</span>.isSecure = false;
+		}
+
 		<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"visible"</span>, null, <span class="reserved">this</span>.configVisible, <span class="reserved">this</span>.cfg.checkBoolean, <span class="reserved">this</span>.element, true);
+		<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"effect"</span>);
+		<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"monitorresize"</span>, true, <span class="reserved">this</span>.configMonitorResize);
 	},
 
 	<span class="comment">/**
@@ -335,32 +442,36 @@ YAHOO.widget.Module.<span class="reserved">prototype</span> = {
 	*/</span>
 	init : <span class="reserved">function</span>(el, userConfig) {
 
-		<span class="reserved">if</span> (typeof el == <span class="literal">"string"</span>)
-		{
+		<span class="reserved">this</span>.cfg = new YAHOO.util.Config(<span class="reserved">this</span>);
+
+		<span class="reserved">this</span>.initEvents();
+		
+		<span class="reserved">this</span>.beforeInitModuleEvent.fire(el);
+
+		<span class="reserved">if</span> (typeof el == <span class="literal">"string"</span>) {
 			var elId = el;
 
 			el = document.getElementById(el);
-			<span class="reserved">if</span> (! el)
-			{
+			<span class="reserved">if</span> (! el) {
 				el = document.createElement(<span class="literal">"DIV"</span>);
 				el.id = elId;
 			}
 		}
 
 		<span class="reserved">this</span>.element = el;
-		<span class="reserved">this</span>.id = el.id;
+		
+		<span class="reserved">if</span> (el.id) {
+			<span class="reserved">this</span>.id = el.id;
+		} 
 		
 		<span class="reserved">this</span>.childNodesInDOM = [null,null,null];
 
 		var childNodes = <span class="reserved">this</span>.element.childNodes;
 
-		<span class="reserved">if</span> (childNodes)
-		{
-			<span class="reserved">for</span> (var i=0;i&lt;childNodes.length;i++)
-			{
+		<span class="reserved">if</span> (childNodes) {
+			<span class="reserved">for</span> (var i=0;i&lt;childNodes.length;i++) {
 				var child = childNodes[i];
-				switch (child.className)
-				{
+				switch (child.className) {
 					case YAHOO.widget.Module.CSS_HEADER:
 						<span class="reserved">this</span>.header = child;
 						<span class="reserved">this</span>.childNodesInDOM[0] = child;
@@ -377,13 +488,41 @@ YAHOO.widget.Module.<span class="reserved">prototype</span> = {
 			}
 		}
 
-		<span class="reserved">this</span>.initEvents();
 		<span class="reserved">this</span>.initDefaultConfig();
-		
+
+		YAHOO.util.Dom.addClass(<span class="reserved">this</span>.element, YAHOO.widget.Module.CSS_MODULE);
+
 		<span class="reserved">if</span> (userConfig) {
 			<span class="reserved">this</span>.cfg.applyConfig(userConfig);
 		}
+
+		<span class="reserved">this</span>.initModuleEvent.fire(<span class="reserved">this</span>.element);
 	},
+
+	<span class="comment">/**
+	* Initialized an empty DOM element that is placed out of the visible area that can be used to detect text resize.
+	*/</span>
+	initResizeMonitor : <span class="reserved">function</span>() {
+		var resizeMonitor = document.getElementById(<span class="literal">"_yuiResizeMonitor"</span>);
+		<span class="reserved">if</span> (! resizeMonitor) {
+			resizeMonitor = document.createElement(<span class="literal">"DIV"</span>);
+			resizeMonitor.style.position = <span class="literal">"absolute"</span>;
+			resizeMonitor.id = <span class="literal">"_yuiResizeMonitor"</span>;
+			resizeMonitor.style.width = <span class="literal">"1em"</span>;
+			resizeMonitor.style.height = <span class="literal">"1em"</span>;
+			resizeMonitor.style.top = <span class="literal">"-1000px"</span>;
+			resizeMonitor.style.left = <span class="literal">"-1000px"</span>;
+			resizeMonitor.innerHTML = <span class="literal">"&amp;nbsp;"</span>;
+			document.body.appendChild(resizeMonitor);
+		}
+		<span class="reserved">this</span>.resizeMonitor = resizeMonitor;
+		YAHOO.util.Event.addListener(<span class="reserved">this</span>.resizeMonitor, <span class="literal">"resize"</span>, <span class="reserved">this</span>.onDomResize, <span class="reserved">this</span>, true);
+	},
+
+	<span class="comment">/**
+	* Event handler fired when the resize monitor element is resized.
+	*/</span>
+	onDomResize : <span class="reserved">function</span>(e, obj) { },
 
 	<span class="comment">/**
 	* Sets the Module's header content to the HTML specified, or appends the passed element to the header. If no header is present, one will be automatically created.
@@ -471,8 +610,7 @@ YAHOO.widget.Module.<span class="reserved">prototype</span> = {
 			<span class="reserved">this</span>.footer.className = YAHOO.widget.Module.CSS_FOOTER;
 		}
 
-		<span class="reserved">if</span> (typeof footerContent == <span class="literal">"string"</span>)
-		{
+		<span class="reserved">if</span> (typeof footerContent == <span class="literal">"string"</span>) {
 			<span class="reserved">this</span>.footer.innerHTML = footerContent;
 		} <span class="reserved">else</span> {
 			<span class="reserved">this</span>.footer.innerHTML = <span class="literal">""</span>;
@@ -529,7 +667,7 @@ YAHOO.widget.Module.<span class="reserved">prototype</span> = {
 			}
 			appendTo(appendToNode);
 		} <span class="reserved">else</span> { <span class="comment">// No node was passed in. If the element is not pre-marked up, this fails</span>
-			<span class="reserved">if</span> (! YAHOO.util.Dom._elementInDom(<span class="reserved">this</span>.element)) {
+			<span class="reserved">if</span> (! YAHOO.util.Dom.inDocument(<span class="reserved">this</span>.element)) {
 				<span class="reserved">return</span> false;
 			}
 		}
@@ -561,8 +699,8 @@ YAHOO.widget.Module.<span class="reserved">prototype</span> = {
 		}
 		
 		<span class="reserved">this</span>.cfg.fireDeferredEvents();
-		<span class="reserved">this</span>.renderEvent.fire();
 
+		<span class="reserved">this</span>.renderEvent.fire();
 		<span class="reserved">return</span> true;
 	},
 
@@ -615,8 +753,22 @@ YAHOO.widget.Module.<span class="reserved">prototype</span> = {
 		} <span class="reserved">else</span> {
 			YAHOO.util.Dom.setStyle(<span class="reserved">this</span>.element, <span class="literal">"display"</span>, <span class="literal">"none"</span>);
 		}
+	},
+
+	<span class="comment">/**
+	* Default event handler for the "monitorresize" configuration property
+	*/</span>
+	configMonitorResize : <span class="reserved">function</span>(type, args, obj) {
+		var monitor = args[0];
+		<span class="reserved">if</span> (monitor) {
+			<span class="reserved">this</span>.initResizeMonitor();
+		} <span class="reserved">else</span> {
+			YAHOO.util.Event.removeListener(<span class="reserved">this</span>.resizeMonitor, <span class="literal">"resize"</span>, <span class="reserved">this</span>.onDomResize);
+			<span class="reserved">this</span>.resizeMonitor = null;
+		}
 	}
-}</pre>
+}
+</pre>
 			</div>
 		
 	</div>
@@ -625,8 +777,9 @@ YAHOO.widget.Module.<span class="reserved">prototype</span> = {
 
 <div id="footer">
 	<hr />
-	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
 	<br />
+	Yahoo! Confidential.
 	<br /><br />
 	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
 	version 1.9.5.8

@@ -14,7 +14,7 @@
 
 <div id="header">
 	<h1>JavaScript Documentation</h1>
-	<h3><a href="./index.html">Container Components</a></h3>
+	<h3><a href="./index.html">YUI Containers</a></h3>
 
 	<div class="breadcrumbs">
 		
@@ -27,7 +27,7 @@
 			
 			
 			
-				<a href="./index.html">Container Components</a>
+				<a href="./index.html">YUI Containers</a>
 				&gt;
 				<strong>YAHOO.widget.Dialog</strong>
 			
@@ -64,6 +64,11 @@
 								YAHOO.util.Config</a>
 						</li>
 					
+						<li>
+							<a href="YAHOO.util.KeyListener.html">
+								YAHOO.util.KeyListener</a>
+						</li>
+					
 
 					
 						<li>
@@ -84,6 +89,16 @@
 						<li>
 							<a href="YAHOO.widget.Overlay.html">
 								YAHOO.widget.Overlay</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayEffect.html">
+								YAHOO.widget.OverlayEffect</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayManager.html">
+								YAHOO.widget.OverlayManager</a>
 						</li>
 					
 						<li>
@@ -121,6 +136,11 @@
 						</li>
 					
 						<li>
+							<a href="overview-summary-KeyListener.js.html">
+								KeyListener.js</a>
+						</li>
+					
+						<li>
 							<a href="overview-summary-Module.js.html">
 								Module.js</a>
 						</li>
@@ -128,6 +148,16 @@
 						<li>
 							<a href="overview-summary-Overlay.js.html">
 								Overlay.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayEffect.js.html">
+								OverlayEffect.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayManager.js.html">
+								OverlayManager.js</a>
 						</li>
 					
 						<li>
@@ -236,6 +266,18 @@
 								<td class="flags">string</td>
 								<td class="spec">
 									<code>
+										<a href="#CSS_DIALOG">CSS_DIALOG</a>
+									</code>
+									<div class="description">
+										Constant for the default CSS class name that represents a Dialog&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
 										<a href="#ICON_ALARM">ICON_ALARM</a>
 									</code>
 									<div class="description">
@@ -326,7 +368,7 @@
 					<div class="section field inheritance">
 						<h3>Fields inherited from class <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 						<div class="content">
-							<code><a href="YAHOO.widget.Module.html#element">element</a>, <a href="YAHOO.widget.Module.html#header">header</a>, <a href="YAHOO.widget.Module.html#body">body</a>, <a href="YAHOO.widget.Module.html#footer">footer</a>, <a href="YAHOO.widget.Module.html#childNodesInDOM">childNodesInDOM</a></code>
+							<code><a href="YAHOO.widget.Module.html#element">element</a>, <a href="YAHOO.widget.Module.html#header">header</a>, <a href="YAHOO.widget.Module.html#body">body</a>, <a href="YAHOO.widget.Module.html#footer">footer</a>, <a href="YAHOO.widget.Module.html#id">id</a>, <a href="YAHOO.widget.Module.html#childNodesInDOM">childNodesInDOM</a>, <a href="YAHOO.widget.Module.html#imageRoot">imageRoot</a>, <a href="YAHOO.widget.Module.html#effects">effects</a></code>
 						</div>
 					</div>
 				
@@ -343,7 +385,7 @@
 							<a href="YAHOO.widget.Dialog.html#YAHOO.widget.Dialog()">YAHOO.widget.Dialog</a>
 						</code>
 						<div class="description">
-							Dialog is an implementation of Panel that behaves like an OS dialog.&nbsp;
+							Copyright (c) 2006, Yahoo!&nbsp;
 						</div>
 					</div>
 				</div>
@@ -357,6 +399,19 @@
 					<h3><a name="methodSummary">Method Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 					<div class="content">
 						<table border="1" cellpadding="3" cellspacing="0">
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#blurButtons">blurButtons</a>
+											()
+										</code>
+										<div class="description">
+											Blurs all the html buttons&nbsp;
+										</div>
+									</td>
+								</tr>
 							
 								<tr>
 									<td class="flags">void</td>
@@ -389,10 +444,36 @@
 									<td class="spec">
 										<code>
 											<a href="#focusDefault">focusDefault</a>
-											(type, args, obj)
+											()
 										</code>
 										<div class="description">
 											Sets the focus to the button that is designated as the default.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#focusFirstButton">focusFirstButton</a>
+											()
+										</code>
+										<div class="description">
+											Sets the focus to the first button in the button list&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#focusLastButton">focusLastButton</a>
+											()
+										</code>
+										<div class="description">
+											Sets the focus to the last button in the button list&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -414,37 +495,11 @@
 									<td class="flags">void</td>
 									<td class="spec">
 										<code>
-											<a href="#handleNoClick">handleNoClick</a>
+											<a href="#handleSubmitClick">handleSubmitClick</a>
 											(&lt;DOMEvent&gt; e, &lt;object&gt; obj)
 										</code>
 										<div class="description">
-											The default event handler fired when the user clicks No in the built-in button set&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#handleOKClick">handleOKClick</a>
-											(&lt;DOMEvent&gt; e, &lt;object&gt; obj)
-										</code>
-										<div class="description">
-											The default event handler fired when the user clicks OK in the built-in button set&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#handleYesClick">handleYesClick</a>
-											(&lt;DOMEvent&gt; e, &lt;object&gt; obj)
-										</code>
-										<div class="description">
-											The default event handler fired when the user clicks Yes in the built-in button set&nbsp;
+											The default event handler fired when the user clicks OK/Yes in the built-in button set&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -497,21 +552,21 @@
 				<div class="section method inheritance">
 					<h3>Methods inherited from class  <a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></h3>
 					<div class="content">
-						<code><a href="YAHOO.widget.Panel.html#configVisible">configVisible</a>, <a href="YAHOO.widget.Panel.html#configHeight">configHeight</a>, <a href="YAHOO.widget.Panel.html#configWidth">configWidth</a>, <a href="YAHOO.widget.Panel.html#configClose">configClose</a>, <a href="YAHOO.widget.Panel.html#configDraggable">configDraggable</a>, <a href="YAHOO.widget.Panel.html#configUnderlay">configUnderlay</a>, <a href="YAHOO.widget.Panel.html#configModal">configModal</a>, <a href="YAHOO.widget.Panel.html#configFixedCenter">configFixedCenter</a>, <a href="YAHOO.widget.Panel.html#syncPosition">syncPosition</a>, <a href="YAHOO.widget.Panel.html#buildContainer">buildContainer</a>, <a href="YAHOO.widget.Panel.html#sizeShadow">sizeShadow</a>, <a href="YAHOO.widget.Panel.html#sizeMatte">sizeMatte</a>, <a href="YAHOO.widget.Panel.html#center">center</a>, <a href="YAHOO.widget.Panel.html#registerDragDrop">registerDragDrop</a>, <a href="YAHOO.widget.Panel.html#buildMask">buildMask</a>, <a href="YAHOO.widget.Panel.html#hideMask">hideMask</a>, <a href="YAHOO.widget.Panel.html#showMask">showMask</a></code>
+						<code><a href="YAHOO.widget.Panel.html#configClose">configClose</a>, <a href="YAHOO.widget.Panel.html#configDraggable">configDraggable</a>, <a href="YAHOO.widget.Panel.html#configUnderlay">configUnderlay</a>, <a href="YAHOO.widget.Panel.html#configModal">configModal</a>, <a href="YAHOO.widget.Panel.html#configkeyListeners">configkeyListeners</a>, <a href="YAHOO.widget.Panel.html#buildWrapper">buildWrapper</a>, <a href="YAHOO.widget.Panel.html#sizeUnderlay">sizeUnderlay</a>, <a href="YAHOO.widget.Panel.html#onDomResize">onDomResize</a>, <a href="YAHOO.widget.Panel.html#onWindowResize">onWindowResize</a>, <a href="YAHOO.widget.Panel.html#registerDragDrop">registerDragDrop</a>, <a href="YAHOO.widget.Panel.html#buildMask">buildMask</a>, <a href="YAHOO.widget.Panel.html#hideMask">hideMask</a>, <a href="YAHOO.widget.Panel.html#showMask">showMask</a>, <a href="YAHOO.widget.Panel.html#sizeMask">sizeMask</a>, <a href="YAHOO.widget.Panel.html#configHeight">configHeight</a>, <a href="YAHOO.widget.Panel.html#configWidth">configWidth</a>, <a href="YAHOO.widget.Panel.html#render">render</a></code>
 					</div>
 				</div>
 			
 				<div class="section method inheritance">
 					<h3>Methods inherited from class  <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></h3>
 					<div class="content">
-						<code><a href="YAHOO.widget.Overlay.html#moveTo">moveTo</a>, <a href="YAHOO.widget.Overlay.html#configzIndex">configzIndex</a>, <a href="YAHOO.widget.Overlay.html#configXY">configXY</a>, <a href="YAHOO.widget.Overlay.html#configX">configX</a>, <a href="YAHOO.widget.Overlay.html#configY">configY</a>, <a href="YAHOO.widget.Overlay.html#configIframe">configIframe</a>, <a href="YAHOO.widget.Overlay.html#configConstrainToViewport">configConstrainToViewport</a>, <a href="YAHOO.widget.Overlay.html#enforceConstraints">enforceConstraints</a></code>
+						<code><a href="YAHOO.widget.Overlay.html#moveTo">moveTo</a>, <a href="YAHOO.widget.Overlay.html#configVisible">configVisible</a>, <a href="YAHOO.widget.Overlay.html#configFixedCenter">configFixedCenter</a>, <a href="YAHOO.widget.Overlay.html#configzIndex">configzIndex</a>, <a href="YAHOO.widget.Overlay.html#configXY">configXY</a>, <a href="YAHOO.widget.Overlay.html#configX">configX</a>, <a href="YAHOO.widget.Overlay.html#configY">configY</a>, <a href="YAHOO.widget.Overlay.html#configIframe">configIframe</a>, <a href="YAHOO.widget.Overlay.html#configConstrainToViewport">configConstrainToViewport</a>, <a href="YAHOO.widget.Overlay.html#configContext">configContext</a>, <a href="YAHOO.widget.Overlay.html#align">align</a>, <a href="YAHOO.widget.Overlay.html#enforceConstraints">enforceConstraints</a>, <a href="YAHOO.widget.Overlay.html#center">center</a>, <a href="YAHOO.widget.Overlay.html#syncPosition">syncPosition</a></code>
 					</div>
 				</div>
 			
 				<div class="section method inheritance">
 					<h3>Methods inherited from class  <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></h3>
 					<div class="content">
-						<code><a href="YAHOO.widget.Module.html#setHeader">setHeader</a>, <a href="YAHOO.widget.Module.html#appendToHeader">appendToHeader</a>, <a href="YAHOO.widget.Module.html#setBody">setBody</a>, <a href="YAHOO.widget.Module.html#appendToBody">appendToBody</a>, <a href="YAHOO.widget.Module.html#setFooter">setFooter</a>, <a href="YAHOO.widget.Module.html#appendToFooter">appendToFooter</a>, <a href="YAHOO.widget.Module.html#render">render</a>, <a href="YAHOO.widget.Module.html#destroy">destroy</a>, <a href="YAHOO.widget.Module.html#show">show</a>, <a href="YAHOO.widget.Module.html#hide">hide</a></code>
+						<code><a href="YAHOO.widget.Module.html#initResizeMonitor">initResizeMonitor</a>, <a href="YAHOO.widget.Module.html#setHeader">setHeader</a>, <a href="YAHOO.widget.Module.html#appendToHeader">appendToHeader</a>, <a href="YAHOO.widget.Module.html#setBody">setBody</a>, <a href="YAHOO.widget.Module.html#appendToBody">appendToBody</a>, <a href="YAHOO.widget.Module.html#setFooter">setFooter</a>, <a href="YAHOO.widget.Module.html#appendToFooter">appendToFooter</a>, <a href="YAHOO.widget.Module.html#destroy">destroy</a>, <a href="YAHOO.widget.Module.html#show">show</a>, <a href="YAHOO.widget.Module.html#hide">hide</a>, <a href="YAHOO.widget.Module.html#configMonitorResize">configMonitorResize</a></code>
 					</div>
 				</div>
 			
@@ -523,6 +578,19 @@
 				<div class="section field details">
 					<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 					<div class="content">
+						
+							<h4><a name="CSS_DIALOG">CSS_DIALOG</a></h4>
+							<div class="detail">
+								<code>
+									string
+									&nbsp;
+									<strong>CSS_DIALOG</strong>
+								</code>
+								<div class="description">
+									Constant for the default CSS class name that represents a Dialog
+								</div>
+							</div>
+							<hr />
 						
 							<h4><a name="ICON_ALARM">ICON_ALARM</a></h4>
 							<div class="detail">
@@ -633,8 +701,9 @@
 							</code>
 							<div class="description">
 								
-									Dialog is an implementation of Panel that behaves like an OS dialog. Built-in functionality for buttons with event handlers is included, and button sets can be build dynamically, or the preincluded ones for OK/Cancel and Yes/No can be utilized.
- 
+									Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
 								
 								
 								
@@ -662,7 +731,7 @@
 								
 								
 								
-									HASH(0x1caabac)
+									HASH(0x1d5d1a8)
 								
 							</div>
 						</div>
@@ -677,6 +746,27 @@
 				<div class="section method details">
 					<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 					<div class="content">
+						
+							<h4><a name="blurButtons">blurButtons</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>blurButtons</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Blurs all the html buttons
+									
+									
+									
+									
+										HASH(0x1cf9ec8)
+									
+								</div>
+							</div>
+							<hr />
 						
 							<h4><a name="configButtons">configButtons</a></h4>
 							<div class="detail">
@@ -693,7 +783,7 @@
 									
 									
 									
-										HASH(0x1c8d720)
+										HASH(0x1d4c03c)
 									
 								</div>
 							</div>
@@ -714,7 +804,7 @@
 									
 									
 									
-										HASH(0x1c8d960)
+										HASH(0x1d4c15c)
 									
 								</div>
 							</div>
@@ -725,7 +815,7 @@
 								<code>
 									void 
 									<strong>focusDefault</strong>
-									(type, args, obj)
+									()
 								</code>
 										
 								<div class="description">
@@ -735,7 +825,49 @@
 									
 									
 									
-										HASH(0x1c8d9b4)
+										HASH(0x1d4c27c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="focusFirstButton">focusFirstButton</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>focusFirstButton</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Sets the focus to the first button in the button list
+									
+									
+									
+									
+										HASH(0x1d4c39c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="focusLastButton">focusLastButton</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>focusLastButton</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Sets the focus to the last button in the button list
+									
+									
+									
+									
+										HASH(0x1d4c4bc)
 									
 								</div>
 							</div>
@@ -771,23 +903,23 @@
 									
 									
 									
-										HASH(0x1d223dc)
+										HASH(0x1d4c5d0)
 									
 								</div>
 							</div>
 							<hr />
 						
-							<h4><a name="handleNoClick">handleNoClick</a></h4>
+							<h4><a name="handleSubmitClick">handleSubmitClick</a></h4>
 							<div class="detail">
 								<code>
 									void 
-									<strong>handleNoClick</strong>
+									<strong>handleSubmitClick</strong>
 									(&lt;DOMEvent&gt; e, &lt;object&gt; obj)
 								</code>
 										
 								<div class="description">
 									
-										The default event handler fired when the user clicks No in the built-in button set
+										The default event handler fired when the user clicks OK/Yes in the built-in button set
 									
 									
 										<dl>
@@ -807,79 +939,7 @@
 									
 									
 									
-										HASH(0x1d222f8)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="handleOKClick">handleOKClick</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>handleOKClick</strong>
-									(&lt;DOMEvent&gt; e, &lt;object&gt; obj)
-								</code>
-										
-								<div class="description">
-									
-										The default event handler fired when the user clicks OK in the built-in button set
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>e</code> - 
-														The current DOM event  
-												</dd>
-											
-												<dd>
-													<code>obj</code> - 
-														The object argument, in this case, the Dialog itself   
-												</dd>
-											
-										</dl>
-									
-									
-									
-										HASH(0x1d229d0)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="handleYesClick">handleYesClick</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>handleYesClick</strong>
-									(&lt;DOMEvent&gt; e, &lt;object&gt; obj)
-								</code>
-										
-								<div class="description">
-									
-										The default event handler fired when the user clicks Yes in the built-in button set
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>e</code> - 
-														The current DOM event  
-												</dd>
-											
-												<dd>
-													<code>obj</code> - 
-														The object argument, in this case, the Dialog itself   
-												</dd>
-											
-										</dl>
-									
-									
-									
-										HASH(0x1d6c798)
+										HASH(0x1d4c738)
 									
 								</div>
 							</div>
@@ -920,7 +980,7 @@
 									
 									
 									
-										HASH(0x1d6cb40)
+										HASH(0x1d4c8a0)
 									
 								</div>
 							</div>
@@ -941,7 +1001,7 @@
 									
 									
 									
-										HASH(0x1d277ac)
+										HASH(0x1d4ca44)
 									
 								</div>
 							</div>
@@ -962,7 +1022,7 @@
 									
 									
 									
-										HASH(0x1d278cc)
+										HASH(0x1d4cb64)
 									
 								</div>
 							</div>
@@ -980,8 +1040,9 @@
 
 <div id="footer">
 	<hr />
-	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
 	<br />
+	Yahoo! Confidential.
 	<br /><br />
 	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
 	version 1.9.5.8

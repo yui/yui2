@@ -14,7 +14,7 @@
 
 <div id="header">
 	<h1>JavaScript Documentation</h1>
-	<h3><a href="./index.html">Container Components</a></h3>
+	<h3><a href="./index.html">YUI Containers</a></h3>
 
 	<div class="breadcrumbs">
 		
@@ -27,7 +27,7 @@
 			
 			
 			
-				<a href="./index.html">Container Components</a>
+				<a href="./index.html">YUI Containers</a>
 				&gt;
 				<strong>YAHOO.util.Config</strong>
 			
@@ -64,6 +64,11 @@
 								YAHOO.util.Config</a>
 						</li>
 					
+						<li>
+							<a href="YAHOO.util.KeyListener.html">
+								YAHOO.util.KeyListener</a>
+						</li>
+					
 
 					
 						<li>
@@ -84,6 +89,16 @@
 						<li>
 							<a href="YAHOO.widget.Overlay.html">
 								YAHOO.widget.Overlay</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayEffect.html">
+								YAHOO.widget.OverlayEffect</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayManager.html">
+								YAHOO.widget.OverlayManager</a>
 						</li>
 					
 						<li>
@@ -121,6 +136,11 @@
 						</li>
 					
 						<li>
+							<a href="overview-summary-KeyListener.js.html">
+								KeyListener.js</a>
+						</li>
+					
+						<li>
 							<a href="overview-summary-Module.js.html">
 								Module.js</a>
 						</li>
@@ -128,6 +148,16 @@
 						<li>
 							<a href="overview-summary-Overlay.js.html">
 								Overlay.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayEffect.js.html">
+								OverlayEffect.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayManager.js.html">
+								OverlayManager.js</a>
 						</li>
 					
 						<li>
@@ -230,7 +260,7 @@
 							<a href="YAHOO.util.Config.html#YAHOO.util.Config()">YAHOO.util.Config</a>
 						</code>
 						<div class="description">
-							Config is a utility used within an object to allow the implementer to maintain a list of local configuration properties and listen for changes to those properties dynamically using CustomEvent.&nbsp;
+							Copyright (c) 2006, Yahoo!&nbsp;
 						</div>
 					</div>
 				</div>
@@ -254,201 +284,6 @@
 										</code>
 										<div class="description">
 											Initializes the configuration object and all of its local members.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#addProperty">addProperty</a>
-											(&lt;string&gt; key, &lt;object&gt; val, &lt;Function&gt; hdl, &lt;Function&gt; vfn, &lt;Element&gt; el, &lt;boolean&gt; mc)
-										</code>
-										<div class="description">
-											Adds a property to the Config object's private config hash.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#applyConfig">applyConfig</a>
-											(&lt;object&gt; userConfig, &lt;boolean&gt; init)
-										</code>
-										<div class="description">
-											Applies a key-value object literal to the configuration, replacing any existing values.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">boolean</td>
-									<td class="spec">
-										<code>
-											<a href="#checkBoolean">checkBoolean</a>
-											(&lt;object&gt; val)
-										</code>
-										<div class="description">
-											Validates that the value passed in is a boolean.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">boolean</td>
-									<td class="spec">
-										<code>
-											<a href="#checkNumber">checkNumber</a>
-											(&lt;object&gt; val)
-										</code>
-										<div class="description">
-											Validates that the value passed in is a number.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#fireDeferredEvents">fireDeferredEvents</a>
-											()
-										</code>
-										<div class="description">
-											Fires any events that were deferred due to unavailable DOM dependencies.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">boolean</td>
-									<td class="spec">
-										<code>
-											<a href="#fireEvent">fireEvent</a>
-											(&lt;string&gt; key, &lt;property&gt; property, value)
-										</code>
-										<div class="description">
-											Fires a configuration property event using the specified value.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">object</td>
-									<td class="spec">
-										<code>
-											<a href="#getConfig">getConfig</a>
-											()
-										</code>
-										<div class="description">
-											Returns a key-value configuration map of the values currently set in the Config object.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">object</td>
-									<td class="spec">
-										<code>
-											<a href="#getDefault">getDefault</a>
-											(key)
-										</code>
-										<div class="description">
-											Returns the default value of specified property.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">object</td>
-									<td class="spec">
-										<code>
-											<a href="#getProperty">getProperty</a>
-											(key)
-										</code>
-										<div class="description">
-											Returns the value of specified property.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#refireEvent">refireEvent</a>
-											(key)
-										</code>
-										<div class="description">
-											Fires the event for a property using the property's current value.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#refresh">refresh</a>
-											()
-										</code>
-										<div class="description">
-											Refires the events for all configuration properties using their current values.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#reset">reset</a>
-											()
-										</code>
-										<div class="description">
-											Applies the private initialConfig to the configuration object, which in effect resets the config to its original intended state.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">Object</td>
-									<td class="spec">
-										<code>
-											<a href="#resetProperty">resetProperty</a>
-											(key)
-										</code>
-										<div class="description">
-											Resets the specified property's value to its initial value.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">boolean</td>
-									<td class="spec">
-										<code>
-											<a href="#setProperty">setProperty</a>
-											(key, value, silent)
-										</code>
-										<div class="description">
-											Sets the value of a property.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">Object</td>
-									<td class="spec">
-										<code>
-											<a href="#subscribeToConfigEvent">subscribeToConfigEvent</a>
-											(&lt;string&gt; key, &lt;Function&gt; handler, &lt;object&gt; obj, &lt;boolean&gt; override)
-										</code>
-										<div class="description">
-											Subscribes an external handler to the change event for any given property.&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -479,8 +314,9 @@
 							</code>
 							<div class="description">
 								
-									Config is a utility used within an object to allow the implementer to maintain a list of local configuration properties and listen for changes to those properties dynamically using CustomEvent. The initial values are also maintained so that the configuration can be reset at any given point to its initial state.
- 
+									Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
 								
 								
 								
@@ -498,7 +334,7 @@
 								
 								
 								
-									HASH(0x1caa924)
+									HASH(0x1ca7b08)
 								
 							</div>
 						</div>
@@ -539,532 +375,7 @@
 									
 									
 									
-										HASH(0x1caac30)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="addProperty">addProperty</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>addProperty</strong>
-									(&lt;string&gt; key, &lt;object&gt; val, &lt;Function&gt; hdl, &lt;Function&gt; vfn, &lt;Element&gt; el, &lt;boolean&gt; mc)
-								</code>
-										
-								<div class="description">
-									
-										Adds a property to the Config object's private config hash.
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>key</code> - 
-														The configuration property's name  
-												</dd>
-											
-												<dd>
-													<code>val</code> - 
-														The property's default value  
-												</dd>
-											
-												<dd>
-													<code>hdl</code> - 
-														The default event handler  
-												</dd>
-											
-												<dd>
-													<code>vfn</code> - 
-														The validation function used to validate the value(s) set into the property  
-												</dd>
-											
-												<dd>
-													<code>el</code> - 
-														The DOM-dependency element that must be in the document in order for the event execution not the be deferred  
-												</dd>
-											
-												<dd>
-													<code>mc</code> - 
-														Whether or not the property must be changed from the default in order to fire events. 	  
-												</dd>
-											
-										</dl>
-									
-									
-									
-										HASH(0x1d42638)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="applyConfig">applyConfig</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>applyConfig</strong>
-									(&lt;object&gt; userConfig, &lt;boolean&gt; init)
-								</code>
-										
-								<div class="description">
-									
-										Applies a key-value object literal to the configuration, replacing any existing values.
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>userConfig</code> - 
-														The configuration object literal  
-												</dd>
-											
-												<dd>
-													<code>init</code> - 
-															When set to true, the initialConfig will be set to the userConfig passed in, so that calling a reset will reset the properties to the passed values. 	  
-												</dd>
-											
-										</dl>
-									
-									
-									
-										HASH(0x1d12af4)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="checkBoolean">checkBoolean</a></h4>
-							<div class="detail">
-								<code>
-									boolean 
-									<strong>checkBoolean</strong>
-									(&lt;object&gt; val)
-								</code>
-										
-								<div class="description">
-									
-										Validates that the value passed in is a boolean.
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>val</code> - 
-														The value to validate  
-												</dd>
-											
-										</dl>
-									
-									
-										<dl>
-											<dt>Returns:</dt>
-											<dd>	true, if the value is valid</dd>
-										</dl>
-									
-									
-										HASH(0x1d12d7c)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="checkNumber">checkNumber</a></h4>
-							<div class="detail">
-								<code>
-									boolean 
-									<strong>checkNumber</strong>
-									(&lt;object&gt; val)
-								</code>
-										
-								<div class="description">
-									
-										Validates that the value passed in is a number.
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>val</code> - 
-														The value to validate  
-												</dd>
-											
-										</dl>
-									
-									
-										<dl>
-											<dt>Returns:</dt>
-											<dd>	true, if the value is valid</dd>
-										</dl>
-									
-									
-										HASH(0x1d13028)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="fireDeferredEvents">fireDeferredEvents</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>fireDeferredEvents</strong>
-									()
-								</code>
-										
-								<div class="description">
-									
-										Fires any events that were deferred due to unavailable DOM dependencies.
-									
-									
-									
-									
-										HASH(0x1d132d4)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="fireEvent">fireEvent</a></h4>
-							<div class="detail">
-								<code>
-									boolean 
-									<strong>fireEvent</strong>
-									(&lt;string&gt; key, &lt;property&gt; property, value)
-								</code>
-										
-								<div class="description">
-									
-										Fires a configuration property event using the specified value. If the property has a DOM dependency specified in its configuration, the event will be deferred. All deferred events can be fired by a call to the Config object's fireDeferredEvents method.
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>key</code> - 
-																The configuration property's name  
-												</dd>
-											
-												<dd>
-													<code>property</code> - 
-														The property object for which to fire the event  
-												</dd>
-											
-												<dd>
-													<code>object</code> - 
-															The value of the correct type for the property  
-												</dd>
-											
-										</dl>
-									
-									
-										<dl>
-											<dt>Returns:</dt>
-											<dd>	true, if the event was deferred, or false if it was fired.  </dd>
-										</dl>
-									
-									
-										HASH(0x1c8d3a8)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="getConfig">getConfig</a></h4>
-							<div class="detail">
-								<code>
-									object 
-									<strong>getConfig</strong>
-									()
-								</code>
-										
-								<div class="description">
-									
-										Returns a key-value configuration map of the values currently set in the Config object.
-									
-									
-									
-										<dl>
-											<dt>Returns:</dt>
-											<dd> The current config, represented in a key-value map</dd>
-										</dl>
-									
-									
-										HASH(0x1c8d858)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="getDefault">getDefault</a></h4>
-							<div class="detail">
-								<code>
-									object 
-									<strong>getDefault</strong>
-									(key)
-								</code>
-										
-								<div class="description">
-									
-										Returns the default value of specified property.
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>The</code> - 
-													 name of the property  
-												</dd>
-											
-										</dl>
-									
-									
-										<dl>
-											<dt>Returns:</dt>
-											<dd> The default of the specified property</dd>
-										</dl>
-									
-									
-										HASH(0x1c8da98)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="getProperty">getProperty</a></h4>
-							<div class="detail">
-								<code>
-									object 
-									<strong>getProperty</strong>
-									(key)
-								</code>
-										
-								<div class="description">
-									
-										Returns the value of specified property.
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>The</code> - 
-													 name of the property  
-												</dd>
-											
-										</dl>
-									
-									
-										<dl>
-											<dt>Returns:</dt>
-											<dd>	The value of the specified property</dd>
-										</dl>
-									
-									
-										HASH(0x1d220dc)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="refireEvent">refireEvent</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>refireEvent</strong>
-									(key)
-								</code>
-										
-								<div class="description">
-									
-										Fires the event for a property using the property's current value.
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>The</code> - 
-													 name of the property 	  
-												</dd>
-											
-										</dl>
-									
-									
-									
-										HASH(0x1d22304)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="refresh">refresh</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>refresh</strong>
-									()
-								</code>
-										
-								<div class="description">
-									
-										Refires the events for all configuration properties using their current values.
-									
-									
-									
-									
-										HASH(0x1d2261c)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="reset">reset</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>reset</strong>
-									()
-								</code>
-										
-								<div class="description">
-									
-										Applies the private initialConfig to the configuration object, which in effect resets the config to its original intended state.
-									
-									
-									
-									
-										HASH(0x1d22898)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="resetProperty">resetProperty</a></h4>
-							<div class="detail">
-								<code>
-									Object 
-									<strong>resetProperty</strong>
-									(key)
-								</code>
-										
-								<div class="description">
-									
-										Resets the specified property's value to its initial value.
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>The</code> - 
-													 name of the property
-												</dd>
-											
-										</dl>
-									
-									
-									
-										HASH(0x1d22c10)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="setProperty">setProperty</a></h4>
-							<div class="detail">
-								<code>
-									boolean 
-									<strong>setProperty</strong>
-									(key, value, silent)
-								</code>
-										
-								<div class="description">
-									
-										Sets the value of a property. If the silent property is passed as true, the property's event will not be fired.
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>The</code> - 
-													 name of the property  
-												</dd>
-											
-												<dd>
-													<code>The</code> - 
-													 value to set the property to  
-												</dd>
-											
-												<dd>
-													<code>Whether</code> - 
-													 the value should be set silently, without firing the property event.  
-												</dd>
-											
-										</dl>
-									
-									
-										<dl>
-											<dt>Returns:</dt>
-											<dd>	true, if the set was successful, false if it failed.</dd>
-										</dl>
-									
-									
-										HASH(0x1cdb064)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="subscribeToConfigEvent">subscribeToConfigEvent</a></h4>
-							<div class="detail">
-								<code>
-									Object 
-									<strong>subscribeToConfigEvent</strong>
-									(&lt;string&gt; key, &lt;Function&gt; handler, &lt;object&gt; obj, &lt;boolean&gt; override)
-								</code>
-										
-								<div class="description">
-									
-										Subscribes an external handler to the change event for any given property.
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>key</code> - 
-																The property name  
-												</dd>
-											
-												<dd>
-													<code>handler</code> - 
-															The handler function to use subscribe to the property's event  
-												</dd>
-											
-												<dd>
-													<code>obj</code> - 
-																The object to use for scoping the event handler (see CustomEvent documentation)  
-												</dd>
-											
-												<dd>
-													<code>override</code> - 
-														Optional. If true, will override "this" within the handler to map to the scope object passed into the method.
-												</dd>
-											
-										</dl>
-									
-									
-									
-										HASH(0x1d6ca38)
+										HASH(0x1ca7b80)
 									
 								</div>
 							</div>
@@ -1082,8 +393,9 @@
 
 <div id="footer">
 	<hr />
-	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
 	<br />
+	Yahoo! Confidential.
 	<br /><br />
 	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
 	version 1.9.5.8

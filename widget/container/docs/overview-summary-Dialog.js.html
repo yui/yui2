@@ -14,7 +14,7 @@
 
 <div id="header">
 	<h1>JavaScript Documentation</h1>
-	<h3><a href="./index.html">Container Components</a></h3>
+	<h3><a href="./index.html">YUI Containers</a></h3>
 
 	<div class="breadcrumbs">
 		
@@ -23,7 +23,7 @@
 			
 			
 			
-				<a href="./index.html">Container Components</a>
+				<a href="./index.html">YUI Containers</a>
 				&gt;
 				<strong>Dialog.js</strong>
 			
@@ -64,6 +64,11 @@
 								YAHOO.util.Config</a>
 						</li>
 					
+						<li>
+							<a href="YAHOO.util.KeyListener.html">
+								YAHOO.util.KeyListener</a>
+						</li>
+					
 
 					
 						<li>
@@ -84,6 +89,16 @@
 						<li>
 							<a href="YAHOO.widget.Overlay.html">
 								YAHOO.widget.Overlay</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayEffect.html">
+								YAHOO.widget.OverlayEffect</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayManager.html">
+								YAHOO.widget.OverlayManager</a>
 						</li>
 					
 						<li>
@@ -121,6 +136,11 @@
 						</li>
 					
 						<li>
+							<a href="overview-summary-KeyListener.js.html">
+								KeyListener.js</a>
+						</li>
+					
+						<li>
 							<a href="overview-summary-Module.js.html">
 								Module.js</a>
 						</li>
@@ -128,6 +148,16 @@
 						<li>
 							<a href="overview-summary-Overlay.js.html">
 								Overlay.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayEffect.js.html">
+								OverlayEffect.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayManager.js.html">
+								OverlayManager.js</a>
 						</li>
 					
 						<li>
@@ -224,6 +254,9 @@
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<pre class="sourceview"><span class="comment">/**
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
 * <span class="attrib">@class</span>
 * Dialog is an implementation of Panel that behaves like an OS dialog. Built-in functionality for buttons with event handlers is included, and button sets can be build dynamically, or the preincluded ones for OK/Cancel and Yes/No can be utilized.
 * <span class="attrib">@param</span> {string}	el	The element ID representing the Dialog &lt;em&gt;OR&lt;/em&gt;
@@ -253,42 +286,49 @@ YAHOO.widget.Dialog.superclass = YAHOO.widget.Panel.<span class="reserved">proto
 * <span class="attrib">@type</span> string
 * <span class="attrib">@final</span>
 */</span>
-YAHOO.widget.Dialog.ICON_BLOCK = <span class="literal">"http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/bsc/blck16_1.gif"</span>;
+YAHOO.widget.Dialog.ICON_BLOCK = <span class="literal">"nt/ic/ut/bsc/blck16_1.gif"</span>;
 
 <span class="comment">/**
 * Constant for the standard network icon for alarm
 * <span class="attrib">@type</span> string
 * <span class="attrib">@final</span>
 */</span>
-YAHOO.widget.Dialog.ICON_ALARM = <span class="literal">"http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/bsc/alrt16_1.gif"</span>;
+YAHOO.widget.Dialog.ICON_ALARM = <span class="literal">"nt/ic/ut/bsc/alrt16_1.gif"</span>;
 
 <span class="comment">/**
 * Constant for the standard network icon for help
 * <span class="attrib">@type</span> string
 * <span class="attrib">@final</span>
 */</span>
-YAHOO.widget.Dialog.ICON_HELP  = <span class="literal">"http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/bsc/hlp16_1.gif"</span>;
+YAHOO.widget.Dialog.ICON_HELP  = <span class="literal">"nt/ic/ut/bsc/hlp16_1.gif"</span>;
 
 <span class="comment">/**
 * Constant for the standard network icon for info
 * <span class="attrib">@type</span> string
 * <span class="attrib">@final</span>
 */</span>
-YAHOO.widget.Dialog.ICON_INFO  = <span class="literal">"http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/bsc/info16_1.gif"</span>;
+YAHOO.widget.Dialog.ICON_INFO  = <span class="literal">"nt/ic/ut/bsc/info16_1.gif"</span>;
 
 <span class="comment">/**
 * Constant for the standard network icon for warn
 * <span class="attrib">@type</span> string
 * <span class="attrib">@final</span>
 */</span>
-YAHOO.widget.Dialog.ICON_WARN  = <span class="literal">"http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/bsc/warn16_1.gif"</span>;
+YAHOO.widget.Dialog.ICON_WARN  = <span class="literal">"nt/ic/ut/bsc/warn16_1.gif"</span>;
 
 <span class="comment">/**
 * Constant for the standard network icon for a tip
 * <span class="attrib">@type</span> string
 * <span class="attrib">@final</span>
 */</span>
-YAHOO.widget.Dialog.ICON_TIP   = <span class="literal">"http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/bsc/tip16_1.gif"</span>;
+YAHOO.widget.Dialog.ICON_TIP   = <span class="literal">"nt/ic/ut/bsc/tip16_1.gif"</span>;
+
+<span class="comment">/**
+* Constant for the default CSS class name that represents a Dialog
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.Dialog.CSS_DIALOG = <span class="literal">"dialog"</span>;
 
 <span class="comment">/**
 * Initializes the class's configurable properties which can be changed using the Dialog's Config object (cfg).
@@ -317,33 +357,37 @@ YAHOO.widget.Dialog.<span class="reserved">prototype</span>.initEvents = <span c
 */</span>
 YAHOO.widget.Dialog.<span class="reserved">prototype</span>.init = <span class="reserved">function</span>(el, userConfig) {
 	YAHOO.widget.Dialog.superclass.init.call(<span class="reserved">this</span>, el<span class="comment">/*, userConfig*/</span>);  <span class="comment">// Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level</span>
+	
+	YAHOO.util.Dom.addClass(<span class="reserved">this</span>.element, YAHOO.widget.Dialog.CSS_DIALOG);
 
 	<span class="comment">/**
 	* Built-in button set for OK/Cancel buttons
-	* <span class="attrib">@type</span> object
-	*/</span>
-	<span class="reserved">this</span>.BUTTONS_OKCANCEL = { 
-				<span class="literal">"OK"</span>: {
-					handler : <span class="reserved">this</span>.handleOKClick,
+	* <span class="attrib">@type</span> Array
+	*/</span>	
+	<span class="reserved">this</span>.BUTTONS_OKCANCEL = [ 
+				{	text : <span class="literal">"OK"</span>,
+					handler : <span class="reserved">this</span>.handleSubmitClick,
 					isDefault : true
 				},
-				<span class="literal">"Cancel"</span>: {
+				{	text : <span class="literal">"Cancel"</span>,
 					handler : <span class="reserved">this</span>.handleCancelClick
-				} };
+				}];
+
 	<span class="comment">/**
 	* Built-in button set for Yes/No buttons
-	* <span class="attrib">@type</span> object
+	* <span class="attrib">@type</span> Array
 	*/</span>
-	<span class="reserved">this</span>.BUTTONS_YESNO = { 
-				<span class="literal">"Yes"</span>: {
-					handler : <span class="reserved">this</span>.handleYesClick,
+	<span class="reserved">this</span>.BUTTONS_YESNO = [ 
+				{	text : <span class="literal">"Yes"</span>,
+					handler : <span class="reserved">this</span>.handleSubmitClick,
 					isDefault : true
 				},
-				<span class="literal">"No"</span>: {
-					handler : <span class="reserved">this</span>.handleNoClick
-				} };
+				{	text : <span class="literal">"No"</span>,
+					handler : <span class="reserved">this</span>.handleCancelClick
+				}];
 
 	<span class="reserved">this</span>.showEvent.subscribe(<span class="reserved">this</span>.focusDefault, <span class="reserved">this</span>, true);
+	<span class="reserved">this</span>.beforeHideEvent.subscribe(<span class="reserved">this</span>.blurButtons, <span class="reserved">this</span>, true);
 
 	<span class="reserved">if</span> (userConfig) {
 		<span class="reserved">this</span>.cfg.applyConfig(userConfig, true);
@@ -361,9 +405,12 @@ YAHOO.widget.Dialog.<span class="reserved">prototype</span>.init = <span class="
 YAHOO.widget.Dialog.<span class="reserved">prototype</span>.configIcon = <span class="reserved">function</span>(type, args, obj) {
 	var iconURL = args[0];
 	<span class="reserved">if</span> (iconURL &amp;&amp; iconURL != <span class="literal">"none"</span>) {
+		iconURL = <span class="reserved">this</span>.imageRoot + iconURL;
 		<span class="reserved">if</span> (! <span class="reserved">this</span>.icon) {
 			<span class="reserved">this</span>.icon = document.createElement(<span class="literal">"DIV"</span>);
-
+			<span class="reserved">if</span> (! <span class="reserved">this</span>.body) {
+				<span class="reserved">return</span>;
+			}
 			var firstChild = <span class="reserved">this</span>.body.firstChild;
 			<span class="reserved">if</span> (firstChild) {
 				<span class="reserved">this</span>.body.insertBefore(<span class="reserved">this</span>.icon, firstChild);
@@ -391,12 +438,9 @@ YAHOO.widget.Dialog.<span class="reserved">prototype</span>.configIcon = <span c
 YAHOO.widget.Dialog.<span class="reserved">prototype</span>.configButtons = <span class="reserved">function</span>(type, args, obj) {
 	var buttons = args[0];
 	<span class="reserved">if</span> (buttons != <span class="literal">"none"</span>) {
-		<span class="reserved">if</span> (! <span class="reserved">this</span>.buttonSet) {
-			<span class="reserved">this</span>.buttonSet = document.createElement(<span class="literal">"SPAN"</span>);
-			<span class="reserved">this</span>.buttonSet.className = <span class="literal">"button-group"</span>;
-		}
-		
-		<span class="reserved">this</span>.buttonSet.innerHTML = <span class="literal">""</span>;
+		<span class="reserved">this</span>.buttonSpan = null;
+		<span class="reserved">this</span>.buttonSpan = document.createElement(<span class="literal">"SPAN"</span>);
+		<span class="reserved">this</span>.buttonSpan.className = <span class="literal">"button-group"</span>;
 
 		<span class="reserved">if</span> (buttons == <span class="literal">"okcancel"</span>) {
 			buttons = <span class="reserved">this</span>.BUTTONS_OKCANCEL;
@@ -404,58 +448,96 @@ YAHOO.widget.Dialog.<span class="reserved">prototype</span>.configButtons = <spa
 			buttons = <span class="reserved">this</span>.BUTTONS_YESNO;
 		}
 
-		<span class="reserved">this</span>.buttons = buttons;
-
-		<span class="reserved">for</span> (var text in buttons) {
-			var button = buttons[text];
+		<span class="reserved">for</span> (var b=0;b&lt;buttons.length;b++) {
+			var button = buttons[b];
 			var htmlButton = document.createElement(<span class="literal">"BUTTON"</span>);
 
 			<span class="reserved">if</span> (button.isDefault) {
 				htmlButton.className = <span class="literal">"default"</span>;
+				<span class="reserved">this</span>.defaultHtmlButton = htmlButton;
 			}
 
-			htmlButton.appendChild(document.createTextNode(text));
+			htmlButton.appendChild(document.createTextNode(button.text));
 			YAHOO.util.Event.addListener(htmlButton, <span class="literal">"click"</span>, button.handler, <span class="reserved">this</span>);
-			<span class="reserved">this</span>.buttonSet.appendChild(htmlButton);
+			
+			var me = <span class="reserved">this</span>;
 
-			button.htmlButton = htmlButton;
+			<span class="reserved">if</span> (b == 0) {
+				<span class="reserved">this</span>.preventBackTab = new YAHOO.util.KeyListener(htmlButton, { shift:true, keys:9 }, {fn:me.focusLastButton, scope:me, correctScope:true} );
+				<span class="reserved">this</span>.showEvent.subscribe(<span class="reserved">this</span>.preventBackTab.enable, <span class="reserved">this</span>.preventBackTab, true);
+				<span class="reserved">this</span>.hideEvent.subscribe(<span class="reserved">this</span>.preventBackTab.disable, <span class="reserved">this</span>.preventBackTab, true);
+				<span class="reserved">this</span>.preventBackTab.enable();
 
-			<span class="reserved">if</span> (<span class="reserved">this</span>.browser == <span class="literal">"ie"</span>) {
-				<span class="reserved">this</span>.buttonSet = <span class="reserved">this</span>.buttonSet.cloneNode(true);
 			}
+			<span class="reserved">if</span> (b == (buttons.length-1)) {
+				<span class="reserved">if</span> (<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"modal"</span>)) {
+					<span class="reserved">this</span>.restrictFocus = new YAHOO.util.KeyListener(htmlButton, { shift:false, keys:9 }, {fn:me.focusFirstButton,scope:me,correctScope:true} );
+					<span class="reserved">this</span>.showEvent.subscribe(<span class="reserved">this</span>.restrictFocus.enable, <span class="reserved">this</span>.restrictFocus, true);
+					<span class="reserved">this</span>.hideEvent.subscribe(<span class="reserved">this</span>.restrictFocus.disable, <span class="reserved">this</span>.restrictFocus, true);
+					<span class="reserved">this</span>.restrictFocus.enable();
+				}
+			}
+
+			<span class="reserved">this</span>.buttonSpan.appendChild(htmlButton);		
+			button.htmlButton = htmlButton;
 		}
-		<span class="reserved">this</span>.setFooter(<span class="reserved">this</span>.buttonSet);
+
+		<span class="reserved">this</span>.setFooter(<span class="reserved">this</span>.buttonSpan);
 	} <span class="reserved">else</span> {
-		<span class="reserved">if</span> (<span class="reserved">this</span>.buttonSet)	{
-			<span class="reserved">this</span>.buttonSet.style.display = <span class="literal">"none"</span>;
+		<span class="reserved">if</span> (<span class="reserved">this</span>.buttonSpan)	{
+			<span class="reserved">this</span>.buttonSpan.style.display = <span class="literal">"none"</span>;
 		}
 	}
 	<span class="reserved">this</span>.cfg.refireEvent(<span class="literal">"underlay"</span>);
+	<span class="reserved">this</span>.cfg.refireEvent(<span class="literal">"iframe"</span>);
 }
 
 <span class="comment">/**
 * Sets the focus to the button that is designated as the default. By default, his handler is executed when the show event is fired.
 */</span>
-YAHOO.widget.Dialog.<span class="reserved">prototype</span>.focusDefault = <span class="reserved">function</span>(type, args, obj) {
-	<span class="reserved">for</span> (var text in <span class="reserved">this</span>.buttons) {
-		var button = <span class="reserved">this</span>.buttons[text];
-		<span class="reserved">if</span> (button.isDefault) {
-			button.htmlButton.focus();
-		}
-	}	
+YAHOO.widget.Dialog.<span class="reserved">prototype</span>.focusDefault = <span class="reserved">function</span>() {
+	<span class="reserved">this</span>.defaultHtmlButton.focus();
+}
+<span class="comment">/**
+* Blurs all the html buttons
+*/</span>
+YAHOO.widget.Dialog.<span class="reserved">prototype</span>.blurButtons = <span class="reserved">function</span>() {
+	var buttons = <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"buttons"</span>);
+	<span class="reserved">if</span> (buttons) {
+		var html = buttons[0].htmlButton;
+		html.blur();
+	}
 }
 
+<span class="comment">/**
+* Sets the focus to the first button in the button list
+*/</span>
+YAHOO.widget.Dialog.<span class="reserved">prototype</span>.focusFirstButton = <span class="reserved">function</span>() {
+	var buttons = <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"buttons"</span>);
+	<span class="reserved">if</span> (buttons) {
+		var html = buttons[0].htmlButton;
+		html.focus();
+	}
+}
+<span class="comment">/**
+* Sets the focus to the last button in the button list
+*/</span>
+YAHOO.widget.Dialog.<span class="reserved">prototype</span>.focusLastButton = <span class="reserved">function</span>() {
+	var buttons = <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"buttons"</span>);
+	<span class="reserved">if</span> (buttons) {
+		var html = buttons[buttons.length-1].htmlButton;
+		html.focus();
+	}
+}
 <span class="comment">// END BUILT-IN PROPERTY EVENT HANDLERS //</span>
 
 <span class="comment">// BEGIN BUILT-IN DOM EVENT HANDLERS //</span>
-
-
 <span class="comment">/**
-* The default event handler fired when the user clicks OK in the built-in button set
+* The default event handler fired when the user clicks OK/Yes in the built-in button set
 * <span class="attrib">@param</span> {DOMEvent} e	The current DOM event
 * <span class="attrib">@param</span> {object}	obj	The object argument, in this case, the Dialog itself
 */</span>
-YAHOO.widget.Dialog.<span class="reserved">prototype</span>.handleOKClick = <span class="reserved">function</span>(e, obj) { }
+YAHOO.widget.Dialog.<span class="reserved">prototype</span>.handleSubmitClick = <span class="reserved">function</span>(e, obj) { }
 
 <span class="comment">/**
 * The default event handler fired when the user clicks Cancel in the built-in button set
@@ -463,22 +545,6 @@ YAHOO.widget.Dialog.<span class="reserved">prototype</span>.handleOKClick = <spa
 * <span class="attrib">@param</span> {object}	obj	The object argument, in this case, the Dialog itself
 */</span>
 YAHOO.widget.Dialog.<span class="reserved">prototype</span>.handleCancelClick = <span class="reserved">function</span>(e, obj) {
-	obj.hide();
-}
-
-<span class="comment">/**
-* The default event handler fired when the user clicks Yes in the built-in button set
-* <span class="attrib">@param</span> {DOMEvent} e	The current DOM event
-* <span class="attrib">@param</span> {object}	obj	The object argument, in this case, the Dialog itself
-*/</span>
-YAHOO.widget.Dialog.<span class="reserved">prototype</span>.handleYesClick = <span class="reserved">function</span>(e, obj) { }
-
-<span class="comment">/**
-* The default event handler fired when the user clicks No in the built-in button set
-* <span class="attrib">@param</span> {DOMEvent} e	The current DOM event
-* <span class="attrib">@param</span> {object}	obj	The object argument, in this case, the Dialog itself
-*/</span>
-YAHOO.widget.Dialog.<span class="reserved">prototype</span>.handleNoClick = <span class="reserved">function</span>(e, obj) {
 	obj.hide();
 }
 
@@ -491,8 +557,9 @@ YAHOO.widget.Dialog.<span class="reserved">prototype</span>.handleNoClick = <spa
 
 <div id="footer">
 	<hr />
-	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
 	<br />
+	Yahoo! Confidential.
 	<br /><br />
 	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
 	version 1.9.5.8
