@@ -289,6 +289,8 @@ YAHOO.widget.Calendar_Core = function(id, containerId, monthyear, selected) {
 	}
 }
 
+YAHOO.widget.Calendar_Core.IMG_ROOT = (window.location.href.toLowerCase().indexOf("https") == 0 ? "https://a248.e.akamai.net/sec.yimg.com/i/" : "http://us.i1.yimg.com/us.yimg.com/i/");
+
 /**
 * Type constant used for renderers to represent an individual date (M/D/Y)
 * @final
@@ -765,8 +767,8 @@ YAHOO.widget.Calendar_Core.prototype.setupConfig = function() {
 		SHOW_WEEK_HEADER : false,
 		SHOW_WEEK_FOOTER : false,
 		HIDE_BLANK_WEEKS : false,
-		NAV_ARROW_LEFT : "img/callt.gif",
-		NAV_ARROW_RIGHT : "img/calrt.gif"
+		NAV_ARROW_LEFT : YAHOO.widget.Calendar_Core.IMG_ROOT + "us/tr/callt.gif",
+		NAV_ARROW_RIGHT : YAHOO.widget.Calendar_Core.IMG_ROOT + "us/tr/calrt.gif"
 	};
 
 	this.Options = this.Config.Options;
@@ -2801,7 +2803,7 @@ YAHOO.widget.Calendar2up.prototype.renderHeader = function() {
 		YAHOO.util.Event.addListener(linkClose, "click", this.hide, this);
 
 		var imgClose = document.createElement("IMG");
-		imgClose.src = "img/calx.gif";
+		imgClose.src = YAHOO.widget.Calendar_Core.IMG_ROOT + "us/my/bn/x_d.gif";
 		imgClose.className = "close-icon";
 
 		linkClose.appendChild(imgClose);

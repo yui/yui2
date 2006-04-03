@@ -168,7 +168,7 @@ YAHOO.widget.Calendar2up.prototype.renderHeader = function() {
 		YAHOO.util.Event.addListener(linkClose, "click", this.hide, this);
 
 		var imgClose = document.createElement("IMG");
-		imgClose.src = "img/calx.gif";
+		imgClose.src = YAHOO.widget.Calendar_Core.IMG_ROOT + "us/my/bn/x_d.gif";
 		imgClose.className = "close-icon";
 
 		linkClose.appendChild(imgClose);
