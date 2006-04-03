@@ -60,8 +60,7 @@ YAHOO.widget.Overlay.prototype.configVisible=function(type,args,obj){var val=arg
 var currentVis=YAHOO.util.Dom.getStyle(this.element,"visibility");if(val){if(currentVis=="hidden"){for(var i=0;i<effectInstances.length;i++){var e=effectInstances[i];e.animateIn();}
 if(this.iframe){YAHOO.util.Dom.setStyle(this.iframe,"display","block");}}}else{if(currentVis=="visible"){for(var i=0;i<effectInstances.length;i++){var e=effectInstances[i];e.animateOut();}
 if(this.iframe){YAHOO.util.Dom.setStyle(this.iframe,"display","none");}}}}else{if(val){YAHOO.util.Dom.setStyle((this.element),"visibility","visible");if(this.iframe){YAHOO.util.Dom.setStyle(this.iframe,"display","block");}}else{YAHOO.util.Dom.setStyle((this.element),"visibility","hidden");if(this.iframe){YAHOO.util.Dom.setStyle(this.iframe,"display","none");}}}}
-YAHOO.widget.Overlay.prototype.configFixedCenter=function(type,args,obj){var val=args[0];
-var me=this;var refireIframe=function(e,obj){setTimeout(function(){me.cfg.refireEvent("iframe");},0);}
+YAHOO.widget.Overlay.prototype.configFixedCenter=function(type,args,obj){var val=args[0];var me=this;var refireIframe=function(e,obj){setTimeout(function(){me.cfg.refireEvent("iframe");},0);}
 if(val){this.center();if(YAHOO.util.Event._getCacheIndex(window,"resize",this.center)==-1){YAHOO.util.Event.addListener(window,"resize",this.center,this,true);}
 if(YAHOO.util.Event._getCacheIndex(window,"resize",refireIframe)==-1){YAHOO.util.Event.addListener(window,"resize",refireIframe,this,true);}
 if(YAHOO.util.Event._getCacheIndex(window,"scroll",this.center)==-1){YAHOO.util.Event.addListener(window,"scroll",this.center,this,true);}
