@@ -6,115 +6,287 @@
         <title>Context Menu Example</title>
 
         <!-- Stanard fonts -->
+        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/reset_2.0.0-b3.css">
         <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/fonts_2.0.0-b2.css">
 
-        <!-- CSS for the menu -->
-        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/menu/css/menu_2.0.1-b2.css">
-
+        <!-- Page-specific styles -->
         <style type="text/css">
 
-            #contextmenu {
-    
-                z-index:1;
-
-            }
+            body { margin:.5em; }
 
         </style>
+
+        <!-- CSS for Menu -->
+        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/menu/css/menu_2.0.0-b3.css"> 
 
         <!-- Namespace source file -->
         <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/yahoo_2.0.0-b2.js"></script>
         
         <!-- Dependency source files -->
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dom_2.0.0-b2.js"></script>
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/event_2.0.0-b2.js"></script>
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/container/container_core_2.0.0-b2.js"></script>
-        
-        <!-- Menu source file -->
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/menu/menu_2.0.1-b2.js"></script>
+        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/event_2.0.0-b3.js" ></script>
+        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dom_2.0.2-b3.js" ></script>
+        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/container/container_core_2.0.0-b3.js"></script>
 
+        <!-- Menu source file -->
+        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/menu/menu_2.0.0-b3.js"></script>
+
+        <!-- Page-specific script -->
         <script type="text/javascript">
+
+            /*
+                Create an instance of the OverlayManager 
+            */
+
+            YAHOO.example.OverlayManager = new YAHOO.widget.OverlayManager();
+
+
+            /*
+                Create a subclass of YAHOO.widget.Menu to define a set
+                of default behaviors for each "ContextMenu" instance
+            */
+
+            YAHOO.example.ContextMenu = function(p_oElement, p_oUserConfig) {
+            
+                if(arguments.length > 0) {
+            
+                    YAHOO.example.ContextMenu.superclass.constructor.call(
+                        this, 
+                        p_oElement, 
+                        p_oUserConfig
+                    );
+            
+                }
+            
+            };
+            
+            YAHOO.example.ContextMenu.prototype = new YAHOO.widget.Menu();
+            YAHOO.example.ContextMenu.prototype.constructor = YAHOO.example.ContextMenu;
+            YAHOO.example.ContextMenu.superclass = YAHOO.widget.Menu.prototype;
+
+            YAHOO.example.ContextMenu.prototype.init = function(p_oElement, p_oUserConfig) {
+        
+                /*
+                    Set the type of MenuItem instances created 
+                    when parsing the DOM of each "ContextMenu" instance
+                */
+
+                this.MENUITEM_TYPE = YAHOO.example.ContextMenuItem;
+
+
+                // Call the init of the super class
+
+                YAHOO.example.ContextMenu.superclass.init.call(this, p_oElement);
+
+
+                /*
+                    The default value for the "constraintoviewport" 
+                    configuration property is "false."  The following line
+                    forces that property to "true" for this subclass.
+                */
+
+                this.cfg.setProperty("constraintoviewport", true);
+
+            };
+
+
+            /*
+                Create a subclass of YAHOO.widget.MenuItem to define a set
+                of default behaviors for each MenuItem instance in the 
+                context menu
+            */
+
+            YAHOO.example.ContextMenuItem = function(p_oObject, p_oUserConfig) {
+            
+                if(p_oObject) {
+            
+                    YAHOO.example.ContextMenuItem.superclass.constructor.call(this, p_oObject, p_oUserConfig);
+            
+                }
+            
+            };
+            
+            YAHOO.example.ContextMenuItem.prototype = new YAHOO.widget.MenuItem();
+            YAHOO.example.ContextMenuItem.prototype.constructor = YAHOO.example.ContextMenuItem;
+            YAHOO.example.ContextMenuItem.superclass = YAHOO.widget.MenuItem.prototype;
+
+            YAHOO.example.ContextMenuItem.prototype.init = function(p_oObject, p_oUserConfig) {
+
+                /*
+                    Set the type of submenu instances created 
+                    when parsing the DOM of each MenuItem
+                */
+
+                this.SUBMENU_TYPE = YAHOO.example.ContextMenu;
+
+
+                // Call the init of the super class
+
+                YAHOO.example.ContextMenuItem.superclass.init.call(
+                    this, 
+                    p_oObject, 
+                    p_oUserConfig
+                );  
+
+
+                // Add an "onkeydown" handler to each "ContextMenuItem" instance
+
+                this.keyDownEvent.subscribe(this._onKeyDown);
+
+            };
+
+
+            // Handler for each instance's "keydown" event
+
+            YAHOO.example.ContextMenuItem.prototype._onKeyDown = function(p_sType, p_aArguments) {
+
+                var oEvent = p_aArguments[0];
+
+                switch(oEvent.keyCode) {
+                    
+                    case 9:     // Tab
+                    case 38:    // Up arrow
+                    case 40:    // Down arrow
+        
+                        var oActiveMenuItem = this.parent.activeMenuItem;
+        
+                        if(
+                            this == oActiveMenuItem && 
+                            !this.cfg.getProperty("selected")
+                        ) {
+        
+                            this.cfg.setProperty("selected", true);
+        
+                        }
+                        else {
+        
+                            var oNextMenuItem;
+            
+                            if(oEvent.shiftKey || oEvent.keyCode == 38) {
+        
+                                oNextMenuItem = 
+                                    this.getPreviousEnabledSibling();
+        
+                            }
+                            else {
+        
+                                oNextMenuItem = 
+                                    this.getNextEnabledSibling();
+        
+                            }
+                    
+                            if(oNextMenuItem) {
+        
+                                this.cfg.setProperty("selected", false);
+        
+                                oNextMenuItem.cfg.setProperty("selected", true);
+                    
+                                oNextMenuItem.focus();
+                
+                            }
+        
+                        }
+        
+                    break;
+
+                    case 27:    // Esc key
+        
+                        this.parent.hide();
+        
+                    break;
+        
+                }
+
+            }
+
 
             function CreatePageContextMenu() {
 
-                var oContextMenu = new YAHOO.widget.Menu("contextmenu");
-
-
-                // Create four logical grouping containers for the context menu
-
-                oContextMenu.addSubmenu(new YAHOO.widget.Menu("group0"));
-                oContextMenu.addSubmenu(new YAHOO.widget.Menu("group1"));
-                oContextMenu.addSubmenu(new YAHOO.widget.Menu("group2"));
-                oContextMenu.addSubmenu(new YAHOO.widget.Menu("group3"));
+                var oContextMenu = new YAHOO.example.ContextMenu("contextmenu");
 
 
                 // Add MenuItem instances to the first group
 
-                oContextMenu.getSubmenu(0).addMenuItem(
-                    new YAHOO.widget.MenuItem("Back")
+                oContextMenu.addMenuItem(
+                    new YAHOO.example.ContextMenuItem("Back")
                 );
 
-                oContextMenu.getSubmenu(0).addMenuItem(
-                    new YAHOO.widget.MenuItem("Forward", { disabled:true })
+                oContextMenu.addMenuItem(
+                    new YAHOO.example.ContextMenuItem("Forward", { disabled:true })
                 );
 
 
-                oContextMenu.getSubmenu(0).addMenuItem(
-                    new YAHOO.widget.MenuItem("Reload")
+                oContextMenu.addMenuItem(
+                    new YAHOO.example.ContextMenuItem("Reload")
                 );
 
-                oContextMenu.getSubmenu(0).addMenuItem(
-                    new YAHOO.widget.MenuItem("Stop", { disabled:true })
+                oContextMenu.addMenuItem(
+                    new YAHOO.example.ContextMenuItem("Stop", { disabled:true })
                 );
 
 
                 // Add MenuItem instances to the second group
 
-                oContextMenu.getSubmenu(1).addMenuItem(
-                    new YAHOO.widget.MenuItem("Bookmark This Page...")
+                oContextMenu.addMenuItem(
+                    new YAHOO.example.ContextMenuItem("Bookmark This Page..."),
+                    1
                 );
 
-                oContextMenu.getSubmenu(1).addMenuItem(
-                    new YAHOO.widget.MenuItem("Save Page As...")
+                oContextMenu.addMenuItem(
+                    new YAHOO.example.ContextMenuItem("Save Page As..."),
+                    1
                 );
 
-                oContextMenu.getSubmenu(1).addMenuItem(
-                    new YAHOO.widget.MenuItem("Send Link...")
+                oContextMenu.addMenuItem(
+                    new YAHOO.example.ContextMenuItem("Send Link..."),
+                    1
                 );
 
 
                 // Add MenuItem instances to the third group
 
-                oContextMenu.getSubmenu(2).addMenuItem(
-                    new YAHOO.widget.MenuItem(
+                oContextMenu.addMenuItem(
+                    new YAHOO.example.ContextMenuItem(
                         "View Background Image", 
                         { disabled:true }
-                    )
+                    ),
+                    2
                 );
 
-                oContextMenu.getSubmenu(2).addMenuItem(
-                    new YAHOO.widget.MenuItem("Select All")
+                oContextMenu.addMenuItem(
+                    new YAHOO.example.ContextMenuItem("Select All"),
+                    2
                 );
 
 
                 // Add MenuItem instances to the fourth group
 
-                oContextMenu.getSubmenu(3).addMenuItem(
-                    new YAHOO.widget.MenuItem("View Page Source")
+                oContextMenu.addMenuItem(
+                    new YAHOO.example.ContextMenuItem("View Page Source"),
+                    3
                 );
 
-                oContextMenu.getSubmenu(3).addMenuItem(
-                    new YAHOO.widget.MenuItem("View Page Info")
+                oContextMenu.addMenuItem(
+                    new YAHOO.example.ContextMenuItem("View Page Info"),
+                    3
                 );
 
 
                 oContextMenu.render(document.body);
+
+
+                YAHOO.example.OverlayManager.register(oContextMenu);
 
             }
 
 
             function onDocumentClick(p_oEvent) {
 
-                YAHOO.widget.MenuManager.hideVisibleMenus();
+                /*
+                    Hide any other menus that might be visible for displaying
+                    the context menu
+                */
+
+                YAHOO.example.OverlayManager.hideAll();
 
             }
 
@@ -125,19 +297,22 @@
                     Hide any other menus that might be visible for displaying
                     the context menu
                 */
-                YAHOO.widget.MenuManager.hideVisibleMenus();
+
+                YAHOO.example.OverlayManager.hideAll();
 
 
                 // Prevent the browser's default context menu from appearing
+
                 YAHOO.util.Event.preventDefault(p_oEvent);
+
+
+                // Position and display the context menu
 
                 var nX = YAHOO.util.Event.getPageX(p_oEvent),
                     nY = YAHOO.util.Event.getPageY(p_oEvent),
                     oContextMenu = 
-                    YAHOO.widget.MenuManager.getMenu("contextmenu");
+                    YAHOO.example.OverlayManager.find("contextmenu");
 
-
-                // Position and display the context menu
                 oContextMenu.cfg.applyConfig( { x:nX, y:nY, visible:true } );
 
             }

@@ -6,18 +6,31 @@
         <title>Left Nav Exmaple</title>
 
         <!-- CSS for fonts and grids -->
-        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/reset_2.0.0-b2.css">
+        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/reset_2.0.0-b3.css">
         <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/fonts_2.0.0-b2.css">
         <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/grids_2.0.0-b2.css">
-        
-        <!-- CSS for Menu -->
-        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/menu/css/menu_2.0.1-b2.css">
 
+        <!-- CSS for Menu -->
+        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/menu/css/menu_2.0.0-b3.css">        
+
+        <!-- Page-specific styles -->
         <style type="text/css">
+
+            /*  
+                Provide some default styles and behaviors in case CSS is
+                enabled, but JavaScript is not.
+            */
 
             #menu0 {
 
                 position:static;
+                visibility:visible;
+
+            }
+
+            #menu0 li :link:hover {
+
+                text-decoration:underline;
 
             }
 
@@ -27,24 +40,66 @@
         <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/yahoo_2.0.0-b2.js"></script>
         
         <!-- Dependency source files -->
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dom_2.0.0-b2.js"></script>
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/event_2.0.0-b2.js"></script>
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/container/container_core_2.0.0-b2.js"></script>
-        
-        <!-- Menu source file -->
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/menu/menu_2.0.1-b2.js"></script>
+        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/event_2.0.0-b3.js" ></script>
+        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dom_2.0.2-b3.js" ></script>
+        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/container/container_core_2.0.0-b3.js"></script>
 
+        <!-- Menu source file -->
+        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/menu/menu_2.0.0-b3.js"></script>
+
+        <!-- Page-specific script -->
         <script type="text/javascript">
 
+            function getBrowser() {
+
+                var sUserAgent = navigator.userAgent.toLowerCase();
+
+                // Check Opera first in case of spoofing
+
+                if (sUserAgent.indexOf('opera')!=-1) { 
+
+                    return 'opera';
+
+                } else if (sUserAgent.indexOf('msie 7')!=-1) {
+
+                    return 'ie7';
+
+                } else if (sUserAgent.indexOf('msie') !=-1) {
+
+                    return 'ie';
+
+                } else if (sUserAgent.indexOf('safari')!=-1) {
+
+                    return 'safari';
+
+                } else if (sUserAgent.indexOf('gecko') != -1) {
+
+                    return 'gecko';
+
+                } else {
+
+                    return false;
+
+                }
+
+            }
+
+
+            // Create an instance of the "OverlayManager" class
+
+            YAHOO.example.OverlayManager = new YAHOO.widget.OverlayManager();
+
+
             /*
-                Create a subclass of Menu to define default behaviors for
-                each submenu instance created.
+                Create a subclass of YAHOO.widget.Menu to define the root
+                Menu of the left navigation
             */
-            var LeftNavSubmenu = function(p_oElement, p_oUserConfig) {
+
+            YAHOO.example.LeftNav = function(p_oElement, p_oUserConfig) {
             
-                if (arguments.length > 0) {
+                if(arguments.length > 0) {
             
-                    LeftNavSubmenu.superclass.constructor.call(
+                    YAHOO.example.LeftNav.superclass.constructor.call(
                         this, 
                         p_oElement, 
                         p_oUserConfig
@@ -54,139 +109,550 @@
             
             }
             
-            LeftNavSubmenu.prototype = new YAHOO.widget.Menu();
-            LeftNavSubmenu.prototype.constructor = YAHOO.widget.LeftNavSubmenu;
-            LeftNavSubmenu.superclass = YAHOO.widget.Menu.prototype;
+            YAHOO.example.LeftNav.prototype = new YAHOO.widget.Menu();
+            YAHOO.example.LeftNav.prototype.constructor = YAHOO.example.LeftNav;
+            YAHOO.example.LeftNav.superclass = YAHOO.widget.Menu.prototype;
 
-            LeftNavSubmenu.prototype.init = function(p_oElement, p_oUserConfig) {
+            YAHOO.example.LeftNav.prototype.init = function(p_oElement, p_oUserConfig) {
+        
+                /*
+                    Set the type of MenuItem instances created 
+                    when parsing the DOM of each "LeftNav" instance
+                */
 
-                LeftNavSubmenu.superclass.init.call(
+                this.MENUITEM_TYPE = YAHOO.example.LeftNavMenuItem;
+
+
+                /*
+                    Call the init of the super class (all subclasses must 
+                    implement and call this method)
+                */
+
+                YAHOO.example.LeftNav.superclass.init.call(
                     this, 
                     p_oElement, 
                     p_oUserConfig
-                );                
+                );
 
-                var oTimer;
+            };
+
+
+            /*
+                Create a subclass of YAHOO.widget.MenuItem to define a set
+                of default behaviors for each MenuItem instance in the 
+                left navigation
+            */
+
+            YAHOO.example.LeftNavMenuItem = function(p_oObject, p_oUserConfig) {
+
+                if(p_oObject) {
+            
+                    YAHOO.example.LeftNavMenuItem.superclass.constructor.call(
+                        this, 
+                        p_oObject, 
+                        p_oUserConfig
+                    );
+            
+                }
+            
+            };
+            
+            YAHOO.example.LeftNavMenuItem.prototype = new YAHOO.widget.MenuItem();
+            YAHOO.example.LeftNavMenuItem.prototype.constructor = YAHOO.example.LeftNavMenuItem;
+            YAHOO.example.LeftNavMenuItem.superclass = YAHOO.widget.MenuItem.prototype;
+
+            YAHOO.example.LeftNavMenuItem.prototype.init = function(p_oObject, p_oUserConfig) {
 
                 /*
-                    Handler for each "LeftNavSubmenu" instance's mouseOverEvent
+                    Set the type of submenu instances created 
+                    when parsing the DOM of each "LeftNavMenuItem" instance
                 */
-                var oOnMouseOver = function(p_sType, p_aArguments, p_oMenu) {
 
-                    if(oTimer) {
-    
-                        window.clearTimeout(oTimer);
+                this.SUBMENU_TYPE = YAHOO.example.LeftNavSubmenu;
 
-                    }
-
-                };
 
                 /*
-                    Handler for each "LeftNavSubmenu" instance's mouseOutEvent
+                    Set the type of MenuItem instances created 
+                    when parsing the DOM of each "LeftNav" instance
                 */
-                var oOnMouseOut = function(p_sType, p_aArguments, p_oMenu) {
 
-                    function hideMenu() {
+                this.MENUITEM_TYPE = YAHOO.example.LeftNavMenuItem;
 
-                        p_oMenu.hide();
 
-                        p_oMenu.parent.cfg.setProperty("selected", false);
+                /*
+                    Call the init of the super class (all subclasses must 
+                    implement and call this method)
+                */
 
+                YAHOO.example.LeftNavMenuItem.superclass.init.call(
+                    this, 
+                    p_oObject, 
+                    p_oUserConfig
+                );  
+
+
+                // Subscribe private event handlers to the instance's events
+
+                this.mouseOverEvent.subscribe(this._onMouseOver);
+                this.mouseOutEvent.subscribe(this._onMouseOut);
+                this.keyDownEvent.subscribe(this._onKeyDown);
+
+
+                /*
+                    FF 1.0 doesn't allow you to prevent the default tab 
+                    behavior "onkeydown," so we need to handle that event
+                    "onkeypress" for FF < 1.5
+                */
+
+                var sBrowser = getBrowser(),
+                    sUserAgent = navigator.userAgent.toLowerCase();
+
+                this._bFF10 = 
+                    (sBrowser == "gecko" && sUserAgent.indexOf("1.0") != -1);
+
+                if(this._bFF10) {
+
+                    this.keyPressEvent.subscribe(this._onKeyPress);
+
+                }
+
+            };
+
+
+            // Handler for each "LeftNavMenuItem" instance's "mouseover" event
+            
+            YAHOO.example.LeftNavMenuItem.prototype._onMouseOver = function(p_sType, p_aArguments) {
+            
+                var oSubmenu,
+                    oActiveMenuItem = this.parent.activeMenuItem;
+
+
+                // Hide any other submenus that might be visible
+
+                if(oActiveMenuItem && oActiveMenuItem != this) {
+            
+                    oSubmenu = oActiveMenuItem.cfg.getProperty("submenu");
+            
+                    if(oSubmenu && oSubmenu.cfg.getProperty("visible")) {
+
+                        window.clearTimeout(oSubmenu.TimeoutId);
+            
+                        oSubmenu.hide();
+            
+                    }
+        
+                }
+
+
+                // Show the submenu for this instance
+
+                oSubmenu = this.cfg.getProperty("submenu");
+        
+                if(oSubmenu) {
+        
+                    oSubmenu.show();
+        
+                }
+            
+            };
+
+
+            // Handler for each "LeftNavMenuItem" instance's "mouseout" event
+
+            YAHOO.example.LeftNavMenuItem.prototype._onMouseOut = function(p_sType, p_aArguments) {
+
+                var oSubmenu = this.cfg.getProperty("submenu");
+
+                if(oSubmenu) {
+
+                    var oEvent = p_aArguments[0],
+                        oRelatedTarget = YAHOO.util.Event.getRelatedTarget(oEvent);
+
+                    if(
+                        !(
+                            oRelatedTarget == oSubmenu.element || 
+                            this._oDom.isAncestor(oSubmenu.element, oRelatedTarget)
+                        )
+                    ) {
+
+                        oSubmenu.hide();
+        
                     }
 
-                    oTimer = window.setTimeout(hideMenu, 750);
+                }
 
-                };
+            };
+
+
+            // Handler for each "LeftNavMenuItem" instance's "keypress" event
+
+            YAHOO.example.LeftNavMenuItem.prototype._onKeyPress = function(p_sType, p_aArguments) {
+
+                var oEvent = p_aArguments[0];
+
+                switch(oEvent.keyCode) {
+                    
+                    case 9:     // Tab
+
+                        var oActiveMenuItem = this.parent.activeMenuItem;
+        
+                        if(
+                            this == oActiveMenuItem && 
+                            !this.cfg.getProperty("selected")
+                        ) {
+        
+                            this.cfg.setProperty("selected", true);
+        
+                        }
+                        else {
+        
+                            var oNextMenuItem;
+            
+                            if(oEvent.shiftKey) {
+        
+                                oNextMenuItem = 
+                                    this.getPreviousEnabledSibling();
+        
+                            }
+                            else {
+        
+                                oNextMenuItem = 
+                                    this.getNextEnabledSibling();
+        
+                            }
+                    
+                            if(oNextMenuItem) {
+        
+                                var oSubmenu = this.cfg.getProperty("submenu");
+                        
+                                if(oSubmenu) {
+                        
+                                    oSubmenu.hide();
+                        
+                                }
+        
+                                this.cfg.setProperty("selected", false);
+        
+                                oNextMenuItem.cfg.setProperty("selected", true);
+                    
+                                oNextMenuItem.focus();
+                
+                            }
+        
+                        }
+
+                        YAHOO.util.Event.preventDefault(oEvent);
+
+                    break;
+
+                }
+            
+            };    
+
+
+            // Handler for each "LeftNavMenuItem" instance's "keydown" event
+            
+            YAHOO.example.LeftNavMenuItem.prototype._onKeyDown = function(p_sType, p_aArguments) {
+
+                var oEvent = p_aArguments[0];
+
+                switch(oEvent.keyCode) {
+
+                    case 9:     // Tab                    
+                    case 38:    // Up arrow
+                    case 40:    // Down arrow
+
+                        if(oEvent.keyCode == 9 && this._bFF10) {
+
+                            return;
+
+                        }
+        
+                        var oActiveMenuItem = this.parent.activeMenuItem;
+        
+                        if(
+                            this == oActiveMenuItem && 
+                            !this.cfg.getProperty("selected")
+                        ) {
+        
+                            this.cfg.setProperty("selected", true);
+        
+                        }
+                        else {
+        
+                            var oNextMenuItem;
+            
+                            if(
+                                (oEvent.keyCode == 9 && oEvent.shiftKey) || 
+                                oEvent.keyCode == 38
+                            ) {
+        
+                                oNextMenuItem = 
+                                    this.getPreviousEnabledSibling();
+        
+                            }
+                            else {
+        
+                                oNextMenuItem = 
+                                    this.getNextEnabledSibling();
+        
+                            }
+                    
+                            if(oNextMenuItem) {
+        
+                                var oSubmenu = this.cfg.getProperty("submenu");
+                        
+                                if(oSubmenu) {
+                        
+                                    oSubmenu.hide();
+                        
+                                }
+        
+                                this.cfg.setProperty("selected", false);
+        
+                                oNextMenuItem.cfg.setProperty("selected", true);
+                    
+                                oNextMenuItem.focus();
+                
+                            }
+        
+                        }
+
+                        if(oEvent.keyCode == 9) {
+
+                            YAHOO.util.Event.preventDefault(oEvent);
+
+                        }
+        
+                    break;
+                    
+        
+                    case 39:    // Right arrow
+        
+                        var oSubmenu = this.cfg.getProperty("submenu");
+        
+                        if(oSubmenu) {
+        
+                            oSubmenu.show();
+                            oSubmenu.setInitialSelection();
+                            oSubmenu.setInitialFocus();
+        
+                        }
+        
+                    break;
+                    
+        
+                    case 37:    // Left arrow
+                    case 27:    // Esc key
+        
+                        // Only hide the Menu if it is a submenu
+
+                        if(this.parent.parent) {
+
+                            this.parent.hide();
+            
+                            var oMenuItem = this.parent.parent;
+            
+                            if(oMenuItem) {
+            
+                                oMenuItem.focus();
+            
+                            }
+
+                        }
+        
+                    break;
+        
+                }
+
+            };
+
+
+            /*
+                Create a subclass of YAHOO.example.LeftNav to define the
+                default behaviors of each submenu instance of the 
+                left navigation
+            */
+
+            YAHOO.example.LeftNavSubmenu = function(p_oElement, p_oUserConfig) {
+            
+                if(arguments.length > 0) {
+            
+                    YAHOO.example.LeftNavSubmenu.superclass.constructor.call(
+                        this, 
+                        p_oElement, 
+                        p_oUserConfig
+                    );
+            
+                }
+            
+            }
+            
+            YAHOO.example.LeftNavSubmenu.prototype = new YAHOO.widget.Menu();
+            YAHOO.example.LeftNavSubmenu.prototype.constructor = YAHOO.example.LeftNavSubmenu;
+            YAHOO.example.LeftNavSubmenu.superclass = YAHOO.widget.Menu.prototype;
+
+            YAHOO.example.LeftNavSubmenu.prototype.init = function(p_oElement, p_oUserConfig) {
+
+                /*
+                    Identify the type of MenuItem instances created 
+                    when parsing the DOM of each MenuItem
+                */
+
+                this.MENUITEM_TYPE = YAHOO.example.LeftNavMenuItem;
+
+
+                /*
+                    Call the init of the super class (all subclasses must 
+                    implement and call this method)
+                */
+
+                YAHOO.example.LeftNavSubmenu.superclass.init.call(
+                    this, 
+                    p_oElement, 
+                    p_oUserConfig
+                );
 
 
                 // Subscribe the handlers to the menu's events
 
-                this.mouseOverEvent.subscribe(oOnMouseOver, this);
-                this.mouseOutEvent.subscribe(oOnMouseOut, this);
+                this.mouseOverEvent.subscribe(this._onMouseOver);
+                this.mouseOutEvent.subscribe(this._onMouseOut, this);
+                this.showEvent.subscribe(this._onShow);
 
-            }
+
+                /*
+                    Register each instance that is created with
+                    the OverlayManager
+                */
+
+                YAHOO.example.OverlayManager.register(this);
+
+            };
+
+
+            /*
+                Add a new public property to this class - "TimeoutId" - the id 
+                of the function called via "window.setTimeout"
+            */
+
+            YAHOO.example.LeftNavSubmenu.prototype.TimeoutId;
+
+
+            // Handler for each "LeftNavSubmenu" instance's "mouseover" event
+
+            YAHOO.example.LeftNavSubmenu.prototype._onMouseOver = function(p_sType, p_aArguments) {
+
+                this.parent.cfg.setProperty("selected", true);
+
+
+                if(this.TimeoutId) {
+
+                    window.clearTimeout(this.TimeoutId);
+
+                }
+
+            };
+
+
+            // Handler for each "LeftNavSubmenu" instance's "mouseout" event
+
+            YAHOO.example.LeftNavSubmenu.prototype._onMouseOut = function(p_sType, p_aArguments, p_oMenu) {
+
+                var oParentMenu = this.parent.parent,
+                    oEvent = p_aArguments[0],
+                    oRelatedTarget = YAHOO.util.Event.getRelatedTarget(oEvent);
+
+
+                function hideMenu() {
+
+                    p_oMenu.hide();
+
+                    p_oMenu.parent.cfg.setProperty("selected", false);
+
+                }
+
+
+                /*
+                    If the mouse is moving towards another menu, 
+                    hide immedidately
+                */
+
+                if(
+                    oRelatedTarget == oParentMenu.element || 
+                    this._oDom.isAncestor(oParentMenu.element, oRelatedTarget)
+                ) {
+
+                    this.hide();
+
+                }
+                else {
+
+                    this.TimeoutId = window.setTimeout(hideMenu, 750);
+
+                }
+
+            };
+
+
+            // Handler for each "LeftNavSubmenu" instance's "show" event
+
+            YAHOO.example.LeftNavSubmenu.prototype._onShow = function(p_sType, p_aArguments) {
+
+                var oMenuItem = this.parent,
+                    aMenuItemPosition = YAHOO.util.Dom.getXY(oMenuItem.element),
+                    aPosition = [];
+
+    
+                // Calculate the x position
+                
+                aPosition[0] = 
+                    (aMenuItemPosition[0] + oMenuItem.element.offsetWidth);
+    
+    
+                // Calculate the y position
+    
+                aPosition[1] = aMenuItemPosition[1];
+    
+    
+                // Position the menu
+    
+                this.cfg.setProperty("xy", aPosition);
+
+            };
+
 
             function onDocumentClick(p_oEvent) {
 
-                YAHOO.widget.MenuManager.hideVisibleMenus();
+                /*
+                    Hide any other menus that might be visible for displaying
+                    the context menu
+                */
 
-                YAHOO.widget.MenuManager.getMenu("menu0").show();
+                YAHOO.example.OverlayManager.hideAll();
 
             }
+
            
             function onWindowLoad() {
 
-                // Create the root menu
+                // Create the root menu and associated submenus
 
-                var oLeftNav = new YAHOO.widget.Menu(
+                var oLeftNav = new YAHOO.example.LeftNav(
                     "menu0", 
                     { 
                         // Make the root visible by default
-                        visible:true,
-
-                        /*
-                            Since each submenu will be of a different class 
-                            (LeftNavSubmenu), we want to set the
-                            "initsubmenus" configuration property to "false"
-                            to ensure that the root menu's constructor
-                            doesn't automatically iterate all of the
-                            child nodes of element "menu0" and instantiate
-                            submenus of type "Menu" directly. 
-                        */
-                        initsubmenus:false
+                        visible:true
                     }
                 );
 
 
-                /*
-                    Append the submenu instances to their corresponding 
-                    MenuItem instances
-                */
-
-                oLeftNav.getMenuItem(0).cfg.setProperty(
-                    "submenu", (new LeftNavSubmenu("menu1"))
-                ); 
-
-                oLeftNav.getMenuItem(1).cfg.setProperty(
-                    "submenu", (new LeftNavSubmenu("menu2"))
-                );
-
-                oLeftNav.getMenuItem(2).cfg.setProperty(
-                    "submenu", (new LeftNavSubmenu("menu3"))
-                );
-
-                oLeftNav.getMenuItem(3).cfg.setProperty(
-                    "submenu", (new LeftNavSubmenu("menu4"))
-                );
-
-                oLeftNav.getMenuItem(4).cfg.setProperty(
-                    "submenu", (new LeftNavSubmenu("menu5"))
-                );
-
-                oLeftNav.getMenuItem(5).cfg.setProperty(
-                    "submenu", (new LeftNavSubmenu("menu6"))
-                ); 
-
-                oLeftNav.getMenuItem(6).cfg.setProperty(
-                    "submenu", (new LeftNavSubmenu("menu7"))
-                );
-
-                oLeftNav.getMenuItem(7).cfg.setProperty(
-                    "submenu", (new LeftNavSubmenu("menu8"))
-                );
-
-                oLeftNav.getMenuItem(8).cfg.setProperty(
-                    "submenu", (new LeftNavSubmenu("menu9"))
-                );
-
-                oLeftNav.getMenuItem(9).cfg.setProperty(
-                    "submenu", (new LeftNavSubmenu("menu10"))
-                );
-
-
-                // Render the menu and associated submenus
+                // Render the root menu and associated submenus
 
                 oLeftNav.render();
+
+
+                // Assign a "click" handler to the document
 
                 YAHOO.util.Event.addListener(
                     document, 
@@ -228,7 +694,7 @@
 
                     <div id="menu0" class="yuimenu">
                         <div class="bd">
-                            <ul>
+                            <ul class="first">
                                 <li><a href="#">Menu Item 0</a>
                                     <div id="menu1" class="yuimenu">
                                         <div class="bd">
