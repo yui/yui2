@@ -8,7 +8,7 @@
 
 <style type="text/css">
     /* ylogger default styles */
-    #ylogger {position:absolute;top:1em;right:1em;}
+    #ylogger {position:absolute;}
     .ylogger {padding:1em;background-color:#AAA;border:1px solid black;font-family:monospace;font-size:77%;z-index:9000;}
     .ylogger p {margin:1px;padding:.1em;}
     .ylogger button {font-family:monospace;font-size:77%;}
@@ -134,7 +134,7 @@
 <script>
 <!--
     function initLogReader() {
-        myLogReader1 = new YAHOO.widget.LogReader();
+        myLogReader1 = new YAHOO.widget.LogReader(null,{top:"1px",right:"1px"});
         myLogReader3 = new YAHOO.widget.LogReader(null,{footerEnabled:false});
         myLogReader4 = new YAHOO.widget.LogReader();
         myLogReader2 = new YAHOO.widget.LogReader("mylogger",{width:"100px",height:"100px"});

@@ -6,10 +6,6 @@
 YAHOO.widget.LogReader = function(containerEl, oConfig) {
     var oSelf = this;
         
-    // Initialize members
-    this.width = "30em";
-    this.height = "20em";
-
     // Parse config vars here
     if (typeof oConfig == "object") {
         for(var param in oConfig) {
@@ -35,8 +31,27 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
             this._containerEl = document.body.appendChild(document.createElement("div"));
             this._containerEl.id = "ylogger";
             this._containerEl.className = "ylogger";
-            this._containerEl.style.width = this.width;
+            this._containerEl.style.width = (this.width) ? this.width : this.DEFAULT_WIDTH;
+            
+            // Set defaults if not provided by implementer
+            if(!this.left && !this.right && !this.bottom && !this.top) {
+                this._containerEl.style.top = this.DEFAULT_TOP;
+                this._containerEl.style.right = this.DEFAULT_RIGHT;
+            }
             YAHOO.widget.LogReader._defaultContainerEl = this._containerEl;
+        }
+        
+        // If implementer has provided, trust and set those
+        if(this.left || this.right || this.bottom || this.top) {
+            this._containerEl.style.left = "auto";
+            this._containerEl.style.right = "auto";
+            this._containerEl.style.bottom = "auto";
+            this._containerEl.style.top = "auto";
+
+            this._containerEl.style.left = this.left;
+            this._containerEl.style.right = this.right;
+            this._containerEl.style.bottom = this.bottom;
+            this._containerEl.style.top = this.top;
         }
     }
 
@@ -73,7 +88,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         if(!this._consoleEl) {
             this._consoleEl = this._containerEl.appendChild(document.createElement("div"));
             this._consoleEl.className = "ylog_bd";
-            this._consoleEl.style.height = this.height;
+            this._consoleEl.style.height = (this.height) ? this.height : this.DEFAULT_HEIGHT;
         }
         // Don't create footer if disabled
         if(!this._ftEl && this.footerEnabled) {
@@ -121,6 +136,17 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
 };
 
 /***************************************************************************
+ * Public constants
+ ***************************************************************************/
+YAHOO.widget.LogReader.prototype.DEFAULT_WIDTH = "30em";
+
+YAHOO.widget.LogReader.prototype.DEFAULT_HEIGHT = "20em";
+
+YAHOO.widget.LogReader.prototype.DEFAULT_TOP = "1em";
+
+YAHOO.widget.LogReader.prototype.DEFAULT_RIGHT = "1em";
+
+/***************************************************************************
  * Public members
  ***************************************************************************/
 YAHOO.widget.LogReader.prototype.logReaderEnabled = true;
@@ -128,6 +154,14 @@ YAHOO.widget.LogReader.prototype.logReaderEnabled = true;
 YAHOO.widget.LogReader.prototype.width = null;
 
 YAHOO.widget.LogReader.prototype.height = null;
+
+YAHOO.widget.LogReader.prototype.top = null;
+
+YAHOO.widget.LogReader.prototype.left = null;
+
+YAHOO.widget.LogReader.prototype.right = null;
+
+YAHOO.widget.LogReader.prototype.bottom = null;
 
 YAHOO.widget.LogReader.prototype.footerEnabled = true;
 
@@ -174,8 +208,6 @@ YAHOO.widget.LogReader.prototype._consoleEl = null;
 YAHOO.widget.LogReader.prototype._ftEl = null;
 
 YAHOO.widget.LogReader.prototype._filters = null;
-
-
 
 /***************************************************************************
  * Private methods
