@@ -38,6 +38,9 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
                 this._containerEl.style.top = this.DEFAULT_TOP;
                 this._containerEl.style.right = this.DEFAULT_RIGHT;
             }
+            if(!this.fontSize) {
+                this._containerEl.style.fontSize = this.DEFAULT_FONTSIZE;
+            }
             YAHOO.widget.LogReader._defaultContainerEl = this._containerEl;
         }
         
@@ -53,6 +56,9 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
             this._containerEl.style.bottom = this.bottom;
             this._containerEl.style.top = this.top;
         }
+        if(this.fontSize) {
+            this._containerEl.style.fontSize = this.fontSize;
+        }
     }
 
     if(this._containerEl) {
@@ -67,6 +73,8 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
 
             this._collapseBtn = document.createElement("input");
             this._collapseBtn.type = "button"
+            this._collapseBtn.style.fontSize = YAHOO.util.Dom.getStyle(this._containerEl,"fontSize");
+            this._collapseBtn.className = "button";
             this._collapseBtn.value = "Collapse";
             this._collapseBtn = this._collapseEl.appendChild(this._collapseBtn);
             YAHOO.util.Event.addListener(oSelf._collapseBtn,'click',oSelf._onClickCollapseBtn,oSelf);
@@ -100,12 +108,16 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
 
             this._pauseBtn = document.createElement("input");
             this._pauseBtn.type = "button";
+            this._pauseBtn.style.fontSize = YAHOO.util.Dom.getStyle(this._containerEl,"fontSize");
+            this._pauseBtn.className = "button";
             this._pauseBtn.value = "Pause";
             this._pauseBtn = this._btnsEl.appendChild(this._pauseBtn);
             YAHOO.util.Event.addListener(oSelf._pauseBtn,'click',oSelf._onClickPauseBtn,oSelf);
 
             this._clearBtn = document.createElement("input");
             this._clearBtn.type = "button";
+            this._clearBtn.style.fontSize = YAHOO.util.Dom.getStyle(this._containerEl,"fontSize");
+            this._clearBtn.className = "button";
             this._clearBtn.value = "Clear";
             this._clearBtn = this._btnsEl.appendChild(this._clearBtn);
             YAHOO.util.Event.addListener(oSelf._clearBtn,'click',oSelf._onClickClearBtn,oSelf);
@@ -146,6 +158,8 @@ YAHOO.widget.LogReader.prototype.DEFAULT_TOP = "1em";
 
 YAHOO.widget.LogReader.prototype.DEFAULT_RIGHT = "1em";
 
+YAHOO.widget.LogReader.prototype.DEFAULT_FONTSIZE = "77%";
+
 /***************************************************************************
  * Public members
  ***************************************************************************/
@@ -162,6 +176,8 @@ YAHOO.widget.LogReader.prototype.left = null;
 YAHOO.widget.LogReader.prototype.right = null;
 
 YAHOO.widget.LogReader.prototype.bottom = null;
+
+YAHOO.widget.LogReader.prototype.fontSize = null;
 
 YAHOO.widget.LogReader.prototype.footerEnabled = true;
 
