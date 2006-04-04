@@ -64,14 +64,6 @@ YAHOO.widget.Logger.reset = function() {
     this.log(null, "Logger reset");
 };
 
-YAHOO.widget.Logger.hide = function() {
-    this._containerEl.parentNode.removeChild(this._containerEl);
-    this._ftEl = null;
-    this._consoleEl = null;
-    this._hdEl = null;
-    this._containerEl = null;
-}
-
 YAHOO.widget.Logger.getStack = function() {
     return this._stack;
 }

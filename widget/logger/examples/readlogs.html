@@ -60,8 +60,8 @@
             <input id="ylog_inputcustomtype" type="text" value="myType">
             <button onclick="YAHOO.log(document.getElementById('ylog_inputcustommsg').value,document.getElementById('ylog_inputcustomtype').value)">Log</button></p>
 
-        <p><a href="javascript:YAHOO.widget.Logger.hide()">Hide Logger</a></p>
-        <p><a href="javascript:YAHOO.widget.Logger.show()">Show Logger</a></p>
+        <p><a href="javascript:doHideAll();">Hide All Log Readers</a></p>
+        <p><a href="javascript:doShowAll();">Show All Log Readers</a></p>
         
         <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
         Sed eu enim in neque nonummy suscipit. Sed non metus. Aliquam pretium, massa
@@ -140,6 +140,20 @@
         myLogReader2 = new YAHOO.widget.LogReader("mylogger",{width:"100px",height:"100px"});
     }
     YAHOO.util.Event.addListener(this,'load',initLogReader);
+    
+    function doHideAll() {
+        myLogReader1.hide();
+        myLogReader2.hide();
+        myLogReader3.hide();
+        myLogReader4.hide();
+    }
+    
+    function doShowAll() {
+        myLogReader1.show();
+        myLogReader2.show();
+        myLogReader3.show();
+        myLogReader4.show();
+    }
 //-->
 </script>
 </div>

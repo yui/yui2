@@ -144,6 +144,14 @@ YAHOO.widget.LogReader.prototype.resume = function() {
     this._printBuffer();
 };
 
+YAHOO.widget.LogReader.prototype.hide = function() {
+    this._containerEl.style.display = "none";
+};
+
+YAHOO.widget.LogReader.prototype.show = function() {
+    this._containerEl.style.display = "block";
+};
+
  /***************************************************************************
  * Private members
  ***************************************************************************/
