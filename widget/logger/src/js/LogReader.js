@@ -6,13 +6,16 @@
 YAHOO.widget.LogReader = function(containerEl, oConfig) {
     var oSelf = this;
         
-    // Initialize memebers
-    this.logReaderEnabled = true;
-    this._lastTime = YAHOO.widget.Logger.getStartTime(); // timestamp of last log message to console
-    this._buffer = []; // output buffer
-    this._timeout = null; // output buffer timeout
-    this._allFilters = [];
-    this._currFilters = [];
+    // Initialize members
+    this.width = "30em";
+    this.height = "20em";
+
+    // Parse config vars here
+    if (typeof oConfig == "object") {
+        for(var param in oConfig) {
+            this[param] = oConfig[param];
+        }
+    }
 
     // Attach container...
     if(containerEl) {
@@ -32,17 +35,11 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
             this._containerEl = document.body.appendChild(document.createElement("div"));
             this._containerEl.id = "ylogger";
             this._containerEl.className = "ylogger";
+            this._containerEl.style.width = this.width;
             YAHOO.widget.LogReader._defaultContainerEl = this._containerEl;
         }
     }
 
-    // Parse config vars here
-    if (typeof oConfig == "object") {
-        for(var param in oConfig) {
-            this[param] = oConfig[param];
-        }
-    }
-    
     if(this._containerEl) {
         // Create header
         if(!this._hdEl) {
@@ -76,6 +73,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         if(!this._consoleEl) {
             this._consoleEl = this._containerEl.appendChild(document.createElement("div"));
             this._consoleEl.className = "ylog_bd";
+            this._consoleEl.style.height = this.height;
         }
         // Don't create footer if disabled
         if(!this._ftEl && this.footerEnabled) {
@@ -98,34 +96,38 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
             YAHOO.util.Event.addListener(oSelf._clearBtn,'click',oSelf._onClickClearBtn,oSelf);
 
             this._filtersEl = this._ftEl.appendChild(document.createElement("div"));
-
-            /*this._filterAllBtn = document.createElement("input");
-            this._filterAllBtn.className = "ylog_filterAllBtn";
-            this._filterAllBtn.type = "button";
-            this._filterAllBtn.value = "Filter All";
-            this._filterAllBtn = this._filtersEl.appendChild(this._filterAllBtn);
-            YAHOO.util.Event.addListener(oSelf._filterAllBtn,'click',oSelf._onClickFilterAllBtn,oSelf);*/
-
-            var catsLen = YAHOO.widget.Logger.categories.length;
-            for(var i=0; i < catsLen; i++) {
-                this._createFilterCheckbox(YAHOO.widget.Logger.categories[i]);
-            }
         }
     }
     
-    //subscribe to Logger's events
-    YAHOO.widget.Logger.categoryCreateEvent.subscribe(this._onCategoryCreate, this);
+    // Initialize buffer
+    if(!this._buffer) {
+        this._buffer = []; // output buffer
+    }
     YAHOO.widget.Logger.newLogEvent.subscribe(this._onNewLog, this);
-    
-    this._filterLogsNoCats();
+    this._lastTime = YAHOO.widget.Logger.getStartTime(); // timestamp of last log message to console
+
+    // Initialize filters
+    this._filters = [];
+    var catsLen = YAHOO.widget.Logger.categories.length;
+    if(this._filtersEl) {
+        for(var i=0; i < catsLen; i++) {
+            this._createFilterCheckbox(YAHOO.widget.Logger.categories[i]);
+        }
+    }
+    YAHOO.widget.Logger.categoryCreateEvent.subscribe(this._onCategoryCreate, this);
     
     YAHOO.widget.LogReader._index++;
+    this._filterLogs();
 };
 
 /***************************************************************************
  * Public members
  ***************************************************************************/
 YAHOO.widget.LogReader.prototype.logReaderEnabled = true;
+
+YAHOO.widget.LogReader.prototype.width = null;
+
+YAHOO.widget.LogReader.prototype.height = null;
 
 YAHOO.widget.LogReader.prototype.footerEnabled = true;
 
@@ -149,23 +151,22 @@ YAHOO.widget.LogReader._defaultContainerEl = null;
 
 YAHOO.widget.LogReader._index = 0;
 
-YAHOO.widget.LogReader.prototype._allFilters = null;
- 
-YAHOO.widget.LogReader.prototype._currFilters = null;
-
 YAHOO.widget.LogReader.prototype._buffer = null;
+
+YAHOO.widget.LogReader.prototype._lastTime = null;
 
 YAHOO.widget.LogReader.prototype._timeout = null;
 
 YAHOO.widget.LogReader.prototype._containerEl = null;
 
-YAHOO.widget.LogReader.prototype._consoleEl = null;
-
 YAHOO.widget.LogReader.prototype._hdEl = null;
+
+YAHOO.widget.LogReader.prototype._consoleEl = null;
 
 YAHOO.widget.LogReader.prototype._ftEl = null;
 
-YAHOO.widget.LogReader.prototype._lastTime = null;
+YAHOO.widget.LogReader.prototype._filters = null;
+
 
 
 /***************************************************************************
@@ -180,51 +181,18 @@ YAHOO.widget.LogReader.prototype._createFilterCheckbox = function(category) {
         filterChk.className = "ylog_filter" + category;
         filterChk.type = "checkbox";
         filterChk.checked = true;
+        filterChk.category = category;
         filterChk = this._filtersEl.appendChild(filterChk);
         YAHOO.util.Event.addListener(filterChk,'click',oSelf._onCheckFilter,oSelf);
 
         var filterChkLbl = this._filtersEl.appendChild(document.createElement("span"));
         filterChkLbl.className = category;
         filterChkLbl.innerHTML = category;
-
-        this._allFilters.push({"category":category,"el":filterChk});
-        this._currFilters.push({"category":category,"el":filterChk});
     }
 }
 
 YAHOO.widget.LogReader.prototype._filterLogs = function() {
-    // Iterate through all filters since
-    // some may have been dynamically added and
-    // print logs that make it through
-    if(this._containerEl && this._consoleEl && this._ftEl) {
-        this._currFilters = [];
-        var filtersLen = this._allFilters.length;
-        for(var i=0; i<filtersLen; i++) {
-            //for(var x in this._allFilters[i]) {
-                //alert(x + ' is '+this._allFilters[i][x]);
-            //}
-            if(this._allFilters[i].el.checked) {
-                this._currFilters.push({"category":this._allFilters[i].category,"el":this._allFilters[i].el});
-            }
-        }
-    }
-
     // Reprint stack with new filters
-    if (this._consoleEl != null) {
-        this._clearConsole();
-        this._printToConsole(YAHOO.widget.Logger.getStack());
-    }
-};
-
-YAHOO.widget.LogReader.prototype._filterLogsAllCats = function() {
-    this._currFilters = [];
-    if (this._consoleEl != null) {
-        this._clearConsole();
-    }
-};
-
-YAHOO.widget.LogReader.prototype._filterLogsNoCats = function() {
-    this._currFilters = this._allFilters;
     if (this._consoleEl != null) {
         this._clearConsole();
         this._printToConsole(YAHOO.widget.Logger.getStack());
@@ -247,13 +215,13 @@ YAHOO.widget.LogReader.prototype._clearConsole = function() {
 
 YAHOO.widget.LogReader.prototype._printBuffer = function() {
     this._timeout = null;
-    var entries = [];
-    for (var i=0; i<this._buffer.length; i++) {
-        entries[i] = this._buffer[i];
-    }
-    this._buffer = [];
 
     if (this._consoleEl != null) {
+        var entries = [];
+        for (var i=0; i<this._buffer.length; i++) {
+            entries[i] = this._buffer[i];
+        }
+        this._buffer = [];
         this._printToConsole(entries);
     }
 };
@@ -261,43 +229,47 @@ YAHOO.widget.LogReader.prototype._printBuffer = function() {
 
 YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
     var entriesLen = aEntries.length;
-    var filterLen = this._currFilters.length;
+    var filtersLen = this._filters.length;
     // Iterate through all log entries...
     for(var i=0; i<entriesLen; i++) {
         var entry = aEntries[i];
         var category = entry.category;
+        var okToPrint = true;
         // ...and only print the ones that filter through
-        for(var j=0; j<filterLen; j++) {
-            if(category == this._currFilters[j].category) {
-                // To format for console, calculate the elapsed time
-                // to be from the last item that passed through the filter,
-                // not the absolute previous item in the stack
-                var label = category.substring(0,4).toUpperCase();
-
-                var time = entry.time;
-                if (time.toLocaleTimeString) {
-                    var localTime  = time.toLocaleTimeString();
-                }
-                else {
-                    localTime = time.toString();
-                }
-
-                var msecs = time.getTime();
-                var elapsedTime = msecs - this._lastTime;
-                this._lastTime = msecs;
-
-                var name = (entry.name) ? entry.name + ": " : "";
-
-                var output =  "<span class='"+category+"'>"+label+"</span> " +
-                    localTime + " (" +
-                    elapsedTime + "): " +
-                    name +
-                    entry.msg;
-
-                var oNewElement = this._consoleEl.insertBefore(document.createElement("p"),this._consoleEl.firstChild);
-                oNewElement.innerHTML = output;
+        for(var j=0; j<filtersLen; j++) {
+            if(category == this._filters[j]) {
+                okToPrint = false;
                 break;
             }
+        }
+        if(okToPrint) {
+            // To format for console, calculate the elapsed time
+            // to be from the last item that passed through the filter,
+            // not the absolute previous item in the stack
+            var label = category.substring(0,4).toUpperCase();
+
+            var time = entry.time;
+            if (time.toLocaleTimeString) {
+                var localTime  = time.toLocaleTimeString();
+            }
+            else {
+                localTime = time.toString();
+            }
+
+            var msecs = time.getTime();
+            var elapsedTime = msecs - this._lastTime;
+            this._lastTime = msecs;
+
+            var name = (entry.name) ? entry.name + ": " : "";
+
+            var output =  "<span class='"+category+"'>"+label+"</span> " +
+                localTime + " (" +
+                elapsedTime + "): " +
+                name +
+                entry.msg;
+
+            var oNewElement = this._consoleEl.insertBefore(document.createElement("p"),this._consoleEl.firstChild);
+            oNewElement.innerHTML = output;
         }
     }
 };
@@ -307,7 +279,7 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
  ***************************************************************************/
 YAHOO.widget.LogReader.prototype._onCategoryCreate = function(type, args, oSelf) {
     var category = args[0];
-    if(oSelf._containerEl && oSelf._consoleEl && oSelf._ftEl) {
+    if(oSelf._ftEl) {
         oSelf._createFilterCheckbox(category);
     }
 }
@@ -346,39 +318,19 @@ YAHOO.widget.LogReader.prototype._onClickClearBtn = function(v, oSelf) {
     oSelf._clearConsole();
 };
 
-YAHOO.widget.LogReader.prototype._onClickFilterAllBtn = function(v, oSelf) {
-    var btn = oSelf._filterBtn;
-    // Filter all
-    if(btn.value == "Filters Off") {
-        oSelf._filterLogsNoCats();
-        // Check all checkboxes in UI
-        if(oSelf._ftEl) {
-            var filtersLen = this._allFilters.length;
-            for(var i=0; i<filtersLen; i++) {
-                var filterChk = this._allFilters[i].el;
-                filterChk.checked = true;
-            }
-            this._currFilters = this._allFilters;
-        }
-        btn.value = "Filter All";
-    }
-    // Filter none
-    else {
-        this._filterLogsAllCats();
-        // Uncheck all checkboxes in UI
-        if(oSelf._ftEl) {
-            var filtersLen = this._allFilters.length;
-            for(var i=0; i<filtersLen; i++) {
-                var filterChk = this._allFilters[i].el;
-                filterChk.checked = false;
-            }
-            this._currFilters = [];
-        }
-        btn.value = "Filters Off";
-    }
-};
-
 YAHOO.widget.LogReader.prototype._onCheckFilter = function(v, oSelf) {
+    var category = this.category;
+    if(this.checked) { // Remove category from filters
+        for(var i=0; i<oSelf._filters.length; i++) {
+            if(category == oSelf._filters[i]) {
+                oSelf._filters.splice(i, 1);
+                break;
+            }
+        }
+    }
+    else { // Add category to filters
+        oSelf._filters.push(category);
+    }
     oSelf._filterLogs();
 };
 
