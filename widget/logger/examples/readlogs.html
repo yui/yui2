@@ -7,22 +7,24 @@
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
 
 <style type="text/css">
-    #ylogger {position:fixed;float:right;top:50%;width:30%;margin:1em;padding:1em;background-color:#AAA;border:1px solid black;font-family:monospace;font-size:77%;}
-    #ylogger p {margin:1px;padding:.1em;}
-    #ylogger button {font-family:monospace;font-size:77%;}
-    #ylogger #ylog_hd {margin-bottom:.5em;cursor:move;background-color:#575757;color:#FFF;padding:.5em;}
-    #ylogger #ylog_hd #ylog_collapse {position:relative;float:right;}
-    #ylogger #ylog_bd {position:relative;width:100%;height:20em;overflow:auto;background-color:#FFF;border:1px solid gray;}
-    #ylogger #ylog_ft {margin-top:.5em;}
-    #ylogger #ylog_ft #ylog_btns {position:relative;float:right;}
-    #ylogger .info {background-color:#A7CC25;} /* A7CC25 green */
-    #ylogger .warn {background-color:#F58516;} /* F58516 orange */
-    #ylogger .error {background-color:#E32F0B;} /* E32F0B red */
-    #ylogger .time {background-color:#A6C9D7;} /* A6C9D7 blue */
-    #ylogger .window {background-color:#F2E886;} /* F2E886 tan  */
+    /* ylogger default styles */
+    #ylogger {position:absolute;top:1em;right:1em;width:30em;}
+    .ylogger {padding:1em;background-color:#AAA;border:1px solid black;font-family:monospace;font-size:77%;z-index:9000;}
+    .ylogger p {margin:1px;padding:.1em;}
+    .ylogger button {font-family:monospace;font-size:77%;}
+    .ylogger .ylog_hd {position:relative;margin-top:1em;padding:.5em;background-color:#575757;color:#FFF;}
+    .ylogger .ylog_bd {position:relative;background-color:#FFF;border:1px solid gray;overflow:auto;width:100%;height:20em;}
+    .ylogger .ylog_ft {position:relative;margin-top:.5em;margin-bottom:1em;}
+    .ylogger .ylog_btns {position:relative;float:right;bottom:.25em;}
+    .ylogger .info {background-color:#A7CC25;} /* A7CC25 green */
+    .ylogger .warn {background-color:#F58516;} /* F58516 orange */
+    .ylogger .error {background-color:#E32F0B;} /* E32F0B red */
+    .ylogger .time {background-color:#A6C9D7;} /* A6C9D7 blue */
+    .ylogger .window {background-color:#F2E886;} /* F2E886 tan  */
 
-    /* custom style for custom log type */
-    #ylogger .foobar {background-color:#AAA;} /* AAA grey  */
+    /* custom ylogger styles */
+    #mylogger {position:fixed;left:1em;bottom:1em;border:1px solid purple;width:15em;padding:1em;background-color:#AAA;border:1px solid black;font-family:monospace;font-size:77%;z-index:9000;}
+
 
     #content .ylog_input {width:40%;}
 </style>
@@ -36,7 +38,7 @@
 
 <div id="bd">
     <!-- Logger begins -->
-    <div id="ylogger"></div>
+    <div id="mylogger" class="ylogger"></div>
     <!-- Logger ends -->
 
     <!-- Content begins -->
@@ -60,6 +62,45 @@
 
         <p><a href="javascript:YAHOO.widget.Logger.hide()">Hide Logger</a></p>
         <p><a href="javascript:YAHOO.widget.Logger.show()">Show Logger</a></p>
+        
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
+        Sed eu enim in neque nonummy suscipit. Sed non metus. Aliquam pretium, massa
+        quis vulputate aliquam, felis enim vehicula nisl, ut pharetra arcu nunc
+        vitae leo. Morbi rhoncus ullamcorper quam. Maecenas vel velit. Praesent
+        ultricies placerat mauris. Nunc posuere aliquam ligula. Nunc mi ligula,
+        rutrum eget, consequat ac, cursus non, tortor. Pellentesque ante metus,
+        mattis pharetra, lobortis in, pulvinar nec, felis. Cras fringilla. Cras
+        consequat. Nullam faucibus. Vivamus tincidunt porttitor leo. Etiam est mi,
+        dictum nec, vehicula id, ultricies ac, nibh. Mauris felis.</p>
+
+        <p>Nulla sit amet mi eu lacus tempus volutpat. Phasellus tincidunt hendrerit
+        quam. Maecenas lorem felis, viverra non, varius ut, ultrices et, mi.
+        Phasellus vehicula nunc eu tellus. Duis rutrum justo eu odio. Ut facilisis
+        nisl at purus. Maecenas turpis neque, adipiscing in, fringilla vitae, congue
+        sed, ipsum. Sed condimentum eros eu leo dignissim ultricies. Pellentesque
+        eros nulla, tempus ut, gravida at, vulputate at, metus. Maecenas enim metus,
+        suscipit eget, commodo vel, euismod ac, leo. Curabitur id nulla. Phasellus
+        euismod mi ut enim. Ut molestie bibendum odio.</p>
+
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
+        Sed eu enim in neque nonummy suscipit. Sed non metus. Aliquam pretium, massa
+        quis vulputate aliquam, felis enim vehicula nisl, ut pharetra arcu nunc
+        vitae leo. Morbi rhoncus ullamcorper quam. Maecenas vel velit. Praesent
+        ultricies placerat mauris. Nunc posuere aliquam ligula. Nunc mi ligula,
+        rutrum eget, consequat ac, cursus non, tortor. Pellentesque ante metus,
+        mattis pharetra, lobortis in, pulvinar nec, felis. Cras fringilla. Cras
+        consequat. Nullam faucibus. Vivamus tincidunt porttitor leo. Etiam est mi,
+        dictum nec, vehicula id, ultricies ac, nibh. Mauris felis.</p>
+
+        <p>Nulla sit amet mi eu lacus tempus volutpat. Phasellus tincidunt hendrerit
+        quam. Maecenas lorem felis, viverra non, varius ut, ultrices et, mi.
+        Phasellus vehicula nunc eu tellus. Duis rutrum justo eu odio. Ut facilisis
+        nisl at purus. Maecenas turpis neque, adipiscing in, fringilla vitae, congue
+        sed, ipsum. Sed condimentum eros eu leo dignissim ultricies. Pellentesque
+        eros nulla, tempus ut, gravida at, vulputate at, metus. Maecenas enim metus,
+        suscipit eget, commodo vel, euismod ac, leo. Curabitur id nulla. Phasellus
+        euismod mi ut enim. Ut molestie bibendum odio.</p>
+
         <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
         Sed eu enim in neque nonummy suscipit. Sed non metus. Aliquam pretium, massa
         quis vulputate aliquam, felis enim vehicula nisl, ut pharetra arcu nunc
@@ -83,9 +124,9 @@
 
 <!-- Libary begins -->
 <script src="./js/YAHOO.js"></script>
-<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/dom_2.0.0-b1.js"></script>
-<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/event_2.0.0-b2.js"></script>
-<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/dragdrop_2.0.1-b2.js"></script>
+<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/dom_2.0.2-b3.js"></script>
+<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/event_2.0.0-b3.js"></script>
+<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/dragdrop_2.0.0-b3.js"></script>
 <script src="../src/js/Logger.js"></script>
 <script src="../src/js/LogReader.js"></script>
 <!-- Library ends -->
@@ -94,7 +135,9 @@
 <!--
     function initLogReader() {
         myLogReader1 = new YAHOO.widget.LogReader();
-        myLogReader2 = new YAHOO.widget.LogReader("ylogger");
+        myLogReader3 = new YAHOO.widget.LogReader();
+        myLogReader4 = new YAHOO.widget.LogReader();
+        myLogReader2 = new YAHOO.widget.LogReader("mylogger");
     }
     YAHOO.util.Event.addListener(this,'load',initLogReader);
 //-->

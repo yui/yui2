@@ -7,23 +7,21 @@
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
 
 <style type="text/css">
-    #ylogger {position:relative;float:right;width:30%;margin:1em;padding:1em;background-color:#AAA;border:1px solid black;font-family:monospace;font-size:77%;}
-    #ylogger p {margin:1px;padding:.1em;}
-    #ylogger button {font-family:monospace;font-size:77%;}
-    #ylogger #ylog_hd {margin-bottom:.5em;cursor:move;background-color:#575757;color:#FFF;padding:.5em;}
-    #ylogger #ylog_hd #ylog_collapse {position:relative;float:right;}
-    #ylogger #ylog_bd {position:relative;width:100%;height:20em;overflow:auto;background-color:#FFF;border:1px solid gray;}
-    #ylogger #ylog_ft {margin-top:.5em;}
-    #ylogger #ylog_ft #ylog_btns {position:relative;float:right;}
-    #ylogger .info {background-color:#A7CC25;} /* A7CC25 green */
-    #ylogger .warn {background-color:#F58516;} /* F58516 orange */
-    #ylogger .error {background-color:#E32F0B;} /* E32F0B red */
-    #ylogger .time {background-color:#A6C9D7;} /* A6C9D7 blue */
-    #ylogger .window {background-color:#F2E886;} /* F2E886 tan  */
-    
-    /* custom style for custom log type */
-    #ylogger .foobar {background-color:#AAA;} /* AAA grey  */
-    
+    /* ylogger default styles */
+    #ylogger {position:absolute;top:1em;right:1em;width:30em;}
+    .ylogger {padding:1em;background-color:#AAA;border:1px solid black;font-family:monospace;font-size:77%;z-index:9000;}
+    .ylogger p {margin:1px;padding:.1em;}
+    .ylogger button {font-family:monospace;font-size:77%;}
+    .ylogger .ylog_hd {position:relative;margin-top:1em;padding:.5em;background-color:#575757;color:#FFF;}
+    .ylogger .ylog_bd {position:relative;background-color:#FFF;border:1px solid gray;overflow:auto;width:100%;height:20em;}
+    .ylogger .ylog_ft {position:relative;margin-top:.5em;margin-bottom:1em;}
+    .ylogger .ylog_btns {position:relative;float:right;bottom:.25em;}
+    .ylogger .info {background-color:#A7CC25;} /* A7CC25 green */
+    .ylogger .warn {background-color:#F58516;} /* F58516 orange */
+    .ylogger .error {background-color:#E32F0B;} /* E32F0B red */
+    .ylogger .time {background-color:#A6C9D7;} /* A6C9D7 blue */
+    .ylogger .window {background-color:#F2E886;} /* F2E886 tan  */
+
     #content .ylog_input {width:40%;}
 </style>
 </head>
@@ -36,7 +34,7 @@
 
 <div id="bd">
     <!-- Logger begins -->
-    <div id="ylogger"></div>
+    <div id="mylogger"></div>
     <!-- Logger ends -->
     
     <!-- Content begins -->
@@ -82,9 +80,9 @@
     
 <!-- Libary begins -->
 <script src="./js/YAHOO.js"></script>
-<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/dom_2.0.0-b1.js"></script>
-<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/event_2.0.0-b2.js"></script>
-<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/dragdrop_2.0.1-b2.js"></script>
+<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/dom_2.0.2-b3.js"></script>
+<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/event_2.0.0-b3.js"></script>
+<script src="http://makeover.corp.yahoo.com/lib/common/utils/2/dragdrop_2.0.0-b3.js"></script>
 <script src="../src/js/Logger.js"></script>
 <script src="../src/js/LogReader.js"></script>
 <script src="../src/js/LogWriter.js"></script>
@@ -93,12 +91,15 @@
 <script>
 <!--
     YAHOO.util.Event.addListener(this,'load',myClassInit);
-    // Call show() to output messages
-    var myLogReader = new YAHOO.widget.LogReader("ylogger");
+    var myLogReader = new YAHOO.widget.LogReader();
 
     function myClassInit() {
         // Instantiate a custom logwriter with the name "myClass"
-        var myLogWriter = new YAHOO.widget.LogWriter("myClass");
+        myLogWriter = new YAHOO.widget.LogWriter("myClass");
+        
+        // Write out some logs
+        writeGlobalLogs();
+        writeMyLoggerLogs();
 
         // Define interesting moments that cause log messages to be written by "myClass"
         YAHOO.util.Event.addListener(document.getElementById('btn_loginfo'),'click',onLogInfoClick);
