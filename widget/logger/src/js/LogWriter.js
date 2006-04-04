@@ -10,7 +10,7 @@ YAHOO.widget.LogWriter = function(sName) {
 /***************************************************************************
  * Public methods
  ***************************************************************************/
-YAHOO.widget.LogWriter.prototype.log = function(sMsg, sCateogory) {
+YAHOO.widget.LogWriter.prototype.log = function(sMsg, sCategory) {
     YAHOO.widget.Logger.log(this._name, sMsg, sCategory);
 };
 

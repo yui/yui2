@@ -7,11 +7,12 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
     var oSelf = this;
         
     // Initialize memebers
-    this._filters = YAHOO.widget.Logger.categories;
-    this._lastFilteredTime = YAHOO.widget.Logger.getStartTime(); // timestamp of last log message to console
+    this.logReaderEnabled = true;
+    this._lastTime = YAHOO.widget.Logger.getStartTime(); // timestamp of last log message to console
     this._buffer = []; // output buffer
     this._timeout = null; // output buffer timeout
-    this.logReaderEnabled = true;
+    this._allFilters = [];
+    this._currFilters = [];
 
     // Attach container...
     if(containerEl) {
@@ -24,13 +25,15 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
     }
     // ...or create container from scratch
     if(!this._containerEl) {
-        this._containerEl = document.body.appendChild(document.createElement("div"));
-        this._containerEl.id = "ylogger";
-        this._containerEl.style.position = "absolute";
-        this._containerEl.style.top = "1em";
-        this._containerEl.style.right = "1em";
-        this._containerEl.style.zIndex = "9000";
-        this._containerCreated = true;
+        if(YAHOO.widget.LogReader._defaultContainerEl) {
+            this._containerEl =  YAHOO.widget.LogReader._defaultContainerEl;
+        }
+        else {
+            this._containerEl = document.body.appendChild(document.createElement("div"));
+            this._containerEl.id = "ylogger";
+            this._containerEl.className = "ylogger";
+            YAHOO.widget.LogReader._defaultContainerEl = this._containerEl;
+        }
     }
 
     // Parse config vars here
@@ -44,12 +47,13 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         // Create header
         if(!this._hdEl) {
             this._hdEl = this._containerEl.appendChild(document.createElement("div"));
-            this._hdEl.id = "ylog_hd";
+            this._hdEl.id = "ylog_hd" + YAHOO.widget.LogReader._index;
+            this._hdEl.className = "ylog_hd";
+            
             this._collapseEl = this._hdEl.appendChild(document.createElement("div"));
-            this._collapseEl.id = "ylog_collapse";
+            this._collapseEl.className = "ylog_btns";
 
             this._collapseBtn = document.createElement("input");
-            this._collapseBtn.id = "ylog_collapseBtn";
             this._collapseBtn.type = "button"
             this._collapseBtn.value = "Collapse";
             this._collapseBtn = this._collapseEl.appendChild(this._collapseBtn);
@@ -57,49 +61,50 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
 
             this._title = this._hdEl.appendChild(document.createElement("h4"));
             this._title.innerHTML = "Logger Console";
-        }
-        // If Drag and Drop utility is available...
-        // ...and container was created from scratch...
-        // ...then make the header draggable
-        if(this._containerCreated && YAHOO.util.DD) {
-            var ylog_dd = new YAHOO.util.DD(this._containerEl.id);
-            ylog_dd.setHandleElId(this._hdEl.id);
+
+            // If Drag and Drop utility is available...
+            // ...and this container was created from scratch...
+            // ...then make the header draggable
+            if(YAHOO.util.DD &&
+            (YAHOO.widget.LogReader._defaultContainerEl == this._containerEl)) {
+                var ylog_dd = new YAHOO.util.DD(this._containerEl.id);
+                ylog_dd.setHandleElId(this._hdEl.id);
+                this._hdEl.style.cursor = "move";
+            }
         }
         // Ceate console
         if(!this._consoleEl) {
             this._consoleEl = this._containerEl.appendChild(document.createElement("div"));
-            this._consoleEl.id = "ylog_bd";
+            this._consoleEl.className = "ylog_bd";
         }
         // Don't create footer if disabled
         if(!this._ftEl && this.footerEnabled) {
             this._ftEl = this._containerEl.appendChild(document.createElement("div"));
-            this._ftEl.id = "ylog_ft";
+            this._ftEl.className = "ylog_ft";
 
             this._btnsEl = this._ftEl.appendChild(document.createElement("div"));
-            this._btnsEl.id = "ylog_btns";
+            this._btnsEl.className = "ylog_btns";
 
             this._pauseBtn = document.createElement("input");
-            this._pauseBtn.id = "ylog_pauseBtn";
             this._pauseBtn.type = "button";
             this._pauseBtn.value = "Pause";
             this._pauseBtn = this._btnsEl.appendChild(this._pauseBtn);
             YAHOO.util.Event.addListener(oSelf._pauseBtn,'click',oSelf._onClickPauseBtn,oSelf);
 
-            this._resetBtn = document.createElement("input");
-            this._resetBtn.id = "ylog_resetBtn";
-            this._resetBtn.type = "button";
-            this._resetBtn.value = "Reset";
-            this._resetBtn = this._btnsEl.appendChild(this._resetBtn);
-            YAHOO.util.Event.addListener(oSelf._resetBtn,'click',oSelf._onClickResetBtn,oSelf);
+            this._clearBtn = document.createElement("input");
+            this._clearBtn.type = "button";
+            this._clearBtn.value = "Clear";
+            this._clearBtn = this._btnsEl.appendChild(this._clearBtn);
+            YAHOO.util.Event.addListener(oSelf._clearBtn,'click',oSelf._onClickClearBtn,oSelf);
 
             this._filtersEl = this._ftEl.appendChild(document.createElement("div"));
 
-            /*this._filterBtn = document.createElement("input");
-            this._filterBtn.id = "ylog_filterBtn";
-            this._filterBtn.type = "button";
-            this._filterBtn.value = "Filter All";
-            this._filterBtn = this._filtersEl.appendChild(this._filterBtn);
-            YAHOO.util.Event.addListener(oSelf._filterBtn,'click',oSelf._onClickFilterAllBtn,oSelf);*/
+            /*this._filterAllBtn = document.createElement("input");
+            this._filterAllBtn.className = "ylog_filterAllBtn";
+            this._filterAllBtn.type = "button";
+            this._filterAllBtn.value = "Filter All";
+            this._filterAllBtn = this._filtersEl.appendChild(this._filterAllBtn);
+            YAHOO.util.Event.addListener(oSelf._filterAllBtn,'click',oSelf._onClickFilterAllBtn,oSelf);*/
 
             var catsLen = YAHOO.widget.Logger.categories.length;
             for(var i=0; i < catsLen; i++) {
@@ -112,8 +117,9 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
     YAHOO.widget.Logger.categoryCreateEvent.subscribe(this._onCategoryCreate, this);
     YAHOO.widget.Logger.newLogEvent.subscribe(this._onNewLog, this);
     
-    this._setFiltersNone();
-
+    this._filterLogsNoCats();
+    
+    YAHOO.widget.LogReader._index++;
 };
 
 /***************************************************************************
@@ -127,37 +133,31 @@ YAHOO.widget.LogReader.prototype.footerEnabled = true;
  * Public methods
  ***************************************************************************/
 YAHOO.widget.LogReader.prototype.pause = function() {
-    YAHOO.widget.Logger.log(null, "LogReader paused");
     this._timeout = null;
     this.logReaderEnabled = false;
 };
 
 YAHOO.widget.LogReader.prototype.resume = function() {
     this.logReaderEnabled = true;
-    YAHOO.widget.Logger.log(null, "LogReader resumed");
-};
-
-YAHOO.widget.LogReader.prototype.reset = function() {
-    this._timeout = null;
-    this._buffer = [];
-
-    if (this._consoleEl != null) {
-        this._clearConsole();
-    }
-    YAHOO.widget.Logger.reset();
-
-    this._lastFilteredTime = YAHOO.widget.Logger.getStartTime();
-
+    this._printBuffer();
 };
 
  /***************************************************************************
  * Private members
  ***************************************************************************/
-YAHOO.widget.LogReader.prototype._filters = null;
+YAHOO.widget.LogReader._defaultContainerEl = null;
+
+YAHOO.widget.LogReader._index = 0;
+
+YAHOO.widget.LogReader.prototype._allFilters = null;
+ 
+YAHOO.widget.LogReader.prototype._currFilters = null;
 
 YAHOO.widget.LogReader.prototype._buffer = null;
 
 YAHOO.widget.LogReader.prototype._timeout = null;
+
+YAHOO.widget.LogReader.prototype._containerEl = null;
 
 YAHOO.widget.LogReader.prototype._consoleEl = null;
 
@@ -165,39 +165,46 @@ YAHOO.widget.LogReader.prototype._hdEl = null;
 
 YAHOO.widget.LogReader.prototype._ftEl = null;
 
-YAHOO.widget.LogReader.prototype._lastFilteredTime = null;
+YAHOO.widget.LogReader.prototype._lastTime = null;
 
 
 /***************************************************************************
  * Private methods
  ***************************************************************************/
-YAHOO.widget.LogReader.prototype._createFilterCheckbox = function(type) {
+YAHOO.widget.LogReader.prototype._createFilterCheckbox = function(category) {
     var oSelf = this;
+    
+    if(this._filtersEl) {
+        // Append el at the end so IE 5.5 can set "type" attribute
+        var filterChk = document.createElement("input");
+        filterChk.className = "ylog_filter" + category;
+        filterChk.type = "checkbox";
+        filterChk.checked = true;
+        filterChk = this._filtersEl.appendChild(filterChk);
+        YAHOO.util.Event.addListener(filterChk,'click',oSelf._onCheckFilter,oSelf);
 
-    // Append el at the end so IE 5.5 can set "type" attribute
-    var typeChk = document.createElement("input");
-    typeChk.id = "ylog_filter" + type;
-    typeChk.type = "checkbox";
-    typeChk.checked = true;
-    typeChk = this._filtersEl.appendChild(typeChk);
-    YAHOO.util.Event.addListener(typeChk,'click',oSelf._onCheckFilter,oSelf);
+        var filterChkLbl = this._filtersEl.appendChild(document.createElement("span"));
+        filterChkLbl.className = category;
+        filterChkLbl.innerHTML = category;
 
-    var typeLbl = this._filtersEl.appendChild(document.createElement("span"));
-    typeLbl.className = type;
-    typeLbl.innerHTML = type;
+        this._allFilters.push({"category":category,"el":filterChk});
+        this._currFilters.push({"category":category,"el":filterChk});
+    }
 }
 
-YAHOO.widget.LogReader.prototype._setFilters = function() {
-    // Iterate through all filter checkboxes
-    // since some may have been dynamically added and
-    // track which filters to enable
+YAHOO.widget.LogReader.prototype._filterLogs = function() {
+    // Iterate through all filters since
+    // some may have been dynamically added and
+    // print logs that make it through
     if(this._containerEl && this._consoleEl && this._ftEl) {
-        this._filters = [];
-        var catsLen = YAHOO.widget.Logger.categories.length;
-        for(var i=0; i<catsLen; i++) {
-            var filterChk = document.getElementById("ylog_filter"+YAHOO.widget.Logger.categories[i]);
-            if(filterChk.checked) {
-                this._filters.push(YAHOO.widget.Logger.categories[i]);
+        this._currFilters = [];
+        var filtersLen = this._allFilters.length;
+        for(var i=0; i<filtersLen; i++) {
+            //for(var x in this._allFilters[i]) {
+                //alert(x + ' is '+this._allFilters[i][x]);
+            //}
+            if(this._allFilters[i].el.checked) {
+                this._currFilters.push({"category":this._allFilters[i].category,"el":this._allFilters[i].el});
             }
         }
     }
@@ -209,15 +216,15 @@ YAHOO.widget.LogReader.prototype._setFilters = function() {
     }
 };
 
-YAHOO.widget.LogReader.prototype._setFiltersAll = function() {
-    this._filters = [];
+YAHOO.widget.LogReader.prototype._filterLogsAllCats = function() {
+    this._currFilters = [];
     if (this._consoleEl != null) {
         this._clearConsole();
     }
 };
 
-YAHOO.widget.LogReader.prototype._setFiltersNone = function() {
-    this._filters = YAHOO.widget.Logger.categories;
+YAHOO.widget.LogReader.prototype._filterLogsNoCats = function() {
+    this._currFilters = this._allFilters;
     if (this._consoleEl != null) {
         this._clearConsole();
         this._printToConsole(YAHOO.widget.Logger.getStack());
@@ -230,7 +237,7 @@ YAHOO.widget.LogReader.prototype._clearConsole = function() {
     this._buffer = [];
 
     // Reset the rolling timer
-    this._lastFilteredTime = YAHOO.widget.Logger.getStartTime();
+    this._lastTime = YAHOO.widget.Logger.getStartTime();
 
     var consoleEl = this._consoleEl;
     while(consoleEl.hasChildNodes()) {
@@ -248,24 +255,22 @@ YAHOO.widget.LogReader.prototype._printBuffer = function() {
 
     if (this._consoleEl != null) {
         this._printToConsole(entries);
-
     }
 };
 
 
 YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
     var entriesLen = aEntries.length;
-    var filterLen = this._filters.length;
+    var filterLen = this._currFilters.length;
     // Iterate through all log entries...
     for(var i=0; i<entriesLen; i++) {
         var entry = aEntries[i];
         var category = entry.category;
         // ...and only print the ones that filter through
         for(var j=0; j<filterLen; j++) {
-            if(category == this._filters[j]) {
-
-                // formatting to console
-                // calculate the elapsed time to be from the last item that passed through the filter,
+            if(category == this._currFilters[j].category) {
+                // To format for console, calculate the elapsed time
+                // to be from the last item that passed through the filter,
                 // not the absolute previous item in the stack
                 var label = category.substring(0,4).toUpperCase();
 
@@ -278,8 +283,8 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
                 }
 
                 var msecs = time.getTime();
-                var elapsedTime = msecs - this._lastFilteredTime;
-                this._lastFilteredTime = msecs;
+                var elapsedTime = msecs - this._lastTime;
+                this._lastTime = msecs;
 
                 var name = (entry.name) ? entry.name + ": " : "";
 
@@ -302,9 +307,6 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
  ***************************************************************************/
 YAHOO.widget.LogReader.prototype._onCategoryCreate = function(type, args, oSelf) {
     var category = args[0];
-    oSelf._filters.push(category);
-
-    // Add a new filter checkbox to UI
     if(oSelf._containerEl && oSelf._consoleEl && oSelf._ftEl) {
         oSelf._createFilterCheckbox(category);
     }
@@ -340,42 +342,44 @@ YAHOO.widget.LogReader.prototype._onClickPauseBtn = function(v, oSelf) {
     }
 };
 
-YAHOO.widget.LogReader.prototype._onClickResetBtn = function(v, oSelf) {
-    oSelf.reset();
+YAHOO.widget.LogReader.prototype._onClickClearBtn = function(v, oSelf) {
+    oSelf._clearConsole();
 };
 
 YAHOO.widget.LogReader.prototype._onClickFilterAllBtn = function(v, oSelf) {
     var btn = oSelf._filterBtn;
     // Filter all
     if(btn.value == "Filters Off") {
-        oSelf._setFiltersNone();
+        oSelf._filterLogsNoCats();
         // Check all checkboxes in UI
         if(oSelf._ftEl) {
-            var catsLen = YAHOO.widget.Logger.categories.length;
-            for(var i=0; i<catsLen; i++) {
-                var filterChk = document.getElementById("ylog_filter"+YAHOO.widget.Logger.categories[i]);
+            var filtersLen = this._allFilters.length;
+            for(var i=0; i<filtersLen; i++) {
+                var filterChk = this._allFilters[i].el;
                 filterChk.checked = true;
             }
+            this._currFilters = this._allFilters;
         }
         btn.value = "Filter All";
     }
     // Filter none
     else {
-        this._setFiltersAll();
+        this._filterLogsAllCats();
         // Uncheck all checkboxes in UI
         if(oSelf._ftEl) {
-            var catsLen = oSelf.categories.length;
-            for(var i=0; i<catsLen; i++) {
-                var filterChk = document.getElementById("ylog_filter"+YAHOO.widget.Logger.categories[i]);
+            var filtersLen = this._allFilters.length;
+            for(var i=0; i<filtersLen; i++) {
+                var filterChk = this._allFilters[i].el;
                 filterChk.checked = false;
             }
+            this._currFilters = [];
         }
         btn.value = "Filters Off";
     }
 };
 
 YAHOO.widget.LogReader.prototype._onCheckFilter = function(v, oSelf) {
-    oSelf._setFilters();
+    oSelf._filterLogs();
 };
 
 YAHOO.widget.LogReader.prototype._onNewLog = function(type, args, oSelf) {
