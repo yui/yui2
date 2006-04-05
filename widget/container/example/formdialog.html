@@ -56,8 +56,9 @@
 
 	function submitCallback(obj) {
 		var response = obj.responseText;
-		eval(response);
+		response = response.split("<!")[0];
 		document.getElementById("resp").innerHTML = response;
+		eval(response);
 	}
 
 	function init() {
