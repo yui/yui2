@@ -1,7 +1,8 @@
 /* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
 
 /**
- * @class The Yahoo global namespace
+ * The Yahoo global namespace
+ * @constructor
  */
 var YAHOO = window.YAHOO || {};
 
@@ -35,6 +36,17 @@ YAHOO.namespace = function( sNameSpace ) {
     }
 
     return currentNS;
+};
+
+/**
+ * Global log method.
+ */
+YAHOO.log = function(sMsg,sCategory) {
+    if(YAHOO.widget.Logger) {
+        YAHOO.widget.Logger.log(null, sMsg, sCategory);
+    } else {
+        return false;
+    }
 };
 
 YAHOO.namespace("util");

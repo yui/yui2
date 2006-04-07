@@ -38,6 +38,18 @@ YAHOO.namespace = function( sNameSpace ) {
     return currentNS;
 };
 
+/**
+ * Global log method.
+ */
+YAHOO.log = function(sMsg,sCategory) {
+    if(YAHOO.widget.Logger) {
+        YAHOO.widget.Logger.log(null, sMsg, sCategory);
+    } else {
+        return false;
+    }
+};
+
+
 YAHOO.namespace("util");
 YAHOO.namespace("widget");
 YAHOO.namespace("example");
