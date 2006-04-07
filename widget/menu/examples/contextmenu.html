@@ -12,16 +12,27 @@
         <!-- Page-specific styles -->
         <style type="text/css">
 
-            h1,p {
+            h1,p,ul {
 
                 margin:1em;
+
+            }
+
+            em {
+
+                font-weight:bold;
+
+            }
+
+            #operainstructions {
+
+                margin-left:2em;
 
             }
 
             #yahooproperties {
 
                 list-style-type:none;
-                margin:1em;
                 width:198px;
                 background-color:#666;
                 border:solid 1px #666;
@@ -675,6 +686,8 @@
             };
 
 
+            // "click" event handler for the document object
+
             function onDocumentClick(p_oEvent) {
 
                 /*
@@ -687,7 +700,9 @@
             }
 
 
-            function onDocumentContextMenu(p_oEvent) {
+            // "contextmenu" event handler for the document object
+
+            function onYahooPropertiesContextMenu(p_oEvent) {
 
                 var oTarget = YAHOO.util.Event.getTarget(p_oEvent, true);
 
@@ -744,7 +759,29 @@
                 }
 
             }
-           
+
+
+            // "click" event handler for the list of Yahoo! properties (UL)
+
+            function onYahooPropertiesClick(p_oEvent) {
+
+                if(p_oEvent.ctrlKey) {
+
+                    onYahooPropertiesContextMenu.call(this, p_oEvent);
+    
+                    /*
+                        Stop propagation of the event so that the document's
+                        "click" handler ("onDocumentClick") does not get called
+                    */
+
+                    YAHOO.util.Event.stopPropagation(p_oEvent);
+
+                }
+
+            }
+
+
+            // "load" event handler for the "window" object           
 
             function onWindowLoad(p_oEvent) {
 
@@ -826,11 +863,32 @@
                 var oYahooProperties = 
                         document.getElementById("yahooproperties");
 
-                YAHOO.util.Event.addListener(
-                    oYahooProperties, 
-                    "contextmenu", 
-                    onDocumentContextMenu
-                );
+
+                var sBrowser = getBrowser();
+
+                /*
+                    Listen for the "click" event in Opera b/c it does not 
+                    support the "contextmenu" event
+                */
+
+                if(sBrowser && sBrowser == "opera") {
+
+                    YAHOO.util.Event.addListener(
+                        oYahooProperties, 
+                        "click", 
+                        onYahooPropertiesClick
+                    );
+
+                }
+                else {
+
+                    YAHOO.util.Event.addListener(
+                        oYahooProperties, 
+                        "contextmenu", 
+                        onYahooPropertiesContextMenu
+                    );
+
+                }
 
 
                 // Assign a "click" event handler to the document
@@ -852,8 +910,15 @@
     </head>
     <body>
         <h1>Context Menu Example</h1>
-        <p>Right-click, or control-click on any of the following items to invoke a context menu.  You'll be able to use the context menu to manipulate the items in the list.</p>
-        <p><em>Note:</em> This example will not work in Opera as it does not support the "contextmenu" event.</p>
+
+        <p>Right-click, or hold down the control key and click with the left mouse button on any of the following items to invoke a context menu.  You'll be able to use the context menu to manipulate the items in the list.</p>
+
+        <p><em>Please Note:</em> Opera does not currently support the "contextmenu" event and a right-click in Opera does not cause the "mousedown," "mouseup," or the "click" event to fire.  For these reasons Opera users will need to do the following to use this example:</p>
+
+        <ul id="operainstructions">
+            <li><em>Opera 8.5 and 9 for Windows:</em>  Hold down the control key and click with the left mouse button.</li>
+            <li><em>Opera 8.5 and 9 for OS X:</em>  Hold down the command key (&#8984;) and click with the left mouse button.</li>
+        </ul>
 
         <ul id="yahooproperties">
             <li class="first"><a href="http://mail.yahoo.com">Yahoo! Mail</a></li>
