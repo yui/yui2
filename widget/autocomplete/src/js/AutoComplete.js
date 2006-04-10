@@ -143,13 +143,13 @@ YAHOO.widget.AutoComplete.prototype.highlightClassName = "highlight";
 YAHOO.widget.AutoComplete.prototype.delimChar = null;
 
 /**
- * Whether or not the auto complete input field should be automatically filled
+ * Whether or not the auto complete input field should be automatically updated
  * with the first query result as the user types, auto-selecting the substring
  * that the user has not typed. Default: false.
  *
  * @type boolean
  */
-YAHOO.widget.AutoComplete.prototype.autoFill = false;
+YAHOO.widget.AutoComplete.prototype.typeAhead = false;
 
 /**
  * Whether or not to animate the expansion/collapse of the auto complete
@@ -887,6 +887,13 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._isIgnoreKey = function(nKeyCode) {
+    if(this.typeAhead) { // fewer query triggers when type ahead is on
+        if((nKeyCode == 8) || // backspace
+        (nKeyCode == 39) || // right
+        (nKeyCode == 46)) { // delete
+            return true;
+        }
+    }
     if ((nKeyCode == 9) || (nKeyCode == 13)  || // tab, enter
             (nKeyCode == 16) || (nKeyCode == 17) || // shift, ctl
             (nKeyCode >= 18 && nKeyCode <= 20) || // alt,pause/break,caps lock
@@ -1074,7 +1081,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         oSelf._toggleHighlight(oFirstItem,'mouseover');
         oSelf._toggleContainer(true);
         oSelf.itemArrowToEvent.fire(oSelf, oFirstItem);
-        oSelf._autoFill(oFirstItem,sQuery);
+        oSelf._typeAhead(oFirstItem,sQuery);
         oSelf._oCurItem = oFirstItem;
     }
     else {
@@ -1126,23 +1133,23 @@ YAHOO.widget.AutoComplete.prototype._textMatchesOption = function() {
 };
 
 /**
- * Fills in the text input box with the first query result as the user types,
+ * Updates in the text input box with the first query result as the user types,
  * selecting the substring that the user has not typed.
  *
- * @param {object} oItem The &lt;li&gt; element item from which to auto fill data
+ * @param {object} oItem The &lt;li&gt; element item whose data populates the input field
  * @param {string} sQuery Query string
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._autoFill = function(oItem, sQuery) {
+YAHOO.widget.AutoComplete.prototype._typeAhead = function(oItem, sQuery) {
     var oTextbox = this._oTextbox;
     var sValue = this._oTextbox.value;
     
-    // Don't auto fill if turned off
-    if (!this.autoFill) {
+    // Don't update with type-ahead if turned off
+    if (!this.typeAhead) {
         return;
     }
     
-    // Don't auto fill if query term doesn't match what user has typed
+    // Don't update input field if query term doesn't match what user has typed
     // If delimited, extract the query term from the delimited string
     var aDelimChar = (this.delimChar) ? this.delimChar : null;
     if(aDelimChar) {
@@ -1169,12 +1176,12 @@ YAHOO.widget.AutoComplete.prototype._autoFill = function(oItem, sQuery) {
         }
     }
     
-    // Don't auto fill if text selection is not supported
+    // Don't update with type-ahead if text selection is not supported
     if(!oTextbox.setSelectionRange && !oTextbox.createTextRange) {
         return;
     }
    
-    // Select the portion of text being auto filled
+    // Select the portion of text that the user has not typed
     var nStart = sValue.length;
     this._updateValue(oItem);
     var nEnd = oTextbox.value.length;
@@ -1381,21 +1388,19 @@ YAHOO.widget.AutoComplete.prototype._updateValue = function(oItem) {
  */
 YAHOO.widget.AutoComplete.prototype._selectItem = function(oItem) {
     this._bItemSelected = true;
-    if(!this.autoFill) {
-        this._updateValue(oItem);
-    }
+    this._updateValue(oItem);
     this.itemSelectEvent.fire(this, oItem);
     this._clearList();
 };
 
 /**
- * For auto filled text input box values, the right arrow key jumps to the end
+ * For values updated by type-ahead, the right arrow key jumps to the end
  * of the textbox, otherwise the container is closed.
  *
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._jumpSelection = function() {
-    if(!this.autoFill) {
+    if(!this.typeAhead) {
         return;
     }
     else {
@@ -1434,7 +1439,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
             this.itemArrowFromEvent.fire(this, oCurItem);
         }
         if (nNewItemIndex == -1) {
-           // go back to query (remove autofill)
+           // go back to query (remove type-ahead string)
             if(this.delimChar && this._sSavedQuery) {
                 if (!this._textMatchesOption()) {
                     this._oTextbox.value = this._sSavedQuery;
@@ -1491,7 +1496,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
 
         this._toggleHighlight(oNewItem, 'mouseover');
         this.itemArrowToEvent.fire(this, oNewItem);
-        if(this.autoFill) {
+        if(this.typeAhead) {
             this._updateValue(oNewItem);
         }
     }

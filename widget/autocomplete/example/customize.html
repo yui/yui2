@@ -103,8 +103,8 @@
                 <dd><input id="animvert" type="checkbox" onclick="toggleAnimVert(this);" checked></dd>
             <dt>Animation Speed</dt>
                 <dd><input id="animspeed" type="text" size="2" value="0.3"> <input type="button" value="Update" onclick="updateAnimSpeed();"></dd>
-            <dt>Auto Fill</dt>
-                <dd><input id="autofill" type="checkbox" onclick="toggleAutoFill(this);"></dd>
+            <dt>Type Ahead</dt>
+                <dd><input id="typeahead" type="checkbox" onclick="toggleTypeAhead(this);"></dd>
             <dt>Force a Selection</dt>
                 <dd><input id="forceselection" type="checkbox" onclick="toggleForceSelection(this);"></dd>
             <dt>Maximum Results</dt>
@@ -404,9 +404,9 @@
         doLog("Updated animation speed to " + oAutoComp.animSpeed + ".");
     }
 
-    function toggleAutoFill(autoFill) {
-        oAutoComp.autoFill = autoFill.checked;
-        doLog("Updated auto fill to " + oAutoComp.autoFill + ".");
+    function toggleTypeAhead(typeAhead) {
+        oAutoComp.typeAhead = typeAhead.checked;
+        doLog("Updated type ahead to " + oAutoComp.typeAhead + ".");
     }
     
     function toggleForceSelection(forceSelection) {
