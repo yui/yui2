@@ -224,8 +224,26 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	this.subscribeToConfigEvent = function(key, handler, obj, override) {
 		var property = config[key];
 		if (property != undefined && property.event) {
-			property.event.subscribe(handler, obj, override);
+			if (! YAHOO.util.Config.alreadySubscribed(property.event, handler, obj)) {
+				property.event.subscribe(handler, obj, override);
+			}
 			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	* Unsubscribes an external handler from the change event for any given property. 
+	* @param {string}	key			The property name
+	* @param {Function}	handler		The handler function to use subscribe to the property's event
+	* @param {object}	obj			The object to use for scoping the event handler (see CustomEvent documentation)
+	* @param {boolean}	override	Optional. If true, will override "this" within the handler to map to the scope object passed into the method.
+	*/
+	this.unsubscribeFromConfigEvent = function(key, handler, obj) {
+		var property = config[key];
+		if (property != undefined && property.event) {
+			return property.event.unsubscribe(handler, obj);
 		} else {
 			return false;
 		}
@@ -271,20 +289,15 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 	}
 }
-/**
-* Checks to see if the passed element is actually present in the DOM.
-* @param	{Element}	element	The element to be checked for DOM presence.
-* @return	{boolean}	true, if the element is present in the DOM
-*/
-YAHOO.util.Dom._elementInDom = function(element) {
-	var parentNode = element.parentNode;
-	if (! parentNode) {
-		return false;
-	} else {
-		if (parentNode.tagName == "HTML") {
+
+
+YAHOO.util.Config.alreadySubscribed = function(evt, fn, obj) {
+	for (var e=0;e<evt.subscribers.length;e++) {
+		var subsc = evt.subscribers[e];
+		if (subsc && subsc.obj == obj && subsc.fn == fn) {
 			return true;
-		} else {
-			return YAHOO.util.Dom._elementInDom(parentNode);
+			break;
 		}
 	}
+	return false;
 }

@@ -86,8 +86,6 @@ YAHOO.widget.OverlayEffect.prototype.handleTweenAnimateOut = function(type, args
 */
 YAHOO.widget.OverlayEffect.prototype.handleCompleteAnimateOut = function(type, args, obj) { }
 
-
-
 /**
 * A pre-configured OverlayEffect instance that can be used for fading an overlay in and out.
 * @param {Overlay}	The Overlay object to animate
@@ -98,13 +96,17 @@ YAHOO.widget.OverlayEffect.FADE = function(overlay, dur) {
 	var fade = new YAHOO.widget.OverlayEffect(overlay, { attributes:{opacity: {from:0, to:1}}, duration:dur, method:YAHOO.util.Easing.easeIn }, { attributes:{opacity: {to:0}}, duration:dur, method:YAHOO.util.Easing.easeOut} );
 
 	fade.handleStartAnimateIn = function(type,args,obj) {
-
 		YAHOO.util.Dom.addClass(obj.overlay.element, "hide-select");
+		
+		if (! obj.overlay.underlay) {
+			obj.overlay.cfg.refireEvent("underlay");
+		}
 
 		if (obj.overlay.underlay) {
 			obj.initialUnderlayOpacity = YAHOO.util.Dom.getStyle(obj.overlay.underlay, "opacity");
 			obj.overlay.underlay.style.filter = null;
 		}
+
 		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "visible"); 
 		YAHOO.util.Dom.setStyle(obj.overlay.element, "opacity", 0);
 	}
@@ -196,15 +198,13 @@ YAHOO.widget.OverlayEffect.SLIDE = function(overlay, dur) {
 	}
 
 	slide.handleStartAnimateOut = function(type, args, obj) {
-		if (obj.overlay.browser == "ie") {
+		/*if (obj.overlay.browser == "ie") {
 			document.documentElement.style.overflowX = "hidden";
-			document.documentElement.style.overflowY = "hidden";	
 		} else if (obj.overlay.browser == "gecko") {
 			document.body.style.overflowX = "hidden";
-			document.body.style.overflowY = "hidden";
 		} else {
 			document.body.style.overflow = "hidden"; 
-		}
+		}*/
 
 		obj.overlay.element.style.width = obj.overlay.element.offsetWidth + "px";
 
@@ -220,7 +220,7 @@ YAHOO.widget.OverlayEffect.SLIDE = function(overlay, dur) {
 	}
 
 	slide.handleTweenAnimateOut = function(type, args, obj) {
-		if (obj.overlay.browser == "ie") {
+		/*if (obj.overlay.browser == "ie") {
 			document.documentElement.style.overflowX = "hidden";
 			document.documentElement.style.overflowY = "hidden";	
 		} else if (obj.overlay.browser == "gecko") {
@@ -228,7 +228,7 @@ YAHOO.widget.OverlayEffect.SLIDE = function(overlay, dur) {
 			document.body.style.overflowY = "hidden";
 		} else {
 			document.body.style.overflow = "hidden"; 
-		}
+		}*/
 		
 		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
 
@@ -247,7 +247,7 @@ YAHOO.widget.OverlayEffect.SLIDE = function(overlay, dur) {
 		obj.overlay.cfg.refireEvent("fixedcenter");
 		obj.overlay.cfg.refireEvent("width");
 
-		if (obj.overlay.browser == "ie") {
+		/*if (obj.overlay.browser == "ie") {
 			document.documentElement.style.overflowX = "auto";
 			document.documentElement.style.overflowY = "auto";
 		} else if (obj.overlay.browser == "gecko") {
@@ -255,7 +255,7 @@ YAHOO.widget.OverlayEffect.SLIDE = function(overlay, dur) {
 			document.body.style.overflowY = "visible";
 		} else {
 			document.body.style.overflow = "visible"; 
-		}
+		}*/
 
 		obj.animateOutCompleteEvent.fire();
 	};	

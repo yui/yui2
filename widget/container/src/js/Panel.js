@@ -49,7 +49,6 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 		this.cfg.applyConfig(userConfig, true);
 	}
 
-	YAHOO.util.Event.addListener(window, "resize", this.onWindowResize, this, true);
 }
 
 /**
@@ -126,17 +125,6 @@ YAHOO.widget.Panel.prototype.configDraggable = function(type, args, obj) {
 		}
 		YAHOO.util.Dom.setStyle(this.header,"cursor","move");
 		this.registerDragDrop();
-		this.dd.onDrag = function() {
-			obj.syncPosition();
-		}
-		if (this.browser == "ie") {
-			this.dd.startDrag = function() {
-				YAHOO.util.Dom.addClass(obj.element,"drag");
-			}
-			this.dd.endDrag = function() {
-				YAHOO.util.Dom.removeClass(obj.element,"drag");
-			}
-		}
 	} else {
 		if (this.dd) {
 			this.dd.unreg();
@@ -182,6 +170,7 @@ YAHOO.widget.Panel.prototype.configUnderlay = function(type, args, obj) {
 */
 YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 	var val = args[0];
+
 	if (val) {
 		this.buildMask();
 		var effect = this.cfg.getProperty("effect");
@@ -196,13 +185,24 @@ YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 			
 			this.showEvent.unsubscribe(this.showMask, this);
 			this.hideEvent.unsubscribe(this.hideMask, this);
+			
+			if (! YAHOO.util.Config.alreadySubscribed( firstEffect.beforeAnimateInEvent, this.showMask, this) ) {
+				firstEffect.beforeAnimateInEvent.subscribe(this.showMask, this, true);
+			}
 
-			firstEffect.beforeAnimateInEvent.subscribe(this.showMask, this, true);
-			firstEffect.animateOutCompleteEvent.subscribe(this.hideMask, this, true);
+			if (! YAHOO.util.Config.alreadySubscribed( firstEffect.animateOutCompleteEvent, this.hideMask, this ) ) {
+				firstEffect.animateOutCompleteEvent.subscribe(this.hideMask, this, true);
+			}
+			//firstEffect.animateInCompleteEvent.subscribe(this.sizeMask, this, true);
+			
 
 		} else {
-			this.showEvent.subscribe(this.showMask, this, true);
-			this.hideEvent.subscribe(this.hideMask, this, true);
+			if (! YAHOO.util.Config.alreadySubscribed( this.showEvent, this.showMask, this) ) {
+				this.showEvent.subscribe(this.showMask, this, true);
+			}
+			if (! YAHOO.util.Config.alreadySubscribed( this.hideEvent, this.hideMask, this) ) {
+				this.hideEvent.subscribe(this.hideMask, this, true);
+			}
 		}
 	}
 }
@@ -211,33 +211,23 @@ YAHOO.widget.Panel.prototype.configkeyListeners = function(type, args, obj) {
 	var handlers = args[0];
 
 	if (handlers) {
-		var dupeCheck = function(evt, fn, obj) {
-			for (var e=0;e<evt.subscribers.length;e++) {
-				var subsc = evt.subscribers[e];
-				if (subsc.obj == obj && subsc.fn == fn) {
-					return true;
-					break;
-				}
-			}
-			return false;
-		}
 
 		if (handlers instanceof Array) {
 			for (var i=0;i<handlers.length;i++) {
 				var handler = handlers[i];
 
-				if (! dupeCheck(this.showEvent, handler.enable, handler)) {
+				if (! YAHOO.util.Config.alreadySubscribed(this.showEvent, handler.enable, handler)) {
 					this.showEvent.subscribe(handler.enable, handler, true);
 				}
-				if (! dupeCheck(this.hideEvent, handler.disable, handler)) {
+				if (! YAHOO.util.Config.alreadySubscribed(this.hideEvent, handler.disable, handler)) {
 					this.hideEvent.subscribe(handler.disable, handler, true);
 				}
 			}
 		} else {
-			if (! dupeCheck(this.showEvent, handlers.enable, handlers)) {
+			if (! YAHOO.util.Config.alreadySubscribed(this.showEvent, handlers.enable, handlers)) {
 				this.showEvent.subscribe(handlers.enable, handlers, true);
 			}
-			if (! dupeCheck(this.hideEvent, handlers.disable, handlers)) {
+			if (! YAHOO.util.Config.alreadySubscribed(this.hideEvent, handlers.disable, handlers)) {
 				this.hideEvent.subscribe(handlers.disable, handlers, true);
 			}
 		}
@@ -331,10 +321,60 @@ YAHOO.widget.Panel.prototype.registerDragDrop = function() {
 		if (! this.header.id) {
 			this.header.id = this.id + "_h";
 		}
+		
+		var me = this;
+
+		this.dd.startDrag = function() {
+			if (me.browser == "ie") {
+				YAHOO.util.Dom.addClass(me.element,"drag");
+			}
+
+			if (me.cfg.getProperty("constraintoviewport")) {
+				var offsetHeight = me.element.offsetHeight;
+				var offsetWidth = me.element.offsetWidth;
+
+				var viewPortWidth = YAHOO.util.Dom.getViewportWidth();
+				var viewPortHeight = YAHOO.util.Dom.getViewportHeight();
+
+				var scrollX = window.scrollX || document.documentElement.scrollLeft;
+				var scrollY = window.scrollY || document.documentElement.scrollTop;
+
+				var topConstraint = scrollY + 10;
+				var leftConstraint = scrollX + 10;
+				var bottomConstraint = scrollY + viewPortHeight - offsetHeight - 10;
+				var rightConstraint = scrollX + viewPortWidth - offsetWidth - 10;
+
+				this.minX = leftConstraint
+				this.maxX = rightConstraint;
+				this.constrainX = true;
+
+				this.minY = topConstraint;
+				this.maxY = bottomConstraint;
+				this.constrainY = true;
+			} else {
+				this.constrainX = false;
+				this.constrainY = false;
+			}
+		
+		}
+		
+		this.dd.onDrag = function() {
+			me.syncPosition();
+			me.cfg.refireEvent("iframe");
+		}
+
+		this.dd.endDrag = function() {
+			if (me.browser == "ie") {
+				YAHOO.util.Dom.removeClass(me.element,"drag");
+			}
+		}
+
 		this.dd.setHandleElId(this.header.id);
 		this.dd.addInvalidHandleType("INPUT");
 		this.dd.addInvalidHandleType("SELECT");
 		this.dd.addInvalidHandleType("TEXTAREA");
+
+
 	}
 }
 
@@ -344,6 +384,7 @@ YAHOO.widget.Panel.prototype.registerDragDrop = function() {
 YAHOO.widget.Panel.prototype.buildMask = function() {
 	if (! this.mask) {
 		this.mask = document.createElement("DIV");
+		this.mask.id = this.id + "_mask";
 		this.mask.className = "mask";
 		this.mask.innerHTML = "&nbsp;";
 
@@ -366,27 +407,9 @@ YAHOO.widget.Panel.prototype.buildMask = function() {
 YAHOO.widget.Panel.prototype.hideMask = function() {
 	if (this.cfg.getProperty("modal") && this.mask) {
 		this.mask.style.display = "none";
-		this.mask.style.width = "1px";
-		this.mask.style.height = "1px";
-
-		YAHOO.util.Dom.removeClass(document.body, "masked");
-
-		switch (this.browser) {
-			case "ie":
-			case "ie7":
-				document.documentElement.style.overflowX = "auto";
-				document.documentElement.style.overflowY = "scroll";
-				break;
-			case "gecko":
-				document.body.style.overflowX = "auto";
-				document.body.style.overflowY = "auto";
-				break;
-			default:
-				document.body.style.overflow = "auto"; 
-				break;
-		}
-
+		YAHOO.util.Event.removeListener(window, "resize", this.onWindowResize);
 		this.hideMaskEvent.fire();
+		YAHOO.util.Dom.removeClass(document.body, "masked");
 	}
 }
 
@@ -395,50 +418,18 @@ YAHOO.widget.Panel.prototype.hideMask = function() {
 */
 YAHOO.widget.Panel.prototype.showMask = function() {
 	if (this.cfg.getProperty("modal") && this.mask) {
-		switch (this.browser) {
-			case "ie":
-			case "ie7":
-				document.documentElement.style.overflowX = "hidden";
-				document.documentElement.style.overflowY = "hidden";	
-				break;
-			case "gecko":
-				document.body.style.overflowX = "hidden";
-				document.body.style.overflowY = "hidden";
-				break;
-			default:
-				document.body.style.overflow = "hidden"; 
-				break;
-		}
-
-		this.sizeMask();
-
 		YAHOO.util.Dom.addClass(document.body, "masked");
+		YAHOO.util.Event.addListener(window, "resize", this.onWindowResize, this, true);
+		this.sizeMask();
 		this.mask.style.display = "block";
-
 		this.showMaskEvent.fire();
 	}
 }
 
 YAHOO.widget.Panel.prototype.sizeMask = function() {
 	if (this.mask) {
-		var clientHeight = YAHOO.util.Dom.getClientHeight();
-		var scrollHeight = document.body.scrollHeight;
-
-		switch (this.browser) {
-			case "ie":
-			case "ie7":
-				this.mask.style.width = "110%";
-				this.mask.style.height = (scrollHeight > clientHeight ? scrollHeight : clientHeight)+ "px";
-				break;
-			case "gecko":
-				this.mask.style.width = "110%";
-				this.mask.style.height = "100%";
-				break;
-			default:
-				this.mask.style.width = "110%";
-				this.mask.style.height = "100%";
-				break;
-		}
+		this.mask.style.height = YAHOO.util.Dom.getDocumentHeight()+"px";
+		this.mask.style.width = YAHOO.util.Dom.getDocumentWidth()+"px";
 	}
 }
 
@@ -466,63 +457,6 @@ YAHOO.widget.Panel.prototype.configWidth = function(type, args, obj) {
 }
 
 YAHOO.widget.Panel.prototype.render = function(appendToNode) {
-	this.beforeRenderEvent.fire();
-
-	var me = this;
-	var appendTo = function(element) {
-		if (typeof element == "string") {
-			element = document.getElementById(element);
-		}
-		
-		if (element) {
-			element.appendChild(me.element);
-			me.appendEvent.fire();
-		}
-	}
-
-	if (appendToNode) {
-		if (typeof appendToNode == "string") {
-			el = document.getElementById(el);
-			if (! el) {
-				el = document.createElement("DIV");
-				el.id = elId;
-			}
-		}
-		appendTo(appendToNode);
-	} else { // No node was passed in. If the element is not pre-marked up, this fails
-		if (! YAHOO.util.Dom.inDocument(this.element)) {
-			return false;
-		}
-	}
-
-	// Need to get everything into the DOM if it isn't already
-	
-	if ((! this.childNodesInDOM[0]) && this.header) {
-		// There is a header, but it's not in the DOM yet... need to add it
-		var firstChild = this.innerElement.firstChild;
-		if (firstChild) { // Insert before first child if exists
-			this.innerElement.insertBefore(this.header, firstChild);
-		} else { // Append to empty body because there are no children
-			this.innerElement.appendChild(this.header);
-		}
-	}
-
-	if ((! this.childNodesInDOM[1]) && this.body) {
-		// There is a body, but it's not in the DOM yet... need to add it
-		if (this.childNodesInDOM[2]) { // Insert before footer if exists in DOM
-			this.innerElement.insertBefore(this.body, this.childNodesInDOM[2]);
-		} else { // Append to element because there is no footer
-			this.innerElement.appendChild(this.body);
-		}
-	}
-
-	if ((! this.childNodesInDOM[2]) && this.footer) {
-		// There is a footer, but it's not in the DOM yet... need to add it
-		this.innerElement.appendChild(this.footer);
-	}
-	
-	this.cfg.fireDeferredEvents();
-
-	this.renderEvent.fire();
-	return true;
+	var moduleElement = this.innerElement;
+	return YAHOO.widget.Panel.superclass.render.call(this, appendToNode, moduleElement);
 }

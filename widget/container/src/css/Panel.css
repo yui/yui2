@@ -14,10 +14,6 @@
 	visibility:hidden;
 }
 
-body.masked {
-	height:100%;
-}
-
 .mask {
     z-index:0;   
     display:none;
@@ -31,6 +27,14 @@ body.masked {
     }
 .mask[id]{ /* IE6 and below Can't See This */
     position:fixed;
+}
+
+.hide-scrollbars * {
+	overflow:hidden;
+}
+
+.hide-scrollbars textarea, .hide-scrollbars select {
+	display:none;
 }
 
 .panel-container {

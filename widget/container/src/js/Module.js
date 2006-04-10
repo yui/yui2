@@ -387,8 +387,12 @@ YAHOO.widget.Module.prototype = {
 	* @param {Element}	appendToNode	The element to which the Module should be appended to prior to rendering	
 	* @return {boolean} Success or failure of the render
 	*/
-	render : function(appendToNode) {
+	render : function(appendToNode, moduleElement) {
 		this.beforeRenderEvent.fire();
+
+		if (! moduleElement) {
+			moduleElement = this.element;
+		}
 
 		var me = this;
 		var appendTo = function(element) {
@@ -421,26 +425,26 @@ YAHOO.widget.Module.prototype = {
 		
 		if ((! this.childNodesInDOM[0]) && this.header) {
 			// There is a header, but it's not in the DOM yet... need to add it
-			var firstChild = this.element.firstChild;
+			var firstChild = moduleElement.firstChild;
 			if (firstChild) { // Insert before first child if exists
-				this.element.insertBefore(this.header, firstChild);
+				moduleElement.insertBefore(this.header, firstChild);
 			} else { // Append to empty body because there are no children
-				this.element.appendChild(this.header);
+				moduleElement.appendChild(this.header);
 			}
 		}
 
 		if ((! this.childNodesInDOM[1]) && this.body) {
 			// There is a body, but it's not in the DOM yet... need to add it
 			if (this.childNodesInDOM[2]) { // Insert before footer if exists in DOM
-				this.element.insertBefore(this.body, this.childNodesInDOM[2]);
+				moduleElement.insertBefore(this.body, this.childNodesInDOM[2]);
 			} else { // Append to element because there is no footer
-				this.element.appendChild(this.body);
+				moduleElement.appendChild(this.body);
 			}
 		}
 
 		if ((! this.childNodesInDOM[2]) && this.footer) {
 			// There is a footer, but it's not in the DOM yet... need to add it
-			this.element.appendChild(this.footer);
+			moduleElement.appendChild(this.footer);
 		}
 		
 		this.cfg.fireDeferredEvents();
@@ -474,7 +478,9 @@ YAHOO.widget.Module.prototype = {
 	show : function() {
 		this.beforeShowEvent.fire();
 		this.cfg.setProperty("visible", true);
-		this.showEvent.fire();
+		if (! this.cfg.getProperty("effect")) {
+			this.showEvent.fire();
+		}
 	},
 
 	/**
@@ -483,7 +489,9 @@ YAHOO.widget.Module.prototype = {
 	hide : function() {
 		this.beforeHideEvent.fire();
 		this.cfg.setProperty("visible", false);
-		this.hideEvent.fire();
+		if (! this.cfg.getProperty("effect")) {
+			this.hideEvent.fire();
+		}
 	},
 
 	// BUILT-IN EVENT HANDLERS FOR MODULE //
@@ -513,3 +521,4 @@ YAHOO.widget.Module.prototype = {
 		}
 	}
 }
+
