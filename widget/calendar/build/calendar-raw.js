@@ -1030,7 +1030,7 @@ YAHOO.widget.Calendar_Core.prototype.renderBody = function(workingDate) {
 	
 	workingDate = YAHOO.widget.DateMath.subtract(workingDate, YAHOO.widget.DateMath.DAY, this.preMonthDays);
 
-	this.table.style.visibility = "hidden"; // Hide while we render
+	//this.table.style.visibility = "hidden"; // Hide while we render
 	
 	var weekRowIndex = 0;
 	
@@ -1229,7 +1229,7 @@ YAHOO.widget.Calendar_Core.prototype.renderBody = function(workingDate) {
 		}
 	}
 	
-	this.table.style.visibility = "visible"; // Show table, now that it's rendered
+	//this.table.style.visibility = "visible"; // Show table, now that it's rendered
 	
 };
 
