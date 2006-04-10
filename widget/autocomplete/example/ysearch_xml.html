@@ -109,7 +109,6 @@
         oACDS.getResultsEvent.subscribe(myOnGetResults);
         oACDS.getCachedResultsEvent.subscribe(myOnGetCachedResults);
         oACDS.dataErrorEvent.subscribe(myOnDataError);
-        oACDS.dataSourceErrorEvent.subscribe(myOnDataSourceError);
         oACDS.cacheFlushEvent.subscribe(myOnCacheFlush);
 
         oAutoComp.textboxFocusEvent.subscribe(myOnTextboxFocus);
@@ -123,7 +122,6 @@
         oAutoComp.itemArrowFromEvent.subscribe(myOnItemArrowFrom);
         oAutoComp.itemSelectEvent.subscribe(myOnItemSelect);
         oAutoComp.selectionClearEvent.subscribe(myOnSelectionClear);
-        oAutoComp.autoCompleteErrorEvent.subscribe(myOnAutoCompleteError);
 
         // Define custom event handlers
         function myOnQuery(sType, aArgs) {
@@ -162,13 +160,6 @@
             var sQuery = aArgs[2];
             var sMessage = aArgs[3];
             doLog("Data source for " + oParent.getName() + " experienced a data retrieval error: " + sMessage);
-        }
-
-        function myOnDataSourceError(sType, aArgs) {
-            var oDataSource = aArgs[0];
-            var oParent = aArgs[1];
-            var sMessage = aArgs[2];
-            doLog("Data source for " + oParent.getName() + " experienced a data source object error: " + sMessage);
         }
 
         function myOnCacheFlush(sType, aArgs) {
@@ -236,11 +227,6 @@
             var oAutoComp = aArgs[0];
             doLog(oAutoComp.getName() + " had to clear an invalid selection.");
         };
-
-        function myOnAutoCompleteError(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            doLog(oAutoComp.getName() + " experienced an error.");
-        }
     }
     
     YAHOO.util.Event.addListener(this,'load',autoCompInit);

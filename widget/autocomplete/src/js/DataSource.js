@@ -217,7 +217,6 @@ YAHOO.widget.DataSource.prototype._init = function() {
     this.getResultsEvent = new YAHOO.util.CustomEvent("getResults", this);
     this.getCachedResultsEvent = new YAHOO.util.CustomEvent("getCachedResults", this);
     this.dataErrorEvent = new YAHOO.util.CustomEvent("dataError", this);
-    this.dataSourceErrorEvent = new YAHOO.util.CustomEvent("dataSourceError", this);
     this.cacheFlushEvent = new YAHOO.util.CustomEvent("cacheFlush", this);
 };
 

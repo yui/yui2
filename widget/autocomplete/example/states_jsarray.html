@@ -561,7 +561,6 @@ var areacodesArray = [
         oACDS.getResultsEvent.subscribe(myOnGetResults);
         oACDS.getCachedResultsEvent.subscribe(myOnGetCachedResults);
         oACDS.dataErrorEvent.subscribe(myOnDataError);
-        oACDS.dataSourceErrorEvent.subscribe(myOnDataSourceError);
         oACDS.cacheFlushEvent.subscribe(myOnCacheFlush);
 
         oAutoComp.textboxFocusEvent.subscribe(myOnTextboxFocus);
@@ -575,14 +574,12 @@ var areacodesArray = [
         oAutoComp.itemArrowFromEvent.subscribe(myOnItemArrowFrom);
         oAutoComp.itemSelectEvent.subscribe(myOnItemSelect);
         oAutoComp.selectionClearEvent.subscribe(myOnSelectionClear);
-        oAutoComp.autoCompleteErrorEvent.subscribe(myOnAutoCompleteError);
 
         oACDS2.queryEvent.subscribe(myOnQuery);
         oACDS2.cacheQueryEvent.subscribe(myOnCacheQuery);
         oACDS2.getResultsEvent.subscribe(myOnGetResults);
         oACDS2.getCachedResultsEvent.subscribe(myOnGetCachedResults);
         oACDS2.dataErrorEvent.subscribe(myOnDataError);
-        oACDS2.dataSourceErrorEvent.subscribe(myOnDataSourceError);
         oACDS2.cacheFlushEvent.subscribe(myOnCacheFlush);
 
         oAutoComp2.textboxFocusEvent.subscribe(myOnTextboxFocus);
@@ -596,7 +593,6 @@ var areacodesArray = [
         oAutoComp2.itemArrowFromEvent.subscribe(myOnItemArrowFrom);
         oAutoComp2.itemSelectEvent.subscribe(myOnItemSelect);
         oAutoComp2.selectionClearEvent.subscribe(myOnSelectionClear);
-        oAutoComp2.autoCompleteErrorEvent.subscribe(myOnAutoCompleteError);
 
         // Define custom event handlers
         function myOnQuery(sType, aArgs) {
@@ -635,13 +631,6 @@ var areacodesArray = [
             var sQuery = aArgs[2];
             var sMessage = aArgs[3];
             doLog("Data source for " + oParent.getName() + " experienced a data retrieval error: " + sMessage);
-        }
-
-        function myOnDataSourceError(sType, aArgs) {
-            var oDataSource = aArgs[0];
-            var oParent = aArgs[1];
-            var sMessage = aArgs[2];
-            doLog("Data source for " + oParent.getName() + " experienced a data source object error: " + sMessage);
         }
 
         function myOnCacheFlush(sType, aArgs) {
@@ -709,11 +698,6 @@ var areacodesArray = [
             var oAutoComp = aArgs[0];
             doLog(oAutoComp.getName() + " had to clear an invalid selection.");
         };
-
-        function myOnAutoCompleteError(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            doLog(oAutoComp.getName() + " experienced an error.");
-        }
     }
     
     YAHOO.util.Event.addListener(this,'load',autoCompInit);

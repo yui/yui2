@@ -163,7 +163,6 @@
         oACDS.getResultsEvent.subscribe(myOnGetResults);
         oACDS.getCachedResultsEvent.subscribe(myOnGetCachedResults);
         oACDS.dataErrorEvent.subscribe(myOnDataError);
-        oACDS.dataSourceErrorEvent.subscribe(myOnDataSourceError);
         oACDS.cacheFlushEvent.subscribe(myOnCacheFlush);
 
         oAutoComp0.textboxFocusEvent.subscribe(myOnTextboxFocus);
@@ -177,7 +176,6 @@
         oAutoComp0.itemArrowFromEvent.subscribe(myOnItemArrowFrom);
         oAutoComp0.itemSelectEvent.subscribe(myOnItemSelect);
         oAutoComp0.selectionClearEvent.subscribe(myOnSelectionClear);
-        oAutoComp0.autoCompleteErrorEvent.subscribe(myOnAutoCompleteError);
 
         oAutoComp1.textboxFocusEvent.subscribe(myOnTextboxFocus);
         oAutoComp1.textboxBlurEvent.subscribe(myOnTextboxBlur);
@@ -190,7 +188,6 @@
         oAutoComp1.itemArrowFromEvent.subscribe(myOnItemArrowFrom);
         oAutoComp1.itemSelectEvent.subscribe(myOnItemSelect);
         oAutoComp1.selectionClearEvent.subscribe(myOnSelectionClear);
-        oAutoComp1.autoCompleteErrorEvent.subscribe(myOnAutoCompleteError);
 
         oAutoComp2.textboxFocusEvent.subscribe(myOnTextboxFocus);
         oAutoComp2.textboxBlurEvent.subscribe(myOnTextboxBlur);
@@ -203,7 +200,6 @@
         oAutoComp2.itemArrowFromEvent.subscribe(myOnItemArrowFrom);
         oAutoComp2.itemSelectEvent.subscribe(myOnItemSelect);
         oAutoComp2.selectionClearEvent.subscribe(myOnSelectionClear);
-        oAutoComp2.autoCompleteErrorEvent.subscribe(myOnAutoCompleteError);
 
         // Define custom event handlers
         function myOnQuery(sType, aArgs) {
@@ -242,13 +238,6 @@
             var sQuery = aArgs[2];
             var sMessage = aArgs[3];
             doLog("Data source for " + oParent.getName() + " experienced a data retrieval error: " + sMessage);
-        }
-
-        function myOnDataSourceError(sType, aArgs) {
-            var oDataSource = aArgs[0];
-            var oParent = aArgs[1];
-            var sMessage = aArgs[2];
-            doLog("Data source for " + oParent.getName() + " experienced a data source object error: " + sMessage);
         }
 
         function myOnCacheFlush(sType, aArgs) {
@@ -316,11 +305,6 @@
             var oAutoComp = aArgs[0];
             doLog(oAutoComp.getName() + " had to clear an invalid selection.");
         };
-
-        function myOnAutoCompleteError(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            doLog(oAutoComp.getName() + " experienced an error.");
-        }
     }
     
     YAHOO.util.Event.addListener(this,'load',autoCompInit);
