@@ -136,64 +136,48 @@ YAHOO.widget.DataSource.prototype.flushCache = function() {
 /**
  * Fired when a query is made to the live data source. Subscribers receive an
  * array of the following arguments:<br>
- *     - {object} The data source instance<br>
- *     - {object} The object instance that has requested data<br>
- *     - {string} Query string
+ *     - {string} Event type<br>
+ *     - {array} [The data source instance, the requesting object, the query string]
  */
 YAHOO.widget.DataSource.prototype.queryEvent = null;
 
 /**
  * Fired when a query is made to the local cache. Subscribers receive an array
  * of the following arguments:<br>
- *     - {object} The data source instance<br>
- *     - {object} The object instance that has requested data<br>
- *     - {string} Query string
+ *     - {string} Event type<br>
+ *     - {array} [The data source instance, the requesting object, the query string]
  */
-YAHOO.widget.DataSource.prototype.queryCacheEvent = null;
+YAHOO.widget.DataSource.prototype.cacheQueryEvent = null;
 
 /**
  * Fired when data is retrieved from the live data source. Subscribers receive
  * an array of the following arguments:<br>
- *     - {object} The data source instance<br>
- *     - {object} The object instance that has requested data<br>
- *     - {string} Query string<br>
- *     - {array} An array of result objects
+ *     - {string} Event type<br>
+ *     - {array} [The data source instance, the requesting object, the query string, array of result objects]
  */
 YAHOO.widget.DataSource.prototype.getResultsEvent = null;
     
 /**
  * Fired when data is retrieved from the local cache. Subscribers receive an
  * array of the following arguments:<br>
- *     - {object} The data source instance<br>
- *     - {object} The object instance that has requested data<br>
- *     - {string} Query string<br>
- *     - {array} An array of result objects
+ *     - {string} Event type<br>
+ *     - {array} [The data source instance, the requesting object, the query string, array of result objects]
  */
 YAHOO.widget.DataSource.prototype.getCachedResultsEvent = null;
 
 /**
  * Fired when an error is encountered with the live data source. Subscribers
  * receive an array of the following arguments:<br>
- *     - {object} The data source instance<br>
- *     - {object} The object instance that has requested data<br>
- *     - {string} Query string<br>
- *     - {string} Descriptive error message
+ *     - {string} Event type<br>
+ *     - {array} [The data source instance, the requesting object, the query string, error message string]
  */
 YAHOO.widget.DataSource.prototype.dataErrorEvent = null;
 
 /**
- * Fired when an error is encountered with the data source object instance.
- * Subscribers receive an array of the following arguments:<br>
- *     - {object} The data source instance<br>
- *     - {object} The object instance that has requested data<br>
- *     - {string} Descriptive error message
- */
-YAHOO.widget.DataSource.prototype.dataSourceErrorEvent = null;
-    
-/**
  * Fired when the local cache is flushed. Subscribers receive an array of the
  * following arguments:<br>
- *     - {object} The data source instance
+ *     - {string} Event type<br>
+ *     - {array} [The data source instance]
  */
 YAHOO.widget.DataSource.prototype.cacheFlushEvent = null;
 
@@ -393,7 +377,7 @@ YAHOO.widget.DS_XHR = function(sScriptURI, aSchema, oConfigs) {
     
     // Initialization sequence
     if(!aSchema || (aSchema.constructor != Array)) {
-        this.dataSourceErrorEvent.fire(this, null, this.ERROR_INIT);
+        //log this.ERROR_INIT
     }
     else {
         this.schema = aSchema;

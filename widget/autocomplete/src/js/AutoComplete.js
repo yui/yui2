@@ -76,7 +76,6 @@ YAHOO.widget.AutoComplete = function(sTextboxID,sContainerID,oDataSource,oConfig
         this.itemArrowFromEvent = new YAHOO.util.CustomEvent("itemArrowFrom", this);
         this.itemSelectEvent = new YAHOO.util.CustomEvent("itemSelect", this);
         this.selectionClearEvent = new YAHOO.util.CustomEvent("selectionClear", this);
-        this.autoCompleteErrorEvent = new YAHOO.util.CustomEvent("autoCompleteError", this);
 
         // Turn off autocomplete on textbox
         oTextbox.setAttribute("autocomplete","off");  
@@ -269,92 +268,90 @@ YAHOO.widget.AutoComplete.prototype.formatResult = function(oResultItem, sQuery)
 /**
  * Fired when the auto complete text input box receives focus. Subscribers
  * receive an array of the following arguments:<br>
- *     - {object} The auto complete object instance
+ *     - {string} Event type<br>
+ *     - {array} [The auto complete object instance]
  */
 YAHOO.widget.AutoComplete.prototype.textboxFocusEvent = null;
 
 /**
  * Fired when the auto complete text input box loses focus. Subscribers receive
  * an array of the following arguments:<br>
- *     - {object} The auto complete object instance
+ *     - {string} Event type<br>
+ *     - {array} [The auto complete object instance]
  */
 YAHOO.widget.AutoComplete.prototype.textboxBlurEvent = null;
     
 /**
  * Fired when the auto complete text input box value gets updated. Subscribers
  * receive an array of the following arguments:<br>
- *     - {object} The auto complete object instance<br>
- *     - {string} The string value of the result
+ *     - {string} Event type<br>
+ *     - {array} [The auto complete object instance, the matching result key string]
  */
 YAHOO.widget.AutoComplete.prototype.textboxUpdateEvent = null;
     
 /**
  * Fired when the auto complete container is expanded. Subscribers receive the
  * following arguments:<br>
- *     - {object} The auto complete object instance
+ *     - {string} Event type<br>
+ *     - {array} [The auto complete object instance]
  */
 YAHOO.widget.AutoComplete.prototype.containerExpandEvent = null;
 
 /**
  * Fired when the auto complete container is collapsed. Subscribers receive the
  * following arguments:<br>
- *     - {object} The auto complete object instance
+ *     - {string} Event type<br>
+ *     - {array} [The auto complete object instance]
  */
 YAHOO.widget.AutoComplete.prototype.containerCollapseEvent = null;
 
 /**
  * Fired when result item has been moused to. Subscribers receive the following
  * arguments:<br>
- *     - {object} The auto complete object instance<br>
- *     - {object} The &lt;li&gt; element item moused to
+ *     - {string} Event type<br>
+ *     - {array} [The auto complete object instance, the &lt;li&gt; element item moused to]
  */
 YAHOO.widget.AutoComplete.prototype.itemMouseToEvent = null;
 
 /**
  * Fired when result item has been moused away from. Subscribers receive the
  * following arguments:<br>
- *     - {object} The auto complete object instance<br>
- *     - {object} The &lt;li&gt; element item moused from
+ *     - {string} Event type<br>
+ *     - {array} [The auto complete object instance, the &lt;li&gt; element item moused from]
  */
 YAHOO.widget.AutoComplete.prototype.itemMouseFromEvent = null;
 
 /**
  * Fired when result item has been arrowed to. Subscribers receive the following
  * arguments:<br>
- *     - {object} The auto complete instance<br>
- *     - {object} The auto complete instance
+ *     - {string} Event type<br>
+ *     - {array} [The auto complete object instance, the &lt;li&gt; element item arrowed to]
  */
 YAHOO.widget.AutoComplete.prototype.itemArrowToEvent = null;
 
 /**
  * Fired when result item has been arrowed away from. Subscribers receive the
  * following arguments:<br>
- *     - {object} The auto complete instance<br>
- *     - {object} The &lt;li&gt; element item arrowed away from
+ *     - {string} Event type<br>
+ *     - {array} [The auto complete object instance, the &lt;li&gt; element item arrowed from]
  */
 YAHOO.widget.AutoComplete.prototype.itemArrowFromEvent = null;
 
 /**
  * Fired when an item is selected via mouse click, ENTER key, or TAB key.
  * Subscribers receive the following arguments:<br>
- *     - {object} The auto complete instance<br>
- *     - {object} The selected &lt;li&gt; element item
+ *     - {string} Event type<br>
+ *     - {array} [The auto complete object instance, the selected &lt;li&gt; element item]
  */
 YAHOO.widget.AutoComplete.prototype.itemSelectEvent = null;
 
 /**
  * Fired when the user's input has been cleared because it did not match one of
  * the returned query results. Subscribers receive the following arguments:<br>
- *     - {object} The auto complete instance
+ *     - {string} Event type<br>
+ *     - {array} [The auto complete object instance]
  */
 YAHOO.widget.AutoComplete.prototype.selectionClearEvent = null;
-
-/**
- * Fired when an error is encountered with the auto complete instance.
- * Subscribers receive the following arguments:<br>
- *     - {object} The auto complete instance
- */
-YAHOO.widget.AutoComplete.prototype.autoCompleteErrorEvent = null;
 
 /***************************************************************************
  * Private member variables
