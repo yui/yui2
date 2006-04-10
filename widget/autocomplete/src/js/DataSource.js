@@ -391,7 +391,7 @@ YAHOO.widget.DS_XHR.prototype = new YAHOO.widget.DataSource();
  * Public constants
  ***************************************************************************/
 /**
- * JSON data format
+ * JSON data type
  *
  * @type constant
  * @final
@@ -399,7 +399,7 @@ YAHOO.widget.DS_XHR.prototype = new YAHOO.widget.DataSource();
 YAHOO.widget.DS_XHR.prototype.TYPE_JSON = 0;
 
 /**
- * XML data format
+ * XML data type
  *
  * @type constant
  * @final
@@ -407,7 +407,7 @@ YAHOO.widget.DS_XHR.prototype.TYPE_JSON = 0;
 YAHOO.widget.DS_XHR.prototype.TYPE_XML = 1;
 
 /**
- * Flat file data format
+ * Flat file data type
  *
  * @type constant
  * @final
@@ -456,12 +456,12 @@ YAHOO.widget.DS_XHR.prototype.scriptQueryParam = "query";
 YAHOO.widget.DS_XHR.prototype.scriptQueryAppend = "";
 
 /**
- * XHR response data format. Other types that may be defined are TYPE_XML and
+ * XHR response data type. Other types that may be defined are TYPE_XML and
  * TYPE_FLAT. Default: TYPE_JSON.
  *
  * @type type
  */
-YAHOO.widget.DS_XHR.prototype.responseFormat = YAHOO.widget.DS_XHR.prototype.TYPE_JSON;
+YAHOO.widget.DS_XHR.prototype.responseType = YAHOO.widget.DS_XHR.prototype.TYPE_JSON;
 
 /**
  * String after which to strip results. If the results from the XHR are sent
@@ -485,7 +485,7 @@ YAHOO.widget.DS_XHR.prototype.responseStripAfter = "\n<!--";
  * @param {object} oParent The object instance that has requested data
  */
 YAHOO.widget.DS_XHR.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
-    var isXML = (this.responseFormat == this.TYPE_XML);
+    var isXML = (this.responseType == this.TYPE_XML);
     var sUri = this.scriptURI+"?"+this.scriptQueryParam+"="+sQuery;
     if(this.scriptQueryAppend.length > 0) {
         sUri += "&" + this.scriptQueryAppend;
@@ -553,7 +553,7 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
         oResponse = oResponse.substring(0,nEnd);
     }
 
-    switch (this.responseFormat) {
+    switch (this.responseType) {
         case this.TYPE_JSON:
             if(window.JSON) {
                 var jsonObjParsed = JSON.parse(oResponse);

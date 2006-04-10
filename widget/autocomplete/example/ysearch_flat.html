@@ -111,7 +111,7 @@
         //     ["Record Delimiter",
         //     "Field Delimiter"]
         oACDS = new YAHOO.widget.DS_XHR("ysearch_flat.php", ["\n", "\t"]);
-        oACDS.responseFormat = YAHOO.widget.DS_XHR.prototype.TYPE_FLAT;
+        oACDS.responseType = YAHOO.widget.DS_XHR.prototype.TYPE_FLAT;
         oACDS.maxCacheEntries = 60;
         oACDS.queryMatchSubset = true;
 

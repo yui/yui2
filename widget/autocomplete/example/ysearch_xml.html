@@ -96,7 +96,7 @@
         //     ...
         //     "Additional Param Name n"]
         oACDS = new YAHOO.widget.DS_XHR("ysearch_proxy.php", ["Result", "Title"]);
-        oACDS.responseFormat = oACDS.TYPE_XML;
+        oACDS.responseType = oACDS.TYPE_XML;
         oACDS.queryMatchContains = true;
         oACDS.scriptQueryAppend = "results=100"; // Needed for YWS
 

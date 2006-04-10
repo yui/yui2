@@ -86,8 +86,8 @@
             <dt>Strip After String</dt>
                 <dd>TBD
                 </dd>
-            <dt>Response Format</dt>
-                <dd><select id="responseformat" onchange="updateResponseFormat(this)">
+            <dt>Response Type</dt>
+                <dd><select id="responsetype" onchange="updateResponseType(this)">
                         <option value="YAHOO.widget.DS_XHR.prototype.TYPE_FLAT" selected>FLAT</option>
                         <option value="YAHOO.widget.DS_XHR.prototype.TYPE_JSON">JSON</option>
                         <option value="YAHOO.widget.DS_XHR.prototype.TYPE_XML">XML</option>
@@ -148,7 +148,7 @@
         var schema = eval(document.getElementById("schema").value);
         oACDS = new YAHOO.widget.DS_XHR(document.getElementById("uri").value, schema);
         // This is the one non-default value other than constructor params
-        oACDS.responseFormat = (eval(document.getElementById("responseformat").options[document.getElementById("responseformat").selectedIndex].value));
+        oACDS.responseType = (eval(document.getElementById("responsetype").options[document.getElementById("responsetype").selectedIndex].value));
 
         // AutoComplete 1
         oAutoComp = new YAHOO.widget.AutoComplete('custominput','customcontainer', oACDS);
@@ -363,9 +363,9 @@
         }
     }
 
-    function updateResponseFormat(format) {
-        oACDS.responseFormat = eval(format.options[format.selectedIndex].value);
-        doLog("Updated response format to " + oACDS.responseFormat + ".");
+    function updateResponseType(type) {
+        oACDS.responseType = eval(type.options[type.selectedIndex].value);
+        doLog("Updated response type to " + oACDS.responseType + ".");
     }
 
     // AutoComplete Panel

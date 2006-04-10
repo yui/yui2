@@ -42,7 +42,7 @@
     query is forced to make a trip to the live source.</p>
 
     <h3>AutoComplete</h3>
-    <p>This AutoComplete instance defines a robust formatResult function that
+    <p>This AutoComplete instance defines a robust formatResult() function that
     formats the result data into HTML markup that displays an image from Flickr
     and its title. </p>
 
@@ -103,7 +103,7 @@
         oACDS = new YAHOO.widget.DS_XHR("./flickr_proxy.php", 
             ["photo", "title", "id", "owner", "secret", "server"]);
         oACDS.scriptQueryParam = "tags";
-        oACDS.responseFormat = YAHOO.widget.DS_XHR.prototype.TYPE_XML;
+        oACDS.responseType = YAHOO.widget.DS_XHR.prototype.TYPE_XML;
         oACDS.maxCacheEntries = 0;
         oACDS.scriptQueryAppend = "method=flickr.photos.search";
         
