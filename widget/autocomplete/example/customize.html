@@ -39,7 +39,7 @@
 
     <!-- AutoComplete begins -->
     <div id="customdiv">
-        <form onsubmit="return false;">
+        <form onsubmit="return validateForm();">
         <h4>Customize your own AutoComplete widget:</h4>
         <input id="custominput" type="text">
         <div id="customshadow"><div id="customcontainer"></div></div>
@@ -137,6 +137,11 @@
 
 <script>
 <!--
+    function validateForm() {
+        // Validate form inputs here
+        return false;
+    }
+
     function autoCompInit() {
         // DataSource 1
         var schema = eval(document.getElementById("schema").value);

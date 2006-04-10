@@ -48,7 +48,7 @@
 
     <!-- AutoComplete begins -->
     <div id="flickrdiv">
-        <form onsubmit="return false;">
+        <form onsubmit="return validateForm();">
         <h4>Enter Flickr tags to find a photo (separate with commas):</h4>
         <input id="flickrinput" type="text">
         <div id="flickrshadow"><div id="flickrcontainer"></div></div>
@@ -87,6 +87,11 @@
 
 <script>
 <!--
+    function validateForm() {
+        // Validate form inputs here
+        return false;
+    }
+
     function autoCompInit() {
         // Instantiate data source and define schema as an array:
         //     ["ResultNodeName",

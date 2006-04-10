@@ -46,7 +46,7 @@
 
     <!-- AutoComplete begins -->
     <div id="statesdiv">
-        <form onsubmit="return false;">
+        <form onsubmit="return validateForm();">
         <h4>Find a state:</h4>
         <input id="statesinput" type="text">
         <div id="statesshadow"><div id="statescontainer"></div></div>
@@ -90,6 +90,11 @@
 
 <script>
 <!--
+    function validateForm() {
+        // Validate form inputs here
+        return false;
+    }
+
     function autoCompInit() {
         // Instantiate data source    
         oACDS = new YAHOO.widget.DS_JSFunction(getStates);

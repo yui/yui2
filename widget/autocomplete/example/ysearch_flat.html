@@ -52,7 +52,7 @@
 
     <!-- AutoComplete begins -->
     <div id="ysearchdiv">
-        <form onsubmit="return false;">
+        <form onsubmit="return validateForm();">
         <h4>Yahoo! Search (1 sec query delay):</h4>
         <input id="ysearchinput0" type="text">
         <div id="ysearchshadow0"><div id="ysearchcontainer0"></div></div>
@@ -100,6 +100,11 @@
 
 <script>
 <!--
+    function validateForm() {
+        // Validate form inputs here
+        return false;
+    }
+
     function autoCompInit() {
         // Instantiate one data source and define schema as an array:
         //     ["Record Delimiter",
