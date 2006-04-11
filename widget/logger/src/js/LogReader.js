@@ -45,18 +45,19 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         }
         
         // If implementer has provided, trust and set those
-        if(this.left || this.right || this.bottom || this.top) {
-            this._containerEl.style.left = "auto";
-            this._containerEl.style.right = "auto";
-            this._containerEl.style.bottom = "auto";
-            this._containerEl.style.top = "auto";
-
+        if(this.left) {
             this._containerEl.style.left = this.left;
+        }
+        if(this.right) {
             this._containerEl.style.right = this.right;
+        }
+        if(this.bottom) {
             this._containerEl.style.bottom = this.bottom;
+        }
+        if(this.top) {
             this._containerEl.style.top = this.top;
         }
-        if(this.fontSize) {
+        if(this.fontSize) {alert('true');
             this._containerEl.style.fontSize = this.fontSize;
         }
     }
