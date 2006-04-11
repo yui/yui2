@@ -4,6 +4,7 @@
 <title>AutoComplete Widget :: Customizable Example</title>
 <link rel="stylesheet" href="./css/reset.css" type="text/css" />
 <link rel="stylesheet" href="./css/fonts.css" type="text/css" />
+<link rel="stylesheet" href="./css/logger.css" type="text/css" />
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
 
 <style type="text/css">
@@ -25,9 +26,7 @@
     
 <div id="bd">
     <!-- Logger begins -->
-    <div id="logger">
-    <p>Welcome to AutoComplete.</p>
-    </div>
+    <div id="logger"></div>
     <!-- Logger ends -->
 
     <!-- Content begins -->
@@ -132,6 +131,7 @@
 <script src="./js/event.js"></script>
 <script src="./js/connection.js"></script>
 <script src="./js/animation.js"></script>
+<script src="./js/logger.js"></script>
 <script src="../src/js/AutoComplete.js"></script>
 <script src="../src/js/DataSource.js"></script>
 <!-- Library ends -->
@@ -182,14 +182,12 @@
             var oDataSource = aArgs[0];
             var oParent = aArgs[1];
             var sQuery = aArgs[2];
-            doLog("Data source for " + oParent.getName() + " made source query for '" + sQuery + "'.");
         }
 
         function myOnCacheQuery(sType, aArgs) {
             var oDataSource = aArgs[0];
             var oParent = aArgs[1];
             var sQuery = aArgs[2];
-            doLog("Data source for " + oParent.getName() + " made cache query for '" + sQuery + "'.");
         }
 
         function myOnGetResults(sType, aArgs) {
@@ -197,7 +195,6 @@
             var oParent = aArgs[1];
             var sQuery = aArgs[2];
             var aResults = aArgs[3];
-            doLog("Data source for " + oParent.getName() + " got " + aResults.length + " results from source.");
         }
 
         function myOnGetCachedResults(sType, aArgs) {
@@ -205,7 +202,6 @@
             var oParent = aArgs[1];
             var sQuery = aArgs[2];
             var aResults = aArgs[3];
-            doLog("Data source for " + oParent.getName() + " got " + aResults.length + " results from cache.");
         }
 
         function myOnDataError(sType, aArgs) {
@@ -213,136 +209,111 @@
             var oParent = aArgs[1];
             var sQuery = aArgs[2];
             var sMessage = aArgs[3];
-            doLog("Data source for " + oParent.getName() + " experienced a data retrieval error: " + sMessage);
         }
 
         function myOnCacheFlush(sType, aArgs) {
             var oDataSource = aArgs[0];
-            doLog(" cache flush complete.");
         }
 
         function myOnTextboxFocus(sType, aArgs) {
             var oAutoComp = aArgs[0];
-            doLog(oAutoComp.getName() + " has been engaged.");
         }
 
         function myOnTextboxKey(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var nKeyCode = aArgs[1];
-            doLog("Key " + nKeyCode + " has been input into " + oAutoComp.getName() + ".");
         }
 
         function myOnDataRequest(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var sQuery = aArgs[1];
-            doLog(oAutoComp.getName() + " has sent a query for " + sQuery +".");
         }
 
         function myOnDataReturn(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var sQuery = aArgs[1];
             var aResults = aArgs[2];
-            doLog(oAutoComp.getName() + " has received " + aResults.length +
-            " results for query " + sQuery + ".");
         }
 
         function myOnDataError(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var sQuery = aArgs[1];
-            doLog(oAutoComp.getName() + " has received an error for query " + sQuery +".");
         }
 
         function myOnContainerExpand(sType, aArgs) {
             var oAutoComp = aArgs[0];
-            doLog(oAutoComp.getName() + " container expanded.");
         }
 
         function myOnTypeAhead(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var sQuery = aArgs[1];
             var sPrefill = aArgs[2];
-            doLog(oAutoComp.getName() + " prefilled the input box with " +
-            sPrefill + " for query " + sQuery + ".");
         }
 
         function myOnItemMouseOver(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
-            doLog(oAutoComp.getName() + " moused over " + oItem.id);
         }
 
         function myOnItemMouseOut(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
-            doLog(oAutoComp.getName() + " moused out from " + oItem.id);
         }
 
         function myOnItemArrowTo(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
-            doLog(oAutoComp.getName() + " arrowed to " + oItem.id);
         }
 
         function myOnItemArrowFrom(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
-            doLog(oAutoComp.getName() + " arrowed away from " + oItem.id);
         }
 
         function myOnItemSelect(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
             var sMsg = (oItem) ? oItem.id : "a non-query-result";
-            doLog(oAutoComp.getName() + " selected " + sMsg);
         }
 
         function myOnSelectionEnforce(sType, aArgs) {
             var oAutoComp = aArgs[0];
-            doLog(oAutoComp.getName() + " had to clear an invalid selection.");
-        }
+       }
 
         function myOnContainerCollapse(sType, aArgs) {
             var oAutoComp = aArgs[0];
-            doLog(oAutoComp.getName() + " container collapsed.");
         }
 
         function myOnTextboxBlur(sType, aArgs) {
             var oAutoComp = aArgs[0];
-            doLog(oAutoComp.getName() + " has been disengaged.");
         }
     }
 
     YAHOO.util.Event.addListener(this,'load',autoCompInit);
     
     // Logging
-    var logger = document.getElementById("logger");
-
-    function doLog(string) {
-        var date = new Date();
-        var timestamp = date.getTime();
-        logger.innerHTML = "<p>"+timestamp+" "+string+"</p>"+logger.innerHTML;
-    }
+    var logger = new YAHOO.widget.LogReader("logger");
 
     // DataSource Panel
     function toggleCaseSens(casesens) {
         oACDS.queryMatchCase = casesens.checked;
-        doLog("Updated case sensitivity to " + oACDS.queryMatchCase + ".");
+        YAHOO.log("Updated case sensitivity to " + oACDS.queryMatchCase + ".");
     }
 
     function toggleMatchSubset(matchsubset) {
         oACDS.queryMatchSubset = matchsubset.checked;
-        doLog("Updated subset matching to " + oACDS.queryMatchSubset + ".");
+        YAHOO.log("Updated subset matching to " + oACDS.queryMatchSubset + ".");
     }
 
     function updateCacheSize() {
         var cacheSize = document.getElementById("cachesize").value;
         if (cacheSize >= 0) {
             oACDS.maxCacheEntries = cacheSize;
-            doLog("Updated cache size to " + oACDS.maxCacheEntries + ".");
+            YAHOO.log("Updated cache size to " + oACDS.maxCacheEntries + ".");
         }
         else {
             document.getElementById("cachesize").value = oACDS.maxCacheEntries;
-            doLog("Could not update cache size."); 
+            YAHOO.log("Could not update cache size.", "warn");
         }
     }
 
@@ -352,35 +323,41 @@
 
     function updateMatch(matchContains) {
         oACDS.queryMatchContains = eval(matchContains.options[matchContains.selectedIndex].value);
-        doLog("Updated match type to " + oACDS.queryMatchContains + ".");
+        YAHOO.log("Updated match type to " + oACDS.queryMatchContains + ".");
     }
 
     function updateSchema() {
         var newSchema = document.getElementById("schema").value;
         if(newSchema === "") {
-            document.getElementById("schema").value = oACDS.schema;
-            doLog("Could not update schema.");
+            document.getElementById("schema").value = "";
+            YAHOO.log("Could not update schema.", "warn");
         }
         else {
-            oACDS.schema = eval(newSchema);
-            doLog("Updated schema to " + oACDS.schema + ".");
+            try {
+                oACDS.schema = eval(newSchema);
+                YAHOO.log("Updated schema to " + oACDS.schema + ".");
+            }
+            catch(e) {
+                document.getElementById("schema").value = "";
+                YAHOO.log("Could not update schema.", "warn");
+            }
         }
     }
 
     function updateQueryString() {
             oACDS.scriptQueryAppend = document.getElementById("querystring").value;
-            doLog("Updated query string to " + oACDS.scriptQueryAppend + ".");
+            YAHOO.log("Updated query string to " + oACDS.scriptQueryAppend + ".");
     }
 
     function updateScriptParam() {
         var newScriptParam = document.getElementById("scriptparam").value;
         if(newScriptParam === "") {
             document.getElementById("scriptparam").value = oACDS.scriptQueryParam;
-            doLog("Could not update script parameter.");
+            YAHOO.log("Could not update script parameter.", "warn");
         }
         else {
             oACDS.scriptQueryParam = newScriptParam;
-            doLog("Updated script parameter to " + oACDS.scriptQueryParam + ".");
+            YAHOO.log("Updated script parameter to " + oACDS.scriptQueryParam + ".");
         }
     }
 
@@ -388,82 +365,82 @@
         var newURI = document.getElementById("uri").value;
         if(newURI === "") {
             document.getElementById("uri").value = oACDS.scriptURI;
-            doLog("Could not update script URI.");
+            YAHOO.log("Could not update script URI.", "warn");
         }
         else {
             oACDS.scriptURI = newURI;
-            doLog("Updated script URI to " + oACDS.scriptURI + ".");
+            YAHOO.log("Updated script URI to " + oACDS.scriptURI + ".");
         }
     }
 
     function updateResponseType(type) {
         oACDS.responseType = eval(type.options[type.selectedIndex].value);
-        doLog("Updated response type to " + oACDS.responseType + ".");
+        YAHOO.log("Updated response type to " + oACDS.responseType + ".");
     }
 
     // AutoComplete Panel
     function toggleAnimHoriz(animHoriz) {
         oAutoComp.animHoriz = animHoriz.checked;
-        doLog("Updated horizontal animation to " + oAutoComp.animHoriz + ".");
+        YAHOO.log("Updated horizontal animation to " + oAutoComp.animHoriz + ".");
     }
     
     function toggleAnimVert(animVert) {
         oAutoComp.animVert = animVert.checked;
-        doLog("Updated vertical animation to " + oAutoComp.animVert + ".");
+        YAHOO.log("Updated vertical animation to " + oAutoComp.animVert + ".");
     }
 
     function updateAnimSpeed() {
         var animSpeed = document.getElementById("animspeed").value;
         if (animSpeed < 1) {
             document.getElementById("animspeed").value = oAutoComp.animSpeed;
-            doLog("Could not update animation speed.");
+            YAHOO.log("Could not update animation speed.", "warn");
             return;
         }
         oAutoComp.animSpeed = animSpeed;
-        doLog("Updated animation speed to " + oAutoComp.animSpeed + ".");
+        YAHOO.log("Updated animation speed to " + oAutoComp.animSpeed + ".");
     }
 
     function toggleTypeAhead(typeAhead) {
         oAutoComp.typeAhead = typeAhead.checked;
-        doLog("Updated type ahead to " + oAutoComp.typeAhead + ".");
+        YAHOO.log("Updated type ahead to " + oAutoComp.typeAhead + ".");
     }
     
     function toggleForceSelection(forceSelection) {
         oAutoComp.forceSelection = forceSelection.checked;
-        doLog("Updated force selection to " + oAutoComp.forceSelection + ".");
+        YAHOO.log("Updated force selection to " + oAutoComp.forceSelection + ".");
     }
         
     function updateMaxResults() {
         var maxResults = document.getElementById("maxresults").value;
         if (maxResults < 1) {
             document.getElementById("maxresults").value = oAutoComp.maxResultsDisplayed;
-            doLog("Could not update maximum results.");
+            YAHOO.log("Could not update maximum results.", "warn");
             return;
         }
         oAutoComp.maxResultsDisplayed = maxResults;
-        doLog("Updated maximum results to " + oAutoComp.maxResultsDisplayed + ".");
+        YAHOO.log("Updated maximum results to " + oAutoComp.maxResultsDisplayed + ".");
     }
     
     function updateMinQueryLength() {
         var minQueryLength = document.getElementById("minquerylength").value;  
         if (minQueryLength < 1) {
             document.getElementById("minquerylength").value = oAutoComp.ninQueryLength;
-            doLog("Could not update minimum query length.");
+            YAHOO.log("Could not update minimum query length.", "warn");
             return;
         }
         oAutoComp.minQueryLength = minQueryLength;
-        doLog("Updated minimum query length to " + oAutoComp.minQueryLength + ".");
+        YAHOO.log("Updated minimum query length to " + oAutoComp.minQueryLength + ".");
     }
     
     function updateQueryDelay() {
         var queryDelay = document.getElementById("querydelay").value;
         if (queryDelay < 0) {
             document.getElementById("querydelay").value = oAutoComp.queryDelay;
-            doLog("Could not update query delay.");
+            YAHOO.log("Could not update query delay.", "warn");
             return;
         }
         oAutoComp.queryDelay = queryDelay;
-        doLog("Updated query delay to " + oAutoComp.queryDelay + ".");
+        YAHOO.log("Updated query delay to " + oAutoComp.queryDelay + ".");
     } 
    
     function updateDelimChar() {
@@ -476,27 +453,27 @@
         }
         else {
             document.getElementById("delimchar").value = oAutoComp.delimChar;
-            doLog("Could not update delimiter character.");
+            YAHOO.log("Could not update delimiter character.", "warn");
             return;
         }
-        doLog("Updated delimiter character to " + oAutoComp.delimChar + ".");
+        YAHOO.log("Updated delimiter character to " + oAutoComp.delimChar + ".");
     }
     
     function updateHighlight() {        
         oAutoComp.highlightClassName = document.getElementById("highlightclass").value;
-        doLog("Updated highlight class name to " + oAutoComp.highlightClassName + ".");
+        YAHOO.log("Updated highlight class name to " + oAutoComp.highlightClassName + ".");
     }
     
     function updateHeader() {
         var header = document.getElementById("header").value;
         oAutoComp.setHeader(header);
-        doLog("Header updated.");
+        YAHOO.log("Header updated.");
     }
 
     function updateFooter() {
         var footer = document.getElementById("footer").value;
         oAutoComp.setFooter(footer);
-        doLog("Footer updated.");
+        YAHOO.log("Footer updated.");
     }
 //-->
 </script>
