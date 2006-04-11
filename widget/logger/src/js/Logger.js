@@ -1,13 +1,15 @@
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
 /**
- * Static class providing logging capabilities.
+ * Static class providing logging functionality. Saves logs written through the
+ * global YAHOO.log function or written by LogWriter. Provides access to logs
+ * for reading by LogReader. Log messages are automatically output to Firebug,
+ * if present.
  *
- * @constructor
- *
+ * requires YAHOO.util.Event Event utility
  */
 YAHOO.widget.Logger = new function() {
-    // TODO: Expose in API doc?
     // Initialize members
     this.loggerEnabled = true;
     this.firebugEnabled; // undefined at initialization
@@ -49,8 +51,6 @@ YAHOO.widget.Logger.log = function(sName, sMsg, sCategory) {
         this._stack.push(logEntry);
         this.newLogEvent.fire(logEntry);
 
-        //TODO: either/or firebug?
-        //TODO: does firebug need a buffer?
         if (this.firebugEnabled !== false) {
             this._printToFirebug(logEntry);
         }
@@ -94,35 +94,30 @@ YAHOO.widget.Logger._isNewCategory = function(category) {
 };
 
 YAHOO.widget.Logger._printToFirebug = function(entry) {
-    //for (var i = 0; i < entries.length; i++) {
-        // format message for firebug -- elapsed time is calculated from the absolute
-        // previous entry in the stack
-        //var entry = entries[i];
-        var category = entry.category;
-        var label = entry.category.substring(0,4).toUpperCase();
+    var category = entry.category;
+    var label = entry.category.substring(0,4).toUpperCase();
 
-        var time = entry.time;
-        if (time.toLocaleTimeString) {
-            var localTime  = time.toLocaleTimeString();
-        }
-        else {
-            localTime = time.toString();
-        }
+    var time = entry.time;
+    if (time.toLocaleTimeString) {
+        var localTime  = time.toLocaleTimeString();
+    }
+    else {
+        localTime = time.toString();
+    }
 
-        var msecs = time.getTime();
-        var elapsedTime = msecs - this._lastTime;
-        this._lastTime = msecs;
-        
-        var name = (entry.name) ? entry.name + ": " : "";
+    var msecs = time.getTime();
+    var elapsedTime = msecs - this._lastTime;
+    this._lastTime = msecs;
+    
+    var name = (entry.name) ? entry.name + ": " : "";
 
-        var output = "<span class='"+category+"'>"+label+"</span> " +
-            localTime + " (" +
-            elapsedTime + "): " +
-            name +
-            entry.msg;
+    var output = "<span class='"+category+"'>"+label+"</span> " +
+        localTime + " (" +
+        elapsedTime + "): " +
+        name +
+        entry.msg;
 
-        this.firebugEnabled = printfire(output);
-    //}
+    this.firebugEnabled = printfire(output);
 };
 
 function printfire() {
@@ -144,8 +139,6 @@ function printfire() {
 /***************************************************************************
  * Private event handlers
  ***************************************************************************/
-
-
 YAHOO.widget.Logger._onWindowError = function(msg,url,line) {
     // Logger is not in scope of this event handler
     try {

@@ -1,7 +1,12 @@
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
 /**
- * @class an instance of a logwriter.  Expects to be initalized with a name.
+ * Class providing ability to log messages through YAHOO.widget.Logger from a
+ * named source.
  *
  * @constructor
+ * @param {string} sName Name of LogWriter instance
  */
 YAHOO.widget.LogWriter = function(sName) {
     this._name = sName;

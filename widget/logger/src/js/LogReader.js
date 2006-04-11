@@ -1,7 +1,17 @@
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
 /**
- * @class an instance of a logreader.
+ * Class providing UI to read messages logged to YAHOO.widget.Logger.
+ *
+ * requires YAHOO.util.Dom DOM utility
+ * requires YAHOO.util.Event Event utility
+ * optional YAHOO.util.DragDrop Drag and drop utility
  *
  * @constructor
+ * @param {el or ID} containerEl DOM element object or ID of container to wrap reader UI
+ * @param {object} oConfig Optional object literal of configuration params
  */
 YAHOO.widget.LogReader = function(containerEl, oConfig) {
     var oSelf = this;
