@@ -31,6 +31,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         else if(containerEl.tagName) {
             this._containerEl = containerEl;
         }
+        this._containerEl.className = "ylogger";
     }
     // ...or create container from scratch
     if(!this._containerEl) {
