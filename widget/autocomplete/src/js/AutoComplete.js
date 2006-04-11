@@ -66,16 +66,20 @@ YAHOO.widget.AutoComplete = function(sTextboxID,sContainerID,oDataSource,oConfig
         YAHOO.util.Event.addListener(oContainer,'scroll',oSelf._onContainerScroll,oSelf);
 
         this.textboxFocusEvent = new YAHOO.util.CustomEvent("textboxFocus", this);
-        this.textboxBlurEvent = new YAHOO.util.CustomEvent("textboxBlur", this);
-        this.textboxUpdateEvent = new YAHOO.util.CustomEvent("textboxUpdate", this);
+        this.textboxKeyEvent = new YAHOO.util.CustomEvent("textboxKey", this);
+        this.dataRequestEvent = new YAHOO.util.CustomEvent("dataRequest", this);
+        this.dataReturnEvent = new YAHOO.util.CustomEvent("dataReturn", this);
+        this.dataErrorEvent = new YAHOO.util.CustomEvent("dataError", this);
         this.containerExpandEvent = new YAHOO.util.CustomEvent("containerExpand", this);
-        this.containerCollapseEvent = new YAHOO.util.CustomEvent("containerCollapse", this);
-        this.itemMouseToEvent = new YAHOO.util.CustomEvent("itemMouseTo", this);
-        this.itemMouseFromEvent = new YAHOO.util.CustomEvent("itemMouseFrom", this);
+        this.typeAheadEvent = new YAHOO.util.CustomEvent("typeAhead", this);
+        this.itemMouseOverEvent = new YAHOO.util.CustomEvent("itemMouseOver", this);
+        this.itemMouseOutEvent = new YAHOO.util.CustomEvent("itemMouseOut", this);
         this.itemArrowToEvent = new YAHOO.util.CustomEvent("itemArrowTo", this);
         this.itemArrowFromEvent = new YAHOO.util.CustomEvent("itemArrowFrom", this);
         this.itemSelectEvent = new YAHOO.util.CustomEvent("itemSelect", this);
-        this.selectionClearEvent = new YAHOO.util.CustomEvent("selectionClear", this);
+        this.selectionEnforceEvent = new YAHOO.util.CustomEvent("selectionEnforce", this);
+        this.containerCollapseEvent = new YAHOO.util.CustomEvent("containerCollapse", this);
+        this.textboxBlurEvent = new YAHOO.util.CustomEvent("textboxBlur", this);
 
         // Turn off autocomplete on textbox
         oTextbox.setAttribute("autocomplete","off");  
@@ -274,21 +278,38 @@ YAHOO.widget.AutoComplete.prototype.formatResult = function(oResultItem, sQuery)
 YAHOO.widget.AutoComplete.prototype.textboxFocusEvent = null;
 
 /**
- * Fired when the auto complete text input box loses focus. Subscribers receive
- * an array of the following arguments:<br>
- *     - {string} Event type<br>
- *     - {array} [The auto complete object instance]
- */
-YAHOO.widget.AutoComplete.prototype.textboxBlurEvent = null;
-    
-/**
- * Fired when the auto complete text input box value gets updated. Subscribers
+ * Fired when the auto complete text input box receives key input. Subscribers
  * receive an array of the following arguments:<br>
  *     - {string} Event type<br>
- *     - {array} [The auto complete object instance, the matching result key string]
+ *     - {array} [The auto complete object instance, the keycode number]
  */
-YAHOO.widget.AutoComplete.prototype.textboxUpdateEvent = null;
-    
+YAHOO.widget.AutoComplete.prototype.textboxKeyEvent = null;
+
+/**
+ * Fired when the auto complete instance makes a query to the data source.
+ * Subscribers receive an array of the following arguments:<br>
+ *     - {string} Event type<br>
+ *     - {array} [The auto complete object instance, the query string]
+ */
+YAHOO.widget.AutoComplete.prototype.dataRequestEvent = null;
+
+/**
+ * Fired when the auto complete instance receives query results from the data
+ * source. Subscribers receive an array of the following arguments:<br>
+ *     - {string} Event type<br>
+ *     - {array} [The auto complete object instance, the query string, results array]
+ */
+YAHOO.widget.AutoComplete.prototype.dataReturnEvent = null;
+
+/**
+ * Fired when the auto complete instance does not receive query results from the
+ * data source due to an error. Subscribers receive an array of the following
+ * arguments:<br>
+ *     - {string} Event type<br>
+ *     - {array} [The auto complete object instance, the query string]
+ */
+YAHOO.widget.AutoComplete.prototype.dataErrorEvent = null;
+
 /**
  * Fired when the auto complete container is expanded. Subscribers receive the
  * following arguments:<br>
@@ -298,28 +319,28 @@ YAHOO.widget.AutoComplete.prototype.textboxUpdateEvent = null;
 YAHOO.widget.AutoComplete.prototype.containerExpandEvent = null;
 
 /**
- * Fired when the auto complete container is collapsed. Subscribers receive the
- * following arguments:<br>
+ * Fired when the auto complete textbox has been prefilled by the type-ahead
+ * feature. Subscribers receive the following arguments:<br>
  *     - {string} Event type<br>
- *     - {array} [The auto complete object instance]
+ *     - {array} [The auto complete object instance, the query string, the prefill string]
  */
-YAHOO.widget.AutoComplete.prototype.containerCollapseEvent = null;
+YAHOO.widget.AutoComplete.prototype.typeAheadEvent = null;
 
 /**
- * Fired when result item has been moused to. Subscribers receive the following
+ * Fired when result item has been moused over. Subscribers receive the following
  * arguments:<br>
  *     - {string} Event type<br>
  *     - {array} [The auto complete object instance, the &lt;li&gt; element item moused to]
  */
-YAHOO.widget.AutoComplete.prototype.itemMouseToEvent = null;
+YAHOO.widget.AutoComplete.prototype.itemMouseOverEvent = null;
 
 /**
- * Fired when result item has been moused away from. Subscribers receive the
+ * Fired when result item has been moused out. Subscribers receive the
  * following arguments:<br>
  *     - {string} Event type<br>
  *     - {array} [The auto complete object instance, the &lt;li&gt; element item moused from]
  */
-YAHOO.widget.AutoComplete.prototype.itemMouseFromEvent = null;
+YAHOO.widget.AutoComplete.prototype.itemMouseOutEvent = null;
 
 /**
  * Fired when result item has been arrowed to. Subscribers receive the following
@@ -346,12 +367,29 @@ YAHOO.widget.AutoComplete.prototype.itemArrowFromEvent = null;
 YAHOO.widget.AutoComplete.prototype.itemSelectEvent = null;
 
 /**
- * Fired when the user's input has been cleared because it did not match one of
- * the returned query results. Subscribers receive the following arguments:<br>
+ * Fired if forceSelection is enabled and the user's input has been cleared
+ * because it did not match one of the returned query results. Subscribers
+ * receive the following arguments:<br>
  *     - {string} Event type<br>
  *     - {array} [The auto complete object instance]
  */
-YAHOO.widget.AutoComplete.prototype.selectionClearEvent = null;
+YAHOO.widget.AutoComplete.prototype.selectionEnforceEvent = null;
+
+/**
+ * Fired when the auto complete container is collapsed. Subscribers receive the
+ * following arguments:<br>
+ *     - {string} Event type<br>
+ *     - {array} [The auto complete object instance]
+ */
+YAHOO.widget.AutoComplete.prototype.containerCollapseEvent = null;
+
+/**
+ * Fired when the auto complete text input box loses focus. Subscribers receive
+ * an array of the following arguments:<br>
+ *     - {string} Event type<br>
+ *     - {array} [The auto complete object instance]
+ */
+YAHOO.widget.AutoComplete.prototype.textboxBlurEvent = null;
 
 /***************************************************************************
  * Private member variables
@@ -684,7 +722,7 @@ YAHOO.widget.AutoComplete.prototype._initItem = function(oItem, nItemIndex) {
  */
 YAHOO.widget.AutoComplete.prototype._onItemMouseover = function(v,oSelf) {
     oSelf._toggleHighlight(this,'mouseover');
-    oSelf.itemMouseToEvent.fire(oSelf, this);
+    oSelf.itemMouseOverEvent.fire(oSelf, this);
 };
 
 /**
@@ -696,7 +734,7 @@ YAHOO.widget.AutoComplete.prototype._onItemMouseover = function(v,oSelf) {
  */
 YAHOO.widget.AutoComplete.prototype._onItemMouseout = function(v,oSelf) {
     oSelf._toggleHighlight(this,'mouseout');
-    oSelf.itemMouseFromEvent.fire(oSelf, this);
+    oSelf.itemMouseOutEvent.fire(oSelf, this);
 };
 
 /**
@@ -707,7 +745,7 @@ YAHOO.widget.AutoComplete.prototype._onItemMouseout = function(v,oSelf) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._onItemMouseclick = function(v,oSelf) {
-    // In case item has not been moused to
+    // In case item has not been moused over
     oSelf._toggleHighlight(this,'mouseover');         
     oSelf._selectItem(this);
 };
@@ -856,6 +894,9 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
     if (oSelf._isIgnoreKey(nKeyCode) || (sText.toLowerCase() == this._sCurQuery)) {
         return;
     }
+    else {
+        oSelf.textboxKeyEvent.fire(oSelf, nKeyCode);
+    }
 
     // Set timeout on the request
     if (oSelf.queryDelay > 0) {
@@ -999,6 +1040,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
     
     sQuery = encodeURI(sQuery);
     this._nDelayID = -1;    // Reset timeout ID because request has been made
+    this.dataRequestEvent.fire(this, sQuery)
     this.dataSource.getResults(this._populateList, sQuery, this);
 };
 
@@ -1037,6 +1079,13 @@ YAHOO.widget.AutoComplete.prototype._clearList = function() {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, oSelf) {
+    if(aResults === null) {
+        oSelf.dataErrorEvent.fire(oSelf, sQuery);
+    }
+    else {
+        oSelf.dataReturnEvent.fire(oSelf, sQuery, aResults);
+    }
+    
     if (!oSelf._bFocused || !aResults) {
         return;
     }
@@ -1106,7 +1155,7 @@ YAHOO.widget.AutoComplete.prototype._clearSelection = function() {
     this._sSavedQuery = this._oTextbox.value;
     
     // Fire custom event
-    this.selectionClearEvent.fire(this);
+    this.selectionEnforceEvent.fire(this);
 };
 
 /**
@@ -1139,40 +1188,13 @@ YAHOO.widget.AutoComplete.prototype._textMatchesOption = function() {
  */
 YAHOO.widget.AutoComplete.prototype._typeAhead = function(oItem, sQuery) {
     var oTextbox = this._oTextbox;
-    var sValue = this._oTextbox.value;
+    var sValue = this._oTextbox.value; // any saved queries plus what user has typed
     
     // Don't update with type-ahead if turned off
     if (!this.typeAhead) {
         return;
     }
-    
-    // Don't update input field if query term doesn't match what user has typed
-    // If delimited, extract the query term from the delimited string
-    var aDelimChar = (this.delimChar) ? this.delimChar : null;
-    if(aDelimChar) {
-        // Loop through all possible delimiters and find the latest one
-        var nDelimIndex = -1;
-        for(var i = aDelimChar.length-1; i >= 0 ; i--) {
-            var nNewIndex = sQuery.lastIndexOf(aDelimChar[i]);
-            if(nNewIndex > nDelimIndex) {
-                nDelimIndex = nNewIndex;
-            }
-        }
 
-        // A delimiter has been found...
-        if (nDelimIndex > -1) {
-            // Pull out the last string after the delimiter
-            //TODO: the 'plus 2' here won't work for space delimiters
-            if (encodeURI(sValue.substr(nNewIndex + 2)).indexOf(sQuery) < 0) {
-                return;
-            }
-        }
-        //TODO: do both need to be lower case?
-        else if(encodeURI(sValue.toLowerCase()) != sQuery) {
-            return;
-        }
-    }
-    
     // Don't update with type-ahead if text selection is not supported
     if(!oTextbox.setSelectionRange && !oTextbox.createTextRange) {
         return;
@@ -1183,6 +1205,7 @@ YAHOO.widget.AutoComplete.prototype._typeAhead = function(oItem, sQuery) {
     this._updateValue(oItem);
     var nEnd = oTextbox.value.length;
     this._selectText(oTextbox,nStart,nEnd);
+    this.typeAheadEvent.fire(this,sQuery,oTextbox.value.substr(nStart,nEnd));
 };
 
 /**
@@ -1374,7 +1397,6 @@ YAHOO.widget.AutoComplete.prototype._updateValue = function(oItem) {
     this._selectText(oTextbox,end,end);
     
     this._oCurItem = oItem;
-    this.textboxUpdateEvent.fire(this, sResultKey);
 };
 
 /**

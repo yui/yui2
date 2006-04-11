@@ -117,16 +117,20 @@
         oACDS.cacheFlushEvent.subscribe(myOnCacheFlush);
 
         oAutoComp.textboxFocusEvent.subscribe(myOnTextboxFocus);
-        oAutoComp.textboxBlurEvent.subscribe(myOnTextboxBlur);
-        oAutoComp.textboxUpdateEvent.subscribe(myOnTextboxUpdate);
+        oAutoComp.textboxKeyEvent.subscribe(myOnTextboxKey);
+        oAutoComp.dataRequestEvent.subscribe(myOnDataRequest);
+        oAutoComp.dataReturnEvent.subscribe(myOnDataReturn);
+        oAutoComp.dataErrorEvent.subscribe(myOnDataError);
         oAutoComp.containerExpandEvent.subscribe(myOnContainerExpand);
-        oAutoComp.containerCollapseEvent.subscribe(myOnContainerCollapse);
-        oAutoComp.itemMouseToEvent.subscribe(myOnItemMouseTo);
-        oAutoComp.itemMouseFromEvent.subscribe(myOnItemMouseFrom);
+        oAutoComp.typeAheadEvent.subscribe(myOnTypeAhead);
+        oAutoComp.itemMouseOverEvent.subscribe(myOnItemMouseOver);
+        oAutoComp.itemMouseOutEvent.subscribe(myOnItemMouseOut);
         oAutoComp.itemArrowToEvent.subscribe(myOnItemArrowTo);
         oAutoComp.itemArrowFromEvent.subscribe(myOnItemArrowFrom);
         oAutoComp.itemSelectEvent.subscribe(myOnItemSelect);
-        oAutoComp.selectionClearEvent.subscribe(myOnSelectionClear);
+        oAutoComp.selectionEnforceEvent.subscribe(myOnSelectionEnforce);
+        oAutoComp.containerCollapseEvent.subscribe(myOnContainerCollapse);
+        oAutoComp.textboxBlurEvent.subscribe(myOnTextboxBlur);
 
         // Define custom event handlers
         function myOnQuery(sType, aArgs) {
@@ -170,43 +174,62 @@
         function myOnCacheFlush(sType, aArgs) {
             var oDataSource = aArgs[0];
             doLog(" cache flush complete.");
-        };
+        }
 
         function myOnTextboxFocus(sType, aArgs) {
             var oAutoComp = aArgs[0];
             doLog(oAutoComp.getName() + " has been engaged.");
-        };
+        }
 
-        function myOnTextboxBlur(sType, aArgs) {
+        function myOnTextboxKey(sType, aArgs) {
             var oAutoComp = aArgs[0];
-            doLog(oAutoComp.getName() + " has been disengaged.");
-        };
+            var nKeyCode = aArgs[1];
+            doLog("Key " + nKeyCode + " has been input into " + oAutoComp.getName() + ".");
+        }
 
-        function myOnTextboxUpdate(sType, aArgs) {
+        function myOnDataRequest(sType, aArgs) {
             var oAutoComp = aArgs[0];
-            var sResultKey = aArgs[1];
-            doLog(oAutoComp.getName() + " has been updated with '" + sResultKey+"'.");
-        };
+            var sQuery = aArgs[1];
+            doLog(oAutoComp.getName() + " has sent a query for " + sQuery +".");
+        }
+
+        function myOnDataReturn(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var sQuery = aArgs[1];
+            var aResults = aArgs[2];
+            doLog(oAutoComp.getName() + " has received " + aResults.length +
+            " results for query " + sQuery + ".");
+        }
+
+        function myOnDataError(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var sQuery = aArgs[1];
+            doLog(oAutoComp.getName() + " has received an error for query " + sQuery +".");
+        }
+
         function myOnContainerExpand(sType, aArgs) {
             var oAutoComp = aArgs[0];
             doLog(oAutoComp.getName() + " container expanded.");
-        };
-
-        function myOnContainerCollapse(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            doLog(oAutoComp.getName() + " container collapsed.");
-        };
-
-        function myOnItemMouseTo(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            var oItem = aArgs[1];
-            doLog(oAutoComp.getName() + " moused to " + oItem.id);
         }
 
-        function myOnItemMouseFrom(sType, aArgs) {
+        function myOnTypeAhead(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var sQuery = aArgs[1];
+            var sPrefill = aArgs[2];
+            doLog(oAutoComp.getName() + " prefilled the input box with " +
+            sPrefill + " for query " + sQuery + ".");
+        }
+
+        function myOnItemMouseOver(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
-            doLog(oAutoComp.getName() + " moused away from " + oItem.id);
+            doLog(oAutoComp.getName() + " moused over " + oItem.id);
+        }
+
+        function myOnItemMouseOut(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var oItem = aArgs[1];
+            doLog(oAutoComp.getName() + " moused out from " + oItem.id);
         }
 
         function myOnItemArrowTo(sType, aArgs) {
@@ -228,10 +251,20 @@
             doLog(oAutoComp.getName() + " selected " + sMsg);
         }
 
-        function myOnSelectionClear(sType, aArgs) {
+        function myOnSelectionEnforce(sType, aArgs) {
             var oAutoComp = aArgs[0];
             doLog(oAutoComp.getName() + " had to clear an invalid selection.");
-        };
+        }
+
+        function myOnContainerCollapse(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            doLog(oAutoComp.getName() + " container collapsed.");
+        }
+
+        function myOnTextboxBlur(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            doLog(oAutoComp.getName() + " has been disengaged.");
+        }
     }
     
     YAHOO.util.Event.addListener(this,'load',autoCompInit);

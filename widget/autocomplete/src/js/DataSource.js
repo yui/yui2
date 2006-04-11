@@ -509,6 +509,7 @@ YAHOO.widget.DS_XHR.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
         }
         if(oResp === null) {
             oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATANULL);
+            oCallbackFn(sQuery, null, oParent);
             return;
         }
         
@@ -521,6 +522,7 @@ YAHOO.widget.DS_XHR.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
 
     var responseFailure = function(oResp) {
         oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATAXHR);
+        oCallbackFn(sQuery, null, oParent);
         return;
     };
     
@@ -731,6 +733,7 @@ YAHOO.widget.DS_JSFunction.prototype.doQuery = function(oCallbackFn, sQuery, oPa
     aResults = oFunction(sQuery);
     if(aResults === null) {
         this.dataErrorEvent.fire(this, oParent, sQuery, this.ERROR_DATANULL);
+        oCallbackFn(sQuery, null, oParent);
         return;
     }
     
@@ -831,5 +834,4 @@ YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParen
 
     this.getResultsEvent.fire(this, oParent, sQuery, aResults);
     oCallbackFn(sQuery, aResults, oParent);
-    return;
 };
