@@ -215,6 +215,32 @@
 							<td class="flags">int</td>
 							<td class="spec">
 								<code>
+									<a href="#POLL_INTERVAL">POLL_INTERVAL</a>
+								</code>
+								<div class="description">
+									The poll interval in milliseconds&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">int</td>
+							<td class="spec">
+								<code>
+									<a href="#POLL_RETRYS">POLL_RETRYS</a>
+								</code>
+								<div class="description">
+									The number of times we should look for elements that are not
+ in the DOM at the time the event is requested after the document
+ has been loaded.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">int</td>
+							<td class="spec">
+								<code>
 									<a href="#SCOPE">SCOPE</a>
 								</code>
 								<div class="description">
@@ -295,14 +321,14 @@
 							</tr>
 						
 							<tr>
-								<td class="flags">void</td>
+								<td class="flags">Object</td>
 								<td class="spec">
 									<code>
-										<a href="#clearCache">clearCache</a>
-										()
+										<a href="#generateId">generateId</a>
+										(el)
 									</code>
 									<div class="description">
-										Clears the element cache&nbsp;
+										Creates an ID for the element if it does not already have one.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -400,6 +426,33 @@
 							</tr>
 						
 							<tr>
+								<td class="flags">int[]</td>
+								<td class="spec">
+									<code>
+										<a href="#getXY">getXY</a>
+										(ev)
+									</code>
+									<div class="description">
+										Returns the pageX and pageY properties as an indexed array.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#onAvailable">onAvailable</a>
+										(&lt;string&gt; p_id, &lt;function&gt; p_fn, &lt;object&gt; p_obj, &lt;boolean&gt; p_override)
+									</code>
+									<div class="description">
+										Executes the supplied callback when the item with the supplied
+ id is found.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
@@ -417,7 +470,7 @@
 								<td class="spec">
 									<code>
 										<a href="#removeListener">removeListener</a>
-										(&lt;Object&gt; el, &lt;String&gt; sType, &lt;Function&gt; fn)
+										(&lt;Object&gt; el, &lt;String&gt; sType, &lt;Function&gt; fn, &lt;int&gt; index)
 									</code>
 									<div class="description">
 										Removes an event handler&nbsp;
@@ -502,6 +555,34 @@
 							</code>
 							<div class="description">
 								Function to execute, int constant
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="POLL_INTERVAL">POLL_INTERVAL</a></h4>
+						<div class="detail">
+							<code>
+								int
+								&nbsp;
+								<strong>POLL_INTERVAL</strong>
+							</code>
+							<div class="description">
+								The poll interval in milliseconds
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="POLL_RETRYS">POLL_RETRYS</a></h4>
+						<div class="detail">
+							<code>
+								int
+								&nbsp;
+								<strong>POLL_RETRYS</strong>
+							</code>
+							<div class="description">
+								The number of times we should look for elements that are not
+ in the DOM at the time the event is requested after the document
+ has been loaded.  The default is 200
 							</div>
 						</div>
 						<hr />
@@ -638,17 +719,17 @@
 						</div>
 						<hr />
 					
-						<h4><a name="clearCache">clearCache</a></h4>
+						<h4><a name="generateId">generateId</a></h4>
 						<div class="detail">
 							<code>
-								void 
-								<strong>clearCache</strong>
-								()
+								Object 
+								<strong>generateId</strong>
+								(el)
 							</code>
 									
 							<div class="description">
 								
-									Clears the element cache
+									Creates an ID for the element if it does not already have one.
 								
 								
 								
@@ -905,6 +986,74 @@
 						</div>
 						<hr />
 					
+						<h4><a name="getXY">getXY</a></h4>
+						<div class="detail">
+							<code>
+								int[] 
+								<strong>getXY</strong>
+								(ev)
+							</code>
+									
+							<div class="description">
+								
+									Returns the pageX and pageY properties as an indexed array.
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="onAvailable">onAvailable</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>onAvailable</strong>
+								(&lt;string&gt; p_id, &lt;function&gt; p_fn, &lt;object&gt; p_obj, &lt;boolean&gt; p_override)
+							</code>
+									
+							<div class="description">
+								
+									Executes the supplied callback when the item with the supplied
+ id is found.  This is meant to be used to execute behavior as
+ soon as possible as the page loads.  If you use this after the
+ initial page load it will poll for a fixed time for the element.
+ The number of times it will poll and the frequency are
+ configurable.  By default it will poll for 10 seconds.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>p_id</code> - 
+												 the id of the element to look for.  
+											</dd>
+										
+											<dd>
+												<code>p_fn</code> - 
+												 what to execute when the element is found.  
+											</dd>
+										
+											<dd>
+												<code>p_obj</code> - 
+												 an optional object to be passed back as  a parameter to p_fn.  
+											</dd>
+										
+											<dd>
+												<code>p_override</code> - 
+												 If set to true, p_fn will execute  in the scope of p_obj                 
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="preventDefault">preventDefault</a></h4>
 						<div class="detail">
 							<code>
@@ -939,7 +1088,7 @@
 							<code>
 								boolean 
 								<strong>removeListener</strong>
-								(&lt;Object&gt; el, &lt;String&gt; sType, &lt;Function&gt; fn)
+								(&lt;Object&gt; el, &lt;String&gt; sType, &lt;Function&gt; fn, &lt;int&gt; index)
 							</code>
 									
 							<div class="description">
@@ -952,7 +1101,7 @@
 										
 											<dd>
 												<code>el</code> - 
-												 the html element or the id of the element to   assign the event to.  
+												 the html element or the id of the element to   remove the event from.  
 											</dd>
 										
 											<dd>
@@ -965,12 +1114,17 @@
 												 the method the event invokes  
 											</dd>
 										
+											<dd>
+												<code>index</code> - 
+												 optional parameter for the index to remove.                     Saves having to look it up if it is known.  
+											</dd>
+										
 									</dl>
 								
 								
 									<dl>
 										<dt>Returns:</dt>
-										<dd> true if the unbind was successful, false   otherwise</dd>
+										<dd> true if the action was successful, false   otherwise</dd>
 									</dl>
 								
 								

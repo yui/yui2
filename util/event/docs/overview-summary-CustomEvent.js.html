@@ -180,7 +180,11 @@
 		
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<pre class="sourceview"><span class="comment">/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */</span>
+				<pre class="sourceview"><span class="comment">/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+*/</span>
 
 <span class="comment">/**
  * The CustomEvent class lets you define events for your application
@@ -215,7 +219,7 @@ YAHOO.util.CustomEvent = <span class="reserved">function</span>(type, oScope) {
 <span class="comment">
     // Register with the event utility for automatic cleanup.  Made optional</span>
 <span class="comment">    // so that CustomEvent can be used independently of pe.event</span>
-    <span class="reserved">if</span> (YAHOO.util[<span class="literal">"Event"</span>]) { 
+    <span class="reserved">if</span> (YAHOO.util.Event) { 
         YAHOO.util.Event.regCE(<span class="reserved">this</span>);
     }
 };
@@ -240,7 +244,7 @@ YAHOO.util.CustomEvent.<span class="reserved">prototype</span> = {
      */</span>
     unsubscribe: <span class="reserved">function</span>(fn, obj) {
         var found = false;
-        <span class="reserved">for</span> (var i=0; i&lt;<span class="reserved">this</span>.subscribers.length; ++i) {
+        <span class="reserved">for</span> (var i=0, len=<span class="reserved">this</span>.subscribers.length; i&lt;len; ++i) {
             var s = <span class="reserved">this</span>.subscribers[i];
             <span class="reserved">if</span> (s &amp;&amp; s.contains(fn, obj)) {
                 <span class="reserved">this</span>._delete(i);
@@ -264,7 +268,7 @@ YAHOO.util.CustomEvent.<span class="reserved">prototype</span> = {
      * <span class="attrib">@param</span> {Array} an arbitrary set of parameters to pass to the handler
      */</span>
     fire: <span class="reserved">function</span>() {
-        <span class="reserved">for</span> (var i=0; i&lt;<span class="reserved">this</span>.subscribers.length; ++i) {
+        <span class="reserved">for</span> (var i=0, len=<span class="reserved">this</span>.subscribers.length; i&lt;len; ++i) {
             var s = <span class="reserved">this</span>.subscribers[i];
             <span class="reserved">if</span> (s) {
                 var scope = (s.override) ? s.obj : <span class="reserved">this</span>.scope;
@@ -277,7 +281,7 @@ YAHOO.util.CustomEvent.<span class="reserved">prototype</span> = {
      * Removes all listeners
      */</span>
     unsubscribeAll: <span class="reserved">function</span>() {
-        <span class="reserved">for</span> (var i=0; i&lt;<span class="reserved">this</span>.subscribers.length; ++i) {
+        <span class="reserved">for</span> (var i=0, len=<span class="reserved">this</span>.subscribers.length; i&lt;len; ++i) {
             <span class="reserved">this</span>._delete(i);
         }
     },

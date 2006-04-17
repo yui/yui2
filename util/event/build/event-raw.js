@@ -671,6 +671,16 @@ if (!YAHOO.util.Event) {
                 delete listeners[index][this.FN];
                 delete listeners[index];
 
+                // remove the map entry
+                var key = el.id + sType;
+                for (i=0, len=listenerMap[key].length; i<len; ++i) {
+                    var item = listenerMap[key][i];
+                    if (item && item.fn == fn) {
+                        delete listenerMap[key][i];
+                        break;
+                    }
+                }
+
                 return true;
 
             },
@@ -863,12 +873,14 @@ if (!YAHOO.util.Event) {
                 if (!listenerMap[key]) {
                     return -1;
                 } else {
+                    
                     for (var i=0, len=listenerMap[key].length; i<len; ++i) {
                         var item = listenerMap[key][i];
-                        if (item.fn == fn) {
+                        if (item && item.fn == fn) {
                             return item.index;
                         }
                     }
+
                 }
 
                 return -1;

@@ -173,7 +173,11 @@
 		
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<pre class="sourceview"><span class="comment">/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */</span>
+				<pre class="sourceview"><span class="comment">/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+*/</span>
 <span class="comment">
 // Only load this library once.  If it is loaded a second time, existing</span>
 <span class="comment">// events cannot be detached.</span>
@@ -188,57 +192,23 @@
  */</span>
     YAHOO.util.Event = <span class="reserved">function</span>() {
 
-        <span class="comment">/**
-         * True after the onload event has fired
-         * <span class="attrib">@type</span> boolean
-         * <span class="attrib">@private</span>
-         */</span>
-        var loadComplete =  false;
-
-        <span class="comment">/**
-         * Cache of wrapped listeners
-         * <span class="attrib">@type</span> array
-         * <span class="attrib">@private</span>
-         */</span>
-        var listeners = [];
-
-        <span class="comment">/**
-         * Listeners that will be attached during the onload event
-         * <span class="attrib">@type</span> array
-         * <span class="attrib">@private</span>
-         */</span>
-        var delayedListeners = [];
-
-        <span class="comment">/**
-         * User-defined unload function that will be fired before all events
-         * are detached
-         * <span class="attrib">@type</span> array
-         * <span class="attrib">@private</span>
-         */</span>
-        var unloadListeners = [];
-
-        <span class="comment">/**
-         * Cache of the custom events that have been defined.  Used for
-         * automatic cleanup
-         * <span class="attrib">@type</span> array
-         * <span class="attrib">@private</span>
-         */</span>
-        var customEvents = [];
-
-        <span class="comment">/**
-         * Cache of DOM0 event handlers to work around issues with DOM2 events
-         * in Safari
-         * <span class="attrib">@private</span>
-         */</span>
-        var legacyEvents = [];
-
-        <span class="comment">/**
-         * Listener stack for DOM0 events
-         * <span class="attrib">@private</span>
-         */</span>
-        var legacyHandlers = [];
-
         YAHOO.util.Event.<span class="reserved">prototype</span> = {
+
+            <span class="comment">/**
+             * The number of times we should look for elements that are not
+             * in the DOM at the time the event is requested after the document
+             * has been loaded.  The default is 200<span class="attrib">@50</span> ms, so it will poll
+             * for 10 seconds or until all outstanding handlers are bound
+             * (whichever comes first).
+             * <span class="attrib">@type</span> int
+             */</span>
+            POLL_RETRYS: 200,
+
+            <span class="comment">/**
+             * The poll interval in milliseconds
+             * <span class="attrib">@type</span> int
+             */</span>
+            POLL_INTERVAL: 50,
 
             <span class="comment">/**
              * Element to bind, int constant
@@ -277,23 +247,34 @@
              * <span class="attrib">@type</span> int
              */</span>
             ADJ_SCOPE: 4,
+            isIE: (!<span class="reserved">this</span>.isSafari &amp;&amp; !navigator.userAgent.match(/opera/gi) &amp;&amp; 
+                    navigator.userAgent.match(/msie/gi)),
 
             <span class="comment">/**
-             * Safari detection is necessary to work around the preventDefault
-             * bug that makes it so you can't cancel a href click from the 
-             * handler.  There is not a capabilities check we can use here.
-             * <span class="attrib">@private</span>
+             * Executes the supplied callback when the item with the supplied
+             * id is found.  This is meant to be used to execute behavior as
+             * soon as possible as the page loads.  If you use this after the
+             * initial page load it will poll for a fixed time for the element.
+             * The number of times it will poll and the frequency are
+             * configurable.  By default it will poll for 10 seconds.
+             * <span class="attrib">@param</span> {string} p_id the id of the element to look for.
+             * <span class="attrib">@param</span> {function} p_fn what to execute when the element is found.
+             * <span class="attrib">@param</span> {object} p_obj an optional object to be passed back as
+             * a parameter to p_fn.
+             * <span class="attrib">@param</span> {boolean} p_override If set to true, p_fn will execute
+             * in the scope of p_obj
+             *
              */</span>
-            isSafari: (navigator.userAgent.match(/safari/gi)),
+            onAvailable: <span class="reserved">function</span>(p_id, p_fn, p_obj, p_override) {
+                onAvailStack.push( { id:       p_id, 
+                                     fn:       p_fn, 
+                                     obj:      p_obj, 
+                                     override: p_override } );
 
-            <span class="comment">/**
-             * <span class="attrib">@private</span>
-             * IE detection needed to properly calculate pageX and pageY.  
-             * capabilities checking didn't seem to work because another 
-             * browser that does not provide the properties have the values 
-             * calculated in a different manner than IE.
-             */</span>
-            isIE: (!<span class="reserved">this</span>.isSafari &amp;&amp; navigator.userAgent.match(/msie/gi)),
+                retryCount = <span class="reserved">this</span>.POLL_RETRYS;
+                <span class="reserved">this</span>.startTimeout(0);
+<span class="comment">                // this._tryPreloadAttach();</span>
+            },
 
             <span class="comment">/**
              * Appends an event handler
@@ -311,11 +292,16 @@
              *                        could not have the event bound to it.
              */</span>
             addListener: <span class="reserved">function</span>(el, sType, fn, oScope, bOverride) {
+
+                <span class="reserved">if</span> (!fn || !fn.call) {
+<span class="comment">                    // this.logger.debug("Error, function is not valid " + fn);</span>
+                    <span class="reserved">return</span> false;
+                }
 <span class="comment">
                 // The el argument can be an array of elements or element ids.</span>
                 <span class="reserved">if</span> ( <span class="reserved">this</span>._isValidCollection(el)) {
                     var ok = true;
-                    <span class="reserved">for</span> (var i=0; i&lt; el.length; ++i) {
+                    <span class="reserved">for</span> (var i=0, len=el.length; i&lt;len; ++i) {
                         ok = ( <span class="reserved">this</span>.on(el[i], 
                                        sType, 
                                        fn, 
@@ -325,6 +311,7 @@
                     <span class="reserved">return</span> ok;
 
                 } <span class="reserved">else</span> <span class="reserved">if</span> (typeof el == <span class="literal">"string"</span>) {
+                    var oEl = <span class="reserved">this</span>.getEl(el);
 <span class="comment">                    // If the el argument is a string, we assume it is </span>
 <span class="comment">                    // actually the id of the element.  If the page is loaded</span>
 <span class="comment">                    // we convert el to the actual element, otherwise we </span>
@@ -332,19 +319,21 @@
 <span class="comment">
                     // check to see if we need to delay hooking up the event </span>
 <span class="comment">                    // until after the page loads.</span>
-                    <span class="reserved">if</span> (loadComplete) {
-                        el = <span class="reserved">this</span>.getEl(el);
+                    <span class="reserved">if</span> (loadComplete &amp;&amp; oEl) {
+                        el = oEl;
                     } <span class="reserved">else</span> {
 <span class="comment">                        // defer adding the event until onload fires</span>
-                        delayedListeners[delayedListeners.length] =
-                            [el, sType, fn, oScope, bOverride];
+                        <span class="reserved">this</span>.addDelayedListener(el, 
+                                                sType, 
+                                                fn, 
+                                                oScope, 
+                                                bOverride);
 
                         <span class="reserved">return</span> true;
                     }
                 }
 <span class="comment">
-                // Element should be an html element or an array if we get </span>
-<span class="comment">                // here.</span>
+                // Element should be an html element if we get here</span>
                 <span class="reserved">if</span> (!el) {
 <span class="comment">                    // this.logger.debug("unable to attach event " + sType);</span>
                     <span class="reserved">return</span> false;
@@ -376,15 +365,23 @@
 
                 var li = [el, sType, fn, wrappedFn, scope];
                 var index = listeners.length;
-<span class="comment">                // cache the listener so we can try to automatically unload</span>
+<span class="comment">
+                // cache the listener so we can try to automatically unload</span>
                 listeners[index] = li;
+<span class="comment">
+                // map the listener for quick lookup</span>
+                <span class="reserved">this</span>.mapListener(el, sType, fn, index);
 
                 <span class="reserved">if</span> (<span class="reserved">this</span>.useLegacyEvent(el, sType)) {
                     var legacyIndex = <span class="reserved">this</span>.getLegacyIndex(el, sType);
+
                     <span class="reserved">if</span> (legacyIndex == -1) {
 
                         legacyIndex = legacyEvents.length;
-<span class="comment">                        // cache the signature for the DOM0 event, and </span>
+
+                        legacyMap[el.id + sType] = legacyIndex;
+<span class="comment">
+                        // cache the signature for the DOM0 event, and </span>
 <span class="comment">                        // include the existing handler for the event, if any</span>
                         legacyEvents[legacyIndex] = 
                             [el, sType, el[<span class="literal">"on"</span> + sType]];
@@ -392,7 +389,7 @@
 
                         el[<span class="literal">"on"</span> + sType] = 
                             <span class="reserved">function</span>(e) {
-                                YAHOO.util.Event.fireLegacyEvent(
+                                <span class="reserved">return</span> YAHOO.util.Event.fireLegacyEvent(
                                     YAHOO.util.Event.getEvent(e), legacyIndex);
                             };
                     }
@@ -420,82 +417,25 @@
              * <span class="attrib">@type</span> function
              */</span>
 <span class="comment">            // on: this.addListener,</span>
-
-            <span class="comment">/**
-             * When using legacy events, the handler is routed to this object
-             * so we can fire our custom listener stack.
-             * <span class="attrib">@private</span>
-             */</span>
-            fireLegacyEvent: <span class="reserved">function</span>(e, legacyIndex) {
-<span class="comment">                // alert("fireLegacyEvent " + legacyIndex);</span>
-                var ok = true;
-<span class="comment">
-                // var el = legacyEvents[YAHOO.util.Event.EL];</span>
-
-                <span class="comment">/* this is not working because the property may get populated
-                // fire the event we replaced, if it exists
-                var origHandler = legacyEvents[2];
-                alert(origHandler);
-                if (origHandler &amp;&amp; origHandler.call) {
-                    var ret = origHandler.call(el, e);
-                    ok = (ret);
-                }
-                */</span>
-
-                var le = legacyHandlers[legacyIndex];
-                <span class="reserved">for</span> (i=0; i &lt; le.length; ++i) {
-                    var index = le[i];
-<span class="comment">                    // alert(index);</span>
-                    <span class="reserved">if</span> (index) {
-                        var li = listeners[index];
-                        var scope = li[<span class="reserved">this</span>.ADJ_SCOPE];
-                        var ret = li[<span class="reserved">this</span>.WFN].call(scope, e);
-                        ok = (ok &amp;&amp; ret);
-<span class="comment">                        // alert(ok);</span>
-                    }
-                }
-
-                <span class="reserved">return</span> ok;
-            },
-
-            <span class="comment">/**
-             * Returns the legacy event index that matches the supplied 
-             * signature
-             * <span class="attrib">@private</span>
-             */</span>
-            getLegacyIndex: <span class="reserved">function</span>(el, sType) {
-                <span class="reserved">for</span> (var i=0; i &lt; legacyEvents.length; ++i) {
-                    var le = legacyEvents[i];
-                    <span class="reserved">if</span> (le &amp;&amp; le[0] == el &amp;&amp; le[1] == sType) {
-                        <span class="reserved">return</span> i;
-                    }
-                }
-
-                <span class="reserved">return</span> -1;
-            },
-
-            <span class="comment">/**
-             * Logic that determines when we should automatically use legacy
-             * events instead of DOM2 events.
-             * <span class="attrib">@private</span>
-             */</span>
-            useLegacyEvent: <span class="reserved">function</span>(el, sType) {
-
-                <span class="reserved">return</span> ( (!el.addEventListener &amp;&amp; !el.attachEvent) || 
-                                (sType == <span class="literal">"click"</span> &amp;&amp; <span class="reserved">this</span>.isSafari) );
-            },
                     
             <span class="comment">/**
              * Removes an event handler
              *
              * <span class="attrib">@param</span> {Object} el the html element or the id of the element to 
-             * assign the event to.
+             * remove the event from.
              * <span class="attrib">@param</span> {String} sType the type of event to remove
              * <span class="attrib">@param</span> {Function} fn the method the event invokes
-             * <span class="attrib">@return</span> {boolean} true if the unbind was successful, false 
+             * <span class="attrib">@param</span> {int} index optional parameter for the index to remove.
+             *                    Saves having to look it up if it is known.
+             * <span class="attrib">@return</span> {boolean} true if the action was successful, false 
              * otherwise
              */</span>
-            removeListener: <span class="reserved">function</span>(el, sType, fn) {
+            removeListener: <span class="reserved">function</span>(el, sType, fn, index) {
+
+                <span class="reserved">if</span> (!fn || !fn.call) {
+<span class="comment">                    // this.logger.debug("Error, function is not valid " + fn);</span>
+                    <span class="reserved">return</span> false;
+                }
 <span class="comment">
                 // The el argument can be a string</span>
                 <span class="reserved">if</span> (typeof el == <span class="literal">"string"</span>) {
@@ -503,14 +443,34 @@
 <span class="comment">                // The el argument can be an array of elements or element ids.</span>
                 } <span class="reserved">else</span> <span class="reserved">if</span> ( <span class="reserved">this</span>._isValidCollection(el)) {
                     var ok = true;
-                    <span class="reserved">for</span> (var i=0; i&lt; el.length; ++i) {
+                    <span class="reserved">for</span> (var i=0, len=el.length; i&lt;len; ++i) {
                         ok = ( <span class="reserved">this</span>.removeListener(el[i], sType, fn) &amp;&amp; ok );
                     }
                     <span class="reserved">return</span> ok;
                 }
 
+                <span class="reserved">if</span> (<span class="literal">"unload"</span> == sType) {
+
+                    <span class="reserved">for</span> (i=0, len=unloadListeners.length; i&lt;len; i++) {
+                        var li = unloadListeners[i];
+                        <span class="reserved">if</span> (li &amp;&amp; 
+                            li[0] == el &amp;&amp; 
+                            li[1] == sType &amp;&amp; 
+                            li[2] == fn) {
+                                delete unloadListeners[i];
+                                <span class="reserved">return</span> true;
+                        }
+                    }
+
+                    <span class="reserved">return</span> false;
+                }
+
+
                 var cacheItem = null;
-                var index = <span class="reserved">this</span>._getCacheIndex(el, sType, fn);
+
+                <span class="reserved">if</span> (<span class="literal">"undefined"</span> == typeof index) {
+                    index = <span class="reserved">this</span>._getCacheIndex(el, sType, fn);
+                }
 
                 <span class="reserved">if</span> (index &gt;= 0) {
                     cacheItem = listeners[index];
@@ -525,7 +485,7 @@
 
                 <span class="reserved">if</span> (el.removeEventListener) {
                     el.removeEventListener(sType, cacheItem[<span class="reserved">this</span>.WFN], false);
-<span class="comment">                    // alert("adsf");</span>
+<span class="comment">                    // this.logger.debug("adsf");</span>
                 } <span class="reserved">else</span> <span class="reserved">if</span> (el.detachEvent) {
                     el.detachEvent(<span class="literal">"on"</span> + sType, cacheItem[<span class="reserved">this</span>.WFN]);
                 }
@@ -534,6 +494,16 @@
                 delete listeners[index][<span class="reserved">this</span>.WFN];
                 delete listeners[index][<span class="reserved">this</span>.FN];
                 delete listeners[index];
+<span class="comment">
+                // remove the map entry</span>
+                var key = el.id + sType;
+                <span class="reserved">for</span> (i=0, len=listenerMap[key].length; i&lt;len; ++i) {
+                    var item = listenerMap[key][i];
+                    <span class="reserved">if</span> (item &amp;&amp; item.fn == fn) {
+                        delete listenerMap[key][i];
+                        break;
+                    }
+                }
 
                 <span class="reserved">return</span> true;
 
@@ -594,6 +564,14 @@
 
 
                 <span class="reserved">return</span> y;
+            },
+
+            <span class="comment">/**
+             * Returns the pageX and pageY properties as an indexed array.
+             * <span class="attrib">@type</span> int[]
+             */</span>
+            getXY: <span class="reserved">function</span>(ev) {
+                <span class="reserved">return</span> [<span class="reserved">this</span>.getPageX(ev), <span class="reserved">this</span>.getPageY(ev)];
             },
 
             <span class="comment">/**
@@ -699,185 +677,77 @@
              * <span class="attrib">@return</span> {int} the event's charCode
              */</span>
             getCharCode: <span class="reserved">function</span>(ev) {
-                <span class="reserved">return</span> ev.charCode || (ev.type == <span class="literal">"keypress"</span>) ? ev.keyCode : 0;
+                <span class="reserved">return</span> ev.charCode || ((ev.type == <span class="literal">"keypress"</span>) ? ev.keyCode : 0);
             },
 
             <span class="comment">/**
-             * <span class="attrib">@private</span>
-             * Locating the saved event handler data by function ref
+             * Creates an ID for the element if it does not already have one.
              */</span>
-            _getCacheIndex: <span class="reserved">function</span>(el, sType, fn) {
-                <span class="reserved">for</span> (var i=0; i&lt; listeners.length; ++i) {
-                    var li = listeners[i];
-                    <span class="reserved">if</span> ( li                 &amp;&amp; 
-                         li[<span class="reserved">this</span>.FN] == fn  &amp;&amp; 
-                         li[<span class="reserved">this</span>.EL] == el  &amp;&amp; 
-                         li[<span class="reserved">this</span>.TYPE] == sType ) {
-                        <span class="reserved">return</span> i;
-                    }
+            generateId: <span class="reserved">function</span>(el) {
+                var id = el.id;
+
+                <span class="reserved">if</span> (!id) {
+                    id = <span class="literal">"yui-event-auto-id-"</span> + (counter++);
+                    el.id = id;
                 }
 
-                <span class="reserved">return</span> -1;
-            },
-
-            <span class="comment">/**
-             * We want to be able to use getElementsByTagName as a collection
-             * to attach a group of events to.  Unfortunately, different 
-             * browsers return different types of collections.  This function
-             * tests to determine if the object is array-like.  It will also 
-             * fail if the object is an array, but is empty.
-             * <span class="attrib">@param</span> o the object to test
-             * <span class="attrib">@return</span> {boolean} true if the object is array-like and populated
-             * <span class="attrib">@private</span>
-             */</span>
-            _isValidCollection: <span class="reserved">function</span>(o) {
-<span class="comment">                // alert(o.constructor.toString())</span>
-<span class="comment">                // alert(typeof o)</span>
-
-                <span class="reserved">return</span> ( o                    &amp;&amp; // o is something
-                         o.length             &amp;&amp; // o is indexed
-                         typeof o != <span class="literal">"string"</span> &amp;&amp; // o is not a string
-                         !o.tagName           &amp;&amp; // o is not an HTML element
-                         !o.alert             &amp;&amp; // o is not a window
-                         typeof o[0] != <span class="literal">"undefined"</span> );
-
-            },
-
-            <span class="comment">/**
-             * <span class="attrib">@private</span>
-             * DOM element cache
-             */</span>
-            elCache: {},
-
-            <span class="comment">/**
-             * We cache elements bound by id because when the unload event 
-             * fires, we can no longer use document.getElementById
-             * <span class="attrib">@private</span>
-             */</span>
-            getEl: <span class="reserved">function</span>(id) {
-                <span class="comment">/*
-                // this is a problem when replaced via document.getElementById
-                if (! this.elCache[id]) {
-                    try {
-                        var el = document.getElementById(id);
-                        if (el) {
-                            this.elCache[id] = el;
-                        }
-                    } catch (er) {
-                        // this.logger.debug("document obj not currently 
-                        // available");
-                    }
-                }
-                return this.elCache[id];
-                */</span>
-
-                <span class="reserved">return</span> document.getElementById(id);
-            },
-
-            <span class="comment">/**
-             * Clears the element cache
-             */</span>
-            clearCache: <span class="reserved">function</span>() {
-                <span class="reserved">for</span> (i in <span class="reserved">this</span>.elCache) {
-                    delete <span class="reserved">this</span>.elCache[i];
-                }
-            },
-
-            <span class="comment">/**
-             * Called by CustomEvent instances to provide a handle to the 
-             * event * that can be removed later on.  Should be package 
-             * protected.
-             * <span class="attrib">@private</span>
-             */</span>
-            regCE: <span class="reserved">function</span>(ce) {
-                customEvents.push(ce);
-            },
-
-            <span class="comment">/**
-             * <span class="attrib">@private</span>
-             * hook up any deferred listeners
-             */</span>
-            _load: <span class="reserved">function</span>(e) {
-<span class="comment">                // me.logger = new ygLogger("pe.Event");</span>
-                loadComplete = true;
-            },
-
-            <span class="comment">/**
-             * Polling function that runs before the onload event fires, 
-             * attempting * to attach to DOM Nodes as soon as they are 
-             * available
-             * <span class="attrib">@private</span>
-             */</span>
-            _tryPreloadAttach: <span class="reserved">function</span>() {
-<span class="comment">                // this.logger.debug("tryPreloadAttach");</span>
-<span class="comment">
-                // keep trying until after the page is loaded.  We need to </span>
-<span class="comment">                // check the page load state prior to trying to bind the </span>
-<span class="comment">                // elements so that we can be certain all elements have been </span>
-<span class="comment">                // tested appropriately</span>
-                var tryAgain = !loadComplete;
-
-                <span class="reserved">for</span> (var i=0; i &lt; delayedListeners.length; ++i) {
-                    var d = delayedListeners[i];
-<span class="comment">                    // There may be a race condition here, so we need to </span>
-<span class="comment">                    // verify the array element is usable.</span>
-                    <span class="reserved">if</span> (d) {
-<span class="comment">
-                        // el will be null if document.getElementById did not</span>
-<span class="comment">                        // work</span>
-                        var el = <span class="reserved">this</span>.getEl(d[<span class="reserved">this</span>.EL]);
-
-                        <span class="reserved">if</span> (el) {
-<span class="comment">                            // this.logger.debug("attaching: " + d[this.EL]);</span>
-                            <span class="reserved">this</span>.on(el, d[<span class="reserved">this</span>.TYPE], d[<span class="reserved">this</span>.FN], 
-                                    d[<span class="reserved">this</span>.SCOPE], d[<span class="reserved">this</span>.ADJ_SCOPE]);
-                            delete delayedListeners[i];
-                        }
-                    }
-                }
-
-                <span class="reserved">if</span> (tryAgain) {
-                    setTimeout(<span class="literal">"YAHOO.util.Event._tryPreloadAttach()"</span>, 50);
-                }
+                <span class="reserved">return</span> id;
             },
 
             <span class="comment">/**
              * Removes all listeners registered by pe.event.  Called 
-             * automatically during the unload event.
+             * automatically during the unload event.  While the primary
+             * reason to do this is to work around the IE memory leak
+             * problem, the code was originally exected for all browsers
+             * in case they could benefit as well.  As it turns out, 
+             * Safari grinds to a halt if you have a large number of
+             * listeners to remove.  Now the unload code only runs
+             * automatically for IE.  The force parameter was added
+             * so that it is possible to force this code to execute in
+             * non-IE browsers.
+             * <span class="attrib">@param</span> {Event} e The unload event
+             * <span class="attrib">@param</span> me YAHOO.util.Event
+             * <span class="attrib">@param</span> force set to true to run the unload code in non-IE
+             * browsers
              * <span class="attrib">@private</span>
              */</span>
-            _unload: <span class="reserved">function</span>(e, me) {
-                <span class="reserved">for</span> (var i=0; i &lt; unloadListeners.length; ++i) {
+            _unload: <span class="reserved">function</span>(e, me, force) {
+                <span class="reserved">for</span> (var i=0, len=unloadListeners.length; i&lt;len; ++i) {
                     var l = unloadListeners[i];
                     <span class="reserved">if</span> (l) {
                         var scope = (l[<span class="reserved">this</span>.ADJ_SCOPE]) ? l[<span class="reserved">this</span>.SCOPE]: window;
                         l[<span class="reserved">this</span>.FN].call(scope, <span class="reserved">this</span>.getEvent(e), l[<span class="reserved">this</span>.SCOPE] );
                     }
                 }
-
-                <span class="reserved">if</span> (listeners &amp;&amp; listeners.length &gt; 0) {
-                    <span class="reserved">for</span> (i = 0; i &lt; listeners.length; ++i) {
-                        l = listeners[i];
-                        <span class="reserved">if</span> (l) {
-                            <span class="reserved">this</span>.removeListener(l[<span class="reserved">this</span>.EL], l[<span class="reserved">this</span>.TYPE], 
-                                    l[<span class="reserved">this</span>.FN]);
+<span class="comment">
+                // if (this.isIE || force) {</span>
+<span class="comment">                    // if (listeners &amp;&amp; listeners.length &gt; 0) {</span>
+                    len = listeners.length;
+                    <span class="reserved">if</span> (len) {
+                        <span class="reserved">for</span> (i=0; i&lt;len; ++i) {
+                            l = listeners[i];
+                            <span class="reserved">if</span> (l) {
+                                <span class="reserved">this</span>.removeListener(l[<span class="reserved">this</span>.EL], l[<span class="reserved">this</span>.TYPE], 
+                                        l[<span class="reserved">this</span>.FN], i);
+                            }
                         }
+
+                        <span class="reserved">this</span>.clearCache();
                     }
 
-                    <span class="reserved">this</span>.clearCache();
-                }
+                    <span class="reserved">for</span> (i=0, len=customEvents.length; i&lt;len; ++i) {
+                        customEvents[i].unsubscribeAll();
+                        delete customEvents[i];
+                    }
 
-                <span class="reserved">for</span> (i = 0; i &lt; customEvents.length; ++i) {
-                    customEvents[i].unsubscribeAll();
-                    delete customEvents[i];
-                }
-
-                <span class="reserved">for</span> (i = 0; i &lt; legacyEvents.length; ++i) {
-<span class="comment">                    // dereference the element</span>
-                    delete legacyEvents[i][0];
-<span class="comment">                    // delete the array item</span>
-                    delete legacyEvents[i];
-                }
+                    <span class="reserved">for</span> (i=0, len=legacyEvents.length; i&lt;len; ++i) {
+<span class="comment">                        // dereference the element</span>
+<span class="comment">                        // delete legacyEvents[i][0];</span>
+<span class="comment">
+                        // delete the array item</span>
+                        delete legacyEvents[i];
+                    }
+<span class="comment">                //}</span>
             },
 
             <span class="comment">/**
