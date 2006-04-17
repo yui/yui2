@@ -441,9 +441,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
         this.initEvent.subscribe(this._onMenuInit, this, true);
         this.beforeRenderEvent.subscribe(this._onMenuBeforeRender, this, true);
         this.renderEvent.subscribe(this._onMenuRender, this, true);
-        this.showEvent.subscribe(this._onMenuShow, this, true);
         this.hideEvent.subscribe(this._onMenuHide, this, true);
-        this.beforeShowEvent.subscribe(this.preventOverlap, this, true);
 
 
         if(p_oUserConfig) {
@@ -840,6 +838,17 @@ YAHOO.widget.Menu.prototype._configureMenuItemSubmenu = function(p_oMenuItem) {
         );
         
         this.renderEvent.subscribe(this._onParentMenuRender, oSubmenu, true);
+
+        oSubmenu.cfg.setProperty("xy", [0,0]);
+
+        oSubmenu.beforeShowEvent.subscribe(
+            this._onSubmenuBeforeShow, 
+            oSubmenu, 
+            true
+        );
+
+        oSubmenu.showEvent.subscribe(this._onSubmenuShow, oSubmenu, true);
+        oSubmenu.hideEvent.subscribe(this._onSubmenuHide, oSubmenu, true);
 
     }
 
@@ -1390,19 +1399,6 @@ YAHOO.widget.Menu.prototype._onMenuBeforeRender = function(p_sType, p_aArguments
 
 YAHOO.widget.Menu.prototype._onMenuRender = function(p_sType, p_aArguments, p_oMenu) {
 
-   if(this.parent) { 
-
-        this.cfg.setProperty(
-            "context", 
-            [
-                this.parent.element, 
-                this.parent.SUBMENU_ALIGNMENT[0], 
-                this.parent.SUBMENU_ALIGNMENT[1]
-            ]
-        );
-
-    }
-
     var sWidth = this.element.parentNode.tagName == "BODY" ? 
             this.element.offsetWidth : this._getOffsetWidth();
 
@@ -1411,27 +1407,7 @@ YAHOO.widget.Menu.prototype._onMenuRender = function(p_sType, p_aArguments, p_oM
 };
 
 
-YAHOO.widget.Menu.prototype._onMenuShow = function(p_sType, p_aArguments, p_oMenu) {
-
-    if(this.parent) {
-
-        this.parent.subMenuIndicator.alt = 
-            this.parent.EXPANDED_SUBMENU_INDICATOR_ALT_TEXT;
-    
-    }
-
-};
-
-
 YAHOO.widget.Menu.prototype._onMenuHide = function(p_sType, p_aArguments, p_oMenu) {
-
-    if(this.parent) {
-
-        this.parent.subMenuIndicator.alt = 
-            this.parent.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
-    
-    }
-
 
     if(this.activeMenuItem) {
 
@@ -1493,6 +1469,36 @@ YAHOO.widget.Menu.prototype._onParentMenuRender = function(p_sType, p_aArguments
         this.render(this.parent.element);
 
     }
+
+};
+
+
+YAHOO.widget.Menu.prototype._onSubmenuBeforeShow = function(p_sType, p_aArguments, p_oSubmenu) {
+
+    this.cfg.setProperty(
+        "context", 
+        [
+            this.parent.element, 
+            this.parent.SUBMENU_ALIGNMENT[0], 
+            this.parent.SUBMENU_ALIGNMENT[1]
+        ]
+    );
+
+};
+
+
+YAHOO.widget.Menu.prototype._onSubmenuShow = function(p_sType, p_aArguments, p_oSubmenu) {
+
+    this.parent.subMenuIndicator.alt = 
+        this.parent.EXPANDED_SUBMENU_INDICATOR_ALT_TEXT;
+
+};
+
+
+YAHOO.widget.Menu.prototype._onSubmenuHide = function(p_sType, p_aArguments, p_oSubmenu) {
+
+    this.parent.subMenuIndicator.alt = 
+        this.parent.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
 
 };
 
@@ -1596,8 +1602,90 @@ YAHOO.widget.Menu.prototype._onMenuItemConfigChange = function(p_sType, p_aArgum
 };
 
 
+/**
+* Keeps the Menu in the viewport.
+* @see YAHOO.widget.Overlay#enforceConstraints
+*/
+YAHOO.widget.Menu.prototype.enforceConstraints = function(type, args, obj) {
+
+    var pos = args[0],
+
+        x = pos[0],
+        y = pos[1],
+
+        bod = document.getElementsByTagName('body')[0],
+        htm = document.getElementsByTagName('html')[0],
+    
+        bodyOverflow = YAHOO.util.Dom.getStyle(bod, "overflow"),
+        htmOverflow = YAHOO.util.Dom.getStyle(htm, "overflow"),
+
+        offsetHeight = this.element.offsetHeight,
+        offsetWidth = this.element.offsetWidth,
+    
+        viewPortWidth = YAHOO.util.Dom.getClientWidth(),
+        viewPortHeight = YAHOO.util.Dom.getClientHeight(),
+    
+        scrollX = window.scrollX || document.body.scrollLeft,
+        scrollY = window.scrollY || document.body.scrollTop,
+    
+        topConstraint = scrollY + 10,
+        leftConstraint = scrollX + 10,
+        bottomConstraint = scrollY + viewPortHeight - offsetHeight - 10,
+        rightConstraint = scrollX + viewPortWidth - offsetWidth - 10,
+    
+        aContext = this.cfg.getProperty("context"),
+        oContextElement = aContext ? aContext[0] : null;
+
+
+    if (x < 10) {
+
+        x = leftConstraint;
+
+    } else if ((x + offsetWidth) > viewPortWidth) {
+
+        if(
+            oContextElement && 
+            ((x - oContextElement.offsetWidth) > offsetWidth)
+        ) {
+
+            x = (x - (oContextElement.offsetWidth + offsetWidth));
+
+        }
+        else {
+
+            x = rightConstraint;
+
+        }
+
+    }
+
+    if (y < 10) {
+
+        y = topConstraint;
+
+    } else if (y > bottomConstraint) {
+
+        if(oContextElement && (y > offsetHeight)) {
+
+            y = ((y + oContextElement.offsetHeight) - offsetHeight);
+
+        }
+        else {
+
+            y = bottomConstraint;
+
+        }
+
+    }
+
+    this.cfg.setProperty("x", x, true);
+    this.cfg.setProperty("y", y, true);
+
+};
+
 
 // Public methods
+
 
 /**
 * Appends the specified MenuItem instance to a Menu instance.
@@ -1792,36 +1880,6 @@ YAHOO.widget.Menu.prototype.destroy = function() {
     // Continue with the superclass implementation of this method
 
     YAHOO.widget.Menu.superclass.destroy.call(this);
-
-};
-
-
-/**
-* Repositions a Menu instance so that it does not overlap it's parent
-* MenuItem instance.
-*/
-YAHOO.widget.Menu.prototype.preventOverlap = function(type, args, obj) {
-
-    if(this.parent) {
-
-        var aPosition = this._oDom.getXY(this.element),
-        
-            nWidth = parseInt(this.cfg.getProperty("width"), 10),
-            nHeight = parseInt(this.cfg.getProperty("height"), 10),
-            
-            nX = aPosition[0] + nWidth,
-            nY = aPosition[1],
-            
-            nClientWidth = this._oDom.getClientWidth(),
-            nClientHeight = this._oDom.getClientHeight();
-
-        if(nX >= nClientWidth) {
-
-            this.align("tr", "tl");   
-
-        }
-
-    }
 
 };
 
