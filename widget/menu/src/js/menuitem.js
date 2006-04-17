@@ -104,6 +104,9 @@ YAHOO.widget.MenuItem.prototype = {
     SUBMENU_TYPE: null,
 
 
+    SUBMENU_ALIGNMENT: ["tl","tr"],
+
+
     /**
     * Constant representing the type of MenuItem to instantiate when creating 
     * MenuItem instances from parsing the child nodes (either HTMLLIElement, 
@@ -416,21 +419,8 @@ YAHOO.widget.MenuItem.prototype = {
                     this._createRootNodeStructure();
 
                     this.cfg.setProperty("text", p_oObject.text);
-                    this.cfg.setProperty("value", p_oObject.value);
 
                     this.srcElement = p_oObject;
-
-                    if(p_oObject.disabled || p_oObject.parentNode.disabled) {
-
-                        this.cfg.setProperty("disabled", true);
-
-                    }
-
-                    if(p_oObject.selected) {
-
-                        this.cfg.setProperty("selected", true);
-
-                    }
 
                 break;
 
@@ -441,12 +431,6 @@ YAHOO.widget.MenuItem.prototype = {
                     this.cfg.setProperty("text", p_oObject.label);
 
                     this.srcElement = p_oObject;
-
-                    if(p_oObject.disabled || p_oObject.parentNode.disabled) {
-
-                        this.cfg.setProperty("disabled", true);
-
-                    }
 
                     if(this.cfg.getProperty("initsubmenus")) {
 
@@ -460,41 +444,16 @@ YAHOO.widget.MenuItem.prototype = {
 
                     // Get the anchor node (if it exists)
 
-                    var oAnchor = null,
+                    var oAnchor = this._getFirstElement(p_oObject, "A"),
                         sURL = null,
                         sText = null;
-
-                    if(
-                        p_oObject.firstChild && 
-                        p_oObject.firstChild.nodeType == 1 && 
-                        p_oObject.firstChild.tagName == "A"
-                    ) {
-
-                        oAnchor = p_oObject.firstChild;
-
-                    }
-                    else if(
-                        p_oObject.childNodes[1] && 
-                        p_oObject.childNodes[1].nodeType == 1 &&
-                        p_oObject.childNodes[1].tagName == "A"
-                    ) {
-
-                        oAnchor = p_oObject.childNodes[1];
-
-                    }
 
 
                     // Capture the "text" and/or the "URL"
 
                     if(oAnchor) {
 
-                        sURL = oAnchor.getAttribute("href");                        
-
-                        if(sURL == document.location) {
-
-                            sURL = "#";
-
-                        }
+                        sURL = oAnchor.getAttribute("href");
 
                         if(oAnchor.innerText) {
                 
@@ -503,8 +462,7 @@ YAHOO.widget.MenuItem.prototype = {
                         }
                         else {
                 
-                            var oRange = 
-                                oAnchor.ownerDocument.createRange();
+                            var oRange = oAnchor.ownerDocument.createRange();
                 
                             oRange.selectNodeContents(oAnchor);
                 
@@ -523,48 +481,12 @@ YAHOO.widget.MenuItem.prototype = {
                     this.srcElement = p_oObject;
                     this.element = p_oObject;
                     this._oAnchor = oAnchor;
-
-
-                    // Check to see if the MenuItem is disabled
-
-                    var bDisabled = 
-                        this._oDom.hasClass(this.element, "disabled");
-
-
-                    /*
-                        Check to see if the MenuItem should be selected 
-                        by default
-                    */ 
-
-                    var bSelected = 
-                        this._oDom.hasClass(this.element, "selected");
     
 
                     // Check if emphasis has been applied to the MenuItem
 
-                    var oEmphasisNode; // Either EM or STRONG
-
-                    if(
-                        oAnchor.firstChild && 
-                        oAnchor.firstChild.nodeType == 1
-                    ) {
-
-                        oEmphasisNode = oAnchor.firstChild;
-
-                    }
-                    else if(
-                        oAnchor.childNodes[1] && 
-                        oAnchor.childNodes[1].nodeType == 1
-                    ) {
-
-                        oEmphasisNode = oAnchor.childNodes[1];
-
-                    }
-
-
-                    // Determine if the MenuItem has emphasis
-
-                    var bEmphasis = false,
+                    var oEmphasisNode = this._getFirstElement(oAnchor),
+                        bEmphasis = false,
                         bStrongEmphasis = false;
 
                     if(oEmphasisNode) {
@@ -599,58 +521,6 @@ YAHOO.widget.MenuItem.prototype = {
                     }
 
 
-                    // Check for the "help text" node (EM)
-
-                    var oHelpText = null;
-
-                    if(
-                        oAnchor.nextSibling &&
-                        oAnchor.nextSibling.nodeType == 1 &&
-                        oAnchor.nextSibling.tagName == "EM"
-                    ) {
-
-                        oHelpText = oAnchor.nextSibling;
-
-                    }
-                    else if(
-                        oAnchor.nextSibling &&
-                        oAnchor.nextSibling.nextSibling &&
-                        oAnchor.nextSibling.nextSibling.nodeType == 1 &&
-                        oAnchor.nextSibling.nextSibling.tagName == "EM"
-                    ) {
-
-                        oHelpText =  oAnchor.nextSibling.nextSibling;
-
-                    }
-
-
-                    if(oHelpText) {
-
-                        this._oHelpTextEM = oHelpText;
-
-                        /*
-                            Propagate the "hashelptext" class to the LI and 
-                            anchor if it isn't already applied
-                        */
-                        
-                        this._oDom.addClass(this.element, "hashelptext");
-                        this._oDom.addClass(oAnchor, "hashelptext");
-
-
-                    }
-                    else {
-
-                        /* 
-                            Remove the "hashelptext" class if it exists but
-                            there is no help text present
-                        */
-
-                        this._oDom.removeClass(this.element, "hashelptext");
-                        this._oDom.removeClass(oAnchor, "hashelptext");
-
-                    }
-
-
                     /*
                         Set these properties silently to sync up the 
                         configuration object without making changes to the 
@@ -658,7 +528,6 @@ YAHOO.widget.MenuItem.prototype = {
                     */ 
 
                     this.cfg.setProperty("text", sText, true);
-                    this.cfg.setProperty("helptext", oHelpText, true);
                     this.cfg.setProperty("url", sURL, true);
                     this.cfg.setProperty("emphasis", bEmphasis, true);
                     this.cfg.setProperty(
@@ -666,16 +535,6 @@ YAHOO.widget.MenuItem.prototype = {
                         bStrongEmphasis, 
                         true
                     );
-
-
-                    /*
-                        The "selected" and "disabled" properties are not set
-                        silently to ensure that the associated class names
-                        are applied correctly to the DOM elements
-                    */ 
-
-                    this.cfg.setProperty("selected", bSelected);
-                    this.cfg.setProperty("disabled", bDisabled);
 
                     if(this.cfg.getProperty("initsubmenus")) {
 
@@ -725,6 +584,45 @@ YAHOO.widget.MenuItem.prototype = {
 
 
     // Private methods
+
+    /**
+    * Returns an element's first element node
+    * @private
+    * @param {HTMLElement} p_oElement The element to be evaluated.
+    * @param {String} p_sTagName Optional. The tagname of the element.
+    * @return Returns an HTMLElement node.
+    * @type Boolean
+    */
+    _getFirstElement: function(p_oElement, p_sTagName) {
+
+        var oElement;
+
+        if(p_oElement.firstChild && p_oElement.firstChild.nodeType) {
+
+            oElement = p_oElement.firstChild;
+
+        }
+        else if(
+            p_oElement.firstChild && 
+            p_oElement.firstChild.nextSibling && 
+            p_oElement.firstChild.nextSibling.nodeType == 1
+        ) {
+
+            oElement = p_oElement.firstChild.nextSibling;
+
+        }
+
+
+        if(p_sTagName) {
+
+            return (oElement && oElement.tagName == p_sTagName) ? oElement : false;
+
+        }
+
+        return oElement;
+
+    },
+
 
     /**
     * Determines if an object is a string
@@ -872,14 +770,13 @@ YAHOO.widget.MenuItem.prototype = {
     */    
     configHelpText: function(p_sType, p_aArguments, p_oMenuItem) {
 
-        var oHelpText = p_aArguments[0];
-
-        var me = this;
+        var oHelpText = p_aArguments[0],
+            aNodes = [this.element, this._oAnchor],
+            me = this;
 
         function initHelpText() {
 
-            me._oDom.addClass(me.element, "hashelptext");
-            me._oDom.addClass(me._oAnchor, "hashelptext");
+            me._oDom.addClass(aNodes, "hashelptext");
 
             if(me.cfg.getProperty("disabled")) {
 
@@ -897,8 +794,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         function removeHelpText() {
 
-            me._oDom.removeClass(me.element, "hashelptext");
-            me._oDom.removeClass(me._oAnchor, "hashelptext"); 
+            me._oDom.removeClass(aNodes, "hashelptext");
 
             me.element.removeChild(me._oHelpTextEM);
             me._oHelpTextEM = null;
@@ -1023,25 +919,7 @@ YAHOO.widget.MenuItem.prototype = {
             }
             else {
 
-                if(
-                    this._oAnchor.firstChild && 
-                    this._oAnchor.firstChild.nodeType == 1 && 
-                    this._oAnchor.firstChild.tagName == "EM"
-                ) {
-
-                    oEM = this._oAnchor.firstChild;
-
-                }
-                else if(
-                    this._oAnchor.childNodes[1] && 
-                    this._oAnchor.childNodes[1].nodeType == 1 &&
-                    this._oAnchor.childNodes[1].tagName == "EM"
-                ) {
-
-                    oEM = this._oAnchor.childNodes[1];
-
-                }
-
+                oEM = this._getFirstElement(this._oAnchor, "EM");
 
                 this._oAnchor.removeChild(oEM);
                 this._oAnchor.appendChild(this._oText);
@@ -1087,24 +965,7 @@ YAHOO.widget.MenuItem.prototype = {
             }
             else {
 
-                if(
-                    this._oAnchor.firstChild && 
-                    this._oAnchor.firstChild.nodeType == 1 && 
-                    this._oAnchor.firstChild.tagName == "STRONG"
-                ) {
-
-                    oStrong = this._oAnchor.firstChild;
-
-                }
-                else if(
-                    this._oAnchor.childNodes[1] && 
-                    this._oAnchor.childNodes[1].nodeType == 1 &&
-                    this._oAnchor.childNodes[1].tagName == "STRONG"
-                ) {
-
-                    oStrong = this._oAnchor.childNodes[1];
-
-                }
+                oEM = this._getFirstElement(this._oAnchor, "STRONG");
 
                 this._oAnchor.removeChild(oStrong);
                 this._oAnchor.appendChild(this._oText);
@@ -1127,8 +988,16 @@ YAHOO.widget.MenuItem.prototype = {
     */    
     configDisabled: function(p_sType, p_aArguments, p_oMenuItem) {
 
-        var bDisabled = p_aArguments[0];
+        var bDisabled = p_aArguments[0],
+            aNodes = [this.element, this._oAnchor],
+            sImageId,
+            sImageAlt;
 
+        if(this._oHelpTextEM) {
+
+            aNodes[2] = this._oHelpTextEM;  
+
+        }
 
         if(bDisabled) {
 
@@ -1137,55 +1006,31 @@ YAHOO.widget.MenuItem.prototype = {
             this._oAnchor.removeAttribute("href");
             this._oAnchor.removeAttribute("tabIndex");
 
-            this._oDom.addClass(this.element, "disabled");
-            this._oDom.addClass(this._oAnchor, "disabled");
+            this._oDom.addClass(aNodes, "disabled");
 
-            if(this._oHelpTextEM) {
-
-                this._oDom.addClass(this._oHelpTextEM, "disabled");
-
-            }
-
-            if(this.subMenuIndicator) {
-
-                this.subMenuIndicator.src = 
-                    document.getElementById("yuidisabledsubmenuindicator").src;
-
-                this.subMenuIndicator.alt = 
-                    this.DISABLED_SUBMENU_INDICATOR_ALT_TEXT;
-
-            }
+            sImageId = "yuidisabledsubmenuindicator";
+            sImageAlt = this.DISABLED_SUBMENU_INDICATOR_ALT_TEXT;
 
         }
         else {
 
-            this._oAnchor.setAttribute(
-                "href", 
-                this.cfg.getProperty("url")
-            );
-
+            this._oAnchor.setAttribute("href", this.cfg.getProperty("url"));
             this._oAnchor.setAttribute("tabIndex", 0);
 
-            this._oDom.removeClass(this.element, "disabled");
-            this._oDom.removeClass(this._oAnchor, "disabled");
+            this._oDom.removeClass(aNodes, "disabled");
 
-            if(this._oHelpTextEM) {
+            sImageId = "yuisubmenuindicator";
+            sImageAlt = this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
 
-                this._oDom.removeClass(this._oHelpTextEM, "disabled");
+        }
 
-            }
 
-            if(this.subMenuIndicator) {
+        if(this.subMenuIndicator) {
 
-                this.subMenuIndicator.src = 
-                    this.SUBMENU_INDICATOR_IMAGE_URL;
+            this.subMenuIndicator.src = document.getElementById(sImageId).src;
+            this.subMenuIndicator.alt = sImageAlt;
 
-                this.subMenuIndicator.alt = 
-                    this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
-
-            }
-
-        }    
+        }
 
     },
 
@@ -1201,48 +1046,36 @@ YAHOO.widget.MenuItem.prototype = {
     */    
     configSelected: function(p_sType, p_aArguments, p_oMenuItem) {
 
-        var bSelected = p_aArguments[0];
+        var bSelected = p_aArguments[0],
+            aNodes = [this.element, this._oAnchor],
+            sImageId;
 
+        if(this._oHelpTextEM) {
+
+            aNodes[2] = this._oHelpTextEM;  
+
+        }
 
         if(bSelected) {
 
-            this._oDom.addClass(this.element, "selected");
-            this._oDom.addClass(this._oAnchor, "selected");
+            this._oDom.addClass(aNodes, "selected");
 
-            if(this._oHelpTextEM) {
-
-                this._oDom.addClass(this._oHelpTextEM, "selected");
-
-            }
-
-            if(this.subMenuIndicator) {
-
-                this.subMenuIndicator.src = 
-                    document.getElementById("yuiselectedsubmenuindicator").src;
-
-            }
+            sImageId = "yuiselectedsubmenuindicator";
 
         }
         else {
 
-            this._oDom.removeClass(this.element, "selected");
-            this._oDom.removeClass(this._oAnchor, "selected");
+            this._oDom.removeClass(aNodes, "selected");
 
-            if(this._oHelpTextEM) {
-
-                this._oDom.removeClass(this._oHelpTextEM, "selected");
-
-            }
-
-            if(this.subMenuIndicator) {
-
-                this.subMenuIndicator.src = 
-                    document.getElementById("yuisubmenuindicator").src;
-
-            }
+            sImageId = "yuisubmenuindicator";
 
         }
 
+        if(this.subMenuIndicator) {
+
+            this.subMenuIndicator.src = document.getElementById(sImageId).src;
+
+        }
 
     },
 
@@ -1258,16 +1091,18 @@ YAHOO.widget.MenuItem.prototype = {
     */
     configSubmenu: function(p_sType, p_aArguments, p_oMenuItem) {
 
-        var oMenu = p_aArguments[0];
+        var oSubmenu = p_aArguments[0],
+            aNodes = [this.element, this._oAnchor];
 
-        if(oMenu) {
+        if(oSubmenu) {
 
-            oMenu.parent = this;
+            // Set the submenu's parent to this MenuItem instance
 
-            this._oSubmenu = oMenu;
+            oSubmenu.parent = this;
 
-            this._oDom.addClass(this.element, "hassubmenu");
-            this._oDom.addClass(this._oAnchor, "hassubmenu");
+            this._oSubmenu = oSubmenu;
+
+            this._oDom.addClass(aNodes, "hassubmenu");
 
             if(!this.subMenuIndicator) { 
 
@@ -1325,7 +1160,32 @@ YAHOO.widget.MenuItem.prototype = {
 
                 this.subMenuIndicator = oClone;
 
-                this.element.appendChild(this.subMenuIndicator);
+                var oLastElement = this.element.lastChild;
+
+                if(oLastElement.nodeType != 1) {
+                
+                    oLastElement = oLastElement.previousSibling;
+
+                }
+
+                switch(oLastElement.tagName) {
+
+                    case "DIV":
+                    
+                        this.element.insertBefore(
+                            this.subMenuIndicator,
+                            oLastElement
+                        );
+
+                    break;
+
+                    default:
+                    
+                        this.element.appendChild(this.subMenuIndicator);
+
+                    break;
+                
+                }
 
 
                 if(this.cfg.getProperty("disabled")) {
@@ -1345,8 +1205,7 @@ YAHOO.widget.MenuItem.prototype = {
         }
         else {
 
-            this._oDom.removeClass(this.element, "hassubmenu");
-            this._oDom.removeClass(this._oAnchor, "hassubmenu");
+            this._oDom.removeClass(aNodes, "hassubmenu");
 
             if(this.subMenuIndicator) {
 
@@ -1363,7 +1222,6 @@ YAHOO.widget.MenuItem.prototype = {
         }
 
     },
-
 
 
     // Public methods
@@ -1416,9 +1274,7 @@ YAHOO.widget.MenuItem.prototype = {
     
                 var aNextGroup = getNextArrayItem(aMenuItemGroups, nNextGroupIndex);
     
-                /*
-                    Retrieve the first MenuItem instance in the next group
-                */ 
+                // Retrieve the first MenuItem instance in the next group
     
                 oNextMenuItem = getNextArrayItem(aNextGroup, 0);
     
