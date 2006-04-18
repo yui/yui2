@@ -57,7 +57,24 @@ YAHOO.widget.Menu.prototype.CSS_CLASS_NAME = "yuimenu";
 YAHOO.widget.Menu.prototype.MENUITEM_TYPE = null;
 
 
+/**
+* Constant representing the tagname of the HTMLElement node to use to title 
+* a group of MenuItem instances.
+* @final
+* @type String
+*/
+YAHOO.widget.Menu.prototype.GROUP_TITLE_TAG_NAME = "H6";
+
+
 // Private properties
+
+/**
+* Array of HTMLElements used to title groups of MenuItem instances.
+* @private
+* @type {Array}
+*/
+YAHOO.widget.Menu.prototype._aGroupTitles = null;
+
 
 /**
 * Multi-dimensional array of MenuItem instances.
@@ -236,6 +253,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     this._aMenuItemGroups = [];
     this._aListElements = [];
+    this._aGroupTitles = [];
 
 
     var oElement;
@@ -271,7 +289,10 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                 this.beforeInitEvent.fire(YAHOO.widget.Menu);
 
 
-                // Populate the collection of ULs
+                /*
+                    Populate the collection of MenuItem groups and MenuItem
+                    group titles
+                */
 
                 var oNode = this.body.firstChild, 
                     i = 0;
@@ -279,6 +300,12 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
                 do {
 
                     switch(oNode.tagName) {
+
+                        case this.GROUP_TITLE_TAG_NAME:
+                        
+                            this._aGroupTitles[i] = oNode;
+
+                        break;
 
                         case "UL":
 
@@ -853,6 +880,10 @@ YAHOO.widget.Menu.prototype._subscribeToMenuItemEvents = function(p_oMenuItem) {
 };
 
 
+/**
+* Returns the offset width of a Menu instance.
+* @private
+*/
 YAHOO.widget.Menu.prototype._getOffsetWidth = function() {
 
     var oClone = this.element.cloneNode(true);
@@ -1246,6 +1277,15 @@ YAHOO.widget.Menu.prototype._onElementClick = function(p_oEvent, p_oMenu) {
 
 // Private Custom Event handlers
 
+/**
+* "init" Custom Event handler for a Menu instance.  Iterates a Menu instance's 
+* child nodes and instantiates MenuItem and submenu instances.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArguments Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
+*/
 YAHOO.widget.Menu.prototype._onMenuInit = function(p_sType, p_aArguments, p_oMenu) {
 
     if(this.srcElement) {
@@ -1332,19 +1372,25 @@ YAHOO.widget.Menu.prototype._onMenuInit = function(p_sType, p_aArguments, p_oMen
 };
 
 
+/**
+* "beforerender" Custom Event handler for a Menu instance.  Appends all of the 
+* HTMLUListElement (<UL>s) nodes (and their child HTMLLIElement (<LI>)) nodes 
+* and their accompanying title nodes to the body of the Menu instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArguments Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
+*/
 YAHOO.widget.Menu.prototype._onMenuBeforeRender = function(p_sType, p_aArguments, p_oMenu) {
-
-    /*
-        Append all of the HTMLUListElement (<UL>s) nodes (and their child 
-        HTMLLIElement (<LI>)) nodes to the body of the module.
-    */
 
     var nListElements = this._aListElements.length;
 
     if(nListElements > 0) {
 
         var i = 0, 
-            bFirstList = true;
+            bFirstList = true,
+            bFirstTitle = true;
 
         do {
 
@@ -1357,9 +1403,30 @@ YAHOO.widget.Menu.prototype._onMenuBeforeRender = function(p_sType, p_aArguments
         
                 }
 
+
                 if(!this._oDom.isAncestor(this.element, this._aListElements[i])) {
 
                     this.appendToBody(this._aListElements[i]);
+
+                }
+
+
+                if(this._aGroupTitles[i]) {
+
+                    if(!this._oDom.isAncestor(this.element, this._aGroupTitles[i])) {
+
+                        this._aListElements[i].parentNode.insertBefore(this._aGroupTitles[i], this._aListElements[i]);
+
+                    }
+
+                    if(bFirstTitle) {
+                    
+                        this._oDom.addClass(this._aGroupTitles[i], "first");
+                        bFirstTitle = false;
+                    
+                    }
+
+                    this._oDom.addClass(this._aListElements[i], "hastitle");
 
                 }
 
@@ -1375,6 +1442,14 @@ YAHOO.widget.Menu.prototype._onMenuBeforeRender = function(p_sType, p_aArguments
 };
 
 
+/**
+* "render" Custom Event handler for a Menu instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArguments Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
+*/
 YAHOO.widget.Menu.prototype._onMenuRender = function(p_sType, p_aArguments, p_oMenu) {
 
     var sWidth = this.element.parentNode.tagName == "BODY" ? 
@@ -1385,6 +1460,14 @@ YAHOO.widget.Menu.prototype._onMenuRender = function(p_sType, p_aArguments, p_oM
 };
 
 
+/**
+* "hide" Custom Event handler for a Menu instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArguments Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
+*/
 YAHOO.widget.Menu.prototype._onMenuHide = function(p_sType, p_aArguments, p_oMenu) {
 
     if(this.activeMenuItem) {
@@ -1408,6 +1491,15 @@ YAHOO.widget.Menu.prototype._onMenuHide = function(p_sType, p_aArguments, p_oMen
 };
 
 
+/**
+* "configchange" Custom Event handler for a Menu instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArguments Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.Menu} p_oSubmenu The submenu instance that subscribed 
+* to the event.
+*/
 YAHOO.widget.Menu.prototype._onParentMenuConfigChange = function(p_sType, p_aArguments, p_oSubmenu) {
 
     var sPropertyName = p_aArguments[0][0],
@@ -1428,12 +1520,14 @@ YAHOO.widget.Menu.prototype._onParentMenuConfigChange = function(p_sType, p_aArg
 
 
 /**
-* Renders a submenu in response to the firing of it's parent's "render" event.
+* "render" Custom Event handler for a Menu instance.  Renders a submenu in 
+* response to the firing of it's parent's "render" event.
 * @private
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArguments Collection of arguments sent when the event 
 * was fired.
-* @param {YAHOO.widget.Menu} p_oSubmenu The submenu instance to be rendered.
+* @param {YAHOO.widget.Menu} p_oSubmenu The submenu instance that subscribed 
+* to the event.
 */
 YAHOO.widget.Menu.prototype._onParentMenuRender = function(p_sType, p_aArguments, p_oSubmenu) {
 
@@ -1473,6 +1567,15 @@ YAHOO.widget.Menu.prototype._onParentMenuRender = function(p_sType, p_aArguments
 };
 
 
+/**
+* "beforeshow" Custom Event handler for a submenu instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArguments Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.Menu} p_oSubmenu The submenu instance that fired
+* the event.
+*/
 YAHOO.widget.Menu.prototype._onSubmenuBeforeShow = function(p_sType, p_aArguments, p_oSubmenu) {
 
     this.cfg.setProperty(
@@ -1487,6 +1590,15 @@ YAHOO.widget.Menu.prototype._onSubmenuBeforeShow = function(p_sType, p_aArgument
 };
 
 
+/**
+* "show" Custom Event handler for a submenu instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArguments Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.Menu} p_oSubmenu The submenu instance that fired
+* the event.
+*/
 YAHOO.widget.Menu.prototype._onSubmenuShow = function(p_sType, p_aArguments, p_oSubmenu) {
 
     this.parent.subMenuIndicator.alt = 
@@ -1495,6 +1607,15 @@ YAHOO.widget.Menu.prototype._onSubmenuShow = function(p_sType, p_aArguments, p_o
 };
 
 
+/**
+* "hide" Custom Event handler for a submenu instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArguments Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.Menu} p_oSubmenu The submenu instance that fired
+* the event.
+*/
 YAHOO.widget.Menu.prototype._onSubmenuHide = function(p_sType, p_aArguments, p_oSubmenu) {
 
     this.parent.subMenuIndicator.alt = 
@@ -1685,6 +1806,29 @@ YAHOO.widget.Menu.prototype.enforceConstraints = function(type, args, obj) {
 
 
 // Public methods
+
+/**
+* Sets the title of a group of MenuItem instances.
+* @param {String} p_sGroupTitle The title of the MenuItem group.
+* @param {Number} p_nGroupIndex Optional. Number indicating the group to which
+* the MenuItem belongs.
+*/
+YAHOO.widget.Menu.prototype.setMenuGroupTitle = function(p_sGroupTitle, p_nGroupIndex) {
+    
+    if(typeof p_sGroupTitle == "string" && p_sGroupTitle.length > 0) {
+
+        var oGroupTitleElement = 
+                document.createElement(this.GROUP_TITLE_TAG_NAME),
+            oGroupTitleText = document.createTextNode(p_sGroupTitle),
+            nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0;
+    
+        oGroupTitleElement.appendChild(oGroupTitleText);
+    
+        this._aGroupTitles[nGroupIndex] = oGroupTitleElement;
+
+    }
+
+};
 
 
 /**
