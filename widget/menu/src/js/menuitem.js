@@ -104,6 +104,12 @@ YAHOO.widget.MenuItem.prototype = {
     SUBMENU_TYPE: null,
 
 
+    /**
+    * Constant representing how a submenu instance should be aligned it's 
+    * parent MenuItem instance.
+    * @final
+    * @type Array
+    */
     SUBMENU_ALIGNMENT: ["tl","tr"],
 
 
@@ -406,23 +412,23 @@ YAHOO.widget.MenuItem.prototype = {
 
 
 
-this.cfg.addProperty("text", { handler: this.configText, validator: this._checkString });
-
-this.cfg.addProperty("helptext", { handler: this.configHelpText });
-
-this.cfg.addProperty("url", { handler: this.configURL });
-
-this.cfg.addProperty("emphasis", { value: false, handler: this.configEmphasis, validator: this.cfg.checkBoolean });
-
-this.cfg.addProperty("strongemphasis", { value: false, handler: this.configStrongEmphasis, validator: this.cfg.checkBoolean });
-
-this.cfg.addProperty("disabled", { value: false, handler: this.configDisabled, validator: this.cfg.checkBoolean });
-
-this.cfg.addProperty("selected", { value: false, handler: this.configSelected, validator: this.cfg.checkBoolean });
-
-this.cfg.addProperty("submenu", { value: null, handler: this.configSubmenu });
-
-this.cfg.addProperty("initsubmenus", { value: ((p_oUserConfig && (!p_oUserConfig.initsubmenus)) ? false : true) });
+        this.cfg.addProperty("text", { handler: this.configText, validator: this._checkString });
+        
+        this.cfg.addProperty("helptext", { handler: this.configHelpText });
+        
+        this.cfg.addProperty("url", { handler: this.configURL });
+        
+        this.cfg.addProperty("emphasis", { value: false, handler: this.configEmphasis, validator: this.cfg.checkBoolean });
+        
+        this.cfg.addProperty("strongemphasis", { value: false, handler: this.configStrongEmphasis, validator: this.cfg.checkBoolean });
+        
+        this.cfg.addProperty("disabled", { value: false, handler: this.configDisabled, validator: this.cfg.checkBoolean });
+        
+        this.cfg.addProperty("selected", { value: false, handler: this.configSelected, validator: this.cfg.checkBoolean });
+        
+        this.cfg.addProperty("submenu", { value: null, handler: this.configSubmenu });
+        
+        this.cfg.addProperty("initsubmenus", { value: ((p_oUserConfig && (!p_oUserConfig.initsubmenus)) ? false : true) });
 
 
 
