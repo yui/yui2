@@ -560,16 +560,7 @@ YAHOO.widget.Menu.prototype._addMenuItemToGroup = function(p_nGroupIndex, p_oMen
 
         if(oMenuItem) {
 
-            if(
-                !oMenuItem.element.parentNode || 
-
-                // Check if the parentNode is a document fragment
-
-                (
-                    oMenuItem.element.parentNode && 
-                    oMenuItem.element.parentNode.nodeType == 11
-                )
-            ) {
+            if(!this._oDom.isAncestor(this._aListElements[nGroupIndex], oMenuItem.element)) {
 
                 this._aListElements[nGroupIndex].appendChild(oMenuItem.element);
 
@@ -810,21 +801,7 @@ YAHOO.widget.Menu.prototype._configureMenuItemSubmenu = function(p_oMenuItem) {
 
     if(oSubmenu) {
 
-        /*
-            Set the "iframe" and "constraintoviewport" configuration 
-            properties to match the parent Menu
-        */ 
-
-        oSubmenu.cfg.setProperty("iframe", this.cfg.getProperty("iframe"));
-
-        oSubmenu.cfg.setProperty(
-            "constraintoviewport", 
-            this.cfg.getProperty("constraintoviewport")
-        );
-
-
         // Subscribe the submenu to it's parent Menu instance's events
-        
 
         /*
             Listen for configuration changes to the parent Menu instance so 
@@ -839,8 +816,6 @@ YAHOO.widget.Menu.prototype._configureMenuItemSubmenu = function(p_oMenuItem) {
         
         this.renderEvent.subscribe(this._onParentMenuRender, oSubmenu, true);
 
-        oSubmenu.cfg.setProperty("xy", [0,0]);
-
         oSubmenu.beforeShowEvent.subscribe(
             this._onSubmenuBeforeShow, 
             oSubmenu, 
@@ -848,6 +823,7 @@ YAHOO.widget.Menu.prototype._configureMenuItemSubmenu = function(p_oMenuItem) {
         );
 
         oSubmenu.showEvent.subscribe(this._onSubmenuShow, oSubmenu, true);
+
         oSubmenu.hideEvent.subscribe(this._onSubmenuHide, oSubmenu, true);
 
     }
@@ -885,7 +861,7 @@ YAHOO.widget.Menu.prototype._getOffsetWidth = function() {
 
     document.body.appendChild(oClone);
 
-    sWidth = oClone.offsetWidth;
+    var sWidth = oClone.offsetWidth;
 
     document.body.removeChild(oClone);
 
@@ -1268,11 +1244,15 @@ YAHOO.widget.Menu.prototype._onElementClick = function(p_oEvent, p_oMenu) {
 };
 
 
-// Private CustomEvent handlers
+// Private Custom Event handlers
 
 YAHOO.widget.Menu.prototype._onMenuInit = function(p_sType, p_aArguments, p_oMenu) {
 
     if(this.srcElement) {
+
+        var bInitSubmenus = this.cfg.getProperty("initsubmenus"),
+            oNode;
+
 
         switch(this.srcElement.tagName) {
     
@@ -1280,10 +1260,8 @@ YAHOO.widget.Menu.prototype._onMenuInit = function(p_sType, p_aArguments, p_oMen
     
                 if(this._aListElements.length > 0) {
     
-                    var i = this._aListElements.length - 1,
-                        oNode,
-                        bInitSubmenus = this.cfg.getProperty("initsubmenus");
-        
+                    var i = this._aListElements.length - 1;
+
                     do {
             
                         oNode = this._aListElements[i].firstChild;
@@ -1320,7 +1298,7 @@ YAHOO.widget.Menu.prototype._onMenuInit = function(p_sType, p_aArguments, p_oMen
     
             case "SELECT":
     
-                var oNode = this.srcElement.firstChild;
+                oNode = this.srcElement.firstChild;
     
                 do {
     
@@ -1379,7 +1357,7 @@ YAHOO.widget.Menu.prototype._onMenuBeforeRender = function(p_sType, p_aArguments
         
                 }
 
-                if(!this._oDom.inDocument(this._aListElements[i])) {
+                if(!this._oDom.isAncestor(this.element, this._aListElements[i])) {
 
                     this.appendToBody(this._aListElements[i]);
 
@@ -1458,6 +1436,28 @@ YAHOO.widget.Menu.prototype._onParentMenuConfigChange = function(p_sType, p_aArg
 * @param {YAHOO.widget.Menu} p_oSubmenu The submenu instance to be rendered.
 */
 YAHOO.widget.Menu.prototype._onParentMenuRender = function(p_sType, p_aArguments, p_oSubmenu) {
+
+    /*
+        Set the "iframe" and "constraintoviewport" configuration 
+        properties to match the parent Menu
+    */ 
+
+    var oParentMenu = p_oSubmenu.parent.parent;
+
+    p_oSubmenu.cfg.applyConfig(
+    
+        {
+            constraintoviewport: 
+                oParentMenu.cfg.getProperty("constraintoviewport"),
+
+            xy: [0,0],
+
+            iframe: oParentMenu.cfg.getProperty("iframe")
+
+        }
+    
+    );
+
 
     if(this._oDom.inDocument(this.element)) {
 
@@ -1939,6 +1939,9 @@ YAHOO.widget.Menu.prototype.initDefaultConfig = function() {
 
 	// Add Menu config properties
 
-    this.cfg.addProperty("initsubmenus", true);
+//    this.cfg.addProperty("initsubmenus", true);
+
+    this.cfg.addProperty("initsubmenus", { value:true } );
+    this.cfg.queueProperty("visible", false);
 
 };

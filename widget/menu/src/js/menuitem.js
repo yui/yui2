@@ -361,6 +361,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         // Define the config properties
 
+/*
         this.cfg.addProperty("text", null, this.configText, this._checkString);
 
         this.cfg.addProperty("helptext", null, this.configHelpText);
@@ -401,6 +402,28 @@ YAHOO.widget.MenuItem.prototype = {
             "initsubmenus", 
             ((p_oUserConfig && (!p_oUserConfig.initsubmenus)) ? false : true)
         );
+*/
+
+
+
+this.cfg.addProperty("text", { handler: this.configText, validator: this._checkString });
+
+this.cfg.addProperty("helptext", { handler: this.configHelpText });
+
+this.cfg.addProperty("url", { handler: this.configURL });
+
+this.cfg.addProperty("emphasis", { value: false, handler: this.configEmphasis, validator: this.cfg.checkBoolean });
+
+this.cfg.addProperty("strongemphasis", { value: false, handler: this.configStrongEmphasis, validator: this.cfg.checkBoolean });
+
+this.cfg.addProperty("disabled", { value: false, handler: this.configDisabled, validator: this.cfg.checkBoolean });
+
+this.cfg.addProperty("selected", { value: false, handler: this.configSelected, validator: this.cfg.checkBoolean });
+
+this.cfg.addProperty("submenu", { value: null, handler: this.configSubmenu });
+
+this.cfg.addProperty("initsubmenus", { value: ((p_oUserConfig && (!p_oUserConfig.initsubmenus)) ? false : true) });
+
 
 
         if(this._checkString(p_oObject)) {
@@ -535,7 +558,7 @@ YAHOO.widget.MenuItem.prototype = {
                         bStrongEmphasis, 
                         true
                     );
-
+                   
                     if(this.cfg.getProperty("initsubmenus")) {
 
                         this._initSubTree();
@@ -597,7 +620,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         var oElement;
 
-        if(p_oElement.firstChild && p_oElement.firstChild.nodeType) {
+        if(p_oElement.firstChild && p_oElement.firstChild.nodeType == 1) {
 
             oElement = p_oElement.firstChild;
 
@@ -965,7 +988,7 @@ YAHOO.widget.MenuItem.prototype = {
             }
             else {
 
-                oEM = this._getFirstElement(this._oAnchor, "STRONG");
+                oStrong = this._getFirstElement(this._oAnchor, "STRONG");
 
                 this._oAnchor.removeChild(oStrong);
                 this._oAnchor.appendChild(this._oText);
@@ -1171,7 +1194,7 @@ YAHOO.widget.MenuItem.prototype = {
                 switch(oLastElement.tagName) {
 
                     case "DIV":
-                    
+
                         this.element.insertBefore(
                             this.subMenuIndicator,
                             oLastElement
