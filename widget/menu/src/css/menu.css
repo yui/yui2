@@ -23,6 +23,18 @@ div.yuimenu {
     
 }
 
+div.yuimenu h6 {
+
+    border:solid 1px #c4c4be;
+    border-width:1px 0 0 0;
+    font-size:100%;
+    font-weight:normal;
+    margin:0;
+    padding:5px 10px 0 10px;
+    color:#b9b9b9;
+
+}
+
 /* Matches the UL inside a Menu instance */
 
 div.yuimenu ul {
@@ -35,7 +47,10 @@ div.yuimenu ul {
 
 }
 
-div.yuimenu ul.first {
+
+div.yuimenu ul.first, 
+div.yuimenu ul.hastitle,
+div.yuimenu h6.first {
 
     border-width:0;
 
