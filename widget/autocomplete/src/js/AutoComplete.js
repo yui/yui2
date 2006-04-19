@@ -33,7 +33,7 @@ YAHOO.widget.AutoComplete = function(sTextboxID,sContainerID,oDataSource,oConfig
         }
         else {
             // Initialization error: invalid DataSource
-            YAHOO.log("Could not instantiate AutoComplete due to an invalid DataSource", "error");
+            //YAHOO.log("Could not instantiate AutoComplete due to an invalid DataSource", "error");
             return;
         }
     
@@ -723,7 +723,7 @@ YAHOO.widget.AutoComplete.prototype._initItem = function(oItem, nItemIndex) {
 YAHOO.widget.AutoComplete.prototype._onItemMouseover = function(v,oSelf) {
     oSelf._toggleHighlight(this,'mouseover');
     oSelf.itemMouseOverEvent.fire(oSelf, this);
-    YAHOO.log(oSelf.getName() + " moused over " + this.id);
+    //YAHOO.log(oSelf.getName() + " moused over " + this.id);
 
 };
 
@@ -737,7 +737,7 @@ YAHOO.widget.AutoComplete.prototype._onItemMouseover = function(v,oSelf) {
 YAHOO.widget.AutoComplete.prototype._onItemMouseout = function(v,oSelf) {
     oSelf._toggleHighlight(this,'mouseout');
     oSelf.itemMouseOutEvent.fire(oSelf, this);
-    YAHOO.log(oSelf.getName() + " moused out from " + this.id);
+    //YAHOO.log(oSelf.getName() + " moused out from " + this.id);
 };
 
 /**
@@ -899,7 +899,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
     }
     else {
         oSelf.textboxKeyEvent.fire(oSelf, nKeyCode);
-        YAHOO.log(oSelf.getName() + " received key input " + nKeyCode);
+        //YAHOO.log(oSelf.getName() + " received key input " + nKeyCode);
     }
 
     // Set timeout on the request
@@ -959,7 +959,7 @@ YAHOO.widget.AutoComplete.prototype._isIgnoreKey = function(nKeyCode) {
 YAHOO.widget.AutoComplete.prototype._onTextboxFocus = function (v,oSelf) {
     oSelf._bFocused = true;
     oSelf.textboxFocusEvent.fire(oSelf);
-    YAHOO.log(oSelf.getName() + " textbox focused");
+    //YAHOO.log(oSelf.getName() + " textbox focused");
 };
 
 /**
@@ -984,7 +984,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
         }
         oSelf._bFocused = false;
         oSelf.textboxBlurEvent.fire(oSelf);
-        YAHOO.log(oSelf.getName() + " textbox blurred");
+        //YAHOO.log(oSelf.getName() + " textbox blurred");
     }
 };
 
@@ -1047,7 +1047,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
     sQuery = encodeURI(sQuery);
     this._nDelayID = -1;    // Reset timeout ID because request has been made
     this.dataRequestEvent.fire(this, sQuery)
-    YAHOO.log(this.getName() + " requested data for query \"" + sQuery + "\"");
+    //YAHOO.log(this.getName() + " requested data for query \"" + sQuery + "\"");
     this.dataSource.getResults(this._populateList, sQuery, this);
 };
 
@@ -1088,11 +1088,11 @@ YAHOO.widget.AutoComplete.prototype._clearList = function() {
 YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, oSelf) {
     if(aResults === null) {
         oSelf.dataErrorEvent.fire(oSelf, sQuery);
-        YAHOO.log(oSelf.getName() + " data error for query \"" + sQuery + "\"");
+        //YAHOO.log(oSelf.getName() + " data error for query \"" + sQuery + "\"");
     }
     else {
         oSelf.dataReturnEvent.fire(oSelf, sQuery, aResults);
-        YAHOO.log(oSelf.getName() + " received " + aResults.length + " results for query \"" + sQuery + "\"");
+        //YAHOO.log(oSelf.getName() + " received " + aResults.length + " results for query \"" + sQuery + "\"");
     }
     
     if (!oSelf._bFocused || !aResults) {
@@ -1136,7 +1136,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         oSelf._toggleHighlight(oFirstItem,'mouseover');
         oSelf._toggleContainer(true);
         oSelf.itemArrowToEvent.fire(oSelf, oFirstItem);
-        YAHOO.log(oSelf.getName() + " arrowed to item " + oFirstItem.id);
+        //YAHOO.log(oSelf.getName() + " arrowed to item " + oFirstItem.id);
         oSelf._typeAhead(oFirstItem,sQuery);
         oSelf._oCurItem = oFirstItem;
     }
@@ -1166,7 +1166,7 @@ YAHOO.widget.AutoComplete.prototype._clearSelection = function() {
     
     // Fire custom event
     this.selectionEnforceEvent.fire(this);
-    YAHOO.log(this.getName() + " cleared an invalid selection");
+    //YAHOO.log(this.getName() + " cleared an invalid selection");
 };
 
 /**
@@ -1218,7 +1218,7 @@ YAHOO.widget.AutoComplete.prototype._typeAhead = function(oItem, sQuery) {
     this._selectText(oTextbox,nStart,nEnd);
     var sPrefill = oTextbox.value.substr(nStart,nEnd);
     this.typeAheadEvent.fire(this,sQuery,sPrefill);
-    YAHOO.log(this.getName() + " prefilled \"" + sPrefill + "\" for query " + sQuery + "\"");
+    //YAHOO.log(this.getName() + " prefilled \"" + sPrefill + "\" for query " + sQuery + "\"");
 };
 
 /**
@@ -1322,11 +1322,11 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
             // Call event on expand/collapse (overridden by client)
             if(bShow) {
                 oSelf.containerExpandEvent.fire(oSelf);
-                YAHOO.log(oSelf.getName() + " container expanded");
+                //YAHOO.log(oSelf.getName() + " container expanded");
             }
             else {
                 oSelf.containerCollapseEvent.fire(oSelf);
-                YAHOO.log(oSelf.getName() + " container collapsed");
+                //YAHOO.log(oSelf.getName() + " container collapsed");
             }
      	};
 
@@ -1344,11 +1344,11 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
         // Call event on expand/collapse (overriden by client)
         if(bShow) {
             this.containerExpandEvent.fire(this);
-            YAHOO.log(this.getName() + " container expanded");
+            //YAHOO.log(this.getName() + " container expanded");
         }
         else {
             this.containerCollapseEvent.fire(this);
-            YAHOO.log(this.getName() + " container collapsed");
+            //YAHOO.log(this.getName() + " container collapsed");
         }
     }
 };
@@ -1426,7 +1426,7 @@ YAHOO.widget.AutoComplete.prototype._selectItem = function(oItem) {
     this._bItemSelected = true;
     this._updateValue(oItem);
     this.itemSelectEvent.fire(this, oItem);
-    YAHOO.log(this.getName() + " selected item " + oItem.id);
+    //YAHOO.log(this.getName() + " selected item " + oItem.id);
     this._clearList();
 };
 
@@ -1474,7 +1474,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
             // Unhighlight current item
             this._toggleHighlight(oCurItem, 'mouseout');
             this.itemArrowFromEvent.fire(this, oCurItem);
-            YAHOO.log(this.getName() + " arrowed from " + oCurItem.id);
+            //YAHOO.log(this.getName() + " arrowed from " + oCurItem.id);
 
         }
         if (nNewItemIndex == -1) {
@@ -1535,7 +1535,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
 
         this._toggleHighlight(oNewItem, 'mouseover');
         this.itemArrowToEvent.fire(this, oNewItem);
-        YAHOO.log(this.getName() + " arrowed to " + oNewItem.id);
+        //YAHOO.log(this.getName() + " arrowed to " + oNewItem.id);
         if(this.typeAhead) {
             this._updateValue(oNewItem);
         }

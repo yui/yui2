@@ -99,7 +99,7 @@ YAHOO.widget.DataSource.prototype.getResults = function(oCallbackFn, sQuery, oPa
     // Not in cache, so get results from server
     if(aResults.length === 0) {
         this.queryEvent.fire(this, oParent, sQuery);
-        YAHOO.log("Data source for " + oParent.getName() + " made source query for '" + sQuery + "'.");
+        //YAHOO.log("Data source for " + oParent.getName() + " made source query for '" + sQuery + "'.");
         this.doQuery(oCallbackFn, sQuery, oParent);
     }
 };
@@ -129,7 +129,7 @@ YAHOO.widget.DataSource.prototype.flushCache = function() {
         this._aCacheHelper = [];
     }
     this.cacheFlushEvent.fire(this);
-    YAHOO.log("Cache flushed");
+    //YAHOO.log("Cache flushed");
 };
 
 /***************************************************************************
@@ -270,7 +270,7 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
     // If cache is enabled...
     if((this.maxCacheEntries > 0) && aCache && (nCacheLength > 0)) {
         this.cacheQueryEvent.fire(this, oParent, sQuery);
-        YAHOO.log("Data source for " + oParent.getName() + " made cache query for '" + sQuery + "'.");
+        //YAHOO.log("Data source for " + oParent.getName() + " made cache query for '" + sQuery + "'.");
         // If case is unimportant, normalize query now instead of in loops
         if(!this.queryMatchCase) {
             var sOrigQuery = sQuery;
@@ -346,7 +346,7 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
         // If there was a match, send along the results.
         if(bMatchFound) {
             this.getCachedResultsEvent.fire(this, oParent, sOrigQuery, aResults);
-            YAHOO.log("Data source for " + oParent.getName() + " got " + aResults.length + " results from cache.");
+            //YAHOO.log("Data source for " + oParent.getName() + " got " + aResults.length + " results from cache.");
             oCallbackFn(sOrigQuery, aResults, oParent);
         }
     }
@@ -494,7 +494,7 @@ YAHOO.widget.DS_XHR.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
     if(this.scriptQueryAppend.length > 0) {
         sUri += "&" + this.scriptQueryAppend;
     }
-    YAHOO.log("Data source query URL is " + sUri);
+    //YAHOO.log("Data source query URL is " + sUri);
     var oResponse = null;
     
     var oSelf = this;
@@ -513,9 +513,9 @@ YAHOO.widget.DS_XHR.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
         }
         if(oResp === null) {
             oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATANULL);
-            YAHOO.log("Data source for " + oParent.getName() +
-                " experienced a data error for query \"" + sQuery +
-                "\": " + oSelf.ERROR_DATANULL, "error");
+            //YAHOO.log("Data source for " + oParent.getName() +
+            //    " experienced a data error for query \"" + sQuery +
+            //    "\": " + oSelf.ERROR_DATANULL, "error");
             oCallbackFn(sQuery, null, oParent);
             return;
         }
@@ -529,9 +529,9 @@ YAHOO.widget.DS_XHR.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
 
     var responseFailure = function(oResp) {
         oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATAXHR);
-        YAHOO.log("Data source for " + oParent.getName() +
-                " experienced a data error for query \"" + sQuery +
-                "\": " + oSelf.ERROR_DATAXHR, "error");
+        //YAHOO.log("Data source for " + oParent.getName() +
+        //        " experienced a data error for query \"" + sQuery +
+        //        "\": " + oSelf.ERROR_DATAXHR, "error");
         oCallbackFn(sQuery, null, oParent);
         return;
     };
@@ -660,14 +660,14 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
     }    
     if(bError) {
         this.dataErrorEvent.fire(this, oParent, sQuery, this.ERROR_DATAPARSE);
-        YAHOO.log("Data source for " + oParent.getName() +
-                " experienced a data error for query \"" + sQuery +
-                "\": " + this.ERROR_DATAPARSE, "error");
+        //YAHOO.log("Data source for " + oParent.getName() +
+        //        " experienced a data error for query \"" + sQuery +
+        //        "\": " + this.ERROR_DATAPARSE, "error");
         return null;
     }
     else {
         this.getResultsEvent.fire(this, oParent, sQuery, aResults);
-        YAHOO.log("Data source for " + oParent.getName() + " got " + aResults.length + " results from source.");
+        //YAHOO.log("Data source for " + oParent.getName() + " got " + aResults.length + " results from source.");
         return aResults;
     }
 };            
@@ -704,9 +704,7 @@ YAHOO.widget.DS_JSFunction = function(oFunction, oConfigs) {
     // Set any config params passed in to override defaults
     if(typeof oConfigs == "object") {
         for(var sConfig in oConfigs) {
-            if(sConfig) {
-                this[sConfig] = oConfigs[sConfig];
-            }
+            this[sConfig] = oConfigs[sConfig];
         }
     }
     
@@ -747,9 +745,9 @@ YAHOO.widget.DS_JSFunction.prototype.doQuery = function(oCallbackFn, sQuery, oPa
     aResults = oFunction(sQuery);
     if(aResults === null) {
         this.dataErrorEvent.fire(this, oParent, sQuery, this.ERROR_DATANULL);
-        YAHOO.log("Data source for " + oParent.getName() +
-                " experienced a data error for query \"" + sQuery +
-                "\": " + oSelf.ERROR_DATANULL, "error");
+        //YAHOO.log("Data source for " + oParent.getName() +
+        //        " experienced a data error for query \"" + sQuery +
+        //        "\": " + oSelf.ERROR_DATANULL, "error");
         oCallbackFn(sQuery, null, oParent);
         return;
     }
@@ -760,7 +758,7 @@ YAHOO.widget.DS_JSFunction.prototype.doQuery = function(oCallbackFn, sQuery, oPa
     this._addCacheElem(resultObj);
     
     this.getResultsEvent.fire(this, oParent, sQuery, aResults);
-    YAHOO.log("Data source for " + oParent.getName() + " got " + aResults.length + " results from source.");
+    //YAHOO.log("Data source for " + oParent.getName() + " got " + aResults.length + " results from source.");
     oCallbackFn(sQuery, aResults, oParent);
     return;
 };
@@ -783,9 +781,7 @@ YAHOO.widget.DS_JSArray = function(aData, oConfigs) {
     // Set any config params passed in to override defaults
     if(typeof oConfigs == "object") {
         for(var sConfig in oConfigs) {
-            if(sConfig) {
-                this[sConfig] = oConfigs[sConfig];
-            }
+            this[sConfig] = oConfigs[sConfig];
         }
     }
 
@@ -851,6 +847,6 @@ YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParen
     }
 
     this.getResultsEvent.fire(this, oParent, sQuery, aResults);
-    YAHOO.log("Data source for " + oParent.getName() + " got " + aResults.length + " results from source.");
+    //YAHOO.log("Data source for " + oParent.getName() + " got " + aResults.length + " results from source.");
     oCallbackFn(sQuery, aResults, oParent);
 };

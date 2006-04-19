@@ -182,12 +182,14 @@
             var oDataSource = aArgs[0];
             var oParent = aArgs[1];
             var sQuery = aArgs[2];
+            doLog("Data source for " + oParent.getName() + " made source query for '" + sQuery + "'.");
         }
 
         function myOnCacheQuery(sType, aArgs) {
             var oDataSource = aArgs[0];
             var oParent = aArgs[1];
             var sQuery = aArgs[2];
+            doLog("Data source for " + oParent.getName() + " made cache query for '" + sQuery + "'.");
         }
 
         function myOnGetResults(sType, aArgs) {
@@ -195,6 +197,7 @@
             var oParent = aArgs[1];
             var sQuery = aArgs[2];
             var aResults = aArgs[3];
+            doLog("Data source for " + oParent.getName() + " got " + aResults.length + " results from source.");
         }
 
         function myOnGetCachedResults(sType, aArgs) {
@@ -202,6 +205,7 @@
             var oParent = aArgs[1];
             var sQuery = aArgs[2];
             var aResults = aArgs[3];
+            doLog("Data source for " + oParent.getName() + " got " + aResults.length + " results from cache.");
         }
 
         function myOnDataError(sType, aArgs) {
@@ -209,111 +213,136 @@
             var oParent = aArgs[1];
             var sQuery = aArgs[2];
             var sMessage = aArgs[3];
+            doLog("Data source for " + oParent.getName() + " experienced a data retrieval error: " + sMessage);
         }
 
         function myOnCacheFlush(sType, aArgs) {
             var oDataSource = aArgs[0];
+            doLog(" cache flush complete.");
         }
 
         function myOnTextboxFocus(sType, aArgs) {
             var oAutoComp = aArgs[0];
+            doLog(oAutoComp.getName() + " has been engaged.");
         }
 
         function myOnTextboxKey(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var nKeyCode = aArgs[1];
+            doLog("Key " + nKeyCode + " has been input into " + oAutoComp.getName() + ".");
         }
 
         function myOnDataRequest(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var sQuery = aArgs[1];
+            doLog(oAutoComp.getName() + " has sent a query for " + sQuery +".");
         }
 
         function myOnDataReturn(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var sQuery = aArgs[1];
             var aResults = aArgs[2];
+            doLog(oAutoComp.getName() + " has received " + aResults.length +
+            " results for query " + sQuery + ".");
         }
 
         function myOnDataError(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var sQuery = aArgs[1];
+            doLog(oAutoComp.getName() + " has received an error for query " + sQuery +".");
         }
 
         function myOnContainerExpand(sType, aArgs) {
             var oAutoComp = aArgs[0];
+            doLog(oAutoComp.getName() + " container expanded.");
         }
 
         function myOnTypeAhead(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var sQuery = aArgs[1];
             var sPrefill = aArgs[2];
+            doLog(oAutoComp.getName() + " prefilled the input box with " +
+            sPrefill + " for query " + sQuery + ".");
         }
 
         function myOnItemMouseOver(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
+            doLog(oAutoComp.getName() + " moused over " + oItem.id);
         }
 
         function myOnItemMouseOut(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
+            doLog(oAutoComp.getName() + " moused out from " + oItem.id);
         }
 
         function myOnItemArrowTo(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
+            doLog(oAutoComp.getName() + " arrowed to " + oItem.id);
         }
 
         function myOnItemArrowFrom(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
+            doLog(oAutoComp.getName() + " arrowed away from " + oItem.id);
         }
 
         function myOnItemSelect(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
             var sMsg = (oItem) ? oItem.id : "a non-query-result";
+            doLog(oAutoComp.getName() + " selected " + sMsg);
         }
 
         function myOnSelectionEnforce(sType, aArgs) {
             var oAutoComp = aArgs[0];
-       }
+            doLog(oAutoComp.getName() + " had to clear an invalid selection.");
+        }
 
         function myOnContainerCollapse(sType, aArgs) {
             var oAutoComp = aArgs[0];
+            doLog(oAutoComp.getName() + " container collapsed.");
         }
 
         function myOnTextboxBlur(sType, aArgs) {
             var oAutoComp = aArgs[0];
+            doLog(oAutoComp.getName() + " has been disengaged.");
         }
     }
-
     YAHOO.util.Event.addListener(this,'load',autoCompInit);
-    
+
     // Logging
-    var logger = new YAHOO.widget.LogReader("logger");
+    var logger = document.getElementById("logger");
+
+    function doLog(string) {
+        var date = new Date();
+        var timestamp = date.getTime();
+        logger.innerHTML = "<p>"+timestamp+" "+string+"</p>"+logger.innerHTML;
+    }
+
 
     // DataSource Panel
     function toggleCaseSens(casesens) {
         oACDS.queryMatchCase = casesens.checked;
-        YAHOO.log("Updated case sensitivity to " + oACDS.queryMatchCase + ".");
+        //YAHOO.log("Updated case sensitivity to " + oACDS.queryMatchCase + ".");
     }
 
     function toggleMatchSubset(matchsubset) {
         oACDS.queryMatchSubset = matchsubset.checked;
-        YAHOO.log("Updated subset matching to " + oACDS.queryMatchSubset + ".");
+        //YAHOO.log("Updated subset matching to " + oACDS.queryMatchSubset + ".");
     }
 
     function updateCacheSize() {
         var cacheSize = document.getElementById("cachesize").value;
         if (cacheSize >= 0) {
             oACDS.maxCacheEntries = cacheSize;
-            YAHOO.log("Updated cache size to " + oACDS.maxCacheEntries + ".");
+            //YAHOO.log("Updated cache size to " + oACDS.maxCacheEntries + ".");
         }
         else {
             document.getElementById("cachesize").value = oACDS.maxCacheEntries;
-            YAHOO.log("Could not update cache size.", "warn");
+            //YAHOO.log("Could not update cache size.", "warn");
         }
     }
 
@@ -323,41 +352,41 @@
 
     function updateMatch(matchContains) {
         oACDS.queryMatchContains = eval(matchContains.options[matchContains.selectedIndex].value);
-        YAHOO.log("Updated match type to " + oACDS.queryMatchContains + ".");
+        //YAHOO.log("Updated match type to " + oACDS.queryMatchContains + ".");
     }
 
     function updateSchema() {
         var newSchema = document.getElementById("schema").value;
         if(newSchema === "") {
             document.getElementById("schema").value = "";
-            YAHOO.log("Could not update schema.", "warn");
+            //YAHOO.log("Could not update schema.", "warn");
         }
         else {
             try {
                 oACDS.schema = eval(newSchema);
-                YAHOO.log("Updated schema to " + oACDS.schema + ".");
+                //YAHOO.log("Updated schema to " + oACDS.schema + ".");
             }
             catch(e) {
                 document.getElementById("schema").value = "";
-                YAHOO.log("Could not update schema.", "warn");
+                //YAHOO.log("Could not update schema.", "warn");
             }
         }
     }
 
     function updateQueryString() {
             oACDS.scriptQueryAppend = document.getElementById("querystring").value;
-            YAHOO.log("Updated query string to " + oACDS.scriptQueryAppend + ".");
+            //YAHOO.log("Updated query string to " + oACDS.scriptQueryAppend + ".");
     }
 
     function updateScriptParam() {
         var newScriptParam = document.getElementById("scriptparam").value;
         if(newScriptParam === "") {
             document.getElementById("scriptparam").value = oACDS.scriptQueryParam;
-            YAHOO.log("Could not update script parameter.", "warn");
+            //YAHOO.log("Could not update script parameter.", "warn");
         }
         else {
             oACDS.scriptQueryParam = newScriptParam;
-            YAHOO.log("Updated script parameter to " + oACDS.scriptQueryParam + ".");
+            //YAHOO.log("Updated script parameter to " + oACDS.scriptQueryParam + ".");
         }
     }
 
@@ -365,82 +394,82 @@
         var newURI = document.getElementById("uri").value;
         if(newURI === "") {
             document.getElementById("uri").value = oACDS.scriptURI;
-            YAHOO.log("Could not update script URI.", "warn");
+            //YAHOO.log("Could not update script URI.", "warn");
         }
         else {
             oACDS.scriptURI = newURI;
-            YAHOO.log("Updated script URI to " + oACDS.scriptURI + ".");
+            //YAHOO.log("Updated script URI to " + oACDS.scriptURI + ".");
         }
     }
 
     function updateResponseType(type) {
         oACDS.responseType = eval(type.options[type.selectedIndex].value);
-        YAHOO.log("Updated response type to " + oACDS.responseType + ".");
+        //YAHOO.log("Updated response type to " + oACDS.responseType + ".");
     }
 
     // AutoComplete Panel
     function toggleAnimHoriz(animHoriz) {
         oAutoComp.animHoriz = animHoriz.checked;
-        YAHOO.log("Updated horizontal animation to " + oAutoComp.animHoriz + ".");
+        //YAHOO.log("Updated horizontal animation to " + oAutoComp.animHoriz + ".");
     }
     
     function toggleAnimVert(animVert) {
         oAutoComp.animVert = animVert.checked;
-        YAHOO.log("Updated vertical animation to " + oAutoComp.animVert + ".");
+        //YAHOO.log("Updated vertical animation to " + oAutoComp.animVert + ".");
     }
 
     function updateAnimSpeed() {
         var animSpeed = document.getElementById("animspeed").value;
         if (animSpeed < 1) {
             document.getElementById("animspeed").value = oAutoComp.animSpeed;
-            YAHOO.log("Could not update animation speed.", "warn");
+            //YAHOO.log("Could not update animation speed.", "warn");
             return;
         }
         oAutoComp.animSpeed = animSpeed;
-        YAHOO.log("Updated animation speed to " + oAutoComp.animSpeed + ".");
+        //YAHOO.log("Updated animation speed to " + oAutoComp.animSpeed + ".");
     }
 
     function toggleTypeAhead(typeAhead) {
         oAutoComp.typeAhead = typeAhead.checked;
-        YAHOO.log("Updated type ahead to " + oAutoComp.typeAhead + ".");
+        //YAHOO.log("Updated type ahead to " + oAutoComp.typeAhead + ".");
     }
     
     function toggleForceSelection(forceSelection) {
         oAutoComp.forceSelection = forceSelection.checked;
-        YAHOO.log("Updated force selection to " + oAutoComp.forceSelection + ".");
+        //YAHOO.log("Updated force selection to " + oAutoComp.forceSelection + ".");
     }
         
     function updateMaxResults() {
         var maxResults = document.getElementById("maxresults").value;
         if (maxResults < 1) {
             document.getElementById("maxresults").value = oAutoComp.maxResultsDisplayed;
-            YAHOO.log("Could not update maximum results.", "warn");
+            //YAHOO.log("Could not update maximum results.", "warn");
             return;
         }
         oAutoComp.maxResultsDisplayed = maxResults;
-        YAHOO.log("Updated maximum results to " + oAutoComp.maxResultsDisplayed + ".");
+        //YAHOO.log("Updated maximum results to " + oAutoComp.maxResultsDisplayed + ".");
     }
     
     function updateMinQueryLength() {
         var minQueryLength = document.getElementById("minquerylength").value;  
         if (minQueryLength < 1) {
             document.getElementById("minquerylength").value = oAutoComp.ninQueryLength;
-            YAHOO.log("Could not update minimum query length.", "warn");
+            //YAHOO.log("Could not update minimum query length.", "warn");
             return;
         }
         oAutoComp.minQueryLength = minQueryLength;
-        YAHOO.log("Updated minimum query length to " + oAutoComp.minQueryLength + ".");
+        //YAHOO.log("Updated minimum query length to " + oAutoComp.minQueryLength + ".");
     }
     
     function updateQueryDelay() {
         var queryDelay = document.getElementById("querydelay").value;
         if (queryDelay < 0) {
             document.getElementById("querydelay").value = oAutoComp.queryDelay;
-            YAHOO.log("Could not update query delay.", "warn");
+            //YAHOO.log("Could not update query delay.", "warn");
             return;
         }
         oAutoComp.queryDelay = queryDelay;
-        YAHOO.log("Updated query delay to " + oAutoComp.queryDelay + ".");
+        //YAHOO.log("Updated query delay to " + oAutoComp.queryDelay + ".");
     } 
    
     function updateDelimChar() {
@@ -453,27 +482,27 @@
         }
         else {
             document.getElementById("delimchar").value = oAutoComp.delimChar;
-            YAHOO.log("Could not update delimiter character.", "warn");
+            //YAHOO.log("Could not update delimiter character.", "warn");
             return;
         }
-        YAHOO.log("Updated delimiter character to " + oAutoComp.delimChar + ".");
+        //YAHOO.log("Updated delimiter character to " + oAutoComp.delimChar + ".");
     }
     
     function updateHighlight() {        
         oAutoComp.highlightClassName = document.getElementById("highlightclass").value;
-        YAHOO.log("Updated highlight class name to " + oAutoComp.highlightClassName + ".");
+        //YAHOO.log("Updated highlight class name to " + oAutoComp.highlightClassName + ".");
     }
     
     function updateHeader() {
         var header = document.getElementById("header").value;
         oAutoComp.setHeader(header);
-        YAHOO.log("Header updated.");
+        //YAHOO.log("Header updated.");
     }
 
     function updateFooter() {
         var footer = document.getElementById("footer").value;
         oAutoComp.setFooter(footer);
-        YAHOO.log("Footer updated.");
+        //YAHOO.log("Footer updated.");
     }
 //-->
 </script>
