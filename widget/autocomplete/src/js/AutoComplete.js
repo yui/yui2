@@ -19,24 +19,54 @@
  * see JSON JSON library
  *  
  * @constructor
- * @param {string} sTextboxID DOM element ID of the auto complete input field
- * @param {string} sContainerID DOM element ID of the auto complete &lt;div&gt;
+ * @param {element | string} inputEl DOM element reference or string ID of the auto complete input field
+ * @param {element | string} containerEl DOM element reference or string ID of the auto complete &lt;div&gt;
  *                              container
  * @param {object} oDataSource Instance of YAHOO.widget.DataSource for query/results
  * @param {object} oConfigs Optional object literal of config params
  */
-YAHOO.widget.AutoComplete = function(sTextboxID,sContainerID,oDataSource,oConfigs) {
-    if (typeof oDataSource == "object") {
+YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
+    if(inputEl && containerEl && oDataSource) {
         // Validate data source
-        if (oDataSource && oDataSource.getResults) {
+        if (oDataSource.getResults) {
             this.dataSource = oDataSource;
         }
         else {
-            // Initialization error: invalid DataSource
             //YAHOO.log("Could not instantiate AutoComplete due to an invalid DataSource", "error");
             return;
         }
-    
+        // Validate input element
+        if(YAHOO.util.Dom.inDocument(inputEl)) {
+            if(typeof inputEl == "string") {
+                    this._sName = inputEl + YAHOO.widget.AutoComplete._nIndex;
+                    this._oTextbox = document.getElementById(inputEl);
+            }
+            else {
+                this._sName = (inputEl.id) ?
+                    inputEl.id + YAHOO.widget.AutoComplete._nIndex :
+                    "yac_inputEl" + YAHOO.widget.AutoComplete._nIndex;
+                this._oTextbox = inputEl;
+            }
+        }
+        else {
+            //YAHOO.log("Could not instantiate AutoComplete due to an invalid input element", "error");
+            return;
+        }
+
+        // Validate container element
+        if(YAHOO.util.Dom.inDocument(containerEl)) {
+            if(typeof containerEl == "string") {
+                    this._oContainer = document.getElementById(containerEl);
+            }
+            else {
+                this._oContainer = containerEl;
+            }
+        }
+        else {
+            //YAHOO.log("Could not instantiate AutoComplete due to an invalid container element", "error");
+            return;
+        }
+
         // Set any config params passed in to override defaults
         if (typeof oConfigs == "object") {
             for(var sConfig in oConfigs) {
@@ -45,13 +75,8 @@ YAHOO.widget.AutoComplete = function(sTextboxID,sContainerID,oDataSource,oConfig
                 }
             }
         }
-        
-        // Initialization sequence
-        this._sName = sTextboxID + YAHOO.widget.AutoComplete._nIndex;
-        YAHOO.widget.AutoComplete._nIndex++;
-        this._oTextbox = document.getElementById(sTextboxID);
-        this._oContainer = document.getElementById(sContainerID);
 
+        // Initialization sequence
         var oSelf = this;
         var oTextbox = this._oTextbox;
         var oContainer = this._oContainer;
@@ -86,6 +111,10 @@ YAHOO.widget.AutoComplete = function(sTextboxID,sContainerID,oDataSource,oConfig
             
         // Validate and initialize public configs
         this._initProps();
+    }
+    // Required arguments were not found
+    else {
+        //YAHOO.log("Could not instantiate AutoComplete due invalid arguments", "error");
     }
 };
 

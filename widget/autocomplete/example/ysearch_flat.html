@@ -117,7 +117,9 @@
         oACDS.queryMatchSubset = true;
 
         // Instantiate first auto complete
-        oAutoComp0 = new YAHOO.widget.AutoComplete('ysearchinput0','ysearchcontainer0', oACDS);
+        var myInput = document.getElementById('ysearchinput0');
+        var myContainer = document.getElementById('ysearchcontainer0');
+        oAutoComp0 = new YAHOO.widget.AutoComplete(myInput,myContainer,oACDS);
         oAutoComp0.delimChar = ";";
         oAutoComp0.queryDelay = 1;
         oAutoComp0.formatResult = function(oResultItem, sQuery) {
@@ -154,7 +156,7 @@
         };
                 
         // Instantiate third auto complete
-        oAutoComp2 = new YAHOO.widget.AutoComplete('ysearchinput2','ysearchcontainer2', oACDS);
+       oAutoComp2 = new YAHOO.widget.AutoComplete('ysearchinput2','ysearchcontainer2', oACDS);
         oAutoComp2.delimChar = ";";
         oAutoComp2.queryDelay = 0;
 
