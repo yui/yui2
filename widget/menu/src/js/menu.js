@@ -465,7 +465,6 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
         // Subscribe to Custom Events
 
-        this.initEvent.subscribe(this._onMenuInit, this, true);
         this.beforeRenderEvent.subscribe(this._onMenuBeforeRender, this, true);
         this.renderEvent.subscribe(this._onMenuRender, this, true);
         this.hideEvent.subscribe(this._onMenuHide, this, true);
@@ -475,6 +474,12 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
     
             this.cfg.applyConfig(p_oUserConfig);
     
+        }
+
+        if(this.srcElement) {
+
+            this._initSubTree();
+
         }
 
     }
@@ -1275,97 +1280,89 @@ YAHOO.widget.Menu.prototype._onElementClick = function(p_oEvent, p_oMenu) {
 };
 
 
+
 // Private Custom Event handlers
 
 /**
-* "init" Custom Event handler for a Menu instance.  Iterates a Menu instance's 
-* child nodes and instantiates MenuItem and submenu instances.
+* Iterates the source element's childNodes collection and uses the child 
+* nodes to instantiate Menu and MenuItem instances.
 * @private
-* @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArguments Collection of arguments sent when the event 
-* was fired.
-* @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
 */
-YAHOO.widget.Menu.prototype._onMenuInit = function(p_sType, p_aArguments, p_oMenu) {
+YAHOO.widget.Menu.prototype._initSubTree = function() {
 
-    if(this.srcElement) {
+    var bInitSubmenus = this.cfg.getProperty("initsubmenus"),
+        oNode;
 
-        var bInitSubmenus = this.cfg.getProperty("initsubmenus"),
-            oNode;
+    switch(this.srcElement.tagName) {
 
+        case "DIV":
 
-        switch(this.srcElement.tagName) {
-    
-            case "DIV":
-    
-                if(this._aListElements.length > 0) {
-    
-                    var i = this._aListElements.length - 1;
+            if(this._aListElements.length > 0) {
 
-                    do {
-            
-                        oNode = this._aListElements[i].firstChild;
-        
-                        do {
-        
-                            switch(oNode.tagName) {
-            
-                                case "LI":
-            
-                                    this.addMenuItem(
-                                        
-                                        new this.MENUITEM_TYPE(
-                                            oNode, 
-                                            { initsubmenus: bInitSubmenus }
-                                        ),
-                                        i
-                                        
-                                    );
-            
-                                break;
-            
-                            }
-                
-                        }
-                        while((oNode = oNode.nextSibling));
-                
-                    }
-                    while(i--);
-    
-                }
-    
-            break;
-    
-            case "SELECT":
-    
-                oNode = this.srcElement.firstChild;
-    
+                var i = this._aListElements.length - 1;
+
                 do {
+        
+                    oNode = this._aListElements[i].firstChild;
     
-                    switch(oNode.tagName) {
+                    do {
     
-                        case "OPTGROUP":
-                        case "OPTION":
-    
-                            this.addMenuItem(
-                                (
+                        switch(oNode.tagName) {
+        
+                            case "LI":
+        
+                                this.addMenuItem(
+                                    
                                     new this.MENUITEM_TYPE(
                                         oNode, 
                                         { initsubmenus: bInitSubmenus }
-                                    )
-                                )
-                            );
-    
-                        break;
-    
+                                    ),
+                                    i
+                                    
+                                );
+        
+                            break;
+        
+                        }
+            
                     }
-    
+                    while((oNode = oNode.nextSibling));
+            
                 }
-                while((oNode = oNode.nextSibling));
-    
-            break;
-    
-        }
+                while(i--);
+
+            }
+
+        break;
+
+        case "SELECT":
+
+            oNode = this.srcElement.firstChild;
+
+            do {
+
+                switch(oNode.tagName) {
+
+                    case "OPTGROUP":
+                    case "OPTION":
+
+                        this.addMenuItem(
+                            (
+                                new this.MENUITEM_TYPE(
+                                    oNode, 
+                                    { initsubmenus: bInitSubmenus }
+                                )
+                            )
+                        );
+
+                    break;
+
+                }
+
+            }
+            while((oNode = oNode.nextSibling));
+
+        break;
 
     }
 
@@ -1390,43 +1387,43 @@ YAHOO.widget.Menu.prototype._onMenuBeforeRender = function(p_sType, p_aArguments
 
         var i = 0, 
             bFirstList = true,
-            bFirstTitle = true;
+            oUL,
+            oGroupTitle;
+
 
         do {
 
-            if(this._aListElements[i]) {
+            oUL = this._aListElements[i];
+
+            if(oUL) {
 
                 if(bFirstList) {
         
-                    this._oDom.addClass(this._aListElements[i], "first");
+                    this._oDom.addClass(oUL, "first");
                     bFirstList = false;
         
                 }
 
 
-                if(!this._oDom.isAncestor(this.element, this._aListElements[i])) {
+                if(!this._oDom.isAncestor(this.element, oUL)) {
 
-                    this.appendToBody(this._aListElements[i]);
+                    this.appendToBody(oUL);
 
                 }
 
 
-                if(this._aGroupTitles[i]) {
+                oGroupTitle = this._aGroupTitles[i];
 
-                    if(!this._oDom.isAncestor(this.element, this._aGroupTitles[i])) {
+                if(oGroupTitle) {
 
-                        this._aListElements[i].parentNode.insertBefore(this._aGroupTitles[i], this._aListElements[i]);
+                    if(!this._oDom.isAncestor(this.element, oGroupTitle)) {
+
+                        oUL.parentNode.insertBefore(oGroupTitle, oUL);
 
                     }
 
-                    if(bFirstTitle) {
-                    
-                        this._oDom.addClass(this._aGroupTitles[i], "first");
-                        bFirstTitle = false;
-                    
-                    }
 
-                    this._oDom.addClass(this._aListElements[i], "hastitle");
+                    this._oDom.addClass(oUL, "hastitle");
 
                 }
 
@@ -1817,14 +1814,48 @@ YAHOO.widget.Menu.prototype.setMenuGroupTitle = function(p_sGroupTitle, p_nGroup
     
     if(typeof p_sGroupTitle == "string" && p_sGroupTitle.length > 0) {
 
-        var oGroupTitleElement = 
-                document.createElement(this.GROUP_TITLE_TAG_NAME),
-            oGroupTitleText = document.createTextNode(p_sGroupTitle),
-            nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0;
-    
-        oGroupTitleElement.appendChild(oGroupTitleText);
-    
-        this._aGroupTitles[nGroupIndex] = oGroupTitleElement;
+        var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
+
+            oTitle = this._aGroupTitles[nGroupIndex];
+
+
+        if(oTitle) {
+
+            oTitle.innerHTML = p_sGroupTitle;
+            
+        }
+        else {
+
+            oTitle = document.createElement(this.GROUP_TITLE_TAG_NAME);
+                    
+            oTitle.innerHTML = p_sGroupTitle;
+
+            this._aGroupTitles[nGroupIndex] = oTitle;
+
+        }
+
+
+        var i = this._aGroupTitles.length - 1,
+            nFirstIndex;
+
+        do {
+
+            if(this._aGroupTitles[i]) {
+
+                this._oDom.removeClass(this._aGroupTitles[i], "first");
+                nFirstIndex = i;
+
+            }
+
+        }
+        while(i--);
+
+
+        if(nFirstIndex != null) {
+
+            this._oDom.addClass(this._aGroupTitles[nFirstIndex], "first");
+
+        }
 
     }
 
@@ -2083,9 +2114,8 @@ YAHOO.widget.Menu.prototype.initDefaultConfig = function() {
 
 	// Add Menu config properties
 
-//    this.cfg.addProperty("initsubmenus", true);
-
     this.cfg.addProperty("initsubmenus", { value:true } );
+
     this.cfg.queueProperty("visible", false);
 
 };

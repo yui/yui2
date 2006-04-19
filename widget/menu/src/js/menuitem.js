@@ -367,66 +367,22 @@ YAHOO.widget.MenuItem.prototype = {
 
         // Define the config properties
 
-/*
-        this.cfg.addProperty("text", null, this.configText, this._checkString);
 
-        this.cfg.addProperty("helptext", null, this.configHelpText);
-            
-        this.cfg.addProperty("url", "#", this.configURL);
-
-        this.cfg.addProperty(
-            "emphasis", 
-            false, 
-            this.configEmphasis, 
-            this.cfg.checkBoolean
-        );
-
-        this.cfg.addProperty(
-            "strongemphasis", 
-            false, 
-            this.configStrongEmphasis, 
-            this.cfg.checkBoolean
-        );
-
-        this.cfg.addProperty(
-            "disabled", 
-            false, 
-            this.configDisabled, 
-            this.cfg.checkBoolean
-        );
-    
-        this.cfg.addProperty(
-            "selected", 
-            false, 
-            this.configSelected, 
-            this.cfg.checkBoolean
-        );
-
-        this.cfg.addProperty("submenu", null, this.configSubmenu);
-
-        this.cfg.addProperty(
-            "initsubmenus", 
-            ((p_oUserConfig && (!p_oUserConfig.initsubmenus)) ? false : true)
-        );
-*/
-
-
-
-        this.cfg.addProperty("text", { handler: this.configText, validator: this._checkString });
+        this.cfg.addProperty("text", { value:"", handler: this.configText, validator: this._checkString, suppressEvent: true });
         
         this.cfg.addProperty("helptext", { handler: this.configHelpText });
         
-        this.cfg.addProperty("url", { handler: this.configURL });
+        this.cfg.addProperty("url", { value: "#", handler: this.configURL, suppressEvent: true });
         
-        this.cfg.addProperty("emphasis", { value: false, handler: this.configEmphasis, validator: this.cfg.checkBoolean });
+        this.cfg.addProperty("emphasis", { value: false, handler: this.configEmphasis, validator: this.cfg.checkBoolean, suppressEvent: true });
         
-        this.cfg.addProperty("strongemphasis", { value: false, handler: this.configStrongEmphasis, validator: this.cfg.checkBoolean });
+        this.cfg.addProperty("strongemphasis", { value: false, handler: this.configStrongEmphasis, validator: this.cfg.checkBoolean, suppressEvent: true });
         
-        this.cfg.addProperty("disabled", { value: false, handler: this.configDisabled, validator: this.cfg.checkBoolean });
+        this.cfg.addProperty("disabled", { value: false, handler: this.configDisabled, validator: this.cfg.checkBoolean, suppressEvent: true });
         
-        this.cfg.addProperty("selected", { value: false, handler: this.configSelected, validator: this.cfg.checkBoolean });
+        this.cfg.addProperty("selected", { value: false, handler: this.configSelected, validator: this.cfg.checkBoolean, suppressEvent: true });
         
-        this.cfg.addProperty("submenu", { value: null, handler: this.configSubmenu });
+        this.cfg.addProperty("submenu", { handler: this.configSubmenu });
         
         this.cfg.addProperty("initsubmenus", { value: ((p_oUserConfig && (!p_oUserConfig.initsubmenus)) ? false : true) });
 
@@ -606,6 +562,8 @@ YAHOO.widget.MenuItem.prototype = {
                 this.cfg.applyConfig(p_oUserConfig);
     
             }        
+
+            this.cfg.fireQueue();
 
         }
 
@@ -1030,7 +988,11 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(bDisabled) {
 
-            this.cfg.setProperty("selected", false);
+            if(this.cfg.getProperty("selected")) {
+
+                this.cfg.setProperty("selected", false);
+
+            }
 
             this._oAnchor.removeAttribute("href");
             this._oAnchor.removeAttribute("tabIndex");
@@ -1131,7 +1093,6 @@ YAHOO.widget.MenuItem.prototype = {
 
             this._oSubmenu = oSubmenu;
 
-            this._oDom.addClass(aNodes, "hassubmenu");
 
             if(!this.subMenuIndicator) { 
 
@@ -1188,33 +1149,10 @@ YAHOO.widget.MenuItem.prototype = {
                 oClone.removeAttribute("id");
 
                 this.subMenuIndicator = oClone;
-
-                var oLastElement = this.element.lastChild;
-
-                if(oLastElement.nodeType != 1) {
-                
-                    oLastElement = oLastElement.previousSibling;
-
-                }
-
-                switch(oLastElement.tagName) {
-
-                    case "DIV":
-
-                        this.element.insertBefore(
-                            this.subMenuIndicator,
-                            oLastElement
-                        );
-
-                    break;
-
-                    default:
                     
-                        this.element.appendChild(this.subMenuIndicator);
+                this.element.appendChild(this.subMenuIndicator);
 
-                    break;
-                
-                }
+                this._oDom.addClass(aNodes, "hassubmenu");
 
 
                 if(this.cfg.getProperty("disabled")) {
