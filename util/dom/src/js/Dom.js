@@ -50,7 +50,7 @@ YAHOO.util.Dom = function() {
        * @return {String/Array} The current value of the style property for the element(s).
        */
       getStyle: function(el, property) {
-         var f = function(el, self) {
+         var f = function(el) {
             var value = null;
             var dv = document.defaultView;
             
@@ -93,7 +93,7 @@ YAHOO.util.Dom = function() {
             return value;
          };
          
-         return this.batch(el, f, this);
+         return this.batch(el, f, this, true);
       },
    
       /**
@@ -103,7 +103,7 @@ YAHOO.util.Dom = function() {
        * @param {String} val The value to apply to the given property.
        */
       setStyle: function(el, property, val) {
-         var f = function(el, self) {
+         var f = function(el) {
             switch(property) {
                case 'opacity' :
                   if (typeof el.style.filter == 'string') { // in case not appended
@@ -125,7 +125,7 @@ YAHOO.util.Dom = function() {
             
          };
          
-         this.batch(el, f, this);
+         this.batch(el, f, this, true);
       },
       
       /**
@@ -134,10 +134,10 @@ YAHOO.util.Dom = function() {
        @ return {Array} The XY position of the element(s)
        */
       getXY: function(el) {
-         var f = function(el, self) {
+         var f = function(el) {
    
          // has to be part of document to have pageXY
-            if (el.parentNode === null || self.getStyle(el, 'display') == 'none') {
+            if (el.parentNode === null || this.getStyle(el, 'display') == 'none') {
                return false;
             }
             
@@ -155,8 +155,8 @@ YAHOO.util.Dom = function() {
             else if (document.getBoxObjectFor) { // gecko
                box = document.getBoxObjectFor(el);
                
-               var borderLeft = parseInt(self.getStyle(el, 'borderLeftWidth'));
-               var borderTop = parseInt(self.getStyle(el, 'borderTopWidth'));
+               var borderLeft = parseInt(this.getStyle(el, 'borderLeftWidth'));
+               var borderTop = parseInt(this.getStyle(el, 'borderTopWidth'));
                
                pos = [box.x - borderLeft, box.y - borderTop];
             }
@@ -172,7 +172,7 @@ YAHOO.util.Dom = function() {
                }
                if (
                   ua.indexOf('opera') != -1 
-                  || ( ua.indexOf('safari') != -1 && self.getStyle(el, 'position') == 'absolute' ) 
+                  || ( ua.indexOf('safari') != -1 && this.getStyle(el, 'position') == 'absolute' ) 
                ) {
                   pos[0] -= document.body.offsetLeft;
                   pos[1] -= document.body.offsetTop;
@@ -194,7 +194,7 @@ YAHOO.util.Dom = function() {
             return pos;
          };
          
-         return this.batch(el, f, this);
+         return this.batch(el, f, this, true);
       },
       
       /**
@@ -223,11 +223,11 @@ YAHOO.util.Dom = function() {
        * @param {Boolean} noRetry By default we try and set the position a second time if the first fails
        */
       setXY: function(el, pos, noRetry) {
-         var f = function(el, self) {
+         var f = function(el) {
    
-            var style_pos = self.getStyle(el, 'position');
+            var style_pos = this.getStyle(el, 'position');
             if (style_pos == 'static') { // default to relative
-               self.setStyle(el, 'position', 'relative');
+               this.setStyle(el, 'position', 'relative');
                style_pos = 'relative';
             }
             
@@ -251,7 +251,7 @@ YAHOO.util.Dom = function() {
             if (pos[0] !== null) { el.style.left = pos[0] - pageXY[0] + delta[0] + 'px'; }
             if (pos[1] !== null) { el.style.top = pos[1] - pageXY[1] + delta[1] + 'px'; }
       
-            var newXY = self.getXY(el);
+            var newXY = this.getXY(el);
       
             // if retry is true, try one more time if we miss
             if (!noRetry && (newXY[0] != pos[0] || newXY[1] != pos[1]) ) {
@@ -260,7 +260,7 @@ YAHOO.util.Dom = function() {
             }
          };
          
-         this.batch(el, f, this);
+         this.batch(el, f, this, true);
       },
       
       /**
@@ -290,11 +290,11 @@ YAHOO.util.Dom = function() {
        * @return {Region/Array} A Region or array of Region instances containing "top, left, bottom, right" member data.
        */
       getRegion: function(el) {
-         var f = function(el, self) {
+         var f = function(el) {
             return new YAHOO.util.Region.getRegion(el);
          };
          
-         return this.batch(el, f, this);
+         return this.batch(el, f, this, true);
       },
       
       /**
@@ -338,12 +338,12 @@ YAHOO.util.Dom = function() {
        * @return {Boolean/Array} A boolean value or array of boolean values
        */
       hasClass: function(el, className) {
-         var f = function(el, self) {
+         var f = function(el) {
             var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
             return re.test(el['className']);
          };
          
-         return this.batch(el, f, this);
+         return this.batch(el, f, this, true);
       },
    
       /**
@@ -352,13 +352,13 @@ YAHOO.util.Dom = function() {
        * @param {String} className the class name to add to the class attribute
        */
       addClass: function(el, className) {
-         var f = function(el, self) {
-            if (self.hasClass(el, className)) { return; } // already present
+         var f = function(el) {
+            if (this.hasClass(el, className)) { return; } // already present
             
             el['className'] = [el['className'], className].join(' ');
          };
          
-         this.batch(el, f, this);
+         this.batch(el, f, this, true);
       },
    
       /**
@@ -367,8 +367,8 @@ YAHOO.util.Dom = function() {
        * @param {String} className the class name to remove from the class attribute
        */
       removeClass: function(el, className) {
-         var f = function(el, self) {
-            if (!self.hasClass(el, className)) { return; } // not present
+         var f = function(el) {
+            if (!this.hasClass(el, className)) { return; } // not present
             
             var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)', 'g');
             var c = el['className'];
@@ -376,7 +376,7 @@ YAHOO.util.Dom = function() {
             el['className'] = c.replace( re, ' ');
          };
          
-         this.batch(el, f, this);
+         this.batch(el, f, this, true);
       },
       
       /**
@@ -387,12 +387,12 @@ YAHOO.util.Dom = function() {
        * @param {String} newClassName the class name that will be replacing the old class name
        */
       replaceClass: function(el, oldClassName, newClassName) {
-         var f = function(el, self) {
-            self.removeClass(el, oldClassName);
-            self.addClass(el, newClassName);
+         var f = function(el) {
+            this.removeClass(el, oldClassName);
+            this.addClass(el, newClassName);
          };
          
-         this.batch(el, f, this);
+         this.batch(el, f, this, true);
       },
       
       /**
@@ -404,7 +404,7 @@ YAHOO.util.Dom = function() {
       generateId: function(el, prefix) {
          prefix = prefix || 'yui-gen';
          
-         var f = function(el, self) {
+         var f = function(el) {
             el = el || {}; // just generating ID in this case
             
             if (!el.id) { el.id = prefix + id_counter++; } // dont override existing
@@ -412,7 +412,7 @@ YAHOO.util.Dom = function() {
             return el.id;
          };
          
-         return this.batch(el, f, this);
+         return this.batch(el, f, this, true);
       },
       
       /**
@@ -425,7 +425,7 @@ YAHOO.util.Dom = function() {
          haystack = this.get(haystack);
          if (!haystack || !needle) { return false; }
          
-         var f = function(needle, self) {
+         var f = function(needle) {
             if (haystack.contains && ua.indexOf('safari') < 0) 
             { // safari "contains" is broken
                return haystack.contains(needle);
@@ -453,7 +453,7 @@ YAHOO.util.Dom = function() {
             }    
          };
          
-         return this.batch(needle, f, this);     
+         return this.batch(needle, f, this, true);     
       },
       
       /**
@@ -462,11 +462,11 @@ YAHOO.util.Dom = function() {
        * @return {Boolean} Whether or not the element is present in the current document
        */
       inDocument: function(el) {
-         var f = function(el, self) {
-            return self.isAncestor(document.documentElement, el);
+         var f = function(el) {
+            return this.isAncestor(document.documentElement, el);
          };
          
-         return this.batch(el, f, this);
+         return this.batch(el, f, this, true);
       },
       
       _elementInDom: function(el) { // private, for back compat with menu 
@@ -502,21 +502,23 @@ YAHOO.util.Dom = function() {
        * @param {String/HTMLElement/Array} el (optional) An element or array of elements to apply the method to
        * @param {Function} method The method to apply to the element(s)
        * @param {Generic} (optional) o An optional arg that is passed to the supplied method
+       * @param {Boolean} (optional) override Whether or not to override the scope of "method" with "o"
        * @return {HTMLElement/Array} The element(s) with the method applied
        */
-      batch: function(el, method, o) {
+      batch: function(el, method, o, override) {
          el = this.get(el);
+         var scope = (override) ? o : window;
          
          if (!el || el.tagName || !el.length) 
          { // is null or not a collection (tagName for SELECT and others that can be both an element and a collection)
-            return method(el, o);
+            return method.call(scope, el, o);
          } 
          
          var collection = [];
          
          for (var i = 0, len = el.length; i < len; ++i)
          {
-            collection[collection.length] = method(el[i], o);
+            collection[collection.length] = method.call(scope, el[i], o);
          }
          
          return collection;
