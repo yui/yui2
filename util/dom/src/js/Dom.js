@@ -9,6 +9,8 @@ http://developer.yahoo.net/yui/license.txt
  */
 YAHOO.util.Dom = function() {
    var ua = navigator.userAgent.toLowerCase();
+   var isOpera = (ua.indexOf('opera') != -1);
+   var isIE = (ua.indexOf('msie') != -1 && !isOpera); // not opera spoof
    var id_counter = 0;
    
    return {
@@ -104,21 +106,23 @@ YAHOO.util.Dom = function() {
          var f = function(el, self) {
             switch(property) {
                case 'opacity' :
-                  if (el.filters) {
+                  if (typeof el.style.filter == 'string') { // in case not appended
                      el.style.filter = 'alpha(opacity=' + val * 100 + ')';
                      
-                     if (!el.currentStyle.hasLayout) {
-                        el.style.zoom = 1;
+                     if (!el.currentStyle || !el.currentStyle.hasLayout) {
+                        el.style.zoom = 1; // when no layout or cant tell
                      }
                   } else {
                      el.style.opacity = val;
                      el.style['-moz-opacity'] = val;
                      el.style['-khtml-opacity'] = val;
                   }
+
                   break;
                default :
                   el.style[property] = val;
             }
+            
          };
          
          this.batch(el, f, this);
@@ -143,7 +147,6 @@ YAHOO.util.Dom = function() {
             
             if (el.getBoundingClientRect) { // IE
                box = el.getBoundingClientRect();
-               Math.max ( document.documentElement.scrollTop  , document.body.scrollTop );
                var scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
                var scrollLeft = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft);
                
@@ -151,9 +154,13 @@ YAHOO.util.Dom = function() {
             }
             else if (document.getBoxObjectFor) { // gecko
                box = document.getBoxObjectFor(el);
-               pos = [box.x, box.y];
+               
+               var borderLeft = parseInt(self.getStyle(el, 'borderLeftWidth'));
+               var borderTop = parseInt(self.getStyle(el, 'borderTopWidth'));
+               
+               pos = [box.x - borderLeft, box.y - borderTop];
             }
-            else { // safari/opera
+            else { // safari & opera
                pos = [el.offsetLeft, el.offsetTop];
                parent = el.offsetParent;
                if (parent != el) {
@@ -175,7 +182,8 @@ YAHOO.util.Dom = function() {
             if (el.parentNode) { parent = el.parentNode; }
             else { parent = null; }
       
-            while (parent && parent.tagName != 'BODY' && parent.tagName != 'HTML') {
+            while (parent && parent.tagName != 'BODY' && parent.tagName != 'HTML') 
+            { // account for any scrolled ancestors
                pos[0] -= parent.scrollLeft;
                pos[1] -= parent.scrollTop;
       
@@ -291,25 +299,20 @@ YAHOO.util.Dom = function() {
       
       /**
        * Returns the width of the client (viewport).
+       * Now using getViewportWidth.  This interface left intact for back compat.
        * @return {Int} The width of the viewable area of the page.
        */
       getClientWidth: function() {
-         return (
-            document.documentElement.offsetWidth
-            || document.body.offsetWidth
-         );
+         return this.getViewportWidth();
       },
       
       /**
        * Returns the height of the client (viewport).
+       * Now using getViewportHeight.  This interface left intact for back compat.
        * @return {Int} The height of the viewable area of the page.
        */
       getClientHeight: function() {
-         return (
-            self.innerHeight 
-            || document.documentElement.clientHeight
-            || document.body.clientHeight
-         );
+         return this.getViewportHeight();
       },
 
       /**
@@ -466,6 +469,11 @@ YAHOO.util.Dom = function() {
          return this.batch(el, f, this);
       },
       
+      _elementInDom: function(el) { // private, for back compat with menu 
+      
+         return YAHOO.util.Dom.inDocument(el);
+      },
+      
       /**
        * Returns a array of HTMLElements that pass the test applied by supplied boolean method
        * For optimized performance, include a tag and/or root node if possible
@@ -492,14 +500,17 @@ YAHOO.util.Dom = function() {
        * Returns an array of elements that have had the supplied method applied.
        * The method is called with the element(s) as the first arg, and the optional param as the second ( method(el, o) )
        * @param {String/HTMLElement/Array} el (optional) An element or array of elements to apply the method to
-       * @param {String} method The method to apply to the element(s)
+       * @param {Function} method The method to apply to the element(s)
        * @param {Generic} (optional) o An optional arg that is passed to the supplied method
        * @return {HTMLElement/Array} The element(s) with the method applied
        */
       batch: function(el, method, o) {
          el = this.get(el);
          
-         if (!el || !el.length) { return method(el, o); } // is null or not a collection
+         if (!el || el.tagName || !el.length) 
+         { // is null or not a collection (tagName for SELECT and others that can be both an element and a collection)
+            return method(el, o);
+         } 
          
          var collection = [];
          
@@ -509,6 +520,123 @@ YAHOO.util.Dom = function() {
          }
          
          return collection;
+      },
+      
+      /**
+       * Returns the height of the document.
+       * @return {Int} The height of the actual document (which includes the body and its margin).
+       */
+      getDocumentHeight: function() {
+         var scrollHeight=-1,windowHeight=-1,bodyHeight=-1;
+         var marginTop = parseInt(this.getStyle(document.body, 'marginTop'), 10);
+         var marginBottom = parseInt(this.getStyle(document.body, 'marginBottom'), 10);
+         
+         var mode = document.compatMode;
+         
+         if ( (mode || isIE) && !isOpera ) { // (IE, Gecko)
+            switch (mode) {
+               case 'CSS1Compat': // Standards mode
+                  scrollHeight = ((window.innerHeight && window.scrollMaxY) ?  window.innerHeight+window.scrollMaxY : -1);
+                  windowHeight = [document.documentElement.clientHeight,self.innerHeight||-1].sort(function(a, b){return(a-b);})[1];
+                  bodyHeight = document.body.offsetHeight + marginTop + marginBottom;
+                  break;
+               
+               default: // Quirks
+                  scrollHeight = document.body.scrollHeight;
+                  bodyHeight = document.body.clientHeight;
+            }
+         } else { // Safari & Opera
+            scrollHeight = document.documentElement.scrollHeight;
+            windowHeight = self.innerHeight;
+            bodyHeight = document.documentElement.clientHeight;
+         }
+      
+         var h = [scrollHeight,windowHeight,bodyHeight].sort(function(a, b){return(a-b);});
+         return h[2];
+      },
+      
+      /**
+       * Returns the width of the document.
+       * @return {Int} The width of the actual document (which includes the body and its margin).
+       */
+      getDocumentWidth: function() {
+         var docWidth=-1,bodyWidth=-1,winWidth=-1;
+         var marginRight = parseInt(this.getStyle(document.body, 'marginRight'), 10);
+         var marginLeft = parseInt(this.getStyle(document.body, 'marginLeft'), 10);
+         
+         var mode = document.compatMode;
+         
+         if (mode || isIE) { // (IE, Gecko, Opera)
+            switch (mode) {
+               case 'CSS1Compat': // Standards mode
+                  docWidth = document.documentElement.clientWidth;
+                  bodyWidth = document.body.offsetWidth + marginLeft + marginRight;
+                  winWidth = self.innerWidth || -1;
+                  break;
+                  
+               default: // Quirks
+                  bodyWidth = document.body.clientWidth;
+                  winWidth = document.body.scrollWidth;
+                  break;
+            }
+         } else { // Safari
+            docWidth = document.documentElement.clientWidth;
+            bodyWidth = document.body.offsetWidth + marginLeft + marginRight;
+            winWidth = self.innerWidth;
+         }
+      
+         var w = [docWidth,bodyWidth,winWidth].sort(function(a, b){return(a-b);});
+         return w[2];
+      },
+
+      /**
+       * Returns the current height of the viewport.
+       * @return {Int} The height of the viewable area of the page (excludes scrollbars).
+       */
+      getViewportHeight: function() {
+         var height = -1;
+         var mode = document.compatMode;
+      
+         if ( (mode || isIE) && !isOpera ) {
+            switch (mode) { // (IE, Gecko)
+               case 'CSS1Compat': // Standards mode
+                  height = document.documentElement.clientHeight;
+                  break;
+      
+               default: // Quirks
+                  height = document.body.clientHeight;
+            }
+         } else { // Safari, Opera
+            height = self.innerHeight;
+         }
+      
+         return height;
+      },
+      
+      /**
+       * Returns the current width of the viewport.
+       * @return {Int} The width of the viewable area of the page (excludes scrollbars).
+       */
+      
+      getViewportWidth: function() {
+         var width = -1;
+         var mode = document.compatMode;
+         
+         if (mode || isIE) { // (IE, Gecko, Opera)
+            switch (mode) {
+            case 'CSS1Compat': // Standards mode 
+               width = document.documentElement.clientWidth;
+               break;
+               
+            default: // Quirks
+               width = document.body.clientWidth;
+            }
+         } else { // Safari
+            width = self.innerWidth;
+         }
+         
+         return width;
       }
    };
 }();
+

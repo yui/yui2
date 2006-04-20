@@ -22,6 +22,12 @@ YAHOO.util.Region = function(t, r, b, l) {
      * @type int
      */
     this.top = t;
+    
+    /**
+     * The region's top extent as index, for symmetry with set/getXY
+     * @type int
+     */
+    this[1] = t;
 
     /**
      * The region's right extent
@@ -40,6 +46,12 @@ YAHOO.util.Region = function(t, r, b, l) {
      * @type int
      */
     this.left = l;
+    
+    /**
+     * The region's left extent as index, for symmetry with set/getXY
+     * @type int
+     */
+    this[0] = l;
 };
 
 /**
@@ -108,7 +120,7 @@ YAHOO.util.Region.prototype.union = function(region) {
  */
 YAHOO.util.Region.prototype.toString = function() {
     return ( "Region {" +
-             "  t: "    + this.top    + 
+             "t: "    + this.top    + 
              ", r: "    + this.right  + 
              ", b: "    + this.bottom + 
              ", l: "    + this.left   + 
@@ -159,11 +171,13 @@ YAHOO.util.Point = function(x, y) {
      * @type int
      */
     this.y      = y;
-
     this.top    = y;
+    this[1] = y;
+    
     this.right  = x;
     this.bottom = y;
     this.left   = x;
+    this[0] = x;
 };
 
 YAHOO.util.Point.prototype = new YAHOO.util.Region();
