@@ -256,6 +256,8 @@
  * <span class="attrib">@param</span> expanded {boolean} the initial expanded/collapsed state
  */</span>
 YAHOO.widget.TextNode = <span class="reserved">function</span>(oData, oParent, expanded) {
+    <span class="reserved">this</span>.type = <span class="literal">"TextNode"</span>;
+
 	<span class="reserved">if</span> (oParent) { 
 		<span class="reserved">this</span>.init(oData, oParent, expanded);
 		<span class="reserved">this</span>.setUpLabel(oData);

@@ -109,7 +109,7 @@ YAHOO.widget.Node.prototype = {
      * expanded.  This flag is set to true once the data has been fetched.
      * @type boolean
      */
-    dynamicLoadCompelete: false,
+    dynamicLoadComplete: false,
 
     /**
      * This node's previous sibling
@@ -166,6 +166,12 @@ YAHOO.widget.Node.prototype = {
      * @type int
      */
     iconMode: 0,
+
+    /**
+     * The node type
+     * @private
+     */
+    _type: "Node",
 
     /*
     spacerPath: "http://us.i1.yimg.com/us.yimg.com/i/space.gif",

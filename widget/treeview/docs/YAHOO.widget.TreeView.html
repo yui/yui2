@@ -482,6 +482,19 @@
 							</tr>
 						
 							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#removeChildren">removeChildren</a>
+										(&lt;Node&gt; node)
+									</code>
+									<div class="description">
+										Deletes this nodes child collection, recursively.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
 								<td class="flags">boolean</td>
 								<td class="spec">
 									<code>
@@ -489,8 +502,8 @@
 										(node, &lt;boolean&gt; autoRefresh)
 									</code>
 									<div class="description">
-										Removes the node and its children, and refreshes
- the branch of the tree that was affected.&nbsp;
+										Removes the node and its children, and optionally refreshes the branch 
+ of the tree that was affected.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -1033,6 +1046,38 @@
 						</div>
 						<hr />
 					
+						<h4><a name="removeChildren">removeChildren</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>removeChildren</strong>
+								(&lt;Node&gt; node)
+							</code>
+									
+							<div class="description">
+								
+									Deletes this nodes child collection, recursively.  Also collapses
+ the node, and resets the dynamic load flag.  The primary use for
+ this method is to purge a node and allow it to fetch its data
+ dynamically again.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>node</code> - 
+												 the node to purge        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="removeNode">removeNode</a></h4>
 						<div class="detail">
 							<code>
@@ -1043,8 +1088,8 @@
 									
 							<div class="description">
 								
-									Removes the node and its children, and refreshes
- the branch of the tree that was affected.
+									Removes the node and its children, and optionally refreshes the branch 
+ of the tree that was affected.
 								
 								
 									<dl>
@@ -1052,7 +1097,7 @@
 										
 											<dd>
 												<code>autoRefresh</code> - 
-												 automatically refreshes tree if true  
+												 automatically refreshes branch if true  
 											</dd>
 										
 											<dd>

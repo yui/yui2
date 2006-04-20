@@ -16,6 +16,8 @@
  * @param expanded {boolean} the initial expanded/collapsed state
  */
 YAHOO.widget.TextNode = function(oData, oParent, expanded) {
+    this.type = "TextNode";
+
 	if (oParent) { 
 		this.init(oData, oParent, expanded);
 		this.setUpLabel(oData);

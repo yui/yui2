@@ -279,10 +279,10 @@ YAHOO.widget.TreeView.prototype = {
     },
 
     /**
-     * Removes the node and its children, and refreshes
-     * the branch of the tree that was affected.
+     * Removes the node and its children, and optionally refreshes the branch 
+     * of the tree that was affected.
      * @param {Node} The node to remove
-     * @param {boolean} autoRefresh automatically refreshes tree if true
+     * @param {boolean} autoRefresh automatically refreshes branch if true
      * @return {boolean} False is there was a problem, true otherwise.
      */
     removeNode: function(node, autoRefresh) { 
@@ -292,6 +292,7 @@ YAHOO.widget.TreeView.prototype = {
             return false;
         }
 
+        // Get the branch that we may need to refresh
         var p = node.parent;
         if (p.parent) {
             p = p.parent;
@@ -309,14 +310,31 @@ YAHOO.widget.TreeView.prototype = {
     },
 
     /**
+     * Deletes this nodes child collection, recursively.  Also collapses
+     * the node, and resets the dynamic load flag.  The primary use for
+     * this method is to purge a node and allow it to fetch its data
+     * dynamically again.
+     * @param {Node} node the node to purge
+     */
+    removeChildren: function(node) { 
+        for (var i=0, len=node.children.length;i<len;++i) {
+            this._deleteNode(node.children[i]);
+        }
+
+        node.childrenRendered = false;
+        node.dynamicLoadComplete = false;
+        node.collapse();
+    },
+
+    /**
      * Deletes the node and recurses children
      * @private
      */
     _deleteNode: function(node) { 
         var p = node.parent;
-        for (var i=0, len=node.children.length;i<len;++i) {
-            this._deleteNode(node.children[i]);
-        }
+
+        // Remove all the child nodes first
+        this.removeChildren(node);
 
         // Update the parent's collection of children
         var a = [];
@@ -328,6 +346,9 @@ YAHOO.widget.TreeView.prototype = {
         }
 
         p.children = a;
+
+        // reset the childrenRendered flag for the parent
+        p.childrenRendered = false;
 
          // Update the sibling relationship                                                                                                                       
         if (node.previousSibling) {                                                                                                                              
@@ -560,7 +581,7 @@ YAHOO.widget.Node.prototype = {
      * expanded.  This flag is set to true once the data has been fetched.
      * @type boolean
      */
-    dynamicLoadCompelete: false,
+    dynamicLoadComplete: false,
 
     /**
      * This node's previous sibling
@@ -617,6 +638,12 @@ YAHOO.widget.Node.prototype = {
      * @type int
      */
     iconMode: 0,
+
+    /**
+     * The node type
+     * @private
+     */
+    _type: "Node",
 
     /*
     spacerPath: "http://us.i1.yimg.com/us.yimg.com/i/space.gif",
@@ -1249,6 +1276,8 @@ YAHOO.widget.RootNode.prototype.getNodeHtml = function() {
  * @param expanded {boolean} the initial expanded/collapsed state
  */
 YAHOO.widget.TextNode = function(oData, oParent, expanded) {
+    this.type = "TextNode";
+
 	if (oParent) { 
 		this.init(oData, oParent, expanded);
 		this.setUpLabel(oData);

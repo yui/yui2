@@ -526,10 +526,10 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
     },
 
     <span class="comment">/**
-     * Removes the node and its children, and refreshes
-     * the branch of the tree that was affected.
+     * Removes the node and its children, and optionally refreshes the branch 
+     * of the tree that was affected.
      * <span class="attrib">@param</span> {Node} The node to remove
-     * <span class="attrib">@param</span> {boolean} autoRefresh automatically refreshes tree if true
+     * <span class="attrib">@param</span> {boolean} autoRefresh automatically refreshes branch if true
      * <span class="attrib">@return</span> {boolean} False is there was a problem, true otherwise.
      */</span>
     removeNode: <span class="reserved">function</span>(node, autoRefresh) { 
@@ -538,7 +538,8 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
         <span class="reserved">if</span> (node.isRoot()) {
             <span class="reserved">return</span> false;
         }
-
+<span class="comment">
+        // Get the branch that we may need to refresh</span>
         var p = node.parent;
         <span class="reserved">if</span> (p.parent) {
             p = p.parent;
@@ -556,14 +557,31 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
     },
 
     <span class="comment">/**
+     * Deletes this nodes child collection, recursively.  Also collapses
+     * the node, and resets the dynamic load flag.  The primary use for
+     * this method is to purge a node and allow it to fetch its data
+     * dynamically again.
+     * <span class="attrib">@param</span> {Node} node the node to purge
+     */</span>
+    removeChildren: <span class="reserved">function</span>(node) { 
+        <span class="reserved">for</span> (var i=0, len=node.children.length;i&lt;len;++i) {
+            <span class="reserved">this</span>._deleteNode(node.children[i]);
+        }
+
+        node.childrenRendered = false;
+        node.dynamicLoadComplete = false;
+        node.collapse();
+    },
+
+    <span class="comment">/**
      * Deletes the node and recurses children
      * <span class="attrib">@private</span>
      */</span>
     _deleteNode: <span class="reserved">function</span>(node) { 
         var p = node.parent;
-        <span class="reserved">for</span> (var i=0, len=node.children.length;i&lt;len;++i) {
-            <span class="reserved">this</span>._deleteNode(node.children[i]);
-        }
+<span class="comment">
+        // Remove all the child nodes first</span>
+        <span class="reserved">this</span>.removeChildren(node);
 <span class="comment">
         // Update the parent's collection of children</span>
         var a = [];
@@ -575,6 +593,9 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
         }
 
         p.children = a;
+<span class="comment">
+        // reset the childrenRendered flag for the parent</span>
+        p.childrenRendered = false;
 <span class="comment">
          // Update the sibling relationship                                                                                                                       </span>
         <span class="reserved">if</span> (node.previousSibling) {                                                                                                                              

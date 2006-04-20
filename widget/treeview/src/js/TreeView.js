@@ -321,12 +321,14 @@ YAHOO.widget.TreeView.prototype = {
      * the node, and resets the dynamic load flag.  The primary use for
      * this method is to purge a node and allow it to fetch its data
      * dynamically again.
+     * @param {Node} node the node to purge
      */
     removeChildren: function(node) { 
         for (var i=0, len=node.children.length;i<len;++i) {
             this._deleteNode(node.children[i]);
         }
 
+        node.childrenRendered = false;
         node.dynamicLoadComplete = false;
         node.collapse();
     },
