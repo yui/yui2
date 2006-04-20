@@ -469,11 +469,6 @@ YAHOO.util.Dom = function() {
          return this.batch(el, f, this, true);
       },
       
-      _elementInDom: function(el) { // private, for back compat with menu 
-      
-         return YAHOO.util.Dom.inDocument(el);
-      },
-      
       /**
        * Returns a array of HTMLElements that pass the test applied by supplied boolean method
        * For optimized performance, include a tag and/or root node if possible
@@ -487,6 +482,10 @@ YAHOO.util.Dom = function() {
          
          var nodes = [];
          var elements = root.getElementsByTagName(tag);
+         
+         if ( !elements.length && (tag == '*' && root.all) ) {
+            elements = root.all; // IE < 6
+         }
          
          for (var i = 0, len = elements.length; i < len; ++i) 
          {
