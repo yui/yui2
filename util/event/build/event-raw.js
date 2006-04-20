@@ -595,8 +595,15 @@ if (!YAHOO.util.Event) {
              */
             useLegacyEvent: function(el, sType) {
 
-                return ( (!el.addEventListener && !el.attachEvent) || 
-                                (sType == "click" && this.isSafari) );
+                if (!el.addEventListener && !el.attachEvent) {
+                    return true;
+                } else if (this.isSafari) {
+                    if ("click" == sType || "dblclick" == sType) {
+                        return true;
+                    }
+                }
+
+                return false;
             },
                     
             /**
