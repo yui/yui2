@@ -136,50 +136,57 @@ YAHOO.widget.DataSource.prototype.flushCache = function() {
  * Events
  ***************************************************************************/
 /**
- * Fired when a query is made to the live data source. Subscribers receive an
- * array of the following arguments:<br>
- *     - {string} Event type<br>
- *     - {array} [The data source instance, the requesting object, the query string]
+ * Fired when a query is made to the live data source. Subscribers receive the
+ * following array:<br>
+ *     - args[0] The data source instance
+ *     - args[1] The requesting object
+ *     - args[2] The query string
  */
 YAHOO.widget.DataSource.prototype.queryEvent = null;
 
 /**
- * Fired when a query is made to the local cache. Subscribers receive an array
- * of the following arguments:<br>
- *     - {string} Event type<br>
- *     - {array} [The data source instance, the requesting object, the query string]
+ * Fired when a query is made to the local cache. Subscribers receive the
+ * following array:<br>
+ *     - args[0] The data source instance
+ *     - args[1] The requesting object
+ *     - args[2] The query string
  */
 YAHOO.widget.DataSource.prototype.cacheQueryEvent = null;
 
 /**
  * Fired when data is retrieved from the live data source. Subscribers receive
- * an array of the following arguments:<br>
- *     - {string} Event type<br>
- *     - {array} [The data source instance, the requesting object, the query string, array of result objects]
+ * the following array:<br>
+ *     - args[0] The data source instance
+ *     - args[1] The requesting object
+ *     - args[2] The query string
+ *     - args[3] Array of result objects
  */
 YAHOO.widget.DataSource.prototype.getResultsEvent = null;
     
 /**
- * Fired when data is retrieved from the local cache. Subscribers receive an
- * array of the following arguments:<br>
- *     - {string} Event type<br>
- *     - {array} [The data source instance, the requesting object, the query string, array of result objects]
+ * Fired when data is retrieved from the local cache. Subscribers receive the
+ * following array :<br>
+ *     - args[0] The data source instance
+ *     - args[1] The requesting object
+ *     - args[2] The query string
+ *     - args[3] Array of result objects
  */
 YAHOO.widget.DataSource.prototype.getCachedResultsEvent = null;
 
 /**
  * Fired when an error is encountered with the live data source. Subscribers
- * receive an array of the following arguments:<br>
- *     - {string} Event type<br>
- *     - {array} [The data source instance, the requesting object, the query string, error message string]
+ * receive the following array:<br>
+ *     - args[0] The data source instance
+ *     - args[1] The requesting object
+ *     - args[2] The query string
+ *     - args[3] Error message string
  */
 YAHOO.widget.DataSource.prototype.dataErrorEvent = null;
 
 /**
- * Fired when the local cache is flushed. Subscribers receive an array of the
- * following arguments:<br>
- *     - {string} Event type<br>
- *     - {array} [The data source instance]
+ * Fired when the local cache is flushed. Subscribers receive the following
+ * array :<br>
+ *     - args[0] The data source instance
  */
 YAHOO.widget.DataSource.prototype.cacheFlushEvent = null;
 
