@@ -3,35 +3,57 @@
 /****************************************************************************/
 /****************************************************************************/
 /**
- * Static class providing logging functionality. Saves logs written through the
+ * Singleton providing core logging functionality. Saves logs written through the
  * global YAHOO.log function or written by LogWriter. Provides access to logs
  * for reading by LogReader. Log messages are automatically output to Firebug,
  * if present.
  *
  * requires YAHOO.util.Event Event utility
  */
-YAHOO.widget.Logger = new function() {
+YAHOO.widget.Logger = {
     // Initialize members
-    this.loggerEnabled = true;
-    this.firebugEnabled; // undefined at initialization
-    this.categories = ["info","warn","error","time","window"];
-    this._stack = []; // holds all log msgs
-    this._startTime = new Date().getTime(); // static start timestamp
-    this._lastTime = this._startTime; // timestamp of last logged message
+    loggerEnabled: true,
+    //firebugEnabled property undefined at initialization
+    categories: ["info","warn","error","time","window"],
+    _stack: [], // holds all log msgs
+    _startTime: new Date().getTime(), // static start timestamp
+    _lastTime: this._startTime // timestamp of last logged message
 };
 
 /***************************************************************************
  * Events
  ***************************************************************************/
-YAHOO.widget.Logger.bufferDumpEvent = new YAHOO.util.CustomEvent("bufferDump");
-
+/**
+ * Fired when a new category has been created. Subscribers receive the following
+ * array:<br>
+ *     - args[0] The category name
+ */
 YAHOO.widget.Logger.categoryCreateEvent = new YAHOO.util.CustomEvent("categoryCreate");
 
+/**
+ * Fired when a new log message has been created. Subscribers receive the
+ * following array:<br>
+ *     - args[0] The log message
+ */
 YAHOO.widget.Logger.newLogEvent = new YAHOO.util.CustomEvent("newLog");
+
+/**
+ * Fired when the Logger has been reset has been created.
+ */
+YAHOO.widget.Logger.logResetEvent = new YAHOO.util.CustomEvent("logReset");
 
 /***************************************************************************
  * Public methods
  ***************************************************************************/
+/**
+ * Saves a log message to the stack and fires newLogEvent. If the log message is
+ * assigned to an unknown category, creates a new category. If firebug is enabled,
+ * outputs the log message to firebug.
+ *
+ * @param {string} sName Name of LogWriter, or null if none
+ * @param {string} sMsg The log message
+ * @param {string} sCategory Category of log message
+ */
 YAHOO.widget.Logger.log = function(sName, sMsg, sCategory) {
     if(this.loggerEnabled) {
         if(!sCategory) {
@@ -58,33 +80,57 @@ YAHOO.widget.Logger.log = function(sName, sMsg, sCategory) {
     }
 };
 
+/**
+ * Resets internal stack and startTime, enables Logger, and fires logResetEvent.
+ *
+ */
 YAHOO.widget.Logger.reset = function() {
     this._stack = [];
     this._startTime = new Date().getTime();
     this.loggerEnabled = true;
     this.log(null, "Logger reset");
+    this.logResetEvent.fire();
 };
 
+/**
+ * Public accessor to internal stack of log messages.
+ *
+ * @return {array} Array of log messages.
+ */
 YAHOO.widget.Logger.getStack = function() {
     return this._stack;
-}
+};
 
+/**
+ * Public accessor to internal start time.
+ *
+ * @return {date} Internal date of when Logger singleton was initialized.
+ */
 YAHOO.widget.Logger.getStartTime = function() {
     return this._startTime;
-}
-
-/***************************************************************************
- * Private members
- ***************************************************************************/
+};
 
 /***************************************************************************
  * Private methods
  ***************************************************************************/
+/**
+ * Creates a new category of log messages and fires categoryCreateEvent.
+ *
+ * @param {string} category Category name
+ * @private
+ */
 YAHOO.widget.Logger._createNewCategory = function(category) {
     this.categories.push(category);
     this.categoryCreateEvent.fire(category);
 };
 
+/**
+ * Checks to see if a category has already been created.
+ *
+ * @param {string} category Category name
+ * @return {boolean} Returns true if category is unknown, else returns false
+ * @private
+ */
 YAHOO.widget.Logger._isNewCategory = function(category) {
     for(var i=0; i < this.categories.length; i++) {
         if(category == this.categories[i]) {
@@ -94,6 +140,12 @@ YAHOO.widget.Logger._isNewCategory = function(category) {
     return true;
 };
 
+/**
+ * Outputs a log message to Firebug.
+ *
+ * @param {object} entry Log entry object
+ * @private
+ */
 YAHOO.widget.Logger._printToFirebug = function(entry) {
     var category = entry.category;
     var label = entry.category.substring(0,4).toUpperCase();
@@ -121,6 +173,9 @@ YAHOO.widget.Logger._printToFirebug = function(entry) {
     this.firebugEnabled = printfire(output);
 };
 
+/**
+ * Firebug integration method. Outputs log message to Firebug.
+ */
 function printfire() {
     if(document.createEvent) {
         try {
@@ -140,6 +195,14 @@ function printfire() {
 /***************************************************************************
  * Private event handlers
  ***************************************************************************/
+/**
+ * Handles logging of messages due to window error events.
+ *
+ * @param {string} msg The error message
+ * @param {string} url URL of the error
+ * @param {string} line Line number of the error
+ * @private
+ */
 YAHOO.widget.Logger._onWindowError = function(msg,url,line) {
     // Logger is not in scope of this event handler
     try {
@@ -167,33 +230,6 @@ window.onerror = YAHOO.widget.Logger._onWindowError;
  * First log
  */
 YAHOO.widget.Logger.log(null, "Logger initialized");
-
-
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
-/**
- * Class providing ability to log messages through YAHOO.widget.Logger from a
- * named source.
- *
- * @constructor
- * @param {string} sName Name of LogWriter instance
- */
-YAHOO.widget.LogWriter = function(sName) {
-    this._name = sName;
- };
-
-/***************************************************************************
- * Public methods
- ***************************************************************************/
-YAHOO.widget.LogWriter.prototype.log = function(sMsg, sCategory) {
-    YAHOO.widget.Logger.log(this._name, sMsg, sCategory);
-};
-
-/***************************************************************************
- * Private members
- ***************************************************************************/
-YAHOO.widget.LogWriter.prototype._name = null;
 
 /****************************************************************************/
 /****************************************************************************/
@@ -228,6 +264,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         else if(containerEl.tagName) {
             this._containerEl = containerEl;
         }
+        this._containerEl.className = "ylogger";
     }
     // ...or create container from scratch
     if(!this._containerEl) {
@@ -264,7 +301,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         if(this.top) {
             this._containerEl.style.top = this.top;
         }
-        if(this.fontSize) {alert('true');
+        if(this.fontSize) {
             this._containerEl.style.fontSize = this.fontSize;
         }
     }
@@ -280,7 +317,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
             this._collapseEl.className = "ylog_btns";
 
             this._collapseBtn = document.createElement("input");
-            this._collapseBtn.type = "button"
+            this._collapseBtn.type = "button";
             this._collapseBtn.style.fontSize = YAHOO.util.Dom.getStyle(this._containerEl,"fontSize");
             this._collapseBtn.className = "button";
             this._collapseBtn.value = "Collapse";
@@ -358,54 +395,143 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
 /***************************************************************************
  * Public constants
  ***************************************************************************/
+/**
+ * Default CSS width of LogReader container.
+ *
+ * @type constant
+ * @final
+ */
 YAHOO.widget.LogReader.prototype.DEFAULT_WIDTH = "30em";
 
+/**
+ * Default CSS height of LogReader container.
+ *
+ * @type constant
+ * @final
+ */
 YAHOO.widget.LogReader.prototype.DEFAULT_HEIGHT = "20em";
 
+/**
+ * Default CSS top position of LogReader container.
+ *
+ * @type constant
+ * @final
+ */
 YAHOO.widget.LogReader.prototype.DEFAULT_TOP = "1em";
 
+/**
+ * Default CSS right position of LogReader container.
+ *
+ * @type constant
+ * @final
+ */
 YAHOO.widget.LogReader.prototype.DEFAULT_RIGHT = "1em";
 
+/**
+ * Default CSS font size of LogReader container.
+ *
+ * @type constant
+ * @final
+ */
 YAHOO.widget.LogReader.prototype.DEFAULT_FONTSIZE = "77%";
 
 /***************************************************************************
  * Public members
  ***************************************************************************/
+/**
+ * Whether or not the log reader is enabled to output log messages.
+ *
+ * @type boolean
+ */
 YAHOO.widget.LogReader.prototype.logReaderEnabled = true;
 
+/**
+ * CSS width of the log reader container.
+ *
+ * @type string
+ */
 YAHOO.widget.LogReader.prototype.width = null;
 
+/**
+ * CSS height of the log reader container.
+ *
+ * @type string
+ */
 YAHOO.widget.LogReader.prototype.height = null;
 
+/**
+ * CSS top position of the log reader container.
+ *
+ * @type string
+ */
 YAHOO.widget.LogReader.prototype.top = null;
 
+/**
+ * CSS left position of the log reader container.
+ *
+ * @type string
+ */
 YAHOO.widget.LogReader.prototype.left = null;
 
+/**
+ * CSS right position of the log reader container.
+ *
+ * @type string
+ */
 YAHOO.widget.LogReader.prototype.right = null;
 
+/**
+ * CSS bottom position of the log reader container.
+ *
+ * @type string
+ */
 YAHOO.widget.LogReader.prototype.bottom = null;
 
+/**
+ * CSS font size of the log reader container.
+ *
+ * @type string
+ */
 YAHOO.widget.LogReader.prototype.fontSize = null;
 
+/**
+ * Whether or not the footer UI is enabled for the log reader.
+ *
+ * @type boolean
+ */
 YAHOO.widget.LogReader.prototype.footerEnabled = true;
 
 /***************************************************************************
  * Public methods
  ***************************************************************************/
+/**
+ * Pauses output of log messages. While paused, log messages are not lost, but
+ * get saved to a buffer and then output upon resume of log reader.
+ */
 YAHOO.widget.LogReader.prototype.pause = function() {
     this._timeout = null;
     this.logReaderEnabled = false;
 };
 
+/**
+ * Resumes output of log messages, including outputting any log messages that
+ * have been saved to buffer while paused.
+ */
 YAHOO.widget.LogReader.prototype.resume = function() {
     this.logReaderEnabled = true;
     this._printBuffer();
 };
 
+/**
+ * Hides UI of log reader. Logging functionality is not disrupted.
+ */
 YAHOO.widget.LogReader.prototype.hide = function() {
     this._containerEl.style.display = "none";
 };
 
+/**
+ * Shows UI of log reader. Logging functionality is not disrupted.
+ */
 YAHOO.widget.LogReader.prototype.show = function() {
     this._containerEl.style.display = "block";
 };
@@ -413,29 +539,152 @@ YAHOO.widget.LogReader.prototype.show = function() {
  /***************************************************************************
  * Private members
  ***************************************************************************/
-YAHOO.widget.LogReader._defaultContainerEl = null;
-
+/**
+ * Internal class variable to index multiple log reader instances.
+ *
+ * @type number
+ * @private
+ */
 YAHOO.widget.LogReader._index = 0;
 
+/**
+ * A container element shared by all log readers if a container needs to be
+ * created during instantiation. Will be null a container element never needs to
+ * be created on the fly, such as when the implementer passes in their own element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader._defaultContainerEl = null;
+
+/**
+ * Buffer of log messages for batch output.
+ *
+ * @type array
+ * @private
+ */
 YAHOO.widget.LogReader.prototype._buffer = null;
 
+/**
+ * Date of last output log message.
+ *
+ * @type date
+ * @private
+ */
 YAHOO.widget.LogReader.prototype._lastTime = null;
 
+/**
+ * Batched output timeout ID.
+ *
+ * @type number
+ * @private
+ */
 YAHOO.widget.LogReader.prototype._timeout = null;
 
-YAHOO.widget.LogReader.prototype._containerEl = null;
-
-YAHOO.widget.LogReader.prototype._hdEl = null;
-
-YAHOO.widget.LogReader.prototype._consoleEl = null;
-
-YAHOO.widget.LogReader.prototype._ftEl = null;
-
+/**
+ * Filters that prevent certain categories of log messages from being output.
+ *
+ * @type array
+ * @private
+ */
 YAHOO.widget.LogReader.prototype._filters = null;
 
+/**
+ * Log reader container element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._containerEl = null;
+
+/**
+ * Log reader header element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._hdEl = null;
+
+/**
+ * Log reader collapse element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._collapseEl = null;
+
+/**
+ * Log reader collapse button element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._collapseBtn = null;
+
+/**
+ * Log reader title header element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._title = null;
+
+/**
+ * Log reader console element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._consoleEl = null;
+
+/**
+ * Log reader footer element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._ftEl = null;
+
+/**
+ * Log reader buttons container element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._btnsEl = null;
+
+/**
+ * Log reader filter checkboxes container element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._filtersEl = null;
+
+/**
+ * Log reader pause button element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._pauseBtn = null;
+
+/**
+ * lear button element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._clearBtn = null;
 /***************************************************************************
  * Private methods
  ***************************************************************************/
+/**
+ * Creates the UI for a category filter in the log reader footer element.
+ *
+ * @param {string} category Category name
+ * @private
+ */
 YAHOO.widget.LogReader.prototype._createFilterCheckbox = function(category) {
     var oSelf = this;
 
@@ -453,16 +702,27 @@ YAHOO.widget.LogReader.prototype._createFilterCheckbox = function(category) {
         filterChkLbl.className = category;
         filterChkLbl.innerHTML = category;
     }
-}
+};
 
+/**
+ * Reprints all log messages in the stack through filters.
+ *
+ * @private
+ */
 YAHOO.widget.LogReader.prototype._filterLogs = function() {
     // Reprint stack with new filters
-    if (this._consoleEl != null) {
+    if (this._consoleEl !== null) {
         this._clearConsole();
         this._printToConsole(YAHOO.widget.Logger.getStack());
     }
 };
 
+/**
+ * Clears all outputted log messages from the console and resets the time of the
+ * last output log message.
+ *
+ * @private
+ */
 YAHOO.widget.LogReader.prototype._clearConsole = function() {
     // Clear the buffer of any pending messages
     this._timeout = null;
@@ -477,10 +737,15 @@ YAHOO.widget.LogReader.prototype._clearConsole = function() {
     }
 };
 
+/**
+ * Sends buffer of log messages to output and clears buffer.
+ *
+ * @private
+ */
 YAHOO.widget.LogReader.prototype._printBuffer = function() {
     this._timeout = null;
 
-    if (this._consoleEl != null) {
+    if (this._consoleEl !== null) {
         var entries = [];
         for (var i=0; i<this._buffer.length; i++) {
             entries[i] = this._buffer[i];
@@ -490,7 +755,13 @@ YAHOO.widget.LogReader.prototype._printBuffer = function() {
     }
 };
 
-
+/**
+ * Cycles through an array of log messages, and outputs each one to the console
+ * if its category has not been filtered out.
+ *
+ * @param {array} aEntries
+ * @private
+ */
 YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
     var entriesLen = aEntries.length;
     var filtersLen = this._filters.length;
@@ -541,13 +812,28 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
 /***************************************************************************
  * Private event handlers
  ***************************************************************************/
+/**
+ * Handles Logger's categoryCreateEvent.
+ *
+ * @param {string} type The click event
+ * @param {array} args Data passed from event firer
+ * @param {object} oSelf The log reader instance
+ * @private
+ */
 YAHOO.widget.LogReader.prototype._onCategoryCreate = function(type, args, oSelf) {
     var category = args[0];
     if(oSelf._ftEl) {
         oSelf._createFilterCheckbox(category);
     }
-}
+};
 
+/**
+ * Handles click events on the collapse button.
+ *
+ * @param {event} v The click event
+ * @param {object} oSelf The log reader instance
+ * @private
+ */
 YAHOO.widget.LogReader.prototype._onClickCollapseBtn = function(v, oSelf) {
     var btn = oSelf._collapseBtn;
     if(btn.value == "Expand") {
@@ -566,6 +852,13 @@ YAHOO.widget.LogReader.prototype._onClickCollapseBtn = function(v, oSelf) {
     }
 };
 
+/**
+ * Handles click events on the pause button.
+ *
+ * @param {event} v The click event
+ * @param {object} oSelf The log reader instance
+ * @private
+ */
 YAHOO.widget.LogReader.prototype._onClickPauseBtn = function(v, oSelf) {
     var btn = oSelf._pauseBtn;
     if(btn.value == "Resume") {
@@ -578,10 +871,24 @@ YAHOO.widget.LogReader.prototype._onClickPauseBtn = function(v, oSelf) {
     }
 };
 
+/**
+ * Handles click events on the clear button.
+ *
+ * @param {event} v The click event
+ * @param {object} oSelf The log reader instance
+ * @private
+ */
 YAHOO.widget.LogReader.prototype._onClickClearBtn = function(v, oSelf) {
     oSelf._clearConsole();
 };
 
+/**
+ * Handles check events on the filter checkboxes.
+ *
+ * @param {event} v The click event
+ * @param {object} oSelf The log reader instance
+ * @private
+ */
 YAHOO.widget.LogReader.prototype._onCheckFilter = function(v, oSelf) {
     var category = this.category;
     if(this.checked) { // Remove category from filters
@@ -598,14 +905,57 @@ YAHOO.widget.LogReader.prototype._onCheckFilter = function(v, oSelf) {
     oSelf._filterLogs();
 };
 
+/**
+ * Handles Logger's onNewEvent.
+ *
+ * @param {string} type The click event
+ * @param {array} args Data passed from event firer
+ * @param {object} oSelf The log reader instance
+ * @private
+ */
 YAHOO.widget.LogReader.prototype._onNewLog = function(type, args, oSelf) {
     var logEntry = args[0];
     oSelf._buffer.push(logEntry);
 
-    if (oSelf.logReaderEnabled == true && oSelf._timeout == null) {
-        oSelf._timeout = setTimeout(function(){oSelf._printBuffer()}, 100);
+    if (oSelf.logReaderEnabled === true && oSelf._timeout === null) {
+        oSelf._timeout = setTimeout(function(){oSelf._printBuffer();}, 100);
     }
-}
+};
 
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+/**
+ * Class providing ability to log messages through YAHOO.widget.Logger from a
+ * named source.
+ *
+ * @constructor
+ * @param {string} sName Name of LogWriter instance
+ */
+YAHOO.widget.LogWriter = function(sName) {
+    this._name = sName;
+ };
 
+/***************************************************************************
+ * Public methods
+ ***************************************************************************/
+/**
+ * Logs a message attached to the name of the LogWriter.
+ *
+ * @param {string} sMsg The log message
+ * @param {string} sCategory Category name
+ */
+YAHOO.widget.LogWriter.prototype.log = function(sMsg, sCategory) {
+    YAHOO.widget.Logger.log(this._name, sMsg, sCategory);
+};
 
+/***************************************************************************
+ * Private members
+ ***************************************************************************/
+/**
+ * Name of the log writer instance.
+ *
+ * @type string
+ * @private
+ */
+YAHOO.widget.LogWriter.prototype._name = null;
