@@ -15,6 +15,12 @@ YAHOO.widget.LogWriter = function(sName) {
 /***************************************************************************
  * Public methods
  ***************************************************************************/
+/**
+ * Logs a message attached to the name of the LogWriter.
+ *
+ * @param {string} sMsg The log message
+ * @param {string} sCategory Category name
+ */
 YAHOO.widget.LogWriter.prototype.log = function(sMsg, sCategory) {
     YAHOO.widget.Logger.log(this._name, sMsg, sCategory);
 };
@@ -22,6 +28,12 @@ YAHOO.widget.LogWriter.prototype.log = function(sMsg, sCategory) {
 /***************************************************************************
  * Private members
  ***************************************************************************/
+/**
+ * Name of the log writer instance.
+ *
+ * @type string
+ * @private
+ */
 YAHOO.widget.LogWriter.prototype._name = null;
 
 

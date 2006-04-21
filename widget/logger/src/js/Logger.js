@@ -2,35 +2,57 @@
 /****************************************************************************/
 /****************************************************************************/
 /**
- * Static class providing logging functionality. Saves logs written through the
+ * Singleton providing core logging functionality. Saves logs written through the
  * global YAHOO.log function or written by LogWriter. Provides access to logs
  * for reading by LogReader. Log messages are automatically output to Firebug,
  * if present.
  *
  * requires YAHOO.util.Event Event utility
  */
-YAHOO.widget.Logger = new function() {
+YAHOO.widget.Logger = {
     // Initialize members
-    this.loggerEnabled = true;
-    this.firebugEnabled; // undefined at initialization
-    this.categories = ["info","warn","error","time","window"];
-    this._stack = []; // holds all log msgs
-    this._startTime = new Date().getTime(); // static start timestamp
-    this._lastTime = this._startTime; // timestamp of last logged message
+    loggerEnabled: true,
+    //firebugEnabled property undefined at initialization
+    categories: ["info","warn","error","time","window"],
+    _stack: [], // holds all log msgs
+    _startTime: new Date().getTime(), // static start timestamp
+    _lastTime: this._startTime // timestamp of last logged message
 };
 
 /***************************************************************************
  * Events
  ***************************************************************************/
-YAHOO.widget.Logger.bufferDumpEvent = new YAHOO.util.CustomEvent("bufferDump");
-
+/**
+ * Fired when a new category has been created. Subscribers receive the following
+ * array:<br>
+ *     - args[0] The category name
+ */
 YAHOO.widget.Logger.categoryCreateEvent = new YAHOO.util.CustomEvent("categoryCreate");
 
+/**
+ * Fired when a new log message has been created. Subscribers receive the
+ * following array:<br>
+ *     - args[0] The log message
+ */
 YAHOO.widget.Logger.newLogEvent = new YAHOO.util.CustomEvent("newLog");
+
+/**
+ * Fired when the Logger has been reset has been created.
+ */
+YAHOO.widget.Logger.logResetEvent = new YAHOO.util.CustomEvent("logReset");
 
 /***************************************************************************
  * Public methods
  ***************************************************************************/
+/**
+ * Saves a log message to the stack and fires newLogEvent. If the log message is
+ * assigned to an unknown category, creates a new category. If firebug is enabled,
+ * outputs the log message to firebug.
+ *
+ * @param {string} sName Name of LogWriter, or null if none
+ * @param {string} sMsg The log message
+ * @param {string} sCategory Category of log message
+ */
 YAHOO.widget.Logger.log = function(sName, sMsg, sCategory) {
     if(this.loggerEnabled) {
         if(!sCategory) {
@@ -57,33 +79,57 @@ YAHOO.widget.Logger.log = function(sName, sMsg, sCategory) {
     }
 };
 
+/**
+ * Resets internal stack and startTime, enables Logger, and fires logResetEvent.
+ *
+ */
 YAHOO.widget.Logger.reset = function() {
     this._stack = [];
     this._startTime = new Date().getTime();
     this.loggerEnabled = true;
     this.log(null, "Logger reset");
+    this.logResetEvent.fire();
 };
 
+/**
+ * Public accessor to internal stack of log messages.
+ *
+ * @return {array} Array of log messages.
+ */
 YAHOO.widget.Logger.getStack = function() {
     return this._stack;
-}
+};
 
+/**
+ * Public accessor to internal start time.
+ *
+ * @return {date} Internal date of when Logger singleton was initialized.
+ */
 YAHOO.widget.Logger.getStartTime = function() {
     return this._startTime;
-}
-
-/***************************************************************************
- * Private members
- ***************************************************************************/
+};
 
 /***************************************************************************
  * Private methods
  ***************************************************************************/
+/**
+ * Creates a new category of log messages and fires categoryCreateEvent.
+ *
+ * @param {string} category Category name
+ * @private
+ */
 YAHOO.widget.Logger._createNewCategory = function(category) {
     this.categories.push(category);
     this.categoryCreateEvent.fire(category);
 };
 
+/**
+ * Checks to see if a category has already been created.
+ *
+ * @param {string} category Category name
+ * @return {boolean} Returns true if category is unknown, else returns false
+ * @private
+ */
 YAHOO.widget.Logger._isNewCategory = function(category) {
     for(var i=0; i < this.categories.length; i++) {
         if(category == this.categories[i]) {
@@ -93,6 +139,12 @@ YAHOO.widget.Logger._isNewCategory = function(category) {
     return true;
 };
 
+/**
+ * Outputs a log message to Firebug.
+ *
+ * @param {object} entry Log entry object
+ * @private
+ */
 YAHOO.widget.Logger._printToFirebug = function(entry) {
     var category = entry.category;
     var label = entry.category.substring(0,4).toUpperCase();
@@ -120,6 +172,9 @@ YAHOO.widget.Logger._printToFirebug = function(entry) {
     this.firebugEnabled = printfire(output);
 };
 
+/**
+ * Firebug integration method. Outputs log message to Firebug.
+ */
 function printfire() {
     if(document.createEvent) {
         try {
@@ -139,6 +194,14 @@ function printfire() {
 /***************************************************************************
  * Private event handlers
  ***************************************************************************/
+/**
+ * Handles logging of messages due to window error events.
+ *
+ * @param {string} msg The error message
+ * @param {string} url URL of the error
+ * @param {string} line Line number of the error
+ * @private
+ */
 YAHOO.widget.Logger._onWindowError = function(msg,url,line) {
     // Logger is not in scope of this event handler
     try {
