@@ -312,15 +312,15 @@ YAHOO.widget.Slider.<span class="reserved">prototype</span>.setStartSliderState 
     <span class="reserved">this</span>.logger.debug(<span class="literal">"Fixing state"</span>);
     <span class="reserved">if</span> (<span class="reserved">this</span>.thumb._isRegion) {
         <span class="reserved">if</span> (<span class="reserved">this</span>.deferredSetRegionValue) {
-            <span class="reserved">this</span>.setRegionValue.apply(<span class="reserved">this</span>, <span class="reserved">this</span>.deferredSetRegionValue);
+            <span class="reserved">this</span>.setRegionValue.apply(<span class="reserved">this</span>, <span class="reserved">this</span>.deferredSetRegionValue, true);
         } <span class="reserved">else</span> {
             <span class="reserved">this</span>.setRegionValue(0, 0, true);
         }
     } <span class="reserved">else</span> {
         <span class="reserved">if</span> (<span class="reserved">this</span>.deferredSetValue) {
-            <span class="reserved">this</span>.setValue.apply(<span class="reserved">this</span>, <span class="reserved">this</span>.deferredSetValue);
+            <span class="reserved">this</span>.setValue.apply(<span class="reserved">this</span>, <span class="reserved">this</span>.deferredSetValue, true);
         } <span class="reserved">else</span> {
-            <span class="reserved">this</span>.setValue(0, true);
+            <span class="reserved">this</span>.setValue(0, true, true);
         }
     }
 };
@@ -455,11 +455,12 @@ YAHOO.widget.Slider.<span class="reserved">prototype</span>.onThumbChange = <spa
  *
  * <span class="attrib">@param</span> {int} newOffset the number of pixels the thumb should be
  * positioned away from the initial start point 
- * <span class="attrib">@param</span> {boolean} skip animation set to true to disable the animation
+ * <span class="attrib">@param</span> {boolean} skipAnim set to true to disable the animation
  * for this move action (but not others).
+ * <span class="attrib">@param</span> {boolean} force ignore the locked setting and set value anyway
  * <span class="attrib">@return</span> {boolean} true if the move was performed, false if it failed
  */</span>
-YAHOO.widget.Slider.<span class="reserved">prototype</span>.setValue = <span class="reserved">function</span>(newOffset, skipAnim) {
+YAHOO.widget.Slider.<span class="reserved">prototype</span>.setValue = <span class="reserved">function</span>(newOffset, skipAnim, force) {
     <span class="reserved">this</span>.logger.debug(<span class="literal">"setValue "</span> + newOffset);
 
     <span class="reserved">if</span> (!<span class="reserved">this</span>.thumb.available) {
@@ -467,7 +468,7 @@ YAHOO.widget.Slider.<span class="reserved">prototype</span>.setValue = <span cla
         <span class="reserved">this</span>.deferredSetValue = arguments;
     }
 
-    <span class="reserved">if</span> (<span class="reserved">this</span>.isLocked()) {
+    <span class="reserved">if</span> (<span class="reserved">this</span>.isLocked() &amp;&amp; !force) {
         <span class="reserved">this</span>.logger.debug(<span class="literal">"Can't set the value, the control is locked"</span>);
         <span class="reserved">return</span> false;
     }
@@ -499,8 +500,9 @@ YAHOO.widget.Slider.<span class="reserved">prototype</span>.setValue = <span cla
  * positioned away from the initial start point 
  * <span class="attrib">@param</span> {int} newOffset2 the number of pixels the thumb should be
  * positioned away from the initial start point (y axis for region)
- * <span class="attrib">@param</span> {boolean} skip animation set to true to disable the animation
+ * <span class="attrib">@param</span> {boolean} skipAnim set to true to disable the animation
  * for this move action (but not others).
+ * <span class="attrib">@param</span> {boolean} force ignore the locked setting and set value anyway
  * <span class="attrib">@return</span> {boolean} true if the move was performed, false if it failed
  */</span>
 YAHOO.widget.Slider.<span class="reserved">prototype</span>.setRegionValue = <span class="reserved">function</span>(newOffset, newOffset2, skipAnim) {
@@ -509,7 +511,7 @@ YAHOO.widget.Slider.<span class="reserved">prototype</span>.setRegionValue = <sp
         <span class="reserved">this</span>.logger.debug(<span class="literal">"defer setRegionValue until after onAvailble"</span>);
         <span class="reserved">this</span>.deferredSetRegionValue = arguments;
     }
-    <span class="reserved">if</span> (<span class="reserved">this</span>.isLocked()) {
+    <span class="reserved">if</span> (<span class="reserved">this</span>.isLocked() &amp;&amp; !force) {
         <span class="reserved">this</span>.logger.debug(<span class="literal">"Can't set the value, the control is locked"</span>);
         <span class="reserved">return</span> false;
     }
@@ -875,6 +877,8 @@ YAHOO.widget.SliderThumb = <span class="reserved">function</span>(id, sGroup, iL
     <span class="reserved">this</span>.maintainOffset = true;
 
 	<span class="reserved">this</span>.initSlider(iLeft, iRight, iUp, iDown, iTickSize);
+
+    <span class="reserved">this</span>.scroll = false;
 
 };
 

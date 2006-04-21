@@ -695,6 +695,8 @@ YAHOO.widget.SliderThumb = function(id, sGroup, iLeft, iRight, iUp, iDown, iTick
 
 	this.initSlider(iLeft, iRight, iUp, iDown, iTickSize);
 
+    this.scroll = false;
+
 };
 
 YAHOO.widget.SliderThumb.prototype = new YAHOO.util.DD();

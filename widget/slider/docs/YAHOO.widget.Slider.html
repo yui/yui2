@@ -375,7 +375,7 @@
 								<td class="spec">
 									<code>
 										<a href="#setRegionValue">setRegionValue</a>
-										(&lt;int&gt; newOffset, &lt;int&gt; newOffset2, skipAnim)
+										(&lt;int&gt; newOffset, &lt;int&gt; newOffset2, &lt;boolean&gt; skipAnim)
 									</code>
 									<div class="description">
 										Provides a way to set the value of the region slider in code.&nbsp;
@@ -401,7 +401,7 @@
 								<td class="spec">
 									<code>
 										<a href="#setValue">setValue</a>
-										(&lt;int&gt; newOffset, skipAnim)
+										(&lt;int&gt; newOffset, &lt;boolean&gt; skipAnim, &lt;boolean&gt; force)
 									</code>
 									<div class="description">
 										Provides a way to set the value of the slider in code.&nbsp;
@@ -795,7 +795,7 @@
 							<code>
 								boolean 
 								<strong>setRegionValue</strong>
-								(&lt;int&gt; newOffset, &lt;int&gt; newOffset2, skipAnim)
+								(&lt;int&gt; newOffset, &lt;int&gt; newOffset2, &lt;boolean&gt; skipAnim)
 							</code>
 									
 							<div class="description">
@@ -817,8 +817,13 @@
 											</dd>
 										
 											<dd>
-												<code>skip</code> - 
-												 animation set to true to disable the animation  for this move action (but not others).  
+												<code>skipAnim</code> - 
+												 set to true to disable the animation  for this move action (but not others).  
+											</dd>
+										
+											<dd>
+												<code>force</code> - 
+												 ignore the locked setting and set value anyway  
 											</dd>
 										
 									</dl>
@@ -856,7 +861,7 @@
 							<code>
 								boolean 
 								<strong>setValue</strong>
-								(&lt;int&gt; newOffset, skipAnim)
+								(&lt;int&gt; newOffset, &lt;boolean&gt; skipAnim, &lt;boolean&gt; force)
 							</code>
 									
 							<div class="description">
@@ -873,8 +878,13 @@
 											</dd>
 										
 											<dd>
-												<code>skip</code> - 
-												 animation set to true to disable the animation  for this move action (but not others).  
+												<code>skipAnim</code> - 
+												 set to true to disable the animation  for this move action (but not others).  
+											</dd>
+										
+											<dd>
+												<code>force</code> - 
+												 ignore the locked setting and set value anyway  
 											</dd>
 										
 									</dl>
