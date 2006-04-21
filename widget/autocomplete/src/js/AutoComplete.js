@@ -167,8 +167,8 @@ YAHOO.widget.AutoComplete.prototype.highlightClassName = "highlight";
  * Query delimiter. A single character separator for multiple delimited 
  * selections. Multiple delimiter characteres may be defined as an array of
  * strings. A null value or empty string indicates that query results cannot
- * be delimited. Do not enable this feature if you need forceSelection to be
- * true. Default: null.
+ * be delimited. This feature is not recommended if you need forceSelection to
+ * be true. Default: null.
  *
  * @type string or array
  */
@@ -209,8 +209,8 @@ YAHOO.widget.AutoComplete.prototype.animSpeed = 0.3;
 /**
  * Whether or not to force the user's selection to match one of the query
  * results. Enabling this feature essentially transforms the auto complete form
- * input field into a &lt;select&gt; field. Not compatible with delimiter feature.
- * Default: false.
+ * input field into a &lt;select&gt; field. This feature is not recommended
+ * with delimiter character(s) defined. Default: false.
  *
  * @type boolean
  */
@@ -632,6 +632,9 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
         else if(this._oAnim) {
             this._oAnim.duration = animSpeed;
         }
+    }
+    if(this.forceSelection && this.delimChar) {
+        //YAHOO.log(oSelf.getName() + " has enabled force selection with delimiter character(s) defined.","warn");
     }
     if (!this._aListIds) {
         this._aListIds = [];
