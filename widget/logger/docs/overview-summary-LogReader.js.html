@@ -256,9 +256,9 @@ YAHOO.widget.LogReader = <span class="reserved">function</span>(containerEl, oCo
     <span class="reserved">if</span>(<span class="reserved">this</span>._containerEl) {
 <span class="comment">        // Create header</span>
         <span class="reserved">if</span>(!<span class="reserved">this</span>._hdEl) {
-            <span class="reserved">this</span>._hdEl = <span class="reserved">this</span>._containerEl.appendChild(document.createElement(<span class="literal">"div"</span>));
-            <span class="reserved">this</span>._hdEl.id = <span class="literal">"ylog_hd"</span> + YAHOO.widget.LogReader._index;
-            <span class="reserved">this</span>._hdEl.className = <span class="literal">"ylog_hd"</span>;
+            this._hdEl = this._containerEl.appendChild(document.createElement("div"));
+            this._hdEl.id = "ylog_hd" + YAHOO.widget.LogReader._index;
+            this._hdEl.className = "ylog_hd";
 
             this._collapseEl = this._hdEl.appendChild(document.createElement("div"));
             this._collapseEl.className = "ylog_btns";
@@ -274,14 +274,14 @@ YAHOO.widget.LogReader = <span class="reserved">function</span>(containerEl, oCo
             this._title = this._hdEl.appendChild(document.createElement("h4"));
             this._title.innerHTML = "Logger Console";
 
-            // If Drag and Drop utility is available...
-            // ...and this container was created from scratch...
-            // ...then make the header draggable
-            if(YAHOO.util.DD &amp;&amp;
-            (YAHOO.widget.LogReader._defaultContainerEl == this._containerEl)) {
-                var ylog_dd = new YAHOO.util.DD(this._containerEl.id);
-                ylog_dd.setHandleElId(this._hdEl.id);
-                this._hdEl.style.cursor = "move";
+<span class="comment">            // If Drag and Drop utility is available...</span>
+<span class="comment">            // ...and this container was created from scratch...</span>
+<span class="comment">            // ...then make the header draggable</span>
+            <span class="reserved">if</span>(YAHOO.util.DD &amp;&amp;
+            (YAHOO.widget.LogReader._defaultContainerEl == <span class="reserved">this</span>._containerEl)) {
+                var ylog_dd = new YAHOO.util.DD(<span class="reserved">this</span>._containerEl.id);
+                ylog_dd.setHandleElId(<span class="reserved">this</span>._hdEl.id);
+                <span class="reserved">this</span>._hdEl.style.cursor = <span class="literal">"move"</span>;
             }
         }
 <span class="comment">        // Ceate console</span>
@@ -292,19 +292,19 @@ YAHOO.widget.LogReader = <span class="reserved">function</span>(containerEl, oCo
         }
 <span class="comment">        // Don't create footer if disabled</span>
         <span class="reserved">if</span>(!<span class="reserved">this</span>._ftEl &amp;&amp; <span class="reserved">this</span>.footerEnabled) {
-            <span class="reserved">this</span>._ftEl = <span class="reserved">this</span>._containerEl.appendChild(document.createElement(<span class="literal">"div"</span>));
-            <span class="reserved">this</span>._ftEl.className = <span class="literal">"ylog_ft"</span>;
+            this._ftEl = this._containerEl.appendChild(document.createElement("div"));
+            this._ftEl.className = "ylog_ft";
 
-            <span class="reserved">this</span>._btnsEl = <span class="reserved">this</span>._ftEl.appendChild(document.createElement(<span class="literal">"div"</span>));
-            <span class="reserved">this</span>._btnsEl.className = <span class="literal">"ylog_btns"</span>;
+            this._btnsEl = this._ftEl.appendChild(document.createElement("div"));
+            this._btnsEl.className = "ylog_btns";
 
-            <span class="reserved">this</span>._pauseBtn = document.createElement(<span class="literal">"input"</span>);
-            <span class="reserved">this</span>._pauseBtn.type = <span class="literal">"button"</span>;
-            <span class="reserved">this</span>._pauseBtn.style.fontSize = YAHOO.util.Dom.getStyle(<span class="reserved">this</span>._containerEl,<span class="literal">"fontSize"</span>);
-            <span class="reserved">this</span>._pauseBtn.className = <span class="literal">"button"</span>;
-            <span class="reserved">this</span>._pauseBtn.value = <span class="literal">"Pause"</span>;
-            <span class="reserved">this</span>._pauseBtn = <span class="reserved">this</span>._btnsEl.appendChild(<span class="reserved">this</span>._pauseBtn);
-            YAHOO.util.Event.addListener(oSelf._pauseBtn,<span class="literal">'click'</span>,oSelf._onClickPauseBtn,oSelf);
+            this._pauseBtn = document.createElement("input");
+            this._pauseBtn.type = "button";
+            this._pauseBtn.style.fontSize = YAHOO.util.Dom.getStyle(this._containerEl,"fontSize");
+            this._pauseBtn.className = "button";
+            this._pauseBtn.value = "Pause";
+            this._pauseBtn = this._btnsEl.appendChild(this._pauseBtn);
+            YAHOO.util.Event.addListener(oSelf._pauseBtn,'click',oSelf._onClickPauseBtn,oSelf);
 
             this._clearBtn = document.createElement("input");
             this._clearBtn.type = "button";
@@ -314,7 +314,7 @@ YAHOO.widget.LogReader = <span class="reserved">function</span>(containerEl, oCo
             this._clearBtn = this._btnsEl.appendChild(this._clearBtn);
             YAHOO.util.Event.addListener(oSelf._clearBtn,'click',oSelf._onClickClearBtn,oSelf);
 
-            <span class="reserved">this</span>._filtersEl = <span class="reserved">this</span>._ftEl.appendChild(document.createElement(<span class="literal">"div"</span>));
+            this._filtersEl = this._ftEl.appendChild(document.createElement("div"));
         }
     }
 <span class="comment">
@@ -495,6 +495,16 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>.show = <span clas
 YAHOO.widget.LogReader._index = 0;
 
 <span class="comment">/**
+ * A container element shared by all log readers if a container needs to be
+ * created during instantiation. Will be null a container element never needs to
+ * be created on the fly, such as when the implementer passes in their own element.
+ *
+ * <span class="attrib">@type</span> HTMLElement
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.LogReader._defaultContainerEl = null;
+
+<span class="comment">/**
  * Buffer of log messages for batch output.
  *
  * <span class="attrib">@type</span> array
@@ -533,16 +543,6 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>._filters = null;
  * <span class="attrib">@private</span>
  */</span>
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>._containerEl = null;
-
-<span class="comment">/**
- * The log reader container element that was created during instantiation. Will
- * be null if implementer passes in their own container element, which means the
- * element was not created on the fly.
- *
- * <span class="attrib">@type</span> HTMLElement
- * <span class="attrib">@private</span>
- */</span>
-YAHOO.widget.LogReader.<span class="reserved">prototype</span>._defaultContainerEl = null;
 
 <span class="comment">/**
  * Log reader header element.

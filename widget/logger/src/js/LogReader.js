@@ -315,6 +315,16 @@ YAHOO.widget.LogReader.prototype.show = function() {
 YAHOO.widget.LogReader._index = 0;
 
 /**
+ * A container element shared by all log readers if a container needs to be
+ * created during instantiation. Will be null a container element never needs to
+ * be created on the fly, such as when the implementer passes in their own element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader._defaultContainerEl = null;
+
+/**
  * Buffer of log messages for batch output.
  *
  * @type array
@@ -353,16 +363,6 @@ YAHOO.widget.LogReader.prototype._filters = null;
  * @private
  */
 YAHOO.widget.LogReader.prototype._containerEl = null;
-
-/**
- * The log reader container element that was created during instantiation. Will
- * be null if implementer passes in their own container element, which means the
- * element was not created on the fly.
- *
- * @type HTMLElement
- * @private
- */
-YAHOO.widget.LogReader.prototype._defaultContainerEl = null;
 
 /**
  * Log reader header element.
