@@ -9,6 +9,8 @@ http://developer.yahoo.net/yui/license.txt
  */
 YAHOO.util.Dom = function() {
    var ua = navigator.userAgent.toLowerCase();
+   var isOpera = (ua.indexOf('opera') != -1);
+   var isIE = (ua.indexOf('msie') != -1 && !isOpera); // not opera spoof
    var id_counter = 0;
    
    return {
@@ -48,7 +50,7 @@ YAHOO.util.Dom = function() {
        * @return {String/Array} The current value of the style property for the element(s).
        */
       getStyle: function(el, property) {
-         var f = function(el, self) {
+         var f = function(el) {
             var value = null;
             var dv = document.defaultView;
             
@@ -91,7 +93,7 @@ YAHOO.util.Dom = function() {
             return value;
          };
          
-         return this.batch(el, f, this);
+         return this.batch(el, f, this, true);
       },
    
       /**
@@ -101,27 +103,29 @@ YAHOO.util.Dom = function() {
        * @param {String} val The value to apply to the given property.
        */
       setStyle: function(el, property, val) {
-         var f = function(el, self) {
+         var f = function(el) {
             switch(property) {
                case 'opacity' :
-                  if (el.filters) {
+                  if (typeof el.style.filter == 'string') { // in case not appended
                      el.style.filter = 'alpha(opacity=' + val * 100 + ')';
                      
-                     if (!el.currentStyle.hasLayout) {
-                        el.style.zoom = 1;
+                     if (!el.currentStyle || !el.currentStyle.hasLayout) {
+                        el.style.zoom = 1; // when no layout or cant tell
                      }
                   } else {
                      el.style.opacity = val;
                      el.style['-moz-opacity'] = val;
                      el.style['-khtml-opacity'] = val;
                   }
+
                   break;
                default :
                   el.style[property] = val;
             }
+            
          };
          
-         this.batch(el, f, this);
+         this.batch(el, f, this, true);
       },
       
       /**
@@ -130,10 +134,10 @@ YAHOO.util.Dom = function() {
        @ return {Array} The XY position of the element(s)
        */
       getXY: function(el) {
-         var f = function(el, self) {
+         var f = function(el) {
    
          // has to be part of document to have pageXY
-            if (el.parentNode === null || self.getStyle(el, 'display') == 'none') {
+            if (el.parentNode === null || this.getStyle(el, 'display') == 'none') {
                return false;
             }
             
@@ -143,7 +147,6 @@ YAHOO.util.Dom = function() {
             
             if (el.getBoundingClientRect) { // IE
                box = el.getBoundingClientRect();
-               Math.max ( document.documentElement.scrollTop  , document.body.scrollTop );
                var scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
                var scrollLeft = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft);
                
@@ -151,9 +154,13 @@ YAHOO.util.Dom = function() {
             }
             else if (document.getBoxObjectFor) { // gecko
                box = document.getBoxObjectFor(el);
-               pos = [box.x, box.y];
+               
+               var borderLeft = parseInt(this.getStyle(el, 'borderLeftWidth'));
+               var borderTop = parseInt(this.getStyle(el, 'borderTopWidth'));
+               
+               pos = [box.x - borderLeft, box.y - borderTop];
             }
-            else { // safari/opera
+            else { // safari & opera
                pos = [el.offsetLeft, el.offsetTop];
                parent = el.offsetParent;
                if (parent != el) {
@@ -165,7 +172,7 @@ YAHOO.util.Dom = function() {
                }
                if (
                   ua.indexOf('opera') != -1 
-                  || ( ua.indexOf('safari') != -1 && self.getStyle(el, 'position') == 'absolute' ) 
+                  || ( ua.indexOf('safari') != -1 && this.getStyle(el, 'position') == 'absolute' ) 
                ) {
                   pos[0] -= document.body.offsetLeft;
                   pos[1] -= document.body.offsetTop;
@@ -175,7 +182,8 @@ YAHOO.util.Dom = function() {
             if (el.parentNode) { parent = el.parentNode; }
             else { parent = null; }
       
-            while (parent && parent.tagName != 'BODY' && parent.tagName != 'HTML') {
+            while (parent && parent.tagName != 'BODY' && parent.tagName != 'HTML') 
+            { // account for any scrolled ancestors
                pos[0] -= parent.scrollLeft;
                pos[1] -= parent.scrollTop;
       
@@ -186,7 +194,7 @@ YAHOO.util.Dom = function() {
             return pos;
          };
          
-         return this.batch(el, f, this);
+         return this.batch(el, f, this, true);
       },
       
       /**
@@ -215,11 +223,11 @@ YAHOO.util.Dom = function() {
        * @param {Boolean} noRetry By default we try and set the position a second time if the first fails
        */
       setXY: function(el, pos, noRetry) {
-         var f = function(el, self) {
+         var f = function(el) {
    
-            var style_pos = self.getStyle(el, 'position');
+            var style_pos = this.getStyle(el, 'position');
             if (style_pos == 'static') { // default to relative
-               self.setStyle(el, 'position', 'relative');
+               this.setStyle(el, 'position', 'relative');
                style_pos = 'relative';
             }
             
@@ -243,7 +251,7 @@ YAHOO.util.Dom = function() {
             if (pos[0] !== null) { el.style.left = pos[0] - pageXY[0] + delta[0] + 'px'; }
             if (pos[1] !== null) { el.style.top = pos[1] - pageXY[1] + delta[1] + 'px'; }
       
-            var newXY = self.getXY(el);
+            var newXY = this.getXY(el);
       
             // if retry is true, try one more time if we miss
             if (!noRetry && (newXY[0] != pos[0] || newXY[1] != pos[1]) ) {
@@ -252,7 +260,7 @@ YAHOO.util.Dom = function() {
             }
          };
          
-         this.batch(el, f, this);
+         this.batch(el, f, this, true);
       },
       
       /**
@@ -282,34 +290,29 @@ YAHOO.util.Dom = function() {
        * @return {Region/Array} A Region or array of Region instances containing "top, left, bottom, right" member data.
        */
       getRegion: function(el) {
-         var f = function(el, self) {
+         var f = function(el) {
             return new YAHOO.util.Region.getRegion(el);
          };
          
-         return this.batch(el, f, this);
+         return this.batch(el, f, this, true);
       },
       
       /**
        * Returns the width of the client (viewport).
+       * Now using getViewportWidth.  This interface left intact for back compat.
        * @return {Int} The width of the viewable area of the page.
        */
       getClientWidth: function() {
-         return (
-            document.documentElement.offsetWidth
-            || document.body.offsetWidth
-         );
+         return this.getViewportWidth();
       },
       
       /**
        * Returns the height of the client (viewport).
+       * Now using getViewportHeight.  This interface left intact for back compat.
        * @return {Int} The height of the viewable area of the page.
        */
       getClientHeight: function() {
-         return (
-            self.innerHeight 
-            || document.documentElement.clientHeight
-            || document.body.clientHeight
-         );
+         return this.getViewportHeight();
       },
 
       /**
@@ -335,12 +338,12 @@ YAHOO.util.Dom = function() {
        * @return {Boolean/Array} A boolean value or array of boolean values
        */
       hasClass: function(el, className) {
-         var f = function(el, self) {
+         var f = function(el) {
             var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
             return re.test(el['className']);
          };
          
-         return this.batch(el, f, this);
+         return this.batch(el, f, this, true);
       },
    
       /**
@@ -349,13 +352,13 @@ YAHOO.util.Dom = function() {
        * @param {String} className the class name to add to the class attribute
        */
       addClass: function(el, className) {
-         var f = function(el, self) {
-            if (self.hasClass(el, className)) { return; } // already present
+         var f = function(el) {
+            if (this.hasClass(el, className)) { return; } // already present
             
             el['className'] = [el['className'], className].join(' ');
          };
          
-         this.batch(el, f, this);
+         this.batch(el, f, this, true);
       },
    
       /**
@@ -364,8 +367,8 @@ YAHOO.util.Dom = function() {
        * @param {String} className the class name to remove from the class attribute
        */
       removeClass: function(el, className) {
-         var f = function(el, self) {
-            if (!self.hasClass(el, className)) { return; } // not present
+         var f = function(el) {
+            if (!this.hasClass(el, className)) { return; } // not present
             
             var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)', 'g');
             var c = el['className'];
@@ -373,7 +376,7 @@ YAHOO.util.Dom = function() {
             el['className'] = c.replace( re, ' ');
          };
          
-         this.batch(el, f, this);
+         this.batch(el, f, this, true);
       },
       
       /**
@@ -384,12 +387,12 @@ YAHOO.util.Dom = function() {
        * @param {String} newClassName the class name that will be replacing the old class name
        */
       replaceClass: function(el, oldClassName, newClassName) {
-         var f = function(el, self) {
-            self.removeClass(el, oldClassName);
-            self.addClass(el, newClassName);
+         var f = function(el) {
+            this.removeClass(el, oldClassName);
+            this.addClass(el, newClassName);
          };
          
-         this.batch(el, f, this);
+         this.batch(el, f, this, true);
       },
       
       /**
@@ -401,7 +404,7 @@ YAHOO.util.Dom = function() {
       generateId: function(el, prefix) {
          prefix = prefix || 'yui-gen';
          
-         var f = function(el, self) {
+         var f = function(el) {
             el = el || {}; // just generating ID in this case
             
             if (!el.id) { el.id = prefix + id_counter++; } // dont override existing
@@ -409,7 +412,7 @@ YAHOO.util.Dom = function() {
             return el.id;
          };
          
-         return this.batch(el, f, this);
+         return this.batch(el, f, this, true);
       },
       
       /**
@@ -422,7 +425,7 @@ YAHOO.util.Dom = function() {
          haystack = this.get(haystack);
          if (!haystack || !needle) { return false; }
          
-         var f = function(needle, self) {
+         var f = function(needle) {
             if (haystack.contains && ua.indexOf('safari') < 0) 
             { // safari "contains" is broken
                return haystack.contains(needle);
@@ -450,7 +453,7 @@ YAHOO.util.Dom = function() {
             }    
          };
          
-         return this.batch(needle, f, this);     
+         return this.batch(needle, f, this, true);     
       },
       
       /**
@@ -459,11 +462,11 @@ YAHOO.util.Dom = function() {
        * @return {Boolean} Whether or not the element is present in the current document
        */
       inDocument: function(el) {
-         var f = function(el, self) {
-            return self.isAncestor(document.documentElement, el);
+         var f = function(el) {
+            return this.isAncestor(document.documentElement, el);
          };
          
-         return this.batch(el, f, this);
+         return this.batch(el, f, this, true);
       },
       
       /**
@@ -480,6 +483,10 @@ YAHOO.util.Dom = function() {
          var nodes = [];
          var elements = root.getElementsByTagName(tag);
          
+         if ( !elements.length && (tag == '*' && root.all) ) {
+            elements = root.all; // IE < 6
+         }
+         
          for (var i = 0, len = elements.length; i < len; ++i) 
          {
             if ( method(elements[i]) ) { nodes[nodes.length] = elements[i]; }
@@ -492,23 +499,144 @@ YAHOO.util.Dom = function() {
        * Returns an array of elements that have had the supplied method applied.
        * The method is called with the element(s) as the first arg, and the optional param as the second ( method(el, o) )
        * @param {String/HTMLElement/Array} el (optional) An element or array of elements to apply the method to
-       * @param {String} method The method to apply to the element(s)
+       * @param {Function} method The method to apply to the element(s)
        * @param {Generic} (optional) o An optional arg that is passed to the supplied method
+       * @param {Boolean} (optional) override Whether or not to override the scope of "method" with "o"
        * @return {HTMLElement/Array} The element(s) with the method applied
        */
-      batch: function(el, method, o) {
+      batch: function(el, method, o, override) {
          el = this.get(el);
+         var scope = (override) ? o : window;
          
-         if (!el || !el.length) { return method(el, o); } // is null or not a collection
+         if (!el || el.tagName || !el.length) 
+         { // is null or not a collection (tagName for SELECT and others that can be both an element and a collection)
+            return method.call(scope, el, o);
+         } 
          
          var collection = [];
          
          for (var i = 0, len = el.length; i < len; ++i)
          {
-            collection[collection.length] = method(el[i], o);
+            collection[collection.length] = method.call(scope, el[i], o);
          }
          
          return collection;
+      },
+      
+      /**
+       * Returns the height of the document.
+       * @return {Int} The height of the actual document (which includes the body and its margin).
+       */
+      getDocumentHeight: function() {
+         var scrollHeight=-1,windowHeight=-1,bodyHeight=-1;
+         var marginTop = parseInt(this.getStyle(document.body, 'marginTop'), 10);
+         var marginBottom = parseInt(this.getStyle(document.body, 'marginBottom'), 10);
+         
+         var mode = document.compatMode;
+         
+         if ( (mode || isIE) && !isOpera ) { // (IE, Gecko)
+            switch (mode) {
+               case 'CSS1Compat': // Standards mode
+                  scrollHeight = ((window.innerHeight && window.scrollMaxY) ?  window.innerHeight+window.scrollMaxY : -1);
+                  windowHeight = [document.documentElement.clientHeight,self.innerHeight||-1].sort(function(a, b){return(a-b);})[1];
+                  bodyHeight = document.body.offsetHeight + marginTop + marginBottom;
+                  break;
+               
+               default: // Quirks
+                  scrollHeight = document.body.scrollHeight;
+                  bodyHeight = document.body.clientHeight;
+            }
+         } else { // Safari & Opera
+            scrollHeight = document.documentElement.scrollHeight;
+            windowHeight = self.innerHeight;
+            bodyHeight = document.documentElement.clientHeight;
+         }
+      
+         var h = [scrollHeight,windowHeight,bodyHeight].sort(function(a, b){return(a-b);});
+         return h[2];
+      },
+      
+      /**
+       * Returns the width of the document.
+       * @return {Int} The width of the actual document (which includes the body and its margin).
+       */
+      getDocumentWidth: function() {
+         var docWidth=-1,bodyWidth=-1,winWidth=-1;
+         var marginRight = parseInt(this.getStyle(document.body, 'marginRight'), 10);
+         var marginLeft = parseInt(this.getStyle(document.body, 'marginLeft'), 10);
+         
+         var mode = document.compatMode;
+         
+         if (mode || isIE) { // (IE, Gecko, Opera)
+            switch (mode) {
+               case 'CSS1Compat': // Standards mode
+                  docWidth = document.documentElement.clientWidth;
+                  bodyWidth = document.body.offsetWidth + marginLeft + marginRight;
+                  winWidth = self.innerWidth || -1;
+                  break;
+                  
+               default: // Quirks
+                  bodyWidth = document.body.clientWidth;
+                  winWidth = document.body.scrollWidth;
+                  break;
+            }
+         } else { // Safari
+            docWidth = document.documentElement.clientWidth;
+            bodyWidth = document.body.offsetWidth + marginLeft + marginRight;
+            winWidth = self.innerWidth;
+         }
+      
+         var w = [docWidth,bodyWidth,winWidth].sort(function(a, b){return(a-b);});
+         return w[2];
+      },
+
+      /**
+       * Returns the current height of the viewport.
+       * @return {Int} The height of the viewable area of the page (excludes scrollbars).
+       */
+      getViewportHeight: function() {
+         var height = -1;
+         var mode = document.compatMode;
+      
+         if ( (mode || isIE) && !isOpera ) {
+            switch (mode) { // (IE, Gecko)
+               case 'CSS1Compat': // Standards mode
+                  height = document.documentElement.clientHeight;
+                  break;
+      
+               default: // Quirks
+                  height = document.body.clientHeight;
+            }
+         } else { // Safari, Opera
+            height = self.innerHeight;
+         }
+      
+         return height;
+      },
+      
+      /**
+       * Returns the current width of the viewport.
+       * @return {Int} The width of the viewable area of the page (excludes scrollbars).
+       */
+      
+      getViewportWidth: function() {
+         var width = -1;
+         var mode = document.compatMode;
+         
+         if (mode || isIE) { // (IE, Gecko, Opera)
+            switch (mode) {
+            case 'CSS1Compat': // Standards mode 
+               width = document.documentElement.clientWidth;
+               break;
+               
+            default: // Quirks
+               width = document.body.clientWidth;
+            }
+         } else { // Safari
+            width = self.innerWidth;
+         }
+         
+         return width;
       }
    };
 }();
@@ -537,6 +665,12 @@ YAHOO.util.Region = function(t, r, b, l) {
      * @type int
      */
     this.top = t;
+    
+    /**
+     * The region's top extent as index, for symmetry with set/getXY
+     * @type int
+     */
+    this[1] = t;
 
     /**
      * The region's right extent
@@ -555,6 +689,12 @@ YAHOO.util.Region = function(t, r, b, l) {
      * @type int
      */
     this.left = l;
+    
+    /**
+     * The region's left extent as index, for symmetry with set/getXY
+     * @type int
+     */
+    this[0] = l;
 };
 
 /**
@@ -623,7 +763,7 @@ YAHOO.util.Region.prototype.union = function(region) {
  */
 YAHOO.util.Region.prototype.toString = function() {
     return ( "Region {" +
-             "  t: "    + this.top    + 
+             "t: "    + this.top    + 
              ", r: "    + this.right  + 
              ", b: "    + this.bottom + 
              ", l: "    + this.left   + 
@@ -674,11 +814,14 @@ YAHOO.util.Point = function(x, y) {
      * @type int
      */
     this.y      = y;
-
     this.top    = y;
+    this[1] = y;
+    
     this.right  = x;
     this.bottom = y;
     this.left   = x;
+    this[0] = x;
 };
 
 YAHOO.util.Point.prototype = new YAHOO.util.Region();
+
