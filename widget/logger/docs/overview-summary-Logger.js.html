@@ -1,0 +1,429 @@
+
+<html>
+<head>
+	<title>JavaScript Documentation - Logger.js</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Logger</a></h3>
+
+	<div class="breadcrumbs">
+		
+			
+			
+			
+				<a href="./index.html">Logger</a>
+				&gt;
+				<strong>Logger.js</strong>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+						<li>
+							<a href="printfire.html">
+								printfire</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.html">
+								YAHOO.widget</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.LogReader.html">
+								YAHOO.widget.LogReader</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.LogWriter.html">
+								YAHOO.widget.LogWriter</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-Logger.js.html">
+								Logger.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-LogReader.js.html">
+								LogReader.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-LogWriter.js.html">
+								LogWriter.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div class="main">
+			
+		
+		
+			
+			   <h2>Logger.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+		
+		
+		
+		
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+				
+					
+						<a href="#classSummary">Class Summary</a> |
+					
+					
+				
+				
+				
+					<a href="#source">Source Code</a>
+				
+			</div>
+		
+			
+				<div class="section class summaries">
+					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+			
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+						<tr>
+							<td class="name">
+								<a href="printfire.html">printfire</a>
+							</td>
+							<td class="overview">&nbsp;</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		
+		
+		
+		
+			<div class="section source">
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<pre class="sourceview"><span class="comment">/****************************************************************************/</span>
+<span class="comment">/****************************************************************************/</span>
+<span class="comment">/****************************************************************************/</span>
+<span class="comment">/**
+ * Singleton providing core logging functionality. Saves logs written through the
+ * global YAHOO.log function or written by LogWriter. Provides access to logs
+ * for reading by LogReader. Log messages are automatically output to Firebug,
+ * if present.
+ *
+ * requires YAHOO.util.Event Event utility
+ */</span>
+YAHOO.widget.Logger = {
+<span class="comment">    // Initialize members</span>
+    loggerEnabled: true,
+<span class="comment">    //firebugEnabled property undefined at initialization</span>
+    categories: [<span class="literal">"info"</span>,<span class="literal">"warn"</span>,<span class="literal">"error"</span>,<span class="literal">"time"</span>,<span class="literal">"window"</span>],
+    _stack: [], // holds all log msgs
+    _startTime: new Date().getTime(), // static start timestamp
+    _lastTime: <span class="reserved">this</span>._startTime // timestamp of last logged message
+};
+
+<span class="comment">/***************************************************************************
+ * Events
+ ***************************************************************************/</span>
+<span class="comment">/**
+ * Fired when a new category has been created. Subscribers receive the following
+ * array:&lt;br&gt;
+ *     - args[0] The category name
+ */</span>
+YAHOO.widget.Logger.categoryCreateEvent = new YAHOO.util.CustomEvent(<span class="literal">"categoryCreate"</span>);
+
+<span class="comment">/**
+ * Fired when a new log message has been created. Subscribers receive the
+ * following array:&lt;br&gt;
+ *     - args[0] The log message
+ */</span>
+YAHOO.widget.Logger.newLogEvent = new YAHOO.util.CustomEvent(<span class="literal">"newLog"</span>);
+
+<span class="comment">/**
+ * Fired when the Logger has been reset has been created.
+ */</span>
+YAHOO.widget.Logger.logResetEvent = new YAHOO.util.CustomEvent(<span class="literal">"logReset"</span>);
+
+<span class="comment">/***************************************************************************
+ * Public methods
+ ***************************************************************************/</span>
+<span class="comment">/**
+ * Saves a log message to the stack and fires newLogEvent. If the log message is
+ * assigned to an unknown category, creates a new category. If firebug is enabled,
+ * outputs the log message to firebug.
+ *
+ * <span class="attrib">@param</span> {string} sName Name of LogWriter, or null if none
+ * <span class="attrib">@param</span> {string} sMsg The log message
+ * <span class="attrib">@param</span> {string} sCategory Category of log message
+ */</span>
+YAHOO.widget.Logger.log = <span class="reserved">function</span>(sName, sMsg, sCategory) {
+    <span class="reserved">if</span>(<span class="reserved">this</span>.loggerEnabled) {
+        <span class="reserved">if</span>(!sCategory) {
+            sCategory = <span class="literal">"info"</span>; // default category
+        }
+        <span class="reserved">else</span> <span class="reserved">if</span>(<span class="reserved">this</span>._isNewCategory(sCategory)) {
+            <span class="reserved">this</span>._createNewCategory(sCategory);
+        }
+
+        var timestamp = new Date();
+        var logEntry = {
+            time: timestamp,
+            category: sCategory,
+            name: sName,
+            msg: sMsg
+        };
+
+        <span class="reserved">this</span>._stack.push(logEntry);
+        <span class="reserved">this</span>.newLogEvent.fire(logEntry);
+
+        <span class="reserved">if</span> (<span class="reserved">this</span>.firebugEnabled !== false) {
+            <span class="reserved">this</span>._printToFirebug(logEntry);
+        }
+    }
+};
+
+<span class="comment">/**
+ * Resets internal stack and startTime, enables Logger, and fires logResetEvent.
+ *
+ */</span>
+YAHOO.widget.Logger.reset = <span class="reserved">function</span>() {
+    <span class="reserved">this</span>._stack = [];
+    <span class="reserved">this</span>._startTime = new Date().getTime();
+    <span class="reserved">this</span>.loggerEnabled = true;
+    <span class="reserved">this</span>.log(null, <span class="literal">"Logger reset"</span>);
+    <span class="reserved">this</span>.logResetEvent.fire();
+};
+
+<span class="comment">/**
+ * Public accessor to internal stack of log messages.
+ *
+ * <span class="attrib">@return</span> {array} Array of log messages.
+ */</span>
+YAHOO.widget.Logger.getStack = <span class="reserved">function</span>() {
+    <span class="reserved">return</span> <span class="reserved">this</span>._stack;
+};
+
+<span class="comment">/**
+ * Public accessor to internal start time.
+ *
+ * <span class="attrib">@return</span> {date} Internal date of when Logger singleton was initialized.
+ */</span>
+YAHOO.widget.Logger.getStartTime = <span class="reserved">function</span>() {
+    <span class="reserved">return</span> <span class="reserved">this</span>._startTime;
+};
+
+<span class="comment">/***************************************************************************
+ * Private methods
+ ***************************************************************************/</span>
+<span class="comment">/**
+ * Creates a new category of log messages and fires categoryCreateEvent.
+ *
+ * <span class="attrib">@param</span> {string} category Category name
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.Logger._createNewCategory = <span class="reserved">function</span>(category) {
+    <span class="reserved">this</span>.categories.push(category);
+    <span class="reserved">this</span>.categoryCreateEvent.fire(category);
+};
+
+<span class="comment">/**
+ * Checks to see if a category has already been created.
+ *
+ * <span class="attrib">@param</span> {string} category Category name
+ * <span class="attrib">@return</span> {boolean} Returns true if category is unknown, else returns false
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.Logger._isNewCategory = <span class="reserved">function</span>(category) {
+    <span class="reserved">for</span>(var i=0; i &lt; <span class="reserved">this</span>.categories.length; i++) {
+        <span class="reserved">if</span>(category == <span class="reserved">this</span>.categories[i]) {
+            <span class="reserved">return</span> false;
+        }
+    }
+    <span class="reserved">return</span> true;
+};
+
+<span class="comment">/**
+ * Outputs a log message to Firebug.
+ *
+ * <span class="attrib">@param</span> {object} entry Log entry object
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.Logger._printToFirebug = <span class="reserved">function</span>(entry) {
+    var category = entry.category;
+    var label = entry.category.substring(0,4).toUpperCase();
+
+    var time = entry.time;
+    <span class="reserved">if</span> (time.toLocaleTimeString) {
+        var localTime  = time.toLocaleTimeString();
+    }
+    <span class="reserved">else</span> {
+        localTime = time.toString();
+    }
+
+    var msecs = time.getTime();
+    var elapsedTime = msecs - <span class="reserved">this</span>._lastTime;
+    <span class="reserved">this</span>._lastTime = msecs;
+    
+    var name = (entry.name) ? entry.name + <span class="literal">": "</span> : <span class="literal">""</span>;
+
+    var output = <span class="literal">"&lt;span class='"</span>+category+<span class="literal">"'&gt;"</span>+label+<span class="literal">"&lt;/span&gt; "</span> +
+        localTime + <span class="literal">" ("</span> +
+        elapsedTime + <span class="literal">"): "</span> +
+        name +
+        entry.msg;
+
+    <span class="reserved">this</span>.firebugEnabled = printfire(output);
+};
+
+<span class="comment">/**
+ * Firebug integration method. Outputs log message to Firebug.
+ */</span>
+<span class="reserved">function</span> printfire() {
+    <span class="reserved">if</span>(document.createEvent) {
+        try {
+            printfire.args = arguments;
+            var ev = document.createEvent(<span class="literal">"Events"</span>);
+            ev.initEvent(<span class="literal">"printfire"</span>, false, true);
+            dispatchEvent(ev);
+            <span class="reserved">return</span> true;
+        }
+        catch(e) {
+        }
+    }
+    <span class="reserved">return</span> false;
+}
+
+
+<span class="comment">/***************************************************************************
+ * Private event handlers
+ ***************************************************************************/</span>
+<span class="comment">/**
+ * Handles logging of messages due to window error events.
+ *
+ * <span class="attrib">@param</span> {string} msg The error message
+ * <span class="attrib">@param</span> {string} url URL of the error
+ * <span class="attrib">@param</span> {string} line Line number of the error
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.Logger._onWindowError = <span class="reserved">function</span>(msg,url,line) {
+<span class="comment">    // Logger is not in scope of this event handler</span>
+    try {
+        YAHOO.widget.Logger.log(null, msg+<span class="literal">' ('</span>+url+<span class="literal">', line '</span>+line+<span class="literal">')'</span>, <span class="literal">"window"</span>);
+        <span class="reserved">if</span>(YAHOO.widget.Logger._origOnWindowError) {
+            YAHOO.widget.Logger._origOnWindowError();
+        }
+    }
+    catch(e) {
+        <span class="reserved">return</span> false;
+    }
+};
+
+<span class="comment">/**
+ * Handle native JavaScript errors
+ */</span>
+<span class="comment">//NB: Not all browsers support the window.onerror event</span>
+<span class="reserved">if</span>(window.onerror) {
+<span class="comment">    // Save any previously defined handler to call</span>
+    YAHOO.widget.Logger._origOnWindowError = window.onerror;
+}
+window.onerror = YAHOO.widget.Logger._onWindowError;
+
+<span class="comment">/**
+ * First log
+ */</span>
+YAHOO.widget.Logger.log(null, <span class="literal">"Logger initialized"</span>);
+
+</pre>
+			</div>
+		
+	</div>
+</div>
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	<br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+</div>
+
+
+</body>
+</html>
