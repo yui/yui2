@@ -559,7 +559,7 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
     var bError = false;
 
     // Strip out comment at the end of results
-    var nEnd = ((this.responseStripAfter != "") && (oResponse.indexOf)) ?
+    var nEnd = ((this.responseStripAfter !== "") && (oResponse.indexOf)) ?
         oResponse.indexOf(this.responseStripAfter) : -1;
     if(nEnd != -1) {
         oResponse = oResponse.substring(0,nEnd);
