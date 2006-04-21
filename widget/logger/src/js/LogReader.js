@@ -15,7 +15,7 @@
  */
 YAHOO.widget.LogReader = function(containerEl, oConfig) {
     var oSelf = this;
-        
+
     // Parse config vars here
     if (typeof oConfig == "object") {
         for(var param in oConfig) {
@@ -43,7 +43,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
             this._containerEl.id = "ylogger";
             this._containerEl.className = "ylogger";
             this._containerEl.style.width = (this.width) ? this.width : this.DEFAULT_WIDTH;
-            
+
             // Set defaults if not provided by implementer
             if(!this.left && !this.right && !this.bottom && !this.top) {
                 this._containerEl.style.top = this.DEFAULT_TOP;
@@ -54,7 +54,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
             }
             YAHOO.widget.LogReader._defaultContainerEl = this._containerEl;
         }
-        
+
         // If implementer has provided, trust and set those
         if(this.left) {
             this._containerEl.style.left = this.left;
@@ -79,7 +79,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
             this._hdEl = this._containerEl.appendChild(document.createElement("div"));
             this._hdEl.id = "ylog_hd" + YAHOO.widget.LogReader._index;
             this._hdEl.className = "ylog_hd";
-            
+
             this._collapseEl = this._hdEl.appendChild(document.createElement("div"));
             this._collapseEl.className = "ylog_btns";
 
@@ -137,7 +137,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
             this._filtersEl = this._ftEl.appendChild(document.createElement("div"));
         }
     }
-    
+
     // Initialize buffer
     if(!this._buffer) {
         this._buffer = []; // output buffer
@@ -154,7 +154,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         }
     }
     YAHOO.widget.Logger.categoryCreateEvent.subscribe(this._onCategoryCreate, this);
-    
+
     YAHOO.widget.LogReader._index++;
     this._filterLogs();
 };
@@ -307,16 +307,6 @@ YAHOO.widget.LogReader.prototype.show = function() {
  * Private members
  ***************************************************************************/
 /**
- * The log reader container element that was created during instantiation. Will
- * be null if implementer passes in their own container element, which means the
- * element was not created on the fly.
- *
- * @type HTMLElement
- * @private
- */
-YAHOO.widget.LogReader._defaultContainerEl = null;
-
-/**
  * Internal class variable to index multiple log reader instances.
  *
  * @type number
@@ -349,6 +339,14 @@ YAHOO.widget.LogReader.prototype._lastTime = null;
 YAHOO.widget.LogReader.prototype._timeout = null;
 
 /**
+ * Filters that prevent certain categories of log messages from being output.
+ *
+ * @type array
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._filters = null;
+
+/**
  * Log reader container element.
  *
  * @type HTMLElement
@@ -357,12 +355,46 @@ YAHOO.widget.LogReader.prototype._timeout = null;
 YAHOO.widget.LogReader.prototype._containerEl = null;
 
 /**
+ * The log reader container element that was created during instantiation. Will
+ * be null if implementer passes in their own container element, which means the
+ * element was not created on the fly.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._defaultContainerEl = null;
+
+/**
  * Log reader header element.
  *
  * @type HTMLElement
  * @private
  */
 YAHOO.widget.LogReader.prototype._hdEl = null;
+
+/**
+ * Log reader collapse element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._collapseEl = null;
+
+/**
+ * Log reader collapse button element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._collapseBtn = null;
+
+/**
+ * Log reader title header element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._title = null;
 
 /**
  * Log reader console element.
@@ -381,13 +413,36 @@ YAHOO.widget.LogReader.prototype._consoleEl = null;
 YAHOO.widget.LogReader.prototype._ftEl = null;
 
 /**
- * Filters that prevent certain categories of log messages from being output.
+ * Log reader buttons container element.
  *
- * @type array
+ * @type HTMLElement
  * @private
  */
-YAHOO.widget.LogReader.prototype._filters = null;
+YAHOO.widget.LogReader.prototype._btnsEl = null;
 
+/**
+ * Log reader filter checkboxes container element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._filtersEl = null;
+
+/**
+ * Log reader pause button element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._pauseBtn = null;
+
+/**
+ * lear button element.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._clearBtn = null;
 /***************************************************************************
  * Private methods
  ***************************************************************************/

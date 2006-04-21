@@ -260,7 +260,7 @@ YAHOO.widget.LogReader = <span class="reserved">function</span>(containerEl, oCo
             <span class="reserved">this</span>._hdEl.id = <span class="literal">"ylog_hd"</span> + YAHOO.widget.LogReader._index;
             <span class="reserved">this</span>._hdEl.className = <span class="literal">"ylog_hd"</span>;
 
-<span class="comment">/*            this._collapseEl = this._hdEl.appendChild(document.createElement("div"));
+            this._collapseEl = this._hdEl.appendChild(document.createElement("div"));
             this._collapseEl.className = "ylog_btns";
 
             this._collapseBtn = document.createElement("input");
@@ -282,7 +282,7 @@ YAHOO.widget.LogReader = <span class="reserved">function</span>(containerEl, oCo
                 var ylog_dd = new YAHOO.util.DD(this._containerEl.id);
                 ylog_dd.setHandleElId(this._hdEl.id);
                 this._hdEl.style.cursor = "move";
-*/</span>            }
+            }
         }
 <span class="comment">        // Ceate console</span>
         <span class="reserved">if</span>(!<span class="reserved">this</span>._consoleEl) {
@@ -306,7 +306,7 @@ YAHOO.widget.LogReader = <span class="reserved">function</span>(containerEl, oCo
             <span class="reserved">this</span>._pauseBtn = <span class="reserved">this</span>._btnsEl.appendChild(<span class="reserved">this</span>._pauseBtn);
             YAHOO.util.Event.addListener(oSelf._pauseBtn,<span class="literal">'click'</span>,oSelf._onClickPauseBtn,oSelf);
 
-<span class="comment">/*            this._clearBtn = document.createElement("input");
+            this._clearBtn = document.createElement("input");
             this._clearBtn.type = "button";
             this._clearBtn.style.fontSize = YAHOO.util.Dom.getStyle(this._containerEl,"fontSize");
             this._clearBtn.className = "button";
@@ -314,7 +314,7 @@ YAHOO.widget.LogReader = <span class="reserved">function</span>(containerEl, oCo
             this._clearBtn = this._btnsEl.appendChild(this._clearBtn);
             YAHOO.util.Event.addListener(oSelf._clearBtn,'click',oSelf._onClickClearBtn,oSelf);
 
-*/</span>            <span class="reserved">this</span>._filtersEl = <span class="reserved">this</span>._ftEl.appendChild(document.createElement(<span class="literal">"div"</span>));
+            <span class="reserved">this</span>._filtersEl = <span class="reserved">this</span>._ftEl.appendChild(document.createElement(<span class="literal">"div"</span>));
         }
     }
 <span class="comment">
@@ -487,16 +487,6 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>.show = <span clas
  * Private members
  ***************************************************************************/</span>
 <span class="comment">/**
- * The log reader container element that was created during instantiation. Will
- * be null if implementer passes in their own container element, which means the
- * element was not created on the fly.
- *
- * <span class="attrib">@type</span> HTMLElement
- * <span class="attrib">@private</span>
- */</span>
-YAHOO.widget.LogReader._defaultContainerEl = null;
-
-<span class="comment">/**
  * Internal class variable to index multiple log reader instances.
  *
  * <span class="attrib">@type</span> number
@@ -529,6 +519,14 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>._lastTime = null;
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>._timeout = null;
 
 <span class="comment">/**
+ * Filters that prevent certain categories of log messages from being output.
+ *
+ * <span class="attrib">@type</span> array
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.LogReader.<span class="reserved">prototype</span>._filters = null;
+
+<span class="comment">/**
  * Log reader container element.
  *
  * <span class="attrib">@type</span> HTMLElement
@@ -537,12 +535,46 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>._timeout = null;
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>._containerEl = null;
 
 <span class="comment">/**
+ * The log reader container element that was created during instantiation. Will
+ * be null if implementer passes in their own container element, which means the
+ * element was not created on the fly.
+ *
+ * <span class="attrib">@type</span> HTMLElement
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.LogReader.<span class="reserved">prototype</span>._defaultContainerEl = null;
+
+<span class="comment">/**
  * Log reader header element.
  *
  * <span class="attrib">@type</span> HTMLElement
  * <span class="attrib">@private</span>
  */</span>
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>._hdEl = null;
+
+<span class="comment">/**
+ * Log reader collapse element.
+ *
+ * <span class="attrib">@type</span> HTMLElement
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.LogReader.<span class="reserved">prototype</span>._collapseEl = null;
+
+<span class="comment">/**
+ * Log reader collapse button element.
+ *
+ * <span class="attrib">@type</span> HTMLElement
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.LogReader.<span class="reserved">prototype</span>._collapseBtn = null;
+
+<span class="comment">/**
+ * Log reader title header element.
+ *
+ * <span class="attrib">@type</span> HTMLElement
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.LogReader.<span class="reserved">prototype</span>._title = null;
 
 <span class="comment">/**
  * Log reader console element.
@@ -561,13 +593,36 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>._consoleEl = null
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>._ftEl = null;
 
 <span class="comment">/**
- * Filters that prevent certain categories of log messages from being output.
+ * Log reader buttons container element.
  *
- * <span class="attrib">@type</span> array
+ * <span class="attrib">@type</span> HTMLElement
  * <span class="attrib">@private</span>
  */</span>
-YAHOO.widget.LogReader.<span class="reserved">prototype</span>._filters = null;
+YAHOO.widget.LogReader.<span class="reserved">prototype</span>._btnsEl = null;
 
+<span class="comment">/**
+ * Log reader filter checkboxes container element.
+ *
+ * <span class="attrib">@type</span> HTMLElement
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.LogReader.<span class="reserved">prototype</span>._filtersEl = null;
+
+<span class="comment">/**
+ * Log reader pause button element.
+ *
+ * <span class="attrib">@type</span> HTMLElement
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.LogReader.<span class="reserved">prototype</span>._pauseBtn = null;
+
+<span class="comment">/**
+ * lear button element.
+ *
+ * <span class="attrib">@type</span> HTMLElement
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.LogReader.<span class="reserved">prototype</span>._clearBtn = null;
 <span class="comment">/***************************************************************************
  * Private methods
  ***************************************************************************/</span>
