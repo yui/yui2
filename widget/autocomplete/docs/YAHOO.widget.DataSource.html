@@ -207,10 +207,10 @@
 							<td class="flags">Object</td>
 							<td class="spec">
 								<code>
-									<a href="#dataErrorEvent">dataErrorEvent</a>
+									<a href="#cacheQueryEvent">cacheQueryEvent</a>
 								</code>
 								<div class="description">
-									Fired when an error is encountered with the live data source.&nbsp;
+									Fired when a query is made to the local cache.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -219,10 +219,10 @@
 							<td class="flags">Object</td>
 							<td class="spec">
 								<code>
-									<a href="#dataSourceErrorEvent">dataSourceErrorEvent</a>
+									<a href="#dataErrorEvent">dataErrorEvent</a>
 								</code>
 								<div class="description">
-									Fired when an error is encountered with the data source object instance.&nbsp;
+									Fired when an error is encountered with the live data source.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -283,18 +283,6 @@
 								</code>
 								<div class="description">
 									Max size of the local cache.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">Object</td>
-							<td class="spec">
-								<code>
-									<a href="#queryCacheEvent">queryCacheEvent</a>
-								</code>
-								<div class="description">
-									Fired when a query is made to the local cache.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -445,9 +433,26 @@
 								<strong>cacheFlushEvent</strong>
 							</code>
 							<div class="description">
-								Fired when the local cache is flushed. Subscribers receive an array of the
- following arguments:<br>
-     - {object} The data source instance
+								Fired when the local cache is flushed. Subscribers receive the following
+ array :<br>
+     - args[0] The data source instance
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="cacheQueryEvent">cacheQueryEvent</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								&nbsp;
+								<strong>cacheQueryEvent</strong>
+							</code>
+							<div class="description">
+								Fired when a query is made to the local cache. Subscribers receive the
+ following array:<br>
+     - args[0] The data source instance
+     - args[1] The requesting object
+     - args[2] The query string
 							</div>
 						</div>
 						<hr />
@@ -461,28 +466,11 @@
 							</code>
 							<div class="description">
 								Fired when an error is encountered with the live data source. Subscribers
- receive an array of the following arguments:<br>
-     - {object} The data source instance<br>
-     - {object} The object instance that has requested data<br>
-     - {string} Query string<br>
-     - {string} Descriptive error message
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="dataSourceErrorEvent">dataSourceErrorEvent</a></h4>
-						<div class="detail">
-							<code>
-								Object
-								&nbsp;
-								<strong>dataSourceErrorEvent</strong>
-							</code>
-							<div class="description">
-								Fired when an error is encountered with the data source object instance.
- Subscribers receive an array of the following arguments:<br>
-     - {object} The data source instance<br>
-     - {object} The object instance that has requested data<br>
-     - {string} Descriptive error message
+ receive the following array:<br>
+     - args[0] The data source instance
+     - args[1] The requesting object
+     - args[2] The query string
+     - args[3] Error message string
 							</div>
 						</div>
 						<hr />
@@ -521,12 +509,12 @@
 								<strong>getCachedResultsEvent</strong>
 							</code>
 							<div class="description">
-								Fired when data is retrieved from the local cache. Subscribers receive an
- array of the following arguments:<br>
-     - {object} The data source instance<br>
-     - {object} The object instance that has requested data<br>
-     - {string} Query string<br>
-     - {array} An array of result objects
+								Fired when data is retrieved from the local cache. Subscribers receive the
+ following array :<br>
+     - args[0] The data source instance
+     - args[1] The requesting object
+     - args[2] The query string
+     - args[3] Array of result objects
 							</div>
 						</div>
 						<hr />
@@ -540,11 +528,11 @@
 							</code>
 							<div class="description">
 								Fired when data is retrieved from the live data source. Subscribers receive
- an array of the following arguments:<br>
-     - {object} The data source instance<br>
-     - {object} The object instance that has requested data<br>
-     - {string} Query string<br>
-     - {array} An array of result objects
+ the following array:<br>
+     - args[0] The data source instance
+     - args[1] The requesting object
+     - args[2] The query string
+     - args[3] Array of result objects
 							</div>
 						</div>
 						<hr />
@@ -565,23 +553,6 @@
 						</div>
 						<hr />
 					
-						<h4><a name="queryCacheEvent">queryCacheEvent</a></h4>
-						<div class="detail">
-							<code>
-								Object
-								&nbsp;
-								<strong>queryCacheEvent</strong>
-							</code>
-							<div class="description">
-								Fired when a query is made to the local cache. Subscribers receive an array
- of the following arguments:<br>
-     - {object} The data source instance<br>
-     - {object} The object instance that has requested data<br>
-     - {string} Query string
-							</div>
-						</div>
-						<hr />
-					
 						<h4><a name="queryEvent">queryEvent</a></h4>
 						<div class="detail">
 							<code>
@@ -590,11 +561,11 @@
 								<strong>queryEvent</strong>
 							</code>
 							<div class="description">
-								Fired when a query is made to the live data source. Subscribers receive an
- array of the following arguments:<br>
-     - {object} The data source instance<br>
-     - {object} The object instance that has requested data<br>
-     - {string} Query string
+								Fired when a query is made to the live data source. Subscribers receive the
+ following array:<br>
+     - args[0] The data source instance
+     - args[1] The requesting object
+     - args[2] The query string
 							</div>
 						</div>
 						<hr />
