@@ -1,0 +1,438 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:x2="http://www.w3.org/TR/xhtml2"
+		xmlns:role="http://www.w3.org/2005/01/wai-rdf/GUIRoleTaxonomy#"
+		xmlns:state="http://www.w3.org/2005/07/aaa">
+<head>
+<title>Yahoo! UI Library - Slider Widget</title>
+<link rel="stylesheet" type="text/css" href="css/screen.css">
+<style type="text/css">
+
+	.dragPanel { 
+		position: absolute;
+		background-color: #eeeeee;
+		top: 200px;
+		left: 20px;
+		width: 320px;
+		height: 180px;
+	}
+
+	.dragPanel h4 { 
+		background-color: #bbbbbb;
+		height: 10px;
+        margin: 0px;
+		cursor: move;
+	}
+
+
+	input { font-size: 85%}
+	.thumb { 
+		cursor:default;
+		width:18px; 
+		height:18px; 
+		z-index: 9;
+		position: absolute; 
+        left: 0px;
+	}
+
+	.bg {
+		position:absolute; 
+		left:10px; 
+		height:18px; 
+		width:146px; 
+		border: 0px solid #aaaaaa;
+	}
+	
+	.bg span, .bg p {
+		cursor:default;
+		position: relative;
+		font-size: 2px;
+		overflow: hidden;
+		color: #aaaaaa;
+		top: 4px;
+		height: 10px;
+		width: 4px;
+		display: block;
+		float:left;
+	}
+
+	.bg span {
+		border-top:1px solid #cccccc;
+		border-bottom:1px solid #cccccc;
+	}
+
+	.bg .lb {
+		border-left:1px solid #cccccc;
+	}
+
+	.bg .rb {
+		border-right:1px solid #cccccc;
+	}
+	#valdiv { position:absolute; top: 100px; left:10px; } 
+
+	#rBG {top:30px}
+	#gBG {top:50px}
+	#bBG {top:70px}
+
+	#swatch {
+		position:absolute; 
+		left:160px; 
+		top:34px;
+		height:50px; 
+		width:50px; 
+		border:1px solid #aaaaaa;
+	}
+
+</style>
+<script type="text/javascript" src="js/YAHOO.js" ></script>
+<script type="text/javascript" src="js/log.js" ></script>
+<script type="text/javascript" src="js/event.js" ></script>
+<script type="text/javascript" src="js/color.js" ></script>
+<script type="text/javascript" src="js/key.js" ></script>
+<script type="text/javascript" src="js/animation-raw.js" ></script>
+<script type="text/javascript" src="js/dom-raw.js" ></script>
+<script type="text/javascript" src="js/dragdrop.js" ></script>
+<!--
+<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/event_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dom_2.0.0-b1.js" ></script>
+<script type="text/javascript" src="/DragDrop.dev/js/dragdrop/build/dragdrop-debug.js" ></script>
+<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dragdrop_2.0.0-b1.js" ></script>
+-->
+
+<script type="text/javascript" src="js/slider.js" ></script></head>
+<body> 
+<div id="pageTitle"><h3>Slider Widget</h3></div> 
+
+<div id="container">
+  <div id="containerTop">
+    <div id="header"><img id="ylogo" src="img/logo.gif" /></div>
+	<div id="main">
+
+		
+<style type="text/css">
+	#logDiv { 
+		position:relative;
+		overflow:auto;
+		text-align:left;
+		z-index:998;
+		font-size:84%;
+		width:100%;
+		top:0px; 
+		height:600px; 
+	}
+	#logButtonHeader input { font-size: 80% }
+</style>
+
+<div id="rightbar">
+	<div id="rightBarPad">
+		<h3>Links</h3>
+		<div id="linkage">
+			<ul>
+			<li><a href="basic.html?mode=dist">Basic Slider</a></li>
+			<li><a href="rgb.html?mode=dist">RGB Slider</a></li>
+			<li><a href="rgb2.html?mode=dist">Color Picker</a></li>
+            <!--
+			<li><a href="slider.html?mode=dist">All on one page</a></li>
+            -->
+			</ul>
+		</div> 
+
+<script type="text/javascript">
+
+YAHOO.example.logApp = function() {
+    var divId;
+    return {
+        toggle: function() {
+            if (this.value == "Disable Logger") {
+                ygLogger.disable();
+                this.value = "Enable Logger";
+            } else {
+                ygLogger.enable();
+                this.value = "Disable Logger";
+            }
+        },
+
+        clear: function() {
+            document.getElementById(divId).innerHTML='';
+        },
+
+        init: function(p_divId, p_toggleElId, p_clearElId) {
+            divId = p_divId
+            YAHOO.util.Event.on(p_toggleElId, "click", this.toggle);
+            YAHOO.util.Event.on(p_clearElId,  "click", this.clear);
+        }
+    };
+} (); 
+
+YAHOO.example.logApp.init("logDiv", "toggleButton", "clearButton");
+
+</script>
+
+<h3 id="logHeader">
+  <input type="button" id="toggleButton" value="Disable Logger" />&nbsp;
+  <input type="button" id="clearButton"  value="Clear" />
+</h3>
+<div id="logDiv"></div>
+</div>
+<div id="logFooter">Note: click the Disable Logger button to make the drag operation less choppy</div>
+
+	</div>
+</div>
+
+ 
+
+		<div id="content"> 
+		  <div class="newsItem"> 
+			<h3>RGB Slider</h3>
+			  <p>
+			  The RGB slider implements three slider controls to generate a
+			  RGB color.  The background color of each slider is also
+			  dynamically modified to reflect the colors that could be
+			  generated by moving a single slider.
+			  </p>
+		  </div> 
+		</div> 
+      
+    </div>
+  </div>
+</div>
+
+<div id="ddRGB" class="dragPanel">
+	<h4 id="pickerHandle">&nbsp;</h4>
+	<div id="rBG" class="bg">
+	  <div id="rthumb" class="thumb"><img src="img/vline.png" /></div> 
+	</div> 
+
+	<div id="gBG" class="bg">
+	  <div id="gthumb" class="thumb"><img src="img/vline.png" /></div> 
+	</div> 
+
+	<div id="bBG" class="bg">
+	  <div id="bthumb" class="thumb"><img src="img/vline.png" /></div> 
+	</div> 
+
+
+	<div id="valdiv">
+		<form name="rgbform" onsubmit="return userUpdate()">
+		<table border="0">
+		<tr>
+		<td>
+		RGB
+		</td>
+		<td>
+		<input name="rval" id="rval" type="text" value="0" size="4" maxlength="4" />
+		<input name="gval" id="gval" type="text" value="0" size="4" maxlength="4" />
+		<input name="bval" id="bval" type="text" value="0" size="4" maxlength="4" />
+		</td>
+		<td>
+		<input type="button" value="Update" onclick="userUpdate()" />
+		</td>
+		</tr>
+		<tr>
+		<td>
+		Hex: #
+		</td>
+		<td>
+		<input name="hexval" id="hexval" type="text" value="" size="6" maxlength="6" />
+		</td>
+		<td>
+		<input type="button" value="Update" onclick="userUpdate(true)" />
+		</td>
+		</tr>
+		<tr>
+		<td>
+		<input type="button" value="Reset" onclick="userReset()" />
+		</td>
+		</tr>
+		</table>
+		</form>
+	</div>
+
+	<div id="swatch">&nbsp;</div>
+	</div>
+
+
+<script type="text/javascript">
+
+	var r, g, b;
+	var gLogger;
+	var dd;
+
+	function init() {
+		if (typeof(ygLogger) != "undefined") {
+			ygLogger.init(document.getElementById("logDiv"));
+			gLogger = new ygLogger("slider.php");
+		}
+
+        rgbInit();
+    }
+
+	function rgbInit() {
+
+		r = YAHOO.widget.Slider.getHorizSlider("rBG", "rthumb", 0, 128);
+		r.onChange = function(newVal) { listenerUpdate("r", newVal*2); };
+
+		g = YAHOO.widget.Slider.getHorizSlider("gBG", "gthumb", 0, 128);
+		g.onChange = function(newVal) { listenerUpdate("g", newVal*2); };
+
+		b = YAHOO.widget.Slider.getHorizSlider("bBG", "bthumb", 0, 128);
+		b.onChange = function(newVal) { listenerUpdate("b", newVal*2); };
+
+		initColor();
+
+		dd = new YAHOO.util.DD("ddRGB");
+		dd.setHandleElId("pickerHandle");
+	}
+
+	window.onload = init;
+
+	function initColor() {
+		var ch = " ";
+
+		d = document.createElement("P");
+		d.className = "rb";
+		r.getEl().appendChild(d);
+		d = document.createElement("P");
+		d.className = "rb";
+		g.getEl().appendChild(d);
+		d = document.createElement("P");
+		d.className = "rb";
+		b.getEl().appendChild(d);
+
+		for (var i=0; i<34; i++) {
+			d = document.createElement("SPAN");
+			d.id = "rBG" + i
+			// d.innerHTML = ch;
+			r.getEl().appendChild(d);
+
+			d = document.createElement("SPAN");
+			d.id = "gBG" + i
+			// d.innerHTML = ch;
+			g.getEl().appendChild(d);
+
+			d = document.createElement("SPAN");
+			d.id = "bBG" + i
+			// d.innerHTML = ch;
+			b.getEl().appendChild(d);
+		}
+
+		d = document.createElement("P");
+		d.className = "lb";
+		r.getEl().appendChild(d);
+		d = document.createElement("P");
+		d.className = "lb";
+		g.getEl().appendChild(d);
+		d = document.createElement("P");
+		d.className = "lb";
+		b.getEl().appendChild(d);
+
+		userUpdate();
+	}
+
+	function updateSliderColors() {
+
+		var curr, curg, curb;
+		curr = Math.min(r.getValue() * 2, 255);
+		curg = Math.min(g.getValue() * 2, 255);
+		curb = Math.min(b.getValue() * 2, 255);
+
+        gLogger.debug("updateSliderColor " + curr + ", " + curg + ", " + curb);
+
+		var d;
+		for (var i=0; i<34; i++) {
+			d = document.getElementById("rBG" + i);
+			d.style.backgroundColor = 
+				"rgb(" + (i*8) + "," + curg + "," + curb + ")";
+
+			d = document.getElementById("gBG" + i);
+			d.style.backgroundColor = 
+				"rgb(" + curr + "," + (i*8) + "," + curb + ")";
+
+			d = document.getElementById("bBG" + i);
+			d.style.backgroundColor = 
+				"rgb(" + curr + "," + curg + "," + (i*8) + ")";
+		}
+
+		document.getElementById("swatch").style.backgroundColor =
+			"rgb(" + curr + "," + curg + "," + curb + ")";
+
+		document.getElementById("hexval").value = 
+					YAHOO.util.Color.rgb2hex(curr, curg, curb);
+	}
+
+
+	function listenerUpdate(whichSlider, newVal) {
+		if (newVal == 256) {
+			newVal = 255;
+		}
+		document.getElementById(whichSlider + "val").value = newVal;
+		updateSliderColors();
+	}
+
+	function userUpdate(isHex) {
+		var v;
+		var f = document.forms['rgbform'];
+
+		if (isHex) {
+			var hexval = f["hexval"].value;
+			// shorthand #369
+			if (hexval.length == 3) {
+				var newval = "";
+				for (var i=0;i<3;i++) {
+					var a = hexval.substr(i, 1);
+					newval += a + a;
+				}
+
+				hexval = newval;
+			}
+
+			gLogger.debug("hexval:" + hexval);
+
+			if (hexval.length != 6) {
+				alert("illegal hex code: " + hexval);
+			} else {
+				var rgb = YAHOO.util.Color.hex2rgb(hexval);
+				// alert(rgb.toString());
+				if (YAHOO.util.Color.isValidRGB(rgb)) {
+					f['rval'].value = rgb[0];
+					f['gval'].value = rgb[1];
+					f['bval'].value = rgb[2];
+				}
+			}
+		}
+
+		// red
+		v = parseFloat(f['rval'].value);
+		v = ( isNaN(v) ) ? 0 : Math.round(v);
+        gLogger.debug("setValue, r: " + v);
+		r.setValue(Math.round(v) / 2);
+
+		v = parseFloat(f['gval'].value);
+		v = ( isNaN(v) ) ? 0 : Math.round(v);
+        gLogger.debug("setValue, g: " + g);
+		g.setValue(Math.round(v) / 2);
+
+		v = parseFloat(f['bval'].value);
+		v = ( isNaN(v) ) ? 0 : Math.round(v);
+        gLogger.debug("setValue, b: " + b);
+		b.setValue(Math.round(v) / 2);
+
+
+		updateSliderColors();
+
+		return false;
+	}
+
+	function userReset() {
+		var v;
+		var f = document.forms['rgbform'];
+
+		r.setValue(0);
+		g.setValue(0);
+		b.setValue(0);
+	}
+</script>
+
+</body>
+</html>
