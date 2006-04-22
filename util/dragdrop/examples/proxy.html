@@ -94,7 +94,7 @@ YAHOO.example.DDApp = function() {
                 ygLogger.init(document.getElementById("logDiv"));
             }
 
-            YAHOO.util.Event.on("testtext", "keydown", handleKeypress);
+            // YAHOO.util.Event.on("testtext", "keydown", handleKeypress);
             initPointMode();
         },
 
@@ -105,14 +105,19 @@ YAHOO.example.DDApp = function() {
         },
 
         unlock: function() { 
-                    dd.unlock(); 
+            dd.unlock(); 
         },
+
         changeMode: function(val) {
             if (val == 1) {
                 initIntersectMode();
             } else {
                 initPointMode();
             }
+        },
+
+        unreg: function() {
+            dd.unreg();
         }
 
     };
@@ -124,7 +129,7 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
 </script>
 
 <div id="pageTitle">
-	<h3>Drag and Drop - DDProxy</h3>
+    <h3>Drag and Drop - DDProxy</h3>
 </div>
 
   
@@ -222,36 +227,37 @@ YAHOO.example.logApp.init("logDiv", "toggleButton", "clearButton");
 
   <div id="content">
     <form name="dragDropForm" action="javscript:;">
-	<div class="newsItem">
-	  <h3>Proxy</h3>
+    <div class="newsItem">
+      <h3>Proxy</h3>
 
-	  <a href="javascript:YAHOO.util.DDM._onUnload()">Unload test</a>
-	  <a href="javascript:lock()">lock</a>
-	  <a href="javascript:unlock()">unlock</a>
-	  <a href="javascript:dd.unreg()">Unreg test</a>
-	  <p>
-	    This example builds on
-		<a href="../test/test_draggable.php?mode=dist">YAHOO.util.DD</a>.
-		Instead of moving the actual html element that was clicked, we have a hidden
-		layer, empty aside from a border, absolutely positioned, that we place in the same 
-		location of the clicked object.  The onDrag event handler was implemented so
-		that the style of the DragDrop elements change when they interact.  The onDragDrop
-		event handler was implemented so that the elements swap positions if one is dropped
-		on another.
+      <a href="javascript:YAHOO.util.DDM._onUnload()">Unload test</a>
+      <a href="javascript:YAHOO.example.DDApp.lock()">lock</a>
+      <a href="javascript:YAHOO.example.DDApp.unlock()">unlock</a>
+      <a href="javascript:YAHOO.example.DDApp.unreg()">Unreg test</a>
+      <p>
+        This example builds on
+        <a href="../test/test_draggable.php?mode=dist">YAHOO.util.DD</a>.
+        Instead of moving the actual html element that was clicked, we have a hidden
+        layer, empty aside from a border, absolutely positioned, that we place in the same 
+        location of the clicked object.  The onDrag event handler was implemented so
+        that the style of the DragDrop elements change when they interact.  The onDragDrop
+        event handler was implemented so that the elements swap positions if one is dropped
+        on another.
         Mode: 
         <select onchange="YAHOO.example.DDApp.changeMode(this.selectedIndex)">
           <option value="0" selected>Point</point>
           <option value="1">Intersect</point>
         </select>
-
+<!--
         <input name="testtext" id="testtext" type="text" />
+-->
 
-	  </p>
+      </p>
 
-	</div>
-	</form>
+    </div>
+    </form>
   </div>
-	
+    
         <div id="footerContainer">
         <div id="footer">
           <p>&nbsp;</p>
