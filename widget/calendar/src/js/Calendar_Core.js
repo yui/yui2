@@ -333,8 +333,8 @@ YAHOO.widget.Calendar_Core.prototype.wireDefaultEvents = function() {
 		var index = cell.index;
 		var d = cal.cellDates[index];
 		var date = new Date(d[0],d[1]-1,d[2]);
-	
-		if (! cal.isDateOOM(date)) {
+
+		if (! cal.isDateOOM(date) && ! YAHOO.util.Dom.hasClass(cell, "restricted")) {
 			YAHOO.widget.Calendar_Core.prependCssClass(cell, cal.Style.CSS_CELL_HOVER);
 		}
 	}
@@ -772,8 +772,6 @@ YAHOO.widget.Calendar_Core.prototype.renderBody = function(workingDate) {
 	this.postMonthDays = YAHOO.widget.Calendar_Core.DISPLAY_DAYS-this.preMonthDays-this.monthDays;
 	
 	workingDate = YAHOO.widget.DateMath.subtract(workingDate, YAHOO.widget.DateMath.DAY, this.preMonthDays);
-
-	//this.table.style.visibility = "hidden"; // Hide while we render
 	
 	var weekRowIndex = 0;
 	
@@ -971,9 +969,7 @@ YAHOO.widget.Calendar_Core.prototype.renderBody = function(workingDate) {
 			YAHOO.widget.Calendar_Core.addCssClass(cell, this.Style.CSS_CELL_BOTTOM);
 		}
 	}
-	
-	//this.table.style.visibility = "visible"; // Show table, now that it's rendered
-	
+		
 };
 
 /**
