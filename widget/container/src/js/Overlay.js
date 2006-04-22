@@ -66,6 +66,20 @@ YAHOO.widget.Overlay.BOTTOM_RIGHT = "br";
 */
 YAHOO.widget.Overlay.CSS_OVERLAY = "overlay";
 
+/**
+* CustomEvent fired before the Overlay is moved.
+* args: x,y that the Overlay will be moved to
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.widget.Overlay.prototype.beforeMoveEvent = null;
+
+/**
+* CustomEvent fired after the Overlay is moved.
+* args: x,y that the Overlay was moved to
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.widget.Overlay.prototype.moveEvent = null;
+
 /*
 * The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
 * @param {string}	el	The element ID representing the Overlay <em>OR</em>
@@ -81,9 +95,15 @@ YAHOO.widget.Overlay.prototype.init = function(el, userConfig) {
 		this.cfg.applyConfig(userConfig, true);
 	}
 
-	if (! YAHOO.util.Config.alreadySubscribed(this.renderEvent, this.cfg.refresh, this.cfg)) {
-		this.renderEvent.subscribe(this.cfg.refresh, this.cfg, true);
+	if (this.platform == "mac" && this.browser == "gecko") {
+		if (! YAHOO.util.Config.alreadySubscribed(this.showEvent,this.showMacGeckoScrollbars,this)) {
+			this.showEvent.subscribe(this.showMacGeckoScrollbars,this,true);
+		}
+		if (! YAHOO.util.Config.alreadySubscribed(this.hideEvent,this.hideMacGeckoScrollbars,this)) {
+			this.hideEvent.subscribe(this.hideMacGeckoScrollbars,this,true);
+		}
 	}
+
 }
 
 /**
@@ -103,22 +123,20 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	YAHOO.widget.Overlay.superclass.initDefaultConfig.call(this);
 
 	// Add overlay config properties //
+	this.cfg.addProperty("x", { handler:this.configX, validator:this.cfg.checkNumber, suppressEvent:true, supercedes:["iframe"] } );
+	this.cfg.addProperty("y", { handler:this.configY, validator:this.cfg.checkNumber, suppressEvent:true, supercedes:["iframe"] } );
+	this.cfg.addProperty("xy",{ handler:this.configXY, suppressEvent:true, supercedes:["iframe"] } );
 
-	this.cfg.addProperty("x", null, this.configX, this.cfg.checkNumber, this.element, true);
-	this.cfg.addProperty("y", null, this.configY, this.cfg.checkNumber, this.element, true);
-	this.cfg.addProperty("xy", null, this.configXY, null, this.element, true);
+	this.cfg.addProperty("context",	{ handler:this.configContext, suppressEvent:true, supercedes:["iframe"] } );
+	this.cfg.addProperty("fixedcenter", { value:false, handler:this.configFixedCenter, validator:this.cfg.checkBoolean, supercedes:["iframe","visible"] } );
 
-	this.cfg.addProperty("fixedcenter", false, this.configFixedCenter, this.cfg.checkBoolean, this.element);
+	this.cfg.addProperty("width", { handler:this.configWidth, suppressEvent:true, supercedes:["iframe"] } );
+	this.cfg.addProperty("height", { handler:this.configHeight, suppressEvent:true, supercedes:["iframe"] } );
 
-	this.cfg.addProperty("width", null, this.configWidth, null, this.element, true);
-	this.cfg.addProperty("height", null, this.configHeight, null, this.element, true);
+	this.cfg.addProperty("zIndex", { value:null, handler:this.configzIndex } );
 
-	this.cfg.addProperty("zIndex", null, this.configzIndex, this.cfg.checkNumber, this.element, true);
-
-	this.cfg.addProperty("constraintoviewport", false, this.configConstrainToViewport, this.cfg.checkBoolean);
-	this.cfg.addProperty("iframe", ((this.browser == "ie" || (this.platform == "mac" && this.browser == "gecko")) ? true : false), this.configIframe, this.cfg.checkBoolean, this.element);
-
-	this.cfg.addProperty("context",	null, this.configContext);
+	this.cfg.addProperty("constraintoviewport", { value:false, handler:this.configConstrainToViewport, validator:this.cfg.checkBoolean, supercedes:["iframe","x","y","xy"] } );
+	this.cfg.addProperty("iframe", { value:(this.browser == "ie" ? true : false), handler:this.configIframe, validator:this.cfg.checkBoolean, supercedes:["visible","zIndex"] } );
 }
 
 /**
@@ -130,18 +148,37 @@ YAHOO.widget.Overlay.prototype.moveTo = function(x, y) {
 	this.cfg.setProperty("xy",[x,y]);
 }
 
+/**
+* Adds a special CSS class to the Overlay when Mac/Gecko is in use, to work around a Gecko bug where
+* scrollbars cannot be hidden. See https://bugzilla.mozilla.org/show_bug.cgi?id=187435
+*/
+YAHOO.widget.Overlay.prototype.hideMacGeckoScrollbars = function() {
+	YAHOO.util.Dom.removeClass(this.element, "show-scrollbars");
+	YAHOO.util.Dom.addClass(this.element, "hide-scrollbars");
+}
+
+/**
+* Removes a special CSS class from the Overlay when Mac/Gecko is in use, to work around a Gecko bug where
+* scrollbars cannot be hidden. See https://bugzilla.mozilla.org/show_bug.cgi?id=187435
+*/
+YAHOO.widget.Overlay.prototype.showMacGeckoScrollbars = function() {
+	YAHOO.util.Dom.removeClass(this.element, "hide-scrollbars");
+	YAHOO.util.Dom.addClass(this.element, "show-scrollbars");
+}
+
 // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
 
 /**
-* The default event handler fired when the "visible" property is changed. The fading animation of the Panel, if enabled, is also handled within this method.
+* The default event handler fired when the "visible" property is changed. This method is responsible for firing showEvent and hideEvent.
 */
 YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
-	var val = args[0];
-	
+	var visible = args[0];
+	var currentVis = YAHOO.util.Dom.getStyle(this.element, "visibility");
+
 	var effect = this.cfg.getProperty("effect");
+
+	var effectInstances = new Array();
 	if (effect) {
-		var effectInstances = new Array();
-		
 		if (effect instanceof Array) {
 			for (var i=0;i<effect.length;i++) {
 				var eff = effect[i];
@@ -150,137 +187,93 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 		} else {
 			effectInstances[effectInstances.length] = effect.effect(this, effect.duration);
 		}
+	}
 
-		var currentVis = YAHOO.util.Dom.getStyle(this.element, "visibility");
-		if (val) { // Animate in if not showing
-			if (currentVis == "hidden") {
-				for (var i=0;i<effectInstances.length;i++) {
-					var e = effectInstances[i];
-					if (! YAHOO.util.Config.alreadySubscribed(e.animateInCompleteEvent,this.showEvent.fire,this.showEvent)) {
-						e.animateInCompleteEvent.subscribe(this.showEvent.fire,this.showEvent,true);
+	var isMacGecko = (this.platform == "mac" && this.browser == "gecko");
+
+	if (visible) { // Show
+		if (isMacGecko) {
+			this.showMacGeckoScrollbars();
+		}	
+
+		if (effect) { // Animate in
+			if (visible) { // Animate in if not showing
+				if (currentVis != "visible") {
+					for (var i=0;i<effectInstances.length;i++) {
+						var e = effectInstances[i];
+						if (! YAHOO.util.Config.alreadySubscribed(e.animateInCompleteEvent,this.showEvent.fire,this.showEvent)) {
+							e.animateInCompleteEvent.subscribe(this.showEvent.fire,this.showEvent,true); // Delegate showEvent until end of animateInComplete
+						}
+						//this.cfg.refireEvent("iframe");
+						e.animateIn();
 					}
-					e.animateIn();
 				}
-				//if (this.iframe) {
-				//	YAHOO.util.Dom.setStyle(this.iframe, "display", "block");
-				//}
 			}
-		} else { // Animate out if showing
-			if (currentVis == "visible") {
+		} else { // Show
+			if (currentVis != "visible") {
+				YAHOO.util.Dom.setStyle(this.element, "visibility", "visible");
+				this.cfg.refireEvent("iframe");
+				this.showEvent.fire();
+			}
+		}
+
+	} else { // Hide
+		if (isMacGecko) {
+			this.hideMacGeckoScrollbars();
+		}	
+
+		if (effect) { // Animate out if showing
+			if (currentVis != "hidden") {
 				for (var i=0;i<effectInstances.length;i++) {
 					var e = effectInstances[i];
 					if (! YAHOO.util.Config.alreadySubscribed(e.animateOutCompleteEvent,this.hideEvent.fire,this.hideEvent)) {				
-						e.animateOutCompleteEvent.subscribe(this.hideEvent.fire,this.hideEvent,true);			
+						e.animateOutCompleteEvent.subscribe(this.hideEvent.fire,this.hideEvent,true); // Delegate hideEvent until end of animateOutComplete
 					}
 					e.animateOut();
 				}
-				//if (this.iframe) {
-				//	YAHOO.util.Dom.setStyle(this.iframe, "display", "none");
-				//}
 			}
-		}
-	} else { // No animation
-		if (val) {
-			YAHOO.util.Dom.setStyle((this.element), "visibility", "visible");
-				
-			if (this.platform == "mac" && this.browser == "gecko") {
-				if (! YAHOO.util.Config.alreadySubscribed(this.showEvent,this.showMacGeckoScrollbars,this)) {
-					this.showEvent.subscribe(this.showMacGeckoScrollbars,this,true);
-				}
+		} else { // Simple hide
+			if (currentVis != "hidden") {
+				YAHOO.util.Dom.setStyle(this.element, "visibility", "hidden");
 				this.cfg.refireEvent("iframe");
-				/*this.showEvent.subscribe(
-					function() {
-						this.cfg.refireEvent("iframe");
-					}, this, true);*/
+				this.hideEvent.fire();
 			}
-			//if (this.iframe) {
-				//YAHOO.util.Dom.setStyle(this.iframe, "display", "block");
-				//YAHOO.util.Dom.setStyle(this.iframe, "opacity", 1);
-				//YAHOO.util.Dom.setStyle(this.iframe, "visibility", "visible");
-				//YAHOO.util.Dom.setStyle(this.iframe, "zIndex", (this.cfg.getProperty("zIndex") - 1));
-			//}
-		} else {
-
-			if (this.platform == "mac" && this.browser == "gecko") {
-				if (! YAHOO.util.Config.alreadySubscribed(this.hideEvent,this.hideMacGeckoScrollbars,this)) {
-					this.hideEvent.subscribe(this.hideMacGeckoScrollbars,this,true);
-				}
-				this.cfg.refireEvent("iframe");
-			}
-			YAHOO.util.Dom.setStyle((this.element), "visibility", "hidden");
-			//if (this.iframe) {
-			//	YAHOO.util.Dom.setStyle(this.iframe, "display", "none");
-				//YAHOO.util.Dom.setStyle(this.iframe, "visibility", "hidden");
-				//YAHOO.util.Dom.setStyle(this.iframe, "zIndex", (this.cfg.getProperty("zIndex") + 1));
-			//}
-		}
+		}	
 	}
-	this.cfg.refireEvent("iframe");
 }
 
+/**
+* Center event handler used for centering on scroll/resize, but only if the Overlay is visible
+*/
+YAHOO.widget.Overlay.prototype.doCenterOnDOMEvent = function() {
+	if (this.cfg.getProperty("visible")) {
+		this.center();
+	}
+}
 
 /**
 * The default event handler fired when the "fixedcenter" property is changed.
 */
 YAHOO.widget.Overlay.prototype.configFixedCenter = function(type, args, obj) {
 	var val = args[0];
-	var me = this;
-	
-	if (! this.centerOnVis) {
-		this.centerOnVis = function(type,args,obj) {
-			var visible = args[0];
-			if (visible) {
-				this.center();
-			}
-		};
-	}
 
 	if (val) {
-		this.cfg.subscribeToConfigEvent("visible", this.centerOnVis, this, true);
+		this.center();
 			
-		//= function(key, handler, obj, override)
 		if (! YAHOO.util.Config.alreadySubscribed(this.beforeShowEvent, this.center, this)) {
 			this.beforeShowEvent.subscribe(this.center, this, true);
 		}
 		
-		if (! YAHOO.util.Config.alreadySubscribed(YAHOO.widget.Overlay.windowResizeEvent, this.center, this)) {
-			YAHOO.widget.Overlay.windowResizeEvent.subscribe(this.center, this, true);
+		if (! YAHOO.util.Config.alreadySubscribed(YAHOO.widget.Overlay.windowResizeEvent, this.doCenterOnDOMEvent, this)) {
+			YAHOO.widget.Overlay.windowResizeEvent.subscribe(this.doCenterOnDOMEvent, this, true);
 		}
 
-		if (! YAHOO.util.Config.alreadySubscribed(YAHOO.widget.Overlay.windowScrollEvent, this.center, this)) {
-			YAHOO.widget.Overlay.windowScrollEvent.subscribe(this.center, this, true);
+		if (! YAHOO.util.Config.alreadySubscribed(YAHOO.widget.Overlay.windowScrollEvent, this.doCenterOnDOMEvent, this)) {
+			YAHOO.widget.Overlay.windowScrollEvent.subscribe( this.doCenterOnDOMEvent, this, true);
 		}
-
-		//YAHOO.widget.Overlay.windowResizeEvent.subscribe(refireIframe, this, true);
-		//YAHOO.widget.Overlay.windowScrollEvent.subscribe(refireIframe, this, true);
-
-		/*if (YAHOO.util.Event._getCacheIndex(window, "resize", this.center) == -1) {
-			YAHOO.util.Event.addListener(window, "resize", this.center, this, true);
-		}
-		if (YAHOO.util.Event._getCacheIndex(window, "resize", refireIframe) == -1) {
-			YAHOO.util.Event.addListener(window, "resize", refireIframe, this, true);
-		}
-		if (YAHOO.util.Event._getCacheIndex(window, "scroll", this.center) == -1) {
-			YAHOO.util.Event.addListener(window, "scroll", this.center, this, true);
-		}
-		if (YAHOO.util.Event._getCacheIndex(window, "scroll", refireIframe) == -1) {
-			YAHOO.util.Event.addListener(window, "scroll", refireIframe, this, true);
-		}*/
 	} else {
-		/*var removed = [];
-		removed[0] = YAHOO.util.Event.removeListener(window, "resize", this.center);
-		removed[1] = YAHOO.util.Event.removeListener(window, "resize", refireIframe);
-		removed[2] = YAHOO.util.Event.removeListener(window, "scroll", this.center);
-		removed[3] = YAHOO.util.Event.removeListener(window, "scroll", refireIframe);*/
-		//this.beforeShowEvent.unsubscribe(this.center, this);
-		this.cfg.unsubscribeFromConfigEvent("visible", this.centerOnVis, this);
-		YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.center, this);
-		YAHOO.widget.Overlay.windowScrollEvent.unsubscribe(this.center, this);
-
-		//YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(refireIframe, this);
-		//YAHOO.widget.Overlay.windowScrollEvent.unsubscribe(refireIframe, this);
-
-		//this.syncPosition();
+		YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.doCenterOnDOMEvent, this);
+		YAHOO.widget.Overlay.windowScrollEvent.unsubscribe(this.doCenterOnDOMEvent, this);
 	}
 }
 
@@ -302,7 +295,6 @@ YAHOO.widget.Overlay.prototype.configWidth = function(type, args, obj) {
 	var el = this.element;
 	YAHOO.util.Dom.setStyle(el, "width", width);
 	this.cfg.refireEvent("iframe");
-	this.cfg.refireEvent("context");
 }
 
 /**
@@ -310,7 +302,15 @@ YAHOO.widget.Overlay.prototype.configWidth = function(type, args, obj) {
 */
 YAHOO.widget.Overlay.prototype.configzIndex = function(type, args, obj) {
 	var zIndex = args[0];
+
 	var el = this.element;
+
+	if (! zIndex) {
+		zIndex = YAHOO.util.Dom.getStyle(el, "zIndex");
+		if (! zIndex || isNaN(zIndex)) {
+			zIndex = 0;
+		}
+	}
 
 	if (this.iframe) {
 		if (zIndex <= 0) {
@@ -318,6 +318,7 @@ YAHOO.widget.Overlay.prototype.configzIndex = function(type, args, obj) {
 		}
 		YAHOO.util.Dom.setStyle(this.iframe, "zIndex", (zIndex-1));
 	}
+
 	YAHOO.util.Dom.setStyle(el, "zIndex", zIndex);
 	this.cfg.setProperty("zIndex", zIndex, true);
 }
@@ -330,21 +331,15 @@ YAHOO.widget.Overlay.prototype.configXY = function(type, args, obj) {
 	var x = pos[0];
 	var y = pos[1];
 
-	this.cfg.setProperty("x", x, true);
-	this.cfg.setProperty("y", y, true);
+	this.cfg.setProperty("x", x);
+	this.cfg.setProperty("y", y);
 
 	this.beforeMoveEvent.fire([x,y]);
 
 	x = this.cfg.getProperty("x");
 	y = this.cfg.getProperty("y");
 
-	//alert("setXY:"+[x,y]);
-	YAHOO.util.Dom.setXY(this.element, [x,y], true);
-
-	if (this.cfg.getProperty("iframe")) {
-		this.cfg.refireEvent("iframe");
-	}
-
+	this.cfg.refireEvent("iframe");
 	this.moveEvent.fire([x,y]);
 }
 
@@ -364,12 +359,10 @@ YAHOO.widget.Overlay.prototype.configX = function(type, args, obj) {
 	y = this.cfg.getProperty("y");
 
 	YAHOO.util.Dom.setX(this.element, x, true);
+	
 	this.cfg.setProperty("xy", [x, y], true);
 
-	if (this.cfg.getProperty("iframe")) {
-		this.cfg.refireEvent("iframe");
-	}
-
+	this.cfg.refireEvent("iframe");
 	this.moveEvent.fire([x, y]);
 }
 
@@ -389,12 +382,10 @@ YAHOO.widget.Overlay.prototype.configY = function(type, args, obj) {
 	y = this.cfg.getProperty("y");
 
 	YAHOO.util.Dom.setY(this.element, y, true);
+
 	this.cfg.setProperty("xy", [x, y], true);
 
-	if (this.cfg.getProperty("iframe")) {
-		this.cfg.refireEvent("iframe");
-	}
-
+	this.cfg.refireEvent("iframe");
 	this.moveEvent.fire([x, y]);
 }
 
@@ -406,68 +397,50 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 
 	var el = this.element;
 
-	//var x = this.cfg.getProperty("x");
-	//var y = this.cfg.getProperty("y");
-	
-	var pos = YAHOO.util.Dom.getXY(this.element);
-
-	//if (! x || ! y) {
-	//	this.syncPosition();
-	//	x = this.cfg.getProperty("x");
-	//	y = this.cfg.getProperty("y");
-	//}
-
 	if (val) {
-		if (! this.iframe) {
-			this.iframe = document.createElement("iframe");
-			
-			var parent = el.parentNode;
-			if (parent) {
-				parent.appendChild(this.iframe);
-			} else {
-				document.body.appendChild(this.iframe);
+		var x = this.cfg.getProperty("x");
+		var y = this.cfg.getProperty("y");
+
+		if (! x || ! y) {
+			this.syncPosition();
+			x = this.cfg.getProperty("x");
+			y = this.cfg.getProperty("y");
+		}
+
+		if (! isNaN(x) && ! isNaN(y)) {
+			if (! this.iframe) {
+				this.iframe = document.createElement("iframe");
+				
+				var parent = el.parentNode;
+				if (parent) {
+					parent.appendChild(this.iframe);
+				} else {
+					document.body.appendChild(this.iframe);
+				}
+
+				this.iframe.src = this.imageRoot + YAHOO.widget.Overlay.IFRAME_SRC;
+				YAHOO.util.Dom.setStyle(this.iframe, "position", "absolute");
+				YAHOO.util.Dom.setStyle(this.iframe, "border", "none");
+				YAHOO.util.Dom.setStyle(this.iframe, "margin", "0");
+				YAHOO.util.Dom.setStyle(this.iframe, "padding", "0");
+				YAHOO.util.Dom.setStyle(this.iframe, "opacity", "0");
 			}
 
-			this.iframe.src = this.imageRoot + YAHOO.widget.Overlay.IFRAME_SRC;
-			YAHOO.util.Dom.setStyle(this.iframe, "position", "absolute");
-			YAHOO.util.Dom.setStyle(this.iframe, "border", "none");
-			YAHOO.util.Dom.setStyle(this.iframe, "margin", "0");
-			YAHOO.util.Dom.setStyle(this.iframe, "padding", "0");
-			YAHOO.util.Dom.setStyle(this.iframe, "opacity", "0");
+			YAHOO.util.Dom.setStyle(this.iframe, "left", x-2 + "px");
+			YAHOO.util.Dom.setStyle(this.iframe, "top", y-2 + "px");
+
+			var width = el.clientWidth;
+			var height = el.clientHeight;
+
+			YAHOO.util.Dom.setStyle(this.iframe, "width", (width+2) + "px");
+			YAHOO.util.Dom.setStyle(this.iframe, "height", (height+2) + "px");
+
+			if (! this.cfg.getProperty("visible")) {
+				this.iframe.style.display = "none";
+			} else {
+				this.iframe.style.display = "block";
+			}
 		}
-
-		var elementZ = parseInt(YAHOO.util.Dom.getStyle(el, "zIndex"));
-
-		if (isNaN(elementZ) || elementZ <= 0) {
-			this.cfg.setProperty("zIndex", 1);
-		} else {
-			this.cfg.setProperty("zIndex", elementZ, true);
-		}
-
-		//YAHOO.util.Dom.setStyle(this.iframe, "zIndex", (this.cfg.getProperty("zIndex") - 1));
-
-		//YAHOO.util.Dom.setStyle(this.iframe, "left", x-2 + "px");
-		//YAHOO.util.Dom.setStyle(this.iframe, "top", y-2 + "px");
-
-		YAHOO.util.Dom.setXY(this.iframe, pos, true);
-
-		var width = el.offsetWidth;
-		var height = el.offsetHeight;
-
-		YAHOO.util.Dom.setStyle(this.iframe, "width", (width+2) + "px");
-		YAHOO.util.Dom.setStyle(this.iframe, "height", (height+2) + "px");
-
-		if (! this.cfg.getProperty("visible")) {
-			//alert("hidden z: " + (this.cfg.getProperty("zIndex") + 1));
-			this.iframe.style.display = "none";
-			//YAHOO.util.Dom.setStyle(this.iframe, "visibility", "hidden");
-		} else {
-			YAHOO.util.Dom.setStyle(this.iframe, "zIndex", (this.cfg.getProperty("zIndex") - 1));
-			this.iframe.style.display = "block";
-			this.iframe.style.opacity = (this.iframe.style.opacity != 0 ? 0: 1);
-		}
-
-
 	} else {
 		if (this.iframe) {
 			this.iframe.style.display = "none";
@@ -637,15 +610,11 @@ YAHOO.widget.Overlay.prototype.center = function() {
 	var x = (viewPortWidth / 2) - (elementWidth / 2) + scrollX;
 	var y = (viewPortHeight / 2) - (elementHeight / 2) + scrollY;
 	
-	this.element.style.left = x + "px";
-	this.element.style.top = y + "px";
-	
+	this.element.style.left = parseInt(x) + "px";
+	this.element.style.top = parseInt(y) + "px";
 	this.syncPosition();
-	//this.cfg.setProperty("xy", [x,y]);
-	this.cfg.refireEvent("iframe");
 
-	//this.cfg.setProperty("x", x, true);
-	//this.cfg.setProperty("y", y, true);
+	this.cfg.refireEvent("iframe");
 }
 
 /**
@@ -653,7 +622,6 @@ YAHOO.widget.Overlay.prototype.center = function() {
 */
 YAHOO.widget.Overlay.prototype.syncPosition = function() {
 	var pos = YAHOO.util.Dom.getXY(this.element);
-	//;alert("sync:"+pos);
 	this.cfg.setProperty("x", pos[0], true);
 	this.cfg.setProperty("y", pos[1], true);
 	this.cfg.setProperty("xy", pos, true);
@@ -667,24 +635,40 @@ YAHOO.widget.Overlay.prototype.onDomResize = function(e, obj) {
 	this.cfg.refireEvent("iframe");
 }
 
+/**
+* A singleton CustomEvent used for reacting to the DOM event for window scroll
+* @type YAHOO.util.CustomEvent
+*/
 YAHOO.widget.Overlay.windowScrollEvent = new YAHOO.util.CustomEvent("windowScroll");
+
+/**
+* A singleton CustomEvent used for reacting to the DOM event for window resize
+* @type YAHOO.util.CustomEvent
+*/
 YAHOO.widget.Overlay.windowResizeEvent = new YAHOO.util.CustomEvent("windowResize");
 
-YAHOO.widget.Overlay.windowScrollHandler = function() {
+/**
+* The DOM event handler used to fire the CustomEvent for window scroll
+* @type Function
+*/
+YAHOO.widget.Overlay.windowScrollHandler = function(e) {
 	YAHOO.widget.Overlay.windowScrollEvent.fire();
 }
 
-YAHOO.widget.Overlay.windowResizeHandler = function() {
+/**
+* The DOM event handler used to fire the CustomEvent for window resize
+* @type Function
+*/
+YAHOO.widget.Overlay.windowResizeHandler = function(e) {
 	YAHOO.widget.Overlay.windowResizeEvent.fire();
 }
 
-YAHOO.util.Event.addListener(window, "scroll", YAHOO.widget.Overlay.windowScrollHandler);
-YAHOO.util.Event.addListener(window, "resize", YAHOO.widget.Overlay.windowResizeHandler);
 
-YAHOO.widget.Overlay.prototype.hideMacGeckoScrollbars = function() {
-	YAHOO.util.Dom.addClass(this.element, "hide-scrollbars");
-}
-
-YAHOO.widget.Overlay.prototype.showMacGeckoScrollbars = function() {
-	YAHOO.util.Dom.removeClass(this.element, "hide-scrollbars");
+if (YAHOO.widget.Overlay._initialized == undefined) {
+	YAHOO.util.Event.addListener(window, "scroll", YAHOO.widget.Overlay.windowScrollHandler);
+	YAHOO.util.Event.addListener(window, "resize", YAHOO.widget.Overlay.windowResizeHandler);
+	/**
+	* @private
+	*/
+	YAHOO.widget.Overlay._initialized = true;
 }

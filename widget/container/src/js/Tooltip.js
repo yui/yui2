@@ -52,10 +52,11 @@ YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 		if (userConfig) {
 			this.cfg.applyConfig(userConfig);
 		}
+		
+		this.cfg.queueProperty("visible",false);
+		this.cfg.queueProperty("constraintoviewport",true);
 
-		this.moveEvent.subscribe(this.preventOverlap, this, true);
-		this.cfg.setProperty("visible",false);
-		this.cfg.setProperty("constraintoviewport",true);
+		this.setBody("");
 		this.render(this.cfg.getProperty("container"));
 	}
 }
@@ -65,13 +66,15 @@ YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 */
 YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	YAHOO.widget.Tooltip.superclass.initDefaultConfig.call(this);
-	
-	this.cfg.addProperty("showdelay",			200,	this.configShowDelay,			this.cfg.checkNumber);
-	this.cfg.addProperty("autodismissdelay",	5000,	this.configAutoDismissDelay,	this.cfg.checkNumber);
-	this.cfg.addProperty("hidedelay",			250,	this.configHideDelay,			this.cfg.checkNumber);
 
-	this.cfg.addProperty("text",				null,	this.configText,				null, null, true);
-	this.cfg.addProperty("container",			document.body, this.configContainer);
+	this.cfg.addProperty("preventoverlap",		{ value:true, handler:this.configPreventOverlap, validator:this.cfg.checkBoolean, supercedes:["x","y","xy"] } );
+
+	this.cfg.addProperty("showdelay",			{ value:200, handler:this.configShowDelay, validator:this.cfg.checkNumber } );
+	this.cfg.addProperty("autodismissdelay",	{ value:5000, handler:this.configAutoDismissDelay, validator:this.cfg.checkNumber } );
+	this.cfg.addProperty("hidedelay",			{ value:250, handler:this.configHideDelay, validator:this.cfg.checkNumber } );
+
+	this.cfg.addProperty("text",				{ handler:this.configText, suppressEvent:true } );
+	this.cfg.addProperty("container",			{ value:document.body, handler:this.configContainer } );
 }
 
 // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
@@ -93,6 +96,20 @@ YAHOO.widget.Tooltip.prototype.configContainer = function(type, args, obj) {
 	var container = args[0];
 	if (typeof container == 'string') {
 		this.cfg.setProperty("container", document.getElementById(container), true);
+	}
+}
+
+/**
+* The default event handler fired when the "preventoverlap" property is changed.
+*/
+YAHOO.widget.Tooltip.prototype.configPreventOverlap = function(type, args, obj) {
+	var preventoverlap = args[0];
+	if (preventoverlap) {
+		if (! YAHOO.util.Config.alreadySubscribed(this.moveEvent, this.preventOverlap, this)) {
+			this.moveEvent.subscribe(this.preventOverlap, this, true);
+		}
+	} else {
+		this.moveEvent.unsubscribe(this.preventOverlap, this);
 	}
 }
 

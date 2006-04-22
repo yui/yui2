@@ -51,23 +51,18 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 			if (keyData.keys instanceof Array) {
 				for (var i=0;i<keyData.keys.length;i++) {
 					if (keyPressed == keyData.keys[i]) {
-						YAHOO.util.Event.stopEvent(e);
-						keyEvent.fire(keyPressed);
+						keyEvent.fire(keyPressed, e);
 						break;
 					}
 				}
 			} else {
 				if (keyPressed == keyData.keys) {
-					YAHOO.util.Event.stopEvent(e);
-					keyEvent.fire(keyPressed);
+					keyEvent.fire(keyPressed, e);
 				}
 			}
 		}
 	}
 
-	/**
-	* Enables the KeyListener, by dynamically attaching the key event to the appropriate DOM element.
-	*/
 	this.enable = function() {
 		if (! this.enabled) {
 			YAHOO.util.Event.addListener(attachTo, event, handleKeyPress);
@@ -76,13 +71,12 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 		this.enabled = true;
 	}
 
-	/**
-	* Disables the KeyListener, by dynamically removing the key event from the appropriate DOM element.
-	*/
 	this.disable = function() {
-		YAHOO.util.Event.removeListener(attachTo, event, handleKeyPress);
+		if (this.enabled) {
+			YAHOO.util.Event.removeListener(attachTo, event, handleKeyPress);
+			this.disabledEvent.fire(keyData);
+		}
 		this.enabled = false;
-		this.disabledEvent.fire(keyData);
 	}
 
 }
@@ -98,3 +92,27 @@ YAHOO.util.KeyListener.KEYDOWN = "keydown";
 * @final
 */
 YAHOO.util.KeyListener.KEYUP = "keyup";
+
+/**
+* Enables the KeyListener, by dynamically attaching the key event to the appropriate DOM element.
+*/
+YAHOO.util.KeyListener.prototype.enable = function() {};
+
+/**
+* Disables the KeyListener, by dynamically removing the key event from the appropriate DOM element.
+*/
+YAHOO.util.KeyListener.prototype.disable = function() {};
+
+/**
+* CustomEvent fired when the KeyListener is enabled
+* args: keyData
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.util.KeyListener.prototype.enabledEvent = null;
+
+/**
+* CustomEvent fired when the KeyListener is disabled
+* args: keyData
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.util.KeyListener.prototype.disabledEvent = null;

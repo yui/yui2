@@ -32,6 +32,27 @@ YAHOO.widget.Panel.superclass = YAHOO.widget.Overlay.prototype;
 */
 YAHOO.widget.Panel.CSS_PANEL = "panel";
 
+/**
+* Constant representing the default CSS class used for a Panel's wrapping container
+* @type string
+* @final
+*/
+YAHOO.widget.Panel.CSS_PANEL_CONTAINER = "panel-container";
+
+/**
+* CustomEvent fired after the modality mask is shown
+* args: none
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.widget.Panel.prototype.showMaskEvent = null;
+
+/**
+* CustomEvent fired after the modality mask is hidden
+* args: none
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.widget.Panel.prototype.hideMaskEvent = null;
+
 /*
 * The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
 * @param {string}	el	The element ID representing the Overlay <em>OR</em>
@@ -49,6 +70,14 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 		this.cfg.applyConfig(userConfig, true);
 	}
 
+	this.beforeRenderEvent.subscribe(function() {
+		var draggable = this.cfg.getProperty("draggable");
+		if (draggable) {
+			if (! this.header) {
+				this.setHeader("&nbsp;");
+			}
+		}
+	}, this, true);
 }
 
 /**
@@ -68,13 +97,14 @@ YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
 	YAHOO.widget.Panel.superclass.initDefaultConfig.call(this);
 
 	// Add panel config properties //
-	this.cfg.addProperty("close",	true,	this.configClose,	this.cfg.checkBoolean);
-	this.cfg.addProperty("draggable", true,	this.configDraggable,	this.cfg.checkBoolean);
 
-	this.cfg.addProperty("underlay",	"shadow", this.configUnderlay, null, this.element);
-	this.cfg.addProperty("modal",	false,	this.configModal,	this.cfg.checkBoolean, this.element);
+	this.cfg.addProperty("close", { value:true, handler:this.configClose, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
+	this.cfg.addProperty("draggable", { value:true,	handler:this.configDraggable, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
 
-	this.cfg.addProperty("keyListeners", null, this.configkeyListeners);
+	this.cfg.addProperty("underlay", { value:"shadow", handler:this.configUnderlay, supercedes:["visible"] } );
+	this.cfg.addProperty("modal",	{ value:false, handler:this.configModal, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
+
+	this.cfg.addProperty("keylisteners", { handler:this.configKeyListeners, suppressEvent:true, supercedes:["visible"] } );
 }
 
 // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
@@ -119,17 +149,16 @@ YAHOO.widget.Panel.prototype.configClose = function(type, args, obj) {
 YAHOO.widget.Panel.prototype.configDraggable = function(type, args, obj) {
 	var val = args[0];
 	if (val) {
-		if (! this.header) {
-			this.setHeader("&nbsp;");
-			this.render();
+		if (this.header) {
+			YAHOO.util.Dom.setStyle(this.header,"cursor","move");
+			this.registerDragDrop();
 		}
-		YAHOO.util.Dom.setStyle(this.header,"cursor","move");
-		this.registerDragDrop();
 	} else {
 		if (this.dd) {
 			this.dd.unreg();
 		}
 		if (this.header) {
+			YAHOO.util.Dom.setStyle(this.header,"cursor","auto");
 		}
 	}
 }
@@ -151,6 +180,7 @@ YAHOO.widget.Panel.prototype.configUnderlay = function(type, args, obj) {
 				this.underlay.innerHTML = "&nbsp;";
 				this.element.appendChild(this.underlay);
 			} 
+
 			this.sizeUnderlay();
 			break;
 		case "matte":
@@ -169,66 +199,48 @@ YAHOO.widget.Panel.prototype.configUnderlay = function(type, args, obj) {
 * The default event handler fired when the "modal" property is changed. This handler subscribes or unsubscribes to the show and hide events to handle the display or hide of the modality mask.
 */
 YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
-	var val = args[0];
+	var modal = args[0];
 
-	if (val) {
+	if (modal) {
 		this.buildMask();
-		var effect = this.cfg.getProperty("effect");
-		var visible = this.cfg.getProperty("visible");
-		
-		if (visible) {
-			this.showMask();
+
+		if (! YAHOO.util.Config.alreadySubscribed( this.showEvent, this.showMask, this ) ) {
+			this.showEvent.subscribe(this.showMask, this, true);
 		}
-
-		if (effect && this.effects.length > 0) {
-			var firstEffect = this.effects[0];
-			
-			this.showEvent.unsubscribe(this.showMask, this);
-			this.hideEvent.unsubscribe(this.hideMask, this);
-			
-			if (! YAHOO.util.Config.alreadySubscribed( firstEffect.beforeAnimateInEvent, this.showMask, this) ) {
-				firstEffect.beforeAnimateInEvent.subscribe(this.showMask, this, true);
-			}
-
-			if (! YAHOO.util.Config.alreadySubscribed( firstEffect.animateOutCompleteEvent, this.hideMask, this ) ) {
-				firstEffect.animateOutCompleteEvent.subscribe(this.hideMask, this, true);
-			}
-			//firstEffect.animateInCompleteEvent.subscribe(this.sizeMask, this, true);
-			
-
-		} else {
-			if (! YAHOO.util.Config.alreadySubscribed( this.showEvent, this.showMask, this) ) {
-				this.showEvent.subscribe(this.showMask, this, true);
-			}
-			if (! YAHOO.util.Config.alreadySubscribed( this.hideEvent, this.hideMask, this) ) {
-				this.hideEvent.subscribe(this.hideMask, this, true);
-			}
+		if (! YAHOO.util.Config.alreadySubscribed( this.hideEvent, this.hideMask, this) ) {
+			this.hideEvent.subscribe(this.hideMask, this, true);
 		}
+		if (! YAHOO.util.Config.alreadySubscribed( YAHOO.widget.Overlay.windowResizeEvent, this.sizeMask, this ) ) {
+			YAHOO.widget.Overlay.windowResizeEvent.subscribe(this.sizeMask, this, true);
+		}
+	} else {
+		this.beforeShowEvent.unsubscribe(this.showMask, this);
+		this.hideEvent.unsubscribe(this.hideMask, this);
+		YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.sizeMask);
 	}
 }
 
-YAHOO.widget.Panel.prototype.configkeyListeners = function(type, args, obj) {
-	var handlers = args[0];
+YAHOO.widget.Panel.prototype.configKeyListeners = function(type, args, obj) {
+	var listeners = args[0];
 
-	if (handlers) {
+	if (listeners) {
+		if (listeners instanceof Array) {
+			for (var i=0;i<listeners.length;i++) {
+				var listener = listeners[i];
 
-		if (handlers instanceof Array) {
-			for (var i=0;i<handlers.length;i++) {
-				var handler = handlers[i];
-
-				if (! YAHOO.util.Config.alreadySubscribed(this.showEvent, handler.enable, handler)) {
-					this.showEvent.subscribe(handler.enable, handler, true);
+				if (! YAHOO.util.Config.alreadySubscribed(this.showEvent, listener.enable, listener)) {
+					this.showEvent.subscribe(listener.enable, listener, true);
 				}
-				if (! YAHOO.util.Config.alreadySubscribed(this.hideEvent, handler.disable, handler)) {
-					this.hideEvent.subscribe(handler.disable, handler, true);
+				if (! YAHOO.util.Config.alreadySubscribed(this.hideEvent, listener.disable, listener)) {
+					this.hideEvent.subscribe(listener.disable, listener, true);
 				}
 			}
 		} else {
-			if (! YAHOO.util.Config.alreadySubscribed(this.showEvent, handlers.enable, handlers)) {
-				this.showEvent.subscribe(handlers.enable, handlers, true);
+			if (! YAHOO.util.Config.alreadySubscribed(this.showEvent, listeners.enable, listeners)) {
+				this.showEvent.subscribe(listeners.enable, listeners, true);
 			}
-			if (! YAHOO.util.Config.alreadySubscribed(this.hideEvent, handlers.disable, handlers)) {
-				this.hideEvent.subscribe(handlers.disable, handlers, true);
+			if (! YAHOO.util.Config.alreadySubscribed(this.hideEvent, listeners.disable, listeners)) {
+				this.hideEvent.subscribe(listeners.disable, listeners, true);
 			}
 		}
 	} 
@@ -250,7 +262,7 @@ YAHOO.widget.Panel.prototype.buildWrapper = function() {
 	YAHOO.util.Dom.addClass(this.innerElement, "panel");
 
 	var wrapper = document.createElement("DIV");
-	wrapper.className = "panel-container";
+	wrapper.className = YAHOO.widget.Panel.CSS_PANEL_CONTAINER;
 	wrapper.id = elementClone.id + "_c";
 	
 	wrapper.appendChild(elementClone);
@@ -285,7 +297,7 @@ YAHOO.widget.Panel.prototype.buildWrapper = function() {
 }
 
 /**
-* Adjusts the size of the shadow based no the size of the element.
+* Adjusts the size of the shadow based on the size of the element.
 */
 YAHOO.widget.Panel.prototype.sizeUnderlay = function() {
 	if (this.underlay && this.browser != "gecko" && this.browser != "safari") {
@@ -304,12 +316,6 @@ YAHOO.widget.Panel.prototype.onDomResize = function(e, obj) {
 		me.sizeUnderlay();
 	}, 0);
 };
-
-YAHOO.widget.Panel.prototype.onWindowResize = function(e, obj) {
-	if (this.cfg.getProperty("modal")) {
-		this.sizeMask();
-	}
-}
 
 /**
 * Registers the Panel's header for drag & drop capability.
@@ -361,6 +367,9 @@ YAHOO.widget.Panel.prototype.registerDragDrop = function() {
 		this.dd.onDrag = function() {
 			me.syncPosition();
 			me.cfg.refireEvent("iframe");
+			if (this.platform == "mac" && this.browser == "gecko") {
+				this.showMacGeckoScrollbars();
+			}
 		}
 
 		this.dd.endDrag = function() {
@@ -373,8 +382,6 @@ YAHOO.widget.Panel.prototype.registerDragDrop = function() {
 		this.dd.addInvalidHandleType("INPUT");
 		this.dd.addInvalidHandleType("SELECT");
 		this.dd.addInvalidHandleType("TEXTAREA");
-
-
 	}
 }
 
@@ -406,8 +413,8 @@ YAHOO.widget.Panel.prototype.buildMask = function() {
 */
 YAHOO.widget.Panel.prototype.hideMask = function() {
 	if (this.cfg.getProperty("modal") && this.mask) {
+		this.mask.tabIndex = -1;
 		this.mask.style.display = "none";
-		YAHOO.util.Event.removeListener(window, "resize", this.onWindowResize);
 		this.hideMaskEvent.fire();
 		YAHOO.util.Dom.removeClass(document.body, "masked");
 	}
@@ -419,13 +426,16 @@ YAHOO.widget.Panel.prototype.hideMask = function() {
 YAHOO.widget.Panel.prototype.showMask = function() {
 	if (this.cfg.getProperty("modal") && this.mask) {
 		YAHOO.util.Dom.addClass(document.body, "masked");
-		YAHOO.util.Event.addListener(window, "resize", this.onWindowResize, this, true);
 		this.sizeMask();
 		this.mask.style.display = "block";
+		this.mask.tabIndex = 0;
 		this.showMaskEvent.fire();
 	}
 }
 
+/**
+* Sets the size of the modality mask to cover the entire scrollable area of the document
+*/
 YAHOO.widget.Panel.prototype.sizeMask = function() {
 	if (this.mask) {
 		this.mask.style.height = YAHOO.util.Dom.getDocumentHeight()+"px";
@@ -453,10 +463,14 @@ YAHOO.widget.Panel.prototype.configWidth = function(type, args, obj) {
 	YAHOO.util.Dom.setStyle(el, "width", width);
 	this.cfg.refireEvent("underlay");
 	this.cfg.refireEvent("iframe");
-	this.cfg.refireEvent("context");
 }
 
+/**
+* Renders the Panel by inserting the elements that are not already in the main Panel into their correct places. Optionally appends the Panel to the specified node prior to the render's execution. NOTE: For Panels without existing markup, the appendToNode argument is REQUIRED. If this argument is ommitted and the current element is not present in the document, the function will return false, indicating that the render was a failure.
+* @param {string}	appendToNode	The element id to which the Module should be appended to prior to rendering <em>OR</em>
+* @param {Element}	appendToNode	The element to which the Module should be appended to prior to rendering	
+* @return {boolean} Success or failure of the render
+*/
 YAHOO.widget.Panel.prototype.render = function(appendToNode) {
-	var moduleElement = this.innerElement;
-	return YAHOO.widget.Panel.superclass.render.call(this, appendToNode, moduleElement);
+	return YAHOO.widget.Panel.superclass.render.call(this, appendToNode, this.innerElement);
 }

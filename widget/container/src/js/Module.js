@@ -15,7 +15,16 @@ YAHOO.widget.Module = function(el, userConfig) {
 	}
 }
 
+/**
+* Constant representing the prefix path to use for non-secure images
+* @type string
+*/
 YAHOO.widget.Module.IMG_ROOT = "http://us.i1.yimg.com/us.yimg.com/i/";
+
+/**
+* Constant representing the prefix path to use for securely served images
+* @type string
+*/
 YAHOO.widget.Module.IMG_ROOT_SSL = "https://a248.e.akamai.net/sec.yimg.com/i/";
 
 /**
@@ -97,20 +106,113 @@ YAHOO.widget.Module.prototype = {
 	imageRoot : YAHOO.widget.Module.IMG_ROOT,
 
 	/**
-	* Array of OverlayEffects to use when showing and hiding the Module
-	* @type YAHOO.widget.OverlayEffect[]
+	* CustomEvent fired prior to class initalization.
+	* args: class reference of the initializing class, such as this.beforeInitEvent.fire(YAHOO.widget.Module)
+	* @type YAHOO.util.CustomEvent
 	*/
-	effects : new Array(),
+	beforeInitEvent : null,
 
+	/**
+	* CustomEvent fired after class initalization.
+	* args: class reference of the initializing class, such as this.initEvent.fire(YAHOO.widget.Module)
+	* @type YAHOO.util.CustomEvent
+	*/
+	initEvent : null,
+
+	/**
+	* CustomEvent fired when the Module is appended to the DOM
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	appendEvent : null,
+
+	/**
+	* CustomEvent fired before the Module is rendered
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	beforeRenderEvent : null,
+
+	/**
+	* CustomEvent fired after the Module is rendered
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	renderEvent : null,
+
+	/**
+	* CustomEvent fired when the header content of the Module is modified
+	* args: string/element representing the new header content
+	* @type YAHOO.util.CustomEvent
+	*/
+	changeHeaderEvent : null,
+
+	/**
+	* CustomEvent fired when the body content of the Module is modified
+	* args: string/element representing the new body content
+	* @type YAHOO.util.CustomEvent
+	*/
+	changeBodyEvent : null,
+
+	/**
+	* CustomEvent fired when the footer content of the Module is modified
+	* args: string/element representing the new footer content
+	* @type YAHOO.util.CustomEvent
+	*/
+	changeFooterEvent : null,
+
+	/**
+	* CustomEvent fired when the content of the Module is modified
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	changeContentEvent : null,
+
+	/**
+	* CustomEvent fired when the Module is destroyed
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	destroyEvent : null,
+
+	/**
+	* CustomEvent fired before the Module is shown
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	beforeShowEvent : null,
+
+	/**
+	* CustomEvent fired after the Module is shown
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	showEvent : null,
+
+	/**
+	* CustomEvent fired before the Module is hidden
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	beforeHideEvent : null,
+	
+	/**
+	* CustomEvent fired after the Module is hidden
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	hideEvent : null,
+		
 	/**
 	* Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
 	*/
 	initEvents : function() {
 
-		this.beforeInitModuleEvent	= new YAHOO.util.CustomEvent("beforeInitModule");
-		this.initModuleEvent		= new YAHOO.util.CustomEvent("initModule");
+		this.beforeInitEvent		= new YAHOO.util.CustomEvent("beforeInit");
+		this.initEvent				= new YAHOO.util.CustomEvent("init");
 
 		this.appendEvent			= new YAHOO.util.CustomEvent("append");
+
 		this.beforeRenderEvent		= new YAHOO.util.CustomEvent("beforeRender");
 		this.renderEvent			= new YAHOO.util.CustomEvent("render");
 
@@ -121,13 +223,60 @@ YAHOO.widget.Module.prototype = {
 		this.changeContentEvent		= new YAHOO.util.CustomEvent("changeContent");
 
 		this.destroyEvent			= new YAHOO.util.CustomEvent("destroy");
-		this.beforeShowEvent		= new YAHOO.util.CustomEvent("beforeShow", this);
-		this.showEvent				= new YAHOO.util.CustomEvent("show", this);
-		this.beforeHideEvent		= new YAHOO.util.CustomEvent("beforeHide", this);
-		this.hideEvent				= new YAHOO.util.CustomEvent("hide", this);
-
-		this.resizeEvent			= new YAHOO.util.CustomEvent("resize", this);
+		this.beforeShowEvent		= new YAHOO.util.CustomEvent("beforeShow");
+		this.showEvent				= new YAHOO.util.CustomEvent("show");
+		this.beforeHideEvent		= new YAHOO.util.CustomEvent("beforeHide");
+		this.hideEvent				= new YAHOO.util.CustomEvent("hide");
 	}, 
+
+	/**
+	* String representing the current user-agent platform
+	* @type string
+	*/
+	platform : function() {
+					var ua = navigator.userAgent.toLowerCase();
+					if (ua.indexOf("windows") != -1 || ua.indexOf("win32") != -1) {
+						return "windows";
+					} else if (ua.indexOf("macintosh") != -1) {
+						return "mac";
+					} else {
+						return false;
+					}
+				}(),
+
+	/**
+	* String representing the current user-agent browser
+	* @type string
+	*/
+	browser : function() {
+			var ua = navigator.userAgent.toLowerCase();
+				  if (ua.indexOf('opera')!=-1) { // Opera (check first in case of spoof)
+					 return 'opera';
+				  } else if (ua.indexOf('msie 7')!=-1) { // IE7
+					 return 'ie7';
+				  } else if (ua.indexOf('msie') !=-1) { // IE
+					 return 'ie';
+				  } else if (ua.indexOf('safari')!=-1) { // Safari (check before Gecko because it includes "like Gecko")
+					 return 'safari';
+				  } else if (ua.indexOf('gecko') != -1) { // Gecko
+					 return 'gecko';
+				  } else {
+					 return false;
+				  }
+			}(),
+
+	/**
+	* Boolean representing whether or not the current browsing context is secure (https)
+	* @type boolean
+	*/
+	isSecure : function() {
+		if (window.location.href.toLowerCase().indexOf("https") == 0) {
+			this.imageRoot = YAHOO.widget.Module.IMG_ROOT_SSL;
+			return true;
+		} else {
+			return false;
+		}
+	}(),
 
 	/**
 	* Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
@@ -135,48 +284,9 @@ YAHOO.widget.Module.prototype = {
 	initDefaultConfig : function() {
 		// Add properties //
 
-		var ua = navigator.userAgent.toLowerCase();
-
-		this.platform = function() {
-			if (ua.indexOf("windows") != -1 || ua.indexOf("win32") != -1) {
-				return "windows";
-			} else if (ua.indexOf("macintosh") != -1) {
-				return "mac";
-			} else {
-				return false;
-			}
-		}();
-
-		/**
-		* A string representing the current browser, as determined by the user-agent
-		* @type string
-		*/
-		this.browser = function() {
-			  if (ua.indexOf('opera')!=-1) { // Opera (check first in case of spoof)
-				 return 'opera';
-			  } else if (ua.indexOf('msie 7')!=-1) { // IE7
-				 return 'ie7';
-			  } else if (ua.indexOf('msie') !=-1) { // IE
-				 return 'ie';
-			  } else if (ua.indexOf('safari')!=-1) { // Safari (check before Gecko because it includes "like Gecko")
-				 return 'safari';
-			  } else if (ua.indexOf('gecko') != -1) { // Gecko
-				 return 'gecko';
-			  } else {
-				 return false;
-			  }
-		}();
-
-		if (window.location.href.toLowerCase().indexOf("https") == 0) {
-			this.imageRoot = YAHOO.widget.Module.IMG_ROOT_SSL;
-			this.isSecure = true;
-		} else {
-			this.isSecure = false;
-		}
-
-		this.cfg.addProperty("visible", null, this.configVisible, this.cfg.checkBoolean, this.element, true);
-		this.cfg.addProperty("effect");
-		this.cfg.addProperty("monitorresize", true, this.configMonitorResize);
+		this.cfg.addProperty("visible", { value:true, handler:this.configVisible, validator:this.cfg.checkBoolean } );
+		this.cfg.addProperty("effect", { suppressEvent:true, supercedes:["visible"] } );
+		this.cfg.addProperty("monitorresize", { value:true, handler:this.configMonitorResize } );
 	},
 
 	/**
@@ -187,12 +297,12 @@ YAHOO.widget.Module.prototype = {
 	*/
 	init : function(el, userConfig) {
 
-		this.cfg = new YAHOO.util.Config(this);
-
 		this.initEvents();
-		
-		this.beforeInitModuleEvent.fire(el);
 
+		this.beforeInitEvent.fire(YAHOO.widget.Module);
+
+		this.cfg = new YAHOO.util.Config(this);
+		
 		if (typeof el == "string") {
 			var elId = el;
 
@@ -208,8 +318,6 @@ YAHOO.widget.Module.prototype = {
 		if (el.id) {
 			this.id = el.id;
 		} 
-		
-		this.childNodesInDOM = [null,null,null];
 
 		var childNodes = this.element.childNodes;
 
@@ -219,15 +327,12 @@ YAHOO.widget.Module.prototype = {
 				switch (child.className) {
 					case YAHOO.widget.Module.CSS_HEADER:
 						this.header = child;
-						this.childNodesInDOM[0] = child;
 						break;
 					case YAHOO.widget.Module.CSS_BODY:
 						this.body = child;
-						this.childNodesInDOM[1] = child;
 						break;
 					case YAHOO.widget.Module.CSS_FOOTER:
 						this.footer = child;
-						this.childNodesInDOM[2] = child;
 						break;
 				}
 			}
@@ -241,7 +346,13 @@ YAHOO.widget.Module.prototype = {
 			this.cfg.applyConfig(userConfig);
 		}
 
-		this.initModuleEvent.fire(this.element);
+		// Subscribe to the fireQueue() method of Config so that any queued configuration changes are
+		// excecuted upon render of the Module
+		if (! YAHOO.util.Config.alreadySubscribed(this.renderEvent, this.cfg.fireQueue, this.cfg)) {
+			this.renderEvent.subscribe(this.cfg.fireQueue, this.cfg, true);
+		}
+
+		this.initEvent.fire(YAHOO.widget.Module);
 	},
 
 	/**
@@ -385,6 +496,7 @@ YAHOO.widget.Module.prototype = {
 	* Renders the Module by inserting the elements that are not already in the main Module into their correct places. Optionally appends the Module to the specified node prior to the render's execution. NOTE: For Modules without existing markup, the appendToNode argument is REQUIRED. If this argument is ommitted and the current element is not present in the document, the function will return false, indicating that the render was a failure.
 	* @param {string}	appendToNode	The element id to which the Module should be appended to prior to rendering <em>OR</em>
 	* @param {Element}	appendToNode	The element to which the Module should be appended to prior to rendering	
+	* @param {Element}	moduleElement	OPTIONAL. The element that represents the actual Standard Module container. 
 	* @return {boolean} Success or failure of the render
 	*/
 	render : function(appendToNode, moduleElement) {
@@ -407,13 +519,6 @@ YAHOO.widget.Module.prototype = {
 		}
 
 		if (appendToNode) {
-			if (typeof appendToNode == "string") {
-				el = document.getElementById(el);
-				if (! el) {
-					el = document.createElement("DIV");
-					el.id = elId;
-				}
-			}
 			appendTo(appendToNode);
 		} else { // No node was passed in. If the element is not pre-marked up, this fails
 			if (! YAHOO.util.Dom.inDocument(this.element)) {
@@ -423,7 +528,7 @@ YAHOO.widget.Module.prototype = {
 
 		// Need to get everything into the DOM if it isn't already
 		
-		if ((! this.childNodesInDOM[0]) && this.header) {
+		if (this.header && ! YAHOO.util.Dom.inDocument(this.header)) {
 			// There is a header, but it's not in the DOM yet... need to add it
 			var firstChild = moduleElement.firstChild;
 			if (firstChild) { // Insert before first child if exists
@@ -433,21 +538,19 @@ YAHOO.widget.Module.prototype = {
 			}
 		}
 
-		if ((! this.childNodesInDOM[1]) && this.body) {
+		if (this.body && ! YAHOO.util.Dom.inDocument(this.body)) {
 			// There is a body, but it's not in the DOM yet... need to add it
-			if (this.childNodesInDOM[2]) { // Insert before footer if exists in DOM
-				moduleElement.insertBefore(this.body, this.childNodesInDOM[2]);
+			if (this.footer && YAHOO.util.Dom.isAncestor(this.moduleElement, this.footer)) { // Insert before footer if exists in DOM
+				moduleElement.insertBefore(this.body, this.footer);
 			} else { // Append to element because there is no footer
 				moduleElement.appendChild(this.body);
 			}
 		}
 
-		if ((! this.childNodesInDOM[2]) && this.footer) {
+		if (this.footer && ! YAHOO.util.Dom.inDocument(this.footer)) {
 			// There is a footer, but it's not in the DOM yet... need to add it
 			moduleElement.appendChild(this.footer);
 		}
-		
-		this.cfg.fireDeferredEvents();
 
 		this.renderEvent.fire();
 		return true;
@@ -478,9 +581,6 @@ YAHOO.widget.Module.prototype = {
 	show : function() {
 		this.beforeShowEvent.fire();
 		this.cfg.setProperty("visible", true);
-		if (! this.cfg.getProperty("effect")) {
-			this.showEvent.fire();
-		}
 	},
 
 	/**
@@ -489,22 +589,22 @@ YAHOO.widget.Module.prototype = {
 	hide : function() {
 		this.beforeHideEvent.fire();
 		this.cfg.setProperty("visible", false);
-		if (! this.cfg.getProperty("effect")) {
-			this.hideEvent.fire();
-		}
 	},
 
 	// BUILT-IN EVENT HANDLERS FOR MODULE //
 
 	/**
 	* Default event handler for changing the visibility property of a Module. By default, this is achieved by switching the "display" style between "block" and "none".
+	* This method is responsible for firing showEvent and hideEvent.
 	*/
 	configVisible : function(type, args, obj) {
 		var visible = args[0];
 		if (visible) {
 			YAHOO.util.Dom.setStyle(this.element, "display", "block");
+			this.showEvent.fire();
 		} else {
 			YAHOO.util.Dom.setStyle(this.element, "display", "none");
+			this.hideEvent.fire();
 		}
 	},
 
@@ -521,4 +621,3 @@ YAHOO.widget.Module.prototype = {
 		}
 	}
 }
-

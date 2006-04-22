@@ -122,13 +122,14 @@ YAHOO.widget.OverlayEffect.FADE = function(overlay, dur) {
 			YAHOO.util.Dom.setStyle(obj.overlay.underlay, "opacity", obj.initialUnderlayOpacity);
 		}
 
+		obj.overlay.cfg.refireEvent("iframe");
 		obj.animateInCompleteEvent.fire();
 	}
 
 	fade.handleStartAnimateOut = function(type, args, obj) {
 		YAHOO.util.Dom.addClass(obj.overlay.element, "hide-select");
 
-		if (obj.overlay.underlay && obj.overlay.underlay.style.filter) {
+		if (obj.overlay.underlay) {
 			obj.overlay.underlay.style.filter = null;
 		}
 	}
@@ -140,6 +141,8 @@ YAHOO.widget.OverlayEffect.FADE = function(overlay, dur) {
 		}				
 		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "hidden");
 		YAHOO.util.Dom.setStyle(obj.overlay.element, "opacity", 1); 
+
+		obj.overlay.cfg.refireEvent("iframe");
 
 		obj.animateOutCompleteEvent.fire();
 	};	
@@ -159,14 +162,11 @@ YAHOO.widget.OverlayEffect.SLIDE = function(overlay, dur) {
 	var x = overlay.cfg.getProperty("x") || YAHOO.util.Dom.getX(overlay.element);
 	var y = overlay.cfg.getProperty("y") || YAHOO.util.Dom.getY(overlay.element);
 
-	this.startX = x;
-	this.startY = y;
-
 	var clientWidth = YAHOO.util.Dom.getClientWidth();
 	var offsetWidth = overlay.element.offsetWidth;
 
 	var slide = new YAHOO.widget.OverlayEffect(overlay, { 
-															attributes:{ points: { from:[(-25-offsetWidth),y], to:[x, y] } }, 
+															attributes:{ points: { to:[x, y] } }, 
 															duration:dur, 
 															method:YAHOO.util.Easing.easeIn 
 														}, 
@@ -176,39 +176,38 @@ YAHOO.widget.OverlayEffect.SLIDE = function(overlay, dur) {
 															method:YAHOO.util.Easing.easeOut
 														} 
 												);
+
+	slide.handleStartAnimateIn = function(type,args,obj) {
+		obj.overlay.element.style.left = (-25-offsetWidth) + "px";
+		obj.overlay.element.style.top  = y + "px";
+	}
 	
 	slide.handleTweenAnimateIn = function(type, args, obj) {
-		if (YAHOO.util.Dom.getStyle(obj.overlay.element, "visibility") == "hidden") {
-			YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "visible");
-		}
+
 
 		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
 
-		var x = pos[0];
-		var y = pos[1];
+		var currentX = pos[0];
+		var currentY = pos[1];
 
-		obj.overlay.cfg.setProperty("xy", [x,y], true);
+		if (YAHOO.util.Dom.getStyle(obj.overlay.element, "visibility") == "hidden" && currentX < x) {
+			YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "visible");
+		}
+
+		obj.overlay.cfg.setProperty("xy", [currentX,currentY], true);
 		obj.overlay.cfg.refireEvent("iframe");
 	}
 	
 	slide.handleCompleteAnimateIn = function(type, args, obj) {
 		obj.overlay.cfg.setProperty("xy", [x,y], true);
+		obj.startX = x;
+		obj.startY = y;
 		obj.overlay.cfg.refireEvent("iframe");
 		obj.animateInCompleteEvent.fire();
 	}
 
 	slide.handleStartAnimateOut = function(type, args, obj) {
-		/*if (obj.overlay.browser == "ie") {
-			document.documentElement.style.overflowX = "hidden";
-		} else if (obj.overlay.browser == "gecko") {
-			document.body.style.overflowX = "hidden";
-		} else {
-			document.body.style.overflow = "hidden"; 
-		}*/
-
-		obj.overlay.element.style.width = obj.overlay.element.offsetWidth + "px";
-
-		var clientWidth = YAHOO.util.Dom.getClientWidth();
+		var clientWidth = YAHOO.util.Dom.getViewportWidth();
 		
 		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
 
@@ -220,16 +219,6 @@ YAHOO.widget.OverlayEffect.SLIDE = function(overlay, dur) {
 	}
 
 	slide.handleTweenAnimateOut = function(type, args, obj) {
-		/*if (obj.overlay.browser == "ie") {
-			document.documentElement.style.overflowX = "hidden";
-			document.documentElement.style.overflowY = "hidden";	
-		} else if (obj.overlay.browser == "gecko") {
-			document.body.style.overflowX = "hidden";
-			document.body.style.overflowY = "hidden";
-		} else {
-			document.body.style.overflow = "hidden"; 
-		}*/
-		
 		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
 
 		var x = pos[0];
@@ -243,126 +232,10 @@ YAHOO.widget.OverlayEffect.SLIDE = function(overlay, dur) {
 		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "hidden");		
 		var offsetWidth = obj.overlay.element.offsetWidth;
 
-		obj.overlay.cfg.setProperty("xy", [this.startX,this.startY]);
-		obj.overlay.cfg.refireEvent("fixedcenter");
-		obj.overlay.cfg.refireEvent("width");
-
-		/*if (obj.overlay.browser == "ie") {
-			document.documentElement.style.overflowX = "auto";
-			document.documentElement.style.overflowY = "auto";
-		} else if (obj.overlay.browser == "gecko") {
-			document.body.style.overflowX = "visible";
-			document.body.style.overflowY = "visible";
-		} else {
-			document.body.style.overflow = "visible"; 
-		}*/
-
+		obj.overlay.cfg.setProperty("xy", [x,y]);
 		obj.animateOutCompleteEvent.fire();
 	};	
 
 	slide.init(YAHOO.util.Motion);
 	return slide;
 }
-
-/**
-* A pre-configured OverlayEffect instance that can be used for expanding an overlay in and out horizontally.
-* @param {Overlay}	The Overlay object to animate
-* @param {float}	The duration of the animation
-* @type OverlayEffect
-*/
-YAHOO.widget.OverlayEffect.EXPAND_H = function(overlay, dur) {
-	var initialWidth = YAHOO.util.Dom.getStyle(overlay.element, "width");
-
-	var offsetWidth = overlay.element.offsetWidth;
-	var offsetHeight = overlay.element.offsetHeight;
-
-	var expand = new YAHOO.widget.OverlayEffect(overlay, { attributes:{width: {from:0, to:parseInt(initialWidth), unit:"em" }}, duration:dur, method:YAHOO.util.Easing.easeIn }, { attributes:{width: {to:0, unit:"em"}}, duration:dur, method:YAHOO.util.Easing.easeOut} );
-
-	expand.handleStartAnimateIn = function(type,args,obj) {
-		var w = obj.cachedOffsetWidth || obj.overlay.element.offsetWidth;
-
-		if (obj.overlay.header) {
-			var padLeft = YAHOO.util.Dom.getStyle(obj.overlay.header, "paddingLeft");
-			var padRight = YAHOO.util.Dom.getStyle(obj.overlay.header, "paddingRight");
-			obj.overlay.header.style.width = (w-parseInt(padLeft)-parseInt(padRight)) + "px";
-		}
-		if (obj.overlay.body) {
-			var padLeft = YAHOO.util.Dom.getStyle(obj.overlay.body, "paddingLeft");
-			var padRight = YAHOO.util.Dom.getStyle(obj.overlay.body, "paddingRight");
-			obj.overlay.body.style.width = (w-parseInt(padLeft)-parseInt(padRight)) + "px";
-		}
-		if (obj.overlay.footer) {
-			var padLeft = YAHOO.util.Dom.getStyle(obj.overlay.footer, "paddingLeft");
-			var padRight = YAHOO.util.Dom.getStyle(obj.overlay.footer, "paddingRight");
-			obj.overlay.footer.style.width = (w-parseInt(padLeft)-parseInt(padRight)) + "px";
-		}
-	}
-
-	expand.handleTweenAnimateIn = function(type, args, obj) {
-		obj.overlay.cfg.refireEvent("underlay");
-		obj.overlay.cfg.refireEvent("iframe");
-		if (YAHOO.util.Dom.getStyle(obj.overlay.element, "visibility") == "hidden") {
-			YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "visible");
-		}
-	}
-
-	expand.handleCompleteAnimateIn = function(type,args,obj) {
-		YAHOO.util.Dom.setStyle(obj.overlay.element, "height", "auto");
-		YAHOO.util.Dom.setStyle(obj.overlay.element, "width", initialWidth);
-
-		if (obj.overlay.header) {
-			obj.overlay.header.style.width = "auto";
-		}
-		if (obj.overlay.body) {
-			obj.overlay.body.style.width = "auto";
-		}
-		if (obj.overlay.footer) {
-			obj.overlay.footer.style.width = "auto";
-		}
-	}
-
-	expand.handleStartAnimateOut = function(type,args,obj) {
-		var w = obj.overlay.element.offsetWidth;
-		obj.cachedOffsetWidth = w;
-
-		if (obj.overlay.header) {
-			var padLeft = YAHOO.util.Dom.getStyle(obj.overlay.header, "paddingLeft");
-			var padRight = YAHOO.util.Dom.getStyle(obj.overlay.header, "paddingRight");
-			obj.overlay.header.style.width = (w-parseInt(padLeft)-parseInt(padRight)) + "px";
-		}
-		if (obj.overlay.body) {
-			var padLeft = YAHOO.util.Dom.getStyle(obj.overlay.body, "paddingLeft");
-			var padRight = YAHOO.util.Dom.getStyle(obj.overlay.body, "paddingRight");
-			obj.overlay.body.style.width = (w-parseInt(padLeft)-parseInt(padRight)) + "px";
-		}
-		if (obj.overlay.footer) {
-			var padLeft = YAHOO.util.Dom.getStyle(obj.overlay.footer, "paddingLeft");
-			var padRight = YAHOO.util.Dom.getStyle(obj.overlay.footer, "paddingRight");
-			obj.overlay.footer.style.width = (w-parseInt(padLeft)-parseInt(padRight)) + "px";
-		}
-	}
-
-	expand.handleTweenAnimateOut = function(type, args, obj) {
-		obj.overlay.cfg.refireEvent("underlay");
-		obj.overlay.cfg.refireEvent("iframe");
-	}
-
-	expand.handleCompleteAnimateOut =  function(type, args, obj) { 
-		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "hidden");
-		YAHOO.util.Dom.setStyle(obj.overlay.element, "height", "auto");
-		YAHOO.util.Dom.setStyle(obj.overlay.element, "width", initialWidth);
-
-		if (obj.overlay.header) {
-			obj.overlay.header.style.width = "auto";
-		}
-		if (obj.overlay.body) {
-			obj.overlay.body.style.width = "auto";
-		}
-		if (obj.overlay.footer) {
-			obj.overlay.footer.style.width = "auto";
-		}
-	};	
-
-	expand.init();
-	return expand;
-};

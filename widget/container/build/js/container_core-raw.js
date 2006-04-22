@@ -1,3 +1,4 @@
+
 /**
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
@@ -13,127 +14,52 @@ YAHOO.util.Config = function(owner) {
 	}
 }
 
-/**
-* Initializes the configuration object and all of its local members.
-* @param {object}	owner	The owner object to which this Config object belongs
-*/
-YAHOO.util.Config.prototype.init = function(owner) {
-
-	this.owner = owner;
-	this.configChangedEvent = new YAHOO.util.CustomEvent("configChanged");
-
-	/* Private Members */
-
-	var config = {};
-	var deferredEvents = {};
-	var initialConfig = {};
+YAHOO.util.Config.prototype = {
+	
+	/**
+	* Object reference to the owner of this Config object
+	* @type object
+	*/
+	owner : null,
 
 	/**
-	* @private
-	* Fires a configuration property event using the specified value. If the property has a DOM dependency specified in its configuration, the event will be deferred. All deferred events can be fired by a call to the Config object's fireDeferredEvents method.
-	* @param {string}	key			The configuration property's name
-	* @param {property}	property	The property object for which to fire the event
-	* @param {value}	object		The value of the correct type for the property
-	*/ 
-	var fireEvent = function(key, property, value) {
-		if (property.dependentElement && ! YAHOO.util.Dom.inDocument(property.dependentElement)) { // Can't fire this event yet
-			deferredEvents[key] = { args : value };
-			return true;
-		} else {
-			if (property.mustChange) {
-				if (property.defaultValue != property.value) {
-					property.event.fire(value);
-				}
-			} else {
-				property.event.fire(value);
-			}
-			return false;
-		}		
-	}
+	* Object reference to the owner of this Config object
+	* args: key, value
+	* @type YAHOO.util.CustomEvent
+	*/
+	configChangedEvent : null,
 
-	/* End Private Members */
+	/**
+	* Boolean flag that specifies whether a queue is currently being executed
+	* @type boolean
+	*/
+	queueInProgress : false,
 
 	/**
 	* Adds a property to the Config object's private config hash. 
 	* @param {string}	key	The configuration property's name
-	* @param {object}	val	The property's default value
-	* @param {Function} hdl	The default event handler
-	* @param {Function}	vfn	The validation function used to validate the value(s) set into the property
-	* @param {Element}	el	The DOM-dependency element that must be in the document in order for the event execution not the be deferred
-	* @param {boolean} mc	Whether or not the property must be changed from the default in order to fire events.
+	* @param {object}	propertyObject	The object containing all of this property's arguments
 	*/
-	this.addProperty = function(key, val, hdl, vfn, el, mc) {
-		config[key] = { event : new YAHOO.util.CustomEvent(key), 
-						handler : hdl, 
-						dependentElement : el,
-						defaultValue : val, 
-						value : null,
-						validator : vfn,
-						mustChange : mc
-						};
-		if (config[key].handler) {
-			config[key].event.subscribe(config[key].handler, this.owner, true);
-		}
-		this.setProperty(key, val, true);
-	}
+	addProperty : function(key, propertyObject){},
 
 	/**
 	* Returns a key-value configuration map of the values currently set in the Config object.
 	* @return {object} The current config, represented in a key-value map
 	*/
-	this.getConfig = function() {
-		var cfg = {};
-			
-		for (var prop in config) {
-			var property = config[prop]
-			if (property != undefined && property.event) {
-				cfg[prop] = property.value;
-			}
-		}
-		
-		return cfg;
-	}
+	getConfig : function(){},
 
 	/**
 	* Returns the value of specified property.
 	* @param {key}		The name of the property
 	* @return {object}	The value of the specified property
 	*/
-	this.getProperty = function(key) {
-		var property = config[key];
-		if (property != undefined && property.event) {
-			return property.value;
-		} else {
-			return undefined;
-		}
-	}
-
-	/**
-	* Returns the default value of specified property.
-	* @param {key}		The name of the property
-	* @return {object} The default of the specified property
-	*/	
-	this.getDefault = function(key) {
-		var property = config[key];
-		if (property != undefined && property.event) {
-			return property.defaultValue;
-		} else {
-			return undefined;
-		}
-	}
+	getProperty : function(key){},
 
 	/**
 	* Resets the specified property's value to its initial value.
 	* @param {key}		The name of the property
 	*/
-	this.resetProperty = function(key) {
-		var property = config[key];
-		if (property != undefined && property.event) {
-			this.setProperty(key, initialConfig[key].value);
-		} else {
-			return undefined;
-		}
-	}
+	resetProperty : function(key){},
 
 	/**
 	* Sets the value of a property. If the silent property is passed as true, the property's event will not be fired.
@@ -142,77 +68,40 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @param {boolean}	Whether the value should be set silently, without firing the property event.
 	* @return {boolean}	true, if the set was successful, false if it failed.
 	*/
-	this.setProperty = function(key, value, silent) {
-		var property = config[key];
-		if (property != undefined && property.event) {
-			if (property.validator && ! property.validator(value)) { // validator
-				return false;
-			} else {
-				property.value = value;
-				if (! silent) {
-					// We're good to fire the events, but we need
-					// to make sure that the owner is in the DOM if this is
-					// a DOM-dependent event
+	setProperty : function(key,value,silent){},
 
-					var deferred = fireEvent(key, property, value);
-
-					this.configChangedEvent.fire([key, value, deferred]);
-				}
-				return true;
-			}
-		} else {
-			return false;
-		}
-	}
+	/**
+	* Sets the value of a property and queues its event to execute. If the event is already scheduled to execute, it is
+	* moved from its current position to the end of the queue.
+	* @param {key}		The name of the property
+	* @param {value}	The value to set the property to
+	* @return {boolean}	true, if the set was successful, false if it failed.
+	*/	
+	queueProperty : function(key,value){},
 
 	/**
 	* Fires the event for a property using the property's current value.
 	* @param {key}		The name of the property
 	*/
-	this.refireEvent = function(key) {
-		var property = config[key];
-		if (property != undefined && property.event) {
-			fireEvent(key, property, property.value);
-		}
-	}
+	refireEvent : function(key){},
 
 	/**
-	* Applies a key-value object literal to the configuration, replacing any existing values.
+	* Applies a key-value object literal to the configuration, replacing any existing values, and queueing the property events.
+	* Although the values will be set, fireQueue() must be called for their associated events to execute.
 	* @param {object}	userConfig	The configuration object literal
 	* @param {boolean}	init		When set to true, the initialConfig will be set to the userConfig passed in, so that calling a reset will reset the properties to the passed values.
 	*/
-	this.applyConfig = function(userConfig, init) {
-		if (init) {
-			initialConfig = userConfig;
-		}
-		for (var prop in userConfig) {
-			this.setProperty(prop, userConfig[prop], true);
-		}
-		for (var prop in userConfig) {
-			var property = config[prop];
-			if (property != undefined && property.event) {
-				fireEvent(prop, property, userConfig[prop]);
-			}
-		}
-
-	}
+	applyConfig : function(userConfig,init){},
 
 	/**
 	* Refires the events for all configuration properties using their current values.
 	*/
-	this.refresh = function() {
-		for (var prop in config) {
-			this.refireEvent(prop);
-		}
-	}
+	refresh : function(){},
 
 	/**
-	* Applies the private initialConfig to the configuration object, which in effect resets the config to its original intended state.
+	* Fires the normalized list of queued property change events
 	*/
-	this.reset = function() {
-		this.applyConfig(initialConfig);
-	}
-	
+	fireQueue : function(){},
 
 	/**
 	* Subscribes an external handler to the change event for any given property. 
@@ -220,68 +109,36 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @param {Function}	handler		The handler function to use subscribe to the property's event
 	* @param {object}	obj			The object to use for scoping the event handler (see CustomEvent documentation)
 	* @param {boolean}	override	Optional. If true, will override "this" within the handler to map to the scope object passed into the method.
-	*/
-	this.subscribeToConfigEvent = function(key, handler, obj, override) {
-		var property = config[key];
-		if (property != undefined && property.event) {
-			if (! YAHOO.util.Config.alreadySubscribed(property.event, handler, obj)) {
-				property.event.subscribe(handler, obj, override);
-			}
-			return true;
-		} else {
-			return false;
-		}
-	}
+	*/	
+	subscribeToConfigEvent : function(key,handler,obj,override){},
 
 	/**
 	* Unsubscribes an external handler from the change event for any given property. 
 	* @param {string}	key			The property name
 	* @param {Function}	handler		The handler function to use subscribe to the property's event
 	* @param {object}	obj			The object to use for scoping the event handler (see CustomEvent documentation)
-	* @param {boolean}	override	Optional. If true, will override "this" within the handler to map to the scope object passed into the method.
 	*/
-	this.unsubscribeFromConfigEvent = function(key, handler, obj) {
-		var property = config[key];
-		if (property != undefined && property.event) {
-			return property.event.unsubscribe(handler, obj);
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	* Fires any events that were deferred due to unavailable DOM dependencies.
-	*/
-	this.fireDeferredEvents = function() {
-		for (var prop in deferredEvents) {
-			var property = config[prop];
-			if (property != undefined && property.event) {
-				fireEvent(prop, property, deferredEvents[prop].args);
-			}
-		}
-	}
-
-	// Some built-in validators //
+	unsubscribeFromConfigEvent: function(key,handler,obj){},
 
 	/**
 	* Validates that the value passed in is a boolean.
 	* @param	{object}	val	The value to validate
 	* @return	{boolean}	true, if the value is valid
-	*/
-	this.checkBoolean = function(val) {
+	*/	
+	checkBoolean: function(val) {
 		if (typeof val == 'boolean') {
 			return true;
 		} else {
 			return false;
 		}
-	}
-	/**
+	},
 
+	/**
 	* Validates that the value passed in is a number.
 	* @param	{object}	val	The value to validate
 	* @return	{boolean}	true, if the value is valid
 	*/
-	this.checkNumber = function(val) {
+	checkNumber: function(val) {
 		if (isNaN(val)) {
 			return false;
 		} else {
@@ -291,6 +148,280 @@ YAHOO.util.Config.prototype.init = function(owner) {
 }
 
 
+/**
+* Initializes the configuration object and all of its local members.
+* @param {object}	owner	The owner object to which this Config object belongs
+*/
+YAHOO.util.Config.prototype.init = function(owner) {
+
+	this.owner = owner;
+	this.configChangedEvent = new YAHOO.util.CustomEvent("configChanged");
+	this.queueInProgress = false;
+
+	/* Private Members */
+
+	var config = {};
+	var initialConfig = {};
+	var eventQueue = [];
+
+	/**
+	* @private
+	* Fires a configuration property event using the specified value. 
+	* @param {string}	key			The configuration property's name
+	* @param {value}	object		The value of the correct type for the property
+	*/ 
+	var fireEvent = function( key, value ) {
+		key = key.toLowerCase();
+
+		var property = config[key];
+
+		if (typeof property != 'undefined' && property.event) {
+			property.event.fire(value);
+		}	
+	}
+	/* End Private Members */
+
+	this.addProperty = function( key, propertyObject ) {
+		key = key.toLowerCase();
+
+		config[key] = propertyObject;
+
+		propertyObject.event = new YAHOO.util.CustomEvent(key);
+		propertyObject.key = key;
+
+		if (propertyObject.handler) {
+			propertyObject.event.subscribe(propertyObject.handler, this.owner, true);
+		}
+
+		this.setProperty(key, propertyObject.value, true);
+		
+		if (! propertyObject.suppressEvent) {
+			this.queueProperty(key, propertyObject.value);
+		}
+	}
+
+	this.getConfig = function() {
+		var cfg = {};
+			
+		for (var prop in config) {
+			var property = config[prop]
+			if (typeof property != 'undefined' && property.event) {
+				cfg[prop] = property.value;
+			}
+		}
+		
+		return cfg;
+	}
+
+	this.getProperty = function(key) {
+		key = key.toLowerCase();
+
+		var property = config[key];
+		if (typeof property != 'undefined' && property.event) {
+			return property.value;
+		} else {
+			return undefined;
+		}
+	}
+
+
+	this.resetProperty = function(key) {
+		key = key.toLowerCase();
+
+		var property = config[key];
+		if (typeof property != 'undefined' && property.event) {
+			this.setProperty(key, initialConfig[key].value);
+		} else {
+			return undefined;
+		}
+	}
+
+
+	this.setProperty = function(key, value, silent) {
+		key = key.toLowerCase();
+
+		if (this.queueInProgress && ! silent) {
+			this.queueProperty(key,value); // Currently running through a queue... 
+			return true;
+		} else {
+			var property = config[key];
+			if (typeof property != 'undefined' && property.event) {
+				if (property.validator && ! property.validator(value)) { // validator
+					return false;
+				} else {
+					property.value = value;
+					if (! silent) {
+						fireEvent(key, value);
+						this.configChangedEvent.fire([key, value]);
+					}
+					return true;
+				}
+			} else {
+				return false;
+			}
+		}
+	}
+
+	this.queueProperty = function(key, value) {
+		key = key.toLowerCase();
+
+		var property = config[key];
+							
+		if (typeof property != 'undefined' && property.event) {
+			if (typeof value != 'undefined' && property.validator && ! property.validator(value)) { // validator
+				return false;
+			} else {
+
+				if (typeof value != 'undefined') {
+					property.value = value;
+				} else {
+					value = property.value;
+				}
+
+				var foundDuplicate = false;
+
+				for (var i=0;i<eventQueue.length;i++) {
+					var queueItem = eventQueue[i];
+
+					if (queueItem) {
+						var queueItemKey = queueItem[0];
+						var queueItemValue = queueItem[1];
+						
+						if (queueItemKey.toLowerCase() == key) {
+							// found a dupe... push to end of queue, null current item, and break
+							eventQueue[i] = null;
+							eventQueue.push([key, (typeof value != 'undefined' ? value : queueItemValue)]);
+							foundDuplicate = true;
+							break;
+						}
+					}
+				}
+				
+				if (! foundDuplicate && typeof value != 'undefined') { // this is a refire, or a new property in the queue
+					eventQueue.push([key, value]);
+				}
+			}
+
+			if (property.supercedes) {
+				for (var s=0;s<property.supercedes.length;s++) {
+					var supercedesCheck = property.supercedes[s];
+
+					for (var q=0;q<eventQueue.length;q++) {
+						var queueItemCheck = eventQueue[q];
+
+						if (queueItemCheck) {
+							var queueItemCheckKey = queueItemCheck[0];
+							var queueItemCheckValue = queueItemCheck[1];
+							
+							if ( queueItemCheckKey.toLowerCase() == supercedesCheck.toLowerCase() ) {
+								eventQueue.push([queueItemCheckKey, queueItemCheckValue]);
+								eventQueue[q] = null;
+								break;
+							}
+						}
+					}
+				}
+			}
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	this.refireEvent = function(key) {
+		key = key.toLowerCase();
+
+		var property = config[key];
+		if (typeof property != 'undefined' && property.event && typeof property.value != 'undefined') {
+			if (this.queueInProgress) {
+				this.queueProperty(key);
+			} else {
+				fireEvent(key, property.value);
+			}
+		}
+	}
+
+	this.applyConfig = function(userConfig, init) {
+		if (init) {
+			initialConfig = userConfig;
+		}
+		for (var prop in userConfig) {
+			this.queueProperty(prop, userConfig[prop]);
+		}
+	}
+
+	this.refresh = function() {
+		for (var prop in config) {
+			this.refireEvent(prop);
+		}
+	}
+
+	this.fireQueue = function() {
+		this.queueInProgress = true;
+		for (var i=0;i<eventQueue.length;i++) {
+			var queueItem = eventQueue[i];
+			if (queueItem) {
+				var key = queueItem[0];
+				var value = queueItem[1];
+
+				var property = config[key];
+				property.value = value;
+
+				fireEvent(key,value);
+			}
+		}
+		
+		this.queueInProgress = false;
+		eventQueue = new Array();
+	}
+
+	this.subscribeToConfigEvent = function(key, handler, obj, override) {
+		key = key.toLowerCase();
+
+		var property = config[key];
+		if (typeof property != 'undefined' && property.event) {
+			if (! YAHOO.util.Config.alreadySubscribed(property.event, handler, obj)) {
+				property.event.subscribe(handler, obj, override);
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+	this.unsubscribeFromConfigEvent = function(key, handler, obj) {
+		key = key.toLowerCase();
+
+		var property = config[key];
+		if (typeof property != 'undefined' && property.event) {
+			return property.event.unsubscribe(handler, obj);
+		} else {
+			return false;
+		}
+	}
+
+	// TODO: REMOVE
+	this.outputEventQueue = function() {
+		var output = "";
+		for (var q=0;q<eventQueue.length;q++) {
+			var queueItem = eventQueue[q];
+			if (queueItem) {
+				output += queueItem[0] + "=" + queueItem[1] + ", ";
+			}
+		}
+		return output;
+	}
+}
+
+/**
+* Checks to determine if a particular function/object pair are already subscribed to the specified CustomEvent
+* @param {YAHOO.util.CustomEvent} evt	The CustomEvent for which to check the subscriptions
+* @param {Function}	fn	The function to look for in the subscribers list
+* @param {object}	obj	The execution scope object for the subscription
+* @return {boolean}	true, if the function/object pair is already subscribed to the CustomEvent passed in
+*/
 YAHOO.util.Config.alreadySubscribed = function(evt, fn, obj) {
 	for (var e=0;e<evt.subscribers.length;e++) {
 		var subsc = evt.subscribers[e];
@@ -300,9 +431,7 @@ YAHOO.util.Config.alreadySubscribed = function(evt, fn, obj) {
 		}
 	}
 	return false;
-}
-
-/**
+}/**
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
@@ -319,7 +448,16 @@ YAHOO.widget.Module = function(el, userConfig) {
 	}
 }
 
+/**
+* Constant representing the prefix path to use for non-secure images
+* @type string
+*/
 YAHOO.widget.Module.IMG_ROOT = "http://us.i1.yimg.com/us.yimg.com/i/";
+
+/**
+* Constant representing the prefix path to use for securely served images
+* @type string
+*/
 YAHOO.widget.Module.IMG_ROOT_SSL = "https://a248.e.akamai.net/sec.yimg.com/i/";
 
 /**
@@ -401,20 +539,113 @@ YAHOO.widget.Module.prototype = {
 	imageRoot : YAHOO.widget.Module.IMG_ROOT,
 
 	/**
-	* Array of OverlayEffects to use when showing and hiding the Module
-	* @type YAHOO.widget.OverlayEffect[]
+	* CustomEvent fired prior to class initalization.
+	* args: class reference of the initializing class, such as this.beforeInitEvent.fire(YAHOO.widget.Module)
+	* @type YAHOO.util.CustomEvent
 	*/
-	effects : new Array(),
+	beforeInitEvent : null,
 
+	/**
+	* CustomEvent fired after class initalization.
+	* args: class reference of the initializing class, such as this.initEvent.fire(YAHOO.widget.Module)
+	* @type YAHOO.util.CustomEvent
+	*/
+	initEvent : null,
+
+	/**
+	* CustomEvent fired when the Module is appended to the DOM
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	appendEvent : null,
+
+	/**
+	* CustomEvent fired before the Module is rendered
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	beforeRenderEvent : null,
+
+	/**
+	* CustomEvent fired after the Module is rendered
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	renderEvent : null,
+
+	/**
+	* CustomEvent fired when the header content of the Module is modified
+	* args: string/element representing the new header content
+	* @type YAHOO.util.CustomEvent
+	*/
+	changeHeaderEvent : null,
+
+	/**
+	* CustomEvent fired when the body content of the Module is modified
+	* args: string/element representing the new body content
+	* @type YAHOO.util.CustomEvent
+	*/
+	changeBodyEvent : null,
+
+	/**
+	* CustomEvent fired when the footer content of the Module is modified
+	* args: string/element representing the new footer content
+	* @type YAHOO.util.CustomEvent
+	*/
+	changeFooterEvent : null,
+
+	/**
+	* CustomEvent fired when the content of the Module is modified
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	changeContentEvent : null,
+
+	/**
+	* CustomEvent fired when the Module is destroyed
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	destroyEvent : null,
+
+	/**
+	* CustomEvent fired before the Module is shown
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	beforeShowEvent : null,
+
+	/**
+	* CustomEvent fired after the Module is shown
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	showEvent : null,
+
+	/**
+	* CustomEvent fired before the Module is hidden
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	beforeHideEvent : null,
+	
+	/**
+	* CustomEvent fired after the Module is hidden
+	* args: none
+	* @type YAHOO.util.CustomEvent
+	*/
+	hideEvent : null,
+		
 	/**
 	* Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
 	*/
 	initEvents : function() {
 
-		this.beforeInitModuleEvent	= new YAHOO.util.CustomEvent("beforeInitModule");
-		this.initModuleEvent		= new YAHOO.util.CustomEvent("initModule");
+		this.beforeInitEvent		= new YAHOO.util.CustomEvent("beforeInit");
+		this.initEvent				= new YAHOO.util.CustomEvent("init");
 
 		this.appendEvent			= new YAHOO.util.CustomEvent("append");
+
 		this.beforeRenderEvent		= new YAHOO.util.CustomEvent("beforeRender");
 		this.renderEvent			= new YAHOO.util.CustomEvent("render");
 
@@ -425,13 +656,60 @@ YAHOO.widget.Module.prototype = {
 		this.changeContentEvent		= new YAHOO.util.CustomEvent("changeContent");
 
 		this.destroyEvent			= new YAHOO.util.CustomEvent("destroy");
-		this.beforeShowEvent		= new YAHOO.util.CustomEvent("beforeShow", this);
-		this.showEvent				= new YAHOO.util.CustomEvent("show", this);
-		this.beforeHideEvent		= new YAHOO.util.CustomEvent("beforeHide", this);
-		this.hideEvent				= new YAHOO.util.CustomEvent("hide", this);
-
-		this.resizeEvent			= new YAHOO.util.CustomEvent("resize", this);
+		this.beforeShowEvent		= new YAHOO.util.CustomEvent("beforeShow");
+		this.showEvent				= new YAHOO.util.CustomEvent("show");
+		this.beforeHideEvent		= new YAHOO.util.CustomEvent("beforeHide");
+		this.hideEvent				= new YAHOO.util.CustomEvent("hide");
 	}, 
+
+	/**
+	* String representing the current user-agent platform
+	* @type string
+	*/
+	platform : function() {
+					var ua = navigator.userAgent.toLowerCase();
+					if (ua.indexOf("windows") != -1 || ua.indexOf("win32") != -1) {
+						return "windows";
+					} else if (ua.indexOf("macintosh") != -1) {
+						return "mac";
+					} else {
+						return false;
+					}
+				}(),
+
+	/**
+	* String representing the current user-agent browser
+	* @type string
+	*/
+	browser : function() {
+			var ua = navigator.userAgent.toLowerCase();
+				  if (ua.indexOf('opera')!=-1) { // Opera (check first in case of spoof)
+					 return 'opera';
+				  } else if (ua.indexOf('msie 7')!=-1) { // IE7
+					 return 'ie7';
+				  } else if (ua.indexOf('msie') !=-1) { // IE
+					 return 'ie';
+				  } else if (ua.indexOf('safari')!=-1) { // Safari (check before Gecko because it includes "like Gecko")
+					 return 'safari';
+				  } else if (ua.indexOf('gecko') != -1) { // Gecko
+					 return 'gecko';
+				  } else {
+					 return false;
+				  }
+			}(),
+
+	/**
+	* Boolean representing whether or not the current browsing context is secure (https)
+	* @type boolean
+	*/
+	isSecure : function() {
+		if (window.location.href.toLowerCase().indexOf("https") == 0) {
+			this.imageRoot = YAHOO.widget.Module.IMG_ROOT_SSL;
+			return true;
+		} else {
+			return false;
+		}
+	}(),
 
 	/**
 	* Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
@@ -439,48 +717,9 @@ YAHOO.widget.Module.prototype = {
 	initDefaultConfig : function() {
 		// Add properties //
 
-		var ua = navigator.userAgent.toLowerCase();
-
-		this.platform = function() {
-			if (ua.indexOf("windows") != -1 || ua.indexOf("win32") != -1) {
-				return "windows";
-			} else if (ua.indexOf("macintosh") != -1) {
-				return "mac";
-			} else {
-				return false;
-			}
-		}();
-
-		/**
-		* A string representing the current browser, as determined by the user-agent
-		* @type string
-		*/
-		this.browser = function() {
-			  if (ua.indexOf('opera')!=-1) { // Opera (check first in case of spoof)
-				 return 'opera';
-			  } else if (ua.indexOf('msie 7')!=-1) { // IE7
-				 return 'ie7';
-			  } else if (ua.indexOf('msie') !=-1) { // IE
-				 return 'ie';
-			  } else if (ua.indexOf('safari')!=-1) { // Safari (check before Gecko because it includes "like Gecko")
-				 return 'safari';
-			  } else if (ua.indexOf('gecko') != -1) { // Gecko
-				 return 'gecko';
-			  } else {
-				 return false;
-			  }
-		}();
-
-		if (window.location.href.toLowerCase().indexOf("https") == 0) {
-			this.imageRoot = YAHOO.widget.Module.IMG_ROOT_SSL;
-			this.isSecure = true;
-		} else {
-			this.isSecure = false;
-		}
-
-		this.cfg.addProperty("visible", null, this.configVisible, this.cfg.checkBoolean, this.element, true);
-		this.cfg.addProperty("effect");
-		this.cfg.addProperty("monitorresize", true, this.configMonitorResize);
+		this.cfg.addProperty("visible", { value:true, handler:this.configVisible, validator:this.cfg.checkBoolean } );
+		this.cfg.addProperty("effect", { suppressEvent:true, supercedes:["visible"] } );
+		this.cfg.addProperty("monitorresize", { value:true, handler:this.configMonitorResize } );
 	},
 
 	/**
@@ -491,12 +730,12 @@ YAHOO.widget.Module.prototype = {
 	*/
 	init : function(el, userConfig) {
 
-		this.cfg = new YAHOO.util.Config(this);
-
 		this.initEvents();
-		
-		this.beforeInitModuleEvent.fire(el);
 
+		this.beforeInitEvent.fire(YAHOO.widget.Module);
+
+		this.cfg = new YAHOO.util.Config(this);
+		
 		if (typeof el == "string") {
 			var elId = el;
 
@@ -512,8 +751,6 @@ YAHOO.widget.Module.prototype = {
 		if (el.id) {
 			this.id = el.id;
 		} 
-		
-		this.childNodesInDOM = [null,null,null];
 
 		var childNodes = this.element.childNodes;
 
@@ -523,15 +760,12 @@ YAHOO.widget.Module.prototype = {
 				switch (child.className) {
 					case YAHOO.widget.Module.CSS_HEADER:
 						this.header = child;
-						this.childNodesInDOM[0] = child;
 						break;
 					case YAHOO.widget.Module.CSS_BODY:
 						this.body = child;
-						this.childNodesInDOM[1] = child;
 						break;
 					case YAHOO.widget.Module.CSS_FOOTER:
 						this.footer = child;
-						this.childNodesInDOM[2] = child;
 						break;
 				}
 			}
@@ -545,7 +779,13 @@ YAHOO.widget.Module.prototype = {
 			this.cfg.applyConfig(userConfig);
 		}
 
-		this.initModuleEvent.fire(this.element);
+		// Subscribe to the fireQueue() method of Config so that any queued configuration changes are
+		// excecuted upon render of the Module
+		if (! YAHOO.util.Config.alreadySubscribed(this.renderEvent, this.cfg.fireQueue, this.cfg)) {
+			this.renderEvent.subscribe(this.cfg.fireQueue, this.cfg, true);
+		}
+
+		this.initEvent.fire(YAHOO.widget.Module);
 	},
 
 	/**
@@ -689,6 +929,7 @@ YAHOO.widget.Module.prototype = {
 	* Renders the Module by inserting the elements that are not already in the main Module into their correct places. Optionally appends the Module to the specified node prior to the render's execution. NOTE: For Modules without existing markup, the appendToNode argument is REQUIRED. If this argument is ommitted and the current element is not present in the document, the function will return false, indicating that the render was a failure.
 	* @param {string}	appendToNode	The element id to which the Module should be appended to prior to rendering <em>OR</em>
 	* @param {Element}	appendToNode	The element to which the Module should be appended to prior to rendering	
+	* @param {Element}	moduleElement	OPTIONAL. The element that represents the actual Standard Module container. 
 	* @return {boolean} Success or failure of the render
 	*/
 	render : function(appendToNode, moduleElement) {
@@ -711,13 +952,6 @@ YAHOO.widget.Module.prototype = {
 		}
 
 		if (appendToNode) {
-			if (typeof appendToNode == "string") {
-				el = document.getElementById(el);
-				if (! el) {
-					el = document.createElement("DIV");
-					el.id = elId;
-				}
-			}
 			appendTo(appendToNode);
 		} else { // No node was passed in. If the element is not pre-marked up, this fails
 			if (! YAHOO.util.Dom.inDocument(this.element)) {
@@ -727,7 +961,7 @@ YAHOO.widget.Module.prototype = {
 
 		// Need to get everything into the DOM if it isn't already
 		
-		if ((! this.childNodesInDOM[0]) && this.header) {
+		if (this.header && ! YAHOO.util.Dom.inDocument(this.header)) {
 			// There is a header, but it's not in the DOM yet... need to add it
 			var firstChild = moduleElement.firstChild;
 			if (firstChild) { // Insert before first child if exists
@@ -737,21 +971,19 @@ YAHOO.widget.Module.prototype = {
 			}
 		}
 
-		if ((! this.childNodesInDOM[1]) && this.body) {
+		if (this.body && ! YAHOO.util.Dom.inDocument(this.body)) {
 			// There is a body, but it's not in the DOM yet... need to add it
-			if (this.childNodesInDOM[2]) { // Insert before footer if exists in DOM
-				moduleElement.insertBefore(this.body, this.childNodesInDOM[2]);
+			if (this.footer && YAHOO.util.Dom.isAncestor(this.moduleElement, this.footer)) { // Insert before footer if exists in DOM
+				moduleElement.insertBefore(this.body, this.footer);
 			} else { // Append to element because there is no footer
 				moduleElement.appendChild(this.body);
 			}
 		}
 
-		if ((! this.childNodesInDOM[2]) && this.footer) {
+		if (this.footer && ! YAHOO.util.Dom.inDocument(this.footer)) {
 			// There is a footer, but it's not in the DOM yet... need to add it
 			moduleElement.appendChild(this.footer);
 		}
-		
-		this.cfg.fireDeferredEvents();
 
 		this.renderEvent.fire();
 		return true;
@@ -782,9 +1014,6 @@ YAHOO.widget.Module.prototype = {
 	show : function() {
 		this.beforeShowEvent.fire();
 		this.cfg.setProperty("visible", true);
-		if (! this.cfg.getProperty("effect")) {
-			this.showEvent.fire();
-		}
 	},
 
 	/**
@@ -793,22 +1022,22 @@ YAHOO.widget.Module.prototype = {
 	hide : function() {
 		this.beforeHideEvent.fire();
 		this.cfg.setProperty("visible", false);
-		if (! this.cfg.getProperty("effect")) {
-			this.hideEvent.fire();
-		}
 	},
 
 	// BUILT-IN EVENT HANDLERS FOR MODULE //
 
 	/**
 	* Default event handler for changing the visibility property of a Module. By default, this is achieved by switching the "display" style between "block" and "none".
+	* This method is responsible for firing showEvent and hideEvent.
 	*/
 	configVisible : function(type, args, obj) {
 		var visible = args[0];
 		if (visible) {
 			YAHOO.util.Dom.setStyle(this.element, "display", "block");
+			this.showEvent.fire();
 		} else {
 			YAHOO.util.Dom.setStyle(this.element, "display", "none");
+			this.hideEvent.fire();
 		}
 	},
 
@@ -825,7 +1054,6 @@ YAHOO.widget.Module.prototype = {
 		}
 	}
 }
-
 /**
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
@@ -894,6 +1122,20 @@ YAHOO.widget.Overlay.BOTTOM_RIGHT = "br";
 */
 YAHOO.widget.Overlay.CSS_OVERLAY = "overlay";
 
+/**
+* CustomEvent fired before the Overlay is moved.
+* args: x,y that the Overlay will be moved to
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.widget.Overlay.prototype.beforeMoveEvent = null;
+
+/**
+* CustomEvent fired after the Overlay is moved.
+* args: x,y that the Overlay was moved to
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.widget.Overlay.prototype.moveEvent = null;
+
 /*
 * The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
 * @param {string}	el	The element ID representing the Overlay <em>OR</em>
@@ -909,9 +1151,15 @@ YAHOO.widget.Overlay.prototype.init = function(el, userConfig) {
 		this.cfg.applyConfig(userConfig, true);
 	}
 
-	if (! YAHOO.util.Config.alreadySubscribed(this.renderEvent, this.cfg.refresh, this.cfg)) {
-		this.renderEvent.subscribe(this.cfg.refresh, this.cfg, true);
+	if (this.platform == "mac" && this.browser == "gecko") {
+		if (! YAHOO.util.Config.alreadySubscribed(this.showEvent,this.showMacGeckoScrollbars,this)) {
+			this.showEvent.subscribe(this.showMacGeckoScrollbars,this,true);
+		}
+		if (! YAHOO.util.Config.alreadySubscribed(this.hideEvent,this.hideMacGeckoScrollbars,this)) {
+			this.hideEvent.subscribe(this.hideMacGeckoScrollbars,this,true);
+		}
 	}
+
 }
 
 /**
@@ -931,22 +1179,20 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	YAHOO.widget.Overlay.superclass.initDefaultConfig.call(this);
 
 	// Add overlay config properties //
+	this.cfg.addProperty("x", { handler:this.configX, validator:this.cfg.checkNumber, suppressEvent:true, supercedes:["iframe"] } );
+	this.cfg.addProperty("y", { handler:this.configY, validator:this.cfg.checkNumber, suppressEvent:true, supercedes:["iframe"] } );
+	this.cfg.addProperty("xy",{ handler:this.configXY, suppressEvent:true, supercedes:["iframe"] } );
 
-	this.cfg.addProperty("x", null, this.configX, this.cfg.checkNumber, this.element, true);
-	this.cfg.addProperty("y", null, this.configY, this.cfg.checkNumber, this.element, true);
-	this.cfg.addProperty("xy", null, this.configXY, null, this.element, true);
+	this.cfg.addProperty("context",	{ handler:this.configContext, suppressEvent:true, supercedes:["iframe"] } );
+	this.cfg.addProperty("fixedcenter", { value:false, handler:this.configFixedCenter, validator:this.cfg.checkBoolean, supercedes:["iframe","visible"] } );
 
-	this.cfg.addProperty("fixedcenter", false, this.configFixedCenter, this.cfg.checkBoolean, this.element);
+	this.cfg.addProperty("width", { handler:this.configWidth, suppressEvent:true, supercedes:["iframe"] } );
+	this.cfg.addProperty("height", { handler:this.configHeight, suppressEvent:true, supercedes:["iframe"] } );
 
-	this.cfg.addProperty("width", null, this.configWidth, null, this.element, true);
-	this.cfg.addProperty("height", null, this.configHeight, null, this.element, true);
+	this.cfg.addProperty("zIndex", { value:null, handler:this.configzIndex } );
 
-	this.cfg.addProperty("zIndex", null, this.configzIndex, this.cfg.checkNumber, this.element, true);
-
-	this.cfg.addProperty("constraintoviewport", false, this.configConstrainToViewport, this.cfg.checkBoolean);
-	this.cfg.addProperty("iframe", ((this.browser == "ie" || (this.platform == "mac" && this.browser == "gecko")) ? true : false), this.configIframe, this.cfg.checkBoolean, this.element);
-
-	this.cfg.addProperty("context",	null, this.configContext);
+	this.cfg.addProperty("constraintoviewport", { value:false, handler:this.configConstrainToViewport, validator:this.cfg.checkBoolean, supercedes:["iframe","x","y","xy"] } );
+	this.cfg.addProperty("iframe", { value:(this.browser == "ie" ? true : false), handler:this.configIframe, validator:this.cfg.checkBoolean, supercedes:["visible","zIndex"] } );
 }
 
 /**
@@ -958,18 +1204,37 @@ YAHOO.widget.Overlay.prototype.moveTo = function(x, y) {
 	this.cfg.setProperty("xy",[x,y]);
 }
 
+/**
+* Adds a special CSS class to the Overlay when Mac/Gecko is in use, to work around a Gecko bug where
+* scrollbars cannot be hidden. See https://bugzilla.mozilla.org/show_bug.cgi?id=187435
+*/
+YAHOO.widget.Overlay.prototype.hideMacGeckoScrollbars = function() {
+	YAHOO.util.Dom.removeClass(this.element, "show-scrollbars");
+	YAHOO.util.Dom.addClass(this.element, "hide-scrollbars");
+}
+
+/**
+* Removes a special CSS class from the Overlay when Mac/Gecko is in use, to work around a Gecko bug where
+* scrollbars cannot be hidden. See https://bugzilla.mozilla.org/show_bug.cgi?id=187435
+*/
+YAHOO.widget.Overlay.prototype.showMacGeckoScrollbars = function() {
+	YAHOO.util.Dom.removeClass(this.element, "hide-scrollbars");
+	YAHOO.util.Dom.addClass(this.element, "show-scrollbars");
+}
+
 // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
 
 /**
-* The default event handler fired when the "visible" property is changed. The fading animation of the Panel, if enabled, is also handled within this method.
+* The default event handler fired when the "visible" property is changed. This method is responsible for firing showEvent and hideEvent.
 */
 YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
-	var val = args[0];
-	
+	var visible = args[0];
+	var currentVis = YAHOO.util.Dom.getStyle(this.element, "visibility");
+
 	var effect = this.cfg.getProperty("effect");
+
+	var effectInstances = new Array();
 	if (effect) {
-		var effectInstances = new Array();
-		
 		if (effect instanceof Array) {
 			for (var i=0;i<effect.length;i++) {
 				var eff = effect[i];
@@ -978,137 +1243,93 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 		} else {
 			effectInstances[effectInstances.length] = effect.effect(this, effect.duration);
 		}
+	}
 
-		var currentVis = YAHOO.util.Dom.getStyle(this.element, "visibility");
-		if (val) { // Animate in if not showing
-			if (currentVis == "hidden") {
-				for (var i=0;i<effectInstances.length;i++) {
-					var e = effectInstances[i];
-					if (! YAHOO.util.Config.alreadySubscribed(e.animateInCompleteEvent,this.showEvent.fire,this.showEvent)) {
-						e.animateInCompleteEvent.subscribe(this.showEvent.fire,this.showEvent,true);
+	var isMacGecko = (this.platform == "mac" && this.browser == "gecko");
+
+	if (visible) { // Show
+		if (isMacGecko) {
+			this.showMacGeckoScrollbars();
+		}	
+
+		if (effect) { // Animate in
+			if (visible) { // Animate in if not showing
+				if (currentVis != "visible") {
+					for (var i=0;i<effectInstances.length;i++) {
+						var e = effectInstances[i];
+						if (! YAHOO.util.Config.alreadySubscribed(e.animateInCompleteEvent,this.showEvent.fire,this.showEvent)) {
+							e.animateInCompleteEvent.subscribe(this.showEvent.fire,this.showEvent,true); // Delegate showEvent until end of animateInComplete
+						}
+						//this.cfg.refireEvent("iframe");
+						e.animateIn();
 					}
-					e.animateIn();
 				}
-				//if (this.iframe) {
-				//	YAHOO.util.Dom.setStyle(this.iframe, "display", "block");
-				//}
 			}
-		} else { // Animate out if showing
-			if (currentVis == "visible") {
+		} else { // Show
+			if (currentVis != "visible") {
+				YAHOO.util.Dom.setStyle(this.element, "visibility", "visible");
+				this.cfg.refireEvent("iframe");
+				this.showEvent.fire();
+			}
+		}
+
+	} else { // Hide
+		if (isMacGecko) {
+			this.hideMacGeckoScrollbars();
+		}	
+
+		if (effect) { // Animate out if showing
+			if (currentVis != "hidden") {
 				for (var i=0;i<effectInstances.length;i++) {
 					var e = effectInstances[i];
 					if (! YAHOO.util.Config.alreadySubscribed(e.animateOutCompleteEvent,this.hideEvent.fire,this.hideEvent)) {				
-						e.animateOutCompleteEvent.subscribe(this.hideEvent.fire,this.hideEvent,true);			
+						e.animateOutCompleteEvent.subscribe(this.hideEvent.fire,this.hideEvent,true); // Delegate hideEvent until end of animateOutComplete
 					}
 					e.animateOut();
 				}
-				//if (this.iframe) {
-				//	YAHOO.util.Dom.setStyle(this.iframe, "display", "none");
-				//}
 			}
-		}
-	} else { // No animation
-		if (val) {
-			YAHOO.util.Dom.setStyle((this.element), "visibility", "visible");
-				
-			if (this.platform == "mac" && this.browser == "gecko") {
-				if (! YAHOO.util.Config.alreadySubscribed(this.showEvent,this.showMacGeckoScrollbars,this)) {
-					this.showEvent.subscribe(this.showMacGeckoScrollbars,this,true);
-				}
+		} else { // Simple hide
+			if (currentVis != "hidden") {
+				YAHOO.util.Dom.setStyle(this.element, "visibility", "hidden");
 				this.cfg.refireEvent("iframe");
-				/*this.showEvent.subscribe(
-					function() {
-						this.cfg.refireEvent("iframe");
-					}, this, true);*/
+				this.hideEvent.fire();
 			}
-			//if (this.iframe) {
-				//YAHOO.util.Dom.setStyle(this.iframe, "display", "block");
-				//YAHOO.util.Dom.setStyle(this.iframe, "opacity", 1);
-				//YAHOO.util.Dom.setStyle(this.iframe, "visibility", "visible");
-				//YAHOO.util.Dom.setStyle(this.iframe, "zIndex", (this.cfg.getProperty("zIndex") - 1));
-			//}
-		} else {
-
-			if (this.platform == "mac" && this.browser == "gecko") {
-				if (! YAHOO.util.Config.alreadySubscribed(this.hideEvent,this.hideMacGeckoScrollbars,this)) {
-					this.hideEvent.subscribe(this.hideMacGeckoScrollbars,this,true);
-				}
-				this.cfg.refireEvent("iframe");
-			}
-			YAHOO.util.Dom.setStyle((this.element), "visibility", "hidden");
-			//if (this.iframe) {
-			//	YAHOO.util.Dom.setStyle(this.iframe, "display", "none");
-				//YAHOO.util.Dom.setStyle(this.iframe, "visibility", "hidden");
-				//YAHOO.util.Dom.setStyle(this.iframe, "zIndex", (this.cfg.getProperty("zIndex") + 1));
-			//}
-		}
+		}	
 	}
-	this.cfg.refireEvent("iframe");
 }
 
+/**
+* Center event handler used for centering on scroll/resize, but only if the Overlay is visible
+*/
+YAHOO.widget.Overlay.prototype.doCenterOnDOMEvent = function() {
+	if (this.cfg.getProperty("visible")) {
+		this.center();
+	}
+}
 
 /**
 * The default event handler fired when the "fixedcenter" property is changed.
 */
 YAHOO.widget.Overlay.prototype.configFixedCenter = function(type, args, obj) {
 	var val = args[0];
-	var me = this;
-	
-	if (! this.centerOnVis) {
-		this.centerOnVis = function(type,args,obj) {
-			var visible = args[0];
-			if (visible) {
-				this.center();
-			}
-		};
-	}
 
 	if (val) {
-		this.cfg.subscribeToConfigEvent("visible", this.centerOnVis, this, true);
+		this.center();
 			
-		//= function(key, handler, obj, override)
 		if (! YAHOO.util.Config.alreadySubscribed(this.beforeShowEvent, this.center, this)) {
 			this.beforeShowEvent.subscribe(this.center, this, true);
 		}
 		
-		if (! YAHOO.util.Config.alreadySubscribed(YAHOO.widget.Overlay.windowResizeEvent, this.center, this)) {
-			YAHOO.widget.Overlay.windowResizeEvent.subscribe(this.center, this, true);
+		if (! YAHOO.util.Config.alreadySubscribed(YAHOO.widget.Overlay.windowResizeEvent, this.doCenterOnDOMEvent, this)) {
+			YAHOO.widget.Overlay.windowResizeEvent.subscribe(this.doCenterOnDOMEvent, this, true);
 		}
 
-		if (! YAHOO.util.Config.alreadySubscribed(YAHOO.widget.Overlay.windowScrollEvent, this.center, this)) {
-			YAHOO.widget.Overlay.windowScrollEvent.subscribe(this.center, this, true);
+		if (! YAHOO.util.Config.alreadySubscribed(YAHOO.widget.Overlay.windowScrollEvent, this.doCenterOnDOMEvent, this)) {
+			YAHOO.widget.Overlay.windowScrollEvent.subscribe( this.doCenterOnDOMEvent, this, true);
 		}
-
-		//YAHOO.widget.Overlay.windowResizeEvent.subscribe(refireIframe, this, true);
-		//YAHOO.widget.Overlay.windowScrollEvent.subscribe(refireIframe, this, true);
-
-		/*if (YAHOO.util.Event._getCacheIndex(window, "resize", this.center) == -1) {
-			YAHOO.util.Event.addListener(window, "resize", this.center, this, true);
-		}
-		if (YAHOO.util.Event._getCacheIndex(window, "resize", refireIframe) == -1) {
-			YAHOO.util.Event.addListener(window, "resize", refireIframe, this, true);
-		}
-		if (YAHOO.util.Event._getCacheIndex(window, "scroll", this.center) == -1) {
-			YAHOO.util.Event.addListener(window, "scroll", this.center, this, true);
-		}
-		if (YAHOO.util.Event._getCacheIndex(window, "scroll", refireIframe) == -1) {
-			YAHOO.util.Event.addListener(window, "scroll", refireIframe, this, true);
-		}*/
 	} else {
-		/*var removed = [];
-		removed[0] = YAHOO.util.Event.removeListener(window, "resize", this.center);
-		removed[1] = YAHOO.util.Event.removeListener(window, "resize", refireIframe);
-		removed[2] = YAHOO.util.Event.removeListener(window, "scroll", this.center);
-		removed[3] = YAHOO.util.Event.removeListener(window, "scroll", refireIframe);*/
-		//this.beforeShowEvent.unsubscribe(this.center, this);
-		this.cfg.unsubscribeFromConfigEvent("visible", this.centerOnVis, this);
-		YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.center, this);
-		YAHOO.widget.Overlay.windowScrollEvent.unsubscribe(this.center, this);
-
-		//YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(refireIframe, this);
-		//YAHOO.widget.Overlay.windowScrollEvent.unsubscribe(refireIframe, this);
-
-		//this.syncPosition();
+		YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.doCenterOnDOMEvent, this);
+		YAHOO.widget.Overlay.windowScrollEvent.unsubscribe(this.doCenterOnDOMEvent, this);
 	}
 }
 
@@ -1130,7 +1351,6 @@ YAHOO.widget.Overlay.prototype.configWidth = function(type, args, obj) {
 	var el = this.element;
 	YAHOO.util.Dom.setStyle(el, "width", width);
 	this.cfg.refireEvent("iframe");
-	this.cfg.refireEvent("context");
 }
 
 /**
@@ -1138,7 +1358,15 @@ YAHOO.widget.Overlay.prototype.configWidth = function(type, args, obj) {
 */
 YAHOO.widget.Overlay.prototype.configzIndex = function(type, args, obj) {
 	var zIndex = args[0];
+
 	var el = this.element;
+
+	if (! zIndex) {
+		zIndex = YAHOO.util.Dom.getStyle(el, "zIndex");
+		if (! zIndex || isNaN(zIndex)) {
+			zIndex = 0;
+		}
+	}
 
 	if (this.iframe) {
 		if (zIndex <= 0) {
@@ -1146,6 +1374,7 @@ YAHOO.widget.Overlay.prototype.configzIndex = function(type, args, obj) {
 		}
 		YAHOO.util.Dom.setStyle(this.iframe, "zIndex", (zIndex-1));
 	}
+
 	YAHOO.util.Dom.setStyle(el, "zIndex", zIndex);
 	this.cfg.setProperty("zIndex", zIndex, true);
 }
@@ -1158,21 +1387,15 @@ YAHOO.widget.Overlay.prototype.configXY = function(type, args, obj) {
 	var x = pos[0];
 	var y = pos[1];
 
-	this.cfg.setProperty("x", x, true);
-	this.cfg.setProperty("y", y, true);
+	this.cfg.setProperty("x", x);
+	this.cfg.setProperty("y", y);
 
 	this.beforeMoveEvent.fire([x,y]);
 
 	x = this.cfg.getProperty("x");
 	y = this.cfg.getProperty("y");
 
-	//alert("setXY:"+[x,y]);
-	YAHOO.util.Dom.setXY(this.element, [x,y], true);
-
-	if (this.cfg.getProperty("iframe")) {
-		this.cfg.refireEvent("iframe");
-	}
-
+	this.cfg.refireEvent("iframe");
 	this.moveEvent.fire([x,y]);
 }
 
@@ -1192,12 +1415,10 @@ YAHOO.widget.Overlay.prototype.configX = function(type, args, obj) {
 	y = this.cfg.getProperty("y");
 
 	YAHOO.util.Dom.setX(this.element, x, true);
+	
 	this.cfg.setProperty("xy", [x, y], true);
 
-	if (this.cfg.getProperty("iframe")) {
-		this.cfg.refireEvent("iframe");
-	}
-
+	this.cfg.refireEvent("iframe");
 	this.moveEvent.fire([x, y]);
 }
 
@@ -1217,12 +1438,10 @@ YAHOO.widget.Overlay.prototype.configY = function(type, args, obj) {
 	y = this.cfg.getProperty("y");
 
 	YAHOO.util.Dom.setY(this.element, y, true);
+
 	this.cfg.setProperty("xy", [x, y], true);
 
-	if (this.cfg.getProperty("iframe")) {
-		this.cfg.refireEvent("iframe");
-	}
-
+	this.cfg.refireEvent("iframe");
 	this.moveEvent.fire([x, y]);
 }
 
@@ -1234,68 +1453,50 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 
 	var el = this.element;
 
-	//var x = this.cfg.getProperty("x");
-	//var y = this.cfg.getProperty("y");
-	
-	var pos = YAHOO.util.Dom.getXY(this.element);
-
-	//if (! x || ! y) {
-	//	this.syncPosition();
-	//	x = this.cfg.getProperty("x");
-	//	y = this.cfg.getProperty("y");
-	//}
-
 	if (val) {
-		if (! this.iframe) {
-			this.iframe = document.createElement("iframe");
-			
-			var parent = el.parentNode;
-			if (parent) {
-				parent.appendChild(this.iframe);
-			} else {
-				document.body.appendChild(this.iframe);
+		var x = this.cfg.getProperty("x");
+		var y = this.cfg.getProperty("y");
+
+		if (! x || ! y) {
+			this.syncPosition();
+			x = this.cfg.getProperty("x");
+			y = this.cfg.getProperty("y");
+		}
+
+		if (! isNaN(x) && ! isNaN(y)) {
+			if (! this.iframe) {
+				this.iframe = document.createElement("iframe");
+				
+				var parent = el.parentNode;
+				if (parent) {
+					parent.appendChild(this.iframe);
+				} else {
+					document.body.appendChild(this.iframe);
+				}
+
+				this.iframe.src = this.imageRoot + YAHOO.widget.Overlay.IFRAME_SRC;
+				YAHOO.util.Dom.setStyle(this.iframe, "position", "absolute");
+				YAHOO.util.Dom.setStyle(this.iframe, "border", "none");
+				YAHOO.util.Dom.setStyle(this.iframe, "margin", "0");
+				YAHOO.util.Dom.setStyle(this.iframe, "padding", "0");
+				YAHOO.util.Dom.setStyle(this.iframe, "opacity", "0");
 			}
 
-			this.iframe.src = this.imageRoot + YAHOO.widget.Overlay.IFRAME_SRC;
-			YAHOO.util.Dom.setStyle(this.iframe, "position", "absolute");
-			YAHOO.util.Dom.setStyle(this.iframe, "border", "none");
-			YAHOO.util.Dom.setStyle(this.iframe, "margin", "0");
-			YAHOO.util.Dom.setStyle(this.iframe, "padding", "0");
-			YAHOO.util.Dom.setStyle(this.iframe, "opacity", "0");
+			YAHOO.util.Dom.setStyle(this.iframe, "left", x-2 + "px");
+			YAHOO.util.Dom.setStyle(this.iframe, "top", y-2 + "px");
+
+			var width = el.clientWidth;
+			var height = el.clientHeight;
+
+			YAHOO.util.Dom.setStyle(this.iframe, "width", (width+2) + "px");
+			YAHOO.util.Dom.setStyle(this.iframe, "height", (height+2) + "px");
+
+			if (! this.cfg.getProperty("visible")) {
+				this.iframe.style.display = "none";
+			} else {
+				this.iframe.style.display = "block";
+			}
 		}
-
-		var elementZ = parseInt(YAHOO.util.Dom.getStyle(el, "zIndex"));
-
-		if (isNaN(elementZ) || elementZ <= 0) {
-			this.cfg.setProperty("zIndex", 1);
-		} else {
-			this.cfg.setProperty("zIndex", elementZ, true);
-		}
-
-		//YAHOO.util.Dom.setStyle(this.iframe, "zIndex", (this.cfg.getProperty("zIndex") - 1));
-
-		//YAHOO.util.Dom.setStyle(this.iframe, "left", x-2 + "px");
-		//YAHOO.util.Dom.setStyle(this.iframe, "top", y-2 + "px");
-
-		YAHOO.util.Dom.setXY(this.iframe, pos, true);
-
-		var width = el.offsetWidth;
-		var height = el.offsetHeight;
-
-		YAHOO.util.Dom.setStyle(this.iframe, "width", (width+2) + "px");
-		YAHOO.util.Dom.setStyle(this.iframe, "height", (height+2) + "px");
-
-		if (! this.cfg.getProperty("visible")) {
-			//alert("hidden z: " + (this.cfg.getProperty("zIndex") + 1));
-			this.iframe.style.display = "none";
-			//YAHOO.util.Dom.setStyle(this.iframe, "visibility", "hidden");
-		} else {
-			YAHOO.util.Dom.setStyle(this.iframe, "zIndex", (this.cfg.getProperty("zIndex") - 1));
-			this.iframe.style.display = "block";
-			this.iframe.style.opacity = (this.iframe.style.opacity != 0 ? 0: 1);
-		}
-
-
 	} else {
 		if (this.iframe) {
 			this.iframe.style.display = "none";
@@ -1465,15 +1666,11 @@ YAHOO.widget.Overlay.prototype.center = function() {
 	var x = (viewPortWidth / 2) - (elementWidth / 2) + scrollX;
 	var y = (viewPortHeight / 2) - (elementHeight / 2) + scrollY;
 	
-	this.element.style.left = x + "px";
-	this.element.style.top = y + "px";
-	
+	this.element.style.left = parseInt(x) + "px";
+	this.element.style.top = parseInt(y) + "px";
 	this.syncPosition();
-	//this.cfg.setProperty("xy", [x,y]);
-	this.cfg.refireEvent("iframe");
 
-	//this.cfg.setProperty("x", x, true);
-	//this.cfg.setProperty("y", y, true);
+	this.cfg.refireEvent("iframe");
 }
 
 /**
@@ -1481,7 +1678,6 @@ YAHOO.widget.Overlay.prototype.center = function() {
 */
 YAHOO.widget.Overlay.prototype.syncPosition = function() {
 	var pos = YAHOO.util.Dom.getXY(this.element);
-	//;alert("sync:"+pos);
 	this.cfg.setProperty("x", pos[0], true);
 	this.cfg.setProperty("y", pos[1], true);
 	this.cfg.setProperty("xy", pos, true);
@@ -1495,28 +1691,43 @@ YAHOO.widget.Overlay.prototype.onDomResize = function(e, obj) {
 	this.cfg.refireEvent("iframe");
 }
 
+/**
+* A singleton CustomEvent used for reacting to the DOM event for window scroll
+* @type YAHOO.util.CustomEvent
+*/
 YAHOO.widget.Overlay.windowScrollEvent = new YAHOO.util.CustomEvent("windowScroll");
+
+/**
+* A singleton CustomEvent used for reacting to the DOM event for window resize
+* @type YAHOO.util.CustomEvent
+*/
 YAHOO.widget.Overlay.windowResizeEvent = new YAHOO.util.CustomEvent("windowResize");
 
-YAHOO.widget.Overlay.windowScrollHandler = function() {
+/**
+* The DOM event handler used to fire the CustomEvent for window scroll
+* @type Function
+*/
+YAHOO.widget.Overlay.windowScrollHandler = function(e) {
 	YAHOO.widget.Overlay.windowScrollEvent.fire();
 }
 
-YAHOO.widget.Overlay.windowResizeHandler = function() {
+/**
+* The DOM event handler used to fire the CustomEvent for window resize
+* @type Function
+*/
+YAHOO.widget.Overlay.windowResizeHandler = function(e) {
 	YAHOO.widget.Overlay.windowResizeEvent.fire();
 }
 
-YAHOO.util.Event.addListener(window, "scroll", YAHOO.widget.Overlay.windowScrollHandler);
-YAHOO.util.Event.addListener(window, "resize", YAHOO.widget.Overlay.windowResizeHandler);
 
-YAHOO.widget.Overlay.prototype.hideMacGeckoScrollbars = function() {
-	YAHOO.util.Dom.addClass(this.element, "hide-scrollbars");
+if (YAHOO.widget.Overlay._initialized == undefined) {
+	YAHOO.util.Event.addListener(window, "scroll", YAHOO.widget.Overlay.windowScrollHandler);
+	YAHOO.util.Event.addListener(window, "resize", YAHOO.widget.Overlay.windowResizeHandler);
+	/**
+	* @private
+	*/
+	YAHOO.widget.Overlay._initialized = true;
 }
-
-YAHOO.widget.Overlay.prototype.showMacGeckoScrollbars = function() {
-	YAHOO.util.Dom.removeClass(this.element, "hide-scrollbars");
-}
-
 /**
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
@@ -1527,8 +1738,8 @@ http://developer.yahoo.net/yui/license.txt
 * @param {object}	userConfig		The object literal representing the user configuration of the OverlayManager
 * @constructor
 */
-YAHOO.widget.OverlayManager = function(overlays, userConfig) {
-	this.init(overlays, userConfig);
+YAHOO.widget.OverlayManager = function(userConfig) {
+	this.init(userConfig);
 }
 
 /**
@@ -1550,32 +1761,57 @@ YAHOO.widget.OverlayManager.prototype = {
 	/**
 	* Initializes the default configuration of the OverlayManager
 	*/	
-	initDefaultConfig : function() {}, 
+	initDefaultConfig : function() {
+		this.cfg.addProperty("overlays", { suppressEvent:true } );
+		this.cfg.addProperty("focusevent", { value:"mousedown" } );
+	}, 
+
+	/**
+	* Returns the currently focused Overlay
+	* @return {Overlay}	The currently focused Overlay
+	*/
+	getActive : function() {},
+
+	/**
+	* Focuses the specified Overlay
+	* @param {Overlay}	The Overlay to focus
+	* @param {string}	The id of the Overlay to focus
+	*/
+	focus : function(overlay) {},
+
+	/**
+	* Removes the specified Overlay from the manager
+	* @param {Overlay}	The Overlay to remove
+	* @param {string}	The id of the Overlay to remove
+	*/
+	remove: function(overlay) {},
+
+	/**
+	* Removes focus from all registered Overlays in the manager
+	*/
+	blurAll : function() {},
 
 	/**
 	* Initializes the OverlayManager
 	* @param {Array}	overlays	Optional. A collection of Overlays to register with the manager.
 	* @param {object}	userConfig		The object literal representing the user configuration of the OverlayManager
 	*/
-	init : function(overlays, userConfig) {
+	init : function(userConfig) {
 		this.cfg = new YAHOO.util.Config(this);
+
 		this.initDefaultConfig();
+
+		if (userConfig) {
+			this.cfg.applyConfig(userConfig, true);
+		}
+		this.cfg.fireQueue();
 
 		var activeOverlay = null;
 
-		/**
-		* Returns the currently focused Overlay
-		* @return {Overlay}	The currently focused Overlay
-		*/
 		this.getActive = function() {
 			return activeOverlay;
 		}
 
-		/**
-		* Focuses the specified Overlay
-		* @param {Overlay}	The Overlay to focus
-		* @param {string}	The id of the Overlay to focus
-		*/
 		this.focus = function(overlay) {
 			var o = this.find(overlay);
 			if (o) {
@@ -1591,11 +1827,6 @@ YAHOO.widget.OverlayManager.prototype = {
 			}
 		}
 
-		/**
-		* Removes the specified Overlay from the manager
-		* @param {Overlay}	The Overlay to remove
-		* @param {string}	The id of the Overlay to remove
-		*/
 		this.remove = function(overlay) {
 			var o = this.find(overlay);
 			if (o) {
@@ -1613,9 +1844,6 @@ YAHOO.widget.OverlayManager.prototype = {
 			}
 		}
 
-		/**
-		* Removes focus from all registered Overlays in the manager
-		*/
 		this.blurAll = function() {
 			activeOverlay = null;
 			for (var o=0;o<this.overlays.length;o++) {
@@ -1623,15 +1851,12 @@ YAHOO.widget.OverlayManager.prototype = {
 			}		
 		}
 
+		var overlays = this.cfg.getProperty("overlays");
+
 		if (overlays) {
 			this.register(overlays);
 			this.overlays.sort(this.compareZIndexDesc);
 		}
-
-		if (userConfig) {
-			this.cfg.applyConfig(userConfig, true);
-		}
-
 	},
 
 	/**
@@ -1642,8 +1867,7 @@ YAHOO.widget.OverlayManager.prototype = {
 	*/
 	register : function(overlay) {
 		if (overlay instanceof YAHOO.widget.Overlay) {
-			overlay.cfg.addProperty("manager");
-			overlay.cfg.setProperty("manager", this);
+			overlay.cfg.addProperty("manager", { value:this } );
 
 			overlay.focusEvent = new YAHOO.util.CustomEvent("focus");
 			overlay.blurEvent = new YAHOO.util.CustomEvent("blur");
@@ -1660,11 +1884,12 @@ YAHOO.widget.OverlayManager.prototype = {
 				this.blurEvent.fire();
 			}
 
-			var focusOnMouseDown = function(e,obj) {
+			var focusOnDomEvent = function(e,obj) {
 				mgr.focus(overlay);
 			}
-
-			YAHOO.util.Event.addListener(overlay.element,"mousedown",focusOnMouseDown,this,true);
+			
+			var focusevent = this.cfg.getProperty("focusevent");
+			YAHOO.util.Event.addListener(overlay.element,focusevent,focusOnDomEvent,this,true);
 
 			var zIndex = YAHOO.util.Dom.getStyle(overlay.element, "zIndex");
 			if (! isNaN(zIndex)) {
@@ -1748,4 +1973,121 @@ YAHOO.widget.OverlayManager.prototype = {
 		}
 	}
 
+}/**
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+* @class 
+* KeyListener is a utility that provides an easy interface for listening for keydown/keyup events fired against DOM elements.
+* @param {Element}	attachTo	The element or element ID to which the key event should be attached
+* @param {string}	attachTo	The element or element ID to which the key event should be attached
+* @param (object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).
+* @param {function}	handler		The CustomEvent handler to fire when the key event is detected
+* @param {object}	handler		An object literal representing the handler. 
+* @param {string}	event		Optional. The event (keydown or keyup) to listen for. Defaults automatically to keydown.
+* @constructor
+*/
+YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
+	if (! event) {
+		event = YAHOO.util.KeyListener.KEYDOWN;
+	}
+
+	var keyEvent = new YAHOO.util.CustomEvent("keyPressed");
+	
+	this.enabledEvent = new YAHOO.util.CustomEvent("enabled");
+	this.disabledEvent = new YAHOO.util.CustomEvent("disabled");
+
+	if (typeof attachTo == 'string') {
+		attachTo = document.getElementById(attachTo);
+	}
+
+	if (typeof handler == 'function') {
+		keyEvent.subscribe(handler);
+	} else {
+		keyEvent.subscribe(handler.fn, handler.scope, handler.correctScope);
+	}
+
+	/**
+	* Handles the key event when a key is pressed.
+	* @private
+	*/
+	var handleKeyPress = function(e, obj) {
+		var keyPressed = e.charCode || e.keyCode;
+		
+		if (! keyData.shift)	keyData.shift = false;
+		if (! keyData.alt)		keyData.alt = false;
+		if (! keyData.ctrl)		keyData.ctrl = false;
+
+		// check held down modifying keys first
+		if (e.shiftKey == keyData.shift && 
+			e.altKey   == keyData.alt &&
+			e.ctrlKey  == keyData.ctrl) { // if we pass this, all modifiers match
+
+			if (keyData.keys instanceof Array) {
+				for (var i=0;i<keyData.keys.length;i++) {
+					if (keyPressed == keyData.keys[i]) {
+						keyEvent.fire(keyPressed, e);
+						break;
+					}
+				}
+			} else {
+				if (keyPressed == keyData.keys) {
+					keyEvent.fire(keyPressed, e);
+				}
+			}
+		}
+	}
+
+	this.enable = function() {
+		if (! this.enabled) {
+			YAHOO.util.Event.addListener(attachTo, event, handleKeyPress);
+			this.enabledEvent.fire(keyData);
+		}
+		this.enabled = true;
+	}
+
+	this.disable = function() {
+		if (this.enabled) {
+			YAHOO.util.Event.removeListener(attachTo, event, handleKeyPress);
+			this.disabledEvent.fire(keyData);
+		}
+		this.enabled = false;
+	}
+
 }
+
+/**
+* Constant representing the DOM "keydown" event.
+* @final
+*/
+YAHOO.util.KeyListener.KEYDOWN = "keydown";
+
+/**
+* Constant representing the DOM "keyup" event.
+* @final
+*/
+YAHOO.util.KeyListener.KEYUP = "keyup";
+
+/**
+* Enables the KeyListener, by dynamically attaching the key event to the appropriate DOM element.
+*/
+YAHOO.util.KeyListener.prototype.enable = function() {};
+
+/**
+* Disables the KeyListener, by dynamically removing the key event from the appropriate DOM element.
+*/
+YAHOO.util.KeyListener.prototype.disable = function() {};
+
+/**
+* CustomEvent fired when the KeyListener is enabled
+* args: keyData
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.util.KeyListener.prototype.enabledEvent = null;
+
+/**
+* CustomEvent fired when the KeyListener is disabled
+* args: keyData
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.util.KeyListener.prototype.disabledEvent = null;

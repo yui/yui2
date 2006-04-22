@@ -8,8 +8,8 @@ http://developer.yahoo.net/yui/license.txt
 * @param {object}	userConfig		The object literal representing the user configuration of the OverlayManager
 * @constructor
 */
-YAHOO.widget.OverlayManager = function(overlays, userConfig) {
-	this.init(overlays, userConfig);
+YAHOO.widget.OverlayManager = function(userConfig) {
+	this.init(userConfig);
 }
 
 /**
@@ -31,32 +31,57 @@ YAHOO.widget.OverlayManager.prototype = {
 	/**
 	* Initializes the default configuration of the OverlayManager
 	*/	
-	initDefaultConfig : function() {}, 
+	initDefaultConfig : function() {
+		this.cfg.addProperty("overlays", { suppressEvent:true } );
+		this.cfg.addProperty("focusevent", { value:"mousedown" } );
+	}, 
+
+	/**
+	* Returns the currently focused Overlay
+	* @return {Overlay}	The currently focused Overlay
+	*/
+	getActive : function() {},
+
+	/**
+	* Focuses the specified Overlay
+	* @param {Overlay}	The Overlay to focus
+	* @param {string}	The id of the Overlay to focus
+	*/
+	focus : function(overlay) {},
+
+	/**
+	* Removes the specified Overlay from the manager
+	* @param {Overlay}	The Overlay to remove
+	* @param {string}	The id of the Overlay to remove
+	*/
+	remove: function(overlay) {},
+
+	/**
+	* Removes focus from all registered Overlays in the manager
+	*/
+	blurAll : function() {},
 
 	/**
 	* Initializes the OverlayManager
 	* @param {Array}	overlays	Optional. A collection of Overlays to register with the manager.
 	* @param {object}	userConfig		The object literal representing the user configuration of the OverlayManager
 	*/
-	init : function(overlays, userConfig) {
+	init : function(userConfig) {
 		this.cfg = new YAHOO.util.Config(this);
+
 		this.initDefaultConfig();
+
+		if (userConfig) {
+			this.cfg.applyConfig(userConfig, true);
+		}
+		this.cfg.fireQueue();
 
 		var activeOverlay = null;
 
-		/**
-		* Returns the currently focused Overlay
-		* @return {Overlay}	The currently focused Overlay
-		*/
 		this.getActive = function() {
 			return activeOverlay;
 		}
 
-		/**
-		* Focuses the specified Overlay
-		* @param {Overlay}	The Overlay to focus
-		* @param {string}	The id of the Overlay to focus
-		*/
 		this.focus = function(overlay) {
 			var o = this.find(overlay);
 			if (o) {
@@ -72,11 +97,6 @@ YAHOO.widget.OverlayManager.prototype = {
 			}
 		}
 
-		/**
-		* Removes the specified Overlay from the manager
-		* @param {Overlay}	The Overlay to remove
-		* @param {string}	The id of the Overlay to remove
-		*/
 		this.remove = function(overlay) {
 			var o = this.find(overlay);
 			if (o) {
@@ -94,9 +114,6 @@ YAHOO.widget.OverlayManager.prototype = {
 			}
 		}
 
-		/**
-		* Removes focus from all registered Overlays in the manager
-		*/
 		this.blurAll = function() {
 			activeOverlay = null;
 			for (var o=0;o<this.overlays.length;o++) {
@@ -104,15 +121,12 @@ YAHOO.widget.OverlayManager.prototype = {
 			}		
 		}
 
+		var overlays = this.cfg.getProperty("overlays");
+
 		if (overlays) {
 			this.register(overlays);
 			this.overlays.sort(this.compareZIndexDesc);
 		}
-
-		if (userConfig) {
-			this.cfg.applyConfig(userConfig, true);
-		}
-
 	},
 
 	/**
@@ -123,8 +137,7 @@ YAHOO.widget.OverlayManager.prototype = {
 	*/
 	register : function(overlay) {
 		if (overlay instanceof YAHOO.widget.Overlay) {
-			overlay.cfg.addProperty("manager");
-			overlay.cfg.setProperty("manager", this);
+			overlay.cfg.addProperty("manager", { value:this } );
 
 			overlay.focusEvent = new YAHOO.util.CustomEvent("focus");
 			overlay.blurEvent = new YAHOO.util.CustomEvent("blur");
@@ -141,11 +154,12 @@ YAHOO.widget.OverlayManager.prototype = {
 				this.blurEvent.fire();
 			}
 
-			var focusOnMouseDown = function(e,obj) {
+			var focusOnDomEvent = function(e,obj) {
 				mgr.focus(overlay);
 			}
-
-			YAHOO.util.Event.addListener(overlay.element,"mousedown",focusOnMouseDown,this,true);
+			
+			var focusevent = this.cfg.getProperty("focusevent");
+			YAHOO.util.Event.addListener(overlay.element,focusevent,focusOnDomEvent,this,true);
 
 			var zIndex = YAHOO.util.Dom.getStyle(overlay.element, "zIndex");
 			if (! isNaN(zIndex)) {
