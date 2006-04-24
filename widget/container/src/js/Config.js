@@ -1,19 +1,3 @@
-
-function printfire() {
-    if(document.createEvent) {
-        try {
-            printfire.args = arguments;
-            var ev = document.createEvent("Events");
-            ev.initEvent("printfire", false, true);
-            dispatchEvent(ev);
-            return true;
-        }
-        catch(e) {
-        }
-    }
-    return false;
-}
-
 /**
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
@@ -380,8 +364,6 @@ YAHOO.util.Config.prototype.init = function(owner) {
 				var key = queueItem[0];
 				var value = queueItem[1];
 				
-				printfire(key + ":" + value);
-
 				var property = config[key];
 				property.value = value;
 
