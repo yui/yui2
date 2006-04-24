@@ -47,6 +47,8 @@ YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 	} else {
 		YAHOO.widget.Tooltip.superclass.init.call(this, el);
 
+		this.beforeInitEvent.fire(YAHOO.widget.Tooltip);
+
 		YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Tooltip.CSS_TOOLTIP);
 
 		if (userConfig) {
@@ -58,6 +60,8 @@ YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 
 		this.setBody("");
 		this.render(this.cfg.getProperty("container"));
+
+		this.initEvent.fire(YAHOO.widget.Tooltip);
 	}
 }
 

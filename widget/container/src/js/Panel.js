@@ -62,6 +62,8 @@ YAHOO.widget.Panel.prototype.hideMaskEvent = null;
 YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 	YAHOO.widget.Panel.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
 	
+	this.beforeInitEvent.fire(YAHOO.widget.Panel);
+
 	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Panel.CSS_PANEL);
 
 	this.buildWrapper();			
@@ -78,6 +80,9 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 			}
 		}
 	}, this, true);
+
+	this.initEvent.fire(YAHOO.widget.Panel);
+
 }
 
 /**

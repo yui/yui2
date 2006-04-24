@@ -95,6 +95,8 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
 	YAHOO.widget.Dialog.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
 
+	this.beforeInitEvent.fire(YAHOO.widget.Dialog);
+
 	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Dialog.CSS_DIALOG);
 
 	this.cfg.queueProperty("postmethod", "manual");
@@ -108,6 +110,8 @@ YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
 			this.setBody("");
 		}
 	}, this, true);
+
+	this.initEvent.fire(YAHOO.widget.Dialog);
 
 }
 /**
