@@ -1,4 +1,3 @@
-
 /**
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
@@ -364,7 +363,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 			if (queueItem) {
 				var key = queueItem[0];
 				var value = queueItem[1];
-
+				
 				var property = config[key];
 				property.value = value;
 
@@ -1145,6 +1144,8 @@ YAHOO.widget.Overlay.prototype.moveEvent = null;
 YAHOO.widget.Overlay.prototype.init = function(el, userConfig) {
 	YAHOO.widget.Overlay.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
 	
+	this.beforeInitEvent.fire(YAHOO.widget.Overlay);
+
 	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Overlay.CSS_OVERLAY);
 
 	if (userConfig) {
@@ -1159,6 +1160,8 @@ YAHOO.widget.Overlay.prototype.init = function(el, userConfig) {
 			this.hideEvent.subscribe(this.hideMacGeckoScrollbars,this,true);
 		}
 	}
+
+	this.initEvent.fire(YAHOO.widget.Overlay);
 
 }
 

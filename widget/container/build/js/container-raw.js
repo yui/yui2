@@ -363,7 +363,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 			if (queueItem) {
 				var key = queueItem[0];
 				var value = queueItem[1];
-
+				
 				var property = config[key];
 				property.value = value;
 
@@ -1144,6 +1144,8 @@ YAHOO.widget.Overlay.prototype.moveEvent = null;
 YAHOO.widget.Overlay.prototype.init = function(el, userConfig) {
 	YAHOO.widget.Overlay.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
 	
+	this.beforeInitEvent.fire(YAHOO.widget.Overlay);
+
 	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Overlay.CSS_OVERLAY);
 
 	if (userConfig) {
@@ -1158,6 +1160,8 @@ YAHOO.widget.Overlay.prototype.init = function(el, userConfig) {
 			this.hideEvent.subscribe(this.hideMacGeckoScrollbars,this,true);
 		}
 	}
+
+	this.initEvent.fire(YAHOO.widget.Overlay);
 
 }
 
@@ -2380,6 +2384,8 @@ YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 	} else {
 		YAHOO.widget.Tooltip.superclass.init.call(this, el);
 
+		this.beforeInitEvent.fire(YAHOO.widget.Tooltip);
+
 		YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Tooltip.CSS_TOOLTIP);
 
 		if (userConfig) {
@@ -2391,6 +2397,8 @@ YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 
 		this.setBody("");
 		this.render(this.cfg.getProperty("container"));
+
+		this.initEvent.fire(YAHOO.widget.Tooltip);
 	}
 }
 
@@ -2642,6 +2650,8 @@ YAHOO.widget.Panel.prototype.hideMaskEvent = null;
 YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 	YAHOO.widget.Panel.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
 	
+	this.beforeInitEvent.fire(YAHOO.widget.Panel);
+
 	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Panel.CSS_PANEL);
 
 	this.buildWrapper();			
@@ -2658,6 +2668,9 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 			}
 		}
 	}, this, true);
+
+	this.initEvent.fire(YAHOO.widget.Panel);
+
 }
 
 /**
@@ -3213,6 +3226,8 @@ YAHOO.widget.FormDialog.prototype.initEvents = function() {
 */
 YAHOO.widget.FormDialog.prototype.init = function(el, userConfig) {
 	YAHOO.widget.FormDialog.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
+	
+	this.beforeInitEvent.fire(YAHOO.widget.FormDialog);
 
 	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.FormDialog.CSS_FORMDIALOG);
 
@@ -3233,6 +3248,8 @@ YAHOO.widget.FormDialog.prototype.init = function(el, userConfig) {
 			}
 		}
 	}, this, true);
+
+	this.initEvent.fire(YAHOO.widget.FormDialog);
 }
 
 /**
@@ -3645,6 +3662,8 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
 	YAHOO.widget.Dialog.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
 
+	this.beforeInitEvent.fire(YAHOO.widget.Dialog);
+
 	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Dialog.CSS_DIALOG);
 
 	this.cfg.queueProperty("postmethod", "manual");
@@ -3658,6 +3677,8 @@ YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
 			this.setBody("");
 		}
 	}, this, true);
+
+	this.initEvent.fire(YAHOO.widget.Dialog);
 
 }
 /**
