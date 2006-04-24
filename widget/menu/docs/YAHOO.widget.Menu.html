@@ -56,6 +56,16 @@
 						</li>
 					
 						<li>
+							<a href="YAHOO.widget.ContextMenu.html">
+								YAHOO.widget.ContextMenu</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.ContextMenuItem.html">
+								YAHOO.widget.ContextMenuItem</a>
+						</li>
+					
+						<li>
 							<a href="YAHOO.widget.Menu.html">
 								YAHOO.widget.Menu</a>
 						</li>
@@ -63,6 +73,16 @@
 						<li>
 							<a href="YAHOO.widget.MenuItem.html">
 								YAHOO.widget.MenuItem</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.MenuModule.html">
+								YAHOO.widget.MenuModule</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.MenuModuleItem.html">
+								YAHOO.widget.MenuModuleItem</a>
 						</li>
 					
 				</ul>
@@ -75,6 +95,16 @@
 				<ul class="content">		
 					
 						<li>
+							<a href="overview-summary-contextmenu.js.html">
+								contextmenu.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-contextmenuitem.js.html">
+								contextmenuitem.js</a>
+						</li>
+					
+						<li>
 							<a href="overview-summary-menu.js.html">
 								menu.js</a>
 						</li>
@@ -82,6 +112,16 @@
 						<li>
 							<a href="overview-summary-menuitem.js.html">
 								menuitem.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-menumodule.js.html">
+								menumodule.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-menumoduleitem.js.html">
+								menumoduleitem.js</a>
 						</li>
 					
 				</ul>
@@ -97,9 +137,18 @@
    |
    +--YAHOO.widget.Overlay
          |
-         +--<b>YAHOO.widget.Menu</b>
+         +--<a href='YAHOO.widget.MenuModule.html'>YAHOO.widget.MenuModule</a>
+               |
+               +--<b>YAHOO.widget.Menu</b>
 </pre>
 		
+		
+			<dl class="subclasses">
+				<dt>Direct Known Subclasses:</dd>
+				<dd>
+					 <a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a>
+				</dd>
+		   </dl>
 		
 	
 		<hr />
@@ -115,7 +164,7 @@
 			</div>
 			<div class="class-extends">
 				
-					<dd>extends YAHOO.widget.Overlay</dd>
+					<dd>extends <a href='YAHOO.widget.MenuModule.html'>YAHOO.widget.MenuModule</a></dd>
 				
 			</div>
 		</div>
@@ -173,155 +222,6 @@
 					<table border="1" cellpadding="3" cellspacing="0">
 					
 						<tr>
-							<td class="flags">{YAHOO.util.CustomEvent}</td>
-							<td class="spec">
-								<code>
-									<a href="#clickEvent">clickEvent</a>
-								</code>
-								<div class="description">
-									Fires when the user clicks the on a Menu instance.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">String</td>
-							<td class="spec">
-								<code>
-									<a href="#CSS_CLASS_NAME">CSS_CLASS_NAME</a>
-								</code>
-								<div class="description">
-									Constant representing the CSS class(es) to be applied to the root 
- HTMLDivElement of the Menu.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">{YAHOO.util.CustomEvent}</td>
-							<td class="spec">
-								<code>
-									<a href="#keyDownEvent">keyDownEvent</a>
-								</code>
-								<div class="description">
-									Fires when the user presses a key.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">{YAHOO.util.CustomEvent}</td>
-							<td class="spec">
-								<code>
-									<a href="#keyPressEvent">keyPressEvent</a>
-								</code>
-								<div class="description">
-									Fires when the user presses an alphanumeric key.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">{YAHOO.util.CustomEvent}</td>
-							<td class="spec">
-								<code>
-									<a href="#keyUpEvent">keyUpEvent</a>
-								</code>
-								<div class="description">
-									Fires when the user releases a key.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags"><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></td>
-							<td class="spec">
-								<code>
-									<a href="#MENUITEM_TYPE">MENUITEM_TYPE</a>
-								</code>
-								<div class="description">
-									Constant representing the type of MenuItem to instantiate when creating 
- MenuItem instances from parsing the child nodes (either HTMLLIElement, 
- HTMLOptGroupElement or HTMLOptionElement) of the Menu's DOM.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">{YAHOO.util.CustomEvent}</td>
-							<td class="spec">
-								<code>
-									<a href="#mouseDownEvent">mouseDownEvent</a>
-								</code>
-								<div class="description">
-									Fires when the user mouses down on a Menu instance.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">{YAHOO.util.CustomEvent}</td>
-							<td class="spec">
-								<code>
-									<a href="#mouseOutEvent">mouseOutEvent</a>
-								</code>
-								<div class="description">
-									Fires when the mouse has left a Menu instance.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">{YAHOO.util.CustomEvent}</td>
-							<td class="spec">
-								<code>
-									<a href="#mouseOverEvent">mouseOverEvent</a>
-								</code>
-								<div class="description">
-									Fires when the mouse has entered a Menu instance.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">{YAHOO.util.CustomEvent}</td>
-							<td class="spec">
-								<code>
-									<a href="#mouseUpEvent">mouseUpEvent</a>
-								</code>
-								<div class="description">
-									Fires when the user releases a mouse button while the mouse is over 
- a Menu instance.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">{YAHOO.widget.MenuItem}</td>
-							<td class="spec">
-								<code>
-									<a href="#parent">parent</a>
-								</code>
-								<div class="description">
-									Returns the parent MenuItem instance.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">{HTMLSelectElement/HTMLDivElement}</td>
-							<td class="spec">
-								<code>
-									<a href="#srcElement">srcElement</a>
-								</code>
-								<div class="description">
-									Returns the HTMLElement (either HTMLSelectElement or HTMLDivElement)
- used create the Menu instance.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
 							<td class="flags">Object</td>
 							<td class="spec">
 								<code>
@@ -338,6 +238,15 @@
 			</div>
 		
 				
+		
+			
+				<div class="section field inheritance">
+					<h3>Fields inherited from class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+					<div class="content">
+								<code><a href="YAHOO.widget.MenuModule.html#CSS_CLASS_NAME">CSS_CLASS_NAME</a>, <a href="YAHOO.widget.MenuModule.html#ITEM_TYPE">ITEM_TYPE</a>, <a href="YAHOO.widget.MenuModule.html#GROUP_TITLE_TAG_NAME">GROUP_TITLE_TAG_NAME</a>, <a href="YAHOO.widget.MenuModule.html#parent">parent</a>, <a href="YAHOO.widget.MenuModule.html#srcElement">srcElement</a>, <a href="YAHOO.widget.MenuModule.html#mouseOverEvent">mouseOverEvent</a>, <a href="YAHOO.widget.MenuModule.html#mouseOutEvent">mouseOutEvent</a>, <a href="YAHOO.widget.MenuModule.html#mouseDownEvent">mouseDownEvent</a>, <a href="YAHOO.widget.MenuModule.html#mouseUpEvent">mouseUpEvent</a>, <a href="YAHOO.widget.MenuModule.html#clickEvent">clickEvent</a>, <a href="YAHOO.widget.MenuModule.html#keyPressEvent">keyPressEvent</a>, <a href="YAHOO.widget.MenuModule.html#keyDownEvent">keyDownEvent</a>, <a href="YAHOO.widget.MenuModule.html#keyUpEvent">keyUpEvent</a></code>
+					</div>
+				</div>
+			
 		
 		<!-- =========== END FIELD SUMMARY =========== -->
 
@@ -367,113 +276,6 @@
 					<table border="1" cellpadding="3" cellspacing="0">
 						
 							<tr>
-								<td class="flags"><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></td>
-								<td class="spec">
-									<code>
-										<a href="#addMenuItem">addMenuItem</a>
-										(&lt;<a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>&gt; p_oMenuItem, &lt;Number&gt; p_nGroupIndex)
-									</code>
-									<div class="description">
-										Appends the specified MenuItem instance to a Menu instance.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#configFixedCenter">configFixedCenter</a>
-										(type, args, obj)
-									</code>
-									<div class="description">
-										The default event handler fired when the "fixedcenter" property is changed.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#configIframe">configIframe</a>
-										(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, &lt;<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>&gt; p_oMenu)
-									</code>
-									<div class="description">
-										Event handler for when the "iframe" configuration property of a
- Menu changes.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#configVisible">configVisible</a>
-										(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, &lt;<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>&gt; p_oMenu)
-									</code>
-									<div class="description">
-										Event handler for when the "visible" configuration property of a
- Menu changes.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#destroy">destroy</a>
-										()
-									</code>
-									<div class="description">
-										Removes the Menu instance's element from the DOM and sets all child 
- elements to null.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#enforceConstraints">enforceConstraints</a>
-										(type, args, obj)
-									</code>
-									<div class="description">
-										Keeps the Menu in the viewport.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags"><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></td>
-								<td class="spec">
-									<code>
-										<a href="#getMenuItem">getMenuItem</a>
-										(&lt;Number&gt; p_nMenuItemIndex, &lt;Number&gt; p_nGroupIndex)
-									</code>
-									<div class="description">
-										Returns the MenuItem instance at the specified index.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">Array</td>
-								<td class="spec">
-									<code>
-										<a href="#getMenuItemGroups">getMenuItemGroups</a>
-										()
-									</code>
-									<div class="description">
-										Returns a multi-dimensional array of all of a Menu's MenuItem instances.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
@@ -486,92 +288,18 @@
 								</td>
 							</tr>
 						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#initDefaultConfig">initDefaultConfig</a>
-										()
-									</code>
-									<div class="description">
-										Initializes the custom events for Menu which are fired automatically
- at appropriate times by the Menu class.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags"><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></td>
-								<td class="spec">
-									<code>
-										<a href="#insertMenuItem">insertMenuItem</a>
-										(&lt;<a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>&gt; p_oMenuItem, &lt;Number&gt; p_nMenuItemIndex, &lt;Number&gt; p_nGroupIndex)
-									</code>
-									<div class="description">
-										Inserts a MenuItem instance into a Menu instance at the specified index.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags"><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></td>
-								<td class="spec">
-									<code>
-										<a href="#removeMenuItem">removeMenuItem</a>
-										(p_oObject, &lt;Number&gt; p_nGroupIndex)
-									</code>
-									<div class="description">
-										Removes the specified MenuItem instance from a Menu instance.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">Object</td>
-								<td class="spec">
-									<code>
-										<a href="#render">render</a>
-										(p_oAppendToNode, &lt;Boolean&gt; p_bHideSourceElement)
-									</code>
-									<div class="description">
-										Renders the Menu by inserting the elements that are not already in the 
- main Module format into their correct places.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#setInitialFocus">setInitialFocus</a>
-										()
-									</code>
-									<div class="description">
-										Sets focus to a Menu instance's first enabled MenuItem instance.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#setInitialSelection">setInitialSelection</a>
-										()
-									</code>
-									<div class="description">
-										Sets the "selected" configuration property of a Menu instance's first
- enabled MenuItem instance to "true."&nbsp;
-									</div>
-								</td>
-							</tr>
-						
 					</table>
 				</div>
 			</div>
 		
 		
+		
+			<div class="section method inheritance">
+				<h3>Methods inherited from class  <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></h3>
+				<div class="content">
+							<code><a href="YAHOO.widget.MenuModule.html#enforceConstraints">enforceConstraints</a>, <a href="YAHOO.widget.MenuModule.html#configPosition">configPosition</a>, <a href="YAHOO.widget.MenuModule.html#setItemGroupTitle">setItemGroupTitle</a>, <a href="YAHOO.widget.MenuModule.html#addItem">addItem</a>, <a href="YAHOO.widget.MenuModule.html#insertItem">insertItem</a>, <a href="YAHOO.widget.MenuModule.html#removeItem">removeItem</a>, <a href="YAHOO.widget.MenuModule.html#getItemGroups">getItemGroups</a>, <a href="YAHOO.widget.MenuModule.html#getItem">getItem</a>, <a href="YAHOO.widget.MenuModule.html#destroy">destroy</a>, <a href="YAHOO.widget.MenuModule.html#setInitialFocus">setInitialFocus</a>, <a href="YAHOO.widget.MenuModule.html#setInitialSelection">setInitialSelection</a>, <a href="YAHOO.widget.MenuModule.html#initDefaultConfig">initDefaultConfig</a></code>
+				</div>
+			</div>
 		
 		<!-- ========== END METHOD SUMMARY =========== -->
 
@@ -581,175 +309,6 @@
 			<div class="section field details">
 				<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
-					
-						<h4><a name="clickEvent">clickEvent</a></h4>
-						<div class="detail">
-							<code>
-								{YAHOO.util.CustomEvent}
-								&nbsp;
-								<strong>clickEvent</strong>
-							</code>
-							<div class="description">
-								Fires when the user clicks the on a Menu instance.  Passes back the 
- DOM Event object as an argument.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="CSS_CLASS_NAME">CSS_CLASS_NAME</a></h4>
-						<div class="detail">
-							<code>
-								String
-								&nbsp;
-								<strong>CSS_CLASS_NAME</strong>
-							</code>
-							<div class="description">
-								Constant representing the CSS class(es) to be applied to the root 
- HTMLDivElement of the Menu.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="keyDownEvent">keyDownEvent</a></h4>
-						<div class="detail">
-							<code>
-								{YAHOO.util.CustomEvent}
-								&nbsp;
-								<strong>keyDownEvent</strong>
-							</code>
-							<div class="description">
-								Fires when the user presses a key.  Passes back the DOM Event 
- object as an argument.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="keyPressEvent">keyPressEvent</a></h4>
-						<div class="detail">
-							<code>
-								{YAHOO.util.CustomEvent}
-								&nbsp;
-								<strong>keyPressEvent</strong>
-							</code>
-							<div class="description">
-								Fires when the user presses an alphanumeric key.  Passes back the 
- DOM Event object as an argument.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="keyUpEvent">keyUpEvent</a></h4>
-						<div class="detail">
-							<code>
-								{YAHOO.util.CustomEvent}
-								&nbsp;
-								<strong>keyUpEvent</strong>
-							</code>
-							<div class="description">
-								Fires when the user releases a key.  Passes back the DOM Event 
- object as an argument.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="MENUITEM_TYPE">MENUITEM_TYPE</a></h4>
-						<div class="detail">
-							<code>
-								<a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>
-								&nbsp;
-								<strong>MENUITEM_TYPE</strong>
-							</code>
-							<div class="description">
-								Constant representing the type of MenuItem to instantiate when creating 
- MenuItem instances from parsing the child nodes (either HTMLLIElement, 
- HTMLOptGroupElement or HTMLOptionElement) of the Menu's DOM.  The default 
- is YAHOO.widget.MenuItem.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="mouseDownEvent">mouseDownEvent</a></h4>
-						<div class="detail">
-							<code>
-								{YAHOO.util.CustomEvent}
-								&nbsp;
-								<strong>mouseDownEvent</strong>
-							</code>
-							<div class="description">
-								Fires when the user mouses down on a Menu instance.  Passes back the 
- DOM Event object as an argument.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="mouseOutEvent">mouseOutEvent</a></h4>
-						<div class="detail">
-							<code>
-								{YAHOO.util.CustomEvent}
-								&nbsp;
-								<strong>mouseOutEvent</strong>
-							</code>
-							<div class="description">
-								Fires when the mouse has left a Menu instance.  Passes back the DOM 
- Event object as an argument.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="mouseOverEvent">mouseOverEvent</a></h4>
-						<div class="detail">
-							<code>
-								{YAHOO.util.CustomEvent}
-								&nbsp;
-								<strong>mouseOverEvent</strong>
-							</code>
-							<div class="description">
-								Fires when the mouse has entered a Menu instance.  Passes back the 
- DOM Event object as an argument.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="mouseUpEvent">mouseUpEvent</a></h4>
-						<div class="detail">
-							<code>
-								{YAHOO.util.CustomEvent}
-								&nbsp;
-								<strong>mouseUpEvent</strong>
-							</code>
-							<div class="description">
-								Fires when the user releases a mouse button while the mouse is over 
- a Menu instance.  Passes back the DOM Event object as an argument.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="parent">parent</a></h4>
-						<div class="detail">
-							<code>
-								{YAHOO.widget.MenuItem}
-								&nbsp;
-								<strong>parent</strong>
-							</code>
-							<div class="description">
-								Returns the parent MenuItem instance.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="srcElement">srcElement</a></h4>
-						<div class="detail">
-							<code>
-								{HTMLSelectElement/HTMLDivElement}
-								&nbsp;
-								<strong>srcElement</strong>
-							</code>
-							<div class="description">
-								Returns the HTMLElement (either HTMLSelectElement or HTMLDivElement)
- used create the Menu instance.
-							</div>
-						</div>
-						<hr />
 					
 						<h4><a name="superclass">superclass</a></h4>
 						<div class="detail">
@@ -788,13 +347,12 @@
 									<dt>Parameters:</dt>
 									
 										<dd>
-											<code>String</code> - 
-											/HTMLElement} p_oElement String id or HTMLElement   (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.  
+											{<code>String/HTMLElement</code>} -  p_oElement String id or HTMLElement   (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.  
 										</dd>
 									
 										<dd>
 											<code>p_oUserConfig</code> - 
-											 Optional. The configuration object literal   containing the configuration that should be set for this Menu. See   configuration documentation for more details.
+											 Optional. The configuration object literal   containing the configuration for a Menu instance. See   configuration class documentation for more details.
 										</dd>
 									
 								</dl>
@@ -817,252 +375,6 @@
 				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
 					
-						<h4><a name="addMenuItem">addMenuItem</a></h4>
-						<div class="detail">
-							<code>
-								<a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a> 
-								<strong>addMenuItem</strong>
-								(&lt;<a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>&gt; p_oMenuItem, &lt;Number&gt; p_nGroupIndex)
-							</code>
-									
-							<div class="description">
-								
-									Appends the specified MenuItem instance to a Menu instance.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>p_oMenuItem</code> - 
-												 MenuItem instance to be added.  
-											</dd>
-										
-											<dd>
-												<code>p_nGroupIndex</code> - 
-												 Optional. Number indicating the group to which  the MenuItem belongs.  
-											</dd>
-										
-									</dl>
-								
-								
-									<dl>
-										<dt>Returns:</dt>
-										<dd>The MenuItem that was added to the Menu.  </dd>
-									</dl>
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="configFixedCenter">configFixedCenter</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>configFixedCenter</strong>
-								(type, args, obj)
-							</code>
-									
-							<div class="description">
-								
-									The default event handler fired when the "fixedcenter" property is changed.
-								
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="configIframe">configIframe</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>configIframe</strong>
-								(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, &lt;<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>&gt; p_oMenu)
-							</code>
-									
-							<div class="description">
-								
-									Event handler for when the "iframe" configuration property of a
- Menu changes.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>p_sType</code> - 
-												 The name of the event that was fired.  
-											</dd>
-										
-											<dd>
-												<code>p_aArguments</code> - 
-												 Collection of arguments sent when the event   was fired.  
-											</dd>
-										
-											<dd>
-												<code>p_oMenu</code> - 
-												 The Menu instance fired the event.  
-											</dd>
-										
-									</dl>
-								
-								
-								
-									ARRAY(0x83abe88)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="configVisible">configVisible</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>configVisible</strong>
-								(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, &lt;<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>&gt; p_oMenu)
-							</code>
-									
-							<div class="description">
-								
-									Event handler for when the "visible" configuration property of a
- Menu changes.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>p_sType</code> - 
-												 The name of the event that was fired.  
-											</dd>
-										
-											<dd>
-												<code>p_aArguments</code> - 
-												 Collection of arguments sent when the event   was fired.  
-											</dd>
-										
-											<dd>
-												<code>p_oMenu</code> - 
-												 The Menu instance fired the event.  
-											</dd>
-										
-									</dl>
-								
-								
-								
-									ARRAY(0x83c56a0)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="destroy">destroy</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>destroy</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Removes the Menu instance's element from the DOM and sets all child 
- elements to null.
-								
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="enforceConstraints">enforceConstraints</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>enforceConstraints</strong>
-								(type, args, obj)
-							</code>
-									
-							<div class="description">
-								
-									Keeps the Menu in the viewport.
-								
-								
-								
-								
-									ARRAY(0x842af3c)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="getMenuItem">getMenuItem</a></h4>
-						<div class="detail">
-							<code>
-								<a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a> 
-								<strong>getMenuItem</strong>
-								(&lt;Number&gt; p_nMenuItemIndex, &lt;Number&gt; p_nGroupIndex)
-							</code>
-									
-							<div class="description">
-								
-									Returns the MenuItem instance at the specified index.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>p_nMenuItemIndex</code> - 
-												 Number indicating the ordinal position of the   MenuItem instance to be retrieved.  
-											</dd>
-										
-											<dd>
-												<code>p_nGroupIndex</code> - 
-												 Optional. Number indicating the group to which  the MenuItem belongs.  
-											</dd>
-										
-									</dl>
-								
-								
-									<dl>
-										<dt>Returns:</dt>
-										<dd>A MenuItem instance.  </dd>
-									</dl>
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="getMenuItemGroups">getMenuItemGroups</a></h4>
-						<div class="detail">
-							<code>
-								Array 
-								<strong>getMenuItemGroups</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Returns a multi-dimensional array of all of a Menu's MenuItem instances.
-								
-								
-								
-									<dl>
-										<dt>Returns:</dt>
-										<dd>An array of MenuItem instances.  </dd>
-									</dl>
-								
-								
-							</div>
-						</div>
-						<hr />
-					
 						<h4><a name="init">init</a></h4>
 						<div class="detail">
 							<code>
@@ -1073,9 +385,9 @@
 									
 							<div class="description">
 								
-									The Menu class's initialization method. This method is automatically called 
- by the constructor, and sets up all DOM references for pre-existing markup, 
- and creates required markup if it is not already present.
+									The Menu class's initialization method. This method is automatically 
+ called by the constructor, and sets up all DOM references for pre-existing 
+ markup, and creates required markup if it is not already present.
 								
 								
 									<dl>
@@ -1083,197 +395,14 @@
 										
 											<dd>
 												<code>p_oUserConfig</code> - 
-												 The configuration object literal containing   the configuration that should be set for this Menu. See configuration   documentation for more details.   
+												 Optional. The configuration object literal   containing the configuration for a Menu instance. See   configuration class documentation for more details.   
 											</dd>
 										
 											<dd>
-												<code>String</code> - 
-												/HTMLElement} p_oElement String id or HTMLElement   (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.  
+												{<code>String/HTMLElement</code>} - p_oElement String id or HTMLElement   (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.  
 											</dd>
 										
 									</dl>
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="initDefaultConfig">initDefaultConfig</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>initDefaultConfig</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Initializes the custom events for Menu which are fired automatically
- at appropriate times by the Menu class.
-								
-								
-								
-								
-									ARRAY(0x8431c30)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="insertMenuItem">insertMenuItem</a></h4>
-						<div class="detail">
-							<code>
-								<a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a> 
-								<strong>insertMenuItem</strong>
-								(&lt;<a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>&gt; p_oMenuItem, &lt;Number&gt; p_nMenuItemIndex, &lt;Number&gt; p_nGroupIndex)
-							</code>
-									
-							<div class="description">
-								
-									Inserts a MenuItem instance into a Menu instance at the specified index.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>p_oMenuItem</code> - 
-												 MenuItem instance to be inserted.  
-											</dd>
-										
-											<dd>
-												<code>p_nMenuItemIndex</code> - 
-												 Number indicating the ordinal position   at which the MenuItem should be added.  
-											</dd>
-										
-											<dd>
-												<code>p_nGroupIndex</code> - 
-												 Optional. Number indicating the group to which  the MenuItem instance belongs.  
-											</dd>
-										
-									</dl>
-								
-								
-									<dl>
-										<dt>Returns:</dt>
-										<dd>The MenuItem that was inserted into the Menu.  </dd>
-									</dl>
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="removeMenuItem">removeMenuItem</a></h4>
-						<div class="detail">
-							<code>
-								<a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a> 
-								<strong>removeMenuItem</strong>
-								(p_oObject, &lt;Number&gt; p_nGroupIndex)
-							</code>
-									
-							<div class="description">
-								
-									Removes the specified MenuItem instance from a Menu instance.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>p_nGroupIndex</code> - 
-												 Optional. Number indicating the group to which  the MenuItem belongs.  
-											</dd>
-										
-											<dd>
-												<code>YAHOO</code> - 
-												.widget.MenuItem/Number} p_oObject MenuItem or index of the  MenuItem instance to be removed.  
-											</dd>
-										
-									</dl>
-								
-								
-									<dl>
-										<dt>Returns:</dt>
-										<dd>The MenuItem that was removed from the Menu.  </dd>
-									</dl>
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="render">render</a></h4>
-						<div class="detail">
-							<code>
-								Object 
-								<strong>render</strong>
-								(p_oAppendToNode, &lt;Boolean&gt; p_bHideSourceElement)
-							</code>
-									
-							<div class="description">
-								
-									Renders the Menu by inserting the elements that are not already in the 
- main Module format into their correct places. Optionally appends the 
- Menu to the specified node prior to the render's execution.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>p_bHideSourceElement</code> - 
-												 Boolean indicating if the source  element should be hidden rather than destroyed. Default is false.  
-											</dd>
-										
-											<dd>
-												<code>String</code> - 
-												/HTMLElement} p_oAppendToNode The element or element id to   that the Module should be appended to prior to rendering.  
-											</dd>
-										
-									</dl>
-								
-								
-								
-									ARRAY(0x8438c30)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="setInitialFocus">setInitialFocus</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>setInitialFocus</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Sets focus to a Menu instance's first enabled MenuItem instance.
-								
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="setInitialSelection">setInitialSelection</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>setInitialSelection</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Sets the "selected" configuration property of a Menu instance's first
- enabled MenuItem instance to "true."
-								
 								
 								
 								
