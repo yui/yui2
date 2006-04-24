@@ -1,6 +1,8 @@
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
-YAHOO.namespace("YAHOO.widget");
+/**
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt 
+**/
 
 /**
 * @class
@@ -254,10 +256,6 @@ YAHOO.widget.DateMath = new function() {
 		return date;
 	};
 }
-
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
-YAHOO.namespace("YAHOO.widget");
 
 /**
 * @class
@@ -590,8 +588,8 @@ YAHOO.widget.Calendar_Core.prototype.wireDefaultEvents = function() {
 		var index = cell.index;
 		var d = cal.cellDates[index];
 		var date = new Date(d[0],d[1]-1,d[2]);
-	
-		if (! cal.isDateOOM(date)) {
+
+		if (! cal.isDateOOM(date) && ! YAHOO.util.Dom.hasClass(cell, "restricted")) {
 			YAHOO.widget.Calendar_Core.prependCssClass(cell, cal.Style.CSS_CELL_HOVER);
 		}
 	}
@@ -1029,8 +1027,6 @@ YAHOO.widget.Calendar_Core.prototype.renderBody = function(workingDate) {
 	this.postMonthDays = YAHOO.widget.Calendar_Core.DISPLAY_DAYS-this.preMonthDays-this.monthDays;
 	
 	workingDate = YAHOO.widget.DateMath.subtract(workingDate, YAHOO.widget.DateMath.DAY, this.preMonthDays);
-
-	//this.table.style.visibility = "hidden"; // Hide while we render
 	
 	var weekRowIndex = 0;
 	
@@ -1228,9 +1224,7 @@ YAHOO.widget.Calendar_Core.prototype.renderBody = function(workingDate) {
 			YAHOO.widget.Calendar_Core.addCssClass(cell, this.Style.CSS_CELL_BOTTOM);
 		}
 	}
-	
-	//this.table.style.visibility = "visible"; // Show table, now that it's rendered
-	
+		
 };
 
 /**
@@ -2139,10 +2133,6 @@ YAHOO.widget.Calendar_Core._getBrowser = function()
 
 YAHOO.widget.Cal_Core = YAHOO.widget.Calendar_Core;
 
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
-YAHOO.namespace("YAHOO.widget");
-
 /**
 * @class
 * Calendar is the default implementation of the YAHOO.widget.Calendar_Core base class.
@@ -2217,10 +2207,6 @@ YAHOO.widget.Calendar.prototype.renderHeader = function() {
 };
 
 YAHOO.widget.Cal = YAHOO.widget.Calendar;
-
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
-YAHOO.namespace("YAHOO.widget");
 
 /**
 * @class
@@ -2632,10 +2618,6 @@ YAHOO.widget.CalendarGroup.prototype.wireEvent = function(eventName, fn) {
 };
 
 YAHOO.widget.CalGrp = YAHOO.widget.CalendarGroup;
-
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
-YAHOO.namespace("YAHOO.widget");
 
 /**
 * @class
