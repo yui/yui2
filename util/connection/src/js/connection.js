@@ -31,7 +31,14 @@ YAHOO.util.Connect =
    * @private
    * @type array
    */
-	_http_header:[],
+	_http_header:{},
+
+  /**
+   * Determines if HTTP headers are set.
+   * @private
+   * @type boolean
+   */
+	_has_http_headers:false,
 
  /**
   * Property modified by setForm() to determine if the transaction
@@ -168,7 +175,6 @@ YAHOO.util.Connect =
    * @param {string} method HTTP transaction method
    * @param {string} uri Fully qualified path of resource
    * @param callback User-defined callback function or object
-   * @param callbackArg User-defined callback arguments
    * @param {string} postData POST body
    * @return {object} Returns the connection object
    */
@@ -193,21 +199,22 @@ YAHOO.util.Connect =
 				this._sFormData = '';
 				this._isFormSubmit = false;
 			}
-			o.conn.open(method, uri, true);
-		    this.handleReadyState(o, callback);
 
-			//remove this because it's causing content-type problems?
+			o.conn.open(method, uri, true);
+
 			if(postData){
-				//this.initHeader('Content-Type','application/x-www-form-urlencoded');
+				this.initHeader('Content-Type','application/x-www-form-urlencoded');
 			}
 
 			//Verify whether the transaction has any user-defined HTTP headers
 			//and set them.
-			if(this._http_header.length>0){
+			if(this._has_http_headers){
 				this.setHeader(o);
 			}
 
+			this.handleReadyState(o, callback);
 			postData?o.conn.send(postData):o.conn.send(null);
+
 			return o;
 		}
 	},
@@ -221,21 +228,28 @@ YAHOO.util.Connect =
    * @private
    * @param {object} o The connection object
    * @param callback User-defined callback object
-   * @param callbackArg User-defined arguments passed to the callback
    * @return void
    */
 	handleReadyState:function(o, callback)
 	{
 		var oConn = this;
-		this._poll[o.tId] = window.setInterval(
-			function(){
-				if(o.conn && o.conn.readyState == 4){
-					window.clearInterval(oConn._poll[o.tId]);
-					oConn._poll.splice(o.tId);
-					oConn.handleTransactionResponse(o, callback);
+		try
+		{
+			this._poll[o.tId] = window.setInterval(
+				function(){
+					if(o.conn && o.conn.readyState == 4){
+						window.clearInterval(oConn._poll[o.tId]);
+						oConn._poll.splice(o.tId);
+						oConn.handleTransactionResponse(o, callback);
+					}
 				}
-			}
-		,this._polling_interval);
+			,this._polling_interval);
+		}
+		catch(e)
+		{
+			window.clearInterval(oConn._poll[o.tId]);
+			oConn.handleTransactionResponse(o, callback);
+		}
 	},
 
   /**
@@ -246,7 +260,6 @@ YAHOO.util.Connect =
    * @private
    * @param {object} o The connection object
    * @param {function} callback - User-defined callback object
-   * @param {} callbackArg - User-defined arguments to be passed to the callback
    * @return void
    */
 	handleTransactionResponse:function(o, callback)
@@ -260,7 +273,8 @@ YAHOO.util.Connect =
 		var httpStatus;
 		var responseObject;
 
-		try{
+		try
+		{
 			httpStatus = o.conn.status;
 		}
 		catch(e){
@@ -319,6 +333,7 @@ YAHOO.util.Connect =
 			}
 		}
 
+		delete responseObject;
 		this.releaseObject(o);
 	},
 
@@ -328,7 +343,7 @@ YAHOO.util.Connect =
    * object's property values.
    * @private
    * @param {object} o The connection object
-   * @param {} callbackArg User-defined arguments to be passed to the callback
+   * @param {} callbackArg User-defined argument or arguments to be passed to the callback
    * @param {boolean} isSuccess Indicates whether the transaction was successful or not.
    * @return object
    */
@@ -337,27 +352,33 @@ YAHOO.util.Connect =
 		var obj = {};
 		var headerObj = {};
 
-		var headerStr = o.conn.getAllResponseHeaders();
-		var header = headerStr.split("\n");
-		for(var i=0; i < header.length; i++){
-			var delimitPos = header[i].indexOf(':');
-			if(delimitPos != -1){
-				headerObj[header[i].substring(0,delimitPos)] = header[i].substring(delimitPos+1);
+		try
+		{
+			var headerStr = o.conn.getAllResponseHeaders();
+			var header = headerStr.split("\n");
+			for(var i=0; i < header.length; i++){
+				var delimitPos = header[i].indexOf(':');
+				if(delimitPos != -1){
+					headerObj[header[i].substring(0,delimitPos)] = header[i].substring(delimitPos+1);
+				}
+			}
+
+			obj.tId = o.tId;
+			obj.status = o.conn.status;
+			obj.statusText = o.conn.statusText;
+			obj.getResponseHeader = headerObj;
+			obj.getAllResponseHeaders = headerStr;
+			obj.responseText = o.conn.responseText;
+			obj.responseXML = o.conn.responseXML;
+			if(typeof callbackArg !== undefined){
+				obj.argument = callbackArg;
 			}
 		}
-
-		obj.tId = o.tId;
-		obj.status = o.conn.status;
-		obj.statusText = o.conn.statusText;
-		obj.getResponseHeader = headerObj;
-		obj.getAllResponseHeaders = headerStr;
-		obj.responseText = o.conn.responseText;
-		obj.responseXML = o.conn.responseXML;
-		if(callbackArg){
-			obj.argument = callbackArg;
+		catch(e){}
+		finally
+		{
+			return obj;
 		}
-
-		return obj;
 	},
 
   /**
@@ -398,8 +419,14 @@ YAHOO.util.Connect =
    */
 	initHeader:function(label,value)
 	{
-		var oHeader = [label,value];
-		this._http_header.push(oHeader);
+		if(this._http_header[label] === undefined){
+			this._http_header[label] = value;
+		}
+		else{
+			this._http_header[label] =  value + "," + this._http_header[label];
+		}
+
+		this._has_http_headers = true;
 	},
 
   /**
@@ -410,27 +437,84 @@ YAHOO.util.Connect =
    */
 	setHeader:function(o)
 	{
-		var oHeader = this._http_header;
-		for(var i=0;i<oHeader.length;i++){
-			o.conn.setRequestHeader(oHeader[i][0],oHeader[i][1]);
+		for(var prop in this._http_header){
+			o.conn.setRequestHeader(prop, this._http_header[prop]);
 		}
-		oHeader.splice(0,oHeader.length);
+		delete this._http_header;
+
+		this._http_header = {};
+		this._has_http_headers = false;
 	},
 
   /**
    * This method assembles the form label and value pairs and
-   * constructs an encoded POST body.  Both syncRequest()
-   * and asyncRequest() will automatically initialize the
+   * constructs an encoded POST body.
+   * asyncRequest() will automatically initialize the
    * transaction with a HTTP header Content-Type of
    * application/x-www-form-urlencoded.
    * @public
    * @param {string} formName value of form name attribute
    * @return void
    */
+
 	setForm:function(formName)
 	{
-		this._sFormData = YAHOO.util.Form.setForm(formName);
+		this._sFormData = '';
+		var oForm = document.forms[formName];
+		var oElement, oName, oValue;
+		var hasSubmit = false;
+
+		// Iterate over the form elements collection to construct the
+		// label-value pairs.
+		for (var i=0; i<oForm.elements.length; i++){
+			oDisabled = oForm.elements[i].disabled;
+			oElement = oForm.elements[i];
+			oName = oForm.elements[i].name;
+			oValue = oForm.elements[i].value;
+
+			if(!oDisabled && oValue != '')
+			{
+				switch (oElement.type)
+				{
+					case 'select-one':
+					case 'select-multiple':
+						for(var j=0; j<oElement.options.length; j++){
+							if(oElement.options[j].selected){
+								this._sFormData += encodeURIComponent(oName) + '=' + encodeURIComponent(oElement.options[j].value || oElement.options[j].text) + '&';
+							}
+						}
+						break;
+					case 'radio':
+					case 'checkbox':
+						if(oElement.checked){
+							this._sFormData += encodeURIComponent(oName) + '=' + encodeURIComponent(oValue) + '&';
+						}
+						break;
+					case 'file':
+					//	this._sFormData += encodeURIComponent(oName) + '=' + encodeURIComponent(oValue) + '&';
+					// stub case as XMLHttpRequest will only send the file path as a string.
+					case undefined:
+					// stub case for fieldset element which returns undefined.
+					case 'reset':
+					// stub case for input type reset button.
+					case 'button':
+					// stub case for input type button elements.
+						break;
+					case 'submit':
+						if(hasSubmit == false){
+							this._sFormData += encodeURIComponent(oName) + '=' + encodeURIComponent(oValue) + '&';
+							hasSubmit = true;
+						}
+						break;
+					default:
+						this._sFormData += encodeURIComponent(oName) + '=' + encodeURIComponent(oValue) + '&';
+						break;
+				}
+			}
+		}
+
 		this._isFormSubmit = true;
+		this._sFormData = this._sFormData.substr(0, this._sFormData.length - 1);
 	},
 
   /**
@@ -482,9 +566,9 @@ YAHOO.util.Connect =
    */
 	releaseObject:function(o)
 	{
-			//dereference the XHR instance.
-			o.conn = null;
-			//dereference the connection object.
-			o = null;
+		//dereference the XHR instance.
+		o.conn = null;
+		//dereference the connection object.
+		o = null;
 	}
-}
+};
