@@ -6,8 +6,11 @@
         <title>Basic Menu From Existing Markup</title>
 
         <!-- Stanard fonts -->
-        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/reset_2.0.0-b3.css">
-        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/fonts_2.0.0-b2.css">
+        <link rel="stylesheet" type="text/css" href="http://competitor.corp.yahoo.com/yuilibs/reset.css">
+        <link rel="stylesheet" type="text/css" href="http://competitor.corp.yahoo.com/yuilibs/fonts.css">
+
+        <!-- CSS for Menu -->
+        <link rel="stylesheet" type="text/css" href="../src/css/menu.css">  
 
         <!-- Page-specific styles -->
         <style type="text/css">
@@ -16,33 +19,31 @@
 
         </style>
 
-        <!-- CSS for Menu -->
-        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/menu/css/menu_2.0.0-b3.css"> 
-
         <!-- Namespace source file -->
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/yahoo_2.0.0-b2.js"></script>
+        <script type="text/javascript" src="http://competitor.corp.yahoo.com/yuilibs/yahoo.js"></script>
         
         <!-- Dependency source files -->
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/event_2.0.0-b3.js" ></script>
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dom_2.0.2-b3.js" ></script>
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/container/container_core_2.0.0-b3.js"></script>
+        <script type="text/javascript" src="http://competitor.corp.yahoo.com/yuilibs/event.js"></script>
+        <script type="text/javascript" src="http://competitor.corp.yahoo.com/yuilibs/dom.js"></script>
+        <script type="text/javascript" src="http://spendforever-dx.corp.yahoo.com/container/2.0b4/build/js/container_core-raw.js"></script>
 
         <!-- Menu source file -->
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/menu/menu_2.0.0-b3.js"></script>
-
+        <script type="text/javascript" src="../src/js/menumodule.js"></script>
+        <script type="text/javascript" src="../src/js/menumoduleitem.js"></script>
+        <script type="text/javascript" src="../src/js/menu.js"></script>
+        <script type="text/javascript" src="../src/js/menuitem.js"></script>
+        
         <!-- Page-specific script -->
         <script type="text/javascript">
 
             function onWindowLoad(p_oEvent) {
 
-                var oMenu = new YAHOO.widget.Menu("basicmenu");
+                var oMenu = new YAHOO.widget.Menu("basicmenu", { fixedcenter: true });
 
                 oMenu.render();
 
-                oMenu.center();
-    
                 oMenu.show();
-
+                
             }
 
 
@@ -51,19 +52,19 @@
         </script>
     </head>
     <body>
-        <h1>Basic Menu From Existing Markup</h1>
+        <h1>Basic Menu From Existing Markup <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to create a basic menu using existing markup on the page.  The Menu API also supports building a menu like this <a href="basicmenufromjs.html">using nothing but JavaScript</a>.</p>
 
         <div id="basicmenu" class="yuimenu">
             <div class="bd">
                 <ul class="first">
-                    <li><a href="http://mail.yahoo.com">Yahoo! Mail</a></li>
-                    <li><a href="http://addressbook.yahoo.com">Yahoo! Address Book</a></li>
-                    <li><a href="http://calendar.yahoo.com">Yahoo! Calendar</a></li>
-                    <li><a href="http://notepad.yahoo.com">Yahoo! Notepad</a></li>
+                    <li class="yuimenuitem"><a href="http://mail.yahoo.com">Yahoo! Mail</a></li>
+                    <li class="yuimenuitem"><a href="http://addressbook.yahoo.com">Yahoo! Address Book</a></li>
+                    <li class="yuimenuitem"><a href="http://calendar.yahoo.com">Yahoo! Calendar</a></li>
+                    <li class="yuimenuitem"><a href="http://notepad.yahoo.com">Yahoo! Notepad</a></li>
                 </ul>            
             </div>
-        </div>        
+        </div>
 
     </body>
 </html>

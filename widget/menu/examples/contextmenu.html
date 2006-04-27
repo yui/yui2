@@ -6,19 +6,24 @@
         <title>Context Menu Example</title>
 
         <!-- Stanard fonts -->
-        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/reset_2.0.0-b3.css">
-        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/fonts_2.0.0-b2.css">
+        <link rel="stylesheet" type="text/css" href="http://competitor.corp.yahoo.com/yuilibs/reset.css">
+        <link rel="stylesheet" type="text/css" href="http://competitor.corp.yahoo.com/yuilibs/fonts.css">
+
+        <!-- CSS for Menu -->
+        <link rel="stylesheet" type="text/css" href="../src/css/menu.css"> 
 
         <!-- Page-specific styles -->
         <style type="text/css">
 
-            h1,p,ul {
+            h1, p, ul {
 
                 margin:1em;
 
             }
 
-            em {
+            h1 em,
+            p em,
+            li em {
 
                 font-weight:bold;
 
@@ -26,913 +31,247 @@
 
             #operainstructions {
 
+                list-style-type:square;
                 margin-left:2em;
 
             }
 
-            #yahooproperties {
+            #clones {
 
-                list-style-type:none;
-                width:198px;
-                background-color:#666;
-                border:solid 1px #666;
-
+                background-color:#9C6;
+                width:450px;
+                height:400px;
+                overflow:auto;
+         
+            }
+            
+            #clones li {
+            
+                float:left;
+                display:inline;
+                border:solid 1px #000;
+                background-color:#fff;
+                margin:10px;
+                text-align:center;
+            
             }
 
-            #yahooproperties li {
-
-                background-color:#ccc;
-                margin:1px 0 0 0;
-                padding:.25em .5em;
+            #clones li img {
+            
+                border:solid 1px #000;
+                margin:5px;
+            
+            }
+            
+            #clones li cite {
+            
+                display:block;
+                text-align:center;
+                margin:0 0 5px 0;
+                padding:0 5px;
 
             }
-
-            #yahooproperties li.first {
-
-                margin:0;
-
-            }
-
-            #yahooproperties li a {
-
-                zoom:1;
-
-            }
-
+            
         </style>
-
-        <!-- CSS for Menu -->
-        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/menu/css/menu_2.0.0-b3.css"> 
-
         <!-- Namespace source file -->
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/yahoo_2.0.0-b2.js"></script>
+        <script type="text/javascript" src="http://competitor.corp.yahoo.com/yuilibs/yahoo.js"></script>
         
         <!-- Dependency source files -->
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/event_2.0.0-b3.js" ></script>
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dom_2.0.2-b3.js" ></script>
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/container/container_core_2.0.0-b3.js"></script>
-
+        <script type="text/javascript" src="http://competitor.corp.yahoo.com/yuilibs/event.js"></script>
+        <script type="text/javascript" src="http://competitor.corp.yahoo.com/yuilibs/dom.js"></script>
+        <script type="text/javascript" src="http://spendforever-dx.corp.yahoo.com/container/2.0b4/build/js/container_core-raw.js"></script>
+        
         <!-- Menu source file -->
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/menu/menu_2.0.0-b3.js"></script>
-
+        <script type="text/javascript" src="../src/js/menumodule.js"></script>
+        <script type="text/javascript" src="../src/js/menumoduleitem.js"></script>
+        <script type="text/javascript" src="../src/js/menu.js"></script>
+        <script type="text/javascript" src="../src/js/menuitem.js"></script>
+        <script type="text/javascript" src="../src/js/contextmenu.js"></script>
+        <script type="text/javascript" src="../src/js/contextmenuitem.js"></script>                
+               
         <!-- Page-specific script -->
         <script type="text/javascript">
 
-            function getBrowser() {
+            // "move" event handler for the context menu
 
-                var sUserAgent = navigator.userAgent.toLowerCase();
+            function onMoveContextMenu() {
 
-                // Check Opera first in case of spoofing
+                var oNode = this.contextEventTarget;
+                var bDisabled = (oNode.tagName == "UL");
+                var i = this.getItemGroups()[0].length - 1;
 
-                if (sUserAgent.indexOf('opera')!=-1) { 
-
-                    return 'opera';
-
-                } else if (sUserAgent.indexOf('msie 7')!=-1) {
-
-                    return 'ie7';
-
-                } else if (sUserAgent.indexOf('msie') !=-1) {
-
-                    return 'ie';
-
-                } else if (sUserAgent.indexOf('safari')!=-1) {
-
-                    return 'safari';
-
-                } else if (sUserAgent.indexOf('gecko') != -1) {
-
-                    return 'gecko';
-
-                } else {
-
-                    return false;
+                do {
+                
+                    this.getItem(i).cfg.setProperty("disabled", bDisabled);
 
                 }
+                while(i--);
 
             }
+        
 
-
-            //  Create an instance of the OverlayManager 
-
-            YAHOO.example.OverlayManager = new YAHOO.widget.OverlayManager();
-
-
-            /*
-                Create a subclass of YAHOO.widget.Menu to define a set
-                of default behaviors for each "ContextMenu" instance
-            */
-
-            YAHOO.example.ContextMenu = function(p_oElement, p_oUserConfig) {
+            // "click" event handler for each item in the context menu
             
-                if(arguments.length > 0) {
-            
-                    YAHOO.example.ContextMenu.superclass.constructor.call(
-                        this, 
-                        p_oElement, 
-                        p_oUserConfig
-                    );
-            
-                }
-            
-            };
-            
-            YAHOO.example.ContextMenu.prototype = new YAHOO.widget.Menu();
-            YAHOO.example.ContextMenu.prototype.constructor = YAHOO.example.ContextMenu;
-            YAHOO.example.ContextMenu.superclass = YAHOO.widget.Menu.prototype;
+            function onContextMenuItemClick(p_sType, p_aArguments) {
 
-            YAHOO.example.ContextMenu.prototype.init = function(p_oElement, p_oUserConfig) {
-        
-                // Set the type of MenuItem instances for this menu
+                var oNode = this.parent.contextEventTarget,
+                    oLI;
 
-                this.MENUITEM_TYPE = YAHOO.example.ContextMenuItem;
-
-
-                // Call the init of the super class
-
-                YAHOO.example.ContextMenu.superclass.init.call(this, p_oElement);
-
-
-                /*
-                    The default value for the "constraintoviewport" 
-                    configuration property is "false."  The following line
-                    forces that property to "true" for this subclass.
-                */
-
-                this.cfg.setProperty("constraintoviewport", true);
-
-
-                // Add event handlers
-
-                this.showEvent.subscribe(this._onShow);
-                this.mouseOverEvent.subscribe(this._onMouseOver);
-
-            };
-
-
-            // Handler for each "ContextMenu" instance's "mouseover" event
-
-            YAHOO.example.ContextMenu.prototype._onMouseOver = function(p_sType, p_aArguments) {
-
-                /*
-                    If the menu is a submenu, then select the menu's parent
-                    MenuItem instance
-                */
-
-                if(this.parent) {
-
-                    this.parent.cfg.setProperty("selected", true);
-
-                }
-
-            };
-
-
-            // Handler for each "ContextMenu" instance's "show" event
-
-            YAHOO.example.ContextMenu.prototype._onShow = function(p_sType, p_aArguments) {
-
-                /*
-                    If the menu is a submenu, position it relative to the 
-                    parent MenuItem instance
-                */
-
-                if(this.parent) {
-
-                    var oMenuItem = this.parent,
-                        aMenuItemPosition = YAHOO.util.Dom.getXY(oMenuItem.element),
-                        aPosition = [];
-    
-        
-                    // Calculate the x position
-                    
-                    aPosition[0] = 
-                        (aMenuItemPosition[0] + oMenuItem.element.offsetWidth);
-        
-        
-                    // Calculate the y position
-        
-                    aPosition[1] = aMenuItemPosition[1];
-        
-        
-                    // Position the menu
-        
-                    this.cfg.setProperty("xy", aPosition);
-
-                }
-
-            };
-
-
-            /*
-                Create a subclass of YAHOO.widget.MenuItem to define a set
-                of default behaviors for each MenuItem instance in the 
-                context menu
-            */
-
-            YAHOO.example.ContextMenuItem = function(p_oObject, p_oUserConfig) {
-            
-                if(p_oObject) {
-            
-                    YAHOO.example.ContextMenuItem.superclass.constructor.call(this, p_oObject, p_oUserConfig);
-            
-                }
-            
-            };
-            
-            YAHOO.example.ContextMenuItem.prototype = new YAHOO.widget.MenuItem();
-            YAHOO.example.ContextMenuItem.prototype.constructor = YAHOO.example.ContextMenuItem;
-            YAHOO.example.ContextMenuItem.superclass = YAHOO.widget.MenuItem.prototype;
-
-            YAHOO.example.ContextMenuItem.prototype.init = function(p_oObject, p_oUserConfig) {
-
-                // Set the type of submenu instances 
-
-                this.SUBMENU_TYPE = YAHOO.example.ContextMenu;
-
-
-                // Call the init of the super class
-
-                YAHOO.example.ContextMenuItem.superclass.init.call(
-                    this, 
-                    p_oObject, 
-                    p_oUserConfig
-                );  
-
-
-                // Add event handlers to each "ContextMenuItem" instance
-
-                this.keyDownEvent.subscribe(this._onKeyDown);
-                this.mouseOverEvent.subscribe(this._onMouseOver);
-                this.mouseOutEvent.subscribe(this._onMouseOut);
-                this.clickEvent.subscribe(this._onClick);
-
-
-                /*
-                    FF 1.0 doesn't allow you to prevent the default tab 
-                    behavior "onkeydown," so we need to handle that event
-                    "onkeypress" for FF < 1.5
-                */
-
-                var sBrowser = getBrowser(),
-                    sUserAgent = navigator.userAgent.toLowerCase();
-
-                this._bFF10 = 
-                    (sBrowser == "gecko" && sUserAgent.indexOf("1.0") != -1);
-
-                if(this._bFF10) {
-
-                    this.keyPressEvent.subscribe(this._onKeyPress);
-
-                }
-
-            };
-
-
-            // Handler for each "ContextMenuItem" instance's "keypress" event
-
-            YAHOO.example.ContextMenuItem.prototype._onKeyPress = function(p_sType, p_aArguments) {
-
-                var oEvent = p_aArguments[0];
-
-                switch(oEvent.keyCode) {
-                    
-                    case 9:     // Tab
-
-                        var oActiveMenuItem = this.parent.activeMenuItem;
-        
-                        if(
-                            this == oActiveMenuItem && 
-                            !this.cfg.getProperty("selected")
-                        ) {
-        
-                            this.cfg.setProperty("selected", true);
-        
-                        }
-                        else {
-        
-                            var oNextMenuItem;
-            
-                            if(oEvent.shiftKey) {
-        
-                                oNextMenuItem = 
-                                    this.getPreviousEnabledSibling();
-        
-                            }
-                            else {
-        
-                                oNextMenuItem = 
-                                    this.getNextEnabledSibling();
-        
-                            }
-                    
-                            if(oNextMenuItem) {
-        
-                                var oSubmenu = this.cfg.getProperty("submenu");
-                        
-                                if(oSubmenu) {
-                        
-                                    oSubmenu.hide();
-                        
-                                }
-        
-                                this.cfg.setProperty("selected", false);
-        
-                                oNextMenuItem.cfg.setProperty("selected", true);
-                    
-                                oNextMenuItem.focus();
+                if(oNode.tagName == "LI") {
                 
-                            }
-        
-                        }
-
-                        YAHOO.util.Event.preventDefault(oEvent);
-
-                    break;
-
-                }
-            
-            }; 
-
-
-            // Handler for each "ContextMenuItem" instance's "keydown" event
-
-            YAHOO.example.ContextMenuItem.prototype._onKeyDown = function(p_sType, p_aArguments) {
-
-                var oEvent = p_aArguments[0];
-
-                switch(oEvent.keyCode) {
-
-                    case 9:     // Tab                    
-                    case 38:    // Up arrow
-                    case 40:    // Down arrow
-
-                        if(oEvent.keyCode == 9 && this._bFF10) {
-
-                            return;
-
-                        }
-        
-                        var oActiveMenuItem = this.parent.activeMenuItem;
-        
-                        if(
-                            this == oActiveMenuItem && 
-                            !this.cfg.getProperty("selected")
-                        ) {
-        
-                            this.cfg.setProperty("selected", true);
-        
-                        }
-                        else {
-        
-                            var oNextMenuItem;
-            
-                            if(
-                                (oEvent.keyCode == 9 && oEvent.shiftKey) || 
-                                oEvent.keyCode == 38
-                            ) {
-        
-                                oNextMenuItem = 
-                                    this.getPreviousEnabledSibling();
-        
-                            }
-                            else {
-        
-                                oNextMenuItem = 
-                                    this.getNextEnabledSibling();
-        
-                            }
-                    
-                            if(oNextMenuItem) {
-        
-                                var oSubmenu = this.cfg.getProperty("submenu");
-                        
-                                if(oSubmenu) {
-                        
-                                    oSubmenu.hide();
-                        
-                                }
-        
-                                this.cfg.setProperty("selected", false);
-        
-                                oNextMenuItem.cfg.setProperty("selected", true);
-                    
-                                oNextMenuItem.focus();
-                
-                            }
-        
-                        }
-
-                        if(oEvent.keyCode == 9) {
-
-                            YAHOO.util.Event.preventDefault(oEvent);
-
-                        }
-        
-                    break;
-                    
-        
-                    case 39:    // Right arrow
-        
-                        var oSubmenu = this.cfg.getProperty("submenu");
-        
-                        if(oSubmenu) {
-        
-                            oSubmenu.show();
-                            oSubmenu.setInitialSelection();
-                            oSubmenu.setInitialFocus();
-        
-                        }
-        
-                    break;
-                    
-        
-                    case 37:    // Left arrow
-
-                        // Only hide if this this is a MenuItem of a submenu
-
-                        if(this.parent.parent) {
-
-                            this.parent.hide();
-
-                            // Set focus to the parent MenuItem if one exists
-            
-                            var oMenuItem = this.parent.parent;
-            
-                            if(oMenuItem) {
-            
-                                oMenuItem.focus();
-            
-                            }
-
-                        }
-
-                    break;
-
-                    case 27:    // Esc key
-        
-                        this.parent.hide();
-
-                        // Set focus to the parent MenuItem if one exists
-
-                        var oMenuItem = this.parent.parent;
-        
-                        if(oMenuItem) {
-
-                            oMenuItem.focus();
-
-                        }
-
-                    break;
-        
-                }
-
-            };
-
-
-           // Handler for each "ContextMenuItem" instance's "mouseover" event
-            
-            YAHOO.example.ContextMenuItem.prototype._onMouseOver = function(p_sType, p_aArguments) {
-            
-                var oSubmenu,
-                    oActiveMenuItem = this.parent.activeMenuItem;
-
-
-                // Hide any other submenus that might be visible
-
-                if(oActiveMenuItem && oActiveMenuItem != this) {
-            
-                    oSubmenu = oActiveMenuItem.cfg.getProperty("submenu");
-            
-                    if(oSubmenu && oSubmenu.cfg.getProperty("visible")) {
-
-                        window.clearTimeout(oSubmenu.TimeoutId);
-            
-                        oSubmenu.hide();
-            
-                    }
-        
-                }
-
-
-                // Show the submenu for this instance
-
-                oSubmenu = this.cfg.getProperty("submenu");
-        
-                if(oSubmenu) {
-        
-                    oSubmenu.show();
-        
-                }
-            
-            };
-
-
-            // Handler for each "ContextMenuItem" instance's "mouseout" event
-
-            YAHOO.example.ContextMenuItem.prototype._onMouseOut = function(p_sType, p_aArguments) {
-
-                var oSubmenu = this.cfg.getProperty("submenu");
-
-                if(oSubmenu) {
-
-                    var oEvent = p_aArguments[0],
-                        oRelatedTarget = YAHOO.util.Event.getRelatedTarget(oEvent);
-
-                    if(
-                        !(
-                            oRelatedTarget == oSubmenu.element || 
-                            this._oDom.isAncestor(oSubmenu.element, oRelatedTarget)
-                        )
-                    ) {
-
-                        oSubmenu.hide();
-        
-                    }
-
-                }
-
-            };
-
-
-            // Handler for each "ContextMenuItem" instance's "click" event
-
-            YAHOO.example.ContextMenuItem.prototype._onClick = function(p_sType, p_aArguments) {
-
-                if(this.parent.parent) {
-
-                    var oParentMenu = this.parent.parent.parent,
-                        oLI = oParentMenu.listItemElement,
-                        sColor = "#";
-
-                    switch(this.index) {
-
-                        case 0: // Red
-
-                            sColor += "f00";
-
-                        break;
-
-                        case 1: // Blue
-
-                            sColor += "00f";
-
-                        break;
-
-                        case 2: // Green
-
-                            sColor += "090";
-
-                        break;
-
-                        case 3: // Orange
-
-                            sColor += "f60";
-
-                        break;
-
-                        case 4: // Gray
-
-                            sColor += "ccc";
-
-                        break;
-
-                    }
-
-                    oLI.style.backgroundColor = sColor;
-
-                    oParentMenu.hide();
+                    oLI = oNode;
 
                 }
                 else {
 
-                    var oLI = this.parent.listItemElement,
-                        oAnchor;
-
-                    if(oLI.firstChild.nodeType == 1) {
-
-                        oAnchor = oLI.firstChild;
-
-                    }
-                    else {
-
-                        oAnchor = oLI.childNodes[1];
-
-                    }
-
-                    switch(this.index) {
-
-                        case 0: // Edit Text
-
-                            var sText = window.prompt("Enter the text for this item:", oAnchor.firstChild.nodeValue);
-
-                            if(sText && sText.length > 0) {
-
-                                oAnchor.firstChild.nodeValue = sText;
-
-                            }
-
-                        break;
-
-                        case 1: // Edit URL
-
-                            var sURL = window.prompt("Enter the URL for this item:", oAnchor.getAttribute("href"));
-
-                            if(sURL && sURL.length > 0) {
-
-                                oAnchor.setAttribute("href", sURL);
-
-                            }
-
-                        break;
-
-                        case 3: // Clone
-
-                            var oClone = oLI.cloneNode(true);
-
-                            YAHOO.util.Dom.removeClass(oClone, "first");
-
-                            oLI.parentNode.appendChild(oClone);
-
-                        break;
-
-                        case 4: // Delete
-
-                            var oUL = oLI.parentNode;
-
-                            oUL.removeChild(oLI);
-
-                            var oFirstLI = oUL.getElementsByTagName("li")[0];
-
-                            if(oFirstLI) {
-
-                                YAHOO.util.Dom.addClass(oFirstLI, "first");
-
-                            }
-                            else {
-
-                                oUL.parentNode.removeChild(oUL);
-
-                            }
-
-                        break;
-
-                    }                    
-
-                    this.parent.hide();
-
-                }
-
-            };
-
-
-            // "click" event handler for the document object
-
-            function onDocumentClick(p_oEvent) {
-
-                /*
-                    Hide any other menus that might be visible for displaying
-                    the context menu
-                */
-
-                YAHOO.example.OverlayManager.hideAll();
-
-            }
-
-
-            // "contextmenu" event handler for the document object
-
-            function onYahooPropertiesContextMenu(p_oEvent) {
-
-                var oTarget = YAHOO.util.Event.getTarget(p_oEvent, true);
-
-                if(oTarget != this) {
-
-                    var oNode = oTarget,
-                    oLI;
-
+                    /*
+                         If the target of the event was a child of an LI, 
+                         get the parent LI element
+                    */
 
                     do {
+    
+                        if(oNode.tagName == "LI") {
 
-                        if(oNode.parentNode == this) {
+                            oLI = oNode;                            
 
-                            oLI = oNode;
                             break;
-
+                        
                         }
-
+    
                     }
                     while((oNode = oNode.parentNode));
+                
+                }
+                
+
+                switch(this.index) {
+                
+                    case 0:     // Edit name
+
+                        var oCite = oLI.lastChild;
+
+                        if(oCite.nodeType != 1) {
+                        
+                            oCite = oCite.previousSibling;
+
+                        }
+                    
+                        var oTextNode = oCite.firstChild;
+
+                        var sName = window.prompt("Enter a new name for ", oTextNode.nodeValue);
+
+                        if(sName && sName.length > 0) {
+                            
+                            oTextNode.nodeValue = sName;
+
+                        }
+                    
+                    break;
 
 
-                    /*
-                        Hide any other menus that might be visible for
-                        displaying the context menu
-                    */
-    
-                    YAHOO.example.OverlayManager.hideAll();
-    
-    
-                    // Position and display the context menu
-    
-                    var nX = YAHOO.util.Event.getPageX(p_oEvent),
-                        nY = YAHOO.util.Event.getPageY(p_oEvent),
-                        oContextMenu = 
-                        YAHOO.example.OverlayManager.find("contextmenu");
-    
-                    oContextMenu.cfg.applyConfig( { x:nX, y:nY, visible:true } );
-    
-    
-                    /*
-                        Store a reference to the HTMLLIElement (LI) that was 
-                        clicked as a member of the context menu so that it
-                        can be easily manipulated by the event handlers
-                    */
-    
-                    oContextMenu.listItemElement = oLI;
-    
-    
-                    // Prevent the browser's default context menu from appearing
-    
-                    YAHOO.util.Event.preventDefault(p_oEvent);
+                    case 1:     // Clone
 
+                        var oClone = oLI.cloneNode(true);
+
+                        oLI.parentNode.appendChild(oClone);
+
+                    break;
+                    
+
+                    case 2:     // Delete
+
+                        var oUL = oLI.parentNode;
+
+                        oUL.removeChild(oLI);
+
+                    break;                    
+                
                 }
 
+                this.parent.hide();
+            
             }
 
 
-            // "click" event handler for the list of Yahoo! properties (UL)
-
-            function onYahooPropertiesClick(p_oEvent) {
-
-                if(p_oEvent.ctrlKey) {
-
-                    onYahooPropertiesContextMenu.call(this, p_oEvent);
-    
-                    /*
-                        Stop propagation of the event so that the document's
-                        "click" handler ("onDocumentClick") does not get called
-                    */
-
-                    YAHOO.util.Event.stopPropagation(p_oEvent);
-
-                }
-
-            }
-
-
-            // "load" event handler for the "window" object           
+            // "load" event handler for the "window" object       
 
             function onWindowLoad(p_oEvent) {
 
                 // Create the context menu
 
-                var oContextMenu = new YAHOO.example.ContextMenu("contextmenu");
+                var oContextMenu = new YAHOO.widget.ContextMenu(
+                                        "contextmenu", 
+                                        { trigger: "clones" } 
+                                    );
+
+                var aMainMenuItems = [
+                        "Edit Name", 
+                        "Clone", 
+                        "Delete"
+                    ];
+                    
+                var nMainMenuItems = aMainMenuItems.length;
+                
+                var oMenuItem;
 
 
-                // Add items to the context menu
+                // Add items to the main menu
 
-                oContextMenu.addMenuItem(
-                    new YAHOO.example.ContextMenuItem("Edit Text")
+                for(var i=0; i<nMainMenuItems; i++) {
+
+                    oMenuItem = 
+                        new YAHOO.widget.ContextMenuItem(aMainMenuItems[i]);
+
+                    /*
+                        Add a "click" event handler to each 
+                        ContextMenuItem instance
+                    */
+
+                    oMenuItem.clickEvent.subscribe(onContextMenuItemClick);
+
+                    oContextMenu.addItem(oMenuItem);
+
+                }
+
+
+                //  Add a "move" event handler to the context menu 
+                    
+                oContextMenu.moveEvent.subscribe(
+                    onMoveContextMenu, 
+                    oContextMenu, 
+                    this
                 );
-
-                oContextMenu.addMenuItem(
-                    new YAHOO.example.ContextMenuItem("Edit URL")
-                );
-
-
-                // Create a submenu for the color picker
-
-                var oColorMenu = new YAHOO.example.ContextMenu("colors");
-
-                oColorMenu.addMenuItem(
-                    new YAHOO.example.ContextMenuItem("Red")
-                );
-
-                oColorMenu.addMenuItem(
-                    new YAHOO.example.ContextMenuItem("Blue")
-                );
-
-                oColorMenu.addMenuItem(
-                    new YAHOO.example.ContextMenuItem("Green")
-                );
-
-                oColorMenu.addMenuItem(
-                    new YAHOO.example.ContextMenuItem("Orange")
-                );
-
-                oColorMenu.addMenuItem(
-                    new YAHOO.example.ContextMenuItem("Gray")
-                );
-
-
-                // Add the color MenuItem
-
-                oContextMenu.addMenuItem(
-                    new YAHOO.example.ContextMenuItem(
-                        "Change Color", 
-                        { submenu: oColorMenu }
-                    )
-                );
-
-                oContextMenu.addMenuItem(
-                    new YAHOO.example.ContextMenuItem("Clone")
-                );
-
-
-                oContextMenu.addMenuItem(
-                    new YAHOO.example.ContextMenuItem("Delete")
-                );
-
+                
 
                 // Render the context menu and color picker submenu
 
                 oContextMenu.render(document.body);
-
-
-                // Register the context menu with the "OverlayManager"
-
-                YAHOO.example.OverlayManager.register(oContextMenu);
-
-
-                /*
-                    Assign a "contextmenu" event handler the 
-                    list of Yahoo! properties
-                */
-
-                var oYahooProperties = 
-                        document.getElementById("yahooproperties");
-
-
-                var sBrowser = getBrowser();
-
-                /*
-                    Listen for the "click" event in Opera b/c it does not 
-                    support the "contextmenu" event
-                */
-
-                if(sBrowser && sBrowser == "opera") {
-
-                    YAHOO.util.Event.addListener(
-                        oYahooProperties, 
-                        "click", 
-                        onYahooPropertiesClick
-                    );
-
-                }
-                else {
-
-                    YAHOO.util.Event.addListener(
-                        oYahooProperties, 
-                        "contextmenu", 
-                        onYahooPropertiesContextMenu
-                    );
-
-                }
-
-
-                // Assign a "click" event handler to the document
-
-                YAHOO.util.Event.addListener(
-                    document, 
-                    "click", 
-                    onDocumentClick
-                );
-
+                
             }
 
 
             // Assign a "load" event handler to the window
 
             YAHOO.util.Event.addListener(window, "load", onWindowLoad);
-            
+                    
         </script>
+
     </head>
     <body>
-        <h1>Context Menu Example</h1>
+        <h1>Context Menu Example <em>[<a href="index.html">Examples Home</a>]</em></h1>
 
-        <p>Right-click, or hold down the control key and click with the left mouse button on any of the following items to invoke a context menu.  You'll be able to use the context menu to manipulate the items in the list.</p>
+        <p>Use the context menu to rename, clone or delete Dolly.</p>
 
-        <p><em>Please Note:</em> Opera does not currently support the "contextmenu" event and a right-click in Opera does not cause the "mousedown," "mouseup," or the "click" event to fire.  For these reasons Opera users will need to do the following to use this example:</p>
+        <p><em>Please Note:</em> Opera users will need to do the following to use this example:</p>
 
         <ul id="operainstructions">
             <li><em>Opera 8.5 and 9 for Windows:</em>  Hold down the control key and click with the left mouse button.</li>
             <li><em>Opera 8.5 and 9 for OS X:</em>  Hold down the command key (&#8984;) and click with the left mouse button.</li>
         </ul>
 
-        <ul id="yahooproperties">
-            <li class="first"><a href="http://mail.yahoo.com">Yahoo! Mail</a></li>
-            <li><a href="http://addressbook.yahoo.com">Yahoo! Address Book</a></li>
-            <li><a href="http://calendar.yahoo.com">Yahoo! Calendar</a></li>
-            <li><a href="http://notepad.yahoo.com">Yahoo! Notepad</a></li>
-            <li><a href="http://local.yahoo.com">Yahoo! Local</a></li>
-            <li><a href="http://maps.yahoo.com">Yahoo! Maps</a></li>
-            <li><a href="http://travel.yahoo.com">Yahoo! Travel</a></li>
-            <li><a href="http://shopping.yahoo.com">Yahoo! Shopping</a></li>
-            <li><a href="http://messenger.yahoo.com">Yahoo! Messenger</a></li>
-            <li><a href="http://360.yahoo.com">Yahoo! 360</a></li>
-            <li><a href="http://groups.yahoo.com">Yahoo! Groups</a></li>
-            <li><a href="http://photos.yahoo.com">Yahoo! Photos</a></li>
+        <ul id="clones">
+            <li><a href="http://en.wikipedia.org/wiki/Dolly_%28clone%29"><img src="img/dolly.jpg" width="100" height="100" alt="Dolly, a ewe, the first mammal to have been successfully cloned from an adult cell."></a><cite>Dolly</cite></li>
         </ul>
 
     </body>

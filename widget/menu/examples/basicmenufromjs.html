@@ -6,8 +6,11 @@
         <title>Basic Menu From Pure JavaScript</title>
 
         <!-- Stanard fonts -->
-        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/reset_2.0.0-b3.css">
-        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/fonts_2.0.0-b2.css">
+        <link rel="stylesheet" type="text/css" href="http://competitor.corp.yahoo.com/yuilibs/reset.css">
+        <link rel="stylesheet" type="text/css" href="http://competitor.corp.yahoo.com/yuilibs/fonts.css">
+
+        <!-- CSS for Menu -->
+        <link rel="stylesheet" type="text/css" href="../src/css/menu.css"> 
 
         <!-- Page-specific styles -->
         <style type="text/css">
@@ -16,49 +19,49 @@
 
         </style>
 
-        <!-- CSS for Menu -->
-        <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/menu/css/menu_2.0.0-b3.css"> 
-
         <!-- Namespace source file -->
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/yahoo_2.0.0-b2.js"></script>
+        <script type="text/javascript" src="http://competitor.corp.yahoo.com/yuilibs/yahoo.js"></script>
         
         <!-- Dependency source files -->
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/event_2.0.0-b3.js" ></script>
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dom_2.0.2-b3.js" ></script>
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/container/container_core_2.0.0-b3.js"></script>
-
+        <script type="text/javascript" src="http://competitor.corp.yahoo.com/yuilibs/event.js"></script>
+        <script type="text/javascript" src="http://competitor.corp.yahoo.com/yuilibs/dom.js"></script>
+        <script type="text/javascript" src="http://spendforever-dx.corp.yahoo.com/container/2.0b4/build/js/container_core-raw.js"></script>
+        
         <!-- Menu source file -->
-        <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/menu/menu_2.0.0-b3.js"></script>
-
+        <script type="text/javascript" src="../src/js/menumodule.js"></script>
+        <script type="text/javascript" src="../src/js/menumoduleitem.js"></script>
+        <script type="text/javascript" src="../src/js/menu.js"></script>
+        <script type="text/javascript" src="../src/js/menuitem.js"></script>
+        
         <!-- Page-specific script -->
         <script type="text/javascript">
 
             function onWindowLoad(p_oEvent) {
 
-                var oMenu = new YAHOO.widget.Menu("basicmenu");
+                var oMenu = new YAHOO.widget.Menu("basicmenu", { fixedcenter: true });
 
-                oMenu.addMenuItem(
+                oMenu.addItem(
                         new YAHOO.widget.MenuItem(
                             "Yahoo! Mail", 
                             { url:"http://mail.yahoo.com"}
                         )
                     );
 
-                oMenu.addMenuItem(
+                oMenu.addItem(
                         new YAHOO.widget.MenuItem(
                             "Yahoo! Address Book", 
                             { url:"http://addressbook.yahoo.com"}
                         )
                     );
 
-                oMenu.addMenuItem(
+                oMenu.addItem(
                         new YAHOO.widget.MenuItem(
                             "Yahoo! Calendar", 
                             { url:"http://calendar.yahoo.com"}
                         )
                     );
 
-                oMenu.addMenuItem(
+                oMenu.addItem(
                         new YAHOO.widget.MenuItem(
                             "Yahoo! Notepad", 
                             { url:"http://notepad.yahoo.com"} 
@@ -66,8 +69,6 @@
                     );
 
                 oMenu.render(document.body);
-
-                oMenu.center();
     
                 oMenu.show();
 
@@ -79,7 +80,7 @@
         </script>
     </head>
     <body>
-        <h1>Basic Menu From Pure JavaScript</h1>
+        <h1>Basic Menu From Pure JavaScript <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to create a basic menu using nothing but JavaScript.  The Menu API also supports building a menu like this <a href="basicmenufrommarkup.html">using existing markup</a>.</p>
     </body>
 </html>
