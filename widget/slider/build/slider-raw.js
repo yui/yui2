@@ -36,16 +36,6 @@ YAHOO.widget.Slider = function(sElementId, sGroup, oThumb) {
 			self.onThumbChange(); 
 		};
 
-		var el = oThumb.getEl();
-
-		/**
-		 * the center of the slider element is stored so we can position 
-		 * place it in the correct position when the background is clicked
-		 *
-		 * @type Coordinate
-		 */
-		this.thumbCenterPoint = { x:el.offsetWidth/2, y:el.offsetHeight/2 };
-
 		/**
 		 * Overrides the isTarget property in YAHOO.util.DragDrop
 		 * @private
@@ -57,14 +47,6 @@ YAHOO.widget.Slider = function(sElementId, sGroup, oThumb) {
 		 * @type boolean
 		 */
 		this.animate = YAHOO.widget.Slider.ANIM_AVAIL;
-
-        /**
-         * The basline position of the background element, used
-         * to determine if the background has moved since the last
-         * operation.
-         * @type int[]
-         */
-        this.baselinePos = YAHOO.util.Dom.getXY(this.getEl());
 
 		/**
 		 * Adjustment factor for tick animation, the more ticks, the
@@ -160,6 +142,30 @@ YAHOO.widget.Slider.getSliderRegion =
 YAHOO.widget.Slider.ANIM_AVAIL = true;
 
 YAHOO.widget.Slider.prototype.setStartSliderState = function() {
+
+    var el = this.thumb.getEl();
+
+    /**
+     * the center of the slider element is stored so we can position 
+     * place it in the correct position when the background is clicked
+     *
+     * @type Coordinate
+     */
+    this.thumbCenterPoint = { 
+            x: parseInt(el.offsetWidth/2, 10), 
+            y: parseInt(el.offsetHeight/2, 10) 
+    };
+
+    this.thumb.startOffset = this.thumb.getOffsetFromParent();
+
+    /**
+     * The basline position of the background element, used
+     * to determine if the background has moved since the last
+     * operation.
+     * @type int[]
+     */
+    this.baselinePos = YAHOO.util.Dom.getXY(this.getEl());
+
     if (this.thumb._isRegion) {
         if (this.deferredSetRegionValue) {
             this.setRegionValue.apply(this, this.deferredSetRegionValue, true);
@@ -307,6 +313,7 @@ YAHOO.widget.Slider.prototype.setValue = function(newOffset, skipAnim, force) {
 
     if (!this.thumb.available) {
         this.deferredSetValue = arguments;
+        return false;
     }
 
     if (this.isLocked() && !force) {
@@ -348,7 +355,9 @@ YAHOO.widget.Slider.prototype.setRegionValue = function(newOffset, newOffset2, s
 
     if (!this.thumb.available) {
         this.deferredSetRegionValue = arguments;
+        return false;
     }
+
     if (this.isLocked() && !force) {
         return false;
     }
@@ -792,7 +801,7 @@ YAHOO.widget.SliderThumb.prototype.initSlider = function (iLeft, iRight, iUp, iD
 	// var el = this.getEl();
 
     // this.parentPos = YAHOO.util.getXY(this.parentElId);
-    this.startOffset = this.getOffsetFromParent();
+    // this.startOffset = this.getOffsetFromParent();
     //alert(this.getValue());
 };
 
@@ -804,6 +813,7 @@ YAHOO.widget.SliderThumb.prototype.initSlider = function (iLeft, iRight, iUp, iD
  * slider has moved from the start position.
  */
 YAHOO.widget.SliderThumb.prototype.getValue = function () {
+    if (!this.available) { return 0; }
     var val = (this._isHoriz) ? this.getXValue() : this.getYValue();
     return val;
 };
@@ -816,6 +826,7 @@ YAHOO.widget.SliderThumb.prototype.getValue = function () {
  * slider has moved horizontally from the start position.
  */
 YAHOO.widget.SliderThumb.prototype.getXValue = function () {
+    if (!this.available) { return 0; }
 	// return (YAHOO.util.Dom.getX(this.getEl()) - this.initPageX);
     var newOffset = this.getOffsetFromParent();
 	return (newOffset[0] - this.startOffset[0]);
@@ -829,6 +840,7 @@ YAHOO.widget.SliderThumb.prototype.getXValue = function () {
  * slider has moved vertically from the start position.
  */
 YAHOO.widget.SliderThumb.prototype.getYValue = function () {
+    if (!this.available) { return 0; }
 	// return (YAHOO.util.Dom.getY(this.getEl()) - this.initPageY);
     var newOffset = this.getOffsetFromParent();
 	return (newOffset[1] - this.startOffset[1]);
