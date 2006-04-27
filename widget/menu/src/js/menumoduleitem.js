@@ -8,7 +8,7 @@ http://developer.yahoo.net/yui/license.txt
 * @class The MenuModuleItem class allows you to create and modify an item for a
 * MenuModule instance.
 * @constructor
-* @param {String/HTMLElement} p_oObject String or HTMLElement 
+* @param {String or HTMLElement} p_oObject String or HTMLElement 
 * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
 * source HTMLElement node.
 * @param {Object} p_oUserConfig The configuration object literal containing 
@@ -35,8 +35,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     * @final
     * @type String
     */
-    SUBMENU_INDICATOR_IMAGE_URL: 
-        "http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/alt1/menuarorght9_nrm_1.gif",
+    SUBMENU_INDICATOR_IMAGE_PATH: "nt/ic/ut/alt1/menuarorght9_nrm_1.gif",
 
 
     /**
@@ -45,8 +44,8 @@ YAHOO.widget.MenuModuleItem.prototype = {
     * @final
     * @type String
     */
-    SELECTED_SUBMENU_INDICATOR_IMAGE_URL: 
-        "http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/alt1/menuarorght9_hov_1.gif",
+    SELECTED_SUBMENU_INDICATOR_IMAGE_PATH: 
+        "nt/ic/ut/alt1/menuarorght9_hov_1.gif",
 
 
     /**
@@ -55,8 +54,8 @@ YAHOO.widget.MenuModuleItem.prototype = {
     * @final
     * @type String
     */
-    DISABLED_SUBMENU_INDICATOR_IMAGE_URL: 
-        "http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/alt1/menuarorght9_dim_1.gif",
+    DISABLED_SUBMENU_INDICATOR_IMAGE_PATH: 
+        "nt/ic/ut/alt1/menuarorght9_dim_1.gif",
 
 
     /**
@@ -97,25 +96,25 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
     /**
     * Constant representing the type of menu to instantiate when creating 
-    * menu instances from parsing the child nodes (either HTMLSelectElement or 
-    * HTMLDivElement) of the MenuModuleItem's DOM.  The default 
+    * submenu instances from parsing the child nodes (either HTMLSelectElement 
+    * or HTMLDivElement) of the item's DOM.  The default 
     * is YAHOO.widget.MenuModule.
     * @final
     * @type YAHOO.widget.MenuModule
     */
-    MENU_TYPE: null,
+    SUBMENU_TYPE: null,
 
 
     /**
-    * Constant representing the type of MenuModuleItem to instantiate when 
-    * creating MenuModuleItem instances from parsing the child nodes (either 
+    * Constant representing the type of item to instantiate when 
+    * creating item instances from parsing the child nodes (either 
     * HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
-    * MenuModuleItem's DOM.  
+    * submenu's DOM.  
     * The default is YAHOO.widget.MenuModuleItem.
     * @final
     * @type YAHOO.widget.MenuModuleItem
     */
-    ITEM_TYPE: null,
+    SUBMENU_ITEM_TYPE: null,
 
 
     // Private member variables
@@ -180,6 +179,35 @@ YAHOO.widget.MenuModuleItem.prototype = {
 	constructor: YAHOO.widget.MenuModuleItem,
 
 
+	/**
+	* The string representing the image root
+	* @type string
+	*/
+	imageRoot: YAHOO.widget.Module.IMG_ROOT,
+
+
+	/**
+	* Boolean representing whether or not the current browsing context 
+	* is secure (https)
+	* @type boolean
+	*/
+	isSecure: function() {
+
+		if(window.location.href.toLowerCase().indexOf("https") == 0) {
+
+			this.imageRoot = YAHOO.widget.Module.IMG_ROOT_SSL;
+
+			return true;
+
+		} else {
+
+			return false;
+
+		}
+
+	}(),
+
+
     /**
     * Returns the ordinal position of a MenuModuleItem instance in a group.
     * @type Number
@@ -239,19 +267,41 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
         var sUserAgent = navigator.userAgent.toLowerCase();
 
-          if (sUserAgent.indexOf("opera")!=-1) { // Opera (check first in case of spoof)
-             return "opera";
-          } else if (sUserAgent.indexOf("msie 7")!=-1) { // IE7
-             return "ie7";
-          } else if (sUserAgent.indexOf("msie") !=-1) { // IE
-             return "ie";
-          } else if (sUserAgent.indexOf("safari")!=-1) { // Safari (check before Gecko because it includes "like Gecko")
-             return "safari";
-          } else if (sUserAgent.indexOf("gecko") != -1) { // Gecko
-             return "gecko";
-          } else {
-             return false;
-          }
+        // Opera (check first in case of spoof)
+    
+        if(sUserAgent.indexOf("opera")!=-1) { 
+        
+            return "opera";
+        
+        // IE7
+
+        } else if(sUserAgent.indexOf("msie 7")!=-1) {
+        
+            return "ie7";
+        
+        // IE
+
+        } else if(sUserAgent.indexOf("msie") !=-1) {
+        
+            return "ie";
+        
+        // Safari (check before Gecko because it includes "like Gecko")
+
+        } else if(sUserAgent.indexOf("safari")!=-1) {
+        
+            return "safari";
+        
+        // Gecko
+
+        } else if(sUserAgent.indexOf("gecko") != -1) {
+        
+            return "gecko";
+        
+        } else {
+        
+            return false;
+        
+        }
 
     }(),
 
@@ -361,7 +411,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     * automatically called by the constructor, and sets up all DOM references 
     * for pre-existing markup, and creates required markup if it is not
     * already present.
-    * @param {String/HTMLElement} p_oObject String or HTMLElement 
+    * @param {String or HTMLElement} p_oObject String or HTMLElement 
     * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
     * source HTMLElement node.
     * @param {Object} p_oUserConfig The configuration object literal containing 
@@ -370,15 +420,15 @@ YAHOO.widget.MenuModuleItem.prototype = {
     */
     init: function(p_oObject, p_oUserConfig) {
 
-        if(!this.MENU_TYPE) {
+        if(!this.SUBMENU_TYPE) {
     
-            this.MENU_TYPE = YAHOO.widget.MenuModule;
+            this.SUBMENU_TYPE = YAHOO.widget.MenuModule;
     
         }
 
-        if(!this.ITEM_TYPE) {
+        if(!this.SUBMENU_ITEM_TYPE) {
     
-            this.ITEM_TYPE = YAHOO.widget.MenuModuleItem;
+            this.SUBMENU_ITEM_TYPE = YAHOO.widget.MenuModuleItem;
     
         }
 
@@ -391,24 +441,73 @@ YAHOO.widget.MenuModuleItem.prototype = {
         // Define the config properties
 
 
-        this.cfg.addProperty("text", { value:"", handler: this.configText, validator: this._checkString, suppressEvent: true });
+        this.cfg.addProperty(
+            "text", 
+            { 
+                value:"", 
+                handler: this.configText, 
+                validator: this._checkString, 
+                suppressEvent: true 
+            }
+        );
         
         this.cfg.addProperty("helptext", { handler: this.configHelpText });
         
-        this.cfg.addProperty("url", { value: "#", handler: this.configURL, suppressEvent: true });
+        this.cfg.addProperty(
+            "url", 
+            { value: "#", handler: this.configURL, suppressEvent: true }
+        );
         
-        this.cfg.addProperty("emphasis", { value: false, handler: this.configEmphasis, validator: this.cfg.checkBoolean, suppressEvent: true });
+        this.cfg.addProperty(
+            "emphasis", 
+            { 
+                value: false, 
+                handler: this.configEmphasis, 
+                validator: this.cfg.checkBoolean, 
+                suppressEvent: true 
+            }
+        );
         
-        this.cfg.addProperty("strongemphasis", { value: false, handler: this.configStrongEmphasis, validator: this.cfg.checkBoolean, suppressEvent: true });
+        this.cfg.addProperty(
+            "strongemphasis", 
+            {
+                value: false, 
+                handler: this.configStrongEmphasis, 
+                validator: this.cfg.checkBoolean, 
+                suppressEvent: true 
+            }
+        );
         
-        this.cfg.addProperty("disabled", { value: false, handler: this.configDisabled, validator: this.cfg.checkBoolean, suppressEvent: true });
+        this.cfg.addProperty(
+            "disabled", 
+            {
+                value: false, 
+                handler: this.configDisabled, 
+                validator: this.cfg.checkBoolean, 
+                suppressEvent: true 
+            }
+        );
         
-        this.cfg.addProperty("selected", { value: false, handler: this.configSelected, validator: this.cfg.checkBoolean, suppressEvent: true });
+        this.cfg.addProperty(
+            "selected", 
+            {
+                value: false, 
+                handler: this.configSelected, 
+                validator: this.cfg.checkBoolean, 
+                suppressEvent: true 
+            }
+        );
         
         this.cfg.addProperty("submenu", { handler: this.configSubmenu });
         
-        this.cfg.addProperty("initsubtree", { value: ((p_oUserConfig && (!p_oUserConfig.initsubtree)) ? false : true) });
+        this.cfg.addProperty("initsubtree", { value: true });
 
+
+        if(p_oUserConfig && !p_oUserConfig.initsubtree) {
+
+            this.cfg.setProperty("initsubtree", false);
+
+        }
 
 
         if(this._checkString(p_oObject)) {
@@ -625,7 +724,8 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
         if(p_sTagName) {
 
-            return (oElement && oElement.tagName == p_sTagName) ? oElement : false;
+            return (oElement && oElement.tagName == p_sTagName) ? 
+                oElement : false;
 
         }
 
@@ -689,8 +789,8 @@ YAHOO.widget.MenuModuleItem.prototype = {
     */
     _initSubTree: function() {
 
-        var Menu = this.MENU_TYPE,
-            MenuModuleItem = this.ITEM_TYPE;
+        var Menu = this.SUBMENU_TYPE,
+            MenuModuleItem = this.SUBMENU_ITEM_TYPE;
 
 
         if(this.srcElement.childNodes.length > 0) {
@@ -782,6 +882,12 @@ YAHOO.widget.MenuModuleItem.prototype = {
             aNodes = [this.element, this._oAnchor],
             me = this;
 
+
+        /**
+        * Adds the "hashelptext" class to the necessary nodes and refires the 
+        * "selected" and "disabled" configuration events
+        * @ignore
+        */
         function initHelpText() {
 
             me._oDom.addClass(aNodes, "hashelptext");
@@ -800,6 +906,11 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
         }
 
+
+        /**
+        * Removes the "hashelptext" class and corresponding DOM element (EM)
+        * @ignore
+        */
         function removeHelpText() {
 
             me._oDom.removeClass(aNodes, "hashelptext");
@@ -1125,7 +1236,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
                     oSubMenuIndicator = document.createElement("img");
 
                     oSubMenuIndicator.src = 
-                        this.SUBMENU_INDICATOR_IMAGE_URL;
+                        (this.imageRoot + this.SUBMENU_INDICATOR_IMAGE_PATH);
         
                     oSubMenuIndicator.alt = 
                         this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
@@ -1137,7 +1248,10 @@ YAHOO.widget.MenuModuleItem.prototype = {
                             document.createElement("img");
 
                         oSelectedSubMenuIndicator.src = 
-                            this.SELECTED_SUBMENU_INDICATOR_IMAGE_URL;
+                            (
+                                this.imageRoot + 
+                                this.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH
+                            );
 
                         oSelectedSubMenuIndicator.id = 
                             "yuiselectedsubmenuindicator";
@@ -1147,7 +1261,10 @@ YAHOO.widget.MenuModuleItem.prototype = {
                             document.createElement("img");
 
                         oDisabledSubMenuIndicator.src = 
-                            this.DISABLED_SUBMENU_INDICATOR_IMAGE_URL;
+                            (
+                                this.imageRoot + 
+                                this.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH
+                            );
 
                         oDisabledSubMenuIndicator.id = 
                             "yuidisabledsubmenuindicator";
@@ -1223,6 +1340,15 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
         if(this.parent instanceof YAHOO.widget.MenuModule) {
 
+
+            /**
+            * Returns the next item in an array 
+            * @param {p_aArray} An array
+            * @param {p_nStartIndex} The index to start searching the array 
+            * @ignore
+            * @return Returns an item in an array
+            * @type Object 
+            */
             function getNextArrayItem(p_aArray, p_nStartIndex) {
     
                 return p_aArray[p_nStartIndex] || 
@@ -1284,26 +1410,50 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
         if(this.parent instanceof YAHOO.widget.MenuModule) {
 
+            /**
+            * Returns the previous item in an array 
+            * @param {p_aArray} An array
+            * @param {p_nStartIndex} The index to start searching the array 
+            * @ignore
+            * @return Returns an item in an array
+            * @type Object 
+            */
             function getPreviousArrayItem(p_aArray, p_nStartIndex) {
     
                 return p_aArray[p_nStartIndex] || 
                     getPreviousArrayItem(p_aArray, (p_nStartIndex-1));
     
             }
-    
+
+
+            /**
+            * Get the index of the first item in an array 
+            * @param {p_aArray} An array
+            * @param {p_nStartIndex} The index to start searching the array 
+            * @ignore
+            * @return Returns an item in an array
+            * @type Object 
+            */    
             function getFirstItemIndex(p_aArray, p_nStartIndex) {
     
                 return p_aArray[p_nStartIndex] ? 
-                    p_nStartIndex : getFirstItemIndex(p_aArray, (p_nStartIndex+1));
+                    p_nStartIndex : 
+                    getFirstItemIndex(p_aArray, (p_nStartIndex+1));
     
             }
     
             var aItemGroups = this.parent.getItemGroups(),
                 oPreviousItem;
     
-            if(this.index > getFirstItemIndex(aItemGroups[this.groupIndex], 0)) {
+            if(
+                this.index > getFirstItemIndex(aItemGroups[this.groupIndex], 0)
+            ) {
     
-                oPreviousItem = getPreviousArrayItem(aItemGroups[this.groupIndex], (this.index-1));
+                oPreviousItem = 
+                    getPreviousArrayItem(
+                        aItemGroups[this.groupIndex], 
+                        (this.index-1)
+                    );
     
             }
             else {
@@ -1321,13 +1471,19 @@ YAHOO.widget.MenuModuleItem.prototype = {
     
                 }
     
-                var aPreviousGroup = getPreviousArrayItem(aItemGroups, nPreviousGroupIndex);
+                var aPreviousGroup = 
+                        getPreviousArrayItem(aItemGroups, nPreviousGroupIndex);
     
-                oPreviousItem = getPreviousArrayItem(aPreviousGroup, (aPreviousGroup.length - 1));
+                oPreviousItem = 
+                    getPreviousArrayItem(
+                        aPreviousGroup, 
+                        (aPreviousGroup.length - 1)
+                    );
     
             }
     
-            return oPreviousItem.cfg.getProperty("disabled") ? oPreviousItem.getPreviousEnabledSibling() : oPreviousItem;
+            return oPreviousItem.cfg.getProperty("disabled") ? 
+                    oPreviousItem.getPreviousEnabledSibling() : oPreviousItem;
 
         }
 

@@ -9,7 +9,7 @@ http://developer.yahoo.net/yui/license.txt
 * @constructor
 * @extends YAHOO.widget.MenuItem
 * @base YAHOO.widget.MenuItem
-* @param {String/HTMLElement} p_oObject String or HTMLElement 
+* @param {String or HTMLElement} p_oObject String or HTMLElement 
 * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
 * source HTMLElement node.
 * @param {Object} p_oUserConfig The configuration object literal containing 
@@ -31,7 +31,11 @@ YAHOO.widget.ContextMenuItem = function(p_oObject, p_oUserConfig) {
 };
 
 YAHOO.widget.ContextMenuItem.prototype = new YAHOO.widget.MenuItem();
-YAHOO.widget.ContextMenuItem.prototype.constructor = YAHOO.widget.ContextMenuItem;
+
+YAHOO.widget.ContextMenuItem.prototype.constructor = 
+
+    YAHOO.widget.ContextMenuItem;
+
 YAHOO.widget.ContextMenuItem.superclass = YAHOO.widget.MenuItem.prototype;
 
 
@@ -40,45 +44,47 @@ YAHOO.widget.ContextMenuItem.superclass = YAHOO.widget.MenuItem.prototype;
 * automatically called by the constructor, and sets up all DOM references for
 * pre-existing markup, and creates required markup if it is not
 * already present.
-* @param {String/HTMLElement} p_oObject String or HTMLElement 
+* @param {String or HTMLElement} p_oObject String or HTMLElement 
 * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
 * source HTMLElement node.
 * @param {Object} p_oUserConfig The configuration object literal containing 
 * the configuration for a ContextMenuItem instance. See the configuration 
 * class documentation for more details.
 */
-YAHOO.widget.ContextMenuItem.prototype.init = function(p_oObject, p_oUserConfig) {
+YAHOO.widget.ContextMenuItem.prototype.init = 
 
-    if(!this.MENU_TYPE) {
-
-        this.MENU_TYPE = YAHOO.widget.ContextMenu;
-
-    }
-
-    if(!this.ITEM_TYPE) {
-
-        this.ITEM_TYPE = YAHOO.widget.ContextMenuItem;
-
-    }
-
-
-    /* 
-        Call the init of the superclass (YAHOO.widget.MenuItem)
-        Note: We don't pass the user config in here yet 
-        because we only want it executed once, at the lowest 
-        subclass level.
-    */ 
-
-    YAHOO.widget.ContextMenuItem.superclass.init.call(this, p_oObject);
-
-
-    if(p_oUserConfig) {
-
-        this.cfg.applyConfig(p_oUserConfig);
-
-    }
-
-
-    this.cfg.fireQueue();
-
-};
+    function(p_oObject, p_oUserConfig) {
+    
+        if(!this.SUBMENU_TYPE) {
+    
+            this.SUBMENU_TYPE = YAHOO.widget.ContextMenu;
+    
+        }
+    
+        if(!this.SUBMENU_ITEM_TYPE) {
+    
+            this.SUBMENU_ITEM_TYPE = YAHOO.widget.ContextMenuItem;
+    
+        }
+    
+    
+        /* 
+            Call the init of the superclass (YAHOO.widget.MenuItem)
+            Note: We don't pass the user config in here yet 
+            because we only want it executed once, at the lowest 
+            subclass level.
+        */ 
+    
+        YAHOO.widget.ContextMenuItem.superclass.init.call(this, p_oObject);
+    
+    
+        if(p_oUserConfig) {
+    
+            this.cfg.applyConfig(p_oUserConfig);
+    
+        }
+    
+    
+        this.cfg.fireQueue();
+    
+    };

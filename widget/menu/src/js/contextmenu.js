@@ -10,7 +10,7 @@ http://developer.yahoo.net/yui/license.txt
 * @constructor
 * @extends YAHOO.widget.Menu
 * @base YAHOO.widget.Menu
-* @param {String/HTMLElement} p_oElement String id or HTMLElement 
+* @param {String or HTMLElement} p_oElement String id or HTMLElement 
 * (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
 * @param {Object} p_oUserConfig Optional. The configuration object literal 
 * containing the configuration for a ContextMenu instance. See 
@@ -39,7 +39,7 @@ YAHOO.widget.ContextMenu.superclass = YAHOO.widget.Menu.prototype;
 * The ContextMenu class's initialization method. This method is automatically  
 * called by the constructor, and sets up all DOM references for pre-existing 
 * markup, and creates required markup if it is not already present.
-* @param {String/HTMLElement} p_oElement String id or HTMLElement 
+* @param {String or HTMLElement} p_oElement String id or HTMLElement 
 * (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
 * @param {Object} p_oUserConfig Optional. The configuration object literal 
 * containing the configuration for a ContextMenu instance. See 
@@ -78,70 +78,93 @@ YAHOO.widget.ContextMenu.prototype.init = function(p_oElement, p_oUserConfig) {
 // Private event handlers
 
 /**
-* "click" event handler for the document object.
+* "mousedown" event handler for the document object.
 * @private
 * @param {Event} p_oEvent Event object passed back by the 
 * event utility (YAHOO.util.Event).
 * @param {YAHOO.widget.ContextMenu} p_oMenu The ContextMenu instance 
 * handling the event.
 */
-YAHOO.widget.ContextMenu.prototype._onDocumentClick = function(p_oEvent, p_oMenu) {
+YAHOO.widget.ContextMenu.prototype._onDocumentMouseDown = 
 
-    var oTarget = this._oEventUtil.getTarget(p_oEvent, true);
-
-    if(
-        oTarget != this._oTargetElement || 
-        !this._oDom.isAncestor(this._oTargetElement, oTarget)
-    ) {
-
-        this.hide();    
+    function(p_oEvent, p_oMenu) {
     
-    }
-
-};
-
-
-/**
-* "contextmenu" event handler for the HTMLElement node that triggered the event.
-* @private
-* @param {Event} p_oEvent Event object passed back by the 
-* event utility (YAHOO.util.Event).
-* @param {YAHOO.widget.ContextMenu} p_oMenu The ContextMenu instance 
-* handling the event.
-*/
-YAHOO.widget.ContextMenu.prototype._onTriggerContextMenu = function(p_oEvent, p_oMenu) {
-
-    if(p_oEvent.type == "click") {
+        var oTarget = this._oEventUtil.getTarget(p_oEvent, true);
     
-        if(!p_oEvent.ctrlKey) {
-
-            return;
+        if(
+            oTarget != this._oTargetElement || 
+            !this._oDom.isAncestor(this._oTargetElement, oTarget)
+        ) {
+    
+            this.hide();    
         
         }
     
-        YAHOO.util.Event.stopPropagation(p_oEvent);
-
-    }
+    };
 
 
-    this.contextEventTarget = this._oEventUtil.getTarget(p_oEvent, true);
+/**
+* "click" event handler for the HTMLElement node that triggered the event. 
+* Used to cancel default behaviors in Opera.
+* @private
+* @param {Event} p_oEvent Event object passed back by the 
+* event utility (YAHOO.util.Event).
+* @param {YAHOO.widget.ContextMenu} p_oMenu The ContextMenu instance 
+* handling the event.
+*/
+YAHOO.widget.ContextMenu.prototype._onTriggerClick = 
+
+    function(p_oEvent, p_oMenu) {
+    
+        this._oEventUtil.stopEvent(p_oEvent);
+        
+    };
 
 
-    // Position and display the context menu
+/**
+* "contextmenu" event handler ("mousedown" for Opera) for the HTMLElement 
+* node that triggered the event.
+* @private
+* @param {Event} p_oEvent Event object passed back by the 
+* event utility (YAHOO.util.Event).
+* @param {YAHOO.widget.ContextMenu} p_oMenu The ContextMenu instance 
+* handling the event.
+*/
+YAHOO.widget.ContextMenu.prototype._onTriggerContextMenu = 
 
-    var nX = this._oEventUtil.getPageX(p_oEvent),
-        nY = this._oEventUtil.getPageY(p_oEvent);
-
-
-    this.cfg.applyConfig( { x:nX, y:nY, visible:true } );
-    this.cfg.fireQueue();
-
-
-    // Prevent the browser's default context menu from appearing
-
-    YAHOO.util.Event.preventDefault(p_oEvent);
-
-};
+    function(p_oEvent, p_oMenu) {
+    
+        if(p_oEvent.type == "mousedown") {
+        
+            if(!p_oEvent.ctrlKey) {
+    
+                return;
+            
+            }
+        
+            this._oEventUtil.stopEvent(p_oEvent);
+    
+        }
+    
+    
+        this.contextEventTarget = this._oEventUtil.getTarget(p_oEvent, true);
+    
+    
+        // Position and display the context menu
+    
+        var nX = this._oEventUtil.getPageX(p_oEvent),
+            nY = this._oEventUtil.getPageY(p_oEvent);
+    
+    
+        this.cfg.applyConfig( { x:nX, y:nY, visible:true } );
+        this.cfg.fireQueue();
+    
+    
+        // Prevent the browser's default context menu from appearing
+    
+        this._oEventUtil.preventDefault(p_oEvent);
+    
+    };
 
 
 // Public properties
@@ -176,59 +199,67 @@ YAHOO.widget.ContextMenu.prototype.initDefaultConfig = function() {
 
 /**
 * Event handler for when the "trigger" configuration property of
-* a MenuItem instance changes. 
+* a MenuItem instance. 
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArguments Collection of arguments sent when the 
 * event was fired.
 * @param {YAHOO.widget.ContextMenu} p_oMenu The ContextMenu that instance fired
 * the event.
 */
-YAHOO.widget.ContextMenu.prototype.configTrigger = function(p_sType, p_aArguments, p_oMenu) {
+YAHOO.widget.ContextMenu.prototype.configTrigger = 
 
-    var oTrigger = p_aArguments[0],
-        oElement;
-
-
-    if(typeof oTrigger == "string") {
-
-        oElement = document.getElementById(oTrigger);
-
-    }
-    else if(oTrigger.tagName) {
-
-        oElement = oTrigger;
-
-    }    
-
-
-    if(oElement) {
-
-        /*
-            Listen for the "click" event in Opera b/c it does not 
-            support the "contextmenu" event
-        */ 
+    function(p_sType, p_aArguments, p_oMenu) {
+    
+        var oTrigger = p_aArguments[0];
+    
+        if(oTrigger) {
+    
+            /*
+                Listen for the "mousedown" event in Opera b/c it does not 
+                support the "contextmenu" event
+            */ 
+      
+            var bOpera = (this.browser == "opera");
+    
+            var sContextEvent = bOpera ? "mousedown" : "contextmenu";
+    
+            this._oEventUtil.addListener(
+                oTrigger, 
+                sContextEvent, 
+                this._onTriggerContextMenu,
+                this,
+                true
+            );
+    
+    
+            /*
+                Assign a "click" event handler to the trigger element(s) for
+                Opera to prevent default browser behaviors.
+            */
+    
+            if(bOpera) {
             
-        var sContextEvent = this.browser == "opera" ? "click" : "contextmenu";
-
-        YAHOO.util.Event.addListener(
-            oElement, 
-            sContextEvent, 
-            this._onTriggerContextMenu,
-            this,
-            true
-        );
+                this._oEventUtil.addListener(
+                    oTrigger, 
+                    "click", 
+                    this._onTriggerClick,
+                    this,
+                    true
+                );
     
-
-        // Assign a "click" event handler to the document
+            }
     
-        YAHOO.util.Event.addListener(
-            document, 
-            "click", 
-            this._onDocumentClick,
-            this,
-            true
-        );        
-
-    }
     
-};
+            // Assign a "mousedown" event handler to the document
+        
+            this._oEventUtil.addListener(
+                document, 
+                "mousedown", 
+                this._onDocumentMouseDown,
+                this,
+                true
+            );        
+    
+        }
+        
+    };

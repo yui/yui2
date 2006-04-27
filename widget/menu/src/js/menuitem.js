@@ -11,7 +11,7 @@ http://developer.yahoo.net/yui/license.txt
 * @constructor
 * @extends YAHOO.widget.MenuModuleItem
 * @base YAHOO.widget.MenuModuleItem
-* @param {String/HTMLElement} p_oObject String or HTMLElement 
+* @param {String or HTMLElement} p_oObject String or HTMLElement 
 * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
 * source HTMLElement node.
 * @param {Object} p_oUserConfig The configuration object literal containing 
@@ -42,7 +42,7 @@ YAHOO.widget.MenuItem.superclass = YAHOO.widget.MenuModuleItem.prototype;
 * called by the constructor, and sets up all DOM references for
 * pre-existing markup, and creates required markup if it is not
 * already present.
-* @param {String/HTMLElement} p_oObject String or HTMLElement 
+* @param {String or HTMLElement} p_oObject String or HTMLElement 
 * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
 * source HTMLElement node.
 * @param {Object} p_oUserConfig The configuration object literal containing 
@@ -51,15 +51,15 @@ YAHOO.widget.MenuItem.superclass = YAHOO.widget.MenuModuleItem.prototype;
 */
 YAHOO.widget.MenuItem.prototype.init = function(p_oObject, p_oUserConfig) {
 
-    if(!this.MENU_TYPE) {
+    if(!this.SUBMENU_TYPE) {
 
-        this.MENU_TYPE = YAHOO.widget.Menu;
+        this.SUBMENU_TYPE = YAHOO.widget.Menu;
 
     }
 
-    if(!this.ITEM_TYPE) {
+    if(!this.SUBMENU_ITEM_TYPE) {
 
-        this.ITEM_TYPE = YAHOO.widget.MenuItem;
+        this.SUBMENU_ITEM_TYPE = YAHOO.widget.MenuItem;
 
     }
 
@@ -77,18 +77,6 @@ YAHOO.widget.MenuItem.prototype.init = function(p_oObject, p_oUserConfig) {
     // Add event handlers to each "MenuItem" instance
 
     this.keyDownEvent.subscribe(this._onKeyDown, this, true);
-
-    /*
-        Handle tab "onkeypress" for FF < 1.5 because FF 1.0 doesn't allow you
-        to prevent the default tab behavior "onkeydown"
-    */
-
-    if((this.browser == "gecko" && this._sUserAgent.indexOf("1.0") != -1)) {
-
-        this.keyPressEvent.subscribe(this._onKeyPress, this, true);
-
-    }
-
     this.mouseOverEvent.subscribe(this._onMouseOver, this, true);
     this.mouseOutEvent.subscribe(this._onMouseOut, this, true);
 
@@ -106,69 +94,6 @@ YAHOO.widget.MenuItem.prototype.init = function(p_oObject, p_oUserConfig) {
 
 // Private event handlers
 
-/**
-* "keypress" Custom Event handler for a MenuItem instance.
-* @private
-* @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArguments Collection of arguments sent when the event 
-* was fired.
-* @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
-* fired the event.
-*/
-YAHOO.widget.MenuItem.prototype._onKeyPress = function(p_sType, p_aArguments, p_oMenuItem) {
-
-    var oEvent = p_aArguments[0];
-
-    if(oEvent.keyCode == 9) {
-        
-        var oActiveItem = this.parent.activeItem;
-
-        if(this == oActiveItem && !this.cfg.getProperty("selected")) {
-
-            this.cfg.setProperty("selected", true);
-
-        }
-        else {
-
-            var oNextItem;
-
-            if(oEvent.shiftKey) {
-
-                oNextItem = this.getPreviousEnabledSibling();
-
-            }
-            else {
-
-                oNextItem = this.getNextEnabledSibling();
-
-            }
-    
-            if(oNextItem) {
-
-                var oSubmenu = this.cfg.getProperty("submenu");
-        
-                if(oSubmenu) {
-        
-                    oSubmenu.hide();
-        
-                }
-
-                this.cfg.setProperty("selected", false);
-
-                oNextItem.cfg.setProperty("selected", true);
-    
-                oNextItem.focus();
-
-            }
-
-        }
-
-        YAHOO.util.Event.preventDefault(oEvent);
-
-    }
-
-}; 
-
 
 /**
 * "keydown" Custom Event handler for a MenuItem instance.
@@ -179,121 +104,103 @@ YAHOO.widget.MenuItem.prototype._onKeyPress = function(p_sType, p_aArguments, p_
 * @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */
-YAHOO.widget.MenuItem.prototype._onKeyDown = function(p_sType, p_aArguments, p_oMenuItem) {
+YAHOO.widget.MenuItem.prototype._onKeyDown = 
 
-    var oEvent = p_aArguments[0];
-
-    switch(oEvent.keyCode) {
-
-        case 9:     // Tab                    
-        case 38:    // Up arrow
-        case 40:    // Down arrow
-
-            if(
-                oEvent.keyCode == 9 && 
-                (
-                    this.browser == "gecko" && 
-                    this._sUserAgent.indexOf("1.0") != -1)
-                ) 
-            {
-
-                return;
-
-            }
-
-            var oActiveItem = this.parent.activeItem;
-
-            if(this == oActiveItem && !this.cfg.getProperty("selected")) {
-
-                this.cfg.setProperty("selected", true);
-
-            }
-            else {
-
-                var oNextItem;
-
-                if(
-                    (oEvent.keyCode == 9 && oEvent.shiftKey) || 
-                    oEvent.keyCode == 38
-                ) {
-
-                    oNextItem = this.getPreviousEnabledSibling();
-
-                }
-                else {
-
-                    oNextItem = this.getNextEnabledSibling();
-
-                }
-        
-                if(oNextItem) {
-
-                    var oSubmenu = this.cfg.getProperty("submenu");
-            
-                    if(oSubmenu) {
-            
-                        oSubmenu.hide();
-            
-                    }
-
-                    this.cfg.setProperty("selected", false);
-
-                    oNextItem.cfg.setProperty("selected", true);
-        
-                    oNextItem.focus();
+    function(p_sType, p_aArguments, p_oMenuItem) {
+    
+        var oEvent = p_aArguments[0];
+    
+        switch(oEvent.keyCode) {
+    
+            case 38:    // Up arrow
+            case 40:    // Down arrow
+    
+                var oActiveItem = this.parent.activeItem;
+    
+                if(this == oActiveItem && !this.cfg.getProperty("selected")) {
+    
+                    this.cfg.setProperty("selected", true);
     
                 }
+                else {
+    
+                    var oNextItem = (oEvent.keyCode == 38) ? 
+                            this.getPreviousEnabledSibling() : 
+                            this.getNextEnabledSibling();
+            
+                    if(oNextItem) {
 
-            }
+                        this.parent.clearActiveItem();
 
-            if(oEvent.keyCode == 9) {
-
-                YAHOO.util.Event.preventDefault(oEvent);
-
-            }
-
-        break;
-        
-
-        case 39:    // Right arrow
-
-            var oSubmenu = this.cfg.getProperty("submenu");
-
-            if(oSubmenu) {
-
-                oSubmenu.show();
-                oSubmenu.setInitialSelection();
-
-            }
-
-        break;
-
-
-        case 37:    // Left arrow
-
-            // Only hide if this this is a MenuItem of a submenu
-
-            if(this.parent.parent) {
-
-                this.parent.hide();
-
-                // Set focus to the parent MenuItem if one exists
-
-                var oMenuItem = this.parent.parent;
-
-                if(oMenuItem) {
-
-                    oMenuItem.focus();
-
+                        oNextItem.cfg.setProperty("selected", true);
+            
+                        oNextItem.focus();
+    
+                    }
+    
                 }
+    
+            break;
+            
+    
+            case 39:    // Right arrow
+    
+                var oSubmenu = this.cfg.getProperty("submenu");
+    
+                if(oSubmenu) {
+    
+                    oSubmenu.show();
+    
+                }
+                else if(
+                    this.parent.parent && 
+                    this.parent.parent instanceof YAHOO.widget.MenuBarItem
+                ) {
 
-            }
-
-        break;        
-
-    }
-
-};
+                    this.parent.hide();
+    
+                    // Set focus to the parent MenuItem if one exists
+    
+                    var oMenuItem = this.parent.parent;
+    
+                    if(oMenuItem) {
+    
+                        oMenuItem.focus();
+                        oMenuItem.cfg.setProperty("selected", true);
+    
+                    }                    
+                
+                }
+    
+            break;
+    
+    
+            case 37:    // Left arrow
+    
+                // Only hide if this this is a MenuItem of a submenu
+    
+                if(this.parent.parent) {
+    
+                    this.parent.hide();
+    
+                    // Set focus to the parent MenuItem if one exists
+    
+                    var oMenuItem = this.parent.parent;
+    
+                    if(oMenuItem) {
+    
+                        oMenuItem.focus();
+                        oMenuItem.cfg.setProperty("selected", true);
+    
+                    }
+    
+                }
+    
+            break;        
+    
+        }
+    
+    };
 
 
 /**
@@ -305,47 +212,39 @@ YAHOO.widget.MenuItem.prototype._onKeyDown = function(p_sType, p_aArguments, p_o
 * @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */
-YAHOO.widget.MenuItem.prototype._onMouseOver = function(p_sType, p_aArguments, p_oMenuItem) {
+YAHOO.widget.MenuItem.prototype._onMouseOver = 
 
-    var oSubmenu,
-        oActiveItem = this.parent.activeItem;
-
-
-    // Hide any other submenus that might be visible
-
-    if(oActiveItem && oActiveItem != this) {
-
-        oActiveItem.cfg.setProperty("selected", false);
-
-
-        oSubmenu = oActiveItem.cfg.getProperty("submenu");
-
-        if(oSubmenu && oSubmenu.cfg.getProperty("visible")) {
-
-            oSubmenu.hide();
-
+    function(p_sType, p_aArguments, p_oMenuItem) {
+    
+        var oActiveItem = this.parent.activeItem;
+    
+    
+        // Hide any other submenus that might be visible
+    
+        if(oActiveItem && oActiveItem != this) {
+    
+            this.parent.clearActiveItem();
+    
         }
-
-    }
-
-
-    // Select and focus the current MenuItem instance
-
-    this.cfg.setProperty("selected", true);
-    this.focus();
-
-
-    // Show the submenu for this instance
-
-    oSubmenu = this.cfg.getProperty("submenu");
-
-    if(oSubmenu) {
-
-        oSubmenu.show();
-
-    }
-
-};
+    
+    
+        // Select and focus the current MenuItem instance
+    
+        this.cfg.setProperty("selected", true);
+        this.focus();
+    
+    
+        // Show the submenu for this instance
+    
+        var oSubmenu = this.cfg.getProperty("submenu");
+    
+        if(oSubmenu) {
+    
+            oSubmenu.show();
+    
+        }
+    
+    };
 
 
 /**
@@ -357,29 +256,31 @@ YAHOO.widget.MenuItem.prototype._onMouseOver = function(p_sType, p_aArguments, p
 * @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */
-YAHOO.widget.MenuItem.prototype._onMouseOut = function(p_sType, p_aArguments, p_oMenuItem) {
+YAHOO.widget.MenuItem.prototype._onMouseOut = 
 
-    this.cfg.setProperty("selected", false);
-
-
-    var oSubmenu = this.cfg.getProperty("submenu");
-
-    if(oSubmenu) {
-
-        var oEvent = p_aArguments[0],
-            oRelatedTarget = YAHOO.util.Event.getRelatedTarget(oEvent);
-
-        if(
-            !(
-                oRelatedTarget == oSubmenu.element || 
-                this._oDom.isAncestor(oSubmenu.element, oRelatedTarget)
-            )
-        ) {
-
-            oSubmenu.hide();
-
+    function(p_sType, p_aArguments, p_oMenuItem) {
+    
+        this.cfg.setProperty("selected", false);
+    
+    
+        var oSubmenu = this.cfg.getProperty("submenu");
+    
+        if(oSubmenu) {
+    
+            var oEvent = p_aArguments[0],
+                oRelatedTarget = YAHOO.util.Event.getRelatedTarget(oEvent);
+    
+            if(
+                !(
+                    oRelatedTarget == oSubmenu.element || 
+                    this._oDom.isAncestor(oSubmenu.element, oRelatedTarget)
+                )
+            ) {
+    
+                oSubmenu.hide();
+    
+            }
+    
         }
-
-    }
-
-};
+    
+    };
