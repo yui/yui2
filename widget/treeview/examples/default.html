@@ -1,26 +1,27 @@
-<!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+      <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Yahoo! UI Library - Tree Control</title>
-<link rel="stylesheet" type="text/css" href="css/screen.css">
+<link rel="stylesheet" type="text/css" href="css/screen.css" />
+<link rel="stylesheet" type="text/css" href="css/local/tree.css" />
 </head>
   
-<body onload="treeInit()">
-
-<link rel="stylesheet" type="text/css" href="css/default/tree.css">
+<body>
 
 <div id="pageTitle">
 	<h3>Tree Control</h3>
 </div>
 
 
-<img src="img/logo.gif" style="position:absolute;top:5px;left:5px" />
 
 <div id="container">
+<img class="ylogo" src="img/logo.gif" alt="" />
   <div id="containerTop">
     <div id="header">
-      <h1> </h1>
+      <h1>
+      
+      </h1>
       <h4>&nbsp;</h4>
     </div>
     <div id="main">
@@ -45,6 +46,7 @@
 </div> 
 
 <script type="text/javascript">
+//<![CDATA[
 	
 	function toggleygLogger(el) {
 		if (el.value == "Disable Logger") {
@@ -57,6 +59,7 @@
 	}
 
 	// ygLogger.disable();
+//]]>
 </script>
 
 
@@ -73,7 +76,7 @@
 
 
   <div id="content">
-    <form name="mainForm" action="javscript:;">
+    <form id="mainForm" action="javscript:;">
 	<div class="newsItem">
 	  <h3>Default TreeView Widget</h3>
 	  <p>
@@ -101,6 +104,8 @@
 
 
 
+<script type="text/javascript" src="/sharedlibs/prototype-1.4.0.js"></script>
+
 <script type="text/javascript" src="js/YAHOO.js" ></script>
 <script type="text/javascript" src="js/log.js"></script>
 <!--
@@ -112,13 +117,14 @@
 <script type="text/javascript" src="js/dom-raw.js"></script>
 <script type="text/javascript" src="js/dragdrop-debug.js"></script>
 
+<script type="text/javascript" src="js/json.js" ></script>
 
 <script type="text/javascript" src="js/treeview.js" ></script>
 <script type="text/javascript" src="js/TaskNode.js"></script>
 <script type="text/javascript" src="js/CheckOnClickNode.js"></script>
 
 <script type="text/javascript">
-
+//<![CDATA[
 	var gLogger;
 	var tree;
 	var nodes = new Array();
@@ -168,6 +174,9 @@
 		}
 	}
 
+    YAHOO.util.Event.addListener(window, "load", treeInit);
+
+//]]>
 </script>
 
   </body>

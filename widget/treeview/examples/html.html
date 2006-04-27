@@ -8,19 +8,21 @@
   
 <body>
 
-<link rel="stylesheet" type="text/css" href="css/default/tree.css">
+<link rel="stylesheet" type="text/css" href="css/local/tree.css">
 
 <div id="pageTitle">
     <h3>Tree Control</h3>
 </div>
 
 
-<img src="img/logo.gif" style="position:absolute;top:5px;left:5px" />
 
 <div id="container">
+<img class="ylogo" src="img/logo.gif" alt="" />
   <div id="containerTop">
     <div id="header">
-      <h1> </h1>
+      <h1>
+      
+      </h1>
       <h4>&nbsp;</h4>
     </div>
     <div id="main">
@@ -45,6 +47,7 @@
 </div> 
 
 <script type="text/javascript">
+//<![CDATA[
 	
 	function toggleygLogger(el) {
 		if (el.value == "Disable Logger") {
@@ -57,6 +60,7 @@
 	}
 
 	// ygLogger.disable();
+//]]>
 </script>
 
 
@@ -99,6 +103,9 @@
   </div>
 </div>
 
+
+<script type="text/javascript" src="/sharedlibs/prototype-1.4.0.js"></script>
+
 <script type="text/javascript" src="js/YAHOO.js" ></script>
 <script type="text/javascript" src="js/log.js"></script>
 <!--
@@ -110,6 +117,7 @@
 <script type="text/javascript" src="js/dom-raw.js"></script>
 <script type="text/javascript" src="js/dragdrop-debug.js"></script>
 
+<script type="text/javascript" src="js/json.js" ></script>
 
 <script type="text/javascript" src="js/treeview.js" ></script>
 <script type="text/javascript" src="js/TaskNode.js"></script>
@@ -134,6 +142,9 @@ function buildRandomTextNodeTree() {
     for (var i = 0; i < Math.floor((Math.random()*4) + 3); i++) {
         var tmpNode = new YAHOO.widget.TextNode("label-" + i, tree.getRoot(), false);
         buildRandomTextBranch(tmpNode);
+        // var tmpNode2 = new YAHOO.widget.HTMLNode("label-" + i, tree.getRoot(), false, true);
+        buildRandomTextBranch(tmpNode);
+        // buildRandomTextBranch(tmpNode2);
     }
 
     tree.draw();
@@ -145,12 +156,14 @@ function buildRandomTextBranch(node) {
     if (node.depth < 3) {
         gLogger.debug("buildRandomTextBranch: " + node.index);
         for ( var i = 0; i < Math.floor(Math.random() * 4) + 1 ; i++ ) {
-            var tmpNode = new YAHOO.widget.TextNode(node.label + "-" + i, node, false);
-            if (node.depth == 2) {
+            tmpNode = new YAHOO.widget.TextNode(node.label + "-" + i, node, false);
+            // tmpNode2 = new YAHOO.widget.HTMLNode(node.html + "-" + i, node, false, true);
+            // if (node.depth == 2) {
                 buildRandomHTMLBranch(tmpNode);
-            } else {
-                buildRandomTextBranch(tmpNode);
-            }
+                // buildRandomHTMLBranch(tmpNode2);
+            // } else {
+                // buildRandomTextBranch(tmpNode);
+            // }
         }
     }
 }

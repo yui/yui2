@@ -7,19 +7,21 @@
 </head>
 <body onload="treeInit()">
 
-<link rel="stylesheet" type="text/css" href="css/default/tree.css">
+<link rel="stylesheet" type="text/css" href="css/local/tree.css">
 
 <div id="pageTitle">
 	<h3>Tree Control</h3>
 </div>
 
 
-<img src="img/logo.gif" style="position:absolute;top:5px;left:5px" />
 
 <div id="container">
+<img class="ylogo" src="img/logo.gif" alt="" />
   <div id="containerTop">
     <div id="header">
-      <h1> </h1>
+      <h1>
+      
+      </h1>
       <h4>&nbsp;</h4>
     </div>
     <div id="main">
@@ -44,6 +46,7 @@
 </div> 
 
 <script type="text/javascript">
+//<![CDATA[
 	
 	function toggleygLogger(el) {
 		if (el.value == "Disable Logger") {
@@ -56,6 +59,7 @@
 	}
 
 	// ygLogger.disable();
+//]]>
 </script>
 
 
@@ -95,6 +99,9 @@
   </div>
 </div>
 
+
+<script type="text/javascript" src="/sharedlibs/prototype-1.4.0.js"></script>
+
 <script type="text/javascript" src="js/YAHOO.js" ></script>
 <script type="text/javascript" src="js/log.js"></script>
 <!--
@@ -106,6 +113,7 @@
 <script type="text/javascript" src="js/dom-raw.js"></script>
 <script type="text/javascript" src="js/dragdrop-debug.js"></script>
 
+<script type="text/javascript" src="js/json.js" ></script>
 
 <script type="text/javascript" src="js/treeview.js" ></script>
 <script type="text/javascript" src="js/TaskNode.js"></script>

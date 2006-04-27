@@ -7,6 +7,8 @@
  * When a task is clicked, the state of the nodes and parent and children
  * are updated, and this behavior cascades.
  *
+ * Adds a custom event to 
+ *
  * @extends YAHOO.widget.TextNode
  * @constructor
  * @param oData {object} a string or object containing the data that will
@@ -21,10 +23,16 @@ YAHOO.widget.TaskNode = function(oData, oParent, expanded, checked) {
 	if (oParent) { 
 		this.init(oData, oParent, expanded);
 		this.setUpLabel(oData);
-		this.checked = checked;
         if (checked && checked === true) {
             this.check();
         }
+
+        /*
+        if (!this.tree.checkClickEvent) {
+            this.tree.checkClickEvent = 
+                    new YAHOO.util.CustomEvent("checkclick", this.tree);
+        }
+        */
 	}
 };
 
@@ -87,12 +95,24 @@ YAHOO.widget.TaskNode.prototype.getCheckLink = function() {
  * Invoked when the user clicks the check box
  */
 YAHOO.widget.TaskNode.prototype.checkClick = function() { 
+    this.logger.debug("previous checkstate: " + this.checkState);
 	if (this.checkState === 0) {
 		this.check();
 	} else {
 		this.uncheck();
 	}
+
+    // this.tree.checkClickEvent.fire(this);
+
+    this.onCheckClick();
 };
+
+/**
+ * Override to get the check click event
+ */
+YAHOO.widget.TaskNode.prototype.onCheckClick = function() { 
+    this.logger.debug("check was clicked");
+}
 
 /**
  * Refresh the state of this node's parent, and cascade up.
