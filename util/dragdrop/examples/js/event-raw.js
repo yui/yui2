@@ -678,8 +678,16 @@ if (!YAHOO.util.Event) {
                 delete listeners[index][this.FN];
                 delete listeners[index];
 
+                if (!el) {
+                    return true;
+                }
+
                 // remove the map entry
                 var key = el.id + sType;
+                if (!listenerMap[key]) {
+                    return true;
+                }
+
                 for (i=0, len=listenerMap[key].length; i<len; ++i) {
                     var item = listenerMap[key][i];
                     if (item && item.fn == fn) {
@@ -876,6 +884,11 @@ if (!YAHOO.util.Event) {
                     }
                 }
                 */
+
+                if (!el) {
+                    return -1;
+                }
+
                 var key = el.id + sType;
                 if (!listenerMap[key]) {
                     return -1;
