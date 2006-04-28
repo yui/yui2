@@ -2333,6 +2333,8 @@ YAHOO.widget.MenuModule.prototype.clearActiveItem = function () {
 
     if(oActiveItem) {
 
+        oActiveItem.cfg.setProperty("selected", false);
+
         var oSubmenu = oActiveItem.cfg.getProperty("submenu");
 
         if(oSubmenu) {
@@ -2340,9 +2342,6 @@ YAHOO.widget.MenuModule.prototype.clearActiveItem = function () {
             oSubmenu.hide();
 
         }
-
-        oActiveItem.cfg.setProperty("selected", false);
-        oActiveItem.blur();
 
     }
 

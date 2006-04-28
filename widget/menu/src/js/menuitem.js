@@ -140,19 +140,30 @@ YAHOO.widget.MenuItem.prototype._onKeyDown =
     
                 }
     
+                YAHOO.util.Event.preventDefault(oEvent);
+
             break;
             
     
             case 39:    // Right arrow
-    
+
+                this.parent.clearActiveItem();
+
+                this.cfg.setProperty("selected", true);
+                
+                this.focus();
+
+
                 var oSubmenu = this.cfg.getProperty("submenu");
     
                 if(oSubmenu) {
-    
+
                     oSubmenu.show();
+                    oSubmenu.setInitialSelection();                    
     
                 }
                 else if(
+                    YAHOO.widget.MenuBarItem && 
                     this.parent.parent && 
                     this.parent.parent instanceof YAHOO.widget.MenuBarItem
                 ) {
@@ -172,6 +183,8 @@ YAHOO.widget.MenuItem.prototype._onKeyDown =
                 
                 }
     
+                YAHOO.util.Event.preventDefault(oEvent);
+
             break;
     
     
@@ -195,6 +208,8 @@ YAHOO.widget.MenuItem.prototype._onKeyDown =
                     }
     
                 }
+
+                YAHOO.util.Event.preventDefault(oEvent);
     
             break;        
     

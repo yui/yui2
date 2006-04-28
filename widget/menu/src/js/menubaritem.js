@@ -181,9 +181,8 @@ YAHOO.widget.MenuBarItem.prototype._onKeyDown =
                 else {
     
                     var oNextItem = (oEvent.keyCode == 37) ? 
-                        this.getPreviousEnabledSibling() : 
-                        this.getNextEnabledSibling();
-    
+                            this.getPreviousEnabledSibling() : 
+                            this.getNextEnabledSibling();
             
                     if(oNextItem) {
 
@@ -196,6 +195,8 @@ YAHOO.widget.MenuBarItem.prototype._onKeyDown =
                     }
     
                 }
+
+                YAHOO.util.Event.preventDefault(oEvent);
     
             break;
     
@@ -215,6 +216,8 @@ YAHOO.widget.MenuBarItem.prototype._onKeyDown =
                     oSubmenu.setInitialSelection();
     
                 }
+
+                YAHOO.util.Event.preventDefault(oEvent);
     
             break;
     
