@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>YAHOO.widget.Panel</title>
+
+<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/yahoo_2.0.0-b3.js" ></script>
+<script type="text/javascript" src="http://feelbuild-mac.corp.yahoo.com/Event.dev/js/event/build/event-raw.js" ></script>
+<script type="text/javascript" src="http://ue.corp.yahoo.com/msweeney/dev/platform/2.0/util/dom/build/dom-raw.js" ></script>
+<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dragdrop_2.0.0-b3.js" ></script>
+<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/animation_2.0.0-b3.js" ></script>
+<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/connection_2.0.0-b3.js" ></script>
+
+<link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/fonts_0.9.0.css" />
+<link rel="stylesheet" type="text/css" href="css/example.css" />
+
+<link rel="stylesheet" type="text/css" href="../build/css/container.css" />
+<script type="text/javascript" src="../build/js/container.js"></script>
+
+<style>
+
+#win {
+	visibility:hidden;
+}
+
+.panel-container.shadow .underlay {
+	background-color:#999;
+}
+
+.panel {
+	border:none;
+	overflow:visible;
+	background-color:transparent;
+}
+
+.panel .hd {
+	padding:0;
+	border:none;
+	background:transparent url(img/aqua-hd-bg.gif);
+	color:#000;
+	height:22px;
+	margin-left:7px;
+	margin-right:7px;
+	text-align:center;
+	overflow:visible;
+}
+
+.panel .hd span {
+	vertical-align:middle;
+	line-height:22px;
+}
+
+.panel .close {
+	top:3px;
+	left:4px;
+	height:18px;
+	width:17px;
+}
+
+.panel .close.nonsecure {
+	background-image:url(img/aqua-hd-close.gif);
+}
+
+.panel .close.secure {
+	background-image:url(img/aqua-hd-close.gif);
+}
+
+.panel .close.nonsecure:hover {
+	background-image:url(img/aqua-hd-close-over.gif);
+}
+
+.panel .close.secure:hover {
+	background-image:url(img/aqua-hd-close-over.gif);
+}
+
+
+
+.panel .lt {
+	width:7px;height:22px;
+	top:0;left:0;
+	background:transparent url(img/aqua-hd-lt.gif);
+	position:absolute;
+}
+
+.panel .rt {
+	width:7px;height:22px;
+	top:0;right:0;
+	background:transparent url(img/aqua-hd-rt.gif);
+	position:absolute;
+}
+
+.panel .bd {
+	overflow:hidden;
+	padding:4px;
+	border:1px solid #aeaeae;
+	background-color:#FFF;
+
+}
+
+</style>
+
+<script language="javascript">
+	var panel;
+	var modules = [];
+
+	function init() {
+		panel = new YAHOO.widget.Panel("win", { effect:{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.25}, width:"30em", fixedcenter: true, constraintoviewport: true, underlay:"none", close:true, visible:false, draggable:true, modal:false } );
+		panel.render();
+		
+		modules["win"] = panel;
+	}
+
+	YAHOO.util.Event.addListener(window, "load", init);
+</script>
+</head>
+<body>
+	<div class="homeLink">
+		<!--<a href="index.html">&lt; Home</a>-->
+	</div>
+
+	<div class="box" id="bodyMain">
+		<div class="hd">
+			<h1>Aqua Panel Example</h1>
+		</div>
+		<div class="bd">
+			<p>Some custom CSS allows Panel to be rendered with a familiar skin.
+			</p>
+
+			<button onclick="panel.show()">Show the Panel</button>
+			<select>
+				<option>This is a &lt;select&gt; element, helpul for testing the IFRAME shim</option>
+			</select>
+		</div>
+	</div>
+
+<div id="win">
+		<div class="hd"><div class="lt"></div><span>Sprockets!</span><div class="rt"></div></div>
+		<div class="bd">
+			<img src="http://static.flickr.com/7/6301565_7123909f10_t.jpg" alt="sprockets!" style="float:left;margin:0 5px 5px"/>
+			<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis in risus. Vestibulum a nibh tincidunt elit iaculis laoreet. In pede metus, tristique non, consectetuer a, vestibulum vel, enim. Curabitur neque magna, pulvinar sit amet, lobortis viverra, porta non, dui. Donec tempor, arcu quis interdum pellentesque, dui dolor gravida pede, in iaculis justo tortor venenatis ligula. Cras non pede vel risus egestas faucibus. Nam pulvinar lobortis nisi. In vehicula venenatis sapien.</p>
+
+			<p style="margin-bottom:0px">Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam et risus ut est adipiscing congue. Praesent ut justo. Proin hendrerit urna eget eros. Curabitur condimentum tempor diam. Pellentesque tortor odio, sollicitudin eget, pellentesque ut, ullamcorper a, justo. Nam tellus pede, fermentum ac, sollicitudin sed, mollis vel, turpis. Fusce pulvinar nibh et erat. Praesent purus nibh, fermentum ac, imperdiet vel, aliquet eu, mi. Praesent non nisi ac mauris tempor ultricies. Nulla mollis tellus porta leo. Nunc accumsan dapibus tellus. Nunc nec nunc.</p>
+		</div>
+	</div>
+</div>
+
+
+</body>
+</html>

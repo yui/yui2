@@ -155,7 +155,7 @@
 	overflow:hidden;
 }
 
-.dialog .bd .icon {
+.simple-dialog .bd .icon {
 	background-repeat:no-repeat;
 	width:16px;
 	height:16px;
@@ -163,13 +163,13 @@
 	float:left;
 }
 
-.dialog .ft, .form-dialog .ft {
+.dialog .ft, .simple-dialog .ft {
 	padding-bottom:5px;
 	padding-right:5px;
 	text-align:right;
 }
 
-.form-dialog form {
+.dialog form, .simple-dialog form {
 	margin:0;
 }
 

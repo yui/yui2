@@ -579,7 +579,6 @@ YAHOO.widget.Module.prototype = {
 	* Shows the Module element by setting the visible configuration property to true. Also fires two events: beforeShowEvent prior to the visibility change, and showEvent after.
 	*/
 	show : function() {
-		this.beforeShowEvent.fire();
 		this.cfg.setProperty("visible", true);
 	},
 
@@ -587,7 +586,6 @@ YAHOO.widget.Module.prototype = {
 	* Hides the Module element by setting the visible configuration property to false. Also fires two events: beforeHideEvent prior to the visibility change, and hideEvent after.
 	*/
 	hide : function() {
-		this.beforeHideEvent.fire();
 		this.cfg.setProperty("visible", false);
 	},
 
@@ -600,9 +598,11 @@ YAHOO.widget.Module.prototype = {
 	configVisible : function(type, args, obj) {
 		var visible = args[0];
 		if (visible) {
+			this.beforeShowEvent.fire();
 			YAHOO.util.Dom.setStyle(this.element, "display", "block");
 			this.showEvent.fire();
 		} else {
+			this.beforeHideEvent.fire();
 			YAHOO.util.Dom.setStyle(this.element, "display", "none");
 			this.hideEvent.fire();
 		}

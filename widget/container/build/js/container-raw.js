@@ -1011,7 +1011,6 @@ YAHOO.widget.Module.prototype = {
 	* Shows the Module element by setting the visible configuration property to true. Also fires two events: beforeShowEvent prior to the visibility change, and showEvent after.
 	*/
 	show : function() {
-		this.beforeShowEvent.fire();
 		this.cfg.setProperty("visible", true);
 	},
 
@@ -1019,7 +1018,6 @@ YAHOO.widget.Module.prototype = {
 	* Hides the Module element by setting the visible configuration property to false. Also fires two events: beforeHideEvent prior to the visibility change, and hideEvent after.
 	*/
 	hide : function() {
-		this.beforeHideEvent.fire();
 		this.cfg.setProperty("visible", false);
 	},
 
@@ -1032,9 +1030,11 @@ YAHOO.widget.Module.prototype = {
 	configVisible : function(type, args, obj) {
 		var visible = args[0];
 		if (visible) {
+			this.beforeShowEvent.fire();
 			YAHOO.util.Dom.setStyle(this.element, "display", "block");
 			this.showEvent.fire();
 		} else {
+			this.beforeHideEvent.fire();
 			YAHOO.util.Dom.setStyle(this.element, "display", "none");
 			this.hideEvent.fire();
 		}
@@ -1258,18 +1258,19 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 		if (effect) { // Animate in
 			if (visible) { // Animate in if not showing
 				if (currentVis != "visible") {
+					this.beforeShowEvent.fire();
 					for (var i=0;i<effectInstances.length;i++) {
 						var e = effectInstances[i];
-						if (! YAHOO.util.Config.alreadySubscribed(e.animateInCompleteEvent,this.showEvent.fire,this.showEvent)) {
+						if (i == 0 && ! YAHOO.util.Config.alreadySubscribed(e.animateInCompleteEvent,this.showEvent.fire,this.showEvent)) {
 							e.animateInCompleteEvent.subscribe(this.showEvent.fire,this.showEvent,true); // Delegate showEvent until end of animateInComplete
 						}
-						//this.cfg.refireEvent("iframe");
 						e.animateIn();
 					}
 				}
 			}
 		} else { // Show
 			if (currentVis != "visible") {
+				this.beforeShowEvent.fire();
 				YAHOO.util.Dom.setStyle(this.element, "visibility", "visible");
 				this.cfg.refireEvent("iframe");
 				this.showEvent.fire();
@@ -1283,9 +1284,10 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 
 		if (effect) { // Animate out if showing
 			if (currentVis != "hidden") {
+				this.beforeHideEvent.fire();
 				for (var i=0;i<effectInstances.length;i++) {
 					var e = effectInstances[i];
-					if (! YAHOO.util.Config.alreadySubscribed(e.animateOutCompleteEvent,this.hideEvent.fire,this.hideEvent)) {				
+					if (i == 0 && ! YAHOO.util.Config.alreadySubscribed(e.animateOutCompleteEvent,this.hideEvent.fire,this.hideEvent)) {				
 						e.animateOutCompleteEvent.subscribe(this.hideEvent.fire,this.hideEvent,true); // Delegate hideEvent until end of animateOutComplete
 					}
 					e.animateOut();
@@ -1293,6 +1295,7 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 			}
 		} else { // Simple hide
 			if (currentVis != "hidden") {
+				this.beforeHideEvent.fire();
 				YAHOO.util.Dom.setStyle(this.element, "visibility", "hidden");
 				this.cfg.refireEvent("iframe");
 				this.hideEvent.fire();
@@ -2099,247 +2102,6 @@ Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 * @class
-* OverlayEffect encapsulates animation transitions that are executed when an Overlay is shown or hidden.
-* @param {Overlay}	overlay		The Overlay that the animation should be associated with
-* @param {object}	attrIn		The object literal representing the animation arguments to be used for the animate-in transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
-* @param {object}	attrOut		The object literal representing the animation arguments to be used for the animate-out transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
-* @param {Element}	targetElement	Optional. The target element that should be animated during the transition. Defaults to overlay.element.
-* @constructor
-*/
-YAHOO.widget.OverlayEffect = function(overlay, attrIn, attrOut, targetElement) {
-	this.overlay = overlay;
-
-	this.attrIn = attrIn;
-	this.attrOut = attrOut;
-
-	this.targetElement = targetElement || overlay.element;
-
-	this.beforeAnimateInEvent = new YAHOO.util.CustomEvent("beforeAnimateIn");
-	this.beforeAnimateOutEvent = new YAHOO.util.CustomEvent("beforeAnimateOut");
-
-	this.animateInCompleteEvent = new YAHOO.util.CustomEvent("animateInComplete");
-	this.animateOutCompleteEvent = new YAHOO.util.CustomEvent("animateOutComplete");
-}
-
-/**
-* Initializes the animation classes and events.
-* @param {class}	Optional. The animation class to instantiate. Defaults to YAHOO.util.Anim. Other options include YAHOO.util.Motion.
-*/
-YAHOO.widget.OverlayEffect.prototype.init = function(animClass) {
-	if (! animClass) {
-		animClass = YAHOO.util.Anim;
-	}
-	this.animIn = new animClass(this.targetElement, this.attrIn.attributes, this.attrIn.duration, this.attrIn.method);
-	this.animIn.onStart.subscribe(this.handleStartAnimateIn, this);
-	this.animIn.onTween.subscribe(this.handleTweenAnimateIn, this);
-	this.animIn.onComplete.subscribe(this.handleCompleteAnimateIn, this);
-
-	this.animOut = new animClass(this.targetElement, this.attrOut.attributes, this.attrOut.duration, this.attrOut.method);
-	this.animOut.onStart.subscribe(this.handleStartAnimateOut, this);
-	this.animOut.onTween.subscribe(this.handleTweenAnimateOut, this);
-	this.animOut.onComplete.subscribe(this.handleCompleteAnimateOut, this);
-}
-
-/**
-* Triggers the in-animation.
-*/
-YAHOO.widget.OverlayEffect.prototype.animateIn = function() {
-	this.beforeAnimateInEvent.fire();
-	this.animIn.animate();
-}
-
-/**
-* Triggers the out-animation.
-*/
-YAHOO.widget.OverlayEffect.prototype.animateOut = function() {
-	this.beforeAnimateOutEvent.fire();
-	this.animOut.animate();
-}
-
-/**
-* The default onStart handler for the in-animation.
-*/
-YAHOO.widget.OverlayEffect.prototype.handleStartAnimateIn = function(type, args, obj) { }
-/**
-* The default onTween handler for the in-animation.
-*/
-YAHOO.widget.OverlayEffect.prototype.handleTweenAnimateIn = function(type, args, obj) { }
-/**
-* The default onComplete handler for the in-animation.
-*/
-YAHOO.widget.OverlayEffect.prototype.handleCompleteAnimateIn = function(type, args, obj) { }
-
-/**
-* The default onStart handler for the out-animation.
-*/
-YAHOO.widget.OverlayEffect.prototype.handleStartAnimateOut = function(type, args, obj) { }
-/**
-* The default onTween handler for the out-animation.
-*/
-YAHOO.widget.OverlayEffect.prototype.handleTweenAnimateOut = function(type, args, obj) { }
-/**
-* The default onComplete handler for the out-animation.
-*/
-YAHOO.widget.OverlayEffect.prototype.handleCompleteAnimateOut = function(type, args, obj) { }
-
-/**
-* A pre-configured OverlayEffect instance that can be used for fading an overlay in and out.
-* @param {Overlay}	The Overlay object to animate
-* @param {float}	The duration of the animation
-* @type OverlayEffect
-*/
-YAHOO.widget.OverlayEffect.FADE = function(overlay, dur) {
-	var fade = new YAHOO.widget.OverlayEffect(overlay, { attributes:{opacity: {from:0, to:1}}, duration:dur, method:YAHOO.util.Easing.easeIn }, { attributes:{opacity: {to:0}}, duration:dur, method:YAHOO.util.Easing.easeOut} );
-
-	fade.handleStartAnimateIn = function(type,args,obj) {
-		YAHOO.util.Dom.addClass(obj.overlay.element, "hide-select");
-		
-		if (! obj.overlay.underlay) {
-			obj.overlay.cfg.refireEvent("underlay");
-		}
-
-		if (obj.overlay.underlay) {
-			obj.initialUnderlayOpacity = YAHOO.util.Dom.getStyle(obj.overlay.underlay, "opacity");
-			obj.overlay.underlay.style.filter = null;
-		}
-
-		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "visible"); 
-		YAHOO.util.Dom.setStyle(obj.overlay.element, "opacity", 0);
-	}
-
-	fade.handleCompleteAnimateIn = function(type,args,obj) {
-		YAHOO.util.Dom.removeClass(obj.overlay.element, "hide-select");
-
-		if (obj.overlay.element.style.filter) {
-			obj.overlay.element.style.filter = null;
-		}			
-		
-		if (obj.overlay.underlay) {
-			YAHOO.util.Dom.setStyle(obj.overlay.underlay, "opacity", obj.initialUnderlayOpacity);
-		}
-
-		obj.overlay.cfg.refireEvent("iframe");
-		obj.animateInCompleteEvent.fire();
-	}
-
-	fade.handleStartAnimateOut = function(type, args, obj) {
-		YAHOO.util.Dom.addClass(obj.overlay.element, "hide-select");
-
-		if (obj.overlay.underlay) {
-			obj.overlay.underlay.style.filter = null;
-		}
-	}
-
-	fade.handleCompleteAnimateOut =  function(type, args, obj) { 
-		YAHOO.util.Dom.removeClass(obj.overlay.element, "hide-select");
-		if (obj.overlay.element.style.filter) {
-			obj.overlay.element.style.filter = null;
-		}				
-		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "hidden");
-		YAHOO.util.Dom.setStyle(obj.overlay.element, "opacity", 1); 
-
-		obj.overlay.cfg.refireEvent("iframe");
-
-		obj.animateOutCompleteEvent.fire();
-	};	
-
-	fade.init();
-	return fade;
-};
-
-
-/**
-* A pre-configured OverlayEffect instance that can be used for sliding an overlay in and out.
-* @param {Overlay}	The Overlay object to animate
-* @param {float}	The duration of the animation
-* @type OverlayEffect
-*/
-YAHOO.widget.OverlayEffect.SLIDE = function(overlay, dur) {
-	var x = overlay.cfg.getProperty("x") || YAHOO.util.Dom.getX(overlay.element);
-	var y = overlay.cfg.getProperty("y") || YAHOO.util.Dom.getY(overlay.element);
-
-	var clientWidth = YAHOO.util.Dom.getClientWidth();
-	var offsetWidth = overlay.element.offsetWidth;
-
-	var slide = new YAHOO.widget.OverlayEffect(overlay, { 
-															attributes:{ points: { to:[x, y] } }, 
-															duration:dur, 
-															method:YAHOO.util.Easing.easeIn 
-														}, 
-														{ 
-															attributes:{ points: { to:[(clientWidth+25), y] } },
-															duration:dur, 
-															method:YAHOO.util.Easing.easeOut
-														} 
-												);
-
-	slide.handleStartAnimateIn = function(type,args,obj) {
-		obj.overlay.element.style.left = (-25-offsetWidth) + "px";
-		obj.overlay.element.style.top  = y + "px";
-	}
-	
-	slide.handleTweenAnimateIn = function(type, args, obj) {
-
-
-		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
-
-		var currentX = pos[0];
-		var currentY = pos[1];
-
-		if (YAHOO.util.Dom.getStyle(obj.overlay.element, "visibility") == "hidden" && currentX < x) {
-			YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "visible");
-		}
-
-		obj.overlay.cfg.setProperty("xy", [currentX,currentY], true);
-		obj.overlay.cfg.refireEvent("iframe");
-	}
-	
-	slide.handleCompleteAnimateIn = function(type, args, obj) {
-		obj.overlay.cfg.setProperty("xy", [x,y], true);
-		obj.startX = x;
-		obj.startY = y;
-		obj.overlay.cfg.refireEvent("iframe");
-		obj.animateInCompleteEvent.fire();
-	}
-
-	slide.handleStartAnimateOut = function(type, args, obj) {
-		var clientWidth = YAHOO.util.Dom.getViewportWidth();
-		
-		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
-
-		var x = pos[0];
-		var y = pos[1];
-
-		var currentTo = obj.animOut.attributes.points.to;
-		obj.animOut.attributes.points.to = [(clientWidth+25), y];
-	}
-
-	slide.handleTweenAnimateOut = function(type, args, obj) {
-		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
-
-		var x = pos[0];
-		var y = pos[1];
-
-		obj.overlay.cfg.setProperty("xy", [x,y], true);
-		obj.overlay.cfg.refireEvent("iframe");
-	}
-
-	slide.handleCompleteAnimateOut = function(type, args, obj) { 
-		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "hidden");		
-		var offsetWidth = obj.overlay.element.offsetWidth;
-
-		obj.overlay.cfg.setProperty("xy", [x,y]);
-		obj.animateOutCompleteEvent.fire();
-	};	
-
-	slide.init(YAHOO.util.Motion);
-	return slide;
-}
-/**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-* @class
 * Tooltip is an implementation of Overlay that behaves like an OS tooltip, displaying when the user mouses over a particular element, and disappearing on mouse out.
 * @param {string}	el	The element ID representing the Tooltip <em>OR</em>
 * @param {Element}	el	The element representing the Tooltip
@@ -3072,78 +2834,78 @@ Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 * @class
-* FormDialog is an implementation of Panel that can be used to submit form data. Built-in functionality for buttons with event handlers is included, and button sets can be build dynamically, or the preincluded ones for Submit/Cancel and OK/Cancel can be utilized. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
-* @param {string}	el	The element ID representing the FormDialog <em>OR</em>
-* @param {Element}	el	The element representing the FormDialog
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this FormDialog. See configuration documentation for more details.
+* Dialog is an implementation of Panel that can be used to submit form data. Built-in functionality for buttons with event handlers is included, and button sets can be build dynamically, or the preincluded ones for Submit/Cancel and OK/Cancel can be utilized. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
+* @param {string}	el	The element ID representing the Dialog <em>OR</em>
+* @param {Element}	el	The element representing the Dialog
+* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Dialog. See configuration documentation for more details.
 * @constructor
 */
-YAHOO.widget.FormDialog = function(el, userConfig) {
+YAHOO.widget.Dialog = function(el, userConfig) {
 	if (arguments.length > 0) {
-		YAHOO.widget.FormDialog.superclass.constructor.call(this, el, userConfig);
+		YAHOO.widget.Dialog.superclass.constructor.call(this, el, userConfig);
 	}
 }
 
-YAHOO.widget.FormDialog.prototype = new YAHOO.widget.Panel();
-YAHOO.widget.FormDialog.prototype.constructor = YAHOO.widget.FormDialog;
+YAHOO.widget.Dialog.prototype = new YAHOO.widget.Panel();
+YAHOO.widget.Dialog.prototype.constructor = YAHOO.widget.Dialog;
 
 /**
-* Reference to the FormDialog's superclass, Panel
+* Reference to the Dialog's superclass, Panel
 * @type class
 * @final
 */
-YAHOO.widget.FormDialog.superclass = YAHOO.widget.Panel.prototype;
+YAHOO.widget.Dialog.superclass = YAHOO.widget.Panel.prototype;
 
 /**
-* Constant representing the default CSS class used for a FormDialog
+* Constant representing the default CSS class used for a Dialog
 * @type string
 * @final
 */
-YAHOO.widget.FormDialog.CSS_FORMDIALOG = "form-dialog";
+YAHOO.widget.Dialog.CSS_DIALOG = "dialog";
 
 
 /**
 * CustomEvent fired prior to submission
 * @type YAHOO.util.CustomEvent
 */
-YAHOO.widget.FormDialog.prototype.beforeSubmitEvent = null;
+YAHOO.widget.Dialog.prototype.beforeSubmitEvent = null;
 
 /**
 * CustomEvent fired after submission
 * @type YAHOO.util.CustomEvent
 */
-YAHOO.widget.FormDialog.prototype.submitEvent = null;
+YAHOO.widget.Dialog.prototype.submitEvent = null;
 
 /**
 * CustomEvent fired prior to manual submission
 * @type YAHOO.util.CustomEvent
 */
-YAHOO.widget.FormDialog.prototype.manualSubmitEvent = null;
+YAHOO.widget.Dialog.prototype.manualSubmitEvent = null;
 
 /**
 * CustomEvent fired prior to asynchronous submission
 * @type YAHOO.util.CustomEvent
 */
-YAHOO.widget.FormDialog.prototype.asyncSubmitEvent = null;
+YAHOO.widget.Dialog.prototype.asyncSubmitEvent = null;
 
 /**
 * CustomEvent fired prior to form-based submission
 * @type YAHOO.util.CustomEvent
 */
-YAHOO.widget.FormDialog.prototype.formSubmitEvent = null;
+YAHOO.widget.Dialog.prototype.formSubmitEvent = null;
 
 /**
 * CustomEvent fired after cancel
 * @type YAHOO.util.CustomEvent
 */
-YAHOO.widget.FormDialog.prototype.cancelEvent = null;
+YAHOO.widget.Dialog.prototype.cancelEvent = null;
 
 
 /**
-* Initializes the class's configurable properties which can be changed using the FormDialog's Config object (cfg).
+* Initializes the class's configurable properties which can be changed using the Dialog's Config object (cfg).
 */
-YAHOO.widget.FormDialog.prototype.initDefaultConfig = function() {
-	YAHOO.widget.FormDialog.superclass.initDefaultConfig.call(this);
+YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
+	YAHOO.widget.Dialog.superclass.initDefaultConfig.call(this);
 
 	/**
 	* The internally maintained callback object for use with the Connection utility
@@ -3203,10 +2965,10 @@ YAHOO.widget.FormDialog.prototype.initDefaultConfig = function() {
 }
 
 /**
-* Initializes the custom events for FormDialog which are fired automatically at appropriate times by the FormDialog class.
+* Initializes the custom events for Dialog which are fired automatically at appropriate times by the Dialog class.
 */
-YAHOO.widget.FormDialog.prototype.initEvents = function() {
-	YAHOO.widget.FormDialog.superclass.initEvents.call(this);
+YAHOO.widget.Dialog.prototype.initEvents = function() {
+	YAHOO.widget.Dialog.superclass.initEvents.call(this);
 	
 	this.beforeSubmitEvent	= new YAHOO.util.CustomEvent("beforeSubmit");
 	this.submitEvent		= new YAHOO.util.CustomEvent("submit");
@@ -3219,17 +2981,17 @@ YAHOO.widget.FormDialog.prototype.initEvents = function() {
 }
 
 /*
-* The FormDialog initialization method, which is executed for FormDialog and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
-* @param {string}	el	The element ID representing the FormDialog <em>OR</em>
-* @param {Element}	el	The element representing the FormDialog
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this FormDialog. See configuration documentation for more details.
+* The Dialog initialization method, which is executed for Dialog and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
+* @param {string}	el	The element ID representing the Dialog <em>OR</em>
+* @param {Element}	el	The element representing the Dialog
+* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Dialog. See configuration documentation for more details.
 */
-YAHOO.widget.FormDialog.prototype.init = function(el, userConfig) {
-	YAHOO.widget.FormDialog.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
+YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
+	YAHOO.widget.Dialog.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
 	
-	this.beforeInitEvent.fire(YAHOO.widget.FormDialog);
+	this.beforeInitEvent.fire(YAHOO.widget.Dialog);
 
-	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.FormDialog.CSS_FORMDIALOG);
+	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Dialog.CSS_DIALOG);
 
 	if (userConfig) {
 		this.cfg.applyConfig(userConfig);
@@ -3249,13 +3011,13 @@ YAHOO.widget.FormDialog.prototype.init = function(el, userConfig) {
 		}
 	}, this, true);
 
-	this.initEvent.fire(YAHOO.widget.FormDialog);
+	this.initEvent.fire(YAHOO.widget.Dialog);
 }
 
 /**
-* Prepares the FormDialog's internal FORM object, creating one if one is not currently present.
+* Prepares the Dialog's internal FORM object, creating one if one is not currently present.
 */
-YAHOO.widget.FormDialog.prototype.registerForm = function() {
+YAHOO.widget.Dialog.prototype.registerForm = function() {
 	var form = this.element.getElementsByTagName("FORM")[0];
 
 	if (! form) {
@@ -3317,7 +3079,7 @@ YAHOO.widget.FormDialog.prototype.registerForm = function() {
 /**
 * The default event handler for the "buttons" configuration property
 */
-YAHOO.widget.FormDialog.prototype.configButtons = function(type, args, obj) {
+YAHOO.widget.Dialog.prototype.configButtons = function(type, args, obj) {
 	var buttons = args[0];
 	if (buttons != "none") {
 		this.buttonSpan = null;
@@ -3360,22 +3122,22 @@ YAHOO.widget.FormDialog.prototype.configButtons = function(type, args, obj) {
 /**
 * The default handler fired when the "success" property is changed. Used for asynchronous submission only.
 */ 
-YAHOO.widget.FormDialog.prototype.configOnSuccess = function(type,args,obj){};
+YAHOO.widget.Dialog.prototype.configOnSuccess = function(type,args,obj){};
 
 /**
 * The default handler fired when the "failure" property is changed. Used for asynchronous submission only.
 */ 
-YAHOO.widget.FormDialog.prototype.configOnFailure = function(type,args,obj){};
+YAHOO.widget.Dialog.prototype.configOnFailure = function(type,args,obj){};
 
 /**
 * Executes a submission of the form based on the value of the postmethod property.
 */
-YAHOO.widget.FormDialog.prototype.doSubmit = function() {};
+YAHOO.widget.Dialog.prototype.doSubmit = function() {};
 
 /**
-* The default event handler used to focus the first field of the form when the FormDialog is shown.
+* The default event handler used to focus the first field of the form when the Dialog is shown.
 */
-YAHOO.widget.FormDialog.prototype.focusFirst = function(type,args,obj) {
+YAHOO.widget.Dialog.prototype.focusFirst = function(type,args,obj) {
 	if (args) {
 		var e = args[1];
 		if (e) {
@@ -3391,9 +3153,9 @@ YAHOO.widget.FormDialog.prototype.focusFirst = function(type,args,obj) {
 }
 
 /**
-* Sets the focus to the last button in the button or form element in the FormDialog
+* Sets the focus to the last button in the button or form element in the Dialog
 */
-YAHOO.widget.FormDialog.prototype.focusLast = function(type,args,obj) {
+YAHOO.widget.Dialog.prototype.focusLast = function(type,args,obj) {
 	if (args) {
 		var e = args[1];
 		if (e) {
@@ -3414,7 +3176,7 @@ YAHOO.widget.FormDialog.prototype.focusLast = function(type,args,obj) {
 /**
 * Sets the focus to the button that is designated as the default. By default, his handler is executed when the show event is fired.
 */
-YAHOO.widget.FormDialog.prototype.focusDefaultButton = function() {
+YAHOO.widget.Dialog.prototype.focusDefaultButton = function() {
 	if (this.defaultHtmlButton) {
 		this.defaultHtmlButton.focus();
 	}
@@ -3423,7 +3185,7 @@ YAHOO.widget.FormDialog.prototype.focusDefaultButton = function() {
 /**
 * Blurs all the html buttons
 */
-YAHOO.widget.FormDialog.prototype.blurButtons = function() {
+YAHOO.widget.Dialog.prototype.blurButtons = function() {
 	var buttons = this.cfg.getProperty("buttons");
 	if (buttons && buttons instanceof Array) {
 		var html = buttons[0].htmlButton;
@@ -3436,7 +3198,7 @@ YAHOO.widget.FormDialog.prototype.blurButtons = function() {
 /**
 * Sets the focus to the first button in the button list
 */
-YAHOO.widget.FormDialog.prototype.focusFirstButton = function() {
+YAHOO.widget.Dialog.prototype.focusFirstButton = function() {
 	var buttons = this.cfg.getProperty("buttons");
 	if (buttons && buttons instanceof Array) {
 		var html = buttons[0].htmlButton;
@@ -3449,7 +3211,7 @@ YAHOO.widget.FormDialog.prototype.focusFirstButton = function() {
 /**
 * Sets the focus to the first button in the button list
 */
-YAHOO.widget.FormDialog.prototype.focusLastButton = function() {
+YAHOO.widget.Dialog.prototype.focusLastButton = function() {
 	var buttons = this.cfg.getProperty("buttons");
 	if (buttons && buttons instanceof Array) {
 		var html = buttons[buttons.length-1].htmlButton;
@@ -3464,14 +3226,14 @@ YAHOO.widget.FormDialog.prototype.focusLastButton = function() {
 /**
 * Built-in function hook for writing a validation function that will be checked for a "true" value prior to a submit. This function, as implemented by default, always returns true, so it should be overridden if validation is necessary.
 */
-YAHOO.widget.FormDialog.prototype.validate = function() {
+YAHOO.widget.Dialog.prototype.validate = function() {
 	return true;
 }
 
 /**
-* Executes a submit of the FormDialog followed by a hide, if validation is successful.
+* Executes a submit of the Dialog followed by a hide, if validation is successful.
 */
-YAHOO.widget.FormDialog.prototype.submit = function() {
+YAHOO.widget.Dialog.prototype.submit = function() {
 	if (this.validate()) {
 		this.beforeSubmitEvent.fire();
 		this.doSubmit();
@@ -3484,9 +3246,9 @@ YAHOO.widget.FormDialog.prototype.submit = function() {
 }
 
 /**
-* Executes the cancel of the FormDialog followed by a hide.
+* Executes the cancel of the Dialog followed by a hide.
 */
-YAHOO.widget.FormDialog.prototype.cancel = function() {
+YAHOO.widget.Dialog.prototype.cancel = function() {
 	this.cancelEvent.fire();
 	this.hide();	
 }
@@ -3495,7 +3257,7 @@ YAHOO.widget.FormDialog.prototype.cancel = function() {
 * Returns a JSON-compatible data structure representing the data currently contained in the form.
 * @return {object} A JSON object reprsenting the data of the current form.
 */
-YAHOO.widget.FormDialog.prototype.getData = function() {
+YAHOO.widget.Dialog.prototype.getData = function() {
 	var form = this.form;
 	var data = {};
 
@@ -3570,82 +3332,82 @@ Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 * @class
-* Dialog is a simple implementation of FormDialog that can be used to submit a single value. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
-* @param {string}	el	The element ID representing the Dialog <em>OR</em>
-* @param {Element}	el	The element representing the Dialog
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Dialog. See configuration documentation for more details.
+* SimpleDialog is a simple implementation of Dialog that can be used to submit a single value. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
+* @param {string}	el	The element ID representing the SimpleDialog <em>OR</em>
+* @param {Element}	el	The element representing the SimpleDialog
+* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this SimpleDialog. See configuration documentation for more details.
 * @constructor
 */
-YAHOO.widget.Dialog = function(el, userConfig) {
+YAHOO.widget.SimpleDialog = function(el, userConfig) {
 	if (arguments.length > 0) {
-		YAHOO.widget.Dialog.superclass.constructor.call(this, el, userConfig);
+		YAHOO.widget.SimpleDialog.superclass.constructor.call(this, el, userConfig);
 	}
 }
 
-YAHOO.widget.Dialog.prototype = new YAHOO.widget.FormDialog();
-YAHOO.widget.Dialog.prototype.constructor = YAHOO.widget.Dialog;
+YAHOO.widget.SimpleDialog.prototype = new YAHOO.widget.Dialog();
+YAHOO.widget.SimpleDialog.prototype.constructor = YAHOO.widget.SimpleDialog;
 
 /**
-* Reference to the Dialog's superclass, FormDialog
+* Reference to the SimpleDialog's superclass, Dialog
 * @type class
 * @final
 */
-YAHOO.widget.Dialog.superclass = YAHOO.widget.FormDialog.prototype;
+YAHOO.widget.SimpleDialog.superclass = YAHOO.widget.Dialog.prototype;
 
 /**
 * Constant for the standard network icon for a blocking action
 * @type string
 * @final
 */
-YAHOO.widget.Dialog.ICON_BLOCK = "nt/ic/ut/bsc/blck16_1.gif";
+YAHOO.widget.SimpleDialog.ICON_BLOCK = "nt/ic/ut/bsc/blck16_1.gif";
 
 /**
 * Constant for the standard network icon for alarm
 * @type string
 * @final
 */
-YAHOO.widget.Dialog.ICON_ALARM = "nt/ic/ut/bsc/alrt16_1.gif";
+YAHOO.widget.SimpleDialog.ICON_ALARM = "nt/ic/ut/bsc/alrt16_1.gif";
 
 /**
 * Constant for the standard network icon for help
 * @type string
 * @final
 */
-YAHOO.widget.Dialog.ICON_HELP  = "nt/ic/ut/bsc/hlp16_1.gif";
+YAHOO.widget.SimpleDialog.ICON_HELP  = "nt/ic/ut/bsc/hlp16_1.gif";
 
 /**
 * Constant for the standard network icon for info
 * @type string
 * @final
 */
-YAHOO.widget.Dialog.ICON_INFO  = "nt/ic/ut/bsc/info16_1.gif";
+YAHOO.widget.SimpleDialog.ICON_INFO  = "nt/ic/ut/bsc/info16_1.gif";
 
 /**
 * Constant for the standard network icon for warn
 * @type string
 * @final
 */
-YAHOO.widget.Dialog.ICON_WARN  = "nt/ic/ut/bsc/warn16_1.gif";
+YAHOO.widget.SimpleDialog.ICON_WARN  = "nt/ic/ut/bsc/warn16_1.gif";
 
 /**
 * Constant for the standard network icon for a tip
 * @type string
 * @final
 */
-YAHOO.widget.Dialog.ICON_TIP   = "nt/ic/ut/bsc/tip16_1.gif";
+YAHOO.widget.SimpleDialog.ICON_TIP   = "nt/ic/ut/bsc/tip16_1.gif";
 
 /**
-* Constant representing the default CSS class used for a Dialog
+* Constant representing the default CSS class used for a SimpleDialog
 * @type string
 * @final
 */
-YAHOO.widget.Dialog.CSS_DIALOG = "dialog";
+YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG = "simple-dialog";
 
 /**
-* Initializes the class's configurable properties which can be changed using the Dialog's Config object (cfg).
+* Initializes the class's configurable properties which can be changed using the SimpleDialog's Config object (cfg).
 */
-YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
-	YAHOO.widget.Dialog.superclass.initDefaultConfig.call(this);
+YAHOO.widget.SimpleDialog.prototype.initDefaultConfig = function() {
+	YAHOO.widget.SimpleDialog.superclass.initDefaultConfig.call(this);
 
 	// Add dialog config properties //
 	this.cfg.addProperty("icon",	{ value:"none",	handler:this.configIcon, suppressEvent:true } );
@@ -3654,17 +3416,17 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 
 
 /*
-* The Dialog initialization method, which is executed for Dialog and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
-* @param {string}	el	The element ID representing the Dialog <em>OR</em>
-* @param {Element}	el	The element representing the Dialog
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Dialog. See configuration documentation for more details.
+* The SimpleDialog initialization method, which is executed for SimpleDialog and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
+* @param {string}	el	The element ID representing the SimpleDialog <em>OR</em>
+* @param {Element}	el	The element representing the SimpleDialog
+* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this SimpleDialog. See configuration documentation for more details.
 */
-YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
-	YAHOO.widget.Dialog.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
+YAHOO.widget.SimpleDialog.prototype.init = function(el, userConfig) {
+	YAHOO.widget.SimpleDialog.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
 
-	this.beforeInitEvent.fire(YAHOO.widget.Dialog);
+	this.beforeInitEvent.fire(YAHOO.widget.SimpleDialog);
 
-	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Dialog.CSS_DIALOG);
+	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG);
 
 	this.cfg.queueProperty("postmethod", "manual");
 
@@ -3678,14 +3440,14 @@ YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
 		}
 	}, this, true);
 
-	this.initEvent.fire(YAHOO.widget.Dialog);
+	this.initEvent.fire(YAHOO.widget.SimpleDialog);
 
 }
 /**
-* Prepares the Dialog's internal FORM object, creating one if one is not currently present, and adding the value hidden field.
+* Prepares the SimpleDialog's internal FORM object, creating one if one is not currently present, and adding the value hidden field.
 */
-YAHOO.widget.Dialog.prototype.registerForm = function() {
-	YAHOO.widget.Dialog.superclass.registerForm.call(this);
+YAHOO.widget.SimpleDialog.prototype.registerForm = function() {
+	YAHOO.widget.SimpleDialog.superclass.registerForm.call(this);
 	this.form.innerHTML += "<input type=\"hidden\" name=\"" + this.id + "\" value=\"\"/>";
 }
 
@@ -3694,7 +3456,7 @@ YAHOO.widget.Dialog.prototype.registerForm = function() {
 /**
 * Fired when the "icon" property is set.
 */
-YAHOO.widget.Dialog.prototype.configIcon = function(type,args,obj) {
+YAHOO.widget.SimpleDialog.prototype.configIcon = function(type,args,obj) {
 	var icon = args[0];
 	if (icon && icon != "none") {
 		var iconHTML = "<img src=\"" + this.imageRoot + icon + "\" class=\"icon\" />";
@@ -3705,10 +3467,251 @@ YAHOO.widget.Dialog.prototype.configIcon = function(type,args,obj) {
 /**
 * Fired when the "text" property is set.
 */
-YAHOO.widget.Dialog.prototype.configText = function(type,args,obj) {
+YAHOO.widget.SimpleDialog.prototype.configText = function(type,args,obj) {
 	var text = args[0];
 	if (text) {
 		this.setBody(text);
 	}
 }
 // END BUILT-IN PROPERTY EVENT HANDLERS //
+/**
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+* @class
+* ContainerEffect encapsulates animation transitions that are executed when an Overlay is shown or hidden.
+* @param {Overlay}	overlay		The Overlay that the animation should be associated with
+* @param {object}	attrIn		The object literal representing the animation arguments to be used for the animate-in transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
+* @param {object}	attrOut		The object literal representing the animation arguments to be used for the animate-out transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
+* @param {Element}	targetElement	Optional. The target element that should be animated during the transition. Defaults to overlay.element.
+* @constructor
+*/
+YAHOO.widget.ContainerEffect = function(overlay, attrIn, attrOut, targetElement) {
+	this.overlay = overlay;
+
+	this.attrIn = attrIn;
+	this.attrOut = attrOut;
+
+	this.targetElement = targetElement || overlay.element;
+
+	this.beforeAnimateInEvent = new YAHOO.util.CustomEvent("beforeAnimateIn");
+	this.beforeAnimateOutEvent = new YAHOO.util.CustomEvent("beforeAnimateOut");
+
+	this.animateInCompleteEvent = new YAHOO.util.CustomEvent("animateInComplete");
+	this.animateOutCompleteEvent = new YAHOO.util.CustomEvent("animateOutComplete");
+}
+
+/**
+* Initializes the animation classes and events.
+* @param {class}	Optional. The animation class to instantiate. Defaults to YAHOO.util.Anim. Other options include YAHOO.util.Motion.
+*/
+YAHOO.widget.ContainerEffect.prototype.init = function(animClass) {
+	if (! animClass) {
+		animClass = YAHOO.util.Anim;
+	}
+	this.animIn = new animClass(this.targetElement, this.attrIn.attributes, this.attrIn.duration, this.attrIn.method);
+	this.animIn.onStart.subscribe(this.handleStartAnimateIn, this);
+	this.animIn.onTween.subscribe(this.handleTweenAnimateIn, this);
+	this.animIn.onComplete.subscribe(this.handleCompleteAnimateIn, this);
+
+	this.animOut = new animClass(this.targetElement, this.attrOut.attributes, this.attrOut.duration, this.attrOut.method);
+	this.animOut.onStart.subscribe(this.handleStartAnimateOut, this);
+	this.animOut.onTween.subscribe(this.handleTweenAnimateOut, this);
+	this.animOut.onComplete.subscribe(this.handleCompleteAnimateOut, this);
+}
+
+/**
+* Triggers the in-animation.
+*/
+YAHOO.widget.ContainerEffect.prototype.animateIn = function() {
+	this.beforeAnimateInEvent.fire();
+	this.animIn.animate();
+}
+
+/**
+* Triggers the out-animation.
+*/
+YAHOO.widget.ContainerEffect.prototype.animateOut = function() {
+	this.beforeAnimateOutEvent.fire();
+	this.animOut.animate();
+}
+
+/**
+* The default onStart handler for the in-animation.
+*/
+YAHOO.widget.ContainerEffect.prototype.handleStartAnimateIn = function(type, args, obj) { }
+/**
+* The default onTween handler for the in-animation.
+*/
+YAHOO.widget.ContainerEffect.prototype.handleTweenAnimateIn = function(type, args, obj) { }
+/**
+* The default onComplete handler for the in-animation.
+*/
+YAHOO.widget.ContainerEffect.prototype.handleCompleteAnimateIn = function(type, args, obj) { }
+
+/**
+* The default onStart handler for the out-animation.
+*/
+YAHOO.widget.ContainerEffect.prototype.handleStartAnimateOut = function(type, args, obj) { }
+/**
+* The default onTween handler for the out-animation.
+*/
+YAHOO.widget.ContainerEffect.prototype.handleTweenAnimateOut = function(type, args, obj) { }
+/**
+* The default onComplete handler for the out-animation.
+*/
+YAHOO.widget.ContainerEffect.prototype.handleCompleteAnimateOut = function(type, args, obj) { }
+
+/**
+* A pre-configured ContainerEffect instance that can be used for fading an overlay in and out.
+* @param {Overlay}	The Overlay object to animate
+* @param {float}	The duration of the animation
+* @type ContainerEffect
+*/
+YAHOO.widget.ContainerEffect.FADE = function(overlay, dur) {
+	var fade = new YAHOO.widget.ContainerEffect(overlay, { attributes:{opacity: {from:0, to:1}}, duration:dur, method:YAHOO.util.Easing.easeIn }, { attributes:{opacity: {to:0}}, duration:dur, method:YAHOO.util.Easing.easeOut} );
+
+	fade.handleStartAnimateIn = function(type,args,obj) {
+		YAHOO.util.Dom.addClass(obj.overlay.element, "hide-select");
+		
+		if (! obj.overlay.underlay) {
+			obj.overlay.cfg.refireEvent("underlay");
+		}
+
+		if (obj.overlay.underlay) {
+			obj.initialUnderlayOpacity = YAHOO.util.Dom.getStyle(obj.overlay.underlay, "opacity");
+			obj.overlay.underlay.style.filter = null;
+		}
+
+		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "visible"); 
+		YAHOO.util.Dom.setStyle(obj.overlay.element, "opacity", 0);
+	}
+
+	fade.handleCompleteAnimateIn = function(type,args,obj) {
+		YAHOO.util.Dom.removeClass(obj.overlay.element, "hide-select");
+
+		if (obj.overlay.element.style.filter) {
+			obj.overlay.element.style.filter = null;
+		}			
+		
+		if (obj.overlay.underlay) {
+			YAHOO.util.Dom.setStyle(obj.overlay.underlay, "opacity", obj.initialUnderlayOpacity);
+		}
+
+		obj.overlay.cfg.refireEvent("iframe");
+		obj.animateInCompleteEvent.fire();
+	}
+
+	fade.handleStartAnimateOut = function(type, args, obj) {
+		YAHOO.util.Dom.addClass(obj.overlay.element, "hide-select");
+
+		if (obj.overlay.underlay) {
+			obj.overlay.underlay.style.filter = null;
+		}
+	}
+
+	fade.handleCompleteAnimateOut =  function(type, args, obj) { 
+		YAHOO.util.Dom.removeClass(obj.overlay.element, "hide-select");
+		if (obj.overlay.element.style.filter) {
+			obj.overlay.element.style.filter = null;
+		}				
+		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "hidden");
+		YAHOO.util.Dom.setStyle(obj.overlay.element, "opacity", 1); 
+
+		obj.overlay.cfg.refireEvent("iframe");
+
+		obj.animateOutCompleteEvent.fire();
+	};	
+
+	fade.init();
+	return fade;
+};
+
+
+/**
+* A pre-configured ContainerEffect instance that can be used for sliding an overlay in and out.
+* @param {Overlay}	The Overlay object to animate
+* @param {float}	The duration of the animation
+* @type ContainerEffect
+*/
+YAHOO.widget.ContainerEffect.SLIDE = function(overlay, dur) {
+	var x = overlay.cfg.getProperty("x") || YAHOO.util.Dom.getX(overlay.element);
+	var y = overlay.cfg.getProperty("y") || YAHOO.util.Dom.getY(overlay.element);
+
+	var clientWidth = YAHOO.util.Dom.getClientWidth();
+	var offsetWidth = overlay.element.offsetWidth;
+
+	var slide = new YAHOO.widget.ContainerEffect(overlay, { 
+															attributes:{ points: { to:[x, y] } }, 
+															duration:dur, 
+															method:YAHOO.util.Easing.easeIn 
+														}, 
+														{ 
+															attributes:{ points: { to:[(clientWidth+25), y] } },
+															duration:dur, 
+															method:YAHOO.util.Easing.easeOut
+														} 
+												);
+
+	slide.handleStartAnimateIn = function(type,args,obj) {
+		obj.overlay.element.style.left = (-25-offsetWidth) + "px";
+		obj.overlay.element.style.top  = y + "px";
+	}
+	
+	slide.handleTweenAnimateIn = function(type, args, obj) {
+
+
+		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
+
+		var currentX = pos[0];
+		var currentY = pos[1];
+
+		if (YAHOO.util.Dom.getStyle(obj.overlay.element, "visibility") == "hidden" && currentX < x) {
+			YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "visible");
+		}
+
+		obj.overlay.cfg.setProperty("xy", [currentX,currentY], true);
+		obj.overlay.cfg.refireEvent("iframe");
+	}
+	
+	slide.handleCompleteAnimateIn = function(type, args, obj) {
+		obj.overlay.cfg.setProperty("xy", [x,y], true);
+		obj.startX = x;
+		obj.startY = y;
+		obj.overlay.cfg.refireEvent("iframe");
+		obj.animateInCompleteEvent.fire();
+	}
+
+	slide.handleStartAnimateOut = function(type, args, obj) {
+		var clientWidth = YAHOO.util.Dom.getViewportWidth();
+		
+		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
+
+		var x = pos[0];
+		var y = pos[1];
+
+		var currentTo = obj.animOut.attributes.points.to;
+		obj.animOut.attributes.points.to = [(clientWidth+25), y];
+	}
+
+	slide.handleTweenAnimateOut = function(type, args, obj) {
+		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
+
+		var x = pos[0];
+		var y = pos[1];
+
+		obj.overlay.cfg.setProperty("xy", [x,y], true);
+		obj.overlay.cfg.refireEvent("iframe");
+	}
+
+	slide.handleCompleteAnimateOut = function(type, args, obj) { 
+		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "hidden");		
+		var offsetWidth = obj.overlay.element.offsetWidth;
+
+		obj.overlay.cfg.setProperty("xy", [x,y]);
+		obj.animateOutCompleteEvent.fire();
+	};	
+
+	slide.init(YAHOO.util.Motion);
+	return slide;
+}

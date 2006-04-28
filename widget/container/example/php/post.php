@@ -5,7 +5,7 @@ $index = 0;
 
 foreach($_POST as $key => $value) {
 	
-	print "$key : ";
+	print "$key:";
     
 	if (gettype($value) == "array") {
 		print "[";

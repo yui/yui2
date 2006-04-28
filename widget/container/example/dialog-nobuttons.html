@@ -46,6 +46,13 @@
 	var dlg;
 	var data;
 
+	function handleOK(e, obj) {
+		obj.submit();
+	}
+
+	function handleCancel(e, obj) {
+		obj.cancel();
+	}
 
 	function submitCallback(obj) {
 		var response = obj.responseText;
@@ -55,23 +62,20 @@
 	}
 
 	function init() {
-		var handleCancel = function() {
+		var handleEsc = function(type, args, obj) {
 			this.cancel();
 		}
-		var handleSubmit = function() {
+		var handleEnter = function(type, args, obj) {
 			this.submit();
-		}
-		
+		}	
 
-		dlg = new YAHOO.widget.Dialog("dlg", { modal:true, visible:false, width:"350px", fixedcenter:true, constraintoviewport:true, draggable:true });
+		dlg = new YAHOO.widget.Dialog("dlg", { visible:false, width:"350px", fixedcenter:true, modal:true, constraintoviewport:true, draggable:true });
 		
-		var listeners = new YAHOO.util.KeyListener(document, { keys : 27 }, {fn:handleCancel,scope:dlg,correctScope:true} );
+		var listeners = new YAHOO.util.KeyListener(document, { keys : 27 }, {fn:handleEsc,scope:dlg,correctScope:true} );
 
 		dlg.cfg.queueProperty("keylisteners", listeners);
 
-		dlg.cfg.queueProperty("buttons", [ { text:"Submit", handler:handleSubmit, isDefault:true },
-										   { text:"Cancel", handler:handleCancel } ]);
-
+		dlg.cfg.queueProperty("buttons", dlg.BUTTONS_SUBMITCANCEL);
 		dlg.cfg.queueProperty("onsuccess", submitCallback);
 		
 		var handleManual = function(type, args, obj) {
@@ -127,6 +131,7 @@
 		<div class="hd">Please enter your information</div>
 		<div class="bd">
 			<form name="dlgForm" method="POST" action="php/post.php">
+			<input type="button" onclick="dlg.submit()" value="submit" />
 			<p>Please enter your personal contact information:</p>
 					<label for="firstname">First Name:</label><input type="textbox" name="firstname" /><br/>
 					<label for="lastname">Last Name:</label><input type="textbox" name="lastname" /><br/>
@@ -148,8 +153,6 @@
 			</form>
 		</div>
 	</div>
-
-
 
 </body>
 </html>

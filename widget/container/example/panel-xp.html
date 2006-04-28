@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>YAHOO.widget.Panel</title>
+
+<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/yahoo_2.0.0-b3.js" ></script>
+<script type="text/javascript" src="http://feelbuild-mac.corp.yahoo.com/Event.dev/js/event/build/event-raw.js" ></script>
+<script type="text/javascript" src="http://ue.corp.yahoo.com/msweeney/dev/platform/2.0/util/dom/build/dom-raw.js" ></script>
+<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dragdrop_2.0.0-b3.js" ></script>
+<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/animation_2.0.0-b3.js" ></script>
+<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/connection_2.0.0-b3.js" ></script>
+
+<link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/fonts_0.9.0.css" />
+<link rel="stylesheet" type="text/css" href="css/example.css" />
+
+<link rel="stylesheet" type="text/css" href="../build/css/container.css" />
+<script type="text/javascript" src="../build/js/container.js"></script>
+
+<style>
+
+#win {
+	visibility:hidden;
+}
+
+.panel-container.shadow .underlay {
+	background-color:#999;
+}
+
+.panel {
+	border:none;
+	overflow:visible;
+	background:transparent url(img/xp-brdr-rt.gif) no-repeat top right;
+}
+
+.panel .hd {
+	padding:0;
+	border:none;
+	background:transparent url(img/xp-hd.gif);
+	color:#FFF;
+	height:30px;
+	margin-left:8px;
+	margin-right:8px;
+	text-align:left;
+	vertical-align:middle;
+	overflow:visible;
+}
+
+.panel .hd span {
+	line-height:30px;
+	vertical-align:middle;
+}
+
+.panel .close {
+	top:5px;
+	right:8px;
+	height:21px;
+	width:21px;
+}
+
+.panel .close.nonsecure {
+	background-image:url(img/xp-close.gif);
+}
+
+.panel .close.secure {
+	background-image:url(img/xp-close.gif);
+}
+
+.panel .tl {
+	width:8px;height:29px;
+	top:1px;left:0;
+	background:transparent url(img/xp-tl.gif);
+	position:absolute;
+}
+
+.panel .tr {
+	width:8px;height:29px;
+	top:1px;right:0;
+	background:transparent url(img/xp-tr.gif);
+	position:absolute;
+}
+
+.panel .bl {
+	width:8px;height:26px;
+	bottom:0;left:0;
+	background:transparent url(img/xp-bl.gif);
+	position:absolute;
+}
+
+.panel .ft {
+	background:transparent url(img/xp-ft.gif);
+	font-size:11px;
+	height:26px;
+	padding:0px 10px;
+}
+
+.panel .ft span {
+	line-height:22px;
+	vertical-align:middle;
+}
+
+.panel .br {
+	width:8px;height:26px;
+	bottom:0;right:0;
+	background:transparent url(img/xp-br.gif);
+	position:absolute;
+}
+
+.panel .bd {
+	overflow:hidden;
+	padding:10px;
+	border:none;
+	background:#FFF url(img/xp-brdr-lt.gif) repeat-y;
+	margin:0 4px 0 0;
+}
+
+.panel .bd .brdr-rt {
+	width:4px;
+	right:0;
+	top:29px;
+	bottom:26px;
+	height:auto;
+	background:#FFF url(img/xp-brdr-rt.gif) repeat-y;
+	position:absolute;
+}
+
+</style>
+
+<script language="javascript">
+	var panel;
+	var modules = [];
+
+	function init() {
+		panel = new YAHOO.widget.Panel("win", { effect:{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.25}, width:"30em", fixedcenter: true, constraintoviewport: true, underlay:"none", close:true, visible:false, draggable:true, modal:false } );
+		panel.render();
+		
+		modules["win"] = panel;
+	}
+
+	YAHOO.util.Event.addListener(window, "load", init);
+</script>
+</head>
+<body>
+	<div class="homeLink">
+		<!--<a href="index.html">&lt; Home</a>-->
+	</div>
+
+	<div class="box" id="bodyMain">
+		<div class="hd">
+			<h1>XP Panel Example</h1>
+		</div>
+		<div class="bd">
+			<p>Some custom CSS allows Panel to be rendered with a familiar skin.
+			</p>
+
+			<button onclick="panel.show()">Show the Panel</button>
+			<select>
+				<option>This is a &lt;select&gt; element, helpul for testing the IFRAME shim</option>
+			</select>
+		</div>
+	</div>
+
+<div id="win">
+		<div class="hd"><div class="tl"></div><span>Sprockets!</span><div class="tr"></div></div>
+		<div class="bd">
+			<img src="http://static.flickr.com/7/6301565_7123909f10_t.jpg" alt="sprockets!" style="float:left;margin:0 5px 5px"/>
+			<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis in risus. Vestibulum a nibh tincidunt elit iaculis laoreet. In pede metus, tristique non, consectetuer a, vestibulum vel, enim. Curabitur neque magna, pulvinar sit amet, lobortis viverra, porta non, dui. Donec tempor, arcu quis interdum pellentesque, dui dolor gravida pede, in iaculis justo tortor venenatis ligula. Cras non pede vel risus egestas faucibus. Nam pulvinar lobortis nisi. In vehicula venenatis sapien.</p>
+
+			<p style="margin-bottom:0px">Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam et risus ut est adipiscing congue. Praesent ut justo. Proin hendrerit urna eget eros. Curabitur condimentum tempor diam. Pellentesque tortor odio, sollicitudin eget, pellentesque ut, ullamcorper a, justo. Nam tellus pede, fermentum ac, sollicitudin sed, mollis vel, turpis. Fusce pulvinar nibh et erat. Praesent purus nibh, fermentum ac, imperdiet vel, aliquet eu, mi. Praesent non nisi ac mauris tempor ultricies. Nulla mollis tellus porta leo. Nunc accumsan dapibus tellus. Nunc nec nunc.</p>
+		</div>
+		<div class="ft">
+			<div class="bl"></div><span>Some footer text</span><div class="br"></div>
+		</div>
+	</div>
+</div>
+
+
+</body>
+</html>

@@ -1011,7 +1011,6 @@ YAHOO.widget.Module.prototype = {
 	* Shows the Module element by setting the visible configuration property to true. Also fires two events: beforeShowEvent prior to the visibility change, and showEvent after.
 	*/
 	show : function() {
-		this.beforeShowEvent.fire();
 		this.cfg.setProperty("visible", true);
 	},
 
@@ -1019,7 +1018,6 @@ YAHOO.widget.Module.prototype = {
 	* Hides the Module element by setting the visible configuration property to false. Also fires two events: beforeHideEvent prior to the visibility change, and hideEvent after.
 	*/
 	hide : function() {
-		this.beforeHideEvent.fire();
 		this.cfg.setProperty("visible", false);
 	},
 
@@ -1032,9 +1030,11 @@ YAHOO.widget.Module.prototype = {
 	configVisible : function(type, args, obj) {
 		var visible = args[0];
 		if (visible) {
+			this.beforeShowEvent.fire();
 			YAHOO.util.Dom.setStyle(this.element, "display", "block");
 			this.showEvent.fire();
 		} else {
+			this.beforeHideEvent.fire();
 			YAHOO.util.Dom.setStyle(this.element, "display", "none");
 			this.hideEvent.fire();
 		}
@@ -1258,18 +1258,19 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 		if (effect) { // Animate in
 			if (visible) { // Animate in if not showing
 				if (currentVis != "visible") {
+					this.beforeShowEvent.fire();
 					for (var i=0;i<effectInstances.length;i++) {
 						var e = effectInstances[i];
-						if (! YAHOO.util.Config.alreadySubscribed(e.animateInCompleteEvent,this.showEvent.fire,this.showEvent)) {
+						if (i == 0 && ! YAHOO.util.Config.alreadySubscribed(e.animateInCompleteEvent,this.showEvent.fire,this.showEvent)) {
 							e.animateInCompleteEvent.subscribe(this.showEvent.fire,this.showEvent,true); // Delegate showEvent until end of animateInComplete
 						}
-						//this.cfg.refireEvent("iframe");
 						e.animateIn();
 					}
 				}
 			}
 		} else { // Show
 			if (currentVis != "visible") {
+				this.beforeShowEvent.fire();
 				YAHOO.util.Dom.setStyle(this.element, "visibility", "visible");
 				this.cfg.refireEvent("iframe");
 				this.showEvent.fire();
@@ -1283,9 +1284,10 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 
 		if (effect) { // Animate out if showing
 			if (currentVis != "hidden") {
+				this.beforeHideEvent.fire();
 				for (var i=0;i<effectInstances.length;i++) {
 					var e = effectInstances[i];
-					if (! YAHOO.util.Config.alreadySubscribed(e.animateOutCompleteEvent,this.hideEvent.fire,this.hideEvent)) {				
+					if (i == 0 && ! YAHOO.util.Config.alreadySubscribed(e.animateOutCompleteEvent,this.hideEvent.fire,this.hideEvent)) {				
 						e.animateOutCompleteEvent.subscribe(this.hideEvent.fire,this.hideEvent,true); // Delegate hideEvent until end of animateOutComplete
 					}
 					e.animateOut();
@@ -1293,6 +1295,7 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 			}
 		} else { // Simple hide
 			if (currentVis != "hidden") {
+				this.beforeHideEvent.fire();
 				YAHOO.util.Dom.setStyle(this.element, "visibility", "hidden");
 				this.cfg.refireEvent("iframe");
 				this.hideEvent.fire();

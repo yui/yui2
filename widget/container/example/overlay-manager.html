@@ -5,16 +5,17 @@
 <title>YAHOO.widget.OverlayManager</title>
 
 <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/yahoo_2.0.0-b3.js" ></script>
-<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/event_2.0.0-b3.js" ></script>
-<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dom_2.0.2-b3.js" ></script>
+<script type="text/javascript" src="http://feelbuild-mac.corp.yahoo.com/Event.dev/js/event/build/event-raw.js" ></script>
+<script type="text/javascript" src="http://ue.corp.yahoo.com/msweeney/dev/platform/2.0/util/dom/build/dom-raw.js" ></script>
 <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dragdrop_2.0.0-b3.js" ></script>
 <script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/animation_2.0.0-b3.js" ></script>
+<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/connection_2.0.0-b3.js" ></script>
 
 <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/fonts_0.9.0.css" />
 <link rel="stylesheet" type="text/css" href="css/example.css" />
 
-<link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/container/css/container_2.0.0-b3.css" />
-<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/container/container_2.0.0-b3.js"></script>
+<link rel="stylesheet" type="text/css" href="../build/css/container.css" />
+<script type="text/javascript" src="../build/js/container.js"></script>
 
 <style>
 
@@ -42,7 +43,6 @@
 	var mgr;
 
 	function init() {
-		mgr = new YAHOO.widget.OverlayManager();
 
 		// *****************************************************************
 		// This represents a Overlay already on the page
@@ -50,7 +50,7 @@
 
 			oPredefined = new YAHOO.widget.Overlay("oPredefined", {visible:true, x:400, y:400} );
 			oPredefined.render();
-			mgr.register(oPredefined);
+			//mgr.register(oPredefined);
 
 		// *****************************************************************
 		// This represents an Overlay completely pre-constructed from code
@@ -62,7 +62,7 @@
 			oDynamic.setBody("I was created completely at runtime!");
 
 			oDynamic.render(document.body);
-			mgr.register(oDynamic);
+			//mgr.register(oDynamic);
 
 		// *****************************************************************
 		// This represents a overlay with a container, but no body content defined
@@ -74,9 +74,11 @@
 			oChangedAtRuntime.setFooter("The footer was changed too!");
 
 			oChangedAtRuntime.render();
-			mgr.register(oChangedAtRuntime);
+			//mgr.register(oChangedAtRuntime);
 		// *****************************************************************
 
+
+		mgr = new YAHOO.widget.OverlayManager( { overlays:[oPredefined,oDynamic,oChangedAtRuntime] } );
 
 		var button2 = document.getElementById("btnHide");
 		button2.onclick = hideAll;
@@ -227,6 +229,8 @@
 		
 		if (isNew) {
 			newMod.render(document.body);
+		} else {
+			newMod.render();
 		}
 
 	}
@@ -304,8 +308,8 @@
 	<div class="row">
       <div class="label">Show/Hide Effect(s)</div><div class="formw"><select name="effect">
       <option value="">*none*</option>
-      <option value="YAHOO.widget.OverlayEffect.FADE">Fade</option>
-      <option value="YAHOO.widget.OverlayEffect.SLIDE">Slide</option>
+      <option value="YAHOO.widget.ContainerEffect.FADE">Fade</option>
+      <option value="YAHOO.widget.ContainerEffect.SLIDE">Slide</option>
     </select> Duration: <input type="text" name="duration" style="width:25px"/>s</div>
     </div>
 
