@@ -193,7 +193,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 	*/
 	isSecure: function() {
 
-		if(window.location.href.toLowerCase().indexOf("https") == 0) {
+		if(window.location.href.toLowerCase().indexOf("https") === 0) {
 
 			this.imageRoot = YAHOO.widget.Module.IMG_ROOT_SSL;
 

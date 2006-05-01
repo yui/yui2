@@ -1664,7 +1664,7 @@ YAHOO.widget.MenuModule.prototype._onParentMenuModuleConfigChange =
     function(p_sType, p_aArguments, p_oSubmenu) {
     
         var sPropertyName = p_aArguments[0][0],
-            sPropertyValue = p_aArguments[0][1];
+            oPropertyValue = p_aArguments[0][1];
     
         switch(sPropertyName) {
     
