@@ -4,8 +4,8 @@ directories:
 util - all utility projects:
 * animation
 * connection
-* dragdrop
 * dom
+* dragdrop
 * event
 
 widget - all widget projects:
@@ -20,3 +20,54 @@ css - all CSS-specific projects
 * font
 * grid
 * reset
+
+build - raw versions of build files for all components
+* animation
+* autocomplete
+* calendar
+* connection
+* dom
+* dragdrop
+* event
+* menu
+* overlay
+* slider
+* treeview
+
+example of a component subdirectory:
+-- widget
+| |
+| -- calendar
+| | |
+    -- build
+| | | |
+      -- calendar.js (raw, commented source)
+| | | |
+| | | -- calendar-min.js (minified source)
+| | |
+| | -- src
+| | | |
+      -- css
+| | | | |
+        -- calendar.css
+| | | |
+      -img
+| | | | |
+        -- callt.gif
+| | | |
+      -- js
+| | | | |
+| | | | -- Calendar.js
+
+example of a build subdirectory:
+-- build
+| |
+| -- calendar
+| | |
+    -- calendar.js (raw, commented source)
+| | | |
+| | -- assets (local copies of akamaized css and img assets)
+| | | |
+| | | -- callt.gif     
+| | | |
+      -- calendar.css
