@@ -268,6 +268,20 @@ YAHOO.widget.LogReader.prototype.fontSize = null;
  */
 YAHOO.widget.LogReader.prototype.footerEnabled = true;
 
+/**
+ * Whether or not output is compact (less readable).
+ *
+ * @type boolean
+ */
+YAHOO.widget.LogReader.prototype.compact = true;
+
+/**
+ * Whether or not newest message is printed on top.
+ *
+ * @type boolean
+ */
+YAHOO.widget.LogReader.prototype.newestOnTop = true;
+
 /***************************************************************************
  * Public methods
  ***************************************************************************/
@@ -530,6 +544,8 @@ YAHOO.widget.LogReader.prototype._printBuffer = function() {
  * @private
  */
 YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
+//TODO: much optimization here
+//if !compact, set fixed widths for time output
     var entriesLen = aEntries.length;
     var filtersLen = this._filters.length;
     // Iterate through all log entries...
@@ -559,19 +575,28 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
             }
 
             var msecs = time.getTime();
+            var startTime = YAHOO.widget.Logger.getStartTime();
+            var totalTime = msecs - startTime;
             var elapsedTime = msecs - this._lastTime;
             this._lastTime = msecs;
 
             var name = (entry.name) ? entry.name + ": " : "";
+            
+            var compact = (this.compact) ? "" : "<br>";
 
             var output =  "<span class='"+category+"'>"+label+"</span> " +
-                localTime + " (" +
-                elapsedTime + "): " +
-                name +
+                totalTime + " ms (+" +
+                elapsedTime + ") " + localTime + ": " +
+                name + compact +
                 entry.msg;
 
-            var oNewElement = this._consoleEl.insertBefore(document.createElement("p"),this._consoleEl.firstChild);
+            var oNewElement = (this.newestOnTop) ?
+                this._consoleEl.insertBefore(document.createElement("p"),this._consoleEl.firstChild):
+                this._consoleEl.appendChild(document.createElement("p"));
             oNewElement.innerHTML = output;
+            if(!this.newestOnTop) {
+                this._consoleEl.scrollTop = this._consoleEl.scrollHeight;
+            }
         }
     }
 };
