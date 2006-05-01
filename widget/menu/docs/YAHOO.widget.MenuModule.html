@@ -71,6 +71,16 @@
 						</li>
 					
 						<li>
+							<a href="YAHOO.widget.MenuBar.html">
+								YAHOO.widget.MenuBar</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.MenuBarItem.html">
+								YAHOO.widget.MenuBarItem</a>
+						</li>
+					
+						<li>
 							<a href="YAHOO.widget.MenuItem.html">
 								YAHOO.widget.MenuItem</a>
 						</li>
@@ -110,6 +120,16 @@
 						</li>
 					
 						<li>
+							<a href="overview-summary-menubar.js.html">
+								menubar.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-menubaritem.js.html">
+								menubaritem.js</a>
+						</li>
+					
+						<li>
 							<a href="overview-summary-menuitem.js.html">
 								menuitem.js</a>
 						</li>
@@ -144,7 +164,7 @@
 			<dl class="subclasses">
 				<dt>Direct Known Subclasses:</dd>
 				<dd>
-					 <a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>
+					 <a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>, <a href="YAHOO.widget.MenuBar.html">YAHOO.widget.MenuBar</a>
 				</dd>
 		   </dl>
 		
@@ -443,6 +463,20 @@
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
+										<a href="#clearActiveItem">clearActiveItem</a>
+										()
+									</code>
+									<div class="description">
+										Sets the "selected" configuration property of a MenuModule instance's active 
+ item to "false," blurs the item and hide's the item's submenu.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
 										<a href="#configPosition">configPosition</a>
 										(&lt;String&gt; p_sType, &lt;Array&gt; p_aArguments, &lt;<a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a>&gt; p_oMenuModule)
 									</code>
@@ -512,7 +546,7 @@
 								<td class="spec">
 									<code>
 										<a href="#init">init</a>
-										(p_oElement, &lt;Object&gt; p_oUserConfig)
+										(&#60;String or HTMLElement&#62; p_oElement, &lt;Object&gt; p_oUserConfig)
 									</code>
 									<div class="description">
 										The MenuModule class's initialization method.&nbsp;
@@ -552,7 +586,7 @@
 								<td class="spec">
 									<code>
 										<a href="#removeItem">removeItem</a>
-										(p_oObject, &lt;Number&gt; p_nGroupIndex)
+										(&#60;String or HTMLElement&#62; p_oObject, &lt;Number&gt; p_nGroupIndex)
 									</code>
 									<div class="description">
 										Removes the specified item from a MenuModule instance.&nbsp;
@@ -835,7 +869,8 @@
 									<dt>Parameters:</dt>
 									
 										<dd>
-											{<code>String/HTMLElement</code>} -  p_oElement String id or HTMLElement   (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.  
+											<code>p_oElement</code> - 
+											 String id or HTMLElement   (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.  
 										</dd>
 									
 										<dd>
@@ -902,6 +937,26 @@
 						</div>
 						<hr />
 					
+						<h4><a name="clearActiveItem">clearActiveItem</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>clearActiveItem</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Sets the "selected" configuration property of a MenuModule instance's active 
+ item to "false," blurs the item and hide's the item's submenu.
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="configPosition">configPosition</a></h4>
 						<div class="detail">
 							<code>
@@ -931,14 +986,14 @@
 										
 											<dd>
 												<code>p_oMenuModule</code> - 
-												 The MenuModule instance fired the event.  
+												 The MenuModule instance fired  the event.  
 											</dd>
 										
 									</dl>
 								
 								
 								
-									ARRAY(0x8416eb8)
+									ARRAY(0x86cd968)
 								
 							</div>
 						</div>
@@ -1052,7 +1107,7 @@
 							<code>
 								void 
 								<strong>init</strong>
-								(p_oElement, &lt;Object&gt; p_oUserConfig)
+								(&#60;String or HTMLElement&#62; p_oElement, &lt;Object&gt; p_oUserConfig)
 							</code>
 									
 							<div class="description">
@@ -1066,12 +1121,13 @@
 										<dt>Parameters:</dt>
 										
 											<dd>
+												<code>p_oElement</code> - 
+												 String id or HTMLElement   (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.  
+											</dd>
+
+											<dd>
 												<code>p_oUserConfig</code> - 
 												 Optional. The configuration object literal   containing the configuration for a MenuModule instance. See   configuration class documentation for more details.   
-											</dd>
-										
-											<dd>
-												{<code>String/HTMLElement</code>} -  p_oElement String id or HTMLElement   (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.  
 											</dd>
 										
 									</dl>
@@ -1151,7 +1207,7 @@
 							<code>
 								<a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a> 
 								<strong>removeItem</strong>
-								(p_oObject, &lt;Number&gt; p_nGroupIndex)
+								(&#60;String or HTMLElement&#62; p_oObject, &lt;Number&gt; p_nGroupIndex)
 							</code>
 									
 							<div class="description">

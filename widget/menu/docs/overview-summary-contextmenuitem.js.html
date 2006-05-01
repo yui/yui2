@@ -71,6 +71,16 @@
 						</li>
 					
 						<li>
+							<a href="YAHOO.widget.MenuBar.html">
+								YAHOO.widget.MenuBar</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.MenuBarItem.html">
+								YAHOO.widget.MenuBarItem</a>
+						</li>
+					
+						<li>
 							<a href="YAHOO.widget.MenuItem.html">
 								YAHOO.widget.MenuItem</a>
 						</li>
@@ -110,6 +120,16 @@
 						</li>
 					
 						<li>
+							<a href="overview-summary-menubar.js.html">
+								menubar.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-menubaritem.js.html">
+								menubaritem.js</a>
+						</li>
+					
+						<li>
 							<a href="overview-summary-menuitem.js.html">
 								menuitem.js</a>
 						</li>
@@ -131,10 +151,14 @@
 	
 	<div class="main">
 			
-           <h2>contextmenuitem.js</h2>
+		
+		
+			
+			   <h2>contextmenuitem.js</h2>
+			
 
 			<div class="section source">
-				<h3><a name="source">Souce Code</a></h3>
+
 				<pre class="sourceview"><span class="comment">/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
@@ -146,7 +170,7 @@ http://developer.yahoo.net/yui/license.txt
 * <span class="attrib">@constructor</span>
 * <span class="attrib">@extends</span> YAHOO.widget.MenuItem
 * <span class="attrib">@base</span> YAHOO.widget.MenuItem
-* <span class="attrib">@param</span> {String/HTMLElement} p_oObject String or HTMLElement 
+* <span class="attrib">@param</span> {String or HTMLElement} p_oObject String or HTMLElement 
 * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
 * source HTMLElement node.
 * <span class="attrib">@param</span> {Object} p_oUserConfig The configuration object literal containing 
@@ -168,7 +192,11 @@ YAHOO.widget.ContextMenuItem = <span class="reserved">function</span>(p_oObject,
 };
 
 YAHOO.widget.ContextMenuItem.<span class="reserved">prototype</span> = new YAHOO.widget.MenuItem();
-YAHOO.widget.ContextMenuItem.<span class="reserved">prototype</span>.constructor = YAHOO.widget.ContextMenuItem;
+
+YAHOO.widget.ContextMenuItem.<span class="reserved">prototype</span>.constructor = 
+
+    YAHOO.widget.ContextMenuItem;
+
 YAHOO.widget.ContextMenuItem.superclass = YAHOO.widget.MenuItem.<span class="reserved">prototype</span>;
 
 
@@ -177,48 +205,50 @@ YAHOO.widget.ContextMenuItem.superclass = YAHOO.widget.MenuItem.<span class="res
 * automatically called by the constructor, and sets up all DOM references for
 * pre-existing markup, and creates required markup if it is not
 * already present.
-* <span class="attrib">@param</span> {String/HTMLElement} p_oObject String or HTMLElement 
+* <span class="attrib">@param</span> {String or HTMLElement} p_oObject String or HTMLElement 
 * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
 * source HTMLElement node.
 * <span class="attrib">@param</span> {Object} p_oUserConfig The configuration object literal containing 
 * the configuration for a ContextMenuItem instance. See the configuration 
 * class documentation for more details.
 */</span>
-YAHOO.widget.ContextMenuItem.<span class="reserved">prototype</span>.init = <span class="reserved">function</span>(p_oObject, p_oUserConfig) {
+YAHOO.widget.ContextMenuItem.<span class="reserved">prototype</span>.init = 
 
-    <span class="reserved">if</span>(!<span class="reserved">this</span>.MENU_TYPE) {
-
-        <span class="reserved">this</span>.MENU_TYPE = YAHOO.widget.ContextMenu;
-
-    }
-
-    <span class="reserved">if</span>(!<span class="reserved">this</span>.ITEM_TYPE) {
-
-        <span class="reserved">this</span>.ITEM_TYPE = YAHOO.widget.ContextMenuItem;
-
-    }
-
-
-    <span class="comment">/* 
-        Call the init of the superclass (YAHOO.widget.MenuItem)
-        Note: We don't pass the user config in here yet 
-        because we only want it executed once, at the lowest 
-        subclass level.
-    */</span> 
-
-    YAHOO.widget.ContextMenuItem.superclass.init.call(<span class="reserved">this</span>, p_oObject);
-
-
-    <span class="reserved">if</span>(p_oUserConfig) {
-
-        <span class="reserved">this</span>.cfg.applyConfig(p_oUserConfig);
-
-    }
-
-
-    <span class="reserved">this</span>.cfg.fireQueue();
-
-};</pre>
+    <span class="reserved">function</span>(p_oObject, p_oUserConfig) {
+    
+        <span class="reserved">if</span>(!<span class="reserved">this</span>.SUBMENU_TYPE) {
+    
+            <span class="reserved">this</span>.SUBMENU_TYPE = YAHOO.widget.ContextMenu;
+    
+        }
+    
+        <span class="reserved">if</span>(!<span class="reserved">this</span>.SUBMENU_ITEM_TYPE) {
+    
+            <span class="reserved">this</span>.SUBMENU_ITEM_TYPE = YAHOO.widget.ContextMenuItem;
+    
+        }
+    
+    
+        <span class="comment">/* 
+            Call the init of the superclass (YAHOO.widget.MenuItem)
+            Note: We don't pass the user config in here yet 
+            because we only want it executed once, at the lowest 
+            subclass level.
+        */</span> 
+    
+        YAHOO.widget.ContextMenuItem.superclass.init.call(<span class="reserved">this</span>, p_oObject);
+    
+    
+        <span class="reserved">if</span>(p_oUserConfig) {
+    
+            <span class="reserved">this</span>.cfg.applyConfig(p_oUserConfig, true);
+    
+        }
+    
+    
+        <span class="reserved">this</span>.cfg.fireQueue();
+    
+    };</pre>
 			</div>
 		
 	</div>
