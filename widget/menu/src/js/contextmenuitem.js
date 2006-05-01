@@ -80,7 +80,7 @@ YAHOO.widget.ContextMenuItem.prototype.init =
     
         if(p_oUserConfig) {
     
-            this.cfg.applyConfig(p_oUserConfig);
+            this.cfg.applyConfig(p_oUserConfig, true);
     
         }
     

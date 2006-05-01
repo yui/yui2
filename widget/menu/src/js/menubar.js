@@ -86,7 +86,7 @@ YAHOO.widget.MenuBar.prototype.init = function(p_oElement, p_oUserConfig) {
 
     if(p_oUserConfig) {
 
-        this.cfg.applyConfig(p_oUserConfig);
+        this.cfg.applyConfig(p_oUserConfig, true);
 
     }
     

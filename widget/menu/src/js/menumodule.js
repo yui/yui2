@@ -472,7 +472,7 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oUserConfig) {
 
         if(p_oUserConfig) {
     
-            this.cfg.applyConfig(p_oUserConfig);
+            this.cfg.applyConfig(p_oUserConfig, true);
     
         }
 
@@ -495,6 +495,48 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oUserConfig) {
 
 
 // Private methods
+
+
+/**
+* Returns the first enabled item in a menu instance.
+* @return Returns a MenuModuleItem instance.
+* @type YAHOO.widget.MenuModuleItem
+* @private
+*/
+YAHOO.widget.MenuModule.prototype._getFirstEnabledItem = function() {
+
+    var nGroups = this._aItemGroups.length,
+        oItem,
+        aItemGroup;
+
+    for(var i=0; i<nGroups; i++) {
+
+        aItemGroup = this._aItemGroups[i];
+        
+        if(aItemGroup) {
+
+            var nItems = aItemGroup.length;
+            
+            for(var n=0; n<nItems; n++) {
+            
+                oItem = aItemGroup[n];
+                
+                if(!oItem.cfg.getProperty("disabled")) {
+                
+                    return oItem;
+                
+                }
+    
+                oItem = null;
+    
+            }
+        
+        }
+    
+    }
+    
+};
+
 
 /**
 * Determines if the value is one of the supported positions.
@@ -531,146 +573,149 @@ YAHOO.widget.MenuModule.prototype._addItemToGroup =
 
     function(p_nGroupIndex, p_oItem, p_nItemIndex) {
 
-    if(typeof p_nItemIndex == "number") {
+        if(typeof p_nItemIndex == "number") {
 
-        var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
-            aGroup = this._getItemGroup(nGroupIndex);
+            var nGroupIndex = typeof p_nGroupIndex == "number" ? 
+                    p_nGroupIndex : 0,
+                    aGroup = this._getItemGroup(nGroupIndex);
 
-        if(!aGroup) {
+    
+            if(!aGroup) {
+    
+                aGroup = this._createItemGroup(nGroupIndex);
+    
+            }
 
-            aGroup = this._createItemGroup(nGroupIndex);
 
-        }
-
-        var bFirstInsertion = (aGroup.length === 0);
+            var bAppend = (p_nItemIndex >= aGroup.length);            
 
 
-        if(aGroup[p_nItemIndex]) {
+            if(aGroup[p_nItemIndex]) {
+    
+                aGroup.splice(p_nItemIndex, 0, p_oItem);
+    
+            }
+            else {
+    
+                aGroup[p_nItemIndex] = p_oItem;
+    
+            }
 
-            aGroup.splice(p_nItemIndex, 0, p_oItem);
+
+            var oItem = aGroup[p_nItemIndex];
+
+            if(oItem) {
+
+                if(bAppend && !oItem.element.parentNode) {
+        
+                    this._aListElements[nGroupIndex].appendChild(oItem.element);
+    
+                }
+                else {
+  
+    
+                    /**
+                    * Returns the next sibling of an item in an array 
+                    * @param {p_aArray} An array
+                    * @param {p_nStartIndex} The index to start searching the array 
+                    * @ignore
+                    * @return Returns an item in an array
+                    * @type Object 
+                    */
+                    function getNextItemSibling(p_aArray, p_nStartIndex) {
+            
+                        return (
+                                p_aArray[p_nStartIndex] || 
+                                getNextItemSibling(p_aArray, (p_nStartIndex+1))
+                            );
+            
+                    }
+    
+    
+                    var oNextItemSibling = 
+                            getNextItemSibling(aGroup, (p_nItemIndex+1));
+    
+                    if(oNextItemSibling && !oItem.element.parentNode) {
+            
+                        this._aListElements[nGroupIndex].insertBefore(
+                                oItem.element, 
+                                oNextItemSibling.element
+                            );
+        
+                    }
+    
+                }
+    
+
+                oItem.parent = this;
+        
+                this._subscribeToItemEvents(oItem);
+    
+                this._configureItemSubmenuModule(oItem);
+                
+                this._updateItemProperties(nGroupIndex);
+        
+                return oItem;
+    
+            }
 
         }
         else {
-
-            aGroup[p_nItemIndex] = p_oItem;
-
-        }
-
-
-        var oItem = aGroup[p_nItemIndex];
-
-        if(oItem) {
-
-            if(bFirstInsertion && !oItem.element.parentNode) {
     
-                this._aListElements[nGroupIndex].appendChild(oItem.element);
-
+            var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
+                aGroup = this._getItemGroup(nGroupIndex);
+    
+            if(!aGroup) {
+    
+                aGroup = this._createItemGroup(nGroupIndex);
+    
             }
-            else {
-
-
-                /**
-                * Returns the next sibling of an item in an array 
-                * @param {p_aArray} An array
-                * @param {p_nStartIndex} The index to start searching the array 
-                * @ignore
-                * @return Returns an item in an array
-                * @type Object 
-                */
-                function getNextItemSibling(p_aArray, p_nStartIndex) {
-        
-                    return (
-                            p_aArray[p_nStartIndex] || 
-                            getNextItemSibling(p_aArray, (p_nStartIndex+1))
-                        );
-        
-                }
-
-
-                var oNextItemSibling = 
-                        getNextItemSibling(aGroup, (p_nItemIndex+1));
-
-                if(oNextItemSibling && !oItem.element.parentNode) {
-        
-                    this._aListElements[nGroupIndex].insertBefore(
-                            oItem.element, 
-                            oNextItemSibling.element
-                        );
+    
+            var nItemIndex = aGroup.length;
+    
+            aGroup[nItemIndex] = p_oItem;
+    
+    
+            var oItem = aGroup[nItemIndex];
+    
+            if(oItem) {
+    
+                if(
+                    !this._oDom.isAncestor(
+                        this._aListElements[nGroupIndex], 
+                        oItem.element
+                    )
+                ) {
+    
+                    this._aListElements[nGroupIndex].appendChild(oItem.element);
     
                 }
-
-            }
-
-
-            oItem.parent = this;
     
-            this._subscribeToItemEvents(oItem);
-
-            this._configureItemSubmenuModule(oItem);
-            
-            this._updateItemProperties(nGroupIndex);
+                oItem.element.setAttribute("groupindex", nGroupIndex);
+                oItem.element.setAttribute("index", nItemIndex);
+        
+                oItem.parent = this;
     
-            return oItem;
-
-        }
-
-    }
-    else {
-
-        var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
-            aGroup = this._getItemGroup(nGroupIndex);
-
-        if(!aGroup) {
-
-            aGroup = this._createItemGroup(nGroupIndex);
-
-        }
-
-        var nItemIndex = aGroup.length;
-
-        aGroup[nItemIndex] = p_oItem;
-
-
-        var oItem = aGroup[nItemIndex];
-
-        if(oItem) {
-
-            if(
-                !this._oDom.isAncestor(
-                    this._aListElements[nGroupIndex], 
-                    oItem.element
-                )
-            ) {
-
-                this._aListElements[nGroupIndex].appendChild(oItem.element);
-
-            }
-
-            oItem.element.setAttribute("groupindex", nGroupIndex);
-            oItem.element.setAttribute("index", nItemIndex);
+                oItem.index = nItemIndex;
+                oItem.groupIndex = nGroupIndex;
+        
+                this._subscribeToItemEvents(oItem);
     
-            oItem.parent = this;
-
-            oItem.index = nItemIndex;
-            oItem.groupIndex = nGroupIndex;
+                this._configureItemSubmenuModule(oItem);
     
-            this._subscribeToItemEvents(oItem);
-
-            this._configureItemSubmenuModule(oItem);
-
-            if(nItemIndex === 0) {
-    
-                this._oDom.addClass(oItem.element, "first");
+                if(nItemIndex === 0) {
+        
+                    this._oDom.addClass(oItem.element, "first");
+        
+                }
+        
+                return oItem;
     
             }
     
-            return oItem;
-
         }
-
-    }
-
-};
+    
+    };
 
 
 /**
@@ -687,59 +732,67 @@ YAHOO.widget.MenuModule.prototype._removeItemFromGroupByIndex =
 
     function(p_nGroupIndex, p_nItemIndex) {
 
-    var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
-        aGroup = this._getItemGroup(nGroupIndex),
-        aArray = aGroup.splice(p_nItemIndex, 1),
-        oItem = aArray[0];
-
-    if(oItem) {
-
-        // Update the index and className properties of each member        
-        
-        this._updateItemProperties(nGroupIndex);
-
-        if(aGroup.length === 0) {
-
-            // Remove the UL
-
-            var oUL = this._aListElements[nGroupIndex];
-
-            if(this.body && oUL) {
-
-                this.body.removeChild(oUL);
-
-            }
-
-            // Remove the group from the array of items
-
-            this._aItemGroups.splice(nGroupIndex, 1);
-
-
-            // Remove the UL from the array of ULs
-
-            this._aListElements.splice(nGroupIndex, 1);
-
-
-            // Assign the "first" class to the new first UL in the collection
-
-            oUL = this._aListElements[0];
-
-            if(oUL) {
-
-                this._oDom.addClass(oUL, "first");
-
-            }            
-
-        }
-
-
-        // Return a reference to the item that was removed
+        var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
+            aGroup = this._getItemGroup(nGroupIndex);
     
-        return oItem;
-
-    }
-
-};
+        if(aGroup) {
+    
+            var aArray = aGroup.splice(p_nItemIndex, 1),
+                oItem = aArray[0];
+        
+            if(oItem) {
+        
+                // Update the index and className properties of each member        
+                
+                this._updateItemProperties(nGroupIndex);
+        
+                if(aGroup.length === 0) {
+        
+                    // Remove the UL
+        
+                    var oUL = this._aListElements[nGroupIndex];
+        
+                    if(this.body && oUL) {
+        
+                        this.body.removeChild(oUL);
+        
+                    }
+        
+                    // Remove the group from the array of items
+        
+                    this._aItemGroups.splice(nGroupIndex, 1);
+        
+        
+                    // Remove the UL from the array of ULs
+        
+                    this._aListElements.splice(nGroupIndex, 1);
+        
+        
+                    /*
+                         Assign the "first" class to the new first UL in 
+                         the collection
+                    */
+        
+                    oUL = this._aListElements[0];
+        
+                    if(oUL) {
+        
+                        this._oDom.addClass(oUL, "first");
+        
+                    }            
+        
+                }
+        
+        
+                // Return a reference to the item that was removed
+            
+                return oItem;
+        
+            }
+    
+        }
+    
+    };
 
 
 /**
@@ -755,35 +808,43 @@ YAHOO.widget.MenuModule.prototype._removeItemFromGroupByValue =
 
     function(p_nGroupIndex, p_oItem) {
 
-    var aGroup = this._getItemGroup(p_nGroupIndex),
-        nItems = aGroup.length,
-        nItemIndex = -1;
+        var aGroup = this._getItemGroup(p_nGroupIndex);
 
-    if(nItems > 0) {
+        if(aGroup) {
 
-        var i = nItems-1;
-    
-        do {
-    
-            if(aGroup[i] == p_oItem) {
-    
-                nItemIndex = i;
-                break;    
-    
+            var nItems = aGroup.length,
+                nItemIndex = -1;
+        
+            if(nItems > 0) {
+        
+                var i = nItems-1;
+            
+                do {
+            
+                    if(aGroup[i] == p_oItem) {
+            
+                        nItemIndex = i;
+                        break;    
+            
+                    }
+            
+                }
+                while(i--);
+            
+                if(nItemIndex > -1) {
+            
+                    return this._removeItemFromGroupByIndex(
+                                p_nGroupIndex, 
+                                nItemIndex
+                            );
+            
+                }
+        
             }
-    
+        
         }
-        while(i--);
     
-        if(nItemIndex > -1) {
-    
-            return this._removeItemFromGroupByIndex(p_nGroupIndex, nItemIndex);
-    
-        }
-
-    }
-
-};
+    };
 
 
 /**
@@ -796,40 +857,48 @@ YAHOO.widget.MenuModule.prototype._updateItemProperties =
 
     function(p_nGroupIndex) {
 
-    var aGroup = this._getItemGroup(p_nGroupIndex),
-        nItems = aGroup.length;
-
-    if(nItems > 0) {
-
-        var i = nItems - 1,
-            oItem;
-
-        // Update the index and className properties of each member        
+        var aGroup = this._getItemGroup(p_nGroupIndex),
+            nItems = aGroup.length;
     
-        do {
-
-            if(aGroup[i]) {
+        if(nItems > 0) {
     
-                aGroup[i].index = i;
-                aGroup[i].groupIndex = p_nGroupIndex;
-                aGroup[i].element.setAttribute("groupindex", p_nGroupIndex);
-                aGroup[i].element.setAttribute("index", i);
-                this._oDom.removeClass(aGroup[i].element, "first");
-
+            var i = nItems - 1,
+                oItem,
+                oLI;
+    
+            // Update the index and className properties of each member        
+        
+            do {
+    
                 oItem = aGroup[i];
-
+    
+                if(oItem) {
+        
+                    oLI = oItem.element;
+    
+                    oItem.index = i;
+                    oItem.groupIndex = p_nGroupIndex;
+    
+                    oLI.setAttribute("groupindex", p_nGroupIndex);
+                    oLI.setAttribute("index", i);
+    
+                    this._oDom.removeClass(oLI, "first");
+    
+                }
+        
+            }
+            while(i--);
+    
+    
+            if(oLI) {
+    
+                this._oDom.addClass(oLI, "first");
+    
             }
     
         }
-        while(i--);
-
-
-        this._oDom.addClass(oItem.element, "first");
-
-
-    }
-
-};
+    
+    };
 
 
 /**
@@ -1354,8 +1423,7 @@ YAHOO.widget.MenuModule.prototype._onElementClick =
 */
 YAHOO.widget.MenuModule.prototype._initSubTree = function() {
 
-    var bInitSubmenus = this.cfg.getProperty("initsubtree"),
-        oNode;
+    var oNode;
 
     switch(this.srcElement.tagName) {
 
@@ -1375,15 +1443,7 @@ YAHOO.widget.MenuModule.prototype._initSubTree = function() {
         
                             case "LI":
         
-                                this.addItem(
-                                    
-                                    new this.ITEM_TYPE(
-                                        oNode, 
-                                        { initsubtree: bInitSubmenus }
-                                    ),
-                                    i
-                                    
-                                );
+                                this.addItem(new this.ITEM_TYPE(oNode), i);
         
                             break;
         
@@ -1410,14 +1470,7 @@ YAHOO.widget.MenuModule.prototype._initSubTree = function() {
                     case "OPTGROUP":
                     case "OPTION":
 
-                        this.addItem(
-                            (
-                                new this.ITEM_TYPE(
-                                    oNode, 
-                                    { initsubtree: bInitSubmenus }
-                                )
-                            )
-                        );
+                        this.addItem(new this.ITEM_TYPE(oNode));
 
                     break;
 
@@ -2261,35 +2314,7 @@ YAHOO.widget.MenuModule.prototype.destroy = function() {
 
 };
 
-/**
-* Sets focus to a MenuModule instance's first enabled item.
-*/
-YAHOO.widget.MenuModule.prototype._getFirstEnabledItem = function() {
 
-    var nGroups = this._aItemGroups.length,
-        oItem;
-
-    for(var i=0; i<nGroups; i++) {
-
-        var nItems = this._aItemGroups[i].length;
-        
-        for(var n=0; n<nItems; n++) {
-        
-            oItem = this._aItemGroups[i][n];
-            
-            if(!oItem.cfg.getProperty("disabled")) {
-            
-                return oItem;
-            
-            }
-
-            oItem = null;
-
-        }
-    
-    }
-    
-};
 
 
 /**
@@ -2357,8 +2382,6 @@ YAHOO.widget.MenuModule.prototype.initDefaultConfig = function() {
     YAHOO.widget.MenuModule.superclass.initDefaultConfig.call(this);
 
 	// Add configuration properties
-
-    this.cfg.addProperty("initsubtree", { value: true } );
 
     this.cfg.addProperty(
         "position", 

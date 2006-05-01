@@ -83,7 +83,7 @@ YAHOO.widget.MenuItem.prototype.init = function(p_oObject, p_oUserConfig) {
 
     if(p_oUserConfig) {
 
-        this.cfg.applyConfig(p_oUserConfig);
+        this.cfg.applyConfig(p_oUserConfig, true);
 
     }
 

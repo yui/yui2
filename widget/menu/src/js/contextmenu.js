@@ -64,7 +64,7 @@ YAHOO.widget.ContextMenu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     if(p_oUserConfig) {
 
-        this.cfg.applyConfig(p_oUserConfig);
+        this.cfg.applyConfig(p_oUserConfig, true);
 
     }
     
@@ -115,8 +115,12 @@ YAHOO.widget.ContextMenu.prototype._onDocumentMouseDown =
 YAHOO.widget.ContextMenu.prototype._onTriggerClick = 
 
     function(p_oEvent, p_oMenu) {
+
+        if(p_oEvent.ctrlKey) {
+        
+            this._oEventUtil.stopEvent(p_oEvent);
     
-        this._oEventUtil.stopEvent(p_oEvent);
+        }
         
     };
 

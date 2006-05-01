@@ -499,15 +499,6 @@ YAHOO.widget.MenuModuleItem.prototype = {
         );
         
         this.cfg.addProperty("submenu", { handler: this.configSubmenu });
-        
-        this.cfg.addProperty("initsubtree", { value: true });
-
-
-        if(p_oUserConfig && !p_oUserConfig.initsubtree) {
-
-            this.cfg.setProperty("initsubtree", false);
-
-        }
 
 
         if(this._checkString(p_oObject)) {
@@ -539,11 +530,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
                     this.srcElement = p_oObject;
 
-                    if(this.cfg.getProperty("initsubtree")) {
-
-                        this._initSubTree();
-
-                    }
+                    this._initSubTree();
 
                 break;
 
@@ -642,12 +629,8 @@ YAHOO.widget.MenuModuleItem.prototype = {
                         bStrongEmphasis, 
                         true
                     );
-                   
-                    if(this.cfg.getProperty("initsubtree")) {
 
-                        this._initSubTree();
-
-                    }
+                    this._initSubTree();
 
                 break;
 
