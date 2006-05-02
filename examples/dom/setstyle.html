@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>DOM Example: setStyle</title>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+
+<script type="text/javascript">
+YAHOO.namespace('example.dom');
+
+YAHOO.example.dom.init = function() {
+
+   var fade = function(e) {
+      YAHOO.util.Dom.setStyle('fade', 'opacity', .5);
+   };
+   
+   YAHOO.util.Event.addListener(document, 'click', fade);
+};
+
+YAHOO.util.Event.addListener(window, 'load', YAHOO.example.dom.init);
+</script>
+
+<link rel="stylesheet" type="text/css" href="css/dom.css">
+</head>
+
+<body>
+<div id="doc">
+   <h1>DOM Example: setStyle</h1>
+   <p>This example demonstrates how to use Dom.setStyle to set the opacity of an element.</p>
+   <p>Click anywhere to set the element's opacity.</p>
+   <div id="fade">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat </div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Motion Example - With Additional Attributes</title>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
+
+<script type="text/javascript">
+YAHOO.namespace('example.anim');
+YAHOO.example.anim.init = function() {        
+
+   var endPoint = YAHOO.util.Dom.getXY('end');
+   var attributes = {
+      points: {
+         to: endPoint,
+         control: [ [100, 800], [-100, 200] ]
+      },
+      width: {by: 100},
+      height: {by: 100}
+   };
+
+   var anim = new YAHOO.util.Motion('motion', attributes, 1, YAHOO.util.Easing.easeIn);
+   
+   var animate = function(e) {
+      anim.animate();
+      return false;
+   };
+   
+   YAHOO.util.Event.addListener(document, 'click', animate);
+      
+};
+
+YAHOO.util.Event.addListener(window, 'load', YAHOO.example.anim.init);
+</script>
+
+<link rel="stylesheet" type="text/css" href="css/anim.css">
+</head>
+<body>
+<div id="doc">
+   <h1>Motion Example - With Additional Attributes</h1>
+   <p>This example demonstrates how to animate an element's position and size together.</p>
+   <p>Click anywhere to start animation.</p>
+   <div id="motion"></div>  
+   <div id="end"></div>
+</div>
+</body>
+</html>

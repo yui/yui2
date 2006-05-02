@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>DOM Example: addClass</title>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+
+<script type="text/javascript">
+YAHOO.namespace('example.dom');
+
+YAHOO.example.dom.init = function() {
+
+   var add = function(e) {
+      YAHOO.util.Dom.addClass('test', 'bar');
+      alert(document.getElementById('test').className);
+   };
+   
+   YAHOO.util.Event.addListener(document, 'click', add);
+};
+
+YAHOO.util.Event.addListener(window, 'load', YAHOO.example.dom.init);
+</script>
+<link rel="stylesheet" type="text/css" href="css/dom.css">
+</head>
+
+<body>
+<div id="doc">
+   <h1>DOM Example: addClass</h1>
+   <p>This example demonstrates how to use Dom.addClass to add a class to a given element.</p>
+   <p>Click anywhere to test.</p>
+   <div class="foo" id="test"></div>                  
+</div>
+
+
+</body>
+</html>

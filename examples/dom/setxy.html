@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>DOM Example: setXY</title>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+
+<script type="text/javascript">
+YAHOO.namespace('example.dom');
+
+YAHOO.example.dom.init = function() {
+
+   var move = function(e) {
+      var xy = [YAHOO.util.Event.getPageX(e), YAHOO.util.Event.getPageY(e)];
+      YAHOO.util.Dom.setXY('test', xy);
+   };
+   
+   YAHOO.util.Event.addListener(document, 'click', move);
+};
+
+YAHOO.util.Event.addListener(window, 'load', YAHOO.example.dom.init);
+</script>
+
+<link rel="stylesheet" type="text/css" href="css/dom.css">
+</head>
+
+<body>
+<div id="doc">
+   <h1>DOM Example: setXY</h1>
+   <p>This example demonstrates how to use Dom.setXY to set an elements position.</p>
+   <p>Click anywhere and the element will move to the click point.</p>
+   <div id="test"></div>
+</div>
+
+
+</body>
+</html>

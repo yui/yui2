@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>DOM Example: hasClass</title>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+
+<script type="text/javascript">
+YAHOO.namespace('example.dom');
+
+YAHOO.example.dom.init = function() {
+
+   var test = function(e) {
+      alert(YAHOO.util.Dom.hasClass('test', 'foo'));
+   };
+   
+   YAHOO.util.Event.addListener(document, 'click', test);
+};
+
+YAHOO.util.Event.addListener(window, 'load', YAHOO.example.dom.init);
+</script>
+<link rel="stylesheet" type="text/css" href="css/dom.css">
+</head>
+
+<body>
+<div id="doc">
+   <h1>DOM Example: hasClass</h1>
+   <p>This example demonstrates how to use Dom.hasClass to test whether a class is assigned to a given element.</p>
+   <p>Click anywhere to test.</p>
+   <div class="foo2 foo bar" id="test"></div>                  
+</div>
+
+
+</body>
+</html>

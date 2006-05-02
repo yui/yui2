@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>DOM Example: getStyle</title>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+
+<script type="text/javascript">
+YAHOO.namespace('example.dom');
+
+YAHOO.example.dom.init = function() {
+
+   var change = function(e) {
+      var bgColor = YAHOO.util.Dom.getStyle('end', 'backgroundColor');
+      YAHOO.util.Dom.setStyle('test', 'backgroundColor', bgColor);
+   };
+   
+   YAHOO.util.Event.addListener(document, 'click', change);
+};
+
+YAHOO.util.Event.addListener(window, 'load', YAHOO.example.dom.init);
+</script>
+
+<link rel="stylesheet" type="text/css" href="css/dom.css">
+</head>
+
+<body>
+<div id="doc">
+   <h1>DOM Example: getStyle</h1>
+   <p>This example demonstrates how to use Dom.getStyle to get the current style of an element.</p>
+   <p>Click anywhere to get the background color of the red element and apply it to the gray element.</p>
+   <div id="test"></div>
+   <div id="end"></div>
+</div>
+
+
+</body>
+</html>

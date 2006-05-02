@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>DOM Example: getElementsByClassName</title>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+
+<script type="text/javascript">
+YAHOO.namespace('example.dom');
+
+YAHOO.example.dom.init = function() {
+
+   var count = function(e) {
+      var elements = YAHOO.util.Dom.getElementsByClassName('test');
+      alert(elements.length);
+   };
+   
+   YAHOO.util.Event.addListener(document, 'click', count);
+};
+
+YAHOO.util.Event.addListener(window, 'load', YAHOO.example.dom.init);
+</script>
+<link rel="stylesheet" type="text/css" href="css/dom.css">
+</head>
+
+<body>
+<div id="doc">
+   <h1>DOM Example: getElementsByClassName</h1>
+   <p>This example demonstrates how to use Dom.getByClassName to get a collection of elements with a particular class name.</p>
+   <p>Click anywhere to test.</p>
+   <div class="test">div class=&quot;test&quot;</div>
+   <div class="test2 test">div class=&quot;test2 test&quot;</div>
+   <div class="test test2">div class=&quot;test test2&quot;</div>
+   <div class="test ">div class=&quot;test &quot;</div>   
+   <div class=" test ">div class=&quot; test &quot;</div>
+   <div class=" test2 test">div class=&quot; test2 test&quot;</div>
+   <div class="test test2 ">div class=&quot;test test2 &quot;</div>    
+   <div class="test2 test ">div class=&quot;test2 test &quot;</div>  
+   <div class=" test2 test">div class=&quot; test2 test&quot;</div>   
+   <div class=" test2 test ">div class=&quot; test2 test &quot;</div>   
+   <div class="test3 test2 test">div class=&quot;test3 test2 test&quot;</div>  
+   <div class="test2 test3">div class=&quot;test2 test3&quot;</div>                   
+</div>
+
+
+</body>
+</html>
