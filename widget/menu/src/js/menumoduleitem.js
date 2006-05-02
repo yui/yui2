@@ -567,7 +567,15 @@ YAHOO.widget.MenuModuleItem.prototype = {
                     }
                     else {
 
-                        sText = p_oObject.firstChild.nodeValue;
+                        var oText = p_oObject.firstChild;
+
+                        sText = oText.nodeValue;
+
+                        oAnchor = document.createElement("a");
+
+                        p_oObject.replaceChild(oAnchor, oText);
+                        
+                        oAnchor.appendChild(oText);
 
                     }
 
@@ -1110,7 +1118,6 @@ YAHOO.widget.MenuModuleItem.prototype = {
             }
 
             this._oAnchor.removeAttribute("href");
-            this._oAnchor.removeAttribute("tabIndex");
 
             this._oDom.addClass(aNodes, "disabled");
 
@@ -1121,7 +1128,6 @@ YAHOO.widget.MenuModuleItem.prototype = {
         else {
 
             this._oAnchor.setAttribute("href", this.cfg.getProperty("url"));
-            this._oAnchor.setAttribute("tabIndex", 0);
 
             this._oDom.removeClass(aNodes, "disabled");
 
