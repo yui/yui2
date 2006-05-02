@@ -1,0 +1,713 @@
+
+<html>
+<head>
+	<title>
+		JavaScript Documentation - 
+		
+			Dom.js
+		
+	</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Dom Utility</a></h3>
+
+	<div class="breadcrumbs">
+		
+			<a href="javascript: alert('This location is TBD');">Home</a>
+			&gt;
+			
+			
+			
+			
+				<a href="./index.html">Dom Utility</a>
+				&gt;
+				<strong>Dom.js</strong>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.Dom.html">
+								YAHOO.util.Dom</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.Point.html">
+								YAHOO.util.Point</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.Region.html">
+								YAHOO.util.Region</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-Dom.js.html">
+								Dom.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Region.js.html">
+								Region.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div class="main">
+			
+		
+		
+			
+			   <h2>Dom.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+		
+		
+		
+		
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+				
+					
+						<a href="#classSummary">Class Summary</a> |
+					
+					
+				
+				
+				
+					<a href="#source">Source Code</a>
+				
+			</div>
+		
+			
+				<div class="section class summaries">
+					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+			
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+						<tr>
+							<td class="name">
+								<a href="YAHOO.util.Dom.html">YAHOO.util.Dom</a>
+							</td>
+							<td class="overview">Provides helper methods for DOM elements.</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		
+		
+		
+		
+			<div class="section source">
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<pre class="sourceview"><span class="comment">/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+*/</span>
+
+<span class="comment">/**
+ * <span class="attrib">@class</span> Provides helper methods for DOM elements.
+ */</span>
+YAHOO.util.Dom = <span class="reserved">function</span>() {};
+
+YAHOO.util.Dom.<span class="reserved">prototype</span> = {
+   <span class="comment">/**
+    * Returns an HTMLElement reference
+    * <span class="attrib">@param</span> {String/HTMLElement/Array} el Accepts a string to use as an ID for getting a DOM reference, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+    * <span class="attrib">@return</span> {HTMLElement/Array} A DOM reference to an HTML element or an array of HTMLElements.
+    */</span>
+   get: <span class="reserved">function</span>(el) {
+      <span class="reserved">if</span> (typeof el != <span class="literal">'string'</span> &amp;&amp; !(el instanceof Array) )
+      { <span class="comment">// assuming HTMLElement or HTMLCollection, so pass back as is</span>
+         <span class="reserved">return</span> el;
+      }
+      
+      <span class="reserved">if</span> (typeof el == <span class="literal">'string'</span>) 
+      { <span class="comment">// ID</span>
+         <span class="reserved">return</span> document.getElementById(el);
+      }
+      <span class="reserved">else</span>
+      { <span class="comment">// array of ID's and/or elements</span>
+         var collection = [];
+         <span class="reserved">for</span> (var i = 0, len = el.length; i &lt; len; ++i)
+         {
+            collection[collection.length] = <span class="reserved">this</span>.get(el[i]);
+         }
+         
+         <span class="reserved">return</span> collection;
+      }
+
+      <span class="reserved">return</span> null; <span class="comment">// safety, should never happen</span>
+   },
+
+   <span class="comment">/**
+    * Normalizes currentStyle and ComputedStyle.
+    * <span class="attrib">@param</span> {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+    * <span class="attrib">@param</span> {String} property The style property whose value is returned.
+    * <span class="attrib">@return</span> {String/Array} The current value of the style property for the element(s).
+    */</span>
+   getStyle: <span class="reserved">function</span>(el, property) {
+      var f = <span class="reserved">function</span>(el, self) {
+         var value = null;
+         var dv = document.defaultView;
+         
+         <span class="reserved">if</span> (property == <span class="literal">'opacity'</span> &amp;&amp; el.filters) 
+         {<span class="comment">// IE opacity</span>
+            value = 1;
+            try {
+               value = el.filters.item(<span class="literal">'DXImageTransform.Microsoft.Alpha'</span>).opacity / 100;
+            } catch(e) {
+               try {
+                  value = el.filters.item(<span class="literal">'alpha'</span>).opacity / 100;
+               } catch(e) {}
+            }
+         }
+         <span class="reserved">else</span> <span class="reserved">if</span> (el.style[property]) 
+         {
+            value = el.style[property];
+         }
+         <span class="reserved">else</span> <span class="reserved">if</span> (el.currentStyle &amp;&amp; el.currentStyle[property]) {
+            value = el.currentStyle[property];
+         }
+         <span class="reserved">else</span> <span class="reserved">if</span> ( dv &amp;&amp; dv.getComputedStyle )
+         {  <span class="comment">// convert camelCase to hyphen-case</span>
+            
+            var converted = <span class="literal">''</span>;
+            <span class="reserved">for</span>(var i = 0, len = property.length;i &lt; len; ++i) {
+               <span class="reserved">if</span> (property.charAt(i) == property.charAt(i).toUpperCase()) 
+               {
+                  converted = converted + <span class="literal">'-'</span> + property.charAt(i).toLowerCase();
+               } <span class="reserved">else</span> {
+                  converted = converted + property.charAt(i);
+               }
+            }
+            
+            <span class="reserved">if</span> (dv.getComputedStyle(el, <span class="literal">''</span>) &amp;&amp; dv.getComputedStyle(el, <span class="literal">''</span>).getPropertyValue(converted)) {
+               value = dv.getComputedStyle(el, <span class="literal">''</span>).getPropertyValue(converted);
+            }
+         }
+   
+         <span class="reserved">return</span> value;
+      };
+      
+      <span class="reserved">return</span> <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>);
+   },
+
+   <span class="comment">/**
+    * Wrapper for setting style properties of HTMLElements.  Normalizes "opacity" across modern browsers.
+    * <span class="attrib">@param</span> {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+    * <span class="attrib">@param</span> {String} property The style property to be set.
+    * <span class="attrib">@param</span> {String} val The value to apply to the given property.
+    */</span>
+   setStyle: <span class="reserved">function</span>(el, property, val) {
+      var f = <span class="reserved">function</span>(el, self) {
+         switch(property) {
+            case <span class="literal">'opacity'</span> :
+               <span class="reserved">if</span> (el.filters) {
+                  el.style.filter = <span class="literal">'alpha(opacity='</span> + val * 100 + <span class="literal">')'</span>;
+                  
+                  <span class="reserved">if</span> (!el.currentStyle.hasLayout) {
+                     el.style.zoom = 1;
+                  }
+               } <span class="reserved">else</span> {
+                  el.style.opacity = val;
+                  el.style[<span class="literal">'-moz-opacity'</span>] = val;
+                  el.style[<span class="literal">'-khtml-opacity'</span>] = val;
+               }
+               break;
+            default :
+               el.style[property] = val;
+         }
+      };
+      
+      <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>);
+   },
+   
+   <span class="comment">/**
+    * Gets the current position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+    * <span class="attrib">@param</span> {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
+    @ return {Array} The XY position of the element(s)
+    */</span>
+   getXY: <span class="reserved">function</span>(el) {
+      var f = <span class="reserved">function</span>(el, self) {
+
+      <span class="comment">// has to be part of document to have pageXY</span>
+         <span class="reserved">if</span> (el.parentNode === null || self.getStyle(el, <span class="literal">'display'</span>) == <span class="literal">'none'</span>) {
+            <span class="reserved">return</span> false;
+         }
+         
+         var parent = null;
+         var pos = [];
+         var box;
+         
+         <span class="reserved">if</span> (el.getBoundingClientRect) { <span class="comment">// IE</span>
+            box = el.getBoundingClientRect();
+            Math.max ( document.documentElement.scrollTop  , document.body.scrollTop );
+            var scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
+            var scrollLeft = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft);
+            
+            <span class="reserved">return</span> [box.left + scrollLeft, box.top + scrollTop];
+         }
+         <span class="reserved">else</span> <span class="reserved">if</span> (document.getBoxObjectFor) { <span class="comment">// gecko</span>
+            box = document.getBoxObjectFor(el);
+            pos = [box.x, box.y];
+         }
+         <span class="reserved">else</span> { <span class="comment">// safari/opera</span>
+            pos = [el.offsetLeft, el.offsetTop];
+            parent = el.offsetParent;
+            <span class="reserved">if</span> (parent != el) {
+               <span class="reserved">while</span> (parent) {
+                  pos[0] += parent.offsetLeft;
+                  pos[1] += parent.offsetTop;
+                  parent = parent.offsetParent;
+               }
+            }
+            <span class="reserved">if</span> (
+               ua.indexOf(<span class="literal">'opera'</span>) != -1 
+               || ( ua.indexOf(<span class="literal">'safari'</span>) != -1 &amp;&amp; self.getStyle(el, <span class="literal">'position'</span>) == <span class="literal">'absolute'</span> ) 
+            ) {
+               pos[0] -= document.body.offsetLeft;
+               pos[1] -= document.body.offsetTop;
+            } 
+         }
+         
+         <span class="reserved">if</span> (el.parentNode) { parent = el.parentNode; }
+         <span class="reserved">else</span> { parent = null; }
+   
+         <span class="reserved">while</span> (parent &amp;&amp; parent.tagName != <span class="literal">'BODY'</span> &amp;&amp; parent.tagName != <span class="literal">'HTML'</span>) {
+            pos[0] -= parent.scrollLeft;
+            pos[1] -= parent.scrollTop;
+   
+            <span class="reserved">if</span> (parent.parentNode) { parent = parent.parentNode; } 
+            <span class="reserved">else</span> { parent = null; }
+         }
+   
+         <span class="reserved">return</span> pos;
+      };
+      
+      <span class="reserved">return</span> <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>);
+   },
+   
+   <span class="comment">/**
+    * Gets the current X position of an element based on page coordinates.  The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+    * <span class="attrib">@param</span> {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
+    * <span class="attrib">@return</span> {String/Array} The X position of the element(s)
+    */</span>
+   getX: <span class="reserved">function</span>(el) {
+      <span class="reserved">return</span> <span class="reserved">this</span>.getXY(el)[0];
+   },
+   
+   <span class="comment">/**
+    * Gets the current Y position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+    * <span class="attrib">@param</span> {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
+    * <span class="attrib">@return</span> {String/Array} The Y position of the element(s)
+    */</span>
+   getY: <span class="reserved">function</span>(el) {
+      <span class="reserved">return</span> <span class="reserved">this</span>.getXY(el)[1];
+   },
+   
+   <span class="comment">/**
+    * Set the position of an html element in page coordinates, regardless of how the element is positioned.
+    * The element(s) must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+    * <span class="attrib">@param</span> {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
+    * <span class="attrib">@param</span> {Array} pos Contains X &amp; Y values for new position (coordinates are page-based)
+    * <span class="attrib">@param</span> {Boolean} noRetry By default we try and set the position a second time if the first fails
+    */</span>
+   setXY: <span class="reserved">function</span>(el, pos, noRetry) {
+      var f = <span class="reserved">function</span>(el, self) {
+
+         var style_pos = self.getStyle(el, <span class="literal">'position'</span>);
+         <span class="reserved">if</span> (style_pos == <span class="literal">'static'</span>) { <span class="comment">// default to relative</span>
+            self.setStyle(el, <span class="literal">'position'</span>, <span class="literal">'relative'</span>);
+            style_pos = <span class="literal">'relative'</span>;
+         }
+         
+         var pageXY = YAHOO.util.Dom.getXY(el);
+         <span class="reserved">if</span> (pageXY === false) { <span class="reserved">return</span> false; } <span class="comment">// has to be part of doc to have pageXY</span>
+         
+         var delta = [
+            parseInt( YAHOO.util.Dom.getStyle(el, <span class="literal">'left'</span>), 10 ),
+            parseInt( YAHOO.util.Dom.getStyle(el, <span class="literal">'top'</span>), 10 )
+         ];
+      
+         <span class="reserved">if</span> ( isNaN(delta[0]) ) <span class="comment">// defaults to 'auto'</span>
+         { 
+            delta[0] = (style_pos == <span class="literal">'relative'</span>) ? 0 : el.offsetLeft;
+         } 
+         <span class="reserved">if</span> ( isNaN(delta[1]) ) <span class="comment">// defaults to 'auto'</span>
+         { 
+            delta[1] = (style_pos == <span class="literal">'relative'</span>) ? 0 : el.offsetTop;
+         } 
+   
+         <span class="reserved">if</span> (pos[0] !== null) { el.style.left = pos[0] - pageXY[0] + delta[0] + <span class="literal">'px'</span>; }
+         <span class="reserved">if</span> (pos[1] !== null) { el.style.top = pos[1] - pageXY[1] + delta[1] + <span class="literal">'px'</span>; }
+   
+         var newXY = self.getXY(el);
+   
+         <span class="comment">// if retry is true, try one more time if we miss</span>
+         <span class="reserved">if</span> (!noRetry &amp;&amp; (newXY[0] != pos[0] || newXY[1] != pos[1]) ) {
+            var retry = <span class="reserved">function</span>() { YAHOO.util.Dom.setXY(el, pos, true); };
+            setTimeout(retry, 0); <span class="comment">// "delay" for IE resize timing issue</span>
+         }
+      };
+      
+      <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>);
+   },
+   
+   <span class="comment">/**
+    * Set the X position of an html element in page coordinates, regardless of how the element is positioned.
+    * The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+    * <span class="attrib">@param</span> {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+    * <span class="attrib">@param</span> {Int} x to use as the X coordinate for the element(s).
+    */</span>
+   setX: <span class="reserved">function</span>(el, x) {
+      <span class="reserved">this</span>.setXY(el, [x, null]);
+   },
+   
+   <span class="comment">/**
+    * Set the Y position of an html element in page coordinates, regardless of how the element is positioned.
+    * The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+    * <span class="attrib">@param</span> {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+    * <span class="attrib">@param</span> {Int} x to use as the Y coordinate for the element(s).
+    */</span>
+   setY: <span class="reserved">function</span>(el, y) {
+      <span class="reserved">this</span>.setXY(el, [null, y]);
+   },
+   
+   <span class="comment">/**
+    * Returns the region position of the given element.
+    * The element must be part of the DOM tree to have a region (display:none or elements not appended return false).
+    * <span class="attrib">@param</span> {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+    * <span class="attrib">@return</span> {Region/Array} A Region or array of Region instances containing "top, left, bottom, right" member data.
+    */</span>
+   getRegion: <span class="reserved">function</span>(el) {
+      var f = <span class="reserved">function</span>(el, self) {
+         <span class="reserved">return</span> new YAHOO.util.Region.getRegion(el);
+      };
+      
+      <span class="reserved">return</span> <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>);
+   },
+   
+   <span class="comment">/**
+    * Returns the width of the client (viewport).
+    * <span class="attrib">@return</span> {Int} The width of the viewable area of the page.
+    */</span>
+   getClientWidth: <span class="reserved">function</span>() {
+      <span class="reserved">return</span> (
+         document.documentElement.offsetWidth
+         || document.body.offsetWidth
+      );
+   },
+   
+   <span class="comment">/**
+    * Returns the height of the client (viewport).
+    * <span class="attrib">@return</span> {Int} The height of the viewable area of the page.
+    */</span>
+   getClientHeight: <span class="reserved">function</span>() {
+      <span class="reserved">return</span> (
+         self.innerHeight 
+         || document.documentElement.clientHeight
+         || document.body.clientHeight
+      );
+   },
+
+   <span class="comment">/**
+    * Returns a array of HTMLElements with the given class
+    * For optimized performance, include a tag and/or root node if possible
+    * <span class="attrib">@param</span> {String} className The class name to match against
+    * <span class="attrib">@param</span> {String} tag (optional) The tag name of the elements being collected
+    * <span class="attrib">@param</span> {String/HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
+    * <span class="attrib">@return</span> {Array} An array of elements that have the given class name
+    */</span>
+   getElementsByClassName: <span class="reserved">function</span>(className, tag, root) {
+      var re = new RegExp(<span class="literal">'(?:^|\\s+)'</span> + className + <span class="literal">'(?:\\s+|$)'</span>);
+      
+      var method = <span class="reserved">function</span>(el) { <span class="reserved">return</span> re.test(el[<span class="literal">'className'</span>]); };
+      
+      <span class="reserved">return</span> <span class="reserved">this</span>.getElementsBy(method, tag, root);
+   },
+
+   <span class="comment">/**
+    * Determines whether an HTMLElement has the given className
+    * <span class="attrib">@param</span> {String/HTMLElement/Array} el The element or collection to test
+    * <span class="attrib">@param</span> {String} className the class name to search for
+    * <span class="attrib">@return</span> {Boolean/Array} A boolean value or array of boolean values
+    */</span>
+   hasClass: <span class="reserved">function</span>(el, className) {
+      var f = <span class="reserved">function</span>(el, self) {
+         var re = new RegExp(<span class="literal">'(?:^|\\s+)'</span> + className + <span class="literal">'(?:\\s+|$)'</span>);
+         <span class="reserved">return</span> re.test(el[<span class="literal">'className'</span>]);
+      };
+      
+      <span class="reserved">return</span> <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>);
+   },
+
+   <span class="comment">/**
+    * Adds a class name to a given element or collection of elements
+    * <span class="attrib">@param</span> {String/HTMLElement/Array} el The element or collection to add the class to
+    * <span class="attrib">@param</span> {String} className the class name to add to the class attribute
+    */</span>
+   addClass: <span class="reserved">function</span>(el, className) {
+      var f = <span class="reserved">function</span>(el, self) {
+         <span class="reserved">if</span> (self.hasClass(el, className)) { <span class="reserved">return</span>; } <span class="comment">// already present</span>
+         
+         el[<span class="literal">'className'</span>] = [el[<span class="literal">'className'</span>], className].join(<span class="literal">' '</span>);
+      };
+      
+      <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>);
+   },
+
+   <span class="comment">/**
+    * Removes a class name from a given element or collection of elements
+    * <span class="attrib">@param</span> {String/HTMLElement/Array} el The element or collection to remove the class from
+    * <span class="attrib">@param</span> {String} className the class name to remove from the class attribute
+    */</span>
+   removeClass: <span class="reserved">function</span>(el, className) {
+      var f = <span class="reserved">function</span>(el, self) {
+         <span class="reserved">if</span> (!self.hasClass(el, className)) { <span class="reserved">return</span>; } <span class="comment">// not present</span>
+         
+         var re = new RegExp(<span class="literal">'(?:^|\\s+)'</span> + className + <span class="literal">'(?:\\s+|$)'</span>, <span class="literal">'g'</span>);
+         var c = el[<span class="literal">'className'</span>];
+         
+         el[<span class="literal">'className'</span>] = c.replace( re, <span class="literal">' '</span>);
+      };
+      
+      <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>);
+   },
+   
+   <span class="comment">/**
+    * Replace a class with another class for a given element or collection of elements.
+    * If no oldClassName is present, the newClassName is simply added.
+    * <span class="attrib">@param</span> {String/HTMLElement/Array} el The element or collection to remove the class from
+    * <span class="attrib">@param</span> {String} oldClassName the class name to be replaced
+    * <span class="attrib">@param</span> {String} newClassName the class name that will be replacing the old class name
+    */</span>
+   replaceClass: <span class="reserved">function</span>(el, oldClassName, newClassName) {
+      var f = <span class="reserved">function</span>(el, self) {
+         self.removeClass(el, oldClassName);
+         self.addClass(el, newClassName);
+      };
+      
+      <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>);
+   },
+   
+   <span class="comment">/**
+    * Generates a unique ID
+    * <span class="attrib">@param</span> {String/HTMLElement/Array} el (optional) An optional element array of elements to add an ID to (no ID is added if one is already present)
+    * <span class="attrib">@param</span> {String} prefix (optional) an optional prefix to use (defaults to "yui-gen")
+    * <span class="attrib">@return</span> {String/Array} The generated ID, or array of generated IDs (or original ID if already present on an element)
+    */</span>
+   generateId: <span class="reserved">function</span>(el, prefix) {
+      prefix = prefix || <span class="literal">'yui-gen'</span>;
+      
+      var f = <span class="reserved">function</span>(el, self) {
+         el = el || {}; <span class="comment">// just generating ID in this case</span>
+         
+         <span class="reserved">if</span> (!el.id) { el.id = prefix + id_counter++; } <span class="comment">// dont override existing</span>
+         
+         <span class="reserved">return</span> el.id;
+      };
+      
+      <span class="reserved">return</span> <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>);
+   },
+   
+   <span class="comment">/**
+    * Determines whether an HTMLElement is an ancestor of another HTML element in the DOM hierarchy
+    * <span class="attrib">@param</span> {String/HTMLElement} haystack The possible ancestor
+    * <span class="attrib">@param</span> {String/HTMLElement} needle The possible descendent
+    * <span class="attrib">@return</span> {Boolean} Whether or not the haystack is an ancestor of needle
+    */</span>
+   isAncestor: <span class="reserved">function</span>(haystack, needle) {
+      haystack = <span class="reserved">this</span>.get(haystack);
+      <span class="reserved">if</span> (!haystack || !needle) { <span class="reserved">return</span> false; }
+      
+      var f = <span class="reserved">function</span>(needle, self) {
+         <span class="reserved">if</span> (haystack.contains &amp;&amp; ua.indexOf(<span class="literal">'safari'</span>) &lt; 0) 
+         { <span class="comment">// safari "contains" is broken</span>
+            <span class="reserved">return</span> haystack.contains(needle);
+         }
+         <span class="reserved">else</span> <span class="reserved">if</span> ( haystack.compareDocumentPosition ) 
+         {
+            <span class="reserved">return</span> !!(haystack.compareDocumentPosition(needle) &amp; 16);
+         }
+         <span class="reserved">else</span> 
+         { <span class="comment">// loop up and test each parent</span>
+            var parent = needle.parentNode;
+            
+            <span class="reserved">while</span> (parent) {
+               <span class="reserved">if</span> (parent == haystack) {
+                  <span class="reserved">return</span> true;
+               }
+               <span class="reserved">else</span> <span class="reserved">if</span> (parent.tagName == <span class="literal">'HTML'</span>) {
+                  <span class="reserved">return</span> false;
+               }
+               
+               parent = parent.parentNode;
+            }
+            
+            <span class="reserved">return</span> false;
+         }    
+      };
+      
+      <span class="reserved">return</span> <span class="reserved">this</span>.batch(needle, f, <span class="reserved">this</span>);     
+   },
+   
+   <span class="comment">/**
+    * Determines whether an HTMLElement is present in the current document
+    * <span class="attrib">@param</span> {String/HTMLElement} el The element to search for
+    * <span class="attrib">@return</span> {Boolean} Whether or not the element is present in the current document
+    */</span>
+   inDocument: <span class="reserved">function</span>(el) {
+      var f = <span class="reserved">function</span>(el, self) {
+         <span class="reserved">return</span> self.isAncestor(document.documentElement, el);
+      };
+      
+      <span class="reserved">return</span> <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>);
+   },
+   
+   <span class="comment">/**
+    * Returns a array of HTMLElements that pass the test applied by supplied boolean method
+    * For optimized performance, include a tag and/or root node if possible
+    * <span class="attrib">@param</span> {Function} method A boolean method to test elements with
+    * <span class="attrib">@param</span> {String} tag (optional) The tag name of the elements being collected
+    * <span class="attrib">@param</span> {String/HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
+    */</span>
+   getElementsBy: <span class="reserved">function</span>(method, tag, root) {
+      tag = tag || <span class="literal">'*'</span>;
+      root = <span class="reserved">this</span>.get(root) || document;
+      
+      var nodes = [];
+      var elements = root.getElementsByTagName(tag);
+      
+      <span class="reserved">for</span> (var i = 0, len = elements.length; i &lt; len; ++i) 
+      {
+         <span class="reserved">if</span> ( method(elements[i]) ) { nodes[nodes.length] = elements[i]; }
+      }
+
+      <span class="reserved">return</span> nodes;
+   },
+   
+   <span class="comment">/**
+    * Returns an array of elements that have had the supplied method applied.
+    * The method is called with the element(s) as the first arg, and the optional param as the second ( method(el, o) )
+    * <span class="attrib">@param</span> {String/HTMLElement/Array} el (optional) An element or array of elements to apply the method to
+    * <span class="attrib">@param</span> {String} method The method to apply to the element(s)
+    * <span class="attrib">@param</span> {Generic} (optional) o An optional arg that is passed to the supplied method
+    * <span class="attrib">@return</span> {HTMLElement/Array} The element(s) with the method applied
+    */</span>
+   batch: <span class="reserved">function</span>(el, method, o) {
+      el = <span class="reserved">this</span>.get(el);
+      
+      <span class="reserved">if</span> (!el || !el.length) { <span class="reserved">return</span> method(el, o); } <span class="comment">// is null or not a collection</span>
+      
+      var collection = [];
+      
+      <span class="reserved">for</span> (var i = 0, len = el.length; i &lt; len; ++i)
+      {
+         collection[collection.length] = method(el[i], o);
+      }
+      
+      <span class="reserved">return</span> collection;
+   }
+};
+
+</pre>
+			</div>
+		
+	</div>
+</div>
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+	version 1.9.5.8
+</div>
+
+
+</body>
+</html>
