@@ -1,8 +1,9 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-*/
+/*                                                                                                                                                      
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.                                                                                                    
+Code licensed under the BSD License:                                                                                                                    
+http://developer.yahoo.net/yui/license.txt                                                                                                              
+version: 0.10.0                                                                                                                                         
+*/ 
 
 /**
  * The CustomEvent class lets you define events for your application
@@ -164,12 +165,6 @@ YAHOO.util.Subscriber = function(fn, obj, bOverride) {
 YAHOO.util.Subscriber.prototype.contains = function(fn, obj) {
     return (this.fn == fn && this.obj == obj);
 };
-
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-*/
 
 // Only load this library once.  If it is loaded a second time, existing
 // events cannot be detached.
