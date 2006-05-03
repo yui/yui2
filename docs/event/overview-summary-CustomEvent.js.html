@@ -1,0 +1,368 @@
+
+<html>
+<head>
+	<title>JavaScript Documentation - CustomEvent.js</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Yui Event Utility</a></h3>
+
+	<div class="breadcrumbs">
+		
+			
+			
+			
+				<a href="./index.html">Yui Event Utility</a>
+				&gt;
+				<strong>CustomEvent.js</strong>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.CustomEvent.html">
+								YAHOO.util.CustomEvent</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.Event.html">
+								YAHOO.util.Event</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.Subscriber.html">
+								YAHOO.util.Subscriber</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-CustomEvent.js.html">
+								CustomEvent.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Event.js.html">
+								Event.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div class="main">
+			
+		
+		
+			
+			   <h2>CustomEvent.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+		
+		
+		
+		
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+				
+					
+						<a href="#classSummary">Class Summary</a> |
+					
+					
+				
+				
+				
+					<a href="#source">Source Code</a>
+				
+			</div>
+		
+			
+				<div class="section class summaries">
+					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+			
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+						<tr>
+							<td class="name">
+								<a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a>
+							</td>
+							<td class="overview">&nbsp;</td>
+						</tr>
+						
+						<tr>
+							<td class="name">
+								<a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a>
+							</td>
+							<td class="overview">Stores the subscriber information to be used when the event fires.</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		
+		
+		
+		
+			<div class="section source">
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<pre class="sourceview"><span class="comment">/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+*/</span>
+
+<span class="comment">/**
+ * The CustomEvent class lets you define events for your application
+ * that can be subscribed to by one or more independent component.
+ *
+ * <span class="attrib">@param</span> {String} type The type of event, which is passed to the callback
+ *                 when the event fires
+ * <span class="attrib">@param</span> {Object} oScope The context the event will fire from.  "this" will
+ *                 refer to this object in the callback.  Default value: 
+ *                 the window object.  The listener can override this.
+ * <span class="attrib">@constructor</span>
+ */</span>
+YAHOO.util.CustomEvent = <span class="reserved">function</span>(type, oScope) {
+    <span class="comment">/**
+     * The type of event, returned to subscribers when the event fires
+     * <span class="attrib">@type</span> string
+     */</span>
+    <span class="reserved">this</span>.type = type;
+
+    <span class="comment">/**
+     * The scope the the event will fire from by default.  Defaults to the window 
+     * obj
+     * <span class="attrib">@type</span> object
+     */</span>
+    <span class="reserved">this</span>.scope = oScope || window;
+
+    <span class="comment">/**
+     * The subscribers to this event
+     * <span class="attrib">@type</span> Subscriber[]
+     */</span>
+    <span class="reserved">this</span>.subscribers = [];
+<span class="comment">
+    // Register with the event utility for automatic cleanup.  Made optional</span>
+<span class="comment">    // so that CustomEvent can be used independently of pe.event</span>
+    <span class="reserved">if</span> (YAHOO.util.Event) { 
+        YAHOO.util.Event.regCE(<span class="reserved">this</span>);
+    }
+};
+
+YAHOO.util.CustomEvent.<span class="reserved">prototype</span> = {
+    <span class="comment">/**
+     * Subscribes the caller to this event
+     * <span class="attrib">@param</span> {Function} fn       The function to execute
+     * <span class="attrib">@param</span> {Object}   obj      An object to be passed along when the event fires
+     * <span class="attrib">@param</span> {boolean}  bOverride If true, the obj passed in becomes the execution
+     *                            scope of the listener
+     */</span>
+    subscribe: <span class="reserved">function</span>(fn, obj, bOverride) {
+        <span class="reserved">this</span>.subscribers.push( new YAHOO.util.Subscriber(fn, obj, bOverride) );
+    },
+
+    <span class="comment">/**
+     * Unsubscribes the caller from this event
+     * <span class="attrib">@param</span> {Function} fn  The function to execute
+     * <span class="attrib">@param</span> {Object}   obj An object to be passed along when the event fires
+     * <span class="attrib">@return</span> {boolean} True if the subscriber was found and detached.
+     */</span>
+    unsubscribe: <span class="reserved">function</span>(fn, obj) {
+        var found = false;
+        <span class="reserved">for</span> (var i=0, len=<span class="reserved">this</span>.subscribers.length; i&lt;len; ++i) {
+            var s = <span class="reserved">this</span>.subscribers[i];
+            <span class="reserved">if</span> (s &amp;&amp; s.contains(fn, obj)) {
+                <span class="reserved">this</span>._delete(i);
+                found = true;
+            }
+        }
+
+        <span class="reserved">return</span> found;
+    },
+
+    <span class="comment">/**
+     * Notifies the subscribers.  The callback functions will be executed
+     * from the scope specified when the event was created, and with the following
+     * parameters:
+     *   &lt;pre&gt;
+     *   - The type of event
+     *   - All of the arguments fire() was executed with as an array
+     *   - The custom object (if any) that was passed into the subscribe() method
+     *   &lt;/pre&gt;
+     *   
+     * <span class="attrib">@param</span> {Array} an arbitrary set of parameters to pass to the handler
+     */</span>
+    fire: <span class="reserved">function</span>() {
+        <span class="reserved">for</span> (var i=0, len=<span class="reserved">this</span>.subscribers.length; i&lt;len; ++i) {
+            var s = <span class="reserved">this</span>.subscribers[i];
+            <span class="reserved">if</span> (s) {
+                var scope = (s.override) ? s.obj : <span class="reserved">this</span>.scope;
+                s.fn.call(scope, <span class="reserved">this</span>.type, arguments, s.obj);
+            }
+        }
+    },
+
+    <span class="comment">/**
+     * Removes all listeners
+     */</span>
+    unsubscribeAll: <span class="reserved">function</span>() {
+        <span class="reserved">for</span> (var i=0, len=<span class="reserved">this</span>.subscribers.length; i&lt;len; ++i) {
+            <span class="reserved">this</span>._delete(i);
+        }
+    },
+
+    <span class="comment">/**
+     * <span class="attrib">@private</span>
+     */</span>
+    _delete: <span class="reserved">function</span>(index) {
+        var s = <span class="reserved">this</span>.subscribers[index];
+        <span class="reserved">if</span> (s) {
+            delete s.fn;
+            delete s.obj;
+        }
+
+        delete <span class="reserved">this</span>.subscribers[index];
+    }
+};
+<span class="comment">
+/////////////////////////////////////////////////////////////////////</span>
+
+<span class="comment">/**
+ * <span class="attrib">@class</span> Stores the subscriber information to be used when the event fires.
+ * <span class="attrib">@param</span> {Function} fn       The function to execute
+ * <span class="attrib">@param</span> {Object}   obj      An object to be passed along when the event fires
+ * <span class="attrib">@param</span> {boolean}  bOverride If true, the obj passed in becomes the execution
+ *                            scope of the listener
+ * <span class="attrib">@constructor</span>
+ */</span>
+YAHOO.util.Subscriber = <span class="reserved">function</span>(fn, obj, bOverride) {
+    <span class="comment">/**
+     * The callback that will be execute when the event fires
+     * <span class="attrib">@type</span> function
+     */</span>
+    <span class="reserved">this</span>.fn = fn;
+
+    <span class="comment">/**
+     * An optional custom object that will passed to the callback when
+     * the event fires
+     * <span class="attrib">@type</span> object
+     */</span>
+    <span class="reserved">this</span>.obj = obj || null;
+
+    <span class="comment">/**
+     * The default execution scope for the event listener is defined when the
+     * event is created (usually the object which contains the event).
+     * By setting override to true, the execution scope becomes the custom
+     * object passed in by the subscriber
+     * <span class="attrib">@type</span> boolean
+     */</span>
+    <span class="reserved">this</span>.override = (bOverride);
+};
+
+<span class="comment">/**
+ * Returns true if the fn and obj match this objects properties.
+ * Used by the unsubscribe method to match the right subscriber.
+ *
+ * <span class="attrib">@param</span> {Function} fn the function to execute
+ * <span class="attrib">@param</span> {Object} obj an object to be passed along when the event fires
+ * <span class="attrib">@return</span> {boolean} true if the supplied arguments match this 
+ *                   subscriber's signature.
+ */</span>
+YAHOO.util.Subscriber.<span class="reserved">prototype</span>.contains = <span class="reserved">function</span>(fn, obj) {
+    <span class="reserved">return</span> (<span class="reserved">this</span>.fn == fn &amp;&amp; <span class="reserved">this</span>.obj == obj);
+};
+
+</pre>
+			</div>
+		
+	</div>
+</div>
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+</div>
+
+
+</body>
+</html>
