@@ -1,0 +1,202 @@
+<!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Yahoo! UI Library - Tree Control</title>
+<link rel="stylesheet" type="text/css" href="css/screen.css">
+<style type="text/css">
+    .emLabel, .emLabel:link, .emLabel:visited, .emLabel:hover { 
+        font-weight: bold;
+    }
+</style>
+</head>
+  
+<body onload="treeInit()">
+
+<link rel="stylesheet" type="text/css" href="css/menu/tree.css">
+
+<div id="pageTitle">
+	<h3>Tree Control</h3>
+</div>
+
+
+
+<div id="container">
+<img class="ylogo" src="img/logo.gif" alt="" />
+  <div id="containerTop">
+    <div id="header">
+      <h1>
+      
+      </h1>
+      <h4>&nbsp;</h4>
+    </div>
+    <div id="main">
+
+<div id="rightbar">
+
+<div id="rightBarPad">
+<h3>Examples</h3>
+
+<div id="linkage">
+<ul>
+<li><a href="default.html?mode=dist">Default Tree Widget</a></li>
+<li><a href="folders.html?mode=dist">Folder View</a></li>
+
+
+<li><a href="menu.html?mode=dist">Menu</a></li>
+<li><a href="html.html?mode=dist">HTML Node</a></li>
+<li><a href="check.html?mode=dist">Task List</a></li>
+</ul>
+
+</div> 
+
+</div>
+
+</div>
+
+
+  <div id="content">
+    <form name="mainForm" action="javscript:;">
+	<div class="newsItem">
+	  <h3>Menu TreeView Widget</h3>
+	  <p>
+		The presentation differences between the default treeview widget and this
+		one were accomplished by modifying the css styles in tree.css.  The
+		functionality is the same, except the menu does not allow multiple siblings
+		to be expanded at one time (when you expand a node, all of its expanded 
+		siblings are collapsed.
+	  </p>
+
+	  <div id="expandcontractdiv">
+		<a href="javascript:tree.expandAll()">Expand all</a>
+		<a href="javascript:tree.collapseAll()">Collapse all</a>
+	  </div>
+	  <div id="treeDiv1"></div>
+
+	</div>
+	</form>
+  </div>
+	
+      <div id="footerContainer">
+        <div id="footer">
+          <p>&nbsp;</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/connection/connection.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
+
+<script type="text/javascript" src="js/log.js"></script>
+<script type="text/javascript" src="js/json.js" ></script>
+
+<script type="text/javascript" src="../../build/treeview/treeview.js" ></script>
+<script type="text/javascript" src="js/TaskNode.js"></script>
+<script type="text/javascript" src="js/CheckOnClickNode.js"></script>
+
+<script type="text/javascript">
+
+	var gLogger;
+	var tree;
+	var nodes = new Array();
+	var nodeIndex = 0;
+	
+	function treeInit() {
+		if (typeof(ygLogger) != "undefined") {
+			ygLogger.init(document.getElementById("logDiv"));
+			gLogger = new ygLogger("basic.php");
+		}
+
+		buildRandomTextNodeTree();
+	}
+
+	function buildRandomTextNodeTree() {
+		tree = new YAHOO.widget.TreeView("treeDiv1");
+		tree.onExpand = function(node) {
+			// alert(node.index + " was expanded"); 
+		}
+
+		tree.onCollapse = function(node) {
+			// alert(node.index + " was collapsed"); 
+		}
+
+		for (var i = 0; i < Math.floor((Math.random()*4) + 3); i++) {
+			var thisId = nodeIndex++;
+			var thisLabel = "menu" + i;
+			// nodes[thisId] = new YAHOO.widget.TextNode({ label: thisLabel }, tree.getRoot(), false);
+			// nodes[thisId] = new YAHOO.widget.MenuNode({label:thisLabel, href:"http://asdf"}, tree.getRoot(), false);
+			nodes[thisId] = new YAHOO.widget.MenuNode(thisLabel, tree.getRoot(), false);
+
+			var p1 = nodes[thisId];
+			var l1 = thisLabel;
+
+			for (var j = 0; j < Math.floor(Math.random()*6) + 1; j++) { 
+				thisId = nodeIndex++;
+				thisLabel = l1 + "-" + j;
+				// nodes[thisId] = new YAHOO.widget.TextNode({ label: thisLabel }, p1, true);
+				nodes[thisId] = new YAHOO.widget.MenuNode(thisLabel, p1, false);
+
+				var p2 = nodes[thisId];
+				var l2 = thisLabel;
+
+				for (var k =0; k < Math.floor(Math.random()*6) + 1; k++) { 
+					thisId = nodeIndex++;
+					thisLabel = l2 + "-" + k;
+
+                    /*
+					var data = {
+							id: thisId,
+							label: thisLabel, 
+							href: "javascript:onLabelClick(" + thisId + ")" 
+						}
+*/
+
+					var data = {
+							label: thisLabel, 
+                            href: "javascript:void(window.open('http://www.yahoo.com'))" 
+						}
+					nodes[thisId] = new YAHOO.widget.TextNode(data, p2, false);
+                    nodes[thisId].labelStyle = "emLabel";
+
+					// nodes[thisId] = new YAHOO.widget.MenuNode(thisLabel, p2, false);
+				}
+
+			}
+
+		}
+
+		// nodes[0] = new YAHOO.widget.TextNode(tree.getRoot(), false, "label-0");
+		tree.draw();
+	}
+
+	var selectedId = null;
+	function onLabelClick(id) {
+
+		var node = tree.getNodeByProperty("id", id);
+		// alert(node.label);
+
+		var el = node.getLabelEl()
+
+        gLogger.debug("pos: " + YAHOO.util.Dom.getXY(el));
+
+        el.style.backgroundColor = "#c5dbfc";
+		
+
+		if (selectedId != null) {
+			node = tree.getNodeByProperty("id", selectedId);
+			node.getLabelEl().style.backgroundColor = "white";
+		}
+
+		selectedId = id;
+	}
+
+</script>
+
+  </body>
+</html>
+ 

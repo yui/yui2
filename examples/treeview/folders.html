@@ -1,0 +1,139 @@
+<!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+<title>Yahoo! UI Library - Tree Control</title>
+<link rel="stylesheet" type="text/css" href="css/screen.css">
+</head>
+  
+<body onload="treeInit()">
+
+<link rel="stylesheet" type="text/css" href="css/folders/tree.css">
+
+<div id="pageTitle">
+	<h3>Tree Control</h3>
+</div>
+
+
+
+<div id="container">
+<img class="ylogo" src="img/logo.gif" alt="" />
+  <div id="containerTop">
+    <div id="header">
+      <h1>
+      
+      </h1>
+      <h4>&nbsp;</h4>
+    </div>
+    <div id="main">
+
+<div id="rightbar">
+
+<div id="rightBarPad">
+<h3>Examples</h3>
+
+<div id="linkage">
+<ul>
+<li><a href="default.html?mode=dist">Default Tree Widget</a></li>
+<li><a href="folders.html?mode=dist">Folder View</a></li>
+
+
+<li><a href="menu.html?mode=dist">Menu</a></li>
+<li><a href="html.html?mode=dist">HTML Node</a></li>
+<li><a href="check.html?mode=dist">Task List</a></li>
+</ul>
+
+</div> 
+
+</div>
+
+</div>
+
+
+  <div id="content">
+    <form name="mainForm" action="javscript:;">
+	<div class="newsItem">
+	  <h3>Folders</h3>
+	  <p>
+		
+	  </p>
+
+	  <div id="expandcontractdiv">
+		<a href="javascript:tree.expandAll()">Expand all</a>
+		<a href="javascript:tree.collapseAll()">Collapse all</a>
+	  </div>
+	  <div id="treeDiv1"></div>
+
+	</div>
+	</form>
+  </div>
+	
+      <div id="footerContainer">
+        <div id="footer">
+          <p>&nbsp;</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/connection/connection.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
+
+<script type="text/javascript" src="js/log.js"></script>
+<script type="text/javascript" src="js/json.js" ></script>
+
+<script type="text/javascript" src="../../build/treeview/treeview.js" ></script>
+<script type="text/javascript" src="js/TaskNode.js"></script>
+<script type="text/javascript" src="js/CheckOnClickNode.js"></script>
+
+<script type="text/javascript">
+
+	var gLogger;
+	var tree;
+	var nodes = new Array();
+	var nodeIndex;
+	
+	function treeInit() {
+		if (typeof(ygLogger) != "undefined") {
+			ygLogger.init(document.getElementById("logDiv"));
+			gLogger = new ygLogger("basic.php");
+		}
+
+		buildRandomTextNodeTree();
+	}
+	
+	function buildRandomTextNodeTree() {
+		tree = new YAHOO.widget.TreeView("treeDiv1");
+
+		for (var i = 0; i < Math.floor((Math.random()*4) + 3); i++) {
+			var tmpNode = new YAHOO.widget.TextNode("label-" + i, tree.getRoot(), false);
+			buildRandomTextBranch(tmpNode);
+		}
+
+		tree.draw();
+	}
+
+	var callback = null;
+
+	function buildRandomTextBranch(node) {
+		if (node.depth < 6) {
+			gLogger.debug("buildRandomTextBranch: " + node.index);
+			for ( var i = 0; i < Math.floor(Math.random() * 4) ; i++ ) {
+				var tmpNode = new YAHOO.widget.TextNode(node.label + "-" + i, node, false);
+				buildRandomTextBranch(tmpNode);
+			}
+		}
+	}
+
+</script>
+
+  </body>
+</html>
+ 
