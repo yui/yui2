@@ -2,6 +2,7 @@
 	<head>
         <script src = "../../build/yahoo.js" ></script>
         <script src = "../../build/connection-min.js" ></script>
+		<link rel="stylesheet" type="text/css" href="../../docs/assets/dpSyntaxHighlighter.css" />
 	</head>
 <body>
 <h1> Connection Manager GET Transaction</h1>
@@ -11,29 +12,26 @@ The following code example provides a step-by-step approach to creating a simple
 </p>
 
 <h3>Source file and dependencies</h3>
-<p>Load the YAHOO namespace and connection manager source file</p>
-<pre>
-  &lt;script src="yahoo.js"&gt;
-  &lt;script src="connection.js"&gt;
-</pre>
+<p>Load the YAHOO namespace and connection manager source file:</p>
+
+<pre><textarea name="code" class="JScript" cols="60" rows="1"><script src="yahoo.js"></script>
+<script src="connection.js"></script></textarea></pre>
 
 <h3>Assemble the Querystring</h3>
-<p>Construct a querystring with two key-value pairs of <em>username - anonymous</em> and <em>userid - 0</em></p>
-<pre>
-  /*
+<p>Construct a querystring with two key-value pairs of <em>username = anonymous</em> and <em>userid = 0</em>:</p>
+
+<pre><textarea name="code" class="JScript" cols="60" rows="1">  /*
    *
    * Create a querystring with example key-value pairs of
    * username and userid.  Remember to encode the querystring
    * if and when the string contains special characters.
    *
    */
-  var sUrl = "get.php?username=anonymous&userid=0";
-</pre>
+  var sUrl = "get.php?username=anonymous&userid=0";</textarea></pre>
 
 <h3>The Callback Object</h3>
 <p>Create a callback object to handle the response, and pass an object literal to both success and failure as the argument.</p>
-<pre>
-var handleSuccess = function(o){
+<pre><textarea name="code" class="JScript" cols="60" rows="1">var handleSuccess = function(o){
 
 	function parseHeaders(){
 		var allHeaders = headerStr.split("\n");
@@ -64,8 +62,7 @@ var callback =
   success:handleSuccess,
   failure: handleFailure
   argument: { foo:"foo", bar:"bar" }
-};
-</pre>
+};</textarea></pre>
 
 <h3>Initiate the GET Transaction</h3>
 <p>Call YAHOO.util.Connect.asyncRequest to send the request to get.php,
@@ -76,9 +73,9 @@ the server response data.
 <p>
 Note: Caching and GET idempotency.
 </p>
-<pre>
-  var request = YAHOO.util.Connection.asyncRequest('GET', sUrl, callback);
-</pre>
+
+<pre><textarea name="code" class="JScript" cols="60" rows="1">var request = YAHOO.util.Connection.asyncRequest('GET', sUrl, callback);</textarea></pre>
+
 <div id="container"></div>
 <script>
 var div = document.getElementById('container');
@@ -116,6 +113,11 @@ function makeRequest(){
 	var request = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 }
 </script>
-<form><input type="button" value="Send a GET Request" onclick="makeRequest();"></form>
+<form><input type="button" value="Send a GET Request" onClick="makeRequest();"></form>
+
+<script src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
 </body>
 </html>
