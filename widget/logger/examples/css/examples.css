@@ -9,3 +9,5 @@
     #ylogo {top:10px;left:10px;}
     #title {position:absolute;top:10px;left:90px;}
     #bd h1,h2,h3,p{margin:1em;}
+    
+    #content .ylog_input {width:40%;}

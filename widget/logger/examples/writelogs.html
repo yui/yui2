@@ -6,10 +6,6 @@
 <link rel="stylesheet" href="./css/fonts.css" type="text/css"  />
 <link rel="stylesheet" href="./css/logger.css" type="text/css" />
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
-
-<style type="text/css">
-    #content .ylog_input {width:40%;}
-</style>
 </head>
 
 <body>
@@ -69,66 +65,89 @@
 <script src="./js/dom.js"></script>
 <script src="./js/event.js"></script>
 <script src="./js/dragdrop.js"></script>
-<script src="./js/logger.js"></script>
+<!--<script src="./js/logger.js"></script>-->
+<script src="../src/js/Logger.js"></script>
+<script src="../src/js/LogReader.js"></script>
+<script src="../src/js/LogWriter.js"></script>
 <!-- Library ends -->
 
 <script>
-<!--
-    YAHOO.util.Event.addListener(this,'load',myClassInit);
-    var myLogReader = new YAHOO.widget.LogReader();
+YAHOO.example.LogWriter = function() {
+    var myLogReader;
+    var myLogWriter;
 
-    function myClassInit() {
-        // Instantiate a custom logwriter with the name "myClass"
-        myLogWriter = new YAHOO.widget.LogWriter("myClass");
+    return {
+        init: function() {
+            // Instantiate a logreader
+            myLogReader = new YAHOO.widget.LogReader();
+            // Instantiate a custom logwriter with the name "myClass"
+            myLogWriter = new YAHOO.widget.LogWriter("myClass");
+
+            // Write out some logs
+            YAHOO.example.LogWriter.writeGlobalLogs();
+            YAHOO.example.LogWriter.writeMyLoggerLogs();
+
+            // Define interesting moments that cause log messages to be written by "myClass"
+            var oSelf = YAHOO.example.LogWriter;
+            YAHOO.util.Event.addListener(document.getElementById('btn_loginfo'),'click',oSelf.onLogInfoClick);
+            YAHOO.util.Event.addListener(document.getElementById('btn_logwarn'),'click',oSelf.onLogWarnClick);
+            YAHOO.util.Event.addListener(document.getElementById('btn_logerror'),'click',oSelf.onLogErrorClick);
+            YAHOO.util.Event.addListener(document.getElementById('btn_logtime'),'click',oSelf.onLogTimeClick);
+            YAHOO.util.Event.addListener(document.getElementById('btn_logcustom'),'click',oSelf.onLogCustomClick);
+        },
+
+        hideAllReaders: function() {
+            myLogReader.hide();
+        },
+
+        showAllReaders: function() {
+            myLogReader.show();
+        },
+
+        writeGlobalLogs: function() {
+            // You can call the global function YAHOO.log() anytime, anywhere
+            YAHOO.log("Yahoo! is great"); // defaults to type "info"
+            YAHOO.log("Yahoo! is great", "info");
+            YAHOO.log("Yahoo! is great", "warn");
+            YAHOO.log("Yahoo! is great", "error");
+            YAHOO.log("Yahoo! is great", "time");
+            YAHOO.log("Yahoo! is great", "foobar"); // custom
+        },
+
+        writeMyLoggerLogs: function () {
+            // Or you can instantiate your own logwriter and use it to write log messages
+            myLogWriter.log("My class is great"); // defaults to type "info"
+            myLogWriter.log("My class is great", "info");
+            myLogWriter.log("My class is great", "warn");
+            myLogWriter.log("My class is great", "error");
+            myLogWriter.log("My class is great", "time");
+            myLogWriter.log("My class is great", "foobar"); // custom
+            myLogWriter.log("My class uses another custom type: myWarn", "myWarn"); //custom
+        },
         
-        // Write out some logs
-        writeGlobalLogs();
-        writeMyLoggerLogs();
-
-        // Define interesting moments that cause log messages to be written by "myClass"
-        YAHOO.util.Event.addListener(document.getElementById('btn_loginfo'),'click',onLogInfoClick);
-        function onLogInfoClick() {
+        onLogInfoClick: function() {
             myLogWriter.log(document.getElementById('ylog_inputinfo').value,'info');
-        }
-        YAHOO.util.Event.addListener(document.getElementById('btn_logwarn'),'click',onLogWarnClick);
-        function onLogWarnClick() {
+        },
+
+        onLogWarnClick: function() {
             myLogWriter.log(document.getElementById('ylog_inputwarn').value,'warn');
-        }
-        YAHOO.util.Event.addListener(document.getElementById('btn_logerror'),'click',onLogErrorClick);
-        function onLogErrorClick() {
+        },
+
+        onLogErrorClick: function() {
             myLogWriter.log(document.getElementById('ylog_inputerror').value,'error');
-        }
-        YAHOO.util.Event.addListener(document.getElementById('btn_logtime'),'click',onLogTimeClick);
-        function onLogTimeClick() {
+        },
+
+        onLogTimeClick: function() {
             myLogWriter.log(document.getElementById('ylog_inputtime').value,'time');
-        }
-        YAHOO.util.Event.addListener(document.getElementById('btn_logcustom'),'click',onLogCustomClick);
-        function onLogCustomClick() {;
+        },
+
+        onLogCustomClick: function() {
             myLogWriter.log(document.getElementById('ylog_inputcustommsg').value,document.getElementById('ylog_inputcustomtype').value);
         }
     }
-    
-    function writeGlobalLogs() {
-        // You can call the global function YAHOO.log() anytime, anywhere
-        YAHOO.log("Yahoo! is great"); // defaults to type "info"
-        YAHOO.log("Yahoo! is great", "info");
-        YAHOO.log("Yahoo! is great", "warn");
-        YAHOO.log("Yahoo! is great", "error");
-        YAHOO.log("Yahoo! is great", "time");
-        YAHOO.log("Yahoo! is great", "foobar"); // custom
-    }
-    
-    function writeMyLoggerLogs() {
-        // Or you can instantiate your own logwriter and use it to write log messages
-        myLogWriter.log("My class is great"); // defaults to type "info"
-        myLogWriter.log("My class is great", "info");
-        myLogWriter.log("My class is great", "warn");
-        myLogWriter.log("My class is great", "error");
-        myLogWriter.log("My class is great", "time");
-        myLogWriter.log("My class is great", "foobar"); // custom
-        myLogWriter.log("My class uses another custom type: myWarn", "myWarn"); //custom
-    }
-//-->
+}();
+
+YAHOO.util.Event.addListener(this,'load',YAHOO.example.LogWriter.init);
 </script>
 </div>
 </body>

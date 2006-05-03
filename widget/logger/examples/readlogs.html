@@ -6,13 +6,6 @@
 <link rel="stylesheet" href="./css/fonts.css" type="text/css"  />
 <link rel="stylesheet" href="./css/logger.css" type="text/css" />
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
-
-<style type="text/css">
-    /* custom ylogger style */
-    #mylogger {position:fixed;right:1em;bottom:1em;width:30em;}
-
-    #content .ylog_input {width:40%;}
-</style>
 </head>
 
 <body>
@@ -22,14 +15,10 @@
 </div>
 
 <div id="bd">
-    <!-- Logger begins -->
-    <div id="mylogger" class="ylogger"></div>
-    <!-- Logger ends -->
-
     <!-- Content begins -->
     <div id="content">
-        <h3>Default Logger Example</h3>
-        <p>This is an example of a default Logger implementation.</p>
+        <h3>Default LogReader Example</h3>
+        <p>This is an example of a default LogReader implementation.</p>
 
         <p><input id="ylog_inputinfo" class="ylog_input" type="text" value="Log an info message.">
             <button onclick="YAHOO.log(document.getElementById('ylog_inputinfo').value,'info')">Log</button></p>
@@ -45,8 +34,8 @@
             <input id="ylog_inputcustomtype" type="text" value="myType">
             <button onclick="YAHOO.log(document.getElementById('ylog_inputcustommsg').value,document.getElementById('ylog_inputcustomtype').value)">Log</button></p>
 
-        <p><a href="javascript:doHideAll();">Hide All Log Readers</a></p>
-        <p><a href="javascript:doShowAll();">Show All Log Readers</a></p>
+        <p><a href="javascript:YAHOO.example.logReader.doHideAll();">Hide All LogReaders</a></p>
+        <p><a href="javascript:YAHOO.example.logReader.doShowAll();">Show All LogReaders</a></p>
         
         <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
         Sed eu enim in neque nonummy suscipit. Sed non metus. Aliquam pretium, massa
@@ -112,27 +101,36 @@
 <script src="./js/dom.js"></script>
 <script src="./js/event.js"></script>
 <script src="./js/dragdrop.js"></script>
-<script src="./js/logger.js"></script>
+<!--<script src="./js/logger.js"></script>-->
+<script src="../src/js/Logger.js"></script>
+<script src="../src/js/LogReader.js"></script>
+<script src="../src/js/LogWriter.js"></script>
 <!-- Library ends -->
 
 <script>
-<!--
-    function initLogReader() {
-        myLogReader1 = new YAHOO.widget.LogReader(); // totally default
-        myLogReader2 = new YAHOO.widget.LogReader("mylogger"); // custom div
-    }
-    YAHOO.util.Event.addListener(this,'load',initLogReader);
+YAHOO.example.LogReader = function() {
+    var myLogReader1;
+    var myLogReader2;
     
-    function doHideAll() {
-        myLogReader1.hide();
-        myLogReader2.hide();
+    return {
+        init: function() {
+            myLogReader1 = new YAHOO.widget.LogReader();
+            myLogReader2 = new YAHOO.widget.LogReader();
+        },
+
+        hideAllReaders: function() {
+            myLogReader1.hide();
+            myLogReader2.hide();
+        },
+
+        showAllReaders: function() {
+            myLogReader1.show();
+            myLogReader2.show();
+        }
     }
-    
-    function doShowAll() {
-        myLogReader1.show();
-        myLogReader2.show();
-    }
-//-->
+}();
+
+YAHOO.util.Event.addListener(this,'load',YAHOO.example.LogReader.init);
 </script>
 </div>
 </body>
