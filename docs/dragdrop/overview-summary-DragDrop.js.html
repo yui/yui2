@@ -1,0 +1,1092 @@
+
+<html>
+<head>
+	<title>JavaScript Documentation - DragDrop.js</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Drag and Drop</a></h3>
+
+	<div class="breadcrumbs">
+		
+			
+			
+			
+				<a href="./index.html">Drag and Drop</a>
+				&gt;
+				<strong>DragDrop.js</strong>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DD.html">
+								YAHOO.util.DD</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DDProxy.html">
+								YAHOO.util.DDProxy</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DDTarget.html">
+								YAHOO.util.DDTarget</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DragDrop.html">
+								YAHOO.util.DragDrop</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DragDropMgr.html">
+								YAHOO.util.DragDropMgr</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-DD.js.html">
+								DD.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DDProxy.js.html">
+								DDProxy.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DDTarget.js.html">
+								DDTarget.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DragDrop.js.html">
+								DragDrop.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DragDropMgr.js.html">
+								DragDropMgr.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div class="main">
+			
+		
+		
+			
+			   <h2>DragDrop.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+		
+		
+		
+		
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+				
+					
+						<a href="#classSummary">Class Summary</a> |
+					
+					
+				
+				
+				
+					<a href="#source">Source Code</a>
+				
+			</div>
+		
+			
+				<div class="section class summaries">
+					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+			
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+						<tr>
+							<td class="name">
+								<a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a>
+							</td>
+							<td class="overview">&nbsp;</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		
+		
+		
+		
+			<div class="section source">
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<pre class="sourceview"><span class="comment">/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */</span>
+
+<span class="comment">/**
+ * Defines the interface and base operation of items that that can be 
+ * dragged or can be drop targets.  It was designed to be extended, overriding
+ * the event handlers for startDrag, onDrag, onDragOver, onDragOut.
+ * Up to three html elements can be associated with a DragDrop instance:
+ * &lt;ul&gt;
+ * &lt;li&gt;linked element: the element that is passed into the constructor.
+ * This is the element which defines the boundaries for interaction with 
+ * other DragDrop objects.&lt;/li&gt;
+ * &lt;li&gt;handle element(s): The drag operation only occurs if the element that 
+ * was clicked matches a handle element.  By default this is the linked 
+ * element, but there are times that you will want only a portion of the 
+ * linked element to initiate the drag operation, and the setHandleElId() 
+ * method provides a way to define this.&lt;/li&gt;
+ * &lt;li&gt;drag element: this represents an the element that would be moved along
+ * with the cursor during a drag operation.  By default, this is the linked
+ * element itself as in &lt;a href="YAHOO.util.DD.html#"&gt;YAHOO.util.DD&lt;/a&gt;.  setDragElId() lets you define
+ * a separate element that would be moved, as in &lt;a href="YAHOO.util.DDProxy.html#"&gt;YAHOO.util.DDProxy&lt;/a&gt;
+ * &lt;/li&gt;
+ * &lt;/ul&gt;
+ * This class should not be instantiated until the onload event to ensure that
+ * the associated elements are available.
+ * The following would define a DragDrop obj that would interact with any 
+ * other * DragDrop obj in the "group1" group:
+ * &lt;pre&gt;
+ *  dd = new YAHOO.util.DragDrop("div1", "group1");
+ * &lt;/pre&gt;
+ * Since none of the event handlers have been implemented, nothing would 
+ * actually happen if you were to run the code above.  Normally you would 
+ * override this class or one of the default implementations, but you can 
+ * also override the methods you want on an instance of the class...
+ * &lt;pre&gt;
+ *  dd.onDragDrop = function(e, id) {
+ *   alert("dd was dropped on " + id);
+ *  }
+ * &lt;/pre&gt;
+ * <span class="attrib">@constructor</span>
+ * <span class="attrib">@param</span> {String} id of the element that is linked to this instance
+ * <span class="attrib">@param</span> {String} sGroup the group of related DragDrop objects
+ */</span>
+YAHOO.util.DragDrop = <span class="reserved">function</span>(id, sGroup) {
+    <span class="reserved">if</span> (id) {
+        <span class="reserved">this</span>.init(id, sGroup); 
+    }
+};
+
+YAHOO.util.DragDrop.<span class="reserved">prototype</span> = {
+
+    <span class="comment">/**
+     * The id of the element associated with this object.  This is what we 
+     * refer to as the "linked element" because the size and position of 
+     * this element is used to determine when the drag and drop objects have 
+     * interacted.
+     *
+     * <span class="attrib">@type</span> String
+     */</span>
+    id: null,
+
+    <span class="comment">/**
+     * The id of the element that will be dragged.  By default this is same 
+     * as the linked element , but could be changed to another element. Ex: 
+     * YAHOO.util.DDProxy
+     *
+     * <span class="attrib">@type</span> String
+     * <span class="attrib">@private</span>
+     */</span>
+    dragElId: null, 
+
+    <span class="comment">/**
+     * the id of the element that initiates the drag operation.  By default 
+     * this is the linked element, but could be changed to be a child of this
+     * element.  This lets us do things like only starting the drag when the 
+     * header element within the linked html element is clicked.
+     *
+     * <span class="attrib">@type</span> String
+     * <span class="attrib">@private</span>
+     */</span>
+    handleElId: null, 
+
+    <span class="comment">/**
+     * An array of HTML tags that will be ignored if clicked.
+     * <span class="attrib">@type</span> string[]
+     */</span>
+    invalidHandleTypes: null, 
+
+    <span class="comment">/**
+     * The linked element's absolute X position at the time the drag was 
+     * started
+     *
+     * <span class="attrib">@type</span> int
+     * <span class="attrib">@private</span>
+     */</span>
+    startPageX: 0,
+
+    <span class="comment">/**
+     * The linked element's absolute X position at the time the drag was 
+     * started
+     *
+     * <span class="attrib">@type</span> int
+     * <span class="attrib">@private</span>
+     */</span>
+    startPageY: 0,
+
+    <span class="comment">/**
+     * The group defines a logical collection of DragDrop objects that are 
+     * related.  Instances only get events when interacting with other 
+     * DragDrop object in the same group.  This lets us define multiple 
+     * groups using a single DragDrop subclass if we want.
+     * <span class="attrib">@type</span> string[]
+     */</span>
+    groups: null,
+
+    <span class="comment">/**
+     * Individual drag/drop instances can be locked.  This will prevent 
+     * onmousedown start drag.
+     *
+     * <span class="attrib">@type</span> boolean
+     * <span class="attrib">@private</span>
+     */</span>
+    locked: false,
+
+    <span class="comment">/**
+     * Lock this instance
+     */</span>
+    lock: <span class="reserved">function</span>() { <span class="reserved">this</span>.locked = true; },
+
+    <span class="comment">/**
+     * Unlock this instace
+     */</span>
+    unlock: <span class="reserved">function</span>() { <span class="reserved">this</span>.locked = false; },
+
+    <span class="comment">/**
+     * By default, all insances can be a drop target.  This can be disabled by
+     * setting isTarget to false.
+     *
+     * <span class="attrib">@type</span> boolean
+     */</span>
+    isTarget: true,
+
+    <span class="comment">/**
+     * The padding configured for this drag and drop object for calculating
+     * the drop zone intersection with this object.
+     * <span class="attrib">@type</span> int[]
+     */</span>
+    padding: null,
+
+    <span class="comment">/**
+     * <span class="attrib">@private</span>
+     */</span>
+    _domRef: null,
+
+    <span class="comment">/**
+     * Internal typeof flag
+     * <span class="attrib">@private</span>
+     */</span>
+    __ygDragDrop: true,
+
+    <span class="comment">/**
+     * Set to true when horizontal contraints are applied
+     *
+     * <span class="attrib">@type</span> boolean
+     * <span class="attrib">@private</span>
+     */</span>
+    constrainX: false,
+
+    <span class="comment">/**
+     * Set to true when vertical contraints are applied
+     *
+     * <span class="attrib">@type</span> boolean
+     * <span class="attrib">@private</span>
+     */</span>
+    constrainY: false,
+
+    <span class="comment">/**
+     * The left constraint
+     *
+     * <span class="attrib">@type</span> int
+     * <span class="attrib">@private</span>
+     */</span>
+    minX: 0,
+
+    <span class="comment">/**
+     * The right constraint
+     *
+     * <span class="attrib">@type</span> int
+     * <span class="attrib">@private</span>
+     */</span>
+    maxX: 0,
+
+    <span class="comment">/**
+     * The up constraint 
+     *
+     * <span class="attrib">@type</span> int
+     * <span class="attrib">@private</span>
+     */</span>
+    minY: 0,
+
+    <span class="comment">/**
+     * The down constraint 
+     *
+     * <span class="attrib">@type</span> int
+     * <span class="attrib">@private</span>
+     */</span>
+    maxY: 0,
+
+    <span class="comment">/**
+     * Maintain offsets when we resetconstraints.  Used to maintain the 
+     * slider thumb value, and this needs to be fixed.
+     * <span class="attrib">@type</span> boolean
+     */</span>
+    maintainOffset: false,
+
+    <span class="comment">/**
+     * Array of pixel locations the element will snap to if we specified a 
+     * horizontal graduation/interval.  This array is generated automatically
+     * when you define a tick interval.
+     * <span class="attrib">@type</span> int[]
+     */</span>
+    xTicks: null,
+
+    <span class="comment">/**
+     * Array of pixel locations the element will snap to if we specified a 
+     * vertical graduation/interval.  This array is generated automatically 
+     * when you define a tick interval.
+     * <span class="attrib">@type</span> int[]
+     */</span>
+    yTicks: null,
+
+    <span class="comment">/**
+     * By default the drag and drop instance will only respond to the primary
+     * button click (left button for a right-handed mouse).  Set to true to
+     * allow drag and drop to start with any mouse click that is propogated
+     * by the browser
+     * <span class="attrib">@type</span> boolean
+     */</span>
+    primaryButtonOnly: true,
+
+    <span class="comment">/**
+     * Code that executes immediately before the startDrag event
+     * <span class="attrib">@private</span>
+     */</span>
+    b4StartDrag: <span class="reserved">function</span>(x, y) { },
+
+    <span class="comment">/**
+     * Abstract method called after a drag/drop object is clicked
+     * and the drag or mousedown time thresholds have beeen met.
+     *
+     * <span class="attrib">@param</span> {int} X click location
+     * <span class="attrib">@param</span> {int} Y click location
+     */</span>
+    startDrag: <span class="reserved">function</span>(x, y) { <span class="comment">/* override this */</span> },
+
+    <span class="comment">/**
+     * Code that executes immediately before the onDrag event
+     * <span class="attrib">@private</span>
+     */</span>
+    b4Drag: <span class="reserved">function</span>(e) { },
+
+    <span class="comment">/**
+     * Abstract method called during the onMouseMove event while dragging an 
+     * object.
+     *
+     * <span class="attrib">@param</span> {Event} e
+     */</span>
+    onDrag: <span class="reserved">function</span>(e) { <span class="comment">/* override this */</span> },
+
+    <span class="comment">/**
+     * Code that executes immediately before the onDragEnter event
+     * <span class="attrib">@private</span>
+     */</span>
+<span class="comment">    // b4DragEnter: function(e) { },</span>
+
+    <span class="comment">/**
+     * Abstract method called when this element fist begins hovering over 
+     * another DragDrop obj
+     *
+     * <span class="attrib">@param</span> {Event} e
+     * <span class="attrib">@param</span> {String || YAHOO.util.DragDrop[]} id In POINT mode, the element
+     * id this is hovering over.  In INTERSECT mode, an array of one or more 
+     * dragdrop items being hovered over.
+     */</span>
+    onDragEnter: <span class="reserved">function</span>(e, id) { <span class="comment">/* override this */</span> },
+
+    <span class="comment">/**
+     * Code that executes immediately before the onDragOver event
+     * <span class="attrib">@private</span>
+     */</span>
+    b4DragOver: <span class="reserved">function</span>(e) { },
+
+    <span class="comment">/**
+     * Abstract method called when this element is hovering over another 
+     * DragDrop obj
+     *
+     * <span class="attrib">@param</span> {Event} e
+     * <span class="attrib">@param</span> {String || YAHOO.util.DragDrop[]} id In POINT mode, the element
+     * id this is hovering over.  In INTERSECT mode, an array of dd items 
+     * being hovered over.
+     */</span>
+    onDragOver: <span class="reserved">function</span>(e, id) { <span class="comment">/* override this */</span> },
+
+    <span class="comment">/**
+     * Code that executes immediately before the onDragOut event
+     * <span class="attrib">@private</span>
+     */</span>
+    b4DragOut: <span class="reserved">function</span>(e) { },
+
+    <span class="comment">/**
+     * Abstract method called when we are no longer hovering over an element
+     *
+     * <span class="attrib">@param</span> {Event} e
+     * <span class="attrib">@param</span> {String || YAHOO.util.DragDrop[]} id In POINT mode, the element
+     * id this was hovering over.  In INTERSECT mode, an array of dd items 
+     * that the mouse is no longer over.
+     */</span>
+    onDragOut: <span class="reserved">function</span>(e, id) { <span class="comment">/* override this */</span> },
+
+    <span class="comment">/**
+     * Code that executes immediately before the onDragDrop event
+     * <span class="attrib">@private</span>
+     */</span>
+    b4DragDrop: <span class="reserved">function</span>(e) { },
+
+    <span class="comment">/**
+     * Abstract method called when this item is dropped on another DragDrop 
+     * obj
+     *
+     * <span class="attrib">@param</span> {Event} e
+     * <span class="attrib">@param</span> {String || YAHOO.util.DragDrop[]} id In POINT mode, the element
+     * id this was dropped on.  In INTERSECT mode, an array of dd items this 
+     * was dropped on.
+     */</span>
+    onDragDrop: <span class="reserved">function</span>(e, id) { <span class="comment">/* override this */</span> },
+
+    <span class="comment">/**
+     * Code that executes immediately before the endDrag event
+     * <span class="attrib">@private</span>
+     */</span>
+    b4EndDrag: <span class="reserved">function</span>(e) { },
+
+    <span class="comment">/**
+     * Fired when we are done dragging the object
+     *
+     * <span class="attrib">@param</span> {Event} e
+     */</span>
+    endDrag: <span class="reserved">function</span>(e) { <span class="comment">/* override this */</span> },
+
+    <span class="comment">/**
+     * Code executed immediately before the onMouseDown event
+
+     * <span class="attrib">@param</span> {Event} e
+     * <span class="attrib">@private</span>
+     */</span>
+    b4MouseDown: <span class="reserved">function</span>(e) {  },
+
+    <span class="comment">/**
+     * Event handler that fires when a drag/drop obj gets a mousedown
+     * <span class="attrib">@param</span> {Event} e
+     */</span>
+    onMouseDown: <span class="reserved">function</span>(e) { <span class="comment">/* override this */</span> },
+
+    <span class="comment">/**
+     * Event handler that fires when a drag/drop obj gets a mouseup
+     * <span class="attrib">@param</span> {Event} e
+     */</span>
+    onMouseUp: <span class="reserved">function</span>(e) { <span class="comment">/* override this */</span> },
+
+    <span class="comment">/**
+     * Returns a reference to the linked element
+     *
+     * <span class="attrib">@return</span> {HTMLElement} the html element 
+     */</span>
+    getEl: <span class="reserved">function</span>() { 
+        <span class="reserved">if</span> (!<span class="reserved">this</span>._domRef) {
+            <span class="reserved">this</span>._domRef = <span class="reserved">this</span>.DDM.getElement(<span class="reserved">this</span>.id); 
+        }
+
+        <span class="reserved">return</span> <span class="reserved">this</span>._domRef;
+    },
+
+    <span class="comment">/**
+     * Returns a reference to the actual element to drag.  By default this is
+     * the same as the html element, but it can be assigned to another 
+     * element. An example of this can be found in YAHOO.util.DDProxy
+     *
+     * <span class="attrib">@return</span> {HTMLElement} the html element 
+     */</span>
+    getDragEl: <span class="reserved">function</span>() {
+        <span class="reserved">return</span> <span class="reserved">this</span>.DDM.getElement(<span class="reserved">this</span>.dragElId);
+    },
+
+    <span class="comment">/**
+     * Sets up the DragDrop object.  Must be called in the constructor of any
+     * YAHOO.util.DragDrop subclass
+     *
+     * <span class="attrib">@param</span> id the id of the linked element
+     * <span class="attrib">@param</span> {String} sGroup the group of related items
+     * element is supposed to be a target only, set to false.
+     */</span>
+    init: <span class="reserved">function</span>(id, sGroup) {
+        <span class="reserved">this</span>.initTarget(id, sGroup);
+        YAHOO.util.Event.addListener(id, <span class="literal">"mousedown"</span>, 
+                                          <span class="reserved">this</span>.handleMouseDown, <span class="reserved">this</span>, true);
+    },
+
+    <span class="comment">/**
+     * Initializes Targeting functionality only... the object does not
+     * get a mousedown handler.
+     *
+     * <span class="attrib">@param</span> id the id of the linked element
+     * <span class="attrib">@param</span> {String} sGroup the group of related items
+     * element is supposed to be a target only, set to false.
+     */</span>
+    initTarget: <span class="reserved">function</span>(id, sGroup) {
+<span class="comment">
+        // create a local reference to the drag and drop manager</span>
+        <span class="reserved">this</span>.DDM = YAHOO.util.DDM;
+<span class="comment">
+        // create a logger instance</span>
+        <span class="reserved">this</span>.logger = new ygLogger(<span class="literal">"DragDrop"</span>);
+<span class="comment">
+        // set the default padding</span>
+        <span class="reserved">this</span>.padding = [0, 0, 0, 0];
+<span class="comment">
+        // initialize the groups array</span>
+        <span class="reserved">this</span>.groups = {};
+<span class="comment">
+        // set the id</span>
+        <span class="reserved">this</span>.id = id;
+<span class="comment">
+        // the element is a drag handle by default</span>
+        <span class="reserved">this</span>.setDragElId(id); 
+<span class="comment">
+        // by default, clicked anchors will not start drag operations</span>
+        <span class="reserved">this</span>.invalidHandleTypes = {a : <span class="literal">"a"</span>};
+<span class="comment">
+        // We don't want to register this as the handle with the manager</span>
+<span class="comment">        // so we just set the id rather than calling the setter</span>
+        <span class="reserved">this</span>.handleElId = id;
+<span class="comment">
+        // cache the position of the element if we can</span>
+        <span class="reserved">if</span> (document &amp;&amp; document.body) {
+            <span class="reserved">this</span>.setInitPosition();
+        }
+<span class="comment">
+        // add to an interaction group</span>
+        <span class="reserved">this</span>.addToGroup((sGroup) ? sGroup : <span class="literal">"default"</span>);
+
+    },
+
+    <span class="comment">/**
+     * Configures the padding for the target zone in px.  Effectively expands
+     * (or reduces) the virtual object size for targeting calculations.  
+     * Supports css-style shorthand; if only one parameter is passed, all sides
+     * will have that padding, and if only two are passed, the top and bottom
+     * will have the first param, the left and right the second.
+     * <span class="attrib">@param</span> {int} iTop    Top pad
+     * <span class="attrib">@param</span> {int} iRight  Right pad
+     * <span class="attrib">@param</span> {int} iBot    Bot pad
+     * <span class="attrib">@param</span> {int} iLeft   Left pad
+     */</span>
+    setPadding: <span class="reserved">function</span>(iTop, iRight, iBot, iLeft) {
+<span class="comment">        // this.padding = [iLeft, iRight, iTop, iBot];</span>
+        <span class="reserved">if</span> (!iRight &amp;&amp; 0 !== iRight) {
+            <span class="reserved">this</span>.padding = [iTop, iTop, iTop, iTop];
+        } <span class="reserved">else</span> <span class="reserved">if</span> (!iBot &amp;&amp; 0 !== iBot) {
+            <span class="reserved">this</span>.padding = [iTop, iRight, iTop, iRight];
+        } <span class="reserved">else</span> {
+            <span class="reserved">this</span>.padding = [iTop, iRight, iBot, iLeft];
+        }
+    },
+
+    <span class="comment">/**
+     * Stores the initial placement of the dd element
+     */</span>
+    setInitPosition: <span class="reserved">function</span>(diffX, diffY) {
+        var el = <span class="reserved">this</span>.getEl();
+
+        <span class="reserved">if</span> (!<span class="reserved">this</span>.DDM.verifyEl(el)) {
+            <span class="reserved">this</span>.logger.debug(<span class="reserved">this</span>.id + <span class="literal">" element is broken"</span>);
+            <span class="reserved">return</span>;
+        }
+
+        var dx = diffX || 0;
+        var dy = diffY || 0;
+
+        var p = YAHOO.util.Dom.getXY( el );
+
+        <span class="reserved">this</span>.initPageX = p[0] - dx;
+        <span class="reserved">this</span>.initPageY = p[1] - dy;
+
+        <span class="reserved">this</span>.lastPageX = p[0];
+        <span class="reserved">this</span>.lastPageY = p[1];
+
+        <span class="reserved">this</span>.setStartPosition(p);
+    },
+
+    <span class="comment">/**
+     * Sets the start position of the element.  This is set when the obj
+     * is initialized, the reset when a drag is started.
+     * <span class="attrib">@param</span> pos current position (from previous lookup)
+     * <span class="attrib">@private</span>
+     */</span>
+    setStartPosition: <span class="reserved">function</span>(pos) {
+
+        var p = pos || YAHOO.util.Dom.getXY( <span class="reserved">this</span>.getEl() );
+
+        <span class="reserved">this</span>.startPageX = p[0];
+        <span class="reserved">this</span>.startPageY = p[1];
+    },
+
+    <span class="comment">/**
+     * Add this instance to a group of related drag/drop objects.  All 
+     * instances belong to at least one group, and can belong to as many 
+     * groups as needed.
+     *
+     * <span class="attrib">@param</span> sGroup {string} the name of the group
+     */</span>
+    addToGroup: <span class="reserved">function</span>(sGroup) {
+        <span class="reserved">this</span>.groups[sGroup] = true;
+        <span class="reserved">this</span>.DDM.regDragDrop(<span class="reserved">this</span>, sGroup);
+    },
+
+    <span class="comment">/**
+     * Allows you to specify that an element other than the linked element 
+     * will be moved with the cursor during a drag
+     *
+     * <span class="attrib">@param</span> id the id of the element that will be used to initiate the drag
+     */</span>
+    setDragElId: <span class="reserved">function</span>(id) {
+        <span class="reserved">this</span>.dragElId = id;
+    },
+
+    <span class="comment">/**
+     * Allows you to specify a child of the linked element that should be 
+     * used to initiate the drag operation.  An example of this would be if 
+     * you have a content div with text and links.  Clicking anywhere in the 
+     * content area would normally start the drag operation.  Use this method
+     * to specify that an element inside of the content div is the element 
+     * that starts the drag operation.
+     *
+     * <span class="attrib">@param</span> id the id of the element that will be used to initiate the drag
+     */</span>
+    setHandleElId: <span class="reserved">function</span>(id) {
+        <span class="reserved">this</span>.handleElId = id;
+        <span class="reserved">this</span>.DDM.regHandle(<span class="reserved">this</span>.id, id);
+    },
+
+    <span class="comment">/**
+     * Allows you to set an element outside of the linked element as a drag 
+     * handle
+     */</span>
+    setOuterHandleElId: <span class="reserved">function</span>(id) {
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"Adding outer handle event: "</span> + id);
+        YAHOO.util.Event.addListener(id, <span class="literal">"mousedown"</span>, 
+                <span class="reserved">this</span>.handleMouseDown, <span class="reserved">this</span>, true);
+        <span class="reserved">this</span>.setHandleElId(id);
+    },
+
+    <span class="comment">/**
+     * Remove all drag and drop hooks for this element
+     */</span>
+    unreg: <span class="reserved">function</span>() {
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"DragDrop obj cleanup "</span> + <span class="reserved">this</span>.id);
+        YAHOO.util.Event.removeListener(<span class="reserved">this</span>.id, <span class="literal">"mousedown"</span>, 
+                <span class="reserved">this</span>.handleMouseDown);
+        <span class="reserved">this</span>._domRef = null;
+        <span class="reserved">this</span>.DDM._remove(<span class="reserved">this</span>);
+    },
+
+    <span class="comment">/**
+     * Returns true if this instance is locked, or the drag drop mgr is locked
+     * (meaning that all drag/drop is disabled on the page.)
+     *
+     * <span class="attrib">@return</span> {boolean} true if this obj or all drag/drop is locked, else 
+     * false
+     */</span>
+    isLocked: <span class="reserved">function</span>() {
+        <span class="reserved">return</span> (<span class="reserved">this</span>.DDM.isLocked() || <span class="reserved">this</span>.locked);
+    },
+
+    <span class="comment">/**
+     * Fired when this object is clicked
+     *
+     * <span class="attrib">@param</span> {Event} e 
+     * <span class="attrib">@param</span> {YAHOO.util.DragDrop} oDD the clicked dd object (this dd obj)
+     * <span class="attrib">@private</span>
+     */</span>
+    handleMouseDown: <span class="reserved">function</span>(e, oDD) {
+
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"isLocked: "</span> + <span class="reserved">this</span>.isLocked());
+
+        var EU = YAHOO.util.Event;
+
+        
+        var button = e.which || e.button;
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"button: "</span> + button);
+
+        <span class="reserved">if</span> (<span class="reserved">this</span>.primaryButtonOnly &amp;&amp; button &gt; 1) {
+            <span class="reserved">this</span>.logger.debug(<span class="literal">"Mousedown was not produced by the primary button"</span>);
+            <span class="reserved">return</span>;
+        }
+
+        <span class="reserved">if</span> (<span class="reserved">this</span>.isLocked()) {
+            <span class="reserved">this</span>.logger.debug(<span class="literal">"Drag and drop is disabled, aborting"</span>);
+            <span class="reserved">return</span>;
+        }
+
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"mousedown "</span> + <span class="reserved">this</span>.id);
+
+        <span class="reserved">this</span>.DDM.refreshCache(<span class="reserved">this</span>.groups);
+<span class="comment">
+        // Only process the event if we really clicked within the linked </span>
+<span class="comment">        // element.  The reason we make this check is that in the case that </span>
+<span class="comment">        // another element was moved between the clicked element and the </span>
+<span class="comment">        // cursor in the time between the mousedown and mouseup events. When </span>
+<span class="comment">        // this happens, the element gets the next mousedown event </span>
+<span class="comment">        // regardless of where on the screen it happened.  </span>
+        var pt = new YAHOO.util.Point(EU.getPageX(e), EU.getPageY(e));
+        <span class="reserved">if</span> ( <span class="reserved">this</span>.DDM.isOverTarget(pt, <span class="reserved">this</span>) )  {
+
+            <span class="reserved">this</span>.logger.debug(<span class="literal">"click is legit"</span>);
+<span class="comment">
+            //  check to see if the handle was clicked</span>
+            var srcEl = EU.getTarget(e);
+
+            <span class="reserved">if</span> (<span class="reserved">this</span>.isValidHandleChild(srcEl) &amp;&amp;
+                    (<span class="reserved">this</span>.id == <span class="reserved">this</span>.handleElId || 
+                     <span class="reserved">this</span>.DDM.handleWasClicked(srcEl, <span class="reserved">this</span>.id)) ) {
+<span class="comment">
+                // set the initial element position</span>
+                <span class="reserved">this</span>.setStartPosition();
+
+                <span class="reserved">this</span>.logger.debug(<span class="literal">"firing onMouseDown events"</span>);
+
+
+                <span class="reserved">this</span>.b4MouseDown(e);
+                <span class="reserved">this</span>.onMouseDown(e);
+                <span class="reserved">this</span>.DDM.handleMouseDown(e, <span class="reserved">this</span>);
+
+                <span class="reserved">this</span>.DDM.stopEvent(e);
+            }
+        }
+    },
+
+    <span class="comment">/**
+     * Allows you to specify a tag name that should not start a drag operation
+     * when clicked.  This is designed to facilitate embedding links within a
+     * drag handle that do something other than start the drag.
+     * 
+     * <span class="attrib">@param</span> {string} tagName the type of element to exclude
+     */</span>
+    addInvalidHandleType: <span class="reserved">function</span>(tagName) {
+        var type = tagName.toUpperCase();
+        <span class="reserved">this</span>.invalidHandleTypes[type] = type;
+    },
+
+    <span class="comment">/**
+     * Unsets an excluded tag name set by addInvalidHandleType
+     * 
+     * <span class="attrib">@param</span> {string} tagName the type of element to unexclude
+     */</span>
+    removeInvalidHandleType: <span class="reserved">function</span>(tagName) {
+        var type = tagName.toUpperCase();
+        <span class="reserved">this</span>.invalidHandleTypes[type] = null;
+    },
+
+    <span class="comment">/**
+     * Checks the tag exclusion list to see if this click should be ignored
+     *
+     * <span class="attrib">@param</span> {ygNode} node
+     * <span class="attrib">@return</span> {boolean} true if this is a valid tag type, false if not
+     */</span>
+    isValidHandleChild: <span class="reserved">function</span>(node) {
+        var type = node.nodeName;
+
+        <span class="reserved">if</span> (type == <span class="literal">"#text"</span>) {
+<span class="comment">            // this.logger.debug("text node, getting parent node type");</span>
+            type = node.parentNode.nodeName;
+        }
+
+        <span class="reserved">return</span> (!<span class="reserved">this</span>.invalidHandleTypes[type]);
+    },
+
+    <span class="comment">/**
+     * Create the array of horizontal tick marks if an interval was specified
+     * in setXConstraint().
+     *
+     * <span class="attrib">@private</span>
+     */</span>
+    setXTicks: <span class="reserved">function</span>(iStartX, iTickSize) {
+        <span class="reserved">this</span>.xTicks = [];
+        <span class="reserved">this</span>.xTickSize = iTickSize;
+        
+        var tickMap = {};
+
+        <span class="reserved">for</span> (var i = <span class="reserved">this</span>.initPageX; i &gt;= <span class="reserved">this</span>.minX; i = i - iTickSize) {
+            <span class="reserved">if</span> (!tickMap[i]) {
+                <span class="reserved">this</span>.xTicks[<span class="reserved">this</span>.xTicks.length] = i;
+                tickMap[i] = true;
+            }
+        }
+
+        <span class="reserved">for</span> (i = <span class="reserved">this</span>.initPageX; i &lt;= <span class="reserved">this</span>.maxX; i = i + iTickSize) {
+            <span class="reserved">if</span> (!tickMap[i]) {
+                <span class="reserved">this</span>.xTicks[<span class="reserved">this</span>.xTicks.length] = i;
+                tickMap[i] = true;
+            }
+        }
+
+        <span class="reserved">this</span>.xTicks.sort(<span class="reserved">this</span>.DDM.numericSort) ;
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"xTicks: "</span> + <span class="reserved">this</span>.xTicks.join());
+    },
+
+    <span class="comment">/**
+     * Create the array of vertical tick marks if an interval was specified in 
+     * setYConstraint().
+     *
+     * <span class="attrib">@private</span>
+     */</span>
+    setYTicks: <span class="reserved">function</span>(iStartY, iTickSize) {
+        <span class="reserved">this</span>.yTicks = [];
+        <span class="reserved">this</span>.yTickSize = iTickSize;
+
+        var tickMap = {};
+
+        <span class="reserved">for</span> (var i = <span class="reserved">this</span>.initPageY; i &gt;= <span class="reserved">this</span>.minY; i = i - iTickSize) {
+            <span class="reserved">if</span> (!tickMap[i]) {
+                <span class="reserved">this</span>.yTicks[<span class="reserved">this</span>.yTicks.length] = i;
+                tickMap[i] = true;
+            }
+        }
+
+        <span class="reserved">for</span> (i = <span class="reserved">this</span>.initPageY; i &lt;= <span class="reserved">this</span>.maxY; i = i + iTickSize) {
+            <span class="reserved">if</span> (!tickMap[i]) {
+                <span class="reserved">this</span>.yTicks[<span class="reserved">this</span>.yTicks.length] = i;
+                tickMap[i] = true;
+            }
+        }
+
+        <span class="reserved">this</span>.yTicks.sort(<span class="reserved">this</span>.DDM.numericSort) ;
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"yTicks: "</span> + <span class="reserved">this</span>.yTicks.join());
+    },
+
+    <span class="comment">/**
+     * By default, the element can be dragged any place on the screen.  Use 
+     * this method to limit the horizontal travel of the element.  Pass in 
+     * 0,0 for the parameters if you want to lock the drag to the y axis.
+     *
+     * <span class="attrib">@param</span> {int} iLeft the number of pixels the element can move to the left
+     * <span class="attrib">@param</span> {int} iRight the number of pixels the element can move to the 
+     * right
+     * <span class="attrib">@param</span> {int} iTickSize optional parameter for specifying that the 
+     * element
+     * should move iTickSize pixels at a time.
+     */</span>
+    setXConstraint: <span class="reserved">function</span>(iLeft, iRight, iTickSize) {
+        <span class="reserved">this</span>.leftConstraint = iLeft;
+        <span class="reserved">this</span>.rightConstraint = iRight;
+
+        <span class="reserved">this</span>.minX = <span class="reserved">this</span>.initPageX - iLeft;
+        <span class="reserved">this</span>.maxX = <span class="reserved">this</span>.initPageX + iRight;
+        <span class="reserved">if</span> (iTickSize) { <span class="reserved">this</span>.setXTicks(<span class="reserved">this</span>.initPageX, iTickSize); }
+
+        <span class="reserved">this</span>.constrainX = true;
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"initPageX:"</span> + <span class="reserved">this</span>.initPageX + <span class="literal">" minX:"</span> + <span class="reserved">this</span>.minX + 
+                <span class="literal">" maxX:"</span> + <span class="reserved">this</span>.maxX);
+    },
+
+    <span class="comment">/**
+     * By default, the element can be dragged any place on the screen.  Set 
+     * this to limit the vertical travel of the element.  Pass in 0,0 for the
+     * parameters if you want to lock the drag to the x axis.
+     *
+     * <span class="attrib">@param</span> {int} iUp the number of pixels the element can move up
+     * <span class="attrib">@param</span> {int} iDown the number of pixels the element can move down
+     * <span class="attrib">@param</span> {int} iTickSize optional parameter for specifying that the 
+     * element should move iTickSize pixels at a time.
+     */</span>
+    setYConstraint: <span class="reserved">function</span>(iUp, iDown, iTickSize) {
+        <span class="reserved">this</span>.topConstraint = iUp;
+        <span class="reserved">this</span>.bottomConstraint = iDown;
+
+        <span class="reserved">this</span>.minY = <span class="reserved">this</span>.initPageY - iUp;
+        <span class="reserved">this</span>.maxY = <span class="reserved">this</span>.initPageY + iDown;
+        <span class="reserved">if</span> (iTickSize) { <span class="reserved">this</span>.setYTicks(<span class="reserved">this</span>.initPageY, iTickSize); }
+
+        <span class="reserved">this</span>.constrainY = true;
+        
+        <span class="reserved">this</span>.logger.debug(<span class="literal">"initPageY:"</span> + <span class="reserved">this</span>.initPageY + <span class="literal">" minY:"</span> + <span class="reserved">this</span>.minY + 
+                <span class="literal">" maxY:"</span> + <span class="reserved">this</span>.maxY);
+    },
+
+    <span class="comment">/**
+     * resetConstraints must be called if you manually reposition a dd element.
+     * <span class="attrib">@param</span> {boolean} maintainOffset
+     */</span>
+    resetConstraints: <span class="reserved">function</span>() {
+<span class="comment">
+        // this.logger.debug("init pagexy: " + this.initPageX + ", " + </span>
+<span class="comment">        //      this.initPageY);</span>
+<span class="comment">        // this.logger.debug("last pagexy: " + this.lastPageX + ", " + </span>
+<span class="comment">        //      this.lastPageY);</span>
+<span class="comment">
+        // figure out how much this thing has moved</span>
+        var dx = (<span class="reserved">this</span>.maintainOffset) ? <span class="reserved">this</span>.lastPageX - <span class="reserved">this</span>.initPageX : 0;
+        var dy = (<span class="reserved">this</span>.maintainOffset) ? <span class="reserved">this</span>.lastPageY - <span class="reserved">this</span>.initPageY : 0;
+<span class="comment">
+        // this.logger.debug("diff: " + dx + ", " + dy);</span>
+<span class="comment">
+        // reset the initial location</span>
+        <span class="reserved">this</span>.setInitPosition(dx, dy);
+
+        <span class="reserved">if</span> (<span class="reserved">this</span>.constrainX) {
+            <span class="reserved">this</span>.setXConstraint( <span class="reserved">this</span>.leftConstraint, 
+                                 <span class="reserved">this</span>.rightConstraint, 
+                                 <span class="reserved">this</span>.xTickSize        );
+        }
+
+        <span class="reserved">if</span> (<span class="reserved">this</span>.constrainY) {
+            <span class="reserved">this</span>.setYConstraint( <span class="reserved">this</span>.topConstraint, 
+                                 <span class="reserved">this</span>.bottomConstraint, 
+                                 <span class="reserved">this</span>.yTickSize         );
+        }
+    },
+
+    <span class="comment">/**
+     * Normally the drag element is moved pixel by pixel, but we can specify 
+     * that it move a number of pixels at a time.  This method resolves the 
+     * location when we have it set up like this.
+     *
+     * <span class="attrib">@param</span> {int} val where we want to place the object
+     * <span class="attrib">@param</span> {int[]} tickArray sorted array of valid points
+     * <span class="attrib">@return</span> {int} the closest tick
+     * <span class="attrib">@private</span>
+     */</span>
+    getTick: <span class="reserved">function</span>(val, tickArray) {
+
+        <span class="reserved">if</span> (!tickArray) {
+<span class="comment">            // If tick interval is not defined, it is effectively 1 pixel, </span>
+<span class="comment">            // so we return the value passed to us.</span>
+            <span class="reserved">return</span> val; 
+        } <span class="reserved">else</span> <span class="reserved">if</span> (tickArray[0] &gt;= val) {
+<span class="comment">            // The value is lower than the first tick, so we return the first</span>
+<span class="comment">            // tick.</span>
+            <span class="reserved">return</span> tickArray[0];
+        } <span class="reserved">else</span> {
+            <span class="reserved">for</span> (var i = 0; i &lt; tickArray.length; ++i) {
+                var next = i + 1;
+                <span class="reserved">if</span> (tickArray[next] &amp;&amp; tickArray[next] &gt;= val) {
+                    var diff1 = val - tickArray[i];
+                    var diff2 = tickArray[next] - val;
+                    <span class="reserved">return</span> (diff2 &gt; diff1) ? tickArray[i] : tickArray[next];
+                }
+            }
+<span class="comment">
+            // The value is larger than the last tick, so we return the last</span>
+<span class="comment">            // tick.</span>
+            <span class="reserved">return</span> tickArray[tickArray.length - 1];
+        }
+    },
+
+    <span class="comment">/**
+     * toString method
+     * <span class="attrib">@return</span> {string} string representation of the dd obj
+     */</span>
+    toString: <span class="reserved">function</span>(val, tickArray) {
+        <span class="reserved">return</span> (<span class="literal">"YAHOO.util.DragDrop {"</span> + <span class="reserved">this</span>.id + <span class="literal">"}"</span>);
+    }
+
+};
+
+</pre>
+			</div>
+		
+	</div>
+</div>
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+  <!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<head>
+<title>Yahoo! UI Library - Drag and Drop</title>
+<link rel="stylesheet" type="text/css" href="./css/screen.css">
+</head>
+  
+<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
+<script type="text/javascript" src="js/log.js" ></script>
+<script type="text/javascript" src="../../build/event/event.js" ></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
+
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
+        <script type="text/javascript" src="js/DDOnTop.js" ></script>
+        <script type="text/javascript" src="js/DDSwap.js" ></script>
+        <script type="text/javascript" src="js/DDMy.js" ></script>
+        <script type="text/javascript" src="js/DDMy2.js" ></script>
+        <script type="text/javascript" src="js/DDList.js" ></script>
+        <script type="text/javascript" src="js/DDPlayer.js" ></script>
+        <script type="text/javascript" src="js/DDResize.js" ></script>
+
+    
+<script type="text/javascript">
+	
+	// if (ygLogger) var gLogger = new ygLogger("test_noimpl.php");
+	var dd, dd2, dd3;
+	
+	function dragDropInit() {
+		if (typeof(ygLogger) != "undefined") {
+			ygLogger.init(document.getElementById("logDiv"));
+		}
+
+		dd = new YAHOO.util.DragDrop("dragDiv1");
+		dd2 = new YAHOO.util.DragDrop("dragDiv2");
+		dd3 = new YAHOO.util.DragDrop("dragDiv3");
+	}
+	
+	YAHOO.util.Event.addListener(window, "load", dragDropInit);
+	
+</script>
+<body>
+<div id="pageTitle">
+	<h3>Drag and Drop - YAHOO.util.DragDrop</h3>
+</div>
+
+
+<style type="text/css">
+
+    #logDiv {
+        font-family:Arial, Helvetica, sans-serif;
+        position:relative;overflow:auto;text-align:left;z-index:998;
+        font-size:84%;width:100%;top:0px; height:280px;
+    }
+
+    #logFooter { 
+        font-size:82%;background-color:#cccccc;padding:5px;line-height:14px 
+    }
+
+    #ylogo { 
+        position:absolute;top:5px;left:5px; 
+    }
+
+    #logHeader input {
+        font-size:80%;
+    }
+
+</style>
+
+<img id="ylogo" src="img/logo.gif" />
+
+<div id="container">
+<div id="containerTop">
+<div id="header">
+<h4>&nbsp;</h4>
+</div>
+<div id="main">
+
+<div id="rightbar">
+
+<div id="rightBarPad">
+<h3>Examples</h3>
+
+<div id="linkage">
+<ul>
+<li><a href="drag.html?mode=dist">Drag test</a></li>
+<li><a href="ontop.html?mode=dist">Always on top test</a></li>
+<li><a href="proxy.html?mode=dist">Framed test</a> </li>
+<li><a href="list.html?mode=dist">Sortable List</a> </li>
+<li><a href="slider.html?mode=dist">Slider</a></li>
+<li><a href="multihandle.html?mode=dist">Multiple Handles</a></li>
+<li><a href="targetable.html?mode=dist">Targetable Affordance</a></li>
+<li><a href="grid.html?mode=dist">Grid</a></li>
+<li><a href="resize.html?mode=dist">Resize Pane</a></li>
+
+</ul>
+</div> 
+
+
+</div>
+
+
+</div>
+
+  <div id="content">
+    <form name="dragDropForm" action="javscript:;">
+	<div class="newsItem">
+	  <h3>No Implementation</h3>
+	  <p>By implementing the base drag and drop class, the manager class will
+      keep track of the element's virtual position, but not actually move anything.
+      You can click on any of the
+	  three squares and watch the various events that the Drag and Drop Manager fires in
+	  logger window.	  </p>
+	</div>
+	</form>
+  </div>
+
+        <div id="footerContainer">
+        <div id="footer">
+          <p>&nbsp;</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+ 
+	<div id="dragDiv1" class="testSquare" style="background:url(img/sq1.png) 0 0 no-repeat;background-color:#6D739A;top:240px; left:105px ">DragDrop</div>
+	<div id="dragDiv2" class="testSquare" style="background:url(img/sq2.png) 0 0 no-repeat;background-color:#566F4E;top:350px; left:215px">DragDrop</div>
+	<div id="dragDiv3" class="testSquare" style="background:url(img/sq3.png) 0 0 no-repeat;background-color:#7E5B60;top:460px; left:325px">DragDrop</div>
+   
+    </body>
+  </html>

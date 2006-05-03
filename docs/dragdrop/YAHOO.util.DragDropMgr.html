@@ -1,0 +1,1209 @@
+
+<html>
+<head>
+	<title>JavaScript Documentation - </title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Drag and Drop</a></h3>
+
+	<div class="breadcrumbs">
+		
+			
+			
+			
+			
+			
+			
+			
+				<a href="./index.html">Drag and Drop</a>
+				&gt;
+				<strong>YAHOO.util.DragDropMgr</strong>
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+	
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DD.html">
+								YAHOO.util.DD</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DDProxy.html">
+								YAHOO.util.DDProxy</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DDTarget.html">
+								YAHOO.util.DDTarget</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DragDrop.html">
+								YAHOO.util.DragDrop</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DragDropMgr.html">
+								YAHOO.util.DragDropMgr</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-DD.js.html">
+								DD.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DDProxy.js.html">
+								DDProxy.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DDTarget.js.html">
+								DDTarget.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DragDrop.js.html">
+								DragDrop.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DragDropMgr.js.html">
+								DragDropMgr.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div id="pri">
+        <div class="main">
+	
+		<h2>Class YAHOO.util.DragDropMgr</h2>
+		<pre>Object
+   |
+   +--<b>YAHOO.util.DragDropMgr</b>
+</pre>
+		
+		
+	
+		<hr />
+		
+		<!-- Class definition -->
+		<div class="class-def">
+			<div class="class-name">
+				<span class="class-attribs">
+					
+				</span>
+				<span class="class-type">class</span>
+				<b>YAHOO.util.DragDropMgr</b>
+			</div>
+			<div class="class-extends">
+				
+			</div>
+		</div>
+			
+		
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+		
+		<!-- ======== QUICK LINKS ======== -->
+		<div class="quick-links">
+			<strong>Quick Links:</strong>&nbsp;
+			
+			
+				<a href="#field_summary">Field Summary</a>
+				
+			
+			
+			
+				<a href="#methodSummary">Method Summary</a> |
+				<a href="#methodDetails">Method Details</a>
+			
+		</div>
+		<!-- ======== END QUICK LINKS ======== -->
+
+		<!-- ======== NESTED CLASS SUMMARY ======== -->
+		
+		<!-- ======== END NESTED CLASS SUMMARY ======== -->
+
+		<!-- =========== FIELD SUMMARY =========== -->
+		
+			<div class="section field summaries">
+				<h3><a name="field_summary">Field Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+					
+						<tr>
+							<td class="flags">int</td>
+							<td class="spec">
+								<code>
+									<a href="#clickPixelThresh">clickPixelThresh</a>
+								</code>
+								<div class="description">
+									The number of pixels that the mouse needs to move after the 
+ mousedown before the drag is initiated.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">int</td>
+							<td class="spec">
+								<code>
+									<a href="#clickTimeThresh">clickTimeThresh</a>
+								</code>
+								<div class="description">
+									The number of milliseconds after the mousedown event to initiate the
+ drag if we don't get a mouseup event.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">int</td>
+							<td class="spec">
+								<code>
+									<a href="#INTERSECT">INTERSECT</a>
+								</code>
+								<div class="description">
+									In intersect mode, drag and drop interactio nis defined by the 
+ overlap of two or more drag and drop objects.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">int</td>
+							<td class="spec">
+								<code>
+									<a href="#mode">mode</a>
+								</code>
+								<div class="description">
+									The current drag and drop mode.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">int</td>
+							<td class="spec">
+								<code>
+									<a href="#POINT">POINT</a>
+								</code>
+								<div class="description">
+									In point mode, drag and drop interaction is defined by the 
+ location of the cursor during the drag/drop&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#preventDefault">preventDefault</a>
+								</code>
+								<div class="description">
+									Flag to determine if we should prevent the default behavior of the
+ events we define.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#stopPropagation">stopPropagation</a>
+								</code>
+								<div class="description">
+									Flag to determine if we should stop the propagation of the events 
+ we generate.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#useCache">useCache</a>
+								</code>
+								<div class="description">
+									Set useCache to false if you want to force object the lookup of each
+ drag and drop linked element constantly during a drag.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+					</table>
+				</div>
+			</div>
+		
+				
+		
+		<!-- =========== END FIELD SUMMARY =========== -->
+
+
+		<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+		
+		<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
+
+
+		<!-- ========== METHOD SUMMARY =========== -->
+		
+			<div class="section method summaries">
+				<h3><a name="methodSummary">Method Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+							<tr>
+								<td class="flags">ygDragDrop</td>
+								<td class="spec">
+									<code>
+										<a href="#getBestMatch">getBestMatch</a>
+										(dds)
+									</code>
+									<div class="description">
+										Helper function for getting the best match from the list of drag 
+ and drop objects returned by the drag and drop events when we are 
+ in INTERSECT mode.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">DragDrop</td>
+								<td class="spec">
+									<code>
+										<a href="#getDDById">getDDById</a>
+										(&lt;String&gt; id)
+									</code>
+									<div class="description">
+										Returns the DragDrop instance for a given id&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#getLocation">getLocation</a>
+										(&lt;ygDragDrop&gt; oDD)
+									</code>
+									<div class="description">
+										Returns the an array containing the drag and drop element's position
+ and size, including the ygDragDrop.padding configured for it&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#getRelated">getRelated</a>
+										(&lt;ygDragDrop&gt; p_oDD, &lt;boolean&gt; bTargetsOnly)
+									</code>
+									<div class="description">
+										Returns the drag and drop instances that are in all groups the
+ passed in instance belongs to.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">boolean</td>
+								<td class="spec">
+									<code>
+										<a href="#isDragDrop">isDragDrop</a>
+										(&lt;String&gt; id)
+									</code>
+									<div class="description">
+										Utility function to determine if a given element has been 
+ registered as a drag drop item.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">boolean</td>
+								<td class="spec">
+									<code>
+										<a href="#isHandle">isHandle</a>
+										(sDDId, sHandleId)
+									</code>
+									<div class="description">
+										Utility function to determine if a given element has been 
+ registered as a drag drop handle for the given Drag Drop object.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">boolean</td>
+								<td class="spec">
+									<code>
+										<a href="#isLegalTarget">isLegalTarget</a>
+										(oDD, oTargetDD)
+									</code>
+									<div class="description">
+										Returns true if the specified dd target is a legal target for 
+ the specifice drag obj&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">boolean</td>
+								<td class="spec">
+									<code>
+										<a href="#isLocked">isLocked</a>
+										()
+									</code>
+									<div class="description">
+										Is drag and drop locked?&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">boolean</td>
+								<td class="spec">
+									<code>
+										<a href="#isTypeOfDD">isTypeOfDD</a>
+										(oDD)
+									</code>
+									<div class="description">
+										My goal is to be able to transparently determine if an object is
+ typeof ygDragDrop, and the exact subclass of ygDragDrop.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#lock">lock</a>
+										()
+									</code>
+									<div class="description">
+										Lock all drag and drop functionality&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#refreshCache">refreshCache</a>
+										(&lt;Array&gt; aGroups)
+									</code>
+									<div class="description">
+										Refreshes the cache of the top-left and bottom-right points of the 
+ drag and drop objects in the specified groups&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#regDragDrop">regDragDrop</a>
+										(&lt;DragDrop&gt; oDD, &lt;String&gt; sGroup)
+									</code>
+									<div class="description">
+										Each DragDrop instance must be registered with the DragDropMgr.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#regHandle">regHandle</a>
+										(&lt;String&gt; sDDId, &lt;String&gt; sHandleId)
+									</code>
+									<div class="description">
+										Each DragDrop handle element must be registered.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#unlock">unlock</a>
+										()
+									</code>
+									<div class="description">
+										Unlock all drag and drop functionality&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">boolean</td>
+								<td class="spec">
+									<code>
+										<a href="#verifyEl">verifyEl</a>
+										(&lt;HTMLElement&gt; el)
+									</code>
+									<div class="description">
+										This checks to make sure an element exists and is in the DOM.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		<!-- ========== END METHOD SUMMARY =========== -->
+
+
+		<!-- ============ FIELD DETAIL START =========== -->
+		
+			<div class="section field details">
+				<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					
+						<h4><a name="clickPixelThresh">clickPixelThresh</a></h4>
+						<div class="detail">
+							<code>
+								int
+								&nbsp;
+								<strong>clickPixelThresh</strong>
+							</code>
+							<div class="description">
+								The number of pixels that the mouse needs to move after the 
+ mousedown before the drag is initiated.  Default=3;
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="clickTimeThresh">clickTimeThresh</a></h4>
+						<div class="detail">
+							<code>
+								int
+								&nbsp;
+								<strong>clickTimeThresh</strong>
+							</code>
+							<div class="description">
+								The number of milliseconds after the mousedown event to initiate the
+ drag if we don't get a mouseup event. Default=1000
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="INTERSECT">INTERSECT</a></h4>
+						<div class="detail">
+							<code>
+								int
+								&nbsp;
+								<strong>INTERSECT</strong>
+							</code>
+							<div class="description">
+								In intersect mode, drag and drop interactio nis defined by the 
+ overlap of two or more drag and drop objects.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="mode">mode</a></h4>
+						<div class="detail">
+							<code>
+								int
+								&nbsp;
+								<strong>mode</strong>
+							</code>
+							<div class="description">
+								The current drag and drop mode.  Default it point mode
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="POINT">POINT</a></h4>
+						<div class="detail">
+							<code>
+								int
+								&nbsp;
+								<strong>POINT</strong>
+							</code>
+							<div class="description">
+								In point mode, drag and drop interaction is defined by the 
+ location of the cursor during the drag/drop
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="preventDefault">preventDefault</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>preventDefault</strong>
+							</code>
+							<div class="description">
+								Flag to determine if we should prevent the default behavior of the
+ events we define. By default this is true, but this can be set to 
+ false if you need the default behavior (not recommended)
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="stopPropagation">stopPropagation</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>stopPropagation</strong>
+							</code>
+							<div class="description">
+								Flag to determine if we should stop the propagation of the events 
+ we generate. This is true by default but you may want to set it to
+ false if the html element contains other features that require the
+ mouse click.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="useCache">useCache</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>useCache</strong>
+							</code>
+							<div class="description">
+								Set useCache to false if you want to force object the lookup of each
+ drag and drop linked element constantly during a drag.
+							</div>
+						</div>
+						<hr />
+					
+				</div>
+			</div>
+		
+		<!-- ============ FIELD DETAIL END =========== -->
+
+		<!-- ========= CONSTRUCTOR DETAIL START ======== -->
+		
+			<div class="section constructor details">
+				<h3><a name="constructor_detail">Constructor Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<h4><a name="YAHOO.util.DragDropMgr()">YAHOO.util.DragDropMgr</a></h4>
+					<div class="detail">
+						<code>
+							<strong>YAHOO.util.DragDropMgr</strong>
+							
+						</code>
+						<div class="description">
+							
+							
+							
+							
+							
+							
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		
+		<!-- ========= CONSTRUCTOR DETAIL END ======== -->
+
+
+		<!-- ============ METHOD DETAIL START ========== -->
+		
+			<div class="section method details">
+				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					
+						<h4><a name="getBestMatch">getBestMatch</a></h4>
+						<div class="detail">
+							<code>
+								ygDragDrop 
+								<strong>getBestMatch</strong>
+								(dds)
+							</code>
+									
+							<div class="description">
+								
+									Helper function for getting the best match from the list of drag 
+ and drop objects returned by the drag and drop events when we are 
+ in INTERSECT mode.  It returns either the first object that the 
+ cursor is over, or the object that has the greatest overlap with 
+ the dragged element.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>ygDragDrop</code> - 
+												[]} dds The array of drag and drop objects   targeted  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd>       The best single match</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getDDById">getDDById</a></h4>
+						<div class="detail">
+							<code>
+								DragDrop 
+								<strong>getDDById</strong>
+								(&lt;String&gt; id)
+							</code>
+									
+							<div class="description">
+								
+									Returns the DragDrop instance for a given id
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>id</code> - 
+												 the id of the DragDrop object  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> the drag drop object, null if it is not found</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getLocation">getLocation</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>getLocation</strong>
+								(&lt;ygDragDrop&gt; oDD)
+							</code>
+									
+							<div class="description">
+								
+									Returns the an array containing the drag and drop element's position
+ and size, including the ygDragDrop.padding configured for it
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>oDD</code> - 
+												 the drag and drop object to get the   location for  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd>array containing the top left and bottom right points of the   element</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getRelated">getRelated</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>getRelated</strong>
+								(&lt;ygDragDrop&gt; p_oDD, &lt;boolean&gt; bTargetsOnly)
+							</code>
+									
+							<div class="description">
+								
+									Returns the drag and drop instances that are in all groups the
+ passed in instance belongs to.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>p_oDD</code> - 
+												 the obj to get related data for  
+											</dd>
+										
+											<dd>
+												<code>bTargetsOnly</code> - 
+												 if true, only return targetable objs  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd>{ygDragDrop[]} the related instances</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="isDragDrop">isDragDrop</a></h4>
+						<div class="detail">
+							<code>
+								boolean 
+								<strong>isDragDrop</strong>
+								(&lt;String&gt; id)
+							</code>
+									
+							<div class="description">
+								
+									Utility function to determine if a given element has been 
+ registered as a drag drop item.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>id</code> - 
+												 the element id to check  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> true if this element is a DragDrop item,   false otherwise</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="isHandle">isHandle</a></h4>
+						<div class="detail">
+							<code>
+								boolean 
+								<strong>isHandle</strong>
+								(sDDId, sHandleId)
+							</code>
+									
+							<div class="description">
+								
+									Utility function to determine if a given element has been 
+ registered as a drag drop handle for the given Drag Drop object.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>id</code> - 
+												 the element id to check  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> true if this element is a DragDrop handle, false   otherwise</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="isLegalTarget">isLegalTarget</a></h4>
+						<div class="detail">
+							<code>
+								boolean 
+								<strong>isLegalTarget</strong>
+								(oDD, oTargetDD)
+							</code>
+									
+							<div class="description">
+								
+									Returns true if the specified dd target is a legal target for 
+ the specifice drag obj
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>the</code> - 
+												 drag obj  
+											</dd>
+										
+											<dd>
+												<code>ygDragDrop</code> - 
+												) the target  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> true if the target is a legal target for the   dd obj</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="isLocked">isLocked</a></h4>
+						<div class="detail">
+							<code>
+								boolean 
+								<strong>isLocked</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Is drag and drop locked?
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> True if drag and drop is locked, false otherwise.</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="isTypeOfDD">isTypeOfDD</a></h4>
+						<div class="detail">
+							<code>
+								boolean 
+								<strong>isTypeOfDD</strong>
+								(oDD)
+							</code>
+									
+							<div class="description">
+								
+									My goal is to be able to transparently determine if an object is
+ typeof ygDragDrop, and the exact subclass of ygDragDrop.  typeof 
+ returns "object", oDD.constructor.toString() always returns
+ "ygDragDrop" and not the name of the subclass.  So for now it just
+ evaluates a well-known variable in ygDragDrop.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>the</code> - 
+												 object to evaluate  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> true if typeof oDD = ygDragDrop</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="lock">lock</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>lock</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Lock all drag and drop functionality
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="refreshCache">refreshCache</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>refreshCache</strong>
+								(&lt;Array&gt; aGroups)
+							</code>
+									
+							<div class="description">
+								
+									Refreshes the cache of the top-left and bottom-right points of the 
+ drag and drop objects in the specified groups
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>aGroups</code> - 
+												 an associative array of groups to refresh            
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="regDragDrop">regDragDrop</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>regDragDrop</strong>
+								(&lt;DragDrop&gt; oDD, &lt;String&gt; sGroup)
+							</code>
+									
+							<div class="description">
+								
+									Each DragDrop instance must be registered with the DragDropMgr.  
+ This is executed in ygDragDrop.init()
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>oDD</code> - 
+												 the DragDrop object to register  
+											</dd>
+										
+											<dd>
+												<code>sGroup</code> - 
+												 the name of the group this element belongs to            
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="regHandle">regHandle</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>regHandle</strong>
+								(&lt;String&gt; sDDId, &lt;String&gt; sHandleId)
+							</code>
+									
+							<div class="description">
+								
+									Each DragDrop handle element must be registered.  This is done
+ automatically when executing ygDragDrop.setHandleElId()
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>sDDId</code> - 
+												 the DragDrop id this element is a handle for  
+											</dd>
+										
+											<dd>
+												<code>sHandleId</code> - 
+												 the id of the element that is the drag   handle            
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="unlock">unlock</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>unlock</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Unlock all drag and drop functionality
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="verifyEl">verifyEl</a></h4>
+						<div class="detail">
+							<code>
+								boolean 
+								<strong>verifyEl</strong>
+								(&lt;HTMLElement&gt; el)
+							</code>
+									
+							<div class="description">
+								
+									This checks to make sure an element exists and is in the DOM.  The
+ main purpose is to handle cases where innerHTML is used to remove
+ drag and drop objects from the DOM.  IE provides an 'unspecified
+ error' when trying to access the offsetParent of such an element
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>el</code> - 
+												 the element to check  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> true if the element looks usable</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+				</div>
+			</div>
+		
+		<!-- ============ METHOD DETAIL END ========== -->
+		</div>
+	</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+</div>
+
+
+</body>
+</html>

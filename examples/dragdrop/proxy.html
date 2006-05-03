@@ -1,0 +1,252 @@
+<!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<head>
+<title>Yahoo! UI Library - Drag and Drop</title>
+<link rel="stylesheet" type="text/css" href="./css/screen.css">
+</head>
+
+<body>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
+<script type="text/javascript" src="js/log.js" ></script>
+<script type="text/javascript" src="../../build/event/event.js" ></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
+
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
+        <script type="text/javascript" src="js/DDOnTop.js" ></script>
+        <script type="text/javascript" src="js/DDSwap.js" ></script>
+        <script type="text/javascript" src="js/DDMy.js" ></script>
+        <script type="text/javascript" src="js/DDMy2.js" ></script>
+        <script type="text/javascript" src="js/DDList.js" ></script>
+        <script type="text/javascript" src="js/DDPlayer.js" ></script>
+        <script type="text/javascript" src="js/DDResize.js" ></script>
+
+    
+<script type="text/javascript" language="JavaScript">
+
+YAHOO.example.DDApp = function() {
+    var logger = new ygLogger("DDApp");
+    var dd, dd2, dd3;
+
+    function handleKeypress(e) {
+        alert("asdf");
+        logger.debug("keypress");
+        YAHOO.util.Event.stopEvent(e);
+        e.cancel = true;
+        return false;
+    }
+
+    function initPointMode() {
+
+        logger.debug("point mode");
+
+        unreg();
+
+        YAHOO.util.DDM.mode = YAHOO.util.DDM.POINT;
+
+        dd = new YAHOO.example.DDSwap("dragDiv1");
+        // dd.setPadding(10);
+
+        dd2 = new YAHOO.example.DDSwap("dragDiv2");
+        dd2.addInvalidHandleType("input");
+        // dd2.setPadding(10, 20, 30, 40);
+
+        dd3 = new YAHOO.example.DDSwap("dragDiv3");
+        // dd3.setPadding(10, 40);
+        // dd3.setPadding(10, 0, 20, 40);
+
+
+    }
+
+    function initIntersectMode() {
+
+        logger.debug("intersect mode");
+
+        unreg();
+
+        YAHOO.util.DDM.mode = YAHOO.util.DDM.INTERSECT;
+
+        dd = new YAHOO.example.DDSwap_i("dragDiv1");
+        //dd.setPadding(10);
+
+        dd2 = new YAHOO.example.DDSwap_i("dragDiv2");
+        dd2.addInvalidHandleType("input");
+        //dd2.setPadding(10, 20, 30, 40);
+
+        dd3 = new YAHOO.example.DDSwap_i("dragDiv3");
+        // dd3.setPadding(10, 40);
+        //dd3.setPadding(10, 0, 20, 40);
+    }
+
+    function unreg() {
+        if (dd) dd.unreg();
+        if (dd2) dd2.unreg();
+        if (dd3) dd3.unreg();
+    }
+
+    return {
+        init: function() {
+
+            if (typeof(ygLogger) != "undefined") {
+                ygLogger.init(document.getElementById("logDiv"));
+            }
+
+            // YAHOO.util.Event.on("testtext", "keydown", handleKeypress);
+            initPointMode();
+        },
+
+        lock: function() { 
+            dd.lock(); 
+            dd2.setXConstraint(100, 100);
+            dd2.setYConstraint(100, 100);
+        },
+
+        unlock: function() { 
+            dd.unlock(); 
+        },
+
+        changeMode: function(val) {
+            if (val == 1) {
+                initIntersectMode();
+            } else {
+                initPointMode();
+            }
+        },
+
+        unreg: function() {
+            dd.unreg();
+        }
+
+    };
+}();
+
+
+YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
+
+</script>
+
+<div id="pageTitle">
+    <h3>Drag and Drop - DDProxy</h3>
+</div>
+
+  
+<style type="text/css">
+
+    #logDiv {
+        font-family:Arial, Helvetica, sans-serif;
+        position:relative;overflow:auto;text-align:left;z-index:998;
+        font-size:84%;width:100%;top:0px; height:280px;
+    }
+
+    #logFooter { 
+        font-size:82%;background-color:#cccccc;padding:5px;line-height:14px 
+    }
+
+    #ylogo { 
+        position:absolute;top:5px;left:5px; 
+    }
+
+    #logHeader input {
+        font-size:80%;
+    }
+
+</style>
+
+<img id="ylogo" src="img/logo.gif" />
+
+<div id="container">
+<div id="containerTop">
+<div id="header">
+<h4>&nbsp;</h4>
+</div>
+<div id="main">
+
+<div id="rightbar">
+
+<div id="rightBarPad">
+<h3>Examples</h3>
+
+<div id="linkage">
+<ul>
+<li><a href="drag.html?mode=dist">Drag test</a></li>
+<li><a href="ontop.html?mode=dist">Always on top test</a></li>
+<li><a href="proxy.html?mode=dist">Framed test</a> </li>
+<li><a href="list.html?mode=dist">Sortable List</a> </li>
+<li><a href="slider.html?mode=dist">Slider</a></li>
+<li><a href="multihandle.html?mode=dist">Multiple Handles</a></li>
+<li><a href="targetable.html?mode=dist">Targetable Affordance</a></li>
+<li><a href="grid.html?mode=dist">Grid</a></li>
+<li><a href="resize.html?mode=dist">Resize Pane</a></li>
+
+</ul>
+</div> 
+
+
+</div>
+
+
+</div>
+
+  <div id="content">
+    <form name="dragDropForm" action="javscript:;">
+    <div class="newsItem">
+      <h3>Proxy</h3>
+
+      <a href="javascript:YAHOO.util.DDM._onUnload()">Unload test</a>
+      <a href="javascript:YAHOO.example.DDApp.lock()">lock</a>
+      <a href="javascript:YAHOO.example.DDApp.unlock()">unlock</a>
+      <a href="javascript:YAHOO.example.DDApp.unreg()">Unreg test</a>
+      <p>
+        This example builds on
+        <a href="../test/test_draggable.php?mode=dist">YAHOO.util.DD</a>.
+        Instead of moving the actual html element that was clicked, we have a hidden
+        layer, empty aside from a border, absolutely positioned, that we place in the same 
+        location of the clicked object.  The onDrag event handler was implemented so
+        that the style of the DragDrop elements change when they interact.  The onDragDrop
+        event handler was implemented so that the elements swap positions if one is dropped
+        on another.
+        Mode: 
+        <select onchange="YAHOO.example.DDApp.changeMode(this.selectedIndex)">
+          <option value="0" selected>Point</point>
+          <option value="1">Intersect</point>
+        </select>
+<!--
+        <input name="testtext" id="testtext" type="text" />
+-->
+
+      </p>
+
+    </div>
+    </form>
+  </div>
+    
+        <div id="footerContainer">
+        <div id="footer">
+          <p>&nbsp;</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+<!--
+<div id="wrapperDiv" style="position:relative;width:400px;top:200px;height:200px;overflow:auto">
+-->
+
+<div id="dragDiv1" class="testSquare" style="background:url(img/sq1.png) 0 0 no-repeat;background-color:#6D739A;top:270px; left:105px ">DDSwap</div>
+<div id="dragDiv2" class="testSquare" style="background:url(img/sq2.png) 0 0 no-repeat;background-color:#566F4E;top:350px; left:215px">
+DDSwap
+<!--
+<input type="text" name="testinput" />
+-->
+</div>
+<div id="wrapperDiv">
+  <div id="dragDiv3" class="testSquare" style="background:url(img/sq3.png) 0 0 no-repeat;background-color:#7E5B60;top:430px; left:325px">DDSwap</div>
+</div>
+
+<!--
+</div>
+-->
+</body>
+</html>

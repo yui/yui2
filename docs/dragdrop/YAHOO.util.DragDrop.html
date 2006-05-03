@@ -1,0 +1,1918 @@
+
+<html>
+<head>
+	<title>JavaScript Documentation - </title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Drag and Drop</a></h3>
+
+	<div class="breadcrumbs">
+		
+			
+			
+			
+			
+			
+			
+			
+				<a href="./index.html">Drag and Drop</a>
+				&gt;
+				<strong>YAHOO.util.DragDrop</strong>
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+	
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DD.html">
+								YAHOO.util.DD</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DDProxy.html">
+								YAHOO.util.DDProxy</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DDTarget.html">
+								YAHOO.util.DDTarget</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DragDrop.html">
+								YAHOO.util.DragDrop</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DragDropMgr.html">
+								YAHOO.util.DragDropMgr</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-DD.js.html">
+								DD.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DDProxy.js.html">
+								DDProxy.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DDTarget.js.html">
+								DDTarget.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DragDrop.js.html">
+								DragDrop.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DragDropMgr.js.html">
+								DragDropMgr.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div id="pri">
+        <div class="main">
+	
+		<h2>Class YAHOO.util.DragDrop</h2>
+		<pre>Object
+   |
+   +--<b>YAHOO.util.DragDrop</b>
+</pre>
+		
+		
+			<dl class="subclasses">
+				<dt>Direct Known Subclasses:</dd>
+				<dd>
+					 <a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a>, <a href="YAHOO.util.DD.html">YAHOO.util.DD</a>
+				</dd>
+		   </dl>
+		
+	
+		<hr />
+		
+		<!-- Class definition -->
+		<div class="class-def">
+			<div class="class-name">
+				<span class="class-attribs">
+					
+				</span>
+				<span class="class-type">class</span>
+				<b>YAHOO.util.DragDrop</b>
+			</div>
+			<div class="class-extends">
+				
+			</div>
+		</div>
+			
+		
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+		
+		<!-- ======== QUICK LINKS ======== -->
+		<div class="quick-links">
+			<strong>Quick Links:</strong>&nbsp;
+			
+			
+				<a href="#field_summary">Field Summary</a>
+				|
+			
+			
+				<a href="#constructor_summary">Constructor Summary</a>
+				|
+			
+			
+				<a href="#methodSummary">Method Summary</a> |
+				<a href="#methodDetails">Method Details</a>
+			
+		</div>
+		<!-- ======== END QUICK LINKS ======== -->
+
+		<!-- ======== NESTED CLASS SUMMARY ======== -->
+		
+		<!-- ======== END NESTED CLASS SUMMARY ======== -->
+
+		<!-- =========== FIELD SUMMARY =========== -->
+		
+			<div class="section field summaries">
+				<h3><a name="field_summary">Field Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+					
+						<tr>
+							<td class="flags">string[]</td>
+							<td class="spec">
+								<code>
+									<a href="#groups">groups</a>
+								</code>
+								<div class="description">
+									The group defines a logical collection of DragDrop objects that are 
+ related.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">String</td>
+							<td class="spec">
+								<code>
+									<a href="#id">id</a>
+								</code>
+								<div class="description">
+									The id of the element associated with this object.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">string[]</td>
+							<td class="spec">
+								<code>
+									<a href="#invalidHandleTypes">invalidHandleTypes</a>
+								</code>
+								<div class="description">
+									An array of HTML tags that will be ignored if clicked.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#isTarget">isTarget</a>
+								</code>
+								<div class="description">
+									By default, all insances can be a drop target.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#maintainOffset">maintainOffset</a>
+								</code>
+								<div class="description">
+									Maintain offsets when we resetconstraints.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">int[]</td>
+							<td class="spec">
+								<code>
+									<a href="#padding">padding</a>
+								</code>
+								<div class="description">
+									The padding configured for this drag and drop object for calculating
+ the drop zone intersection with this object.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#primaryButtonOnly">primaryButtonOnly</a>
+								</code>
+								<div class="description">
+									By default the drag and drop instance will only respond to the primary
+ button click (left button for a right-handed mouse).&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">int[]</td>
+							<td class="spec">
+								<code>
+									<a href="#xTicks">xTicks</a>
+								</code>
+								<div class="description">
+									Array of pixel locations the element will snap to if we specified a 
+ horizontal graduation/interval.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">int[]</td>
+							<td class="spec">
+								<code>
+									<a href="#yTicks">yTicks</a>
+								</code>
+								<div class="description">
+									Array of pixel locations the element will snap to if we specified a 
+ vertical graduation/interval.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+					</table>
+				</div>
+			</div>
+		
+				
+		
+		<!-- =========== END FIELD SUMMARY =========== -->
+
+
+		<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+		
+			<div class="section contructor summaries">
+				<h3><a name="constructor_summary">Constructor Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<code class="spec">
+						<a href="YAHOO.util.DragDrop.html#YAHOO.util.DragDrop()">YAHOO.util.DragDrop</a>
+					</code>
+					<div class="description">
+						Defines the interface and base operation of items that that can be 
+ dragged or can be drop targets.&nbsp;
+					</div>
+				</div>
+			</div>
+		
+		<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
+
+
+		<!-- ========== METHOD SUMMARY =========== -->
+		
+			<div class="section method summaries">
+				<h3><a name="methodSummary">Method Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#addInvalidHandleType">addInvalidHandleType</a>
+										(&lt;string&gt; tagName)
+									</code>
+									<div class="description">
+										Allows you to specify a tag name that should not start a drag operation
+ when clicked.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#addToGroup">addToGroup</a>
+										(sGroup)
+									</code>
+									<div class="description">
+										Add this instance to a group of related drag/drop objects.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#endDrag">endDrag</a>
+										(&lt;Event&gt; e)
+									</code>
+									<div class="description">
+										Fired when we are done dragging the object&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">HTMLElement</td>
+								<td class="spec">
+									<code>
+										<a href="#getDragEl">getDragEl</a>
+										()
+									</code>
+									<div class="description">
+										Returns a reference to the actual element to drag.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">HTMLElement</td>
+								<td class="spec">
+									<code>
+										<a href="#getEl">getEl</a>
+										()
+									</code>
+									<div class="description">
+										Returns a reference to the linked element&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#init">init</a>
+										(id, &lt;String&gt; sGroup)
+									</code>
+									<div class="description">
+										Sets up the DragDrop object.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#initTarget">initTarget</a>
+										(id, &lt;String&gt; sGroup)
+									</code>
+									<div class="description">
+										Initializes Targeting functionality only...&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">boolean</td>
+								<td class="spec">
+									<code>
+										<a href="#isLocked">isLocked</a>
+										()
+									</code>
+									<div class="description">
+										Returns true if this instance is locked, or the drag drop mgr is locked
+ (meaning that all drag/drop is disabled on the page.)&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">boolean</td>
+								<td class="spec">
+									<code>
+										<a href="#isValidHandleChild">isValidHandleChild</a>
+										(&lt;ygNode&gt; node)
+									</code>
+									<div class="description">
+										Checks the tag exclusion list to see if this click should be ignored&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#lock">lock</a>
+										()
+									</code>
+									<div class="description">
+										Lock this instance&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#onDrag">onDrag</a>
+										(&lt;Event&gt; e)
+									</code>
+									<div class="description">
+										Abstract method called during the onMouseMove event while dragging an 
+ object.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#onDragDrop">onDragDrop</a>
+										(&lt;Event&gt; e, id)
+									</code>
+									<div class="description">
+										Abstract method called when this item is dropped on another DragDrop 
+ obj&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#onDragEnter">onDragEnter</a>
+										(&lt;Event&gt; e, id)
+									</code>
+									<div class="description">
+										Abstract method called when this element fist begins hovering over 
+ another DragDrop obj&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#onDragOut">onDragOut</a>
+										(&lt;Event&gt; e, id)
+									</code>
+									<div class="description">
+										Abstract method called when we are no longer hovering over an element&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#onDragOver">onDragOver</a>
+										(&lt;Event&gt; e, id)
+									</code>
+									<div class="description">
+										Abstract method called when this element is hovering over another 
+ DragDrop obj&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#onMouseDown">onMouseDown</a>
+										(&lt;Event&gt; e)
+									</code>
+									<div class="description">
+										Event handler that fires when a drag/drop obj gets a mousedown&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#onMouseUp">onMouseUp</a>
+										(&lt;Event&gt; e)
+									</code>
+									<div class="description">
+										Event handler that fires when a drag/drop obj gets a mouseup&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#removeInvalidHandleType">removeInvalidHandleType</a>
+										(&lt;string&gt; tagName)
+									</code>
+									<div class="description">
+										Unsets an excluded tag name set by addInvalidHandleType&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#resetConstraints">resetConstraints</a>
+										()
+									</code>
+									<div class="description">
+										resetConstraints must be called if you manually reposition a dd element.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#setDragElId">setDragElId</a>
+										(id)
+									</code>
+									<div class="description">
+										Allows you to specify that an element other than the linked element 
+ will be moved with the cursor during a drag&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#setHandleElId">setHandleElId</a>
+										(id)
+									</code>
+									<div class="description">
+										Allows you to specify a child of the linked element that should be 
+ used to initiate the drag operation.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#setInitPosition">setInitPosition</a>
+										(diffX, diffY)
+									</code>
+									<div class="description">
+										Stores the initial placement of the dd element&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#setOuterHandleElId">setOuterHandleElId</a>
+										(id)
+									</code>
+									<div class="description">
+										Allows you to set an element outside of the linked element as a drag 
+ handle&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#setPadding">setPadding</a>
+										(&lt;int&gt; iTop, &lt;int&gt; iRight, &lt;int&gt; iBot, &lt;int&gt; iLeft)
+									</code>
+									<div class="description">
+										Configures the padding for the target zone in px.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#setXConstraint">setXConstraint</a>
+										(&lt;int&gt; iLeft, &lt;int&gt; iRight, &lt;int&gt; iTickSize)
+									</code>
+									<div class="description">
+										By default, the element can be dragged any place on the screen.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#setYConstraint">setYConstraint</a>
+										(&lt;int&gt; iUp, &lt;int&gt; iDown, &lt;int&gt; iTickSize)
+									</code>
+									<div class="description">
+										By default, the element can be dragged any place on the screen.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#startDrag">startDrag</a>
+										(x, y)
+									</code>
+									<div class="description">
+										Abstract method called after a drag/drop object is clicked
+ and the drag or mousedown time thresholds have beeen met.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#toString">toString</a>
+										(val, tickArray)
+									</code>
+									<div class="description">
+										toString method&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#unlock">unlock</a>
+										()
+									</code>
+									<div class="description">
+										Unlock this instace&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#unreg">unreg</a>
+										()
+									</code>
+									<div class="description">
+										Remove all drag and drop hooks for this element&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		<!-- ========== END METHOD SUMMARY =========== -->
+
+
+		<!-- ============ FIELD DETAIL START =========== -->
+		
+			<div class="section field details">
+				<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					
+						<h4><a name="groups">groups</a></h4>
+						<div class="detail">
+							<code>
+								string[]
+								&nbsp;
+								<strong>groups</strong>
+							</code>
+							<div class="description">
+								The group defines a logical collection of DragDrop objects that are 
+ related.  Instances only get events when interacting with other 
+ DragDrop object in the same group.  This lets us define multiple 
+ groups using a single DragDrop subclass if we want.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="id">id</a></h4>
+						<div class="detail">
+							<code>
+								String
+								&nbsp;
+								<strong>id</strong>
+							</code>
+							<div class="description">
+								The id of the element associated with this object.  This is what we 
+ refer to as the "linked element" because the size and position of 
+ this element is used to determine when the drag and drop objects have 
+ interacted.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="invalidHandleTypes">invalidHandleTypes</a></h4>
+						<div class="detail">
+							<code>
+								string[]
+								&nbsp;
+								<strong>invalidHandleTypes</strong>
+							</code>
+							<div class="description">
+								An array of HTML tags that will be ignored if clicked.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="isTarget">isTarget</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>isTarget</strong>
+							</code>
+							<div class="description">
+								By default, all insances can be a drop target.  This can be disabled by
+ setting isTarget to false.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="maintainOffset">maintainOffset</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>maintainOffset</strong>
+							</code>
+							<div class="description">
+								Maintain offsets when we resetconstraints.  Used to maintain the 
+ slider thumb value, and this needs to be fixed.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="padding">padding</a></h4>
+						<div class="detail">
+							<code>
+								int[]
+								&nbsp;
+								<strong>padding</strong>
+							</code>
+							<div class="description">
+								The padding configured for this drag and drop object for calculating
+ the drop zone intersection with this object.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="primaryButtonOnly">primaryButtonOnly</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>primaryButtonOnly</strong>
+							</code>
+							<div class="description">
+								By default the drag and drop instance will only respond to the primary
+ button click (left button for a right-handed mouse).  Set to true to
+ allow drag and drop to start with any mouse click that is propogated
+ by the browser
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="xTicks">xTicks</a></h4>
+						<div class="detail">
+							<code>
+								int[]
+								&nbsp;
+								<strong>xTicks</strong>
+							</code>
+							<div class="description">
+								Array of pixel locations the element will snap to if we specified a 
+ horizontal graduation/interval.  This array is generated automatically
+ when you define a tick interval.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="yTicks">yTicks</a></h4>
+						<div class="detail">
+							<code>
+								int[]
+								&nbsp;
+								<strong>yTicks</strong>
+							</code>
+							<div class="description">
+								Array of pixel locations the element will snap to if we specified a 
+ vertical graduation/interval.  This array is generated automatically 
+ when you define a tick interval.
+							</div>
+						</div>
+						<hr />
+					
+				</div>
+			</div>
+		
+		<!-- ============ FIELD DETAIL END =========== -->
+
+		<!-- ========= CONSTRUCTOR DETAIL START ======== -->
+		
+			<div class="section constructor details">
+				<h3><a name="constructor_detail">Constructor Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<h4><a name="YAHOO.util.DragDrop()">YAHOO.util.DragDrop</a></h4>
+					<div class="detail">
+						<code>
+							<strong>YAHOO.util.DragDrop</strong>
+							()
+						</code>
+						<div class="description">
+							
+								Defines the interface and base operation of items that that can be 
+ dragged or can be drop targets.  It was designed to be extended, overriding
+ the event handlers for startDrag, onDrag, onDragOver, onDragOut.
+ Up to three html elements can be associated with a DragDrop instance:
+ <ul>
+ <li>linked element: the element that is passed into the constructor.
+ This is the element which defines the boundaries for interaction with 
+ other DragDrop objects.</li>
+ <li>handle element(s): The drag operation only occurs if the element that 
+ was clicked matches a handle element.  By default this is the linked 
+ element, but there are times that you will want only a portion of the 
+ linked element to initiate the drag operation, and the setHandleElId() 
+ method provides a way to define this.</li>
+ <li>drag element: this represents an the element that would be moved along
+ with the cursor during a drag operation.  By default, this is the linked
+ element itself as in <a href="YAHOO.util.DD.html#">YAHOO.util.DD</a>.  setDragElId() lets you define
+ a separate element that would be moved, as in <a href="YAHOO.util.DDProxy.html#">YAHOO.util.DDProxy</a>
+ </li>
+ </ul>
+ This class should not be instantiated until the onload event to ensure that
+ the associated elements are available.
+ The following would define a DragDrop obj that would interact with any 
+ other * DragDrop obj in the "group1" group:
+ <pre>
+  dd = new YAHOO.util.DragDrop("div1", "group1");
+ </pre>
+ Since none of the event handlers have been implemented, nothing would 
+ actually happen if you were to run the code above.  Normally you would 
+ override this class or one of the default implementations, but you can 
+ also override the methods you want on an instance of the class...
+ <pre>
+  dd.onDragDrop = function(e, id) {
+   alert("dd was dropped on " + id);
+  }
+ </pre>
+							
+							
+							
+								<dl>
+									<dt>Parameters:</dt>
+									
+										<dd>
+											<code>id</code> - 
+											 of the element that is linked to this instance  
+										</dd>
+									
+										<dd>
+											<code>sGroup</code> - 
+											 the group of related DragDrop objects
+										</dd>
+									
+								</dl>
+							
+							
+							
+							
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		
+		<!-- ========= CONSTRUCTOR DETAIL END ======== -->
+
+
+		<!-- ============ METHOD DETAIL START ========== -->
+		
+			<div class="section method details">
+				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					
+						<h4><a name="addInvalidHandleType">addInvalidHandleType</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>addInvalidHandleType</strong>
+								(&lt;string&gt; tagName)
+							</code>
+									
+							<div class="description">
+								
+									Allows you to specify a tag name that should not start a drag operation
+ when clicked.  This is designed to facilitate embedding links within a
+ drag handle that do something other than start the drag.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>tagName</code> - 
+												 the type of element to exclude        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="addToGroup">addToGroup</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>addToGroup</strong>
+								(sGroup)
+							</code>
+									
+							<div class="description">
+								
+									Add this instance to a group of related drag/drop objects.  All 
+ instances belong to at least one group, and can belong to as many 
+ groups as needed.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>sGroup</code> - 
+												 {string} the name of the group        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="endDrag">endDrag</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>endDrag</strong>
+								(&lt;Event&gt; e)
+							</code>
+									
+							<div class="description">
+								
+									Fired when we are done dragging the object
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>e</code> - 
+												        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getDragEl">getDragEl</a></h4>
+						<div class="detail">
+							<code>
+								HTMLElement 
+								<strong>getDragEl</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Returns a reference to the actual element to drag.  By default this is
+ the same as the html element, but it can be assigned to another 
+ element. An example of this can be found in YAHOO.util.DDProxy
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> the html element</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getEl">getEl</a></h4>
+						<div class="detail">
+							<code>
+								HTMLElement 
+								<strong>getEl</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Returns a reference to the linked element
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> the html element</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="init">init</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>init</strong>
+								(id, &lt;String&gt; sGroup)
+							</code>
+									
+							<div class="description">
+								
+									Sets up the DragDrop object.  Must be called in the constructor of any
+ YAHOO.util.DragDrop subclass
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>id</code> - 
+												 the id of the linked element  
+											</dd>
+										
+											<dd>
+												<code>sGroup</code> - 
+												 the group of related items  element is supposed to be a target only, set to false.        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="initTarget">initTarget</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>initTarget</strong>
+								(id, &lt;String&gt; sGroup)
+							</code>
+									
+							<div class="description">
+								
+									Initializes Targeting functionality only... the object does not
+ get a mousedown handler.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>id</code> - 
+												 the id of the linked element  
+											</dd>
+										
+											<dd>
+												<code>sGroup</code> - 
+												 the group of related items  element is supposed to be a target only, set to false.        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="isLocked">isLocked</a></h4>
+						<div class="detail">
+							<code>
+								boolean 
+								<strong>isLocked</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Returns true if this instance is locked, or the drag drop mgr is locked
+ (meaning that all drag/drop is disabled on the page.)
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> true if this obj or all drag/drop is locked, else   false</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="isValidHandleChild">isValidHandleChild</a></h4>
+						<div class="detail">
+							<code>
+								boolean 
+								<strong>isValidHandleChild</strong>
+								(&lt;ygNode&gt; node)
+							</code>
+									
+							<div class="description">
+								
+									Checks the tag exclusion list to see if this click should be ignored
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>node</code> - 
+												  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> true if this is a valid tag type, false if not</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="lock">lock</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>lock</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Lock this instance
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="onDrag">onDrag</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>onDrag</strong>
+								(&lt;Event&gt; e)
+							</code>
+									
+							<div class="description">
+								
+									Abstract method called during the onMouseMove event while dragging an 
+ object.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>e</code> - 
+												        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="onDragDrop">onDragDrop</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>onDragDrop</strong>
+								(&lt;Event&gt; e, id)
+							</code>
+									
+							<div class="description">
+								
+									Abstract method called when this item is dropped on another DragDrop 
+ obj
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>e</code> - 
+												  
+											</dd>
+										
+											<dd>
+												<code>String</code> - 
+												 || YAHOO.util.DragDrop[]} id In POINT mode, the element  id this was dropped on.  In INTERSECT mode, an array of dd items this   was dropped on.        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="onDragEnter">onDragEnter</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>onDragEnter</strong>
+								(&lt;Event&gt; e, id)
+							</code>
+									
+							<div class="description">
+								
+									Abstract method called when this element fist begins hovering over 
+ another DragDrop obj
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>e</code> - 
+												  
+											</dd>
+										
+											<dd>
+												<code>String</code> - 
+												 || YAHOO.util.DragDrop[]} id In POINT mode, the element  id this is hovering over.  In INTERSECT mode, an array of one or more   dragdrop items being hovered over.        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="onDragOut">onDragOut</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>onDragOut</strong>
+								(&lt;Event&gt; e, id)
+							</code>
+									
+							<div class="description">
+								
+									Abstract method called when we are no longer hovering over an element
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>e</code> - 
+												  
+											</dd>
+										
+											<dd>
+												<code>String</code> - 
+												 || YAHOO.util.DragDrop[]} id In POINT mode, the element  id this was hovering over.  In INTERSECT mode, an array of dd items   that the mouse is no longer over.        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="onDragOver">onDragOver</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>onDragOver</strong>
+								(&lt;Event&gt; e, id)
+							</code>
+									
+							<div class="description">
+								
+									Abstract method called when this element is hovering over another 
+ DragDrop obj
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>e</code> - 
+												  
+											</dd>
+										
+											<dd>
+												<code>String</code> - 
+												 || YAHOO.util.DragDrop[]} id In POINT mode, the element  id this is hovering over.  In INTERSECT mode, an array of dd items   being hovered over.        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="onMouseDown">onMouseDown</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>onMouseDown</strong>
+								(&lt;Event&gt; e)
+							</code>
+									
+							<div class="description">
+								
+									Event handler that fires when a drag/drop obj gets a mousedown
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>e</code> - 
+												        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="onMouseUp">onMouseUp</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>onMouseUp</strong>
+								(&lt;Event&gt; e)
+							</code>
+									
+							<div class="description">
+								
+									Event handler that fires when a drag/drop obj gets a mouseup
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>e</code> - 
+												        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="removeInvalidHandleType">removeInvalidHandleType</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>removeInvalidHandleType</strong>
+								(&lt;string&gt; tagName)
+							</code>
+									
+							<div class="description">
+								
+									Unsets an excluded tag name set by addInvalidHandleType
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>tagName</code> - 
+												 the type of element to unexclude        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="resetConstraints">resetConstraints</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>resetConstraints</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									resetConstraints must be called if you manually reposition a dd element.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>maintainOffset</code> - 
+												        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="setDragElId">setDragElId</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>setDragElId</strong>
+								(id)
+							</code>
+									
+							<div class="description">
+								
+									Allows you to specify that an element other than the linked element 
+ will be moved with the cursor during a drag
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>id</code> - 
+												 the id of the element that will be used to initiate the drag        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="setHandleElId">setHandleElId</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>setHandleElId</strong>
+								(id)
+							</code>
+									
+							<div class="description">
+								
+									Allows you to specify a child of the linked element that should be 
+ used to initiate the drag operation.  An example of this would be if 
+ you have a content div with text and links.  Clicking anywhere in the 
+ content area would normally start the drag operation.  Use this method
+ to specify that an element inside of the content div is the element 
+ that starts the drag operation.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>id</code> - 
+												 the id of the element that will be used to initiate the drag        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="setInitPosition">setInitPosition</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>setInitPosition</strong>
+								(diffX, diffY)
+							</code>
+									
+							<div class="description">
+								
+									Stores the initial placement of the dd element
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="setOuterHandleElId">setOuterHandleElId</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>setOuterHandleElId</strong>
+								(id)
+							</code>
+									
+							<div class="description">
+								
+									Allows you to set an element outside of the linked element as a drag 
+ handle
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="setPadding">setPadding</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>setPadding</strong>
+								(&lt;int&gt; iTop, &lt;int&gt; iRight, &lt;int&gt; iBot, &lt;int&gt; iLeft)
+							</code>
+									
+							<div class="description">
+								
+									Configures the padding for the target zone in px.  Effectively expands
+ (or reduces) the virtual object size for targeting calculations.  
+ Supports css-style shorthand; if only one parameter is passed, all sides
+ will have that padding, and if only two are passed, the top and bottom
+ will have the first param, the left and right the second.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>iTop</code> - 
+												    Top pad  
+											</dd>
+										
+											<dd>
+												<code>iRight</code> - 
+												  Right pad  
+											</dd>
+										
+											<dd>
+												<code>iBot</code> - 
+												    Bot pad  
+											</dd>
+										
+											<dd>
+												<code>iLeft</code> - 
+												   Left pad        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="setXConstraint">setXConstraint</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>setXConstraint</strong>
+								(&lt;int&gt; iLeft, &lt;int&gt; iRight, &lt;int&gt; iTickSize)
+							</code>
+									
+							<div class="description">
+								
+									By default, the element can be dragged any place on the screen.  Use 
+ this method to limit the horizontal travel of the element.  Pass in 
+ 0,0 for the parameters if you want to lock the drag to the y axis.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>iLeft</code> - 
+												 the number of pixels the element can move to the left  
+											</dd>
+										
+											<dd>
+												<code>iRight</code> - 
+												 the number of pixels the element can move to the   right  
+											</dd>
+										
+											<dd>
+												<code>iTickSize</code> - 
+												 optional parameter for specifying that the   element  should move iTickSize pixels at a time.        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="setYConstraint">setYConstraint</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>setYConstraint</strong>
+								(&lt;int&gt; iUp, &lt;int&gt; iDown, &lt;int&gt; iTickSize)
+							</code>
+									
+							<div class="description">
+								
+									By default, the element can be dragged any place on the screen.  Set 
+ this to limit the vertical travel of the element.  Pass in 0,0 for the
+ parameters if you want to lock the drag to the x axis.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>iUp</code> - 
+												 the number of pixels the element can move up  
+											</dd>
+										
+											<dd>
+												<code>iDown</code> - 
+												 the number of pixels the element can move down  
+											</dd>
+										
+											<dd>
+												<code>iTickSize</code> - 
+												 optional parameter for specifying that the   element should move iTickSize pixels at a time.        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="startDrag">startDrag</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>startDrag</strong>
+								(x, y)
+							</code>
+									
+							<div class="description">
+								
+									Abstract method called after a drag/drop object is clicked
+ and the drag or mousedown time thresholds have beeen met.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>X</code> - 
+												 click location  
+											</dd>
+										
+											<dd>
+												<code>Y</code> - 
+												 click location        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="toString">toString</a></h4>
+						<div class="detail">
+							<code>
+								string 
+								<strong>toString</strong>
+								(val, tickArray)
+							</code>
+									
+							<div class="description">
+								
+									toString method
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> string representation of the dd obj</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="unlock">unlock</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>unlock</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Unlock this instace
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="unreg">unreg</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>unreg</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Remove all drag and drop hooks for this element
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+				</div>
+			</div>
+		
+		<!-- ============ METHOD DETAIL END ========== -->
+		</div>
+	</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+</div>
+
+
+</body>
+</html>

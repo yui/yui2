@@ -1,0 +1,498 @@
+
+<html>
+<head>
+	<title>JavaScript Documentation - DD.js</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Drag and Drop</a></h3>
+
+	<div class="breadcrumbs">
+		
+			
+			
+			
+				<a href="./index.html">Drag and Drop</a>
+				&gt;
+				<strong>DD.js</strong>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DD.html">
+								YAHOO.util.DD</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DDProxy.html">
+								YAHOO.util.DDProxy</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DDTarget.html">
+								YAHOO.util.DDTarget</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DragDrop.html">
+								YAHOO.util.DragDrop</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.DragDropMgr.html">
+								YAHOO.util.DragDropMgr</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-DD.js.html">
+								DD.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DDProxy.js.html">
+								DDProxy.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DDTarget.js.html">
+								DDTarget.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DragDrop.js.html">
+								DragDrop.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DragDropMgr.js.html">
+								DragDropMgr.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div class="main">
+			
+		
+		
+			
+			   <h2>DD.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+		
+		
+		
+		
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+				
+					
+						<a href="#classSummary">Class Summary</a> |
+					
+					
+				
+				
+				
+					<a href="#source">Source Code</a>
+				
+			</div>
+		
+			
+				<div class="section class summaries">
+					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+			
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+						<tr>
+							<td class="name">
+								<a href="YAHOO.util.DD.html">YAHOO.util.DD</a>
+							</td>
+							<td class="overview">&nbsp;</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		
+		
+		
+		
+			<div class="section source">
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<pre class="sourceview"><span class="comment">/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */</span>
+
+<span class="comment">/**
+ * A DragDrop implementation where the linked element follows the 
+ * mouse cursor during a drag.
+ *
+ * <span class="attrib">@extends</span> YAHOO.util.DragDrop
+ * <span class="attrib">@constructor</span>
+ * <span class="attrib">@param</span> {String} id the id of the linked element 
+ * <span class="attrib">@param</span> {String} sGroup the group of related DragDrop items
+ */</span>
+YAHOO.util.DD = <span class="reserved">function</span>(id, sGroup) {
+    <span class="reserved">if</span> (id) {
+        <span class="reserved">this</span>.init(id, sGroup);
+        <span class="reserved">this</span>.logger.setModuleName(<span class="literal">"DD"</span>);
+    }
+};
+
+YAHOO.util.DD.<span class="reserved">prototype</span> = new YAHOO.util.DragDrop();
+
+<span class="comment">/**
+ * When set to true, the utility automatically tries to scroll the browser
+ * window wehn a drag and drop element is dragged near the viewport boundary.
+ * Defaults to true.
+ *
+ * <span class="attrib">@type</span> boolean
+ */</span>
+YAHOO.util.DD.<span class="reserved">prototype</span>.scroll = true; 
+
+<span class="comment">/**
+ * Sets the pointer offset to the distance between the linked element's top 
+ * left corner and the location the element was clicked
+ *
+ * <span class="attrib">@param</span> {int} iPageX the X coordinate of the click
+ * <span class="attrib">@param</span> {int} iPageY the Y coordinate of the click
+ */</span>
+YAHOO.util.DD.<span class="reserved">prototype</span>.autoOffset = <span class="reserved">function</span>(iPageX, iPageY) {
+    var el = <span class="reserved">this</span>.getEl();
+    var aCoord = YAHOO.util.Dom.getXY(el);
+    var x = iPageX - aCoord[0];
+    var y = iPageY - aCoord[1];
+    <span class="reserved">this</span>.setDelta(x, y);
+    <span class="reserved">this</span>.logger.debug(<span class="literal">"autoOffset el pos: "</span> + aCoord + <span class="literal">", delta: "</span> + x + <span class="literal">","</span> + y);
+};
+
+<span class="comment">/** 
+ * Sets the pointer offset.  You can call this directly to force the offset to
+ * be in a particular location (e.g., pass in 0,0 to set it to the center of the
+ * object, as done in ygDDSliderBG)
+ *
+ * <span class="attrib">@param</span> {int} iDeltaX the distance from the left
+ * <span class="attrib">@param</span> {int} iDeltaY the distance from the top
+ */</span>
+YAHOO.util.DD.<span class="reserved">prototype</span>.setDelta = <span class="reserved">function</span>(iDeltaX, iDeltaY) {
+    <span class="reserved">this</span>.deltaX = iDeltaX;
+    <span class="reserved">this</span>.deltaY = iDeltaY;
+    <span class="reserved">this</span>.logger.debug(<span class="literal">"deltaX:"</span> + <span class="reserved">this</span>.deltaX + <span class="literal">", deltaY:"</span> + <span class="reserved">this</span>.deltaY);
+};
+
+<span class="comment">/**
+ * Sets the drag element to the location of the mousedown or click event, 
+ * maintaining the cursor location relative to the location on the element 
+ * that was clicked.  Override this if you want to place the element in a 
+ * location other than where the cursor is.
+ *
+ * <span class="attrib">@param</span> {int} iPageX the X coordinate of the mousedown or drag event
+ * <span class="attrib">@param</span> {int} iPageY the Y coordinate of the mousedown or drag event
+ */</span>
+
+YAHOO.util.DD.<span class="reserved">prototype</span>.setDragElPos = <span class="reserved">function</span>(iPageX, iPageY) {
+    <span class="reserved">this</span>.alignElWithMouse(<span class="reserved">this</span>.getDragEl(), iPageX, iPageY);
+};
+
+<span class="comment">/**
+ * Sets the element to the location of the mousedown or click event, 
+ * maintaining the cursor location relative to the location on the element 
+ * that was clicked.  Override this if you want to place the element in a 
+ * location other than where the cursor is.
+ *
+ * <span class="attrib">@param</span> {HTMLElement} el the element to move
+ * <span class="attrib">@param</span> {int} iPageX the X coordinate of the mousedown or drag event
+ * <span class="attrib">@param</span> {int} iPageY the Y coordinate of the mousedown or drag event
+ */</span>
+YAHOO.util.DD.<span class="reserved">prototype</span>.alignElWithMouse = <span class="reserved">function</span>(el, iPageX, iPageY) {
+    var oCoord = <span class="reserved">this</span>.getTargetCoord(iPageX, iPageY);
+    var aCoord = [oCoord.x, oCoord.y];
+<span class="comment">    // this.logger.debug("****alignElWithMouse : " + el.id + ", " + aCoord + ", " + el.style.display);</span>
+    YAHOO.util.Dom.setXY(el, aCoord);
+
+    <span class="reserved">this</span>.cachePosition(oCoord.x, oCoord.y);
+
+    <span class="reserved">this</span>.autoScroll(oCoord.x, oCoord.y, el.offsetHeight, el.offsetWidth);
+};
+
+<span class="comment">/**
+ * Saves the most recent position so that we can reset the constraints and
+ * tick marks on-demand.  We need to know this so that we can calculate the
+ * number of pixels the element is offset from its original position.
+ */</span>
+YAHOO.util.DD.<span class="reserved">prototype</span>.cachePosition = <span class="reserved">function</span>(iPageX, iPageY) {
+    <span class="reserved">if</span> (iPageX) {
+        <span class="reserved">this</span>.lastPageX = iPageX;
+        <span class="reserved">this</span>.lastPageY = iPageY;
+    } <span class="reserved">else</span> {
+        var aCoord = YAHOO.util.Dom.getXY(<span class="reserved">this</span>.getEl());
+        <span class="reserved">this</span>.lastPageX = aCoord[0];
+        <span class="reserved">this</span>.lastPageY = aCoord[1];
+    }
+};
+
+<span class="comment">/**
+ * Auto-scroll the window if the dragged object has been moved beyond the 
+ * visible window boundary.
+ *
+ * <span class="attrib">@param</span> {int} x the drag element's x position
+ * <span class="attrib">@param</span> {int} y the drag element's y position
+ * <span class="attrib">@param</span> {int} h the height of the drag element
+ * <span class="attrib">@param</span> {int} w the width of the drag element
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.util.DD.<span class="reserved">prototype</span>.autoScroll = <span class="reserved">function</span>(x, y, h, w) {
+
+    <span class="reserved">if</span> (<span class="reserved">this</span>.scroll) {
+<span class="comment">        // The client height</span>
+        var clientH = <span class="reserved">this</span>.DDM.getClientHeight();
+<span class="comment">
+        // The client width</span>
+        var clientW = <span class="reserved">this</span>.DDM.getClientWidth();
+<span class="comment">
+        // The amt scrolled down</span>
+        var st = <span class="reserved">this</span>.DDM.getScrollTop();
+<span class="comment">
+        // The amt scrolled right</span>
+        var sl = <span class="reserved">this</span>.DDM.getScrollLeft();
+<span class="comment">
+        // Location of the bottom of the element</span>
+        var bot = h + y;
+<span class="comment">
+        // Location of the right of the element</span>
+        var right = w + x;
+<span class="comment">
+        // The distance from the cursor to the bottom of the visible area, </span>
+<span class="comment">        // adjusted so that we don't scroll if the cursor is beyond the</span>
+<span class="comment">        // element drag constraints</span>
+        var toBot = (clientH + st - y - <span class="reserved">this</span>.deltaY);
+<span class="comment">
+        // The distance from the cursor to the right of the visible area</span>
+        var toRight = (clientW + sl - x - <span class="reserved">this</span>.deltaX);
+<span class="comment">
+        // this.logger.debug( " x: " + x + " y: " + y + " h: " + h + </span>
+<span class="comment">        // " clientH: " + clientH + " clientW: " + clientW + </span>
+<span class="comment">        // " st: " + st + " sl: " + sl + " bot: " + bot + </span>
+<span class="comment">        // " right: " + right + " toBot: " + toBot + " toRight: " + toRight);</span>
+<span class="comment">
+        // How close to the edge the cursor must be before we scroll</span>
+<span class="comment">        // var thresh = (document.all) ? 100 : 40;</span>
+        var thresh = 40;
+<span class="comment">
+        // How many pixels to scroll per autoscroll op.  This helps to reduce </span>
+<span class="comment">        // clunky scrolling. IE is more sensitive about this ... it needs this </span>
+<span class="comment">        // value to be higher.</span>
+        var scrAmt = (document.all) ? 80 : 30;
+<span class="comment">
+        // Scroll down if we are near the bottom of the visible page and the </span>
+<span class="comment">        // obj extends below the crease</span>
+        <span class="reserved">if</span> ( bot &gt; clientH &amp;&amp; toBot &lt; thresh ) { 
+            window.scrollTo(sl, st + scrAmt); 
+        }
+<span class="comment">
+        // Scroll up if the window is scrolled down and the top of the object</span>
+<span class="comment">        // goes above the top border</span>
+        <span class="reserved">if</span> ( y &lt; st &amp;&amp; st &gt; 0 &amp;&amp; y - st &lt; thresh ) { 
+            window.scrollTo(sl, st - scrAmt); 
+        }
+<span class="comment">
+        // Scroll right if the obj is beyond the right border and the cursor is</span>
+<span class="comment">        // near the border.</span>
+        <span class="reserved">if</span> ( right &gt; clientW &amp;&amp; toRight &lt; thresh ) { 
+            window.scrollTo(sl + scrAmt, st); 
+        }
+<span class="comment">
+        // Scroll left if the window has been scrolled to the right and the obj</span>
+<span class="comment">        // extends past the left border</span>
+        <span class="reserved">if</span> ( x &lt; sl &amp;&amp; sl &gt; 0 &amp;&amp; x - sl &lt; thresh ) { 
+            window.scrollTo(sl - scrAmt, st);
+        }
+    }
+};
+
+<span class="comment">/**
+ * Finds the location the element should be placed if we want to move
+ * it to where the mouse location less the click offset would place us.
+ *
+ * <span class="attrib">@param</span> {int} iPageX the X coordinate of the click
+ * <span class="attrib">@param</span> {int} iPageY the Y coordinate of the click
+ * <span class="attrib">@return</span> an object that contains the coordinates (Object.x and Object.y)
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.util.DD.<span class="reserved">prototype</span>.getTargetCoord = <span class="reserved">function</span>(iPageX, iPageY) {
+<span class="comment">
+    // this.logger.debug("getTargetCoord: " + iPageX + ", " + iPageY);</span>
+
+    var x = iPageX - <span class="reserved">this</span>.deltaX;
+    var y = iPageY - <span class="reserved">this</span>.deltaY;
+
+    <span class="reserved">if</span> (<span class="reserved">this</span>.constrainX) {
+        <span class="reserved">if</span> (x &lt; <span class="reserved">this</span>.minX) { x = <span class="reserved">this</span>.minX; }
+        <span class="reserved">if</span> (x &gt; <span class="reserved">this</span>.maxX) { x = <span class="reserved">this</span>.maxX; }
+    }
+
+    <span class="reserved">if</span> (<span class="reserved">this</span>.constrainY) {
+        <span class="reserved">if</span> (y &lt; <span class="reserved">this</span>.minY) { y = <span class="reserved">this</span>.minY; }
+        <span class="reserved">if</span> (y &gt; <span class="reserved">this</span>.maxY) { y = <span class="reserved">this</span>.maxY; }
+    }
+
+    x = <span class="reserved">this</span>.getTick(x, <span class="reserved">this</span>.xTicks);
+    y = <span class="reserved">this</span>.getTick(y, <span class="reserved">this</span>.yTicks);
+<span class="comment">
+    // this.logger.debug("getTargetCoord " + </span>
+<span class="comment">            // " iPageX: " + iPageX +</span>
+<span class="comment">            // " iPageY: " + iPageY +</span>
+<span class="comment">            // " x: " + x + ", y: " + y);</span>
+
+    <span class="reserved">return</span> {x:x, y:y};
+};
+
+<span class="comment">/** 
+ * Event that fires prior to the onMouseDown event.  Overrides 
+ * YAHOO.util.DragDrop.
+ */</span>
+YAHOO.util.DD.<span class="reserved">prototype</span>.b4MouseDown = <span class="reserved">function</span>(e) {
+<span class="comment">    // this.resetConstraints();</span>
+    <span class="reserved">this</span>.autoOffset(YAHOO.util.Event.getPageX(e), 
+                        YAHOO.util.Event.getPageY(e));
+};
+
+<span class="comment">/** 
+ * Event that fires prior to the onDrag event.  Overrides 
+ * YAHOO.util.DragDrop.
+ */</span>
+YAHOO.util.DD.<span class="reserved">prototype</span>.b4Drag = <span class="reserved">function</span>(e) {
+    <span class="reserved">this</span>.setDragElPos(YAHOO.util.Event.getPageX(e), 
+                        YAHOO.util.Event.getPageY(e));
+};
+<span class="comment">
+
+///////////////////////////////////////////////////////////////////////////////</span>
+<span class="comment">// Debugging ygDragDrop events that can be overridden</span>
+<span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
+<span class="comment">/*
+YAHOO.util.DD.prototype.startDrag = function(x, y) {
+    this.logger.debug(this.id.toString()  + " startDrag");
+};
+
+YAHOO.util.DD.prototype.onDrag = function(e) {
+    this.logger.debug(this.id.toString() + " onDrag");
+};
+
+YAHOO.util.DD.prototype.onDragEnter = function(e, id) {
+    this.logger.debug(this.id.toString() + " onDragEnter: " + id);
+};
+
+YAHOO.util.DD.prototype.onDragOver = function(e, id) {
+    this.logger.debug(this.id.toString() + " onDragOver: " + id);
+};
+
+YAHOO.util.DD.prototype.onDragOut = function(e, id) {
+    this.logger.debug(this.id.toString() + " onDragOut: " + id);
+};
+
+YAHOO.util.DD.prototype.onDragDrop = function(e, id) {
+    this.logger.debug(this.id.toString() + " onDragDrop: " + id);
+};
+
+YAHOO.util.DD.prototype.endDrag = function(e) {
+    this.logger.debug(this.id.toString() + " endDrag");
+};
+*/</span>
+
+</pre>
+			</div>
+		
+	</div>
+</div>
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,144 @@
+  <!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<head>
+<title>Yahoo! UI Library - Drag and Drop</title>
+<link rel="stylesheet" type="text/css" href="./css/screen.css">
+</head>
+  
+<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
+<script type="text/javascript" src="js/log.js" ></script>
+<script type="text/javascript" src="../../build/event/event.js" ></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
+
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
+        <script type="text/javascript" src="js/DDOnTop.js" ></script>
+        <script type="text/javascript" src="js/DDSwap.js" ></script>
+        <script type="text/javascript" src="js/DDMy.js" ></script>
+        <script type="text/javascript" src="js/DDMy2.js" ></script>
+        <script type="text/javascript" src="js/DDList.js" ></script>
+        <script type="text/javascript" src="js/DDPlayer.js" ></script>
+        <script type="text/javascript" src="js/DDResize.js" ></script>
+
+    
+<script type="text/javascript">
+
+YAHOO.example.DDApp = function() {
+    var dd, dd3, logger;
+    return {
+        init: function() {
+            if (typeof(ygLogger) != "undefined") {
+                ygLogger.init(document.getElementById("logDiv"));
+                logger = new ygLogger("test_noimpl.php");
+            }
+
+            dd = new YAHOO.example.DDOnTop("dragDiv1");
+            dd.setHandleElId("handle1");
+            dd.setHandleElId("handle2");
+            dd3 = new YAHOO.util.DDTarget("dragDiv3");
+        }
+    };
+} ();
+    
+YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
+    
+</script>
+<body>
+<div id="pageTitle">
+    <h3>Drag and Drop - DD, DDTarget</h3>
+</div>
+
+
+<style type="text/css">
+
+    #logDiv {
+        font-family:Arial, Helvetica, sans-serif;
+        position:relative;overflow:auto;text-align:left;z-index:998;
+        font-size:84%;width:100%;top:0px; height:280px;
+    }
+
+    #logFooter { 
+        font-size:82%;background-color:#cccccc;padding:5px;line-height:14px 
+    }
+
+    #ylogo { 
+        position:absolute;top:5px;left:5px; 
+    }
+
+    #logHeader input {
+        font-size:80%;
+    }
+
+</style>
+
+<img id="ylogo" src="img/logo.gif" />
+
+<div id="container">
+<div id="containerTop">
+<div id="header">
+<h4>&nbsp;</h4>
+</div>
+<div id="main">
+
+<div id="rightbar">
+
+<div id="rightBarPad">
+<h3>Examples</h3>
+
+<div id="linkage">
+<ul>
+<li><a href="drag.html?mode=dist">Drag test</a></li>
+<li><a href="ontop.html?mode=dist">Always on top test</a></li>
+<li><a href="proxy.html?mode=dist">Framed test</a> </li>
+<li><a href="list.html?mode=dist">Sortable List</a> </li>
+<li><a href="slider.html?mode=dist">Slider</a></li>
+<li><a href="multihandle.html?mode=dist">Multiple Handles</a></li>
+<li><a href="targetable.html?mode=dist">Targetable Affordance</a></li>
+<li><a href="grid.html?mode=dist">Grid</a></li>
+<li><a href="resize.html?mode=dist">Resize Pane</a></li>
+
+</ul>
+</div> 
+
+
+</div>
+
+
+</div>
+
+  <div id="content">
+    <form name="dragDropForm" action="javscript:;">
+    <div class="newsItem">
+      <h3>Multiple Drag Handles</h3>
+      <p>
+        Demonstrates the support for multiple drag handles introduced in release 0.9.1.
+      </p>
+
+    </div>
+    </form>
+  </div>
+    
+      <div id="footerContainer">
+        <div id="footer">
+          <p>&nbsp;</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div id="dragDiv1" style="position:absolute;color:white;background-color:#594178;top:240px; left:105px;height:200px;width:200px;z-index:2;padding:4px">
+        <div id="handle1" style="text-align:center;margin-right:14px;cursor:move;float:left;color:black;width:90px;background-color:#eeeeee;border:1px solid black ">handle1</div>
+        <div id="handle2" style="text-align:center;cursor:move;float:right;color:black;width:90px;background-color:#eeeeee;border:1px solid black ">handle2</div>
+        <p>
+        
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris nec turpis. Vestibulum gravida suscipit libero. Integer id sapien. Nullam tempus, lorem quis rutrum consectetuer, erat massa vehicula nisl, eu pulvinar lacus diam ac orci
+        
+        </p>
+    </div>
+
+    <div id="dragDiv3" class="testSquare" style="background-color:#000000;top:460px; left:325px;cursor:default;z-index:0">DDTarget</div>
+    
+  </body>
+</html>
+ 
