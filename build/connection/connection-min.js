@@ -29,18 +29,18 @@ this.handleReadyState(o,callback);postData?o.conn.send(postData):o.conn.send(nul
 {var oConn=this;try
 {this._poll[o.tId]=window.setInterval(function(){if(o.conn&&o.conn.readyState==4){window.clearInterval(oConn._poll[o.tId]);oConn._poll.splice(o.tId);oConn.handleTransactionResponse(o,callback);}},this._polling_interval);}
 catch(e)
-{window.clearInterval(oConn._poll[o.tId]);oConn.handleTransactionResponse(o,callback);}},handleTransactionResponse:function(o,callback)
+{window.clearInterval(oConn._poll[o.tId]);oConn._poll.splice(o.tId);oConn.handleTransactionResponse(o,callback);}},handleTransactionResponse:function(o,callback)
 {if(!callback){this.releaseObject(o);return;}
 var httpStatus;var responseObject;try
 {httpStatus=o.conn.status;}
 catch(e){httpStatus=13030;}
-if(httpStatus==200){responseObject=this.createResponseObject(o,callback.argument);if(callback.success){if(!callback.scope){callback.success(responseObject);}
+if(httpStatus>=200&&httpStatus<300){responseObject=this.createResponseObject(o,callback.argument);if(callback.success){if(!callback.scope){callback.success(responseObject);}
 else{callback.success.apply(callback.scope,[responseObject]);}}}
 else{switch(httpStatus){case 12002:case 12029:case 12030:case 12031:case 12152:case 13030:responseObject=this.createExceptionObject(o,callback.argument);if(callback.failure){if(!callback.scope){callback.failure(responseObject);}
 else{callback.failure.apply(callback.scope,[responseObject]);}}
 break;default:responseObject=this.createResponseObject(o,callback.argument);if(callback.failure){if(!callback.scope){callback.failure(responseObject);}
 else{callback.failure.apply(callback.scope,[responseObject]);}}}}
-delete responseObject;this.releaseObject(o);},createResponseObject:function(o,callbackArg)
+this.releaseObject(o);},createResponseObject:function(o,callbackArg)
 {var obj={};var headerObj={};try
 {var headerStr=o.conn.getAllResponseHeaders();var header=headerStr.split("\n");for(var i=0;i<header.length;i++){var delimitPos=header[i].indexOf(':');if(delimitPos!=-1){headerObj[header[i].substring(0,delimitPos)]=header[i].substring(delimitPos+1);}}
 obj.tId=o.tId;obj.status=o.conn.status;obj.statusText=o.conn.statusText;obj.getResponseHeader=headerObj;obj.getAllResponseHeaders=headerStr;obj.responseText=o.conn.responseText;obj.responseXML=o.conn.responseXML;if(typeof callbackArg!==undefined){obj.argument=callbackArg;}}
@@ -54,7 +54,10 @@ else{this._http_header[label]=value+","+this._http_header[label];}
 this._has_http_headers=true;},setHeader:function(o)
 {for(var prop in this._http_header){o.conn.setRequestHeader(prop,this._http_header[prop]);}
 delete this._http_header;this._http_header={};this._has_http_headers=false;},setForm:function(formName)
-{this._sFormData='';var oForm=(formName==(typeof string))?document.forms[formName]:formName;var oElement,oName,oValue;var hasSubmit=false;for(var i=0;i<oForm.elements.length;i++){oDisabled=oForm.elements[i].disabled;if(oForm.elements[i].name!=""){oElement=oForm.elements[i];oName=oForm.elements[i].name;oValue=oForm.elements[i].value;}
+{this._sFormData='';if(typeof formName=='string'){var oForm=document.forms[formName];}
+else if(typeof formName=='object'){var oForm=formName;}
+else{return;}
+var oElement,oName,oValue,oDisabled;var hasSubmit=false;for(var i=0;i<oForm.elements.length;i++){oDisabled=oForm.elements[i].disabled;if(oForm.elements[i].name!=""){oElement=oForm.elements[i];oName=oForm.elements[i].name;oValue=oForm.elements[i].value;}
 if(!oDisabled)
 {switch(oElement.type)
 {case'select-one':case'select-multiple':for(var j=0;j<oElement.options.length;j++){if(oElement.options[j].selected){this._sFormData+=encodeURIComponent(oName)+'='+encodeURIComponent(oElement.options[j].value||oElement.options[j].text)+'&';}}

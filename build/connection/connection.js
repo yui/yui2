@@ -60,7 +60,7 @@ YAHOO.util.Connect =
   * @private
   * @type string
   */
-	_poll:new Array(),
+	_poll:[],
 
   /**
    * The polling frequency, in milliseconds, for HandleReadyState.
@@ -248,6 +248,7 @@ YAHOO.util.Connect =
 		catch(e)
 		{
 			window.clearInterval(oConn._poll[o.tId]);
+			oConn._poll.splice(o.tId);
 			oConn.handleTransactionResponse(o, callback);
 		}
 	},
@@ -284,7 +285,7 @@ YAHOO.util.Connect =
 			httpStatus = 13030;
 		}
 
-		if(httpStatus == 200){
+		if(httpStatus >= 200 && httpStatus < 300){
 			responseObject = this.createResponseObject(o, callback.argument);
 			if(callback.success){
 				if(!callback.scope){
@@ -333,7 +334,6 @@ YAHOO.util.Connect =
 			}
 		}
 
-		delete responseObject;
 		this.releaseObject(o);
 	},
 
@@ -344,7 +344,6 @@ YAHOO.util.Connect =
    * @private
    * @param {object} o The connection object
    * @param {} callbackArg User-defined argument or arguments to be passed to the callback
-   * @param {boolean} isSuccess Indicates whether the transaction was successful or not.
    * @return object
    */
 	createResponseObject:function(o, callbackArg)
@@ -389,8 +388,6 @@ YAHOO.util.Connect =
    * @private
    * @param {int} tId Transaction Id
    * @param callbackArg The user-defined arguments
-   * @param {string} errorCode Error code associated with the exception.
-   * @param {string} errorText Error message describing the exception.
    * @return object
    */
 	createExceptionObject:function(tId, callbackArg)
@@ -453,7 +450,7 @@ YAHOO.util.Connect =
    * transaction with a HTTP header Content-Type of
    * application/x-www-form-urlencoded.
    * @public
-   * @param {string||object} form name attribute or form object.
+   * @param {string || object} form name attribute or form object.
    * @return void
    */
 	setForm:function(formName)
@@ -466,7 +463,7 @@ YAHOO.util.Connect =
 			var oForm = formName;
 		}
 		else{
-			return null;
+			return;
 		}
 		var oElement, oName, oValue, oDisabled;
 		var hasSubmit = false;
@@ -483,7 +480,7 @@ YAHOO.util.Connect =
 				oValue = oForm.elements[i].value;
 			}
 
-			// Do not submit fields that are disabled .
+			// Do not submit fields that are disabled.
 			if(!oDisabled)
 			{
 				switch (oElement.type)
