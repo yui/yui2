@@ -1,0 +1,402 @@
+
+<html>
+<head>
+	<title>JavaScript Documentation - menubaritem.js</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Yahoo! Menuing Library</a></h3>
+
+	<div class="breadcrumbs">
+					
+			
+			
+			
+				<a href="./index.html">Yahoo! Menuing Library</a>
+				&gt;
+				<strong>menubaritem.js</strong>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.widget.html">
+								YAHOO.widget</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.ContextMenu.html">
+								YAHOO.widget.ContextMenu</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.ContextMenuItem.html">
+								YAHOO.widget.ContextMenuItem</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Menu.html">
+								YAHOO.widget.Menu</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.MenuBar.html">
+								YAHOO.widget.MenuBar</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.MenuBarItem.html">
+								YAHOO.widget.MenuBarItem</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.MenuItem.html">
+								YAHOO.widget.MenuItem</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.MenuModule.html">
+								YAHOO.widget.MenuModule</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.MenuModuleItem.html">
+								YAHOO.widget.MenuModuleItem</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-contextmenu.js.html">
+								contextmenu.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-contextmenuitem.js.html">
+								contextmenuitem.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-menu.js.html">
+								menu.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-menubar.js.html">
+								menubar.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-menubaritem.js.html">
+								menubaritem.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-menuitem.js.html">
+								menuitem.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-menumodule.js.html">
+								menumodule.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-menumoduleitem.js.html">
+								menumoduleitem.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div class="main">
+			
+        <h2>menubaritem.js</h2>
+        
+        <div class="section source">
+            <pre class="sourceview"><span class="comment">/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+*/</span>
+
+<span class="comment">/**
+* <span class="attrib">@class</span> The MenuBarItem class allows you to create and modify an item for a
+* MenuBar instance.  MenuBarItem extends YAHOO.widget.MenuModuleItem to provide 
+* a set of default mouse and key event behaviors.
+* <span class="attrib">@constructor</span>
+* <span class="attrib">@extends</span> YAHOO.widget.MenuModuleItem
+* <span class="attrib">@base</span> YAHOO.widget.MenuModuleItem
+* <span class="attrib">@param</span> {String or HTMLElement} p_oObject String or HTMLElement 
+* (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
+* source HTMLElement node.
+* <span class="attrib">@param</span> {Object} p_oUserConfig The configuration object literal containing 
+* the configuration for a MenuBarItem instance. See the configuration 
+* class documentation for more details.
+*/</span>
+YAHOO.widget.MenuBarItem = <span class="reserved">function</span>(p_oObject, p_oUserConfig) {
+
+    <span class="reserved">if</span>(p_oObject) {
+
+        YAHOO.widget.MenuBarItem.superclass.constructor.call(
+            <span class="reserved">this</span>, 
+            p_oObject, 
+            p_oUserConfig
+        );
+
+    }
+
+};
+
+YAHOO.widget.MenuBarItem.<span class="reserved">prototype</span> = new YAHOO.widget.MenuModuleItem();
+YAHOO.widget.MenuBarItem.<span class="reserved">prototype</span>.constructor = YAHOO.widget.MenuBarItem;
+YAHOO.widget.MenuBarItem.superclass = YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span>;
+
+
+<span class="comment">/**
+* The MenuBarItem class's initialization method. This method is automatically
+* called by the constructor, and sets up all DOM references for
+* pre-existing markup, and creates required markup if it is not
+* already present.
+* <span class="attrib">@param</span> {String or HTMLElement} p_oObject String or HTMLElement 
+* (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
+* source HTMLElement node.
+* <span class="attrib">@param</span> {Object} p_oUserConfig The configuration object literal containing 
+* the configuration for a MenuBarItem instance. See the configuration 
+* class documentation for more details.
+*/</span>
+YAHOO.widget.MenuBarItem.<span class="reserved">prototype</span>.init = <span class="reserved">function</span>(p_oObject, p_oUserConfig) {
+
+    <span class="reserved">if</span>(!<span class="reserved">this</span>.SUBMENU_TYPE) {
+
+        <span class="reserved">this</span>.SUBMENU_TYPE = YAHOO.widget.Menu;
+
+    }
+
+    <span class="reserved">if</span>(!<span class="reserved">this</span>.SUBMENU_ITEM_TYPE) {
+
+        <span class="reserved">this</span>.SUBMENU_ITEM_TYPE = YAHOO.widget.MenuItem;
+
+    }
+
+
+    <span class="comment">/* 
+        Call the init of the superclass (YAHOO.widget.MenuModuleItem)
+        Note: We don't pass the user config in here yet 
+        because we only want it executed once, at the lowest 
+        subclass level.
+    */</span> 
+
+    YAHOO.widget.MenuBarItem.superclass.init.call(<span class="reserved">this</span>, p_oObject);  
+<span class="comment">
+
+    // Add event handlers to each "MenuBarItem" instance</span>
+
+    <span class="reserved">this</span>.keyDownEvent.subscribe(<span class="reserved">this</span>._onKeyDown, <span class="reserved">this</span>, true);
+    <span class="reserved">this</span>.mouseOverEvent.subscribe(<span class="reserved">this</span>._onMouseOver, <span class="reserved">this</span>, true);
+    <span class="reserved">this</span>.mouseOutEvent.subscribe(<span class="reserved">this</span>._onMouseOut, <span class="reserved">this</span>, true);
+
+
+    <span class="reserved">if</span>(p_oUserConfig) {
+
+        <span class="reserved">this</span>.cfg.applyConfig(p_oUserConfig, true);
+
+    }
+
+    <span class="reserved">this</span>.cfg.fireQueue();
+
+};
+<span class="comment">
+
+// Constants</span>
+
+<span class="comment">/**
+* Constant representing the CSS class(es) to be applied to the root 
+* HTMLLIElement of the MenuBarItem.
+* <span class="attrib">@final</span>
+* <span class="attrib">@type</span> String
+*/</span>
+YAHOO.widget.MenuBarItem.<span class="reserved">prototype</span>.CSS_CLASS_NAME = <span class="literal">"yuimenubaritem"</span>;
+
+
+<span class="comment">/**
+* Constant representing the path to the image to be used for the submenu
+* arrow indicator.
+* <span class="attrib">@final</span>
+* <span class="attrib">@type</span> String
+*/</span>
+YAHOO.widget.MenuBarItem.<span class="reserved">prototype</span>.SUBMENU_INDICATOR_IMAGE_PATH =
+    <span class="literal">"nt/ic/ut/bsc/menuarodwn9_nrm_1.gif"</span>;
+
+
+<span class="comment">/**
+* Constant representing the path to the image to be used for the submenu
+* arrow indicator when a MenuBarItem instance has focus.
+* <span class="attrib">@final</span>
+* <span class="attrib">@type</span> String
+*/</span>
+YAHOO.widget.MenuBarItem.<span class="reserved">prototype</span>.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH =
+    <span class="literal">"nt/ic/ut/bsc/menuarodwn9_clk_1.gif"</span>;
+
+
+<span class="comment">/**
+* Constant representing the path to the image to be used for the submenu
+* arrow indicator when a MenuBarItem instance is disabled.
+* <span class="attrib">@final</span>
+* <span class="attrib">@type</span> String
+*/</span>
+YAHOO.widget.MenuBarItem.<span class="reserved">prototype</span>.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH = 
+    <span class="literal">"nt/ic/ut/bsc/menuarodwn9_dim_1.gif"</span>;
+<span class="comment">
+
+// Private event handlers</span>
+
+<span class="comment">/**
+* "mouseover" Custom Event handler for a MenuBarItem instance.
+* <span class="attrib">@private</span>
+*/</span>
+YAHOO.widget.MenuBarItem.<span class="reserved">prototype</span>._onMouseOver = 
+    YAHOO.widget.MenuItem.<span class="reserved">prototype</span>._onMouseOver;
+
+
+<span class="comment">/**
+* "mouseout" Custom Event handler for a MenuBarItem instance.
+* <span class="attrib">@private</span>
+*/</span>
+YAHOO.widget.MenuBarItem.<span class="reserved">prototype</span>._onMouseOut = 
+    YAHOO.widget.MenuItem.<span class="reserved">prototype</span>._onMouseOut;
+    
+
+<span class="comment">/**
+* "keydown" Custom Event handler for a MenuBarItem instance.
+* <span class="attrib">@private</span>
+* <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
+* <span class="attrib">@param</span> {Array} p_aArguments Collection of arguments sent when the event 
+* was fired.
+* <span class="attrib">@param</span> {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
+* fired the event.
+*/</span>
+YAHOO.widget.MenuBarItem.<span class="reserved">prototype</span>._onKeyDown =
+
+    <span class="reserved">function</span>(p_sType, p_aArguments, p_oMenuItem) {
+
+        var oEvent = p_aArguments[0];
+    
+        switch(oEvent.keyCode) {
+    
+            case 37:    // Left arrow
+            case 39:    // Right arrow
+    
+                var oActiveItem = <span class="reserved">this</span>.parent.activeItem;
+    
+                <span class="reserved">if</span>(<span class="reserved">this</span> == oActiveItem &amp;&amp; !<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"selected"</span>)) {
+    
+                    <span class="reserved">this</span>.cfg.setProperty(<span class="literal">"selected"</span>, true);
+    
+                }
+                <span class="reserved">else</span> {
+    
+                    var oNextItem = (oEvent.keyCode == 37) ? 
+                            <span class="reserved">this</span>.getPreviousEnabledSibling() : 
+                            <span class="reserved">this</span>.getNextEnabledSibling();
+            
+                    <span class="reserved">if</span>(oNextItem) {
+
+                        <span class="reserved">this</span>.parent.clearActiveItem();
+
+                        oNextItem.cfg.setProperty(<span class="literal">"selected"</span>, true);
+            
+                        oNextItem.focus();
+    
+                    }
+    
+                }
+
+                YAHOO.util.Event.preventDefault(oEvent);
+    
+            break;
+    
+            case 40:    // Down arrow
+
+                <span class="reserved">this</span>.parent.clearActiveItem();
+                        
+                <span class="reserved">this</span>.cfg.setProperty(<span class="literal">"selected"</span>, true);
+                
+                <span class="reserved">this</span>.focus();
+
+                var oSubmenu = <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"submenu"</span>);
+    
+                <span class="reserved">if</span>(oSubmenu) {
+        
+                    oSubmenu.show();
+                    oSubmenu.setInitialSelection();
+    
+                }
+
+                YAHOO.util.Event.preventDefault(oEvent);
+    
+            break;
+    
+        }
+    
+    };</pre>
+        </div>
+		
+	</div>
+</div>
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">
+	JSDoc</a>
+</div>
+
+
+
+</body>
+</html>

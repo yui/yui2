@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>Setting Configuration Properties At Runtime</title>
+
+        <!-- Stanard reset and fonts -->
+        <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
+        <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
+
+        <!-- CSS for Menu -->
+        <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css"> 
+
+        <!-- Page-specific styles -->
+        <style type="text/css">
+
+            body { margin:.5em; }
+
+            li.yuimenuitem a em {
+            
+                font-style:italic;
+            }
+            
+            li.yuimenuitem strong {
+            
+                font-weight:bold;
+            
+            }
+            
+            #console {
+
+                position:absolute;
+                bottom:0;
+                left:0;
+                background-color:#ccc;
+                border-top:solid 1px #000;
+                width:100%;
+                
+            }
+
+            #console h6 {
+            
+                margin:5px 5px 10px;
+            
+            }
+            
+            #console em {
+            
+                font-weight:bold;
+            
+            }
+
+            #console pre {
+
+                margin:0px 5px 5px;
+                height:88px;            
+                font-size:90%;
+                overflow:auto;
+            
+            }
+
+            p em {
+            
+                text-decoration:underline;
+            
+            }
+
+        </style>
+
+        <!-- Namespace source file -->
+        <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+        
+        <!-- Dependency source files -->
+        <script type="text/javascript" src="../../build/event/event.js"></script>
+        <script type="text/javascript" src="../../build/dom/dom.js"></script>
+        <script type="text/javascript" src="../../build/container/container_core.js"></script>
+        
+        <!-- Menu source file -->
+        <script type="text/javascript" src="../../build/menu/menu.js"></script>
+
+        <!-- Page-specific script -->
+        <script type="text/javascript">
+
+            // "config change" event handler for each MenuItem instance 
+
+            function onMenuItemConfigChange(p_sType, p_aArguments, p_oMenuItem) {
+
+                var sPropertyName = p_aArguments[0][0],
+                    sPropertyValue = p_aArguments[0][1];
+
+                document.getElementById("output").innerHTML += 
+                    "<em>[MenuItem]</em> " +
+                    "Index: " + this.index + ", " +
+                    "Group Index: " + this.groupIndex + ", " +
+                    "Custom Event Type: " + p_sType + ", " +                  
+                    "\"" + sPropertyName + "\" Property Set To: \"" + sPropertyValue + "\"" +
+                    "<br>";
+            
+            }
+
+
+            // "load" event handler for the window
+
+            function onWindowLoad(p_oEvent) {
+
+                // Create a menu
+
+                var oMenu = new YAHOO.widget.Menu("basicmenu", { fixedcenter: true }),
+
+                    // Add the MenuItem instance to the menu
+    
+                    aMenuItemData = [
+                    
+                        "MenuItem 0",
+                        "MenuItem 1",
+                        "MenuItem 2",
+                        "MenuItem 3",
+                        "MenuItem 4"
+    
+                    ],
+    
+                    nMenuItems = aMenuItemData.length,
+                    
+                    oMenuItem;
+                
+
+                for(var i=0; i<nMenuItems; i++) {
+
+                    oMenuItem = new YAHOO.widget.MenuItem(aMenuItemData[i]);
+
+                    oMenuItem.cfg.configChangedEvent.subscribe(onMenuItemConfigChange, oMenuItem, true);
+
+                    oMenu.addItem(oMenuItem);
+
+                }
+
+
+                oMenu.render(document.body);
+    
+                oMenu.show();
+
+
+                // Create a console to log event information
+
+                var oConsole = document.createElement("div"),
+                    oTitle = document.createElement("h6"),
+                    oTitleText = document.createTextNode("Event Data"),
+                    oOutput = document.createElement("pre");
+
+                    oConsole.id = "console";
+                    oOutput.id = "output";
+                    
+
+                document.body.appendChild(oConsole);
+                oConsole.appendChild(oTitle);
+                oTitle.appendChild(oTitleText);
+                oConsole.appendChild(oOutput);
+
+
+                // Set the MenuItem configuration properties
+
+                oMenu.getItem(0).cfg.setProperty("selected", true);
+                oMenu.getItem(1).cfg.setProperty("disabled", true);
+                oMenu.getItem(2).cfg.setProperty("helptext", "Help Me!");
+                oMenu.getItem(3).cfg.setProperty("emphasis", true);
+                oMenu.getItem(4).cfg.setProperty("strongemphasis", true);                
+
+            }
+
+
+            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            
+        </script>
+    </head>
+    <body>
+        <h1>Setting Configuration Properties At Runtime <em>[<a href="index.html">Examples Home</a>]</em></h1>
+        <p>This example demonstrates how to set MenuItem configuration properties at runtime and listen for the changes through the "configChangedEvent."</p>
+    </body>
+</html>

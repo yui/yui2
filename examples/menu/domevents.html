@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>Listening For DOM-Related Events</title>
+
+        <!-- Stanard reset and fonts -->
+        <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
+        <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
+
+        <!-- CSS for Menu -->
+        <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
+
+        <!-- Page-specific styles -->
+        <style type="text/css">
+
+            body { margin:.5em; }
+            
+            #console {
+
+                position:absolute;
+                bottom:0;
+                left:0;
+                background-color:#ccc;
+                border-top:solid 1px #000;
+                width:100%;
+                
+            }
+
+            #console h6 {
+            
+                margin:5px 5px 10px;
+            
+            }
+            
+            #console em {
+            
+                font-weight:bold;
+            
+            }
+
+            #console pre {
+
+                margin:0px 5px 5px;
+                height:88px;            
+                font-size:90%;
+                overflow:auto;
+            
+            }
+
+            p em {
+            
+                text-decoration:underline;
+            
+            }
+
+        </style>
+
+        <!-- Namespace source file -->
+        <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+        
+        <!-- Dependency source files -->
+        <script type="text/javascript" src="../../build/event/event.js"></script>
+        <script type="text/javascript" src="../../build/dom/dom.js"></script>
+        <script type="text/javascript" src="../../build/container/container_core.js"></script>
+        
+        <!-- Menu source file -->
+        <script type="text/javascript" src="../../build/menu/menu.js"></script>
+
+        <!-- Page-specific script -->
+        <script type="text/javascript">
+
+            // Generic event handler for the Menu instance's DOM-related events
+            
+            function onMenuEvent(p_sType, p_aArguments) {
+            
+                var oDOMEvent = p_aArguments[0];
+
+                document.getElementById("output").innerHTML += 
+                    "<em>[Menu]</em> " +
+                    "Id: " + this.id + ", " +
+                    "Custom Event Type: " + p_sType + ", " +                  
+                    "DOM Event Type: " + oDOMEvent.type +
+                    "<br>";
+            
+            }
+
+
+            /*
+                Generic event handler for each MenuItem instance's 
+                DOM-related events
+            */
+
+            function onMenuItemEvent(p_sType, p_aArguments) {
+
+                var oDOMEvent = p_aArguments[0];
+
+                document.getElementById("output").innerHTML += 
+                    "<em>[MenuItem]</em> " +
+                    "Index: " + this.index + ", " +
+                    "Group Index: " + this.groupIndex + ", " +
+                    "Custom Event Type: " + p_sType + ", " +                  
+                    "DOM Event Type: " + oDOMEvent.type +
+                    "<br>";
+            
+            }
+
+
+            // "load" event handler for the window
+
+            function onWindowLoad(p_oEvent) {
+
+                // Create a menu
+
+                var oMenu = new YAHOO.widget.Menu("basicmenu", { fixedcenter: true }),
+
+                    // Create the MenuItem instances and add them to the menu
+
+                    aMenuItemData = [
+                
+                        "MenuItem 0",
+                        "MenuItem 1",
+                        "MenuItem 2",
+                        "MenuItem 3",
+                        "MenuItem 4"
+
+                    ],
+
+                    nMenuItems = aMenuItemData.length,
+
+                    oMenuItem;
+                
+
+                for(var i=0; i<nMenuItems; i++) {
+
+                    oMenuItem = new YAHOO.widget.MenuItem(aMenuItemData[i]);
+
+                    oMenuItem.mouseOverEvent.subscribe(onMenuItemEvent);
+                    oMenuItem.mouseOutEvent.subscribe(onMenuItemEvent);
+                    oMenuItem.mouseDownEvent.subscribe(onMenuItemEvent);
+                    oMenuItem.mouseUpEvent.subscribe(onMenuItemEvent);
+                    oMenuItem.clickEvent.subscribe(onMenuItemEvent);
+                    oMenuItem.keyDownEvent.subscribe(onMenuItemEvent);
+                    oMenuItem.keyUpEvent.subscribe(onMenuItemEvent);
+                    oMenuItem.keyPressEvent.subscribe(onMenuItemEvent);
+
+                    oMenu.addItem(oMenuItem);
+
+                }
+
+                oMenu.render(document.body);
+    
+                oMenu.show();
+
+
+                // Focus the first MenuItem instance
+
+                oMenu.getItem(0).focus();
+                
+
+                // Disable the third MenuItem instance
+
+                oMenu.getItem(2).cfg.setProperty("disabled", true);
+
+
+                // Create a console to log event information
+
+                var oConsole = document.createElement("div"),
+                    oTitle = document.createElement("h6"),
+                    oTitleText = document.createTextNode("Event Data"),
+                    oOutput = document.createElement("pre");
+
+                    oConsole.id = "console";
+                    oOutput.id = "output";
+                    
+                document.body.appendChild(oConsole);
+                oConsole.appendChild(oTitle);
+                oTitle.appendChild(oTitleText);
+                oConsole.appendChild(oOutput);
+
+
+                // Subscribe to the menu's DOM-related events
+
+                oMenu.mouseOverEvent.subscribe(onMenuEvent);
+                oMenu.mouseOutEvent.subscribe(onMenuEvent);
+                oMenu.mouseDownEvent.subscribe(onMenuEvent);
+                oMenu.mouseUpEvent.subscribe(onMenuEvent);
+                oMenu.clickEvent.subscribe(onMenuEvent);
+                oMenu.keyDownEvent.subscribe(onMenuEvent);
+                oMenu.keyUpEvent.subscribe(onMenuEvent);
+                oMenu.keyPressEvent.subscribe(onMenuEvent);
+
+            }
+
+
+            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            
+        </script>
+    </head>
+    <body>
+        <h1>Listening For DOM-Related Events <em>[<a href="index.html">Examples Home</a>]</em></h1>
+        <p>This example demonstrates how to listen for DOM-related events.  Interaction with the Menu will result in event information being output to the console.  <em>Please note</em>: Disabled MenuItem instance do not fire DOM events.  This is demonstrated with the third MenuItem instance.</p>
+    </body>
+</html>

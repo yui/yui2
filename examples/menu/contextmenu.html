@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>Context Menu Example</title>
+
+        <!-- Stanard reset and fonts -->
+        <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
+        <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
+
+        <!-- CSS for Menu -->
+        <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css"> 
+
+        <!-- Page-specific styles -->
+        <style type="text/css">
+
+            h1, p, ul {
+
+                margin:1em;
+
+            }
+
+            h1 em,
+            p em,
+            li em {
+
+                font-weight:bold;
+
+            }
+
+            #operainstructions {
+
+                list-style-type:square;
+                margin-left:2em;
+
+            }
+
+            #clones {
+
+                background-color:#9C6;
+                width:450px;
+                height:400px;
+                overflow:auto;
+         
+            }
+            
+            #clones li {
+            
+                float:left;
+                display:inline;
+                border:solid 1px #000;
+                background-color:#fff;
+                margin:10px;
+                text-align:center;
+            
+            }
+
+            #clones li img {
+            
+                border:solid 1px #000;
+                margin:5px;
+            
+            }
+            
+            #clones li cite {
+            
+                display:block;
+                text-align:center;
+                margin:0 0 5px 0;
+                padding:0 5px;
+
+            }
+            
+        </style>
+
+        <!-- Namespace source file -->
+        <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+        
+        <!-- Dependency source files -->
+        <script type="text/javascript" src="../../build/event/event.js"></script>
+        <script type="text/javascript" src="../../build/dom/dom.js"></script>
+        <script type="text/javascript" src="../../build/container/container_core.js"></script>
+        
+        <!-- Menu source file -->
+        <script type="text/javascript" src="../../build/menu/menu.js"></script>
+
+        <!-- Page-specific script -->
+        <script type="text/javascript">
+
+            // "move" event handler for the context menu
+
+            function onMoveContextMenu() {
+
+                var oNode = this.contextEventTarget;
+                var bDisabled = (oNode.tagName == "UL");
+                var i = this.getItemGroups()[0].length - 1;
+
+                do {
+                
+                    this.getItem(i).cfg.setProperty("disabled", bDisabled);
+
+                }
+                while(i--);
+
+            }
+        
+
+            // "click" event handler for each item in the context menu
+            
+            function onContextMenuItemClick(p_sType, p_aArguments) {
+
+                var oNode = this.parent.contextEventTarget,
+                    oLI;
+
+                if(oNode.tagName == "LI") {
+                
+                    oLI = oNode;
+
+                }
+                else {
+
+                    /*
+                         If the target of the event was a child of an LI, 
+                         get the parent LI element
+                    */
+
+                    do {
+    
+                        if(oNode.tagName == "LI") {
+
+                            oLI = oNode;                            
+
+                            break;
+                        
+                        }
+    
+                    }
+                    while((oNode = oNode.parentNode));
+                
+                }
+                
+
+                switch(this.index) {
+                
+                    case 0:     // Edit name
+
+                        var oCite = oLI.lastChild;
+
+                        if(oCite.nodeType != 1) {
+                        
+                            oCite = oCite.previousSibling;
+
+                        }
+                    
+                        var oTextNode = oCite.firstChild;
+
+                        var sName = window.prompt("Enter a new name for ", oTextNode.nodeValue);
+
+                        if(sName && sName.length > 0) {
+                            
+                            oTextNode.nodeValue = sName;
+
+                        }
+                    
+                    break;
+
+
+                    case 1:     // Clone
+
+                        var oClone = oLI.cloneNode(true);
+
+                        oLI.parentNode.appendChild(oClone);
+
+                    break;
+                    
+
+                    case 2:     // Delete
+
+                        var oUL = oLI.parentNode;
+
+                        oUL.removeChild(oLI);
+
+                    break;                    
+                
+                }
+
+                this.parent.hide();
+            
+            }
+
+
+            // "load" event handler for the "window" object       
+
+            function onWindowLoad(p_oEvent) {
+
+                // Create the context menu
+
+                var oContextMenu = new YAHOO.widget.ContextMenu(
+                                        "contextmenu", 
+                                        { trigger: "clones" } 
+                                    );
+
+                var aMainMenuItems = [
+                        "Edit Name", 
+                        "Clone", 
+                        "Delete"
+                    ];
+                    
+                var nMainMenuItems = aMainMenuItems.length;
+                
+                var oMenuItem;
+
+
+                // Add items to the main menu
+
+                for(var i=0; i<nMainMenuItems; i++) {
+
+                    oMenuItem = 
+                        new YAHOO.widget.ContextMenuItem(aMainMenuItems[i]);
+
+                    /*
+                        Add a "click" event handler to each 
+                        ContextMenuItem instance
+                    */
+
+                    oMenuItem.clickEvent.subscribe(onContextMenuItemClick);
+
+                    oContextMenu.addItem(oMenuItem);
+
+                }
+
+
+                //  Add a "move" event handler to the context menu 
+                    
+                oContextMenu.moveEvent.subscribe(
+                    onMoveContextMenu, 
+                    oContextMenu, 
+                    this
+                );
+                
+
+                // Render the context menu and color picker submenu
+
+                oContextMenu.render(document.body);
+                
+            }
+
+
+            // Assign a "load" event handler to the window
+
+            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+                    
+        </script>
+
+    </head>
+    <body>
+        <h1>Context Menu Example <em>[<a href="index.html">Examples Home</a>]</em></h1>
+
+        <p>Use the context menu to rename, clone or delete Dolly.</p>
+
+        <p><em>Please Note:</em> Opera users will need to do the following to use this example:</p>
+
+        <ul id="operainstructions">
+            <li><em>Opera for Windows:</em>  Hold down the control key and click with the left mouse button.</li>
+            <li><em>Opera for OS X:</em>  Hold down the command key (&#8984;) and click with the left mouse button.</li>
+        </ul>
+
+        <ul id="clones">
+            <li><a href="http://en.wikipedia.org/wiki/Dolly_%28clone%29"><img src="img/dolly.jpg" width="100" height="100" alt="Dolly, a ewe, the first mammal to have been successfully cloned from an adult cell."></a><cite>Dolly</cite></li>
+        </ul>
+
+    </body>
+</html>

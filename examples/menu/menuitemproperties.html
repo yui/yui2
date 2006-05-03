@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>MenuItem Configuration Properties</title>
+
+        <!-- Stanard reset and fonts -->
+        <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
+        <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
+
+        <!-- CSS for Menu -->
+        <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
+
+        <!-- Page-specific styles -->
+        <style type="text/css">
+
+            body { margin:.5em; }
+            
+            li.yuimenuitem a em {
+            
+                font-style:italic;
+            }
+            
+            li.yuimenuitem strong {
+            
+                font-weight:bold;
+            
+            }
+
+        </style>
+
+        <!-- Namespace source file -->
+        <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+        
+        <!-- Dependency source files -->
+        <script type="text/javascript" src="../../build/event/event.js"></script>
+        <script type="text/javascript" src="../../build/dom/dom.js"></script>
+        <script type="text/javascript" src="../../build/container/container_core.js"></script>
+        
+        <!-- Menu source file -->
+        <script type="text/javascript" src="../../build/menu/menu.js"></script>
+
+        <!-- Page-specific script -->
+        <script type="text/javascript">
+
+            // "load" event handler for the window
+
+            function onWindowLoad(p_oEvent) {
+
+                // Create a menu
+
+                var oMenu = new YAHOO.widget.Menu("basicmenu", { fixedcenter: true }),
+
+                    // Add the MenuItem instance to the menu
+    
+                    aMenuItemData = [
+                
+                        { text: "Selected MenuItem", config: { selected: true } },
+                        { text: "Disabled MenuItem", config: { disabled: true } },
+                        { text: "MenuItem With Help Text", config: { helptext: "Help Me!" } },
+                        { text: "MenuItem With A URL", config: { url: "http://www.yahoo.com!" } },
+                        { text: "MenuItem With Emphasis", config: { emphasis: true } },
+                        { text: "MenuItem With Strong Emphasis", config: { strongemphasis: true } }
+    
+                    ],
+    
+                    nMenuItems = aMenuItemData.length,
+    
+                    oMenuItem;
+                
+
+                for(var i=0; i<nMenuItems; i++) {
+
+                    oMenuItem = new YAHOO.widget.MenuItem( 
+                                        aMenuItemData[i].text,
+                                        aMenuItemData[i].config
+                                    );
+
+                    oMenu.addItem(oMenuItem);
+
+                }
+
+                oMenu.render(document.body);
+    
+                oMenu.show();
+
+            }
+
+
+            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            
+        </script>
+    </head>
+    <body>
+        <h1>MenuItem Configuration Properties <em>[<a href="index.html">Examples Home</a>]</em></h1>
+        <p>This example demonstrates how to set configuration properties when instantiating a MenuItem instance.</p>
+    </body>
+</html>

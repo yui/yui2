@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>Menu With Grouped MenuItem Instances From Existing Markup</title>
+
+        <!-- Stanard reset and fonts -->
+        <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
+        <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
+
+        <!-- CSS for Menu -->
+        <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
+
+        <!-- Page-specific styles -->
+        <style type="text/css">
+
+            body { margin:.5em; }
+
+        </style>
+
+        <!-- Namespace source file -->
+        <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+        
+        <!-- Dependency source files -->
+        <script type="text/javascript" src="../../build/event/event.js"></script>
+        <script type="text/javascript" src="../../build/dom/dom.js"></script>
+        <script type="text/javascript" src="../../build/container/container_core.js"></script>
+        
+        <!-- Menu source file -->
+        <script type="text/javascript" src="../../build/menu/menu.js"></script>
+
+        <!-- Page-specific script -->
+        <script type="text/javascript">
+
+            function onWindowLoad(p_oEvent) {
+
+                var oMenu = new YAHOO.widget.Menu("menuwithgroups", { fixedcenter: true });
+
+                oMenu.render();
+    
+                oMenu.show();
+
+            }
+
+
+            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            
+        </script>
+    </head>
+    <body>
+        <h1>Menu With Grouped MenuItem Instances From Existing Markup <em>[<a href="index.html">Examples Home</a>]</em></h1>
+        <p>This example demonstrates how to group MenuItem instances.  The Menu API also supports building a menu like this <a href="groupsfromjs.html">using nothing but JavaScript</a>.</p>
+
+        <div id="menuwithgroups" class="yuimenu">
+            <div class="bd">
+                <ul class="first">
+                    <li class="yuimenuitem"><a href="http://mail.yahoo.com">Yahoo! Mail</a></li>
+                    <li class="yuimenuitem"><a href="http://addressbook.yahoo.com">Yahoo! Address Book</a></li>
+                    <li class="yuimenuitem"><a href="http://calendar.yahoo.com">Yahoo! Calendar</a></li>
+                    <li class="yuimenuitem"><a href="http://notepad.yahoo.com">Yahoo! Notepad</a></li>
+                </ul>
+                <ul>
+                    <li class="yuimenuitem"><a href="http://local.yahoo.com">Yahoo! Local</a></li>
+                    <li class="yuimenuitem"><a href="http://maps.yahoo.com">Yahoo! Maps</a></li>
+                    <li class="yuimenuitem"><a href="http://travel.yahoo.com">Yahoo! Travel</a></li>
+                    <li class="yuimenuitem"><a href="http://shopping.yahoo.com">Yahoo! Shopping</a></li>
+                </ul>
+                <ul>
+                    <li class="yuimenuitem"><a href="http://messenger.yahoo.com">Yahoo! Messenger</a></li>
+                    <li class="yuimenuitem"><a href="http://360.yahoo.com">Yahoo! 360</a></li>
+                    <li class="yuimenuitem"><a href="http://groups.yahoo.com">Yahoo! Groups</a></li>
+                    <li class="yuimenuitem"><a href="http://photos.yahoo.com">Yahoo! Photos</a></li>
+                </ul>
+            </div>
+        </div>        
+
+    </body>
+</html>
