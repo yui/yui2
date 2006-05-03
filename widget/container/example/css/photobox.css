@@ -1,0 +1,82 @@
+#win {
+	visibility:hidden;
+}
+
+.photobox {
+	border:3px solid #666;
+	overflow:visible;
+	background-color:#333;
+	padding:5px;
+}
+
+.photobox .hd {
+	font-family:georgia, times new roman, times, serif;
+	font-weight:normal;
+	border:none;
+	border-bottom:1px solid #666;
+	background:transparent;
+	color:#FFF;
+	height:18px;
+	text-align:left;
+	overflow:visible;
+	padding:0;
+	padding-bottom:5px;
+	margin-bottom:5px;
+	width:500px;
+}
+
+.photobox .hd span {
+	vertical-align:middle;
+	line-height:15px;
+}
+
+.photobox .close {
+	top:8px;
+	right:8px;
+	height:15px;
+	width:18px;
+}
+
+.photobox .close.nonsecure {
+	background-image:url(../img/ybox-close.gif);
+}
+
+.photobox .close.secure {
+	background-image:url(../img/ybox-close.gif);
+}
+
+.photobox .bd  {
+	padding:0;
+}
+
+.photobox .bd img {
+	border:none;
+}
+
+.mask {
+    background-color:#000;
+    -moz-opacity: 0.75;
+    opacity:.75;
+    filter:alpha(opacity=75);
+}
+
+.photobox .ft {
+	height:16px;
+	width:500px;
+	padding:5px 0;
+	position:relative;
+}
+
+.photobox .ft .back {
+	position:absolute;
+	left:1px;
+}
+
+.photobox .ft .back img, .photobox .ft .next img {
+	border:none;
+}
+
+.photobox .ft .next {
+	position:absolute;
+	right:1px;
+}

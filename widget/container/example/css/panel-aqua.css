@@ -1,0 +1,77 @@
+#win {
+	visibility:hidden;
+}
+
+.panel-container.shadow .underlay {
+	background-color:#999;
+}
+
+.panel {
+	border:none;
+	overflow:visible;
+	background-color:transparent;
+}
+
+.panel .hd {
+	padding:0;
+	border:none;
+	background:transparent url(../img/aqua-hd-bg.gif);
+	color:#000;
+	height:22px;
+	margin-left:7px;
+	margin-right:7px;
+	text-align:center;
+	overflow:visible;
+}
+
+.panel .hd span {
+	vertical-align:middle;
+	line-height:22px;
+}
+
+.panel .close {
+	top:3px;
+	left:4px;
+	height:18px;
+	width:17px;
+}
+
+.panel .close.nonsecure {
+	background-image:url(../img/aqua-hd-close.gif);
+}
+
+.panel .close.secure {
+	background-image:url(../img/aqua-hd-close.gif);
+}
+
+.panel .close.nonsecure:hover {
+	background-image:url(../img/aqua-hd-close-over.gif);
+}
+
+.panel .close.secure:hover {
+	background-image:url(../img/aqua-hd-close-over.gif);
+}
+
+
+
+.panel .lt {
+	width:7px;height:22px;
+	top:0;left:0;
+	background:transparent url(../img/aqua-hd-lt.gif);
+	position:absolute;
+}
+
+.panel .rt {
+	width:7px;height:22px;
+	top:0;right:0;
+	background:transparent url(../img/aqua-hd-rt.gif);
+	position:absolute;
+}
+
+.panel .bd {
+	overflow:hidden;
+	padding:4px;
+	border:1px solid #aeaeae;
+	background-color:#FFF;
+
+}

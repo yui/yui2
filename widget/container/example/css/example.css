@@ -163,3 +163,25 @@ div.row div.formw {
 	vertical-align:middle;
 } 
 
+#resp {
+	font-family:courier;
+	font-size:12px;
+	margin-top:0px;
+}
+
+.box label {
+	float:none;
+}
+
+.radioline {
+	width:100%;
+	clear:both;
+}
+
+.radioline.first {
+	margin-top:10px;
+}
+
+.radioline.last {
+	margin-bottom:10px;
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>YAHOO.widget.Panel - PhotoBox Example</title>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
+<script type="text/javascript" src="../../build/event/event.js" ></script>
+<script type="text/javascript" src="../../build/dom/dom.js" ></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
+<script type="text/javascript" src="../../build/animation/animation.js" ></script>
+
+<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css" />
+<link rel="stylesheet" type="text/css" href="css/example.css" />
+
+<link rel="stylesheet" type="text/css" href="../../build/container/assets/container.css" />
+<script type="text/javascript" src="../../build/container/container.js"></script>
+
+<script type="text/javascript" src="js/PanelEffect.js"></script>
+<script type="text/javascript" src="js/PhotoBox.js"></script>
+
+<link rel="stylesheet" type="text/css" href="css/photobox.css" />
+
+<script language="javascript">
+	YAHOO.namespace("example.photobox");
+
+	function init() {
+		YAHOO.example.photobox.box = new YAHOO.widget.PhotoBox("win", { 
+		effect:[{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.45},{effect:YAHOO.widget.PanelEffect.BODY_EXPAND_V,duration:0.35}], 
+		fixedcenter: true, constraintoviewport: true, underlay:"none", close:true, visible:false, draggable:false, modal:true, 
+		photos:[{src:"http://static.flickr.com/51/129586913_e78683c466.jpg",caption:"Linus"},
+				{src:"http://static.flickr.com/50/129590195_0642f2d96a.jpg",caption:"Linus 2"},
+				{src:"http://static.flickr.com/8/12669712_be928a0d97.jpg",caption:"Dobb's Ferry, NY"}
+				], width:"500px"}	
+				);
+		YAHOO.example.photobox.box.render();
+	}
+
+	YAHOO.util.Event.addListener(window, "load", init);
+</script>
+</head>
+<body>
+
+	<div class="box" id="bodyMain">
+		<div class="hd">
+			<h1>PhotoBox Example</h1>
+		</div>
+		<div class="bd">
+			<button onclick="YAHOO.example.photobox.box.show()">Show the PhotoBox</button>
+			<select>
+				<option>This is a &lt;select&gt; element, helpul for testing the IFRAME shim</option>
+			</select>
+		</div>
+	</div>
+
+	<div id="win">
+			<div class="hd"><div class="lt"></div><span id="win_title">Linus</span><div class="rt"></div></div>
+			<div class="bd">
+				<img id="win_img" src="#" width="500"/>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>

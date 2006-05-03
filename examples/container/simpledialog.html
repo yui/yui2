@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>YAHOO.widget.SimpleDialog</title>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
+<script type="text/javascript" src="../../build/event/event.js" ></script>
+<script type="text/javascript" src="../../build/dom/dom.js" ></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
+<script type="text/javascript" src="../../build/animation/animation.js" ></script>
+<script type="text/javascript" src="../../build/connection/connection.js" ></script>
+
+<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css" />
+<link rel="stylesheet" type="text/css" href="css/example.css" />
+
+<link rel="stylesheet" type="text/css" href="../../build/container/assets/container.css" />
+<script type="text/javascript" src="../../build/container/container.js"></script>
+
+<script language="javascript">
+	YAHOO.namespace("example.simpledialog");
+
+	function submitCallback(obj) {
+		var response = obj.responseText;
+		alert(response);
+	}
+
+	function init() {
+		var handleCancel = function() {
+			this.cancel();
+		}
+
+		var handleSubmit = function() {
+			alert("That wasn't so bad!");
+			this.form[this.id].value = "1";
+			this.submit();
+		}
+
+		YAHOO.example.simpledialog.dlg = new YAHOO.widget.SimpleDialog("dlg", { postmethod:"async", visible:false, width: "20em", effect:[{effect:YAHOO.widget.ContainerEffect.SLIDE,duration:0.25},{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.25}], fixedcenter:true, modal:true, draggable:false });
+		
+		YAHOO.example.simpledialog.dlg.setHeader("Warning!");
+		YAHOO.example.simpledialog.dlg.setBody("Are you sure you want to do this?");
+
+		YAHOO.example.simpledialog.dlg.cfg.queueProperty("icon",YAHOO.widget.SimpleDialog.ICON_WARN);
+		YAHOO.example.simpledialog.dlg.cfg.queueProperty("buttons", [ { text:"OK", handler:handleSubmit, isDefault:true },
+										   { text:"Cancel", handler:handleCancel } ]);
+		YAHOO.example.simpledialog.dlg.cfg.queueProperty("onsuccess", submitCallback);
+
+		var listeners = new YAHOO.util.KeyListener(document, { keys : 27 }, {fn:handleCancel,scope:YAHOO.example.simpledialog.dlg,correctScope:true} );
+		YAHOO.example.simpledialog.dlg.cfg.queueProperty("keylisteners", listeners);
+
+		var handleManual = function(type, args, obj) {
+			alert("Manual submission of " + this.id + " detected");
+			alert(this.getData()[this.id]);
+		}
+
+		YAHOO.example.simpledialog.dlg.manualSubmitEvent.subscribe(handleManual, YAHOO.example.simpledialog.dlg, true);
+
+		YAHOO.example.simpledialog.dlg.render(document.body);
+
+		YAHOO.example.simpledialog.dlg.form.action = "php/post.php";
+		YAHOO.example.simpledialog.dlg.form.method = "POST";
+	}
+
+	YAHOO.util.Event.addListener(window, "load", init);
+
+</script>
+</head>
+<body>
+	<div class="homeLink">
+		<a href="index.html">&lt; Home</a>
+	</div>
+
+
+	<div class="box">
+		<div class="hd">
+			<h1>SimpleDialog Example</h1>
+		</div>
+		<div class="bd">
+			<p>SimpleDialog is an implementation of <a href="panel.html">Panel</a> that behaves like an OS dialog. SimpleDialog is used for asking the user a simple question that usually involves a Yes/No or OK/Cancel response.</p> 
+			
+			<p>Two sets of buttons with handlers are built into the SimpleDialog object: a set for OK/Cancel and a set for Yes/No, which respectively call the handleOKClick/handleCancelClick and handleYesClick/handleNoClick DOM events that are built-in.
+			</p>
+
+			<p>The code to instantiate this SimpleDialog example looks like this:
+				<code>dlg = new YAHOO.widget.SimpleDialog("dlg", { width: "20em", effect:{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.25}, fixedcenter:true, modal:true, draggable:false });<br/><br/>
+		YAHOO.example.simpledialog.dlg.setHeader("Warning!");<br/>
+		YAHOO.example.simpledialog.dlg.setBody("Are you sure you want to do this?");<br/>
+		YAHOO.example.simpledialog.dlg.cfg.setProperty("icon",YAHOO.widget.SimpleDialog.ICON_WARN);
+				</code>
+				Next, we wire up the buttons using a simple JSON structure that points to local handlers for each button:
+				<code>				
+				dlg.cfg.setProperty("buttons",  [ 
+						{ text:"OK", handler:handleOK, isDefault:true },
+						{ text:"Cancel",handler:handleCancel } 
+						]
+				);
+				</code>
+			</p>
+
+			<button onclick="YAHOO.example.simpledialog.dlg.show()">Show me a dialog</button>
+			<select>
+				<option>This is a &lt;select&gt; element, helpul for testing the IFRAME shim</option>
+			</select>
+		</div>
+	</div>
+
+</body>
+</html>

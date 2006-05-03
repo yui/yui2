@@ -1,0 +1,65 @@
+.module {
+	margin:5px;
+	padding:5px;
+	border:1px solid red;
+	background-color:#FFFFFF;
+} 
+div.overlayform {
+	width:700px;
+	border:1px solid black;
+	background-color:#FFF;
+}
+
+div.overlayform .formheader {
+	padding:5px;
+	font-weight:bold;
+	background-color:#D92121;
+	color:#FFF;
+
+}
+
+div.overlayform textarea {
+	width:450px;
+	height:50px;
+}
+
+div.overlayform button {
+	float:right;
+	margin-right:10px
+}
+
+div.row {
+	clear:both;
+	vertical-align:middle;
+	padding-bottom:5px;
+}
+
+div.row.header {
+	font-weight:bold;
+	background-color:#666;
+	color:#FFF;
+	vertical-align:middle;
+	height:1em;
+}
+
+div.row.first {
+	margin-top:5px;
+}
+
+div.row.last {
+	margin-bottom:5px;
+}
+
+div.row div.label {
+	float: left;
+	width: 125px;
+	margin-right:10px;
+	text-align: right;
+	vertical-align:middle;
+}
+
+div.row div.formw {
+	float: left;
+	text-align: left;
+	vertical-align:middle;
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>YAHOO.widget.Panel - Aqua Panel Example</title>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
+<script type="text/javascript" src="../../build/event/event.js" ></script>
+<script type="text/javascript" src="../../build/dom/dom.js" ></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
+<script type="text/javascript" src="../../build/animation/animation.js" ></script>
+
+<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css" />
+<link rel="stylesheet" type="text/css" href="css/example.css" />
+
+<link rel="stylesheet" type="text/css" href="../../build/container/assets/container.css" />
+<script type="text/javascript" src="../../build/container/container.js"></script>
+
+<link rel="stylesheet" type="text/css" href="css/panel-aqua.css" />
+
+<script language="javascript">
+	YAHOO.namespace("example.aqua");
+
+	function init() {
+		YAHOO.example.aqua.panel = new YAHOO.widget.Panel("win", { effect:{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.25}, width:"30em", fixedcenter: true, constraintoviewport: true, underlay:"none", close:true, visible:false, draggable:true, modal:false } );
+		YAHOO.example.aqua.panel.render();
+	}
+
+	YAHOO.util.Event.addListener(window, "load", init);
+</script>
+</head>
+<body>
+	<div class="box" id="bodyMain">
+		<div class="hd">
+			<h1>Aqua Panel Example</h1>
+		</div>
+		<div class="bd">
+			<p>Some custom CSS allows Panel to be rendered with a familiar skin.
+			</p>
+
+			<button onclick="YAHOO.example.aqua.panel.show()">Show the Panel</button>
+			<select>
+				<option>This is a &lt;select&gt; element, helpul for testing the IFRAME shim</option>
+			</select>
+		</div>
+	</div>
+
+<div id="win">
+		<div class="hd"><div class="lt"></div><span>Sprockets!</span><div class="rt"></div></div>
+		<div class="bd">
+			<img src="http://static.flickr.com/7/6301565_7123909f10_t.jpg" alt="sprockets!" style="float:left;margin:0 5px 5px"/>
+			<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis in risus. Vestibulum a nibh tincidunt elit iaculis laoreet. In pede metus, tristique non, consectetuer a, vestibulum vel, enim. Curabitur neque magna, pulvinar sit amet, lobortis viverra, porta non, dui. Donec tempor, arcu quis interdum pellentesque, dui dolor gravida pede, in iaculis justo tortor venenatis ligula. Cras non pede vel risus egestas faucibus. Nam pulvinar lobortis nisi. In vehicula venenatis sapien.</p>
+
+			<p style="margin-bottom:0px">Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam et risus ut est adipiscing congue. Praesent ut justo. Proin hendrerit urna eget eros. Curabitur condimentum tempor diam. Pellentesque tortor odio, sollicitudin eget, pellentesque ut, ullamcorper a, justo. Nam tellus pede, fermentum ac, sollicitudin sed, mollis vel, turpis. Fusce pulvinar nibh et erat. Praesent purus nibh, fermentum ac, imperdiet vel, aliquet eu, mi. Praesent non nisi ac mauris tempor ultricies. Nulla mollis tellus porta leo. Nunc accumsan dapibus tellus. Nunc nec nunc.</p>
+		</div>
+	</div>
+</div>
+
+
+</body>
+</html>
