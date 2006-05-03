@@ -140,7 +140,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	this.cfg.addProperty("zIndex", { value:null, handler:this.configzIndex } );
 
 	this.cfg.addProperty("constraintoviewport", { value:false, handler:this.configConstrainToViewport, validator:this.cfg.checkBoolean, supercedes:["iframe","x","y","xy"] } );
-	this.cfg.addProperty("iframe", { value:(this.browser == "ie" ? true : false), handler:this.configIframe, validator:this.cfg.checkBoolean, supercedes:["visible","zIndex"] } );
+	this.cfg.addProperty("iframe", { value:(this.browser == "ie" ? true : false), handler:this.configIframe, validator:this.cfg.checkBoolean, supercedes:["zIndex"] } );
 }
 
 /**

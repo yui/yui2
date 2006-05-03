@@ -343,7 +343,7 @@ YAHOO.widget.Module.prototype = {
 		YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Module.CSS_MODULE);
 
 		if (userConfig) {
-			this.cfg.applyConfig(userConfig);
+			this.cfg.applyConfig(userConfig, true);
 		}
 
 		// Subscribe to the fireQueue() method of Config so that any queued configuration changes are

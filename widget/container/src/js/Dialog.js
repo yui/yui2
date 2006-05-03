@@ -163,7 +163,7 @@ YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
 	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Dialog.CSS_DIALOG);
 
 	if (userConfig) {
-		this.cfg.applyConfig(userConfig);
+		this.cfg.applyConfig(userConfig, true);
 	}
 
 	this.renderEvent.subscribe(this.registerForm, this, true);

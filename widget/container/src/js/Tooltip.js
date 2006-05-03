@@ -52,7 +52,7 @@ YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 		YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Tooltip.CSS_TOOLTIP);
 
 		if (userConfig) {
-			this.cfg.applyConfig(userConfig);
+			this.cfg.applyConfig(userConfig, true);
 		}
 		
 		this.cfg.queueProperty("visible",false);

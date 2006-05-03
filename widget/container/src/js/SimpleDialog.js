@@ -102,7 +102,7 @@ YAHOO.widget.SimpleDialog.prototype.init = function(el, userConfig) {
 	this.cfg.queueProperty("postmethod", "manual");
 
 	if (userConfig) {
-		this.cfg.applyConfig(userConfig);
+		this.cfg.applyConfig(userConfig, true);
 	}
 
 	this.beforeRenderEvent.subscribe(function() {
