@@ -91,7 +91,7 @@ function getModule(){
 	var sUrl = entryPoint + queryString;
 
 	// Initiate the HTTP GET request.
-	var request = YAHOO.util.Connect.asyncRequest('GET', sUrl, { success:successHandler });
+	var request = YAHOO.util.Connect.asyncRequest('GET', sUrl, { success:successHandler, failure:failureHandler });
 }
 </textarea>
 
