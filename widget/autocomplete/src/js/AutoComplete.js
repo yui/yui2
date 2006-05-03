@@ -89,6 +89,9 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
         YAHOO.util.Event.addListener(oContainer,'mouseover',oSelf._onContainerMouseover,oSelf);
         YAHOO.util.Event.addListener(oContainer,'mouseout',oSelf._onContainerMouseout,oSelf);
         YAHOO.util.Event.addListener(oContainer,'scroll',oSelf._onContainerScroll,oSelf);
+        if(oTextbox.form && this.allowBrowserAutocomplete) {
+            YAHOO.util.Event.addListener(oTextbox.form,'submit',oSelf._onFormSubmit,oSelf);
+        }
 
         this.textboxFocusEvent = new YAHOO.util.CustomEvent("textboxFocus", this);
         this.textboxKeyEvent = new YAHOO.util.CustomEvent("textboxKey", this);
@@ -215,6 +218,16 @@ YAHOO.widget.AutoComplete.prototype.animSpeed = 0.3;
  * @type boolean
  */
 YAHOO.widget.AutoComplete.prototype.forceSelection = false;
+
+/**
+ * Whether or not to allow browsers to cache user typed input, which effectively
+ * does not set the input attribute autocomplete="off". When users click the
+ * back button after form submission, typed input can be prefilled by the
+ * browser. Default: true.
+ *
+ * @type boolean
+ */
+YAHOO.widget.AutoComplete.prototype.allowBrowserAutocomplete = true;
 
 /***************************************************************************
  * Public methods
@@ -635,6 +648,7 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
     if (!this._aListIds) {
         this._aListIds = [];
     }
+    
     if(!this._aListIds || (this.maxResultsDisplayed != this._aListIds.length)) {
         this._initContainer();
     }
@@ -689,7 +703,7 @@ YAHOO.widget.AutoComplete.prototype._initContainer = function() {
             sFooterID,
             "' class='ac_ft'></div>"];
     
-    sContent = sContent.join("");        
+    sContent = sContent.join("");
     this._oContainer.innerHTML = sContent;
 
     this._oHeader = document.getElementById(sHeaderID);
@@ -985,6 +999,7 @@ YAHOO.widget.AutoComplete.prototype._isIgnoreKey = function(nKeyCode) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._onTextboxFocus = function (v,oSelf) {
+    oSelf._oTextbox.setAttribute("autocomplete","off");
     oSelf._bFocused = true;
     oSelf.textboxFocusEvent.fire(oSelf);
     //YAHOO.log(oSelf.getName() + " textbox focused");
@@ -1014,6 +1029,17 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
         oSelf.textboxBlurEvent.fire(oSelf);
         //YAHOO.log(oSelf.getName() + " textbox blurred");
     }
+};
+
+/**
+ * Handles form submission event.
+ *
+ * @param {event} v The submit event
+ * @param {object} oSelf The auto complete instance
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._onFormSubmit = function(v,oSelf) {
+    oSelf._oTextbox.setAttribute("autocomplete","on");
 };
 
 /**
