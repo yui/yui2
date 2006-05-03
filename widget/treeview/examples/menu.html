@@ -39,41 +39,16 @@
 <div id="linkage">
 <ul>
 <li><a href="default.html?mode=dist">Default Tree Widget</a></li>
+<li><a href="dynamic.html?mode=dist">Dynamic Load</a></li>
+
+
 <li><a href="folders.html?mode=dist">Folder View</a></li>
-
-
 <li><a href="menu.html?mode=dist">Menu</a></li>
 <li><a href="html.html?mode=dist">HTML Node</a></li>
 <li><a href="check.html?mode=dist">Task List</a></li>
-<li><a href="anim.html?mode=dist">Fade animation (experimental)</a></li>
 </ul>
 
 </div> 
-
-<script type="text/javascript">
-//<![CDATA[
-	
-	function toggleygLogger(el) {
-		if (el.value == "Disable Logger") {
-			ygLogger.disable();
-			el.value = "Enable Logger";
-		} else {
-			ygLogger.enable();
-			el.value = "Disable Logger";
-		}
-	}
-
-	// ygLogger.disable();
-//]]>
-</script>
-
-
-<h3><input type="button" style="font-size:80%"
-		onclick="javascript:void(toggleygLogger(this))" value="Disable Logger" />&nbsp;
-	<input type="button" style="font-size:80%"
-		onclick="javascript:void(document.getElementById('logDiv').innerHTML='')" value="Clear" />
-</h3>
-<div id="logDiv" style="font-family:Arial, Helvetica, sans-serif;position:relative;overflow:auto;text-align:left;z-index:998;font-size:84%;width:100%;top:0px; height:280px;"></div>
 
 </div>
 
@@ -111,23 +86,23 @@
   </div>
 </div>
 
-
-<script type="text/javascript" src="/sharedlibs/prototype-1.4.0.js"></script>
-
-<script type="text/javascript" src="js/YAHOO.js" ></script>
-<script type="text/javascript" src="js/log.js"></script>
+<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/connection/connection.js"></script>
 <!--
-<script type="text/javascript" src="/Event.dev/src/Event.js"></script>
+<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dom_2.0.2-b3.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
 -->
-<script type="text/javascript" src="js/event.js"></script>
-<script type="text/javascript" src="js/connect.js"></script>
-<script type="text/javascript" src="js/animation-raw.js"></script>
-<script type="text/javascript" src="js/dom-raw.js"></script>
-<script type="text/javascript" src="js/dragdrop-debug.js"></script>
+<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/animation_2.0.0-b3.js"></script>
+<script type="text/javascript" src="http://sequence.corp.yahoo.com/yui/build/dom/dom.js"></script>
 
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
+
+<script type="text/javascript" src="js/log.js"></script>
 <script type="text/javascript" src="js/json.js" ></script>
 
-<script type="text/javascript" src="js/treeview.js" ></script>
+<script type="text/javascript" src="../../build/treeview/treeview.js" ></script>
 <script type="text/javascript" src="js/TaskNode.js"></script>
 <script type="text/javascript" src="js/CheckOnClickNode.js"></script>
 

@@ -85,23 +85,19 @@
 	}
 
 </style>
-<script type="text/javascript" src="js/YAHOO.js" ></script>
-<script type="text/javascript" src="js/event-raw.js" ></script>
-<script type="text/javascript" src="js/dom-raw.js" ></script>
-<script type="text/javascript" src="js/logger.js" ></script>
-<script type="text/javascript" src="js/log.js" ></script>
+
+<!-- Nav and logger start -->
+
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
+<script type="text/javascript" src="../../build/event/event.js" ></script>
+<script type="text/javascript" src="../../build/dom/dom.js" ></script>
+<script type="text/javascript" src="../../build/animation/animation.js" ></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
 <script type="text/javascript" src="js/color.js" ></script>
 <script type="text/javascript" src="js/key.js" ></script>
-<script type="text/javascript" src="js/animation-raw.js" ></script>
-<script type="text/javascript" src="js/dragdrop-raw.js" ></script>
-<!--
-<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/event_2.0.0-b1.js" ></script>
-<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dom_2.0.0-b1.js" ></script>
-<script type="text/javascript" src="/DragDrop.dev/js/dragdrop/build/dragdrop-debug.js" ></script>
-<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dragdrop_2.0.0-b1.js" ></script>
--->
 
-<script type="text/javascript" src="js/slider.js" ></script></head>
+<script type="text/javascript" src="../../build/slider/slider.js" ></script></head>
 <body> 
 <div id="pageTitle"><h3>Slider Widget</h3></div> 
 
@@ -139,8 +135,8 @@
     <h3>Links</h3>
     <div id="linkage">
         <ul>
-        <li><a href="basic.html?mode=dist">Accessible Sliders</a></li>
         <li><a href="simple.html?mode=dist">Simple Slider</a></li>
+        <li><a href="basic.html?mode=dist">Sliders w/Accessibility Features</a></li>
         <li><a href="rgb.html?mode=dist">RGB Slider</a></li>
         <li><a href="rgb2.html?mode=dist">Color Picker</a></li>
         <!--
@@ -148,40 +144,6 @@
         -->
         </ul>
     </div> 
-
-    <script type="text/javascript">
-
-    YAHOO.example.logApp = function() {
-        var divId;
-        return {
-            toggle: function() {
-                if (this.value == "Disable Logger") {
-                    ygLogger.disable();
-                    this.value = "Enable Logger";
-                } else {
-                    ygLogger.enable();
-                    this.value = "Disable Logger";
-                }
-            },
-
-            clear: function() {
-                document.getElementById(divId).innerHTML='';
-            },
-
-            init: function(p_divId, p_toggleElId, p_clearElId) {
-                divId = p_divId
-                YAHOO.util.Event.on(p_toggleElId, "click", this.toggle);
-                YAHOO.util.Event.on(p_clearElId,  "click", this.clear);
-            }
-        };
-    } (); 
-
-    YAHOO.example.logApp.init("logDiv", "toggleButton", "clearButton");
-
-    </script>
-
-    <div id="logDiv"></div>
-    <div id="logFooter">Note: click the Disable Logger button to make the drag operation less choppy</div>
 
   </div>
 </div>
@@ -262,7 +224,7 @@
 <script type="text/javascript">
 
 	var r, g, b;
-	var gLogger;
+	var gLogger = {debug:function(){}};
 	var dd;
 
 	function init() {
