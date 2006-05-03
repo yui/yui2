@@ -1,0 +1,139 @@
+<html>
+<head>
+        <script src = "../../build/yahoo/yahoo-min.js" ></script>
+        <script src = "../../build/connection/connection-min.js" ></script>
+</head>
+<body>
+<h1> Retrieving a Y! Weather RSS Feed</h1>
+<p>
+This example demonstrates how to use the Connection Manager and a PHP proxy -- to work around XMLHttpRequest's same-domain policy -- to retrieve an XML document from http://xml.weather.yahoo.com/forecastrss.
+</p>
+
+<h3>Source file and dependencies</h3>
+<p>Load the YAHOO namespace and connection manager source file</p>
+<pre>
+  &lt;script src="yahoo.js"&gt;
+  &lt;script src="connection.js"&gt;
+</pre>
+
+<h3>Callback Object and the Weather RSS</h3>
+<p>Yahoo! Weather RSS will return an XML document if the transaction is successful. The following callback object with success and failure handlers is used to process the response.</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+// This is the response display container
+var div = document.getElementById('weatherModule');
+// This is a reference to the HTML form.
+var oForm = document.getElementById('wForm');
+
+/*
+ * This method will traverse the response XML document and build a
+ * simple HTML module comprised of data from the following tags:
+ *
+ * Data in the first <title> tag in the document.
+ * Data in the first <lastBuildDate> tag in the document.
+ * HTML from the second <description> tag in the document.
+ *
+ */
+function successHandler(o){
+	var root = o.responseXML.documentElement;
+	var oTitle = root.getElementsByTagName('description')[0].firstChild.nodeValue;
+	var oDateTime = root.getElementsByTagName('lastBuildDate')[0].firstChild.nodeValue;
+	var descriptionNode = root.getElementsByTagName('description')[1].firstChild.nodeValue;
+
+	// Format and display results in the response container.
+	div.innerHTML = "<p>" + oTitle + "</p>" + "<p>" + oDateTime + "</p>" + descriptionNode;
+}
+
+/*
+ *
+ * This is a simple failure handler that will display
+ * the HTTP status code and status message if the resource
+ * returns a non-2xx code.
+ *
+ */
+function failureHandler(o){
+	div.innerHTML = o.status + " " + o.statusText;
+}
+</textarea>
+
+<h3>Assemble the Querystring and Initiate the Transaction</h3>
+<p>The Yahoo! Weather RSS feed requires a simple HTTP GET request, with a base URL and a parameters querystring.  In this example, we will use the following parameters:</p>
+<ul>
+	<li>p - location as U.S. Zip Code or Location ID</li>
+	<li>u - temperature units</li>
+</ul>
+
+<p>The following are some example location IDs</p>
+<ul>
+	<li>Beijing: CHXX0008</li>
+	<li>Helsinki: FIXX0002</li>
+	<li>London: UKXX0085</li>
+	<li>Moscow: RSXX0063</li>
+	<li>Munich: GMXX0087</li>
+	<li>Paris: FRXX0076</li>
+	<li>Riyadh: SAXX0017</li>
+	<li>Tokyo: JAXX0085</li>
+</ul>
+<p>For more details on the Y! Weather RSS feed and other location IDs, please visit <a href="http://developer.yahoo.com/weather/index.html">http://developer.yahoo.com/weather/index.html</a>.
+<p>Method getModule retrieves the input values for location and temperature and creates a querystring.</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+function getModule(){
+
+	// retrieve the field values for the zip code
+	// input and the unit input.
+	var sLocation = oForm.elements['zip'].value;
+	var sUnit = oForm.elements['unit'].value;
+
+	// entryPoint is the base URL
+	var entryPoint = 'php/weather.php';
+
+	// queryString is the key-value pairs of zip and unit.
+	var queryString = encodeURI('?p=' + sLocation + '&' + 'u=' + sUnit);
+	var sUrl = entryPoint + queryString;
+
+	// Initiate the HTTP GET request.
+	var request = YAHOO.util.Connect.asyncRequest('GET', sUrl, { success:successHandler });
+}
+</textarea>
+
+<form id="wForm">
+<fieldset>
+	<label>Zip Code</label> <input type="text" name="zip" value="94089">
+	<p>Please enter a U.S. Zip Code or a location ID, especially for international locations, to get the current temperature -- Zip Code 94089 is for Sunnyvale, California.  You can also use location IDs.</p>
+</fieldset>
+<fieldset>
+<label>Unit</label> <input type="text" name="unit" length="1" maxlength="1">
+<p>Enter *F* for Fahrenheit or *C* for Celsius temperature unit.
+</fieldset>
+<input type="button" value="Get Weather RSS" onclick="getModule()">
+</form>
+
+<div id="weatherModule"></div>
+<script>
+var div = document.getElementById('weatherModule');
+var oForm = document.getElementById('wForm');
+
+function successHandler(o){
+	var root = o.responseXML.documentElement;
+	var oTitle = root.getElementsByTagName('description')[0].firstChild.nodeValue;
+	var oDateTime = root.getElementsByTagName('lastBuildDate')[0].firstChild.nodeValue;
+	var descriptionNode = root.getElementsByTagName('description')[1].firstChild.nodeValue;
+
+	div.innerHTML = "<p>" + oTitle + "</p>" + "<p>" + oDateTime + "</p>" + descriptionNode;
+}
+
+function failureHandler(o){
+	div.innerHTML = o.status + " " + o.statusText;
+}
+
+function getModule(){
+	var iZip = oForm.elements['zip'].value;
+	var sUnit = oForm.elements['unit'].value;
+	var entryPoint = 'http://ue.corp.yahoo.com/tsha/weather/weather.php';
+	var queryString = encodeURI('?p=' + iZip + '&' + 'u=' + sUnit);
+	var sUrl = entryPoint + queryString;
+	var request = YAHOO.util.Connect.asyncRequest('GET', sUrl, { success:successHandler });
+}
+
+</script>
+</body>
+</html>
