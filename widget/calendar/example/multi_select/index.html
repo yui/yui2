@@ -1,26 +1,28 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-
 <head>
 
-	<title> Yahoo! Calendar Widget</title>
-
-	<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/yahoo_2.0.0-b3.js" ></script>
-	<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/event_2.0.0-b3.js" ></script>
-	<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/utils/2/dom_2.0.2-b3.js" ></script>
+	<title>Yahoo! Calendar Widget - Multi-Select Implementation</title>
 	
-	<link rel="stylesheet" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/calendar/css/calendar_2.0.0-b3.css" type="text/css">	
-	<script type="text/javascript" src="http://us.js2.yimg.com/us.js.yimg.com/lib/common/widgets/2/calendar/calendar_2.0.0-b3.js"></script>
 
 	<link rel="stylesheet" href="../css/examples.css" type="text/css">
+	
+	<script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
+	<script type="text/javascript" src="../../../build/event/event.js" ></script>
+	<script type="text/javascript" src="../../../build/dom/dom.js" ></script>
 
+	<script type="text/javascript" src="../../../build/calendar/calendar.js"></script>
+	
+	<link type="text/css" rel="stylesheet" href="../../../build/calendar/assets/calendar.css">	
+	<link rel="stylesheet" type="text/css" href="../../../docs/assets/dpSyntaxHighlighter.css" />
+	
 	<script language="javascript">
-		var cal1;
+		YAHOO.namespace("example.calendar");
 
 		function init() {
-			cal1 = new YAHOO.widget.Calendar("cal1", "cal1Container");
-			cal1.Options.MULTI_SELECT = true;
-			cal1.render();
+			YAHOO.example.calendar.cal1 = new YAHOO.widget.Calendar("YAHOO.example.calendar.cal1", "cal1Container");
+			YAHOO.example.calendar.cal1.Options.MULTI_SELECT = true;
+			YAHOO.example.calendar.cal1.render();
 		}
 	</script>
 
@@ -39,21 +41,29 @@
 		<h4>Simple Multi-Select Implementation</h4>
 
 		<p>This implementation modifies the <a href="../default/index.html">default Calendar</a> to allow for selection of multiple values. This is accomplished by simply changing an option in the calendar configuration options: </p>
-        <xmp>var cal1;
+<textarea name="code" class="JScript" cols="60" rows="1">
+var cal1;
 function init() {
    cal1 = new YAHOO.widget.Calendar("cal1", "cal1Container");
    cal1.Options.MULTI_SELECT = true;
    cal1.render();
 }
-</xmp></div>
+</textarea>
+</div>
 	<div class="column right">
 		<div style="margin-left:auto;margin-right:auto;width:150px">
 			<div id="cal1Container"></div>
 		</div>
 		<div style="margin-left:auto;margin-right:auto;text-align:center;width:150px;clear:both">
-			<a href="javascript:cal1.reset()" class="navLink" style="font-size:12px;text-decoration:underline">reset</a>|
-			<a href="javascript:alert(cal1.getSelectedDates())" class="navLink" style="font-size:12px;text-decoration:underline">what's selected?</a>
+			<a href="javascript:YAHOO.example.calendar.cal1.reset()" class="navLink" style="font-size:12px;text-decoration:underline">reset</a>|
+			<a href="javascript:alert(YAHOO.example.calendar.cal1.getSelectedDates())" class="navLink" style="font-size:12px;text-decoration:underline">what's selected?</a>
 		</div>
 	</div>
+
+<script src="../../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
 </body>
 </html>
