@@ -1,0 +1,363 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>AutoComplete Widget :: Complex Flat-data Implementation</title>
+<link rel="stylesheet" href="../../build/reset/reset.css" type="text/css" />
+<link rel="stylesheet" href="../../build/fonts/fonts.css" type="text/css" />
+<link rel="stylesheet" href="./css/examples.css" type="text/css" />
+
+<style type="text/css">
+    #ysearchdiv {position:relative;width:40%;margin:1em;} /* set width of widget here*/
+    #ysearchinput0,#ysearchinput1,#ysearchinput2 {position:relative;width:100%;height:1.2em;display:block;}
+    #ysearchcontainer0,#ysearchcontainer1,#ysearchcontainer2 {position:relative;bottom:4px;right:4px;border:1px solid #404040;background:#fff;font-size:85%;overflow:hidden;display:none;}
+    #ysearchcontainer0 ul,#ysearchcontainer1 ul,#ysearchcontainer2 ul {position:relative;width:100%;padding:5px 0;list-style:none;}
+    #ysearchcontainer0 li,#ysearchcontainer1 li,#ysearchcontainer2 li {padding:0 5px;cursor:default;white-space:nowrap;display:list-item;}
+    #ysearchcontainer0 .ysearchquery,#ysearchcontainer1 .ysearchquery,#ysearchcontainer2 .ysearchquery{position:absolute;right:10px;color:#808080;z-index:10;}
+    #ysearchcontainer0 li.highlight {background:#ff0;}
+    #ysearchcontainer1 li.highlight {background:#0ff;}
+    #ysearchcontainer2 li.highlight {background:#a0a0a0;}
+    #ysearchshadow0,#ysearchshadow1,#ysearchshadow2 {position:absolute;width:100%;margin:.3em;z-index:5;background:#a0a0a0;}
+</style>
+</head>
+
+<body>
+<div id="hd">
+    <div id="ylogo"><img src="./img/logo.gif" width="65" height="38" alt="Y!" /></div>
+    <div id="title"><h1><a href="./">AutoComplete Widget</a> :: Flat Data Custom PHP Script</h1></div>
+</div>
+
+<div id="bd">
+    <!-- Logger begins -->
+    <div id="logger">
+    <p>Welcome to AutoComplete.</p>
+    </div>
+    <!-- Logger ends -->
+
+    <!-- Content begins -->
+    <h3>DataSource</h3>
+    <p>This DataSource instance points to a custom PHP script that returns flat
+    (fake) data of recent search terms and number of results. The schema has
+    been defined to parse tab-delimited data rows that are separated by line
+    breaks. For maximum cache usage, the DataSource has been
+    configured to match query subsets in the cache, and the cache itself has
+    been turned up to 60 entries for fewer round trips to the server.
+    </p>
+
+    <h3>AutoComplete</h3>
+    <p>Three AutoComplete instances are created that all point the a single
+    DataSource for maximimum cache efficiency. Queries can be delimited using
+    the semi-colon (;) character. For demonstration purposes, each instance
+    decreases the query delay slightly, and each instance formats the return
+    data in the container in a slightly different way.</p>
+
+    <!-- AutoComplete begins -->
+    <div id="ysearchdiv">
+        <form onsubmit="return validateForm();">
+        <h4>Yahoo! Search (1 sec query delay):</h4>
+        <input id="ysearchinput0" type="text">
+        <div id="ysearchshadow0"><div id="ysearchcontainer0"></div></div>
+
+        <h4>Yahoo! Search (0.5 sec query delay):</h4>
+        <input id="ysearchinput1" type="text">
+        <div id="ysearchshadow1"><div id="ysearchcontainer1"></div></div>
+
+        <h4>Yahoo! Search (0 sec query delay):</h4>
+        <input id="ysearchinput2" type="text">
+        <div id="ysearchshadow2""><div id="ysearchcontainer2"></div></div>
+        </form>
+    </div>
+    
+    <!-- AutoComplete ends -->
+    
+    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
+    Sed eu enim in neque nonummy suscipit. Sed non metus. Aliquam pretium, massa
+    quis vulputate aliquam, felis enim vehicula nisl, ut pharetra arcu nunc
+    vitae leo. Morbi rhoncus ullamcorper quam. Maecenas vel velit. Praesent
+    ultricies placerat mauris. Nunc posuere aliquam ligula. Nunc mi ligula,
+    rutrum eget, consequat ac, cursus non, tortor. Pellentesque ante metus,
+    mattis pharetra, lobortis in, pulvinar nec, felis. Cras fringilla. Cras
+    consequat. Nullam faucibus. Vivamus tincidunt porttitor leo. Etiam est mi,
+    dictum nec, vehicula id, ultricies ac, nibh. Mauris felis.</p>
+
+    <p>Nulla sit amet mi eu lacus tempus volutpat. Phasellus tincidunt hendrerit
+    quam. Maecenas lorem felis, viverra non, varius ut, ultrices et, mi.
+    Phasellus vehicula nunc eu tellus. Duis rutrum justo eu odio. Ut facilisis
+    nisl at purus. Maecenas turpis neque, adipiscing in, fringilla vitae, congue
+    sed, ipsum. Sed condimentum eros eu leo dignissim ultricies. Pellentesque
+    eros nulla, tempus ut, gravida at, vulputate at, metus. Maecenas enim metus,
+    suscipit eget, commodo vel, euismod ac, leo. Curabitur id nulla. Phasellus
+    euismod mi ut enim. Ut molestie bibendum odio.</p>
+    <!-- Content ends -->
+
+<!-- Libary begins -->
+<script src="../../build/yahoo/yahoo.js"></script>
+<script src="../../build/dom/dom.js"></script>
+<script src="../../build/event/event.js"></script>
+<script src="../../build/connection/connection.js"></script>
+<script src="../../build/animation/animation.js"></script>
+<script src="../../build/autocomplete/autocomplete.js"></script>
+<!-- Library ends -->
+
+<script>
+    function validateForm() {
+        // Validate form inputs here
+        return false;
+    }
+
+    function autoCompInit() {
+        // Instantiate one data source and define schema as an array:
+        //     ["Record Delimiter",
+        //     "Field Delimiter"]
+        oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_flat.php", ["\n", "\t"]);
+        oACDS.responseType = YAHOO.widget.DS_XHR.prototype.TYPE_FLAT;
+        oACDS.maxCacheEntries = 60;
+        oACDS.queryMatchSubset = true;
+
+        // Instantiate first auto complete
+        var myInput = document.getElementById('ysearchinput0');
+        var myContainer = document.getElementById('ysearchcontainer0');
+        oAutoComp0 = new YAHOO.widget.AutoComplete(myInput,myContainer,oACDS);
+        oAutoComp0.delimChar = ";";
+        oAutoComp0.queryDelay = 1;
+        oAutoComp0.formatResult = function(oResultItem, sQuery) {
+            var sKey = oResultItem[0];
+            var nQuantity = oResultItem[1];
+            var sKeyQuery = sKey.substr(0, sQuery.length);
+            var sKeyRemainder = sKey.substr(sQuery.length);
+            var aMarkup = ["<div id='ysearchresult'><div class='ysearchquery'>",
+                nQuantity,
+                "</div><span style='font-weight:bold'>",
+                sKeyQuery,
+                "</span>",
+                sKeyRemainder,
+                "</div>"];
+            return (aMarkup.join(""));
+        };
+
+        // Instantiate second auto complete
+        oAutoComp1 = new YAHOO.widget.AutoComplete('ysearchinput1','ysearchcontainer1', oACDS);
+        oAutoComp1.delimChar = ";";
+        oAutoComp1.formatResult = function(oResultItem, sQuery) {
+            var sKey = oResultItem[0];
+            var nQuantity = oResultItem[1];
+            var sKeyQuery = sKey.substr(0, sQuery.length);
+            var sKeyRemainder = sKey.substr(sQuery.length);
+            var aMarkup = ["<div class='ysearchresult'><div class='ysearchquery'>",
+                nQuantity,
+                "</div><span style='color:red'>",
+                sKeyQuery,
+                "</span>",
+                sKeyRemainder,
+                "</div>"];
+            return (aMarkup.join(""));
+        };
+                
+        // Instantiate third auto complete
+        oAutoComp2 = new YAHOO.widget.AutoComplete('ysearchinput2','ysearchcontainer2', oACDS);
+        oAutoComp2.delimChar = ";";
+        oAutoComp2.queryDelay = 0;
+
+        // Subscribe to custom events
+        oACDS.queryEvent.subscribe(myOnQuery);
+        oACDS.cacheQueryEvent.subscribe(myOnCacheQuery);
+        oACDS.getResultsEvent.subscribe(myOnGetResults);
+        oACDS.getCachedResultsEvent.subscribe(myOnGetCachedResults);
+        oACDS.dataErrorEvent.subscribe(myOnDataError);
+        oACDS.cacheFlushEvent.subscribe(myOnCacheFlush);
+
+        oAutoComp0.textboxFocusEvent.subscribe(myOnTextboxFocus);
+        oAutoComp0.textboxKeyEvent.subscribe(myOnTextboxKey);
+        oAutoComp0.dataRequestEvent.subscribe(myOnDataRequest);
+        oAutoComp0.dataReturnEvent.subscribe(myOnDataReturn);
+        oAutoComp0.dataErrorEvent.subscribe(myOnDataError);
+        oAutoComp0.containerExpandEvent.subscribe(myOnContainerExpand);
+        oAutoComp0.typeAheadEvent.subscribe(myOnTypeAhead);
+        oAutoComp0.itemMouseOverEvent.subscribe(myOnItemMouseOver);
+        oAutoComp0.itemMouseOutEvent.subscribe(myOnItemMouseOut);
+        oAutoComp0.itemArrowToEvent.subscribe(myOnItemArrowTo);
+        oAutoComp0.itemArrowFromEvent.subscribe(myOnItemArrowFrom);
+        oAutoComp0.itemSelectEvent.subscribe(myOnItemSelect);
+        oAutoComp0.selectionEnforceEvent.subscribe(myOnSelectionEnforce);
+        oAutoComp0.containerCollapseEvent.subscribe(myOnContainerCollapse);
+        oAutoComp0.textboxBlurEvent.subscribe(myOnTextboxBlur);
+
+        oAutoComp1.textboxFocusEvent.subscribe(myOnTextboxFocus);
+        oAutoComp1.textboxKeyEvent.subscribe(myOnTextboxKey);
+        oAutoComp1.dataRequestEvent.subscribe(myOnDataRequest);
+        oAutoComp1.dataReturnEvent.subscribe(myOnDataReturn);
+        oAutoComp1.dataErrorEvent.subscribe(myOnDataError);
+        oAutoComp1.containerExpandEvent.subscribe(myOnContainerExpand);
+        oAutoComp1.typeAheadEvent.subscribe(myOnTypeAhead);
+        oAutoComp1.itemMouseOverEvent.subscribe(myOnItemMouseOver);
+        oAutoComp1.itemMouseOutEvent.subscribe(myOnItemMouseOut);
+        oAutoComp1.itemArrowToEvent.subscribe(myOnItemArrowTo);
+        oAutoComp1.itemArrowFromEvent.subscribe(myOnItemArrowFrom);
+        oAutoComp1.itemSelectEvent.subscribe(myOnItemSelect);
+        oAutoComp1.selectionEnforceEvent.subscribe(myOnSelectionEnforce);
+        oAutoComp1.containerCollapseEvent.subscribe(myOnContainerCollapse);
+        oAutoComp1.textboxBlurEvent.subscribe(myOnTextboxBlur);
+
+        oAutoComp2.textboxFocusEvent.subscribe(myOnTextboxFocus);
+        oAutoComp2.textboxKeyEvent.subscribe(myOnTextboxKey);
+        oAutoComp2.dataRequestEvent.subscribe(myOnDataRequest);
+        oAutoComp2.dataReturnEvent.subscribe(myOnDataReturn);
+        oAutoComp2.dataErrorEvent.subscribe(myOnDataError);
+        oAutoComp2.containerExpandEvent.subscribe(myOnContainerExpand);
+        oAutoComp2.typeAheadEvent.subscribe(myOnTypeAhead);
+        oAutoComp2.itemMouseOverEvent.subscribe(myOnItemMouseOver);
+        oAutoComp2.itemMouseOutEvent.subscribe(myOnItemMouseOut);
+        oAutoComp2.itemArrowToEvent.subscribe(myOnItemArrowTo);
+        oAutoComp2.itemArrowFromEvent.subscribe(myOnItemArrowFrom);
+        oAutoComp2.itemSelectEvent.subscribe(myOnItemSelect);
+        oAutoComp2.selectionEnforceEvent.subscribe(myOnSelectionEnforce);
+        oAutoComp2.containerCollapseEvent.subscribe(myOnContainerCollapse);
+        oAutoComp2.textboxBlurEvent.subscribe(myOnTextboxBlur);
+
+        // Define custom event handlers
+        function myOnQuery(sType, aArgs) {
+            var oDataSource = aArgs[0];
+            var oParent = aArgs[1];
+            var sQuery = aArgs[2];
+            doLog("Data source for " + oParent.getName() + " made source query for '" + sQuery + "'.");
+        }
+
+        function myOnCacheQuery(sType, aArgs) {
+            var oDataSource = aArgs[0];
+            var oParent = aArgs[1];
+            var sQuery = aArgs[2];
+            doLog("Data source for " + oParent.getName() + " made cache query for '" + sQuery + "'.");
+        }
+
+        function myOnGetResults(sType, aArgs) {
+            var oDataSource = aArgs[0];
+            var oParent = aArgs[1];
+            var sQuery = aArgs[2];
+            var aResults = aArgs[3];
+            doLog("Data source for " + oParent.getName() + " got " + aResults.length + " results from source.");
+        }
+
+        function myOnGetCachedResults(sType, aArgs) {
+            var oDataSource = aArgs[0];
+            var oParent = aArgs[1];
+            var sQuery = aArgs[2];
+            var aResults = aArgs[3];
+            doLog("Data source for " + oParent.getName() + " got " + aResults.length + " results from cache.");
+        }
+
+        function myOnDataError(sType, aArgs) {
+            var oDataSource = aArgs[0];
+            var oParent = aArgs[1];
+            var sQuery = aArgs[2];
+            var sMessage = aArgs[3];
+            doLog("Data source for " + oParent.getName() + " experienced a data retrieval error: " + sMessage);
+        }
+
+        function myOnCacheFlush(sType, aArgs) {
+            var oDataSource = aArgs[0];
+            doLog(" cache flush complete.");
+        }
+
+        function myOnTextboxFocus(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            doLog(oAutoComp.getName() + " has been engaged.");
+        }
+
+        function myOnTextboxKey(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var nKeyCode = aArgs[1];
+            doLog("Key " + nKeyCode + " has been input into " + oAutoComp.getName() + ".");
+        }
+
+        function myOnDataRequest(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var sQuery = aArgs[1];
+            doLog(oAutoComp.getName() + " has sent a query for " + sQuery +".");
+        }
+
+        function myOnDataReturn(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var sQuery = aArgs[1];
+            var aResults = aArgs[2];
+            doLog(oAutoComp.getName() + " has received " + aResults.length +
+            " results for query " + sQuery + ".");
+        }
+
+        function myOnDataError(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var sQuery = aArgs[1];
+            doLog(oAutoComp.getName() + " has received an error for query " + sQuery +".");
+        }
+
+        function myOnContainerExpand(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            doLog(oAutoComp.getName() + " container expanded.");
+        }
+
+        function myOnTypeAhead(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var sQuery = aArgs[1];
+            var sPrefill = aArgs[2];
+            doLog(oAutoComp.getName() + " prefilled the input box with " +
+            sPrefill + " for query " + sQuery + ".");
+        }
+
+        function myOnItemMouseOver(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var oItem = aArgs[1];
+            doLog(oAutoComp.getName() + " moused over " + oItem.id);
+        }
+
+        function myOnItemMouseOut(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var oItem = aArgs[1];
+            doLog(oAutoComp.getName() + " moused out from " + oItem.id);
+        }
+
+        function myOnItemArrowTo(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var oItem = aArgs[1];
+            doLog(oAutoComp.getName() + " arrowed to " + oItem.id);
+        }
+
+        function myOnItemArrowFrom(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var oItem = aArgs[1];
+            doLog(oAutoComp.getName() + " arrowed away from " + oItem.id);
+        }
+
+        function myOnItemSelect(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            var oItem = aArgs[1];
+            var sMsg = (oItem) ? oItem.id : "a non-query-result";
+            doLog(oAutoComp.getName() + " selected " + sMsg);
+        }
+
+        function myOnSelectionEnforce(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            doLog(oAutoComp.getName() + " had to clear an invalid selection.");
+        }
+
+        function myOnContainerCollapse(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            doLog(oAutoComp.getName() + " container collapsed.");
+        }
+
+        function myOnTextboxBlur(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            doLog(oAutoComp.getName() + " has been disengaged.");
+        }
+    }
+    YAHOO.util.Event.addListener(this,'load',autoCompInit);
+
+    // Logging
+    var logger = document.getElementById("logger");
+
+    function doLog(string) {
+        var date = new Date();
+        var timestamp = date.getTime();
+        logger.innerHTML = "<p>"+timestamp+" "+string+"</p>"+logger.innerHTML;
+    }
+</script>
+</div>
+</body>
+</html>
