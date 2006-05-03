@@ -301,7 +301,7 @@ YAHOO.widget.Calendar_Core.prototype.wireDefaultEvents = function() {
 		var d = cal.cellDates[index];
 		var date = new Date(d[0],d[1]-1,d[2]);
 		
-		if (! cal.isDateOOM(date)) {
+		if (! cal.isDateOOM(date) && ! YAHOO.util.Dom.hasClass(cell, cal.Style.CSS_CELL_RESTRICTED) && ! YAHOO.util.Dom.hasClass(cell, cal.Style.CSS_CELL_OOB)) {
 			if (cal.Options.MULTI_SELECT) {
 				var link = cell.getElementsByTagName("A")[0];
 				link.blur();
@@ -336,7 +336,7 @@ YAHOO.widget.Calendar_Core.prototype.wireDefaultEvents = function() {
 		var d = cal.cellDates[index];
 		var date = new Date(d[0],d[1]-1,d[2]);
 
-		if (! cal.isDateOOM(date) && ! YAHOO.util.Dom.hasClass(cell, "restricted")) {
+		if (! cal.isDateOOM(date) && ! YAHOO.util.Dom.hasClass(cell, cal.Style.CSS_CELL_RESTRICTED) && ! YAHOO.util.Dom.hasClass(cell, cal.Style.CSS_CELL_OOB)) {
 			YAHOO.widget.Calendar_Core.prependCssClass(cell, cal.Style.CSS_CELL_HOVER);
 		}
 	}
@@ -459,6 +459,7 @@ YAHOO.widget.Calendar_Core.prototype.setupConfig = function() {
 		CSS_CELL_RESTRICTED : "restricted",
 		CSS_CELL_TODAY : "today",
 		CSS_CELL_OOM : "oom",
+		CSS_CELL_OOB : "previous",
 		CSS_HEADER : "calheader",
 		CSS_HEADER_TEXT : "calhead",
 		CSS_WEEKDAY_CELL : "calweekdaycell",
@@ -679,10 +680,9 @@ YAHOO.widget.Calendar_Core.prototype.buildShellBody = function() {
 				this.cells[this.cells.length] = cell;
 				YAHOO.widget.Calendar_Core.setCssClasses(cell, [this.Style.CSS_CELL]);
 				YAHOO.util.Event.addListener(cell, "click", this.doSelectCell, this);
-				if (YAHOO.widget.Calendar_Core._getBrowser() == "ie") {
-					YAHOO.util.Event.addListener(cell, "mouseover", this.doCellMouseOver, this);
-					YAHOO.util.Event.addListener(cell, "mouseout", this.doCellMouseOut, this);
-				}
+
+				YAHOO.util.Event.addListener(cell, "mouseover", this.doCellMouseOver, this);
+				YAHOO.util.Event.addListener(cell, "mouseout", this.doCellMouseOut, this);
 			}
 			row.appendChild(cell);
 		}
@@ -1003,7 +1003,7 @@ YAHOO.widget.Calendar_Core.prototype._unload = function(e, cal) {
 /****************** BEGIN BUILT-IN TABLE CELL RENDERERS ************************************/
 
 YAHOO.widget.Calendar_Core.prototype.renderOutOfBoundsDate = function(workingDate, cell) {
-	YAHOO.widget.Calendar_Core.addCssClass(cell, "previous");
+	YAHOO.widget.Calendar_Core.addCssClass(cell, this.Style.CSS_CELL_OOB);
 	cell.innerHTML = workingDate.getDate();
 	return YAHOO.widget.Calendar_Core.STOP_RENDER;
 }
