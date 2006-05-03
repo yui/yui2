@@ -1,0 +1,4321 @@
+
+<html>
+<head>
+	<title>
+		JavaScript Documentation - 
+		
+			YAHOO.widget.Calendar_Core
+		
+	</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Yahoo! UI Library: Calendar</a></h3>
+
+	<div class="breadcrumbs">
+			
+			
+			
+			
+			
+			
+			
+			
+				<a href="./index.html">Yahoo! UI Library: Calendar</a>
+				&gt;
+				<strong>YAHOO.widget.Calendar_Core</strong>
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+	
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.widget.Calendar.html">
+								YAHOO.widget.Calendar</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Calendar2up.html">
+								YAHOO.widget.Calendar2up</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Calendar2up_Cal.html">
+								YAHOO.widget.Calendar2up_Cal</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Calendar_Core.html">
+								YAHOO.widget.Calendar_Core</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.CalendarGroup.html">
+								YAHOO.widget.CalendarGroup</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.DateMath.html">
+								YAHOO.widget.DateMath</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-Calendar.js.html">
+								Calendar.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Calendar2up.js.html">
+								Calendar2up.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Calendar_Core.js.html">
+								Calendar_Core.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-CalendarGroup.js.html">
+								CalendarGroup.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-DateMath.js.html">
+								DateMath.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div id="pri">
+		<div class="main">
+			
+			<h2>Class YAHOO.widget.Calendar_Core</h2>
+			<pre>Object
+   |
+   +--<b>YAHOO.widget.Calendar_Core</b>
+</pre>
+			
+			
+				<dl class="subclasses">
+					<dt>Direct Known Subclasses:</dd>
+					<dd>
+						 <a href="YAHOO.widget.Calendar2up_Cal.html">YAHOO.widget.Calendar2up_Cal</a>, <a href="YAHOO.widget.Calendar.html">YAHOO.widget.Calendar</a>
+					</dd>
+			   </dl>
+			
+		
+			<hr />
+			
+			<!-- Class definition -->
+			<div class="class-def">
+				<div class="class-name">
+					<span class="class-attribs">
+						
+					</span>
+					<span class="class-type">class</span>
+					<b>YAHOO.widget.Calendar_Core</b>
+				</div>
+				<div class="class-extends">
+					
+				</div>
+			</div>
+				
+			
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+			<!-- ======== QUICK LINKS ======== -->
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+				
+				
+					<a href="#field_summary">Field Summary</a>
+					|
+				
+				
+					<a href="#constructor_summary">Constructor Summary</a>
+					|
+				
+				
+					<a href="#methodSummary">Method Summary</a> |
+					<a href="#methodDetails">Method Details</a>
+				
+			</div>
+			<!-- ======== END QUICK LINKS ======== -->
+	
+			<!-- ======== NESTED CLASS SUMMARY ======== -->
+			
+			<!-- ======== END NESTED CLASS SUMMARY ======== -->
+	
+			<!-- =========== FIELD SUMMARY =========== -->
+			
+				<div class="section field summaries">
+					<h3><a name="field_summary">Field Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+					<div class="content">
+						<table border="1" cellpadding="3" cellspacing="0">
+						
+							<tr>
+								<td class="flags">Date</td>
+								<td class="spec">
+									<code>
+										<a href="#_pageDate">_pageDate</a>
+									</code>
+									<div class="description">
+										A Date object representing the month/year that the calendar is initially set to&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Array</td>
+								<td class="spec">
+									<code>
+										<a href="#_renderStack">_renderStack</a>
+									</code>
+									<div class="description">
+										A copy of the initial render functions created before rendering.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Array</td>
+								<td class="spec">
+									<code>
+										<a href="#_selectedDates">_selectedDates</a>
+									</code>
+									<div class="description">
+										The private list of initially selected dates.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Array[](Integer[])</td>
+								<td class="spec">
+									<code>
+										<a href="#cellDates">cellDates</a>
+									</code>
+									<div class="description">
+										The collection of calendar cell dates that is parallel to the cells collection.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">HTMLTableCellElement[]</td>
+								<td class="spec">
+									<code>
+										<a href="#cells">cells</a>
+									</code>
+									<div class="description">
+										The collection of calendar table cells&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#Config">Config</a>
+									</code>
+									<div class="description">
+										The configuration object used to set up the calendars various locale and style options.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">HTMLTableCellElement</td>
+								<td class="spec">
+									<code>
+										<a href="#headerCell">headerCell</a>
+									</code>
+									<div class="description">
+										The HTML cell element that represents the main header cell TH used in the calendar table&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">String</td>
+								<td class="spec">
+									<code>
+										<a href="#id">id</a>
+									</code>
+									<div class="description">
+										The id that uniquely identifies this calendar.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Date</td>
+								<td class="spec">
+									<code>
+										<a href="#maxDate">maxDate</a>
+									</code>
+									<div class="description">
+										A Date object representing the maximum selectable date&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Date</td>
+								<td class="spec">
+									<code>
+										<a href="#minDate">minDate</a>
+									</code>
+									<div class="description">
+										A Date object representing the minimum selectable date&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">HTMLElement</td>
+								<td class="spec">
+									<code>
+										<a href="#oDomContainer">oDomContainer</a>
+									</code>
+									<div class="description">
+										The DOM element reference that points to this calendar's container element.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Date</td>
+								<td class="spec">
+									<code>
+										<a href="#pageDate">pageDate</a>
+									</code>
+									<div class="description">
+										A Date object representing the month/year that the calendar is currently set to&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">CalendarGroup</td>
+								<td class="spec">
+									<code>
+										<a href="#parent">parent</a>
+									</code>
+									<div class="description">
+										The parent CalendarGroup, only to be set explicitly by the parent group&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Array[]</td>
+								<td class="spec">
+									<code>
+										<a href="#renderStack">renderStack</a>
+									</code>
+									<div class="description">
+										The list of render functions, along with required parameters, used to render cells.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Array[](Integer[])</td>
+								<td class="spec">
+									<code>
+										<a href="#selectedDates">selectedDates</a>
+									</code>
+									<div class="description">
+										The list of currently selected dates.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Boolean</td>
+								<td class="spec">
+									<code>
+										<a href="#shellRendered">shellRendered</a>
+									</code>
+									<div class="description">
+										A boolean indicating whether the shell of the calendar has already been rendered to the page&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">HTMLTableElement</td>
+								<td class="spec">
+									<code>
+										<a href="#table">table</a>
+									</code>
+									<div class="description">
+										The HTML table element that represents this calendar&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Date</td>
+								<td class="spec">
+									<code>
+										<a href="#today">today</a>
+									</code>
+									<div class="description">
+										A Date object representing today's date.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">HTMLTableCellElement[]</td>
+								<td class="spec">
+									<code>
+										<a href="#weekFooterCells">weekFooterCells</a>
+									</code>
+									<div class="description">
+										The collection of calendar week footer cells&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">HTMLTableCellElement[]</td>
+								<td class="spec">
+									<code>
+										<a href="#weekHeaderCells">weekHeaderCells</a>
+									</code>
+									<div class="description">
+										The collection of calendar week header cells&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">String</td>
+								<td class="spec">
+									<code>
+										<a href="#DATE">DATE</a>
+									</code>
+									<div class="description">
+										Type constant used for renderers to represent an individual date (M/D/Y)&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Integer</td>
+								<td class="spec">
+									<code>
+										<a href="#DISPLAY_DAYS">DISPLAY_DAYS</a>
+									</code>
+									<div class="description">
+										Constant that represents the total number of date cells that are displayed in a given month
+ including&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#IMG_ROOT">IMG_ROOT</a>
+									</code>
+									<div class="description">
+										&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">String</td>
+								<td class="spec">
+									<code>
+										<a href="#MONTH">MONTH</a>
+									</code>
+									<div class="description">
+										Type constant used for renderers to represent a month across any year&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">String</td>
+								<td class="spec">
+									<code>
+										<a href="#MONTH_DAY">MONTH_DAY</a>
+									</code>
+									<div class="description">
+										Type constant used for renderers to represent an individual date across any year (M/D)&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">String</td>
+								<td class="spec">
+									<code>
+										<a href="#RANGE">RANGE</a>
+									</code>
+									<div class="description">
+										Type constant used for renderers to represent a range of individual dates (M/D/Y-M/D/Y)&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">String</td>
+								<td class="spec">
+									<code>
+										<a href="#STOP_RENDER">STOP_RENDER</a>
+									</code>
+									<div class="description">
+										Constant used for halting the execution of the remainder of the render stack&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">String</td>
+								<td class="spec">
+									<code>
+										<a href="#WEEKDAY">WEEKDAY</a>
+									</code>
+									<div class="description">
+										Type constant used for renderers to represent a weekday&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+						</table>
+					</div>
+				</div>
+			
+					
+			
+			<!-- =========== END FIELD SUMMARY =========== -->
+	
+	
+			<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+			
+				<div class="section contructor summaries">
+					<h3><a name="constructor_summary">Constructor Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+					<div class="content">
+						<code class="spec">
+							<a href="YAHOO.widget.Calendar_Core.html#YAHOO.widget.Calendar_Core()">YAHOO.widget.Calendar_Core</a>
+						</code>
+						<div class="description">
+							&nbsp;
+						</div>
+					</div>
+				</div>
+			
+			<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
+	
+	
+			<!-- ========== METHOD SUMMARY =========== -->
+			
+				<div class="section method summaries">
+					<h3><a name="methodSummary">Method Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+					<div class="content">
+						<table border="1" cellpadding="3" cellspacing="0">
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#_addRenderer">_addRenderer</a>
+											(&lt;String&gt; type, &lt;Array&gt; aDates, &lt;Function&gt; fnRender)
+										</code>
+										<div class="description">
+											The private method used for adding cell renderers to the local render stack.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Boolean</td>
+									<td class="spec">
+										<code>
+											<a href="#_fieldArraysAreEqual">_fieldArraysAreEqual</a>
+											(array1, array2)
+										</code>
+										<div class="description">
+											Converts a date field array [yyyy,mm,dd] to a JavaScript Date object.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Integer</td>
+									<td class="spec">
+										<code>
+											<a href="#_indexOfSelectedFieldArray">_indexOfSelectedFieldArray</a>
+											(find)
+										</code>
+										<div class="description">
+											Gets the index of a date field array [yyyy,mm,dd] in the current list of selected dates.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Array[](Integer[])</td>
+									<td class="spec">
+										<code>
+											<a href="#_parseDate">_parseDate</a>
+											(&lt;String&gt; sDate)
+										</code>
+										<div class="description">
+											Converts a date string to a date field array&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Array[](Integer[])</td>
+									<td class="spec">
+										<code>
+											<a href="#_parseDates">_parseDates</a>
+											(&lt;String&gt; sDates)
+										</code>
+										<div class="description">
+											Converts a multi or single-date string to an array of date field arrays&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Array[](Integer[])</td>
+									<td class="spec">
+										<code>
+											<a href="#_parseRange">_parseRange</a>
+											(startDate, endDate)
+										</code>
+										<div class="description">
+											Converts a date range to the full list of included dates&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Date</td>
+									<td class="spec">
+										<code>
+											<a href="#_toDate">_toDate</a>
+											(dateFieldArray)
+										</code>
+										<div class="description">
+											Converts a date field array [yyyy,mm,dd] to a JavaScript Date object.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Array[](Integer[])</td>
+									<td class="spec">
+										<code>
+											<a href="#_toFieldArray">_toFieldArray</a>
+											(date)
+										</code>
+										<div class="description">
+											Converts a date (either a JavaScript Date object, or a date string) to the internal data structure
+ used to represent dates: [[yyyy,mm,dd],[yyyy,mm,dd]].&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#_unload">_unload</a>
+											(e, cal)
+										</code>
+										<div class="description">
+											&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#addMonthRenderer">addMonthRenderer</a>
+											(&lt;Integer&gt; month, &lt;Function&gt; fnRender)
+										</code>
+										<div class="description">
+											Adds a month to the render stack.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#addMonths">addMonths</a>
+											(&lt;Integer&gt; count)
+										</code>
+										<div class="description">
+											Adds the designated number of months to the current calendar month, and sets the current
+ calendar page date to the new month.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#addRenderer">addRenderer</a>
+											(&lt;String&gt; sDates, &lt;Function&gt; fnRender)
+										</code>
+										<div class="description">
+											Adds a renderer to the render stack.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#addWeekdayRenderer">addWeekdayRenderer</a>
+											(weekday, &lt;Function&gt; fnRender)
+										</code>
+										<div class="description">
+											Adds a weekday to the render stack.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#addYears">addYears</a>
+											(&lt;Integer&gt; count)
+										</code>
+										<div class="description">
+											Adds the designated number of years to the current calendar, and sets the current
+ calendar page date to the new month.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">String</td>
+									<td class="spec">
+										<code>
+											<a href="#buildDayLabel">buildDayLabel</a>
+											(workingDate)
+										</code>
+										<div class="description">
+											Builds the date digit that will be displayed in calendar cells&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">String</td>
+									<td class="spec">
+										<code>
+											<a href="#buildMonthLabel">buildMonthLabel</a>
+											()
+										</code>
+										<div class="description">
+											Builds the date label that will be displayed in the calendar header or
+ footer, depending on configuration.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#buildShell">buildShell</a>
+											()
+										</code>
+										<div class="description">
+											Builds the calendar table shell that will be filled in with dates and formatting.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#buildShellBody">buildShellBody</a>
+											()
+										</code>
+										<div class="description">
+											Builds the calendar shell body (6 weeks by 7 days)&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#buildShellFooter">buildShellFooter</a>
+											()
+										</code>
+										<div class="description">
+											Builds the calendar shell footer.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#buildShellHeader">buildShellHeader</a>
+											()
+										</code>
+										<div class="description">
+											Builds the calendar shell header by inserting a THEAD into the local calendar table.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#clear">clear</a>
+											()
+										</code>
+										<div class="description">
+											Clears the selected dates in the current calendar widget and sets the calendar
+ to the current month and year.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#clearAllBodyCellStyles">clearAllBodyCellStyles</a>
+											(style)
+										</code>
+										<div class="description">
+											Removes all styles from all body cells in the current calendar table.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#clearElement">clearElement</a>
+											(cell)
+										</code>
+										<div class="description">
+											Clears the inner HTML, CSS class and style information from the specified cell.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#customConfig">customConfig</a>
+											()
+										</code>
+										<div class="description">
+											This method is called when subclasses need to override configuration variables
+ or create new ones.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Date[]</td>
+									<td class="spec">
+										<code>
+											<a href="#deselect">deselect</a>
+											(date)
+										</code>
+										<div class="description">
+											Deselects a date or a collection of dates on the current calendar.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Date[]</td>
+									<td class="spec">
+										<code>
+											<a href="#deselectAll">deselectAll</a>
+											()
+										</code>
+										<div class="description">
+											Deselects all dates on the current calendar.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Date[]</td>
+									<td class="spec">
+										<code>
+											<a href="#deselectCell">deselectCell</a>
+											(i)
+										</code>
+										<div class="description">
+											Deselects a date on the current calendar by referencing the index of the cell that should be deselected.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Date[]</td>
+									<td class="spec">
+										<code>
+											<a href="#getSelectedDates">getSelectedDates</a>
+											()
+										</code>
+										<div class="description">
+											Gets the list of currently selected dates from the calendar.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#init">init</a>
+											(&lt;String&gt; id, &lt;String&gt; containerId, &lt;String&gt; monthyear, &lt;String&gt; selected)
+										</code>
+										<div class="description">
+											Initializes the calendar widget.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Boolean</td>
+									<td class="spec">
+										<code>
+											<a href="#isDateOOM">isDateOOM</a>
+											(&lt;Date&gt; date)
+										</code>
+										<div class="description">
+											Determines whether a given date is OOM (out of month).&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#nextMonth">nextMonth</a>
+											()
+										</code>
+										<div class="description">
+											Navigates to the next month page in the calendar widget.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#nextYear">nextYear</a>
+											()
+										</code>
+										<div class="description">
+											Navigates to the next year in the currently selected month in the calendar widget.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#onBeforeDeselect">onBeforeDeselect</a>
+											()
+										</code>
+										<div class="description">
+											Event executed before a date is deselected in the calendar widget.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#onBeforeSelect">onBeforeSelect</a>
+											()
+										</code>
+										<div class="description">
+											Event executed before a date is selected in the calendar widget.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#onChangePage">onChangePage</a>
+											()
+										</code>
+										<div class="description">
+											Event executed when the user navigates to a different calendar page.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#onClear">onClear</a>
+											()
+										</code>
+										<div class="description">
+											Event executed when the calendar widget is completely cleared to the current month with no selections.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#onDeselect">onDeselect</a>
+											()
+										</code>
+										<div class="description">
+											Event executed when a date is deselected in the calendar widget.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#onRender">onRender</a>
+											()
+										</code>
+										<div class="description">
+											Event executed when the calendar widget is rendered.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#onReset">onReset</a>
+											()
+										</code>
+										<div class="description">
+											Event executed when the calendar widget is reset to its original state.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#onSelect">onSelect</a>
+											()
+										</code>
+										<div class="description">
+											Event executed when a date is selected in the calendar widget.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#previousMonth">previousMonth</a>
+											()
+										</code>
+										<div class="description">
+											Navigates to the previous month page in the calendar widget.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#previousYear">previousYear</a>
+											()
+										</code>
+										<div class="description">
+											Navigates to the previous year in the currently selected month in the calendar widget.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#render">render</a>
+											()
+										</code>
+										<div class="description">
+											Renders the calendar after it has been configured.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#renderBody">renderBody</a>
+											(&lt;Date&gt; workingDate)
+										</code>
+										<div class="description">
+											Appends the calendar body.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">String</td>
+									<td class="spec">
+										<code>
+											<a href="#renderBodyCellRestricted">renderBodyCellRestricted</a>
+											(&lt;Date&gt; workingDate, &lt;HTMLTableCellElement&gt; cell)
+										</code>
+										<div class="description">
+											Renders the current calendar cell as a non-selectable "black-out" date using the default
+ restricted style.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">String</td>
+									<td class="spec">
+										<code>
+											<a href="#renderCellDefault">renderCellDefault</a>
+											(&lt;Date&gt; workingDate, &lt;HTMLTableCellElement&gt; cell)
+										</code>
+										<div class="description">
+											Renders a single standard calendar cell in the calendar widget table.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">String</td>
+									<td class="spec">
+										<code>
+											<a href="#renderCellNotThisMonth">renderCellNotThisMonth</a>
+											(&lt;Date&gt; workingDate, &lt;HTMLTableCellElement&gt; cell)
+										</code>
+										<div class="description">
+											Applies the default style used for rendering dates that are not a part of the current
+ month (preceding or trailing the cells for the current month)&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#renderCellStyleHighlight1">renderCellStyleHighlight1</a>
+											(workingDate, cell)
+										</code>
+										<div class="description">
+											&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#renderCellStyleHighlight2">renderCellStyleHighlight2</a>
+											(workingDate, cell)
+										</code>
+										<div class="description">
+											&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#renderCellStyleHighlight3">renderCellStyleHighlight3</a>
+											(workingDate, cell)
+										</code>
+										<div class="description">
+											&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#renderCellStyleHighlight4">renderCellStyleHighlight4</a>
+											(workingDate, cell)
+										</code>
+										<div class="description">
+											&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">String</td>
+									<td class="spec">
+										<code>
+											<a href="#renderCellStyleSelected">renderCellStyleSelected</a>
+											(&lt;Date&gt; workingDate, &lt;HTMLTableCellElement&gt; cell)
+										</code>
+										<div class="description">
+											Applies the default style used for rendering selected dates to the current calendar cell&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">String</td>
+									<td class="spec">
+										<code>
+											<a href="#renderCellStyleToday">renderCellStyleToday</a>
+											(&lt;Date&gt; workingDate, &lt;HTMLTableCellElement&gt; cell)
+										</code>
+										<div class="description">
+											Applies the default style used for rendering today's date to the current calendar cell&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#renderFooter">renderFooter</a>
+											()
+										</code>
+										<div class="description">
+											Appends the contents of the calendar widget footer into the shell.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#renderHeader">renderHeader</a>
+											()
+										</code>
+										<div class="description">
+											Appends the header contents into the widget header.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Object</td>
+									<td class="spec">
+										<code>
+											<a href="#renderOutOfBoundsDate">renderOutOfBoundsDate</a>
+											(workingDate, cell)
+										</code>
+										<div class="description">
+											BEGIN BUILT-IN TABLE CELL RENDERERS&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#renderRowFooter">renderRowFooter</a>
+											(&lt;Date&gt; workingDate, &lt;HTMLTableCellElement&gt; cell)
+										</code>
+										<div class="description">
+											Renders the row footer for a week.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#renderRowHeader">renderRowHeader</a>
+											(&lt;Date&gt; workingDate, &lt;HTMLTableCellElement&gt; cell)
+										</code>
+										<div class="description">
+											Renders the row header for a week.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#renderShell">renderShell</a>
+											()
+										</code>
+										<div class="description">
+											Outputs the calendar shell to the DOM, inserting it into the placeholder element.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#reset">reset</a>
+											()
+										</code>
+										<div class="description">
+											Resets the calendar widget to the originally selected month and year, and 
+ sets the calendar to the initial selection(s).&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#resetRenderers">resetRenderers</a>
+											()
+										</code>
+										<div class="description">
+											Resets the render stack of the current calendar to its original pre-render value.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Date[]</td>
+									<td class="spec">
+										<code>
+											<a href="#select">select</a>
+											(date)
+										</code>
+										<div class="description">
+											Selects a date or a collection of dates on the current calendar.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Date[]</td>
+									<td class="spec">
+										<code>
+											<a href="#selectCell">selectCell</a>
+											(&lt;Integer&gt; cellIndex)
+										</code>
+										<div class="description">
+											Selects a date on the current calendar by referencing the index of the cell that should be selected.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#setMonth">setMonth</a>
+											(&lt;Integer&gt; month)
+										</code>
+										<div class="description">
+											Sets the calendar's month explicitly.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#setupConfig">setupConfig</a>
+											()
+										</code>
+										<div class="description">
+											This method is called to initialize the widget configuration variables, including
+style, localization, and other display and behavioral options.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#setYear">setYear</a>
+											(&lt;Integer&gt; year)
+										</code>
+										<div class="description">
+											Sets the calendar's year explicitly.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#subtractMonths">subtractMonths</a>
+											(&lt;Integer&gt; count)
+										</code>
+										<div class="description">
+											Subtracts the designated number of months from the current calendar month, and sets the current
+ calendar page date to the new month.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#subtractYears">subtractYears</a>
+											(&lt;Integer&gt; count)
+										</code>
+										<div class="description">
+											Subtcats the designated number of years from the current calendar, and sets the current
+ calendar page date to the new month.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Boolean</td>
+									<td class="spec">
+										<code>
+											<a href="#validate">validate</a>
+											()
+										</code>
+										<div class="description">
+											Validates the calendar widget.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#wireCustomEvents">wireCustomEvents</a>
+											()
+										</code>
+										<div class="description">
+											This function can be extended by subclasses to attach additional DOM events to
+ the calendar.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#wireDefaultEvents">wireDefaultEvents</a>
+											()
+										</code>
+										<div class="description">
+											Wires the local DOM events for the Calendar, including cell selection, hover, and
+ default navigation that is used for moving back and forth between calendar pages.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Object</td>
+									<td class="spec">
+										<code>
+											<a href="#_getBrowser">_getBrowser</a>
+											()
+										</code>
+										<div class="description">
+											END GETTER/SETTER METHODS&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#addCssClass">addCssClass</a>
+											(&lt;HTMLElement&gt; element, &lt;String&gt; style)
+										</code>
+										<div class="description">
+											Adds the specified CSS class to the element passed to this method.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#prependCssClass">prependCssClass</a>
+											(element, style)
+										</code>
+										<div class="description">
+											&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#removeCssClass">removeCssClass</a>
+											(&lt;HTMLElement&gt; element, &lt;String&gt; style)
+										</code>
+										<div class="description">
+											Removed the specified CSS class from the element passed to this method.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#setCssClasses">setCssClasses</a>
+											(&lt;HTMLElement&gt; element, aStyles)
+										</code>
+										<div class="description">
+											Sets the specified array of CSS classes into the referenced element&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+						</table>
+					</div>
+				</div>
+			
+			
+			
+			<!-- ========== END METHOD SUMMARY =========== -->
+	
+	
+			<!-- ============ FIELD DETAIL START =========== -->
+			
+				<div class="section field details">
+					<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+					<div class="content">
+						
+							<h4><a name="_pageDate">_pageDate</a></h4>
+							<div class="detail">
+								<code>
+									Date
+									&nbsp;
+									<strong>_pageDate</strong>
+								</code>
+								<div class="description">
+									A Date object representing the month/year that the calendar is initially set to
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="_renderStack">_renderStack</a></h4>
+							<div class="detail">
+								<code>
+									Array
+									&nbsp;
+									<strong>_renderStack</strong>
+								</code>
+								<div class="description">
+									A copy of the initial render functions created before rendering.
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="_selectedDates">_selectedDates</a></h4>
+							<div class="detail">
+								<code>
+									Array
+									&nbsp;
+									<strong>_selectedDates</strong>
+								</code>
+								<div class="description">
+									The private list of initially selected dates.
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="cellDates">cellDates</a></h4>
+							<div class="detail">
+								<code>
+									Array[](Integer[])
+									&nbsp;
+									<strong>cellDates</strong>
+								</code>
+								<div class="description">
+									The collection of calendar cell dates that is parallel to the cells collection. The array contains dates field arrays in the format of [YYYY, M, D].
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="cells">cells</a></h4>
+							<div class="detail">
+								<code>
+									HTMLTableCellElement[]
+									&nbsp;
+									<strong>cells</strong>
+								</code>
+								<div class="description">
+									The collection of calendar table cells
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="Config">Config</a></h4>
+							<div class="detail">
+								<code>
+									Object
+									&nbsp;
+									<strong>Config</strong>
+								</code>
+								<div class="description">
+									The configuration object used to set up the calendars various locale and style options.
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="headerCell">headerCell</a></h4>
+							<div class="detail">
+								<code>
+									HTMLTableCellElement
+									&nbsp;
+									<strong>headerCell</strong>
+								</code>
+								<div class="description">
+									The HTML cell element that represents the main header cell TH used in the calendar table
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="id">id</a></h4>
+							<div class="detail">
+								<code>
+									String
+									&nbsp;
+									<strong>id</strong>
+								</code>
+								<div class="description">
+									The id that uniquely identifies this calendar. This id should match the id of the placeholder element on the page.
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="maxDate">maxDate</a></h4>
+							<div class="detail">
+								<code>
+									Date
+									&nbsp;
+									<strong>maxDate</strong>
+								</code>
+								<div class="description">
+									A Date object representing the maximum selectable date
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="minDate">minDate</a></h4>
+							<div class="detail">
+								<code>
+									Date
+									&nbsp;
+									<strong>minDate</strong>
+								</code>
+								<div class="description">
+									A Date object representing the minimum selectable date
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="oDomContainer">oDomContainer</a></h4>
+							<div class="detail">
+								<code>
+									HTMLElement
+									&nbsp;
+									<strong>oDomContainer</strong>
+								</code>
+								<div class="description">
+									The DOM element reference that points to this calendar's container element. The calendar will be inserted into this element when the shell is rendered.
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="pageDate">pageDate</a></h4>
+							<div class="detail">
+								<code>
+									Date
+									&nbsp;
+									<strong>pageDate</strong>
+								</code>
+								<div class="description">
+									A Date object representing the month/year that the calendar is currently set to
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="parent">parent</a></h4>
+							<div class="detail">
+								<code>
+									CalendarGroup
+									&nbsp;
+									<strong>parent</strong>
+								</code>
+								<div class="description">
+									The parent CalendarGroup, only to be set explicitly by the parent group
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="renderStack">renderStack</a></h4>
+							<div class="detail">
+								<code>
+									Array[]
+									&nbsp;
+									<strong>renderStack</strong>
+								</code>
+								<div class="description">
+									The list of render functions, along with required parameters, used to render cells.
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="selectedDates">selectedDates</a></h4>
+							<div class="detail">
+								<code>
+									Array[](Integer[])
+									&nbsp;
+									<strong>selectedDates</strong>
+								</code>
+								<div class="description">
+									The list of currently selected dates. The data format for this local collection is 
+ an array of date field arrays, e.g:
+ [
+	[2004,5,25],
+	[2004,5,26]
+ ]
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="shellRendered">shellRendered</a></h4>
+							<div class="detail">
+								<code>
+									Boolean
+									&nbsp;
+									<strong>shellRendered</strong>
+								</code>
+								<div class="description">
+									A boolean indicating whether the shell of the calendar has already been rendered to the page
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="table">table</a></h4>
+							<div class="detail">
+								<code>
+									HTMLTableElement
+									&nbsp;
+									<strong>table</strong>
+								</code>
+								<div class="description">
+									The HTML table element that represents this calendar
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="today">today</a></h4>
+							<div class="detail">
+								<code>
+									Date
+									&nbsp;
+									<strong>today</strong>
+								</code>
+								<div class="description">
+									A Date object representing today's date.
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="weekFooterCells">weekFooterCells</a></h4>
+							<div class="detail">
+								<code>
+									HTMLTableCellElement[]
+									&nbsp;
+									<strong>weekFooterCells</strong>
+								</code>
+								<div class="description">
+									The collection of calendar week footer cells
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="weekHeaderCells">weekHeaderCells</a></h4>
+							<div class="detail">
+								<code>
+									HTMLTableCellElement[]
+									&nbsp;
+									<strong>weekHeaderCells</strong>
+								</code>
+								<div class="description">
+									The collection of calendar week header cells
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="DATE">DATE</a></h4>
+							<div class="detail">
+								<code>
+									String
+									&nbsp;
+									<strong>DATE</strong>
+								</code>
+								<div class="description">
+									Type constant used for renderers to represent an individual date (M/D/Y)
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="DISPLAY_DAYS">DISPLAY_DAYS</a></h4>
+							<div class="detail">
+								<code>
+									Integer
+									&nbsp;
+									<strong>DISPLAY_DAYS</strong>
+								</code>
+								<div class="description">
+									Constant that represents the total number of date cells that are displayed in a given month
+ including
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="IMG_ROOT">IMG_ROOT</a></h4>
+							<div class="detail">
+								<code>
+									Object
+									&nbsp;
+									<strong>IMG_ROOT</strong>
+								</code>
+								<div class="description">
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="MONTH">MONTH</a></h4>
+							<div class="detail">
+								<code>
+									String
+									&nbsp;
+									<strong>MONTH</strong>
+								</code>
+								<div class="description">
+									Type constant used for renderers to represent a month across any year
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="MONTH_DAY">MONTH_DAY</a></h4>
+							<div class="detail">
+								<code>
+									String
+									&nbsp;
+									<strong>MONTH_DAY</strong>
+								</code>
+								<div class="description">
+									Type constant used for renderers to represent an individual date across any year (M/D)
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="RANGE">RANGE</a></h4>
+							<div class="detail">
+								<code>
+									String
+									&nbsp;
+									<strong>RANGE</strong>
+								</code>
+								<div class="description">
+									Type constant used for renderers to represent a range of individual dates (M/D/Y-M/D/Y)
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="STOP_RENDER">STOP_RENDER</a></h4>
+							<div class="detail">
+								<code>
+									String
+									&nbsp;
+									<strong>STOP_RENDER</strong>
+								</code>
+								<div class="description">
+									Constant used for halting the execution of the remainder of the render stack
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="WEEKDAY">WEEKDAY</a></h4>
+							<div class="detail">
+								<code>
+									String
+									&nbsp;
+									<strong>WEEKDAY</strong>
+								</code>
+								<div class="description">
+									Type constant used for renderers to represent a weekday
+								</div>
+							</div>
+							<hr />
+						
+					</div>
+				</div>
+			
+			<!-- ============ FIELD DETAIL END =========== -->
+	
+			<!-- ========= CONSTRUCTOR DETAIL START ======== -->
+			
+				<div class="section constructor details">
+					<h3><a name="constructor_detail">Constructor Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+					<div class="content">
+						<h4><a name="YAHOO.widget.Calendar_Core()">YAHOO.widget.Calendar_Core</a></h4>
+						<div class="detail">
+							<code>
+								<strong>YAHOO.widget.Calendar_Core</strong>
+								()
+							</code>
+							<div class="description">
+								
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>id</code> - 
+															The id of the table element that will represent the calendar widget  
+											</dd>
+										
+											<dd>
+												<code>containerId</code> - 
+													The id of the container element that will contain the calendar table  
+											</dd>
+										
+											<dd>
+												<code>monthyear</code> - 
+													The month/year string used to set the current calendar page  
+											</dd>
+										
+											<dd>
+												<code>selected</code> - 
+													A string of date values formatted using the date parser. The built-in 								default date format is MM/DD/YYYY. Ranges are defined using 								MM/DD/YYYY-MM/DD/YYYY. Month/day combinations are defined using MM/DD. 								Any combination of these can be combined by delimiting the string with 								commas. Example: "12/24/2005,12/25,1/18/2006-1/21/2006"
+											</dd>
+										
+									</dl>
+								
+								
+								
+								
+								
+									HASH(0x1dae2e4)
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			
+			<!-- ========= CONSTRUCTOR DETAIL END ======== -->
+	
+	
+			<!-- ============ METHOD DETAIL START ========== -->
+			
+				<div class="section method details">
+					<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+					<div class="content">
+						
+							<h4><a name="_addRenderer">_addRenderer</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>_addRenderer</strong>
+									(&lt;String&gt; type, &lt;Array&gt; aDates, &lt;Function&gt; fnRender)
+								</code>
+										
+								<div class="description">
+									
+										The private method used for adding cell renderers to the local render stack.
+ This method is called by other methods that set the renderer type prior to the method call.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>type</code> - 
+															The type string that indicates the type of date renderer being added. 									Values are YAHOO.widget.Calendar_Core.DATE, YAHOO.widget.Calendar_Core.MONTH_DAY, YAHOO.widget.Calendar_Core.WEEKDAY, 									YAHOO.widget.Calendar_Core.RANGE, YAHOO.widget.Calendar_Core.MONTH  
+												</dd>
+											
+												<dd>
+													<code>aDates</code> - 
+															An array of dates used to construct the renderer. The format varies based 									on the renderer type  
+												</dd>
+											
+												<dd>
+													<code>fnRender</code> - 
+														The function executed to render cells that match the render rules for this renderer.   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1dca354)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="_fieldArraysAreEqual">_fieldArraysAreEqual</a></h4>
+							<div class="detail">
+								<code>
+									Boolean 
+									<strong>_fieldArraysAreEqual</strong>
+									(array1, array2)
+								</code>
+										
+								<div class="description">
+									
+										Converts a date field array [yyyy,mm,dd] to a JavaScript Date object.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>Integer</code> - 
+													[]}	array1	The first date field array to compare  
+												</dd>
+											
+												<dd>
+													<code>Integer</code> - 
+													[]}	array2	The first date field array to compare  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>The boolean that represents the equality of the two arrays  </dd>
+										</dl>
+									
+									
+										HASH(0x1dca4d4)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="_indexOfSelectedFieldArray">_indexOfSelectedFieldArray</a></h4>
+							<div class="detail">
+								<code>
+									Integer 
+									<strong>_indexOfSelectedFieldArray</strong>
+									(find)
+								</code>
+										
+								<div class="description">
+									
+										Gets the index of a date field array [yyyy,mm,dd] in the current list of selected dates.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>Integer</code> - 
+													[]}		find	The date field array to search for  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>The index of the date field array within the collection of selected dates. 								-1 will be returned if the date is not found.  </dd>
+										</dl>
+									
+									
+										HASH(0x1dca624)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="_parseDate">_parseDate</a></h4>
+							<div class="detail">
+								<code>
+									Array[](Integer[]) 
+									<strong>_parseDate</strong>
+									(&lt;String&gt; sDate)
+								</code>
+										
+								<div class="description">
+									
+										Converts a date string to a date field array
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>sDate</code> - 
+																Date string. Valid formats are mm/dd and mm/dd/yyyy.  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>A date field array representing the string passed to the method  </dd>
+										</dl>
+									
+									
+										HASH(0x1dca744)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="_parseDates">_parseDates</a></h4>
+							<div class="detail">
+								<code>
+									Array[](Integer[]) 
+									<strong>_parseDates</strong>
+									(&lt;String&gt; sDates)
+								</code>
+										
+								<div class="description">
+									
+										Converts a multi or single-date string to an array of date field arrays
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>sDates</code> - 
+															Date string with one or more comma-delimited dates. Valid formats are mm/dd, mm/dd/yyyy, mm/dd/yyyy-mm/dd/yyyy  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>An array of date field arrays  </dd>
+										</dl>
+									
+									
+										HASH(0x1dca864)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="_parseRange">_parseRange</a></h4>
+							<div class="detail">
+								<code>
+									Array[](Integer[]) 
+									<strong>_parseRange</strong>
+									(startDate, endDate)
+								</code>
+										
+								<div class="description">
+									
+										Converts a date range to the full list of included dates
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>Integer</code> - 
+													[]}	startDate	Date field array representing the first date in the range  
+												</dd>
+											
+												<dd>
+													<code>Integer</code> - 
+													[]}	endDate		Date field array representing the last date in the range  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>An array of date field arrays  </dd>
+										</dl>
+									
+									
+										HASH(0x1dca984)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="_toDate">_toDate</a></h4>
+							<div class="detail">
+								<code>
+									Date 
+									<strong>_toDate</strong>
+									(dateFieldArray)
+								</code>
+										
+								<div class="description">
+									
+										Converts a date field array [yyyy,mm,dd] to a JavaScript Date object.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>Integer</code> - 
+													[]}		dateFieldArray	The date field array to convert to a JavaScript Date.  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>JavaScript Date object representing the date field array  </dd>
+										</dl>
+									
+									
+										HASH(0x1dcaad4)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="_toFieldArray">_toFieldArray</a></h4>
+							<div class="detail">
+								<code>
+									Array[](Integer[]) 
+									<strong>_toFieldArray</strong>
+									(date)
+								</code>
+										
+								<div class="description">
+									
+										Converts a date (either a JavaScript Date object, or a date string) to the internal data structure
+ used to represent dates: [[yyyy,mm,dd],[yyyy,mm,dd]].
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>String</code> - 
+													/Date/Date[]}	date	The date string of dates to deselect in the current calendar. Valid formats are 								individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006). 								Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005). 								This method can also take a JavaScript Date object or an array of Date objects.	  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>Array of date field arrays  </dd>
+										</dl>
+									
+									
+										HASH(0x1dcabf4)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="_unload">_unload</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>_unload</strong>
+									(e, cal)
+								</code>
+										
+								<div class="description">
+									
+									
+									
+									
+										HASH(0x1db6c04)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="addMonthRenderer">addMonthRenderer</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>addMonthRenderer</strong>
+									(&lt;Integer&gt; month, &lt;Function&gt; fnRender)
+								</code>
+										
+								<div class="description">
+									
+										Adds a month to the render stack. The function reference passed to this method will be executed
+ when a date cell matches the month passed to this method.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>month</code> - 
+															The month (1-12) to associate with this renderer  
+												</dd>
+											
+												<dd>
+													<code>fnRender</code> - 
+														The function executed to render cells that match the render rules for this renderer.   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1db6d18)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="addMonths">addMonths</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>addMonths</strong>
+									(&lt;Integer&gt; count)
+								</code>
+										
+								<div class="description">
+									
+										Adds the designated number of months to the current calendar month, and sets the current
+ calendar page date to the new month.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>count</code> - 
+														The number of months to add to the current calendar   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1db6e80)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="addRenderer">addRenderer</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>addRenderer</strong>
+									(&lt;String&gt; sDates, &lt;Function&gt; fnRender)
+								</code>
+										
+								<div class="description">
+									
+										Adds a renderer to the render stack. The function reference passed to this method will be executed
+ when a date cell matches the conditions specified in the date string for this renderer.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>sDates</code> - 
+															A date string to associate with the specified renderer. Valid formats 									include date (12/24/2005), month/day (12/24), and range (12/1/2004-1/1/2005)  
+												</dd>
+											
+												<dd>
+													<code>fnRender</code> - 
+														The function executed to render cells that match the render rules for this renderer.   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1db6fb8)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="addWeekdayRenderer">addWeekdayRenderer</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>addWeekdayRenderer</strong>
+									(weekday, &lt;Function&gt; fnRender)
+								</code>
+										
+								<div class="description">
+									
+										Adds a weekday to the render stack. The function reference passed to this method will be executed
+ when a date cell matches the weekday passed to this method.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>fnRender</code> - 
+														The function executed to render cells that match the render rules for this renderer.   
+												</dd>
+											
+												<dd>
+													<code>weekay</code> - 
+															The weekday (1-7) to associate with this renderer  
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1db7120)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="addYears">addYears</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>addYears</strong>
+									(&lt;Integer&gt; count)
+								</code>
+										
+								<div class="description">
+									
+										Adds the designated number of years to the current calendar, and sets the current
+ calendar page date to the new month.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>count</code> - 
+														The number of years to add to the current calendar   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1db7288)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="buildDayLabel">buildDayLabel</a></h4>
+							<div class="detail">
+								<code>
+									String 
+									<strong>buildDayLabel</strong>
+									(workingDate)
+								</code>
+										
+								<div class="description">
+									
+										Builds the date digit that will be displayed in calendar cells
+									
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>The formatted day label  </dd>
+										</dl>
+									
+									
+										HASH(0x1db73b4)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="buildMonthLabel">buildMonthLabel</a></h4>
+							<div class="detail">
+								<code>
+									String 
+									<strong>buildMonthLabel</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Builds the date label that will be displayed in the calendar header or
+ footer, depending on configuration.
+									
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>The formatted calendar month label  </dd>
+										</dl>
+									
+									
+										HASH(0x1db74bc)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="buildShell">buildShell</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>buildShell</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Builds the calendar table shell that will be filled in with dates and formatting.
+ This method calls buildShellHeader, buildShellBody, and buildShellFooter (in that order) 
+ to construct the pieces of the calendar table. The construction of the shell should
+ only happen one time when the calendar is initialized.
+									
+									
+									
+									
+										HASH(0x1db75dc)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="buildShellBody">buildShellBody</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>buildShellBody</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Builds the calendar shell body (6 weeks by 7 days)
+									
+									
+									
+									
+										HASH(0x1db76fc)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="buildShellFooter">buildShellFooter</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>buildShellFooter</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Builds the calendar shell footer. In the default implementation, there is
+ no footer.
+									
+									
+									
+									
+										HASH(0x1db781c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="buildShellHeader">buildShellHeader</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>buildShellHeader</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Builds the calendar shell header by inserting a THEAD into the local calendar table.
+									
+									
+									
+									
+										HASH(0x1db793c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="clear">clear</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>clear</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Clears the selected dates in the current calendar widget and sets the calendar
+ to the current month and year.
+									
+									
+									
+									
+										HASH(0x1db7a5c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="clearAllBodyCellStyles">clearAllBodyCellStyles</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>clearAllBodyCellStyles</strong>
+									(style)
+								</code>
+										
+								<div class="description">
+									
+										Removes all styles from all body cells in the current calendar table.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>The</code> - 
+													 CSS class name to remove from all calendar body cells   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1dcf034)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="clearElement">clearElement</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>clearElement</strong>
+									(cell)
+								</code>
+										
+								<div class="description">
+									
+										Clears the inner HTML, CSS class and style information from the specified cell.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>The</code> - 
+													 cell to clear   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1dcf16c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="customConfig">customConfig</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>customConfig</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										This method is called when subclasses need to override configuration variables
+ or create new ones. Values can be explicitly set as follows:
+ <blockquote><code>
+	this.Config.Style.CSS_CELL = "newcalcell";
+	this.Config.Locale.MONTHS_SHORT = ["Jan", "Fv", "Mars", "Avr", "Mai", "Juin", "Juil", "Aot", "Sept", "Oct", "Nov", "Dc"];
+ </code></blockquote>
+									
+									
+									
+									
+										HASH(0x1dcf2b0)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="deselect">deselect</a></h4>
+							<div class="detail">
+								<code>
+									Date[] 
+									<strong>deselect</strong>
+									(date)
+								</code>
+										
+								<div class="description">
+									
+										Deselects a date or a collection of dates on the current calendar. This method, by default,
+ does not call the render method explicitly. Once deselection has completed, render must be 
+ called for the changes to be reflected visually.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>String</code> - 
+													/Date/Date[]}	date	The date string of dates to deselect in the current calendar. Valid formats are 								individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006). 								Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005). 								This method can also take a JavaScript Date object or an array of Date objects.	  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>Array of JavaScript Date objects representing all individual dates that are currently selected.  </dd>
+										</dl>
+									
+									
+										HASH(0x1dcf3ac)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="deselectAll">deselectAll</a></h4>
+							<div class="detail">
+								<code>
+									Date[] 
+									<strong>deselectAll</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Deselects all dates on the current calendar.
+									
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>Array of JavaScript Date objects representing all individual dates that are currently selected. 						Assuming that this function executes properly, the return value should be an empty array. 						However, the empty array is returned for the sake of being able to check the selection status 						of the calendar.  </dd>
+										</dl>
+									
+									
+										HASH(0x1dcf4d8)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="deselectCell">deselectCell</a></h4>
+							<div class="detail">
+								<code>
+									Date[] 
+									<strong>deselectCell</strong>
+									(i)
+								</code>
+										
+								<div class="description">
+									
+										Deselects a date on the current calendar by referencing the index of the cell that should be deselected.
+ This method is used to easily deselect a single cell (usually with a mouse click) without having to do
+ a full render. The selected style is removed from the cell directly.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>cellIndex</code> - 
+														The index of the cell to deselect in the current calendar.   
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>Array of JavaScript Date objects representing all individual dates that are currently selected.  </dd>
+										</dl>
+									
+									
+										HASH(0x1dcf5d4)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="getSelectedDates">getSelectedDates</a></h4>
+							<div class="detail">
+								<code>
+									Date[] 
+									<strong>getSelectedDates</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Gets the list of currently selected dates from the calendar.
+									
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>An array of currently selected JavaScript Date objects.  </dd>
+										</dl>
+									
+									
+										HASH(0x1dcf700)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="init">init</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>init</strong>
+									(&lt;String&gt; id, &lt;String&gt; containerId, &lt;String&gt; monthyear, &lt;String&gt; selected)
+								</code>
+										
+								<div class="description">
+									
+										Initializes the calendar widget. This method must be called by all subclass constructors.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>id</code> - 
+																The id of the table element that will represent the calendar widget  
+												</dd>
+											
+												<dd>
+													<code>containerId</code> - 
+														The id of the container element that will contain the calendar table  
+												</dd>
+											
+												<dd>
+													<code>monthyear</code> - 
+														The month/year string used to set the current calendar page  
+												</dd>
+											
+												<dd>
+													<code>selected</code> - 
+														A string of date values formatted using the date parser. The built-in 								default date format is MM/DD/YYYY. Ranges are defined using 								MM/DD/YYYY-MM/DD/YYYY. Month/day combinations are defined using MM/DD. 								Any combination of these can be combined by delimiting the string with 								commas. Example: "12/24/2005,12/25,1/18/2006-1/21/2006"   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1dcf814)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="isDateOOM">isDateOOM</a></h4>
+							<div class="detail">
+								<code>
+									Boolean 
+									<strong>isDateOOM</strong>
+									(&lt;Date&gt; date)
+								</code>
+										
+								<div class="description">
+									
+										Determines whether a given date is OOM (out of month).
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>date</code> - 
+														The JavaScript Date object for which to check the OOM status  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>	true if the date is OOM</dd>
+										</dl>
+									
+									
+										HASH(0x1dcf9c4)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="nextMonth">nextMonth</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>nextMonth</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Navigates to the next month page in the calendar widget.
+									
+									
+									
+									
+										HASH(0x1dcfafc)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="nextYear">nextYear</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>nextYear</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Navigates to the next year in the currently selected month in the calendar widget.
+									
+									
+									
+									
+										HASH(0x1dcfc1c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="onBeforeDeselect">onBeforeDeselect</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>onBeforeDeselect</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Event executed before a date is deselected in the calendar widget.
+									
+									
+									
+									
+										HASH(0x1dcfd3c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="onBeforeSelect">onBeforeSelect</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>onBeforeSelect</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Event executed before a date is selected in the calendar widget.
+									
+									
+									
+									
+										HASH(0x1dcfe5c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="onChangePage">onChangePage</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>onChangePage</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Event executed when the user navigates to a different calendar page.
+									
+									
+									
+									
+										HASH(0x1dcff7c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="onClear">onClear</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>onClear</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Event executed when the calendar widget is completely cleared to the current month with no selections.
+									
+									
+									
+									
+										HASH(0x1dd5d70)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="onDeselect">onDeselect</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>onDeselect</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Event executed when a date is deselected in the calendar widget.
+									
+									
+									
+									
+										HASH(0x1dd5e90)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="onRender">onRender</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>onRender</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Event executed when the calendar widget is rendered.
+									
+									
+									
+									
+										HASH(0x1dd5fb0)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="onReset">onReset</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>onReset</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Event executed when the calendar widget is reset to its original state.
+									
+									
+									
+									
+										HASH(0x1dd60d0)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="onSelect">onSelect</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>onSelect</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Event executed when a date is selected in the calendar widget.
+									
+									
+									
+									
+										HASH(0x1dd61f0)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="previousMonth">previousMonth</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>previousMonth</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Navigates to the previous month page in the calendar widget.
+									
+									
+									
+									
+										HASH(0x1dd6310)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="previousYear">previousYear</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>previousYear</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Navigates to the previous year in the currently selected month in the calendar widget.
+									
+									
+									
+									
+										HASH(0x1dd6430)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="render">render</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>render</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Renders the calendar after it has been configured. The render() method has a specific call chain that will execute
+ when the method is called: renderHeader, renderBody, renderFooter.
+ Refer to the documentation for those methods for information on 
+ individual render tasks.
+									
+									
+									
+									
+										HASH(0x1dd6550)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="renderBody">renderBody</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>renderBody</strong>
+									(&lt;Date&gt; workingDate)
+								</code>
+										
+								<div class="description">
+									
+										Appends the calendar body. The default implementation calculates the number of
+ OOM (out of month) cells that need to be rendered at the start of the month, renders those, 
+ and renders all the day cells using the built-in cell rendering methods.
+
+ While iterating through all of the cells, the calendar checks for renderers in the
+ local render stack that match the date of the current cell, and then applies styles
+ as necessary.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>workingDate</code> - 
+														The current working Date object being used to generate the calendar   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1dd6664)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="renderBodyCellRestricted">renderBodyCellRestricted</a></h4>
+							<div class="detail">
+								<code>
+									String 
+									<strong>renderBodyCellRestricted</strong>
+									(&lt;Date&gt; workingDate, &lt;HTMLTableCellElement&gt; cell)
+								</code>
+										
+								<div class="description">
+									
+										Renders the current calendar cell as a non-selectable "black-out" date using the default
+ restricted style.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>workingDate</code> - 
+															The current working Date object being used to generate the calendar  
+												</dd>
+											
+												<dd>
+													<code>cell</code> - 
+																The current working cell in the calendar  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>YAHOO.widget.Calendar_Core.STOP_RENDER if rendering should stop with this style, null or nothing if rendering 			should not be terminated  </dd>
+										</dl>
+									
+									
+										HASH(0x1dd6784)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="renderCellDefault">renderCellDefault</a></h4>
+							<div class="detail">
+								<code>
+									String 
+									<strong>renderCellDefault</strong>
+									(&lt;Date&gt; workingDate, &lt;HTMLTableCellElement&gt; cell)
+								</code>
+										
+								<div class="description">
+									
+										Renders a single standard calendar cell in the calendar widget table.
+ All logic for determining how a standard default cell will be rendered is 
+ encapsulated in this method, and must be accounted for when extending the
+ widget class.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>workingDate</code> - 
+															The current working Date object being used to generate the calendar  
+												</dd>
+											
+												<dd>
+													<code>cell</code> - 
+																The current working cell in the calendar  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>YAHOO.widget.Calendar_Core.STOP_RENDER if rendering should stop with this style, null or nothing if rendering 			should not be terminated  </dd>
+										</dl>
+									
+									
+										HASH(0x1dd68d4)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="renderCellNotThisMonth">renderCellNotThisMonth</a></h4>
+							<div class="detail">
+								<code>
+									String 
+									<strong>renderCellNotThisMonth</strong>
+									(&lt;Date&gt; workingDate, &lt;HTMLTableCellElement&gt; cell)
+								</code>
+										
+								<div class="description">
+									
+										Applies the default style used for rendering dates that are not a part of the current
+ month (preceding or trailing the cells for the current month)
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>workingDate</code> - 
+															The current working Date object being used to generate the calendar  
+												</dd>
+											
+												<dd>
+													<code>cell</code> - 
+																The current working cell in the calendar  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>YAHOO.widget.Calendar_Core.STOP_RENDER if rendering should stop with this style, null or nothing if rendering 			should not be terminated  </dd>
+										</dl>
+									
+									
+										HASH(0x1dd6a24)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="renderCellStyleHighlight1">renderCellStyleHighlight1</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>renderCellStyleHighlight1</strong>
+									(workingDate, cell)
+								</code>
+										
+								<div class="description">
+									
+									
+									
+									
+										HASH(0x1dd6b98)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="renderCellStyleHighlight2">renderCellStyleHighlight2</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>renderCellStyleHighlight2</strong>
+									(workingDate, cell)
+								</code>
+										
+								<div class="description">
+									
+									
+									
+									
+										HASH(0x1dd6cb8)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="renderCellStyleHighlight3">renderCellStyleHighlight3</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>renderCellStyleHighlight3</strong>
+									(workingDate, cell)
+								</code>
+										
+								<div class="description">
+									
+									
+									
+									
+										HASH(0x1dde72c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="renderCellStyleHighlight4">renderCellStyleHighlight4</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>renderCellStyleHighlight4</strong>
+									(workingDate, cell)
+								</code>
+										
+								<div class="description">
+									
+									
+									
+									
+										HASH(0x1dde84c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="renderCellStyleSelected">renderCellStyleSelected</a></h4>
+							<div class="detail">
+								<code>
+									String 
+									<strong>renderCellStyleSelected</strong>
+									(&lt;Date&gt; workingDate, &lt;HTMLTableCellElement&gt; cell)
+								</code>
+										
+								<div class="description">
+									
+										Applies the default style used for rendering selected dates to the current calendar cell
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>workingDate</code> - 
+															The current working Date object being used to generate the calendar  
+												</dd>
+											
+												<dd>
+													<code>cell</code> - 
+																The current working cell in the calendar  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>YAHOO.widget.Calendar_Core.STOP_RENDER if rendering should stop with this style, null or nothing if rendering 			should not be terminated  </dd>
+										</dl>
+									
+									
+										HASH(0x1dde948)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="renderCellStyleToday">renderCellStyleToday</a></h4>
+							<div class="detail">
+								<code>
+									String 
+									<strong>renderCellStyleToday</strong>
+									(&lt;Date&gt; workingDate, &lt;HTMLTableCellElement&gt; cell)
+								</code>
+										
+								<div class="description">
+									
+										Applies the default style used for rendering today's date to the current calendar cell
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>workingDate</code> - 
+															The current working Date object being used to generate the calendar  
+												</dd>
+											
+												<dd>
+													<code>cell</code> - 
+																The current working cell in the calendar  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>YAHOO.widget.Calendar_Core.STOP_RENDER if rendering should stop with this style, null or nothing if rendering 			should not be terminated  </dd>
+										</dl>
+									
+									
+										HASH(0x1ddea98)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="renderFooter">renderFooter</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>renderFooter</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Appends the contents of the calendar widget footer into the shell. By default, 
+ the calendar does not contain a footer, and this method must be implemented by 
+ subclassing the widget.
+									
+									
+									
+									
+										HASH(0x1ddec0c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="renderHeader">renderHeader</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>renderHeader</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Appends the header contents into the widget header.
+									
+									
+									
+									
+										HASH(0x1dded2c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="renderOutOfBoundsDate">renderOutOfBoundsDate</a></h4>
+							<div class="detail">
+								<code>
+									Object 
+									<strong>renderOutOfBoundsDate</strong>
+									(workingDate, cell)
+								</code>
+										
+								<div class="description">
+									
+										BEGIN BUILT-IN TABLE CELL RENDERERS
+									
+									
+									
+									
+										HASH(0x1ddee4c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="renderRowFooter">renderRowFooter</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>renderRowFooter</strong>
+									(&lt;Date&gt; workingDate, &lt;HTMLTableCellElement&gt; cell)
+								</code>
+										
+								<div class="description">
+									
+										Renders the row footer for a week. The date passed in should be
+ the first date of the given week.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>workingDate</code> - 
+															The current working Date object (beginning of the week) being used to generate the calendar  
+												</dd>
+											
+												<dd>
+													<code>cell</code> - 
+																The current working cell in the calendar   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1ddef54)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="renderRowHeader">renderRowHeader</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>renderRowHeader</strong>
+									(&lt;Date&gt; workingDate, &lt;HTMLTableCellElement&gt; cell)
+								</code>
+										
+								<div class="description">
+									
+										Renders the row header for a week. The date passed in should be
+ the first date of the given week.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>workingDate</code> - 
+															The current working Date object (beginning of the week) being used to generate the calendar  
+												</dd>
+											
+												<dd>
+													<code>cell</code> - 
+																The current working cell in the calendar   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1ddf0bc)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="renderShell">renderShell</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>renderShell</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Outputs the calendar shell to the DOM, inserting it into the placeholder element.
+									
+									
+									
+									
+										HASH(0x1ddf230)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="reset">reset</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>reset</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Resets the calendar widget to the originally selected month and year, and 
+ sets the calendar to the initial selection(s).
+									
+									
+									
+									
+										HASH(0x1ddf350)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="resetRenderers">resetRenderers</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>resetRenderers</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Resets the render stack of the current calendar to its original pre-render value.
+									
+									
+									
+									
+										HASH(0x1ddf470)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="select">select</a></h4>
+							<div class="detail">
+								<code>
+									Date[] 
+									<strong>select</strong>
+									(date)
+								</code>
+										
+								<div class="description">
+									
+										Selects a date or a collection of dates on the current calendar. This method, by default,
+ does not call the render method explicitly. Once selection has completed, render must be 
+ called for the changes to be reflected visually.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>String</code> - 
+													/Date/Date[]}	date	The date string of dates to select in the current calendar. Valid formats are 								individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006). 								Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005). 								This method can also take a JavaScript Date object or an array of Date objects.  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>Array of JavaScript Date objects representing all individual dates that are currently selected.  </dd>
+										</dl>
+									
+									
+										HASH(0x1ddf56c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="selectCell">selectCell</a></h4>
+							<div class="detail">
+								<code>
+									Date[] 
+									<strong>selectCell</strong>
+									(&lt;Integer&gt; cellIndex)
+								</code>
+										
+								<div class="description">
+									
+										Selects a date on the current calendar by referencing the index of the cell that should be selected.
+ This method is used to easily select a single cell (usually with a mouse click) without having to do
+ a full render. The selected style is applied to the cell directly.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>cellIndex</code> - 
+														The index of the cell to select in the current calendar.   
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>Array of JavaScript Date objects representing all individual dates that are currently selected.  </dd>
+										</dl>
+									
+									
+										HASH(0x1de4040)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="setMonth">setMonth</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>setMonth</strong>
+									(&lt;Integer&gt; month)
+								</code>
+										
+								<div class="description">
+									
+										Sets the calendar's month explicitly.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>month</code> - 
+															The numeric month, from 1 (January) to 12 (December)   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1de4178)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="setupConfig">setupConfig</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>setupConfig</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										This method is called to initialize the widget configuration variables, including
+style, localization, and other display and behavioral options.
+<p>Config: Container for the CSS style configuration variables.</p>
+<p><strong>Config.Style</strong> - Defines the CSS classes used for different calendar elements</p>
+<blockquote>
+	<div><em>CSS_CALENDAR</em> : Container table</div>
+	<div><em>CSS_HEADER</em> : </div>
+	<div><em>CSS_HEADER_TEXT</em> : Calendar header</div>
+	<div><em>CSS_FOOTER</em> : Calendar footer</div>
+	<div><em>CSS_CELL</em> : Calendar day cell</div>
+	<div><em>CSS_CELL_OOM</em> : Calendar OOM (out of month) cell</div>
+	<div><em>CSS_CELL_SELECTED</em> : Calendar selected cell</div>
+	<div><em>CSS_CELL_RESTRICTED</em> : Calendar restricted cell</div>
+	<div><em>CSS_CELL_TODAY</em> : Calendar cell for today's date</div>
+	<div><em>CSS_ROW_HEADER</em> : The cell preceding a row (used for week number by default)</div>
+	<div><em>CSS_ROW_FOOTER</em> : The cell following a row (not implemented by default)</div>
+	<div><em>CSS_WEEKDAY_CELL</em> : The cells used for labeling weekdays</div>
+	<div><em>CSS_WEEKDAY_ROW</em> : The row containing the weekday label cells</div>
+	<div><em>CSS_BORDER</em> : The border style used for the default UED rendering</div>
+	<div><em>CSS_CONTAINER</em> : Special container class used to properly adjust the sizing and float</div>
+	<div><em>CSS_NAV_LEFT</em> : Left navigation arrow</div>
+	<div><em>CSS_NAV_RIGHT</em> : Right navigation arrow</div>
+	<div><em>CSS_CELL_TOP</em> : Outlying cell along the top row</div>
+	<div><em>CSS_CELL_LEFT</em> : Outlying cell along the left row</div>
+	<div><em>CSS_CELL_RIGHT</em> : Outlying cell along the right row</div>
+	<div><em>CSS_CELL_BOTTOM</em> : Outlying cell along the bottom row</div>
+	<div><em>CSS_CELL_HOVER</em> : Cell hover style</div>
+	<div><em>CSS_CELL_HIGHLIGHT1</em> : Highlight color 1 for styling cells</div>
+	<div><em>CSS_CELL_HIGHLIGHT2</em> : Highlight color 2 for styling cells</div>
+	<div><em>CSS_CELL_HIGHLIGHT3</em> : Highlight color 3 for styling cells</div>
+	<div><em>CSS_CELL_HIGHLIGHT4</em> : Highlight color 4 for styling cells</div>
+
+</blockquote>
+<p><strong>Config.Locale</strong> - Defines the locale string arrays used for localization</p>
+<blockquote>
+	<div><em>MONTHS_SHORT</em> : Array of 12 months in short format ("Jan", "Feb", etc.)</div>
+	<div><em>MONTHS_LONG</em> : Array of 12 months in short format ("Jan", "Feb", etc.)</div>
+	<div><em>WEEKDAYS_1CHAR</em> : Array of 7 days in 1-character format ("S", "M", etc.)</div>
+	<div><em>WEEKDAYS_SHORT</em> : Array of 7 days in short format ("Su", "Mo", etc.)</div>
+	<div><em>WEEKDAYS_MEDIUM</em> : Array of 7 days in medium format ("Sun", "Mon", etc.)</div>
+	<div><em>WEEKDAYS_LONG</em> : Array of 7 days in long format ("Sunday", "Monday", etc.)</div>
+	<div><em>DATE_DELIMITER</em> : The value used to delimit series of multiple dates (Default: ",")</div>
+	<div><em>DATE_FIELD_DELIMITER</em> : The value used to delimit date fields (Default: "/")</div>
+	<div><em>DATE_RANGE_DELIMITER</em> : The value used to delimit date fields (Default: "-")</div>
+	<div><em>MY_MONTH_POSITION</em> : The value used to determine the position of the month in a month/year combo (e.g. 12/2005) (Default: 1)</div>
+	<div><em>MY_YEAR_POSITION</em> : The value used to determine the position of the year in a month/year combo (e.g. 12/2005) (Default: 2)</div>	
+	<div><em>MD_MONTH_POSITION</em> : The value used to determine the position of the month in a month/day combo (e.g. 12/25) (Default: 1)</div>
+	<div><em>MD_DAY_POSITION</em> : The value used to determine the position of the day in a month/day combo (e.g. 12/25) (Default: 2)</div>
+	<div><em>MDY_MONTH_POSITION</em> : The value used to determine the position of the month in a month/day/year combo (e.g. 12/25/2005) (Default: 1)</div>
+	<div><em>MDY_DAY_POSITION</em> : The value used to determine the position of the day in a month/day/year combo (e.g. 12/25/2005) (Default: 2)</div>
+	<div><em>MDY_YEAR_POSITION</em> : The value used to determine the position of the year in a month/day/year combo (e.g. 12/25/2005) (Default: 3)</div>
+</blockquote>
+<p><strong>Config.Options</strong> - Defines other configurable calendar widget options</p>
+<blockquote>
+	<div><em>SHOW_WEEKDAYS</em> : Boolean, determines whether to display the weekday headers (defaults to true)</div>
+	<div><em>LOCALE_MONTHS</em> : Array, points to the desired Config.Locale array (defaults to Config.Locale.MONTHS_LONG)</div>
+	<div><em>LOCALE_WEEKDAYS</em> : Array, points to the desired Config.Locale array (defaults to Config.Locale.WEEKDAYS_SHORT)</div>
+	<div><em>START_WEEKDAY</em> : Integer, 0-6, representing the day that a week begins on</div>
+	<div><em>SHOW_WEEK_HEADER</em> : Boolean, determines whether to display row headers</div>
+	<div><em>SHOW_WEEK_FOOTER</em> : Boolean, determines whether to display row footers</div>
+	<div><em>HIDE_BLANK_WEEKS</em> : Boolean, determines whether to hide extra weeks that are completely OOM</div>
+	<div><em>NAV_ARROW_LEFT</em> : String, the image path used for the left navigation arrow</div>
+	<div><em>NAV_ARROW_RIGHT</em> : String, the image path used for the right navigation arrow</div>
+</blockquote>
+									
+									
+									
+									
+										HASH(0x1de42bc)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="setYear">setYear</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>setYear</strong>
+									(&lt;Integer&gt; year)
+								</code>
+										
+								<div class="description">
+									
+										Sets the calendar's year explicitly.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>year</code> - 
+															The numeric 4-digit year   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1de43d0)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="subtractMonths">subtractMonths</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>subtractMonths</strong>
+									(&lt;Integer&gt; count)
+								</code>
+										
+								<div class="description">
+									
+										Subtracts the designated number of months from the current calendar month, and sets the current
+ calendar page date to the new month.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>count</code> - 
+														The number of months to subtract from the current calendar   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1de4508)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="subtractYears">subtractYears</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>subtractYears</strong>
+									(&lt;Integer&gt; count)
+								</code>
+										
+								<div class="description">
+									
+										Subtcats the designated number of years from the current calendar, and sets the current
+ calendar page date to the new month.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>count</code> - 
+														The number of years to subtract from the current calendar   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1de4640)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="validate">validate</a></h4>
+							<div class="detail">
+								<code>
+									Boolean 
+									<strong>validate</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Validates the calendar widget. This method has no default implementation
+ and must be extended by subclassing the widget.
+									
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd>Should return true if the widget validates, and false if  it doesn't.  </dd>
+										</dl>
+									
+									
+										HASH(0x1de476c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="wireCustomEvents">wireCustomEvents</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>wireCustomEvents</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										This function can be extended by subclasses to attach additional DOM events to
+ the calendar. By default, this method is unimplemented.
+									
+									
+									
+									
+										HASH(0x1de488c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="wireDefaultEvents">wireDefaultEvents</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>wireDefaultEvents</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										Wires the local DOM events for the Calendar, including cell selection, hover, and
+ default navigation that is used for moving back and forth between calendar pages.
+									
+									
+									
+									
+										HASH(0x1de49ac)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="_getBrowser">_getBrowser</a></h4>
+							<div class="detail">
+								<code>
+									Object 
+									<strong>_getBrowser</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										END GETTER/SETTER METHODS
+									
+									
+									
+									
+										HASH(0x1de4acc)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="addCssClass">addCssClass</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>addCssClass</strong>
+									(&lt;HTMLElement&gt; element, &lt;String&gt; style)
+								</code>
+										
+								<div class="description">
+									
+										Adds the specified CSS class to the element passed to this method.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>element</code> - 
+															The element to which the CSS class should be applied  
+												</dd>
+											
+												<dd>
+													<code>style</code> - 
+															The CSS class name to add to the referenced element   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1de4bd4)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="prependCssClass">prependCssClass</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>prependCssClass</strong>
+									(element, style)
+								</code>
+										
+								<div class="description">
+									
+									
+									
+									
+										HASH(0x1de4d48)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="removeCssClass">removeCssClass</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>removeCssClass</strong>
+									(&lt;HTMLElement&gt; element, &lt;String&gt; style)
+								</code>
+										
+								<div class="description">
+									
+										Removed the specified CSS class from the element passed to this method.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>element</code> - 
+															The element from which the CSS class should be removed  
+												</dd>
+											
+												<dd>
+													<code>style</code> - 
+															The CSS class name to remove from the referenced element   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1de4e5c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="setCssClasses">setCssClasses</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>setCssClasses</strong>
+									(&lt;HTMLElement&gt; element, aStyles)
+								</code>
+										
+								<div class="description">
+									
+										Sets the specified array of CSS classes into the referenced element
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>element</code> - 
+															The element to set the CSS classes into  
+												</dd>
+											
+												<dd>
+													<code>String</code> - 
+													[]}		aStyles		An array of CSS class names   
+												</dd>
+											
+										</dl>
+									
+									
+									
+										HASH(0x1e03b00)
+									
+								</div>
+							</div>
+							<hr />
+						
+					</div>
+				</div>
+			
+			<!-- ============ METHOD DETAIL END ========== -->
+		</div>
+	</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+
+
+<div id="footer">
+	<hr />	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+	version 1.9.5.8
+</div>
+
+
+</body>
+</html>
