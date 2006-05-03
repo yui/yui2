@@ -459,8 +459,16 @@ YAHOO.util.Connect =
 	setForm:function(formName)
 	{
 		this._sFormData = '';
-		var oForm = (formName == (typeof string))?document.forms[formName]:formName;
-		var oElement, oName, oValue;
+		if(typeof formName == 'string'){
+			var oForm = document.forms[formName];
+		}
+		else if(typeof formName == 'object'){
+			var oForm = formName;
+		}
+		else{
+			return null;
+		}
+		var oElement, oName, oValue, oDisabled;
 		var hasSubmit = false;
 
 		// Iterate over the form elements collection to construct the
