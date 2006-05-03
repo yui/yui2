@@ -11,7 +11,7 @@ http://developer.yahoo.net/yui/license.txt
  * callback you create.
  * @ class
  */
-YAHOO.util.Connect.prototype =
+YAHOO.util.Connect =
 {
   /**
    * Array of  MSFT ActiveX ids for XMLHttpRequest.
