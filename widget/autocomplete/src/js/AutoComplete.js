@@ -1111,7 +1111,6 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._clearList = function() {
-    this._toggleContainer(false);
     this._oContainer.scrollTop = 0;
     var aItems = this._aListIds;
     
@@ -1126,6 +1125,7 @@ YAHOO.widget.AutoComplete.prototype._clearList = function() {
     this._oCurItem = null;
     this._nDisplayedItems = 0;
     this._sCurQuery = null;
+    this._toggleContainer(false);
 };
 
 /**
