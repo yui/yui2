@@ -207,7 +207,19 @@
 					<table border="1" cellpadding="3" cellspacing="0">
 					
 						<tr>
-							<td class="flags">string[]</td>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#available">available</a>
+								</code>
+								<div class="description">
+									The availabe property is false until the linked dom element is accessible.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">{YAHOO.util.DragDrop.prototype.string = string;}</td>
 							<td class="spec">
 								<code>
 									<a href="#groups">groups</a>
@@ -235,10 +247,35 @@
 							<td class="flags">string[]</td>
 							<td class="spec">
 								<code>
+									<a href="#invalidHandleClasses">invalidHandleClasses</a>
+								</code>
+								<div class="description">
+									An indexted array of css class names for elements that will be ignored
+ if clicked.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">{YAHOO.util.DragDrop.prototype.string = string;}</td>
+							<td class="spec">
+								<code>
+									<a href="#invalidHandleIds">invalidHandleIds</a>
+								</code>
+								<div class="description">
+									An associative array of ids for elements that will be ignored if clicked&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">{YAHOO.util.DragDrop.prototype.string = string;}</td>
+							<td class="spec">
+								<code>
 									<a href="#invalidHandleTypes">invalidHandleTypes</a>
 								</code>
 								<div class="description">
-									An array of HTML tags that will be ignored if clicked.&nbsp;
+									An associative array of HTML tags that will be ignored if clicked.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -352,6 +389,33 @@
 				<h3><a name="methodSummary">Method Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
 					<table border="1" cellpadding="3" cellspacing="0">
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#addInvalidHandleClass">addInvalidHandleClass</a>
+										(&lt;string&gt; cssClass)
+									</code>
+									<div class="description">
+										Lets you specify a css class of elements that will not initiate a drag&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#addInvalidHandleId">addInvalidHandleId</a>
+										(&lt;string&gt; id)
+									</code>
+									<div class="description">
+										Lets you to specify an element id for a child of a drag handle
+ that should not initiate a drag&nbsp;
+									</div>
+								</td>
+							</tr>
 						
 							<tr>
 								<td class="flags">void</td>
@@ -489,6 +553,20 @@
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
+										<a href="#onAvailable">onAvailable</a>
+										()
+									</code>
+									<div class="description">
+										Override the onAvailable method to do what is needed after the initial
+ position was determined.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
 										<a href="#onDrag">onDrag</a>
 										(&lt;Event&gt; e)
 									</code>
@@ -576,6 +654,32 @@
 									</code>
 									<div class="description">
 										Event handler that fires when a drag/drop obj gets a mouseup&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#removeInvalidHandleClass">removeInvalidHandleClass</a>
+										(cssClass)
+									</code>
+									<div class="description">
+										Unsets an invalid css class&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#removeInvalidHandleId">removeInvalidHandleId</a>
+										(id)
+									</code>
+									<div class="description">
+										Unsets an invalid handle id&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -768,10 +872,23 @@
 				<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
 					
+						<h4><a name="available">available</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>available</strong>
+							</code>
+							<div class="description">
+								The availabe property is false until the linked dom element is accessible.
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="groups">groups</a></h4>
 						<div class="detail">
 							<code>
-								string[]
+								{YAHOO.util.DragDrop.prototype.string = string;}
 								&nbsp;
 								<strong>groups</strong>
 							</code>
@@ -800,15 +917,42 @@
 						</div>
 						<hr />
 					
-						<h4><a name="invalidHandleTypes">invalidHandleTypes</a></h4>
+						<h4><a name="invalidHandleClasses">invalidHandleClasses</a></h4>
 						<div class="detail">
 							<code>
 								string[]
 								&nbsp;
+								<strong>invalidHandleClasses</strong>
+							</code>
+							<div class="description">
+								An indexted array of css class names for elements that will be ignored
+ if clicked.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="invalidHandleIds">invalidHandleIds</a></h4>
+						<div class="detail">
+							<code>
+								{YAHOO.util.DragDrop.prototype.string = string;}
+								&nbsp;
+								<strong>invalidHandleIds</strong>
+							</code>
+							<div class="description">
+								An associative array of ids for elements that will be ignored if clicked
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="invalidHandleTypes">invalidHandleTypes</a></h4>
+						<div class="detail">
+							<code>
+								{YAHOO.util.DragDrop.prototype.string = string;}
+								&nbsp;
 								<strong>invalidHandleTypes</strong>
 							</code>
 							<div class="description">
-								An array of HTML tags that will be ignored if clicked.
+								An associative array of HTML tags that will be ignored if clicked.
 							</div>
 						</div>
 						<hr />
@@ -989,6 +1133,65 @@
 			<div class="section method details">
 				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
+					
+						<h4><a name="addInvalidHandleClass">addInvalidHandleClass</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>addInvalidHandleClass</strong>
+								(&lt;string&gt; cssClass)
+							</code>
+									
+							<div class="description">
+								
+									Lets you specify a css class of elements that will not initiate a drag
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>cssClass</code> - 
+												 the class of the elements you wish to ignore        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="addInvalidHandleId">addInvalidHandleId</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>addInvalidHandleId</strong>
+								(&lt;string&gt; id)
+							</code>
+									
+							<div class="description">
+								
+									Lets you to specify an element id for a child of a drag handle
+ that should not initiate a drag
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>id</code> - 
+												 the element id of the element you wish to ignore        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
 					
 						<h4><a name="addInvalidHandleType">addInvalidHandleType</a></h4>
 						<div class="detail">
@@ -1279,6 +1482,26 @@
 						</div>
 						<hr />
 					
+						<h4><a name="onAvailable">onAvailable</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>onAvailable</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Override the onAvailable method to do what is needed after the initial
+ position was determined.
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="onDrag">onDrag</a></h4>
 						<div class="detail">
 							<code>
@@ -1496,6 +1719,64 @@
 											<dd>
 												<code>e</code> - 
 												        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="removeInvalidHandleClass">removeInvalidHandleClass</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>removeInvalidHandleClass</strong>
+								(cssClass)
+							</code>
+									
+							<div class="description">
+								
+									Unsets an invalid css class
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>the</code> - 
+												 class of the element(s) you wish to re-enable        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="removeInvalidHandleId">removeInvalidHandleId</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>removeInvalidHandleId</strong>
+								(id)
+							</code>
+									
+							<div class="description">
+								
+									Unsets an invalid handle id
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>the</code> - 
+												 id of the element to re-enable        
 											</dd>
 										
 									</dl>
@@ -1905,12 +2186,8 @@
 
 
 <div id="footer">
-	<hr />
-	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
-	<br />
-	Yahoo! Confidential.
-	<br /><br />
-	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+    <hr />
+    Copyright &copy; 2004 - 2006 Yahoo! Inc. All rights reserved.
 </div>
 
 

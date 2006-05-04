@@ -236,6 +236,18 @@
 						</tr>
 					
 						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#locked">locked</a>
+								</code>
+								<div class="description">
+									Is drag and drop locked?&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="flags">int</td>
 							<td class="spec">
 								<code>
@@ -336,6 +348,46 @@
 							</tr>
 						
 							<tr>
+								<td class="flags">int</td>
+								<td class="spec">
+									<code>
+										<a href="#getClientHeight">getClientHeight</a>
+										()
+									</code>
+									<div class="description">
+										Gets the client height&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">int</td>
+								<td class="spec">
+									<code>
+										<a href="#getClientWidth">getClientWidth</a>
+										()
+									</code>
+									<div class="description">
+										Gets the client width&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#getCss">getCss</a>
+										(&lt;String&gt; id)
+									</code>
+									<div class="description">
+										Returns the style property for the DOM element (i.e., 
+ document.getElById(id).style)&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
 								<td class="flags">DragDrop</td>
 								<td class="spec">
 									<code>
@@ -344,6 +396,19 @@
 									</code>
 									<div class="description">
 										Returns the DragDrop instance for a given id&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#getElement">getElement</a>
+										(&lt;String&gt; id)
+									</code>
+									<div class="description">
+										Returns the actual DOM element&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -363,6 +428,32 @@
 							</tr>
 						
 							<tr>
+								<td class="flags">int</td>
+								<td class="spec">
+									<code>
+										<a href="#getPosX">getPosX</a>
+										(el)
+									</code>
+									<div class="description">
+										Returns the X position of an html element&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">int</td>
+								<td class="spec">
+									<code>
+										<a href="#getPosY">getPosY</a>
+										(el)
+									</code>
+									<div class="description">
+										Returns the Y position of an html element&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
 								<td class="flags">Object</td>
 								<td class="spec">
 									<code>
@@ -372,6 +463,60 @@
 									<div class="description">
 										Returns the drag and drop instances that are in all groups the
  passed in instance belongs to.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">int</td>
+								<td class="spec">
+									<code>
+										<a href="#getScrollLeft">getScrollLeft</a>
+										()
+									</code>
+									<div class="description">
+										Gets the scrollLeft&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">int</td>
+								<td class="spec">
+									<code>
+										<a href="#getScrollTop">getScrollTop</a>
+										()
+									</code>
+									<div class="description">
+										Gets the scrollTop&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#getStyle">getStyle</a>
+										(&lt;HTMLElement&gt; el, &lt;string&gt; styleProp)
+									</code>
+									<div class="description">
+										Returns the specified element style property&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#handleWasClicked">handleWasClicked</a>
+										(node, id)
+									</code>
+									<div class="description">
+										Recursively searches the immediate parent and all child nodes for 
+ the handle element in order to determine wheter or not it was 
+ clicked.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -462,6 +607,32 @@
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
+										<a href="#moveToEl">moveToEl</a>
+										(moveEl, targetEl)
+									</code>
+									<div class="description">
+										&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#numericSort">numericSort</a>
+										(a, b)
+									</code>
+									<div class="description">
+										numeric array sort function&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
 										<a href="#refreshCache">refreshCache</a>
 										(&lt;Array&gt; aGroups)
 									</code>
@@ -494,6 +665,47 @@
 									</code>
 									<div class="description">
 										Each DragDrop handle element must be registered.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#startDrag">startDrag</a>
+										(x, y)
+									</code>
+									<div class="description">
+										Fired when either the drag pixel threshol or the mousedown hold 
+ time threshold has been met.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#stopEvent">stopEvent</a>
+										(&lt;Event&gt; e)
+									</code>
+									<div class="description">
+										Utility to stop event propagation and event default, if these 
+ features are turned on.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#swapNode">swapNode</a>
+										(n1, n2)
+									</code>
+									<div class="description">
+										Swap two nodes.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -577,6 +789,19 @@
 							<div class="description">
 								In intersect mode, drag and drop interactio nis defined by the 
  overlap of two or more drag and drop objects.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="locked">locked</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>locked</strong>
+							</code>
+							<div class="description">
+								Is drag and drop locked?
 							</div>
 						</div>
 						<hr />
@@ -729,6 +954,89 @@
 						</div>
 						<hr />
 					
+						<h4><a name="getClientHeight">getClientHeight</a></h4>
+						<div class="detail">
+							<code>
+								int 
+								<strong>getClientHeight</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Gets the client height
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> client height in px</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getClientWidth">getClientWidth</a></h4>
+						<div class="detail">
+							<code>
+								int 
+								<strong>getClientWidth</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Gets the client width
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> client width in px</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getCss">getCss</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>getCss</strong>
+								(&lt;String&gt; id)
+							</code>
+									
+							<div class="description">
+								
+									Returns the style property for the DOM element (i.e., 
+ document.getElById(id).style)
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>id</code> - 
+												 the id of the elment to get  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> The style property of the element</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="getDDById">getDDById</a></h4>
 						<div class="detail">
 							<code>
@@ -756,6 +1064,40 @@
 									<dl>
 										<dt>Returns:</dt>
 										<dd> the drag drop object, null if it is not found</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getElement">getElement</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>getElement</strong>
+								(&lt;String&gt; id)
+							</code>
+									
+							<div class="description">
+								
+									Returns the actual DOM element
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>id</code> - 
+												 the id of the elment to get  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> The element</dd>
 									</dl>
 								
 								
@@ -798,6 +1140,74 @@
 						</div>
 						<hr />
 					
+						<h4><a name="getPosX">getPosX</a></h4>
+						<div class="detail">
+							<code>
+								int 
+								<strong>getPosX</strong>
+								(el)
+							</code>
+									
+							<div class="description">
+								
+									Returns the X position of an html element
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>el</code> - 
+												 the element for which to get the position  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> the X coordinate</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getPosY">getPosY</a></h4>
+						<div class="detail">
+							<code>
+								int 
+								<strong>getPosY</strong>
+								(el)
+							</code>
+									
+							<div class="description">
+								
+									Returns the Y position of an html element
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>el</code> - 
+												 the element for which to get the position  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> the Y coordinate</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="getRelated">getRelated</a></h4>
 						<div class="detail">
 							<code>
@@ -832,6 +1242,126 @@
 										<dt>Returns:</dt>
 										<dd>{ygDragDrop[]} the related instances</dd>
 									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getScrollLeft">getScrollLeft</a></h4>
+						<div class="detail">
+							<code>
+								int 
+								<strong>getScrollLeft</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Gets the scrollLeft
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> the document's scrollTop</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getScrollTop">getScrollTop</a></h4>
+						<div class="detail">
+							<code>
+								int 
+								<strong>getScrollTop</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Gets the scrollTop
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> the document's scrollTop</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getStyle">getStyle</a></h4>
+						<div class="detail">
+							<code>
+								string 
+								<strong>getStyle</strong>
+								(&lt;HTMLElement&gt; el, &lt;string&gt; styleProp)
+							</code>
+									
+							<div class="description">
+								
+									Returns the specified element style property
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>el</code> - 
+												          the element  
+											</dd>
+										
+											<dd>
+												<code>styleProp</code> - 
+												   the style property  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd>     The value of the style property  </dd>
+									</dl>
+								
+								
+									, use YAHOO.util.Dom.getStyle
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="handleWasClicked">handleWasClicked</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>handleWasClicked</strong>
+								(node, id)
+							</code>
+									
+							<div class="description">
+								
+									Recursively searches the immediate parent and all child nodes for 
+ the handle element in order to determine wheter or not it was 
+ clicked.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>node</code> - 
+												 the html element to inspect
+											</dd>
+										
+									</dl>
+								
 								
 								
 							</div>
@@ -1029,6 +1559,42 @@
 						</div>
 						<hr />
 					
+						<h4><a name="moveToEl">moveToEl</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>moveToEl</strong>
+								(moveEl, targetEl)
+							</code>
+									
+							<div class="description">
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="numericSort">numericSort</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>numericSort</strong>
+								(a, b)
+							</code>
+									
+							<div class="description">
+								
+									numeric array sort function
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="refreshCache">refreshCache</a></h4>
 						<div class="detail">
 							<code>
@@ -1129,6 +1695,106 @@
 						</div>
 						<hr />
 					
+						<h4><a name="startDrag">startDrag</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>startDrag</strong>
+								(x, y)
+							</code>
+									
+							<div class="description">
+								
+									Fired when either the drag pixel threshol or the mousedown hold 
+ time threshold has been met.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>x</code> - 
+												 {int} the X position of the original mousedown  
+											</dd>
+										
+											<dd>
+												<code>y</code> - 
+												 {int} the Y position of the original mousedown            
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="stopEvent">stopEvent</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>stopEvent</strong>
+								(&lt;Event&gt; e)
+							</code>
+									
+							<div class="description">
+								
+									Utility to stop event propagation and event default, if these 
+ features are turned on.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>e</code> - 
+												 the event as returned by YAHOO.util.DragDropMgr.prototype.getEvent()            
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="swapNode">swapNode</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>swapNode</strong>
+								(n1, n2)
+							</code>
+									
+							<div class="description">
+								
+									Swap two nodes.  In IE, we use the native method, for others we 
+ emulate the IE behavior
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>n1</code> - 
+												 the first node to swap  
+											</dd>
+										
+											<dd>
+												<code>n2</code> - 
+												 the other node to swap            
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="unlock">unlock</a></h4>
 						<div class="detail">
 							<code>
@@ -1196,12 +1862,8 @@
 
 
 <div id="footer">
-	<hr />
-	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
-	<br />
-	Yahoo! Confidential.
-	<br /><br />
-	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+    <hr />
+    Copyright &copy; 2004 - 2006 Yahoo! Inc. All rights reserved.
 </div>
 
 

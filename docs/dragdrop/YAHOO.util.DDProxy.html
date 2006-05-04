@@ -231,6 +231,18 @@
 						</tr>
 					
 						<tr>
+							<td class="flags">Object</td>
+							<td class="spec">
+								<code>
+									<a href="#forceCssPosition">forceCssPosition</a>
+								</code>
+								<div class="description">
+									&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="flags">boolean</td>
 							<td class="spec">
 								<code>
@@ -287,7 +299,7 @@
 				<div class="section field inheritance">
 					<h3>Fields inherited from class <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 					<div class="content">
-								<code><a href="YAHOO.util.DragDrop.html#id">id</a>, <a href="YAHOO.util.DragDrop.html#invalidHandleTypes">invalidHandleTypes</a>, <a href="YAHOO.util.DragDrop.html#groups">groups</a>, <a href="YAHOO.util.DragDrop.html#isTarget">isTarget</a>, <a href="YAHOO.util.DragDrop.html#padding">padding</a>, <a href="YAHOO.util.DragDrop.html#maintainOffset">maintainOffset</a>, <a href="YAHOO.util.DragDrop.html#xTicks">xTicks</a>, <a href="YAHOO.util.DragDrop.html#yTicks">yTicks</a>, <a href="YAHOO.util.DragDrop.html#primaryButtonOnly">primaryButtonOnly</a></code>
+								<code><a href="YAHOO.util.DragDrop.html#id">id</a>, <a href="YAHOO.util.DragDrop.html#invalidHandleTypes">invalidHandleTypes</a>, <a href="YAHOO.util.DragDrop.html#invalidHandleIds">invalidHandleIds</a>, <a href="YAHOO.util.DragDrop.html#invalidHandleClasses">invalidHandleClasses</a>, <a href="YAHOO.util.DragDrop.html#groups">groups</a>, <a href="YAHOO.util.DragDrop.html#isTarget">isTarget</a>, <a href="YAHOO.util.DragDrop.html#padding">padding</a>, <a href="YAHOO.util.DragDrop.html#maintainOffset">maintainOffset</a>, <a href="YAHOO.util.DragDrop.html#xTicks">xTicks</a>, <a href="YAHOO.util.DragDrop.html#yTicks">yTicks</a>, <a href="YAHOO.util.DragDrop.html#primaryButtonOnly">primaryButtonOnly</a>, <a href="YAHOO.util.DragDrop.html#available">available</a></code>
 					</div>
 				</div>
 			
@@ -324,11 +336,37 @@
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
+										<a href="#b4EndDrag">b4EndDrag</a>
+										(e)
+									</code>
+									<div class="description">
+										&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
 										<a href="#b4MouseDown">b4MouseDown</a>
 										(e)
 									</code>
 									<div class="description">
 										Event that fires prior to the onMouseDown event.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#b4StartDrag">b4StartDrag</a>
+										(x, y)
+									</code>
+									<div class="description">
+										&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -388,7 +426,7 @@
 			<div class="section method inheritance">
 				<h3>Methods inherited from class  <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></h3>
 				<div class="content">
-							<code><a href="YAHOO.util.DragDrop.html#lock">lock</a>, <a href="YAHOO.util.DragDrop.html#unlock">unlock</a>, <a href="YAHOO.util.DragDrop.html#startDrag">startDrag</a>, <a href="YAHOO.util.DragDrop.html#onDrag">onDrag</a>, <a href="YAHOO.util.DragDrop.html#onDragEnter">onDragEnter</a>, <a href="YAHOO.util.DragDrop.html#onDragOver">onDragOver</a>, <a href="YAHOO.util.DragDrop.html#onDragOut">onDragOut</a>, <a href="YAHOO.util.DragDrop.html#onDragDrop">onDragDrop</a>, <a href="YAHOO.util.DragDrop.html#onMouseDown">onMouseDown</a>, <a href="YAHOO.util.DragDrop.html#onMouseUp">onMouseUp</a>, <a href="YAHOO.util.DragDrop.html#getEl">getEl</a>, <a href="YAHOO.util.DragDrop.html#getDragEl">getDragEl</a>, <a href="YAHOO.util.DragDrop.html#init">init</a>, <a href="YAHOO.util.DragDrop.html#initTarget">initTarget</a>, <a href="YAHOO.util.DragDrop.html#setPadding">setPadding</a>, <a href="YAHOO.util.DragDrop.html#setInitPosition">setInitPosition</a>, <a href="YAHOO.util.DragDrop.html#addToGroup">addToGroup</a>, <a href="YAHOO.util.DragDrop.html#setDragElId">setDragElId</a>, <a href="YAHOO.util.DragDrop.html#setHandleElId">setHandleElId</a>, <a href="YAHOO.util.DragDrop.html#setOuterHandleElId">setOuterHandleElId</a>, <a href="YAHOO.util.DragDrop.html#unreg">unreg</a>, <a href="YAHOO.util.DragDrop.html#isLocked">isLocked</a>, <a href="YAHOO.util.DragDrop.html#addInvalidHandleType">addInvalidHandleType</a>, <a href="YAHOO.util.DragDrop.html#removeInvalidHandleType">removeInvalidHandleType</a>, <a href="YAHOO.util.DragDrop.html#isValidHandleChild">isValidHandleChild</a>, <a href="YAHOO.util.DragDrop.html#setXConstraint">setXConstraint</a>, <a href="YAHOO.util.DragDrop.html#setYConstraint">setYConstraint</a>, <a href="YAHOO.util.DragDrop.html#resetConstraints">resetConstraints</a>, <a href="YAHOO.util.DragDrop.html#toString">toString</a></code>
+							<code><a href="YAHOO.util.DragDrop.html#lock">lock</a>, <a href="YAHOO.util.DragDrop.html#unlock">unlock</a>, <a href="YAHOO.util.DragDrop.html#startDrag">startDrag</a>, <a href="YAHOO.util.DragDrop.html#onDrag">onDrag</a>, <a href="YAHOO.util.DragDrop.html#onDragEnter">onDragEnter</a>, <a href="YAHOO.util.DragDrop.html#onDragOver">onDragOver</a>, <a href="YAHOO.util.DragDrop.html#onDragOut">onDragOut</a>, <a href="YAHOO.util.DragDrop.html#onDragDrop">onDragDrop</a>, <a href="YAHOO.util.DragDrop.html#onMouseDown">onMouseDown</a>, <a href="YAHOO.util.DragDrop.html#onMouseUp">onMouseUp</a>, <a href="YAHOO.util.DragDrop.html#onAvailable">onAvailable</a>, <a href="YAHOO.util.DragDrop.html#getEl">getEl</a>, <a href="YAHOO.util.DragDrop.html#getDragEl">getDragEl</a>, <a href="YAHOO.util.DragDrop.html#init">init</a>, <a href="YAHOO.util.DragDrop.html#initTarget">initTarget</a>, <a href="YAHOO.util.DragDrop.html#setPadding">setPadding</a>, <a href="YAHOO.util.DragDrop.html#setInitPosition">setInitPosition</a>, <a href="YAHOO.util.DragDrop.html#addToGroup">addToGroup</a>, <a href="YAHOO.util.DragDrop.html#setDragElId">setDragElId</a>, <a href="YAHOO.util.DragDrop.html#setHandleElId">setHandleElId</a>, <a href="YAHOO.util.DragDrop.html#setOuterHandleElId">setOuterHandleElId</a>, <a href="YAHOO.util.DragDrop.html#unreg">unreg</a>, <a href="YAHOO.util.DragDrop.html#isLocked">isLocked</a>, <a href="YAHOO.util.DragDrop.html#addInvalidHandleType">addInvalidHandleType</a>, <a href="YAHOO.util.DragDrop.html#addInvalidHandleId">addInvalidHandleId</a>, <a href="YAHOO.util.DragDrop.html#addInvalidHandleClass">addInvalidHandleClass</a>, <a href="YAHOO.util.DragDrop.html#removeInvalidHandleType">removeInvalidHandleType</a>, <a href="YAHOO.util.DragDrop.html#removeInvalidHandleId">removeInvalidHandleId</a>, <a href="YAHOO.util.DragDrop.html#removeInvalidHandleClass">removeInvalidHandleClass</a>, <a href="YAHOO.util.DragDrop.html#isValidHandleChild">isValidHandleChild</a>, <a href="YAHOO.util.DragDrop.html#setXConstraint">setXConstraint</a>, <a href="YAHOO.util.DragDrop.html#setYConstraint">setYConstraint</a>, <a href="YAHOO.util.DragDrop.html#resetConstraints">resetConstraints</a>, <a href="YAHOO.util.DragDrop.html#toString">toString</a></code>
 				</div>
 			</div>
 		
@@ -429,6 +467,19 @@
  you do not have constraints on the obj is to have the drag frame centered
  around the cursor.  Set centerFrame to true for this effect.  Ex: 
  ygDDMy2
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="forceCssPosition">forceCssPosition</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								&nbsp;
+								<strong>forceCssPosition</strong>
+							</code>
+							<div class="description">
+								
 							</div>
 						</div>
 						<hr />
@@ -537,6 +588,23 @@
 				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
 					
+						<h4><a name="b4EndDrag">b4EndDrag</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>b4EndDrag</strong>
+								(e)
+							</code>
+									
+							<div class="description">
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="b4MouseDown">b4MouseDown</a></h4>
 						<div class="detail">
 							<code>
@@ -549,6 +617,23 @@
 								
 									Event that fires prior to the onMouseDown event.  Overrides 
  YAHOO.util.DragDrop.
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="b4StartDrag">b4StartDrag</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>b4StartDrag</strong>
+								(x, y)
+							</code>
+									
+							<div class="description">
 								
 								
 								
@@ -636,12 +721,8 @@
 
 
 <div id="footer">
-	<hr />
-	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
-	<br />
-	Yahoo! Confidential.
-	<br /><br />
-	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+    <hr />
+    Copyright &copy; 2004 - 2006 Yahoo! Inc. All rights reserved.
 </div>
 
 

@@ -6,16 +6,13 @@
 
 <body>
 
-<script type="text/javascript" src="js/yahoo.js" ></script>
+<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
 <script type="text/javascript" src="js/log.js" ></script>
-<!--
-<script type="text/javascript" src="/Event.dev/src/Event.js" ></script>
--->
-<script type="text/javascript" src="js/event.js" ></script>
-<script type="text/javascript" src="js/dom-raw.js"></script>
-<script type="text/javascript" src="js/animation-raw.js"></script>
+<script type="text/javascript" src="../../build/event/event.js" ></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
 
-<script type="text/javascript" src="js/dragdrop.js" ></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
         <script type="text/javascript" src="js/DDOnTop.js" ></script>
         <script type="text/javascript" src="js/DDSwap.js" ></script>
         <script type="text/javascript" src="js/DDMy.js" ></script>
@@ -184,44 +181,9 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
 </ul>
 </div> 
 
-<script type="text/javascript">
 
-YAHOO.example.logApp = function() {
-    var divId;
-    return {
-        toggle: function() {
-            if (this.value == "Disable Logger") {
-                ygLogger.disable();
-                this.value = "Enable Logger";
-            } else {
-                ygLogger.enable();
-                this.value = "Disable Logger";
-            }
-        },
-
-        clear: function() {
-            document.getElementById(divId).innerHTML='';
-        },
-
-        init: function(p_divId, p_toggleElId, p_clearElId) {
-            divId = p_divId
-            YAHOO.util.Event.on(p_toggleElId, "click", this.toggle);
-            YAHOO.util.Event.on(p_clearElId,  "click", this.clear);
-        }
-    };
-} (); 
-
-YAHOO.example.logApp.init("logDiv", "toggleButton", "clearButton");
-
-</script>
-
-<h3 id="logHeader">
-  <input type="button" id="toggleButton" value="Disable Logger" />&nbsp;
-  <input type="button" id="clearButton"  value="Clear" />
-</h3>
-<div id="logDiv"></div>
 </div>
-<div id="logFooter">Note: click the Disable Logger button to make the drag operation less choppy</div>
+
 
 </div>
 
