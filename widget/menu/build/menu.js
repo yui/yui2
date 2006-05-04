@@ -1337,19 +1337,30 @@ YAHOO.widget.MenuModule.prototype._onElementClick =
             */        
     
             if(oTarget == oItem.subMenuIndicator && oSubmenu) {
-        
+
                 if(oSubmenu.cfg.getProperty("visible")) {
         
                     oSubmenu.hide();
         
                 }
                 else {
+
+                    var oActiveItem = this.activeItem;
+               
+
+                    // Hide any other submenus that might be visible
+                
+                    if(oActiveItem && oActiveItem != this) {
+                
+                        this.clearActiveItem();
+                
+                    }
+
+                    this.activeItem = oItem;
         
                     oItem.cfg.setProperty("selected", true);
-                    
+
                     oSubmenu.show();
-        
-                    oSubmenu.setInitialSelection();
         
                 }                
         
@@ -4108,7 +4119,12 @@ YAHOO.widget.Menu.prototype._onKeyDown =
                 if(this.parent) {
         
                     this.parent.focus();
-                    this.parent.cfg.setProperty("selected", true);
+
+                    if(this.parent.parent instanceof YAHOO.widget.Menu) {
+
+                        this.parent.cfg.setProperty("selected", true);
+        
+                    }
         
                 }
             
@@ -4680,7 +4696,7 @@ YAHOO.widget.ContextMenu.prototype.configTrigger =
         
     };
     
-    
+
 /**
 * @class Creates an item for a context menu instance.
 * @constructor
@@ -4858,17 +4874,6 @@ YAHOO.widget.MenuBar.prototype.init = function(p_oElement, p_oUserConfig) {
 };
 
 
-// Constants
-
-/**
-* Constant representing the CSS class(es) to be applied to the root 
-* HTMLDivElement of the MenuBar instance.
-* @final
-* @type String
-*/
-YAHOO.widget.MenuBar.prototype.CSS_CLASS_NAME = "yuimenubar";
-
-
 /**
 * @class The MenuBarItem class allows you to create and modify an item for a
 * MenuBar instance.  MenuBarItem extends YAHOO.widget.MenuModuleItem to provide 
@@ -4942,8 +4947,6 @@ YAHOO.widget.MenuBarItem.prototype.init = function(p_oObject, p_oUserConfig) {
     // Add event handlers to each "MenuBarItem" instance
 
     this.keyDownEvent.subscribe(this._onKeyDown, this, true);
-    this.mouseOverEvent.subscribe(this._onMouseOver, this, true);
-    this.mouseOutEvent.subscribe(this._onMouseOut, this, true);
 
 
     if(p_oUserConfig) {
@@ -4999,22 +5002,6 @@ YAHOO.widget.MenuBarItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH =
 
 
 // Private event handlers
-
-/**
-* "mouseover" Custom Event handler for a MenuBarItem instance.
-* @private
-*/
-YAHOO.widget.MenuBarItem.prototype._onMouseOver = 
-    YAHOO.widget.MenuItem.prototype._onMouseOver;
-
-
-/**
-* "mouseout" Custom Event handler for a MenuBarItem instance.
-* @private
-*/
-YAHOO.widget.MenuBarItem.prototype._onMouseOut = 
-    YAHOO.widget.MenuItem.prototype._onMouseOut;
-    
 
 /**
 * "keydown" Custom Event handler for a MenuBarItem instance.
@@ -5089,3 +5076,12 @@ YAHOO.widget.MenuBarItem.prototype._onKeyDown =
         }
     
     };
+// Constants
+
+/**
+* Constant representing the CSS class(es) to be applied to the root 
+* HTMLDivElement of the MenuBar instance.
+* @final
+* @type String
+*/
+YAHOO.widget.MenuBar.prototype.CSS_CLASS_NAME = "yuimenubar";
