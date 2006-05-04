@@ -9,7 +9,6 @@
 <script type="text/javascript" src="../../build/dom/dom.js" ></script>
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
 <script type="text/javascript" src="../../build/animation/animation.js" ></script>
-<script type="text/javascript" src="../../build/connection/connection.js" ></script>
 
 <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css" />
 <link rel="stylesheet" type="text/css" href="css/example.css" />
@@ -27,39 +26,28 @@
 
 	function init() {
 		var handleCancel = function() {
+			alert("You clicked 'Cancel'!");
 			this.cancel();
 		}
 
-		var handleSubmit = function() {
-			alert("That wasn't so bad!");
-			this.form[this.id].value = "1";
+		var handleOK = function() {
+			alert("You clicked 'OK'!");
 			this.submit();
 		}
 
-		YAHOO.example.simpledialog.dlg = new YAHOO.widget.SimpleDialog("dlg", { postmethod:"async", visible:false, width: "20em", effect:[{effect:YAHOO.widget.ContainerEffect.SLIDE,duration:0.25},{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.25}], fixedcenter:true, modal:true, draggable:false });
+		YAHOO.example.simpledialog.dlg = new YAHOO.widget.SimpleDialog("dlg", { visible:false, width: "20em", effect:[{effect:YAHOO.widget.ContainerEffect.SLIDE,duration:0.25},{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.25}], fixedcenter:true, modal:true, draggable:false });
 		
 		YAHOO.example.simpledialog.dlg.setHeader("Warning!");
 		YAHOO.example.simpledialog.dlg.setBody("Are you sure you want to do this?");
 
 		YAHOO.example.simpledialog.dlg.cfg.queueProperty("icon",YAHOO.widget.SimpleDialog.ICON_WARN);
-		YAHOO.example.simpledialog.dlg.cfg.queueProperty("buttons", [ { text:"OK", handler:handleSubmit, isDefault:true },
+		YAHOO.example.simpledialog.dlg.cfg.queueProperty("buttons", [ { text:"OK", handler:handleOK, isDefault:true },
 										   { text:"Cancel", handler:handleCancel } ]);
-		YAHOO.example.simpledialog.dlg.cfg.queueProperty("onsuccess", submitCallback);
 
 		var listeners = new YAHOO.util.KeyListener(document, { keys : 27 }, {fn:handleCancel,scope:YAHOO.example.simpledialog.dlg,correctScope:true} );
 		YAHOO.example.simpledialog.dlg.cfg.queueProperty("keylisteners", listeners);
 
-		var handleManual = function(type, args, obj) {
-			alert("Manual submission of " + this.id + " detected");
-			alert(this.getData()[this.id]);
-		}
-
-		YAHOO.example.simpledialog.dlg.manualSubmitEvent.subscribe(handleManual, YAHOO.example.simpledialog.dlg, true);
-
 		YAHOO.example.simpledialog.dlg.render(document.body);
-
-		YAHOO.example.simpledialog.dlg.form.action = "php/post.php";
-		YAHOO.example.simpledialog.dlg.form.method = "POST";
 	}
 
 	YAHOO.util.Event.addListener(window, "load", init);
@@ -73,9 +61,6 @@
 		</div>
 		<div class="bd">
 			<p>SimpleDialog is an implementation of <a href="panel.html">Panel</a> that behaves like an OS dialog. SimpleDialog is used for asking the user a simple question that usually involves a Yes/No or OK/Cancel response.</p> 
-			
-			<p>Two sets of buttons with handlers are built into the SimpleDialog object: a set for OK/Cancel and a set for Yes/No, which respectively call the handleOKClick/handleCancelClick and handleYesClick/handleNoClick DOM events that are built-in.
-			</p>
 
 			<p>The code to instantiate this SimpleDialog example looks like this:
 				<code>dlg = new YAHOO.widget.SimpleDialog("dlg", { width: "20em", effect:{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.25}, fixedcenter:true, modal:true, draggable:false });<br/><br/>
