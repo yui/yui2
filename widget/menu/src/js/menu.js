@@ -132,7 +132,12 @@ YAHOO.widget.Menu.prototype._onKeyDown =
                 if(this.parent) {
         
                     this.parent.focus();
-                    this.parent.cfg.setProperty("selected", true);
+
+                    if(this.parent.parent instanceof YAHOO.widget.Menu) {
+
+                        this.parent.cfg.setProperty("selected", true);
+        
+                    }
         
                 }
             
