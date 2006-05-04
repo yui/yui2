@@ -19,11 +19,6 @@
 <script language="javascript">
 	YAHOO.namespace("example.simpledialog");
 
-	function submitCallback(obj) {
-		var response = obj.responseText;
-		alert(response);
-	}
-
 	function init() {
 		var handleCancel = function() {
 			alert("You clicked 'Cancel'!");
@@ -41,10 +36,12 @@
 		YAHOO.example.simpledialog.dlg.setBody("Are you sure you want to do this?");
 
 		YAHOO.example.simpledialog.dlg.cfg.queueProperty("icon",YAHOO.widget.SimpleDialog.ICON_WARN);
-		YAHOO.example.simpledialog.dlg.cfg.queueProperty("buttons", [ { text:"OK", handler:handleOK, isDefault:true },
-										   { text:"Cancel", handler:handleCancel } ]);
+		YAHOO.example.simpledialog.dlg.cfg.queueProperty("buttons", [ 
+																		{ text:"OK", handler:handleOK, isDefault:true },
+																		{ text:"Cancel", handler:handleCancel }
+																	]);
 
-		var listeners = new YAHOO.util.KeyListener(document, { keys : 27 }, {fn:handleCancel,scope:YAHOO.example.simpledialog.dlg,correctScope:true} );
+		var listeners = new YAHOO.util.KeyListener(document, { keys : 27 }, {fn:handleCancel ,scope:YAHOO.example.simpledialog.dlg, correctScope:true} );
 		YAHOO.example.simpledialog.dlg.cfg.queueProperty("keylisteners", listeners);
 
 		YAHOO.example.simpledialog.dlg.render(document.body);
