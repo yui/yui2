@@ -1,0 +1,70 @@
+html, body {
+	margin:5px;
+	color: #333;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-family: palatino, georgia, "Times New Roman", serif;
+}
+
+h3 {
+	color:#666;
+	margin-top:8px;
+	margin-bottom:8px;
+}
+
+h4 {
+	margin-top:0px;
+	margin-bottom:10px;
+}
+
+#logo {
+	position:absolute;
+	left:5px;
+	top:5px;
+}
+
+
+#pageTitle {
+	margin-left:80px;
+	height:38px;
+	clear:both;
+}
+
+xmp {
+	border:1px solid #CCC;
+	background-color:#F7F7F7;
+	padding:5px;
+	font-size:12px;
+}
+
+.column.left {
+	float:left;
+	display:inline;
+	margin-left:80px;
+	width:500px;
+}
+
+.column.right {
+	text-align:center;
+	background-color:#C2C2D7;
+	float:left;
+	margin-left:10px;
+	width:240px;
+	padding:50px 0px;
+	height:425px;
+
+}
+
+.column p {
+	margin:10px 0px;
+	font: normal 11px verdana, sans-serif;
+	line-height:15px;
+}
+
+a.navLink {
+	padding:5px;
+	color:#000;
+	text-decoration:none;
+	font:14px sans-serif;
+}
