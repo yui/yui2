@@ -53,9 +53,9 @@ return obj;},initHeader:function(label,value)
 else{this._http_header[label]=value+","+this._http_header[label];}
 this._has_http_headers=true;},setHeader:function(o)
 {for(var prop in this._http_header){o.conn.setRequestHeader(prop,this._http_header[prop]);}
-delete this._http_header;this._http_header={};this._has_http_headers=false;},setForm:function(formName)
-{this._sFormData='';if(typeof formName=='string'){var oForm=document.forms[formName];}
-else if(typeof formName=='object'){var oForm=formName;}
+delete this._http_header;this._http_header={};this._has_http_headers=false;},setForm:function(formId)
+{this._sFormData='';if(typeof formId=='string'){var oForm=(document.getElementById(formId)||document.forms[formId]);}
+else if(typeof formId=='object'){var oForm=formId;}
 else{return;}
 var oElement,oName,oValue,oDisabled;var hasSubmit=false;for(var i=0;i<oForm.elements.length;i++){oDisabled=oForm.elements[i].disabled;if(oForm.elements[i].name!=""){oElement=oForm.elements[i];oName=oForm.elements[i].name;oValue=oForm.elements[i].value;}
 if(!oDisabled)

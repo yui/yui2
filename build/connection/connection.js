@@ -450,17 +450,20 @@ YAHOO.util.Connect =
    * transaction with a HTTP header Content-Type of
    * application/x-www-form-urlencoded.
    * @public
-   * @param {string || object} form name attribute or form object.
+   * @param {string || object} form id or name attribute, or form object.
    * @return void
    */
-	setForm:function(formName)
+	setForm:function(formId)
 	{
 		this._sFormData = '';
-		if(typeof formName == 'string'){
-			var oForm = document.forms[formName];
+		if(typeof formId == 'string'){
+			// Determine if the argument is a form id or a form name.
+			// Note form name usage is deprecated by supported
+			// here for legacy reasons.
+			var oForm = (document.getElementById(formId) || document.forms[formId] );
 		}
-		else if(typeof formName == 'object'){
-			var oForm = formName;
+		else if(typeof formId == 'object'){
+			var oForm = formId;
 		}
 		else{
 			return;
