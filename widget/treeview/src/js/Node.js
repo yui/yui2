@@ -770,6 +770,13 @@ YAHOO.widget.Node.prototype = {
     refresh: function() {
         // this.loadComplete();
         this.getChildrenEl().innerHTML = this.completeRender();
+
+        if (this.hasIcon) {
+            var el = this.getToggleEl();
+            if (el) {
+                el.className = this.getStyle();
+            }
+        }
     }
 
 };
