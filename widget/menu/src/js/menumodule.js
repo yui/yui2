@@ -1337,19 +1337,30 @@ YAHOO.widget.MenuModule.prototype._onElementClick =
             */        
     
             if(oTarget == oItem.subMenuIndicator && oSubmenu) {
-        
+
                 if(oSubmenu.cfg.getProperty("visible")) {
         
                     oSubmenu.hide();
         
                 }
                 else {
+
+                    var oActiveItem = this.activeItem;
+               
+
+                    // Hide any other submenus that might be visible
+                
+                    if(oActiveItem && oActiveItem != this) {
+                
+                        this.clearActiveItem();
+                
+                    }
+
+                    this.activeItem = oItem;
         
                     oItem.cfg.setProperty("selected", true);
-                    
+
                     oSubmenu.show();
-        
-                    oSubmenu.setInitialSelection();
         
                 }                
         
