@@ -27,12 +27,12 @@
 	function init() {
 		var handleCancel = function() {
 			alert("You clicked 'Cancel'!");
-			this.cancel();
+			this.hide();
 		}
 
 		var handleOK = function() {
 			alert("You clicked 'OK'!");
-			this.submit();
+			this.hide();
 		}
 
 		YAHOO.example.simpledialog.dlg = new YAHOO.widget.SimpleDialog("dlg", { visible:false, width: "20em", effect:[{effect:YAHOO.widget.ContainerEffect.SLIDE,duration:0.25},{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.25}], fixedcenter:true, modal:true, draggable:false });
