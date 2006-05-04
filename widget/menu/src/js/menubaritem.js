@@ -77,8 +77,6 @@ YAHOO.widget.MenuBarItem.prototype.init = function(p_oObject, p_oUserConfig) {
     // Add event handlers to each "MenuBarItem" instance
 
     this.keyDownEvent.subscribe(this._onKeyDown, this, true);
-    this.mouseOverEvent.subscribe(this._onMouseOver, this, true);
-    this.mouseOutEvent.subscribe(this._onMouseOut, this, true);
 
 
     if(p_oUserConfig) {
@@ -134,22 +132,6 @@ YAHOO.widget.MenuBarItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH =
 
 
 // Private event handlers
-
-/**
-* "mouseover" Custom Event handler for a MenuBarItem instance.
-* @private
-*/
-YAHOO.widget.MenuBarItem.prototype._onMouseOver = 
-    YAHOO.widget.MenuItem.prototype._onMouseOver;
-
-
-/**
-* "mouseout" Custom Event handler for a MenuBarItem instance.
-* @private
-*/
-YAHOO.widget.MenuBarItem.prototype._onMouseOut = 
-    YAHOO.widget.MenuItem.prototype._onMouseOut;
-    
 
 /**
 * "keydown" Custom Event handler for a MenuBarItem instance.
