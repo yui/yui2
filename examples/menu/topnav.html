@@ -164,6 +164,73 @@
             }
 
 
+            // "mouseover" handler for each item in the menu bar
+
+            function onMenuBarItemMouseOver(p_sType, p_aArguments, p_oMenuItem) {
+            
+                var oActiveItem = this.parent.activeItem;
+            
+            
+                // Hide any other submenus that might be visible
+            
+                if(oActiveItem && oActiveItem != this) {
+            
+                    this.parent.clearActiveItem();
+            
+                }
+            
+            
+                // Select and focus the current MenuItem instance
+            
+                this.cfg.setProperty("selected", true);
+                this.focus();
+            
+            
+                // Show the submenu for this instance
+            
+                var oSubmenu = this.cfg.getProperty("submenu");
+            
+                if(oSubmenu) {
+            
+                    oSubmenu.show();
+            
+                }
+            
+            };
+        
+
+            // "mouseout" handler for each item in the menu bar
+        
+            function onMenuBarItemMouseOut(p_sType, p_aArguments, p_oMenuItem) {
+            
+                this.cfg.setProperty("selected", false);
+            
+            
+                var oSubmenu = this.cfg.getProperty("submenu");
+            
+                if(oSubmenu) {
+            
+                    var oEvent = p_aArguments[0],
+                        oRelatedTarget = YAHOO.util.Event.getRelatedTarget(oEvent);
+            
+                    if(
+                        !(
+                            oRelatedTarget == oSubmenu.element || 
+                            this._oDom.isAncestor(oSubmenu.element, oRelatedTarget)
+                        )
+                    ) {
+            
+                        oSubmenu.hide();
+            
+                    }
+            
+                }
+            
+            };
+
+
+
+
             // "load" handler for the window
 
             function onWindowLoad() {
@@ -240,7 +307,31 @@
                 // Render the menubar and corresponding submenus
                 
                 oMenuBar.render();
+
+
+                /*
+                    Add a "mouseover" and "mouseout" event handler each item 
+                    in the menu bar 
+                */               
+
+                var aMenuBarItems = oMenuBar.getItemGroups()[0],
+                    i = aMenuBarItems.length - 1;
+
+                do {
+
+                    aMenuBarItems[i].mouseOverEvent.subscribe(
+                        onMenuBarItemMouseOver, 
+                        this
+                    );
+
+                    aMenuBarItems[i].mouseOutEvent.subscribe(
+                        onMenuBarItemMouseOut, 
+                        this
+                    );
                 
+                }
+                while(i--);
+
 
                 // Add a "mouseover" handler to the menubar
 
