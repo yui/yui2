@@ -2,7 +2,6 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-version: 0.10.0
 */
 
 /**
@@ -107,7 +106,7 @@ YAHOO.util.Dom = function() {
          var f = function(el) {
             switch(property) {
                case 'opacity' :
-                  if (typeof el.style.filter == 'string') { // in case not appended
+                  if (isIE && typeof el.style.filter == 'string') { // in case not appended
                      el.style.filter = 'alpha(opacity=' + val * 100 + ')';
                      
                      if (!el.currentStyle || !el.currentStyle.hasLayout) {

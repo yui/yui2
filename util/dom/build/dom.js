@@ -106,7 +106,7 @@ YAHOO.util.Dom = function() {
          var f = function(el) {
             switch(property) {
                case 'opacity' :
-                  if (typeof el.style.filter == 'string') { // in case not appended
+                  if (isIE && typeof el.style.filter == 'string') { // in case not appended
                      el.style.filter = 'alpha(opacity=' + val * 100 + ')';
                      
                      if (!el.currentStyle || !el.currentStyle.hasLayout) {
