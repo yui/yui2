@@ -1,0 +1,104 @@
+#win {
+	visibility:hidden;
+}
+
+.panel-container.shadow .underlay {
+	background-color:#999;
+}
+
+.panel {
+	border:none;
+	overflow:visible;
+	background:transparent url(../img/xp-brdr-rt.gif) no-repeat top right;
+}
+
+.panel .hd {
+	padding:0;
+	border:none;
+	background:transparent url(../img/xp-hd.gif);
+	color:#FFF;
+	height:30px;
+	margin-left:8px;
+	margin-right:8px;
+	text-align:left;
+	vertical-align:middle;
+	overflow:visible;
+}
+
+.panel .hd span {
+	line-height:30px;
+	vertical-align:middle;
+}
+
+.panel .close {
+	top:5px;
+	right:8px;
+	height:21px;
+	width:21px;
+}
+
+.panel .close.nonsecure {
+	background-image:url(../img/xp-close.gif);
+}
+
+.panel .close.secure {
+	background-image:url(../img/xp-close.gif);
+}
+
+.panel .tl {
+	width:8px;height:29px;
+	top:1px;left:0;
+	background:transparent url(../img/xp-tl.gif);
+	position:absolute;
+}
+
+.panel .tr {
+	width:8px;height:29px;
+	top:1px;right:0;
+	background:transparent url(../img/xp-tr.gif);
+	position:absolute;
+}
+
+.panel .bl {
+	width:8px;height:26px;
+	bottom:0;left:0;
+	background:transparent url(../img/xp-bl.gif);
+	position:absolute;
+}
+
+.panel .ft {
+	background:transparent url(../img/xp-ft.gif);
+	font-size:11px;
+	height:26px;
+	padding:0px 10px;
+}
+
+.panel .ft span {
+	line-height:22px;
+	vertical-align:middle;
+}
+
+.panel .br {
+	width:8px;height:26px;
+	bottom:0;right:0;
+	background:transparent url(../img/xp-br.gif);
+	position:absolute;
+}
+
+.panel .bd {
+	overflow:hidden;
+	padding:10px;
+	border:none;
+	background:#FFF url(../img/xp-brdr-lt.gif) repeat-y;
+	margin:0 4px 0 0;
+}
+
+.panel .bd .brdr-rt {
+	width:4px;
+	right:0;
+	top:29px;
+	bottom:26px;
+	height:auto;
+	background:#FFF url(../img/xp-brdr-rt.gif) repeat-y;
+	position:absolute;
+}
