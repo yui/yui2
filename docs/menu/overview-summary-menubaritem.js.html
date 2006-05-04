@@ -151,10 +151,10 @@
 	
 	<div class="main">
 			
-        <h2>menubaritem.js</h2>
-        
-        <div class="section source">
-            <pre class="sourceview"><span class="comment">/*
+			   <h2>menubaritem.js</h2>
+		
+			<div class="section source">
+				<pre class="sourceview"><span class="comment">/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
@@ -233,8 +233,6 @@ YAHOO.widget.MenuBarItem.<span class="reserved">prototype</span>.init = <span cl
     // Add event handlers to each "MenuBarItem" instance</span>
 
     <span class="reserved">this</span>.keyDownEvent.subscribe(<span class="reserved">this</span>._onKeyDown, <span class="reserved">this</span>, true);
-    <span class="reserved">this</span>.mouseOverEvent.subscribe(<span class="reserved">this</span>._onMouseOver, <span class="reserved">this</span>, true);
-    <span class="reserved">this</span>.mouseOutEvent.subscribe(<span class="reserved">this</span>._onMouseOut, <span class="reserved">this</span>, true);
 
 
     <span class="reserved">if</span>(p_oUserConfig) {
@@ -290,22 +288,6 @@ YAHOO.widget.MenuBarItem.<span class="reserved">prototype</span>.DISABLED_SUBMEN
 <span class="comment">
 
 // Private event handlers</span>
-
-<span class="comment">/**
-* "mouseover" Custom Event handler for a MenuBarItem instance.
-* <span class="attrib">@private</span>
-*/</span>
-YAHOO.widget.MenuBarItem.<span class="reserved">prototype</span>._onMouseOver = 
-    YAHOO.widget.MenuItem.<span class="reserved">prototype</span>._onMouseOver;
-
-
-<span class="comment">/**
-* "mouseout" Custom Event handler for a MenuBarItem instance.
-* <span class="attrib">@private</span>
-*/</span>
-YAHOO.widget.MenuBarItem.<span class="reserved">prototype</span>._onMouseOut = 
-    YAHOO.widget.MenuItem.<span class="reserved">prototype</span>._onMouseOut;
-    
 
 <span class="comment">/**
 * "keydown" Custom Event handler for a MenuBarItem instance.
@@ -380,7 +362,7 @@ YAHOO.widget.MenuBarItem.<span class="reserved">prototype</span>._onKeyDown =
         }
     
     };</pre>
-        </div>
+			</div>
 		
 	</div>
 </div>

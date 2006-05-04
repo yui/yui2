@@ -151,10 +151,10 @@
 	
 	<div class="main">
 			
-        <h2>menumoduleitem.js</h2>
-        
-        <div class="section source">
-            <pre class="sourceview"><span class="comment">/*
+           <h2>menumoduleitem.js</h2>
+		
+			<div class="section source">
+				<pre class="sourceview"><span class="comment">/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
@@ -723,7 +723,15 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
                     }
                     <span class="reserved">else</span> {
 
-                        sText = p_oObject.firstChild.nodeValue;
+                        var oText = p_oObject.firstChild;
+
+                        sText = oText.nodeValue;
+
+                        oAnchor = document.createElement(<span class="literal">"a"</span>);
+
+                        p_oObject.replaceChild(oAnchor, oText);
+                        
+                        oAnchor.appendChild(oText);
 
                     }
 
@@ -1266,7 +1274,6 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
             }
 
             <span class="reserved">this</span>._oAnchor.removeAttribute(<span class="literal">"href"</span>);
-            <span class="reserved">this</span>._oAnchor.removeAttribute(<span class="literal">"tabIndex"</span>);
 
             <span class="reserved">this</span>._oDom.addClass(aNodes, <span class="literal">"disabled"</span>);
 
@@ -1277,7 +1284,6 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
         <span class="reserved">else</span> {
 
             <span class="reserved">this</span>._oAnchor.setAttribute(<span class="literal">"href"</span>, <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"url"</span>));
-            <span class="reserved">this</span>._oAnchor.setAttribute(<span class="literal">"tabIndex"</span>, 0);
 
             <span class="reserved">this</span>._oDom.removeClass(aNodes, <span class="literal">"disabled"</span>);
 
@@ -1735,7 +1741,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     }
 
 };</pre>
-        </div>
+			</div>
 		
 	</div>
 </div>

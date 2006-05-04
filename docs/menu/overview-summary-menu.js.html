@@ -150,11 +150,11 @@
 	</div>
 	
 	<div class="main">
-
-        <h2>menu.js</h2>
-
-        <div class="section source">
-            <pre class="sourceview"><span class="comment">/*
+			
+           <h2>menu.js</h2>
+		
+			<div class="section source">
+				<pre class="sourceview"><span class="comment">/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
@@ -288,7 +288,12 @@ YAHOO.widget.Menu.<span class="reserved">prototype</span>._onKeyDown =
                 <span class="reserved">if</span>(<span class="reserved">this</span>.parent) {
         
                     <span class="reserved">this</span>.parent.focus();
-                    <span class="reserved">this</span>.parent.cfg.setProperty(<span class="literal">"selected"</span>, true);
+
+                    <span class="reserved">if</span>(<span class="reserved">this</span>.parent.parent instanceof YAHOO.widget.Menu) {
+
+                        <span class="reserved">this</span>.parent.cfg.setProperty(<span class="literal">"selected"</span>, true);
+        
+                    }
         
                 }
             
@@ -297,8 +302,8 @@ YAHOO.widget.Menu.<span class="reserved">prototype</span>._onKeyDown =
         }
     
     };</pre>
-        </div>
-	
+			</div>
+		
 	</div>
 </div>
 
