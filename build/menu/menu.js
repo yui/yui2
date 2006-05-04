@@ -4430,7 +4430,7 @@ YAHOO.widget.MenuItem.prototype._onMouseOut =
         }
     
     };
-    
+
 
 /**
 * @class Creates a list of options which vary depending on the context in 
@@ -4695,7 +4695,7 @@ YAHOO.widget.ContextMenu.prototype.configTrigger =
         }
         
     };
-    
+
 
 /**
 * @class Creates an item for a context menu instance.
@@ -4781,7 +4781,7 @@ YAHOO.widget.ContextMenuItem.prototype.init =
         this.cfg.fireQueue();
     
     };
-    
+
 
 /**
 * @class Horizontal collection of items, each of which can contain a submenu.
@@ -4872,6 +4872,17 @@ YAHOO.widget.MenuBar.prototype.init = function(p_oElement, p_oUserConfig) {
     this.initEvent.fire(YAHOO.widget.MenuBar);
 
 };
+
+
+// Constants
+
+/**
+* Constant representing the CSS class(es) to be applied to the root 
+* HTMLDivElement of the MenuBar instance.
+* @final
+* @type String
+*/
+YAHOO.widget.MenuBar.prototype.CSS_CLASS_NAME = "yuimenubar";
 
 
 /**
@@ -5076,12 +5087,3 @@ YAHOO.widget.MenuBarItem.prototype._onKeyDown =
         }
     
     };
-// Constants
-
-/**
-* Constant representing the CSS class(es) to be applied to the root 
-* HTMLDivElement of the MenuBar instance.
-* @final
-* @type String
-*/
-YAHOO.widget.MenuBar.prototype.CSS_CLASS_NAME = "yuimenubar";
