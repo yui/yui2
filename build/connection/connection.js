@@ -14,7 +14,7 @@ http://developer.yahoo.net/yui/license.txt
 YAHOO.util.Connect =
 {
   /**
-   * Array of  MSFT ActiveX ids for XMLHttpRequest.
+   * Array of MSFT ActiveX ids for XMLHttpRequest.
    * @private
    * @type array
    */
@@ -41,15 +41,16 @@ YAHOO.util.Connect =
 	_has_http_headers:false,
 
  /**
-  * Property modified by setForm() to determine if the transaction
-  * should be processed as a HTML form POST.
+  * Property modified by setForm() to determine if the data
+  * should be submitted as an HTML form.
   * @private
   * @type boolean
   */
 	_isFormSubmit:false,
 
  /**
-  * Property modified by setForm() to create the HTML form POST body.
+  * Property modified by setForm() to set the HTML form data
+  * for each transaction.
   * @private
   * @type string
   */
@@ -445,7 +446,7 @@ YAHOO.util.Connect =
 
   /**
    * This method assembles the form label and value pairs and
-   * constructs an encoded POST body.
+   * constructs an encoded string.
    * asyncRequest() will automatically initialize the
    * transaction with a HTTP header Content-Type of
    * application/x-www-form-urlencoded.
