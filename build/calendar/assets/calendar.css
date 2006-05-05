@@ -102,6 +102,12 @@ td.calcell.calcellhover {
 	border:1px solid #FF9900;
 }
 
+/* Added to perform some correction for Opera 8.5
+   hover redraw bug */
+table:hover {
+	background-color:#FFF;
+}
+
 td.calcell.calcellhover a {
 	color:#FFF;
 }
