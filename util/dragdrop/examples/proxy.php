@@ -1,27 +1,12 @@
-<!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<head>
-<title>Yahoo! UI Library - Drag and Drop</title>
-<link rel="stylesheet" type="text/css" href="./css/screen.css">
-</head>
+<?php
+    $templateRelativePath = '.';
+    include('inc/inc-top.php');
+?>
 
 <body>
 
-<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
-<script type="text/javascript" src="js/log.js" ></script>
-<script type="text/javascript" src="../../build/event/event.js" ></script>
-<script type="text/javascript" src="../../build/dom/dom.js"></script>
-<script type="text/javascript" src="../../build/animation/animation.js"></script>
+<?php include('inc/inc-alljs.php'); ?>
 
-<script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
-        <script type="text/javascript" src="js/DDOnTop.js" ></script>
-        <script type="text/javascript" src="js/DDSwap.js" ></script>
-        <script type="text/javascript" src="js/DDMy.js" ></script>
-        <script type="text/javascript" src="js/DDMy2.js" ></script>
-        <script type="text/javascript" src="js/DDList.js" ></script>
-        <script type="text/javascript" src="js/DDPlayer.js" ></script>
-        <script type="text/javascript" src="js/DDResize.js" ></script>
-
-    
 <script type="text/javascript" language="JavaScript">
 
 YAHOO.example.DDApp = function() {
@@ -129,63 +114,7 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
     <h3>Drag and Drop - DDProxy</h3>
 </div>
 
-  
-<style type="text/css">
-
-    #logDiv {
-        font-family:Arial, Helvetica, sans-serif;
-        position:relative;overflow:auto;text-align:left;z-index:998;
-        font-size:84%;width:100%;top:0px; height:280px;
-    }
-
-    #logFooter { 
-        font-size:82%;background-color:#cccccc;padding:5px;line-height:14px 
-    }
-
-    #ylogo { 
-        position:absolute;top:5px;left:5px; 
-    }
-
-    #logHeader input {
-        font-size:80%;
-    }
-
-</style>
-
-<img id="ylogo" src="img/logo.gif" />
-
-<div id="container">
-<div id="containerTop">
-<div id="header">
-<h4>&nbsp;</h4>
-</div>
-<div id="main">
-
-<div id="rightbar">
-
-<div id="rightBarPad">
-<h3>Examples</h3>
-
-<div id="linkage">
-<ul>
-<li><a href="drag.html?mode=dist">Drag test</a></li>
-<li><a href="ontop.html?mode=dist">Always on top test</a></li>
-<li><a href="proxy.html?mode=dist">Framed test</a> </li>
-<li><a href="list.html?mode=dist">Sortable List</a> </li>
-<li><a href="slider.html?mode=dist">Slider</a></li>
-<li><a href="multihandle.html?mode=dist">Multiple Handles</a></li>
-<li><a href="targetable.html?mode=dist">Targetable Affordance</a></li>
-<li><a href="grid.html?mode=dist">Grid</a></li>
-<li><a href="resize.html?mode=dist">Resize Pane</a></li>
-
-</ul>
-</div> 
-
-
-</div>
-
-
-</div>
+  <?php include('inc/inc-rightbar.php'); ?>
 
   <div id="content">
     <form name="dragDropForm" action="javscript:;">
@@ -198,7 +127,7 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
       <a href="javascript:YAHOO.example.DDApp.unreg()">Unreg test</a>
       <p>
         This example builds on
-        <a href="../test/test_draggable.php?mode=dist">YAHOO.util.DD</a>.
+        <a href="../test/test_draggable.php?mode=<? echo $_GET['mode'] ?>">YAHOO.util.DD</a>.
         Instead of moving the actual html element that was clicked, we have a hidden
         layer, empty aside from a border, absolutely positioned, that we place in the same 
         location of the clicked object.  The onDrag event handler was implemented so
@@ -220,15 +149,9 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
     </form>
   </div>
     
-        <div id="footerContainer">
-        <div id="footer">
-          <p>&nbsp;</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
+  <?php
+    include('inc/inc-bottom.php');
+  ?>
   
 <!--
 <div id="wrapperDiv" style="position:relative;width:400px;top:200px;height:200px;overflow:auto">

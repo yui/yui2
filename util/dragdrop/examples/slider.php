@@ -160,22 +160,8 @@
 		</div> 
      
 
-<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
-<script type="text/javascript" src="js/log.js" ></script>
-<script type="text/javascript" src="../../build/event/event.js" ></script>
-<script type="text/javascript" src="../../build/dom/dom.js"></script>
-<script type="text/javascript" src="../../build/animation/animation.js"></script>
+<?php include('inc/inc-alljs.php'); ?>
 
-<script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
-        <script type="text/javascript" src="js/DDOnTop.js" ></script>
-        <script type="text/javascript" src="js/DDSwap.js" ></script>
-        <script type="text/javascript" src="js/DDMy.js" ></script>
-        <script type="text/javascript" src="js/DDMy2.js" ></script>
-        <script type="text/javascript" src="js/DDList.js" ></script>
-        <script type="text/javascript" src="js/DDPlayer.js" ></script>
-        <script type="text/javascript" src="js/DDResize.js" ></script>
-
-    
 <script type="text/javascript" src="js/color.js" ></script>
 <script type="text/javascript" src="js/key.js" ></script>
 <script type="text/javascript" src="js/animation-raw.js" ></script>
