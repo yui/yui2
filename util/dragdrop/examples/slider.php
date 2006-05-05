@@ -164,8 +164,8 @@
 
 <script type="text/javascript" src="js/color.js" ></script>
 <script type="text/javascript" src="js/key.js" ></script>
-<script type="text/javascript" src="js/animation-raw.js" ></script>
-<script type="text/javascript" src="js/slider.js" ></script>
+<script type="text/javascript" src="../../build/animation/animation.js" ></script>
+<script type="text/javascript" src="../../build/slider/slider.js" ></script>
 <script type="text/javascript">
 
 	var hue;
