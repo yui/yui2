@@ -4,6 +4,14 @@ Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 */
 
+body:after {
+
+    content:"";
+    visibility:hidden;
+    /* Preload initial submenu indicator image to fix FF rendering bug */
+    background:url("http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/alt1/menuarorght9_nrm_1.gif");
+
+}
 
 /* Menu styles */
 
