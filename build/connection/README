@@ -1,0 +1,50 @@
+Connection Manager Release Notes
+
+*** version 0.10.0 ***
+
+* handleTransactionResponse() now treats the full HTTP 2xx range as a success
+case, instead of just HTTP 200.
+
+* To accommodate multiple field values in Mozilla/Firefox, multiple initHeader
+calls with the same label will now result in the values concatenated to a
+comma- delimited string value.
+Example:
+Setting Content-Type:'application/x-www-form-urlencoded' and Content-
+Type:'text/xml' will result in Content-Type:'application/x-www-form-urlencoded,
+text/xml'.
+
+* Default polling interval lowered to 50ms.
+
+* YAHOO.util.Connect.setPollingInterval() will allow you to set a polling
+interval -- in milliseconds -- to override the default value.
+
+* YAHOO.util.Connect.getResponseHeader[headerLabel] now supported as a response
+object property to provide symmetry with the native XHR object's property.
+Example:
+YAHOO.util.Connect.getResponseHeader['Content-Length'] will return the value
+for the Content-Length header, if the header is available.
+
+* YAHOO.util.Connect.allResponseHeaders property renamed to
+getAllResponseHeaders to provide symmetry with the native XHR object's
+property.
+
+* YAHOO.util.Connect.setForm() now supports HTTP GET as well as HTTP POST.
+
+* YAHOO.util.Connect.setForm() now accepts an HTML form object as well as its
+name attribute value.
+
+* YAHOO.util.Connect.setForm() will not submit HTML form fields that are
+disabled or do not have a name attribute value.
+
+* [FIXED] Response exceptions result in infinite callback loop in
+Mozilla/Firefox.
+
+* [FIXED] YAHOO.util.Connect.abort() now properly clears polling interval.
+
+* [FIXED] isCallInProgress() now verifies whether XHR instance still exists,
+and returns false if the connection object is no longer available.
+
+*** version 0.9.0 ***
+
+* Initial release
+
