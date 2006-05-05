@@ -6,10 +6,10 @@
 	z-index:0;
 }
 
-.sunday {
+.calendar td.sunday {
 	background-color: rgb(253, 224, 224);
 }
 
-.sunday a {
+.calendar td.sunday a {
 	color:red;
 }
