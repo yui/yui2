@@ -1,4 +1,9 @@
-
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 0.10.0
+*/
 YAHOO.widget.DateMath=new function(){this.DAY="D";this.WEEK="W";this.YEAR="Y";this.MONTH="M";this.ONE_DAY_MS=1000*60*60*24;this.add=function(date,field,amount){var d=new Date(date.getTime());switch(field)
 {case this.MONTH:var newMonth=date.getMonth()+amount;var years=0;if(newMonth<0){while(newMonth<0)
 {newMonth+=12;years-=1;}}else if(newMonth>11){while(newMonth>11)

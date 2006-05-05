@@ -1,9 +1,9 @@
-/**
+/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt 
-**/
-
+http://developer.yahoo.net/yui/license.txt
+version: 0.10.0
+*/
 /**
 * @class
 * <p>YAHOO.widget.DateMath is used for simple date manipulation. The class is a static utility

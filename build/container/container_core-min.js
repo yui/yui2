@@ -1,4 +1,9 @@
-
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 0.10.0
+*/
 YAHOO.util.Config=function(owner){if(owner){this.init(owner);}}
 YAHOO.util.Config.prototype={owner:null,configChangedEvent:null,queueInProgress:false,addProperty:function(key,propertyObject){},getConfig:function(){},getProperty:function(key){},resetProperty:function(key){},setProperty:function(key,value,silent){},queueProperty:function(key,value){},refireEvent:function(key){},applyConfig:function(userConfig,init){},refresh:function(){},fireQueue:function(){},subscribeToConfigEvent:function(key,handler,obj,override){},unsubscribeFromConfigEvent:function(key,handler,obj){},checkBoolean:function(val){if(typeof val=='boolean'){return true;}else{return false;}},checkNumber:function(val){if(isNaN(val)){return false;}else{return true;}}}
 YAHOO.util.Config.prototype.init=function(owner){this.owner=owner;this.configChangedEvent=new YAHOO.util.CustomEvent("configChanged");this.queueInProgress=false;var config={};var initialConfig={};var eventQueue=[];var fireEvent=function(key,value){key=key.toLowerCase();var property=config[key];if(typeof property!='undefined'&&property.event){property.event.fire(value);}}
