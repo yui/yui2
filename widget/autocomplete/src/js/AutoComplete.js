@@ -13,6 +13,7 @@
  * attributes, borders, position, fonts, etc</li>
  * </ul>
  *  
+ * requires YAHOO.util.Dom Dom utility
  * requires YAHOO.util.Event Event utility
  * requires YAHOO.widget.DataSource Data source class      
  * see YAHOO.util.Animation Animation utility
@@ -1327,7 +1328,7 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
     
     // If animation is enabled...
     var oAnim = this._oAnim;
-    if (oAnim && oAnim.getEl() && YAHOO.util.Dom && (this.animHoriz || this.animVert)) {
+    if (oAnim && oAnim.getEl() && (this.animHoriz || this.animVert)) {
         if(oAnim.isAnimated()) {
             oAnim.stop();
         }

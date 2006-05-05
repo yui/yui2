@@ -197,7 +197,8 @@
  * &lt;li&gt;UI look-and-feel customizable through CSS, including container
  * attributes, borders, position, fonts, etc&lt;/li&gt;
  * &lt;/ul&gt;
- *  
+ *
+ * requires YAHOO.util.Dom Dom utility
  * requires YAHOO.util.Event Event utility
  * requires YAHOO.widget.DataSource Data source class      
  * see YAHOO.util.Animation Animation utility
@@ -1486,7 +1487,7 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._toggleContain
 <span class="comment">
     // If animation is enabled...</span>
     var oAnim = <span class="reserved">this</span>._oAnim;
-    <span class="reserved">if</span> (oAnim &amp;&amp; oAnim.getEl() &amp;&amp; YAHOO.util.Dom &amp;&amp; (<span class="reserved">this</span>.animHoriz || <span class="reserved">this</span>.animVert)) {
+    <span class="reserved">if</span> (oAnim &amp;&amp; oAnim.getEl() &amp;&amp; (<span class="reserved">this</span>.animHoriz || <span class="reserved">this</span>.animVert)) {
         <span class="reserved">if</span>(oAnim.isAnimated()) {
             oAnim.stop();
         }
