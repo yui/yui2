@@ -1756,7 +1756,12 @@ YAHOO.widget.MenuModule.prototype._onSubmenuBeforeShow =
     function(p_sType, p_aArguments, p_oSubmenu) {
     
         var aAlignment = this.parent.parent.cfg.getProperty("submenualignment");
-    
+
+        this.cfg.setProperty(
+            "submenualignment", 
+            [ aAlignment[0], aAlignment[1] ]
+        );
+
         this.cfg.setProperty(
             "context", 
             [
@@ -1765,7 +1770,7 @@ YAHOO.widget.MenuModule.prototype._onSubmenuBeforeShow =
                 aAlignment[1]
             ]
         );
-    
+
         this.parent.subMenuIndicator.alt = 
             this.parent.EXPANDED_SUBMENU_INDICATOR_ALT_TEXT;
     
@@ -2020,7 +2025,7 @@ YAHOO.widget.MenuModule.prototype.enforceConstraints =
 YAHOO.widget.MenuModule.prototype.configPosition = 
 
     function(p_sType, p_aArguments, p_oMenuModule) {
-    
+
         var sCSSPosition = p_aArguments[0] == "static" ? "static" : "absolute";
     
         this._oDom.setStyle(this.element, "position", sCSSPosition);
@@ -2402,6 +2407,8 @@ YAHOO.widget.MenuModule.prototype.initDefaultConfig = function() {
             validator: this._checkPosition 
         } 
     );
+
+    this.cfg.refireEvent("position");
 
     this.cfg.addProperty("submenualignment", { value: ["tl","tr"] } );
 
@@ -4430,8 +4437,8 @@ YAHOO.widget.MenuItem.prototype._onMouseOut =
         }
     
     };
-
-
+    
+    
 /**
 * @class Creates a list of options which vary depending on the context in 
 * which the menu is invoked.
@@ -4781,7 +4788,7 @@ YAHOO.widget.ContextMenuItem.prototype.init =
         this.cfg.fireQueue();
     
     };
-
+    
 
 /**
 * @class Horizontal collection of items, each of which can contain a submenu.
@@ -4882,7 +4889,7 @@ YAHOO.widget.MenuBar.prototype.init = function(p_oElement, p_oUserConfig) {
 * @final
 * @type String
 */
-YAHOO.widget.MenuBar.prototype.CSS_CLASS_NAME = "yuimenubar";
+YAHOO.widget.MenuBar.prototype.CSS_CLASS_NAME = "yuimenubar"; 
 
 
 /**
