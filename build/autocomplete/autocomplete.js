@@ -1330,7 +1330,7 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
 
     // If animation is enabled...
     var oAnim = this._oAnim;
-    if (oAnim && oAnim.getEl() && YAHOO.util.Dom && (this.animHoriz || this.animVert)) {
+    if (oAnim && oAnim.getEl() && (this.animHoriz || this.animVert)) {
         if(oAnim.isAnimated()) {
             oAnim.stop();
         }
