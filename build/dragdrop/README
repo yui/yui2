@@ -1,0 +1,17 @@
+Drag and Drop Release Notes
+
+0.10.0
+
+   * Improved the performance in intersect mode
+
+   * It was possible for the drag and drop initialization to be skipped
+     for very slow loading pages.  This was fixed.
+
+   * New methods to exclude regions within your drag and drop element: 
+     addInvalidHandleId(), addInvalidHandleClass()
+
+   * Added an onAvailable handler that is executed after the initial state is set.
+
+   * Drag and drop is more forgiving when the implementer attempts to create the
+     instance prior to the element being in the document, but after the window
+     load event has fired.
