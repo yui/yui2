@@ -1,0 +1,56 @@
+TreeView - Release Notes
+
+0.10.0
+
+   * If the child collection changes prior to a refresh(), the icon is now
+     changed appropriately.
+
+   * Added TreeView removeChildren(node).  This will recursively purge the node's
+     children, and reset its dynamic load state.  
+
+   * previousSibling and nextSibling are now adjusted correctly when a
+     node is deleted.
+
+   * expand()/collapse() now will not expand/collapse the node if false is
+     returned from the onExpand/onCollapse event handlers.
+
+   * The onExpand and onCollapse events now fire before the node is expanded
+     or collapsed so that the implementer can modify the node's child collection
+     prior to display.
+
+   * The childrenRendered property previous was used to indicate both that
+     a dynamically loaded node has received its data, and also to indicate
+     that the children html has been created.  This has been split into
+     two properties.  dynamicLoadComplete and childrenRendered.
+
+   * Implemented the renderHidden flag.  If set to true, the html for the entire
+     tree will be created when tree.draw() is called, not just the html for the
+     visible nodes.
+
+   * Added an onLabelClick listener to TextNode
+
+   * TreeView.removeNode no longer automatically refreshes the tree.  It has an
+     optional parameter to perform the refresh.
+
+   * removeNode can now be executed on nodes that have not been rendered.
+
+   * You can now delete top-level nodes.
+
+   * Added onCheckClick listener to the TaskNode example
+
+   * Added Node.iconMode, which is a property that configures the way 
+     dynamically loaded nodes are displayed when they are expanded and contain 
+     no children.
+
+   * TreeView/Node.setDynamicLoad now accepts an optional second parameter to 
+     set the iconMode property.
+
+   * Fixed an issue in the TaskNode.js example that prevented setting the checked
+     state of a node through the constructor.
+
+   * Fixed an issue in HTMLNode that caused rendering issues when hasIcon was 
+     set to true.
+
+   * Added TreeView.removeNode
+
+   * Added Node.refresh
