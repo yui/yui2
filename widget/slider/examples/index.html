@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Yahoo! UI Library - Slider Widget</title>
+<link rel="stylesheet" type="text/css" href="css/screen.css">
+
+<!-- Nav and logger start -->
+
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
+<script type="text/javascript" src="../../build/event/event.js" ></script>
+<script type="text/javascript" src="../../build/dom/dom.js" ></script>
+<script type="text/javascript" src="../../build/animation/animation.js" ></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
+<script type="text/javascript" src="js/color.js" ></script>
+<script type="text/javascript" src="js/key.js" ></script>
+
+<script type="text/javascript" src="../../build/slider/slider.js" ></script></head>
+<body> 
+<div id="pageTitle"><h3>Slider Widget</h3></div> 
+
+<div id="container">
+  <div id="containerTop">
+    <div id="header"><img id="ylogo" src="img/logo.gif" /></div>
+	<div id="main">
+
+
+		<!-- Nav and logger start -->
+
+<style type="text/css">
+    #logButtonHeader input { font-size: 80% }
+
+/* ylogger default styles */
+#ylogger {position:absolute;top:1em;right:1em;}
+/*
+.ylogger {padding:1em;background-color:#AAA;border:1px solid black;font-family:monospace;font-size:77%;z-index:9000;}
+*/
+.ylogger {font-family:monospace;font-size:95%;z-index:9000;}
+.ylogger p {margin:1px;padding:.1em;}
+.ylogger button {font-family:monospace;font-size:77%;}
+.ylogger .ylog_hd {position:relative;margin-top:0.1em;padding:0.5em;background-color:#575757;color:#FFF;}
+.ylogger .ylog_bd {height: 1100px;position:relative;background-color:#FFF;border:1px solid gray;overflow:auto;width:100%;}
+.ylogger .ylog_ft {position:relative;margin-top:0.5em;margin-bottom:0.1em;}
+.ylogger .ylog_btns {position:relative;float:right;bottom:0.25em;}
+.ylogger .info {background-color:#A7CC25;} /* A7CC25 green */
+.ylogger .warn {background-color:#F58516;} /* F58516 orange */
+.ylogger .error {background-color:#E32F0B;} /* E32F0B red */
+.ylogger .time {background-color:#A6C9D7;} /* A6C9D7 blue */
+.ylogger .window {background-color:#F2E886;} /* F2E886 tan  */
+</style>
+
+<div id="rightbar">
+  <div id="rightBarPad">
+    <h3>Links</h3>
+    <div id="linkage">
+        <ul>
+        <li><a href="index.html?mode=dist">Simple Slider</a></li>
+        <li><a href="basic.html?mode=dist">Sliders w/Accessibility Features</a></li>
+        <li><a href="rgb.html?mode=dist">RGB Slider</a></li>
+        <li><a href="rgb2.html?mode=dist">Color Picker</a></li>
+        <!--
+        <li><a href="slider.html?mode=dist">All on one page</a></li>
+        -->
+        </ul>
+    </div> 
+
+  </div>
+</div>
+<!-- Nav and logger end -->
+ 
+
+		<div id="content"> 
+		  <div class="newsItem"> 
+			<h3>Sliders</h3>
+			  <p>
+				The slider widget is an implementation of YAHOO.util.DragDrop 
+				It also will use YAHOO.util.Animation if available to
+				animate the movement of the thumb when you click the 
+				slider background.
+			  </p>
+
+              <div id="vertWrapper">
+                <div
+                 id="vertBGDiv"
+                 name="vertBGDiv"
+                 title="Vertical Slider">
+                   <div id="vertHandleDiv"><img alt="" src="img/vertSlider.png" /></div> 
+                </div>
+
+                <div id="vertValueDiv">
+                  <form name="formV" id="formV">
+                      <input name="vertVal" id="vertVal" type="text" value="0" size="4" maxlength="4" />
+                      <input id="vertButton" type="button" value="Update" />
+                  </form>
+                </div>
+              </div>
+		</div> 
+
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+
+YAHOO.example.SliderApp = function() {
+	var verticalSlider, gLogger;
+
+    // The slider can move 0 pixels up
+    var topConstraint = 0;
+
+    // The slider can move 200 pixels down
+    var bottomConstraint = 200;
+
+    // Custom scale factor for converting the pixel offset into a real value
+    var scaleFactor = 1.5;
+
+    return {
+
+        init: function() {
+            if (typeof(ygLogger) != "undefined") {
+                ygLogger.init(document.getElementById("logDiv"));
+                gLogger = new ygLogger("slider.php");
+            }
+
+            YAHOO.util.Event.addListener("formV", "submit", this.updateVert);
+            YAHOO.util.Event.addListener("vertButton", "click", this.updateVert);
+
+            verticalSlider = YAHOO.widget.Slider.getVertSlider("vertBGDiv", 
+                             "vertHandleDiv", topConstraint, bottomConstraint);
+
+            verticalSlider.onChange = function(offsetFromStart) {
+                // use the scale factor to convert the pixel offset into a
+                // real value
+                var actualValue = parseInt(offsetFromStart * scaleFactor);
+                document.getElementById("vertVal").value = actualValue;
+                document.getElementById("vertBGDiv").title = 
+                            "Vertical Slider, value = " + actualValue;
+            };
+
+            verticalSlider.onSlideStart = function() {
+                // alert("slidestart");
+            };
+
+            verticalSlider.onSlideEnd = function() {
+                // alert("slideend");
+            };
+
+        },
+
+        updateVert: function() {
+            var v = parseFloat(document.forms['formV']['vertVal'].value, 10);
+            if ( isNaN(v) ) v = 0;
+
+            // convert the real value into a pixel offset
+            verticalSlider.setValue(Math.round(v/scaleFactor));
+            return false;
+        }
+    };
+} ();
+
+YAHOO.example.SliderApp.init();
+	
+</script>
+
+</body>
+</html>
