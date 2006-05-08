@@ -1,0 +1,12 @@
+Animation Release Notes
+
+*** version 0.10.0 ***
+
+* Scroll now handles relative ("by") animation correctly 
+
+* Now converts "auto" values of "from" to appropriate initial values
+
+*** version 0.9.0 ***
+
+* Initial release
+
