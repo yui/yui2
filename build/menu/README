@@ -1,0 +1,34 @@
+Menu Release Notes
+
+*** version 0.10.0 ***
+
+* Initial release
+
+* Known issues:
+
+      * Some Firefox extensions disable the ability for JavaScript to prevent  
+        the display of the browser's default context menu.  These extensions
+        can cause the YUI ContextMenu to stop working.  If you encounter this 
+        problem, you can reset the context menu preference in Firefox back to 
+        the default by making sure the "Disable or replace context menus" 
+        preference is checked:
+
+            Mac Firefox 1.0: 
+            -------------------
+            Preferences > Web Features > 
+                Advanced... > Disable or replace context menus
+
+            Mac Firefox 1.5
+            -------------------
+            Preferences > Context > 
+                Advanced... > Disable or replace context menus
+
+            Windows Firefox 1.0
+            -------------------
+            Tools > Options > Web Features > 
+                Advanced... > Disable or replace context menus
+
+            Windows Firefox 1.5
+            -------------------
+            Tools > Options > Context > 
+                Advanced... > Disable or replace context menus
