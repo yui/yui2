@@ -4,15 +4,17 @@ function getStates(sQuery) {
         var charKey = sQuery.substring(0,1).toLowerCase();
         var oResponse = dataset[charKey];
         
-        for(var i = oResponse.length-1; i >= 0; i--) {
-            var sKey = oResponse[i].STATE;
-            var sKeyIndex = encodeURI(sKey.toLowerCase()).indexOf(sQuery.toLowerCase());
-            
-            // Query found at the beginning of the key string for STARTSWITH
-            // returns an array of arrays where STATE is index=0, ABBR is index=1
-            if(sKeyIndex === 0) {
-                aResults.unshift([sKey, oResponse[i].ABBR]);
-            }            
+        if(oResponse) {
+            for(var i = oResponse.length-1; i >= 0; i--) {
+                var sKey = oResponse[i].STATE;
+                var sKeyIndex = encodeURI(sKey.toLowerCase()).indexOf(sQuery.toLowerCase());
+
+                // Query found at the beginning of the key string for STARTSWITH
+                // returns an array of arrays where STATE is index=0, ABBR is index=1
+                if(sKeyIndex === 0) {
+                    aResults.unshift([sKey, oResponse[i].ABBR]);
+                }
+            }
         }
         return aResults;
     }
