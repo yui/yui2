@@ -189,7 +189,7 @@ YAHOO.widget.AutoComplete.prototype.typeAhead = false;
 
 /**
  * Whether or not to animate the expansion/collapse of the auto complete
- * container in the horizontal direction.  Default: false.
+ * container in the horizontal direction. Default: false.
  *
  * @type boolean
  */
@@ -197,7 +197,7 @@ YAHOO.widget.AutoComplete.prototype.animHoriz = false;
 
 /**
  * Whether or not to animate the expansion/collapse of the auto complete
- * container in the vertical direction.  Default: true.
+ * container in the vertical direction. Default: true.
  *
  * @type boolean
  */
@@ -221,14 +221,27 @@ YAHOO.widget.AutoComplete.prototype.animSpeed = 0.3;
 YAHOO.widget.AutoComplete.prototype.forceSelection = false;
 
 /**
- * Whether or not to allow browsers to cache user typed input, which effectively
- * does not set the input attribute autocomplete="off". When users click the
- * back button after form submission, typed input can be prefilled by the
- * browser. Default: true.
+ * Whether or not to allow browsers to cache user-typed input in the input
+ * field. Disabling this feature will prevent the widget from setting the
+ * autocomplete="off" on the auto complete input field. When autocomplete="off"
+ * and users click the back button after form submission, user-typed input can
+ * be prefilled by the browser from its cache. This caching of user input may
+ * not be desired for sensitive data, such as credit card numbers, in which
+ * case, implementers should consider setting allowBrowserAutocomplete to false.
+ * Default: true.
  *
  * @type boolean
  */
 YAHOO.widget.AutoComplete.prototype.allowBrowserAutocomplete = true;
+
+/**
+ * Whether or not the auto complete container should always be displayed.
+ * Enabling this feature prevents the toggling of the container to a collapsed
+ * state. Default: false.
+ *
+ * @type boolean
+ */
+YAHOO.widget.AutoComplete.prototype.alwaysShowContainer = false;
 
 /***************************************************************************
  * Public methods
@@ -718,10 +731,15 @@ YAHOO.widget.AutoComplete.prototype._initContainer = function() {
         this._oContent.style.zIndex = 9050;
     } 
 
-    this._oContainer.style.display = "none";
-    this._oHeader.style.display = "none";
-    this._oFooter.style.display = "none";
-    
+    if(!this.alwaysShowContainer) {
+        this._oContainer.style.display = "none";
+        this._oHeader.style.display = "none";
+        this._oFooter.style.display = "none";
+    }
+    else {
+        this._bContainerOpen = true;
+    }
+
     this._initItems();
 };
 
@@ -1307,6 +1325,10 @@ YAHOO.widget.AutoComplete.prototype._selectText = function(oTextbox, nStart, nEn
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
+    if(this.alwaysShowContainer) {
+        return;
+    }
+    
     var oContainer = this._oContainer;
     // Don't animate if it's already closed && !bShow
     if (!bShow && !this._bContainerOpen) {
