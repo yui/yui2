@@ -168,6 +168,14 @@ YAHOO.widget.AutoComplete.prototype.queryDelay = 0.5;
 YAHOO.widget.AutoComplete.prototype.highlightClassName = "highlight";
 
 /**
+ * Class name of a pre-highlighted item within the auto complete container.
+ * Default: null.
+ *
+ * @type string
+ */
+YAHOO.widget.AutoComplete.prototype.prehighlightClassName = null;
+
+/**
  * Query delimiter. A single character separator for multiple delimited 
  * selections. Multiple delimiter characteres may be defined as an array of
  * strings. A null value or empty string indicates that query results cannot
@@ -782,7 +790,13 @@ YAHOO.widget.AutoComplete.prototype._initItem = function(oItem, nItemIndex) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._onItemMouseover = function(v,oSelf) {
-    oSelf._toggleHighlight(this,'mouseover');
+    if(oSelf.prehighlightClassName) {
+        oSelf._togglePrehighlight(this,'mouseover');
+    }
+    else {
+        oSelf._toggleHighlight(this,'to');
+    }
+    
     oSelf.itemMouseOverEvent.fire(oSelf, this);
     //YAHOO.log(oSelf.getName() + " moused over " + this.id);
 
@@ -796,7 +810,13 @@ YAHOO.widget.AutoComplete.prototype._onItemMouseover = function(v,oSelf) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._onItemMouseout = function(v,oSelf) {
-    oSelf._toggleHighlight(this,'mouseout');
+    if(oSelf.prehighlightClassName) {
+        oSelf._togglePrehighlight(this,'mouseout');
+    }
+    else {
+        oSelf._toggleHighlight(this,'from');
+    }
+
     oSelf.itemMouseOutEvent.fire(oSelf, this);
     //YAHOO.log(oSelf.getName() + " moused out from " + this.id);
 };
@@ -810,7 +830,7 @@ YAHOO.widget.AutoComplete.prototype._onItemMouseout = function(v,oSelf) {
  */
 YAHOO.widget.AutoComplete.prototype._onItemMouseclick = function(v,oSelf) {
     // In case item has not been moused over
-    oSelf._toggleHighlight(this,'mouseover');         
+    oSelf._toggleHighlight(this,'to');
     oSelf._selectItem(this);
 };
 
@@ -836,7 +856,7 @@ YAHOO.widget.AutoComplete.prototype._onContainerMouseout = function(v,oSelf) {
     oSelf._bOverContainer = false;
     // If container is still active
     if(oSelf._oCurItem) {
-        oSelf._toggleHighlight(oSelf._oCurItem,'mouseover');
+        oSelf._toggleHighlight(oSelf._oCurItem,'to');
     }
 };
 
@@ -1138,7 +1158,7 @@ YAHOO.widget.AutoComplete.prototype._clearList = function() {
     }
     
     if (this._oCurItem) {
-        this._toggleHighlight(this._oCurItem,'mouseout');
+        this._toggleHighlight(this._oCurItem,'from');
     }
         
     this._oCurItem = null;
@@ -1206,7 +1226,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         
         // Select first item and show UI
         var oFirstItem = document.getElementById(aItems[0]);
-        oSelf._toggleHighlight(oFirstItem,'mouseover');
+        oSelf._toggleHighlight(oFirstItem,'to');
         oSelf._toggleContainer(true);
         oSelf.itemArrowToEvent.fire(oSelf, oFirstItem);
         //YAHOO.log(oSelf.getName() + " arrowed to item " + oFirstItem.id);
@@ -1441,16 +1461,39 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._toggleHighlight = function(oNewItem, sType) {
-    oNewItem.className = oNewItem.className.replace(this.highlightClassName,"");
-    
     if(this._oCurItem) {
-        this._oCurItem.className = 
-            this._oCurItem.className.replace(this.highlightClassName,"");
+        // Remove highlight from old item
+        YAHOO.util.Dom.removeClass(this._oCurItem, this.highlightClassName);
     }
     
-    if(sType == 'mouseover') {
-        oNewItem.className += " " + this.highlightClassName;
+    if(sType == 'to') {
+        // Apply highlight to new item
+        YAHOO.util.Dom.replaceClass(oNewItem, this.prehighlightClassName, this.highlightClassName)
         this._oCurItem = oNewItem;
+    }
+};
+
+/**
+ * Toggles the pre-highlight on or off for an item in the container.
+ *
+ * @param {object} oNewItem New The &lt;li&gt; element item to receive highlight
+ *                              behavior
+ * @param {string} sType "mouseover" will toggle highlight on, and "mouseout"
+ *                       will toggle highlight off.
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._togglePrehighlight = function(oNewItem, sType) {
+    if(oNewItem == this._oCurItem) {
+        return;
+    }
+
+    if(sType == 'mouseover') {
+        // Apply prehighlight to new item
+        YAHOO.util.Dom.addClass(oNewItem, this.prehighlightClassName);
+    }
+    else {
+        // Remove prehighlight from old item
+        YAHOO.util.Dom.removeClass(oNewItem, this.prehighlightClassName);
     }
 };
 
@@ -1549,7 +1592,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
 
         if (oCurItem) {
             // Unhighlight current item
-            this._toggleHighlight(oCurItem, 'mouseout');
+            this._toggleHighlight(oCurItem, 'from');
             this.itemArrowFromEvent.fire(this, oCurItem);
             //YAHOO.log(this.getName() + " arrowed from " + oCurItem.id);
 
@@ -1610,7 +1653,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
             }
         }
 
-        this._toggleHighlight(oNewItem, 'mouseover');
+        this._toggleHighlight(oNewItem, 'to');
         this.itemArrowToEvent.fire(this, oNewItem);
         //YAHOO.log(this.getName() + " arrowed to " + oNewItem.id);
         if(this.typeAhead) {

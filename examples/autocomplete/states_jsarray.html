@@ -8,13 +8,14 @@
 
 <style type="text/css">
     #statesdiv {position:relative;width:15em;margin:1em;} /* set width of widget here*/
-    #statesinput,#statesinput2 {position:relative;width:100%;height:1.2em;display:block;}
+    #statesinput,#statesinput2 {position:relative;width:100%;height:1.2em;display:block;margin-bottom:10em;}
     #statescontainer {position:relative;bottom:4px;right:4px;border:1px solid #404040;background:#fff;font-size:85%;overflow:hidden;}
     #statescontainer2 {position:relative;bottom:4px;right:4px;border:1px solid #404040;background:#fff;font-size:85%;overflow:auto;height:20em;}
     #statescontainer ul,#statescontainer2 ul {position:relative;width:100%;padding:5px 0;list-style:none;}
     #statescontainer li,#statescontainer2 li {padding:0 5px;cursor:default;white-space:nowrap;display:list-item;}
-    #statescontainer li.highlight,#statescontainer2 li.highlight {background:#ff0;}
-    #statesshadow,#statesshadow2 {position:absolute;width:100%;*width:auto;_width:100%;margin:.3em;z-index:5;background:#a0a0a0;} /* bug 614383 workaround for ie7 */
+    #statescontainer li.highlight,#statescontainer2 li.highlight {background:#FF0;}
+    #statescontainer li.prehighlight,#statescontainer2 li.prehighlight {background:#FFFF80;}
+    #statesshadow,#statesshadow2 {position:absolute;width:100%;*width:auto;_width:100%;margin:.3em;z-index:5;background:#A0A0A0;} /* bug 614383 workaround for ie7 */
 </style>
 </head>
 
@@ -541,6 +542,7 @@ var areacodesArray = [
         // Instantiate first auto complete
         oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
         oAutoComp.queryDelay = 0;
+        oAutoComp.prehighlightClassName = "prehighlight";
 
         // Instantiate second data source
         oACDS2 = new YAHOO.widget.DS_JSArray(areacodesArray);
@@ -549,6 +551,7 @@ var areacodesArray = [
         oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput2','statescontainer2', oACDS2, {alwaysShowContainer:true});
         oAutoComp2.queryDelay = 0;
         oAutoComp2.maxResultsDisplayed = 100;
+        oAutoComp2.prehighlightClassName = "prehighlight";
         oAutoComp2.formatResult = function(oResultItem, sQuery) {
             var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";
             return (sMarkup);
