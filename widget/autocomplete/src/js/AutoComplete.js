@@ -81,7 +81,9 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
         var oSelf = this;
         var oTextbox = this._oTextbox;
         var oContainer = this._oContainer;
-    
+        this._initProps();
+
+        // Set up events
         YAHOO.util.Event.addListener(oTextbox,'keyup',oSelf._onTextboxKeyUp,oSelf);
         YAHOO.util.Event.addListener(oTextbox,'keydown',oSelf._onTextboxKeyDown,oSelf);
         YAHOO.util.Event.addListener(oTextbox,'keypress',oSelf._onTextboxKeyPress,oSelf);
@@ -112,9 +114,6 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
 
         // Turn off autocomplete on textbox
         oTextbox.setAttribute("autocomplete","off");  
-            
-        // Validate and initialize public configs
-        this._initProps();
     }
     // Required arguments were not found
     else {
@@ -271,7 +270,8 @@ YAHOO.widget.AutoComplete.prototype.getName = function() {
  *                 container 
  */
 YAHOO.widget.AutoComplete.prototype.getListIds = function() {
-    return this._aListIds;
+    //TODO: go through getListItems to return ids
+    return this._aListItems;
 };
 
 /**
@@ -282,8 +282,8 @@ YAHOO.widget.AutoComplete.prototype.getListIds = function() {
  */
 YAHOO.widget.AutoComplete.prototype.setHeader = function(sHeader) {
     if(sHeader) {
-        this._oHeader.innerHTML = sHeader;
-        this._oHeader.style.display = "block";
+        this._oContainer._oHeader.innerHTML = sHeader;
+        this._oContainer._oHeader.style.display = "block";
     }
 };
 
@@ -295,8 +295,8 @@ YAHOO.widget.AutoComplete.prototype.setHeader = function(sHeader) {
  */
 YAHOO.widget.AutoComplete.prototype.setFooter = function(sFooter) {
     if(sFooter) {
-        this._oFooter.innerHTML = sFooter;
-        this._oFooter.style.display = "block";
+        this._oContainer._oFooter.innerHTML = sFooter;
+        this._oContainer._oFooter.style.display = "block";
     }
 };
 
@@ -527,7 +527,7 @@ YAHOO.widget.AutoComplete.prototype._bOverContainer = false;
  * @type object
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._oIFrame = null;
+//YAHOO.widget.AutoComplete.prototype._oIFrame = null;
 
 /**
  * Content DOM element. Only used in IE for iFrame trick.
@@ -535,7 +535,7 @@ YAHOO.widget.AutoComplete.prototype._oIFrame = null;
  * @type object
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._oContent = null;
+//YAHOO.widget.AutoComplete.prototype._oContent = null;
 
 /**
  * Container header DOM element.
@@ -543,7 +543,7 @@ YAHOO.widget.AutoComplete.prototype._oContent = null;
  * @type object
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._oHeader = null;
+//YAHOO.widget.AutoComplete.prototype._oHeader = null;
 
 /**
  * Container footer DOM element.
@@ -551,16 +551,16 @@ YAHOO.widget.AutoComplete.prototype._oHeader = null;
  * @type object
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._oFooter = null;
+//YAHOO.widget.AutoComplete.prototype._oFooter = null;
 
 /**
- * Array of &lt;li&gt; elements IDs used to display query results within the
+ * Array of &lt;li&gt; elements references that contain query results within the
  * auto complete container.
  *
  * @type array
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._aListIds = null;
+YAHOO.widget.AutoComplete.prototype._aListItems = null;
 
 /**
  * Number of &lt;li&gt; elements currently displayed in auto complete container.
@@ -667,112 +667,90 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
     if(this.forceSelection && this.delimChar) {
         //YAHOO.log(oSelf.getName() + " has enabled force selection with delimiter character(s) defined.","warn");
     }
-    if (!this._aListIds) {
-        this._aListIds = [];
-    }
-    
-    if(!this._aListIds || (this.maxResultsDisplayed != this._aListIds.length)) {
-        this._initContainer();
-    }
 };
 
 /**
- * Initializes the auto complete container
+ * Initializes the auto complete container, including iframe shim for IE bug
  *
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._initContainer = function() {
-    // Create the max number of <li> elements, but hide them all
-    this._aListIds = [];
-    var aItemsMarkup = [];
-    var sName = this._sName;
-    var sPrefix = sName + "item";
-    var sHeaderID = sName + "header";
-    var sFooterID = sName + "footer";
-
-    for(var i = this.maxResultsDisplayed-1; i >= 0 ; i--) {
-        var sItemID = sPrefix + i;
-        this._aListIds[i] = sItemID;
-        aItemsMarkup.unshift("<li id='" + sItemID + "'></li>\n"); 
+    if(this._oContainer.hasChildNodes()) {
+        for(var i=this._oContainer.childNodes.length-1; i >= 0; i--)
+            this._oContainer.removeChild(this._oContainer.childNodes[i]);
     }
-    
-    var sList = "<ul id='" + sName + "list'>" +
-        aItemsMarkup.join("") + "</ul>";
 
-    // Need this iFrame trick to make sure the container appears over form 
+    // Need this iFrame trick to make sure the container appears over form
     // elements to workaround IE z-index bug
-    var sContent = (this.useIFrame) ?
-            ["<div id='",
-            sName,
-            "content'>",
-            "<div id='",
-            sHeaderID,
-            "' class='ac_hd'></div><div class='ac_bd'>",
-            sList,
-            "</div><div id='",
-            sFooterID,
-            "' class='ac_ft'></div>",
-            "</div><iframe id='",
-            sName,
-            "iframe' src='about:blank' frameborder='0' scrolling='no'>",
-            "</iframe>"] :
-            
-            ["<div id='",
-            sHeaderID,
-            "' class='ac_hd'></div><div class='ac_bd'>",
-            sList, 
-            "</div><div id='",
-            sFooterID,
-            "' class='ac_ft'></div>"];
-    
-    sContent = sContent.join("");
-    this._oContainer.innerHTML = sContent;
+    if(this.useIFrame) {
+        var oContent = document.createElement("div");
+        oContent.style.position = "relative";
+        oContent.style.zIndex = 9050;
+        this._oContainer._oContent = this._oContainer.appendChild(oContent);
+    }
 
-    this._oHeader = document.getElementById(sHeaderID);
-    this._oFooter = document.getElementById(sFooterID);
+    var oHeader = document.createElement("div");
+    oHeader.className = "ac_hd";
     
-    if (this.useIFrame) {
-        this._oContent = document.getElementById(sName + "content");
-        this._oIFrame = document.getElementById(sName + "iframe");
-        this._oContent.style.position = "relative";
-        this._oIFrame.style.position = "relative";
-        this._oContent.style.zIndex = 9050;
-    } 
+    var oBody = document.createElement("div");
+    oBody.className = "ac_bd";
+
+    var oFooter = document.createElement("div");
+    oFooter.className = "ac_ft";
+
+    this._oContainer._oHeader = this._oContainer.appendChild(oHeader);
+    this._oContainer._oBody = this._oContainer.appendChild(oBody);
+    this._oContainer._oFooter = this._oContainer.appendChild(oFooter);
+
+    if(this.useIFrame) {
+        var oIFrame = document.createElement("iframe");
+        oIFrame.src = "about:blank";
+        oIFrame.frameBorder = 0;
+        oIFrame.scrolling = "no"
+        oIFrame.style.position = "relative";
+        this._oContainer._oIFrame = this._oContainer.appendChild(oIFrame);
+    }
 
     if(!this.alwaysShowContainer) {
         this._oContainer.style.display = "none";
-        this._oHeader.style.display = "none";
-        this._oFooter.style.display = "none";
     }
     else {
         this._bContainerOpen = true;
     }
-
-    this._initItems();
 };
 
 /**
- * Initializes up to YAHOO.widget.AutoComplete#maxResultsDisplayed &lt;li&gt;
- * elements in the container.
+ * Creates up to YAHOO.widget.AutoComplete#maxResultsDisplayed &lt;li&gt;
+ * elements in a container list.
  *
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._initItems = function() {    
-    // set properties & events for each item now that they are in the DOM
-    for(var i = this.maxResultsDisplayed-1; i >= 0 ; i--) {
-        var oItem = document.getElementById(this._aListIds[i]);        
-        this._initItem(oItem, i);
+YAHOO.widget.AutoComplete.prototype._initList = function() {
+    this._aListItems = [];
+    if(this._oContainer._oBody.hasChildNodes()) {
+        for(var i=this._oContainer._oBody.childNodes.length-1; i >= 0; i--)
+            this._oContainer._oBody.removeChild(this._oContainer._oBody.childNodes[i]);
+    }
+    
+    var oList = document.createElement("ul");
+    oList = this._oContainer._oBody.appendChild(oList);
+
+    for(var i=0; i<this.maxResultsDisplayed; i++) {
+        var oItem = document.createElement("li");
+        oItem = oList.appendChild(oItem);
+        this._aListItems[i] = oItem;
+        this._initListItem(oItem, i);
     }
 };
 
 /**
- * Initializes each &lt;li&gt; element in the container .
+ * Initializes each &lt;li&gt; element in the container list.
  *
  * @param {object} oItem The &lt;li&gt; DOM element
  * @param {number} onItemIndex The index of the element
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._initItem = function(oItem, nItemIndex) {
+YAHOO.widget.AutoComplete.prototype._initListItem = function(oItem, nItemIndex) {
     var oSelf = this;
     oItem.style.display = "none";
     oItem._nItemIndex = nItemIndex;
@@ -1151,10 +1129,10 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
  */
 YAHOO.widget.AutoComplete.prototype._clearList = function() {
     this._oContainer.scrollTop = 0;
-    var aItems = this._aListIds;
+    var aItems = this._aListItems;
     
     for(var i = aItems.length-1; i >= 0 ; i--) {
-        document.getElementById(aItems[i]).style.display = "none";
+        aItems[i].style.display = "none";
     }
     
     if (this._oCurItem) {
@@ -1191,6 +1169,13 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
     if (!oSelf._bFocused || !aResults) {
         return;
     }
+    
+    if(!oSelf._oContainer._oBody) {
+        oSelf._initContainer();
+    }
+    if(!oSelf._aListItems || (oSelf.maxResultsDisplayed != oSelf._aListItems.length)) {
+        oSelf._initList();
+    }
 
     var isOpera = (navigator.userAgent.toLowerCase().indexOf("opera") != -1);
     oSelf._oContainer.style.width = (!isOpera) ? null : "";
@@ -1198,15 +1183,15 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
 
     var sCurQuery = decodeURI(sQuery);
     oSelf._sCurQuery = sCurQuery;
-    var aItems = oSelf._aListIds;  
+    var aItems = oSelf._aListItems;
     oSelf._bItemSelected = false;
     
     var nItems = Math.min(aResults.length,oSelf.maxResultsDisplayed);
     oSelf._nDisplayedItems = nItems;
     if (nItems > 0) {
         // Fill items with data
-        for(var i = nItems-1; i >= 0 ; i--) {
-            var oItemi = document.getElementById(aItems[i]);
+        for(var i = nItems-1; i >= 0; i--) {
+            var oItemi = aItems[i];
             var oResultItemi = aResults[i];
             oItemi.innerHTML = oSelf.formatResult(oResultItemi, sCurQuery);
             oItemi.style.display = "list-item";
@@ -1217,7 +1202,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         
         // Empty out remaining items if any
         for(var j = aItems.length-1; j >= nItems ; j--) {
-            var oItemj = document.getElementById(aItems[j]);
+            var oItemj = aItems[j];
             oItemj.innerHTML = null;
             oItemj.style.display = "none";
             oItemj._sResultKey = null;
@@ -1225,7 +1210,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         }
         
         // Select first item and show UI
-        var oFirstItem = document.getElementById(aItems[0]);
+        var oFirstItem = aItems[0];
         oSelf._toggleHighlight(oFirstItem,'to');
         oSelf._toggleContainer(true);
         oSelf.itemArrowToEvent.fire(oSelf, oFirstItem);
@@ -1272,7 +1257,7 @@ YAHOO.widget.AutoComplete.prototype._textMatchesOption = function() {
     var foundMatch = false;
 
     for(var i = this._nDisplayedItems-1; i >= 0 ; i--) {
-        var oItem = document.getElementById(this._aListIds[i]);
+        var oItem = this._aListItems[i];
         var sMatch = oItem._sResultKey.toLowerCase();
         if (sMatch == this._sCurQuery.toLowerCase()) {
             foundMatch = true;
@@ -1619,7 +1604,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
             return;
         }
 
-        var oNewItem = document.getElementById(this._sName + "item" + nNewItemIndex);
+        var oNewItem = this._aListItems[nNewItemIndex];
 
         // Scroll the container if necessary
         if((YAHOO.util.Dom.getStyle(this._oContainer,"overflow") == "auto") &&

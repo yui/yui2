@@ -1,16 +1,15 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>AutoComplete Widget :: Customizable Example</title>
+<title>AutoComplete Widget :: JS Array Example</title>
 <link rel="stylesheet" href="../../build/reset/reset.css" type="text/css" />
 <link rel="stylesheet" href="../../build/fonts/fonts.css" type="text/css" />
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
 
 <style type="text/css">
     #statesdiv {position:relative;width:15em;margin:1em;} /* set width of widget here*/
-    #statesinput,#statesinput2 {position:relative;width:100%;height:1.2em;display:block;margin-bottom:10em;}
-    #statescontainer {position:relative;bottom:4px;right:4px;border:1px solid #404040;background:#fff;font-size:85%;overflow:hidden;}
-    #statescontainer2 {position:relative;bottom:4px;right:4px;border:1px solid #404040;background:#fff;font-size:85%;overflow:auto;height:20em;}
+    #statesinput,#statesinput2 {position:relative;width:100%;height:1.2em;display:block;}
+    #statescontainer, #statescontainer2 {position:relative;bottom:4px;right:4px;border:1px solid #404040;background:#fff;font-size:85%;overflow:hidden;}
     #statescontainer ul,#statescontainer2 ul {position:relative;width:100%;padding:5px 0;list-style:none;}
     #statescontainer li,#statescontainer2 li {padding:0 5px;cursor:default;white-space:nowrap;display:list-item;}
     #statescontainer li.highlight,#statescontainer2 li.highlight {background:#FF0;}
@@ -22,7 +21,7 @@
 <body>
 <div id="hd">
     <div id="ylogo"><img src="./img/logo.gif" width="65" height="38" alt="Y!" /></div>
-    <div id="title"><h1><a href="./">AutoComplete Widget</a> :: JS Array States</h1></div>
+    <div id="title"><h1><a href="./">AutoComplete Widget</a> :: JS Array Example</h1></div>
 </div>
 
 <div id="bd">
@@ -43,7 +42,9 @@
     via JavaScript arrays, queries should be very fast to return data. Therefore,
     both AutoComplete instances are configured to have a query delay of zero
     seconds. The second AutoComplete instance is configured to display two data
-    fields in the container: the area code and the area code's state.</p>
+    fields in the container: the area code and the area code's state. Both
+    containers define a prehighlightClassName which provides a distinct visual
+    cue for mouse events than for arrow events.</p>
 
     <!-- AutoComplete begins -->
     <div id="statesdiv">
@@ -54,7 +55,7 @@
 
         <h4>Find an area code:</h4>
         <input id="statesinput2" type="text">
-        <div id="statesshadow2"><div id="statescontainer2">Area codes</div></div>
+        <div id="statesshadow2"><div id="statescontainer2"></div></div>
         </form>
     </div>
     <!-- AutoComplete ends -->
@@ -548,9 +549,8 @@ var areacodesArray = [
         oACDS2 = new YAHOO.widget.DS_JSArray(areacodesArray);
 
         // Instantiate second auto complete
-        oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput2','statescontainer2', oACDS2, {alwaysShowContainer:true});
+        oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput2','statescontainer2', oACDS2);
         oAutoComp2.queryDelay = 0;
-        oAutoComp2.maxResultsDisplayed = 100;
         oAutoComp2.prehighlightClassName = "prehighlight";
         oAutoComp2.formatResult = function(oResultItem, sQuery) {
             var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";

@@ -1,15 +1,21 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>AutoComplete Widget :: Customizable Example</title>
+<title>AutoComplete Widget :: JS Function Example</title>
 <link rel="stylesheet" href="../../build/reset/reset.css" type="text/css" />
 <link rel="stylesheet" href="../../build/fonts/fonts.css" type="text/css" />
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
 
 <style type="text/css">
+    #statescontainer2 {position:relative;bottom:4px;right:4px;border:1px solid #404040;background:#fff;font-size:85%;overflow:auto;height:20em;}
+
+
+
+
     #statesdiv {position:relative;width:15em;margin:1em;} /* set width of widget here*/
     #statesinput {position:relative;width:100%;height:1.2em;display:block;}
-    #statescontainer {position:relative;bottom:4px;right:4px;border:1px solid #404040;background:#fff;font-size:85%;overflow:hidden;display:none;}
+    #statescontainerdefault {width:100%;height:100%;padding:5px 5px;}
+    #statescontainer {position:relative;bottom:4px;right:4px;border:1px solid #404040;background:#fff;font-size:85%;height:11em;overflow:hidden;}
     #statescontainer ul {position:relative;width:100%;padding:5px 0;list-style:none;}
     #statescontainer li {padding:0 5px;cursor:default;white-space:nowrap;display:list-item;}
     #statescontainer li.highlight {background:#ff0;}
@@ -20,7 +26,7 @@
 <body>
 <div id="hd">
     <div id="ylogo"><img src="./img/logo.gif" width="65" height="38" alt="Y!" /></div>
-    <div id="title"><h1><a href="./">AutoComplete Widget</a> :: JS Function States</h1></div>
+    <div id="title"><h1><a href="./">AutoComplete Widget</a> :: JS Function Example</h1></div>
 </div>
 
 <div id="bd">
@@ -42,14 +48,16 @@
     queries should be very fast to return data. Therefore, the AutoComplete
     instance is configured to have a query delay of zero seconds. The
     AutoComplete instance is also configured to display two data fields in its
-    container: the state and its corresponding postal abbreviation.</p>
+    container: the state and its corresponding postal abbreviation. By setting
+    the alwaysShowContainer property to true and appropriate CSS styles, the
+    container has been implemented to always be displayed.</p>
 
     <!-- AutoComplete begins -->
     <div id="statesdiv">
         <form onsubmit="return validateForm();">
         <h4>Find a state:</h4>
         <input id="statesinput" type="text">
-        <div id="statesshadow"><div id="statescontainer"></div></div>
+        <div id="statesshadow"><div id="statescontainer"><div id="statescontainerdefault">Start typing to display states</div></div></div>
         </form>
     </div> 
     <!-- AutoComplete ends -->
@@ -98,8 +106,9 @@
         oACDS = new YAHOO.widget.DS_JSFunction(getStates);
         
         // Instantiate auto complete
-        oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
+        oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS, {alwaysShowContainer:true});
         oAutoComp.queryDelay = 0;
+        oAutoComp.maxResultsDisplayed = 8;
         oAutoComp.formatResult = function(oResultItem, sQuery) {
             var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";
             return (sMarkup);
@@ -246,6 +255,8 @@
             var oItem = aArgs[1];
             var sMsg = (oItem) ? oItem.id : "a non-query-result";
             doLog(oAutoComp.getName() + " selected " + sMsg);
+            
+            oAutoComp._oContainer._oBody.innerHTML = "foobar";
         }
 
         function myOnSelectionEnforce(sType, aArgs) {
