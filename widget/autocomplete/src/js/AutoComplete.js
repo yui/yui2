@@ -691,16 +691,21 @@ YAHOO.widget.AutoComplete.prototype._initContainer = function() {
 
     var oHeader = document.createElement("div");
     oHeader.className = "ac_hd";
+    oHeader.style.display = "none";
     
     var oBody = document.createElement("div");
     oBody.className = "ac_bd";
 
     var oFooter = document.createElement("div");
     oFooter.className = "ac_ft";
+    oFooter.style.display = "none";
 
-    this._oContainer._oHeader = this._oContainer.appendChild(oHeader);
-    this._oContainer._oBody = this._oContainer.appendChild(oBody);
-    this._oContainer._oFooter = this._oContainer.appendChild(oFooter);
+    this._oContainer._oHeader = (this.useIFrame) ?
+        oContent.appendChild(oHeader): this._oContainer.appendChild(oHeader);
+    this._oContainer._oBody = (this.useIFrame) ?
+        oContent.appendChild(oBody): this._oContainer.appendChild(oBody);
+    this._oContainer._oFooter = (this.useIFrame) ?
+        oContent.appendChild(oFooter) : this._oContainer.appendChild(oFooter);
 
     if(this.useIFrame) {
         var oIFrame = document.createElement("iframe");
@@ -1508,12 +1513,13 @@ YAHOO.widget.AutoComplete.prototype._updateValue = function(oItem) {
             oTextbox.value += " ";
         }
     }
-    else { oTextbox.value = sResultKey; } 
+    else { oTextbox.value = sResultKey; }
 
     // scroll to bottom of textarea if necessary
     if(oTextbox.type == "textarea") {
         oTextbox.scrollTop = oTextbox.scrollHeight;
     }
+
     // move cursor to end
     var end = oTextbox.value.length;
     this._selectText(oTextbox,end,end);
