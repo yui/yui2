@@ -317,6 +317,18 @@ YAHOO.widget.LogReader.prototype.show = function() {
     this._containerEl.style.display = "block";
 };
 
+/**
+ * Updates title to given string.
+ *
+ * @param {string} sTitle String to display in log reader's title bar.
+ */
+YAHOO.widget.LogReader.prototype.setTitle = function(sTitle) {
+    var regEx = />/g;
+    sTitle = sTitle.replace(regEx,"&gt;");
+    regEx = /</g;
+    sTitle = sTitle.replace(regEx,"&lt;");
+    this._title.innerHTML = (sTitle);
+};
  /***************************************************************************
  * Private members
  ***************************************************************************/
