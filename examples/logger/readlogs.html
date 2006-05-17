@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Logger Widget :: Reading Logs</title>
+<link rel="stylesheet" href="../../build/reset/reset.css" type="text/css" />
+<link rel="stylesheet" href="../../build/fonts/fonts.css" type="text/css"  />
+<link rel="stylesheet" href="../../build/logger/assets/logger.css" type="text/css" />
+<link rel="stylesheet" href="./css/examples.css" type="text/css" />
+</head>
+
+<body>
+<div id="hd">
+    <div id="ylogo"><img src="./img/logo.gif" width="65" height="38" alt="Y!" /></div>
+    <div id="title"><h1><a href="./index.html">Logger Widget</a> :: Reading Logs</h1></div>
+</div>
+
+<div id="bd">
+    <!-- Content begins -->
+    <div id="content">
+        <h3>Default LogReader Example</h3>
+        <p>With just a few lines of code, you can put a LogReader on any web
+        page that displays log messages built into the YUI Library or custom
+        log messages that you can insert into your own code. This example takes
+        advantage of the YUI Library's Drag and Drop utility to make the
+        LogReader draggable.</p>
+
+        <p><input id="ylog_inputinfo" class="ylog_input" type="text" value="Log an info message.">
+            <button onclick="YAHOO.log(document.getElementById('ylog_inputinfo').value,'info')">Log</button></p>
+        <p><input id="ylog_inputwarn" class="ylog_input" type="text" value="Log a warning.">
+            <button onclick="YAHOO.log(document.getElementById('ylog_inputwarn').value,'warn')">Log</button></p>
+        <p><input id="ylog_inputerror" class="ylog_input" type="text" value="Log an error.">
+            <button onclick="YAHOO.log(document.getElementById('ylog_inputerror').value,'error')">Log</button></p>
+        <p><input id="ylog_inputtime" class="ylog_input" type="text" value="Log a timing message.">
+            <button onclick="YAHOO.log(document.getElementById('ylog_inputtime').value,'time')">Log</button></p>
+        <p><input id="ylog_inputwindow" class="ylog_input" type="text" value="Log a window error.">
+            <button onclick="someUndefinedFunction();">Log</button></p>
+        <p><input id="ylog_inputcustommsg" class="ylog_input" type="text" value="Log a custom type message.">
+            <input id="ylog_inputcustomtype" type="text" value="myType">
+            <button onclick="YAHOO.log(document.getElementById('ylog_inputcustommsg').value,document.getElementById('ylog_inputcustomtype').value)">Log</button></p>
+
+        <p><a href="javascript:YAHOO.example.LogReader.hideAllReaders();">Hide All LogReaders</a></p>
+        <p><a href="javascript:YAHOO.example.LogReader.showAllReaders();">Show All LogReaders</a></p>
+        
+    </div>
+    <!-- Content ends -->
+
+<!-- Libary begins -->
+<script src="../../build/yahoo/yahoo.js"></script>
+<script src="../../build/dom/dom.js"></script>
+<script src="../../build/event/event.js"></script>
+<script src="../../build/dragdrop/dragdrop.js"></script>
+<script src="../../build/logger/logger.js"></script>
+<!-- Library ends -->
+
+<script>
+YAHOO.example.LogReader = function() {
+    var myLogReader1;
+    var myLogReader2;
+    
+    return {
+        init: function() {
+            myLogReader1 = new YAHOO.widget.LogReader();
+            myLogReader2 = new YAHOO.widget.LogReader();
+            myLogReader2.newestOnTop = false;
+            myLogReader2.setTitle("Logger Console: Oldest > on > Top!");
+        },
+
+        hideAllReaders: function() {
+            myLogReader1.hide();
+            myLogReader2.hide();
+        },
+
+        showAllReaders: function() {
+            myLogReader1.show();
+            myLogReader2.show();
+        }
+    }
+}();
+
+YAHOO.util.Event.addListener(this,'load',YAHOO.example.LogReader.init);
+</script>
+</div>
+</body>
+</html>
