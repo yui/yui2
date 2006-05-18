@@ -2,9 +2,9 @@
 <html>
 <head>
 <title>Logger Widget :: Customizing LogReader</title>
-<link rel="stylesheet" href="./css/reset.css" type="text/css" />
-<link rel="stylesheet" href="./css/fonts.css" type="text/css"  />
-<link rel="stylesheet" href="./css/logger.css" type="text/css" />
+<link rel="stylesheet" href="../../build/reset/reset.css" type="text/css" />
+<link rel="stylesheet" href="../../build/fonts/fonts.css" type="text/css"  />
+<link rel="stylesheet" href="../../build/logger/assets/logger.css" type="text/css" />
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
 
 <style type="text/css">
@@ -43,9 +43,12 @@
             <input id="ylog_inputcustomtype" type="text" value="myType">
             <button onclick="YAHOO.log(document.getElementById('ylog_inputcustommsg').value,document.getElementById('ylog_inputcustomtype').value)">Log</button></p>
 
-        <p><a href="javascript:YAHOO.example.LogReader.doHideAll();">Hide All Log Readers</a></p>
-        <p><a href="javascript:YAHOO.example.LogReader.doShowAll();">Show All Log Readers</a></p>
-        
+        <p><a href="javascript:YAHOO.example.LogReader.hideAllReaders();">Hide All LogReaders</a> ||
+        <a href="javascript:YAHOO.example.LogReader.showAllReaders();">Show All LogReaders</a></p>
+
+        <p><a href="javascript:YAHOO.widget.Logger.disableFirebug();">Disable Output to Firebug</a> ||
+        <a href="javascript:YAHOO.widget.Logger.enableFirebug();">Enable Output to Firebug</a></p>
+
         <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
         Sed eu enim in neque nonummy suscipit. Sed non metus. Aliquam pretium, massa
         quis vulputate aliquam, felis enim vehicula nisl, ut pharetra arcu nunc
@@ -106,14 +109,10 @@
     <!-- Content ends -->
 
 <!-- Libary begins -->
-<script src="./js/yahoo.js"></script>
-<script src="./js/dom.js"></script>
-<script src="./js/event.js"></script>
-<script src="./js/dragdrop.js"></script>
-<!--<script src="./js/logger.js"></script>-->
-<script src="../src/js/Logger.js"></script>
-<script src="../src/js/LogReader.js"></script>
-<script src="../src/js/LogWriter.js"></script>
+<script src="../../build/yahoo/yahoo.js"></script>
+<script src="../../build/dom/dom.js"></script>
+<script src="../../build/event/event.js"></script>
+<script src="../../build/logger/logger.js"></script>
 <!-- Library ends -->
 
 <script>
@@ -127,12 +126,12 @@ YAHOO.example.LogReader = function() {
             myLogReader2 = new YAHOO.widget.LogReader("mylogger");
         },
 
-        doHideAll: function() {
+        hideAllReaders: function() {
             myLogReader1.hide();
             myLogReader2.hide();
         },
 
-        doShowAll: function() {
+        showAllReaders: function() {
             myLogReader1.show();
             myLogReader2.show();
         }
