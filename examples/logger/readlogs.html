@@ -38,9 +38,11 @@
             <input id="ylog_inputcustomtype" type="text" value="myType">
             <button onclick="YAHOO.log(document.getElementById('ylog_inputcustommsg').value,document.getElementById('ylog_inputcustomtype').value)">Log</button></p>
 
-        <p><a href="javascript:YAHOO.example.LogReader.hideAllReaders();">Hide All LogReaders</a></p>
-        <p><a href="javascript:YAHOO.example.LogReader.showAllReaders();">Show All LogReaders</a></p>
+        <p><a href="javascript:YAHOO.example.LogReader.hideAllReaders();">Hide All LogReaders</a> ||
+        <a href="javascript:YAHOO.example.LogReader.showAllReaders();">Show All LogReaders</a></p>
         
+        <p><a href="javascript:YAHOO.widget.Logger.disableFirebug();">Disable Output to Firebug</a> ||
+        <a href="javascript:YAHOO.widget.Logger.enableFirebug();">Enable Output to Firebug</a></p>
     </div>
     <!-- Content ends -->
 

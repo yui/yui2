@@ -12,7 +12,7 @@
 YAHOO.widget.Logger = {
     // Initialize members
     loggerEnabled: true,
-    //firebugEnabled property undefined at initialization
+    _firebugEnabled: true,
     categories: ["info","warn","error","time","window"],
     _stack: [], // holds all log msgs
     _startTime: new Date().getTime(), // static start timestamp
@@ -46,8 +46,8 @@ YAHOO.widget.Logger.logResetEvent = new YAHOO.util.CustomEvent("logReset");
  ***************************************************************************/
 /**
  * Saves a log message to the stack and fires newLogEvent. If the log message is
- * assigned to an unknown category, creates a new category. If firebug is enabled,
- * outputs the log message to firebug.
+ * assigned to an unknown category, creates a new category. If Firebug is enabled,
+ * outputs the log message to Firebug.
  *
  * @param {string} sName Name of LogWriter, or null if none
  * @param {string} sMsg The log message
@@ -73,7 +73,7 @@ YAHOO.widget.Logger.log = function(sName, sMsg, sCategory) {
         this._stack.push(logEntry);
         this.newLogEvent.fire(logEntry);
 
-        if (this.firebugEnabled !== false) {
+        if(this._firebugEnabled) {
             this._printToFirebug(logEntry);
         }
     }
@@ -108,6 +108,22 @@ YAHOO.widget.Logger.getStack = function() {
 YAHOO.widget.Logger.getStartTime = function() {
     return this._startTime;
 };
+
+/**
+ * Disables output to the Firebug Firefox extension.
+ */
+YAHOO.widget.Logger.disableFirebug = function() {
+    YAHOO.log("YAHOO.Logger output to Firebug has been disabled.");
+    this._firebugEnabled = false;
+}
+
+/**
+ * Enables output to the Firebug Firefox extension.
+ */
+YAHOO.widget.Logger.enableFirebug = function() {
+    this._firebugEnabled = true;
+    YAHOO.log("YAHOO.Logger output to Firebug has been enabled.");
+}
 
 /***************************************************************************
  * Private methods
@@ -169,7 +185,7 @@ YAHOO.widget.Logger._printToFirebug = function(entry) {
         name +
         entry.msg;
 
-    this.firebugEnabled = printfire(output);
+    this._firebugEnabled = printfire(output);
 };
 
 /**
