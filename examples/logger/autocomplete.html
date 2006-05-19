@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>AutoComplete Widget :: JS Array Example</title>
+<link rel="stylesheet" href="../../build/reset/reset.css" type="text/css" />
+<link rel="stylesheet" href="../../build/fonts/fonts.css" type="text/css" />
+<link rel="stylesheet" href="../../build/logger/assets/logger.css" type="text/css" />
+<link rel="stylesheet" href="./css/examples.css" type="text/css" />
+
+<style type="text/css">
+    #statesdiv {position:relative;width:15em;margin:1em;} /* set width of widget here*/
+    #statesinput {position:relative;width:100%;height:1.2em;display:block;}
+    #statescontainer {position:relative;bottom:4px;right:4px;border:1px solid #404040;background:#fff;font-size:85%;overflow:hidden;display:none;}
+    #statescontainer ul {position:relative;width:100%;padding:5px 0;list-style:none;}
+    #statescontainer li {padding:0 5px;cursor:default;white-space:nowrap;display:list-item;}
+    #statescontainer li.highlight {background:#FF0;}
+    #statescontainer li.prehighlight {background:#FFFF80;}
+    #statesshadow {position:absolute;width:100%;*width:auto;_width:100%;margin:.3em;z-index:5;background:#A0A0A0;} /* bug 614383 workaround for ie7 */
+</style>
+</head>
+
+<body>
+<div id="hd">
+    <div id="ylogo"><img src="./img/logo.gif" width="65" height="38" alt="Y!" /></div>
+    <div id="title"><h1><a href="./">AutoComplete Widget</a> :: JS Array Example</h1></div>
+</div>
+
+<div id="bd">
+    <!-- Logger begins -->
+    <div id="logger">
+    <p>Welcome to AutoComplete.</p>
+    </div>
+    <!-- Logger ends -->
+
+    <!-- Content begins -->
+    <h3>Using Logger to Debug YUI Library Components</h3>
+    <p>In this example, we have set up an instance of AutoComplete. By using the
+    debug build of AutoComplete source code, we are able to instantiate a
+    LogReader on this page and read the messages generated from the component.
+    In order to place the LogReader in a convenient spot, we pass in a custom
+    bottom value into its constructor.</p>
+
+    <!-- AutoComplete begins -->
+    <div id="statesdiv">
+        <form onsubmit="return validateForm();">
+        <h4>Find a state:</h4>
+        <input id="statesinput" type="text">
+        <div id="statesshadow"><div id="statescontainer"></div></div>
+    </div>
+    <!-- AutoComplete ends -->
+
+    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
+    Sed eu enim in neque nonummy suscipit. Sed non metus. Aliquam pretium, massa
+    quis vulputate aliquam, felis enim vehicula nisl, ut pharetra arcu nunc
+    vitae leo. Morbi rhoncus ullamcorper quam. Maecenas vel velit. Praesent
+    ultricies placerat mauris. Nunc posuere aliquam ligula. Nunc mi ligula,
+    rutrum eget, consequat ac, cursus non, tortor. Pellentesque ante metus,
+    mattis pharetra, lobortis in, pulvinar nec, felis. Cras fringilla. Cras
+    consequat. Nullam faucibus. Vivamus tincidunt porttitor leo. Etiam est mi,
+    dictum nec, vehicula id, ultricies ac, nibh. Mauris felis.</p>
+
+    <p>Nulla sit amet mi eu lacus tempus volutpat. Phasellus tincidunt hendrerit
+    quam. Maecenas lorem felis, viverra non, varius ut, ultrices et, mi.
+    Phasellus vehicula nunc eu tellus. Duis rutrum justo eu odio. Ut facilisis
+    nisl at purus. Maecenas turpis neque, adipiscing in, fringilla vitae, congue
+    sed, ipsum. Sed condimentum eros eu leo dignissim ultricies. Pellentesque
+    eros nulla, tempus ut, gravida at, vulputate at, metus. Maecenas enim metus,
+    suscipit eget, commodo vel, euismod ac, leo. Curabitur id nulla. Phasellus
+    euismod mi ut enim. Ut molestie bibendum odio.</p>
+    <!-- Content ends -->
+
+<!-- Libary begins -->
+<script src="../../build/yahoo/yahoo.js"></script>
+<script src="../../build/dom/dom.js"></script>
+<script src="../../build/event/event.js"></script>
+<script src="../../build/animation/animation.js"></script>
+<script src="../../build/logger/logger.js"></script>
+<script src="./js/autocomplete-debug.js"></script>
+<!-- Library ends -->
+
+<!-- In-memory JS array begins-->
+<script>
+var statesArray = [
+    "Alabama",
+    "Alaska",
+    "Arizona",
+    "Arkansas",
+    "California",
+    "Colorado",
+    "Connecticut",
+    "Delaware",
+    "Florida",
+    "Georgia",
+    "Hawaii",
+    "Idaho",
+    "Illinois",
+    "Indiana",
+    "Iowa",
+    "Kansas",
+    "Kentucky",
+    "Louisiana",
+    "Maine",
+    "Maryland",
+    "Massachusetts",
+    "Michigan",
+    "Minnesota",
+    "Mississippi",
+    "Missouri",
+    "Montana",
+    "Nebraska",
+    "Nevada",
+    "New Hampshire",
+    "New Jersey",
+    "New Mexico",
+    "New York",
+    "North Dakota",
+    "North Carolina",
+    "Ohio",
+    "Oklahoma",
+    "Oregon",
+    "Pennsylvania",
+    "Rhode Island",
+    "South Carolina",
+    "South Dakota",
+    "Tennessee",
+    "Texas",
+    "Utah",
+    "Vermont",
+    "Virginia",
+    "Washington",
+    "West Virginia",
+    "Wisconsin",
+    "Wyoming"
+];
+</script>
+<!-- In-memory JS array ends-->
+
+
+<script>
+YAHOO.example.AutoCompleteLogger = function() {
+    return {
+        validateForm: function() {
+            // Validate form inputs here
+            return false;
+        },
+
+        init: function() {
+            // Instatiate LogReader
+            var oLogReader = new YAHOO.widget.LogReader(null,{top:"50%"});
+
+            // Instantiate DataSource
+            var oACDS = new YAHOO.widget.DS_JSArray(statesArray);
+
+            // Instantiate AutoComplete
+            var oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
+            oAutoComp.queryDelay = 0;
+            oAutoComp.prehighlightClassName = "prehighlight";
+        }
+    };
+}();
+
+YAHOO.example.AutoCompleteLogger.init();
+</script>
+</div>
+</body>
+</html>
