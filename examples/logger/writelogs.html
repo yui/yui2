@@ -21,9 +21,11 @@
     
     <!-- Content begins -->
     <div id="content">
-        <h3>Custom Logger Example</h3>
-        <p>This is an example of a custom Logger implementation. First we
-        instantiate a Logwriter object and then use that to write our messages.</p>
+        <h3>Writing Log Messages From Your Code</h3>
+        <p>In this example, we instanatiate a simple LogReader to display log
+        messages. We use the global method YAHOO.log() to write simple messages,
+        and we also instantiate a LogWriter instance to write messages that are
+        assigned to custom-named class.</p>
 
         <p><input id="ylog_inputinfo" class="ylog_input" type="text" value="Log an info message.">
             <button id="btn_loginfo">Log</button></p>
@@ -77,7 +79,7 @@ YAHOO.example.LogWriter = function() {
         init: function() {
             // Instantiate a logreader
             myLogReader = new YAHOO.widget.LogReader();
-            // Instantiate a custom logwriter with the name "myClass"
+            // Instantiate a custom logwriter assigned to the name "myClass"
             myLogWriter = new YAHOO.widget.LogWriter("myClass");
 
             // Write out some logs
@@ -141,7 +143,7 @@ YAHOO.example.LogWriter = function() {
         onLogCustomClick: function() {
             myLogWriter.log(document.getElementById('ylog_inputcustommsg').value,document.getElementById('ylog_inputcustomtype').value);
         }
-    }
+    };
 }();
 
 YAHOO.util.Event.addListener(this,'load',YAHOO.example.LogWriter.init);

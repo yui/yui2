@@ -42,16 +42,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
             this._containerEl = document.body.appendChild(document.createElement("div"));
             this._containerEl.id = "ylogger";
             this._containerEl.className = "ylogger";
-            this._containerEl.style.width = (this.width) ? this.width : this.DEFAULT_WIDTH;
 
-            // Set defaults if not provided by implementer
-            if(!this.left && !this.right && !this.bottom && !this.top) {
-                this._containerEl.style.top = this.DEFAULT_TOP;
-                this._containerEl.style.right = this.DEFAULT_RIGHT;
-            }
-            if(!this.fontSize) {
-                this._containerEl.style.fontSize = this.DEFAULT_FONTSIZE;
-            }
             YAHOO.widget.LogReader._defaultContainerEl = this._containerEl;
         }
 
@@ -108,7 +99,11 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         if(!this._consoleEl) {
             this._consoleEl = this._containerEl.appendChild(document.createElement("div"));
             this._consoleEl.className = "ylog_bd";
-            this._consoleEl.style.height = (this.height) ? this.height : this.DEFAULT_HEIGHT;
+            
+            // If implementer has provided, trust and set those
+            if(this.height) {
+                this._consoleEl.style.height = this.height;
+            }
         }
         // Don't create footer if disabled
         if(!this._ftEl && this.footerEnabled) {
@@ -158,49 +153,6 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
     YAHOO.widget.LogReader._index++;
     this._filterLogs();
 };
-
-/***************************************************************************
- * Public constants
- ***************************************************************************/
-/**
- * Default CSS width of LogReader container.
- *
- * @type constant
- * @final
- */
-YAHOO.widget.LogReader.prototype.DEFAULT_WIDTH = "30em";
-
-/**
- * Default CSS height of LogReader container.
- *
- * @type constant
- * @final
- */
-YAHOO.widget.LogReader.prototype.DEFAULT_HEIGHT = "20em";
-
-/**
- * Default CSS top position of LogReader container.
- *
- * @type constant
- * @final
- */
-YAHOO.widget.LogReader.prototype.DEFAULT_TOP = "1em";
-
-/**
- * Default CSS right position of LogReader container.
- *
- * @type constant
- * @final
- */
-YAHOO.widget.LogReader.prototype.DEFAULT_RIGHT = "1em";
-
-/**
- * Default CSS font size of LogReader container.
- *
- * @type constant
- * @final
- */
-YAHOO.widget.LogReader.prototype.DEFAULT_FONTSIZE = "77%";
 
 /***************************************************************************
  * Public members
@@ -557,7 +509,7 @@ YAHOO.widget.LogReader.prototype._printBuffer = function() {
  */
 YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
 //TODO: much optimization here
-//if !compact, set fixed widths for time output
+//if !compactOutput, set fixed widths for time output
     var entriesLen = aEntries.length;
     var filtersLen = this._filters.length;
     // Iterate through all log entries...
@@ -594,12 +546,12 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
 
             var name = (entry.name) ? entry.name + ": " : "";
             
-            var compact = (this.compact) ? "" : "<br>";
+            var compactOutput = (this.compactOutput) ? "" : "<br>";
 
             var output =  "<span class='"+category+"'>"+label+"</span> " +
                 totalTime + " ms (+" +
                 elapsedTime + ") " + localTime + ": " +
-                name + compact +
+                name + compactOutput +
                 entry.msg;
 
             var oNewElement = (this.newestOnTop) ?
