@@ -167,16 +167,6 @@ div.yuimenubar li a {
     
 }
 
-
-/* Matches the submenu indicator for menu items */
-
-div.yuimenu li img {
-  
-    margin:0 -16px 0 10px;
-    border:0;
-
-}
-
 div.yuimenu li.hassubmenu,
 div.yuimenu li.hashelptext {
 
@@ -255,9 +245,19 @@ div.yuimenubar li.yuimenubaritem.first {
 
 }
 
+
+/* Matches the submenu indicator for menu items */
+
 div.yuimenubar li.yuimenubaritem img {
 
     margin:0 0 0 10px;
     vertical-align:middle;
+
+}
+
+div.yuimenu li.yuimenuitem img {
+  
+    margin:0 -16px 0 10px;
+    border:0;
 
 }
