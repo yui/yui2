@@ -117,6 +117,20 @@ YAHOO.widget.MenuModuleItem.prototype = {
     SUBMENU_ITEM_TYPE: null,
 
 
+    /**
+    * Constant representing the prefix path to use for non-secure images
+    * @type string
+    */
+    IMG_ROOT: "http://us.i1.yimg.com/us.yimg.com/i/",
+    
+
+    /**
+    * Constant representing the prefix path to use for securely served images
+    * @type string
+    */
+    IMG_ROOT_SSL: "https://a248.e.akamai.net/sec.yimg.com/i/",
+
+
     // Private member variables
     
     /**
@@ -183,7 +197,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 	* The string representing the image root
 	* @type string
 	*/
-	imageRoot: YAHOO.widget.Module.IMG_ROOT,
+	imageRoot: null,
 
 
 	/**
@@ -194,8 +208,6 @@ YAHOO.widget.MenuModuleItem.prototype = {
 	isSecure: function() {
 
 		if(window.location.href.toLowerCase().indexOf("https") === 0) {
-
-			this.imageRoot = YAHOO.widget.Module.IMG_ROOT_SSL;
 
 			return true;
 
@@ -420,6 +432,9 @@ YAHOO.widget.MenuModuleItem.prototype = {
     */
     init: function(p_oObject, p_oUserConfig) {
 
+        this.imageRoot = (this.isSecure) ? this.IMG_ROOT_SSL : this.IMG_ROOT;
+
+
         if(!this.SUBMENU_TYPE) {
     
             this.SUBMENU_TYPE = YAHOO.widget.MenuModule;
@@ -539,7 +554,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
                     // Get the anchor node (if it exists)
 
                     var oAnchor = this._getFirstElement(p_oObject, "A"),
-                        sURL = null,
+                        sURL = "#",
                         sText = null;
 
 
@@ -572,6 +587,8 @@ YAHOO.widget.MenuModuleItem.prototype = {
                         sText = oText.nodeValue;
 
                         oAnchor = document.createElement("a");
+                        
+                        oAnchor.setAttribute("href", sURL);
 
                         p_oObject.replaceChild(oAnchor, oText);
                         
@@ -1100,7 +1117,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
         var bDisabled = p_aArguments[0],
             aNodes = [this.element, this._oAnchor],
-            sImageId,
+            sImageSrc,
             sImageAlt;
 
         if(this._oHelpTextEM) {
@@ -1121,7 +1138,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
             this._oDom.addClass(aNodes, "disabled");
 
-            sImageId = "yuidisabledsubmenuindicator";
+            sImageSrc = this.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH;
             sImageAlt = this.DISABLED_SUBMENU_INDICATOR_ALT_TEXT;
 
         }
@@ -1131,7 +1148,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
             this._oDom.removeClass(aNodes, "disabled");
 
-            sImageId = "yuisubmenuindicator";
+            sImageSrc = this.SUBMENU_INDICATOR_IMAGE_PATH;
             sImageAlt = this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
 
         }
@@ -1139,7 +1156,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
         if(this.subMenuIndicator) {
 
-            this.subMenuIndicator.src = document.getElementById(sImageId).src;
+            this.subMenuIndicator.src = this.imageRoot + sImageSrc;
             this.subMenuIndicator.alt = sImageAlt;
 
         }
@@ -1160,7 +1177,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
         var bSelected = p_aArguments[0],
             aNodes = [this.element, this._oAnchor],
-            sImageId;
+            sImageSrc;
 
         if(this._oHelpTextEM) {
 
@@ -1172,20 +1189,20 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
             this._oDom.addClass(aNodes, "selected");
 
-            sImageId = "yuiselectedsubmenuindicator";
+            sImageSrc = this.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH;
 
         }
         else {
 
             this._oDom.removeClass(aNodes, "selected");
 
-            sImageId = "yuisubmenuindicator";
+            sImageSrc = this.SUBMENU_INDICATOR_IMAGE_PATH;
 
         }
 
         if(this.subMenuIndicator) {
 
-            this.subMenuIndicator.src = document.getElementById(sImageId).src;
+            this.subMenuIndicator.src = this.imageRoot + sImageSrc;
 
         }
 
@@ -1217,66 +1234,15 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
             if(!this.subMenuIndicator) { 
 
-                var oSubMenuIndicator = 
-                        document.getElementById("yuisubmenuindicator");
+                this.subMenuIndicator = document.createElement("img");
 
-                if(!oSubMenuIndicator) {
+                this.subMenuIndicator.src = 
+                    (this.imageRoot + this.SUBMENU_INDICATOR_IMAGE_PATH);
 
-                    oSubMenuIndicator = document.createElement("img");
-
-                    oSubMenuIndicator.src = 
-                        (this.imageRoot + this.SUBMENU_INDICATOR_IMAGE_PATH);
-        
-                    oSubMenuIndicator.alt = 
-                        this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
-
-                    oSubMenuIndicator.id = "yuisubmenuindicator";
+                this.subMenuIndicator.alt = 
+                    this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
 
 
-                    var oSelectedSubMenuIndicator = 
-                            document.createElement("img");
-
-                        oSelectedSubMenuIndicator.src = 
-                            (
-                                this.imageRoot + 
-                                this.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH
-                            );
-
-                        oSelectedSubMenuIndicator.id = 
-                            "yuiselectedsubmenuindicator";
-                    
-
-                    var oDisabledSubMenuIndicator = 
-                            document.createElement("img");
-
-                        oDisabledSubMenuIndicator.src = 
-                            (
-                                this.imageRoot + 
-                                this.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH
-                            );
-
-                        oDisabledSubMenuIndicator.id = 
-                            "yuidisabledsubmenuindicator";
-
-                    var oDIV = document.createElement("div");
-
-                    oDIV.style.position = "absolute";
-                    oDIV.style.left = "-1000px";
-
-                    oDIV.appendChild(oSubMenuIndicator);
-                    oDIV.appendChild(oSelectedSubMenuIndicator);
-                    oDIV.appendChild(oDisabledSubMenuIndicator);
-
-                    document.body.appendChild(oDIV);
-
-                }              
-
-
-                var oClone = oSubMenuIndicator.cloneNode(false);
-                oClone.removeAttribute("id");
-
-                this.subMenuIndicator = oClone;
-                    
                 this.element.appendChild(this.subMenuIndicator);
 
                 this._oDom.addClass(aNodes, "hassubmenu");
