@@ -4,7 +4,6 @@ Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 */
 
-
 /* Menu styles */
 
 div.yuimenu {
@@ -140,7 +139,7 @@ div.yuimenubar li li {
 }
 
 
-/* Matches the help text for a MenuItem instance */
+/* Matches the help text for a menu item */
 
 div.yuimenu li em {
 
@@ -168,16 +167,6 @@ div.yuimenubar li a {
     
 }
 
-
-/* Matches the sub menu indicator for a MenuItem instance */
-
-div.yuimenu li img {
-  
-    margin:0 -16px 0 10px;
-    border:0;
-
-}
-
 div.yuimenu li.hassubmenu,
 div.yuimenu li.hashelptext {
 
@@ -195,7 +184,7 @@ div.yuimenu li.hashelptext a.hashelptext {
 }
 
 
-/* Matches focused and selected MenuItem instances */
+/* Matches focused and selected menu items */
 
 div.yuimenu li.selected,
 div.yuimenubar li.selected {
@@ -220,7 +209,7 @@ div.yuimenubar li.selected a.selected {
 }
 
 
-/* Matches disabled MenuItem instances */
+/* Matches disabled menu items */
 
 div.yuimenu li.disabled, 
 div.yuimenubar li.disabled {
@@ -256,9 +245,19 @@ div.yuimenubar li.yuimenubaritem.first {
 
 }
 
+
+/* Matches the submenu indicator for menu items */
+
 div.yuimenubar li.yuimenubaritem img {
 
     margin:0 0 0 10px;
     vertical-align:middle;
+
+}
+
+div.yuimenu li.yuimenuitem img {
+  
+    margin:0 -16px 0 10px;
+    border:0;
 
 }
