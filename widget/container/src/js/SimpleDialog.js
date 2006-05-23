@@ -142,6 +142,7 @@ YAHOO.widget.SimpleDialog.prototype.configText = function(type,args,obj) {
 	var text = args[0];
 	if (text) {
 		this.setBody(text);
+		this.cfg.refireEvent("icon");
 	}
 }
 // END BUILT-IN PROPERTY EVENT HANDLERS //
