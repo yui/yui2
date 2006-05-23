@@ -14,6 +14,7 @@ YAHOO.widget.Logger = {
     loggerEnabled: true,
     _firebugEnabled: true,
     categories: ["info","warn","error","time","window"],
+    names: ["global"],
     _stack: [], // holds all log msgs
     _startTime: new Date().getTime(), // static start timestamp
     _lastTime: this._startTime // timestamp of last logged message
@@ -28,6 +29,13 @@ YAHOO.widget.Logger = {
  *     - args[0] The category name
  */
 YAHOO.widget.Logger.categoryCreateEvent = new YAHOO.util.CustomEvent("categoryCreate");
+
+/**
+ * Fired when a new name has been created. Subscribers receive the following
+ * array:<br>
+ *     - args[0] The class name
+ */
+YAHOO.widget.Logger.nameCreateEvent = new YAHOO.util.CustomEvent("nameCreate");
 
 /**
  * Fired when a new log message has been created. Subscribers receive the
@@ -60,6 +68,12 @@ YAHOO.widget.Logger.log = function(sName, sMsg, sCategory) {
         }
         else if(this._isNewCategory(sCategory)) {
             this._createNewCategory(sCategory);
+        }
+        if(!sName) {
+            sName = "global"; // default namespace
+        }
+        else if(this._isNewName(sName)) {
+            this._createNewName(sName);
         }
 
         var timestamp = new Date();
@@ -153,6 +167,35 @@ YAHOO.widget.Logger._isNewCategory = function(category) {
         }
     }
     return true;
+};
+
+/**
+ * Creates a new name for log messages and fires nameCreateEvent.
+ *
+ * @param {string} name Class name
+ * @private
+ */
+YAHOO.widget.Logger._createNewName = function(name) {
+    this.names.push(name);
+    this.nameCreateEvent.fire(name);
+};
+
+/**
+ * Checks to see if a name has already been created.
+ *
+ * @param {string} name Class name
+ * @return {boolean} Returns true if name is unknown, else returns false
+ * @private
+ */
+YAHOO.widget.Logger._isNewName = function(name) {
+    if(name) {
+        for(var i=0; i < this.names.length; i++) {
+            if(name == this.names[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
 };
 
 /**

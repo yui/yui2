@@ -46,7 +46,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
             YAHOO.widget.LogReader._defaultContainerEl = this._containerEl;
         }
 
-        // If implementer has provided, trust and set those
+        // If implementer has provided container values, trust and set those
         if(this.left) {
             this._containerEl.style.left = this.left;
         }
@@ -100,7 +100,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
             this._consoleEl = this._containerEl.appendChild(document.createElement("div"));
             this._consoleEl.className = "ylog_bd";
             
-            // If implementer has provided, trust and set those
+            // If implementer has provided console, trust and set those
             if(this.height) {
                 this._consoleEl.style.height = this.height;
             }
@@ -129,7 +129,9 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
             this._clearBtn = this._btnsEl.appendChild(this._clearBtn);
             YAHOO.util.Event.addListener(oSelf._clearBtn,'click',oSelf._onClickClearBtn,oSelf);
 
-            this._filtersEl = this._ftEl.appendChild(document.createElement("div"));
+            this._categoryFiltersEl = this._ftEl.appendChild(document.createElement("div"));
+            this._nameFiltersEl = this._ftEl.appendChild(document.createElement("div"));
+            this._nameFiltersEl.className = "ylog_namefilters";
         }
     }
 
@@ -140,15 +142,24 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
     YAHOO.widget.Logger.newLogEvent.subscribe(this._onNewLog, this);
     this._lastTime = YAHOO.widget.Logger.getStartTime(); // timestamp of last log message to console
 
-    // Initialize filters
-    this._filters = [];
+    // Initialize category filters
+    this._categoryFilters = [];
     var catsLen = YAHOO.widget.Logger.categories.length;
-    if(this._filtersEl) {
+    if(this._categoryFiltersEl) {
         for(var i=0; i < catsLen; i++) {
-            this._createFilterCheckbox(YAHOO.widget.Logger.categories[i]);
+            this._createCategoryCheckbox(YAHOO.widget.Logger.categories[i]);
+        }
+    }
+    // Initialize name filters
+    this._nameFilters = [];
+    var namesLen = YAHOO.widget.Logger.names.length;
+    if(this._nameFiltersEl) {
+        for(var j=0; j < namesLen; j++) {
+            this._createNameCheckbox(YAHOO.widget.Logger.names[j]);
         }
     }
     YAHOO.widget.Logger.categoryCreateEvent.subscribe(this._onCategoryCreate, this);
+    YAHOO.widget.Logger.nameCreateEvent.subscribe(this._onNameCreate, this);
 
     YAHOO.widget.LogReader._index++;
     this._filterLogs();
@@ -285,7 +296,7 @@ YAHOO.widget.LogReader.prototype.setTitle = function(sTitle) {
  * Private members
  ***************************************************************************/
 /**
- * Internal class variable to index multiple log reader instances.
+ * Internal class member to index multiple log reader instances.
  *
  * @type number
  * @private
@@ -293,8 +304,8 @@ YAHOO.widget.LogReader.prototype.setTitle = function(sTitle) {
 YAHOO.widget.LogReader._index = 0;
 
 /**
- * A container element shared by all log readers if a container needs to be
- * created during instantiation. Will be null a container element never needs to
+ * A class member shared by all log readers if a container needs to be
+ * created during instantiation. Will be null if a container element never needs to
  * be created on the fly, such as when the implementer passes in their own element.
  *
  * @type HTMLElement
@@ -327,12 +338,20 @@ YAHOO.widget.LogReader.prototype._lastTime = null;
 YAHOO.widget.LogReader.prototype._timeout = null;
 
 /**
- * Filters that prevent certain categories of log messages from being output.
+ * Array of filters for log message categories.
  *
  * @type array
  * @private
  */
-YAHOO.widget.LogReader.prototype._filters = null;
+YAHOO.widget.LogReader.prototype._categoryFilters = null;
+
+/**
+ * Array of filters for log message names.
+ *
+ * @type array
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._nameFilters = null;
 
 /**
  * Log reader container element.
@@ -399,12 +418,20 @@ YAHOO.widget.LogReader.prototype._ftEl = null;
 YAHOO.widget.LogReader.prototype._btnsEl = null;
 
 /**
- * Log reader filter checkboxes container element.
+ * Container element for log reader category filter checkboxes.
  *
  * @type HTMLElement
  * @private
  */
-YAHOO.widget.LogReader.prototype._filtersEl = null;
+YAHOO.widget.LogReader.prototype._categoryFiltersEl = null;
+
+/**
+ * Container element for log reader name filter checkboxes.
+ *
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._nameFiltersEl = null;
 
 /**
  * Log reader pause button element.
@@ -430,22 +457,57 @@ YAHOO.widget.LogReader.prototype._clearBtn = null;
  * @param {string} category Category name
  * @private
  */
-YAHOO.widget.LogReader.prototype._createFilterCheckbox = function(category) {
+YAHOO.widget.LogReader.prototype._createCategoryCheckbox = function(category) {
     var oSelf = this;
     
-    if(this._filtersEl) {
+    if(this._ftEl) {
+        var parentEl = this._categoryFiltersEl;
+        var filters = this._categoryFilters;
+        
         // Append el at the end so IE 5.5 can set "type" attribute
-        var filterChk = document.createElement("input");
-        filterChk.className = "ylog_filter" + category;
-        filterChk.type = "checkbox";
-        filterChk.checked = true;
-        filterChk.category = category;
-        filterChk = this._filtersEl.appendChild(filterChk);
-        YAHOO.util.Event.addListener(filterChk,'click',oSelf._onCheckFilter,oSelf);
+        var categoryChk = document.createElement("input");
+        categoryChk.className = "ylog_filter" + category;
+        categoryChk.type = "checkbox";
+        categoryChk.category = category;
+        categoryChk.checked = true;
+        categoryChk = parentEl.appendChild(categoryChk);
 
-        var filterChkLbl = this._filtersEl.appendChild(document.createElement("span"));
-        filterChkLbl.className = category;
-        filterChkLbl.innerHTML = category;
+        // Add this checked filter to the internal array of filters
+        filters.push(category);
+        // Subscribe to the click event
+        YAHOO.util.Event.addListener(categoryChk,'click',oSelf._onCheckCategory,oSelf);
+
+        // Create and class the text label
+        var categoryChkLbl = parentEl.appendChild(document.createElement("span"));
+        categoryChkLbl.className = category;
+        categoryChkLbl.innerHTML = category;
+    }
+};
+
+YAHOO.widget.LogReader.prototype._createNameCheckbox = function(name) {
+    var oSelf = this;
+
+    if(this._ftEl) {
+        var parentEl = this._nameFiltersEl;
+        var filters = this._nameFilters;
+
+        // Append el at the end so IE 5.5 can set "type" attribute
+        var nameChk = document.createElement("input");
+        nameChk.className = "ylog_filter" + name;
+        nameChk.type = "checkbox";
+        nameChk.name = name;
+        nameChk.checked = true;
+        nameChk = parentEl.appendChild(nameChk);
+
+        // Add this checked filter to the internal array of filters
+        filters.push(name);
+        // Subscribe to the click event
+        YAHOO.util.Event.addListener(nameChk,'click',oSelf._onCheckName,oSelf);
+
+        // Create and class the text label
+        var nameChkLbl = parentEl.appendChild(document.createElement("span"));
+        nameChkLbl.className = name;
+        nameChkLbl.innerHTML = name;
     }
 };
 
@@ -511,17 +573,28 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
 //TODO: much optimization here
 //if !compactOutput, set fixed widths for time output
     var entriesLen = aEntries.length;
-    var filtersLen = this._filters.length;
-    // Iterate through all log entries...
+    var nameFiltersLen = this._nameFilters.length;
+    var categoryFiltersLen = this._categoryFilters.length;
+    // Iterate through all log entries to print the ones that filter through
     for(var i=0; i<entriesLen; i++) {
         var entry = aEntries[i];
-        var category = entry.category;
-        var okToPrint = true;
-        // ...and only print the ones that filter through
-        for(var j=0; j<filtersLen; j++) {
-            if(category == this._filters[j]) {
-                okToPrint = false;
+        var category = (entry.category) ? entry.category : null;
+        var name = (entry.name) ? entry.name : null;
+        var okToPrint = false;
+        var okToFilterCats = false;
+
+        for(var j=0; j<nameFiltersLen; j++) {
+            if(name == this._nameFilters[j]) {
+                okToFilterCats = true;
                 break;
+            }
+        }
+        if(okToFilterCats) {
+            for(var k=0; k<categoryFiltersLen; k++) {
+                if(category && (category == this._categoryFilters[k])) {
+                    okToPrint = true;
+                    break;
+                }
             }
         }
         if(okToPrint) {
@@ -551,8 +624,8 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
             var output =  "<span class='"+category+"'>"+label+"</span> " +
                 totalTime + " ms (+" +
                 elapsedTime + ") " + localTime + ": " +
-                name + compactOutput +
-                entry.msg;
+                compactOutput+
+                name + entry.msg;
 
             var oNewElement = (this.newestOnTop) ?
                 this._consoleEl.insertBefore(document.createElement("p"),this._consoleEl.firstChild):
@@ -571,7 +644,7 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
 /**
  * Handles Logger's categoryCreateEvent.
  *
- * @param {string} type The click event
+ * @param {string} type The event
  * @param {array} args Data passed from event firer
  * @param {object} oSelf The log reader instance
  * @private
@@ -579,8 +652,73 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
 YAHOO.widget.LogReader.prototype._onCategoryCreate = function(type, args, oSelf) {
     var category = args[0];
     if(oSelf._ftEl) {
-        oSelf._createFilterCheckbox(category);
+        oSelf._createCategoryCheckbox(category);
     }
+};
+
+/**
+ * Handles Logger's nameCreateEvent.
+ *
+ * @param {string} type The event
+ * @param {array} args Data passed from event firer
+ * @param {object} oSelf The log reader instance
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._onNameCreate = function(type, args, oSelf) {
+    var name = args[0];
+    if(oSelf._ftEl) {
+        oSelf._createNameCheckbox(name);
+    }
+};
+
+/**
+ * Handles check events on the category filter checkboxes.
+ *
+ * @param {event} v The click event
+ * @param {object} oSelf The log reader instance
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._onCheckCategory = function(v, oSelf) {
+    var newFilter = this.category;
+    var filtersArray = oSelf._categoryFilters;
+
+    if(!this.checked) { // Remove category from filters
+        for(var i=0; i<filtersArray.length; i++) {
+            if(newFilter == filtersArray[i]) {
+                filtersArray.splice(i, 1);
+                break;
+            }
+        }
+    }
+    else { // Add category to filters
+        filtersArray.push(newFilter);
+    }
+    oSelf._filterLogs();
+};
+
+/**
+ * Handles check events on the category filter checkboxes.
+ *
+ * @param {event} v The click event
+ * @param {object} oSelf The log reader instance
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._onCheckName = function(v, oSelf) {
+    var newFilter = this.name;
+    var filtersArray = oSelf._nameFilters;
+    
+    if(!this.checked) { // Remove category from filters
+        for(var i=0; i<filtersArray.length; i++) {
+            if(newFilter == filtersArray[i]) {
+                filtersArray.splice(i, 1);
+                break;
+            }
+        }
+    }
+    else { // Add category to filters
+        filtersArray.push(newFilter);
+    }
+    oSelf._filterLogs();
 };
 
 /**
@@ -636,29 +774,6 @@ YAHOO.widget.LogReader.prototype._onClickPauseBtn = function(v, oSelf) {
  */
 YAHOO.widget.LogReader.prototype._onClickClearBtn = function(v, oSelf) {
     oSelf._clearConsole();
-};
-
-/**
- * Handles check events on the filter checkboxes.
- *
- * @param {event} v The click event
- * @param {object} oSelf The log reader instance
- * @private
- */
-YAHOO.widget.LogReader.prototype._onCheckFilter = function(v, oSelf) {
-    var category = this.category;
-    if(this.checked) { // Remove category from filters
-        for(var i=0; i<oSelf._filters.length; i++) {
-            if(category == oSelf._filters[i]) {
-                oSelf._filters.splice(i, 1);
-                break;
-            }
-        }
-    }
-    else { // Add category to filters
-        oSelf._filters.push(category);
-    }
-    oSelf._filterLogs();
 };
 
 /**
