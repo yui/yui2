@@ -26,7 +26,7 @@ YAHOO.widget.OverlayManager.prototype = {
 	* The array of Overlays that are currently registered
 	* @type Array
 	*/
-	overlays : new Array(),
+	overlays : null,
 
 	/**
 	* Initializes the default configuration of the OverlayManager
@@ -122,6 +122,10 @@ YAHOO.widget.OverlayManager.prototype = {
 		}
 
 		var overlays = this.cfg.getProperty("overlays");
+		
+		if (! this.overlays) {
+			this.overlays = new Array();
+		}
 
 		if (overlays) {
 			this.register(overlays);

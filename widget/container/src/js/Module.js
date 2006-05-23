@@ -271,7 +271,6 @@ YAHOO.widget.Module.prototype = {
 	*/
 	isSecure : function() {
 		if (window.location.href.toLowerCase().indexOf("https") == 0) {
-			this.imageRoot = YAHOO.widget.Module.IMG_ROOT_SSL;
 			return true;
 		} else {
 			return false;
@@ -303,6 +302,10 @@ YAHOO.widget.Module.prototype = {
 
 		this.cfg = new YAHOO.util.Config(this);
 		
+		if (this.isSecure) {
+			this.imageRoot = YAHOO.widget.Module.IMG_ROOT_SSL;
+		}
+
 		if (typeof el == "string") {
 			var elId = el;
 

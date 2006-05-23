@@ -417,6 +417,7 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 		if (! isNaN(x) && ! isNaN(y)) {
 			if (! this.iframe) {
 				this.iframe = document.createElement("iframe");
+				this.iframe.src = this.imageRoot + YAHOO.widget.Overlay.IFRAME_SRC;
 				
 				var parent = el.parentNode;
 				if (parent) {
@@ -425,7 +426,6 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 					document.body.appendChild(this.iframe);
 				}
 
-				this.iframe.src = this.imageRoot + YAHOO.widget.Overlay.IFRAME_SRC;
 				YAHOO.util.Dom.setStyle(this.iframe, "position", "absolute");
 				YAHOO.util.Dom.setStyle(this.iframe, "border", "none");
 				YAHOO.util.Dom.setStyle(this.iframe, "margin", "0");
@@ -433,8 +433,10 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 				YAHOO.util.Dom.setStyle(this.iframe, "opacity", "0");
 			}
 
-			YAHOO.util.Dom.setStyle(this.iframe, "left", x-2 + "px");
-			YAHOO.util.Dom.setStyle(this.iframe, "top", y-2 + "px");
+			//YAHOO.util.Dom.setStyle(this.iframe, "left", x-2 + "px");
+			//YAHOO.util.Dom.setStyle(this.iframe, "top", y-2 + "px");
+
+			YAHOO.util.Dom.setXY(this.iframe, [x,y]);
 
 			var width = el.clientWidth;
 			var height = el.clientHeight;
