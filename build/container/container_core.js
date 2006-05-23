@@ -1,10 +1,7 @@
-/*
+/**
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-version: 0.10.0
-*/
-/**
 * @class 
 * Config is a utility used within an object to allow the implementer to maintain a list of local configuration properties and listen for changes to those properties dynamically using CustomEvent. The initial values are also maintained so that the configuration can be reset at any given point to its initial state.
 * @param {object}	owner	The owner object to which this Config object belongs
@@ -706,7 +703,6 @@ YAHOO.widget.Module.prototype = {
 	*/
 	isSecure : function() {
 		if (window.location.href.toLowerCase().indexOf("https") == 0) {
-			this.imageRoot = YAHOO.widget.Module.IMG_ROOT_SSL;
 			return true;
 		} else {
 			return false;
@@ -738,6 +734,10 @@ YAHOO.widget.Module.prototype = {
 
 		this.cfg = new YAHOO.util.Config(this);
 		
+		if (this.isSecure) {
+			this.imageRoot = YAHOO.widget.Module.IMG_ROOT_SSL;
+		}
+
 		if (typeof el == "string") {
 			var elId = el;
 
@@ -1475,6 +1475,7 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 		if (! isNaN(x) && ! isNaN(y)) {
 			if (! this.iframe) {
 				this.iframe = document.createElement("iframe");
+				this.iframe.src = this.imageRoot + YAHOO.widget.Overlay.IFRAME_SRC;
 				
 				var parent = el.parentNode;
 				if (parent) {
@@ -1483,7 +1484,6 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 					document.body.appendChild(this.iframe);
 				}
 
-				this.iframe.src = this.imageRoot + YAHOO.widget.Overlay.IFRAME_SRC;
 				YAHOO.util.Dom.setStyle(this.iframe, "position", "absolute");
 				YAHOO.util.Dom.setStyle(this.iframe, "border", "none");
 				YAHOO.util.Dom.setStyle(this.iframe, "margin", "0");
@@ -1491,9 +1491,11 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 				YAHOO.util.Dom.setStyle(this.iframe, "opacity", "0");
 			}
 
-			YAHOO.util.Dom.setStyle(this.iframe, "left", x-2 + "px");
-			YAHOO.util.Dom.setStyle(this.iframe, "top", y-2 + "px");
+			// YAHOO.util.Dom.setStyle(this.iframe, "left", x-2 + "px");
+			// YAHOO.util.Dom.setStyle(this.iframe, "top", y-2 + "px");
 
+			YAHOO.util.Dom.setXY(this.iframe, [x,y]);
+			
 			var width = el.clientWidth;
 			var height = el.clientHeight;
 
@@ -1765,7 +1767,7 @@ YAHOO.widget.OverlayManager.prototype = {
 	* The array of Overlays that are currently registered
 	* @type Array
 	*/
-	overlays : new Array(),
+	overlays : null,
 
 	/**
 	* Initializes the default configuration of the OverlayManager
@@ -1861,6 +1863,10 @@ YAHOO.widget.OverlayManager.prototype = {
 		}
 
 		var overlays = this.cfg.getProperty("overlays");
+		
+		if (! this.overlays) {
+			this.overlays = new Array();
+		}
 
 		if (overlays) {
 			this.register(overlays);
