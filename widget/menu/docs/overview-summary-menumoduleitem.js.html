@@ -150,11 +150,11 @@
 	</div>
 	
 	<div class="main">
-			
-           <h2>menumoduleitem.js</h2>
-		
-			<div class="section source">
-				<pre class="sourceview"><span class="comment">/*
+
+        <h2>menumoduleitem.js</h2>
+        
+        <div class="section source">
+            <pre class="sourceview"><span class="comment">/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
@@ -271,6 +271,20 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     * <span class="attrib">@type</span> YAHOO.widget.MenuModuleItem
     */</span>
     SUBMENU_ITEM_TYPE: null,
+
+
+    <span class="comment">/**
+    * Constant representing the prefix path to use for non-secure images
+    * <span class="attrib">@type</span> string
+    */</span>
+    IMG_ROOT: <span class="literal">"http://us.i1.yimg.com/us.yimg.com/i/"</span>,
+    
+
+    <span class="comment">/**
+    * Constant representing the prefix path to use for securely served images
+    * <span class="attrib">@type</span> string
+    */</span>
+    IMG_ROOT_SSL: <span class="literal">"https://a248.e.akamai.net/sec.yimg.com/i/"</span>,
 <span class="comment">
 
     // Private member variables</span>
@@ -339,7 +353,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 	* The string representing the image root
 	* <span class="attrib">@type</span> string
 	*/</span>
-	imageRoot: YAHOO.widget.Module.IMG_ROOT,
+	imageRoot: null,
 
 
 	<span class="comment">/**
@@ -350,8 +364,6 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 	isSecure: <span class="reserved">function</span>() {
 
 		<span class="reserved">if</span>(window.location.href.toLowerCase().indexOf(<span class="literal">"https"</span>) === 0) {
-
-			<span class="reserved">this</span>.imageRoot = YAHOO.widget.Module.IMG_ROOT_SSL;
 
 			<span class="reserved">return</span> true;
 
@@ -576,6 +588,9 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     */</span>
     init: <span class="reserved">function</span>(p_oObject, p_oUserConfig) {
 
+        <span class="reserved">this</span>.imageRoot = (<span class="reserved">this</span>.isSecure) ? <span class="reserved">this</span>.IMG_ROOT_SSL : <span class="reserved">this</span>.IMG_ROOT;
+
+
         <span class="reserved">if</span>(!<span class="reserved">this</span>.SUBMENU_TYPE) {
     
             <span class="reserved">this</span>.SUBMENU_TYPE = YAHOO.widget.MenuModule;
@@ -695,7 +710,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
                     // Get the anchor node (if it exists)</span>
 
                     var oAnchor = <span class="reserved">this</span>._getFirstElement(p_oObject, <span class="literal">"A"</span>),
-                        sURL = null,
+                        sURL = <span class="literal">"#"</span>,
                         sText = null;
 <span class="comment">
 
@@ -728,6 +743,8 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
                         sText = oText.nodeValue;
 
                         oAnchor = document.createElement(<span class="literal">"a"</span>);
+                        
+                        oAnchor.setAttribute(<span class="literal">"href"</span>, sURL);
 
                         p_oObject.replaceChild(oAnchor, oText);
                         
@@ -1256,7 +1273,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
         var bDisabled = p_aArguments[0],
             aNodes = [<span class="reserved">this</span>.element, <span class="reserved">this</span>._oAnchor],
-            sImageId,
+            sImageSrc,
             sImageAlt;
 
         <span class="reserved">if</span>(<span class="reserved">this</span>._oHelpTextEM) {
@@ -1277,7 +1294,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
             <span class="reserved">this</span>._oDom.addClass(aNodes, <span class="literal">"disabled"</span>);
 
-            sImageId = <span class="literal">"yuidisabledsubmenuindicator"</span>;
+            sImageSrc = <span class="reserved">this</span>.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH;
             sImageAlt = <span class="reserved">this</span>.DISABLED_SUBMENU_INDICATOR_ALT_TEXT;
 
         }
@@ -1287,7 +1304,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
             <span class="reserved">this</span>._oDom.removeClass(aNodes, <span class="literal">"disabled"</span>);
 
-            sImageId = <span class="literal">"yuisubmenuindicator"</span>;
+            sImageSrc = <span class="reserved">this</span>.SUBMENU_INDICATOR_IMAGE_PATH;
             sImageAlt = <span class="reserved">this</span>.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
 
         }
@@ -1295,7 +1312,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
         <span class="reserved">if</span>(<span class="reserved">this</span>.subMenuIndicator) {
 
-            <span class="reserved">this</span>.subMenuIndicator.src = document.getElementById(sImageId).src;
+            <span class="reserved">this</span>.subMenuIndicator.src = <span class="reserved">this</span>.imageRoot + sImageSrc;
             <span class="reserved">this</span>.subMenuIndicator.alt = sImageAlt;
 
         }
@@ -1316,7 +1333,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
         var bSelected = p_aArguments[0],
             aNodes = [<span class="reserved">this</span>.element, <span class="reserved">this</span>._oAnchor],
-            sImageId;
+            sImageSrc;
 
         <span class="reserved">if</span>(<span class="reserved">this</span>._oHelpTextEM) {
 
@@ -1328,20 +1345,20 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
             <span class="reserved">this</span>._oDom.addClass(aNodes, <span class="literal">"selected"</span>);
 
-            sImageId = <span class="literal">"yuiselectedsubmenuindicator"</span>;
+            sImageSrc = <span class="reserved">this</span>.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH;
 
         }
         <span class="reserved">else</span> {
 
             <span class="reserved">this</span>._oDom.removeClass(aNodes, <span class="literal">"selected"</span>);
 
-            sImageId = <span class="literal">"yuisubmenuindicator"</span>;
+            sImageSrc = <span class="reserved">this</span>.SUBMENU_INDICATOR_IMAGE_PATH;
 
         }
 
         <span class="reserved">if</span>(<span class="reserved">this</span>.subMenuIndicator) {
 
-            <span class="reserved">this</span>.subMenuIndicator.src = document.getElementById(sImageId).src;
+            <span class="reserved">this</span>.subMenuIndicator.src = <span class="reserved">this</span>.imageRoot + sImageSrc;
 
         }
 
@@ -1373,66 +1390,15 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
             <span class="reserved">if</span>(!<span class="reserved">this</span>.subMenuIndicator) { 
 
-                var oSubMenuIndicator = 
-                        document.getElementById(<span class="literal">"yuisubmenuindicator"</span>);
+                <span class="reserved">this</span>.subMenuIndicator = document.createElement(<span class="literal">"img"</span>);
 
-                <span class="reserved">if</span>(!oSubMenuIndicator) {
+                <span class="reserved">this</span>.subMenuIndicator.src = 
+                    (<span class="reserved">this</span>.imageRoot + <span class="reserved">this</span>.SUBMENU_INDICATOR_IMAGE_PATH);
 
-                    oSubMenuIndicator = document.createElement(<span class="literal">"img"</span>);
-
-                    oSubMenuIndicator.src = 
-                        (<span class="reserved">this</span>.imageRoot + <span class="reserved">this</span>.SUBMENU_INDICATOR_IMAGE_PATH);
-        
-                    oSubMenuIndicator.alt = 
-                        <span class="reserved">this</span>.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
-
-                    oSubMenuIndicator.id = <span class="literal">"yuisubmenuindicator"</span>;
+                <span class="reserved">this</span>.subMenuIndicator.alt = 
+                    <span class="reserved">this</span>.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
 
 
-                    var oSelectedSubMenuIndicator = 
-                            document.createElement(<span class="literal">"img"</span>);
-
-                        oSelectedSubMenuIndicator.src = 
-                            (
-                                <span class="reserved">this</span>.imageRoot + 
-                                <span class="reserved">this</span>.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH
-                            );
-
-                        oSelectedSubMenuIndicator.id = 
-                            <span class="literal">"yuiselectedsubmenuindicator"</span>;
-                    
-
-                    var oDisabledSubMenuIndicator = 
-                            document.createElement(<span class="literal">"img"</span>);
-
-                        oDisabledSubMenuIndicator.src = 
-                            (
-                                <span class="reserved">this</span>.imageRoot + 
-                                <span class="reserved">this</span>.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH
-                            );
-
-                        oDisabledSubMenuIndicator.id = 
-                            <span class="literal">"yuidisabledsubmenuindicator"</span>;
-
-                    var oDIV = document.createElement(<span class="literal">"div"</span>);
-
-                    oDIV.style.position = <span class="literal">"absolute"</span>;
-                    oDIV.style.left = <span class="literal">"-1000px"</span>;
-
-                    oDIV.appendChild(oSubMenuIndicator);
-                    oDIV.appendChild(oSelectedSubMenuIndicator);
-                    oDIV.appendChild(oDisabledSubMenuIndicator);
-
-                    document.body.appendChild(oDIV);
-
-                }              
-
-
-                var oClone = oSubMenuIndicator.cloneNode(false);
-                oClone.removeAttribute(<span class="literal">"id"</span>);
-
-                <span class="reserved">this</span>.subMenuIndicator = oClone;
-                    
                 <span class="reserved">this</span>.element.appendChild(<span class="reserved">this</span>.subMenuIndicator);
 
                 <span class="reserved">this</span>._oDom.addClass(aNodes, <span class="literal">"hassubmenu"</span>);
@@ -1741,7 +1707,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     }
 
 };</pre>
-			</div>
+        </div>
 		
 	</div>
 </div>
@@ -1750,7 +1716,6 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 <div id="footer">
 	<hr />
 	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
-
 	<br /><br />
 	Documentation generated by <a href="http://jsdoc.sourceforge.net/">
 	JSDoc</a>
