@@ -1,5 +1,3 @@
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
 /**
  * The Yahoo global namespace
  * @constructor
@@ -15,40 +13,44 @@ var YAHOO = window.YAHOO || {};
  * Either of the above would create YAHOO.property, then
  * YAHOO.property.package
  *
- * @param  {String} sNameSpace String representation of the desired 
- *                             namespace
- * @return {Object}            A reference to the namespace object
+ * @param  {String} ns The name of the namespace
+ * @return {Object}    A reference to the namespace object
  */
-YAHOO.namespace = function( sNameSpace ) {
+YAHOO.namespace = function( ns ) {
 
-    if (!sNameSpace || !sNameSpace.length) {
+    if (!ns || !ns.length) {
         return null;
     }
 
-    var levels = sNameSpace.split(".");
-
-    var currentNS = YAHOO;
+    var levels = ns.split(".");
+    var nsobj = YAHOO;
 
     // YAHOO is implied, so it is ignored if it is included
     for (var i=(levels[0] == "YAHOO") ? 1 : 0; i<levels.length; ++i) {
-        currentNS[levels[i]] = currentNS[levels[i]] || {};
-        currentNS = currentNS[levels[i]];
+        nsobj[levels[i]] = nsobj[levels[i]] || {};
+        nsobj = nsobj[levels[i]];
     }
 
-    return currentNS;
+    return nsobj;
 };
 
 /**
- * Global log method.
+ * Global log method
+ * @param  {string}  sMsg       The message to log.
+ * @param  {string}  sCategory  The log category for the message.  Default
+ *                              categories are "info", "warn", "error", time".
+ *                              Custom categories can be used as well. (opt)
+ * @param  {string}  sName      The name of the module generating the message (opt)
+ * @return {boolean}            True if the log operation was successful.
  */
-YAHOO.log = function(sMsg,sCategory) {
-    if(YAHOO.widget.Logger) {
-        YAHOO.widget.Logger.log(null, sMsg, sCategory);
+YAHOO.log = function(sMsg, sCategory, sName) {
+    var l = YAHOO.widget.Logger;
+    if(l && l.log) {
+        return l.log(sMsg, sCategory);
     } else {
         return false;
     }
 };
-
 
 YAHOO.namespace("util");
 YAHOO.namespace("widget");
