@@ -463,24 +463,26 @@ YAHOO.widget.LogReader.prototype._createCategoryCheckbox = function(category) {
     if(this._ftEl) {
         var parentEl = this._categoryFiltersEl;
         var filters = this._categoryFilters;
-        
-        // Append el at the end so IE 5.5 can set "type" attribute
-        var categoryChk = document.createElement("input");
-        categoryChk.className = "ylog_filter" + category;
-        categoryChk.type = "checkbox";
-        categoryChk.category = category;
-        categoryChk.checked = true;
-        categoryChk = parentEl.appendChild(categoryChk);
 
-        // Add this checked filter to the internal array of filters
-        filters.push(category);
-        // Subscribe to the click event
-        YAHOO.util.Event.addListener(categoryChk,'click',oSelf._onCheckCategory,oSelf);
+        var filterEl = parentEl.appendChild(document.createElement("span"));
+        filterEl.className = "ylog_filtergrp";
+            // Append el at the end so IE 5.5 can set "type" attribute
+            var categoryChk = document.createElement("input");
+            categoryChk.className = "ylog_filter" + category;
+            categoryChk.type = "checkbox";
+            categoryChk.category = category;
+            categoryChk.checked = true;
+            categoryChk = filterEl.appendChild(categoryChk);
 
-        // Create and class the text label
-        var categoryChkLbl = parentEl.appendChild(document.createElement("span"));
-        categoryChkLbl.className = category;
-        categoryChkLbl.innerHTML = category;
+            // Add this checked filter to the internal array of filters
+            filters.push(category);
+            // Subscribe to the click event
+            YAHOO.util.Event.addListener(categoryChk,'click',oSelf._onCheckCategory,oSelf);
+
+            // Create and class the text label
+            var categoryChkLbl = filterEl.appendChild(document.createElement("span"));
+            categoryChkLbl.className = category;
+            categoryChkLbl.innerHTML = category;
     }
 };
 
@@ -491,13 +493,16 @@ YAHOO.widget.LogReader.prototype._createNameCheckbox = function(name) {
         var parentEl = this._nameFiltersEl;
         var filters = this._nameFilters;
 
+        var filterEl = parentEl.appendChild(document.createElement("span"));
+        filterEl.className = "ylog_filtergrp";
+
         // Append el at the end so IE 5.5 can set "type" attribute
         var nameChk = document.createElement("input");
         nameChk.className = "ylog_filter" + name;
         nameChk.type = "checkbox";
         nameChk.name = name;
         nameChk.checked = true;
-        nameChk = parentEl.appendChild(nameChk);
+        nameChk = filterEl.appendChild(nameChk);
 
         // Add this checked filter to the internal array of filters
         filters.push(name);
@@ -505,7 +510,7 @@ YAHOO.widget.LogReader.prototype._createNameCheckbox = function(name) {
         YAHOO.util.Event.addListener(nameChk,'click',oSelf._onCheckName,oSelf);
 
         // Create and class the text label
-        var nameChkLbl = parentEl.appendChild(document.createElement("span"));
+        var nameChkLbl = filterEl.appendChild(document.createElement("span"));
         nameChkLbl.className = name;
         nameChkLbl.innerHTML = name;
     }

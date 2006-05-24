@@ -11,6 +11,7 @@
 .ylogger .ylog_ft {position:relative;margin-top:.5em;margin-bottom:1em;}
 .ylogger .ylog_ft .ylog_namefilters {border-top:1px solid #575757;margin-top:.25em;padding-top:.25em;}
 .ylogger .ylog_btns {position:relative;float:right;bottom:.25em;}
+.ylogger .ylog_filtergrp {margin-right:.5em;white-space:nowrap;}
 .ylogger .info {background-color:#A7CC25;} /* A7CC25 green */
 .ylogger .warn {background-color:#F58516;} /* F58516 orange */
 .ylogger .error {background-color:#E32F0B;} /* E32F0B red */
