@@ -10,8 +10,8 @@
 /* customized ylogger styles */
 /* font size is controlled here: default 77% */
 #mylogger {position:fixed;bottom:1em;right:1em;font-size:100%;}
-/* width is controlled here: default 30em */
-.ylogger {padding:1em;width:40em;background-color:#AAA;border:1px solid black;font-family:monospace;z-index:9000;}
+/* width is controlled here: default 31em */
+.ylogger {padding:1em;width:31em;background-color:#AAA;border:1px solid black;font-family:monospace;z-index:9000;}
 .ylogger p {margin:1px;padding:.1em;}
 .ylogger button {font-family:monospace;}
 .ylogger .ylog_hd {position:relative;margin-top:1em;padding:.5em;background-color:#575757;color:#FFF;}
@@ -45,13 +45,10 @@
         <p>This LogReader implementation has been modified by changing some default
         CSS styles as well as modifying some properties through the constructor.
         In this example, the LogReader is placed in a fixed position at the
-        bottom right of the screen. The width of the overall container has been
-        made bigger, the height of the consoles have been made smaller, the
-        font size has been bumped up, and the log messages of the second
-        LogReader has been made more compact (i.e., the line break within each
-        message has been removed). As in the first example, the YUI Library's
-        Drag and Drop utility has been included in order to make the LogReader
-        draggable.</p>
+        bottom right of the screen. The height of each of the consoles has been
+        made smaller, the font size has been bumped up, and the log messages of
+        the second LogReader has been made more compact (i.e., the line break
+        within each message has been removed).</p>
 
         <p><input id="ylog_inputinfo" class="ylog_input" type="text" value="Log an info message.">
             <button onclick="YAHOO.log(document.getElementById('ylog_inputinfo').value,'info')">Log</button></p>

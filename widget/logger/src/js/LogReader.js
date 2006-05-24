@@ -130,6 +130,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
             YAHOO.util.Event.addListener(oSelf._clearBtn,'click',oSelf._onClickClearBtn,oSelf);
 
             this._categoryFiltersEl = this._ftEl.appendChild(document.createElement("div"));
+            this._categoryFiltersEl.className = "ylog_categoryfilters";
             this._nameFiltersEl = this._ftEl.appendChild(document.createElement("div"));
             this._nameFiltersEl.className = "ylog_namefilters";
         }
