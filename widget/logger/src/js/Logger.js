@@ -57,11 +57,11 @@ YAHOO.widget.Logger.logResetEvent = new YAHOO.util.CustomEvent("logReset");
  * assigned to an unknown category, creates a new category. If Firebug is enabled,
  * outputs the log message to Firebug.
  *
- * @param {string} sName Name of LogWriter, or null if none
  * @param {string} sMsg The log message
- * @param {string} sCategory Category of log message
+ * @param {string} sCategory Category of log message, or null
+ * @param {string} sName Name of LogWriter, or null if none
  */
-YAHOO.widget.Logger.log = function(sName, sMsg, sCategory) {
+YAHOO.widget.Logger.log = function(sMsg, sCategory, sName) {
     if(this.loggerEnabled) {
         if(!sCategory) {
             sCategory = "info"; // default category
@@ -90,6 +90,10 @@ YAHOO.widget.Logger.log = function(sName, sMsg, sCategory) {
         if(this._firebugEnabled) {
             this._printToFirebug(logEntry);
         }
+        return true;
+    }
+    else {
+        return false;
     }
 };
 
@@ -287,5 +291,5 @@ window.onerror = YAHOO.widget.Logger._onWindowError;
 /**
  * First log
  */
-YAHOO.widget.Logger.log(null, "Logger initialized");
+YAHOO.widget.Logger.log("Logger initialized");
 

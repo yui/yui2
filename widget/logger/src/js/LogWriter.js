@@ -22,7 +22,7 @@ YAHOO.widget.LogWriter = function(sName) {
  * @param {string} sCategory Category name
  */
 YAHOO.widget.LogWriter.prototype.log = function(sMsg, sCategory) {
-    YAHOO.widget.Logger.log(this._name, sMsg, sCategory);
+    YAHOO.widget.Logger.log(sMsg, sCategory, this._name);
 };
 
 /***************************************************************************
