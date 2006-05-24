@@ -268,7 +268,7 @@ function printfire() {
 YAHOO.widget.Logger._onWindowError = function(msg,url,line) {
     // Logger is not in scope of this event handler
     try {
-        YAHOO.widget.Logger.log(null, msg+' ('+url+', line '+line+')', "window");
+        YAHOO.widget.Logger.log(msg+' ('+url+', line '+line+')', "window");
         if(YAHOO.widget.Logger._origOnWindowError) {
             YAHOO.widget.Logger._origOnWindowError();
         }
