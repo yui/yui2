@@ -1,8 +1,8 @@
 /* ylogger default styles */
 /* font size is controlled here: default 77% */
 #ylogger {position:absolute;top:1em;right:1em;font-size:77%;}
-/* width is controlled here: default 30em */
-.ylogger {padding:1em;width:30em;background-color:#AAA;border:1px solid black;font-family:monospace;z-index:9000;}
+/* width is controlled here: default 31em */
+.ylogger {padding:1em;width:31em;background-color:#AAA;border:1px solid black;font-family:monospace;z-index:9000;}
 .ylogger p {margin:1px;padding:.1em;}
 .ylogger button {font-family:monospace;}
 .ylogger .ylog_hd {position:relative;margin-top:1em;padding:.5em;background-color:#575757;color:#FFF;}
