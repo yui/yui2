@@ -28,26 +28,26 @@ YAHOO.widget.Logger = {
  * array:<br>
  *     - args[0] The category name
  */
-YAHOO.widget.Logger.categoryCreateEvent = new YAHOO.util.CustomEvent("categoryCreate");
+YAHOO.widget.Logger.categoryCreateEvent = new YAHOO.util.CustomEvent("categoryCreate", this, true);
 
 /**
  * Fired when a new name has been created. Subscribers receive the following
  * array:<br>
  *     - args[0] The class name
  */
-YAHOO.widget.Logger.nameCreateEvent = new YAHOO.util.CustomEvent("nameCreate");
+YAHOO.widget.Logger.nameCreateEvent = new YAHOO.util.CustomEvent("nameCreate", this, true);
 
 /**
  * Fired when a new log message has been created. Subscribers receive the
  * following array:<br>
  *     - args[0] The log message
  */
-YAHOO.widget.Logger.newLogEvent = new YAHOO.util.CustomEvent("newLog");
+YAHOO.widget.Logger.newLogEvent = new YAHOO.util.CustomEvent("newLog", this, true);
 
 /**
  * Fired when the Logger has been reset has been created.
  */
-YAHOO.widget.Logger.logResetEvent = new YAHOO.util.CustomEvent("logReset");
+YAHOO.widget.Logger.logResetEvent = new YAHOO.util.CustomEvent("logReset", this, true);
 
 /***************************************************************************
  * Public methods
