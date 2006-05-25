@@ -47,13 +47,13 @@ YAHOO.namespace = function( ns ) {
  * @param  {string}  sCategory  The log category for the message.  Default
  *                              categories are "info", "warn", "error", time".
  *                              Custom categories can be used as well. (opt)
- * @param  {string}  sName      The name of the module generating the message (opt)
+ * @param  {string}  sSource    The name of the module generating the message (opt)
  * @return {boolean}            True if the log operation was successful.
  */
-YAHOO.log = function(sMsg, sCategory, sName) {
+YAHOO.log = function(sMsg, sCategory, sSource) {
     var l = YAHOO.widget.Logger;
     if(l && l.log) {
-        return l.log(sMsg, sCategory);
+        return l.log(sMsg, sCategory, sSource);
     } else {
         return false;
     }
