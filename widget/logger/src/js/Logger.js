@@ -14,7 +14,7 @@ YAHOO.widget.Logger = {
     loggerEnabled: true,
     _firebugEnabled: true,
     categories: ["info","warn","error","time","window"],
-    names: ["global"],
+    sources: ["global"],
     _stack: [], // holds all log msgs
     _startTime: new Date().getTime(), // static start timestamp
     _lastTime: this._startTime // timestamp of last logged message
@@ -31,11 +31,11 @@ YAHOO.widget.Logger = {
 YAHOO.widget.Logger.categoryCreateEvent = new YAHOO.util.CustomEvent("categoryCreate", this, true);
 
 /**
- * Fired when a new name has been created. Subscribers receive the following
+ * Fired when a new source has been named. Subscribers receive the following
  * array:<br>
- *     - args[0] The class name
+ *     - args[0] The source name
  */
-YAHOO.widget.Logger.nameCreateEvent = new YAHOO.util.CustomEvent("nameCreate", this, true);
+YAHOO.widget.Logger.sourceCreateEvent = new YAHOO.util.CustomEvent("sourceCreate", this, true);
 
 /**
  * Fired when a new log message has been created. Subscribers receive the
@@ -54,14 +54,15 @@ YAHOO.widget.Logger.logResetEvent = new YAHOO.util.CustomEvent("logReset", this,
  ***************************************************************************/
 /**
  * Saves a log message to the stack and fires newLogEvent. If the log message is
- * assigned to an unknown category, creates a new category. If Firebug is enabled,
+ * assigned to an unknown category, creates a new category. If the log message is
+ * from an unknown source, creates a new source.  If Firebug is enabled,
  * outputs the log message to Firebug.
  *
  * @param {string} sMsg The log message
  * @param {string} sCategory Category of log message, or null
- * @param {string} sName Name of LogWriter, or null if none
+ * @param {string} sSource Source of LogWriter, or null if global
  */
-YAHOO.widget.Logger.log = function(sMsg, sCategory, sName) {
+YAHOO.widget.Logger.log = function(sMsg, sCategory, sSource) {
     if(this.loggerEnabled) {
         if(!sCategory) {
             sCategory = "info"; // default category
@@ -69,18 +70,18 @@ YAHOO.widget.Logger.log = function(sMsg, sCategory, sName) {
         else if(this._isNewCategory(sCategory)) {
             this._createNewCategory(sCategory);
         }
-        if(!sName) {
-            sName = "global"; // default namespace
+        if(!sSource) {
+            sSource = "global"; // default source
         }
-        else if(this._isNewName(sName)) {
-            this._createNewName(sName);
+        else if(this._isNewSource(sSource)) {
+            this._createNewSource(sSource);
         }
 
         var timestamp = new Date();
         var logEntry = {
             time: timestamp,
             category: sCategory,
-            name: sName,
+            source: sSource,
             msg: sMsg
         };
 
@@ -174,27 +175,27 @@ YAHOO.widget.Logger._isNewCategory = function(category) {
 };
 
 /**
- * Creates a new name for log messages and fires nameCreateEvent.
+ * Creates a new source of log messages and fires sourceCreateEvent.
  *
- * @param {string} name Class name
+ * @param {string} source Source name
  * @private
  */
-YAHOO.widget.Logger._createNewName = function(name) {
-    this.names.push(name);
-    this.nameCreateEvent.fire(name);
+YAHOO.widget.Logger._createNewSource = function(source) {
+    this.sources.push(source);
+    this.sourceCreateEvent.fire(source);
 };
 
 /**
- * Checks to see if a name has already been created.
+ * Checks to see if a source has already been created.
  *
- * @param {string} name Class name
- * @return {boolean} Returns true if name is unknown, else returns false
+ * @param {string} source Source name
+ * @return {boolean} Returns true if source is unknown, else returns false
  * @private
  */
-YAHOO.widget.Logger._isNewName = function(name) {
-    if(name) {
-        for(var i=0; i < this.names.length; i++) {
-            if(name == this.names[i]) {
+YAHOO.widget.Logger._isNewSource = function(source) {
+    if(source) {
+        for(var i=0; i < this.sources.length; i++) {
+            if(source == this.sources[i]) {
                 return false;
             }
         }
@@ -224,12 +225,10 @@ YAHOO.widget.Logger._printToFirebug = function(entry) {
     var elapsedTime = msecs - this._lastTime;
     this._lastTime = msecs;
     
-    var name = (entry.name) ? entry.name + ": " : "";
-
     var output = "<span class='"+category+"'>"+label+"</span> " +
         localTime + " (" +
         elapsedTime + "): " +
-        name +
+        entry.source + ": " +
         entry.msg;
 
     this._firebugEnabled = printfire(output);

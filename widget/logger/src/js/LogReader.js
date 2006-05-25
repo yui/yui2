@@ -131,8 +131,8 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
 
             this._categoryFiltersEl = this._ftEl.appendChild(document.createElement("div"));
             this._categoryFiltersEl.className = "ylog_categoryfilters";
-            this._nameFiltersEl = this._ftEl.appendChild(document.createElement("div"));
-            this._nameFiltersEl.className = "ylog_namefilters";
+            this._sourceFiltersEl = this._ftEl.appendChild(document.createElement("div"));
+            this._sourceFiltersEl.className = "ylog_sourcefilters";
         }
     }
 
@@ -151,16 +151,16 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
             this._createCategoryCheckbox(YAHOO.widget.Logger.categories[i]);
         }
     }
-    // Initialize name filters
-    this._nameFilters = [];
-    var namesLen = YAHOO.widget.Logger.names.length;
-    if(this._nameFiltersEl) {
-        for(var j=0; j < namesLen; j++) {
-            this._createNameCheckbox(YAHOO.widget.Logger.names[j]);
+    // Initialize source filters
+    this._sourceFilters = [];
+    var sourcesLen = YAHOO.widget.Logger.sources.length;
+    if(this._sourceFiltersEl) {
+        for(var j=0; j < sourcesLen; j++) {
+            this._createSourceCheckbox(YAHOO.widget.Logger.sources[j]);
         }
     }
     YAHOO.widget.Logger.categoryCreateEvent.subscribe(this._onCategoryCreate, this);
-    YAHOO.widget.Logger.nameCreateEvent.subscribe(this._onNameCreate, this);
+    YAHOO.widget.Logger.sourceCreateEvent.subscribe(this._onSourceCreate, this);
 
     YAHOO.widget.LogReader._index++;
     this._filterLogs();
@@ -347,12 +347,12 @@ YAHOO.widget.LogReader.prototype._timeout = null;
 YAHOO.widget.LogReader.prototype._categoryFilters = null;
 
 /**
- * Array of filters for log message names.
+ * Array of filters for log message sources.
  *
  * @type array
  * @private
  */
-YAHOO.widget.LogReader.prototype._nameFilters = null;
+YAHOO.widget.LogReader.prototype._sourceFilters = null;
 
 /**
  * Log reader container element.
@@ -427,12 +427,12 @@ YAHOO.widget.LogReader.prototype._btnsEl = null;
 YAHOO.widget.LogReader.prototype._categoryFiltersEl = null;
 
 /**
- * Container element for log reader name filter checkboxes.
+ * Container element for log reader source filter checkboxes.
  *
  * @type HTMLElement
  * @private
  */
-YAHOO.widget.LogReader.prototype._nameFiltersEl = null;
+YAHOO.widget.LogReader.prototype._sourceFiltersEl = null;
 
 /**
  * Log reader pause button element.
@@ -487,33 +487,33 @@ YAHOO.widget.LogReader.prototype._createCategoryCheckbox = function(category) {
     }
 };
 
-YAHOO.widget.LogReader.prototype._createNameCheckbox = function(name) {
+YAHOO.widget.LogReader.prototype._createSourceCheckbox = function(source) {
     var oSelf = this;
 
     if(this._ftEl) {
-        var parentEl = this._nameFiltersEl;
-        var filters = this._nameFilters;
+        var parentEl = this._sourceFiltersEl;
+        var filters = this._sourceFilters;
 
         var filterEl = parentEl.appendChild(document.createElement("span"));
         filterEl.className = "ylog_filtergrp";
 
         // Append el at the end so IE 5.5 can set "type" attribute
-        var nameChk = document.createElement("input");
-        nameChk.className = "ylog_filter" + name;
-        nameChk.type = "checkbox";
-        nameChk.name = name;
-        nameChk.checked = true;
-        nameChk = filterEl.appendChild(nameChk);
+        var sourceChk = document.createElement("input");
+        sourceChk.className = "ylog_filter" + source;
+        sourceChk.type = "checkbox";
+        sourceChk.source = source;
+        sourceChk.checked = true;
+        sourceChk = filterEl.appendChild(sourceChk);
 
         // Add this checked filter to the internal array of filters
-        filters.push(name);
+        filters.push(source);
         // Subscribe to the click event
-        YAHOO.util.Event.addListener(nameChk,'click',oSelf._onCheckName,oSelf);
+        YAHOO.util.Event.addListener(sourceChk,'click',oSelf._onCheckSource,oSelf);
 
         // Create and class the text label
-        var nameChkLbl = filterEl.appendChild(document.createElement("span"));
-        nameChkLbl.className = name;
-        nameChkLbl.innerHTML = name;
+        var sourceChkLbl = filterEl.appendChild(document.createElement("span"));
+        sourceChkLbl.className = source;
+        sourceChkLbl.innerHTML = source;
     }
 };
 
@@ -579,25 +579,25 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
 //TODO: much optimization here
 //if !compactOutput, set fixed widths for time output
     var entriesLen = aEntries.length;
-    var nameFiltersLen = this._nameFilters.length;
+    var sourceFiltersLen = this._sourceFilters.length;
     var categoryFiltersLen = this._categoryFilters.length;
     // Iterate through all log entries to print the ones that filter through
     for(var i=0; i<entriesLen; i++) {
         var entry = aEntries[i];
-        var category = (entry.category) ? entry.category : null;
-        var name = (entry.name) ? entry.name : null;
+        var category = entry.category;
+        var source = entry.source;
         var okToPrint = false;
         var okToFilterCats = false;
 
-        for(var j=0; j<nameFiltersLen; j++) {
-            if(name == this._nameFilters[j]) {
+        for(var j=0; j<sourceFiltersLen; j++) {
+            if(source == this._sourceFilters[j]) {
                 okToFilterCats = true;
                 break;
             }
         }
         if(okToFilterCats) {
             for(var k=0; k<categoryFiltersLen; k++) {
-                if(category && (category == this._categoryFilters[k])) {
+                if(category == this._categoryFilters[k]) {
                     okToPrint = true;
                     break;
                 }
@@ -607,7 +607,7 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
             // To format for console, calculate the elapsed time
             // to be from the last item that passed through the filter,
             // not the absolute previous item in the stack
-            var label = category.substring(0,4).toUpperCase();
+            var label = entry.category.substring(0,4).toUpperCase();
 
             var time = entry.time;
             if (time.toLocaleTimeString) {
@@ -622,8 +622,6 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
             var totalTime = msecs - startTime;
             var elapsedTime = msecs - this._lastTime;
             this._lastTime = msecs;
-
-            var name = (entry.name) ? entry.name + ": " : "";
             
             var compactOutput = (this.compactOutput) ? "" : "<br>";
 
@@ -631,7 +629,8 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
                 totalTime + " ms (+" +
                 elapsedTime + ") " + localTime + ": " +
                 compactOutput+
-                name + entry.msg;
+                source + ": "
+                + entry.msg;
 
             var oNewElement = (this.newestOnTop) ?
                 this._consoleEl.insertBefore(document.createElement("p"),this._consoleEl.firstChild):
@@ -663,17 +662,17 @@ YAHOO.widget.LogReader.prototype._onCategoryCreate = function(type, args, oSelf)
 };
 
 /**
- * Handles Logger's nameCreateEvent.
+ * Handles Logger's sourceCreateEvent.
  *
  * @param {string} type The event
  * @param {array} args Data passed from event firer
  * @param {object} oSelf The log reader instance
  * @private
  */
-YAHOO.widget.LogReader.prototype._onNameCreate = function(type, args, oSelf) {
-    var name = args[0];
+YAHOO.widget.LogReader.prototype._onSourceCreate = function(type, args, oSelf) {
+    var source = args[0];
     if(oSelf._ftEl) {
-        oSelf._createNameCheckbox(name);
+        oSelf._createSourceCheckbox(source);
     }
 };
 
@@ -709,9 +708,9 @@ YAHOO.widget.LogReader.prototype._onCheckCategory = function(v, oSelf) {
  * @param {object} oSelf The log reader instance
  * @private
  */
-YAHOO.widget.LogReader.prototype._onCheckName = function(v, oSelf) {
-    var newFilter = this.name;
-    var filtersArray = oSelf._nameFilters;
+YAHOO.widget.LogReader.prototype._onCheckSource = function(v, oSelf) {
+    var newFilter = this.source;
+    var filtersArray = oSelf._sourceFilters;
     
     if(!this.checked) { // Remove category from filters
         for(var i=0; i<filtersArray.length; i++) {

@@ -6,35 +6,35 @@
  * named source.
  *
  * @constructor
- * @param {string} sName Name of LogWriter instance
+ * @param {string} sSource Source of LogWriter instance
  */
-YAHOO.widget.LogWriter = function(sName) {
-    this._name = sName;
+YAHOO.widget.LogWriter = function(sSource) {
+    this._source = sSource;
  };
 
 /***************************************************************************
  * Public methods
  ***************************************************************************/
 /**
- * Logs a message attached to the name of the LogWriter.
+ * Logs a message attached to the source of the LogWriter.
  *
  * @param {string} sMsg The log message
  * @param {string} sCategory Category name
  */
 YAHOO.widget.LogWriter.prototype.log = function(sMsg, sCategory) {
-    YAHOO.widget.Logger.log(sMsg, sCategory, this._name);
+    YAHOO.widget.Logger.log(sMsg, sCategory, this._source);
 };
 
 /***************************************************************************
  * Private members
  ***************************************************************************/
 /**
- * Name of the log writer instance.
+ * Source of the log writer instance.
  *
  * @type string
  * @private
  */
-YAHOO.widget.LogWriter.prototype._name = null;
+YAHOO.widget.LogWriter.prototype._source = null;
 
 
 
