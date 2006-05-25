@@ -18,7 +18,28 @@ version: 0.10.0
  *                 the window object.  The listener can override this.
  * @constructor
  */
-YAHOO.util.CustomEvent = function(type, oScope) {
+YAHOO.util.CustomEvent = function(type, oScope, silent) {
+
+    // YAHOO.log("New Event '" + type + "', defined by: " + YAHOO.util.CustomEvent.caller);
+    // YAHOO.log("New Event '" + type + "', defined by: " + arguments.callee.caller);
+    // YAHOO.log("New Event '" + type + "', defined by: " + arguments.callee);
+    //YAHOO.log("New Event '" + type + "', scope: " + oScope);
+    // YAHOO.log("New Event '" + type + "', defined by: " + 
+            // Object.prototype.toString.call(oScope));
+
+    // var getContext = function() {
+        // return this;
+    // };
+
+    // YAHOO.log("New Event '" + type + "', defined by: " + getContext.call(oScope));
+    // YAHOO.log("New Event '" + type + "', defined by: " + 
+            // getContext.call(arguments.callee.caller));
+
+    //YAHOO.log( "New Event '" + type + "', scope: " + oScope + ", caller" +
+     //          getContext.call(YAHOO.util.CustomEvent.caller) );
+
+    // YAHOO.log( "New Event '" + type + "', scope: " + oScope );
+
     /**
      * The type of event, returned to subscribers when the event fires
      * @type string
@@ -33,6 +54,13 @@ YAHOO.util.CustomEvent = function(type, oScope) {
     this.scope = oScope || window;
 
     /**
+     * By default all custom events are logged in the debug build, set silent
+     * to true to disable logging for this event.
+     * @type boolean
+     */
+    this.silent = silent;
+
+    /**
      * The subscribers to this event
      * @type Subscriber[]
      */
@@ -42,6 +70,10 @@ YAHOO.util.CustomEvent = function(type, oScope) {
     // so that CustomEvent can be used independently of pe.event
     if (YAHOO.util.Event) { 
         YAHOO.util.Event.regCE(this);
+    }
+
+    if (!this.silent) {
+        YAHOO.log( "Creating " + this, "info", "CE" );
     }
 };
 
@@ -89,11 +121,30 @@ YAHOO.util.CustomEvent.prototype = {
      * @param {Array} an arbitrary set of parameters to pass to the handler
      */
     fire: function() {
-        for (var i=0, len=this.subscribers.length; i<len; ++i) {
+        var len=this.subscribers.length;
+
+        var args = [];
+
+        for (var i=0; i<arguments.length; ++i) {
+            args.push(arguments[i]);
+        }
+
+
+        if (!this.silent) {
+            YAHOO.log( "Firing "       + this       + ", " + 
+                       "args: "        + args  + ", " +
+                       "subscribers: " + len,                 
+                       "info", "CE"                          );
+        }
+
+        for (i=0; i<len; ++i) {
             var s = this.subscribers[i];
             if (s) {
+                if (!this.silent) {
+                    YAHOO.log( (i+1) + ": " +  s, "info", "CE" );
+                }
                 var scope = (s.override) ? s.obj : this.scope;
-                s.fn.call(scope, this.type, arguments, s.obj);
+                s.fn.call(scope, this.type, args, s.obj);
             }
         }
     },
@@ -118,6 +169,12 @@ YAHOO.util.CustomEvent.prototype = {
         }
 
         delete this.subscribers[index];
+    },
+
+    toString: function() {
+         return "Evt: " + "'" + this.type  + "', " + 
+             "scope: " + this.scope;
+
     }
 };
 
@@ -168,6 +225,9 @@ YAHOO.util.Subscriber.prototype.contains = function(fn, obj) {
     return (this.fn == fn && this.obj == obj);
 };
 
+YAHOO.util.Subscriber.prototype.toString = function() {
+    return "Subscriber, obj: " + (this.obj || "")  + ", override: " +  (this.override || "no");
+};
 /* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
 
 // Only load this library once.  If it is loaded a second time, existing
