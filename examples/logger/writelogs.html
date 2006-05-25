@@ -20,8 +20,8 @@
         <h3>Writing Log Messages From Your Code</h3>
         <p>In this example, we instanatiate a simple LogReader to display log
         messages. We use the global method YAHOO.log() to write simple messages,
-        and we also instantiate a LogWriter instance to write messages that are
-        assigned to custom-named class.</p>
+        and we also instantiate a LogWriter instance to write messages from a
+        custom-named source.</p>
 
         <p><input id="ylog_inputinfo" class="ylog_input" type="text" value="Log an info message.">
             <button id="btn_loginfo">Log this message</button></p>
@@ -37,8 +37,8 @@
             <input id="ylog_inputcustomtype" type="text" value="myCategory">
             <button id="btn_logcustom">Log this message with this category</button></p>
 
-        <p><input id="ylog_inputname" class="ylog_input" type="text" value="CustomWriter">
-            <button id="btn_logname">Generate some messages from a named writer</button></p>
+        <p><input id="ylog_inputsource" class="ylog_input" type="text" value="CustomSource">
+            <button id="btn_logsource">Generate some messages from a named source</button></p>
 
         <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
         Sed eu enim in neque nonummy suscipit. Sed non metus. Aliquam pretium, massa
@@ -85,7 +85,6 @@ YAHOO.example.LogWriter = function() {
             YAHOO.log("Here is a warning", "warn");
             YAHOO.log("Some error has occurred", "error");
             YAHOO.log("Use timers to profile your code", "time");
-            YAHOO.log("Let's make up a custom category!", "foobar"); // custom
 
             // Define interesting moments that cause log messages to be written
             var oSelf = YAHOO.example.LogWriter;
@@ -94,7 +93,7 @@ YAHOO.example.LogWriter = function() {
             YAHOO.util.Event.addListener(document.getElementById('btn_logerror'),'click',oSelf.onLogErrorClick);
             YAHOO.util.Event.addListener(document.getElementById('btn_logtime'),'click',oSelf.onLogTimeClick);
             YAHOO.util.Event.addListener(document.getElementById('btn_logcustom'),'click',oSelf.onLogCustomClick);
-            YAHOO.util.Event.addListener(document.getElementById('btn_logname'),'click',oSelf.onNameWriterClick);
+            YAHOO.util.Event.addListener(document.getElementById('btn_logsource'),'click',oSelf.onSourceWriterClick);
         },
 
         hideAllReaders: function() {
@@ -105,18 +104,18 @@ YAHOO.example.LogWriter = function() {
             myLogReader.show();
         },
 
-        createNewLogWriter: function(name) {
+        createNewLogWriter: function(source) {
             // You can instantiate your own named logwriter and use it to write log messages
-            var newWriter = new YAHOO.widget.LogWriter(name);
+            var newWriter = new YAHOO.widget.LogWriter(source);
             newWriter.log("Doing great!"); // defaults to type "info"
             newWriter.log("Giving a warning", "warn");
             newWriter.log("Throwing an error", "error");
             newWriter.log("Timing some code", "time");
-            newWriter.log("Need custom category", name+"error");
+            newWriter.log("Need custom category", source+"error");
         },
 
-        onNameWriterClick: function() {
-            YAHOO.example.LogWriter.createNewLogWriter(document.getElementById('ylog_inputname').value);
+        onSourceWriterClick: function() {
+            YAHOO.example.LogWriter.createNewLogWriter(document.getElementById('ylog_inputsource').value);
         },
 
         onLogInfoClick: function() {
