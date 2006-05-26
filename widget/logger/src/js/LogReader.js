@@ -47,6 +47,9 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         }
 
         // If implementer has provided container values, trust and set those
+        if(this.width) {
+            this._containerEl.style.width = this.width;
+        }
         if(this.left) {
             this._containerEl.style.left = this.left;
         }
