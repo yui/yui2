@@ -471,12 +471,13 @@ YAHOO.widget.LogReader.prototype._createCategoryCheckbox = function(category) {
         var filterEl = parentEl.appendChild(document.createElement("span"));
         filterEl.className = "ylog_filtergrp";
             // Append el at the end so IE 5.5 can set "type" attribute
+            // and THEN set checked property
             var categoryChk = document.createElement("input");
             categoryChk.className = "ylog_filter" + category;
             categoryChk.type = "checkbox";
             categoryChk.category = category;
-            categoryChk.checked = true;
             categoryChk = filterEl.appendChild(categoryChk);
+            categoryChk.checked = true;
 
             // Add this checked filter to the internal array of filters
             filters.push(category);
@@ -501,12 +502,13 @@ YAHOO.widget.LogReader.prototype._createSourceCheckbox = function(source) {
         filterEl.className = "ylog_filtergrp";
 
         // Append el at the end so IE 5.5 can set "type" attribute
+        // and THEN set checked property
         var sourceChk = document.createElement("input");
         sourceChk.className = "ylog_filter" + source;
         sourceChk.type = "checkbox";
         sourceChk.source = source;
-        sourceChk.checked = true;
         sourceChk = filterEl.appendChild(sourceChk);
+        sourceChk.checked = true;
 
         // Add this checked filter to the internal array of filters
         filters.push(source);
