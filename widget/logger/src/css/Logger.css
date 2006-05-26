@@ -5,12 +5,12 @@
 .ylogger {padding:1em;width:31em;background-color:#AAA;border:1px solid black;font-family:monospace;z-index:9000;}
 .ylogger p {margin:1px;padding:.1em;}
 .ylogger button {font-family:monospace;}
-.ylogger .ylog_hd {position:relative;margin-top:1em;padding:.5em;background-color:#575757;color:#FFF;}
+.ylogger .ylog_hd {margin-top:1em;padding:.5em;background-color:#575757;color:#FFF;}
 /* height is controlled here: default 20em*/
-.ylogger .ylog_bd {position:relative;background-color:#FFF;border:1px solid gray;overflow:auto;width:100%;height:20em;}
-.ylogger .ylog_ft {position:relative;margin-top:.5em;margin-bottom:1em;}
+.ylogger .ylog_bd {width:100%;height:20em;background-color:#FFF;border:1px solid gray;overflow:auto;}
+.ylogger .ylog_ft {margin-top:.5em;margin-bottom:1em;}
 .ylogger .ylog_ft .ylog_categoryfilters {}
-.ylogger .ylog_ft .ylog_sourcefilters {width:100%;border-top:1px solid #575757;margin-top:.25em;padding-top:.25em;}
+.ylogger .ylog_ft .ylog_sourcefilters {width:100%;border-top:1px solid #575757;margin-top:.75em;padding-top:.75em;}
 .ylogger .ylog_btns {position:relative;float:right;bottom:.25em;}
 .ylogger .ylog_filtergrp {margin-right:.5em;}
 .ylogger .info {background-color:#A7CC25;} /* A7CC25 green */
