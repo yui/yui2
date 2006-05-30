@@ -70,18 +70,28 @@ YAHOO.widget.Logger.log = function(sMsg, sCategory, sSource) {
         else if(this._isNewCategory(sCategory)) {
             this._createNewCategory(sCategory);
         }
-        if(!sSource) {
-            sSource = "global"; // default source
-        }
-        else if(this._isNewSource(sSource)) {
-            this._createNewSource(sSource);
+        var sClass = "global"; // default source
+        var sDetail = null;
+        if(sSource) {
+            var spaceIndex = sSource.indexOf(" ");
+            if(spaceIndex > 0) {
+                sClass = sSource.substring(0,spaceIndex);// substring until first space
+                sDetail = sSource.substring(spaceIndex,sSource.length);// the rest of the source
+            }
+            else {
+                sClass = sSource
+            }
+            if(this._isNewSource(sClass)) {
+                this._createNewSource(sClass);
+            }
         }
 
         var timestamp = new Date();
         var logEntry = {
             time: timestamp,
             category: sCategory,
-            source: sSource,
+            source: sClass,
+            sourceDetail: sDetail,
             msg: sMsg
         };
 

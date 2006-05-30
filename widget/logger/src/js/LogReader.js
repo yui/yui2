@@ -173,77 +173,79 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
  * Public members
  ***************************************************************************/
 /**
- * Whether or not the log reader is enabled to output log messages.
+ * Whether or not the log reader is enabled to output log messages. Default:
+ * true.
  *
  * @type boolean
  */
 YAHOO.widget.LogReader.prototype.logReaderEnabled = true;
 
 /**
- * CSS width of the log reader container.
+ * Public member to access CSS width of the log reader container.
  *
  * @type string
  */
 YAHOO.widget.LogReader.prototype.width = null;
 
 /**
- * CSS height of the log reader container.
+ * Public member to access CSS height of the log reader container.
  *
  * @type string
  */
 YAHOO.widget.LogReader.prototype.height = null;
 
 /**
- * CSS top position of the log reader container.
+ * Public member to access CSS top position of the log reader container.
  *
  * @type string
  */
 YAHOO.widget.LogReader.prototype.top = null;
 
 /**
- * CSS left position of the log reader container.
+ * Public member to access CSS left position of the log reader container.
  *
  * @type string
  */
 YAHOO.widget.LogReader.prototype.left = null;
 
 /**
- * CSS right position of the log reader container.
+ * Public member to access CSS right position of the log reader container.
  *
  * @type string
  */
 YAHOO.widget.LogReader.prototype.right = null;
 
 /**
- * CSS bottom position of the log reader container.
+ * Public member to access CSS bottom position of the log reader container.
  *
  * @type string
  */
 YAHOO.widget.LogReader.prototype.bottom = null;
 
 /**
- * CSS font size of the log reader container.
+ * Public member to access CSS font size of the log reader container.
  *
  * @type string
  */
 YAHOO.widget.LogReader.prototype.fontSize = null;
 
 /**
- * Whether or not the footer UI is enabled for the log reader.
+ * Whether or not the footer UI is enabled for the log reader. Default: true.
  *
  * @type boolean
  */
 YAHOO.widget.LogReader.prototype.footerEnabled = true;
 
 /**
- * Whether or not output is compact (less readable).
+ * Whether or not output is verbose (more readable). Setting to true will make
+ * output more compact (less readable). Default: true.
  *
  * @type boolean
  */
-YAHOO.widget.LogReader.prototype.compact = true;
+YAHOO.widget.LogReader.prototype.verboseOutput = true;
 
 /**
- * Whether or not newest message is printed on top.
+ * Whether or not newest message is printed on top. Default: true.
  *
  * @type boolean
  */
@@ -582,7 +584,7 @@ YAHOO.widget.LogReader.prototype._printBuffer = function() {
  */
 YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
 //TODO: much optimization here
-//if !compactOutput, set fixed widths for time output
+//if verboseOutput, set fixed widths for time output
     var entriesLen = aEntries.length;
     var sourceFiltersLen = this._sourceFilters.length;
     var categoryFiltersLen = this._categoryFilters.length;
@@ -591,6 +593,7 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
         var entry = aEntries[i];
         var category = entry.category;
         var source = entry.source;
+        var sourceDetail = entry.sourceDetail;
         var okToPrint = false;
         var okToFilterCats = false;
 
@@ -628,14 +631,16 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
             var elapsedTime = msecs - this._lastTime;
             this._lastTime = msecs;
             
-            var compactOutput = (this.compactOutput) ? "" : "<br>";
+            var verboseOutput = (this.verboseOutput) ? "<br>" : "";
+            var sourceAndDetail = (sourceDetail) ? source + " " + sourceDetail :
+                source;
 
             var output =  "<span class='"+category+"'>"+label+"</span> " +
                 totalTime + " ms (+" +
                 elapsedTime + ") " + localTime + ": " +
-                compactOutput+
-                source + ": "
-                + entry.msg;
+                sourceAndDetail + ": " +
+                verboseOutput +
+                entry.msg;
 
             var oNewElement = (this.newestOnTop) ?
                 this._consoleEl.insertBefore(document.createElement("p"),this._consoleEl.firstChild):
