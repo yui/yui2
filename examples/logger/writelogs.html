@@ -37,7 +37,7 @@
             <input id="ylog_inputcustomtype" type="text" value="myCategory">
             <button id="btn_logcustom">Log this message with this category</button></p>
 
-        <p><input id="ylog_inputsource" class="ylog_input" type="text" value="CustomSource">
+        <p><input id="ylog_inputsource" class="ylog_input" type="text" value="SomeClass instance1">
             <button id="btn_logsource">Generate some messages from a named source</button></p>
 
         <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
@@ -111,7 +111,6 @@ YAHOO.example.LogWriter = function() {
             newWriter.log("Giving a warning", "warn");
             newWriter.log("Throwing an error", "error");
             newWriter.log("Timing some code", "time");
-            newWriter.log("Need custom category", source+"error");
         },
 
         onSourceWriterClick: function() {
