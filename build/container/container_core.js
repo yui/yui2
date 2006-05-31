@@ -1068,7 +1068,7 @@ http://developer.yahoo.net/yui/license.txt
 */
 YAHOO.widget.Overlay = function(el, userConfig) {
 	if (arguments.length > 0) {
-		YAHOO.widget.Overlay.superclass.constructor.call(this, el, userConfig);
+		this.superclass.constructor.call(this, el, userConfig);
 	}
 }
 
@@ -1080,7 +1080,7 @@ YAHOO.widget.Overlay.prototype.constructor = YAHOO.widget.Overlay;
 * @type class
 * @final
 */
-YAHOO.widget.Overlay.superclass = YAHOO.widget.Module.prototype;
+YAHOO.widget.Overlay.prototype.superclass = YAHOO.widget.Module.prototype;
 
 /**
 * The URL of the blank image that will be placed in the iframe
@@ -1145,7 +1145,7 @@ YAHOO.widget.Overlay.prototype.moveEvent = null;
 * @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
 */
 YAHOO.widget.Overlay.prototype.init = function(el, userConfig) {
-	YAHOO.widget.Overlay.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
+	this.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
 	
 	this.beforeInitEvent.fire(YAHOO.widget.Overlay);
 
@@ -1172,7 +1172,7 @@ YAHOO.widget.Overlay.prototype.init = function(el, userConfig) {
 * Initializes the custom events for Overlay which are fired automatically at appropriate times by the Overlay class.
 */
 YAHOO.widget.Overlay.prototype.initEvents = function() {
-	YAHOO.widget.Overlay.superclass.initEvents.call(this);
+	this.superclass.initEvents.call(this);
 
 	this.beforeMoveEvent = new YAHOO.util.CustomEvent("beforeMove", this);
 	this.moveEvent = new YAHOO.util.CustomEvent("move", this);
@@ -1182,7 +1182,7 @@ YAHOO.widget.Overlay.prototype.initEvents = function() {
 * Initializes the class's configurable properties which can be changed using the Overlay's Config object (cfg).
 */
 YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
-	YAHOO.widget.Overlay.superclass.initDefaultConfig.call(this);
+	this.superclass.initDefaultConfig.call(this);
 
 	// Add overlay config properties //
 	this.cfg.addProperty("x", { handler:this.configX, validator:this.cfg.checkNumber, suppressEvent:true, supercedes:["iframe"] } );
@@ -1491,11 +1491,8 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 				YAHOO.util.Dom.setStyle(this.iframe, "opacity", "0");
 			}
 
-			// YAHOO.util.Dom.setStyle(this.iframe, "left", x-2 + "px");
-			// YAHOO.util.Dom.setStyle(this.iframe, "top", y-2 + "px");
-
 			YAHOO.util.Dom.setXY(this.iframe, [x,y]);
-			
+
 			var width = el.clientWidth;
 			var height = el.clientHeight;
 
@@ -1698,9 +1695,22 @@ YAHOO.widget.Overlay.prototype.syncPosition = function() {
 * Event handler fired when the resize monitor element is resized.
 */
 YAHOO.widget.Overlay.prototype.onDomResize = function(e, obj) {
-	YAHOO.widget.Overlay.superclass.onDomResize.call(this, e, obj);
+	this.superclass.onDomResize.call(this, e, obj);
 	this.cfg.refireEvent("iframe");
 }
+
+/**
+* Removes the Overlay element from the DOM and sets all child elements to null.
+*/
+YAHOO.widget.Overlay.prototype.destroy = function() {
+	if (this.iframe) {
+		this.iframe.parentNode.removeChild(this.iframe);
+	}
+	
+	this.iframe = null;
+
+	this.superclass.destroy.call(this);  
+}; 
 
 /**
 * A singleton CustomEvent used for reacting to the DOM event for window scroll

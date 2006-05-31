@@ -1068,7 +1068,7 @@ http://developer.yahoo.net/yui/license.txt
 */
 YAHOO.widget.Overlay = function(el, userConfig) {
 	if (arguments.length > 0) {
-		YAHOO.widget.Overlay.superclass.constructor.call(this, el, userConfig);
+		this.superclass.constructor.call(this, el, userConfig);
 	}
 }
 
@@ -1080,7 +1080,7 @@ YAHOO.widget.Overlay.prototype.constructor = YAHOO.widget.Overlay;
 * @type class
 * @final
 */
-YAHOO.widget.Overlay.superclass = YAHOO.widget.Module.prototype;
+YAHOO.widget.Overlay.prototype.superclass = YAHOO.widget.Module.prototype;
 
 /**
 * The URL of the blank image that will be placed in the iframe
@@ -1145,7 +1145,7 @@ YAHOO.widget.Overlay.prototype.moveEvent = null;
 * @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
 */
 YAHOO.widget.Overlay.prototype.init = function(el, userConfig) {
-	YAHOO.widget.Overlay.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
+	this.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
 	
 	this.beforeInitEvent.fire(YAHOO.widget.Overlay);
 
@@ -1172,7 +1172,7 @@ YAHOO.widget.Overlay.prototype.init = function(el, userConfig) {
 * Initializes the custom events for Overlay which are fired automatically at appropriate times by the Overlay class.
 */
 YAHOO.widget.Overlay.prototype.initEvents = function() {
-	YAHOO.widget.Overlay.superclass.initEvents.call(this);
+	this.superclass.initEvents.call(this);
 
 	this.beforeMoveEvent = new YAHOO.util.CustomEvent("beforeMove", this);
 	this.moveEvent = new YAHOO.util.CustomEvent("move", this);
@@ -1182,7 +1182,7 @@ YAHOO.widget.Overlay.prototype.initEvents = function() {
 * Initializes the class's configurable properties which can be changed using the Overlay's Config object (cfg).
 */
 YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
-	YAHOO.widget.Overlay.superclass.initDefaultConfig.call(this);
+	this.superclass.initDefaultConfig.call(this);
 
 	// Add overlay config properties //
 	this.cfg.addProperty("x", { handler:this.configX, validator:this.cfg.checkNumber, suppressEvent:true, supercedes:["iframe"] } );
@@ -1491,9 +1491,6 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 				YAHOO.util.Dom.setStyle(this.iframe, "opacity", "0");
 			}
 
-			//YAHOO.util.Dom.setStyle(this.iframe, "left", x-2 + "px");
-			//YAHOO.util.Dom.setStyle(this.iframe, "top", y-2 + "px");
-
 			YAHOO.util.Dom.setXY(this.iframe, [x,y]);
 
 			var width = el.clientWidth;
@@ -1698,9 +1695,22 @@ YAHOO.widget.Overlay.prototype.syncPosition = function() {
 * Event handler fired when the resize monitor element is resized.
 */
 YAHOO.widget.Overlay.prototype.onDomResize = function(e, obj) {
-	YAHOO.widget.Overlay.superclass.onDomResize.call(this, e, obj);
+	this.superclass.onDomResize.call(this, e, obj);
 	this.cfg.refireEvent("iframe");
 }
+
+/**
+* Removes the Overlay element from the DOM and sets all child elements to null.
+*/
+YAHOO.widget.Overlay.prototype.destroy = function() {
+	if (this.iframe) {
+		this.iframe.parentNode.removeChild(this.iframe);
+	}
+	
+	this.iframe = null;
+
+	this.superclass.destroy.call(this);  
+}; 
 
 /**
 * A singleton CustomEvent used for reacting to the DOM event for window scroll
@@ -2119,7 +2129,7 @@ http://developer.yahoo.net/yui/license.txt
 */
 YAHOO.widget.Tooltip = function(el, userConfig) {
 	if (arguments.length > 0) {
-		YAHOO.widget.Tooltip.superclass.constructor.call(this, el, userConfig);
+		this.superclass.constructor.call(this, el, userConfig);
 	}
 }
 
@@ -2131,7 +2141,7 @@ YAHOO.widget.Tooltip.prototype.constructor = YAHOO.widget.Tooltip;
 * @type class
 * @final
 */
-YAHOO.widget.Tooltip.superclass = YAHOO.widget.Overlay.prototype;
+YAHOO.widget.Tooltip.prototype.superclass = YAHOO.widget.Overlay.prototype;
 
 /**
 * Constant representing the Tooltip CSS class
@@ -2153,7 +2163,7 @@ YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 		}
 		YAHOO.util.Event.addListener(window, "load", deferredInit, this, true);
 	} else {
-		YAHOO.widget.Tooltip.superclass.init.call(this, el);
+		this.superclass.init.call(this, el);
 
 		this.beforeInitEvent.fire(YAHOO.widget.Tooltip);
 
@@ -2177,7 +2187,7 @@ YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 * Initializes the class's configurable properties which can be changed using the Overlay's Config object (cfg).
 */
 YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
-	YAHOO.widget.Tooltip.superclass.initDefaultConfig.call(this);
+	this.superclass.initDefaultConfig.call(this);
 
 	this.cfg.addProperty("preventoverlap",		{ value:true, handler:this.configPreventOverlap, validator:this.cfg.checkBoolean, supercedes:["x","y","xy"] } );
 
@@ -2370,7 +2380,7 @@ http://developer.yahoo.net/yui/license.txt
 */
 YAHOO.widget.Panel = function(el, userConfig) {
 	if (arguments.length > 0) {
-		YAHOO.widget.Panel.superclass.constructor.call(this, el, userConfig);
+		this.superclass.constructor.call(this, el, userConfig);
 	}
 }
 
@@ -2382,7 +2392,7 @@ YAHOO.widget.Panel.prototype.constructor = YAHOO.widget.Panel;
 * @type class
 * @final
 */
-YAHOO.widget.Panel.superclass = YAHOO.widget.Overlay.prototype;
+YAHOO.widget.Panel.prototype.superclass = YAHOO.widget.Overlay.prototype;
 
 /**
 * Constant representing the default CSS class used for a Panel
@@ -2419,7 +2429,7 @@ YAHOO.widget.Panel.prototype.hideMaskEvent = null;
 * @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
 */
 YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
-	YAHOO.widget.Panel.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
+	this.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
 	
 	this.beforeInitEvent.fire(YAHOO.widget.Panel);
 
@@ -2448,7 +2458,7 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 * Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
 */
 YAHOO.widget.Panel.prototype.initEvents = function() {
-	YAHOO.widget.Panel.superclass.initEvents.call(this);
+	this.superclass.initEvents.call(this);
 
 	this.showMaskEvent = new YAHOO.util.CustomEvent("showMask");
 	this.hideMaskEvent = new YAHOO.util.CustomEvent("hideMask");
@@ -2458,7 +2468,7 @@ YAHOO.widget.Panel.prototype.initEvents = function() {
 * Initializes the class's configurable properties which can be changed using the Panel's Config object (cfg).
 */
 YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
-	YAHOO.widget.Panel.superclass.initDefaultConfig.call(this);
+	this.superclass.initDefaultConfig.call(this);
 
 	// Add panel config properties //
 
@@ -2674,7 +2684,7 @@ YAHOO.widget.Panel.prototype.sizeUnderlay = function() {
 * Event handler fired when the resize monitor element is resized.
 */
 YAHOO.widget.Panel.prototype.onDomResize = function(e, obj) { 
-	YAHOO.widget.Panel.superclass.onDomResize.call(this, e, obj);
+	this.superclass.onDomResize.call(this, e, obj);
 	var me = this;
 	setTimeout(function() {
 		me.sizeUnderlay();
@@ -2836,7 +2846,7 @@ YAHOO.widget.Panel.prototype.configWidth = function(type, args, obj) {
 * @return {boolean} Success or failure of the render
 */
 YAHOO.widget.Panel.prototype.render = function(appendToNode) {
-	return YAHOO.widget.Panel.superclass.render.call(this, appendToNode, this.innerElement);
+	return this.superclass.render.call(this, appendToNode, this.innerElement);
 }
 /**
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
@@ -2851,7 +2861,7 @@ http://developer.yahoo.net/yui/license.txt
 */
 YAHOO.widget.Dialog = function(el, userConfig) {
 	if (arguments.length > 0) {
-		YAHOO.widget.Dialog.superclass.constructor.call(this, el, userConfig);
+		this.superclass.constructor.call(this, el, userConfig);
 	}
 }
 
@@ -2863,7 +2873,7 @@ YAHOO.widget.Dialog.prototype.constructor = YAHOO.widget.Dialog;
 * @type class
 * @final
 */
-YAHOO.widget.Dialog.superclass = YAHOO.widget.Panel.prototype;
+YAHOO.widget.Dialog.prototype.superclass = YAHOO.widget.Panel.prototype;
 
 /**
 * Constant representing the default CSS class used for a Dialog
@@ -2914,7 +2924,7 @@ YAHOO.widget.Dialog.prototype.cancelEvent = null;
 * Initializes the class's configurable properties which can be changed using the Dialog's Config object (cfg).
 */
 YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
-	YAHOO.widget.Dialog.superclass.initDefaultConfig.call(this);
+	this.superclass.initDefaultConfig.call(this);
 
 	/**
 	* The internally maintained callback object for use with the Connection utility
@@ -2977,7 +2987,7 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 * Initializes the custom events for Dialog which are fired automatically at appropriate times by the Dialog class.
 */
 YAHOO.widget.Dialog.prototype.initEvents = function() {
-	YAHOO.widget.Dialog.superclass.initEvents.call(this);
+	this.superclass.initEvents.call(this);
 	
 	this.beforeSubmitEvent	= new YAHOO.util.CustomEvent("beforeSubmit");
 	this.submitEvent		= new YAHOO.util.CustomEvent("submit");
@@ -2996,7 +3006,7 @@ YAHOO.widget.Dialog.prototype.initEvents = function() {
 * @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Dialog. See configuration documentation for more details.
 */
 YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
-	YAHOO.widget.Dialog.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
+	this.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
 	
 	this.beforeInitEvent.fire(YAHOO.widget.Dialog);
 
@@ -3349,7 +3359,7 @@ http://developer.yahoo.net/yui/license.txt
 */
 YAHOO.widget.SimpleDialog = function(el, userConfig) {
 	if (arguments.length > 0) {
-		YAHOO.widget.SimpleDialog.superclass.constructor.call(this, el, userConfig);
+		this.superclass.constructor.call(this, el, userConfig);
 	}
 }
 
@@ -3361,7 +3371,7 @@ YAHOO.widget.SimpleDialog.prototype.constructor = YAHOO.widget.SimpleDialog;
 * @type class
 * @final
 */
-YAHOO.widget.SimpleDialog.superclass = YAHOO.widget.Dialog.prototype;
+YAHOO.widget.SimpleDialog.prototype.superclass = YAHOO.widget.Dialog.prototype;
 
 /**
 * Constant for the standard network icon for a blocking action
@@ -3416,7 +3426,7 @@ YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG = "simple-dialog";
 * Initializes the class's configurable properties which can be changed using the SimpleDialog's Config object (cfg).
 */
 YAHOO.widget.SimpleDialog.prototype.initDefaultConfig = function() {
-	YAHOO.widget.SimpleDialog.superclass.initDefaultConfig.call(this);
+	this.superclass.initDefaultConfig.call(this);
 
 	// Add dialog config properties //
 	this.cfg.addProperty("icon",	{ value:"none",	handler:this.configIcon, suppressEvent:true } );
@@ -3431,7 +3441,7 @@ YAHOO.widget.SimpleDialog.prototype.initDefaultConfig = function() {
 * @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this SimpleDialog. See configuration documentation for more details.
 */
 YAHOO.widget.SimpleDialog.prototype.init = function(el, userConfig) {
-	YAHOO.widget.SimpleDialog.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
+	this.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
 
 	this.beforeInitEvent.fire(YAHOO.widget.SimpleDialog);
 
@@ -3456,7 +3466,7 @@ YAHOO.widget.SimpleDialog.prototype.init = function(el, userConfig) {
 * Prepares the SimpleDialog's internal FORM object, creating one if one is not currently present, and adding the value hidden field.
 */
 YAHOO.widget.SimpleDialog.prototype.registerForm = function() {
-	YAHOO.widget.SimpleDialog.superclass.registerForm.call(this);
+	this.superclass.registerForm.call(this);
 	this.form.innerHTML += "<input type=\"hidden\" name=\"" + this.id + "\" value=\"\"/>";
 }
 
