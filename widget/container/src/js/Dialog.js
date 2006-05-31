@@ -11,7 +11,7 @@ http://developer.yahoo.net/yui/license.txt
 */
 YAHOO.widget.Dialog = function(el, userConfig) {
 	if (arguments.length > 0) {
-		YAHOO.widget.Dialog.superclass.constructor.call(this, el, userConfig);
+		this.superclass.constructor.call(this, el, userConfig);
 	}
 }
 
@@ -23,7 +23,7 @@ YAHOO.widget.Dialog.prototype.constructor = YAHOO.widget.Dialog;
 * @type class
 * @final
 */
-YAHOO.widget.Dialog.superclass = YAHOO.widget.Panel.prototype;
+YAHOO.widget.Dialog.prototype.superclass = YAHOO.widget.Panel.prototype;
 
 /**
 * Constant representing the default CSS class used for a Dialog
@@ -74,7 +74,7 @@ YAHOO.widget.Dialog.prototype.cancelEvent = null;
 * Initializes the class's configurable properties which can be changed using the Dialog's Config object (cfg).
 */
 YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
-	YAHOO.widget.Dialog.superclass.initDefaultConfig.call(this);
+	this.superclass.initDefaultConfig.call(this);
 
 	/**
 	* The internally maintained callback object for use with the Connection utility
@@ -137,7 +137,7 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 * Initializes the custom events for Dialog which are fired automatically at appropriate times by the Dialog class.
 */
 YAHOO.widget.Dialog.prototype.initEvents = function() {
-	YAHOO.widget.Dialog.superclass.initEvents.call(this);
+	this.superclass.initEvents.call(this);
 	
 	this.beforeSubmitEvent	= new YAHOO.util.CustomEvent("beforeSubmit");
 	this.submitEvent		= new YAHOO.util.CustomEvent("submit");
@@ -156,7 +156,7 @@ YAHOO.widget.Dialog.prototype.initEvents = function() {
 * @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Dialog. See configuration documentation for more details.
 */
 YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
-	YAHOO.widget.Dialog.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
+	this.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
 	
 	this.beforeInitEvent.fire(YAHOO.widget.Dialog);
 

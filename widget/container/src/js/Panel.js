@@ -11,7 +11,7 @@ http://developer.yahoo.net/yui/license.txt
 */
 YAHOO.widget.Panel = function(el, userConfig) {
 	if (arguments.length > 0) {
-		YAHOO.widget.Panel.superclass.constructor.call(this, el, userConfig);
+		this.superclass.constructor.call(this, el, userConfig);
 	}
 }
 
@@ -23,7 +23,7 @@ YAHOO.widget.Panel.prototype.constructor = YAHOO.widget.Panel;
 * @type class
 * @final
 */
-YAHOO.widget.Panel.superclass = YAHOO.widget.Overlay.prototype;
+YAHOO.widget.Panel.prototype.superclass = YAHOO.widget.Overlay.prototype;
 
 /**
 * Constant representing the default CSS class used for a Panel
@@ -60,7 +60,7 @@ YAHOO.widget.Panel.prototype.hideMaskEvent = null;
 * @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
 */
 YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
-	YAHOO.widget.Panel.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
+	this.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
 	
 	this.beforeInitEvent.fire(YAHOO.widget.Panel);
 
@@ -89,7 +89,7 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 * Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
 */
 YAHOO.widget.Panel.prototype.initEvents = function() {
-	YAHOO.widget.Panel.superclass.initEvents.call(this);
+	this.superclass.initEvents.call(this);
 
 	this.showMaskEvent = new YAHOO.util.CustomEvent("showMask");
 	this.hideMaskEvent = new YAHOO.util.CustomEvent("hideMask");
@@ -99,7 +99,7 @@ YAHOO.widget.Panel.prototype.initEvents = function() {
 * Initializes the class's configurable properties which can be changed using the Panel's Config object (cfg).
 */
 YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
-	YAHOO.widget.Panel.superclass.initDefaultConfig.call(this);
+	this.superclass.initDefaultConfig.call(this);
 
 	// Add panel config properties //
 
@@ -315,7 +315,7 @@ YAHOO.widget.Panel.prototype.sizeUnderlay = function() {
 * Event handler fired when the resize monitor element is resized.
 */
 YAHOO.widget.Panel.prototype.onDomResize = function(e, obj) { 
-	YAHOO.widget.Panel.superclass.onDomResize.call(this, e, obj);
+	this.superclass.onDomResize.call(this, e, obj);
 	var me = this;
 	setTimeout(function() {
 		me.sizeUnderlay();
@@ -477,5 +477,5 @@ YAHOO.widget.Panel.prototype.configWidth = function(type, args, obj) {
 * @return {boolean} Success or failure of the render
 */
 YAHOO.widget.Panel.prototype.render = function(appendToNode) {
-	return YAHOO.widget.Panel.superclass.render.call(this, appendToNode, this.innerElement);
+	return this.superclass.render.call(this, appendToNode, this.innerElement);
 }
