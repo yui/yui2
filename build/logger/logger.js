@@ -70,28 +70,18 @@ YAHOO.widget.Logger.log = function(sMsg, sCategory, sSource) {
         else if(this._isNewCategory(sCategory)) {
             this._createNewCategory(sCategory);
         }
-        var sClass = "global"; // default source
-        var sDetail = null;
-        if(sSource) {
-            var spaceIndex = sSource.indexOf(" ");
-            if(spaceIndex > 0) {
-                sClass = sSource.substring(0,spaceIndex);// substring until first space
-                sDetail = sSource.substring(spaceIndex,sSource.length);// the rest of the source
-            }
-            else {
-                sClass = sSource
-            }
-            if(this._isNewSource(sClass)) {
-                this._createNewSource(sClass);
-            }
+        if(!sSource) {
+            sSource = "global"; // default source
+        }
+        else if(this._isNewSource(sSource)) {
+            this._createNewSource(sSource);
         }
 
         var timestamp = new Date();
         var logEntry = {
             time: timestamp,
             category: sCategory,
-            source: sClass,
-            sourceDetail: sDetail,
+            source: sSource,
             msg: sMsg
         };
 
@@ -517,79 +507,77 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
  * Public members
  ***************************************************************************/
 /**
- * Whether or not the log reader is enabled to output log messages. Default:
- * true.
+ * Whether or not the log reader is enabled to output log messages.
  *
  * @type boolean
  */
 YAHOO.widget.LogReader.prototype.logReaderEnabled = true;
 
 /**
- * Public member to access CSS width of the log reader container.
+ * CSS width of the log reader container.
  *
  * @type string
  */
 YAHOO.widget.LogReader.prototype.width = null;
 
 /**
- * Public member to access CSS height of the log reader container.
+ * CSS height of the log reader container.
  *
  * @type string
  */
 YAHOO.widget.LogReader.prototype.height = null;
 
 /**
- * Public member to access CSS top position of the log reader container.
+ * CSS top position of the log reader container.
  *
  * @type string
  */
 YAHOO.widget.LogReader.prototype.top = null;
 
 /**
- * Public member to access CSS left position of the log reader container.
+ * CSS left position of the log reader container.
  *
  * @type string
  */
 YAHOO.widget.LogReader.prototype.left = null;
 
 /**
- * Public member to access CSS right position of the log reader container.
+ * CSS right position of the log reader container.
  *
  * @type string
  */
 YAHOO.widget.LogReader.prototype.right = null;
 
 /**
- * Public member to access CSS bottom position of the log reader container.
+ * CSS bottom position of the log reader container.
  *
  * @type string
  */
 YAHOO.widget.LogReader.prototype.bottom = null;
 
 /**
- * Public member to access CSS font size of the log reader container.
+ * CSS font size of the log reader container.
  *
  * @type string
  */
 YAHOO.widget.LogReader.prototype.fontSize = null;
 
 /**
- * Whether or not the footer UI is enabled for the log reader. Default: true.
+ * Whether or not the footer UI is enabled for the log reader.
  *
  * @type boolean
  */
 YAHOO.widget.LogReader.prototype.footerEnabled = true;
 
 /**
- * Whether or not output is verbose (more readable). Setting to true will make
- * output more compact (less readable). Default: true.
+ * Whether or not output is compact (less readable).
  *
  * @type boolean
  */
-YAHOO.widget.LogReader.prototype.verboseOutput = true;
+YAHOO.widget.LogReader.prototype.compact = true;
 
 /**
- * Whether or not newest message is printed on top. Default: true.
+ * Whether or not newest message is printed on top.
  *
  * @type boolean
  */
@@ -817,13 +805,12 @@ YAHOO.widget.LogReader.prototype._createCategoryCheckbox = function(category) {
         var filterEl = parentEl.appendChild(document.createElement("span"));
         filterEl.className = "ylog_filtergrp";
             // Append el at the end so IE 5.5 can set "type" attribute
-            // and THEN set checked property
             var categoryChk = document.createElement("input");
             categoryChk.className = "ylog_filter" + category;
             categoryChk.type = "checkbox";
             categoryChk.category = category;
-            categoryChk = filterEl.appendChild(categoryChk);
             categoryChk.checked = true;
+            categoryChk = filterEl.appendChild(categoryChk);
 
             // Add this checked filter to the internal array of filters
             filters.push(category);
@@ -848,13 +835,12 @@ YAHOO.widget.LogReader.prototype._createSourceCheckbox = function(source) {
         filterEl.className = "ylog_filtergrp";
 
         // Append el at the end so IE 5.5 can set "type" attribute
-        // and THEN set checked property
         var sourceChk = document.createElement("input");
         sourceChk.className = "ylog_filter" + source;
         sourceChk.type = "checkbox";
         sourceChk.source = source;
-        sourceChk = filterEl.appendChild(sourceChk);
         sourceChk.checked = true;
+        sourceChk = filterEl.appendChild(sourceChk);
 
         // Add this checked filter to the internal array of filters
         filters.push(source);
@@ -928,7 +914,7 @@ YAHOO.widget.LogReader.prototype._printBuffer = function() {
  */
 YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
 //TODO: much optimization here
-//if verboseOutput, set fixed widths for time output
+//if !compactOutput, set fixed widths for time output
     var entriesLen = aEntries.length;
     var sourceFiltersLen = this._sourceFilters.length;
     var categoryFiltersLen = this._categoryFilters.length;
@@ -937,7 +923,6 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
         var entry = aEntries[i];
         var category = entry.category;
         var source = entry.source;
-        var sourceDetail = entry.sourceDetail;
         var okToPrint = false;
         var okToFilterCats = false;
 
@@ -975,16 +960,14 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
             var elapsedTime = msecs - this._lastTime;
             this._lastTime = msecs;
             
-            var verboseOutput = (this.verboseOutput) ? "<br>" : "";
-            var sourceAndDetail = (sourceDetail) ? source + " " + sourceDetail :
-                source;
+            var compactOutput = (this.compactOutput) ? "" : "<br>";
 
             var output =  "<span class='"+category+"'>"+label+"</span> " +
                 totalTime + " ms (+" +
                 elapsedTime + ") " + localTime + ": " +
-                sourceAndDetail + ": " +
-                verboseOutput +
-                entry.msg;
+                compactOutput+
+                source + ": "
+                + entry.msg;
 
             var oNewElement = (this.newestOnTop) ?
                 this._consoleEl.insertBefore(document.createElement("p"),this._consoleEl.firstChild):
