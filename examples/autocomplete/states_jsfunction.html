@@ -14,7 +14,7 @@
 
     #statesdiv {position:relative;width:15em;margin:1em;} /* set width of widget here*/
     #statesinput {position:relative;width:100%;height:1.2em;display:block;}
-    #statescontainerdefault {width:100%;height:100%;padding:5px 5px;}
+    #statescontainerdefault {padding:5px 5px;}
     #statescontainer {position:relative;bottom:4px;right:4px;border:1px solid #404040;background:#fff;font-size:85%;height:11em;overflow:hidden;}
     #statescontainer ul {position:relative;width:100%;padding:5px 0;list-style:none;}
     #statescontainer li {padding:0 5px;cursor:default;white-space:nowrap;display:list-item;}
@@ -39,7 +39,7 @@
     <!-- Content begins -->
     <h3>DataSource</h3>
     <p>This DataSource instance points to an in-memory JavaScript function that
-    results in an array. The function queries against an in-memory object
+    returns results in an array. The function queries against an in-memory object
     literal of data that holds the 50 US states and their corresponding postal
     abbreviations.</p>
 
@@ -49,7 +49,7 @@
     instance is configured to have a query delay of zero seconds. The
     AutoComplete instance is also configured to display two data fields in its
     container: the state and its corresponding postal abbreviation. By setting
-    the alwaysShowContainer property to true and appropriate CSS styles, the
+    the alwaysShowContainer property to true and customizing appropriate CSS styles, the
     container has been implemented to always be displayed.</p>
 
     <!-- AutoComplete begins -->
@@ -57,7 +57,7 @@
         <form onsubmit="return validateForm();">
         <h4>Find a state:</h4>
         <input id="statesinput" type="text">
-        <div id="statesshadow"><div id="statescontainer"><div id="statescontainerdefault">Start typing to display states</div></div></div>
+        <div id="statesshadow"><div id="statescontainer"><div id="statescontainerdefault">Start typing to find states</div></div></div>
         </form>
     </div> 
     <!-- AutoComplete ends -->
@@ -107,6 +107,7 @@
         
         // Instantiate auto complete
         oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS, {alwaysShowContainer:true});
+        //oAutoComp.forceSelection = true;
         oAutoComp.queryDelay = 0;
         oAutoComp.maxResultsDisplayed = 8;
         oAutoComp.formatResult = function(oResultItem, sQuery) {
@@ -205,6 +206,10 @@
             var aResults = aArgs[2];
             doLog(oAutoComp.getName() + " has received " + aResults.length +
             " results for query " + sQuery + ".");
+            
+            if(aResults.length == 0) {
+                oAutoComp.setBody("<div id=\"statescontainerdefault\">No matching results</div>");
+            }
         }
 
         function myOnDataError(sType, aArgs) {
@@ -256,7 +261,7 @@
             var sMsg = (oItem) ? oItem.id : "a non-query-result";
             doLog(oAutoComp.getName() + " selected " + sMsg);
             
-            oAutoComp._oContainer._oBody.innerHTML = "foobar";
+            oAutoComp.setBody("<div id=\"statescontainerdefault\">Start typing to find states</div>");
         }
 
         function myOnSelectionEnforce(sType, aArgs) {
@@ -272,6 +277,8 @@
         function myOnTextboxBlur(sType, aArgs) {
             var oAutoComp = aArgs[0];
             doLog(oAutoComp.getName() + " has been disengaged.");
+
+            oAutoComp.setBody("<div id=\"statescontainerdefault\">Start typing to find states</div>");
         }
     }
     YAHOO.util.Event.addListener(this,'load',autoCompInit);

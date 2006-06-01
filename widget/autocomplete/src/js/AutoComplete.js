@@ -281,7 +281,7 @@ YAHOO.widget.AutoComplete.prototype.getListIds = function() {
  * @param {string} sHeader HTML markup for container header
  */
 YAHOO.widget.AutoComplete.prototype.setHeader = function(sHeader) {
-    if(sHeader) {
+    if(sHeader && this._oContainer._oHeader) {
         this._oContainer._oHeader.innerHTML = sHeader;
         this._oContainer._oHeader.style.display = "block";
     }
@@ -294,9 +294,28 @@ YAHOO.widget.AutoComplete.prototype.setHeader = function(sHeader) {
  * @param {string} sFooter HTML markup for container footer
  */
 YAHOO.widget.AutoComplete.prototype.setFooter = function(sFooter) {
-    if(sFooter) {
+    if(sFooter && this._oContainer._oFooter) {
         this._oContainer._oFooter.innerHTML = sFooter;
         this._oContainer._oFooter.style.display = "block";
+    }
+};
+
+/**
+ * Sets HTML markup for the auto complete container body. This markup will be
+ * inserted within a &lt;div&gt; tag with a class of "ac_bd".
+ *
+ * @param {string} sHeader HTML markup for container body
+ */
+YAHOO.widget.AutoComplete.prototype.setBody = function(sBody) {
+    if(sBody) {
+        if(this._oContainer._oBody) {
+            this._oContainer._oBody.innerHTML = sBody;
+            this._oContainer._oBody.style.display = "block";
+        }
+        else {
+            this._oContainer.innerHTML = sBody;
+            this._oContainer.style.display = "block";
+        }
     }
 };
 
@@ -1136,8 +1155,10 @@ YAHOO.widget.AutoComplete.prototype._clearList = function() {
     this._oContainer.scrollTop = 0;
     var aItems = this._aListItems;
     
-    for(var i = aItems.length-1; i >= 0 ; i--) {
-        aItems[i].style.display = "none";
+    if(aItems && (aItems.length > 0)) {
+        for(var i = aItems.length-1; i >= 0 ; i--) {
+            aItems[i].style.display = "none";
+        }
     }
     
     if (this._oCurItem) {
@@ -1166,21 +1187,16 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         oSelf.dataErrorEvent.fire(oSelf, sQuery);
         //YAHOO.log(oSelf.getName() + " data error for query \"" + sQuery + "\"");
     }
-    else {
-        oSelf.dataReturnEvent.fire(oSelf, sQuery, aResults);
-        //YAHOO.log(oSelf.getName() + " received " + aResults.length + " results for query \"" + sQuery + "\"");
-    }
-    
     if (!oSelf._bFocused || !aResults) {
         return;
     }
     
-    if(!oSelf._oContainer._oBody) {
+    //if(!oSelf._oContainer._oBody) {
         oSelf._initContainer();
-    }
-    if(!oSelf._aListItems || (oSelf.maxResultsDisplayed != oSelf._aListItems.length)) {
+    //}
+    //if(!oSelf._aListItems || (oSelf.maxResultsDisplayed != oSelf._aListItems.length)) {
         oSelf._initList();
-    }
+    //}
 
     var isOpera = (navigator.userAgent.toLowerCase().indexOf("opera") != -1);
     oSelf._oContainer.style.width = (!isOpera) ? null : "";
@@ -1226,6 +1242,9 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
     else {
         oSelf._clearList();
     }
+    oSelf.dataReturnEvent.fire(oSelf, sQuery, aResults);
+    //YAHOO.log(oSelf.getName() + " received " + aResults.length + " results for query \"" + sQuery + "\"");
+
 };
 
 /**
