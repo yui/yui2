@@ -94,7 +94,7 @@
         //     "Additional Param Name 1",
         //     ...
         //     "Additional Param Name n"]
-        oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_proxy.php", ["ResultSet.Result", "Title"]);
+        oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_proxy.php", ["ResultSet.Result", "Title", "Summary", "Url"]);
         oACDS.queryMatchContains = true;
         oACDS.scriptQueryAppend = "output=json&results=100"; // Needed for YWS
 

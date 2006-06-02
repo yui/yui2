@@ -1196,12 +1196,8 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         return;
     }
     
-    //if(!oSelf._oContainer._oBody) {
-        oSelf._initContainer();
-    //}
-    //if(!oSelf._aListItems || (oSelf.maxResultsDisplayed != oSelf._aListItems.length)) {
-        oSelf._initList();
-    //}
+    oSelf._initContainer();
+    oSelf._initList();
 
     var isOpera = (navigator.userAgent.toLowerCase().indexOf("opera") != -1);
     oSelf._oContainer.style.width = (!isOpera) ? null : "";

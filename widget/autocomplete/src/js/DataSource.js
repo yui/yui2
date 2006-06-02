@@ -574,7 +574,9 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
 
     switch (this.responseType) {
         case this.TYPE_JSON:
+            var jsonList;
             if(window.JSON) {
+                // Use the JSON utility if available
                 var jsonObjParsed = JSON.parse(oResponse);
                 if(!jsonObjParsed) {
                     bError = true;
@@ -582,70 +584,94 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                 }
                 else {
                     // eval is necessary here since aSchema[0] is of unknown depth
-                    var jsonListParsed = eval("jsonObjParsed." + aSchema[0]);
-                    for(var i = jsonListParsed.length-1; i >= 0 ; i--) {
-                        // eval is necessary here since aSchema[1] is of unknown depth
-                        jsonListParsed[i][0] = eval("jsonListParsed[i]." + aSchema[1]);
-                        aResults[i] = jsonListParsed[i];
-                    }
-                    break;
+                    jsonList = eval("jsonObjParsed." + aSchema[0]);
                 }
             }
             else {
-                try {                    
-                    // trim leading spaces 
+                // Parse the JSON response as a string
+                try {
+                    // Trim leading spaces
                     while (oResponse.substring(0,1) == " ") {
                         oResponse = oResponse.substring(1, oResponse.length);
                     }
                     
-                    // zero response
-                    if((oResponse.indexOf("{}") === 0) ||
-                        (oResponse.indexOf("{") < 0)) {
+                    // Invalid JSON response
+                    if(oResponse.indexOf("{") < 0) {
+                        bError = true;
                         break;
                     }
                 
-                    // eval is necessary here
-                    var jsonObjRaw = eval('(' + oResponse + ')');
-                                     
-                    // eval is necessary here since aSchema[0] is of unknown depth                    
-                    var jsonListRaw = eval("jsonObjRaw." + aSchema[0]);
-                    
-                    for(var j = jsonListRaw.length-1; j >= 0 ; j--) {
-                        // eval is probably not necessary here
-                        //jsonListRaw[j][0] = eval("jsonListRaw[j]." + aSchema[1]);
-                        jsonListRaw[j][0] = jsonListRaw[j][aSchema[1]];
-                        aResults[j] = jsonListRaw[j];
+                    // Empty (but not invalid) JSON response
+                    if(oResponse.indexOf("{}") === 0) {
+                        break;
                     }
-                    break;
+                    
+                    // Turn the string into an object literal...
+                    // ...eval is necessary here
+                    var jsonObjRaw = eval("(" + oResponse + ")");
+                    if(!jsonObjRaw) {
+                        bError = true;
+                        break;
+                    }
+                    
+                    // Grab the object member that contains an array of all reponses...
+                    // ...eval is necessary here since aSchema[0] is of unknown depth
+                    jsonList = eval("(jsonObjRaw." + aSchema[0]+")");
                 }
                 catch(e) {
                     bError = true;
                     break;
                }
             }
+
+            if(!jsonList) {
+                bError = true;
+                break;
+            }
+            
+            // Loop through the array of all responses...
+            for(var i = jsonList.length-1; i >= 0 ; i--) {
+                var aResultItem = [];
+                // ...and loop through each data field value of each response
+                for(var j = aSchema.length-1; j >= 1 ; j--) {
+                    // ...and capture data into an array mapped according to the schema...
+                    // ...eval is necessary here since aSchema[z] is of unknown depth
+                    var dataFieldValue = eval("(jsonList[" + i + "]." + aSchema[j] + ")");
+                    aResultItem.unshift(dataFieldValue);
+                    //doLog(dataFieldValue);
+                }
+                // Capture the array of data field values in an array of results
+                aResults.unshift(aResultItem);
+            }
             break;
         case this.TYPE_XML:
-           var xmlList = oResponse.getElementsByTagName(aSchema[0]);
-             for(var k = xmlList.length-1; k >= 0 ; k--) {
-                var result = xmlList.item(k);//doLog(k+' is '+result.attributes.item(0).firstChild.nodeValue);
+            // Get the collection of results
+            var xmlList = oResponse.getElementsByTagName(aSchema[0]);
+            // Loop through each result
+            for(var k = xmlList.length-1; k >= 0 ; k--) {
+                var result = xmlList.item(k);
+                //doLog(k+' is '+result.attributes.item(0).firstChild.nodeValue);
                 var aFieldSet = [];
-                for(var m = aSchema.length-1; m >= 1 ; m--) {//doLog(aSchema[m]+' is '+result.attributes.getNamedItem(aSchema[m]).firstChild.nodeValue);
+                // Loop through each data field in each result using the schema
+                for(var m = aSchema.length-1; m >= 1 ; m--) {
+                    //doLog(aSchema[m]+' is '+result.attributes.getNamedItem(aSchema[m]).firstChild.nodeValue);
                     var sValue = null;
-                    // Capture each data value into an array
-                    // Data may be held in an attribute...
+                    // Values may be held in an attribute...
                     var xmlAttr = result.attributes.getNamedItem(aSchema[m]);
                     if(xmlAttr) {
                         sValue = xmlAttr.value;//doLog('attr'+sValue);
                     }
-                    // Or in a node...
+                    // ...or in a node
                     else {
                         var xmlNode = result.getElementsByTagName(aSchema[m]);
                         if(xmlNode) {
                             sValue = xmlNode.item(0).firstChild.nodeValue;// doLog('node'+sValue);
                         }
                     }
+                    // Capture the schema-mapped data field values into an array
                     aFieldSet.unshift(sValue);
                 }
+                // Capture each array of values into an array of results
                 aResults.unshift(aFieldSet);
             }
             break;
