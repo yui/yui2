@@ -635,10 +635,9 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                 // ...and loop through each data field value of each response
                 for(var j = aSchema.length-1; j >= 1 ; j--) {
                     // ...and capture data into an array mapped according to the schema...
-                    // ...eval is necessary here since aSchema[z] is of unknown depth
-                    var dataFieldValue = eval("(jsonList[" + i + "]." + aSchema[j] + ")");
-                    aResultItem.unshift(dataFieldValue);
+                    var dataFieldValue = jsonList[i][aSchema[j]];
                     //doLog(dataFieldValue);
+                    aResultItem.unshift(dataFieldValue);
                 }
                 // Capture the array of data field values in an array of results
                 aResults.unshift(aResultItem);
