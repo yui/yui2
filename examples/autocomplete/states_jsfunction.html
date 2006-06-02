@@ -234,32 +234,33 @@
         function myOnItemMouseOver(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
-            doLog(oAutoComp.getName() + " moused over " + oItem.id);
+            doLog(oAutoComp.getName() + " moused over " + oItem.toString());
         }
 
         function myOnItemMouseOut(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
-            doLog(oAutoComp.getName() + " moused out from " + oItem.id);
+            doLog(oAutoComp.getName() + " moused out from " + oItem.toString());
         }
 
         function myOnItemArrowTo(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
-            doLog(oAutoComp.getName() + " arrowed to " + oItem.id);
+            doLog(oAutoComp.getName() + " arrowed to " + oItem.toString());
         }
 
         function myOnItemArrowFrom(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
-            doLog(oAutoComp.getName() + " arrowed away from " + oItem.id);
+            doLog(oAutoComp.getName() + " arrowed away from " + oItem.toString());
         }
 
         function myOnItemSelect(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
-            var sMsg = (oItem) ? oItem.id : "a non-query-result";
-            doLog(oAutoComp.getName() + " selected " + sMsg);
+            var oData = aArgs[2];
+            var sMsg = (oItem) ? oItem.toString() : "a non-query-result";
+            doLog(oAutoComp.getName() + " selected " + sMsg + " which has the following data: " + oData);
             
             oAutoComp.setBody("<div id=\"statescontainerdefault\">Start typing to find states</div>");
         }

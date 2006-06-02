@@ -445,6 +445,7 @@ YAHOO.widget.AutoComplete.prototype.itemArrowFromEvent = null;
  * Subscribers receive the following array:<br>
  *     - args[0] The auto complete object instance
  *     - args[1] The selected &lt;li&gt; element item
+ *     - args[2] The data returned for the item, either as an object, or mapped from the schema into an array
  */
 YAHOO.widget.AutoComplete.prototype.itemSelectEvent = null;
 
@@ -778,6 +779,10 @@ YAHOO.widget.AutoComplete.prototype._initListItem = function(oItem, nItemIndex) 
     var oSelf = this;
     oItem.style.display = "none";
     oItem._nItemIndex = nItemIndex;
+    oItem.toString = function () {
+        return oSelf.getName() + "LI" + nItemIndex;
+    };
+    
     oItem.mouseover = oItem.mouseout = oItem.onclick = null;
     YAHOO.util.Event.addListener(oItem,'mouseover',oSelf._onItemMouseover,oSelf);
     YAHOO.util.Event.addListener(oItem,'mouseout',oSelf._onItemMouseout,oSelf);
@@ -1555,7 +1560,7 @@ YAHOO.widget.AutoComplete.prototype._updateValue = function(oItem) {
 YAHOO.widget.AutoComplete.prototype._selectItem = function(oItem) {
     this._bItemSelected = true;
     this._updateValue(oItem);
-    this.itemSelectEvent.fire(this, oItem);
+    this.itemSelectEvent.fire(this, oItem, oItem._oResultData);
     //YAHOO.log(this.getName() + " selected item " + oItem.id);
     this._clearList();
 };
