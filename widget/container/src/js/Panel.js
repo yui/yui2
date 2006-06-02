@@ -238,6 +238,7 @@ YAHOO.widget.Panel.prototype.configKeyListeners = function(type, args, obj) {
 				}
 				if (! YAHOO.util.Config.alreadySubscribed(this.hideEvent, listener.disable, listener)) {
 					this.hideEvent.subscribe(listener.disable, listener, true);
+					this.destroyEvent.subscribe(listener.disable, listener, true);
 				}
 			}
 		} else {
@@ -246,6 +247,7 @@ YAHOO.widget.Panel.prototype.configKeyListeners = function(type, args, obj) {
 			}
 			if (! YAHOO.util.Config.alreadySubscribed(this.hideEvent, listeners.disable, listeners)) {
 				this.hideEvent.subscribe(listeners.disable, listeners, true);
+				this.destroyEvent.subscribe(listeners.disable, listeners, true); 
 			}
 		}
 	} 
