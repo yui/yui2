@@ -188,6 +188,14 @@ YAHOO.widget.AutoComplete.prototype.prehighlightClassName = null;
 YAHOO.widget.AutoComplete.prototype.delimChar = null;
 
 /**
+ * Whether or not the first item in the auto complete container should be
+ * automatically highlighted on expand. Default: false.
+ *
+ * @type boolean
+ */
+YAHOO.widget.AutoComplete.prototype.autoHighlight = false;
+
+/**
  * Whether or not the auto complete input field should be automatically updated
  * with the first query result as the user types, auto-selecting the substring
  * that the user has not typed. Default: false.
@@ -1169,7 +1177,7 @@ YAHOO.widget.AutoComplete.prototype._clearList = function() {
     }
     
     if (this._oCurItem) {
-        this._toggleHighlight(this._oCurItem,'from');
+        //this._toggleHighlight(this._oCurItem,'from');
     }
         
     this._oCurItem = null;
@@ -1233,14 +1241,21 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
             oItemj._oResultData = null;
         }
         
-        // Select first item and show UI
-        var oFirstItem = aItems[0];
-        oSelf._toggleHighlight(oFirstItem,'to');
+        if(oSelf.autoHighlight) {
+            // Go to the first item
+            var oFirstItem = aItems[0];
+            oSelf._oCurItem = oFirstItem;
+            oSelf._toggleHighlight(oFirstItem,'to');
+            oSelf.itemArrowToEvent.fire(oSelf, oFirstItem);
+            oSelf._typeAhead(oFirstItem,sQuery);
+        }
+        else {
+            oSelf._oCurItem = null;
+        }
+
+        // Expand the container
         oSelf._toggleContainer(true);
-        oSelf.itemArrowToEvent.fire(oSelf, oFirstItem);
         //YAHOO.log(oSelf.getName() + " arrowed to item " + oFirstItem.id);
-        oSelf._typeAhead(oFirstItem,sQuery);
-        oSelf._oCurItem = oFirstItem;
     }
     else {
         oSelf._clearList();

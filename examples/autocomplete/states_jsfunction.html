@@ -50,7 +50,9 @@
     AutoComplete instance is also configured to display two data fields in its
     container: the state and its corresponding postal abbreviation. By setting
     the alwaysShowContainer property to true and customizing appropriate CSS styles, the
-    container has been implemented to always be displayed.</p>
+    container has been implemented to always be displayed. Finally, the parameter
+    autoHighlight has been set to true, to reduce the number of user actions it
+    takes to submit a valid selection.</p>
 
     <!-- AutoComplete begins -->
     <div id="statesdiv">
@@ -109,6 +111,7 @@
         oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS, {alwaysShowContainer:true});
         //oAutoComp.forceSelection = true;
         oAutoComp.queryDelay = 0;
+        oAutoComp.autoHighlight = true;
         oAutoComp.maxResultsDisplayed = 8;
         oAutoComp.formatResult = function(oResultItem, sQuery) {
             var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";

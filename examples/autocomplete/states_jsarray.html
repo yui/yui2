@@ -43,8 +43,14 @@
     both AutoComplete instances are configured to have a query delay of zero
     seconds. The second AutoComplete instance is configured to display two data
     fields in the container: the area code and the area code's state. Both
-    containers define a prehighlightClassName which provides a distinct visual
-    cue for mouse events than for arrow events.</p>
+    containers define a prehighlightClassName which provides a different visual
+    cue for mouse events than for arrow events. The parameter autoHighlight has
+    also been set to true, to reduce the number of user interactions it
+    takes to submit a valid selection. To provide even more visual feedback,
+    the parameter typeAhead has been set to true for the first AutoComplete
+    instance. For the second AutoComplete instance, typeAhead and forceSelection
+    have been set to true in order to prevent the user from typing in a free-form
+    selection altogether.</p>
 
     <!-- AutoComplete begins -->
     <div id="statesdiv">
@@ -544,6 +550,8 @@ var areacodesArray = [
         oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
         oAutoComp.queryDelay = 0;
         oAutoComp.prehighlightClassName = "prehighlight";
+        oAutoComp.autoHighlight = true;
+        oAutoComp.typeAhead = true;
 
         // Instantiate second data source
         oACDS2 = new YAHOO.widget.DS_JSArray(areacodesArray);
@@ -552,6 +560,9 @@ var areacodesArray = [
         oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput2','statescontainer2', oACDS2);
         oAutoComp2.queryDelay = 0;
         oAutoComp2.prehighlightClassName = "prehighlight";
+        oAutoComp2.autoHighlight = true;
+        oAutoComp2.typeAhead = true;
+        oAutoComp2.forceSelection = true;
         oAutoComp2.formatResult = function(oResultItem, sQuery) {
             var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";
             return (sMarkup);
