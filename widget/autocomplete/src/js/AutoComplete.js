@@ -1144,7 +1144,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
         return;
     }
     
-    sQuery = encodeURI(sQuery);
+    sQuery = encodeURIComponent(sQuery);
     this._nDelayID = -1;    // Reset timeout ID because request has been made
     this.dataRequestEvent.fire(this, sQuery);
     //YAHOO.log(this.getName() + " requested data for query \"" + sQuery + "\"");
