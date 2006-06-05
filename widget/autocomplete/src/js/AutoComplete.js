@@ -1203,7 +1203,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
     oSelf._oContainer.style.width = (!isOpera) ? null : "";
     oSelf._oContainer.style.height = (!isOpera) ? null : "";
 
-    var sCurQuery = decodeURI(sQuery);
+    var sCurQuery = decodeURIComponent(sQuery);
     oSelf._sCurQuery = sCurQuery;
     var aItems = oSelf._aListItems;
     oSelf._bItemSelected = false;

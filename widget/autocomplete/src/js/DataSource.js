@@ -290,8 +290,8 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
             var aAllResultItems = resultObj.results;
             // If case is unimportant, normalize match key for comparison
             var matchKey = (!this.queryMatchCase) ?
-                encodeURI(resultObj.query.toLowerCase()):
-                encodeURI(resultObj.query);
+                encodeURIComponent(resultObj.query.toLowerCase()):
+                encodeURIComponent(resultObj.query);
             
             // If a cached match key exactly matches the query...
             if(matchKey == sQuery) {
@@ -323,8 +323,8 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
                         for(var k = aAllResultItems.length-1; k >= 0; k--) {
                             var aRecord = aAllResultItems[k];
                             var sKeyIndex = (this.queryMatchCase) ?
-                                encodeURI(aRecord[0]).indexOf(sQuery):
-                                encodeURI(aRecord[0]).toLowerCase().indexOf(sQuery);
+                                encodeURIComponent(aRecord[0]).indexOf(sQuery):
+                                encodeURIComponent(aRecord[0]).toLowerCase().indexOf(sQuery);
                             
                             // A STARTSWITH match is when the query is found at the beginning of the key string...
                             if((!bMatchContains && (sKeyIndex === 0)) ||
@@ -528,7 +528,7 @@ YAHOO.widget.DS_XHR.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
         }
         
         var resultObj = {};
-        resultObj.query = decodeURI(sQuery);
+        resultObj.query = decodeURIComponent(sQuery);
         resultObj.results = oSelf.parseResponse(sQuery, oResp, oParent);
         oSelf._addCacheElem(resultObj);
         oCallbackFn(sQuery, resultObj.results, oParent);
@@ -785,7 +785,7 @@ YAHOO.widget.DS_JSFunction.prototype.doQuery = function(oCallbackFn, sQuery, oPa
     }
     
     var resultObj = {};
-    resultObj.query = decodeURI(sQuery);
+    resultObj.query = decodeURIComponent(sQuery);
     resultObj.results = aResults;
     this._addCacheElem(resultObj);
     
@@ -866,8 +866,8 @@ YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParen
         }
 
         var sKeyIndex = (this.queryMatchCase) ?
-            encodeURI(aDataset[0]).indexOf(sQuery):
-            encodeURI(aDataset[0]).toLowerCase().indexOf(sQuery);
+            encodeURIComponent(aDataset[0]).indexOf(sQuery):
+            encodeURIComponent(aDataset[0]).toLowerCase().indexOf(sQuery);
 
         // A STARTSWITH match is when the query is found at the beginning of the key string...
         if((!bMatchContains && (sKeyIndex === 0)) ||
