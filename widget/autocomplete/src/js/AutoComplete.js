@@ -403,8 +403,9 @@ YAHOO.widget.AutoComplete.prototype.dataReturnEvent = null;
 YAHOO.widget.AutoComplete.prototype.dataErrorEvent = null;
 
 /**
- * Fired when the auto complete container is expanded. Subscribers receive the
- * following array:<br>
+ * Fired when the auto complete container is expanded. If alwaysShowContainer is
+ * enabled, then containerExpandEvent will be fired when the container is
+ * populated with results. Subscribers receive the following array:<br>
  *     - args[0] The auto complete object instance
  */
 YAHOO.widget.AutoComplete.prototype.containerExpandEvent = null;
@@ -468,8 +469,9 @@ YAHOO.widget.AutoComplete.prototype.itemSelectEvent = null;
 YAHOO.widget.AutoComplete.prototype.selectionEnforceEvent = null;
 
 /**
- * Fired when the auto complete container is collapsed. Subscribers receive the
- * following array:<br>
+ * Fired when the auto complete container is collapsed. If alwaysShowContainer is
+ * enabled, then containerCollapseEvent will be fired when the container is
+ * cleared of results. Subscribers receive the following array:<br>
  *     - args[0] The auto complete object instance
  */
 YAHOO.widget.AutoComplete.prototype.containerCollapseEvent = null;
@@ -1373,6 +1375,16 @@ YAHOO.widget.AutoComplete.prototype._selectText = function(oTextbox, nStart, nEn
  */
 YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
     if(this.alwaysShowContainer) {
+        this._bContainerOpen = bShow;
+        
+        // Fire these events to give implementers a hook into the container
+        // being populated and being emptied
+        if(bShow) {
+            this.containerExpandEvent.fire(this);
+        }
+        else {
+            this.containerCollapseEvent.fire(this);
+        }
         return;
     }
     
@@ -1465,7 +1477,6 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
         this._bContainerOpen = bShow;
         oContainer.style.display = (bShow) ? "block" : "none";
         
-        // Call event on expand/collapse (overriden by client)
         if(bShow) {
             this.containerExpandEvent.fire(this);
             //YAHOO.log(this.getName() + " container expanded");

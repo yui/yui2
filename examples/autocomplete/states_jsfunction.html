@@ -50,7 +50,9 @@
     AutoComplete instance is also configured to display two data fields in its
     container: the state and its corresponding postal abbreviation. By setting
     the alwaysShowContainer property to true and customizing appropriate CSS styles, the
-    container has been implemented to always be displayed. Finally, the parameter
+    container has been implemented to always be displayed. Custom event handlers
+    have been hooked into containerExpandEvent and containerCollapseEvent to
+    dynamically update the always open container's contents. Finally, the parameter
     autoHighlight has been set to true, to reduce the number of user actions it
     takes to submit a valid selection.</p>
 
@@ -59,7 +61,7 @@
         <form onsubmit="return validateForm();">
         <h4>Find a state:</h4>
         <input id="statesinput" type="text">
-        <div id="statesshadow"><div id="statescontainer"><div id="statescontainerdefault">Start typing to find states</div></div></div>
+        <div id="statesshadow"><div id="statescontainer"><div id="statescontainerdefault">Start typing to find a state</div></div></div>
         </form>
     </div> 
     <!-- AutoComplete ends -->
@@ -209,7 +211,7 @@
             var aResults = aArgs[2];
             doLog(oAutoComp.getName() + " has received " + aResults.length +
             " results for query " + sQuery + ".");
-            
+
             if(aResults.length == 0) {
                 oAutoComp.setBody("<div id=\"statescontainerdefault\">No matching results</div>");
             }
@@ -264,8 +266,6 @@
             var oData = aArgs[2];
             var sMsg = (oItem) ? oItem.toString() : "a non-query-result";
             doLog(oAutoComp.getName() + " selected " + sMsg + " which has the following data: " + oData);
-            
-            oAutoComp.setBody("<div id=\"statescontainerdefault\">Start typing to find states</div>");
         }
 
         function myOnSelectionEnforce(sType, aArgs) {
@@ -276,13 +276,13 @@
         function myOnContainerCollapse(sType, aArgs) {
             var oAutoComp = aArgs[0];
             doLog(oAutoComp.getName() + " container collapsed.");
+
+            oAutoComp.setBody("<div id=\"statescontainerdefault\">Start typing to find a state</div>");
         }
 
         function myOnTextboxBlur(sType, aArgs) {
             var oAutoComp = aArgs[0];
             doLog(oAutoComp.getName() + " has been disengaged.");
-
-            oAutoComp.setBody("<div id=\"statescontainerdefault\">Start typing to find states</div>");
         }
     }
     YAHOO.util.Event.addListener(this,'load',autoCompInit);
