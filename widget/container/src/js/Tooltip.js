@@ -11,7 +11,7 @@ http://developer.yahoo.net/yui/license.txt
 */
 YAHOO.widget.Tooltip = function(el, userConfig) {
 	if (arguments.length > 0) {
-		this.superclass.constructor.call(this, el, userConfig);
+		YAHOO.widget.Tooltip.superclass.constructor.call(this, el, userConfig);
 	}
 }
 
@@ -23,7 +23,7 @@ YAHOO.widget.Tooltip.prototype.constructor = YAHOO.widget.Tooltip;
 * @type class
 * @final
 */
-YAHOO.widget.Tooltip.prototype.superclass = YAHOO.widget.Overlay.prototype;
+YAHOO.widget.Tooltip.superclass = YAHOO.widget.Overlay.prototype;
 
 /**
 * Constant representing the Tooltip CSS class
@@ -45,7 +45,7 @@ YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 		}
 		YAHOO.util.Event.addListener(window, "load", deferredInit, this, true);
 	} else {
-		this.superclass.init.call(this, el);
+		YAHOO.widget.Tooltip.superclass.init.call(this, el);
 
 		this.beforeInitEvent.fire(YAHOO.widget.Tooltip);
 
@@ -69,7 +69,7 @@ YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 * Initializes the class's configurable properties which can be changed using the Overlay's Config object (cfg).
 */
 YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
-	this.superclass.initDefaultConfig.call(this);
+	YAHOO.widget.Tooltip.superclass.initDefaultConfig.call(this);
 
 	this.cfg.addProperty("preventoverlap",		{ value:true, handler:this.configPreventOverlap, validator:this.cfg.checkBoolean, supercedes:["x","y","xy"] } );
 

@@ -11,7 +11,7 @@ http://developer.yahoo.net/yui/license.txt
 */
 YAHOO.widget.SimpleDialog = function(el, userConfig) {
 	if (arguments.length > 0) {
-		this.superclass.constructor.call(this, el, userConfig);
+		YAHOO.widget.SimpleDialog.superclass.constructor.call(this, el, userConfig);
 	}
 }
 
@@ -23,7 +23,7 @@ YAHOO.widget.SimpleDialog.prototype.constructor = YAHOO.widget.SimpleDialog;
 * @type class
 * @final
 */
-YAHOO.widget.SimpleDialog.prototype.superclass = YAHOO.widget.Dialog.prototype;
+YAHOO.widget.SimpleDialog.superclass = YAHOO.widget.Dialog.prototype;
 
 /**
 * Constant for the standard network icon for a blocking action
@@ -78,7 +78,7 @@ YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG = "simple-dialog";
 * Initializes the class's configurable properties which can be changed using the SimpleDialog's Config object (cfg).
 */
 YAHOO.widget.SimpleDialog.prototype.initDefaultConfig = function() {
-	this.superclass.initDefaultConfig.call(this);
+	YAHOO.widget.SimpleDialog.superclass.initDefaultConfig.call(this);
 
 	// Add dialog config properties //
 	this.cfg.addProperty("icon",	{ value:"none",	handler:this.configIcon, suppressEvent:true } );
@@ -93,7 +93,7 @@ YAHOO.widget.SimpleDialog.prototype.initDefaultConfig = function() {
 * @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this SimpleDialog. See configuration documentation for more details.
 */
 YAHOO.widget.SimpleDialog.prototype.init = function(el, userConfig) {
-	this.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
+	YAHOO.widget.SimpleDialog.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
 
 	this.beforeInitEvent.fire(YAHOO.widget.SimpleDialog);
 
@@ -118,7 +118,7 @@ YAHOO.widget.SimpleDialog.prototype.init = function(el, userConfig) {
 * Prepares the SimpleDialog's internal FORM object, creating one if one is not currently present, and adding the value hidden field.
 */
 YAHOO.widget.SimpleDialog.prototype.registerForm = function() {
-	this.superclass.registerForm.call(this);
+	YAHOO.widget.SimpleDialog.superclass.registerForm.call(this);
 	this.form.innerHTML += "<input type=\"hidden\" name=\"" + this.id + "\" value=\"\"/>";
 }
 
