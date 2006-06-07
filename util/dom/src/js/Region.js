@@ -119,11 +119,11 @@ YAHOO.util.Region.prototype.union = function(region) {
  * @return string the region properties
  */
 YAHOO.util.Region.prototype.toString = function() {
-    return ( "Region {" +
-             "t: "    + this.top    + 
-             ", r: "    + this.right  + 
-             ", b: "    + this.bottom + 
-             ", l: "    + this.left   + 
+    return ( "Region {"    +
+             "top: "       + this.top    + 
+             ", right: "   + this.right  + 
+             ", bottom: "  + this.bottom + 
+             ", left: "    + this.left   + 
              "}" );
 };
 
@@ -160,24 +160,23 @@ YAHOO.util.Region.getRegion = function(el) {
  * @extends Region
  */
 YAHOO.util.Point = function(x, y) {
+   if (x instanceof Array) { // accept output from Dom.getXY
+      y = x[1];
+      x = x[0];
+   }
+   
     /**
-     * The X position of the point
+     * The X position of the point, which is also the right, left and index zero (for Dom.getXY symmetry)
      * @type int
      */
-    this.x      = x;
 
+    this.x = this.right = this.left = this[0] = x;
+     
     /**
-     * The Y position of the point
+     * The Y position of the point, which is also the top, bottom and index one (for Dom.getXY symmetry)
      * @type int
      */
-    this.y      = y;
-    this.top    = y;
-    this[1] = y;
-    
-    this.right  = x;
-    this.bottom = y;
-    this.left   = x;
-    this[0] = x;
+    this.y = this.top = this.bottom = this[1] = y;
 };
 
 YAHOO.util.Point.prototype = new YAHOO.util.Region();
