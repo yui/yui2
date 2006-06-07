@@ -12,6 +12,7 @@ YAHOO.util.Dom = function() {
    var isOpera = (ua.indexOf('opera') != -1);
    var isIE = (ua.indexOf('msie') != -1 && !isOpera); // not opera spoof
    var id_counter = 0;
+   var util = YAHOO.util; // internal shorthand
    
    return {
       /**
@@ -34,7 +35,7 @@ YAHOO.util.Dom = function() {
             var collection = [];
             for (var i = 0, len = el.length; i < len; ++i)
             {
-               collection[collection.length] = this.get(el[i]);
+               collection[collection.length] = util.Dom.get(el[i]);
             }
             
             return collection;
@@ -93,7 +94,7 @@ YAHOO.util.Dom = function() {
             return value;
          };
          
-         return this.batch(el, f, this, true);
+         return util.Dom.batch(el, f, util.Dom, true);
       },
    
       /**
@@ -125,7 +126,7 @@ YAHOO.util.Dom = function() {
             
          };
          
-         this.batch(el, f, this, true);
+         util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -194,7 +195,7 @@ YAHOO.util.Dom = function() {
             return pos;
          };
          
-         return this.batch(el, f, this, true);
+         return util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -203,7 +204,7 @@ YAHOO.util.Dom = function() {
        * @return {String/Array} The X position of the element(s)
        */
       getX: function(el) {
-         return this.getXY(el)[0];
+         return util.Dom.getXY(el)[0];
       },
       
       /**
@@ -212,7 +213,7 @@ YAHOO.util.Dom = function() {
        * @return {String/Array} The Y position of the element(s)
        */
       getY: function(el) {
-         return this.getXY(el)[1];
+         return util.Dom.getXY(el)[1];
       },
       
       /**
@@ -231,12 +232,12 @@ YAHOO.util.Dom = function() {
                style_pos = 'relative';
             }
             
-            var pageXY = YAHOO.util.Dom.getXY(el);
+            var pageXY = this.getXY(el);
             if (pageXY === false) { return false; } // has to be part of doc to have pageXY
             
             var delta = [
-               parseInt( YAHOO.util.Dom.getStyle(el, 'left'), 10 ),
-               parseInt( YAHOO.util.Dom.getStyle(el, 'top'), 10 )
+               parseInt( this.getStyle(el, 'left'), 10 ),
+               parseInt( this.getStyle(el, 'top'), 10 )
             ];
          
             if ( isNaN(delta[0]) ) // defaults to 'auto'
@@ -255,12 +256,12 @@ YAHOO.util.Dom = function() {
       
             // if retry is true, try one more time if we miss
             if (!noRetry && (newXY[0] != pos[0] || newXY[1] != pos[1]) ) {
-               var retry = function() { YAHOO.util.Dom.setXY(el, pos, true); };
+               var retry = function() { util.Dom.setXY(el, pos, true); };
                setTimeout(retry, 0); // "delay" for IE resize timing issue
             }
          };
          
-         this.batch(el, f, this, true);
+         util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -270,7 +271,7 @@ YAHOO.util.Dom = function() {
        * @param {Int} x to use as the X coordinate for the element(s).
        */
       setX: function(el, x) {
-         this.setXY(el, [x, null]);
+         util.Dom.setXY(el, [x, null]);
       },
       
       /**
@@ -280,7 +281,7 @@ YAHOO.util.Dom = function() {
        * @param {Int} x to use as the Y coordinate for the element(s).
        */
       setY: function(el, y) {
-         this.setXY(el, [null, y]);
+         util.Dom.setXY(el, [null, y]);
       },
       
       /**
@@ -294,7 +295,7 @@ YAHOO.util.Dom = function() {
             return new YAHOO.util.Region.getRegion(el);
          };
          
-         return this.batch(el, f, this, true);
+         return util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -303,7 +304,7 @@ YAHOO.util.Dom = function() {
        * @return {Int} The width of the viewable area of the page.
        */
       getClientWidth: function() {
-         return this.getViewportWidth();
+         return util.Dom.getViewportWidth();
       },
       
       /**
@@ -312,7 +313,7 @@ YAHOO.util.Dom = function() {
        * @return {Int} The height of the viewable area of the page.
        */
       getClientHeight: function() {
-         return this.getViewportHeight();
+         return util.Dom.getViewportHeight();
       },
 
       /**
@@ -327,8 +328,7 @@ YAHOO.util.Dom = function() {
          var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
          
          var method = function(el) { return re.test(el['className']); };
-         
-         return this.getElementsBy(method, tag, root);
+         return util.Dom.getElementsBy(method, tag, root);
       },
 
       /**
@@ -343,7 +343,7 @@ YAHOO.util.Dom = function() {
             return re.test(el['className']);
          };
          
-         return this.batch(el, f, this, true);
+         return util.Dom.batch(el, f, util.Dom, true);
       },
    
       /**
@@ -358,7 +358,7 @@ YAHOO.util.Dom = function() {
             el['className'] = [el['className'], className].join(' ');
          };
          
-         this.batch(el, f, this, true);
+         util.Dom.batch(el, f, util.Dom, true);
       },
    
       /**
@@ -373,10 +373,10 @@ YAHOO.util.Dom = function() {
             var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)', 'g');
             var c = el['className'];
             
-            el['className'] = c.replace( re, ' ');
+            el['className'] = c.replace(re, ' ');
          };
          
-         this.batch(el, f, this, true);
+         util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -392,7 +392,7 @@ YAHOO.util.Dom = function() {
             this.addClass(el, newClassName);
          };
          
-         this.batch(el, f, this, true);
+         util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -412,7 +412,7 @@ YAHOO.util.Dom = function() {
             return el.id;
          };
          
-         return this.batch(el, f, this, true);
+         return util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -422,7 +422,7 @@ YAHOO.util.Dom = function() {
        * @return {Boolean} Whether or not the haystack is an ancestor of needle
        */
       isAncestor: function(haystack, needle) {
-         haystack = this.get(haystack);
+         haystack = util.Dom.get(haystack);
          if (!haystack || !needle) { return false; }
          
          var f = function(needle) {
@@ -453,7 +453,7 @@ YAHOO.util.Dom = function() {
             }    
          };
          
-         return this.batch(needle, f, this, true);     
+         return util.Dom.batch(needle, f, util.Dom, true);     
       },
       
       /**
@@ -466,7 +466,7 @@ YAHOO.util.Dom = function() {
             return this.isAncestor(document.documentElement, el);
          };
          
-         return this.batch(el, f, this, true);
+         return util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -478,7 +478,7 @@ YAHOO.util.Dom = function() {
        */
       getElementsBy: function(method, tag, root) {
          tag = tag || '*';
-         root = this.get(root) || document;
+         root = util.Dom.get(root) || document;
          
          var nodes = [];
          var elements = root.getElementsByTagName(tag);
@@ -505,7 +505,7 @@ YAHOO.util.Dom = function() {
        * @return {HTMLElement/Array} The element(s) with the method applied
        */
       batch: function(el, method, o, override) {
-         el = this.get(el);
+         el = util.Dom.get(el);
          var scope = (override) ? o : window;
          
          if (!el || el.tagName || !el.length) 
@@ -529,8 +529,8 @@ YAHOO.util.Dom = function() {
        */
       getDocumentHeight: function() {
          var scrollHeight=-1,windowHeight=-1,bodyHeight=-1;
-         var marginTop = parseInt(this.getStyle(document.body, 'marginTop'), 10);
-         var marginBottom = parseInt(this.getStyle(document.body, 'marginBottom'), 10);
+         var marginTop = parseInt(util.Dom.getStyle(document.body, 'marginTop'), 10);
+         var marginBottom = parseInt(util.Dom.getStyle(document.body, 'marginBottom'), 10);
          
          var mode = document.compatMode;
          
@@ -562,8 +562,8 @@ YAHOO.util.Dom = function() {
        */
       getDocumentWidth: function() {
          var docWidth=-1,bodyWidth=-1,winWidth=-1;
-         var marginRight = parseInt(this.getStyle(document.body, 'marginRight'), 10);
-         var marginLeft = parseInt(this.getStyle(document.body, 'marginLeft'), 10);
+         var marginRight = parseInt(util.Dom.getStyle(document.body, 'marginRight'), 10);
+         var marginLeft = parseInt(util.Dom.getStyle(document.body, 'marginLeft'), 10);
          
          var mode = document.compatMode;
          
