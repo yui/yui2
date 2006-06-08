@@ -151,7 +151,7 @@ YAHOO.util.CustomEvent.prototype = {
     },
 
     toString: function() {
-         return "Evt: " + "'" + this.type  + "', " + 
+         return "CustomEvent: " + "'" + this.type  + "', " + 
              "scope: " + this.scope;
 
     }
@@ -896,7 +896,8 @@ if (!YAHOO.util.Event) {
                 var id = el.id;
 
                 if (!id) {
-                    id = "yuievtautoid-" + (counter++);
+                    id = "yuievtautoid-" + counter;
+                    ++counter;
                     el.id = id;
                 }
 
@@ -966,7 +967,7 @@ if (!YAHOO.util.Event) {
 
             /**
              * Polling function that runs before the onload event fires, 
-             * attempting * to attach to DOM Nodes as soon as they are 
+             * attempting to attach to DOM Nodes as soon as they are 
              * available
              * @private
              */
@@ -1013,7 +1014,7 @@ if (!YAHOO.util.Event) {
                 delayedListeners = stillDelayed;
 
                 // onAvailable
-                notAvail = [];
+                var notAvail = [];
                 for (i=0,len=onAvailStack.length; i<len ; ++i) {
                     var item = onAvailStack[i];
                     if (item) {
@@ -1037,6 +1038,8 @@ if (!YAHOO.util.Event) {
                 }
 
                 this.locked = false;
+
+                return true;
 
             },
 

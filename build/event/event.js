@@ -16,7 +16,16 @@ version: 0.10.0
  *                 the window object.  The listener can override this.
  * @constructor
  */
-YAHOO.util.CustomEvent = function(type, oScope) {
+YAHOO.util.CustomEvent = function(type, oScope, silent) {
+
+
+    // var getContext = function() {
+        // return this;
+    // };
+
+
+
+
     /**
      * The type of event, returned to subscribers when the event fires
      * @type string
@@ -31,6 +40,13 @@ YAHOO.util.CustomEvent = function(type, oScope) {
     this.scope = oScope || window;
 
     /**
+     * By default all custom events are logged in the debug build, set silent
+     * to true to disable logging for this event.
+     * @type boolean
+     */
+    this.silent = silent;
+
+    /**
      * The subscribers to this event
      * @type Subscriber[]
      */
@@ -40,6 +56,9 @@ YAHOO.util.CustomEvent = function(type, oScope) {
     // so that CustomEvent can be used independently of pe.event
     if (YAHOO.util.Event) { 
         YAHOO.util.Event.regCE(this);
+    }
+
+    if (!this.silent) {
     }
 };
 
@@ -87,11 +106,24 @@ YAHOO.util.CustomEvent.prototype = {
      * @param {Array} an arbitrary set of parameters to pass to the handler
      */
     fire: function() {
-        for (var i=0, len=this.subscribers.length; i<len; ++i) {
+        var len=this.subscribers.length;
+
+        var args = [];
+
+        for (var i=0; i<arguments.length; ++i) {
+            args.push(arguments[i]);
+        }
+
+        if (!this.silent) {
+        }
+
+        for (i=0; i<len; ++i) {
             var s = this.subscribers[i];
             if (s) {
+                if (!this.silent) {
+                }
                 var scope = (s.override) ? s.obj : this.scope;
-                s.fn.call(scope, this.type, arguments, s.obj);
+                s.fn.call(scope, this.type, args, s.obj);
             }
         }
     },
@@ -116,6 +148,12 @@ YAHOO.util.CustomEvent.prototype = {
         }
 
         delete this.subscribers[index];
+    },
+
+    toString: function() {
+         return "CustomEvent: " + "'" + this.type  + "', " + 
+             "scope: " + this.scope;
+
     }
 };
 
@@ -166,6 +204,9 @@ YAHOO.util.Subscriber.prototype.contains = function(fn, obj) {
     return (this.fn == fn && this.obj == obj);
 };
 
+YAHOO.util.Subscriber.prototype.toString = function() {
+    return "Subscriber, obj: " + (this.obj || "")  + ", override: " +  (this.override || "no");
+};
 /* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
 
 // Only load this library once.  If it is loaded a second time, existing
@@ -456,7 +497,6 @@ if (!YAHOO.util.Event) {
                     return true;
                 }
 
-
                 // if the user chooses to override the scope, we use the custom
                 // object passed in, otherwise the executing scope will be the
                 // HTML element that the event is registered on
@@ -644,7 +684,6 @@ if (!YAHOO.util.Event) {
                 if (!el || !cacheItem) {
                     return false;
                 }
-
 
                 if (el.removeEventListener) {
                     el.removeEventListener(sType, cacheItem[this.WFN], false);
@@ -857,7 +896,8 @@ if (!YAHOO.util.Event) {
                 var id = el.id;
 
                 if (!id) {
-                    id = "yuievtautoid-" + (counter++);
+                    id = "yuievtautoid-" + counter;
+                    ++counter;
                     el.id = id;
                 }
 
@@ -927,7 +967,7 @@ if (!YAHOO.util.Event) {
 
             /**
              * Polling function that runs before the onload event fires, 
-             * attempting * to attach to DOM Nodes as soon as they are 
+             * attempting to attach to DOM Nodes as soon as they are 
              * available
              * @private
              */
@@ -938,7 +978,6 @@ if (!YAHOO.util.Event) {
                 }
 
                 this.locked = true;
-
 
                 // keep trying until after the page is loaded.  We need to 
                 // check the page load state prior to trying to bind the 
@@ -975,7 +1014,7 @@ if (!YAHOO.util.Event) {
                 delayedListeners = stillDelayed;
 
                 // onAvailable
-                notAvail = [];
+                var notAvail = [];
                 for (i=0,len=onAvailStack.length; i<len ; ++i) {
                     var item = onAvailStack[i];
                     if (item) {
@@ -999,6 +1038,8 @@ if (!YAHOO.util.Event) {
                 }
 
                 this.locked = false;
+
+                return true;
 
             },
 
