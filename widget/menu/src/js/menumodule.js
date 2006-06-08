@@ -573,146 +573,173 @@ YAHOO.widget.MenuModule.prototype._addItemToGroup =
 
     function(p_nGroupIndex, p_oItem, p_nItemIndex) {
 
-        if(typeof p_nItemIndex == "number") {
+        var oItem;
 
-            var nGroupIndex = typeof p_nGroupIndex == "number" ? 
-                    p_nGroupIndex : 0,
-                    aGroup = this._getItemGroup(nGroupIndex);
+        if(p_oItem instanceof this.ITEM_TYPE) {
 
+            oItem = p_oItem;     
+
+        }
+        else if(typeof p_oItem == "string") {
+
+            oItem = new this.ITEM_TYPE(p_oItem);
+        
+        }
+
+
+        if(oItem) {
+        
+            if(typeof p_nItemIndex == "number") {
     
-            if(!aGroup) {
+                var nGroupIndex = typeof p_nGroupIndex == "number" ? 
+                        p_nGroupIndex : 0,
+                        aGroup = this._getItemGroup(nGroupIndex);
     
-                aGroup = this._createItemGroup(nGroupIndex);
+        
+                if(!aGroup) {
+        
+                    aGroup = this._createItemGroup(nGroupIndex);
+        
+                }
     
-            }
-
-
-            var bAppend = (p_nItemIndex >= aGroup.length);            
-
-
-            if(aGroup[p_nItemIndex]) {
     
-                aGroup.splice(p_nItemIndex, 0, p_oItem);
+                var bAppend = (p_nItemIndex >= aGroup.length);            
+    
+    
+                if(aGroup[p_nItemIndex]) {
+        
+                    aGroup.splice(p_nItemIndex, 0, oItem);
+        
+                }
+                else {
+        
+                    aGroup[p_nItemIndex] = oItem;
+        
+                }
+    
+    
+                var oGroupItem = aGroup[p_nItemIndex];
+    
+                if(oGroupItem) {
+    
+                    if(bAppend && !oGroupItem.element.parentNode) {
+            
+                        this._aListElements[nGroupIndex].appendChild(
+                            oGroupItem.element
+                        );
+        
+                    }
+                    else {
+      
+        
+                        /**
+                        * Returns the next sibling of an item in an array 
+                        * @param {p_aArray} An array
+                        * @param {p_nStartIndex} The index to start searching
+                        * the array 
+                        * @ignore
+                        * @return Returns an item in an array
+                        * @type Object 
+                        */
+                        function getNextItemSibling(p_aArray, p_nStartIndex) {
+                
+                            return (
+                                    p_aArray[p_nStartIndex] || 
+                                    getNextItemSibling(
+                                        p_aArray, 
+                                        (p_nStartIndex+1)
+                                    )
+                                );
+                
+                        }
+        
+        
+                        var oNextItemSibling = 
+                                getNextItemSibling(aGroup, (p_nItemIndex+1));
+        
+                        if(oNextItemSibling && !oGroupItem.element.parentNode) {
+                
+                            this._aListElements[nGroupIndex].insertBefore(
+                                    oGroupItem.element, 
+                                    oNextItemSibling.element
+                                );
+            
+                        }
+        
+                    }
+        
+    
+                    oGroupItem.parent = this;
+            
+                    this._subscribeToItemEvents(oGroupItem);
+        
+                    this._configureItemSubmenuModule(oGroupItem);
+                    
+                    this._updateItemProperties(nGroupIndex);
+            
+                    return oGroupItem;
+        
+                }
     
             }
             else {
-    
-                aGroup[p_nItemIndex] = p_oItem;
-    
-            }
-
-
-            var oItem = aGroup[p_nItemIndex];
-
-            if(oItem) {
-
-                if(bAppend && !oItem.element.parentNode) {
         
-                    this._aListElements[nGroupIndex].appendChild(oItem.element);
-    
+                var nGroupIndex = typeof p_nGroupIndex == "number" ? 
+                        p_nGroupIndex : 0,
+                        aGroup = this._getItemGroup(nGroupIndex);
+        
+                if(!aGroup) {
+        
+                    aGroup = this._createItemGroup(nGroupIndex);
+        
                 }
-                else {
-  
-    
-                    /**
-                    * Returns the next sibling of an item in an array 
-                    * @param {p_aArray} An array
-                    * @param {p_nStartIndex} The index to start searching the array 
-                    * @ignore
-                    * @return Returns an item in an array
-                    * @type Object 
-                    */
-                    function getNextItemSibling(p_aArray, p_nStartIndex) {
-            
-                        return (
-                                p_aArray[p_nStartIndex] || 
-                                getNextItemSibling(p_aArray, (p_nStartIndex+1))
-                            );
-            
-                    }
-    
-    
-                    var oNextItemSibling = 
-                            getNextItemSibling(aGroup, (p_nItemIndex+1));
-    
-                    if(oNextItemSibling && !oItem.element.parentNode) {
-            
-                        this._aListElements[nGroupIndex].insertBefore(
-                                oItem.element, 
-                                oNextItemSibling.element
-                            );
+        
+                var nItemIndex = aGroup.length;
+        
+                aGroup[nItemIndex] = oItem;
+        
+        
+                var oGroupItem = aGroup[nItemIndex];
+        
+                if(oGroupItem) {
+        
+                    if(
+                        !this._oDom.isAncestor(
+                            this._aListElements[nGroupIndex], 
+                            oGroupItem.element
+                        )
+                    ) {
+        
+                        this._aListElements[nGroupIndex].appendChild(
+                            oGroupItem.element
+                        );
         
                     }
-    
+        
+                    oGroupItem.element.setAttribute("groupindex", nGroupIndex);
+                    oGroupItem.element.setAttribute("index", nItemIndex);
+            
+                    oGroupItem.parent = this;
+        
+                    oGroupItem.index = nItemIndex;
+                    oGroupItem.groupIndex = nGroupIndex;
+            
+                    this._subscribeToItemEvents(oGroupItem);
+        
+                    this._configureItemSubmenuModule(oGroupItem);
+        
+                    if(nItemIndex === 0) {
+            
+                        this._oDom.addClass(oGroupItem.element, "first");
+            
+                    }
+            
+                    return oGroupItem;
+        
                 }
-    
-
-                oItem.parent = this;
         
-                this._subscribeToItemEvents(oItem);
-    
-                this._configureItemSubmenuModule(oItem);
-                
-                this._updateItemProperties(nGroupIndex);
-        
-                return oItem;
-    
             }
 
-        }
-        else {
-    
-            var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
-                aGroup = this._getItemGroup(nGroupIndex);
-    
-            if(!aGroup) {
-    
-                aGroup = this._createItemGroup(nGroupIndex);
-    
-            }
-    
-            var nItemIndex = aGroup.length;
-    
-            aGroup[nItemIndex] = p_oItem;
-    
-    
-            var oItem = aGroup[nItemIndex];
-    
-            if(oItem) {
-    
-                if(
-                    !this._oDom.isAncestor(
-                        this._aListElements[nGroupIndex], 
-                        oItem.element
-                    )
-                ) {
-    
-                    this._aListElements[nGroupIndex].appendChild(oItem.element);
-    
-                }
-    
-                oItem.element.setAttribute("groupindex", nGroupIndex);
-                oItem.element.setAttribute("index", nItemIndex);
-        
-                oItem.parent = this;
-    
-                oItem.index = nItemIndex;
-                oItem.groupIndex = nGroupIndex;
-        
-                this._subscribeToItemEvents(oItem);
-    
-                this._configureItemSubmenuModule(oItem);
-    
-                if(nItemIndex === 0) {
-        
-                    this._oDom.addClass(oItem.element, "first");
-        
-                }
-        
-                return oItem;
-    
-            }
-    
         }
     
     };
@@ -2113,10 +2140,10 @@ YAHOO.widget.MenuModule.prototype.setItemGroupTitle =
 */
 YAHOO.widget.MenuModule.prototype.addItem = function(p_oItem, p_nGroupIndex) {
 
-    if(p_oItem && p_oItem instanceof YAHOO.widget.MenuModuleItem) {
+    if(p_oItem) {
 
         return this._addItemToGroup(p_nGroupIndex, p_oItem);
-
+        
     }
 
 };
@@ -2136,7 +2163,7 @@ YAHOO.widget.MenuModule.prototype.insertItem =
 
     function(p_oItem, p_nItemIndex, p_nGroupIndex) {
     
-        if(p_oItem && p_oItem instanceof YAHOO.widget.MenuModuleItem) {
+        if(p_oItem) {
     
             return this._addItemToGroup(p_nGroupIndex, p_oItem, p_nItemIndex);
     
