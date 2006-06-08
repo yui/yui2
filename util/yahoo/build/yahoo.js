@@ -42,7 +42,8 @@ YAHOO.namespace = function( ns ) {
 };
 
 /**
- * Global log method
+ * Uses YAHOO.widget.Logger to output a log message, if the widget is available.
+ *
  * @param  {string}  sMsg       The message to log.
  * @param  {string}  sCategory  The log category for the message.  Default
  *                              categories are "info", "warn", "error", time".
