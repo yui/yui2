@@ -153,7 +153,7 @@ YAHOO.example.AutoCompleteLogger = function() {
     };
 }();
 
-YAHOO.example.AutoCompleteLogger.init();
+YAHOO.util.Event.addListener(this,'load',YAHOO.example.AutoCompleteLogger.init);
 </script>
 </div>
 </body>
