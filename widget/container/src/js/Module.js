@@ -46,7 +46,7 @@ YAHOO.widget.Module.CSS_HEADER = "hd";
 * @type string
 * @final
 */
-YAHOO.widget.Module.CSS_BODY   = "bd";
+YAHOO.widget.Module.CSS_BODY = "bd";
 
 /**
 * Constant representing the module footer
@@ -623,4 +623,8 @@ YAHOO.widget.Module.prototype = {
 			this.resizeMonitor = null;
 		}
 	}
+}
+
+YAHOO.widget.Module.prototype.toString = function() {
+	return "Module " + this.id;
 }
