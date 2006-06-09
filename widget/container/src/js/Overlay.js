@@ -654,6 +654,10 @@ YAHOO.widget.Overlay.prototype.destroy = function() {
 	YAHOO.widget.Overlay.superclass.destroy.call(this);  
 }; 
 
+YAHOO.widget.Overlay.prototype.toString = function() {
+	return "Overlay " + this.id;
+}
+
 /**
 * A singleton CustomEvent used for reacting to the DOM event for window scroll
 * @type YAHOO.util.CustomEvent
