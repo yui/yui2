@@ -1049,7 +1049,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
     var sText = this.value; //string in textbox
 
     // Filter out chars that don't trigger queries
-    if (oSelf._isIgnoreKey(nKeyCode) || (sText.toLowerCase() == this._sCurQuery)) {
+    if (oSelf._isIgnoreKey(nKeyCode) || (sText.toLowerCase() == oSelf._sCurQuery)) {
         return;
     }
     else {
@@ -1084,13 +1084,6 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._isIgnoreKey = function(nKeyCode) {
-    if(this.typeAhead) { // fewer query triggers when type ahead is on
-        if((nKeyCode == 8) || // backspace
-        (nKeyCode == 39) || // right
-        (nKeyCode == 46)) { // delete
-            return true;
-        }
-    }
     if ((nKeyCode == 9) || (nKeyCode == 13)  || // tab, enter
             (nKeyCode == 16) || (nKeyCode == 17) || // shift, ctl
             (nKeyCode >= 18 && nKeyCode <= 20) || // alt,pause/break,caps lock
