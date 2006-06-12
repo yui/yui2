@@ -725,7 +725,7 @@ if (!YAHOO.util.Event) {
              */
             getTarget: function(ev, resolveTextNode) {
                 var t = ev.target || ev.srcElement;
-                return resolveTextNode(t);
+                return this.resolveTextNode(t);
             },
 
             /**
