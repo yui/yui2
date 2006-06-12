@@ -71,7 +71,7 @@ YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	YAHOO.widget.Tooltip.superclass.initDefaultConfig.call(this);
 
-	this.cfg.addProperty("preventoverlap",		{ value:true, handler:this.configPreventOverlap, validator:this.cfg.checkBoolean, supercedes:["x","y","xy"] } );
+	this.cfg.addProperty("preventoverlap",		{ value:true, validator:this.cfg.checkBoolean, supercedes:["x","y","xy"] } );
 
 	this.cfg.addProperty("showdelay",			{ value:200, handler:this.configShowDelay, validator:this.cfg.checkNumber } );
 	this.cfg.addProperty("autodismissdelay",	{ value:5000, handler:this.configAutoDismissDelay, validator:this.cfg.checkNumber } );
@@ -105,7 +105,7 @@ YAHOO.widget.Tooltip.prototype.configContainer = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "preventoverlap" property is changed.
-*/
+
 YAHOO.widget.Tooltip.prototype.configPreventOverlap = function(type, args, obj) {
 	var preventoverlap = args[0];
 	if (preventoverlap) {
@@ -116,6 +116,7 @@ YAHOO.widget.Tooltip.prototype.configPreventOverlap = function(type, args, obj) 
 		this.moveEvent.unsubscribe(this.preventOverlap, this);
 	}
 }
+*/
 
 /**
 * The default event handler fired when the "context" property is changed.
@@ -123,18 +124,34 @@ YAHOO.widget.Tooltip.prototype.configPreventOverlap = function(type, args, obj) 
 YAHOO.widget.Tooltip.prototype.configContext = function(type, args, obj) {
 	var context = args[0];
 	if (context) {
-		if (typeof context == "string") {
-			this.cfg.setProperty("context", document.getElementById(context), true);
-		}
 		
-		var contextElement = this.cfg.getProperty("context");
-
-		if (contextElement && contextElement.title && ! this.cfg.getProperty("text")) {
-			this.cfg.setProperty("text", contextElement.title);
+		// Normalize parameter into an array
+		if (! (context instanceof Array)) {
+			if (typeof context == "string") {
+				this.cfg.setProperty("context", [document.getElementById(context)], true);
+			} else { // Assuming this is an element
+				this.cfg.setProperty("context", [context], true);
+			}
+			context = this.cfg.getProperty("context");
 		}
 
-		YAHOO.util.Event.addListener(contextElement, "mouseover", this.onContextMouseOver, this);
-		YAHOO.util.Event.addListener(contextElement, "mouseout", this.onContextMouseOut, this);
+
+		// Remove any existing mouseover/mouseout listeners
+		if (this._context) {
+			for (var c=0;c<this._context.length;++c) {
+				var el = this._context[c];
+				YAHOO.util.Event.removeListener(el, "mouseover", this.onContextMouseOver);
+				YAHOO.util.Event.removeListener(el, "mouseout", this.onContextMouseOut);
+			}
+		}
+
+		// Add mouseover/mouseout listeners to context elements
+		this._context = context;
+		for (var c=0;c<this._context.length;++c) {
+			var el = this._context[c];
+			YAHOO.util.Event.addListener(el, "mouseover", this.onContextMouseOver, this);
+			YAHOO.util.Event.addListener(el, "mouseout", this.onContextMouseOut, this);
+		}
 	}
 }
 
@@ -148,22 +165,21 @@ YAHOO.widget.Tooltip.prototype.configContext = function(type, args, obj) {
 * @param {object}	obj	The object argument
 */
 YAHOO.widget.Tooltip.prototype.onContextMouseOver = function(e, obj) {
-	if (! obj) {
-		obj = this;
-	}
-	
-	var context = obj.cfg.getProperty("context");
-	
+	var context = this;
+
 	if (context.title) {
-		obj.tempTitle = context.title;
+		obj._tempTitle = context.title;
 		context.title = "";
+		obj.setBody(obj._tempTitle);
+	} else {
+		obj.cfg.refireEvent("text");
 	}
 
 	/**
 	* The unique process ID associated with the thread responsible for showing the Tooltip.
 	* @type int
 	*/
-	this.procId = obj.doShow(e);
+	this.procId = obj.doShow(e, context);
 }
 
 /**
@@ -172,14 +188,10 @@ YAHOO.widget.Tooltip.prototype.onContextMouseOver = function(e, obj) {
 * @param {object}	obj	The object argument
 */
 YAHOO.widget.Tooltip.prototype.onContextMouseOut = function(e, obj) {
-	if (! obj) {
-		obj = this;
-	}
+	var el = this;
 
-	var context = obj.cfg.getProperty("context");
-
-	if (obj.tempTitle) {
-		context.title = obj.tempTitle;
+	if (obj._tempTitle) {
+		el.title = obj._tempTitle;
 	}
 	
 	if (this.procId) {
@@ -198,12 +210,11 @@ YAHOO.widget.Tooltip.prototype.onContextMouseOut = function(e, obj) {
 * @param {DOMEvent} e	The current DOM event
 * @return {int}	The process ID of the timeout function associated with doShow
 */
-YAHOO.widget.Tooltip.prototype.doShow = function(e) {
+YAHOO.widget.Tooltip.prototype.doShow = function(e, context) {
 
 	var pageX = YAHOO.util.Event.getPageX(e);
 	var pageY = YAHOO.util.Event.getPageY(e);
 	
-	var context = this.cfg.getProperty("context");
 	var yOffset = 25;
 	if (this.browser == "opera" && context.tagName == "A") {
 		yOffset += 12;
@@ -213,6 +224,9 @@ YAHOO.widget.Tooltip.prototype.doShow = function(e) {
 	return setTimeout(
 		function() {
 			me.moveTo(pageX, pageY + yOffset);
+			if (me.cfg.getProperty("preventoverlap")) {
+				me.preventOverlap(context);
+			}
 			me.show();
 			me.doHide();
 		},
@@ -234,13 +248,13 @@ YAHOO.widget.Tooltip.prototype.doHide = function() {
 /**
 * Fired when the Tooltip is moved, this event handler is used to prevent the Tooltip from overlapping with its context element.
 */
-YAHOO.widget.Tooltip.prototype.preventOverlap = function(type, args, obj) {
-	var pos = args[0];
+YAHOO.widget.Tooltip.prototype.preventOverlap = function(context) {
+	var pos = this.cfg.getProperty("xy");
 	var x = pos[0];
 	var y = pos[1];
 
 	var elementRegion = YAHOO.util.Dom.getRegion(this.element);
-	var contextRegion = YAHOO.util.Dom.getRegion(this.cfg.getProperty("context"));
+	var contextRegion = YAHOO.util.Dom.getRegion(context);
 	
 	var intersection = contextRegion.intersect(elementRegion);
 	if (intersection) { // they overlap
@@ -248,4 +262,8 @@ YAHOO.widget.Tooltip.prototype.preventOverlap = function(type, args, obj) {
 		y = (y - overlapHeight - 10);
 		this.cfg.setProperty("y", y);
 	}
+}
+
+YAHOO.widget.Tooltip.prototype.toString = function() {
+	return "Tooltip " + this.id;
 }
