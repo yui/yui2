@@ -250,13 +250,17 @@ div.yuimenubar li.yuimenubaritem.first {
 
 div.yuimenubar li.yuimenubaritem img {
 
+    height:9px;
+    width:9px;
     margin:0 0 0 10px;
     vertical-align:middle;
 
 }
 
 div.yuimenu li.yuimenuitem img {
-  
+
+    height:9px;
+    width:9px;  
     margin:0 -16px 0 10px;
     border:0;
 
