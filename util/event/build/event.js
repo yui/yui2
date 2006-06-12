@@ -113,7 +113,6 @@ YAHOO.util.CustomEvent.prototype = {
             var s = this.subscribers[i];
             if (s) {
                 if (!this.silent) {
-                               "info", "Event" );
                 }
                 var scope = (s.override) ? s.obj : this.scope;
                 s.fn.call(scope, this.type, args, s.obj);
@@ -698,7 +697,7 @@ if (!YAHOO.util.Event) {
              * @param {boolean} resolveTextNode when set to true the target's
              *                  parent will be returned if the target is a 
              *                  text node.  @deprecated, the text node is
-             *                  resolved automatically
+             *                  now resolved automatically
              * @return {HTMLElement} the event's target
              */
             getTarget: function(ev, resolveTextNode) {
@@ -709,7 +708,7 @@ if (!YAHOO.util.Event) {
             /**
              * In some cases, some browsers will return a text node inside
              * the actual element that was targeted.  This normalizes the
-             * return value for getTarget and getRelatedTarget
+             * return value for getTarget and getRelatedTarget.
              * @param {HTMLElement} node to resolve
              * @return  the normized node
              */
