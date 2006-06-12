@@ -18,14 +18,6 @@ version: 0.10.0
  */
 YAHOO.util.CustomEvent = function(type, oScope, silent) {
 
-
-    // var getContext = function() {
-        // return this;
-    // };
-
-
-
-
     /**
      * The type of event, returned to subscribers when the event fires
      * @type string
@@ -121,6 +113,7 @@ YAHOO.util.CustomEvent.prototype = {
             var s = this.subscribers[i];
             if (s) {
                 if (!this.silent) {
+                               "info", "Event" );
                 }
                 var scope = (s.override) ? s.obj : this.scope;
                 s.fn.call(scope, this.type, args, s.obj);
@@ -205,10 +198,9 @@ YAHOO.util.Subscriber.prototype.contains = function(fn, obj) {
 };
 
 YAHOO.util.Subscriber.prototype.toString = function() {
-    return "Subscriber, obj: " + (this.obj || "")  + ", override: " +  (this.override || "no");
+    return "Subscriber { obj: " + (this.obj || "")  + 
+           ", override: " +  (this.override || "no") + " }";
 };
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
 // Only load this library once.  If it is loaded a second time, existing
 // events cannot be detached.
 if (!YAHOO.util.Event) {
@@ -541,7 +533,7 @@ if (!YAHOO.util.Event) {
                 // DOM2 Event model
                 } else if (el.addEventListener) {
                     el.addEventListener(sType, wrappedFn, false);
-                // Internet Explorer abstraction
+                // IE
                 } else if (el.attachEvent) {
                     el.attachEvent("on" + sType, wrappedFn);
                 }
@@ -705,16 +697,27 @@ if (!YAHOO.util.Event) {
              * @param {Event} ev the event
              * @param {boolean} resolveTextNode when set to true the target's
              *                  parent will be returned if the target is a 
-             *                  text node
+             *                  text node.  @deprecated, the text node is
+             *                  resolved automatically
              * @return {HTMLElement} the event's target
              */
             getTarget: function(ev, resolveTextNode) {
                 var t = ev.target || ev.srcElement;
+                return resolveTextNode(t);
+            },
 
-                if (resolveTextNode && t && "#text" == t.nodeName) {
-                    return t.parentNode;
+            /**
+             * In some cases, some browsers will return a text node inside
+             * the actual element that was targeted.  This normalizes the
+             * return value for getTarget and getRelatedTarget
+             * @param {HTMLElement} node to resolve
+             * @return  the normized node
+             */
+            resolveTextNode: function(node) {
+                if (node && "#text" == node.nodeName) {
+                    return node.parentNode;
                 } else {
-                    return t;
+                    return node;
                 }
             },
 
@@ -777,7 +780,7 @@ if (!YAHOO.util.Event) {
                     }
                 }
 
-                return t;
+                return this.resolveTextNode(t);
             },
 
             /**

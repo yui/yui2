@@ -20,26 +20,6 @@ version: 0.10.0
  */
 YAHOO.util.CustomEvent = function(type, oScope, silent) {
 
-    // YAHOO.log("New Event '" + type + "', defined by: " + YAHOO.util.CustomEvent.caller);
-    // YAHOO.log("New Event '" + type + "', defined by: " + arguments.callee.caller);
-    // YAHOO.log("New Event '" + type + "', defined by: " + arguments.callee);
-    //YAHOO.log("New Event '" + type + "', scope: " + oScope);
-    // YAHOO.log("New Event '" + type + "', defined by: " + 
-            // Object.prototype.toString.call(oScope));
-
-    // var getContext = function() {
-        // return this;
-    // };
-
-    // YAHOO.log("New Event '" + type + "', defined by: " + getContext.call(oScope));
-    // YAHOO.log("New Event '" + type + "', defined by: " + 
-            // getContext.call(arguments.callee.caller));
-
-    //YAHOO.log( "New Event '" + type + "', scope: " + oScope + ", caller" +
-     //          getContext.call(YAHOO.util.CustomEvent.caller) );
-
-    // YAHOO.log( "New Event '" + type + "', scope: " + oScope );
-
     /**
      * The type of event, returned to subscribers when the event fires
      * @type string
@@ -141,7 +121,8 @@ YAHOO.util.CustomEvent.prototype = {
             var s = this.subscribers[i];
             if (s) {
                 if (!this.silent) {
-                    YAHOO.log( (i+1) + ": " +  s, "info", "Event" );
+                    YAHOO.log( this.type + "->" + (i+1) + ": " +  s, 
+                               "info", "Event" );
                 }
                 var scope = (s.override) ? s.obj : this.scope;
                 s.fn.call(scope, this.type, args, s.obj);
@@ -226,10 +207,9 @@ YAHOO.util.Subscriber.prototype.contains = function(fn, obj) {
 };
 
 YAHOO.util.Subscriber.prototype.toString = function() {
-    return "Subscriber, obj: " + (this.obj || "")  + ", override: " +  (this.override || "no");
+    return "Subscriber { obj: " + (this.obj || "")  + 
+           ", override: " +  (this.override || "no") + " }";
 };
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
 // Only load this library once.  If it is loaded a second time, existing
 // events cannot be detached.
 if (!YAHOO.util.Event) {
@@ -568,7 +548,7 @@ if (!YAHOO.util.Event) {
                     // this.logger.debug("adding DOM event: " + el.id + 
                     // ", " + sType);
                     el.addEventListener(sType, wrappedFn, false);
-                // Internet Explorer abstraction
+                // IE
                 } else if (el.attachEvent) {
                     el.attachEvent("on" + sType, wrappedFn);
                 }
@@ -740,18 +720,27 @@ if (!YAHOO.util.Event) {
              * @param {Event} ev the event
              * @param {boolean} resolveTextNode when set to true the target's
              *                  parent will be returned if the target is a 
-             *                  text node
+             *                  text node.  @deprecated, the text node is
+             *                  resolved automatically
              * @return {HTMLElement} the event's target
              */
             getTarget: function(ev, resolveTextNode) {
                 var t = ev.target || ev.srcElement;
+                return resolveTextNode(t);
+            },
 
-                if (resolveTextNode && t && "#text" == t.nodeName) {
-                    // this.logger.debug("target is text node, returning 
-                    // parent");
-                    return t.parentNode;
+            /**
+             * In some cases, some browsers will return a text node inside
+             * the actual element that was targeted.  This normalizes the
+             * return value for getTarget and getRelatedTarget
+             * @param {HTMLElement} node to resolve
+             * @return  the normized node
+             */
+            resolveTextNode: function(node) {
+                if (node && "#text" == node.nodeName) {
+                    return node.parentNode;
                 } else {
-                    return t;
+                    return node;
                 }
             },
 
@@ -815,7 +804,7 @@ if (!YAHOO.util.Event) {
                     }
                 }
 
-                return t;
+                return this.resolveTextNode(t);
             },
 
             /**
