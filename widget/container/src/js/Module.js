@@ -55,6 +55,13 @@ YAHOO.widget.Module.CSS_BODY = "bd";
 */
 YAHOO.widget.Module.CSS_FOOTER = "ft";
 
+/**
+* Constant representing the url for the "src" attribute of the iframe used to monitor changes to the browser's base font size
+* @type string
+* @final
+*/
+YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL = null;
+
 YAHOO.widget.Module.prototype = {
 
 	/**
@@ -362,26 +369,74 @@ YAHOO.widget.Module.prototype = {
 	* Initialized an empty DOM element that is placed out of the visible area that can be used to detect text resize.
 	*/
 	initResizeMonitor : function() {
+
 		var resizeMonitor = document.getElementById("_yuiResizeMonitor");
+
 		if (! resizeMonitor) {
-			resizeMonitor = document.createElement("DIV");
-			resizeMonitor.style.position = "absolute";
+
+			resizeMonitor = document.createElement("iframe");
+
+            var bIE = (this.browser.indexOf("ie") === 0);
+
+            if(this.isSecure && this.RESIZE_MONITOR_SECURE_URL && bIE) {
+
+                resizeMonitor.src = this.RESIZE_MONITOR_SECURE_URL;
+
+            }
+			
 			resizeMonitor.id = "_yuiResizeMonitor";
-			resizeMonitor.style.width = "1em";
-			resizeMonitor.style.height = "1em";
-			resizeMonitor.style.top = "-1000px";
-			resizeMonitor.style.left = "-1000px";
-			resizeMonitor.innerHTML = "&nbsp;";
+			resizeMonitor.style.visibility = "hidden";
+			
 			document.body.appendChild(resizeMonitor);
+
+            resizeMonitor.style.width = "10em";
+            resizeMonitor.style.height = "10em";
+            resizeMonitor.style.position = "absolute";
+            
+            var nLeft = -1 * resizeMonitor.offsetWidth,
+                nTop = -1 * resizeMonitor.offsetHeight;
+
+            resizeMonitor.style.top = nTop + "px";
+            resizeMonitor.style.left =  nLeft + "px";
+            resizeMonitor.style.borderStyle = "none";
+            resizeMonitor.style.borderWidth = "0";
+            YAHOO.util.Dom.setStyle(resizeMonitor, "opacity", "0");
+			
+			resizeMonitor.style.visibility = "visible";
+
+            if(!bIE) {
+
+                var doc = resizeMonitor.contentWindow.document;
+
+                doc.open();
+                doc.close();
+            
+            }
+
 		}
-		this.resizeMonitor = resizeMonitor;
-		YAHOO.util.Event.addListener(this.resizeMonitor, "resize", this.onDomResize, this, true);
+
+        if(resizeMonitor && resizeMonitor.contentWindow) {
+
+    		this.resizeMonitor = resizeMonitor;
+
+    		YAHOO.util.Event.addListener(this.resizeMonitor.contentWindow, "resize", this.onDomResize, this, true);
+
+        }
+
 	},
 
 	/**
 	* Event handler fired when the resize monitor element is resized.
 	*/
-	onDomResize : function(e, obj) { },
+	onDomResize : function(e, obj) { 
+
+        var nLeft = -1 * this.resizeMonitor.offsetWidth,
+            nTop = -1 * this.resizeMonitor.offsetHeight;
+        
+        this.resizeMonitor.style.top = nTop + "px";
+        this.resizeMonitor.style.left =  nLeft + "px";
+	
+	},
 
 	/**
 	* Sets the Module's header content to the HTML specified, or appends the passed element to the header. If no header is present, one will be automatically created.
