@@ -1497,7 +1497,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
         if(
             !this.cfg.getProperty("disabled") && 
             this.parent && 
-            this.parent.cfg.getProperty("visible")
+            this._oDom.getStyle(this.element, "visibility") == "visible"
         ) {
 
             this._oAnchor.blur();
