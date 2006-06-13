@@ -467,7 +467,7 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oUserConfig) {
         this.beforeRenderEvent.subscribe(this._onBeforeRender, this, true);
         this.renderEvent.subscribe(this._onRender, this, true);
         this.showEvent.subscribe(this._onShow, this, true);
-        this.hideEvent.subscribe(this._onHide, this, true);
+        this.beforeHideEvent.subscribe(this._onBeforeHide, this, true);
 
 
         if(p_oUserConfig) {
@@ -1662,20 +1662,23 @@ YAHOO.widget.MenuModule.prototype._onShow =
 * @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */
-YAHOO.widget.MenuModule.prototype._onHide = 
+YAHOO.widget.MenuModule.prototype._onBeforeHide = 
 
     function(p_sType, p_aArguments, p_oMenuModule) {
 
-        if(this.activeItem) {
+        var oActiveItem = this.activeItem;
+
+        if(oActiveItem) {
     
-            if(this.activeItem.cfg.getProperty("selected")) {
+            oActiveItem.blur();
+
+            if(oActiveItem.cfg.getProperty("selected")) {
     
-                this.activeItem.cfg.setProperty("selected", false);
-                this.activeItem.blur();
+                oActiveItem.cfg.setProperty("selected", false);
     
             }
     
-            var oSubmenu = this.activeItem.cfg.getProperty("submenu");
+            var oSubmenu = oActiveItem.cfg.getProperty("submenu");
     
             if(oSubmenu && oSubmenu.cfg.getProperty("visible")) {
     
