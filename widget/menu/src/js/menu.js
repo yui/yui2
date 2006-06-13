@@ -64,8 +64,9 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 
     // Add event handlers
 
-    this.mouseOverEvent.subscribe(this._onMouseOver, this, true);
-    this.keyDownEvent.subscribe(this._onKeyDown, this, true);
+    this.showEvent.subscribe(this._onMenuShow, this, true);
+    this.mouseOverEvent.subscribe(this._onMenuMouseOver, this, true);
+    this.keyDownEvent.subscribe(this._onMenuKeyDown, this, true);
 
 
     if(p_oUserConfig) {
@@ -82,6 +83,33 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 // Private event handlers
 
 /**
+* "show" Custom Event handler for a menu.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArguments Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.Menu} p_oMenu The menu that fired the event.
+*/
+YAHOO.widget.Menu.prototype._onMenuShow = 
+
+    function(p_sType, p_aArguments, p_oMenu) {
+
+        if(this.parent && this.parent.parent instanceof YAHOO.widget.Menu) {
+
+            var aAlignment = 
+                    this.parent.parent.cfg.getProperty("submenualignment");
+    
+            this.cfg.setProperty(
+                "submenualignment", 
+                [ aAlignment[0], aAlignment[1] ]
+            );
+        
+        }
+
+    };
+
+
+/**
 * "mouseover" Custom Event handler for a Menu instance.
 * @private
 * @param {String} p_sType The name of the event that was fired.
@@ -89,7 +117,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oUserConfig) {
 * was fired.
 * @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
 */
-YAHOO.widget.Menu.prototype._onMouseOver = 
+YAHOO.widget.Menu.prototype._onMenuMouseOver = 
 
     function(p_sType, p_aArguments, p_oMenu) {
     
@@ -115,7 +143,7 @@ YAHOO.widget.Menu.prototype._onMouseOver =
 * was fired.
 * @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
 */
-YAHOO.widget.Menu.prototype._onKeyDown = 
+YAHOO.widget.Menu.prototype._onMenuKeyDown = 
 
     function(p_sType, p_aArguments, p_oMenu) {
     
