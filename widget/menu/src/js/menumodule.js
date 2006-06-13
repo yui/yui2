@@ -1708,7 +1708,6 @@ YAHOO.widget.MenuModule.prototype._onParentMenuModuleConfigChange =
     
             case "iframe":
             case "constraintoviewport":
-            case "submenualignment":
     
                 p_oSubmenu.cfg.setProperty(sPropertyName, oPropertyValue);
                     
@@ -1783,11 +1782,6 @@ YAHOO.widget.MenuModule.prototype._onSubmenuBeforeShow =
     function(p_sType, p_aArguments, p_oSubmenu) {
     
         var aAlignment = this.parent.parent.cfg.getProperty("submenualignment");
-
-        this.cfg.setProperty(
-            "submenualignment", 
-            [ aAlignment[0], aAlignment[1] ]
-        );
 
         this.cfg.setProperty(
             "context", 
