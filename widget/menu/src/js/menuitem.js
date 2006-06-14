@@ -36,7 +36,6 @@ YAHOO.widget.MenuItem.prototype = new YAHOO.widget.MenuModuleItem();
 YAHOO.widget.MenuItem.prototype.constructor = YAHOO.widget.MenuItem;
 YAHOO.widget.MenuItem.superclass = YAHOO.widget.MenuModuleItem.prototype;
 
-
 /**
 * The MenuItem class's initialization method. This method is automatically
 * called by the constructor, and sets up all DOM references for
@@ -90,6 +89,59 @@ YAHOO.widget.MenuItem.prototype.init = function(p_oObject, p_oUserConfig) {
     this.cfg.fireQueue();
 
 };
+
+
+// Constants
+
+/**
+* Constant representing the path to the image to be used for the checked state.
+* @final
+* @type String
+*/
+YAHOO.widget.MenuItem.prototype.CHECKED_IMAGE_PATH = 
+    "nt/ic/ut/bsc/menuchk8_nrm_1.gif";
+
+/**
+* Constant representing the path to the image to be used for the selected 
+* checked state.
+* @final
+* @type String
+*/
+YAHOO.widget.MenuItem.prototype.SELECTED_CHECKED_IMAGE_PATH = 
+    "nt/ic/ut/bsc/menuchk8_hov_1.gif";
+
+/**
+* Constant representing the path to the image to be used for the disabled 
+* checked state.
+* @final
+* @type String
+*/
+YAHOO.widget.MenuItem.prototype.DISABLED_CHECKED_IMAGE_PATH = 
+    "nt/ic/ut/bsc/menuchk8_dim_1.gif";
+
+/**
+* Constant representing the alt text for the image to be used for the 
+* checked image.
+* @final
+* @type String
+*/
+YAHOO.widget.MenuItem.prototype.CHECKED_IMAGE_ALT_TEXT = "Checked.";
+
+
+/**
+* Constant representing the alt text for the image to be used for the 
+* checked image when the item is disabled.
+* @final
+* @type String
+*/
+YAHOO.widget.MenuItem.prototype.DISABLED_CHECKED_IMAGE_ALT_TEXT = 
+    "Checked. (Item disabled.)";
+
+
+// Private properties
+
+
+YAHOO.widget.MenuItem.prototype._checkImage = null;
 
 
 // Private event handlers
@@ -299,3 +351,161 @@ YAHOO.widget.MenuItem.prototype._onMouseOut =
         }
     
     };
+
+
+// Event handlers for configuration properties
+
+/**
+* Event handler for when the "checked" configuration property of
+* a MenuItem instance changes. 
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArguments Collection of arguments sent when the 
+* event was fired.
+* @param {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
+* that fired the event.
+*/    
+YAHOO.widget.MenuItem.prototype.configChecked =
+
+    function(p_sType, p_aArguments, p_oItem) {
+    
+        var bChecked = p_aArguments[0];
+        
+        if(bChecked) {
+
+            var oImg = document.createElement("img");
+
+            oImg.src = (this.imageRoot + this.CHECKED_IMAGE_PATH);
+
+            oImg.alt = this.CHECKED_IMAGE_ALT_TEXT;
+
+            this._checkImage = oImg;
+
+//            this.element.appendChild(oImg);
+
+            this.element.insertBefore(oImg, this.element.lastChild);
+
+            this._oDom.addClass([this.element, oImg], "checked");
+
+            if(this.cfg.getProperty("disabled")) {
+
+                this.cfg.refireEvent("disabled");
+
+            }
+
+            if(this.cfg.getProperty("selected")) {
+
+                this.cfg.refireEvent("selected");
+
+            }
+        
+        }
+        else {
+
+            this._oDom.removeClass([this.element, this._checkImage], "checked");
+
+            if(this._checkImage) {
+
+                this.element.removeChild(this._checkImage);
+
+            }
+
+            this._checkImage = null;
+        
+        }
+
+    };
+    
+
+/**
+* Event handler for when the "selected" configuration property of
+* a MenuItem instance changes. 
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArguments Collection of arguments sent when the 
+* event was fired.
+* @param {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
+* that fired the event.
+*/    
+YAHOO.widget.MenuItem.prototype.configSelected = 
+
+    function(p_sType, p_aArguments, p_oItem) {
+    
+        YAHOO.widget.MenuItem.superclass.configSelected.call(
+                this, p_sType, p_aArguments, p_oItem
+            );        
+    
+        if(
+            !this.cfg.getProperty("disabled") && 
+            this.cfg.getProperty("checked")
+        ) {
+
+            var bSelected = p_aArguments[0];
+            
+            this._checkImage.src = this.imageRoot + (bSelected ? 
+                this.SELECTED_CHECKED_IMAGE_PATH : this.CHECKED_IMAGE_PATH);
+            
+        }            
+    
+    };
+
+
+/**
+* Event handler for when the "disabled" configuration property of
+* a MenuItem instance changes. 
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArguments Collection of arguments sent when the 
+* event was fired.
+* @param {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
+* that fired the event.
+*/    
+YAHOO.widget.MenuItem.prototype.configDisabled = 
+
+    function(p_sType, p_aArguments, p_oItem) {
+    
+        YAHOO.widget.MenuItem.superclass.configDisabled.call(
+                this, p_sType, p_aArguments, p_oItem
+            );        
+    
+        if(this.cfg.getProperty("checked")) {
+    
+            var bDisabled = p_aArguments[0],
+                sAlt = this.CHECKED_IMAGE_ALT_TEXT,
+                sSrc = this.CHECKED_IMAGE_PATH;
+            
+            if(bDisabled) {
+    
+                sAlt = this.DISABLED_CHECKED_IMAGE_ALT_TEXT;
+                sSrc = this.DISABLED_CHECKED_IMAGE_PATH;        
+            
+            }
+    
+            this._checkImage.src = this.imageRoot + sSrc;
+            this._checkImage.alt = sAlt;
+            
+        }    
+            
+    };
+
+
+// Public methods
+    
+/**
+* Initializes the class's configurable properties which can be changed using 
+* the MenuModule's Config object (cfg).
+*/
+YAHOO.widget.MenuItem.prototype.initDefaultConfig = function() {
+
+    YAHOO.widget.MenuItem.superclass.initDefaultConfig.call(this);
+
+	// Add configuration properties
+
+    this.cfg.addProperty(
+        "checked", 
+        {
+            value: false, 
+            handler: this.configChecked, 
+            validator: this.cfg.checkBoolean, 
+            suppressEvent: true 
+        } 
+    );
+
+};
