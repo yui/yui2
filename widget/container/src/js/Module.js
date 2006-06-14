@@ -370,57 +370,61 @@ YAHOO.widget.Module.prototype = {
 	*/
 	initResizeMonitor : function() {
 
-		var resizeMonitor = document.getElementById("_yuiResizeMonitor");
+        if(this.browser != "opera") {
 
-		if (! resizeMonitor) {
-
-			resizeMonitor = document.createElement("iframe");
-
-            var bIE = (this.browser.indexOf("ie") === 0);
-
-            if(this.isSecure && this.RESIZE_MONITOR_SECURE_URL && bIE) {
-
-                resizeMonitor.src = this.RESIZE_MONITOR_SECURE_URL;
-
+            var resizeMonitor = document.getElementById("_yuiResizeMonitor");
+    
+            if (! resizeMonitor) {
+    
+                resizeMonitor = document.createElement("iframe");
+    
+                var bIE = (this.browser.indexOf("ie") === 0);
+    
+                if(this.isSecure && this.RESIZE_MONITOR_SECURE_URL && bIE) {
+    
+                    resizeMonitor.src = this.RESIZE_MONITOR_SECURE_URL;
+    
+                }
+                
+                resizeMonitor.id = "_yuiResizeMonitor";
+                resizeMonitor.style.visibility = "hidden";
+                
+                document.body.appendChild(resizeMonitor);
+    
+                resizeMonitor.style.width = "10em";
+                resizeMonitor.style.height = "10em";
+                resizeMonitor.style.position = "absolute";
+                
+                var nLeft = -1 * resizeMonitor.offsetWidth,
+                    nTop = -1 * resizeMonitor.offsetHeight;
+    
+                resizeMonitor.style.top = nTop + "px";
+                resizeMonitor.style.left =  nLeft + "px";
+                resizeMonitor.style.borderStyle = "none";
+                resizeMonitor.style.borderWidth = "0";
+                YAHOO.util.Dom.setStyle(resizeMonitor, "opacity", "0");
+                
+                resizeMonitor.style.visibility = "visible";
+    
+                if(!bIE) {
+    
+                    var doc = resizeMonitor.contentWindow.document;
+    
+                    doc.open();
+                    doc.close();
+                
+                }
+    
             }
-			
-			resizeMonitor.id = "_yuiResizeMonitor";
-			resizeMonitor.style.visibility = "hidden";
-			
-			document.body.appendChild(resizeMonitor);
-
-            resizeMonitor.style.width = "10em";
-            resizeMonitor.style.height = "10em";
-            resizeMonitor.style.position = "absolute";
-            
-            var nLeft = -1 * resizeMonitor.offsetWidth,
-                nTop = -1 * resizeMonitor.offsetHeight;
-
-            resizeMonitor.style.top = nTop + "px";
-            resizeMonitor.style.left =  nLeft + "px";
-            resizeMonitor.style.borderStyle = "none";
-            resizeMonitor.style.borderWidth = "0";
-            YAHOO.util.Dom.setStyle(resizeMonitor, "opacity", "0");
-			
-			resizeMonitor.style.visibility = "visible";
-
-            if(!bIE) {
-
-                var doc = resizeMonitor.contentWindow.document;
-
-                doc.open();
-                doc.close();
-            
+    
+            if(resizeMonitor && resizeMonitor.contentWindow) {
+    
+                this.resizeMonitor = resizeMonitor;
+    
+                YAHOO.util.Event.addListener(this.resizeMonitor.contentWindow, "resize", this.onDomResize, this, true);
+    
             }
-
-		}
-
-        if(resizeMonitor && resizeMonitor.contentWindow) {
-
-    		this.resizeMonitor = resizeMonitor;
-
-    		YAHOO.util.Event.addListener(this.resizeMonitor.contentWindow, "resize", this.onDomResize, this, true);
-
+        
         }
 
 	},
