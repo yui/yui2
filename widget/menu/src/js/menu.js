@@ -174,3 +174,42 @@ YAHOO.widget.Menu.prototype._onMenuKeyDown =
         }
     
     };
+    
+
+// Public event handlers
+
+/**
+* Event handler fired when the resize monitor element is resized.
+*/
+YAHOO.widget.Menu.prototype.onDomResize = function(e, obj) {
+
+    if(!this._handleResize) {
+    
+        this._handleResize = true;
+        return;
+    
+    }
+
+    if(this.cfg.getProperty("position") == "dynamic") {
+
+        this.cfg.setProperty("width", (this._getOffsetWidth() + "px"));
+        
+        if(this.parent && this.cfg.getProperty("visible")) {
+
+            var me = this;
+
+            function align() {
+
+                me.align();
+            
+            }
+
+            window.setTimeout(align, 0);
+            
+        }
+
+    }
+
+    YAHOO.widget.Menu.superclass.onDomResize.call(this, e, obj);
+
+};    
