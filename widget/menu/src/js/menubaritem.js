@@ -113,7 +113,7 @@ YAHOO.widget.MenuBarItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH =
 
 /**
 * Constant representing the path to the image to be used for the submenu
-* arrow indicator when a MenuBarItem instance has focus.
+* arrow indicator when a MenuBarItem instance is selected.
 * @final
 * @type String
 */
