@@ -736,7 +736,8 @@ if (!YAHOO.util.Event) {
              * @return  the normized node
              */
             resolveTextNode: function(node) {
-                if (node && "#text" == node.nodeName) {
+                if (node && node.nodeName && 
+                        "#TEXT" == node.nodeName.toUpperCase()) {
                     return node.parentNode;
                 } else {
                     return node;
@@ -1075,6 +1076,66 @@ if (!YAHOO.util.Event) {
 
                 return true;
 
+            },
+
+            /**
+             * Removes all listeners attached to the given element via addListener.
+             * Optionally, the node's children can also be purged.
+             * Optionally, you can specify a specific type of event to remove.
+             * @param {HTMLElement} el the element to purge
+             * @param {boolean} recurse recursively purge this element's children
+             * as well.  Use with caution.
+             * @param {string} sType optional type of listener to purge. If
+             * left out, all listeners will be removed
+             */
+            purgeElement: function(el, recurse, sType) {
+                var elListeners = this.getListeners(el, sType);
+                if (elListeners) {
+                    for (var i=0,len=elListeners.length; i<len ; ++i) {
+                        var l = elListeners[i];
+                        this.removeListener(el, l.type, l.fn, l.index);
+                    }
+                }
+
+                if (recurse && el && el.childNodes) {
+                    for (i=0,len=el.childNodes.length; i<len ; ++i) {
+                        this.purgeElement(el.childNodes[i], recurse, sType);
+                    }
+                }
+            },
+
+            /**
+             * Returns all listeners attached to the given element via addListener.
+             * Optionally, you can specify a specific type of event to return.
+             * @param el {HTMLElement} the element to inspect 
+             * @param sType {string} optional type of listener to return. If
+             * left out, all listeners will be returned
+             * @return {Object} the listener. Contains the following fields:
+             *    type:   (string)   the type of event
+             *    fn:     (function) the callback supplied to addListener
+             *    obj:    (object)   the custom object supplied to addListener
+             *    adjust: (boolean)  whether or not to adjust the default scope
+             *    index:  (int)      its position in the Event util listener cache
+             */           
+            getListeners: function(el, sType) {
+                var elListeners = [];
+                if (listeners && listeners.length > 0) {
+                    for (var i=0,len=listeners.length; i<len ; ++i) {
+                        var l = listeners[i];
+                        if ( l  && l[this.EL] === el && 
+                                (!sType || sType === l[this.TYPE]) ) {
+                            elListeners.push({
+                                type:   l[this.TYPE],
+                                fn:     l[this.FN],
+                                obj:    l[this.SCOPE],
+                                adjust: l[this.ADJ_SCOPE],
+                                index:  i
+                            });
+                        }
+                    }
+                }
+
+                return (elListeners.length) ? elListeners : null;
             },
 
             /**
