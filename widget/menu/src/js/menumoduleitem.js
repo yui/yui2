@@ -40,7 +40,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
     /**
     * Constant representing the path to the image to be used for the submenu
-    * arrow indicator when a MenuModuleItem instance has focus.
+    * arrow indicator when a MenuModuleItem instance is selected.
     * @final
     * @type String
     */
@@ -452,68 +452,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
         this.cfg = new YAHOO.util.Config(this);
 
-
-        // Define the config properties
-
-
-        this.cfg.addProperty(
-            "text", 
-            { 
-                value:"", 
-                handler: this.configText, 
-                validator: this._checkString, 
-                suppressEvent: true 
-            }
-        );
-        
-        this.cfg.addProperty("helptext", { handler: this.configHelpText });
-        
-        this.cfg.addProperty(
-            "url", 
-            { value: "#", handler: this.configURL, suppressEvent: true }
-        );
-        
-        this.cfg.addProperty(
-            "emphasis", 
-            { 
-                value: false, 
-                handler: this.configEmphasis, 
-                validator: this.cfg.checkBoolean, 
-                suppressEvent: true 
-            }
-        );
-        
-        this.cfg.addProperty(
-            "strongemphasis", 
-            {
-                value: false, 
-                handler: this.configStrongEmphasis, 
-                validator: this.cfg.checkBoolean, 
-                suppressEvent: true 
-            }
-        );
-        
-        this.cfg.addProperty(
-            "disabled", 
-            {
-                value: false, 
-                handler: this.configDisabled, 
-                validator: this.cfg.checkBoolean, 
-                suppressEvent: true 
-            }
-        );
-        
-        this.cfg.addProperty(
-            "selected", 
-            {
-                value: false, 
-                handler: this.configSelected, 
-                validator: this.cfg.checkBoolean, 
-                suppressEvent: true 
-            }
-        );
-        
-        this.cfg.addProperty("submenu", { handler: this.configSubmenu });
+        this.initDefaultConfig();
 
 
         if(this._checkString(p_oObject)) {
@@ -1175,34 +1114,38 @@ YAHOO.widget.MenuModuleItem.prototype = {
     */    
     configSelected: function(p_sType, p_aArguments, p_oItem) {
 
-        var bSelected = p_aArguments[0],
-            aNodes = [this.element, this._oAnchor],
-            sImageSrc;
+        if(!this.cfg.getProperty("disabled")) {
 
-        if(this._oHelpTextEM) {
-
-            aNodes[2] = this._oHelpTextEM;  
-
-        }
-
-        if(bSelected) {
-
-            this._oDom.addClass(aNodes, "selected");
-
-            sImageSrc = this.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH;
-
-        }
-        else {
-
-            this._oDom.removeClass(aNodes, "selected");
-
-            sImageSrc = this.SUBMENU_INDICATOR_IMAGE_PATH;
-
-        }
-
-        if(this.subMenuIndicator) {
-
-            this.subMenuIndicator.src = this.imageRoot + sImageSrc;
+            var bSelected = p_aArguments[0],
+                aNodes = [this.element, this._oAnchor],
+                sImageSrc;
+    
+            if(this._oHelpTextEM) {
+    
+                aNodes[2] = this._oHelpTextEM;  
+    
+            }
+    
+            if(bSelected) {
+    
+                this._oDom.addClass(aNodes, "selected");
+    
+                sImageSrc = this.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH;
+    
+            }
+            else {
+    
+                this._oDom.removeClass(aNodes, "selected");
+    
+                sImageSrc = this.SUBMENU_INDICATOR_IMAGE_PATH;
+    
+            }
+    
+            if(this.subMenuIndicator) {
+    
+                this.subMenuIndicator.src = this.imageRoot + sImageSrc;
+    
+            }
 
         }
 
@@ -1285,6 +1228,75 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
 
     // Public methods
+
+	/**
+	* Initializes an item's configurable properties.
+	*/
+	initDefaultConfig : function() {
+
+        // Define the config properties
+
+        this.cfg.addProperty(
+            "text", 
+            { 
+                value:"", 
+                handler: this.configText, 
+                validator: this._checkString, 
+                suppressEvent: true 
+            }
+        );
+        
+        this.cfg.addProperty("helptext", { handler: this.configHelpText });
+        
+        this.cfg.addProperty(
+            "url", 
+            { value: "#", handler: this.configURL, suppressEvent: true }
+        );
+        
+        this.cfg.addProperty(
+            "emphasis", 
+            { 
+                value: false, 
+                handler: this.configEmphasis, 
+                validator: this.cfg.checkBoolean, 
+                suppressEvent: true 
+            }
+        );
+        
+        this.cfg.addProperty(
+            "strongemphasis", 
+            {
+                value: false, 
+                handler: this.configStrongEmphasis, 
+                validator: this.cfg.checkBoolean, 
+                suppressEvent: true 
+            }
+        );
+        
+        this.cfg.addProperty(
+            "disabled", 
+            {
+                value: false, 
+                handler: this.configDisabled, 
+                validator: this.cfg.checkBoolean, 
+                suppressEvent: true 
+            }
+        );
+        
+        this.cfg.addProperty(
+            "selected", 
+            {
+                value: false, 
+                handler: this.configSelected, 
+                validator: this.cfg.checkBoolean, 
+                suppressEvent: true 
+            }
+        );
+        
+        this.cfg.addProperty("submenu", { handler: this.configSubmenu });
+
+	},
+
 
     /**
     * Finds the next enabled MenuModuleItem instance in a MenuModule instance 
@@ -1497,7 +1509,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
         if(
             !this.cfg.getProperty("disabled") && 
             this.parent && 
-            this._oDom.getStyle(this.element, "visibility") == "visible"
+            this._oDom.getStyle(this.parent.element, "visibility") == "visible"
         ) {
 
             this._oAnchor.blur();
