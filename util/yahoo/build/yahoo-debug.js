@@ -24,7 +24,7 @@ var YAHOO = window.YAHOO || {};
  * @param  {String} ns The name of the namespace
  * @return {Object}    A reference to the namespace object
  */
-YAHOO.namespace = function( ns ) {
+YAHOO.namespace = function(ns) {
 
     if (!ns || !ns.length) {
         return null;
@@ -49,7 +49,7 @@ YAHOO.namespace = function( ns ) {
  * @param  {string}  sCategory  The log category for the message.  Default
  *                              categories are "info", "warn", "error", time".
  *                              Custom categories can be used as well. (opt)
- * @param  {string}  sSource    The name of the module generating the message (opt)
+ * @param  {string}  sSource    The source of the the message (opt)
  * @return {boolean}            True if the log operation was successful.
  */
 YAHOO.log = function(sMsg, sCategory, sSource) {
@@ -61,6 +61,22 @@ YAHOO.log = function(sMsg, sCategory, sSource) {
     }
 };
 
+/**
+ * Utility to set up the prototype, constructor and superclass inheritance 
+ * properties
+ *
+ * @param {Function} The object to extend
+ * @param {Function} The object to inherit
+ */
+YAHOO.extend = function(subclass, superclass) {
+    var f = function() {};
+    f.prototype = superclass.prototype;
+    subclass.prototype = new f();
+    subclass.prototype.constructor = subclass;
+    subclass.superclass = superclass;
+};
+
 YAHOO.namespace("util");
 YAHOO.namespace("widget");
 YAHOO.namespace("example");
+
