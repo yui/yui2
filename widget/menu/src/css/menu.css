@@ -265,3 +265,22 @@ div.yuimenu li.yuimenuitem img {
     border:0;
 
 }
+
+div.yuimenu li.checked {
+
+    position:relative;
+
+}
+
+div.yuimenu li.checked img.checked {
+
+    height:8px;
+    width:8px;
+    margin:0;
+    border:0;
+    position:absolute;
+    left:6px;
+    *left:-16px;
+    top:.5em;
+    
+}
