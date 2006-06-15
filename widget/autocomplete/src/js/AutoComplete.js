@@ -62,11 +62,25 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
             else {
                 this._oContainer = containerEl;
             }
+            if(this._oContainer.style.display == "none") {
+                //YAHOO.log("The container may not display properly if display is set to \"none\" in CSS", "warn");
+            }
         }
         else {
             //YAHOO.log("Could not instantiate AutoComplete due to an invalid container element", "error");
             return;
         }
+
+        // Initialization sequence
+        this._initContainer();
+        this._initProps();
+        this._initList();
+        this._initContainerHelpers();
+        
+        var oSelf = this;
+        var oTextbox = this._oTextbox;
+        // Events are actually for the content module within the container
+        var oContent = this._oContainer._oContent;
 
         // Set any config params passed in to override defaults
         if (typeof oConfigs == "object") {
@@ -77,12 +91,6 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
             }
         }
 
-        // Initialization sequence
-        var oSelf = this;
-        var oTextbox = this._oTextbox;
-        var oContainer = this._oContainer;
-        this._initProps();
-
         // Set up events
         YAHOO.util.Event.addListener(oTextbox,'keyup',oSelf._onTextboxKeyUp,oSelf);
         YAHOO.util.Event.addListener(oTextbox,'keydown',oSelf._onTextboxKeyDown,oSelf);
@@ -91,10 +99,10 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
 
         YAHOO.util.Event.addListener(oTextbox,'focus',oSelf._onTextboxFocus,oSelf);
         YAHOO.util.Event.addListener(oTextbox,'blur',oSelf._onTextboxBlur,oSelf);
-        YAHOO.util.Event.addListener(oContainer,'mouseover',oSelf._onContainerMouseover,oSelf);
-        YAHOO.util.Event.addListener(oContainer,'mouseout',oSelf._onContainerMouseout,oSelf);
-        YAHOO.util.Event.addListener(oContainer,'scroll',oSelf._onContainerScroll,oSelf);
-        YAHOO.util.Event.addListener(oContainer, 'resize', oSelf._onContainerResize,oSelf);
+        YAHOO.util.Event.addListener(oContent,'mouseover',oSelf._onContainerMouseover,oSelf);
+        YAHOO.util.Event.addListener(oContent,'mouseout',oSelf._onContainerMouseout,oSelf);
+        YAHOO.util.Event.addListener(oContent,'scroll',oSelf._onContainerScroll,oSelf);
+        YAHOO.util.Event.addListener(oContent,'resize',oSelf._onContainerResize,oSelf);
         if(oTextbox.form && this.allowBrowserAutocomplete) {
             YAHOO.util.Event.addListener(oTextbox.form,'submit',oSelf._onFormSubmit,oSelf);
         }
@@ -190,11 +198,11 @@ YAHOO.widget.AutoComplete.prototype.delimChar = null;
 
 /**
  * Whether or not the first item in the auto complete container should be
- * automatically highlighted on expand. Default: false.
+ * automatically highlighted on expand. Default: true.
  *
  * @type boolean
  */
-YAHOO.widget.AutoComplete.prototype.autoHighlight = false;
+YAHOO.widget.AutoComplete.prototype.autoHighlight = true;
 
 /**
  * Whether or not the auto complete input field should be automatically updated
@@ -305,7 +313,7 @@ YAHOO.widget.AutoComplete.prototype.setHeader = function(sHeader) {
  * @param {string} sFooter HTML markup for container footer
  */
 YAHOO.widget.AutoComplete.prototype.setFooter = function(sFooter) {
-    if(sFooter && this._oContainer._oContent_oFooter) {
+    if(sFooter && this._oContainer._oContent._oFooter) {
         this._oContainer._oContent._oFooter.innerHTML = sFooter;
         this._oContainer._oContent._oFooter.style.display = "block";
     }
@@ -319,13 +327,13 @@ YAHOO.widget.AutoComplete.prototype.setFooter = function(sFooter) {
  */
 YAHOO.widget.AutoComplete.prototype.setBody = function(sBody) {
     if(sBody) {
-        if(this._oContainer._oContent && this._oContainer._oContent._oBody) {
+        if(this._oContainer._oContent._oBody) {
             this._oContainer._oContent._oBody.innerHTML = sBody;
             this._oContainer._oContent._oBody.style.display = "block";
         }
         else {
-            this._oContainer.innerHTML = sBody;
-            this._oContainer.style.display = "block";
+            this._oContainer._oContent.innerHTML = sBody;
+            this._oContainer._oContent.style.display = "block";
         }
     }
 };
@@ -611,6 +619,14 @@ YAHOO.widget.AutoComplete.prototype._aListItems = null;
 YAHOO.widget.AutoComplete.prototype._nDisplayedItems = 0;
 
 /**
+ * Total number of &lt;li&gt; elements displayed and hidden in auto complete container.
+ *
+ * @type number
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._nTotalItems = 0;
+
+/**
  * Current query string
  *
  * @type string
@@ -692,15 +708,15 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
         }
     }
     var animSpeed = this.animSpeed;
-    if(this.animHoriz || this.animVert) {
+    if((this.animHoriz || this.animVert) && YAHOO.util.Anim) {
         if(isNaN(animSpeed) || (animSpeed < 0)) {
             animSpeed = 0.3;
         }
-        
-        if(!this._oAnim && YAHOO.util.Anim) {
-            this._oAnim = new YAHOO.util.Anim(this._oContainer, {}, animSpeed);
+        if(!this._oAnim ) {
+            oAnim = new YAHOO.util.Anim(this._oContainer._oContent, {}, this.animSpeed);
+            this._oAnim = oAnim;
         }
-        else if(this._oAnim) {
+        else {
             this._oAnim.duration = animSpeed;
         }
     }
@@ -714,70 +730,66 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
  *
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._initContainer = function() {
+YAHOO.widget.AutoComplete.prototype._initContainerHelpers = function() {
+    // TODO: don't blow things away unless you have to
     //TODO: make sure this destroys everything in memory
-    if(this._oContainer.hasChildNodes()) {
+    /*if(this._oContainer.hasChildNodes()) {
         for(var i=this._oContainer.childNodes.length-1; i >= 0; i--)
             this._oContainer.removeChild(this._oContainer.childNodes[i]);
-    }
+    }*/
 
-    // Need this iFrame trick to make sure the container appears over form
-    // elements to workaround IE z-index bug
-    //if(this.useIFrame) {
-        //var oContent = document.createElement("div");
-        //oContent.style.position = "relative";
-        //oContent.style.zIndex = 9050;
-        //this._oContent = this._oContainer.appendChild(oContent);
-    //}
-
-    if(this.useShadow) {
+    if(this.useShadow && !this._oContainer._oShadow) {
         var oShadow = document.createElement("div");
-        oShadow.style.position = "absolute";
         oShadow.className = "shadow";
-        oShadow.style.width = "100%";
-        oShadow.style.height = "100%";
-        //oShadow.style.zIndex = 0;
         this._oContainer._oShadow = this._oContainer.appendChild(oShadow);
-
     }
-    if(this.useIFrame) {
+    if(this.useIFrame && !this._oContainer._oIFrame) {
         var oIFrame = document.createElement("iframe");
+        // TODO: configurable src
         oIFrame.src = "about:blank";//"http://www.jumpsplash.com";//
         oIFrame.frameBorder = 0;
         oIFrame.scrolling = "no";
         oIFrame.style.position = "absolute";
         oIFrame.style.width = "100%";
         oIFrame.style.height = "100%";
-        //oIFrame.style.zIndex = -9050;
+        //oIFrame.style.zIndex = 0;
         this._oContainer._oIFrame = this._oContainer.appendChild(oIFrame);
     }
+};
 
-    // The div oContent helps size the iframe and shadow properly
-    var oContent = document.createElement("div");
-    oContent.className = "content";
-    oContent.style.position = "relative";
-    oContent.style.zIndex = 9050;
-    //oContent.style.width = "100%";
-    //oContent.style.height = "100%";
-    //oContent.style.border = "1px solid #404040;"
-    //oContent.style.background = "green";
-    //oContent.style.fontSize = "85%";
-    this._oContainer._oContent = this._oContainer.appendChild(oContent);
+/**
+ * Initializes the auto complete container, including iframe shim for IE bug
+ *
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._initContainer = function() {
+    // TODO: don't blow things away unless you have to
+    //TODO: make sure this destroys everything in memory
+    /*if(this._oContainer.hasChildNodes()) {
+        for(var i=this._oContainer.childNodes.length-1; i >= 0; i--)
+            this._oContainer.removeChild(this._oContainer.childNodes[i]);
+    }*/
 
+    if(!this._oContainer._oContent) {
+        // The div oContent helps size the iframe and shadow properly
+        var oContent = document.createElement("div");
+        oContent.className = "content";
+        this._oContainer._oContent = this._oContainer.appendChild(oContent);
 
-    var oHeader = document.createElement("div");
-    oHeader.className = "ac_hd";
-    oHeader.style.display = "none";
-    this._oContainer._oContent._oHeader = oContent.appendChild(oHeader);
-    
-    var oBody = document.createElement("div");
-    oBody.className = "ac_bd";
-    this._oContainer._oContent._oBody = oContent.appendChild(oBody);
+        var oHeader = document.createElement("div");
+        oHeader.className = "ac_hd";
+        oHeader.style.display = "none";//DEBUG
+        this._oContainer._oContent._oHeader = this._oContainer._oContent.appendChild(oHeader);
 
-    var oFooter = document.createElement("div");
-    oFooter.className = "ac_ft";
-    oFooter.style.display = "none";
-    this._oContainer._oContent._oFooter = oContent.appendChild(oFooter);
+        var oBody = document.createElement("div");
+        oBody.className = "ac_bd";
+        this._oContainer._oContent._oBody = this._oContainer._oContent.appendChild(oBody);
+
+        var oFooter = document.createElement("div");
+        oFooter.className = "ac_ft";
+        oFooter.style.display = "none";//DEBUG
+        this._oContainer._oContent._oFooter = this._oContainer._oContent.appendChild(oFooter);
+    }
 
     /*this._oContainer._oHeader = //(this.useIFrame) ?
         //this._oContent.appendChild(oHeader):
@@ -790,13 +802,12 @@ YAHOO.widget.AutoComplete.prototype._initContainer = function() {
         this._oContainer.appendChild(oFooter);*/
 
     if(!this.alwaysShowContainer) {
-        this._oContainer.style.display = "none";
+        this._oContainer._oContent.style.display = "none";//DEBUG
+        this._toggleContainerHelpers(false);
     }
     else {
         this._bContainerOpen = true;
     }
-    
-    this._toggleContainerHelpers(false);
 };
 
 /**
@@ -806,21 +817,23 @@ YAHOO.widget.AutoComplete.prototype._initContainer = function() {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._initList = function() {
-    this._aListItems = [];
-    if(this._oContainer._oContent._oBody.hasChildNodes()) {
-        for(var i=this._oContainer._oContent._oBody.childNodes.length-1; i >= 0; i--)
-            this._oContainer._oContent._oBody.removeChild(this._oContainer._oBody.childNodes[i]);
-    }
-    
-    var oList = document.createElement("ul");
-    oList.style.position = "relative";
-    oList = this._oContainer._oContent._oBody.appendChild(oList);
+    if(this._nTotalItems != this.maxResultsDisplayed) {
+        this._aListItems = [];
+        while(this._oContainer._oContent._oBody.hasChildNodes()) {
+            this._oContainer._oContent._oBody.removeChild(this._oContainer._oContent._oBody.firstChild);
+        }
 
-    for(var i=0; i<this.maxResultsDisplayed; i++) {
-        var oItem = document.createElement("li");
-        oItem = oList.appendChild(oItem);
-        this._aListItems[i] = oItem;
-        this._initListItem(oItem, i);
+        var oList = document.createElement("ul");
+        oList = this._oContainer._oContent._oBody.appendChild(oList);
+
+        for(var i=0; i<this.maxResultsDisplayed; i++) {
+            var oItem = document.createElement("li");
+            oItem = oList.appendChild(oItem);
+            oItem.innerHTML = "result";//DEBUG
+            this._aListItems[i] = oItem;
+            this._initListItem(oItem, i);
+        }
+        this._nTotalItems = this.maxResultsDisplayed;
     }
 };
 
@@ -833,7 +846,7 @@ YAHOO.widget.AutoComplete.prototype._initList = function() {
  */
 YAHOO.widget.AutoComplete.prototype._initListItem = function(oItem, nItemIndex) {
     var oSelf = this;
-    oItem.style.display = "none";
+    oItem.style.display = "none";//DEBUG
     oItem._nItemIndex = nItemIndex;
     oItem.toString = function () {
         return oSelf.getName() + "LI" + nItemIndex;
@@ -1222,7 +1235,7 @@ YAHOO.widget.AutoComplete.prototype._clearList = function() {
     
     if(aItems && (aItems.length > 0)) {
         for(var i = aItems.length-1; i >= 0 ; i--) {
-            aItems[i].style.display = "none";
+            aItems[i].style.display = "none";//DEBUG
         }
     }
     
@@ -1257,12 +1270,13 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
     }
     
     //TODO: Figure out what I can do once, and what may need to be re-init'd
-    oSelf._initContainer();
+    //oSelf._initContainer();
     oSelf._initList();
+    oSelf._initContainerHelpers();
 
     var isOpera = (navigator.userAgent.toLowerCase().indexOf("opera") != -1);
-    oSelf._oContainer.style.width = (!isOpera) ? null : "";
-    oSelf._oContainer.style.height = (!isOpera) ? null : "";
+    oSelf._oContainer._oContent.style.width = (!isOpera) ? null : "";
+    oSelf._oContainer._oContent.style.height = (!isOpera) ? null : "";
 
     var sCurQuery = decodeURIComponent(sQuery);
     oSelf._sCurQuery = sCurQuery;
@@ -1287,7 +1301,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         for(var j = aItems.length-1; j >= nItems ; j--) {
             var oItemj = aItems[j];
             oItemj.innerHTML = null;
-            oItemj.style.display = "none";
+            oItemj.style.display = "none";//DEBUG
             oItemj._sResultKey = null;
             oItemj._oResultData = null;
         }
@@ -1422,30 +1436,32 @@ YAHOO.widget.AutoComplete.prototype._selectText = function(oTextbox, nStart, nEn
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
-    //var width = this._oContainer.offsetWidth + "px";
-    var height = this._oContainer.offsetHeight + "px";
+//TODO: is width necessary?
+    var width = this._oContainer._oContent.offsetWidth + "px";
+    var height = this._oContainer._oContent.offsetHeight + "px";
     
     if(this.useIFrame && this._oContainer._oIFrame) {
         if(this.alwaysShowContainer || bShow) {
-            //this._oContainer._oIFrame.style.width = width;
+            this._oContainer._oIFrame.style.width = width;
             this._oContainer._oIFrame.style.height = height;
             
         }
         else {
-            //this._oContainer._oIFrame.style.width = 0;
+            this._oContainer._oIFrame.style.width = 0;
             this._oContainer._oIFrame.style.height = 0;
         }
     }
     if(this.useShadow && this._oContainer._oShadow) {
         if(this.alwaysShowContainer || bShow) {
-            //this._oContainer._oShadow.style.width = width;
+            this._oContainer._oShadow.style.width = width;
             this._oContainer._oShadow.style.height = height;
         }
         else {
-           //this._oContainer._oShadow.style.width = 0;
+           this._oContainer._oShadow.style.width = 0;
             this._oContainer._oShadow.style.height = 0;
         }
     }
+    doLog(width + height);
 };
 
 /**
@@ -1473,7 +1489,7 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
     var oContainer = this._oContainer;
     // Don't animate if it's already closed && !bShow
     if (!bShow && !this._bContainerOpen) {
-        oContainer.style.display = "none";
+        oContainer._oContent.style.display = "none";//DEBUG
         return;
     }
     
@@ -1490,10 +1506,10 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
         }
         
         // Clone container to grab current size offscreen
-        var oClone = oContainer.cloneNode(true);
-        oContainer.parentNode.appendChild(oClone);
+        var oClone = oContainer._oContent.cloneNode(true);
+        oContainer.appendChild(oClone);
         oClone.style.top = "-9000px";
-        oClone.style.display = "block";
+        oClone.style.display = "block";//DEBUG
         
         // Current size of the container is the EXPANDED size
         var wExp = oClone.offsetWidth;
@@ -1510,16 +1526,16 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
 
         // If opening anew, set to a collapsed size...
         if(bShow && !this._bContainerOpen) {
-            oContainer.style.width = wColl+"px";
-            oContainer.style.height = hColl+"px";
+            oContainer._oContent.style.width = wColl+"px";
+            oContainer._oContent.style.height = hColl+"px";
         }
         // Else, set it to its last known size.
         else {
-            oContainer.style.width = wExp+"px";
-            oContainer.style.height = hExp+"px";
+            oContainer._oContent.style.width = wExp+"px";
+            oContainer._oContent.style.height = hExp+"px";
         }
         
-        oContainer.parentNode.removeChild(oClone);
+        oContainer.removeChild(oClone);
         oClone = null;
 
     	var oSelf = this;
@@ -1534,14 +1550,14 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
                 //YAHOO.log(oSelf.getName() + " container expanded");
             }
             else {
-                oContainer.style.display = "none";
+                oContainer._oContent.style.display = "none";//DEBUG
                 oSelf.containerCollapseEvent.fire(oSelf);
                 //YAHOO.log(oSelf.getName() + " container collapsed");
             }
      	};
 
         // Display container and animate it
-        oContainer.style.display = "block";
+        oContainer._oContent.style.display = "block";//DEBUG
         oAnim.onComplete.subscribe(onAnimComplete);
         oAnim.animate();
         this._bContainerOpen = bShow;
@@ -1549,7 +1565,7 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
     // Else don't animate, just show or hide
     else {
         this._bContainerOpen = bShow;
-        oContainer.style.display = (bShow) ? "block" : "none";
+        oContainer._oContent.style.display = (bShow) ? "block" : "none";//DEBUG
         this._toggleContainerHelpers(bShow);
         if(bShow) {
             this.containerExpandEvent.fire(this);
@@ -1741,28 +1757,28 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
             // User is keying down
             if(nKeyCode == 40) {
                 // Bottom of selected item is below scroll area...
-                if((oNewItem.offsetTop+oNewItem.offsetHeight) > (this._oContainer.scrollTop + this._oContainer.offsetHeight)) {
+                if((oNewItem.offsetTop+oNewItem.offsetHeight) > (this._oContainer._oContent.scrollTop + this._oContainer._oContent.offsetHeight)) {
                     // Set bottom of scroll area to bottom of selected item
-                    this._oContainer.scrollTop = (oNewItem.offsetTop+oNewItem.offsetHeight) - this._oContainer.offsetHeight;
+                    this._oContainer._oContent.scrollTop = (oNewItem.offsetTop+oNewItem.offsetHeight) - this._oContainer._oContent.offsetHeight;
                 }
                 // Bottom of selected item is above scroll area...
-                else if((oNewItem.offsetTop+oNewItem.offsetHeight) < this._oContainer.scrollTop) {
+                else if((oNewItem.offsetTop+oNewItem.offsetHeight) < this._oContainer._oContent.scrollTop) {
                     // Set top of selected item to top of scroll area
-                    this._oContainer.scrollTop = oNewItem.offsetTop;
+                    this._oContainer._oContent.scrollTop = oNewItem.offsetTop;
 
                 }
             }
             // User is keying up
             else {
                 // Top of selected item is above scroll area
-                if(oNewItem.offsetTop < this._oContainer.scrollTop) {
+                if(oNewItem.offsetTop < this._oContainer._oContent.scrollTop) {
                     // Set top of scroll area to top of selected item
-                    this._oContainer.scrollTop = oNewItem.offsetTop;
+                    this._oContainer._oContent.scrollTop = oNewItem.offsetTop;
                 }
                 // Top of selected item is below scroll area
-                else if(oNewItem.offsetTop > (this._oContainer.scrollTop + this._oContainer.offsetHeight)) {
+                else if(oNewItem.offsetTop > (this._oContainer._oContent.scrollTop + this._oContainer._oContent.offsetHeight)) {
                     // Set bottom of selected item to bottom of scroll area
-                    this._oContainer.scrollTop = (oNewItem.offsetTop+oNewItem.offsetHeight) - this._oContainer.offsetHeight;
+                    this._oContainer._oContent.scrollTop = (oNewItem.offsetTop+oNewItem.offsetHeight) - this._oContainer._oContent.offsetHeight;
                 }
             }
         }

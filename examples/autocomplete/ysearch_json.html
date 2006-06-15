@@ -7,13 +7,16 @@
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
 
 <style type="text/css">
-    #ysearchdiv {position:relative;width:40%;margin:1em;} /* set width of widget here*/
-    #ysearchinput {position:relative;width:100%;height:1.2em;display:block;}
-    #ysearchcontainer {position:relative;bottom:4px;right:4px;border:1px solid #404040;background:#fff;font-size:85%;overflow:hidden;display:none;}
-    #ysearchcontainer ul {position:relative;width:100%;padding:5px 0;list-style:none;}
-    #ysearchcontainer li {padding:0 5px;cursor:default;white-space:nowrap;display:list-item;}
+    #ysearchmod {position:relative;text-align:center;z-index:9050;}
+    #ysearchautocomplete {position:relative;}
+    #ysearchinput {position:relative;width:20em;height:1.4em;}
+    #ysearchcontainer {position:absolute;left:0;top:1.7em;display:inline;}
+    #ysearchcontainer .content {position:absolute;left:0;top:0;width:20em;border:1px solid #404040;background:#fff;overflow:hidden;text-align:left;z-index:9050;}
+    #ysearchcontainer .shadow {position:absolute;left:0;top:0;margin:.3em;background:#a0a0a0;z-index:9049;}
+    #ysearchcontainer ul {padding:5px 0;width:100%;}
+    #ysearchcontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
     #ysearchcontainer li.highlight {background:#ff0;}
-    #ysearchshadow {position:absolute;width:100%;margin:.3em;z-index:5;background:#a0a0a0;}
+    #ysearchsubmit {position:relative;}
 </style>
 </head>
 
@@ -24,6 +27,19 @@
 </div>
 
 <div id="bd">
+    <!-- AutoComplete begins -->
+    <div id="ysearchmod">
+        <form onsubmit="return validateForm();">
+            <span>Yahoo! Search</span>
+            <span id="ysearchautocomplete">
+                <input id="ysearchinput">
+                <div id="ysearchcontainer"></div>
+            </span>
+            <input id="ysearchsubmit" type="submit" value="Submit Query">
+        </form>
+    </div>
+    <!-- AutoComplete ends -->
+
     <!-- Logger begins -->
     <div id="logger">
     <p>Welcome to AutoComplete.</p>
@@ -40,16 +56,6 @@
 
     <h3>AutoComplete</h3>
     <p>This AutoComplete instance uses only default configuration values.</p>
-
-    <!-- AutoComplete begins -->
-    <div id="ysearchdiv">
-        <form onsubmit="return validateForm();">
-        <h4>Yahoo! Search:</h4>
-        <input id="ysearchinput" type="text">
-        <div id="ysearchshadow"><div id="ysearchcontainer"></div></div>
-        </form>
-    </div>
-    <!-- AutoComplete ends -->
     
     <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
     Sed eu enim in neque nonummy suscipit. Sed non metus. Aliquam pretium, massa
@@ -100,6 +106,8 @@
 
         // Instantiate auto complete
         oAutoComp = new YAHOO.widget.AutoComplete('ysearchinput','ysearchcontainer', oACDS);
+        oAutoComp.useShadow = true;
+        oAutoComp.maxResultsDisplayed = 30;
         
         // Subscribe to custom events
         oACDS.queryEvent.subscribe(myOnQuery);
