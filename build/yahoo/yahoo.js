@@ -72,7 +72,7 @@ YAHOO.extend = function(subclass, superclass) {
     f.prototype = superclass.prototype;
     subclass.prototype = new f();
     subclass.prototype.constructor = subclass;
-    subclass.superclass = superclass;
+    subclass.superclass = superclass.prototype;
 };
 
 YAHOO.namespace("util");
