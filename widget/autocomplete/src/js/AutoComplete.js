@@ -774,7 +774,6 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelpers = function() {
         oIFrame.style.position = "absolute";
         oIFrame.style.width = "100%";
         oIFrame.style.height = "100%";
-        //oIFrame.style.zIndex = 0;
         this._oContainer._oIFrame = this._oContainer.appendChild(oIFrame);
     }
 };
@@ -1284,11 +1283,6 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         return;
     }
     
-    //TODO: Figure out what I can do once, and what may need to be re-init'd
-    //oSelf._initContainer();
-    oSelf._initList();
-    oSelf._initContainerHelpers();
-
     var isOpera = (navigator.userAgent.toLowerCase().indexOf("opera") != -1);
     oSelf._oContainer._oContent.style.width = (!isOpera) ? null : "";
     oSelf._oContainer._oContent.style.height = (!isOpera) ? null : "";
@@ -1301,6 +1295,11 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
     var nItems = Math.min(aResults.length,oSelf.maxResultsDisplayed);
     oSelf._nDisplayedItems = nItems;
     if (nItems > 0) {
+        //TODO: Figure out what I can do once, and what may need to be re-init'd
+        //oSelf._initContainer();
+        oSelf._initList();
+        oSelf._initContainerHelpers();
+        
         // Fill items with data
         for(var i = nItems-1; i >= 0; i--) {
             var oItemi = aItems[i];
@@ -1454,12 +1453,12 @@ YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
 //TODO: is width necessary?
     var width = this._oContainer._oContent.offsetWidth + "px";
     var height = this._oContainer._oContent.offsetHeight + "px";
-    
+
     if(this.useIFrame && this._oContainer._oIFrame) {
         if(this.alwaysShowContainer || bShow) {
             this._oContainer._oIFrame.style.width = width;
             this._oContainer._oIFrame.style.height = height;
-            
+
         }
         else {
             this._oContainer._oIFrame.style.width = 0;
