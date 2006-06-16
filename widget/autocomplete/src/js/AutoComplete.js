@@ -1252,9 +1252,9 @@ YAHOO.widget.AutoComplete.prototype._clearList = function() {
             aItems[i].style.display = "none";//DEBUG
         }
     }
-    
+
     if (this._oCurItem) {
-        //this._toggleHighlight(this._oCurItem,'from');
+        this._toggleHighlight(this._oCurItem,'from');
     }
         
     this._oCurItem = null;
