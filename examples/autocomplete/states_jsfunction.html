@@ -12,7 +12,7 @@
 
 
 
-    #statesdiv {position:relative;width:15em;margin:1em;} /* set width of widget here*/
+    /*#statesdiv {position:relative;width:15em;margin:1em;} /* set width of widget here
     #statesinput {position:relative;width:100%;height:1.2em;display:block;}
     #statescontainerdefault {padding:5px 5px;}
     #statescontainer {position:relative;bottom:4px;right:4px;border:1px solid #404040;background:#fff;font-size:85%;height:11em;overflow:hidden;}
@@ -20,6 +20,16 @@
     #statescontainer li {padding:0 5px;cursor:default;white-space:nowrap;display:list-item;}
     #statescontainer li.highlight {background:#ff0;}
     #statesshadow {position:absolute;width:100%;*width:auto;_width:100%;margin:.3em;z-index:5;background:#a0a0a0;} /* bug 614383 workaround for ie7 */
+
+    #statesmod {position:relative;padding:1em;}
+    #statesautocomplete {position:relative;margin:1em;width:15em;}/* set width of widget here*/
+    #statesinput {position:absolute;width:100%;height:1.4em;}
+    #statescontainer {position:absolute;top:1.7em;width:100%;}
+    #statescontainer .content {position:absolute;width:100%;height:11em;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
+    #statescontainer .shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
+    #statescontainer ul {padding:5px 0;width:100%;}
+    #statescontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
+    #statescontainer li.highlight {background:#ff0;}
 </style>
 </head>
 
@@ -57,13 +67,23 @@
     takes to submit a valid selection.</p>
 
     <!-- AutoComplete begins -->
-    <div id="statesdiv">
+    <!--<div id="statesdiv">
         <form onsubmit="return validateForm();">
         <h4>Find a state:</h4>
         <input id="statesinput" type="text">
         <div id="statesshadow"><div id="statescontainer"><div id="statescontainerdefault">Start typing to find a state</div></div></div>
         </form>
-    </div> 
+    </div> -->
+    
+    <div id="statesmod">
+        <form onsubmit="return validateForm();">
+            <h2>Find a state:</h2>
+            <div id="statesautocomplete">
+                <input id="statesinput">
+                <div id="statescontainer"></div>
+            </div>
+        </form>
+    </div>
     <!-- AutoComplete ends -->
     
     <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
@@ -115,6 +135,8 @@
         oAutoComp.queryDelay = 0;
         oAutoComp.autoHighlight = true;
         oAutoComp.maxResultsDisplayed = 8;
+        oAutoComp.useShadow = true;
+        oAutoComp.setBody("<div id=\"statescontainerdefault\">Start typing to find a state</div>");
         oAutoComp.formatResult = function(oResultItem, sQuery) {
             var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";
             return (sMarkup);

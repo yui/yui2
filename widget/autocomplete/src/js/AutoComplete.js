@@ -300,9 +300,15 @@ YAHOO.widget.AutoComplete.prototype.getListIds = function() {
  * @param {string} sHeader HTML markup for container header
  */
 YAHOO.widget.AutoComplete.prototype.setHeader = function(sHeader) {
-    if(sHeader && this._oContainer._oContent._oHeader) {
-        this._oContainer._oContent._oHeader.innerHTML = sHeader;
-        this._oContainer._oContent._oHeader.style.display = "block";
+    if(sHeader) {
+        if(this._oContainer._oContent._oHeader) {
+            this._oContainer._oContent._oHeader.innerHTML = sHeader;
+            this._oContainer._oContent._oHeader.style.display = "block";
+        }
+    }
+    else {
+        this._oContainer._oContent._oHeader.innerHTML = "";
+        this._oContainer._oContent._oHeader.style.display = "none";
     }
 };
 
@@ -313,9 +319,15 @@ YAHOO.widget.AutoComplete.prototype.setHeader = function(sHeader) {
  * @param {string} sFooter HTML markup for container footer
  */
 YAHOO.widget.AutoComplete.prototype.setFooter = function(sFooter) {
-    if(sFooter && this._oContainer._oContent._oFooter) {
-        this._oContainer._oContent._oFooter.innerHTML = sFooter;
-        this._oContainer._oContent._oFooter.style.display = "block";
+    if(sFooter) {
+        if(this._oContainer._oContent._oFooter) {
+            this._oContainer._oContent._oFooter.innerHTML = sFooter;
+            this._oContainer._oContent._oFooter.style.display = "block";
+        }
+    }
+    else {
+        this._oContainer._oContent._oFooter.innerHTML = "";
+        this._oContainer._oContent._oFooter.style.display = "none";
     }
 };
 
@@ -330,12 +342,14 @@ YAHOO.widget.AutoComplete.prototype.setBody = function(sBody) {
         if(this._oContainer._oContent._oBody) {
             this._oContainer._oContent._oBody.innerHTML = sBody;
             this._oContainer._oContent._oBody.style.display = "block";
-        }
-        else {
-            this._oContainer._oContent.innerHTML = sBody;
             this._oContainer._oContent.style.display = "block";
         }
     }
+    else {
+        this._oContainer._oContent._oBody.innerHTML = "";
+        this._oContainer._oContent.style.display = "none";
+    }
+    this._nTotalItems = 0;
 };
 
 /**
@@ -723,6 +737,14 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
     if(this.forceSelection && this.delimChar) {
         //YAHOO.log(oSelf.getName() + " has enabled force selection with delimiter character(s) defined.","warn");
     }
+
+    if(!this.alwaysShowContainer) {
+        //this._oContainer._oContent.style.display = "none";//DEBUG
+        //this._toggleContainerHelpers(false);
+    }
+    else {
+        this._bContainerOpen = true;
+    }
 };
 
 /**
@@ -774,6 +796,7 @@ YAHOO.widget.AutoComplete.prototype._initContainer = function() {
         // The div oContent helps size the iframe and shadow properly
         var oContent = document.createElement("div");
         oContent.className = "content";
+        oContent.style.display = "none";
         this._oContainer._oContent = this._oContainer.appendChild(oContent);
 
         var oHeader = document.createElement("div");
@@ -800,14 +823,6 @@ YAHOO.widget.AutoComplete.prototype._initContainer = function() {
     this._oContainer._oFooter = //(this.useIFrame) ?
         //this._oContent.appendChild(oFooter) :
         this._oContainer.appendChild(oFooter);*/
-
-    if(!this.alwaysShowContainer) {
-        this._oContainer._oContent.style.display = "none";//DEBUG
-        this._toggleContainerHelpers(false);
-    }
-    else {
-        this._bContainerOpen = true;
-    }
 };
 
 /**
