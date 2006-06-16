@@ -1244,7 +1244,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._clearList = function() {
-    this._oContainer.scrollTop = 0;
+    this._oContainer._oContent.scrollTop = 0;
     var aItems = this._aListItems;
     
     if(aItems && (aItems.length > 0)) {
@@ -1475,7 +1475,6 @@ YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
             this._oContainer._oShadow.style.height = 0;
         }
     }
-    doLog(width + height);
 };
 
 /**
@@ -1766,7 +1765,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
         var oNewItem = this._aListItems[nNewItemIndex];
 
         // Scroll the container if necessary
-        if((YAHOO.util.Dom.getStyle(this._oContainer,"overflow") == "auto") &&
+        if((YAHOO.util.Dom.getStyle(this._oContainer._oContent,"overflow") == "auto") &&
         (nNewItemIndex > -1) && (nNewItemIndex < this._nDisplayedItems)) {
             // User is keying down
             if(nKeyCode == 40) {
