@@ -7,13 +7,15 @@
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
 
 <style type="text/css">
-    #customdiv {position:relative;width:40%;margin:1em;} /* set width of widget here*/
-    #custominput {position:relative;width:100%;height:1.2em;display:block;}
-    #customcontainer {position:relative;bottom:4px;right:4px;border:1px solid #404040;background:#fff;font-size:85%;overflow:hidden;display:none;}
-    #customcontainer ul {position:relative;width:100%;padding:5px 0;list-style:none;}
-    #customcontainer li {padding:0 5px;cursor:default;white-space:nowrap;display:list-item;}
+    #custommod {position:relative;padding:1em;}
+    #customautocomplete {position:relative;margin:1em;width:40%;}/* set width of widget here*/
+    #custominput {position:absolute;width:100%;height:1.4em;}
+    #customcontainer {position:absolute;top:1.7em;width:100%;}
+    #customcontainer .content {position:absolute;width:100%;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
+    #customcontainer .shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
+    #customcontainer ul {padding:5px 0;width:100%;}
+    customcontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
     #customcontainer li.highlight {background:#ff0;}
-    #customshadow {position:absolute;width:100%;margin:.3em;z-index:5;background:#a0a0a0;}
 </style>
 </head>
 
@@ -38,13 +40,15 @@
     </p>
 
     <!-- AutoComplete begins -->
-    <div id="customdiv">
+    <div id="custommod">
         <form onsubmit="return validateForm();">
-        <h4>Customize your own AutoComplete widget:</h4>
-        <input id="custominput" type="text">
-        <div id="customshadow"><div id="customcontainer"></div></div>
+            <h2>Customize your own AutoComplete widget:</h2>
+            <div id="customautocomplete">
+                <input id="custominput">
+                <div id="customcontainer"></div>
+            </div>
         </form>
-    </div> 
+    </div>
     <!-- AutoComplete ends -->
 
     <!-- Panel begins -->
@@ -108,7 +112,7 @@
             <dt>Force a Selection</dt>
                 <dd><input id="forceselection" type="checkbox" onclick="toggleForceSelection(this);"></dd>
             <dt>Maximum Results</dt>
-                <dd><input id="maxresults" type="text" size="2" value="10"> <input type="button" value="Update" onclick="updateMaxResults();"></dd>
+                <dd><input id="maxresults" type="text" size="2" value="13"> <input type="button" value="Update" onclick="updateMaxResults();"></dd>
             <dt>Minimum Query Length</dt>
                 <dd><input id="minquerylength" type="text" size="2" value="1"> <input type="button" value="Update" onclick="updateMinQueryLength();"></dd>
             <dt>Query Delay</dt>
@@ -151,6 +155,13 @@
 
         // AutoComplete 1
         oAutoComp = new YAHOO.widget.AutoComplete('custominput','customcontainer', oACDS);
+        oAutoComp.maxResultsDisplayed = 13;
+        oAutoComp.useShadow = true;
+
+        var ua = navigator.userAgent.toLowerCase();
+        if(ua.indexOf('msie') != -1 && ua.indexOf('opera') < 0) {
+            oAutoComp.useIFrame = true;
+        }
 
         // Subscribe to custom events
         oACDS.queryEvent.subscribe(myOnQuery);

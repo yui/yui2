@@ -349,7 +349,7 @@ YAHOO.widget.AutoComplete.prototype.setBody = function(sBody) {
         this._oContainer._oContent._oBody.innerHTML = "";
         this._oContainer._oContent.style.display = "none";
     }
-    this._nTotalItems = 0;
+    this._maxResultsDisplayed = 0;
 };
 
 /**
@@ -633,12 +633,12 @@ YAHOO.widget.AutoComplete.prototype._aListItems = null;
 YAHOO.widget.AutoComplete.prototype._nDisplayedItems = 0;
 
 /**
- * Total number of &lt;li&gt; elements displayed and hidden in auto complete container.
+ * Internal count of &lt;li&gt; elements displayed and hidden in auto complete container.
  *
  * @type number
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._nTotalItems = 0;
+YAHOO.widget.AutoComplete.prototype._maxResultsDisplayed = 0;
 
 /**
  * Current query string
@@ -831,24 +831,21 @@ YAHOO.widget.AutoComplete.prototype._initContainer = function() {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._initList = function() {
-    if(this._nTotalItems != this.maxResultsDisplayed) {
-        this._aListItems = [];
-        while(this._oContainer._oContent._oBody.hasChildNodes()) {
-            this._oContainer._oContent._oBody.removeChild(this._oContainer._oContent._oBody.firstChild);
-        }
-
-        var oList = document.createElement("ul");
-        oList = this._oContainer._oContent._oBody.appendChild(oList);
-
-        for(var i=0; i<this.maxResultsDisplayed; i++) {
-            var oItem = document.createElement("li");
-            oItem = oList.appendChild(oItem);
-            oItem.innerHTML = "result";//DEBUG
-            this._aListItems[i] = oItem;
-            this._initListItem(oItem, i);
-        }
-        this._nTotalItems = this.maxResultsDisplayed;
+    this._aListItems = [];
+    while(this._oContainer._oContent._oBody.hasChildNodes()) {
+        this._oContainer._oContent._oBody.removeChild(this._oContainer._oContent._oBody.firstChild);
     }
+
+    var oList = document.createElement("ul");
+    oList = this._oContainer._oContent._oBody.appendChild(oList);
+    for(var i=0; i<this.maxResultsDisplayed; i++) {
+        var oItem = document.createElement("li");
+        oItem = oList.appendChild(oItem);
+        oItem.innerHTML = "result";
+        this._aListItems[i] = oItem;
+        this._initListItem(oItem, i);
+    }
+    this._maxResultsDisplayed = this.maxResultsDisplayed;
 };
 
 /**
@@ -1289,16 +1286,19 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
 
     var sCurQuery = decodeURIComponent(sQuery);
     oSelf._sCurQuery = sCurQuery;
-    var aItems = oSelf._aListItems;
     oSelf._bItemSelected = false;
+    
+    if(oSelf._maxResultsDisplayed != oSelf.maxResultsDisplayed) {
+        oSelf._initList();
+    }
     
     var nItems = Math.min(aResults.length,oSelf.maxResultsDisplayed);
     oSelf._nDisplayedItems = nItems;
     if (nItems > 0) {
         //TODO: Figure out what I can do once, and what may need to be re-init'd
         //oSelf._initContainer();
-        oSelf._initList();
         oSelf._initContainerHelpers();
+        var aItems = oSelf._aListItems;
         
         // Fill items with data
         for(var i = nItems-1; i >= 0; i--) {

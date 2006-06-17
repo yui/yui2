@@ -560,11 +560,6 @@ var areacodesArray = [
         oAutoComp.typeAhead = true;
         oAutoComp.useShadow = true;
 
-        var ua = navigator.userAgent.toLowerCase();
-        if(ua.indexOf('msie') != -1 && ua.indexOf('opera') < 0) {
-            oAutoComp.useIFrame = true;
-        }
-
         // Instantiate second data source
         oACDS2 = new YAHOO.widget.DS_JSArray(areacodesArray);
 
