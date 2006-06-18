@@ -121,6 +121,7 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
         this.itemArrowToEvent = new YAHOO.util.CustomEvent("itemArrowTo", this);
         this.itemArrowFromEvent = new YAHOO.util.CustomEvent("itemArrowFrom", this);
         this.itemSelectEvent = new YAHOO.util.CustomEvent("itemSelect", this);
+        this.unmatchedItemSelectEvent = new YAHOO.util.CustomEvent("unmatchedItemSelect", this);
         this.selectionEnforceEvent = new YAHOO.util.CustomEvent("selectionEnforce", this);
         this.containerCollapseEvent = new YAHOO.util.CustomEvent("containerCollapse", this);
         this.textboxBlurEvent = new YAHOO.util.CustomEvent("textboxBlur", this);
@@ -500,6 +501,14 @@ YAHOO.widget.AutoComplete.prototype.itemArrowFromEvent = null;
  *     - args[2] The data returned for the item, either as an object, or mapped from the schema into an array
  */
 YAHOO.widget.AutoComplete.prototype.itemSelectEvent = null;
+
+/**
+ * Fired when an user selection does not match any of the displayed result items.
+ * Subscribers receive the following array:<br>
+ *     - args[0] The auto complete object instance
+ *     - args[1] The user selection
+ */
+YAHOO.widget.AutoComplete.prototype.unmatchedItemSelectEvent = null;
 
 /**
  * Fired if forceSelection is enabled and the user's input has been cleared
@@ -1153,9 +1162,14 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
     // Don't treat as a blur if it was a selection via mouse click
     if(!oSelf._bOverContainer || (oSelf._nKeyCode == 9)) {
         // Current query needs to be validated
-        if(oSelf.forceSelection && !oSelf._bItemSelected) {
+        if(!oSelf._bItemSelected) {
             if(!oSelf._bContainerOpen || (oSelf._bContainerOpen && !oSelf._textMatchesOption())) {
-                oSelf._clearSelection();
+                if(oSelf.forceSelection) {
+                    oSelf._clearSelection();
+                }
+                else {
+                    oSelf.unmatchedItemSelectEvent.fire(oSelf, oSelf._sCurQuery);
+                }
             }
         }
             
