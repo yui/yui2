@@ -609,7 +609,7 @@ var areacodesArray = [
         oACDS2.dataErrorEvent.subscribe(myOnDataError);
         oACDS2.cacheFlushEvent.subscribe(myOnCacheFlush);
 
-        oAutoComp2.textboxFocusEvent.subscribe(myOnTextboxFocus);
+        oAutoComp2.textboxFocusEvent.subscribe(myOnTextbox2Focus);
         oAutoComp2.textboxKeyEvent.subscribe(myOnTextboxKey);
         oAutoComp2.dataRequestEvent.subscribe(myOnDataRequest);
         oAutoComp2.dataReturnEvent.subscribe(myOnDataReturn);
@@ -626,6 +626,11 @@ var areacodesArray = [
         oAutoComp2.textboxBlurEvent.subscribe(myOnTextboxBlur);
 
         // Define custom event handlers
+        function myOnTextbox2Focus(sType, aArgs) {
+            var oAutoComp = aArgs[0];
+            oAutoComp.sendQuery("2");
+        }
+
         function myOnQuery(sType, aArgs) {
             var oDataSource = aArgs[0];
             var oParent = aArgs[1];

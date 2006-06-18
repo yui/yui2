@@ -272,6 +272,23 @@ YAHOO.widget.AutoComplete.prototype.allowBrowserAutocomplete = true;
  */
 YAHOO.widget.AutoComplete.prototype.alwaysShowContainer = false;
 
+/**
+ * Whether or not to use an iFrame to layer over Windows form elements in
+ * IE. Set to true only when the auto complete container will be on top of a
+ * &lt;select&gt; field in IE and thus exposed to the IE z-index bug (i.e.,
+ * 5.5 < IE < 7). Default:false.
+ *
+ * @type boolean
+ */
+YAHOO.widget.AutoComplete.prototype.useIFrame = false;
+
+/**
+ * Whether or not the auto complete container should have a shadow. Default:false.
+ *
+ * @type boolean
+ */
+YAHOO.widget.AutoComplete.prototype.useShadow = false;
+
 /***************************************************************************
  * Public methods
  ***************************************************************************/
@@ -365,23 +382,6 @@ YAHOO.widget.AutoComplete.prototype.setBody = function(sBody) {
 };
 
 /**
- * Whether or not to use an iFrame to layer over Windows form elements in
- * IE. Set to true only when the auto complete container will be on top of a 
- * &lt;select&gt; field in IE and thus exposed to the IE z-index bug (i.e., 
- * 5.5 < IE < 7). Default:false.
- *
- * @type boolean
- */
-YAHOO.widget.AutoComplete.prototype.useIFrame = false;
-
-/**
- * Whether or not the auto complete container should have a shadow. Default:false.
- *
- * @type boolean
- */
-YAHOO.widget.AutoComplete.prototype.useShadow = false;
-
-/**
  * Overridable method that converts a result item object into HTML markup
  * for display. Return data values are accessible via the oResultItem object,
  * and the key return value will always be oResultItem[0]. Markup will be
@@ -399,6 +399,15 @@ YAHOO.widget.AutoComplete.prototype.formatResult = function(oResultItem, sQuery)
     else {
         return "";
     }
+};
+
+/**
+ * Makes query request to the data source.
+ *
+ * @param {string} sQuery Query string.
+ */
+YAHOO.widget.AutoComplete.prototype.sendQuery = function(sQuery) {
+    this._sendQuery(sQuery);
 };
 
 /***************************************************************************
