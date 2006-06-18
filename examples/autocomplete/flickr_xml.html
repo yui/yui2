@@ -4,6 +4,7 @@
 <title>AutoComplete Widget :: Customized XML Implementation</title>
 <link rel="stylesheet" href="../../build/reset/reset.css" type="text/css" />
 <link rel="stylesheet" href="../../build/fonts/fonts.css" type="text/css" />
+<link rel="stylesheet" href="../../build/logger/assets/logger.css" type="text/css" />
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
 
 <style type="text/css">
@@ -28,9 +29,7 @@
 
 <div id="bd">
     <!-- Logger begins -->
-    <div id="logger">
-    <p>Welcome to AutoComplete.</p>
-    </div>
+    <div id="logger"></div>
     <!-- Logger ends -->
 
     <!-- Content begins -->
@@ -82,10 +81,11 @@
 <!-- Libary begins -->
 <script src="../../build/yahoo/yahoo.js"></script>
 <script src="../../build/dom/dom.js"></script>
-<script src="../../build/event/event.js"></script>
+<script src="../../build/event/event-debug.js"></script>
 <script src="../../build/connection/connection.js"></script>
 <script src="../../build/animation/animation.js"></script>
 <script src="../../build/autocomplete/autocomplete.js"></script>
+<script src="../../build/logger/logger.js"></script>
 <!-- Library ends -->
 
 <script>
@@ -95,6 +95,8 @@
     }
 
     function autoCompInit() {
+        var mylogger = new YAHOO.widget.LogReader("logger");
+        
         // Instantiate data source and define schema as an array:
         //     ["ResultNodeName",
         //     "QueryKeyAttributeOrNodeName",
@@ -157,14 +159,14 @@
             var oDataSource = aArgs[0];
             var oParent = aArgs[1];
             var sQuery = aArgs[2];
-            doLog("Data source for " + oParent.getName() + " made source query for '" + sQuery + "'.");
+            //doLog("Data source for " + oParent.getName() + " made source query for '" + sQuery + "'.");
         }
 
         function myOnCacheQuery(sType, aArgs) {
             var oDataSource = aArgs[0];
             var oParent = aArgs[1];
             var sQuery = aArgs[2];
-            doLog("Data source for " + oParent.getName() + " made cache query for '" + sQuery + "'.");
+            //doLog("Data source for " + oParent.getName() + " made cache query for '" + sQuery + "'.");
         }
 
         function myOnGetResults(sType, aArgs) {
@@ -172,7 +174,7 @@
             var oParent = aArgs[1];
             var sQuery = aArgs[2];
             var aResults = aArgs[3];
-            doLog("Data source for " + oParent.getName() + " got " + aResults.length + " results from source.");
+            //doLog("Data source for " + oParent.getName() + " got " + aResults.length + " results from source.");
         }
 
         function myOnGetCachedResults(sType, aArgs) {
@@ -180,7 +182,7 @@
             var oParent = aArgs[1];
             var sQuery = aArgs[2];
             var aResults = aArgs[3];
-            doLog("Data source for " + oParent.getName() + " got " + aResults.length + " results from cache.");
+            //doLog("Data source for " + oParent.getName() + " got " + aResults.length + " results from cache.");
         }
 
         function myOnDataError(sType, aArgs) {
@@ -188,80 +190,80 @@
             var oParent = aArgs[1];
             var sQuery = aArgs[2];
             var sMessage = aArgs[3];
-            doLog("Data source for " + oParent.getName() + " experienced a data retrieval error: " + sMessage);
+            //doLog("Data source for " + oParent.getName() + " experienced a data retrieval error: " + sMessage);
         }
 
         function myOnCacheFlush(sType, aArgs) {
             var oDataSource = aArgs[0];
-            doLog(" cache flush complete.");
+            //doLog(" cache flush complete.");
         }
 
         function myOnTextboxFocus(sType, aArgs) {
             var oAutoComp = aArgs[0];
-            doLog(oAutoComp.getName() + " has been engaged.");
+            //doLog(oAutoComp.getName() + " has been engaged.");
         }
 
         function myOnTextboxKey(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var nKeyCode = aArgs[1];
-            doLog("Key " + nKeyCode + " has been input into " + oAutoComp.getName() + ".");
+            //doLog("Key " + nKeyCode + " has been input into " + oAutoComp.getName() + ".");
         }
 
         function myOnDataRequest(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var sQuery = aArgs[1];
-            doLog(oAutoComp.getName() + " has sent a query for " + sQuery +".");
+            //doLog(oAutoComp.getName() + " has sent a query for " + sQuery +".");
         }
 
         function myOnDataReturn(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var sQuery = aArgs[1];
             var aResults = aArgs[2];
-            doLog(oAutoComp.getName() + " has received " + aResults.length +
-            " results for query " + sQuery + ".");
+            //doLog(oAutoComp.getName() + " has received " + aResults.length +
+            //" results for query " + sQuery + ".");
         }
 
         function myOnDataError(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var sQuery = aArgs[1];
-            doLog(oAutoComp.getName() + " has received an error for query " + sQuery +".");
+            //doLog(oAutoComp.getName() + " has received an error for query " + sQuery +".");
         }
 
         function myOnContainerExpand(sType, aArgs) {
             var oAutoComp = aArgs[0];
-            doLog(oAutoComp.getName() + " container expanded.");
+            //doLog(oAutoComp.getName() + " container expanded.");
         }
 
         function myOnTypeAhead(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var sQuery = aArgs[1];
             var sPrefill = aArgs[2];
-            doLog(oAutoComp.getName() + " prefilled the input box with " +
-            sPrefill + " for query " + sQuery + ".");
+            //doLog(oAutoComp.getName() + " prefilled the input box with " +
+            //sPrefill + " for query " + sQuery + ".");
         }
 
         function myOnItemMouseOver(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
-            doLog(oAutoComp.getName() + " moused over " + oItem.toString());
+            //doLog(oAutoComp.getName() + " moused over " + oItem.toString());
         }
 
         function myOnItemMouseOut(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
-            doLog(oAutoComp.getName() + " moused out from " + oItem.toString());
+            //doLog(oAutoComp.getName() + " moused out from " + oItem.toString());
         }
 
         function myOnItemArrowTo(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
-            doLog(oAutoComp.getName() + " arrowed to " + oItem.toString());
+            //doLog(oAutoComp.getName() + " arrowed to " + oItem.toString());
         }
 
         function myOnItemArrowFrom(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var oItem = aArgs[1];
-            doLog(oAutoComp.getName() + " arrowed away from " + oItem.toString());
+            //doLog(oAutoComp.getName() + " arrowed away from " + oItem.toString());
         }
 
         function myOnItemSelect(sType, aArgs) {
@@ -269,34 +271,34 @@
             var oItem = aArgs[1];
             var oData = aArgs[2];
             var sMsg = (oItem) ? oItem.toString() : "a non-query-result";
-            doLog(oAutoComp.getName() + " selected " + sMsg + " which has the following data: " + oData);
+            //doLog(oAutoComp.getName() + " selected " + sMsg + " which has the following data: " + oData);
         }
 
         function myOnSelectionEnforce(sType, aArgs) {
             var oAutoComp = aArgs[0];
-            doLog(oAutoComp.getName() + " had to clear an invalid selection.");
+            //doLog(oAutoComp.getName() + " had to clear an invalid selection.");
         }
 
         function myOnContainerCollapse(sType, aArgs) {
             var oAutoComp = aArgs[0];
-            doLog(oAutoComp.getName() + " container collapsed.");
+            //doLog(oAutoComp.getName() + " container collapsed.");
         }
 
         function myOnTextboxBlur(sType, aArgs) {
             var oAutoComp = aArgs[0];
-            doLog(oAutoComp.getName() + " has been disengaged.");
+            //doLog(oAutoComp.getName() + " has been disengaged.");
         }
     }
     YAHOO.util.Event.addListener(this,'load',autoCompInit);
 
     // Logging
-    var logger = document.getElementById("logger");
+    /*var logger = document.getElementById("logger");
 
     function doLog(string) {
         var date = new Date();
         var timestamp = date.getTime();
         logger.innerHTML = "<p>"+timestamp+" "+string+"</p>"+logger.innerHTML;
-    }
+    }*/
 </script>
 </div>
 </body>

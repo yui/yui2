@@ -33,24 +33,24 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
             this.dataSource = oDataSource;
         }
         else {
-            //YAHOO.log("Could not instantiate AutoComplete due to an invalid DataSource", "error");
+            YAHOO.log("Could not instantiate AutoComplete due to an invalid DataSource", "error", this.toString());
             return;
         }
         // Validate input element
         if(YAHOO.util.Dom.inDocument(inputEl)) {
             if(typeof inputEl == "string") {
-                    this._sName = inputEl + YAHOO.widget.AutoComplete._nIndex;
+                    this._sName = "instance" + YAHOO.widget.AutoComplete._nIndex + " " + inputEl;
                     this._oTextbox = document.getElementById(inputEl);
             }
             else {
                 this._sName = (inputEl.id) ?
-                    inputEl.id + YAHOO.widget.AutoComplete._nIndex :
-                    "yac_inputEl" + YAHOO.widget.AutoComplete._nIndex;
+                    "instance" + YAHOO.widget.AutoComplete._nIndex + " " + inputEl.id:
+                    "instance" + YAHOO.widget.AutoComplete._nIndex;
                 this._oTextbox = inputEl;
             }
         }
         else {
-            //YAHOO.log("Could not instantiate AutoComplete due to an invalid input element", "error");
+            YAHOO.log("Could not instantiate AutoComplete due to an invalid input element", "error", this.toString());
             return;
         }
 
@@ -63,11 +63,11 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
                 this._oContainer = containerEl;
             }
             if(this._oContainer.style.display == "none") {
-                //YAHOO.log("The container may not display properly if display is set to \"none\" in CSS", "warn");
+                YAHOO.log("The container may not display properly if display is set to \"none\" in CSS", "warn", this.toString());
             }
         }
         else {
-            //YAHOO.log("Could not instantiate AutoComplete due to an invalid container element", "error");
+            YAHOO.log("Could not instantiate AutoComplete due to an invalid container element", "error", this.toString());
             return;
         }
 
@@ -90,6 +90,8 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
                 }
             }
         }
+        
+        YAHOO.widget.AutoComplete._nIndex++;
 
         // Set up events
         YAHOO.util.Event.addListener(oTextbox,'keyup',oSelf._onTextboxKeyUp,oSelf);
@@ -128,7 +130,7 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
     }
     // Required arguments were not found
     else {
-        //YAHOO.log("Could not instantiate AutoComplete due invalid arguments", "error");
+        YAHOO.log("Could not instantiate AutoComplete due invalid arguments", "error", this.toString());
     }
 };
 
@@ -279,6 +281,15 @@ YAHOO.widget.AutoComplete.prototype.alwaysShowContainer = false;
  */
 YAHOO.widget.AutoComplete.prototype.getName = function() {
     return this._sName;
+};
+
+ /**
+ * Public accessor to the unique name of the auto complete instance.
+ *
+ * @return {string} Unique name of the auto complete instance
+ */
+YAHOO.widget.AutoComplete.prototype.toString = function() {
+    return "AutoComplete " + this._sName;
 };
 
 /**
@@ -735,7 +746,7 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
         }
     }
     if(this.forceSelection && this.delimChar) {
-        //YAHOO.log(oSelf.getName() + " has enabled force selection with delimiter character(s) defined.","warn");
+        YAHOO.log(oSelf.getName() + " has enabled force selection with delimiter character(s) defined.","warn", this.toString());
     }
 
     if(!this.alwaysShowContainer) {
@@ -842,6 +853,7 @@ YAHOO.widget.AutoComplete.prototype._initList = function() {
         var oItem = document.createElement("li");
         oItem = oList.appendChild(oItem);
         oItem.innerHTML = "result";
+        //TODO:oItem.toString = function() {return "foobar";};
         this._aListItems[i] = oItem;
         this._initListItem(oItem, i);
     }
@@ -885,8 +897,6 @@ YAHOO.widget.AutoComplete.prototype._onItemMouseover = function(v,oSelf) {
     }
     
     oSelf.itemMouseOverEvent.fire(oSelf, this);
-    //YAHOO.log(oSelf.getName() + " moused over " + this.id);
-
 };
 
 /**
@@ -905,7 +915,6 @@ YAHOO.widget.AutoComplete.prototype._onItemMouseout = function(v,oSelf) {
     }
 
     oSelf.itemMouseOutEvent.fire(oSelf, this);
-    //YAHOO.log(oSelf.getName() + " moused out from " + this.id);
 };
 
 /**
@@ -965,7 +974,7 @@ YAHOO.widget.AutoComplete.prototype._onContainerScroll = function(v,oSelf) {
  * @param {object} oSelf The auto complete instance
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._onContainerResize = function(v,oSelf) {//doLog('container resized');
+YAHOO.widget.AutoComplete.prototype._onContainerResize = function(v,oSelf) {//TODO('container resized');
     oSelf._toggleContainerHelpers(oSelf._bContainerOpen);
 };
 
@@ -1078,7 +1087,6 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
     }
     else {
         oSelf.textboxKeyEvent.fire(oSelf, nKeyCode);
-        //YAHOO.log(oSelf.getName() + " received key input " + nKeyCode);
     }
 
     // Set timeout on the request
@@ -1132,7 +1140,6 @@ YAHOO.widget.AutoComplete.prototype._onTextboxFocus = function (v,oSelf) {
     oSelf._oTextbox.setAttribute("autocomplete","off");
     oSelf._bFocused = true;
     oSelf.textboxFocusEvent.fire(oSelf);
-    //YAHOO.log(oSelf.getName() + " textbox focused");
 };
 
 /**
@@ -1157,7 +1164,6 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
         }
         oSelf._bFocused = false;
         oSelf.textboxBlurEvent.fire(oSelf);
-        //YAHOO.log(oSelf.getName() + " textbox blurred");
     }
 };
 
@@ -1231,7 +1237,6 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
     sQuery = encodeURIComponent(sQuery);
     this._nDelayID = -1;    // Reset timeout ID because request has been made
     this.dataRequestEvent.fire(this, sQuery);
-    //YAHOO.log(this.getName() + " requested data for query \"" + sQuery + "\"");
     this.dataSource.getResults(this._populateList, sQuery, this);
 };
 
@@ -1274,7 +1279,6 @@ YAHOO.widget.AutoComplete.prototype._clearList = function() {
 YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, oSelf) {
     if(aResults === null) {
         oSelf.dataErrorEvent.fire(oSelf, sQuery);
-        //YAHOO.log(oSelf.getName() + " data error for query \"" + sQuery + "\"");
     }
     if (!oSelf._bFocused || !aResults) {
         return;
@@ -1334,14 +1338,11 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
 
         // Expand the container
         oSelf._toggleContainer(true);
-        //YAHOO.log(oSelf.getName() + " arrowed to item " + oFirstItem.id);
     }
     else {
         oSelf._clearList();
     }
     oSelf.dataReturnEvent.fire(oSelf, sQuery, aResults);
-    //YAHOO.log(oSelf.getName() + " received " + aResults.length + " results for query \"" + sQuery + "\"");
-
 };
 
 /**
@@ -1365,7 +1366,6 @@ YAHOO.widget.AutoComplete.prototype._clearSelection = function() {
     
     // Fire custom event
     this.selectionEnforceEvent.fire(this);
-    //YAHOO.log(this.getName() + " cleared an invalid selection");
 };
 
 /**
@@ -1417,7 +1417,6 @@ YAHOO.widget.AutoComplete.prototype._typeAhead = function(oItem, sQuery) {
     this._selectText(oTextbox,nStart,nEnd);
     var sPrefill = oTextbox.value.substr(nStart,nEnd);
     this.typeAheadEvent.fire(this,sQuery,sPrefill);
-    //YAHOO.log(this.getName() + " prefilled \"" + sPrefill + "\" for query " + sQuery + "\"");
 };
 
 /**
@@ -1560,12 +1559,10 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
                 // Expand the iFrame after container is done.
                 oSelf._toggleContainerHelpers(bShow);
                 oSelf.containerExpandEvent.fire(oSelf);
-                //YAHOO.log(oSelf.getName() + " container expanded");
             }
             else {
                 oContainer._oContent.style.display = "none";//DEBUG
                 oSelf.containerCollapseEvent.fire(oSelf);
-                //YAHOO.log(oSelf.getName() + " container collapsed");
             }
      	};
 
@@ -1582,11 +1579,9 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
         this._toggleContainerHelpers(bShow);
         if(bShow) {
             this.containerExpandEvent.fire(this);
-            //YAHOO.log(this.getName() + " container expanded");
         }
         else {
             this.containerCollapseEvent.fire(this);
-            //YAHOO.log(this.getName() + " container collapsed");
         }
     }
 
@@ -1689,7 +1684,6 @@ YAHOO.widget.AutoComplete.prototype._selectItem = function(oItem) {
     this._bItemSelected = true;
     this._updateValue(oItem);
     this.itemSelectEvent.fire(this, oItem, oItem._oResultData);
-    //YAHOO.log(this.getName() + " selected item " + oItem.id);
     this._clearList();
 };
 
@@ -1737,8 +1731,6 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
             // Unhighlight current item
             this._toggleHighlight(oCurItem, 'from');
             this.itemArrowFromEvent.fire(this, oCurItem);
-            //YAHOO.log(this.getName() + " arrowed from " + oCurItem.id);
-
         }
         if (nNewItemIndex == -1) {
            // go back to query (remove type-ahead string)
@@ -1798,7 +1790,6 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
 
         this._toggleHighlight(oNewItem, 'to');
         this.itemArrowToEvent.fire(this, oNewItem);
-        //YAHOO.log(this.getName() + " arrowed to " + oNewItem.id);
         if(this.typeAhead) {
             this._updateValue(oNewItem);
         }
