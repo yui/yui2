@@ -52,7 +52,9 @@
     the parameter typeAhead has been set to true for the first AutoComplete
     instance. For the second AutoComplete instance, typeAhead and forceSelection
     have been set to true in order to prevent the user from typing in a free-form
-    selection altogether.</p>
+    selection altogether, and the textboxFocusEvent has been wired to call
+    "sendQuery" which pre-populates the autocomplete with an initital set of
+    results.</p>
 
     <!-- AutoComplete begins -->
     <div id="statesmod">
