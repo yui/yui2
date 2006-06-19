@@ -416,7 +416,13 @@ YAHOO.widget.AutoComplete.prototype.formatResult = function(oResultItem, sQuery)
  * @param {string} sQuery Query string.
  */
 YAHOO.widget.AutoComplete.prototype.sendQuery = function(sQuery) {
-    this._sendQuery(sQuery);
+    if(!sQuery) {
+        YAHOO.log("Query could not be sent because the string value was empty or null.","warn",this.toString());
+        return;
+    }
+    else {
+        this._sendQuery(sQuery);
+    }
 };
 
 /***************************************************************************
@@ -773,7 +779,7 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
         }
     }
     if(this.forceSelection && this.delimChar) {
-        YAHOO.log(oSelf.getName() + " has enabled force selection with delimiter character(s) defined.","warn", this.toString());
+        YAHOO.log("Force selection has been enabled with delimiter character(s) defined.","warn", this.toString());
     }
 
     if(!this.alwaysShowContainer) {
