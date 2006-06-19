@@ -644,10 +644,13 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
             // Loop through the array of all responses...
             for(var i = jsonList.length-1; i >= 0 ; i--) {
                 var aResultItem = [];
+                var jsonResult = jsonList[i];
                 // ...and loop through each data field value of each response
                 for(var j = aSchema.length-1; j >= 1 ; j--) {
                     // ...and capture data into an array mapped according to the schema...
-                    var dataFieldValue = jsonList[i][aSchema[j]];
+
+                    var dataFieldValue = jsonResult[aSchema[j]];
+                    if(!dataFieldValue) dataFieldValue = "";
                     //doLog(dataFieldValue);
                     aResultItem.unshift(dataFieldValue);
                 }
@@ -658,25 +661,35 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
         case this.TYPE_XML:
             // Get the collection of results
             var xmlList = oResponse.getElementsByTagName(aSchema[0]);
+            if((xmlList.length != 0) && !xmlList) {
+                bError = true;
+                break;
+            }
             // Loop through each result
             for(var k = xmlList.length-1; k >= 0 ; k--) {
                 var result = xmlList.item(k);
-                //doLog(k+' is '+result.attributes.item(0).firstChild.nodeValue);
+                //YAHOO.log("Result"+k+" is "+result.attributes.item(0).firstChild.nodeValue,"debug",this.toString());
                 var aFieldSet = [];
                 // Loop through each data field in each result using the schema
                 for(var m = aSchema.length-1; m >= 1 ; m--) {
-                    //doLog(aSchema[m]+' is '+result.attributes.getNamedItem(aSchema[m]).firstChild.nodeValue);
+                    //YAHOO.log(aSchema[m]+" is "+result.attributes.getNamedItem(aSchema[m]).firstChild.nodeValue);
                     var sValue = null;
                     // Values may be held in an attribute...
                     var xmlAttr = result.attributes.getNamedItem(aSchema[m]);
                     if(xmlAttr) {
-                        sValue = xmlAttr.value;//doLog('attr'+sValue);
+                        sValue = xmlAttr.value;
+                        //YAHOO.log("Attr value is "+sValue,"debug",this.toString());
                     }
                     // ...or in a node
-                    else {
+                    else{
                         var xmlNode = result.getElementsByTagName(aSchema[m]);
-                        if(xmlNode) {
-                            sValue = xmlNode.item(0).firstChild.nodeValue;// doLog('node'+sValue);
+                        if(xmlNode && xmlNode.item(0) && xmlNode.item(0).firstChild) {
+                            sValue = xmlNode.item(0).firstChild.nodeValue;
+                            //YAHOO.log("Node value is "+sValue,"debug",this.toString());
+                        }
+                        else {
+                            sValue = "";
+                            //YAHOO.log("Value not found","debug",this.toString());
                         }
                     }
                     // Capture the schema-mapped data field values into an array
