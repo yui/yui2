@@ -380,8 +380,6 @@ YAHOO.widget.MenuItem.prototype.configChecked =
 
             this._checkImage = oImg;
 
-//            this.element.appendChild(oImg);
-
             this.element.insertBefore(oImg, this.element.lastChild);
 
             this._oDom.addClass([this.element, oImg], "checked");
