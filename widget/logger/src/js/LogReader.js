@@ -475,7 +475,7 @@ YAHOO.widget.LogReader.prototype._createCategoryCheckbox = function(category) {
             // Append el at the end so IE 5.5 can set "type" attribute
             // and THEN set checked property
             var categoryChk = document.createElement("input");
-            categoryChk.className = "yui-log-filter" + category;
+            categoryChk.id = "yui-log-filter-" + category;
             categoryChk.type = "checkbox";
             categoryChk.category = category;
             categoryChk = filterEl.appendChild(categoryChk);
@@ -487,7 +487,8 @@ YAHOO.widget.LogReader.prototype._createCategoryCheckbox = function(category) {
             YAHOO.util.Event.addListener(categoryChk,'click',oSelf._onCheckCategory,oSelf);
 
             // Create and class the text label
-            var categoryChkLbl = filterEl.appendChild(document.createElement("span"));
+            var categoryChkLbl = filterEl.appendChild(document.createElement("label"));
+            categoryChkLbl.htmlFor = categoryChk.id;
             categoryChkLbl.className = category;
             categoryChkLbl.innerHTML = category;
     }
@@ -506,7 +507,7 @@ YAHOO.widget.LogReader.prototype._createSourceCheckbox = function(source) {
         // Append el at the end so IE 5.5 can set "type" attribute
         // and THEN set checked property
         var sourceChk = document.createElement("input");
-        sourceChk.className = "yui-log-filter" + source;
+        sourceChk.id = "yui-log-filter" + source;
         sourceChk.type = "checkbox";
         sourceChk.source = source;
         sourceChk = filterEl.appendChild(sourceChk);
@@ -518,7 +519,8 @@ YAHOO.widget.LogReader.prototype._createSourceCheckbox = function(source) {
         YAHOO.util.Event.addListener(sourceChk,'click',oSelf._onCheckSource,oSelf);
 
         // Create and class the text label
-        var sourceChkLbl = filterEl.appendChild(document.createElement("span"));
+        var sourceChkLbl = filterEl.appendChild(document.createElement("label"));
+        sourceChkLbl.htmlFor = sourceChk.id;
         sourceChkLbl.className = source;
         sourceChkLbl.innerHTML = source;
     }
