@@ -33,6 +33,16 @@ YAHOO.util.Motion = function(el, attributes, duration, method) {
 YAHOO.util.Motion.prototype = new YAHOO.util.Anim();
 
 /**
+ * toString method
+ * @return {String} string represenation of anim obj
+ */
+YAHOO.util.Motion.prototype.toString = function() {
+   var el = this.getEl();
+   var id = el.id || el.tagName;
+   return ("Motion " + id);
+};
+
+/**
  * Per attribute units that should be used by default.
  * Motion points default to 'px' units.
  * @type Object
@@ -134,7 +144,7 @@ YAHOO.util.Motion.prototype.initMotion = function(el, attributes, duration, meth
       var attributes = this.attributes;
       var control =  attributes['points']['control'] || [];
 
-      if (control.length > 0 && control[0].constructor != Array) { // could be single point or array of points
+      if (control.length > 0 && control[0].constructor.toString().indexOf('Array') > -1) { // could be single point or array of points (using toString in case passed from a frame)
          control = [control];
       }
       
