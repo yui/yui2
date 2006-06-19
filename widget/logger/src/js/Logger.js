@@ -17,7 +17,7 @@ YAHOO.widget.Logger = {
     sources: ["global"],
     _stack: [], // holds all log msgs
     _startTime: new Date().getTime(), // static start timestamp
-    _lastTime: this._startTime // timestamp of last logged message
+    _lastTime: null // timestamp of last logged message
 };
 
 /***************************************************************************
@@ -220,48 +220,33 @@ YAHOO.widget.Logger._isNewSource = function(source) {
  * @private
  */
 YAHOO.widget.Logger._printToFirebug = function(entry) {
-    var category = entry.category;
-    var label = entry.category.substring(0,4).toUpperCase();
+    if(window.console && console.log) {
+        var category = entry.category;
+        var label = entry.category.substring(0,4).toUpperCase();
 
-    var time = entry.time;
-    if (time.toLocaleTimeString) {
-        var localTime  = time.toLocaleTimeString();
+        var time = entry.time;
+        if (time.toLocaleTimeString) {
+            var localTime  = time.toLocaleTimeString();
+        }
+        else {
+            localTime = time.toString();
+        }
+
+        var msecs = time.getTime();
+        var elapsedTime = (YAHOO.widget.Logger._lastTime) ?
+            (msecs - YAHOO.widget.Logger._lastTime) : 0;
+        YAHOO.widget.Logger._lastTime = msecs;
+
+        var output = //Firebug doesn't support HTML "<span class='"+category+"'>"+label+"</span> " +
+            localTime + " (" +
+            elapsedTime + "ms): " +
+            entry.source + ": " +
+            entry.msg;
+
+        
+        console.log(output);
     }
-    else {
-        localTime = time.toString();
-    }
-
-    var msecs = time.getTime();
-    var elapsedTime = msecs - this._lastTime;
-    this._lastTime = msecs;
-    
-    var output = "<span class='"+category+"'>"+label+"</span> " +
-        localTime + " (" +
-        elapsedTime + "): " +
-        entry.source + ": " +
-        entry.msg;
-
-    this._firebugEnabled = printfire(output);
 };
-
-/**
- * Firebug integration method. Outputs log message to Firebug.
- */
-function printfire() {
-    if(document.createEvent) {
-        try {
-            printfire.args = arguments;
-            var ev = document.createEvent("Events");
-            ev.initEvent("printfire", false, true);
-            dispatchEvent(ev);
-            return true;
-        }
-        catch(e) {
-        }
-    }
-    return false;
-}
-
 
 /***************************************************************************
  * Private event handlers

@@ -636,7 +636,7 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
                 source;
 
             var output =  "<span class='"+category+"'>"+label+"</span> " +
-                totalTime + " ms (+" +
+                totalTime + "ms (+" +
                 elapsedTime + ") " + localTime + ": " +
                 sourceAndDetail + ": " +
                 verboseOutput +
