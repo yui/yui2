@@ -33,6 +33,7 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
             this.dataSource = oDataSource;
         }
         else {
+            YAHOO.log("Could not instantiate AutoComplete due to an invalid DataSource", "error", this.toString());
             return;
         }
         // Validate input element
@@ -49,6 +50,7 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
             }
         }
         else {
+            YAHOO.log("Could not instantiate AutoComplete due to an invalid input element", "error", this.toString());
             return;
         }
 
@@ -61,9 +63,11 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
                 this._oContainer = containerEl;
             }
             if(this._oContainer.style.display == "none") {
+                YAHOO.log("The container may not display properly if display is set to \"none\" in CSS", "warn", this.toString());
             }
         }
         else {
+            YAHOO.log("Could not instantiate AutoComplete due to an invalid container element", "error", this.toString());
             return;
         }
 
@@ -127,6 +131,7 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
     }
     // Required arguments were not found
     else {
+        YAHOO.log("Could not instantiate AutoComplete due invalid arguments", "error", this.toString());
     }
 };
 
@@ -412,6 +417,7 @@ YAHOO.widget.AutoComplete.prototype.formatResult = function(oResultItem, sQuery)
  */
 YAHOO.widget.AutoComplete.prototype.sendQuery = function(sQuery) {
     if(!sQuery) {
+        YAHOO.log("Query could not be sent because the string value was empty or null.","warn",this.toString());
         return;
     }
     else {
@@ -773,6 +779,7 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
         }
     }
     if(this.forceSelection && this.delimChar) {
+        YAHOO.log("Force selection has been enabled with delimiter character(s) defined.","warn", this.toString());
     }
 
     if(!this.alwaysShowContainer) {
@@ -2346,6 +2353,7 @@ YAHOO.widget.DS_XHR.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
     if(this.scriptQueryAppend.length > 0) {
         sUri += "&" + this.scriptQueryAppend;
     }
+    YAHOO.log("Data source is querying URL " + sUri, "info", this.toString());
     var oResponse = null;
     
     var oSelf = this;
@@ -2364,6 +2372,7 @@ YAHOO.widget.DS_XHR.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
         }
         if(oResp === null) {
             oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATANULL);
+            YAHOO.log("Data error occurred: " + oSelf.ERROR_DATANULL, "error", this.toString());
             oCallbackFn(sQuery, null, oParent);
             return;
         }
@@ -2377,6 +2386,7 @@ YAHOO.widget.DS_XHR.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
 
     var responseFailure = function(oResp) {
         oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATAXHR);
+        YAHOO.log("Data error occured: " + oSelf.ERROR_DATAXHR, "error", this.toString());
         oCallbackFn(sQuery, null, oParent);
         return;
     };
@@ -2494,23 +2504,28 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
             // Loop through each result
             for(var k = xmlList.length-1; k >= 0 ; k--) {
                 var result = xmlList.item(k);
+                //YAHOO.log("Result"+k+" is "+result.attributes.item(0).firstChild.nodeValue,"debug",this.toString());
                 var aFieldSet = [];
                 // Loop through each data field in each result using the schema
                 for(var m = aSchema.length-1; m >= 1 ; m--) {
+                    //YAHOO.log(aSchema[m]+" is "+result.attributes.getNamedItem(aSchema[m]).firstChild.nodeValue);
                     var sValue = null;
                     // Values may be held in an attribute...
                     var xmlAttr = result.attributes.getNamedItem(aSchema[m]);
                     if(xmlAttr) {
                         sValue = xmlAttr.value;
+                        //YAHOO.log("Attr value is "+sValue,"debug",this.toString());
                     }
                     // ...or in a node
                     else{
                         var xmlNode = result.getElementsByTagName(aSchema[m]);
                         if(xmlNode && xmlNode.item(0) && xmlNode.item(0).firstChild) {
                             sValue = xmlNode.item(0).firstChild.nodeValue;
+                            //YAHOO.log("Node value is "+sValue,"debug",this.toString());
                         }
                         else {
                             sValue = "";
+                            //YAHOO.log("Value not found","debug",this.toString());
                         }
                     }
                     // Capture the schema-mapped data field values into an array
@@ -2538,6 +2553,7 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
     }    
     if(bError) {
         this.dataErrorEvent.fire(this, oParent, sQuery, this.ERROR_DATAPARSE);
+        YAHOO.log("Data error occurred: " + this.ERROR_DATAPARSE, "error", this.toString());
         return null;
     }
     else {
@@ -2619,6 +2635,7 @@ YAHOO.widget.DS_JSFunction.prototype.doQuery = function(oCallbackFn, sQuery, oPa
     aResults = oFunction(sQuery);
     if(aResults === null) {
         this.dataErrorEvent.fire(this, oParent, sQuery, this.ERROR_DATANULL);
+        YAHOO.log("Data error occurred: " + oSelf.ERROR_DATANULL, "error", this.toString());
         oCallbackFn(sQuery, null, oParent);
         return;
     }

@@ -17,7 +17,7 @@ YAHOO.widget.Logger = {
     sources: ["global"],
     _stack: [], // holds all log msgs
     _startTime: new Date().getTime(), // static start timestamp
-    _lastTime: this._startTime // timestamp of last logged message
+    _lastTime: null // timestamp of last logged message
 };
 
 /***************************************************************************
@@ -220,48 +220,33 @@ YAHOO.widget.Logger._isNewSource = function(source) {
  * @private
  */
 YAHOO.widget.Logger._printToFirebug = function(entry) {
-    var category = entry.category;
-    var label = entry.category.substring(0,4).toUpperCase();
+    if(window.console && console.log) {
+        var category = entry.category;
+        var label = entry.category.substring(0,4).toUpperCase();
 
-    var time = entry.time;
-    if (time.toLocaleTimeString) {
-        var localTime  = time.toLocaleTimeString();
+        var time = entry.time;
+        if (time.toLocaleTimeString) {
+            var localTime  = time.toLocaleTimeString();
+        }
+        else {
+            localTime = time.toString();
+        }
+
+        var msecs = time.getTime();
+        var elapsedTime = (YAHOO.widget.Logger._lastTime) ?
+            (msecs - YAHOO.widget.Logger._lastTime) : 0;
+        YAHOO.widget.Logger._lastTime = msecs;
+
+        var output = //Firebug doesn't support HTML "<span class='"+category+"'>"+label+"</span> " +
+            localTime + " (" +
+            elapsedTime + "ms): " +
+            entry.source + ": " +
+            entry.msg;
+
+        
+        console.log(output);
     }
-    else {
-        localTime = time.toString();
-    }
-
-    var msecs = time.getTime();
-    var elapsedTime = msecs - this._lastTime;
-    this._lastTime = msecs;
-    
-    var output = "<span class='"+category+"'>"+label+"</span> " +
-        localTime + " (" +
-        elapsedTime + "): " +
-        entry.source + ": " +
-        entry.msg;
-
-    this._firebugEnabled = printfire(output);
 };
-
-/**
- * Firebug integration method. Outputs log message to Firebug.
- */
-function printfire() {
-    if(document.createEvent) {
-        try {
-            printfire.args = arguments;
-            var ev = document.createEvent("Events");
-            ev.initEvent("printfire", false, true);
-            dispatchEvent(ev);
-            return true;
-        }
-        catch(e) {
-        }
-    }
-    return false;
-}
-
 
 /***************************************************************************
  * Private event handlers
@@ -375,7 +360,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         else if(containerEl.tagName) {
             this._containerEl = containerEl;
         }
-        this._containerEl.className = "ylogger";
+        this._containerEl.className = "yui-log";
     }
     // ...or create container from scratch
     if(!this._containerEl) {
@@ -384,8 +369,8 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         }
         else {
             this._containerEl = document.body.appendChild(document.createElement("div"));
-            this._containerEl.id = "ylogger";
-            this._containerEl.className = "ylogger";
+            this._containerEl.id = "yui-log";
+            this._containerEl.className = "yui-log";
 
             YAHOO.widget.LogReader._defaultContainerEl = this._containerEl;
         }
@@ -415,16 +400,16 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         // Create header
         if(!this._hdEl) {
             this._hdEl = this._containerEl.appendChild(document.createElement("div"));
-            this._hdEl.id = "ylog_hd" + YAHOO.widget.LogReader._index;
-            this._hdEl.className = "ylog_hd";
+            this._hdEl.id = "yui-log-hd" + YAHOO.widget.LogReader._index;
+            this._hdEl.className = "yui-log-hd";
 
             this._collapseEl = this._hdEl.appendChild(document.createElement("div"));
-            this._collapseEl.className = "ylog_btns";
+            this._collapseEl.className = "yui-log-btns";
 
             this._collapseBtn = document.createElement("input");
             this._collapseBtn.type = "button";
             this._collapseBtn.style.fontSize = YAHOO.util.Dom.getStyle(this._containerEl,"fontSize");
-            this._collapseBtn.className = "button";
+            this._collapseBtn.className = "yui-log-button";
             this._collapseBtn.value = "Collapse";
             this._collapseBtn = this._collapseEl.appendChild(this._collapseBtn);
             YAHOO.util.Event.addListener(oSelf._collapseBtn,'click',oSelf._onClickCollapseBtn,oSelf);
@@ -445,7 +430,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         // Ceate console
         if(!this._consoleEl) {
             this._consoleEl = this._containerEl.appendChild(document.createElement("div"));
-            this._consoleEl.className = "ylog_bd";
+            this._consoleEl.className = "yui-log-bd";
             
             // If implementer has provided console, trust and set those
             if(this.height) {
@@ -455,15 +440,15 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         // Don't create footer if disabled
         if(!this._ftEl && this.footerEnabled) {
             this._ftEl = this._containerEl.appendChild(document.createElement("div"));
-            this._ftEl.className = "ylog_ft";
+            this._ftEl.className = "yui-log-ft";
 
             this._btnsEl = this._ftEl.appendChild(document.createElement("div"));
-            this._btnsEl.className = "ylog_btns";
+            this._btnsEl.className = "yui-log-btns";
 
             this._pauseBtn = document.createElement("input");
             this._pauseBtn.type = "button";
             this._pauseBtn.style.fontSize = YAHOO.util.Dom.getStyle(this._containerEl,"fontSize");
-            this._pauseBtn.className = "button";
+            this._pauseBtn.className = "yui-log-button";
             this._pauseBtn.value = "Pause";
             this._pauseBtn = this._btnsEl.appendChild(this._pauseBtn);
             YAHOO.util.Event.addListener(oSelf._pauseBtn,'click',oSelf._onClickPauseBtn,oSelf);
@@ -471,15 +456,15 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
             this._clearBtn = document.createElement("input");
             this._clearBtn.type = "button";
             this._clearBtn.style.fontSize = YAHOO.util.Dom.getStyle(this._containerEl,"fontSize");
-            this._clearBtn.className = "button";
+            this._clearBtn.className = "yui-log-button";
             this._clearBtn.value = "Clear";
             this._clearBtn = this._btnsEl.appendChild(this._clearBtn);
             YAHOO.util.Event.addListener(oSelf._clearBtn,'click',oSelf._onClickClearBtn,oSelf);
 
             this._categoryFiltersEl = this._ftEl.appendChild(document.createElement("div"));
-            this._categoryFiltersEl.className = "ylog_categoryfilters";
+            this._categoryFiltersEl.className = "yui-log-categoryfilters";
             this._sourceFiltersEl = this._ftEl.appendChild(document.createElement("div"));
-            this._sourceFiltersEl.className = "ylog_sourcefilters";
+            this._sourceFiltersEl.className = "yui-log-sourcefilters";
         }
     }
 
@@ -815,11 +800,12 @@ YAHOO.widget.LogReader.prototype._createCategoryCheckbox = function(category) {
         var filters = this._categoryFilters;
 
         var filterEl = parentEl.appendChild(document.createElement("span"));
-        filterEl.className = "ylog_filtergrp";
+        filterEl.className = "yui-log-filtergrp";
             // Append el at the end so IE 5.5 can set "type" attribute
             // and THEN set checked property
             var categoryChk = document.createElement("input");
-            categoryChk.className = "ylog_filter" + category;
+            categoryChk.id = "yui-log-filter-" + category + YAHOO.widget.LogReader._index;
+            categoryChk.className = "yui-log-filter-" + category;
             categoryChk.type = "checkbox";
             categoryChk.category = category;
             categoryChk = filterEl.appendChild(categoryChk);
@@ -831,7 +817,8 @@ YAHOO.widget.LogReader.prototype._createCategoryCheckbox = function(category) {
             YAHOO.util.Event.addListener(categoryChk,'click',oSelf._onCheckCategory,oSelf);
 
             // Create and class the text label
-            var categoryChkLbl = filterEl.appendChild(document.createElement("span"));
+            var categoryChkLbl = filterEl.appendChild(document.createElement("label"));
+            categoryChkLbl.setAttribute("for",categoryChk.id);
             categoryChkLbl.className = category;
             categoryChkLbl.innerHTML = category;
     }
@@ -845,12 +832,13 @@ YAHOO.widget.LogReader.prototype._createSourceCheckbox = function(source) {
         var filters = this._sourceFilters;
 
         var filterEl = parentEl.appendChild(document.createElement("span"));
-        filterEl.className = "ylog_filtergrp";
+        filterEl.className = "yui-log-filtergrp";
 
         // Append el at the end so IE 5.5 can set "type" attribute
         // and THEN set checked property
         var sourceChk = document.createElement("input");
-        sourceChk.className = "ylog_filter" + source;
+        sourceChk.id = "yui-log-filter" + source + YAHOO.widget.LogReader._index;
+        sourceChk.className = "yui-log-filter" + source;
         sourceChk.type = "checkbox";
         sourceChk.source = source;
         sourceChk = filterEl.appendChild(sourceChk);
@@ -862,7 +850,8 @@ YAHOO.widget.LogReader.prototype._createSourceCheckbox = function(source) {
         YAHOO.util.Event.addListener(sourceChk,'click',oSelf._onCheckSource,oSelf);
 
         // Create and class the text label
-        var sourceChkLbl = filterEl.appendChild(document.createElement("span"));
+        var sourceChkLbl = filterEl.appendChild(document.createElement("label"));
+        sourceChkLbl.setAttribute("for",sourceChk.id);
         sourceChkLbl.className = source;
         sourceChkLbl.innerHTML = source;
     }
@@ -916,6 +905,9 @@ YAHOO.widget.LogReader.prototype._printBuffer = function() {
         }
         this._buffer = [];
         this._printToConsole(entries);
+        if(!this.newestOnTop) {
+            this._consoleEl.scrollTop = this._consoleEl.scrollHeight;
+        }
     }
 };
 
@@ -980,7 +972,7 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
                 source;
 
             var output =  "<span class='"+category+"'>"+label+"</span> " +
-                totalTime + " ms (+" +
+                totalTime + "ms (+" +
                 elapsedTime + ") " + localTime + ": " +
                 sourceAndDetail + ": " +
                 verboseOutput +
@@ -990,9 +982,6 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
                 this._consoleEl.insertBefore(document.createElement("p"),this._consoleEl.firstChild):
                 this._consoleEl.appendChild(document.createElement("p"));
             oNewElement.innerHTML = output;
-            if(!this.newestOnTop) {
-                this._consoleEl.scrollTop = this._consoleEl.scrollHeight;
-            }
         }
     }
 };
