@@ -110,7 +110,19 @@ YAHOO.util.AnimMgr = new function() {
                correctFrame(tween);
             }
             
-            tween.onTween.fire();     
+            var data = {
+               duration: new Date() - tween.getStartTime(),
+               currentFrame: tween.currentFrame
+            };
+            
+            data.toString = function() {
+               return (
+                  ', duration: ' + data.duration +
+                  ', currentFrame: ' + data.currentFrame
+               );
+            };
+            
+            tween.onTween.fire(data);     
             tween._onTween.fire();        
          }
          else { YAHOO.util.AnimMgr.stop(tween); }
