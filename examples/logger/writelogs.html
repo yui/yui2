@@ -23,21 +23,21 @@
         and we also instantiate a LogWriter instance to write messages from a
         custom-named source.</p>
 
-        <p><input id="ylog_inputinfo" class="ylog_input" type="text" value="Log an info message.">
+        <p><input id="yui-log-inputinfo" class="yui-log-input" type="text" value="Log an info message.">
             <button id="btn_loginfo">Log this message</button></p>
-        <p><input id="ylog_inputwarn" class="ylog_input" type="text" value="Log a warning.">
+        <p><input id="yui-log-inputwarn" class="yui-log-input" type="text" value="Log a warning.">
             <button id="btn_logwarn">Log this message</button></p>
-        <p><input id="ylog_inputerror" class="ylog_input" type="text" value="Log an error.">
+        <p><input id="yui-log-inputerror" class="yui-log-input" type="text" value="Log an error.">
             <button id="btn_logerror">Log this message</button></p>
-        <p><input id="ylog_inputtime" class="ylog_input" type="text" value="Log a timing message.">
+        <p><input id="yui-log-inputtime" class="yui-log-input" type="text" value="Log a timing message.">
             <button id="btn_logtime">Log this message</button></p>
-        <p><input id="ylog_inputwindow" class="ylog_input" type="text" value="Log a window error.">
+        <p><input id="yui-log-inputwindow" class="yui-log-input" type="text" value="Log a window error.">
             <button onclick="someUndefinedFunction();">Log this message</button></p>
-        <p><input id="ylog_inputcustommsg" class="ylog_input" type="text" value="Log a custom type message.">
-            <input id="ylog_inputcustomtype" type="text" value="myCategory">
+        <p><input id="yui-log-inputcustommsg" class="yui-log-input" type="text" value="Log a custom type message.">
+            <input id="yui-log-inputcustomtype" type="text" value="myCategory">
             <button id="btn_logcustom">Log this message with this category</button></p>
 
-        <p><input id="ylog_inputsource" class="ylog_input" type="text" value="SomeClass instance1">
+        <p><input id="yui-log-inputsource" class="yui-log-input" type="text" value="SomeClass instance1">
             <button id="btn_logsource">Generate some messages from a named source</button></p>
 
         <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
@@ -114,27 +114,27 @@ YAHOO.example.LogWriter = function() {
         },
 
         onSourceWriterClick: function() {
-            YAHOO.example.LogWriter.createNewLogWriter(document.getElementById('ylog_inputsource').value);
+            YAHOO.example.LogWriter.createNewLogWriter(document.getElementById('yui-log-inputsource').value);
         },
 
         onLogInfoClick: function() {
-            myLogWriter.log(document.getElementById('ylog_inputinfo').value,'info');
+            myLogWriter.log(document.getElementById('yui-log-inputinfo').value,'info');
         },
 
         onLogWarnClick: function() {
-            myLogWriter.log(document.getElementById('ylog_inputwarn').value,'warn');
+            myLogWriter.log(document.getElementById('yui-log-inputwarn').value,'warn');
         },
 
         onLogErrorClick: function() {
-            myLogWriter.log(document.getElementById('ylog_inputerror').value,'error');
+            myLogWriter.log(document.getElementById('yui-log-inputerror').value,'error');
         },
 
         onLogTimeClick: function() {
-            myLogWriter.log(document.getElementById('ylog_inputtime').value,'time');
+            myLogWriter.log(document.getElementById('yui-log-inputtime').value,'time');
         },
 
         onLogCustomClick: function() {
-            myLogWriter.log(document.getElementById('ylog_inputcustommsg').value,document.getElementById('ylog_inputcustomtype').value);
+            myLogWriter.log(document.getElementById('yui-log-inputcustommsg').value,document.getElementById('yui-log-inputcustomtype').value);
         }
     };
 }();
