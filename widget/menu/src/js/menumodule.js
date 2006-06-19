@@ -331,6 +331,9 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oUserConfig) {
 
                 }
 
+                this.logger = new YAHOO.widget.LogWriter(this.toString());
+
+                this.logger.log("Source element: " + this.srcElement.tagName);
     
             break;
     
@@ -356,6 +359,10 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oUserConfig) {
 
                 this.beforeInitEvent.fire(YAHOO.widget.MenuModule);
 
+                this.logger = new YAHOO.widget.LogWriter(this.toString());
+
+                this.logger.log("Source element: " + this.srcElement.tagName);
+
             break;
     
         }
@@ -372,6 +379,12 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oUserConfig) {
         YAHOO.widget.MenuModule.superclass.init.call(this, p_oElement);
 
         this.beforeInitEvent.fire(YAHOO.widget.MenuModule);
+
+        this.logger = new YAHOO.widget.LogWriter(this.toString());
+
+        this.logger.log(
+            "No source element found.  Created element with id: " + this.id 
+        );
 
     }
 
@@ -495,6 +508,102 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oUserConfig) {
 
 
 // Private methods
+
+/**
+* Iterates the source element's childNodes collection and uses the child 
+* nodes to instantiate MenuModule and MenuModuleItem instances.
+* @private
+*/
+YAHOO.widget.MenuModule.prototype._initSubTree = function() {
+
+    var oNode;
+
+    this.logger.log("Searching DOM for items to initialize.");
+
+    switch(this.srcElement.tagName) {
+
+        case "DIV":
+
+            if(this._aListElements.length > 0) {
+
+                this.logger.log(
+                    "Found " + this._aListElements.length + 
+                    " item groups to initialize."
+                );
+
+                var i = this._aListElements.length - 1;
+
+                do {
+
+                    oNode = this._aListElements[i].firstChild;
+    
+                    this.logger.log(
+                        "Scanning " +  
+                        this._aListElements[i].childNodes.length + 
+                        " child nodes for items to initialize."
+                    );
+
+                    do {
+    
+                        switch(oNode.tagName) {
+        
+                            case "LI":
+
+                                this.logger.log(
+                                    "Initializing " +  oNode.tagName + " node."
+                                );
+
+                                this.addItem(new this.ITEM_TYPE(oNode), i);
+        
+                            break;
+        
+                        }
+            
+                    }
+                    while((oNode = oNode.nextSibling));
+            
+                }
+                while(i--);
+
+            }
+
+        break;
+
+        case "SELECT":
+
+            this.logger.log(
+                "Scanning " +  
+                this.srcElement.childNodes.length + 
+                " child nodes for items to initialize."
+            );
+
+            oNode = this.srcElement.firstChild;
+
+            do {
+
+                switch(oNode.tagName) {
+
+                    case "OPTGROUP":
+                    case "OPTION":
+
+                        this.logger.log(
+                            "Initializing " +  oNode.tagName + " node."
+                        );
+
+                        this.addItem(new this.ITEM_TYPE(oNode));
+
+                    break;
+
+                }
+
+            }
+            while((oNode = oNode.nextSibling));
+
+        break;
+
+    }
+
+};
 
 
 /**
@@ -677,6 +786,14 @@ YAHOO.widget.MenuModule.prototype._addItemToGroup =
                     
                     this._updateItemProperties(nGroupIndex);
             
+                    this.logger.log(
+                        "Item inserted." + 
+                        " Text: " + oGroupItem.cfg.getProperty("text") + ", " +
+                        " Index: " + oGroupItem.index + ", " +
+                        " Group Index: " + oGroupItem.groupIndex
+                    );
+
+
                     return oGroupItem;
         
                 }
@@ -733,6 +850,13 @@ YAHOO.widget.MenuModule.prototype._addItemToGroup =
                         this._oDom.addClass(oGroupItem.element, "first");
             
                     }
+
+                    this.logger.log(
+                        "Item added." + 
+                        " Text: " + oGroupItem.cfg.getProperty("text") + ", " +
+                        " Index: " + oGroupItem.index + ", " +
+                        " Group Index: " + oGroupItem.groupIndex
+                    );
             
                     return oGroupItem;
         
@@ -1454,75 +1578,6 @@ YAHOO.widget.MenuModule.prototype._onElementClick =
 
 // Private Custom Event handlers
 
-/**
-* Iterates the source element's childNodes collection and uses the child 
-* nodes to instantiate MenuModule and MenuModuleItem instances.
-* @private
-*/
-YAHOO.widget.MenuModule.prototype._initSubTree = function() {
-
-    var oNode;
-
-    switch(this.srcElement.tagName) {
-
-        case "DIV":
-
-            if(this._aListElements.length > 0) {
-
-                var i = this._aListElements.length - 1;
-
-                do {
-        
-                    oNode = this._aListElements[i].firstChild;
-    
-                    do {
-    
-                        switch(oNode.tagName) {
-        
-                            case "LI":
-        
-                                this.addItem(new this.ITEM_TYPE(oNode), i);
-        
-                            break;
-        
-                        }
-            
-                    }
-                    while((oNode = oNode.nextSibling));
-            
-                }
-                while(i--);
-
-            }
-
-        break;
-
-        case "SELECT":
-
-            oNode = this.srcElement.firstChild;
-
-            do {
-
-                switch(oNode.tagName) {
-
-                    case "OPTGROUP":
-                    case "OPTION":
-
-                        this.addItem(new this.ITEM_TYPE(oNode));
-
-                    break;
-
-                }
-
-            }
-            while((oNode = oNode.nextSibling));
-
-        break;
-
-    }
-
-};
-
 
 /**
 * "beforerender" Custom Event handler for a MenuModule instance.  Appends all 
@@ -2059,6 +2114,13 @@ YAHOO.widget.MenuModule.prototype.configPosition =
 
 // Public methods
 
+YAHOO.widget.MenuModule.prototype.toString = function() {
+
+    return ("Menu " + this.id);
+
+};
+
+
 /**
 * Sets the title of a group of items.
 * @param {String} p_sGroupTitle The title of the group.
@@ -2202,6 +2264,13 @@ YAHOO.widget.MenuModule.prototype.removeItem =
             if(oItem) {
     
                 oItem.destroy();
+
+                this.logger.log(
+                    "Item removed." + 
+                    " Text: " + oItem.cfg.getProperty("text") + ", " +
+                    " Index: " + oItem.index + ", " +
+                    " Group Index: " + oItem.groupIndex
+                );
     
                 return oItem;
     
@@ -2351,6 +2420,8 @@ YAHOO.widget.MenuModule.prototype.destroy = function() {
     // Continue with the superclass implementation of this method
 
     YAHOO.widget.MenuModule.superclass.destroy.call(this);
+    
+    this.logger.log("Destroyed.");
 
 };
 

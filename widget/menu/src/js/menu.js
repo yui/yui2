@@ -190,6 +190,8 @@ YAHOO.widget.Menu.prototype.onDomResize = function(e, obj) {
     
     }
 
+    this.logger.log("Browser font sized changed.");
+
     if(this.cfg.getProperty("position") == "dynamic") {
 
         this.cfg.setProperty("width", (this._getOffsetWidth() + "px"));
