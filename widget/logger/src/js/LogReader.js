@@ -475,7 +475,8 @@ YAHOO.widget.LogReader.prototype._createCategoryCheckbox = function(category) {
             // Append el at the end so IE 5.5 can set "type" attribute
             // and THEN set checked property
             var categoryChk = document.createElement("input");
-            categoryChk.id = "yui-log-filter-" + category;
+            categoryChk.id = "yui-log-filter-" + category + YAHOO.widget.LogReader._index;
+            categoryChk.className = "yui-log-filter-" + category;
             categoryChk.type = "checkbox";
             categoryChk.category = category;
             categoryChk = filterEl.appendChild(categoryChk);
@@ -507,7 +508,8 @@ YAHOO.widget.LogReader.prototype._createSourceCheckbox = function(source) {
         // Append el at the end so IE 5.5 can set "type" attribute
         // and THEN set checked property
         var sourceChk = document.createElement("input");
-        sourceChk.id = "yui-log-filter" + source;
+        sourceChk.id = "yui-log-filter" + source + YAHOO.widget.LogReader._index;
+        sourceChk.className = "yui-log-filter" + source;
         sourceChk.type = "checkbox";
         sourceChk.source = source;
         sourceChk = filterEl.appendChild(sourceChk);
