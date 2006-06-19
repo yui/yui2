@@ -174,7 +174,7 @@ YAHOO.widget.AutoComplete.prototype.queryDelay = 0.5;
 
 /**
  * Class name of a highlighted item within the auto complete container.
- * Default: "highlight".
+ * Default: "yui-ac-highlight".
  *
  * @type string
  */
