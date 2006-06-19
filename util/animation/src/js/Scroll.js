@@ -33,11 +33,21 @@ YAHOO.util.Scroll = function(el, attributes, duration,  method) {
 YAHOO.util.Scroll.prototype = new YAHOO.util.Anim();
 
 /**
+ * toString method
+ * @return {String} string represenation of anim obj
+ */
+YAHOO.util.Scroll.prototype.toString = function() {
+   var el = this.getEl();
+   var id = el.id || el.tagName;
+   return ("Scroll " + id);
+};
+
+/**
  * Per attribute units that should be used by default.
  * Scroll positions default to no units.
  * @type Object
  */
-YAHOO.util.Scroll.prototype.defaultUnits.scroll = ' ';
+YAHOO.util.Scroll.prototype.defaultUnits.scroll = '';
 
 /**
  * Returns the value computed by the animation's "method".
