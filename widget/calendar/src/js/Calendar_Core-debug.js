@@ -28,7 +28,13 @@ http://developer.yahoo.net/yui/license.txt
 								commas. Example: "12/24/2005,12/25,1/18/2006-1/21/2006"
 */
 YAHOO.widget.Calendar_Core = function(id, containerId, monthyear, selected) {
-	if (arguments.length > 0) {
+	if (arguments.length > 0) {	
+		if (! id) {
+			YAHOO.log("No ID specified", "error");
+		}
+		if (! containerId) {
+			YAHOO.log("No container ID specified", "error");
+		}
 		this.init(id, containerId, monthyear, selected);
 	}
 }
@@ -236,6 +242,9 @@ YAHOO.widget.Calendar_Core.prototype = {
 								commas. Example: "12/24/2005,12/25,1/18/2006-1/21/2006"
 */
 YAHOO.widget.Calendar_Core.prototype.init = function(id, containerId, monthyear, selected) {
+
+	this.logger = new YAHOO.widget.LogWriter("Calendar_Core " + id);	
+
 	this.setupConfig();
 
 	this.id = id;
@@ -249,6 +258,10 @@ YAHOO.widget.Calendar_Core.prototype.init = function(id, containerId, monthyear,
 
 	this.oDomContainer = document.getElementById(containerId);
 	
+	if (! this.oDomContainer) {
+		this.logger.log("No valid container present.", "error");
+	}
+
 	this.today = new Date();
 	YAHOO.widget.DateMath.clearTime(this.today);
 
@@ -263,6 +276,8 @@ YAHOO.widget.Calendar_Core.prototype.init = function(id, containerId, monthyear,
 		month = this.today.getMonth()+1;
 		year = this.today.getFullYear();
 	}
+
+	this.logger.log("Initialized with month/year of " + month + "/" + year, "info");
 
 	this.pageDate = new Date(year, month-1, 1);
 	this._pageDate = new Date(this.pageDate.getTime());
@@ -295,6 +310,9 @@ YAHOO.widget.Calendar_Core.prototype.wireDefaultEvents = function() {
 	this.doSelectCell = function(e, cal) {		
 		var cell = this;
 		var index = cell.index;
+
+		cal.logger.log("Selecting cell " + index + " via click", "info");
+
 		var d = cal.cellDates[index];
 		var date = new Date(d[0],d[1]-1,d[2]);
 		
@@ -729,6 +747,8 @@ YAHOO.widget.Calendar_Core.prototype.render = function() {
 * Appends the header contents into the widget header.
 */
 YAHOO.widget.Calendar_Core.prototype.renderHeader = function() {
+	this.logger.log("Rendering header", "info");
+
 	this.headerCell.innerHTML = "";
 	
 	var headerContainer = document.createElement("DIV");
@@ -751,6 +771,7 @@ YAHOO.widget.Calendar_Core.prototype.renderHeader = function() {
 * @param {Date}	workingDate	The current working Date object being used to generate the calendar
 */
 YAHOO.widget.Calendar_Core.prototype.renderBody = function(workingDate) {
+	this.logger.log("Rendering body", "info");
 
 	this.preMonthDays = workingDate.getDay();
 	if (this.Options.START_WEEKDAY > 0) {
@@ -760,10 +781,16 @@ YAHOO.widget.Calendar_Core.prototype.renderBody = function(workingDate) {
 		this.preMonthDays += 7;
 	}
 	
+	this.logger.log(this.preMonthDays + " preciding out-of-month days", "info");
+
 	this.monthDays = YAHOO.widget.DateMath.findMonthEnd(workingDate).getDate();
+	this.logger.log(this.monthDays + " month days", "info");
+
 	this.postMonthDays = YAHOO.widget.Calendar_Core.DISPLAY_DAYS-this.preMonthDays-this.monthDays;
+	this.logger.log(this.postMonthDays + " post-month days", "info");
 	
 	workingDate = YAHOO.widget.DateMath.subtract(workingDate, YAHOO.widget.DateMath.DAY, this.preMonthDays);
+	this.logger.log("Calendar page starts on " + workingDate, "info");
 	
 	var weekRowIndex = 0;
 	
@@ -805,7 +832,7 @@ YAHOO.widget.Calendar_Core.prototype.renderBody = function(workingDate) {
 			}
 		}
 
-		
+		this.logger.log("Rendering cell " + cell.id + " (" + workingDate.getFullYear() + "-" + (workingDate.getMonth()+1) + "-" + workingDate.getDate() + ")", "cellrender");
 
 		var renderer = null;
 		
@@ -915,6 +942,8 @@ YAHOO.widget.Calendar_Core.prototype.renderBody = function(workingDate) {
 		
 		for (var x=0;x<cellRenderers.length;++x) {
 			var ren = cellRenderers[x];
+			this.logger.log("renderer[" + x + "] for (" + workingDate.getFullYear() + "-" + (workingDate.getMonth()+1) + "-" + workingDate.getDate() + ")", "cellrender");
+
 			if (ren.call(this,workingDate,cell) == YAHOO.widget.Calendar_Core.STOP_RENDER) {
 				break;
 			}
@@ -948,6 +977,9 @@ YAHOO.widget.Calendar_Core.prototype.renderBody = function(workingDate) {
 		if (c >= ((this.preMonthDays+postDays+this.monthDays)-7)) {
 			YAHOO.util.Dom.addClass(cell, this.Style.CSS_CELL_BOTTOM);
 		}
+	
+		this.logger.log("Final styles for (" + workingDate.getFullYear() + "-" + (workingDate.getMonth()+1) + "-" + workingDate.getDate() + "): " + cell.className, "cellrender");
+
 	}
 		
 };
@@ -1225,8 +1257,10 @@ YAHOO.widget.Calendar_Core.prototype.clear = function() {
 */
 YAHOO.widget.Calendar_Core.prototype.select = function(date) {
 	this.onBeforeSelect();
+	this.logger.log("Select: " + date, "info");
 
 	var aToBeSelected = this._toFieldArray(date);
+	this.logger.log("Selection field array: " + aToBeSelected, "info");
 
 	for (var a=0;a<aToBeSelected.length;++a) {
 		var toSelect = aToBeSelected[a]; // For each date item in the list of dates we're trying to select
@@ -1261,6 +1295,7 @@ YAHOO.widget.Calendar_Core.prototype.selectCell = function(cellIndex) {
 	var cellDate = this.cellDates[cellIndex];
 
 	var dCellDate = this._toDate(cellDate);
+	this.logger.log("Select: " + dCellDate, "info");
 
 	var selectDate = cellDate.concat();
 
@@ -1293,6 +1328,8 @@ YAHOO.widget.Calendar_Core.prototype.deselect = function(date) {
 	this.onBeforeDeselect();
 
 	var aToBeSelected = this._toFieldArray(date);
+
+	this.logger.log("Select: " + aToBeSelected, "info");
 
 	for (var a=0;a<aToBeSelected.length;++a) {
 		var toSelect = aToBeSelected[a]; // For each date item in the list of dates we're trying to select
@@ -1328,6 +1365,7 @@ YAHOO.widget.Calendar_Core.prototype.deselectCell = function(i) {
 	var cellDateIndex = this._indexOfSelectedFieldArray(cellDate);
 
 	var dCellDate = this._toDate(cellDate);
+	this.logger.log("Deselect: " + dCellDate, "info");
 
 	var selectDate = cellDate.concat();
 

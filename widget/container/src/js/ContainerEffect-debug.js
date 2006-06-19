@@ -3,14 +3,24 @@ Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 * @class
-* OverlayEffect encapsulates animation transitions that are executed when an Overlay is shown or hidden.
+* ContainerEffect encapsulates animation transitions that are executed when an Overlay is shown or hidden.
 * @param {Overlay}	overlay		The Overlay that the animation should be associated with
 * @param {object}	attrIn		The object literal representing the animation arguments to be used for the animate-in transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
 * @param {object}	attrOut		The object literal representing the animation arguments to be used for the animate-out transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
 * @param {Element}	targetElement	Optional. The target element that should be animated during the transition. Defaults to overlay.element.
 * @constructor
 */
-YAHOO.widget.OverlayEffect = function(overlay, attrIn, attrOut, targetElement) {
+YAHOO.widget.ContainerEffect = function(overlay, attrIn, attrOut, targetElement) {
+	if (! overlay) {
+		YAHOO.log("No overlay specified", "error");
+	}
+	if (! attrIn) {
+		YAHOO.log("No animate-in attributes specified", "error");
+	}
+	if (! attrOut) {
+		YAHOO.log("No animate-out attributes specified", "error");
+	}
+
 	this.overlay = overlay;
 
 	this.attrIn = attrIn;
@@ -29,7 +39,7 @@ YAHOO.widget.OverlayEffect = function(overlay, attrIn, attrOut, targetElement) {
 * Initializes the animation classes and events.
 * @param {class}	Optional. The animation class to instantiate. Defaults to YAHOO.util.Anim. Other options include YAHOO.util.Motion.
 */
-YAHOO.widget.OverlayEffect.prototype.init = function(animClass) {
+YAHOO.widget.ContainerEffect.prototype.init = function(animClass) {
 	if (! animClass) {
 		animClass = YAHOO.util.Anim;
 	}
@@ -47,7 +57,7 @@ YAHOO.widget.OverlayEffect.prototype.init = function(animClass) {
 /**
 * Triggers the in-animation.
 */
-YAHOO.widget.OverlayEffect.prototype.animateIn = function() {
+YAHOO.widget.ContainerEffect.prototype.animateIn = function() {
 	this.beforeAnimateInEvent.fire();
 	this.animIn.animate();
 }
@@ -55,7 +65,7 @@ YAHOO.widget.OverlayEffect.prototype.animateIn = function() {
 /**
 * Triggers the out-animation.
 */
-YAHOO.widget.OverlayEffect.prototype.animateOut = function() {
+YAHOO.widget.ContainerEffect.prototype.animateOut = function() {
 	this.beforeAnimateOutEvent.fire();
 	this.animOut.animate();
 }
@@ -63,37 +73,45 @@ YAHOO.widget.OverlayEffect.prototype.animateOut = function() {
 /**
 * The default onStart handler for the in-animation.
 */
-YAHOO.widget.OverlayEffect.prototype.handleStartAnimateIn = function(type, args, obj) { }
+YAHOO.widget.ContainerEffect.prototype.handleStartAnimateIn = function(type, args, obj) { }
 /**
 * The default onTween handler for the in-animation.
 */
-YAHOO.widget.OverlayEffect.prototype.handleTweenAnimateIn = function(type, args, obj) { }
+YAHOO.widget.ContainerEffect.prototype.handleTweenAnimateIn = function(type, args, obj) { }
 /**
 * The default onComplete handler for the in-animation.
 */
-YAHOO.widget.OverlayEffect.prototype.handleCompleteAnimateIn = function(type, args, obj) { }
+YAHOO.widget.ContainerEffect.prototype.handleCompleteAnimateIn = function(type, args, obj) { }
 
 /**
 * The default onStart handler for the out-animation.
 */
-YAHOO.widget.OverlayEffect.prototype.handleStartAnimateOut = function(type, args, obj) { }
+YAHOO.widget.ContainerEffect.prototype.handleStartAnimateOut = function(type, args, obj) { }
 /**
 * The default onTween handler for the out-animation.
 */
-YAHOO.widget.OverlayEffect.prototype.handleTweenAnimateOut = function(type, args, obj) { }
+YAHOO.widget.ContainerEffect.prototype.handleTweenAnimateOut = function(type, args, obj) { }
 /**
 * The default onComplete handler for the out-animation.
 */
-YAHOO.widget.OverlayEffect.prototype.handleCompleteAnimateOut = function(type, args, obj) { }
+YAHOO.widget.ContainerEffect.prototype.handleCompleteAnimateOut = function(type, args, obj) { }
+
+YAHOO.widget.ContainerEffect.prototype.toString = function() {
+	var output = "ContainerEffect";
+	if (this.overlay) {
+		output += " [" + this.overlay.toString() + "]";
+	}
+	return output;
+}
 
 /**
-* A pre-configured OverlayEffect instance that can be used for fading an overlay in and out.
+* A pre-configured ContainerEffect instance that can be used for fading an overlay in and out.
 * @param {Overlay}	The Overlay object to animate
 * @param {float}	The duration of the animation
-* @type OverlayEffect
+* @type ContainerEffect
 */
-YAHOO.widget.OverlayEffect.FADE = function(overlay, dur) {
-	var fade = new YAHOO.widget.OverlayEffect(overlay, { attributes:{opacity: {from:0, to:1}}, duration:dur, method:YAHOO.util.Easing.easeIn }, { attributes:{opacity: {to:0}}, duration:dur, method:YAHOO.util.Easing.easeOut} );
+YAHOO.widget.ContainerEffect.FADE = function(overlay, dur) {
+	var fade = new YAHOO.widget.ContainerEffect(overlay, { attributes:{opacity: {from:0, to:1}}, duration:dur, method:YAHOO.util.Easing.easeIn }, { attributes:{opacity: {to:0}}, duration:dur, method:YAHOO.util.Easing.easeOut} );
 
 	fade.handleStartAnimateIn = function(type,args,obj) {
 		YAHOO.util.Dom.addClass(obj.overlay.element, "hide-select");
@@ -153,19 +171,19 @@ YAHOO.widget.OverlayEffect.FADE = function(overlay, dur) {
 
 
 /**
-* A pre-configured OverlayEffect instance that can be used for sliding an overlay in and out.
+* A pre-configured ContainerEffect instance that can be used for sliding an overlay in and out.
 * @param {Overlay}	The Overlay object to animate
 * @param {float}	The duration of the animation
-* @type OverlayEffect
+* @type ContainerEffect
 */
-YAHOO.widget.OverlayEffect.SLIDE = function(overlay, dur) {
+YAHOO.widget.ContainerEffect.SLIDE = function(overlay, dur) {
 	var x = overlay.cfg.getProperty("x") || YAHOO.util.Dom.getX(overlay.element);
 	var y = overlay.cfg.getProperty("y") || YAHOO.util.Dom.getY(overlay.element);
 
 	var clientWidth = YAHOO.util.Dom.getClientWidth();
 	var offsetWidth = overlay.element.offsetWidth;
 
-	var slide = new YAHOO.widget.OverlayEffect(overlay, { 
+	var slide = new YAHOO.widget.ContainerEffect(overlay, { 
 															attributes:{ points: { to:[x, y] } }, 
 															duration:dur, 
 															method:YAHOO.util.Easing.easeIn 

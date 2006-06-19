@@ -41,9 +41,6 @@
     -moz-opacity: 0.5;
     opacity:.50;
     filter: alpha(opacity=50);
-    }
-.mask[id]{ /* IE6 and below Can't See This */
-    position:fixed;
 }
 
 .hide-scrollbars * {

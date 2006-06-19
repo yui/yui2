@@ -10,6 +10,8 @@ http://developer.yahoo.net/yui/license.txt
 YAHOO.util.Config = function(owner) {
 	if (owner) {
 		this.init(owner);
+	} else {
+		YAHOO.log("No owner specified for Config object", "error");
 	}
 }
 
@@ -170,6 +172,8 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @param {value}	object		The value of the correct type for the property
 	*/ 
 	var fireEvent = function( key, value ) {
+		YAHOO.log("Firing Config event: " + key + "=" + value, "info");
+		
 		key = key.toLowerCase();
 
 		var property = config[key];
@@ -182,6 +186,8 @@ YAHOO.util.Config.prototype.init = function(owner) {
 
 	this.addProperty = function( key, propertyObject ) {
 		key = key.toLowerCase();
+		
+		YAHOO.log("Added property: " + key, "info");
 
 		config[key] = propertyObject;
 
@@ -223,7 +229,6 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 	}
 
-
 	this.resetProperty = function(key) {
 		key = key.toLowerCase();
 
@@ -235,9 +240,10 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 	}
 
-
 	this.setProperty = function(key, value, silent) {
 		key = key.toLowerCase();
+		
+		YAHOO.log("setProperty: " + key + "=" + value, "info");
 
 		if (this.queueInProgress && ! silent) {
 			this.queueProperty(key,value); // Currently running through a queue... 
@@ -262,7 +268,10 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	}
 
 	this.queueProperty = function(key, value) {
+	
 		key = key.toLowerCase();
+
+		YAHOO.log("queueProperty: " + key + "=" + value, "info");
 
 		var property = config[key];
 							
@@ -321,6 +330,8 @@ YAHOO.util.Config.prototype.init = function(owner) {
 					}
 				}
 			}
+	
+			YAHOO.log("Config event queue: " + this.outputEventQueue(), "info");
 
 			return true;
 		} else {
@@ -451,6 +462,8 @@ http://developer.yahoo.net/yui/license.txt
 YAHOO.widget.Module = function(el, userConfig) {
 	if (el) { 
 		this.init(el, userConfig); 
+	} else {
+		YAHOO.log("No element or element ID specified for Module instantiation", "error");
 	}
 }
 
@@ -1023,6 +1036,7 @@ YAHOO.widget.Module.prototype = {
 			appendTo(appendToNode);
 		} else { // No node was passed in. If the element is not pre-marked up, this fails
 			if (! YAHOO.util.Dom.inDocument(this.element)) {
+				YAHOO.log("Render failed. Must specify appendTo node if Module isn't already in the DOM.", "error");
 				return false;
 			}
 		}
@@ -1465,6 +1479,8 @@ YAHOO.widget.Overlay.prototype.configXY = function(type, args, obj) {
 	x = this.cfg.getProperty("x");
 	y = this.cfg.getProperty("y");
 
+	YAHOO.log("xy: " + [x,y], "iframe");
+
 	this.cfg.refireEvent("iframe");
 	this.moveEvent.fire([x,y]);
 }
@@ -1549,10 +1565,13 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 		var y = this.cfg.getProperty("y");
 
 		if (! x || ! y) {
+			YAHOO.log("syncPosition needed for iframe", "iframe");
 			this.syncPosition();
 			x = this.cfg.getProperty("x");
 			y = this.cfg.getProperty("y");
 		}
+
+		YAHOO.log("iframe positioning to: " + [x,y], "iframe");
 
 		if (! isNaN(x) && ! isNaN(y)) {
 			if (! this.iframe) {
@@ -2117,6 +2136,16 @@ http://developer.yahoo.net/yui/license.txt
 * @constructor
 */
 YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
+	if (! attachTo) {
+		YAHOO.log("No attachTo element specified", "error");
+	}
+	if (! keyData) {
+		YAHOO.log("No keyData specified", "error");
+	}
+	if (! handler) {
+		YAHOO.log("No handler specified", "error");
+	}
+
 	if (! event) {
 		event = YAHOO.util.KeyListener.KEYDOWN;
 	}
@@ -2224,3 +2253,1688 @@ YAHOO.util.KeyListener.prototype.enabledEvent = null;
 * @type YAHOO.util.CustomEvent
 */
 YAHOO.util.KeyListener.prototype.disabledEvent = null;
+/**
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+* @class
+* Tooltip is an implementation of Overlay that behaves like an OS tooltip, displaying when the user mouses over a particular element, and disappearing on mouse out.
+* @param {string}	el	The element ID representing the Tooltip <em>OR</em>
+* @param {Element}	el	The element representing the Tooltip
+* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
+* @constructor
+*/
+YAHOO.widget.Tooltip = function(el, userConfig) {
+	if (arguments.length > 0) {
+		YAHOO.widget.Tooltip.superclass.constructor.call(this, el, userConfig);
+	}
+}
+
+YAHOO.extend(YAHOO.widget.Tooltip, YAHOO.widget.Overlay);
+
+YAHOO.widget.Tooltip.logger = new YAHOO.widget.LogWriter("Tooltip");
+
+/**
+* Constant representing the Tooltip CSS class
+* @type string
+* @final
+*/
+YAHOO.widget.Tooltip.CSS_TOOLTIP = "tt";
+
+/*
+* The Tooltip initialization method. This method is automatically called by the constructor. A Tooltip is automatically rendered by the init method, and it also is set to be invisible by default, and constrained to viewport by default as well.
+* @param {string}	el	The element ID representing the Tooltip <em>OR</em>
+* @param {Element}	el	The element representing the Tooltip
+* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Tooltip. See configuration documentation for more details.
+*/
+YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
+	this.logger = YAHOO.widget.Tooltip.logger;
+
+	if (document.readyState && document.readyState != "complete") {
+		var deferredInit = function() {
+			this.init(el, userConfig);
+		}
+		YAHOO.util.Event.addListener(window, "load", deferredInit, this, true);
+	} else {
+		YAHOO.widget.Tooltip.superclass.init.call(this, el);
+
+		this.beforeInitEvent.fire(YAHOO.widget.Tooltip);
+
+		YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Tooltip.CSS_TOOLTIP);
+
+		if (userConfig) {
+			this.cfg.applyConfig(userConfig, true);
+		}
+		
+		this.cfg.queueProperty("visible",false);
+		this.cfg.queueProperty("constraintoviewport",true);
+
+		this.setBody("");
+		this.render(this.cfg.getProperty("container"));
+
+		this.initEvent.fire(YAHOO.widget.Tooltip);
+	}
+}
+
+/**
+* Initializes the class's configurable properties which can be changed using the Overlay's Config object (cfg).
+*/
+YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
+	YAHOO.widget.Tooltip.superclass.initDefaultConfig.call(this);
+
+	this.cfg.addProperty("preventoverlap",		{ value:true, validator:this.cfg.checkBoolean, supercedes:["x","y","xy"] } );
+
+	this.cfg.addProperty("showdelay",			{ value:200, handler:this.configShowDelay, validator:this.cfg.checkNumber } );
+	this.cfg.addProperty("autodismissdelay",	{ value:5000, handler:this.configAutoDismissDelay, validator:this.cfg.checkNumber } );
+	this.cfg.addProperty("hidedelay",			{ value:250, handler:this.configHideDelay, validator:this.cfg.checkNumber } );
+
+	this.cfg.addProperty("text",				{ handler:this.configText, suppressEvent:true } );
+	this.cfg.addProperty("container",			{ value:document.body, handler:this.configContainer } );
+}
+
+// BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
+
+/**
+* The default event handler fired when the "text" property is changed.
+*/
+YAHOO.widget.Tooltip.prototype.configText = function(type, args, obj) {
+	var text = args[0];
+	if (text) {
+		this.setBody(text);
+	}
+}
+
+/**
+* The default event handler fired when the "container" property is changed.
+*/
+YAHOO.widget.Tooltip.prototype.configContainer = function(type, args, obj) {
+	var container = args[0];
+	if (typeof container == 'string') {
+		this.cfg.setProperty("container", document.getElementById(container), true);
+	}
+}
+
+/**
+* The default event handler fired when the "context" property is changed.
+*/
+YAHOO.widget.Tooltip.prototype.configContext = function(type, args, obj) {
+	var context = args[0];
+	if (context) {
+		
+		// Normalize parameter into an array
+		if (! (context instanceof Array)) {
+			if (typeof context == "string") {
+				this.cfg.setProperty("context", [document.getElementById(context)], true);
+			} else { // Assuming this is an element
+				this.cfg.setProperty("context", [context], true);
+			}
+			context = this.cfg.getProperty("context");
+		}
+
+
+		// Remove any existing mouseover/mouseout listeners
+		if (this._context) {
+			for (var c=0;c<this._context.length;++c) {
+				var el = this._context[c];
+				YAHOO.util.Event.removeListener(el, "mouseover", this.onContextMouseOver);
+				YAHOO.util.Event.removeListener(el, "mousemove", this.onContextMouseMove);
+				YAHOO.util.Event.removeListener(el, "mouseout", this.onContextMouseOut);
+			}
+		}
+
+		// Add mouseover/mouseout listeners to context elements
+		this._context = context;
+		for (var c=0;c<this._context.length;++c) {
+			var el = this._context[c];
+			YAHOO.util.Event.addListener(el, "mouseover", this.onContextMouseOver, this);
+			YAHOO.util.Event.addListener(el, "mousemove", this.onContextMouseMove, this);
+			YAHOO.util.Event.addListener(el, "mouseout", this.onContextMouseOut, this);
+		}
+	}
+}
+
+// END BUILT-IN PROPERTY EVENT HANDLERS //
+
+// BEGIN BUILT-IN DOM EVENT HANDLERS //
+
+YAHOO.widget.Tooltip.prototype.onContextMouseMove = function(e, obj) {
+
+	obj.pageX = YAHOO.util.Event.getPageX(e);
+	obj.pageY = YAHOO.util.Event.getPageY(e);
+
+}
+
+/**
+* The default event handler fired when the user mouses over the context element.
+* @param {DOMEvent} e	The current DOM event
+* @param {object}	obj	The object argument
+*/
+YAHOO.widget.Tooltip.prototype.onContextMouseOver = function(e, obj) {
+
+	if (obj.hideProcId) {
+		clearTimeout(obj.hideProcId);
+		obj.logger.log("Clearing hide timer: " + obj.hideProcId, "time");
+		obj.hideProcId = null;
+	}
+	
+	var context = this;
+	YAHOO.util.Event.addListener(context, "mousemove", obj.onContextMouseMove, obj);
+
+	if (context.title) {
+		obj._tempTitle = context.title;
+		context.title = "";
+	}
+
+	/**
+	* The unique process ID associated with the thread responsible for showing the Tooltip.
+	* @type int
+	*/
+	obj.showProcId = obj.doShow(e, context);
+	obj.logger.log("Setting show tooltip timeout: " + this.showProcId, "time");
+}
+
+/**
+* The default event handler fired when the user mouses out of the context element.
+* @param {DOMEvent} e	The current DOM event
+* @param {object}	obj	The object argument
+*/
+YAHOO.widget.Tooltip.prototype.onContextMouseOut = function(e, obj) {
+	var el = this;
+
+	if (obj._tempTitle) {
+		el.title = obj._tempTitle;
+		obj._tempTitle = null;
+	}
+	
+	if (obj.showProcId) {
+		clearTimeout(obj.showProcId);
+		obj.logger.log("Clearing show timer: " + obj.showProcId, "time");
+		obj.showProcId = null;		
+	}
+
+	if (obj.hideProcId) {
+		clearTimeout(obj.hideProcId);
+		obj.logger.log("Clearing hide timer: " + obj.hideProcId, "time");
+		obj.hideProcId = null;
+	}
+
+
+	obj.hideProcId = setTimeout(function() {
+				obj.hide();
+				}, obj.cfg.getProperty("hidedelay"));
+}
+
+// END BUILT-IN DOM EVENT HANDLERS //
+
+/**
+* Processes the showing of the Tooltip by setting the timeout delay and offset of the Tooltip.
+* @param {DOMEvent} e	The current DOM event
+* @return {int}	The process ID of the timeout function associated with doShow
+*/
+YAHOO.widget.Tooltip.prototype.doShow = function(e, context) {
+	
+	var yOffset = 25;
+	if (this.browser == "opera" && context.tagName == "A") {
+		yOffset += 12;
+	}
+
+	var me = this;
+	return setTimeout(
+		function() {
+			if (me._tempTitle) {
+				me.setBody(me._tempTitle);
+			} else {
+				me.cfg.refireEvent("text");
+			}
+
+			me.logger.log("Show tooltip", "time");
+			me.moveTo(me.pageX, me.pageY + yOffset);
+			if (me.cfg.getProperty("preventoverlap")) {
+				me.preventOverlap(me.pageX, me.pageY);
+			}
+			
+			YAHOO.util.Event.removeListener(context, "mousemove", me.onContextMouseMove);
+
+			me.show();
+			me.hideProcId = me.doHide();
+			me.logger.log("Hide tooltip time active: " + me.hideProcId, "time");
+		},
+	this.cfg.getProperty("showdelay"));
+}
+
+/**
+* Sets the timeout for the auto-dismiss delay, which by default is 5 seconds, meaning that a tooltip will automatically dismiss itself after 5 seconds of being displayed.
+*/
+YAHOO.widget.Tooltip.prototype.doHide = function() {
+	var me = this;
+	me.logger.log("Setting hide tooltip timeout", "time");
+	return setTimeout(
+		function() {
+			me.logger.log("Hide tooltip", "time");
+			me.hide();
+		},
+		this.cfg.getProperty("autodismissdelay"));
+}
+
+/**
+* Fired when the Tooltip is moved, this event handler is used to prevent the Tooltip from overlapping with its context element.
+*/
+YAHOO.widget.Tooltip.prototype.preventOverlap = function(pageX, pageY) {
+	
+	var height = this.element.offsetHeight;
+	
+	var elementRegion = YAHOO.util.Dom.getRegion(this.element);
+
+	elementRegion.top -= 5;
+	elementRegion.left -= 5;
+	elementRegion.right += 5;
+	elementRegion.bottom += 5;
+
+	var mousePoint = new YAHOO.util.Point(pageX, pageY);
+	
+	this.logger.log("context " + elementRegion, "ttip");
+	this.logger.log("mouse " + mousePoint, "ttip");
+
+	if (elementRegion.contains(mousePoint)) {
+		this.logger.log("OVERLAP", "warn");
+		this.cfg.setProperty("y", (pageY-height-5))
+	}
+}
+
+YAHOO.widget.Tooltip.prototype.toString = function() {
+	return "Tooltip " + this.id;
+}/**
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+* @class
+* Panel is an implementation of Overlay that behaves like an OS window, with a draggable header and an optional close icon at the top right.
+* @param {string}	el	The element ID representing the Panel <em>OR</em>
+* @param {Element}	el	The element representing the Panel
+* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Panel. See configuration documentation for more details.
+* @constructor
+*/
+YAHOO.widget.Panel = function(el, userConfig) {
+	if (arguments.length > 0) {
+		YAHOO.widget.Panel.superclass.constructor.call(this, el, userConfig);
+	}
+}
+
+YAHOO.extend(YAHOO.widget.Panel, YAHOO.widget.Overlay);
+
+/**
+* Constant representing the default CSS class used for a Panel
+* @type string
+* @final
+*/
+YAHOO.widget.Panel.CSS_PANEL = "panel";
+
+/**
+* Constant representing the default CSS class used for a Panel's wrapping container
+* @type string
+* @final
+*/
+YAHOO.widget.Panel.CSS_PANEL_CONTAINER = "panel-container";
+
+/**
+* CustomEvent fired after the modality mask is shown
+* args: none
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.widget.Panel.prototype.showMaskEvent = null;
+
+/**
+* CustomEvent fired after the modality mask is hidden
+* args: none
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.widget.Panel.prototype.hideMaskEvent = null;
+
+/*
+* The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
+* @param {string}	el	The element ID representing the Overlay <em>OR</em>
+* @param {Element}	el	The element representing the Overlay
+* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
+*/
+YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
+	YAHOO.widget.Panel.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
+	
+	this.beforeInitEvent.fire(YAHOO.widget.Panel);
+
+	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Panel.CSS_PANEL);
+
+	this.buildWrapper();			
+	
+	if (userConfig) {
+		this.cfg.applyConfig(userConfig, true);
+	}
+
+	this.beforeRenderEvent.subscribe(function() {
+		var draggable = this.cfg.getProperty("draggable");
+		if (draggable) {
+			if (! this.header) {
+				this.setHeader("&nbsp;");
+			}
+		}
+	}, this, true);
+
+	this.initEvent.fire(YAHOO.widget.Panel);
+
+}
+
+/**
+* Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
+*/
+YAHOO.widget.Panel.prototype.initEvents = function() {
+	YAHOO.widget.Panel.superclass.initEvents.call(this);
+
+	this.showMaskEvent = new YAHOO.util.CustomEvent("showMask");
+	this.hideMaskEvent = new YAHOO.util.CustomEvent("hideMask");
+
+	this.dragEvent = new YAHOO.util.CustomEvent("drag");
+}
+
+/**
+* Initializes the class's configurable properties which can be changed using the Panel's Config object (cfg).
+*/
+YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
+	YAHOO.widget.Panel.superclass.initDefaultConfig.call(this);
+
+	// Add panel config properties //
+
+	this.cfg.addProperty("close", { value:true, handler:this.configClose, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
+	this.cfg.addProperty("draggable", { value:true,	handler:this.configDraggable, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
+
+	this.cfg.addProperty("underlay", { value:"shadow", handler:this.configUnderlay, supercedes:["visible"] } );
+	this.cfg.addProperty("modal",	{ value:false, handler:this.configModal, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
+
+	this.cfg.addProperty("keylisteners", { handler:this.configKeyListeners, suppressEvent:true, supercedes:["visible"] } );
+}
+
+// BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
+
+/**
+* The default event handler fired when the "close" property is changed. The method controls the appending or hiding of the close icon at the top right of the Panel.
+*/
+YAHOO.widget.Panel.prototype.configClose = function(type, args, obj) {
+	var val = args[0];
+
+	var doHide = function(e, obj) {
+		obj.hide();
+	}
+
+	if (val) {
+		if (! this.close) {
+			this.close = document.createElement("DIV");
+			YAHOO.util.Dom.addClass(this.close, "close");
+
+			if (this.isSecure) {
+				YAHOO.util.Dom.addClass(this.close, "secure");
+			} else {
+				YAHOO.util.Dom.addClass(this.close, "nonsecure");
+			}
+
+			this.close.innerHTML = "&nbsp;";
+			this.innerElement.appendChild(this.close);
+			YAHOO.util.Event.addListener(this.close, "click", doHide, this);	
+		} else {
+			this.close.style.display = "block";
+		}
+	} else {
+		if (this.close) {
+			this.close.style.display = "none";
+		}
+	}
+}
+
+/**
+* The default event handler fired when the "draggable" property is changed.
+*/
+YAHOO.widget.Panel.prototype.configDraggable = function(type, args, obj) {
+	var val = args[0];
+	if (val) {
+		if (this.header) {
+			YAHOO.util.Dom.setStyle(this.header,"cursor","move");
+			this.registerDragDrop();
+		}
+	} else {
+		if (this.dd) {
+			this.dd.unreg();
+		}
+		if (this.header) {
+			YAHOO.util.Dom.setStyle(this.header,"cursor","auto");
+		}
+	}
+}
+
+/**
+* The default event handler fired when the "underlay" property is changed.
+*/
+YAHOO.widget.Panel.prototype.configUnderlay = function(type, args, obj) {
+	var val = args[0];
+
+	switch (val.toLowerCase()) {
+		case "shadow":
+			YAHOO.util.Dom.removeClass(this.element, "matte");
+			YAHOO.util.Dom.addClass(this.element, "shadow");
+
+			if (! this.underlay) { // create if not already in DOM
+				this.underlay = document.createElement("DIV");
+				this.underlay.className = "underlay";
+				this.underlay.innerHTML = "&nbsp;";
+				this.element.appendChild(this.underlay);
+			} 
+
+			this.sizeUnderlay();
+			break;
+		case "matte":
+			YAHOO.util.Dom.removeClass(this.element, "shadow");
+			YAHOO.util.Dom.addClass(this.element, "matte");
+			break;
+		case "none":
+		default:
+			YAHOO.util.Dom.removeClass(this.element, "shadow");
+			YAHOO.util.Dom.removeClass(this.element, "matte");
+			break;
+	}
+}
+
+/**
+* The default event handler fired when the "modal" property is changed. This handler subscribes or unsubscribes to the show and hide events to handle the display or hide of the modality mask.
+*/
+YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
+	var modal = args[0];
+
+	if (modal) {
+		this.buildMask();
+
+		if (! YAHOO.util.Config.alreadySubscribed( this.showEvent, this.showMask, this ) ) {
+			this.showEvent.subscribe(this.showMask, this, true);
+		}
+		if (! YAHOO.util.Config.alreadySubscribed( this.hideEvent, this.hideMask, this) ) {
+			this.hideEvent.subscribe(this.hideMask, this, true);
+		}
+		if (! YAHOO.util.Config.alreadySubscribed( YAHOO.widget.Overlay.windowResizeEvent, this.sizeMask, this ) ) {
+			YAHOO.widget.Overlay.windowResizeEvent.subscribe(this.sizeMask, this, true);
+		}
+	} else {
+		this.beforeShowEvent.unsubscribe(this.showMask, this);
+		this.hideEvent.unsubscribe(this.hideMask, this);
+		YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.sizeMask);
+	}
+}
+
+YAHOO.widget.Panel.prototype.configKeyListeners = function(type, args, obj) {
+	var listeners = args[0];
+
+	if (listeners) {
+		if (listeners instanceof Array) {
+			for (var i=0;i<listeners.length;i++) {
+				var listener = listeners[i];
+
+				if (! YAHOO.util.Config.alreadySubscribed(this.showEvent, listener.enable, listener)) {
+					this.showEvent.subscribe(listener.enable, listener, true);
+				}
+				if (! YAHOO.util.Config.alreadySubscribed(this.hideEvent, listener.disable, listener)) {
+					this.hideEvent.subscribe(listener.disable, listener, true);
+					this.destroyEvent.subscribe(listener.disable, listener, true);
+				}
+			}
+		} else {
+			if (! YAHOO.util.Config.alreadySubscribed(this.showEvent, listeners.enable, listeners)) {
+				this.showEvent.subscribe(listeners.enable, listeners, true);
+			}
+			if (! YAHOO.util.Config.alreadySubscribed(this.hideEvent, listeners.disable, listeners)) {
+				this.hideEvent.subscribe(listeners.disable, listeners, true);
+				this.destroyEvent.subscribe(listeners.disable, listeners, true); 
+			}
+		}
+	} 
+}
+
+// END BUILT-IN PROPERTY EVENT HANDLERS //
+
+
+/**
+* Builds the wrapping container around the Panel that is used for positioning the shadow and matte underlays. The container element is assigned to a  local instance variable called container, and the element is reinserted inside of it.
+*/
+YAHOO.widget.Panel.prototype.buildWrapper = function() {
+	var elementParent = this.element.parentNode;
+
+	var elementClone = this.element.cloneNode(true);
+	this.innerElement = elementClone;
+	this.innerElement.style.visibility = "inherit";
+
+	YAHOO.util.Dom.addClass(this.innerElement, YAHOO.widget.Panel.CSS_PANEL);
+
+	var wrapper = document.createElement("DIV");
+	wrapper.className = YAHOO.widget.Panel.CSS_PANEL_CONTAINER;
+	wrapper.id = elementClone.id + "_c";
+	
+	wrapper.appendChild(elementClone);
+	
+	if (elementParent) {
+		elementParent.replaceChild(wrapper, this.element);
+	}
+
+	this.element = wrapper;
+
+	// Resynchronize the local field references
+
+	var childNodes = this.innerElement.childNodes;
+	if (childNodes) {
+		for (var i=0;i<childNodes.length;i++) {
+			var child = childNodes[i];
+			switch (child.className) {
+				case YAHOO.widget.Module.CSS_HEADER:
+					this.header = child;
+					break;
+				case YAHOO.widget.Module.CSS_BODY:
+					this.body = child;
+					break;
+				case YAHOO.widget.Module.CSS_FOOTER:
+					this.footer = child;
+					break;
+			}
+		}
+	}
+
+	this.initDefaultConfig(); // We've changed the DOM, so the configuration must be re-tooled to get the DOM references right
+}
+
+/**
+* Adjusts the size of the shadow based on the size of the element.
+*/
+YAHOO.widget.Panel.prototype.sizeUnderlay = function() {
+	if (this.underlay && this.browser != "gecko" && this.browser != "safari") {
+		this.underlay.style.width = this.innerElement.offsetWidth + "px";
+		this.underlay.style.height = this.innerElement.offsetHeight + "px";
+	}
+}
+
+/**
+* Event handler fired when the resize monitor element is resized.
+*/
+YAHOO.widget.Panel.prototype.onDomResize = function(e, obj) { 
+	YAHOO.widget.Panel.superclass.onDomResize.call(this, e, obj);
+	var me = this;
+	setTimeout(function() {
+		me.sizeUnderlay();
+	}, 0);
+};
+
+/**
+* Registers the Panel's header for drag & drop capability.
+*/
+YAHOO.widget.Panel.prototype.registerDragDrop = function() {
+	if (this.header) {
+		this.dd = new YAHOO.util.DD(this.element.id, this.id);
+
+		if (! this.header.id) {
+			this.header.id = this.id + "_h";
+		}
+		
+		var me = this;
+
+		this.dd.startDrag = function() {
+
+			if (me.browser == "ie") {
+				YAHOO.util.Dom.addClass(me.element,"drag");
+			}
+
+			if (me.cfg.getProperty("constraintoviewport")) {
+				var offsetHeight = me.element.offsetHeight;
+				var offsetWidth = me.element.offsetWidth;
+
+				var viewPortWidth = YAHOO.util.Dom.getViewportWidth();
+				var viewPortHeight = YAHOO.util.Dom.getViewportHeight();
+
+				var scrollX = window.scrollX || document.documentElement.scrollLeft;
+				var scrollY = window.scrollY || document.documentElement.scrollTop;
+
+				var topConstraint = scrollY + 10;
+				var leftConstraint = scrollX + 10;
+				var bottomConstraint = scrollY + viewPortHeight - offsetHeight - 10;
+				var rightConstraint = scrollX + viewPortWidth - offsetWidth - 10;
+
+				this.minX = leftConstraint
+				this.maxX = rightConstraint;
+				this.constrainX = true;
+
+				this.minY = topConstraint;
+				this.maxY = bottomConstraint;
+				this.constrainY = true;
+			} else {
+				this.constrainX = false;
+				this.constrainY = false;
+			}
+
+			me.dragEvent.fire("startDrag", arguments);
+		}
+		
+		this.dd.onDrag = function() {
+			me.syncPosition();
+			me.cfg.refireEvent("iframe");
+			if (this.platform == "mac" && this.browser == "gecko") {
+				this.showMacGeckoScrollbars();
+			}
+
+			me.dragEvent.fire("onDrag", arguments);
+		}
+
+		this.dd.endDrag = function() {
+			if (me.browser == "ie") {
+				YAHOO.util.Dom.removeClass(me.element,"drag");
+			}
+
+			me.dragEvent.fire("endDrag", arguments);
+		}
+
+		this.dd.setHandleElId(this.header.id);
+		this.dd.addInvalidHandleType("INPUT");
+		this.dd.addInvalidHandleType("SELECT");
+		this.dd.addInvalidHandleType("TEXTAREA");
+	}
+}
+
+/**
+* Builds the mask that is laid over the document when the Panel is configured to be modal.
+*/
+YAHOO.widget.Panel.prototype.buildMask = function() {
+	if (! this.mask) {
+		this.mask = document.createElement("DIV");
+		this.mask.id = this.id + "_mask";
+		this.mask.className = "mask";
+		this.mask.innerHTML = "&nbsp;";
+
+		var maskClick = function(e, obj) {
+			YAHOO.util.Event.stopEvent(e);
+		}
+
+		YAHOO.util.Event.addListener(this.mask, maskClick, this);
+
+		if (this.browser == "opera") {
+			this.mask.style.backgroundColor = "transparent";
+		}
+		document.body.appendChild(this.mask);
+	}
+}
+
+/**
+* Hides the modality mask.
+*/
+YAHOO.widget.Panel.prototype.hideMask = function() {
+	if (this.cfg.getProperty("modal") && this.mask) {
+		this.mask.tabIndex = -1;
+		this.mask.style.display = "none";
+		this.hideMaskEvent.fire();
+		YAHOO.util.Dom.removeClass(document.body, "masked");
+	}
+}
+
+/**
+* Shows the modality mask.
+*/
+YAHOO.widget.Panel.prototype.showMask = function() {
+	if (this.cfg.getProperty("modal") && this.mask) {
+		YAHOO.util.Dom.addClass(document.body, "masked");
+		this.sizeMask();
+		this.mask.style.display = "block";
+		this.mask.tabIndex = 0;
+		this.showMaskEvent.fire();
+	}
+}
+
+/**
+* Sets the size of the modality mask to cover the entire scrollable area of the document
+*/
+YAHOO.widget.Panel.prototype.sizeMask = function() {
+	if (this.mask) {
+		this.mask.style.height = YAHOO.util.Dom.getDocumentHeight()+"px";
+		this.mask.style.width = YAHOO.util.Dom.getDocumentWidth()+"px";
+	}
+}
+
+/**
+* The default event handler fired when the "height" property is changed.
+*/
+YAHOO.widget.Panel.prototype.configHeight = function(type, args, obj) {
+	var height = args[0];
+	var el = this.innerElement;
+	YAHOO.util.Dom.setStyle(el, "height", height);
+	this.cfg.refireEvent("underlay");
+	this.cfg.refireEvent("iframe");
+}
+
+/**
+* The default event handler fired when the "width" property is changed.
+*/
+YAHOO.widget.Panel.prototype.configWidth = function(type, args, obj) {
+	var width = args[0];
+	var el = this.innerElement;
+	YAHOO.util.Dom.setStyle(el, "width", width);
+	this.cfg.refireEvent("underlay");
+	this.cfg.refireEvent("iframe");
+}
+
+/**
+* Renders the Panel by inserting the elements that are not already in the main Panel into their correct places. Optionally appends the Panel to the specified node prior to the render's execution. NOTE: For Panels without existing markup, the appendToNode argument is REQUIRED. If this argument is ommitted and the current element is not present in the document, the function will return false, indicating that the render was a failure.
+* @param {string}	appendToNode	The element id to which the Module should be appended to prior to rendering <em>OR</em>
+* @param {Element}	appendToNode	The element to which the Module should be appended to prior to rendering	
+* @return {boolean} Success or failure of the render
+*/
+YAHOO.widget.Panel.prototype.render = function(appendToNode) {
+	return YAHOO.widget.Panel.superclass.render.call(this, appendToNode, this.innerElement);
+}
+
+YAHOO.widget.Panel.prototype.toString = function() {
+	return "Panel " + this.id;
+}/**
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+* @class
+* Dialog is an implementation of Panel that can be used to submit form data. Built-in functionality for buttons with event handlers is included, and button sets can be build dynamically, or the preincluded ones for Submit/Cancel and OK/Cancel can be utilized. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
+* @param {string}	el	The element ID representing the Dialog <em>OR</em>
+* @param {Element}	el	The element representing the Dialog
+* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Dialog. See configuration documentation for more details.
+* @constructor
+*/
+YAHOO.widget.Dialog = function(el, userConfig) {
+	if (arguments.length > 0) {
+		YAHOO.widget.Dialog.superclass.constructor.call(this, el, userConfig);
+	}
+}
+
+YAHOO.extend(YAHOO.widget.Dialog, YAHOO.widget.Panel);
+
+/**
+* Constant representing the default CSS class used for a Dialog
+* @type string
+* @final
+*/
+YAHOO.widget.Dialog.CSS_DIALOG = "dialog";
+
+
+/**
+* CustomEvent fired prior to submission
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.widget.Dialog.prototype.beforeSubmitEvent = null;
+
+/**
+* CustomEvent fired after submission
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.widget.Dialog.prototype.submitEvent = null;
+
+/**
+* CustomEvent fired prior to manual submission
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.widget.Dialog.prototype.manualSubmitEvent = null;
+
+/**
+* CustomEvent fired prior to asynchronous submission
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.widget.Dialog.prototype.asyncSubmitEvent = null;
+
+/**
+* CustomEvent fired prior to form-based submission
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.widget.Dialog.prototype.formSubmitEvent = null;
+
+/**
+* CustomEvent fired after cancel
+* @type YAHOO.util.CustomEvent
+*/
+YAHOO.widget.Dialog.prototype.cancelEvent = null;
+
+
+/**
+* Initializes the class's configurable properties which can be changed using the Dialog's Config object (cfg).
+*/
+YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
+	YAHOO.widget.Dialog.superclass.initDefaultConfig.call(this);
+
+	/**
+	* The internally maintained callback object for use with the Connection utility
+	* @type object
+	* @private
+	*/
+	var callback = {
+		success : null,
+		failure : null,
+		argument: null,
+		scope : this
+	}
+
+	this.configOnSuccess = function(type, args, obj) {
+		var fn = args[0];
+		callback.success = fn;
+	}
+
+	this.configOnFailure = function(type, args, obj) {
+		var fn = args[0];
+		callback.failure = fn;
+	}
+
+
+	this.doSubmit = function() {
+		var method = this.cfg.getProperty("postmethod");
+		switch (method) {
+			case "async":
+				YAHOO.util.Connect.setForm(this.form.name);
+				var cObj = YAHOO.util.Connect.asyncRequest('POST', this.form.action, callback);
+				this.asyncSubmitEvent.fire();
+				break;
+			case "form":
+				this.form.submit();
+				this.formSubmitEvent.fire();
+				break;
+			case "none":
+			case "manual":
+				this.manualSubmitEvent.fire();
+				break;
+		}
+	}
+
+	// Add form dialog config properties //
+	this.cfg.addProperty("postmethod", { value:"async", validator:function(val) { 
+													if (val != "form" && val != "async" && val != "none" && val != "manual") {
+														return false;
+													} else {
+														return true;
+													}
+												} });
+
+	this.cfg.addProperty("onsuccess",	{ handler:this.configOnSuccess, suppressEvent:true } );
+	this.cfg.addProperty("onfailure",	{ handler:this.configOnFailure, suppressEvent:true } );
+
+	this.cfg.addProperty("buttons",		{ value:"none",	handler:this.configButtons } );
+}
+
+/**
+* Initializes the custom events for Dialog which are fired automatically at appropriate times by the Dialog class.
+*/
+YAHOO.widget.Dialog.prototype.initEvents = function() {
+	YAHOO.widget.Dialog.superclass.initEvents.call(this);
+	
+	this.beforeSubmitEvent	= new YAHOO.util.CustomEvent("beforeSubmit");
+	this.submitEvent		= new YAHOO.util.CustomEvent("submit");
+
+	this.manualSubmitEvent	= new YAHOO.util.CustomEvent("manualSubmit");
+	this.asyncSubmitEvent	= new YAHOO.util.CustomEvent("asyncSubmit");
+	this.formSubmitEvent	= new YAHOO.util.CustomEvent("formSubmit");
+
+	this.cancelEvent		= new YAHOO.util.CustomEvent("cancel");
+}
+
+/*
+* The Dialog initialization method, which is executed for Dialog and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
+* @param {string}	el	The element ID representing the Dialog <em>OR</em>
+* @param {Element}	el	The element representing the Dialog
+* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Dialog. See configuration documentation for more details.
+*/
+YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
+	YAHOO.widget.Dialog.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
+	
+	this.beforeInitEvent.fire(YAHOO.widget.Dialog);
+
+	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Dialog.CSS_DIALOG);
+
+	this.cfg.setProperty("visible", false);
+
+	if (userConfig) {
+		this.cfg.applyConfig(userConfig, true);
+	}
+
+	this.renderEvent.subscribe(this.registerForm, this, true);
+
+	this.showEvent.subscribe(this.focusFirst, this, true);
+	this.beforeHideEvent.subscribe(this.blurButtons, this, true);
+
+	this.beforeRenderEvent.subscribe(function() {
+		var buttonCfg = this.cfg.getProperty("buttons");
+		if (buttonCfg && buttonCfg != "none") {
+			if (! this.footer) {
+				this.setFooter("");
+			}
+		}
+	}, this, true);
+
+	this.initEvent.fire(YAHOO.widget.Dialog);
+}
+
+/**
+* Prepares the Dialog's internal FORM object, creating one if one is not currently present.
+*/
+YAHOO.widget.Dialog.prototype.registerForm = function() {
+	var form = this.element.getElementsByTagName("FORM")[0];
+
+	if (! form) {
+		var formHTML = "<form name=\"frm_" + this.id + "\" action=\"\"></form>";
+		this.body.innerHTML += formHTML;
+		form = this.element.getElementsByTagName("FORM")[0];
+	}
+
+	this.firstFormElement = function() {
+		for (var f=0;f<form.elements.length;f++ ) {
+			var el = form.elements[f];
+			if (el.focus) {
+				if (el.type && el.type != "hidden") {
+					return el;
+					break;
+				}
+			}
+		}
+		return null;
+	}();
+
+	this.lastFormElement = function() {
+		for (var f=form.elements.length-1;f>=0;f-- ) {
+			var el = form.elements[f];
+			if (el.focus) {
+				if (el.type && el.type != "hidden") {
+					return el;
+					break;
+				}
+			}
+		}
+		return null;
+	}();
+
+	this.form = form;
+
+	if (this.cfg.getProperty("modal") && this.form) {
+
+		var me = this;
+		
+		var firstElement = this.firstFormElement || this.firstButton;
+		if (firstElement) {
+			this.preventBackTab = new YAHOO.util.KeyListener(firstElement, { shift:true, keys:9 }, {fn:me.focusLast, scope:me, correctScope:true} );
+			this.showEvent.subscribe(this.preventBackTab.enable, this.preventBackTab, true);
+			this.hideEvent.subscribe(this.preventBackTab.disable, this.preventBackTab, true);
+		}
+
+		var lastElement = this.lastButton || this.lastFormElement;
+		if (lastElement) {
+			this.preventTabOut = new YAHOO.util.KeyListener(lastElement, { shift:false, keys:9 }, {fn:me.focusFirst, scope:me, correctScope:true} );
+			this.showEvent.subscribe(this.preventTabOut.enable, this.preventTabOut, true);
+			this.hideEvent.subscribe(this.preventTabOut.disable, this.preventTabOut, true);
+		}
+	}
+}
+
+// BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
+
+/**
+* The default event handler for the "buttons" configuration property
+*/
+YAHOO.widget.Dialog.prototype.configButtons = function(type, args, obj) {
+	var buttons = args[0];
+	if (buttons != "none") {
+		this.buttonSpan = null;
+		this.buttonSpan = document.createElement("SPAN");
+		this.buttonSpan.className = "button-group";
+
+		for (var b=0;b<buttons.length;b++) {
+			var button = buttons[b];
+
+			var htmlButton = document.createElement("BUTTON");
+
+			if (button.isDefault) {
+				htmlButton.className = "default";
+				this.defaultHtmlButton = htmlButton;
+			}
+
+			htmlButton.appendChild(document.createTextNode(button.text));
+			YAHOO.util.Event.addListener(htmlButton, "click", button.handler, this, true);
+
+			this.buttonSpan.appendChild(htmlButton);		
+			button.htmlButton = htmlButton;
+
+			if (b == 0) {
+				this.firstButton = button.htmlButton;
+			}
+
+			if (b == (buttons.length-1)) {
+				this.lastButton = button.htmlButton;
+			}
+
+		}
+
+		this.setFooter(this.buttonSpan);
+
+		this.cfg.refireEvent("iframe");
+		this.cfg.refireEvent("underlay");
+	} else { // Do cleanup
+		if (this.buttonSpan) {
+			if (this.buttonSpan.parentNode) {
+				this.buttonSpan.parentNode.removeChild(this.buttonSpan);
+			}
+
+			this.buttonSpan = null;
+			this.firstButtom = null;
+			this.lastButton = null;
+			this.defaultHtmlButton = null;
+		}
+	}
+}
+
+/**
+* The default handler fired when the "success" property is changed. Used for asynchronous submission only.
+*/ 
+YAHOO.widget.Dialog.prototype.configOnSuccess = function(type,args,obj){};
+
+/**
+* The default handler fired when the "failure" property is changed. Used for asynchronous submission only.
+*/ 
+YAHOO.widget.Dialog.prototype.configOnFailure = function(type,args,obj){};
+
+/**
+* Executes a submission of the form based on the value of the postmethod property.
+*/
+YAHOO.widget.Dialog.prototype.doSubmit = function() {};
+
+/**
+* The default event handler used to focus the first field of the form when the Dialog is shown.
+*/
+YAHOO.widget.Dialog.prototype.focusFirst = function(type,args,obj) {
+	if (args) {
+		var e = args[1];
+		if (e) {
+			YAHOO.util.Event.stopEvent(e);
+		}
+	}
+
+	if (this.firstFormElement) {
+		this.firstFormElement.focus();
+	} else {
+		this.focusDefaultButton();
+	}
+}
+
+/**
+* Sets the focus to the last button in the button or form element in the Dialog
+*/
+YAHOO.widget.Dialog.prototype.focusLast = function(type,args,obj) {
+	if (args) {
+		var e = args[1];
+		if (e) {
+			YAHOO.util.Event.stopEvent(e);
+		}
+	}
+
+	var buttons = this.cfg.getProperty("buttons");
+	if (buttons && buttons instanceof Array) {
+		this.focusLastButton();
+	} else {
+		if (this.lastFormElement) {
+			this.lastFormElement.focus();
+		}
+	}
+}
+
+/**
+* Sets the focus to the button that is designated as the default. By default, his handler is executed when the show event is fired.
+*/
+YAHOO.widget.Dialog.prototype.focusDefaultButton = function() {
+	if (this.defaultHtmlButton) {
+		this.defaultHtmlButton.focus();
+	}
+}
+
+/**
+* Blurs all the html buttons
+*/
+YAHOO.widget.Dialog.prototype.blurButtons = function() {
+	var buttons = this.cfg.getProperty("buttons");
+	if (buttons && buttons instanceof Array) {
+		var html = buttons[0].htmlButton;
+		if (html) {
+			html.blur();
+		}
+	}
+}
+
+/**
+* Sets the focus to the first button in the button list
+*/
+YAHOO.widget.Dialog.prototype.focusFirstButton = function() {
+	var buttons = this.cfg.getProperty("buttons");
+	if (buttons && buttons instanceof Array) {
+		var html = buttons[0].htmlButton;
+		if (html) {
+			html.focus();
+		}
+	}
+}
+
+/**
+* Sets the focus to the first button in the button list
+*/
+YAHOO.widget.Dialog.prototype.focusLastButton = function() {
+	var buttons = this.cfg.getProperty("buttons");
+	if (buttons && buttons instanceof Array) {
+		var html = buttons[buttons.length-1].htmlButton;
+		if (html) {
+			html.focus();
+		}
+	}
+}
+
+// END BUILT-IN PROPERTY EVENT HANDLERS //
+
+/**
+* Built-in function hook for writing a validation function that will be checked for a "true" value prior to a submit. This function, as implemented by default, always returns true, so it should be overridden if validation is necessary.
+*/
+YAHOO.widget.Dialog.prototype.validate = function() {
+	return true;
+}
+
+/**
+* Executes a submit of the Dialog followed by a hide, if validation is successful.
+*/
+YAHOO.widget.Dialog.prototype.submit = function() {
+	if (this.validate()) {
+		this.beforeSubmitEvent.fire();
+		this.doSubmit();
+		this.submitEvent.fire();
+		this.hide();
+		return true;
+	} else {
+		return false;
+	}
+}
+
+/**
+* Executes the cancel of the Dialog followed by a hide.
+*/
+YAHOO.widget.Dialog.prototype.cancel = function() {
+	this.cancelEvent.fire();
+	this.hide();	
+}
+
+/**
+* Returns a JSON-compatible data structure representing the data currently contained in the form.
+* @return {object} A JSON object reprsenting the data of the current form.
+*/
+YAHOO.widget.Dialog.prototype.getData = function() {
+	var form = this.form;
+	var data = {};
+
+	if (form) {
+		for (var i in this.form) {
+			var formItem = form[i];
+			if (formItem) {
+				if (formItem.tagName) { // Got a single form item
+					switch (formItem.tagName) {
+						case "INPUT":
+							switch (formItem.type) {
+								case "checkbox": 
+									data[i] = formItem.checked;
+									break;
+								case "textbox":
+								case "text":
+								case "hidden":
+									data[i] = formItem.value;
+									break;
+							}
+							break;
+						case "TEXTAREA":
+							data[i] = formItem.value;
+							break;
+						case "SELECT":
+							var val = new Array();
+							for (var x=0;x<formItem.options.length;x++)	{
+								var option = formItem.options[x];
+								if (option.selected) {
+									var selval = option.value;
+									if (! selval || selval == "") {
+										selval = option.text;
+									}
+									val[val.length] = selval;
+								}
+							}
+							data[i] = val;
+							break;
+					}
+				} else if (formItem[0] && formItem[0].tagName) { // this is an array of form items
+					switch (formItem[0].tagName) {
+						case "INPUT" :
+							switch (formItem[0].type) {
+								case "radio":
+									for (var r=0; r<formItem.length; r++) {
+										var radio = formItem[r];
+										if (radio.checked) {
+											data[radio.name] = radio.value;
+											break;
+										}
+									}
+									break;
+								case "checkbox":
+									var cbArray = new Array();
+									for (var c=0; c<formItem.length; c++) {
+										var check = formItem[c];
+										if (check.checked) {
+											cbArray[cbArray.length] = check.value;
+										}
+									}
+									data[formItem[0].name] = cbArray;
+									break;
+							}
+					}
+				}
+			}
+		}	
+	}
+	return data;
+}
+
+YAHOO.widget.Dialog.prototype.toString = function() {
+	return "Dialog " + this.id;
+}/**
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+* @class
+* SimpleDialog is a simple implementation of Dialog that can be used to submit a single value. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
+* @param {string}	el	The element ID representing the SimpleDialog <em>OR</em>
+* @param {Element}	el	The element representing the SimpleDialog
+* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this SimpleDialog. See configuration documentation for more details.
+* @constructor
+*/
+YAHOO.widget.SimpleDialog = function(el, userConfig) {
+	if (arguments.length > 0) {
+		YAHOO.widget.SimpleDialog.superclass.constructor.call(this, el, userConfig);
+	}
+}
+
+YAHOO.extend(YAHOO.widget.SimpleDialog, YAHOO.widget.Dialog);
+
+/**
+* Constant for the standard network icon for a blocking action
+* @type string
+* @final
+*/
+YAHOO.widget.SimpleDialog.ICON_BLOCK = "nt/ic/ut/bsc/blck16_1.gif";
+
+/**
+* Constant for the standard network icon for alarm
+* @type string
+* @final
+*/
+YAHOO.widget.SimpleDialog.ICON_ALARM = "nt/ic/ut/bsc/alrt16_1.gif";
+
+/**
+* Constant for the standard network icon for help
+* @type string
+* @final
+*/
+YAHOO.widget.SimpleDialog.ICON_HELP  = "nt/ic/ut/bsc/hlp16_1.gif";
+
+/**
+* Constant for the standard network icon for info
+* @type string
+* @final
+*/
+YAHOO.widget.SimpleDialog.ICON_INFO  = "nt/ic/ut/bsc/info16_1.gif";
+
+/**
+* Constant for the standard network icon for warn
+* @type string
+* @final
+*/
+YAHOO.widget.SimpleDialog.ICON_WARN  = "nt/ic/ut/bsc/warn16_1.gif";
+
+/**
+* Constant for the standard network icon for a tip
+* @type string
+* @final
+*/
+YAHOO.widget.SimpleDialog.ICON_TIP   = "nt/ic/ut/bsc/tip16_1.gif";
+
+/**
+* Constant representing the default CSS class used for a SimpleDialog
+* @type string
+* @final
+*/
+YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG = "simple-dialog";
+
+/**
+* Initializes the class's configurable properties which can be changed using the SimpleDialog's Config object (cfg).
+*/
+YAHOO.widget.SimpleDialog.prototype.initDefaultConfig = function() {
+	YAHOO.widget.SimpleDialog.superclass.initDefaultConfig.call(this);
+
+	// Add dialog config properties //
+	this.cfg.addProperty("icon",	{ value:"none",	handler:this.configIcon, suppressEvent:true } );
+	this.cfg.addProperty("text",	{ value:"", handler:this.configText, suppressEvent:true, supercedes:["icon"] } );
+}
+
+
+/*
+* The SimpleDialog initialization method, which is executed for SimpleDialog and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
+* @param {string}	el	The element ID representing the SimpleDialog <em>OR</em>
+* @param {Element}	el	The element representing the SimpleDialog
+* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this SimpleDialog. See configuration documentation for more details.
+*/
+YAHOO.widget.SimpleDialog.prototype.init = function(el, userConfig) {
+	YAHOO.widget.SimpleDialog.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
+
+	this.beforeInitEvent.fire(YAHOO.widget.SimpleDialog);
+
+	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG);
+
+	this.cfg.queueProperty("postmethod", "manual");
+
+	if (userConfig) {
+		this.cfg.applyConfig(userConfig, true);
+	}
+
+	this.beforeRenderEvent.subscribe(function() {
+		if (! this.body) {
+			this.setBody("");
+		}
+	}, this, true);
+
+	this.initEvent.fire(YAHOO.widget.SimpleDialog);
+
+}
+/**
+* Prepares the SimpleDialog's internal FORM object, creating one if one is not currently present, and adding the value hidden field.
+*/
+YAHOO.widget.SimpleDialog.prototype.registerForm = function() {
+	YAHOO.widget.SimpleDialog.superclass.registerForm.call(this);
+	this.form.innerHTML += "<input type=\"hidden\" name=\"" + this.id + "\" value=\"\"/>";
+}
+
+// BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
+
+/**
+* Fired when the "icon" property is set.
+*/
+YAHOO.widget.SimpleDialog.prototype.configIcon = function(type,args,obj) {
+	var icon = args[0];
+	if (icon && icon != "none") {
+		var iconHTML = "<img src=\"" + this.imageRoot + icon + "\" class=\"icon\" />";
+		this.body.innerHTML = iconHTML + this.body.innerHTML;
+	}
+}
+
+/**
+* Fired when the "text" property is set.
+*/
+YAHOO.widget.SimpleDialog.prototype.configText = function(type,args,obj) {
+	var text = args[0];
+	if (text) {
+		this.setBody(text);
+		this.cfg.refireEvent("icon");
+	}
+}
+// END BUILT-IN PROPERTY EVENT HANDLERS //
+
+YAHOO.widget.SimpleDialog.prototype.toString = function() {
+	return "SimpleDialog " + this.id;
+}/**
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+* @class
+* ContainerEffect encapsulates animation transitions that are executed when an Overlay is shown or hidden.
+* @param {Overlay}	overlay		The Overlay that the animation should be associated with
+* @param {object}	attrIn		The object literal representing the animation arguments to be used for the animate-in transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
+* @param {object}	attrOut		The object literal representing the animation arguments to be used for the animate-out transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
+* @param {Element}	targetElement	Optional. The target element that should be animated during the transition. Defaults to overlay.element.
+* @constructor
+*/
+YAHOO.widget.ContainerEffect = function(overlay, attrIn, attrOut, targetElement) {
+	if (! overlay) {
+		YAHOO.log("No overlay specified", "error");
+	}
+	if (! attrIn) {
+		YAHOO.log("No animate-in attributes specified", "error");
+	}
+	if (! attrOut) {
+		YAHOO.log("No animate-out attributes specified", "error");
+	}
+
+	this.overlay = overlay;
+
+	this.attrIn = attrIn;
+	this.attrOut = attrOut;
+
+	this.targetElement = targetElement || overlay.element;
+
+	this.beforeAnimateInEvent = new YAHOO.util.CustomEvent("beforeAnimateIn");
+	this.beforeAnimateOutEvent = new YAHOO.util.CustomEvent("beforeAnimateOut");
+
+	this.animateInCompleteEvent = new YAHOO.util.CustomEvent("animateInComplete");
+	this.animateOutCompleteEvent = new YAHOO.util.CustomEvent("animateOutComplete");
+}
+
+/**
+* Initializes the animation classes and events.
+* @param {class}	Optional. The animation class to instantiate. Defaults to YAHOO.util.Anim. Other options include YAHOO.util.Motion.
+*/
+YAHOO.widget.ContainerEffect.prototype.init = function(animClass) {
+	if (! animClass) {
+		animClass = YAHOO.util.Anim;
+	}
+	this.animIn = new animClass(this.targetElement, this.attrIn.attributes, this.attrIn.duration, this.attrIn.method);
+	this.animIn.onStart.subscribe(this.handleStartAnimateIn, this);
+	this.animIn.onTween.subscribe(this.handleTweenAnimateIn, this);
+	this.animIn.onComplete.subscribe(this.handleCompleteAnimateIn, this);
+
+	this.animOut = new animClass(this.targetElement, this.attrOut.attributes, this.attrOut.duration, this.attrOut.method);
+	this.animOut.onStart.subscribe(this.handleStartAnimateOut, this);
+	this.animOut.onTween.subscribe(this.handleTweenAnimateOut, this);
+	this.animOut.onComplete.subscribe(this.handleCompleteAnimateOut, this);
+}
+
+/**
+* Triggers the in-animation.
+*/
+YAHOO.widget.ContainerEffect.prototype.animateIn = function() {
+	this.beforeAnimateInEvent.fire();
+	this.animIn.animate();
+}
+
+/**
+* Triggers the out-animation.
+*/
+YAHOO.widget.ContainerEffect.prototype.animateOut = function() {
+	this.beforeAnimateOutEvent.fire();
+	this.animOut.animate();
+}
+
+/**
+* The default onStart handler for the in-animation.
+*/
+YAHOO.widget.ContainerEffect.prototype.handleStartAnimateIn = function(type, args, obj) { }
+/**
+* The default onTween handler for the in-animation.
+*/
+YAHOO.widget.ContainerEffect.prototype.handleTweenAnimateIn = function(type, args, obj) { }
+/**
+* The default onComplete handler for the in-animation.
+*/
+YAHOO.widget.ContainerEffect.prototype.handleCompleteAnimateIn = function(type, args, obj) { }
+
+/**
+* The default onStart handler for the out-animation.
+*/
+YAHOO.widget.ContainerEffect.prototype.handleStartAnimateOut = function(type, args, obj) { }
+/**
+* The default onTween handler for the out-animation.
+*/
+YAHOO.widget.ContainerEffect.prototype.handleTweenAnimateOut = function(type, args, obj) { }
+/**
+* The default onComplete handler for the out-animation.
+*/
+YAHOO.widget.ContainerEffect.prototype.handleCompleteAnimateOut = function(type, args, obj) { }
+
+YAHOO.widget.ContainerEffect.prototype.toString = function() {
+	var output = "ContainerEffect";
+	if (this.overlay) {
+		output += " [" + this.overlay.toString() + "]";
+	}
+	return output;
+}
+
+/**
+* A pre-configured ContainerEffect instance that can be used for fading an overlay in and out.
+* @param {Overlay}	The Overlay object to animate
+* @param {float}	The duration of the animation
+* @type ContainerEffect
+*/
+YAHOO.widget.ContainerEffect.FADE = function(overlay, dur) {
+	var fade = new YAHOO.widget.ContainerEffect(overlay, { attributes:{opacity: {from:0, to:1}}, duration:dur, method:YAHOO.util.Easing.easeIn }, { attributes:{opacity: {to:0}}, duration:dur, method:YAHOO.util.Easing.easeOut} );
+
+	fade.handleStartAnimateIn = function(type,args,obj) {
+		YAHOO.util.Dom.addClass(obj.overlay.element, "hide-select");
+		
+		if (! obj.overlay.underlay) {
+			obj.overlay.cfg.refireEvent("underlay");
+		}
+
+		if (obj.overlay.underlay) {
+			obj.initialUnderlayOpacity = YAHOO.util.Dom.getStyle(obj.overlay.underlay, "opacity");
+			obj.overlay.underlay.style.filter = null;
+		}
+
+		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "visible"); 
+		YAHOO.util.Dom.setStyle(obj.overlay.element, "opacity", 0);
+	}
+
+	fade.handleCompleteAnimateIn = function(type,args,obj) {
+		YAHOO.util.Dom.removeClass(obj.overlay.element, "hide-select");
+
+		if (obj.overlay.element.style.filter) {
+			obj.overlay.element.style.filter = null;
+		}			
+		
+		if (obj.overlay.underlay) {
+			YAHOO.util.Dom.setStyle(obj.overlay.underlay, "opacity", obj.initialUnderlayOpacity);
+		}
+
+		obj.overlay.cfg.refireEvent("iframe");
+		obj.animateInCompleteEvent.fire();
+	}
+
+	fade.handleStartAnimateOut = function(type, args, obj) {
+		YAHOO.util.Dom.addClass(obj.overlay.element, "hide-select");
+
+		if (obj.overlay.underlay) {
+			obj.overlay.underlay.style.filter = null;
+		}
+	}
+
+	fade.handleCompleteAnimateOut =  function(type, args, obj) { 
+		YAHOO.util.Dom.removeClass(obj.overlay.element, "hide-select");
+		if (obj.overlay.element.style.filter) {
+			obj.overlay.element.style.filter = null;
+		}				
+		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "hidden");
+		YAHOO.util.Dom.setStyle(obj.overlay.element, "opacity", 1); 
+
+		obj.overlay.cfg.refireEvent("iframe");
+
+		obj.animateOutCompleteEvent.fire();
+	};	
+
+	fade.init();
+	return fade;
+};
+
+
+/**
+* A pre-configured ContainerEffect instance that can be used for sliding an overlay in and out.
+* @param {Overlay}	The Overlay object to animate
+* @param {float}	The duration of the animation
+* @type ContainerEffect
+*/
+YAHOO.widget.ContainerEffect.SLIDE = function(overlay, dur) {
+	var x = overlay.cfg.getProperty("x") || YAHOO.util.Dom.getX(overlay.element);
+	var y = overlay.cfg.getProperty("y") || YAHOO.util.Dom.getY(overlay.element);
+
+	var clientWidth = YAHOO.util.Dom.getClientWidth();
+	var offsetWidth = overlay.element.offsetWidth;
+
+	var slide = new YAHOO.widget.ContainerEffect(overlay, { 
+															attributes:{ points: { to:[x, y] } }, 
+															duration:dur, 
+															method:YAHOO.util.Easing.easeIn 
+														}, 
+														{ 
+															attributes:{ points: { to:[(clientWidth+25), y] } },
+															duration:dur, 
+															method:YAHOO.util.Easing.easeOut
+														} 
+												);
+
+	slide.handleStartAnimateIn = function(type,args,obj) {
+		obj.overlay.element.style.left = (-25-offsetWidth) + "px";
+		obj.overlay.element.style.top  = y + "px";
+	}
+	
+	slide.handleTweenAnimateIn = function(type, args, obj) {
+
+
+		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
+
+		var currentX = pos[0];
+		var currentY = pos[1];
+
+		if (YAHOO.util.Dom.getStyle(obj.overlay.element, "visibility") == "hidden" && currentX < x) {
+			YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "visible");
+		}
+
+		obj.overlay.cfg.setProperty("xy", [currentX,currentY], true);
+		obj.overlay.cfg.refireEvent("iframe");
+	}
+	
+	slide.handleCompleteAnimateIn = function(type, args, obj) {
+		obj.overlay.cfg.setProperty("xy", [x,y], true);
+		obj.startX = x;
+		obj.startY = y;
+		obj.overlay.cfg.refireEvent("iframe");
+		obj.animateInCompleteEvent.fire();
+	}
+
+	slide.handleStartAnimateOut = function(type, args, obj) {
+		var clientWidth = YAHOO.util.Dom.getViewportWidth();
+		
+		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
+
+		var x = pos[0];
+		var y = pos[1];
+
+		var currentTo = obj.animOut.attributes.points.to;
+		obj.animOut.attributes.points.to = [(clientWidth+25), y];
+	}
+
+	slide.handleTweenAnimateOut = function(type, args, obj) {
+		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
+
+		var x = pos[0];
+		var y = pos[1];
+
+		obj.overlay.cfg.setProperty("xy", [x,y], true);
+		obj.overlay.cfg.refireEvent("iframe");
+	}
+
+	slide.handleCompleteAnimateOut = function(type, args, obj) { 
+		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "hidden");		
+		var offsetWidth = obj.overlay.element.offsetWidth;
+
+		obj.overlay.cfg.setProperty("xy", [x,y]);
+		obj.animateOutCompleteEvent.fire();
+	};	
+
+	slide.init(YAHOO.util.Motion);
+	return slide;
+}

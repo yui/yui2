@@ -17,6 +17,8 @@ YAHOO.widget.Tooltip = function(el, userConfig) {
 
 YAHOO.extend(YAHOO.widget.Tooltip, YAHOO.widget.Overlay);
 
+YAHOO.widget.Tooltip.logger = new YAHOO.widget.LogWriter("Tooltip");
+
 /**
 * Constant representing the Tooltip CSS class
 * @type string
@@ -31,6 +33,8 @@ YAHOO.widget.Tooltip.CSS_TOOLTIP = "tt";
 * @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Tooltip. See configuration documentation for more details.
 */
 YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
+	this.logger = YAHOO.widget.Tooltip.logger;
+
 	if (document.readyState && document.readyState != "complete") {
 		var deferredInit = function() {
 			this.init(el, userConfig);
@@ -154,6 +158,7 @@ YAHOO.widget.Tooltip.prototype.onContextMouseOver = function(e, obj) {
 
 	if (obj.hideProcId) {
 		clearTimeout(obj.hideProcId);
+		obj.logger.log("Clearing hide timer: " + obj.hideProcId, "time");
 		obj.hideProcId = null;
 	}
 	
@@ -170,6 +175,7 @@ YAHOO.widget.Tooltip.prototype.onContextMouseOver = function(e, obj) {
 	* @type int
 	*/
 	obj.showProcId = obj.doShow(e, context);
+	obj.logger.log("Setting show tooltip timeout: " + this.showProcId, "time");
 }
 
 /**
@@ -187,11 +193,13 @@ YAHOO.widget.Tooltip.prototype.onContextMouseOut = function(e, obj) {
 	
 	if (obj.showProcId) {
 		clearTimeout(obj.showProcId);
-		obj.showProcId = null;
+		obj.logger.log("Clearing show timer: " + obj.showProcId, "time");
+		obj.showProcId = null;		
 	}
 
 	if (obj.hideProcId) {
 		clearTimeout(obj.hideProcId);
+		obj.logger.log("Clearing hide timer: " + obj.hideProcId, "time");
 		obj.hideProcId = null;
 	}
 
@@ -224,6 +232,7 @@ YAHOO.widget.Tooltip.prototype.doShow = function(e, context) {
 				me.cfg.refireEvent("text");
 			}
 
+			me.logger.log("Show tooltip", "time");
 			me.moveTo(me.pageX, me.pageY + yOffset);
 			if (me.cfg.getProperty("preventoverlap")) {
 				me.preventOverlap(me.pageX, me.pageY);
@@ -233,6 +242,7 @@ YAHOO.widget.Tooltip.prototype.doShow = function(e, context) {
 
 			me.show();
 			me.hideProcId = me.doHide();
+			me.logger.log("Hide tooltip time active: " + me.hideProcId, "time");
 		},
 	this.cfg.getProperty("showdelay"));
 }
@@ -242,8 +252,10 @@ YAHOO.widget.Tooltip.prototype.doShow = function(e, context) {
 */
 YAHOO.widget.Tooltip.prototype.doHide = function() {
 	var me = this;
+	me.logger.log("Setting hide tooltip timeout", "time");
 	return setTimeout(
 		function() {
+			me.logger.log("Hide tooltip", "time");
 			me.hide();
 		},
 		this.cfg.getProperty("autodismissdelay"));
@@ -265,6 +277,9 @@ YAHOO.widget.Tooltip.prototype.preventOverlap = function(pageX, pageY) {
 
 	var mousePoint = new YAHOO.util.Point(pageX, pageY);
 	
+	this.logger.log("context " + elementRegion, "ttip");
+	this.logger.log("mouse " + mousePoint, "ttip");
+
 	if (elementRegion.contains(mousePoint)) {
 		this.logger.log("OVERLAP", "warn");
 		this.cfg.setProperty("y", (pageY-height-5))

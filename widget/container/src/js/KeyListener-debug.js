@@ -13,6 +13,16 @@ http://developer.yahoo.net/yui/license.txt
 * @constructor
 */
 YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
+	if (! attachTo) {
+		YAHOO.log("No attachTo element specified", "error");
+	}
+	if (! keyData) {
+		YAHOO.log("No keyData specified", "error");
+	}
+	if (! handler) {
+		YAHOO.log("No handler specified", "error");
+	}
+
 	if (! event) {
 		event = YAHOO.util.KeyListener.KEYDOWN;
 	}

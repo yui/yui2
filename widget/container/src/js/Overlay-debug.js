@@ -338,6 +338,8 @@ YAHOO.widget.Overlay.prototype.configXY = function(type, args, obj) {
 	x = this.cfg.getProperty("x");
 	y = this.cfg.getProperty("y");
 
+	YAHOO.log("xy: " + [x,y], "iframe");
+
 	this.cfg.refireEvent("iframe");
 	this.moveEvent.fire([x,y]);
 }
@@ -422,10 +424,13 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 		var y = this.cfg.getProperty("y");
 
 		if (! x || ! y) {
+			YAHOO.log("syncPosition needed for iframe", "iframe");
 			this.syncPosition();
 			x = this.cfg.getProperty("x");
 			y = this.cfg.getProperty("y");
 		}
+
+		YAHOO.log("iframe positioning to: " + [x,y], "iframe");
 
 		if (! isNaN(x) && ! isNaN(y)) {
 			if (! this.iframe) {

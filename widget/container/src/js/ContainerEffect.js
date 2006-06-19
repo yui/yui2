@@ -86,6 +86,14 @@ YAHOO.widget.ContainerEffect.prototype.handleTweenAnimateOut = function(type, ar
 */
 YAHOO.widget.ContainerEffect.prototype.handleCompleteAnimateOut = function(type, args, obj) { }
 
+YAHOO.widget.ContainerEffect.prototype.toString = function() {
+	var output = "ContainerEffect";
+	if (this.overlay) {
+		output += " [" + this.overlay.toString() + "]";
+	}
+	return output;
+}
+
 /**
 * A pre-configured ContainerEffect instance that can be used for fading an overlay in and out.
 * @param {Overlay}	The Overlay object to animate

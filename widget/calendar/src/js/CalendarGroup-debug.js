@@ -50,6 +50,8 @@ YAHOO.widget.CalendarGroup = function(pageCount, id, containerId, monthyear, sel
 									commas. Example: "12/24/2005,12/25,1/18/2006-1/21/2006"
 */
 YAHOO.widget.CalendarGroup.prototype.init = function(pageCount, id, containerId, monthyear, selected) {
+	this.logger = new YAHOO.widget.LogWriter("CalendarGroup " + id);	
+	
 	this.id = id;
 	this.selectedDates = new Array();
 	this.containerId = containerId;
@@ -77,6 +79,8 @@ YAHOO.widget.CalendarGroup.prototype.init = function(pageCount, id, containerId,
 	this.doPreviousMonth = function(e, calGroup) {
 		calGroup.previousMonth();
 	};
+	
+	this.logger.log("Initialized " + pageCount + "-page CalendarGroup", "info");
 };
 
 YAHOO.widget.CalendarGroup.prototype.setChildFunction = function(fnName, fn) {

@@ -10,6 +10,8 @@ http://developer.yahoo.net/yui/license.txt
 YAHOO.util.Config = function(owner) {
 	if (owner) {
 		this.init(owner);
+	} else {
+		YAHOO.log("No owner specified for Config object", "error");
 	}
 }
 
@@ -170,6 +172,8 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @param {value}	object		The value of the correct type for the property
 	*/ 
 	var fireEvent = function( key, value ) {
+		YAHOO.log("Firing Config event: " + key + "=" + value, "info");
+		
 		key = key.toLowerCase();
 
 		var property = config[key];
@@ -182,6 +186,8 @@ YAHOO.util.Config.prototype.init = function(owner) {
 
 	this.addProperty = function( key, propertyObject ) {
 		key = key.toLowerCase();
+		
+		YAHOO.log("Added property: " + key, "info");
 
 		config[key] = propertyObject;
 
@@ -223,7 +229,6 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 	}
 
-
 	this.resetProperty = function(key) {
 		key = key.toLowerCase();
 
@@ -235,9 +240,10 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 	}
 
-
 	this.setProperty = function(key, value, silent) {
 		key = key.toLowerCase();
+		
+		YAHOO.log("setProperty: " + key + "=" + value, "info");
 
 		if (this.queueInProgress && ! silent) {
 			this.queueProperty(key,value); // Currently running through a queue... 
@@ -262,7 +268,10 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	}
 
 	this.queueProperty = function(key, value) {
+	
 		key = key.toLowerCase();
+
+		YAHOO.log("queueProperty: " + key + "=" + value, "info");
 
 		var property = config[key];
 							
@@ -321,6 +330,8 @@ YAHOO.util.Config.prototype.init = function(owner) {
 					}
 				}
 			}
+	
+			YAHOO.log("Config event queue: " + this.outputEventQueue(), "info");
 
 			return true;
 		} else {
