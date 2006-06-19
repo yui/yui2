@@ -1,18 +1,18 @@
 /* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
 /* Container Styles */
 
-.calcontainer {*height:1%;} /* IE */
-.calcontainer:after {content:'.';clear:both;display:block;visibility:hidden;height:0;} /* others */
+.yui-cal2upwrapper {*height:1%;} /* IE */
+.yui-cal2upwrapper:after {content:'.';clear:both;display:block;visibility:hidden;height:0;} /* others */
 
-.calbordered {
+.yui-calcontainer {
 	float:left;
 	padding:5px;
 	background-color:#F7F9FB;
 	border:1px solid #7B9EBD;
 }
 
-.calbordered .title {
-	font:73% Arial,Helvetica,sans-serif;
+.yui-calcontainer .title {
+	font:100% sans-serif;
 	color:#000;
 	font-weight:bold;
 	margin-bottom:5px;
@@ -21,81 +21,78 @@
 	position:relative;
 }
 
-.title .close-icon {
+.yui-calcontainer .title .close-icon {
 	position:absolute;
 	right:0;
 	top:0;
 	border:none;
 }
 
-.cal2up {
+.yui-calcontainer .cal2up {
 	float:left;
 }
 
-.calnavleft {
+.yui-calendar .calnavleft {
 	position:absolute;
-	top:0;
+	background-repeat:no-repeat;
+	cursor:pointer;
+	top:2px;
 	bottom:0;
+	width:9px;
 	height:12px;   
 	left:2px;
 }
 
-.calnavright {
+.yui-calendar .calnavright {
 	position:absolute;
-	top:0;
+	background-repeat:no-repeat;
+	cursor:pointer;
+	top:2px;
 	bottom:0;
+	width:9px;
 	height:12px;  
 	right:2px;
 }
 
 /* Calendar element styles */
 
-.calendar {
-	font:73% Arial,Helvetica,sans-serif;
+.yui-calendar {
+	font:100% sans-serif;
 	text-align:center;
 	border-spacing:0;
+	border-collapse:separate;
 }
 
-td.calcell {
+.yui-calendar td.calcell {
 	width:1.5em;
 	height:1em;
 	border:1px solid #E0E0E0;
 	background-color:#FFF;
 }
 
-.calendar.wait td.calcell {
-	color:#999;
-	background-color:#CCC;
-}
-
-.calendar.wait td.calcell a {
-	color:#999;
-	font-style:italic;
-}
-
-td.calcell a {
+.yui-calendar td.calcell a {
 	color:#003DB8;
 	text-decoration:none;
 }
 
-td.calcell.today {
+.yui-calendar td.calcell.today {
 	border:1px solid #000;
 }
 
-td.calcell.oom {
+.yui-calendar td.calcell.oom {
 	cursor:default;
 	color:#999;
 	background-color:#EEE;
 	border:1px solid #E0E0E0;
 }
 
-td.calcell.selected {
+.yui-calendar td.calcell.selected {
 	color:#003DB8;
 	background-color:#FFF19F;
 	border:1px solid #FF9900;
 }
 
-td.calcell.calcellhover {
+.yui-calendar td.calcell.calcellhover {
 	cursor:pointer;
 	color:#FFF;
 	background-color:#FF9900;
@@ -104,53 +101,54 @@ td.calcell.calcellhover {
 
 /* Added to perform some correction for Opera 8.5
    hover redraw bug */
-table:hover {
+table.yui-calendar:hover {
 	background-color:#FFF;
 }
 
-td.calcell.calcellhover a {
+.yui-calendar td.calcell.calcellhover a {
 	color:#FFF;
 }
 
-td.calcell.restricted {
+.yui-calendar td.calcell.restricted {
 	text-decoration:line-through;
 }
 
-td.calcell.previous {
+.yui-calendar td.calcell.previous {
 	color:#CCC;
 }
 
-td.calcell.highlight1 { background-color:#CCFF99; }
-td.calcell.highlight2 { background-color:#99CCFF; }
-td.calcell.highlight3 { background-color:#FFCCCC; }
-td.calcell.highlight4 { background-color:#CCFF99; }
+.yui-calendar td.calcell.highlight1 { background-color:#CCFF99; }
+.yui-calendar td.calcell.highlight2 { background-color:#99CCFF; }
+.yui-calendar td.calcell.highlight3 { background-color:#FFCCCC; }
+.yui-calendar td.calcell.highlight4 { background-color:#CCFF99; }
 
 
-.calhead {
+.yui-calendar .calhead {
 	border:1px solid #E0E0E0;
 	vertical-align:middle;
 	background-color:#FFF;
 }
 
-.calheader {
+.yui-calendar .calheader {
 	position:relative;
 	width:100%;
+	text-align:center;
 }
 
-.calheader img {
+.yui-calendar .calheader img {
 	border:none;
 }
 
-.calweekdaycell {
+.yui-calendar .calweekdaycell {
 	color:#666;
 	font-weight:normal;
 }
 
-.calfoot {
+.yui-calendar .calfoot {
 	background-color:#EEE;
 }
 
-.calrowhead, .calrowfoot {
+.yui-calendar .calrowhead, .yui-calendar .calrowfoot {
 	color:#666;
 	font-size:9px;
 	font-style:italic;
@@ -158,6 +156,10 @@ td.calcell.highlight4 { background-color:#CCFF99; }
 	width:15px;
 }
 
-.calrowhead {
+.yui-calendar .calrowhead {
 	border-right-width:2px;
 }
+
+/*Specific changes for calendar running under fonts/reset */
+.yui-calendar a:hover {background:inherit;}
+p#clear {clear:left; padding-top:10px;}
