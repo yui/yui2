@@ -14,6 +14,16 @@ YAHOO.util.Dom = function() {
    var id_counter = 0;
    var util = YAHOO.util; // internal shorthand
    
+   var property_cache = {}; // to cache case conversion for set/getStyle
+   
+   // improve performance by only looking up once
+   var cacheConvertedProperties = function(property) {
+      property_cache[property] = {
+         camel: property.replace(/-([a-z])/gi, function(m0, m1) {return m1.toUpperCase()}),
+         hyphen: property.replace(/([a-z])([A-Z]+)/g, function(m0, m1, m2) {return (m1 + '-' + m2.toLowerCase())})
+      };
+   }
+   
    return {
       /**
        * Returns an HTMLElement reference
@@ -55,8 +65,15 @@ YAHOO.util.Dom = function() {
             var value = null;
             var dv = document.defaultView;
             
-            if (property == 'opacity' && el.filters) 
-            {// IE opacity
+            if (!property_cache[property]) {
+               cacheConvertedProperties(property);
+            }
+            
+            var camel = property_cache[property]['camel'];
+            var hyphen = property_cache[property]['hyphen'];
+
+            
+            if (property == 'opacity' && el.filters) {// IE opacity
                value = 1;
                try {
                   value = el.filters.item('DXImageTransform.Microsoft.Alpha').opacity / 100;
@@ -65,29 +82,17 @@ YAHOO.util.Dom = function() {
                      value = el.filters.item('alpha').opacity / 100;
                   } catch(e) {}
                }
+            } else if (el.style[camel]) { // camelCase for valid styles
+               value = el.style[camel];
             }
-            else if (el.style[property]) 
-            {
-               value = el.style[property];
+            else if (el.currentStyle && el.currentStyle[camel]) { // camelCase for currentStyle
+               value = el.currentStyle[camel];
             }
-            else if (el.currentStyle && el.currentStyle[property]) {
-               value = el.currentStyle[property];
-            }
-            else if ( dv && dv.getComputedStyle )
-            {  // convert camelCase to hyphen-case
+            else if ( dv && dv.getComputedStyle ) { // hyphen-case for computedStyle
+               var computed = dv.getComputedStyle(el, '');
                
-               var converted = '';
-               for(var i = 0, len = property.length;i < len; ++i) {
-                  if (property.charAt(i) == property.charAt(i).toUpperCase()) 
-                  {
-                     converted = converted + '-' + property.charAt(i).toLowerCase();
-                  } else {
-                     converted = converted + property.charAt(i);
-                  }
-               }
-               
-               if (dv.getComputedStyle(el, '') && dv.getComputedStyle(el, '').getPropertyValue(converted)) {
-                  value = dv.getComputedStyle(el, '').getPropertyValue(converted);
+               if (computed && computed.getPropertyValue(hyphen)) {
+                  value = computed.getPropertyValue(hyphen);
                }
             }
       
@@ -104,6 +109,12 @@ YAHOO.util.Dom = function() {
        * @param {String} val The value to apply to the given property.
        */
       setStyle: function(el, property, val) {
+         if (!property_cache[property]) {
+            cacheConvertedProperties(property);
+         }
+         
+         var camel = property_cache[property]['camel'];
+         
          var f = function(el) {
             switch(property) {
                case 'opacity' :
@@ -121,7 +132,7 @@ YAHOO.util.Dom = function() {
 
                   break;
                default :
-                  el.style[property] = val;
+                  el.style[camel] = val;
             }
             
          };
@@ -142,33 +153,33 @@ YAHOO.util.Dom = function() {
                return false;
             }
             
-            var parent = null;
+            var parentNode = null;
             var pos = [];
             var box;
             
             if (el.getBoundingClientRect) { // IE
                box = el.getBoundingClientRect();
-               var scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
-               var scrollLeft = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft);
+               var doc = document;
+               if ( !this.inDocument(el) ) {// might be in a frame, need to get its scroll
+                  var doc = parent.document;
+                  while ( doc && !this.isAncestor(doc.documentElement, el) ) {
+                     doc = parent.document;
+                  }
+               }
+
+               var scrollTop = Math.max(doc.documentElement.scrollTop, doc.body.scrollTop);
+               var scrollLeft = Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft);
                
                return [box.left + scrollLeft, box.top + scrollTop];
             }
-            else if (document.getBoxObjectFor) { // gecko
-               box = document.getBoxObjectFor(el);
-               
-               var borderLeft = parseInt(this.getStyle(el, 'borderLeftWidth'));
-               var borderTop = parseInt(this.getStyle(el, 'borderTopWidth'));
-               
-               pos = [box.x - borderLeft, box.y - borderTop];
-            }
-            else { // safari & opera
+            else { // safari, opera, & gecko
                pos = [el.offsetLeft, el.offsetTop];
-               parent = el.offsetParent;
-               if (parent != el) {
-                  while (parent) {
-                     pos[0] += parent.offsetLeft;
-                     pos[1] += parent.offsetTop;
-                     parent = parent.offsetParent;
+               parentNode = el.offsetParent;
+               if (parentNode != el) {
+                  while (parentNode) {
+                     pos[0] += parentNode.offsetLeft;
+                     pos[1] += parentNode.offsetTop;
+                     parentNode = parentNode.offsetParent;
                   }
                }
                if (
@@ -180,16 +191,16 @@ YAHOO.util.Dom = function() {
                } 
             }
             
-            if (el.parentNode) { parent = el.parentNode; }
-            else { parent = null; }
+            if (el.parentNode) { parentNode = el.parentNode; }
+            else { parentNode = null; }
       
-            while (parent && parent.tagName != 'BODY' && parent.tagName != 'HTML') 
+            while (parentNode && parentNode.tagName.toUpperCase() != 'BODY' && parentNode.tagName.toUpperCase() != 'HTML') 
             { // account for any scrolled ancestors
-               pos[0] -= parent.scrollLeft;
-               pos[1] -= parent.scrollTop;
+               pos[0] -= parentNode.scrollLeft;
+               pos[1] -= parentNode.scrollTop;
       
-               if (parent.parentNode) { parent = parent.parentNode; } 
-               else { parent = null; }
+               if (parentNode.parentNode) { parentNode = parentNode.parentNode; } 
+               else { parentNode = null; }
             }
       
             return pos;
@@ -325,9 +336,7 @@ YAHOO.util.Dom = function() {
        * @return {Array} An array of elements that have the given class name
        */
       getElementsByClassName: function(className, tag, root) {
-         var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
-         
-         var method = function(el) { return re.test(el['className']); };
+         var method = function(el) { return util.Dom.hasClass(el, className) };
          return util.Dom.getElementsBy(method, tag, root);
       },
 
@@ -338,8 +347,9 @@ YAHOO.util.Dom = function() {
        * @return {Boolean/Array} A boolean value or array of boolean values
        */
       hasClass: function(el, className) {
+         var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
+         
          var f = function(el) {
-            var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
             return re.test(el['className']);
          };
          
@@ -367,13 +377,16 @@ YAHOO.util.Dom = function() {
        * @param {String} className the class name to remove from the class attribute
        */
       removeClass: function(el, className) {
+         var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)', 'g');
+
          var f = function(el) {
             if (!this.hasClass(el, className)) { return; } // not present
-            
-            var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)', 'g');
             var c = el['className'];
-            
             el['className'] = c.replace(re, ' ');
+            if ( this.hasClass(el, className) ) { // in case of multiple adjacent
+               this.removeClass(el, className);
+            }
+            
          };
          
          util.Dom.batch(el, f, util.Dom, true);
@@ -387,9 +400,14 @@ YAHOO.util.Dom = function() {
        * @param {String} newClassName the class name that will be replacing the old class name
        */
       replaceClass: function(el, oldClassName, newClassName) {
+         var re = new RegExp('(?:^|\\s+)' + oldClassName + '(?:\\s+|$)', 'g');
+
          var f = function(el) {
-            this.removeClass(el, oldClassName);
-            this.addClass(el, newClassName);
+            el['className'] = el['className'].replace(re, ' ' + newClassName + ' ');
+            
+            if ( this.hasClass(el, oldClassName) ) { // in case of multiple adjacent
+               this.replaceClass(el, oldClassName, newClassName);
+            }
          };
          
          util.Dom.batch(el, f, util.Dom, true);
@@ -442,7 +460,7 @@ YAHOO.util.Dom = function() {
                   if (parent == haystack) {
                      return true;
                   }
-                  else if (parent.tagName == 'HTML') {
+                  else if (parent.tagName.toUpperCase() == 'HTML') {
                      return false;
                   }
                   
