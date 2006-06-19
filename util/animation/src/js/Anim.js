@@ -34,6 +34,16 @@ YAHOO.util.Anim = function(el, attributes, duration, method)
 
 YAHOO.util.Anim.prototype = {
    /**
+    * toString method
+    * @return {String} string represenation of anim obj
+    */
+   toString: function() {
+      var el = this.getEl();
+      var id = el.id || el.tagName;
+      return ("Anim " + id);
+   },
+   
+   /**
     * Returns the value computed by the animation's "method".
     * @param {String} attribute The name of the attribute.
     * @param {Number} start The value this attribute should start from for this animation.
@@ -73,7 +83,7 @@ YAHOO.util.Anim.prototype = {
     * Per attribute units that should be used by default.
     * @type Object
     */
-   defaultUnits: { opacity: ' ' },
+   defaultUnits: { opacity: '' },
 
    /**
     * @param {String or HTMLElement} el Reference to the element that will be animated
@@ -188,7 +198,7 @@ YAHOO.util.Anim.prototype = {
        * @param {Number} val The default value to be applied to the attribute.
        */
       this.setDefault = function(attribute, val) {
-         if ( val.constructor != Array && (val == 'auto' || isNaN(val)) ) { // if 'auto' or NaN, set defaults for well known attributes, zero for others
+         if ( !(val instanceof Array) && (val == 'auto' || isNaN(val)) ) { // if 'auto' or NaN, set defaults for well known attributes, zero for others
             switch(attribute) {
                case'width':
                   val = el.clientWidth || el.offsetWidth; // computed width
@@ -261,6 +271,14 @@ YAHOO.util.Anim.prototype = {
          
          for (var attribute in attributes) {
             val = this.getAttribute(attribute);
+            if (typeof attributes[attribute].unit == 'undefined') {
+               if (typeof this.defaultUnits[attribute] != 'undefined') {
+                  attributes[attribute].unit = this.defaultUnits[attribute];
+               } else {
+                  attributes[attribute].unit = this.defaultUnit;
+               }
+            }
+            
             this.setDefault(attribute, val);
          }
          
@@ -280,10 +298,17 @@ YAHOO.util.Anim.prototype = {
          endTime = new Date();
          
          var data = {
-            time: endTime,
             duration: endTime - startTime,
             frames: actualFrames,
             fps: actualFrames / this.duration
+         };
+         
+         data.toString = function() {
+            return (
+               ', duration: ' + data.duration +
+               ', frames: ' + data.frames +
+               ', fps: ' + data.fps
+            );
          };
 
          isAnimated = false;  
@@ -300,12 +325,9 @@ YAHOO.util.Anim.prototype = {
          var start;
          var end = null;
          var val;
-         var unit;
          var attributes = this['attributes'];
          
          for (var attribute in attributes) {
-            unit = attributes[attribute]['unit'] || this.defaultUnits[attribute] || this.defaultUnit;
-   
             if (typeof attributes[attribute]['from'] != 'undefined') {
                start = attributes[attribute]['from'];
             } else {
@@ -342,7 +364,7 @@ YAHOO.util.Anim.prototype = {
                   val = 0;
                }
 
-               this.setAttribute(attribute, val, unit); 
+               this.setAttribute(attribute, val, attributes[attribute].unit); 
             }
          }
          
@@ -353,7 +375,7 @@ YAHOO.util.Anim.prototype = {
        * Custom event that fires after onStart, useful in subclassing
        * @private
        */   
-      this._onStart = new YAHOO.util.CustomEvent('_onStart', this);
+      this._onStart = new YAHOO.util.CustomEvent('_onStart', this, true);
       
       /**
        * Custom event that fires when animation begins
@@ -371,7 +393,7 @@ YAHOO.util.Anim.prototype = {
        * Custom event that fires after onTween
        * @private
        */
-      this._onTween = new YAHOO.util.CustomEvent('_tween', this);
+      this._onTween = new YAHOO.util.CustomEvent('_tween', this, true);
       
       /**
        * Custom event that fires when animation ends
