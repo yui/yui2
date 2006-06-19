@@ -9,17 +9,13 @@
 <?php include('inc/inc-alljs.php'); ?>
 
 
+        <script type="text/javascript" src="js/DDResize.js" ></script>
 
 <script type="text/javascript">
 YAHOO.example.DDApp = function() {
     var dd, dd2, dd3;
     return {
         init: function() {
-            if (typeof(ygLogger) != "undefined") {
-                ygLogger.init(document.getElementById("logDiv"));
-                var gLogger = new ygLogger("test_draggable.php");
-            }
-
             dd = new YAHOO.example.DDResize("panelDiv", "handleDiv", "panelresize");
             dd2 = new YAHOO.util.DD("panelDiv", "paneldrag");
             dd2.addInvalidHandleId("handleDiv");

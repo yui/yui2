@@ -7,6 +7,8 @@
 
 <?php include('inc/inc-alljs.php'); ?>
 
+        <script type="text/javascript" src="js/DDOnTop.js" ></script>
+
 <script type="text/javascript" language="JavaScript">
 
 YAHOO.example.DDApp = function() {
@@ -14,11 +16,6 @@ YAHOO.example.DDApp = function() {
 
     return {
         init: function() {
-            if (typeof(ygLogger) != "undefined") {
-                ygLogger.init(document.getElementById("logDiv"));
-                var gLogger = new ygLogger("DDApp");
-            }
-
             dd = new YAHOO.example.DDOnTop("dragDiv1");
             dd.addInvalidHandleId("excludeid3");
             dd.addInvalidHandleClass("excludeclass2");

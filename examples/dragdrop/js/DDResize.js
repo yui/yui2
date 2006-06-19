@@ -8,16 +8,17 @@
  * @param {String} panel id of the element to resize
  * @param {String} sGroup the group of related DragDrop items
  */
-YAHOO.example.DDResize = function(panelElId, handleElId, sGroup) {
+YAHOO.example.DDResize = function(panelElId, handleElId, sGroup, config) {
     if (handleElId) {
-        this.init(panelElId, sGroup);
+        this.init(panelElId, sGroup, config);
         this.handleElId = handleElId;
         this.setHandleElId(handleElId);
-        this.logger = new ygLogger("DDResize");
+        this.logger = this.logger || YAHOO;
     }
 };
 
-YAHOO.example.DDResize.prototype = new YAHOO.util.DragDrop();
+// YAHOO.example.DDResize.prototype = new YAHOO.util.DragDrop();
+YAHOO.extend(YAHOO.example.DDResize, YAHOO.util.DragDrop);
 
 YAHOO.example.DDResize.prototype.onMouseDown = function(e) {
     var panel = this.getEl();

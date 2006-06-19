@@ -11,9 +11,11 @@
 
 YAHOO.example.DDWithOverlay = function(id, sGroup, overlayId) {
     this.init(id, sGroup);
+    // this.initFrame();
     this.overlayId = overlayId;
 };
 
+// YAHOO.example.DDWithOverlay.prototype = new YAHOO.util.DDProxy();
 YAHOO.example.DDWithOverlay.prototype = new YAHOO.util.DD();
 
 YAHOO.example.DDWithOverlay.prototype.startDrag = function(e) {
@@ -39,13 +41,14 @@ YAHOO.example.DDWithOverlay.prototype.endDrag = function(e) {
 };
 
 YAHOO.example.DDApp = function() {
-    var dd, dd2, dd3, logger;
+    var dd, dd2, dd3;
     return {
         init: function() {
-            if (typeof(ygLogger) != "undefined") {
-                ygLogger.init(document.getElementById("logDiv"));
-                logger = new ygLogger("DDApp");
-            }
+
+            YAHOO.util.Event.addListener(
+                    "overlay", 
+                    "mouseover", function(e) {YAHOO.util.Event.stopEvent(e);}
+                    );
 
             dd = new YAHOO.example.DDWithOverlay("dragDiv1", "default", "overlay");
             dd2 = new YAHOO.example.DDWithOverlay("dragDiv2", "default", "overlay");

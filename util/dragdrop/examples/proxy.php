@@ -7,15 +7,16 @@
 
 <?php include('inc/inc-alljs.php'); ?>
 
+        <script type="text/javascript" src="js/DDSwap.js" ></script>
+
 <script type="text/javascript" language="JavaScript">
 
 YAHOO.example.DDApp = function() {
-    var logger = new ygLogger("DDApp");
     var dd, dd2, dd3;
 
     function handleKeypress(e) {
         alert("asdf");
-        logger.debug("keypress");
+        YAHOO.log("keypress");
         YAHOO.util.Event.stopEvent(e);
         e.cancel = true;
         return false;
@@ -23,20 +24,23 @@ YAHOO.example.DDApp = function() {
 
     function initPointMode() {
 
-        logger.debug("point mode");
+        YAHOO.log("point mode");
 
         unreg();
 
         YAHOO.util.DDM.mode = YAHOO.util.DDM.POINT;
 
-        dd = new YAHOO.example.DDSwap("dragDiv1");
+        dd = new YAHOO.example.DDSwap("dragDiv1", "proxytest", 
+                    { dragElId: "dragDiv4" });
         // dd.setPadding(10);
+        //dd.setXConstraint(0,0);
 
-        dd2 = new YAHOO.example.DDSwap("dragDiv2");
+        dd2 = new YAHOO.example.DDSwap("dragDiv2", "proxytest");
         dd2.addInvalidHandleType("input");
         // dd2.setPadding(10, 20, 30, 40);
+        dd2.setXConstraint(0,0);
 
-        dd3 = new YAHOO.example.DDSwap("dragDiv3");
+        dd3 = new YAHOO.example.DDSwap("dragDiv3", "proxytest");
         // dd3.setPadding(10, 40);
         // dd3.setPadding(10, 0, 20, 40);
 
@@ -45,7 +49,7 @@ YAHOO.example.DDApp = function() {
 
     function initIntersectMode() {
 
-        logger.debug("intersect mode");
+        YAHOO.log("intersect mode");
 
         unreg();
 
@@ -57,6 +61,7 @@ YAHOO.example.DDApp = function() {
         dd2 = new YAHOO.example.DDSwap_i("dragDiv2");
         dd2.addInvalidHandleType("input");
         //dd2.setPadding(10, 20, 30, 40);
+        dd2.setXConstraint(0,0);
 
         dd3 = new YAHOO.example.DDSwap_i("dragDiv3");
         // dd3.setPadding(10, 40);
@@ -71,10 +76,6 @@ YAHOO.example.DDApp = function() {
 
     return {
         init: function() {
-
-            if (typeof(ygLogger) != "undefined") {
-                ygLogger.init(document.getElementById("logDiv"));
-            }
 
             // YAHOO.util.Event.on("testtext", "keydown", handleKeypress);
             initPointMode();
@@ -168,6 +169,7 @@ DDSwap
   <div id="dragDiv3" class="testSquare" style="background:url(img/sq3.png) 0 0 no-repeat;background-color:#7E5B60;top:430px; left:325px">DDSwap</div>
 </div>
 
+  <div id="dragDiv4" class="testSquare" style="border:0px solid black;height: 141px;width:160px;background-color:#7E5B60;top:630px; left:525px">a proxy</div>
 <!--
 </div>
 -->

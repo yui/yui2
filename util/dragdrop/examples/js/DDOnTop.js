@@ -12,14 +12,15 @@
  * @param {String} id the id of the linked element
  * @param {String} sGroup the group of related DragDrop items
  */
-YAHOO.example.DDOnTop = function(id, sGroup) {
+YAHOO.example.DDOnTop = function(id, sGroup, config) {
     if (id) {
-        this.init(id, sGroup);
-        this.logger = new ygLogger("DDOnTop");
+        this.init(id, sGroup, config);
+        this.logger = this.logger || YAHOO;
     }
 };
 
-YAHOO.example.DDOnTop.prototype = new YAHOO.util.DD();
+// YAHOO.example.DDOnTop.prototype = new YAHOO.util.DD();
+YAHOO.extend(YAHOO.example.DDOnTop, YAHOO.util.DD);
 
 /**
  * The inital z-index of the element, stored so we can restore it later
@@ -29,7 +30,7 @@ YAHOO.example.DDOnTop.prototype = new YAHOO.util.DD();
 YAHOO.example.DDOnTop.prototype.origZ = 0;
 
 YAHOO.example.DDOnTop.prototype.startDrag = function(x, y) {
-    this.logger.debug(this.id + " startDrag");
+    this.logger.log(this.id + " startDrag");
 
     var style = this.getEl().style;
 
@@ -41,7 +42,7 @@ YAHOO.example.DDOnTop.prototype.startDrag = function(x, y) {
 };
 
 YAHOO.example.DDOnTop.prototype.endDrag = function(e) {
-    this.logger.debug(this.id + " endDrag");
+    this.logger.log(this.id + " endDrag");
 
     // restore the original z-index
     this.getEl().style.zIndex = this.origZ;

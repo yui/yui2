@@ -19,23 +19,13 @@ if ($mode == "dist") {
 
 <?php include('inc/inc-alljs.php'); ?>
 
+        <script type="text/javascript" src="js/DDMy.js" ></script>
+
 <script type="text/javascript" language="JavaScript">
-	var gLogger = new ygLogger("my.html");
 	var dds = new Array();
 	
 		
-	function toggleygLogger(el) {
-		if (el.value == "Disable Logger") {
-			ygLogger.disable();
-			el.value = "Enable ygLogger";
-		} else {
-			ygLogger.enable();
-			el.value = "Disable Logger";
-		}
-	}
-	
 	function dragDropInit() {
-		ygLogger.init(document.getElementById("logDiv"));
 
 		
 		// center column
@@ -732,19 +722,9 @@ ___ ___ ___ </font></center></td>
 <a href="#" onclick="return ym_rm('63798', this);" title="Remove"><img src="my_files/x_d.gif" alt="Remove" border="0" height="13" hspace="2" width="17"></a></td></tr></tbody></table></div><div id="m_63798" style="display: block;"><table border="0" cellpadding="3" cellspacing="0" width="100%">
 <tbody><tr><td bgcolor="#d2e4fc">Tests</td></tr>
 <tr><td>
-<ul>
-<li><a href="drag.<?php echo $ext ?>?mode=<?php echo $mode ?>">Drag test</a></li>
-<li><a href="ontop.<?php echo $ext ?>?mode=<?php echo $mode ?>">Always on top test</a></li>
-<li><a href="proxy.<?php echo $ext ?>?mode=<?php echo $mode ?>">Framed test</a> </li>
-<li><a href="list.<?php echo $ext ?>?mode=<?php echo $mode ?>">Sortable List</a> </li>
-<li><a href="my.<?php echo $ext ?>?mode=<?php echo $mode ?>">My Yahoo! - column constraint</a></li>
-<li><a href="my2.<?php echo $ext ?>?mode=<?php echo $mode ?>">My Yahoo! - no constraint</a></li>
-<li><a href="slider.<?php echo $ext ?>?mode=<?php echo $mode ?>">Slider</a></li>
-<li><a href="multihandle.<?php echo $ext ?>?mode=<?php echo $mode ?>">Multiple Handles</a></li>
-<li><a href="targetable.<?php echo $ext ?>?mode=<?php echo $mode ?>">Targetable Affordance</a></li>
-<li><a href="grid.<?php echo $ext ?>?mode=<?php echo $mode ?>">Grid</a></li>
 
-</ul>
+
+<?php include('inc/inc-rightbar.php'); ?>
 
 
 </td>

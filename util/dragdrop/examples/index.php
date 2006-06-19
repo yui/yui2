@@ -62,8 +62,6 @@ if ($mode == "dist") {
 		</p>
 
 <?php } ?>
-      <p><a href="slider.<?php echo $ext ?>?mode=<?php echo $mode ?>">Slider</a>:
-	  Slider implementations.</p>
 
 	   <p><a href="multihandle.<?php echo $ext ?>?mode=<?php echo $mode ?>">Multiple drag handles</a>:
 	  Demonstrates the support for multiple drag handles introduced in release 0.9.1.

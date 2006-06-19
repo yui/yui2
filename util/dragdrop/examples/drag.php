@@ -10,15 +10,19 @@
 <script type="text/javascript">
 
 YAHOO.example.DDApp = function() {
-    var dd, dd2, dd3, logger;
+    var dd, dd2, dd3;
     return {
         init: function() {
-            if (typeof(ygLogger) != "undefined") {
-                ygLogger.init(document.getElementById("logDiv"));
-                logger = new ygLogger("DDApp");
-            }
 
             dd = new YAHOO.util.DD("dragDiv1");
+
+            dd.onDragDrop = function(e, id) {
+                var draggedEl = this.getEl();
+                var targetedEl = document.getElementById(id);
+                var DOM = YAHOO.util.Dom;
+                DOM.setX(draggedEl, DOM.getX(targetedEl));
+            };
+
             dd2 = new YAHOO.util.DD("dragDiv2");
             dd3 = new YAHOO.util.DD("dragDiv3");
         }
@@ -72,5 +76,20 @@ include('inc/inc-bottom.php');
 <div id="dragDiv1" class="testSquare" >YAHOO.util.DD</div>
 <div id="dragDiv2" class="testSquare" >YAHOO.util.DD</div>
 <div id="dragDiv3" class="testSquare" >YAHOO.util.DD</div>
+<form name="formTest" action="http://www.yahoo.com" method="get">                                                                                                    
+<input type="text" id="txtTest" />                                                                                                                   
+                                                                                                                                                     
+<script>                                                                                                                                             
+YAHOO.util.Event.addListener('txtTest','keypress',txtTest_keydown);                                                                                   
+                                                                                                                                                     
+function txtTest_keydown (e) {                                                                                                                       
+    YAHOO.util.Event.stopEvent(e);                                                                                                                   
+    alert(YAHOO.util.Event.getCharCode(e));                                                                                                       
+    // return false;
+}                                                                                                                                                    
+</script>                                                                                                                                            
+</form>   
+
+
 </body>
 </html>

@@ -105,8 +105,6 @@
       picker.
       </p>
 
- 
-
         <div id="pickerPanel" class="dragPanel">
             <h4 id="pickerHandle">&nbsp;</h4>
             <div id="pickerDiv">
@@ -147,12 +145,6 @@
   </div>
 </div>
 
-<div id="content"> 
-
-
-		</div> 
-     
-
 <?php include('inc/inc-alljs.php'); ?>
 
 <script type="text/javascript" src="js/color.js" ></script>
@@ -163,16 +155,10 @@
 
 	var hue;
 	var picker;
-	var gLogger;
 	var dd1, dd2;
 	var r, g, b;
 
 	function init() {
-		if (typeof(ygLogger) != "undefined") {
-			ygLogger.init(document.getElementById("logDiv"));
-			gLogger = new ygLogger("slider.php");
-		}
-
         standardSliderInit();
         // rgbInit();
         pickerInit();
@@ -209,7 +195,7 @@
 		var h = (180 - hue.getValue()) / 180;
 		if (h == 1) { h = 0; }
 
-		gLogger.debug("hue " + hue.getValue());
+		YAHOO.log("hue " + hue.getValue());
 
 		var a = YAHOO.util.Color.hsv2rgb( h, 1, 1);
 
@@ -225,17 +211,17 @@
 		document.getElementById("pickerhval").value = (h*2);
 
 		h = h / 180;
-		gLogger.debug("h " + hue.getValue());
+		YAHOO.log("h " + hue.getValue());
 
 		var s = picker.getXValue() / 180;
 		document.getElementById("pickersval").value = Math.round(s * 100);
 
-		gLogger.debug("s " + s);
+		YAHOO.log("s " + s);
 
 		var v = (180 - picker.getYValue()) / 180;
 		document.getElementById("pickervval").value = Math.round(v * 100);
 
-		gLogger.debug("v " + v);
+		YAHOO.log("v " + v);
 
 		var a = YAHOO.util.Color.hsv2rgb( h, s, v );
 
@@ -324,7 +310,7 @@
 		curg = Math.min(g.getValue() * 2, 255);
 		curb = Math.min(b.getValue() * 2, 255);
 
-        gLogger.debug("updateSliderColor " + curr + ", " + curg + ", " + curb);
+        YAHOO.log("updateSliderColor " + curr + ", " + curg + ", " + curb);
 
 		var d;
 		for (var i=0; i<34; i++) {
@@ -358,7 +344,7 @@
 	}
 
 	function userUpdate(isHex) {
-        gLogger.debug("userupdate");
+        YAHOO.log("userupdate");
 		var v;
 		var f = document.forms['rgbform'];
 
@@ -375,7 +361,7 @@
 				hexval = newval;
 			}
 
-			gLogger.debug("hexval:" + hexval);
+			YAHOO.log("hexval:" + hexval);
 
 			if (hexval.length != 6) {
 				alert("illegal hex code: " + hexval);
@@ -454,7 +440,7 @@ var slider1, slider2;
 
 // accessibility keypress test
 function handleHorizSliderKey(slider, ev) {
-	if (gLogger) gLogger.debug("horizontal slider keypress");
+    YAHOO.log("horizontal slider keypress");
 
     // Firefox 1.5+ only at this point
     if (!slider.getAttributeNS) {
@@ -472,7 +458,7 @@ function handleHorizSliderKey(slider, ev) {
 
 	var kc = ev.keyCode;
 
-	if (gLogger) gLogger.debug("keycode: " + kc);
+	YAHOO.log("keycode: " + kc);
 
 	if (kc == YAHOO.util.Key.DOM_VK_LEFT) {
 		delta = -25;
@@ -498,7 +484,7 @@ function handleHorizSliderKey(slider, ev) {
 }
 
 function handleVertSliderKey(slider, ev) {
-	if (gLogger) gLogger.debug("vertical slider keypress");
+	YAHOO.log("vertical slider keypress");
 
     // Firefox 1.5+ only at this point
     if (!slider.getAttributeNS) {

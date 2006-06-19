@@ -1,4 +1,3 @@
-
 /* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
 
 /**
@@ -10,12 +9,12 @@
  * @param {String} id the id of the linked element
  * @param {String} sGroup the group of related DragDrop objects
  */
-YAHOO.example.DDList = function(id, sGroup) {
+YAHOO.example.DDList = function(id, sGroup, config) {
 
     if (id) {
-        this.init(id, sGroup);
+        this.init(id, sGroup, config);
         this.initFrame();
-        this.logger = new ygLogger("YAHOO.example.DDList");
+        this.logger = this.logger || YAHOO;
     }
 
     var s = this.getDragEl().style;
@@ -25,10 +24,11 @@ YAHOO.example.DDList = function(id, sGroup) {
     s.filter = "alpha(opacity=76)";
 };
 
-YAHOO.example.DDList.prototype = new YAHOO.util.DDProxy();
+// YAHOO.example.DDList.prototype = new YAHOO.util.DDProxy();
+YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy);
 
 YAHOO.example.DDList.prototype.startDrag = function(x, y) {
-    this.logger.debug(this.id + " startDrag");
+    this.logger.log(this.id + " startDrag");
 
     var dragEl = this.getDragEl();
     var clickEl = this.getEl();
@@ -49,7 +49,7 @@ YAHOO.example.DDList.prototype.onDrag = function(e, id) {
 };
 
 YAHOO.example.DDList.prototype.onDragOver = function(e, id) {
-    // this.logger.debug(this.id.toString() + " onDragOver " + id);
+    // this.logger.log(this.id.toString() + " onDragOver " + id);
     var el;
     
     if ("string" == typeof id) {
@@ -57,10 +57,9 @@ YAHOO.example.DDList.prototype.onDragOver = function(e, id) {
     } else { 
         el = YAHOO.util.DDM.getBestMatch(id).getEl();
     }
-
     
     var mid = YAHOO.util.DDM.getPosY(el) + ( Math.floor(el.offsetTop / 2));
-    this.logger.debug("mid: " + mid);
+    this.logger.log("mid: " + mid);
 
     if (YAHOO.util.Event.getPageY(e) < mid) {
         var el2 = this.getEl();
@@ -70,7 +69,7 @@ YAHOO.example.DDList.prototype.onDragOver = function(e, id) {
 };
 
 YAHOO.example.DDList.prototype.onDragEnter = function(e, id) {
-    // this.logger.debug(this.id.toString() + " onDragEnter " + id);
+    // this.logger.log(this.id.toString() + " onDragEnter " + id);
     // this.getDragEl().style.border = "1px solid #449629";
 };
 
@@ -79,14 +78,25 @@ YAHOO.example.DDList.prototype.onDragOut = function(e, id) {
     // this.getDragEl().style.border = "1px solid #964428";
 };
 
+YAHOO.example.DDList.prototype.toString = function() {
+    return "DDList " + this.id;
+};
+
+
 /////////////////////////////////////////////////////////////////////////////
 
-YAHOO.example.DDListBoundary = function(id, sGroup) {
+YAHOO.example.DDListBoundary = function(id, sGroup, config) {
     if (id) {
-        this.init(id, sGroup);
-        this.logger = new ygLogger("DDListBoundary");
+        this.init(id, sGroup, config);
+        this.logger = this.logger || YAHOO;
         this.isBoundary = true;
     }
 };
 
-YAHOO.example.DDListBoundary.prototype = new YAHOO.util.DDTarget();
+// YAHOO.example.DDListBoundary.prototype = new YAHOO.util.DDTarget();
+YAHOO.extend(YAHOO.example.DDListBoundary, YAHOO.util.DDTarget);
+
+YAHOO.example.DDListBoundary.prototype.toString = function() {
+    return "DDListBoundary " + this.id;
+};
+

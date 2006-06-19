@@ -7,14 +7,13 @@
   
 <?php include('inc/inc-alljs.php'); ?>
 
+<script type="text/javascript" src="js/DDList.js" ></script>
+
 <script type="text/javascript">
 
 YAHOO.example.DDApp = function() {
     return {
         init: function() {
-            if (typeof(ygLogger) != "undefined") {
-                ygLogger.init(document.getElementById("logDiv"));
-            }
 
             var i = 0;
             for (j=0;j < <?php echo $items ?>;++j) {

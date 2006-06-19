@@ -1,5 +1,3 @@
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
 /**
  * A DragDrop implementation that inserts an empty, bordered div into
  * the document that follows the cursor during drag operations.  At the time of
@@ -14,49 +12,29 @@
  * @constructor
  * @param {String} id the id of the linked html element
  * @param {String} sGroup the group of related DragDrop objects
+ * @param {object} config an object containing configurable attributes
+ *                Valid properties for DDProxy in addition to those in DragDrop: 
+ *                   resizeFrame, centerFrame, dragElId
  */
-YAHOO.util.DDProxy = function(id, sGroup) {
+YAHOO.util.DDProxy = function(id, sGroup, config) {
     if (id) {
-        this.forceCssPosition = false;
-
-        this.init(id, sGroup);
+        this.init(id, sGroup, config);
         this.initFrame(); 
-        this.logger.setModuleName("DDProxy");
     }
 };
 
-YAHOO.util.DDProxy.prototype = new YAHOO.util.DD();
+YAHOO.extend(YAHOO.util.DDProxy, YAHOO.util.DD);
 
 /**
- * A reference to the one proxy div element we create for all instances of this 
- * class
- *
- * @type HTMLElement
- */
-YAHOO.util.DDProxy.frameDiv = null;
-
-/**
- * the drag frame div id
- *
+ * The default drag frame div id
  * @type String
  */
 YAHOO.util.DDProxy.dragElId = "ygddfdiv";
 
 /**
- * The border width of the frame.  This is used when we resize the frame to
- * the size of the linked element.  We substract the border width to make
- * the div the correct size.
- *
- * @TODO find a better way to handle this
- *
- * @type int
- */
-YAHOO.util.DDProxy.prototype.borderWidth = 2;
-
-/**
  * By default we resize the drag frame to be the same size as the element
  * we want to drag (this is to get the frame effect).  We can turn it off
- * if we want a different behavior (ex: ygDDMy2)
+ * if we want a different behavior.
  *
  * @type boolean
  */
@@ -66,35 +44,47 @@ YAHOO.util.DDProxy.prototype.resizeFrame = true;
  * By default the frame is positioned exactly where the drag element is, so
  * we use the cursor offset provided by YAHOO.util.DD.  Another option that works only if
  * you do not have constraints on the obj is to have the drag frame centered
- * around the cursor.  Set centerFrame to true for this effect.  Ex: 
- * ygDDMy2
+ * around the cursor.  Set centerFrame to true for this effect.
  *
  * @type boolean
  */
 YAHOO.util.DDProxy.prototype.centerFrame = false;
 
 /**
+ * Previous proxy element size.
+ * @private
+ */
+YAHOO.util.DDProxy.prototype._previousSize = [-1, -1];
+
+/**
  * Create the drag frame if needed
  */
-YAHOO.util.DDProxy.createFrame = function() {
-    var THIS = YAHOO.util.DDProxy;
+YAHOO.util.DDProxy.prototype.createFrame = function() {
+    var self = this;
+    var body = document.body;
 
-    if (!document || !document.body) {
-        setTimeout(THIS.createFrame, 50);
+    if (!body || !body.firstChild) {
+        setTimeout( function() { self.createFrame(); }, 50 );
         return;
     }
 
-    if (!THIS.frameDiv) {
-        THIS.frameDiv = document.createElement("div");
-        THIS.frameDiv.id = THIS.dragElId;
-        var s = THIS.frameDiv.style;
-        s.position = "absolute";
-        s.visibility = "hidden";
-        s.cursor = "move";
-        s.border = "2px solid #aaa";
-        s.zIndex = 999;
-        document.body.appendChild(THIS.frameDiv);
+    var div = this.getDragEl();
 
+    if (!div) {
+        div    = document.createElement("div");
+        div.id = this.dragElId;
+        var s  = div.style;
+
+        s.position   = "absolute";
+        s.visibility = "hidden";
+        s.cursor     = "move";
+        s.border     = "2px solid #aaa";
+        s.zIndex     = 999;
+
+        // appendChild can blow up IE if invoked prior to the window load event
+        // while rendering a table.  It is possible there are other scenarios 
+        // that would cause this to happen as well.
+        body.insertBefore(div, body.firstChild);
     }
 };
 
@@ -103,10 +93,22 @@ YAHOO.util.DDProxy.createFrame = function() {
  * constructor of all subclasses
  */
 YAHOO.util.DDProxy.prototype.initFrame = function() {
-    YAHOO.util.DDProxy.createFrame();
-    this.setDragElId(YAHOO.util.DDProxy.dragElId);
-    this.useAbsMath = true;
+    // YAHOO.util.DDProxy.createFrame();
+    // this.setDragElId(YAHOO.util.DDProxy.dragElId);
 
+    this.createFrame();
+
+};
+
+YAHOO.util.DDProxy.prototype.applyConfig = function() {
+    this.logger.log("DDProxy applyConfig");
+    YAHOO.util.DDProxy.superclass.applyConfig.call(this);
+
+    this.resizeFrame = (this.config.resizeFrame !== false);
+    this.centerFrame = (this.config.centerFrame);
+    this.setDragElId(this.config.dragElId || YAHOO.util.DDProxy.dragElId);
+
+    //this.logger.log("dragElId: " + this.dragElId);
 };
 
 /**
@@ -119,22 +121,54 @@ YAHOO.util.DDProxy.prototype.initFrame = function() {
  */
 YAHOO.util.DDProxy.prototype.showFrame = function(iPageX, iPageY) {
     var el = this.getEl();
+    var dragEl = this.getDragEl();
+    var s = dragEl.style;
 
-    var s = this.getDragEl().style;
-
-    if (this.resizeFrame) {
-        s.width = (parseInt(el.offsetWidth, 10) - (2*this.borderWidth)) + "px";
-        s.height = (parseInt(el.offsetHeight, 10) - (2*this.borderWidth)) + "px";
-    }
+    this._resizeProxy();
 
     if (this.centerFrame) {
-        this.setDelta(Math.round(parseInt(s.width, 10)/2), 
-                Math.round(parseInt(s.width, 10)/2));
+        this.setDelta( Math.round(parseInt(s.width,  10)/2), 
+                       Math.round(parseInt(s.height, 10)/2) );
     }
 
     this.setDragElPos(iPageX, iPageY);
 
-    s.visibility = "";
+    // s.visibility = "";
+    YAHOO.util.Dom.setStyle(dragEl, "visibility", "visible"); 
+};
+
+YAHOO.util.DDProxy.prototype._resizeProxy = function() {
+    var DOM    = YAHOO.util.Dom;
+    var el     = this.getEl();
+    var dragEl = this.getDragEl();
+
+    if (this.resizeFrame) {
+        var bt = parseInt( DOM.getStyle(dragEl, "borderTopWidth"    ), 10);
+        var br = parseInt( DOM.getStyle(dragEl, "borderRightWidth"  ), 10);
+        var bb = parseInt( DOM.getStyle(dragEl, "borderBottomWidth" ), 10);
+        var bl = parseInt( DOM.getStyle(dragEl, "borderLeftWidth"   ), 10);
+
+        if (isNaN(bt)) { bt = 0; }
+        if (isNaN(br)) { br = 0; }
+        if (isNaN(bb)) { bb = 0; }
+        if (isNaN(bl)) { bl = 0; }
+
+        this.logger.log("proxy size: " + bt + "  " + br + " " + bb + " " + bl);
+
+        var newWidth  = el.offsetWidth - br - bl;
+        var newHeight = el.offsetHeight - bt - bb;
+
+        if (this._previousSize[0] !== newWidth && 
+                        this._previousSize[1] !== newHeight) {
+
+            this.logger.log("Resizing proxy element");
+
+            DOM.setStyle( dragEl, "width",  newWidth  + "px" );
+            DOM.setStyle( dragEl, "height", newHeight + "px" );
+
+            this._previousSize = [newWidth, newHeight];
+        }
+    }
 };
 
 // overrides YAHOO.util.DragDrop
@@ -148,35 +182,41 @@ YAHOO.util.DDProxy.prototype.b4MouseDown = function(e) {
 // overrides YAHOO.util.DragDrop
 YAHOO.util.DDProxy.prototype.b4StartDrag = function(x, y) {
     // show the drag frame
-    this.logger.debug("start drag show frame, x: " + x + ", y: " + y);
+    this.logger.log("start drag show frame, x: " + x + ", y: " + y);
     this.showFrame(x, y);
 };
 
 // overrides YAHOO.util.DragDrop
 YAHOO.util.DDProxy.prototype.b4EndDrag = function(e) {
-    this.logger.debug(this.id + " b4EndDrag");
-
-    // hide the drag frame
-    var s = this.getDragEl().style;
-    s.visibility = "hidden";
+    this.logger.log(this.id + " b4EndDrag");
+    YAHOO.util.Dom.setStyle(this.getDragEl(), "visibility", "hidden"); 
 };
 
 // overrides YAHOO.util.DragDrop
 // By default we try to move the element to the last location of the frame.  
 // This is so that the default behavior mirrors that of YAHOO.util.DD.  
 YAHOO.util.DDProxy.prototype.endDrag = function(e) {
-    this.logger.debug(this.id + " endDrag");
+    var DOM = YAHOO.util.Dom;
+    this.logger.log(this.id + " endDrag");
     var lel = this.getEl();
     var del = this.getDragEl();
 
     // Show the drag frame briefly so we can get its position
-    del.style.visibility = "";
+    // del.style.visibility = "";
+    DOM.setStyle(del, "visibility", ""); 
 
     // Hide the linked element before the move to get around a Safari 
     // rendering bug.
-    lel.style.visibility = "hidden";
+    //lel.style.visibility = "hidden";
+    DOM.setStyle(lel, "visibility", "hidden"); 
     YAHOO.util.DDM.moveToEl(lel, del);
-    del.style.visibility = "hidden";
-    lel.style.visibility = "";
+    //del.style.visibility = "hidden";
+    DOM.setStyle(del, "visibility", "hidden"); 
+    //lel.style.visibility = "";
+    DOM.setStyle(lel, "visibility", ""); 
+};
+
+YAHOO.util.DDProxy.prototype.toString = function() {
+    return ("DDProxy " + this.id);
 };
 

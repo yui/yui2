@@ -5,17 +5,14 @@
   
 <?php include('inc/inc-alljs.php'); ?>
 
+<script type="text/javascript" src="js/DDOnTop.js" ></script>
+
 <script type="text/javascript">
 
 YAHOO.example.DDApp = function() {
     var dd, dd3, logger;
     return {
         init: function() {
-            if (typeof(ygLogger) != "undefined") {
-                ygLogger.init(document.getElementById("logDiv"));
-                logger = new ygLogger("test_noimpl.php");
-            }
-
             dd = new YAHOO.example.DDOnTop("dragDiv1");
             dd.setHandleElId("handle1");
             dd.setHandleElId("handle2");

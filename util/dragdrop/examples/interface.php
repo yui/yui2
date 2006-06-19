@@ -7,14 +7,9 @@
 
 <script type="text/javascript">
 	
-	// if (ygLogger) var gLogger = new ygLogger("test_noimpl.php");
 	var dd, dd2, dd3;
 	
 	function dragDropInit() {
-		if (typeof(ygLogger) != "undefined") {
-			ygLogger.init(document.getElementById("logDiv"));
-		}
-
 		dd = new YAHOO.util.DragDrop("dragDiv1");
 		dd2 = new YAHOO.util.DragDrop("dragDiv2");
 		dd3 = new YAHOO.util.DragDrop("dragDiv3");

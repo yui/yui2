@@ -5,17 +5,20 @@
   
 <?php include('inc/inc-alljs.php'); ?>
 
+        <script type="text/javascript" src="js/DDPlayer.js" ></script>
 <script type="text/javascript">
 YAHOO.example.DDApp = function() {
     var slots = [];
     var players = [];
-    var logger;
+    var Event = YAHOO.util.Event;
+    var DDM = YAHOO.util.DDM;
     return {
+
+        remove: function() {
+            players[4].removeFromGroup("bottomslots");
+        },
+
         init: function() {
-            if (typeof(ygLogger) != "undefined") {
-                ygLogger.init(document.getElementById("logDiv"));
-                logger = new ygLogger("test_draggable.php");
-            }
             
             // slots
             slots[0] = new YAHOO.util.DDTarget("t1", "topslots");
@@ -35,12 +38,14 @@ YAHOO.example.DDApp = function() {
             players[5] = new YAHOO.example.DDPlayer("pboth2", "topslots");
             players[5].addToGroup("bottomslots");
 
-            YAHOO.util.DDM.mode = document.getElementById("ddmode").selectedIndex;
+            DDM.mode = document.getElementById("ddmode").selectedIndex;
         }
+
     };
 } ();
 
 YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
+YAHOO.util.Event.addListener("removeButton", "click", YAHOO.example.DDApp.remove);
 
 </script>
 <body>
@@ -60,7 +65,10 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
         </select>
       </p>
       <div id="workArea">&nbsp;</div>
-      <p>&nbsp;</p>
+      <p>
+      
+<input id="removeButton" type="button" value="remove" />
+      </p>
     </div>
     </form>
   </div>
@@ -100,6 +108,7 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
 <div class="player" id="pb2" >4</div>
 <div class="player" id="pboth1" >5</div>
 <div class="player" id="pboth2" >6</div>
+
 
 </body>
 </html>

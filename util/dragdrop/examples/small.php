@@ -10,21 +10,17 @@
 <script type="text/javascript">
 
 YAHOO.example.DDApp = function() {
-    var dd, dd2, dd3, logger;
+    var dd, dd2, dd3;
     var self = this;
     return {
         init: function() {
-            if (typeof(ygLogger) != "undefined") {
-                ygLogger.init(document.getElementById("logDiv"));
-                logger = new ygLogger("DDApp");
-            }
-
             dd = new YAHOO.util.DD("dragDiv1");
             dd2 = new YAHOO.util.DD("dragDiv2");
             dd3 = new YAHOO.util.DD("dragDiv3");
 
             YAHOO.util.Event.addListener("dragDiv1", "focusout", focusIn);
         },
+
         focusIn: function(e) {
             alert("focusin");
         }

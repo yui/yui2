@@ -30,13 +30,9 @@ body { background: url("img/grid.png") }
 <script type="text/javascript">
 
 YAHOO.example.DDApp = function() {
-    var dd, dd2, dd3, logger;
+    var dd, dd2, dd3;
     return {
         init: function() {
-            if (typeof(ygLogger) != "undefined") {
-                ygLogger.init(document.getElementById("logDiv"));
-                logger = new ygLogger("DDApp");
-            }
 
             dd = new YAHOO.util.DD("dragDiv1");
             dd.setXConstraint(1000, 1000, 25);

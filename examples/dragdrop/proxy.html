@@ -7,30 +7,21 @@
 <body>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
-<script type="text/javascript" src="js/log.js" ></script>
 <script type="text/javascript" src="../../build/event/event.js" ></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
-<script type="text/javascript" src="../../build/animation/animation.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js" ></script>
 
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
-        <script type="text/javascript" src="js/DDOnTop.js" ></script>
         <script type="text/javascript" src="js/DDSwap.js" ></script>
-        <script type="text/javascript" src="js/DDMy.js" ></script>
-        <script type="text/javascript" src="js/DDMy2.js" ></script>
-        <script type="text/javascript" src="js/DDList.js" ></script>
-        <script type="text/javascript" src="js/DDPlayer.js" ></script>
-        <script type="text/javascript" src="js/DDResize.js" ></script>
 
-    
 <script type="text/javascript" language="JavaScript">
 
 YAHOO.example.DDApp = function() {
-    var logger = new ygLogger("DDApp");
     var dd, dd2, dd3;
 
     function handleKeypress(e) {
         alert("asdf");
-        logger.debug("keypress");
+        YAHOO.log("keypress");
         YAHOO.util.Event.stopEvent(e);
         e.cancel = true;
         return false;
@@ -38,20 +29,23 @@ YAHOO.example.DDApp = function() {
 
     function initPointMode() {
 
-        logger.debug("point mode");
+        YAHOO.log("point mode");
 
         unreg();
 
         YAHOO.util.DDM.mode = YAHOO.util.DDM.POINT;
 
-        dd = new YAHOO.example.DDSwap("dragDiv1");
+        dd = new YAHOO.example.DDSwap("dragDiv1", "proxytest", 
+                    { dragElId: "dragDiv4" });
         // dd.setPadding(10);
+        //dd.setXConstraint(0,0);
 
-        dd2 = new YAHOO.example.DDSwap("dragDiv2");
+        dd2 = new YAHOO.example.DDSwap("dragDiv2", "proxytest");
         dd2.addInvalidHandleType("input");
         // dd2.setPadding(10, 20, 30, 40);
+        dd2.setXConstraint(0,0);
 
-        dd3 = new YAHOO.example.DDSwap("dragDiv3");
+        dd3 = new YAHOO.example.DDSwap("dragDiv3", "proxytest");
         // dd3.setPadding(10, 40);
         // dd3.setPadding(10, 0, 20, 40);
 
@@ -60,7 +54,7 @@ YAHOO.example.DDApp = function() {
 
     function initIntersectMode() {
 
-        logger.debug("intersect mode");
+        YAHOO.log("intersect mode");
 
         unreg();
 
@@ -72,6 +66,7 @@ YAHOO.example.DDApp = function() {
         dd2 = new YAHOO.example.DDSwap_i("dragDiv2");
         dd2.addInvalidHandleType("input");
         //dd2.setPadding(10, 20, 30, 40);
+        dd2.setXConstraint(0,0);
 
         dd3 = new YAHOO.example.DDSwap_i("dragDiv3");
         // dd3.setPadding(10, 40);
@@ -86,10 +81,6 @@ YAHOO.example.DDApp = function() {
 
     return {
         init: function() {
-
-            if (typeof(ygLogger) != "undefined") {
-                ygLogger.init(document.getElementById("logDiv"));
-            }
 
             // YAHOO.util.Event.on("testtext", "keydown", handleKeypress);
             initPointMode();
@@ -132,25 +123,27 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
   
 <style type="text/css">
 
-    #logDiv {
-        font-family:Arial, Helvetica, sans-serif;
-        position:relative;overflow:auto;text-align:left;z-index:998;
-        font-size:84%;width:100%;top:0px; height:280px;
-    }
+/* ylogger default styles */
+#ylogger {position:absolute;top:1em;right:1em;}
+/*
+.ylogger {padding:1em;background-color:#AAA;border:1px solid black;font-family:monospace;font-size:77%;z-index:9000;}
+*/
+.ylogger {font-family:monospace;z-index:9000;}
+.ylogger p {margin:1px;padding:.1em;}
+.ylogger button {font-family:monospace;font-size:77%;}
+.ylogger .ylog_hd {position:relative;margin-top:2px;padding:2px;background-color:#575757;color:#FFF;}
+.ylogger .ylog_bd {height: 1100px;position:relative;background-color:#FFF;border:1px solid gray;overflow:auto;width:100%;}
+.ylogger .ylog_ft {position:relative;margin-top:0.5em;margin-bottom:0.1em;}
+.ylogger .ylog_btns {position:relative;float:right;bottom:0.25em;}
+.ylogger .info {background-color:#A7CC25;} /* A7CC25 green */
+.ylogger .warn {background-color:#F58516;} /* F58516 orange */
+.ylogger .error {background-color:#E32F0B;} /* E32F0B red */
+.ylogger .time {background-color:#A6C9D7;} /* A6C9D7 blue */
+.ylogger .window {background-color:#F2E886;} /* F2E886 tan  */
 
-    #logFooter { 
-        font-size:82%;background-color:#cccccc;padding:5px;line-height:14px 
-    }
-
-    #ylogo { 
-        position:absolute;top:5px;left:5px; 
-    }
-
-    #logHeader input {
-        font-size:80%;
-    }
 
 </style>
+
 
 <img id="ylogo" src="img/logo.gif" />
 
@@ -172,7 +165,9 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
 <li><a href="ontop.html?mode=dist">Always on top test</a></li>
 <li><a href="proxy.html?mode=dist">Framed test</a> </li>
 <li><a href="list.html?mode=dist">Sortable List</a> </li>
+<!--
 <li><a href="slider.html?mode=dist">Slider</a></li>
+-->
 <li><a href="multihandle.html?mode=dist">Multiple Handles</a></li>
 <li><a href="targetable.html?mode=dist">Targetable Affordance</a></li>
 <li><a href="grid.html?mode=dist">Grid</a></li>
@@ -245,6 +240,7 @@ DDSwap
   <div id="dragDiv3" class="testSquare" style="background:url(img/sq3.png) 0 0 no-repeat;background-color:#7E5B60;top:430px; left:325px">DDSwap</div>
 </div>
 
+  <div id="dragDiv4" class="testSquare" style="border:0px solid black;height: 141px;width:160px;background-color:#7E5B60;top:630px; left:525px">a proxy</div>
 <!--
 </div>
 -->

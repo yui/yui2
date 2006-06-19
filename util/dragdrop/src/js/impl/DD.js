@@ -1,5 +1,3 @@
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
 /**
  * A DragDrop implementation where the linked element follows the 
  * mouse cursor during a drag.
@@ -8,15 +6,18 @@
  * @constructor
  * @param {String} id the id of the linked element 
  * @param {String} sGroup the group of related DragDrop items
+ * @param {object} config an object containing configurable attributes
+ *                Valid properties for DD: 
+ *                    scroll
  */
-YAHOO.util.DD = function(id, sGroup) {
+YAHOO.util.DD = function(id, sGroup, config) {
     if (id) {
-        this.init(id, sGroup);
-        this.logger.setModuleName("DD");
+        this.init(id, sGroup, config);
     }
 };
 
-YAHOO.util.DD.prototype = new YAHOO.util.DragDrop();
+// YAHOO.util.DD.prototype = new YAHOO.util.DragDrop();
+YAHOO.extend(YAHOO.util.DD, YAHOO.util.DragDrop);
 
 /**
  * When set to true, the utility automatically tries to scroll the browser
@@ -35,12 +36,14 @@ YAHOO.util.DD.prototype.scroll = true;
  * @param {int} iPageY the Y coordinate of the click
  */
 YAHOO.util.DD.prototype.autoOffset = function(iPageX, iPageY) {
-    var el = this.getEl();
-    var aCoord = YAHOO.util.Dom.getXY(el);
-    var x = iPageX - aCoord[0];
-    var y = iPageY - aCoord[1];
+    // var el = this.getEl();
+    // var aCoord = YAHOO.util.Dom.getXY(el);
+    // var x = iPageX - aCoord[0];
+    // var y = iPageY - aCoord[1];
+    var x = iPageX - this.startPageX;
+    var y = iPageY - this.startPageY;
     this.setDelta(x, y);
-    this.logger.debug("autoOffset el pos: " + aCoord + ", delta: " + x + "," + y);
+    // this.logger.log("autoOffset el pos: " + aCoord + ", delta: " + x + "," + y);
 };
 
 /** 
@@ -54,7 +57,7 @@ YAHOO.util.DD.prototype.autoOffset = function(iPageX, iPageY) {
 YAHOO.util.DD.prototype.setDelta = function(iDeltaX, iDeltaY) {
     this.deltaX = iDeltaX;
     this.deltaY = iDeltaY;
-    this.logger.debug("deltaX:" + this.deltaX + ", deltaY:" + this.deltaY);
+    this.logger.log("deltaX:" + this.deltaX + ", deltaY:" + this.deltaY);
 };
 
 /**
@@ -75,7 +78,7 @@ YAHOO.util.DD.prototype.setDragElPos = function(iPageX, iPageY) {
 
     // if (!this.cssVerified) {
         // var pos = el.style.position;
-        // this.logger.debug("drag element position: " + pos);
+        // this.logger.log("drag element position: " + pos);
     // }
 
     this.alignElWithMouse(el, iPageX, iPageY);
@@ -93,9 +96,25 @@ YAHOO.util.DD.prototype.setDragElPos = function(iPageX, iPageY) {
  */
 YAHOO.util.DD.prototype.alignElWithMouse = function(el, iPageX, iPageY) {
     var oCoord = this.getTargetCoord(iPageX, iPageY);
-    var aCoord = [oCoord.x, oCoord.y];
-    // this.logger.debug("****alignElWithMouse : " + el.id + ", " + aCoord + ", " + el.style.display);
-    YAHOO.util.Dom.setXY(el, aCoord);
+    // this.logger.log("****alignElWithMouse : " + el.id + ", " + aCoord + ", " + el.style.display);
+
+    // this.deltaSetXY = null;
+    if (!this.deltaSetXY) {
+        var aCoord = [oCoord.x, oCoord.y];
+        YAHOO.util.Dom.setXY(el, aCoord);
+        var newLeft = parseInt( YAHOO.util.Dom.getStyle(el, "left"), 10 );
+        var newTop  = parseInt( YAHOO.util.Dom.getStyle(el, "top" ), 10 );
+
+        this.deltaSetXY = [ newLeft - oCoord.x, newTop - oCoord.y ];
+
+        // this.logger.log("css X: " + YAHOO.util.Dom.getStyle(el, "left"));
+        // this.logger.log("css Y: " + YAHOO.util.Dom.getStyle(el, "top"));
+        // this.logger.log("deltaSetXY: " + this.deltaSetXY);
+    } else {
+        YAHOO.util.Dom.setStyle(el, "left", (oCoord.x + this.deltaSetXY[0]) + "px");
+        YAHOO.util.Dom.setStyle(el, "top",  (oCoord.y + this.deltaSetXY[1]) + "px");
+    }
+    
 
     this.cachePosition(oCoord.x, oCoord.y);
 
@@ -157,7 +176,7 @@ YAHOO.util.DD.prototype.autoScroll = function(x, y, h, w) {
         // The distance from the cursor to the right of the visible area
         var toRight = (clientW + sl - x - this.deltaX);
 
-        // this.logger.debug( " x: " + x + " y: " + y + " h: " + h + 
+        // this.logger.log( " x: " + x + " y: " + y + " h: " + h + 
         // " clientH: " + clientH + " clientW: " + clientW + 
         // " st: " + st + " sl: " + sl + " bot: " + bot + 
         // " right: " + right + " toBot: " + toBot + " toRight: " + toRight);
@@ -208,7 +227,7 @@ YAHOO.util.DD.prototype.autoScroll = function(x, y, h, w) {
  */
 YAHOO.util.DD.prototype.getTargetCoord = function(iPageX, iPageY) {
 
-    // this.logger.debug("getTargetCoord: " + iPageX + ", " + iPageY);
+    // this.logger.log("getTargetCoord: " + iPageX + ", " + iPageY);
 
     var x = iPageX - this.deltaX;
     var y = iPageY - this.deltaY;
@@ -226,12 +245,17 @@ YAHOO.util.DD.prototype.getTargetCoord = function(iPageX, iPageY) {
     x = this.getTick(x, this.xTicks);
     y = this.getTick(y, this.yTicks);
 
-    // this.logger.debug("getTargetCoord " + 
+    // this.logger.log("getTargetCoord " + 
             // " iPageX: " + iPageX +
             // " iPageY: " + iPageY +
             // " x: " + x + ", y: " + y);
 
     return {x:x, y:y};
+};
+
+YAHOO.util.DD.prototype.applyConfig = function() {
+    YAHOO.util.DD.superclass.applyConfig.call(this);
+    this.scroll = (this.config.scroll !== false);
 };
 
 /** 
@@ -253,37 +277,40 @@ YAHOO.util.DD.prototype.b4Drag = function(e) {
                         YAHOO.util.Event.getPageY(e));
 };
 
+YAHOO.util.DD.prototype.toString = function() {
+    return ("DD " + this.id);
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 // Debugging ygDragDrop events that can be overridden
 ///////////////////////////////////////////////////////////////////////////////
 /*
 YAHOO.util.DD.prototype.startDrag = function(x, y) {
-    this.logger.debug(this.id.toString()  + " startDrag");
+    this.logger.log(this.id.toString()  + " startDrag");
 };
 
 YAHOO.util.DD.prototype.onDrag = function(e) {
-    this.logger.debug(this.id.toString() + " onDrag");
+    this.logger.log(this.id.toString() + " onDrag");
 };
 
 YAHOO.util.DD.prototype.onDragEnter = function(e, id) {
-    this.logger.debug(this.id.toString() + " onDragEnter: " + id);
+    this.logger.log(this.id.toString() + " onDragEnter: " + id);
 };
 
 YAHOO.util.DD.prototype.onDragOver = function(e, id) {
-    this.logger.debug(this.id.toString() + " onDragOver: " + id);
+    this.logger.log(this.id.toString() + " onDragOver: " + id);
 };
 
 YAHOO.util.DD.prototype.onDragOut = function(e, id) {
-    this.logger.debug(this.id.toString() + " onDragOut: " + id);
+    this.logger.log(this.id.toString() + " onDragOut: " + id);
 };
 
 YAHOO.util.DD.prototype.onDragDrop = function(e, id) {
-    this.logger.debug(this.id.toString() + " onDragDrop: " + id);
+    this.logger.log(this.id.toString() + " onDragDrop: " + id);
 };
 
 YAHOO.util.DD.prototype.endDrag = function(e) {
-    this.logger.debug(this.id.toString() + " endDrag");
+    this.logger.log(this.id.toString() + " endDrag");
 };
 */
 

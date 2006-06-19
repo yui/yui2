@@ -10,23 +10,24 @@
  * @param {String} id the id of the linked element
  * @param {String} sGroup the group of related DragDrop objects
  */
-YAHOO.example.DDMy = function(id, sGroup) {
+YAHOO.example.DDMy = function(id, sGroup, config) {
 
-	if (id) {
-		this.init(id, sGroup);
-		this.initFrame();
-		this.logger = new ygLogger("DDMy");
-	}
+    if (id) {
+        this.init(id, sGroup, config);
+        this.initFrame();
+        this.logger = this.logger || YAHOO;
+    }
 
-	// The frame should only move vertically...  this makes it so the user can
-	// only move content channels up and down within a column
-	this.setXConstraint(0, 0);
+    // The frame should only move vertically...  this makes it so the user can
+    // only move content channels up and down within a column
+    this.setXConstraint(0, 0);
 };
 
-YAHOO.example.DDMy.prototype = new YAHOO.util.DDProxy();
+// YAHOO.example.DDMy.prototype = new YAHOO.util.DDProxy();
+YAHOO.extend(YAHOO.example.DDMy, YAHOO.util.DDProxy);
 
 YAHOO.example.DDMy.prototype.onDragDrop = function(e, id) {
-	this.logger.debug(this.id + " onDragDrop");
+    this.logger.log(this.id + " onDragDrop");
 
     var el;
 
@@ -36,12 +37,12 @@ YAHOO.example.DDMy.prototype.onDragDrop = function(e, id) {
         el = YAHOO.util.DDM.getBestMatch(id).getEl();
     }
 
-	YAHOO.util.DDM.swapNode(this.getEl(), el);
+    YAHOO.util.DDM.swapNode(this.getEl(), el);
 };
 
 YAHOO.example.DDMy.prototype.endDrag = function(e) {
-	// we default behavior is to move the element to the end point when
-	// the drag is ended.  In our case, we only want to move the element
-	// when it is dropped on another dd element.  To override the default,
-	// we simply need to create an empty endDrag function.
+    // we default behavior is to move the element to the end point when
+    // the drag is ended.  In our case, we only want to move the element
+    // when it is dropped on another dd element.  To override the default,
+    // we simply need to create an empty endDrag function.
 };

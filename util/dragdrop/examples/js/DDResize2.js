@@ -9,9 +9,9 @@
  * @param {String} sGroup the group of related DragDrop items
  */
 YAHOO.example.DDResize = function(panelElId, nwHandle, 
-        neHandle, seHandle, swHandle, sGroup) {
+        neHandle, seHandle, swHandle, sGroup, config) {
     if (panelElId) {
-        this.init(panelElId, sGroup);
+        this.init(panelElId, sGroup, config);
         this.nwHandle = nwHandle;
         this.neHandle = neHandle;
         this.seHandle = seHandle;
@@ -20,11 +20,12 @@ YAHOO.example.DDResize = function(panelElId, nwHandle,
         this.setHandleElId(neHandle);
         this.setHandleElId(seHandle);
         this.setHandleElId(swHandle);
-        this.logger = new ygLogger("DDResize");
+        this.logger = this.logger || YAHOO;
     }
 };
 
-YAHOO.example.DDResize.prototype = new YAHOO.util.DragDrop();
+// YAHOO.example.DDResize.prototype = new YAHOO.util.DragDrop();
+YAHOO.extend(YAHOO.example.DDResize, YAHOO.util.DragDrop);
 
 YAHOO.example.DDResize.prototype.lockAspectRatio = false;
 
@@ -36,7 +37,7 @@ YAHOO.example.DDResize.prototype.onMouseDown = function(e) {
 
     this.aspectRatio = this.startWidth/this.startHeight;
     this.direction = this.getDirection(YAHOO.util.Event.getTarget(e, true).id);
-    this.logger.debug("direction " + this.direction);
+    this.logger.log("direction " + this.direction);
 
     this.startPos = [YAHOO.util.Event.getPageX(e),
                      YAHOO.util.Event.getPageY(e)];

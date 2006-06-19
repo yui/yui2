@@ -11,21 +11,22 @@
  * @param {String} id the id of the linked element
  * @param {String} sGroup the group of related DragDrop objects
  */
-YAHOO.example.DDPlayer = function(id, sGroup) {
+YAHOO.example.DDPlayer = function(id, sGroup, config) {
     this.initPlayer(id, sGroup);
 };
 
-YAHOO.example.DDPlayer.prototype = new YAHOO.util.DDProxy();
+// YAHOO.example.DDPlayer.prototype = new YAHOO.util.DDProxy();
+YAHOO.extend(YAHOO.example.DDPlayer, YAHOO.util.DDProxy);
 
 YAHOO.example.DDPlayer.TYPE = "DDPlayer";
 
-YAHOO.example.DDPlayer.prototype.initPlayer = function(id, sGroup) {
+YAHOO.example.DDPlayer.prototype.initPlayer = function(id, sGroup, config) {
     if (!id) { return; }
 
-    this.init(id, sGroup);
+    this.init(id, sGroup, config);
     this.initFrame();
 
-    this.logger = new ygLogger("DDPlayer");
+    this.logger = this.logger || YAHOO;
     var s = this.getDragEl().style;
     s.borderColor = "transparent";
     // s.backgroundColor = "#cccccc";
@@ -41,11 +42,11 @@ YAHOO.example.DDPlayer.prototype.initPlayer = function(id, sGroup) {
     this.slot = null;
 
     this.startPos = YAHOO.util.Dom.getXY( this.getEl() );
-    this.logger.debug(id + " startpos: " + this.startPos);
+    this.logger.log(id + " startpos: " + this.startPos);
 };
 
 YAHOO.example.DDPlayer.prototype.startDrag = function(x, y) {
-    this.logger.debug(this.id + " startDrag");
+    this.logger.log(this.id + " startDrag");
 
     var dragEl = this.getDragEl();
     var clickEl = this.getEl();
@@ -60,7 +61,7 @@ YAHOO.example.DDPlayer.prototype.startDrag = function(x, y) {
     s.filter = "alpha(opacity=10)";
 
     var targets = YAHOO.util.DDM.getRelated(this, true);
-    this.logger.debug(targets.length + " targets");
+    this.logger.log(targets.length + " targets");
     for (var i=0; i<targets.length; i++) {
         
         var targetEl = this.getTargetDomRef(targets[i]);
@@ -123,12 +124,12 @@ YAHOO.example.DDPlayer.prototype.onDragDrop = function(e, id) {
             // slot can go to the slot the dragged player is in
             // YAHOO.util.DDM.isLegalTarget is a new method
             if ( YAHOO.util.DDM.isLegalTarget(oDD.player, this.slot) ) {
-                this.logger.debug("swapping player positions");
+                this.logger.log("swapping player positions");
                 YAHOO.util.DDM.moveToEl(oDD.player.getEl(), el);
                 this.slot.player = oDD.player;
                 oDD.player.slot = this.slot;
             } else {
-                this.logger.debug("moving player in slot back to start");
+                this.logger.log("moving player in slot back to start");
                 YAHOO.util.Dom.setXY(oDD.player.getEl(), oDD.player.startPos);
                 this.slot.player = null;
                 oDD.player.slot = null

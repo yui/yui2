@@ -1,5 +1,3 @@
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
 /**
  * Defines the interface and base operation of items that that can be 
  * dragged or can be drop targets.  It was designed to be extended, overriding
@@ -39,10 +37,13 @@
  * @constructor
  * @param {String} id of the element that is linked to this instance
  * @param {String} sGroup the group of related DragDrop objects
+ * @param {object} config an object containing configurable attributes
+ *                Valid properties for DragDrop: 
+ *                    padding, isTarget, maintainOffset, primaryButtonOnly
  */
-YAHOO.util.DragDrop = function(id, sGroup) {
+YAHOO.util.DragDrop = function(id, sGroup, config) {
     if (id) {
-        this.init(id, sGroup); 
+        this.init(id, sGroup, config); 
     }
 };
 
@@ -57,6 +58,12 @@ YAHOO.util.DragDrop.prototype = {
      * @type String
      */
     id: null,
+
+    /**
+     * Configuration attributes passed into the constructor
+     * @type object
+     */
+    config: null,
 
     /**
      * The id of the element that will be dragged.  By default this is same 
@@ -390,7 +397,7 @@ YAHOO.util.DragDrop.prototype = {
      * position was determined.
      */
     onAvailable: function () { 
-        this.logger.debug("onAvailable (base)"); 
+        this.logger.log("onAvailable (base)"); 
     },
 
     /**
@@ -400,7 +407,7 @@ YAHOO.util.DragDrop.prototype = {
      */
     getEl: function() { 
         if (!this._domRef) {
-            this._domRef = this.DDM.getElement(this.id); 
+            this._domRef = YAHOO.util.Dom.get(this.id); 
         }
 
         return this._domRef;
@@ -414,7 +421,7 @@ YAHOO.util.DragDrop.prototype = {
      * @return {HTMLElement} the html element 
      */
     getDragEl: function() {
-        return this.DDM.getElement(this.dragElId);
+        return YAHOO.util.Dom.get(this.dragElId);
     },
 
     /**
@@ -423,10 +430,10 @@ YAHOO.util.DragDrop.prototype = {
      *
      * @param id the id of the linked element
      * @param {String} sGroup the group of related items
-     * element is supposed to be a target only, set to false.
+     * @param {object} config configuration attributes
      */
-    init: function(id, sGroup) {
-        this.initTarget(id, sGroup);
+    init: function(id, sGroup, config) {
+        this.initTarget(id, sGroup, config);
         YAHOO.util.Event.addListener(this.id, "mousedown", 
                                           this.handleMouseDown, this, true);
     },
@@ -437,47 +444,61 @@ YAHOO.util.DragDrop.prototype = {
      *
      * @param id the id of the linked element
      * @param {String} sGroup the group of related items
-     * element is supposed to be a target only, set to false.
+     * @param {object} config configuration attributes
      */
-    initTarget: function(id, sGroup) {
+    initTarget: function(id, sGroup, config) {
+
+        // configuration attributes 
+        this.config = config || {};
 
         // create a local reference to the drag and drop manager
         this.DDM = YAHOO.util.DDM;
-
-        // create a logger instance
-        this.logger = new ygLogger("DragDrop");
-
-        // set the default padding
-        this.padding = [0, 0, 0, 0];
-
         // initialize the groups array
         this.groups = {};
 
         // set the id
         this.id = id;
 
-        // the element is a drag handle by default
+        // We don't want to register this as the handle with the manager
+        // so we just set the id rather than calling the setter.
+        this.handleElId = id;
+
+        YAHOO.util.Event.onAvailable(id, this.handleOnAvailable, this, true);
+
+        // create a logger instance
+        this.logger = new YAHOO.widget.LogWriter(this.toString());
+
+        // the linked element is the element that gets dragged by default
         this.setDragElId(id); 
 
-        // by default, clicked anchors will not start drag operations
+        // by default, clicked anchors will not start drag operations. 
+        // @TODO what else should be here?  Probably form fields.
         this.invalidHandleTypes = { A: "A" };
         this.invalidHandleIds = {};
         this.invalidHandleClasses = [];
 
-        // We don't want to register this as the handle with the manager
-        // so we just set the id rather than calling the setter
-        this.handleElId = id;
-
-        // cache the position of the element if we can
-        // if (document && document.body) {
-            // this.setInitPosition();
-        // }
-
-        // var self = this;
-        YAHOO.util.Event.onAvailable(id, this.handleOnAvailable, this, true);
-
         // add to an interaction group
         this.addToGroup((sGroup) ? sGroup : "default");
+
+        this.applyConfig();
+    },
+
+    /**
+     * Applies the configuration parameters that were passed into the constructor.
+     * This is supposed to happen at each level through the inheritance chain.  So
+     * a DDProxy implentation will execute apply config on DDProxy, DD, and 
+     * DragDrop in order to get all of the parameters that are available in
+     * each object.
+     */
+    applyConfig: function() {
+
+        // configurable properties: 
+        //    padding, isTarget, maintainOffset, primaryButtonOnly
+        this.padding           = this.config.padding || [0, 0, 0, 0];
+        this.isTarget          = (this.config.isTarget !== false);
+        this.maintainOffset    = (this.config.maintainOffset);
+        this.primaryButtonOnly = (this.config.primaryButtonOnly !== false);
+
     },
 
     /**
@@ -485,7 +506,7 @@ YAHOO.util.DragDrop.prototype = {
      * @private
      */
     handleOnAvailable: function() {
-        this.logger.debug("handleOnAvailable");
+        this.logger.log("handleOnAvailable");
         this.available = true;
         this.resetConstraints();
         this.onAvailable();
@@ -520,7 +541,7 @@ YAHOO.util.DragDrop.prototype = {
         var el = this.getEl();
 
         if (!this.DDM.verifyEl(el)) {
-            this.logger.debug(this.id + " element is broken");
+            this.logger.log(this.id + " element is broken");
             return;
         }
 
@@ -535,8 +556,10 @@ YAHOO.util.DragDrop.prototype = {
         this.lastPageX = p[0];
         this.lastPageY = p[1];
 
-        this.logger.debug(this.id + " inital position: " + this.initPageX + 
+        this.logger.log(this.id + " inital position: " + this.initPageX + 
                 ", " + this.initPageY);
+
+        this.deltaSetXY = null;
 
         this.setStartPosition(p);
     },
@@ -548,7 +571,6 @@ YAHOO.util.DragDrop.prototype = {
      * @private
      */
     setStartPosition: function(pos) {
-
         var p = pos || YAHOO.util.Dom.getXY( this.getEl() );
 
         this.startPageX = p[0];
@@ -565,6 +587,19 @@ YAHOO.util.DragDrop.prototype = {
     addToGroup: function(sGroup) {
         this.groups[sGroup] = true;
         this.DDM.regDragDrop(this, sGroup);
+    },
+
+    /**
+     * Remove's this instance from the supplied interaction group
+     * @param {string}  sGroup  The group to drop
+     */
+    removeFromGroup: function(sGroup) {
+        this.logger.log("Removing from group: " + sGroup);
+        if (this.groups[sGroup]) {
+            delete this.groups[sGroup];
+        }
+
+        this.DDM.removeDDFromGroup(this, sGroup);
     },
 
     /**
@@ -597,7 +632,7 @@ YAHOO.util.DragDrop.prototype = {
      * handle
      */
     setOuterHandleElId: function(id) {
-        this.logger.debug("Adding outer handle event: " + id);
+        this.logger.log("Adding outer handle event: " + id);
         YAHOO.util.Event.addListener(id, "mousedown", 
                 this.handleMouseDown, this, true);
         this.setHandleElId(id);
@@ -607,7 +642,7 @@ YAHOO.util.DragDrop.prototype = {
      * Remove all drag and drop hooks for this element
      */
     unreg: function() {
-        this.logger.debug("DragDrop obj cleanup " + this.id);
+        this.logger.log("DragDrop obj cleanup " + this.id);
         YAHOO.util.Event.removeListener(this.id, "mousedown", 
                 this.handleMouseDown);
         this._domRef = null;
@@ -634,26 +669,27 @@ YAHOO.util.DragDrop.prototype = {
      */
     handleMouseDown: function(e, oDD) {
 
-        this.logger.debug("isLocked: " + this.isLocked());
+        this.logger.log("isLocked: " + this.isLocked());
 
         var EU = YAHOO.util.Event;
 
         var button = e.which || e.button;
-        this.logger.debug("button: " + button);
+        this.logger.log("button: " + button);
 
         if (this.primaryButtonOnly && button > 1) {
-            this.logger.debug("Mousedown was not produced by the primary button");
+            this.logger.log("Mousedown was not produced by the primary button");
             return;
         }
 
         if (this.isLocked()) {
-            this.logger.debug("Drag and drop is disabled, aborting");
+            this.logger.log("Drag and drop is disabled, aborting");
             return;
         }
 
-        this.logger.debug("mousedown " + this.id);
-
+        this.logger.log("mousedown " + this.id);
         this.DDM.refreshCache(this.groups);
+        // var self = this;
+        // setTimeout( function() { self.DDM.refreshCache(self.groups); }, 0);
 
         // Only process the event if we really clicked within the linked 
         // element.  The reason we make this check is that in the case that 
@@ -664,7 +700,7 @@ YAHOO.util.DragDrop.prototype = {
         var pt = new YAHOO.util.Point(EU.getPageX(e), EU.getPageY(e));
         if ( this.DDM.isOverTarget(pt, this) )  {
 
-            this.logger.debug("click is over target");
+            this.logger.log("click is over target");
 
             //  check to see if the handle was clicked
             var srcEl = EU.getTarget(e);
@@ -673,12 +709,12 @@ YAHOO.util.DragDrop.prototype = {
                     (this.id == this.handleElId || 
                      this.DDM.handleWasClicked(srcEl, this.id)) ) {
 
-                this.logger.debug("click was a valid handle");
+                this.logger.log("click was a valid handle");
 
                 // set the initial element position
                 this.setStartPosition();
 
-                this.logger.debug("firing onMouseDown events");
+                this.logger.log("firing onMouseDown events");
 
 
                 this.b4MouseDown(e);
@@ -758,28 +794,26 @@ YAHOO.util.DragDrop.prototype = {
      * @return {boolean} true if this is a valid tag type, false if not
      */
     isValidHandleChild: function(node) {
-        // var type = node.nodeName;
-
-        // if (type == "#text") {
-            // // this.logger.debug("text node, getting parent node type");
-            // type = node.parentNode.nodeName;
-        // }
 
         var valid = true;
-        var n = (node.nodeName == "#text") ? node.parentNode : node;
-        valid = valid && !this.invalidHandleTypes[n.nodeName];
-        valid = valid && !this.invalidHandleIds[n.id];
+        // var n = (node.nodeName == "#text") ? node.parentNode : node;
+        var nodeName;
+        try {
+            nodeName = node.nodeName.toUpperCase();
+        } catch(e) {
+            nodeName = node.nodeName;
+        }
+        valid = valid && !this.invalidHandleTypes[nodeName];
+        valid = valid && !this.invalidHandleIds[node.id];
 
         for (var i=0, len=this.invalidHandleClasses.length; valid && i<len; ++i) {
-            valid = !YAHOO.util.Dom.hasClass(n, this.invalidHandleClasses[i]);
+            valid = !YAHOO.util.Dom.hasClass(node, this.invalidHandleClasses[i]);
         }
 
-        this.logger.debug("Valid handle? ... " + valid);
+        this.logger.log("Valid handle? ... " + valid);
 
         return valid;
 
-        //return ( !(this.invalidHandleTypes[n.nodeName] || 
-                    //this.invalidHandleIds[n.id]) );
     },
 
     /**
@@ -809,7 +843,7 @@ YAHOO.util.DragDrop.prototype = {
         }
 
         this.xTicks.sort(this.DDM.numericSort) ;
-        this.logger.debug("xTicks: " + this.xTicks.join());
+        this.logger.log("xTicks: " + this.xTicks.join());
     },
 
     /**
@@ -819,7 +853,7 @@ YAHOO.util.DragDrop.prototype = {
      * @private
      */
     setYTicks: function(iStartY, iTickSize) {
-        // this.logger.debug("setYTicks: " + iStartY + ", " + iTickSize
+        // this.logger.log("setYTicks: " + iStartY + ", " + iTickSize
                // + ", " + this.initPageY + ", " + this.minY + ", " + this.maxY );
         this.yTicks = [];
         this.yTickSize = iTickSize;
@@ -841,7 +875,7 @@ YAHOO.util.DragDrop.prototype = {
         }
 
         this.yTicks.sort(this.DDM.numericSort) ;
-        this.logger.debug("yTicks: " + this.yTicks.join());
+        this.logger.log("yTicks: " + this.yTicks.join());
     },
 
     /**
@@ -866,7 +900,7 @@ YAHOO.util.DragDrop.prototype = {
         if (iTickSize) { this.setXTicks(this.initPageX, iTickSize); }
 
         this.constrainX = true;
-        this.logger.debug("initPageX:" + this.initPageX + " minX:" + this.minX + 
+        this.logger.log("initPageX:" + this.initPageX + " minX:" + this.minX + 
                 " maxX:" + this.maxX);
     },
 
@@ -881,7 +915,7 @@ YAHOO.util.DragDrop.prototype = {
      * element should move iTickSize pixels at a time.
      */
     setYConstraint: function(iUp, iDown, iTickSize) {
-        this.logger.debug("setYConstraint: " + iUp + "," + iDown + "," + iTickSize);
+        this.logger.log("setYConstraint: " + iUp + "," + iDown + "," + iTickSize);
         this.topConstraint = iUp;
         this.bottomConstraint = iDown;
 
@@ -891,7 +925,7 @@ YAHOO.util.DragDrop.prototype = {
 
         this.constrainY = true;
         
-        this.logger.debug("initPageY:" + this.initPageY + " minY:" + this.minY + 
+        this.logger.log("initPageY:" + this.initPageY + " minY:" + this.minY + 
                 " maxY:" + this.maxY);
     },
 
@@ -901,13 +935,13 @@ YAHOO.util.DragDrop.prototype = {
      */
     resetConstraints: function() {
 
-        this.logger.debug("resetConstraints");
+        this.logger.log("resetConstraints");
 
         // Maintain offsets if necessary
         if (this.initPageX || this.initPageX === 0) {
-            this.logger.debug("init pagexy: " + this.initPageX + ", " + 
+            this.logger.log("init pagexy: " + this.initPageX + ", " + 
                                this.initPageY);
-            this.logger.debug("last pagexy: " + this.lastPageX + ", " + 
+            this.logger.log("last pagexy: " + this.lastPageX + ", " + 
                                this.lastPageY);
             // figure out how much this thing has moved
             var dx = (this.maintainOffset) ? this.lastPageX - this.initPageX : 0;
@@ -973,8 +1007,8 @@ YAHOO.util.DragDrop.prototype = {
      * toString method
      * @return {string} string representation of the dd obj
      */
-    toString: function(val, tickArray) {
-        return ("YAHOO.util.DragDrop {" + this.id + "}");
+    toString: function() {
+        return ("DragDrop " + this.id);
     }
 
 };
