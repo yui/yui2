@@ -572,6 +572,9 @@ YAHOO.widget.LogReader.prototype._printBuffer = function() {
         }
         this._buffer = [];
         this._printToConsole(entries);
+        if(!this.newestOnTop) {
+            this._consoleEl.scrollTop = this._consoleEl.scrollHeight;
+        }
     }
 };
 
@@ -646,9 +649,6 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
                 this._consoleEl.insertBefore(document.createElement("p"),this._consoleEl.firstChild):
                 this._consoleEl.appendChild(document.createElement("p"));
             oNewElement.innerHTML = output;
-            if(!this.newestOnTop) {
-                this._consoleEl.scrollTop = this._consoleEl.scrollHeight;
-            }
         }
     }
 };
