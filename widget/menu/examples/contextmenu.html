@@ -3,14 +3,9 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>Context Menu Example</title>
+        <title>Context Menu</title>
 
-        <!-- Stanard reset and fonts -->
-        <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
-        <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
-
-        <!-- CSS for Menu -->
-        <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css"> 
+        <?php require_once("styles.inc"); ?>
 
         <!-- Page-specific styles -->
         <style type="text/css">
@@ -23,7 +18,7 @@
 
             h1 em,
             p em,
-            li em {
+            #operainstructions li em {
 
                 font-weight:bold;
 
@@ -74,23 +69,107 @@
             
         </style>
 
-        <!-- Namespace source file -->
-        <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
-        
-        <!-- Dependency source files -->
-        <script type="text/javascript" src="../../build/event/event.js"></script>
-        <script type="text/javascript" src="../../build/dom/dom.js"></script>
-        <script type="text/javascript" src="../../build/container/container_core.js"></script>
-        
-        <!-- Menu source file -->
-        <script type="text/javascript" src="../../build/menu/menu.js"></script>
+        <?php require_once("scripts.inc"); ?>
 
         <!-- Page-specific script -->
         <script type="text/javascript">
 
+            // Renames an "Ewe"
+
+            function EditEweName(p_oLI) {
+
+                var oCite = p_oLI.lastChild;
+
+                if(oCite.nodeType != 1) {
+                
+                    oCite = oCite.previousSibling;
+
+                }
+            
+                var oTextNode = oCite.firstChild;
+
+                var sName = 
+                        window.prompt(
+                            "Enter a new name for ", 
+                            oTextNode.nodeValue
+                        );
+
+                if(sName && sName.length > 0) {
+                    
+                    oTextNode.nodeValue = sName;
+
+                }
+            
+            }
+            
+
+            // Clones an "Ewe"
+
+            function CloneEwe(p_oLI) {
+
+                var oClone = p_oLI.cloneNode(true);
+
+                p_oLI.parentNode.appendChild(oClone);
+            
+            }
+            
+
+            // Deletes an "Ewe"
+
+            function DeleteEwe(p_oLI) {
+
+                var oUL = p_oLI.parentNode;
+
+                oUL.removeChild(p_oLI);
+            
+            }
+
+
+
+            /*
+                 Returns the LI instance that is the parent node of the target 
+                 of a "contextmenu" event
+            */
+
+            function GetListItemFromEvenTarget(p_oNode) {
+
+                var oLI;
+
+                if(p_oNode.tagName == "LI") {
+                
+                    oLI = p_oNode;
+
+                }
+                else {
+
+                    /*
+                         If the target of the event was a child of an LI, 
+                         get the parent LI element
+                    */
+
+                    do {
+    
+                        if(p_oNode.tagName == "LI") {
+
+                            oLI = p_oNode;                            
+
+                            break;
+                        
+                        }
+    
+                    }
+                    while((p_oNode = p_oNode.parentNode));
+                
+                }
+
+                return oLI;
+            
+            }
+
+
             // "move" event handler for the context menu
 
-            function onMoveContextMenu() {
+            function onContextMenuMove() {
 
                 var oNode = this.contextEventTarget;
                 var bDisabled = (oNode.tagName == "UL");
@@ -104,82 +183,34 @@
                 while(i--);
 
             }
-        
+            
 
             // "click" event handler for each item in the context menu
             
             function onContextMenuItemClick(p_sType, p_aArguments) {
 
-                var oNode = this.parent.contextEventTarget,
-                    oLI;
-
-                if(oNode.tagName == "LI") {
-                
-                    oLI = oNode;
-
-                }
-                else {
-
-                    /*
-                         If the target of the event was a child of an LI, 
-                         get the parent LI element
-                    */
-
-                    do {
-    
-                        if(oNode.tagName == "LI") {
-
-                            oLI = oNode;                            
-
-                            break;
-                        
-                        }
-    
-                    }
-                    while((oNode = oNode.parentNode));
-                
-                }
-                
+                var oLI = 
+                    GetListItemFromEvenTarget(this.parent.contextEventTarget);
 
                 switch(this.index) {
                 
                     case 0:     // Edit name
 
-                        var oCite = oLI.lastChild;
-
-                        if(oCite.nodeType != 1) {
-                        
-                            oCite = oCite.previousSibling;
-
-                        }
-                    
-                        var oTextNode = oCite.firstChild;
-
-                        var sName = window.prompt("Enter a new name for ", oTextNode.nodeValue);
-
-                        if(sName && sName.length > 0) {
-                            
-                            oTextNode.nodeValue = sName;
-
-                        }
+                        EditEweName(oLI);
                     
                     break;
 
 
                     case 1:     // Clone
 
-                        var oClone = oLI.cloneNode(true);
-
-                        oLI.parentNode.appendChild(oClone);
+                        CloneEwe(oLI);
 
                     break;
                     
 
                     case 2:     // Delete
 
-                        var oUL = oLI.parentNode;
-
-                        oUL.removeChild(oLI);
+                        DeleteEwe(oLI);
 
                     break;                    
                 
@@ -187,6 +218,50 @@
 
                 this.parent.hide();
             
+            }
+
+
+            // "keydown" event handlers for the context menu
+
+            function onContextMenuKeyDown(p_sType, p_sArguments, p_oMenu) {
+
+                var oEvent = p_sArguments[0];
+
+                if(oEvent.shiftKey) {
+                
+                    var oLI = 
+                        GetListItemFromEvenTarget(this.contextEventTarget);
+
+                    switch(oEvent.keyCode) {
+                    
+                        case 69:     // Edit name
+
+                            EditEweName(oLI);
+
+                            this.hide();
+
+                        break;
+                        
+                        case 67:     // Clone
+                        
+                            CloneEwe(oLI);
+
+                            this.hide();
+
+                        break;
+                        
+                        case 68:     // Delete
+
+                            DeleteEwe(oLI);
+
+                            this.hide();
+                        
+                        break;
+                    
+                    }
+                
+                }
+
             }
 
 
@@ -202,9 +277,9 @@
                                     );
 
                 var aMainMenuItems = [
-                        "Edit Name", 
-                        "Clone", 
-                        "Delete"
+                        { text: "Edit Name", helptext: "Shift + E" }, 
+                        { text: "Clone", helptext: "Shift + C" }, 
+                        { text: "Delete", helptext: "Shift + D" }
                     ];
                     
                 var nMainMenuItems = aMainMenuItems.length;
@@ -217,7 +292,10 @@
                 for(var i=0; i<nMainMenuItems; i++) {
 
                     oMenuItem = 
-                        new YAHOO.widget.ContextMenuItem(aMainMenuItems[i]);
+                        new YAHOO.widget.ContextMenuItem(
+                            aMainMenuItems[i].text, 
+                            { helptext: aMainMenuItems[i].helptext } 
+                        );
 
                     /*
                         Add a "click" event handler to each 
@@ -234,13 +312,22 @@
                 //  Add a "move" event handler to the context menu 
                     
                 oContextMenu.moveEvent.subscribe(
-                    onMoveContextMenu, 
+                    onContextMenuMove, 
                     oContextMenu, 
                     this
                 );
-                
 
-                // Render the context menu and color picker submenu
+
+                // Add a "keydown" event handler to the context menu
+
+                oContextMenu.keyDownEvent.subscribe(
+                    onContextMenuKeyDown,
+                    oContextMenu,
+                    true
+                );
+
+
+                // Render the context menu
 
                 oContextMenu.render(document.body);
                 
@@ -255,7 +342,7 @@
 
     </head>
     <body>
-        <h1>Context Menu Example <em>[<a href="index.html">Examples Home</a>]</em></h1>
+        <h1>Context Menu <em>[<a href="index.html">Examples Home</a>]</em></h1>
 
         <p>Use the context menu to rename, clone or delete Dolly.</p>
 

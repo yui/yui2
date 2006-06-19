@@ -1,0 +1,388 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>Application Menubar Exmaple</title>
+
+        <?php require_once("styles.inc"); ?>
+
+        <!-- Page-specific styles -->
+        <style type="text/css">
+
+            body {
+            
+                background-color:#dfb8df;
+            
+            }
+
+
+            /* Define a new style for each menubar */
+
+            div.yuimenubar {
+                
+                border-width:1px 0;
+                border-color:#666;
+                border-style:solid;
+                background-color:#ccc;
+
+            }
+            
+            div.yuimenubar div.bd {
+                
+                border-width:1px 0;
+                border-color:#ddd;
+                border-style:solid;
+                
+            }
+
+            div.yuimenubar li.yuimenubaritem {
+
+                border-width:0;
+                border-style:none;
+                padding:4px 12px;
+            
+            }
+
+            div.yuimenubar li.yuimenubaritem img {
+              
+                margin:0;
+                border:0;
+                height:1px;
+                width:1px;
+            
+            }        
+            
+
+            /* Define a new style for each menu */
+
+            div.yuimenu {
+
+                border:solid 1px #666;
+                background-color:#ccc;                
+            
+            }
+
+            div.yuimenu div.bd {
+                
+                border-width:0;
+                border-style:none;
+                
+            }
+
+
+            /* Define a new style for each menu item */
+
+            div.yuimenu li.yuimenuitem {
+
+                padding-top:4px;
+                padding-bottom:4px;
+
+            }
+
+            div.yuimenu li.yuimenuitem img {
+            
+                height:9px;
+                width:9px;
+                margin:0 -16px 0 10px;
+                border:0;
+            
+            }
+
+            div.yuimenu ul {
+            
+                border:solid 1px #666;
+                border-width:1px 0 0 0;
+            
+            }
+
+
+            /* Define a new style for an item's "selected" state */
+
+            div.yuimenu li.selected,
+            div.yuimenubar li.selected {
+            
+                background-color:#039;
+            
+            }
+
+            div.yuimenu li.selected a.selected,
+            div.yuimenubar li.selected a.selected {
+                
+                text-decoration:none;
+                
+            }
+
+
+            /* Define a new style for an item's "disabled" state */
+
+            div.yuimenu li.disabled a.disabled,
+            div.yuimenu li.disabled em.disabled,
+            div.yuimenubar li.disabled a.disabled {
+            
+                color:#666;
+                
+            }
+        
+        </style>
+
+        <?php require_once("scripts.inc"); ?>
+
+        <!-- Page-specific script -->
+        <script type="text/javascript">
+
+            /**
+            * Constant representing the path to the image to be used for the 
+            * submenu arrow indicator.
+            * @final
+            * @type String
+            */
+            YAHOO.widget.MenuBarItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH =
+                "promo/m/irs/blank.gif";
+            
+            
+            /**
+            * Constant representing the path to the image to be used for the 
+            * submenu arrow indicator when a MenuBarItem instance is selected.
+            * @final
+            * @type String
+            */
+            YAHOO.widget.MenuBarItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH =
+                "promo/m/irs/blank.gif";
+            
+            
+            /**
+            * Constant representing the path to the image to be used for the 
+            * submenu arrow indicator when a MenuBarItem instance is disabled.
+            * @final
+            * @type String
+            */
+            YAHOO.widget.MenuBarItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH = 
+                "promo/m/irs/blank.gif";
+
+
+            // "click" event handler for each item in the root MenuBar instance
+
+            function onMenuBarItemClick(p_sType, p_aArguments) {
+            
+                this.parent.hasFocus = true;
+
+                var oActiveItem = this.parent.activeItem;
+            
+            
+                // Hide any other submenus that might be visible
+            
+                if(oActiveItem && oActiveItem != this) {
+            
+                    this.parent.clearActiveItem();
+            
+                }
+            
+            
+                // Select and focus the current MenuItem instance
+            
+                this.cfg.setProperty("selected", true);
+                this.focus();
+            
+            
+                // Show the submenu for this instance
+            
+                var oSubmenu = this.cfg.getProperty("submenu");
+
+                if(oSubmenu) {
+            
+                    if(oSubmenu.cfg.getProperty("visible")) {
+                    
+                        oSubmenu.hide();
+                    
+                    }
+                    else {
+                    
+                        oSubmenu.show();                    
+                    
+                    }
+            
+                }
+
+            }
+
+
+            // "mouseover" event handler for each item in the root MenuBar instance
+
+            function onMenuBarItemMouseOver(p_sType, p_aArguments) {
+            
+                var oActiveItem = this.parent.activeItem;
+            
+            
+                // Hide any other submenus that might be visible
+            
+                if(oActiveItem && oActiveItem != this) {
+            
+                    this.parent.clearActiveItem();
+            
+                }
+            
+            
+                // Select and focus the current MenuItem instance
+            
+                this.cfg.setProperty("selected", true);
+                this.focus();
+
+                if(this.parent.hasFocus) {            
+            
+                    // Show the submenu for this instance
+                
+                    var oSubmenu = this.cfg.getProperty("submenu");
+    
+                    if(oSubmenu) {
+                
+                        if(oSubmenu.cfg.getProperty("visible")) {
+                        
+                            oSubmenu.hide();
+                        
+                        }
+                        else {
+                        
+                            oSubmenu.show();                    
+                        
+                        }
+                
+                    }
+
+                }
+
+            }
+
+
+            // "load" event handler for the window
+
+            function onWindowLoad() {
+
+                var Menu = YAHOO.widget.Menu,
+                    MenuItem = YAHOO.widget.MenuItem;
+
+
+                var oApplicationsMenu = new Menu("applications");
+                
+                oApplicationsMenu.addItem("Application 1");
+                oApplicationsMenu.addItem("Application 2");
+                oApplicationsMenu.addItem("Application 3");
+                oApplicationsMenu.addItem("Application 3");
+
+
+                var oFileMenu = new Menu("filemenu");
+                
+                oFileMenu.addItem(new MenuItem("New File", { helptext: "Ctrl + N" } ));
+                oFileMenu.addItem("New Folder");
+                oFileMenu.addItem(new MenuItem("Open", { helptext: "Ctrl + O" }));
+                oFileMenu.addItem(new MenuItem("Open With...", { submenu: oApplicationsMenu }));
+                oFileMenu.addItem(new MenuItem("Print", { helptext: "Ctrl + P" }));
+
+
+                var oEditMenu = new Menu("edit");
+
+                oEditMenu.addItem(new MenuItem("Undo", { helptext: "Ctrl + Z" }));
+                oEditMenu.addItem(new MenuItem("Redo", { helptext: "Ctrl + Y", disabled: true }));
+                oEditMenu.addItem(new MenuItem("Cut", { helptext: "Ctrl + X", disabled: true }), 1);
+                oEditMenu.addItem(new MenuItem("Copy", { helptext: "Ctrl + C", disabled: true }), 1);
+                oEditMenu.addItem(new MenuItem("Paste", { helptext: "Ctrl + V" }), 1);
+                oEditMenu.addItem(new MenuItem("Delete", { helptext: "Del", disabled: true }), 1);
+                oEditMenu.addItem(new MenuItem("Select All", { helptext: "Ctrl + A" }), 2);
+                oEditMenu.addItem(new MenuItem("Find", { helptext: "Ctrl + F" }), 3);
+                oEditMenu.addItem(new MenuItem("Find Again", { helptext: "Ctrl + G" }), 3);
+
+
+                var oMenuBar = new YAHOO.widget.MenuBar("test");
+
+                oMenuBar.addItem(new YAHOO.widget.MenuBarItem("File", { submenu: oFileMenu }));
+                oMenuBar.addItem(new YAHOO.widget.MenuBarItem("Edit", { submenu: oEditMenu }));
+                oMenuBar.addItem("View");
+                oMenuBar.addItem("Favorites");
+                oMenuBar.addItem("Tools");
+                oMenuBar.addItem("Tools");
+                oMenuBar.addItem("Help");
+                oMenuBar.addItem(new YAHOO.widget.MenuBarItem("Examples Home", { url: "index.html" }));
+
+                // Render the MenuBar instance and corresponding submenus
+
+                oMenuBar.render(document.body);
+
+
+                /*
+                    Add a "click" and "mouseover" event handler to each item 
+                    in the root MenuBar instnace
+                */
+
+                var i = oMenuBar.getItemGroups()[0].length - 1,
+                    oMenuBarItem;
+
+                do {
+
+                    oMenuBarItem = oMenuBar.getItem(i);
+                    
+                    if(oMenuBarItem) {
+
+                        oMenuBarItem.clickEvent.subscribe(
+                                onMenuBarItemClick,
+                                oMenuBarItem,
+                                true
+                            );
+
+                        oMenuBarItem.mouseOverEvent.subscribe(
+                                onMenuBarItemMouseOver,
+                                oMenuBarItem,
+                                true
+                            );
+
+                    }
+                
+                }
+                while(i--);
+
+
+                // "click" event handler for the document
+    
+                function onDocumentClick(p_oEvent) {
+                
+                    YAHOO.example.OverlayManager.hideAll();
+    
+                    oMenuBar.hasFocus = false;
+                
+                    oMenuBar.clearActiveItem();
+                    
+                    oMenuBar.activeItem.blur();
+
+                }
+
+
+                // Add a "click" handler for the document
+
+                YAHOO.util.Event.addListener(
+                        document, 
+                        "click", 
+                        onDocumentClick
+                    );
+
+
+                YAHOO.example.OverlayManager = new YAHOO.widget.OverlayManager();
+
+                // Register the menus with the Overlay mananger
+
+                YAHOO.example.OverlayManager.register(oFileMenu);
+
+                YAHOO.example.OverlayManager.register(oApplicationsMenu);
+
+                YAHOO.example.OverlayManager.register(oEditMenu);
+
+            }
+
+
+            // Add a "load" handler for the window
+
+            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
