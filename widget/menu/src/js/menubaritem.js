@@ -108,7 +108,7 @@ YAHOO.widget.MenuBarItem.prototype.CSS_CLASS_NAME = "yuimenubaritem";
 * @type String
 */
 YAHOO.widget.MenuBarItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH =
-    "nt/ic/ut/bsc/menuarodwn9_nrm_1.gif";
+    "nt/ic/ut/alt1/menuarodwn8_nrm_1.gif";
 
 
 /**
@@ -118,7 +118,7 @@ YAHOO.widget.MenuBarItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH =
 * @type String
 */
 YAHOO.widget.MenuBarItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH =
-    "nt/ic/ut/bsc/menuarodwn9_clk_1.gif";
+    "nt/ic/ut/alt1/menuarodwn8_hov_1.gif";
 
 
 /**
@@ -128,7 +128,7 @@ YAHOO.widget.MenuBarItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH =
 * @type String
 */
 YAHOO.widget.MenuBarItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH = 
-    "nt/ic/ut/bsc/menuarodwn9_dim_1.gif";
+    "nt/ic/ut/alt1/menuarodwn8_dim_1.gif";
 
 
 // Private event handlers

@@ -35,7 +35,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     * @final
     * @type String
     */
-    SUBMENU_INDICATOR_IMAGE_PATH: "nt/ic/ut/alt1/menuarorght9_nrm_1.gif",
+    SUBMENU_INDICATOR_IMAGE_PATH: "nt/ic/ut/alt1/menuarorght8_nrm_1.gif",
 
 
     /**
@@ -45,7 +45,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     * @type String
     */
     SELECTED_SUBMENU_INDICATOR_IMAGE_PATH: 
-        "nt/ic/ut/alt1/menuarorght9_hov_1.gif",
+        "nt/ic/ut/alt1/menuarorght8_hov_1.gif",
 
 
     /**
@@ -55,7 +55,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     * @type String
     */
     DISABLED_SUBMENU_INDICATOR_IMAGE_PATH: 
-        "nt/ic/ut/alt1/menuarorght9_dim_1.gif",
+        "nt/ic/ut/alt1/menuarorght8_dim_1.gif",
 
 
     /**
