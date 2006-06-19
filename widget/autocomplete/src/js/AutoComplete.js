@@ -178,7 +178,7 @@ YAHOO.widget.AutoComplete.prototype.queryDelay = 0.5;
  *
  * @type string
  */
-YAHOO.widget.AutoComplete.prototype.highlightClassName = "highlight";
+YAHOO.widget.AutoComplete.prototype.highlightClassName = "yui-ac-highlight";
 
 /**
  * Class name of a pre-highlighted item within the auto complete container.
@@ -800,7 +800,7 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelpers = function() {
 
     if(this.useShadow && !this._oContainer._oShadow) {
         var oShadow = document.createElement("div");
-        oShadow.className = "shadow";
+        oShadow.className = "yui-ac-shadow";
         this._oContainer._oShadow = this._oContainer.appendChild(oShadow);
     }
     if(this.useIFrame && !this._oContainer._oIFrame) {
@@ -832,21 +832,21 @@ YAHOO.widget.AutoComplete.prototype._initContainer = function() {
     if(!this._oContainer._oContent) {
         // The div oContent helps size the iframe and shadow properly
         var oContent = document.createElement("div");
-        oContent.className = "content";
+        oContent.className = "yui-ac-content";
         oContent.style.display = "none";
         this._oContainer._oContent = this._oContainer.appendChild(oContent);
 
         var oHeader = document.createElement("div");
-        oHeader.className = "ac_hd";
+        oHeader.className = "yui-ac-hd";
         oHeader.style.display = "none";//DEBUG
         this._oContainer._oContent._oHeader = this._oContainer._oContent.appendChild(oHeader);
 
         var oBody = document.createElement("div");
-        oBody.className = "ac_bd";
+        oBody.className = "yui-ac-bd";
         this._oContainer._oContent._oBody = this._oContainer._oContent.appendChild(oBody);
 
         var oFooter = document.createElement("div");
-        oFooter.className = "ac_ft";
+        oFooter.className = "yui-ac-ft";
         oFooter.style.display = "none";//DEBUG
         this._oContainer._oContent._oFooter = this._oContainer._oContent.appendChild(oFooter);
     }
