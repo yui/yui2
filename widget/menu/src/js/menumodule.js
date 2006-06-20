@@ -1,9 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-*/
-
 /**
 * @class The superclass of all menu containers.
 * @constructor
@@ -382,9 +376,7 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oUserConfig) {
 
         this.logger = new YAHOO.widget.LogWriter(this.toString());
 
-        this.logger.log(
-            "No source element found.  Created element with id: " + this.id 
-        );
+        this.logger.log("No source element found.  Created element with id: " + this.id);
 
     }
 
@@ -526,10 +518,7 @@ YAHOO.widget.MenuModule.prototype._initSubTree = function() {
 
             if(this._aListElements.length > 0) {
 
-                this.logger.log(
-                    "Found " + this._aListElements.length + 
-                    " item groups to initialize."
-                );
+                this.logger.log("Found " + this._aListElements.length + " item groups to initialize.");
 
                 var i = this._aListElements.length - 1;
 
@@ -537,11 +526,7 @@ YAHOO.widget.MenuModule.prototype._initSubTree = function() {
 
                     oNode = this._aListElements[i].firstChild;
     
-                    this.logger.log(
-                        "Scanning " +  
-                        this._aListElements[i].childNodes.length + 
-                        " child nodes for items to initialize."
-                    );
+                    this.logger.log("Scanning " +  this._aListElements[i].childNodes.length + " child nodes for items to initialize.");
 
                     do {
     
@@ -549,9 +534,7 @@ YAHOO.widget.MenuModule.prototype._initSubTree = function() {
         
                             case "LI":
 
-                                this.logger.log(
-                                    "Initializing " +  oNode.tagName + " node."
-                                );
+                                this.logger.log("Initializing " +  oNode.tagName + " node.");
 
                                 this.addItem(new this.ITEM_TYPE(oNode), i);
         
@@ -571,11 +554,7 @@ YAHOO.widget.MenuModule.prototype._initSubTree = function() {
 
         case "SELECT":
 
-            this.logger.log(
-                "Scanning " +  
-                this.srcElement.childNodes.length + 
-                " child nodes for items to initialize."
-            );
+            this.logger.log("Scanning " +  this.srcElement.childNodes.length + " child nodes for items to initialize.");
 
             oNode = this.srcElement.firstChild;
 
@@ -586,9 +565,7 @@ YAHOO.widget.MenuModule.prototype._initSubTree = function() {
                     case "OPTGROUP":
                     case "OPTION":
 
-                        this.logger.log(
-                            "Initializing " +  oNode.tagName + " node."
-                        );
+                        this.logger.log("Initializing " +  oNode.tagName + " node.");
 
                         this.addItem(new this.ITEM_TYPE(oNode));
 
@@ -786,13 +763,7 @@ YAHOO.widget.MenuModule.prototype._addItemToGroup =
                     
                     this._updateItemProperties(nGroupIndex);
             
-                    this.logger.log(
-                        "Item inserted." + 
-                        " Text: " + oGroupItem.cfg.getProperty("text") + ", " +
-                        " Index: " + oGroupItem.index + ", " +
-                        " Group Index: " + oGroupItem.groupIndex
-                    );
-
+                    this.logger.log("Item inserted." + " Text: " + oGroupItem.cfg.getProperty("text") + ", " + " Index: " + oGroupItem.index + ", " + " Group Index: " + oGroupItem.groupIndex);
 
                     return oGroupItem;
         
@@ -851,12 +822,7 @@ YAHOO.widget.MenuModule.prototype._addItemToGroup =
             
                     }
 
-                    this.logger.log(
-                        "Item added." + 
-                        " Text: " + oGroupItem.cfg.getProperty("text") + ", " +
-                        " Index: " + oGroupItem.index + ", " +
-                        " Group Index: " + oGroupItem.groupIndex
-                    );
+                    this.logger.log("Item added." + " Text: " + oGroupItem.cfg.getProperty("text") + ", " + " Index: " + oGroupItem.index + ", " + " Group Index: " + oGroupItem.groupIndex);
             
                     return oGroupItem;
         
@@ -2265,12 +2231,7 @@ YAHOO.widget.MenuModule.prototype.removeItem =
     
                 oItem.destroy();
 
-                this.logger.log(
-                    "Item removed." + 
-                    " Text: " + oItem.cfg.getProperty("text") + ", " +
-                    " Index: " + oItem.index + ", " +
-                    " Group Index: " + oItem.groupIndex
-                );
+                this.logger.log("Item removed." + " Text: " + oItem.cfg.getProperty("text") + ", " + " Index: " + oItem.index + ", " + " Group Index: " + oItem.groupIndex);
     
                 return oItem;
     

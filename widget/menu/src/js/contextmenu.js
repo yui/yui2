@@ -1,8 +1,5 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-*/
+
+
 
 /**
 * @class Creates a list of options which vary depending on the context in 
