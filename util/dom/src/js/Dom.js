@@ -22,7 +22,7 @@ YAHOO.util.Dom = function() {
          camel: property.replace(/-([a-z])/gi, function(m0, m1) {return m1.toUpperCase()}),
          hyphen: property.replace(/([a-z])([A-Z]+)/g, function(m0, m1, m2) {return (m1 + '-' + m2.toLowerCase())})
       };
-   }
+   };
    
    return {
       /**
@@ -72,7 +72,6 @@ YAHOO.util.Dom = function() {
             var camel = property_cache[property]['camel'];
             var hyphen = property_cache[property]['hyphen'];
 
-            
             if (property == 'opacity' && el.filters) {// IE opacity
                value = 1;
                try {
@@ -404,7 +403,7 @@ YAHOO.util.Dom = function() {
 
          var f = function(el) {
             el['className'] = el['className'].replace(re, ' ' + newClassName + ' ');
-            
+
             if ( this.hasClass(el, oldClassName) ) { // in case of multiple adjacent
                this.replaceClass(el, oldClassName, newClassName);
             }

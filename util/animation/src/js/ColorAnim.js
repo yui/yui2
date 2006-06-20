@@ -70,7 +70,7 @@ YAHOO.util.ColorAnim.prototype.parseColor = function(s) {YAHOO.log('s = ' + s);
    }
    
    return null;
-}
+};
 
 /**
  * Returns the value computed by the animation's "method".
