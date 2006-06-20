@@ -298,12 +298,25 @@ YAHOO.widget.Logger.log("Logger initialized");
  * @param {string} sSource Source of LogWriter instance
  */
 YAHOO.widget.LogWriter = function(sSource) {
+    if(!sSource) {
+        YAHOO.log("Could not instantiate LogWriter due to invalid source.", "error", "LogWriter");
+        return;
+    }
     this._source = sSource;
  };
 
 /***************************************************************************
  * Public methods
  ***************************************************************************/
+ /**
+ * Public accessor to the unique name of the LogWriter instance.
+ *
+ * @return {string} Unique name of the LogWriter instance
+ */
+YAHOO.widget.LogWriter.prototype.toString = function() {
+    return "LogWriter " + this._sSource;
+};
+
 /**
  * Logs a message attached to the source of the LogWriter.
  *
@@ -314,6 +327,25 @@ YAHOO.widget.LogWriter.prototype.log = function(sMsg, sCategory) {
     YAHOO.widget.Logger.log(sMsg, sCategory, this._source);
 };
 
+/**
+ * Public accessor to get the source name.
+ */
+YAHOO.widget.LogWriter.prototype.getSource = function() {
+    return this._sSource;
+};
+
+/**
+ * Public accessor to set the source name.
+ */
+YAHOO.widget.LogWriter.prototype.setSource = function(sSource) {
+    if(!sSource) {
+        YAHOO.log("Could not instantiate LogWriter due to invalid source.", "error", this.toString());
+        return;
+    }
+    else {
+        this._sSource = sSource;
+    }
+};
 /***************************************************************************
  * Private members
  ***************************************************************************/
@@ -818,7 +850,7 @@ YAHOO.widget.LogReader.prototype._createCategoryCheckbox = function(category) {
 
             // Create and class the text label
             var categoryChkLbl = filterEl.appendChild(document.createElement("label"));
-            categoryChkLbl.setAttribute("for",categoryChk.id);
+            categoryChkLbl.htmlFor = categoryChk.id;
             categoryChkLbl.className = category;
             categoryChkLbl.innerHTML = category;
     }
@@ -851,7 +883,7 @@ YAHOO.widget.LogReader.prototype._createSourceCheckbox = function(source) {
 
         // Create and class the text label
         var sourceChkLbl = filterEl.appendChild(document.createElement("label"));
-        sourceChkLbl.setAttribute("for",sourceChk.id);
+        sourceChkLbl.htmlFor = sourceChk.id;
         sourceChkLbl.className = source;
         sourceChkLbl.innerHTML = source;
     }
