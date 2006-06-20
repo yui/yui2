@@ -459,6 +459,9 @@ YAHOO.util.DragDrop.prototype = {
         // set the id
         this.id = id;
 
+        // add to an interaction group
+        this.addToGroup((sGroup) ? sGroup : "default");
+
         // We don't want to register this as the handle with the manager
         // so we just set the id rather than calling the setter.
         this.handleElId = id;
@@ -476,9 +479,6 @@ YAHOO.util.DragDrop.prototype = {
         this.invalidHandleTypes = { A: "A" };
         this.invalidHandleIds = {};
         this.invalidHandleClasses = [];
-
-        // add to an interaction group
-        this.addToGroup((sGroup) ? sGroup : "default");
 
         this.applyConfig();
     },
@@ -892,7 +892,6 @@ YAHOO.util.DragDrop.prototype = {
      */
     setXConstraint: function(iLeft, iRight, iTickSize) {
         this.leftConstraint = iLeft;
-
         this.rightConstraint = iRight;
 
         this.minX = this.initPageX - iLeft;
@@ -902,6 +901,26 @@ YAHOO.util.DragDrop.prototype = {
         this.constrainX = true;
         this.logger.log("initPageX:" + this.initPageX + " minX:" + this.minX + 
                 " maxX:" + this.maxX);
+    },
+
+    /**
+     * Clears any constraints applied to this instance.  Also clears ticks
+     * since they can't exist independent of a constraint at this time.
+     */
+    clearConstraints: function() {
+        this.logger.log("Clearing constraints");
+        this.constrainX = false;
+        this.constrainY = false;
+        this.clearTicks();
+    },
+
+    /**
+     * Clears any tick interval defined for this instance
+     */
+    clearTicks: function() {
+        this.logger.log("Clearing ticks");
+        this.xTicks = null;
+        this.yTicks = null;
     },
 
     /**
