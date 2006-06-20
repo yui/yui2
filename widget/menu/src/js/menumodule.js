@@ -2284,37 +2284,7 @@ YAHOO.widget.MenuModule.prototype.destroy = function() {
 
     // Remove DOM event handlers
 
-    this._oEventUtil.removeListener(
-        this.element, 
-        "mouseover", 
-        this._onElementMouseOver
-    );
-
-    this._oEventUtil.removeListener(
-        this.element, 
-        "mouseout", 
-        this._onElementMouseOut
-    );
-
-    this._oEventUtil.removeListener(
-        this.element, 
-        "click", 
-        this._onElementClick
-    );
-
-    this._oEventUtil.removeListener(
-        this.element, 
-        "mousedown", 
-        this._onDOMEvent
-        );
-
-    this._oEventUtil.removeListener(this.element, "mouseup", this._onDOMEvent);
-
-    this._oEventUtil.removeListener(this.element, "keydown", this._onDOMEvent);
-
-    this._oEventUtil.removeListener(this.element, "keyup", this._onDOMEvent);
-
-    this._oEventUtil.removeListener(this.element, "keypress", this._onDOMEvent);
+    this._oEventUtil.purgeElement(this.element);
 
 
     // Remove Custom Event listeners
