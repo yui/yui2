@@ -1,17 +1,14 @@
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
 /**
  * Contains the tree view state data and the root node.  This is an
  * ordered tree; child nodes will be displayed in the order created, and
  * there currently is no way to change this.
  *
  * @constructor
- * @todo graft (appendBefore, appendAfter)
- * @param {string} id The id of the element that the tree will be inserted
- * into.
+ * @param {string|HTMLElement} id The id of the element, or the element
+ * itself that the tree will be inserted into.
  */
 YAHOO.widget.TreeView = function(id) {
-	if (id) { this.init(id); }
+    if (id) { this.init(id); }
 };
 
 /**
@@ -19,7 +16,6 @@ YAHOO.widget.TreeView = function(id) {
  * @type int
  */
 YAHOO.widget.TreeView.nodeCount = 0;
-
 
 YAHOO.widget.TreeView.prototype = {
 
@@ -29,6 +25,12 @@ YAHOO.widget.TreeView.prototype = {
      * @type String
      */
     id: null,
+
+    /**
+     * The host element for this tree
+     * @private
+     */
+    _el: null,
 
      /**
      * Flat collection of all nodes in this tree
@@ -79,7 +81,8 @@ YAHOO.widget.TreeView.prototype = {
     /**
      * Sets up the animation for expanding children
      *
-     * @param {string} the type of animation (acceptable constants in YAHOO.widget.TVAnim)
+     * @param {string} the type of animation (acceptable values defined in 
+     * YAHOO.widget.TVAnim)
      */
     setExpandAnim: function(type) {
         if (YAHOO.widget.TVAnim.isValid(type)) {
@@ -90,7 +93,8 @@ YAHOO.widget.TreeView.prototype = {
     /**
      * Sets up the animation for collapsing children
      *
-     * @param {string} the type of animation (acceptable constants in YAHOO.widget.TVAnim)
+     * @param {string} the type of animation (acceptable values defined in 
+     * YAHOO.widget.TVAnim)
      */
     setCollapseAnim: function(type) {
         if (YAHOO.widget.TVAnim.isValid(type)) {
@@ -106,7 +110,7 @@ YAHOO.widget.TreeView.prototype = {
      * @return {boolean} true if animation could be invoked, false otherwise
      */
     animateExpand: function(el) {
-        this.logger.debug("animating expand");
+        this.logger.log("animating expand");
 
         if (this._expandAnim && this._animCount < this.maxAnim) {
             // this.locked = true;
@@ -132,7 +136,7 @@ YAHOO.widget.TreeView.prototype = {
      * @return {boolean} true if animation could be invoked, false otherwise
      */
     animateCollapse: function(el) {
-        this.logger.debug("animating collapse");
+        this.logger.log("animating collapse");
 
         if (this._collapseAnim && this._animCount < this.maxAnim) {
             // this.locked = true;
@@ -154,7 +158,7 @@ YAHOO.widget.TreeView.prototype = {
      * Function executed when the expand animation completes
      */
     expandComplete: function() {
-        this.logger.debug("expand complete: " + this.id);
+        this.logger.log("expand complete: " + this.id);
         --this._animCount;
         // this.locked = false;
     },
@@ -163,7 +167,7 @@ YAHOO.widget.TreeView.prototype = {
      * Function executed when the collapse animation completes
      */
     collapseComplete: function() {
-        this.logger.debug("collapse complete: " + this.id);
+        this.logger.log("collapse complete: " + this.id);
         --this._animCount;
         // this.locked = false;
     },
@@ -171,23 +175,29 @@ YAHOO.widget.TreeView.prototype = {
     /**
      * Initializes the tree
      *
-     * @parm {string} id the id of the element that will hold the tree
+     * @parm {string|HTMLElement} id the id of the element that will hold the tree
      * @private
      */
     init: function(id) {
 
         this.id = id;
+
+        if ("string" !== typeof id) {
+            this._el = id;
+            this.id = this.generateId(id);
+        }
+
         this._nodes = [];
 
         // store a global reference
-        YAHOO.widget.TreeView.trees[id] = this;
+        YAHOO.widget.TreeView.trees[this.id] = this;
 
         // Set up the root node
         this.root = new YAHOO.widget.RootNode(this);
 
-        this.logger = new ygLogger("TreeView");
+        this.logger = new YAHOO.widget.LogWriter(this.toString());
 
-        this.logger.debug("tree init: " + id);
+        this.logger.log("tree init: " + this.id);
     },
 
     /**
@@ -195,8 +205,19 @@ YAHOO.widget.TreeView.prototype = {
      */
     draw: function() {
         var html = this.root.getHtml();
-        document.getElementById(this.id).innerHTML = html;
+        this.getEl().innerHTML = html;
         this.firstDraw = false;
+    },
+
+    /**
+     * Returns the tree's host element
+     * @return {HTMLElement} the host element
+     */
+    getEl: function() {
+        if (! this._el) {
+            this._el = document.getElementById(this.id);
+        }
+        return this._el;
     },
 
     /**
@@ -267,8 +288,7 @@ YAHOO.widget.TreeView.prototype = {
 
     /**
      * Returns a node that has a matching property and value in the data
-     * object that was passed into its constructor.  Provides a flexible
-     * way for the implementer to get a particular node.
+     * object that was passed into its constructor.
      *
      * @param {object} property the property to search (usually a string)
      * @param {object} value the value we want to find (usuall an int or string)
@@ -283,6 +303,26 @@ YAHOO.widget.TreeView.prototype = {
         }
 
         return null;
+    },
+
+    /**
+     * Returns a collection of nodes that have a matching property 
+     * and value in the data object that was passed into its constructor.  
+     *
+     * @param {object} property the property to search (usually a string)
+     * @param {object} value the value we want to find (usuall an int or string)
+     * @return {Array} the matching collection of nodes, null if no match
+     */
+    getNodesByProperty: function(property, value) {
+        var values = [];
+        for (var i in this._nodes) {
+            var n = this._nodes[i];
+            if (n.data && value == n.data[property]) {
+                values.push(n);
+            }
+        }
+
+        return (values.length) ? values : null;
     },
 
     /**
@@ -324,12 +364,15 @@ YAHOO.widget.TreeView.prototype = {
      * @param {Node} node the node to purge
      */
     removeChildren: function(node) { 
-        for (var i=0, len=node.children.length;i<len;++i) {
-            this._deleteNode(node.children[i]);
+        this.logger.log("Removing children for " + node);
+        while (node.children.length) {
+             this._deleteNode(node.children[0]);
         }
 
         node.childrenRendered = false;
         node.dynamicLoadComplete = false;
+        // node.collapse();
+        node.expand();
         node.collapse();
     },
 
@@ -338,15 +381,24 @@ YAHOO.widget.TreeView.prototype = {
      * @private
      */
     _deleteNode: function(node) { 
-        var p = node.parent;
-
         // Remove all the child nodes first
         this.removeChildren(node);
+
+        // Remove the node from the tree
+        this.popBranch(node);
+    },
+
+    /**
+     * Removes the branch from the tree
+     * @param {Node} the node to remove
+     */
+    popBranch: function(node) { 
+        var p = node.parent;
 
         // Update the parent's collection of children
         var a = [];
 
-        for (i=0, len=p.children.length;i<len;++i) {
+        for (var i=0, len=p.children.length;i<len;++i) {
             if (p.children[i] != node) {
                 a[a.length] = p.children[i];
             }
@@ -357,29 +409,49 @@ YAHOO.widget.TreeView.prototype = {
         // reset the childrenRendered flag for the parent
         p.childrenRendered = false;
 
-         // Update the sibling relationship                                                                                                                       
-        if (node.previousSibling) {                                                                                                                              
-            node.previousSibling.nextSibling = node.nextSibling;                                                                                                   
-        }                                                                                                                                                        
+         // Update the sibling relationship
+        if (node.previousSibling) {
+            node.previousSibling.nextSibling = node.nextSibling;
+        }
 
-        if (node.nextSibling) {                                                                                                                                  
-            node.nextSibling.previousSibling = node.previousSibling;                                                                                               
+        if (node.nextSibling) {
+            node.nextSibling.previousSibling = node.previousSibling;
         }
 
         // Update the tree's node collection 
         delete this._nodes[node.index];
     },
 
+
+    /**
+     * toString
+     * @return {string} string representation of the tree
+     */
+    toString: function() {
+        return "TreeView " + this.id;
+    },
+
+    /**
+     * private
+     */
+    generateId: function(el) {
+        var id = el.id;
+
+        if (!id) {
+            id = "yui-tv-auto-id-" + (YAHOO.widget.TreeView.counter++);
+        }
+
+        return id;
+    },
+
     /**
      * Abstract method that is executed when a node is expanded
-     *
      * @param node {Node} the node that was expanded
      */
     onExpand: function(node) { },
 
     /**
      * Abstract method that is executed when a node is collapsed
-     *
      * @param node {Node} the node that was collapsed.
      */
     onCollapse: function(node) { }
@@ -395,6 +467,11 @@ YAHOO.widget.TreeView.prototype = {
 YAHOO.widget.TreeView.trees = [];
 
 /**
+ * @private
+ */
+YAHOO.widget.TreeView.counter = 0;
+
+/**
  * Global method for getting a tree by its id.  Used in the generated
  * tree html.
  *
@@ -402,8 +479,8 @@ YAHOO.widget.TreeView.trees = [];
  * @return {TreeView} the tree instance requested, null if not found.
  */
 YAHOO.widget.TreeView.getTree = function(treeId) {
-	var t = YAHOO.widget.TreeView.trees[treeId];
-	return (t) ? t : null;
+    var t = YAHOO.widget.TreeView.trees[treeId];
+    return (t) ? t : null;
 };
 
 
@@ -416,8 +493,8 @@ YAHOO.widget.TreeView.getTree = function(treeId) {
  * @return {Node} the node instance requested, null if not found
  */
 YAHOO.widget.TreeView.getNode = function(treeId, nodeIndex) {
-	var t = YAHOO.widget.TreeView.getTree(treeId);
-	return (t) ? t.getNodeByIndex(nodeIndex) : null;
+    var t = YAHOO.widget.TreeView.getTree(treeId);
+    return (t) ? t.getNodeByIndex(nodeIndex) : null;
 };
 
 /**
@@ -429,14 +506,14 @@ YAHOO.widget.TreeView.getNode = function(treeId, nodeIndex) {
  * @param {boolean} capture if true event is capture phase, bubble otherwise
  */
 YAHOO.widget.TreeView.addHandler = function (el, sType, fn, capture) {
-	capture = (capture) ? true : false;
-	if (el.addEventListener) {
-		el.addEventListener(sType, fn, capture);
-	} else if (el.attachEvent) {
-		el.attachEvent("on" + sType, fn);
-	} else {
-		el["on" + sType] = fn;
-	}
+    capture = (capture) ? true : false;
+    if (el.addEventListener) {
+        el.addEventListener(sType, fn, capture);
+    } else if (el.attachEvent) {
+        el.attachEvent("on" + sType, fn);
+    } else {
+        el["on" + sType] = fn;
+    }
 };
 
 /**
@@ -445,34 +522,34 @@ YAHOO.widget.TreeView.addHandler = function (el, sType, fn, capture) {
  */
 YAHOO.widget.TreeView.preload = function() {
 
-	var styles = [
-		"ygtvtn",	
-		"ygtvtm",	
-		"ygtvtmh",	
-		"ygtvtp",	
-		"ygtvtph",	
-		"ygtvln",	
-		"ygtvlm",	
-		"ygtvlmh",	
-		"ygtvlp",	
-		"ygtvlph",	
-		"ygtvloading"
-		];
+    var styles = [
+        "ygtvtn",   
+        "ygtvtm",   
+        "ygtvtmh",  
+        "ygtvtp",   
+        "ygtvtph",  
+        "ygtvln",   
+        "ygtvlm",   
+        "ygtvlmh",  
+        "ygtvlp",   
+        "ygtvlph",  
+        "ygtvloading"
+        ];
 
-	var sb = [];
-	
-	for (var i = 0; i < styles.length; ++i) { 
-		sb[sb.length] = '<span class="' + styles[i] + '">&nbsp;</span>';
-	}
+    var sb = [];
+    
+    for (var i = 0; i < styles.length; ++i) { 
+        sb[sb.length] = '<span class="' + styles[i] + '">&#160;</span>';
+    }
 
-	var f = document.createElement("div");
-	var s = f.style;
-	s.position = "absolute";
-	s.top = "-1000px";
-	s.left = "-1000px";
-	f.innerHTML = sb.join("");
+    var f = document.createElement("DIV");
+    var s = f.style;
+    s.position = "absolute";
+    s.top = "-1000px";
+    s.left = "-1000px";
+    f.innerHTML = sb.join("");
 
-	document.body.appendChild(f);
+    document.body.appendChild(f);
 };
 
 YAHOO.widget.TreeView.addHandler(window, 

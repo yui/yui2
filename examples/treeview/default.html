@@ -2,8 +2,15 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
       <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
+
 <title>Yahoo! UI Library - Tree Control</title>
+<link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/fonts_2.0.0-b3.css" />
+<link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/grids_2.0.0-b3.css" />
+
 <link rel="stylesheet" type="text/css" href="css/screen.css" />
+<!--
+<link rel="stylesheet" type="text/css" href="http://html-new/lib/common/widgets/2/treeview/css/default/treeview_2.0.0-b4.css" />
+-->
 <link rel="stylesheet" type="text/css" href="css/local/tree.css" />
 </head>
   
@@ -13,6 +20,44 @@
 	<h3>Tree Control</h3>
 </div>
 
+<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<!--
+<script type="text/javascript" src="http://produce.yahoo.com/tsha/yui/connection/conn_alert.js"></script>
+-->
+<script type="text/javascript" src="../../build/connection/connection.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
+
+<script type="text/javascript" src="js/logger.js"></script>
+<script type="text/javascript" src="js/json.js" ></script>
+
+<script type="text/javascript" src="../../build/treeview/treeview.js" ></script>
+<script type="text/javascript" src="js/TaskNode.js"></script>
+<script type="text/javascript" src="js/CheckOnClickNode.js"></script>
+
+<style type="text/css">
+
+/* ylogger default styles */
+#ylogger {position:absolute;top:1em;right:1em;}
+/*
+.ylogger {padding:1em;background-color:#AAA;border:1px solid black;font-family:monospace;font-size:77%;z-index:9000;}
+*/
+.ylogger {font-family:monospace;z-index:9000;}
+.ylogger p {margin:1px;padding:.1em;}
+.ylogger button {font-family:monospace;font-size:77%;}
+.ylogger .ylog_hd {position:relative;margin-top:2px;padding:2px;background-color:#575757;color:#FFF;}
+.ylogger .ylog_bd {height: 1100px;position:relative;background-color:#FFF;border:1px solid gray;overflow:auto;width:100%;}
+.ylogger .ylog_ft {position:relative;margin-top:0.5em;margin-bottom:0.1em;}
+.ylogger .ylog_btns {position:relative;float:right;bottom:0.25em;}
+.ylogger .info {background-color:#A7CC25;} /* A7CC25 green */
+.ylogger .warn {background-color:#F58516;} /* F58516 orange */
+.ylogger .error {background-color:#E32F0B;} /* E32F0B red */
+.ylogger .time {background-color:#A6C9D7;} /* A6C9D7 blue */
+.ylogger .window {background-color:#F2E886;} /* F2E886 tan  */
+</style>
 
 
 <div id="container">
@@ -79,34 +124,13 @@
 </div>
 
 
-<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
-<script type="text/javascript" src="../../build/event/event.js"></script>
-<script type="text/javascript" src="../../build/connection/connection.js"></script>
-<script type="text/javascript" src="../../build/animation/animation.js"></script>
-<script type="text/javascript" src="../../build/dom/dom.js"></script>
-
-<script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
-
-<script type="text/javascript" src="js/log.js"></script>
-<script type="text/javascript" src="js/json.js" ></script>
-
-<script type="text/javascript" src="../../build/treeview/treeview.js" ></script>
-<script type="text/javascript" src="js/TaskNode.js"></script>
-<script type="text/javascript" src="js/CheckOnClickNode.js"></script>
 
 <script type="text/javascript">
 //<![CDATA[
-	var gLogger;
-	var tree;
-	var nodes = new Array();
-	var nodeIndex;
+	var tree, nodeIndex;
+	var nodes = [];
 	
 	function treeInit() {
-		if (typeof(ygLogger) != "undefined") {
-			ygLogger.init(document.getElementById("logDiv"));
-			gLogger = new ygLogger("basic.php");
-		}
-
 		buildRandomTextNodeTree();
 	}
 	
@@ -128,7 +152,7 @@
 
 	function buildLargeBranch(node) {
 		if (node.depth < 10) {
-			gLogger.debug("buildRandomTextBranch: " + node.index);
+			YAHOO.log("buildRandomTextBranch: " + node.index);
 			for ( var i = 0; i < 10; i++ ) {
 				new YAHOO.widget.TextNode(node.label + "-" + i, node, false);
 			}
@@ -137,7 +161,7 @@
 
 	function buildRandomTextBranch(node) {
 		if (node.depth < 10) {
-			gLogger.debug("buildRandomTextBranch: " + node.index);
+			YAHOO.log("buildRandomTextBranch: " + node.index);
 			for ( var i = 0; i < Math.floor(Math.random() * 4) ; i++ ) {
 				var tmpNode = new YAHOO.widget.TextNode(node.label + "-" + i, node, false);
 				buildRandomTextBranch(tmpNode);

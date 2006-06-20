@@ -1,5 +1,3 @@
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
 /**
  * A static factory class for tree view expand/collapse animations
  *

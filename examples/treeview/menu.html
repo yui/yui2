@@ -18,6 +18,44 @@
 	<h3>Tree Control</h3>
 </div>
 
+<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<!--
+<script type="text/javascript" src="http://produce.yahoo.com/tsha/yui/connection/conn_alert.js"></script>
+-->
+<script type="text/javascript" src="../../build/connection/connection.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
+
+<script type="text/javascript" src="js/logger.js"></script>
+<script type="text/javascript" src="js/json.js" ></script>
+
+<script type="text/javascript" src="../../build/treeview/treeview.js" ></script>
+<script type="text/javascript" src="js/TaskNode.js"></script>
+<script type="text/javascript" src="js/CheckOnClickNode.js"></script>
+
+<style type="text/css">
+
+/* ylogger default styles */
+#ylogger {position:absolute;top:1em;right:1em;}
+/*
+.ylogger {padding:1em;background-color:#AAA;border:1px solid black;font-family:monospace;font-size:77%;z-index:9000;}
+*/
+.ylogger {font-family:monospace;z-index:9000;}
+.ylogger p {margin:1px;padding:.1em;}
+.ylogger button {font-family:monospace;font-size:77%;}
+.ylogger .ylog_hd {position:relative;margin-top:2px;padding:2px;background-color:#575757;color:#FFF;}
+.ylogger .ylog_bd {height: 1100px;position:relative;background-color:#FFF;border:1px solid gray;overflow:auto;width:100%;}
+.ylogger .ylog_ft {position:relative;margin-top:0.5em;margin-bottom:0.1em;}
+.ylogger .ylog_btns {position:relative;float:right;bottom:0.25em;}
+.ylogger .info {background-color:#A7CC25;} /* A7CC25 green */
+.ylogger .warn {background-color:#F58516;} /* F58516 orange */
+.ylogger .error {background-color:#E32F0B;} /* E32F0B red */
+.ylogger .time {background-color:#A6C9D7;} /* A6C9D7 blue */
+.ylogger .window {background-color:#F2E886;} /* F2E886 tan  */
+</style>
 
 
 <div id="container">
@@ -87,34 +125,14 @@
   </div>
 </div>
 
-<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
-<script type="text/javascript" src="../../build/event/event.js"></script>
-<script type="text/javascript" src="../../build/connection/connection.js"></script>
-<script type="text/javascript" src="../../build/animation/animation.js"></script>
-<script type="text/javascript" src="../../build/dom/dom.js"></script>
-
-<script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
-
-<script type="text/javascript" src="js/log.js"></script>
-<script type="text/javascript" src="js/json.js" ></script>
-
-<script type="text/javascript" src="../../build/treeview/treeview.js" ></script>
-<script type="text/javascript" src="js/TaskNode.js"></script>
-<script type="text/javascript" src="js/CheckOnClickNode.js"></script>
 
 <script type="text/javascript">
 
-	var gLogger;
 	var tree;
 	var nodes = new Array();
 	var nodeIndex = 0;
 	
 	function treeInit() {
-		if (typeof(ygLogger) != "undefined") {
-			ygLogger.init(document.getElementById("logDiv"));
-			gLogger = new ygLogger("basic.php");
-		}
-
 		buildRandomTextNodeTree();
 	}
 
@@ -185,7 +203,7 @@
 
 		var el = node.getLabelEl()
 
-        gLogger.debug("pos: " + YAHOO.util.Dom.getXY(el));
+        YAHOO.log("pos: " + YAHOO.util.Dom.getXY(el));
 
         el.style.backgroundColor = "#c5dbfc";
 		

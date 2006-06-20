@@ -1,5 +1,3 @@
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
 /**
  * The default node presentation.  The first parameter should be
  * either a string that will be used as the node's label, or an object
@@ -16,12 +14,17 @@
  * @param expanded {boolean} the initial expanded/collapsed state
  */
 YAHOO.widget.TextNode = function(oData, oParent, expanded) {
-    this.type = "TextNode";
+    // this.type = "TextNode";
 
-	if (oParent) { 
-		this.init(oData, oParent, expanded);
-		this.setUpLabel(oData);
-	}
+    if (oData) { 
+        this.init(oData, oParent, expanded);
+        this.setUpLabel(oData);
+    }
+
+    /**
+     * @private
+     */
+    this.logger     = new YAHOO.widget.LogWriter(this.toString());
 };
 
 YAHOO.widget.TextNode.prototype = new YAHOO.widget.Node();
@@ -56,26 +59,26 @@ YAHOO.widget.TextNode.prototype.label = null;
  * @param oData string containing the label, or an object with a label property
  */
 YAHOO.widget.TextNode.prototype.setUpLabel = function(oData) { 
-	if (typeof oData == "string") {
-		oData = { label: oData };
-	}
-	this.label = oData.label;
-	
-	// update the link
-	if (oData.href) {
-		this.href = oData.href;
-	}
+    if (typeof oData == "string") {
+        oData = { label: oData };
+    }
+    this.label = oData.label;
+    
+    // update the link
+    if (oData.href) {
+        this.href = oData.href;
+    }
 
-	// set the target
-	if (oData.target) {
-		this.target = oData.target;
-	}
+    // set the target
+    if (oData.target) {
+        this.target = oData.target;
+    }
 
     if (oData.style) {
         this.labelStyle = oData.style;
     }
 
-	this.labelElId = "ygtvlabelel" + this.index;
+    this.labelElId = "ygtvlabelel" + this.index;
 };
 
 /**
@@ -84,38 +87,39 @@ YAHOO.widget.TextNode.prototype.setUpLabel = function(oData) {
  * @return {object} the element
  */
 YAHOO.widget.TextNode.prototype.getLabelEl = function() { 
-	return document.getElementById(this.labelElId);
+    return document.getElementById(this.labelElId);
 };
 
 // overrides YAHOO.widget.Node
 YAHOO.widget.TextNode.prototype.getNodeHtml = function() { 
-	var sb = [];
+    this.logger.log("Generating html");
+    var sb = [];
 
-	sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0">';
-	sb[sb.length] = '<tr>';
-	
-	for (i=0;i<this.depth;++i) {
-		// sb[sb.length] = '<td class="ygtvdepthcell">&nbsp;</td>';
-		sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&nbsp;</td>';
-	}
+    sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0">';
+    sb[sb.length] = '<tr>';
+    
+    for (i=0;i<this.depth;++i) {
+        // sb[sb.length] = '<td class="ygtvdepthcell">&#160;</td>';
+        sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&#160;</td>';
+    }
 
-	var getNode = 'YAHOO.widget.TreeView.getNode(\'' +
-					this.tree.id + '\',' + this.index + ')';
+    var getNode = 'YAHOO.widget.TreeView.getNode(\'' +
+                    this.tree.id + '\',' + this.index + ')';
 
-	sb[sb.length] = '<td';
-	// sb[sb.length] = ' onselectstart="return false"';
-	sb[sb.length] = ' id="' + this.getToggleElId() + '"';
-	sb[sb.length] = ' class="' + this.getStyle() + '"';
-	if (this.hasChildren(true)) {
-		sb[sb.length] = ' onmouseover="this.className=';
-		sb[sb.length] = getNode + '.getHoverStyle()"';
-		sb[sb.length] = ' onmouseout="this.className=';
-		sb[sb.length] = getNode + '.getStyle()"';
-	}
-	sb[sb.length] = ' onclick="javascript:' + this.getToggleLink() + '">';
+    sb[sb.length] = '<td';
+    // sb[sb.length] = ' onselectstart="return false"';
+    sb[sb.length] = ' id="' + this.getToggleElId() + '"';
+    sb[sb.length] = ' class="' + this.getStyle() + '"';
+    if (this.hasChildren(true)) {
+        sb[sb.length] = ' onmouseover="this.className=';
+        sb[sb.length] = getNode + '.getHoverStyle()"';
+        sb[sb.length] = ' onmouseout="this.className=';
+        sb[sb.length] = getNode + '.getStyle()"';
+    }
+    sb[sb.length] = ' onclick="javascript:' + this.getToggleLink() + '">';
 
     /*
-	sb[sb.length] = '<img id="' + this.getSpacerId() + '"';
+    sb[sb.length] = '<img id="' + this.getSpacerId() + '"';
     sb[sb.length] = ' alt=""';
     sb[sb.length] = ' tabindex=0';
     sb[sb.length] = ' src="' + this.spacerPath + '"';
@@ -125,32 +129,32 @@ YAHOO.widget.TextNode.prototype.getNodeHtml = function() {
     sb[sb.length] = ' />';
     */
 
-	sb[sb.length] = '&nbsp;';
+    sb[sb.length] = '&#160;';
 
-	sb[sb.length] = '</td>';
-	sb[sb.length] = '<td>';
-	sb[sb.length] = '<a';
-	sb[sb.length] = ' id="' + this.labelElId + '"';
-	sb[sb.length] = ' class="' + this.labelStyle + '"';
-	sb[sb.length] = ' href="' + this.href + '"';
-	sb[sb.length] = ' target="' + this.target + '"';
-	sb[sb.length] = ' onclick="return ' + getNode + '.onLabelClick(' + getNode +')"';
-	if (this.hasChildren(true)) {
-		sb[sb.length] = ' onmouseover="document.getElementById(\'';
-		sb[sb.length] = this.getToggleElId() + '\').className=';
-		sb[sb.length] = getNode + '.getHoverStyle()"';
-		sb[sb.length] = ' onmouseout="document.getElementById(\'';
-		sb[sb.length] = this.getToggleElId() + '\').className=';
-		sb[sb.length] = getNode + '.getStyle()"';
-	}
-	sb[sb.length] = ' >';
-	sb[sb.length] = this.label;
-	sb[sb.length] = '</a>';
-	sb[sb.length] = '</td>';
-	sb[sb.length] = '</tr>';
-	sb[sb.length] = '</table>';
+    sb[sb.length] = '</td>';
+    sb[sb.length] = '<td>';
+    sb[sb.length] = '<a';
+    sb[sb.length] = ' id="' + this.labelElId + '"';
+    sb[sb.length] = ' class="' + this.labelStyle + '"';
+    sb[sb.length] = ' href="' + this.href + '"';
+    sb[sb.length] = ' target="' + this.target + '"';
+    sb[sb.length] = ' onclick="return ' + getNode + '.onLabelClick(' + getNode +')"';
+    if (this.hasChildren(true)) {
+        sb[sb.length] = ' onmouseover="document.getElementById(\'';
+        sb[sb.length] = this.getToggleElId() + '\').className=';
+        sb[sb.length] = getNode + '.getHoverStyle()"';
+        sb[sb.length] = ' onmouseout="document.getElementById(\'';
+        sb[sb.length] = this.getToggleElId() + '\').className=';
+        sb[sb.length] = getNode + '.getStyle()"';
+    }
+    sb[sb.length] = ' >';
+    sb[sb.length] = this.label;
+    sb[sb.length] = '</a>';
+    sb[sb.length] = '</td>';
+    sb[sb.length] = '</tr>';
+    sb[sb.length] = '</table>';
 
-	return sb.join("");
+    return sb.join("");
 };
 
 
@@ -161,6 +165,11 @@ YAHOO.widget.TextNode.prototype.getNodeHtml = function() {
  * @return false to cancel the anchor click
  */
 YAHOO.widget.TextNode.prototype.onLabelClick = function(me) { 
-    me.logger.debug("onLabelClick " + this.label);
+    me.logger.log("onLabelClick " + this.label);
     //return true;
 };
+
+YAHOO.widget.TextNode.prototype.toString = function() { 
+    return "TextNode (" + this.index + ") " + this.label;
+};
+

@@ -1,5 +1,3 @@
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
 /**
  * A custom YAHOO.widget.Node that handles the unique nature of 
  * the virtual, presentationless root node.
@@ -21,6 +19,7 @@ YAHOO.widget.RootNode = function(oTree) {
 	 */
 	this.tree = oTree;
 };
+
 YAHOO.widget.RootNode.prototype = new YAHOO.widget.Node();
 
 // overrides YAHOO.widget.Node
@@ -28,3 +27,10 @@ YAHOO.widget.RootNode.prototype.getNodeHtml = function() {
 	return ""; 
 };
 
+YAHOO.widget.RootNode.prototype.toString = function() { 
+    return "RootNode";
+};
+
+YAHOO.widget.RootNode.prototype.loadComplete = function() { 
+    this.tree.draw();
+};

@@ -1,5 +1,3 @@
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
 /**
  * A 1/2 second fade-in animation.
  *
@@ -8,23 +6,23 @@
  * @param callback {function} function to invoke when the animation is finished
  */
 YAHOO.widget.TVFadeIn = function(el, callback) {
-	/**
-	 * The element to animate
+    /**
+     * The element to animate
      * @type HTMLElement
-	 */
-	this.el = el;
+     */
+    this.el = el;
 
-	/**
-	 * the callback to invoke when the animation is complete
-	 *
-	 * @type function
-	 */
-	this.callback = callback;
+    /**
+     * the callback to invoke when the animation is complete
+     *
+     * @type function
+     */
+    this.callback = callback;
 
-	/**
-	 * @private
-	 */
-	this.logger = new ygLogger("TVFadeIn");
+    /**
+     * @private
+     */
+    this.logger = new YAHOO.widget.LogWriter(this.toString());
 };
 
 /**
@@ -41,7 +39,7 @@ YAHOO.widget.TVFadeIn.prototype = {
 
         // var dur = ( navigator.userAgent.match(/msie/gi) ) ? 0.05 : 0.4;
         var dur = 0.4; 
-        // this.logger.debug("duration: " + dur);
+        // this.logger.log("duration: " + dur);
         // var a = new ygAnim_Fade(this.el, dur, 1);
         // a.setStart(0.1);
         // a.onComplete = function() { tvanim.onComplete(); };
@@ -57,6 +55,10 @@ YAHOO.widget.TVFadeIn.prototype = {
      */
     onComplete: function() {
         this.callback();
+    },
+
+    toString: function() {
+        return "TVFadeIn";
     }
 };
 

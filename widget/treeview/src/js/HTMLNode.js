@@ -1,5 +1,3 @@
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
 /**
  * This implementation takes either a string or object for the
  * oData argument.  If is it a string, we will use it for the display
@@ -17,7 +15,7 @@
  * have an icon
  */
 YAHOO.widget.HTMLNode = function(oData, oParent, expanded, hasIcon) {
-    if (oParent) { 
+    if (oData) { 
         this.init(oData, oParent, expanded);
         this.initContent(oData, hasIcon);
     }
@@ -62,6 +60,11 @@ YAHOO.widget.HTMLNode.prototype.initContent = function(oData, hasIcon) {
     this.html = oData.html;
     this.contentElId = "ygtvcontentel" + this.index;
     this.hasIcon = hasIcon;
+
+    /**
+     * @private
+     */
+    this.logger = new YAHOO.widget.LogWriter(this.toString());
 };
 
 /**
@@ -75,13 +78,14 @@ YAHOO.widget.HTMLNode.prototype.getContentEl = function() {
 
 // overrides YAHOO.widget.Node
 YAHOO.widget.HTMLNode.prototype.getNodeHtml = function() { 
+    this.logger.log("Generating html");
     var sb = [];
 
     sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0">';
     sb[sb.length] = '<tr>';
     
     for (i=0;i<this.depth;++i) {
-        sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&nbsp;</td>';
+        sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&#160;</td>';
     }
 
     if (this.hasIcon) {
@@ -97,7 +101,7 @@ YAHOO.widget.HTMLNode.prototype.getNodeHtml = function() {
             sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
             sb[sb.length] = this.tree.id + '\',' + this.index +  ').getStyle()"';
         }
-        sb[sb.length] = '>&nbsp;</td>';
+        sb[sb.length] = '>&#160;</td>';
     }
 
     sb[sb.length] = '<td';
@@ -110,5 +114,9 @@ YAHOO.widget.HTMLNode.prototype.getNodeHtml = function() {
     sb[sb.length] = '</table>';
 
     return sb.join("");
+};
+
+YAHOO.widget.HTMLNode.prototype.toString = function() { 
+    return "HTMLNode (" + this.index + ")";
 };
 

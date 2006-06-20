@@ -86,13 +86,14 @@
 .ygtvitem { }  
 
 /* the style of the div around each node's collection of children */
-.ygtvchildren { }  
+.ygtvchildren {  }  
 * html .ygtvchildren { height:2%; }  
 
 /* the style of the text label in ygTextNode */
 .ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover { 
 	margin-left:2px;
 	text-decoration: none;
+    background-color: white;
 }
 
 .ygtvspacer { height: 10px; width: 10px; margin: 2px; }

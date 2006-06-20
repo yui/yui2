@@ -1,5 +1,3 @@
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
 /**
  * The base class for all tree nodes.  The node's presentation and behavior in
  * response to mouse events is handled in Node subclasses.
@@ -11,7 +9,7 @@
  * @constructor
  */
 YAHOO.widget.Node = function(oData, oParent, expanded) {
-	if (oParent) { this.init(oData, oParent, expanded); }
+    if (oData) { this.init(oData, oParent, expanded); }
 };
 
 YAHOO.widget.Node.prototype = {
@@ -189,45 +187,165 @@ YAHOO.widget.Node.prototype = {
      * @param expanded {boolean} the initial expanded/collapsed state
      */
     init: function(oData, oParent, expanded) {
-        this.data		= oData;
-        this.children	= [];
-        this.index		= YAHOO.widget.TreeView.nodeCount;
+        this.data       = oData;
+        this.children   = [];
+        this.index      = YAHOO.widget.TreeView.nodeCount;
         ++YAHOO.widget.TreeView.nodeCount;
-        this.logger		= new ygLogger("Node");
-        this.expanded	= expanded;
+        this.expanded   = expanded;
+        this.logger     = new YAHOO.widget.LogWriter(this.toString());
 
         // oParent should never be null except when we create the root node.
         if (oParent) {
-            this.tree			= oParent.tree;
-            this.parent			= oParent;
-            this.href			= "javascript:" + this.getToggleLink();
-            this.depth			= oParent.depth + 1;
-            this.multiExpand	= oParent.multiExpand;
-
             oParent.appendChild(this);
         }
     },
 
     /**
-     * Appends a node to the child collection.
-     *
-     * @param node {Node} the new node
-     * @return {Node} the child node
-     * @private
-     * @TODO insertBefore, insertAfter
+     * Certain properties for the node cannot be set until the parent
+     * is known. This is called after the node is inserted into a tree.
+     * the parent is also applied to this node's children in order to
+     * make it possible to move a branch from one tree to another.
+     * @param {Node} parentNode this node's parent node
      */
-    appendChild: function(node) {
-        if (this.hasChildren()) {
-            var sib = this.children[this.children.length - 1];
-            sib.nextSibling = node;
-            node.previousSibling = sib;
+    applyParent: function(parentNode) {
+        if (!parentNode) {
+            return false;
         }
 
-        this.tree.regNode(node);
-        this.children[this.children.length] = node;
-        this.childrenRendered = false;
-        return node;
+        this.tree   = parentNode.tree;
+        this.parent = parentNode;
+        this.depth  = parentNode.depth + 1;
 
+        if (! this.href) {
+            this.href = "javascript:" + this.getToggleLink();
+        }
+
+        if (! this.multiExpand) {
+            this.multiExpand = parentNode.multiExpand;
+        }
+
+        this.tree.regNode(this);
+        parentNode.childrenRendered = false;
+
+        // cascade update existing children
+        for (var i=0, len=this.children.length;i<len;++i) {
+            this.children[i].applyParent(this);
+        }
+
+        return true;
+    },
+
+    /**
+     * Appends a node to the child collection.
+     *
+     * @param childNode {Node} the new node
+     * @return {Node} the child node
+     * @private
+     */
+    appendChild: function(childNode) {
+        if (this.hasChildren()) {
+            var sib = this.children[this.children.length - 1];
+            sib.nextSibling = childNode;
+            childNode.previousSibling = sib;
+        }
+        this.children[this.children.length] = childNode;
+        childNode.applyParent(this);
+
+        return childNode;
+    },
+
+    /**
+     * Appends this node to the supplied node's child collection
+     * @param parentNode {Node} the node to append to.
+     */
+    appendTo: function(parentNode) {
+        return parentNode.appendChild(this);
+    },
+
+    /**
+    * Inserts this node before this supplied node
+    *
+    * @param node {Node} the node to insert this node before
+    * @return {Node} the inserted node
+    */
+    insertBefore: function(node) {
+        this.logger.log("insertBefore: " + node);
+        var p = node.parent;
+        if (p) {
+
+            if (this.tree) {
+                this.tree.popBranch(this);
+            }
+
+            var refIndex = node.isChildOf(p);
+            this.logger.log(refIndex);
+            p.children.splice(refIndex, 0, this);
+            if (node.previousSibling) {
+                node.previousSibling.nextSibling = this;
+            }
+            this.previousSibling = node.previousSibling;
+            this.nextSibling = node;
+            node.previousSibling = this;
+
+            this.applyParent(p);
+        }
+
+        return this;
+    },
+ 
+    /**
+    * Inserts this node after the supplied node
+    *
+    * @param node {Node} the node to insert after
+    * @return {Node} the inserted node
+    */
+    insertAfter: function(node) {
+        this.logger.log("insertAfter: " + node);
+        var p = node.parent;
+        if (p) {
+
+            if (this.tree) {
+                this.tree.popBranch(this);
+            }
+
+            var refIndex = node.isChildOf(p);
+            this.logger.log(refIndex);
+
+            if (!node.nextSibling) {
+                return this.appendTo(p);
+            }
+
+            p.children.splice(refIndex + 1, 0, this);
+
+            node.nextSibling.previousSibling = this;
+            this.previousSibling = node;
+            this.nextSibling = node.nextSibling;
+            node.nextSibling = this;
+
+            this.applyParent(p);
+        }
+
+        return this;
+    },
+
+    /**
+    * Returns true if the Node is a child of supplied Node
+    *
+    * @param parentNode {Node} the Node to check
+    * @return {boolean} The node index if this Node is a child of 
+    *                   supplied Node, else -1.
+    * @private
+    */
+    isChildOf: function(parentNode) {
+        if (parentNode && parentNode.children) {
+            for (var i=0, len=parentNode.children.length; i<len ; ++i) {
+                if (parentNode.children[i] === this) {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
     },
 
     /**
@@ -254,7 +372,7 @@ YAHOO.widget.Node.prototype = {
      * Hides this node's children
      */
     hideChildren: function() {
-        this.logger.debug("hiding " + this.index);
+        this.logger.log("hiding " + this.index);
 
         if (!this.tree.animateCollapse(this.getChildrenEl())) {
             this.getChildrenEl().style.display = "none";
@@ -371,7 +489,7 @@ YAHOO.widget.Node.prototype = {
         var ret = this.tree.onCollapse(this);
 
         if ("undefined" != typeof ret && !ret) {
-            this.logger.debug("Collapse was stopped by the event handler");
+            this.logger.log("Collapse was stopped by the event handler");
             return;
         }
 
@@ -404,7 +522,7 @@ YAHOO.widget.Node.prototype = {
         var ret = this.tree.onExpand(this);
 
         if ("undefined" != typeof ret && !ret) {
-            this.logger.debug("Expand was stopped by the event handler");
+            this.logger.log("Expand was stopped by the event handler");
             return;
         }
 
@@ -414,10 +532,10 @@ YAHOO.widget.Node.prototype = {
         }
 
         if (! this.childrenRendered) {
-            this.logger.debug("children not rendered yet");
+            this.logger.log("children not rendered yet");
             this.getChildrenEl().innerHTML = this.renderChildren();
         } else {
-            this.logger.debug("CHILDREN RENDERED");
+            this.logger.log("CHILDREN RENDERED");
         }
 
         this.expanded = true;
@@ -454,9 +572,9 @@ YAHOO.widget.Node.prototype = {
      * @return {string} the css class for this node's toggle
      */
     getStyle: function() {
-        // this.logger.debug("No children, " + " isDyanmic: " + this.isDynamic() + " expanded: " + this.expanded);
+        // this.logger.log("No children, " + " isDyanmic: " + this.isDynamic() + " expanded: " + this.expanded);
         if (this.isLoading) {
-            this.logger.debug("returning the loading icon");
+            this.logger.log("returning the loading icon");
             return "ygtvloading";
         } else {
             // location top or bottom, middle nodes also get the top style
@@ -469,7 +587,7 @@ YAHOO.widget.Node.prototype = {
                 type = (this.expanded) ? "m" : "p";
             }
 
-            // this.logger.debug("ygtv" + loc + type);
+            // this.logger.log("ygtv" + loc + type);
             return "ygtv" + loc + type;
         }
     },
@@ -559,7 +677,7 @@ YAHOO.widget.Node.prototype = {
      */
     isDynamic: function() { 
         var lazy = (!this.isRoot() && (this._dynLoad || this.tree.root._dynLoad));
-        // this.logger.debug("isDynamic: " + lazy);
+        // this.logger.log("isDynamic: " + lazy);
         return lazy;
     },
 
@@ -645,7 +763,7 @@ YAHOO.widget.Node.prototype = {
      */
     renderChildren: function() {
 
-        this.logger.debug("rendering children for " + this.index);
+        this.logger.log("rendering children for " + this.index);
 
         var node = this;
 
@@ -654,7 +772,7 @@ YAHOO.widget.Node.prototype = {
             this.tree.locked = true;
 
             if (this.dataLoader) {
-                this.logger.debug("Using dynamic loader defined for this node");
+                this.logger.log("Using dynamic loader defined for this node");
 
                 setTimeout( 
                     function() {
@@ -665,7 +783,7 @@ YAHOO.widget.Node.prototype = {
                     }, 10);
                 
             } else if (this.tree.root.dataLoader) {
-                this.logger.debug("Using the tree-level dynamic loader");
+                this.logger.log("Using the tree-level dynamic loader");
 
                 setTimeout( 
                     function() {
@@ -676,7 +794,7 @@ YAHOO.widget.Node.prototype = {
                     }, 10);
 
             } else {
-                this.logger.debug("no loader found");
+                this.logger.log("no loader found");
                 return "Error: data loader not found or not specified.";
             }
 
@@ -692,7 +810,7 @@ YAHOO.widget.Node.prototype = {
      * @return {string} children html
      */
     completeRender: function() {
-        this.logger.debug("completeRender: " + this.index + ", # of children: " + this.children.length);
+        this.logger.log("completeRender: " + this.index + ", # of children: " + this.children.length);
         var sb = [];
 
         for (var i=0; i < this.children.length; ++i) {
@@ -710,7 +828,7 @@ YAHOO.widget.Node.prototype = {
      * in dynamic load situations.
      */
     loadComplete: function() {
-        this.logger.debug("loadComplete: " + this.index);
+        this.logger.log("loadComplete: " + this.index);
         this.getChildrenEl().innerHTML = this.completeRender();
         this.dynamicLoadComplete = true;
         this.isLoading = false;
@@ -726,7 +844,7 @@ YAHOO.widget.Node.prototype = {
      */
     getAncestor: function(depth) {
         if (depth >= this.depth || depth < 0)  {
-            this.logger.debug("illegal getAncestor depth: " + depth);
+            this.logger.log("illegal getAncestor depth: " + depth);
             return null;
         }
 
@@ -760,6 +878,7 @@ YAHOO.widget.Node.prototype = {
      * @return {string} The HTML that will render this node.
      */
     getNodeHtml: function() { 
+        this.logger.log("Generating html");
         return ""; 
     },
 
@@ -777,6 +896,14 @@ YAHOO.widget.Node.prototype = {
                 el.className = this.getStyle();
             }
         }
+    },
+
+    /**
+     * toString
+     * @return {string} string representation of the node
+     */
+    toString: function() {
+        return "Node (" + this.index + ")";
     }
 
 };
