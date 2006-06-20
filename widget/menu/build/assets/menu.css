@@ -250,14 +250,37 @@ div.yuimenubar li.yuimenubaritem.first {
 
 div.yuimenubar li.yuimenubaritem img {
 
+    height:8px;
+    width:8px;
     margin:0 0 0 10px;
     vertical-align:middle;
 
 }
 
 div.yuimenu li.yuimenuitem img {
-  
+
+    height:8px;
+    width:8px;
     margin:0 -16px 0 10px;
     border:0;
 
+}
+
+div.yuimenu li.checked {
+
+    position:relative;
+
+}
+
+div.yuimenu li.checked img.checked {
+
+    height:8px;
+    width:8px;
+    margin:0;
+    border:0;
+    position:absolute;
+    left:6px;
+    *left:-16px;
+    top:.5em;
+    
 }
