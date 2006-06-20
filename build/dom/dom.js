@@ -12,6 +12,17 @@ YAHOO.util.Dom = function() {
    var isOpera = (ua.indexOf('opera') != -1);
    var isIE = (ua.indexOf('msie') != -1 && !isOpera); // not opera spoof
    var id_counter = 0;
+   var util = YAHOO.util; // internal shorthand
+   
+   var property_cache = {}; // to cache case conversion for set/getStyle
+   
+   // improve performance by only looking up once
+   var cacheConvertedProperties = function(property) {
+      property_cache[property] = {
+         camel: property.replace(/-([a-z])/gi, function(m0, m1) {return m1.toUpperCase()}),
+         hyphen: property.replace(/([a-z])([A-Z]+)/g, function(m0, m1, m2) {return (m1 + '-' + m2.toLowerCase())})
+      };
+   };
    
    return {
       /**
@@ -34,7 +45,7 @@ YAHOO.util.Dom = function() {
             var collection = [];
             for (var i = 0, len = el.length; i < len; ++i)
             {
-               collection[collection.length] = this.get(el[i]);
+               collection[collection.length] = util.Dom.get(el[i]);
             }
             
             return collection;
@@ -54,8 +65,14 @@ YAHOO.util.Dom = function() {
             var value = null;
             var dv = document.defaultView;
             
-            if (property == 'opacity' && el.filters) 
-            {// IE opacity
+            if (!property_cache[property]) {
+               cacheConvertedProperties(property);
+            }
+            
+            var camel = property_cache[property]['camel'];
+            var hyphen = property_cache[property]['hyphen'];
+
+            if (property == 'opacity' && el.filters) {// IE opacity
                value = 1;
                try {
                   value = el.filters.item('DXImageTransform.Microsoft.Alpha').opacity / 100;
@@ -64,36 +81,24 @@ YAHOO.util.Dom = function() {
                      value = el.filters.item('alpha').opacity / 100;
                   } catch(e) {}
                }
+            } else if (el.style[camel]) { // camelCase for valid styles
+               value = el.style[camel];
             }
-            else if (el.style[property]) 
-            {
-               value = el.style[property];
+            else if (el.currentStyle && el.currentStyle[camel]) { // camelCase for currentStyle
+               value = el.currentStyle[camel];
             }
-            else if (el.currentStyle && el.currentStyle[property]) {
-               value = el.currentStyle[property];
-            }
-            else if ( dv && dv.getComputedStyle )
-            {  // convert camelCase to hyphen-case
+            else if ( dv && dv.getComputedStyle ) { // hyphen-case for computedStyle
+               var computed = dv.getComputedStyle(el, '');
                
-               var converted = '';
-               for(var i = 0, len = property.length;i < len; ++i) {
-                  if (property.charAt(i) == property.charAt(i).toUpperCase()) 
-                  {
-                     converted = converted + '-' + property.charAt(i).toLowerCase();
-                  } else {
-                     converted = converted + property.charAt(i);
-                  }
-               }
-               
-               if (dv.getComputedStyle(el, '') && dv.getComputedStyle(el, '').getPropertyValue(converted)) {
-                  value = dv.getComputedStyle(el, '').getPropertyValue(converted);
+               if (computed && computed.getPropertyValue(hyphen)) {
+                  value = computed.getPropertyValue(hyphen);
                }
             }
       
             return value;
          };
          
-         return this.batch(el, f, this, true);
+         return util.Dom.batch(el, f, util.Dom, true);
       },
    
       /**
@@ -103,6 +108,12 @@ YAHOO.util.Dom = function() {
        * @param {String} val The value to apply to the given property.
        */
       setStyle: function(el, property, val) {
+         if (!property_cache[property]) {
+            cacheConvertedProperties(property);
+         }
+         
+         var camel = property_cache[property]['camel'];
+         
          var f = function(el) {
             switch(property) {
                case 'opacity' :
@@ -120,12 +131,12 @@ YAHOO.util.Dom = function() {
 
                   break;
                default :
-                  el.style[property] = val;
+                  el.style[camel] = val;
             }
             
          };
          
-         this.batch(el, f, this, true);
+         util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -141,33 +152,33 @@ YAHOO.util.Dom = function() {
                return false;
             }
             
-            var parent = null;
+            var parentNode = null;
             var pos = [];
             var box;
             
             if (el.getBoundingClientRect) { // IE
                box = el.getBoundingClientRect();
-               var scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
-               var scrollLeft = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft);
+               var doc = document;
+               if ( !this.inDocument(el) ) {// might be in a frame, need to get its scroll
+                  var doc = parent.document;
+                  while ( doc && !this.isAncestor(doc.documentElement, el) ) {
+                     doc = parent.document;
+                  }
+               }
+
+               var scrollTop = Math.max(doc.documentElement.scrollTop, doc.body.scrollTop);
+               var scrollLeft = Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft);
                
                return [box.left + scrollLeft, box.top + scrollTop];
             }
-            else if (document.getBoxObjectFor) { // gecko
-               box = document.getBoxObjectFor(el);
-               
-               var borderLeft = parseInt(this.getStyle(el, 'borderLeftWidth'));
-               var borderTop = parseInt(this.getStyle(el, 'borderTopWidth'));
-               
-               pos = [box.x - borderLeft, box.y - borderTop];
-            }
-            else { // safari & opera
+            else { // safari, opera, & gecko
                pos = [el.offsetLeft, el.offsetTop];
-               parent = el.offsetParent;
-               if (parent != el) {
-                  while (parent) {
-                     pos[0] += parent.offsetLeft;
-                     pos[1] += parent.offsetTop;
-                     parent = parent.offsetParent;
+               parentNode = el.offsetParent;
+               if (parentNode != el) {
+                  while (parentNode) {
+                     pos[0] += parentNode.offsetLeft;
+                     pos[1] += parentNode.offsetTop;
+                     parentNode = parentNode.offsetParent;
                   }
                }
                if (
@@ -179,22 +190,22 @@ YAHOO.util.Dom = function() {
                } 
             }
             
-            if (el.parentNode) { parent = el.parentNode; }
-            else { parent = null; }
+            if (el.parentNode) { parentNode = el.parentNode; }
+            else { parentNode = null; }
       
-            while (parent && parent.tagName != 'BODY' && parent.tagName != 'HTML') 
+            while (parentNode && parentNode.tagName.toUpperCase() != 'BODY' && parentNode.tagName.toUpperCase() != 'HTML') 
             { // account for any scrolled ancestors
-               pos[0] -= parent.scrollLeft;
-               pos[1] -= parent.scrollTop;
+               pos[0] -= parentNode.scrollLeft;
+               pos[1] -= parentNode.scrollTop;
       
-               if (parent.parentNode) { parent = parent.parentNode; } 
-               else { parent = null; }
+               if (parentNode.parentNode) { parentNode = parentNode.parentNode; } 
+               else { parentNode = null; }
             }
       
             return pos;
          };
          
-         return this.batch(el, f, this, true);
+         return util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -203,7 +214,7 @@ YAHOO.util.Dom = function() {
        * @return {String/Array} The X position of the element(s)
        */
       getX: function(el) {
-         return this.getXY(el)[0];
+         return util.Dom.getXY(el)[0];
       },
       
       /**
@@ -212,7 +223,7 @@ YAHOO.util.Dom = function() {
        * @return {String/Array} The Y position of the element(s)
        */
       getY: function(el) {
-         return this.getXY(el)[1];
+         return util.Dom.getXY(el)[1];
       },
       
       /**
@@ -231,12 +242,12 @@ YAHOO.util.Dom = function() {
                style_pos = 'relative';
             }
             
-            var pageXY = YAHOO.util.Dom.getXY(el);
+            var pageXY = this.getXY(el);
             if (pageXY === false) { return false; } // has to be part of doc to have pageXY
             
             var delta = [
-               parseInt( YAHOO.util.Dom.getStyle(el, 'left'), 10 ),
-               parseInt( YAHOO.util.Dom.getStyle(el, 'top'), 10 )
+               parseInt( this.getStyle(el, 'left'), 10 ),
+               parseInt( this.getStyle(el, 'top'), 10 )
             ];
          
             if ( isNaN(delta[0]) ) // defaults to 'auto'
@@ -255,12 +266,12 @@ YAHOO.util.Dom = function() {
       
             // if retry is true, try one more time if we miss
             if (!noRetry && (newXY[0] != pos[0] || newXY[1] != pos[1]) ) {
-               var retry = function() { YAHOO.util.Dom.setXY(el, pos, true); };
+               var retry = function() { util.Dom.setXY(el, pos, true); };
                setTimeout(retry, 0); // "delay" for IE resize timing issue
             }
          };
          
-         this.batch(el, f, this, true);
+         util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -270,7 +281,7 @@ YAHOO.util.Dom = function() {
        * @param {Int} x to use as the X coordinate for the element(s).
        */
       setX: function(el, x) {
-         this.setXY(el, [x, null]);
+         util.Dom.setXY(el, [x, null]);
       },
       
       /**
@@ -280,7 +291,7 @@ YAHOO.util.Dom = function() {
        * @param {Int} x to use as the Y coordinate for the element(s).
        */
       setY: function(el, y) {
-         this.setXY(el, [null, y]);
+         util.Dom.setXY(el, [null, y]);
       },
       
       /**
@@ -294,7 +305,7 @@ YAHOO.util.Dom = function() {
             return new YAHOO.util.Region.getRegion(el);
          };
          
-         return this.batch(el, f, this, true);
+         return util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -303,7 +314,7 @@ YAHOO.util.Dom = function() {
        * @return {Int} The width of the viewable area of the page.
        */
       getClientWidth: function() {
-         return this.getViewportWidth();
+         return util.Dom.getViewportWidth();
       },
       
       /**
@@ -312,7 +323,7 @@ YAHOO.util.Dom = function() {
        * @return {Int} The height of the viewable area of the page.
        */
       getClientHeight: function() {
-         return this.getViewportHeight();
+         return util.Dom.getViewportHeight();
       },
 
       /**
@@ -324,11 +335,8 @@ YAHOO.util.Dom = function() {
        * @return {Array} An array of elements that have the given class name
        */
       getElementsByClassName: function(className, tag, root) {
-         var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
-         
-         var method = function(el) { return re.test(el['className']); };
-         
-         return this.getElementsBy(method, tag, root);
+         var method = function(el) { return util.Dom.hasClass(el, className) };
+         return util.Dom.getElementsBy(method, tag, root);
       },
 
       /**
@@ -338,12 +346,13 @@ YAHOO.util.Dom = function() {
        * @return {Boolean/Array} A boolean value or array of boolean values
        */
       hasClass: function(el, className) {
+         var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
+         
          var f = function(el) {
-            var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
             return re.test(el['className']);
          };
          
-         return this.batch(el, f, this, true);
+         return util.Dom.batch(el, f, util.Dom, true);
       },
    
       /**
@@ -358,7 +367,7 @@ YAHOO.util.Dom = function() {
             el['className'] = [el['className'], className].join(' ');
          };
          
-         this.batch(el, f, this, true);
+         util.Dom.batch(el, f, util.Dom, true);
       },
    
       /**
@@ -367,16 +376,19 @@ YAHOO.util.Dom = function() {
        * @param {String} className the class name to remove from the class attribute
        */
       removeClass: function(el, className) {
+         var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)', 'g');
+
          var f = function(el) {
             if (!this.hasClass(el, className)) { return; } // not present
-            
-            var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)', 'g');
             var c = el['className'];
+            el['className'] = c.replace(re, ' ');
+            if ( this.hasClass(el, className) ) { // in case of multiple adjacent
+               this.removeClass(el, className);
+            }
             
-            el['className'] = c.replace( re, ' ');
          };
          
-         this.batch(el, f, this, true);
+         util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -387,12 +399,17 @@ YAHOO.util.Dom = function() {
        * @param {String} newClassName the class name that will be replacing the old class name
        */
       replaceClass: function(el, oldClassName, newClassName) {
+         var re = new RegExp('(?:^|\\s+)' + oldClassName + '(?:\\s+|$)', 'g');
+
          var f = function(el) {
-            this.removeClass(el, oldClassName);
-            this.addClass(el, newClassName);
+            el['className'] = el['className'].replace(re, ' ' + newClassName + ' ');
+
+            if ( this.hasClass(el, oldClassName) ) { // in case of multiple adjacent
+               this.replaceClass(el, oldClassName, newClassName);
+            }
          };
          
-         this.batch(el, f, this, true);
+         util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -412,7 +429,7 @@ YAHOO.util.Dom = function() {
             return el.id;
          };
          
-         return this.batch(el, f, this, true);
+         return util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -422,7 +439,7 @@ YAHOO.util.Dom = function() {
        * @return {Boolean} Whether or not the haystack is an ancestor of needle
        */
       isAncestor: function(haystack, needle) {
-         haystack = this.get(haystack);
+         haystack = util.Dom.get(haystack);
          if (!haystack || !needle) { return false; }
          
          var f = function(needle) {
@@ -442,7 +459,7 @@ YAHOO.util.Dom = function() {
                   if (parent == haystack) {
                      return true;
                   }
-                  else if (parent.tagName == 'HTML') {
+                  else if (parent.tagName.toUpperCase() == 'HTML') {
                      return false;
                   }
                   
@@ -453,7 +470,7 @@ YAHOO.util.Dom = function() {
             }    
          };
          
-         return this.batch(needle, f, this, true);     
+         return util.Dom.batch(needle, f, util.Dom, true);     
       },
       
       /**
@@ -466,7 +483,7 @@ YAHOO.util.Dom = function() {
             return this.isAncestor(document.documentElement, el);
          };
          
-         return this.batch(el, f, this, true);
+         return util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -478,7 +495,7 @@ YAHOO.util.Dom = function() {
        */
       getElementsBy: function(method, tag, root) {
          tag = tag || '*';
-         root = this.get(root) || document;
+         root = util.Dom.get(root) || document;
          
          var nodes = [];
          var elements = root.getElementsByTagName(tag);
@@ -505,7 +522,7 @@ YAHOO.util.Dom = function() {
        * @return {HTMLElement/Array} The element(s) with the method applied
        */
       batch: function(el, method, o, override) {
-         el = this.get(el);
+         el = util.Dom.get(el);
          var scope = (override) ? o : window;
          
          if (!el || el.tagName || !el.length) 
@@ -529,8 +546,8 @@ YAHOO.util.Dom = function() {
        */
       getDocumentHeight: function() {
          var scrollHeight=-1,windowHeight=-1,bodyHeight=-1;
-         var marginTop = parseInt(this.getStyle(document.body, 'marginTop'), 10);
-         var marginBottom = parseInt(this.getStyle(document.body, 'marginBottom'), 10);
+         var marginTop = parseInt(util.Dom.getStyle(document.body, 'marginTop'), 10);
+         var marginBottom = parseInt(util.Dom.getStyle(document.body, 'marginBottom'), 10);
          
          var mode = document.compatMode;
          
@@ -562,8 +579,8 @@ YAHOO.util.Dom = function() {
        */
       getDocumentWidth: function() {
          var docWidth=-1,bodyWidth=-1,winWidth=-1;
-         var marginRight = parseInt(this.getStyle(document.body, 'marginRight'), 10);
-         var marginLeft = parseInt(this.getStyle(document.body, 'marginLeft'), 10);
+         var marginRight = parseInt(util.Dom.getStyle(document.body, 'marginRight'), 10);
+         var marginLeft = parseInt(util.Dom.getStyle(document.body, 'marginLeft'), 10);
          
          var mode = document.compatMode;
          
@@ -762,11 +779,11 @@ YAHOO.util.Region.prototype.union = function(region) {
  * @return string the region properties
  */
 YAHOO.util.Region.prototype.toString = function() {
-    return ( "Region {" +
-             "t: "    + this.top    + 
-             ", r: "    + this.right  + 
-             ", b: "    + this.bottom + 
-             ", l: "    + this.left   + 
+    return ( "Region {"    +
+             "top: "       + this.top    + 
+             ", right: "   + this.right  + 
+             ", bottom: "  + this.bottom + 
+             ", left: "    + this.left   + 
              "}" );
 };
 
@@ -803,24 +820,23 @@ YAHOO.util.Region.getRegion = function(el) {
  * @extends Region
  */
 YAHOO.util.Point = function(x, y) {
+   if (x instanceof Array) { // accept output from Dom.getXY
+      y = x[1];
+      x = x[0];
+   }
+   
     /**
-     * The X position of the point
+     * The X position of the point, which is also the right, left and index zero (for Dom.getXY symmetry)
      * @type int
      */
-    this.x      = x;
 
+    this.x = this.right = this.left = this[0] = x;
+     
     /**
-     * The Y position of the point
+     * The Y position of the point, which is also the top, bottom and index one (for Dom.getXY symmetry)
      * @type int
      */
-    this.y      = y;
-    this.top    = y;
-    this[1] = y;
-    
-    this.right  = x;
-    this.bottom = y;
-    this.left   = x;
-    this[0] = x;
+    this.y = this.top = this.bottom = this[1] = y;
 };
 
 YAHOO.util.Point.prototype = new YAHOO.util.Region();
