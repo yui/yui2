@@ -15,21 +15,15 @@
 */
 YAHOO.widget.ContextMenu = function(p_oElement, p_oUserConfig) {
 
-    if(arguments.length > 0) {
-
-        YAHOO.widget.ContextMenu.superclass.constructor.call(
-                this, 
-                p_oElement,
-                p_oUserConfig
-            );
-
-    }
+    YAHOO.widget.ContextMenu.superclass.constructor.call(
+            this, 
+            p_oElement,
+            p_oUserConfig
+        );
 
 };
 
-YAHOO.widget.ContextMenu.prototype = new YAHOO.widget.Menu();
-YAHOO.widget.ContextMenu.prototype.constructor = YAHOO.widget.ContextMenu;
-YAHOO.widget.ContextMenu.superclass = YAHOO.widget.Menu.prototype;
+YAHOO.extend(YAHOO.widget.ContextMenu, YAHOO.widget.Menu);
 
 
 /**

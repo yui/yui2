@@ -17,21 +17,16 @@
 */
 YAHOO.widget.MenuItem = function(p_oObject, p_oUserConfig) {
 
-    if(p_oObject) {
-
-        YAHOO.widget.MenuItem.superclass.constructor.call(
-            this, 
-            p_oObject, 
-            p_oUserConfig
-        );
-
-    }
+    YAHOO.widget.MenuItem.superclass.constructor.call(
+        this, 
+        p_oObject, 
+        p_oUserConfig
+    );
 
 };
 
-YAHOO.widget.MenuItem.prototype = new YAHOO.widget.MenuModuleItem();
-YAHOO.widget.MenuItem.prototype.constructor = YAHOO.widget.MenuItem;
-YAHOO.widget.MenuItem.superclass = YAHOO.widget.MenuModuleItem.prototype;
+YAHOO.extend(YAHOO.widget.MenuItem, YAHOO.widget.MenuModuleItem);
+
 
 /**
 * The MenuItem class's initialization method. This method is automatically

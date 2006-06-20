@@ -17,21 +17,15 @@
 */
 YAHOO.widget.MenuBarItem = function(p_oObject, p_oUserConfig) {
 
-    if(p_oObject) {
-
-        YAHOO.widget.MenuBarItem.superclass.constructor.call(
-            this, 
-            p_oObject, 
-            p_oUserConfig
-        );
-
-    }
+    YAHOO.widget.MenuBarItem.superclass.constructor.call(
+        this, 
+        p_oObject, 
+        p_oUserConfig
+    );
 
 };
 
-YAHOO.widget.MenuBarItem.prototype = new YAHOO.widget.MenuModuleItem();
-YAHOO.widget.MenuBarItem.prototype.constructor = YAHOO.widget.MenuBarItem;
-YAHOO.widget.MenuBarItem.superclass = YAHOO.widget.MenuModuleItem.prototype;
+YAHOO.extend(YAHOO.widget.MenuBarItem, YAHOO.widget.MenuModuleItem);
 
 
 /**

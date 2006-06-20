@@ -11,21 +11,15 @@
 */
 YAHOO.widget.MenuModule = function(p_oElement, p_oUserConfig) {
 
-	if (arguments.length > 0) {
-
-		YAHOO.widget.MenuModule.superclass.constructor.call(
-            this, 
-            p_oElement, 
-            p_oUserConfig
-        );
-
-	}
+    YAHOO.widget.MenuModule.superclass.constructor.call(
+        this, 
+        p_oElement, 
+        p_oUserConfig
+    );
 
 };
 
-YAHOO.widget.MenuModule.prototype = new YAHOO.widget.Overlay();
-YAHOO.widget.MenuModule.prototype.constructor = YAHOO.widget.MenuModule;
-YAHOO.widget.MenuModule.superclass = YAHOO.widget.Overlay.prototype;
+YAHOO.extend(YAHOO.widget.MenuModule, YAHOO.widget.Overlay);
 
 
 // Constants

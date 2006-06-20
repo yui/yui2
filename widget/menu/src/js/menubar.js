@@ -16,21 +16,15 @@
 */
 YAHOO.widget.MenuBar = function(p_oElement, p_oUserConfig) {
 
-    if(arguments.length > 0) {
-
-        YAHOO.widget.MenuBar.superclass.constructor.call(
-                this, 
-                p_oElement,
-                p_oUserConfig
-            );
-
-    }
+    YAHOO.widget.MenuBar.superclass.constructor.call(
+            this, 
+            p_oElement,
+            p_oUserConfig
+        );
 
 };
 
-YAHOO.widget.MenuBar.prototype = new YAHOO.widget.MenuModule();
-YAHOO.widget.MenuBar.prototype.constructor = YAHOO.widget.MenuBar;
-YAHOO.widget.MenuBar.superclass = YAHOO.widget.MenuModule.prototype;
+YAHOO.extend(YAHOO.widget.MenuBar, YAHOO.widget.MenuModule);
 
 
 /**
