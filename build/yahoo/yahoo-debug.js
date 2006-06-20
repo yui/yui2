@@ -3,7 +3,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.                                                                                                    
 Code licensed under the BSD License:                                                                                                                    
 http://developer.yahoo.net/yui/license.txt                                                                                                              
-version: 0.10.0                                                                                                                                         
+version: 0.11.0                                                                                                                                         
 */ 
 
 /**
@@ -62,11 +62,11 @@ YAHOO.log = function(sMsg, sCategory, sSource) {
 };
 
 /**
- * Utility to set up the prototype, constructor and superclass inheritance 
- * properties
+ * Utility to set up the prototype, constructor and superclass properties to
+ * support an inheritance strategy that can chain constructors and methods.
  *
- * @param {Function} The object to extend
- * @param {Function} The object to inherit
+ * @param {Function} subclass   the object to modify
+ * @param {Function} superclass the object to inherit
  */
 YAHOO.extend = function(subclass, superclass) {
     var f = function() {};
