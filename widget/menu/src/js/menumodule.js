@@ -1239,7 +1239,7 @@ YAHOO.widget.MenuModule.prototype._onDOMEvent =
     
             sCustomEventType = oEventTypes[p_oEvent.type],
         
-            oTarget = this._oEventUtil.getTarget(p_oEvent, true);
+            oTarget = this._oEventUtil.getTarget(p_oEvent);
     
         /*
             Check if the target was an element that is a part of a 
@@ -1276,7 +1276,7 @@ YAHOO.widget.MenuModule.prototype._onElementMouseOver =
 
     function(p_oEvent, p_oMenuModule) {
 
-        var oTarget = this._oEventUtil.getTarget(p_oEvent, true);
+        var oTarget = this._oEventUtil.getTarget(p_oEvent);
     
         if(
             (
@@ -1422,7 +1422,7 @@ YAHOO.widget.MenuModule.prototype._onElementClick =
 
     function(p_oEvent, p_oMenuModule) {
 
-        var oTarget = this._oEventUtil.getTarget(p_oEvent, true),
+        var oTarget = this._oEventUtil.getTarget(p_oEvent),
     
             /*
                 Check if the target was a DOM element that is a part of an

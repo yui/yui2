@@ -80,7 +80,7 @@ YAHOO.widget.ContextMenu.prototype._onDocumentMouseDown =
 
     function(p_oEvent, p_oMenu) {
     
-        var oTarget = this._oEventUtil.getTarget(p_oEvent, true);
+        var oTarget = this._oEventUtil.getTarget(p_oEvent);
     
         if(
             oTarget != this._oTargetElement || 
@@ -142,7 +142,7 @@ YAHOO.widget.ContextMenu.prototype._onTriggerContextMenu =
         }
     
     
-        this.contextEventTarget = this._oEventUtil.getTarget(p_oEvent, true);
+        this.contextEventTarget = this._oEventUtil.getTarget(p_oEvent);
     
     
         // Position and display the context menu
