@@ -1,18 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
-		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
+<!DOCTYPE html PUBLIC "-//W4C//DTD XHTML 1.0 Strict//EN" 
+		"http://www.w3.org/TR/xhtml2/DTD/xhtml1-strict.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w4.org/1999/xhtml"
 		xmlns:x2="http://www.w3.org/TR/xhtml2"
 		xmlns:role="http://www.w3.org/2005/01/wai-rdf/GUIRoleTaxonomy#"
 		xmlns:state="http://www.w3.org/2005/07/aaa">
 <head>
 <title>Yahoo! UI Library - Slider Widget</title>
-<link rel="stylesheet" type="text/css" href="css/screen.css">
+<link rel="stylesheet" type="text/css" href="css/screen.css" ></link>
 
 <!-- Nav and logger start -->
-
+<!--
+<script type="text/javascript" src="../../build/event/event.js" ></script>
+-->
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
 <script type="text/javascript" src="../../build/event/event.js" ></script>
+<script type="text/javascript" src="../../build/logger/logger.js" ></script>
 <script type="text/javascript" src="../../build/dom/dom.js" ></script>
 <script type="text/javascript" src="../../build/animation/animation.js" ></script>
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
@@ -148,15 +151,16 @@
 
 
 <script type="text/javascript">
+//<![CDATA[
 function handleHorizSliderKey(slider, ev) {
 	if (gLogger) gLogger.debug("horizontal slider keypress");
 
-	// var valueNow = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuenow"));
+	// var valueNow = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuenow"), 10);
 
 	var valueNow = horizontalSlider.getValue();
 
-	// var valueMin = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuemin"));
-	// var valueMax = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuemax"));
+	// var valueMin = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuemin"), 10);
+	// var valueMax = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuemax"), 10);
 
 	var valueMin = verticalSlider.thumb.rightConstraint;
 	var valueMax = verticalSlider.thumb.leftConstraint;
@@ -198,12 +202,12 @@ function handleHorizSliderKey(slider, ev) {
 function handleVertSliderKey(slider, ev) {
 	if (gLogger) gLogger.debug("vertical slider keypress");
 
-	// var valueNow = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuenow"));
+	// var valueNow = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuenow"), 10);
 
 	var valueNow = verticalSlider.getValue();
 
-	// var valueMin = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuemin"));
-	// var valueMax = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuemax"));
+	// var valueMin = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuemin"), 10);
+	// var valueMax = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuemax"), 10);
 
 	var valueMin = verticalSlider.thumb.topConstraint;
 	var valueMax = verticalSlider.thumb.bottomConstraint;
@@ -267,15 +271,18 @@ function handleVertSliderKey(slider, ev) {
 		};
 
         verticalSlider.onSlideStart = function() {
-            // alert("slidestart");
+            //alert("slidestart");
+            YAHOO.log("VERT slidestart", "warn");
         }
 
         verticalSlider.onSlideEnd = function() {
-            // alert("slideend");
+            //alert("slideend");
+            YAHOO.log("VERT slideend", "warn");
         }
 
         // verticalSlider.setValue(20);
         // verticalSlider.lock();
+        //verticalSlider.animate = false;
 
 
 
@@ -293,6 +300,17 @@ function handleVertSliderKey(slider, ev) {
 			document.getElementById("horizBGDiv").title = 
                         "Horizontal Slider, value = " + offsetFromStart;
 		};
+
+        horizontalSlider.onSlideStart = function() {
+            //alert("slidestart");
+            YAHOO.log("HORIZ slidestart", "warn");
+        };
+
+        horizontalSlider.onSlideEnd = function() {
+            // alert("slideend");
+            YAHOO.log("HORIZ slideend", "warn");
+        };
+
 
         // horizontalSlider.lock();
 
@@ -321,6 +339,7 @@ function handleVertSliderKey(slider, ev) {
 	}
 
 	window.onload = init;
+ //]]>
 </script>
 
 </body>

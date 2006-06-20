@@ -5,10 +5,13 @@
 <link rel="stylesheet" type="text/css" href="css/screen.css">
 
 <!-- Nav and logger start -->
-
+<!--
+<script type="text/javascript" src="../../build/event/event.js" ></script>
+-->
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
 <script type="text/javascript" src="../../build/event/event.js" ></script>
+<script type="text/javascript" src="../../build/logger/logger.js" ></script>
 <script type="text/javascript" src="../../build/dom/dom.js" ></script>
 <script type="text/javascript" src="../../build/animation/animation.js" ></script>
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
@@ -94,6 +97,9 @@
                   </form>
                 </div>
               </div>
+              <div>
+              <input id="re2" type="button" value="removeTicks" />
+              </div>
 		</div> 
 
     </div>
@@ -104,7 +110,7 @@
 <script type="text/javascript">
 
 YAHOO.example.SliderApp = function() {
-	var verticalSlider, gLogger;
+	var verticalSlider;
 
     // The slider can move 0 pixels up
     var topConstraint = 0;
@@ -118,33 +124,34 @@ YAHOO.example.SliderApp = function() {
     return {
 
         init: function() {
-            if (typeof(ygLogger) != "undefined") {
-                ygLogger.init(document.getElementById("logDiv"));
-                gLogger = new ygLogger("slider.php");
-            }
 
             YAHOO.util.Event.addListener("formV", "submit", this.updateVert);
             YAHOO.util.Event.addListener("vertButton", "click", this.updateVert);
 
             verticalSlider = YAHOO.widget.Slider.getVertSlider("vertBGDiv", 
-                             "vertHandleDiv", topConstraint, bottomConstraint);
+                             "vertHandleDiv", topConstraint, bottomConstraint, 20);
 
             verticalSlider.onChange = function(offsetFromStart) {
                 // use the scale factor to convert the pixel offset into a
                 // real value
-                var actualValue = parseInt(offsetFromStart * scaleFactor);
+                var actualValue = parseInt(offsetFromStart * scaleFactor, 10);
                 document.getElementById("vertVal").value = actualValue;
                 document.getElementById("vertBGDiv").title = 
                             "Vertical Slider, value = " + actualValue;
             };
 
             verticalSlider.onSlideStart = function() {
-                // alert("slidestart");
+                YAHOO.log("slidestart", "warn");
             };
 
             verticalSlider.onSlideEnd = function() {
-                // alert("slideend");
+                YAHOO.log("slideend", "warn");
             };
+
+            // verticalSlider.unreg();
+            // verticalSlider.backgroundEnabled = false;
+
+            verticalSlider.setValue(20);
 
         },
 
@@ -155,12 +162,22 @@ YAHOO.example.SliderApp = function() {
             // convert the real value into a pixel offset
             verticalSlider.setValue(Math.round(v/scaleFactor));
             return false;
+        },
+
+        clearConstraints: function() {
+            verticalSlider.getThumb().clearConstraints();
+        },
+
+        clearTicks: function() {
+            verticalSlider.getThumb().clearTicks();
         }
     };
 } ();
 
-YAHOO.example.SliderApp.init();
-	
+//YAHOO.example.SliderApp.init();
+YAHOO.util.Event.addListener(window, "load", YAHOO.example.SliderApp.init, 
+                             YAHOO.example.SliderApp, true);
+YAHOO.util.Event.addListener("re2", "click", YAHOO.example.SliderApp.clearTicks);
 </script>
 
 </body>

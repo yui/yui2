@@ -1,5 +1,3 @@
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
 /**
  * A DragDrop implementation that can be used as a background for a
  * slider.  It takes a reference to the thumb instance 
@@ -9,18 +7,22 @@
  *
  * @extends YAHOO.util.DragDrop
  * @constructor
- * @param {String} id the id of the element linked to this instance
- * @param {String} sGroup the group of related DragDrop items
+ * @param {String} id     The id of the element linked to this instance
+ * @param {String} sGroup The group of related DragDrop items
+ * @param {String} sType  The type of slider (horiz, vert, region)
  */
-YAHOO.widget.Slider = function(sElementId, sGroup, oThumb) {
+YAHOO.widget.Slider = function(sElementId, sGroup, oThumb, sType) {
 	if (sElementId) {
 
         /**
-         * @private
+         * The type of the slider (horiz, vert, region)
+         * @type string
          */
-		this.logger = new ygLogger("Slider " + sElementId);
+        this.type = sType;
 
 		this.init(sElementId, sGroup, true);
+
+        this.logger = new YAHOO.widget.LogWriter(this.toString());
 
 		var self = this;
 
@@ -50,6 +52,10 @@ YAHOO.widget.Slider = function(sElementId, sGroup, oThumb) {
 		 */
 		this.animate = YAHOO.widget.Slider.ANIM_AVAIL;
 
+        /**
+         * Set to false to disable a background click thumb move
+         */
+        this.backgroundEnabled = true;
 
 		/**
 		 * Adjustment factor for tick animation, the more ticks, the
@@ -64,23 +70,24 @@ YAHOO.widget.Slider = function(sElementId, sGroup, oThumb) {
 			this.tickPause = Math.round(360 / oThumb.yTicks.length);
 		}
 
-        this.logger.debug("tickPause: " + this.tickPause);
+        this.logger.log("tickPause: " + this.tickPause);
 
 		// delegate thumb methods
 		oThumb.onMouseDown = function () { return self.focus(); };
 		oThumb.b4MouseDown = function () { return self.b4MouseDown(); };
 		// oThumb.lock = function() { self.lock(); };
 		// oThumb.unlock = function() { self.unlock(); };
-		oThumb.onMouseUp = function() { self.onMouseUp(); };
+		oThumb.onMouseUp = function() { self.thumbMouseUp(); };
 		oThumb.onDrag = function() { self.fireEvents(); };
 		oThumb.onAvailable = function() { return self.setStartSliderState(); };
 	}
 };
 
-YAHOO.widget.Slider.prototype = new YAHOO.util.DragDrop();
+//YAHOO.widget.Slider.prototype = new YAHOO.util.DragDrop();
+YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop);
 
 // YAHOO.widget.Slider.prototype.onAvailable = function() {
-    // this.logger.debug("bg avail");
+    // this.logger.log("bg avail");
 // };
 
 /**
@@ -98,7 +105,7 @@ YAHOO.widget.Slider.getHorizSlider =
 	function (sBGElId, sHandleElId, iLeft, iRight, iTickSize) {
 		return new YAHOO.widget.Slider(sBGElId, sBGElId, 
 			new YAHOO.widget.SliderThumb(sHandleElId, sBGElId, 
-							   iLeft, iRight, 0, 0, iTickSize));
+							   iLeft, iRight, 0, 0, iTickSize), "horiz");
 };
 
 /**
@@ -116,7 +123,7 @@ YAHOO.widget.Slider.getVertSlider =
 	function (sBGElId, sHandleElId, iUp, iDown, iTickSize) {
 		return new YAHOO.widget.Slider(sBGElId, sBGElId, 
 			new YAHOO.widget.SliderThumb(sHandleElId, sBGElId, 0, 0, 
-							   iUp, iDown, iTickSize));
+							   iUp, iDown, iTickSize), "vert");
 };
 
 /**
@@ -137,7 +144,7 @@ YAHOO.widget.Slider.getSliderRegion =
 	function (sBGElId, sHandleElId, iLeft, iRight, iUp, iDown, iTickSize) {
 		return new YAHOO.widget.Slider(sBGElId, sBGElId, 
 			new YAHOO.widget.SliderThumb(sHandleElId, sBGElId, iLeft, iRight, 
-							   iUp, iDown, iTickSize));
+							   iUp, iDown, iTickSize), "region");
 };
 
 /**
@@ -147,8 +154,8 @@ YAHOO.widget.Slider.getSliderRegion =
 YAHOO.widget.Slider.ANIM_AVAIL = true;
 
 YAHOO.widget.Slider.prototype.setStartSliderState = function() {
-    this.logger.debug("Fixing state");
 
+    this.logger.log("Fixing state");
 
     var el = this.thumb.getEl();
 
@@ -163,8 +170,6 @@ YAHOO.widget.Slider.prototype.setStartSliderState = function() {
             y: parseInt(el.offsetHeight/2, 10) 
     };
 
-    this.thumb.startOffset = this.thumb.getOffsetFromParent();
-
     /**
      * The basline position of the background element, used
      * to determine if the background has moved since the last
@@ -172,6 +177,8 @@ YAHOO.widget.Slider.prototype.setStartSliderState = function() {
      * @type int[]
      */
     this.baselinePos = YAHOO.util.Dom.getXY(this.getEl());
+
+    this.thumb.startOffset = this.thumb.getOffsetFromParent(this.baselinePos);
 
     if (this.thumb._isRegion) {
         if (this.deferredSetRegionValue) {
@@ -192,7 +199,7 @@ YAHOO.widget.Slider.prototype.setStartSliderState = function() {
  * Lock the slider, overrides YAHOO.util.DragDrop
  */
 YAHOO.widget.Slider.prototype.lock = function() {
-	this.logger.debug("locking");
+	this.logger.log("locking");
 	this.thumb.lock();
 	this.locked = true;
 };
@@ -201,7 +208,7 @@ YAHOO.widget.Slider.prototype.lock = function() {
  * Unlock the slider, overrides YAHOO.util.DragDrop
  */
 YAHOO.widget.Slider.prototype.unlock = function() {
-	this.logger.debug("unlocking");
+	this.logger.log("unlocking");
 	this.thumb.unlock();
 	this.locked = false;
 };
@@ -211,11 +218,19 @@ YAHOO.widget.Slider.prototype.unlock = function() {
  *
  * @private
  */
-YAHOO.widget.Slider.prototype.onMouseUp = function() {
-	this.logger.debug("bg mouseup");
-	this._deferSlideEnd = true;
-	this.fireEvents();
+YAHOO.widget.Slider.prototype.thumbMouseUp = function() {
+	this.logger.log("bg mouseup");
+    if (!this.isLocked() && !this.moveComplete) {
+	    this.endMove();
+    }
 
+};
+
+/**
+ * Returns a reference to this slider's thumb
+ */
+YAHOO.widget.Slider.prototype.getThumb = function() {
+    return this.thumb;
 };
 
 /**
@@ -225,7 +240,7 @@ YAHOO.widget.Slider.prototype.onMouseUp = function() {
  * @private
  */
 YAHOO.widget.Slider.prototype.focus = function() {
-    this.logger.debug("focus");
+    this.logger.log("focus");
 
     // Focus the background element if possible
     var el = this.getEl();
@@ -242,7 +257,6 @@ YAHOO.widget.Slider.prototype.focus = function() {
         this.onSlideStart();
 	    return true;
     }
-
 };
 
 /**
@@ -253,7 +267,7 @@ YAHOO.widget.Slider.prototype.focus = function() {
  */
 YAHOO.widget.Slider.prototype.onChange = function (firstOffset, secondOffset) { 
 	/* override me */ 
-	this.logger.debug("onChange: " + firstOffset + ", " + secondOffset);
+	this.logger.log("onChange: " + firstOffset + ", " + secondOffset);
 };
 
 /**
@@ -261,7 +275,7 @@ YAHOO.widget.Slider.prototype.onChange = function (firstOffset, secondOffset) {
  */
 YAHOO.widget.Slider.prototype.onSlideStart = function () { 
 	/* override me */ 
-	this.logger.debug("onSlideStart");
+	this.logger.log("onSlideStart");
 };
 
 /**
@@ -269,7 +283,7 @@ YAHOO.widget.Slider.prototype.onSlideStart = function () {
  */
 YAHOO.widget.Slider.prototype.onSlideEnd = function () { 
 	/* override me */ 
-	this.logger.debug("onSlideEnd");
+	this.logger.log("onSlideEnd");
 };
 
 /**
@@ -324,32 +338,35 @@ YAHOO.widget.Slider.prototype.onThumbChange = function () {
  * @return {boolean} true if the move was performed, false if it failed
  */
 YAHOO.widget.Slider.prototype.setValue = function(newOffset, skipAnim, force) {
-    this.logger.debug("setValue " + newOffset);
+    this.logger.log("setValue " + newOffset);
 
     if (!this.thumb.available) {
-        this.logger.debug("defer setValue until after onAvailble");
+        this.logger.log("defer setValue until after onAvailble");
         this.deferredSetValue = arguments;
         return false;
     }
 
     if (this.isLocked() && !force) {
-        this.logger.debug("Can't set the value, the control is locked");
+        this.logger.log("Can't set the value, the control is locked");
         return false;
     }
 
 	if ( isNaN(newOffset) ) {
-		this.logger.debug("setValue, Illegal argument: " + newOffset);
+		this.logger.log("setValue, Illegal argument: " + newOffset);
 		return false;
 	}
 
 	var t = this.thumb;
 	var newX, newY;
+    this.verifyOffset();
 	if (t._isRegion) {
         return false;
 	} else if (t._isHoriz) {
+        this.onSlideStart();
 		newX = t.initPageX + newOffset + this.thumbCenterPoint.x;
 		this.moveThumb(newX, t.initPageY, skipAnim);
 	} else {
+        this.onSlideStart();
 		newY = t.initPageY + newOffset + this.thumbCenterPoint.y;
 		this.moveThumb(t.initPageX, newY, skipAnim);
 	}
@@ -372,23 +389,24 @@ YAHOO.widget.Slider.prototype.setValue = function(newOffset, skipAnim, force) {
 YAHOO.widget.Slider.prototype.setRegionValue = function(newOffset, newOffset2, skipAnim) {
 
     if (!this.thumb.available) {
-        this.logger.debug("defer setRegionValue until after onAvailble");
+        this.logger.log("defer setRegionValue until after onAvailble");
         this.deferredSetRegionValue = arguments;
         return false;
     }
 
     if (this.isLocked() && !force) {
-        this.logger.debug("Can't set the value, the control is locked");
+        this.logger.log("Can't set the value, the control is locked");
         return false;
     }
 
 	if ( isNaN(newOffset) ) {
-		this.logger.debug("setRegionValue, Illegal argument: " + newOffset);
+		this.logger.log("setRegionValue, Illegal argument: " + newOffset);
 		return false;
 	}
 
 	var t = this.thumb;
 	if (t._isRegion) {
+        this.onSlideStart();
 		var newX = t.initPageX + newOffset + this.thumbCenterPoint.x;
 		var newY = t.initPageY + newOffset2 + this.thumbCenterPoint.y;
 		this.moveThumb(newX, newY, skipAnim);
@@ -407,10 +425,10 @@ YAHOO.widget.Slider.prototype.setRegionValue = function(newOffset, newOffset2, s
 YAHOO.widget.Slider.prototype.verifyOffset = function() {
 
     var newPos = YAHOO.util.Dom.getXY(this.getEl());
-    this.logger.debug("newPos: " + newPos);
+    this.logger.log("newPos: " + newPos);
 
     if (newPos[0] != this.baselinePos[0] || newPos[1] != this.baselinePos[1]) {
-        this.logger.debug("background moved, resetting constraints");
+        this.logger.log("background moved, resetting constraints");
         this.thumb.resetConstraints();
         this.baselinePos = newPos;
         return false;
@@ -431,34 +449,33 @@ YAHOO.widget.Slider.prototype.verifyOffset = function() {
  */
 YAHOO.widget.Slider.prototype.moveThumb = function(x, y, skipAnim) {
 
-    if (!this.thumb.available) {
-        this.logger.debug("thumb is not available yet, aborting move");
+	var t = this.thumb;
+	var self = this;
+
+    if (!t.available) {
+        this.logger.log("thumb is not available yet, aborting move");
         return;
     }
 
-	this.logger.debug("move thumb, x: "  + x + ", y: " + y);
+	this.logger.log("move thumb, x: "  + x + ", y: " + y);
 
-    this.verifyOffset();
+    // this.verifyOffset();
 
-	var self = this;
-	var t = this.thumb;
-    //if (t._graduated) {
-	    //t.setDelta(0, 0);
-    //} else {
-	    t.setDelta(this.thumbCenterPoint.x, this.thumbCenterPoint.y);
-    //}
+	t.setDelta(this.thumbCenterPoint.x, this.thumbCenterPoint.y);
+
 	var _p = t.getTargetCoord(x, y);
     var p = [_p.x, _p.y];
 
+
 	if (this.animate && YAHOO.widget.Slider.ANIM_AVAIL && t._graduated && !skipAnim) {
-		this.logger.debug("graduated");
+		this.logger.log("graduated");
 		// this.thumb._animating = true;
 		this.lock();
 		
 		setTimeout( function() { self.moveOneTick(p); }, this.tickPause );
 
 	} else if (this.animate && YAHOO.widget.Slider.ANIM_AVAIL && !skipAnim) {
-		this.logger.debug("animating to " + p);
+		this.logger.log("animating to " + p);
 
 		// this.thumb._animating = true;
 		this.lock();
@@ -466,11 +483,12 @@ YAHOO.widget.Slider.prototype.moveThumb = function(x, y, skipAnim) {
 		var oAnim = new YAHOO.util.Motion( 
                 t.id, { points: { to: p } }, 0.4, YAHOO.util.Easing.easeOut );
 
-		oAnim.onComplete.subscribe( function() { self.endAnim(); } );
+		oAnim.onComplete.subscribe( function() { self.endMove(); } );
 		oAnim.animate();
 	} else {
 		t.setDragElPos(x, y);
-		this.fireEvents();
+		// this.fireEvents();
+		this.endMove();
 	}
 };
 
@@ -504,7 +522,7 @@ YAHOO.widget.Slider.prototype.moveOneTick = function(finalCoord) {
         nextCoord = this._getNextY(curCoord, finalCoord);
 	}
 
-	this.logger.debug("moveOneTick: " + 
+	this.logger.log("moveOneTick: " + 
 			" finalCoord: " + finalCoord +
 			" curCoord: " + curCoord +
 			" nextCoord: " + nextCoord);
@@ -512,7 +530,13 @@ YAHOO.widget.Slider.prototype.moveOneTick = function(finalCoord) {
 	if (nextCoord) {
 
 		// move to the next coord
-		YAHOO.util.Dom.setXY(t.getEl(), nextCoord);
+		// YAHOO.util.Dom.setXY(t.getEl(), nextCoord);
+
+        // var el = t.getEl();
+        // YAHOO.util.Dom.setStyle(el, "left", (nextCoord[0] + this.thumb.deltaSetXY[0]) + "px");
+        // YAHOO.util.Dom.setStyle(el, "top",  (nextCoord[1] + this.thumb.deltaSetXY[1]) + "px");
+
+        this.thumb.alignElWithMouse(t.getEl(), nextCoord[0], nextCoord[1]);
 		
 		// check if we are in the final position, if not make a recursive call
 		if (!(nextCoord[0] == finalCoord[0] && nextCoord[1] == finalCoord[1])) {
@@ -520,16 +544,10 @@ YAHOO.widget.Slider.prototype.moveOneTick = function(finalCoord) {
 			setTimeout(function() { self.moveOneTick(finalCoord); }, 
 					this.tickPause);
 		} else {
-			// all done
-			//this.thumb._animating = false;
-			this.unlock();
-			this.fireEvents();
+            this.endMove();
 		}
 	} else {
-		// all done
-		// this.thumb._animating = false;
-		this.unlock();
-		this.fireEvents();
+        this.endMove();
 	}
 
 	//this.tickPause = Math.round(this.tickPause/2);
@@ -540,11 +558,8 @@ YAHOO.widget.Slider.prototype.moveOneTick = function(finalCoord) {
  * @private/
  */
 YAHOO.widget.Slider.prototype._getNextX = function(curCoord, finalCoord) {
-    this.logger.debug("getNextX: " + curCoord + ", " + finalCoord);
+    this.logger.log("getNextX: " + curCoord + ", " + finalCoord);
     var t = this.thumb;
-    //var thresh = t.tickSize;
-    // var thresh = t.tickSize + (Math.floor(t.tickSize/2));
-    // var thresh = t.tickSize + this.thumbCenterPoint.x;
     var thresh;
     var tmp = [];
     var nextCoord = null;
@@ -608,13 +623,13 @@ YAHOO.widget.Slider.prototype.onMouseDown = function(e) {
     // this.resetConstraints(true);
     // this.thumb.resetConstraints(true);
 
-	if (! this.isLocked()) {
+	if (! this.isLocked() && this.backgroundEnabled) {
 		var x = YAHOO.util.Event.getPageX(e);
 		var y = YAHOO.util.Event.getPageY(e);
-		this.logger.debug("bg mousedown: " + x + "," + y);
+		this.logger.log("bg mousedown: " + x + "," + y);
 
-		this.moveThumb(x, y);
 		this.focus();
+		this.moveThumb(x, y);
 	}
 	
 };
@@ -633,13 +648,14 @@ YAHOO.widget.Slider.prototype.onDrag = function(e) {
 };
 
 /**
- * Fired when the animation ends
+ * Fired when the slider movement ends
  *
  * @private
  */
-YAHOO.widget.Slider.prototype.endAnim = function () {
+YAHOO.widget.Slider.prototype.endMove = function () {
 	// this._animating = false;
 	this.unlock();
+	this.moveComplete = true;
 	this.fireEvents();
 	
 };
@@ -654,18 +670,18 @@ YAHOO.widget.Slider.prototype.endAnim = function () {
 YAHOO.widget.Slider.prototype.fireEvents = function () {
 
 	var t = this.thumb;
-	// this.logger.debug("FireEvents: " + t._isRegion);
+	// this.logger.log("FireEvents: " + t._isRegion);
 
 	t.cachePosition();
 
 	if (! this.isLocked()) {
 		if (t._isRegion) {
-			this.logger.debug("region");
+			this.logger.log("region");
 			var newX = t.getXValue();
 			var newY = t.getYValue();
 
 			if (newX != this.previousX || newY != this.previousY) {
-				// this.logger.debug("Firing onchange");
+				// this.logger.log("Firing onchange");
 				this.onChange( newX, newY );
 			}
 
@@ -675,20 +691,27 @@ YAHOO.widget.Slider.prototype.fireEvents = function () {
 		} else {
 			var newVal = t.getValue();
 			if (newVal != this.previousVal) {
-				this.logger.debug("Firing onchange: " + newVal);
+				this.logger.log("Firing onchange: " + newVal);
 				this.onChange( newVal );
 			}
 			this.previousVal = newVal;
 		}
 
-		if (this._deferSlideEnd) {
+		if (this.moveComplete) {
 			this.onSlideEnd();
-			this._deferSlideEnd = false;
+			this.moveComplete = false;
 		}
 
 	}
 };
 
+/**
+ * toString
+ * @return {string} string representation of the instance
+ */
+YAHOO.widget.Slider.prototype.toString = function () { 
+    return ("Slider (" + this.type +") " + this.id);
+};
 
 /**
  * A drag and drop implementation to be used as the thumb of a slider.
@@ -714,13 +737,9 @@ YAHOO.widget.SliderThumb = function(id, sGroup, iLeft, iRight, iUp, iDown, iTick
          * @type string
          */
         this.parentElId = sGroup;
-
-		/**
-		 * @private
-		 */
-		this.logger = new ygLogger("SliderThumb " + id);
-
 	}
+
+    this.logger = new YAHOO.widget.LogWriter(this.toString());
 
 	/**
 	 * Overrides the isTarget property in YAHOO.util.DragDrop
@@ -748,24 +767,19 @@ YAHOO.widget.SliderThumb = function(id, sGroup, iLeft, iRight, iUp, iDown, iTick
 
 };
 
-YAHOO.widget.SliderThumb.prototype = new YAHOO.util.DD();
-
-// YAHOO.widget.SliderThumb.prototype.onAvailable = function() {
-    // this.logger.debug("thumb onAvailable");
-    // var el = this.getEl();
-    // YAHOO.util.Dom.setXY(el, YAHOO.util.Dom.getXY(el));
-    // this.startOffset = this.getOffsetFromParent();
-// }
+// YAHOO.widget.SliderThumb.prototype = new YAHOO.util.DD();
+YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD);
 
 /**
  * Returns the difference between the location of the thumb and its parent.
+ * @param {Array} Optionally accepts the position of the parent
  * @type int[]
  */
-YAHOO.widget.SliderThumb.prototype.getOffsetFromParent = function() {
-    var myPos     = YAHOO.util.Dom.getXY(this.getEl());
-    var parentPos = YAHOO.util.Dom.getXY(this.parentElId);
+YAHOO.widget.SliderThumb.prototype.getOffsetFromParent = function(parentPos) {
+    var myPos = YAHOO.util.Dom.getXY(this.getEl());
+    var ppos  = parentPos || YAHOO.util.Dom.getXY(this.parentElId);
 
-    return [ (myPos[0] - parentPos[0]), (myPos[1] - parentPos[1]) ];
+    return [ (myPos[0] - ppos[0]), (myPos[1] - ppos[1]) ];
 };
 
 /**
@@ -827,13 +841,6 @@ YAHOO.widget.SliderThumb.prototype._graduated = false;
 YAHOO.widget.SliderThumb.prototype.initSlider = function (iLeft, iRight, iUp, iDown, 
 		iTickSize) {
 
-	// this.logger.debug("Slider init: "  + 
-            // "iLeft: " + iLeft + 
-            // ",iRight: " + iRight + 
-            // ",iUp: " + iUp + 
-            // ",iDown: " + iDown + 
-            // ",iTickSize: " + iTickSize);
-
 	this.setXConstraint(iLeft, iRight, iTickSize);
 	this.setYConstraint(iUp, iDown, iTickSize);
 
@@ -845,11 +852,14 @@ YAHOO.widget.SliderThumb.prototype.initSlider = function (iLeft, iRight, iUp, iD
 	this._isVert   = (iUp > 0 ||  iDown > 0);
 	this._isRegion = (this._isHoriz && this._isVert); 
 
-	// var el = this.getEl();
+};
 
-    // this.parentPos = YAHOO.util.getXY(this.parentElId);
-    // this.startOffset = this.getOffsetFromParent();
-    //alert(this.getValue());
+/**
+ * Clear's the slider's ticks
+ */
+YAHOO.widget.SliderThumb.prototype.clearTicks = function () {
+    YAHOO.widget.SliderThumb.superclass.clearTicks.call(this);
+    this._graduated = false;
 };
 
 /**
@@ -862,7 +872,7 @@ YAHOO.widget.SliderThumb.prototype.initSlider = function (iLeft, iRight, iUp, iD
 YAHOO.widget.SliderThumb.prototype.getValue = function () {
     if (!this.available) { return 0; }
     var val = (this._isHoriz) ? this.getXValue() : this.getYValue();
-    this.logger.debug("getVal: " + val);
+    this.logger.log("getVal: " + val);
     return val;
 };
 
@@ -875,7 +885,6 @@ YAHOO.widget.SliderThumb.prototype.getValue = function () {
  */
 YAHOO.widget.SliderThumb.prototype.getXValue = function () {
     if (!this.available) { return 0; }
-	// return (YAHOO.util.Dom.getX(this.getEl()) - this.initPageX);
     var newOffset = this.getOffsetFromParent();
 	return (newOffset[0] - this.startOffset[0]);
 };
@@ -889,9 +898,16 @@ YAHOO.widget.SliderThumb.prototype.getXValue = function () {
  */
 YAHOO.widget.SliderThumb.prototype.getYValue = function () {
     if (!this.available) { return 0; }
-	// return (YAHOO.util.Dom.getY(this.getEl()) - this.initPageY);
     var newOffset = this.getOffsetFromParent();
 	return (newOffset[1] - this.startOffset[1]);
+};
+
+/**
+ * toString
+ * @return {string} string representation of the instance
+ */
+YAHOO.widget.SliderThumb.prototype.toString = function () { 
+    return "SliderThumb " + this.id;
 };
 
 /**
