@@ -899,6 +899,8 @@ YAHOO.util.DragDrop.prototype = {
     clearTicks: function() {
         this.xTicks = null;
         this.yTicks = null;
+        this.xTickSize = 0;
+        this.yTickSize = 0;
     },
 
     /**

@@ -921,6 +921,8 @@ YAHOO.util.DragDrop.prototype = {
         this.logger.log("Clearing ticks");
         this.xTicks = null;
         this.yTicks = null;
+        this.xTickSize = 0;
+        this.yTickSize = 0;
     },
 
     /**
