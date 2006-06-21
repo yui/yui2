@@ -669,23 +669,26 @@ YAHOO.widget.MenuModule.prototype._addItemToGroup =
 
         if(oItem) {
         
+            var nGroupIndex = typeof p_nGroupIndex == "number" ? 
+                    p_nGroupIndex : 0,
+
+                aGroup = this._getItemGroup(nGroupIndex),
+
+                oGroupItem;
+    
+
+            if(!aGroup) {
+    
+                aGroup = this._createItemGroup(nGroupIndex);
+    
+            }
+
+
             if(typeof p_nItemIndex == "number") {
-    
-                var nGroupIndex = typeof p_nGroupIndex == "number" ? 
-                        p_nGroupIndex : 0,
-                        aGroup = this._getItemGroup(nGroupIndex);
-    
-        
-                if(!aGroup) {
-        
-                    aGroup = this._createItemGroup(nGroupIndex);
-        
-                }
-    
     
                 var bAppend = (p_nItemIndex >= aGroup.length);            
     
-    
+
                 if(aGroup[p_nItemIndex]) {
         
                     aGroup.splice(p_nItemIndex, 0, oItem);
@@ -698,7 +701,7 @@ YAHOO.widget.MenuModule.prototype._addItemToGroup =
                 }
     
     
-                var oGroupItem = aGroup[p_nItemIndex];
+                oGroupItem = aGroup[p_nItemIndex];
     
                 if(oGroupItem) {
     
@@ -766,22 +769,12 @@ YAHOO.widget.MenuModule.prototype._addItemToGroup =
             }
             else {
         
-                var nGroupIndex = typeof p_nGroupIndex == "number" ? 
-                        p_nGroupIndex : 0,
-                        aGroup = this._getItemGroup(nGroupIndex);
-        
-                if(!aGroup) {
-        
-                    aGroup = this._createItemGroup(nGroupIndex);
-        
-                }
-        
                 var nItemIndex = aGroup.length;
         
                 aGroup[nItemIndex] = oItem;
         
         
-                var oGroupItem = aGroup[nItemIndex];
+                oGroupItem = aGroup[nItemIndex];
         
                 if(oGroupItem) {
         

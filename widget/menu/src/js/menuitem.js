@@ -159,7 +159,8 @@ YAHOO.widget.MenuItem.prototype._onKeyDown =
             case 38:    // Up arrow
             case 40:    // Down arrow
     
-                var oActiveItem = this.parent.activeItem;
+                var oActiveItem = this.parent.activeItem,
+                    oMenuItem;
     
                 if(this == oActiveItem && !this.cfg.getProperty("selected")) {
     
@@ -216,7 +217,7 @@ YAHOO.widget.MenuItem.prototype._onKeyDown =
     
                     // Set focus to the parent MenuItem if one exists
     
-                    var oMenuItem = this.parent.parent;
+                    oMenuItem = this.parent.parent;
     
                     if(oMenuItem) {
     
@@ -242,7 +243,7 @@ YAHOO.widget.MenuItem.prototype._onKeyDown =
     
                     // Set focus to the parent MenuItem if one exists
     
-                    var oMenuItem = this.parent.parent;
+                    oMenuItem = this.parent.parent;
     
                     if(oMenuItem) {
     
