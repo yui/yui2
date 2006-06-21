@@ -272,47 +272,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 	* String representing the browser
 	* @type string
 	*/
-	browser: function() {
-
-        var sUserAgent = navigator.userAgent.toLowerCase();
-
-        // Opera (check first in case of spoof)
-    
-        if(sUserAgent.indexOf("opera")!=-1) { 
-        
-            return "opera";
-        
-        // IE7
-
-        } else if(sUserAgent.indexOf("msie 7")!=-1) {
-        
-            return "ie7";
-        
-        // IE
-
-        } else if(sUserAgent.indexOf("msie") !=-1) {
-        
-            return "ie";
-        
-        // Safari (check before Gecko because it includes "like Gecko")
-
-        } else if(sUserAgent.indexOf("safari")!=-1) {
-        
-            return "safari";
-        
-        // Gecko
-
-        } else if(sUserAgent.indexOf("gecko") != -1) {
-        
-            return "gecko";
-        
-        } else {
-        
-            return false;
-        
-        }
-
-    }(),
+	browser: YAHOO.widget.Module.prototype.browser,
 
 
     // Events
