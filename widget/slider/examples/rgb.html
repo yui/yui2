@@ -87,10 +87,13 @@
 </style>
 
 <!-- Nav and logger start -->
-
+<!--
+<script type="text/javascript" src="../../build/event/event.js" ></script>
+-->
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
 <script type="text/javascript" src="../../build/event/event.js" ></script>
+<script type="text/javascript" src="../../build/logger/logger.js" ></script>
 <script type="text/javascript" src="../../build/dom/dom.js" ></script>
 <script type="text/javascript" src="../../build/animation/animation.js" ></script>
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
@@ -224,15 +227,9 @@
 <script type="text/javascript">
 
 	var r, g, b;
-	var gLogger = {debug:function(){}};
 	var dd;
 
 	function init() {
-		if (typeof(ygLogger) != "undefined") {
-			ygLogger.init(document.getElementById("logDiv"));
-			gLogger = new ygLogger("slider.php");
-		}
-
         rgbInit();
     }
 
@@ -305,7 +302,7 @@
 		curg = Math.min(g.getValue() * 2, 255);
 		curb = Math.min(b.getValue() * 2, 255);
 
-        gLogger.debug("updateSliderColor " + curr + ", " + curg + ", " + curb);
+        YAHOO.log("updateSliderColor " + curr + ", " + curg + ", " + curb);
 
 		var d;
 		for (var i=0; i<34; i++) {
@@ -355,7 +352,7 @@
 				hexval = newval;
 			}
 
-			gLogger.debug("hexval:" + hexval);
+			YAHOO.log("hexval:" + hexval);
 
 			if (hexval.length != 6) {
 				alert("illegal hex code: " + hexval);
@@ -373,17 +370,17 @@
 		// red
 		v = parseFloat(f['rval'].value);
 		v = ( isNaN(v) ) ? 0 : Math.round(v);
-        gLogger.debug("setValue, r: " + v);
+        YAHOO.log("setValue, r: " + v);
 		r.setValue(Math.round(v) / 2);
 
 		v = parseFloat(f['gval'].value);
 		v = ( isNaN(v) ) ? 0 : Math.round(v);
-        gLogger.debug("setValue, g: " + g);
+        YAHOO.log("setValue, g: " + g);
 		g.setValue(Math.round(v) / 2);
 
 		v = parseFloat(f['bval'].value);
 		v = ( isNaN(v) ) ? 0 : Math.round(v);
-        gLogger.debug("setValue, b: " + b);
+        YAHOO.log("setValue, b: " + b);
 		b.setValue(Math.round(v) / 2);
 
 

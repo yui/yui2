@@ -88,10 +88,13 @@
 </style>
 
 <!-- Nav and logger start -->
-
+<!--
+<script type="text/javascript" src="../../build/event/event.js" ></script>
+-->
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
 <script type="text/javascript" src="../../build/event/event.js" ></script>
+<script type="text/javascript" src="../../build/logger/logger.js" ></script>
 <script type="text/javascript" src="../../build/dom/dom.js" ></script>
 <script type="text/javascript" src="../../build/animation/animation.js" ></script>
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
@@ -200,14 +203,9 @@
 
 	var hue;
 	var picker;
-	var gLogger = {debug: function(){}};
 	var dd;
 
 	function init() {
-		if (typeof(ygLogger) != "undefined") {
-			ygLogger.init(document.getElementById("logDiv"));
-			gLogger = new ygLogger("slider.php");
-		}
 
 		hue = YAHOO.widget.Slider.getVertSlider("hueBg", "hueThumb", 0, 180);
 		hue.onChange = function(newVal) { hueUpdate(newVal); };
@@ -237,7 +235,7 @@
 		var h = (180 - hue.getValue()) / 180;
 		if (h == 1) { h = 0; }
 
-		gLogger.debug("hue " + hue.getValue());
+		YAHOO.log("hue " + hue.getValue());
 
 		var a = YAHOO.util.Color.hsv2rgb( h, 1, 1);
 
@@ -253,17 +251,17 @@
 		document.getElementById("hval").value = (h*2);
 
 		h = h / 180;
-		gLogger.debug("h " + hue.getValue());
+		YAHOO.log("h " + hue.getValue());
 
 		var s = picker.getXValue() / 180;
 		document.getElementById("sval").value = Math.round(s * 100);
 
-		gLogger.debug("s " + s);
+		YAHOO.log("s " + s);
 
 		var v = (180 - picker.getYValue()) / 180;
 		document.getElementById("vval").value = Math.round(v * 100);
 
-		gLogger.debug("v " + v);
+		YAHOO.log("v " + v);
 
 		var a = YAHOO.util.Color.hsv2rgb( h, s, v );
 

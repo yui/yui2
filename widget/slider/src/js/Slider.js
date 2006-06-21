@@ -74,7 +74,7 @@ YAHOO.widget.Slider = function(sElementId, sGroup, oThumb, sType) {
 
 		// delegate thumb methods
 		oThumb.onMouseDown = function () { return self.focus(); };
-		oThumb.b4MouseDown = function () { return self.b4MouseDown(); };
+		//oThumb.b4MouseDown = function () { return self.b4MouseDown(); };
 		// oThumb.lock = function() { self.lock(); };
 		// oThumb.unlock = function() { self.unlock(); };
 		oThumb.onMouseUp = function() { self.thumbMouseUp(); };
@@ -449,6 +449,8 @@ YAHOO.widget.Slider.prototype.verifyOffset = function() {
  */
 YAHOO.widget.Slider.prototype.moveThumb = function(x, y, skipAnim) {
 
+        this.logger.log("move thumb", "warn");
+
 	var t = this.thumb;
 	var self = this;
 
@@ -610,6 +612,7 @@ YAHOO.widget.Slider.prototype._getNextY = function(curCoord, finalCoord) {
  * @private
  */
 YAHOO.widget.Slider.prototype.b4MouseDown = function(e) {
+    this.thumb.autoOffset();
     this.thumb.resetConstraints();
 };
 
