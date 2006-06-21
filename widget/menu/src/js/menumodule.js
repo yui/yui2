@@ -309,13 +309,13 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oUserConfig) {
 
 
                 /*
-                    Apply the "first" class to the first UL to mimic 
-                    the "first-child" psuedo class.
+                    Apply the "first-of-type" class to the first UL to mimic 
+                    the "first-of-type" CSS3 psuedo class.
                 */
 
                 if(this._aListElements[0]) {
 
-                    this._oDom.addClass(this._aListElements[0], "first");
+                    this._oDom.addClass(this._aListElements[0], "first-of-type");
 
                 }
 
@@ -812,7 +812,7 @@ YAHOO.widget.MenuModule.prototype._addItemToGroup =
         
                     if(nItemIndex === 0) {
             
-                        this._oDom.addClass(oGroupItem.element, "first");
+                        this._oDom.addClass(oGroupItem.element, "first-of-type");
             
                     }
 
@@ -880,15 +880,15 @@ YAHOO.widget.MenuModule.prototype._removeItemFromGroupByIndex =
         
         
                     /*
-                         Assign the "first" class to the new first UL in 
-                         the collection
+                         Assign the "first-of-type" class to the new first UL 
+                         in the collection
                     */
         
                     oUL = this._aListElements[0];
         
                     if(oUL) {
         
-                        this._oDom.addClass(oUL, "first");
+                        this._oDom.addClass(oUL, "first-of-type");
         
                     }            
         
@@ -993,7 +993,7 @@ YAHOO.widget.MenuModule.prototype._updateItemProperties =
                     oLI.setAttribute("groupindex", p_nGroupIndex);
                     oLI.setAttribute("index", i);
     
-                    this._oDom.removeClass(oLI, "first");
+                    this._oDom.removeClass(oLI, "first-of-type");
     
                 }
         
@@ -1003,7 +1003,7 @@ YAHOO.widget.MenuModule.prototype._updateItemProperties =
     
             if(oLI) {
     
-                this._oDom.addClass(oLI, "first");
+                this._oDom.addClass(oLI, "first-of-type");
     
             }
     
@@ -1580,7 +1580,7 @@ YAHOO.widget.MenuModule.prototype._onBeforeRender =
     
                     if(bFirstList) {
             
-                        this._oDom.addClass(oUL, "first");
+                        this._oDom.addClass(oUL, "first-of-type");
                         bFirstList = false;
             
                     }
@@ -2124,7 +2124,7 @@ YAHOO.widget.MenuModule.prototype.setItemGroupTitle =
     
                     this._oDom.removeClass(
                         this._aGroupTitleElements[i],
-                        "first"
+                        "first-of-type"
                     );
 
                     nFirstIndex = i;
@@ -2139,7 +2139,7 @@ YAHOO.widget.MenuModule.prototype.setItemGroupTitle =
     
                 this._oDom.addClass(
                     this._aGroupTitleElements[nFirstIndex], 
-                    "first"
+                    "first-of-type"
                 );
     
             }
