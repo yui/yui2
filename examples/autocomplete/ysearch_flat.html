@@ -51,12 +51,12 @@
     <p>Three AutoComplete instances are created that all point the a single
     DataSource for maximimum cache efficiency. Queries can be delimited using
     the semi-colon (;) character. For demonstration purposes, each instance
-    decreases the query delay slightly, and each instance formats the return
+    decreases the query delay slightly, and each instance presents the return
     data in the container in a slightly different way.</p>
 
     <!-- AutoComplete begins -->
     <div id="ysearchmod">
-        <form onsubmit="return validateForm();">
+        <form onsubmit="return YAHOO.example.ACFlatData.validateForm();">
             <h2>Yahoo! Search (1 sec query delay):</h2>
             <div id="ysearchautocomplete0">
                 <input id="ysearchinput0">
@@ -107,268 +107,78 @@
 <!-- Library ends -->
 
 <script>
-    function validateForm() {
-        // Validate form inputs here
-        return false;
-    }
+YAHOO.example.ACFlatData = function(){
+    var mylogger;
+    var oACDS;
+    var oAutoComp0,oAutoComp1,oAutoComp2;
 
-    function autoCompInit() {
-        var mylogger = new YAHOO.widget.LogReader("logger");
-        
-        // Instantiate one data source and define schema as an array:
-        //     ["Record Delimiter",
-        //     "Field Delimiter"]
-        oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_flat.php", ["\n", "\t"]);
-        oACDS.responseType = YAHOO.widget.DS_XHR.prototype.TYPE_FLAT;
-        oACDS.maxCacheEntries = 60;
-        oACDS.queryMatchSubset = true;
+    return {
+        init: function() {
+            //Logger
+            mylogger = new YAHOO.widget.LogReader("logger");
 
-        // Instantiate first auto complete
-        var myInput = document.getElementById('ysearchinput0');
-        var myContainer = document.getElementById('ysearchcontainer0');
-        oAutoComp0 = new YAHOO.widget.AutoComplete(myInput,myContainer,oACDS);
-        oAutoComp0.delimChar = ";";
-        oAutoComp0.queryDelay = 1;
-        oAutoComp0.formatResult = function(oResultItem, sQuery) {
-            var sKey = oResultItem[0];
-            var nQuantity = oResultItem[1];
-            var sKeyQuery = sKey.substr(0, sQuery.length);
-            var sKeyRemainder = sKey.substr(sQuery.length);
-            var aMarkup = ["<div id='ysearchresult'><div class='ysearchquery'>",
-                nQuantity,
-                "</div><span style='font-weight:bold'>",
-                sKeyQuery,
-                "</span>",
-                sKeyRemainder,
-                "</div>"];
-            return (aMarkup.join(""));
-        };
+            // Instantiate one data source and define schema as an array:
+            //     ["Record Delimiter",
+            //     "Field Delimiter"]
+            oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_flat.php", ["\n", "\t"]);
+            oACDS.responseType = YAHOO.widget.DS_XHR.prototype.TYPE_FLAT;
+            oACDS.maxCacheEntries = 60;
+            oACDS.queryMatchSubset = true;
 
-        // Instantiate second auto complete
-        oAutoComp1 = new YAHOO.widget.AutoComplete('ysearchinput1','ysearchcontainer1', oACDS);
-        oAutoComp1.delimChar = ";";
-        oAutoComp1.formatResult = function(oResultItem, sQuery) {
-            var sKey = oResultItem[0];
-            var nQuantity = oResultItem[1];
-            var sKeyQuery = sKey.substr(0, sQuery.length);
-            var sKeyRemainder = sKey.substr(sQuery.length);
-            var aMarkup = ["<div class='ysearchresult'><div class='ysearchquery'>",
-                nQuantity,
-                "</div><span style='color:red'>",
-                sKeyQuery,
-                "</span>",
-                sKeyRemainder,
-                "</div>"];
-            return (aMarkup.join(""));
-        };
-                
-        // Instantiate third auto complete
-        oAutoComp2 = new YAHOO.widget.AutoComplete('ysearchinput2','ysearchcontainer2', oACDS);
-        oAutoComp2.delimChar = ";";
-        oAutoComp2.queryDelay = 0;
-        oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
+            // Instantiate first auto complete
+            var myInput = document.getElementById('ysearchinput0');
+            var myContainer = document.getElementById('ysearchcontainer0');
+            oAutoComp0 = new YAHOO.widget.AutoComplete(myInput,myContainer,oACDS);
+            oAutoComp0.delimChar = ";";
+            oAutoComp0.queryDelay = 1;
+            oAutoComp0.formatResult = function(oResultItem, sQuery) {
+                var sKey = oResultItem[0];
+                var nQuantity = oResultItem[1];
+                var sKeyQuery = sKey.substr(0, sQuery.length);
+                var sKeyRemainder = sKey.substr(sQuery.length);
+                var aMarkup = ["<div id='ysearchresult'><div class='ysearchquery'>",
+                    nQuantity,
+                    "</div><span style='font-weight:bold'>",
+                    sKeyQuery,
+                    "</span>",
+                    sKeyRemainder,
+                    "</div>"];
+                return (aMarkup.join(""));
+            };
 
-        // Subscribe to custom events
-        oACDS.queryEvent.subscribe(myOnQuery);
-        oACDS.cacheQueryEvent.subscribe(myOnCacheQuery);
-        oACDS.getResultsEvent.subscribe(myOnGetResults);
-        oACDS.getCachedResultsEvent.subscribe(myOnGetCachedResults);
-        oACDS.dataErrorEvent.subscribe(myOnDataError);
-        oACDS.cacheFlushEvent.subscribe(myOnCacheFlush);
+            // Instantiate second auto complete
+            oAutoComp1 = new YAHOO.widget.AutoComplete('ysearchinput1','ysearchcontainer1', oACDS);
+            oAutoComp1.delimChar = ";";
+            oAutoComp1.formatResult = function(oResultItem, sQuery) {
+                var sKey = oResultItem[0];
+                var nQuantity = oResultItem[1];
+                var sKeyQuery = sKey.substr(0, sQuery.length);
+                var sKeyRemainder = sKey.substr(sQuery.length);
+                var aMarkup = ["<div class='ysearchresult'><div class='ysearchquery'>",
+                    nQuantity,
+                    "</div><span style='color:red'>",
+                    sKeyQuery,
+                    "</span>",
+                    sKeyRemainder,
+                    "</div>"];
+                return (aMarkup.join(""));
+            };
 
-        oAutoComp0.textboxFocusEvent.subscribe(myOnTextboxFocus);
-        oAutoComp0.textboxKeyEvent.subscribe(myOnTextboxKey);
-        oAutoComp0.dataRequestEvent.subscribe(myOnDataRequest);
-        oAutoComp0.dataReturnEvent.subscribe(myOnDataReturn);
-        oAutoComp0.dataErrorEvent.subscribe(myOnDataError);
-        oAutoComp0.containerExpandEvent.subscribe(myOnContainerExpand);
-        oAutoComp0.typeAheadEvent.subscribe(myOnTypeAhead);
-        oAutoComp0.itemMouseOverEvent.subscribe(myOnItemMouseOver);
-        oAutoComp0.itemMouseOutEvent.subscribe(myOnItemMouseOut);
-        oAutoComp0.itemArrowToEvent.subscribe(myOnItemArrowTo);
-        oAutoComp0.itemArrowFromEvent.subscribe(myOnItemArrowFrom);
-        oAutoComp0.itemSelectEvent.subscribe(myOnItemSelect);
-        oAutoComp0.selectionEnforceEvent.subscribe(myOnSelectionEnforce);
-        oAutoComp0.containerCollapseEvent.subscribe(myOnContainerCollapse);
-        oAutoComp0.textboxBlurEvent.subscribe(myOnTextboxBlur);
-
-        oAutoComp1.textboxFocusEvent.subscribe(myOnTextboxFocus);
-        oAutoComp1.textboxKeyEvent.subscribe(myOnTextboxKey);
-        oAutoComp1.dataRequestEvent.subscribe(myOnDataRequest);
-        oAutoComp1.dataReturnEvent.subscribe(myOnDataReturn);
-        oAutoComp1.dataErrorEvent.subscribe(myOnDataError);
-        oAutoComp1.containerExpandEvent.subscribe(myOnContainerExpand);
-        oAutoComp1.typeAheadEvent.subscribe(myOnTypeAhead);
-        oAutoComp1.itemMouseOverEvent.subscribe(myOnItemMouseOver);
-        oAutoComp1.itemMouseOutEvent.subscribe(myOnItemMouseOut);
-        oAutoComp1.itemArrowToEvent.subscribe(myOnItemArrowTo);
-        oAutoComp1.itemArrowFromEvent.subscribe(myOnItemArrowFrom);
-        oAutoComp1.itemSelectEvent.subscribe(myOnItemSelect);
-        oAutoComp1.selectionEnforceEvent.subscribe(myOnSelectionEnforce);
-        oAutoComp1.containerCollapseEvent.subscribe(myOnContainerCollapse);
-        oAutoComp1.textboxBlurEvent.subscribe(myOnTextboxBlur);
-
-        oAutoComp2.textboxFocusEvent.subscribe(myOnTextboxFocus);
-        oAutoComp2.textboxKeyEvent.subscribe(myOnTextboxKey);
-        oAutoComp2.dataRequestEvent.subscribe(myOnDataRequest);
-        oAutoComp2.dataReturnEvent.subscribe(myOnDataReturn);
-        oAutoComp2.dataErrorEvent.subscribe(myOnDataError);
-        oAutoComp2.containerExpandEvent.subscribe(myOnContainerExpand);
-        oAutoComp2.typeAheadEvent.subscribe(myOnTypeAhead);
-        oAutoComp2.itemMouseOverEvent.subscribe(myOnItemMouseOver);
-        oAutoComp2.itemMouseOutEvent.subscribe(myOnItemMouseOut);
-        oAutoComp2.itemArrowToEvent.subscribe(myOnItemArrowTo);
-        oAutoComp2.itemArrowFromEvent.subscribe(myOnItemArrowFrom);
-        oAutoComp2.itemSelectEvent.subscribe(myOnItemSelect);
-        oAutoComp2.selectionEnforceEvent.subscribe(myOnSelectionEnforce);
-        oAutoComp2.containerCollapseEvent.subscribe(myOnContainerCollapse);
-        oAutoComp2.textboxBlurEvent.subscribe(myOnTextboxBlur);
-
-        // Define custom event handlers
-        function myOnQuery(sType, aArgs) {
-            var oDataSource = aArgs[0];
-            var oParent = aArgs[1];
-            var sQuery = aArgs[2];
-            //doLog("Data source for " + oParent.getName() + " made source query for '" + sQuery + "'.");
+            // Instantiate third auto complete
+            oAutoComp2 = new YAHOO.widget.AutoComplete('ysearchinput2','ysearchcontainer2', oACDS);
+            oAutoComp2.delimChar = ";";
+            oAutoComp2.queryDelay = 0;
+            oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
+        },
+            
+        validateForm: function() {
+            // Validate form inputs here
+            return false;
         }
+    };
+}();
 
-        function myOnCacheQuery(sType, aArgs) {
-            var oDataSource = aArgs[0];
-            var oParent = aArgs[1];
-            var sQuery = aArgs[2];
-            //doLog("Data source for " + oParent.getName() + " made cache query for '" + sQuery + "'.");
-        }
-
-        function myOnGetResults(sType, aArgs) {
-            var oDataSource = aArgs[0];
-            var oParent = aArgs[1];
-            var sQuery = aArgs[2];
-            var aResults = aArgs[3];
-            //doLog("Data source for " + oParent.getName() + " got " + aResults.length + " results from source.");
-        }
-
-        function myOnGetCachedResults(sType, aArgs) {
-            var oDataSource = aArgs[0];
-            var oParent = aArgs[1];
-            var sQuery = aArgs[2];
-            var aResults = aArgs[3];
-            //doLog("Data source for " + oParent.getName() + " got " + aResults.length + " results from cache.");
-        }
-
-        function myOnDataError(sType, aArgs) {
-            var oDataSource = aArgs[0];
-            var oParent = aArgs[1];
-            var sQuery = aArgs[2];
-            var sMessage = aArgs[3];
-            //doLog("Data source for " + oParent.getName() + " experienced a data retrieval error: " + sMessage);
-        }
-
-        function myOnCacheFlush(sType, aArgs) {
-            var oDataSource = aArgs[0];
-            //doLog(" cache flush complete.");
-        }
-
-        function myOnTextboxFocus(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            //doLog(oAutoComp.getName() + " has been engaged.");
-        }
-
-        function myOnTextboxKey(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            var nKeyCode = aArgs[1];
-            //doLog("Key " + nKeyCode + " has been input into " + oAutoComp.getName() + ".");
-        }
-
-        function myOnDataRequest(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            var sQuery = aArgs[1];
-            //doLog(oAutoComp.getName() + " has sent a query for " + sQuery +".");
-        }
-
-        function myOnDataReturn(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            var sQuery = aArgs[1];
-            var aResults = aArgs[2];
-            //doLog(oAutoComp.getName() + " has received " + aResults.length +
-            //" results for query " + sQuery + ".");
-        }
-
-        function myOnDataError(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            var sQuery = aArgs[1];
-            //doLog(oAutoComp.getName() + " has received an error for query " + sQuery +".");
-        }
-
-        function myOnContainerExpand(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            //doLog(oAutoComp.getName() + " container expanded.");
-        }
-
-        function myOnTypeAhead(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            var sQuery = aArgs[1];
-            var sPrefill = aArgs[2];
-            //doLog(oAutoComp.getName() + " prefilled the input box with " +
-            //sPrefill + " for query " + sQuery + ".");
-        }
-
-        function myOnItemMouseOver(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            var oItem = aArgs[1];
-            //doLog(oAutoComp.getName() + " moused over " + oItem.toString());
-        }
-
-        function myOnItemMouseOut(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            var oItem = aArgs[1];
-            //doLog(oAutoComp.getName() + " moused out from " + oItem.toString());
-        }
-
-        function myOnItemArrowTo(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            var oItem = aArgs[1];
-            //doLog(oAutoComp.getName() + " arrowed to " + oItem.toString());
-        }
-
-        function myOnItemArrowFrom(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            var oItem = aArgs[1];
-            //doLog(oAutoComp.getName() + " arrowed away from " + oItem.toString());
-        }
-
-        function myOnItemSelect(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            var oItem = aArgs[1];
-            var oData = aArgs[2];
-            var sMsg = (oItem) ? oItem.toString() : "a non-query-result";
-            //doLog(oAutoComp.getName() + " selected " + sMsg + " which has the following data: " + oData);
-        }
-
-        function myOnSelectionEnforce(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            //doLog(oAutoComp.getName() + " had to clear an invalid selection.");
-        }
-
-        function myOnContainerCollapse(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            //doLog(oAutoComp.getName() + " container collapsed.");
-        }
-
-        function myOnTextboxBlur(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            //doLog(oAutoComp.getName() + " has been disengaged.");
-        }
-    }
-    YAHOO.util.Event.addListener(this,'load',autoCompInit);
-
-    // Logging
-    /*var logger = document.getElementById("logger");
-
-    function doLog(string) {
-        var date = new Date();
-        var timestamp = date.getTime();
-        logger.innerHTML = "<p>"+timestamp+" "+string+"</p>"+logger.innerHTML;
-    }*/
+YAHOO.util.Event.addListener(this,'load',YAHOO.example.ACFlatData.init);
 </script>
 </div>
 </body>
