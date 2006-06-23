@@ -44,7 +44,7 @@
     <h3>AutoComplete</h3>
     <p>This AutoComplete instance defines a robust formatResult() function that
     formats the result data into HTML markup that displays an image from Flickr
-    and its title.</p>
+    and its title. The autoHighlight feature has additionally been disabled.</p>
 
     <!-- AutoComplete begins -->
     <div id="flickrmod">
@@ -114,6 +114,7 @@ YAHOO.example.ACFlickr = function() {
 
             // Instantiate auto complete
             oAutoComp = new YAHOO.widget.AutoComplete('flickrinput','flickrcontainer', oACDS);
+            oAutoComp.autoHighlight = false;
             oAutoComp.formatResult = function(oResultItem, sQuery) {
                 // This was defined by the schema array of the data source
                 var sTitle = oResultItem[0];

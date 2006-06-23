@@ -564,11 +564,11 @@ YAHOO.widget.DS_XHR.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
             return;
         }
 //DEBUG
-YAHOO.log(oResp.responseXML.getElementsByTagName("Result"),'warn');
+/*YAHOO.log(oResp.responseXML.getElementsByTagName("Result"),'warn');
 for(var foo in oResp) {
     YAHOO.log(foo + ": "+oResp[foo],'warn');
 }
-YAHOO.log('responseXML.xml: '+oResp.responseXML.xml,'warn');
+YAHOO.log('responseXML.xml: '+oResp.responseXML.xml,'warn');*/
         if(!isXML) {
             oResp = oResp.responseText;
         }
@@ -577,7 +577,7 @@ YAHOO.log('responseXML.xml: '+oResp.responseXML.xml,'warn');
         }
         if(oResp === null) {
             oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATANULL);
-            YAHOO.log(oSelf.ERROR_DATANULL, "error", this.toString());
+            YAHOO.log(oSelf.ERROR_DATANULL, "error", oSelf.toString());
             return;
         }
 
@@ -599,7 +599,7 @@ YAHOO.log('responseXML.xml: '+oResp.responseXML.xml,'warn');
 
     var responseFailure = function(oResp) {
         oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATAXHR);
-        YAHOO.log(oSelf.ERROR_DATAXHR + ": " + oResp.statusText, "error", this.toString());
+        YAHOO.log(oSelf.ERROR_DATAXHR + ": " + oResp.statusText, "error", oSelf.toString());
         return;
     };
     

@@ -94,19 +94,19 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
         YAHOO.widget.AutoComplete._nIndex++;
 
         // Set up events
-        YAHOO.util.Event.addListener(oTextbox,'keyup',oSelf._onTextboxKeyUp,oSelf);
-        YAHOO.util.Event.addListener(oTextbox,'keydown',oSelf._onTextboxKeyDown,oSelf);
+        YAHOO.util.Event.addListener(oTextbox,"keyup",oSelf._onTextboxKeyUp,oSelf);
+        YAHOO.util.Event.addListener(oTextbox,"keydown",oSelf._onTextboxKeyDown,oSelf);
         // only for FF < 1.0
-        //YAHOO.util.Event.addListener(oTextbox,'keypress',oSelf._onTextboxKeyPress,oSelf);
+        //YAHOO.util.Event.addListener(oTextbox,"keypress",oSelf._onTextboxKeyPress,oSelf);
 
-        YAHOO.util.Event.addListener(oTextbox,'focus',oSelf._onTextboxFocus,oSelf);
-        YAHOO.util.Event.addListener(oTextbox,'blur',oSelf._onTextboxBlur,oSelf);
-        YAHOO.util.Event.addListener(oContent,'mouseover',oSelf._onContainerMouseover,oSelf);
-        YAHOO.util.Event.addListener(oContent,'mouseout',oSelf._onContainerMouseout,oSelf);
-        YAHOO.util.Event.addListener(oContent,'scroll',oSelf._onContainerScroll,oSelf);
-        YAHOO.util.Event.addListener(oContent,'resize',oSelf._onContainerResize,oSelf);
+        YAHOO.util.Event.addListener(oTextbox,"focus",oSelf._onTextboxFocus,oSelf);
+        YAHOO.util.Event.addListener(oTextbox,"blur",oSelf._onTextboxBlur,oSelf);
+        YAHOO.util.Event.addListener(oContent,"mouseover",oSelf._onContainerMouseover,oSelf);
+        YAHOO.util.Event.addListener(oContent,"mouseout",oSelf._onContainerMouseout,oSelf);
+        YAHOO.util.Event.addListener(oContent,"scroll",oSelf._onContainerScroll,oSelf);
+        YAHOO.util.Event.addListener(oContent,"resize",oSelf._onContainerResize,oSelf);
         if(oTextbox.form && this.allowBrowserAutocomplete) {
-            YAHOO.util.Event.addListener(oTextbox.form,'submit',oSelf._onFormSubmit,oSelf);
+            YAHOO.util.Event.addListener(oTextbox.form,"submit",oSelf._onFormSubmit,oSelf);
         }
 
         this.textboxFocusEvent = new YAHOO.util.CustomEvent("textboxFocus", this);
@@ -904,9 +904,9 @@ YAHOO.widget.AutoComplete.prototype._initListItem = function(oItem, nItemIndex) 
     };
     
     oItem.mouseover = oItem.mouseout = oItem.onclick = null;
-    YAHOO.util.Event.addListener(oItem,'mouseover',oSelf._onItemMouseover,oSelf);
-    YAHOO.util.Event.addListener(oItem,'mouseout',oSelf._onItemMouseout,oSelf);
-    YAHOO.util.Event.addListener(oItem,'click',oSelf._onItemMouseclick,oSelf);
+    YAHOO.util.Event.addListener(oItem,"mouseover",oSelf._onItemMouseover,oSelf);
+    YAHOO.util.Event.addListener(oItem,"mouseout",oSelf._onItemMouseout,oSelf);
+    YAHOO.util.Event.addListener(oItem,"click",oSelf._onItemMouseclick,oSelf);
 };
 
 /**
@@ -918,10 +918,10 @@ YAHOO.widget.AutoComplete.prototype._initListItem = function(oItem, nItemIndex) 
  */
 YAHOO.widget.AutoComplete.prototype._onItemMouseover = function(v,oSelf) {
     if(oSelf.prehighlightClassName) {
-        oSelf._togglePrehighlight(this,'mouseover');
+        oSelf._togglePrehighlight(this,"mouseover");
     }
     else {
-        oSelf._toggleHighlight(this,'to');
+        oSelf._toggleHighlight(this,"to");
     }
     
     oSelf.itemMouseOverEvent.fire(oSelf, this);
@@ -936,10 +936,10 @@ YAHOO.widget.AutoComplete.prototype._onItemMouseover = function(v,oSelf) {
  */
 YAHOO.widget.AutoComplete.prototype._onItemMouseout = function(v,oSelf) {
     if(oSelf.prehighlightClassName) {
-        oSelf._togglePrehighlight(this,'mouseout');
+        oSelf._togglePrehighlight(this,"mouseout");
     }
     else {
-        oSelf._toggleHighlight(this,'from');
+        oSelf._toggleHighlight(this,"from");
     }
 
     oSelf.itemMouseOutEvent.fire(oSelf, this);
@@ -954,7 +954,7 @@ YAHOO.widget.AutoComplete.prototype._onItemMouseout = function(v,oSelf) {
  */
 YAHOO.widget.AutoComplete.prototype._onItemMouseclick = function(v,oSelf) {
     // In case item has not been moused over
-    oSelf._toggleHighlight(this,'to');
+    oSelf._toggleHighlight(this,"to");
     oSelf._selectItem(this);
 };
 
@@ -980,7 +980,7 @@ YAHOO.widget.AutoComplete.prototype._onContainerMouseout = function(v,oSelf) {
     oSelf._bOverContainer = false;
     // If container is still active
     if(oSelf._oCurItem) {
-        oSelf._toggleHighlight(oSelf._oCurItem,'to');
+        oSelf._toggleHighlight(oSelf._oCurItem,"to");
     }
 };
 
@@ -1002,7 +1002,7 @@ YAHOO.widget.AutoComplete.prototype._onContainerScroll = function(v,oSelf) {
  * @param {object} oSelf The auto complete instance
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._onContainerResize = function(v,oSelf) {//TODO('container resized');
+YAHOO.widget.AutoComplete.prototype._onContainerResize = function(v,oSelf) {//TODO("container resized");
     oSelf._toggleContainerHelpers(oSelf._bContainerOpen);
 };
 
@@ -1289,7 +1289,7 @@ YAHOO.widget.AutoComplete.prototype._clearList = function() {
     }
 
     if (this._oCurItem) {
-        this._toggleHighlight(this._oCurItem,'from');
+        this._toggleHighlight(this._oCurItem,"from");
     }
         
     this._oCurItem = null;
@@ -1360,8 +1360,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         if(oSelf.autoHighlight) {
             // Go to the first item
             var oFirstItem = aItems[0];
-            oSelf._oCurItem = oFirstItem;
-            oSelf._toggleHighlight(oFirstItem,'to');
+            oSelf._toggleHighlight(oFirstItem,"to");
             oSelf.itemArrowToEvent.fire(oSelf, oFirstItem);
             oSelf._typeAhead(oFirstItem,sQuery);
         }
@@ -1638,7 +1637,7 @@ YAHOO.widget.AutoComplete.prototype._toggleHighlight = function(oNewItem, sType)
         YAHOO.util.Dom.removeClass(this._oCurItem, this.highlightClassName);
     }
 
-    if((sType == 'to') && this.highlightClassName) {
+    if((sType == "to") && this.highlightClassName) {
         // Apply highlight to new item
         YAHOO.util.Dom.addClass(oNewItem, this.highlightClassName)
         this._oCurItem = oNewItem;
@@ -1659,7 +1658,7 @@ YAHOO.widget.AutoComplete.prototype._togglePrehighlight = function(oNewItem, sTy
         return;
     }
 
-    if((sType == 'mouseover') && this.prehighlightClassName) {
+    if((sType == "mouseover") && this.prehighlightClassName) {
         // Apply prehighlight to new item
         YAHOO.util.Dom.addClass(oNewItem, this.prehighlightClassName);
     }
@@ -1764,7 +1763,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
 
         if (oCurItem) {
             // Unhighlight current item
-            this._toggleHighlight(oCurItem, 'from');
+            this._toggleHighlight(oCurItem, "from");
             this.itemArrowFromEvent.fire(this, oCurItem);
         }
         if (nNewItemIndex == -1) {
@@ -1823,7 +1822,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
             }
         }
 
-        this._toggleHighlight(oNewItem, 'to');
+        this._toggleHighlight(oNewItem, "to");
         this.itemArrowToEvent.fire(this, oNewItem);
         if(this.typeAhead) {
             this._updateValue(oNewItem);
