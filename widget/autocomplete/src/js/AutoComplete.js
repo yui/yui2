@@ -29,7 +29,7 @@
 YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
     if(inputEl && containerEl && oDataSource) {
         // Validate data source
-        if (oDataSource.getResults) {
+        if (oDataSource && (oDataSource.constructor == YAHOO.widget.DataSource)) {
             this.dataSource = oDataSource;
         }
         else {
@@ -328,6 +328,7 @@ YAHOO.widget.AutoComplete.prototype.toString = function() {
  */
 YAHOO.widget.AutoComplete.prototype.getListIds = function() {
     //TODO: go through getListItems to return ids
+    //TODO: make available the data for each item
     return this._aListItems;
 };
 
@@ -782,11 +783,7 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
         YAHOO.log("Force selection has been enabled with delimiter character(s) defined.","warn", this.toString());
     }
 
-    if(!this.alwaysShowContainer) {
-        //this._oContainer._oContent.style.display = "none";//DEBUG
-        //this._toggleContainerHelpers(false);
-    }
-    else {
+    if(this.alwaysShowContainer) {
         this._bContainerOpen = true;
     }
 };
@@ -885,8 +882,6 @@ YAHOO.widget.AutoComplete.prototype._initList = function() {
     for(var i=0; i<this.maxResultsDisplayed; i++) {
         var oItem = document.createElement("li");
         oItem = oList.appendChild(oItem);
-        oItem.innerHTML = "result";
-        //TODO:oItem.toString = function() {return "foobar";};
         this._aListItems[i] = oItem;
         this._initListItem(oItem, i);
     }
@@ -897,7 +892,7 @@ YAHOO.widget.AutoComplete.prototype._initList = function() {
  * Initializes each &lt;li&gt; element in the container list.
  *
  * @param {object} oItem The &lt;li&gt; DOM element
- * @param {number} onItemIndex The index of the element
+ * @param {number} nItemIndex The index of the element
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._initListItem = function(oItem, nItemIndex) {
@@ -1523,17 +1518,19 @@ YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
  */
 YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
     if(this.alwaysShowContainer) {
-        this._bContainerOpen = bShow;
-        
-        // Fire these events to give implementers a hook into the container
-        // being populated and being emptied
-        if(bShow) {
-            this.containerExpandEvent.fire(this);
+        // If
+        if(this._bContainerOpen) {
+            // Fire these events to give implementers a hook into the container
+            // being populated and being emptied
+            if(bShow) {
+                this.containerExpandEvent.fire(this);
+            }
+            else {
+                this.containerCollapseEvent.fire(this);
+            }
+            this._bContainerOpen = bShow;
+            return;
         }
-        else {
-            this.containerCollapseEvent.fire(this);
-        }
-        return;
     }
     
     var oContainer = this._oContainer;
@@ -1640,10 +1637,10 @@ YAHOO.widget.AutoComplete.prototype._toggleHighlight = function(oNewItem, sType)
         // Remove highlight from old item
         YAHOO.util.Dom.removeClass(this._oCurItem, this.highlightClassName);
     }
-    
-    if(sType == 'to') {
+
+    if((sType == 'to') && this.highlightClassName) {
         // Apply highlight to new item
-        YAHOO.util.Dom.replaceClass(oNewItem, this.prehighlightClassName, this.highlightClassName)
+        YAHOO.util.Dom.addClass(oNewItem, this.highlightClassName)
         this._oCurItem = oNewItem;
     }
 };
@@ -1662,7 +1659,7 @@ YAHOO.widget.AutoComplete.prototype._togglePrehighlight = function(oNewItem, sTy
         return;
     }
 
-    if(sType == 'mouseover') {
+    if((sType == 'mouseover') && this.prehighlightClassName) {
         // Apply prehighlight to new item
         YAHOO.util.Dom.addClass(oNewItem, this.prehighlightClassName);
     }

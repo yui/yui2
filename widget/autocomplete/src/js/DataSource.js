@@ -87,6 +87,15 @@ YAHOO.widget.DataSource.prototype.queryMatchCase = false;
  *
  * @return {string} Unique name of the data source instance
  */
+YAHOO.widget.DataSource.prototype.getName = function() {
+    return this._sName;
+};
+
+ /**
+ * Public accessor to the unique name of the data source instance.
+ *
+ * @return {string} Unique name of the data source instance
+ */
 YAHOO.widget.DataSource.prototype.toString = function() {
     return "DataSource " + this._sName;
 };
@@ -207,6 +216,14 @@ YAHOO.widget.DataSource.prototype.cacheFlushEvent = null;
  * @private
  */
 YAHOO.widget.DataSource._nIndex = 0;
+
+/**
+ * Name of data source instance.
+ *
+ * @type string
+ * @private
+ */
+YAHOO.widget.DataSource.prototype._sName = null;
 
 /**
  * Local cache of data result objects indexed chronologically.
@@ -403,7 +420,8 @@ YAHOO.widget.DS_XHR = function(sScriptURI, aSchema, oConfigs) {
     
     // Initialization sequence
     if(!aSchema || (aSchema.constructor != Array)) {
-        //log this.ERROR_INIT
+        YAHOO.log("Could not instantiate XHR DataSource due to invalid arguments", "error", this.toString());
+        return;
     }
     else {
         this.schema = aSchema;
@@ -452,6 +470,17 @@ YAHOO.widget.DS_XHR.prototype.ERROR_DATAXHR = "XHR response failed";
 /***************************************************************************
  * Public member variables
  ***************************************************************************/
+/**
+ * Number of milliseconds the XHR connection will wait for a server response. A
+ * a value of zero indicates the XHR connection will wait forever. Any value
+ * greater than zero will use the Connection utility's Auto-Abort feature.
+ * Default: 0.
+ *
+ * @type number
+ */
+YAHOO.widget.DS_XHR.prototype.connTimeout = 0;
+
+
 /**
  * Absolute or relative URI to script that returns query results. For instance,
  * queries will be sent to
@@ -528,6 +557,18 @@ YAHOO.widget.DS_XHR.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
      * @private
      */
     var responseSuccess = function(oResp) {
+        // Response ID does not match last made request ID.
+        if(!oSelf._oConn || (oResp.tId != oSelf._oConn.tId)) {
+            oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATANULL);
+            YAHOO.log(oSelf.ERROR_DATANULL, "error", this.toString());
+            return;
+        }
+//DEBUG
+YAHOO.log(oResp.responseXML.getElementsByTagName("Result"),'warn');
+for(var foo in oResp) {
+    YAHOO.log(foo + ": "+oResp[foo],'warn');
+}
+YAHOO.log('responseXML.xml: '+oResp.responseXML.xml,'warn');
         if(!isXML) {
             oResp = oResp.responseText;
         }
@@ -536,22 +577,29 @@ YAHOO.widget.DS_XHR.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
         }
         if(oResp === null) {
             oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATANULL);
-            YAHOO.log("Data error occurred: " + oSelf.ERROR_DATANULL, "error", this.toString());
-            oCallbackFn(sQuery, null, oParent);
+            YAHOO.log(oSelf.ERROR_DATANULL, "error", this.toString());
             return;
         }
-        
+
+        var aResults = oSelf.parseResponse(sQuery, oResp, oParent);
         var resultObj = {};
         resultObj.query = decodeURIComponent(sQuery);
-        resultObj.results = oSelf.parseResponse(sQuery, oResp, oParent);
-        oSelf._addCacheElem(resultObj);
-        oCallbackFn(sQuery, resultObj.results, oParent);
+        resultObj.results = aResults;
+        if(aResults === null) {
+            oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATAPARSE);
+            YAHOO.log(oSelf.ERROR_DATAPARSE, "error", oSelf.toString());
+            return;
+        }
+        else {
+            oSelf.getResultsEvent.fire(oSelf, oParent, sQuery, aResults);
+            oSelf._addCacheElem(resultObj);
+            oCallbackFn(sQuery, aResults, oParent);
+        }
     };
 
     var responseFailure = function(oResp) {
         oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATAXHR);
-        YAHOO.log("Data error occured: " + oSelf.ERROR_DATAXHR, "error", this.toString());
-        oCallbackFn(sQuery, null, oParent);
+        YAHOO.log(oSelf.ERROR_DATAXHR + ": " + oResp.statusText, "error", this.toString());
         return;
     };
     
@@ -560,7 +608,15 @@ YAHOO.widget.DS_XHR.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
         failure:responseFailure
     };
     
-    YAHOO.util.Connect.asyncRequest("GET", sUri, oCallback, null);
+    if(!isNaN(this.connTimeout) && this.connTimeout > 0) {
+        oCallback.timeout = this.connTimeout;
+    }
+    
+    if(this._oConn) {
+        YAHOO.util.Connect.abort(this._oConn);
+    }
+    
+    oSelf._oConn = YAHOO.util.Connect.asyncRequest("GET", sUri, oCallback, null);
 };
 
 /**
@@ -650,7 +706,9 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                     // ...and capture data into an array mapped according to the schema...
 
                     var dataFieldValue = jsonResult[aSchema[j]];
-                    if(!dataFieldValue) dataFieldValue = "";
+                    if(!dataFieldValue) {
+                        dataFieldValue = "";
+                    }
                     //doLog(dataFieldValue);
                     aResultItem.unshift(dataFieldValue);
                 }
@@ -661,7 +719,7 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
         case this.TYPE_XML:
             // Get the collection of results
             var xmlList = oResponse.getElementsByTagName(aSchema[0]);
-            if((xmlList.length != 0) && !xmlList) {
+            if(!xmlList) {
                 bError = true;
                 break;
             }
@@ -716,12 +774,9 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
             break;
     }    
     if(bError) {
-        this.dataErrorEvent.fire(this, oParent, sQuery, this.ERROR_DATAPARSE);
-        YAHOO.log("Data error occurred: " + this.ERROR_DATAPARSE, "error", this.toString());
         return null;
     }
     else {
-        this.getResultsEvent.fire(this, oParent, sQuery, aResults);
         return aResults;
     }
 };            
@@ -761,10 +816,16 @@ YAHOO.widget.DS_JSFunction = function(oFunction, oConfigs) {
             this[sConfig] = oConfigs[sConfig];
         }
     }
-    
+
     // Initialization sequence
-    this.dataFunction = oFunction;
-    this._init();
+    if(!oFunction  || (oFunction.constructor != Function)) {
+        YAHOO.log("Could not instantiate JSFunction DataSource due to invalid arguments", "error", this.toString());
+        return;
+    }
+    else {
+        this.dataFunction = oFunction;
+        this._init();
+    }
 };
 
 YAHOO.widget.DS_JSFunction.prototype = new YAHOO.widget.DataSource();
@@ -799,8 +860,7 @@ YAHOO.widget.DS_JSFunction.prototype.doQuery = function(oCallbackFn, sQuery, oPa
     aResults = oFunction(sQuery);
     if(aResults === null) {
         this.dataErrorEvent.fire(this, oParent, sQuery, this.ERROR_DATANULL);
-        YAHOO.log("Data error occurred: " + oSelf.ERROR_DATANULL, "error", this.toString());
-        oCallbackFn(sQuery, null, oParent);
+        YAHOO.log(oSelf.ERROR_DATANULL, "error", this.toString());
         return;
     }
     
@@ -837,8 +897,14 @@ YAHOO.widget.DS_JSArray = function(aData, oConfigs) {
     }
 
     // Initialization sequence
-    this.data = aData;
-    this._init();
+    if(!aData || (aData.constructor != Array)) {
+        YAHOO.log("Could not instantiate JSArray DataSource due to invalid arguments", "error", this.toString());
+        return;
+    }
+    else {
+        this.data = aData;
+        this._init();
+    }
 };
 
 YAHOO.widget.DS_JSArray.prototype = new YAHOO.widget.DataSource();
