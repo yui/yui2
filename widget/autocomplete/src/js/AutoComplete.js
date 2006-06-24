@@ -76,7 +76,7 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
         this._initProps();
         this._initList();
         this._initContainerHelpers();
-        
+
         var oSelf = this;
         var oTextbox = this._oTextbox;
         // Events are actually for the content module within the container
@@ -90,7 +90,6 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
                 }
             }
         }
-        
         YAHOO.widget.AutoComplete._nIndex++;
 
         // Set up events
@@ -115,6 +114,7 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
         this.dataReturnEvent = new YAHOO.util.CustomEvent("dataReturn", this);
         this.dataErrorEvent = new YAHOO.util.CustomEvent("dataError", this);
         this.containerExpandEvent = new YAHOO.util.CustomEvent("containerExpand", this);
+        this.containerHelpersExpandEvent = new YAHOO.util.CustomEvent("containerHelpersExpand", this);
         this.typeAheadEvent = new YAHOO.util.CustomEvent("typeAhead", this);
         this.itemMouseOverEvent = new YAHOO.util.CustomEvent("itemMouseOver", this);
         this.itemMouseOutEvent = new YAHOO.util.CustomEvent("itemMouseOut", this);
@@ -124,6 +124,7 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
         this.unmatchedItemSelectEvent = new YAHOO.util.CustomEvent("unmatchedItemSelect", this);
         this.selectionEnforceEvent = new YAHOO.util.CustomEvent("selectionEnforce", this);
         this.containerCollapseEvent = new YAHOO.util.CustomEvent("containerCollapse", this);
+        this.containerHelpersCollapseEvent = new YAHOO.util.CustomEvent("containerHelpersCollapse", this);
         this.textboxBlurEvent = new YAHOO.util.CustomEvent("textboxBlur", this);
 
         // Turn off autocomplete on textbox
@@ -478,6 +479,12 @@ YAHOO.widget.AutoComplete.prototype.dataErrorEvent = null;
 YAHOO.widget.AutoComplete.prototype.containerExpandEvent = null;
 
 /**
+ * Fired when the auto complete container helpers are expanded. Subscribers
+ * receive the following array:<br>
+ *     - args[0] The auto complete object instance
+ */
+YAHOO.widget.AutoComplete.prototype.containerHelpersExpandEvent = null;
+/**
  * Fired when the auto complete textbox has been prefilled by the type-ahead
  * feature. Subscribers receive the following array:<br>
  *     - args[0] The auto complete object instance
@@ -550,6 +557,13 @@ YAHOO.widget.AutoComplete.prototype.selectionEnforceEvent = null;
  *     - args[0] The auto complete object instance
  */
 YAHOO.widget.AutoComplete.prototype.containerCollapseEvent = null;
+
+/**
+ * Fired when the auto complete container helpers are collapsed. Subscribers
+ * receive the following array:<br>
+ *     - args[0] The auto complete object instance
+ */
+YAHOO.widget.AutoComplete.prototype.containerHelpersCollapseEvent = null;
 
 /**
  * Fired when the auto complete text input box loses focus. Subscribers receive
@@ -780,7 +794,10 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
         }
     }
     if(this.forceSelection && this.delimChar) {
-        YAHOO.log("Force selection has been enabled with delimiter character(s) defined.","warn", this.toString());
+        YAHOO.log("The forceSelection feature has been enabled with delimChar defined.","warn", this.toString());
+    }
+    if(this.alwaysShowContainer && (this.useShadow || this.useIFrame)) {
+        YAHOO.log("The features useShadow and useIFrame are not compatible with the alwaysShowContainer feature.","warn", this.toString());
     }
 
     if(this.alwaysShowContainer) {
@@ -1002,7 +1019,8 @@ YAHOO.widget.AutoComplete.prototype._onContainerScroll = function(v,oSelf) {
  * @param {object} oSelf The auto complete instance
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._onContainerResize = function(v,oSelf) {//TODO("container resized");
+YAHOO.widget.AutoComplete.prototype._onContainerResize = function(v,oSelf) {
+    YAHOO.log("Container resize event.","info",this.toString());
     oSelf._toggleContainerHelpers(oSelf._bContainerOpen);
 };
 
@@ -1506,6 +1524,13 @@ YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
             this._oContainer._oShadow.style.height = 0;
         }
     }
+    
+    if(bShow) {
+        this.containerHelpersExpandEvent.fire(this);
+    }
+    else {
+        this.containerHelpersCollapseEvent.fire(this);
+    }
 };
 
 /**
@@ -1516,24 +1541,22 @@ YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
+    // Implementer has container always open so don't mess with it
     if(this.alwaysShowContainer) {
-        // If
-        if(this._bContainerOpen) {
-            // Fire these events to give implementers a hook into the container
-            // being populated and being emptied
-            if(bShow) {
-                this.containerExpandEvent.fire(this);
-            }
-            else {
-                this.containerCollapseEvent.fire(this);
-            }
-            this._bContainerOpen = bShow;
-            return;
+        // Fire these events to give implementers a hook into the container
+        // being populated and being emptied
+        if(bShow) {
+            this.containerExpandEvent.fire(this);
         }
+        else {
+            this.containerCollapseEvent.fire(this);
+        }
+        this._bContainerOpen = bShow;
+        return;
     }
     
     var oContainer = this._oContainer;
-    // Don't animate if it's already closed && !bShow
+    // Container is already closed
     if (!bShow && !this._bContainerOpen) {
         oContainer._oContent.style.display = "none";//DEBUG
         return;
@@ -1543,9 +1566,11 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
     var oAnim = this._oAnim;
     if (oAnim && oAnim.getEl() && (this.animHoriz || this.animVert)) {
     
-        // If iFrame needs to be collapsed, do it right away...
-        // but if iFrame needs to be expanded, wait until after the container expands
-        if(!bShow) this._toggleContainerHelpers(bShow);
+        // If iFrame/shadow need to be collapsed, do it right away...
+        // but if iFrame/shadow need to be expanded, wait until after the container expands
+        if(!bShow) {
+            this._toggleContainerHelpers(bShow);
+        }
         
         if(oAnim.isAnimated()) {
             oAnim.stop();
@@ -1590,14 +1615,13 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
     		oAnim.onComplete.unsubscribeAll();
 
             if(bShow) {
-                // Expand the iFrame after container is done.
-                oSelf._toggleContainerHelpers(bShow);
                 oSelf.containerExpandEvent.fire(oSelf);
             }
             else {
                 oContainer._oContent.style.display = "none";//DEBUG
                 oSelf.containerCollapseEvent.fire(oSelf);
             }
+            oSelf._toggleContainerHelpers(bShow);
      	};
 
         // Display container and animate it
@@ -1608,16 +1632,17 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
     }
     // Else don't animate, just show or hide
     else {
-        this._bContainerOpen = bShow;
-        oContainer._oContent.style.display = (bShow) ? "block" : "none";//DEBUG
-        this._toggleContainerHelpers(bShow);
         if(bShow) {
+            oContainer._oContent.style.display = "block";
             this.containerExpandEvent.fire(this);
         }
         else {
+            oContainer._oContent.style.display = "none";
             this.containerCollapseEvent.fire(this);
         }
-    }
+        this._toggleContainerHelpers(bShow);
+        this._bContainerOpen = bShow;
+   }
 
 };
 

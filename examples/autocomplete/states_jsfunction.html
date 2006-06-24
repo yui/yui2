@@ -112,8 +112,8 @@ YAHOO.example.ACJSFunction = function(){
             oACDS = new YAHOO.widget.DS_JSFunction(getStates);
 
             // Instantiate auto complete
-            oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS, {alwaysShowContainer:true});
-            //oAutoComp.forceSelection = true;
+            oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
+            oAutoComp.alwaysShowContainer = true;
             oAutoComp.queryDelay = 0;
             oAutoComp.autoHighlight = true;
             oAutoComp.maxResultsDisplayed = 8;
