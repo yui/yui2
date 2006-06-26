@@ -52,46 +52,94 @@
     <!-- AutoComplete ends -->
 
     <!-- Panel begins -->
-    <div id="panel">
-    <!-- The following is in a select to demonstrate the useIFrame feature -->
-    <select><option>Customize configurations for AutoComplete</option></select>
-        <dl>
-            <dt>Animate Horizontally</dt>
-                <dd><input id="animhoriz" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleAnimHoriz(this);"></dd>
-            <dt>Animate Vertically</dt>
-                <dd><input id="animvert" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleAnimVert(this);" checked></dd>
-            <dt>Animation Speed</dt>
-                <dd><input id="animspeed" type="text" size="2" value="0.3"> <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateAnimSpeed();"></dd>
-            <dt>Use Shadow</dt>
-                <dd><input id="useshadow" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleShadow(this);"></dd>
-            <dt>Use IFrame</dt>
-                <dd><input id="useiframe" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleIFrame(this);"></dd>
-            <dt>Type Ahead</dt>
-                <dd><input id="typeahead" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleTypeAhead(this);"></dd>
-            <dt>Force a Selection</dt>
-                <dd><input id="forceselection" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleForceSelection(this);"></dd>
-            <dt>Maximum Results</dt>
-                <dd><input id="maxresults" type="text" size="2" value="10"> <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateMaxResults();"></dd>
-            <dt>Minimum Query Length</dt>
-                <dd><input id="minquerylength" type="text" size="2" value="1"> <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateMinQueryLength();"></dd>
-            <dt>Query Delay</dt>
-                <dd><input id="querydelay" type="text" size="2" value="0.5"> <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateQueryDelay();"></dd>
-            <dt>Array of Delimiter Character(s)</dt>
-                <dd><input id="delimchar" type="text" size="30" value=""> <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateDelimChar();"></dd>
-            <dt>Highlight Classname</dt>
-                <dd><input id="highlightclass" type="text" size="30" value="yui-ac-highlight" maxlength="30"> <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateHighlight();"></dd>
-            <dt>Pre-highlight Classname</dt>
-                <dd><input id="prehighlightclass" type="text" size="30" value="" maxlength="30"> <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updatePrehighlight();"></dd>
-            <dt>Set Header</dt>
-                <dd><textarea id="header" cols="25" rows="5"></textarea><br><input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateHeader();"></dd>
-            <dt>Always Show Container</dt>
-                <dd><input id="alwaysshowcontainer" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleAlwaysShowContainer(this);"></dd>
-            <dt>Set Body</dt>
-                <dd><textarea id="body" cols="25" rows="5"></textarea><br><input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateBody();"></dd>
-            <dt>Set Footer</dt>
-                <dd><textarea id="footer" cols="25" rows="5"></textarea><br><input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateFooter();"></dd>
-        </dl>
-    </div>
+    <form id="panel">
+    
+        <!-- The following is in a select to demonstrate the useIFrame feature -->
+        <select><option>Customize configurations for AutoComplete</option></select>
+
+        <div>
+            <input id="animhoriz" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleAnimHoriz(this);">
+            <label for="animhoriz">Animate Horizontally</label>
+        </div>
+        <div>
+            <input id="animvert" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleAnimVert(this);" checked>
+            <label for="animvert">Animate Vertically</label>
+        </div>
+        <div>
+            <label for="animspeed">Animation Speed: </label>
+            <input id="animspeed" type="text" size="2" value="0.3">
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateAnimSpeed();">
+        </div>
+        <div>
+            <input id="useshadow" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleShadow(this);">
+            <label for="useshadow">Use Shadow</label>
+        </div>
+        <div>
+            <input id="useiframe" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleIFrame(this);">
+            <label for="useiframe">Use IFrame</label>
+        </div>
+        <div>
+            <input id="typeahead" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleTypeAhead(this);">
+            <label for="typeahead">Type Ahead</label>
+        </div>
+        <div>
+            <input id="forceselection" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleForceSelection(this);">
+            <label for="forceselection">Force a Selection</label>
+        </div>
+        <div>
+            <label for="maxresults">Maximum Results: </label>
+            <input id="maxresults" type="text" size="2" value="10">
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateMaxResults();">
+        </div>
+        <div>
+            <label for="minquerylength">Minimum Query Length: </label>
+            <input id="minquerylength" type="text" size="2" value="1">
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateMinQueryLength();"
+        </div>
+        <div>
+            <label for="querydelay">Query Delay: </label>
+            <input id="querydelay" type="text" size="2" value="0.5">
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateQueryDelay();">
+        </div>
+        <div>
+            <label for="delimchar">Array of Delimiter Character(s)</label><br>
+            <input id="delimchar" type="text" size="30" value="">
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateDelimChar();">
+        </div>
+        <div>
+            <label for="highlightclass">Highlight Classname</label><br>
+            <input id="highlightclass" type="text" size="30" value="yui-ac-highlight" maxlength="30">
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateHighlight();">
+        </div>
+        <div>
+            <label for="prehighlightclass">Pre-highlight Classname</label><br>
+            <input id="prehighlightclass" type="text" size="30" value="" maxlength="30">
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updatePrehighlight();">
+        </div>
+        <div>
+            <input id="allowbrowserautocomplete" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleAllowBrowserAutocomplete(this);" checked>
+            <label for="allowbrowserautocomplete">Allow Browser Autocomplete</label>
+        </div>
+        <div>
+            <input id="alwaysshowcontainer" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleAlwaysShowContainer(this);">
+            <label for="alwaysshowcontainer">Always Show Container</label>
+        </div>
+        <div>
+            <label for="header">Set Header</label>
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateHeader();"><br>
+            <textarea id="header" cols="25" rows="5"></textarea>
+        </div>
+        <div>
+            <label for="body">Set Body</label>
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateBody();"><br>
+            <textarea id="body" cols="25" rows="5"></textarea>
+        </div>
+        <div>
+            <label for="footer">Set Footer</label>
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateFooter();"><br>
+            <textarea id="footer" cols="25" rows="5"></textarea>
+        </div>
+    </form>
     <!-- Panel ends -->
     <!-- Content ends -->
     
@@ -241,12 +289,11 @@ YAHOO.example.ACCustomizable = function(){
             mylogwriter.log("Updated prehighlightClassName to " + oAutoComp.prehighlightClassName + ".");
         },
 
-        updateHeader: function() {
-            var header = document.getElementById("header").value;
-            oAutoComp.setHeader(header);
-            mylogwriter.log("Header updated.");
+        toggleAllowBrowserAutocomplete: function(allowBrowserAutocomplete) {
+            oAutoComp.allowBrowserAutocomplete = allowBrowserAutocomplete.checked;
+            mylogwriter.log("Updated allowBrowserAutocomplete to " + oAutoComp.allowBrowserAutocomplete + ".");
         },
-        
+
         toggleAlwaysShowContainer: function(alwaysShowContainer) {
             var container = YAHOO.util.Dom.getElementsByClassName("yui-ac-content","div","customcontainer")[0];
             if(container) {
@@ -265,6 +312,12 @@ YAHOO.example.ACCustomizable = function(){
             }
         },
 
+        updateHeader: function() {
+            var header = document.getElementById("header").value;
+            oAutoComp.setHeader(header);
+            mylogwriter.log("Header updated.");
+        },
+        
         updateBody: function() {
             var body = document.getElementById("body").value;
             oAutoComp.setBody(body);
@@ -279,7 +332,7 @@ YAHOO.example.ACCustomizable = function(){
 
         validateForm: function() {
             // Validate form inputs here
-            return false;
+            return true;
         }
     };
 }();

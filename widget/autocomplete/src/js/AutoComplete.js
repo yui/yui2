@@ -104,7 +104,7 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
         YAHOO.util.Event.addListener(oContent,"mouseout",oSelf._onContainerMouseout,oSelf);
         YAHOO.util.Event.addListener(oContent,"scroll",oSelf._onContainerScroll,oSelf);
         YAHOO.util.Event.addListener(oContent,"resize",oSelf._onContainerResize,oSelf);
-        if(oTextbox.form && this.allowBrowserAutocomplete) {
+        if(oTextbox.form) {
             YAHOO.util.Event.addListener(oTextbox.form,"submit",oSelf._onFormSubmit,oSelf);
         }
 
@@ -1226,7 +1226,12 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._onFormSubmit = function(v,oSelf) {
-    oSelf._oTextbox.setAttribute("autocomplete","on");
+    if(oSelf.allowBrowserAutocomplete) {
+        oSelf._oTextbox.setAttribute("autocomplete","on");
+    }
+    else {
+        oSelf._oTextbox.setAttribute("autocomplete","off");
+    }
 };
 
 /**
