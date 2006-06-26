@@ -53,7 +53,8 @@
 
     <!-- Panel begins -->
     <div id="panel">
-    <h4>Customize configurations for AutoComplete</h4>
+    <!-- The following is in a select to demonstrate the useIFrame feature -->
+    <select><option>Customize configurations for AutoComplete</option></select>
         <dl>
             <dt>Animate Horizontally</dt>
                 <dd><input id="animhoriz" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleAnimHoriz(this);"></dd>
@@ -63,6 +64,8 @@
                 <dd><input id="animspeed" type="text" size="2" value="0.3"> <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateAnimSpeed();"></dd>
             <dt>Use Shadow</dt>
                 <dd><input id="useshadow" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleShadow(this);"></dd>
+            <dt>Use IFrame</dt>
+                <dd><input id="useiframe" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleIFrame(this);"></dd>
             <dt>Type Ahead</dt>
                 <dd><input id="typeahead" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleTypeAhead(this);"></dd>
             <dt>Force a Selection</dt>
@@ -125,6 +128,7 @@ YAHOO.example.ACCustomizable = function(){
             var ua = navigator.userAgent.toLowerCase();
             if(ua.indexOf('msie') != -1 && ua.indexOf('opera') < 0) {
                 oAutoComp.useIFrame = true;
+                YAHOO.util.Dom.get("useiframe").checked = true;
             }
         },
 
@@ -154,6 +158,11 @@ YAHOO.example.ACCustomizable = function(){
         toggleShadow: function(useShadow) {
             oAutoComp.useShadow = useShadow.checked;
             mylogwriter.log("Updated useShadow to " + oAutoComp.useShadow + ".");
+        },
+
+        toggleIFrame: function(useIFrame) {
+            oAutoComp.useIFrame = useIFrame.checked;
+            mylogwriter.log("Updated useIFrame to " + oAutoComp.useIFrame + ".");
         },
 
         toggleTypeAhead: function(typeAhead) {
@@ -235,13 +244,25 @@ YAHOO.example.ACCustomizable = function(){
         updateHeader: function() {
             var header = document.getElementById("header").value;
             oAutoComp.setHeader(header);
-            my
-            logwriter.log("Header updated.");
+            mylogwriter.log("Header updated.");
         },
         
         toggleAlwaysShowContainer: function(alwaysShowContainer) {
-            oAutoComp.alwaysShowContainer = alwaysShowContainer.checked;
-            mylogwriter.log("Updated alwaysShowContainer to " + oAutoComp.alwaysShowContainer + ".");
+            var container = YAHOO.util.Dom.getElementsByClassName("yui-ac-content","div","customcontainer")[0];
+            if(container) {
+                oAutoComp.alwaysShowContainer = alwaysShowContainer.checked;
+                if(oAutoComp.alwaysShowContainer) {
+                    oAutoComp.setBody("alwaysShowContainer enabled");
+                }
+                else {
+                    container.style.height = "0";
+                    oAutoComp.setBody();
+                }
+                mylogwriter.log("Updated alwaysShowContainer to " + oAutoComp.alwaysShowContainer + ".");
+            }
+            else {
+                mylogwriter.log("Could not update alwaysShowContainer.","warn");
+            }
         },
 
         updateBody: function() {
