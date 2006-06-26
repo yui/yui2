@@ -245,17 +245,15 @@ YAHOO.util.Dom = function() {
             var pageXY = this.getXY(el);
             if (pageXY === false) { return false; } // has to be part of doc to have pageXY
             
-            var delta = [
+            var delta = [ // assuming pixels; if not we will have to retry
                parseInt( this.getStyle(el, 'left'), 10 ),
                parseInt( this.getStyle(el, 'top'), 10 )
             ];
          
-            if ( isNaN(delta[0]) ) // defaults to 'auto'
-            { 
+            if ( isNaN(delta[0]) ) {// in case of 'auto'
                delta[0] = (style_pos == 'relative') ? 0 : el.offsetLeft;
             } 
-            if ( isNaN(delta[1]) ) // defaults to 'auto'
-            { 
+            if ( isNaN(delta[1]) ) { // in case of 'auto'
                delta[1] = (style_pos == 'relative') ? 0 : el.offsetTop;
             } 
       
@@ -264,10 +262,9 @@ YAHOO.util.Dom = function() {
       
             var newXY = this.getXY(el);
       
-            // if retry is true, try one more time if we miss
+            // if retry is true, try one more time if we miss 
             if (!noRetry && (newXY[0] != pos[0] || newXY[1] != pos[1]) ) {
-               var retry = function() { util.Dom.setXY(el, pos, true); };
-               setTimeout(retry, 0); // "delay" for IE resize timing issue
+               this.setXY(el, pos, true);
             }
          };
          
