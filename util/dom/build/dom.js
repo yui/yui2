@@ -15,11 +15,43 @@ YAHOO.util.Dom = function() {
    var util = YAHOO.util; // internal shorthand
    var property_cache = {}; // to cache case conversion for set/getStyle
    
+   var toCamel = function(property) {
+      var convert = function(prop) {
+         var test = /(-[a-z])/i.exec(prop);
+         return prop.replace(RegExp.$1, RegExp.$1.substr(1).toUpperCase());
+      };
+      
+      while(property.indexOf('-') > -1) {
+         property = convert(property);
+      }
+
+      return property;
+      //return property.replace(/-([a-z])/gi, function(m0, m1) {return m1.toUpperCase()}) // cant use function as 2nd arg yet due to safari bug
+   };
+   
+   var toHyphen = function(property) {
+      if (property.indexOf('-') > -1) { // assume hyphen
+         return property;
+      }
+      
+      var converted = '';
+      for (var i = 0, len = property.length;i < len; ++i) {
+         if (property.charAt(i) == property.charAt(i).toUpperCase()) {
+            converted = converted + '-' + property.charAt(i).toLowerCase();
+         } else {
+            converted = converted + property.charAt(i);
+         }
+      }
+
+      return converted;
+      //return property.replace(/([a-z])([A-Z]+)/g, function(m0, m1, m2) {return (m1 + '-' + m2.toLowerCase())});
+   };
+   
    // improve performance by only looking up once
    var cacheConvertedProperties = function(property) {
       property_cache[property] = {
-         camel: property.replace(/-([a-z])/gi, function(m0, m1) {return m1.toUpperCase()}),
-         hyphen: property.replace(/([a-z])([A-Z]+)/g, function(m0, m1, m2) {return (m1 + '-' + m2.toLowerCase())})
+         camel: toCamel(property),
+         hyphen: toHyphen(property)
       };
    };
    
