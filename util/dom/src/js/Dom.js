@@ -13,8 +13,9 @@ YAHOO.util.Dom = function() {
    var isIE = (ua.indexOf('msie') != -1 && !isOpera); // not opera spoof
    var id_counter = 0;
    var util = YAHOO.util; // internal shorthand
-   
    var property_cache = {}; // to cache case conversion for set/getStyle
+   var logger = {};
+   logger.log = function() {YAHOO.log.apply(arguments)};
    
    // improve performance by only looking up once
    var cacheConvertedProperties = function(property) {
@@ -31,26 +32,26 @@ YAHOO.util.Dom = function() {
        * @return {HTMLElement/Array} A DOM reference to an HTML element or an array of HTMLElements.
        */
       get: function(el) {
-         if (typeof el != 'string' && !(el instanceof Array) )
-         { // assuming HTMLElement or HTMLCollection, so pass back as is
+         if (typeof el != 'string' && !(el instanceof Array) ) { // assuming HTMLElement or HTMLCollection, so pass back as is
+            logger.log('get(' + el + ') returning ' + el, 'info', 'Dom');
             return el;
          }
          
-         if (typeof el == 'string') 
-         { // ID
+         if (typeof el == 'string') { // ID
+            logger.log('get("' + el + '") returning ' + document.getElementById(el), 'info', 'Dom');
             return document.getElementById(el);
          }
-         else
-         { // array of ID's and/or elements
+         else { // array of ID's and/or elements
             var collection = [];
-            for (var i = 0, len = el.length; i < len; ++i)
-            {
+            for (var i = 0, len = el.length; i < len; ++i) {
                collection[collection.length] = util.Dom.get(el[i]);
             }
             
+            logger.log('get("' + el + '") returning ' + collection, 'info', 'Dom');
             return collection;
          }
 
+         logger.log('element ' + el + ' not found', 'error', 'Dom');
          return null; // safety, should never happen
       },
    
@@ -95,6 +96,7 @@ YAHOO.util.Dom = function() {
                }
             }
       
+            logger.log('getStyle ' + property + ' returning ' + value, 'info', 'Dom');
             return value;
          };
          
@@ -134,6 +136,8 @@ YAHOO.util.Dom = function() {
                   el.style[camel] = val;
             }
             
+            logger.log('setStyle setting ' + property + ' to ' + val, 'info', 'Dom');
+            
          };
          
          util.Dom.batch(el, f, util.Dom, true);
@@ -149,6 +153,7 @@ YAHOO.util.Dom = function() {
    
          // has to be part of document to have pageXY
             if (el.parentNode === null || this.getStyle(el, 'display') == 'none') {
+               logger.log('getXY failed: element not available', 'error', 'Dom');
                return false;
             }
             
@@ -202,6 +207,8 @@ YAHOO.util.Dom = function() {
                else { parentNode = null; }
             }
       
+            logger.log('getXY returning ' + pos, 'info', 'Dom');
+            
             return pos;
          };
          
@@ -235,7 +242,6 @@ YAHOO.util.Dom = function() {
        */
       setXY: function(el, pos, noRetry) {
          var f = function(el) {
-   
             var style_pos = this.getStyle(el, 'position');
             if (style_pos == 'static') { // default to relative
                this.setStyle(el, 'position', 'relative');
@@ -243,7 +249,10 @@ YAHOO.util.Dom = function() {
             }
             
             var pageXY = this.getXY(el);
-            if (pageXY === false) { return false; } // has to be part of doc to have pageXY
+            if (pageXY === false) { // has to be part of doc to have pageXY
+               logger.log('setXY failed: element not available', 'error', 'Dom');
+               return false; 
+            }
             
             var delta = [ // assuming pixels; if not we will have to retry
                parseInt( this.getStyle(el, 'left'), 10 ),
@@ -266,6 +275,8 @@ YAHOO.util.Dom = function() {
             if (!noRetry && (newXY[0] != pos[0] || newXY[1] != pos[1]) ) {
                this.setXY(el, pos, true);
             }
+            
+            logger.log('setXY setting position to ' + pos, 'info', 'Dom');
          };
          
          util.Dom.batch(el, f, util.Dom, true);
@@ -299,7 +310,9 @@ YAHOO.util.Dom = function() {
        */
       getRegion: function(el) {
          var f = function(el) {
-            return new YAHOO.util.Region.getRegion(el);
+            var region = new YAHOO.util.Region.getRegion(el);
+            logger.log('getRegion returning ' + region, 'info', 'Dom');
+            return region;
          };
          
          return util.Dom.batch(el, f, util.Dom, true);
@@ -346,6 +359,7 @@ YAHOO.util.Dom = function() {
          var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
          
          var f = function(el) {
+            logger.log('hasClass returning ' + re.test(el['className']), 'info', 'Dom');
             return re.test(el['className']);
          };
          
@@ -360,6 +374,8 @@ YAHOO.util.Dom = function() {
       addClass: function(el, className) {
          var f = function(el) {
             if (this.hasClass(el, className)) { return; } // already present
+            
+            logger.log('addClass adding ' + className, 'info', 'Dom');
             
             el['className'] = [el['className'], className].join(' ');
          };
@@ -377,6 +393,9 @@ YAHOO.util.Dom = function() {
 
          var f = function(el) {
             if (!this.hasClass(el, className)) { return; } // not present
+            
+            logger.log('removeClass removing ' + className, 'info', 'Dom');
+            
             var c = el['className'];
             el['className'] = c.replace(re, ' ');
             if ( this.hasClass(el, className) ) { // in case of multiple adjacent
@@ -399,6 +418,8 @@ YAHOO.util.Dom = function() {
          var re = new RegExp('(?:^|\\s+)' + oldClassName + '(?:\\s+|$)', 'g');
 
          var f = function(el) {
+            logger.log('replaceClass replacing ' + oldClassName + ' with ' + newClassName, 'info', 'Dom');
+         
             el['className'] = el['className'].replace(re, ' ' + newClassName + ' ');
 
             if ( this.hasClass(el, oldClassName) ) { // in case of multiple adjacent
@@ -417,11 +438,21 @@ YAHOO.util.Dom = function() {
        */
       generateId: function(el, prefix) {
          prefix = prefix || 'yui-gen';
+         el = el || {};
          
          var f = function(el) {
-            el = el || {}; // just generating ID in this case
+            if (el) {
+               el = util.Dom.get(el);
+            } else {
+               el = {}; // just generating ID in this case
+            }
             
-            if (!el.id) { el.id = prefix + id_counter++; } // dont override existing
+            if (!el.id) {
+               el.id = prefix + id_counter++; 
+               logger.log('generateId generating ' + el.id, 'info', 'Dom');
+            } // dont override existing
+            
+            logger.log('generateId returning ' + el.id, 'info', 'Dom');
             
             return el.id;
          };
@@ -440,29 +471,30 @@ YAHOO.util.Dom = function() {
          if (!haystack || !needle) { return false; }
          
          var f = function(needle) {
-            if (haystack.contains && ua.indexOf('safari') < 0) 
-            { // safari "contains" is broken
+            if (haystack.contains && ua.indexOf('safari') < 0) { // safari "contains" is broken
+               logger.log('isAncestor returning ' + haystack.contains(needle), 'info', 'Dom');
                return haystack.contains(needle);
             }
-            else if ( haystack.compareDocumentPosition ) 
-            {
+            else if ( haystack.compareDocumentPosition ) {
+               logger.log('isAncestor returning ' + !!(haystack.compareDocumentPosition(needle) & 16), 'info', 'Dom');
                return !!(haystack.compareDocumentPosition(needle) & 16);
             }
-            else 
-            { // loop up and test each parent
+            else { // loop up and test each parent
                var parent = needle.parentNode;
                
                while (parent) {
                   if (parent == haystack) {
+                     logger.log('isAncestor returning true', 'info', 'Dom');
                      return true;
                   }
                   else if (parent.tagName.toUpperCase() == 'HTML') {
+                     logger.log('isAncestor returning false', 'info', 'Dom');
                      return false;
                   }
                   
                   parent = parent.parentNode;
                }
-               
+               logger.log('isAncestor returning false', 'info', 'Dom');
                return false;
             }    
          };
@@ -506,6 +538,8 @@ YAHOO.util.Dom = function() {
             if ( method(elements[i]) ) { nodes[nodes.length] = elements[i]; }
          }
 
+         logger.log('getElementsBy returning ' + nodes, 'info', 'Dom');
+         
          return nodes;
       },
       
@@ -519,18 +553,26 @@ YAHOO.util.Dom = function() {
        * @return {HTMLElement/Array} The element(s) with the method applied
        */
       batch: function(el, method, o, override) {
+         var id = el;
          el = util.Dom.get(el);
+         
          var scope = (override) ? o : window;
          
-         if (!el || el.tagName || !el.length) 
-         { // is null or not a collection (tagName for SELECT and others that can be both an element and a collection)
+         if (!el || el.tagName || !el.length) { // is null or not a collection (tagName for SELECT and others that can be both an element and a collection)
+            if (!el) {
+               logger.log(id + ' not available', 'error', 'Dom');
+               return false;
+            }
             return method.call(scope, el, o);
          } 
          
          var collection = [];
          
-         for (var i = 0, len = el.length; i < len; ++i)
-         {
+         for (var i = 0, len = el.length; i < len; ++i) {
+            if (!el[i]) {
+               id = id[i];
+               logger.log(id + ' not available', 'error', 'Dom');
+            }
             collection[collection.length] = method.call(scope, el[i], o);
          }
          
@@ -567,6 +609,7 @@ YAHOO.util.Dom = function() {
          }
       
          var h = [scrollHeight,windowHeight,bodyHeight].sort(function(a, b){return(a-b);});
+         logger.log('getDocumentHeight returning ' + h[2], 'info', 'Dom');
          return h[2];
       },
       
@@ -601,6 +644,7 @@ YAHOO.util.Dom = function() {
          }
       
          var w = [docWidth,bodyWidth,winWidth].sort(function(a, b){return(a-b);});
+         logger.log('getDocumentWidth returning ' + w[2], 'info', 'Dom');
          return w[2];
       },
 
@@ -625,6 +669,7 @@ YAHOO.util.Dom = function() {
             height = self.innerHeight;
          }
       
+         logger.log('getViewportHeight returning ' + height, 'info', 'Dom');
          return height;
       },
       
@@ -649,7 +694,7 @@ YAHOO.util.Dom = function() {
          } else { // Safari
             width = self.innerWidth;
          }
-         
+         logger.log('getViewportWidth returning ' + width, 'info', 'Dom');
          return width;
       }
    };
