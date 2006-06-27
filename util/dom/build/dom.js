@@ -13,7 +13,6 @@ YAHOO.util.Dom = function() {
    var isIE = (ua.indexOf('msie') != -1 && !isOpera); // not opera spoof
    var id_counter = 0;
    var util = YAHOO.util; // internal shorthand
-   
    var property_cache = {}; // to cache case conversion for set/getStyle
    
    // improve performance by only looking up once
@@ -31,20 +30,16 @@ YAHOO.util.Dom = function() {
        * @return {HTMLElement/Array} A DOM reference to an HTML element or an array of HTMLElements.
        */
       get: function(el) {
-         if (typeof el != 'string' && !(el instanceof Array) )
-         { // assuming HTMLElement or HTMLCollection, so pass back as is
+         if (typeof el != 'string' && !(el instanceof Array) ) { // assuming HTMLElement or HTMLCollection, so pass back as is
             return el;
          }
          
-         if (typeof el == 'string') 
-         { // ID
+         if (typeof el == 'string') { // ID
             return document.getElementById(el);
          }
-         else
-         { // array of ID's and/or elements
+         else { // array of ID's and/or elements
             var collection = [];
-            for (var i = 0, len = el.length; i < len; ++i)
-            {
+            for (var i = 0, len = el.length; i < len; ++i) {
                collection[collection.length] = util.Dom.get(el[i]);
             }
             
@@ -134,6 +129,7 @@ YAHOO.util.Dom = function() {
                   el.style[camel] = val;
             }
             
+            
          };
          
          util.Dom.batch(el, f, util.Dom, true);
@@ -202,6 +198,7 @@ YAHOO.util.Dom = function() {
                else { parentNode = null; }
             }
       
+            
             return pos;
          };
          
@@ -235,7 +232,6 @@ YAHOO.util.Dom = function() {
        */
       setXY: function(el, pos, noRetry) {
          var f = function(el) {
-   
             var style_pos = this.getStyle(el, 'position');
             if (style_pos == 'static') { // default to relative
                this.setStyle(el, 'position', 'relative');
@@ -243,19 +239,19 @@ YAHOO.util.Dom = function() {
             }
             
             var pageXY = this.getXY(el);
-            if (pageXY === false) { return false; } // has to be part of doc to have pageXY
+            if (pageXY === false) { // has to be part of doc to have pageXY
+               return false; 
+            }
             
-            var delta = [
+            var delta = [ // assuming pixels; if not we will have to retry
                parseInt( this.getStyle(el, 'left'), 10 ),
                parseInt( this.getStyle(el, 'top'), 10 )
             ];
          
-            if ( isNaN(delta[0]) ) // defaults to 'auto'
-            { 
+            if ( isNaN(delta[0]) ) {// in case of 'auto'
                delta[0] = (style_pos == 'relative') ? 0 : el.offsetLeft;
             } 
-            if ( isNaN(delta[1]) ) // defaults to 'auto'
-            { 
+            if ( isNaN(delta[1]) ) { // in case of 'auto'
                delta[1] = (style_pos == 'relative') ? 0 : el.offsetTop;
             } 
       
@@ -264,11 +260,11 @@ YAHOO.util.Dom = function() {
       
             var newXY = this.getXY(el);
       
-            // if retry is true, try one more time if we miss
+            // if retry is true, try one more time if we miss 
             if (!noRetry && (newXY[0] != pos[0] || newXY[1] != pos[1]) ) {
-               var retry = function() { util.Dom.setXY(el, pos, true); };
-               setTimeout(retry, 0); // "delay" for IE resize timing issue
+               this.setXY(el, pos, true);
             }
+            
          };
          
          util.Dom.batch(el, f, util.Dom, true);
@@ -302,7 +298,8 @@ YAHOO.util.Dom = function() {
        */
       getRegion: function(el) {
          var f = function(el) {
-            return new YAHOO.util.Region.getRegion(el);
+            var region = new YAHOO.util.Region.getRegion(el);
+            return region;
          };
          
          return util.Dom.batch(el, f, util.Dom, true);
@@ -364,6 +361,7 @@ YAHOO.util.Dom = function() {
          var f = function(el) {
             if (this.hasClass(el, className)) { return; } // already present
             
+            
             el['className'] = [el['className'], className].join(' ');
          };
          
@@ -380,6 +378,8 @@ YAHOO.util.Dom = function() {
 
          var f = function(el) {
             if (!this.hasClass(el, className)) { return; } // not present
+            
+            
             var c = el['className'];
             el['className'] = c.replace(re, ' ');
             if ( this.hasClass(el, className) ) { // in case of multiple adjacent
@@ -402,6 +402,7 @@ YAHOO.util.Dom = function() {
          var re = new RegExp('(?:^|\\s+)' + oldClassName + '(?:\\s+|$)', 'g');
 
          var f = function(el) {
+         
             el['className'] = el['className'].replace(re, ' ' + newClassName + ' ');
 
             if ( this.hasClass(el, oldClassName) ) { // in case of multiple adjacent
@@ -420,11 +421,19 @@ YAHOO.util.Dom = function() {
        */
       generateId: function(el, prefix) {
          prefix = prefix || 'yui-gen';
+         el = el || {};
          
          var f = function(el) {
-            el = el || {}; // just generating ID in this case
+            if (el) {
+               el = util.Dom.get(el);
+            } else {
+               el = {}; // just generating ID in this case
+            }
             
-            if (!el.id) { el.id = prefix + id_counter++; } // dont override existing
+            if (!el.id) {
+               el.id = prefix + id_counter++; 
+            } // dont override existing
+            
             
             return el.id;
          };
@@ -443,16 +452,13 @@ YAHOO.util.Dom = function() {
          if (!haystack || !needle) { return false; }
          
          var f = function(needle) {
-            if (haystack.contains && ua.indexOf('safari') < 0) 
-            { // safari "contains" is broken
+            if (haystack.contains && ua.indexOf('safari') < 0) { // safari "contains" is broken
                return haystack.contains(needle);
             }
-            else if ( haystack.compareDocumentPosition ) 
-            {
+            else if ( haystack.compareDocumentPosition ) {
                return !!(haystack.compareDocumentPosition(needle) & 16);
             }
-            else 
-            { // loop up and test each parent
+            else { // loop up and test each parent
                var parent = needle.parentNode;
                
                while (parent) {
@@ -465,7 +471,6 @@ YAHOO.util.Dom = function() {
                   
                   parent = parent.parentNode;
                }
-               
                return false;
             }    
          };
@@ -509,6 +514,7 @@ YAHOO.util.Dom = function() {
             if ( method(elements[i]) ) { nodes[nodes.length] = elements[i]; }
          }
 
+         
          return nodes;
       },
       
@@ -522,18 +528,24 @@ YAHOO.util.Dom = function() {
        * @return {HTMLElement/Array} The element(s) with the method applied
        */
       batch: function(el, method, o, override) {
+         var id = el;
          el = util.Dom.get(el);
+         
          var scope = (override) ? o : window;
          
-         if (!el || el.tagName || !el.length) 
-         { // is null or not a collection (tagName for SELECT and others that can be both an element and a collection)
+         if (!el || el.tagName || !el.length) { // is null or not a collection (tagName for SELECT and others that can be both an element and a collection)
+            if (!el) {
+               return false;
+            }
             return method.call(scope, el, o);
          } 
          
          var collection = [];
          
-         for (var i = 0, len = el.length; i < len; ++i)
-         {
+         for (var i = 0, len = el.length; i < len; ++i) {
+            if (!el[i]) {
+               id = id[i];
+            }
             collection[collection.length] = method.call(scope, el[i], o);
          }
          
@@ -652,7 +664,6 @@ YAHOO.util.Dom = function() {
          } else { // Safari
             width = self.innerWidth;
          }
-         
          return width;
       }
    };
@@ -727,7 +738,6 @@ YAHOO.util.Region.prototype.contains = function(region) {
              region.top    >= this.top    && 
              region.bottom <= this.bottom    );
 
-    // this.logger.debug("does " + this + " contain " + region + " ... " + ret);
 };
 
 /**
@@ -806,7 +816,6 @@ YAHOO.util.Region.getRegion = function(el) {
 };
 
 /////////////////////////////////////////////////////////////////////////////
-
 
 /**
  * @class
