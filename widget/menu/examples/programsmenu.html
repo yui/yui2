@@ -135,56 +135,6 @@
         <!-- Page-specific script -->
         <script type="text/javascript">
         
-            /*
-                 Create an instance of OverlayManager to provide access to 
-                 menus inside the scope of other function
-            */
-
-            YAHOO.example.OverlayManager = new YAHOO.widget.OverlayManager();
-
-
-            // "mousedown" event handler for the document
-
-            function onDocumentMouseDown(p_oEvent) {
-            
-                // Hide the menu
-
-                var oMenu = YAHOO.example.OverlayManager.find("yproducts");
-                
-                oMenu.hide();
-
-            }
-
-            
-            // "click" handler for the "info" panel
-
-            function onPanelClick(p_oEvent) {
-            
-                YAHOO.util.Event.stopPropagation(p_oEvent);
-            
-            }
-
-
-            // "mousedown" event handler for "Yahoo!" button
-
-            function onYahooClick(p_oEvent) {
-
-                // Position and display the menu
-
-                var oMenu = YAHOO.example.OverlayManager.find("yproducts");
-
-                oMenu.align("bl", "tl");
-                
-                oMenu.show();
-                
-
-                // Stop propagation and prevent the default "click" behavior
-
-                YAHOO.util.Event.stopEvent(p_oEvent);
-                
-            }
-
-
             // "click" handler for the "Go to..." menu item
 
             function onGotoClick() {
@@ -199,69 +149,33 @@
             
             }
             
-            
-            // "resize" handler for the window
-
-            function onWindowResize() {
-
-                // Position the H2 so that it is at the bottom of the viewport
-
-                var oH2 = document.getElementsByTagName("h2")[0];
-
-                var nViewportHeight = YAHOO.util.Dom.getClientHeight();
-
-                var nToolbarHeight = oH2.offsetHeight;
-                
-                oH2.style.top = (nViewportHeight - nToolbarHeight) + "px";   
-
-                var oMenu = YAHOO.example.OverlayManager.find("yproducts");
-
-                oMenu.align("bl", "tl");
-            
-            }
-            
 
             // "load" handler for the window
 
             function onWindowLoad() {
 
-                var oH2 = document.getElementsByTagName("h1")[0];
+                var oH1 = document.getElementsByTagName("h1")[0];
 
                 /*
-                    Apply the "ytoolbar" class to the H2 so that it is styled 
+                    Apply the "ytoolbar" class to the H1 so that it is styled 
                     like an application toolbar
                 */
 
-                YAHOO.util.Dom.addClass(oH2, "ytoolbar");
+                YAHOO.util.Dom.addClass(oH1, "ytoolbar");
 
 
-                // Position the H2 "toolbar" to the bottom of the viewport
+                function PositionToolbar() {
 
-                var nViewportHeight = YAHOO.util.Dom.getClientHeight();
+                    // Position the H1 "toolbar" to the bottom of the viewport
+    
+                    var nViewportHeight = YAHOO.util.Dom.getClientHeight(),
+                        nToolbarHeight = oH1.offsetHeight;
+                    
+                    oH1.style.top = (nViewportHeight - nToolbarHeight) + "px";                
 
-                var nToolbarHeight = oH2.offsetHeight;
-                
-                oH2.style.top = (nViewportHeight - nToolbarHeight) + "px";                
+                }
 
-
-                /*
-                    Assign a "click" event handler to the "Yahoo!" link that 
-                    will display the menu
-                */
-                
-                YAHOO.util.Event.addListener("yahoo", "click", onYahooClick);
-
-
-                /*
-                    Assign a "click" event handler to the document that will
-                    hiden the menu
-                */
-
-                YAHOO.util.Event.addListener(
-                        document, 
-                        "click", 
-                        onDocumentMouseDown
-                    );
+                PositionToolbar();
 
 
                 // Instantiate the root menu and submenus
@@ -274,10 +188,14 @@
 
                 // Add a link back to the examples index page
 
-                var oExamples = oMenu.addItem(new YAHOO.widget.MenuItem("Examples", { url: "index.html" } ));
+                var oExamples = oMenu.addItem(
+                                    new YAHOO.widget.MenuItem(
+                                            "Examples", 
+                                            { url: "index.html" } 
+                                        )
+                                    );
 
                 oExamples.element.id = "examples";
-
 
 
                 // Add a "Go to..." item to the root menu
@@ -285,7 +203,6 @@
                 var oGoTo = oMenu.addItem("Go to...");
 
                 oGoTo.element.id = "goto";
-
 
 
                 // Add a "click" event handler to the "Go to..." item
@@ -306,13 +223,63 @@
                 oMenu.cfg.setProperty("context", ["yahoo", "bl", "tl"]);
 
 
+                // "click" event handler for "Yahoo!" button
+    
+                function onYahooClick(p_oEvent) {
+    
+                    // Position and display the menu
+    
+                    oMenu.align("bl", "tl");
+                    
+                    oMenu.show();
+                    
+    
+                    // Stop propagation and prevent the default "click" behavior
+    
+                    YAHOO.util.Event.stopEvent(p_oEvent);
+                    
+                }
+
+
                 /*
-                    Register the root menu with the overlay manager so that it 
-                    is accessible within the scope of other functions
+                    Assign a "click" event handler to the "Yahoo!" link that 
+                    will display the menu
+                */
+                
+                YAHOO.util.Event.addListener("yahoo", "click", onYahooClick);
+
+
+                // "mousedown" event handler for the document
+    
+                function onDocumentClick(p_oEvent) {
+                
+                    // Hide the menu
+                    
+                    oMenu.hide();
+    
+                }
+
+                /*
+                    Assign a "click" event handler to the document that will
+                    hiden the menu
                 */
 
-                YAHOO.example.OverlayManager.register(oMenu);
+                YAHOO.util.Event.addListener(
+                        document, 
+                        "click", 
+                        onDocumentClick
+                    );
 
+
+                // "resize" handler for the window
+    
+                function onWindowResize() {
+    
+                    PositionToolbar();
+    
+                    oMenu.align("bl", "tl");
+                
+                }
 
                 /*
                     Add a "resize" event handler for the window that will 

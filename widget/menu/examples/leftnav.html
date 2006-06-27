@@ -5,10 +5,12 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <title>Left Nav Example</title>
 
-        <?php require_once("styles.inc"); ?>
+        <?php 
+            $g_bUseGrids = true;
+            require_once("styles.inc");
+        ?>
 
         <!-- Page-specific styles -->
-        <link rel="stylesheet" type="text/css" href="../../../build/grids/grids.css">
         <style type="text/css">
 
             div.yui-b p {
@@ -291,7 +293,7 @@
 
                     <div id="yproducts" class="yuimenu">
                         <div class="bd">
-                            <ul class="first">
+                            <ul class="first-of-type">
                                 <li id="communications" class="yuimenuitem"><a href="http://communications.yahoo.com/">Communications</a></li>
                                 <li id="entertainment" class="yuimenuitem"><a href="http://entertainment.yahoo.com/">Entertainment</a></li>
                                 <li id="finance" class="yuimenuitem"><a href="http://finance.yahoo.com/">Finance</a></li>

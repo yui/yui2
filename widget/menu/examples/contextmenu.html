@@ -225,14 +225,14 @@
 
             function onContextMenuKeyDown(p_sType, p_sArguments, p_oMenu) {
 
-                var oEvent = p_sArguments[0];
+                var oDOMEvent = p_sArguments[0];
 
-                if(oEvent.shiftKey) {
+                if(oDOMEvent.shiftKey) {
                 
                     var oLI = 
                         GetListItemFromEvenTarget(this.contextEventTarget);
 
-                    switch(oEvent.keyCode) {
+                    switch(oDOMEvent.keyCode) {
                     
                         case 69:     // Edit name
 
