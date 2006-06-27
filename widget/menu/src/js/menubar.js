@@ -10,16 +10,16 @@
 * @base YAHOO.widget.MenuModule
 * @param {String or HTMLElement} p_oElement String id or HTMLElement 
 * (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
-* @param {Object} p_oUserConfig Optional. The configuration object literal 
+* @param {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a MenuBar instance. See 
 * configuration class documentation for more details.
 */
-YAHOO.widget.MenuBar = function(p_oElement, p_oUserConfig) {
+YAHOO.widget.MenuBar = function(p_oElement, p_oConfig) {
 
     YAHOO.widget.MenuBar.superclass.constructor.call(
             this, 
             p_oElement,
-            p_oUserConfig
+            p_oConfig
         );
 
 };
@@ -33,11 +33,11 @@ YAHOO.extend(YAHOO.widget.MenuBar, YAHOO.widget.MenuModule);
 * markup, and creates required markup if it is not already present.
 * @param {String or HTMLElement} p_oElement String id or HTMLElement 
 * (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
-* @param {Object} p_oUserConfig Optional. The configuration object literal 
+* @param {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a MenuBar instance. See 
 * configuration class documentation for more details.
 */
-YAHOO.widget.MenuBar.prototype.init = function(p_oElement, p_oUserConfig) {
+YAHOO.widget.MenuBar.prototype.init = function(p_oElement, p_oConfig) {
 
     if(!this.ITEM_TYPE) {
 
@@ -53,14 +53,15 @@ YAHOO.widget.MenuBar.prototype.init = function(p_oElement, p_oUserConfig) {
 
     this.beforeInitEvent.fire(YAHOO.widget.MenuBar);
 
+    var oConfig = this.cfg;
 
     /*
         Set the default value for the "position" configuration property
         to "static" 
     */
-    if(!p_oUserConfig || (p_oUserConfig && !p_oUserConfig.position)) {
+    if(!p_oConfig || (p_oConfig && !p_oConfig.position)) {
 
-        this.cfg.queueProperty("position", "static");
+        oConfig.queueProperty("position", "static");
 
     }
 
@@ -68,16 +69,16 @@ YAHOO.widget.MenuBar.prototype.init = function(p_oElement, p_oUserConfig) {
         Set the default value for the "submenualignment" configuration property
         to "tl" and "bl" 
     */
-    if(!p_oUserConfig || (p_oUserConfig && !p_oUserConfig.submenualignment)) {
+    if(!p_oConfig || (p_oConfig && !p_oConfig.submenualignment)) {
 
-        this.cfg.queueProperty("submenualignment", ["tl","bl"]);
+        oConfig.queueProperty("submenualignment", ["tl","bl"]);
 
     }
 
 
-    if(p_oUserConfig) {
+    if(p_oConfig) {
 
-        this.cfg.applyConfig(p_oUserConfig, true);
+        oConfig.applyConfig(p_oConfig, true);
 
     }
     

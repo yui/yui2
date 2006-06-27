@@ -9,16 +9,16 @@
 * @param {String or HTMLElement} p_oObject String or HTMLElement 
 * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
 * source HTMLElement node.
-* @param {Object} p_oUserConfig The configuration object literal containing 
+* @param {Object} p_oConfig The configuration object literal containing 
 * the configuration for a ContextMenuItem instance. See the configuration 
 * class documentation for more details.
 */
-YAHOO.widget.ContextMenuItem = function(p_oObject, p_oUserConfig) {
+YAHOO.widget.ContextMenuItem = function(p_oObject, p_oConfig) {
 
     YAHOO.widget.ContextMenuItem.superclass.constructor.call(
         this, 
         p_oObject, 
-        p_oUserConfig
+        p_oConfig
     );
 
 };
@@ -34,13 +34,13 @@ YAHOO.extend(YAHOO.widget.ContextMenuItem, YAHOO.widget.MenuItem);
 * @param {String or HTMLElement} p_oObject String or HTMLElement 
 * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
 * source HTMLElement node.
-* @param {Object} p_oUserConfig The configuration object literal containing 
+* @param {Object} p_oConfig The configuration object literal containing 
 * the configuration for a ContextMenuItem instance. See the configuration 
 * class documentation for more details.
 */
 YAHOO.widget.ContextMenuItem.prototype.init = 
 
-    function(p_oObject, p_oUserConfig) {
+    function(p_oObject, p_oConfig) {
     
         if(!this.SUBMENU_TYPE) {
     
@@ -63,15 +63,15 @@ YAHOO.widget.ContextMenuItem.prototype.init =
         */ 
     
         YAHOO.widget.ContextMenuItem.superclass.init.call(this, p_oObject);
+
+        var oConfig = this.cfg;
     
+        if(p_oConfig) {
     
-        if(p_oUserConfig) {
-    
-            this.cfg.applyConfig(p_oUserConfig, true);
+            oConfig.applyConfig(p_oConfig, true);
     
         }
     
-    
-        this.cfg.fireQueue();
+        oConfig.fireQueue();
     
     };

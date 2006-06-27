@@ -11,16 +11,16 @@
 * @param {String or HTMLElement} p_oObject String or HTMLElement 
 * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
 * source HTMLElement node.
-* @param {Object} p_oUserConfig The configuration object literal containing 
+* @param {Object} p_oConfig The configuration object literal containing 
 * the configuration for a MenuItem instance. See the configuration 
 * class documentation for more details.
 */
-YAHOO.widget.MenuItem = function(p_oObject, p_oUserConfig) {
+YAHOO.widget.MenuItem = function(p_oObject, p_oConfig) {
 
     YAHOO.widget.MenuItem.superclass.constructor.call(
         this, 
         p_oObject, 
-        p_oUserConfig
+        p_oConfig
     );
 
 };
@@ -36,11 +36,11 @@ YAHOO.extend(YAHOO.widget.MenuItem, YAHOO.widget.MenuModuleItem);
 * @param {String or HTMLElement} p_oObject String or HTMLElement 
 * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
 * source HTMLElement node.
-* @param {Object} p_oUserConfig The configuration object literal containing 
+* @param {Object} p_oConfig The configuration object literal containing 
 * the configuration for a MenuItem instance. See the configuration 
 * class documentation for more details.
 */
-YAHOO.widget.MenuItem.prototype.init = function(p_oObject, p_oUserConfig) {
+YAHOO.widget.MenuItem.prototype.init = function(p_oObject, p_oConfig) {
 
     if(!this.SUBMENU_TYPE) {
 
@@ -71,14 +71,15 @@ YAHOO.widget.MenuItem.prototype.init = function(p_oObject, p_oUserConfig) {
     this.mouseOverEvent.subscribe(this._onMouseOver, this, true);
     this.mouseOutEvent.subscribe(this._onMouseOut, this, true);
 
+    var oConfig = this.cfg;
 
-    if(p_oUserConfig) {
+    if(p_oConfig) {
 
-        this.cfg.applyConfig(p_oUserConfig, true);
+        oConfig.applyConfig(p_oConfig, true);
 
     }
 
-    this.cfg.fireQueue();
+    oConfig.fireQueue();
 
 };
 
@@ -143,39 +144,44 @@ YAHOO.widget.MenuItem.prototype._checkImage = null;
 * "keydown" Custom Event handler for a MenuItem instance.
 * @private
 * @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArguments Collection of arguments sent when the event 
+* @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
 * @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */
 YAHOO.widget.MenuItem.prototype._onKeyDown = 
 
-    function(p_sType, p_aArguments, p_oMenuItem) {
+    function(p_sType, p_aArgs, p_oMenuItem) {
+
+        var Event = YAHOO.util.Event;
+        var oDOMEvent = p_aArgs[0];
+        var oParent = this.parent;
+        var oConfig = this.cfg;
+        var oMenuItem;
     
-        var oEvent = p_aArguments[0];
-    
-        switch(oEvent.keyCode) {
+
+        switch(oDOMEvent.keyCode) {
     
             case 38:    // Up arrow
             case 40:    // Down arrow
     
-                var oActiveItem = this.parent.activeItem,
-                    oMenuItem;
+                if(
+                    this == oParent.activeItem && 
+                    !oConfig.getProperty("selected")
+                ) {
     
-                if(this == oActiveItem && !this.cfg.getProperty("selected")) {
-    
-                    this.cfg.setProperty("selected", true);
+                    oConfig.setProperty("selected", true);
     
                 }
                 else {
     
-                    var oNextItem = (oEvent.keyCode == 38) ? 
+                    var oNextItem = (oDOMEvent.keyCode == 38) ? 
                             this.getPreviousEnabledSibling() : 
                             this.getNextEnabledSibling();
             
                     if(oNextItem) {
 
-                        this.parent.clearActiveItem();
+                        oParent.clearActiveItem();
 
                         oNextItem.cfg.setProperty("selected", true);
             
@@ -185,21 +191,21 @@ YAHOO.widget.MenuItem.prototype._onKeyDown =
     
                 }
     
-                YAHOO.util.Event.preventDefault(oEvent);
+                Event.preventDefault(oDOMEvent);
 
             break;
             
     
             case 39:    // Right arrow
 
-                this.parent.clearActiveItem();
+                oParent.clearActiveItem();
 
-                this.cfg.setProperty("selected", true);
+                oConfig.setProperty("selected", true);
                 
                 this.focus();
 
 
-                var oSubmenu = this.cfg.getProperty("submenu");
+                var oSubmenu = oConfig.getProperty("submenu");
     
                 if(oSubmenu) {
 
@@ -209,15 +215,15 @@ YAHOO.widget.MenuItem.prototype._onKeyDown =
                 }
                 else if(
                     YAHOO.widget.MenuBarItem && 
-                    this.parent.parent && 
-                    this.parent.parent instanceof YAHOO.widget.MenuBarItem
+                    oParent.parent && 
+                    oParent.parent instanceof YAHOO.widget.MenuBarItem
                 ) {
 
-                    this.parent.hide();
+                    oParent.hide();
     
                     // Set focus to the parent MenuItem if one exists
     
-                    oMenuItem = this.parent.parent;
+                    oMenuItem = oParent.parent;
     
                     if(oMenuItem) {
     
@@ -228,7 +234,7 @@ YAHOO.widget.MenuItem.prototype._onKeyDown =
                 
                 }
     
-                YAHOO.util.Event.preventDefault(oEvent);
+                Event.preventDefault(oDOMEvent);
 
             break;
     
@@ -237,13 +243,13 @@ YAHOO.widget.MenuItem.prototype._onKeyDown =
     
                 // Only hide if this this is a MenuItem of a submenu
     
-                if(this.parent.parent) {
+                if(oParent.parent) {
     
-                    this.parent.hide();
+                    oParent.hide();
     
                     // Set focus to the parent MenuItem if one exists
     
-                    oMenuItem = this.parent.parent;
+                    oMenuItem = oParent.parent;
     
                     if(oMenuItem) {
     
@@ -254,7 +260,7 @@ YAHOO.widget.MenuItem.prototype._onKeyDown =
     
                 }
 
-                YAHOO.util.Event.preventDefault(oEvent);
+                Event.preventDefault(oDOMEvent);
     
             break;        
     
@@ -267,36 +273,38 @@ YAHOO.widget.MenuItem.prototype._onKeyDown =
 * "mouseover" Custom Event handler for a MenuItem instance.
 * @private
 * @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArguments Collection of arguments sent when the event 
+* @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
 * @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */
 YAHOO.widget.MenuItem.prototype._onMouseOver = 
 
-    function(p_sType, p_aArguments, p_oMenuItem) {
-    
-        var oActiveItem = this.parent.activeItem;
+    function(p_sType, p_aArgs, p_oMenuItem) {
+
+        var oParent = this.parent;
+        var oConfig = this.cfg;
+        var oActiveItem = oParent.activeItem;
     
     
         // Hide any other submenus that might be visible
     
         if(oActiveItem && oActiveItem != this) {
     
-            this.parent.clearActiveItem();
+            oParent.clearActiveItem();
     
         }
     
     
         // Select and focus the current MenuItem instance
     
-        this.cfg.setProperty("selected", true);
+        oConfig.setProperty("selected", true);
         this.focus();
     
     
         // Show the submenu for this instance
     
-        var oSubmenu = this.cfg.getProperty("submenu");
+        var oSubmenu = oConfig.getProperty("submenu");
     
         if(oSubmenu) {
     
@@ -311,29 +319,29 @@ YAHOO.widget.MenuItem.prototype._onMouseOver =
 * "mouseout" Custom Event handler for a MenuItem instance.
 * @private
 * @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArguments Collection of arguments sent when the event 
+* @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
 * @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */
 YAHOO.widget.MenuItem.prototype._onMouseOut = 
 
-    function(p_sType, p_aArguments, p_oMenuItem) {
+    function(p_sType, p_aArgs, p_oMenuItem) {
     
-        this.cfg.setProperty("selected", false);
-    
-    
-        var oSubmenu = this.cfg.getProperty("submenu");
+        var oConfig = this.cfg;
+        var oSubmenu = oConfig.getProperty("submenu");
+
+        oConfig.setProperty("selected", false);
     
         if(oSubmenu) {
     
-            var oEvent = p_aArguments[0],
-                oRelatedTarget = YAHOO.util.Event.getRelatedTarget(oEvent);
+            var oDOMEvent = p_aArgs[0];
+            var oRelatedTarget = YAHOO.util.Event.getRelatedTarget(oDOMEvent);
     
             if(
                 !(
                     oRelatedTarget == oSubmenu.element || 
-                    this._oDom.isAncestor(oSubmenu.element, oRelatedTarget)
+                    YAHOO.util.Dom.isAncestor(oSubmenu.element, oRelatedTarget)
                 )
             ) {
     
@@ -352,51 +360,68 @@ YAHOO.widget.MenuItem.prototype._onMouseOut =
 * Event handler for when the "checked" configuration property of
 * a MenuItem instance changes. 
 * @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArguments Collection of arguments sent when the 
+* @param {Array} p_aArgs Collection of arguments sent when the 
 * event was fired.
 * @param {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
 * that fired the event.
 */    
 YAHOO.widget.MenuItem.prototype.configChecked =
 
-    function(p_sType, p_aArguments, p_oItem) {
+    function(p_sType, p_aArgs, p_oItem) {
     
-        var bChecked = p_aArguments[0];
+        var Dom = YAHOO.util.Dom;
+        var bChecked = p_aArgs[0];
+        var oEl = this.element;
+        var oConfig = this.cfg;
+        var oImg;
         
+
         if(bChecked) {
 
-            var oImg = document.createElement("img");
-
+            oImg = document.createElement("img");
             oImg.src = (this.imageRoot + this.CHECKED_IMAGE_PATH);
-
             oImg.alt = this.CHECKED_IMAGE_ALT_TEXT;
 
-            this._checkImage = oImg;
+            var oSubmenu = this.cfg.getProperty("submenu");
 
-            this.element.insertBefore(oImg, this.element.lastChild);
+            if(oSubmenu) {
 
-            this._oDom.addClass([this.element, oImg], "checked");
+                oEl.insertBefore(oImg, oSubmenu.element);
 
-            if(this.cfg.getProperty("disabled")) {
+            }
+            else {
 
-                this.cfg.refireEvent("disabled");
+                oEl.appendChild(oImg);            
 
             }
 
-            if(this.cfg.getProperty("selected")) {
 
-                this.cfg.refireEvent("selected");
+            Dom.addClass([oEl, oImg], "checked");
+
+            this._checkImage = oImg;
+
+            if(oConfig.getProperty("disabled")) {
+
+                oConfig.refireEvent("disabled");
+
+            }
+
+            if(oConfig.getProperty("selected")) {
+
+                oConfig.refireEvent("selected");
 
             }
         
         }
         else {
 
-            this._oDom.removeClass([this.element, this._checkImage], "checked");
+            oImg = this._checkImage;
 
-            if(this._checkImage) {
+            Dom.removeClass([oEl, oImg], "checked");
 
-                this.element.removeChild(this._checkImage);
+            if(oImg) {
+
+                oEl.removeChild(oImg);
 
             }
 
@@ -411,25 +436,24 @@ YAHOO.widget.MenuItem.prototype.configChecked =
 * Event handler for when the "selected" configuration property of
 * a MenuItem instance changes. 
 * @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArguments Collection of arguments sent when the 
+* @param {Array} p_aArgs Collection of arguments sent when the 
 * event was fired.
 * @param {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
 * that fired the event.
 */    
 YAHOO.widget.MenuItem.prototype.configSelected = 
 
-    function(p_sType, p_aArguments, p_oItem) {
-    
+    function(p_sType, p_aArgs, p_oItem) {
+
         YAHOO.widget.MenuItem.superclass.configSelected.call(
-                this, p_sType, p_aArguments, p_oItem
+                this, p_sType, p_aArgs, p_oItem
             );        
     
-        if(
-            !this.cfg.getProperty("disabled") && 
-            this.cfg.getProperty("checked")
-        ) {
+        var oConfig = this.cfg;
 
-            var bSelected = p_aArguments[0];
+        if(!oConfig.getProperty("disabled") && oConfig.getProperty("checked")) {
+
+            var bSelected = p_aArgs[0];
             
             this._checkImage.src = this.imageRoot + (bSelected ? 
                 this.SELECTED_CHECKED_IMAGE_PATH : this.CHECKED_IMAGE_PATH);
@@ -443,24 +467,25 @@ YAHOO.widget.MenuItem.prototype.configSelected =
 * Event handler for when the "disabled" configuration property of
 * a MenuItem instance changes. 
 * @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArguments Collection of arguments sent when the 
+* @param {Array} p_aArgs Collection of arguments sent when the 
 * event was fired.
 * @param {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
 * that fired the event.
 */    
 YAHOO.widget.MenuItem.prototype.configDisabled = 
 
-    function(p_sType, p_aArguments, p_oItem) {
+    function(p_sType, p_aArgs, p_oItem) {
     
         YAHOO.widget.MenuItem.superclass.configDisabled.call(
-                this, p_sType, p_aArguments, p_oItem
+                this, p_sType, p_aArgs, p_oItem
             );        
     
         if(this.cfg.getProperty("checked")) {
     
-            var bDisabled = p_aArguments[0],
-                sAlt = this.CHECKED_IMAGE_ALT_TEXT,
-                sSrc = this.CHECKED_IMAGE_PATH;
+            var bDisabled = p_aArgs[0];
+            var sAlt = this.CHECKED_IMAGE_ALT_TEXT;
+            var sSrc = this.CHECKED_IMAGE_PATH;
+            var oImg = this._checkImage;
             
             if(bDisabled) {
     
@@ -469,8 +494,8 @@ YAHOO.widget.MenuItem.prototype.configDisabled =
             
             }
     
-            this._checkImage.src = this.imageRoot + sSrc;
-            this._checkImage.alt = sAlt;
+            oImg.src = this.imageRoot + sSrc;
+            oImg.alt = sAlt;
             
         }    
             

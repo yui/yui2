@@ -11,16 +11,16 @@
 * @param {String or HTMLElement} p_oObject String or HTMLElement 
 * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
 * source HTMLElement node.
-* @param {Object} p_oUserConfig The configuration object literal containing 
+* @param {Object} p_oConfig The configuration object literal containing 
 * the configuration for a MenuBarItem instance. See the configuration 
 * class documentation for more details.
 */
-YAHOO.widget.MenuBarItem = function(p_oObject, p_oUserConfig) {
+YAHOO.widget.MenuBarItem = function(p_oObject, p_oConfig) {
 
     YAHOO.widget.MenuBarItem.superclass.constructor.call(
         this, 
         p_oObject, 
-        p_oUserConfig
+        p_oConfig
     );
 
 };
@@ -36,11 +36,11 @@ YAHOO.extend(YAHOO.widget.MenuBarItem, YAHOO.widget.MenuModuleItem);
 * @param {String or HTMLElement} p_oObject String or HTMLElement 
 * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
 * source HTMLElement node.
-* @param {Object} p_oUserConfig The configuration object literal containing 
+* @param {Object} p_oConfig The configuration object literal containing 
 * the configuration for a MenuBarItem instance. See the configuration 
 * class documentation for more details.
 */
-YAHOO.widget.MenuBarItem.prototype.init = function(p_oObject, p_oUserConfig) {
+YAHOO.widget.MenuBarItem.prototype.init = function(p_oObject, p_oConfig) {
 
     if(!this.SUBMENU_TYPE) {
 
@@ -69,14 +69,15 @@ YAHOO.widget.MenuBarItem.prototype.init = function(p_oObject, p_oUserConfig) {
 
     this.keyDownEvent.subscribe(this._onKeyDown, this, true);
 
+    var oConfig = this.cfg;
 
-    if(p_oUserConfig) {
+    if(p_oConfig) {
 
-        this.cfg.applyConfig(p_oUserConfig, true);
+        oConfig.applyConfig(p_oConfig, true);
 
     }
 
-    this.cfg.fireQueue();
+    oConfig.fireQueue();
 
 };
 
@@ -128,38 +129,42 @@ YAHOO.widget.MenuBarItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH =
 * "keydown" Custom Event handler for a MenuBarItem instance.
 * @private
 * @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArguments Collection of arguments sent when the event 
+* @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
 * @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */
 YAHOO.widget.MenuBarItem.prototype._onKeyDown =
 
-    function(p_sType, p_aArguments, p_oMenuItem) {
+    function(p_sType, p_aArgs, p_oMenuItem) {
 
-        var oEvent = p_aArguments[0];
+        var Event = YAHOO.util.Event;
+        var oDOMEvent = p_aArgs[0];
+        var oConfig = this.cfg;
+        var oParent = this.parent;
     
-        switch(oEvent.keyCode) {
+        switch(oDOMEvent.keyCode) {
     
             case 37:    // Left arrow
             case 39:    // Right arrow
     
-                var oActiveItem = this.parent.activeItem;
+                if(
+                    this == oParent.activeItem && 
+                    !oConfig.getProperty("selected")
+                ) {
     
-                if(this == oActiveItem && !this.cfg.getProperty("selected")) {
-    
-                    this.cfg.setProperty("selected", true);
+                    oConfig.setProperty("selected", true);
     
                 }
                 else {
     
-                    var oNextItem = (oEvent.keyCode == 37) ? 
+                    var oNextItem = (oDOMEvent.keyCode == 37) ? 
                             this.getPreviousEnabledSibling() : 
                             this.getNextEnabledSibling();
             
                     if(oNextItem) {
 
-                        this.parent.clearActiveItem();
+                        oParent.clearActiveItem();
 
                         oNextItem.cfg.setProperty("selected", true);
             
@@ -169,19 +174,19 @@ YAHOO.widget.MenuBarItem.prototype._onKeyDown =
     
                 }
 
-                YAHOO.util.Event.preventDefault(oEvent);
+                Event.preventDefault(oDOMEvent);
     
             break;
     
             case 40:    // Down arrow
 
-                this.parent.clearActiveItem();
+                oParent.clearActiveItem();
                         
-                this.cfg.setProperty("selected", true);
+                oConfig.setProperty("selected", true);
                 
                 this.focus();
 
-                var oSubmenu = this.cfg.getProperty("submenu");
+                var oSubmenu = oConfig.getProperty("submenu");
     
                 if(oSubmenu) {
         
@@ -190,7 +195,7 @@ YAHOO.widget.MenuBarItem.prototype._onKeyDown =
     
                 }
 
-                YAHOO.util.Event.preventDefault(oEvent);
+                Event.preventDefault(oDOMEvent);
     
             break;
     

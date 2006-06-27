@@ -9,16 +9,16 @@
 * @base YAHOO.widget.Menu
 * @param {String or HTMLElement} p_oElement String id or HTMLElement 
 * (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
-* @param {Object} p_oUserConfig Optional. The configuration object literal 
+* @param {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a ContextMenu instance. See 
 * configuration class documentation for more details.
 */
-YAHOO.widget.ContextMenu = function(p_oElement, p_oUserConfig) {
+YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 
     YAHOO.widget.ContextMenu.superclass.constructor.call(
             this, 
             p_oElement,
-            p_oUserConfig
+            p_oConfig
         );
 
 };
@@ -32,11 +32,11 @@ YAHOO.extend(YAHOO.widget.ContextMenu, YAHOO.widget.Menu);
 * markup, and creates required markup if it is not already present.
 * @param {String or HTMLElement} p_oElement String id or HTMLElement 
 * (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
-* @param {Object} p_oUserConfig Optional. The configuration object literal 
+* @param {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a ContextMenu instance. See 
 * configuration class documentation for more details.
 */
-YAHOO.widget.ContextMenu.prototype.init = function(p_oElement, p_oUserConfig) {
+YAHOO.widget.ContextMenu.prototype.init = function(p_oElement, p_oConfig) {
 
     if(!this.ITEM_TYPE) {
 
@@ -53,9 +53,9 @@ YAHOO.widget.ContextMenu.prototype.init = function(p_oElement, p_oUserConfig) {
     this.beforeInitEvent.fire(YAHOO.widget.ContextMenu);
 
 
-    if(p_oUserConfig) {
+    if(p_oConfig) {
 
-        this.cfg.applyConfig(p_oUserConfig, true);
+        this.cfg.applyConfig(p_oConfig, true);
 
     }
     
@@ -80,14 +80,15 @@ YAHOO.widget.ContextMenu.prototype._onDocumentMouseDown =
 
     function(p_oEvent, p_oMenu) {
     
-        var oTarget = this._oEventUtil.getTarget(p_oEvent);
+        var oTarget = YAHOO.util.Event.getTarget(p_oEvent);
+        var oTargetEl = this._oTargetElement;
     
         if(
-            oTarget != this._oTargetElement || 
-            !this._oDom.isAncestor(this._oTargetElement, oTarget)
+            oTarget != oTargetEl || 
+            !YAHOO.util.Dom.isAncestor(oTargetEl, oTarget)
         ) {
     
-            this.hide();    
+            this.hide();
         
         }
     
@@ -109,7 +110,7 @@ YAHOO.widget.ContextMenu.prototype._onTriggerClick =
 
         if(p_oEvent.ctrlKey) {
         
-            this._oEventUtil.stopEvent(p_oEvent);
+            YAHOO.util.Event.stopEvent(p_oEvent);
     
         }
         
@@ -128,7 +129,10 @@ YAHOO.widget.ContextMenu.prototype._onTriggerClick =
 YAHOO.widget.ContextMenu.prototype._onTriggerContextMenu = 
 
     function(p_oEvent, p_oMenu) {
-    
+
+        var Event = YAHOO.util.Event;
+        var oConfig = this.cfg;
+
         if(p_oEvent.type == "mousedown") {
         
             if(!p_oEvent.ctrlKey) {
@@ -137,27 +141,27 @@ YAHOO.widget.ContextMenu.prototype._onTriggerContextMenu =
             
             }
         
-            this._oEventUtil.stopEvent(p_oEvent);
+            Event.stopEvent(p_oEvent);
     
         }
     
     
-        this.contextEventTarget = this._oEventUtil.getTarget(p_oEvent);
+        this.contextEventTarget = Event.getTarget(p_oEvent);
     
     
         // Position and display the context menu
     
-        var nX = this._oEventUtil.getPageX(p_oEvent),
-            nY = this._oEventUtil.getPageY(p_oEvent);
+        var nX = Event.getPageX(p_oEvent);
+        var nY = Event.getPageY(p_oEvent);
     
     
-        this.cfg.applyConfig( { x:nX, y:nY, visible:true } );
-        this.cfg.fireQueue();
+        oConfig.applyConfig( { x:nX, y:nY, visible:true } );
+        oConfig.fireQueue();
     
     
         // Prevent the browser's default context menu from appearing
     
-        this._oEventUtil.preventDefault(p_oEvent);
+        Event.preventDefault(p_oEvent);
     
     };
 
@@ -196,16 +200,17 @@ YAHOO.widget.ContextMenu.prototype.initDefaultConfig = function() {
 * Event handler for when the "trigger" configuration property of
 * a MenuItem instance. 
 * @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArguments Collection of arguments sent when the 
+* @param {Array} p_aArgs Collection of arguments sent when the 
 * event was fired.
 * @param {YAHOO.widget.ContextMenu} p_oMenu The ContextMenu that instance fired
 * the event.
 */
 YAHOO.widget.ContextMenu.prototype.configTrigger = 
 
-    function(p_sType, p_aArguments, p_oMenu) {
+    function(p_sType, p_aArgs, p_oMenu) {
     
-        var oTrigger = p_aArguments[0];
+        var Event = YAHOO.util.Event;
+        var oTrigger = p_aArgs[0];
     
         if(oTrigger) {
     
@@ -216,11 +221,9 @@ YAHOO.widget.ContextMenu.prototype.configTrigger =
       
             var bOpera = (this.browser == "opera");
     
-            var sContextEvent = bOpera ? "mousedown" : "contextmenu";
-    
-            this._oEventUtil.addListener(
+            Event.addListener(
                 oTrigger, 
-                sContextEvent, 
+                (bOpera ? "mousedown" : "contextmenu"), 
                 this._onTriggerContextMenu,
                 this,
                 true
@@ -234,7 +237,7 @@ YAHOO.widget.ContextMenu.prototype.configTrigger =
     
             if(bOpera) {
             
-                this._oEventUtil.addListener(
+                Event.addListener(
                     oTrigger, 
                     "click", 
                     this._onTriggerClick,
@@ -247,7 +250,7 @@ YAHOO.widget.ContextMenu.prototype.configTrigger =
     
             // Assign a "mousedown" event handler to the document
         
-            this._oEventUtil.addListener(
+            Event.addListener(
                 document, 
                 "mousedown", 
                 this._onDocumentMouseDown,
