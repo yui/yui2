@@ -11,4 +11,5 @@
     #bd h1,h2,h3,p{padding:.5em;}
     /*#logger {position:relative;float:right;width:30em;margin:1em;}*/
     #logger {position:relative;float:right;margin:1em;width:30em;padding:.5em;}
-    #panel {width:33%;background:#DEDEDE;border:1px solid #000;margin:1em;padding:1em;}
+    #panel {width:40%;background:#DEDEDE;border:1px solid #000;margin:2em;padding:1em;}
+    #panel div {margin-top:1em;padding-bottom:.5em;border-bottom:1px solid #404040;}
