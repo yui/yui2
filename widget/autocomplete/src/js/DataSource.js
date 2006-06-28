@@ -428,6 +428,7 @@ YAHOO.widget.DS_XHR = function(sScriptURI, aSchema, oConfigs) {
     }
     this.scriptURI = sScriptURI;
     this._init();
+    YAHOO.log("XHR DataSource initialized","info",this.toString());
 };
 
 YAHOO.widget.DS_XHR.prototype = new YAHOO.widget.DataSource();
@@ -825,6 +826,7 @@ YAHOO.widget.DS_JSFunction = function(oFunction, oConfigs) {
     else {
         this.dataFunction = oFunction;
         this._init();
+        YAHOO.log("JS Function DataSource initialized","info",this.toString());
     }
 };
 
@@ -904,6 +906,7 @@ YAHOO.widget.DS_JSArray = function(aData, oConfigs) {
     else {
         this.data = aData;
         this._init();
+        YAHOO.log("JS Array DataSource initialized","info",this.toString());
     }
 };
 

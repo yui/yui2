@@ -129,6 +129,8 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
 
         // Turn off autocomplete on textbox
         oTextbox.setAttribute("autocomplete","off");  
+        
+        YAHOO.log("AutoComplete initialized","info",this.toString());
     }
     // Required arguments were not found
     else {
@@ -290,7 +292,7 @@ YAHOO.widget.AutoComplete.prototype.useIFrame = false;
  *
  * @type boolean
  */
-YAHOO.widget.AutoComplete.prototype.iFrameURI = "about:blank";
+YAHOO.widget.AutoComplete.prototype.iFrameSrc = "about:blank";
 
 /**
  * Whether or not the auto complete container should have a shadow. Default:false.
@@ -536,7 +538,8 @@ YAHOO.widget.AutoComplete.prototype.itemSelectEvent = null;
 
 /**
  * Fired when an user selection does not match any of the displayed result items.
- * Subscribers receive the following array:<br>
+ * Note that this event may not behave as expected when delimiter characters
+ * have been defined. Subscribers receive the following array:<br>
  *     - args[0] The auto complete object instance
  *     - args[1] The user selection
  */
@@ -826,7 +829,7 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelpers = function() {
     if(this.useIFrame && !this._oContainer._oIFrame) {
         var oIFrame = document.createElement("iframe");
         // TODO: configurable src
-        oIFrame.src = this.iFrameURI;
+        oIFrame.src = this.iFrameSrc;
         oIFrame.frameBorder = 0;
         oIFrame.scrolling = "no";
         oIFrame.style.position = "absolute";
