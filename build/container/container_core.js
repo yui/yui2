@@ -1136,9 +1136,7 @@ http://developer.yahoo.net/yui/license.txt
 * @constructor
 */
 YAHOO.widget.Overlay = function(el, userConfig) {
-	if (arguments.length > 0) {
-		YAHOO.widget.Overlay.superclass.constructor.call(this, el, userConfig);
-	}
+	YAHOO.widget.Overlay.superclass.constructor.call(this, el, userConfig);
 }
 
 YAHOO.extend(YAHOO.widget.Overlay, YAHOO.widget.Module);
@@ -2010,7 +2008,7 @@ YAHOO.widget.OverlayManager.prototype = {
 			}
 
 			var focusOnDomEvent = function(e,obj) {
-				mgr.focus(overlay);
+				overlay.focus();
 			}
 			
 			var focusevent = this.cfg.getProperty("focusevent");

@@ -1136,9 +1136,7 @@ http://developer.yahoo.net/yui/license.txt
 * @constructor
 */
 YAHOO.widget.Overlay = function(el, userConfig) {
-	if (arguments.length > 0) {
-		YAHOO.widget.Overlay.superclass.constructor.call(this, el, userConfig);
-	}
+	YAHOO.widget.Overlay.superclass.constructor.call(this, el, userConfig);
 }
 
 YAHOO.extend(YAHOO.widget.Overlay, YAHOO.widget.Module);
@@ -2010,7 +2008,7 @@ YAHOO.widget.OverlayManager.prototype = {
 			}
 
 			var focusOnDomEvent = function(e,obj) {
-				mgr.focus(overlay);
+				overlay.focus();
 			}
 			
 			var focusevent = this.cfg.getProperty("focusevent");
@@ -2236,9 +2234,7 @@ http://developer.yahoo.net/yui/license.txt
 * @constructor
 */
 YAHOO.widget.Tooltip = function(el, userConfig) {
-	if (arguments.length > 0) {
-		YAHOO.widget.Tooltip.superclass.constructor.call(this, el, userConfig);
-	}
+	YAHOO.widget.Tooltip.superclass.constructor.call(this, el, userConfig);
 }
 
 YAHOO.extend(YAHOO.widget.Tooltip, YAHOO.widget.Overlay);
@@ -2511,9 +2507,7 @@ http://developer.yahoo.net/yui/license.txt
 * @constructor
 */
 YAHOO.widget.Panel = function(el, userConfig) {
-	if (arguments.length > 0) {
-		YAHOO.widget.Panel.superclass.constructor.call(this, el, userConfig);
-	}
+	YAHOO.widget.Panel.superclass.constructor.call(this, el, userConfig);
 }
 
 YAHOO.extend(YAHOO.widget.Panel, YAHOO.widget.Overlay);
@@ -2713,10 +2707,14 @@ YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 		if (! YAHOO.util.Config.alreadySubscribed( YAHOO.widget.Overlay.windowResizeEvent, this.sizeMask, this ) ) {
 			YAHOO.widget.Overlay.windowResizeEvent.subscribe(this.sizeMask, this, true);
 		}
+		if (! YAHOO.util.Config.alreadySubscribed( YAHOO.widget.Overlay.windowScrollEvent, this.sizeMask, this ) ) {
+			YAHOO.widget.Overlay.windowScrollEvent.subscribe(this.sizeMask, this, true);
+		}
 	} else {
 		this.beforeShowEvent.unsubscribe(this.showMask, this);
 		this.hideEvent.unsubscribe(this.hideMask, this);
 		YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.sizeMask);
+		YAHOO.widget.Overlay.windowScrollEvent.unsubscribe(this.sizeMask);
 	}
 }
 
@@ -2997,9 +2995,7 @@ http://developer.yahoo.net/yui/license.txt
 * @constructor
 */
 YAHOO.widget.Dialog = function(el, userConfig) {
-	if (arguments.length > 0) {
-		YAHOO.widget.Dialog.superclass.constructor.call(this, el, userConfig);
-	}
+	YAHOO.widget.Dialog.superclass.constructor.call(this, el, userConfig);
 }
 
 YAHOO.extend(YAHOO.widget.Dialog, YAHOO.widget.Panel);
@@ -3060,30 +3056,19 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 	* @type object
 	* @private
 	*/
-	var callback = {
+	this.callback = {
 		success : null,
 		failure : null,
 		argument: null,
 		scope : this
 	}
 
-	this.configOnSuccess = function(type, args, obj) {
-		var fn = args[0];
-		callback.success = fn;
-	}
-
-	this.configOnFailure = function(type, args, obj) {
-		var fn = args[0];
-		callback.failure = fn;
-	}
-
-
 	this.doSubmit = function() {
 		var method = this.cfg.getProperty("postmethod");
 		switch (method) {
 			case "async":
 				YAHOO.util.Connect.setForm(this.form.name);
-				var cObj = YAHOO.util.Connect.asyncRequest('POST', this.form.action, callback);
+				var cObj = YAHOO.util.Connect.asyncRequest('POST', this.form.action, this.callback);
 				this.asyncSubmitEvent.fire();
 				break;
 			case "form":
@@ -3105,9 +3090,6 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 														return true;
 													}
 												} });
-
-	this.cfg.addProperty("onsuccess",	{ handler:this.configOnSuccess, suppressEvent:true } );
-	this.cfg.addProperty("onfailure",	{ handler:this.configOnFailure, suppressEvent:true } );
 
 	this.cfg.addProperty("buttons",		{ value:"none",	handler:this.configButtons } );
 }
@@ -3504,9 +3486,7 @@ http://developer.yahoo.net/yui/license.txt
 * @constructor
 */
 YAHOO.widget.SimpleDialog = function(el, userConfig) {
-	if (arguments.length > 0) {
-		YAHOO.widget.SimpleDialog.superclass.constructor.call(this, el, userConfig);
-	}
+	YAHOO.widget.SimpleDialog.superclass.constructor.call(this, el, userConfig);
 }
 
 YAHOO.extend(YAHOO.widget.SimpleDialog, YAHOO.widget.Dialog);
