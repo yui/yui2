@@ -10,16 +10,15 @@
 
 <style type="text/css">
     #statesmod {position:relative;}
-    #statesautocomplete, #statesautocomplete2 {position:relative;width:15em;margin-bottom:1em;}/* set width of widget here*/
-    #statesautocomplete {z-index:9000} /* for IE z-index of absolute divs inside relative divs issue */
-    #statesinput, #statesinput2 {width:100%;height:1.4em;z-index:0;}
-    #statescontainer, #statescontainer2 {position:absolute;top:1.7em;width:100%}
-    #statescontainer .yui-ac-content, #statescontainer2 .yui-ac-content {position:absolute;width:100%;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
-    #statescontainer .yui-ac-shadow, #statescontainer2 .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
-    #statescontainer ul, #statescontainer2 ul {padding:5px 0;width:100%;}
-    #statescontainer li, #statescontainer2 li {padding:0 5px;cursor:default;white-space:nowrap;}
-    #statescontainer li.yui-ac-highlight, #statescontainer2 li.yui-ac-highlight {background:#ff0;}
-    #statescontainer li.yui-ac-prehighlight,#statescontainer2 li.yui-ac-prehighlight {background:#FFFFCC;}n,
+    #statesautocomplete{position:relative;width:15em;margin-bottom:1em;}/* set width of widget here*/
+    #statesinput {width:100%;height:1.4em;}
+    #statescontainer {position:absolute;top:1.7em;width:100%}
+    #statescontainer .yui-ac-content {position:absolute;width:100%;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
+    #statescontainer .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
+    #statescontainer ul {padding:5px 0;width:100%;}
+    #statescontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
+    #statescontainer li.yui-ac-highlight {background:#ff0;}
+    #statescontainer li.yui-ac-prehighlight {background:#FFFFCC;}
 </style>
 </head>
 
@@ -73,10 +72,10 @@
 <!-- Libary begins -->
 <script src="../../build/yahoo/yahoo.js"></script>
 <script src="../../build/dom/dom.js"></script>
-<script src="./js/event-debug.js"></script>
-<script src="./js/animation-debug.js"></script>
+<script src="../../build/event/event-debug.js"></script>
+<script src="../../build/animation/animation.js"></script>
+<script src="../../build/autocomplete/autocomplete-debug.js"></script>
 <script src="../../build/logger/logger.js"></script>
-<script src="./js/autocomplete-debug.js"></script>
 <!-- Library ends -->
 
 <!-- In-memory JS array begins-->
@@ -155,7 +154,7 @@ YAHOO.example.AutoCompleteLogger = function() {
             // Instantiate AutoComplete
             var oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
             oAutoComp.queryDelay = 0;
-            oAutoComp.prehighlightClassName = "prehighlight";
+            oAutoComp.prehighlightClassName = "yui-ac-prehighlight";
         }
     };
 }();
