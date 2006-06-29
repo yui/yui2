@@ -9,7 +9,8 @@
     #ylogo {top:10px;left:10px;}
     #title {position:absolute;top:10px;left:90px;}
     #bd h1,h2,h3,p{padding:.5em;}
-    /*#logger {position:relative;float:right;width:30em;margin:1em;}*/
     #logger {position:relative;float:right;margin:1em;width:30em;padding:.5em;}
     #panel {width:40%;background:#DEDEDE;border:1px solid #000;margin:2em;padding:1em;}
     #panel div {margin-top:1em;padding-bottom:.5em;border-bottom:1px solid #404040;}
+    #coder {position:absolute;background:#DEDEDE;border:1px solid #000;margin:1em;padding:.5em;bottom:10px;right:10px;}
+    #output {position:relative;width:30em;height:15em;margin-top:1em;}
