@@ -47,23 +47,24 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         }
 
         // If implementer has provided container values, trust and set those
+        var containerStyle = this._containerEl.style;
         if(this.width) {
-            this._containerEl.style.width = this.width;
+            containerStyle.width = this.width;
         }
         if(this.left) {
-            this._containerEl.style.left = this.left;
+            containerStyle.left = this.left;
         }
         if(this.right) {
-            this._containerEl.style.right = this.right;
+            containerStyle.right = this.right;
         }
         if(this.bottom) {
-            this._containerEl.style.bottom = this.bottom;
+            containerStyle.bottom = this.bottom;
         }
         if(this.top) {
-            this._containerEl.style.top = this.top;
+            containerStyle.top = this.top;
         }
         if(this.fontSize) {
-            this._containerEl.style.fontSize = this.fontSize;
+            containerStyle.fontSize = this.fontSize;
         }
     }
 
@@ -590,8 +591,6 @@ YAHOO.widget.LogReader.prototype._printBuffer = function() {
  * @private
  */
 YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
-//TODO: much optimization here
-//if verboseOutput, set fixed widths for time output
     var entriesLen = aEntries.length;
     var sourceFiltersLen = this._sourceFilters.length;
     var categoryFiltersLen = this._categoryFilters.length;
@@ -639,8 +638,8 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
             this._lastTime = msecs;
             
             var verboseOutput = (this.verboseOutput) ? "<br>" : "";
-            var sourceAndDetail = (sourceDetail) ? source + " " + sourceDetail :
-                source;
+            var sourceAndDetail = (sourceDetail) ?
+                source + " " + sourceDetail : source;
 
             var output =  "<span class='"+category+"'>"+label+"</span> " +
                 totalTime + "ms (+" +

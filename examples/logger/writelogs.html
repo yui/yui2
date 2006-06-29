@@ -77,7 +77,7 @@ YAHOO.example.LogWriter = function() {
     return {
         init: function() {
             // Instantiate a logreader and a logwriter
-            myLogReader = new YAHOO.widget.LogReader();
+            myLogReader = new YAHOO.widget.LogReader(null,{top:"50%",right:"10px"});
             myLogWriter = new YAHOO.widget.LogWriter("myWriter");
 
             // You can call the global function YAHOO.log() anytime, anywhere
