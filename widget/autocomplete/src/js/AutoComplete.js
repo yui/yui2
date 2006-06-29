@@ -29,13 +29,14 @@
 YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
     if(inputEl && containerEl && oDataSource) {
         // Validate data source
-        if (oDataSource && (oDataSource.constructor == YAHOO.widget.DataSource)) {
+        if (oDataSource && (oDataSource instanceof YAHOO.widget.DataSource)) {
             this.dataSource = oDataSource;
         }
         else {
             YAHOO.log("Could not instantiate AutoComplete due to an invalid DataSource", "error", this.toString());
             return;
         }
+
         // Validate input element
         if(YAHOO.util.Dom.inDocument(inputEl)) {
             if(typeof inputEl == "string") {
@@ -71,17 +72,6 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
             return;
         }
 
-        // Initialization sequence
-        this._initContainer();
-        this._initProps();
-        this._initList();
-        this._initContainerHelpers();
-
-        var oSelf = this;
-        var oTextbox = this._oTextbox;
-        // Events are actually for the content module within the container
-        var oContent = this._oContainer._oContent;
-
         // Set any config params passed in to override defaults
         if (typeof oConfigs == "object") {
             for(var sConfig in oConfigs) {
@@ -90,14 +80,23 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
                 }
             }
         }
-        YAHOO.widget.AutoComplete._nIndex++;
+        
+        // Initialization sequence
+        this._initContainer();
+        this._initProps();
+        this._initList();
+        this._initContainerHelpers();
 
         // Set up events
+        var oSelf = this;
+        var oTextbox = this._oTextbox;
+        // Events are actually for the content module within the container
+        var oContent = this._oContainer._oContent;
+        
+        // Dom events
         YAHOO.util.Event.addListener(oTextbox,"keyup",oSelf._onTextboxKeyUp,oSelf);
         YAHOO.util.Event.addListener(oTextbox,"keydown",oSelf._onTextboxKeyDown,oSelf);
-        // only for FF < 1.0
-        //YAHOO.util.Event.addListener(oTextbox,"keypress",oSelf._onTextboxKeyPress,oSelf);
-
+        YAHOO.util.Event.addListener(oTextbox,"keypress",oSelf._onTextboxKeyPress,oSelf);
         YAHOO.util.Event.addListener(oTextbox,"focus",oSelf._onTextboxFocus,oSelf);
         YAHOO.util.Event.addListener(oTextbox,"blur",oSelf._onTextboxBlur,oSelf);
         YAHOO.util.Event.addListener(oContent,"mouseover",oSelf._onContainerMouseover,oSelf);
@@ -107,14 +106,14 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
         if(oTextbox.form) {
             YAHOO.util.Event.addListener(oTextbox.form,"submit",oSelf._onFormSubmit,oSelf);
         }
-
+        
+        // Custom events
         this.textboxFocusEvent = new YAHOO.util.CustomEvent("textboxFocus", this);
         this.textboxKeyEvent = new YAHOO.util.CustomEvent("textboxKey", this);
         this.dataRequestEvent = new YAHOO.util.CustomEvent("dataRequest", this);
         this.dataReturnEvent = new YAHOO.util.CustomEvent("dataReturn", this);
         this.dataErrorEvent = new YAHOO.util.CustomEvent("dataError", this);
         this.containerExpandEvent = new YAHOO.util.CustomEvent("containerExpand", this);
-        this.containerHelpersExpandEvent = new YAHOO.util.CustomEvent("containerHelpersExpand", this);
         this.typeAheadEvent = new YAHOO.util.CustomEvent("typeAhead", this);
         this.itemMouseOverEvent = new YAHOO.util.CustomEvent("itemMouseOver", this);
         this.itemMouseOutEvent = new YAHOO.util.CustomEvent("itemMouseOut", this);
@@ -124,12 +123,11 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
         this.unmatchedItemSelectEvent = new YAHOO.util.CustomEvent("unmatchedItemSelect", this);
         this.selectionEnforceEvent = new YAHOO.util.CustomEvent("selectionEnforce", this);
         this.containerCollapseEvent = new YAHOO.util.CustomEvent("containerCollapse", this);
-        this.containerHelpersCollapseEvent = new YAHOO.util.CustomEvent("containerHelpersCollapse", this);
         this.textboxBlurEvent = new YAHOO.util.CustomEvent("textboxBlur", this);
 
-        // Turn off autocomplete on textbox
+        // Finish up
         oTextbox.setAttribute("autocomplete","off");  
-        
+        YAHOO.widget.AutoComplete._nIndex++;
         YAHOO.log("AutoComplete initialized","info",this.toString());
     }
     // Required arguments were not found
@@ -323,16 +321,29 @@ YAHOO.widget.AutoComplete.prototype.toString = function() {
 };
 
 /**
- * Public accessor to the internal array of DOM &lt;li&gt; element IDs that
+ * Public accessor to the internal array of DOM &lt;li&gt; elements that
  * display query results within the auto complete container.
  *
- * @return {array} Array of &lt;li&gt; element IDs within the auto complete
- *                 container 
+ * @return {array} Array of &lt;li&gt; elements within the auto complete
+ *                 container
  */
-YAHOO.widget.AutoComplete.prototype.getListIds = function() {
-    //TODO: go through getListItems to return ids
-    //TODO: make available the data for each item
+YAHOO.widget.AutoComplete.prototype.getListItems = function() {
     return this._aListItems;
+};
+
+/**
+ * Public accessor to the data held in an &lt;li&gt; element of the
+ * auto complete container.
+ *
+ * @return {object or array} Object or array of result data or null
+ */
+YAHOO.widget.AutoComplete.prototype.getListItemData = function(oListItem) {
+    if(oListItem._oResultData) {
+        return oListItem._oResultData;
+    }
+    else {
+        return false;
+    }
 };
 
 /**
@@ -420,12 +431,12 @@ YAHOO.widget.AutoComplete.prototype.formatResult = function(oResultItem, sQuery)
  * @param {string} sQuery Query string.
  */
 YAHOO.widget.AutoComplete.prototype.sendQuery = function(sQuery) {
-    if(!sQuery) {
-        YAHOO.log("Query could not be sent because the string value was empty or null.","warn",this.toString());
-        return;
+    if(sQuery) {
+        this._sendQuery(sQuery);
     }
     else {
-        this._sendQuery(sQuery);
+        YAHOO.log("Query could not be sent because the string value was empty or null.","warn",this.toString());
+        return;
     }
 };
 
@@ -480,12 +491,6 @@ YAHOO.widget.AutoComplete.prototype.dataErrorEvent = null;
  */
 YAHOO.widget.AutoComplete.prototype.containerExpandEvent = null;
 
-/**
- * Fired when the auto complete container helpers are expanded. Subscribers
- * receive the following array:<br>
- *     - args[0] The auto complete object instance
- */
-YAHOO.widget.AutoComplete.prototype.containerHelpersExpandEvent = null;
 /**
  * Fired when the auto complete textbox has been prefilled by the type-ahead
  * feature. Subscribers receive the following array:<br>
@@ -560,13 +565,6 @@ YAHOO.widget.AutoComplete.prototype.selectionEnforceEvent = null;
  *     - args[0] The auto complete object instance
  */
 YAHOO.widget.AutoComplete.prototype.containerCollapseEvent = null;
-
-/**
- * Fired when the auto complete container helpers are collapsed. Subscribers
- * receive the following array:<br>
- *     - args[0] The auto complete object instance
- */
-YAHOO.widget.AutoComplete.prototype.containerHelpersCollapseEvent = null;
 
 /**
  * Fired when the auto complete text input box loses focus. Subscribers receive
@@ -644,38 +642,6 @@ YAHOO.widget.AutoComplete.prototype._bContainerOpen = false;
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._bOverContainer = false;
-
-/**
- * iFrame DOM element. Only used in IE for iframe trick.
- *
- * @type object
- * @private
- */
-//YAHOO.widget.AutoComplete.prototype._oIFrame = null;
-
-/**
- * Content DOM element. Only used in IE for iFrame trick.
- *
- * @type object
- * @private
- */
-//YAHOO.widget.AutoComplete.prototype._oContent = null;
-
-/**
- * Container header DOM element.
- *
- * @type object
- * @private
- */
-//YAHOO.widget.AutoComplete.prototype._oHeader = null;
-
-/**
- * Container footer DOM element.
- *
- * @type object
- * @private
- */
-//YAHOO.widget.AutoComplete.prototype._oFooter = null;
 
 /**
  * Array of &lt;li&gt; elements references that contain query results within the
@@ -809,18 +775,12 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
 };
 
 /**
- * Initializes the auto complete container, including iframe shim for IE bug
+ * Initializes the auto complete container helpers if they are enabled and do
+ * not exist
  *
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._initContainerHelpers = function() {
-    // TODO: don't blow things away unless you have to
-    //TODO: make sure this destroys everything in memory
-    /*if(this._oContainer.hasChildNodes()) {
-        for(var i=this._oContainer.childNodes.length-1; i >= 0; i--)
-            this._oContainer.removeChild(this._oContainer.childNodes[i]);
-    }*/
-
     if(this.useShadow && !this._oContainer._oShadow) {
         var oShadow = document.createElement("div");
         oShadow.className = "yui-ac-shadow";
@@ -828,7 +788,6 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelpers = function() {
     }
     if(this.useIFrame && !this._oContainer._oIFrame) {
         var oIFrame = document.createElement("iframe");
-        // TODO: configurable src
         oIFrame.src = this.iFrameSrc;
         oIFrame.frameBorder = 0;
         oIFrame.scrolling = "no";
@@ -840,20 +799,13 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelpers = function() {
 };
 
 /**
- * Initializes the auto complete container, including iframe shim for IE bug
+ * Initializes the auto complete container once at object creation
  *
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._initContainer = function() {
-    // TODO: don't blow things away unless you have to
-    //TODO: make sure this destroys everything in memory
-    /*if(this._oContainer.hasChildNodes()) {
-        for(var i=this._oContainer.childNodes.length-1; i >= 0; i--)
-            this._oContainer.removeChild(this._oContainer.childNodes[i]);
-    }*/
-
     if(!this._oContainer._oContent) {
-        // The div oContent helps size the iframe and shadow properly
+        // The oContent div helps size the iframe and shadow properly
         var oContent = document.createElement("div");
         oContent.className = "yui-ac-content";
         oContent.style.display = "none";
@@ -861,7 +813,7 @@ YAHOO.widget.AutoComplete.prototype._initContainer = function() {
 
         var oHeader = document.createElement("div");
         oHeader.className = "yui-ac-hd";
-        oHeader.style.display = "none";//DEBUG
+        oHeader.style.display = "none";
         this._oContainer._oContent._oHeader = this._oContainer._oContent.appendChild(oHeader);
 
         var oBody = document.createElement("div");
@@ -870,24 +822,18 @@ YAHOO.widget.AutoComplete.prototype._initContainer = function() {
 
         var oFooter = document.createElement("div");
         oFooter.className = "yui-ac-ft";
-        oFooter.style.display = "none";//DEBUG
+        oFooter.style.display = "none";
         this._oContainer._oContent._oFooter = this._oContainer._oContent.appendChild(oFooter);
     }
-
-    /*this._oContainer._oHeader = //(this.useIFrame) ?
-        //this._oContent.appendChild(oHeader):
-        this._oContainer.appendChild(oHeader);
-    this._oContainer._oBody = //(this.useIFrame) ?
-        //this._oContent.appendChild(oBody):
-        this._oContainer.appendChild(oBody);
-    this._oContainer._oFooter = //(this.useIFrame) ?
-        //this._oContent.appendChild(oFooter) :
-        this._oContainer.appendChild(oFooter);*/
+    else {
+        YAHOO.log("Could not initialize the container","warn",this.toString());
+    }
 };
 
 /**
- * Creates up to YAHOO.widget.AutoComplete#maxResultsDisplayed &lt;li&gt;
- * elements in a container list.
+ * Clears out contents of container body and creates up to
+ * YAHOO.widget.AutoComplete#maxResultsDisplayed &lt;li&gt; elements in an
+ * &lt;ul&gt; element.
  *
  * @private
  */
@@ -917,7 +863,7 @@ YAHOO.widget.AutoComplete.prototype._initList = function() {
  */
 YAHOO.widget.AutoComplete.prototype._initListItem = function(oItem, nItemIndex) {
     var oSelf = this;
-    oItem.style.display = "none";//DEBUG
+    oItem.style.display = "none";
     oItem._nItemIndex = nItemIndex;
     oItem.toString = function () {
         return oSelf.getName() + "LI" + nItemIndex;
@@ -1018,12 +964,11 @@ YAHOO.widget.AutoComplete.prototype._onContainerScroll = function(v,oSelf) {
 /**
  * Handles container resize events.
  *
- * @param {event} v The scroll event
+ * @param {event} v The resize event
  * @param {object} oSelf The auto complete instance
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._onContainerResize = function(v,oSelf) {
-    YAHOO.log("Container resize event.","info",this.toString());
     oSelf._toggleContainerHelpers(oSelf._bContainerOpen);
 };
 
@@ -1086,23 +1031,20 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
 };
 
 /**
- * Handles textbox keypress events, mainly for FF.
+ * Handles textbox keypress events, mainly for stopEvent in Safari.
  *
  * @param {event} v The keyup event
- * @param {object} oSelf The auto complete instance  
+ * @param {object} oSelf The auto complete instance
  * @private
  */
-/*YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
+YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
     var nKeyCode = v.keyCode;
-    
-    // for FF < 1.0
+
     switch (nKeyCode) {
     case 9: // tab
     case 13: // enter
-        if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
-            if(oSelf._bContainerOpen) {
+        if((oSelf._nKeyCode != nKeyCode)) {
                 YAHOO.util.Event.stopEvent(v);
-            }
         }
         break;
     case 38: // up
@@ -1112,7 +1054,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
     default:
         break;
     }
-};*/
+};
 
 /**
  * Handles textbox keyup events that trigger queries.
@@ -1310,7 +1252,7 @@ YAHOO.widget.AutoComplete.prototype._clearList = function() {
     
     if(aItems && (aItems.length > 0)) {
         for(var i = aItems.length-1; i >= 0 ; i--) {
-            aItems[i].style.display = "none";//DEBUG
+            aItems[i].style.display = "none";
         }
     }
 
@@ -1344,8 +1286,9 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
     }
     
     var isOpera = (navigator.userAgent.toLowerCase().indexOf("opera") != -1);
-    oSelf._oContainer._oContent.style.width = (!isOpera) ? null : "";
-    oSelf._oContainer._oContent.style.height = (!isOpera) ? null : "";
+    var contentStyle = oSelf._oContainer._oContent.style;
+    contentStyle.width = (!isOpera) ? null : "";
+    contentStyle.height = (!isOpera) ? null : "";
 
     var sCurQuery = decodeURIComponent(sQuery);
     oSelf._sCurQuery = sCurQuery;
@@ -1358,8 +1301,6 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
     var nItems = Math.min(aResults.length,oSelf.maxResultsDisplayed);
     oSelf._nDisplayedItems = nItems;
     if (nItems > 0) {
-        //TODO: Figure out what I can do once, and what may need to be re-init'd
-        //oSelf._initContainer();
         oSelf._initContainerHelpers();
         var aItems = oSelf._aListItems;
         
@@ -1378,7 +1319,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         for(var j = aItems.length-1; j >= nItems ; j--) {
             var oItemj = aItems[j];
             oItemj.innerHTML = null;
-            oItemj.style.display = "none";//DEBUG
+            oItemj.style.display = "none";
             oItemj._sResultKey = null;
             oItemj._oResultData = null;
         }
@@ -1455,14 +1396,14 @@ YAHOO.widget.AutoComplete.prototype._textMatchesOption = function() {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._typeAhead = function(oItem, sQuery) {
-    var oTextbox = this._oTextbox;
-    var sValue = this._oTextbox.value; // any saved queries plus what user has typed
-    
-    // Don't update with type-ahead if turned off
+    // Don't update if turned off
     if (!this.typeAhead) {
         return;
     }
 
+    var oTextbox = this._oTextbox;
+    var sValue = this._oTextbox.value; // any saved queries plus what user has typed
+    
     // Don't update with type-ahead if text selection is not supported
     if(!oTextbox.setSelectionRange && !oTextbox.createTextRange) {
         return;
@@ -1501,21 +1442,21 @@ YAHOO.widget.AutoComplete.prototype._selectText = function(oTextbox, nStart, nEn
 };
 
 /**
- * Syncs auto complete container with its helpers: iFrame shim and shadow.
+ * Syncs auto complete container with its helpers.
  *
  * @param {boolean} bShow True if container is expanded, false if collapsed
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
-//TODO: is width necessary?
+    var bFireEvent = false;
     var width = this._oContainer._oContent.offsetWidth + "px";
     var height = this._oContainer._oContent.offsetHeight + "px";
 
     if(this.useIFrame && this._oContainer._oIFrame) {
+        bFireEvent = true;
         if(this.alwaysShowContainer || bShow) {
             this._oContainer._oIFrame.style.width = width;
             this._oContainer._oIFrame.style.height = height;
-
         }
         else {
             this._oContainer._oIFrame.style.width = 0;
@@ -1523,6 +1464,7 @@ YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
         }
     }
     if(this.useShadow && this._oContainer._oShadow) {
+        bFireEvent = true;
         if(this.alwaysShowContainer || bShow) {
             this._oContainer._oShadow.style.width = width;
             this._oContainer._oShadow.style.height = height;
@@ -1531,13 +1473,6 @@ YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
            this._oContainer._oShadow.style.width = 0;
             this._oContainer._oShadow.style.height = 0;
         }
-    }
-    
-    if(bShow) {
-        this.containerHelpersExpandEvent.fire(this);
-    }
-    else {
-        this.containerHelpersCollapseEvent.fire(this);
     }
 };
 
@@ -1566,16 +1501,15 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
     var oContainer = this._oContainer;
     // Container is already closed
     if (!bShow && !this._bContainerOpen) {
-        oContainer._oContent.style.display = "none";//DEBUG
+        oContainer._oContent.style.display = "none";
         return;
     }
     
     // If animation is enabled...
     var oAnim = this._oAnim;
     if (oAnim && oAnim.getEl() && (this.animHoriz || this.animVert)) {
-    
-        // If iFrame/shadow need to be collapsed, do it right away...
-        // but if iFrame/shadow need to be expanded, wait until after the container expands
+        // If helpers need to be collapsed, do it right away...
+        // but if helpers need to be expanded, wait until after the container expands
         if(!bShow) {
             this._toggleContainerHelpers(bShow);
         }
@@ -1588,7 +1522,7 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
         var oClone = oContainer._oContent.cloneNode(true);
         oContainer.appendChild(oClone);
         oClone.style.top = "-9000px";
-        oClone.style.display = "block";//DEBUG
+        oClone.style.display = "block";
         
         // Current size of the container is the EXPANDED size
         var wExp = oClone.offsetWidth;
@@ -1665,14 +1599,15 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._toggleHighlight = function(oNewItem, sType) {
+    var sHighlight = this.highlightClassName;
     if(this._oCurItem) {
         // Remove highlight from old item
-        YAHOO.util.Dom.removeClass(this._oCurItem, this.highlightClassName);
+        YAHOO.util.Dom.removeClass(this._oCurItem, sHighlight);
     }
 
-    if((sType == "to") && this.highlightClassName) {
+    if((sType == "to") && sHighlight) {
         // Apply highlight to new item
-        YAHOO.util.Dom.addClass(oNewItem, this.highlightClassName)
+        YAHOO.util.Dom.addClass(oNewItem, sHighlight);
         this._oCurItem = oNewItem;
     }
 };
@@ -1691,13 +1626,14 @@ YAHOO.widget.AutoComplete.prototype._togglePrehighlight = function(oNewItem, sTy
         return;
     }
 
-    if((sType == "mouseover") && this.prehighlightClassName) {
+    var sPrehighlight = this.prehighlightClassName;
+    if((sType == "mouseover") && sPrehighlight) {
         // Apply prehighlight to new item
-        YAHOO.util.Dom.addClass(oNewItem, this.prehighlightClassName);
+        YAHOO.util.Dom.addClass(oNewItem, sPrehighlight);
     }
     else {
         // Remove prehighlight from old item
-        YAHOO.util.Dom.removeClass(oNewItem, this.prehighlightClassName);
+        YAHOO.util.Dom.removeClass(oNewItem, sPrehighlight);
     }
 };
 
@@ -1778,7 +1714,7 @@ YAHOO.widget.AutoComplete.prototype._jumpSelection = function() {
  */
 YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
     if(this._bContainerOpen) {
-        // determine current item's id number
+        // Determine current item's id number
         var oCurItem = this._oCurItem;
         var nCurItemIndex = -1;
 
@@ -1789,7 +1725,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
         var nNewItemIndex = (nKeyCode == 40) ?
                 (nCurItemIndex + 1) : (nCurItemIndex - 1);
 
-        // out of bounds
+        // Out of bounds
         if (nNewItemIndex < -2 || nNewItemIndex >= this._nDisplayedItems) {
             return;
         }
@@ -1800,7 +1736,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
             this.itemArrowFromEvent.fire(this, oCurItem);
         }
         if (nNewItemIndex == -1) {
-           // go back to query (remove type-ahead string)
+           // Go back to query (remove type-ahead string)
             if(this.delimChar && this._sSavedQuery) {
                 if (!this._textMatchesOption()) {
                     this._oTextbox.value = this._sSavedQuery;
@@ -1816,7 +1752,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
             return;
         }
         if (nNewItemIndex == -2) {
-            // close container
+            // Close container
             this._clearList();
             return;
         }
