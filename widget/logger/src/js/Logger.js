@@ -79,7 +79,7 @@ YAHOO.widget.Logger.log = function(sMsg, sCategory, sSource) {
                 sDetail = sSource.substring(spaceIndex,sSource.length);// the rest of the source
             }
             else {
-                sClass = sSource
+                sClass = sSource;
             }
             if(this._isNewSource(sClass)) {
                 this._createNewSource(sClass);
@@ -144,7 +144,7 @@ YAHOO.widget.Logger.getStartTime = function() {
 YAHOO.widget.Logger.disableFirebug = function() {
     YAHOO.log("YAHOO.Logger output to Firebug has been disabled.");
     this._firebugEnabled = false;
-}
+};
 
 /**
  * Enables output to the Firebug Firefox extension.
@@ -152,7 +152,7 @@ YAHOO.widget.Logger.disableFirebug = function() {
 YAHOO.widget.Logger.enableFirebug = function() {
     this._firebugEnabled = true;
     YAHOO.log("YAHOO.Logger output to Firebug has been enabled.");
-}
+};
 
 /***************************************************************************
  * Private methods
