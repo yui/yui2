@@ -663,18 +663,18 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                     while (oResponse.substring(0,1) == " ") {
                         oResponse = oResponse.substring(1, oResponse.length);
                     }
-                    
+
                     // Invalid JSON response
                     if(oResponse.indexOf("{") < 0) {
                         bError = true;
                         break;
                     }
-                
+
                     // Empty (but not invalid) JSON response
                     if(oResponse.indexOf("{}") === 0) {
                         break;
                     }
-                    
+
                     // Turn the string into an object literal...
                     // ...eval is necessary here
                     var jsonObjRaw = eval("(" + oResponse + ")");
@@ -682,7 +682,7 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                         bError = true;
                         break;
                     }
-                    
+
                     // Grab the object member that contains an array of all reponses...
                     // ...eval is necessary here since aSchema[0] is of unknown depth
                     jsonList = eval("(jsonObjRaw." + aSchema[0]+")");
@@ -697,7 +697,7 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                 bError = true;
                 break;
             }
-            
+
             // Loop through the array of all responses...
             for(var i = jsonList.length-1; i >= 0 ; i--) {
                 var aResultItem = [];
@@ -772,7 +772,7 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
             break;
         default:
             break;
-    }    
+    }
     if(bError) {
         return null;
     }

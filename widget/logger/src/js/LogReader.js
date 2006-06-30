@@ -103,7 +103,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         if(!this._consoleEl) {
             this._consoleEl = this._containerEl.appendChild(document.createElement("div"));
             this._consoleEl.className = "yui-log-bd";
-            
+
             // If implementer has provided console, trust and set those
             if(this.height) {
                 this._consoleEl.style.height = this.height;
@@ -466,7 +466,7 @@ YAHOO.widget.LogReader.prototype._clearBtn = null;
  */
 YAHOO.widget.LogReader.prototype._createCategoryCheckbox = function(category) {
     var oSelf = this;
-    
+
     if(this._ftEl) {
         var parentEl = this._categoryFiltersEl;
         var filters = this._categoryFilters;
@@ -636,7 +636,7 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
             var totalTime = msecs - startTime;
             var elapsedTime = msecs - this._lastTime;
             this._lastTime = msecs;
-            
+
             var verboseOutput = (this.verboseOutput) ? "<br>" : "";
             var sourceAndDetail = (sourceDetail) ?
                 source + " " + sourceDetail : source;
@@ -724,7 +724,7 @@ YAHOO.widget.LogReader.prototype._onCheckCategory = function(v, oSelf) {
 YAHOO.widget.LogReader.prototype._onCheckSource = function(v, oSelf) {
     var newFilter = this.source;
     var filtersArray = oSelf._sourceFilters;
-    
+
     if(!this.checked) { // Remove category from filters
         for(var i=0; i<filtersArray.length; i++) {
             if(newFilter == filtersArray[i]) {

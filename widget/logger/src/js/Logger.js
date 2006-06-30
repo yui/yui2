@@ -243,7 +243,7 @@ YAHOO.widget.Logger._printToFirebug = function(entry) {
             entry.source + ": " +
             entry.msg;
 
-        
+
         console.log(output);
     }
 };
