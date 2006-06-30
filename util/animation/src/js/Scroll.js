@@ -24,85 +24,85 @@ Version: 0.10.0
  * @param {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
  * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
  */
-YAHOO.util.Scroll = function(el, attributes, duration,  method) {
-   if (el) {
-      YAHOO.util.Anim.call(this, el, attributes, duration, method);
-   }
-};
+(function() {
+   YAHOO.util.Scroll = function(el, attributes, duration,  method) {
+      if (el) { // dont break existing subclasses not using YAHOO.extend
+         YAHOO.util.Scroll.superclass.constructor.call(this, el, attributes, duration, method);
+      }
+   };
 
-YAHOO.util.Scroll.prototype = new YAHOO.util.Anim();
+   YAHOO.extend(YAHOO.util.Scroll, YAHOO.util.ColorAnim);
+   
+   // shorthand
+   var Y = YAHOO.util;
+   var superclass = Y.Scroll.superclass;
+   var prototype = Y.Scroll.prototype;
+   var Motion = Y.Scroll;
 
-/**
- * toString method
- * @return {String} string represenation of anim obj
- */
-YAHOO.util.Scroll.prototype.toString = function() {
-   var el = this.getEl();
-   var id = el.id || el.tagName;
-   return ("Scroll " + id);
-};
-
-/**
- * Per attribute units that should be used by default.
- * Scroll positions default to no units.
- * @type Object
- */
-YAHOO.util.Scroll.prototype.defaultUnits.scroll = '';
-
-/**
- * Returns the value computed by the animation's "method".
- * @param {String} attribute The name of the attribute.
- * @param {Number} start The value this attribute should start from for this animation.
- * @param {Number} end  The value this attribute should end at for this animation.
- * @return {Number} The Value to be applied to the attribute.
- */
-YAHOO.util.Scroll.prototype.doMethod = function(attribute, start, end) {
-   var val = null;
-
-   if (attribute == 'scroll') {
-      val = [
-         this.method(this.currentFrame, start[0], end[0] - start[0], this.totalFrames),
-         this.method(this.currentFrame, start[1], end[1] - start[1], this.totalFrames)
-      ];
+   /**
+    * toString method
+    * @return {String} string represenation of anim obj
+    */
+   prototype.toString = function() {
+      var el = this.getEl();
+      var id = el.id || el.tagName;
+      return ("Scroll " + id);
+   };
+   
+   /**
+    * Returns the value computed by the animation's "method".
+    * @param {String} attr The name of the attribute.
+    * @param {Number} start The value this attribute should start from for this animation.
+    * @param {Number} end  The value this attribute should end at for this animation.
+    * @return {Number} The Value to be applied to the attribute.
+    */
+   prototype.doMethod = function(attr, start, end) {
+      var val = null;
+   
+      if (attr == 'scroll') {
+         val = [
+            this.method(this.currentFrame, start[0], end[0] - start[0], this.totalFrames),
+            this.method(this.currentFrame, start[1], end[1] - start[1], this.totalFrames)
+         ];
+         
+      } else {
+         val = superclass.doMethod.call(this, attr, start, end);
+      }
+      return val;
+   };
+   
+   /**
+    * Returns current value of the attribute.
+    * @param {String} attr The name of the attribute.
+    * @return {Number} val The current value of the attribute.
+    */
+   prototype.getAttribute = function(attr) {
+      var val = null;
+      var el = this.getEl();
       
-   } else {
-      val = this.method(this.currentFrame, start, end - start, this.totalFrames);
-   }
-   return val;
-};
-
-/**
- * Returns current value of the attribute.
- * @param {String} attribute The name of the attribute.
- * @return {Number} val The current value of the attribute.
- */
-YAHOO.util.Scroll.prototype.getAttribute = function(attribute) {
-   var val = null;
-   var el = this.getEl();
+      if (attr == 'scroll') {
+         val = [ el.scrollLeft, el.scrollTop ];
+      } else {
+         val = superclass.getAttribute.call(this, attr);
+      }
+      
+      return val;
+   };
    
-   if (attribute == 'scroll') {
-      val = [ el.scrollLeft, el.scrollTop ];
-   } else {
-      val = parseFloat( YAHOO.util.Dom.getStyle(el, attribute) );
-   }
-   
-   return val;
-};
-
-/**
- * Applies a value to an attribute
- * @param {String} attribute The name of the attribute.
- * @param {Number} val The value to be applied to the attribute.
- * @param {String} unit The unit ('px', '%', etc.) of the value.
- */
-YAHOO.util.Scroll.prototype.setAttribute = function(attribute, val, unit) {
-   var el = this.getEl();
-   
-   if (attribute == 'scroll') {
-      el.scrollLeft = val[0];
-      el.scrollTop = val[1];
-   } else {
-      YAHOO.util.Dom.setStyle(el, attribute, val + unit); 
-   }
-};
-
+   /**
+    * Applies a value to an attribute
+    * @param {String} attr The name of the attribute.
+    * @param {Number} val The value to be applied to the attribute.
+    * @param {String} unit The unit ('px', '%', etc.) of the value.
+    */
+   prototype.setAttribute = function(attr, val, unit) {
+      var el = this.getEl();
+      
+      if (attr == 'scroll') {
+         el.scrollLeft = val[0];
+         el.scrollTop = val[1];
+      } else {
+         superclass.setAttribute.call(this, attr, val, unit);
+      }
+   };
+})();

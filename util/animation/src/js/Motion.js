@@ -24,169 +24,157 @@ Version: 0.10.0
  * @param {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
  * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
  */
-YAHOO.util.Motion = function(el, attributes, duration, method) {
-   if (el) {
-      this.initMotion(el, attributes, duration, method);
-   }
-};
-
-YAHOO.util.Motion.prototype = new YAHOO.util.Anim();
-
-/**
- * toString method
- * @return {String} string represenation of anim obj
- */
-YAHOO.util.Motion.prototype.toString = function() {
-   var el = this.getEl();
-   var id = el.id || el.tagName;
-   return ("Motion " + id);
-};
-
-/**
- * Per attribute units that should be used by default.
- * Motion points default to 'px' units.
- * @type Object
- */
-YAHOO.util.Motion.prototype.defaultUnits.points = 'px';
-
-/**
- * Returns the value computed by the animation's "method".
- * @param {String} attribute The name of the attribute.
- * @param {Number} start The value this attribute should start from for this animation.
- * @param {Number} end  The value this attribute should end at for this animation.
- * @return {Number} The Value to be applied to the attribute.
- */
-YAHOO.util.Motion.prototype.doMethod = function(attribute, start, end) {
-   var val = null;
-   
-   if (attribute == 'points') {
-      var translatedPoints = this.getTranslatedPoints();
-      var t = this.method(this.currentFrame, 0, 100, this.totalFrames) / 100;				
-   
-      if (translatedPoints) {
-         val = YAHOO.util.Bezier.getPosition(translatedPoints, t);
+(function() {
+   YAHOO.util.Motion = function(el, attributes, duration,  method) {
+      if (el) { // dont break existing subclasses not using YAHOO.extend
+         YAHOO.util.Motion.superclass.constructor.call(this, el, attributes, duration, method);
       }
-      
-   } else {
-      val = this.method(this.currentFrame, start, end - start, this.totalFrames);
-   }
-   
-   return val;
-};
+   };
 
-/**
- * Returns current value of the attribute.
- * @param {String} attribute The name of the attribute.
- * @return {Number} val The current value of the attribute.
- */
-YAHOO.util.Motion.prototype.getAttribute = function(attribute) {
-   var val = null;
+   YAHOO.extend(YAHOO.util.Motion, YAHOO.util.ColorAnim);
    
-   if (attribute == 'points') {
-      val = [ this.getAttribute('left'), this.getAttribute('top') ];
-      if ( isNaN(val[0]) ) { val[0] = 0; }
-      if ( isNaN(val[1]) ) { val[1] = 0; }
-   } else {
-      val = parseFloat( YAHOO.util.Dom.getStyle(this.getEl(), attribute) );
-   }
-   
-   return val;
-};
+   // shorthand
+   var Y = YAHOO.util;
+   var superclass = Y.Motion.superclass;
+   var prototype = Y.Motion.prototype;
+   var Motion = Y.Motion;
 
-/**
- * Applies a value to an attribute
- * @param {String} attribute The name of the attribute.
- * @param {Number} val The value to be applied to the attribute.
- * @param {String} unit The unit ('px', '%', etc.) of the value.
- */
-YAHOO.util.Motion.prototype.setAttribute = function(attribute, val, unit) {
-   if (attribute == 'points') {
-      YAHOO.util.Dom.setStyle(this.getEl(), 'left', val[0] + unit);
-      YAHOO.util.Dom.setStyle(this.getEl(), 'top', val[1] + unit);
-   } else {
-      YAHOO.util.Dom.setStyle(this.getEl(), attribute, val + unit); 
-   }
-};
+   /**
+    * toString method
+    * @return {String} string represenation of anim obj
+    */
+   prototype.toString = function() {
+      var el = this.getEl();
+      var id = el.id || el.tagName;
+      return ("Motion " + id);
+   };
+   
+   prototype.patterns.points = /^points$/i;
+   
+   /**
+    * Applies a value to an attribute
+    * @param {String} attr The name of the attribute.
+    * @param {Number} val The value to be applied to the attribute.
+    * @param {String} unit The unit ('px', '%', etc.) of the value.
+    */
+   prototype.setAttribute = function(attr, val, unit) {
+      if (  this.patterns.points.test(attr) ) {
+         unit = unit || 'px';
+         superclass.setAttribute.call(this, 'left', val[0], unit);
+         superclass.setAttribute.call(this, 'top', val[1], unit);
+      } else {
+         superclass.setAttribute.call(this, attr, val, unit);
+      }
+   };
+   
+   /**
+    * Sets the default value to be used when "from" is not supplied.
+    * @param {String} attr The attribute being set.
+    * @param {Number} val The default value to be applied to the attribute.
+    */
+   prototype.getAttribute = function(attr) {
+      if (  this.patterns.points.test(attr) ) {
+         var val = [
+            superclass.getAttribute.call(this, 'left'),
+            superclass.getAttribute.call(this, 'top')
+         ];
+      } else {
+         val = superclass.getAttribute.call(this, attr);
+      }
 
-/**
- * @param {String or HTMLElement} el Reference to the element that will be animated
- * @param {Object} attributes The attribute(s) to be animated.  
- * Each attribute is an object with at minimum a "to" or "by" member defined.  
- * Additional optional members are "from" (defaults to current value), "units" (defaults to "px").  
- * All attribute names use camelCase.
- * @param {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
- * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
- */ 
-YAHOO.util.Motion.prototype.initMotion = function(el, attributes, duration, method) {
-   YAHOO.util.Anim.call(this, el, attributes, duration, method);
+      return val;
+   };
    
-   attributes = attributes || {};
-   attributes.points = attributes.points || {};
-   attributes.points.control = attributes.points.control || [];
+   /**
+    * Returns the value computed by the animation's "method".
+    * @param {String} attr The name of the attribute.
+    * @param {Number} start The value this attribute should start from for this animation.
+    * @param {Number} end  The value this attribute should end at for this animation.
+    * @return {Number} The Value to be applied to the attribute.
+    */
+   prototype.doMethod = function(attr, start, end) {
+      var val = null;
+
+      if ( this.patterns.points.test(attr) ) {
+         var t = this.method(this.currentFrame, 0, 100, this.totalFrames) / 100;				
+         val = Y.Bezier.getPosition(this.runtimeAttributes[attr], t);
+      } else {
+         val = superclass.doMethod.call(this, attr, start, end);
+      }
+      return val;
+   };
    
-   this.attributes = attributes;
+   prototype.setRuntimeAttribute = function(attr) {
+      if ( this.patterns.points.test(attr) ) {
+         var el = this.getEl();
+         var attributes = this.attributes;
+         var start;
+         var control = attributes['points']['control'] || [];
+         var end;
+         var i, len;
+         
+         if (control.length > 0 && control[0].constructor.toString().indexOf('Array') < 0) { // could be single point or array of points (using toString in case passed from a frame)
+            control = [control];
+         } else { // break reference to attributes.points.control
+            var tmp = []; 
+            for (i = 0, len = control.length; i< len; ++i) {
+               tmp[i] = control[i];
+            }
+            control = tmp;
+         }
+
+         if (Y.Dom.getStyle(el, 'position') == 'static') { // default to relative
+            Y.Dom.setStyle(el, 'position', 'relative');
+         }
    
-   var start;
-   var end = null;
-   var translatedPoints = null;
+         if ( isset(attributes['points']['from']) ) {
+            Y.Dom.setXY(el, attributes['points']['from']); // set position to from point
+         } 
+         else { Y.Dom.setXY( el, Y.Dom.getXY(el) ); } // set it to current position
+         
+         start = this.getAttribute('points'); // get actual top & left
+         
+         // TO beats BY, per SMIL 2.1 spec
+         if ( isset(attributes['points']['to']) ) {
+            end = translateValues.call(this, attributes['points']['to'], start);
+            
+            var pageXY = Y.Dom.getXY(this.getEl());
+            for (i = 0, len = control.length; i < len; ++i) {
+               control[i] = [ control[i][0] - pageXY[0], control[i][1] - pageXY[1] ];
+               //control[i] = [ control[i][0] + start[0], control[i][1] + start[1] ];
+               //control[i] = translateValues.call(this, control[i], start);
+            }
+
+            
+         } else if ( isset(attributes['points']['by']) ) {
+            end = [ start[0] + attributes['points']['by'][0], start[1] + attributes['points']['by'][1] ];
+            
+            for (i = 0, len = control.length; i < len; ++i) {
+               control[i] = [ start[0] + control[i][0], start[1] + control[i][1] ];
+            }
+         }
+            //console.log(control);
+         this.runtimeAttributes[attr] = [start];
+         
+         if (control.length > 0) {
+            this.runtimeAttributes[attr] = this.runtimeAttributes[attr].concat(control); 
+         }
+
+         this.runtimeAttributes[attr][this.runtimeAttributes[attr].length] = end;
+      }
+      else {
+         superclass.setRuntimeAttribute.call(this, attr);
+      }
+   };
    
-   this.getTranslatedPoints = function() { return translatedPoints; };
-   
-   var translateValues = function(val, self) {
-      var pageXY = YAHOO.util.Dom.getXY(self.getEl());
+   var translateValues = function(val, start) {
+      var pageXY = Y.Dom.getXY(this.getEl());
       val = [ val[0] - pageXY[0] + start[0], val[1] - pageXY[1] + start[1] ];
    
       return val; 
    };
    
-   var onStart = function() {
-      start = this.getAttribute('points');
-      var attributes = this.attributes;
-      var control =  attributes['points']['control'] || [];
-
-      if (control.length > 0 && control[0].constructor.toString().indexOf('Array') > -1) { // could be single point or array of points (using toString in case passed from a frame)
-         control = [control];
-      }
-      
-      if (YAHOO.util.Dom.getStyle(this.getEl(), 'position') == 'static') { // default to relative
-         YAHOO.util.Dom.setStyle(this.getEl(), 'position', 'relative');
-      }
-
-      if (typeof attributes['points']['from'] != 'undefined') {
-         YAHOO.util.Dom.setXY(this.getEl(), attributes['points']['from']); // set to from point
-         start = this.getAttribute('points'); // get actual offset values
-      } 
-      else if ((start[0] === 0 || start[1] === 0)) { // these sometimes up when auto
-         YAHOO.util.Dom.setXY(this.getEl(), YAHOO.util.Dom.getXY(this.getEl())); // set it to current position, giving offsets
-         start = this.getAttribute('points'); // get actual offset values
-      }
-
-      var i, len;
-      // TO beats BY, per SMIL 2.1 spec
-      if (typeof attributes['points']['to'] != 'undefined') {
-         end = translateValues(attributes['points']['to'], this);
-         
-         for (i = 0, len = control.length; i < len; ++i) {
-            control[i] = translateValues(control[i], this);
-         }
-         
-      } else if (typeof attributes['points']['by'] != 'undefined') {
-         end = [ start[0] + attributes['points']['by'][0], start[1] + attributes['points']['by'][1]];
-         
-         for (i = 0, len = control.length; i < len; ++i) {
-            control[i] = [ start[0] + control[i][0], start[1] + control[i][1] ];
-         }
-      }
-
-      if (end) {
-         translatedPoints = [start];
-         
-         if (control.length > 0) { translatedPoints = translatedPoints.concat(control); }
-         
-         translatedPoints[translatedPoints.length] = end;
-      }
+   var isset = function(prop) {
+      return (typeof prop !== 'undefined');
    };
-   
-   this._onStart.subscribe(onStart);
-};
-
+})();
