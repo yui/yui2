@@ -884,6 +884,7 @@ YAHOO.util.Easing = {
    	return a*Math.pow(2,-10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )*.5 + c + b;
    },
 
+
    /**
     * back easing in - backtracking slightly, then reversing direction and moving to target
     * @param {Number} t Time value used to compute current value.
