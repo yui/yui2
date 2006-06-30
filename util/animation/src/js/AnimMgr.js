@@ -52,12 +52,19 @@ YAHOO.util.AnimMgr = new function() {
     * @param {object} tween The Anim instance to be be registered
     */
    this.registerElement = function(tween) {
-      if ( tween.isAnimated() ) { return false; }// but not if already animating
-      
       queue[queue.length] = tween;
       tweenCount += 1;
-
+      tween._onStart.fire();
       this.start();
+   };
+   
+   this.unRegister = function(tween, index) {
+      tween._onComplete.fire();
+      index = index || getIndex(tween);
+      if (index != -1) { queue.splice(index, 1); }
+      
+      tweenCount -= 1;
+      if (tweenCount <= 0) { this.stop(); }
    };
    
    /**
@@ -74,12 +81,11 @@ YAHOO.util.AnimMgr = new function() {
     * If no instance given, Manager stops thread and all animations.
     */   
    this.stop = function(tween) {
-      if (!tween)
-      {
+      if (!tween) {
          clearInterval(thread);
          for (var i = 0, len = queue.length; i < len; ++i) {
             if (queue[i].isAnimated()) {
-               queue[i].stop();  
+               this.unRegister(tween, i);  
             }
          }
          queue = [];
@@ -87,10 +93,7 @@ YAHOO.util.AnimMgr = new function() {
          tweenCount = 0;
       }
       else {
-         tween.stop();     
-         tweenCount -= 1;
-         
-         if (tweenCount <= 0) { this.stop(); }
+         this.unRegister(tween);
       }
    };
    
@@ -109,24 +112,19 @@ YAHOO.util.AnimMgr = new function() {
             if (tween.useSeconds) {
                correctFrame(tween);
             }
-            
-            var data = {
-               duration: new Date() - tween.getStartTime(),
-               currentFrame: tween.currentFrame
-            };
-            
-            data.toString = function() {
-               return (
-                  ', duration: ' + data.duration +
-                  ', currentFrame: ' + data.currentFrame
-               );
-            };
-            
-            tween.onTween.fire(data);     
             tween._onTween.fire();        
          }
-         else { YAHOO.util.AnimMgr.stop(tween); }
+         else { YAHOO.util.AnimMgr.stop(tween, i); }
       }
+   };
+   
+   var getIndex = function(anim) {
+      for (var i = 0, len = queue.length; i < len; ++i) {
+         if (queue[i] == anim) {
+            return i; // note return;
+         }
+      }
+      return -1;
    };
    
    /**
