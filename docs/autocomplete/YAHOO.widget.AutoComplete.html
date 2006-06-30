@@ -188,6 +188,31 @@
 							<td class="flags">boolean</td>
 							<td class="spec">
 								<code>
+									<a href="#allowBrowserAutocomplete">allowBrowserAutocomplete</a>
+								</code>
+								<div class="description">
+									Whether or not to allow browsers to cache user-typed input in the input
+ field.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#alwaysShowContainer">alwaysShowContainer</a>
+								</code>
+								<div class="description">
+									Whether or not the auto complete container should always be displayed.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
 									<a href="#animHoriz">animHoriz</a>
 								</code>
 								<div class="description">
@@ -218,6 +243,19 @@
 								<div class="description">
 									Whether or not to animate the expansion/collapse of the auto complete
  container in the vertical direction.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#autoHighlight">autoHighlight</a>
+								</code>
+								<div class="description">
+									Whether or not the first item in the auto complete container should be
+ automatically highlighted on expand.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -334,6 +372,18 @@
 						</tr>
 					
 						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#iFrameSrc">iFrameSrc</a>
+								</code>
+								<div class="description">
+									Configurable iFrame src used when useIFrame = true.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="flags">Object</td>
 							<td class="spec">
 								<code>
@@ -413,6 +463,18 @@
 								</code>
 								<div class="description">
 									Number of characters that must be entered before querying for results.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">string</td>
+							<td class="spec">
+								<code>
+									<a href="#prehighlightClassName">prehighlightClassName</a>
+								</code>
+								<div class="description">
+									Class name of a pre-highlighted item within the auto complete container.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -506,6 +568,18 @@
 						</tr>
 					
 						<tr>
+							<td class="flags">Object</td>
+							<td class="spec">
+								<code>
+									<a href="#unmatchedItemSelectEvent">unmatchedItemSelectEvent</a>
+								</code>
+								<div class="description">
+									Fired when an user selection does not match any of the displayed result items.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="flags">boolean</td>
 							<td class="spec">
 								<code>
@@ -514,6 +588,18 @@
 								<div class="description">
 									Whether or not to use an iFrame to layer over Windows form elements in
  IE.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#useShadow">useShadow</a>
+								</code>
+								<div class="description">
+									Whether or not the auto complete container should have a shadow.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -567,14 +653,28 @@
 							</tr>
 						
 							<tr>
+								<td class="flags">object or array</td>
+								<td class="spec">
+									<code>
+										<a href="#getListItemData">getListItemData</a>
+										(oListItem)
+									</code>
+									<div class="description">
+										Public accessor to the data held in an &lt;li&gt; element of the
+ auto complete container.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
 								<td class="flags">array</td>
 								<td class="spec">
 									<code>
-										<a href="#getListIds">getListIds</a>
+										<a href="#getListItems">getListItems</a>
 										()
 									</code>
 									<div class="description">
-										Public accessor to the internal array of DOM &lt;li&gt; element IDs that
+										Public accessor to the internal array of DOM &lt;li&gt; elements that
  display query results within the auto complete container.&nbsp;
 									</div>
 								</td>
@@ -589,6 +689,32 @@
 									</code>
 									<div class="description">
 										Public accessor to the unique name of the auto complete instance.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#sendQuery">sendQuery</a>
+										(&lt;string&gt; sQuery)
+									</code>
+									<div class="description">
+										Makes query request to the data source.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#setBody">setBody</a>
+										(sBody)
+									</code>
+									<div class="description">
+										Sets HTML markup for the auto complete container body.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -619,6 +745,19 @@
 								</td>
 							</tr>
 						
+							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#toString">toString</a>
+										()
+									</code>
+									<div class="description">
+										Public accessor to the unique name of the auto complete instance.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
 					</table>
 				</div>
 			</div>
@@ -634,6 +773,41 @@
 				<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
 					
+						<h4><a name="allowBrowserAutocomplete">allowBrowserAutocomplete</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>allowBrowserAutocomplete</strong>
+							</code>
+							<div class="description">
+								Whether or not to allow browsers to cache user-typed input in the input
+ field. Disabling this feature will prevent the widget from setting the
+ autocomplete="off" on the auto complete input field. When autocomplete="off"
+ and users click the back button after form submission, user-typed input can
+ be prefilled by the browser from its cache. This caching of user input may
+ not be desired for sensitive data, such as credit card numbers, in which
+ case, implementers should consider setting allowBrowserAutocomplete to false.
+ Default: true.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="alwaysShowContainer">alwaysShowContainer</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>alwaysShowContainer</strong>
+							</code>
+							<div class="description">
+								Whether or not the auto complete container should always be displayed.
+ Enabling this feature prevents the toggling of the container to a collapsed
+ state. Default: false.
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="animHoriz">animHoriz</a></h4>
 						<div class="detail">
 							<code>
@@ -643,7 +817,7 @@
 							</code>
 							<div class="description">
 								Whether or not to animate the expansion/collapse of the auto complete
- container in the horizontal direction.  Default: false.
+ container in the horizontal direction. Default: false.
 							</div>
 						</div>
 						<hr />
@@ -670,7 +844,21 @@
 							</code>
 							<div class="description">
 								Whether or not to animate the expansion/collapse of the auto complete
- container in the vertical direction.  Default: true.
+ container in the vertical direction. Default: true.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="autoHighlight">autoHighlight</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>autoHighlight</strong>
+							</code>
+							<div class="description">
+								Whether or not the first item in the auto complete container should be
+ automatically highlighted on expand. Default: true.
 							</div>
 						</div>
 						<hr />
@@ -683,8 +871,9 @@
 								<strong>containerCollapseEvent</strong>
 							</code>
 							<div class="description">
-								Fired when the auto complete container is collapsed. Subscribers receive the
- following array:<br>
+								Fired when the auto complete container is collapsed. If alwaysShowContainer is
+ enabled, then containerCollapseEvent will be fired when the container is
+ cleared of results. Subscribers receive the following array:<br>
      - args[0] The auto complete object instance
 							</div>
 						</div>
@@ -698,8 +887,9 @@
 								<strong>containerExpandEvent</strong>
 							</code>
 							<div class="description">
-								Fired when the auto complete container is expanded. Subscribers receive the
- following array:<br>
+								Fired when the auto complete container is expanded. If alwaysShowContainer is
+ enabled, then containerExpandEvent will be fired when the container is
+ populated with results. Subscribers receive the following array:<br>
      - args[0] The auto complete object instance
 							</div>
 						</div>
@@ -810,7 +1000,22 @@
 							</code>
 							<div class="description">
 								Class name of a highlighted item within the auto complete container.
- Default: "highlight".
+ Default: "yui-ac-highlight".
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="iFrameSrc">iFrameSrc</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>iFrameSrc</strong>
+							</code>
+							<div class="description">
+								Configurable iFrame src used when useIFrame = true. Implementations over SSL
+ should set this parameter to an appropriate https location in order to avoid
+ security-related browser errors. Default:"about:blank".
 							</div>
 						</div>
 						<hr />
@@ -891,6 +1096,7 @@
  Subscribers receive the following array:<br>
      - args[0] The auto complete object instance
      - args[1] The selected &lt;li&gt; element item
+     - args[2] The data returned for the item, either as an object, or mapped from the schema into an array
 							</div>
 						</div>
 						<hr />
@@ -918,6 +1124,20 @@
 							<div class="description">
 								Number of characters that must be entered before querying for results.
  Default: 1.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="prehighlightClassName">prehighlightClassName</a></h4>
+						<div class="detail">
+							<code>
+								string
+								&nbsp;
+								<strong>prehighlightClassName</strong>
+							</code>
+							<div class="description">
+								Class name of a pre-highlighted item within the auto complete container.
+ Default: null.
 							</div>
 						</div>
 						<hr />
@@ -1032,6 +1252,23 @@
 						</div>
 						<hr />
 					
+						<h4><a name="unmatchedItemSelectEvent">unmatchedItemSelectEvent</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								&nbsp;
+								<strong>unmatchedItemSelectEvent</strong>
+							</code>
+							<div class="description">
+								Fired when an user selection does not match any of the displayed result items.
+ Note that this event may not behave as expected when delimiter characters
+ have been defined. Subscribers receive the following array:<br>
+     - args[0] The auto complete object instance
+     - args[1] The user selection
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="useIFrame">useIFrame</a></h4>
 						<div class="detail">
 							<code>
@@ -1044,6 +1281,19 @@
  IE. Set to true only when the auto complete container will be on top of a
  &lt;select&gt; field in IE and thus exposed to the IE z-index bug (i.e.,
  5.5 < IE < 7). Default:false.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="useShadow">useShadow</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>useShadow</strong>
+							</code>
+							<div class="description">
+								Whether or not the auto complete container should have a shadow. Default:false.
 							</div>
 						</div>
 						<hr />
@@ -1075,9 +1325,10 @@
  <li>UI look-and-feel customizable through CSS, including container
  attributes, borders, position, fonts, etc</li>
  </ul>
-  
+
+ requires YAHOO.util.Dom Dom utility
  requires YAHOO.util.Event Event utility
- requires YAHOO.widget.DataSource Data source class      
+ requires YAHOO.widget.DataSource Data source class
  see YAHOO.util.Animation Animation utility
  see JSON JSON library
 							
@@ -1087,13 +1338,13 @@
 									<dt>Parameters:</dt>
 									
 										<dd>
-											<code>inputEl</code> - 
-											 DOM element reference or string ID of the auto complete input field  
+											<code>element</code> - 
+											 | string} inputEl DOM element reference or string ID of the auto complete input field  
 										</dd>
 									
 										<dd>
-											<code>containerEl</code> - 
-											 DOM element reference or string ID of the auto complete &lt;div&gt;                               container  
+											<code>element</code> - 
+											 | string} containerEl DOM element reference or string ID of the auto complete &lt;div&gt;                               container  
 										</dd>
 									
 										<dd>
@@ -1168,24 +1419,49 @@
 						</div>
 						<hr />
 					
-						<h4><a name="getListIds">getListIds</a></h4>
+						<h4><a name="getListItemData">getListItemData</a></h4>
+						<div class="detail">
+							<code>
+								object or array
+								<strong>getListItemData</strong>
+								(oListItem)
+							</code>
+									
+							<div class="description">
+								
+									Public accessor to the data held in an &lt;li&gt; element of the
+ auto complete container.
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> Object or array of result data or null</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getListItems">getListItems</a></h4>
 						<div class="detail">
 							<code>
 								array 
-								<strong>getListIds</strong>
+								<strong>getListItems</strong>
 								()
 							</code>
 									
 							<div class="description">
 								
-									Public accessor to the internal array of DOM &lt;li&gt; element IDs that
+									Public accessor to the internal array of DOM &lt;li&gt; elements that
  display query results within the auto complete container.
 								
 								
 								
 									<dl>
 										<dt>Returns:</dt>
-										<dd> Array of &lt;li&gt; element IDs within the auto complete                  container</dd>
+										<dd> Array of &lt;li&gt; elements within the auto complete                  container</dd>
 									</dl>
 								
 								
@@ -1211,6 +1487,65 @@
 										<dt>Returns:</dt>
 										<dd> Unique name of the auto complete instance</dd>
 									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="sendQuery">sendQuery</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>sendQuery</strong>
+								(&lt;string&gt; sQuery)
+							</code>
+									
+							<div class="description">
+								
+									Makes query request to the data source.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>sQuery</code> - 
+												 Query string.    
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="setBody">setBody</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>setBody</strong>
+								(sBody)
+							</code>
+									
+							<div class="description">
+								
+									Sets HTML markup for the auto complete container body. This markup will be
+ inserted within a &lt;div&gt; tag with a class of "ac_bd".
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>sHeader</code> - 
+												 HTML markup for container body    
+											</dd>
+										
+									</dl>
+								
 								
 								
 							</div>
@@ -1271,6 +1606,30 @@
 										
 									</dl>
 								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="toString">toString</a></h4>
+						<div class="detail">
+							<code>
+								string 
+								<strong>toString</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Public accessor to the unique name of the auto complete instance.
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> Unique name of the auto complete instance</dd>
+									</dl>
 								
 								
 							</div>

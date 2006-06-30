@@ -62,11 +62,6 @@
 						</li>
 					
 						<li>
-							<a href="YAHOO.widget.Logger.html">
-								YAHOO.widget.Logger</a>
-						</li>
-
-						<li>
 							<a href="YAHOO.widget.LogWriter.html">
 								YAHOO.widget.LogWriter</a>
 						</li>
@@ -211,7 +206,7 @@ YAHOO.widget.LogReader = <span class="reserved">function</span>(containerEl, oCo
         <span class="reserved">else</span> <span class="reserved">if</span>(containerEl.tagName) {
             <span class="reserved">this</span>._containerEl = containerEl;
         }
-        <span class="reserved">this</span>._containerEl.className = <span class="literal">"ylogger"</span>;
+        <span class="reserved">this</span>._containerEl.className = <span class="literal">"yui-log"</span>;
     }
 <span class="comment">    // ...or create container from scratch</span>
     <span class="reserved">if</span>(!<span class="reserved">this</span>._containerEl) {
@@ -220,48 +215,48 @@ YAHOO.widget.LogReader = <span class="reserved">function</span>(containerEl, oCo
         }
         <span class="reserved">else</span> {
             <span class="reserved">this</span>._containerEl = document.body.appendChild(document.createElement(<span class="literal">"div"</span>));
-            <span class="reserved">this</span>._containerEl.id = <span class="literal">"ylogger"</span>;
-            <span class="reserved">this</span>._containerEl.className = <span class="literal">"ylogger"</span>;
+            <span class="reserved">this</span>._containerEl.id = <span class="literal">"yui-log"</span>;
+            <span class="reserved">this</span>._containerEl.className = <span class="literal">"yui-log"</span>;
 
             YAHOO.widget.LogReader._defaultContainerEl = <span class="reserved">this</span>._containerEl;
         }
 <span class="comment">
         // If implementer has provided container values, trust and set those</span>
+        var containerStyle = <span class="reserved">this</span>._containerEl.style;
         <span class="reserved">if</span>(<span class="reserved">this</span>.width) {
-            <span class="reserved">this</span>._containerEl.style.width = <span class="reserved">this</span>.width;
+            containerStyle.width = <span class="reserved">this</span>.width;
         }
         <span class="reserved">if</span>(<span class="reserved">this</span>.left) {
-            <span class="reserved">this</span>._containerEl.style.left = <span class="reserved">this</span>.left;
+            containerStyle.left = <span class="reserved">this</span>.left;
         }
         <span class="reserved">if</span>(<span class="reserved">this</span>.right) {
-            <span class="reserved">this</span>._containerEl.style.right = <span class="reserved">this</span>.right;
+            containerStyle.right = <span class="reserved">this</span>.right;
         }
         <span class="reserved">if</span>(<span class="reserved">this</span>.bottom) {
-            <span class="reserved">this</span>._containerEl.style.bottom = <span class="reserved">this</span>.bottom;
+            containerStyle.bottom = <span class="reserved">this</span>.bottom;
         }
         <span class="reserved">if</span>(<span class="reserved">this</span>.top) {
-            <span class="reserved">this</span>._containerEl.style.top = <span class="reserved">this</span>.top;
+            containerStyle.top = <span class="reserved">this</span>.top;
         }
         <span class="reserved">if</span>(<span class="reserved">this</span>.fontSize) {
-            <span class="reserved">this</span>._containerEl.style.fontSize = <span class="reserved">this</span>.fontSize;
+            containerStyle.fontSize = <span class="reserved">this</span>.fontSize;
         }
     }
 
     <span class="reserved">if</span>(<span class="reserved">this</span>._containerEl) {
-
-        // Create header
-        if(!this._hdEl) {
+<span class="comment">        // Create header</span>
+        <span class="comment">/*JSDOCif(!this._hdEl) {
             this._hdEl = this._containerEl.appendChild(document.createElement("div"));
-            this._hdEl.id = "ylog_hd" + YAHOO.widget.LogReader._index;
-            this._hdEl.className = "ylog_hd";
+            this._hdEl.id = "yui-log-hd" + YAHOO.widget.LogReader._index;
+            this._hdEl.className = "yui-log-hd";
 
             this._collapseEl = this._hdEl.appendChild(document.createElement("div"));
-            this._collapseEl.className = "ylog_btns";
+            this._collapseEl.className = "yui-log-btns";
 
             this._collapseBtn = document.createElement("input");
             this._collapseBtn.type = "button";
             this._collapseBtn.style.fontSize = YAHOO.util.Dom.getStyle(this._containerEl,"fontSize");
-            this._collapseBtn.className = "button";
+            this._collapseBtn.className = "yui-log-button";
             this._collapseBtn.value = "Collapse";
             this._collapseBtn = this._collapseEl.appendChild(this._collapseBtn);
             YAHOO.util.Event.addListener(oSelf._collapseBtn,'click',oSelf._onClickCollapseBtn,oSelf);
@@ -282,7 +277,7 @@ YAHOO.widget.LogReader = <span class="reserved">function</span>(containerEl, oCo
         // Ceate console
         if(!this._consoleEl) {
             this._consoleEl = this._containerEl.appendChild(document.createElement("div"));
-            this._consoleEl.className = "ylog_bd";
+            this._consoleEl.className = "yui-log-bd";
 
             // If implementer has provided console, trust and set those
             if(this.height) {
@@ -292,15 +287,15 @@ YAHOO.widget.LogReader = <span class="reserved">function</span>(containerEl, oCo
         // Don't create footer if disabled
         if(!this._ftEl &amp;&amp; this.footerEnabled) {
             this._ftEl = this._containerEl.appendChild(document.createElement("div"));
-            this._ftEl.className = "ylog_ft";
+            this._ftEl.className = "yui-log-ft";
 
             this._btnsEl = this._ftEl.appendChild(document.createElement("div"));
-            this._btnsEl.className = "ylog_btns";
+            this._btnsEl.className = "yui-log-btns";
 
             this._pauseBtn = document.createElement("input");
             this._pauseBtn.type = "button";
             this._pauseBtn.style.fontSize = YAHOO.util.Dom.getStyle(this._containerEl,"fontSize");
-            this._pauseBtn.className = "button";
+            this._pauseBtn.className = "yui-log-button";
             this._pauseBtn.value = "Pause";
             this._pauseBtn = this._btnsEl.appendChild(this._pauseBtn);
             YAHOO.util.Event.addListener(oSelf._pauseBtn,'click',oSelf._onClickPauseBtn,oSelf);
@@ -308,16 +303,16 @@ YAHOO.widget.LogReader = <span class="reserved">function</span>(containerEl, oCo
             this._clearBtn = document.createElement("input");
             this._clearBtn.type = "button";
             this._clearBtn.style.fontSize = YAHOO.util.Dom.getStyle(this._containerEl,"fontSize");
-            this._clearBtn.className = "button";
+            this._clearBtn.className = "yui-log-button";
             this._clearBtn.value = "Clear";
             this._clearBtn = this._btnsEl.appendChild(this._clearBtn);
             YAHOO.util.Event.addListener(oSelf._clearBtn,'click',oSelf._onClickClearBtn,oSelf);
 
             this._categoryFiltersEl = this._ftEl.appendChild(document.createElement("div"));
-            this._categoryFiltersEl.className = "ylog_categoryfilters";
+            this._categoryFiltersEl.className = "yui-log-categoryfilters";
             this._sourceFiltersEl = this._ftEl.appendChild(document.createElement("div"));
-            this._sourceFiltersEl.className = "ylog_sourcefilters";
-        }
+            this._sourceFiltersEl.className = "yui-log-sourcefilters";
+        }*/</span>
     }
 <span class="comment">
     // Initialize buffer</span>
@@ -354,77 +349,79 @@ YAHOO.widget.LogReader = <span class="reserved">function</span>(containerEl, oCo
  * Public members
  ***************************************************************************/</span>
 <span class="comment">/**
- * Whether or not the log reader is enabled to output log messages.
+ * Whether or not the log reader is enabled to output log messages. Default:
+ * true.
  *
  * <span class="attrib">@type</span> boolean
  */</span>
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>.logReaderEnabled = true;
 
 <span class="comment">/**
- * CSS width of the log reader container.
+ * Public member to access CSS width of the log reader container.
  *
  * <span class="attrib">@type</span> string
  */</span>
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>.width = null;
 
 <span class="comment">/**
- * CSS height of the log reader container.
+ * Public member to access CSS height of the log reader container.
  *
  * <span class="attrib">@type</span> string
  */</span>
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>.height = null;
 
 <span class="comment">/**
- * CSS top position of the log reader container.
+ * Public member to access CSS top position of the log reader container.
  *
  * <span class="attrib">@type</span> string
  */</span>
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>.top = null;
 
 <span class="comment">/**
- * CSS left position of the log reader container.
+ * Public member to access CSS left position of the log reader container.
  *
  * <span class="attrib">@type</span> string
  */</span>
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>.left = null;
 
 <span class="comment">/**
- * CSS right position of the log reader container.
+ * Public member to access CSS right position of the log reader container.
  *
  * <span class="attrib">@type</span> string
  */</span>
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>.right = null;
 
 <span class="comment">/**
- * CSS bottom position of the log reader container.
+ * Public member to access CSS bottom position of the log reader container.
  *
  * <span class="attrib">@type</span> string
  */</span>
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>.bottom = null;
 
 <span class="comment">/**
- * CSS font size of the log reader container.
+ * Public member to access CSS font size of the log reader container.
  *
  * <span class="attrib">@type</span> string
  */</span>
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>.fontSize = null;
 
 <span class="comment">/**
- * Whether or not the footer UI is enabled for the log reader.
+ * Whether or not the footer UI is enabled for the log reader. Default: true.
  *
  * <span class="attrib">@type</span> boolean
  */</span>
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>.footerEnabled = true;
 
 <span class="comment">/**
- * Whether or not output is compact (less readable).
+ * Whether or not output is verbose (more readable). Setting to true will make
+ * output more compact (less readable). Default: true.
  *
  * <span class="attrib">@type</span> boolean
  */</span>
-YAHOO.widget.LogReader.<span class="reserved">prototype</span>.compact = true;
+YAHOO.widget.LogReader.<span class="reserved">prototype</span>.verboseOutput = true;
 
 <span class="comment">/**
- * Whether or not newest message is printed on top.
+ * Whether or not newest message is printed on top. Default: true.
  *
  * <span class="attrib">@type</span> boolean
  */</span>
@@ -644,20 +641,22 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>._clearBtn = null;
  */</span>
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>._createCategoryCheckbox = <span class="reserved">function</span>(category) {
     var oSelf = <span class="reserved">this</span>;
-    
+
     <span class="reserved">if</span>(<span class="reserved">this</span>._ftEl) {
         var parentEl = <span class="reserved">this</span>._categoryFiltersEl;
         var filters = <span class="reserved">this</span>._categoryFilters;
 
         var filterEl = parentEl.appendChild(document.createElement(<span class="literal">"span"</span>));
-        filterEl.className = <span class="literal">"ylog_filtergrp"</span>;
+        filterEl.className = <span class="literal">"yui-log-filtergrp"</span>;
 <span class="comment">            // Append el at the end so IE 5.5 can set "type" attribute</span>
+<span class="comment">            // and THEN set checked property</span>
             var categoryChk = document.createElement(<span class="literal">"input"</span>);
-            categoryChk.className = <span class="literal">"ylog_filter"</span> + category;
+            categoryChk.id = <span class="literal">"yui-log-filter-"</span> + category + YAHOO.widget.LogReader._index;
+            categoryChk.className = <span class="literal">"yui-log-filter-"</span> + category;
             categoryChk.type = <span class="literal">"checkbox"</span>;
             categoryChk.category = category;
-            categoryChk.checked = true;
             categoryChk = filterEl.appendChild(categoryChk);
+            categoryChk.checked = true;
 <span class="comment">
             // Add this checked filter to the internal array of filters</span>
             filters.push(category);
@@ -665,7 +664,8 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>._createCategoryCh
             YAHOO.util.Event.addListener(categoryChk,<span class="literal">'click'</span>,oSelf._onCheckCategory,oSelf);
 <span class="comment">
             // Create and class the text label</span>
-            var categoryChkLbl = filterEl.appendChild(document.createElement(<span class="literal">"span"</span>));
+            var categoryChkLbl = filterEl.appendChild(document.createElement(<span class="literal">"label"</span>));
+            categoryChkLbl.htmlFor = categoryChk.id;
             categoryChkLbl.className = category;
             categoryChkLbl.innerHTML = category;
     }
@@ -679,15 +679,17 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>._createSourceChec
         var filters = <span class="reserved">this</span>._sourceFilters;
 
         var filterEl = parentEl.appendChild(document.createElement(<span class="literal">"span"</span>));
-        filterEl.className = <span class="literal">"ylog_filtergrp"</span>;
+        filterEl.className = <span class="literal">"yui-log-filtergrp"</span>;
 <span class="comment">
         // Append el at the end so IE 5.5 can set "type" attribute</span>
+<span class="comment">        // and THEN set checked property</span>
         var sourceChk = document.createElement(<span class="literal">"input"</span>);
-        sourceChk.className = <span class="literal">"ylog_filter"</span> + source;
+        sourceChk.id = <span class="literal">"yui-log-filter"</span> + source + YAHOO.widget.LogReader._index;
+        sourceChk.className = <span class="literal">"yui-log-filter"</span> + source;
         sourceChk.type = <span class="literal">"checkbox"</span>;
         sourceChk.source = source;
-        sourceChk.checked = true;
         sourceChk = filterEl.appendChild(sourceChk);
+        sourceChk.checked = true;
 <span class="comment">
         // Add this checked filter to the internal array of filters</span>
         filters.push(source);
@@ -695,7 +697,8 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>._createSourceChec
         YAHOO.util.Event.addListener(sourceChk,<span class="literal">'click'</span>,oSelf._onCheckSource,oSelf);
 <span class="comment">
         // Create and class the text label</span>
-        var sourceChkLbl = filterEl.appendChild(document.createElement(<span class="literal">"span"</span>));
+        var sourceChkLbl = filterEl.appendChild(document.createElement(<span class="literal">"label"</span>));
+        sourceChkLbl.htmlFor = sourceChk.id;
         sourceChkLbl.className = source;
         sourceChkLbl.innerHTML = source;
     }
@@ -749,6 +752,9 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>._printBuffer = <s
         }
         <span class="reserved">this</span>._buffer = [];
         <span class="reserved">this</span>._printToConsole(entries);
+        <span class="reserved">if</span>(!<span class="reserved">this</span>.newestOnTop) {
+            <span class="reserved">this</span>._consoleEl.scrollTop = <span class="reserved">this</span>._consoleEl.scrollHeight;
+        }
     }
 };
 
@@ -760,8 +766,6 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>._printBuffer = <s
  * <span class="attrib">@private</span>
  */</span>
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>._printToConsole = <span class="reserved">function</span>(aEntries) {
-<span class="comment">//TODO: much optimization here</span>
-<span class="comment">//if !compactOutput, set fixed widths for time output</span>
     var entriesLen = aEntries.length;
     var sourceFiltersLen = <span class="reserved">this</span>._sourceFilters.length;
     var categoryFiltersLen = <span class="reserved">this</span>._categoryFilters.length;
@@ -770,6 +774,7 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>._printToConsole =
         var entry = aEntries[i];
         var category = entry.category;
         var source = entry.source;
+        var sourceDetail = entry.sourceDetail;
         var okToPrint = false;
         var okToFilterCats = false;
 
@@ -806,23 +811,22 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>._printToConsole =
             var totalTime = msecs - startTime;
             var elapsedTime = msecs - <span class="reserved">this</span>._lastTime;
             <span class="reserved">this</span>._lastTime = msecs;
-            
-            var compactOutput = (<span class="reserved">this</span>.compactOutput) ? <span class="literal">""</span> : <span class="literal">"&lt;br&gt;"</span>;
+
+            var verboseOutput = (<span class="reserved">this</span>.verboseOutput) ? <span class="literal">"&lt;br&gt;"</span> : <span class="literal">""</span>;
+            var sourceAndDetail = (sourceDetail) ?
+                source + <span class="literal">" "</span> + sourceDetail : source;
 
             var output =  <span class="literal">"&lt;span class='"</span>+category+<span class="literal">"'&gt;"</span>+label+<span class="literal">"&lt;/span&gt; "</span> +
-                totalTime + <span class="literal">" ms (+"</span> +
+                totalTime + <span class="literal">"ms (+"</span> +
                 elapsedTime + <span class="literal">") "</span> + localTime + <span class="literal">": "</span> +
-                compactOutput+
-                source + <span class="literal">": "</span>
-                + entry.msg;
+                sourceAndDetail + <span class="literal">": "</span> +
+                verboseOutput +
+                entry.msg;
 
             var oNewElement = (<span class="reserved">this</span>.newestOnTop) ?
                 <span class="reserved">this</span>._consoleEl.insertBefore(document.createElement(<span class="literal">"p"</span>),<span class="reserved">this</span>._consoleEl.firstChild):
                 <span class="reserved">this</span>._consoleEl.appendChild(document.createElement(<span class="literal">"p"</span>));
             oNewElement.innerHTML = output;
-            <span class="reserved">if</span>(!<span class="reserved">this</span>.newestOnTop) {
-                <span class="reserved">this</span>._consoleEl.scrollTop = <span class="reserved">this</span>._consoleEl.scrollHeight;
-            }
         }
     }
 };
@@ -895,7 +899,7 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>._onCheckCategory 
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>._onCheckSource = <span class="reserved">function</span>(v, oSelf) {
     var newFilter = <span class="reserved">this</span>.source;
     var filtersArray = oSelf._sourceFilters;
-    
+
     <span class="reserved">if</span>(!<span class="reserved">this</span>.checked) { // Remove category from filters
         <span class="reserved">for</span>(var i=0; i&lt;filtersArray.length; i++) {
             <span class="reserved">if</span>(newFilter == filtersArray[i]) {

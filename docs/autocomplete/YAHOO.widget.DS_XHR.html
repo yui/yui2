@@ -189,6 +189,18 @@
 					<table border="1" cellpadding="3" cellspacing="0">
 					
 						<tr>
+							<td class="flags">number</td>
+							<td class="spec">
+								<code>
+									<a href="#connTimeout">connTimeout</a>
+								</code>
+								<div class="description">
+									Number of milliseconds the XHR connection will wait for a server response.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="flags">constant</td>
 							<td class="spec">
 								<code>
@@ -386,7 +398,7 @@
 			<div class="section method inheritance">
 				<h3>Methods inherited from class  <a href="YAHOO.widget.DataSource.html">YAHOO.widget.DataSource</a></h3>
 				<div class="content">
-							<code><a href="YAHOO.widget.DataSource.html#getResults">getResults</a>, <a href="YAHOO.widget.DataSource.html#flushCache">flushCache</a></code>
+							<code><a href="YAHOO.widget.DataSource.html#getName">getName</a>, <a href="YAHOO.widget.DataSource.html#toString">toString</a>, <a href="YAHOO.widget.DataSource.html#getResults">getResults</a>, <a href="YAHOO.widget.DataSource.html#flushCache">flushCache</a></code>
 				</div>
 			</div>
 		
@@ -398,6 +410,22 @@
 			<div class="section field details">
 				<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
+					
+						<h4><a name="connTimeout">connTimeout</a></h4>
+						<div class="detail">
+							<code>
+								number
+								&nbsp;
+								<strong>connTimeout</strong>
+							</code>
+							<div class="description">
+								Number of milliseconds the XHR connection will wait for a server response. A
+ a value of zero indicates the XHR connection will wait forever. Any value
+ greater than zero will use the Connection utility's Auto-Abort feature.
+ Default: 0.
+							</div>
+						</div>
+						<hr />
 					
 						<h4><a name="ERROR_DATAXHR">ERROR_DATAXHR</a></h4>
 						<div class="detail">

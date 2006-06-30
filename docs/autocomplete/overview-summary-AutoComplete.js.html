@@ -200,57 +200,61 @@
  *
  * requires YAHOO.util.Dom Dom utility
  * requires YAHOO.util.Event Event utility
- * requires YAHOO.widget.DataSource Data source class      
+ * requires YAHOO.widget.DataSource Data source class
  * see YAHOO.util.Animation Animation utility
  * see JSON JSON library
- *  
+ *
  * <span class="attrib">@constructor</span>
- * <span class="attrib">@param</span> {HTMLElement} inputEl DOM element reference or string ID of the auto complete input field
- * <span class="attrib">@param</span> {HTMLElement} containerEl DOM element reference or string ID of the auto complete &amp;lt;div&amp;gt;
+ * <span class="attrib">@param</span> {element | string} inputEl DOM element reference or string ID of the auto complete input field
+ * <span class="attrib">@param</span> {element | string} containerEl DOM element reference or string ID of the auto complete &amp;lt;div&amp;gt;
  *                              container
  * <span class="attrib">@param</span> {object} oDataSource Instance of YAHOO.widget.DataSource for query/results
  * <span class="attrib">@param</span> {object} oConfigs Optional object literal of config params
  */</span>
 YAHOO.widget.AutoComplete = <span class="reserved">function</span>(inputEl,containerEl,oDataSource,oConfigs) {
     <span class="reserved">if</span>(inputEl &amp;&amp; containerEl &amp;&amp; oDataSource) {
-<span class="comment">        // Validate data source</span>
-        <span class="reserved">if</span> (oDataSource.getResults) {
-            <span class="reserved">this</span>.dataSource = oDataSource;
+        // Validate data source
+        if (oDataSource &amp;&amp; (oDataSource instanceof YAHOO.widget.DataSource)) {
+            this.dataSource = oDataSource;
         }
-        <span class="reserved">else</span> {
-<span class="comment">            //YAHOO.log("Could not instantiate AutoComplete due to an invalid DataSource", "error");</span>
-            <span class="reserved">return</span>;
+        else {
+            YAHOO.log("Could not instantiate AutoComplete due to an invalid DataSource", "error", this.toString());
+            return;
         }
-<span class="comment">        // Validate input element</span>
-        <span class="reserved">if</span>(YAHOO.util.Dom.inDocument(inputEl)) {
-            <span class="reserved">if</span>(typeof inputEl == <span class="literal">"string"</span>) {
-                    <span class="reserved">this</span>._sName = inputEl + YAHOO.widget.AutoComplete._nIndex;
-                    <span class="reserved">this</span>._oTextbox = document.getElementById(inputEl);
+
+        // Validate input element
+        if(YAHOO.util.Dom.inDocument(inputEl)) {
+            if(typeof inputEl == "string") {
+                    this._sName = "instance" + YAHOO.widget.AutoComplete._nIndex + " " + inputEl;
+                    this._oTextbox = document.getElementById(inputEl);
             }
-            <span class="reserved">else</span> {
-                <span class="reserved">this</span>._sName = (inputEl.id) ?
-                    inputEl.id + YAHOO.widget.AutoComplete._nIndex :
-                    <span class="literal">"yac_inputEl"</span> + YAHOO.widget.AutoComplete._nIndex;
-                <span class="reserved">this</span>._oTextbox = inputEl;
-            }
-        }
-        <span class="reserved">else</span> {
-<span class="comment">            //YAHOO.log("Could not instantiate AutoComplete due to an invalid input element", "error");</span>
-            <span class="reserved">return</span>;
-        }
-<span class="comment">
-        // Validate container element</span>
-        <span class="reserved">if</span>(YAHOO.util.Dom.inDocument(containerEl)) {
-            <span class="reserved">if</span>(typeof containerEl == <span class="literal">"string"</span>) {
-                    <span class="reserved">this</span>._oContainer = document.getElementById(containerEl);
-            }
-            <span class="reserved">else</span> {
-                <span class="reserved">this</span>._oContainer = containerEl;
+            else {
+                this._sName = (inputEl.id) ?
+                    "instance" + YAHOO.widget.AutoComplete._nIndex + " " + inputEl.id:
+                    "instance" + YAHOO.widget.AutoComplete._nIndex;
+                this._oTextbox = inputEl;
             }
         }
-        <span class="reserved">else</span> {
-<span class="comment">            //YAHOO.log("Could not instantiate AutoComplete due to an invalid container element", "error");</span>
-            <span class="reserved">return</span>;
+        else {
+            YAHOO.log("Could not instantiate AutoComplete due to an invalid input element", "error", this.toString());
+            return;
+        }
+
+        // Validate container element
+        if(YAHOO.util.Dom.inDocument(containerEl)) {
+            if(typeof containerEl == "string") {
+                    this._oContainer = document.getElementById(containerEl);
+            }
+            else {
+                this._oContainer = containerEl;
+            }
+            if(this._oContainer.style.display == "none") {
+                YAHOO.log("The container may not display properly if display is set to \"none\" in CSS", "warn", this.toString());
+            }
+        }
+        else {
+            YAHOO.log("Could not instantiate AutoComplete due to an invalid container element", "error", this.toString());
+            return;
         }
 <span class="comment">
         // Set any config params passed in to override defaults</span>
@@ -263,44 +267,57 @@ YAHOO.widget.AutoComplete = <span class="reserved">function</span>(inputEl,conta
         }
 <span class="comment">
         // Initialization sequence</span>
+        <span class="reserved">this</span>._initContainer();
+        <span class="reserved">this</span>._initProps();
+        <span class="reserved">this</span>._initList();
+        <span class="reserved">this</span>._initContainerHelpers();
+<span class="comment">
+        // Set up events</span>
         var oSelf = <span class="reserved">this</span>;
         var oTextbox = <span class="reserved">this</span>._oTextbox;
-        var oContainer = <span class="reserved">this</span>._oContainer;
-
-        YAHOO.util.Event.addListener(oTextbox,<span class="literal">'keyup'</span>,oSelf._onTextboxKeyUp,oSelf);
-        YAHOO.util.Event.addListener(oTextbox,<span class="literal">'keydown'</span>,oSelf._onTextboxKeyDown,oSelf);
-        YAHOO.util.Event.addListener(oTextbox,<span class="literal">'keypress'</span>,oSelf._onTextboxKeyPress,oSelf);
-        YAHOO.util.Event.addListener(oTextbox,<span class="literal">'focus'</span>,oSelf._onTextboxFocus,oSelf);
-        YAHOO.util.Event.addListener(oTextbox,<span class="literal">'blur'</span>,oSelf._onTextboxBlur,oSelf);
-        YAHOO.util.Event.addListener(oContainer,<span class="literal">'mouseover'</span>,oSelf._onContainerMouseover,oSelf);
-        YAHOO.util.Event.addListener(oContainer,<span class="literal">'mouseout'</span>,oSelf._onContainerMouseout,oSelf);
-        YAHOO.util.Event.addListener(oContainer,<span class="literal">'scroll'</span>,oSelf._onContainerScroll,oSelf);
-
-        this.textboxFocusEvent = new YAHOO.util.CustomEvent("textboxFocus", this);
-        this.textboxKeyEvent = new YAHOO.util.CustomEvent("textboxKey", this);
-        this.dataRequestEvent = new YAHOO.util.CustomEvent("dataRequest", this);
-        this.dataReturnEvent = new YAHOO.util.CustomEvent("dataReturn", this);
-        this.dataErrorEvent = new YAHOO.util.CustomEvent("dataError", this);
-        this.containerExpandEvent = new YAHOO.util.CustomEvent("containerExpand", this);
-        this.typeAheadEvent = new YAHOO.util.CustomEvent("typeAhead", this);
-        this.itemMouseOverEvent = new YAHOO.util.CustomEvent("itemMouseOver", this);
-        this.itemMouseOutEvent = new YAHOO.util.CustomEvent("itemMouseOut", this);
-        this.itemArrowToEvent = new YAHOO.util.CustomEvent("itemArrowTo", this);
-        this.itemArrowFromEvent = new YAHOO.util.CustomEvent("itemArrowFrom", this);
-        this.itemSelectEvent = new YAHOO.util.CustomEvent("itemSelect", this);
-        this.selectionEnforceEvent = new YAHOO.util.CustomEvent("selectionEnforce", this);
-        this.containerCollapseEvent = new YAHOO.util.CustomEvent("containerCollapse", this);
-        this.textboxBlurEvent = new YAHOO.util.CustomEvent("textboxBlur", this);
+<span class="comment">        // Events are actually for the content module within the container</span>
+        var oContent = <span class="reserved">this</span>._oContainer._oContent;
 <span class="comment">
-        // Turn off autocomplete on textbox</span>
+        // Dom events</span>
+        YAHOO.util.Event.addListener(oTextbox,<span class="literal">"keyup"</span>,oSelf._onTextboxKeyUp,oSelf);
+        YAHOO.util.Event.addListener(oTextbox,<span class="literal">"keydown"</span>,oSelf._onTextboxKeyDown,oSelf);
+        YAHOO.util.Event.addListener(oTextbox,<span class="literal">"keypress"</span>,oSelf._onTextboxKeyPress,oSelf);
+        YAHOO.util.Event.addListener(oTextbox,<span class="literal">"focus"</span>,oSelf._onTextboxFocus,oSelf);
+        YAHOO.util.Event.addListener(oTextbox,<span class="literal">"blur"</span>,oSelf._onTextboxBlur,oSelf);
+        YAHOO.util.Event.addListener(oContent,<span class="literal">"mouseover"</span>,oSelf._onContainerMouseover,oSelf);
+        YAHOO.util.Event.addListener(oContent,<span class="literal">"mouseout"</span>,oSelf._onContainerMouseout,oSelf);
+        YAHOO.util.Event.addListener(oContent,<span class="literal">"scroll"</span>,oSelf._onContainerScroll,oSelf);
+        YAHOO.util.Event.addListener(oContent,<span class="literal">"resize"</span>,oSelf._onContainerResize,oSelf);
+        <span class="reserved">if</span>(oTextbox.form) {
+            YAHOO.util.Event.addListener(oTextbox.form,<span class="literal">"submit"</span>,oSelf._onFormSubmit,oSelf);
+        }
+<span class="comment">
+        // Custom events</span>
+        <span class="reserved">this</span>.textboxFocusEvent = new YAHOO.util.CustomEvent(<span class="literal">"textboxFocus"</span>, <span class="reserved">this</span>);
+        <span class="reserved">this</span>.textboxKeyEvent = new YAHOO.util.CustomEvent(<span class="literal">"textboxKey"</span>, <span class="reserved">this</span>);
+        <span class="reserved">this</span>.dataRequestEvent = new YAHOO.util.CustomEvent(<span class="literal">"dataRequest"</span>, <span class="reserved">this</span>);
+        <span class="reserved">this</span>.dataReturnEvent = new YAHOO.util.CustomEvent(<span class="literal">"dataReturn"</span>, <span class="reserved">this</span>);
+        <span class="reserved">this</span>.dataErrorEvent = new YAHOO.util.CustomEvent(<span class="literal">"dataError"</span>, <span class="reserved">this</span>);
+        <span class="reserved">this</span>.containerExpandEvent = new YAHOO.util.CustomEvent(<span class="literal">"containerExpand"</span>, <span class="reserved">this</span>);
+        <span class="reserved">this</span>.typeAheadEvent = new YAHOO.util.CustomEvent(<span class="literal">"typeAhead"</span>, <span class="reserved">this</span>);
+        <span class="reserved">this</span>.itemMouseOverEvent = new YAHOO.util.CustomEvent(<span class="literal">"itemMouseOver"</span>, <span class="reserved">this</span>);
+        <span class="reserved">this</span>.itemMouseOutEvent = new YAHOO.util.CustomEvent(<span class="literal">"itemMouseOut"</span>, <span class="reserved">this</span>);
+        <span class="reserved">this</span>.itemArrowToEvent = new YAHOO.util.CustomEvent(<span class="literal">"itemArrowTo"</span>, <span class="reserved">this</span>);
+        <span class="reserved">this</span>.itemArrowFromEvent = new YAHOO.util.CustomEvent(<span class="literal">"itemArrowFrom"</span>, <span class="reserved">this</span>);
+        <span class="reserved">this</span>.itemSelectEvent = new YAHOO.util.CustomEvent(<span class="literal">"itemSelect"</span>, <span class="reserved">this</span>);
+        <span class="reserved">this</span>.unmatchedItemSelectEvent = new YAHOO.util.CustomEvent(<span class="literal">"unmatchedItemSelect"</span>, <span class="reserved">this</span>);
+        <span class="reserved">this</span>.selectionEnforceEvent = new YAHOO.util.CustomEvent(<span class="literal">"selectionEnforce"</span>, <span class="reserved">this</span>);
+        <span class="reserved">this</span>.containerCollapseEvent = new YAHOO.util.CustomEvent(<span class="literal">"containerCollapse"</span>, <span class="reserved">this</span>);
+        <span class="reserved">this</span>.textboxBlurEvent = new YAHOO.util.CustomEvent(<span class="literal">"textboxBlur"</span>, <span class="reserved">this</span>);
+<span class="comment">
+        // Finish up</span>
         oTextbox.setAttribute(<span class="literal">"autocomplete"</span>,<span class="literal">"off"</span>);
-<span class="comment">
-        // Validate and initialize public configs</span>
-        <span class="reserved">this</span>._initProps();
+        YAHOO.widget.AutoComplete._nIndex++;
+        YAHOO.log(<span class="literal">"AutoComplete initialized"</span>,<span class="literal">"info"</span>,<span class="reserved">this</span>.toString());
     }
 <span class="comment">    // Required arguments were not found</span>
     <span class="reserved">else</span> {
-<span class="comment">        //YAHOO.log("Could not instantiate AutoComplete due invalid arguments", "error");</span>
+        YAHOO.log(<span class="literal">"Could not instantiate AutoComplete due invalid arguments"</span>, <span class="literal">"error"</span>, <span class="reserved">this</span>.toString());
     }
 };
 
@@ -343,11 +360,19 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.queryDelay = 0
 
 <span class="comment">/**
  * Class name of a highlighted item within the auto complete container.
- * Default: "highlight".
+ * Default: "yui-ac-highlight".
  *
  * <span class="attrib">@type</span> string
  */</span>
-YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.highlightClassName = <span class="literal">"highlight"</span>;
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.highlightClassName = <span class="literal">"yui-ac-highlight"</span>;
+
+<span class="comment">/**
+ * Class name of a pre-highlighted item within the auto complete container.
+ * Default: null.
+ *
+ * <span class="attrib">@type</span> string
+ */</span>
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.prehighlightClassName = null;
 
 <span class="comment">/**
  * Query delimiter. A single character separator for multiple delimited
@@ -361,6 +386,14 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.highlightClass
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.delimChar = null;
 
 <span class="comment">/**
+ * Whether or not the first item in the auto complete container should be
+ * automatically highlighted on expand. Default: true.
+ *
+ * <span class="attrib">@type</span> boolean
+ */</span>
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.autoHighlight = true;
+
+<span class="comment">/**
  * Whether or not the auto complete input field should be automatically updated
  * with the first query result as the user types, auto-selecting the substring
  * that the user has not typed. Default: false.
@@ -371,7 +404,7 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.typeAhead = fa
 
 <span class="comment">/**
  * Whether or not to animate the expansion/collapse of the auto complete
- * container in the horizontal direction.  Default: false.
+ * container in the horizontal direction. Default: false.
  *
  * <span class="attrib">@type</span> boolean
  */</span>
@@ -379,7 +412,7 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.animHoriz = fa
 
 <span class="comment">/**
  * Whether or not to animate the expansion/collapse of the auto complete
- * container in the vertical direction.  Default: true.
+ * container in the vertical direction. Default: true.
  *
  * <span class="attrib">@type</span> boolean
  */</span>
@@ -402,6 +435,55 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.animSpeed = 0.
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.forceSelection = false;
 
+<span class="comment">/**
+ * Whether or not to allow browsers to cache user-typed input in the input
+ * field. Disabling this feature will prevent the widget from setting the
+ * autocomplete="off" on the auto complete input field. When autocomplete="off"
+ * and users click the back button after form submission, user-typed input can
+ * be prefilled by the browser from its cache. This caching of user input may
+ * not be desired for sensitive data, such as credit card numbers, in which
+ * case, implementers should consider setting allowBrowserAutocomplete to false.
+ * Default: true.
+ *
+ * <span class="attrib">@type</span> boolean
+ */</span>
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.allowBrowserAutocomplete = true;
+
+<span class="comment">/**
+ * Whether or not the auto complete container should always be displayed.
+ * Enabling this feature prevents the toggling of the container to a collapsed
+ * state. Default: false.
+ *
+ * <span class="attrib">@type</span> boolean
+ */</span>
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.alwaysShowContainer = false;
+
+<span class="comment">/**
+ * Whether or not to use an iFrame to layer over Windows form elements in
+ * IE. Set to true only when the auto complete container will be on top of a
+ * &amp;lt;select&amp;gt; field in IE and thus exposed to the IE z-index bug (i.e.,
+ * 5.5 &lt; IE &lt; 7). Default:false.
+ *
+ * <span class="attrib">@type</span> boolean
+ */</span>
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.useIFrame = false;
+
+<span class="comment">/**
+ * Configurable iFrame src used when useIFrame = true. Implementations over SSL
+ * should set this parameter to an appropriate https location in order to avoid
+ * security-related browser errors. Default:"about:blank".
+ *
+ * <span class="attrib">@type</span> boolean
+ */</span>
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.iFrameSrc = <span class="literal">"about:blank"</span>;
+
+<span class="comment">/**
+ * Whether or not the auto complete container should have a shadow. Default:false.
+ *
+ * <span class="attrib">@type</span> boolean
+ */</span>
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.useShadow = false;
+
 <span class="comment">/***************************************************************************
  * Public methods
  ***************************************************************************/</span>
@@ -414,15 +496,39 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.getName = <spa
     <span class="reserved">return</span> <span class="reserved">this</span>._sName;
 };
 
+ <span class="comment">/**
+ * Public accessor to the unique name of the auto complete instance.
+ *
+ * <span class="attrib">@return</span> {string} Unique name of the auto complete instance
+ */</span>
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.toString = <span class="reserved">function</span>() {
+    <span class="reserved">return</span> <span class="literal">"AutoComplete "</span> + <span class="reserved">this</span>._sName;
+};
+
 <span class="comment">/**
- * Public accessor to the internal array of DOM &amp;lt;li&amp;gt; element IDs that
+ * Public accessor to the internal array of DOM &amp;lt;li&amp;gt; elements that
  * display query results within the auto complete container.
  *
- * <span class="attrib">@return</span> {array} Array of &amp;lt;li&amp;gt; element IDs within the auto complete
+ * <span class="attrib">@return</span> {array} Array of &amp;lt;li&amp;gt; elements within the auto complete
  *                 container
  */</span>
-YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.getListIds = <span class="reserved">function</span>() {
-    <span class="reserved">return</span> <span class="reserved">this</span>._aListIds;
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.getListItems = <span class="reserved">function</span>() {
+    <span class="reserved">return</span> <span class="reserved">this</span>._aListItems;
+};
+
+<span class="comment">/**
+ * Public accessor to the data held in an &amp;lt;li&amp;gt; element of the
+ * auto complete container.
+ *
+ * <span class="attrib">@return</span> {object or array} Object or array of result data or null
+ */</span>
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.getListItemData = <span class="reserved">function</span>(oListItem) {
+    <span class="reserved">if</span>(oListItem._oResultData) {
+        <span class="reserved">return</span> oListItem._oResultData;
+    }
+    <span class="reserved">else</span> {
+        <span class="reserved">return</span> false;
+    }
 };
 
 <span class="comment">/**
@@ -433,8 +539,14 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.getListIds = <
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.setHeader = <span class="reserved">function</span>(sHeader) {
     <span class="reserved">if</span>(sHeader) {
-        <span class="reserved">this</span>._oHeader.innerHTML = sHeader;
-        <span class="reserved">this</span>._oHeader.style.display = <span class="literal">"block"</span>;
+        <span class="reserved">if</span>(<span class="reserved">this</span>._oContainer._oContent._oHeader) {
+            <span class="reserved">this</span>._oContainer._oContent._oHeader.innerHTML = sHeader;
+            <span class="reserved">this</span>._oContainer._oContent._oHeader.style.display = <span class="literal">"block"</span>;
+        }
+    }
+    <span class="reserved">else</span> {
+        <span class="reserved">this</span>._oContainer._oContent._oHeader.innerHTML = <span class="literal">""</span>;
+        <span class="reserved">this</span>._oContainer._oContent._oHeader.style.display = <span class="literal">"none"</span>;
     }
 };
 
@@ -446,20 +558,37 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.setHeader = <s
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.setFooter = <span class="reserved">function</span>(sFooter) {
     <span class="reserved">if</span>(sFooter) {
-        <span class="reserved">this</span>._oFooter.innerHTML = sFooter;
-        <span class="reserved">this</span>._oFooter.style.display = <span class="literal">"block"</span>;
+        <span class="reserved">if</span>(<span class="reserved">this</span>._oContainer._oContent._oFooter) {
+            <span class="reserved">this</span>._oContainer._oContent._oFooter.innerHTML = sFooter;
+            <span class="reserved">this</span>._oContainer._oContent._oFooter.style.display = <span class="literal">"block"</span>;
+        }
+    }
+    <span class="reserved">else</span> {
+        <span class="reserved">this</span>._oContainer._oContent._oFooter.innerHTML = <span class="literal">""</span>;
+        <span class="reserved">this</span>._oContainer._oContent._oFooter.style.display = <span class="literal">"none"</span>;
     }
 };
 
 <span class="comment">/**
- * Whether or not to use an iFrame to layer over Windows form elements in
- * IE. Set to true only when the auto complete container will be on top of a
- * &amp;lt;select&amp;gt; field in IE and thus exposed to the IE z-index bug (i.e.,
- * 5.5 &lt; IE &lt; 7). Default:false.
+ * Sets HTML markup for the auto complete container body. This markup will be
+ * inserted within a &amp;lt;div&amp;gt; tag with a class of "ac_bd".
  *
- * <span class="attrib">@type</span> boolean
+ * <span class="attrib">@param</span> {string} sHeader HTML markup for container body
  */</span>
-YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.useIFrame = false;
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.setBody = <span class="reserved">function</span>(sBody) {
+    <span class="reserved">if</span>(sBody) {
+        <span class="reserved">if</span>(<span class="reserved">this</span>._oContainer._oContent._oBody) {
+            <span class="reserved">this</span>._oContainer._oContent._oBody.innerHTML = sBody;
+            <span class="reserved">this</span>._oContainer._oContent._oBody.style.display = <span class="literal">"block"</span>;
+            <span class="reserved">this</span>._oContainer._oContent.style.display = <span class="literal">"block"</span>;
+        }
+    }
+    <span class="reserved">else</span> {
+        <span class="reserved">this</span>._oContainer._oContent._oBody.innerHTML = <span class="literal">""</span>;
+        <span class="reserved">this</span>._oContainer._oContent.style.display = <span class="literal">"none"</span>;
+    }
+    <span class="reserved">this</span>._maxResultsDisplayed = 0;
+};
 
 <span class="comment">/**
  * Overridable method that converts a result item object into HTML markup
@@ -478,6 +607,21 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.formatResult =
     }
     <span class="reserved">else</span> {
         <span class="reserved">return</span> <span class="literal">""</span>;
+    }
+};
+
+<span class="comment">/**
+ * Makes query request to the data source.
+ *
+ * <span class="attrib">@param</span> {string} sQuery Query string.
+ */</span>
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.sendQuery = <span class="reserved">function</span>(sQuery) {
+    <span class="reserved">if</span>(sQuery) {
+        <span class="reserved">this</span>._sendQuery(sQuery);
+    }
+    <span class="reserved">else</span> {
+        YAHOO.log(<span class="literal">"Query could not be sent because the string value was empty or null."</span>,<span class="literal">"warn"</span>,<span class="reserved">this</span>.toString());
+        <span class="reserved">return</span>;
     }
 };
 
@@ -525,8 +669,9 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.dataReturnEven
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.dataErrorEvent = null;
 
 <span class="comment">/**
- * Fired when the auto complete container is expanded. Subscribers receive the
- * following array:&lt;br&gt;
+ * Fired when the auto complete container is expanded. If alwaysShowContainer is
+ * enabled, then containerExpandEvent will be fired when the container is
+ * populated with results. Subscribers receive the following array:&lt;br&gt;
  *     - args[0] The auto complete object instance
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.containerExpandEvent = null;
@@ -577,8 +722,18 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.itemArrowFromE
  * Subscribers receive the following array:&lt;br&gt;
  *     - args[0] The auto complete object instance
  *     - args[1] The selected &amp;lt;li&amp;gt; element item
+ *     - args[2] The data returned for the item, either as an object, or mapped from the schema into an array
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.itemSelectEvent = null;
+
+<span class="comment">/**
+ * Fired when an user selection does not match any of the displayed result items.
+ * Note that this event may not behave as expected when delimiter characters
+ * have been defined. Subscribers receive the following array:&lt;br&gt;
+ *     - args[0] The auto complete object instance
+ *     - args[1] The user selection
+ */</span>
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.unmatchedItemSelectEvent = null;
 
 <span class="comment">/**
  * Fired if forceSelection is enabled and the user's input has been cleared
@@ -589,8 +744,9 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.itemSelectEven
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.selectionEnforceEvent = null;
 
 <span class="comment">/**
- * Fired when the auto complete container is collapsed. Subscribers receive the
- * following array:&lt;br&gt;
+ * Fired when the auto complete container is collapsed. If alwaysShowContainer is
+ * enabled, then containerCollapseEvent will be fired when the container is
+ * cleared of results. Subscribers receive the following array:&lt;br&gt;
  *     - args[0] The auto complete object instance
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.containerCollapseEvent = null;
@@ -673,45 +829,13 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._bContainerOpe
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._bOverContainer = false;
 
 <span class="comment">/**
- * iFrame DOM element. Only used in IE for iframe trick.
- *
- * <span class="attrib">@type</span> object
- * <span class="attrib">@private</span>
- */</span>
-YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._oIFrame = null;
-
-<span class="comment">/**
- * Content DOM element. Only used in IE for iFrame trick.
- *
- * <span class="attrib">@type</span> object
- * <span class="attrib">@private</span>
- */</span>
-YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._oContent = null;
-
-<span class="comment">/**
- * Container header DOM element.
- *
- * <span class="attrib">@type</span> object
- * <span class="attrib">@private</span>
- */</span>
-YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._oHeader = null;
-
-<span class="comment">/**
- * Container footer DOM element.
- *
- * <span class="attrib">@type</span> object
- * <span class="attrib">@private</span>
- */</span>
-YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._oFooter = null;
-
-<span class="comment">/**
- * Array of &amp;lt;li&amp;gt; elements IDs used to display query results within the
+ * Array of &amp;lt;li&amp;gt; elements references that contain query results within the
  * auto complete container.
  *
  * <span class="attrib">@type</span> array
  * <span class="attrib">@private</span>
  */</span>
-YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._aListIds = null;
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._aListItems = null;
 
 <span class="comment">/**
  * Number of &amp;lt;li&amp;gt; elements currently displayed in auto complete container.
@@ -720,6 +844,14 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._aListIds = nu
  * <span class="attrib">@private</span>
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._nDisplayedItems = 0;
+
+<span class="comment">/**
+ * Internal count of &amp;lt;li&amp;gt; elements displayed and hidden in auto complete container.
+ *
+ * <span class="attrib">@type</span> number
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._maxResultsDisplayed = 0;
 
 <span class="comment">/**
  * Current query string
@@ -803,128 +935,129 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._initProps = <
         }
     }
     var animSpeed = <span class="reserved">this</span>.animSpeed;
-    <span class="reserved">if</span>(<span class="reserved">this</span>.animHoriz || <span class="reserved">this</span>.animVert) {
+    <span class="reserved">if</span>((<span class="reserved">this</span>.animHoriz || <span class="reserved">this</span>.animVert) &amp;&amp; YAHOO.util.Anim) {
         <span class="reserved">if</span>(isNaN(animSpeed) || (animSpeed &lt; 0)) {
             animSpeed = 0.3;
         }
-
-        <span class="reserved">if</span>(!<span class="reserved">this</span>._oAnim &amp;&amp; YAHOO.util.Anim) {
-            <span class="reserved">this</span>._oAnim = new YAHOO.util.Anim(<span class="reserved">this</span>._oContainer, {}, animSpeed);
+        <span class="reserved">if</span>(!<span class="reserved">this</span>._oAnim ) {
+            oAnim = new YAHOO.util.Anim(<span class="reserved">this</span>._oContainer._oContent, {}, <span class="reserved">this</span>.animSpeed);
+            <span class="reserved">this</span>._oAnim = oAnim;
         }
-        <span class="reserved">else</span> <span class="reserved">if</span>(<span class="reserved">this</span>._oAnim) {
+        <span class="reserved">else</span> {
             <span class="reserved">this</span>._oAnim.duration = animSpeed;
         }
     }
     <span class="reserved">if</span>(<span class="reserved">this</span>.forceSelection &amp;&amp; <span class="reserved">this</span>.delimChar) {
-<span class="comment">        //YAHOO.log(oSelf.getName() + " has enabled force selection with delimiter character(s) defined.","warn");</span>
+        YAHOO.log(<span class="literal">"The forceSelection feature has been enabled with delimChar defined."</span>,<span class="literal">"warn"</span>, <span class="reserved">this</span>.toString());
     }
-    <span class="reserved">if</span> (!<span class="reserved">this</span>._aListIds) {
-        <span class="reserved">this</span>._aListIds = [];
+    <span class="reserved">if</span>(<span class="reserved">this</span>.alwaysShowContainer &amp;&amp; (<span class="reserved">this</span>.useShadow || <span class="reserved">this</span>.useIFrame)) {
+        YAHOO.log(<span class="literal">"The features useShadow and useIFrame are not compatible with the alwaysShowContainer feature."</span>,<span class="literal">"warn"</span>, <span class="reserved">this</span>.toString());
     }
-    <span class="reserved">if</span>(!<span class="reserved">this</span>._aListIds || (<span class="reserved">this</span>.maxResultsDisplayed != <span class="reserved">this</span>._aListIds.length)) {
-        <span class="reserved">this</span>._initContainer();
+
+    <span class="reserved">if</span>(<span class="reserved">this</span>.alwaysShowContainer) {
+        <span class="reserved">this</span>._bContainerOpen = true;
     }
 };
 
 <span class="comment">/**
- * Initializes the auto complete container
+ * Initializes the auto complete container helpers if they are enabled and do
+ * not exist
+ *
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._initContainerHelpers = <span class="reserved">function</span>() {
+    <span class="reserved">if</span>(<span class="reserved">this</span>.useShadow &amp;&amp; !<span class="reserved">this</span>._oContainer._oShadow) {
+        var oShadow = document.createElement(<span class="literal">"div"</span>);
+        oShadow.className = <span class="literal">"yui-ac-shadow"</span>;
+        <span class="reserved">this</span>._oContainer._oShadow = <span class="reserved">this</span>._oContainer.appendChild(oShadow);
+    }
+    <span class="reserved">if</span>(<span class="reserved">this</span>.useIFrame &amp;&amp; !<span class="reserved">this</span>._oContainer._oIFrame) {
+        var oIFrame = document.createElement(<span class="literal">"iframe"</span>);
+        oIFrame.src = <span class="reserved">this</span>.iFrameSrc;
+        oIFrame.frameBorder = 0;
+        oIFrame.scrolling = <span class="literal">"no"</span>;
+        oIFrame.style.position = <span class="literal">"absolute"</span>;
+        oIFrame.style.width = <span class="literal">"100%"</span>;
+        oIFrame.style.height = <span class="literal">"100%"</span>;
+        <span class="reserved">this</span>._oContainer._oIFrame = <span class="reserved">this</span>._oContainer.appendChild(oIFrame);
+    }
+};
+
+<span class="comment">/**
+ * Initializes the auto complete container once at object creation
  *
  * <span class="attrib">@private</span>
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._initContainer = <span class="reserved">function</span>() {
-<span class="comment">    // Create the max number of &lt;li&gt; elements, but hide them all</span>
-    <span class="reserved">this</span>._aListIds = [];
-    var aItemsMarkup = [];
-    var sName = <span class="reserved">this</span>._sName;
-    var sPrefix = sName + <span class="literal">"item"</span>;
-    var sHeaderID = sName + <span class="literal">"header"</span>;
-    var sFooterID = sName + <span class="literal">"footer"</span>;
+    <span class="reserved">if</span>(!<span class="reserved">this</span>._oContainer._oContent) {
+<span class="comment">        // The oContent div helps size the iframe and shadow properly</span>
+        var oContent = document.createElement(<span class="literal">"div"</span>);
+        oContent.className = <span class="literal">"yui-ac-content"</span>;
+        oContent.style.display = <span class="literal">"none"</span>;
+        <span class="reserved">this</span>._oContainer._oContent = <span class="reserved">this</span>._oContainer.appendChild(oContent);
 
-    <span class="reserved">for</span>(var i = <span class="reserved">this</span>.maxResultsDisplayed-1; i &gt;= 0 ; i--) {
-        var sItemID = sPrefix + i;
-        <span class="reserved">this</span>._aListIds[i] = sItemID;
-        aItemsMarkup.unshift(<span class="literal">"&lt;li id='"</span> + sItemID + <span class="literal">"'&gt;&lt;/li&gt;\n"</span>);
+        var oHeader = document.createElement(<span class="literal">"div"</span>);
+        oHeader.className = <span class="literal">"yui-ac-hd"</span>;
+        oHeader.style.display = <span class="literal">"none"</span>;
+        <span class="reserved">this</span>._oContainer._oContent._oHeader = <span class="reserved">this</span>._oContainer._oContent.appendChild(oHeader);
+
+        var oBody = document.createElement(<span class="literal">"div"</span>);
+        oBody.className = <span class="literal">"yui-ac-bd"</span>;
+        <span class="reserved">this</span>._oContainer._oContent._oBody = <span class="reserved">this</span>._oContainer._oContent.appendChild(oBody);
+
+        var oFooter = document.createElement(<span class="literal">"div"</span>);
+        oFooter.className = <span class="literal">"yui-ac-ft"</span>;
+        oFooter.style.display = <span class="literal">"none"</span>;
+        <span class="reserved">this</span>._oContainer._oContent._oFooter = <span class="reserved">this</span>._oContainer._oContent.appendChild(oFooter);
     }
-
-    var sList = <span class="literal">"&lt;ul id='"</span> + sName + <span class="literal">"list'&gt;"</span> +
-        aItemsMarkup.join(<span class="literal">""</span>) + <span class="literal">"&lt;/ul&gt;"</span>;
-<span class="comment">
-    // Need this iFrame trick to make sure the container appears over form</span>
-<span class="comment">    // elements to workaround IE z-index bug</span>
-    var sContent = (<span class="reserved">this</span>.useIFrame) ?
-            [<span class="literal">"&lt;div id='"</span>,
-            sName,
-            <span class="literal">"content'&gt;"</span>,
-            <span class="literal">"&lt;div id='"</span>,
-            sHeaderID,
-            <span class="literal">"' class='ac_hd'&gt;&lt;/div&gt;&lt;div class='ac_bd'&gt;"</span>,
-            sList,
-            <span class="literal">"&lt;/div&gt;&lt;div id='"</span>,
-            sFooterID,
-            <span class="literal">"' class='ac_ft'&gt;&lt;/div&gt;"</span>,
-            <span class="literal">"&lt;/div&gt;&lt;iframe id='"</span>,
-            sName,
-            <span class="literal">"iframe' src='about:blank' frameborder='0' scrolling='no'&gt;"</span>,
-            <span class="literal">"&lt;/iframe&gt;"</span>] :
-
-            [<span class="literal">"&lt;div id='"</span>,
-            sHeaderID,
-            <span class="literal">"' class='ac_hd'&gt;&lt;/div&gt;&lt;div class='ac_bd'&gt;"</span>,
-            sList,
-            <span class="literal">"&lt;/div&gt;&lt;div id='"</span>,
-            sFooterID,
-            <span class="literal">"' class='ac_ft'&gt;&lt;/div&gt;"</span>];
-
-    sContent = sContent.join(<span class="literal">""</span>);
-    <span class="reserved">this</span>._oContainer.innerHTML = sContent;
-
-    <span class="reserved">this</span>._oHeader = document.getElementById(sHeaderID);
-    <span class="reserved">this</span>._oFooter = document.getElementById(sFooterID);
-
-    <span class="reserved">if</span> (<span class="reserved">this</span>.useIFrame) {
-        <span class="reserved">this</span>._oContent = document.getElementById(sName + <span class="literal">"content"</span>);
-        <span class="reserved">this</span>._oIFrame = document.getElementById(sName + <span class="literal">"iframe"</span>);
-        <span class="reserved">this</span>._oContent.style.position = <span class="literal">"relative"</span>;
-        <span class="reserved">this</span>._oIFrame.style.position = <span class="literal">"relative"</span>;
-        <span class="reserved">this</span>._oContent.style.zIndex = 9050;
+    <span class="reserved">else</span> {
+        YAHOO.log(<span class="literal">"Could not initialize the container"</span>,<span class="literal">"warn"</span>,<span class="reserved">this</span>.toString());
     }
-
-    <span class="reserved">this</span>._oContainer.style.display = <span class="literal">"none"</span>;
-    <span class="reserved">this</span>._oHeader.style.display = <span class="literal">"none"</span>;
-    <span class="reserved">this</span>._oFooter.style.display = <span class="literal">"none"</span>;
-
-    <span class="reserved">this</span>._initItems();
 };
 
 <span class="comment">/**
- * Initializes up to YAHOO.widget.AutoComplete#maxResultsDisplayed &amp;lt;li&amp;gt;
- * elements in the container.
+ * Clears out contents of container body and creates up to
+ * YAHOO.widget.AutoComplete#maxResultsDisplayed &amp;lt;li&amp;gt; elements in an
+ * &amp;lt;ul&amp;gt; element.
  *
  * <span class="attrib">@private</span>
  */</span>
-YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._initItems = <span class="reserved">function</span>() {
-<span class="comment">    // set properties &amp; events for each item now that they are in the DOM</span>
-    <span class="reserved">for</span>(var i = <span class="reserved">this</span>.maxResultsDisplayed-1; i &gt;= 0 ; i--) {
-        var oItem = document.getElementById(<span class="reserved">this</span>._aListIds[i]);
-        <span class="reserved">this</span>._initItem(oItem, i);
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._initList = <span class="reserved">function</span>() {
+    <span class="reserved">this</span>._aListItems = [];
+    <span class="reserved">while</span>(<span class="reserved">this</span>._oContainer._oContent._oBody.hasChildNodes()) {
+        <span class="reserved">this</span>._oContainer._oContent._oBody.removeChild(<span class="reserved">this</span>._oContainer._oContent._oBody.firstChild);
     }
+
+    var oList = document.createElement(<span class="literal">"ul"</span>);
+    oList = <span class="reserved">this</span>._oContainer._oContent._oBody.appendChild(oList);
+    <span class="reserved">for</span>(var i=0; i&lt;<span class="reserved">this</span>.maxResultsDisplayed; i++) {
+        var oItem = document.createElement(<span class="literal">"li"</span>);
+        oItem = oList.appendChild(oItem);
+        <span class="reserved">this</span>._aListItems[i] = oItem;
+        <span class="reserved">this</span>._initListItem(oItem, i);
+    }
+    <span class="reserved">this</span>._maxResultsDisplayed = <span class="reserved">this</span>.maxResultsDisplayed;
 };
 
 <span class="comment">/**
- * Initializes each &amp;lt;li&amp;gt; element in the container .
+ * Initializes each &amp;lt;li&amp;gt; element in the container list.
  *
  * <span class="attrib">@param</span> {object} oItem The &amp;lt;li&amp;gt; DOM element
- * <span class="attrib">@param</span> {number} onItemIndex The index of the element
+ * <span class="attrib">@param</span> {number} nItemIndex The index of the element
  * <span class="attrib">@private</span>
  */</span>
-YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._initItem = <span class="reserved">function</span>(oItem, nItemIndex) {
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._initListItem = <span class="reserved">function</span>(oItem, nItemIndex) {
     var oSelf = <span class="reserved">this</span>;
     oItem.style.display = <span class="literal">"none"</span>;
     oItem._nItemIndex = nItemIndex;
+    oItem.toString = <span class="reserved">function</span> () {
+        <span class="reserved">return</span> oSelf.getName() + <span class="literal">"LI"</span> + nItemIndex;
+    };
+
     oItem.mouseover = oItem.mouseout = oItem.onclick = null;
-    YAHOO.util.Event.addListener(oItem,<span class="literal">'mouseover'</span>,oSelf._onItemMouseover,oSelf);
-    YAHOO.util.Event.addListener(oItem,<span class="literal">'mouseout'</span>,oSelf._onItemMouseout,oSelf);
-    YAHOO.util.Event.addListener(oItem,<span class="literal">'click'</span>,oSelf._onItemMouseclick,oSelf);
+    YAHOO.util.Event.addListener(oItem,<span class="literal">"mouseover"</span>,oSelf._onItemMouseover,oSelf);
+    YAHOO.util.Event.addListener(oItem,<span class="literal">"mouseout"</span>,oSelf._onItemMouseout,oSelf);
+    YAHOO.util.Event.addListener(oItem,<span class="literal">"click"</span>,oSelf._onItemMouseclick,oSelf);
 };
 
 <span class="comment">/**
@@ -935,10 +1068,14 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._initItem = <s
  * <span class="attrib">@private</span>
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onItemMouseover = <span class="reserved">function</span>(v,oSelf) {
-    oSelf._toggleHighlight(<span class="reserved">this</span>,<span class="literal">'mouseover'</span>);
-    oSelf.itemMouseOverEvent.fire(oSelf, <span class="reserved">this</span>);
-<span class="comment">    //YAHOO.log(oSelf.getName() + " moused over " + this.id);</span>
+    <span class="reserved">if</span>(oSelf.prehighlightClassName) {
+        oSelf._togglePrehighlight(<span class="reserved">this</span>,<span class="literal">"mouseover"</span>);
+    }
+    <span class="reserved">else</span> {
+        oSelf._toggleHighlight(<span class="reserved">this</span>,<span class="literal">"to"</span>);
+    }
 
+    oSelf.itemMouseOverEvent.fire(oSelf, <span class="reserved">this</span>);
 };
 
 <span class="comment">/**
@@ -949,9 +1086,14 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onItemMouseov
  * <span class="attrib">@private</span>
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onItemMouseout = <span class="reserved">function</span>(v,oSelf) {
-    oSelf._toggleHighlight(<span class="reserved">this</span>,<span class="literal">'mouseout'</span>);
+    <span class="reserved">if</span>(oSelf.prehighlightClassName) {
+        oSelf._togglePrehighlight(<span class="reserved">this</span>,<span class="literal">"mouseout"</span>);
+    }
+    <span class="reserved">else</span> {
+        oSelf._toggleHighlight(<span class="reserved">this</span>,<span class="literal">"from"</span>);
+    }
+
     oSelf.itemMouseOutEvent.fire(oSelf, <span class="reserved">this</span>);
-<span class="comment">    //YAHOO.log(oSelf.getName() + " moused out from " + this.id);</span>
 };
 
 <span class="comment">/**
@@ -963,7 +1105,7 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onItemMouseou
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onItemMouseclick = <span class="reserved">function</span>(v,oSelf) {
 <span class="comment">    // In case item has not been moused over</span>
-    oSelf._toggleHighlight(<span class="reserved">this</span>,<span class="literal">'mouseover'</span>);
+    oSelf._toggleHighlight(<span class="reserved">this</span>,<span class="literal">"to"</span>);
     oSelf._selectItem(<span class="reserved">this</span>);
 };
 
@@ -989,7 +1131,7 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onContainerMo
     oSelf._bOverContainer = false;
 <span class="comment">    // If container is still active</span>
     <span class="reserved">if</span>(oSelf._oCurItem) {
-        oSelf._toggleHighlight(oSelf._oCurItem,<span class="literal">'mouseover'</span>);
+        oSelf._toggleHighlight(oSelf._oCurItem,<span class="literal">"to"</span>);
     }
 };
 
@@ -1002,6 +1144,17 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onContainerMo
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onContainerScroll = <span class="reserved">function</span>(v,oSelf) {
     oSelf._oTextbox.focus();
+};
+
+<span class="comment">/**
+ * Handles container resize events.
+ *
+ * <span class="attrib">@param</span> {event} v The resize event
+ * <span class="attrib">@param</span> {object} oSelf The auto complete instance
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onContainerResize = <span class="reserved">function</span>(v,oSelf) {
+    oSelf._toggleContainerHelpers(oSelf._bContainerOpen);
 };
 
 
@@ -1063,7 +1216,7 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onTextboxKeyD
 };
 
 <span class="comment">/**
- * Handles textbox keypress events, mainly for FF.
+ * Handles textbox keypress events, mainly for stopEvent in Safari.
  *
  * <span class="attrib">@param</span> {event} v The keyup event
  * <span class="attrib">@param</span> {object} oSelf The auto complete instance
@@ -1071,15 +1224,12 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onTextboxKeyD
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onTextboxKeyPress = <span class="reserved">function</span>(v,oSelf) {
     var nKeyCode = v.keyCode;
-<span class="comment">
-    // for FF &lt; 1.0</span>
+
     switch (nKeyCode) {
     case 9: // tab
     case 13: // enter
-        <span class="reserved">if</span>(oSelf.delimChar &amp;&amp; (oSelf._nKeyCode != nKeyCode)) {
-            <span class="reserved">if</span>(oSelf._bContainerOpen) {
+        <span class="reserved">if</span>((oSelf._nKeyCode != nKeyCode)) {
                 YAHOO.util.Event.stopEvent(v);
-            }
         }
         break;
     case 38: // up
@@ -1108,12 +1258,11 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onTextboxKeyU
     var sText = <span class="reserved">this</span>.value; //string in textbox
 <span class="comment">
     // Filter out chars that don't trigger queries</span>
-    <span class="reserved">if</span> (oSelf._isIgnoreKey(nKeyCode) || (sText.toLowerCase() == <span class="reserved">this</span>._sCurQuery)) {
+    <span class="reserved">if</span> (oSelf._isIgnoreKey(nKeyCode) || (sText.toLowerCase() == oSelf._sCurQuery)) {
         <span class="reserved">return</span>;
     }
     <span class="reserved">else</span> {
         oSelf.textboxKeyEvent.fire(oSelf, nKeyCode);
-<span class="comment">        //YAHOO.log(oSelf.getName() + " received key input " + nKeyCode);</span>
     }
 <span class="comment">
     // Set timeout on the request</span>
@@ -1143,13 +1292,6 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onTextboxKeyU
  * <span class="attrib">@private</span>
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._isIgnoreKey = <span class="reserved">function</span>(nKeyCode) {
-    <span class="reserved">if</span>(<span class="reserved">this</span>.typeAhead) { // fewer query triggers when type ahead is on
-        <span class="reserved">if</span>((nKeyCode == 8) || // backspace
-        (nKeyCode == 39) || // right
-        (nKeyCode == 46)) { // delete
-            <span class="reserved">return</span> true;
-        }
-    }
     <span class="reserved">if</span> ((nKeyCode == 9) || (nKeyCode == 13)  || // tab, enter
             (nKeyCode == 16) || (nKeyCode == 17) || // shift, ctl
             (nKeyCode &gt;= 18 &amp;&amp; nKeyCode &lt;= 20) || // alt,pause/break,caps lock
@@ -1171,9 +1313,9 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._isIgnoreKey =
  * <span class="attrib">@private</span>
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onTextboxFocus = <span class="reserved">function</span> (v,oSelf) {
+    oSelf._oTextbox.setAttribute(<span class="literal">"autocomplete"</span>,<span class="literal">"off"</span>);
     oSelf._bFocused = true;
     oSelf.textboxFocusEvent.fire(oSelf);
-<span class="comment">    //YAHOO.log(oSelf.getName() + " textbox focused");</span>
 };
 
 <span class="comment">/**
@@ -1187,9 +1329,14 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onTextboxBlur
 <span class="comment">    // Don't treat as a blur if it was a selection via mouse click</span>
     <span class="reserved">if</span>(!oSelf._bOverContainer || (oSelf._nKeyCode == 9)) {
 <span class="comment">        // Current query needs to be validated</span>
-        <span class="reserved">if</span>(oSelf.forceSelection &amp;&amp; !oSelf._bItemSelected) {
+        <span class="reserved">if</span>(!oSelf._bItemSelected) {
             <span class="reserved">if</span>(!oSelf._bContainerOpen || (oSelf._bContainerOpen &amp;&amp; !oSelf._textMatchesOption())) {
-                oSelf._clearSelection();
+                <span class="reserved">if</span>(oSelf.forceSelection) {
+                    oSelf._clearSelection();
+                }
+                <span class="reserved">else</span> {
+                    oSelf.unmatchedItemSelectEvent.fire(oSelf, oSelf._sCurQuery);
+                }
             }
         }
 
@@ -1198,7 +1345,22 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onTextboxBlur
         }
         oSelf._bFocused = false;
         oSelf.textboxBlurEvent.fire(oSelf);
-<span class="comment">        //YAHOO.log(oSelf.getName() + " textbox blurred");</span>
+    }
+};
+
+<span class="comment">/**
+ * Handles form submission event.
+ *
+ * <span class="attrib">@param</span> {event} v The submit event
+ * <span class="attrib">@param</span> {object} oSelf The auto complete instance
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._onFormSubmit = <span class="reserved">function</span>(v,oSelf) {
+    <span class="reserved">if</span>(oSelf.allowBrowserAutocomplete) {
+        oSelf._oTextbox.setAttribute(<span class="literal">"autocomplete"</span>,<span class="literal">"on"</span>);
+    }
+    <span class="reserved">else</span> {
+        oSelf._oTextbox.setAttribute(<span class="literal">"autocomplete"</span>,<span class="literal">"off"</span>);
     }
 };
 
@@ -1258,10 +1420,9 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._sendQuery = <
         <span class="reserved">return</span>;
     }
 
-    sQuery = encodeURI(sQuery);
+    sQuery = encodeURIComponent(sQuery);
     <span class="reserved">this</span>._nDelayID = -1;    // Reset timeout ID because request has been made
     <span class="reserved">this</span>.dataRequestEvent.fire(<span class="reserved">this</span>, sQuery);
-<span class="comment">    //YAHOO.log(this.getName() + " requested data for query \"" + sQuery + "\"");</span>
     <span class="reserved">this</span>.dataSource.getResults(<span class="reserved">this</span>._populateList, sQuery, <span class="reserved">this</span>);
 };
 
@@ -1271,21 +1432,23 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._sendQuery = <
  * <span class="attrib">@private</span>
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._clearList = <span class="reserved">function</span>() {
-    <span class="reserved">this</span>._toggleContainer(false);
-    <span class="reserved">this</span>._oContainer.scrollTop = 0;
-    var aItems = <span class="reserved">this</span>._aListIds;
+    <span class="reserved">this</span>._oContainer._oContent.scrollTop = 0;
+    var aItems = <span class="reserved">this</span>._aListItems;
 
-    <span class="reserved">for</span>(var i = aItems.length-1; i &gt;= 0 ; i--) {
-        document.getElementById(aItems[i]).style.display = <span class="literal">"none"</span>;
+    <span class="reserved">if</span>(aItems &amp;&amp; (aItems.length &gt; 0)) {
+        <span class="reserved">for</span>(var i = aItems.length-1; i &gt;= 0 ; i--) {
+            aItems[i].style.display = <span class="literal">"none"</span>;
+        }
     }
 
     <span class="reserved">if</span> (<span class="reserved">this</span>._oCurItem) {
-        <span class="reserved">this</span>._toggleHighlight(<span class="reserved">this</span>._oCurItem,<span class="literal">'mouseout'</span>);
+        <span class="reserved">this</span>._toggleHighlight(<span class="reserved">this</span>._oCurItem,<span class="literal">"from"</span>);
     }
 
     <span class="reserved">this</span>._oCurItem = null;
     <span class="reserved">this</span>._nDisplayedItems = 0;
     <span class="reserved">this</span>._sCurQuery = null;
+    <span class="reserved">this</span>._toggleContainer(false);
 };
 
 <span class="comment">/**
@@ -1302,32 +1465,33 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._clearList = <
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._populateList = <span class="reserved">function</span>(sQuery, aResults, oSelf) {
     <span class="reserved">if</span>(aResults === null) {
         oSelf.dataErrorEvent.fire(oSelf, sQuery);
-<span class="comment">        //YAHOO.log(oSelf.getName() + " data error for query \"" + sQuery + "\"");</span>
     }
-    <span class="reserved">else</span> {
-        oSelf.dataReturnEvent.fire(oSelf, sQuery, aResults);
-<span class="comment">        //YAHOO.log(oSelf.getName() + " received " + aResults.length + " results for query \"" + sQuery + "\"");</span>
-    }
-
     <span class="reserved">if</span> (!oSelf._bFocused || !aResults) {
         <span class="reserved">return</span>;
     }
 
     var isOpera = (navigator.userAgent.toLowerCase().indexOf(<span class="literal">"opera"</span>) != -1);
-    oSelf._oContainer.style.width = (!isOpera) ? null : <span class="literal">""</span>;
-    oSelf._oContainer.style.height = (!isOpera) ? null : <span class="literal">""</span>;
+    var contentStyle = oSelf._oContainer._oContent.style;
+    contentStyle.width = (!isOpera) ? null : <span class="literal">""</span>;
+    contentStyle.height = (!isOpera) ? null : <span class="literal">""</span>;
 
-    var sCurQuery = decodeURI(sQuery);
+    var sCurQuery = decodeURIComponent(sQuery);
     oSelf._sCurQuery = sCurQuery;
-    var aItems = oSelf._aListIds;
     oSelf._bItemSelected = false;
+
+    <span class="reserved">if</span>(oSelf._maxResultsDisplayed != oSelf.maxResultsDisplayed) {
+        oSelf._initList();
+    }
 
     var nItems = Math.min(aResults.length,oSelf.maxResultsDisplayed);
     oSelf._nDisplayedItems = nItems;
     <span class="reserved">if</span> (nItems &gt; 0) {
-<span class="comment">        // Fill items with data</span>
-        <span class="reserved">for</span>(var i = nItems-1; i &gt;= 0 ; i--) {
-            var oItemi = document.getElementById(aItems[i]);
+        oSelf._initContainerHelpers();
+        var aItems = oSelf._aListItems;
+<span class="comment">
+        // Fill items with data</span>
+        <span class="reserved">for</span>(var i = nItems-1; i &gt;= 0; i--) {
+            var oItemi = aItems[i];
             var oResultItemi = aResults[i];
             oItemi.innerHTML = oSelf.formatResult(oResultItemi, sCurQuery);
             oItemi.style.display = <span class="literal">"list-item"</span>;
@@ -1338,25 +1502,31 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._populateList 
 <span class="comment">
         // Empty out remaining items if any</span>
         <span class="reserved">for</span>(var j = aItems.length-1; j &gt;= nItems ; j--) {
-            var oItemj = document.getElementById(aItems[j]);
+            var oItemj = aItems[j];
             oItemj.innerHTML = null;
             oItemj.style.display = <span class="literal">"none"</span>;
             oItemj._sResultKey = null;
             oItemj._oResultData = null;
         }
+
+        <span class="reserved">if</span>(oSelf.autoHighlight) {
+<span class="comment">            // Go to the first item</span>
+            var oFirstItem = aItems[0];
+            oSelf._toggleHighlight(oFirstItem,<span class="literal">"to"</span>);
+            oSelf.itemArrowToEvent.fire(oSelf, oFirstItem);
+            oSelf._typeAhead(oFirstItem,sQuery);
+        }
+        <span class="reserved">else</span> {
+            oSelf._oCurItem = null;
+        }
 <span class="comment">
-        // Select first item and show UI</span>
-        var oFirstItem = document.getElementById(aItems[0]);
-        oSelf._toggleHighlight(oFirstItem,<span class="literal">'mouseover'</span>);
+        // Expand the container</span>
         oSelf._toggleContainer(true);
-        oSelf.itemArrowToEvent.fire(oSelf, oFirstItem);
-<span class="comment">        //YAHOO.log(oSelf.getName() + " arrowed to item " + oFirstItem.id);</span>
-        oSelf._typeAhead(oFirstItem,sQuery);
-        oSelf._oCurItem = oFirstItem;
     }
     <span class="reserved">else</span> {
         oSelf._clearList();
     }
+    oSelf.dataReturnEvent.fire(oSelf, sQuery, aResults);
 };
 
 <span class="comment">/**
@@ -1380,7 +1550,6 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._clearSelectio
 <span class="comment">
     // Fire custom event</span>
     <span class="reserved">this</span>.selectionEnforceEvent.fire(<span class="reserved">this</span>);
-<span class="comment">    //YAHOO.log(this.getName() + " cleared an invalid selection");</span>
 };
 
 <span class="comment">/**
@@ -1393,7 +1562,7 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._textMatchesOp
     var foundMatch = false;
 
     <span class="reserved">for</span>(var i = <span class="reserved">this</span>._nDisplayedItems-1; i &gt;= 0 ; i--) {
-        var oItem = document.getElementById(<span class="reserved">this</span>._aListIds[i]);
+        var oItem = <span class="reserved">this</span>._aListItems[i];
         var sMatch = oItem._sResultKey.toLowerCase();
         <span class="reserved">if</span> (sMatch == <span class="reserved">this</span>._sCurQuery.toLowerCase()) {
             foundMatch = true;
@@ -1412,13 +1581,13 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._textMatchesOp
  * <span class="attrib">@private</span>
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._typeAhead = <span class="reserved">function</span>(oItem, sQuery) {
-    var oTextbox = <span class="reserved">this</span>._oTextbox;
-    var sValue = <span class="reserved">this</span>._oTextbox.value; // any saved queries plus what user has typed
-<span class="comment">
-    // Don't update with type-ahead if turned off</span>
+<span class="comment">    // Don't update if turned off</span>
     <span class="reserved">if</span> (!<span class="reserved">this</span>.typeAhead) {
         <span class="reserved">return</span>;
     }
+
+    var oTextbox = <span class="reserved">this</span>._oTextbox;
+    var sValue = <span class="reserved">this</span>._oTextbox.value; // any saved queries plus what user has typed
 <span class="comment">
     // Don't update with type-ahead if text selection is not supported</span>
     <span class="reserved">if</span>(!oTextbox.setSelectionRange &amp;&amp; !oTextbox.createTextRange) {
@@ -1432,7 +1601,6 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._typeAhead = <
     <span class="reserved">this</span>._selectText(oTextbox,nStart,nEnd);
     var sPrefill = oTextbox.value.substr(nStart,nEnd);
     <span class="reserved">this</span>.typeAheadEvent.fire(<span class="reserved">this</span>,sQuery,sPrefill);
-<span class="comment">    //YAHOO.log(this.getName() + " prefilled \"" + sPrefill + "\" for query " + sQuery + "\"");</span>
 };
 
 <span class="comment">/**
@@ -1459,6 +1627,41 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._selectText = 
 };
 
 <span class="comment">/**
+ * Syncs auto complete container with its helpers.
+ *
+ * <span class="attrib">@param</span> {boolean} bShow True if container is expanded, false if collapsed
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._toggleContainerHelpers = <span class="reserved">function</span>(bShow) {
+    var bFireEvent = false;
+    var width = <span class="reserved">this</span>._oContainer._oContent.offsetWidth + <span class="literal">"px"</span>;
+    var height = <span class="reserved">this</span>._oContainer._oContent.offsetHeight + <span class="literal">"px"</span>;
+
+    <span class="reserved">if</span>(<span class="reserved">this</span>.useIFrame &amp;&amp; <span class="reserved">this</span>._oContainer._oIFrame) {
+        bFireEvent = true;
+        <span class="reserved">if</span>(<span class="reserved">this</span>.alwaysShowContainer || bShow) {
+            <span class="reserved">this</span>._oContainer._oIFrame.style.width = width;
+            <span class="reserved">this</span>._oContainer._oIFrame.style.height = height;
+        }
+        <span class="reserved">else</span> {
+            <span class="reserved">this</span>._oContainer._oIFrame.style.width = 0;
+            <span class="reserved">this</span>._oContainer._oIFrame.style.height = 0;
+        }
+    }
+    <span class="reserved">if</span>(<span class="reserved">this</span>.useShadow &amp;&amp; <span class="reserved">this</span>._oContainer._oShadow) {
+        bFireEvent = true;
+        <span class="reserved">if</span>(<span class="reserved">this</span>.alwaysShowContainer || bShow) {
+            <span class="reserved">this</span>._oContainer._oShadow.style.width = width;
+            <span class="reserved">this</span>._oContainer._oShadow.style.height = height;
+        }
+        <span class="reserved">else</span> {
+           <span class="reserved">this</span>._oContainer._oShadow.style.width = 0;
+            <span class="reserved">this</span>._oContainer._oShadow.style.height = 0;
+        }
+    }
+};
+
+<span class="comment">/**
  * Animates expansion or collapse of the container.
  *
  * <span class="attrib">@param</span> {boolean} bShow True if container should be expanded, false if
@@ -1466,35 +1669,43 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._selectText = 
  * <span class="attrib">@private</span>
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._toggleContainer = <span class="reserved">function</span>(bShow) {
-    var oContainer = <span class="reserved">this</span>._oContainer;
-<span class="comment">    // Don't animate if it's already closed &amp;&amp; !bShow</span>
-    <span class="reserved">if</span> (!bShow &amp;&amp; !<span class="reserved">this</span>._bContainerOpen) {
-        oContainer.style.display = <span class="literal">"none"</span>;
+<span class="comment">    // Implementer has container always open so don't mess with it</span>
+    <span class="reserved">if</span>(<span class="reserved">this</span>.alwaysShowContainer) {
+<span class="comment">        // Fire these events to give implementers a hook into the container</span>
+<span class="comment">        // being populated and being emptied</span>
+        <span class="reserved">if</span>(bShow) {
+            <span class="reserved">this</span>.containerExpandEvent.fire(<span class="reserved">this</span>);
+        }
+        <span class="reserved">else</span> {
+            <span class="reserved">this</span>.containerCollapseEvent.fire(<span class="reserved">this</span>);
+        }
+        <span class="reserved">this</span>._bContainerOpen = bShow;
         <span class="reserved">return</span>;
     }
 
-    var oContent = <span class="reserved">this</span>._oContent;
-    var oIFrame = <span class="reserved">this</span>._oIFrame;
-<span class="comment">    // Make the iframe used in the ie trick the same dimension as the content</span>
-    <span class="reserved">if</span> (bShow &amp;&amp; oContent &amp;&amp; oIFrame) {
-        var sDisplay = oContainer.style.display;
-        oContainer.style.display = <span class="literal">"block"</span>;
-        oIFrame.style.width = oContent.offsetWidth+<span class="literal">"px"</span>;
-        oIFrame.style.height = oContent.offsetHeight+<span class="literal">"px"</span>;
-        oIFrame.style.marginTop = <span class="literal">"-"</span>+oContent.offsetHeight+<span class="literal">"px"</span>;
-        oContainer.style.display = sDisplay;
+    var oContainer = <span class="reserved">this</span>._oContainer;
+<span class="comment">    // Container is already closed</span>
+    <span class="reserved">if</span> (!bShow &amp;&amp; !<span class="reserved">this</span>._bContainerOpen) {
+        oContainer._oContent.style.display = <span class="literal">"none"</span>;
+        <span class="reserved">return</span>;
     }
 <span class="comment">
     // If animation is enabled...</span>
     var oAnim = <span class="reserved">this</span>._oAnim;
     <span class="reserved">if</span> (oAnim &amp;&amp; oAnim.getEl() &amp;&amp; (<span class="reserved">this</span>.animHoriz || <span class="reserved">this</span>.animVert)) {
+<span class="comment">        // If helpers need to be collapsed, do it right away...</span>
+<span class="comment">        // but if helpers need to be expanded, wait until after the container expands</span>
+        <span class="reserved">if</span>(!bShow) {
+            <span class="reserved">this</span>._toggleContainerHelpers(bShow);
+        }
+
         <span class="reserved">if</span>(oAnim.isAnimated()) {
             oAnim.stop();
         }
 <span class="comment">
         // Clone container to grab current size offscreen</span>
-        var oClone = oContainer.cloneNode(true);
-        oContainer.parentNode.appendChild(oClone);
+        var oClone = oContainer._oContent.cloneNode(true);
+        oContainer.appendChild(oClone);
         oClone.style.top = <span class="literal">"-9000px"</span>;
         oClone.style.display = <span class="literal">"block"</span>;
 <span class="comment">
@@ -1513,58 +1724,53 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._toggleContain
 <span class="comment">
         // If opening anew, set to a collapsed size...</span>
         <span class="reserved">if</span>(bShow &amp;&amp; !<span class="reserved">this</span>._bContainerOpen) {
-            oContainer.style.width = wColl+<span class="literal">"px"</span>;
-            oContainer.style.height = hColl+<span class="literal">"px"</span>;
+            oContainer._oContent.style.width = wColl+<span class="literal">"px"</span>;
+            oContainer._oContent.style.height = hColl+<span class="literal">"px"</span>;
         }
 <span class="comment">        // Else, set it to its last known size.</span>
         <span class="reserved">else</span> {
-            oContainer.style.width = wExp+<span class="literal">"px"</span>;
-            oContainer.style.height = hExp+<span class="literal">"px"</span>;
+            oContainer._oContent.style.width = wExp+<span class="literal">"px"</span>;
+            oContainer._oContent.style.height = hExp+<span class="literal">"px"</span>;
         }
 
-        oContainer.parentNode.removeChild(oClone);
+        oContainer.removeChild(oClone);
         oClone = null;
 
     	var oSelf = <span class="reserved">this</span>;
     	var onAnimComplete = <span class="reserved">function</span>() {
 <span class="comment">            // Finish the collapse</span>
-    		<span class="reserved">if</span>(!bShow) {
-                oContainer.style.display = <span class="literal">"none"</span>;
-    		}
     		oAnim.onComplete.unsubscribeAll();
-<span class="comment">
-            // Call event on expand/collapse (overridden by client)</span>
+
             <span class="reserved">if</span>(bShow) {
                 oSelf.containerExpandEvent.fire(oSelf);
-<span class="comment">                //YAHOO.log(oSelf.getName() + " container expanded");</span>
             }
             <span class="reserved">else</span> {
+                oContainer._oContent.style.display = <span class="literal">"none"</span>;//DEBUG
                 oSelf.containerCollapseEvent.fire(oSelf);
-<span class="comment">                //YAHOO.log(oSelf.getName() + " container collapsed");</span>
             }
+            oSelf._toggleContainerHelpers(bShow);
      	};
 <span class="comment">
         // Display container and animate it</span>
-        oContainer.style.display = <span class="literal">"block"</span>;
+        oContainer._oContent.style.display = <span class="literal">"block"</span>;//DEBUG
         oAnim.onComplete.subscribe(onAnimComplete);
         oAnim.animate();
         <span class="reserved">this</span>._bContainerOpen = bShow;
     }
 <span class="comment">    // Else don't animate, just show or hide</span>
     <span class="reserved">else</span> {
-        <span class="reserved">this</span>._bContainerOpen = bShow;
-        oContainer.style.display = (bShow) ? <span class="literal">"block"</span> : <span class="literal">"none"</span>;
-<span class="comment">
-        // Call event on expand/collapse (overriden by client)</span>
         <span class="reserved">if</span>(bShow) {
+            oContainer._oContent.style.display = <span class="literal">"block"</span>;
             <span class="reserved">this</span>.containerExpandEvent.fire(<span class="reserved">this</span>);
-<span class="comment">            //YAHOO.log(this.getName() + " container expanded");</span>
         }
         <span class="reserved">else</span> {
+            oContainer._oContent.style.display = <span class="literal">"none"</span>;
             <span class="reserved">this</span>.containerCollapseEvent.fire(<span class="reserved">this</span>);
-<span class="comment">            //YAHOO.log(this.getName() + " container collapsed");</span>
         }
-    }
+        <span class="reserved">this</span>._toggleContainerHelpers(bShow);
+        <span class="reserved">this</span>._bContainerOpen = bShow;
+   }
+
 };
 
 <span class="comment">/**
@@ -1578,16 +1784,41 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._toggleContain
  * <span class="attrib">@private</span>
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._toggleHighlight = <span class="reserved">function</span>(oNewItem, sType) {
-    oNewItem.className = oNewItem.className.replace(<span class="reserved">this</span>.highlightClassName,<span class="literal">""</span>);
-
+    var sHighlight = <span class="reserved">this</span>.highlightClassName;
     <span class="reserved">if</span>(<span class="reserved">this</span>._oCurItem) {
-        <span class="reserved">this</span>._oCurItem.className =
-            <span class="reserved">this</span>._oCurItem.className.replace(<span class="reserved">this</span>.highlightClassName,<span class="literal">""</span>);
+<span class="comment">        // Remove highlight from old item</span>
+        YAHOO.util.Dom.removeClass(<span class="reserved">this</span>._oCurItem, sHighlight);
     }
 
-    <span class="reserved">if</span>(sType == <span class="literal">'mouseover'</span>) {
-        oNewItem.className += <span class="literal">" "</span> + <span class="reserved">this</span>.highlightClassName;
+    <span class="reserved">if</span>((sType == <span class="literal">"to"</span>) &amp;&amp; sHighlight) {
+<span class="comment">        // Apply highlight to new item</span>
+        YAHOO.util.Dom.addClass(oNewItem, sHighlight);
         <span class="reserved">this</span>._oCurItem = oNewItem;
+    }
+};
+
+<span class="comment">/**
+ * Toggles the pre-highlight on or off for an item in the container.
+ *
+ * <span class="attrib">@param</span> {object} oNewItem New The &amp;lt;li&amp;gt; element item to receive highlight
+ *                              behavior
+ * <span class="attrib">@param</span> {string} sType "mouseover" will toggle highlight on, and "mouseout"
+ *                       will toggle highlight off.
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._togglePrehighlight = <span class="reserved">function</span>(oNewItem, sType) {
+    <span class="reserved">if</span>(oNewItem == <span class="reserved">this</span>._oCurItem) {
+        <span class="reserved">return</span>;
+    }
+
+    var sPrehighlight = <span class="reserved">this</span>.prehighlightClassName;
+    <span class="reserved">if</span>((sType == <span class="literal">"mouseover"</span>) &amp;&amp; sPrehighlight) {
+<span class="comment">        // Apply prehighlight to new item</span>
+        YAHOO.util.Dom.addClass(oNewItem, sPrehighlight);
+    }
+    <span class="reserved">else</span> {
+<span class="comment">        // Remove prehighlight from old item</span>
+        YAHOO.util.Dom.removeClass(oNewItem, sPrehighlight);
     }
 };
 
@@ -1623,7 +1854,8 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._updateValue =
     <span class="reserved">if</span>(oTextbox.type == <span class="literal">"textarea"</span>) {
         oTextbox.scrollTop = oTextbox.scrollHeight;
     }
-<span class="comment">    // move cursor to end</span>
+<span class="comment">
+    // move cursor to end</span>
     var end = oTextbox.value.length;
     <span class="reserved">this</span>._selectText(oTextbox,end,end);
 
@@ -1639,8 +1871,7 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._updateValue =
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._selectItem = <span class="reserved">function</span>(oItem) {
     <span class="reserved">this</span>._bItemSelected = true;
     <span class="reserved">this</span>._updateValue(oItem);
-    <span class="reserved">this</span>.itemSelectEvent.fire(<span class="reserved">this</span>, oItem);
-<span class="comment">    //YAHOO.log(this.getName() + " selected item " + oItem.id);</span>
+    <span class="reserved">this</span>.itemSelectEvent.fire(<span class="reserved">this</span>, oItem, oItem._oResultData);
     <span class="reserved">this</span>._clearList();
 };
 
@@ -1668,7 +1899,7 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._jumpSelection
  */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._moveSelection = <span class="reserved">function</span>(nKeyCode) {
     <span class="reserved">if</span>(<span class="reserved">this</span>._bContainerOpen) {
-<span class="comment">        // determine current item's id number</span>
+<span class="comment">        // Determine current item's id number</span>
         var oCurItem = <span class="reserved">this</span>._oCurItem;
         var nCurItemIndex = -1;
 
@@ -1679,20 +1910,18 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._moveSelection
         var nNewItemIndex = (nKeyCode == 40) ?
                 (nCurItemIndex + 1) : (nCurItemIndex - 1);
 <span class="comment">
-        // out of bounds</span>
+        // Out of bounds</span>
         <span class="reserved">if</span> (nNewItemIndex &lt; -2 || nNewItemIndex &gt;= <span class="reserved">this</span>._nDisplayedItems) {
             <span class="reserved">return</span>;
         }
 
         <span class="reserved">if</span> (oCurItem) {
 <span class="comment">            // Unhighlight current item</span>
-            <span class="reserved">this</span>._toggleHighlight(oCurItem, <span class="literal">'mouseout'</span>);
+            <span class="reserved">this</span>._toggleHighlight(oCurItem, <span class="literal">"from"</span>);
             <span class="reserved">this</span>.itemArrowFromEvent.fire(<span class="reserved">this</span>, oCurItem);
-<span class="comment">            //YAHOO.log(this.getName() + " arrowed from " + oCurItem.id);</span>
-
         }
         <span class="reserved">if</span> (nNewItemIndex == -1) {
-<span class="comment">           // go back to query (remove type-ahead string)</span>
+<span class="comment">           // Go back to query (remove type-ahead string)</span>
             <span class="reserved">if</span>(<span class="reserved">this</span>.delimChar &amp;&amp; <span class="reserved">this</span>._sSavedQuery) {
                 <span class="reserved">if</span> (!<span class="reserved">this</span>._textMatchesOption()) {
                     <span class="reserved">this</span>._oTextbox.value = <span class="reserved">this</span>._sSavedQuery;
@@ -1708,48 +1937,47 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._moveSelection
             <span class="reserved">return</span>;
         }
         <span class="reserved">if</span> (nNewItemIndex == -2) {
-<span class="comment">            // close container</span>
+<span class="comment">            // Close container</span>
             <span class="reserved">this</span>._clearList();
             <span class="reserved">return</span>;
         }
 
-        var oNewItem = document.getElementById(<span class="reserved">this</span>._sName + <span class="literal">"item"</span> + nNewItemIndex);
+        var oNewItem = <span class="reserved">this</span>._aListItems[nNewItemIndex];
 <span class="comment">
         // Scroll the container if necessary</span>
-        <span class="reserved">if</span>((YAHOO.util.Dom.getStyle(<span class="reserved">this</span>._oContainer,<span class="literal">"overflow"</span>) == <span class="literal">"auto"</span>) &amp;&amp;
+        <span class="reserved">if</span>((YAHOO.util.Dom.getStyle(<span class="reserved">this</span>._oContainer._oContent,<span class="literal">"overflow"</span>) == <span class="literal">"auto"</span>) &amp;&amp;
         (nNewItemIndex &gt; -1) &amp;&amp; (nNewItemIndex &lt; <span class="reserved">this</span>._nDisplayedItems)) {
 <span class="comment">            // User is keying down</span>
             <span class="reserved">if</span>(nKeyCode == 40) {
 <span class="comment">                // Bottom of selected item is below scroll area...</span>
-                <span class="reserved">if</span>((oNewItem.offsetTop+oNewItem.offsetHeight) &gt; (<span class="reserved">this</span>._oContainer.scrollTop + <span class="reserved">this</span>._oContainer.offsetHeight)) {
+                <span class="reserved">if</span>((oNewItem.offsetTop+oNewItem.offsetHeight) &gt; (<span class="reserved">this</span>._oContainer._oContent.scrollTop + <span class="reserved">this</span>._oContainer._oContent.offsetHeight)) {
 <span class="comment">                    // Set bottom of scroll area to bottom of selected item</span>
-                    <span class="reserved">this</span>._oContainer.scrollTop = (oNewItem.offsetTop+oNewItem.offsetHeight) - <span class="reserved">this</span>._oContainer.offsetHeight;
+                    <span class="reserved">this</span>._oContainer._oContent.scrollTop = (oNewItem.offsetTop+oNewItem.offsetHeight) - <span class="reserved">this</span>._oContainer._oContent.offsetHeight;
                 }
 <span class="comment">                // Bottom of selected item is above scroll area...</span>
-                <span class="reserved">else</span> <span class="reserved">if</span>((oNewItem.offsetTop+oNewItem.offsetHeight) &lt; <span class="reserved">this</span>._oContainer.scrollTop) {
+                <span class="reserved">else</span> <span class="reserved">if</span>((oNewItem.offsetTop+oNewItem.offsetHeight) &lt; <span class="reserved">this</span>._oContainer._oContent.scrollTop) {
 <span class="comment">                    // Set top of selected item to top of scroll area</span>
-                    <span class="reserved">this</span>._oContainer.scrollTop = oNewItem.offsetTop;
+                    <span class="reserved">this</span>._oContainer._oContent.scrollTop = oNewItem.offsetTop;
 
                 }
             }
 <span class="comment">            // User is keying up</span>
             <span class="reserved">else</span> {
 <span class="comment">                // Top of selected item is above scroll area</span>
-                <span class="reserved">if</span>(oNewItem.offsetTop &lt; <span class="reserved">this</span>._oContainer.scrollTop) {
+                <span class="reserved">if</span>(oNewItem.offsetTop &lt; <span class="reserved">this</span>._oContainer._oContent.scrollTop) {
 <span class="comment">                    // Set top of scroll area to top of selected item</span>
-                    <span class="reserved">this</span>._oContainer.scrollTop = oNewItem.offsetTop;
+                    <span class="reserved">this</span>._oContainer._oContent.scrollTop = oNewItem.offsetTop;
                 }
 <span class="comment">                // Top of selected item is below scroll area</span>
-                <span class="reserved">else</span> <span class="reserved">if</span>(oNewItem.offsetTop &gt; (<span class="reserved">this</span>._oContainer.scrollTop + <span class="reserved">this</span>._oContainer.offsetHeight)) {
+                <span class="reserved">else</span> <span class="reserved">if</span>(oNewItem.offsetTop &gt; (<span class="reserved">this</span>._oContainer._oContent.scrollTop + <span class="reserved">this</span>._oContainer._oContent.offsetHeight)) {
 <span class="comment">                    // Set bottom of selected item to bottom of scroll area</span>
-                    <span class="reserved">this</span>._oContainer.scrollTop = (oNewItem.offsetTop+oNewItem.offsetHeight) - <span class="reserved">this</span>._oContainer.offsetHeight;
+                    <span class="reserved">this</span>._oContainer._oContent.scrollTop = (oNewItem.offsetTop+oNewItem.offsetHeight) - <span class="reserved">this</span>._oContainer._oContent.offsetHeight;
                 }
             }
         }
 
-        <span class="reserved">this</span>._toggleHighlight(oNewItem, <span class="literal">'mouseover'</span>);
+        <span class="reserved">this</span>._toggleHighlight(oNewItem, <span class="literal">"to"</span>);
         <span class="reserved">this</span>.itemArrowToEvent.fire(<span class="reserved">this</span>, oNewItem);
-<span class="comment">        //YAHOO.log(this.getName() + " arrowed to " + oNewItem.id);</span>
         <span class="reserved">if</span>(<span class="reserved">this</span>.typeAhead) {
             <span class="reserved">this</span>._updateValue(oNewItem);
         }

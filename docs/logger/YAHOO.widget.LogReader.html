@@ -57,15 +57,10 @@
 						</li>
 					
 						<li>
-							<a href="YAHOO.widget.Logger.html">
-								YAHOO.widget.Logger</a>
-						</li>
-
-						<li>
 							<a href="YAHOO.widget.LogReader.html">
 								YAHOO.widget.LogReader</a>
 						</li>
-
+					
 						<li>
 							<a href="YAHOO.widget.LogWriter.html">
 								YAHOO.widget.LogWriter</a>
@@ -186,19 +181,7 @@
 									<a href="#bottom">bottom</a>
 								</code>
 								<div class="description">
-									CSS bottom position of the log reader container.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">boolean</td>
-							<td class="spec">
-								<code>
-									<a href="#compact">compact</a>
-								</code>
-								<div class="description">
-									Whether or not output is compact (less readable).&nbsp;
+									Public member to access CSS bottom position of the log reader container.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -210,7 +193,7 @@
 									<a href="#fontSize">fontSize</a>
 								</code>
 								<div class="description">
-									CSS font size of the log reader container.&nbsp;
+									Public member to access CSS font size of the log reader container.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -234,7 +217,7 @@
 									<a href="#height">height</a>
 								</code>
 								<div class="description">
-									CSS height of the log reader container.&nbsp;
+									Public member to access CSS height of the log reader container.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -246,7 +229,7 @@
 									<a href="#left">left</a>
 								</code>
 								<div class="description">
-									CSS left position of the log reader container.&nbsp;
+									Public member to access CSS left position of the log reader container.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -282,7 +265,7 @@
 									<a href="#right">right</a>
 								</code>
 								<div class="description">
-									CSS right position of the log reader container.&nbsp;
+									Public member to access CSS right position of the log reader container.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -294,7 +277,19 @@
 									<a href="#top">top</a>
 								</code>
 								<div class="description">
-									CSS top position of the log reader container.&nbsp;
+									Public member to access CSS top position of the log reader container.&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#verboseOutput">verboseOutput</a>
+								</code>
+								<div class="description">
+									Whether or not output is verbose (more readable).&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -306,7 +301,7 @@
 									<a href="#width">width</a>
 								</code>
 								<div class="description">
-									CSS width of the log reader container.&nbsp;
+									Public member to access CSS width of the log reader container.&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -348,7 +343,7 @@
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
-										<a href="#createSourceCheckbox">createSourceCheckbox</a>
+										<a href="#_createSourceCheckbox">_createSourceCheckbox</a>
 										(source)
 									</code>
 									<div class="description">
@@ -446,20 +441,7 @@
 								<strong>bottom</strong>
 							</code>
 							<div class="description">
-								CSS bottom position of the log reader container.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="compact">compact</a></h4>
-						<div class="detail">
-							<code>
-								boolean
-								&nbsp;
-								<strong>compact</strong>
-							</code>
-							<div class="description">
-								Whether or not output is compact (less readable).
+								Public member to access CSS bottom position of the log reader container.
 							</div>
 						</div>
 						<hr />
@@ -472,7 +454,7 @@
 								<strong>fontSize</strong>
 							</code>
 							<div class="description">
-								CSS font size of the log reader container.
+								Public member to access CSS font size of the log reader container.
 							</div>
 						</div>
 						<hr />
@@ -485,7 +467,7 @@
 								<strong>footerEnabled</strong>
 							</code>
 							<div class="description">
-								Whether or not the footer UI is enabled for the log reader.
+								Whether or not the footer UI is enabled for the log reader. Default: true.
 							</div>
 						</div>
 						<hr />
@@ -498,7 +480,7 @@
 								<strong>height</strong>
 							</code>
 							<div class="description">
-								CSS height of the log reader container.
+								Public member to access CSS height of the log reader container.
 							</div>
 						</div>
 						<hr />
@@ -511,7 +493,7 @@
 								<strong>left</strong>
 							</code>
 							<div class="description">
-								CSS left position of the log reader container.
+								Public member to access CSS left position of the log reader container.
 							</div>
 						</div>
 						<hr />
@@ -524,7 +506,8 @@
 								<strong>logReaderEnabled</strong>
 							</code>
 							<div class="description">
-								Whether or not the log reader is enabled to output log messages.
+								Whether or not the log reader is enabled to output log messages. Default:
+ true.
 							</div>
 						</div>
 						<hr />
@@ -537,7 +520,7 @@
 								<strong>newestOnTop</strong>
 							</code>
 							<div class="description">
-								Whether or not newest message is printed on top.
+								Whether or not newest message is printed on top. Default: true.
 							</div>
 						</div>
 						<hr />
@@ -550,7 +533,7 @@
 								<strong>right</strong>
 							</code>
 							<div class="description">
-								CSS right position of the log reader container.
+								Public member to access CSS right position of the log reader container.
 							</div>
 						</div>
 						<hr />
@@ -563,7 +546,21 @@
 								<strong>top</strong>
 							</code>
 							<div class="description">
-								CSS top position of the log reader container.
+								Public member to access CSS top position of the log reader container.
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="verboseOutput">verboseOutput</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>verboseOutput</strong>
+							</code>
+							<div class="description">
+								Whether or not output is verbose (more readable). Setting to true will make
+ output more compact (less readable). Default: true.
 							</div>
 						</div>
 						<hr />
@@ -576,7 +573,7 @@
 								<strong>width</strong>
 							</code>
 							<div class="description">
-								CSS width of the log reader container.
+								Public member to access CSS width of the log reader container.
 							</div>
 						</div>
 						<hr />
@@ -640,11 +637,11 @@
 				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
 					
-						<h4><a name="createSourceCheckbox">createSourceCheckbox</a></h4>
+						<h4><a name="_createSourceCheckbox">_createSourceCheckbox</a></h4>
 						<div class="detail">
 							<code>
 								void 
-								<strong>createSourceCheckbox</strong>
+								<strong>_createSourceCheckbox</strong>
 								(source)
 							</code>
 									

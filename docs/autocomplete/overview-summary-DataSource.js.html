@@ -288,6 +288,24 @@ YAHOO.widget.DataSource.<span class="reserved">prototype</span>.queryMatchCase =
 <span class="comment">/***************************************************************************
  * Public methods
  ***************************************************************************/</span>
+ <span class="comment">/**
+ * Public accessor to the unique name of the data source instance.
+ *
+ * <span class="attrib">@return</span> {string} Unique name of the data source instance
+ */</span>
+YAHOO.widget.DataSource.<span class="reserved">prototype</span>.getName = <span class="reserved">function</span>() {
+    <span class="reserved">return</span> <span class="reserved">this</span>._sName;
+};
+
+ <span class="comment">/**
+ * Public accessor to the unique name of the data source instance.
+ *
+ * <span class="attrib">@return</span> {string} Unique name of the data source instance
+ */</span>
+YAHOO.widget.DataSource.<span class="reserved">prototype</span>.toString = <span class="reserved">function</span>() {
+    <span class="reserved">return</span> <span class="literal">"DataSource "</span> + <span class="reserved">this</span>._sName;
+};
+
 <span class="comment">/**
  * Retrieves query results, first checking the local cache, then making the
  * query request to the live data source as defined by the function doQuery.
@@ -305,7 +323,6 @@ YAHOO.widget.DataSource.<span class="reserved">prototype</span>.getResults = <sp
     // Not in cache, so get results from server</span>
     <span class="reserved">if</span>(aResults.length === 0) {
         <span class="reserved">this</span>.queryEvent.fire(<span class="reserved">this</span>, oParent, sQuery);
-<span class="comment">        //YAHOO.log("Data source for " + oParent.getName() + " made source query for '" + sQuery + "'.");</span>
         <span class="reserved">this</span>.doQuery(oCallbackFn, sQuery, oParent);
     }
 };
@@ -335,7 +352,6 @@ YAHOO.widget.DataSource.<span class="reserved">prototype</span>.flushCache = <sp
         <span class="reserved">this</span>._aCacheHelper = [];
     }
     <span class="reserved">this</span>.cacheFlushEvent.fire(<span class="reserved">this</span>);
-<span class="comment">    //YAHOO.log("Cache flushed");</span>
 };
 
 <span class="comment">/***************************************************************************
@@ -400,6 +416,22 @@ YAHOO.widget.DataSource.<span class="reserved">prototype</span>.cacheFlushEvent 
  * Private member variables
  ***************************************************************************/</span>
 <span class="comment">/**
+ * Internal class variable to index multiple data source instances.
+ *
+ * <span class="attrib">@type</span> number
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.DataSource._nIndex = 0;
+
+<span class="comment">/**
+ * Name of data source instance.
+ *
+ * <span class="attrib">@type</span> string
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.DataSource.<span class="reserved">prototype</span>._sName = null;
+
+<span class="comment">/**
  * Local cache of data result objects indexed chronologically.
  *
  * <span class="attrib">@type</span> array
@@ -426,6 +458,9 @@ YAHOO.widget.DataSource.<span class="reserved">prototype</span>._init = <span cl
     <span class="reserved">if</span>(maxCacheEntries &gt; 0 &amp;&amp; !<span class="reserved">this</span>._aCache) {
         <span class="reserved">this</span>._aCache = [];
     }
+    
+    <span class="reserved">this</span>._sName = <span class="literal">"instance"</span> + YAHOO.widget.DataSource._nIndex;
+    YAHOO.widget.DataSource._nIndex++;
     
     <span class="reserved">this</span>.queryEvent = new YAHOO.util.CustomEvent(<span class="literal">"query"</span>, <span class="reserved">this</span>);
     <span class="reserved">this</span>.cacheQueryEvent = new YAHOO.util.CustomEvent(<span class="literal">"cacheQuery"</span>, <span class="reserved">this</span>);
@@ -483,7 +518,6 @@ YAHOO.widget.DataSource.<span class="reserved">prototype</span>._doQueryCache = 
     // If cache is enabled...</span>
     <span class="reserved">if</span>((<span class="reserved">this</span>.maxCacheEntries &gt; 0) &amp;&amp; aCache &amp;&amp; (nCacheLength &gt; 0)) {
         <span class="reserved">this</span>.cacheQueryEvent.fire(<span class="reserved">this</span>, oParent, sQuery);
-<span class="comment">        //YAHOO.log("Data source for " + oParent.getName() + " made cache query for '" + sQuery + "'.");</span>
 <span class="comment">        // If case is unimportant, normalize query now instead of in loops</span>
         <span class="reserved">if</span>(!<span class="reserved">this</span>.queryMatchCase) {
             var sOrigQuery = sQuery;
@@ -496,8 +530,8 @@ YAHOO.widget.DataSource.<span class="reserved">prototype</span>._doQueryCache = 
             var aAllResultItems = resultObj.results;
 <span class="comment">            // If case is unimportant, normalize match key for comparison</span>
             var matchKey = (!<span class="reserved">this</span>.queryMatchCase) ?
-                encodeURI(resultObj.query.toLowerCase()):
-                encodeURI(resultObj.query);
+                encodeURIComponent(resultObj.query.toLowerCase()):
+                encodeURIComponent(resultObj.query);
 <span class="comment">            
             // If a cached match key exactly matches the query...</span>
             <span class="reserved">if</span>(matchKey == sQuery) {
@@ -529,8 +563,8 @@ YAHOO.widget.DataSource.<span class="reserved">prototype</span>._doQueryCache = 
                         <span class="reserved">for</span>(var k = aAllResultItems.length-1; k &gt;= 0; k--) {
                             var aRecord = aAllResultItems[k];
                             var sKeyIndex = (<span class="reserved">this</span>.queryMatchCase) ?
-                                encodeURI(aRecord[0]).indexOf(sQuery):
-                                encodeURI(aRecord[0]).toLowerCase().indexOf(sQuery);
+                                encodeURIComponent(aRecord[0]).indexOf(sQuery):
+                                encodeURIComponent(aRecord[0]).toLowerCase().indexOf(sQuery);
 <span class="comment">                            
                             // A STARTSWITH match is when the query is found at the beginning of the key string...</span>
                             <span class="reserved">if</span>((!bMatchContains &amp;&amp; (sKeyIndex === 0)) ||
@@ -559,7 +593,6 @@ YAHOO.widget.DataSource.<span class="reserved">prototype</span>._doQueryCache = 
         // If there was a match, send along the results.</span>
         <span class="reserved">if</span>(bMatchFound) {
             <span class="reserved">this</span>.getCachedResultsEvent.fire(<span class="reserved">this</span>, oParent, sOrigQuery, aResults);
-<span class="comment">            //YAHOO.log("Data source for " + oParent.getName() + " got " + aResults.length + " results from cache.");</span>
             oCallbackFn(sOrigQuery, aResults, oParent);
         }
     }
@@ -593,13 +626,15 @@ YAHOO.widget.DS_XHR = <span class="reserved">function</span>(sScriptURI, aSchema
 <span class="comment">    
     // Initialization sequence</span>
     <span class="reserved">if</span>(!aSchema || (aSchema.constructor != Array)) {
-<span class="comment">        //log this.ERROR_INIT</span>
+        YAHOO.log(<span class="literal">"Could not instantiate XHR DataSource due to invalid arguments"</span>, <span class="literal">"error"</span>, <span class="reserved">this</span>.toString());
+        <span class="reserved">return</span>;
     }
     <span class="reserved">else</span> {
         <span class="reserved">this</span>.schema = aSchema;
     }
     <span class="reserved">this</span>.scriptURI = sScriptURI;
     <span class="reserved">this</span>._init();
+    YAHOO.log(<span class="literal">"XHR DataSource initialized"</span>,<span class="literal">"info"</span>,<span class="reserved">this</span>.toString());
 };
 
 YAHOO.widget.DS_XHR.<span class="reserved">prototype</span> = new YAHOO.widget.DataSource();
@@ -642,6 +677,17 @@ YAHOO.widget.DS_XHR.<span class="reserved">prototype</span>.ERROR_DATAXHR = <spa
 <span class="comment">/***************************************************************************
  * Public member variables
  ***************************************************************************/</span>
+<span class="comment">/**
+ * Number of milliseconds the XHR connection will wait for a server response. A
+ * a value of zero indicates the XHR connection will wait forever. Any value
+ * greater than zero will use the Connection utility's Auto-Abort feature.
+ * Default: 0.
+ *
+ * <span class="attrib">@type</span> number
+ */</span>
+YAHOO.widget.DS_XHR.<span class="reserved">prototype</span>.connTimeout = 0;
+
+
 <span class="comment">/**
  * Absolute or relative URI to script that returns query results. For instance,
  * queries will be sent to
@@ -707,7 +753,7 @@ YAHOO.widget.DS_XHR.<span class="reserved">prototype</span>.doQuery = <span clas
     <span class="reserved">if</span>(<span class="reserved">this</span>.scriptQueryAppend.length &gt; 0) {
         sUri += <span class="literal">"&amp;"</span> + <span class="reserved">this</span>.scriptQueryAppend;
     }
-<span class="comment">    //YAHOO.log("Data source query URL is " + sUri);</span>
+    YAHOO.log(<span class="literal">"Data source is querying URL "</span> + sUri, <span class="literal">"info"</span>, <span class="reserved">this</span>.toString());
     var oResponse = null;
     
     var oSelf = <span class="reserved">this</span>;
@@ -718,6 +764,18 @@ YAHOO.widget.DS_XHR.<span class="reserved">prototype</span>.doQuery = <span clas
      * <span class="attrib">@private</span>
      */</span>
     var responseSuccess = <span class="reserved">function</span>(oResp) {
+<span class="comment">        // Response ID does not match last made request ID.</span>
+        <span class="reserved">if</span>(!oSelf._oConn || (oResp.tId != oSelf._oConn.tId)) {
+            oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATANULL);
+            YAHOO.log(oSelf.ERROR_DATANULL, <span class="literal">"error"</span>, <span class="reserved">this</span>.toString());
+            <span class="reserved">return</span>;
+        }
+<span class="comment">//DEBUG</span>
+<span class="comment">/*YAHOO.log(oResp.responseXML.getElementsByTagName("Result"),'warn');
+for(var foo in oResp) {
+    YAHOO.log(foo + ": "+oResp[foo],'warn');
+}
+YAHOO.log('responseXML.xml: '+oResp.responseXML.xml,'warn');*/</span>
         <span class="reserved">if</span>(!isXML) {
             oResp = oResp.responseText;
         }
@@ -726,26 +784,29 @@ YAHOO.widget.DS_XHR.<span class="reserved">prototype</span>.doQuery = <span clas
         }
         <span class="reserved">if</span>(oResp === null) {
             oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATANULL);
-<span class="comment">            //YAHOO.log("Data source for " + oParent.getName() +</span>
-<span class="comment">            //    " experienced a data error for query \"" + sQuery +</span>
-<span class="comment">            //    "\": " + oSelf.ERROR_DATANULL, "error");</span>
-            oCallbackFn(sQuery, null, oParent);
+            YAHOO.log(oSelf.ERROR_DATANULL, <span class="literal">"error"</span>, oSelf.toString());
             <span class="reserved">return</span>;
         }
-        
+
+        var aResults = oSelf.parseResponse(sQuery, oResp, oParent);
         var resultObj = {};
-        resultObj.query = decodeURI(sQuery);
-        resultObj.results = oSelf.parseResponse(sQuery, oResp, oParent);
-        oSelf._addCacheElem(resultObj);
-        oCallbackFn(sQuery, resultObj.results, oParent);
+        resultObj.query = decodeURIComponent(sQuery);
+        resultObj.results = aResults;
+        <span class="reserved">if</span>(aResults === null) {
+            oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATAPARSE);
+            YAHOO.log(oSelf.ERROR_DATAPARSE, <span class="literal">"error"</span>, oSelf.toString());
+            <span class="reserved">return</span>;
+        }
+        <span class="reserved">else</span> {
+            oSelf.getResultsEvent.fire(oSelf, oParent, sQuery, aResults);
+            oSelf._addCacheElem(resultObj);
+            oCallbackFn(sQuery, aResults, oParent);
+        }
     };
 
     var responseFailure = <span class="reserved">function</span>(oResp) {
         oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATAXHR);
-<span class="comment">        //YAHOO.log("Data source for " + oParent.getName() +</span>
-<span class="comment">        //        " experienced a data error for query \"" + sQuery +</span>
-<span class="comment">        //        "\": " + oSelf.ERROR_DATAXHR, "error");</span>
-        oCallbackFn(sQuery, null, oParent);
+        YAHOO.log(oSelf.ERROR_DATAXHR + <span class="literal">": "</span> + oResp.statusText, <span class="literal">"error"</span>, oSelf.toString());
         <span class="reserved">return</span>;
     };
     
@@ -754,7 +815,15 @@ YAHOO.widget.DS_XHR.<span class="reserved">prototype</span>.doQuery = <span clas
         failure:responseFailure
     };
     
-    YAHOO.util.Connect.asyncRequest(<span class="literal">"GET"</span>, sUri, oCallback, null);
+    <span class="reserved">if</span>(!isNaN(<span class="reserved">this</span>.connTimeout) &amp;&amp; <span class="reserved">this</span>.connTimeout &gt; 0) {
+        oCallback.timeout = <span class="reserved">this</span>.connTimeout;
+    }
+    
+    <span class="reserved">if</span>(<span class="reserved">this</span>._oConn) {
+        YAHOO.util.Connect.abort(<span class="reserved">this</span>._oConn);
+    }
+    
+    oSelf._oConn = YAHOO.util.Connect.asyncRequest(<span class="literal">"GET"</span>, sUri, oCallback, null);
 };
 
 <span class="comment">/**
@@ -780,7 +849,9 @@ YAHOO.widget.DS_XHR.<span class="reserved">prototype</span>.parseResponse = <spa
 
     switch (this.responseType) {
         case this.TYPE_JSON:
+            var jsonList;
             if(window.JSON) {
+                // Use the JSON utility if available
                 var jsonObjParsed = JSON.parse(oResponse);
                 if(!jsonObjParsed) {
                     bError = true;
@@ -788,70 +859,107 @@ YAHOO.widget.DS_XHR.<span class="reserved">prototype</span>.parseResponse = <spa
                 }
                 else {
                     // eval is necessary here since aSchema[0] is of unknown depth
-                    var jsonListParsed = eval("jsonObjParsed." + aSchema[0]);
-                    for(var i = jsonListParsed.length-1; i &gt;= 0 ; i--) {
-                        // eval is necessary here since aSchema[1] is of unknown depth
-                        jsonListParsed[i][0] = eval("jsonListParsed[i]." + aSchema[1]);
-                        aResults[i] = jsonListParsed[i];
-                    }
-                    break;
+                    jsonList = eval("jsonObjParsed." + aSchema[0]);
                 }
             }
             else {
+                // Parse the JSON response as a string
                 try {
-                    // trim leading spaces
+                    // Trim leading spaces
                     while (oResponse.substring(0,1) == " ") {
                         oResponse = oResponse.substring(1, oResponse.length);
                     }
 
-                    // zero response
-                    if((oResponse.indexOf("{}") === 0) ||
-                        (oResponse.indexOf("{") &lt; 0)) {
+                    // Invalid JSON response
+                    if(oResponse.indexOf("{") &lt; 0) {
+                        bError = true;
                         break;
                     }
 
-                    // eval is necessary here
-                    var jsonObjRaw = eval('(' + oResponse + ')');
-
-                    // eval is necessary here since aSchema[0] is of unknown depth
-                    var jsonListRaw = eval("jsonObjRaw." + aSchema[0]);
-
-                    for(var j = jsonListRaw.length-1; j &gt;= 0 ; j--) {
-                        // eval is probably not necessary here
-                        //jsonListRaw[j][0] = eval("jsonListRaw[j]." + aSchema[1]);
-                        jsonListRaw[j][0] = jsonListRaw[j][aSchema[1]];
-                        aResults[j] = jsonListRaw[j];
+                    // Empty (but not invalid) JSON response
+                    if(oResponse.indexOf("{}") === 0) {
+                        break;
                     }
-                    break;
+
+                    // Turn the string into an object literal...
+                    // ...eval is necessary here
+                    var jsonObjRaw = eval("(" + oResponse + ")");
+                    if(!jsonObjRaw) {
+                        bError = true;
+                        break;
+                    }
+
+                    // Grab the object member that contains an array of all reponses...
+                    // ...eval is necessary here since aSchema[0] is of unknown depth
+                    jsonList = eval("(jsonObjRaw." + aSchema[0]+")");
                 }
                 catch(e) {
                     bError = true;
                     break;
                }
             }
+
+            if(!jsonList) {
+                bError = true;
+                break;
+            }
+
+            // Loop through the array of all responses...
+            for(var i = jsonList.length-1; i &gt;= 0 ; i--) {
+                var aResultItem = [];
+                var jsonResult = jsonList[i];
+                // ...and loop through each data field value of each response
+                for(var j = aSchema.length-1; j &gt;= 1 ; j--) {
+                    // ...and capture data into an array mapped according to the schema...
+                    var dataFieldValue = jsonResult[aSchema[j]];
+                    if(!dataFieldValue) {
+                        dataFieldValue = "";
+                    }
+                    //YAHOO.log("data: " + i + " value:" +j+" = "+dataFieldValue,"debug",this.toString());
+                    aResultItem.unshift(dataFieldValue);
+                }
+                // Capture the array of data field values in an array of results
+                aResults.unshift(aResultItem);
+            }
             break;
         case this.TYPE_XML:
-           var xmlList = oResponse.getElementsByTagName(aSchema[0]);
-             for(var k = xmlList.length-1; k &gt;= 0 ; k--) {
-                var result = xmlList.item(k);//doLog(k+' is '+result.attributes.item(0).firstChild.nodeValue);
+            // Get the collection of results
+            var xmlList = oResponse.getElementsByTagName(aSchema[0]);
+            if(!xmlList) {
+                bError = true;
+                break;
+            }
+            // Loop through each result
+            for(var k = xmlList.length-1; k &gt;= 0 ; k--) {
+                var result = xmlList.item(k);
+                //YAHOO.log("Result"+k+" is "+result.attributes.item(0).firstChild.nodeValue,"debug",this.toString());
                 var aFieldSet = [];
-                for(var m = aSchema.length-1; m &gt;= 1 ; m--) {//doLog(aSchema[m]+' is '+result.attributes.getNamedItem(aSchema[m]).firstChild.nodeValue);
+                // Loop through each data field in each result using the schema
+                for(var m = aSchema.length-1; m &gt;= 1 ; m--) {
+                    //YAHOO.log(aSchema[m]+" is "+result.attributes.getNamedItem(aSchema[m]).firstChild.nodeValue);
                     var sValue = null;
-                    // Capture each data value into an array
-                    // Data may be held in an attribute...
+                    // Values may be held in an attribute...
                     var xmlAttr = result.attributes.getNamedItem(aSchema[m]);
                     if(xmlAttr) {
-                        sValue = xmlAttr.value;//doLog('attr'+sValue);
+                        sValue = xmlAttr.value;
+                        //YAHOO.log("Attr value is "+sValue,"debug",this.toString());
                     }
-                    // Or in a node...
-                    else {
+                    // ...or in a node
+                    else{
                         var xmlNode = result.getElementsByTagName(aSchema[m]);
-                        if(xmlNode) {
-                            sValue = xmlNode.item(0).firstChild.nodeValue;// doLog('node'+sValue);
+                        if(xmlNode &amp;&amp; xmlNode.item(0) &amp;&amp; xmlNode.item(0).firstChild) {
+                            sValue = xmlNode.item(0).firstChild.nodeValue;
+                            //YAHOO.log("Node value is "+sValue,"debug",this.toString());
+                        }
+                        else {
+                            sValue = "";
+                            //YAHOO.log("Value not found","debug",this.toString());
                         }
                     }
+                    // Capture the schema-mapped data field values into an array
                     aFieldSet.unshift(sValue);
                 }
+                // Capture each array of values into an array of results
                 aResults.unshift(aFieldSet);
             }
             break;
@@ -870,17 +978,11 @@ YAHOO.widget.DS_XHR.<span class="reserved">prototype</span>.parseResponse = <spa
             break;
         default:
             break;
-    }
+    }>
     <span class="reserved">if</span>(bError) {
-        <span class="reserved">this</span>.dataErrorEvent.fire(<span class="reserved">this</span>, oParent, sQuery, <span class="reserved">this</span>.ERROR_DATAPARSE);
-<span class="comment">        //YAHOO.log("Data source for " + oParent.getName() +</span>
-<span class="comment">        //        " experienced a data error for query \"" + sQuery +</span>
-<span class="comment">        //        "\": " + this.ERROR_DATAPARSE, "error");</span>
         <span class="reserved">return</span> null;
     }
     <span class="reserved">else</span> {
-        <span class="reserved">this</span>.getResultsEvent.fire(<span class="reserved">this</span>, oParent, sQuery, aResults);
-<span class="comment">        //YAHOO.log("Data source for " + oParent.getName() + " got " + aResults.length + " results from source.");</span>
         <span class="reserved">return</span> aResults;
     }
 };            
@@ -920,10 +1022,17 @@ YAHOO.widget.DS_JSFunction = <span class="reserved">function</span>(oFunction, o
             <span class="reserved">this</span>[sConfig] = oConfigs[sConfig];
         }
     }
-<span class="comment">    
+<span class="comment">
     // Initialization sequence</span>
-    <span class="reserved">this</span>.dataFunction = oFunction;
-    <span class="reserved">this</span>._init();
+    <span class="reserved">if</span>(!oFunction  || (oFunction.constructor != Function)) {
+        YAHOO.log(<span class="literal">"Could not instantiate JSFunction DataSource due to invalid arguments"</span>, <span class="literal">"error"</span>, <span class="reserved">this</span>.toString());
+        <span class="reserved">return</span>;
+    }
+    <span class="reserved">else</span> {
+        <span class="reserved">this</span>.dataFunction = oFunction;
+        <span class="reserved">this</span>._init();
+        YAHOO.log(<span class="literal">"JS Function DataSource initialized"</span>,<span class="literal">"info"</span>,<span class="reserved">this</span>.toString());
+    }
 };
 
 YAHOO.widget.DS_JSFunction.<span class="reserved">prototype</span> = new YAHOO.widget.DataSource();
@@ -958,20 +1067,16 @@ YAHOO.widget.DS_JSFunction.<span class="reserved">prototype</span>.doQuery = <sp
     aResults = oFunction(sQuery);
     <span class="reserved">if</span>(aResults === null) {
         <span class="reserved">this</span>.dataErrorEvent.fire(<span class="reserved">this</span>, oParent, sQuery, <span class="reserved">this</span>.ERROR_DATANULL);
-<span class="comment">        //YAHOO.log("Data source for " + oParent.getName() +</span>
-<span class="comment">        //        " experienced a data error for query \"" + sQuery +</span>
-<span class="comment">        //        "\": " + oSelf.ERROR_DATANULL, "error");</span>
-        oCallbackFn(sQuery, null, oParent);
+        YAHOO.log(oSelf.ERROR_DATANULL, <span class="literal">"error"</span>, <span class="reserved">this</span>.toString());
         <span class="reserved">return</span>;
     }
     
     var resultObj = {};
-    resultObj.query = decodeURI(sQuery);
+    resultObj.query = decodeURIComponent(sQuery);
     resultObj.results = aResults;
     <span class="reserved">this</span>._addCacheElem(resultObj);
     
     <span class="reserved">this</span>.getResultsEvent.fire(<span class="reserved">this</span>, oParent, sQuery, aResults);
-<span class="comment">    //YAHOO.log("Data source for " + oParent.getName() + " got " + aResults.length + " results from source.");</span>
     oCallbackFn(sQuery, aResults, oParent);
     <span class="reserved">return</span>;
 };
@@ -999,8 +1104,15 @@ YAHOO.widget.DS_JSArray = <span class="reserved">function</span>(aData, oConfigs
     }
 <span class="comment">
     // Initialization sequence</span>
-    <span class="reserved">this</span>.data = aData;
-    <span class="reserved">this</span>._init();
+    <span class="reserved">if</span>(!aData || (aData.constructor != Array)) {
+        YAHOO.log(<span class="literal">"Could not instantiate JSArray DataSource due to invalid arguments"</span>, <span class="literal">"error"</span>, <span class="reserved">this</span>.toString());
+        <span class="reserved">return</span>;
+    }
+    <span class="reserved">else</span> {
+        <span class="reserved">this</span>.data = aData;
+        <span class="reserved">this</span>._init();
+        YAHOO.log(<span class="literal">"JS Array DataSource initialized"</span>,<span class="literal">"info"</span>,<span class="reserved">this</span>.toString());
+    }
 };
 
 YAHOO.widget.DS_JSArray.<span class="reserved">prototype</span> = new YAHOO.widget.DataSource();
@@ -1047,8 +1159,8 @@ YAHOO.widget.DS_JSArray.<span class="reserved">prototype</span>.doQuery = <span 
         }
 
         var sKeyIndex = (<span class="reserved">this</span>.queryMatchCase) ?
-            encodeURI(aDataset[0]).indexOf(sQuery):
-            encodeURI(aDataset[0]).toLowerCase().indexOf(sQuery);
+            encodeURIComponent(aDataset[0]).indexOf(sQuery):
+            encodeURIComponent(aDataset[0]).toLowerCase().indexOf(sQuery);
 <span class="comment">
         // A STARTSWITH match is when the query is found at the beginning of the key string...</span>
         <span class="reserved">if</span>((!bMatchContains &amp;&amp; (sKeyIndex === 0)) ||
@@ -1060,7 +1172,6 @@ YAHOO.widget.DS_JSArray.<span class="reserved">prototype</span>.doQuery = <span 
     }
 
     <span class="reserved">this</span>.getResultsEvent.fire(<span class="reserved">this</span>, oParent, sQuery, aResults);
-<span class="comment">    //YAHOO.log("Data source for " + oParent.getName() + " got " + aResults.length + " results from source.");</span>
     oCallbackFn(sQuery, aResults, oParent);
 };
 </pre>

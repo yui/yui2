@@ -57,15 +57,10 @@
 						</li>
 					
 						<li>
-							<a href="YAHOO.widget.Logger.html">
-								YAHOO.widget.Logger</a>
-						</li>
-					
-						<li>
 							<a href="YAHOO.widget.LogReader.html">
 								YAHOO.widget.LogReader</a>
 						</li>
-
+					
 						<li>
 							<a href="YAHOO.widget.LogWriter.html">
 								YAHOO.widget.LogWriter</a>
@@ -202,6 +197,19 @@
 					<table border="1" cellpadding="3" cellspacing="0">
 						
 							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#getSource">getSource</a>
+										()
+									</code>
+									<div class="description">
+										Public accessor to get the source name.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
@@ -210,6 +218,32 @@
 									</code>
 									<div class="description">
 										Logs a message attached to the source of the LogWriter.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#setSource">setSource</a>
+										(&lt;string&gt; sSource)
+									</code>
+									<div class="description">
+										Public accessor to set the source name.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#toString">toString</a>
+										()
+									</code>
+									<div class="description">
+										Public accessor to the unique name of the LogWriter instance.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -273,6 +307,30 @@
 				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
 					
+						<h4><a name="getSource">getSource</a></h4>
+						<div class="detail">
+							<code>
+								string 
+								<strong>getSource</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Public accessor to get the source name.
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> The LogWriter source</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="log">log</a></h4>
 						<div class="detail">
 							<code>
@@ -301,6 +359,59 @@
 										
 									</dl>
 								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="setSource">setSource</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>setSource</strong>
+								(&lt;string&gt; sSource)
+							</code>
+									
+							<div class="description">
+								
+									Public accessor to set the source name.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>sSource</code> - 
+												 Source of LogWriter instance    
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="toString">toString</a></h4>
+						<div class="detail">
+							<code>
+								string 
+								<strong>toString</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Public accessor to the unique name of the LogWriter instance.
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> Unique name of the LogWriter instance</dd>
+									</dl>
 								
 								
 							</div>

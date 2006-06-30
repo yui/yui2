@@ -57,15 +57,10 @@
 						</li>
 					
 						<li>
-							<a href="YAHOO.widget.Logger.html">
-								YAHOO.widget.Logger</a>
-						</li>
-					
-						<li>
 							<a href="YAHOO.widget.LogReader.html">
 								YAHOO.widget.LogReader</a>
 						</li>
-
+					
 						<li>
 							<a href="YAHOO.widget.LogWriter.html">
 								YAHOO.widget.LogWriter</a>
@@ -189,12 +184,25 @@
  * <span class="attrib">@param</span> {string} sSource Source of LogWriter instance
  */</span>
 YAHOO.widget.LogWriter = <span class="reserved">function</span>(sSource) {
+    <span class="reserved">if</span>(!sSource) {
+        YAHOO.log(<span class="literal">"Could not instantiate LogWriter due to invalid source."</span>, <span class="literal">"error"</span>, <span class="literal">"LogWriter"</span>);
+        <span class="reserved">return</span>;
+    }
     <span class="reserved">this</span>._source = sSource;
  };
 
 <span class="comment">/***************************************************************************
  * Public methods
  ***************************************************************************/</span>
+ <span class="comment">/**
+ * Public accessor to the unique name of the LogWriter instance.
+ *
+ * <span class="attrib">@return</span> {string} Unique name of the LogWriter instance
+ */</span>
+YAHOO.widget.LogWriter.<span class="reserved">prototype</span>.toString = <span class="reserved">function</span>() {
+    <span class="reserved">return</span> <span class="literal">"LogWriter "</span> + <span class="reserved">this</span>._sSource;
+};
+
 <span class="comment">/**
  * Logs a message attached to the source of the LogWriter.
  *
@@ -205,6 +213,29 @@ YAHOO.widget.LogWriter.<span class="reserved">prototype</span>.log = <span class
     YAHOO.widget.Logger.log(sMsg, sCategory, <span class="reserved">this</span>._source);
 };
 
+<span class="comment">/**
+ * Public accessor to get the source name.
+ *
+ * <span class="attrib">@return</span> {string} The LogWriter source
+ */</span>
+YAHOO.widget.LogWriter.<span class="reserved">prototype</span>.getSource = <span class="reserved">function</span>() {
+    <span class="reserved">return</span> <span class="reserved">this</span>._sSource;
+};
+
+<span class="comment">/**
+ * Public accessor to set the source name.
+ *
+ * <span class="attrib">@param</span> {string} sSource Source of LogWriter instance
+ */</span>
+YAHOO.widget.LogWriter.<span class="reserved">prototype</span>.setSource = <span class="reserved">function</span>(sSource) {
+    <span class="reserved">if</span>(!sSource) {
+        YAHOO.log(<span class="literal">"Could not set source due to invalid source."</span>, <span class="literal">"error"</span>, <span class="reserved">this</span>.toString());
+        <span class="reserved">return</span>;
+    }
+    <span class="reserved">else</span> {
+        <span class="reserved">this</span>._sSource = sSource;
+    }
+};
 <span class="comment">/***************************************************************************
  * Private members
  ***************************************************************************/</span>
