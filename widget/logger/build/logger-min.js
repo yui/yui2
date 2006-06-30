@@ -1,14 +1,19 @@
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 0.11.0
+*/
+
 
 YAHOO.widget.Logger={loggerEnabled:true,_firebugEnabled:true,categories:["info","warn","error","time","window"],sources:["global"],_stack:[],_startTime:new Date().getTime(),_lastTime:null};YAHOO.widget.Logger.categoryCreateEvent=new YAHOO.util.CustomEvent("categoryCreate",this,true);YAHOO.widget.Logger.sourceCreateEvent=new YAHOO.util.CustomEvent("sourceCreate",this,true);YAHOO.widget.Logger.newLogEvent=new YAHOO.util.CustomEvent("newLog",this,true);YAHOO.widget.Logger.logResetEvent=new YAHOO.util.CustomEvent("logReset",this,true);YAHOO.widget.Logger.log=function(sMsg,sCategory,sSource){if(this.loggerEnabled){if(!sCategory){sCategory="info";}
 else if(this._isNewCategory(sCategory)){this._createNewCategory(sCategory);}
 var sClass="global";var sDetail=null;if(sSource){var spaceIndex=sSource.indexOf(" ");if(spaceIndex>0){sClass=sSource.substring(0,spaceIndex);sDetail=sSource.substring(spaceIndex,sSource.length);}
-else{sClass=sSource}
+else{sClass=sSource;}
 if(this._isNewSource(sClass)){this._createNewSource(sClass);}}
 var timestamp=new Date();var logEntry={time:timestamp,category:sCategory,source:sClass,sourceDetail:sDetail,msg:sMsg};this._stack.push(logEntry);this.newLogEvent.fire(logEntry);if(this._firebugEnabled){this._printToFirebug(logEntry);}
 return true;}
-else{return false;}};YAHOO.widget.Logger.reset=function(){this._stack=[];this._startTime=new Date().getTime();this.loggerEnabled=true;this.log(null,"Logger reset");this.logResetEvent.fire();};YAHOO.widget.Logger.getStack=function(){return this._stack;};YAHOO.widget.Logger.getStartTime=function(){return this._startTime;};YAHOO.widget.Logger.disableFirebug=function(){YAHOO.log("YAHOO.Logger output to Firebug has been disabled.");this._firebugEnabled=false;}
-YAHOO.widget.Logger.enableFirebug=function(){this._firebugEnabled=true;YAHOO.log("YAHOO.Logger output to Firebug has been enabled.");}
-YAHOO.widget.Logger._createNewCategory=function(category){this.categories.push(category);this.categoryCreateEvent.fire(category);};YAHOO.widget.Logger._isNewCategory=function(category){for(var i=0;i<this.categories.length;i++){if(category==this.categories[i]){return false;}}
+else{return false;}};YAHOO.widget.Logger.reset=function(){this._stack=[];this._startTime=new Date().getTime();this.loggerEnabled=true;this.log(null,"Logger reset");this.logResetEvent.fire();};YAHOO.widget.Logger.getStack=function(){return this._stack;};YAHOO.widget.Logger.getStartTime=function(){return this._startTime;};YAHOO.widget.Logger.disableFirebug=function(){YAHOO.log("YAHOO.Logger output to Firebug has been disabled.");this._firebugEnabled=false;};YAHOO.widget.Logger.enableFirebug=function(){this._firebugEnabled=true;YAHOO.log("YAHOO.Logger output to Firebug has been enabled.");};YAHOO.widget.Logger._createNewCategory=function(category){this.categories.push(category);this.categoryCreateEvent.fire(category);};YAHOO.widget.Logger._isNewCategory=function(category){for(var i=0;i<this.categories.length;i++){if(category==this.categories[i]){return false;}}
 return true;};YAHOO.widget.Logger._createNewSource=function(source){this.sources.push(source);this.sourceCreateEvent.fire(source);};YAHOO.widget.Logger._isNewSource=function(source){if(source){for(var i=0;i<this.sources.length;i++){if(source==this.sources[i]){return false;}}
 return true;}};YAHOO.widget.Logger._printToFirebug=function(entry){if(window.console&&console.log){var category=entry.category;var label=entry.category.substring(0,4).toUpperCase();var time=entry.time;if(time.toLocaleTimeString){var localTime=time.toLocaleTimeString();}
 else{localTime=time.toString();}
@@ -18,19 +23,19 @@ entry.source+": "+
 entry.msg;console.log(output);}};YAHOO.widget.Logger._onWindowError=function(msg,url,line){try{YAHOO.widget.Logger.log(msg+' ('+url+', line '+line+')',"window");if(YAHOO.widget.Logger._origOnWindowError){YAHOO.widget.Logger._origOnWindowError();}}
 catch(e){return false;}};if(window.onerror){YAHOO.widget.Logger._origOnWindowError=window.onerror;}
 window.onerror=YAHOO.widget.Logger._onWindowError;YAHOO.widget.Logger.log("Logger initialized");YAHOO.widget.LogWriter=function(sSource){if(!sSource){YAHOO.log("Could not instantiate LogWriter due to invalid source.","error","LogWriter");return;}
-this._source=sSource;};YAHOO.widget.LogWriter.prototype.toString=function(){return"LogWriter "+this._sSource;};YAHOO.widget.LogWriter.prototype.log=function(sMsg,sCategory){YAHOO.widget.Logger.log(sMsg,sCategory,this._source);};YAHOO.widget.LogWriter.prototype.getSource=function(){return this._sSource;};YAHOO.widget.LogWriter.prototype.setSource=function(sSource){if(!sSource){YAHOO.log("Could not instantiate LogWriter due to invalid source.","error",this.toString());return;}
+this._source=sSource;};YAHOO.widget.LogWriter.prototype.toString=function(){return"LogWriter "+this._sSource;};YAHOO.widget.LogWriter.prototype.log=function(sMsg,sCategory){YAHOO.widget.Logger.log(sMsg,sCategory,this._source);};YAHOO.widget.LogWriter.prototype.getSource=function(){return this._sSource;};YAHOO.widget.LogWriter.prototype.setSource=function(sSource){if(!sSource){YAHOO.log("Could not set source due to invalid source.","error",this.toString());return;}
 else{this._sSource=sSource;}};YAHOO.widget.LogWriter.prototype._source=null;YAHOO.widget.LogReader=function(containerEl,oConfig){var oSelf=this;if(typeof oConfig=="object"){for(var param in oConfig){this[param]=oConfig[param];}}
 if(containerEl){if(typeof containerEl=="string"){this._containerEl=document.getElementById(containerEl);}
 else if(containerEl.tagName){this._containerEl=containerEl;}
 this._containerEl.className="yui-log";}
 if(!this._containerEl){if(YAHOO.widget.LogReader._defaultContainerEl){this._containerEl=YAHOO.widget.LogReader._defaultContainerEl;}
 else{this._containerEl=document.body.appendChild(document.createElement("div"));this._containerEl.id="yui-log";this._containerEl.className="yui-log";YAHOO.widget.LogReader._defaultContainerEl=this._containerEl;}
-if(this.width){this._containerEl.style.width=this.width;}
-if(this.left){this._containerEl.style.left=this.left;}
-if(this.right){this._containerEl.style.right=this.right;}
-if(this.bottom){this._containerEl.style.bottom=this.bottom;}
-if(this.top){this._containerEl.style.top=this.top;}
-if(this.fontSize){this._containerEl.style.fontSize=this.fontSize;}}
+var containerStyle=this._containerEl.style;if(this.width){containerStyle.width=this.width;}
+if(this.left){containerStyle.left=this.left;}
+if(this.right){containerStyle.right=this.right;}
+if(this.bottom){containerStyle.bottom=this.bottom;}
+if(this.top){containerStyle.top=this.top;}
+if(this.fontSize){containerStyle.fontSize=this.fontSize;}}
 if(this._containerEl){if(!this._hdEl){this._hdEl=this._containerEl.appendChild(document.createElement("div"));this._hdEl.id="yui-log-hd"+YAHOO.widget.LogReader._index;this._hdEl.className="yui-log-hd";this._collapseEl=this._hdEl.appendChild(document.createElement("div"));this._collapseEl.className="yui-log-btns";this._collapseBtn=document.createElement("input");this._collapseBtn.type="button";this._collapseBtn.style.fontSize=YAHOO.util.Dom.getStyle(this._containerEl,"fontSize");this._collapseBtn.className="yui-log-button";this._collapseBtn.value="Collapse";this._collapseBtn=this._collapseEl.appendChild(this._collapseBtn);YAHOO.util.Event.addListener(oSelf._collapseBtn,'click',oSelf._onClickCollapseBtn,oSelf);this._title=this._hdEl.appendChild(document.createElement("h4"));this._title.innerHTML="Logger Console";if(YAHOO.util.DD&&(YAHOO.widget.LogReader._defaultContainerEl==this._containerEl)){var ylog_dd=new YAHOO.util.DD(this._containerEl.id);ylog_dd.setHandleElId(this._hdEl.id);this._hdEl.style.cursor="move";}}
 if(!this._consoleEl){this._consoleEl=this._containerEl.appendChild(document.createElement("div"));this._consoleEl.className="yui-log-bd";if(this.height){this._consoleEl.style.height=this.height;}}
 if(!this._ftEl&&this.footerEnabled){this._ftEl=this._containerEl.appendChild(document.createElement("div"));this._ftEl.className="yui-log-ft";this._btnsEl=this._ftEl.appendChild(document.createElement("div"));this._btnsEl.className="yui-log-btns";this._pauseBtn=document.createElement("input");this._pauseBtn.type="button";this._pauseBtn.style.fontSize=YAHOO.util.Dom.getStyle(this._containerEl,"fontSize");this._pauseBtn.className="yui-log-button";this._pauseBtn.value="Pause";this._pauseBtn=this._btnsEl.appendChild(this._pauseBtn);YAHOO.util.Event.addListener(oSelf._pauseBtn,'click',oSelf._onClickPauseBtn,oSelf);this._clearBtn=document.createElement("input");this._clearBtn.type="button";this._clearBtn.style.fontSize=YAHOO.util.Dom.getStyle(this._containerEl,"fontSize");this._clearBtn.className="yui-log-button";this._clearBtn.value="Clear";this._clearBtn=this._btnsEl.appendChild(this._clearBtn);YAHOO.util.Event.addListener(oSelf._clearBtn,'click',oSelf._onClickClearBtn,oSelf);this._categoryFiltersEl=this._ftEl.appendChild(document.createElement("div"));this._categoryFiltersEl.className="yui-log-categoryfilters";this._sourceFiltersEl=this._ftEl.appendChild(document.createElement("div"));this._sourceFiltersEl.className="yui-log-sourcefilters";}}

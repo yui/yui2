@@ -1,3 +1,10 @@
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 0.11.0
+*/
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -79,7 +86,7 @@ YAHOO.widget.Logger.log = function(sMsg, sCategory, sSource) {
                 sDetail = sSource.substring(spaceIndex,sSource.length);// the rest of the source
             }
             else {
-                sClass = sSource
+                sClass = sSource;
             }
             if(this._isNewSource(sClass)) {
                 this._createNewSource(sClass);
@@ -144,7 +151,7 @@ YAHOO.widget.Logger.getStartTime = function() {
 YAHOO.widget.Logger.disableFirebug = function() {
     YAHOO.log("YAHOO.Logger output to Firebug has been disabled.");
     this._firebugEnabled = false;
-}
+};
 
 /**
  * Enables output to the Firebug Firefox extension.
@@ -152,7 +159,7 @@ YAHOO.widget.Logger.disableFirebug = function() {
 YAHOO.widget.Logger.enableFirebug = function() {
     this._firebugEnabled = true;
     YAHOO.log("YAHOO.Logger output to Firebug has been enabled.");
-}
+};
 
 /***************************************************************************
  * Private methods
@@ -329,6 +336,8 @@ YAHOO.widget.LogWriter.prototype.log = function(sMsg, sCategory) {
 
 /**
  * Public accessor to get the source name.
+ *
+ * @return {string} The LogWriter source
  */
 YAHOO.widget.LogWriter.prototype.getSource = function() {
     return this._sSource;
@@ -336,10 +345,12 @@ YAHOO.widget.LogWriter.prototype.getSource = function() {
 
 /**
  * Public accessor to set the source name.
+ *
+ * @param {string} sSource Source of LogWriter instance
  */
 YAHOO.widget.LogWriter.prototype.setSource = function(sSource) {
     if(!sSource) {
-        YAHOO.log("Could not instantiate LogWriter due to invalid source.", "error", this.toString());
+        YAHOO.log("Could not set source due to invalid source.", "error", this.toString());
         return;
     }
     else {
@@ -408,23 +419,24 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         }
 
         // If implementer has provided container values, trust and set those
+        var containerStyle = this._containerEl.style;
         if(this.width) {
-            this._containerEl.style.width = this.width;
+            containerStyle.width = this.width;
         }
         if(this.left) {
-            this._containerEl.style.left = this.left;
+            containerStyle.left = this.left;
         }
         if(this.right) {
-            this._containerEl.style.right = this.right;
+            containerStyle.right = this.right;
         }
         if(this.bottom) {
-            this._containerEl.style.bottom = this.bottom;
+            containerStyle.bottom = this.bottom;
         }
         if(this.top) {
-            this._containerEl.style.top = this.top;
+            containerStyle.top = this.top;
         }
         if(this.fontSize) {
-            this._containerEl.style.fontSize = this.fontSize;
+            containerStyle.fontSize = this.fontSize;
         }
     }
 
@@ -951,8 +963,6 @@ YAHOO.widget.LogReader.prototype._printBuffer = function() {
  * @private
  */
 YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
-//TODO: much optimization here
-//if verboseOutput, set fixed widths for time output
     var entriesLen = aEntries.length;
     var sourceFiltersLen = this._sourceFilters.length;
     var categoryFiltersLen = this._categoryFilters.length;
@@ -1000,8 +1010,8 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
             this._lastTime = msecs;
             
             var verboseOutput = (this.verboseOutput) ? "<br>" : "";
-            var sourceAndDetail = (sourceDetail) ? source + " " + sourceDetail :
-                source;
+            var sourceAndDetail = (sourceDetail) ?
+                source + " " + sourceDetail : source;
 
             var output =  "<span class='"+category+"'>"+label+"</span> " +
                 totalTime + "ms (+" +
