@@ -563,16 +563,6 @@ YAHOO.example.ACJSArray = function() {
                 var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";
                 return (sMarkup);
             };
-
-            // Subscribe to custom events
-            oAutoComp2.textboxFocusEvent.subscribe(YAHOO.example.ACJSArray.doInitialQuery);
-        },
-
-        // When the area-code textbox receives focus, send a query
-        // for the string "2" to prepopulate with results for the user
-        doInitialQuery: function(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            oAutoComp.sendQuery("2");
         },
 
         validateForm: function() {
