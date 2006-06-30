@@ -256,7 +256,10 @@ YAHOO.util.Anim.prototype = {
       
       this.runtimeAttributes = {};
       
-      YAHOO.log('creating new instance of ' + this);
+      var logger = {};
+      logger.log = function() {YAHOO.log.apply(window, arguments)};
+      
+      logger.log('creating new instance of ' + this);
       
       /**
        * Starts the animation by registering it with the animation manager.   
@@ -1118,9 +1121,7 @@ Version: 0.10.0
             
             var pageXY = Y.Dom.getXY(this.getEl());
             for (i = 0, len = control.length; i < len; ++i) {
-               control[i] = [ control[i][0] - pageXY[0], control[i][1] - pageXY[1] ];
-               //control[i] = [ control[i][0] + start[0], control[i][1] + start[1] ];
-               //control[i] = translateValues.call(this, control[i], start);
+               control[i] = [ control[i][0] - pageXY[0], control[i][1] - pageXY[1] ];;
             }
 
             
@@ -1131,7 +1132,7 @@ Version: 0.10.0
                control[i] = [ start[0] + control[i][0], start[1] + control[i][1] ];
             }
          }
-            //console.log(control);
+
          this.runtimeAttributes[attr] = [start];
          
          if (control.length > 0) {
