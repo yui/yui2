@@ -256,7 +256,10 @@ YAHOO.util.Anim.prototype = {
       
       this.runtimeAttributes = {};
       
-      YAHOO.log('creating new instance of ' + this);
+      var logger = {};
+      logger.log = function() {YAHOO.log.apply(window, arguments)};
+      
+      logger.log('creating new instance of ' + this);
       
       /**
        * Starts the animation by registering it with the animation manager.   
