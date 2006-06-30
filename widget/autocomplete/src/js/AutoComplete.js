@@ -124,7 +124,7 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
         this.selectionEnforceEvent = new YAHOO.util.CustomEvent("selectionEnforce", this);
         this.containerCollapseEvent = new YAHOO.util.CustomEvent("containerCollapse", this);
         this.textboxBlurEvent = new YAHOO.util.CustomEvent("textboxBlur", this);
-
+        
         // Finish up
         oTextbox.setAttribute("autocomplete","off");
         YAHOO.widget.AutoComplete._nIndex++;
@@ -135,7 +135,6 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
         YAHOO.log("Could not instantiate AutoComplete due invalid arguments", "error", this.toString());
     }
 };
-
 
 /***************************************************************************
  * Public member variables
@@ -840,7 +839,13 @@ YAHOO.widget.AutoComplete.prototype._initContainer = function() {
 YAHOO.widget.AutoComplete.prototype._initList = function() {
     this._aListItems = [];
     while(this._oContainer._oContent._oBody.hasChildNodes()) {
-        this._oContainer._oContent._oBody.removeChild(this._oContainer._oContent._oBody.firstChild);
+        var oldListItems = this.getListItems();
+        if(oldListItems) {
+            for(var oldi = oldListItems.length-1; oldi >= 0; i--) {
+                oldListItems[oldi] = null;
+            }
+        }
+        this._oContainer._oContent._oBody.innerHTML = "";
     }
 
     var oList = document.createElement("ul");
@@ -865,9 +870,6 @@ YAHOO.widget.AutoComplete.prototype._initListItem = function(oItem, nItemIndex) 
     var oSelf = this;
     oItem.style.display = "none";
     oItem._nItemIndex = nItemIndex;
-    oItem.toString = function () {
-        return oSelf.getName() + "LI" + nItemIndex;
-    };
 
     oItem.mouseover = oItem.mouseout = oItem.onclick = null;
     YAHOO.util.Event.addListener(oItem,"mouseover",oSelf._onItemMouseover,oSelf);
@@ -1560,14 +1562,14 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
                 oSelf.containerExpandEvent.fire(oSelf);
             }
             else {
-                oContainer._oContent.style.display = "none";//DEBUG
+                oContainer._oContent.style.display = "none";
                 oSelf.containerCollapseEvent.fire(oSelf);
             }
             oSelf._toggleContainerHelpers(bShow);
      	};
 
         // Display container and animate it
-        oContainer._oContent.style.display = "block";//DEBUG
+        oContainer._oContent.style.display = "block";
         oAnim.onComplete.subscribe(onAnimComplete);
         oAnim.animate();
         this._bContainerOpen = bShow;
