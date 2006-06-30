@@ -256,7 +256,10 @@ YAHOO.util.Anim.prototype = {
       
       this.runtimeAttributes = {};
       
+      var logger = {};
+      logger.log = function() {YAHOO.log.apply(window, arguments)};
       
+      logger.log('creating new instance of ' + this);
       
       /**
        * Starts the animation by registering it with the animation manager.   
@@ -883,6 +886,7 @@ YAHOO.util.Easing = {
    	if (t < 1) return -.5*(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
    	return a*Math.pow(2,-10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )*.5 + c + b;
    },
+
 
    /**
     * back easing in - backtracking slightly, then reversing direction and moving to target
