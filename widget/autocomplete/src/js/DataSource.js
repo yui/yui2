@@ -705,12 +705,11 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                 // ...and loop through each data field value of each response
                 for(var j = aSchema.length-1; j >= 1 ; j--) {
                     // ...and capture data into an array mapped according to the schema...
-
                     var dataFieldValue = jsonResult[aSchema[j]];
                     if(!dataFieldValue) {
                         dataFieldValue = "";
                     }
-                    //doLog(dataFieldValue);
+                    //YAHOO.log("data: " + i + " value:" +j+" = "+dataFieldValue,"debug",this.toString());
                     aResultItem.unshift(dataFieldValue);
                 }
                 // Capture the array of data field values in an array of results
