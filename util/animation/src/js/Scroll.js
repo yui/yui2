@@ -37,7 +37,6 @@ Version: 0.10.0
    var Y = YAHOO.util;
    var superclass = Y.Scroll.superclass;
    var prototype = Y.Scroll.prototype;
-   var Motion = Y.Scroll;
 
    /**
     * toString method
