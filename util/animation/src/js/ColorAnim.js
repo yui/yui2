@@ -2,12 +2,12 @@
  * @class ColorAnim subclass for color fading
  * <p>Usage: <code>var myAnim = new Y.ColorAnim(el, { backgroundColor: { from: '#FF0000', to: '#FFFFFF' } }, 1, Y.Easing.easeOut);</code></p>
  * <p>Color values can be specified with either 112233, #112233, [255,255,255], or rgb(255,255,255)
- * @requires Y.Anim
- * @requires Y.AnimMgr
- * @requires Y.Easing
- * @requires Y.Bezier
- * @requires Y.Dom
- * @requires Y.Event
+ * @requires YAHOO.util.Anim
+ * @requires YAHOO.util.AnimMgr
+ * @requires YAHOO.util.Easing
+ * @requires YAHOO.util.Bezier
+ * @requires YAHOO.util.Dom
+ * @requires YAHOO.util.Event
  * @constructor
  * @param {HTMLElement | String} el Reference to the element that will be animated
  * @param {Object} attributes The attribute(s) to be animated.
@@ -28,7 +28,6 @@
    var Y = YAHOO.util;
    var superclass = Y.ColorAnim.superclass;
    var prototype = Y.ColorAnim.prototype;
-   var ColorAnim = Y.ColorAnim;
    
    /**
     * toString method
@@ -76,9 +75,9 @@
    };
    
    /**
-    * Sets the default value to be used when "from" is not supplied.
-    * @param {String} attr The attribute being set.
-    * @param {Number} val The default value to be applied to the attribute.
+    * Returns current value of the attribute.
+    * @param {String} attr The name of the attribute.
+    * @return {Number} val The current value of the attribute.
     */
    prototype.getAttribute = function(attr) {
       var el = this.getEl();
@@ -129,6 +128,12 @@
       return val;
    };
    
+   /**
+    * Sets the actual values to be used during the animation.
+    * Should only be needed for subclass use.
+    * @param {Object} attr The attribute object
+    * @private 
+    */
    prototype.setRuntimeAttribute = function(attr) {
       superclass.setRuntimeAttribute.call(this, attr);
       
