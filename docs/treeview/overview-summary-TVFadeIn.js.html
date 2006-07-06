@@ -238,9 +238,7 @@
 		
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<pre class="sourceview"><span class="comment">/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */</span>
-
-<span class="comment">/**
+				<pre class="sourceview"><span class="comment">/**
  * A 1/2 second fade-in animation.
  *
  * <span class="attrib">@constructor</span>
@@ -248,23 +246,23 @@
  * <span class="attrib">@param</span> callback {function} function to invoke when the animation is finished
  */</span>
 YAHOO.widget.TVFadeIn = <span class="reserved">function</span>(el, callback) {
-	<span class="comment">/**
-	 * The element to animate
+    <span class="comment">/**
+     * The element to animate
      * <span class="attrib">@type</span> HTMLElement
-	 */</span>
-	<span class="reserved">this</span>.el = el;
+     */</span>
+    <span class="reserved">this</span>.el = el;
 
-	<span class="comment">/**
-	 * the callback to invoke when the animation is complete
-	 *
-	 * <span class="attrib">@type</span> function
-	 */</span>
-	<span class="reserved">this</span>.callback = callback;
+    <span class="comment">/**
+     * the callback to invoke when the animation is complete
+     *
+     * <span class="attrib">@type</span> function
+     */</span>
+    <span class="reserved">this</span>.callback = callback;
 
-	<span class="comment">/**
-	 * <span class="attrib">@private</span>
-	 */</span>
-	<span class="reserved">this</span>.logger = new ygLogger(<span class="literal">"TVFadeIn"</span>);
+    <span class="comment">/**
+     * <span class="attrib">@private</span>
+     */</span>
+    <span class="reserved">this</span>.logger = new YAHOO.widget.LogWriter(<span class="reserved">this</span>.toString());
 };
 
 <span class="comment">/**
@@ -281,7 +279,7 @@ YAHOO.widget.TVFadeIn.<span class="reserved">prototype</span> = {
 <span class="comment">
         // var dur = ( navigator.userAgent.match(/msie/gi) ) ? 0.05 : 0.4;</span>
         var dur = 0.4; 
-<span class="comment">        // this.logger.debug("duration: " + dur);</span>
+<span class="comment">        // this.logger.log("duration: " + dur);</span>
 <span class="comment">        // var a = new ygAnim_Fade(this.el, dur, 1);</span>
 <span class="comment">        // a.setStart(0.1);</span>
 <span class="comment">        // a.onComplete = function() { tvanim.onComplete(); };</span>
@@ -297,6 +295,10 @@ YAHOO.widget.TVFadeIn.<span class="reserved">prototype</span> = {
      */</span>
     onComplete: <span class="reserved">function</span>() {
         <span class="reserved">this</span>.callback();
+    },
+
+    toString: <span class="reserved">function</span>() {
+        <span class="reserved">return</span> <span class="literal">"TVFadeIn"</span>;
     }
 };
 

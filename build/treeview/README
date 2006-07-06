@@ -1,5 +1,31 @@
 TreeView - Release Notes
 
+0.11.0
+
+   * Added TreeView -> popNode, which differs from removeNode in that the
+     node's children are preserved so the entire branch can be re-inserted
+     into another part of the tree, or another tree.
+
+   * Added TreeView -> getNodesByProperty, which differs from 
+     getNodeByProperty by returning an array of all nodes that have the
+     specified property rather than just the first one.
+
+   * Added Node -> insertBefore, insertAfter, and appendTo.  These method
+     can be used to reorganize the tree.
+
+   * removeChildren properly resets the node icon when executed against a 
+     collpased node.
+     
+   * Moved depth assignment from the constructor to appendChild so that the
+     value is set properly if the node is moved within the tree.
+
+   * Fixed broken loop in removeChildren.
+
+   * RootNode -> loadComplete calls tree.draw for hot-wiring the dynamic load
+     feature for the top level nodes.
+
+   * The treeview constructor will accept an element instead of an id.
+
 0.10.0
 
    * If the child collection changes prior to a refresh(), the icon is now

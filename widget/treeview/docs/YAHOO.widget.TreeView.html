@@ -414,6 +414,32 @@
 							</tr>
 						
 							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#generateId">generateId</a>
+										(el)
+									</code>
+									<div class="description">
+										private&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">HTMLElement</td>
+								<td class="spec">
+									<code>
+										<a href="#getEl">getEl</a>
+										()
+									</code>
+									<div class="description">
+										Returns the tree's host element&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
 								<td class="flags">Node</td>
 								<td class="spec">
 									<code>
@@ -438,6 +464,20 @@
 									<div class="description">
 										Returns a node that has a matching property and value in the data
  object that was passed into its constructor.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Array</td>
+								<td class="spec">
+									<code>
+										<a href="#getNodesByProperty">getNodesByProperty</a>
+										(&lt;object&gt; property, &lt;object&gt; value)
+									</code>
+									<div class="description">
+										Returns a collection of nodes that have a matching property 
+ and value in the data object that was passed into its constructor.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -485,6 +525,21 @@
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
+										<a href="#popNode">popNode</a>
+										(node)
+									</code>
+									<div class="description">
+										Removes the node from the tree, preserving the child collection 
+ to make it possible to insert the branch into another part of the 
+ tree, or another tree.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
 										<a href="#removeChildren">removeChildren</a>
 										(&lt;Node&gt; node)
 									</code>
@@ -502,8 +557,8 @@
 										(node, &lt;boolean&gt; autoRefresh)
 									</code>
 									<div class="description">
-										Removes the node and its children, and optionally refreshes the branch 
- of the tree that was affected.&nbsp;
+										Removes the node and its children, and optionally refreshes the 
+ branch of the tree that was affected.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -543,6 +598,19 @@
 									</code>
 									<div class="description">
 										Sets up the animation for expanding children&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#toString">toString</a>
+										()
+									</code>
+									<div class="description">
+										toString&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -591,7 +659,7 @@
 								<td class="spec">
 									<code>
 										<a href="#preload">preload</a>
-										()
+										(prefix)
 									</code>
 									<div class="description">
 										Attempts to preload the images defined in the styles used to draw the tree by
@@ -695,8 +763,8 @@
 									<dt>Parameters:</dt>
 									
 										<dd>
-											<code>id</code> - 
-											 The id of the element that the tree will be inserted  into.
+											<code>string</code> - 
+											|HTMLElement} id The id of the element, or the element  itself that the tree will be inserted into.
 										</dd>
 									
 								</dl>
@@ -887,6 +955,49 @@
 						</div>
 						<hr />
 					
+						<h4><a name="generateId">generateId</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>generateId</strong>
+								(el)
+							</code>
+									
+							<div class="description">
+								
+									private
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getEl">getEl</a></h4>
+						<div class="detail">
+							<code>
+								HTMLElement 
+								<strong>getEl</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Returns the tree's host element
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> the host element</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="getNodeByIndex">getNodeByIndex</a></h4>
 						<div class="detail">
 							<code>
@@ -934,8 +1045,7 @@
 							<div class="description">
 								
 									Returns a node that has a matching property and value in the data
- object that was passed into its constructor.  Provides a flexible
- way for the implementer to get a particular node.
+ object that was passed into its constructor.
 								
 								
 									<dl>
@@ -957,6 +1067,46 @@
 									<dl>
 										<dt>Returns:</dt>
 										<dd> the matching node, null if no match</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getNodesByProperty">getNodesByProperty</a></h4>
+						<div class="detail">
+							<code>
+								Array 
+								<strong>getNodesByProperty</strong>
+								(&lt;object&gt; property, &lt;object&gt; value)
+							</code>
+									
+							<div class="description">
+								
+									Returns a collection of nodes that have a matching property 
+ and value in the data object that was passed into its constructor.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>property</code> - 
+												 the property to search (usually a string)  
+											</dd>
+										
+											<dd>
+												<code>value</code> - 
+												 the value we want to find (usuall an int or string)  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> the matching collection of nodes, null if no match</dd>
 									</dl>
 								
 								
@@ -1046,6 +1196,37 @@
 						</div>
 						<hr />
 					
+						<h4><a name="popNode">popNode</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>popNode</strong>
+								(node)
+							</code>
+									
+							<div class="description">
+								
+									Removes the node from the tree, preserving the child collection 
+ to make it possible to insert the branch into another part of the 
+ tree, or another tree.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>the</code> - 
+												 node to remove        
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="removeChildren">removeChildren</a></h4>
 						<div class="detail">
 							<code>
@@ -1088,8 +1269,8 @@
 									
 							<div class="description">
 								
-									Removes the node and its children, and optionally refreshes the branch 
- of the tree that was affected.
+									Removes the node and its children, and optionally refreshes the 
+ branch of the tree that was affected.
 								
 								
 									<dl>
@@ -1136,7 +1317,7 @@
 										
 											<dd>
 												<code>the</code> - 
-												 type of animation (acceptable constants in YAHOO.widget.TVAnim)        
+												 type of animation (acceptable values defined in   YAHOO.widget.TVAnim)        
 											</dd>
 										
 									</dl>
@@ -1199,11 +1380,35 @@
 										
 											<dd>
 												<code>the</code> - 
-												 type of animation (acceptable constants in YAHOO.widget.TVAnim)        
+												 type of animation (acceptable values defined in   YAHOO.widget.TVAnim)        
 											</dd>
 										
 									</dl>
 								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="toString">toString</a></h4>
+						<div class="detail">
+							<code>
+								string 
+								<strong>toString</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									toString
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> string representation of the tree</dd>
+									</dl>
 								
 								
 							</div>
@@ -1334,7 +1539,7 @@
 							<code>
 								void 
 								<strong>preload</strong>
-								()
+								(prefix)
 							</code>
 									
 							<div class="description">

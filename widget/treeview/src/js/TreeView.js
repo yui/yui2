@@ -326,8 +326,8 @@ YAHOO.widget.TreeView.prototype = {
     },
 
     /**
-     * Removes the node and its children, and optionally refreshes the branch 
-     * of the tree that was affected.
+     * Removes the node and its children, and optionally refreshes the 
+     * branch of the tree that was affected.
      * @param {Node} The node to remove
      * @param {boolean} autoRefresh automatically refreshes branch if true
      * @return {boolean} False is there was a problem, true otherwise.
@@ -385,14 +385,16 @@ YAHOO.widget.TreeView.prototype = {
         this.removeChildren(node);
 
         // Remove the node from the tree
-        this.popBranch(node);
+        this.popNode(node);
     },
 
     /**
-     * Removes the branch from the tree
+     * Removes the node from the tree, preserving the child collection 
+     * to make it possible to insert the branch into another part of the 
+     * tree, or another tree.
      * @param {Node} the node to remove
      */
-    popBranch: function(node) { 
+    popNode: function(node) { 
         var p = node.parent;
 
         // Update the parent's collection of children
@@ -438,7 +440,8 @@ YAHOO.widget.TreeView.prototype = {
         var id = el.id;
 
         if (!id) {
-            id = "yui-tv-auto-id-" + (YAHOO.widget.TreeView.counter++);
+            id = "yui-tv-auto-id-" + YAHOO.widget.TreeView.counter;
+            YAHOO.widget.TreeView.counter++;
         }
 
         return id;
@@ -520,26 +523,14 @@ YAHOO.widget.TreeView.addHandler = function (el, sType, fn, capture) {
  * Attempts to preload the images defined in the styles used to draw the tree by
  * rendering off-screen elements that use the styles.
  */
-YAHOO.widget.TreeView.preload = function() {
-
-    var styles = [
-        "ygtvtn",   
-        "ygtvtm",   
-        "ygtvtmh",  
-        "ygtvtp",   
-        "ygtvtph",  
-        "ygtvln",   
-        "ygtvlm",   
-        "ygtvlmh",  
-        "ygtvlp",   
-        "ygtvlph",  
-        "ygtvloading"
-        ];
+YAHOO.widget.TreeView.preload = function(prefix) {
+    prefix = prefix || "ygtv";
+    var styles = ["tn","tm","tmh","tp","tph","ln","lm","lmh","lp","lph","loading"];
 
     var sb = [];
     
     for (var i = 0; i < styles.length; ++i) { 
-        sb[sb.length] = '<span class="' + styles[i] + '">&#160;</span>';
+        sb[sb.length] = '<span class="' + prefix + styles[i] + '">&#160;</span>';
     }
 
     var f = document.createElement("DIV");

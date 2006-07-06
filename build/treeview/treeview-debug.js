@@ -393,14 +393,16 @@ YAHOO.widget.TreeView.prototype = {
         this.removeChildren(node);
 
         // Remove the node from the tree
-        this.popBranch(node);
+        this.popNode(node);
     },
 
     /**
-     * Removes the branch from the tree
+     * Removes the branch from the tree.  This differs from removeNode in
+     * that the child collection is preserved to make it possible to
+     * insert the branch into another part of the tree, or another tree.
      * @param {Node} the node to remove
      */
-    popBranch: function(node) { 
+    popNode: function(node) { 
         var p = node.parent;
 
         // Update the parent's collection of children
@@ -446,7 +448,8 @@ YAHOO.widget.TreeView.prototype = {
         var id = el.id;
 
         if (!id) {
-            id = "yui-tv-auto-id-" + (YAHOO.widget.TreeView.counter++);
+            id = "yui-tv-auto-id-" + YAHOO.widget.TreeView.counter;
+            YAHOO.widget.TreeView.counter++;
         }
 
         return id;
@@ -528,26 +531,14 @@ YAHOO.widget.TreeView.addHandler = function (el, sType, fn, capture) {
  * Attempts to preload the images defined in the styles used to draw the tree by
  * rendering off-screen elements that use the styles.
  */
-YAHOO.widget.TreeView.preload = function() {
-
-    var styles = [
-        "ygtvtn",   
-        "ygtvtm",   
-        "ygtvtmh",  
-        "ygtvtp",   
-        "ygtvtph",  
-        "ygtvln",   
-        "ygtvlm",   
-        "ygtvlmh",  
-        "ygtvlp",   
-        "ygtvlph",  
-        "ygtvloading"
-        ];
+YAHOO.widget.TreeView.preload = function(prefix) {
+    prefix = prefix || "ygtv";
+    var styles = ["tn","tm","tmh","tp","tph","ln","lm","lmh","lp","lph","loading"];
 
     var sb = [];
     
     for (var i = 0; i < styles.length; ++i) { 
-        sb[sb.length] = '<span class="' + styles[i] + '">&#160;</span>';
+        sb[sb.length] = '<span class="' + prefix + styles[i] + '">&#160;</span>';
     }
 
     var f = document.createElement("DIV");
@@ -839,7 +830,7 @@ YAHOO.widget.Node.prototype = {
         if (p) {
 
             if (this.tree) {
-                this.tree.popBranch(this);
+                this.tree.popNode(this);
             }
 
             var refIndex = node.isChildOf(p);
@@ -870,7 +861,7 @@ YAHOO.widget.Node.prototype = {
         if (p) {
 
             if (this.tree) {
-                this.tree.popBranch(this);
+                this.tree.popNode(this);
             }
 
             var refIndex = node.isChildOf(p);
@@ -1741,8 +1732,8 @@ YAHOO.widget.HTMLNode = function(oData, oParent, expanded, hasIcon) {
 YAHOO.widget.HTMLNode.prototype = new YAHOO.widget.Node();
 
 /**
- * The CSS class for the label href.  Defaults to ygtvlabel, but can be
- * overridden to provide a custom presentation for a specific node.
+ * The CSS class for the html content container.  Defaults to ygtvhtml, but 
+ * can be overridden to provide a custom presentation for a specific node.
  *
  * @type string
  */

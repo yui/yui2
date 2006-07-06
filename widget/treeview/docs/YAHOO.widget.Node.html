@@ -500,6 +500,33 @@
 					<table border="1" cellpadding="3" cellspacing="0">
 						
 							<tr>
+								<td class="flags">Node</td>
+								<td class="spec">
+									<code>
+										<a href="#appendTo">appendTo</a>
+										(parentNode)
+									</code>
+									<div class="description">
+										Appends this node to the supplied node's child collection&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">boolean</td>
+								<td class="spec">
+									<code>
+										<a href="#applyParent">applyParent</a>
+										(&lt;Node&gt; parentNode)
+									</code>
+									<div class="description">
+										Certain properties for the node cannot be set until the parent
+ is known.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
@@ -802,6 +829,32 @@
 							</tr>
 						
 							<tr>
+								<td class="flags">Node</td>
+								<td class="spec">
+									<code>
+										<a href="#insertAfter">insertAfter</a>
+										(node)
+									</code>
+									<div class="description">
+										Inserts this node after the supplied node&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Node</td>
+								<td class="spec">
+									<code>
+										<a href="#insertBefore">insertBefore</a>
+										(node)
+									</code>
+									<div class="description">
+										Inserts this node before this supplied node&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
 								<td class="flags">boolean</td>
 								<td class="spec">
 									<code>
@@ -890,6 +943,19 @@
 									</code>
 									<div class="description">
 										Expands if node is collapsed, collapses otherwise.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#toString">toString</a>
+										()
+									</code>
+									<div class="description">
+										toString&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -1214,6 +1280,77 @@
 			<div class="section method details">
 				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
+					
+						<h4><a name="appendTo">appendTo</a></h4>
+						<div class="detail">
+							<code>
+								Node 
+								<strong>appendTo</strong>
+								(parentNode)
+							</code>
+									
+							<div class="description">
+								
+									Appends this node to the supplied node's child collection
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>parentNode</code> - 
+												 {Node} the node to append to.  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> The appended node</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="applyParent">applyParent</a></h4>
+						<div class="detail">
+							<code>
+								boolean 
+								<strong>applyParent</strong>
+								(&lt;Node&gt; parentNode)
+							</code>
+									
+							<div class="description">
+								
+									Certain properties for the node cannot be set until the parent
+ is known. This is called after the node is inserted into a tree.
+ the parent is also applied to this node's children in order to
+ make it possible to move a branch from one tree to another.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>parentNode</code> - 
+												 this node's parent node  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> true if the application was successful</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
 					
 						<h4><a name="collapse">collapse</a></h4>
 						<div class="detail">
@@ -1791,6 +1928,74 @@
 						</div>
 						<hr />
 					
+						<h4><a name="insertAfter">insertAfter</a></h4>
+						<div class="detail">
+							<code>
+								Node 
+								<strong>insertAfter</strong>
+								(node)
+							</code>
+									
+							<div class="description">
+								
+									Inserts this node after the supplied node
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>node</code> - 
+												 {Node} the node to insert after  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> the inserted node</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="insertBefore">insertBefore</a></h4>
+						<div class="detail">
+							<code>
+								Node 
+								<strong>insertBefore</strong>
+								(node)
+							</code>
+									
+							<div class="description">
+								
+									Inserts this node before this supplied node
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>node</code> - 
+												 {Node} the node to insert this node before  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> the inserted node</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="isDynamic">isDynamic</a></h4>
 						<div class="detail">
 							<code>
@@ -1950,6 +2155,30 @@
 									Expands if node is collapsed, collapses otherwise.
 								
 								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="toString">toString</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>toString</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									toString
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> string representation of the node</dd>
+									</dl>
 								
 								
 							</div>

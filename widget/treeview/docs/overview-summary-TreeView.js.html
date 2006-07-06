@@ -238,20 +238,17 @@
 		
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<pre class="sourceview"><span class="comment">/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */</span>
-
-<span class="comment">/**
+				<pre class="sourceview"><span class="comment">/**
  * Contains the tree view state data and the root node.  This is an
  * ordered tree; child nodes will be displayed in the order created, and
  * there currently is no way to change this.
  *
  * <span class="attrib">@constructor</span>
- * <span class="attrib">@todo</span> graft (appendBefore, appendAfter)
- * <span class="attrib">@param</span> {string} id The id of the element that the tree will be inserted
- * into.
+ * <span class="attrib">@param</span> {string|HTMLElement} id The id of the element, or the element
+ * itself that the tree will be inserted into.
  */</span>
 YAHOO.widget.TreeView = <span class="reserved">function</span>(id) {
-	<span class="reserved">if</span> (id) { <span class="reserved">this</span>.init(id); }
+    <span class="reserved">if</span> (id) { <span class="reserved">this</span>.init(id); }
 };
 
 <span class="comment">/**
@@ -259,7 +256,6 @@ YAHOO.widget.TreeView = <span class="reserved">function</span>(id) {
  * <span class="attrib">@type</span> int
  */</span>
 YAHOO.widget.TreeView.nodeCount = 0;
-
 
 YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
 
@@ -269,6 +265,12 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
      * <span class="attrib">@type</span> String
      */</span>
     id: null,
+
+    <span class="comment">/**
+     * The host element for this tree
+     * <span class="attrib">@private</span>
+     */</span>
+    _el: null,
 
      <span class="comment">/**
      * Flat collection of all nodes in this tree
@@ -319,7 +321,8 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
     <span class="comment">/**
      * Sets up the animation for expanding children
      *
-     * <span class="attrib">@param</span> {string} the type of animation (acceptable constants in YAHOO.widget.TVAnim)
+     * <span class="attrib">@param</span> {string} the type of animation (acceptable values defined in 
+     * YAHOO.widget.TVAnim)
      */</span>
     setExpandAnim: <span class="reserved">function</span>(type) {
         <span class="reserved">if</span> (YAHOO.widget.TVAnim.isValid(type)) {
@@ -330,7 +333,8 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
     <span class="comment">/**
      * Sets up the animation for collapsing children
      *
-     * <span class="attrib">@param</span> {string} the type of animation (acceptable constants in YAHOO.widget.TVAnim)
+     * <span class="attrib">@param</span> {string} the type of animation (acceptable values defined in 
+     * YAHOO.widget.TVAnim)
      */</span>
     setCollapseAnim: <span class="reserved">function</span>(type) {
         <span class="reserved">if</span> (YAHOO.widget.TVAnim.isValid(type)) {
@@ -346,7 +350,7 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
      * <span class="attrib">@return</span> {boolean} true if animation could be invoked, false otherwise
      */</span>
     animateExpand: <span class="reserved">function</span>(el) {
-        <span class="reserved">this</span>.logger.debug(<span class="literal">"animating expand"</span>);
+        <span class="reserved">this</span>.logger.log(<span class="literal">"animating expand"</span>);
 
         <span class="reserved">if</span> (<span class="reserved">this</span>._expandAnim &amp;&amp; <span class="reserved">this</span>._animCount &lt; <span class="reserved">this</span>.maxAnim) {
 <span class="comment">            // this.locked = true;</span>
@@ -372,7 +376,7 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
      * <span class="attrib">@return</span> {boolean} true if animation could be invoked, false otherwise
      */</span>
     animateCollapse: <span class="reserved">function</span>(el) {
-        <span class="reserved">this</span>.logger.debug(<span class="literal">"animating collapse"</span>);
+        <span class="reserved">this</span>.logger.log(<span class="literal">"animating collapse"</span>);
 
         <span class="reserved">if</span> (<span class="reserved">this</span>._collapseAnim &amp;&amp; <span class="reserved">this</span>._animCount &lt; <span class="reserved">this</span>.maxAnim) {
 <span class="comment">            // this.locked = true;</span>
@@ -394,7 +398,7 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
      * Function executed when the expand animation completes
      */</span>
     expandComplete: <span class="reserved">function</span>() {
-        <span class="reserved">this</span>.logger.debug(<span class="literal">"expand complete: "</span> + <span class="reserved">this</span>.id);
+        <span class="reserved">this</span>.logger.log(<span class="literal">"expand complete: "</span> + <span class="reserved">this</span>.id);
         --<span class="reserved">this</span>._animCount;
 <span class="comment">        // this.locked = false;</span>
     },
@@ -403,7 +407,7 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
      * Function executed when the collapse animation completes
      */</span>
     collapseComplete: <span class="reserved">function</span>() {
-        <span class="reserved">this</span>.logger.debug(<span class="literal">"collapse complete: "</span> + <span class="reserved">this</span>.id);
+        <span class="reserved">this</span>.logger.log(<span class="literal">"collapse complete: "</span> + <span class="reserved">this</span>.id);
         --<span class="reserved">this</span>._animCount;
 <span class="comment">        // this.locked = false;</span>
     },
@@ -411,23 +415,29 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
     <span class="comment">/**
      * Initializes the tree
      *
-     * <span class="attrib">@parm</span> {string} id the id of the element that will hold the tree
+     * <span class="attrib">@parm</span> {string|HTMLElement} id the id of the element that will hold the tree
      * <span class="attrib">@private</span>
      */</span>
     init: <span class="reserved">function</span>(id) {
 
         <span class="reserved">this</span>.id = id;
+
+        <span class="reserved">if</span> (<span class="literal">"string"</span> !== typeof id) {
+            <span class="reserved">this</span>._el = id;
+            <span class="reserved">this</span>.id = <span class="reserved">this</span>.generateId(id);
+        }
+
         <span class="reserved">this</span>._nodes = [];
 <span class="comment">
         // store a global reference</span>
-        YAHOO.widget.TreeView.trees[id] = <span class="reserved">this</span>;
+        YAHOO.widget.TreeView.trees[<span class="reserved">this</span>.id] = <span class="reserved">this</span>;
 <span class="comment">
         // Set up the root node</span>
         <span class="reserved">this</span>.root = new YAHOO.widget.RootNode(<span class="reserved">this</span>);
 
-        <span class="reserved">this</span>.logger = new ygLogger(<span class="literal">"TreeView"</span>);
+        <span class="reserved">this</span>.logger = new YAHOO.widget.LogWriter(<span class="reserved">this</span>.toString());
 
-        <span class="reserved">this</span>.logger.debug(<span class="literal">"tree init: "</span> + id);
+        <span class="reserved">this</span>.logger.log(<span class="literal">"tree init: "</span> + <span class="reserved">this</span>.id);
     },
 
     <span class="comment">/**
@@ -435,8 +445,19 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
      */</span>
     draw: <span class="reserved">function</span>() {
         var html = <span class="reserved">this</span>.root.getHtml();
-        document.getElementById(<span class="reserved">this</span>.id).innerHTML = html;
+        <span class="reserved">this</span>.getEl().innerHTML = html;
         <span class="reserved">this</span>.firstDraw = false;
+    },
+
+    <span class="comment">/**
+     * Returns the tree's host element
+     * <span class="attrib">@return</span> {HTMLElement} the host element
+     */</span>
+    getEl: <span class="reserved">function</span>() {
+        <span class="reserved">if</span> (! <span class="reserved">this</span>._el) {
+            <span class="reserved">this</span>._el = document.getElementById(<span class="reserved">this</span>.id);
+        }
+        <span class="reserved">return</span> <span class="reserved">this</span>._el;
     },
 
     <span class="comment">/**
@@ -507,8 +528,7 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
 
     <span class="comment">/**
      * Returns a node that has a matching property and value in the data
-     * object that was passed into its constructor.  Provides a flexible
-     * way for the implementer to get a particular node.
+     * object that was passed into its constructor.
      *
      * <span class="attrib">@param</span> {object} property the property to search (usually a string)
      * <span class="attrib">@param</span> {object} value the value we want to find (usuall an int or string)
@@ -526,8 +546,28 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
     },
 
     <span class="comment">/**
-     * Removes the node and its children, and optionally refreshes the branch 
-     * of the tree that was affected.
+     * Returns a collection of nodes that have a matching property 
+     * and value in the data object that was passed into its constructor.  
+     *
+     * <span class="attrib">@param</span> {object} property the property to search (usually a string)
+     * <span class="attrib">@param</span> {object} value the value we want to find (usuall an int or string)
+     * <span class="attrib">@return</span> {Array} the matching collection of nodes, null if no match
+     */</span>
+    getNodesByProperty: <span class="reserved">function</span>(property, value) {
+        var values = [];
+        <span class="reserved">for</span> (var i in <span class="reserved">this</span>._nodes) {
+            var n = <span class="reserved">this</span>._nodes[i];
+            <span class="reserved">if</span> (n.data &amp;&amp; value == n.data[property]) {
+                values.push(n);
+            }
+        }
+
+        <span class="reserved">return</span> (values.length) ? values : null;
+    },
+
+    <span class="comment">/**
+     * Removes the node and its children, and optionally refreshes the 
+     * branch of the tree that was affected.
      * <span class="attrib">@param</span> {Node} The node to remove
      * <span class="attrib">@param</span> {boolean} autoRefresh automatically refreshes branch if true
      * <span class="attrib">@return</span> {boolean} False is there was a problem, true otherwise.
@@ -564,12 +604,15 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
      * <span class="attrib">@param</span> {Node} node the node to purge
      */</span>
     removeChildren: <span class="reserved">function</span>(node) { 
-        <span class="reserved">for</span> (var i=0, len=node.children.length;i&lt;len;++i) {
-            <span class="reserved">this</span>._deleteNode(node.children[i]);
+        <span class="reserved">this</span>.logger.log(<span class="literal">"Removing children for "</span> + node);
+        <span class="reserved">while</span> (node.children.length) {
+             <span class="reserved">this</span>._deleteNode(node.children[0]);
         }
 
         node.childrenRendered = false;
         node.dynamicLoadComplete = false;
+<span class="comment">        // node.collapse();</span>
+        node.expand();
         node.collapse();
     },
 
@@ -578,15 +621,26 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
      * <span class="attrib">@private</span>
      */</span>
     _deleteNode: <span class="reserved">function</span>(node) { 
-        var p = node.parent;
-<span class="comment">
-        // Remove all the child nodes first</span>
+<span class="comment">        // Remove all the child nodes first</span>
         <span class="reserved">this</span>.removeChildren(node);
+<span class="comment">
+        // Remove the node from the tree</span>
+        <span class="reserved">this</span>.popNode(node);
+    },
+
+    <span class="comment">/**
+     * Removes the node from the tree, preserving the child collection 
+     * to make it possible to insert the branch into another part of the 
+     * tree, or another tree.
+     * <span class="attrib">@param</span> {Node} the node to remove
+     */</span>
+    popNode: <span class="reserved">function</span>(node) { 
+        var p = node.parent;
 <span class="comment">
         // Update the parent's collection of children</span>
         var a = [];
 
-        <span class="reserved">for</span> (i=0, len=p.children.length;i&lt;len;++i) {
+        <span class="reserved">for</span> (var i=0, len=p.children.length;i&lt;len;++i) {
             <span class="reserved">if</span> (p.children[i] != node) {
                 a[a.length] = p.children[i];
             }
@@ -597,29 +651,50 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
         // reset the childrenRendered flag for the parent</span>
         p.childrenRendered = false;
 <span class="comment">
-         // Update the sibling relationship                                                                                                                       </span>
-        <span class="reserved">if</span> (node.previousSibling) {                                                                                                                              
-            node.previousSibling.nextSibling = node.nextSibling;                                                                                                   
-        }                                                                                                                                                        
+         // Update the sibling relationship</span>
+        <span class="reserved">if</span> (node.previousSibling) {
+            node.previousSibling.nextSibling = node.nextSibling;
+        }
 
-        <span class="reserved">if</span> (node.nextSibling) {                                                                                                                                  
-            node.nextSibling.previousSibling = node.previousSibling;                                                                                               
+        <span class="reserved">if</span> (node.nextSibling) {
+            node.nextSibling.previousSibling = node.previousSibling;
         }
 <span class="comment">
         // Update the tree's node collection </span>
         delete <span class="reserved">this</span>._nodes[node.index];
     },
 
+
+    <span class="comment">/**
+     * toString
+     * <span class="attrib">@return</span> {string} string representation of the tree
+     */</span>
+    toString: <span class="reserved">function</span>() {
+        <span class="reserved">return</span> <span class="literal">"TreeView "</span> + <span class="reserved">this</span>.id;
+    },
+
+    <span class="comment">/**
+     * private
+     */</span>
+    generateId: <span class="reserved">function</span>(el) {
+        var id = el.id;
+
+        <span class="reserved">if</span> (!id) {
+            id = <span class="literal">"yui-tv-auto-id-"</span> + YAHOO.widget.TreeView.counter;
+            YAHOO.widget.TreeView.counter++;
+        }
+
+        <span class="reserved">return</span> id;
+    },
+
     <span class="comment">/**
      * Abstract method that is executed when a node is expanded
-     *
      * <span class="attrib">@param</span> node {Node} the node that was expanded
      */</span>
     onExpand: <span class="reserved">function</span>(node) { },
 
     <span class="comment">/**
      * Abstract method that is executed when a node is collapsed
-     *
      * <span class="attrib">@param</span> node {Node} the node that was collapsed.
      */</span>
     onCollapse: <span class="reserved">function</span>(node) { }
@@ -635,6 +710,11 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
 YAHOO.widget.TreeView.trees = [];
 
 <span class="comment">/**
+ * <span class="attrib">@private</span>
+ */</span>
+YAHOO.widget.TreeView.counter = 0;
+
+<span class="comment">/**
  * Global method for getting a tree by its id.  Used in the generated
  * tree html.
  *
@@ -642,8 +722,8 @@ YAHOO.widget.TreeView.trees = [];
  * <span class="attrib">@return</span> {TreeView} the tree instance requested, null if not found.
  */</span>
 YAHOO.widget.TreeView.getTree = <span class="reserved">function</span>(treeId) {
-	var t = YAHOO.widget.TreeView.trees[treeId];
-	<span class="reserved">return</span> (t) ? t : null;
+    var t = YAHOO.widget.TreeView.trees[treeId];
+    <span class="reserved">return</span> (t) ? t : null;
 };
 
 
@@ -656,8 +736,8 @@ YAHOO.widget.TreeView.getTree = <span class="reserved">function</span>(treeId) {
  * <span class="attrib">@return</span> {Node} the node instance requested, null if not found
  */</span>
 YAHOO.widget.TreeView.getNode = <span class="reserved">function</span>(treeId, nodeIndex) {
-	var t = YAHOO.widget.TreeView.getTree(treeId);
-	<span class="reserved">return</span> (t) ? t.getNodeByIndex(nodeIndex) : null;
+    var t = YAHOO.widget.TreeView.getTree(treeId);
+    <span class="reserved">return</span> (t) ? t.getNodeByIndex(nodeIndex) : null;
 };
 
 <span class="comment">/**
@@ -669,50 +749,38 @@ YAHOO.widget.TreeView.getNode = <span class="reserved">function</span>(treeId, n
  * <span class="attrib">@param</span> {boolean} capture if true event is capture phase, bubble otherwise
  */</span>
 YAHOO.widget.TreeView.addHandler = <span class="reserved">function</span> (el, sType, fn, capture) {
-	capture = (capture) ? true : false;
-	<span class="reserved">if</span> (el.addEventListener) {
-		el.addEventListener(sType, fn, capture);
-	} <span class="reserved">else</span> <span class="reserved">if</span> (el.attachEvent) {
-		el.attachEvent(<span class="literal">"on"</span> + sType, fn);
-	} <span class="reserved">else</span> {
-		el[<span class="literal">"on"</span> + sType] = fn;
-	}
+    capture = (capture) ? true : false;
+    <span class="reserved">if</span> (el.addEventListener) {
+        el.addEventListener(sType, fn, capture);
+    } <span class="reserved">else</span> <span class="reserved">if</span> (el.attachEvent) {
+        el.attachEvent(<span class="literal">"on"</span> + sType, fn);
+    } <span class="reserved">else</span> {
+        el[<span class="literal">"on"</span> + sType] = fn;
+    }
 };
 
 <span class="comment">/**
  * Attempts to preload the images defined in the styles used to draw the tree by
  * rendering off-screen elements that use the styles.
  */</span>
-YAHOO.widget.TreeView.preload = <span class="reserved">function</span>() {
+YAHOO.widget.TreeView.preload = <span class="reserved">function</span>(prefix) {
+    prefix = prefix || <span class="literal">"ygtv"</span>;
+    var styles = [<span class="literal">"tn"</span>,<span class="literal">"tm"</span>,<span class="literal">"tmh"</span>,<span class="literal">"tp"</span>,<span class="literal">"tph"</span>,<span class="literal">"ln"</span>,<span class="literal">"lm"</span>,<span class="literal">"lmh"</span>,<span class="literal">"lp"</span>,<span class="literal">"lph"</span>,<span class="literal">"loading"</span>];
 
-	var styles = [
-		<span class="literal">"ygtvtn"</span>,	
-		<span class="literal">"ygtvtm"</span>,	
-		<span class="literal">"ygtvtmh"</span>,	
-		<span class="literal">"ygtvtp"</span>,	
-		<span class="literal">"ygtvtph"</span>,	
-		<span class="literal">"ygtvln"</span>,	
-		<span class="literal">"ygtvlm"</span>,	
-		<span class="literal">"ygtvlmh"</span>,	
-		<span class="literal">"ygtvlp"</span>,	
-		<span class="literal">"ygtvlph"</span>,	
-		<span class="literal">"ygtvloading"</span>
-		];
+    var sb = [];
+    
+    <span class="reserved">for</span> (var i = 0; i &lt; styles.length; ++i) { 
+        sb[sb.length] = <span class="literal">'&lt;span class="'</span> + prefix + styles[i] + <span class="literal">'"&gt;&amp;#160;&lt;/span&gt;'</span>;
+    }
 
-	var sb = [];
-	
-	<span class="reserved">for</span> (var i = 0; i &lt; styles.length; ++i) { 
-		sb[sb.length] = <span class="literal">'&lt;span class="'</span> + styles[i] + <span class="literal">'"&gt;&amp;nbsp;&lt;/span&gt;'</span>;
-	}
+    var f = document.createElement(<span class="literal">"DIV"</span>);
+    var s = f.style;
+    s.position = <span class="literal">"absolute"</span>;
+    s.top = <span class="literal">"-1000px"</span>;
+    s.left = <span class="literal">"-1000px"</span>;
+    f.innerHTML = sb.join(<span class="literal">""</span>);
 
-	var f = document.createElement(<span class="literal">"div"</span>);
-	var s = f.style;
-	s.position = <span class="literal">"absolute"</span>;
-	s.top = <span class="literal">"-1000px"</span>;
-	s.left = <span class="literal">"-1000px"</span>;
-	f.innerHTML = sb.join(<span class="literal">""</span>);
-
-	document.body.appendChild(f);
+    document.body.appendChild(f);
 };
 
 YAHOO.widget.TreeView.addHandler(window, 

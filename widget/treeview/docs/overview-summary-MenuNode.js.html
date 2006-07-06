@@ -238,16 +238,14 @@
 		
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<pre class="sourceview"><span class="comment">/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */</span>
-
-<span class="comment">/**
+				<pre class="sourceview"><span class="comment">/**
  * A menu-specific implementation that differs from TextNode in that only 
  * one sibling can be expanded at a time.
  * <span class="attrib">@extends</span> YAHOO.widget.TextNode
  * <span class="attrib">@constructor</span>
  */</span>
 YAHOO.widget.MenuNode = <span class="reserved">function</span>(oData, oParent, expanded) {
-	<span class="reserved">if</span> (oParent) { 
+	<span class="reserved">if</span> (oData) { 
 		<span class="reserved">this</span>.init(oData, oParent, expanded);
 		<span class="reserved">this</span>.setUpLabel(oData);
 	}
@@ -258,9 +256,18 @@ YAHOO.widget.MenuNode = <span class="reserved">function</span>(oData, oParent, e
      */</span>
 	<span class="reserved">this</span>.multiExpand = false;
 
+    <span class="comment">/**
+     * <span class="attrib">@private</span>
+     */</span>
+    <span class="reserved">this</span>.logger     = new YAHOO.widget.LogWriter(<span class="reserved">this</span>.toString());
+
 };
 
 YAHOO.widget.MenuNode.<span class="reserved">prototype</span> = new YAHOO.widget.TextNode();
+
+YAHOO.widget.MenuNode.<span class="reserved">prototype</span>.toString = <span class="reserved">function</span>() { 
+    <span class="reserved">return</span> <span class="literal">"MenuNode ("</span> + <span class="reserved">this</span>.index + <span class="literal">") "</span> + <span class="reserved">this</span>.label;
+};
 
 </pre>
 			</div>

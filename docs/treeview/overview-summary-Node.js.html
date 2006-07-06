@@ -238,9 +238,7 @@
 		
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<pre class="sourceview"><span class="comment">/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */</span>
-
-<span class="comment">/**
+				<pre class="sourceview"><span class="comment">/**
  * The base class for all tree nodes.  The node's presentation and behavior in
  * response to mouse events is handled in Node subclasses.
  *
@@ -251,7 +249,7 @@
  * <span class="attrib">@constructor</span>
  */</span>
 YAHOO.widget.Node = <span class="reserved">function</span>(oData, oParent, expanded) {
-	<span class="reserved">if</span> (oParent) { <span class="reserved">this</span>.init(oData, oParent, expanded); }
+    <span class="reserved">if</span> (oData) { <span class="reserved">this</span>.init(oData, oParent, expanded); }
 };
 
 YAHOO.widget.Node.<span class="reserved">prototype</span> = {
@@ -429,45 +427,167 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
      * <span class="attrib">@param</span> expanded {boolean} the initial expanded/collapsed state
      */</span>
     init: <span class="reserved">function</span>(oData, oParent, expanded) {
-        <span class="reserved">this</span>.data		= oData;
-        <span class="reserved">this</span>.children	= [];
-        <span class="reserved">this</span>.index		= YAHOO.widget.TreeView.nodeCount;
+        <span class="reserved">this</span>.data       = oData;
+        <span class="reserved">this</span>.children   = [];
+        <span class="reserved">this</span>.index      = YAHOO.widget.TreeView.nodeCount;
         ++YAHOO.widget.TreeView.nodeCount;
-        <span class="reserved">this</span>.logger		= new ygLogger(<span class="literal">"Node"</span>);
-        <span class="reserved">this</span>.expanded	= expanded;
+        <span class="reserved">this</span>.expanded   = expanded;
+        <span class="reserved">this</span>.logger     = new YAHOO.widget.LogWriter(<span class="reserved">this</span>.toString());
 <span class="comment">
         // oParent should never be null except when we create the root node.</span>
         <span class="reserved">if</span> (oParent) {
-            <span class="reserved">this</span>.tree			= oParent.tree;
-            <span class="reserved">this</span>.parent			= oParent;
-            <span class="reserved">this</span>.href			= <span class="literal">"javascript:"</span> + <span class="reserved">this</span>.getToggleLink();
-            <span class="reserved">this</span>.depth			= oParent.depth + 1;
-            <span class="reserved">this</span>.multiExpand	= oParent.multiExpand;
-
             oParent.appendChild(<span class="reserved">this</span>);
         }
     },
 
     <span class="comment">/**
-     * Appends a node to the child collection.
-     *
-     * <span class="attrib">@param</span> node {Node} the new node
-     * <span class="attrib">@return</span> {Node} the child node
-     * <span class="attrib">@private</span>
-     * <span class="attrib">@TODO</span> insertBefore, insertAfter
+     * Certain properties for the node cannot be set until the parent
+     * is known. This is called after the node is inserted into a tree.
+     * the parent is also applied to this node's children in order to
+     * make it possible to move a branch from one tree to another.
+     * <span class="attrib">@param</span> {Node} parentNode this node's parent node
+     * <span class="attrib">@return</span> {boolean} true if the application was successful
      */</span>
-    appendChild: <span class="reserved">function</span>(node) {
-        <span class="reserved">if</span> (<span class="reserved">this</span>.hasChildren()) {
-            var sib = <span class="reserved">this</span>.children[<span class="reserved">this</span>.children.length - 1];
-            sib.nextSibling = node;
-            node.previousSibling = sib;
+    applyParent: <span class="reserved">function</span>(parentNode) {
+        <span class="reserved">if</span> (!parentNode) {
+            <span class="reserved">return</span> false;
         }
 
-        <span class="reserved">this</span>.tree.regNode(node);
-        <span class="reserved">this</span>.children[<span class="reserved">this</span>.children.length] = node;
-        <span class="reserved">this</span>.childrenRendered = false;
-        <span class="reserved">return</span> node;
+        <span class="reserved">this</span>.tree   = parentNode.tree;
+        <span class="reserved">this</span>.parent = parentNode;
+        <span class="reserved">this</span>.depth  = parentNode.depth + 1;
 
+        <span class="reserved">if</span> (! <span class="reserved">this</span>.href) {
+            <span class="reserved">this</span>.href = <span class="literal">"javascript:"</span> + <span class="reserved">this</span>.getToggleLink();
+        }
+
+        <span class="reserved">if</span> (! <span class="reserved">this</span>.multiExpand) {
+            <span class="reserved">this</span>.multiExpand = parentNode.multiExpand;
+        }
+
+        <span class="reserved">this</span>.tree.regNode(<span class="reserved">this</span>);
+        parentNode.childrenRendered = false;
+<span class="comment">
+        // cascade update existing children</span>
+        <span class="reserved">for</span> (var i=0, len=<span class="reserved">this</span>.children.length;i&lt;len;++i) {
+            <span class="reserved">this</span>.children[i].applyParent(<span class="reserved">this</span>);
+        }
+
+        <span class="reserved">return</span> true;
+    },
+
+    <span class="comment">/**
+     * Appends a node to the child collection.
+     *
+     * <span class="attrib">@param</span> childNode {Node} the new node
+     * <span class="attrib">@return</span> {Node} the child node
+     * <span class="attrib">@private</span>
+     */</span>
+    appendChild: <span class="reserved">function</span>(childNode) {
+        <span class="reserved">if</span> (<span class="reserved">this</span>.hasChildren()) {
+            var sib = <span class="reserved">this</span>.children[<span class="reserved">this</span>.children.length - 1];
+            sib.nextSibling = childNode;
+            childNode.previousSibling = sib;
+        }
+        <span class="reserved">this</span>.children[<span class="reserved">this</span>.children.length] = childNode;
+        childNode.applyParent(<span class="reserved">this</span>);
+
+        <span class="reserved">return</span> childNode;
+    },
+
+    <span class="comment">/**
+     * Appends this node to the supplied node's child collection
+     * <span class="attrib">@param</span> parentNode {Node} the node to append to.
+     * <span class="attrib">@return</span> {Node} The appended node
+     */</span>
+    appendTo: <span class="reserved">function</span>(parentNode) {
+        <span class="reserved">return</span> parentNode.appendChild(<span class="reserved">this</span>);
+    },
+
+    <span class="comment">/**
+    * Inserts this node before this supplied node
+    *
+    * <span class="attrib">@param</span> node {Node} the node to insert this node before
+    * <span class="attrib">@return</span> {Node} the inserted node
+    */</span>
+    insertBefore: <span class="reserved">function</span>(node) {
+        <span class="reserved">this</span>.logger.log(<span class="literal">"insertBefore: "</span> + node);
+        var p = node.parent;
+        <span class="reserved">if</span> (p) {
+
+            <span class="reserved">if</span> (<span class="reserved">this</span>.tree) {
+                <span class="reserved">this</span>.tree.popNode(<span class="reserved">this</span>);
+            }
+
+            var refIndex = node.isChildOf(p);
+            <span class="reserved">this</span>.logger.log(refIndex);
+            p.children.splice(refIndex, 0, <span class="reserved">this</span>);
+            <span class="reserved">if</span> (node.previousSibling) {
+                node.previousSibling.nextSibling = <span class="reserved">this</span>;
+            }
+            <span class="reserved">this</span>.previousSibling = node.previousSibling;
+            <span class="reserved">this</span>.nextSibling = node;
+            node.previousSibling = <span class="reserved">this</span>;
+
+            <span class="reserved">this</span>.applyParent(p);
+        }
+
+        <span class="reserved">return</span> <span class="reserved">this</span>;
+    },
+ 
+    <span class="comment">/**
+    * Inserts this node after the supplied node
+    *
+    * <span class="attrib">@param</span> node {Node} the node to insert after
+    * <span class="attrib">@return</span> {Node} the inserted node
+    */</span>
+    insertAfter: <span class="reserved">function</span>(node) {
+        <span class="reserved">this</span>.logger.log(<span class="literal">"insertAfter: "</span> + node);
+        var p = node.parent;
+        <span class="reserved">if</span> (p) {
+
+            <span class="reserved">if</span> (<span class="reserved">this</span>.tree) {
+                <span class="reserved">this</span>.tree.popNode(<span class="reserved">this</span>);
+            }
+
+            var refIndex = node.isChildOf(p);
+            <span class="reserved">this</span>.logger.log(refIndex);
+
+            <span class="reserved">if</span> (!node.nextSibling) {
+                <span class="reserved">return</span> <span class="reserved">this</span>.appendTo(p);
+            }
+
+            p.children.splice(refIndex + 1, 0, <span class="reserved">this</span>);
+
+            node.nextSibling.previousSibling = <span class="reserved">this</span>;
+            <span class="reserved">this</span>.previousSibling = node;
+            <span class="reserved">this</span>.nextSibling = node.nextSibling;
+            node.nextSibling = <span class="reserved">this</span>;
+
+            <span class="reserved">this</span>.applyParent(p);
+        }
+
+        <span class="reserved">return</span> <span class="reserved">this</span>;
+    },
+
+    <span class="comment">/**
+    * Returns true if the Node is a child of supplied Node
+    *
+    * <span class="attrib">@param</span> parentNode {Node} the Node to check
+    * <span class="attrib">@return</span> {boolean} The node index if this Node is a child of 
+    *                   supplied Node, else -1.
+    * <span class="attrib">@private</span>
+    */</span>
+    isChildOf: <span class="reserved">function</span>(parentNode) {
+        <span class="reserved">if</span> (parentNode &amp;&amp; parentNode.children) {
+            <span class="reserved">for</span> (var i=0, len=parentNode.children.length; i&lt;len ; ++i) {
+                <span class="reserved">if</span> (parentNode.children[i] === <span class="reserved">this</span>) {
+                    <span class="reserved">return</span> i;
+                }
+            }
+        }
+
+        <span class="reserved">return</span> -1;
     },
 
     <span class="comment">/**
@@ -494,7 +614,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
      * Hides this node's children
      */</span>
     hideChildren: <span class="reserved">function</span>() {
-        <span class="reserved">this</span>.logger.debug(<span class="literal">"hiding "</span> + <span class="reserved">this</span>.index);
+        <span class="reserved">this</span>.logger.log(<span class="literal">"hiding "</span> + <span class="reserved">this</span>.index);
 
         <span class="reserved">if</span> (!<span class="reserved">this</span>.tree.animateCollapse(<span class="reserved">this</span>.getChildrenEl())) {
             <span class="reserved">this</span>.getChildrenEl().style.display = <span class="literal">"none"</span>;
@@ -611,7 +731,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
         var ret = <span class="reserved">this</span>.tree.onCollapse(<span class="reserved">this</span>);
 
         <span class="reserved">if</span> (<span class="literal">"undefined"</span> != typeof ret &amp;&amp; !ret) {
-            <span class="reserved">this</span>.logger.debug(<span class="literal">"Collapse was stopped by the event handler"</span>);
+            <span class="reserved">this</span>.logger.log(<span class="literal">"Collapse was stopped by the event handler"</span>);
             <span class="reserved">return</span>;
         }
 
@@ -644,7 +764,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
         var ret = <span class="reserved">this</span>.tree.onExpand(<span class="reserved">this</span>);
 
         <span class="reserved">if</span> (<span class="literal">"undefined"</span> != typeof ret &amp;&amp; !ret) {
-            <span class="reserved">this</span>.logger.debug(<span class="literal">"Expand was stopped by the event handler"</span>);
+            <span class="reserved">this</span>.logger.log(<span class="literal">"Expand was stopped by the event handler"</span>);
             <span class="reserved">return</span>;
         }
 
@@ -654,10 +774,10 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
         }
 
         <span class="reserved">if</span> (! <span class="reserved">this</span>.childrenRendered) {
-            <span class="reserved">this</span>.logger.debug(<span class="literal">"children not rendered yet"</span>);
+            <span class="reserved">this</span>.logger.log(<span class="literal">"children not rendered yet"</span>);
             <span class="reserved">this</span>.getChildrenEl().innerHTML = <span class="reserved">this</span>.renderChildren();
         } <span class="reserved">else</span> {
-            <span class="reserved">this</span>.logger.debug(<span class="literal">"CHILDREN RENDERED"</span>);
+            <span class="reserved">this</span>.logger.log(<span class="literal">"CHILDREN RENDERED"</span>);
         }
 
         <span class="reserved">this</span>.expanded = true;
@@ -694,9 +814,9 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
      * <span class="attrib">@return</span> {string} the css class for this node's toggle
      */</span>
     getStyle: <span class="reserved">function</span>() {
-<span class="comment">        // this.logger.debug("No children, " + " isDyanmic: " + this.isDynamic() + " expanded: " + this.expanded);</span>
+<span class="comment">        // this.logger.log("No children, " + " isDyanmic: " + this.isDynamic() + " expanded: " + this.expanded);</span>
         <span class="reserved">if</span> (<span class="reserved">this</span>.isLoading) {
-            <span class="reserved">this</span>.logger.debug(<span class="literal">"returning the loading icon"</span>);
+            <span class="reserved">this</span>.logger.log(<span class="literal">"returning the loading icon"</span>);
             <span class="reserved">return</span> <span class="literal">"ygtvloading"</span>;
         } <span class="reserved">else</span> {
 <span class="comment">            // location top or bottom, middle nodes also get the top style</span>
@@ -709,7 +829,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
                 type = (<span class="reserved">this</span>.expanded) ? <span class="literal">"m"</span> : <span class="literal">"p"</span>;
             }
 <span class="comment">
-            // this.logger.debug("ygtv" + loc + type);</span>
+            // this.logger.log("ygtv" + loc + type);</span>
             <span class="reserved">return</span> <span class="literal">"ygtv"</span> + loc + type;
         }
     },
@@ -799,7 +919,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
      */</span>
     isDynamic: <span class="reserved">function</span>() { 
         var lazy = (!<span class="reserved">this</span>.isRoot() &amp;&amp; (<span class="reserved">this</span>._dynLoad || <span class="reserved">this</span>.tree.root._dynLoad));
-<span class="comment">        // this.logger.debug("isDynamic: " + lazy);</span>
+<span class="comment">        // this.logger.log("isDynamic: " + lazy);</span>
         <span class="reserved">return</span> lazy;
     },
 
@@ -885,7 +1005,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
      */</span>
     renderChildren: <span class="reserved">function</span>() {
 
-        <span class="reserved">this</span>.logger.debug(<span class="literal">"rendering children for "</span> + <span class="reserved">this</span>.index);
+        <span class="reserved">this</span>.logger.log(<span class="literal">"rendering children for "</span> + <span class="reserved">this</span>.index);
 
         var node = <span class="reserved">this</span>;
 
@@ -894,7 +1014,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
             <span class="reserved">this</span>.tree.locked = true;
 
             <span class="reserved">if</span> (<span class="reserved">this</span>.dataLoader) {
-                <span class="reserved">this</span>.logger.debug(<span class="literal">"Using dynamic loader defined for this node"</span>);
+                <span class="reserved">this</span>.logger.log(<span class="literal">"Using dynamic loader defined for this node"</span>);
 
                 setTimeout( 
                     <span class="reserved">function</span>() {
@@ -905,7 +1025,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
                     }, 10);
                 
             } <span class="reserved">else</span> <span class="reserved">if</span> (<span class="reserved">this</span>.tree.root.dataLoader) {
-                <span class="reserved">this</span>.logger.debug(<span class="literal">"Using the tree-level dynamic loader"</span>);
+                <span class="reserved">this</span>.logger.log(<span class="literal">"Using the tree-level dynamic loader"</span>);
 
                 setTimeout( 
                     <span class="reserved">function</span>() {
@@ -916,7 +1036,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
                     }, 10);
 
             } <span class="reserved">else</span> {
-                <span class="reserved">this</span>.logger.debug(<span class="literal">"no loader found"</span>);
+                <span class="reserved">this</span>.logger.log(<span class="literal">"no loader found"</span>);
                 <span class="reserved">return</span> <span class="literal">"Error: data loader not found or not specified."</span>;
             }
 
@@ -932,7 +1052,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
      * <span class="attrib">@return</span> {string} children html
      */</span>
     completeRender: <span class="reserved">function</span>() {
-        <span class="reserved">this</span>.logger.debug(<span class="literal">"completeRender: "</span> + <span class="reserved">this</span>.index + <span class="literal">", # of children: "</span> + <span class="reserved">this</span>.children.length);
+        <span class="reserved">this</span>.logger.log(<span class="literal">"completeRender: "</span> + <span class="reserved">this</span>.index + <span class="literal">", # of children: "</span> + <span class="reserved">this</span>.children.length);
         var sb = [];
 
         <span class="reserved">for</span> (var i=0; i &lt; <span class="reserved">this</span>.children.length; ++i) {
@@ -950,7 +1070,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
      * in dynamic load situations.
      */</span>
     loadComplete: <span class="reserved">function</span>() {
-        <span class="reserved">this</span>.logger.debug(<span class="literal">"loadComplete: "</span> + <span class="reserved">this</span>.index);
+        <span class="reserved">this</span>.logger.log(<span class="literal">"loadComplete: "</span> + <span class="reserved">this</span>.index);
         <span class="reserved">this</span>.getChildrenEl().innerHTML = <span class="reserved">this</span>.completeRender();
         <span class="reserved">this</span>.dynamicLoadComplete = true;
         <span class="reserved">this</span>.isLoading = false;
@@ -966,7 +1086,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
      */</span>
     getAncestor: <span class="reserved">function</span>(depth) {
         <span class="reserved">if</span> (depth &gt;= <span class="reserved">this</span>.depth || depth &lt; 0)  {
-            <span class="reserved">this</span>.logger.debug(<span class="literal">"illegal getAncestor depth: "</span> + depth);
+            <span class="reserved">this</span>.logger.log(<span class="literal">"illegal getAncestor depth: "</span> + depth);
             <span class="reserved">return</span> null;
         }
 
@@ -1000,6 +1120,7 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
      * <span class="attrib">@return</span> {string} The HTML that will render this node.
      */</span>
     getNodeHtml: <span class="reserved">function</span>() { 
+        <span class="reserved">this</span>.logger.log(<span class="literal">"Generating html"</span>);
         <span class="reserved">return</span> <span class="literal">""</span>; 
     },
 
@@ -1010,6 +1131,21 @@ YAHOO.widget.Node.<span class="reserved">prototype</span> = {
     refresh: <span class="reserved">function</span>() {
 <span class="comment">        // this.loadComplete();</span>
         <span class="reserved">this</span>.getChildrenEl().innerHTML = <span class="reserved">this</span>.completeRender();
+
+        <span class="reserved">if</span> (<span class="reserved">this</span>.hasIcon) {
+            var el = <span class="reserved">this</span>.getToggleEl();
+            <span class="reserved">if</span> (el) {
+                el.className = <span class="reserved">this</span>.getStyle();
+            }
+        }
+    },
+
+    <span class="comment">/**
+     * toString
+     * <span class="attrib">@return</span> {string} string representation of the node
+     */</span>
+    toString: <span class="reserved">function</span>() {
+        <span class="reserved">return</span> <span class="literal">"Node ("</span> + <span class="reserved">this</span>.index + <span class="literal">")"</span>;
     }
 
 };

@@ -206,6 +206,7 @@ YAHOO.widget.Node.prototype = {
      * the parent is also applied to this node's children in order to
      * make it possible to move a branch from one tree to another.
      * @param {Node} parentNode this node's parent node
+     * @return {boolean} true if the application was successful
      */
     applyParent: function(parentNode) {
         if (!parentNode) {
@@ -257,6 +258,7 @@ YAHOO.widget.Node.prototype = {
     /**
      * Appends this node to the supplied node's child collection
      * @param parentNode {Node} the node to append to.
+     * @return {Node} The appended node
      */
     appendTo: function(parentNode) {
         return parentNode.appendChild(this);
@@ -274,7 +276,7 @@ YAHOO.widget.Node.prototype = {
         if (p) {
 
             if (this.tree) {
-                this.tree.popBranch(this);
+                this.tree.popNode(this);
             }
 
             var refIndex = node.isChildOf(p);
@@ -305,7 +307,7 @@ YAHOO.widget.Node.prototype = {
         if (p) {
 
             if (this.tree) {
-                this.tree.popBranch(this);
+                this.tree.popNode(this);
             }
 
             var refIndex = node.isChildOf(p);

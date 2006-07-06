@@ -24,8 +24,8 @@ YAHOO.widget.HTMLNode = function(oData, oParent, expanded, hasIcon) {
 YAHOO.widget.HTMLNode.prototype = new YAHOO.widget.Node();
 
 /**
- * The CSS class for the label href.  Defaults to ygtvlabel, but can be
- * overridden to provide a custom presentation for a specific node.
+ * The CSS class for the html content container.  Defaults to ygtvhtml, but 
+ * can be overridden to provide a custom presentation for a specific node.
  *
  * @type string
  */

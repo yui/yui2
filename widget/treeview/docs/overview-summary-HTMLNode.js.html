@@ -238,9 +238,7 @@
 		
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<pre class="sourceview"><span class="comment">/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */</span>
-
-<span class="comment">/**
+				<pre class="sourceview"><span class="comment">/**
  * This implementation takes either a string or object for the
  * oData argument.  If is it a string, we will use it for the display
  * of this node (and it can contain any html code).  If the parameter
@@ -257,7 +255,7 @@
  * have an icon
  */</span>
 YAHOO.widget.HTMLNode = <span class="reserved">function</span>(oData, oParent, expanded, hasIcon) {
-    <span class="reserved">if</span> (oParent) { 
+    <span class="reserved">if</span> (oData) { 
         <span class="reserved">this</span>.init(oData, oParent, expanded);
         <span class="reserved">this</span>.initContent(oData, hasIcon);
     }
@@ -266,8 +264,8 @@ YAHOO.widget.HTMLNode = <span class="reserved">function</span>(oData, oParent, e
 YAHOO.widget.HTMLNode.<span class="reserved">prototype</span> = new YAHOO.widget.Node();
 
 <span class="comment">/**
- * The CSS class for the label href.  Defaults to ygtvlabel, but can be
- * overridden to provide a custom presentation for a specific node.
+ * The CSS class for the html content container.  Defaults to ygtvhtml, but 
+ * can be overridden to provide a custom presentation for a specific node.
  *
  * <span class="attrib">@type</span> string
  */</span>
@@ -302,6 +300,11 @@ YAHOO.widget.HTMLNode.<span class="reserved">prototype</span>.initContent = <spa
     <span class="reserved">this</span>.html = oData.html;
     <span class="reserved">this</span>.contentElId = <span class="literal">"ygtvcontentel"</span> + <span class="reserved">this</span>.index;
     <span class="reserved">this</span>.hasIcon = hasIcon;
+
+    <span class="comment">/**
+     * <span class="attrib">@private</span>
+     */</span>
+    <span class="reserved">this</span>.logger = new YAHOO.widget.LogWriter(<span class="reserved">this</span>.toString());
 };
 
 <span class="comment">/**
@@ -315,13 +318,14 @@ YAHOO.widget.HTMLNode.<span class="reserved">prototype</span>.getContentEl = <sp
 <span class="comment">
 // overrides YAHOO.widget.Node</span>
 YAHOO.widget.HTMLNode.<span class="reserved">prototype</span>.getNodeHtml = <span class="reserved">function</span>() { 
+    <span class="reserved">this</span>.logger.log(<span class="literal">"Generating html"</span>);
     var sb = [];
 
     sb[sb.length] = <span class="literal">'&lt;table border="0" cellpadding="0" cellspacing="0"&gt;'</span>;
     sb[sb.length] = <span class="literal">'&lt;tr&gt;'</span>;
     
     <span class="reserved">for</span> (i=0;i&lt;<span class="reserved">this</span>.depth;++i) {
-        sb[sb.length] = <span class="literal">'&lt;td class="'</span> + <span class="reserved">this</span>.getDepthStyle(i) + <span class="literal">'"&gt;&amp;nbsp;&lt;/td&gt;'</span>;
+        sb[sb.length] = <span class="literal">'&lt;td class="'</span> + <span class="reserved">this</span>.getDepthStyle(i) + <span class="literal">'"&gt;&amp;#160;&lt;/td&gt;'</span>;
     }
 
     <span class="reserved">if</span> (<span class="reserved">this</span>.hasIcon) {
@@ -337,7 +341,7 @@ YAHOO.widget.HTMLNode.<span class="reserved">prototype</span>.getNodeHtml = <spa
             sb[sb.length] = <span class="literal">'YAHOO.widget.TreeView.getNode(\'</span><span class="literal">';
             sb[sb.length] = this.tree.id + '</span>\<span class="literal">','</span> + <span class="reserved">this</span>.index +  <span class="literal">').getStyle()"'</span>;
         }
-        sb[sb.length] = <span class="literal">'&gt;&amp;nbsp;&lt;/td&gt;'</span>;
+        sb[sb.length] = <span class="literal">'&gt;&amp;#160;&lt;/td&gt;'</span>;
     }
 
     sb[sb.length] = <span class="literal">'&lt;td'</span>;
@@ -350,6 +354,10 @@ YAHOO.widget.HTMLNode.<span class="reserved">prototype</span>.getNodeHtml = <spa
     sb[sb.length] = <span class="literal">'&lt;/table&gt;'</span>;
 
     <span class="reserved">return</span> sb.join(<span class="literal">""</span>);
+};
+
+YAHOO.widget.HTMLNode.<span class="reserved">prototype</span>.toString = <span class="reserved">function</span>() { 
+    <span class="reserved">return</span> <span class="literal">"HTMLNode ("</span> + <span class="reserved">this</span>.index + <span class="literal">")"</span>;
 };
 
 </pre>
