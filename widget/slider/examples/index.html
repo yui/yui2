@@ -1,13 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W4C//DTD XHTML 1.0 Strict//EN" 
+		"http://www.w3.org/TR/xhtml2/DTD/xhtml1-strict.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w4.org/1999/xhtml"
+		xmlns:x2="http://www.w3.org/TR/xhtml2"
+		xmlns:role="http://www.w3.org/2005/01/wai-rdf/GUIRoleTaxonomy#"
+		xmlns:state="http://www.w3.org/2005/07/aaa">
 <head>
 <title>Yahoo! UI Library - Slider Widget</title>
-<link rel="stylesheet" type="text/css" href="css/screen.css">
+<link rel="stylesheet" type="text/css" href="css/screen.css" ></link>
 
 <!-- Nav and logger start -->
-<!--
-<script type="text/javascript" src="../../build/event/event.js" ></script>
--->
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
 <script type="text/javascript" src="../../build/event/event.js" ></script>
@@ -18,7 +19,7 @@
 <script type="text/javascript" src="js/color.js" ></script>
 <script type="text/javascript" src="js/key.js" ></script>
 
-<script type="text/javascript" src="../../build/slider/slider.js" ></script></head>
+<script type="text/javascript" src="../../build/slider/slider-debug.js" ></script></head>
 <body> 
 <div id="pageTitle"><h3>Slider Widget</h3></div> 
 
@@ -27,29 +28,33 @@
     <div id="header"><img id="ylogo" src="img/logo.gif" /></div>
 	<div id="main">
 
-
 		<!-- Nav and logger start -->
 
 <style type="text/css">
     #logButtonHeader input { font-size: 80% }
 
-/* ylogger default styles */
-#ylogger {position:absolute;top:1em;right:1em;}
-/*
-.ylogger {padding:1em;background-color:#AAA;border:1px solid black;font-family:monospace;font-size:77%;z-index:9000;}
-*/
-.ylogger {font-family:monospace;font-size:95%;z-index:9000;}
-.ylogger p {margin:1px;padding:.1em;}
-.ylogger button {font-family:monospace;font-size:77%;}
-.ylogger .ylog_hd {position:relative;margin-top:0.1em;padding:0.5em;background-color:#575757;color:#FFF;}
-.ylogger .ylog_bd {height: 1100px;position:relative;background-color:#FFF;border:1px solid gray;overflow:auto;width:100%;}
-.ylogger .ylog_ft {position:relative;margin-top:0.5em;margin-bottom:0.1em;}
-.ylogger .ylog_btns {position:relative;float:right;bottom:0.25em;}
-.ylogger .info {background-color:#A7CC25;} /* A7CC25 green */
-.ylogger .warn {background-color:#F58516;} /* F58516 orange */
-.ylogger .error {background-color:#E32F0B;} /* E32F0B red */
-.ylogger .time {background-color:#A6C9D7;} /* A6C9D7 blue */
-.ylogger .window {background-color:#F2E886;} /* F2E886 tan  */
+/* logger default styles */
+/* font size is controlled here: default 77% */
+#yui-log {position:absolute;top:1em;right:1em;font-size:77%;text-align:left;}
+/* width is controlled here: default 31em */
+.yui-log {background-color:#AAA;border:1px solid black;font-family:monospace;z-index:9000;}
+.yui-log p {margin:1px;padding:.1em;}
+.yui-log button {font-family:monospace;}
+.yui-log .yui-log-hd {margin-top:1em;padding:.5em;background-color:#575757;color:#FFF;}
+/* height is controlled here: default 20em*/
+.yui-log .yui-log-bd {width:100%;height:20em;background-color:#FFF;border:1px solid gray;overflow:auto;}
+.yui-log .yui-log-ft {margin-top:.5em;margin-bottom:1em;}
+.yui-log .yui-log-ft .yui-log-categoryfilters {}
+.yui-log .yui-log-ft .yui-log-sourcefilters {width:100%;border-top:1px solid #575757;margin-top:.75em;padding-top:.75em;}
+.yui-log .yui-log-btns {position:relative;float:right;bottom:.25em;}
+.yui-log .yui-log-filtergrp {margin-right:.5em;}
+.yui-log .info {background-color:#A7CC25;} /* A7CC25 green */
+.yui-log .warn {background-color:#F58516;} /* F58516 orange */
+.yui-log .error {background-color:#E32F0B;} /* E32F0B red */
+.yui-log .time {background-color:#A6C9D7;} /* A6C9D7 blue */
+.yui-log .window {background-color:#F2E886;} /* F2E886 tan */
+
+
 </style>
 
 <div id="rightbar">
@@ -57,8 +62,8 @@
     <h3>Links</h3>
     <div id="linkage">
         <ul>
-        <li><a href="index.html?mode=dist">Simple Slider</a></li>
-        <li><a href="basic.html?mode=dist">Sliders w/Accessibility Features</a></li>
+        <li><a href="index.html?mode=dist">Sliders</a></li>
+        <li><a href="basic.html?mode=dist">Simplified Slider</a></li>
         <li><a href="rgb.html?mode=dist">RGB Slider</a></li>
         <li><a href="rgb2.html?mode=dist">Color Picker</a></li>
         <!--
@@ -80,26 +85,66 @@
 				It also will use YAHOO.util.Animation if available to
 				animate the movement of the thumb when you click the 
 				slider background.
+
+				The only difference between the two sliders aside from
+				the fact that one is vertical and one horizontal is that 
+				the horizontal slider implements the "tick mark" feature
+				of drag and drop; it will "snap" to the tick marks spaced
+				25 pixels apart.
+			  </p>
+			  <p>
+              <!--
+				<a href="javascript:verticalSlider.lock()">Lock</a>
+				<a href="javascript:verticalSlider.unlock()">Unlock</a>
+                -->
 			  </p>
 
               <div id="vertWrapper">
                 <div
                  id="vertBGDiv"
                  name="vertBGDiv"
-                 title="Vertical Slider">
+                 tabindex="0" 
+                 x2:role="role:slider" 
+                 state:valuenow="0" 
+                 state:valuemin="0" 
+                 state:valuemax="200"
+                 title="Vertical Slider" 
+                 onkeydown="return handleVertSliderKey(this, YAHOO.util.Event.getEvent(event))" 
+                 onkeypress="YAHOO.util.Event.preventDefault(YAHOO.util.Event.getEvent(event))" >
                    <div id="vertHandleDiv"><img alt="" src="img/vertSlider.png" /></div> 
                 </div>
 
                 <div id="vertValueDiv">
-                  <form name="formV" id="formV">
-                      <input name="vertVal" id="vertVal" type="text" value="0" size="4" maxlength="4" />
-                      <input id="vertButton" type="button" value="Update" />
+                  <form name="formV" onsubmit="return updateVert()">
+                  <input name="vertVal" id="vertVal" type="text" value="0" size="4" maxlength="4" />
+                  <input type="button" value="Update" onclick="updateVert()" />
                   </form>
                 </div>
               </div>
-              <div>
-              <input id="re2" type="button" value="removeTicks" />
-              </div>
+ 
+           <div id="horizWrapper">
+             <div
+                 id="horizBGDiv"
+                 name="horizBGDiv"
+                 tabindex="0" 
+                 x2:role="role:slider" 
+                 state:valuenow="0" 
+                 state:valuemin="-100" 
+                 state:valuemax="100"
+                 title="Horizontal Slider" 
+                 onkeydown="return handleHorizSliderKey(this, YAHOO.util.Event.getEvent(event))" 
+                 onkeypress="YAHOO.util.Event.preventDefault(YAHOO.util.Event.getEvent(event))" >
+               <div id="horizHandleDiv" ><img alt="" src="img/horizSlider.png" /></div> 
+              </div> 
+
+            <div id="horizValueDiv">
+                <form name="formH" onsubmit="return updateHoriz()">
+                <input name="horizVal" id="horizVal" type="text" value="0" size="4" maxlength="4" />
+                <input type="button" value="Update" onclick="updateHoriz()" />
+                </form>
+            </div>
+
+     
 		</div> 
 
     </div>
@@ -108,76 +153,195 @@
 
 
 <script type="text/javascript">
+//<![CDATA[
+function handleHorizSliderKey(slider, ev) {
+	if (gLogger) gLogger.debug("horizontal slider keypress");
 
-YAHOO.example.SliderApp = function() {
-	var verticalSlider;
+	// var valueNow = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuenow"), 10);
 
-    // The slider can move 0 pixels up
-    var topConstraint = 0;
+	var valueNow = horizontalSlider.getValue();
 
-    // The slider can move 200 pixels down
-    var bottomConstraint = 200;
+	// var valueMin = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuemin"), 10);
+	// var valueMax = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuemax"), 10);
 
-    // Custom scale factor for converting the pixel offset into a real value
-    var scaleFactor = 1.5;
+	var valueMin = verticalSlider.thumb.rightConstraint;
+	var valueMax = verticalSlider.thumb.leftConstraint;
 
-    return {
+	var delta = 0;
 
-        init: function() {
+	var kc = ev.keyCode;
 
-            YAHOO.util.Event.addListener("formV", "submit", this.updateVert);
-            YAHOO.util.Event.addListener("vertButton", "click", this.updateVert);
+	if (gLogger) gLogger.debug("keycode: " + kc);
 
-            verticalSlider = YAHOO.widget.Slider.getVertSlider("vertBGDiv", 
-                             "vertHandleDiv", topConstraint, bottomConstraint, 20);
+	if (kc == YAHOO.util.Key.DOM_VK_LEFT) {
+		delta = -25;
+	} else if (kc == YAHOO.util.Key.DOM_VK_RIGHT) {
+		delta = 25;
+	} else if (kc == YAHOO.util.Key.DOM_VK_HOME) {
+		delta = -( valueNow - valueMin );
+	} else if (kc == YAHOO.util.Key.DOM_VK_END) {
+		delta = valueMax - valueNow;
+	} else {
+		return true;
+	}
+	
+	valueNow += delta;
 
-            verticalSlider.onChange = function(offsetFromStart) {
-                // use the scale factor to convert the pixel offset into a
-                // real value
-                var actualValue = parseInt(offsetFromStart * scaleFactor, 10);
-                document.getElementById("vertVal").value = actualValue;
-                document.getElementById("vertBGDiv").title = 
-                            "Vertical Slider, value = " + actualValue;
-            };
+	horizontalSlider.setValue(valueNow, true);
 
-            verticalSlider.onSlideStart = function() {
-                YAHOO.log("slidestart", "warn");
-            };
+    if (slider.setAttributeNS) {
+	    slider.setAttributeNS("http://www.w3.org/2005/07/aaa", 
+                              "valuenow", 
+                              valueNow);
+    }
+	
+	// displaySlider(slider);
 
-            verticalSlider.onSlideEnd = function() {
-                YAHOO.log("slideend", "warn");
-            };
+    YAHOO.util.Event.stopEvent(ev);
+	return false;
+}
 
-            // verticalSlider.unreg();
-            // verticalSlider.backgroundEnabled = false;
+function handleVertSliderKey(slider, ev) {
+	if (gLogger) gLogger.debug("vertical slider keypress");
 
-            verticalSlider.setValue(20);
+	// var valueNow = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuenow"), 10);
 
-        },
+	var valueNow = verticalSlider.getValue();
 
-        updateVert: function() {
-            var v = parseFloat(document.forms['formV']['vertVal'].value, 10);
-            if ( isNaN(v) ) v = 0;
+	// var valueMin = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuemin"), 10);
+	// var valueMax = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuemax"), 10);
 
-            // convert the real value into a pixel offset
-            verticalSlider.setValue(Math.round(v/scaleFactor));
-            return false;
-        },
+	var valueMin = verticalSlider.thumb.topConstraint;
+	var valueMax = verticalSlider.thumb.bottomConstraint;
 
-        clearConstraints: function() {
-            verticalSlider.getThumb().clearConstraints();
-        },
+	var delta = 0;
+	var kc = ev.keyCode;
+	if (kc == YAHOO.util.Key.DOM_VK_UP) {
+		delta = -20;
+	}
+	else if (kc == YAHOO.util.Key.DOM_VK_DOWN) {
+		delta = 20;
+	}
+	else if (kc == YAHOO.util.Key.DOM_VK_HOME) {
+		delta = -( valueNow - valueMin );
+	}
+	else if (kc == YAHOO.util.Key.DOM_VK_END) {
+		delta = valueMax - valueNow;
+	}
+	else {
+		return true;
+	}
+	
+	valueNow += delta;
+	if (valueNow < valueMin) {
+		valueNow = valueMin;
+	}
 
-        clearTicks: function() {
-            verticalSlider.getThumb().clearTicks();
+	if (valueNow > valueMax) {
+		valueNow = valueMax;
+	}  
+
+    if (slider.setAttributeNS) {
+	    slider.setAttributeNS("http://www.w3.org/2005/07/aaa", 
+                              "valuenow", valueNow);
+    }
+	
+	// displaySlider(slider);
+	verticalSlider.setValue(valueNow, true);
+
+    YAHOO.util.Event.stopEvent(ev);
+	return false;
+}
+
+	var verticalSlider, horizontalSlider;
+	var gLogger;
+	function init() {
+		if (typeof(ygLogger) != "undefined") {
+			ygLogger.init(document.getElementById("logDiv"));
+			gLogger = new ygLogger("slider.php");
+		}
+
+        //////////////////////////////////////////////////////////////////
+
+		verticalSlider = YAHOO.widget.Slider.getVertSlider("vertBGDiv", 
+                         "vertHandleDiv", 0, 200);
+
+		verticalSlider.onChange = function(offsetFromStart) {
+			document.getElementById("vertVal").value = offsetFromStart;
+			document.getElementById("vertBGDiv").title = 
+                        "Vertical Slider, value = " + offsetFromStart;
+		};
+
+        verticalSlider.onSlideStart = function() {
+            //alert("slidestart");
+            YAHOO.log("VERT slidestart", "warn");
         }
-    };
-} ();
 
-//YAHOO.example.SliderApp.init();
-YAHOO.util.Event.addListener(window, "load", YAHOO.example.SliderApp.init, 
-                             YAHOO.example.SliderApp, true);
-YAHOO.util.Event.addListener("re2", "click", YAHOO.example.SliderApp.clearTicks);
+        verticalSlider.onSlideEnd = function() {
+            //alert("slideend");
+            YAHOO.log("VERT slideend", "warn");
+        }
+
+        // verticalSlider.setValue(20);
+        // verticalSlider.lock();
+        //verticalSlider.animate = false;
+
+
+
+	    document.getElementById("vertVal").title = 
+                            "Type in slider value between 0 and 200.";
+
+
+        //////////////////////////////////////////////////////////////////
+
+		horizontalSlider = YAHOO.widget.Slider.getHorizSlider("horizBGDiv", 
+                           "horizHandleDiv", 100, 100, 25);
+
+		horizontalSlider.onChange = function(offsetFromStart) {
+			document.getElementById("horizVal").value = offsetFromStart;
+			document.getElementById("horizBGDiv").title = 
+                        "Horizontal Slider, value = " + offsetFromStart;
+		};
+
+        horizontalSlider.onSlideStart = function() {
+            //alert("slidestart");
+            YAHOO.log("HORIZ slidestart", "warn");
+        };
+
+        horizontalSlider.onSlideEnd = function() {
+            // alert("slideend");
+            YAHOO.log("HORIZ slideend", "warn");
+        };
+
+
+        // horizontalSlider.lock();
+
+	    document.getElementById("horizVal").title = 
+                        "Type in slider value between -100 and 100. Values " +
+                        "will be rounded to a number divisable by 25."
+	}
+
+	function updateVert() {
+		var v = parseFloat(document.forms['formV']['vertVal'].value, 10);
+		if ( isNaN(v) ) v = 0;
+		verticalSlider.setValue(Math.round(v));
+		return false;
+	}
+	
+	function updateHoriz() {
+        var fld = document.forms["formH"]["horizVal"];
+		var v = parseFloat(fld.value, 10);
+		if ( isNaN(v) ) v = 0;
+		horizontalSlider.setValue(Math.round(v));
+        var newVal = horizontalSlider.getValue();
+        if (v != newVal) {
+            fld.value = newVal;
+        }
+		return false;
+	}
+
+	window.onload = init;
+ //]]>
 </script>
 
 </body>

@@ -165,18 +165,7 @@ YAHOO.widget.Slider.prototype.setStartSliderState = function() {
 
     this.logger.log("Fixing state");
 
-    var el = this.thumb.getEl();
-
-    /**
-     * the center of the slider element is stored so we can position 
-     * place it in the correct position when the background is clicked
-     *
-     * @type Coordinate
-     */
-    this.thumbCenterPoint = { 
-            x: parseInt(el.offsetWidth/2, 10), 
-            y: parseInt(el.offsetHeight/2, 10) 
-    };
+    this.setThumbCenterPoint();
 
     /**
      * The basline position of the background element, used
@@ -201,6 +190,25 @@ YAHOO.widget.Slider.prototype.setStartSliderState = function() {
             this.setValue(0, true, true);
         }
     }
+};
+
+YAHOO.widget.Slider.prototype.setThumbCenterPoint = function() {
+
+    var el = this.thumb.getEl();
+
+    if (el) {
+        /**
+         * the center of the slider element is stored so we can position 
+         * place it in the correct position when the background is clicked
+         *
+         * @type Coordinate
+         */
+        this.thumbCenterPoint = { 
+                x: parseInt(el.offsetWidth/2, 10), 
+                y: parseInt(el.offsetHeight/2, 10) 
+        };
+    }
+
 };
 
 /**
@@ -271,7 +279,9 @@ YAHOO.widget.Slider.prototype.focus = function() {
  * Event that fires when the value of the slider has changed
  *
  * @param {int} offsetFromStart the number of pixels the thumb has moved
- * from its start position
+ * from its start position. Normal horizontal and vertical sliders will only
+ * have the firstOffset.  Regions will have both, the first is the horizontal
+ * offset, the second the vertical.
  */
 YAHOO.widget.Slider.prototype.onChange = function (firstOffset, secondOffset) { 
 	/* override me */ 
@@ -932,3 +942,4 @@ YAHOO.widget.SliderThumb.prototype.onChange = function (x, y) { };
 if ("undefined" == typeof YAHOO.util.Anim) {
 	YAHOO.widget.Slider.ANIM_AVAIL = false;
 }
+

@@ -181,6 +181,30 @@
 						</tr>
 					
 						<tr>
+							<td class="flags">Object</td>
+							<td class="spec">
+								<code>
+									<a href="#backgroundEnabled">backgroundEnabled</a>
+								</code>
+								<div class="description">
+									Set to false to disable a background click thumb move&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">Object</td>
+							<td class="spec">
+								<code>
+									<a href="#logger">logger</a>
+								</code>
+								<div class="description">
+									&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="flags">Slider</td>
 							<td class="spec">
 								<code>
@@ -202,6 +226,18 @@
 								<div class="description">
 									Adjustment factor for tick animation, the more ticks, the
  faster the animation (by default)&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">string</td>
+							<td class="spec">
+								<code>
+									<a href="#type">type</a>
+								</code>
+								<div class="description">
+									The type of the slider (horiz, vert, region)&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -251,6 +287,19 @@
 				<h3><a name="methodSummary">Method Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
 					<table border="1" cellpadding="3" cellspacing="0">
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#getThumb">getThumb</a>
+										()
+									</code>
+									<div class="description">
+										Returns a reference to this slider's thumb&nbsp;
+									</div>
+								</td>
+							</tr>
 						
 							<tr>
 								<td class="flags">int</td>
@@ -370,6 +419,19 @@
 							</tr>
 						
 							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#setThumbCenterPoint">setThumbCenterPoint</a>
+										()
+									</code>
+									<div class="description">
+										&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
 								<td class="flags">boolean</td>
 								<td class="spec">
 									<code>
@@ -378,6 +440,19 @@
 									</code>
 									<div class="description">
 										Provides a way to set the value of the slider in code.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#toString">toString</a>
+										()
+									</code>
+									<div class="description">
+										toString&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -476,6 +551,32 @@
 						</div>
 						<hr />
 					
+						<h4><a name="backgroundEnabled">backgroundEnabled</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								&nbsp;
+								<strong>backgroundEnabled</strong>
+							</code>
+							<div class="description">
+								Set to false to disable a background click thumb move
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="logger">logger</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								&nbsp;
+								<strong>logger</strong>
+							</code>
+							<div class="description">
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="thumb">thumb</a></h4>
 						<div class="detail">
 							<code>
@@ -500,6 +601,19 @@
 							<div class="description">
 								Adjustment factor for tick animation, the more ticks, the
  faster the animation (by default)
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="type">type</a></h4>
+						<div class="detail">
+							<code>
+								string
+								&nbsp;
+								<strong>type</strong>
+							</code>
+							<div class="description">
+								The type of the slider (horiz, vert, region)
 							</div>
 						</div>
 						<hr />
@@ -548,12 +662,17 @@
 									
 										<dd>
 											<code>id</code> - 
-											 the id of the element linked to this instance  
+											     The id of the element linked to this instance  
 										</dd>
 									
 										<dd>
 											<code>sGroup</code> - 
-											 the group of related DragDrop items
+											 The group of related DragDrop items  
+										</dd>
+									
+										<dd>
+											<code>sType</code> - 
+											  The type of slider (horiz, vert, region)
 										</dd>
 									
 								</dl>
@@ -575,6 +694,25 @@
 			<div class="section method details">
 				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
+					
+						<h4><a name="getThumb">getThumb</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>getThumb</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Returns a reference to this slider's thumb
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
 					
 						<h4><a name="getValue">getValue</a></h4>
 						<div class="detail">
@@ -685,7 +823,7 @@
 										
 											<dd>
 												<code>offsetFromStart</code> - 
-												 the number of pixels the thumb has moved  from its start position    
+												 the number of pixels the thumb has moved  from its start position. Normal horizontal and vertical sliders will only  have the firstOffset.  Regions will have both, the first is the horizontal  offset, the second the vertical.    
 											</dd>
 										
 									</dl>
@@ -800,6 +938,23 @@
 						</div>
 						<hr />
 					
+						<h4><a name="setThumbCenterPoint">setThumbCenterPoint</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>setThumbCenterPoint</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="setValue">setValue</a></h4>
 						<div class="detail">
 							<code>
@@ -837,6 +992,30 @@
 									<dl>
 										<dt>Returns:</dt>
 										<dd> true if the move was performed, false if it failed</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="toString">toString</a></h4>
+						<div class="detail">
+							<code>
+								string 
+								<strong>toString</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									toString
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> string representation of the instance</dd>
 									</dl>
 								
 								

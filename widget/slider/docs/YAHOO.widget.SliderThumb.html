@@ -169,6 +169,18 @@
 					<table border="1" cellpadding="3" cellspacing="0">
 					
 						<tr>
+							<td class="flags">Object</td>
+							<td class="spec">
+								<code>
+									<a href="#logger">logger</a>
+								</code>
+								<div class="description">
+									&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="flags">boolean</td>
 							<td class="spec">
 								<code>
@@ -264,11 +276,24 @@
 					<table border="1" cellpadding="3" cellspacing="0">
 						
 							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#clearTicks">clearTicks</a>
+										()
+									</code>
+									<div class="description">
+										Clear's the slider's ticks&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
 								<td class="flags">int[]</td>
 								<td class="spec">
 									<code>
 										<a href="#getOffsetFromParent">getOffsetFromParent</a>
-										()
+										(parentPos)
 									</code>
 									<div class="description">
 										Returns the difference between the location of the thumb and its parent.&nbsp;
@@ -332,6 +357,19 @@
 								</td>
 							</tr>
 						
+							<tr>
+								<td class="flags">string</td>
+								<td class="spec">
+									<code>
+										<a href="#toString">toString</a>
+										()
+									</code>
+									<div class="description">
+										toString&nbsp;
+									</div>
+								</td>
+							</tr>
+						
 					</table>
 				</div>
 			</div>
@@ -346,6 +384,19 @@
 			<div class="section field details">
 				<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
+					
+						<h4><a name="logger">logger</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								&nbsp;
+								<strong>logger</strong>
+							</code>
+							<div class="description">
+								
+							</div>
+						</div>
+						<hr />
 					
 						<h4><a name="maintainOffset">maintainOffset</a></h4>
 						<div class="detail">
@@ -495,18 +546,47 @@
 				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
 					
+						<h4><a name="clearTicks">clearTicks</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>clearTicks</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Clear's the slider's ticks
+								
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="getOffsetFromParent">getOffsetFromParent</a></h4>
 						<div class="detail">
 							<code>
 								int[] 
 								<strong>getOffsetFromParent</strong>
-								()
+								(parentPos)
 							</code>
 									
 							<div class="description">
 								
 									Returns the difference between the location of the thumb and its parent.
 								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>Optionally</code> - 
+												 accepts the position of the parent  
+											</dd>
+										
+									</dl>
 								
 								
 								
@@ -633,6 +713,30 @@
 										
 									</dl>
 								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="toString">toString</a></h4>
+						<div class="detail">
+							<code>
+								string 
+								<strong>toString</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									toString
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> string representation of the instance</dd>
+									</dl>
 								
 								
 							</div>
