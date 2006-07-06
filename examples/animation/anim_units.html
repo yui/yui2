@@ -2,6 +2,7 @@
 <html>
 <head>
 <title>Animation Example - Unit</title>
+<link rel="stylesheet" type="text/css" href="css/demo.css">
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
@@ -9,30 +10,20 @@
 <script type="text/javascript" src="../../build/animation/animation.js"></script>
 
 <script type="text/javascript">
-YAHOO.namespace('example.anim');
-YAHOO.example.anim.init = function() {        
-   var anim = new YAHOO.util.Anim('anim', { width: { from: 30, to: 10, unit: 'em'} } );
-   
-   var animate = function(e) {
-      anim.animate();
-      return false;
-   };
-   
-   YAHOO.util.Event.addListener(document, 'click', animate);
-      
+YAHOO.example.init = function() {        
+   var anim = new YAHOO.util.Anim('demo', { width: { from: 30, to: 10, unit: 'em'} } );
+   YAHOO.util.Event.on(document, 'click', anim.animate, anim, true);
 };
 
-YAHOO.util.Event.addListener(window, 'load', YAHOO.example.anim.init);
+YAHOO.util.Event.onAvailable('demo', YAHOO.example.init);
 </script>
-
-<link rel="stylesheet" type="text/css" href="css/anim.css">
 </head>
-<body>
+<body id="animation-demo-units">
 <div id="doc">
    <h1>Animation Example - Unit</h1>
    <p>This example demonstrates how to animate an element's width using &quot;em&quot; as the unit.</p>
    <p>Click anywhere to start animation.</p>
-   <div id="anim"></div>  
+   <div id="demo"></div>  
 </div>
 </body>
 </html>

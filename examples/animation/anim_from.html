@@ -1,7 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>Animation Example - From</title>
+<title>Animation Example - Colors</title>
+<link rel="stylesheet" type="text/css" href="css/demo.css">
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
@@ -9,30 +10,20 @@
 <script type="text/javascript" src="../../build/animation/animation.js"></script>
 
 <script type="text/javascript">
-YAHOO.namespace('example.anim');
-YAHOO.example.anim.init = function() {        
-   var anim = new YAHOO.util.Anim('anim', { width: { from: 600, to: 300} } );
-   
-   var animate = function(e) {
-      anim.animate();
-      return false;
-   };
-   
-   YAHOO.util.Event.addListener(document, 'click', animate);
-      
+YAHOO.example.init = function() {   
+   var anim = new YAHOO.util.Anim('demo', { width: {from: 600, to: 300} });
+   YAHOO.util.Event.on(document, 'click', anim.animate, anim, true);
 };
 
-YAHOO.util.Event.addListener(window, 'load', YAHOO.example.anim.init);
+YAHOO.util.Event.onAvailable('demo', YAHOO.example.init);
 </script>
-
-<link rel="stylesheet" type="text/css" href="css/anim.css">
 </head>
-<body>
+<body id="animation-demo-from">
 <div id="doc">
-   <h1>Animation Example - From</h1>
-   <p>This example demonstrates how to animate an element's width from a given value to a given value.</p>
+   <h1>Animation Example - Colors</h1>
+   <p>This example demonstrates how to animate an element's font and background color.</p>
    <p>Click anywhere to start animation.</p>
-   <div id="anim"></div>  
+   <div id="demo"></div>  
 </div>
 </body>
 </html>
