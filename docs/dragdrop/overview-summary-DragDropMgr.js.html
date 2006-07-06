@@ -158,6 +158,39 @@
 		
 		
 		
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+				
+					
+						<a href="#classSummary">Class Summary</a> |
+					
+					
+				
+				
+				
+					<a href="#source">Source Code</a>
+				
+			</div>
+		
+			
+				<div class="section class summaries">
+					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+			
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+						<tr>
+							<td class="name">
+								<a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a>
+							</td>
+							<td class="overview">&nbsp;</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
 		
 		
 		
@@ -165,12 +198,7 @@
 		
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<pre class="sourceview"><span class="comment">/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */</span>
-<span class="comment">
-// Only load the library once.  Rewriting the manager class would orphan </span>
-<span class="comment">// existing drag and drop instances.</span>
-<span class="reserved">if</span> (!YAHOO.util.DragDropMgr) {
-
+				<pre class="sourceview">
     <span class="comment">/**
      * Handles the element interaction for all DragDrop items in the 
      * window.  Generally, you will not call this class directly, but it does
@@ -180,7 +208,7 @@
      *
      * <span class="attrib">@constructor</span>
      */</span>
-    YAHOO.util.DragDropMgr = new <span class="reserved">function</span>() {
+    YAHOO.util.DragDropMgr = <span class="reserved">function</span>() {
         <span class="comment">/**
          * Flag to determine if we should prevent the default behavior of the
          * events we define. By default this is true, but this can be set to 
@@ -233,13 +261,6 @@
         <span class="comment">/**
          * Is drag and drop locked?
          *
-         * <span class="attrib">@type</span> boolean
-         */</span>
-        <span class="reserved">this</span>.locked = false;
-
-        <span class="comment">/**
-         * Is drag and drop locked?
-         *
          * <span class="attrib">@return</span> {boolean} True if drag and drop is locked, false otherwise.
          */</span>
         <span class="reserved">this</span>.isLocked = <span class="reserved">function</span>() { <span class="reserved">return</span> <span class="reserved">this</span>.locked; };
@@ -263,10 +284,9 @@
          * <span class="attrib">@type</span> int
          */</span>
         <span class="reserved">this</span>.clickTimeThresh = 1000;
-        
-       <span class="comment">/**
+        <span class="comment">/**
          * Each DragDrop instance must be registered with the DragDropMgr.  
-         * This is executed in ygDragDrop.init()
+         * This is executed in DragDrop.init()
          *
          * <span class="attrib">@param</span> {DragDrop} oDD the DragDrop object to register
          * <span class="attrib">@param</span> {String} sGroup the name of the group this element belongs to
@@ -280,11 +300,9 @@
             <span class="reserved">this</span>.ids[sGroup][oDD.id] = oDD;
         };
 
-        
-
         <span class="comment">/**
          * Each DragDrop handle element must be registered.  This is done
-         * automatically when executing ygDragDrop.setHandleElId()
+         * automatically when executing DragDrop.setHandleElId()
          *
          * <span class="attrib">@param</span> {String} sDDId the DragDrop id this element is a handle for
          * <span class="attrib">@param</span> {String} sHandleId the id of the element that is the drag 
@@ -313,9 +331,9 @@
          * Returns the drag and drop instances that are in all groups the
          * passed in instance belongs to.
          *
-         * <span class="attrib">@param</span> {ygDragDrop} p_oDD the obj to get related data for
+         * <span class="attrib">@param</span> {DragDrop} p_oDD the obj to get related data for
          * <span class="attrib">@param</span> {boolean} bTargetsOnly if true, only return targetable objs
-         * <span class="attrib">@return</span> {ygDragDrop[]} the related instances
+         * <span class="attrib">@return</span> {DragDrop[]} the related instances
          */</span>
         <span class="reserved">this</span>.getRelated = <span class="reserved">function</span>(p_oDD, bTargetsOnly) {
             var oDDs = [];
@@ -338,13 +356,13 @@
          * Returns true if the specified dd target is a legal target for 
          * the specifice drag obj
          *
-         * <span class="attrib">@param</span> {ygDragDrop} the drag obj
-         * <span class="attrib">@param</span> {ygDragDrop) the target
+         * <span class="attrib">@param</span> {DragDrop} the drag obj
+         * <span class="attrib">@param</span> {DragDrop) the target
          * <span class="attrib">@return</span> {boolean} true if the target is a legal target for the 
          * dd obj
          */</span>
         <span class="reserved">this</span>.isLegalTarget = <span class="reserved">function</span> (oDD, oTargetDD) {
-            var targets = <span class="reserved">this</span>.getRelated(oDD);
+            var targets = <span class="reserved">this</span>.getRelated(oDD, true);
             <span class="reserved">for</span> (var i=0, len=targets.length;i&lt;len;++i) {
                 <span class="reserved">if</span> (targets[i].id == oTargetDD.id) {
                     <span class="reserved">return</span> true;
@@ -356,13 +374,13 @@
 
         <span class="comment">/**
          * My goal is to be able to transparently determine if an object is
-         * typeof ygDragDrop, and the exact subclass of ygDragDrop.  typeof 
+         * typeof DragDrop, and the exact subclass of DragDrop.  typeof 
          * returns "object", oDD.constructor.toString() always returns
-         * "ygDragDrop" and not the name of the subclass.  So for now it just
-         * evaluates a well-known variable in ygDragDrop.
+         * "DragDrop" and not the name of the subclass.  So for now it just
+         * evaluates a well-known variable in DragDrop.
          *
          * <span class="attrib">@param</span> {Object} the object to evaluate
-         * <span class="attrib">@return</span> {boolean} true if typeof oDD = ygDragDrop
+         * <span class="attrib">@return</span> {boolean} true if typeof oDD = DragDrop
          */</span>
         <span class="reserved">this</span>.isTypeOfDD = <span class="reserved">function</span> (oDD) {
             <span class="reserved">return</span> (oDD &amp;&amp; oDD.__ygDragDrop);
@@ -396,7 +414,6 @@
             <span class="reserved">return</span> null;
         };
 
-        
         <span class="comment">/**
          * Fired when either the drag pixel threshol or the mousedown hold 
          * time threshold has been met.
@@ -405,20 +422,14 @@
          * <span class="attrib">@param</span> y {int} the Y position of the original mousedown
          */</span>
         <span class="reserved">this</span>.startDrag = <span class="reserved">function</span>(x, y) {
-            <span class="reserved">this</span>.logger.debug(<span class="literal">"firing drag start events"</span>);
+            <span class="reserved">this</span>.logger.log(<span class="literal">"firing drag start events"</span>);
             clearTimeout(<span class="reserved">this</span>.clickTimeout);
             <span class="reserved">if</span> (<span class="reserved">this</span>.dragCurrent) {
                 <span class="reserved">this</span>.dragCurrent.b4StartDrag(x, y);
                 <span class="reserved">this</span>.dragCurrent.startDrag(x, y);
             }
-
-            <span class="comment">/**
-             * <span class="attrib">@private</span>
-             */</span>
             <span class="reserved">this</span>.dragThreshMet = true;
         };
-
-        
 
         <span class="comment">/**
          * Utility to stop event propagation and event default, if these 
@@ -436,8 +447,147 @@
             }
         };
 
-        
 
+        <span class="comment">/**
+         * Iterates over all of the DragDrop elements to find ones we are 
+         * hovering over or dropping on
+         *
+         * <span class="attrib">@param</span> {Event} e the event
+         * <span class="attrib">@param</span> {boolean} isDrop is this a drop op or a mouseover op?
+         * <span class="attrib">@private</span>
+         */</span>
+        <span class="reserved">this</span>.fireEvents = <span class="reserved">function</span>(e, isDrop) {
+            var dc = <span class="reserved">this</span>.dragCurrent;
+<span class="comment">
+            // If the user did the mouse up outside of the window, we could </span>
+<span class="comment">            // get here even though we have ended the drag.</span>
+            <span class="reserved">if</span> (!dc || dc.isLocked()) {
+                <span class="reserved">return</span>;
+            }
+
+            var x = YAHOO.util.Event.getPageX(e);
+            var y = YAHOO.util.Event.getPageY(e);
+            var pt = new YAHOO.util.Point(x,y);
+<span class="comment">
+            // cache the previous dragOver array</span>
+            var oldOvers = [];
+
+            var outEvts   = [];
+            var overEvts  = [];
+            var dropEvts  = [];
+            var enterEvts = [];
+<span class="comment">
+            // Check to see if the object(s) we were hovering over is no longer </span>
+<span class="comment">            // being hovered over so we can fire the onDragOut event</span>
+            <span class="reserved">for</span> (var i in <span class="reserved">this</span>.dragOvers) {
+
+                var ddo = <span class="reserved">this</span>.dragOvers[i];
+
+                <span class="reserved">if</span> (! <span class="reserved">this</span>.isTypeOfDD(ddo)) {
+                    continue;
+                }
+
+                <span class="reserved">if</span> (! <span class="reserved">this</span>.isOverTarget(pt, ddo, <span class="reserved">this</span>.mode)) {
+                    outEvts.push( ddo );
+                }
+
+                oldOvers[i] = true;
+                delete <span class="reserved">this</span>.dragOvers[i];
+            }
+
+            <span class="reserved">for</span> (var sGroup in dc.groups) {
+<span class="comment">                // this.logger.log("Processing group " + sGroup);</span>
+                
+                <span class="reserved">if</span> (<span class="literal">"string"</span> != typeof sGroup) {
+                    continue;
+                }
+
+                <span class="reserved">for</span> (i in <span class="reserved">this</span>.ids[sGroup]) {
+                    var oDD = <span class="reserved">this</span>.ids[sGroup][i];
+                    <span class="reserved">if</span> (! <span class="reserved">this</span>.isTypeOfDD(oDD)) {
+                        continue;
+                    }
+
+                    <span class="reserved">if</span> (oDD.isTarget &amp;&amp; !oDD.isLocked() &amp;&amp; oDD != dc) {
+                        <span class="reserved">if</span> (<span class="reserved">this</span>.isOverTarget(pt, oDD, <span class="reserved">this</span>.mode)) {
+<span class="comment">                            // look for drop interactions</span>
+                            <span class="reserved">if</span> (isDrop) {
+                                dropEvts.push( oDD );
+<span class="comment">                            // look for drag enter and drag over interactions</span>
+                            } <span class="reserved">else</span> {
+<span class="comment">
+                                // initial drag over: dragEnter fires</span>
+                                <span class="reserved">if</span> (!oldOvers[oDD.id]) {
+                                    enterEvts.push( oDD );
+<span class="comment">                                // subsequent drag overs: dragOver fires</span>
+                                } <span class="reserved">else</span> {
+                                    overEvts.push( oDD );
+                                }
+
+                                <span class="reserved">this</span>.dragOvers[oDD.id] = oDD;
+                            }
+                        }
+                    }
+                }
+            }
+
+            <span class="reserved">if</span> (<span class="reserved">this</span>.mode) {
+                <span class="reserved">if</span> (outEvts.length) {
+                    <span class="reserved">this</span>.logger.log(dc.id+<span class="literal">" onDragOut: "</span> + outEvts);
+                    dc.b4DragOut(e, outEvts);
+                    dc.onDragOut(e, outEvts);
+                }
+
+                <span class="reserved">if</span> (enterEvts.length) {
+                    <span class="reserved">this</span>.logger.log(dc.id+<span class="literal">" onDragEnter: "</span> + enterEvts);
+                    dc.onDragEnter(e, enterEvts);
+                }
+
+                <span class="reserved">if</span> (overEvts.length) {
+                    <span class="reserved">this</span>.logger.log(dc.id+<span class="literal">" onDragOver: "</span> + overEvts);
+                    dc.b4DragOver(e, overEvts);
+                    dc.onDragOver(e, overEvts);
+                }
+
+                <span class="reserved">if</span> (dropEvts.length) {
+                    <span class="reserved">this</span>.logger.log(dc.id+<span class="literal">" onDragDrop: "</span> + dropEvts);
+                    dc.b4DragDrop(e, dropEvts);
+                    dc.onDragDrop(e, dropEvts);
+                }
+
+            } <span class="reserved">else</span> {
+<span class="comment">                // fire dragout events</span>
+                var len = 0;
+                <span class="reserved">for</span> (i=0, len=outEvts.length; i&lt;len; ++i) {
+                    <span class="reserved">this</span>.logger.log(dc.id+<span class="literal">" onDragOut: "</span> + outEvts[i].id);
+                    dc.b4DragOut(e, outEvts[i].id);
+                    dc.onDragOut(e, outEvts[i].id);
+                }
+<span class="comment">                 
+                // fire enter events</span>
+                <span class="reserved">for</span> (i=0,len=enterEvts.length; i&lt;len; ++i) {
+                    <span class="reserved">this</span>.logger.log(dc.id + <span class="literal">" onDragEnter "</span> + enterEvts[i].id);
+<span class="comment">                    // dc.b4DragEnter(e, oDD.id);</span>
+                    dc.onDragEnter(e, enterEvts[i].id);
+                }
+<span class="comment">         
+                // fire over events</span>
+                <span class="reserved">for</span> (i=0,len=overEvts.length; i&lt;len; ++i) {
+                    <span class="reserved">this</span>.logger.log(dc.id + <span class="literal">" onDragOver "</span> + overEvts[i].id);
+                    dc.b4DragOver(e, overEvts[i].id);
+                    dc.onDragOver(e, overEvts[i].id);
+                }
+<span class="comment">
+                // fire drop events</span>
+                <span class="reserved">for</span> (i=0, len=dropEvts.length; i&lt;len; ++i) {
+                    <span class="reserved">this</span>.logger.log(dc.id + <span class="literal">" dropped on "</span> + dropEvts[i].id);
+                    dc.b4DragDrop(e, dropEvts[i].id);
+                    dc.onDragDrop(e, dropEvts[i].id);
+                }
+
+            }
+
+        };
 
         <span class="comment">/**
          * Helper function for getting the best match from the list of drag 
@@ -446,9 +596,9 @@
          * cursor is over, or the object that has the greatest overlap with 
          * the dragged element.
          *
-         * <span class="attrib">@param</span>  {ygDragDrop[]} dds The array of drag and drop objects 
+         * <span class="attrib">@param</span>  {DragDrop[]} dds The array of drag and drop objects 
          * targeted
-         * <span class="attrib">@return</span> {ygDragDrop}       The best single match
+         * <span class="attrib">@return</span> {DragDrop}       The best single match
          */</span>
         <span class="reserved">this</span>.getBestMatch = <span class="reserved">function</span>(dds) {
             var winner = null;
@@ -489,11 +639,11 @@
          * Refreshes the cache of the top-left and bottom-right points of the 
          * drag and drop objects in the specified groups
          *
-         * <span class="attrib">@param</span> {Array} aGroups an associative array of groups to refresh
+         * <span class="attrib">@param</span> {Object} groups an associative array of groups to refresh
          */</span>
-        <span class="reserved">this</span>.refreshCache = <span class="reserved">function</span>(aGroups) {
-            <span class="reserved">this</span>.logger.debug(<span class="literal">"refreshing element location cache"</span>);
-            <span class="reserved">for</span> (sGroup in aGroups) {
+        <span class="reserved">this</span>.refreshCache = <span class="reserved">function</span>(groups) {
+            <span class="reserved">this</span>.logger.log(<span class="literal">"refreshing element location cache"</span>);
+            <span class="reserved">for</span> (sGroup in groups) {
                 <span class="reserved">if</span> (<span class="literal">"string"</span> != typeof sGroup) {
                     continue;
                 }
@@ -501,15 +651,17 @@
                     var oDD = <span class="reserved">this</span>.ids[sGroup][i];
 
                     <span class="reserved">if</span> (<span class="reserved">this</span>.isTypeOfDD(oDD)) {
+<span class="comment">                    // if (this.isTypeOfDD(oDD) &amp;&amp; oDD.isTarget) {</span>
                         var loc = <span class="reserved">this</span>.getLocation(oDD);
                         <span class="reserved">if</span> (loc) {
                             <span class="reserved">this</span>.locationCache[oDD.id] = loc;
                         } <span class="reserved">else</span> {
                             delete <span class="reserved">this</span>.locationCache[oDD.id];
-                            <span class="reserved">this</span>.logger.debug(<span class="literal">"something is wrong with the element"</span>);
+                            <span class="reserved">this</span>.logger.log(<span class="literal">"Could not get the loc for "</span> + oDD.id,
+                                    <span class="literal">"warn"</span>);
 <span class="comment">                            // this will unregister the drag and drop object if</span>
 <span class="comment">                            // the element is not in a usable state</span>
-                            oDD.unreg();
+<span class="comment">                            // oDD.unreg();</span>
                         }
                     }
                 }
@@ -533,7 +685,7 @@
                     }
                 }
             } catch(e) {
-                <span class="reserved">this</span>.logger.debug(<span class="literal">"detected problem with an element"</span>);
+                <span class="reserved">this</span>.logger.log(<span class="literal">"detected problem with an element"</span>);
             }
 
             <span class="reserved">return</span> false;
@@ -541,30 +693,39 @@
         
         <span class="comment">/**
          * Returns the an array containing the drag and drop element's position
-         * and size, including the ygDragDrop.padding configured for it
+         * and size, including the DragDrop.padding configured for it
          *
-         * <span class="attrib">@param</span> {ygDragDrop} oDD the drag and drop object to get the 
+         * <span class="attrib">@param</span> {DragDrop} oDD the drag and drop object to get the 
          * location for
          * <span class="attrib">@return</span> array containing the top left and bottom right points of the 
          * element 
          */</span>
         <span class="reserved">this</span>.getLocation = <span class="reserved">function</span>(oDD) {
             <span class="reserved">if</span> (! <span class="reserved">this</span>.isTypeOfDD(oDD)) {
-                <span class="reserved">this</span>.logger.debug(oDD + <span class="literal">" is not a DD obj"</span>);
+                <span class="reserved">this</span>.logger.log(oDD + <span class="literal">" is not a DD obj"</span>);
                 <span class="reserved">return</span> null;
             }
 
             var el = oDD.getEl();
-
-            <span class="reserved">if</span> (!<span class="reserved">this</span>.verifyEl(el)) {
-                <span class="reserved">this</span>.logger.debug(oDD + <span class="literal">" element is not usable"</span>);
-                <span class="reserved">return</span> null;
-            }
 <span class="comment">
-            // this.logger.debug(oDD.id + " padding: " + oDD.padding);</span>
+            // element will not have an offsetparent if it was removed from the</span>
+<span class="comment">            // document or display=none</span>
+<span class="comment">            // if (!this.verifyEl(el)) {</span>
+<span class="comment">                // this.logger.log(oDD + " element is not usable");</span>
+<span class="comment">                // return null;</span>
+<span class="comment">            // }</span>
+<span class="comment">
+            // this.logger.log(oDD.id + " padding: " + oDD.padding);</span>
 <span class="comment">
             // var aPos = ygPos.getPos(el);</span>
-            var aPos = YAHOO.util.Dom.getXY(el);
+            var aPos = null;
+            try {
+                aPos= YAHOO.util.Dom.getXY(el);
+            } catch (e) { }
+
+            <span class="reserved">if</span> (!aPos) {
+                <span class="reserved">return</span> null;
+            }
 
             x1 = aPos[0];
             x2 = x1 + el.offsetWidth;
@@ -581,17 +742,126 @@
 
         };
 
+        <span class="comment">/**
+         * Checks the cursor location to see if it over the target
+         * 
+         * <span class="attrib">@param</span> {YAHOO.util.Point} pt The point to evaluate
+         * <span class="attrib">@param</span> {DragDrop} oTarget the DragDrop object we are inspecting
+         * <span class="attrib">@return</span> {boolean} true if the mouse is over the target
+         * <span class="attrib">@private</span>
+         */</span>
+        <span class="reserved">this</span>.isOverTarget = <span class="reserved">function</span>(pt, oTarget, intersect) {
+<span class="comment">            // use cache if available</span>
+            var loc = <span class="reserved">this</span>.locationCache[oTarget.id];
+            <span class="reserved">if</span> (!loc || !<span class="reserved">this</span>.useCache) {
+                <span class="reserved">this</span>.logger.log(<span class="literal">"cache not populated"</span>);
+                loc = <span class="reserved">this</span>.getLocation(oTarget);
+                <span class="reserved">this</span>.locationCache[oTarget.id] = loc;
+
+                <span class="reserved">this</span>.logger.log(<span class="literal">"cache: "</span> + loc);
+            }
+
+            <span class="reserved">if</span> (!loc) {
+                <span class="reserved">return</span> false;
+            }
+
+            oTarget.cursorIsOver = loc.contains( pt );
+<span class="comment">
+            // DragDrop is using this as a sanity check for the initial mousedown</span>
+<span class="comment">            // in this case we are done.  In POINT mode, if the drag obj has no</span>
+<span class="comment">            // contraints, we are also done. Otherwise we need to evaluate the </span>
+<span class="comment">            // location of the target as related to the actual location of the</span>
+<span class="comment">            // dragged element.</span>
+            var dc = <span class="reserved">this</span>.dragCurrent;
+            <span class="reserved">if</span> (!dc || (!intersect &amp;&amp; !dc.constrainX &amp;&amp; !dc.constrainY)) {
+                <span class="reserved">return</span> oTarget.cursorIsOver;
+            }
+
+            oTarget.overlap = null;
+<span class="comment">
+            // Get the current location of the drag element, this is the</span>
+<span class="comment">            // location of the mouse event less the delta that represents</span>
+<span class="comment">            // where the original mousedown happened on the element.  We</span>
+<span class="comment">            // need to consider constraints and ticks as well.</span>
+            var pos = dc.getTargetCoord(pt.x, pt.y);
+
+            var el = dc.getDragEl();
+            var curRegion = new YAHOO.util.Region( pos.y, 
+                                                   pos.x + el.offsetWidth,
+                                                   pos.y + el.offsetHeight, 
+                                                   pos.x );
+
+            var overlap = curRegion.intersect(loc);
+
+            <span class="reserved">if</span> (overlap) {
+                oTarget.overlap = overlap;
+                <span class="reserved">return</span> (intersect) ? true : oTarget.cursorIsOver;
+            } <span class="reserved">else</span> {
+                <span class="reserved">return</span> false;
+            }
+        };
+
+        <span class="comment">/**
+         * <span class="attrib">@private</span>
+         */</span>
+        <span class="reserved">this</span>._onUnload = <span class="reserved">function</span>(e, me) {
+            <span class="reserved">this</span>.unregAll();
+        };
+
+        <span class="comment">/**
+         * Cleans up the drag and drop events and objects.
+         * <span class="attrib">@private</span>
+         */</span>
+        <span class="reserved">this</span>.unregAll = <span class="reserved">function</span>() {
+            <span class="reserved">this</span>.logger.log(<span class="literal">"unregister all"</span>);
+
+            <span class="reserved">if</span> (<span class="reserved">this</span>.dragCurrent) {
+                <span class="reserved">this</span>.stopDrag();
+                <span class="reserved">this</span>.dragCurrent = null;
+            }
+
+            <span class="reserved">this</span>._execOnAll(<span class="literal">"unreg"</span>, []);
+
+            <span class="reserved">for</span> (i in <span class="reserved">this</span>.elementCache) {
+                delete <span class="reserved">this</span>.elementCache[i];
+            }
+
+            <span class="reserved">this</span>.elementCache = {};
+            <span class="reserved">this</span>.ids = {};
+        };
+
+        <span class="comment">/**
+         * A cache of DOM elements
+         * <span class="attrib">@private</span>
+         */</span>
+        <span class="reserved">this</span>.elementCache = {};
         
+        <span class="comment">/**
+         * Get the wrapper for the DOM element specified
+         *
+         * <span class="attrib">@param</span> {String} id the id of the elment to get
+         * <span class="attrib">@return</span> {YAHOO.util.DDM.ElementWrapper} the wrapped element
+         * <span class="attrib">@private</span>
+         * <span class="attrib">@deprecated</span>
+         */</span>
+        <span class="reserved">this</span>.getElWrapper = <span class="reserved">function</span>(id) {
+            var oWrapper = <span class="reserved">this</span>.elementCache[id];
+            <span class="reserved">if</span> (!oWrapper || !oWrapper.el) {
+                oWrapper = <span class="reserved">this</span>.elementCache[id] = 
+                    new <span class="reserved">this</span>.ElementWrapper(YAHOO.util.Dom.get(id));
+            }
+            <span class="reserved">return</span> oWrapper;
+        };
 
         <span class="comment">/**
          * Returns the actual DOM element
          *
          * <span class="attrib">@param</span> {String} id the id of the elment to get
          * <span class="attrib">@return</span> {Object} The element
+         * <span class="attrib">@deprecated</span>
          */</span>
         <span class="reserved">this</span>.getElement = <span class="reserved">function</span>(id) {
-<span class="comment">            // return this.getElWrapper(id).el;</span>
-            <span class="reserved">return</span> document.getElementById(id);
+            <span class="reserved">return</span> YAHOO.util.Dom.get(id);
         };
         
         <span class="comment">/**
@@ -600,22 +870,38 @@
          *
          * <span class="attrib">@param</span> {String} id the id of the elment to get
          * <span class="attrib">@return</span> {Object} The style property of the element
+         * <span class="attrib">@deprecated</span>
          */</span>
         <span class="reserved">this</span>.getCss = <span class="reserved">function</span>(id) {
-<span class="comment">            // return this.getElWrapper(id).css;</span>
-            var css = null;
-            var el = document.getElementById(id);
-            <span class="reserved">if</span> (el) {
-                css = el.style;
-            }
-
-            <span class="reserved">return</span> css;
+            var el = YAHOO.util.Dom.get(id);
+            <span class="reserved">return</span> (el) ? el.style : null;
         };
+
+        <span class="comment">/**
+         * Inner class for cached elements
+         * <span class="attrib">@private</span>
+         * <span class="attrib">@deprecated</span>
+         */</span>
+        <span class="reserved">this</span>.ElementWrapper = <span class="reserved">function</span>(el) {
+                <span class="comment">/**
+                 * <span class="attrib">@private</span>
+                 */</span>
+                <span class="reserved">this</span>.el = el || null;
+                <span class="comment">/**
+                 * <span class="attrib">@private</span>
+                 */</span>
+                <span class="reserved">this</span>.id = <span class="reserved">this</span>.el &amp;&amp; el.id;
+                <span class="comment">/**
+                 * <span class="attrib">@private</span>
+                 */</span>
+                <span class="reserved">this</span>.css = <span class="reserved">this</span>.el &amp;&amp; el.style;
+            };
 
         <span class="comment">/**
          * Returns the X position of an html element
          * <span class="attrib">@param</span> el the element for which to get the position
          * <span class="attrib">@return</span> {int} the X coordinate
+         * <span class="attrib">@deprecated</span>
          */</span>
         <span class="reserved">this</span>.getPosX = <span class="reserved">function</span>(el) {
             <span class="reserved">return</span> YAHOO.util.Dom.getX(el);
@@ -625,6 +911,7 @@
          * Returns the Y position of an html element
          * <span class="attrib">@param</span> el the element for which to get the position
          * <span class="attrib">@return</span> {int} the Y coordinate
+         * <span class="attrib">@deprecated</span>
          */</span>
         <span class="reserved">this</span>.getPosY = <span class="reserved">function</span>(el) {
             <span class="reserved">return</span> YAHOO.util.Dom.getY(el); 
@@ -650,10 +937,25 @@
         };
 
         <span class="comment">/**
+         * <span class="attrib">@private</span>
+         */</span>
+        <span class="reserved">this</span>.getScroll = <span class="reserved">function</span> () {
+            var t, l;
+            <span class="reserved">if</span> (document.documentElement &amp;&amp; document.documentElement.scrollTop) {
+                t = document.documentElement.scrollTop;
+                l = document.documentElement.scrollLeft;
+            } <span class="reserved">else</span> <span class="reserved">if</span> (document.body) {
+                t = document.body.scrollTop;
+                l = document.body.scrollLeft;
+            }
+            <span class="reserved">return</span> { top: t, left: l };
+        };
+
+        <span class="comment">/**
          * Returns the specified element style property
          * <span class="attrib">@param</span> {HTMLElement} el          the element
          * <span class="attrib">@param</span> {string}      styleProp   the style property
-         * <span class="attrib">@return</span> {string}     The value of the style property
+         * <span class="attrib">@return</span> {string} The value of the style property
          * <span class="attrib">@deprecated</span>, use YAHOO.util.Dom.getStyle
          */</span>
         <span class="reserved">this</span>.getStyle = <span class="reserved">function</span>(el, styleProp) {
@@ -662,44 +964,44 @@
 
         <span class="comment">/**
          * Gets the scrollTop
-         *
          * <span class="attrib">@return</span> {int} the document's scrollTop
          */</span>
         <span class="reserved">this</span>.getScrollTop = <span class="reserved">function</span> () { <span class="reserved">return</span> <span class="reserved">this</span>.getScroll().top; };
 
         <span class="comment">/**
          * Gets the scrollLeft
-         *
          * <span class="attrib">@return</span> {int} the document's scrollTop
          */</span>
         <span class="reserved">this</span>.getScrollLeft = <span class="reserved">function</span> () { <span class="reserved">return</span> <span class="reserved">this</span>.getScroll().left; };
 
+        <span class="comment">/**
+         * Sets the x/y position of an element to the location of the
+         * target element.
+         * <span class="attrib">@param</span> {HTMLElement} moveEl      The element to move
+         * <span class="attrib">@param</span> {HTMLElement} targetEl    The position reference element
+         */</span>
         <span class="reserved">this</span>.moveToEl = <span class="reserved">function</span> (moveEl, targetEl) {
             var aCoord = YAHOO.util.Dom.getXY(targetEl);
-            <span class="reserved">this</span>.logger.debug(<span class="literal">"moveToEl: "</span> + aCoord);
+            <span class="reserved">this</span>.logger.log(<span class="literal">"moveToEl: "</span> + aCoord);
             YAHOO.util.Dom.setXY(moveEl, aCoord);
         };
 
         <span class="comment">/**
          * Gets the client height
-         *
          * <span class="attrib">@return</span> {int} client height in px
+         * <span class="attrib">@deprecated</span>
          */</span>
         <span class="reserved">this</span>.getClientHeight = <span class="reserved">function</span>() {
-            <span class="reserved">return</span> (window.innerHeight) ? window.innerHeight : 
-                (document.documentElement &amp;&amp; document.documentElement.clientHeight) ?
-                document.documentElement.clientHeight : document.body.offsetHeight;
+            <span class="reserved">return</span> YAHOO.util.Dom.getClientHeight();
         };
 
         <span class="comment">/**
          * Gets the client width
-         *
          * <span class="attrib">@return</span> {int} client width in px
+         * <span class="attrib">@deprecated</span>
          */</span>
         <span class="reserved">this</span>.getClientWidth = <span class="reserved">function</span>() {
-            <span class="reserved">return</span> (window.innerWidth) ? window.innerWidth : 
-                (document.documentElement &amp;&amp; document.documentElement.clientWidth) ?
-                document.documentElement.clientWidth : document.body.offsetWidth;
+            <span class="reserved">return</span> YAHOO.util.Dom.getClientWidth();
         };
 
         <span class="comment">/**
@@ -707,28 +1009,52 @@
          */</span>
         <span class="reserved">this</span>.numericSort = <span class="reserved">function</span>(a, b) { <span class="reserved">return</span> (a - b); };
 
-        
+        <span class="comment">/**
+         * <span class="attrib">@private</span>
+         */</span>
+        <span class="reserved">this</span>._timeoutCount = 0;
+
+        <span class="comment">/**
+         * Trying to make the load order less important.  Without this we get
+         * an error if this file is loaded before the Event Utility.
+         * <span class="attrib">@private</span>
+         */</span>
+        <span class="reserved">this</span>._addListeners = <span class="reserved">function</span>() {
+            <span class="reserved">if</span> ( YAHOO.util.Event &amp;&amp; document ) {
+                <span class="reserved">this</span>._onLoad();
+            } <span class="reserved">else</span> {
+                <span class="reserved">if</span> (<span class="reserved">this</span>._timeoutCount &gt; 1000) {
+                    <span class="reserved">this</span>.logger.log(<span class="literal">"DragDrop requires the Event Utility"</span>);
+                } <span class="reserved">else</span> {
+                    var DDM = YAHOO.util.DDM;
+                    setTimeout( <span class="reserved">function</span>() { DDM._addListeners(); }, 10);
+                    <span class="reserved">if</span> (document &amp;&amp; document.body) {
+                        <span class="reserved">this</span>._timeoutCount += 1;
+                    }
+                }
+            }
+        };
+
         <span class="comment">/**
          * Recursively searches the immediate parent and all child nodes for 
          * the handle element in order to determine wheter or not it was 
          * clicked.
-         *
          * <span class="attrib">@param</span> node the html element to inspect
          */</span>
         <span class="reserved">this</span>.handleWasClicked = <span class="reserved">function</span>(node, id) {
             <span class="reserved">if</span> (<span class="reserved">this</span>.isHandle(id, node.id)) {
-                <span class="reserved">this</span>.logger.debug(<span class="literal">"clicked node is a handle"</span>);
+                <span class="reserved">this</span>.logger.log(<span class="literal">"clicked node is a handle"</span>);
                 <span class="reserved">return</span> true;
             } <span class="reserved">else</span> {
 <span class="comment">                // check to see if this is a text node child of the one we want</span>
                 var p = node.parentNode;
-<span class="comment">                // this.logger.debug("p: " + p);</span>
+<span class="comment">                // this.logger.log("p: " + p);</span>
 
                 <span class="reserved">while</span> (p) {
                     <span class="reserved">if</span> (<span class="reserved">this</span>.isHandle(id, p.id)) {
                         <span class="reserved">return</span> true;
                     } <span class="reserved">else</span> {
-                        <span class="reserved">this</span>.logger.debug(p.id + <span class="literal">" is not a handle"</span>);
+                        <span class="reserved">this</span>.logger.log(p.id + <span class="literal">" is not a handle"</span>);
                         p = p.parentNode;
                     }
                 }
@@ -737,13 +1063,8 @@
             <span class="reserved">return</span> false;
         };
 
-    } ();
-<span class="comment">
-    // shorter alias, save a few bytes</span>
-    YAHOO.util.DDM = YAHOO.util.DragDropMgr;
-    YAHOO.util.DDM._addListeners();
+    };
 
-}
 
 </pre>
 			</div>

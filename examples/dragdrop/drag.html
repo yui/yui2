@@ -11,7 +11,7 @@
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js" ></script>
 
-<script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop-debug.js" ></script>
 <script type="text/javascript">
 
 YAHOO.example.DDApp = function() {
@@ -62,23 +62,26 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
 
 <style type="text/css">
 
-/* ylogger default styles */
-#ylogger {position:absolute;top:1em;right:1em;}
-/*
-.ylogger {padding:1em;background-color:#AAA;border:1px solid black;font-family:monospace;font-size:77%;z-index:9000;}
-*/
-.ylogger {font-family:monospace;z-index:9000;}
-.ylogger p {margin:1px;padding:.1em;}
-.ylogger button {font-family:monospace;font-size:77%;}
-.ylogger .ylog_hd {position:relative;margin-top:2px;padding:2px;background-color:#575757;color:#FFF;}
-.ylogger .ylog_bd {height: 1100px;position:relative;background-color:#FFF;border:1px solid gray;overflow:auto;width:100%;}
-.ylogger .ylog_ft {position:relative;margin-top:0.5em;margin-bottom:0.1em;}
-.ylogger .ylog_btns {position:relative;float:right;bottom:0.25em;}
-.ylogger .info {background-color:#A7CC25;} /* A7CC25 green */
-.ylogger .warn {background-color:#F58516;} /* F58516 orange */
-.ylogger .error {background-color:#E32F0B;} /* E32F0B red */
-.ylogger .time {background-color:#A6C9D7;} /* A6C9D7 blue */
-.ylogger .window {background-color:#F2E886;} /* F2E886 tan  */
+/* logger default styles */
+/* font size is controlled here: default 77% */
+#yui-log {position:absolute;top:1em;right:1em;font-size:77%;text-align:left;}
+/* width is controlled here: default 31em */
+.yui-log {background-color:#AAA;border:1px solid black;font-family:monospace;z-index:9000;}
+.yui-log p {margin:1px;padding:.1em;}
+.yui-log button {font-family:monospace;}
+.yui-log .yui-log-hd {margin-top:1em;padding:.5em;background-color:#575757;color:#FFF;}
+/* height is controlled here: default 20em*/
+.yui-log .yui-log-bd {width:100%;height:20em;background-color:#FFF;border:1px solid gray;overflow:auto;}
+.yui-log .yui-log-ft {margin-top:.5em;margin-bottom:1em;}
+.yui-log .yui-log-ft .yui-log-categoryfilters {}
+.yui-log .yui-log-ft .yui-log-sourcefilters {width:100%;border-top:1px solid #575757;margin-top:.75em;padding-top:.75em;}
+.yui-log .yui-log-btns {position:relative;float:right;bottom:.25em;}
+.yui-log .yui-log-filtergrp {margin-right:.5em;}
+.yui-log .info {background-color:#A7CC25;} /* A7CC25 green */
+.yui-log .warn {background-color:#F58516;} /* F58516 orange */
+.yui-log .error {background-color:#E32F0B;} /* E32F0B red */
+.yui-log .time {background-color:#A6C9D7;} /* A6C9D7 blue */
+.yui-log .window {background-color:#F2E886;} /* F2E886 tan */
 
 
 </style>
@@ -116,6 +119,26 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
 </div> 
 
 
+
+<script type="text/javascript">
+//<![CDATA[
+    YAHOO.example.logApp = function() {
+        return {
+            init: function() {
+                if (YAHOO.widget.Logger) {
+                    YAHOO.widget.Logger.disableFirebug();
+                    new YAHOO.widget.LogReader( "logDiv", 
+                            { newestOnTop: true, height: "400px" } );
+                }
+            }
+        };
+    } (); 
+
+    YAHOO.util.Event.on(window, "load", YAHOO.example.logApp.init);
+//]]>
+</script>
+
+<div id="logDiv"></div>
 </div>
 
 
@@ -148,16 +171,20 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
 <div id="dragDiv2" class="testSquare" >YAHOO.util.DD</div>
 <div id="dragDiv3" class="testSquare" >YAHOO.util.DD</div>
 <form name="formTest" action="http://www.yahoo.com" method="get">                                                                                                    
+<!--
 <input type="text" id="txtTest" />                                                                                                                   
+-->
                                                                                                                                                      
 <script>                                                                                                                                             
-YAHOO.util.Event.addListener('txtTest','keypress',txtTest_keydown);                                                                                   
+//YAHOO.util.Event.addListener('txtTest','keypress',txtTest_keydown);                                                                                   
                                                                                                                                                      
+/*
 function txtTest_keydown (e) {                                                                                                                       
     YAHOO.util.Event.stopEvent(e);                                                                                                                   
     alert(YAHOO.util.Event.getCharCode(e));                                                                                                       
     // return false;
 }                                                                                                                                                    
+*/
 </script>                                                                                                                                            
 </form>   
 
