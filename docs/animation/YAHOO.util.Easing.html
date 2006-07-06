@@ -18,7 +18,8 @@
 
 	<div class="breadcrumbs">
 		
-
+			<a href="javascript: alert('This location is TBD');">Home</a>
+			&gt;
 			
 			
 			
@@ -58,6 +59,11 @@
 				<ul class="content">
 					
 						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
 							<a href="YAHOO.util.Anim.html">
 								YAHOO.util.Anim</a>
 						</li>
@@ -70,6 +76,11 @@
 						<li>
 							<a href="YAHOO.util.Bezier.html">
 								YAHOO.util.Bezier</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.ColorAnim.html">
+								YAHOO.util.ColorAnim</a>
 						</li>
 					
 						<li>
@@ -109,6 +120,11 @@
 						<li>
 							<a href="overview-summary-Bezier.js.html">
 								Bezier.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-ColorAnim.js.html">
+								ColorAnim.js</a>
 						</li>
 					
 						<li>
@@ -169,12 +185,39 @@
 	
 	
 	
+	
+		<dl class="requires">
+			<dt><strong>Requires:</strong></dt>
+			
+				<dd><a href="YAHOO.util.Anim.html#">YAHOO.util.Anim</a></dd>
+			
+				<dd><a href="YAHOO.util.AnimMgr.html#">YAHOO.util.AnimMgr</a></dd>
+			
+				<dd><a href="YAHOO.util.Easing.html#">YAHOO.util.Easing</a></dd>
+			
+				<dd><a href="YAHOO.util.Bezier.html#">YAHOO.util.Bezier</a></dd>
+			
+				<dd>YAHOO.util.Dom  </dd>
+			
+				<dd>YAHOO.util.Event  </dd>
+			
+				<dd>YAHOO.util.CustomEvent  </dd>
+			
+		</dl>
 		
 	
 	
 	
 	
 	
+	
+		<div class="summary">
+			<p>
+				Easing effects for controlling animation behavior.
+  
+
+			</p>
+		</div>
 	
 </div>
 
@@ -215,6 +258,18 @@
 	
 			<!-- ======== CONSTRUCTOR SUMMARY ======== -->
 			
+				<div class="section contructor summaries">
+					<h3><a name="constructor_summary">Constructor Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+					<div class="content">
+						<code class="spec">
+							<a href="YAHOO.util.Easing.html#YAHOO.util.Easing()">YAHOO.util.Easing</a>
+						</code>
+						<div class="description">
+							&nbsp;
+						</div>
+					</div>
+				</div>
+			
 			<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
 	
 	
@@ -230,23 +285,36 @@
 									<td class="spec">
 										<code>
 											<a href="#backBoth">backBoth</a>
-											(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d)
+											(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d, &lt;Number&gt; s)
 										</code>
 										<div class="description">
-											Starts by going below staring value, and ends by going beyond ending value.&nbsp;
+											backtrack and overshoot, coming back to target.&nbsp;
 										</div>
 									</td>
 								</tr>
 							
 								<tr>
-									<td class="flags">Number</td>
+									<td class="flags">void</td>
 									<td class="spec">
 										<code>
 											<a href="#backIn">backIn</a>
-											(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d)
+											(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d, &lt;Number&gt; s)
 										</code>
 										<div class="description">
-											Begins by going below staring value.&nbsp;
+											backtrack then move to target.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#backOut">backOut</a>
+											(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d, &lt;Number&gt; s)
+										</code>
+										<div class="description">
+											overshoot and come back to target.&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -255,11 +323,37 @@
 									<td class="flags">Number</td>
 									<td class="spec">
 										<code>
-											<a href="#backOut">backOut</a>
+											<a href="#bounceBoth">bounceBoth</a>
 											(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d)
 										</code>
 										<div class="description">
-											End by going beyond ending value.&nbsp;
+											bounce both&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Number</td>
+									<td class="spec">
+										<code>
+											<a href="#bounceIn">bounceIn</a>
+											(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d)
+										</code>
+										<div class="description">
+											bounce in&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Number</td>
+									<td class="spec">
+										<code>
+											<a href="#bounceOut">bounceOut</a>
+											(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d)
+										</code>
+										<div class="description">
+											bounce out&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -281,7 +375,33 @@
 									<td class="flags">Number</td>
 									<td class="spec">
 										<code>
+											<a href="#easeBothStrong">easeBothStrong</a>
+											(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d)
+										</code>
+										<div class="description">
+											Begins slowly and decelerates towards end.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Number</td>
+									<td class="spec">
+										<code>
 											<a href="#easeIn">easeIn</a>
+											(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d)
+										</code>
+										<div class="description">
+											Begins slowly and accelerates towards end.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Number</td>
+									<td class="spec">
+										<code>
+											<a href="#easeInStrong">easeInStrong</a>
 											(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d)
 										</code>
 										<div class="description">
@@ -316,6 +436,58 @@
 									</td>
 								</tr>
 							
+								<tr>
+									<td class="flags">Number</td>
+									<td class="spec">
+										<code>
+											<a href="#easeOutStrong">easeOutStrong</a>
+											(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d)
+										</code>
+										<div class="description">
+											Begins quickly and decelerates towards end.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Number</td>
+									<td class="spec">
+										<code>
+											<a href="#elasticBoth">elasticBoth</a>
+											(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d, a, &lt;Number&gt; p)
+										</code>
+										<div class="description">
+											snap both elastic effect&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Number</td>
+									<td class="spec">
+										<code>
+											<a href="#elasticIn">elasticIn</a>
+											(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d, a, &lt;Number&gt; p)
+										</code>
+										<div class="description">
+											snap in elastic effect&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Number</td>
+									<td class="spec">
+										<code>
+											<a href="#elasticOut">elasticOut</a>
+											(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d, a, &lt;Number&gt; p)
+										</code>
+										<div class="description">
+											snap out elastic effect&nbsp;
+										</div>
+									</td>
+								</tr>
+							
 						</table>
 					</div>
 				</div>
@@ -338,7 +510,7 @@
 						<div class="detail">
 							<code>
 								<strong>YAHOO.util.Easing</strong>
-								
+								()
 							</code>
 							<div class="description">
 								
@@ -368,12 +540,12 @@
 								<code>
 									Number 
 									<strong>backBoth</strong>
-									(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d)
+									(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d, &lt;Number&gt; s)
 								</code>
 										
 								<div class="description">
 									
-										Starts by going below staring value, and ends by going beyond ending value.
+										backtrack and overshoot, coming back to target.
 									
 									
 										<dl>
@@ -397,6 +569,11 @@
 												<dd>
 													<code>d</code> - 
 													 Total length of animation.  
+												</dd>
+											
+												<dd>
+													<code>s</code> - 
+													 Overshoot (optional)  
 												</dd>
 											
 										</dl>
@@ -417,14 +594,116 @@
 							<h4><a name="backIn">backIn</a></h4>
 							<div class="detail">
 								<code>
-									Number 
+									void 
 									<strong>backIn</strong>
+									(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d, &lt;Number&gt; s)
+								</code>
+										
+								<div class="description">
+									
+										backtrack then move to target.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>t</code> - 
+													 Time value used to compute current value.  
+												</dd>
+											
+												<dd>
+													<code>b</code> - 
+													 Starting value.  
+												</dd>
+											
+												<dd>
+													<code>c</code> - 
+													 Delta between start and end values.  
+												</dd>
+											
+												<dd>
+													<code>d</code> - 
+													 Total length of animation.  
+												</dd>
+											
+												<dd>
+													<code>s</code> - 
+													 Overshoot (optional)       
+												</dd>
+											
+										</dl>
+									
+									
+															
+	
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="backOut">backOut</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>backOut</strong>
+									(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d, &lt;Number&gt; s)
+								</code>
+										
+								<div class="description">
+									
+										overshoot and come back to target.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>t</code> - 
+													 Time value used to compute current value.  
+												</dd>
+											
+												<dd>
+													<code>b</code> - 
+													 Starting value.  
+												</dd>
+											
+												<dd>
+													<code>c</code> - 
+													 Delta between start and end values.  
+												</dd>
+											
+												<dd>
+													<code>d</code> - 
+													 Total length of animation.  
+												</dd>
+											
+												<dd>
+													<code>s</code> - 
+													 Overshoot (optional)       
+												</dd>
+											
+										</dl>
+									
+									
+															
+	
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="bounceBoth">bounceBoth</a></h4>
+							<div class="detail">
+								<code>
+									Number 
+									<strong>bounceBoth</strong>
 									(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d)
 								</code>
 										
 								<div class="description">
 									
-										Begins by going below staring value.
+										bounce both
 									
 									
 										<dl>
@@ -465,17 +744,68 @@
 							</div>
 							<hr />
 						
-							<h4><a name="backOut">backOut</a></h4>
+							<h4><a name="bounceIn">bounceIn</a></h4>
 							<div class="detail">
 								<code>
 									Number 
-									<strong>backOut</strong>
+									<strong>bounceIn</strong>
 									(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d)
 								</code>
 										
 								<div class="description">
 									
-										End by going beyond ending value.
+										bounce in
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>t</code> - 
+													 Time value used to compute current value.  
+												</dd>
+											
+												<dd>
+													<code>b</code> - 
+													 Starting value.  
+												</dd>
+											
+												<dd>
+													<code>c</code> - 
+													 Delta between start and end values.  
+												</dd>
+											
+												<dd>
+													<code>d</code> - 
+													 Total length of animation.  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd> The computed value for the current animation frame.</dd>
+										</dl>
+									
+															
+	
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="bounceOut">bounceOut</a></h4>
+							<div class="detail">
+								<code>
+									Number 
+									<strong>bounceOut</strong>
+									(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d)
+								</code>
+										
+								<div class="description">
+									
+										bounce out
 									
 									
 										<dl>
@@ -526,7 +856,58 @@
 										
 								<div class="description">
 									
-										Begins slowly and decelerates towards end.
+										Begins slowly and decelerates towards end. (quadratic)
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>t</code> - 
+													 Time value used to compute current value.  
+												</dd>
+											
+												<dd>
+													<code>b</code> - 
+													 Starting value.  
+												</dd>
+											
+												<dd>
+													<code>c</code> - 
+													 Delta between start and end values.  
+												</dd>
+											
+												<dd>
+													<code>d</code> - 
+													 Total length of animation.  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd> The computed value for the current animation frame.</dd>
+										</dl>
+									
+															
+	
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="easeBothStrong">easeBothStrong</a></h4>
+							<div class="detail">
+								<code>
+									Number 
+									<strong>easeBothStrong</strong>
+									(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d)
+								</code>
+										
+								<div class="description">
+									
+										Begins slowly and decelerates towards end. (quartic)
 									
 									
 										<dl>
@@ -577,7 +958,58 @@
 										
 								<div class="description">
 									
-										Begins slowly and accelerates towards end.
+										Begins slowly and accelerates towards end. (quadratic)
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>t</code> - 
+													 Time value used to compute current value.  
+												</dd>
+											
+												<dd>
+													<code>b</code> - 
+													 Starting value.  
+												</dd>
+											
+												<dd>
+													<code>c</code> - 
+													 Delta between start and end values.  
+												</dd>
+											
+												<dd>
+													<code>d</code> - 
+													 Total length of animation.  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd> The computed value for the current animation frame.</dd>
+										</dl>
+									
+															
+	
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="easeInStrong">easeInStrong</a></h4>
+							<div class="detail">
+								<code>
+									Number 
+									<strong>easeInStrong</strong>
+									(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d)
+								</code>
+										
+								<div class="description">
+									
+										Begins slowly and accelerates towards end. (quartic)
 									
 									
 										<dl>
@@ -679,7 +1111,7 @@
 										
 								<div class="description">
 									
-										Begins quickly and decelerates towards end.
+										Begins quickly and decelerates towards end.  (quadratic)
 									
 									
 										<dl>
@@ -720,6 +1152,225 @@
 							</div>
 							<hr />
 						
+							<h4><a name="easeOutStrong">easeOutStrong</a></h4>
+							<div class="detail">
+								<code>
+									Number 
+									<strong>easeOutStrong</strong>
+									(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d)
+								</code>
+										
+								<div class="description">
+									
+										Begins quickly and decelerates towards end.  (quartic)
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>t</code> - 
+													 Time value used to compute current value.  
+												</dd>
+											
+												<dd>
+													<code>b</code> - 
+													 Starting value.  
+												</dd>
+											
+												<dd>
+													<code>c</code> - 
+													 Delta between start and end values.  
+												</dd>
+											
+												<dd>
+													<code>d</code> - 
+													 Total length of animation.  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd> The computed value for the current animation frame.</dd>
+										</dl>
+									
+															
+	
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="elasticBoth">elasticBoth</a></h4>
+							<div class="detail">
+								<code>
+									Number 
+									<strong>elasticBoth</strong>
+									(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d, a, &lt;Number&gt; p)
+								</code>
+										
+								<div class="description">
+									
+										snap both elastic effect
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>t</code> - 
+													 Time value used to compute current value.  
+												</dd>
+											
+												<dd>
+													<code>b</code> - 
+													 Starting value.  
+												</dd>
+											
+												<dd>
+													<code>c</code> - 
+													 Delta between start and end values.  
+												</dd>
+											
+												<dd>
+													<code>d</code> - 
+													 Total length of animation.  
+												</dd>
+											
+												<dd>
+													<code>p</code> - 
+													 Period (optional)  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd> The computed value for the current animation frame.</dd>
+										</dl>
+									
+															
+	
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="elasticIn">elasticIn</a></h4>
+							<div class="detail">
+								<code>
+									Number 
+									<strong>elasticIn</strong>
+									(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d, a, &lt;Number&gt; p)
+								</code>
+										
+								<div class="description">
+									
+										snap in elastic effect
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>t</code> - 
+													 Time value used to compute current value.  
+												</dd>
+											
+												<dd>
+													<code>b</code> - 
+													 Starting value.  
+												</dd>
+											
+												<dd>
+													<code>c</code> - 
+													 Delta between start and end values.  
+												</dd>
+											
+												<dd>
+													<code>d</code> - 
+													 Total length of animation.  
+												</dd>
+											
+												<dd>
+													<code>p</code> - 
+													 Period (optional)  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd> The computed value for the current animation frame.</dd>
+										</dl>
+									
+															
+	
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="elasticOut">elasticOut</a></h4>
+							<div class="detail">
+								<code>
+									Number 
+									<strong>elasticOut</strong>
+									(&lt;Number&gt; t, &lt;Number&gt; b, &lt;Number&gt; c, &lt;Number&gt; d, a, &lt;Number&gt; p)
+								</code>
+										
+								<div class="description">
+									
+										snap out elastic effect
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
+											
+												<dd>
+													<code>t</code> - 
+													 Time value used to compute current value.  
+												</dd>
+											
+												<dd>
+													<code>b</code> - 
+													 Starting value.  
+												</dd>
+											
+												<dd>
+													<code>c</code> - 
+													 Delta between start and end values.  
+												</dd>
+											
+												<dd>
+													<code>d</code> - 
+													 Total length of animation.  
+												</dd>
+											
+												<dd>
+													<code>p</code> - 
+													 Period (optional)  
+												</dd>
+											
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd> The computed value for the current animation frame.</dd>
+										</dl>
+									
+															
+	
+									
+								</div>
+							</div>
+							<hr />
+						
 					</div>
 				</div>
 			
@@ -732,7 +1383,12 @@
 
 <div id="footer">
 	<hr />
-	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+	version 1.9.5.8
 </div>
 
 

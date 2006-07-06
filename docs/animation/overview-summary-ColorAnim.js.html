@@ -1,0 +1,349 @@
+
+<html>
+<head>
+	<title>
+		JavaScript Documentation - 
+		
+			ColorAnim.js
+		
+	</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Animation Utility</a></h3>
+
+	<div class="breadcrumbs">
+		
+			<a href="javascript: alert('This location is TBD');">Home</a>
+			&gt;
+			
+			
+			
+			
+				<a href="./index.html">Animation Utility</a>
+				&gt;
+				<strong>ColorAnim.js</strong>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.Anim.html">
+								YAHOO.util.Anim</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.AnimMgr.html">
+								YAHOO.util.AnimMgr</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.Bezier.html">
+								YAHOO.util.Bezier</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-Anim.js.html">
+								Anim.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-AnimMgr.js.html">
+								AnimMgr.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Bezier.js.html">
+								Bezier.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-ColorAnim.js.html">
+								ColorAnim.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Easing.js.html">
+								Easing.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Motion.js.html">
+								Motion.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Scroll.js.html">
+								Scroll.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div class="main">
+			
+		
+		
+			
+			   <h2>ColorAnim.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+		
+		
+		
+		
+		
+		
+		
+		
+		
+			<div class="section source">
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<pre class="sourceview"><span class="comment">/**
+ * <span class="attrib">@class</span> ColorAnim subclass for color fading
+ * &lt;p&gt;Usage: &lt;code&gt;var myAnim = new Y.ColorAnim(el, { backgroundColor: { from: '#FF0000', to: '#FFFFFF' } }, 1, Y.Easing.easeOut);&lt;/code&gt;&lt;/p&gt;
+ * &lt;p&gt;Color values can be specified with either 112233, #112233, [255,255,255], or rgb(255,255,255)
+ * <span class="attrib">@requires</span> YAHOO.util.Anim
+ * <span class="attrib">@requires</span> YAHOO.util.AnimMgr
+ * <span class="attrib">@requires</span> YAHOO.util.Easing
+ * <span class="attrib">@requires</span> YAHOO.util.Bezier
+ * <span class="attrib">@requires</span> YAHOO.util.Dom
+ * <span class="attrib">@requires</span> YAHOO.util.Event
+ * <span class="attrib">@constructor</span>
+ * <span class="attrib">@param</span> {HTMLElement | String} el Reference to the element that will be animated
+ * <span class="attrib">@param</span> {Object} attributes The attribute(s) to be animated.
+ * Each attribute is an object with at minimum a "to" or "by" member defined.
+ * Additional optional members are "from" (defaults to current value), "units" (defaults to "px").
+ * All attribute names use camelCase.
+ * <span class="attrib">@param</span> {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
+ * <span class="attrib">@param</span> {Function} method (optional, defaults to Y.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a Y.Easing method)
+ */</span>
+(<span class="reserved">function</span>() {
+   YAHOO.util.ColorAnim = <span class="reserved">function</span>(el, attributes, duration,  method) {
+      YAHOO.util.ColorAnim.superclass.constructor.call(<span class="reserved">this</span>, el, attributes, duration, method);
+   };
+   
+   YAHOO.extend(YAHOO.util.ColorAnim, YAHOO.util.Anim);
+   
+   <span class="comment">// shorthand</span>
+   var Y = YAHOO.util;
+   var superclass = Y.ColorAnim.superclass;
+   var <span class="reserved">prototype</span> = Y.ColorAnim.<span class="reserved">prototype</span>;
+   
+   <span class="comment">/**
+    * toString method
+    * <span class="attrib">@return</span> {String} string represenation of anim obj
+    */</span>
+   <span class="reserved">prototype</span>.toString = <span class="reserved">function</span>() {
+      var el = <span class="reserved">this</span>.getEl();
+      var id = el.id || el.tagName;
+      <span class="reserved">return</span> (<span class="literal">"ColorAnim "</span> + id);
+   };
+   
+   <span class="comment">/**
+    * Only certain attributes should be treated as colors.
+    * <span class="attrib">@type</span> Object
+    */</span>
+   <span class="reserved">prototype</span>.patterns.color = /color$/i;
+   <span class="reserved">prototype</span>.patterns.rgb    = /^rgb\(([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\)$/i;
+   <span class="reserved">prototype</span>.patterns.hex    = /^#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/i;
+   <span class="reserved">prototype</span>.patterns.hex3   = /^#?([0-9A-F]{1})([0-9A-F]{1})([0-9A-F]{1})$/i;
+   
+   <span class="comment">/**
+    * Attempts to parse the given string and return a 3-tuple.
+    * <span class="attrib">@param</span> {String} s The string to parse.
+    * <span class="attrib">@return</span> {Array} The 3-tuple of rgb values.
+    */</span>
+   <span class="reserved">prototype</span>.parseColor = <span class="reserved">function</span>(s) {
+      <span class="reserved">if</span> (s.length == 3) { <span class="reserved">return</span> s; }
+   
+      var c = <span class="reserved">this</span>.patterns.hex.exec(s);
+      <span class="reserved">if</span> (c &amp;&amp; c.length == 4) {
+         <span class="reserved">return</span> [ parseInt(c[1], 16), parseInt(c[2], 16), parseInt(c[3], 16) ];
+      }
+   
+      c = <span class="reserved">this</span>.patterns.rgb.exec(s);
+      <span class="reserved">if</span> (c &amp;&amp; c.length == 4) {
+         <span class="reserved">return</span> [ parseInt(c[1], 10), parseInt(c[2], 10), parseInt(c[3], 10) ];
+      }
+   
+      c = <span class="reserved">this</span>.patterns.hex3.exec(s);
+      <span class="reserved">if</span> (c &amp;&amp; c.length == 4) {
+         <span class="reserved">return</span> [ parseInt(c[1] + c[1], 16), parseInt(c[2] + c[2], 16), parseInt(c[3] + c[3], 16) ];
+      }
+      
+      <span class="reserved">return</span> null;
+   };
+   
+   <span class="comment">/**
+    * Returns current value of the attribute.
+    * <span class="attrib">@param</span> {String} attr The name of the attribute.
+    * <span class="attrib">@return</span> {Number} val The current value of the attribute.
+    */</span>
+   <span class="reserved">prototype</span>.getAttribute = <span class="reserved">function</span>(attr) {
+      var el = <span class="reserved">this</span>.getEl();
+      <span class="reserved">if</span> (  <span class="reserved">this</span>.patterns.color.test(attr) ) {
+         var val = YAHOO.util.Dom.getStyle(el, attr);
+         
+         <span class="reserved">if</span> (val == <span class="literal">'transparent'</span>) { <span class="comment">// bgcolor default</span>
+            var parent = el.parentNode; <span class="comment">// try and get from an ancestor</span>
+            val = Y.Dom.getStyle(parent, attr);
+         
+            <span class="reserved">while</span> (parent &amp;&amp; val == <span class="literal">'transparent'</span>) {
+               parent = parent.parentNode;
+               val = Y.Dom.getStyle(parent, attr);
+               <span class="reserved">if</span> (parent.tagName.toUpperCase() == <span class="literal">'HTML'</span>) {
+                  val = <span class="literal">'ffffff'</span>;
+               }
+            }
+         }
+      } <span class="reserved">else</span> {
+         val = superclass.getAttribute.call(<span class="reserved">this</span>, attr);
+      }
+
+      <span class="reserved">return</span> val;
+   };
+   
+   <span class="comment">/**
+    * Returns the value computed by the animation's "method".
+    * <span class="attrib">@param</span> {String} attr The name of the attribute.
+    * <span class="attrib">@param</span> {Number} start The value this attribute should start from for this animation.
+    * <span class="attrib">@param</span> {Number} end  The value this attribute should end at for this animation.
+    * <span class="attrib">@return</span> {Number} The Value to be applied to the attribute.
+    */</span>
+   <span class="reserved">prototype</span>.doMethod = <span class="reserved">function</span>(attr, start, end) {
+      var val;
+   
+      <span class="reserved">if</span> ( <span class="reserved">this</span>.patterns.color.test(attr) ) {
+         val = [];
+         <span class="reserved">for</span> (var i = 0, len = start.length; i &lt; len; ++i) {
+            val[i] = superclass.doMethod.call(<span class="reserved">this</span>, attr, start[i], end[i]);
+         }
+         
+         val = <span class="literal">'rgb('</span>+Math.floor(val[0])+<span class="literal">','</span>+Math.floor(val[1])+<span class="literal">','</span>+Math.floor(val[2])+<span class="literal">')'</span>;
+      }
+      <span class="reserved">else</span> {
+         val = superclass.doMethod.call(<span class="reserved">this</span>, attr, start, end);
+      }
+
+      <span class="reserved">return</span> val;
+   };
+   
+   <span class="comment">/**
+    * Sets the actual values to be used during the animation.
+    * Should only be needed for subclass use.
+    * <span class="attrib">@param</span> {Object} attr The attribute object
+    * <span class="attrib">@private</span> 
+    */</span>
+   <span class="reserved">prototype</span>.setRuntimeAttribute = <span class="reserved">function</span>(attr) {
+      superclass.setRuntimeAttribute.call(<span class="reserved">this</span>, attr);
+      
+      <span class="reserved">if</span> ( <span class="reserved">this</span>.patterns.color.test(attr) ) {
+         var attributes = <span class="reserved">this</span>.attributes;
+         var start = <span class="reserved">this</span>.parseColor(<span class="reserved">this</span>.runtimeAttributes[attr].start);
+         var end = <span class="reserved">this</span>.parseColor(<span class="reserved">this</span>.runtimeAttributes[attr].end);
+         <span class="comment">// fix colors if going "by"</span>
+         <span class="reserved">if</span> ( typeof attributes[attr][<span class="literal">'to'</span>] === <span class="literal">'undefined'</span> &amp;&amp; typeof attributes[attr][<span class="literal">'by'</span>] !== <span class="literal">'undefined'</span> ) {
+            end = <span class="reserved">this</span>.parseColor(attributes[attr].by);
+         
+            <span class="reserved">for</span> (var i = 0, len = start.length; i &lt; len; ++i) {
+               end[i] = start[i] + end[i];
+            }
+         }
+         
+         <span class="reserved">this</span>.runtimeAttributes[attr].start = start;
+         <span class="reserved">this</span>.runtimeAttributes[attr].end = end;
+      }
+   };
+})();</pre>
+			</div>
+		
+	</div>
+</div>
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+	version 1.9.5.8
+</div>
+
+
+</body>
+</html>

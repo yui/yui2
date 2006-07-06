@@ -4,7 +4,7 @@
 	<title>
 		JavaScript Documentation - 
 		
-			YAHOO.util.Motion
+			YAHOO.util.ColorAnim
 		
 	</title>
 	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
@@ -30,7 +30,7 @@
 			
 				<a href="./index.html">Animation Utility</a>
 				&gt;
-				<strong>YAHOO.util.Motion</strong>
+				<strong>YAHOO.util.ColorAnim</strong>
 			
 			
 			
@@ -150,16 +150,21 @@
 	<div id="pri">
 		<div class="main">
 			
-			<h2>Class YAHOO.util.Motion</h2>
+			<h2>Class YAHOO.util.ColorAnim</h2>
 			<pre>Object
    |
    +--<a href='YAHOO.util.Anim.html'>YAHOO.util.Anim</a>
          |
-         +--<a href='YAHOO.util.ColorAnim.html'>YAHOO.util.ColorAnim</a>
-               |
-               +--<b>YAHOO.util.Motion</b>
+         +--<b>YAHOO.util.ColorAnim</b>
 </pre>
 			
+			
+				<dl class="subclasses">
+					<dt>Direct Known Subclasses:</dd>
+					<dd>
+						 <a href="YAHOO.util.Motion.html">YAHOO.util.Motion</a>, <a href="YAHOO.util.Scroll.html">YAHOO.util.Scroll</a>
+					</dd>
+			   </dl>
 			
 		
 			<hr />
@@ -171,11 +176,11 @@
 						
 					</span>
 					<span class="class-type">class</span>
-					<b>YAHOO.util.Motion</b>
+					<b>YAHOO.util.ColorAnim</b>
 				</div>
 				<div class="class-extends">
 					
-						<dd>extends <a href='YAHOO.util.ColorAnim.html'>YAHOO.util.ColorAnim</a></dd>
+						<dd>extends <a href='YAHOO.util.Anim.html'>YAHOO.util.Anim</a></dd>
 					
 				</div>
 			</div>
@@ -203,13 +208,11 @@
 			
 				<dd><a href="YAHOO.util.Bezier.html#">YAHOO.util.Bezier</a></dd>
 			
-				<dd><a href="YAHOO.util.ColorAnim.html#">YAHOO.util.ColorAnim</a></dd>
-			
 				<dd>YAHOO.util.Dom  </dd>
 			
 				<dd>YAHOO.util.Event  </dd>
 			
-				<dd>YAHOO.util.CustomEvent   </dd>
+				<dd>YAHOO.util.CustomEvent  </dd>
 			
 		</dl>
 		
@@ -221,8 +224,9 @@
 	
 		<div class="summary">
 			<p>
-				Anim subclass for moving elements along a path defined by the "points" member of "attributes".  All "points" are arrays with x, y coordinates.
- <p>Usage: <code>var myAnim = new YAHOO.util.Motion(el, { points: { to: [800, 800] } }, 1, YAHOO.util.Easing.easeOut);</code></p>
+				ColorAnim subclass for color fading.
+ <p>Usage: <code>var myAnim = new Y.ColorAnim(el, { backgroundColor: { from: '#FF0000', to: '#FFFFFF' } }, 1, Y.Easing.easeOut);</code></p>
+ <p>Color values can be specified with 112233, #112233, #123, or rgb(255,255,255)
  
 			</p>
 		</div>
@@ -279,7 +283,7 @@
 					<h3><a name="constructor_summary">Constructor Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 					<div class="content">
 						<code class="spec">
-							<a href="YAHOO.util.Motion.html#YAHOO.util.Motion()">YAHOO.util.Motion</a>
+							<a href="YAHOO.util.ColorAnim.html#YAHOO.util.ColorAnim()">YAHOO.util.ColorAnim</a>
 						</code>
 						<div class="description">
 							&nbsp;
@@ -311,27 +315,27 @@
 								</tr>
 							
 								<tr>
-									<td class="flags">Object</td>
+									<td class="flags">Number</td>
 									<td class="spec">
 										<code>
 											<a href="#getAttribute">getAttribute</a>
 											(&lt;String&gt; attr)
 										</code>
 										<div class="description">
-											Sets the default value to be used when "from" is not supplied.&nbsp;
+											Returns current value of the attribute.&nbsp;
 										</div>
 									</td>
 								</tr>
 							
 								<tr>
-									<td class="flags">void</td>
+									<td class="flags">Array</td>
 									<td class="spec">
 										<code>
-											<a href="#setAttribute">setAttribute</a>
-											(&lt;String&gt; attr, &lt;Number&gt; val, &lt;String&gt; unit)
+											<a href="#parseColor">parseColor</a>
+											(&lt;String&gt; s)
 										</code>
 										<div class="description">
-											Applies a value to an attribute&nbsp;
+											Attempts to parse the given string and return a 3-tuple.&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -356,16 +360,9 @@
 			
 			
 				<div class="section method inheritance">
-					<h3>Methods inherited from class  <a href="YAHOO.util.ColorAnim.html">YAHOO.util.ColorAnim</a></h3>
-					<div class="content">
-						<code><a href="YAHOO.util.ColorAnim.html#parseColor">parseColor</a></code>
-					</div>
-				</div>
-			
-				<div class="section method inheritance">
 					<h3>Methods inherited from class  <a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a></h3>
 					<div class="content">
-						<code><a href="YAHOO.util.Anim.html#getDefaultUnit">getDefaultUnit</a>, <a href="YAHOO.util.Anim.html#init">init</a>, <a href="YAHOO.util.Anim.html#getEl">getEl</a>, <a href="YAHOO.util.Anim.html#isAnimated">isAnimated</a>, <a href="YAHOO.util.Anim.html#getStartTime">getStartTime</a>, <a href="YAHOO.util.Anim.html#animate">animate</a>, <a href="YAHOO.util.Anim.html#stop">stop</a></code>
+						<code><a href="YAHOO.util.Anim.html#setAttribute">setAttribute</a>, <a href="YAHOO.util.Anim.html#getDefaultUnit">getDefaultUnit</a>, <a href="YAHOO.util.Anim.html#init">init</a>, <a href="YAHOO.util.Anim.html#getEl">getEl</a>, <a href="YAHOO.util.Anim.html#isAnimated">isAnimated</a>, <a href="YAHOO.util.Anim.html#getStartTime">getStartTime</a>, <a href="YAHOO.util.Anim.html#animate">animate</a>, <a href="YAHOO.util.Anim.html#stop">stop</a></code>
 					</div>
 				</div>
 			
@@ -381,10 +378,10 @@
 				<div class="section constructor details">
 					<h3><a name="constructorDetails">Constructor Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 					<div class="content">
-						<h4><a name="YAHOO.util.Motion()">YAHOO.util.Motion</a></h4>
+						<h4><a name="YAHOO.util.ColorAnim()">YAHOO.util.ColorAnim</a></h4>
 						<div class="detail">
 							<code>
-								<strong>YAHOO.util.Motion</strong>
+								<strong>YAHOO.util.ColorAnim</strong>
 								()
 							</code>
 							<div class="description">
@@ -395,13 +392,13 @@
 										<dt>Parameters:</dt>
 										
 											<dd>
-												<code>String</code> - 
-												 or HTMLElement} el Reference to the element that will be animated  
+												<code>HTMLElement</code> - 
+												 | String} el Reference to the element that will be animated  
 											</dd>
 										
 											<dd>
 												<code>attributes</code> - 
-												 The attribute(s) to be animated.    Each attribute is an object with at minimum a "to" or "by" member defined.    Additional optional members are "from" (defaults to current value), "units" (defaults to "px").    All attribute names use camelCase.  
+												 The attribute(s) to be animated.  Each attribute is an object with at minimum a "to" or "by" member defined.  Additional optional members are "from" (defaults to current value), "units" (defaults to "px").  All attribute names use camelCase.  
 											</dd>
 										
 											<dd>
@@ -411,7 +408,7 @@
 										
 											<dd>
 												<code>method</code> - 
-												 (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
+												 (optional, defaults to Y.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a Y.Easing method)
 											</dd>
 										
 									</dl>
@@ -484,50 +481,14 @@
 							<h4><a name="getAttribute">getAttribute</a></h4>
 							<div class="detail">
 								<code>
-									Object 
+									Number 
 									<strong>getAttribute</strong>
 									(&lt;String&gt; attr)
 								</code>
 										
 								<div class="description">
 									
-										Sets the default value to be used when "from" is not supplied.
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>attr</code> - 
-													 The attribute being set.  
-												</dd>
-											
-												<dd>
-													<code>val</code> - 
-													 The default value to be applied to the attribute.
-												</dd>
-											
-										</dl>
-									
-									
-															
-	
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="setAttribute">setAttribute</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>setAttribute</strong>
-									(&lt;String&gt; attr, &lt;Number&gt; val, &lt;String&gt; unit)
-								</code>
-										
-								<div class="description">
-									
-										Applies a value to an attribute
+										Returns current value of the attribute.
 									
 									
 										<dl>
@@ -538,18 +499,49 @@
 													 The name of the attribute.  
 												</dd>
 											
-												<dd>
-													<code>val</code> - 
-													 The value to be applied to the attribute.  
-												</dd>
+										</dl>
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd> val The current value of the attribute.</dd>
+										</dl>
+									
+															
+	
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="parseColor">parseColor</a></h4>
+							<div class="detail">
+								<code>
+									Array 
+									<strong>parseColor</strong>
+									(&lt;String&gt; s)
+								</code>
+										
+								<div class="description">
+									
+										Attempts to parse the given string and return a 3-tuple.
+									
+									
+										<dl>
+											<dt>Parameters:</dt>
 											
 												<dd>
-													<code>unit</code> - 
-													 The unit ('px', '%', etc.) of the value.       
+													<code>s</code> - 
+													 The string to parse.  
 												</dd>
 											
 										</dl>
 									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd> The 3-tuple of rgb values.</dd>
+										</dl>
 									
 															
 	

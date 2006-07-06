@@ -18,7 +18,8 @@
 
 	<div class="breadcrumbs">
 		
-
+			<a href="javascript: alert('This location is TBD');">Home</a>
+			&gt;
 			
 			
 			
@@ -58,6 +59,11 @@
 				<ul class="content">
 					
 						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
 							<a href="YAHOO.util.Anim.html">
 								YAHOO.util.Anim</a>
 						</li>
@@ -70,21 +76,6 @@
 						<li>
 							<a href="YAHOO.util.Bezier.html">
 								YAHOO.util.Bezier</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.Easing.html">
-								YAHOO.util.Easing</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.Motion.html">
-								YAHOO.util.Motion</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.Scroll.html">
-								YAHOO.util.Scroll</a>
 						</li>
 					
 				</ul>
@@ -109,6 +100,11 @@
 						<li>
 							<a href="overview-summary-Bezier.js.html">
 								Bezier.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-ColorAnim.js.html">
+								ColorAnim.js</a>
 						</li>
 					
 						<li>
@@ -176,16 +172,21 @@
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<pre class="sourceview"><span class="comment">/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version: 0.10.0
-* /
+TERMS OF USE - EASING EQUATIONS
+Open source under the BSD License.
+Copyright © 2001 Robert Penner All rights reserved.
 
-/**
- * <span class="attrib">@class</span> Class for defining the acceleration rate and path of animations.
- */</span>
-YAHOO.util.Easing = new <span class="reserved">function</span>() {
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+    * Neither the name of the author nor the names of contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+*/</span>
+
+YAHOO.util.Easing = {
 
    <span class="comment">/**
     * Uniform speed between points.
@@ -195,92 +196,226 @@ YAHOO.util.Easing = new <span class="reserved">function</span>() {
     * <span class="attrib">@param</span> {Number} d Total length of animation.
     * <span class="attrib">@return</span> {Number} The computed value for the current animation frame.
     */</span>
-   <span class="reserved">this</span>.easeNone = <span class="reserved">function</span>(t, b, c, d) {
-	<span class="reserved">return</span> b+c*(t/=d); 
-   };
+   easeNone: <span class="reserved">function</span> (t, b, c, d) {
+   	<span class="reserved">return</span> c*t/d + b;
+   },
    
    <span class="comment">/**
-    * Begins slowly and accelerates towards end.
+    * Begins slowly and accelerates towards end. (quadratic)
     * <span class="attrib">@param</span> {Number} t Time value used to compute current value.
     * <span class="attrib">@param</span> {Number} b Starting value.
     * <span class="attrib">@param</span> {Number} c Delta between start and end values.
     * <span class="attrib">@param</span> {Number} d Total length of animation.
     * <span class="attrib">@return</span> {Number} The computed value for the current animation frame.
     */</span>
-   <span class="reserved">this</span>.easeIn = <span class="reserved">function</span>(t, b, c, d) {
-   	<span class="reserved">return</span> b+c*((t/=d)*t*t);
-   };
-   
+   easeIn: <span class="reserved">function</span> (t, b, c, d) {
+   	<span class="reserved">return</span> c*(t/=d)*t + b;
+   },
+
    <span class="comment">/**
-    * Begins quickly and decelerates towards end.
+    * Begins quickly and decelerates towards end.  (quadratic)
     * <span class="attrib">@param</span> {Number} t Time value used to compute current value.
     * <span class="attrib">@param</span> {Number} b Starting value.
     * <span class="attrib">@param</span> {Number} c Delta between start and end values.
     * <span class="attrib">@param</span> {Number} d Total length of animation.
     * <span class="attrib">@return</span> {Number} The computed value for the current animation frame.
     */</span>
-   <span class="reserved">this</span>.easeOut = <span class="reserved">function</span>(t, b, c, d) {
-   	var ts=(t/=d)*t;
-   	var tc=ts*t;
-   	<span class="reserved">return</span> b+c*(tc + -3*ts + 3*t);
-   };
+   easeOut: <span class="reserved">function</span> (t, b, c, d) {
+   	<span class="reserved">return</span> -c *(t/=d)*(t-2) + b;
+   },
    
    <span class="comment">/**
-    * Begins slowly and decelerates towards end.
+    * Begins slowly and decelerates towards end. (quadratic)
     * <span class="attrib">@param</span> {Number} t Time value used to compute current value.
     * <span class="attrib">@param</span> {Number} b Starting value.
     * <span class="attrib">@param</span> {Number} c Delta between start and end values.
     * <span class="attrib">@param</span> {Number} d Total length of animation.
     * <span class="attrib">@return</span> {Number} The computed value for the current animation frame.
     */</span>
-   <span class="reserved">this</span>.easeBoth = <span class="reserved">function</span>(t, b, c, d) {
-   	var ts=(t/=d)*t;
-   	var tc=ts*t;
-   	<span class="reserved">return</span> b+c*(-2*tc + 3*ts);
-   };
+   easeBoth: <span class="reserved">function</span> (t, b, c, d) {
+   	<span class="reserved">if</span> ((t/=d/2) &lt; 1) <span class="reserved">return</span> c/2*t*t + b;
+   	<span class="reserved">return</span> -c/2 * ((--t)*(t-2) - 1) + b;
+   },
    
    <span class="comment">/**
-    * Begins by going below staring value.
+    * Begins slowly and accelerates towards end. (quartic)
     * <span class="attrib">@param</span> {Number} t Time value used to compute current value.
     * <span class="attrib">@param</span> {Number} b Starting value.
     * <span class="attrib">@param</span> {Number} c Delta between start and end values.
     * <span class="attrib">@param</span> {Number} d Total length of animation.
     * <span class="attrib">@return</span> {Number} The computed value for the current animation frame.
     */</span>
-   <span class="reserved">this</span>.backIn = <span class="reserved">function</span>(t, b, c, d) {
-   	var ts=(t/=d)*t;
-   	var tc=ts*t;
-   	<span class="reserved">return</span> b+c*(-3.4005*tc*ts + 10.2*ts*ts + -6.2*tc + 0.4*ts);
-   };
+   easeInStrong: <span class="reserved">function</span> (t, b, c, d) {
+   	<span class="reserved">return</span> c*(t/=d)*t*t*t + b;
+   },
    
    <span class="comment">/**
-    * End by going beyond ending value.
+    * Begins quickly and decelerates towards end.  (quartic)
     * <span class="attrib">@param</span> {Number} t Time value used to compute current value.
     * <span class="attrib">@param</span> {Number} b Starting value.
     * <span class="attrib">@param</span> {Number} c Delta between start and end values.
     * <span class="attrib">@param</span> {Number} d Total length of animation.
     * <span class="attrib">@return</span> {Number} The computed value for the current animation frame.
     */</span>
-   <span class="reserved">this</span>.backOut = <span class="reserved">function</span>(t, b, c, d) {
-   	var ts=(t/=d)*t;
-   	var tc=ts*t;
-   	<span class="reserved">return</span> b+c*(8.292*tc*ts + -21.88*ts*ts + 22.08*tc + -12.69*ts + 5.1975*t);
-   };
+   easeOutStrong: <span class="reserved">function</span> (t, b, c, d) {
+   	<span class="reserved">return</span> -c * ((t=t/d-1)*t*t*t - 1) + b;
+   },
    
    <span class="comment">/**
-    * Starts by going below staring value, and ends by going beyond ending value.
+    * Begins slowly and decelerates towards end. (quartic)
     * <span class="attrib">@param</span> {Number} t Time value used to compute current value.
     * <span class="attrib">@param</span> {Number} b Starting value.
     * <span class="attrib">@param</span> {Number} c Delta between start and end values.
     * <span class="attrib">@param</span> {Number} d Total length of animation.
     * <span class="attrib">@return</span> {Number} The computed value for the current animation frame.
     */</span>
-   <span class="reserved">this</span>.backBoth = <span class="reserved">function</span>(t, b, c, d) {
-   	var ts=(t/=d)*t;
-   	var tc=ts*t;
-   	<span class="reserved">return</span> b+c*(0.402*tc*ts + -2.1525*ts*ts + -3.2*tc + 8*ts + -2.05*t);
-   };
+   easeBothStrong: <span class="reserved">function</span> (t, b, c, d) {
+   	<span class="reserved">if</span> ((t/=d/2) &lt; 1) <span class="reserved">return</span> c/2*t*t*t*t + b;
+   	<span class="reserved">return</span> -c/2 * ((t-=2)*t*t*t - 2) + b;
+   },
+
+   <span class="comment">/**
+    * snap in elastic effect
+    * <span class="attrib">@param</span> {Number} t Time value used to compute current value.
+    * <span class="attrib">@param</span> {Number} b Starting value.
+    * <span class="attrib">@param</span> {Number} c Delta between start and end values.
+    * <span class="attrib">@param</span> {Number} d Total length of animation.
+    * <span class="attrib">@param</span> {Number} p Period (optional)
+    * <span class="attrib">@return</span> {Number} The computed value for the current animation frame.
+    */</span>
+
+   elasticIn: <span class="reserved">function</span> (t, b, c, d, a, p) {
+   	<span class="reserved">if</span> (t==0) <span class="reserved">return</span> b;  <span class="reserved">if</span> ((t/=d)==1) <span class="reserved">return</span> b+c;  <span class="reserved">if</span> (!p) p=d*.3;
+   	<span class="reserved">if</span> (!a || a &lt; Math.abs(c)) { a=c; var s=p/4; }
+   	<span class="reserved">else</span> var s = p/(2*Math.PI) * Math.asin (c/a);
+   	<span class="reserved">return</span> -(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
+   },
+
+   <span class="comment">/**
+    * snap out elastic effect
+    * <span class="attrib">@param</span> {Number} t Time value used to compute current value.
+    * <span class="attrib">@param</span> {Number} b Starting value.
+    * <span class="attrib">@param</span> {Number} c Delta between start and end values.
+    * <span class="attrib">@param</span> {Number} d Total length of animation.
+    * <span class="attrib">@param</span> {Number} p Period (optional)
+    * <span class="attrib">@return</span> {Number} The computed value for the current animation frame.
+    */</span>
+   elasticOut: <span class="reserved">function</span> (t, b, c, d, a, p) {
+   	<span class="reserved">if</span> (t==0) <span class="reserved">return</span> b;  <span class="reserved">if</span> ((t/=d)==1) <span class="reserved">return</span> b+c;  <span class="reserved">if</span> (!p) p=d*.3;
+   	<span class="reserved">if</span> (!a || a &lt; Math.abs(c)) { a=c; var s=p/4; }
+   	<span class="reserved">else</span> var s = p/(2*Math.PI) * Math.asin (c/a);
+   	<span class="reserved">return</span> a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p ) + c + b;
+   },
+   
+   <span class="comment">/**
+    * snap both elastic effect
+    * <span class="attrib">@param</span> {Number} t Time value used to compute current value.
+    * <span class="attrib">@param</span> {Number} b Starting value.
+    * <span class="attrib">@param</span> {Number} c Delta between start and end values.
+    * <span class="attrib">@param</span> {Number} d Total length of animation.
+    * <span class="attrib">@param</span> {Number} p Period (optional)
+    * <span class="attrib">@return</span> {Number} The computed value for the current animation frame.
+    */</span>
+   elasticBoth: <span class="reserved">function</span> (t, b, c, d, a, p) {
+   	<span class="reserved">if</span> (t==0) <span class="reserved">return</span> b;  <span class="reserved">if</span> ((t/=d/2)==2) <span class="reserved">return</span> b+c;  <span class="reserved">if</span> (!p) p=d*(.3*1.5);
+   	<span class="reserved">if</span> (!a || a &lt; Math.abs(c)) { a=c; var s=p/4; }
+   	<span class="reserved">else</span> var s = p/(2*Math.PI) * Math.asin (c/a);
+   	<span class="reserved">if</span> (t &lt; 1) <span class="reserved">return</span> -.5*(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
+   	<span class="reserved">return</span> a*Math.pow(2,-10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )*.5 + c + b;
+   },
+
+
+   <span class="comment">/**
+    * back easing in - backtracking slightly, then reversing direction and moving to target
+    * <span class="attrib">@param</span> {Number} t Time value used to compute current value.
+    * <span class="attrib">@param</span> {Number} b Starting value.
+    * <span class="attrib">@param</span> {Number} c Delta between start and end values.
+    * <span class="attrib">@param</span> {Number} d Total length of animation.
+    * <span class="attrib">@param</span> {Number) s Overshoot (optional)
+    * <span class="attrib">@return</span> {Number} The computed value for the current animation frame.
+    */</span>
+   backIn: <span class="reserved">function</span> (t, b, c, d, s) {
+   	<span class="reserved">if</span> (typeof s == <span class="literal">'undefined'</span>) s = 1.70158;
+   	<span class="reserved">return</span> c*(t/=d)*t*((s+1)*t - s) + b;
+   },
+
+   <span class="comment">/**
+    * back easing out - moving towards target, overshooting it slightly,
+    * then reversing and coming back to target
+    * <span class="attrib">@param</span> {Number} t Time value used to compute current value.
+    * <span class="attrib">@param</span> {Number} b Starting value.
+    * <span class="attrib">@param</span> {Number} c Delta between start and end values.
+    * <span class="attrib">@param</span> {Number} d Total length of animation.
+    * <span class="attrib">@param</span> {Number) s Overshoot (optional)
+    * <span class="attrib">@return</span> {Number} The computed value for the current animation frame.
+    */</span>
+   backOut: <span class="reserved">function</span> (t, b, c, d, s) {
+   	<span class="reserved">if</span> (typeof s == <span class="literal">'undefined'</span>) s = 1.70158;
+   	<span class="reserved">return</span> c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
+   },
+   
+   <span class="comment">/**
+    * back easing in/out - backtracking slightly, then reversing direction and moving to target,
+    * then overshooting target, reversing, and finally coming back to target
+    * <span class="attrib">@param</span> {Number} t Time value used to compute current value.
+    * <span class="attrib">@param</span> {Number} b Starting value.
+    * <span class="attrib">@param</span> {Number} c Delta between start and end values.
+    * <span class="attrib">@param</span> {Number} d Total length of animation.
+    * <span class="attrib">@param</span> {Number) s Overshoot (optional)
+    * <span class="attrib">@return</span> {Number} The computed value for the current animation frame.
+    */</span>
+   backBoth: <span class="reserved">function</span> (t, b, c, d, s) {
+   	<span class="reserved">if</span> (typeof s == <span class="literal">'undefined'</span>) s = 1.70158; 
+   	<span class="reserved">if</span> ((t/=d/2) &lt; 1) <span class="reserved">return</span> c/2*(t*t*(((s*=(1.525))+1)*t - s)) + b;
+   	<span class="reserved">return</span> c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
+   },
+
+   <span class="comment">/**
+    * bounce in
+    * <span class="attrib">@param</span> {Number} t Time value used to compute current value.
+    * <span class="attrib">@param</span> {Number} b Starting value.
+    * <span class="attrib">@param</span> {Number} c Delta between start and end values.
+    * <span class="attrib">@param</span> {Number} d Total length of animation.
+    * <span class="attrib">@return</span> {Number} The computed value for the current animation frame.
+    */</span>
+   bounceIn: <span class="reserved">function</span> (t, b, c, d) {
+   	<span class="reserved">return</span> c - YAHOO.util.Easing.bounceOut(d-t, 0, c, d) + b;
+   },
+   
+   <span class="comment">/**
+    * bounce out
+    * <span class="attrib">@param</span> {Number} t Time value used to compute current value.
+    * <span class="attrib">@param</span> {Number} b Starting value.
+    * <span class="attrib">@param</span> {Number} c Delta between start and end values.
+    * <span class="attrib">@param</span> {Number} d Total length of animation.
+    * <span class="attrib">@return</span> {Number} The computed value for the current animation frame.
+    */</span>
+   bounceOut: <span class="reserved">function</span> (t, b, c, d) {
+   	<span class="reserved">if</span> ((t/=d) &lt; (1/2.75)) {
+   		<span class="reserved">return</span> c*(7.5625*t*t) + b;
+   	} <span class="reserved">else</span> <span class="reserved">if</span> (t &lt; (2/2.75)) {
+   		<span class="reserved">return</span> c*(7.5625*(t-=(1.5/2.75))*t + .75) + b;
+   	} <span class="reserved">else</span> <span class="reserved">if</span> (t &lt; (2.5/2.75)) {
+   		<span class="reserved">return</span> c*(7.5625*(t-=(2.25/2.75))*t + .9375) + b;
+   	} <span class="reserved">else</span> {
+   		<span class="reserved">return</span> c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;
+   	}
+   },
+   
+   <span class="comment">/**
+    * bounce both
+    * <span class="attrib">@param</span> {Number} t Time value used to compute current value.
+    * <span class="attrib">@param</span> {Number} b Starting value.
+    * <span class="attrib">@param</span> {Number} c Delta between start and end values.
+    * <span class="attrib">@param</span> {Number} d Total length of animation.
+    * <span class="attrib">@return</span> {Number} The computed value for the current animation frame.
+    */</span>
+   bounceBoth: <span class="reserved">function</span> (t, b, c, d) {
+   	<span class="reserved">if</span> (t &lt; d/2) <span class="reserved">return</span> YAHOO.util.Easing.bounceIn(t*2, 0, c, d) * .5 + b;
+   	<span class="reserved">return</span> YAHOO.util.Easing.bounceOut(t*2-d, 0, c, d) * .5 + c*.5 + b;
+   }
 };
+
 </pre>
 			</div>
 		
@@ -290,7 +425,12 @@ YAHOO.util.Easing = new <span class="reserved">function</span>() {
 
 <div id="footer">
 	<hr />
-	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+	version 1.9.5.8
 </div>
 
 

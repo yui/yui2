@@ -18,7 +18,8 @@
 
 	<div class="breadcrumbs">
 		
-
+			<a href="javascript: alert('This location is TBD');">Home</a>
+			&gt;
 			
 			
 			
@@ -58,6 +59,11 @@
 				<ul class="content">
 					
 						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
 							<a href="YAHOO.util.Anim.html">
 								YAHOO.util.Anim</a>
 						</li>
@@ -70,21 +76,6 @@
 						<li>
 							<a href="YAHOO.util.Bezier.html">
 								YAHOO.util.Bezier</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.Easing.html">
-								YAHOO.util.Easing</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.Motion.html">
-								YAHOO.util.Motion</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.Scroll.html">
-								YAHOO.util.Scroll</a>
 						</li>
 					
 				</ul>
@@ -109,6 +100,11 @@
 						<li>
 							<a href="overview-summary-Bezier.js.html">
 								Bezier.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-ColorAnim.js.html">
+								ColorAnim.js</a>
 						</li>
 					
 						<li>
@@ -180,9 +176,9 @@ Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 Version: 0.10.0
-* /
+*/</span>
 
-/**
+<span class="comment">/**
  * <span class="attrib">@class</span> Handles animation queueing and threading.
  * Used by Anim and subclasses.
  */</span>
@@ -229,12 +225,19 @@ YAHOO.util.AnimMgr = new <span class="reserved">function</span>() {
     * <span class="attrib">@param</span> {object} tween The Anim instance to be be registered
     */</span>
    <span class="reserved">this</span>.registerElement = <span class="reserved">function</span>(tween) {
-      <span class="reserved">if</span> ( tween.isAnimated() ) { <span class="reserved">return</span> false; }<span class="comment">// but not if already animating</span>
-      
       queue[queue.length] = tween;
       tweenCount += 1;
-
+      tween._onStart.fire();
       <span class="reserved">this</span>.start();
+   };
+   
+   <span class="reserved">this</span>.unRegister = <span class="reserved">function</span>(tween, index) {
+      tween._onComplete.fire();
+      index = index || getIndex(tween);
+      <span class="reserved">if</span> (index != -1) { queue.splice(index, 1); }
+      
+      tweenCount -= 1;
+      <span class="reserved">if</span> (tweenCount &lt;= 0) { <span class="reserved">this</span>.stop(); }
    };
    
    <span class="comment">/**
@@ -251,12 +254,11 @@ YAHOO.util.AnimMgr = new <span class="reserved">function</span>() {
     * If no instance given, Manager stops thread and all animations.
     */</span>   
    <span class="reserved">this</span>.stop = <span class="reserved">function</span>(tween) {
-      <span class="reserved">if</span> (!tween)
-      {
+      <span class="reserved">if</span> (!tween) {
          clearInterval(thread);
          <span class="reserved">for</span> (var i = 0, len = queue.length; i &lt; len; ++i) {
             <span class="reserved">if</span> (queue[i].isAnimated()) {
-               queue[i].stop();  
+               <span class="reserved">this</span>.unRegister(tween, i);  
             }
          }
          queue = [];
@@ -264,10 +266,7 @@ YAHOO.util.AnimMgr = new <span class="reserved">function</span>() {
          tweenCount = 0;
       }
       <span class="reserved">else</span> {
-         tween.stop();     
-         tweenCount -= 1;
-         
-         <span class="reserved">if</span> (tweenCount &lt;= 0) { <span class="reserved">this</span>.stop(); }
+         <span class="reserved">this</span>.unRegister(tween);
       }
    };
    
@@ -286,12 +285,19 @@ YAHOO.util.AnimMgr = new <span class="reserved">function</span>() {
             <span class="reserved">if</span> (tween.useSeconds) {
                correctFrame(tween);
             }
-            
-            tween.onTween.fire();     
             tween._onTween.fire();        
          }
-         <span class="reserved">else</span> { YAHOO.util.AnimMgr.stop(tween); }
+         <span class="reserved">else</span> { YAHOO.util.AnimMgr.stop(tween, i); }
       }
+   };
+   
+   var getIndex = <span class="reserved">function</span>(anim) {
+      <span class="reserved">for</span> (var i = 0, len = queue.length; i &lt; len; ++i) {
+         <span class="reserved">if</span> (queue[i] == anim) {
+            <span class="reserved">return</span> i; <span class="comment">// note return;</span>
+         }
+      }
+      <span class="reserved">return</span> -1;
    };
    
    <span class="comment">/**
@@ -319,7 +325,7 @@ YAHOO.util.AnimMgr = new <span class="reserved">function</span>() {
          tween.currentFrame += tweak;     
       }
    };
-}
+};
 </pre>
 			</div>
 		
@@ -329,7 +335,12 @@ YAHOO.util.AnimMgr = new <span class="reserved">function</span>() {
 
 <div id="footer">
 	<hr />
-	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+	version 1.9.5.8
 </div>
 
 

@@ -18,7 +18,8 @@
 
 	<div class="breadcrumbs">
 		
-
+			<a href="javascript: alert('This location is TBD');">Home</a>
+			&gt;
 			
 			
 			
@@ -58,6 +59,11 @@
 				<ul class="content">
 					
 						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
 							<a href="YAHOO.util.Anim.html">
 								YAHOO.util.Anim</a>
 						</li>
@@ -70,21 +76,6 @@
 						<li>
 							<a href="YAHOO.util.Bezier.html">
 								YAHOO.util.Bezier</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.Easing.html">
-								YAHOO.util.Easing</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.Motion.html">
-								YAHOO.util.Motion</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.Scroll.html">
-								YAHOO.util.Scroll</a>
 						</li>
 					
 				</ul>
@@ -109,6 +100,11 @@
 						<li>
 							<a href="overview-summary-Bezier.js.html">
 								Bezier.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-ColorAnim.js.html">
+								ColorAnim.js</a>
 						</li>
 					
 						<li>
@@ -180,9 +176,9 @@ Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 Version: 0.10.0
-* /
+*/</span>
 
-/**
+<span class="comment">/**
  * <span class="attrib">@class</span> Anim subclass for scrolling elements to a position defined by the "scroll" member of "attributes".  All "scroll" members are arrays with x, y scroll positions.
  * &lt;p&gt;Usage: &lt;code&gt;var myAnim = new YAHOO.util.Scroll(el, { scroll: { to: [0, 800] } }, 1, YAHOO.util.Easing.easeOut);&lt;/code&gt;&lt;/p&gt;
  * <span class="attrib">@requires</span> YAHOO.util.Anim
@@ -201,80 +197,87 @@ Version: 0.10.0
  * <span class="attrib">@param</span> {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
  * <span class="attrib">@param</span> {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
  */</span>
-YAHOO.util.Scroll = <span class="reserved">function</span>(el, attributes, duration,  method) {
-   <span class="reserved">if</span> (el) {
-      YAHOO.util.Anim.call(<span class="reserved">this</span>, el, attributes, duration, method);
-   }
-};
+(<span class="reserved">function</span>() {
+   YAHOO.util.Scroll = <span class="reserved">function</span>(el, attributes, duration,  method) {
+      <span class="reserved">if</span> (el) { <span class="comment">// dont break existing subclasses not using YAHOO.extend</span>
+         YAHOO.util.Scroll.superclass.constructor.call(<span class="reserved">this</span>, el, attributes, duration, method);
+      }
+   };
 
-YAHOO.util.Scroll.<span class="reserved">prototype</span> = new YAHOO.util.Anim();
+   YAHOO.extend(YAHOO.util.Scroll, YAHOO.util.ColorAnim);
+   
+   <span class="comment">// shorthand</span>
+   var Y = YAHOO.util;
+   var superclass = Y.Scroll.superclass;
+   var <span class="reserved">prototype</span> = Y.Scroll.<span class="reserved">prototype</span>;
 
-<span class="comment">/**
- * Per attribute units that should be used by default.
- * Scroll positions default to no units.
- * <span class="attrib">@type</span> Object
- */</span>
-YAHOO.util.Scroll.<span class="reserved">prototype</span>.defaultUnits.scroll = <span class="literal">' '</span>;
-
-<span class="comment">/**
- * Returns the value computed by the animation's "method".
- * <span class="attrib">@param</span> {String} attribute The name of the attribute.
- * <span class="attrib">@param</span> {Number} start The value this attribute should start from for this animation.
- * <span class="attrib">@param</span> {Number} end  The value this attribute should end at for this animation.
- * <span class="attrib">@return</span> {Number} The Value to be applied to the attribute.
- */</span>
-YAHOO.util.Scroll.<span class="reserved">prototype</span>.doMethod = <span class="reserved">function</span>(attribute, start, end) {
-   var val = null;
-
-   <span class="reserved">if</span> (attribute == <span class="literal">'scroll'</span>) {
-      val = [
-         <span class="reserved">this</span>.method(<span class="reserved">this</span>.currentFrame, start[0], end[0] - start[0], <span class="reserved">this</span>.totalFrames),
-         <span class="reserved">this</span>.method(<span class="reserved">this</span>.currentFrame, start[1], end[1] - start[1], <span class="reserved">this</span>.totalFrames)
-      ];
+   <span class="comment">/**
+    * toString method
+    * <span class="attrib">@return</span> {String} string represenation of anim obj
+    */</span>
+   <span class="reserved">prototype</span>.toString = <span class="reserved">function</span>() {
+      var el = <span class="reserved">this</span>.getEl();
+      var id = el.id || el.tagName;
+      <span class="reserved">return</span> (<span class="literal">"Scroll "</span> + id);
+   };
+   
+   <span class="comment">/**
+    * Returns the value computed by the animation's "method".
+    * <span class="attrib">@param</span> {String} attr The name of the attribute.
+    * <span class="attrib">@param</span> {Number} start The value this attribute should start from for this animation.
+    * <span class="attrib">@param</span> {Number} end  The value this attribute should end at for this animation.
+    * <span class="attrib">@return</span> {Number} The Value to be applied to the attribute.
+    */</span>
+   <span class="reserved">prototype</span>.doMethod = <span class="reserved">function</span>(attr, start, end) {
+      var val = null;
+   
+      <span class="reserved">if</span> (attr == <span class="literal">'scroll'</span>) {
+         val = [
+            <span class="reserved">this</span>.method(<span class="reserved">this</span>.currentFrame, start[0], end[0] - start[0], <span class="reserved">this</span>.totalFrames),
+            <span class="reserved">this</span>.method(<span class="reserved">this</span>.currentFrame, start[1], end[1] - start[1], <span class="reserved">this</span>.totalFrames)
+         ];
+         
+      } <span class="reserved">else</span> {
+         val = superclass.doMethod.call(<span class="reserved">this</span>, attr, start, end);
+      }
+      <span class="reserved">return</span> val;
+   };
+   
+   <span class="comment">/**
+    * Returns current value of the attribute.
+    * <span class="attrib">@param</span> {String} attr The name of the attribute.
+    * <span class="attrib">@return</span> {Number} val The current value of the attribute.
+    */</span>
+   <span class="reserved">prototype</span>.getAttribute = <span class="reserved">function</span>(attr) {
+      var val = null;
+      var el = <span class="reserved">this</span>.getEl();
       
-   } <span class="reserved">else</span> {
-      val = <span class="reserved">this</span>.method(<span class="reserved">this</span>.currentFrame, start, end - start, <span class="reserved">this</span>.totalFrames);
-   }
-   <span class="reserved">return</span> val;
-}
-
-<span class="comment">/**
- * Returns current value of the attribute.
- * <span class="attrib">@param</span> {String} attribute The name of the attribute.
- * <span class="attrib">@return</span> {Number} val The current value of the attribute.
- */</span>
-YAHOO.util.Scroll.<span class="reserved">prototype</span>.getAttribute = <span class="reserved">function</span>(attribute) {
-   var val = null;
-   var el = <span class="reserved">this</span>.getEl();
+      <span class="reserved">if</span> (attr == <span class="literal">'scroll'</span>) {
+         val = [ el.scrollLeft, el.scrollTop ];
+      } <span class="reserved">else</span> {
+         val = superclass.getAttribute.call(<span class="reserved">this</span>, attr);
+      }
+      
+      <span class="reserved">return</span> val;
+   };
    
-   <span class="reserved">if</span> (attribute == <span class="literal">'scroll'</span>) {
-      val = [ el.scrollLeft, el.scrollTop ];
-   } <span class="reserved">else</span> {
-      val = parseFloat( YAHOO.util.Dom.getStyle(el, attribute) );
-   }
-   
-   <span class="reserved">return</span> val;
-};
-
-<span class="comment">/**
- * Applies a value to an attribute
- * <span class="attrib">@param</span> {String} attribute The name of the attribute.
- * <span class="attrib">@param</span> {Number} val The value to be applied to the attribute.
- * <span class="attrib">@param</span> {String} unit The unit ('px', '%', etc.) of the value.
- */</span>
-YAHOO.util.Scroll.<span class="reserved">prototype</span>.setAttribute = <span class="reserved">function</span>(attribute, val, unit) {
-   var el = <span class="reserved">this</span>.getEl();
-   
-   <span class="reserved">if</span> (attribute == <span class="literal">'scroll'</span>) {
-      el.scrollLeft = val[0];
-      el.scrollTop = val[1];
-   } <span class="reserved">else</span> {
-      YAHOO.util.Dom.setStyle(el, attribute, val + unit); 
-   }
-};
-
-
-
+   <span class="comment">/**
+    * Applies a value to an attribute
+    * <span class="attrib">@param</span> {String} attr The name of the attribute.
+    * <span class="attrib">@param</span> {Number} val The value to be applied to the attribute.
+    * <span class="attrib">@param</span> {String} unit The unit ('px', '%', etc.) of the value.
+    */</span>
+   <span class="reserved">prototype</span>.setAttribute = <span class="reserved">function</span>(attr, val, unit) {
+      var el = <span class="reserved">this</span>.getEl();
+      
+      <span class="reserved">if</span> (attr == <span class="literal">'scroll'</span>) {
+         el.scrollLeft = val[0];
+         el.scrollTop = val[1];
+      } <span class="reserved">else</span> {
+         superclass.setAttribute.call(<span class="reserved">this</span>, attr, val, unit);
+      }
+   };
+})();
 </pre>
 			</div>
 		
@@ -284,7 +287,12 @@ YAHOO.util.Scroll.<span class="reserved">prototype</span>.setAttribute = <span c
 
 <div id="footer">
 	<hr />
-	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+	version 1.9.5.8
 </div>
 
 

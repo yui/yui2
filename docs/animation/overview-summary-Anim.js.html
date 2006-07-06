@@ -18,7 +18,8 @@
 
 	<div class="breadcrumbs">
 		
-
+			<a href="javascript: alert('This location is TBD');">Home</a>
+			&gt;
 			
 			
 			
@@ -57,7 +58,10 @@
 				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
 				<ul class="content">
 					
-
+						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
 					
 						<li>
 							<a href="YAHOO.util.Anim.html">
@@ -72,21 +76,6 @@
 						<li>
 							<a href="YAHOO.util.Bezier.html">
 								YAHOO.util.Bezier</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.Easing.html">
-								YAHOO.util.Easing</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.Motion.html">
-								YAHOO.util.Motion</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.Scroll.html">
-								YAHOO.util.Scroll</a>
 						</li>
 					
 				</ul>
@@ -111,6 +100,11 @@
 						<li>
 							<a href="overview-summary-Bezier.js.html">
 								Bezier.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-ColorAnim.js.html">
+								ColorAnim.js</a>
 						</li>
 					
 						<li>
@@ -237,55 +231,139 @@ Version: 0.10.0
  * <span class="attrib">@param</span> {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
  */</span>
 
-YAHOO.util.Anim = <span class="reserved">function</span>(el, attributes, duration, method) 
-{
+YAHOO.util.Anim = <span class="reserved">function</span>(el, attributes, duration, method) {
    <span class="reserved">if</span> (el) {
       <span class="reserved">this</span>.init(el, attributes, duration, method); 
+
    }
 };
 
 YAHOO.util.Anim.<span class="reserved">prototype</span> = {
    <span class="comment">/**
+    * toString method
+    * <span class="attrib">@return</span> {String} string represenation of anim obj
+    */</span>
+   toString: <span class="reserved">function</span>() {
+      var el = <span class="reserved">this</span>.getEl();
+      var id = el.id || el.tagName;
+      <span class="reserved">return</span> (<span class="literal">"Anim "</span> + id);
+   },
+   
+   patterns: { <span class="comment">// cached for performance</span>
+      noNegatives:      /width|height|opacity|padding/i, <span class="comment">// keep at zero or above</span>
+      offsetAttribute:  /^((width|height)|(top|left))$/, <span class="comment">// use offsetValue as default</span>
+      defaultUnit:      /width|height|top$|bottom$|left$|right$/i, <span class="comment">// use 'px' by default</span>
+      offsetUnit:       /\d+(em|%|en|ex|pt|in|cm|mm|pc)$/i <span class="comment">// IE may return these, so convert these to offset</span>
+   },
+   
+   <span class="comment">/**
     * Returns the value computed by the animation's "method".
-    * <span class="attrib">@param</span> {String} attribute The name of the attribute.
+    * <span class="attrib">@param</span> {String} attr The name of the attribute.
     * <span class="attrib">@param</span> {Number} start The value this attribute should start from for this animation.
     * <span class="attrib">@param</span> {Number} end  The value this attribute should end at for this animation.
     * <span class="attrib">@return</span> {Number} The Value to be applied to the attribute.
     */</span>
-   doMethod: <span class="reserved">function</span>(attribute, start, end) {
+   doMethod: <span class="reserved">function</span>(attr, start, end) {
       <span class="reserved">return</span> <span class="reserved">this</span>.method(<span class="reserved">this</span>.currentFrame, start, end - start, <span class="reserved">this</span>.totalFrames);
    },
    
    <span class="comment">/**
     * Applies a value to an attribute
-    * <span class="attrib">@param</span> {String} attribute The name of the attribute.
+    * <span class="attrib">@param</span> {String} attr The name of the attribute.
     * <span class="attrib">@param</span> {Number} val The value to be applied to the attribute.
     * <span class="attrib">@param</span> {String} unit The unit ('px', '%', etc.) of the value.
     */</span>
-   setAttribute: <span class="reserved">function</span>(attribute, val, unit) {
-      YAHOO.util.Dom.setStyle(<span class="reserved">this</span>.getEl(), attribute, val + unit); 
+   setAttribute: <span class="reserved">function</span>(attr, val, unit) {
+      <span class="reserved">if</span> ( <span class="reserved">this</span>.patterns.noNegatives.test(attr) ) {
+         val = (val &gt; 0) ? val : 0;
+      }
+
+      YAHOO.util.Dom.setStyle(<span class="reserved">this</span>.getEl(), attr, val + unit);
    },                  
    
    <span class="comment">/**
     * Returns current value of the attribute.
-    * <span class="attrib">@param</span> {String} attribute The name of the attribute.
+    * <span class="attrib">@param</span> {String} attr The name of the attribute.
     * <span class="attrib">@return</span> {Number} val The current value of the attribute.
     */</span>
-   getAttribute: <span class="reserved">function</span>(attribute) {
-      <span class="reserved">return</span> parseFloat( YAHOO.util.Dom.getStyle(<span class="reserved">this</span>.getEl(), attribute));
+   getAttribute: <span class="reserved">function</span>(attr) {
+      var el = <span class="reserved">this</span>.getEl();
+      var val = YAHOO.util.Dom.getStyle(el, attr);
+      
+      <span class="reserved">if</span> (val !== <span class="literal">'auto'</span> &amp;&amp; !<span class="reserved">this</span>.patterns.offsetUnit.test(val)) {
+         <span class="reserved">return</span> parseFloat(val);
+      }
+      
+      var a = <span class="reserved">this</span>.patterns.offsetAttribute.exec(attr) || [];
+      var pos = ( typeof a[1] !== <span class="literal">'undefined'</span> ) ? true : false; <span class="comment">// top or left</span>
+      var box = ( typeof a[2] !== <span class="literal">'undefined'</span>  ) ? true : false; <span class="comment">// width or height</span>
+      
+      
+      <span class="comment">// use offsets for width/height and abs pos top/left</span>
+      <span class="reserved">if</span> ( box || (YAHOO.util.Dom.getStyle(el, <span class="literal">'position'</span>) == <span class="literal">'absolute'</span> &amp;&amp; pos) ) {
+         val = el[<span class="literal">'offset'</span> + a[0].charAt(0).toUpperCase() + a[0].substr(1)];
+      } 
+
+      <span class="reserved">return</span> val;
    },
    
    <span class="comment">/**
-    * The default unit to use for all attributes if not defined per attribute.
-    * <span class="attrib">@type</span> String
+    * Returns the unit to use when none is supplied.
+    * Applies the "defaultUnit" test to decide whether to use pixels or not
+    * <span class="attrib">@param</span> {attr} attr The name of the attribute.
+    * <span class="attrib">@return</span> {String} The default unit to be used.
     */</span>
-   defaultUnit: <span class="literal">'px'</span>,
-   
+   getDefaultUnit: <span class="reserved">function</span>(attr) {
+       <span class="reserved">if</span> ( <span class="reserved">this</span>.patterns.defaultUnit.test(attr) ) {
+         <span class="reserved">return</span> <span class="literal">'px'</span>;
+       }
+       
+       <span class="reserved">return</span> <span class="literal">''</span>;
+   },
+      
    <span class="comment">/**
-    * Per attribute units that should be used by default.
-    * <span class="attrib">@type</span> Object
+    * Sets the actual values to be used during the animation.
+    * Should only be needed for subclass use.
+    * <span class="attrib">@param</span> {Object} attr The attribute object
+    * <span class="attrib">@private</span> 
     */</span>
-   defaultUnits: { opacity: <span class="literal">' '</span> },
+   setRuntimeAttribute: <span class="reserved">function</span>(attr) {
+      var start;
+      var end;
+      var attributes = <span class="reserved">this</span>.attributes;
+
+      <span class="reserved">this</span>.runtimeAttributes[attr] = {};
+      
+      var isset = <span class="reserved">function</span>(prop) {
+         <span class="reserved">return</span> (typeof prop !== <span class="literal">'undefined'</span>);
+      };
+      
+      <span class="reserved">if</span> ( !isset(attributes[attr][<span class="literal">'to'</span>]) &amp;&amp; !isset(attributes[attr][<span class="literal">'by'</span>]) ) {
+         <span class="reserved">return</span> false; <span class="comment">// note return; nothing to animate to</span>
+      }
+      
+      start = ( isset(attributes[attr][<span class="literal">'from'</span>]) ) ? attributes[attr][<span class="literal">'from'</span>] : <span class="reserved">this</span>.getAttribute(attr);
+
+      <span class="comment">// To beats by, per SMIL 2.1 spec</span>
+      <span class="reserved">if</span> ( isset(attributes[attr][<span class="literal">'to'</span>]) ) {
+         end = attributes[attr][<span class="literal">'to'</span>];
+      } <span class="reserved">else</span> <span class="reserved">if</span> ( isset(attributes[attr][<span class="literal">'by'</span>]) ) {
+         <span class="reserved">if</span> (start.constructor == Array) {
+            end = [];
+            <span class="reserved">for</span> (var i = 0, len = start.length; i &lt; len; ++i) {
+               end[i] = start[i] + attributes[attr][<span class="literal">'by'</span>][i];
+            }
+         } <span class="reserved">else</span> {
+            end = start + attributes[attr][<span class="literal">'by'</span>];
+         }
+      }
+      
+      <span class="reserved">this</span>.runtimeAttributes[attr].start = start;
+      <span class="reserved">this</span>.runtimeAttributes[attr].end = end;
+
+      <span class="comment">// set units if needed</span>
+      <span class="reserved">this</span>.runtimeAttributes[attr].unit = ( isset(attributes[attr].unit) ) ? attributes[attr][<span class="literal">'unit'</span>] : <span class="reserved">this</span>.getDefaultUnit(attr);
+   },
 
    <span class="comment">/**
     * <span class="attrib">@param</span> {String or HTMLElement} el Reference to the element that will be animated
@@ -297,7 +375,6 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
     * <span class="attrib">@param</span> {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
     */</span> 
    init: <span class="reserved">function</span>(el, attributes, duration, method) {
-   
       <span class="comment">/**
        * Whether or not the animation is running.
        * <span class="attrib">@private</span>
@@ -313,25 +390,11 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
       var startTime = null;
       
       <span class="comment">/**
-       * A Date object that is created when the animation ends.
-       * <span class="attrib">@private</span>
-       * <span class="attrib">@type</span> Date
-       */</span>
-      var endTime = null;
-      
-      <span class="comment">/**
        * The number of frames this animation was able to execute.
        * <span class="attrib">@private</span>
        * <span class="attrib">@type</span> Int
        */</span>
-      var actualFrames = 0;
-      
-      <span class="comment">/**
-       * The attribute values that will be used if no "from" is supplied.
-       * <span class="attrib">@private</span>
-       * <span class="attrib">@type</span> Object
-       */</span>
-      var defaultValues = {};      
+      var actualFrames = 0; 
 
       <span class="comment">/**
        * The element to be animated.
@@ -393,51 +456,6 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
        */</span>
       <span class="reserved">this</span>.getEl = <span class="reserved">function</span>() { <span class="reserved">return</span> el; };
       
-      
-      <span class="comment">/**
-       * Sets the default value to be used when "from" is not supplied.
-       * <span class="attrib">@param</span> {String} attribute The attribute being set.
-       * <span class="attrib">@param</span> {Number} val The default value to be applied to the attribute.
-       */</span>
-      <span class="reserved">this</span>.setDefault = <span class="reserved">function</span>(attribute, val) {
-         <span class="reserved">if</span> ( val.constructor != Array &amp;&amp; (val == <span class="literal">'auto'</span> || isNaN(val)) ) { <span class="comment">// if 'auto' or NaN, set defaults for well known attributes, zero for others</span>
-            switch(attribute) {
-               case<span class="literal">'width'</span>:
-                  val = el.clientWidth || el.offsetWidth; <span class="comment">// computed width</span>
-                  break;
-               case <span class="literal">'height'</span>:
-                  val = el.clientHeight || el.offsetHeight; <span class="comment">// computed height</span>
-                  break;
-               case <span class="literal">'left'</span>:
-                  <span class="reserved">if</span> (YAHOO.util.Dom.getStyle(el, <span class="literal">'position'</span>) == <span class="literal">'absolute'</span>) {
-                     val = el.offsetLeft; <span class="comment">// computed left</span>
-                  } <span class="reserved">else</span> {
-                     val = 0;
-                  }
-                  break;
-               case <span class="literal">'top'</span>:
-                  <span class="reserved">if</span> (YAHOO.util.Dom.getStyle(el, <span class="literal">'position'</span>) == <span class="literal">'absolute'</span>) {
-                     val = el.offsetTop; <span class="comment">// computed top</span>
-                  } <span class="reserved">else</span> {
-                     val = 0;
-                  }
-                  break;                     
-               default:
-                  val = 0;
-            }
-         }
-
-         defaultValues[attribute] = val;
-      };
-      
-      <span class="comment">/**
-       * Returns the default value for the given attribute.
-       * <span class="attrib">@param</span> {String} attribute The attribute whose value will be returned.
-       */</span>      
-      <span class="reserved">this</span>.getDefault = <span class="reserved">function</span>(attribute) {
-         <span class="reserved">return</span> defaultValues[attribute];
-      };
-      
       <span class="comment">/**
        * Checks whether the element is currently animated.
        * <span class="attrib">@return</span> {Boolean} current value of isAnimated.    
@@ -454,119 +472,101 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
          <span class="reserved">return</span> startTime;
       };      
       
+      <span class="reserved">this</span>.runtimeAttributes = {};
+      
+      var logger = {};
+      logger.log = <span class="reserved">function</span>() {YAHOO.log.apply(window, arguments)};
+      
+      logger.log(<span class="literal">'creating new instance of '</span> + <span class="reserved">this</span>);
+      
       <span class="comment">/**
        * Starts the animation by registering it with the animation manager.   
        */</span>
       <span class="reserved">this</span>.animate = <span class="reserved">function</span>() {
          <span class="reserved">if</span> ( <span class="reserved">this</span>.isAnimated() ) { <span class="reserved">return</span> false; }
          
-         <span class="reserved">this</span>.onStart.fire();
-         <span class="reserved">this</span>._onStart.fire();
+         <span class="reserved">this</span>.currentFrame = 0;
          
          <span class="reserved">this</span>.totalFrames = ( <span class="reserved">this</span>.useSeconds ) ? Math.ceil(YAHOO.util.AnimMgr.fps * <span class="reserved">this</span>.duration) : <span class="reserved">this</span>.duration;
+   
          YAHOO.util.AnimMgr.registerElement(<span class="reserved">this</span>);
-         
-         <span class="comment">// get starting values or use defaults</span>
-         var attributes = <span class="reserved">this</span>.attributes;
-         var el = <span class="reserved">this</span>.getEl();
-         var val;
-         
-         <span class="reserved">for</span> (var attribute in attributes) {
-            val = <span class="reserved">this</span>.getAttribute(attribute);
-            <span class="reserved">this</span>.setDefault(attribute, val);
-         }
-         
-         isAnimated = true;
-         actualFrames = 0;
-         startTime = new Date();   
       };
         
       <span class="comment">/**
        * Stops the animation.  Normally called by AnimMgr when animation completes.
        */</span> 
       <span class="reserved">this</span>.stop = <span class="reserved">function</span>() {
-         <span class="reserved">if</span> ( !<span class="reserved">this</span>.isAnimated() ) { <span class="reserved">return</span> false; } 
+         YAHOO.util.AnimMgr.stop(<span class="reserved">this</span>);
+      };
+      
+      var onStart = <span class="reserved">function</span>() {
+         <span class="reserved">this</span>.onStart.fire();
+         <span class="reserved">for</span> (var attr in <span class="reserved">this</span>.attributes) {
+            <span class="reserved">this</span>.setRuntimeAttribute(attr);
+         }
          
-         <span class="reserved">this</span>.currentFrame = 0;
-         
-         endTime = new Date();
-         
-         var data = {
-            time: endTime,
-            duration: endTime - startTime,
-            frames: actualFrames,
-            fps: actualFrames / <span class="reserved">this</span>.duration
-         };
-
-         isAnimated = false;  
+         isAnimated = true;
          actualFrames = 0;
-         
-         <span class="reserved">this</span>.onComplete.fire(data);
+         startTime = new Date(); 
       };
       
       <span class="comment">/**
        * Feeds the starting and ending values for each animated attribute to doMethod once per frame, then applies the resulting value to the attribute(s).
        * <span class="attrib">@private</span>
        */</span>
+       
       var onTween = <span class="reserved">function</span>() {
-         var start;
-         var end = null;
-         var val;
-         var unit;
-         var attributes = <span class="reserved">this</span>[<span class="literal">'attributes'</span>];
+         var data = {
+            duration: new Date() - <span class="reserved">this</span>.getStartTime(),
+            currentFrame: <span class="reserved">this</span>.currentFrame
+         };
          
-         <span class="reserved">for</span> (var attribute in attributes) {
-            unit = attributes[attribute][<span class="literal">'unit'</span>] || <span class="reserved">this</span>.defaultUnits[attribute] || <span class="reserved">this</span>.defaultUnit;
-   
-            <span class="reserved">if</span> (typeof attributes[attribute][<span class="literal">'from'</span>] != <span class="literal">'undefined'</span>) {
-               start = attributes[attribute][<span class="literal">'from'</span>];
-            } <span class="reserved">else</span> {
-               start = <span class="reserved">this</span>.getDefault(attribute);
-            }
-   
-
-            <span class="comment">// To beats by, per SMIL 2.1 spec</span>
-            <span class="reserved">if</span> (typeof attributes[attribute][<span class="literal">'to'</span>] != <span class="literal">'undefined'</span>) {
-               end = attributes[attribute][<span class="literal">'to'</span>];
-            } 
-            <span class="reserved">else</span> <span class="reserved">if</span> (typeof attributes[attribute][<span class="literal">'by'</span>] != <span class="literal">'undefined'</span>) 
-            {
-               <span class="reserved">if</span> (start.constructor == Array) {
-                  end = [];
-                  <span class="reserved">for</span> (var i = 0, len = start.length; i &lt; len; ++i)
-                  {
-                     end[i] = start[i] + attributes[attribute][<span class="literal">'by'</span>][i];
-                  }
-               }
-               <span class="reserved">else</span>
-               {
-                  end = start + attributes[attribute][<span class="literal">'by'</span>];
-               }
-            }
-   
-            <span class="comment">// if end is null, dont change value</span>
-            <span class="reserved">if</span> (end !== null &amp;&amp; typeof end != <span class="literal">'undefined'</span>) {
-   
-               val = <span class="reserved">this</span>.doMethod(attribute, start, end);
-
-               <span class="comment">// negative not allowed for these (others too, but these are most common)</span>
-               <span class="reserved">if</span> ( (attribute == <span class="literal">'width'</span> || attribute == <span class="literal">'height'</span> || attribute == <span class="literal">'opacity'</span>) &amp;&amp; val &lt; 0 ) {
-                  val = 0;
-               }
-
-               <span class="reserved">this</span>.setAttribute(attribute, val, unit); 
-            }
+         data.toString = <span class="reserved">function</span>() {
+            <span class="reserved">return</span> (
+               <span class="literal">'duration: '</span> + data.duration +
+               <span class="literal">', currentFrame: '</span> + data.currentFrame
+            );
+         };
+         
+         <span class="reserved">this</span>.onTween.fire(data);
+         
+         var runtimeAttributes = <span class="reserved">this</span>.runtimeAttributes;
+         
+         <span class="reserved">for</span> (var attr in runtimeAttributes) {
+            <span class="reserved">this</span>.setAttribute(attr, <span class="reserved">this</span>.doMethod(attr, runtimeAttributes[attr].start, runtimeAttributes[attr].end), runtimeAttributes[attr].unit); 
          }
          
          actualFrames += 1;
+      };
+      
+      var onComplete = <span class="reserved">function</span>() {
+         var actual_duration = (new Date() - startTime) / 1000 ;
+         
+         var data = {
+            duration: actual_duration,
+            frames: actualFrames,
+            fps: actualFrames / actual_duration
+         };
+         
+         data.toString = <span class="reserved">function</span>() {
+            <span class="reserved">return</span> (
+               <span class="literal">'duration: '</span> + data.duration +
+               <span class="literal">', frames: '</span> + data.frames +
+               <span class="literal">', fps: '</span> + data.fps
+            );
+         };
+         
+         isAnimated = false;
+         actualFrames = 0;
+         <span class="reserved">this</span>.onComplete.fire(data);
       };
       
       <span class="comment">/**
        * Custom event that fires after onStart, useful in subclassing
        * <span class="attrib">@private</span>
        */</span>   
-      <span class="reserved">this</span>._onStart = new YAHOO.util.CustomEvent(<span class="literal">'_onStart'</span>, <span class="reserved">this</span>);
-      
+      <span class="reserved">this</span>._onStart = new YAHOO.util.CustomEvent(<span class="literal">'_start'</span>, <span class="reserved">this</span>, true);
+
       <span class="comment">/**
        * Custom event that fires when animation begins
        * Listen via subscribe method (e.g. myAnim.onStart.subscribe(someFunction)
@@ -583,15 +583,22 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
        * Custom event that fires after onTween
        * <span class="attrib">@private</span>
        */</span>
-      <span class="reserved">this</span>._onTween = new YAHOO.util.CustomEvent(<span class="literal">'_tween'</span>, <span class="reserved">this</span>);
+      <span class="reserved">this</span>._onTween = new YAHOO.util.CustomEvent(<span class="literal">'_tween'</span>, <span class="reserved">this</span>, true);
       
       <span class="comment">/**
        * Custom event that fires when animation ends
        * Listen via subscribe method (e.g. myAnim.onComplete.subscribe(someFunction)
        */</span>
       <span class="reserved">this</span>.onComplete = new YAHOO.util.CustomEvent(<span class="literal">'complete'</span>, <span class="reserved">this</span>);
+      <span class="comment">/**
+       * Custom event that fires after onComplete
+       * <span class="attrib">@private</span>
+       */</span>
+      <span class="reserved">this</span>._onComplete = new YAHOO.util.CustomEvent(<span class="literal">'_complete'</span>, <span class="reserved">this</span>, true);
 
+      <span class="reserved">this</span>._onStart.subscribe(onStart);
       <span class="reserved">this</span>._onTween.subscribe(onTween);
+      <span class="reserved">this</span>._onComplete.subscribe(onComplete);
    }
 };
 
@@ -604,7 +611,12 @@ YAHOO.util.Anim.<span class="reserved">prototype</span> = {
 
 <div id="footer">
 	<hr />
-	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+	version 1.9.5.8
 </div>
 
 

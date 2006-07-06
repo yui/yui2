@@ -18,7 +18,8 @@
 
 	<div class="breadcrumbs">
 		
-
+			<a href="javascript: alert('This location is TBD');">Home</a>
+			&gt;
 			
 			
 			
@@ -58,6 +59,11 @@
 				<ul class="content">
 					
 						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
 							<a href="YAHOO.util.Anim.html">
 								YAHOO.util.Anim</a>
 						</li>
@@ -70,6 +76,11 @@
 						<li>
 							<a href="YAHOO.util.Bezier.html">
 								YAHOO.util.Bezier</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.ColorAnim.html">
+								YAHOO.util.ColorAnim</a>
 						</li>
 					
 						<li>
@@ -112,6 +123,11 @@
 						</li>
 					
 						<li>
+							<a href="overview-summary-ColorAnim.js.html">
+								ColorAnim.js</a>
+						</li>
+					
+						<li>
 							<a href="overview-summary-Easing.js.html">
 								Easing.js</a>
 						</li>
@@ -144,7 +160,7 @@
 				<dl class="subclasses">
 					<dt>Direct Known Subclasses:</dd>
 					<dd>
-						 <a href="YAHOO.util.Motion.html">YAHOO.util.Motion</a>, <a href="YAHOO.util.Scroll.html">YAHOO.util.Scroll</a>
+						 <a href="YAHOO.util.ColorAnim.html">YAHOO.util.ColorAnim</a>
 					</dd>
 			   </dl>
 			
@@ -176,12 +192,35 @@
 	
 	
 	
+	
+		<dl class="requires">
+			<dt><strong>Requires:</strong></dt>
+			
+				<dd><a href="YAHOO.util.AnimMgr.html#">YAHOO.util.AnimMgr</a></dd>
+			
+				<dd><a href="YAHOO.util.Easing.html#">YAHOO.util.Easing</a></dd>
+			
+				<dd>YAHOO.util.Dom  </dd>
+			
+				<dd>YAHOO.util.Event  </dd>
+			
+				<dd>YAHOO.util.CustomEvent  </dd>
+			
+		</dl>
 		
 	
 	
 	
 	
 	
+	
+		<div class="summary">
+			<p>
+				Base animation class that provides the interface for building animated effects.
+ <p>Usage: var myAnim = new YAHOO.util.Anim(el, { width: { from: 10, to: 100 } }, 1, YAHOO.util.Easing.easeOut);</p>
+ 
+			</p>
+		</div>
 	
 </div>
 
@@ -251,30 +290,6 @@
 							</tr>
 						
 							<tr>
-								<td class="flags">String</td>
-								<td class="spec">
-									<code>
-										<a href="#defaultUnit">defaultUnit</a>
-									</code>
-									<div class="description">
-										The default unit to use for all attributes if not defined per attribute.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">Object</td>
-								<td class="spec">
-									<code>
-										<a href="#defaultUnits">defaultUnits</a>
-									</code>
-									<div class="description">
-										Per attribute units that should be used by default.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
 								<td class="flags">Number</td>
 								<td class="spec">
 									<code>
@@ -299,40 +314,40 @@
 							</tr>
 						
 							<tr>
-								<td class="flags">Object</td>
+								<td class="flags">CustomEvent</td>
 								<td class="spec">
 									<code>
 										<a href="#onComplete">onComplete</a>
 									</code>
 									<div class="description">
 										Custom event that fires when animation ends
- Listen via subscribe method - usage: "myAnim.onComplete.subscribe(someFunction)"&nbsp;
+ Listen via subscribe method (e.g.&nbsp;
 									</div>
 								</td>
 							</tr>
 						
 							<tr>
-								<td class="flags">Object</td>
+								<td class="flags">CustomEvent</td>
 								<td class="spec">
 									<code>
 										<a href="#onStart">onStart</a>
 									</code>
 									<div class="description">
 										Custom event that fires when animation begins
- Listen via subscribe method - usage: "myAnim.onStart.subscribe(someFunction)"&nbsp;
+ Listen via subscribe method (e.g.&nbsp;
 									</div>
 								</td>
 							</tr>
 						
 							<tr>
-								<td class="flags">Object</td>
+								<td class="flags">CustomEvent</td>
 								<td class="spec">
 									<code>
 										<a href="#onTween">onTween</a>
 									</code>
 									<div class="description">
 										Custom event that fires between each frame
- Listen via subscribe method - usage: "myAnim.onTween.subscribe(someFunction)"&nbsp;
+ Listen via subscribe method (e.g.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -372,6 +387,18 @@
 	
 			<!-- ======== CONSTRUCTOR SUMMARY ======== -->
 			
+				<div class="section contructor summaries">
+					<h3><a name="constructor_summary">Constructor Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+					<div class="content">
+						<code class="spec">
+							<a href="YAHOO.util.Anim.html#YAHOO.util.Anim()">YAHOO.util.Anim</a>
+						</code>
+						<div class="description">
+							Base class for animated DOM objects.&nbsp;
+						</div>
+					</div>
+				</div>
+			
 			<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
 	
 	
@@ -400,7 +427,7 @@
 									<td class="spec">
 										<code>
 											<a href="#doMethod">doMethod</a>
-											(&lt;String&gt; attribute, &lt;Number&gt; start, &lt;Number&gt; end)
+											(&lt;String&gt; attr, &lt;Number&gt; start, &lt;Number&gt; end)
 										</code>
 										<div class="description">
 											Returns the value computed by the animation's "method".&nbsp;
@@ -413,7 +440,7 @@
 									<td class="spec">
 										<code>
 											<a href="#getAttribute">getAttribute</a>
-											(&lt;String&gt; attribute)
+											(&lt;String&gt; attr)
 										</code>
 										<div class="description">
 											Returns current value of the attribute.&nbsp;
@@ -422,14 +449,14 @@
 								</tr>
 							
 								<tr>
-									<td class="flags">Object</td>
+									<td class="flags">String</td>
 									<td class="spec">
 										<code>
-											<a href="#getDefault">getDefault</a>
-											(&lt;String&gt; attribute)
+											<a href="#getDefaultUnit">getDefaultUnit</a>
+											(&lt;attr&gt; attr)
 										</code>
 										<div class="description">
-											Returns the default value for the given attribute.&nbsp;
+											Returns the unit to use when none is supplied.&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -491,7 +518,7 @@
 									<td class="spec">
 										<code>
 											<a href="#setAttribute">setAttribute</a>
-											(&lt;String&gt; attribute, &lt;Number&gt; val, &lt;String&gt; unit)
+											(&lt;String&gt; attr, &lt;Number&gt; val, &lt;String&gt; unit)
 										</code>
 										<div class="description">
 											Applies a value to an attribute&nbsp;
@@ -503,24 +530,24 @@
 									<td class="flags">void</td>
 									<td class="spec">
 										<code>
-											<a href="#setDefault">setDefault</a>
-											(&lt;String&gt; attribute, &lt;Number&gt; val)
-										</code>
-										<div class="description">
-											Sets the default value to be used when "from" is not supplied.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">Object</td>
-									<td class="spec">
-										<code>
 											<a href="#stop">stop</a>
 											()
 										</code>
 										<div class="description">
 											Stops the animation.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">String</td>
+									<td class="spec">
+										<code>
+											<a href="#toString">toString</a>
+											()
+										</code>
+										<div class="description">
+											toString method&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -552,8 +579,7 @@
  Each attribute must have at least a "to" or "by" defined in order to animate.  
  If "to" is supplied, the animation will end with the attribute at that value.  
  If "by" is supplied, the animation will end at that value plus its starting value. 
- If both are supplied, "to" is used, and "by" is ignored. 
- Optional additional member include "from" (the value the attribute should start animating from, defaults to current value), and "unit" (the units to apply to the values).
+ If both are supplied, "to" is used, and "by" is ignored.
 								</div>
 							</div>
 							<hr />
@@ -567,35 +593,7 @@
 								</code>
 								<div class="description">
 									The location of the current animation on the timeline.
- In time-based animations, YAHOO.util.Anim.prototype is used by AnimMgr to ensure the animation finishes on time.
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="defaultUnit">defaultUnit</a></h4>
-							<div class="detail">
-								<code>
-									String
-									&nbsp;
-									<strong>defaultUnit</strong>
-								</code>
-								<div class="description">
-									The default unit to use for all attributes if not defined per attribute.
- defaults to 'px'
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="defaultUnits">defaultUnits</a></h4>
-							<div class="detail">
-								<code>
-									Object
-									&nbsp;
-									<strong>defaultUnits</strong>
-								</code>
-								<div class="description">
-									Per attribute units that should be used by default.
- set to { opacity: ' ' } by default
+ In time-based animations, this is used by AnimMgr to ensure the animation finishes on time.
 								</div>
 							</div>
 							<hr />
@@ -630,13 +628,13 @@
 							<h4><a name="onComplete">onComplete</a></h4>
 							<div class="detail">
 								<code>
-									Object
+									CustomEvent
 									&nbsp;
 									<strong>onComplete</strong>
 								</code>
 								<div class="description">
 									Custom event that fires when animation ends
- Listen via subscribe method - usage: "myAnim.onComplete.subscribe(someFunction)"
+ Listen via subscribe method (e.g. myAnim.onComplete.subscribe(someFunction)
 								</div>
 							</div>
 							<hr />
@@ -644,13 +642,13 @@
 							<h4><a name="onStart">onStart</a></h4>
 							<div class="detail">
 								<code>
-									Object
+									CustomEvent
 									&nbsp;
 									<strong>onStart</strong>
 								</code>
 								<div class="description">
 									Custom event that fires when animation begins
- Listen via subscribe method - usage: "myAnim.onStart.subscribe(someFunction)"
+ Listen via subscribe method (e.g. myAnim.onStart.subscribe(someFunction)
 								</div>
 							</div>
 							<hr />
@@ -658,13 +656,13 @@
 							<h4><a name="onTween">onTween</a></h4>
 							<div class="detail">
 								<code>
-									Object
+									CustomEvent
 									&nbsp;
 									<strong>onTween</strong>
 								</code>
 								<div class="description">
 									Custom event that fires between each frame
- Listen via subscribe method - usage: "myAnim.onTween.subscribe(someFunction)"
+ Listen via subscribe method (e.g. myAnim.onTween.subscribe(someFunction)
 								</div>
 							</div>
 							<hr />
@@ -678,7 +676,7 @@
 								</code>
 								<div class="description">
 									The total number of frames to be executed.
- In time-based animations, YAHOO.util.Anim.prototype is used by AnimMgr to ensure the animation finishes on time.
+ In time-based animations, this is used by AnimMgr to ensure the animation finishes on time.
 								</div>
 							</div>
 							<hr />
@@ -711,11 +709,38 @@
 						<div class="detail">
 							<code>
 								<strong>YAHOO.util.Anim</strong>
-								
+								()
 							</code>
 							<div class="description">
 								
+									Base class for animated DOM objects.
 								
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>el</code> - 
+												 Reference to the element that will be animated. Can be an ID or HTMLElement.  
+											</dd>
+										
+											<dd>
+												<code>attributes</code> - 
+												 The attribute(s) to be animated.    Each attribute is an object with at minimum a "to" or "by" member defined.    Additional optional members are "from" (defaults to current value), "units" (defaults to "px").    All attribute names use camelCase.  
+											</dd>
+										
+											<dd>
+												<code>duration</code> - 
+												 (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based  
+											</dd>
+										
+											<dd>
+												<code>method</code> - 
+												 (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
+											</dd>
+										
+									</dl>
 								
 								
 								
@@ -762,7 +787,7 @@
 								<code>
 									Number 
 									<strong>doMethod</strong>
-									(&lt;String&gt; attribute, &lt;Number&gt; start, &lt;Number&gt; end)
+									(&lt;String&gt; attr, &lt;Number&gt; start, &lt;Number&gt; end)
 								</code>
 										
 								<div class="description">
@@ -774,7 +799,7 @@
 											<dt>Parameters:</dt>
 											
 												<dd>
-													<code>attribute</code> - 
+													<code>attr</code> - 
 													 The name of the attribute.  
 												</dd>
 											
@@ -793,7 +818,7 @@
 									
 										<dl>
 											<dt>Returns:</dt>
-											<dd> The Value to be applied to the attribute.  </dd>
+											<dd> The Value to be applied to the attribute.</dd>
 										</dl>
 									
 															
@@ -808,7 +833,7 @@
 								<code>
 									Number 
 									<strong>getAttribute</strong>
-									(&lt;String&gt; attribute)
+									(&lt;String&gt; attr)
 								</code>
 										
 								<div class="description">
@@ -820,7 +845,7 @@
 											<dt>Parameters:</dt>
 											
 												<dd>
-													<code>attribute</code> - 
+													<code>attr</code> - 
 													 The name of the attribute.  
 												</dd>
 											
@@ -829,7 +854,7 @@
 									
 										<dl>
 											<dt>Returns:</dt>
-											<dd> val The current value of the attribute.  </dd>
+											<dd> val The current value of the attribute.</dd>
 										</dl>
 									
 															
@@ -839,29 +864,35 @@
 							</div>
 							<hr />
 						
-							<h4><a name="getDefault">getDefault</a></h4>
+							<h4><a name="getDefaultUnit">getDefaultUnit</a></h4>
 							<div class="detail">
 								<code>
-									Object 
-									<strong>getDefault</strong>
-									(&lt;String&gt; attribute)
+									String 
+									<strong>getDefaultUnit</strong>
+									(&lt;attr&gt; attr)
 								</code>
 										
 								<div class="description">
 									
-										Returns the default value for the given attribute.
+										Returns the unit to use when none is supplied.
+ Applies the "defaultUnit" test to decide whether to use pixels or not
 									
 									
 										<dl>
 											<dt>Parameters:</dt>
 											
 												<dd>
-													<code>attribute</code> - 
-													 The attribute whose value will be returned.  
+													<code>attr</code> - 
+													 The name of the attribute.  
 												</dd>
 											
 										</dl>
 									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd> The default unit to be used.</dd>
+										</dl>
 									
 															
 	
@@ -883,11 +914,6 @@
 										Returns a reference to the animated element.
 									
 									
-									
-										<dl>
-											<dt>Returns:</dt>
-											<dd>  </dd>
-										</dl>
 									
 															
 	
@@ -912,7 +938,7 @@
 									
 										<dl>
 											<dt>Returns:</dt>
-											<dd> current value of startTime.  </dd>
+											<dd> current value of startTime.</dd>
 										</dl>
 									
 															
@@ -937,6 +963,11 @@
 											<dt>Parameters:</dt>
 											
 												<dd>
+													<code>el</code> - 
+													 Reference to the element that will be animated. Can be an ID or HTMLElement.  
+												</dd>
+											
+												<dd>
 													<code>attributes</code> - 
 													 The attribute(s) to be animated.    Each attribute is an object with at minimum a "to" or "by" member defined.    Additional optional members are "from" (defaults to current value), "units" (defaults to "px").    All attribute names use camelCase.  
 												</dd>
@@ -949,11 +980,6 @@
 												<dd>
 													<code>method</code> - 
 													 (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)       
-												</dd>
-											
-												<dd>
-													<code>String</code> - 
-													 or HTMLElement} el Reference to the element that will be animated  
 												</dd>
 											
 										</dl>
@@ -982,7 +1008,7 @@
 									
 										<dl>
 											<dt>Returns:</dt>
-											<dd> current value of isAnimated.  </dd>
+											<dd> current value of isAnimated.</dd>
 										</dl>
 									
 															
@@ -997,7 +1023,7 @@
 								<code>
 									void 
 									<strong>setAttribute</strong>
-									(&lt;String&gt; attribute, &lt;Number&gt; val, &lt;String&gt; unit)
+									(&lt;String&gt; attr, &lt;Number&gt; val, &lt;String&gt; unit)
 								</code>
 										
 								<div class="description">
@@ -1009,7 +1035,7 @@
 											<dt>Parameters:</dt>
 											
 												<dd>
-													<code>attribute</code> - 
+													<code>attr</code> - 
 													 The name of the attribute.  
 												</dd>
 											
@@ -1020,43 +1046,7 @@
 											
 												<dd>
 													<code>unit</code> - 
-													 The unit ('px', '%', etc.) of the value.  
-												</dd>
-											
-										</dl>
-									
-									
-															
-	
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="setDefault">setDefault</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>setDefault</strong>
-									(&lt;String&gt; attribute, &lt;Number&gt; val)
-								</code>
-										
-								<div class="description">
-									
-										Sets the default value to be used when "from" is not supplied.
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>attribute</code> - 
-													 The attribute being set.  
-												</dd>
-											
-												<dd>
-													<code>val</code> - 
-													 The default value to be applied to the attribute.  
+													 The unit ('px', '%', etc.) of the value.       
 												</dd>
 											
 										</dl>
@@ -1072,7 +1062,7 @@
 							<h4><a name="stop">stop</a></h4>
 							<div class="detail">
 								<code>
-									Object 
+									void 
 									<strong>stop</strong>
 									()
 								</code>
@@ -1082,6 +1072,32 @@
 										Stops the animation.  Normally called by AnimMgr when animation completes.
 									
 									
+									
+															
+	
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="toString">toString</a></h4>
+							<div class="detail">
+								<code>
+									String 
+									<strong>toString</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+										toString method
+									
+									
+									
+										<dl>
+											<dt>Returns:</dt>
+											<dd> string represenation of anim obj</dd>
+										</dl>
 									
 															
 	
@@ -1102,7 +1118,12 @@
 
 <div id="footer">
 	<hr />
-	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+	version 1.9.5.8
 </div>
 
 
