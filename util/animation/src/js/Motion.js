@@ -37,7 +37,6 @@ Version: 0.10.0
    var Y = YAHOO.util;
    var superclass = Y.Motion.superclass;
    var prototype = Y.Motion.prototype;
-   var Motion = Y.Motion;
 
    /**
     * toString method
@@ -104,6 +103,12 @@ Version: 0.10.0
       return val;
    };
    
+   /**
+    * Sets the actual values to be used during the animation.
+    * Should only be needed for subclass use.
+    * @param {Object} attr The attribute object
+    * @private 
+    */
    prototype.setRuntimeAttribute = function(attr) {
       if ( this.patterns.points.test(attr) ) {
          var el = this.getEl();
@@ -140,7 +145,7 @@ Version: 0.10.0
             
             var pageXY = Y.Dom.getXY(this.getEl());
             for (i = 0, len = control.length; i < len; ++i) {
-               control[i] = [ control[i][0] - pageXY[0], control[i][1] - pageXY[1] ];;
+               control[i] = translateValues.call(this, control[i], start);
             }
 
             
