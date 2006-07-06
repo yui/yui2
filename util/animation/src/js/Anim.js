@@ -46,7 +46,7 @@ YAHOO.util.Anim.prototype = {
    patterns: { // cached for performance
       noNegatives:      /width|height|opacity|padding/i, // keep at zero or above
       offsetAttribute:  /^((width|height)|(top|left))$/, // use offsetValue as default
-      defaultUnit:      /width|height|top|bottom|left|right/i, // use 'px' by default
+      defaultUnit:      /width|height|top$|bottom$|left$|right$/i, // use 'px' by default
       offsetUnit:       /\d+(em|%|en|ex|pt|in|cm|mm|pc)$/i // IE may return these, so convert these to offset
    },
    
@@ -101,6 +101,12 @@ YAHOO.util.Anim.prototype = {
       return val;
    },
    
+   /**
+    * Returns the unit to use when none is supplied.
+    * Applies the "defaultUnit" test to decide whether to use pixels or not
+    * @param {attr} attr The name of the attribute.
+    * @return {String} The default unit to be used.
+    */
    getDefaultUnit: function(attr) {
        if ( this.patterns.defaultUnit.test(attr) ) {
          return 'px';
@@ -109,6 +115,12 @@ YAHOO.util.Anim.prototype = {
        return '';
    },
       
+   /**
+    * Sets the actual values to be used during the animation.
+    * Should only be needed for subclass use.
+    * @param {Object} attr The attribute object
+    * @private 
+    */
    setRuntimeAttribute: function(attr) {
       var start;
       var end;
@@ -314,7 +326,7 @@ YAHOO.util.Anim.prototype = {
          
          var runtimeAttributes = this.runtimeAttributes;
          
-         for (var attr in this.runtimeAttributes) {
+         for (var attr in runtimeAttributes) {
             this.setAttribute(attr, this.doMethod(attr, runtimeAttributes[attr].start, runtimeAttributes[attr].end), runtimeAttributes[attr].unit); 
          }
          
@@ -340,7 +352,7 @@ YAHOO.util.Anim.prototype = {
          
          isAnimated = false;
          actualFrames = 0;
-         this.onComplete.fire(data);  //debugger;
+         this.onComplete.fire(data);
       };
       
       /**
