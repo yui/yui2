@@ -54,7 +54,6 @@ ul, li {
    font:100%/1.2em arial;
    width:10px;
    height:10px;
-   overflow:auto;
 }
 
 #animation-demo-scroll #demo p {
@@ -79,6 +78,7 @@ ul, li {
 #animation-demo-scroll #demo {
    width:400px;
    height:200px;
+   overflow:auto;
 }
 
 #animation-demo-colors #demo {
