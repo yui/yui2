@@ -321,14 +321,15 @@
 							</tr>
 						
 							<tr>
-								<td class="flags">Object</td>
+								<td class="flags">string</td>
 								<td class="spec">
 									<code>
 										<a href="#generateId">generateId</a>
 										(el)
 									</code>
 									<div class="description">
-										Creates an ID for the element if it does not already have one.&nbsp;
+										Generates an unique ID for the element if it does not already 
+ have one.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -356,6 +357,19 @@
 									<div class="description">
 										Finds the event in the window object, the caller's arguments, or
  in the arguments of another method in the callstack.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#getListeners">getListeners</a>
+										(el, sType)
+									</code>
+									<div class="description">
+										Returns all listeners attached to the given element via addListener.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -466,14 +480,41 @@
 							</tr>
 						
 							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#purgeElement">purgeElement</a>
+										(&lt;HTMLElement&gt; el, &lt;boolean&gt; recurse, &lt;string&gt; sType)
+									</code>
+									<div class="description">
+										Removes all listeners attached to the given element via addListener.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
 								<td class="flags">boolean</td>
 								<td class="spec">
 									<code>
 										<a href="#removeListener">removeListener</a>
-										(&lt;Object&gt; el, &lt;String&gt; sType, &lt;Function&gt; fn, &lt;int&gt; index)
+										(&lt;Object&gt; el, &lt;String&gt; sType, &lt;Function&gt; fn, index)
 									</code>
 									<div class="description">
 										Removes an event handler&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#resolveTextNode">resolveTextNode</a>
+										(&lt;HTMLElement&gt; node)
+									</code>
+									<div class="description">
+										In some cases, some browsers will return a text node inside
+ the actual element that was targeted.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -722,16 +763,32 @@
 						<h4><a name="generateId">generateId</a></h4>
 						<div class="detail">
 							<code>
-								Object 
+								string 
 								<strong>generateId</strong>
 								(el)
 							</code>
 									
 							<div class="description">
 								
-									Creates an ID for the element if it does not already have one.
+									Generates an unique ID for the element if it does not already 
+ have one.
 								
 								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>el</code> - 
+												 the element  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> the id of the element</dd>
+									</dl>
 								
 								
 							</div>
@@ -803,6 +860,46 @@
 									<dl>
 										<dt>Returns:</dt>
 										<dd> the event</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="getListeners">getListeners</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>getListeners</strong>
+								(el, sType)
+							</code>
+									
+							<div class="description">
+								
+									Returns all listeners attached to the given element via addListener.
+ Optionally, you can specify a specific type of event to return.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>el</code> - 
+												 {HTMLElement} the element to inspect   
+											</dd>
+										
+											<dd>
+												<code>sType</code> - 
+												 {string} optional type of listener to return. If  left out, all listeners will be returned  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> the listener. Contains the following fields:     type:   (string)   the type of event     fn:     (function) the callback supplied to addListener     obj:    (object)   the custom object supplied to addListener     adjust: (boolean)  whether or not to adjust the default scope     index:  (int)      its position in the Event util listener cache</dd>
 									</dl>
 								
 								
@@ -935,7 +1032,7 @@
 										
 											<dd>
 												<code>resolveTextNode</code> - 
-												 when set to true the target's                   parent will be returned if the target is a                    text node  
+												 when set to true the target's                   parent will be returned if the target is a                    text node.  
 											</dd>
 										
 									</dl>
@@ -946,6 +1043,8 @@
 										<dd> the event's target</dd>
 									</dl>
 								
+								
+									, the text node is                   now resolved automatically  
 								
 							</div>
 						</div>
@@ -1083,12 +1182,53 @@
 						</div>
 						<hr />
 					
+						<h4><a name="purgeElement">purgeElement</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>purgeElement</strong>
+								(&lt;HTMLElement&gt; el, &lt;boolean&gt; recurse, &lt;string&gt; sType)
+							</code>
+									
+							<div class="description">
+								
+									Removes all listeners attached to the given element via addListener.
+ Optionally, the node's children can also be purged.
+ Optionally, you can specify a specific type of event to remove.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>el</code> - 
+												 the element to purge  
+											</dd>
+										
+											<dd>
+												<code>recurse</code> - 
+												 recursively purge this element's children  as well.  Use with caution.  
+											</dd>
+										
+											<dd>
+												<code>sType</code> - 
+												 optional type of listener to purge. If  left out, all listeners will be removed                
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="removeListener">removeListener</a></h4>
 						<div class="detail">
 							<code>
 								boolean 
 								<strong>removeListener</strong>
-								(&lt;Object&gt; el, &lt;String&gt; sType, &lt;Function&gt; fn, &lt;int&gt; index)
+								(&lt;Object&gt; el, &lt;String&gt; sType, &lt;Function&gt; fn, index)
 							</code>
 									
 							<div class="description">
@@ -1101,7 +1241,7 @@
 										
 											<dd>
 												<code>el</code> - 
-												 the html element or the id of the element to   remove the event from.  
+												 the html element or the id of the element to   assign the event to.  
 											</dd>
 										
 											<dd>
@@ -1114,9 +1254,40 @@
 												 the method the event invokes  
 											</dd>
 										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd> true if the unbind was successful, false   otherwise</dd>
+									</dl>
+								
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="resolveTextNode">resolveTextNode</a></h4>
+						<div class="detail">
+							<code>
+								Object 
+								<strong>resolveTextNode</strong>
+								(&lt;HTMLElement&gt; node)
+							</code>
+									
+							<div class="description">
+								
+									In some cases, some browsers will return a text node inside
+ the actual element that was targeted.  This normalizes the
+ return value for getTarget and getRelatedTarget.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
 											<dd>
-												<code>index</code> - 
-												 optional parameter for the index to remove.                     Saves having to look it up if it is known.  
+												<code>node</code> - 
+												 to resolve  
 											</dd>
 										
 									</dl>
@@ -1124,7 +1295,7 @@
 								
 									<dl>
 										<dt>Returns:</dt>
-										<dd> true if the action was successful, false   otherwise</dd>
+										<dd>the normized node</dd>
 									</dl>
 								
 								

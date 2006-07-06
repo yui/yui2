@@ -192,7 +192,8 @@
  *                 the window object.  The listener can override this.
  * <span class="attrib">@constructor</span>
  */</span>
-YAHOO.util.CustomEvent = <span class="reserved">function</span>(type, oScope) {
+YAHOO.util.CustomEvent = <span class="reserved">function</span>(type, oScope, silent) {
+
     <span class="comment">/**
      * The type of event, returned to subscribers when the event fires
      * <span class="attrib">@type</span> string
@@ -207,6 +208,13 @@ YAHOO.util.CustomEvent = <span class="reserved">function</span>(type, oScope) {
     <span class="reserved">this</span>.scope = oScope || window;
 
     <span class="comment">/**
+     * By default all custom events are logged in the debug build, set silent
+     * to true to disable logging for this event.
+     * <span class="attrib">@type</span> boolean
+     */</span>
+    <span class="reserved">this</span>.silent = silent;
+
+    <span class="comment">/**
      * The subscribers to this event
      * <span class="attrib">@type</span> Subscriber[]
      */</span>
@@ -216,6 +224,10 @@ YAHOO.util.CustomEvent = <span class="reserved">function</span>(type, oScope) {
 <span class="comment">    // so that CustomEvent can be used independently of pe.event</span>
     <span class="reserved">if</span> (YAHOO.util.Event) { 
         YAHOO.util.Event.regCE(<span class="reserved">this</span>);
+    }
+
+    <span class="reserved">if</span> (!<span class="reserved">this</span>.silent) {
+        YAHOO.log( <span class="literal">"Creating "</span> + <span class="reserved">this</span>, <span class="literal">"info"</span>, <span class="literal">"Event"</span> );
     }
 };
 
@@ -263,11 +275,30 @@ YAHOO.util.CustomEvent.<span class="reserved">prototype</span> = {
      * <span class="attrib">@param</span> {Array} an arbitrary set of parameters to pass to the handler
      */</span>
     fire: <span class="reserved">function</span>() {
-        <span class="reserved">for</span> (var i=0, len=<span class="reserved">this</span>.subscribers.length; i&lt;len; ++i) {
+        var len=<span class="reserved">this</span>.subscribers.length;
+
+        var args = [];
+
+        <span class="reserved">for</span> (var i=0; i&lt;arguments.length; ++i) {
+            args.push(arguments[i]);
+        }
+
+
+        <span class="reserved">if</span> (!<span class="reserved">this</span>.silent) {
+            YAHOO.log( <span class="literal">"Firing "</span>       + <span class="reserved">this</span>  + <span class="literal">", "</span> + 
+                       <span class="literal">"args: "</span>        + args  + <span class="literal">", "</span> +
+                       <span class="literal">"subscribers: "</span> + len,                 
+                       <span class="literal">"info"</span>, <span class="literal">"Event"</span>                  );
+        }
+
+        <span class="reserved">for</span> (i=0; i&lt;len; ++i) {
             var s = <span class="reserved">this</span>.subscribers[i];
             <span class="reserved">if</span> (s) {
+                <span class="reserved">if</span> (!<span class="reserved">this</span>.silent) {
+                    YAHOO.log( <span class="reserved">this</span>.type + <span class="literal">"-&gt;"</span> + (i+1) + <span class="literal">": "</span> +  s, <span class="literal">"info"</span>, <span class="literal">"Event"</span> );
+                }
                 var scope = (s.override) ? s.obj : <span class="reserved">this</span>.scope;
-                s.fn.call(scope, <span class="reserved">this</span>.type, arguments, s.obj);
+                s.fn.call(scope, <span class="reserved">this</span>.type, args, s.obj);
             }
         }
     },
@@ -292,6 +323,12 @@ YAHOO.util.CustomEvent.<span class="reserved">prototype</span> = {
         }
 
         delete <span class="reserved">this</span>.subscribers[index];
+    },
+
+    toString: <span class="reserved">function</span>() {
+         <span class="reserved">return</span> <span class="literal">"CustomEvent: "</span> + <span class="literal">"'"</span> + <span class="reserved">this</span>.type  + <span class="literal">"', "</span> + 
+             <span class="literal">"scope: "</span> + <span class="reserved">this</span>.scope;
+
     }
 };
 <span class="comment">
@@ -342,6 +379,10 @@ YAHOO.util.Subscriber.<span class="reserved">prototype</span>.contains = <span c
     <span class="reserved">return</span> (<span class="reserved">this</span>.fn == fn &amp;&amp; <span class="reserved">this</span>.obj == obj);
 };
 
+YAHOO.util.Subscriber.<span class="reserved">prototype</span>.toString = <span class="reserved">function</span>() {
+    <span class="reserved">return</span> <span class="literal">"Subscriber { obj: "</span> + (<span class="reserved">this</span>.obj || <span class="literal">""</span>)  + 
+           <span class="literal">", override: "</span> +  (<span class="reserved">this</span>.override || <span class="literal">"no"</span>) + <span class="literal">" }"</span>;
+};
 </pre>
 			</div>
 		
