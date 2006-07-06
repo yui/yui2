@@ -46,7 +46,7 @@ YAHOO.util.Anim.prototype = {
    patterns: { // cached for performance
       noNegatives:      /width|height|opacity|padding/i, // keep at zero or above
       offsetAttribute:  /^((width|height)|(top|left))$/, // use offsetValue as default
-      defaultUnit:      /width|height|top|bottom|left|right/i, // use 'px' by default
+      defaultUnit:      /width|height|top$|bottom$|left$|right$/i, // use 'px' by default
       offsetUnit:       /\d+(em|%|en|ex|pt|in|cm|mm|pc)$/i // IE may return these, so convert these to offset
    },
    
@@ -101,6 +101,12 @@ YAHOO.util.Anim.prototype = {
       return val;
    },
    
+   /**
+    * Returns the unit to use when none is supplied.
+    * Applies the "defaultUnit" test to decide whether to use pixels or not
+    * @param {attr} attr The name of the attribute.
+    * @return {String} The default unit to be used.
+    */
    getDefaultUnit: function(attr) {
        if ( this.patterns.defaultUnit.test(attr) ) {
          return 'px';
@@ -109,6 +115,12 @@ YAHOO.util.Anim.prototype = {
        return '';
    },
       
+   /**
+    * Sets the actual values to be used during the animation.
+    * Should only be needed for subclass use.
+    * @param {Object} attr The attribute object
+    * @private 
+    */
    setRuntimeAttribute: function(attr) {
       var start;
       var end;
@@ -311,7 +323,7 @@ YAHOO.util.Anim.prototype = {
          
          var runtimeAttributes = this.runtimeAttributes;
          
-         for (var attr in this.runtimeAttributes) {
+         for (var attr in runtimeAttributes) {
             this.setAttribute(attr, this.doMethod(attr, runtimeAttributes[attr].start, runtimeAttributes[attr].end), runtimeAttributes[attr].unit); 
          }
          
@@ -337,7 +349,7 @@ YAHOO.util.Anim.prototype = {
          
          isAnimated = false;
          actualFrames = 0;
-         this.onComplete.fire(data);  //debugger;
+         this.onComplete.fire(data);
       };
       
       /**
@@ -584,12 +596,12 @@ YAHOO.util.Bezier = new function()
  * @class ColorAnim subclass for color fading
  * <p>Usage: <code>var myAnim = new Y.ColorAnim(el, { backgroundColor: { from: '#FF0000', to: '#FFFFFF' } }, 1, Y.Easing.easeOut);</code></p>
  * <p>Color values can be specified with either 112233, #112233, [255,255,255], or rgb(255,255,255)
- * @requires Y.Anim
- * @requires Y.AnimMgr
- * @requires Y.Easing
- * @requires Y.Bezier
- * @requires Y.Dom
- * @requires Y.Event
+ * @requires YAHOO.util.Anim
+ * @requires YAHOO.util.AnimMgr
+ * @requires YAHOO.util.Easing
+ * @requires YAHOO.util.Bezier
+ * @requires YAHOO.util.Dom
+ * @requires YAHOO.util.Event
  * @constructor
  * @param {HTMLElement | String} el Reference to the element that will be animated
  * @param {Object} attributes The attribute(s) to be animated.
@@ -610,7 +622,6 @@ YAHOO.util.Bezier = new function()
    var Y = YAHOO.util;
    var superclass = Y.ColorAnim.superclass;
    var prototype = Y.ColorAnim.prototype;
-   var ColorAnim = Y.ColorAnim;
    
    /**
     * toString method
@@ -658,9 +669,9 @@ YAHOO.util.Bezier = new function()
    };
    
    /**
-    * Sets the default value to be used when "from" is not supplied.
-    * @param {String} attr The attribute being set.
-    * @param {Number} val The default value to be applied to the attribute.
+    * Returns current value of the attribute.
+    * @param {String} attr The name of the attribute.
+    * @return {Number} val The current value of the attribute.
     */
    prototype.getAttribute = function(attr) {
       var el = this.getEl();
@@ -711,6 +722,12 @@ YAHOO.util.Bezier = new function()
       return val;
    };
    
+   /**
+    * Sets the actual values to be used during the animation.
+    * Should only be needed for subclass use.
+    * @param {Object} attr The attribute object
+    * @private 
+    */
    prototype.setRuntimeAttribute = function(attr) {
       superclass.setRuntimeAttribute.call(this, attr);
       
@@ -894,7 +911,7 @@ YAHOO.util.Easing = {
     * @return {Number} The computed value for the current animation frame.
     */
    backIn: function (t, b, c, d, s) {
-   	if (typeof s == undefined) s = 1.70158;
+   	if (typeof s == 'undefined') s = 1.70158;
    	return c*(t/=d)*t*((s+1)*t - s) + b;
    },
 
@@ -909,7 +926,7 @@ YAHOO.util.Easing = {
     * @return {Number} The computed value for the current animation frame.
     */
    backOut: function (t, b, c, d, s) {
-   	if (typeof s == undefined) s = 1.70158;
+   	if (typeof s == 'undefined') s = 1.70158;
    	return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
    },
    
@@ -924,7 +941,7 @@ YAHOO.util.Easing = {
     * @return {Number} The computed value for the current animation frame.
     */
    backBoth: function (t, b, c, d, s) {
-   	if (typeof s == undefined) s = 1.70158; 
+   	if (typeof s == 'undefined') s = 1.70158; 
    	if ((t/=d/2) < 1) return c/2*(t*t*(((s*=(1.525))+1)*t - s)) + b;
    	return c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
    },
@@ -1014,7 +1031,6 @@ Version: 0.10.0
    var Y = YAHOO.util;
    var superclass = Y.Motion.superclass;
    var prototype = Y.Motion.prototype;
-   var Motion = Y.Motion;
 
    /**
     * toString method
@@ -1081,6 +1097,12 @@ Version: 0.10.0
       return val;
    };
    
+   /**
+    * Sets the actual values to be used during the animation.
+    * Should only be needed for subclass use.
+    * @param {Object} attr The attribute object
+    * @private 
+    */
    prototype.setRuntimeAttribute = function(attr) {
       if ( this.patterns.points.test(attr) ) {
          var el = this.getEl();
@@ -1117,7 +1139,7 @@ Version: 0.10.0
             
             var pageXY = Y.Dom.getXY(this.getEl());
             for (i = 0, len = control.length; i < len; ++i) {
-               control[i] = [ control[i][0] - pageXY[0], control[i][1] - pageXY[1] ];;
+               control[i] = translateValues.call(this, control[i], start);
             }
 
             
@@ -1192,7 +1214,6 @@ Version: 0.10.0
    var Y = YAHOO.util;
    var superclass = Y.Scroll.superclass;
    var prototype = Y.Scroll.prototype;
-   var Motion = Y.Scroll;
 
    /**
     * toString method
