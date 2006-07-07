@@ -9,8 +9,10 @@ http://developer.yahoo.net/yui/license.txt
  */
 YAHOO.util.Dom = function() {
    var ua = navigator.userAgent.toLowerCase();
-   var isOpera = (ua.indexOf('opera') != -1);
-   var isIE = (ua.indexOf('msie') != -1 && !isOpera); // not opera spoof
+   var isOpera = (ua.indexOf('opera') > -1);
+   var isSafari = (ua.indexOf('safari') > -1);
+   var isIE = (window.ActiveXObject);
+
    var id_counter = 0;
    var util = YAHOO.util; // internal shorthand
    var property_cache = {}; // to cache case conversion for set/getStyle
@@ -117,7 +119,7 @@ YAHOO.util.Dom = function() {
             } else if (el.style[camel]) { // camelCase for valid styles
                value = el.style[camel];
             }
-            else if (el.currentStyle && el.currentStyle[camel]) { // camelCase for currentStyle
+            else if (isIE && el.currentStyle && el.currentStyle[camel]) { // camelCase for currentStyle; isIE to workaround broken Opera 9 currentStyle
                value = el.currentStyle[camel];
             }
             else if ( dv && dv.getComputedStyle ) { // hyphen-case for computedStyle
@@ -218,10 +220,7 @@ YAHOO.util.Dom = function() {
                      parentNode = parentNode.offsetParent;
                   }
                }
-               if (
-                  ua.indexOf('opera') != -1 
-                  || ( ua.indexOf('safari') != -1 && this.getStyle(el, 'position') == 'absolute' ) 
-               ) {
+               if (isSafari && this.getStyle(el, 'position') == 'absolute' ) { // safari doubles in some cases
                   pos[0] -= document.body.offsetLeft;
                   pos[1] -= document.body.offsetTop;
                } 
@@ -503,7 +502,7 @@ YAHOO.util.Dom = function() {
          if (!haystack || !needle) { return false; }
          
          var f = function(needle) {
-            if (haystack.contains && ua.indexOf('safari') < 0) { // safari "contains" is broken
+            if (haystack.contains && !isSafari) { // safari "contains" is broken
                logger.log('isAncestor returning ' + haystack.contains(needle), 'info', 'Dom');
                return haystack.contains(needle);
             }
