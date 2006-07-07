@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>Logger Widget :: AutoComplete Example</title>
+<title>Logger Widget :: YUI Integration Example</title>
 <link rel="stylesheet" href="../../build/reset/reset.css" type="text/css" />
 <link rel="stylesheet" href="../../build/fonts/fonts.css" type="text/css" />
 <link rel="stylesheet" href="../../build/grids/grids.css" type="text/css" />
@@ -24,8 +24,7 @@
 
 <body>
 <div id="hd">
-    <div id="ylogo"><img src="./img/logo.gif" width="65" height="38" alt="Y!" /></div>
-    <div id="title"><h1><a href="./">Logger Widget</a> :: AutoComplete Example</h1></div>
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">Logger Widget</a> :: YUI Integration Example</h1>
 </div>
 
 <div id="bd">
@@ -49,24 +48,27 @@
     </div>
     <!-- AutoComplete ends -->
 
-    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
-    Sed eu enim in neque nonummy suscipit. Sed non metus. Aliquam pretium, massa
-    quis vulputate aliquam, felis enim vehicula nisl, ut pharetra arcu nunc
-    vitae leo. Morbi rhoncus ullamcorper quam. Maecenas vel velit. Praesent
-    ultricies placerat mauris. Nunc posuere aliquam ligula. Nunc mi ligula,
-    rutrum eget, consequat ac, cursus non, tortor. Pellentesque ante metus,
-    mattis pharetra, lobortis in, pulvinar nec, felis. Cras fringilla. Cras
-    consequat. Nullam faucibus. Vivamus tincidunt porttitor leo. Etiam est mi,
-    dictum nec, vehicula id, ultricies ac, nibh. Mauris felis.</p>
+    <!-- Sample code begins -->
+    <div id="code">
+    <h3>Sample Code</h3>
 
-    <p>Nulla sit amet mi eu lacus tempus volutpat. Phasellus tincidunt hendrerit
-    quam. Maecenas lorem felis, viverra non, varius ut, ultrices et, mi.
-    Phasellus vehicula nunc eu tellus. Duis rutrum justo eu odio. Ut facilisis
-    nisl at purus. Maecenas turpis neque, adipiscing in, fringilla vitae, congue
-    sed, ipsum. Sed condimentum eros eu leo dignissim ultricies. Pellentesque
-    eros nulla, tempus ut, gravida at, vulputate at, metus. Maecenas enim metus,
-    suscipit eget, commodo vel, euismod ac, leo. Curabitur id nulla. Phasellus
-    euismod mi ut enim. Ut molestie bibendum odio.</p>
+    <p>CSS:</p>
+    <pre class="code">
+    No CSS styles were defined.
+    </pre>
+
+    <p>Markup:</p>
+    <pre class="code">
+    No markup was defined.
+    </pre>
+
+    <p>JavaScript:</p>
+    <pre class="code">
+    // Instatiate LogReader
+    var oLogReader = new YAHOO.widget.LogReader(null,{bottom:"10px",fontSize:"92%",width:"30em",height:"20em"});
+    </pre>
+    </div>
+    <!-- Code sample ends -->
     <!-- Content ends -->
 
 <!-- Libary begins -->
@@ -146,7 +148,7 @@ YAHOO.example.AutoCompleteLogger = function() {
 
         init: function() {
             // Instatiate LogReader
-            var oLogReader = new YAHOO.widget.LogReader(null,{top:"12em",fontSize:"100%",width:"45em",height:"30em"});
+            var oLogReader = new YAHOO.widget.LogReader(null,{bottom:"10px",fontSize:"92%",width:"30em",height:"20em"});
 
             // Instantiate DataSource
             var oACDS = new YAHOO.widget.DS_JSArray(statesArray);

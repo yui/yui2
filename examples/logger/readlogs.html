@@ -10,8 +10,7 @@
 
 <body>
 <div id="hd">
-    <div id="ylogo"><img src="./img/logo.gif" width="65" height="38" alt="Y!" /></div>
-    <div id="title"><h1><a href="./index.html">Logger Widget</a> :: Reading Logs</h1></div>
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">Logger Widget</a> :: Reading Logs</h1>
 </div>
 
 <div id="bd">
@@ -43,6 +42,31 @@
         
         <p><a href="javascript:YAHOO.widget.Logger.disableFirebug();">Disable Output to Firebug</a> ||
         <a href="javascript:YAHOO.widget.Logger.enableFirebug();">Enable Output to Firebug</a></p>
+
+    <!-- Sample code begins -->
+    <div id="code">
+    <h3>Sample Code</h3>
+
+    <p>CSS:</p>
+    <pre class="code">
+    No CSS styles were defined.
+    </pre>
+
+    <p>Markup:</p>
+    <pre class="code">
+    No markup was defined
+    </pre>
+
+    <p>JavaScript:</p>
+    <pre class="code">
+    myLogReader1 = new YAHOO.widget.LogReader();
+    myLogReader2 = new YAHOO.widget.LogReader();
+    myLogReader2.newestOnTop = false;
+    myLogReader2.setTitle("Logger Console: Oldest &gt; on &gt; Top!");
+    </pre>
+    </div>
+    <!-- Code sample ends -->
+
     </div>
     <!-- Content ends -->
 

@@ -10,8 +10,7 @@
 
 <body>
 <div id="hd">
-    <div id="ylogo"><img src="./img/logo.gif" width="65" height="38" alt="Y!" /></div>
-    <div id="title"><h1><a href="./index.html">Logger Widget</a> :: Writing Logs</h1></div>
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">Logger Widget</a> :: Writing Logs</h1>
 </div>
 
 <div id="bd">
@@ -40,24 +39,40 @@
         <p><input id="yui-log-inputsource" class="yui-log-input" type="text" value="SomeClass instance1">
             <button id="btn_logsource">Generate some messages from a named source</button></p>
 
-        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
-        Sed eu enim in neque nonummy suscipit. Sed non metus. Aliquam pretium, massa
-        quis vulputate aliquam, felis enim vehicula nisl, ut pharetra arcu nunc
-        vitae leo. Morbi rhoncus ullamcorper quam. Maecenas vel velit. Praesent
-        ultricies placerat mauris. Nunc posuere aliquam ligula. Nunc mi ligula,
-        rutrum eget, consequat ac, cursus non, tortor. Pellentesque ante metus,
-        mattis pharetra, lobortis in, pulvinar nec, felis. Cras fringilla. Cras
-        consequat. Nullam faucibus. Vivamus tincidunt porttitor leo. Etiam est mi,
-        dictum nec, vehicula id, ultricies ac, nibh. Mauris felis.</p>
+    <!-- Sample code begins -->
+    <div id="code">
+    <h3>Sample Code</h3>
 
-        <p>Nulla sit amet mi eu lacus tempus volutpat. Phasellus tincidunt hendrerit
-        quam. Maecenas lorem felis, viverra non, varius ut, ultrices et, mi.
-        Phasellus vehicula nunc eu tellus. Duis rutrum justo eu odio. Ut facilisis
-        nisl at purus. Maecenas turpis neque, adipiscing in, fringilla vitae, congue
-        sed, ipsum. Sed condimentum eros eu leo dignissim ultricies. Pellentesque
-        eros nulla, tempus ut, gravida at, vulputate at, metus. Maecenas enim metus,
-        suscipit eget, commodo vel, euismod ac, leo. Curabitur id nulla. Phasellus
-        euismod mi ut enim. Ut molestie bibendum odio.</p>
+    <p>CSS:</p>
+    <pre class="code">
+    No CSS styles were defined.
+    </pre>
+
+    <p>Markup:</p>
+    <pre class="code">
+    No markup was defined.
+    </pre>
+
+    <p>JavaScript:</p>
+    <pre class="code">
+    // Instantiate a logreader and a logwriter
+    myLogReader = new YAHOO.widget.LogReader(null,{top:"50%",right:"10px"});
+    myLogWriter = new YAHOO.widget.LogWriter("myWriter");
+
+    // You can call the global function YAHOO.log() anytime, anywhere
+    YAHOO.log("Yahoo! is great"); // defaults to type "info"
+    YAHOO.log("Here is a warning", "warn");
+    YAHOO.log("Some error has occurred", "error");
+    YAHOO.log("Use timers to profile your code", "time");
+
+    myLogWriter.log("something","info");
+    myLogWriter.log("something","warn");
+    myLogWriter.log("something","error");
+    myLogWriter.log("something","time");
+    myLogWriter.log("something","custom");
+    </pre>
+    </div>
+    <!-- Code sample ends -->
     </div>
     <!-- Content ends -->
     
