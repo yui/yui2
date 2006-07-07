@@ -57,8 +57,8 @@ YAHOO.log = function(sMsg, sCategory, sSource) {
  * Utility to set up the prototype, constructor and superclass properties to
  * support an inheritance strategy that can chain constructors and methods.
  *
- * @param {Function} subclass   the object to modify
- * @param {Function} superclass the object to inherit
+ * @param {function} subclass   the object to modify
+ * @param {function} superclass the object to inherit
  */
 YAHOO.extend = function(subclass, superclass) {
     var f = function() {};
