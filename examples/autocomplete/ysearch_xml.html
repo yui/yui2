@@ -22,8 +22,7 @@
 
 <body>
 <div id="hd">
-    <div id="ylogo"><img src="./img/logo.gif" width="65" height="38" alt="Y!" /></div>
-    <div id="title"><h1><a href="./">AutoComplete Widget</a> :: XML Data Yahoo! Search Web Services</h1></div>
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">AutoComplete Widget</a> :: XML Data Yahoo! Search Web Services</h1>
 </div>
 
 <div id="bd">
@@ -54,24 +53,56 @@
     </div>
     <!-- AutoComplete ends -->
     
-    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
-    Sed eu enim in neque nonummy suscipit. Sed non metus. Aliquam pretium, massa
-    quis vulputate aliquam, felis enim vehicula nisl, ut pharetra arcu nunc
-    vitae leo. Morbi rhoncus ullamcorper quam. Maecenas vel velit. Praesent
-    ultricies placerat mauris. Nunc posuere aliquam ligula. Nunc mi ligula,
-    rutrum eget, consequat ac, cursus non, tortor. Pellentesque ante metus,
-    mattis pharetra, lobortis in, pulvinar nec, felis. Cras fringilla. Cras
-    consequat. Nullam faucibus. Vivamus tincidunt porttitor leo. Etiam est mi,
-    dictum nec, vehicula id, ultricies ac, nibh. Mauris felis.</p>
+    <!-- Sample code begins -->
+    <div id="code">
+    <h3>Sample Code</h3>
 
-    <p>Nulla sit amet mi eu lacus tempus volutpat. Phasellus tincidunt hendrerit
-    quam. Maecenas lorem felis, viverra non, varius ut, ultrices et, mi.
-    Phasellus vehicula nunc eu tellus. Duis rutrum justo eu odio. Ut facilisis
-    nisl at purus. Maecenas turpis neque, adipiscing in, fringilla vitae, congue
-    sed, ipsum. Sed condimentum eros eu leo dignissim ultricies. Pellentesque
-    eros nulla, tempus ut, gravida at, vulputate at, metus. Maecenas enim metus,
-    suscipit eget, commodo vel, euismod ac, leo. Curabitur id nulla. Phasellus
-    euismod mi ut enim. Ut molestie bibendum odio.</p>
+    <p>CSS:</p>
+    <pre class="code">
+    #ysearchmod {position:relative;padding:1em;}
+    #ysearchautocomplete {position:relative;margin:1em;width:40%;}/* set width of widget here*/
+    #ysearchinput {position:absolute;width:100%;height:1.4em;}
+    #ysearchcontainer {position:absolute;top:1.7em;width:100%;}
+    #ysearchcontainer .yui-ac-content {position:absolute;width:100%;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
+    #ysearchcontainer .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
+    #ysearchcontainer ul {padding:5px 0;width:100%;}
+    #ysearchcontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
+    #ysearchcontainer li.yui-ac-highlight {background:#ff0;}
+    </pre>
+
+    <p>Markup:</p>
+    <pre class="code">
+    &lt;!-- AutoComplete begins --&gt;
+    &lt;div id="ysearchmod"&gt;
+        &lt;form&gt;
+            &lt;h2&gt;Yahoo! Search&lt;/h2&gt;
+            &lt;div id="ysearchautocomplete"&gt;
+                &lt;input id="ysearchinput"&gt;
+                &lt;div id="ysearchcontainer"&gt;&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+    &lt;!-- AutoComplete ends --&gt;
+    </pre>
+
+    <p>JavaScript:</p>
+    <pre class="code">
+    // Instantiate data source and define schema as an array:
+    //     ["Multi-depth.object.notation.to.find.a.single.result.item",
+    //     "Query Key",
+    //     "Additional Param Name 1",
+    //     ...
+    //     "Additional Param Name n"]
+    oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_proxy.php", ["Result", "Title"]);
+    oACDS.responseType = oACDS.TYPE_XML;
+    oACDS.queryMatchContains = true;
+    oACDS.scriptQueryAppend = "results=100"; // Needed for YWS
+
+    // Instantiate auto complete
+    oAutoComp = new YAHOO.widget.AutoComplete("ysearchinput","ysearchcontainer", oACDS);
+    </pre>
+    </div>
+    <!-- Code sample ends -->
     <!-- Content ends -->
     
 <!-- Libary begins -->
@@ -107,7 +138,7 @@ YAHOO.example.ACXml = function(){
             oACDS.scriptQueryAppend = "results=100"; // Needed for YWS
 
             // Instantiate auto complete
-            oAutoComp = new YAHOO.widget.AutoComplete('ysearchinput','ysearchcontainer', oACDS);
+            oAutoComp = new YAHOO.widget.AutoComplete("ysearchinput","ysearchcontainer", oACDS);
         },
 
         validateForm: function() {
@@ -117,7 +148,7 @@ YAHOO.example.ACXml = function(){
     };
 }();
 
-YAHOO.util.Event.addListener(this,'load',YAHOO.example.ACXml.init);
+YAHOO.util.Event.addListener(this,"load",YAHOO.example.ACXml.init);
 </script>
 </div>
 </body>

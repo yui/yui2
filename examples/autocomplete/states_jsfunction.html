@@ -22,8 +22,7 @@
 
 <body>
 <div id="hd">
-    <div id="ylogo"><img src="./img/logo.gif" width="65" height="38" alt="Y!" /></div>
-    <div id="title"><h1><a href="./">AutoComplete Widget</a> :: JS Function Example</h1></div>
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">AutoComplete Widget</a> :: JavaScript Function</h1>
 </div>
 
 <div id="bd">
@@ -63,24 +62,98 @@
     </div>
     <!-- AutoComplete ends -->
     
-    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris erat.
-    Sed eu enim in neque nonummy suscipit. Sed non metus. Aliquam pretium, massa
-    quis vulputate aliquam, felis enim vehicula nisl, ut pharetra arcu nunc
-    vitae leo. Morbi rhoncus ullamcorper quam. Maecenas vel velit. Praesent
-    ultricies placerat mauris. Nunc posuere aliquam ligula. Nunc mi ligula,
-    rutrum eget, consequat ac, cursus non, tortor. Pellentesque ante metus,
-    mattis pharetra, lobortis in, pulvinar nec, felis. Cras fringilla. Cras
-    consequat. Nullam faucibus. Vivamus tincidunt porttitor leo. Etiam est mi,
-    dictum nec, vehicula id, ultricies ac, nibh. Mauris felis.</p>
+    <!-- Sample code begins -->
+    <div id="code" style="margin-top:15em;">
+    <h3>Sample Code</h3>
 
-    <p>Nulla sit amet mi eu lacus tempus volutpat. Phasellus tincidunt hendrerit
-    quam. Maecenas lorem felis, viverra non, varius ut, ultrices et, mi.
-    Phasellus vehicula nunc eu tellus. Duis rutrum justo eu odio. Ut facilisis
-    nisl at purus. Maecenas turpis neque, adipiscing in, fringilla vitae, congue
-    sed, ipsum. Sed condimentum eros eu leo dignissim ultricies. Pellentesque
-    eros nulla, tempus ut, gravida at, vulputate at, metus. Maecenas enim metus,
-    suscipit eget, commodo vel, euismod ac, leo. Curabitur id nulla. Phasellus
-    euismod mi ut enim. Ut molestie bibendum odio.</p>
+    <p>CSS:</p>
+    <pre class="code">
+    #statesmod {position:relative;padding:1em;}
+    #statesautocomplete {position:relative;margin:1em;width:15em;}/* set width of widget here*/
+    #statesinput {position:absolute;width:100%;height:1.4em;}
+    #statescontainer {position:absolute;top:1.7em;width:100%;}
+    #statescontainer .yui-ac-content {position:absolute;width:100%;height:11em;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
+    #statescontainer .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
+    #statescontainer ul {padding:5px 0;width:100%;}
+    #statescontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
+    #statescontainer li.yui-ac-highlight {background:#ff0;}
+    </pre>
+
+    <p>Markup:</p>
+    <pre class="code">
+    &lt;!-- AutoComplete begins --&gt;
+    &lt;div id="statesmod"&gt;
+        &lt;form&gt;
+            &lt;h2&gt;Find a state:&lt;/h2&gt;
+            &lt;div id="statesautocomplete"&gt;
+                &lt;input id="statesinput"&gt;
+                &lt;div id="statescontainer"&gt;&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+    &lt;!-- AutoComplete ends --&gt;
+    </pre>
+
+    <p>JavaScript:</p>
+    <pre class="code">
+    function getStates(sQuery) {
+        aResults = [];
+        if(sQuery.length > 0) {
+            var charKey = sQuery.substring(0,1).toLowerCase();
+            var oResponse = dataset[charKey];
+
+            if(oResponse) {
+                for(var i = oResponse.length-1; i >= 0; i--) {
+                    var sKey = oResponse[i].STATE;
+                    var sKeyIndex = encodeURI(sKey.toLowerCase()).indexOf(sQuery.toLowerCase());
+
+                    // Query found at the beginning of the key string for STARTSWITH
+                    // returns an array of arrays where STATE is index=0, ABBR is index=1
+                    if(sKeyIndex === 0) {
+                        aResults.unshift([sKey, oResponse[i].ABBR]);
+                    }
+                }
+            }
+            return aResults;
+        }
+        else { return null; }
+    }
+    
+    var dataset =
+        {'a': [{"STATE" : "Alabama", "ABBR" : "AL"},
+    		{"STATE" : "Alaska", "ABBR" : "AK"},
+    		{"STATE" : "Arizona", "ABBR" : "AZ"},
+    		{"STATE" : "Arkansas", "ABBR" : "AR"}],
+    	'b' : [
+    		],
+    	'c' : [
+    		{"STATE" : "California", "ABBR" : "CA"},
+    		{"STATE" : "Colorado", "ABBR" : "CO"},
+            {"STATE" : "Connecticut", "ABBR" : "CT"}] // Entire dataset not shown
+        };
+
+    // Instantiate data source
+    oACDS = new YAHOO.widget.DS_JSFunction(getStates);
+
+    // Instantiate auto complete
+    oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
+    oAutoComp.alwaysShowContainer = true;
+    oAutoComp.queryDelay = 0;
+    oAutoComp.autoHighlight = true;
+    oAutoComp.maxResultsDisplayed = 8;
+    oAutoComp.useShadow = true;
+    oAutoComp.setBody("<div id=\"statescontainerdefault\">Start typing to find a state</div>");
+    oAutoComp.formatResult = function(oResultItem, sQuery) {
+        var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";
+        return (sMarkup);
+    };
+
+    // Subscribe to custom events
+    oAutoComp.dataReturnEvent.subscribe(myOnDataReturn);
+    oAutoComp.containerCollapseEvent.subscribe(myOnContainerCollapse);
+    </pre>
+    </div>
+    <!-- Code sample ends -->
     <!-- Content ends -->
 
 <!-- Libary begins -->
@@ -122,6 +195,22 @@ YAHOO.example.ACJSFunction = function(){
             oAutoComp.formatResult = function(oResultItem, sQuery) {
                 var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";
                 return (sMarkup);
+            };
+
+            // Define custom event handlers
+            myOnDataReturn = function(sType, aArgs) {
+                var oAutoComp = aArgs[0];
+                var sQuery = aArgs[1];
+                var aResults = aArgs[2];
+
+                if(aResults.length == 0) {
+                    oAutoComp.setBody("<div id=\"statescontainerdefault\">No matching results</div>");
+                }
+            };
+
+            myOnContainerCollapse = function(sType, aArgs) {
+                var oAutoComp = aArgs[0];
+                oAutoComp.setBody("<div id=\"statescontainerdefault\">Start typing to find a state</div>");
             };
 
             // Subscribe to custom events
