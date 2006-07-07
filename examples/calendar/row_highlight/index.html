@@ -12,8 +12,11 @@
 	<script type="text/javascript" src="../../../build/dom/dom.js" ></script>
 
 	<script type="text/javascript" src="../../../build/calendar/calendar.js"></script>
-	
+
+	<link type="text/css" rel="stylesheet" href="../../../build/fonts/fonts.css">
+	<link type="text/css" rel="stylesheet" href="../../../build/reset/reset.css">	
 	<link type="text/css" rel="stylesheet" href="../../../build/calendar/assets/calendar.css">	
+
 	<link rel="stylesheet" type="text/css" href="../../../docs/assets/dpSyntaxHighlighter.css" />
 	
 	<style> 
@@ -50,8 +53,8 @@
 				var cell = this;
 				var row = cell.parentNode;
 
-				YAHOO.widget.Calendar_Core.prependCssClass(this, cal.Style.CSS_CELL_HOVER);
-				YAHOO.widget.Calendar_Core.prependCssClass(row, "hilite-row");
+				YAHOO.util.Dom.addClass(this, cal.Style.CSS_CELL_HOVER);
+				YAHOO.util.Dom.addClass(row, "hilite-row");
 			}
 
 			/* Override the doCellMouseOut function (used for IE) to remove row highlighting) */
@@ -59,8 +62,8 @@
 				var cell = this;
 				var row = cell.parentNode;
 
-				YAHOO.widget.Calendar_Core.removeCssClass(this, cal.Style.CSS_CELL_HOVER);
-				YAHOO.widget.Calendar_Core.removeCssClass(row, "hilite-row");
+				YAHOO.util.Dom.removeClass(this, cal.Style.CSS_CELL_HOVER);
+				YAHOO.util.Dom.removeClass(row, "hilite-row");
 			}
 
 			YAHOO.example.calendar.cal1.render();
