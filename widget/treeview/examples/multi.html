@@ -10,9 +10,10 @@
 
 <link rel="stylesheet" type="text/css" href="css/multi/tree.css">
 <style>
-#treecontaner {width: 500px;}
-#tree1 {width:230px;padding: 10px;float:left;}
-#tree2 {width:230px;padding: 10px;float:left;}
+#treecontaner {width: 550px;}
+#tree1 {width:120px;padding: 10px;float:left;}
+#tree2 {width:120px;padding: 10px;float:left;}
+#tree3 {width:120px;padding: 10px;float:left;}
 </style>
 
 <div id="pageTitle">
@@ -129,6 +130,7 @@
       <div id="treecontainer">
 	  <div id="tree1"></div>
 	  <div id="tree2"></div>
+	  <div id="tree3" class="treemenu"></div>
       </div>
 
 	</div>
@@ -150,6 +152,7 @@
 	function treeInit() {
 		buildRandomTextNodeTree(new YAHOO.widget.TreeView("tree1"));
 		buildRandomTextNodeTree(new YAHOO.widget.TreeView("tree2"));
+		buildRandomTextNodeTree(new YAHOO.widget.TreeView("tree3"));
 	}
 	
 	function buildRandomTextNodeTree(tree) {
@@ -165,9 +168,9 @@
 	var callback = null;
 
 	function buildRandomTextBranch(node) {
-		if (node.depth < 6) {
+		if (node.depth < 1) {
 			YAHOO.log("buildRandomTextBranch: " + node.index);
-			for ( var i = 0; i < Math.floor(Math.random() * 4) ; i++ ) {
+			for ( var i = 0; i < Math.floor(Math.random() * 4 + 2) ; i++ ) {
 				var tmpNode = new YAHOO.widget.TextNode(node.label + "-" + i, node, false);
 				buildRandomTextBranch(tmpNode);
 			}
