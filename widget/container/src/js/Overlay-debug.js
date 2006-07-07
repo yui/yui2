@@ -685,7 +685,7 @@ YAHOO.widget.Overlay.prototype.destroy = function() {
 };
 
 /**
-* Returns a string represenation of the object.
+* Returns a string representation of the object.
 * @type string
 */ 
 YAHOO.widget.Overlay.prototype.toString = function() {

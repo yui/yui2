@@ -100,13 +100,37 @@ YAHOO.widget.Calendar2up = function(id, containerId, monthyear, selected) {
 	}
 }
 
-YAHOO.widget.Calendar2up.CSS_2UPWRAPPER = "yui-cal2upwrapper";
-YAHOO.widget.Calendar2up.CSS_CONTAINER = "yui-calcontainer";
-YAHOO.widget.Calendar2up.CSS_2UPCONTAINER = "cal2up";
-YAHOO.widget.Calendar2up.CSS_2UPTITLE = "title";
-YAHOO.widget.Calendar2up.CSS_2UPCLOSE = "close-icon";
-
 YAHOO.widget.Calendar2up.prototype = new YAHOO.widget.CalendarGroup();
+
+/**
+* CSS class representing the wrapper for the 2-up calendar
+* @type string
+*/
+YAHOO.widget.Calendar2up.CSS_2UPWRAPPER = "yui-cal2upwrapper";
+
+/**
+* CSS class representing the container for the calendar
+* @type string
+*/
+YAHOO.widget.Calendar2up.CSS_CONTAINER = "yui-calcontainer";
+
+/**
+* CSS class representing the container for the 2-up calendar
+* @type string
+*/
+YAHOO.widget.Calendar2up.CSS_2UPCONTAINER = "cal2up";
+
+/**
+* CSS class representing the title for the 2-up calendar
+* @type string
+*/
+YAHOO.widget.Calendar2up.CSS_2UPTITLE = "title";
+
+/**
+* CSS class representing the close icon for the 2-up calendar
+* @type string
+*/
+YAHOO.widget.Calendar2up.CSS_2UPCLOSE = "close-icon";
 
 /**
 * Implementation of CalendarGroup.constructChild that ensures that child calendars of 

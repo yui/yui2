@@ -274,7 +274,7 @@ YAHOO.widget.Tooltip.prototype.preventOverlap = function(pageX, pageY) {
 }
 
 /**
-* Returns a string represenation of the object.
+* Returns a string representation of the object.
 * @type string
 */ 
 YAHOO.widget.Tooltip.prototype.toString = function() {

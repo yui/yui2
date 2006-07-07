@@ -1122,7 +1122,7 @@ YAHOO.widget.Module.prototype = {
 }
 
 /**
-* Returns a string represenation of the object.
+* Returns a string representation of the object.
 * @type string
 */ 
 YAHOO.widget.Module.prototype.toString = function() {
@@ -1809,7 +1809,7 @@ YAHOO.widget.Overlay.prototype.destroy = function() {
 };
 
 /**
-* Returns a string represenation of the object.
+* Returns a string representation of the object.
 * @type string
 */ 
 YAHOO.widget.Overlay.prototype.toString = function() {
@@ -2105,7 +2105,7 @@ YAHOO.widget.OverlayManager.prototype = {
 	},
 
 	/**
-	* Returns a string represenation of the object.
+	* Returns a string representation of the object.
 	* @type string
 	*/ 
 	toString : function() {
@@ -2193,7 +2193,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 	}
 
 	/**
-	* Returns a string represenation of the object.
+	* Returns a string representation of the object.
 	* @type string
 	*/ 
 	this.toString = function() {

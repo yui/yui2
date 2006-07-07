@@ -1122,7 +1122,7 @@ YAHOO.widget.Module.prototype = {
 }
 
 /**
-* Returns a string represenation of the object.
+* Returns a string representation of the object.
 * @type string
 */ 
 YAHOO.widget.Module.prototype.toString = function() {
@@ -1809,7 +1809,7 @@ YAHOO.widget.Overlay.prototype.destroy = function() {
 };
 
 /**
-* Returns a string represenation of the object.
+* Returns a string representation of the object.
 * @type string
 */ 
 YAHOO.widget.Overlay.prototype.toString = function() {
@@ -2105,7 +2105,7 @@ YAHOO.widget.OverlayManager.prototype = {
 	},
 
 	/**
-	* Returns a string represenation of the object.
+	* Returns a string representation of the object.
 	* @type string
 	*/ 
 	toString : function() {
@@ -2193,7 +2193,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 	}
 
 	/**
-	* Returns a string represenation of the object.
+	* Returns a string representation of the object.
 	* @type string
 	*/ 
 	this.toString = function() {
@@ -2519,7 +2519,7 @@ YAHOO.widget.Tooltip.prototype.preventOverlap = function(pageX, pageY) {
 }
 
 /**
-* Returns a string represenation of the object.
+* Returns a string representation of the object.
 * @type string
 */ 
 YAHOO.widget.Tooltip.prototype.toString = function() {
@@ -3011,7 +3011,7 @@ YAHOO.widget.Panel.prototype.render = function(appendToNode) {
 }
 
 /**
-* Returns a string represenation of the object.
+* Returns a string representation of the object.
 * @type string
 */ 
 YAHOO.widget.Panel.prototype.toString = function() {
@@ -3506,7 +3506,7 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 }
 
 /**
-* Returns a string represenation of the object.
+* Returns a string representation of the object.
 * @type string
 */ 
 YAHOO.widget.Dialog.prototype.toString = function() {
@@ -3651,7 +3651,7 @@ YAHOO.widget.SimpleDialog.prototype.configText = function(type,args,obj) {
 // END BUILT-IN PROPERTY EVENT HANDLERS //
 
 /**
-* Returns a string represenation of the object.
+* Returns a string representation of the object.
 * @type string
 */ 
 YAHOO.widget.SimpleDialog.prototype.toString = function() {
@@ -3752,7 +3752,7 @@ YAHOO.widget.ContainerEffect.prototype.handleTweenAnimateOut = function(type, ar
 YAHOO.widget.ContainerEffect.prototype.handleCompleteAnimateOut = function(type, args, obj) { }
 
 /**
-* Returns a string represenation of the object.
+* Returns a string representation of the object.
 * @type string
 */ 
 YAHOO.widget.ContainerEffect.prototype.toString = function() {

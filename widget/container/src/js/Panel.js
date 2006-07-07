@@ -485,7 +485,7 @@ YAHOO.widget.Panel.prototype.render = function(appendToNode) {
 }
 
 /**
-* Returns a string represenation of the object.
+* Returns a string representation of the object.
 * @type string
 */ 
 YAHOO.widget.Panel.prototype.toString = function() {

@@ -79,12 +79,22 @@ YAHOO.widget.CalendarGroup.prototype.init = function(pageCount, id, containerId,
 	};
 };
 
+/**
+* Adds a function to all child Calendars within this CalendarGroup.
+* @param {String}		fnName		The name of the function
+* @param {Function}		fn			The function to apply to each Calendar page object
+*/
 YAHOO.widget.CalendarGroup.prototype.setChildFunction = function(fnName, fn) {
 	for (var p=0;p<this.pageCount;++p) {
 		this.pages[p][fnName] = fn;
 	}
 }
 
+/**
+* Calls a function within all child Calendars within this CalendarGroup.
+* @param {String}		fnName		The name of the function
+* @param {Array}		args		The arguments to pass to the function
+*/
 YAHOO.widget.CalendarGroup.prototype.callChildFunction = function(fnName, args) {
 	for (var p=0;p<this.pageCount;++p) {
 		var page = this.pages[p];
@@ -409,6 +419,10 @@ YAHOO.widget.CalendarGroup.prototype.wireEvent = function(eventName, fn) {
 	}
 };
 
+/**
+* Returns a string representation of the object.
+* @type string
+*/ 
 YAHOO.widget.CalendarGroup.prototype.toString = function() {
 	return "CalendarGroup " + this.id;
 }

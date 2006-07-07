@@ -79,7 +79,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 	}
 
 	/**
-	* Returns a string represenation of the object.
+	* Returns a string representation of the object.
 	* @type string
 	*/ 
 	this.toString = function() {

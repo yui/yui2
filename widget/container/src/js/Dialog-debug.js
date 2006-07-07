@@ -488,7 +488,7 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 }
 
 /**
-* Returns a string represenation of the object.
+* Returns a string representation of the object.
 * @type string
 */ 
 YAHOO.widget.Dialog.prototype.toString = function() {

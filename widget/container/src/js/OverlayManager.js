@@ -248,7 +248,7 @@ YAHOO.widget.OverlayManager.prototype = {
 	},
 
 	/**
-	* Returns a string represenation of the object.
+	* Returns a string representation of the object.
 	* @type string
 	*/ 
 	toString : function() {

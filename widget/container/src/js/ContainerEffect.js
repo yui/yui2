@@ -94,7 +94,7 @@ YAHOO.widget.ContainerEffect.prototype.handleTweenAnimateOut = function(type, ar
 YAHOO.widget.ContainerEffect.prototype.handleCompleteAnimateOut = function(type, args, obj) { }
 
 /**
-* Returns a string represenation of the object.
+* Returns a string representation of the object.
 * @type string
 */ 
 YAHOO.widget.ContainerEffect.prototype.toString = function() {
