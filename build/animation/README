@@ -1,5 +1,13 @@
 Animation Release Notes
 
+*** version 0.11.0 ***
+
+* ColorAnim subclass added
+* Motion and Scroll now inherit from ColorAnim
+* getDefaultUnit method added
+* defaultUnit and defaultUnits deprecated
+* getDefault and setDefault methods deprecated
+
 *** version 0.10.0 ***
 
 * Scroll now handles relative ("by") animation correctly 
