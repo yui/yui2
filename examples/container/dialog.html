@@ -28,6 +28,10 @@
 		eval(response);
 	}
 
+	function submitFailure(obj) {
+		alert("Submission failed: " + obj.status);
+	}
+
 	function init() {
 		var handleCancel = function() {
 			this.cancel();
@@ -39,14 +43,14 @@
 
 		YAHOO.example.container.dlg = new YAHOO.widget.Dialog("dlg", { modal:true, visible:false, width:"350px", fixedcenter:true, constraintoviewport:true, draggable:true });
 		
+		YAHOO.example.container.dlg.callback.success = submitCallback;
+		YAHOO.example.container.dlg.callback.failure = submitFailure;
+
 		var listeners = new YAHOO.util.KeyListener(document, { keys : 27 }, {fn:handleCancel,scope:YAHOO.example.container.dlg,correctScope:true} );
 
 		YAHOO.example.container.dlg.cfg.queueProperty("keylisteners", listeners);
 
-		YAHOO.example.container.dlg.cfg.queueProperty("buttons", [ { text:"Submit", handler:handleSubmit, isDefault:true },
-										   { text:"Cancel", handler:handleCancel } ]);
-
-		YAHOO.example.container.dlg.cfg.queueProperty("onsuccess", submitCallback);
+		YAHOO.example.container.dlg.cfg.queueProperty("buttons", [ { text:"Submit", handler:handleSubmit } ]);
 		
 		var handleManual = function(type, args, obj) {
 			alert("Manual submission of " + this.id + " detected");
