@@ -18,7 +18,8 @@
 
 	<div class="breadcrumbs">
 		
-
+			<a href="javascript: alert('This location is TBD');">Home</a>
+			&gt;
 			
 			
 			
@@ -58,10 +59,9 @@
 				<ul class="content">
 					
 						<li>
-							<a href="YAHOO.util.Dom.html">
-								YAHOO.util.Dom</a>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
 						</li>
-            
 					
 						<li>
 							<a href="YAHOO.util.Point.html">
@@ -152,9 +152,55 @@ http://developer.yahoo.net/yui/license.txt
  */</span>
 YAHOO.util.Dom = <span class="reserved">function</span>() {
    var ua = navigator.userAgent.toLowerCase();
-   var isOpera = (ua.indexOf(<span class="literal">'opera'</span>) != -1);
-   var isIE = (ua.indexOf(<span class="literal">'msie'</span>) != -1 &amp;&amp; !isOpera); <span class="comment">// not opera spoof</span>
+   var isOpera = (ua.indexOf(<span class="literal">'opera'</span>) &gt; -1);
+   var isSafari = (ua.indexOf(<span class="literal">'safari'</span>) &gt; -1);
+   var isIE = (window.ActiveXObject);
+
    var id_counter = 0;
+   var util = YAHOO.util; <span class="comment">// internal shorthand</span>
+   var property_cache = {}; <span class="comment">// to cache case conversion for set/getStyle</span>
+   var logger = {};
+   logger.log = <span class="reserved">function</span>() {YAHOO.log.apply(window, arguments)};
+   
+   var toCamel = <span class="reserved">function</span>(property) {
+      var convert = <span class="reserved">function</span>(prop) {
+         var test = /(-[a-z])/i.exec(prop);
+         <span class="reserved">return</span> prop.replace(RegExp.$1, RegExp.$1.substr(1).toUpperCase());
+      };
+      
+      <span class="reserved">while</span>(property.indexOf(<span class="literal">'-'</span>) &gt; -1) {
+         property = convert(property);
+      }
+
+      <span class="reserved">return</span> property;
+      <span class="comment">//return property.replace(/-([a-z])/gi, function(m0, m1) {return m1.toUpperCase()}) // cant use function as 2nd arg yet due to safari bug</span>
+   };
+   
+   var toHyphen = <span class="reserved">function</span>(property) {
+      <span class="reserved">if</span> (property.indexOf(<span class="literal">'-'</span>) &gt; -1) { <span class="comment">// assume hyphen</span>
+         <span class="reserved">return</span> property;
+      }
+      
+      var converted = <span class="literal">''</span>;
+      <span class="reserved">for</span> (var i = 0, len = property.length;i &lt; len; ++i) {
+         <span class="reserved">if</span> (property.charAt(i) == property.charAt(i).toUpperCase()) {
+            converted = converted + <span class="literal">'-'</span> + property.charAt(i).toLowerCase();
+         } <span class="reserved">else</span> {
+            converted = converted + property.charAt(i);
+         }
+      }
+
+      <span class="reserved">return</span> converted;
+      <span class="comment">//return property.replace(/([a-z])([A-Z]+)/g, function(m0, m1, m2) {return (m1 + '-' + m2.toLowerCase())});</span>
+   };
+   
+   <span class="comment">// improve performance by only looking up once</span>
+   var cacheConvertedProperties = <span class="reserved">function</span>(property) {
+      property_cache[property] = {
+         camel: toCamel(property),
+         hyphen: toHyphen(property)
+      };
+   };
    
    <span class="reserved">return</span> {
       <span class="comment">/**
@@ -163,26 +209,26 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        * <span class="attrib">@return</span> {HTMLElement/Array} A DOM reference to an HTML element or an array of HTMLElements.
        */</span>
       get: <span class="reserved">function</span>(el) {
-         <span class="reserved">if</span> (typeof el != <span class="literal">'string'</span> &amp;&amp; !(el instanceof Array) )
-         { <span class="comment">// assuming HTMLElement or HTMLCollection, so pass back as is</span>
+         <span class="reserved">if</span> (typeof el != <span class="literal">'string'</span> &amp;&amp; !(el instanceof Array) ) { <span class="comment">// assuming HTMLElement or HTMLCollection, so pass back as is</span>
+            logger.log(<span class="literal">'get('</span> + el + <span class="literal">') returning '</span> + el, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
             <span class="reserved">return</span> el;
          }
          
-         <span class="reserved">if</span> (typeof el == <span class="literal">'string'</span>) 
-         { <span class="comment">// ID</span>
+         <span class="reserved">if</span> (typeof el == <span class="literal">'string'</span>) { <span class="comment">// ID</span>
+            logger.log(<span class="literal">'get("'</span> + el + <span class="literal">'") returning '</span> + document.getElementById(el), <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
             <span class="reserved">return</span> document.getElementById(el);
          }
-         <span class="reserved">else</span>
-         { <span class="comment">// array of ID's and/or elements</span>
+         <span class="reserved">else</span> { <span class="comment">// array of ID's and/or elements</span>
             var collection = [];
-            <span class="reserved">for</span> (var i = 0, len = el.length; i &lt; len; ++i)
-            {
-               collection[collection.length] = <span class="reserved">this</span>.get(el[i]);
+            <span class="reserved">for</span> (var i = 0, len = el.length; i &lt; len; ++i) {
+               collection[collection.length] = util.Dom.get(el[i]);
             }
             
+            logger.log(<span class="literal">'get("'</span> + el + <span class="literal">'") returning '</span> + collection, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
             <span class="reserved">return</span> collection;
          }
 
+         logger.log(<span class="literal">'element '</span> + el + <span class="literal">' not found'</span>, <span class="literal">'error'</span>, <span class="literal">'Dom'</span>);
          <span class="reserved">return</span> null; <span class="comment">// safety, should never happen</span>
       },
    
@@ -197,8 +243,14 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
             var value = null;
             var dv = document.defaultView;
             
-            <span class="reserved">if</span> (property == <span class="literal">'opacity'</span> &amp;&amp; el.filters) 
-            {<span class="comment">// IE opacity</span>
+            <span class="reserved">if</span> (!property_cache[property]) {
+               cacheConvertedProperties(property);
+            }
+            
+            var camel = property_cache[property][<span class="literal">'camel'</span>];
+            var hyphen = property_cache[property][<span class="literal">'hyphen'</span>];
+
+            <span class="reserved">if</span> (property == <span class="literal">'opacity'</span> &amp;&amp; el.filters) {<span class="comment">// IE opacity</span>
                value = 1;
                try {
                   value = el.filters.item(<span class="literal">'DXImageTransform.Microsoft.Alpha'</span>).opacity / 100;
@@ -207,36 +259,25 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
                      value = el.filters.item(<span class="literal">'alpha'</span>).opacity / 100;
                   } catch(e) {}
                }
+            } <span class="reserved">else</span> <span class="reserved">if</span> (el.style[camel]) { <span class="comment">// camelCase for valid styles</span>
+               value = el.style[camel];
             }
-            <span class="reserved">else</span> <span class="reserved">if</span> (el.style[property]) 
-            {
-               value = el.style[property];
+            <span class="reserved">else</span> <span class="reserved">if</span> (isIE &amp;&amp; el.currentStyle &amp;&amp; el.currentStyle[camel]) { <span class="comment">// camelCase for currentStyle; isIE to workaround broken Opera 9 currentStyle</span>
+               value = el.currentStyle[camel];
             }
-            <span class="reserved">else</span> <span class="reserved">if</span> (el.currentStyle &amp;&amp; el.currentStyle[property]) {
-               value = el.currentStyle[property];
-            }
-            <span class="reserved">else</span> <span class="reserved">if</span> ( dv &amp;&amp; dv.getComputedStyle )
-            {  <span class="comment">// convert camelCase to hyphen-case</span>
+            <span class="reserved">else</span> <span class="reserved">if</span> ( dv &amp;&amp; dv.getComputedStyle ) { <span class="comment">// hyphen-case for computedStyle</span>
+               var computed = dv.getComputedStyle(el, <span class="literal">''</span>);
                
-               var converted = <span class="literal">''</span>;
-               <span class="reserved">for</span>(var i = 0, len = property.length;i &lt; len; ++i) {
-                  <span class="reserved">if</span> (property.charAt(i) == property.charAt(i).toUpperCase()) 
-                  {
-                     converted = converted + <span class="literal">'-'</span> + property.charAt(i).toLowerCase();
-                  } <span class="reserved">else</span> {
-                     converted = converted + property.charAt(i);
-                  }
-               }
-               
-               <span class="reserved">if</span> (dv.getComputedStyle(el, <span class="literal">''</span>) &amp;&amp; dv.getComputedStyle(el, <span class="literal">''</span>).getPropertyValue(converted)) {
-                  value = dv.getComputedStyle(el, <span class="literal">''</span>).getPropertyValue(converted);
+               <span class="reserved">if</span> (computed &amp;&amp; computed.getPropertyValue(hyphen)) {
+                  value = computed.getPropertyValue(hyphen);
                }
             }
       
+            logger.log(<span class="literal">'getStyle '</span> + property + <span class="literal">' returning '</span> + value, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
             <span class="reserved">return</span> value;
          };
          
-         <span class="reserved">return</span> <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>, true);
+         <span class="reserved">return</span> util.Dom.batch(el, f, util.Dom, true);
       },
    
       <span class="comment">/**
@@ -246,6 +287,12 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        * <span class="attrib">@param</span> {String} val The value to apply to the given property.
        */</span>
       setStyle: <span class="reserved">function</span>(el, property, val) {
+         <span class="reserved">if</span> (!property_cache[property]) {
+            cacheConvertedProperties(property);
+         }
+         
+         var camel = property_cache[property][<span class="literal">'camel'</span>];
+         
          var f = <span class="reserved">function</span>(el) {
             switch(property) {
                case <span class="literal">'opacity'</span> :
@@ -263,12 +310,14 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
 
                   break;
                default :
-                  el.style[property] = val;
+                  el.style[camel] = val;
             }
+            
+            logger.log(<span class="literal">'setStyle setting '</span> + property + <span class="literal">' to '</span> + val, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
             
          };
          
-         <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>, true);
+         util.Dom.batch(el, f, util.Dom, true);
       },
       
       <span class="comment">/**
@@ -281,63 +330,63 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
    
          <span class="comment">// has to be part of document to have pageXY</span>
             <span class="reserved">if</span> (el.parentNode === null || <span class="reserved">this</span>.getStyle(el, <span class="literal">'display'</span>) == <span class="literal">'none'</span>) {
+               logger.log(<span class="literal">'getXY failed: element not available'</span>, <span class="literal">'error'</span>, <span class="literal">'Dom'</span>);
                <span class="reserved">return</span> false;
             }
             
-            var parent = null;
+            var parentNode = null;
             var pos = [];
             var box;
             
             <span class="reserved">if</span> (el.getBoundingClientRect) { <span class="comment">// IE</span>
                box = el.getBoundingClientRect();
-               var scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
-               var scrollLeft = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft);
+               var doc = document;
+               <span class="reserved">if</span> ( !<span class="reserved">this</span>.inDocument(el) ) {<span class="comment">// might be in a frame, need to get its scroll</span>
+                  var doc = parent.document;
+                  <span class="reserved">while</span> ( doc &amp;&amp; !<span class="reserved">this</span>.isAncestor(doc.documentElement, el) ) {
+                     doc = parent.document;
+                  }
+               }
+
+               var scrollTop = Math.max(doc.documentElement.scrollTop, doc.body.scrollTop);
+               var scrollLeft = Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft);
                
                <span class="reserved">return</span> [box.left + scrollLeft, box.top + scrollTop];
             }
-            <span class="reserved">else</span> <span class="reserved">if</span> (document.getBoxObjectFor) { <span class="comment">// gecko</span>
-               box = document.getBoxObjectFor(el);
-               
-               var borderLeft = parseInt(<span class="reserved">this</span>.getStyle(el, <span class="literal">'borderLeftWidth'</span>));
-               var borderTop = parseInt(<span class="reserved">this</span>.getStyle(el, <span class="literal">'borderTopWidth'</span>));
-               
-               pos = [box.x - borderLeft, box.y - borderTop];
-            }
-            <span class="reserved">else</span> { <span class="comment">// safari &amp; opera</span>
+            <span class="reserved">else</span> { <span class="comment">// safari, opera, &amp; gecko</span>
                pos = [el.offsetLeft, el.offsetTop];
-               parent = el.offsetParent;
-               <span class="reserved">if</span> (parent != el) {
-                  <span class="reserved">while</span> (parent) {
-                     pos[0] += parent.offsetLeft;
-                     pos[1] += parent.offsetTop;
-                     parent = parent.offsetParent;
+               parentNode = el.offsetParent;
+               <span class="reserved">if</span> (parentNode != el) {
+                  <span class="reserved">while</span> (parentNode) {
+                     pos[0] += parentNode.offsetLeft;
+                     pos[1] += parentNode.offsetTop;
+                     parentNode = parentNode.offsetParent;
                   }
                }
-               <span class="reserved">if</span> (
-                  ua.indexOf(<span class="literal">'opera'</span>) != -1 
-                  || ( ua.indexOf(<span class="literal">'safari'</span>) != -1 &amp;&amp; <span class="reserved">this</span>.getStyle(el, <span class="literal">'position'</span>) == <span class="literal">'absolute'</span> ) 
-               ) {
+               <span class="reserved">if</span> (isSafari &amp;&amp; <span class="reserved">this</span>.getStyle(el, <span class="literal">'position'</span>) == <span class="literal">'absolute'</span> ) { <span class="comment">// safari doubles in some cases</span>
                   pos[0] -= document.body.offsetLeft;
                   pos[1] -= document.body.offsetTop;
                } 
             }
             
-            <span class="reserved">if</span> (el.parentNode) { parent = el.parentNode; }
-            <span class="reserved">else</span> { parent = null; }
+            <span class="reserved">if</span> (el.parentNode) { parentNode = el.parentNode; }
+            <span class="reserved">else</span> { parentNode = null; }
       
-            <span class="reserved">while</span> (parent &amp;&amp; parent.tagName != <span class="literal">'BODY'</span> &amp;&amp; parent.tagName != <span class="literal">'HTML'</span>) 
+            <span class="reserved">while</span> (parentNode &amp;&amp; parentNode.tagName.toUpperCase() != <span class="literal">'BODY'</span> &amp;&amp; parentNode.tagName.toUpperCase() != <span class="literal">'HTML'</span>) 
             { <span class="comment">// account for any scrolled ancestors</span>
-               pos[0] -= parent.scrollLeft;
-               pos[1] -= parent.scrollTop;
+               pos[0] -= parentNode.scrollLeft;
+               pos[1] -= parentNode.scrollTop;
       
-               <span class="reserved">if</span> (parent.parentNode) { parent = parent.parentNode; } 
-               <span class="reserved">else</span> { parent = null; }
+               <span class="reserved">if</span> (parentNode.parentNode) { parentNode = parentNode.parentNode; } 
+               <span class="reserved">else</span> { parentNode = null; }
             }
       
+            logger.log(<span class="literal">'getXY returning '</span> + pos, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
+            
             <span class="reserved">return</span> pos;
          };
          
-         <span class="reserved">return</span> <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>, true);
+         <span class="reserved">return</span> util.Dom.batch(el, f, util.Dom, true);
       },
       
       <span class="comment">/**
@@ -346,7 +395,7 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        * <span class="attrib">@return</span> {String/Array} The X position of the element(s)
        */</span>
       getX: <span class="reserved">function</span>(el) {
-         <span class="reserved">return</span> <span class="reserved">this</span>.getXY(el)[0];
+         <span class="reserved">return</span> util.Dom.getXY(el)[0];
       },
       
       <span class="comment">/**
@@ -355,7 +404,7 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        * <span class="attrib">@return</span> {String/Array} The Y position of the element(s)
        */</span>
       getY: <span class="reserved">function</span>(el) {
-         <span class="reserved">return</span> <span class="reserved">this</span>.getXY(el)[1];
+         <span class="reserved">return</span> util.Dom.getXY(el)[1];
       },
       
       <span class="comment">/**
@@ -367,27 +416,27 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        */</span>
       setXY: <span class="reserved">function</span>(el, pos, noRetry) {
          var f = <span class="reserved">function</span>(el) {
-   
             var style_pos = <span class="reserved">this</span>.getStyle(el, <span class="literal">'position'</span>);
             <span class="reserved">if</span> (style_pos == <span class="literal">'static'</span>) { <span class="comment">// default to relative</span>
                <span class="reserved">this</span>.setStyle(el, <span class="literal">'position'</span>, <span class="literal">'relative'</span>);
                style_pos = <span class="literal">'relative'</span>;
             }
             
-            var pageXY = YAHOO.util.Dom.getXY(el);
-            <span class="reserved">if</span> (pageXY === false) { <span class="reserved">return</span> false; } <span class="comment">// has to be part of doc to have pageXY</span>
+            var pageXY = <span class="reserved">this</span>.getXY(el);
+            <span class="reserved">if</span> (pageXY === false) { <span class="comment">// has to be part of doc to have pageXY</span>
+               logger.log(<span class="literal">'setXY failed: element not available'</span>, <span class="literal">'error'</span>, <span class="literal">'Dom'</span>);
+               <span class="reserved">return</span> false; 
+            }
             
-            var delta = [
-               parseInt( YAHOO.util.Dom.getStyle(el, <span class="literal">'left'</span>), 10 ),
-               parseInt( YAHOO.util.Dom.getStyle(el, <span class="literal">'top'</span>), 10 )
+            var delta = [ <span class="comment">// assuming pixels; if not we will have to retry</span>
+               parseInt( <span class="reserved">this</span>.getStyle(el, <span class="literal">'left'</span>), 10 ),
+               parseInt( <span class="reserved">this</span>.getStyle(el, <span class="literal">'top'</span>), 10 )
             ];
          
-            <span class="reserved">if</span> ( isNaN(delta[0]) ) <span class="comment">// defaults to 'auto'</span>
-            { 
+            <span class="reserved">if</span> ( isNaN(delta[0]) ) {<span class="comment">// in case of 'auto'</span>
                delta[0] = (style_pos == <span class="literal">'relative'</span>) ? 0 : el.offsetLeft;
             } 
-            <span class="reserved">if</span> ( isNaN(delta[1]) ) <span class="comment">// defaults to 'auto'</span>
-            { 
+            <span class="reserved">if</span> ( isNaN(delta[1]) ) { <span class="comment">// in case of 'auto'</span>
                delta[1] = (style_pos == <span class="literal">'relative'</span>) ? 0 : el.offsetTop;
             } 
       
@@ -396,14 +445,15 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
       
             var newXY = <span class="reserved">this</span>.getXY(el);
       
-            <span class="comment">// if retry is true, try one more time if we miss</span>
+            <span class="comment">// if retry is true, try one more time if we miss </span>
             <span class="reserved">if</span> (!noRetry &amp;&amp; (newXY[0] != pos[0] || newXY[1] != pos[1]) ) {
-               var retry = <span class="reserved">function</span>() { YAHOO.util.Dom.setXY(el, pos, true); };
-               setTimeout(retry, 0); <span class="comment">// "delay" for IE resize timing issue</span>
+               <span class="reserved">this</span>.setXY(el, pos, true);
             }
+            
+            logger.log(<span class="literal">'setXY setting position to '</span> + pos, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
          };
          
-         <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>, true);
+         util.Dom.batch(el, f, util.Dom, true);
       },
       
       <span class="comment">/**
@@ -413,7 +463,7 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        * <span class="attrib">@param</span> {Int} x to use as the X coordinate for the element(s).
        */</span>
       setX: <span class="reserved">function</span>(el, x) {
-         <span class="reserved">this</span>.setXY(el, [x, null]);
+         util.Dom.setXY(el, [x, null]);
       },
       
       <span class="comment">/**
@@ -423,7 +473,7 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        * <span class="attrib">@param</span> {Int} x to use as the Y coordinate for the element(s).
        */</span>
       setY: <span class="reserved">function</span>(el, y) {
-         <span class="reserved">this</span>.setXY(el, [null, y]);
+         util.Dom.setXY(el, [null, y]);
       },
       
       <span class="comment">/**
@@ -434,10 +484,12 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        */</span>
       getRegion: <span class="reserved">function</span>(el) {
          var f = <span class="reserved">function</span>(el) {
-            <span class="reserved">return</span> new YAHOO.util.Region.getRegion(el);
+            var region = new YAHOO.util.Region.getRegion(el);
+            logger.log(<span class="literal">'getRegion returning '</span> + region, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
+            <span class="reserved">return</span> region;
          };
          
-         <span class="reserved">return</span> <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>, true);
+         <span class="reserved">return</span> util.Dom.batch(el, f, util.Dom, true);
       },
       
       <span class="comment">/**
@@ -446,7 +498,7 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        * <span class="attrib">@return</span> {Int} The width of the viewable area of the page.
        */</span>
       getClientWidth: <span class="reserved">function</span>() {
-         <span class="reserved">return</span> <span class="reserved">this</span>.getViewportWidth();
+         <span class="reserved">return</span> util.Dom.getViewportWidth();
       },
       
       <span class="comment">/**
@@ -455,7 +507,7 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        * <span class="attrib">@return</span> {Int} The height of the viewable area of the page.
        */</span>
       getClientHeight: <span class="reserved">function</span>() {
-         <span class="reserved">return</span> <span class="reserved">this</span>.getViewportHeight();
+         <span class="reserved">return</span> util.Dom.getViewportHeight();
       },
 
       <span class="comment">/**
@@ -467,11 +519,8 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        * <span class="attrib">@return</span> {Array} An array of elements that have the given class name
        */</span>
       getElementsByClassName: <span class="reserved">function</span>(className, tag, root) {
-         var re = new RegExp(<span class="literal">'(?:^|\\s+)'</span> + className + <span class="literal">'(?:\\s+|$)'</span>);
-         
-         var method = <span class="reserved">function</span>(el) { <span class="reserved">return</span> re.test(el[<span class="literal">'className'</span>]); };
-         
-         <span class="reserved">return</span> <span class="reserved">this</span>.getElementsBy(method, tag, root);
+         var method = <span class="reserved">function</span>(el) { <span class="reserved">return</span> util.Dom.hasClass(el, className) };
+         <span class="reserved">return</span> util.Dom.getElementsBy(method, tag, root);
       },
 
       <span class="comment">/**
@@ -481,12 +530,14 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        * <span class="attrib">@return</span> {Boolean/Array} A boolean value or array of boolean values
        */</span>
       hasClass: <span class="reserved">function</span>(el, className) {
+         var re = new RegExp(<span class="literal">'(?:^|\\s+)'</span> + className + <span class="literal">'(?:\\s+|$)'</span>);
+         
          var f = <span class="reserved">function</span>(el) {
-            var re = new RegExp(<span class="literal">'(?:^|\\s+)'</span> + className + <span class="literal">'(?:\\s+|$)'</span>);
+            logger.log(<span class="literal">'hasClass returning '</span> + re.test(el[<span class="literal">'className'</span>]), <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
             <span class="reserved">return</span> re.test(el[<span class="literal">'className'</span>]);
          };
          
-         <span class="reserved">return</span> <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>, true);
+         <span class="reserved">return</span> util.Dom.batch(el, f, util.Dom, true);
       },
    
       <span class="comment">/**
@@ -498,10 +549,12 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
          var f = <span class="reserved">function</span>(el) {
             <span class="reserved">if</span> (<span class="reserved">this</span>.hasClass(el, className)) { <span class="reserved">return</span>; } <span class="comment">// already present</span>
             
+            logger.log(<span class="literal">'addClass adding '</span> + className, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
+            
             el[<span class="literal">'className'</span>] = [el[<span class="literal">'className'</span>], className].join(<span class="literal">' '</span>);
          };
          
-         <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>, true);
+         util.Dom.batch(el, f, util.Dom, true);
       },
    
       <span class="comment">/**
@@ -510,16 +563,22 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        * <span class="attrib">@param</span> {String} className the class name to remove from the class attribute
        */</span>
       removeClass: <span class="reserved">function</span>(el, className) {
+         var re = new RegExp(<span class="literal">'(?:^|\\s+)'</span> + className + <span class="literal">'(?:\\s+|$)'</span>, <span class="literal">'g'</span>);
+
          var f = <span class="reserved">function</span>(el) {
             <span class="reserved">if</span> (!<span class="reserved">this</span>.hasClass(el, className)) { <span class="reserved">return</span>; } <span class="comment">// not present</span>
             
-            var re = new RegExp(<span class="literal">'(?:^|\\s+)'</span> + className + <span class="literal">'(?:\\s+|$)'</span>, <span class="literal">'g'</span>);
-            var c = el[<span class="literal">'className'</span>];
+            logger.log(<span class="literal">'removeClass removing '</span> + className, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
             
-            el[<span class="literal">'className'</span>] = c.replace( re, <span class="literal">' '</span>);
+            var c = el[<span class="literal">'className'</span>];
+            el[<span class="literal">'className'</span>] = c.replace(re, <span class="literal">' '</span>);
+            <span class="reserved">if</span> ( <span class="reserved">this</span>.hasClass(el, className) ) { <span class="comment">// in case of multiple adjacent</span>
+               <span class="reserved">this</span>.removeClass(el, className);
+            }
+            
          };
          
-         <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>, true);
+         util.Dom.batch(el, f, util.Dom, true);
       },
       
       <span class="comment">/**
@@ -530,12 +589,19 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        * <span class="attrib">@param</span> {String} newClassName the class name that will be replacing the old class name
        */</span>
       replaceClass: <span class="reserved">function</span>(el, oldClassName, newClassName) {
+         var re = new RegExp(<span class="literal">'(?:^|\\s+)'</span> + oldClassName + <span class="literal">'(?:\\s+|$)'</span>, <span class="literal">'g'</span>);
+
          var f = <span class="reserved">function</span>(el) {
-            <span class="reserved">this</span>.removeClass(el, oldClassName);
-            <span class="reserved">this</span>.addClass(el, newClassName);
+            logger.log(<span class="literal">'replaceClass replacing '</span> + oldClassName + <span class="literal">' with '</span> + newClassName, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
+         
+            el[<span class="literal">'className'</span>] = el[<span class="literal">'className'</span>].replace(re, <span class="literal">' '</span> + newClassName + <span class="literal">' '</span>);
+
+            <span class="reserved">if</span> ( <span class="reserved">this</span>.hasClass(el, oldClassName) ) { <span class="comment">// in case of multiple adjacent</span>
+               <span class="reserved">this</span>.replaceClass(el, oldClassName, newClassName);
+            }
          };
          
-         <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>, true);
+         util.Dom.batch(el, f, util.Dom, true);
       },
       
       <span class="comment">/**
@@ -546,16 +612,26 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        */</span>
       generateId: <span class="reserved">function</span>(el, prefix) {
          prefix = prefix || <span class="literal">'yui-gen'</span>;
+         el = el || {};
          
          var f = <span class="reserved">function</span>(el) {
-            el = el || {}; <span class="comment">// just generating ID in this case</span>
+            <span class="reserved">if</span> (el) {
+               el = util.Dom.get(el);
+            } <span class="reserved">else</span> {
+               el = {}; <span class="comment">// just generating ID in this case</span>
+            }
             
-            <span class="reserved">if</span> (!el.id) { el.id = prefix + id_counter++; } <span class="comment">// dont override existing</span>
+            <span class="reserved">if</span> (!el.id) {
+               el.id = prefix + id_counter++; 
+               logger.log(<span class="literal">'generateId generating '</span> + el.id, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
+            } <span class="comment">// dont override existing</span>
+            
+            logger.log(<span class="literal">'generateId returning '</span> + el.id, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
             
             <span class="reserved">return</span> el.id;
          };
          
-         <span class="reserved">return</span> <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>, true);
+         <span class="reserved">return</span> util.Dom.batch(el, f, util.Dom, true);
       },
       
       <span class="comment">/**
@@ -565,38 +641,39 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        * <span class="attrib">@return</span> {Boolean} Whether or not the haystack is an ancestor of needle
        */</span>
       isAncestor: <span class="reserved">function</span>(haystack, needle) {
-         haystack = <span class="reserved">this</span>.get(haystack);
+         haystack = util.Dom.get(haystack);
          <span class="reserved">if</span> (!haystack || !needle) { <span class="reserved">return</span> false; }
          
          var f = <span class="reserved">function</span>(needle) {
-            <span class="reserved">if</span> (haystack.contains &amp;&amp; ua.indexOf(<span class="literal">'safari'</span>) &lt; 0) 
-            { <span class="comment">// safari "contains" is broken</span>
+            <span class="reserved">if</span> (haystack.contains &amp;&amp; !isSafari) { <span class="comment">// safari "contains" is broken</span>
+               logger.log(<span class="literal">'isAncestor returning '</span> + haystack.contains(needle), <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
                <span class="reserved">return</span> haystack.contains(needle);
             }
-            <span class="reserved">else</span> <span class="reserved">if</span> ( haystack.compareDocumentPosition ) 
-            {
+            <span class="reserved">else</span> <span class="reserved">if</span> ( haystack.compareDocumentPosition ) {
+               logger.log(<span class="literal">'isAncestor returning '</span> + !!(haystack.compareDocumentPosition(needle) &amp; 16), <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
                <span class="reserved">return</span> !!(haystack.compareDocumentPosition(needle) &amp; 16);
             }
-            <span class="reserved">else</span> 
-            { <span class="comment">// loop up and test each parent</span>
+            <span class="reserved">else</span> { <span class="comment">// loop up and test each parent</span>
                var parent = needle.parentNode;
                
                <span class="reserved">while</span> (parent) {
                   <span class="reserved">if</span> (parent == haystack) {
+                     logger.log(<span class="literal">'isAncestor returning true'</span>, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
                      <span class="reserved">return</span> true;
                   }
-                  <span class="reserved">else</span> <span class="reserved">if</span> (parent.tagName == <span class="literal">'HTML'</span>) {
+                  <span class="reserved">else</span> <span class="reserved">if</span> (parent.tagName.toUpperCase() == <span class="literal">'HTML'</span>) {
+                     logger.log(<span class="literal">'isAncestor returning false'</span>, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
                      <span class="reserved">return</span> false;
                   }
                   
                   parent = parent.parentNode;
                }
-               
+               logger.log(<span class="literal">'isAncestor returning false'</span>, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
                <span class="reserved">return</span> false;
             }    
          };
          
-         <span class="reserved">return</span> <span class="reserved">this</span>.batch(needle, f, <span class="reserved">this</span>, true);     
+         <span class="reserved">return</span> util.Dom.batch(needle, f, util.Dom, true);     
       },
       
       <span class="comment">/**
@@ -609,7 +686,7 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
             <span class="reserved">return</span> <span class="reserved">this</span>.isAncestor(document.documentElement, el);
          };
          
-         <span class="reserved">return</span> <span class="reserved">this</span>.batch(el, f, <span class="reserved">this</span>, true);
+         <span class="reserved">return</span> util.Dom.batch(el, f, util.Dom, true);
       },
       
       <span class="comment">/**
@@ -621,7 +698,7 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        */</span>
       getElementsBy: <span class="reserved">function</span>(method, tag, root) {
          tag = tag || <span class="literal">'*'</span>;
-         root = <span class="reserved">this</span>.get(root) || document;
+         root = util.Dom.get(root) || document;
          
          var nodes = [];
          var elements = root.getElementsByTagName(tag);
@@ -635,6 +712,8 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
             <span class="reserved">if</span> ( method(elements[i]) ) { nodes[nodes.length] = elements[i]; }
          }
 
+         logger.log(<span class="literal">'getElementsBy returning '</span> + nodes, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
+         
          <span class="reserved">return</span> nodes;
       },
       
@@ -648,18 +727,26 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        * <span class="attrib">@return</span> {HTMLElement/Array} The element(s) with the method applied
        */</span>
       batch: <span class="reserved">function</span>(el, method, o, override) {
-         el = <span class="reserved">this</span>.get(el);
+         var id = el;
+         el = util.Dom.get(el);
+         
          var scope = (override) ? o : window;
          
-         <span class="reserved">if</span> (!el || el.tagName || !el.length) 
-         { <span class="comment">// is null or not a collection (tagName for SELECT and others that can be both an element and a collection)</span>
+         <span class="reserved">if</span> (!el || el.tagName || !el.length) { <span class="comment">// is null or not a collection (tagName for SELECT and others that can be both an element and a collection)</span>
+            <span class="reserved">if</span> (!el) {
+               logger.log(id + <span class="literal">' not available'</span>, <span class="literal">'error'</span>, <span class="literal">'Dom'</span>);
+               <span class="reserved">return</span> false;
+            }
             <span class="reserved">return</span> method.call(scope, el, o);
          } 
          
          var collection = [];
          
-         <span class="reserved">for</span> (var i = 0, len = el.length; i &lt; len; ++i)
-         {
+         <span class="reserved">for</span> (var i = 0, len = el.length; i &lt; len; ++i) {
+            <span class="reserved">if</span> (!el[i]) {
+               id = id[i];
+               logger.log(id + <span class="literal">' not available'</span>, <span class="literal">'error'</span>, <span class="literal">'Dom'</span>);
+            }
             collection[collection.length] = method.call(scope, el[i], o);
          }
          
@@ -672,8 +759,8 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        */</span>
       getDocumentHeight: <span class="reserved">function</span>() {
          var scrollHeight=-1,windowHeight=-1,bodyHeight=-1;
-         var marginTop = parseInt(<span class="reserved">this</span>.getStyle(document.body, <span class="literal">'marginTop'</span>), 10);
-         var marginBottom = parseInt(<span class="reserved">this</span>.getStyle(document.body, <span class="literal">'marginBottom'</span>), 10);
+         var marginTop = parseInt(util.Dom.getStyle(document.body, <span class="literal">'marginTop'</span>), 10);
+         var marginBottom = parseInt(util.Dom.getStyle(document.body, <span class="literal">'marginBottom'</span>), 10);
          
          var mode = document.compatMode;
          
@@ -696,6 +783,7 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
          }
       
          var h = [scrollHeight,windowHeight,bodyHeight].sort(<span class="reserved">function</span>(a, b){<span class="reserved">return</span>(a-b);});
+         logger.log(<span class="literal">'getDocumentHeight returning '</span> + h[2], <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
          <span class="reserved">return</span> h[2];
       },
       
@@ -705,8 +793,8 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
        */</span>
       getDocumentWidth: <span class="reserved">function</span>() {
          var docWidth=-1,bodyWidth=-1,winWidth=-1;
-         var marginRight = parseInt(<span class="reserved">this</span>.getStyle(document.body, <span class="literal">'marginRight'</span>), 10);
-         var marginLeft = parseInt(<span class="reserved">this</span>.getStyle(document.body, <span class="literal">'marginLeft'</span>), 10);
+         var marginRight = parseInt(util.Dom.getStyle(document.body, <span class="literal">'marginRight'</span>), 10);
+         var marginLeft = parseInt(util.Dom.getStyle(document.body, <span class="literal">'marginLeft'</span>), 10);
          
          var mode = document.compatMode;
          
@@ -730,6 +818,7 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
          }
       
          var w = [docWidth,bodyWidth,winWidth].sort(<span class="reserved">function</span>(a, b){<span class="reserved">return</span>(a-b);});
+         logger.log(<span class="literal">'getDocumentWidth returning '</span> + w[2], <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
          <span class="reserved">return</span> w[2];
       },
 
@@ -754,6 +843,7 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
             height = self.innerHeight;
          }
       
+         logger.log(<span class="literal">'getViewportHeight returning '</span> + height, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
          <span class="reserved">return</span> height;
       },
       
@@ -778,7 +868,7 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
          } <span class="reserved">else</span> { <span class="comment">// Safari</span>
             width = self.innerWidth;
          }
-         
+         logger.log(<span class="literal">'getViewportWidth returning '</span> + width, <span class="literal">'info'</span>, <span class="literal">'Dom'</span>);
          <span class="reserved">return</span> width;
       }
    };
@@ -793,7 +883,12 @@ YAHOO.util.Dom = <span class="reserved">function</span>() {
 
 <div id="footer">
 	<hr />
-	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	Copyright &copy; 2004 - 2005 Yahoo! Inc. All rights reserved.
+	<br />
+	Yahoo! Confidential.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
+	version 1.9.5.8
 </div>
 
 
