@@ -28,7 +28,6 @@ Version: 0.10.0
 YAHOO.util.Anim = function(el, attributes, duration, method) {
    if (el) {
       this.init(el, attributes, duration, method); 
-
    }
 };
 
@@ -83,20 +82,21 @@ YAHOO.util.Anim.prototype = {
    getAttribute: function(attr) {
       var el = this.getEl();
       var val = YAHOO.util.Dom.getStyle(el, attr);
-      
+
       if (val !== 'auto' && !this.patterns.offsetUnit.test(val)) {
          return parseFloat(val);
       }
       
       var a = this.patterns.offsetAttribute.exec(attr) || [];
-      var pos = ( typeof a[1] !== 'undefined' ) ? true : false; // top or left
-      var box = ( typeof a[2] !== 'undefined'  ) ? true : false; // width or height
-      
+      var pos = !!( a[3] ); // top or left
+      var box = !!( a[2] ); // width or height
       
       // use offsets for width/height and abs pos top/left
       if ( box || (YAHOO.util.Dom.getStyle(el, 'position') == 'absolute' && pos) ) {
          val = el['offset' + a[0].charAt(0).toUpperCase() + a[0].substr(1)];
-      } 
+      } else { // default to zero for other 'auto'
+         val = 0;
+      }
 
       return val;
    },
