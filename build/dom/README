@@ -1,4 +1,13 @@
-Animation Release Notes
+Dom Release Notes
+
+*** version 0.11.0 ***
+* Work around Opera 9 broken currentStyle
+* Removed timeout wrapper from setXY retry
+* Tagname tests now case-insensitive
+* Internal "this" references changed to allow for method shorthand
+* get/setStyle now accept both camel and hyphen case
+* Gecko reverted to crawling offsets for getXY
+ 
 
 *** version 0.10.0 ***
 
