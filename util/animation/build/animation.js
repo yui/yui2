@@ -1112,7 +1112,7 @@ Version: 0.10.0
          var end;
          var i, len;
          
-         if (control.length > 0 && control[0].constructor.toString().indexOf('Array') < 0) { // could be single point or array of points (using toString in case passed from a frame)
+         if (control.length > 0 && !(control[0] instanceof Array) ) { // could be single point or array of points
             control = [control];
          } else { // break reference to attributes.points.control
             var tmp = []; 
@@ -1167,7 +1167,7 @@ Version: 0.10.0
    var translateValues = function(val, start) {
       var pageXY = Y.Dom.getXY(this.getEl());
       val = [ val[0] - pageXY[0] + start[0], val[1] - pageXY[1] + start[1] ];
-   
+
       return val; 
    };
    
