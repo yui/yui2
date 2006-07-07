@@ -312,6 +312,10 @@ YAHOO.widget.Calendar_Core = function(id, containerId, monthyear, selected) {
 	}
 }
 
+/**
+* The path to be used for images loaded for the Calendar
+* @type String
+*/
 YAHOO.widget.Calendar_Core.IMG_ROOT = (window.location.href.toLowerCase().indexOf("https") == 0 ? "https://a248.e.akamai.net/sec.yimg.com/i/" : "http://us.i1.yimg.com/us.yimg.com/i/");
 
 /**
@@ -612,7 +616,7 @@ YAHOO.widget.Calendar_Core.prototype.wireDefaultEvents = function() {
 		var date = new Date(d[0],d[1]-1,d[2]);
 
 		if (! cal.isDateOOM(date) && ! YAHOO.util.Dom.hasClass(cell, cal.Style.CSS_CELL_RESTRICTED) && ! YAHOO.util.Dom.hasClass(cell, cal.Style.CSS_CELL_OOB)) {
-			YAHOO.widget.Calendar_Core.prependCssClass(cell, cal.Style.CSS_CELL_HOVER);
+			YAHOO.util.Dom.addClass(cell, cal.Style.CSS_CELL_HOVER);
 		}
 	}
 
@@ -1324,15 +1328,50 @@ YAHOO.widget.Calendar_Core.prototype.renderCellDefault = function(workingDate, c
 	cell.appendChild(link);
 };
 
+/**
+* Renders a single standard calendar cell using the CSS hightlight1 style
+* @param {Date}					workingDate		The current working Date object being used to generate the calendar
+* @param {HTMLTableCellElement}	cell			The current working cell in the calendar
+* @return YAHOO.widget.Calendar_Core.STOP_RENDER if rendering should stop with this style, null or nothing if rendering
+*			should not be terminated
+* @type String
+*/
 YAHOO.widget.Calendar_Core.prototype.renderCellStyleHighlight1 = function(workingDate, cell) {
 	YAHOO.util.Dom.addClass(cell, this.Style.CSS_CELL_HIGHLIGHT1);
 };
+
+/**
+* Renders a single standard calendar cell using the CSS hightlight2 style
+* @param {Date}					workingDate		The current working Date object being used to generate the calendar
+* @param {HTMLTableCellElement}	cell			The current working cell in the calendar
+* @return YAHOO.widget.Calendar_Core.STOP_RENDER if rendering should stop with this style, null or nothing if rendering
+*			should not be terminated
+* @type String
+*/
 YAHOO.widget.Calendar_Core.prototype.renderCellStyleHighlight2 = function(workingDate, cell) {
 	YAHOO.util.Dom.addClass(cell, this.Style.CSS_CELL_HIGHLIGHT2);
 };
+
+/**
+* Renders a single standard calendar cell using the CSS hightlight3 style
+* @param {Date}					workingDate		The current working Date object being used to generate the calendar
+* @param {HTMLTableCellElement}	cell			The current working cell in the calendar
+* @return YAHOO.widget.Calendar_Core.STOP_RENDER if rendering should stop with this style, null or nothing if rendering
+*			should not be terminated
+* @type String
+*/
 YAHOO.widget.Calendar_Core.prototype.renderCellStyleHighlight3 = function(workingDate, cell) {
 	YAHOO.util.Dom.addClass(cell, this.Style.CSS_CELL_HIGHLIGHT3);
 };
+
+/**
+* Renders a single standard calendar cell using the CSS hightlight4 style
+* @param {Date}					workingDate		The current working Date object being used to generate the calendar
+* @param {HTMLTableCellElement}	cell			The current working cell in the calendar
+* @return YAHOO.widget.Calendar_Core.STOP_RENDER if rendering should stop with this style, null or nothing if rendering
+*			should not be terminated
+* @type String
+*/
 YAHOO.widget.Calendar_Core.prototype.renderCellStyleHighlight4 = function(workingDate, cell) {
 	YAHOO.util.Dom.addClass(cell, this.Style.CSS_CELL_HIGHLIGHT4);
 };
@@ -1987,13 +2026,9 @@ YAHOO.widget.Calendar_Core.prototype.addMonthRenderer = function(month, fnRender
 YAHOO.widget.Calendar_Core.prototype.addWeekdayRenderer = function(weekday, fnRender) {
 	this._addRenderer(YAHOO.widget.Calendar_Core.WEEKDAY,[weekday],fnRender);
 };
-/************* END RENDERER METHODS *******************************************************/
+//// END RENDERER METHODS ////
 
-/***************** BEGIN CSS METHODS *******************************************/
-
-YAHOO.widget.Calendar_Core.prependCssClass = function(element, style) {
-	element.className = style + " " + element.className;
-}
+//// BEGIN CSS METHODS ////
 
 /**
 * Sets the specified array of CSS classes into the referenced element
@@ -2016,9 +2051,9 @@ YAHOO.widget.Calendar_Core.prototype.clearAllBodyCellStyles = function(style) {
 	}
 };
 
-/***************** END CSS METHODS *********************************************/
+//// END CSS METHODS ////
 
-/***************** BEGIN GETTER/SETTER METHODS *********************************/
+//// BEGIN GETTER/SETTER METHODS ////
 /**
 * Sets the calendar's month explicitly.
 * @param {Integer}	month		The numeric month, from 1 (January) to 12 (December)
@@ -2054,8 +2089,12 @@ YAHOO.widget.Calendar_Core.prototype.getSelectedDates = function() {
 	return returnDates;
 };
 
-/***************** END GETTER/SETTER METHODS *********************************/
+/// END GETTER/SETTER METHODS ///
 
+/**
+* Returns a string representing the current browser.
+* @type String
+*/
 YAHOO.widget.Calendar_Core._getBrowser = function() {
   /**
    * UserAgent
@@ -2076,6 +2115,10 @@ YAHOO.widget.Calendar_Core._getBrowser = function() {
   return false;
 }
 
+/**
+* Returns a string representation of the object.
+* @type string
+*/
 YAHOO.widget.Calendar_Core.prototype.toString = function() {
 	return "Calendar_Core " + this.id;
 }
@@ -2243,12 +2286,22 @@ YAHOO.widget.CalendarGroup.prototype.init = function(pageCount, id, containerId,
 	};
 };
 
+/**
+* Adds a function to all child Calendars within this CalendarGroup.
+* @param {String}		fnName		The name of the function
+* @param {Function}		fn			The function to apply to each Calendar page object
+*/
 YAHOO.widget.CalendarGroup.prototype.setChildFunction = function(fnName, fn) {
 	for (var p=0;p<this.pageCount;++p) {
 		this.pages[p][fnName] = fn;
 	}
 }
 
+/**
+* Calls a function within all child Calendars within this CalendarGroup.
+* @param {String}		fnName		The name of the function
+* @param {Array}		args		The arguments to pass to the function
+*/
 YAHOO.widget.CalendarGroup.prototype.callChildFunction = function(fnName, args) {
 	for (var p=0;p<this.pageCount;++p) {
 		var page = this.pages[p];
@@ -2573,6 +2626,10 @@ YAHOO.widget.CalendarGroup.prototype.wireEvent = function(eventName, fn) {
 	}
 };
 
+/**
+* Returns a string representation of the object.
+* @type string
+*/ 
 YAHOO.widget.CalendarGroup.prototype.toString = function() {
 	return "CalendarGroup " + this.id;
 }
@@ -2679,13 +2736,37 @@ YAHOO.widget.Calendar2up = function(id, containerId, monthyear, selected) {
 	}
 }
 
-YAHOO.widget.Calendar2up.CSS_2UPWRAPPER = "yui-cal2upwrapper";
-YAHOO.widget.Calendar2up.CSS_CONTAINER = "yui-calcontainer";
-YAHOO.widget.Calendar2up.CSS_2UPCONTAINER = "cal2up";
-YAHOO.widget.Calendar2up.CSS_2UPTITLE = "title";
-YAHOO.widget.Calendar2up.CSS_2UPCLOSE = "close-icon";
-
 YAHOO.widget.Calendar2up.prototype = new YAHOO.widget.CalendarGroup();
+
+/**
+* CSS class representing the wrapper for the 2-up calendar
+* @type string
+*/
+YAHOO.widget.Calendar2up.CSS_2UPWRAPPER = "yui-cal2upwrapper";
+
+/**
+* CSS class representing the container for the calendar
+* @type string
+*/
+YAHOO.widget.Calendar2up.CSS_CONTAINER = "yui-calcontainer";
+
+/**
+* CSS class representing the container for the 2-up calendar
+* @type string
+*/
+YAHOO.widget.Calendar2up.CSS_2UPCONTAINER = "cal2up";
+
+/**
+* CSS class representing the title for the 2-up calendar
+* @type string
+*/
+YAHOO.widget.Calendar2up.CSS_2UPTITLE = "title";
+
+/**
+* CSS class representing the close icon for the 2-up calendar
+* @type string
+*/
+YAHOO.widget.Calendar2up.CSS_2UPCLOSE = "close-icon";
 
 /**
 * Implementation of CalendarGroup.constructChild that ensures that child calendars of 

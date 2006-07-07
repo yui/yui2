@@ -1,12 +1,7 @@
 
 <html>
 <head>
-	<title>
-		JavaScript Documentation - 
-		
-			Calendar2up.js
-		
-	</title>
+	<title>JavaScript Documentation - Calendar2up.js</title>
 	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -17,7 +12,7 @@
 	<h3><a href="./index.html">Yahoo! UI Library: Calendar</a></h3>
 
 	<div class="breadcrumbs">
-			
+					
 			
 			
 			
@@ -54,6 +49,11 @@
 			<div class="module">
 				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
 				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.widget.html">
+								YAHOO.widget</a>
+						</li>
 					
 						<li>
 							<a href="YAHOO.widget.Calendar.html">
@@ -255,27 +255,33 @@ YAHOO.widget.Calendar2up_Cal.<span class="reserved">prototype</span>.renderHeade
 	headerContainer.className = <span class="reserved">this</span>.Style.CSS_HEADER;
 	
 	<span class="reserved">if</span> (<span class="reserved">this</span>.index == 0) {
-		var linkLeft = document.createElement(<span class="literal">"A"</span>);
-		linkLeft.href = <span class="literal">"javascript:void(null)"</span>;
-		YAHOO.util.Event.addListener(linkLeft, <span class="literal">"click"</span>, <span class="reserved">this</span>.parent.doPreviousMonth, <span class="reserved">this</span>.parent);
-		var imgLeft = document.createElement(<span class="literal">"IMG"</span>);
-		imgLeft.src = <span class="reserved">this</span>.Options.NAV_ARROW_LEFT;
-		imgLeft.className = <span class="reserved">this</span>.Style.CSS_NAV_LEFT;
-		linkLeft.appendChild(imgLeft);
-		headerContainer.appendChild(linkLeft);
+
+		<span class="reserved">if</span> (<span class="reserved">this</span>.linkLeft) {
+			YAHOO.util.Event.removeListener(<span class="reserved">this</span>.linkLeft, <span class="literal">"mousedown"</span>, <span class="reserved">this</span>.parent.doPreviousMonth);
+		}
+		<span class="reserved">this</span>.linkLeft = document.createElement(<span class="literal">"A"</span>);
+		<span class="reserved">this</span>.linkLeft.innerHTML = <span class="literal">"&amp;nbsp;"</span>;
+		<span class="reserved">this</span>.linkLeft.style.backgroundImage =  <span class="literal">"url("</span> + <span class="reserved">this</span>.Options.NAV_ARROW_LEFT + <span class="literal">")"</span>;
+		<span class="reserved">this</span>.linkLeft.className = <span class="reserved">this</span>.Style.CSS_NAV_LEFT;
+		
+		YAHOO.util.Event.addListener(<span class="reserved">this</span>.linkLeft, <span class="literal">"mousedown"</span>, <span class="reserved">this</span>.parent.doPreviousMonth, <span class="reserved">this</span>.parent);
+		headerContainer.appendChild(<span class="reserved">this</span>.linkLeft);
 	}
 	
 	headerContainer.appendChild(document.createTextNode(<span class="reserved">this</span>.buildMonthLabel()));
 	
 	<span class="reserved">if</span> (<span class="reserved">this</span>.index == 1) {
-		var linkRight = document.createElement(<span class="literal">"A"</span>);
-		linkRight.href = <span class="literal">"javascript:void(null)"</span>;
-		YAHOO.util.Event.addListener(linkRight, <span class="literal">"click"</span>, <span class="reserved">this</span>.parent.doNextMonth, <span class="reserved">this</span>.parent);
-		var imgRight = document.createElement(<span class="literal">"IMG"</span>);
-		imgRight.src = <span class="reserved">this</span>.Options.NAV_ARROW_RIGHT;
-		imgRight.className = <span class="reserved">this</span>.Style.CSS_NAV_RIGHT;
-		linkRight.appendChild(imgRight);
-		headerContainer.appendChild(linkRight);
+
+		<span class="reserved">if</span> (<span class="reserved">this</span>.linkRight) {
+			YAHOO.util.Event.removeListener(<span class="reserved">this</span>.linkRight, <span class="literal">"mousedown"</span>, <span class="reserved">this</span>.parent.doNextMonth);
+		}
+		<span class="reserved">this</span>.linkRight = document.createElement(<span class="literal">"A"</span>);
+		<span class="reserved">this</span>.linkRight.innerHTML = <span class="literal">"&amp;nbsp;"</span>;
+		<span class="reserved">this</span>.linkRight.style.backgroundImage = <span class="literal">"url("</span> + <span class="reserved">this</span>.Options.NAV_ARROW_RIGHT + <span class="literal">")"</span>;
+		<span class="reserved">this</span>.linkRight.className = <span class="reserved">this</span>.Style.CSS_NAV_RIGHT;
+
+		YAHOO.util.Event.addListener(<span class="reserved">this</span>.linkRight, <span class="literal">"mousedown"</span>, <span class="reserved">this</span>.parent.doNextMonth, <span class="reserved">this</span>.parent);
+		headerContainer.appendChild(<span class="reserved">this</span>.linkRight);
 	}
 	
 	<span class="reserved">this</span>.headerCell.appendChild(headerContainer);
@@ -310,6 +316,36 @@ YAHOO.widget.Calendar2up = <span class="reserved">function</span>(id, containerI
 YAHOO.widget.Calendar2up.<span class="reserved">prototype</span> = new YAHOO.widget.CalendarGroup();
 
 <span class="comment">/**
+* CSS class representing the wrapper for the 2-up calendar
+* <span class="attrib">@type</span> string
+*/</span>
+YAHOO.widget.Calendar2up.CSS_2UPWRAPPER = <span class="literal">"yui-cal2upwrapper"</span>;
+
+<span class="comment">/**
+* CSS class representing the container for the calendar
+* <span class="attrib">@type</span> string
+*/</span>
+YAHOO.widget.Calendar2up.CSS_CONTAINER = <span class="literal">"yui-calcontainer"</span>;
+
+<span class="comment">/**
+* CSS class representing the container for the 2-up calendar
+* <span class="attrib">@type</span> string
+*/</span>
+YAHOO.widget.Calendar2up.CSS_2UPCONTAINER = <span class="literal">"cal2up"</span>;
+
+<span class="comment">/**
+* CSS class representing the title for the 2-up calendar
+* <span class="attrib">@type</span> string
+*/</span>
+YAHOO.widget.Calendar2up.CSS_2UPTITLE = <span class="literal">"title"</span>;
+
+<span class="comment">/**
+* CSS class representing the close icon for the 2-up calendar
+* <span class="attrib">@type</span> string
+*/</span>
+YAHOO.widget.Calendar2up.CSS_2UPCLOSE = <span class="literal">"close-icon"</span>;
+
+<span class="comment">/**
 * Implementation of CalendarGroup.constructChild that ensures that child calendars of 
 * Calendar2up will be of type Calendar2up_Cal.
 */</span>
@@ -325,20 +361,20 @@ YAHOO.widget.Calendar2up.<span class="reserved">prototype</span>.constructChild 
 YAHOO.widget.Calendar2up.<span class="reserved">prototype</span>.buildWrapper = <span class="reserved">function</span>(containerId) {
 	var outerContainer = document.getElementById(containerId);
 	
-	outerContainer.className = <span class="literal">"calcontainer"</span>;
+	outerContainer.className = YAHOO.widget.Calendar2up.CSS_2UPWRAPPER;
 	
 	var innerContainer = document.createElement(<span class="literal">"DIV"</span>);
-	innerContainer.className = <span class="literal">"calbordered"</span>;
+	innerContainer.className = YAHOO.widget.Calendar2up.CSS_CONTAINER;
 	innerContainer.id = containerId + <span class="literal">"_inner"</span>;
 	
 	var cal1Container = document.createElement(<span class="literal">"DIV"</span>);
 	cal1Container.id = containerId + <span class="literal">"_0"</span>;
-	cal1Container.className = <span class="literal">"cal2up"</span>;
+	cal1Container.className = YAHOO.widget.Calendar2up.CSS_2UPCONTAINER;
 	cal1Container.style.marginRight = <span class="literal">"10px"</span>;
 	
 	var cal2Container = document.createElement(<span class="literal">"DIV"</span>);
 	cal2Container.id = containerId + <span class="literal">"_1"</span>; 
-	cal2Container.className = <span class="literal">"cal2up"</span>;
+	cal2Container.className = YAHOO.widget.Calendar2up.CSS_2UPCONTAINER;
 	
 	outerContainer.appendChild(innerContainer);
 	innerContainer.appendChild(cal1Container);
@@ -373,7 +409,7 @@ YAHOO.widget.Calendar2up.<span class="reserved">prototype</span>.renderHeader = 
 		}
 	}
 
-	<span class="reserved">this</span>.titleDiv.className = <span class="literal">"title"</span>;
+	<span class="reserved">this</span>.titleDiv.className = YAHOO.widget.Calendar2up.CSS_2UPTITLE;
 	<span class="reserved">this</span>.titleDiv.innerHTML = <span class="reserved">this</span>.title;
 
 	<span class="reserved">if</span> (<span class="reserved">this</span>.outerContainer.style.position == <span class="literal">"absolute"</span>)
@@ -384,7 +420,7 @@ YAHOO.widget.Calendar2up.<span class="reserved">prototype</span>.renderHeader = 
 
 		var imgClose = document.createElement(<span class="literal">"IMG"</span>);
 		imgClose.src = YAHOO.widget.Calendar_Core.IMG_ROOT + <span class="literal">"us/my/bn/x_d.gif"</span>;
-		imgClose.className = <span class="literal">"close-icon"</span>;
+		imgClose.className = YAHOO.widget.Calendar2up.CSS_2UPCLOSE;
 
 		linkClose.appendChild(imgClose);
 
@@ -421,11 +457,13 @@ YAHOO.widget.Cal2up = YAHOO.widget.Calendar2up;</pre>
 
 
 <div id="footer">
-	<hr />	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	<hr />
+	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
 	<br /><br />
-	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
-	version 1.9.5.8
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">
+	JSDoc</a>
 </div>
+
 
 
 </body>

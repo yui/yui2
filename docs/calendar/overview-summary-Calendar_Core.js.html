@@ -1,12 +1,7 @@
 
 <html>
 <head>
-	<title>
-		JavaScript Documentation - 
-		
-			Calendar_Core.js
-		
-	</title>
+	<title>JavaScript Documentation - Calendar_Core.js</title>
 	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -17,7 +12,7 @@
 	<h3><a href="./index.html">Yahoo! UI Library: Calendar</a></h3>
 
 	<div class="breadcrumbs">
-			
+					
 			
 			
 			
@@ -54,6 +49,11 @@
 			<div class="module">
 				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
 				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.widget.html">
+								YAHOO.widget</a>
+						</li>
 					
 						<li>
 							<a href="YAHOO.widget.Calendar.html">
@@ -232,12 +232,15 @@ http://developer.yahoo.net/yui/license.txt
 								commas. Example: "12/24/2005,12/25,1/18/2006-1/21/2006"
 */</span>
 YAHOO.widget.Calendar_Core = <span class="reserved">function</span>(id, containerId, monthyear, selected) {
-	<span class="reserved">if</span> (arguments.length &gt; 0)
-	{
+	<span class="reserved">if</span> (arguments.length &gt; 0) {
 		<span class="reserved">this</span>.init(id, containerId, monthyear, selected);
 	}
 }
 
+<span class="comment">/**
+* The path to be used for images loaded for the Calendar
+* <span class="attrib">@type</span> String
+*/</span>
 YAHOO.widget.Calendar_Core.IMG_ROOT = (window.location.href.toLowerCase().indexOf(<span class="literal">"https"</span>) == 0 ? <span class="literal">"https://a248.e.akamai.net/sec.yimg.com/i/"</span> : <span class="literal">"http://us.i1.yimg.com/us.yimg.com/i/"</span>);
 
 <span class="comment">/**
@@ -460,8 +463,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.init = <span 
 	var month;
 	var year;
 
-	<span class="reserved">if</span> (monthyear)
-	{
+	<span class="reserved">if</span> (monthyear) {
 		var aMonthYear = monthyear.split(<span class="reserved">this</span>.Locale.DATE_FIELD_DELIMITER);
 		month = parseInt(aMonthYear[<span class="reserved">this</span>.Locale.MY_MONTH_POSITION-1]);
 		year = parseInt(aMonthYear[<span class="reserved">this</span>.Locale.MY_YEAR_POSITION-1]);
@@ -473,8 +475,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.init = <span 
 	<span class="reserved">this</span>.pageDate = new Date(year, month-1, 1);
 	<span class="reserved">this</span>._pageDate = new Date(<span class="reserved">this</span>.pageDate.getTime());
 
-	<span class="reserved">if</span> (selected)
-	{
+	<span class="reserved">if</span> (selected) {
 		<span class="reserved">this</span>.selectedDates = <span class="reserved">this</span>._parseDates(selected);
 		<span class="reserved">this</span>._selectedDates = <span class="reserved">this</span>.selectedDates.concat();
 	} <span class="reserved">else</span> {
@@ -513,8 +514,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.wireDefaultEv
 				var cellDate = cal.cellDates[index];
 				var cellDateIndex = cal._indexOfSelectedFieldArray(cellDate);
 				
-				<span class="reserved">if</span> (cellDateIndex &gt; -1)
-				{	
+				<span class="reserved">if</span> (cellDateIndex &gt; -1) {	
 					cal.deselectCell(index);
 				} <span class="reserved">else</span> {
 					cal.selectCell(index);
@@ -541,7 +541,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.wireDefaultEv
 		var date = new Date(d[0],d[1]-1,d[2]);
 
 		<span class="reserved">if</span> (! cal.isDateOOM(date) &amp;&amp; ! YAHOO.util.Dom.hasClass(cell, cal.Style.CSS_CELL_RESTRICTED) &amp;&amp; ! YAHOO.util.Dom.hasClass(cell, cal.Style.CSS_CELL_OOB)) {
-			YAHOO.widget.Calendar_Core.prependCssClass(cell, cal.Style.CSS_CELL_HOVER);
+			YAHOO.util.Dom.addClass(cell, cal.Style.CSS_CELL_HOVER);
 		}
 	}
 
@@ -552,7 +552,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.wireDefaultEv
 	* <span class="attrib">@private</span>
 	*/</span>
 	<span class="reserved">this</span>.doCellMouseOut = <span class="reserved">function</span>(e, cal) {
-		YAHOO.widget.Calendar_Core.removeCssClass(<span class="reserved">this</span>, cal.Style.CSS_CELL_HOVER);
+		YAHOO.util.Dom.removeClass(<span class="reserved">this</span>, cal.Style.CSS_CELL_HOVER);
 	}
 	
 	<span class="comment">/**
@@ -601,8 +601,8 @@ style, localization, and other display and behavioral options.
 	&lt;div&gt;&lt;em&gt;CSS_ROW_FOOTER&lt;/em&gt; : The cell following a row (not implemented by default)&lt;/div&gt;
 	&lt;div&gt;&lt;em&gt;CSS_WEEKDAY_CELL&lt;/em&gt; : The cells used for labeling weekdays&lt;/div&gt;
 	&lt;div&gt;&lt;em&gt;CSS_WEEKDAY_ROW&lt;/em&gt; : The row containing the weekday label cells&lt;/div&gt;
-	&lt;div&gt;&lt;em&gt;CSS_BORDER&lt;/em&gt; : The border style used for the default UED rendering&lt;/div&gt;
-	&lt;div&gt;&lt;em&gt;CSS_CONTAINER&lt;/em&gt; : Special container class used to properly adjust the sizing and float&lt;/div&gt;
+	&lt;div&gt;&lt;em&gt;CSS_CONTAINER&lt;/em&gt; : The border style used for the default UED rendering&lt;/div&gt;
+	&lt;div&gt;&lt;em&gt;CSS_2UPWRAPPER&lt;/em&gt; : Special container class used to properly adjust the sizing and float&lt;/div&gt;
 	&lt;div&gt;&lt;em&gt;CSS_NAV_LEFT&lt;/em&gt; : Left navigation arrow&lt;/div&gt;
 	&lt;div&gt;&lt;em&gt;CSS_NAV_RIGHT&lt;/em&gt; : Right navigation arrow&lt;/div&gt;
 	&lt;div&gt;&lt;em&gt;CSS_CELL_TOP&lt;/em&gt; : Outlying cell along the top row&lt;/div&gt;
@@ -669,9 +669,9 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.setupConfig =
 		CSS_WEEKDAY_CELL : <span class="literal">"calweekdaycell"</span>,
 		CSS_WEEKDAY_ROW : <span class="literal">"calweekdayrow"</span>,
 		CSS_FOOTER : <span class="literal">"calfoot"</span>,
-		CSS_CALENDAR : <span class="literal">"calendar"</span>,
-		CSS_BORDER : <span class="literal">"calbordered"</span>,
-		CSS_CONTAINER : <span class="literal">"calcontainer"</span>, 
+		CSS_CALENDAR : <span class="literal">"yui-calendar"</span>,
+		CSS_CONTAINER : <span class="literal">"yui-calcontainer"</span>,
+		CSS_2UPWRAPPER : <span class="literal">"yui-cal2upwrapper"</span>, 
 		CSS_NAV_LEFT : <span class="literal">"calnavleft"</span>,
 		CSS_NAV_RIGHT : <span class="literal">"calnavright"</span>,
 		CSS_CELL_TOP : <span class="literal">"calcelltop"</span>,
@@ -733,8 +733,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.setupConfig =
 	}
 
 	<span class="comment">// If true, reconfigure weekday arrays to place Mondays first</span>
-	<span class="reserved">if</span> (<span class="reserved">this</span>.Options.START_WEEKDAY &gt; 0)
-	{
+	<span class="reserved">if</span> (<span class="reserved">this</span>.Options.START_WEEKDAY &gt; 0) {
 		<span class="reserved">for</span> (var w=0;w&lt;<span class="reserved">this</span>.Options.START_WEEKDAY;++w) {
 			<span class="reserved">this</span>.Locale.WEEKDAYS_SHORT.push(<span class="reserved">this</span>.Locale.WEEKDAYS_SHORT.shift());
 			<span class="reserved">this</span>.Locale.WEEKDAYS_MEDIUM.push(<span class="reserved">this</span>.Locale.WEEKDAYS_MEDIUM.shift());
@@ -826,8 +825,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.buildShellHea
 	head.appendChild(headRow);
 
 	<span class="comment">// Append day labels, if needed</span>
-	<span class="reserved">if</span> (<span class="reserved">this</span>.Options.SHOW_WEEKDAYS)
-	{
+	<span class="reserved">if</span> (<span class="reserved">this</span>.Options.SHOW_WEEKDAYS) {
 		var row = document.createElement(<span class="literal">"TR"</span>);
 		var fillerCell;
 
@@ -839,8 +837,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.buildShellHea
 			row.appendChild(fillerCell);
 		}
 		
-		<span class="reserved">for</span>(var i=0;i&lt;<span class="reserved">this</span>.Options.LOCALE_WEEKDAYS.length;++i)
-		{
+		<span class="reserved">for</span>(var i=0;i&lt;<span class="reserved">this</span>.Options.LOCALE_WEEKDAYS.length;++i) {
 			var cell = document.createElement(<span class="literal">"TH"</span>);
 			YAHOO.widget.Calendar_Core.setCssClasses(cell,[<span class="reserved">this</span>.Style.CSS_WEEKDAY_CELL]);
 			cell.innerHTML=<span class="reserved">this</span>.Options.LOCALE_WEEKDAYS[i];
@@ -866,12 +863,10 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.buildShellBod
 	<span class="comment">// This should only get executed once</span>
 	<span class="reserved">this</span>.tbody = document.createElement(<span class="literal">"TBODY"</span>);
 
-	<span class="reserved">for</span> (var r=0;r&lt;6;++r)
-	{
+	<span class="reserved">for</span> (var r=0;r&lt;6;++r) {
 		var row = document.createElement(<span class="literal">"TR"</span>);
 		
-		<span class="reserved">for</span> (var c=0;c&lt;<span class="reserved">this</span>.headerCell.colSpan;++c)
-		{
+		<span class="reserved">for</span> (var c=0;c&lt;<span class="reserved">this</span>.headerCell.colSpan;++c) {
 			var cell;
 			<span class="reserved">if</span> (<span class="reserved">this</span>.Config.Options.SHOW_WEEK_HEADER &amp;&amp; c===0) { <span class="comment">// Row header</span>
 				cell = document.createElement(<span class="literal">"TH"</span>);
@@ -917,8 +912,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderShell =
 * individual render tasks.
 */</span>
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.render = <span class="reserved">function</span>() {
-	<span class="reserved">if</span> (! <span class="reserved">this</span>.shellRendered)
-	{
+	<span class="reserved">if</span> (! <span class="reserved">this</span>.shellRendered) {
 		<span class="reserved">this</span>.buildShell();
 		<span class="reserved">this</span>.renderShell();
 	}
@@ -981,8 +975,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderBody = 
 	
 	var weekRowIndex = 0;
 	
-	<span class="reserved">for</span> (var c=0;c&lt;<span class="reserved">this</span>.cells.length;++c)
-	{
+	<span class="reserved">for</span> (var c=0;c&lt;<span class="reserved">this</span>.cells.length;++c) {
 		var cellRenderers = new Array();
 		
 		var cell = <span class="reserved">this</span>.cells[c];
@@ -1026,17 +1019,14 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderBody = 
 		
 		<span class="reserved">if</span> (workingDate.getFullYear()	== <span class="reserved">this</span>.today.getFullYear() &amp;&amp;
 			workingDate.getMonth()		== <span class="reserved">this</span>.today.getMonth() &amp;&amp;
-			workingDate.getDate()		== <span class="reserved">this</span>.today.getDate())
-		{
+			workingDate.getDate()		== <span class="reserved">this</span>.today.getDate()) {
 			cellRenderers[cellRenderers.length]=<span class="reserved">this</span>.renderCellStyleToday;
 		}
 		
-		<span class="reserved">if</span> (<span class="reserved">this</span>.isDateOOM(workingDate))
-		{
+		<span class="reserved">if</span> (<span class="reserved">this</span>.isDateOOM(workingDate)) {
 			cellRenderers[cellRenderers.length]=<span class="reserved">this</span>.renderCellNotThisMonth;
 		} <span class="reserved">else</span> {
-			<span class="reserved">for</span> (var r=0;r&lt;<span class="reserved">this</span>.renderStack.length;++r)
-			{
+			<span class="reserved">for</span> (var r=0;r&lt;<span class="reserved">this</span>.renderStack.length;++r) {
 				var rArray = <span class="reserved">this</span>.renderStack[r];
 				var type = rArray[0];
 				
@@ -1050,8 +1040,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderBody = 
 						day = rArray[1][2];
 						year = rArray[1][0];
 
-						<span class="reserved">if</span> (workingDate.getMonth()+1 == month &amp;&amp; workingDate.getDate() == day &amp;&amp; workingDate.getFullYear() == year)
-						{
+						<span class="reserved">if</span> (workingDate.getMonth()+1 == month &amp;&amp; workingDate.getDate() == day &amp;&amp; workingDate.getFullYear() == year) {
 							renderer = rArray[2];
 							<span class="reserved">this</span>.renderStack.splice(r,1);
 						}
@@ -1060,8 +1049,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderBody = 
 						month = rArray[1][0];
 						day = rArray[1][1];
 						
-						<span class="reserved">if</span> (workingDate.getMonth()+1 == month &amp;&amp; workingDate.getDate() == day)
-						{
+						<span class="reserved">if</span> (workingDate.getMonth()+1 == month &amp;&amp; workingDate.getDate() == day) {
 							renderer = rArray[2];
 							<span class="reserved">this</span>.renderStack.splice(r,1);
 						}
@@ -1082,8 +1070,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderBody = 
 
 						var d2 = new Date(d2year, d2month-1, d2day);
 
-						<span class="reserved">if</span> (workingDate.getTime() &gt;= d1.getTime() &amp;&amp; workingDate.getTime() &lt;= d2.getTime())
-						{
+						<span class="reserved">if</span> (workingDate.getTime() &gt;= d1.getTime() &amp;&amp; workingDate.getTime() &lt;= d2.getTime()) {
 							renderer = rArray[2];
 
 							<span class="reserved">if</span> (workingDate.getTime()==d2.getTime()) { 
@@ -1094,16 +1081,14 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderBody = 
 					case YAHOO.widget.Calendar_Core.WEEKDAY:
 						
 						var weekday = rArray[1][0];
-						<span class="reserved">if</span> (workingDate.getDay()+1 == weekday)
-						{
+						<span class="reserved">if</span> (workingDate.getDay()+1 == weekday) {
 							renderer = rArray[2];
 						}
 						break;
 					case YAHOO.widget.Calendar_Core.MONTH:
 						
 						month = rArray[1][0];
-						<span class="reserved">if</span> (workingDate.getMonth()+1 == month)
-						{
+						<span class="reserved">if</span> (workingDate.getMonth()+1 == month) {
 							renderer = rArray[2];
 						}
 						break;
@@ -1116,17 +1101,14 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderBody = 
 
 		}
 
-		<span class="reserved">if</span> (<span class="reserved">this</span>._indexOfSelectedFieldArray([workingDate.getFullYear(),workingDate.getMonth()+1,workingDate.getDate()]) &gt; -1)
-		{
+		<span class="reserved">if</span> (<span class="reserved">this</span>._indexOfSelectedFieldArray([workingDate.getFullYear(),workingDate.getMonth()+1,workingDate.getDate()]) &gt; -1) {
 			cellRenderers[cellRenderers.length]=<span class="reserved">this</span>.renderCellStyleSelected; 
 		}
 
-		<span class="reserved">if</span> (<span class="reserved">this</span>.minDate)
-		{
+		<span class="reserved">if</span> (<span class="reserved">this</span>.minDate) {
 			<span class="reserved">this</span>.minDate = YAHOO.widget.DateMath.clearTime(<span class="reserved">this</span>.minDate);
 		}
-		<span class="reserved">if</span> (<span class="reserved">this</span>.maxDate)
-		{
+		<span class="reserved">if</span> (<span class="reserved">this</span>.maxDate) {
 			<span class="reserved">this</span>.maxDate = YAHOO.widget.DateMath.clearTime(<span class="reserved">this</span>.maxDate);
 		}
 
@@ -1139,8 +1121,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderBody = 
 			cellRenderers[cellRenderers.length]=<span class="reserved">this</span>.renderCellDefault;	
 		}
 		
-		<span class="reserved">for</span> (var x=0;x&lt;cellRenderers.length;++x)
-		{
+		<span class="reserved">for</span> (var x=0;x&lt;cellRenderers.length;++x) {
 			var ren = cellRenderers[x];
 			<span class="reserved">if</span> (ren.call(<span class="reserved">this</span>,workingDate,cell) == YAHOO.widget.Calendar_Core.STOP_RENDER) {
 				break;
@@ -1152,15 +1133,16 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderBody = 
 			weekRowIndex += 1;
 		}
 
-		YAHOO.widget.Calendar_Core.addCssClass(cell, <span class="reserved">this</span>.Style.CSS_CELL);
+		YAHOO.util.Dom.addClass(cell, <span class="reserved">this</span>.Style.CSS_CELL);
+
 		<span class="reserved">if</span> (c &gt;= 0 &amp;&amp; c &lt;= 6) {
-			YAHOO.widget.Calendar_Core.addCssClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_TOP);
+			YAHOO.util.Dom.addClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_TOP);
 		}
 		<span class="reserved">if</span> ((c % 7) == 0) {
-			YAHOO.widget.Calendar_Core.addCssClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_LEFT);
+			YAHOO.util.Dom.addClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_LEFT);
 		}
 		<span class="reserved">if</span> (((c+1) % 7) == 0) {
-			YAHOO.widget.Calendar_Core.addCssClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_RIGHT);
+			YAHOO.util.Dom.addClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_RIGHT);
 		}
 		
 		var postDays = <span class="reserved">this</span>.postMonthDays; 
@@ -1172,7 +1154,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderBody = 
 		}
 		
 		<span class="reserved">if</span> (c &gt;= ((<span class="reserved">this</span>.preMonthDays+postDays+<span class="reserved">this</span>.monthDays)-7)) {
-			YAHOO.widget.Calendar_Core.addCssClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_BOTTOM);
+			YAHOO.util.Dom.addClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_BOTTOM);
 		}
 	}
 		
@@ -1207,7 +1189,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>._unload = <sp
 <span class="comment">/****************** BEGIN BUILT-IN TABLE CELL RENDERERS ************************************/</span>
 
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderOutOfBoundsDate = <span class="reserved">function</span>(workingDate, cell) {
-	YAHOO.widget.Calendar_Core.addCssClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_OOB);
+	YAHOO.util.Dom.addClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_OOB);
 	cell.innerHTML = workingDate.getDate();
 	<span class="reserved">return</span> YAHOO.widget.Calendar_Core.STOP_RENDER;
 }
@@ -1219,7 +1201,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderOutOfBo
 * <span class="attrib">@param</span> {HTMLTableCellElement}	cell			The current working cell in the calendar
 */</span>
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderRowHeader = <span class="reserved">function</span>(workingDate, cell) {
-	YAHOO.widget.Calendar_Core.addCssClass(cell, <span class="reserved">this</span>.Style.CSS_ROW_HEADER);
+	YAHOO.util.Dom.addClass(cell, <span class="reserved">this</span>.Style.CSS_ROW_HEADER);
 	
 	var useYear = <span class="reserved">this</span>.pageDate.getFullYear();
 	
@@ -1231,7 +1213,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderRowHead
 	cell.innerHTML = weekNum;
 	
 	<span class="reserved">if</span> (<span class="reserved">this</span>.isDateOOM(workingDate) &amp;&amp; ! YAHOO.widget.DateMath.isMonthOverlapWeek(workingDate)) {
-		YAHOO.widget.Calendar_Core.addCssClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_OOM);	
+		YAHOO.util.Dom.addClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_OOM);	
 	}
 };
 
@@ -1242,10 +1224,10 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderRowHead
 * <span class="attrib">@param</span> {HTMLTableCellElement}	cell			The current working cell in the calendar
 */</span>
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderRowFooter = <span class="reserved">function</span>(workingDate, cell) {
-	YAHOO.widget.Calendar_Core.addCssClass(cell, <span class="reserved">this</span>.Style.CSS_ROW_FOOTER);
+	YAHOO.util.Dom.addClass(cell, <span class="reserved">this</span>.Style.CSS_ROW_FOOTER);
 	
 	<span class="reserved">if</span> (<span class="reserved">this</span>.isDateOOM(workingDate) &amp;&amp; ! YAHOO.widget.DateMath.isMonthOverlapWeek(workingDate)) {
-		YAHOO.widget.Calendar_Core.addCssClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_OOM);	
+		YAHOO.util.Dom.addClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_OOM);	
 	}
 };
 
@@ -1271,17 +1253,52 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderCellDef
 	cell.appendChild(link);
 };
 
+<span class="comment">/**
+* Renders a single standard calendar cell using the CSS hightlight1 style
+* <span class="attrib">@param</span> {Date}					workingDate		The current working Date object being used to generate the calendar
+* <span class="attrib">@param</span> {HTMLTableCellElement}	cell			The current working cell in the calendar
+* <span class="attrib">@return</span> YAHOO.widget.Calendar_Core.STOP_RENDER if rendering should stop with this style, null or nothing if rendering
+*			should not be terminated
+* <span class="attrib">@type</span> String
+*/</span>
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderCellStyleHighlight1 = <span class="reserved">function</span>(workingDate, cell) {
-	YAHOO.widget.Calendar_Core.addCssClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_HIGHLIGHT1);
+	YAHOO.util.Dom.addClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_HIGHLIGHT1);
 };
+
+<span class="comment">/**
+* Renders a single standard calendar cell using the CSS hightlight2 style
+* <span class="attrib">@param</span> {Date}					workingDate		The current working Date object being used to generate the calendar
+* <span class="attrib">@param</span> {HTMLTableCellElement}	cell			The current working cell in the calendar
+* <span class="attrib">@return</span> YAHOO.widget.Calendar_Core.STOP_RENDER if rendering should stop with this style, null or nothing if rendering
+*			should not be terminated
+* <span class="attrib">@type</span> String
+*/</span>
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderCellStyleHighlight2 = <span class="reserved">function</span>(workingDate, cell) {
-	YAHOO.widget.Calendar_Core.addCssClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_HIGHLIGHT2);
+	YAHOO.util.Dom.addClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_HIGHLIGHT2);
 };
+
+<span class="comment">/**
+* Renders a single standard calendar cell using the CSS hightlight3 style
+* <span class="attrib">@param</span> {Date}					workingDate		The current working Date object being used to generate the calendar
+* <span class="attrib">@param</span> {HTMLTableCellElement}	cell			The current working cell in the calendar
+* <span class="attrib">@return</span> YAHOO.widget.Calendar_Core.STOP_RENDER if rendering should stop with this style, null or nothing if rendering
+*			should not be terminated
+* <span class="attrib">@type</span> String
+*/</span>
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderCellStyleHighlight3 = <span class="reserved">function</span>(workingDate, cell) {
-	YAHOO.widget.Calendar_Core.addCssClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_HIGHLIGHT3);
+	YAHOO.util.Dom.addClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_HIGHLIGHT3);
 };
+
+<span class="comment">/**
+* Renders a single standard calendar cell using the CSS hightlight4 style
+* <span class="attrib">@param</span> {Date}					workingDate		The current working Date object being used to generate the calendar
+* <span class="attrib">@param</span> {HTMLTableCellElement}	cell			The current working cell in the calendar
+* <span class="attrib">@return</span> YAHOO.widget.Calendar_Core.STOP_RENDER if rendering should stop with this style, null or nothing if rendering
+*			should not be terminated
+* <span class="attrib">@type</span> String
+*/</span>
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderCellStyleHighlight4 = <span class="reserved">function</span>(workingDate, cell) {
-	YAHOO.widget.Calendar_Core.addCssClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_HIGHLIGHT4);
+	YAHOO.util.Dom.addClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_HIGHLIGHT4);
 };
 
 <span class="comment">/**
@@ -1293,7 +1310,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderCellSty
 * <span class="attrib">@type</span> String
 */</span>
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderCellStyleToday = <span class="reserved">function</span>(workingDate, cell) {
-	YAHOO.widget.Calendar_Core.addCssClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_TODAY);
+	YAHOO.util.Dom.addClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_TODAY);
 };
 
 <span class="comment">/**
@@ -1305,7 +1322,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderCellSty
 * <span class="attrib">@type</span> String
 */</span>
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderCellStyleSelected = <span class="reserved">function</span>(workingDate, cell) {
-	YAHOO.widget.Calendar_Core.addCssClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_SELECTED);
+	YAHOO.util.Dom.addClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_SELECTED);
 };
 
 <span class="comment">/**
@@ -1318,7 +1335,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderCellSty
 * <span class="attrib">@type</span> String
 */</span>
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.renderCellNotThisMonth = <span class="reserved">function</span>(workingDate, cell) {
-	YAHOO.widget.Calendar_Core.addCssClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_OOM);
+	YAHOO.util.Dom.addClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_OOM);
 	cell.innerHTML=workingDate.getDate();
 	<span class="reserved">return</span> YAHOO.widget.Calendar_Core.STOP_RENDER;
 };
@@ -1454,11 +1471,9 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.select = <spa
 
 	var aToBeSelected = <span class="reserved">this</span>._toFieldArray(date);
 
-	<span class="reserved">for</span> (var a=0;a&lt;aToBeSelected.length;++a)
-	{
+	<span class="reserved">for</span> (var a=0;a&lt;aToBeSelected.length;++a) {
 		var toSelect = aToBeSelected[a]; <span class="comment">// For each date item in the list of dates we're trying to select</span>
-		<span class="reserved">if</span> (<span class="reserved">this</span>._indexOfSelectedFieldArray(toSelect) == -1) <span class="comment">// not already selected?</span>
-		{	
+		<span class="reserved">if</span> (<span class="reserved">this</span>._indexOfSelectedFieldArray(toSelect) == -1) { <span class="comment">// not already selected?</span>
 			<span class="reserved">this</span>.selectedDates[<span class="reserved">this</span>.selectedDates.length]=toSelect;
 		}
 	}
@@ -1522,13 +1537,11 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.deselect = <s
 
 	var aToBeSelected = <span class="reserved">this</span>._toFieldArray(date);
 
-	<span class="reserved">for</span> (var a=0;a&lt;aToBeSelected.length;++a)
-	{
+	<span class="reserved">for</span> (var a=0;a&lt;aToBeSelected.length;++a) {
 		var toSelect = aToBeSelected[a]; <span class="comment">// For each date item in the list of dates we're trying to select</span>
 		var index = <span class="reserved">this</span>._indexOfSelectedFieldArray(toSelect);
 	
-		<span class="reserved">if</span> (index != -1)
-		{	
+		<span class="reserved">if</span> (index != -1) {	
 			<span class="reserved">this</span>.selectedDates.splice(index,1);
 		}
 	}
@@ -1561,12 +1574,10 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.deselectCell 
 
 	var selectDate = cellDate.concat();
 
-	<span class="reserved">if</span> (cellDateIndex &gt; -1)
-	{
+	<span class="reserved">if</span> (cellDateIndex &gt; -1) {
 		<span class="reserved">if</span> (<span class="reserved">this</span>.pageDate.getMonth() == dCellDate.getMonth() &amp;&amp;
-			<span class="reserved">this</span>.pageDate.getFullYear() == dCellDate.getFullYear())
-		{
-			YAHOO.widget.Calendar_Core.removeCssClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_SELECTED);
+			<span class="reserved">this</span>.pageDate.getFullYear() == dCellDate.getFullYear()) {
+			YAHOO.util.Dom.removeClass(cell, <span class="reserved">this</span>.Style.CSS_CELL_SELECTED);
 		}
 
 		<span class="reserved">this</span>.selectedDates.splice(cellDateIndex, 1);
@@ -1623,18 +1634,12 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.deselectAll =
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>._toFieldArray = <span class="reserved">function</span>(date) {
 	var returnDate = new Array();
 
-	<span class="reserved">if</span> (date instanceof Date)
-	{
+	<span class="reserved">if</span> (date instanceof Date) {
 		returnDate = [[date.getFullYear(), date.getMonth()+1, date.getDate()]];
-	} 
-	<span class="reserved">else</span> <span class="reserved">if</span> (typeof date == <span class="literal">'string'</span>)
-	{
+	} <span class="reserved">else</span> <span class="reserved">if</span> (typeof date == <span class="literal">'string'</span>) {
 		returnDate = <span class="reserved">this</span>._parseDates(date);
-	}
-	<span class="reserved">else</span> <span class="reserved">if</span> (date instanceof Array)
-	{
-		<span class="reserved">for</span> (var i=0;i&lt;date.length;++i)
-		{
+	} <span class="reserved">else</span> <span class="reserved">if</span> (date instanceof Array) {
+		<span class="reserved">for</span> (var i=0;i&lt;date.length;++i) {
 			var d = date[i];
 			returnDate[returnDate.length] = [d.getFullYear(),d.getMonth()+1,d.getDate()];
 		}
@@ -1651,11 +1656,9 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>._toFieldArray
 * <span class="attrib">@type</span> Date
 */</span>
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>._toDate = <span class="reserved">function</span>(dateFieldArray) {
-	<span class="reserved">if</span> (dateFieldArray instanceof Date)
-	{
+	<span class="reserved">if</span> (dateFieldArray instanceof Date) {
 		<span class="reserved">return</span> dateFieldArray;
-	} <span class="reserved">else</span> 	
-	{
+	} <span class="reserved">else</span> {
 		<span class="reserved">return</span> new Date(dateFieldArray[0],dateFieldArray[1]-1,dateFieldArray[2]);
 	}
 };
@@ -1674,8 +1677,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>._toDate = <sp
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>._fieldArraysAreEqual = <span class="reserved">function</span>(array1, array2) {
 	var match = false;
 
-	<span class="reserved">if</span> (array1[0]==array2[0]&amp;&amp;array1[1]==array2[1]&amp;&amp;array1[2]==array2[2])
-	{
+	<span class="reserved">if</span> (array1[0]==array2[0]&amp;&amp;array1[1]==array2[1]&amp;&amp;array1[2]==array2[2]) {
 		match=true;	
 	}
 
@@ -1693,11 +1695,9 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>._fieldArraysA
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>._indexOfSelectedFieldArray = <span class="reserved">function</span>(find) {
 	var selected = -1;
 
-	<span class="reserved">for</span> (var s=0;s&lt;<span class="reserved">this</span>.selectedDates.length;++s)
-	{
+	<span class="reserved">for</span> (var s=0;s&lt;<span class="reserved">this</span>.selectedDates.length;++s) {
 		var sArray = <span class="reserved">this</span>.selectedDates[s];
-		<span class="reserved">if</span> (find[0]==sArray[0]&amp;&amp;find[1]==sArray[1]&amp;&amp;find[2]==sArray[2])
-		{
+		<span class="reserved">if</span> (find[0]==sArray[0]&amp;&amp;find[1]==sArray[1]&amp;&amp;find[2]==sArray[2]) {
 			selected = s;
 			break;
 		}
@@ -1805,8 +1805,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>._parseDate = 
 	var aDate = sDate.split(<span class="reserved">this</span>.Locale.DATE_FIELD_DELIMITER);
 	var rArray;
 
-	<span class="reserved">if</span> (aDate.length == 2)
-	{
+	<span class="reserved">if</span> (aDate.length == 2) {
 		rArray = [aDate[<span class="reserved">this</span>.Locale.MD_MONTH_POSITION-1],aDate[<span class="reserved">this</span>.Locale.MD_DAY_POSITION-1]];
 		rArray.type = YAHOO.widget.Calendar_Core.MONTH_DAY;
 	} <span class="reserved">else</span> {
@@ -1828,8 +1827,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>._parseDates =
 
 	var aDates = sDates.split(<span class="reserved">this</span>.Locale.DATE_DELIMITER);
 	
-	<span class="reserved">for</span> (var d=0;d&lt;aDates.length;++d)
-	{
+	<span class="reserved">for</span> (var d=0;d&lt;aDates.length;++d) {
 		var sDate = aDates[d];
 
 		<span class="reserved">if</span> (sDate.indexOf(<span class="reserved">this</span>.Locale.DATE_RANGE_DELIMITER) != -1) {
@@ -1865,8 +1863,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>._parseRange =
 
 	var results = new Array();
 	results.push(startDate);
-	<span class="reserved">while</span> (dCurrent.getTime() &lt;= dEnd.getTime())
-	{
+	<span class="reserved">while</span> (dCurrent.getTime() &lt;= dEnd.getTime()) {
 		results.push([dCurrent.getFullYear(),dCurrent.getMonth()+1,dCurrent.getDate()]);
 		dCurrent = YAHOO.widget.DateMath.add(dCurrent,YAHOO.widget.DateMath.DAY,1);
 	}
@@ -1902,20 +1899,16 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.clearElement 
 */</span>
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.addRenderer = <span class="reserved">function</span>(sDates, fnRender) {
 	var aDates = <span class="reserved">this</span>._parseDates(sDates);
-	<span class="reserved">for</span> (var i=0;i&lt;aDates.length;++i)
-	{
+	<span class="reserved">for</span> (var i=0;i&lt;aDates.length;++i) {
 		var aDate = aDates[i];
 	
-		<span class="reserved">if</span> (aDate.length == 2) <span class="comment">// this is either a range or a month/day combo</span>
-		{
-			<span class="reserved">if</span> (aDate[0] instanceof Array) <span class="comment">// this is a range</span>
-			{
+		<span class="reserved">if</span> (aDate.length == 2) { <span class="comment">// this is either a range or a month/day combo</span>
+			<span class="reserved">if</span> (aDate[0] instanceof Array) { <span class="comment">// this is a range</span>
 				<span class="reserved">this</span>._addRenderer(YAHOO.widget.Calendar_Core.RANGE,aDate,fnRender);
 			} <span class="reserved">else</span> { <span class="comment">// this is a month/day combo</span>
 				<span class="reserved">this</span>._addRenderer(YAHOO.widget.Calendar_Core.MONTH_DAY,aDate,fnRender);
 			}
-		} <span class="reserved">else</span> <span class="reserved">if</span> (aDate.length == 3)
-		{
+		} <span class="reserved">else</span> <span class="reserved">if</span> (aDate.length == 3) {
 			<span class="reserved">this</span>._addRenderer(YAHOO.widget.Calendar_Core.DATE,aDate,fnRender);
 		}
 	}
@@ -1958,44 +1951,9 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.addMonthRende
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.addWeekdayRenderer = <span class="reserved">function</span>(weekday, fnRender) {
 	<span class="reserved">this</span>._addRenderer(YAHOO.widget.Calendar_Core.WEEKDAY,[weekday],fnRender);
 };
-<span class="comment">/************* END RENDERER METHODS *******************************************************/</span>
+<span class="comment">//// END RENDERER METHODS ////</span>
 
-<span class="comment">/***************** BEGIN CSS METHODS *******************************************/</span>
-<span class="comment">/**
-* Adds the specified CSS class to the element passed to this method.
-* <span class="attrib">@param</span>	{HTMLElement}	element		The element to which the CSS class should be applied
-* <span class="attrib">@param</span>	{String}	style		The CSS class name to add to the referenced element
-*/</span>
-YAHOO.widget.Calendar_Core.addCssClass = <span class="reserved">function</span>(element, style) {
-	<span class="reserved">if</span> (element.className.length === 0)
-	{
-		element.className += style;
-	} <span class="reserved">else</span> {
-		element.className += <span class="literal">" "</span> + style;
-	}
-};
-
-YAHOO.widget.Calendar_Core.prependCssClass = <span class="reserved">function</span>(element, style) {
-	element.className = style + <span class="literal">" "</span> + element.className;
-}
-
-<span class="comment">/**
-* Removed the specified CSS class from the element passed to this method.
-* <span class="attrib">@param</span>	{HTMLElement}	element		The element from which the CSS class should be removed
-* <span class="attrib">@param</span>	{String}	style		The CSS class name to remove from the referenced element
-*/</span>
-YAHOO.widget.Calendar_Core.removeCssClass = <span class="reserved">function</span>(element, style) {
-	var aStyles = element.className.split(<span class="literal">" "</span>);
-	<span class="reserved">for</span> (var s=0;s&lt;aStyles.length;++s)
-	{
-		<span class="reserved">if</span> (aStyles[s] == style)
-		{
-			aStyles.splice(s,1);
-			break;
-		}
-	}
-	YAHOO.widget.Calendar_Core.setCssClasses(element, aStyles);
-};
+<span class="comment">//// BEGIN CSS METHODS ////</span>
 
 <span class="comment">/**
 * Sets the specified array of CSS classes into the referenced element
@@ -2013,15 +1971,14 @@ YAHOO.widget.Calendar_Core.setCssClasses = <span class="reserved">function</span
 * <span class="attrib">@param</span>	{style}		The CSS class name to remove from all calendar body cells
 */</span>
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.clearAllBodyCellStyles = <span class="reserved">function</span>(style) {
-	<span class="reserved">for</span> (var c=0;c&lt;<span class="reserved">this</span>.cells.length;++c)
-	{
-		YAHOO.widget.Calendar_Core.removeCssClass(<span class="reserved">this</span>.cells[c],style);
+	<span class="reserved">for</span> (var c=0;c&lt;<span class="reserved">this</span>.cells.length;++c) {
+		YAHOO.util.Dom.removeClass(<span class="reserved">this</span>.cells[c],style);
 	}
 };
 
-<span class="comment">/***************** END CSS METHODS *********************************************/</span>
+<span class="comment">//// END CSS METHODS ////</span>
 
-<span class="comment">/***************** BEGIN GETTER/SETTER METHODS *********************************/</span>
+<span class="comment">//// BEGIN GETTER/SETTER METHODS ////</span>
 <span class="comment">/**
 * Sets the calendar's month explicitly.
 * <span class="attrib">@param</span> {Integer}	month		The numeric month, from 1 (January) to 12 (December)
@@ -2046,8 +2003,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.setYear = <sp
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.getSelectedDates = <span class="reserved">function</span>() {
 	var returnDates = new Array();
 
-	<span class="reserved">for</span> (var d=0;d&lt;<span class="reserved">this</span>.selectedDates.length;++d)
-	{
+	<span class="reserved">for</span> (var d=0;d&lt;<span class="reserved">this</span>.selectedDates.length;++d) {
 		var dateArray = <span class="reserved">this</span>.selectedDates[d];
 
 		var date = new Date(dateArray[0],dateArray[1]-1,dateArray[2]);
@@ -2058,10 +2014,13 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.getSelectedDa
 	<span class="reserved">return</span> returnDates;
 };
 
-<span class="comment">/***************** END GETTER/SETTER METHODS *********************************/</span>
+<span class="comment">/// END GETTER/SETTER METHODS ///</span>
 
-YAHOO.widget.Calendar_Core._getBrowser = <span class="reserved">function</span>()
-{
+<span class="comment">/**
+* Returns a string representing the current browser.
+* <span class="attrib">@type</span> String
+*/</span>
+YAHOO.widget.Calendar_Core._getBrowser = <span class="reserved">function</span>() {
   <span class="comment">/**
    * UserAgent
    * <span class="attrib">@private</span>
@@ -2081,6 +2040,13 @@ YAHOO.widget.Calendar_Core._getBrowser = <span class="reserved">function</span>(
   <span class="reserved">return</span> false;
 }
 
+<span class="comment">/**
+* Returns a string representation of the object.
+* <span class="attrib">@type</span> string
+*/</span>
+YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.toString = <span class="reserved">function</span>() {
+	<span class="reserved">return</span> <span class="literal">"Calendar_Core "</span> + <span class="reserved">this</span>.id;
+}
 
 YAHOO.widget.Cal_Core = YAHOO.widget.Calendar_Core;</pre>
 			</div>
@@ -2090,11 +2056,13 @@ YAHOO.widget.Cal_Core = YAHOO.widget.Calendar_Core;</pre>
 
 
 <div id="footer">
-	<hr />	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	<hr />
+	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
 	<br /><br />
-	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
-	version 1.9.5.8
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">
+	JSDoc</a>
 </div>
+
 
 
 </body>
