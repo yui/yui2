@@ -17,6 +17,8 @@
 	<h3><a href="./index.html">Yahoo! UI Library: Container</a></h3>
 
 	<div class="breadcrumbs">
+		
+
 			
 			
 			
@@ -56,6 +58,11 @@
 				<ul class="content">
 					
 						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
 							<a href="YAHOO.util.Config.html">
 								YAHOO.util.Config</a>
 						</li>
@@ -65,7 +72,10 @@
 								YAHOO.util.KeyListener</a>
 						</li>
 					
-
+						<li>
+							<a href="YAHOO.widget.html">
+								YAHOO.widget</a>
+						</li>
 					
 						<li>
 							<a href="YAHOO.widget.ContainerEffect.html">
@@ -85,11 +95,6 @@
 						<li>
 							<a href="YAHOO.widget.Overlay.html">
 								YAHOO.widget.Overlay</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.OverlayEffect.html">
-								YAHOO.widget.OverlayEffect</a>
 						</li>
 					
 						<li>
@@ -152,11 +157,6 @@
 						</li>
 					
 						<li>
-							<a href="overview-summary-OverlayEffect.js.html">
-								OverlayEffect.js</a>
-						</li>
-					
-						<li>
 							<a href="overview-summary-OverlayManager.js.html">
 								OverlayManager.js</a>
 						</li>
@@ -187,20 +187,9 @@
 			<h2>Class YAHOO.widget.Panel</h2>
 			<pre>Object
    |
-   +--<a href='YAHOO.widget.Module.html'>YAHOO.widget.Module</a>
-         |
-         +--<a href='YAHOO.widget.Overlay.html'>YAHOO.widget.Overlay</a>
-               |
-               +--<b>YAHOO.widget.Panel</b>
+   +--<b>YAHOO.widget.Panel</b>
 </pre>
 			
-			
-				<dl class="subclasses">
-					<dt>Direct Known Subclasses:</dd>
-					<dd>
-						 <a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a>
-					</dd>
-			   </dl>
 			
 		
 			<hr />
@@ -215,8 +204,6 @@
 					<b>YAHOO.widget.Panel</b>
 				</div>
 				<div class="class-extends">
-					
-						<dd>extends <a href='YAHOO.widget.Overlay.html'>YAHOO.widget.Overlay</a></dd>
 					
 				</div>
 			</div>
@@ -323,41 +310,11 @@
 								</td>
 							</tr>
 						
-							<tr>
-								<td class="flags">class</td>
-								<td class="spec">
-									<code>
-										<a href="#superclass">superclass</a>
-									</code>
-									<div class="description">
-										Reference to the Panel's superclass, Overlay&nbsp;
-									</div>
-								</td>
-							</tr>
-						
 						</table>
 					</div>
 				</div>
 			
 					
-			
-				
-					<div class="section field inheritance">
-						<h3>Fields inherited from class <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-						<div class="content">
-							<code><a href="YAHOO.widget.Overlay.html#beforeMoveEvent">beforeMoveEvent</a>, <a href="YAHOO.widget.Overlay.html#moveEvent">moveEvent</a></code>
-						</div>
-					</div>
-				
-			
-				
-					<div class="section field inheritance">
-						<h3>Fields inherited from class <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-						<div class="content">
-							<code><a href="YAHOO.widget.Module.html#element">element</a>, <a href="YAHOO.widget.Module.html#header">header</a>, <a href="YAHOO.widget.Module.html#body">body</a>, <a href="YAHOO.widget.Module.html#footer">footer</a>, <a href="YAHOO.widget.Module.html#id">id</a>, <a href="YAHOO.widget.Module.html#childNodesInDOM">childNodesInDOM</a>, <a href="YAHOO.widget.Module.html#imageRoot">imageRoot</a>, <a href="YAHOO.widget.Module.html#beforeInitEvent">beforeInitEvent</a>, <a href="YAHOO.widget.Module.html#initEvent">initEvent</a>, <a href="YAHOO.widget.Module.html#appendEvent">appendEvent</a>, <a href="YAHOO.widget.Module.html#beforeRenderEvent">beforeRenderEvent</a>, <a href="YAHOO.widget.Module.html#renderEvent">renderEvent</a>, <a href="YAHOO.widget.Module.html#changeHeaderEvent">changeHeaderEvent</a>, <a href="YAHOO.widget.Module.html#changeBodyEvent">changeBodyEvent</a>, <a href="YAHOO.widget.Module.html#changeFooterEvent">changeFooterEvent</a>, <a href="YAHOO.widget.Module.html#changeContentEvent">changeContentEvent</a>, <a href="YAHOO.widget.Module.html#destroyEvent">destroyEvent</a>, <a href="YAHOO.widget.Module.html#beforeShowEvent">beforeShowEvent</a>, <a href="YAHOO.widget.Module.html#showEvent">showEvent</a>, <a href="YAHOO.widget.Module.html#beforeHideEvent">beforeHideEvent</a>, <a href="YAHOO.widget.Module.html#hideEvent">hideEvent</a></code>
-						</div>
-					</div>
-				
 			
 			<!-- =========== END FIELD SUMMARY =========== -->
 	
@@ -521,10 +478,10 @@
 									<td class="spec">
 										<code>
 											<a href="#init">init</a>
-											(&lt;string&gt; &lt;Element&gt; el, &lt;object&gt; userConfig)
+											(el, userConfig)
 										</code>
 										<div class="description">
-											The Module class's initialization method, which is executed for Module and all of its subclasses.&nbsp;
+											&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -633,25 +590,24 @@
 									</td>
 								</tr>
 							
+								<tr>
+									<td class="flags">Object</td>
+									<td class="spec">
+										<code>
+											<a href="#toString">toString</a>
+											()
+										</code>
+										<div class="description">
+											&nbsp;
+										</div>
+									</td>
+								</tr>
+							
 						</table>
 					</div>
 				</div>
 			
 			
-			
-				<div class="section method inheritance">
-					<h3>Methods inherited from class  <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></h3>
-					<div class="content">
-						<code><a href="YAHOO.widget.Overlay.html#moveTo">moveTo</a>, <a href="YAHOO.widget.Overlay.html#hideMacGeckoScrollbars">hideMacGeckoScrollbars</a>, <a href="YAHOO.widget.Overlay.html#showMacGeckoScrollbars">showMacGeckoScrollbars</a>, <a href="YAHOO.widget.Overlay.html#configVisible">configVisible</a>, <a href="YAHOO.widget.Overlay.html#doCenterOnDOMEvent">doCenterOnDOMEvent</a>, <a href="YAHOO.widget.Overlay.html#configFixedCenter">configFixedCenter</a>, <a href="YAHOO.widget.Overlay.html#configzIndex">configzIndex</a>, <a href="YAHOO.widget.Overlay.html#configXY">configXY</a>, <a href="YAHOO.widget.Overlay.html#configX">configX</a>, <a href="YAHOO.widget.Overlay.html#configY">configY</a>, <a href="YAHOO.widget.Overlay.html#configIframe">configIframe</a>, <a href="YAHOO.widget.Overlay.html#configConstrainToViewport">configConstrainToViewport</a>, <a href="YAHOO.widget.Overlay.html#configContext">configContext</a>, <a href="YAHOO.widget.Overlay.html#align">align</a>, <a href="YAHOO.widget.Overlay.html#enforceConstraints">enforceConstraints</a>, <a href="YAHOO.widget.Overlay.html#center">center</a>, <a href="YAHOO.widget.Overlay.html#syncPosition">syncPosition</a></code>
-					</div>
-				</div>
-			
-				<div class="section method inheritance">
-					<h3>Methods inherited from class  <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></h3>
-					<div class="content">
-						<code><a href="YAHOO.widget.Module.html#platform">platform</a>, <a href="YAHOO.widget.Module.html#browser">browser</a>, <a href="YAHOO.widget.Module.html#isSecure">isSecure</a>, <a href="YAHOO.widget.Module.html#initResizeMonitor">initResizeMonitor</a>, <a href="YAHOO.widget.Module.html#setHeader">setHeader</a>, <a href="YAHOO.widget.Module.html#appendToHeader">appendToHeader</a>, <a href="YAHOO.widget.Module.html#setBody">setBody</a>, <a href="YAHOO.widget.Module.html#appendToBody">appendToBody</a>, <a href="YAHOO.widget.Module.html#setFooter">setFooter</a>, <a href="YAHOO.widget.Module.html#appendToFooter">appendToFooter</a>, <a href="YAHOO.widget.Module.html#destroy">destroy</a>, <a href="YAHOO.widget.Module.html#show">show</a>, <a href="YAHOO.widget.Module.html#hide">hide</a>, <a href="YAHOO.widget.Module.html#configMonitorResize">configMonitorResize</a></code>
-					</div>
-				</div>
 			
 			<!-- ========== END METHOD SUMMARY =========== -->
 	
@@ -716,19 +672,6 @@
 							</div>
 							<hr />
 						
-							<h4><a name="superclass">superclass</a></h4>
-							<div class="detail">
-								<code>
-									class
-									&nbsp;
-									<strong>superclass</strong>
-								</code>
-								<div class="description">
-									Reference to the Panel's superclass, Overlay
-								</div>
-							</div>
-							<hr />
-						
 					</div>
 				</div>
 			
@@ -777,7 +720,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1db14b0)
+									HASH(0x1d38e18)
 								
 							</div>
 						</div>
@@ -808,7 +751,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1db3844)
+										HASH(0x1d4ceb4)
 									
 								</div>
 							</div>
@@ -829,7 +772,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1db1e58)
+										HASH(0x1d8b080)
 									
 								</div>
 							</div>
@@ -850,7 +793,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1db2188)
+										HASH(0x1d8b23c)
 									
 								</div>
 							</div>
@@ -871,7 +814,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1db310c)
+										HASH(0x1d8b380)
 									
 								</div>
 							</div>
@@ -892,7 +835,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1db3328)
+										HASH(0x1d8b614)
 									
 								</div>
 							</div>
@@ -911,7 +854,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1dcdbe8)
+										HASH(0x1d8b7d0)
 									
 								</div>
 							</div>
@@ -932,7 +875,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1dce0b0)
+										HASH(0x1d8b980)
 									
 								</div>
 							</div>
@@ -953,7 +896,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1dfcd8c)
+										HASH(0x1d8bb48)
 									
 								</div>
 							</div>
@@ -974,7 +917,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1dce3f8)
+										HASH(0x1d8bc80)
 									
 								</div>
 							</div>
@@ -995,7 +938,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1db367c)
+										HASH(0x1d8bf14)
 									
 								</div>
 							</div>
@@ -1006,37 +949,15 @@ http://developer.yahoo.net/yui/license.txt
 								<code>
 									void 
 									<strong>init</strong>
-									(&lt;string&gt; &lt;Element&gt; el, &lt;object&gt; userConfig)
+									(el, userConfig)
 								</code>
 										
 								<div class="description">
 									
-										The Module class's initialization method, which is executed for Module and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>el</code> - 
-														The element ID representing the Module <em>OR</em>  
-												</dd>
-											
-												<dd>
-													<code>el</code> - 
-														The element representing the Module  
-												</dd>
-											
-												<dd>
-													<code>userConfig</code> - 
-														The configuration object literal containing the configuration that should be set for this module. See configuration documentation for more details. 	  
-												</dd>
-											
-										</dl>
 									
 									
 									
-										HASH(0x1db3d6c)
+										HASH(0x1dde828)
 									
 								</div>
 							</div>
@@ -1057,7 +978,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1db3f04)
+										HASH(0x1dde9cc)
 									
 								</div>
 							</div>
@@ -1078,7 +999,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1dfd0bc)
+										HASH(0x1ddead4)
 									
 								</div>
 							</div>
@@ -1099,7 +1020,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1dfd1dc)
+										HASH(0x1dded98)
 									
 								</div>
 							</div>
@@ -1120,7 +1041,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1dfd2fc)
+										HASH(0x1ddeea0)
 									
 								</div>
 							</div>
@@ -1161,7 +1082,7 @@ http://developer.yahoo.net/yui/license.txt
 										</dl>
 									
 									
-										HASH(0x1dfd3f8)
+										HASH(0x1ddf0ec)
 									
 								</div>
 							</div>
@@ -1182,7 +1103,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1dfd560)
+										HASH(0x1d435ec)
 									
 								</div>
 							</div>
@@ -1203,7 +1124,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1dfd680)
+										HASH(0x1d43bb0)
 									
 								</div>
 							</div>
@@ -1224,7 +1145,26 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1dfd7a0)
+										HASH(0x1d43ce8)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="toString">toString</a></h4>
+							<div class="detail">
+								<code>
+									Object 
+									<strong>toString</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+									
+									
+									
+										HASH(0x1d43f7c)
 									
 								</div>
 							</div>
@@ -1246,7 +1186,6 @@ http://developer.yahoo.net/yui/license.txt
 	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
 	version 1.9.5.8
 </div>
-
 
 </body>
 </html>

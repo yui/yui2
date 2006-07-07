@@ -17,6 +17,8 @@
 	<h3><a href="./index.html">Yahoo! UI Library: Container</a></h3>
 
 	<div class="breadcrumbs">
+		
+
 			
 			
 			
@@ -56,6 +58,11 @@
 				<ul class="content">
 					
 						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
 							<a href="YAHOO.util.Config.html">
 								YAHOO.util.Config</a>
 						</li>
@@ -65,7 +72,10 @@
 								YAHOO.util.KeyListener</a>
 						</li>
 					
-
+						<li>
+							<a href="YAHOO.widget.html">
+								YAHOO.widget</a>
+						</li>
 					
 						<li>
 							<a href="YAHOO.widget.ContainerEffect.html">
@@ -85,11 +95,6 @@
 						<li>
 							<a href="YAHOO.widget.Overlay.html">
 								YAHOO.widget.Overlay</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.OverlayEffect.html">
-								YAHOO.widget.OverlayEffect</a>
 						</li>
 					
 						<li>
@@ -152,11 +157,6 @@
 						</li>
 					
 						<li>
-							<a href="overview-summary-OverlayEffect.js.html">
-								OverlayEffect.js</a>
-						</li>
-					
-						<li>
 							<a href="overview-summary-OverlayManager.js.html">
 								OverlayManager.js</a>
 						</li>
@@ -187,11 +187,7 @@
 			<h2>Class YAHOO.widget.Tooltip</h2>
 			<pre>Object
    |
-   +--<a href='YAHOO.widget.Module.html'>YAHOO.widget.Module</a>
-         |
-         +--<a href='YAHOO.widget.Overlay.html'>YAHOO.widget.Overlay</a>
-               |
-               +--<b>YAHOO.widget.Tooltip</b>
+   +--<b>YAHOO.widget.Tooltip</b>
 </pre>
 			
 			
@@ -208,8 +204,6 @@
 					<b>YAHOO.widget.Tooltip</b>
 				</div>
 				<div class="class-extends">
-					
-						<dd>extends <a href='YAHOO.widget.Overlay.html'>YAHOO.widget.Overlay</a></dd>
 					
 				</div>
 			</div>
@@ -278,41 +272,11 @@
 								</td>
 							</tr>
 						
-							<tr>
-								<td class="flags">class</td>
-								<td class="spec">
-									<code>
-										<a href="#superclass">superclass</a>
-									</code>
-									<div class="description">
-										Reference to the Tooltip's superclass, Overlay&nbsp;
-									</div>
-								</td>
-							</tr>
-						
 						</table>
 					</div>
 				</div>
 			
 					
-			
-				
-					<div class="section field inheritance">
-						<h3>Fields inherited from class <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-						<div class="content">
-							<code><a href="YAHOO.widget.Overlay.html#beforeMoveEvent">beforeMoveEvent</a>, <a href="YAHOO.widget.Overlay.html#moveEvent">moveEvent</a></code>
-						</div>
-					</div>
-				
-			
-				
-					<div class="section field inheritance">
-						<h3>Fields inherited from class <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-						<div class="content">
-							<code><a href="YAHOO.widget.Module.html#element">element</a>, <a href="YAHOO.widget.Module.html#header">header</a>, <a href="YAHOO.widget.Module.html#body">body</a>, <a href="YAHOO.widget.Module.html#footer">footer</a>, <a href="YAHOO.widget.Module.html#id">id</a>, <a href="YAHOO.widget.Module.html#childNodesInDOM">childNodesInDOM</a>, <a href="YAHOO.widget.Module.html#imageRoot">imageRoot</a>, <a href="YAHOO.widget.Module.html#beforeInitEvent">beforeInitEvent</a>, <a href="YAHOO.widget.Module.html#initEvent">initEvent</a>, <a href="YAHOO.widget.Module.html#appendEvent">appendEvent</a>, <a href="YAHOO.widget.Module.html#beforeRenderEvent">beforeRenderEvent</a>, <a href="YAHOO.widget.Module.html#renderEvent">renderEvent</a>, <a href="YAHOO.widget.Module.html#changeHeaderEvent">changeHeaderEvent</a>, <a href="YAHOO.widget.Module.html#changeBodyEvent">changeBodyEvent</a>, <a href="YAHOO.widget.Module.html#changeFooterEvent">changeFooterEvent</a>, <a href="YAHOO.widget.Module.html#changeContentEvent">changeContentEvent</a>, <a href="YAHOO.widget.Module.html#destroyEvent">destroyEvent</a>, <a href="YAHOO.widget.Module.html#beforeShowEvent">beforeShowEvent</a>, <a href="YAHOO.widget.Module.html#showEvent">showEvent</a>, <a href="YAHOO.widget.Module.html#beforeHideEvent">beforeHideEvent</a>, <a href="YAHOO.widget.Module.html#hideEvent">hideEvent</a></code>
-						</div>
-					</div>
-				
 			
 			<!-- =========== END FIELD SUMMARY =========== -->
 	
@@ -371,19 +335,6 @@
 									<td class="flags">void</td>
 									<td class="spec">
 										<code>
-											<a href="#configPreventOverlap">configPreventOverlap</a>
-											(type, args, obj)
-										</code>
-										<div class="description">
-											The default event handler fired when the "preventoverlap" property is changed.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
 											<a href="#configText">configText</a>
 											(type, args, obj)
 										</code>
@@ -394,7 +345,7 @@
 								</tr>
 							
 								<tr>
-									<td class="flags">void</td>
+									<td class="flags">Object</td>
 									<td class="spec">
 										<code>
 											<a href="#doHide">doHide</a>
@@ -411,7 +362,7 @@
 									<td class="spec">
 										<code>
 											<a href="#doShow">doShow</a>
-											(&lt;DOMEvent&gt; e)
+											(&lt;DOMEvent&gt; e, context)
 										</code>
 										<div class="description">
 											Processes the showing of the Tooltip by setting the timeout delay and offset of the Tooltip.&nbsp;
@@ -424,10 +375,10 @@
 									<td class="spec">
 										<code>
 											<a href="#init">init</a>
-											(&lt;string&gt; &lt;Element&gt; el, &lt;object&gt; userConfig)
+											(el, userConfig)
 										</code>
 										<div class="description">
-											The Module class's initialization method, which is executed for Module and all of its subclasses.&nbsp;
+											&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -441,6 +392,19 @@
 										</code>
 										<div class="description">
 											Initializes the class's configurable properties which can be changed using the Overlay's Config object (cfg).&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">void</td>
+									<td class="spec">
+										<code>
+											<a href="#onContextMouseMove">onContextMouseMove</a>
+											(e, obj)
+										</code>
+										<div class="description">
+											&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -476,10 +440,23 @@
 									<td class="spec">
 										<code>
 											<a href="#preventOverlap">preventOverlap</a>
-											(type, args, obj)
+											(pageX, pageY)
 										</code>
 										<div class="description">
 											Fired when the Tooltip is moved, this event handler is used to prevent the Tooltip from overlapping with its context element.&nbsp;
+										</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="flags">Object</td>
+									<td class="spec">
+										<code>
+											<a href="#toString">toString</a>
+											()
+										</code>
+										<div class="description">
+											&nbsp;
 										</div>
 									</td>
 								</tr>
@@ -489,20 +466,6 @@
 				</div>
 			
 			
-			
-				<div class="section method inheritance">
-					<h3>Methods inherited from class  <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></h3>
-					<div class="content">
-						<code><a href="YAHOO.widget.Overlay.html#initEvents">initEvents</a>, <a href="YAHOO.widget.Overlay.html#moveTo">moveTo</a>, <a href="YAHOO.widget.Overlay.html#hideMacGeckoScrollbars">hideMacGeckoScrollbars</a>, <a href="YAHOO.widget.Overlay.html#showMacGeckoScrollbars">showMacGeckoScrollbars</a>, <a href="YAHOO.widget.Overlay.html#configVisible">configVisible</a>, <a href="YAHOO.widget.Overlay.html#doCenterOnDOMEvent">doCenterOnDOMEvent</a>, <a href="YAHOO.widget.Overlay.html#configFixedCenter">configFixedCenter</a>, <a href="YAHOO.widget.Overlay.html#configHeight">configHeight</a>, <a href="YAHOO.widget.Overlay.html#configWidth">configWidth</a>, <a href="YAHOO.widget.Overlay.html#configzIndex">configzIndex</a>, <a href="YAHOO.widget.Overlay.html#configXY">configXY</a>, <a href="YAHOO.widget.Overlay.html#configX">configX</a>, <a href="YAHOO.widget.Overlay.html#configY">configY</a>, <a href="YAHOO.widget.Overlay.html#configIframe">configIframe</a>, <a href="YAHOO.widget.Overlay.html#configConstrainToViewport">configConstrainToViewport</a>, <a href="YAHOO.widget.Overlay.html#align">align</a>, <a href="YAHOO.widget.Overlay.html#enforceConstraints">enforceConstraints</a>, <a href="YAHOO.widget.Overlay.html#center">center</a>, <a href="YAHOO.widget.Overlay.html#syncPosition">syncPosition</a>, <a href="YAHOO.widget.Overlay.html#onDomResize">onDomResize</a></code>
-					</div>
-				</div>
-			
-				<div class="section method inheritance">
-					<h3>Methods inherited from class  <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></h3>
-					<div class="content">
-						<code><a href="YAHOO.widget.Module.html#platform">platform</a>, <a href="YAHOO.widget.Module.html#browser">browser</a>, <a href="YAHOO.widget.Module.html#isSecure">isSecure</a>, <a href="YAHOO.widget.Module.html#initResizeMonitor">initResizeMonitor</a>, <a href="YAHOO.widget.Module.html#setHeader">setHeader</a>, <a href="YAHOO.widget.Module.html#appendToHeader">appendToHeader</a>, <a href="YAHOO.widget.Module.html#setBody">setBody</a>, <a href="YAHOO.widget.Module.html#appendToBody">appendToBody</a>, <a href="YAHOO.widget.Module.html#setFooter">setFooter</a>, <a href="YAHOO.widget.Module.html#appendToFooter">appendToFooter</a>, <a href="YAHOO.widget.Module.html#render">render</a>, <a href="YAHOO.widget.Module.html#destroy">destroy</a>, <a href="YAHOO.widget.Module.html#show">show</a>, <a href="YAHOO.widget.Module.html#hide">hide</a>, <a href="YAHOO.widget.Module.html#configMonitorResize">configMonitorResize</a></code>
-					</div>
-				</div>
 			
 			<!-- ========== END METHOD SUMMARY =========== -->
 	
@@ -522,19 +485,6 @@
 								</code>
 								<div class="description">
 									Constant representing the Tooltip CSS class
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="superclass">superclass</a></h4>
-							<div class="detail">
-								<code>
-									class
-									&nbsp;
-									<strong>superclass</strong>
-								</code>
-								<div class="description">
-									Reference to the Tooltip's superclass, Overlay
 								</div>
 							</div>
 							<hr />
@@ -587,7 +537,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1ddfbf0)
+									HASH(0x1da362c)
 								
 							</div>
 						</div>
@@ -618,7 +568,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1db19f0)
+										HASH(0x1d4ce0c)
 									
 								</div>
 							</div>
@@ -639,28 +589,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1d7885c)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="configPreventOverlap">configPreventOverlap</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>configPreventOverlap</strong>
-									(type, args, obj)
-								</code>
-										
-								<div class="description">
-									
-										The default event handler fired when the "preventoverlap" property is changed.
-									
-									
-									
-									
-										HASH(0x1db4288)
+										HASH(0x1ddf44c)
 									
 								</div>
 							</div>
@@ -681,7 +610,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1db32a4)
+										HASH(0x1d8b29c)
 									
 								</div>
 							</div>
@@ -690,7 +619,7 @@ http://developer.yahoo.net/yui/license.txt
 							<h4><a name="doHide">doHide</a></h4>
 							<div class="detail">
 								<code>
-									void 
+									Object 
 									<strong>doHide</strong>
 									()
 								</code>
@@ -702,7 +631,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1ddf20c)
+										HASH(0x1d8b728)
 									
 								</div>
 							</div>
@@ -713,7 +642,7 @@ http://developer.yahoo.net/yui/license.txt
 								<code>
 									int 
 									<strong>doShow</strong>
-									(&lt;DOMEvent&gt; e)
+									(&lt;DOMEvent&gt; e, context)
 								</code>
 										
 								<div class="description">
@@ -738,7 +667,7 @@ http://developer.yahoo.net/yui/license.txt
 										</dl>
 									
 									
-										HASH(0x1dce170)
+										HASH(0x1d8b5f0)
 									
 								</div>
 							</div>
@@ -749,37 +678,15 @@ http://developer.yahoo.net/yui/license.txt
 								<code>
 									void 
 									<strong>init</strong>
-									(&lt;string&gt; &lt;Element&gt; el, &lt;object&gt; userConfig)
+									(el, userConfig)
 								</code>
 										
 								<div class="description">
 									
-										The Module class's initialization method, which is executed for Module and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>el</code> - 
-														The element ID representing the Module <em>OR</em>  
-												</dd>
-											
-												<dd>
-													<code>el</code> - 
-														The element representing the Module  
-												</dd>
-											
-												<dd>
-													<code>userConfig</code> - 
-														The configuration object literal containing the configuration that should be set for this module. See configuration documentation for more details. 	  
-												</dd>
-											
-										</dl>
 									
 									
 									
-										HASH(0x1dce278)
+										HASH(0x1d8ba04)
 									
 								</div>
 							</div>
@@ -800,7 +707,26 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1db3e44)
+										HASH(0x1dde75c)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="onContextMouseMove">onContextMouseMove</a></h4>
+							<div class="detail">
+								<code>
+									void 
+									<strong>onContextMouseMove</strong>
+									(e, obj)
+								</code>
+										
+								<div class="description">
+									
+									
+									
+									
+										HASH(0x1dde84c)
 									
 								</div>
 							</div>
@@ -836,7 +762,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1db3f64)
+										HASH(0x1ddebc4)
 									
 								</div>
 							</div>
@@ -872,7 +798,7 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1dfd200)
+										HASH(0x1ddef54)
 									
 								</div>
 							</div>
@@ -883,7 +809,7 @@ http://developer.yahoo.net/yui/license.txt
 								<code>
 									void 
 									<strong>preventOverlap</strong>
-									(type, args, obj)
+									(pageX, pageY)
 								</code>
 										
 								<div class="description">
@@ -893,7 +819,26 @@ http://developer.yahoo.net/yui/license.txt
 									
 									
 									
-										HASH(0x1dfd50c)
+										HASH(0x1ddf164)
+									
+								</div>
+							</div>
+							<hr />
+						
+							<h4><a name="toString">toString</a></h4>
+							<div class="detail">
+								<code>
+									Object 
+									<strong>toString</strong>
+									()
+								</code>
+										
+								<div class="description">
+									
+									
+									
+									
+										HASH(0x1d43d60)
 									
 								</div>
 							</div>
@@ -915,7 +860,6 @@ http://developer.yahoo.net/yui/license.txt
 	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
 	version 1.9.5.8
 </div>
-
 
 </body>
 </html>

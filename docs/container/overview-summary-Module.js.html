@@ -17,6 +17,8 @@
 	<h3><a href="./index.html">Yahoo! UI Library: Container</a></h3>
 
 	<div class="breadcrumbs">
+		
+
 			
 			
 			
@@ -56,6 +58,11 @@
 				<ul class="content">
 					
 						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
 							<a href="YAHOO.util.Config.html">
 								YAHOO.util.Config</a>
 						</li>
@@ -65,7 +72,10 @@
 								YAHOO.util.KeyListener</a>
 						</li>
 					
-
+						<li>
+							<a href="YAHOO.widget.html">
+								YAHOO.widget</a>
+						</li>
 					
 						<li>
 							<a href="YAHOO.widget.ContainerEffect.html">
@@ -85,11 +95,6 @@
 						<li>
 							<a href="YAHOO.widget.Overlay.html">
 								YAHOO.widget.Overlay</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.OverlayEffect.html">
-								YAHOO.widget.OverlayEffect</a>
 						</li>
 					
 						<li>
@@ -149,11 +154,6 @@
 						<li>
 							<a href="overview-summary-Overlay.js.html">
 								Overlay.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-OverlayEffect.js.html">
-								OverlayEffect.js</a>
 						</li>
 					
 						<li>
@@ -307,7 +307,7 @@ YAHOO.widget.Module.CSS_HEADER = <span class="literal">"hd"</span>;
 * <span class="attrib">@type</span> string
 * <span class="attrib">@final</span>
 */</span>
-YAHOO.widget.Module.CSS_BODY   = <span class="literal">"bd"</span>;
+YAHOO.widget.Module.CSS_BODY = <span class="literal">"bd"</span>;
 
 <span class="comment">/**
 * Constant representing the module footer
@@ -315,6 +315,13 @@ YAHOO.widget.Module.CSS_BODY   = <span class="literal">"bd"</span>;
 * <span class="attrib">@final</span>
 */</span>
 YAHOO.widget.Module.CSS_FOOTER = <span class="literal">"ft"</span>;
+
+<span class="comment">/**
+* Constant representing the url for the "src" attribute of the iframe used to monitor changes to the browser's base font size
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL = null;
 
 YAHOO.widget.Module.<span class="reserved">prototype</span> = {
 
@@ -532,7 +539,6 @@ YAHOO.widget.Module.<span class="reserved">prototype</span> = {
 	*/</span>
 	isSecure : <span class="reserved">function</span>() {
 		<span class="reserved">if</span> (window.location.href.toLowerCase().indexOf(<span class="literal">"https"</span>) == 0) {
-			<span class="reserved">this</span>.imageRoot = YAHOO.widget.Module.IMG_ROOT_SSL;
 			<span class="reserved">return</span> true;
 		} <span class="reserved">else</span> {
 			<span class="reserved">return</span> false;
@@ -564,6 +570,10 @@ YAHOO.widget.Module.<span class="reserved">prototype</span> = {
 
 		<span class="reserved">this</span>.cfg = new YAHOO.util.Config(<span class="reserved">this</span>);
 		
+		<span class="reserved">if</span> (<span class="reserved">this</span>.isSecure) {
+			<span class="reserved">this</span>.imageRoot = YAHOO.widget.Module.IMG_ROOT_SSL;
+		}
+
 		<span class="reserved">if</span> (typeof el == <span class="literal">"string"</span>) {
 			var elId = el;
 
@@ -620,26 +630,78 @@ YAHOO.widget.Module.<span class="reserved">prototype</span> = {
 	* Initialized an empty DOM element that is placed out of the visible area that can be used to detect text resize.
 	*/</span>
 	initResizeMonitor : <span class="reserved">function</span>() {
-		var resizeMonitor = document.getElementById(<span class="literal">"_yuiResizeMonitor"</span>);
-		<span class="reserved">if</span> (! resizeMonitor) {
-			resizeMonitor = document.createElement(<span class="literal">"DIV"</span>);
-			resizeMonitor.style.position = <span class="literal">"absolute"</span>;
-			resizeMonitor.id = <span class="literal">"_yuiResizeMonitor"</span>;
-			resizeMonitor.style.width = <span class="literal">"1em"</span>;
-			resizeMonitor.style.height = <span class="literal">"1em"</span>;
-			resizeMonitor.style.top = <span class="literal">"-1000px"</span>;
-			resizeMonitor.style.left = <span class="literal">"-1000px"</span>;
-			resizeMonitor.innerHTML = <span class="literal">"&amp;nbsp;"</span>;
-			document.body.appendChild(resizeMonitor);
-		}
-		<span class="reserved">this</span>.resizeMonitor = resizeMonitor;
-		YAHOO.util.Event.addListener(<span class="reserved">this</span>.resizeMonitor, <span class="literal">"resize"</span>, <span class="reserved">this</span>.onDomResize, <span class="reserved">this</span>, true);
+
+        <span class="reserved">if</span>(<span class="reserved">this</span>.browser != <span class="literal">"opera"</span>) {
+
+            var resizeMonitor = document.getElementById(<span class="literal">"_yuiResizeMonitor"</span>);
+    
+            <span class="reserved">if</span> (! resizeMonitor) {
+    
+                resizeMonitor = document.createElement(<span class="literal">"iframe"</span>);
+    
+                var bIE = (<span class="reserved">this</span>.browser.indexOf(<span class="literal">"ie"</span>) === 0);
+    
+                <span class="reserved">if</span>(<span class="reserved">this</span>.isSecure &amp;&amp; <span class="reserved">this</span>.RESIZE_MONITOR_SECURE_URL &amp;&amp; bIE) {
+    
+                    resizeMonitor.src = <span class="reserved">this</span>.RESIZE_MONITOR_SECURE_URL;
+    
+                }
+                
+                resizeMonitor.id = <span class="literal">"_yuiResizeMonitor"</span>;
+                resizeMonitor.style.visibility = <span class="literal">"hidden"</span>;
+                
+                document.body.appendChild(resizeMonitor);
+    
+                resizeMonitor.style.width = <span class="literal">"10em"</span>;
+                resizeMonitor.style.height = <span class="literal">"10em"</span>;
+                resizeMonitor.style.position = <span class="literal">"absolute"</span>;
+                
+                var nLeft = -1 * resizeMonitor.offsetWidth,
+                    nTop = -1 * resizeMonitor.offsetHeight;
+    
+                resizeMonitor.style.top = nTop + <span class="literal">"px"</span>;
+                resizeMonitor.style.left =  nLeft + <span class="literal">"px"</span>;
+                resizeMonitor.style.borderStyle = <span class="literal">"none"</span>;
+                resizeMonitor.style.borderWidth = <span class="literal">"0"</span>;
+                YAHOO.util.Dom.setStyle(resizeMonitor, <span class="literal">"opacity"</span>, <span class="literal">"0"</span>);
+                
+                resizeMonitor.style.visibility = <span class="literal">"visible"</span>;
+    
+                <span class="reserved">if</span>(!bIE) {
+    
+                    var doc = resizeMonitor.contentWindow.document;
+    
+                    doc.open();
+                    doc.close();
+                
+                }
+    
+            }
+    
+            <span class="reserved">if</span>(resizeMonitor &amp;&amp; resizeMonitor.contentWindow) {
+    
+                <span class="reserved">this</span>.resizeMonitor = resizeMonitor;
+    
+                YAHOO.util.Event.addListener(<span class="reserved">this</span>.resizeMonitor.contentWindow, <span class="literal">"resize"</span>, <span class="reserved">this</span>.onDomResize, <span class="reserved">this</span>, true);
+    
+            }
+        
+        }
+
 	},
 
 	<span class="comment">/**
 	* Event handler fired when the resize monitor element is resized.
 	*/</span>
-	onDomResize : <span class="reserved">function</span>(e, obj) { },
+	onDomResize : <span class="reserved">function</span>(e, obj) { 
+
+        var nLeft = -1 * <span class="reserved">this</span>.resizeMonitor.offsetWidth,
+            nTop = -1 * <span class="reserved">this</span>.resizeMonitor.offsetHeight;
+        
+        <span class="reserved">this</span>.resizeMonitor.style.top = nTop + <span class="literal">"px"</span>;
+        <span class="reserved">this</span>.resizeMonitor.style.left =  nLeft + <span class="literal">"px"</span>;
+	
+	},
 
 	<span class="comment">/**
 	* Sets the Module's header content to the HTML specified, or appends the passed element to the header. If no header is present, one will be automatically created.
@@ -882,7 +944,10 @@ YAHOO.widget.Module.<span class="reserved">prototype</span> = {
 		}
 	}
 }
-</pre>
+
+YAHOO.widget.Module.<span class="reserved">prototype</span>.toString = <span class="reserved">function</span>() {
+	<span class="reserved">return</span> <span class="literal">"Module "</span> + <span class="reserved">this</span>.id;
+}</pre>
 			</div>
 		
 	</div>
@@ -895,7 +960,6 @@ YAHOO.widget.Module.<span class="reserved">prototype</span> = {
 	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
 	version 1.9.5.8
 </div>
-
 
 </body>
 </html>

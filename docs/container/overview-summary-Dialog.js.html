@@ -17,6 +17,8 @@
 	<h3><a href="./index.html">Yahoo! UI Library: Container</a></h3>
 
 	<div class="breadcrumbs">
+		
+
 			
 			
 			
@@ -56,6 +58,11 @@
 				<ul class="content">
 					
 						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
 							<a href="YAHOO.util.Config.html">
 								YAHOO.util.Config</a>
 						</li>
@@ -65,7 +72,10 @@
 								YAHOO.util.KeyListener</a>
 						</li>
 					
-
+						<li>
+							<a href="YAHOO.widget.html">
+								YAHOO.widget</a>
+						</li>
 					
 						<li>
 							<a href="YAHOO.widget.ContainerEffect.html">
@@ -85,11 +95,6 @@
 						<li>
 							<a href="YAHOO.widget.Overlay.html">
 								YAHOO.widget.Overlay</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.OverlayEffect.html">
-								YAHOO.widget.OverlayEffect</a>
 						</li>
 					
 						<li>
@@ -149,11 +154,6 @@
 						<li>
 							<a href="overview-summary-Overlay.js.html">
 								Overlay.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-OverlayEffect.js.html">
-								OverlayEffect.js</a>
 						</li>
 					
 						<li>
@@ -271,20 +271,10 @@ http://developer.yahoo.net/yui/license.txt
 * <span class="attrib">@constructor</span>
 */</span>
 YAHOO.widget.Dialog = <span class="reserved">function</span>(el, userConfig) {
-	<span class="reserved">if</span> (arguments.length &gt; 0) {
-		YAHOO.widget.Dialog.superclass.constructor.call(<span class="reserved">this</span>, el, userConfig);
-	}
+	YAHOO.widget.Dialog.superclass.constructor.call(<span class="reserved">this</span>, el, userConfig);
 }
 
-YAHOO.widget.Dialog.<span class="reserved">prototype</span> = new YAHOO.widget.Panel();
-YAHOO.widget.Dialog.<span class="reserved">prototype</span>.constructor = YAHOO.widget.Dialog;
-
-<span class="comment">/**
-* Reference to the Dialog's superclass, Panel
-* <span class="attrib">@type</span> class
-* <span class="attrib">@final</span>
-*/</span>
-YAHOO.widget.Dialog.superclass = YAHOO.widget.Panel.<span class="reserved">prototype</span>;
+YAHOO.extend(YAHOO.widget.Dialog, YAHOO.widget.Panel);
 
 <span class="comment">/**
 * Constant representing the default CSS class used for a Dialog
@@ -342,30 +332,19 @@ YAHOO.widget.Dialog.<span class="reserved">prototype</span>.initDefaultConfig = 
 	* <span class="attrib">@type</span> object
 	* <span class="attrib">@private</span>
 	*/</span>
-	var callback = {
+	<span class="reserved">this</span>.callback = {
 		success : null,
 		failure : null,
 		argument: null,
 		scope : <span class="reserved">this</span>
 	}
 
-	<span class="reserved">this</span>.configOnSuccess = <span class="reserved">function</span>(type, args, obj) {
-		var fn = args[0];
-		callback.success = fn;
-	}
-
-	<span class="reserved">this</span>.configOnFailure = <span class="reserved">function</span>(type, args, obj) {
-		var fn = args[0];
-		callback.failure = fn;
-	}
-
-
 	<span class="reserved">this</span>.doSubmit = <span class="reserved">function</span>() {
 		var method = <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"postmethod"</span>);
 		switch (method) {
 			case <span class="literal">"async"</span>:
 				YAHOO.util.Connect.setForm(<span class="reserved">this</span>.form.name);
-				var cObj = YAHOO.util.Connect.asyncRequest(<span class="literal">'POST'</span>, <span class="reserved">this</span>.form.action, callback);
+				var cObj = YAHOO.util.Connect.asyncRequest(<span class="literal">'POST'</span>, <span class="reserved">this</span>.form.action, <span class="reserved">this</span>.callback);
 				<span class="reserved">this</span>.asyncSubmitEvent.fire();
 				break;
 			case <span class="literal">"form"</span>:
@@ -387,9 +366,6 @@ YAHOO.widget.Dialog.<span class="reserved">prototype</span>.initDefaultConfig = 
 														<span class="reserved">return</span> true;
 													}
 												} });
-
-	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"onsuccess"</span>,	{ handler:<span class="reserved">this</span>.configOnSuccess, suppressEvent:true } );
-	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"onfailure"</span>,	{ handler:<span class="reserved">this</span>.configOnFailure, suppressEvent:true } );
 
 	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"buttons"</span>,		{ value:<span class="literal">"none"</span>,	handler:<span class="reserved">this</span>.configButtons } );
 }
@@ -422,6 +398,8 @@ YAHOO.widget.Dialog.<span class="reserved">prototype</span>.init = <span class="
 	<span class="reserved">this</span>.beforeInitEvent.fire(YAHOO.widget.Dialog);
 
 	YAHOO.util.Dom.addClass(<span class="reserved">this</span>.element, YAHOO.widget.Dialog.CSS_DIALOG);
+
+	<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"visible"</span>, false);
 
 	<span class="reserved">if</span> (userConfig) {
 		<span class="reserved">this</span>.cfg.applyConfig(userConfig, true);
@@ -546,6 +524,17 @@ YAHOO.widget.Dialog.<span class="reserved">prototype</span>.configButtons = <spa
 
 		<span class="reserved">this</span>.cfg.refireEvent(<span class="literal">"iframe"</span>);
 		<span class="reserved">this</span>.cfg.refireEvent(<span class="literal">"underlay"</span>);
+	} <span class="reserved">else</span> { <span class="comment">// Do cleanup</span>
+		<span class="reserved">if</span> (<span class="reserved">this</span>.buttonSpan) {
+			<span class="reserved">if</span> (<span class="reserved">this</span>.buttonSpan.parentNode) {
+				<span class="reserved">this</span>.buttonSpan.parentNode.removeChild(<span class="reserved">this</span>.buttonSpan);
+			}
+
+			<span class="reserved">this</span>.buttonSpan = null;
+			<span class="reserved">this</span>.firstButtom = null;
+			<span class="reserved">this</span>.lastButton = null;
+			<span class="reserved">this</span>.defaultHtmlButton = null;
+		}
 	}
 }
 
@@ -757,6 +746,10 @@ YAHOO.widget.Dialog.<span class="reserved">prototype</span>.getData = <span clas
 		}	
 	}
 	<span class="reserved">return</span> data;
+}
+
+YAHOO.widget.Dialog.<span class="reserved">prototype</span>.toString = <span class="reserved">function</span>() {
+	<span class="reserved">return</span> <span class="literal">"Dialog "</span> + <span class="reserved">this</span>.id;
 }</pre>
 			</div>
 		
@@ -770,7 +763,6 @@ YAHOO.widget.Dialog.<span class="reserved">prototype</span>.getData = <span clas
 	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
 	version 1.9.5.8
 </div>
-
 
 </body>
 </html>
