@@ -37,10 +37,10 @@
     position:absolute;
     top:0;
     left:0;
-    background-color:#CCC;
     -moz-opacity: 0.5;
     opacity:.50;
     filter: alpha(opacity=50);
+    background-color:#CCC;
 }
 
 .hide-scrollbars * {
@@ -107,8 +107,8 @@
 .panel .hd {
 	background-color:#3d77cb;
 	color:#FFF;
-	font-size:1em;
-	height:1em;
+	font-size:100%;
+	line-height:100%;
 	border:1px solid #FFF;
 	border-bottom:1px solid #000;
 	font-weight:bold;
