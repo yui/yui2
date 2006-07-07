@@ -492,15 +492,6 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.useShadow = fa
  *
  * <span class="attrib">@return</span> {string} Unique name of the auto complete instance
  */</span>
-YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.getName = <span class="reserved">function</span>() {
-    <span class="reserved">return</span> <span class="reserved">this</span>._sName;
-};
-
- <span class="comment">/**
- * Public accessor to the unique name of the auto complete instance.
- *
- * <span class="attrib">@return</span> {string} Unique name of the auto complete instance
- */</span>
 YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>.toString = <span class="reserved">function</span>() {
     <span class="reserved">return</span> <span class="literal">"AutoComplete "</span> + <span class="reserved">this</span>._sName;
 };
@@ -1050,9 +1041,6 @@ YAHOO.widget.AutoComplete.<span class="reserved">prototype</span>._initListItem 
     var oSelf = <span class="reserved">this</span>;
     oItem.style.display = <span class="literal">"none"</span>;
     oItem._nItemIndex = nItemIndex;
-    oItem.toString = <span class="reserved">function</span> () {
-        <span class="reserved">return</span> oSelf.getName() + <span class="literal">"LI"</span> + nItemIndex;
-    };
 
     oItem.mouseover = oItem.mouseout = oItem.onclick = null;
     YAHOO.util.Event.addListener(oItem,<span class="literal">"mouseover"</span>,oSelf._onItemMouseover,oSelf);
