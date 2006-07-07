@@ -10,9 +10,7 @@ http://developer.yahoo.net/yui/license.txt
 * @constructor
 */
 YAHOO.widget.Dialog = function(el, userConfig) {
-	if (arguments.length > 0) {
-		YAHOO.widget.Dialog.superclass.constructor.call(this, el, userConfig);
-	}
+	YAHOO.widget.Dialog.superclass.constructor.call(this, el, userConfig);
 }
 
 YAHOO.extend(YAHOO.widget.Dialog, YAHOO.widget.Panel);
@@ -73,30 +71,19 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 	* @type object
 	* @private
 	*/
-	var callback = {
+	this.callback = {
 		success : null,
 		failure : null,
 		argument: null,
 		scope : this
 	}
 
-	this.configOnSuccess = function(type, args, obj) {
-		var fn = args[0];
-		callback.success = fn;
-	}
-
-	this.configOnFailure = function(type, args, obj) {
-		var fn = args[0];
-		callback.failure = fn;
-	}
-
-
 	this.doSubmit = function() {
 		var method = this.cfg.getProperty("postmethod");
 		switch (method) {
 			case "async":
 				YAHOO.util.Connect.setForm(this.form.name);
-				var cObj = YAHOO.util.Connect.asyncRequest('POST', this.form.action, callback);
+				var cObj = YAHOO.util.Connect.asyncRequest('POST', this.form.action, this.callback);
 				this.asyncSubmitEvent.fire();
 				break;
 			case "form":
@@ -118,9 +105,6 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 														return true;
 													}
 												} });
-
-	this.cfg.addProperty("onsuccess",	{ handler:this.configOnSuccess, suppressEvent:true } );
-	this.cfg.addProperty("onfailure",	{ handler:this.configOnFailure, suppressEvent:true } );
 
 	this.cfg.addProperty("buttons",		{ value:"none",	handler:this.configButtons } );
 }

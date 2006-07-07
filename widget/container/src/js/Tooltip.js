@@ -10,9 +10,7 @@ http://developer.yahoo.net/yui/license.txt
 * @constructor
 */
 YAHOO.widget.Tooltip = function(el, userConfig) {
-	if (arguments.length > 0) {
-		YAHOO.widget.Tooltip.superclass.constructor.call(this, el, userConfig);
-	}
+	YAHOO.widget.Tooltip.superclass.constructor.call(this, el, userConfig);
 }
 
 YAHOO.extend(YAHOO.widget.Tooltip, YAHOO.widget.Overlay);

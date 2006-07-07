@@ -10,9 +10,7 @@ http://developer.yahoo.net/yui/license.txt
 * @constructor
 */
 YAHOO.widget.Panel = function(el, userConfig) {
-	if (arguments.length > 0) {
-		YAHOO.widget.Panel.superclass.constructor.call(this, el, userConfig);
-	}
+	YAHOO.widget.Panel.superclass.constructor.call(this, el, userConfig);
 }
 
 YAHOO.extend(YAHOO.widget.Panel, YAHOO.widget.Overlay);
@@ -212,10 +210,14 @@ YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 		if (! YAHOO.util.Config.alreadySubscribed( YAHOO.widget.Overlay.windowResizeEvent, this.sizeMask, this ) ) {
 			YAHOO.widget.Overlay.windowResizeEvent.subscribe(this.sizeMask, this, true);
 		}
+		if (! YAHOO.util.Config.alreadySubscribed( YAHOO.widget.Overlay.windowScrollEvent, this.sizeMask, this ) ) {
+			YAHOO.widget.Overlay.windowScrollEvent.subscribe(this.sizeMask, this, true);
+		}
 	} else {
 		this.beforeShowEvent.unsubscribe(this.showMask, this);
 		this.hideEvent.unsubscribe(this.hideMask, this);
 		YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.sizeMask);
+		YAHOO.widget.Overlay.windowScrollEvent.unsubscribe(this.sizeMask);
 	}
 }
 
@@ -408,9 +410,6 @@ YAHOO.widget.Panel.prototype.buildMask = function() {
 
 		YAHOO.util.Event.addListener(this.mask, maskClick, this);
 
-		if (this.browser == "opera") {
-			this.mask.style.backgroundColor = "transparent";
-		}
 		document.body.appendChild(this.mask);
 	}
 }

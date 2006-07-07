@@ -159,7 +159,7 @@ YAHOO.widget.OverlayManager.prototype = {
 			}
 
 			var focusOnDomEvent = function(e,obj) {
-				mgr.focus(overlay);
+				overlay.focus();
 			}
 			
 			var focusevent = this.cfg.getProperty("focusevent");

@@ -1756,8 +1756,8 @@ YAHOO.widget.Overlay.prototype.enforceConstraints = function(type, args, obj) {
 * Centers the container in the viewport.
 */
 YAHOO.widget.Overlay.prototype.center = function() {
-	var scrollX = window.scrollX || document.documentElement.scrollLeft;
-	var scrollY = window.scrollY || document.documentElement.scrollTop;
+	var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+	var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
 
 	var viewPortWidth = YAHOO.util.Dom.getClientWidth();
 	var viewPortHeight = YAHOO.util.Dom.getClientHeight();

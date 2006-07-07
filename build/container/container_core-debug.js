@@ -1150,9 +1150,7 @@ http://developer.yahoo.net/yui/license.txt
 * @constructor
 */
 YAHOO.widget.Overlay = function(el, userConfig) {
-	if (arguments.length > 0) {
-		YAHOO.widget.Overlay.superclass.constructor.call(this, el, userConfig);
-	}
+	YAHOO.widget.Overlay.superclass.constructor.call(this, el, userConfig);
 }
 
 YAHOO.extend(YAHOO.widget.Overlay, YAHOO.widget.Module);
@@ -1777,8 +1775,8 @@ YAHOO.widget.Overlay.prototype.enforceConstraints = function(type, args, obj) {
 * Centers the container in the viewport.
 */
 YAHOO.widget.Overlay.prototype.center = function() {
-	var scrollX = window.scrollX || document.documentElement.scrollLeft;
-	var scrollY = window.scrollY || document.documentElement.scrollTop;
+	var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+	var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
 
 	var viewPortWidth = YAHOO.util.Dom.getClientWidth();
 	var viewPortHeight = YAHOO.util.Dom.getClientHeight();
@@ -2029,7 +2027,7 @@ YAHOO.widget.OverlayManager.prototype = {
 			}
 
 			var focusOnDomEvent = function(e,obj) {
-				mgr.focus(overlay);
+				overlay.focus();
 			}
 			
 			var focusevent = this.cfg.getProperty("focusevent");

@@ -10,9 +10,7 @@ http://developer.yahoo.net/yui/license.txt
 * @constructor
 */
 YAHOO.widget.SimpleDialog = function(el, userConfig) {
-	if (arguments.length > 0) {
-		YAHOO.widget.SimpleDialog.superclass.constructor.call(this, el, userConfig);
-	}
+	YAHOO.widget.SimpleDialog.superclass.constructor.call(this, el, userConfig);
 }
 
 YAHOO.extend(YAHOO.widget.SimpleDialog, YAHOO.widget.Dialog);
