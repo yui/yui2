@@ -223,7 +223,6 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 	}
 
-
 	this.resetProperty = function(key) {
 		key = key.toLowerCase();
 
@@ -234,7 +233,6 @@ YAHOO.util.Config.prototype.init = function(owner) {
 			return undefined;
 		}
 	}
-
 
 	this.setProperty = function(key, value, silent) {
 		key = key.toLowerCase();
@@ -1123,6 +1121,10 @@ YAHOO.widget.Module.prototype = {
 	}
 }
 
+/**
+* Returns a string represenation of the object.
+* @type string
+*/ 
 YAHOO.widget.Module.prototype.toString = function() {
 	return "Module " + this.id;
 }/**
@@ -1197,7 +1199,7 @@ YAHOO.widget.Overlay.prototype.beforeMoveEvent = null;
 */
 YAHOO.widget.Overlay.prototype.moveEvent = null;
 
-/*
+/**
 * The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
 * @param {string}	el	The element ID representing the Overlay <em>OR</em>
 * @param {Element}	el	The element representing the Overlay
@@ -1804,8 +1806,12 @@ YAHOO.widget.Overlay.prototype.destroy = function() {
 	this.iframe = null;
 
 	YAHOO.widget.Overlay.superclass.destroy.call(this);  
-}; 
+};
 
+/**
+* Returns a string represenation of the object.
+* @type string
+*/ 
 YAHOO.widget.Overlay.prototype.toString = function() {
 	return "Overlay " + this.id;
 }
@@ -1838,13 +1844,15 @@ YAHOO.widget.Overlay.windowResizeHandler = function(e) {
 	YAHOO.widget.Overlay.windowResizeEvent.fire();
 }
 
+/**
+* @private
+*/
+YAHOO.widget.Overlay._initialized == null;
 
-if (YAHOO.widget.Overlay._initialized == undefined) {
+if (YAHOO.widget.Overlay._initialized == null) {
 	YAHOO.util.Event.addListener(window, "scroll", YAHOO.widget.Overlay.windowScrollHandler);
 	YAHOO.util.Event.addListener(window, "resize", YAHOO.widget.Overlay.windowResizeHandler);
-	/**
-	* @private
-	*/
+
 	YAHOO.widget.Overlay._initialized = true;
 }
 /**
@@ -2096,19 +2104,22 @@ YAHOO.widget.OverlayManager.prototype = {
 		}
 	},
 
+	/**
+	* Returns a string represenation of the object.
+	* @type string
+	*/ 
 	toString : function() {
 		return "OverlayManager";
 	}
 
 }/**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-* @class 
+* Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+* Code licensed under the BSD License:
+* http://developer.yahoo.net/yui/license.txt
 * KeyListener is a utility that provides an easy interface for listening for keydown/keyup events fired against DOM elements.
 * @param {Element}	attachTo	The element or element ID to which the key event should be attached
 * @param {string}	attachTo	The element or element ID to which the key event should be attached
-* @param (object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).
+* @param {object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).
 * @param {function}	handler		The CustomEvent handler to fire when the key event is detected
 * @param {object}	handler		An object literal representing the handler. 
 * @param {string}	event		Optional. The event (keydown or keyup) to listen for. Defaults automatically to keydown.
@@ -2138,7 +2149,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 	* Handles the key event when a key is pressed.
 	* @private
 	*/
-	var handleKeyPress = function(e, obj) {
+	function handleKeyPress(e, obj) {
 		var keyPressed = e.charCode || e.keyCode;
 		
 		if (! keyData.shift)	keyData.shift = false;
@@ -2181,6 +2192,10 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 		this.enabled = false;
 	}
 
+	/**
+	* Returns a string represenation of the object.
+	* @type string
+	*/ 
 	this.toString = function() {
 		return "KeyListener [" + keyData.keys + "] " + attachTo.tagName + (attachTo.id ? "[" + attachTo.id + "]" : "");
 	}
@@ -2198,6 +2213,12 @@ YAHOO.util.KeyListener.KEYDOWN = "keydown";
 * @final
 */
 YAHOO.util.KeyListener.KEYUP = "keyup";
+
+/**
+* Boolean indicating the enabled/disabled state of the Tooltip
+* @type Booleam
+*/
+YAHOO.util.KeyListener.prototype.enabled = null;
 
 /**
 * Enables the KeyListener, by dynamically attaching the key event to the appropriate DOM element.
@@ -2246,7 +2267,7 @@ YAHOO.extend(YAHOO.widget.Tooltip, YAHOO.widget.Overlay);
 */
 YAHOO.widget.Tooltip.CSS_TOOLTIP = "tt";
 
-/*
+/**
 * The Tooltip initialization method. This method is automatically called by the constructor. A Tooltip is automatically rendered by the init method, and it also is set to be invisible by default, and constrained to viewport by default as well.
 * @param {string}	el	The element ID representing the Tooltip <em>OR</em>
 * @param {Element}	el	The element representing the Tooltip
@@ -2360,8 +2381,12 @@ YAHOO.widget.Tooltip.prototype.configContext = function(type, args, obj) {
 
 // BEGIN BUILT-IN DOM EVENT HANDLERS //
 
+/**
+* The default event handler fired when the user moves the mouse while over the context element.
+* @param {DOMEvent} e	The current DOM event
+* @param {object}	obj	The object argument
+*/
 YAHOO.widget.Tooltip.prototype.onContextMouseMove = function(e, obj) {
-
 	obj.pageX = YAHOO.util.Event.getPageX(e);
 	obj.pageY = YAHOO.util.Event.getPageY(e);
 
@@ -2493,6 +2518,10 @@ YAHOO.widget.Tooltip.prototype.preventOverlap = function(pageX, pageY) {
 	}
 }
 
+/**
+* Returns a string represenation of the object.
+* @type string
+*/ 
 YAHOO.widget.Tooltip.prototype.toString = function() {
 	return "Tooltip " + this.id;
 }/**
@@ -2540,7 +2569,7 @@ YAHOO.widget.Panel.prototype.showMaskEvent = null;
 */
 YAHOO.widget.Panel.prototype.hideMaskEvent = null;
 
-/*
+/**
 * The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
 * @param {string}	el	The element ID representing the Overlay <em>OR</em>
 * @param {Element}	el	The element representing the Overlay
@@ -2718,6 +2747,9 @@ YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 	}
 }
 
+/**
+* The default event handler fired when the "keylisteners" property is changed. 
+*/
 YAHOO.widget.Panel.prototype.configKeyListeners = function(type, args, obj) {
 	var listeners = args[0];
 
@@ -2978,6 +3010,10 @@ YAHOO.widget.Panel.prototype.render = function(appendToNode) {
 	return YAHOO.widget.Panel.superclass.render.call(this, appendToNode, this.innerElement);
 }
 
+/**
+* Returns a string represenation of the object.
+* @type string
+*/ 
 YAHOO.widget.Panel.prototype.toString = function() {
 	return "Panel " + this.id;
 }/**
@@ -3107,7 +3143,7 @@ YAHOO.widget.Dialog.prototype.initEvents = function() {
 	this.cancelEvent		= new YAHOO.util.CustomEvent("cancel");
 }
 
-/*
+/**
 * The Dialog initialization method, which is executed for Dialog and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
 * @param {string}	el	The element ID representing the Dialog <em>OR</em>
 * @param {Element}	el	The element representing the Dialog
@@ -3469,6 +3505,10 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 	return data;
 }
 
+/**
+* Returns a string represenation of the object.
+* @type string
+*/ 
 YAHOO.widget.Dialog.prototype.toString = function() {
 	return "Dialog " + this.id;
 }/**
@@ -3549,7 +3589,7 @@ YAHOO.widget.SimpleDialog.prototype.initDefaultConfig = function() {
 }
 
 
-/*
+/**
 * The SimpleDialog initialization method, which is executed for SimpleDialog and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
 * @param {string}	el	The element ID representing the SimpleDialog <em>OR</em>
 * @param {Element}	el	The element representing the SimpleDialog
@@ -3610,6 +3650,10 @@ YAHOO.widget.SimpleDialog.prototype.configText = function(type,args,obj) {
 }
 // END BUILT-IN PROPERTY EVENT HANDLERS //
 
+/**
+* Returns a string represenation of the object.
+* @type string
+*/ 
 YAHOO.widget.SimpleDialog.prototype.toString = function() {
 	return "SimpleDialog " + this.id;
 }/**
@@ -3625,6 +3669,22 @@ http://developer.yahoo.net/yui/license.txt
 * @constructor
 */
 YAHOO.widget.ContainerEffect = function(overlay, attrIn, attrOut, targetElement) {
+	this.init(overlay, attrIn, attrOut, targetElement);
+}
+
+/**
+* Initializes the animation classes and events.
+* @param {class}	Optional. The animation class to instantiate. Defaults to YAHOO.util.Anim. Other options include YAHOO.util.Motion.
+* @param {Overlay}	overlay		The Overlay that the animation should be associated with
+* @param {object}	attrIn		The object literal representing the animation arguments to be used for the animate-in transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
+* @param {object}	attrOut		The object literal representing the animation arguments to be used for the animate-out transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
+* @param {Element}	targetElement	Optional. The target element that should be animated during the transition. Defaults to overlay.element.
+*/
+YAHOO.widget.ContainerEffect.prototype.init = function(animClass, overlay, attrIn, attrOut, targetElement) {
+	if (! animClass) {
+		animClass = YAHOO.util.Anim;
+	}
+
 	this.overlay = overlay;
 
 	this.attrIn = attrIn;
@@ -3637,16 +3697,7 @@ YAHOO.widget.ContainerEffect = function(overlay, attrIn, attrOut, targetElement)
 
 	this.animateInCompleteEvent = new YAHOO.util.CustomEvent("animateInComplete");
 	this.animateOutCompleteEvent = new YAHOO.util.CustomEvent("animateOutComplete");
-}
 
-/**
-* Initializes the animation classes and events.
-* @param {class}	Optional. The animation class to instantiate. Defaults to YAHOO.util.Anim. Other options include YAHOO.util.Motion.
-*/
-YAHOO.widget.ContainerEffect.prototype.init = function(animClass) {
-	if (! animClass) {
-		animClass = YAHOO.util.Anim;
-	}
 	this.animIn = new animClass(this.targetElement, this.attrIn.attributes, this.attrIn.duration, this.attrIn.method);
 	this.animIn.onStart.subscribe(this.handleStartAnimateIn, this);
 	this.animIn.onTween.subscribe(this.handleTweenAnimateIn, this);
@@ -3700,6 +3751,10 @@ YAHOO.widget.ContainerEffect.prototype.handleTweenAnimateOut = function(type, ar
 */
 YAHOO.widget.ContainerEffect.prototype.handleCompleteAnimateOut = function(type, args, obj) { }
 
+/**
+* Returns a string represenation of the object.
+* @type string
+*/ 
 YAHOO.widget.ContainerEffect.prototype.toString = function() {
 	var output = "ContainerEffect";
 	if (this.overlay) {

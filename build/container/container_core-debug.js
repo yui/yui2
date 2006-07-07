@@ -268,7 +268,6 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	}
 
 	this.queueProperty = function(key, value) {
-	
 		key = key.toLowerCase();
 
 		YAHOO.log("queueProperty: " + key + "=" + value, "info");
@@ -1137,6 +1136,10 @@ YAHOO.widget.Module.prototype = {
 	}
 }
 
+/**
+* Returns a string represenation of the object.
+* @type string
+*/ 
 YAHOO.widget.Module.prototype.toString = function() {
 	return "Module " + this.id;
 }/**
@@ -1211,7 +1214,7 @@ YAHOO.widget.Overlay.prototype.beforeMoveEvent = null;
 */
 YAHOO.widget.Overlay.prototype.moveEvent = null;
 
-/*
+/**
 * The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
 * @param {string}	el	The element ID representing the Overlay <em>OR</em>
 * @param {Element}	el	The element representing the Overlay
@@ -1823,8 +1826,12 @@ YAHOO.widget.Overlay.prototype.destroy = function() {
 	this.iframe = null;
 
 	YAHOO.widget.Overlay.superclass.destroy.call(this);  
-}; 
+};
 
+/**
+* Returns a string represenation of the object.
+* @type string
+*/ 
 YAHOO.widget.Overlay.prototype.toString = function() {
 	return "Overlay " + this.id;
 }
@@ -1857,13 +1864,15 @@ YAHOO.widget.Overlay.windowResizeHandler = function(e) {
 	YAHOO.widget.Overlay.windowResizeEvent.fire();
 }
 
+/**
+* @private
+*/
+YAHOO.widget.Overlay._initialized == null;
 
-if (YAHOO.widget.Overlay._initialized == undefined) {
+if (YAHOO.widget.Overlay._initialized == null) {
 	YAHOO.util.Event.addListener(window, "scroll", YAHOO.widget.Overlay.windowScrollHandler);
 	YAHOO.util.Event.addListener(window, "resize", YAHOO.widget.Overlay.windowResizeHandler);
-	/**
-	* @private
-	*/
+
 	YAHOO.widget.Overlay._initialized = true;
 }
 /**
@@ -2115,19 +2124,22 @@ YAHOO.widget.OverlayManager.prototype = {
 		}
 	},
 
+	/**
+	* Returns a string represenation of the object.
+	* @type string
+	*/ 
 	toString : function() {
 		return "OverlayManager";
 	}
 
 }/**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-* @class 
+* Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+* Code licensed under the BSD License:
+* http://developer.yahoo.net/yui/license.txt
 * KeyListener is a utility that provides an easy interface for listening for keydown/keyup events fired against DOM elements.
 * @param {Element}	attachTo	The element or element ID to which the key event should be attached
 * @param {string}	attachTo	The element or element ID to which the key event should be attached
-* @param (object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).
+* @param {object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).
 * @param {function}	handler		The CustomEvent handler to fire when the key event is detected
 * @param {object}	handler		An object literal representing the handler. 
 * @param {string}	event		Optional. The event (keydown or keyup) to listen for. Defaults automatically to keydown.
@@ -2167,7 +2179,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 	* Handles the key event when a key is pressed.
 	* @private
 	*/
-	var handleKeyPress = function(e, obj) {
+	function handleKeyPress(e, obj) {
 		var keyPressed = e.charCode || e.keyCode;
 		
 		if (! keyData.shift)	keyData.shift = false;
@@ -2210,6 +2222,10 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 		this.enabled = false;
 	}
 
+	/**
+	* Returns a string represenation of the object.
+	* @type string
+	*/ 
 	this.toString = function() {
 		return "KeyListener [" + keyData.keys + "] " + attachTo.tagName + (attachTo.id ? "[" + attachTo.id + "]" : "");
 	}
@@ -2227,6 +2243,12 @@ YAHOO.util.KeyListener.KEYDOWN = "keydown";
 * @final
 */
 YAHOO.util.KeyListener.KEYUP = "keyup";
+
+/**
+* Boolean indicating the enabled/disabled state of the Tooltip
+* @type Booleam
+*/
+YAHOO.util.KeyListener.prototype.enabled = null;
 
 /**
 * Enables the KeyListener, by dynamically attaching the key event to the appropriate DOM element.

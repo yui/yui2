@@ -76,7 +76,7 @@ YAHOO.widget.SimpleDialog.prototype.initDefaultConfig = function() {
 }
 
 
-/*
+/**
 * The SimpleDialog initialization method, which is executed for SimpleDialog and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
 * @param {string}	el	The element ID representing the SimpleDialog <em>OR</em>
 * @param {Element}	el	The element representing the SimpleDialog
@@ -137,6 +137,10 @@ YAHOO.widget.SimpleDialog.prototype.configText = function(type,args,obj) {
 }
 // END BUILT-IN PROPERTY EVENT HANDLERS //
 
+/**
+* Returns a string represenation of the object.
+* @type string
+*/ 
 YAHOO.widget.SimpleDialog.prototype.toString = function() {
 	return "SimpleDialog " + this.id;
 }

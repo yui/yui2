@@ -223,7 +223,6 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 	}
 
-
 	this.resetProperty = function(key) {
 		key = key.toLowerCase();
 
@@ -234,7 +233,6 @@ YAHOO.util.Config.prototype.init = function(owner) {
 			return undefined;
 		}
 	}
-
 
 	this.setProperty = function(key, value, silent) {
 		key = key.toLowerCase();

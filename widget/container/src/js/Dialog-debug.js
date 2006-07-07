@@ -125,7 +125,7 @@ YAHOO.widget.Dialog.prototype.initEvents = function() {
 	this.cancelEvent		= new YAHOO.util.CustomEvent("cancel");
 }
 
-/*
+/**
 * The Dialog initialization method, which is executed for Dialog and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
 * @param {string}	el	The element ID representing the Dialog <em>OR</em>
 * @param {Element}	el	The element representing the Dialog
@@ -487,6 +487,10 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 	return data;
 }
 
+/**
+* Returns a string represenation of the object.
+* @type string
+*/ 
 YAHOO.widget.Dialog.prototype.toString = function() {
 	return "Dialog " + this.id;
 }

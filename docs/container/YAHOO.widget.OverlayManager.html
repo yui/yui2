@@ -1,12 +1,7 @@
 
 <html>
 <head>
-	<title>
-		JavaScript Documentation - 
-		
-			YAHOO.widget.OverlayManager
-		
-	</title>
+	<title>JavaScript Documentation - </title>
 	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -17,9 +12,7 @@
 	<h3><a href="./index.html">Yahoo! UI Library: Container</a></h3>
 
 	<div class="breadcrumbs">
-		
-
-			
+					
 			
 			
 			
@@ -182,33 +175,33 @@
 	</div>
 	
 	<div id="pri">
-		<div class="main">
-			
-			<h2>Class YAHOO.widget.OverlayManager</h2>
-			<pre>Object
+        <div class="main">
+	
+		<h2>Class YAHOO.widget.OverlayManager</h2>
+		<pre>Object
    |
    +--<b>YAHOO.widget.OverlayManager</b>
 </pre>
-			
+		
+		
+	
+		<hr />
+		
+		<!-- Class definition -->
+		<div class="class-def">
+			<div class="class-name">
+				<span class="class-attribs">
+					
+				</span>
+				<span class="class-type">class</span>
+				<b>YAHOO.widget.OverlayManager</b>
+			</div>
+			<div class="class-extends">
+				
+			</div>
+		</div>
 			
 		
-			<hr />
-			
-			<!-- Class definition -->
-			<div class="class-def">
-				<div class="class-name">
-					<span class="class-attribs">
-						
-					</span>
-					<span class="class-type">class</span>
-					<b>YAHOO.widget.OverlayManager</b>
-				</div>
-				<div class="class-extends">
-					
-				</div>
-			</div>
-				
-			
 <div class="meta">
 	
 	
@@ -229,45 +222,220 @@
 	
 </div>
 
+		
+		<!-- ======== QUICK LINKS ======== -->
+		<div class="quick-links">
+			<strong>Quick Links:</strong>&nbsp;
 			
-			<!-- ======== QUICK LINKS ======== -->
-			<div class="quick-links">
-				<strong>Quick Links:</strong>&nbsp;
-				
-				
-					<a href="#field_summary">Field Summary</a>
-					|
-				
-				
-					<a href="#constructor_summary">Constructor Summary</a>
-					|
-				
-				
-					<a href="#methodSummary">Method Summary</a> |
-					<a href="#methodDetails">Method Details</a>
-				
+			
+				<a href="#field_summary">Field Summary</a>
+				|
+			
+			
+				<a href="#constructor_summary">Constructor Summary</a>
+				|
+			
+			
+				<a href="#methodSummary">Method Summary</a> |
+				<a href="#methodDetails">Method Details</a>
+			
+		</div>
+		<!-- ======== END QUICK LINKS ======== -->
+
+		<!-- ======== NESTED CLASS SUMMARY ======== -->
+		
+		<!-- ======== END NESTED CLASS SUMMARY ======== -->
+
+		<!-- =========== FIELD SUMMARY =========== -->
+		
+			<div class="section field summaries">
+				<h3><a name="field_summary">Field Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+					
+						<tr>
+							<td class="flags">Array</td>
+							<td class="spec">
+								<code>
+									<a href="#overlays">overlays</a>
+								</code>
+								<div class="description">
+									The array of Overlays that are currently registered&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">string</td>
+							<td class="spec">
+								<code>
+									<a href="#CSS_FOCUSED">CSS_FOCUSED</a>
+								</code>
+								<div class="description">
+									The CSS class representing a focused Overlay&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+					</table>
+				</div>
 			</div>
-			<!-- ======== END QUICK LINKS ======== -->
-	
-			<!-- ======== NESTED CLASS SUMMARY ======== -->
-			
-			<!-- ======== END NESTED CLASS SUMMARY ======== -->
-	
-			<!-- =========== FIELD SUMMARY =========== -->
-			
-				<div class="section field summaries">
-					<h3><a name="field_summary">Field Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-					<div class="content">
-						<table border="1" cellpadding="3" cellspacing="0">
+		
+				
+		
+		<!-- =========== END FIELD SUMMARY =========== -->
+
+
+		<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+		
+			<div class="section contructor summaries">
+				<h3><a name="constructor_summary">Constructor Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<code class="spec">
+						<a href="YAHOO.widget.OverlayManager.html#YAHOO.widget.OverlayManager()">YAHOO.widget.OverlayManager</a>
+					</code>
+					<div class="description">
+						Copyright (c) 2006, Yahoo!&nbsp;
+					</div>
+				</div>
+			</div>
+		
+		<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
+
+
+		<!-- ========== METHOD SUMMARY =========== -->
+		
+			<div class="section method summaries">
+				<h3><a name="methodSummary">Method Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
 						
 							<tr>
-								<td class="flags">Array</td>
+								<td class="flags">void</td>
 								<td class="spec">
 									<code>
-										<a href="#overlays">overlays</a>
+										<a href="#blurAll">blurAll</a>
+										()
 									</code>
 									<div class="description">
-										The array of Overlays that are currently registered&nbsp;
+										Removes focus from all registered Overlays in the manager&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Overlay</td>
+								<td class="spec">
+									<code>
+										<a href="#find">find</a>
+										(&lt;Overlay&gt; &lt;string&gt; overlay)
+									</code>
+									<div class="description">
+										Attempts to locate an Overlay by instance or ID.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#focus">focus</a>
+										(overlay)
+									</code>
+									<div class="description">
+										Focuses the specified Overlay&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">Overlay</td>
+								<td class="spec">
+									<code>
+										<a href="#getActive">getActive</a>
+										()
+									</code>
+									<div class="description">
+										Returns the currently focused Overlay&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#hideAll">hideAll</a>
+										()
+									</code>
+									<div class="description">
+										Hides all Overlays in the manager.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#init">init</a>
+										(&lt;object&gt; userConfig)
+									</code>
+									<div class="description">
+										Initializes the OverlayManager&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#initDefaultConfig">initDefaultConfig</a>
+										()
+									</code>
+									<div class="description">
+										Initializes the default configuration of the OverlayManager&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">boolean</td>
+								<td class="spec">
+									<code>
+										<a href="#register">register</a>
+										(&lt;Overlay&gt; overlay)
+									</code>
+									<div class="description">
+										Registers an Overlay or an array of Overlays with the manager.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#remove">remove</a>
+										(overlay)
+									</code>
+									<div class="description">
+										Removes the specified Overlay from the manager&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#showAll">showAll</a>
+										()
+									</code>
+									<div class="description">
+										Shows all Overlays in the manager.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -276,647 +444,440 @@
 								<td class="flags">string</td>
 								<td class="spec">
 									<code>
-										<a href="#CSS_FOCUSED">CSS_FOCUSED</a>
+										<a href="#toString">toString</a>
+										()
 									</code>
 									<div class="description">
-										The CSS class representing a focused Overlay&nbsp;
+										Returns a string represenation of the object.&nbsp;
 									</div>
 								</td>
 							</tr>
 						
-						</table>
-					</div>
+					</table>
 				</div>
-			
+			</div>
+		
+		
+		
+		<!-- ========== END METHOD SUMMARY =========== -->
+
+
+		<!-- ============ FIELD DETAIL START =========== -->
+		
+			<div class="section field details">
+				<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
 					
-			
-			<!-- =========== END FIELD SUMMARY =========== -->
-	
-	
-			<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-			
-				<div class="section contructor summaries">
-					<h3><a name="constructor_summary">Constructor Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-					<div class="content">
-						<code class="spec">
-							<a href="YAHOO.widget.OverlayManager.html#YAHOO.widget.OverlayManager()">YAHOO.widget.OverlayManager</a>
+						<h4><a name="overlays">overlays</a></h4>
+						<div class="detail">
+							<code>
+								Array
+								&nbsp;
+								<strong>overlays</strong>
+							</code>
+							<div class="description">
+								The array of Overlays that are currently registered
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="CSS_FOCUSED">CSS_FOCUSED</a></h4>
+						<div class="detail">
+							<code>
+								string
+								&nbsp;
+								<strong>CSS_FOCUSED</strong>
+							</code>
+							<div class="description">
+								The CSS class representing a focused Overlay
+							</div>
+						</div>
+						<hr />
+					
+				</div>
+			</div>
+		
+		<!-- ============ FIELD DETAIL END =========== -->
+
+		<!-- ========= CONSTRUCTOR DETAIL START ======== -->
+		
+			<div class="section constructor details">
+				<h3><a name="constructor_detail">Constructor Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<h4><a name="YAHOO.widget.OverlayManager()">YAHOO.widget.OverlayManager</a></h4>
+					<div class="detail">
+						<code>
+							<strong>YAHOO.widget.OverlayManager</strong>
+							()
 						</code>
 						<div class="description">
-							Copyright (c) 2006, Yahoo!&nbsp;
+							
+								Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+							
+							
+							
+								<dl>
+									<dt>Parameters:</dt>
+									
+										<dd>
+											<code>overlays</code> - 
+												Optional. A collection of Overlays to register with the manager.  
+										</dd>
+									
+										<dd>
+											<code>userConfig</code> - 
+													The object literal representing the user configuration of the OverlayManager  
+										</dd>
+									
+								</dl>
+							
+							
+							
+							
+							
+								HASH(0x1d9cab8)
+							
 						</div>
 					</div>
 				</div>
-			
-			<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
-	
-	
-			<!-- ========== METHOD SUMMARY =========== -->
-			
-				<div class="section method summaries">
-					<h3><a name="methodSummary">Method Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-					<div class="content">
-						<table border="1" cellpadding="3" cellspacing="0">
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#blurAll">blurAll</a>
-											()
-										</code>
-										<div class="description">
-											Removes focus from all registered Overlays in the manager&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">Object</td>
-									<td class="spec">
-										<code>
-											<a href="#compareZIndexDesc">compareZIndexDesc</a>
-											(o1, o2)
-										</code>
-										<div class="description">
-											Used for sorting the manager's Overlays by z-index.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">Overlay</td>
-									<td class="spec">
-										<code>
-											<a href="#find">find</a>
-											(&lt;Overlay&gt; &lt;string&gt; overlay)
-										</code>
-										<div class="description">
-											Attempts to locate an Overlay by instance or ID.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#focus">focus</a>
-											(overlay)
-										</code>
-										<div class="description">
-											Focuses the specified Overlay&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">Overlay</td>
-									<td class="spec">
-										<code>
-											<a href="#getActive">getActive</a>
-											()
-										</code>
-										<div class="description">
-											Returns the currently focused Overlay&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#hideAll">hideAll</a>
-											()
-										</code>
-										<div class="description">
-											Hides all Overlays in the manager.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#init">init</a>
-											(&lt;object&gt; userConfig)
-										</code>
-										<div class="description">
-											Initializes the OverlayManager&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#initDefaultConfig">initDefaultConfig</a>
-											()
-										</code>
-										<div class="description">
-											Initializes the default configuration of the OverlayManager&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">boolean</td>
-									<td class="spec">
-										<code>
-											<a href="#register">register</a>
-											(&lt;Overlay&gt; overlay)
-										</code>
-										<div class="description">
-											Registers an Overlay or an array of Overlays with the manager.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#remove">remove</a>
-											(overlay)
-										</code>
-										<div class="description">
-											Removes the specified Overlay from the manager&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">void</td>
-									<td class="spec">
-										<code>
-											<a href="#showAll">showAll</a>
-											()
-										</code>
-										<div class="description">
-											Shows all Overlays in the manager.&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="flags">Object</td>
-									<td class="spec">
-										<code>
-											<a href="#toString">toString</a>
-											()
-										</code>
-										<div class="description">
-											&nbsp;
-										</div>
-									</td>
-								</tr>
-							
-						</table>
-					</div>
-				</div>
-			
-			
-			
-			<!-- ========== END METHOD SUMMARY =========== -->
-	
-	
-			<!-- ============ FIELD DETAIL START =========== -->
-			
-				<div class="section field details">
-					<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-					<div class="content">
-						
-							<h4><a name="overlays">overlays</a></h4>
-							<div class="detail">
-								<code>
-									Array
-									&nbsp;
-									<strong>overlays</strong>
-								</code>
-								<div class="description">
-									The array of Overlays that are currently registered
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="CSS_FOCUSED">CSS_FOCUSED</a></h4>
-							<div class="detail">
-								<code>
-									string
-									&nbsp;
-									<strong>CSS_FOCUSED</strong>
-								</code>
-								<div class="description">
-									The CSS class representing a focused Overlay
-								</div>
-							</div>
-							<hr />
-						
-					</div>
-				</div>
-			
-			<!-- ============ FIELD DETAIL END =========== -->
-	
-			<!-- ========= CONSTRUCTOR DETAIL START ======== -->
-			
-				<div class="section constructor details">
-					<h3><a name="constructor_detail">Constructor Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-					<div class="content">
-						<h4><a name="YAHOO.widget.OverlayManager()">YAHOO.widget.OverlayManager</a></h4>
+			</div>
+		
+		<!-- ========= CONSTRUCTOR DETAIL END ======== -->
+
+
+		<!-- ============ METHOD DETAIL START ========== -->
+		
+			<div class="section method details">
+				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					
+						<h4><a name="blurAll">blurAll</a></h4>
 						<div class="detail">
 							<code>
-								<strong>YAHOO.widget.OverlayManager</strong>
+								void 
+								<strong>blurAll</strong>
 								()
 							</code>
+									
 							<div class="description">
 								
-									Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
+									Removes focus from all registered Overlays in the manager
 								
+								
+								
+								
+									HASH(0x1d74c98)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="find">find</a></h4>
+						<div class="detail">
+							<code>
+								Overlay 
+								<strong>find</strong>
+								(&lt;Overlay&gt; &lt;string&gt; overlay)
+							</code>
+									
+							<div class="description">
+								
+									Attempts to locate an Overlay by instance or ID.
 								
 								
 									<dl>
 										<dt>Parameters:</dt>
 										
 											<dd>
-												<code>overlays</code> - 
-													Optional. A collection of Overlays to register with the manager.  
+												<code>overlay</code> - 
+														An Overlay to locate within the manager  
 											</dd>
 										
 											<dd>
-												<code>userConfig</code> - 
-														The object literal representing the user configuration of the OverlayManager  
+												<code>overlay</code> - 
+														An Overlay id to locate within the manager  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd>	The requested Overlay, if found, or null if it cannot be located.</dd>
+									</dl>
+								
+								
+									HASH(0x1d74ddc)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="focus">focus</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>focus</strong>
+								(overlay)
+							</code>
+									
+							<div class="description">
+								
+									Focuses the specified Overlay
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>The</code> - 
+												 Overlay to focus  
+											</dd>
+										
+											<dd>
+												<code>The</code> - 
+												 id of the Overlay to focus 	  
 											</dd>
 										
 									</dl>
 								
 								
 								
-								
-								
-									HASH(0x1ddf704)
+									HASH(0x1d74f74)
 								
 							</div>
 						</div>
-					</div>
+						<hr />
+					
+						<h4><a name="getActive">getActive</a></h4>
+						<div class="detail">
+							<code>
+								Overlay 
+								<strong>getActive</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Returns the currently focused Overlay
+								
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd>	The currently focused Overlay</dd>
+									</dl>
+								
+								
+									HASH(0x1d4af20)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="hideAll">hideAll</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>hideAll</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Hides all Overlays in the manager.
+								
+								
+								
+								
+									HASH(0x1d9010c)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="init">init</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>init</strong>
+								(&lt;object&gt; userConfig)
+							</code>
+									
+							<div class="description">
+								
+									Initializes the OverlayManager
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>userConfig</code> - 
+														The object literal representing the user configuration of the OverlayManager 	  
+											</dd>
+										
+											<dd>
+												<code>overlays</code> - 
+													Optional. A collection of Overlays to register with the manager.  
+											</dd>
+										
+									</dl>
+								
+								
+								
+									HASH(0x1d41120)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="initDefaultConfig">initDefaultConfig</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>initDefaultConfig</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Initializes the default configuration of the OverlayManager
+								
+								
+								
+								
+									HASH(0x1d90454)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="register">register</a></h4>
+						<div class="detail">
+							<code>
+								boolean 
+								<strong>register</strong>
+								(&lt;Overlay&gt; overlay)
+							</code>
+									
+							<div class="description">
+								
+									Registers an Overlay or an array of Overlays with the manager. Upon registration, the Overlay receives functions for focus and blur, along with CustomEvents for each.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>overlay</code> - 
+														An Overlay to register with the manager.  
+											</dd>
+										
+											<dd>
+												<code>Overlay</code> - 
+												[]}	overlay		An array of Overlays to register with the manager.  
+											</dd>
+										
+									</dl>
+								
+								
+									<dl>
+										<dt>Returns:</dt>
+										<dd>	True if any Overlays are registered.</dd>
+									</dl>
+								
+								
+									HASH(0x1d905d4)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="remove">remove</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>remove</strong>
+								(overlay)
+							</code>
+									
+							<div class="description">
+								
+									Removes the specified Overlay from the manager
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>The</code> - 
+												 Overlay to remove  
+											</dd>
+										
+											<dd>
+												<code>The</code> - 
+												 id of the Overlay to remove 	  
+											</dd>
+										
+									</dl>
+								
+								
+								
+									HASH(0x1d9073c)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="showAll">showAll</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>showAll</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Shows all Overlays in the manager.
+								
+								
+								
+								
+									HASH(0x1d9094c)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="toString">toString</a></h4>
+						<div class="detail">
+							<code>
+								string 
+								<strong>toString</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Returns a string represenation of the object.
+								
+								
+								
+								
+									HASH(0x1d4cfb0)
+								
+							</div>
+						</div>
+						<hr />
+					
 				</div>
-			
-			<!-- ========= CONSTRUCTOR DETAIL END ======== -->
-	
-	
-			<!-- ============ METHOD DETAIL START ========== -->
-			
-				<div class="section method details">
-					<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-					<div class="content">
-						
-							<h4><a name="blurAll">blurAll</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>blurAll</strong>
-									()
-								</code>
-										
-								<div class="description">
-									
-										Removes focus from all registered Overlays in the manager
-									
-									
-									
-									
-										HASH(0x1d17ddc)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="compareZIndexDesc">compareZIndexDesc</a></h4>
-							<div class="detail">
-								<code>
-									Object 
-									<strong>compareZIndexDesc</strong>
-									(o1, o2)
-								</code>
-										
-								<div class="description">
-									
-										Used for sorting the manager's Overlays by z-index.
-									
-									
-									
-									
-										HASH(0x1dc1260)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="find">find</a></h4>
-							<div class="detail">
-								<code>
-									Overlay 
-									<strong>find</strong>
-									(&lt;Overlay&gt; &lt;string&gt; overlay)
-								</code>
-										
-								<div class="description">
-									
-										Attempts to locate an Overlay by instance or ID.
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>overlay</code> - 
-															An Overlay to locate within the manager  
-												</dd>
-											
-												<dd>
-													<code>overlay</code> - 
-															An Overlay id to locate within the manager  
-												</dd>
-											
-										</dl>
-									
-									
-										<dl>
-											<dt>Returns:</dt>
-											<dd>	The requested Overlay, if found, or null if it cannot be located.</dd>
-										</dl>
-									
-									
-										HASH(0x1dc1398)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="focus">focus</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>focus</strong>
-									(overlay)
-								</code>
-										
-								<div class="description">
-									
-										Focuses the specified Overlay
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>The</code> - 
-													 Overlay to focus  
-												</dd>
-											
-												<dd>
-													<code>The</code> - 
-													 id of the Overlay to focus 	  
-												</dd>
-											
-										</dl>
-									
-									
-									
-										HASH(0x1dc1590)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="getActive">getActive</a></h4>
-							<div class="detail">
-								<code>
-									Overlay 
-									<strong>getActive</strong>
-									()
-								</code>
-										
-								<div class="description">
-									
-										Returns the currently focused Overlay
-									
-									
-									
-										<dl>
-											<dt>Returns:</dt>
-											<dd>	The currently focused Overlay</dd>
-										</dl>
-									
-									
-										HASH(0x1dc171c)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="hideAll">hideAll</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>hideAll</strong>
-									()
-								</code>
-										
-								<div class="description">
-									
-										Hides all Overlays in the manager.
-									
-									
-									
-									
-										HASH(0x1dc1860)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="init">init</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>init</strong>
-									(&lt;object&gt; userConfig)
-								</code>
-										
-								<div class="description">
-									
-										Initializes the OverlayManager
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>userConfig</code> - 
-															The object literal representing the user configuration of the OverlayManager 	  
-												</dd>
-											
-												<dd>
-													<code>overlays</code> - 
-														Optional. A collection of Overlays to register with the manager.  
-												</dd>
-											
-										</dl>
-									
-									
-									
-										HASH(0x1dc19ec)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="initDefaultConfig">initDefaultConfig</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>initDefaultConfig</strong>
-									()
-								</code>
-										
-								<div class="description">
-									
-										Initializes the default configuration of the OverlayManager
-									
-									
-									
-									
-										HASH(0x1dc1b90)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="register">register</a></h4>
-							<div class="detail">
-								<code>
-									boolean 
-									<strong>register</strong>
-									(&lt;Overlay&gt; overlay)
-								</code>
-										
-								<div class="description">
-									
-										Registers an Overlay or an array of Overlays with the manager. Upon registration, the Overlay receives functions for focus and blur, along with CustomEvents for each.
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>overlay</code> - 
-															An Overlay to register with the manager.  
-												</dd>
-											
-												<dd>
-													<code>Overlay</code> - 
-													[]}	overlay		An array of Overlays to register with the manager.  
-												</dd>
-											
-										</dl>
-									
-									
-										<dl>
-											<dt>Returns:</dt>
-											<dd>	True if any Overlays are registered.</dd>
-										</dl>
-									
-									
-										HASH(0x1dc1cbc)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="remove">remove</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>remove</strong>
-									(overlay)
-								</code>
-										
-								<div class="description">
-									
-										Removes the specified Overlay from the manager
-									
-									
-										<dl>
-											<dt>Parameters:</dt>
-											
-												<dd>
-													<code>The</code> - 
-													 Overlay to remove  
-												</dd>
-											
-												<dd>
-													<code>The</code> - 
-													 id of the Overlay to remove 	  
-												</dd>
-											
-										</dl>
-									
-									
-									
-										HASH(0x1dc1e6c)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="showAll">showAll</a></h4>
-							<div class="detail">
-								<code>
-									void 
-									<strong>showAll</strong>
-									()
-								</code>
-										
-								<div class="description">
-									
-										Shows all Overlays in the manager.
-									
-									
-									
-									
-										HASH(0x1d2a6f8)
-									
-								</div>
-							</div>
-							<hr />
-						
-							<h4><a name="toString">toString</a></h4>
-							<div class="detail">
-								<code>
-									Object 
-									<strong>toString</strong>
-									()
-								</code>
-										
-								<div class="description">
-									
-									
-									
-									
-										HASH(0x1d6c820)
-									
-								</div>
-							</div>
-							<hr />
-						
-					</div>
-				</div>
-			
-			<!-- ============ METHOD DETAIL END ========== -->
+			</div>
+		
+		<!-- ============ METHOD DETAIL END ========== -->
 		</div>
 	</div>
 </div>
@@ -924,11 +885,14 @@ http://developer.yahoo.net/yui/license.txt
 
 
 <div id="footer">
-	<hr />	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	<hr />
+	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
 	<br /><br />
-	Documentation generated by <a href="http://jsdoc.sourceforge.net/">JSDoc</a>
-	version 1.9.5.8
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">
+	JSDoc</a>
 </div>
+
+
 
 </body>
 </html>

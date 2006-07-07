@@ -684,6 +684,10 @@ YAHOO.widget.Module.prototype = {
 	}
 }
 
+/**
+* Returns a string represenation of the object.
+* @type string
+*/ 
 YAHOO.widget.Module.prototype.toString = function() {
 	return "Module " + this.id;
 }

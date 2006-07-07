@@ -268,7 +268,6 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	}
 
 	this.queueProperty = function(key, value) {
-	
 		key = key.toLowerCase();
 
 		YAHOO.log("queueProperty: " + key + "=" + value, "info");

@@ -22,7 +22,7 @@ YAHOO.extend(YAHOO.widget.Tooltip, YAHOO.widget.Overlay);
 */
 YAHOO.widget.Tooltip.CSS_TOOLTIP = "tt";
 
-/*
+/**
 * The Tooltip initialization method. This method is automatically called by the constructor. A Tooltip is automatically rendered by the init method, and it also is set to be invisible by default, and constrained to viewport by default as well.
 * @param {string}	el	The element ID representing the Tooltip <em>OR</em>
 * @param {Element}	el	The element representing the Tooltip
@@ -136,8 +136,12 @@ YAHOO.widget.Tooltip.prototype.configContext = function(type, args, obj) {
 
 // BEGIN BUILT-IN DOM EVENT HANDLERS //
 
+/**
+* The default event handler fired when the user moves the mouse while over the context element.
+* @param {DOMEvent} e	The current DOM event
+* @param {object}	obj	The object argument
+*/
 YAHOO.widget.Tooltip.prototype.onContextMouseMove = function(e, obj) {
-
 	obj.pageX = YAHOO.util.Event.getPageX(e);
 	obj.pageY = YAHOO.util.Event.getPageY(e);
 
@@ -269,6 +273,10 @@ YAHOO.widget.Tooltip.prototype.preventOverlap = function(pageX, pageY) {
 	}
 }
 
+/**
+* Returns a string represenation of the object.
+* @type string
+*/ 
 YAHOO.widget.Tooltip.prototype.toString = function() {
 	return "Tooltip " + this.id;
 }

@@ -247,6 +247,10 @@ YAHOO.widget.OverlayManager.prototype = {
 		}
 	},
 
+	/**
+	* Returns a string represenation of the object.
+	* @type string
+	*/ 
 	toString : function() {
 		return "OverlayManager";
 	}

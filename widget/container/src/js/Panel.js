@@ -43,7 +43,7 @@ YAHOO.widget.Panel.prototype.showMaskEvent = null;
 */
 YAHOO.widget.Panel.prototype.hideMaskEvent = null;
 
-/*
+/**
 * The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
 * @param {string}	el	The element ID representing the Overlay <em>OR</em>
 * @param {Element}	el	The element representing the Overlay
@@ -221,6 +221,9 @@ YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 	}
 }
 
+/**
+* The default event handler fired when the "keylisteners" property is changed. 
+*/
 YAHOO.widget.Panel.prototype.configKeyListeners = function(type, args, obj) {
 	var listeners = args[0];
 
@@ -481,6 +484,10 @@ YAHOO.widget.Panel.prototype.render = function(appendToNode) {
 	return YAHOO.widget.Panel.superclass.render.call(this, appendToNode, this.innerElement);
 }
 
+/**
+* Returns a string represenation of the object.
+* @type string
+*/ 
 YAHOO.widget.Panel.prototype.toString = function() {
 	return "Panel " + this.id;
 }

@@ -70,7 +70,7 @@ YAHOO.widget.Overlay.prototype.beforeMoveEvent = null;
 */
 YAHOO.widget.Overlay.prototype.moveEvent = null;
 
-/*
+/**
 * The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
 * @param {string}	el	The element ID representing the Overlay <em>OR</em>
 * @param {Element}	el	The element representing the Overlay
@@ -677,8 +677,12 @@ YAHOO.widget.Overlay.prototype.destroy = function() {
 	this.iframe = null;
 
 	YAHOO.widget.Overlay.superclass.destroy.call(this);  
-}; 
+};
 
+/**
+* Returns a string represenation of the object.
+* @type string
+*/ 
 YAHOO.widget.Overlay.prototype.toString = function() {
 	return "Overlay " + this.id;
 }
@@ -711,12 +715,14 @@ YAHOO.widget.Overlay.windowResizeHandler = function(e) {
 	YAHOO.widget.Overlay.windowResizeEvent.fire();
 }
 
+/**
+* @private
+*/
+YAHOO.widget.Overlay._initialized == null;
 
-if (YAHOO.widget.Overlay._initialized == undefined) {
+if (YAHOO.widget.Overlay._initialized == null) {
 	YAHOO.util.Event.addListener(window, "scroll", YAHOO.widget.Overlay.windowScrollHandler);
 	YAHOO.util.Event.addListener(window, "resize", YAHOO.widget.Overlay.windowResizeHandler);
-	/**
-	* @private
-	*/
+
 	YAHOO.widget.Overlay._initialized = true;
 }

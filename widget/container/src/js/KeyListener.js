@@ -1,12 +1,11 @@
 /**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-* @class 
+* Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+* Code licensed under the BSD License:
+* http://developer.yahoo.net/yui/license.txt
 * KeyListener is a utility that provides an easy interface for listening for keydown/keyup events fired against DOM elements.
 * @param {Element}	attachTo	The element or element ID to which the key event should be attached
 * @param {string}	attachTo	The element or element ID to which the key event should be attached
-* @param (object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).
+* @param {object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).
 * @param {function}	handler		The CustomEvent handler to fire when the key event is detected
 * @param {object}	handler		An object literal representing the handler. 
 * @param {string}	event		Optional. The event (keydown or keyup) to listen for. Defaults automatically to keydown.
@@ -36,7 +35,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 	* Handles the key event when a key is pressed.
 	* @private
 	*/
-	var handleKeyPress = function(e, obj) {
+	function handleKeyPress(e, obj) {
 		var keyPressed = e.charCode || e.keyCode;
 		
 		if (! keyData.shift)	keyData.shift = false;
@@ -79,6 +78,10 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 		this.enabled = false;
 	}
 
+	/**
+	* Returns a string represenation of the object.
+	* @type string
+	*/ 
 	this.toString = function() {
 		return "KeyListener [" + keyData.keys + "] " + attachTo.tagName + (attachTo.id ? "[" + attachTo.id + "]" : "");
 	}
@@ -96,6 +99,12 @@ YAHOO.util.KeyListener.KEYDOWN = "keydown";
 * @final
 */
 YAHOO.util.KeyListener.KEYUP = "keyup";
+
+/**
+* Boolean indicating the enabled/disabled state of the Tooltip
+* @type Booleam
+*/
+YAHOO.util.KeyListener.prototype.enabled = null;
 
 /**
 * Enables the KeyListener, by dynamically attaching the key event to the appropriate DOM element.
