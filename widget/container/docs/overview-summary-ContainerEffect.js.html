@@ -1,0 +1,542 @@
+
+<html>
+<head>
+	<title>JavaScript Documentation - ContainerEffect.js</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Yahoo! UI Library: Container</a></h3>
+
+	<div class="breadcrumbs">
+					
+			
+			
+			
+				<a href="./index.html">Yahoo! UI Library: Container</a>
+				&gt;
+				<strong>ContainerEffect.js</strong>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.Config.html">
+								YAHOO.util.Config</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.KeyListener.html">
+								YAHOO.util.KeyListener</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.html">
+								YAHOO.widget</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.ContainerEffect.html">
+								YAHOO.widget.ContainerEffect</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Dialog.html">
+								YAHOO.widget.Dialog</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Module.html">
+								YAHOO.widget.Module</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Overlay.html">
+								YAHOO.widget.Overlay</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayManager.html">
+								YAHOO.widget.OverlayManager</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Panel.html">
+								YAHOO.widget.Panel</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.SimpleDialog.html">
+								YAHOO.widget.SimpleDialog</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Tooltip.html">
+								YAHOO.widget.Tooltip</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-Config.js.html">
+								Config.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-ContainerEffect.js.html">
+								ContainerEffect.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Dialog.js.html">
+								Dialog.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-KeyListener.js.html">
+								KeyListener.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Module.js.html">
+								Module.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Overlay.js.html">
+								Overlay.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayManager.js.html">
+								OverlayManager.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Panel.js.html">
+								Panel.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-SimpleDialog.js.html">
+								SimpleDialog.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Tooltip.js.html">
+								Tooltip.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div class="main">
+			
+		
+		
+			
+			   <h2>ContainerEffect.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+		
+		
+		
+		
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+				
+					
+						<a href="#classSummary">Class Summary</a> |
+					
+					
+				
+				
+				
+					<a href="#source">Source Code</a>
+				
+			</div>
+		
+			
+				<div class="section class summaries">
+					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+			
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+						<tr>
+							<td class="name">
+								<a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a>
+							</td>
+							<td class="overview">ContainerEffect encapsulates animation transitions that are executed when an Overlay is shown or hidden.</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		
+		
+		
+		
+			<div class="section source">
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<pre class="sourceview"><span class="comment">/**
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+* <span class="attrib">@class</span>
+* ContainerEffect encapsulates animation transitions that are executed when an Overlay is shown or hidden.
+* <span class="attrib">@param</span> {Overlay}	overlay		The Overlay that the animation should be associated with
+* <span class="attrib">@param</span> {object}	attrIn		The object literal representing the animation arguments to be used for the animate-in transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
+* <span class="attrib">@param</span> {object}	attrOut		The object literal representing the animation arguments to be used for the animate-out transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
+* <span class="attrib">@param</span> {Element}	targetElement	Optional. The target element that should be animated during the transition. Defaults to overlay.element.
+* <span class="attrib">@param</span> {class}	Optional. The animation class to instantiate. Defaults to YAHOO.util.Anim. Other options include YAHOO.util.Motion.
+* <span class="attrib">@constructor</span>
+*/</span>
+YAHOO.widget.ContainerEffect = <span class="reserved">function</span>(overlay, attrIn, attrOut, targetElement, animClass) {
+	<span class="reserved">if</span> (! animClass) {
+		animClass = YAHOO.util.Anim;
+	}
+
+	<span class="comment">/**
+	* The overlay to animate
+	*/</span>
+	<span class="reserved">this</span>.overlay = overlay;
+	<span class="comment">/**
+	* The animation attributes to use when transitioning into view
+	*/</span>
+	<span class="reserved">this</span>.attrIn = attrIn;
+	<span class="comment">/**
+	* The animation attributes to use when transitioning out of view
+	*/</span>
+	<span class="reserved">this</span>.attrOut = attrOut;
+	<span class="comment">/**
+	* The target element to be animated
+	*/</span>
+	<span class="reserved">this</span>.targetElement = targetElement || overlay.element;
+	<span class="comment">/**
+	* The animation class to use for animating the overlay
+	*/</span>
+	<span class="reserved">this</span>.animClass = animClass;
+}
+
+<span class="comment">/**
+* Initializes the animation classes and events.
+*/</span>
+YAHOO.widget.ContainerEffect.<span class="reserved">prototype</span>.init = <span class="reserved">function</span>() {
+	<span class="reserved">this</span>.beforeAnimateInEvent = new YAHOO.util.CustomEvent(<span class="literal">"beforeAnimateIn"</span>);
+	<span class="reserved">this</span>.beforeAnimateOutEvent = new YAHOO.util.CustomEvent(<span class="literal">"beforeAnimateOut"</span>);
+
+	<span class="reserved">this</span>.animateInCompleteEvent = new YAHOO.util.CustomEvent(<span class="literal">"animateInComplete"</span>);
+	<span class="reserved">this</span>.animateOutCompleteEvent = new YAHOO.util.CustomEvent(<span class="literal">"animateOutComplete"</span>);
+
+	<span class="reserved">this</span>.animIn = new <span class="reserved">this</span>.animClass(<span class="reserved">this</span>.targetElement, <span class="reserved">this</span>.attrIn.attributes, <span class="reserved">this</span>.attrIn.duration, <span class="reserved">this</span>.attrIn.method);
+	<span class="reserved">this</span>.animIn.onStart.subscribe(<span class="reserved">this</span>.handleStartAnimateIn, <span class="reserved">this</span>);
+	<span class="reserved">this</span>.animIn.onTween.subscribe(<span class="reserved">this</span>.handleTweenAnimateIn, <span class="reserved">this</span>);
+	<span class="reserved">this</span>.animIn.onComplete.subscribe(<span class="reserved">this</span>.handleCompleteAnimateIn, <span class="reserved">this</span>);
+
+	<span class="reserved">this</span>.animOut = new <span class="reserved">this</span>.animClass(<span class="reserved">this</span>.targetElement, <span class="reserved">this</span>.attrOut.attributes, <span class="reserved">this</span>.attrOut.duration, <span class="reserved">this</span>.attrOut.method);
+	<span class="reserved">this</span>.animOut.onStart.subscribe(<span class="reserved">this</span>.handleStartAnimateOut, <span class="reserved">this</span>);
+	<span class="reserved">this</span>.animOut.onTween.subscribe(<span class="reserved">this</span>.handleTweenAnimateOut, <span class="reserved">this</span>);
+	<span class="reserved">this</span>.animOut.onComplete.subscribe(<span class="reserved">this</span>.handleCompleteAnimateOut, <span class="reserved">this</span>);
+}
+
+<span class="comment">/**
+* Triggers the in-animation.
+*/</span>
+YAHOO.widget.ContainerEffect.<span class="reserved">prototype</span>.animateIn = <span class="reserved">function</span>() {
+	<span class="reserved">this</span>.beforeAnimateInEvent.fire();
+	<span class="reserved">this</span>.animIn.animate();
+}
+
+<span class="comment">/**
+* Triggers the out-animation.
+*/</span>
+YAHOO.widget.ContainerEffect.<span class="reserved">prototype</span>.animateOut = <span class="reserved">function</span>() {
+	<span class="reserved">this</span>.beforeAnimateOutEvent.fire();
+	<span class="reserved">this</span>.animOut.animate();
+}
+
+<span class="comment">/**
+* The default onStart handler for the in-animation.
+*/</span>
+YAHOO.widget.ContainerEffect.<span class="reserved">prototype</span>.handleStartAnimateIn = <span class="reserved">function</span>(type, args, obj) { }
+<span class="comment">/**
+* The default onTween handler for the in-animation.
+*/</span>
+YAHOO.widget.ContainerEffect.<span class="reserved">prototype</span>.handleTweenAnimateIn = <span class="reserved">function</span>(type, args, obj) { }
+<span class="comment">/**
+* The default onComplete handler for the in-animation.
+*/</span>
+YAHOO.widget.ContainerEffect.<span class="reserved">prototype</span>.handleCompleteAnimateIn = <span class="reserved">function</span>(type, args, obj) { }
+
+<span class="comment">/**
+* The default onStart handler for the out-animation.
+*/</span>
+YAHOO.widget.ContainerEffect.<span class="reserved">prototype</span>.handleStartAnimateOut = <span class="reserved">function</span>(type, args, obj) { }
+<span class="comment">/**
+* The default onTween handler for the out-animation.
+*/</span>
+YAHOO.widget.ContainerEffect.<span class="reserved">prototype</span>.handleTweenAnimateOut = <span class="reserved">function</span>(type, args, obj) { }
+<span class="comment">/**
+* The default onComplete handler for the out-animation.
+*/</span>
+YAHOO.widget.ContainerEffect.<span class="reserved">prototype</span>.handleCompleteAnimateOut = <span class="reserved">function</span>(type, args, obj) { }
+
+<span class="comment">/**
+* Returns a string representation of the object.
+* <span class="attrib">@type</span> string
+*/</span> 
+YAHOO.widget.ContainerEffect.<span class="reserved">prototype</span>.toString = <span class="reserved">function</span>() {
+	var output = <span class="literal">"ContainerEffect"</span>;
+	<span class="reserved">if</span> (<span class="reserved">this</span>.overlay) {
+		output += <span class="literal">" ["</span> + <span class="reserved">this</span>.overlay.toString() + <span class="literal">"]"</span>;
+	}
+	<span class="reserved">return</span> output;
+}
+
+<span class="comment">/**
+* A pre-configured ContainerEffect instance that can be used for fading an overlay in and out.
+* <span class="attrib">@param</span> {Overlay}	The Overlay object to animate
+* <span class="attrib">@param</span> {float}	The duration of the animation
+* <span class="attrib">@type</span> ContainerEffect
+*/</span>
+YAHOO.widget.ContainerEffect.FADE = <span class="reserved">function</span>(overlay, dur) {
+	var fade = new YAHOO.widget.ContainerEffect(overlay, { attributes:{opacity: {from:0, to:1}}, duration:dur, method:YAHOO.util.Easing.easeIn }, { attributes:{opacity: {to:0}}, duration:dur, method:YAHOO.util.Easing.easeOut}, overlay.element );
+
+	fade.handleStartAnimateIn = <span class="reserved">function</span>(type,args,obj) {
+		YAHOO.util.Dom.addClass(obj.overlay.element, <span class="literal">"hide-select"</span>);
+		
+		<span class="reserved">if</span> (! obj.overlay.underlay) {
+			obj.overlay.cfg.refireEvent(<span class="literal">"underlay"</span>);
+		}
+
+		<span class="reserved">if</span> (obj.overlay.underlay) {
+			obj.initialUnderlayOpacity = YAHOO.util.Dom.getStyle(obj.overlay.underlay, <span class="literal">"opacity"</span>);
+			obj.overlay.underlay.style.filter = null;
+		}
+
+		YAHOO.util.Dom.setStyle(obj.overlay.element, <span class="literal">"visibility"</span>, <span class="literal">"visible"</span>); 
+		YAHOO.util.Dom.setStyle(obj.overlay.element, <span class="literal">"opacity"</span>, 0);
+	}
+
+	fade.handleCompleteAnimateIn = <span class="reserved">function</span>(type,args,obj) {
+		YAHOO.util.Dom.removeClass(obj.overlay.element, <span class="literal">"hide-select"</span>);
+
+		<span class="reserved">if</span> (obj.overlay.element.style.filter) {
+			obj.overlay.element.style.filter = null;
+		}			
+		
+		<span class="reserved">if</span> (obj.overlay.underlay) {
+			YAHOO.util.Dom.setStyle(obj.overlay.underlay, <span class="literal">"opacity"</span>, obj.initialUnderlayOpacity);
+		}
+
+		obj.overlay.cfg.refireEvent(<span class="literal">"iframe"</span>);
+		obj.animateInCompleteEvent.fire();
+	}
+
+	fade.handleStartAnimateOut = <span class="reserved">function</span>(type, args, obj) {
+		YAHOO.util.Dom.addClass(obj.overlay.element, <span class="literal">"hide-select"</span>);
+
+		<span class="reserved">if</span> (obj.overlay.underlay) {
+			obj.overlay.underlay.style.filter = null;
+		}
+	}
+
+	fade.handleCompleteAnimateOut =  <span class="reserved">function</span>(type, args, obj) { 
+		YAHOO.util.Dom.removeClass(obj.overlay.element, <span class="literal">"hide-select"</span>);
+		<span class="reserved">if</span> (obj.overlay.element.style.filter) {
+			obj.overlay.element.style.filter = null;
+		}				
+		YAHOO.util.Dom.setStyle(obj.overlay.element, <span class="literal">"visibility"</span>, <span class="literal">"hidden"</span>);
+		YAHOO.util.Dom.setStyle(obj.overlay.element, <span class="literal">"opacity"</span>, 1); 
+
+		obj.overlay.cfg.refireEvent(<span class="literal">"iframe"</span>);
+
+		obj.animateOutCompleteEvent.fire();
+	};	
+
+	fade.init();
+	<span class="reserved">return</span> fade;
+};
+
+
+<span class="comment">/**
+* A pre-configured ContainerEffect instance that can be used for sliding an overlay in and out.
+* <span class="attrib">@param</span> {Overlay}	The Overlay object to animate
+* <span class="attrib">@param</span> {float}	The duration of the animation
+* <span class="attrib">@type</span> ContainerEffect
+*/</span>
+YAHOO.widget.ContainerEffect.SLIDE = <span class="reserved">function</span>(overlay, dur) {
+	var x = overlay.cfg.getProperty(<span class="literal">"x"</span>) || YAHOO.util.Dom.getX(overlay.element);
+	var y = overlay.cfg.getProperty(<span class="literal">"y"</span>) || YAHOO.util.Dom.getY(overlay.element);
+
+	var clientWidth = YAHOO.util.Dom.getClientWidth();
+	var offsetWidth = overlay.element.offsetWidth;
+
+	var slide = new YAHOO.widget.ContainerEffect(overlay, { 
+															attributes:{ points: { to:[x, y] } }, 
+															duration:dur, 
+															method:YAHOO.util.Easing.easeIn 
+														}, 
+														{ 
+															attributes:{ points: { to:[(clientWidth+25), y] } },
+															duration:dur, 
+															method:YAHOO.util.Easing.easeOut
+														},
+														overlay.element,
+														YAHOO.util.Motion
+												);
+
+	slide.handleStartAnimateIn = <span class="reserved">function</span>(type,args,obj) {
+		obj.overlay.element.style.left = (-25-offsetWidth) + <span class="literal">"px"</span>;
+		obj.overlay.element.style.top  = y + <span class="literal">"px"</span>;
+	}
+	
+	slide.handleTweenAnimateIn = <span class="reserved">function</span>(type, args, obj) {
+
+
+		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
+
+		var currentX = pos[0];
+		var currentY = pos[1];
+
+		<span class="reserved">if</span> (YAHOO.util.Dom.getStyle(obj.overlay.element, <span class="literal">"visibility"</span>) == <span class="literal">"hidden"</span> &amp;&amp; currentX &lt; x) {
+			YAHOO.util.Dom.setStyle(obj.overlay.element, <span class="literal">"visibility"</span>, <span class="literal">"visible"</span>);
+		}
+
+		obj.overlay.cfg.setProperty(<span class="literal">"xy"</span>, [currentX,currentY], true);
+		obj.overlay.cfg.refireEvent(<span class="literal">"iframe"</span>);
+	}
+	
+	slide.handleCompleteAnimateIn = <span class="reserved">function</span>(type, args, obj) {
+		obj.overlay.cfg.setProperty(<span class="literal">"xy"</span>, [x,y], true);
+		obj.startX = x;
+		obj.startY = y;
+		obj.overlay.cfg.refireEvent(<span class="literal">"iframe"</span>);
+		obj.animateInCompleteEvent.fire();
+	}
+
+	slide.handleStartAnimateOut = <span class="reserved">function</span>(type, args, obj) {
+		var clientWidth = YAHOO.util.Dom.getViewportWidth();
+		
+		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
+
+		var x = pos[0];
+		var y = pos[1];
+
+		var currentTo = obj.animOut.attributes.points.to;
+		obj.animOut.attributes.points.to = [(clientWidth+25), y];
+	}
+
+	slide.handleTweenAnimateOut = <span class="reserved">function</span>(type, args, obj) {
+		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
+
+		var x = pos[0];
+		var y = pos[1];
+
+		obj.overlay.cfg.setProperty(<span class="literal">"xy"</span>, [x,y], true);
+		obj.overlay.cfg.refireEvent(<span class="literal">"iframe"</span>);
+	}
+
+	slide.handleCompleteAnimateOut = <span class="reserved">function</span>(type, args, obj) { 
+		YAHOO.util.Dom.setStyle(obj.overlay.element, <span class="literal">"visibility"</span>, <span class="literal">"hidden"</span>);		
+		var offsetWidth = obj.overlay.element.offsetWidth;
+
+		obj.overlay.cfg.setProperty(<span class="literal">"xy"</span>, [x,y]);
+		obj.animateOutCompleteEvent.fire();
+	};	
+
+	slide.init();
+	<span class="reserved">return</span> slide;
+}</pre>
+			</div>
+		
+	</div>
+</div>
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">
+	JSDoc</a>
+</div>
+
+
+
+</body>
+</html>

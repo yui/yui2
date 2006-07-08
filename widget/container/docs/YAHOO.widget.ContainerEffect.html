@@ -22,7 +22,7 @@
 			
 				<a href="./index.html">Yahoo! UI Library: Container</a>
 				&gt;
-				<strong>YAHOO.widget.OverlayManager</strong>
+				<strong>YAHOO.widget.ContainerEffect</strong>
 			
 			
 			
@@ -177,10 +177,10 @@
 	<div id="pri">
         <div class="main">
 	
-		<h2>Class YAHOO.widget.OverlayManager</h2>
+		<h2>Class YAHOO.widget.ContainerEffect</h2>
 		<pre>Object
    |
-   +--<b>YAHOO.widget.OverlayManager</b>
+   +--<b>YAHOO.widget.ContainerEffect</b>
 </pre>
 		
 		
@@ -194,7 +194,7 @@
 					
 				</span>
 				<span class="class-type">class</span>
-				<b>YAHOO.widget.OverlayManager</b>
+				<b>YAHOO.widget.ContainerEffect</b>
 			</div>
 			<div class="class-extends">
 				
@@ -254,25 +254,61 @@
 					<table border="1" cellpadding="3" cellspacing="0">
 					
 						<tr>
-							<td class="flags">Array</td>
+							<td class="flags">Object</td>
 							<td class="spec">
 								<code>
-									<a href="#overlays">overlays</a>
+									<a href="#animClass">animClass</a>
 								</code>
 								<div class="description">
-									The array of Overlays that are currently registered&nbsp;
+									The animation class to use for animating the overlay&nbsp;
 								</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="flags">string</td>
+							<td class="flags">Object</td>
 							<td class="spec">
 								<code>
-									<a href="#CSS_FOCUSED">CSS_FOCUSED</a>
+									<a href="#attrIn">attrIn</a>
 								</code>
 								<div class="description">
-									The CSS class representing a focused Overlay&nbsp;
+									The animation attributes to use when transitioning into view&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">Object</td>
+							<td class="spec">
+								<code>
+									<a href="#attrOut">attrOut</a>
+								</code>
+								<div class="description">
+									The animation attributes to use when transitioning out of view&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">Object</td>
+							<td class="spec">
+								<code>
+									<a href="#overlay">overlay</a>
+								</code>
+								<div class="description">
+									The overlay to animate&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">Object</td>
+							<td class="spec">
+								<code>
+									<a href="#targetElement">targetElement</a>
+								</code>
+								<div class="description">
+									The target element to be animated&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -292,7 +328,7 @@
 				<h3><a name="constructor_summary">Constructor Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
 					<code class="spec">
-						<a href="YAHOO.widget.OverlayManager.html#YAHOO.widget.OverlayManager()">YAHOO.widget.OverlayManager</a>
+						<a href="YAHOO.widget.ContainerEffect.html#YAHOO.widget.ContainerEffect()">YAHOO.widget.ContainerEffect</a>
 					</code>
 					<div class="description">
 						Copyright (c) 2006, Yahoo!&nbsp;
@@ -314,24 +350,11 @@
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
-										<a href="#blurAll">blurAll</a>
+										<a href="#animateIn">animateIn</a>
 										()
 									</code>
 									<div class="description">
-										Removes focus from all registered Overlays in the manager&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">Overlay</td>
-								<td class="spec">
-									<code>
-										<a href="#find">find</a>
-										(&lt;Overlay&gt; &lt;string&gt; overlay)
-									</code>
-									<div class="description">
-										Attempts to locate an Overlay by instance or ID.&nbsp;
+										Triggers the in-animation.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -340,24 +363,11 @@
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
-										<a href="#focus">focus</a>
-										(overlay)
-									</code>
-									<div class="description">
-										Focuses the specified Overlay&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">Overlay</td>
-								<td class="spec">
-									<code>
-										<a href="#getActive">getActive</a>
+										<a href="#animateOut">animateOut</a>
 										()
 									</code>
 									<div class="description">
-										Returns the currently focused Overlay&nbsp;
+										Triggers the out-animation.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -366,11 +376,76 @@
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
-										<a href="#hideAll">hideAll</a>
-										()
+										<a href="#handleCompleteAnimateIn">handleCompleteAnimateIn</a>
+										(type, args, obj)
 									</code>
 									<div class="description">
-										Hides all Overlays in the manager.&nbsp;
+										The default onComplete handler for the in-animation.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#handleCompleteAnimateOut">handleCompleteAnimateOut</a>
+										(type, args, obj)
+									</code>
+									<div class="description">
+										The default onComplete handler for the out-animation.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#handleStartAnimateIn">handleStartAnimateIn</a>
+										(type, args, obj)
+									</code>
+									<div class="description">
+										The default onStart handler for the in-animation.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#handleStartAnimateOut">handleStartAnimateOut</a>
+										(type, args, obj)
+									</code>
+									<div class="description">
+										The default onStart handler for the out-animation.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#handleTweenAnimateIn">handleTweenAnimateIn</a>
+										(type, args, obj)
+									</code>
+									<div class="description">
+										The default onTween handler for the in-animation.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
+										<a href="#handleTweenAnimateOut">handleTweenAnimateOut</a>
+										(type, args, obj)
+									</code>
+									<div class="description">
+										The default onTween handler for the out-animation.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -380,62 +455,10 @@
 								<td class="spec">
 									<code>
 										<a href="#init">init</a>
-										(&lt;object&gt; userConfig)
-									</code>
-									<div class="description">
-										Initializes the OverlayManager&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#initDefaultConfig">initDefaultConfig</a>
 										()
 									</code>
 									<div class="description">
-										Initializes the default configuration of the OverlayManager&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">boolean</td>
-								<td class="spec">
-									<code>
-										<a href="#register">register</a>
-										(&lt;Overlay&gt; overlay)
-									</code>
-									<div class="description">
-										Registers an Overlay or an array of Overlays with the manager.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#remove">remove</a>
-										(overlay)
-									</code>
-									<div class="description">
-										Removes the specified Overlay from the manager&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#showAll">showAll</a>
-										()
-									</code>
-									<div class="description">
-										Shows all Overlays in the manager.&nbsp;
+										Initializes the animation classes and events.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -449,6 +472,32 @@
 									</code>
 									<div class="description">
 										Returns a string representation of the object.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">ContainerEffect</td>
+								<td class="spec">
+									<code>
+										<a href="#FADE">FADE</a>
+										(overlay, dur)
+									</code>
+									<div class="description">
+										A pre-configured ContainerEffect instance that can be used for fading an overlay in and out.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">ContainerEffect</td>
+								<td class="spec">
+									<code>
+										<a href="#SLIDE">SLIDE</a>
+										(overlay, dur)
+									</code>
+									<div class="description">
+										A pre-configured ContainerEffect instance that can be used for sliding an overlay in and out.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -468,28 +517,67 @@
 				<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
 					
-						<h4><a name="overlays">overlays</a></h4>
+						<h4><a name="animClass">animClass</a></h4>
 						<div class="detail">
 							<code>
-								Array
+								Object
 								&nbsp;
-								<strong>overlays</strong>
+								<strong>animClass</strong>
 							</code>
 							<div class="description">
-								The array of Overlays that are currently registered
+								The animation class to use for animating the overlay
 							</div>
 						</div>
 						<hr />
 					
-						<h4><a name="CSS_FOCUSED">CSS_FOCUSED</a></h4>
+						<h4><a name="attrIn">attrIn</a></h4>
 						<div class="detail">
 							<code>
-								string
+								Object
 								&nbsp;
-								<strong>CSS_FOCUSED</strong>
+								<strong>attrIn</strong>
 							</code>
 							<div class="description">
-								The CSS class representing a focused Overlay
+								The animation attributes to use when transitioning into view
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="attrOut">attrOut</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								&nbsp;
+								<strong>attrOut</strong>
+							</code>
+							<div class="description">
+								The animation attributes to use when transitioning out of view
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="overlay">overlay</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								&nbsp;
+								<strong>overlay</strong>
+							</code>
+							<div class="description">
+								The overlay to animate
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="targetElement">targetElement</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								&nbsp;
+								<strong>targetElement</strong>
+							</code>
+							<div class="description">
+								The target element to be animated
 							</div>
 						</div>
 						<hr />
@@ -504,10 +592,10 @@
 			<div class="section constructor details">
 				<h3><a name="constructor_detail">Constructor Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
-					<h4><a name="YAHOO.widget.OverlayManager()">YAHOO.widget.OverlayManager</a></h4>
+					<h4><a name="YAHOO.widget.ContainerEffect()">YAHOO.widget.ContainerEffect</a></h4>
 					<div class="detail">
 						<code>
-							<strong>YAHOO.widget.OverlayManager</strong>
+							<strong>YAHOO.widget.ContainerEffect</strong>
 							()
 						</code>
 						<div class="description">
@@ -522,13 +610,28 @@ http://developer.yahoo.net/yui/license.txt
 									<dt>Parameters:</dt>
 									
 										<dd>
-											<code>overlays</code> - 
-												Optional. A collection of Overlays to register with the manager.  
+											<code>overlay</code> - 
+													The Overlay that the animation should be associated with  
 										</dd>
 									
 										<dd>
-											<code>userConfig</code> - 
-													The object literal representing the user configuration of the OverlayManager  
+											<code>attrIn</code> - 
+													The object literal representing the animation arguments to be used for the animate-in transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).  
+										</dd>
+									
+										<dd>
+											<code>attrOut</code> - 
+													The object literal representing the animation arguments to be used for the animate-out transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).  
+										</dd>
+									
+										<dd>
+											<code>targetElement</code> - 
+												Optional. The target element that should be animated during the transition. Defaults to overlay.element.  
+										</dd>
+									
+										<dd>
+											<code>Optional</code> - 
+											. The animation class to instantiate. Defaults to YAHOO.util.Anim. Other options include YAHOO.util.Motion.  
 										</dd>
 									
 								</dl>
@@ -537,7 +640,7 @@ http://developer.yahoo.net/yui/license.txt
 							
 							
 							
-								HASH(0x1d2acd4)
+								HASH(0x1d7c2f0)
 							
 						</div>
 					</div>
@@ -553,146 +656,169 @@ http://developer.yahoo.net/yui/license.txt
 				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
 					
-						<h4><a name="blurAll">blurAll</a></h4>
+						<h4><a name="animateIn">animateIn</a></h4>
 						<div class="detail">
 							<code>
 								void 
-								<strong>blurAll</strong>
+								<strong>animateIn</strong>
 								()
 							</code>
 									
 							<div class="description">
 								
-									Removes focus from all registered Overlays in the manager
+									Triggers the in-animation.
 								
 								
 								
 								
-									HASH(0x1cb4ea4)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="find">find</a></h4>
-						<div class="detail">
-							<code>
-								Overlay 
-								<strong>find</strong>
-								(&lt;Overlay&gt; &lt;string&gt; overlay)
-							</code>
-									
-							<div class="description">
-								
-									Attempts to locate an Overlay by instance or ID.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>overlay</code> - 
-														An Overlay to locate within the manager  
-											</dd>
-										
-											<dd>
-												<code>overlay</code> - 
-														An Overlay id to locate within the manager  
-											</dd>
-										
-									</dl>
-								
-								
-									<dl>
-										<dt>Returns:</dt>
-										<dd>	The requested Overlay, if found, or null if it cannot be located.</dd>
-									</dl>
-								
-								
-									HASH(0x1cb4fe8)
+									HASH(0x1d04cb8)
 								
 							</div>
 						</div>
 						<hr />
 					
-						<h4><a name="focus">focus</a></h4>
+						<h4><a name="animateOut">animateOut</a></h4>
 						<div class="detail">
 							<code>
 								void 
-								<strong>focus</strong>
-								(overlay)
-							</code>
-									
-							<div class="description">
-								
-									Focuses the specified Overlay
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>The</code> - 
-												 Overlay to focus  
-											</dd>
-										
-											<dd>
-												<code>The</code> - 
-												 id of the Overlay to focus 	  
-											</dd>
-										
-									</dl>
-								
-								
-								
-									HASH(0x1dcd80c)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="getActive">getActive</a></h4>
-						<div class="detail">
-							<code>
-								Overlay 
-								<strong>getActive</strong>
+								<strong>animateOut</strong>
 								()
 							</code>
 									
 							<div class="description">
 								
-									Returns the currently focused Overlay
+									Triggers the out-animation.
 								
 								
 								
-									<dl>
-										<dt>Returns:</dt>
-										<dd>	The currently focused Overlay</dd>
-									</dl>
 								
-								
-									HASH(0x1d0f19c)
+									HASH(0x1d0515c)
 								
 							</div>
 						</div>
 						<hr />
 					
-						<h4><a name="hideAll">hideAll</a></h4>
+						<h4><a name="handleCompleteAnimateIn">handleCompleteAnimateIn</a></h4>
 						<div class="detail">
 							<code>
 								void 
-								<strong>hideAll</strong>
-								()
+								<strong>handleCompleteAnimateIn</strong>
+								(type, args, obj)
 							</code>
 									
 							<div class="description">
 								
-									Hides all Overlays in the manager.
+									The default onComplete handler for the in-animation.
 								
 								
 								
 								
-									HASH(0x1d0f328)
+									HASH(0x1cbdb5c)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="handleCompleteAnimateOut">handleCompleteAnimateOut</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>handleCompleteAnimateOut</strong>
+								(type, args, obj)
+							</code>
+									
+							<div class="description">
+								
+									The default onComplete handler for the out-animation.
+								
+								
+								
+								
+									HASH(0x1d239b0)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="handleStartAnimateIn">handleStartAnimateIn</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>handleStartAnimateIn</strong>
+								(type, args, obj)
+							</code>
+									
+							<div class="description">
+								
+									The default onStart handler for the in-animation.
+								
+								
+								
+								
+									HASH(0x1d23b24)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="handleStartAnimateOut">handleStartAnimateOut</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>handleStartAnimateOut</strong>
+								(type, args, obj)
+							</code>
+									
+							<div class="description">
+								
+									The default onStart handler for the out-animation.
+								
+								
+								
+								
+									HASH(0x1d23df4)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="handleTweenAnimateIn">handleTweenAnimateIn</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>handleTweenAnimateIn</strong>
+								(type, args, obj)
+							</code>
+									
+							<div class="description">
+								
+									The default onTween handler for the in-animation.
+								
+								
+								
+								
+									HASH(0x1dcdba4)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="handleTweenAnimateOut">handleTweenAnimateOut</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>handleTweenAnimateOut</strong>
+								(type, args, obj)
+							</code>
+									
+							<div class="description">
+								
+									The default onTween handler for the out-animation.
+								
+								
+								
+								
+									HASH(0x1dcddfc)
 								
 							</div>
 						</div>
@@ -703,151 +829,17 @@ http://developer.yahoo.net/yui/license.txt
 							<code>
 								void 
 								<strong>init</strong>
-								(&lt;object&gt; userConfig)
-							</code>
-									
-							<div class="description">
-								
-									Initializes the OverlayManager
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>userConfig</code> - 
-														The object literal representing the user configuration of the OverlayManager 	  
-											</dd>
-										
-											<dd>
-												<code>overlays</code> - 
-													Optional. A collection of Overlays to register with the manager.  
-											</dd>
-										
-									</dl>
-								
-								
-								
-									HASH(0x1d04cb8)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="initDefaultConfig">initDefaultConfig</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>initDefaultConfig</strong>
 								()
 							</code>
 									
 							<div class="description">
 								
-									Initializes the default configuration of the OverlayManager
+									Initializes the animation classes and events.
 								
 								
 								
 								
-									HASH(0x1d0f670)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="register">register</a></h4>
-						<div class="detail">
-							<code>
-								boolean 
-								<strong>register</strong>
-								(&lt;Overlay&gt; overlay)
-							</code>
-									
-							<div class="description">
-								
-									Registers an Overlay or an array of Overlays with the manager. Upon registration, the Overlay receives functions for focus and blur, along with CustomEvents for each.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>overlay</code> - 
-														An Overlay to register with the manager.  
-											</dd>
-										
-											<dd>
-												<code>Overlay</code> - 
-												[]}	overlay		An array of Overlays to register with the manager.  
-											</dd>
-										
-									</dl>
-								
-								
-									<dl>
-										<dt>Returns:</dt>
-										<dd>	True if any Overlays are registered.</dd>
-									</dl>
-								
-								
-									HASH(0x1d0f7f0)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="remove">remove</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>remove</strong>
-								(overlay)
-							</code>
-									
-							<div class="description">
-								
-									Removes the specified Overlay from the manager
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>The</code> - 
-												 Overlay to remove  
-											</dd>
-										
-											<dd>
-												<code>The</code> - 
-												 id of the Overlay to remove 	  
-											</dd>
-										
-									</dl>
-								
-								
-								
-									HASH(0x1d0f958)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="showAll">showAll</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>showAll</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Shows all Overlays in the manager.
-								
-								
-								
-								
-									HASH(0x1d0fb68)
+									HASH(0x1cbdc1c)
 								
 							</div>
 						</div>
@@ -868,7 +860,79 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1e2d458)
+									HASH(0x1d473f0)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="FADE">FADE</a></h4>
+						<div class="detail">
+							<code>
+								ContainerEffect 
+								<strong>FADE</strong>
+								(overlay, dur)
+							</code>
+									
+							<div class="description">
+								
+									A pre-configured ContainerEffect instance that can be used for fading an overlay in and out.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>The</code> - 
+												 Overlay object to animate  
+											</dd>
+										
+											<dd>
+												<code>The</code> - 
+												 duration of the animation  
+											</dd>
+										
+									</dl>
+								
+								
+								
+									HASH(0x1d47534)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="SLIDE">SLIDE</a></h4>
+						<div class="detail">
+							<code>
+								ContainerEffect 
+								<strong>SLIDE</strong>
+								(overlay, dur)
+							</code>
+									
+							<div class="description">
+								
+									A pre-configured ContainerEffect instance that can be used for sliding an overlay in and out.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>The</code> - 
+												 Overlay object to animate  
+											</dd>
+										
+											<dd>
+												<code>The</code> - 
+												 duration of the animation  
+											</dd>
+										
+									</dl>
+								
+								
+								
+									HASH(0x1cbdcac)
 								
 							</div>
 						</div>

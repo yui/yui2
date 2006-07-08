@@ -1,0 +1,418 @@
+
+<html>
+<head>
+	<title>JavaScript Documentation - SimpleDialog.js</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Yahoo! UI Library: Container</a></h3>
+
+	<div class="breadcrumbs">
+					
+			
+			
+			
+				<a href="./index.html">Yahoo! UI Library: Container</a>
+				&gt;
+				<strong>SimpleDialog.js</strong>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+	</div>
+</div>
+
+<div id="body">
+	
+	
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+		
+		
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+					
+						<li>
+							<a href="YAHOO.util.html">
+								YAHOO.util</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.Config.html">
+								YAHOO.util.Config</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.util.KeyListener.html">
+								YAHOO.util.KeyListener</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.html">
+								YAHOO.widget</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.ContainerEffect.html">
+								YAHOO.widget.ContainerEffect</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Dialog.html">
+								YAHOO.widget.Dialog</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Module.html">
+								YAHOO.widget.Module</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Overlay.html">
+								YAHOO.widget.Overlay</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.OverlayManager.html">
+								YAHOO.widget.OverlayManager</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Panel.html">
+								YAHOO.widget.Panel</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.SimpleDialog.html">
+								YAHOO.widget.SimpleDialog</a>
+						</li>
+					
+						<li>
+							<a href="YAHOO.widget.Tooltip.html">
+								YAHOO.widget.Tooltip</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+		
+		
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">		
+					
+						<li>
+							<a href="overview-summary-Config.js.html">
+								Config.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-ContainerEffect.js.html">
+								ContainerEffect.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Dialog.js.html">
+								Dialog.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-KeyListener.js.html">
+								KeyListener.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Module.js.html">
+								Module.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Overlay.js.html">
+								Overlay.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-OverlayManager.js.html">
+								OverlayManager.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Panel.js.html">
+								Panel.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-SimpleDialog.js.html">
+								SimpleDialog.js</a>
+						</li>
+					
+						<li>
+							<a href="overview-summary-Tooltip.js.html">
+								Tooltip.js</a>
+						</li>
+					
+				</ul>
+			</div>
+		
+	</div>
+	
+	<div class="main">
+			
+		
+		
+			
+			   <h2>SimpleDialog.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+		
+		
+		
+		
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+				
+					
+						<a href="#classSummary">Class Summary</a> |
+					
+					
+				
+				
+				
+					<a href="#source">Source Code</a>
+				
+			</div>
+		
+			
+				<div class="section class summaries">
+					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+			
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+						<tr>
+							<td class="name">
+								<a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a>
+							</td>
+							<td class="overview">SimpleDialog is a simple implementation of Dialog that can be used to submit a single value.</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		
+		
+		
+		
+			<div class="section source">
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<pre class="sourceview"><span class="comment">/**
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+* <span class="attrib">@class</span>
+* SimpleDialog is a simple implementation of Dialog that can be used to submit a single value. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
+* <span class="attrib">@param</span> {string}	el	The element ID representing the SimpleDialog &lt;em&gt;OR&lt;/em&gt;
+* <span class="attrib">@param</span> {Element}	el	The element representing the SimpleDialog
+* <span class="attrib">@param</span> {object}	userConfig	The configuration object literal containing the configuration that should be set for this SimpleDialog. See configuration documentation for more details.
+* <span class="attrib">@constructor</span>
+*/</span>
+YAHOO.widget.SimpleDialog = <span class="reserved">function</span>(el, userConfig) {
+	YAHOO.widget.SimpleDialog.superclass.constructor.call(<span class="reserved">this</span>, el, userConfig);
+}
+
+YAHOO.extend(YAHOO.widget.SimpleDialog, YAHOO.widget.Dialog);
+
+<span class="comment">/**
+* Constant for the standard network icon for a blocking action
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.SimpleDialog.ICON_BLOCK = <span class="literal">"nt/ic/ut/bsc/blck16_1.gif"</span>;
+
+<span class="comment">/**
+* Constant for the standard network icon for alarm
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.SimpleDialog.ICON_ALARM = <span class="literal">"nt/ic/ut/bsc/alrt16_1.gif"</span>;
+
+<span class="comment">/**
+* Constant for the standard network icon for help
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.SimpleDialog.ICON_HELP  = <span class="literal">"nt/ic/ut/bsc/hlp16_1.gif"</span>;
+
+<span class="comment">/**
+* Constant for the standard network icon for info
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.SimpleDialog.ICON_INFO  = <span class="literal">"nt/ic/ut/bsc/info16_1.gif"</span>;
+
+<span class="comment">/**
+* Constant for the standard network icon for warn
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.SimpleDialog.ICON_WARN  = <span class="literal">"nt/ic/ut/bsc/warn16_1.gif"</span>;
+
+<span class="comment">/**
+* Constant for the standard network icon for a tip
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.SimpleDialog.ICON_TIP   = <span class="literal">"nt/ic/ut/bsc/tip16_1.gif"</span>;
+
+<span class="comment">/**
+* Constant representing the default CSS class used for a SimpleDialog
+* <span class="attrib">@type</span> string
+* <span class="attrib">@final</span>
+*/</span>
+YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG = <span class="literal">"simple-dialog"</span>;
+
+<span class="comment">/**
+* Initializes the class's configurable properties which can be changed using the SimpleDialog's Config object (cfg).
+*/</span>
+YAHOO.widget.SimpleDialog.<span class="reserved">prototype</span>.initDefaultConfig = <span class="reserved">function</span>() {
+	YAHOO.widget.SimpleDialog.superclass.initDefaultConfig.call(<span class="reserved">this</span>);
+
+	<span class="comment">// Add dialog config properties //</span>
+	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"icon"</span>,	{ value:<span class="literal">"none"</span>,	handler:<span class="reserved">this</span>.configIcon, suppressEvent:true } );
+	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"text"</span>,	{ value:<span class="literal">""</span>, handler:<span class="reserved">this</span>.configText, suppressEvent:true, supercedes:[<span class="literal">"icon"</span>] } );
+}
+
+
+<span class="comment">/**
+* The SimpleDialog initialization method, which is executed for SimpleDialog and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
+* <span class="attrib">@param</span> {string}	el	The element ID representing the SimpleDialog &lt;em&gt;OR&lt;/em&gt;
+* <span class="attrib">@param</span> {Element}	el	The element representing the SimpleDialog
+* <span class="attrib">@param</span> {object}	userConfig	The configuration object literal containing the configuration that should be set for this SimpleDialog. See configuration documentation for more details.
+*/</span>
+YAHOO.widget.SimpleDialog.<span class="reserved">prototype</span>.init = <span class="reserved">function</span>(el, userConfig) {
+	YAHOO.widget.SimpleDialog.superclass.init.call(<span class="reserved">this</span>, el<span class="comment">/*, userConfig*/</span>);  <span class="comment">// Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level</span>
+
+	<span class="reserved">this</span>.beforeInitEvent.fire(YAHOO.widget.SimpleDialog);
+
+	YAHOO.util.Dom.addClass(<span class="reserved">this</span>.element, YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG);
+
+	<span class="reserved">this</span>.cfg.queueProperty(<span class="literal">"postmethod"</span>, <span class="literal">"manual"</span>);
+
+	<span class="reserved">if</span> (userConfig) {
+		<span class="reserved">this</span>.cfg.applyConfig(userConfig, true);
+	}
+
+	<span class="reserved">this</span>.beforeRenderEvent.subscribe(<span class="reserved">function</span>() {
+		<span class="reserved">if</span> (! <span class="reserved">this</span>.body) {
+			<span class="reserved">this</span>.setBody(<span class="literal">""</span>);
+		}
+	}, <span class="reserved">this</span>, true);
+
+	<span class="reserved">this</span>.initEvent.fire(YAHOO.widget.SimpleDialog);
+
+}
+<span class="comment">/**
+* Prepares the SimpleDialog's internal FORM object, creating one if one is not currently present, and adding the value hidden field.
+*/</span>
+YAHOO.widget.SimpleDialog.<span class="reserved">prototype</span>.registerForm = <span class="reserved">function</span>() {
+	YAHOO.widget.SimpleDialog.superclass.registerForm.call(<span class="reserved">this</span>);
+	<span class="reserved">this</span>.form.innerHTML += <span class="literal">"&lt;input type=\"</span>hidden\<span class="literal">" name=\"</span><span class="literal">" + this.id + "</span>\<span class="literal">" value=\"</span>\<span class="literal">"/&gt;"</span>;
+}
+
+<span class="comment">// BEGIN BUILT-IN PROPERTY EVENT HANDLERS //</span>
+
+<span class="comment">/**
+* Fired when the "icon" property is set.
+*/</span>
+YAHOO.widget.SimpleDialog.<span class="reserved">prototype</span>.configIcon = <span class="reserved">function</span>(type,args,obj) {
+	var icon = args[0];
+	<span class="reserved">if</span> (icon &amp;&amp; icon != <span class="literal">"none"</span>) {
+		var iconHTML = <span class="literal">"&lt;img src=\"</span><span class="literal">" + this.imageRoot + icon + "</span>\<span class="literal">" class=\"</span>icon\<span class="literal">" /&gt;"</span>;
+		<span class="reserved">this</span>.body.innerHTML = iconHTML + <span class="reserved">this</span>.body.innerHTML;
+	}
+}
+
+<span class="comment">/**
+* Fired when the "text" property is set.
+*/</span>
+YAHOO.widget.SimpleDialog.<span class="reserved">prototype</span>.configText = <span class="reserved">function</span>(type,args,obj) {
+	var text = args[0];
+	<span class="reserved">if</span> (text) {
+		<span class="reserved">this</span>.setBody(text);
+		<span class="reserved">this</span>.cfg.refireEvent(<span class="literal">"icon"</span>);
+	}
+}
+<span class="comment">// END BUILT-IN PROPERTY EVENT HANDLERS //</span>
+
+<span class="comment">/**
+* Returns a string representation of the object.
+* <span class="attrib">@type</span> string
+*/</span> 
+YAHOO.widget.SimpleDialog.<span class="reserved">prototype</span>.toString = <span class="reserved">function</span>() {
+	<span class="reserved">return</span> <span class="literal">"SimpleDialog "</span> + <span class="reserved">this</span>.id;
+}</pre>
+			</div>
+		
+	</div>
+</div>
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	<br /><br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">
+	JSDoc</a>
+</div>
+
+
+
+</body>
+</html>

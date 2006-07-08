@@ -22,7 +22,7 @@
 			
 				<a href="./index.html">Yahoo! UI Library: Container</a>
 				&gt;
-				<strong>YAHOO.widget.OverlayManager</strong>
+				<strong>YAHOO.widget.SimpleDialog</strong>
 			
 			
 			
@@ -177,10 +177,10 @@
 	<div id="pri">
         <div class="main">
 	
-		<h2>Class YAHOO.widget.OverlayManager</h2>
+		<h2>Class YAHOO.widget.SimpleDialog</h2>
 		<pre>Object
    |
-   +--<b>YAHOO.widget.OverlayManager</b>
+   +--<b>YAHOO.widget.SimpleDialog</b>
 </pre>
 		
 		
@@ -194,7 +194,7 @@
 					
 				</span>
 				<span class="class-type">class</span>
-				<b>YAHOO.widget.OverlayManager</b>
+				<b>YAHOO.widget.SimpleDialog</b>
 			</div>
 			<div class="class-extends">
 				
@@ -254,13 +254,13 @@
 					<table border="1" cellpadding="3" cellspacing="0">
 					
 						<tr>
-							<td class="flags">Array</td>
+							<td class="flags">string</td>
 							<td class="spec">
 								<code>
-									<a href="#overlays">overlays</a>
+									<a href="#CSS_SIMPLEDIALOG">CSS_SIMPLEDIALOG</a>
 								</code>
 								<div class="description">
-									The array of Overlays that are currently registered&nbsp;
+									Constant representing the default CSS class used for a SimpleDialog&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -269,10 +269,70 @@
 							<td class="flags">string</td>
 							<td class="spec">
 								<code>
-									<a href="#CSS_FOCUSED">CSS_FOCUSED</a>
+									<a href="#ICON_ALARM">ICON_ALARM</a>
 								</code>
 								<div class="description">
-									The CSS class representing a focused Overlay&nbsp;
+									Constant for the standard network icon for alarm&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">string</td>
+							<td class="spec">
+								<code>
+									<a href="#ICON_BLOCK">ICON_BLOCK</a>
+								</code>
+								<div class="description">
+									Constant for the standard network icon for a blocking action&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">string</td>
+							<td class="spec">
+								<code>
+									<a href="#ICON_HELP">ICON_HELP</a>
+								</code>
+								<div class="description">
+									Constant for the standard network icon for help&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">string</td>
+							<td class="spec">
+								<code>
+									<a href="#ICON_INFO">ICON_INFO</a>
+								</code>
+								<div class="description">
+									Constant for the standard network icon for info&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">string</td>
+							<td class="spec">
+								<code>
+									<a href="#ICON_TIP">ICON_TIP</a>
+								</code>
+								<div class="description">
+									Constant for the standard network icon for a tip&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">string</td>
+							<td class="spec">
+								<code>
+									<a href="#ICON_WARN">ICON_WARN</a>
+								</code>
+								<div class="description">
+									Constant for the standard network icon for warn&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -292,7 +352,7 @@
 				<h3><a name="constructor_summary">Constructor Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
 					<code class="spec">
-						<a href="YAHOO.widget.OverlayManager.html#YAHOO.widget.OverlayManager()">YAHOO.widget.OverlayManager</a>
+						<a href="YAHOO.widget.SimpleDialog.html#YAHOO.widget.SimpleDialog()">YAHOO.widget.SimpleDialog</a>
 					</code>
 					<div class="description">
 						Copyright (c) 2006, Yahoo!&nbsp;
@@ -314,24 +374,11 @@
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
-										<a href="#blurAll">blurAll</a>
-										()
+										<a href="#configIcon">configIcon</a>
+										(type,args,obj)
 									</code>
 									<div class="description">
-										Removes focus from all registered Overlays in the manager&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">Overlay</td>
-								<td class="spec">
-									<code>
-										<a href="#find">find</a>
-										(&lt;Overlay&gt; &lt;string&gt; overlay)
-									</code>
-									<div class="description">
-										Attempts to locate an Overlay by instance or ID.&nbsp;
+										Fired when the "icon" property is set.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -340,37 +387,11 @@
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
-										<a href="#focus">focus</a>
-										(overlay)
+										<a href="#configText">configText</a>
+										(type,args,obj)
 									</code>
 									<div class="description">
-										Focuses the specified Overlay&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">Overlay</td>
-								<td class="spec">
-									<code>
-										<a href="#getActive">getActive</a>
-										()
-									</code>
-									<div class="description">
-										Returns the currently focused Overlay&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#hideAll">hideAll</a>
-										()
-									</code>
-									<div class="description">
-										Hides all Overlays in the manager.&nbsp;
+										Fired when the "text" property is set.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -380,10 +401,10 @@
 								<td class="spec">
 									<code>
 										<a href="#init">init</a>
-										(&lt;object&gt; userConfig)
+										(&lt;string&gt; &lt;Element&gt; el, &lt;object&gt; userConfig)
 									</code>
 									<div class="description">
-										Initializes the OverlayManager&nbsp;
+										The SimpleDialog initialization method, which is executed for SimpleDialog and all of its subclasses.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -396,20 +417,7 @@
 										()
 									</code>
 									<div class="description">
-										Initializes the default configuration of the OverlayManager&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">boolean</td>
-								<td class="spec">
-									<code>
-										<a href="#register">register</a>
-										(&lt;Overlay&gt; overlay)
-									</code>
-									<div class="description">
-										Registers an Overlay or an array of Overlays with the manager.&nbsp;
+										Initializes the class's configurable properties which can be changed using the SimpleDialog's Config object (cfg).&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -418,24 +426,11 @@
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
-										<a href="#remove">remove</a>
-										(overlay)
-									</code>
-									<div class="description">
-										Removes the specified Overlay from the manager&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#showAll">showAll</a>
+										<a href="#registerForm">registerForm</a>
 										()
 									</code>
 									<div class="description">
-										Shows all Overlays in the manager.&nbsp;
+										Prepares the SimpleDialog's internal FORM object, creating one if one is not currently present, and adding the value hidden field.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -468,28 +463,93 @@
 				<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
 					
-						<h4><a name="overlays">overlays</a></h4>
-						<div class="detail">
-							<code>
-								Array
-								&nbsp;
-								<strong>overlays</strong>
-							</code>
-							<div class="description">
-								The array of Overlays that are currently registered
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="CSS_FOCUSED">CSS_FOCUSED</a></h4>
+						<h4><a name="CSS_SIMPLEDIALOG">CSS_SIMPLEDIALOG</a></h4>
 						<div class="detail">
 							<code>
 								string
 								&nbsp;
-								<strong>CSS_FOCUSED</strong>
+								<strong>CSS_SIMPLEDIALOG</strong>
 							</code>
 							<div class="description">
-								The CSS class representing a focused Overlay
+								Constant representing the default CSS class used for a SimpleDialog
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="ICON_ALARM">ICON_ALARM</a></h4>
+						<div class="detail">
+							<code>
+								string
+								&nbsp;
+								<strong>ICON_ALARM</strong>
+							</code>
+							<div class="description">
+								Constant for the standard network icon for alarm
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="ICON_BLOCK">ICON_BLOCK</a></h4>
+						<div class="detail">
+							<code>
+								string
+								&nbsp;
+								<strong>ICON_BLOCK</strong>
+							</code>
+							<div class="description">
+								Constant for the standard network icon for a blocking action
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="ICON_HELP">ICON_HELP</a></h4>
+						<div class="detail">
+							<code>
+								string
+								&nbsp;
+								<strong>ICON_HELP</strong>
+							</code>
+							<div class="description">
+								Constant for the standard network icon for help
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="ICON_INFO">ICON_INFO</a></h4>
+						<div class="detail">
+							<code>
+								string
+								&nbsp;
+								<strong>ICON_INFO</strong>
+							</code>
+							<div class="description">
+								Constant for the standard network icon for info
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="ICON_TIP">ICON_TIP</a></h4>
+						<div class="detail">
+							<code>
+								string
+								&nbsp;
+								<strong>ICON_TIP</strong>
+							</code>
+							<div class="description">
+								Constant for the standard network icon for a tip
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="ICON_WARN">ICON_WARN</a></h4>
+						<div class="detail">
+							<code>
+								string
+								&nbsp;
+								<strong>ICON_WARN</strong>
+							</code>
+							<div class="description">
+								Constant for the standard network icon for warn
 							</div>
 						</div>
 						<hr />
@@ -504,10 +564,10 @@
 			<div class="section constructor details">
 				<h3><a name="constructor_detail">Constructor Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
-					<h4><a name="YAHOO.widget.OverlayManager()">YAHOO.widget.OverlayManager</a></h4>
+					<h4><a name="YAHOO.widget.SimpleDialog()">YAHOO.widget.SimpleDialog</a></h4>
 					<div class="detail">
 						<code>
-							<strong>YAHOO.widget.OverlayManager</strong>
+							<strong>YAHOO.widget.SimpleDialog</strong>
 							()
 						</code>
 						<div class="description">
@@ -522,13 +582,18 @@ http://developer.yahoo.net/yui/license.txt
 									<dt>Parameters:</dt>
 									
 										<dd>
-											<code>overlays</code> - 
-												Optional. A collection of Overlays to register with the manager.  
+											<code>el</code> - 
+												The element ID representing the SimpleDialog <em>OR</em>  
+										</dd>
+									
+										<dd>
+											<code>el</code> - 
+												The element representing the SimpleDialog  
 										</dd>
 									
 										<dd>
 											<code>userConfig</code> - 
-													The object literal representing the user configuration of the OverlayManager  
+												The configuration object literal containing the configuration that should be set for this SimpleDialog. See configuration documentation for more details.  
 										</dd>
 									
 								</dl>
@@ -537,7 +602,7 @@ http://developer.yahoo.net/yui/license.txt
 							
 							
 							
-								HASH(0x1d2acd4)
+								HASH(0x1daf170)
 							
 						</div>
 					</div>
@@ -553,146 +618,43 @@ http://developer.yahoo.net/yui/license.txt
 				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
 					
-						<h4><a name="blurAll">blurAll</a></h4>
+						<h4><a name="configIcon">configIcon</a></h4>
 						<div class="detail">
 							<code>
 								void 
-								<strong>blurAll</strong>
-								()
+								<strong>configIcon</strong>
+								(type,args,obj)
 							</code>
 									
 							<div class="description">
 								
-									Removes focus from all registered Overlays in the manager
+									Fired when the "icon" property is set.
 								
 								
 								
 								
-									HASH(0x1cb4ea4)
+									HASH(0x1d0f1cc)
 								
 							</div>
 						</div>
 						<hr />
 					
-						<h4><a name="find">find</a></h4>
-						<div class="detail">
-							<code>
-								Overlay 
-								<strong>find</strong>
-								(&lt;Overlay&gt; &lt;string&gt; overlay)
-							</code>
-									
-							<div class="description">
-								
-									Attempts to locate an Overlay by instance or ID.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>overlay</code> - 
-														An Overlay to locate within the manager  
-											</dd>
-										
-											<dd>
-												<code>overlay</code> - 
-														An Overlay id to locate within the manager  
-											</dd>
-										
-									</dl>
-								
-								
-									<dl>
-										<dt>Returns:</dt>
-										<dd>	The requested Overlay, if found, or null if it cannot be located.</dd>
-									</dl>
-								
-								
-									HASH(0x1cb4fe8)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="focus">focus</a></h4>
+						<h4><a name="configText">configText</a></h4>
 						<div class="detail">
 							<code>
 								void 
-								<strong>focus</strong>
-								(overlay)
+								<strong>configText</strong>
+								(type,args,obj)
 							</code>
 									
 							<div class="description">
 								
-									Focuses the specified Overlay
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>The</code> - 
-												 Overlay to focus  
-											</dd>
-										
-											<dd>
-												<code>The</code> - 
-												 id of the Overlay to focus 	  
-											</dd>
-										
-									</dl>
-								
-								
-								
-									HASH(0x1dcd80c)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="getActive">getActive</a></h4>
-						<div class="detail">
-							<code>
-								Overlay 
-								<strong>getActive</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Returns the currently focused Overlay
-								
-								
-								
-									<dl>
-										<dt>Returns:</dt>
-										<dd>	The currently focused Overlay</dd>
-									</dl>
-								
-								
-									HASH(0x1d0f19c)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="hideAll">hideAll</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>hideAll</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Hides all Overlays in the manager.
+									Fired when the "text" property is set.
 								
 								
 								
 								
-									HASH(0x1d0f328)
+									HASH(0x1d0f370)
 								
 							</div>
 						</div>
@@ -703,32 +665,37 @@ http://developer.yahoo.net/yui/license.txt
 							<code>
 								void 
 								<strong>init</strong>
-								(&lt;object&gt; userConfig)
+								(&lt;string&gt; &lt;Element&gt; el, &lt;object&gt; userConfig)
 							</code>
 									
 							<div class="description">
 								
-									Initializes the OverlayManager
+									The SimpleDialog initialization method, which is executed for SimpleDialog and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
 								
 								
 									<dl>
 										<dt>Parameters:</dt>
 										
 											<dd>
-												<code>userConfig</code> - 
-														The object literal representing the user configuration of the OverlayManager 	  
+												<code>el</code> - 
+													The element ID representing the SimpleDialog <em>OR</em>  
 											</dd>
 										
 											<dd>
-												<code>overlays</code> - 
-													Optional. A collection of Overlays to register with the manager.  
+												<code>el</code> - 
+													The element representing the SimpleDialog  
+											</dd>
+										
+											<dd>
+												<code>userConfig</code> - 
+													The configuration object literal containing the configuration that should be set for this SimpleDialog. See configuration documentation for more details.   
 											</dd>
 										
 									</dl>
 								
 								
 								
-									HASH(0x1d04cb8)
+									HASH(0x1d0f568)
 								
 							</div>
 						</div>
@@ -744,110 +711,33 @@ http://developer.yahoo.net/yui/license.txt
 									
 							<div class="description">
 								
-									Initializes the default configuration of the OverlayManager
+									Initializes the class's configurable properties which can be changed using the SimpleDialog's Config object (cfg).
 								
 								
 								
 								
-									HASH(0x1d0f670)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="register">register</a></h4>
-						<div class="detail">
-							<code>
-								boolean 
-								<strong>register</strong>
-								(&lt;Overlay&gt; overlay)
-							</code>
-									
-							<div class="description">
-								
-									Registers an Overlay or an array of Overlays with the manager. Upon registration, the Overlay receives functions for focus and blur, along with CustomEvents for each.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>overlay</code> - 
-														An Overlay to register with the manager.  
-											</dd>
-										
-											<dd>
-												<code>Overlay</code> - 
-												[]}	overlay		An array of Overlays to register with the manager.  
-											</dd>
-										
-									</dl>
-								
-								
-									<dl>
-										<dt>Returns:</dt>
-										<dd>	True if any Overlays are registered.</dd>
-									</dl>
-								
-								
-									HASH(0x1d0f7f0)
+									HASH(0x1d0f7b4)
 								
 							</div>
 						</div>
 						<hr />
 					
-						<h4><a name="remove">remove</a></h4>
+						<h4><a name="registerForm">registerForm</a></h4>
 						<div class="detail">
 							<code>
 								void 
-								<strong>remove</strong>
-								(overlay)
-							</code>
-									
-							<div class="description">
-								
-									Removes the specified Overlay from the manager
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>The</code> - 
-												 Overlay to remove  
-											</dd>
-										
-											<dd>
-												<code>The</code> - 
-												 id of the Overlay to remove 	  
-											</dd>
-										
-									</dl>
-								
-								
-								
-									HASH(0x1d0f958)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="showAll">showAll</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>showAll</strong>
+								<strong>registerForm</strong>
 								()
 							</code>
 									
 							<div class="description">
 								
-									Shows all Overlays in the manager.
+									Prepares the SimpleDialog's internal FORM object, creating one if one is not currently present, and adding the value hidden field.
 								
 								
 								
 								
-									HASH(0x1d0fb68)
+									HASH(0x1d0f994)
 								
 							</div>
 						</div>
@@ -868,7 +758,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1e2d458)
+									HASH(0x1d0fe80)
 								
 							</div>
 						</div>
