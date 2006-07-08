@@ -378,6 +378,31 @@ YAHOO.widget.MenuItem.prototype.configChecked =
 
         if(bChecked) {
 
+            var me = this;
+
+            function preloadImage(p_sPath) {
+
+                var sPath = me.imageRoot + p_sPath;
+
+                if(!document.images[sPath]) {
+
+                    var oImg = document.createElement("img");
+                    oImg.src = sPath;
+                    oImg.name = sPath;
+                    oImg.id = sPath;
+                    oImg.style.display = "none";
+                    
+                    document.body.appendChild(oImg);
+
+                }
+            
+            }
+
+            preloadImage(this.CHECKED_IMAGE_PATH);
+            preloadImage(this.SELECTED_CHECKED_IMAGE_PATH);
+            preloadImage(this.DISABLED_CHECKED_IMAGE_PATH);
+
+
             oImg = document.createElement("img");
             oImg.src = (this.imageRoot + this.CHECKED_IMAGE_PATH);
             oImg.alt = this.CHECKED_IMAGE_ALT_TEXT;
@@ -454,9 +479,11 @@ YAHOO.widget.MenuItem.prototype.configSelected =
         if(!oConfig.getProperty("disabled") && oConfig.getProperty("checked")) {
 
             var bSelected = p_aArgs[0];
-            
-            this._checkImage.src = this.imageRoot + (bSelected ? 
+
+            var sSrc = this.imageRoot + (bSelected ? 
                 this.SELECTED_CHECKED_IMAGE_PATH : this.CHECKED_IMAGE_PATH);
+
+            this._checkImage.src = document.images[sSrc].src;
             
         }            
     
@@ -490,11 +517,11 @@ YAHOO.widget.MenuItem.prototype.configDisabled =
             if(bDisabled) {
     
                 sAlt = this.DISABLED_CHECKED_IMAGE_ALT_TEXT;
-                sSrc = this.DISABLED_CHECKED_IMAGE_PATH;        
+                sSrc = this.DISABLED_CHECKED_IMAGE_PATH;
             
             }
-    
-            oImg.src = this.imageRoot + sSrc;
+
+            oImg.src = document.images[(this.imageRoot + sSrc)].src;
             oImg.alt = sAlt;
             
         }    

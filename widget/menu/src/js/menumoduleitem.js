@@ -245,7 +245,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     * indicator for a MenuModuleItem instance.
     * @type {HTMLImageElement}
     */
-    subMenuIndicator: null,
+    submenuIndicator: null,
 
 
 	/**
@@ -772,7 +772,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
         var oEl = this.element;
         var oConfig = this.cfg;
         var aNodes = [oEl, this._oAnchor];
-        var oImg = this.subMenuIndicator;
+        var oImg = this.submenuIndicator;
 
 
         /**
@@ -1004,7 +1004,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
         var aNodes = [this.element, oAnchor];
         var oEM = this._oHelpTextEM;
         var oConfig = this.cfg;
-        var oImg = this.subMenuIndicator;
+        var oImg = this.submenuIndicator;
         var sImageSrc;
         var sImageAlt;
 
@@ -1070,7 +1070,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
             var bSelected = p_aArgs[0];
             var oEM = this._oHelpTextEM;
             var aNodes = [this.element, this._oAnchor];
-            var oImg = this.subMenuIndicator;
+            var oImg = this.submenuIndicator;
             var sImageSrc;
 
 
@@ -1095,8 +1095,8 @@ YAHOO.widget.MenuModuleItem.prototype = {
     
             if(oImg) {
     
-                oImg.src = this.imageRoot + sImageSrc;
-    
+                oImg.src = document.images[(this.imageRoot + sImageSrc)].src;
+
             }
 
         }
@@ -1118,7 +1118,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
         var Dom = this._oDom;
         var oEl = this.element;
         var oSubmenu = p_aArgs[0];
-        var oImg = this.subMenuIndicator;
+        var oImg = this.submenuIndicator;
         var oConfig = this.cfg;
         var aNodes = [this.element, this._oAnchor];
 
@@ -1134,13 +1134,37 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
             if(!oImg) { 
 
+                var me = this;
+
+                function preloadImage(p_sPath) {
+
+                    var sPath = me.imageRoot + p_sPath;
+
+                    if(!document.images[sPath]) {
+
+                        var oImg = document.createElement("img");
+                        oImg.src = sPath;
+                        oImg.name = sPath;
+                        oImg.id = sPath;
+                        oImg.style.display = "none";
+                        
+                        document.body.appendChild(oImg);
+
+                    }
+                
+                }
+
+                preloadImage(this.SUBMENU_INDICATOR_IMAGE_PATH);
+                preloadImage(this.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH);
+                preloadImage(this.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH);
+
                 oImg = document.createElement("img");
                 oImg.src = (this.imageRoot + this.SUBMENU_INDICATOR_IMAGE_PATH);
                 oImg.alt = this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
 
                 oEl.appendChild(oImg);
 
-                this.subMenuIndicator = oImg;
+                this.submenuIndicator = oImg;
 
                 Dom.addClass(aNodes, "hassubmenu");
 
