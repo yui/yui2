@@ -274,7 +274,7 @@ div.yuimenu li.checked img.checked {
     border:0;
     position:absolute;
     left:6px;
-    *left:-16px;
+    _left:-16px; /* Underscore hack b/c this is for IE 5.5 and IE 6 only */
     top:.5em;
     
 }
