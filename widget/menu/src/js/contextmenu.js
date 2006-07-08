@@ -26,6 +26,9 @@ YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 YAHOO.extend(YAHOO.widget.ContextMenu, YAHOO.widget.Menu);
 
 
+YAHOO.widget.ContextMenu.prototype._oTrigger = null;
+
+
 /**
 * The ContextMenu class's initialization method. This method is automatically  
 * called by the constructor, and sets up all DOM references for pre-existing 
@@ -214,6 +217,21 @@ YAHOO.widget.ContextMenu.prototype.configTrigger =
     
         if(oTrigger) {
     
+
+            /*
+                If there is a current "trigger" - remove the event handlers 
+                from that element(s) before assigning new ones
+            */
+            if(this._oTrigger) {
+            
+                Event.purgeElement(this._oTrigger);
+
+            }
+
+
+            this._oTrigger = oTrigger;
+
+
             /*
                 Listen for the "mousedown" event in Opera b/c it does not 
                 support the "contextmenu" event
