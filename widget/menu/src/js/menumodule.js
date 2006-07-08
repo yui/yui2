@@ -1213,7 +1213,7 @@ YAHOO.widget.MenuModule.prototype._onDOMEvent =
         */
     
         this._fireItemEvent(oTarget, sCustomEventType, p_oEvent);
-    
+
     
         // Fire the associated custom event for the MenuModule
     
@@ -1392,9 +1392,9 @@ YAHOO.widget.MenuModule.prototype._onElementClick =
         var oTarget = Event.getTarget(p_oEvent);
         
         /*
-        Check if the target was a DOM element that is a part of an
-        item and (if so), fire the associated "click" 
-        Custom Event.
+            Check if the target was a DOM element that is a part of an
+            item and (if so), fire the associated "click" 
+            Custom Event.
         */
         
         var oItem = this._fireItemEvent(oTarget, "clickEvent", p_oEvent);
@@ -1414,7 +1414,7 @@ YAHOO.widget.MenuModule.prototype._onElementClick =
                 submenu when the user clicks on the submenu indicator image.
             */        
     
-            if(oTarget == oItem.subMenuIndicator && oSubmenu) {
+            if(oTarget == oItem.submenuIndicator && oSubmenu) {
 
                 if(oSubmenu.cfg.getProperty("visible")) {
         
@@ -1440,10 +1440,10 @@ YAHOO.widget.MenuModule.prototype._onElementClick =
 
                     oSubmenu.show();
         
-                }                
+                }
         
             }
-            else if(!bCurrentPageURL) {
+            else if(oTarget.tagName != "A" && !bCurrentPageURL) {
                 
                 /*
                     Follow the URL of the item regardless of whether or 
@@ -1783,7 +1783,7 @@ YAHOO.widget.MenuModule.prototype._onSubmenuBeforeShow =
             ]
         );
 
-        oParent.subMenuIndicator.alt = 
+        oParent.submenuIndicator.alt = 
             oParent.EXPANDED_SUBMENU_INDICATOR_ALT_TEXT;
     
     };
@@ -1804,7 +1804,7 @@ YAHOO.widget.MenuModule.prototype._onSubmenuShow =
     
         var oParent = this.parent;
 
-        oParent.subMenuIndicator.alt = 
+        oParent.submenuIndicator.alt = 
             oParent.EXPANDED_SUBMENU_INDICATOR_ALT_TEXT;
     
     };
@@ -1833,7 +1833,7 @@ YAHOO.widget.MenuModule.prototype._onSubmenuHide =
         
         }
 
-        oParent.subMenuIndicator.alt = 
+        oParent.submenuIndicator.alt = 
             oParent.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
     
     };
