@@ -1,5 +1,27 @@
 Connection Manager Release Notes
 
+*** version 0.11.0 ***
+
+* Each transactions can be defined with a timeout threshold, in milliseconds,
+through the callback object.  If the threshold is reached, and the transaction
+hasn't completed, the transaction will call abort().
+
+* setForm() will now support file uploads by setting the second argument to
+true (e.g., YAHOO.util.Connect.setForm(formObject, true).  File upload does not
+use the callback success or failure handler.  Instead, it uses a new callback
+object handler: upload.
+
+* HTML form submit will no longer submit fields without a defined name
+attribute.
+
+* The default POST header of 'Content-Type','application/x-www-form-urlencoded'
+can be overridden by calling setDefaultPostHeader(false).  This
+will remove the default header from non-HTML form, POST submissions.
+
+* setHeader() now enumerates through the _http_header object with
+propertyIsEnumerable to prevent collisions with members added to Object via
+prototype.
+
 *** version 0.10.0 ***
 
 * handleTransactionResponse() now treats the full HTTP 2xx range as a success
@@ -47,4 +69,7 @@ and returns false if the connection object is no longer available.
 *** version 0.9.0 ***
 
 * Initial release
+
+
+
 
