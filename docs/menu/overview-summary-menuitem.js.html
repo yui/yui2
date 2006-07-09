@@ -150,16 +150,13 @@
 	</div>
 	
 	<div class="main">
-
-           <h2>menuitem.js</h2>
-		
+			
+       <h2>menuitem.js</h2>
+			
 			<div class="section source">
+				<h3><a name="source">Souce Code</a></h3>
+				<pre class="sourceview">
 
-				<pre class="sourceview"><span class="comment">/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-*/</span>
 
 <span class="comment">/**
 * <span class="attrib">@class</span> The MenuItem class allows you to create and modify an item for a
@@ -171,27 +168,21 @@ http://developer.yahoo.net/yui/license.txt
 * <span class="attrib">@param</span> {String or HTMLElement} p_oObject String or HTMLElement 
 * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
 * source HTMLElement node.
-* <span class="attrib">@param</span> {Object} p_oUserConfig The configuration object literal containing 
+* <span class="attrib">@param</span> {Object} p_oConfig The configuration object literal containing 
 * the configuration for a MenuItem instance. See the configuration 
 * class documentation for more details.
 */</span>
-YAHOO.widget.MenuItem = <span class="reserved">function</span>(p_oObject, p_oUserConfig) {
+YAHOO.widget.MenuItem = <span class="reserved">function</span>(p_oObject, p_oConfig) {
 
-    <span class="reserved">if</span>(p_oObject) {
-
-        YAHOO.widget.MenuItem.superclass.constructor.call(
-            <span class="reserved">this</span>, 
-            p_oObject, 
-            p_oUserConfig
-        );
-
-    }
+    YAHOO.widget.MenuItem.superclass.constructor.call(
+        <span class="reserved">this</span>, 
+        p_oObject, 
+        p_oConfig
+    );
 
 };
 
-YAHOO.widget.MenuItem.<span class="reserved">prototype</span> = new YAHOO.widget.MenuModuleItem();
-YAHOO.widget.MenuItem.<span class="reserved">prototype</span>.constructor = YAHOO.widget.MenuItem;
-YAHOO.widget.MenuItem.superclass = YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span>;
+YAHOO.extend(YAHOO.widget.MenuItem, YAHOO.widget.MenuModuleItem);
 
 
 <span class="comment">/**
@@ -202,11 +193,11 @@ YAHOO.widget.MenuItem.superclass = YAHOO.widget.MenuModuleItem.<span class="rese
 * <span class="attrib">@param</span> {String or HTMLElement} p_oObject String or HTMLElement 
 * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
 * source HTMLElement node.
-* <span class="attrib">@param</span> {Object} p_oUserConfig The configuration object literal containing 
+* <span class="attrib">@param</span> {Object} p_oConfig The configuration object literal containing 
 * the configuration for a MenuItem instance. See the configuration 
 * class documentation for more details.
 */</span>
-YAHOO.widget.MenuItem.<span class="reserved">prototype</span>.init = <span class="reserved">function</span>(p_oObject, p_oUserConfig) {
+YAHOO.widget.MenuItem.<span class="reserved">prototype</span>.init = <span class="reserved">function</span>(p_oObject, p_oConfig) {
 
     <span class="reserved">if</span>(!<span class="reserved">this</span>.SUBMENU_TYPE) {
 
@@ -237,16 +228,70 @@ YAHOO.widget.MenuItem.<span class="reserved">prototype</span>.init = <span class
     <span class="reserved">this</span>.mouseOverEvent.subscribe(<span class="reserved">this</span>._onMouseOver, <span class="reserved">this</span>, true);
     <span class="reserved">this</span>.mouseOutEvent.subscribe(<span class="reserved">this</span>._onMouseOut, <span class="reserved">this</span>, true);
 
+    var oConfig = <span class="reserved">this</span>.cfg;
 
-    <span class="reserved">if</span>(p_oUserConfig) {
+    <span class="reserved">if</span>(p_oConfig) {
 
-        <span class="reserved">this</span>.cfg.applyConfig(p_oUserConfig, true);
+        oConfig.applyConfig(p_oConfig, true);
 
     }
 
-    <span class="reserved">this</span>.cfg.fireQueue();
+    oConfig.fireQueue();
 
 };
+<span class="comment">
+
+// Constants</span>
+
+<span class="comment">/**
+* Constant representing the path to the image to be used for the checked state.
+* <span class="attrib">@final</span>
+* <span class="attrib">@type</span> String
+*/</span>
+YAHOO.widget.MenuItem.<span class="reserved">prototype</span>.CHECKED_IMAGE_PATH = 
+    <span class="literal">"nt/ic/ut/bsc/menuchk8_nrm_1.gif"</span>;
+
+<span class="comment">/**
+* Constant representing the path to the image to be used for the selected 
+* checked state.
+* <span class="attrib">@final</span>
+* <span class="attrib">@type</span> String
+*/</span>
+YAHOO.widget.MenuItem.<span class="reserved">prototype</span>.SELECTED_CHECKED_IMAGE_PATH = 
+    <span class="literal">"nt/ic/ut/bsc/menuchk8_hov_1.gif"</span>;
+
+<span class="comment">/**
+* Constant representing the path to the image to be used for the disabled 
+* checked state.
+* <span class="attrib">@final</span>
+* <span class="attrib">@type</span> String
+*/</span>
+YAHOO.widget.MenuItem.<span class="reserved">prototype</span>.DISABLED_CHECKED_IMAGE_PATH = 
+    <span class="literal">"nt/ic/ut/bsc/menuchk8_dim_1.gif"</span>;
+
+<span class="comment">/**
+* Constant representing the alt text for the image to be used for the 
+* checked image.
+* <span class="attrib">@final</span>
+* <span class="attrib">@type</span> String
+*/</span>
+YAHOO.widget.MenuItem.<span class="reserved">prototype</span>.CHECKED_IMAGE_ALT_TEXT = <span class="literal">"Checked."</span>;
+
+
+<span class="comment">/**
+* Constant representing the alt text for the image to be used for the 
+* checked image when the item is disabled.
+* <span class="attrib">@final</span>
+* <span class="attrib">@type</span> String
+*/</span>
+YAHOO.widget.MenuItem.<span class="reserved">prototype</span>.DISABLED_CHECKED_IMAGE_ALT_TEXT = 
+    <span class="literal">"Checked. (Item disabled.)"</span>;
+<span class="comment">
+
+// Private properties</span>
+
+
+YAHOO.widget.MenuItem.<span class="reserved">prototype</span>._checkImage = null;
 <span class="comment">
 
 // Private event handlers</span>
@@ -256,38 +301,44 @@ YAHOO.widget.MenuItem.<span class="reserved">prototype</span>.init = <span class
 * "keydown" Custom Event handler for a MenuItem instance.
 * <span class="attrib">@private</span>
 * <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
-* <span class="attrib">@param</span> {Array} p_aArguments Collection of arguments sent when the event 
+* <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
 * <span class="attrib">@param</span> {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */</span>
 YAHOO.widget.MenuItem.<span class="reserved">prototype</span>._onKeyDown = 
 
-    <span class="reserved">function</span>(p_sType, p_aArguments, p_oMenuItem) {
+    <span class="reserved">function</span>(p_sType, p_aArgs, p_oMenuItem) {
+
+        var Event = YAHOO.util.Event;
+        var oDOMEvent = p_aArgs[0];
+        var oParent = <span class="reserved">this</span>.parent;
+        var oConfig = <span class="reserved">this</span>.cfg;
+        var oMenuItem;
     
-        var oEvent = p_aArguments[0];
-    
-        switch(oEvent.keyCode) {
+
+        switch(oDOMEvent.keyCode) {
     
             case 38:    // Up arrow
             case 40:    // Down arrow
     
-                var oActiveItem = <span class="reserved">this</span>.parent.activeItem;
+                <span class="reserved">if</span>(
+                    <span class="reserved">this</span> == oParent.activeItem &amp;&amp; 
+                    !oConfig.getProperty(<span class="literal">"selected"</span>)
+                ) {
     
-                <span class="reserved">if</span>(<span class="reserved">this</span> == oActiveItem &amp;&amp; !<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"selected"</span>)) {
-    
-                    <span class="reserved">this</span>.cfg.setProperty(<span class="literal">"selected"</span>, true);
+                    oConfig.setProperty(<span class="literal">"selected"</span>, true);
     
                 }
                 <span class="reserved">else</span> {
     
-                    var oNextItem = (oEvent.keyCode == 38) ? 
+                    var oNextItem = (oDOMEvent.keyCode == 38) ? 
                             <span class="reserved">this</span>.getPreviousEnabledSibling() : 
                             <span class="reserved">this</span>.getNextEnabledSibling();
             
                     <span class="reserved">if</span>(oNextItem) {
 
-                        <span class="reserved">this</span>.parent.clearActiveItem();
+                        oParent.clearActiveItem();
 
                         oNextItem.cfg.setProperty(<span class="literal">"selected"</span>, true);
             
@@ -297,21 +348,21 @@ YAHOO.widget.MenuItem.<span class="reserved">prototype</span>._onKeyDown =
     
                 }
     
-                YAHOO.util.Event.preventDefault(oEvent);
+                Event.preventDefault(oDOMEvent);
 
             break;
             
     
             case 39:    // Right arrow
 
-                <span class="reserved">this</span>.parent.clearActiveItem();
+                oParent.clearActiveItem();
 
-                <span class="reserved">this</span>.cfg.setProperty(<span class="literal">"selected"</span>, true);
+                oConfig.setProperty(<span class="literal">"selected"</span>, true);
                 
                 <span class="reserved">this</span>.focus();
 
 
-                var oSubmenu = <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"submenu"</span>);
+                var oSubmenu = oConfig.getProperty(<span class="literal">"submenu"</span>);
     
                 <span class="reserved">if</span>(oSubmenu) {
 
@@ -321,15 +372,15 @@ YAHOO.widget.MenuItem.<span class="reserved">prototype</span>._onKeyDown =
                 }
                 <span class="reserved">else</span> <span class="reserved">if</span>(
                     YAHOO.widget.MenuBarItem &amp;&amp; 
-                    <span class="reserved">this</span>.parent.parent &amp;&amp; 
-                    <span class="reserved">this</span>.parent.parent instanceof YAHOO.widget.MenuBarItem
+                    oParent.parent &amp;&amp; 
+                    oParent.parent instanceof YAHOO.widget.MenuBarItem
                 ) {
 
-                    <span class="reserved">this</span>.parent.hide();
+                    oParent.hide();
 <span class="comment">    
                     // Set focus to the parent MenuItem if one exists</span>
     
-                    var oMenuItem = <span class="reserved">this</span>.parent.parent;
+                    oMenuItem = oParent.parent;
     
                     <span class="reserved">if</span>(oMenuItem) {
     
@@ -340,7 +391,7 @@ YAHOO.widget.MenuItem.<span class="reserved">prototype</span>._onKeyDown =
                 
                 }
     
-                YAHOO.util.Event.preventDefault(oEvent);
+                Event.preventDefault(oDOMEvent);
 
             break;
     
@@ -349,13 +400,13 @@ YAHOO.widget.MenuItem.<span class="reserved">prototype</span>._onKeyDown =
 <span class="comment">    
                 // Only hide if this this is a MenuItem of a submenu</span>
     
-                <span class="reserved">if</span>(<span class="reserved">this</span>.parent.parent) {
+                <span class="reserved">if</span>(oParent.parent) {
     
-                    <span class="reserved">this</span>.parent.hide();
+                    oParent.hide();
 <span class="comment">    
                     // Set focus to the parent MenuItem if one exists</span>
     
-                    var oMenuItem = <span class="reserved">this</span>.parent.parent;
+                    oMenuItem = oParent.parent;
     
                     <span class="reserved">if</span>(oMenuItem) {
     
@@ -366,7 +417,7 @@ YAHOO.widget.MenuItem.<span class="reserved">prototype</span>._onKeyDown =
     
                 }
 
-                YAHOO.util.Event.preventDefault(oEvent);
+                Event.preventDefault(oDOMEvent);
     
             break;        
     
@@ -379,36 +430,38 @@ YAHOO.widget.MenuItem.<span class="reserved">prototype</span>._onKeyDown =
 * "mouseover" Custom Event handler for a MenuItem instance.
 * <span class="attrib">@private</span>
 * <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
-* <span class="attrib">@param</span> {Array} p_aArguments Collection of arguments sent when the event 
+* <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
 * <span class="attrib">@param</span> {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */</span>
 YAHOO.widget.MenuItem.<span class="reserved">prototype</span>._onMouseOver = 
 
-    <span class="reserved">function</span>(p_sType, p_aArguments, p_oMenuItem) {
-    
-        var oActiveItem = <span class="reserved">this</span>.parent.activeItem;
+    <span class="reserved">function</span>(p_sType, p_aArgs, p_oMenuItem) {
+
+        var oParent = <span class="reserved">this</span>.parent;
+        var oConfig = <span class="reserved">this</span>.cfg;
+        var oActiveItem = oParent.activeItem;
 <span class="comment">    
     
         // Hide any other submenus that might be visible</span>
     
         <span class="reserved">if</span>(oActiveItem &amp;&amp; oActiveItem != <span class="reserved">this</span>) {
     
-            <span class="reserved">this</span>.parent.clearActiveItem();
+            oParent.clearActiveItem();
     
         }
 <span class="comment">    
     
         // Select and focus the current MenuItem instance</span>
     
-        <span class="reserved">this</span>.cfg.setProperty(<span class="literal">"selected"</span>, true);
+        oConfig.setProperty(<span class="literal">"selected"</span>, true);
         <span class="reserved">this</span>.focus();
 <span class="comment">    
     
         // Show the submenu for this instance</span>
     
-        var oSubmenu = <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"submenu"</span>);
+        var oSubmenu = oConfig.getProperty(<span class="literal">"submenu"</span>);
     
         <span class="reserved">if</span>(oSubmenu) {
     
@@ -423,29 +476,29 @@ YAHOO.widget.MenuItem.<span class="reserved">prototype</span>._onMouseOver =
 * "mouseout" Custom Event handler for a MenuItem instance.
 * <span class="attrib">@private</span>
 * <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
-* <span class="attrib">@param</span> {Array} p_aArguments Collection of arguments sent when the event 
+* <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
 * <span class="attrib">@param</span> {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */</span>
 YAHOO.widget.MenuItem.<span class="reserved">prototype</span>._onMouseOut = 
 
-    <span class="reserved">function</span>(p_sType, p_aArguments, p_oMenuItem) {
+    <span class="reserved">function</span>(p_sType, p_aArgs, p_oMenuItem) {
     
-        <span class="reserved">this</span>.cfg.setProperty(<span class="literal">"selected"</span>, false);
-    
-    
-        var oSubmenu = <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"submenu"</span>);
+        var oConfig = <span class="reserved">this</span>.cfg;
+        var oSubmenu = oConfig.getProperty(<span class="literal">"submenu"</span>);
+
+        oConfig.setProperty(<span class="literal">"selected"</span>, false);
     
         <span class="reserved">if</span>(oSubmenu) {
     
-            var oEvent = p_aArguments[0],
-                oRelatedTarget = YAHOO.util.Event.getRelatedTarget(oEvent);
+            var oDOMEvent = p_aArgs[0];
+            var oRelatedTarget = YAHOO.util.Event.getRelatedTarget(oDOMEvent);
     
             <span class="reserved">if</span>(
                 !(
                     oRelatedTarget == oSubmenu.element || 
-                    <span class="reserved">this</span>._oDom.isAncestor(oSubmenu.element, oRelatedTarget)
+                    YAHOO.util.Dom.isAncestor(oSubmenu.element, oRelatedTarget)
                 )
             ) {
     
@@ -455,7 +508,207 @@ YAHOO.widget.MenuItem.<span class="reserved">prototype</span>._onMouseOut =
     
         }
     
-    };</pre>
+    };
+<span class="comment">
+
+// Event handlers for configuration properties</span>
+
+<span class="comment">/**
+* Event handler for when the "checked" configuration property of
+* a MenuItem instance changes. 
+* <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
+* <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the 
+* event was fired.
+* <span class="attrib">@param</span> {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
+* that fired the event.
+*/</span>    
+YAHOO.widget.MenuItem.<span class="reserved">prototype</span>.configChecked =
+
+    <span class="reserved">function</span>(p_sType, p_aArgs, p_oItem) {
+    
+        var Dom = YAHOO.util.Dom;
+        var bChecked = p_aArgs[0];
+        var oEl = <span class="reserved">this</span>.element;
+        var oConfig = <span class="reserved">this</span>.cfg;
+        var oImg;
+        
+
+        <span class="reserved">if</span>(bChecked) {
+
+            var me = <span class="reserved">this</span>;
+
+            <span class="reserved">function</span> preloadImage(p_sPath) {
+
+                var sPath = me.imageRoot + p_sPath;
+
+                <span class="reserved">if</span>(!document.images[sPath]) {
+
+                    var oImg = document.createElement(<span class="literal">"img"</span>);
+                    oImg.src = sPath;
+                    oImg.name = sPath;
+                    oImg.id = sPath;
+                    oImg.style.display = <span class="literal">"none"</span>;
+                    
+                    document.body.appendChild(oImg);
+
+                }
+            
+            }
+
+            preloadImage(<span class="reserved">this</span>.CHECKED_IMAGE_PATH);
+            preloadImage(<span class="reserved">this</span>.SELECTED_CHECKED_IMAGE_PATH);
+            preloadImage(<span class="reserved">this</span>.DISABLED_CHECKED_IMAGE_PATH);
+
+
+            oImg = document.createElement(<span class="literal">"img"</span>);
+            oImg.src = (<span class="reserved">this</span>.imageRoot + <span class="reserved">this</span>.CHECKED_IMAGE_PATH);
+            oImg.alt = <span class="reserved">this</span>.CHECKED_IMAGE_ALT_TEXT;
+
+            var oSubmenu = <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"submenu"</span>);
+
+            <span class="reserved">if</span>(oSubmenu) {
+
+                oEl.insertBefore(oImg, oSubmenu.element);
+
+            }
+            <span class="reserved">else</span> {
+
+                oEl.appendChild(oImg);            
+
+            }
+
+
+            Dom.addClass([oEl, oImg], <span class="literal">"checked"</span>);
+
+            <span class="reserved">this</span>._checkImage = oImg;
+
+            <span class="reserved">if</span>(oConfig.getProperty(<span class="literal">"disabled"</span>)) {
+
+                oConfig.refireEvent(<span class="literal">"disabled"</span>);
+
+            }
+
+            <span class="reserved">if</span>(oConfig.getProperty(<span class="literal">"selected"</span>)) {
+
+                oConfig.refireEvent(<span class="literal">"selected"</span>);
+
+            }
+        
+        }
+        <span class="reserved">else</span> {
+
+            oImg = <span class="reserved">this</span>._checkImage;
+
+            Dom.removeClass([oEl, oImg], <span class="literal">"checked"</span>);
+
+            <span class="reserved">if</span>(oImg) {
+
+                oEl.removeChild(oImg);
+
+            }
+
+            <span class="reserved">this</span>._checkImage = null;
+        
+        }
+
+    };
+    
+
+<span class="comment">/**
+* Event handler for when the "selected" configuration property of
+* a MenuItem instance changes. 
+* <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
+* <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the 
+* event was fired.
+* <span class="attrib">@param</span> {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
+* that fired the event.
+*/</span>    
+YAHOO.widget.MenuItem.<span class="reserved">prototype</span>.configSelected = 
+
+    <span class="reserved">function</span>(p_sType, p_aArgs, p_oItem) {
+
+        YAHOO.widget.MenuItem.superclass.configSelected.call(
+                <span class="reserved">this</span>, p_sType, p_aArgs, p_oItem
+            );        
+    
+        var oConfig = <span class="reserved">this</span>.cfg;
+
+        <span class="reserved">if</span>(!oConfig.getProperty(<span class="literal">"disabled"</span>) &amp;&amp; oConfig.getProperty(<span class="literal">"checked"</span>)) {
+
+            var bSelected = p_aArgs[0];
+
+            var sSrc = <span class="reserved">this</span>.imageRoot + (bSelected ? 
+                <span class="reserved">this</span>.SELECTED_CHECKED_IMAGE_PATH : <span class="reserved">this</span>.CHECKED_IMAGE_PATH);
+
+            <span class="reserved">this</span>._checkImage.src = document.images[sSrc].src;
+            
+        }            
+    
+    };
+
+
+<span class="comment">/**
+* Event handler for when the "disabled" configuration property of
+* a MenuItem instance changes. 
+* <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
+* <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the 
+* event was fired.
+* <span class="attrib">@param</span> {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
+* that fired the event.
+*/</span>    
+YAHOO.widget.MenuItem.<span class="reserved">prototype</span>.configDisabled = 
+
+    <span class="reserved">function</span>(p_sType, p_aArgs, p_oItem) {
+    
+        YAHOO.widget.MenuItem.superclass.configDisabled.call(
+                <span class="reserved">this</span>, p_sType, p_aArgs, p_oItem
+            );        
+    
+        <span class="reserved">if</span>(<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"checked"</span>)) {
+    
+            var bDisabled = p_aArgs[0];
+            var sAlt = <span class="reserved">this</span>.CHECKED_IMAGE_ALT_TEXT;
+            var sSrc = <span class="reserved">this</span>.CHECKED_IMAGE_PATH;
+            var oImg = <span class="reserved">this</span>._checkImage;
+            
+            <span class="reserved">if</span>(bDisabled) {
+    
+                sAlt = <span class="reserved">this</span>.DISABLED_CHECKED_IMAGE_ALT_TEXT;
+                sSrc = <span class="reserved">this</span>.DISABLED_CHECKED_IMAGE_PATH;
+            
+            }
+
+            oImg.src = document.images[(<span class="reserved">this</span>.imageRoot + sSrc)].src;
+            oImg.alt = sAlt;
+            
+        }    
+            
+    };
+<span class="comment">
+
+// Public methods</span>
+    
+<span class="comment">/**
+* Initializes the class's configurable properties which can be changed using 
+* the MenuModule's Config object (cfg).
+*/</span>
+YAHOO.widget.MenuItem.<span class="reserved">prototype</span>.initDefaultConfig = <span class="reserved">function</span>() {
+
+    YAHOO.widget.MenuItem.superclass.initDefaultConfig.call(<span class="reserved">this</span>);
+<span class="comment">
+	// Add configuration properties</span>
+
+    <span class="reserved">this</span>.cfg.addProperty(
+        <span class="literal">"checked"</span>, 
+        {
+            value: false, 
+            handler: <span class="reserved">this</span>.configChecked, 
+            validator: <span class="reserved">this</span>.cfg.checkBoolean, 
+            suppressEvent: true 
+        } 
+    );
+
+};</pre>
 			</div>
 		
 	</div>
@@ -465,7 +718,6 @@ YAHOO.widget.MenuItem.<span class="reserved">prototype</span>._onMouseOut =
 <div id="footer">
 	<hr />
 	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
-
 	<br /><br />
 	Documentation generated by <a href="http://jsdoc.sourceforge.net/">
 	JSDoc</a>
