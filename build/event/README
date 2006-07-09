@@ -1,5 +1,23 @@
 
-Event - Release Notes
+YUI Library - Event - Release Notes
+
+0.11.0
+
+   * Added Event.purgeElement which will remove all listeners added via 
+     addListener from the supplied element.  If an optional "type" parameter
+     is supplied, only events of that type will be removed.  Optionally, the
+     purge can be performed recursively on the element's children as well.
+
+   * Added Event.getListeners which will return all listeners attached to 
+     a given element.. either all listeners or listeners of a specific type.
+
+   * getTarget now automatically resolves text nodes.  The optional parameter
+     for this feature is now deprecated.
+
+   * getRelatedTarget now resolves text nodes for the browsers that return the
+     text node rather than its host HTML element.
+
+   * CustomEvent now logs the custom event activity if the logger widget is available
 
 0.10.0
 
