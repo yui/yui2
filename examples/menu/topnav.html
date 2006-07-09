@@ -3,16 +3,23 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>Top Nav Exmaple</title>
+        <title>Website Top Nav Example</title>
 
-        <!-- Stanard reset, fonts and grids -->
+            <!-- Standard reset and fonts -->
         <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
         <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
+
+            
+
+        <!-- Grids -->
         <link rel="stylesheet" type="text/css" href="../../build/grids/grids.css">
 
-        <!-- CSS for Menu -->
-        <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">  
+         
 
+        <!-- CSS for Menu -->
+        <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
+ 
+        <!-- Page-specific styles -->
         <style type="text/css">
 
             div.yui-b p {
@@ -51,14 +58,18 @@
 
         </style>
 
-        <!-- Namespace source file -->
+            <!-- Namespace source file -->
         <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
         
+
         <!-- Dependency source files -->
         <script type="text/javascript" src="../../build/event/event.js"></script>
         <script type="text/javascript" src="../../build/dom/dom.js"></script>
+
+
+        <!-- Container source file -->
         <script type="text/javascript" src="../../build/container/container_core.js"></script>
-        
+
         <!-- Menu source file -->
         <script type="text/javascript" src="../../build/menu/menu.js"></script>
 
@@ -210,8 +221,8 @@
             
                 if(oSubmenu) {
             
-                    var oEvent = p_aArguments[0],
-                        oRelatedTarget = YAHOO.util.Event.getRelatedTarget(oEvent);
+                    var oDOMEvent = p_aArguments[0],
+                        oRelatedTarget = YAHOO.util.Event.getRelatedTarget(oDOMEvent);
             
                     if(
                         !(
@@ -227,8 +238,6 @@
                 }
             
             };
-
-
 
 
             // "load" handler for the window
@@ -320,13 +329,11 @@
                 do {
 
                     aMenuBarItems[i].mouseOverEvent.subscribe(
-                        onMenuBarItemMouseOver, 
-                        this
+                        onMenuBarItemMouseOver
                     );
 
                     aMenuBarItems[i].mouseOutEvent.subscribe(
-                        onMenuBarItemMouseOut, 
-                        this
+                        onMenuBarItemMouseOut 
                     );
                 
                 }
@@ -364,7 +371,7 @@
             <div id="hd">
                 <!-- start: your content here -->
                 
-                    <h1>Top Nav Exmaple <em>[<a href="index.html">Examples Home</a>]</em></h1>
+                    <h1>Website Top Nav Exmaple <em>[<a href="index.html">Examples Home</a>]</em></h1>
         
                 <!-- end: your content here -->
             </div>
@@ -377,8 +384,8 @@
                                 
                         <div id="yproducts" class="yuimenubar">
                             <div class="bd">
-                                <ul class="first">
-                                    <li id="communications" class="yuimenubaritem first"><a href="http://communications.yahoo.com/">Communications</a></li>
+                                <ul class="first-of-type">
+                                    <li id="communications" class="yuimenubaritem first-of-type"><a href="http://communications.yahoo.com/">Communications</a></li>
                                     <li id="entertainment" class="yuimenubaritem"><a href="http://entertainment.yahoo.com/">Entertainment</a></li>
                                     <li id="finance" class="yuimenubaritem"><a href="http://finance.yahoo.com/">Finance</a></li>
                                     <li id="search" class="yuimenubaritem"><a href="http://search.yahoo.com/">Search</a></li>

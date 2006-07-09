@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>Example 8: Multi-tiered Menu From Pure JavaScript</title>
+
+            <!-- Standard reset and fonts -->
+        <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
+        <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
+
+ 
+
+        <!-- CSS for Menu -->
+        <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
+ 
+            <!-- Namespace source file -->
+        <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+        
+
+        <!-- Dependency source files -->
+        <script type="text/javascript" src="../../build/event/event.js"></script>
+        <script type="text/javascript" src="../../build/dom/dom.js"></script>
+
+
+        <!-- Container source file -->
+        <script type="text/javascript" src="../../build/container/container_core.js"></script>
+
+        <!-- Menu source file -->
+        <script type="text/javascript" src="../../build/menu/menu.js"></script>
+
+        <!-- Page-specific script -->
+        <script type="text/javascript">
+
+            function onWindowLoad(p_oEvent) {
+
+                var Menu = YAHOO.widget.Menu,
+                    MenuItem = YAHOO.widget.MenuItem;
+
+ 
+                var oPIMMenu = new Menu("pim");
+
+                oPIMMenu.addItem(new MenuItem("Yahoo! Mail", { url:"http://mail.yahoo.com" }));
+                oPIMMenu.addItem(new MenuItem("Yahoo! Address Book", { url:"http://addressbook.yahoo.com" }));
+                oPIMMenu.addItem(new MenuItem("Yahoo! Calendar", { url:"http://calendar.yahoo.com" }));
+                oPIMMenu.addItem(new MenuItem("Yahoo! Notepad", { url:"http://notepad.yahoo.com" } ));
+
+
+                var oCommunicationsMenu = new Menu("communications");
+                
+                oCommunicationsMenu.addItem(new MenuItem("360", { url: "http://360.yahoo.com" }));
+                oCommunicationsMenu.addItem(new MenuItem("Alerts", { url: "http://alerts.yahoo.com" }));
+                oCommunicationsMenu.addItem(new MenuItem("Avatars", { url: "http://avatars.yahoo.com" }));
+                oCommunicationsMenu.addItem(new MenuItem("Groups", { url: "http://groups.yahoo.com " }));
+                oCommunicationsMenu.addItem(new MenuItem("Internet Access", { url: "http://promo.yahoo.com/broadband" }));
+                oCommunicationsMenu.addItem(new MenuItem("PIM", { submenu: oPIMMenu }));
+                oCommunicationsMenu.addItem(new MenuItem("Member Directory", { url: "http://members.yahoo.com" }));
+                oCommunicationsMenu.addItem(new MenuItem("Messenger", { url: "http://messenger.yahoo.com" }));
+                oCommunicationsMenu.addItem(new MenuItem("Mobile", { url: "http://mobile.yahoo.com" }));                
+                oCommunicationsMenu.addItem(new MenuItem("Photos", { url: "http://photos.yahoo.com" }));
+
+
+                var oShoppingMenu = new Menu("shopping");
+                
+                oShoppingMenu.addItem(new MenuItem("Auctions", { url: "http://auctions.shopping.yahoo.com" }));
+                oShoppingMenu.addItem(new MenuItem("Autos", { url: "http://autos.yahoo.com" }));
+                oShoppingMenu.addItem(new MenuItem("Classifieds", { url: "http://classifieds.yahoo.com" }));
+                oShoppingMenu.addItem(new MenuItem("Flowers & Gifts", { url: "http://shopping.yahoo.com/b:Flowers%20%26%20Gifts:20146735" }));
+                oShoppingMenu.addItem(new MenuItem("Points", { url: "http://points.yahoo.com" }));
+                oShoppingMenu.addItem(new MenuItem("Real Estate", { url: "http://realestate.yahoo.com" }));
+                oShoppingMenu.addItem(new MenuItem("Travel", { url: "http://travel.yahoo.com" }));
+                oShoppingMenu.addItem(new MenuItem("Wallet", { url: "http://wallet.yahoo.com" }));
+                oShoppingMenu.addItem(new MenuItem("Yellow Pages", { url: "http://yp.yahoo.com" }));
+
+
+                var oEntertainmentMenu = new Menu("entertainment");
+                
+                oEntertainmentMenu.addItem(new MenuItem("Fantasy Sports", { url: "http://fantasysports.yahoo.com" }));
+                oEntertainmentMenu.addItem(new MenuItem("Games", { url: "http://games.yahoo.com" }));
+                oEntertainmentMenu.addItem(new MenuItem("Kids", { url: "http://www.yahooligans.com" }));
+                oEntertainmentMenu.addItem(new MenuItem("Music", { url: "http://music.yahoo.com" }));
+                oEntertainmentMenu.addItem(new MenuItem("Movies", { url: "http://movies.yahoo.com" }));
+                oEntertainmentMenu.addItem(new MenuItem("Radio", { url: "http://music.yahoo.com/launchcast" }));
+                oEntertainmentMenu.addItem(new MenuItem("Travel", { url: "http://travel.yahoo.com" }));
+                oEntertainmentMenu.addItem(new MenuItem("TV", { url: "http://tv.yahoo.com" }));
+
+
+                var oInformationMenu = new Menu("information");
+
+                oInformationMenu.addItem(new MenuItem("Downloads", { url: "http://downloads.yahoo.com" }));
+                oInformationMenu.addItem(new MenuItem("Finance", { url: "http://finance.yahoo.com" }));
+                oInformationMenu.addItem(new MenuItem("Health", { url: "http://health.yahoo.com" }));
+                oInformationMenu.addItem(new MenuItem("Local", { url: "http://local.yahoo.com" }));
+                oInformationMenu.addItem(new MenuItem("Maps & Directions", { url: "http://maps.yahoo.com" }));
+                oInformationMenu.addItem(new MenuItem("My Yahoo!", { url: "http://my.yahoo.com" }));
+                oInformationMenu.addItem(new MenuItem("News", { url: "http://news.yahoo.com" }));
+                oInformationMenu.addItem(new MenuItem("Search", { url: "http://search.yahoo.com" }));
+                oInformationMenu.addItem(new MenuItem("Small Business", { url: "http://smallbusiness.yahoo.com" }));
+                oInformationMenu.addItem(new MenuItem("Weather", { url: "http://weather.yahoo.com" }));
+
+
+                var oProductsServicesMenu = new Menu("productsandservices", { fixedcenter: true });
+
+                oProductsServicesMenu.addItem(new MenuItem("Communication", { url: "http://communication.yahoo.com", submenu: oCommunicationsMenu }));
+                oProductsServicesMenu.addItem(new MenuItem("Shopping", { url: "http://shopping.yahoo.com", submenu: oShoppingMenu }));
+                oProductsServicesMenu.addItem(new MenuItem("Entertainment", { url: "http://entertainment.yahoo.com", submenu: oEntertainmentMenu }));
+                oProductsServicesMenu.addItem(new MenuItem("Information", { submenu: oInformationMenu } ));
+
+                oProductsServicesMenu.render(document.body);
+    
+                oProductsServicesMenu.show();
+
+            }
+
+
+            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            
+        </script>
+    </head>
+    <body>
+        <h1>Example 8: Multi-tiered Menu From Pure JavaScript <em>[<a href="index.html">Examples Home</a>]</em></h1>
+        <p>This example demonstrates how to create a multi-tiered menu using nothing but JavaScript.  The Menu API also supports building a menu like this <a href="example07.html">using existing markup</a>.</p>
+    </body>
+</html>
