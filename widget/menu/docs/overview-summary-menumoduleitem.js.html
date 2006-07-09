@@ -150,15 +150,13 @@
 	</div>
 	
 	<div class="main">
+			
+           <h2>menumoduleitem.js</h2>
+		
+			<div class="section source">
+				<h3><a name="source">Souce Code</a></h3>
+				<pre class="sourceview">
 
-        <h2>menumoduleitem.js</h2>
-        
-        <div class="section source">
-            <pre class="sourceview"><span class="comment">/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-*/</span>
 
 <span class="comment">/**
 * <span class="attrib">@class</span> The MenuModuleItem class allows you to create and modify an item for a
@@ -167,15 +165,15 @@ http://developer.yahoo.net/yui/license.txt
 * <span class="attrib">@param</span> {String or HTMLElement} p_oObject String or HTMLElement 
 * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
 * source HTMLElement node.
-* <span class="attrib">@param</span> {Object} p_oUserConfig The configuration object literal containing 
+* <span class="attrib">@param</span> {Object} p_oConfig The configuration object literal containing 
 * the configuration for a MenuModuleItem instance. See the configuration 
 * class documentation for more details.
 */</span>
-YAHOO.widget.MenuModuleItem = <span class="reserved">function</span>(p_oObject, p_oUserConfig) {
+YAHOO.widget.MenuModuleItem = <span class="reserved">function</span>(p_oObject, p_oConfig) {
 
     <span class="reserved">if</span>(p_oObject) {
 
-        <span class="reserved">this</span>.init(p_oObject, p_oUserConfig);
+        <span class="reserved">this</span>.init(p_oObject, p_oConfig);
 
     }
 
@@ -191,17 +189,17 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     * <span class="attrib">@final</span>
     * <span class="attrib">@type</span> String
     */</span>
-    SUBMENU_INDICATOR_IMAGE_PATH: <span class="literal">"nt/ic/ut/alt1/menuarorght9_nrm_1.gif"</span>,
+    SUBMENU_INDICATOR_IMAGE_PATH: <span class="literal">"nt/ic/ut/alt1/menuarorght8_nrm_1.gif"</span>,
 
 
     <span class="comment">/**
     * Constant representing the path to the image to be used for the submenu
-    * arrow indicator when a MenuModuleItem instance has focus.
+    * arrow indicator when a MenuModuleItem instance is selected.
     * <span class="attrib">@final</span>
     * <span class="attrib">@type</span> String
     */</span>
     SELECTED_SUBMENU_INDICATOR_IMAGE_PATH: 
-        <span class="literal">"nt/ic/ut/alt1/menuarorght9_hov_1.gif"</span>,
+        <span class="literal">"nt/ic/ut/alt1/menuarorght8_hov_1.gif"</span>,
 
 
     <span class="comment">/**
@@ -211,7 +209,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     * <span class="attrib">@type</span> String
     */</span>
     DISABLED_SUBMENU_INDICATOR_IMAGE_PATH: 
-        <span class="literal">"nt/ic/ut/alt1/menuarorght9_dim_1.gif"</span>,
+        <span class="literal">"nt/ic/ut/alt1/menuarorght8_dim_1.gif"</span>,
 
 
     <span class="comment">/**
@@ -330,14 +328,6 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     * <span class="attrib">@type</span> {YAHOO.util.Dom}
     */</span>
     _oDom: YAHOO.util.Dom,
-
-
-    <span class="comment">/**
-    * Reference to the browser's user agent string.
-    * <span class="attrib">@private</span>
-    * <span class="attrib">@type</span> {String}
-    */</span>
-    _sUserAgent: window.navigator.userAgent.toLowerCase(),
 <span class="comment">
 
     // Public properties</span>
@@ -361,19 +351,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 	* is secure (https)
 	* <span class="attrib">@type</span> boolean
 	*/</span>
-	isSecure: <span class="reserved">function</span>() {
-
-		<span class="reserved">if</span>(window.location.href.toLowerCase().indexOf(<span class="literal">"https"</span>) === 0) {
-
-			<span class="reserved">return</span> true;
-
-		} <span class="reserved">else</span> {
-
-			<span class="reserved">return</span> false;
-
-		}
-
-	}(),
+	isSecure: YAHOO.widget.Module.<span class="reserved">prototype</span>.isSecure,
 
 
     <span class="comment">/**
@@ -424,54 +402,14 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     * indicator for a MenuModuleItem instance.
     * <span class="attrib">@type</span> {HTMLImageElement}
     */</span>
-    subMenuIndicator: null,
+    submenuIndicator: null,
 
 
 	<span class="comment">/**
 	* String representing the browser
 	* <span class="attrib">@type</span> string
 	*/</span>
-	browser: <span class="reserved">function</span>() {
-
-        var sUserAgent = navigator.userAgent.toLowerCase();
-<span class="comment">
-        // Opera (check first in case of spoof)</span>
-    
-        <span class="reserved">if</span>(sUserAgent.indexOf(<span class="literal">"opera"</span>)!=-1) { 
-        
-            <span class="reserved">return</span> <span class="literal">"opera"</span>;
-<span class="comment">        
-        // IE7</span>
-
-        } <span class="reserved">else</span> <span class="reserved">if</span>(sUserAgent.indexOf(<span class="literal">"msie 7"</span>)!=-1) {
-        
-            <span class="reserved">return</span> <span class="literal">"ie7"</span>;
-<span class="comment">        
-        // IE</span>
-
-        } <span class="reserved">else</span> <span class="reserved">if</span>(sUserAgent.indexOf(<span class="literal">"msie"</span>) !=-1) {
-        
-            <span class="reserved">return</span> <span class="literal">"ie"</span>;
-<span class="comment">        
-        // Safari (check before Gecko because it includes "like Gecko")</span>
-
-        } <span class="reserved">else</span> <span class="reserved">if</span>(sUserAgent.indexOf(<span class="literal">"safari"</span>)!=-1) {
-        
-            <span class="reserved">return</span> <span class="literal">"safari"</span>;
-<span class="comment">        
-        // Gecko</span>
-
-        } <span class="reserved">else</span> <span class="reserved">if</span>(sUserAgent.indexOf(<span class="literal">"gecko"</span>) != -1) {
-        
-            <span class="reserved">return</span> <span class="literal">"gecko"</span>;
-        
-        } <span class="reserved">else</span> {
-        
-            <span class="reserved">return</span> false;
-        
-        }
-
-    }(),
+	browser: YAHOO.widget.Module.<span class="reserved">prototype</span>.browser,
 <span class="comment">
 
     // Events</span>
@@ -582,11 +520,11 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     * <span class="attrib">@param</span> {String or HTMLElement} p_oObject String or HTMLElement 
     * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
     * source HTMLElement node.
-    * <span class="attrib">@param</span> {Object} p_oUserConfig The configuration object literal containing 
+    * <span class="attrib">@param</span> {Object} p_oConfig The configuration object literal containing 
     * the configuration for a MenuModuleItem instance. See the configuration 
     * class documentation for more details.
     */</span>
-    init: <span class="reserved">function</span>(p_oObject, p_oUserConfig) {
+    init: <span class="reserved">function</span>(p_oObject, p_oConfig) {
 
         <span class="reserved">this</span>.imageRoot = (<span class="reserved">this</span>.isSecure) ? <span class="reserved">this</span>.IMG_ROOT_SSL : <span class="reserved">this</span>.IMG_ROOT;
 
@@ -607,76 +545,17 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
         // Create the config object</span>
 
         <span class="reserved">this</span>.cfg = new YAHOO.util.Config(<span class="reserved">this</span>);
-<span class="comment">
 
-        // Define the config properties</span>
+        <span class="reserved">this</span>.initDefaultConfig();
 
-
-        <span class="reserved">this</span>.cfg.addProperty(
-            <span class="literal">"text"</span>, 
-            { 
-                value:<span class="literal">""</span>, 
-                handler: <span class="reserved">this</span>.configText, 
-                validator: <span class="reserved">this</span>._checkString, 
-                suppressEvent: true 
-            }
-        );
-        
-        <span class="reserved">this</span>.cfg.addProperty(<span class="literal">"helptext"</span>, { handler: <span class="reserved">this</span>.configHelpText });
-        
-        <span class="reserved">this</span>.cfg.addProperty(
-            <span class="literal">"url"</span>, 
-            { value: <span class="literal">"#"</span>, handler: <span class="reserved">this</span>.configURL, suppressEvent: true }
-        );
-        
-        <span class="reserved">this</span>.cfg.addProperty(
-            <span class="literal">"emphasis"</span>, 
-            { 
-                value: false, 
-                handler: <span class="reserved">this</span>.configEmphasis, 
-                validator: <span class="reserved">this</span>.cfg.checkBoolean, 
-                suppressEvent: true 
-            }
-        );
-        
-        <span class="reserved">this</span>.cfg.addProperty(
-            <span class="literal">"strongemphasis"</span>, 
-            {
-                value: false, 
-                handler: <span class="reserved">this</span>.configStrongEmphasis, 
-                validator: <span class="reserved">this</span>.cfg.checkBoolean, 
-                suppressEvent: true 
-            }
-        );
-        
-        <span class="reserved">this</span>.cfg.addProperty(
-            <span class="literal">"disabled"</span>, 
-            {
-                value: false, 
-                handler: <span class="reserved">this</span>.configDisabled, 
-                validator: <span class="reserved">this</span>.cfg.checkBoolean, 
-                suppressEvent: true 
-            }
-        );
-        
-        <span class="reserved">this</span>.cfg.addProperty(
-            <span class="literal">"selected"</span>, 
-            {
-                value: false, 
-                handler: <span class="reserved">this</span>.configSelected, 
-                validator: <span class="reserved">this</span>.cfg.checkBoolean, 
-                suppressEvent: true 
-            }
-        );
-        
-        <span class="reserved">this</span>.cfg.addProperty(<span class="literal">"submenu"</span>, { handler: <span class="reserved">this</span>.configSubmenu });
+        var oConfig = <span class="reserved">this</span>.cfg;
 
 
         <span class="reserved">if</span>(<span class="reserved">this</span>._checkString(p_oObject)) {
 
             <span class="reserved">this</span>._createRootNodeStructure();
 
-            <span class="reserved">this</span>.cfg.setProperty(<span class="literal">"text"</span>, p_oObject);
+            oConfig.setProperty(<span class="literal">"text"</span>, p_oObject);
 
         }
         <span class="reserved">else</span> <span class="reserved">if</span>(<span class="reserved">this</span>._checkDOMNode(p_oObject)) {
@@ -687,7 +566,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
                     <span class="reserved">this</span>._createRootNodeStructure();
 
-                    <span class="reserved">this</span>.cfg.setProperty(<span class="literal">"text"</span>, p_oObject.text);
+                    oConfig.setProperty(<span class="literal">"text"</span>, p_oObject.text);
 
                     <span class="reserved">this</span>.srcElement = p_oObject;
 
@@ -697,7 +576,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
                     <span class="reserved">this</span>._createRootNodeStructure();
 
-                    <span class="reserved">this</span>.cfg.setProperty(<span class="literal">"text"</span>, p_oObject.label);
+                    oConfig.setProperty(<span class="literal">"text"</span>, p_oObject.label);
 
                     <span class="reserved">this</span>.srcElement = p_oObject;
 
@@ -709,9 +588,9 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 <span class="comment">
                     // Get the anchor node (if it exists)</span>
 
-                    var oAnchor = <span class="reserved">this</span>._getFirstElement(p_oObject, <span class="literal">"A"</span>),
-                        sURL = <span class="literal">"#"</span>,
-                        sText = null;
+                    var oAnchor = <span class="reserved">this</span>._getFirstElement(p_oObject, <span class="literal">"A"</span>);
+                    var sURL = <span class="literal">"#"</span>;
+                    var sText = null;
 <span class="comment">
 
                     // Capture the "text" and/or the "URL"</span>
@@ -760,9 +639,9 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
                     // Check if emphasis has been applied to the MenuModuleItem</span>
 
-                    var oEmphasisNode = <span class="reserved">this</span>._getFirstElement(oAnchor),
-                        bEmphasis = false,
-                        bStrongEmphasis = false;
+                    var oEmphasisNode = <span class="reserved">this</span>._getFirstElement(oAnchor);
+                    var bEmphasis = false;
+                    var bStrongEmphasis = false;
 
                     <span class="reserved">if</span>(oEmphasisNode) {
 <span class="comment">
@@ -802,10 +681,10 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
                         element's DOM
                     */</span> 
 
-                    <span class="reserved">this</span>.cfg.setProperty(<span class="literal">"text"</span>, sText, true);
-                    <span class="reserved">this</span>.cfg.setProperty(<span class="literal">"url"</span>, sURL, true);
-                    <span class="reserved">this</span>.cfg.setProperty(<span class="literal">"emphasis"</span>, bEmphasis, true);
-                    <span class="reserved">this</span>.cfg.setProperty(
+                    oConfig.setProperty(<span class="literal">"text"</span>, sText, true);
+                    oConfig.setProperty(<span class="literal">"url"</span>, sURL, true);
+                    oConfig.setProperty(<span class="literal">"emphasis"</span>, bEmphasis, true);
+                    oConfig.setProperty(
                         <span class="literal">"strongemphasis"</span>, 
                         bStrongEmphasis, 
                         true
@@ -843,13 +722,13 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
             <span class="reserved">this</span>.blurEvent = new CustomEvent(<span class="literal">"blurEvent"</span>, <span class="reserved">this</span>);
 
 
-            <span class="reserved">if</span>(p_oUserConfig) {
+            <span class="reserved">if</span>(p_oConfig) {
     
-                <span class="reserved">this</span>.cfg.applyConfig(p_oUserConfig);
+                oConfig.applyConfig(p_oConfig);
     
             }        
 
-            <span class="reserved">this</span>.cfg.fireQueue();
+            oConfig.fireQueue();
 
         }
 
@@ -953,14 +832,16 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     */</span>
     _initSubTree: <span class="reserved">function</span>() {
 
-        var Menu = <span class="reserved">this</span>.SUBMENU_TYPE,
-            MenuModuleItem = <span class="reserved">this</span>.SUBMENU_ITEM_TYPE;
+        var Menu = <span class="reserved">this</span>.SUBMENU_TYPE;
+        var MenuModuleItem = <span class="reserved">this</span>.SUBMENU_ITEM_TYPE;
+        var oSrcEl = <span class="reserved">this</span>.srcElement;
+        var oConfig = <span class="reserved">this</span>.cfg;
 
 
-        <span class="reserved">if</span>(<span class="reserved">this</span>.srcElement.childNodes.length &gt; 0) {
+        <span class="reserved">if</span>(oSrcEl.childNodes.length &gt; 0) {
 
-            var oNode = <span class="reserved">this</span>.srcElement.firstChild,
-                aOptions = [];
+            var oNode = oSrcEl.firstChild;
+            var aOptions = [];
 
             do {
 
@@ -968,7 +849,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
         
                     case <span class="literal">"DIV"</span>:
         
-                        <span class="reserved">this</span>.cfg.setProperty(<span class="literal">"submenu"</span>, (new Menu(oNode)));
+                        oConfig.setProperty(<span class="literal">"submenu"</span>, (new Menu(oNode)));
         
                     break;
  
@@ -988,7 +869,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
             <span class="reserved">if</span>(nOptions &gt; 0) {
     
-                <span class="reserved">this</span>.cfg.setProperty(
+                oConfig.setProperty(
                     <span class="literal">"submenu"</span>, 
                     (new Menu(<span class="reserved">this</span>._oDom.generateId()))
                 );
@@ -1012,14 +893,14 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     * Event handler for when the "text" configuration property of
     * a MenuModuleItem instance changes. 
     * <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
-    * <span class="attrib">@param</span> {Array} p_aArguments Collection of arguments sent when the 
+    * <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the 
     * event was fired.
     * <span class="attrib">@param</span> {YAHOO.widget.MenuModuleItem} p_oItem The MenuModuleItem instance 
     * that fired the event.
     */</span>
-    configText: <span class="reserved">function</span>(p_sType, p_aArguments, p_oItem) {
+    configText: <span class="reserved">function</span>(p_sType, p_aArgs, p_oItem) {
 
-        var sText = p_aArguments[0];
+        var sText = p_aArgs[0];
 
 
         <span class="reserved">if</span>(<span class="reserved">this</span>._oText) {
@@ -1035,16 +916,20 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     * Event handler for when the "helptext" configuration property of
     * a MenuModuleItem instance changes. 
     * <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
-    * <span class="attrib">@param</span> {Array} p_aArguments Collection of arguments sent when the 
+    * <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the 
     * event was fired.
     * <span class="attrib">@param</span> {YAHOO.widget.MenuModuleItem} p_oItem The MenuModuleItem instance 
     * that fired the event.
     */</span>    
-    configHelpText: <span class="reserved">function</span>(p_sType, p_aArguments, p_oItem) {
+    configHelpText: <span class="reserved">function</span>(p_sType, p_aArgs, p_oItem) {
 
-        var oHelpText = p_aArguments[0],
-            aNodes = [<span class="reserved">this</span>.element, <span class="reserved">this</span>._oAnchor],
-            me = <span class="reserved">this</span>;
+        var me = <span class="reserved">this</span>;
+        var Dom = <span class="reserved">this</span>._oDom;
+        var oHelpText = p_aArgs[0];
+        var oEl = <span class="reserved">this</span>.element;
+        var oConfig = <span class="reserved">this</span>.cfg;
+        var aNodes = [oEl, <span class="reserved">this</span>._oAnchor];
+        var oImg = <span class="reserved">this</span>.submenuIndicator;
 
 
         <span class="comment">/**
@@ -1054,17 +939,17 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
         */</span>
         <span class="reserved">function</span> initHelpText() {
 
-            me._oDom.addClass(aNodes, <span class="literal">"hashelptext"</span>);
+            Dom.addClass(aNodes, <span class="literal">"hashelptext"</span>);
 
-            <span class="reserved">if</span>(me.cfg.getProperty(<span class="literal">"disabled"</span>)) {
+            <span class="reserved">if</span>(oConfig.getProperty(<span class="literal">"disabled"</span>)) {
 
-                me.cfg.refireEvent(<span class="literal">"disabled"</span>);
+                oConfig.refireEvent(<span class="literal">"disabled"</span>);
 
             }
 
-            <span class="reserved">if</span>(me.cfg.getProperty(<span class="literal">"selected"</span>)) {
+            <span class="reserved">if</span>(oConfig.getProperty(<span class="literal">"selected"</span>)) {
 
-                me.cfg.refireEvent(<span class="literal">"selected"</span>);
+                oConfig.refireEvent(<span class="literal">"selected"</span>);
 
             }                
 
@@ -1077,9 +962,9 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
         */</span>
         <span class="reserved">function</span> removeHelpText() {
 
-            me._oDom.removeClass(aNodes, <span class="literal">"hashelptext"</span>);
+            Dom.removeClass(aNodes, <span class="literal">"hashelptext"</span>);
 
-            me.element.removeChild(me._oHelpTextEM);
+            oEl.removeChild(me._oHelpTextEM);
             me._oHelpTextEM = null;
 
         }
@@ -1089,18 +974,17 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
             <span class="reserved">if</span>(<span class="reserved">this</span>._oHelpTextEM) {
 
-                var oParentNode = <span class="reserved">this</span>._oHelpTextEM.parentNode;
-                oParentNode.replaceChild(oHelpText, <span class="reserved">this</span>._oHelpTextEM);
+                <span class="reserved">this</span>._oHelpTextEM.parentNode.replaceChild(
+                    oHelpText, 
+                    <span class="reserved">this</span>._oHelpTextEM
+                );
 
             }
             <span class="reserved">else</span> {
 
                 <span class="reserved">this</span>._oHelpTextEM = oHelpText;
 
-                <span class="reserved">this</span>.element.insertBefore(
-                    <span class="reserved">this</span>._oHelpTextEM, 
-                    <span class="reserved">this</span>.subMenuIndicator
-                );
+                oEl.insertBefore(<span class="reserved">this</span>._oHelpTextEM, oImg);
 
             }
 
@@ -1120,10 +1004,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
                     <span class="reserved">this</span>._oHelpTextEM = document.createElement(<span class="literal">"em"</span>);
 
-                    <span class="reserved">this</span>.element.insertBefore(
-                        <span class="reserved">this</span>._oHelpTextEM, 
-                        <span class="reserved">this</span>.subMenuIndicator
-                    );
+                    oEl.insertBefore(<span class="reserved">this</span>._oHelpTextEM, oImg);
 
                 }
 
@@ -1147,14 +1028,14 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     * Event handler for when the "url" configuration property of
     * a MenuModuleItem instance changes.  
     * <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
-    * <span class="attrib">@param</span> {Array} p_aArguments Collection of arguments sent when the 
+    * <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the 
     * event was fired.
     * <span class="attrib">@param</span> {YAHOO.widget.MenuModuleItem} p_oItem The MenuModuleItem instance 
     * that fired the event.
     */</span>    
-    configURL: <span class="reserved">function</span>(p_sType, p_aArguments, p_oItem) {
+    configURL: <span class="reserved">function</span>(p_sType, p_aArgs, p_oItem) {
 
-        var sURL = p_aArguments[0];
+        var sURL = p_aArgs[0];
 
         <span class="reserved">if</span>(!sURL) {
 
@@ -1171,41 +1052,43 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     * Event handler for when the "emphasis" configuration property of
     * a MenuModuleItem instance changes.  
     * <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
-    * <span class="attrib">@param</span> {Array} p_aArguments Collection of arguments sent when the 
+    * <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the 
     * event was fired.
     * <span class="attrib">@param</span> {YAHOO.widget.MenuModuleItem} p_oItem The MenuModuleItem instance 
     * that fired the event.
     */</span>    
-    configEmphasis: <span class="reserved">function</span>(p_sType, p_aArguments, p_oItem) {
+    configEmphasis: <span class="reserved">function</span>(p_sType, p_aArgs, p_oItem) {
 
-        var bEmphasis = p_aArguments[0];
+        var bEmphasis = p_aArgs[0];
+        var oAnchor = <span class="reserved">this</span>._oAnchor;
+        var oText = <span class="reserved">this</span>._oText;
+        var oConfig = <span class="reserved">this</span>.cfg;
+        var oEM;
 
 
-        <span class="reserved">if</span>(bEmphasis &amp;&amp; <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"strongemphasis"</span>)) {
+        <span class="reserved">if</span>(bEmphasis &amp;&amp; oConfig.getProperty(<span class="literal">"strongemphasis"</span>)) {
 
-            <span class="reserved">this</span>.cfg.setProperty(<span class="literal">"strongemphasis"</span>, false);
+            oConfig.setProperty(<span class="literal">"strongemphasis"</span>, false);
 
         }
 
 
-        <span class="reserved">if</span>(<span class="reserved">this</span>._oAnchor) {
-
-            var oEM;
+        <span class="reserved">if</span>(oAnchor) {
 
             <span class="reserved">if</span>(bEmphasis) {
 
                 oEM = document.createElement(<span class="literal">"em"</span>);
-                oEM.appendChild(<span class="reserved">this</span>._oText);
+                oEM.appendChild(oText);
 
-                <span class="reserved">this</span>._oAnchor.appendChild(oEM);
+                oAnchor.appendChild(oEM);
 
             }
             <span class="reserved">else</span> {
 
-                oEM = <span class="reserved">this</span>._getFirstElement(<span class="reserved">this</span>._oAnchor, <span class="literal">"EM"</span>);
+                oEM = <span class="reserved">this</span>._getFirstElement(oAnchor, <span class="literal">"EM"</span>);
 
-                <span class="reserved">this</span>._oAnchor.removeChild(oEM);
-                <span class="reserved">this</span>._oAnchor.appendChild(<span class="reserved">this</span>._oText);
+                oAnchor.removeChild(oEM);
+                oAnchor.appendChild(oText);
 
             }
 
@@ -1218,40 +1101,41 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     * Event handler for when the "strongemphasis" configuration property of
     * a MenuModuleItem instance changes. 
     * <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
-    * <span class="attrib">@param</span> {Array} p_aArguments Collection of arguments sent when the 
+    * <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the 
     * event was fired.
     * <span class="attrib">@param</span> {YAHOO.widget.MenuModuleItem} p_oItem The MenuModuleItem instance 
     * that fired the event.
     */</span>    
-    configStrongEmphasis: <span class="reserved">function</span>(p_sType, p_aArguments, p_oItem) {
+    configStrongEmphasis: <span class="reserved">function</span>(p_sType, p_aArgs, p_oItem) {
 
-        var bStrongEmphasis = p_aArguments[0];
+        var bStrongEmphasis = p_aArgs[0];
+        var oAnchor = <span class="reserved">this</span>._oAnchor;
+        var oText = <span class="reserved">this</span>._oText;
+        var oConfig = <span class="reserved">this</span>.cfg;
+        var oStrong;
 
+        <span class="reserved">if</span>(bStrongEmphasis &amp;&amp; oConfig.getProperty(<span class="literal">"emphasis"</span>)) {
 
-        <span class="reserved">if</span>(bStrongEmphasis &amp;&amp; <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"emphasis"</span>)) {
-
-            <span class="reserved">this</span>.cfg.setProperty(<span class="literal">"emphasis"</span>, false);
+            oConfig.setProperty(<span class="literal">"emphasis"</span>, false);
 
         }
 
-        <span class="reserved">if</span>(<span class="reserved">this</span>._oAnchor) {
-
-            var oStrong;
+        <span class="reserved">if</span>(oAnchor) {
 
             <span class="reserved">if</span>(bStrongEmphasis) {
 
                 oStrong = document.createElement(<span class="literal">"strong"</span>);
-                oStrong.appendChild(<span class="reserved">this</span>._oText);
+                oStrong.appendChild(oText);
 
-                <span class="reserved">this</span>._oAnchor.appendChild(oStrong);
+                oAnchor.appendChild(oStrong);
 
             }
             <span class="reserved">else</span> {
 
-                oStrong = <span class="reserved">this</span>._getFirstElement(<span class="reserved">this</span>._oAnchor, <span class="literal">"STRONG"</span>);
+                oStrong = <span class="reserved">this</span>._getFirstElement(oAnchor, <span class="literal">"STRONG"</span>);
 
-                <span class="reserved">this</span>._oAnchor.removeChild(oStrong);
-                <span class="reserved">this</span>._oAnchor.appendChild(<span class="reserved">this</span>._oText);
+                oAnchor.removeChild(oStrong);
+                oAnchor.appendChild(oText);
 
             }
 
@@ -1264,35 +1148,41 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     * Event handler for when the "disabled" configuration property of
     * a MenuModuleItem instance changes. 
     * <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
-    * <span class="attrib">@param</span> {Array} p_aArguments Collection of arguments sent when the 
+    * <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the 
     * event was fired.
     * <span class="attrib">@param</span> {YAHOO.widget.MenuModuleItem} p_oItem The MenuModuleItem instance 
     * that fired the event.
     */</span>    
-    configDisabled: <span class="reserved">function</span>(p_sType, p_aArguments, p_oItem) {
+    configDisabled: <span class="reserved">function</span>(p_sType, p_aArgs, p_oItem) {
 
-        var bDisabled = p_aArguments[0],
-            aNodes = [<span class="reserved">this</span>.element, <span class="reserved">this</span>._oAnchor],
-            sImageSrc,
-            sImageAlt;
+        var bDisabled = p_aArgs[0];
+        var Dom = <span class="reserved">this</span>._oDom;
+        var oAnchor = <span class="reserved">this</span>._oAnchor;
+        var aNodes = [<span class="reserved">this</span>.element, oAnchor];
+        var oEM = <span class="reserved">this</span>._oHelpTextEM;
+        var oConfig = <span class="reserved">this</span>.cfg;
+        var oImg = <span class="reserved">this</span>.submenuIndicator;
+        var sImageSrc;
+        var sImageAlt;
 
-        <span class="reserved">if</span>(<span class="reserved">this</span>._oHelpTextEM) {
 
-            aNodes[2] = <span class="reserved">this</span>._oHelpTextEM;  
+        <span class="reserved">if</span>(oEM) {
+
+            aNodes[2] = oEM;
 
         }
 
         <span class="reserved">if</span>(bDisabled) {
 
-            <span class="reserved">if</span>(<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"selected"</span>)) {
+            <span class="reserved">if</span>(oConfig.getProperty(<span class="literal">"selected"</span>)) {
 
-                <span class="reserved">this</span>.cfg.setProperty(<span class="literal">"selected"</span>, false);
+                oConfig.setProperty(<span class="literal">"selected"</span>, false);
 
             }
 
-            <span class="reserved">this</span>._oAnchor.removeAttribute(<span class="literal">"href"</span>);
+            oAnchor.removeAttribute(<span class="literal">"href"</span>);
 
-            <span class="reserved">this</span>._oDom.addClass(aNodes, <span class="literal">"disabled"</span>);
+            Dom.addClass(aNodes, <span class="literal">"disabled"</span>);
 
             sImageSrc = <span class="reserved">this</span>.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH;
             sImageAlt = <span class="reserved">this</span>.DISABLED_SUBMENU_INDICATOR_ALT_TEXT;
@@ -1300,9 +1190,9 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
         }
         <span class="reserved">else</span> {
 
-            <span class="reserved">this</span>._oAnchor.setAttribute(<span class="literal">"href"</span>, <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"url"</span>));
+            oAnchor.setAttribute(<span class="literal">"href"</span>, oConfig.getProperty(<span class="literal">"url"</span>));
 
-            <span class="reserved">this</span>._oDom.removeClass(aNodes, <span class="literal">"disabled"</span>);
+            Dom.removeClass(aNodes, <span class="literal">"disabled"</span>);
 
             sImageSrc = <span class="reserved">this</span>.SUBMENU_INDICATOR_IMAGE_PATH;
             sImageAlt = <span class="reserved">this</span>.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
@@ -1310,10 +1200,10 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
         }
 
 
-        <span class="reserved">if</span>(<span class="reserved">this</span>.subMenuIndicator) {
+        <span class="reserved">if</span>(oImg) {
 
-            <span class="reserved">this</span>.subMenuIndicator.src = <span class="reserved">this</span>.imageRoot + sImageSrc;
-            <span class="reserved">this</span>.subMenuIndicator.alt = sImageAlt;
+            oImg.src = <span class="reserved">this</span>.imageRoot + sImageSrc;
+            oImg.alt = sImageAlt;
 
         }
 
@@ -1324,41 +1214,47 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     * Event handler for when the "selected" configuration property of
     * a MenuModuleItem instance changes. 
     * <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
-    * <span class="attrib">@param</span> {Array} p_aArguments Collection of arguments sent when the 
+    * <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the 
     * event was fired.
     * <span class="attrib">@param</span> {YAHOO.widget.MenuModuleItem} p_oItem The MenuModuleItem instance 
     * that fired the event.
     */</span>    
-    configSelected: <span class="reserved">function</span>(p_sType, p_aArguments, p_oItem) {
+    configSelected: <span class="reserved">function</span>(p_sType, p_aArgs, p_oItem) {
 
-        var bSelected = p_aArguments[0],
-            aNodes = [<span class="reserved">this</span>.element, <span class="reserved">this</span>._oAnchor],
-            sImageSrc;
+        <span class="reserved">if</span>(!<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"disabled"</span>)) {
 
-        <span class="reserved">if</span>(<span class="reserved">this</span>._oHelpTextEM) {
+            var Dom = <span class="reserved">this</span>._oDom;
+            var bSelected = p_aArgs[0];
+            var oEM = <span class="reserved">this</span>._oHelpTextEM;
+            var aNodes = [<span class="reserved">this</span>.element, <span class="reserved">this</span>._oAnchor];
+            var oImg = <span class="reserved">this</span>.submenuIndicator;
+            var sImageSrc;
 
-            aNodes[2] = <span class="reserved">this</span>._oHelpTextEM;  
 
-        }
+            <span class="reserved">if</span>(oEM) {
+    
+                aNodes[2] = oEM;  
+    
+            }
+    
+            <span class="reserved">if</span>(bSelected) {
+    
+                Dom.addClass(aNodes, <span class="literal">"selected"</span>);
+                sImageSrc = <span class="reserved">this</span>.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH;
+    
+            }
+            <span class="reserved">else</span> {
+    
+                Dom.removeClass(aNodes, <span class="literal">"selected"</span>);
+                sImageSrc = <span class="reserved">this</span>.SUBMENU_INDICATOR_IMAGE_PATH;
+    
+            }
+    
+            <span class="reserved">if</span>(oImg) {
+    
+                oImg.src = document.images[(<span class="reserved">this</span>.imageRoot + sImageSrc)].src;
 
-        <span class="reserved">if</span>(bSelected) {
-
-            <span class="reserved">this</span>._oDom.addClass(aNodes, <span class="literal">"selected"</span>);
-
-            sImageSrc = <span class="reserved">this</span>.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH;
-
-        }
-        <span class="reserved">else</span> {
-
-            <span class="reserved">this</span>._oDom.removeClass(aNodes, <span class="literal">"selected"</span>);
-
-            sImageSrc = <span class="reserved">this</span>.SUBMENU_INDICATOR_IMAGE_PATH;
-
-        }
-
-        <span class="reserved">if</span>(<span class="reserved">this</span>.subMenuIndicator) {
-
-            <span class="reserved">this</span>.subMenuIndicator.src = <span class="reserved">this</span>.imageRoot + sImageSrc;
+            }
 
         }
 
@@ -1369,15 +1265,20 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     * Event handler for when the "submenu" configuration property of
     * a MenuModuleItem instance changes. 
     * <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
-    * <span class="attrib">@param</span> {Array} p_aArguments Collection of arguments sent when the 
+    * <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the 
     * event was fired.
     * <span class="attrib">@param</span> {YAHOO.widget.MenuModuleItem} p_oItem The MenuModuleItem instance 
     * that fired the event.
     */</span>
-    configSubmenu: <span class="reserved">function</span>(p_sType, p_aArguments, p_oItem) {
+    configSubmenu: <span class="reserved">function</span>(p_sType, p_aArgs, p_oItem) {
 
-        var oSubmenu = p_aArguments[0],
-            aNodes = [<span class="reserved">this</span>.element, <span class="reserved">this</span>._oAnchor];
+        var Dom = <span class="reserved">this</span>._oDom;
+        var oEl = <span class="reserved">this</span>.element;
+        var oSubmenu = p_aArgs[0];
+        var oImg = <span class="reserved">this</span>.submenuIndicator;
+        var oConfig = <span class="reserved">this</span>.cfg;
+        var aNodes = [<span class="reserved">this</span>.element, <span class="reserved">this</span>._oAnchor];
+
 
         <span class="reserved">if</span>(oSubmenu) {
 <span class="comment">
@@ -1388,31 +1289,52 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
             <span class="reserved">this</span>._oSubmenu = oSubmenu;
 
 
-            <span class="reserved">if</span>(!<span class="reserved">this</span>.subMenuIndicator) { 
+            <span class="reserved">if</span>(!oImg) { 
 
-                <span class="reserved">this</span>.subMenuIndicator = document.createElement(<span class="literal">"img"</span>);
+                var me = <span class="reserved">this</span>;
 
-                <span class="reserved">this</span>.subMenuIndicator.src = 
-                    (<span class="reserved">this</span>.imageRoot + <span class="reserved">this</span>.SUBMENU_INDICATOR_IMAGE_PATH);
+                <span class="reserved">function</span> preloadImage(p_sPath) {
 
-                <span class="reserved">this</span>.subMenuIndicator.alt = 
-                    <span class="reserved">this</span>.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
+                    var sPath = me.imageRoot + p_sPath;
+
+                    <span class="reserved">if</span>(!document.images[sPath]) {
+
+                        var oImg = document.createElement(<span class="literal">"img"</span>);
+                        oImg.src = sPath;
+                        oImg.name = sPath;
+                        oImg.id = sPath;
+                        oImg.style.display = <span class="literal">"none"</span>;
+                        
+                        document.body.appendChild(oImg);
+
+                    }
+                
+                }
+
+                preloadImage(<span class="reserved">this</span>.SUBMENU_INDICATOR_IMAGE_PATH);
+                preloadImage(<span class="reserved">this</span>.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH);
+                preloadImage(<span class="reserved">this</span>.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH);
+
+                oImg = document.createElement(<span class="literal">"img"</span>);
+                oImg.src = (<span class="reserved">this</span>.imageRoot + <span class="reserved">this</span>.SUBMENU_INDICATOR_IMAGE_PATH);
+                oImg.alt = <span class="reserved">this</span>.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
+
+                oEl.appendChild(oImg);
+
+                <span class="reserved">this</span>.submenuIndicator = oImg;
+
+                Dom.addClass(aNodes, <span class="literal">"hassubmenu"</span>);
 
 
-                <span class="reserved">this</span>.element.appendChild(<span class="reserved">this</span>.subMenuIndicator);
+                <span class="reserved">if</span>(oConfig.getProperty(<span class="literal">"disabled"</span>)) {
 
-                <span class="reserved">this</span>._oDom.addClass(aNodes, <span class="literal">"hassubmenu"</span>);
-
-
-                <span class="reserved">if</span>(<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"disabled"</span>)) {
-
-                    <span class="reserved">this</span>.cfg.refireEvent(<span class="literal">"disabled"</span>);
+                    oConfig.refireEvent(<span class="literal">"disabled"</span>);
 
                 }
 
-                <span class="reserved">if</span>(<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"selected"</span>)) {
+                <span class="reserved">if</span>(oConfig.getProperty(<span class="literal">"selected"</span>)) {
 
-                    <span class="reserved">this</span>.cfg.refireEvent(<span class="literal">"selected"</span>);
+                    oConfig.refireEvent(<span class="literal">"selected"</span>);
 
                 }                
 
@@ -1421,11 +1343,11 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
         }
         <span class="reserved">else</span> {
 
-            <span class="reserved">this</span>._oDom.removeClass(aNodes, <span class="literal">"hassubmenu"</span>);
+            Dom.removeClass(aNodes, <span class="literal">"hassubmenu"</span>);
 
-            <span class="reserved">if</span>(<span class="reserved">this</span>.subMenuIndicator) {
+            <span class="reserved">if</span>(oImg) {
 
-                <span class="reserved">this</span>.element.removeChild(<span class="reserved">this</span>.subMenuIndicator);
+                oEl.removeChild(oImg);
 
             }
 
@@ -1442,6 +1364,79 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
     // Public methods</span>
 
+	<span class="comment">/**
+	* Initializes an item's configurable properties.
+	*/</span>
+	initDefaultConfig : <span class="reserved">function</span>() {
+
+        var oConfig = <span class="reserved">this</span>.cfg;
+        var CheckBoolean = oConfig.checkBoolean;
+<span class="comment">
+
+        // Define the config properties</span>
+
+        oConfig.addProperty(
+            <span class="literal">"text"</span>, 
+            { 
+                value: <span class="literal">""</span>, 
+                handler: <span class="reserved">this</span>.configText, 
+                validator: <span class="reserved">this</span>._checkString, 
+                suppressEvent: true 
+            }
+        );
+        
+        oConfig.addProperty(<span class="literal">"helptext"</span>, { handler: <span class="reserved">this</span>.configHelpText });
+        
+        oConfig.addProperty(
+            <span class="literal">"url"</span>, 
+            { value: <span class="literal">"#"</span>, handler: <span class="reserved">this</span>.configURL, suppressEvent: true }
+        );
+        
+        oConfig.addProperty(
+            <span class="literal">"emphasis"</span>, 
+            { 
+                value: false, 
+                handler: <span class="reserved">this</span>.configEmphasis, 
+                validator: CheckBoolean, 
+                suppressEvent: true 
+            }
+        );
+
+        oConfig.addProperty(
+            <span class="literal">"strongemphasis"</span>,
+            {
+                value: false,
+                handler: <span class="reserved">this</span>.configStrongEmphasis,
+                validator: CheckBoolean,
+                suppressEvent: true
+            }
+        );
+
+        oConfig.addProperty(
+            <span class="literal">"disabled"</span>,
+            {
+                value: false,
+                handler: <span class="reserved">this</span>.configDisabled,
+                validator: CheckBoolean,
+                suppressEvent: true
+            }
+        );
+
+        oConfig.addProperty(
+            <span class="literal">"selected"</span>,
+            {
+                value: false,
+                handler: <span class="reserved">this</span>.configSelected,
+                validator: CheckBoolean,
+                suppressEvent: true
+            }
+        );
+
+        oConfig.addProperty(<span class="literal">"submenu"</span>, { handler: <span class="reserved">this</span>.configSubmenu });
+
+	},
+
+
     <span class="comment">/**
     * Finds the next enabled MenuModuleItem instance in a MenuModule instance 
     * <span class="attrib">@return</span> Returns a MenuModuleItem instance.
@@ -1451,6 +1446,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
         <span class="reserved">if</span>(<span class="reserved">this</span>.parent instanceof YAHOO.widget.MenuModule) {
 
+            var nGroupIndex = <span class="reserved">this</span>.groupIndex;
 
             <span class="comment">/**
             * Returns the next item in an array 
@@ -1468,14 +1464,14 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
             }
     
     
-            var aItemGroups = <span class="reserved">this</span>.parent.getItemGroups(),
-                oNextItem;
+            var aItemGroups = <span class="reserved">this</span>.parent.getItemGroups();
+            var oNextItem;
     
     
-            <span class="reserved">if</span>(<span class="reserved">this</span>.index &lt; (aItemGroups[<span class="reserved">this</span>.groupIndex].length - 1)) {
+            <span class="reserved">if</span>(<span class="reserved">this</span>.index &lt; (aItemGroups[nGroupIndex].length - 1)) {
     
                 oNextItem = getNextArrayItem(
-                        aItemGroups[<span class="reserved">this</span>.groupIndex], 
+                        aItemGroups[nGroupIndex], 
                         (<span class="reserved">this</span>.index+1)
                     );
     
@@ -1484,9 +1480,9 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     
                 var nNextGroupIndex;
     
-                <span class="reserved">if</span>(<span class="reserved">this</span>.groupIndex &lt; (aItemGroups.length - 1)) {
+                <span class="reserved">if</span>(nGroupIndex &lt; (aItemGroups.length - 1)) {
     
-                    nNextGroupIndex = <span class="reserved">this</span>.groupIndex + 1;
+                    nNextGroupIndex = nGroupIndex + 1;
     
                 }
                 <span class="reserved">else</span> {
@@ -1521,6 +1517,8 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
         <span class="reserved">if</span>(<span class="reserved">this</span>.parent instanceof YAHOO.widget.MenuModule) {
 
+            var nGroupIndex = <span class="reserved">this</span>.groupIndex;
+
             <span class="comment">/**
             * Returns the previous item in an array 
             * <span class="attrib">@param</span> {p_aArray} An array
@@ -1553,16 +1551,16 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     
             }
     
-            var aItemGroups = <span class="reserved">this</span>.parent.getItemGroups(),
-                oPreviousItem;
+            var aItemGroups = <span class="reserved">this</span>.parent.getItemGroups();
+            var oPreviousItem;
     
             <span class="reserved">if</span>(
-                <span class="reserved">this</span>.index &gt; getFirstItemIndex(aItemGroups[<span class="reserved">this</span>.groupIndex], 0)
+                <span class="reserved">this</span>.index &gt; getFirstItemIndex(aItemGroups[nGroupIndex], 0)
             ) {
     
                 oPreviousItem = 
                     getPreviousArrayItem(
-                        aItemGroups[<span class="reserved">this</span>.groupIndex], 
+                        aItemGroups[nGroupIndex], 
                         (<span class="reserved">this</span>.index-1)
                     );
     
@@ -1571,9 +1569,9 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     
                 var nPreviousGroupIndex;
     
-                <span class="reserved">if</span>(<span class="reserved">this</span>.groupIndex &gt; getFirstItemIndex(aItemGroups, 0)) {
+                <span class="reserved">if</span>(nGroupIndex &gt; getFirstItemIndex(aItemGroups, 0)) {
     
-                    nPreviousGroupIndex = <span class="reserved">this</span>.groupIndex - 1;
+                    nPreviousGroupIndex = nGroupIndex - 1;
     
                 }
                 <span class="reserved">else</span> {
@@ -1607,13 +1605,15 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     */</span>
     focus: <span class="reserved">function</span>() {
 
+        var oParent = <span class="reserved">this</span>.parent;
+        var oAnchor = <span class="reserved">this</span>._oAnchor;
+        var oActiveItem = oParent.activeItem;
+
         <span class="reserved">if</span>(
             !<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"disabled"</span>) &amp;&amp; 
-            <span class="reserved">this</span>.parent &amp;&amp; 
-            <span class="reserved">this</span>.parent.cfg.getProperty(<span class="literal">"visible"</span>)
+            oParent &amp;&amp; 
+            oParent.cfg.getProperty(<span class="literal">"visible"</span>)
         ) {
-
-            var oActiveItem = <span class="reserved">this</span>.parent.activeItem;
 
             <span class="reserved">if</span>(oActiveItem) {
 
@@ -1621,20 +1621,16 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
             }
 
-            <span class="reserved">this</span>._oAnchor.focus();
+            oAnchor.focus();
 
             <span class="comment">/*
                 Opera 8.5 doesn't always focus the anchor if a MenuModuleItem
                 instance has a submenu, this is fixed by calling "focus"
                 twice.
             */</span>
-            <span class="reserved">if</span>(
-                <span class="reserved">this</span>.parent &amp;&amp; 
-                <span class="reserved">this</span>.parent.browser == <span class="literal">"opera"</span> &amp;&amp; 
-                <span class="reserved">this</span>._oSubmenu
-            ) {
+            <span class="reserved">if</span>(oParent &amp;&amp; <span class="reserved">this</span>.browser == <span class="literal">"opera"</span> &amp;&amp; <span class="reserved">this</span>._oSubmenu) {
 
-                <span class="reserved">this</span>._oAnchor.focus();
+                oAnchor.focus();
 
             }
 
@@ -1650,10 +1646,12 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     */</span>    
     blur: <span class="reserved">function</span>() {
 
+        var oParent = <span class="reserved">this</span>.parent;
+
         <span class="reserved">if</span>(
             !<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"disabled"</span>) &amp;&amp; 
-            <span class="reserved">this</span>.parent &amp;&amp; 
-            <span class="reserved">this</span>.parent.cfg.getProperty(<span class="literal">"visible"</span>)
+            oParent &amp;&amp; 
+            <span class="reserved">this</span>._oDom.getStyle(oParent.element, <span class="literal">"visibility"</span>) == <span class="literal">"visible"</span>
         ) {
 
             <span class="reserved">this</span>._oAnchor.blur();
@@ -1671,7 +1669,9 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 	*/</span>
     destroy: <span class="reserved">function</span>() {
 
-        <span class="reserved">if</span>(<span class="reserved">this</span>.element) {
+        var oEl = <span class="reserved">this</span>.element;
+
+        <span class="reserved">if</span>(oEl) {
 <span class="comment">
             // Remove CustomEvent listeners</span>
     
@@ -1690,11 +1690,11 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
             // Remove the element from the parent node</span>
 
-            var oParentNode = <span class="reserved">this</span>.element.parentNode;
+            var oParentNode = oEl.parentNode;
 
             <span class="reserved">if</span>(oParentNode) {
 
-                oParentNode.removeChild(<span class="reserved">this</span>.element);
+                oParentNode.removeChild(oEl);
 
                 <span class="reserved">this</span>.destroyEvent.fire();
 
@@ -1707,7 +1707,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     }
 
 };</pre>
-        </div>
+			</div>
 		
 	</div>
 </div>

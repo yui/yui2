@@ -150,15 +150,13 @@
 	</div>
 	
 	<div class="main">
-			
-			<h2>contextmenu.js</h2>
-		
+
+			   <h2>contextmenu.js</h2>
+
 			<div class="section source">
-				<pre class="sourceview"><span class="comment">/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-*/</span>
+				<h3><a name="source">Souce Code</a></h3>
+				<pre class="sourceview">
+
 
 <span class="comment">/**
 * <span class="attrib">@class</span> Creates a list of options which vary depending on the context in 
@@ -168,27 +166,24 @@ http://developer.yahoo.net/yui/license.txt
 * <span class="attrib">@base</span> YAHOO.widget.Menu
 * <span class="attrib">@param</span> {String or HTMLElement} p_oElement String id or HTMLElement 
 * (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
-* <span class="attrib">@param</span> {Object} p_oUserConfig Optional. The configuration object literal 
+* <span class="attrib">@param</span> {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a ContextMenu instance. See 
 * configuration class documentation for more details.
 */</span>
-YAHOO.widget.ContextMenu = <span class="reserved">function</span>(p_oElement, p_oUserConfig) {
+YAHOO.widget.ContextMenu = <span class="reserved">function</span>(p_oElement, p_oConfig) {
 
-    <span class="reserved">if</span>(arguments.length &gt; 0) {
-
-        YAHOO.widget.ContextMenu.superclass.constructor.call(
-                <span class="reserved">this</span>, 
-                p_oElement,
-                p_oUserConfig
-            );
-
-    }
+    YAHOO.widget.ContextMenu.superclass.constructor.call(
+            <span class="reserved">this</span>, 
+            p_oElement,
+            p_oConfig
+        );
 
 };
 
-YAHOO.widget.ContextMenu.<span class="reserved">prototype</span> = new YAHOO.widget.Menu();
-YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>.constructor = YAHOO.widget.ContextMenu;
-YAHOO.widget.ContextMenu.superclass = YAHOO.widget.Menu.<span class="reserved">prototype</span>;
+YAHOO.extend(YAHOO.widget.ContextMenu, YAHOO.widget.Menu);
+
+
+YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>._oTrigger = null;
 
 
 <span class="comment">/**
@@ -197,11 +192,11 @@ YAHOO.widget.ContextMenu.superclass = YAHOO.widget.Menu.<span class="reserved">p
 * markup, and creates required markup if it is not already present.
 * <span class="attrib">@param</span> {String or HTMLElement} p_oElement String id or HTMLElement 
 * (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
-* <span class="attrib">@param</span> {Object} p_oUserConfig Optional. The configuration object literal 
+* <span class="attrib">@param</span> {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a ContextMenu instance. See 
 * configuration class documentation for more details.
 */</span>
-YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>.init = <span class="reserved">function</span>(p_oElement, p_oUserConfig) {
+YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>.init = <span class="reserved">function</span>(p_oElement, p_oConfig) {
 
     <span class="reserved">if</span>(!<span class="reserved">this</span>.ITEM_TYPE) {
 
@@ -218,9 +213,9 @@ YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>.init = <span cl
     <span class="reserved">this</span>.beforeInitEvent.fire(YAHOO.widget.ContextMenu);
 
 
-    <span class="reserved">if</span>(p_oUserConfig) {
+    <span class="reserved">if</span>(p_oConfig) {
 
-        <span class="reserved">this</span>.cfg.applyConfig(p_oUserConfig, true);
+        <span class="reserved">this</span>.cfg.applyConfig(p_oConfig, true);
 
     }
     
@@ -245,14 +240,15 @@ YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>._onDocumentMous
 
     <span class="reserved">function</span>(p_oEvent, p_oMenu) {
     
-        var oTarget = <span class="reserved">this</span>._oEventUtil.getTarget(p_oEvent, true);
+        var oTarget = YAHOO.util.Event.getTarget(p_oEvent);
+        var oTargetEl = <span class="reserved">this</span>._oTargetElement;
     
         <span class="reserved">if</span>(
-            oTarget != <span class="reserved">this</span>._oTargetElement || 
-            !<span class="reserved">this</span>._oDom.isAncestor(<span class="reserved">this</span>._oTargetElement, oTarget)
+            oTarget != oTargetEl || 
+            !YAHOO.util.Dom.isAncestor(oTargetEl, oTarget)
         ) {
     
-            <span class="reserved">this</span>.hide();    
+            <span class="reserved">this</span>.hide();
         
         }
     
@@ -274,7 +270,7 @@ YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>._onTriggerClick
 
         <span class="reserved">if</span>(p_oEvent.ctrlKey) {
         
-            <span class="reserved">this</span>._oEventUtil.stopEvent(p_oEvent);
+            YAHOO.util.Event.stopEvent(p_oEvent);
     
         }
         
@@ -293,7 +289,10 @@ YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>._onTriggerClick
 YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>._onTriggerContextMenu = 
 
     <span class="reserved">function</span>(p_oEvent, p_oMenu) {
-    
+
+        var Event = YAHOO.util.Event;
+        var oConfig = <span class="reserved">this</span>.cfg;
+
         <span class="reserved">if</span>(p_oEvent.type == <span class="literal">"mousedown"</span>) {
         
             <span class="reserved">if</span>(!p_oEvent.ctrlKey) {
@@ -302,27 +301,27 @@ YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>._onTriggerConte
             
             }
         
-            <span class="reserved">this</span>._oEventUtil.stopEvent(p_oEvent);
+            Event.stopEvent(p_oEvent);
     
         }
     
     
-        <span class="reserved">this</span>.contextEventTarget = <span class="reserved">this</span>._oEventUtil.getTarget(p_oEvent, true);
+        <span class="reserved">this</span>.contextEventTarget = Event.getTarget(p_oEvent);
 <span class="comment">    
     
         // Position and display the context menu</span>
     
-        var nX = <span class="reserved">this</span>._oEventUtil.getPageX(p_oEvent),
-            nY = <span class="reserved">this</span>._oEventUtil.getPageY(p_oEvent);
+        var nX = Event.getPageX(p_oEvent);
+        var nY = Event.getPageY(p_oEvent);
     
     
-        <span class="reserved">this</span>.cfg.applyConfig( { x:nX, y:nY, visible:true } );
-        <span class="reserved">this</span>.cfg.fireQueue();
+        oConfig.applyConfig( { x:nX, y:nY, visible:true } );
+        oConfig.fireQueue();
 <span class="comment">    
     
         // Prevent the browser's default context menu from appearing</span>
     
-        <span class="reserved">this</span>._oEventUtil.preventDefault(p_oEvent);
+        Event.preventDefault(p_oEvent);
     
     };
 <span class="comment">
@@ -361,19 +360,35 @@ YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>.initDefaultConf
 * Event handler for when the "trigger" configuration property of
 * a MenuItem instance. 
 * <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
-* <span class="attrib">@param</span> {Array} p_aArguments Collection of arguments sent when the 
+* <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the 
 * event was fired.
 * <span class="attrib">@param</span> {YAHOO.widget.ContextMenu} p_oMenu The ContextMenu that instance fired
 * the event.
 */</span>
 YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>.configTrigger = 
 
-    <span class="reserved">function</span>(p_sType, p_aArguments, p_oMenu) {
+    <span class="reserved">function</span>(p_sType, p_aArgs, p_oMenu) {
     
-        var oTrigger = p_aArguments[0];
+        var Event = YAHOO.util.Event;
+        var oTrigger = p_aArgs[0];
     
         <span class="reserved">if</span>(oTrigger) {
     
+
+            <span class="comment">/*
+                If there is a current "trigger" - remove the event handlers 
+                from that element(s) before assigning new ones
+            */</span>
+            <span class="reserved">if</span>(<span class="reserved">this</span>._oTrigger) {
+            
+                Event.purgeElement(<span class="reserved">this</span>._oTrigger);
+
+            }
+
+
+            <span class="reserved">this</span>._oTrigger = oTrigger;
+
+
             <span class="comment">/*
                 Listen for the "mousedown" event in Opera b/c it does not 
                 support the "contextmenu" event
@@ -381,11 +396,9 @@ YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>.configTrigger =
       
             var bOpera = (<span class="reserved">this</span>.browser == <span class="literal">"opera"</span>);
     
-            var sContextEvent = bOpera ? <span class="literal">"mousedown"</span> : <span class="literal">"contextmenu"</span>;
-    
-            <span class="reserved">this</span>._oEventUtil.addListener(
+            Event.addListener(
                 oTrigger, 
-                sContextEvent, 
+                (bOpera ? <span class="literal">"mousedown"</span> : <span class="literal">"contextmenu"</span>), 
                 <span class="reserved">this</span>._onTriggerContextMenu,
                 <span class="reserved">this</span>,
                 true
@@ -399,7 +412,7 @@ YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>.configTrigger =
     
             <span class="reserved">if</span>(bOpera) {
             
-                <span class="reserved">this</span>._oEventUtil.addListener(
+                Event.addListener(
                     oTrigger, 
                     <span class="literal">"click"</span>, 
                     <span class="reserved">this</span>._onTriggerClick,
@@ -412,7 +425,7 @@ YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>.configTrigger =
     
             // Assign a "mousedown" event handler to the document</span>
         
-            <span class="reserved">this</span>._oEventUtil.addListener(
+            Event.addListener(
                 document, 
                 <span class="literal">"mousedown"</span>, 
                 <span class="reserved">this</span>._onDocumentMouseDown,
@@ -432,7 +445,6 @@ YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>.configTrigger =
 <div id="footer">
 	<hr />
 	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
-
 	<br /><br />
 	Documentation generated by <a href="http://jsdoc.sourceforge.net/">
 	JSDoc</a>

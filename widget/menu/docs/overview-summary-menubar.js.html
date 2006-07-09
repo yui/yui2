@@ -154,11 +154,9 @@
            <h2>menubar.js</h2>
 		
 			<div class="section source">
-				<pre class="sourceview"><span class="comment">/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-*/</span>
+				<h3><a name="source">Souce Code</a></h3>
+				<pre class="sourceview">
+
 
 <span class="comment">/**
 * <span class="attrib">@class</span> Horizontal collection of items, each of which can contain a submenu.
@@ -169,27 +167,21 @@ http://developer.yahoo.net/yui/license.txt
 * <span class="attrib">@base</span> YAHOO.widget.MenuModule
 * <span class="attrib">@param</span> {String or HTMLElement} p_oElement String id or HTMLElement 
 * (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
-* <span class="attrib">@param</span> {Object} p_oUserConfig Optional. The configuration object literal 
+* <span class="attrib">@param</span> {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a MenuBar instance. See 
 * configuration class documentation for more details.
 */</span>
-YAHOO.widget.MenuBar = <span class="reserved">function</span>(p_oElement, p_oUserConfig) {
+YAHOO.widget.MenuBar = <span class="reserved">function</span>(p_oElement, p_oConfig) {
 
-    <span class="reserved">if</span>(arguments.length &gt; 0) {
-
-        YAHOO.widget.MenuBar.superclass.constructor.call(
-                <span class="reserved">this</span>, 
-                p_oElement,
-                p_oUserConfig
-            );
-
-    }
+    YAHOO.widget.MenuBar.superclass.constructor.call(
+            <span class="reserved">this</span>, 
+            p_oElement,
+            p_oConfig
+        );
 
 };
 
-YAHOO.widget.MenuBar.<span class="reserved">prototype</span> = new YAHOO.widget.MenuModule();
-YAHOO.widget.MenuBar.<span class="reserved">prototype</span>.constructor = YAHOO.widget.MenuBar;
-YAHOO.widget.MenuBar.superclass = YAHOO.widget.MenuModule.<span class="reserved">prototype</span>;
+YAHOO.extend(YAHOO.widget.MenuBar, YAHOO.widget.MenuModule);
 
 
 <span class="comment">/**
@@ -198,11 +190,11 @@ YAHOO.widget.MenuBar.superclass = YAHOO.widget.MenuModule.<span class="reserved"
 * markup, and creates required markup if it is not already present.
 * <span class="attrib">@param</span> {String or HTMLElement} p_oElement String id or HTMLElement 
 * (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
-* <span class="attrib">@param</span> {Object} p_oUserConfig Optional. The configuration object literal 
+* <span class="attrib">@param</span> {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a MenuBar instance. See 
 * configuration class documentation for more details.
 */</span>
-YAHOO.widget.MenuBar.<span class="reserved">prototype</span>.init = <span class="reserved">function</span>(p_oElement, p_oUserConfig) {
+YAHOO.widget.MenuBar.<span class="reserved">prototype</span>.init = <span class="reserved">function</span>(p_oElement, p_oConfig) {
 
     <span class="reserved">if</span>(!<span class="reserved">this</span>.ITEM_TYPE) {
 
@@ -218,14 +210,15 @@ YAHOO.widget.MenuBar.<span class="reserved">prototype</span>.init = <span class=
 
     <span class="reserved">this</span>.beforeInitEvent.fire(YAHOO.widget.MenuBar);
 
+    var oConfig = <span class="reserved">this</span>.cfg;
 
     <span class="comment">/*
         Set the default value for the "position" configuration property
         to "static" 
     */</span>
-    <span class="reserved">if</span>(!p_oUserConfig || (p_oUserConfig &amp;&amp; !p_oUserConfig.position)) {
+    <span class="reserved">if</span>(!p_oConfig || (p_oConfig &amp;&amp; !p_oConfig.position)) {
 
-        <span class="reserved">this</span>.cfg.queueProperty(<span class="literal">"position"</span>, <span class="literal">"static"</span>);
+        oConfig.queueProperty(<span class="literal">"position"</span>, <span class="literal">"static"</span>);
 
     }
 
@@ -233,16 +226,16 @@ YAHOO.widget.MenuBar.<span class="reserved">prototype</span>.init = <span class=
         Set the default value for the "submenualignment" configuration property
         to "tl" and "bl" 
     */</span>
-    <span class="reserved">if</span>(!p_oUserConfig || (p_oUserConfig &amp;&amp; !p_oUserConfig.submenualignment)) {
+    <span class="reserved">if</span>(!p_oConfig || (p_oConfig &amp;&amp; !p_oConfig.submenualignment)) {
 
-        <span class="reserved">this</span>.cfg.queueProperty(<span class="literal">"submenualignment"</span>, [<span class="literal">"tl"</span>,<span class="literal">"bl"</span>]);
+        oConfig.queueProperty(<span class="literal">"submenualignment"</span>, [<span class="literal">"tl"</span>,<span class="literal">"bl"</span>]);
 
     }
 
 
-    <span class="reserved">if</span>(p_oUserConfig) {
+    <span class="reserved">if</span>(p_oConfig) {
 
-        <span class="reserved">this</span>.cfg.applyConfig(p_oUserConfig, true);
+        oConfig.applyConfig(p_oConfig, true);
 
     }
     
@@ -269,7 +262,6 @@ YAHOO.widget.MenuBar.<span class="reserved">prototype</span>.CSS_CLASS_NAME = <s
 <div id="footer">
 	<hr />
 	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
-
 	<br /><br />
 	Documentation generated by <a href="http://jsdoc.sourceforge.net/">
 	JSDoc</a>
