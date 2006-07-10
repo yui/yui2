@@ -17,7 +17,7 @@ form { padding: 0; margin: 0; }
 #header h1 a { display: block; height: 19px; text-decoration: none; }
 #header { height:  60px; border: 0px solid #CFFB00; margin-bottom:0px; padding: 4px; }
 #header h4 { position: relative; float: right; font-size:11px; letter-spacing: 1px; top: 10px; right: 30px; line-height: 15px; padding: 0 0 0 13px; margin: 0px; }
-#content { float: left; width: 500px; padding:10px 0px; border: 0px solid #C13B00; margin-left: 50px; top:0px; }
+#content { float: left; width: 550px; padding:10px 0px; border: 0px solid #C13B00; margin-left: 50px; top:0px; }
 #content h1 { font-size:18px; margin:0px;      }
 .newsItem { padding-bottom:25px; margin-bottom:25px; overflow: hidden; }
 .newsItem h3 { font-size:18px; margin:0px; }
