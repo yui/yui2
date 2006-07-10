@@ -5,7 +5,7 @@
 echo "/*" > copyright.txt
 echo "Copyright (c) `date +%Y`, Yahoo! Inc. All rights reserved." >> copyright.txt
 echo "Code licensed under the BSD License:" >> copyright.txt
-echo "http://developer.yahoo.net/yui/license.txt" >> copyright.txt
+echo "http://developer.yahoo.com/yui/license.txt" >> copyright.txt
 echo "*/" >> copyright.txt
 echo "" >> copyright.txt
 echo "" >> copyright.txt
@@ -64,7 +64,6 @@ cp build/assets/*.gif ~/dev/yahoo/properties/webservices/site/yui/build/menu/ass
 
 cp build/README ../../build/menu/
 cp build/README ~/dev/yahoo/properties/webservices/site/yui/build/menu/
-
 
 # Create example files
 
