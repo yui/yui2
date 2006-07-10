@@ -2,7 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-version: 0.10.0
+version: 0.11.0
 */
 body {
    text-align:center;
@@ -40,7 +40,7 @@ body {
 .yui-t5 .yui-b {width:32%;min-width:240px;}
 
 /* t7: 750 */
-.yui-t7  #main .yui-b {min-width:750px;}
+
 
 
 /*	grid-generic rules for all templates */
