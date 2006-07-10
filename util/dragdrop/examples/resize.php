@@ -45,6 +45,7 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
     <form name="dragDropForm" action="javscript:;">
       <h3>Resize</h3>
      
+<strong>The logger is paused for performance reasons.  Click "Resume" to re-enable it.</strong>
     <div id="panelDiv">&nbsp;
         <div id="handleDiv"></div>
     </div>     

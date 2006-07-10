@@ -65,6 +65,9 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
           <option value="0" selected>Point</point>
           <option value="1">Intersect</point>
         </select>
+<p>
+<strong>The logger is paused for performance reasons.  Click "Resume" to re-enable it.</strong>
+</p>
 
     <table border="0">
     <tr>

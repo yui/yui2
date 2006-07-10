@@ -32,17 +32,17 @@ if ($mode == "dist") {
       <p><a href="drag.<?php echo $ext ?>?mode=<?php echo $mode ?>">Drag test</a>:
 	  All three squares can be dragged, and are drop targets</p>
 
-      <p><a href="ontop.<?php echo $ext ?>?mode=<?php echo $mode ?>">On top test</a>: 
+      <p><a href="ontop.<?php echo $ext ?>?mode=<?php echo $mode ?>">Always on top</a>: 
 	  Same as the drag test, except the object being dragged is 
 	  displayed on top of the others.</p>
 
-      <p><a href="proxy.<?php echo $ext ?>?mode=<?php echo $mode ?>">Frame/swap test</a>: 
+      <p><a href="proxy.<?php echo $ext ?>?mode=<?php echo $mode ?>">Proxy drag</a>: 
 	  The actual element is not moved during a drag operation. 
 	  Instead, an absolutely positioned div (created once for all instances) is resized to the dimensions 
 	  of the linked element and moved to the location of the drag operation.
 	  </p>
 
-	<p><a href="list.<?php echo $ext ?>?mode=<?php echo $mode ?>">Sortable list test</a>: 
+	<p><a href="list.<?php echo $ext ?>?mode=<?php echo $mode ?>">Sortable list</a>: 
 		When a list item is dragged past the center
 		of another list item, it is inserted before that item.
 		The items in the first two columns can interact with items in the other
@@ -64,13 +64,12 @@ if ($mode == "dist") {
 <?php } ?>
 
 	   <p><a href="multihandle.<?php echo $ext ?>?mode=<?php echo $mode ?>">Multiple drag handles</a>:
-	  Demonstrates the support for multiple drag handles introduced in release 0.9.1.
+       Shows how you can create multiple "hot spots" on your draggable item.
 	  </p>
 
-	  <p><a href="targetable.<?php echo $ext ?>?mode=<?php echo $mode ?>">Targetable Afforance</a>:
-		Demonstrates functionality added in version 0.11.0, including support for
-		mutiple groups and the ability to get a list of targets so that they can
-		be highlighted during a drag. 
+	  <p><a href="targetable.<?php echo $ext ?>?mode=<?php echo $mode ?>">Targetable afforance</a>:
+        Demonstrates how multiple interaction groups and inportant moment hooks
+        can be used to provide user feedback during the drag.
 	  </p>
 
 	  <p><a href="grid.<?php echo $ext ?>?mode=<?php echo $mode ?>">Grid</a>:
@@ -80,7 +79,6 @@ if ($mode == "dist") {
 	  <p><a href="resize.<?php echo $ext ?>?mode=<?php echo $mode ?>">Resize</a>:
        Demonstrates a draggable and resizable module.
 	  </p>
-
 
 
 	  <p>&nbsp;</p>

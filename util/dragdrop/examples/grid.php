@@ -63,6 +63,8 @@ v
   <form name="dragDropForm" action="javscript:;">
     <div class="newsItem">
       <h3>YAHOO.util.DD Grid</h3>
+      <p>&nbsp;</p>
+<strong>The logger is paused for performance reasons.  Click "Resume" to re-enable it.</strong>
     </div>
   </form>
 </div>

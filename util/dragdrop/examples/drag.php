@@ -16,12 +16,14 @@ YAHOO.example.DDApp = function() {
 
             dd = new YAHOO.util.DD("dragDiv1");
 
+            /*
             dd.onDragDrop = function(e, id) {
                 var draggedEl = this.getEl();
                 var targetedEl = document.getElementById(id);
                 var DOM = YAHOO.util.Dom;
                 DOM.setX(draggedEl, DOM.getX(targetedEl));
             };
+            */
 
             dd2 = new YAHOO.util.DD("dragDiv2");
             dd3 = new YAHOO.util.DD("dragDiv3");
@@ -66,6 +68,9 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
   between the location of the element and the location of the click.  
   This class also provides a way to
   define other elements that modify the way the drag operation works.      </p>
+
+<strong>The logger is paused for performance reasons.  Click "Resume" to re-enable it.</strong>
+
 </div>
 </form>
 </div>
@@ -77,16 +82,20 @@ include('inc/inc-bottom.php');
 <div id="dragDiv2" class="testSquare" >YAHOO.util.DD</div>
 <div id="dragDiv3" class="testSquare" >YAHOO.util.DD</div>
 <form name="formTest" action="http://www.yahoo.com" method="get">                                                                                                    
+<!--
 <input type="text" id="txtTest" />                                                                                                                   
+-->
                                                                                                                                                      
 <script>                                                                                                                                             
-YAHOO.util.Event.addListener('txtTest','keypress',txtTest_keydown);                                                                                   
+//YAHOO.util.Event.addListener('txtTest','keypress',txtTest_keydown);                                                                                   
                                                                                                                                                      
+/*
 function txtTest_keydown (e) {                                                                                                                       
     YAHOO.util.Event.stopEvent(e);                                                                                                                   
     alert(YAHOO.util.Event.getCharCode(e));                                                                                                       
     // return false;
 }                                                                                                                                                    
+*/
 </script>                                                                                                                                            
 </form>   
 

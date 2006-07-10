@@ -131,7 +131,7 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
 .yui-log {background-color:#AAA;border:1px solid black;font-family:monospace;z-index:9000;}
 .yui-log p {margin:1px;padding:.1em;}
 .yui-log button {font-family:monospace;}
-.yui-log .yui-log-hd {margin-top:1em;padding:.5em;background-color:#575757;color:#FFF;}
+.yui-log .yui-log-hd {padding:.5em;background-color:#575757;color:#FFF;}
 /* height is controlled here: default 20em*/
 .yui-log .yui-log-bd {width:100%;height:20em;background-color:#FFF;border:1px solid gray;overflow:auto;}
 .yui-log .yui-log-ft {margin-top:.5em;margin-bottom:1em;}
@@ -166,16 +166,16 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
 <div id="linkage">
 <ul>
 <li><a href="drag.html?mode=dist">Drag test</a></li>
-<li><a href="ontop.html?mode=dist">Always on top test</a></li>
-<li><a href="proxy.html?mode=dist">Framed test</a> </li>
-<li><a href="list.html?mode=dist">Sortable List</a> </li>
+<li><a href="ontop.html?mode=dist">Always on top</a></li>
+<li><a href="proxy.html?mode=dist">Proxy drag</a> </li>
+<li><a href="list.html?mode=dist">Sortable list</a> </li>
 <!--
 <li><a href="slider.html?mode=dist">Slider</a></li>
 -->
-<li><a href="multihandle.html?mode=dist">Multiple Handles</a></li>
-<li><a href="targetable.html?mode=dist">Targetable Affordance</a></li>
+<li><a href="multihandle.html?mode=dist">Multiple handles</a></li>
+<li><a href="targetable.html?mode=dist">Targetable affordance</a></li>
 <li><a href="grid.html?mode=dist">Grid</a></li>
-<li><a href="resize.html?mode=dist">Resize Pane</a></li>
+<li><a href="resize.html?mode=dist">Resize pane</a></li>
 
 </ul>
 </div> 
@@ -189,8 +189,11 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
             init: function() {
                 if (YAHOO.widget.Logger) {
                     YAHOO.widget.Logger.disableFirebug();
-                    new YAHOO.widget.LogReader( "logDiv", 
+                    var reader = new YAHOO.widget.LogReader( "logDiv", 
                             { newestOnTop: true, height: "400px" } );
+
+                    reader._onClickPauseBtn(null, reader);
+
                 }
             }
         };
@@ -200,6 +203,7 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
 //]]>
 </script>
 
+</h4>
 <div id="logDiv"></div>
 </div>
 
@@ -211,10 +215,12 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
     <div class="newsItem">
       <h3>Proxy</h3>
 
+      <!--
       <a href="javascript:YAHOO.util.DDM._onUnload()">Unload test</a>
       <a href="javascript:YAHOO.example.DDApp.lock()">lock</a>
       <a href="javascript:YAHOO.example.DDApp.unlock()">unlock</a>
       <a href="javascript:YAHOO.example.DDApp.unreg()">Unreg test</a>
+      -->
       <p>
         This example builds on
         <a href="../test/test_draggable.php?mode=dist">YAHOO.util.DD</a>.
@@ -235,6 +241,7 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
 
       </p>
 
+<strong>The logger is paused for performance reasons.  Click "Resume" to re-enable it.</strong>
     </div>
     </form>
   </div>

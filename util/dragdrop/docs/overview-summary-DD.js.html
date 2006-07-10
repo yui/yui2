@@ -198,9 +198,7 @@
 		
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<pre class="sourceview"><span class="comment">/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */</span>
-
-<span class="comment">/**
+				<pre class="sourceview"><span class="comment">/**
  * A DragDrop implementation where the linked element follows the 
  * mouse cursor during a drag.
  *
@@ -208,15 +206,18 @@
  * <span class="attrib">@constructor</span>
  * <span class="attrib">@param</span> {String} id the id of the linked element 
  * <span class="attrib">@param</span> {String} sGroup the group of related DragDrop items
+ * <span class="attrib">@param</span> {object} config an object containing configurable attributes
+ *                Valid properties for DD: 
+ *                    scroll
  */</span>
-YAHOO.util.DD = <span class="reserved">function</span>(id, sGroup) {
+YAHOO.util.DD = <span class="reserved">function</span>(id, sGroup, config) {
     <span class="reserved">if</span> (id) {
-        <span class="reserved">this</span>.init(id, sGroup);
-        <span class="reserved">this</span>.logger.setModuleName(<span class="literal">"DD"</span>);
+        <span class="reserved">this</span>.init(id, sGroup, config);
     }
 };
-
-YAHOO.util.DD.<span class="reserved">prototype</span> = new YAHOO.util.DragDrop();
+<span class="comment">
+// YAHOO.util.DD.prototype = new YAHOO.util.DragDrop();</span>
+YAHOO.extend(YAHOO.util.DD, YAHOO.util.DragDrop);
 
 <span class="comment">/**
  * When set to true, the utility automatically tries to scroll the browser
@@ -235,12 +236,14 @@ YAHOO.util.DD.<span class="reserved">prototype</span>.scroll = true;
  * <span class="attrib">@param</span> {int} iPageY the Y coordinate of the click
  */</span>
 YAHOO.util.DD.<span class="reserved">prototype</span>.autoOffset = <span class="reserved">function</span>(iPageX, iPageY) {
-    var el = <span class="reserved">this</span>.getEl();
-    var aCoord = YAHOO.util.Dom.getXY(el);
-    var x = iPageX - aCoord[0];
-    var y = iPageY - aCoord[1];
+<span class="comment">    // var el = this.getEl();</span>
+<span class="comment">    // var aCoord = YAHOO.util.Dom.getXY(el);</span>
+<span class="comment">    // var x = iPageX - aCoord[0];</span>
+<span class="comment">    // var y = iPageY - aCoord[1];</span>
+    var x = iPageX - <span class="reserved">this</span>.startPageX;
+    var y = iPageY - <span class="reserved">this</span>.startPageY;
     <span class="reserved">this</span>.setDelta(x, y);
-    <span class="reserved">this</span>.logger.debug(<span class="literal">"autoOffset el pos: "</span> + aCoord + <span class="literal">", delta: "</span> + x + <span class="literal">","</span> + y);
+<span class="comment">    // this.logger.log("autoOffset el pos: " + aCoord + ", delta: " + x + "," + y);</span>
 };
 
 <span class="comment">/** 
@@ -254,7 +257,7 @@ YAHOO.util.DD.<span class="reserved">prototype</span>.autoOffset = <span class="
 YAHOO.util.DD.<span class="reserved">prototype</span>.setDelta = <span class="reserved">function</span>(iDeltaX, iDeltaY) {
     <span class="reserved">this</span>.deltaX = iDeltaX;
     <span class="reserved">this</span>.deltaY = iDeltaY;
-    <span class="reserved">this</span>.logger.debug(<span class="literal">"deltaX:"</span> + <span class="reserved">this</span>.deltaX + <span class="literal">", deltaY:"</span> + <span class="reserved">this</span>.deltaY);
+    <span class="reserved">this</span>.logger.log(<span class="literal">"deltaX:"</span> + <span class="reserved">this</span>.deltaX + <span class="literal">", deltaY:"</span> + <span class="reserved">this</span>.deltaY);
 };
 
 <span class="comment">/**
@@ -275,7 +278,7 @@ YAHOO.util.DD.<span class="reserved">prototype</span>.setDragElPos = <span class
 <span class="comment">
     // if (!this.cssVerified) {</span>
 <span class="comment">        // var pos = el.style.position;</span>
-<span class="comment">        // this.logger.debug("drag element position: " + pos);</span>
+<span class="comment">        // this.logger.log("drag element position: " + pos);</span>
 <span class="comment">    // }</span>
 
     <span class="reserved">this</span>.alignElWithMouse(el, iPageX, iPageY);
@@ -293,9 +296,25 @@ YAHOO.util.DD.<span class="reserved">prototype</span>.setDragElPos = <span class
  */</span>
 YAHOO.util.DD.<span class="reserved">prototype</span>.alignElWithMouse = <span class="reserved">function</span>(el, iPageX, iPageY) {
     var oCoord = <span class="reserved">this</span>.getTargetCoord(iPageX, iPageY);
-    var aCoord = [oCoord.x, oCoord.y];
-<span class="comment">    // this.logger.debug("****alignElWithMouse : " + el.id + ", " + aCoord + ", " + el.style.display);</span>
-    YAHOO.util.Dom.setXY(el, aCoord);
+<span class="comment">    // this.logger.log("****alignElWithMouse : " + el.id + ", " + aCoord + ", " + el.style.display);</span>
+<span class="comment">
+    // this.deltaSetXY = null;</span>
+    <span class="reserved">if</span> (!<span class="reserved">this</span>.deltaSetXY) {
+        var aCoord = [oCoord.x, oCoord.y];
+        YAHOO.util.Dom.setXY(el, aCoord);
+        var newLeft = parseInt( YAHOO.util.Dom.getStyle(el, <span class="literal">"left"</span>), 10 );
+        var newTop  = parseInt( YAHOO.util.Dom.getStyle(el, <span class="literal">"top"</span> ), 10 );
+
+        <span class="reserved">this</span>.deltaSetXY = [ newLeft - oCoord.x, newTop - oCoord.y ];
+<span class="comment">
+        // this.logger.log("css X: " + YAHOO.util.Dom.getStyle(el, "left"));</span>
+<span class="comment">        // this.logger.log("css Y: " + YAHOO.util.Dom.getStyle(el, "top"));</span>
+<span class="comment">        // this.logger.log("deltaSetXY: " + this.deltaSetXY);</span>
+    } <span class="reserved">else</span> {
+        YAHOO.util.Dom.setStyle(el, <span class="literal">"left"</span>, (oCoord.x + <span class="reserved">this</span>.deltaSetXY[0]) + <span class="literal">"px"</span>);
+        YAHOO.util.Dom.setStyle(el, <span class="literal">"top"</span>,  (oCoord.y + <span class="reserved">this</span>.deltaSetXY[1]) + <span class="literal">"px"</span>);
+    }
+    
 
     <span class="reserved">this</span>.cachePosition(oCoord.x, oCoord.y);
 
@@ -357,7 +376,7 @@ YAHOO.util.DD.<span class="reserved">prototype</span>.autoScroll = <span class="
         // The distance from the cursor to the right of the visible area</span>
         var toRight = (clientW + sl - x - <span class="reserved">this</span>.deltaX);
 <span class="comment">
-        // this.logger.debug( " x: " + x + " y: " + y + " h: " + h + </span>
+        // this.logger.log( " x: " + x + " y: " + y + " h: " + h + </span>
 <span class="comment">        // " clientH: " + clientH + " clientW: " + clientW + </span>
 <span class="comment">        // " st: " + st + " sl: " + sl + " bot: " + bot + </span>
 <span class="comment">        // " right: " + right + " toBot: " + toBot + " toRight: " + toRight);</span>
@@ -408,7 +427,7 @@ YAHOO.util.DD.<span class="reserved">prototype</span>.autoScroll = <span class="
  */</span>
 YAHOO.util.DD.<span class="reserved">prototype</span>.getTargetCoord = <span class="reserved">function</span>(iPageX, iPageY) {
 <span class="comment">
-    // this.logger.debug("getTargetCoord: " + iPageX + ", " + iPageY);</span>
+    // this.logger.log("getTargetCoord: " + iPageX + ", " + iPageY);</span>
 
     var x = iPageX - <span class="reserved">this</span>.deltaX;
     var y = iPageY - <span class="reserved">this</span>.deltaY;
@@ -426,12 +445,17 @@ YAHOO.util.DD.<span class="reserved">prototype</span>.getTargetCoord = <span cla
     x = <span class="reserved">this</span>.getTick(x, <span class="reserved">this</span>.xTicks);
     y = <span class="reserved">this</span>.getTick(y, <span class="reserved">this</span>.yTicks);
 <span class="comment">
-    // this.logger.debug("getTargetCoord " + </span>
+    // this.logger.log("getTargetCoord " + </span>
 <span class="comment">            // " iPageX: " + iPageX +</span>
 <span class="comment">            // " iPageY: " + iPageY +</span>
 <span class="comment">            // " x: " + x + ", y: " + y);</span>
 
     <span class="reserved">return</span> {x:x, y:y};
+};
+
+YAHOO.util.DD.<span class="reserved">prototype</span>.applyConfig = <span class="reserved">function</span>() {
+    YAHOO.util.DD.superclass.applyConfig.call(<span class="reserved">this</span>);
+    <span class="reserved">this</span>.scroll = (<span class="reserved">this</span>.config.scroll !== false);
 };
 
 <span class="comment">/** 
@@ -452,38 +476,41 @@ YAHOO.util.DD.<span class="reserved">prototype</span>.b4Drag = <span class="rese
     <span class="reserved">this</span>.setDragElPos(YAHOO.util.Event.getPageX(e), 
                         YAHOO.util.Event.getPageY(e));
 };
-<span class="comment">
 
+YAHOO.util.DD.<span class="reserved">prototype</span>.toString = <span class="reserved">function</span>() {
+    <span class="reserved">return</span> (<span class="literal">"DD "</span> + <span class="reserved">this</span>.id);
+};
+<span class="comment">
 ///////////////////////////////////////////////////////////////////////////////</span>
 <span class="comment">// Debugging ygDragDrop events that can be overridden</span>
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
 <span class="comment">/*
 YAHOO.util.DD.prototype.startDrag = function(x, y) {
-    this.logger.debug(this.id.toString()  + " startDrag");
+    this.logger.log(this.id.toString()  + " startDrag");
 };
 
 YAHOO.util.DD.prototype.onDrag = function(e) {
-    this.logger.debug(this.id.toString() + " onDrag");
+    this.logger.log(this.id.toString() + " onDrag");
 };
 
 YAHOO.util.DD.prototype.onDragEnter = function(e, id) {
-    this.logger.debug(this.id.toString() + " onDragEnter: " + id);
+    this.logger.log(this.id.toString() + " onDragEnter: " + id);
 };
 
 YAHOO.util.DD.prototype.onDragOver = function(e, id) {
-    this.logger.debug(this.id.toString() + " onDragOver: " + id);
+    this.logger.log(this.id.toString() + " onDragOver: " + id);
 };
 
 YAHOO.util.DD.prototype.onDragOut = function(e, id) {
-    this.logger.debug(this.id.toString() + " onDragOut: " + id);
+    this.logger.log(this.id.toString() + " onDragOut: " + id);
 };
 
 YAHOO.util.DD.prototype.onDragDrop = function(e, id) {
-    this.logger.debug(this.id.toString() + " onDragDrop: " + id);
+    this.logger.log(this.id.toString() + " onDragDrop: " + id);
 };
 
 YAHOO.util.DD.prototype.endDrag = function(e) {
-    this.logger.debug(this.id.toString() + " endDrag");
+    this.logger.log(this.id.toString() + " endDrag");
 };
 */</span>
 

@@ -30,17 +30,18 @@ YAHOO.example.DDApp = function() {
 
         YAHOO.util.DDM.mode = YAHOO.util.DDM.POINT;
 
-        dd = new YAHOO.example.DDSwap("dragDiv1", "proxytest", 
-                    { dragElId: "dragDiv4" });
+        dd = new YAHOO.example.DDSwap("dragDiv1", "proxytest");
         // dd.setPadding(10);
         //dd.setXConstraint(0,0);
 
         dd2 = new YAHOO.example.DDSwap("dragDiv2", "proxytest");
         dd2.addInvalidHandleType("input");
         // dd2.setPadding(10, 20, 30, 40);
-        dd2.setXConstraint(0,0);
+        // dd2.setXConstraint(0,0);
 
-        dd3 = new YAHOO.example.DDSwap("dragDiv3", "proxytest");
+        // the third DD instance uses its own proxy element
+        dd3 = new YAHOO.example.DDSwap("dragDiv3", "proxytest",
+                    { dragElId: "dragDiv4" });
         // dd3.setPadding(10, 40);
         // dd3.setPadding(10, 0, 20, 40);
 
@@ -61,7 +62,7 @@ YAHOO.example.DDApp = function() {
         dd2 = new YAHOO.example.DDSwap_i("dragDiv2");
         dd2.addInvalidHandleType("input");
         //dd2.setPadding(10, 20, 30, 40);
-        dd2.setXConstraint(0,0);
+        // dd2.setXConstraint(0,0);
 
         dd3 = new YAHOO.example.DDSwap_i("dragDiv3");
         // dd3.setPadding(10, 40);
@@ -122,10 +123,12 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
     <div class="newsItem">
       <h3>Proxy</h3>
 
+      <!--
       <a href="javascript:YAHOO.util.DDM._onUnload()">Unload test</a>
       <a href="javascript:YAHOO.example.DDApp.lock()">lock</a>
       <a href="javascript:YAHOO.example.DDApp.unlock()">unlock</a>
       <a href="javascript:YAHOO.example.DDApp.unreg()">Unreg test</a>
+      -->
       <p>
         This example builds on
         <a href="../test/test_draggable.php?mode=<? echo $_GET['mode'] ?>">YAHOO.util.DD</a>.
@@ -146,6 +149,7 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
 
       </p>
 
+<strong>The logger is paused for performance reasons.  Click "Resume" to re-enable it.</strong>
     </div>
     </form>
   </div>
@@ -169,7 +173,7 @@ DDSwap
   <div id="dragDiv3" class="testSquare" style="background:url(img/sq3.png) 0 0 no-repeat;background-color:#7E5B60;top:430px; left:325px">DDSwap</div>
 </div>
 
-  <div id="dragDiv4" class="testSquare" style="border:0px solid black;height: 141px;width:160px;background-color:#7E5B60;top:630px; left:525px">a proxy</div>
+  <div id="dragDiv4" class="testSquare" style="visibility:hidden;border:0px solid black;height: 141px;width:160px;background-color:#7E5B60;top:630px; left:525px">a custom proxy element</div>
 <!--
 </div>
 -->

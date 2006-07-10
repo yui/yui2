@@ -9,7 +9,7 @@
  * @param {String} sGroup the group of related DragDrop items
  */
 YAHOO.example.DDResize = function(panelElId, handleElId, sGroup, config) {
-    if (handleElId) {
+    if (panelElId) {
         this.init(panelElId, sGroup, config);
         this.handleElId = handleElId;
         this.setHandleElId(handleElId);

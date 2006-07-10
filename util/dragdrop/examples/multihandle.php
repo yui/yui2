@@ -36,8 +36,9 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
     <div class="newsItem">
       <h3>Multiple Drag Handles</h3>
       <p>
-        Demonstrates the support for multiple drag handles introduced in release 0.9.1.
+      &nbsp;
       </p>
+<strong>The logger is paused for performance reasons.  Click "Resume" to re-enable it.</strong>
 
     </div>
     </form>

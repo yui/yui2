@@ -80,6 +80,7 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
         but we have extended it so that the square that is being dragged is positioned
         on top of the others.
       </p>
+<strong>The logger is paused for performance reasons.  Click "Resume" to re-enable it.</strong>
       <div id="workArea">&nbsp;</div>
       <p>&nbsp;</p>
     </div>

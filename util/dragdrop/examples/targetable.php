@@ -45,7 +45,7 @@ YAHOO.example.DDApp = function() {
 } ();
 
 YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
-YAHOO.util.Event.addListener("removeButton", "click", YAHOO.example.DDApp.remove);
+//YAHOO.util.Event.addListener("removeButton", "click", YAHOO.example.DDApp.remove);
 
 </script>
 <body>
@@ -64,10 +64,12 @@ YAHOO.util.Event.addListener("removeButton", "click", YAHOO.example.DDApp.remove
           <option value="1">Intersect</point>
         </select>
       </p>
+<strong>The logger is paused for performance reasons.  Click "Resume" to re-enable it.</strong>
       <div id="workArea">&nbsp;</div>
       <p>
-      
+     <!-- 
 <input id="removeButton" type="button" value="remove" />
+-->
       </p>
     </div>
     </form>
@@ -80,19 +82,19 @@ YAHOO.util.Event.addListener("removeButton", "click", YAHOO.example.DDApp.remove
     .player { border:2px solid #bbbbbb; color:#eeeeee; text-align:center; position: absolute; width:60px; height:60px; }
     .target { border:2px solid #574188; background-color:#cccccc; text-align:center; position: absolute; width:60px; height:60px; }
 
-    #t1 { left: 90px; top: 157px; }
-    #t2 { left: 458px; top: 157px; }
-    #b1 { left: 164px; top: 220px; }
-    #b2 { left: 238px; top: 220px; }
-    #b3 { left: 312px; top: 220px; }
-    #b4 { left: 386px; top: 220px; }
+    #t1 { left: 90px; top: 167px; }
+    #t2 { left: 458px; top: 167px; }
+    #b1 { left: 164px; top: 230px; }
+    #b2 { left: 238px; top: 230px; }
+    #b3 { left: 312px; top: 230px; }
+    #b4 { left: 386px; top: 230px; }
     
-    #pt1 { background-color:#7E695E; left: 164px; top: 340px; }
-    #pt2 { background-color:#7E695E; left: 164px; top: 420px; }
-    #pb1 { background-color:#416153; left: 275px; top: 340px; }
-    #pb2 { background-color:#416153; left: 275px; top: 420px; }
-    #pboth1 { background-color:#552E37; left: 386px; top: 340px; }
-    #pboth2 { background-color:#552E37; left: 386px; top: 420px; }
+    #pt1 { background-color:#7E695E; left: 164px; top: 350px; }
+    #pt2 { background-color:#7E695E; left: 164px; top: 430px; }
+    #pb1 { background-color:#416153; left: 275px; top: 350px; }
+    #pb2 { background-color:#416153; left: 275px; top: 430px; }
+    #pboth1 { background-color:#552E37; left: 386px; top: 350px; }
+    #pboth2 { background-color:#552E37; left: 386px; top: 430px; }
 </style>
 
 <div class="slot" id="t1" >1</div>
