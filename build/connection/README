@@ -6,12 +6,16 @@ Connection Manager Release Notes
 through the callback object.  If the threshold is reached, and the transaction
 hasn't completed, the transaction will call abort().
 
+* abort() will now accept a callback object as the second argument.  The
+failure callback will receive a response object to indicate the transaction was
+aborted.
+
 * setForm() will now support file uploads by setting the second argument to
 true (e.g., YAHOO.util.Connect.setForm(formObject, true).  File upload does not
 use the callback success or failure handler.  Instead, it uses a new callback
 object handler: upload.
 
-* HTML form submit will no longer submit fields without a defined name
+* HTML form submit will no longer submit form fields without a defined name
 attribute.
 
 * The default POST header of 'Content-Type','application/x-www-form-urlencoded'
@@ -69,6 +73,7 @@ and returns false if the connection object is no longer available.
 *** version 0.9.0 ***
 
 * Initial release
+
 
 
 
