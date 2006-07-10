@@ -39,7 +39,7 @@
     <!-- Content begins -->
     <h3>DataSource</h3>
     <p>This DataSource instance points to a custom PHP script that returns flat
-    (fake) data of recent search terms and number of results. The schema has
+    demo data of recent search terms and number of results. The schema has
     been defined to parse tab-delimited data rows that are separated by line
     breaks. For maximum cache usage, the DataSource has been
     configured to match query subsets in the cache, and the cache itself has
@@ -144,13 +144,13 @@
         var nQuantity = oResultItem[1];
         var sKeyQuery = sKey.substr(0, sQuery.length);
         var sKeyRemainder = sKey.substr(sQuery.length);
-        var aMarkup = ["<div id='ysearchresult'><div class='ysearchquery'>",
+        var aMarkup = ["&lt;div id='ysearchresult'&gt;&lt;div class='ysearchquery'&gt;",
             nQuantity,
-            "</div><span style='font-weight:bold'>",
+            "&lt;/div&gt;&lt;span style='font-weight:bold'&gt;",
             sKeyQuery,
-            "</span>",
+            "&lt;/span&gt;",
             sKeyRemainder,
-            "</div>"];
+            "&lt;/div&gt;"];
         return (aMarkup.join(""));
     };
 
@@ -162,13 +162,13 @@
         var nQuantity = oResultItem[1];
         var sKeyQuery = sKey.substr(0, sQuery.length);
         var sKeyRemainder = sKey.substr(sQuery.length);
-        var aMarkup = ["<div class='ysearchresult'><div class='ysearchquery'>",
+        var aMarkup = ["&lt;div class='ysearchresult'&gt;&lt;div class='ysearchquery'&gt;",
             nQuantity,
-            "</div><span style='color:red'>",
+            "&lt;/div&gt;&lt;span style='color:red'&gt;",
             sKeyQuery,
-            "</span>",
+            "&lt;/span&gt;",
             sKeyRemainder,
-            "</div>"];
+            "&lt;/div&gt;"];
         return (aMarkup.join(""));
     };
 

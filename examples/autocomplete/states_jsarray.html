@@ -67,12 +67,10 @@
     prehighlightClassName feature provides an supplemental visual feedback for mouse
     events.</p>
 
-    <p>Additionally, the second AutoComplete instance also has enhanced to
+    <p>Additionally, the second AutoComplete instance also has been enhanced to
     display two data fields in the container: the area code and the area code's
     state. The forceSelection feature has been enabled to prevent the user from
-    typing in a free-form selection, and the textboxFocusEvent has been wired to
-    call the "sendQuery" method, which initializes the widget with an appropriate
-    result set.</p>
+    typing in a free-form selection.</p>
 
     <!-- Sample code begins -->
     <div id="code">
@@ -144,7 +142,6 @@
     oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
     oAutoComp.queryDelay = 0;
     oAutoComp.prehighlightClassName = "yui-ac-prehighlight";
-    oAutoComp.autoHighlight = true;
     oAutoComp.typeAhead = true;
     oAutoComp.useShadow = true;
 
@@ -155,7 +152,6 @@
     oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput2','statescontainer2', oACDS2);
     oAutoComp2.queryDelay = 0;
     oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
-    oAutoComp2.autoHighlight = true;
     oAutoComp2.typeAhead = true;
     oAutoComp2.useShadow = true;
     oAutoComp2.forceSelection = true;
@@ -636,7 +632,6 @@ YAHOO.example.ACJSArray = function() {
             oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
             oAutoComp.queryDelay = 0;
             oAutoComp.prehighlightClassName = "yui-ac-prehighlight";
-            oAutoComp.autoHighlight = true;
             oAutoComp.typeAhead = true;
             oAutoComp.useShadow = true;
             
@@ -647,7 +642,6 @@ YAHOO.example.ACJSArray = function() {
             oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput2','statescontainer2', oACDS2);
             oAutoComp2.queryDelay = 0;
             oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
-            oAutoComp2.autoHighlight = true;
             oAutoComp2.typeAhead = true;
             oAutoComp2.useShadow = true;
             oAutoComp2.forceSelection = true;

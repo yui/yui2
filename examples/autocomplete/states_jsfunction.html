@@ -46,9 +46,7 @@
     the alwaysShowContainer property to true and customizing appropriate CSS styles, the
     container has been implemented to always be displayed. Custom event handlers
     have been hooked into containerExpandEvent and containerCollapseEvent to
-    dynamically update the always open container's contents. Finally, the
-    autoHighlight feature has been enabled to reduce the number of user actions
-    it takes to submit a valid selection.</p>
+    dynamically update the always open container's contents.</p>
 
     <!-- AutoComplete begins -->
     <div id="statesmod">
@@ -139,7 +137,6 @@
     oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
     oAutoComp.alwaysShowContainer = true;
     oAutoComp.queryDelay = 0;
-    oAutoComp.autoHighlight = true;
     oAutoComp.maxResultsDisplayed = 8;
     oAutoComp.useShadow = true;
     oAutoComp.setBody("<div id=\"statescontainerdefault\">Start typing to find a state</div>");
@@ -188,7 +185,6 @@ YAHOO.example.ACJSFunction = function(){
             oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
             oAutoComp.alwaysShowContainer = true;
             oAutoComp.queryDelay = 0;
-            oAutoComp.autoHighlight = true;
             oAutoComp.maxResultsDisplayed = 8;
             oAutoComp.useShadow = true;
             oAutoComp.setBody("<div id=\"statescontainerdefault\">Start typing to find a state</div>");
