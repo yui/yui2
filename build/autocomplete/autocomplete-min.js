@@ -147,7 +147,7 @@ var aResults=oSelf.parseResponse(sQuery,oResp,oParent);var resultObj={};resultOb
 else{oSelf.getResultsEvent.fire(oSelf,oParent,sQuery,aResults);oSelf._addCacheElem(resultObj);oCallbackFn(sQuery,aResults,oParent);}};var responseFailure=function(oResp){oSelf.dataErrorEvent.fire(oSelf,oParent,sQuery,oSelf.ERROR_DATAXHR);return;};var oCallback={success:responseSuccess,failure:responseFailure};if(!isNaN(this.connTimeout)&&this.connTimeout>0){oCallback.timeout=this.connTimeout;}
 if(this._oConn){YAHOO.util.Connect.abort(this._oConn);}
 oSelf._oConn=YAHOO.util.Connect.asyncRequest("GET",sUri,oCallback,null);};YAHOO.widget.DS_XHR.prototype.parseResponse=function(sQuery,oResponse,oParent){var aSchema=this.schema;var aResults=[];var bError=false;var nEnd=((this.responseStripAfter!=="")&&(oResponse.indexOf))?oResponse.indexOf(this.responseStripAfter):-1;if(nEnd!=-1){oResponse=oResponse.substring(0,nEnd);}
-switch(this.responseType){case this.TYPE_JSON:var jsonList;if(window.JSON){var jsonObjParsed=JSON.parse(oResponse);if(!jsonObjParsed){bError=true;break;}
+switch(this.responseType){case this.TYPE_JSON:var jsonList;if(window.JSON&&(navigator.userAgent.toLowerCase().indexOf('khtml')==-1)){var jsonObjParsed=JSON.parse(oResponse);if(!jsonObjParsed){bError=true;break;}
 else{jsonList=eval("jsonObjParsed."+aSchema[0]);}}
 else{try{while(oResponse.substring(0,1)==" "){oResponse=oResponse.substring(1,oResponse.length);}
 if(oResponse.indexOf("{")<0){bError=true;break;}
@@ -168,7 +168,7 @@ aResults.unshift(aFieldSet);}
 break;case this.TYPE_FLAT:if(oResponse.length>0){var newLength=oResponse.length-aSchema[0].length;if(oResponse.substr(newLength)==aSchema[0]){oResponse=oResponse.substr(0,newLength);}
 var aRecords=oResponse.split(aSchema[0]);for(var n=aRecords.length-1;n>=0;n--){aResults[n]=aRecords[n].split(aSchema[1]);}}
 break;default:break;}
-if(bError){return null;}
+sQuery=null;oResponse=null;oParent=null;if(bError){return null;}
 else{return aResults;}};YAHOO.widget.DS_XHR.prototype._oConn=null;YAHOO.widget.DS_JSFunction=function(oFunction,oConfigs){if(typeof oConfigs=="object"){for(var sConfig in oConfigs){this[sConfig]=oConfigs[sConfig];}}
 if(!oFunction||(oFunction.constructor!=Function)){return;}
 else{this.dataFunction=oFunction;this._init();}};YAHOO.widget.DS_JSFunction.prototype=new YAHOO.widget.DataSource();YAHOO.widget.DS_JSFunction.prototype.dataFunction=null;YAHOO.widget.DS_JSFunction.prototype.doQuery=function(oCallbackFn,sQuery,oParent){var oFunction=this.dataFunction;var aResults=[];aResults=oFunction(sQuery);if(aResults===null){this.dataErrorEvent.fire(this,oParent,sQuery,this.ERROR_DATANULL);return;}

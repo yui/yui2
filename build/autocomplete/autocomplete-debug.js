@@ -2454,7 +2454,8 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
     switch (this.responseType) {
         case this.TYPE_JSON:
             var jsonList;
-            if(window.JSON) {
+            // Divert KHTML clients from JSON lib
+            if(window.JSON && (navigator.userAgent.toLowerCase().indexOf('khtml')== -1)) {
                 // Use the JSON utility if available
                 var jsonObjParsed = JSON.parse(oResponse);
                 if(!jsonObjParsed) {
@@ -2583,6 +2584,9 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
         default:
             break;
     }
+    sQuery = null;
+    oResponse = null;
+    oParent = null;
     if(bError) {
         return null;
     }
