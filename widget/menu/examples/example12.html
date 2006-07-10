@@ -6,12 +6,21 @@
         <title>Example 12: Setting Configuration Properties At Runtime</title>
 
         <?php
-            $g_bUseLogger = true;        
-            require_once("styles.inc");
-        ?>
+
+            function include_custom_styles() {
+
+                global $g_sBasePath;
+
+        ?>            
 
         <!-- Logger CSS -->
-        <link rel="stylesheet" type="text/css" href="../../logger/build/assets/logger.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $g_sBasePath; ?>/build/logger/assets/logger.css">
+
+        <?php
+            }
+
+            require_once("styles.inc"); 
+        ?>
 
         <!-- Page-specific styles -->
         <style type="text/css">
@@ -45,7 +54,21 @@
 
         </style>
 
-        <?php require_once("scripts.inc"); ?>
+        <?php
+
+            function include_custom_scripts() {
+
+                global $g_sBasePath;
+
+        ?>            
+        <!-- Logger source file -->
+        <script type="text/javascript" src="<?php echo $g_sBasePath; ?>/build/logger/logger.js"></script>
+        <?php
+            }        
+        
+            require_once("scripts.inc"); 
+
+        ?>
 
         <!-- Page-specific script -->
         <script type="text/javascript">

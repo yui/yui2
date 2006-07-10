@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>Application Menubar Exmaple</title>
+        <title>Application Menubar Example</title>
 
         <?php require_once("styles.inc"); ?>
 
@@ -258,7 +258,9 @@
 
             function onWindowLoad() {
 
-                var Menu = YAHOO.widget.Menu,
+                var MenuBar = YAHOO.widget.MenuBar,
+                    MenuBarItem = YAHOO.widget.MenuBarItem,
+                    Menu = YAHOO.widget.Menu,
                     MenuItem = YAHOO.widget.MenuItem;
 
 
@@ -294,14 +296,15 @@
 
                 var oMenuBar = new YAHOO.widget.MenuBar("test");
 
-                oMenuBar.addItem(new YAHOO.widget.MenuBarItem("File", { submenu: oFileMenu }));
-                oMenuBar.addItem(new YAHOO.widget.MenuBarItem("Edit", { submenu: oEditMenu }));
+                oMenuBar.addItem(new MenuBarItem("File", { submenu: oFileMenu }));
+                oMenuBar.addItem(new MenuBarItem("Edit", { submenu: oEditMenu }));
                 oMenuBar.addItem("View");
                 oMenuBar.addItem("Favorites");
                 oMenuBar.addItem("Tools");
                 oMenuBar.addItem("Tools");
                 oMenuBar.addItem("Help");
-                oMenuBar.addItem(new YAHOO.widget.MenuBarItem("Examples Home", { url: "index.html" }));
+                oMenuBar.addItem(new MenuBarItem("Examples Home", { url: "index.html" }));
+
 
                 // Render the MenuBar instance and corresponding submenus
 
@@ -347,10 +350,13 @@
                     YAHOO.example.OverlayManager.hideAll();
     
                     oMenuBar.hasFocus = false;
-                
-                    oMenuBar.clearActiveItem();
                     
-                    oMenuBar.activeItem.blur();
+                    if(oMenuBar.activeItem) {
+
+                        oMenuBar.clearActiveItem();
+                        oMenuBar.activeItem.blur();
+                    
+                    }
 
                 }
 
@@ -364,14 +370,14 @@
                     );
 
 
-                YAHOO.example.OverlayManager = new YAHOO.widget.OverlayManager();
+                YAHOO.example.OverlayManager = 
+                    new YAHOO.widget.OverlayManager();
+
 
                 // Register the menus with the Overlay mananger
 
                 YAHOO.example.OverlayManager.register(oFileMenu);
-
                 YAHOO.example.OverlayManager.register(oApplicationsMenu);
-
                 YAHOO.example.OverlayManager.register(oEditMenu);
 
             }

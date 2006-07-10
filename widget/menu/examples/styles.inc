@@ -1,63 +1,33 @@
 <?php
 
-    $g_sType = "dev";
-    $bUseGrids = (isset($g_bUseGrids) && $g_bUseGrids == true);
-    $bUseLogger = (isset($g_bUseLogger) && $g_bUseLogger == true);
-    
-    if($g_sType == "dev") {
+$g_sBuildType = "prod";
+
+if($g_sBuildType == "dev") {
+
+    $g_sBasePath = "../../..";
+    $sMenuCSSPath = "../src/css";
+
+}
+else if($g_sBuildType == "prod") {
+
+    $g_sBasePath = "../..";
+    $sMenuCSSPath = "../../build/menu/assets";
+
+}
+
 ?>
-        <!-- Stanard reset and fonts -->
-        <link rel="stylesheet" type="text/css" href="../../../build/reset/reset.css">
-        <link rel="stylesheet" type="text/css" href="../../../build/fonts/fonts.css">
-    
-        <!-- CSS for Menu -->
-        <link rel="stylesheet" type="text/css" href="../src/css/menu.css">
+    <!-- Standard reset and fonts -->
+        <link rel="stylesheet" type="text/css" href="<?php echo $g_sBasePath; ?>/build/reset/reset.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $g_sBasePath; ?>/build/fonts/fonts.css">
 
 <?php
-        if($bUseGrids) {
-?>    
+        if(is_callable("include_custom_styles")) {
 
-        <!-- Grids -->
-        <link rel="stylesheet" type="text/css" href="../../../build/grids/grids.css">
-<?php
+            include_custom_styles();
+
         }
-
-        if($bUseLogger) {
-?>    
-
-        <!-- Logger CSS -->
-        <link rel="stylesheet" type="text/css" href="../../../build/logger/assets/logger.css">
-<?php
-        }
-
-    }
-    else if($g_sType == "build") {
-?>
-        <!-- Stanard reset and fonts -->
-        <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
-        <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
-    
-<?php
-        if($bUseGrids) {
-?>    
-
-        <!-- Grids -->
-        <link rel="stylesheet" type="text/css" href="../../build/grids/grids.css">
-<?php
-        }
-
-        if($bUseLogger) {
-?>    
-
-        <!-- Logger CSS -->
-        <link rel="stylesheet" type="text/css" href="../../build/logger/assets/logger.css">
-<?php
-        }
-?>
-
+?> 
 
         <!-- CSS for Menu -->
-        <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
-<?php
-    }
-?>
+        <link rel="stylesheet" type="text/css" href="<?php echo $sMenuCSSPath; ?>/menu.css">
+ 

@@ -3,11 +3,23 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>Left Nav Example</title>
+        <title>Website Left Nav Example</title>
 
-        <?php 
-            $g_bUseGrids = true;
-            require_once("styles.inc");
+        <?php
+
+            function include_custom_styles() {
+
+                global $g_sBasePath;
+
+        ?>            
+
+        <!-- Grids -->
+        <link rel="stylesheet" type="text/css" href="<?php echo $g_sBasePath; ?>/build/grids/grids.css">
+
+        <?php
+            }
+
+            require_once("styles.inc"); 
         ?>
 
         <!-- Page-specific styles -->
@@ -268,7 +280,7 @@
             <div id="hd">
                 <!-- start: your content here -->
 
-                    <h1>Left Nav Example <em>[<a href="index.html">Examples Home</a>]</em></h1>
+                    <h1>Website Left Nav Example <em>[<a href="index.html">Examples Home</a>]</em></h1>
         
                 <!-- end: your content here -->
             </div>

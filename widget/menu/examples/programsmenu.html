@@ -3,20 +3,27 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>Application-style Menus Example</title>
+        <title>OS-Style Programs Menu Example</title>
 
         <?php require_once("styles.inc"); ?>
 
         <!-- Page-specific styles -->
         <style type="text/css">
 
-            body {
+            html {
             
-                background-color:#dfb8df;
+                overflow:hidden;
             
             }
 
-            /* Define a style for the "toolbar" */
+            body {
+            
+                background-color:#dfb8df;
+                overflow:hidden;
+            
+            }
+
+            /* Define a style for the H1 "toolbar" */
 
             .ytoolbar {
 
@@ -81,7 +88,7 @@
             }
 
 
-            /* Add icons to each menu item */
+            /* Add icons to menu items */
 
             div.yuimenu li.hassubmenu {
             
@@ -217,7 +224,7 @@
 
                 /*
                     Position the bottom-left corner of the root menu to the 
-                    top-left corner of of the "Yahoo!" anchor
+                    top-left corner of the "Yahoo!" anchor
                 */
 
                 oMenu.cfg.setProperty("context", ["yahoo", "bl", "tl"]);
@@ -242,14 +249,14 @@
 
 
                 /*
-                    Assign a "click" event handler to the "Yahoo!" link that 
+                    Assign a "click" event handler to the "Yahoo!" anchor that 
                     will display the menu
                 */
                 
                 YAHOO.util.Event.addListener("yahoo", "click", onYahooClick);
 
 
-                // "mousedown" event handler for the document
+                // "click" event handler for the document
     
                 function onDocumentClick(p_oEvent) {
                 
@@ -261,7 +268,7 @@
 
                 /*
                     Assign a "click" event handler to the document that will
-                    hiden the menu
+                    hide the menu
                 */
 
                 YAHOO.util.Event.addListener(
@@ -281,12 +288,13 @@
                 
                 }
 
+
                 /*
                     Add a "resize" event handler for the window that will 
-                    reposition the H2
+                    reposition the H1 "toolbar" to the bottom of the viewport
                 */
 
-                YAHOO.util.Event.addListener(window, "resize", onWindowResize);                
+                YAHOO.util.Event.addListener(window, "resize", onWindowResize);
                 
             }
 
@@ -325,11 +333,11 @@
                                                 	<li><a href="http://tv.yahoo.com/">Yahoo! TV</a></li>
                                                 </ul>
                                             </div>
-                                        </div>                     
-                                    </li>                                
+                                        </div>
+                                    </li>
                                 </ul>
                             </div>
-                        </div>                            
+                        </div>
                     </li>
                     <li id="search"><a href="http://search.yahoo.com/">Search</a>
                         <div id="searchproducts">
