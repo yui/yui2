@@ -210,8 +210,8 @@ me.dragEvent.fire("endDrag",arguments);}
 this.dd.setHandleElId(this.header.id);this.dd.addInvalidHandleType("INPUT");this.dd.addInvalidHandleType("SELECT");this.dd.addInvalidHandleType("TEXTAREA");}}
 YAHOO.widget.Panel.prototype.buildMask=function(){if(!this.mask){this.mask=document.createElement("DIV");this.mask.id=this.id+"_mask";this.mask.className="mask";this.mask.innerHTML="&nbsp;";var maskClick=function(e,obj){YAHOO.util.Event.stopEvent(e);}
 YAHOO.util.Event.addListener(this.mask,maskClick,this);document.body.appendChild(this.mask);}}
-YAHOO.widget.Panel.prototype.hideMask=function(){if(this.cfg.getProperty("modal")&&this.mask){this.mask.tabIndex=-1;this.mask.style.display="none";this.hideMaskEvent.fire();YAHOO.util.Dom.removeClass(document.body,"masked");}}
-YAHOO.widget.Panel.prototype.showMask=function(){if(this.cfg.getProperty("modal")&&this.mask){YAHOO.util.Dom.addClass(document.body,"masked");this.sizeMask();this.mask.style.display="block";this.mask.tabIndex=0;this.showMaskEvent.fire();}}
+YAHOO.widget.Panel.prototype.hideMask=function(){if(this.cfg.getProperty("modal")&&this.mask){this.mask.style.display="none";this.hideMaskEvent.fire();YAHOO.util.Dom.removeClass(document.body,"masked");}}
+YAHOO.widget.Panel.prototype.showMask=function(){if(this.cfg.getProperty("modal")&&this.mask){YAHOO.util.Dom.addClass(document.body,"masked");this.sizeMask();this.mask.style.display="block";this.showMaskEvent.fire();}}
 YAHOO.widget.Panel.prototype.sizeMask=function(){if(this.mask){this.mask.style.height=YAHOO.util.Dom.getDocumentHeight()+"px";this.mask.style.width=YAHOO.util.Dom.getDocumentWidth()+"px";}}
 YAHOO.widget.Panel.prototype.configHeight=function(type,args,obj){var height=args[0];var el=this.innerElement;YAHOO.util.Dom.setStyle(el,"height",height);this.cfg.refireEvent("underlay");this.cfg.refireEvent("iframe");}
 YAHOO.widget.Panel.prototype.configWidth=function(type,args,obj){var width=args[0];var el=this.innerElement;YAHOO.util.Dom.setStyle(el,"width",width);this.cfg.refireEvent("underlay");this.cfg.refireEvent("iframe");}

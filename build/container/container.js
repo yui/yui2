@@ -2952,7 +2952,6 @@ YAHOO.widget.Panel.prototype.buildMask = function() {
 */
 YAHOO.widget.Panel.prototype.hideMask = function() {
 	if (this.cfg.getProperty("modal") && this.mask) {
-		this.mask.tabIndex = -1;
 		this.mask.style.display = "none";
 		this.hideMaskEvent.fire();
 		YAHOO.util.Dom.removeClass(document.body, "masked");
@@ -2967,7 +2966,6 @@ YAHOO.widget.Panel.prototype.showMask = function() {
 		YAHOO.util.Dom.addClass(document.body, "masked");
 		this.sizeMask();
 		this.mask.style.display = "block";
-		this.mask.tabIndex = 0;
 		this.showMaskEvent.fire();
 	}
 }
