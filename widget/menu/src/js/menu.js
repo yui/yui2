@@ -159,6 +159,8 @@ YAHOO.widget.Menu.prototype._onMenuKeyDown =
                         oParent.cfg.setProperty("selected", true);
         
                     }
+
+                    YAHOO.util.Event.preventDefault(oDOMEvent);
         
                 }
             
