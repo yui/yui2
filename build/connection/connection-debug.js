@@ -329,6 +329,7 @@ YAHOO.util.Connect =
    * @private
    * @param {object} o The connection object
    * @param {object} callback - User-defined callback object
+   * @param {boolean} determines if the transaction was aborted.
    * @return void
    */
     handleTransactionResponse:function(o, callback, isAbort)
@@ -469,6 +470,7 @@ YAHOO.util.Connect =
    * @private
    * @param {int} tId Transaction Id
    * @param callbackArg The user-defined arguments
+   * @param isAbort Determines if the exception is an abort.
    * @return object
    */
     createExceptionObject:function(tId, callbackArg, isAbort)
@@ -647,6 +649,7 @@ YAHOO.util.Connect =
    * document upon completion of the upload transaction.
    *
    * @private
+   * @param {string} optional qualified path of iframe resource for SSL in IE.
    * @return void
    */
 	createFrame:function(secureUri){
@@ -733,6 +736,8 @@ YAHOO.util.Connect =
    * Public method to terminate a transaction, if it has not reached readyState 4.
    * @public
    * @param {object} o The connection object returned by asyncRequest.
+   * @param {object} callback  User-defined callback object.
+   * @param {string} isTimeout boolean to indicate if abort was a timeout.
    * @return void
    */
 	abort:function(o, callback, isTimeout)

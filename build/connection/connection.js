@@ -457,6 +457,7 @@ YAHOO.util.Connect =
    * @private
    * @param {int} tId Transaction Id
    * @param callbackArg The user-defined arguments
+   * @param isAbort Determines if the exception is an abort.
    * @return object
    */
     createExceptionObject:function(tId, callbackArg, isAbort)
