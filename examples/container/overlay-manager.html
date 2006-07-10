@@ -242,6 +242,7 @@
 			mgr.register(myOverlay);
 			</code>
 			</p>
+			<p>Note that when you click on an Overlay, the Overlay is highlighted, indicating that it currently has the focus. This is because the OverlayManager keeps track of which of the registered Overlays currently is focused, and ensures that the z-index of that Overlay is the highest.</p>
 			<button id="btnHide">Hide All</button>
 			<button id="btnShow">Show All</button>
 		</div>
