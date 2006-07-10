@@ -1,4 +1,8 @@
-
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+*/
 YAHOO.widget.DateMath=new function(){this.DAY="D";this.WEEK="W";this.YEAR="Y";this.MONTH="M";this.ONE_DAY_MS=1000*60*60*24;this.add=function(date,field,amount){var d=new Date(date.getTime());switch(field){case this.MONTH:var newMonth=date.getMonth()+amount;var years=0;if(newMonth<0){while(newMonth<0){newMonth+=12;years-=1;}}else if(newMonth>11){while(newMonth>11){newMonth-=12;years+=1;}}
 d.setMonth(newMonth);d.setFullYear(date.getFullYear()+years);break;case this.DAY:d.setDate(date.getDate()+amount);break;case this.YEAR:d.setFullYear(date.getFullYear()+amount);break;case this.WEEK:d.setDate(date.getDate()+(amount*7));break;}
 return d;};this.subtract=function(date,field,amount){return this.add(date,field,(amount*-1));};this.before=function(date,compareTo){var ms=compareTo.getTime();if(date.getTime()<ms){return true;}else{return false;}};this.after=function(date,compareTo){var ms=compareTo.getTime();if(date.getTime()>ms){return true;}else{return false;}};this.between=function(date,dateBegin,dateEnd){if(this.after(date,dateBegin)&&this.before(date,dateEnd)){return true;}else{return false;}};this.getJan1=function(calendarYear){return new Date(calendarYear,0,1);};this.getDayOffset=function(date,calendarYear){var beginYear=this.getJan1(calendarYear);var dayOffset=Math.ceil((date.getTime()-beginYear.getTime())/this.ONE_DAY_MS);return dayOffset;};this.getWeekNumber=function(date,calendarYear,weekStartsOn){date.setHours(12,0,0,0);if(!weekStartsOn){weekStartsOn=0;}

@@ -1,8 +1,9 @@
-/**
+/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt 
-**/
+http://developer.yahoo.net/yui/license.txt
+Version 0.11.0
+*/
 
 /**
 * @class

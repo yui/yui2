@@ -1,5 +1,9 @@
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-/* Container Styles */
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version 0.11.0
+*/
 
 .yui-cal2upwrapper {*height:1%;} /* IE */
 .yui-cal2upwrapper:after {content:'.';clear:both;display:block;visibility:hidden;height:0;} /* others */
