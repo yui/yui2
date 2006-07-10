@@ -262,44 +262,52 @@ http://developer.yahoo.net/yui/license.txt
 * <span class="attrib">@param</span> {object}	attrIn		The object literal representing the animation arguments to be used for the animate-in transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
 * <span class="attrib">@param</span> {object}	attrOut		The object literal representing the animation arguments to be used for the animate-out transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
 * <span class="attrib">@param</span> {Element}	targetElement	Optional. The target element that should be animated during the transition. Defaults to overlay.element.
+* <span class="attrib">@param</span> {class}	Optional. The animation class to instantiate. Defaults to YAHOO.util.Anim. Other options include YAHOO.util.Motion.
 * <span class="attrib">@constructor</span>
 */</span>
-YAHOO.widget.ContainerEffect = <span class="reserved">function</span>(overlay, attrIn, attrOut, targetElement) {
-	<span class="reserved">this</span>.init(overlay, attrIn, attrOut, targetElement);
-}
-
-<span class="comment">/**
-* Initializes the animation classes and events.
-* <span class="attrib">@param</span> {class}	Optional. The animation class to instantiate. Defaults to YAHOO.util.Anim. Other options include YAHOO.util.Motion.
-* <span class="attrib">@param</span> {Overlay}	overlay		The Overlay that the animation should be associated with
-* <span class="attrib">@param</span> {object}	attrIn		The object literal representing the animation arguments to be used for the animate-in transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
-* <span class="attrib">@param</span> {object}	attrOut		The object literal representing the animation arguments to be used for the animate-out transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
-* <span class="attrib">@param</span> {Element}	targetElement	Optional. The target element that should be animated during the transition. Defaults to overlay.element.
-*/</span>
-YAHOO.widget.ContainerEffect.<span class="reserved">prototype</span>.init = <span class="reserved">function</span>(animClass, overlay, attrIn, attrOut, targetElement) {
+YAHOO.widget.ContainerEffect = <span class="reserved">function</span>(overlay, attrIn, attrOut, targetElement, animClass) {
 	<span class="reserved">if</span> (! animClass) {
 		animClass = YAHOO.util.Anim;
 	}
 
+	<span class="comment">/**
+	* The overlay to animate
+	*/</span>
 	<span class="reserved">this</span>.overlay = overlay;
-
+	<span class="comment">/**
+	* The animation attributes to use when transitioning into view
+	*/</span>
 	<span class="reserved">this</span>.attrIn = attrIn;
+	<span class="comment">/**
+	* The animation attributes to use when transitioning out of view
+	*/</span>
 	<span class="reserved">this</span>.attrOut = attrOut;
-
+	<span class="comment">/**
+	* The target element to be animated
+	*/</span>
 	<span class="reserved">this</span>.targetElement = targetElement || overlay.element;
+	<span class="comment">/**
+	* The animation class to use for animating the overlay
+	*/</span>
+	<span class="reserved">this</span>.animClass = animClass;
+}
 
+<span class="comment">/**
+* Initializes the animation classes and events.
+*/</span>
+YAHOO.widget.ContainerEffect.<span class="reserved">prototype</span>.init = <span class="reserved">function</span>() {
 	<span class="reserved">this</span>.beforeAnimateInEvent = new YAHOO.util.CustomEvent(<span class="literal">"beforeAnimateIn"</span>);
 	<span class="reserved">this</span>.beforeAnimateOutEvent = new YAHOO.util.CustomEvent(<span class="literal">"beforeAnimateOut"</span>);
 
 	<span class="reserved">this</span>.animateInCompleteEvent = new YAHOO.util.CustomEvent(<span class="literal">"animateInComplete"</span>);
 	<span class="reserved">this</span>.animateOutCompleteEvent = new YAHOO.util.CustomEvent(<span class="literal">"animateOutComplete"</span>);
 
-	<span class="reserved">this</span>.animIn = new animClass(<span class="reserved">this</span>.targetElement, <span class="reserved">this</span>.attrIn.attributes, <span class="reserved">this</span>.attrIn.duration, <span class="reserved">this</span>.attrIn.method);
+	<span class="reserved">this</span>.animIn = new <span class="reserved">this</span>.animClass(<span class="reserved">this</span>.targetElement, <span class="reserved">this</span>.attrIn.attributes, <span class="reserved">this</span>.attrIn.duration, <span class="reserved">this</span>.attrIn.method);
 	<span class="reserved">this</span>.animIn.onStart.subscribe(<span class="reserved">this</span>.handleStartAnimateIn, <span class="reserved">this</span>);
 	<span class="reserved">this</span>.animIn.onTween.subscribe(<span class="reserved">this</span>.handleTweenAnimateIn, <span class="reserved">this</span>);
 	<span class="reserved">this</span>.animIn.onComplete.subscribe(<span class="reserved">this</span>.handleCompleteAnimateIn, <span class="reserved">this</span>);
 
-	<span class="reserved">this</span>.animOut = new animClass(<span class="reserved">this</span>.targetElement, <span class="reserved">this</span>.attrOut.attributes, <span class="reserved">this</span>.attrOut.duration, <span class="reserved">this</span>.attrOut.method);
+	<span class="reserved">this</span>.animOut = new <span class="reserved">this</span>.animClass(<span class="reserved">this</span>.targetElement, <span class="reserved">this</span>.attrOut.attributes, <span class="reserved">this</span>.attrOut.duration, <span class="reserved">this</span>.attrOut.method);
 	<span class="reserved">this</span>.animOut.onStart.subscribe(<span class="reserved">this</span>.handleStartAnimateOut, <span class="reserved">this</span>);
 	<span class="reserved">this</span>.animOut.onTween.subscribe(<span class="reserved">this</span>.handleTweenAnimateOut, <span class="reserved">this</span>);
 	<span class="reserved">this</span>.animOut.onComplete.subscribe(<span class="reserved">this</span>.handleCompleteAnimateOut, <span class="reserved">this</span>);
@@ -366,7 +374,7 @@ YAHOO.widget.ContainerEffect.<span class="reserved">prototype</span>.toString = 
 * <span class="attrib">@type</span> ContainerEffect
 */</span>
 YAHOO.widget.ContainerEffect.FADE = <span class="reserved">function</span>(overlay, dur) {
-	var fade = new YAHOO.widget.ContainerEffect(overlay, { attributes:{opacity: {from:0, to:1}}, duration:dur, method:YAHOO.util.Easing.easeIn }, { attributes:{opacity: {to:0}}, duration:dur, method:YAHOO.util.Easing.easeOut} );
+	var fade = new YAHOO.widget.ContainerEffect(overlay, { attributes:{opacity: {from:0, to:1}}, duration:dur, method:YAHOO.util.Easing.easeIn }, { attributes:{opacity: {to:0}}, duration:dur, method:YAHOO.util.Easing.easeOut}, overlay.element );
 
 	fade.handleStartAnimateIn = <span class="reserved">function</span>(type,args,obj) {
 		YAHOO.util.Dom.addClass(obj.overlay.element, <span class="literal">"hide-select"</span>);
@@ -447,7 +455,9 @@ YAHOO.widget.ContainerEffect.SLIDE = <span class="reserved">function</span>(over
 															attributes:{ points: { to:[(clientWidth+25), y] } },
 															duration:dur, 
 															method:YAHOO.util.Easing.easeOut
-														} 
+														},
+														overlay.element,
+														YAHOO.util.Motion
 												);
 
 	slide.handleStartAnimateIn = <span class="reserved">function</span>(type,args,obj) {
@@ -509,10 +519,9 @@ YAHOO.widget.ContainerEffect.SLIDE = <span class="reserved">function</span>(over
 		obj.animateOutCompleteEvent.fire();
 	};	
 
-	slide.init(YAHOO.util.Motion);
+	slide.init();
 	<span class="reserved">return</span> slide;
-}
-</pre>
+}</pre>
 			</div>
 		
 	</div>

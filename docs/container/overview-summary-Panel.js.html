@@ -676,7 +676,6 @@ YAHOO.widget.Panel.<span class="reserved">prototype</span>.buildMask = <span cla
 */</span>
 YAHOO.widget.Panel.<span class="reserved">prototype</span>.hideMask = <span class="reserved">function</span>() {
 	<span class="reserved">if</span> (<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"modal"</span>) &amp;&amp; <span class="reserved">this</span>.mask) {
-		<span class="reserved">this</span>.mask.tabIndex = -1;
 		<span class="reserved">this</span>.mask.style.display = <span class="literal">"none"</span>;
 		<span class="reserved">this</span>.hideMaskEvent.fire();
 		YAHOO.util.Dom.removeClass(document.body, <span class="literal">"masked"</span>);
@@ -691,7 +690,6 @@ YAHOO.widget.Panel.<span class="reserved">prototype</span>.showMask = <span clas
 		YAHOO.util.Dom.addClass(document.body, <span class="literal">"masked"</span>);
 		<span class="reserved">this</span>.sizeMask();
 		<span class="reserved">this</span>.mask.style.display = <span class="literal">"block"</span>;
-		<span class="reserved">this</span>.mask.tabIndex = 0;
 		<span class="reserved">this</span>.showMaskEvent.fire();
 	}
 }
