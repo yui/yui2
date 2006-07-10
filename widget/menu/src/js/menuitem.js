@@ -133,7 +133,12 @@ YAHOO.widget.MenuItem.prototype.DISABLED_CHECKED_IMAGE_ALT_TEXT =
 
 // Private properties
 
-
+/**
+* Reference to the HTMLImageElement used to create the checked
+* indicator for a MenuItem instance.
+* @private
+* @type {HTMLImageElement}
+*/
 YAHOO.widget.MenuItem.prototype._checkImage = null;
 
 
