@@ -72,6 +72,30 @@
         </ul>
     </div> 
 
+
+    <script type="text/javascript">
+
+    //<![CDATA[
+    YAHOO.example.logApp = function() {
+        return {
+            init: function() {
+                if (YAHOO.widget.Logger) {
+                    YAHOO.widget.Logger.disableFirebug();
+                    var reader = new YAHOO.widget.LogReader( "logDiv", 
+                            { newestOnTop: true, height: "400px" } );
+
+                    reader._onClickPauseBtn(null, reader);
+                }
+            }
+        };
+    } (); 
+
+    YAHOO.util.Event.on(window, "load", YAHOO.example.logApp.init);
+    //]]>
+    </script>
+
+    <div id="logDiv"></div>
+
   </div>
 </div>
 <!-- Nav and logger end -->
