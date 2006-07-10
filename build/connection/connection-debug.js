@@ -293,14 +293,17 @@ YAHOO.util.Connect =
         try
         {
             if(timeOut !== undefined){
-            	this._timeOut[o.tId] = window.setTimeout(function(){ oConn.abort(o, callback) }, timeOut);
+            	this._timeOut[o.tId] = window.setTimeout(function(){ oConn.abort(o, callback, true) }, timeOut);
             }
             this._poll[o.tId] = window.setInterval(
                 function(){
 					if(o.conn && o.conn.readyState == 4){
 						window.clearInterval(oConn._poll[o.tId]);
-						oConn._timeOut.splice(o.tId);
 						oConn._poll.splice(o.tId);
+						if(timeOut){
+							oConn._timeOut.splice(o.tId);
+						}
+
 						oConn.handleTransactionResponse(o, callback);
                     }
                 }
@@ -309,8 +312,11 @@ YAHOO.util.Connect =
         catch(e)
         {
             window.clearInterval(oConn._poll[o.tId]);
-			oConn._timeOut.splice(o.tId);
             oConn._poll.splice(o.tId);
+			if(timeOut){
+				oConn._timeOut.splice(o.tId);
+			}
+
             oConn.handleTransactionResponse(o, callback);
         }
     },
@@ -729,12 +735,14 @@ YAHOO.util.Connect =
    * @param {object} o The connection object returned by asyncRequest.
    * @return void
    */
-	abort:function(o, callback)
+	abort:function(o, callback, isTimeout)
 	{
 		if(this.isCallInProgress(o)){
 			window.clearInterval(this._poll[o.tId]);
 			this._poll.splice(o.tId);
-			this._timeOut.splice(o.tId);
+			if(isTimeout){
+				this._timeOut.splice(o.tId);
+			}
 			o.conn.abort();
 
 			this.handleTransactionResponse(o, callback, true);
