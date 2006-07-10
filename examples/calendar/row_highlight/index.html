@@ -86,28 +86,28 @@
 
 		<p>This example shows how to highlight the row of the current hover date, using CSS and some minor JavaScript event changes:</p>
 <textarea name="code" class="JScript" cols="60" rows="1">
-<style> 
-	/* highlight the whole row */
-	.calendar tr:hover td.calcell, .hilite-row .calcell {
-		background-color:yellow;
-	}
+	<style> 
+		/* highlight the whole row */
+		tr.hilite-row td.calcell {
+			background-color:yellow;
+		}
 
-	/* highlight the current cell in the standard highlight color */
-	.calendar tr:hover td:hover, .hilite-row .calcellhover {
-		cursor:pointer;
-		color:#FFF;
-		background-color:#FF9900;
-		border:1px solid #FF9900;
-	}
+		/* highlight the current cell in the standard highlight color */
+		tr.hilite-row td.calcellhover {
+			cursor:pointer;
+			color:#FFF;
+			background-color:#FF9900;
+			border:1px solid #FF9900;
+		}
 
-	/* make sure out of month cells don't highlight too */
-	.calendar tr:hover td.oom, .hilite-row .calcell.oom {
-		cursor:default;
-		color:#999;
-		background-color:#EEE;
-		border:1px solid #E0E0E0;
-	}
-</style>
+		/* make sure out of month cells don't highlight too */
+		tr.hilite-row td.calcell.oom {
+			cursor:default;
+			color:#999;
+			background-color:#EEE;
+			border:1px solid #E0E0E0;
+		}
+	</style>
 
 <script language="javascript">
 	var cal1;
