@@ -1762,33 +1762,36 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
         var oNewItem = this._aListItems[nNewItemIndex];
 
         // Scroll the container if necessary
-        if((YAHOO.util.Dom.getStyle(this._oContainer._oContent,"overflow") == "auto") &&
-        (nNewItemIndex > -1) && (nNewItemIndex < this._nDisplayedItems)) {
+        var oContent = this._oContainer._oContent;
+        var scrollOn = ((YAHOO.util.Dom.getStyle(oContent,"overflow") == "auto") ||
+            (YAHOO.util.Dom.getStyle(oContent,"overflowY") == "auto"));
+        if(scrollOn && (nNewItemIndex > -1) &&
+        (nNewItemIndex < this._nDisplayedItems)) {
             // User is keying down
             if(nKeyCode == 40) {
                 // Bottom of selected item is below scroll area...
-                if((oNewItem.offsetTop+oNewItem.offsetHeight) > (this._oContainer._oContent.scrollTop + this._oContainer._oContent.offsetHeight)) {
+                if((oNewItem.offsetTop+oNewItem.offsetHeight) > (oContent.scrollTop + oContent.offsetHeight)) {
                     // Set bottom of scroll area to bottom of selected item
-                    this._oContainer._oContent.scrollTop = (oNewItem.offsetTop+oNewItem.offsetHeight) - this._oContainer._oContent.offsetHeight;
+                    oContent.scrollTop = (oNewItem.offsetTop+oNewItem.offsetHeight) - oContent.offsetHeight;
                 }
                 // Bottom of selected item is above scroll area...
-                else if((oNewItem.offsetTop+oNewItem.offsetHeight) < this._oContainer._oContent.scrollTop) {
+                else if((oNewItem.offsetTop+oNewItem.offsetHeight) < oContent.scrollTop) {
                     // Set top of selected item to top of scroll area
-                    this._oContainer._oContent.scrollTop = oNewItem.offsetTop;
+                    oContent.scrollTop = oNewItem.offsetTop;
 
                 }
             }
             // User is keying up
             else {
                 // Top of selected item is above scroll area
-                if(oNewItem.offsetTop < this._oContainer._oContent.scrollTop) {
+                if(oNewItem.offsetTop < oContent.scrollTop) {
                     // Set top of scroll area to top of selected item
                     this._oContainer._oContent.scrollTop = oNewItem.offsetTop;
                 }
                 // Top of selected item is below scroll area
-                else if(oNewItem.offsetTop > (this._oContainer._oContent.scrollTop + this._oContainer._oContent.offsetHeight)) {
+                else if(oNewItem.offsetTop > (oContent.scrollTop + oContent.offsetHeight)) {
                     // Set bottom of selected item to bottom of scroll area
-                    this._oContainer._oContent.scrollTop = (oNewItem.offsetTop+oNewItem.offsetHeight) - this._oContainer._oContent.offsetHeight;
+                    this._oContainer._oContent.scrollTop = (oNewItem.offsetTop+oNewItem.offsetHeight) - oContent.offsetHeight;
                 }
             }
         }
