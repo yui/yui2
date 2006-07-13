@@ -1,7 +1,11 @@
-/**
+/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
+Version 0.11.0
+*/
+
+/**
 * @class
 * OverlayManager is used for maintaining the focus status of multiple Overlays.
 * @param {Array}	overlays	Optional. A collection of Overlays to register with the manager.

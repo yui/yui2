@@ -4,6 +4,7 @@ Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 Version 0.11.0
 */
+
 /**
 * @class 
 * Config is a utility used within an object to allow the implementer to maintain a list of local configuration properties and listen for changes to those properties dynamically using CustomEvent. The initial values are also maintained so that the configuration can be reset at any given point to its initial state.
@@ -450,10 +451,9 @@ YAHOO.util.Config.alreadySubscribed = function(evt, fn, obj) {
 		}
 	}
 	return false;
-}/**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
+}
+
+/**
 * @class 
 * Module is a JavaScript representation of the Standard Module Format. Standard Module Format is a simple standard for markup containers where child nodes representing the header, body, and footer of the content are denoted using the CSS classes "hd", "bd", and "ft" respectively. Module is the base class for all other classes in the YUI Container package.
 * @param {string}	el	The element ID representing the Module <em>OR</em>
@@ -1145,10 +1145,9 @@ YAHOO.widget.Module.prototype = {
 */ 
 YAHOO.widget.Module.prototype.toString = function() {
 	return "Module " + this.id;
-}/**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
+}
+
+/**
 * @class Overlay is a Module that is absolutely positioned above the page flow. It has convenience methods for positioning and sizing, as well as options for controlling zIndex and constraining the Overlay's position to the current visible viewport. Overlay also contains a dynamicly generated IFRAME which is placed beneath it for Internet Explorer 6 and 5.x so that it will be properly rendered above SELECT elements.
 * @param {string}	el	The element ID representing the Overlay <em>OR</em>
 * @param {Element}	el	The element representing the Overlay
@@ -1365,7 +1364,7 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 		}	
 
 		if (effect) { // Animate out if showing
-			if (currentVis != "hidden") {
+			if (currentVis == "visible") {
 				this.beforeHideEvent.fire();
 				for (var i=0;i<effectInstances.length;i++) {
 					var e = effectInstances[i];
@@ -1376,7 +1375,7 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 				}
 			}
 		} else { // Simple hide
-			if (currentVis != "hidden") {
+			if (currentVis == "visible") {
 				this.beforeHideEvent.fire();
 				YAHOO.util.Dom.setStyle(this.element, "visibility", "hidden");
 				this.cfg.refireEvent("iframe");
@@ -1878,10 +1877,8 @@ if (YAHOO.widget.Overlay._initialized == null) {
 
 	YAHOO.widget.Overlay._initialized = true;
 }
+
 /**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
 * @class
 * OverlayManager is used for maintaining the focus status of multiple Overlays.
 * @param {Array}	overlays	Optional. A collection of Overlays to register with the manager.
@@ -2135,10 +2132,9 @@ YAHOO.widget.OverlayManager.prototype = {
 		return "OverlayManager";
 	}
 
-}/**
-* Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-* Code licensed under the BSD License:
-* http://developer.yahoo.net/yui/license.txt
+}
+
+/**
 * KeyListener is a utility that provides an easy interface for listening for keydown/keyup events fired against DOM elements.
 * @param {Element}	attachTo	The element or element ID to which the key event should be attached
 * @param {string}	attachTo	The element or element ID to which the key event should be attached
@@ -2276,10 +2272,8 @@ YAHOO.util.KeyListener.prototype.enabledEvent = null;
 * @type YAHOO.util.CustomEvent
 */
 YAHOO.util.KeyListener.prototype.disabledEvent = null;
+
 /**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
 * @class
 * Tooltip is an implementation of Overlay that behaves like an OS tooltip, displaying when the user mouses over a particular element, and disappearing on mouse out.
 * @param {string}	el	The element ID representing the Tooltip <em>OR</em>
@@ -2572,10 +2566,9 @@ YAHOO.widget.Tooltip.prototype.preventOverlap = function(pageX, pageY) {
 */ 
 YAHOO.widget.Tooltip.prototype.toString = function() {
 	return "Tooltip " + this.id;
-}/**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
+}
+
+/**
 * @class
 * Panel is an implementation of Overlay that behaves like an OS window, with a draggable header and an optional close icon at the top right.
 * @param {string}	el	The element ID representing the Panel <em>OR</em>
@@ -3062,10 +3055,9 @@ YAHOO.widget.Panel.prototype.render = function(appendToNode) {
 */ 
 YAHOO.widget.Panel.prototype.toString = function() {
 	return "Panel " + this.id;
-}/**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
+}
+
+/**
 * @class
 * Dialog is an implementation of Panel that can be used to submit form data. Built-in functionality for buttons with event handlers is included, and button sets can be build dynamically, or the preincluded ones for Submit/Cancel and OK/Cancel can be utilized. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
 * @param {string}	el	The element ID representing the Dialog <em>OR</em>
@@ -3557,10 +3549,9 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 */ 
 YAHOO.widget.Dialog.prototype.toString = function() {
 	return "Dialog " + this.id;
-}/**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
+}
+
+/**
 * @class
 * SimpleDialog is a simple implementation of Dialog that can be used to submit a single value. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
 * @param {string}	el	The element ID representing the SimpleDialog <em>OR</em>
@@ -3702,10 +3693,9 @@ YAHOO.widget.SimpleDialog.prototype.configText = function(type,args,obj) {
 */ 
 YAHOO.widget.SimpleDialog.prototype.toString = function() {
 	return "SimpleDialog " + this.id;
-}/**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
+}
+
+/**
 * @class
 * ContainerEffect encapsulates animation transitions that are executed when an Overlay is shown or hidden.
 * @param {Overlay}	overlay		The Overlay that the animation should be associated with

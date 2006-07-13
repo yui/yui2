@@ -522,7 +522,6 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.preventOverlap = <s
 	var mousePoint = new YAHOO.util.Point(pageX, pageY);
 	
 	<span class="reserved">if</span> (elementRegion.contains(mousePoint)) {
-		<span class="reserved">this</span>.logger.log(<span class="literal">"OVERLAP"</span>, <span class="literal">"warn"</span>);
 		<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"y"</span>, (pageY-height-5))
 	}
 }

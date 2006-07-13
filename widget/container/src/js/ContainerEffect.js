@@ -1,7 +1,11 @@
-/**
+/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
+Version 0.11.0
+*/
+
+/**
 * @class
 * ContainerEffect encapsulates animation transitions that are executed when an Overlay is shown or hidden.
 * @param {Overlay}	overlay		The Overlay that the animation should be associated with

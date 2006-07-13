@@ -6,6 +6,7 @@ Version 0.11.0
 */
 
 /**
+* @class 
 * Config is a utility used within an object to allow the implementer to maintain a list of local configuration properties and listen for changes to those properties dynamically using CustomEvent. The initial values are also maintained so that the configuration can be reset at any given point to its initial state.
 * @param {object}	owner	The owner object to which this Config object belongs
 * @constructor
@@ -438,10 +439,9 @@ YAHOO.util.Config.alreadySubscribed = function(evt, fn, obj) {
 		}
 	}
 	return false;
-}/**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
+}
+
+/**
 * @class 
 * Module is a JavaScript representation of the Standard Module Format. Standard Module Format is a simple standard for markup containers where child nodes representing the header, body, and footer of the content are denoted using the CSS classes "hd", "bd", and "ft" respectively. Module is the base class for all other classes in the YUI Container package.
 * @param {string}	el	The element ID representing the Module <em>OR</em>
@@ -1130,10 +1130,9 @@ YAHOO.widget.Module.prototype = {
 */ 
 YAHOO.widget.Module.prototype.toString = function() {
 	return "Module " + this.id;
-}/**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
+}
+
+/**
 * @class Overlay is a Module that is absolutely positioned above the page flow. It has convenience methods for positioning and sizing, as well as options for controlling zIndex and constraining the Overlay's position to the current visible viewport. Overlay also contains a dynamicly generated IFRAME which is placed beneath it for Internet Explorer 6 and 5.x so that it will be properly rendered above SELECT elements.
 * @param {string}	el	The element ID representing the Overlay <em>OR</em>
 * @param {Element}	el	The element representing the Overlay
@@ -1350,7 +1349,7 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 		}	
 
 		if (effect) { // Animate out if showing
-			if (currentVis != "hidden") {
+			if (currentVis == "visible") {
 				this.beforeHideEvent.fire();
 				for (var i=0;i<effectInstances.length;i++) {
 					var e = effectInstances[i];
@@ -1361,7 +1360,7 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 				}
 			}
 		} else { // Simple hide
-			if (currentVis != "hidden") {
+			if (currentVis == "visible") {
 				this.beforeHideEvent.fire();
 				YAHOO.util.Dom.setStyle(this.element, "visibility", "hidden");
 				this.cfg.refireEvent("iframe");
@@ -1858,10 +1857,8 @@ if (YAHOO.widget.Overlay._initialized == null) {
 
 	YAHOO.widget.Overlay._initialized = true;
 }
+
 /**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
 * @class
 * OverlayManager is used for maintaining the focus status of multiple Overlays.
 * @param {Array}	overlays	Optional. A collection of Overlays to register with the manager.
@@ -2115,10 +2112,9 @@ YAHOO.widget.OverlayManager.prototype = {
 		return "OverlayManager";
 	}
 
-}/**
-* Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-* Code licensed under the BSD License:
-* http://developer.yahoo.net/yui/license.txt
+}
+
+/**
 * KeyListener is a utility that provides an easy interface for listening for keydown/keyup events fired against DOM elements.
 * @param {Element}	attachTo	The element or element ID to which the key event should be attached
 * @param {string}	attachTo	The element or element ID to which the key event should be attached

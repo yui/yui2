@@ -1,8 +1,4 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-*/
+
 YAHOO.util.Config=function(owner){if(owner){this.init(owner);}}
 YAHOO.util.Config.prototype={owner:null,configChangedEvent:null,queueInProgress:false,addProperty:function(key,propertyObject){},getConfig:function(){},getProperty:function(key){},resetProperty:function(key){},setProperty:function(key,value,silent){},queueProperty:function(key,value){},refireEvent:function(key){},applyConfig:function(userConfig,init){},refresh:function(){},fireQueue:function(){},subscribeToConfigEvent:function(key,handler,obj,override){},unsubscribeFromConfigEvent:function(key,handler,obj){},checkBoolean:function(val){if(typeof val=='boolean'){return true;}else{return false;}},checkNumber:function(val){if(isNaN(val)){return false;}else{return true;}}}
 YAHOO.util.Config.prototype.init=function(owner){this.owner=owner;this.configChangedEvent=new YAHOO.util.CustomEvent("configChanged");this.queueInProgress=false;var config={};var initialConfig={};var eventQueue=[];var fireEvent=function(key,value){key=key.toLowerCase();var property=config[key];if(typeof property!='undefined'&&property.event){property.event.fire(value);}}
@@ -79,8 +75,8 @@ YAHOO.widget.Overlay.prototype.configVisible=function(type,args,obj){var visible
 var isMacGecko=(this.platform=="mac"&&this.browser=="gecko");if(visible){if(isMacGecko){this.showMacGeckoScrollbars();}
 if(effect){if(visible){if(currentVis!="visible"){this.beforeShowEvent.fire();for(var i=0;i<effectInstances.length;i++){var e=effectInstances[i];if(i==0&&!YAHOO.util.Config.alreadySubscribed(e.animateInCompleteEvent,this.showEvent.fire,this.showEvent)){e.animateInCompleteEvent.subscribe(this.showEvent.fire,this.showEvent,true);}
 e.animateIn();}}}}else{if(currentVis!="visible"){this.beforeShowEvent.fire();YAHOO.util.Dom.setStyle(this.element,"visibility","visible");this.cfg.refireEvent("iframe");this.showEvent.fire();}}}else{if(isMacGecko){this.hideMacGeckoScrollbars();}
-if(effect){if(currentVis!="hidden"){this.beforeHideEvent.fire();for(var i=0;i<effectInstances.length;i++){var e=effectInstances[i];if(i==0&&!YAHOO.util.Config.alreadySubscribed(e.animateOutCompleteEvent,this.hideEvent.fire,this.hideEvent)){e.animateOutCompleteEvent.subscribe(this.hideEvent.fire,this.hideEvent,true);}
-e.animateOut();}}}else{if(currentVis!="hidden"){this.beforeHideEvent.fire();YAHOO.util.Dom.setStyle(this.element,"visibility","hidden");this.cfg.refireEvent("iframe");this.hideEvent.fire();}}}}
+if(effect){if(currentVis=="visible"){this.beforeHideEvent.fire();for(var i=0;i<effectInstances.length;i++){var e=effectInstances[i];if(i==0&&!YAHOO.util.Config.alreadySubscribed(e.animateOutCompleteEvent,this.hideEvent.fire,this.hideEvent)){e.animateOutCompleteEvent.subscribe(this.hideEvent.fire,this.hideEvent,true);}
+e.animateOut();}}}else{if(currentVis=="visible"){this.beforeHideEvent.fire();YAHOO.util.Dom.setStyle(this.element,"visibility","hidden");this.cfg.refireEvent("iframe");this.hideEvent.fire();}}}}
 YAHOO.widget.Overlay.prototype.doCenterOnDOMEvent=function(){if(this.cfg.getProperty("visible")){this.center();}}
 YAHOO.widget.Overlay.prototype.configFixedCenter=function(type,args,obj){var val=args[0];if(val){this.center();if(!YAHOO.util.Config.alreadySubscribed(this.beforeShowEvent,this.center,this)){this.beforeShowEvent.subscribe(this.center,this,true);}
 if(!YAHOO.util.Config.alreadySubscribed(YAHOO.widget.Overlay.windowResizeEvent,this.doCenterOnDOMEvent,this)){YAHOO.widget.Overlay.windowResizeEvent.subscribe(this.doCenterOnDOMEvent,this,true);}
@@ -173,7 +169,7 @@ var me=this;return setTimeout(function(){if(me._tempTitle){me.setBody(me._tempTi
 me.moveTo(me.pageX,me.pageY+yOffset);if(me.cfg.getProperty("preventoverlap")){me.preventOverlap(me.pageX,me.pageY);}
 YAHOO.util.Event.removeListener(context,"mousemove",me.onContextMouseMove);me.show();me.hideProcId=me.doHide();},this.cfg.getProperty("showdelay"));}
 YAHOO.widget.Tooltip.prototype.doHide=function(){var me=this;return setTimeout(function(){me.hide();},this.cfg.getProperty("autodismissdelay"));}
-YAHOO.widget.Tooltip.prototype.preventOverlap=function(pageX,pageY){var height=this.element.offsetHeight;var elementRegion=YAHOO.util.Dom.getRegion(this.element);elementRegion.top-=5;elementRegion.left-=5;elementRegion.right+=5;elementRegion.bottom+=5;var mousePoint=new YAHOO.util.Point(pageX,pageY);if(elementRegion.contains(mousePoint)){this.logger.log("OVERLAP","warn");this.cfg.setProperty("y",(pageY-height-5))}}
+YAHOO.widget.Tooltip.prototype.preventOverlap=function(pageX,pageY){var height=this.element.offsetHeight;var elementRegion=YAHOO.util.Dom.getRegion(this.element);elementRegion.top-=5;elementRegion.left-=5;elementRegion.right+=5;elementRegion.bottom+=5;var mousePoint=new YAHOO.util.Point(pageX,pageY);if(elementRegion.contains(mousePoint)){this.cfg.setProperty("y",(pageY-height-5))}}
 YAHOO.widget.Tooltip.prototype.toString=function(){return"Tooltip "+this.id;}
 YAHOO.widget.Panel=function(el,userConfig){YAHOO.widget.Panel.superclass.constructor.call(this,el,userConfig);}
 YAHOO.extend(YAHOO.widget.Panel,YAHOO.widget.Overlay);YAHOO.widget.Panel.CSS_PANEL="panel";YAHOO.widget.Panel.CSS_PANEL_CONTAINER="panel-container";YAHOO.widget.Panel.prototype.showMaskEvent=null;YAHOO.widget.Panel.prototype.hideMaskEvent=null;YAHOO.widget.Panel.prototype.init=function(el,userConfig){YAHOO.widget.Panel.superclass.init.call(this,el);this.beforeInitEvent.fire(YAHOO.widget.Panel);YAHOO.util.Dom.addClass(this.element,YAHOO.widget.Panel.CSS_PANEL);this.buildWrapper();if(userConfig){this.cfg.applyConfig(userConfig,true);}

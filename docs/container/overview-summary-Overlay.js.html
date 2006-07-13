@@ -472,7 +472,7 @@ YAHOO.widget.Overlay.<span class="reserved">prototype</span>.configVisible = <sp
 		}	
 
 		<span class="reserved">if</span> (effect) { <span class="comment">// Animate out if showing</span>
-			<span class="reserved">if</span> (currentVis != <span class="literal">"hidden"</span>) {
+			<span class="reserved">if</span> (currentVis == <span class="literal">"visible"</span>) {
 				<span class="reserved">this</span>.beforeHideEvent.fire();
 				<span class="reserved">for</span> (var i=0;i&lt;effectInstances.length;i++) {
 					var e = effectInstances[i];
@@ -483,7 +483,7 @@ YAHOO.widget.Overlay.<span class="reserved">prototype</span>.configVisible = <sp
 				}
 			}
 		} <span class="reserved">else</span> { <span class="comment">// Simple hide</span>
-			<span class="reserved">if</span> (currentVis != <span class="literal">"hidden"</span>) {
+			<span class="reserved">if</span> (currentVis == <span class="literal">"visible"</span>) {
 				<span class="reserved">this</span>.beforeHideEvent.fire();
 				YAHOO.util.Dom.setStyle(<span class="reserved">this</span>.element, <span class="literal">"visibility"</span>, <span class="literal">"hidden"</span>);
 				<span class="reserved">this</span>.cfg.refireEvent(<span class="literal">"iframe"</span>);
