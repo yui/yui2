@@ -609,7 +609,7 @@ YAHOO.util.Bezier = new function()
  * Additional optional members are "from" (defaults to current value), "units" (defaults to "px").
  * All attribute names use camelCase.
  * @param {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
- * @param {Function} method (optional, defaults to Y.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a Y.Easing method)
+ * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
  */
 (function() {
    YAHOO.util.ColorAnim = function(el, attributes, duration,  method) {
@@ -621,13 +621,13 @@ YAHOO.util.Bezier = new function()
    // shorthand
    var Y = YAHOO.util;
    var superclass = Y.ColorAnim.superclass;
-   var prototype = Y.ColorAnim.prototype;
+   var proto = Y.ColorAnim.prototype;
    
    /**
     * toString method
     * @return {String} string represenation of anim obj
     */
-   prototype.toString = function() {
+   proto.toString = function() {
       var el = this.getEl();
       var id = el.id || el.tagName;
       return ("ColorAnim " + id);
@@ -637,17 +637,17 @@ YAHOO.util.Bezier = new function()
     * Only certain attributes should be treated as colors.
     * @type Object
     */
-   prototype.patterns.color = /color$/i;
-   prototype.patterns.rgb    = /^rgb\(([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\)$/i;
-   prototype.patterns.hex    = /^#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/i;
-   prototype.patterns.hex3   = /^#?([0-9A-F]{1})([0-9A-F]{1})([0-9A-F]{1})$/i;
+   proto.patterns.color = /color$/i;
+   proto.patterns.rgb    = /^rgb\(([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\)$/i;
+   proto.patterns.hex    = /^#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/i;
+   proto.patterns.hex3   = /^#?([0-9A-F]{1})([0-9A-F]{1})([0-9A-F]{1})$/i;
    
    /**
     * Attempts to parse the given string and return a 3-tuple.
     * @param {String} s The string to parse.
     * @return {Array} The 3-tuple of rgb values.
     */
-   prototype.parseColor = function(s) {
+   proto.parseColor = function(s) {
       if (s.length == 3) { return s; }
    
       var c = this.patterns.hex.exec(s);
@@ -673,7 +673,7 @@ YAHOO.util.Bezier = new function()
     * @param {String} attr The name of the attribute.
     * @return {Number} val The current value of the attribute.
     */
-   prototype.getAttribute = function(attr) {
+   proto.getAttribute = function(attr) {
       var el = this.getEl();
       if (  this.patterns.color.test(attr) ) {
          var val = YAHOO.util.Dom.getStyle(el, attr);
@@ -704,7 +704,7 @@ YAHOO.util.Bezier = new function()
     * @param {Number} end  The value this attribute should end at for this animation.
     * @return {Number} The Value to be applied to the attribute.
     */
-   prototype.doMethod = function(attr, start, end) {
+   proto.doMethod = function(attr, start, end) {
       var val;
    
       if ( this.patterns.color.test(attr) ) {
@@ -728,7 +728,7 @@ YAHOO.util.Bezier = new function()
     * @param {Object} attr The attribute object
     * @private 
     */
-   prototype.setRuntimeAttribute = function(attr) {
+   proto.setRuntimeAttribute = function(attr) {
       superclass.setRuntimeAttribute.call(this, attr);
       
       if ( this.patterns.color.test(attr) ) {
@@ -1030,19 +1030,19 @@ Version: 0.10.0
    // shorthand
    var Y = YAHOO.util;
    var superclass = Y.Motion.superclass;
-   var prototype = Y.Motion.prototype;
+   var proto = Y.Motion.prototype;
 
    /**
     * toString method
     * @return {String} string represenation of anim obj
     */
-   prototype.toString = function() {
+   proto.toString = function() {
       var el = this.getEl();
       var id = el.id || el.tagName;
       return ("Motion " + id);
    };
    
-   prototype.patterns.points = /^points$/i;
+   proto.patterns.points = /^points$/i;
    
    /**
     * Applies a value to an attribute
@@ -1050,7 +1050,7 @@ Version: 0.10.0
     * @param {Number} val The value to be applied to the attribute.
     * @param {String} unit The unit ('px', '%', etc.) of the value.
     */
-   prototype.setAttribute = function(attr, val, unit) {
+   proto.setAttribute = function(attr, val, unit) {
       if (  this.patterns.points.test(attr) ) {
          unit = unit || 'px';
          superclass.setAttribute.call(this, 'left', val[0], unit);
@@ -1065,7 +1065,7 @@ Version: 0.10.0
     * @param {String} attr The attribute being set.
     * @param {Number} val The default value to be applied to the attribute.
     */
-   prototype.getAttribute = function(attr) {
+   proto.getAttribute = function(attr) {
       if (  this.patterns.points.test(attr) ) {
          var val = [
             superclass.getAttribute.call(this, 'left'),
@@ -1085,7 +1085,7 @@ Version: 0.10.0
     * @param {Number} end  The value this attribute should end at for this animation.
     * @return {Number} The Value to be applied to the attribute.
     */
-   prototype.doMethod = function(attr, start, end) {
+   proto.doMethod = function(attr, start, end) {
       var val = null;
 
       if ( this.patterns.points.test(attr) ) {
@@ -1103,7 +1103,7 @@ Version: 0.10.0
     * @param {Object} attr The attribute object
     * @private 
     */
-   prototype.setRuntimeAttribute = function(attr) {
+   proto.setRuntimeAttribute = function(attr) {
       if ( this.patterns.points.test(attr) ) {
          var el = this.getEl();
          var attributes = this.attributes;
@@ -1213,13 +1213,13 @@ Version: 0.10.0
    // shorthand
    var Y = YAHOO.util;
    var superclass = Y.Scroll.superclass;
-   var prototype = Y.Scroll.prototype;
+   var proto = Y.Scroll.prototype;
 
    /**
     * toString method
     * @return {String} string represenation of anim obj
     */
-   prototype.toString = function() {
+   proto.toString = function() {
       var el = this.getEl();
       var id = el.id || el.tagName;
       return ("Scroll " + id);
@@ -1232,7 +1232,7 @@ Version: 0.10.0
     * @param {Number} end  The value this attribute should end at for this animation.
     * @return {Number} The Value to be applied to the attribute.
     */
-   prototype.doMethod = function(attr, start, end) {
+   proto.doMethod = function(attr, start, end) {
       var val = null;
    
       if (attr == 'scroll') {
@@ -1252,7 +1252,7 @@ Version: 0.10.0
     * @param {String} attr The name of the attribute.
     * @return {Number} val The current value of the attribute.
     */
-   prototype.getAttribute = function(attr) {
+   proto.getAttribute = function(attr) {
       var val = null;
       var el = this.getEl();
       
@@ -1271,7 +1271,7 @@ Version: 0.10.0
     * @param {Number} val The value to be applied to the attribute.
     * @param {String} unit The unit ('px', '%', etc.) of the value.
     */
-   prototype.setAttribute = function(attr, val, unit) {
+   proto.setAttribute = function(attr, val, unit) {
       var el = this.getEl();
       
       if (attr == 'scroll') {
