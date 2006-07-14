@@ -36,19 +36,19 @@ Version: 0.10.0
    // shorthand
    var Y = YAHOO.util;
    var superclass = Y.Motion.superclass;
-   var prototype = Y.Motion.prototype;
+   var proto = Y.Motion.prototype;
 
    /**
     * toString method
     * @return {String} string represenation of anim obj
     */
-   prototype.toString = function() {
+   proto.toString = function() {
       var el = this.getEl();
       var id = el.id || el.tagName;
       return ("Motion " + id);
    };
    
-   prototype.patterns.points = /^points$/i;
+   proto.patterns.points = /^points$/i;
    
    /**
     * Applies a value to an attribute
@@ -56,7 +56,7 @@ Version: 0.10.0
     * @param {Number} val The value to be applied to the attribute.
     * @param {String} unit The unit ('px', '%', etc.) of the value.
     */
-   prototype.setAttribute = function(attr, val, unit) {
+   proto.setAttribute = function(attr, val, unit) {
       if (  this.patterns.points.test(attr) ) {
          unit = unit || 'px';
          superclass.setAttribute.call(this, 'left', val[0], unit);
@@ -71,7 +71,7 @@ Version: 0.10.0
     * @param {String} attr The attribute being set.
     * @param {Number} val The default value to be applied to the attribute.
     */
-   prototype.getAttribute = function(attr) {
+   proto.getAttribute = function(attr) {
       if (  this.patterns.points.test(attr) ) {
          var val = [
             superclass.getAttribute.call(this, 'left'),
@@ -91,7 +91,7 @@ Version: 0.10.0
     * @param {Number} end  The value this attribute should end at for this animation.
     * @return {Number} The Value to be applied to the attribute.
     */
-   prototype.doMethod = function(attr, start, end) {
+   proto.doMethod = function(attr, start, end) {
       var val = null;
 
       if ( this.patterns.points.test(attr) ) {
@@ -109,7 +109,7 @@ Version: 0.10.0
     * @param {Object} attr The attribute object
     * @private 
     */
-   prototype.setRuntimeAttribute = function(attr) {
+   proto.setRuntimeAttribute = function(attr) {
       if ( this.patterns.points.test(attr) ) {
          var el = this.getEl();
          var attributes = this.attributes;
