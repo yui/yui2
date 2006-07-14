@@ -1,5 +1,9 @@
 Animation Release Notes
 
+*** version 0.11.1 ***
+
+* changed "prototype" shorthand to "proto" (workaround firefox < 1.5 scoping bug)
+
 *** version 0.11.0 ***
 
 * ColorAnim subclass added
