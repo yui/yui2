@@ -2,6 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
+Version: 0.11.1
 */
 
 /**
@@ -64,6 +65,8 @@ YAHOO.util.Dom = function() {
        * @return {HTMLElement/Array} A DOM reference to an HTML element or an array of HTMLElements.
        */
       get: function(el) {
+         if (!el) { return null; } // nothing to work with
+         
          if (typeof el != 'string' && !(el instanceof Array) ) { // assuming HTMLElement or HTMLCollection, so pass back as is
             return el;
          }
@@ -178,7 +181,7 @@ YAHOO.util.Dom = function() {
          var f = function(el) {
    
          // has to be part of document to have pageXY
-            if (el.parentNode === null || this.getStyle(el, 'display') == 'none') {
+            if (el.offsetParent === null || this.getStyle(el, 'display') == 'none') {
                return false;
             }
             
@@ -189,11 +192,13 @@ YAHOO.util.Dom = function() {
             if (el.getBoundingClientRect) { // IE
                box = el.getBoundingClientRect();
                var doc = document;
-               if ( !this.inDocument(el) ) {// might be in a frame, need to get its scroll
-                  var doc = parent.document;
-                  while ( doc && !this.isAncestor(doc.documentElement, el) ) {
-                     doc = parent.document;
+               if ( !this.inDocument(el) && parent.document != document) {// might be in a frame, need to get its scroll
+                  doc = parent.document;
+
+                  if ( !this.isAncestor(doc.documentElement, el) ) {
+                     return false;                 
                   }
+
                }
 
                var scrollTop = Math.max(doc.documentElement.scrollTop, doc.body.scrollTop);
@@ -433,6 +438,11 @@ YAHOO.util.Dom = function() {
          var re = new RegExp('(?:^|\\s+)' + oldClassName + '(?:\\s+|$)', 'g');
 
          var f = function(el) {
+         
+            if ( !this.hasClass(el, oldClassName) ) {
+               this.addClass(el, newClassName); // just add it if nothing to replace
+               return; // note return
+            }
          
             el['className'] = el['className'].replace(re, ' ' + newClassName + ' ');
 
@@ -699,12 +709,6 @@ YAHOO.util.Dom = function() {
       }
    };
 }();
-
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-*/
 
 /**
  * @class A region is a representation of an object on a grid.  It is defined

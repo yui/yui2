@@ -1,5 +1,13 @@
 Dom Release Notes
 
+*** version 0.11.1 ***
+
+* return null if el is null for get()
+* test offsetParent rather than parentNode for getXY()
+* limit depth of parent.document crawl for IE getXY() to 1
+* if no oldClassName to replace, just addClass for replaceClass()
+
+
 *** version 0.11.0 ***
 * Work around Opera 9 broken currentStyle
 * Removed timeout wrapper from setXY retry
