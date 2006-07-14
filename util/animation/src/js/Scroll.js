@@ -36,13 +36,13 @@ Version: 0.10.0
    // shorthand
    var Y = YAHOO.util;
    var superclass = Y.Scroll.superclass;
-   var prototype = Y.Scroll.prototype;
+   var proto = Y.Scroll.prototype;
 
    /**
     * toString method
     * @return {String} string represenation of anim obj
     */
-   prototype.toString = function() {
+   proto.toString = function() {
       var el = this.getEl();
       var id = el.id || el.tagName;
       return ("Scroll " + id);
@@ -55,7 +55,7 @@ Version: 0.10.0
     * @param {Number} end  The value this attribute should end at for this animation.
     * @return {Number} The Value to be applied to the attribute.
     */
-   prototype.doMethod = function(attr, start, end) {
+   proto.doMethod = function(attr, start, end) {
       var val = null;
    
       if (attr == 'scroll') {
@@ -75,7 +75,7 @@ Version: 0.10.0
     * @param {String} attr The name of the attribute.
     * @return {Number} val The current value of the attribute.
     */
-   prototype.getAttribute = function(attr) {
+   proto.getAttribute = function(attr) {
       var val = null;
       var el = this.getEl();
       
@@ -94,7 +94,7 @@ Version: 0.10.0
     * @param {Number} val The value to be applied to the attribute.
     * @param {String} unit The unit ('px', '%', etc.) of the value.
     */
-   prototype.setAttribute = function(attr, val, unit) {
+   proto.setAttribute = function(attr, val, unit) {
       var el = this.getEl();
       
       if (attr == 'scroll') {
