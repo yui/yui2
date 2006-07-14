@@ -2,9 +2,8 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version: 0.10.0
+Version: 0.11.1
 */
-
 /**
  *
  * Base class for animated DOM objects.
@@ -393,13 +392,6 @@ YAHOO.util.Anim.prototype = {
    }
 };
 
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version: 0.10.0
-*/
-
 /**
  * @class Handles animation queueing and threading.
  * Used by Anim and subclasses.
@@ -548,13 +540,6 @@ YAHOO.util.AnimMgr = new function() {
       }
    };
 };
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version: 0.10.0
-*/
-
 /**
  *
  * @class Used to calculate Bezier splines for any number of control points.
@@ -992,13 +977,6 @@ YAHOO.util.Easing = {
    }
 };
 
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version: 0.10.0
-*/
-
 /**
  * @class Anim subclass for moving elements along a path defined by the "points" member of "attributes".  All "points" are arrays with x, y coordinates.
  * <p>Usage: <code>var myAnim = new YAHOO.util.Motion(el, { points: { to: [800, 800] } }, 1, YAHOO.util.Easing.easeOut);</code></p>
@@ -1175,13 +1153,6 @@ Version: 0.10.0
       return (typeof prop !== 'undefined');
    };
 })();
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version: 0.10.0
-*/
-
 /**
  * @class Anim subclass for scrolling elements to a position defined by the "scroll" member of "attributes".  All "scroll" members are arrays with x, y scroll positions.
  * <p>Usage: <code>var myAnim = new YAHOO.util.Scroll(el, { scroll: { to: [0, 800] } }, 1, YAHOO.util.Easing.easeOut);</code></p>
