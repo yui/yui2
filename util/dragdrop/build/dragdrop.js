@@ -2,7 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.                                                                                                    
 Code licensed under the BSD License:                                                                                                                    
 http://developer.yahoo.net/yui/license.txt                                                                                                              
-version: 0.11.0                                                                                                                                         
+version: 0.11.1                                                                                                                                         
 */ 
 
 /**
@@ -559,8 +559,6 @@ YAHOO.util.DragDrop.prototype = {
         this.lastPageY = p[1];
 
 
-        this.deltaSetXY = null;
-
         this.setStartPosition(p);
     },
 
@@ -571,6 +569,8 @@ YAHOO.util.DragDrop.prototype = {
      * @private
      */
     setStartPosition: function(pos) {
+        this.deltaSetXY = null;
+
         var p = pos || YAHOO.util.Dom.getXY( this.getEl() );
 
         this.startPageX = p[0];
