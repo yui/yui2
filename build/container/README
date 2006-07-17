@@ -4,6 +4,7 @@ Container Release Notes
 
 	- Tooltip: Removed incorrect logger statement
 	- Dialog: Corrected logic that was causing browser lockup in IE for SimpleDialog
+	- Dialog: Fixed "firstButtom" typo
 
 *** version 0.11.0 ***
 

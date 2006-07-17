@@ -3326,7 +3326,7 @@ YAHOO.widget.Dialog.prototype.configButtons = function(type, args, obj) {
 			}
 
 			this.buttonSpan = null;
-			this.firstButtom = null;
+			this.firstButton = null;
 			this.lastButton = null;
 			this.defaultHtmlButton = null;
 		}

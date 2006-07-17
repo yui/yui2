@@ -234,7 +234,7 @@ YAHOO.widget.Dialog.prototype.configButtons=function(type,args,obj){var buttons=
 htmlButton.appendChild(document.createTextNode(button.text));YAHOO.util.Event.addListener(htmlButton,"click",button.handler,this,true);this.buttonSpan.appendChild(htmlButton);button.htmlButton=htmlButton;if(b==0){this.firstButton=button.htmlButton;}
 if(b==(buttons.length-1)){this.lastButton=button.htmlButton;}}
 this.setFooter(this.buttonSpan);this.cfg.refireEvent("iframe");this.cfg.refireEvent("underlay");}else{if(this.buttonSpan){if(this.buttonSpan.parentNode){this.buttonSpan.parentNode.removeChild(this.buttonSpan);}
-this.buttonSpan=null;this.firstButtom=null;this.lastButton=null;this.defaultHtmlButton=null;}}}
+this.buttonSpan=null;this.firstButton=null;this.lastButton=null;this.defaultHtmlButton=null;}}}
 YAHOO.widget.Dialog.prototype.configOnSuccess=function(type,args,obj){};YAHOO.widget.Dialog.prototype.configOnFailure=function(type,args,obj){};YAHOO.widget.Dialog.prototype.doSubmit=function(){};YAHOO.widget.Dialog.prototype.focusFirst=function(type,args,obj){if(args){var e=args[1];if(e){YAHOO.util.Event.stopEvent(e);}}
 if(this.firstFormElement){this.firstFormElement.focus();}else{this.focusDefaultButton();}}
 YAHOO.widget.Dialog.prototype.focusLast=function(type,args,obj){if(args){var e=args[1];if(e){YAHOO.util.Event.stopEvent(e);}}
