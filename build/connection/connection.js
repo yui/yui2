@@ -425,7 +425,7 @@ YAHOO.util.Connect =
 			for(var i=0; i < header.length; i++){
 				var delimitPos = header[i].indexOf(':');
 				if(delimitPos != -1){
-					headerObj[header[i].substring(0,delimitPos)] = header[i].substring(delimitPos+1);
+					headerObj[header[i].substring(0,delimitPos)] = header[i].substring(delimitPos + 2);
 				}
 			}
 		}
@@ -697,11 +697,13 @@ YAHOO.util.Connect =
 				argument: callback.argument
 			}
 
-			if(callback.upload && !callback.scope){
-				callback.upload(oResponse);
-			}
-			else{
-				callback.upload.apply(callback.scope, [oResponse]);
+			if(callback.upload){
+				if(!callback.scope){
+					callback.upload(oResponse);
+				}
+				else{
+					callback.upload.apply(callback.scope, [oResponse]);
+				}
 			}
 
 			YAHOO.util.Event.removeListener("ioFrame", "load", uploadCallback);

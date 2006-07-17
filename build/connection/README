@@ -1,5 +1,10 @@
 Connection Manager Release Notes
 
+*** version 0.11.1 ***
+
+* uploadFile() now verifies the existence of callback.upload before invoking
+callback, with or without object scope.
+
 *** version 0.11.0 ***
 
 * Each transactions can be defined with a timeout threshold, in milliseconds,
@@ -73,6 +78,7 @@ and returns false if the connection object is no longer available.
 *** version 0.9.0 ***
 
 * Initial release
+
 
 
 

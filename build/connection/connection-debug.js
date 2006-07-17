@@ -714,13 +714,15 @@ YAHOO.util.Connect =
 				argument: callback.argument
 			}
 
-			if(callback.upload && !callback.scope){
-				callback.upload(oResponse);
-				YAHOO.log('Upload callback.', 'info', 'Connection');
-			}
-			else{
-				callback.upload.apply(callback.scope, [oResponse]);
-				YAHOO.log('Upload callback with object scope.', 'info', 'Connection');
+			if(callback.upload){
+				if(!callback.scope){
+					callback.upload(oResponse);
+					YAHOO.log('Upload callback.', 'info', 'Connection');
+				}
+				else{
+					callback.upload.apply(callback.scope, [oResponse]);
+					YAHOO.log('Upload callback with object scope.', 'info', 'Connection');
+				}
 			}
 
 			YAHOO.util.Event.removeListener("ioFrame", "load", uploadCallback);

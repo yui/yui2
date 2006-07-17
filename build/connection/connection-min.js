@@ -48,7 +48,7 @@ break;default:responseObject=this.createResponseObject(o,callback.argument);if(c
 else{callback.failure.apply(callback.scope,[responseObject]);}}}}
 this.releaseObject(o);},createResponseObject:function(o,callbackArg)
 {var obj={};var headerObj={};try
-{var headerStr=o.conn.getAllResponseHeaders();var header=headerStr.split('\n');for(var i=0;i<header.length;i++){var delimitPos=header[i].indexOf(':');if(delimitPos!=-1){headerObj[header[i].substring(0,delimitPos)]=header[i].substring(delimitPos+1);}}}
+{var headerStr=o.conn.getAllResponseHeaders();var header=headerStr.split('\n');for(var i=0;i<header.length;i++){var delimitPos=header[i].indexOf(':');if(delimitPos!=-1){headerObj[header[i].substring(0,delimitPos)]=header[i].substring(delimitPos+2);}}}
 catch(e){}
 obj.tId=o.tId;obj.status=o.conn.status;obj.statusText=o.conn.statusText;obj.getResponseHeader=headerObj;obj.getAllResponseHeaders=headerStr;obj.responseText=o.conn.responseText;obj.responseXML=o.conn.responseXML;if(typeof callbackArg!==undefined){obj.argument=callbackArg;}
 return obj;},createExceptionObject:function(tId,callbackArg,isAbort)
@@ -75,8 +75,8 @@ this._isFormSubmit=true;this._sFormData=this._sFormData.substr(0,this._sFormData
 else{var io=document.createElement('IFRAME');io.id='ioFrame';io.name='ioFrame';}
 io.style.position='absolute';io.style.top='-1000px';io.style.left='-1000px';document.body.appendChild(io);},uploadFile:function(id,callback,uri){this._formNode.action=uri;this._formNode.enctype='multipart/form-data';this._formNode.method='POST';this._formNode.target='ioFrame';this._formNode.submit();this._formNode=null;this._isFileUpload=false;this._isFormSubmit=false;var uploadCallback=function()
 {var oResponse={tId:id,responseText:document.getElementById("ioFrame").contentWindow.document.body.innerHTML,argument:callback.argument}
-if(callback.upload&&!callback.scope){callback.upload(oResponse);}
-else{callback.upload.apply(callback.scope,[oResponse]);}
+if(callback.upload){if(!callback.scope){callback.upload(oResponse);}
+else{callback.upload.apply(callback.scope,[oResponse]);}}
 YAHOO.util.Event.removeListener("ioFrame","load",uploadCallback);window.ioFrame.location.replace('#');setTimeout("document.body.removeChild(document.getElementById('ioFrame'))",100);};YAHOO.util.Event.addListener("ioFrame","load",uploadCallback);},abort:function(o,callback,isTimeout)
 {if(this.isCallInProgress(o)){window.clearInterval(this._poll[o.tId]);this._poll.splice(o.tId);if(isTimeout){this._timeOut.splice(o.tId);}
 o.conn.abort();this.handleTransactionResponse(o,callback,true);return true;}
