@@ -3,7 +3,7 @@ Drag and Drop Release Notes
 0.11.1
 
    * Fixes an issue where the setXY cache could get out of sync if the element's
-     offsetParent is changed during in onDragDrop.
+     offsetParent is changed during onDragDrop.
 
 0.11.0
 
