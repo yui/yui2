@@ -1,9 +1,9 @@
 
 /*                                                                                                                                                      
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.                                                                                                    
-Code licensed under the BSD License:                                                                                                                    
-http://developer.yahoo.net/yui/license.txt                                                                                                              
-version: 0.11.1                                                                                                                                         
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 0.11.2
 */ 
 
 /**
@@ -570,9 +570,8 @@ YAHOO.util.DragDrop.prototype = {
      * @private
      */
     setStartPosition: function(pos) {
-        this.deltaSetXY = null;
-
         var p = pos || YAHOO.util.Dom.getXY( this.getEl() );
+        this.deltaSetXY = null;
 
         this.startPageX = p[0];
         this.startPageY = p[1];
@@ -1544,7 +1543,7 @@ if (!YAHOO.util.DragDropMgr) {
          */
         this.handleMouseMove = function(e) {
             if (! this.dragCurrent) {
-                return false;
+                return true;
             }
 
             // var button = e.which || e.button;

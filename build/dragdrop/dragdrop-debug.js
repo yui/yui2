@@ -1,9 +1,9 @@
 
 /*                                                                                                                                                      
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.                                                                                                    
-Code licensed under the BSD License:                                                                                                                    
-http://developer.yahoo.net/yui/license.txt                                                                                                              
-version: 0.11.1                                                                                                                                         
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 0.11.2
 */ 
 
 /**
@@ -477,7 +477,8 @@ YAHOO.util.DragDrop.prototype = {
         YAHOO.util.Event.onAvailable(id, this.handleOnAvailable, this, true);
 
         // create a logger instance
-        this.logger = new YAHOO.widget.LogWriter(this.toString());
+        this.logger = (YAHOO.widget.LogWriter) ? 
+                new YAHOO.widget.LogWriter(this.toString()) : YAHOO;
 
         // the linked element is the element that gets dragged by default
         this.setDragElId(id); 
@@ -567,6 +568,7 @@ YAHOO.util.DragDrop.prototype = {
         this.logger.log(this.id + " inital position: " + this.initPageX + 
                 ", " + this.initPageY);
 
+
         this.setStartPosition(p);
     },
 
@@ -577,9 +579,8 @@ YAHOO.util.DragDrop.prototype = {
      * @private
      */
     setStartPosition: function(pos) {
-        this.deltaSetXY = null;
-
         var p = pos || YAHOO.util.Dom.getXY( this.getEl() );
+        this.deltaSetXY = null;
 
         this.startPageX = p[0];
         this.startPageY = p[1];
@@ -1151,7 +1152,8 @@ if (!YAHOO.util.DragDropMgr) {
          * @private
          */
         this.init = function() {
-            this.logger = this.logger || new YAHOO.widget.LogWriter("DragDropMgr");
+            this.logger = (YAHOO.widget.LogWriter) ?
+                new YAHOO.widget.LogWriter("DragDropMgr") : YAHOO;
             this.initialized = true;
         };
 
@@ -1593,8 +1595,8 @@ if (!YAHOO.util.DragDropMgr) {
          */
         this.handleMouseMove = function(e) {
             if (! this.dragCurrent) {
-                // this.logger.log("no current drag obj");
-                return false;
+                this.logger.log("no current drag obj");
+                return true;
             }
 
             // var button = e.which || e.button;

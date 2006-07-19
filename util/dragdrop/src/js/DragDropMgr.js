@@ -107,7 +107,8 @@ if (!YAHOO.util.DragDropMgr) {
          * @private
          */
         this.init = function() {
-            this.logger = this.logger || new YAHOO.widget.LogWriter("DragDropMgr");
+            this.logger = (YAHOO.widget.LogWriter) ?
+                new YAHOO.widget.LogWriter("DragDropMgr") : YAHOO;
             this.initialized = true;
         };
 
@@ -549,8 +550,8 @@ if (!YAHOO.util.DragDropMgr) {
          */
         this.handleMouseMove = function(e) {
             if (! this.dragCurrent) {
-                // this.logger.log("no current drag obj");
-                return false;
+                this.logger.log("no current drag obj");
+                return true;
             }
 
             // var button = e.which || e.button;

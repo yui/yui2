@@ -1,5 +1,10 @@
 Drag and Drop Release Notes
 
+0.11.2
+
+   * Drag and drop will no longer interfere with selecting text on elements
+     that are not involved in drag and drop.
+
 0.11.1
 
    * Fixes an issue where the setXY cache could get out of sync if the element's

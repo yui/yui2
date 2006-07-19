@@ -469,7 +469,8 @@ YAHOO.util.DragDrop.prototype = {
         YAHOO.util.Event.onAvailable(id, this.handleOnAvailable, this, true);
 
         // create a logger instance
-        this.logger = new YAHOO.widget.LogWriter(this.toString());
+        this.logger = (YAHOO.widget.LogWriter) ? 
+                new YAHOO.widget.LogWriter(this.toString()) : YAHOO;
 
         // the linked element is the element that gets dragged by default
         this.setDragElId(id); 
@@ -559,6 +560,7 @@ YAHOO.util.DragDrop.prototype = {
         this.logger.log(this.id + " inital position: " + this.initPageX + 
                 ", " + this.initPageY);
 
+
         this.setStartPosition(p);
     },
 
@@ -569,9 +571,8 @@ YAHOO.util.DragDrop.prototype = {
      * @private
      */
     setStartPosition: function(pos) {
-        this.deltaSetXY = null;
-
         var p = pos || YAHOO.util.Dom.getXY( this.getEl() );
+        this.deltaSetXY = null;
 
         this.startPageX = p[0];
         this.startPageY = p[1];
