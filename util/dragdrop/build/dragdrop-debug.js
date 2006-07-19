@@ -1595,7 +1595,7 @@ if (!YAHOO.util.DragDropMgr) {
          */
         this.handleMouseMove = function(e) {
             if (! this.dragCurrent) {
-                this.logger.log("no current drag obj");
+                // this.logger.log("no current drag obj");
                 return true;
             }
 
