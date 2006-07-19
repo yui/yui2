@@ -64,7 +64,7 @@ YAHOO.widget.Module.CSS_FOOTER = "ft";
 * @type string
 * @final
 */
-YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL = null;
+YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL = "javascript:false";
 
 YAHOO.widget.Module.prototype = {
 
