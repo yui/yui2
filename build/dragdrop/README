@@ -5,6 +5,9 @@ Drag and Drop Release Notes
    * Drag and drop will no longer interfere with selecting text on elements
      that are not involved in drag and drop.
 
+   * The shared drag and drop proxy element now resizes correctly when autoResize
+     is enabled.
+
 0.11.1
 
    * Fixes an issue where the setXY cache could get out of sync if the element's

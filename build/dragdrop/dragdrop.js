@@ -2623,15 +2623,15 @@ YAHOO.util.DDProxy.prototype._resizeProxy = function() {
         var newWidth  = el.offsetWidth - br - bl;
         var newHeight = el.offsetHeight - bt - bb;
 
-        if (this._previousSize[0] !== newWidth && 
-                        this._previousSize[1] !== newHeight) {
+        // if (this._previousSize[0] !== newWidth && 
+                        // this._previousSize[1] !== newHeight) {
 
 
             DOM.setStyle( dragEl, "width",  newWidth  + "px" );
             DOM.setStyle( dragEl, "height", newHeight + "px" );
 
             this._previousSize = [newWidth, newHeight];
-        }
+        // }
     }
 };
 
