@@ -51,12 +51,6 @@ YAHOO.util.DDProxy.prototype.resizeFrame = true;
 YAHOO.util.DDProxy.prototype.centerFrame = false;
 
 /**
- * Previous proxy element size.
- * @private
- */
-YAHOO.util.DDProxy.prototype._previousSize = [-1, -1];
-
-/**
  * Create the drag frame if needed
  */
 YAHOO.util.DDProxy.prototype.createFrame = function() {
@@ -133,7 +127,6 @@ YAHOO.util.DDProxy.prototype.showFrame = function(iPageX, iPageY) {
 
     this.setDragElPos(iPageX, iPageY);
 
-    // s.visibility = "";
     YAHOO.util.Dom.setStyle(dragEl, "visibility", "visible"); 
 };
 
@@ -158,16 +151,10 @@ YAHOO.util.DDProxy.prototype._resizeProxy = function() {
         var newWidth  = el.offsetWidth - br - bl;
         var newHeight = el.offsetHeight - bt - bb;
 
-        // if (this._previousSize[0] !== newWidth && 
-                        // this._previousSize[1] !== newHeight) {
+        this.logger.log("Resizing proxy element");
 
-            this.logger.log("Resizing proxy element");
-
-            DOM.setStyle( dragEl, "width",  newWidth  + "px" );
-            DOM.setStyle( dragEl, "height", newHeight + "px" );
-
-            this._previousSize = [newWidth, newHeight];
-        // }
+        DOM.setStyle( dragEl, "width",  newWidth  + "px" );
+        DOM.setStyle( dragEl, "height", newHeight + "px" );
     }
 };
 
