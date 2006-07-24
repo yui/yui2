@@ -1398,16 +1398,10 @@ YAHOO.widget.MenuModule.prototype._onElementClick =
         */
         
         var oItem = this._fireItemEvent(oTarget, "clickEvent", p_oEvent);
-        
-        var bCurrentPageURL; // Indicates if the URL points to the current page
-    
     
         if(oItem) {
-    
-            var sURL = oItem.cfg.getProperty("url");
+
             var oSubmenu = oItem.cfg.getProperty("submenu");
-            
-            bCurrentPageURL = (sURL.substr((sURL.length-1),1) == "#");
     
             /*
                 ACCESSIBILITY FEATURE FOR SCREEN READERS: Expand/collapse the
@@ -1443,57 +1437,33 @@ YAHOO.widget.MenuModule.prototype._onElementClick =
                 }
         
             }
-            else if(oTarget.tagName != "A" && !bCurrentPageURL) {
-                
-                /*
-                    Follow the URL of the item regardless of whether or 
-                    not the user clicked specifically on the
-                    HTMLAnchorElement (&#60;A&#60;) node.
-                */
-    
-                document.location = sURL;
-        
-            }
-        
-        }
+            else {
             
-    
-        switch(oTarget.tagName) {
-        
-            case "A":
-            
-                if(bCurrentPageURL) {
-    
-                    // Don't follow URLs that are equal to "#"
+                if(oTarget.tagName == "A") {
     
                     Event.preventDefault(p_oEvent);
                 
                 }
-                else {
-    
-                    /*
-                        Break if the anchor's URL is something other than "#" 
-                        to prevent the call to "stopPropagation" from be 
-                        executed.  This is required for Safari to be able to 
-                        follow the URL.
-                    */
-                
-                    break;
+
+                var sURL = oItem.cfg.getProperty("url");
+
+                if(sURL.substr((sURL.length-1),1) != "#") {
+        
+                    document.location = sURL;
                 
                 }
-            
-            default:
-    
-                /*
-                    Stop the propagation of the event at each MenuModule 
-                    instance since Menus can be embedded in eachother.
-                */
-    
-                Event.stopPropagation(p_oEvent);
-            
-            break;
+
+            }
         
         }
+
+
+        /*
+            Stop the propagation of the event at each MenuModule 
+            instance since Menus can be embedded in eachother.
+        */
+
+        Event.stopPropagation(p_oEvent);
     
     
         // Fire the associated "click" Custom Event for the MenuModule instance
