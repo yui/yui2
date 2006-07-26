@@ -52,7 +52,7 @@
 
             }
 
-            #yproducts {
+            #productsandservices {
             
                 visibility: visible;
                 margin:0 0 10px 0;
@@ -68,48 +68,10 @@
 
             YAHOO.example.OverlayManager = new YAHOO.widget.OverlayManager();
 
-
-            // Data used to built product category submenus
-
-            var g_aYProducts = {
-
-                communications: [
-                
-                    { text: "Yahoo! Mail", url: "http://mail.yahoo.com" },
-                    { text: "Yahoo! Address Book", url: "http://addressbook.yahoo.com" },
-                    { text: "Yahoo! Calender", url: "http://calendar.yahoo.com" },
-                    { text: "Yahoo! Notepad", url: "http://notepad.yahoo.com" },
-                    { text: "Yahoo! Messenger", url: "http://messenger.yahoo.com" },
-                    { text: "Yahoo! 360", url: "http://360.yahoo.com" },
-                    { text: "Yahoo! Photos", url: "http://photos.yahoo.com" }
-
-                ],
-
-                search: [
-
-                    { text: "Yahoo! Image Search", url: "http://images.search.yahoo.com/images" },
-                    { text: "Yahoo! Directory", url: "http://dir.yahoo.com/" },
-                    { text: "Yahoo! Local", url: "http://local.yahoo.com" },
-                    { text: "Yahoo! News Search", url: "http://news.search.yahoo.com/news" },
-                    { text: "Yahoo! People Search", url: "http://search.yahoo.com/people" },
-                    { text: "Yahoo! Product Search", url: "http://search.yahoo.com/products" }
-
-                ],
-                
-                entertainment: [
-
-                    { text: "Yahoo! Music", url: "http://music.yahoo.com/" },
-                    { text: "Yahoo! Movies", url: "http://movies.yahoo.com/" },
-                    { text: "Yahoo! TV", url: "http://tv.yahoo.com/" }
-
-                ]
-            
-            };
-
             var g_nTimeoutId;
 
 
-            // "mouseover" event handler for the root menu
+            // "mouseover" event handler for the menubar
 
             function onMenuBarMouseOver(p_sType, p_aArguments, p_oMenu) {
 
@@ -121,7 +83,8 @@
             
             }
 
-            // "mouseover" event handler for each submenu
+
+            // "mouseover" event handler for each submenu of the menubar
 
             function onSubmenuMouseOver(p_sType, p_aArguments, p_oMenu) {
 
@@ -134,13 +97,13 @@
             }
 
 
-            // "mouseout" event handler for each submenu
+            // "mouseout" event handler for each submenu of the menubar
             
             function onSubmenuMouseOut(p_sType, p_aArguments, p_oMenu) {
 
                 function hideMenu() {
 
-                    p_oMenu.hide();
+                    YAHOO.example.OverlayManager.hideAll();
 
                 }
 
@@ -156,16 +119,7 @@
             }
 
 
-            // "mousedown" handler for the document
-
-            function onDocumentMouseDown(p_oEvent) {
-            
-                YAHOO.example.OverlayManager.hideAll();
-
-            }
-
-
-            // "mouseover" handler for each item in the menu bar
+            // "mouseover" handler for each item in the menubar
 
             function onMenuBarItemMouseOver(p_sType, p_aArguments, p_oMenuItem) {
             
@@ -197,10 +151,10 @@
             
                 }
             
-            };
+            }
         
 
-            // "mouseout" handler for each item in the menu bar
+            // "mouseout" handler for each item in the menubar
         
             function onMenuBarItemMouseOut(p_sType, p_aArguments, p_oMenuItem) {
             
@@ -227,103 +181,255 @@
             
                 }
             
-            };
+            }
+
+
+            // "mousedown" handler for the document
+
+            function onDocumentMouseDown(p_oEvent) {
+            
+                YAHOO.example.OverlayManager.hideAll();
+
+            }
 
 
             // "load" handler for the window
 
-            function onWindowLoad() {
+            function onWindowLoad(p_oEvent) {
 
-                var oMenuBar = new YAHOO.widget.MenuBar("yproducts");
-
-                var i = oMenuBar.getItemGroups()[0].length - 1,
-                    oMenuItem,
-                    oSubmenu,               
-                    aSubmenuItems,
-                    nSubmenuItems;
+                var Menu = YAHOO.widget.Menu,
+                    MenuItem = YAHOO.widget.MenuItem;
 
 
-                do {
+                /*
+                     Use a JSON-formatted data structure to define the data for 
+                     the submenus of the menubar
+                */
 
-                    oMenuItem = oMenuBar.getItem(i);
+                var oMenuData = {
+                
+                    "communications": [ 
                     
-                    aSubmenuItems = g_aYProducts[oMenuItem.element.id];
+                        { text: "360", url: "http://360.yahoo.com" },
+                        { text: "Alerts", url: "http://alerts.yahoo.com" },
+                        { text: "Avatars", url: "http://avatars.yahoo.com" },
+                        { text: "Groups", url: "http://groups.yahoo.com " },
+                        { text: "Internet Access", url: "http://promo.yahoo.com/broadband" },
+                        { text: "PIM", submenuId: "pim", submenuItems: [
 
-                    if(aSubmenuItems) {
+                                { text: "Yahoo! Mail", url:"http://mail.yahoo.com" },
+                                { text: "Yahoo! Address Book", url:"http://addressbook.yahoo.com" },
+                                { text: "Yahoo! Calendar",  url:"http://calendar.yahoo.com" },
+                                { text: "Yahoo! Notepad", url:"http://notepad.yahoo.com" }
+
+                            ]
+                        
+                        }, 
+                        { text: "Member Directory", url: "http://members.yahoo.com" },
+                        { text: "Messenger", url: "http://messenger.yahoo.com" },
+                        { text: "Mobile", url: "http://mobile.yahoo.com" },
+                        { text: "Photos", url: "http://photos.yahoo.com" },
                     
-                        // Create a submenu
+                    ],
 
-                        oSubmenu = new YAHOO.widget.Menu(
-                                        (oMenuItem.element.id + "menu")
-                                    );
+                    "shopping": [
 
-                        // Add a "mouseover" event handler to the submenu
+                        { text: "Auctions", url: "http://auctions.shopping.yahoo.com" },
+                        { text: "Autos", url: "http://autos.yahoo.com" },
+                        { text: "Classifieds", url: "http://classifieds.yahoo.com" },
+                        { text: "Flowers & Gifts", url: "http://shopping.yahoo.com/b:Flowers%20%26%20Gifts:20146735" },
+                        { text: "Points", url: "http://points.yahoo.com" },
+                        { text: "Real Estate", url: "http://realestate.yahoo.com" },
+                        { text: "Travel", url: "http://travel.yahoo.com" },
+                        { text: "Wallet", url: "http://wallet.yahoo.com" },
+                        { text: "Yellow Pages", url: "http://yp.yahoo.com" }
+                    
+                    ],
 
-                        oSubmenu.mouseOverEvent.subscribe(
-                                onSubmenuMouseOver, 
-                                oSubmenu, 
-                                true
-                            );
+                    "entertainment": [
+                    
+                        { text: "Fantasy Sports", url: "http://fantasysports.yahoo.com" },
+                        { text: "Games", url: "http://games.yahoo.com" },
+                        { text: "Kids", url: "http://www.yahooligans.com" },
+                        { text: "Music", url: "http://music.yahoo.com" },
+                        { text: "Movies", url: "http://movies.yahoo.com" },
+                        { text: "Radio", url: "http://music.yahoo.com/launchcast" },
+                        { text: "Travel", url: "http://travel.yahoo.com" },
+                        { text: "TV", url: "http://tv.yahoo.com" }              
+                    
+                    ],
+
+                    "information": [
+                    
+                        { text: "Downloads", url: "http://downloads.yahoo.com" },
+                        { text: "Finance", url: "http://finance.yahoo.com" },
+                        { text: "Health", url: "http://health.yahoo.com" },
+                        { text: "Local", url: "http://local.yahoo.com" },
+                        { text: "Maps & Directions", url: "http://maps.yahoo.com" },
+                        { text: "My Yahoo!", url: "http://my.yahoo.com" },
+                        { text: "News", url: "http://news.yahoo.com" },
+                        { text: "Search", url: "http://search.yahoo.com" },
+                        { text: "Small Business", url: "http://smallbusiness.yahoo.com" },
+                        { text: "Weather", url: "http://weather.yahoo.com" }
+                    
+                    ]
+
+                };
 
 
-                        // Add a "mouseout" event handler to the submenu
+                // "beforeshow" handler for each submenu of the menubar
 
-                        oSubmenu.mouseOutEvent.subscribe(
-                                onSubmenuMouseOut,
-                                oSubmenu, 
-                                true
-                            );
+                function onMenuBeforeShow(p_sType, p_sArgs) {
+
+                    // Check if the menu has any items. If not, add them
+                    
+                    if(this.getItemGroups().length == 0) {
+
+                        var aItemsData = this.itemsData,
+                            nItems = aItemsData.length,
+                            oItemData,
+                            oItemConfig,
+                            oSubmenu;
 
 
-                        // Add items to the submenu
+                        for(var i=0; i<nItems; i++) {
 
-                        nSubmenuItems = aSubmenuItems.length;
+                            oItemData = aItemsData[i];
 
-                        for(var n=0; n<nSubmenuItems; n++) {
+                            if(oItemData) {
 
-                            oSubmenu.addItem(
-                                new YAHOO.widget.MenuItem(
-                                    aSubmenuItems[n].text, 
-                                    { url: aSubmenuItems[n].url}
-                                    )
-                                );
+                                oItemConfig = {};
+    
+                                if(oItemData.url) {
+                                
+                                    oItemConfig.url = oItemData.url;
+                                
+                                }
+                                
+    
+                                if(oItemData.submenuItems) {
+    
+                                    oSubmenu = new Menu(oItemData.submenuId);
+
+                                    oSubmenu.itemsData = oItemData.submenuItems;
+
+                                    oSubmenu.beforeShowEvent.subscribe(onMenuBeforeShow, oSubmenu, true);
+                                    oSubmenu.mouseOverEvent.subscribe(onSubmenuMouseOver, oSubmenu, true);
+                                    oSubmenu.mouseOutEvent.subscribe(onSubmenuMouseOut, oSubmenu, true);
+    
+                                    YAHOO.example.OverlayManager.register(oSubmenu);
+    
+                                    oItemConfig.submenu = oSubmenu;
+                                
+                                }
+    
+                                // Add the new MenuItem instance to the Menu
+    
+                                this.addItem(new MenuItem(oItemData.text, oItemConfig));
+
+                            }
 
                         }
 
 
-                        // Add the submenu to its parent item in the main menu
+                        // Render the submenu into its parent MenuItem instance's element
 
-                        oMenuItem.cfg.setProperty("submenu", oSubmenu);
-
-                        YAHOO.example.OverlayManager.register(oSubmenu);
+                        this.render(this.parent.element);
                         
                     }
                 
                 }
-                while(i--);
 
 
-                // Render the menubar and corresponding submenus
-                
+                // Initialize the root menubar
+
+                var oMenuBar = new YAHOO.widget.MenuBar("productsandservices");
+
+
+                // Initialize the submenus of the items in the root menubar
+
+                var oCommunicationsMenu = new Menu("communications"),
+                    oShoppingMenu = new Menu("shopping"),
+                    oEntertainmentMenu = new Menu("entertainment"),
+                    oInformationMenu = new Menu("information");
+
+
+                /*
+                     Add a property ("itemsData") to each submenu that 
+                     is reference to the data for its items.
+                     This data will be used in the "beforeshow" handler to add
+                     the items to each submenu before it is displayed.
+                */
+
+                oCommunicationsMenu.itemsData = oMenuData["communications"];
+                oShoppingMenu.itemsData = oMenuData["shopping"];
+                oEntertainmentMenu.itemsData = oMenuData["entertainment"];
+                oInformationMenu.itemsData = oMenuData["information"];
+
+
+                // Assign event handlers                
+
+                oCommunicationsMenu.beforeShowEvent.subscribe(onMenuBeforeShow, oCommunicationsMenu, true);
+                oCommunicationsMenu.mouseOverEvent.subscribe(onSubmenuMouseOver, oCommunicationsMenu, true);
+                oCommunicationsMenu.mouseOutEvent.subscribe(onSubmenuMouseOut, oCommunicationsMenu, true);
+
+                oShoppingMenu.beforeShowEvent.subscribe(onMenuBeforeShow, oShoppingMenu, true);
+                oShoppingMenu.mouseOverEvent.subscribe(onSubmenuMouseOver, oShoppingMenu, true);
+                oShoppingMenu.mouseOutEvent.subscribe(onSubmenuMouseOut, oShoppingMenu, true);
+
+                oEntertainmentMenu.beforeShowEvent.subscribe(onMenuBeforeShow, oEntertainmentMenu, true);
+                oEntertainmentMenu.mouseOverEvent.subscribe(onSubmenuMouseOver, oEntertainmentMenu, true);
+                oEntertainmentMenu.mouseOutEvent.subscribe(onSubmenuMouseOut, oEntertainmentMenu, true);
+
+                oInformationMenu.beforeShowEvent.subscribe(onMenuBeforeShow, oInformationMenu, true);
+                oInformationMenu.mouseOverEvent.subscribe(onSubmenuMouseOver, oInformationMenu, true);
+                oInformationMenu.mouseOutEvent.subscribe(onSubmenuMouseOut, oInformationMenu, true);
+
+
+                // Add the submenus to the items in the menubar 
+
+                oMenuBar.getItem(0).cfg.setProperty("submenu", oCommunicationsMenu);
+                oMenuBar.getItem(1).cfg.setProperty("submenu", oShoppingMenu);
+                oMenuBar.getItem(2).cfg.setProperty("submenu", oEntertainmentMenu);
+                oMenuBar.getItem(3).cfg.setProperty("submenu", oInformationMenu);
+
+
+                // Render the menubar
+
                 oMenuBar.render();
+
+
+                // Regiser the submenus with the OverlayManager instance
+
+                YAHOO.example.OverlayManager.register(oCommunicationsMenu);
+                YAHOO.example.OverlayManager.register(oShoppingMenu);
+                YAHOO.example.OverlayManager.register(oEntertainmentMenu);
+                YAHOO.example.OverlayManager.register(oInformationMenu);
 
 
                 /*
                     Add a "mouseover" and "mouseout" event handler each item 
-                    in the menu bar 
+                    in the menubar 
                 */               
 
                 var aMenuBarItems = oMenuBar.getItemGroups()[0],
+                    oMenuItem,
                     i = aMenuBarItems.length - 1;
 
                 do {
 
-                    aMenuBarItems[i].mouseOverEvent.subscribe(
-                        onMenuBarItemMouseOver
+                    oMenuItem = aMenuBarItems[i];
+
+                    oMenuItem.mouseOverEvent.subscribe(
+                        onMenuBarItemMouseOver,
+                        oMenuItem,
+                        true
                     );
 
-                    aMenuBarItems[i].mouseOutEvent.subscribe(
-                        onMenuBarItemMouseOut 
+                    oMenuItem.mouseOutEvent.subscribe(
+                        onMenuBarItemMouseOut,
+                        oMenuItem,
+                        true
                     );
                 
                 }
@@ -346,11 +452,9 @@
                         "mousedown", 
                         onDocumentMouseDown
                     );
-
+                
             }
 
-
-            // Add a "load" handler for the window
 
             YAHOO.util.Event.addListener(window, "load", onWindowLoad);
 
@@ -371,14 +475,14 @@
                 <div id="yui-main">
                     <div class="yui-b">
                         <!-- start: stack grids here -->
-                                
-                        <div id="yproducts" class="yuimenubar">
+
+                        <div id="productsandservices" class="yuimenubar">
                             <div class="bd">
                                 <ul class="first-of-type">
-                                    <li id="communications" class="yuimenubaritem first-of-type"><a href="http://communications.yahoo.com/">Communications</a></li>
-                                    <li id="entertainment" class="yuimenubaritem"><a href="http://entertainment.yahoo.com/">Entertainment</a></li>
-                                    <li id="finance" class="yuimenubaritem"><a href="http://finance.yahoo.com/">Finance</a></li>
-                                    <li id="search" class="yuimenubaritem"><a href="http://search.yahoo.com/">Search</a></li>
+                                    <li class="yuimenuitem"><a href="http://communication.yahoo.com">Communication</a></li>
+                                    <li class="yuimenuitem"><a href="http://shopping.yahoo.com">Shopping</a></li>
+                                    <li class="yuimenuitem"><a href="http://entertainment.yahoo.com">Entertainment</a></li>
+                                    <li class="yuimenuitem">Information</li>
                                 </ul>            
                             </div>
                         </div>
