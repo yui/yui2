@@ -1719,20 +1719,14 @@ YAHOO.widget.Overlay.prototype.enforceConstraints = function(type, args, obj) {
 	var x = pos[0];
 	var y = pos[1];
 
-	var width = parseInt(this.cfg.getProperty("width"));
-
-	if (isNaN(width)) {
-		width = 0;
-	}
-
 	var offsetHeight = this.element.offsetHeight;
-	var offsetWidth = (width>0?width:this.element.offsetWidth); //this.element.offsetWidth;
+	var offsetWidth = this.element.offsetWidth;
 
 	var viewPortWidth = YAHOO.util.Dom.getViewportWidth();
 	var viewPortHeight = YAHOO.util.Dom.getViewportHeight();
 
-	var scrollX = window.scrollX || document.documentElement.scrollLeft;
-	var scrollY = window.scrollY || document.documentElement.scrollTop;
+	var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+	var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
 
 	var topConstraint = scrollY + 10;
 	var leftConstraint = scrollX + 10;
