@@ -2,7 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.11.0
+Version 0.11.2
 */
 
 /**
@@ -95,7 +95,7 @@ YAHOO.widget.OverlayManager.prototype = {
 				this.overlays.sort(this.compareZIndexDesc);
 				var topZIndex = YAHOO.util.Dom.getStyle(this.overlays[0].element, "zIndex");
 				if (! isNaN(topZIndex) && this.overlays[0] != overlay) {
-					activeOverlay.cfg.setProperty("zIndex", (parseInt(topZIndex) + 1));
+					activeOverlay.cfg.setProperty("zIndex", (parseInt(topZIndex) + 2));
 				}
 				this.overlays.sort(this.compareZIndexDesc);
 			}

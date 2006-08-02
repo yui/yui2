@@ -1,7 +1,11 @@
-/**
+/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
+Version 0.11.2
+*/
+
+/**
 * @class Overlay is a Module that is absolutely positioned above the page flow. It has convenience methods for positioning and sizing, as well as options for controlling zIndex and constraining the Overlay's position to the current visible viewport. Overlay also contains a dynamicly generated IFRAME which is placed beneath it for Internet Explorer 6 and 5.x so that it will be properly rendered above SELECT elements.
 * @param {string}	el	The element ID representing the Overlay <em>OR</em>
 * @param {Element}	el	The element representing the Overlay
@@ -218,7 +222,7 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 		}	
 
 		if (effect) { // Animate out if showing
-			if (currentVis != "hidden") {
+			if (currentVis == "visible") {
 				this.beforeHideEvent.fire();
 				for (var i=0;i<effectInstances.length;i++) {
 					var e = effectInstances[i];
@@ -229,7 +233,7 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 				}
 			}
 		} else { // Simple hide
-			if (currentVis != "hidden") {
+			if (currentVis == "visible") {
 				this.beforeHideEvent.fire();
 				YAHOO.util.Dom.setStyle(this.element, "visibility", "hidden");
 				this.cfg.refireEvent("iframe");
@@ -593,20 +597,14 @@ YAHOO.widget.Overlay.prototype.enforceConstraints = function(type, args, obj) {
 	var x = pos[0];
 	var y = pos[1];
 
-	var width = parseInt(this.cfg.getProperty("width"));
-
-	if (isNaN(width)) {
-		width = 0;
-	}
-
 	var offsetHeight = this.element.offsetHeight;
-	var offsetWidth = (width>0?width:this.element.offsetWidth); //this.element.offsetWidth;
+	var offsetWidth = this.element.offsetWidth;
 
 	var viewPortWidth = YAHOO.util.Dom.getViewportWidth();
 	var viewPortHeight = YAHOO.util.Dom.getViewportHeight();
 
-	var scrollX = window.scrollX || document.documentElement.scrollLeft;
-	var scrollY = window.scrollY || document.documentElement.scrollTop;
+	var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+	var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
 
 	var topConstraint = scrollY + 10;
 	var leftConstraint = scrollX + 10;

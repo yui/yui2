@@ -1,7 +1,11 @@
-/**
+/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
+Version 0.11.2
+*/
+
+/**
 * @class
 * Dialog is an implementation of Panel that can be used to submit form data. Built-in functionality for buttons with event handlers is included, and button sets can be build dynamically, or the preincluded ones for Submit/Cancel and OK/Cancel can be utilized. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
 * @param {string}	el	The element ID representing the Dialog <em>OR</em>
@@ -74,15 +78,14 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 	this.callback = {
 		success : null,
 		failure : null,
-		argument: null,
-		scope : this
+		argument: null
 	}
 
 	this.doSubmit = function() {
 		var method = this.cfg.getProperty("postmethod");
 		switch (method) {
 			case "async":
-				YAHOO.util.Connect.setForm(this.form.name);
+				YAHOO.util.Connect.setForm(this.form);
 				var cObj = YAHOO.util.Connect.asyncRequest('POST', this.form.action, this.callback);
 				this.asyncSubmitEvent.fire();
 				break;
@@ -270,7 +273,7 @@ YAHOO.widget.Dialog.prototype.configButtons = function(type, args, obj) {
 			}
 
 			this.buttonSpan = null;
-			this.firstButtom = null;
+			this.firstButton = null;
 			this.lastButton = null;
 			this.defaultHtmlButton = null;
 		}

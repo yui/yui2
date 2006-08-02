@@ -1,7 +1,11 @@
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version 0.11.2
+*/
+
 /**
-* Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-* Code licensed under the BSD License:
-* http://developer.yahoo.net/yui/license.txt
 * KeyListener is a utility that provides an easy interface for listening for keydown/keyup events fired against DOM elements.
 * @param {Element}	attachTo	The element or element ID to which the key event should be attached
 * @param {string}	attachTo	The element or element ID to which the key event should be attached
