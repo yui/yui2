@@ -2,7 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.11.1
+Version 0.11.2
 */
 
 /**
@@ -500,7 +500,7 @@ YAHOO.widget.Module.CSS_FOOTER = "ft";
 * @type string
 * @final
 */
-YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL = null;
+YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL = "javascript:false";
 
 YAHOO.widget.Module.prototype = {
 
@@ -820,12 +820,17 @@ YAHOO.widget.Module.prototype = {
     
                 var bIE = (this.browser.indexOf("ie") === 0);
     
-                if(this.isSecure && this.RESIZE_MONITOR_SECURE_URL && bIE) {
+                if(
+                    this.isSecure && 
+                    YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL && 
+                    bIE
+                ) {
     
-                    resizeMonitor.src = this.RESIZE_MONITOR_SECURE_URL;
+                  resizeMonitor.src = 
+                       YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL;
     
-                }
-                
+                }                
+
                 resizeMonitor.id = "_yuiResizeMonitor";
                 resizeMonitor.style.visibility = "hidden";
                 
@@ -1942,7 +1947,7 @@ YAHOO.widget.OverlayManager.prototype = {
 				this.overlays.sort(this.compareZIndexDesc);
 				var topZIndex = YAHOO.util.Dom.getStyle(this.overlays[0].element, "zIndex");
 				if (! isNaN(topZIndex) && this.overlays[0] != overlay) {
-					activeOverlay.cfg.setProperty("zIndex", (parseInt(topZIndex) + 1));
+					activeOverlay.cfg.setProperty("zIndex", (parseInt(topZIndex) + 2));
 				}
 				this.overlays.sort(this.compareZIndexDesc);
 			}
@@ -3078,15 +3083,14 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 	this.callback = {
 		success : null,
 		failure : null,
-		argument: null,
-		scope : this
+		argument: null
 	}
 
 	this.doSubmit = function() {
 		var method = this.cfg.getProperty("postmethod");
 		switch (method) {
 			case "async":
-				YAHOO.util.Connect.setForm(this.form.name);
+				YAHOO.util.Connect.setForm(this.form);
 				var cObj = YAHOO.util.Connect.asyncRequest('POST', this.form.action, this.callback);
 				this.asyncSubmitEvent.fire();
 				break;

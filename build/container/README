@@ -1,5 +1,12 @@
 Container Release Notes
 
+*** version 0.11.2 ***
+
+	- Overlay: Fixed SSL issues with monitorresize property
+	- OverlayManager: Fixed z-index incrementing issues
+	- Dialog: Form elements called "name" will now function properly
+	- Dialog: Removed unnecessary scope:this reference
+
 *** version 0.11.1 ***
 
 	- Tooltip: Removed incorrect logger statement
