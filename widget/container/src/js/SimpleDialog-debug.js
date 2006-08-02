@@ -15,7 +15,7 @@ Version 0.11.2
 */
 YAHOO.widget.SimpleDialog = function(el, userConfig) {
 	YAHOO.widget.SimpleDialog.superclass.constructor.call(this, el, userConfig);
-}
+};
 
 YAHOO.extend(YAHOO.widget.SimpleDialog, YAHOO.widget.Dialog);
 
@@ -77,7 +77,7 @@ YAHOO.widget.SimpleDialog.prototype.initDefaultConfig = function() {
 	// Add dialog config properties //
 	this.cfg.addProperty("icon",	{ value:"none",	handler:this.configIcon, suppressEvent:true } );
 	this.cfg.addProperty("text",	{ value:"", handler:this.configText, suppressEvent:true, supercedes:["icon"] } );
-}
+};
 
 
 /**
@@ -107,14 +107,14 @@ YAHOO.widget.SimpleDialog.prototype.init = function(el, userConfig) {
 
 	this.initEvent.fire(YAHOO.widget.SimpleDialog);
 
-}
+};
 /**
 * Prepares the SimpleDialog's internal FORM object, creating one if one is not currently present, and adding the value hidden field.
 */
 YAHOO.widget.SimpleDialog.prototype.registerForm = function() {
 	YAHOO.widget.SimpleDialog.superclass.registerForm.call(this);
 	this.form.innerHTML += "<input type=\"hidden\" name=\"" + this.id + "\" value=\"\"/>";
-}
+};
 
 // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
 
@@ -127,7 +127,7 @@ YAHOO.widget.SimpleDialog.prototype.configIcon = function(type,args,obj) {
 		var iconHTML = "<img src=\"" + this.imageRoot + icon + "\" class=\"icon\" />";
 		this.body.innerHTML = iconHTML + this.body.innerHTML;
 	}
-}
+};
 
 /**
 * Fired when the "text" property is set.
@@ -138,7 +138,7 @@ YAHOO.widget.SimpleDialog.prototype.configText = function(type,args,obj) {
 		this.setBody(text);
 		this.cfg.refireEvent("icon");
 	}
-}
+};
 // END BUILT-IN PROPERTY EVENT HANDLERS //
 
 /**
@@ -147,4 +147,4 @@ YAHOO.widget.SimpleDialog.prototype.configText = function(type,args,obj) {
 */ 
 YAHOO.widget.SimpleDialog.prototype.toString = function() {
 	return "SimpleDialog " + this.id;
-}
+};

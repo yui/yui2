@@ -42,9 +42,15 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 	function handleKeyPress(e, obj) {
 		var keyPressed = e.charCode || e.keyCode;
 		
-		if (! keyData.shift)	keyData.shift = false;
-		if (! keyData.alt)		keyData.alt = false;
-		if (! keyData.ctrl)		keyData.ctrl = false;
+		if (! keyData.shift) {	
+			keyData.shift = false; 
+		}
+		if (! keyData.alt) {	
+			keyData.alt = false;
+		}
+		if (! keyData.ctrl) {
+			keyData.ctrl = false;
+		}
 
 		// check held down modifying keys first
 		if (e.shiftKey == keyData.shift && 
@@ -72,7 +78,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 			this.enabledEvent.fire(keyData);
 		}
 		this.enabled = true;
-	}
+	};
 
 	this.disable = function() {
 		if (this.enabled) {
@@ -80,7 +86,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 			this.disabledEvent.fire(keyData);
 		}
 		this.enabled = false;
-	}
+	};
 
 	/**
 	* Returns a string representation of the object.
@@ -88,9 +94,9 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 	*/ 
 	this.toString = function() {
 		return "KeyListener [" + keyData.keys + "] " + attachTo.tagName + (attachTo.id ? "[" + attachTo.id + "]" : "");
-	}
+	};
 
-}
+};
 
 /**
 * Constant representing the DOM "keydown" event.

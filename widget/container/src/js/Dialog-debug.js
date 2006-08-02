@@ -15,7 +15,7 @@ Version 0.11.2
 */
 YAHOO.widget.Dialog = function(el, userConfig) {
 	YAHOO.widget.Dialog.superclass.constructor.call(this, el, userConfig);
-}
+};
 
 YAHOO.extend(YAHOO.widget.Dialog, YAHOO.widget.Panel);
 
@@ -79,7 +79,7 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 		success : null,
 		failure : null,
 		argument: null
-	}
+	};
 
 	this.doSubmit = function() {
 		var method = this.cfg.getProperty("postmethod");
@@ -98,7 +98,7 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 				this.manualSubmitEvent.fire();
 				break;
 		}
-	}
+	};
 
 	// Add form dialog config properties //
 	this.cfg.addProperty("postmethod", { value:"async", validator:function(val) { 
@@ -110,7 +110,7 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 												} });
 
 	this.cfg.addProperty("buttons",		{ value:"none",	handler:this.configButtons } );
-}
+};
 
 /**
 * Initializes the custom events for Dialog which are fired automatically at appropriate times by the Dialog class.
@@ -126,7 +126,7 @@ YAHOO.widget.Dialog.prototype.initEvents = function() {
 	this.formSubmitEvent	= new YAHOO.util.CustomEvent("formSubmit");
 
 	this.cancelEvent		= new YAHOO.util.CustomEvent("cancel");
-}
+};
 
 /**
 * The Dialog initialization method, which is executed for Dialog and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
@@ -162,7 +162,7 @@ YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
 	}, this, true);
 
 	this.initEvent.fire(YAHOO.widget.Dialog);
-}
+};
 
 /**
 * Prepares the Dialog's internal FORM object, creating one if one is not currently present.
@@ -182,7 +182,6 @@ YAHOO.widget.Dialog.prototype.registerForm = function() {
 			if (el.focus) {
 				if (el.type && el.type != "hidden") {
 					return el;
-					break;
 				}
 			}
 		}
@@ -195,7 +194,6 @@ YAHOO.widget.Dialog.prototype.registerForm = function() {
 			if (el.focus) {
 				if (el.type && el.type != "hidden") {
 					return el;
-					break;
 				}
 			}
 		}
@@ -222,7 +220,7 @@ YAHOO.widget.Dialog.prototype.registerForm = function() {
 			this.hideEvent.subscribe(this.preventTabOut.disable, this.preventTabOut, true);
 		}
 	}
-}
+};
 
 // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
 
@@ -252,7 +250,7 @@ YAHOO.widget.Dialog.prototype.configButtons = function(type, args, obj) {
 			this.buttonSpan.appendChild(htmlButton);		
 			button.htmlButton = htmlButton;
 
-			if (b == 0) {
+			if (b === 0) {
 				this.firstButton = button.htmlButton;
 			}
 
@@ -278,7 +276,7 @@ YAHOO.widget.Dialog.prototype.configButtons = function(type, args, obj) {
 			this.defaultHtmlButton = null;
 		}
 	}
-}
+};
 
 /**
 * The default handler fired when the "success" property is changed. Used for asynchronous submission only.
@@ -311,7 +309,7 @@ YAHOO.widget.Dialog.prototype.focusFirst = function(type,args,obj) {
 	} else {
 		this.focusDefaultButton();
 	}
-}
+};
 
 /**
 * Sets the focus to the last button in the button or form element in the Dialog
@@ -332,7 +330,7 @@ YAHOO.widget.Dialog.prototype.focusLast = function(type,args,obj) {
 			this.lastFormElement.focus();
 		}
 	}
-}
+};
 
 /**
 * Sets the focus to the button that is designated as the default. By default, his handler is executed when the show event is fired.
@@ -341,7 +339,7 @@ YAHOO.widget.Dialog.prototype.focusDefaultButton = function() {
 	if (this.defaultHtmlButton) {
 		this.defaultHtmlButton.focus();
 	}
-}
+};
 
 /**
 * Blurs all the html buttons
@@ -354,7 +352,7 @@ YAHOO.widget.Dialog.prototype.blurButtons = function() {
 			html.blur();
 		}
 	}
-}
+};
 
 /**
 * Sets the focus to the first button in the button list
@@ -367,7 +365,7 @@ YAHOO.widget.Dialog.prototype.focusFirstButton = function() {
 			html.focus();
 		}
 	}
-}
+};
 
 /**
 * Sets the focus to the first button in the button list
@@ -380,7 +378,7 @@ YAHOO.widget.Dialog.prototype.focusLastButton = function() {
 			html.focus();
 		}
 	}
-}
+};
 
 // END BUILT-IN PROPERTY EVENT HANDLERS //
 
@@ -389,7 +387,7 @@ YAHOO.widget.Dialog.prototype.focusLastButton = function() {
 */
 YAHOO.widget.Dialog.prototype.validate = function() {
 	return true;
-}
+};
 
 /**
 * Executes a submit of the Dialog followed by a hide, if validation is successful.
@@ -404,7 +402,7 @@ YAHOO.widget.Dialog.prototype.submit = function() {
 	} else {
 		return false;
 	}
-}
+};
 
 /**
 * Executes the cancel of the Dialog followed by a hide.
@@ -412,7 +410,7 @@ YAHOO.widget.Dialog.prototype.submit = function() {
 YAHOO.widget.Dialog.prototype.cancel = function() {
 	this.cancelEvent.fire();
 	this.hide();	
-}
+};
 
 /**
 * Returns a JSON-compatible data structure representing the data currently contained in the form.
@@ -444,12 +442,12 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 							data[i] = formItem.value;
 							break;
 						case "SELECT":
-							var val = new Array();
+							var val = [];
 							for (var x=0;x<formItem.options.length;x++)	{
 								var option = formItem.options[x];
 								if (option.selected) {
 									var selval = option.value;
-									if (! selval || selval == "") {
+									if (! selval || selval === "") {
 										selval = option.text;
 									}
 									val[val.length] = selval;
@@ -472,7 +470,7 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 									}
 									break;
 								case "checkbox":
-									var cbArray = new Array();
+									var cbArray = [];
 									for (var c=0; c<formItem.length; c++) {
 										var check = formItem[c];
 										if (check.checked) {
@@ -488,7 +486,7 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 		}	
 	}
 	return data;
-}
+};
 
 /**
 * Returns a string representation of the object.
@@ -496,4 +494,4 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 */ 
 YAHOO.widget.Dialog.prototype.toString = function() {
 	return "Dialog " + this.id;
-}
+};

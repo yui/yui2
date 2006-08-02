@@ -17,7 +17,7 @@ YAHOO.widget.Module = function(el, userConfig) {
 	if (el) { 
 		this.init(el, userConfig); 
 	}
-}
+};
 
 /**
 * Constant representing the prefix path to use for non-secure images
@@ -281,7 +281,7 @@ YAHOO.widget.Module.prototype = {
 	* @type boolean
 	*/
 	isSecure : function() {
-		if (window.location.href.toLowerCase().indexOf("https") == 0) {
+		if (window.location.href.toLowerCase().indexOf("https") === 0) {
 			return true;
 		} else {
 			return false;
@@ -384,11 +384,9 @@ YAHOO.widget.Module.prototype = {
     
                 var bIE = (this.browser.indexOf("ie") === 0);
     
-                if(
-                    this.isSecure && 
-                    YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL && 
-                    bIE
-                ) {
+                if(this.isSecure && 
+                   YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL && 
+                   bIE) {
     
                   resizeMonitor.src = 
                        YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL;
@@ -587,7 +585,7 @@ YAHOO.widget.Module.prototype = {
 				element.appendChild(me.element);
 				me.appendEvent.fire();
 			}
-		}
+		};
 
 		if (appendToNode) {
 			appendTo(appendToNode);
@@ -691,7 +689,7 @@ YAHOO.widget.Module.prototype = {
 			this.resizeMonitor = null;
 		}
 	}
-}
+};
 
 /**
 * Returns a string representation of the object.
@@ -699,4 +697,4 @@ YAHOO.widget.Module.prototype = {
 */ 
 YAHOO.widget.Module.prototype.toString = function() {
 	return "Module " + this.id;
-}
+};

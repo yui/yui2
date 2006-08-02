@@ -15,7 +15,7 @@ YAHOO.util.Config = function(owner) {
 	if (owner) {
 		this.init(owner);
 	}
-}
+};
 
 YAHOO.util.Config.prototype = {
 	
@@ -148,7 +148,7 @@ YAHOO.util.Config.prototype = {
 			return true;
 		}
 	}
-}
+};
 
 
 /**
@@ -181,7 +181,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		if (typeof property != 'undefined' && property.event) {
 			property.event.fire(value);
 		}	
-	}
+	};
 	/* End Private Members */
 
 	this.addProperty = function( key, propertyObject ) {
@@ -201,20 +201,20 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		if (! propertyObject.suppressEvent) {
 			this.queueProperty(key, propertyObject.value);
 		}
-	}
+	};
 
 	this.getConfig = function() {
 		var cfg = {};
 			
 		for (var prop in config) {
-			var property = config[prop]
+			var property = config[prop];
 			if (typeof property != 'undefined' && property.event) {
 				cfg[prop] = property.value;
 			}
 		}
 		
 		return cfg;
-	}
+	};
 
 	this.getProperty = function(key) {
 		key = key.toLowerCase();
@@ -225,7 +225,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		} else {
 			return undefined;
 		}
-	}
+	};
 
 	this.resetProperty = function(key) {
 		key = key.toLowerCase();
@@ -236,7 +236,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		} else {
 			return undefined;
 		}
-	}
+	};
 
 	this.setProperty = function(key, value, silent) {
 		key = key.toLowerCase();
@@ -261,7 +261,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 				return false;
 			}
 		}
-	}
+	};
 
 	this.queueProperty = function(key, value) {
 		key = key.toLowerCase();
@@ -328,7 +328,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		} else {
 			return false;
 		}
-	}
+	};
 
 	this.refireEvent = function(key) {
 		key = key.toLowerCase();
@@ -341,7 +341,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 				fireEvent(key, property.value);
 			}
 		}
-	}
+	};
 
 	this.applyConfig = function(userConfig, init) {
 		if (init) {
@@ -350,13 +350,13 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		for (var prop in userConfig) {
 			this.queueProperty(prop, userConfig[prop]);
 		}
-	}
+	};
 
 	this.refresh = function() {
 		for (var prop in config) {
 			this.refireEvent(prop);
 		}
-	}
+	};
 
 	this.fireQueue = function() {
 		this.queueInProgress = true;
@@ -374,8 +374,8 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 		
 		this.queueInProgress = false;
-		eventQueue = new Array();
-	}
+		eventQueue = [];
+	};
 
 	this.subscribeToConfigEvent = function(key, handler, obj, override) {
 		key = key.toLowerCase();
@@ -389,7 +389,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		} else {
 			return false;
 		}
-	}
+	};
 
 
 	this.unsubscribeFromConfigEvent = function(key, handler, obj) {
@@ -401,7 +401,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		} else {
 			return false;
 		}
-	}
+	};
 
 	this.toString = function() {
 		var output = "Config";
@@ -409,7 +409,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 			output += " [" + this.owner.toString() + "]";
 		}
 		return output;
-	}
+	};
 
 	this.outputEventQueue = function() {
 		var output = "";
@@ -420,8 +420,8 @@ YAHOO.util.Config.prototype.init = function(owner) {
 			}
 		}
 		return output;
-	}
-}
+	};
+};
 
 /**
 * Checks to determine if a particular function/object pair are already subscribed to the specified CustomEvent
@@ -435,11 +435,10 @@ YAHOO.util.Config.alreadySubscribed = function(evt, fn, obj) {
 		var subsc = evt.subscribers[e];
 		if (subsc && subsc.obj == obj && subsc.fn == fn) {
 			return true;
-			break;
 		}
 	}
 	return false;
-}
+};
 
 /**
 * @class 
@@ -453,7 +452,7 @@ YAHOO.widget.Module = function(el, userConfig) {
 	if (el) { 
 		this.init(el, userConfig); 
 	}
-}
+};
 
 /**
 * Constant representing the prefix path to use for non-secure images
@@ -717,7 +716,7 @@ YAHOO.widget.Module.prototype = {
 	* @type boolean
 	*/
 	isSecure : function() {
-		if (window.location.href.toLowerCase().indexOf("https") == 0) {
+		if (window.location.href.toLowerCase().indexOf("https") === 0) {
 			return true;
 		} else {
 			return false;
@@ -820,11 +819,9 @@ YAHOO.widget.Module.prototype = {
     
                 var bIE = (this.browser.indexOf("ie") === 0);
     
-                if(
-                    this.isSecure && 
-                    YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL && 
-                    bIE
-                ) {
+                if(this.isSecure && 
+                   YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL && 
+                   bIE) {
     
                   resizeMonitor.src = 
                        YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL;
@@ -1023,7 +1020,7 @@ YAHOO.widget.Module.prototype = {
 				element.appendChild(me.element);
 				me.appendEvent.fire();
 			}
-		}
+		};
 
 		if (appendToNode) {
 			appendTo(appendToNode);
@@ -1127,7 +1124,7 @@ YAHOO.widget.Module.prototype = {
 			this.resizeMonitor = null;
 		}
 	}
-}
+};
 
 /**
 * Returns a string representation of the object.
@@ -1135,7 +1132,7 @@ YAHOO.widget.Module.prototype = {
 */ 
 YAHOO.widget.Module.prototype.toString = function() {
 	return "Module " + this.id;
-}
+};
 
 /**
 * @class Overlay is a Module that is absolutely positioned above the page flow. It has convenience methods for positioning and sizing, as well as options for controlling zIndex and constraining the Overlay's position to the current visible viewport. Overlay also contains a dynamicly generated IFRAME which is placed beneath it for Internet Explorer 6 and 5.x so that it will be properly rendered above SELECT elements.
@@ -1146,7 +1143,7 @@ YAHOO.widget.Module.prototype.toString = function() {
 */
 YAHOO.widget.Overlay = function(el, userConfig) {
 	YAHOO.widget.Overlay.superclass.constructor.call(this, el, userConfig);
-}
+};
 
 YAHOO.extend(YAHOO.widget.Overlay, YAHOO.widget.Module);
 
@@ -1234,7 +1231,7 @@ YAHOO.widget.Overlay.prototype.init = function(el, userConfig) {
 
 	this.initEvent.fire(YAHOO.widget.Overlay);
 
-}
+};
 
 /**
 * Initializes the custom events for Overlay which are fired automatically at appropriate times by the Overlay class.
@@ -1244,7 +1241,7 @@ YAHOO.widget.Overlay.prototype.initEvents = function() {
 
 	this.beforeMoveEvent = new YAHOO.util.CustomEvent("beforeMove", this);
 	this.moveEvent = new YAHOO.util.CustomEvent("move", this);
-}
+};
 
 /**
 * Initializes the class's configurable properties which can be changed using the Overlay's Config object (cfg).
@@ -1267,7 +1264,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 
 	this.cfg.addProperty("constraintoviewport", { value:false, handler:this.configConstrainToViewport, validator:this.cfg.checkBoolean, supercedes:["iframe","x","y","xy"] } );
 	this.cfg.addProperty("iframe", { value:(this.browser == "ie" ? true : false), handler:this.configIframe, validator:this.cfg.checkBoolean, supercedes:["zIndex"] } );
-}
+};
 
 /**
 * Moves the Overlay to the specified position. This function is identical to calling this.cfg.setProperty("xy", [x,y]);
@@ -1276,7 +1273,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 */
 YAHOO.widget.Overlay.prototype.moveTo = function(x, y) {
 	this.cfg.setProperty("xy",[x,y]);
-}
+};
 
 /**
 * Adds a special CSS class to the Overlay when Mac/Gecko is in use, to work around a Gecko bug where
@@ -1285,7 +1282,7 @@ YAHOO.widget.Overlay.prototype.moveTo = function(x, y) {
 YAHOO.widget.Overlay.prototype.hideMacGeckoScrollbars = function() {
 	YAHOO.util.Dom.removeClass(this.element, "show-scrollbars");
 	YAHOO.util.Dom.addClass(this.element, "hide-scrollbars");
-}
+};
 
 /**
 * Removes a special CSS class from the Overlay when Mac/Gecko is in use, to work around a Gecko bug where
@@ -1294,7 +1291,7 @@ YAHOO.widget.Overlay.prototype.hideMacGeckoScrollbars = function() {
 YAHOO.widget.Overlay.prototype.showMacGeckoScrollbars = function() {
 	YAHOO.util.Dom.removeClass(this.element, "hide-scrollbars");
 	YAHOO.util.Dom.addClass(this.element, "show-scrollbars");
-}
+};
 
 // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
 
@@ -1307,7 +1304,7 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 
 	var effect = this.cfg.getProperty("effect");
 
-	var effectInstances = new Array();
+	var effectInstances = [];
 	if (effect) {
 		if (effect instanceof Array) {
 			for (var i=0;i<effect.length;i++) {
@@ -1330,9 +1327,9 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 			if (visible) { // Animate in if not showing
 				if (currentVis != "visible") {
 					this.beforeShowEvent.fire();
-					for (var i=0;i<effectInstances.length;i++) {
-						var e = effectInstances[i];
-						if (i == 0 && ! YAHOO.util.Config.alreadySubscribed(e.animateInCompleteEvent,this.showEvent.fire,this.showEvent)) {
+					for (var j=0;j<effectInstances.length;j++) {
+						var e = effectInstances[j];
+						if (j === 0 && ! YAHOO.util.Config.alreadySubscribed(e.animateInCompleteEvent,this.showEvent.fire,this.showEvent)) {
 							e.animateInCompleteEvent.subscribe(this.showEvent.fire,this.showEvent,true); // Delegate showEvent until end of animateInComplete
 						}
 						e.animateIn();
@@ -1356,12 +1353,12 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 		if (effect) { // Animate out if showing
 			if (currentVis == "visible") {
 				this.beforeHideEvent.fire();
-				for (var i=0;i<effectInstances.length;i++) {
-					var e = effectInstances[i];
-					if (i == 0 && ! YAHOO.util.Config.alreadySubscribed(e.animateOutCompleteEvent,this.hideEvent.fire,this.hideEvent)) {				
-						e.animateOutCompleteEvent.subscribe(this.hideEvent.fire,this.hideEvent,true); // Delegate hideEvent until end of animateOutComplete
+				for (var k=0;k<effectInstances.length;k++) {
+					var h = effectInstances[k];
+					if (k === 0 && ! YAHOO.util.Config.alreadySubscribed(h.animateOutCompleteEvent,this.hideEvent.fire,this.hideEvent)) {				
+						h.animateOutCompleteEvent.subscribe(this.hideEvent.fire,this.hideEvent,true); // Delegate hideEvent until end of animateOutComplete
 					}
-					e.animateOut();
+					h.animateOut();
 				}
 			}
 		} else { // Simple hide
@@ -1373,7 +1370,7 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 			}
 		}	
 	}
-}
+};
 
 /**
 * Center event handler used for centering on scroll/resize, but only if the Overlay is visible
@@ -1382,7 +1379,7 @@ YAHOO.widget.Overlay.prototype.doCenterOnDOMEvent = function() {
 	if (this.cfg.getProperty("visible")) {
 		this.center();
 	}
-}
+};
 
 /**
 * The default event handler fired when the "fixedcenter" property is changed.
@@ -1408,7 +1405,7 @@ YAHOO.widget.Overlay.prototype.configFixedCenter = function(type, args, obj) {
 		YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.doCenterOnDOMEvent, this);
 		YAHOO.widget.Overlay.windowScrollEvent.unsubscribe(this.doCenterOnDOMEvent, this);
 	}
-}
+};
 
 /**
 * The default event handler fired when the "height" property is changed.
@@ -1418,7 +1415,7 @@ YAHOO.widget.Overlay.prototype.configHeight = function(type, args, obj) {
 	var el = this.element;
 	YAHOO.util.Dom.setStyle(el, "height", height);
 	this.cfg.refireEvent("iframe");
-}
+};
 
 /**
 * The default event handler fired when the "width" property is changed.
@@ -1428,7 +1425,7 @@ YAHOO.widget.Overlay.prototype.configWidth = function(type, args, obj) {
 	var el = this.element;
 	YAHOO.util.Dom.setStyle(el, "width", width);
 	this.cfg.refireEvent("iframe");
-}
+};
 
 /**
 * The default event handler fired when the "zIndex" property is changed.
@@ -1454,7 +1451,7 @@ YAHOO.widget.Overlay.prototype.configzIndex = function(type, args, obj) {
 
 	YAHOO.util.Dom.setStyle(el, "zIndex", zIndex);
 	this.cfg.setProperty("zIndex", zIndex, true);
-}
+};
 
 /**
 * The default event handler fired when the "xy" property is changed.
@@ -1474,7 +1471,7 @@ YAHOO.widget.Overlay.prototype.configXY = function(type, args, obj) {
 
 	this.cfg.refireEvent("iframe");
 	this.moveEvent.fire([x,y]);
-}
+};
 
 /**
 * The default event handler fired when the "x" property is changed.
@@ -1497,7 +1494,7 @@ YAHOO.widget.Overlay.prototype.configX = function(type, args, obj) {
 
 	this.cfg.refireEvent("iframe");
 	this.moveEvent.fire([x, y]);
-}
+};
 
 /**
 * The default event handler fired when the "y" property is changed.
@@ -1520,7 +1517,7 @@ YAHOO.widget.Overlay.prototype.configY = function(type, args, obj) {
 
 	this.cfg.refireEvent("iframe");
 	this.moveEvent.fire([x, y]);
-}
+};
 
 /**
 * The default event handler fired when the "iframe" property is changed.
@@ -1535,13 +1532,13 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 		if (this.iframe) {
 			this.iframe.style.display = "block";
 		}
-	}
+	};
 
 	var hideIframe = function() {
 		if (this.iframe) {
 			this.iframe.style.display = "none";
 		}
-	}
+	};
 
 	if (val) { // IFRAME shim is enabled
 
@@ -1612,7 +1609,7 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 		this.showEvent.unsubscribe(showIframe, this);
 		this.hideEvent.unsubscribe(hideIframe, this);
 	}
-}
+};
 
 
 /**
@@ -1627,7 +1624,7 @@ YAHOO.widget.Overlay.prototype.configConstrainToViewport = function(type, args, 
 	} else {
 		this.beforeMoveEvent.unsubscribe(this.enforceConstraints, this);
 	}
-}
+};
 
 /**
 * The default event handler fired when the "context" property is changed.
@@ -1650,7 +1647,7 @@ YAHOO.widget.Overlay.prototype.configContext = function(type, args, obj) {
 			}
 		}	
 	}
-}
+};
 
 
 // END BUILT-IN PROPERTY EVENT HANDLERS //
@@ -1695,7 +1692,7 @@ YAHOO.widget.Overlay.prototype.align = function(elementAlign, contextAlign) {
 						me.moveTo(h-element.offsetWidth,v-element.offsetHeight);
 						break;
 				}
-			}
+			};
 
 			switch (contextAlign) {
 				case YAHOO.widget.Overlay.TOP_LEFT:
@@ -1713,7 +1710,7 @@ YAHOO.widget.Overlay.prototype.align = function(elementAlign, contextAlign) {
 			}
 		}
 	}
-}
+};
 
 /**
 * The default event handler executed when the moveEvent is fired, if the "constraintoviewport" is set to true.
@@ -1753,7 +1750,7 @@ YAHOO.widget.Overlay.prototype.enforceConstraints = function(type, args, obj) {
 	this.cfg.setProperty("x", x, true);
 	this.cfg.setProperty("y", y, true);
 	this.cfg.setProperty("xy", [x,y], true);
-}
+};
 
 /**
 * Centers the container in the viewport.
@@ -1771,12 +1768,12 @@ YAHOO.widget.Overlay.prototype.center = function() {
 	var x = (viewPortWidth / 2) - (elementWidth / 2) + scrollX;
 	var y = (viewPortHeight / 2) - (elementHeight / 2) + scrollY;
 	
-	this.element.style.left = parseInt(x) + "px";
-	this.element.style.top = parseInt(y) + "px";
+	this.element.style.left = parseInt(x, 10) + "px";
+	this.element.style.top = parseInt(y, 10) + "px";
 	this.syncPosition();
 
 	this.cfg.refireEvent("iframe");
-}
+};
 
 /**
 * Synchronizes the Panel's "xy", "x", and "y" properties with the Panel's position in the DOM. This is primarily used to update position information during drag & drop.
@@ -1786,7 +1783,7 @@ YAHOO.widget.Overlay.prototype.syncPosition = function() {
 	this.cfg.setProperty("x", pos[0], true);
 	this.cfg.setProperty("y", pos[1], true);
 	this.cfg.setProperty("xy", pos, true);
-}
+};
 
 /**
 * Event handler fired when the resize monitor element is resized.
@@ -1794,7 +1791,7 @@ YAHOO.widget.Overlay.prototype.syncPosition = function() {
 YAHOO.widget.Overlay.prototype.onDomResize = function(e, obj) {
 	YAHOO.widget.Overlay.superclass.onDomResize.call(this, e, obj);
 	this.cfg.refireEvent("iframe");
-}
+};
 
 /**
 * Removes the Overlay element from the DOM and sets all child elements to null.
@@ -1815,7 +1812,7 @@ YAHOO.widget.Overlay.prototype.destroy = function() {
 */ 
 YAHOO.widget.Overlay.prototype.toString = function() {
 	return "Overlay " + this.id;
-}
+};
 
 /**
 * A singleton CustomEvent used for reacting to the DOM event for window scroll
@@ -1835,7 +1832,7 @@ YAHOO.widget.Overlay.windowResizeEvent = new YAHOO.util.CustomEvent("windowResiz
 */
 YAHOO.widget.Overlay.windowScrollHandler = function(e) {
 	YAHOO.widget.Overlay.windowScrollEvent.fire();
-}
+};
 
 /**
 * The DOM event handler used to fire the CustomEvent for window resize
@@ -1843,14 +1840,14 @@ YAHOO.widget.Overlay.windowScrollHandler = function(e) {
 */
 YAHOO.widget.Overlay.windowResizeHandler = function(e) {
 	YAHOO.widget.Overlay.windowResizeEvent.fire();
-}
+};
 
 /**
 * @private
 */
-YAHOO.widget.Overlay._initialized == null;
+YAHOO.widget.Overlay._initialized = null;
 
-if (YAHOO.widget.Overlay._initialized == null) {
+if (YAHOO.widget.Overlay._initialized === null) {
 	YAHOO.util.Event.addListener(window, "scroll", YAHOO.widget.Overlay.windowScrollHandler);
 	YAHOO.util.Event.addListener(window, "resize", YAHOO.widget.Overlay.windowResizeHandler);
 
@@ -1866,7 +1863,7 @@ if (YAHOO.widget.Overlay._initialized == null) {
 */
 YAHOO.widget.OverlayManager = function(userConfig) {
 	this.init(userConfig);
-}
+};
 
 /**
 * The CSS class representing a focused Overlay
@@ -1936,7 +1933,7 @@ YAHOO.widget.OverlayManager.prototype = {
 
 		this.getActive = function() {
 			return activeOverlay;
-		}
+		};
 
 		this.focus = function(overlay) {
 			var o = this.find(overlay);
@@ -1947,11 +1944,11 @@ YAHOO.widget.OverlayManager.prototype = {
 				this.overlays.sort(this.compareZIndexDesc);
 				var topZIndex = YAHOO.util.Dom.getStyle(this.overlays[0].element, "zIndex");
 				if (! isNaN(topZIndex) && this.overlays[0] != overlay) {
-					activeOverlay.cfg.setProperty("zIndex", (parseInt(topZIndex) + 2));
+					activeOverlay.cfg.setProperty("zIndex", (parseInt(topZIndex, 10) + 2));
 				}
 				this.overlays.sort(this.compareZIndexDesc);
 			}
-		}
+		};
 
 		this.remove = function(overlay) {
 			var o = this.find(overlay);
@@ -1963,24 +1960,24 @@ YAHOO.widget.OverlayManager.prototype = {
 				o.cfg.setProperty("zIndex", originalZ, true);
 
 				o.cfg.setProperty("manager", null);
-				o.focusEvent = null
+				o.focusEvent = null;
 				o.blurEvent = null;
 				o.focus = null;
 				o.blur = null;
 			}
-		}
+		};
 
 		this.blurAll = function() {
 			activeOverlay = null;
 			for (var o=0;o<this.overlays.length;o++) {
 				YAHOO.util.Dom.removeClass(this.overlays[o].element, YAHOO.widget.OverlayManager.CSS_FOCUSED);
 			}		
-		}
+		};
 
 		var overlays = this.cfg.getProperty("overlays");
 		
 		if (! this.overlays) {
-			this.overlays = new Array();
+			this.overlays = [];
 		}
 
 		if (overlays) {
@@ -2007,23 +2004,23 @@ YAHOO.widget.OverlayManager.prototype = {
 			overlay.focus = function() {
 				mgr.focus(this);
 				this.focusEvent.fire();
-			} 
+			};
 
 			overlay.blur = function() {
 				mgr.blurAll();
 				this.blurEvent.fire();
-			}
+			};
 
 			var focusOnDomEvent = function(e,obj) {
 				overlay.focus();
-			}
+			};
 			
 			var focusevent = this.cfg.getProperty("focusevent");
 			YAHOO.util.Event.addListener(overlay.element,focusevent,focusOnDomEvent,this,true);
 
 			var zIndex = YAHOO.util.Dom.getStyle(overlay.element, "zIndex");
 			if (! isNaN(zIndex)) {
-				overlay.cfg.setProperty("zIndex", parseInt(zIndex));
+				overlay.cfg.setProperty("zIndex", parseInt(zIndex, 10));
 			} else {
 				overlay.cfg.setProperty("zIndex", 0);
 			}
@@ -2059,9 +2056,9 @@ YAHOO.widget.OverlayManager.prototype = {
 				}
 			}
 		} else if (typeof overlay == "string") {
-			for (var o=0;o<this.overlays.length;o++) {
-				if (this.overlays[o].id == overlay) {
-					return this.overlays[o];
+			for (var p=0;p<this.overlays.length;p++) {
+				if (this.overlays[p].id == overlay) {
+					return this.overlays[p];
 				}
 			}			
 		}
@@ -2111,7 +2108,7 @@ YAHOO.widget.OverlayManager.prototype = {
 		return "OverlayManager";
 	}
 
-}
+};
 
 /**
 * KeyListener is a utility that provides an easy interface for listening for keydown/keyup events fired against DOM elements.
@@ -2150,9 +2147,15 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 	function handleKeyPress(e, obj) {
 		var keyPressed = e.charCode || e.keyCode;
 		
-		if (! keyData.shift)	keyData.shift = false;
-		if (! keyData.alt)		keyData.alt = false;
-		if (! keyData.ctrl)		keyData.ctrl = false;
+		if (! keyData.shift) {	
+			keyData.shift = false; 
+		}
+		if (! keyData.alt) {	
+			keyData.alt = false;
+		}
+		if (! keyData.ctrl) {
+			keyData.ctrl = false;
+		}
 
 		// check held down modifying keys first
 		if (e.shiftKey == keyData.shift && 
@@ -2180,7 +2183,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 			this.enabledEvent.fire(keyData);
 		}
 		this.enabled = true;
-	}
+	};
 
 	this.disable = function() {
 		if (this.enabled) {
@@ -2188,7 +2191,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 			this.disabledEvent.fire(keyData);
 		}
 		this.enabled = false;
-	}
+	};
 
 	/**
 	* Returns a string representation of the object.
@@ -2196,9 +2199,9 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 	*/ 
 	this.toString = function() {
 		return "KeyListener [" + keyData.keys + "] " + attachTo.tagName + (attachTo.id ? "[" + attachTo.id + "]" : "");
-	}
+	};
 
-}
+};
 
 /**
 * Constant representing the DOM "keydown" event.

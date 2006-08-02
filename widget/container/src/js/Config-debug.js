@@ -17,7 +17,7 @@ YAHOO.util.Config = function(owner) {
 	} else {
 		YAHOO.log("No owner specified for Config object", "error");
 	}
-}
+};
 
 YAHOO.util.Config.prototype = {
 	
@@ -150,7 +150,7 @@ YAHOO.util.Config.prototype = {
 			return true;
 		}
 	}
-}
+};
 
 
 /**
@@ -185,7 +185,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		if (typeof property != 'undefined' && property.event) {
 			property.event.fire(value);
 		}	
-	}
+	};
 	/* End Private Members */
 
 	this.addProperty = function( key, propertyObject ) {
@@ -207,20 +207,20 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		if (! propertyObject.suppressEvent) {
 			this.queueProperty(key, propertyObject.value);
 		}
-	}
+	};
 
 	this.getConfig = function() {
 		var cfg = {};
 			
 		for (var prop in config) {
-			var property = config[prop]
+			var property = config[prop];
 			if (typeof property != 'undefined' && property.event) {
 				cfg[prop] = property.value;
 			}
 		}
 		
 		return cfg;
-	}
+	};
 
 	this.getProperty = function(key) {
 		key = key.toLowerCase();
@@ -231,7 +231,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		} else {
 			return undefined;
 		}
-	}
+	};
 
 	this.resetProperty = function(key) {
 		key = key.toLowerCase();
@@ -242,7 +242,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		} else {
 			return undefined;
 		}
-	}
+	};
 
 	this.setProperty = function(key, value, silent) {
 		key = key.toLowerCase();
@@ -269,7 +269,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 				return false;
 			}
 		}
-	}
+	};
 
 	this.queueProperty = function(key, value) {
 		key = key.toLowerCase();
@@ -340,7 +340,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		} else {
 			return false;
 		}
-	}
+	};
 
 	this.refireEvent = function(key) {
 		key = key.toLowerCase();
@@ -353,7 +353,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 				fireEvent(key, property.value);
 			}
 		}
-	}
+	};
 
 	this.applyConfig = function(userConfig, init) {
 		if (init) {
@@ -362,13 +362,13 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		for (var prop in userConfig) {
 			this.queueProperty(prop, userConfig[prop]);
 		}
-	}
+	};
 
 	this.refresh = function() {
 		for (var prop in config) {
 			this.refireEvent(prop);
 		}
-	}
+	};
 
 	this.fireQueue = function() {
 		this.queueInProgress = true;
@@ -386,8 +386,8 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 		
 		this.queueInProgress = false;
-		eventQueue = new Array();
-	}
+		eventQueue = [];
+	};
 
 	this.subscribeToConfigEvent = function(key, handler, obj, override) {
 		key = key.toLowerCase();
@@ -401,7 +401,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		} else {
 			return false;
 		}
-	}
+	};
 
 
 	this.unsubscribeFromConfigEvent = function(key, handler, obj) {
@@ -413,7 +413,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		} else {
 			return false;
 		}
-	}
+	};
 
 	this.toString = function() {
 		var output = "Config";
@@ -421,7 +421,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 			output += " [" + this.owner.toString() + "]";
 		}
 		return output;
-	}
+	};
 
 	this.outputEventQueue = function() {
 		var output = "";
@@ -432,8 +432,8 @@ YAHOO.util.Config.prototype.init = function(owner) {
 			}
 		}
 		return output;
-	}
-}
+	};
+};
 
 /**
 * Checks to determine if a particular function/object pair are already subscribed to the specified CustomEvent
@@ -447,8 +447,7 @@ YAHOO.util.Config.alreadySubscribed = function(evt, fn, obj) {
 		var subsc = evt.subscribers[e];
 		if (subsc && subsc.obj == obj && subsc.fn == fn) {
 			return true;
-			break;
 		}
 	}
 	return false;
-}
+};

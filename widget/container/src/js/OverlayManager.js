@@ -14,7 +14,7 @@ Version 0.11.2
 */
 YAHOO.widget.OverlayManager = function(userConfig) {
 	this.init(userConfig);
-}
+};
 
 /**
 * The CSS class representing a focused Overlay
@@ -84,7 +84,7 @@ YAHOO.widget.OverlayManager.prototype = {
 
 		this.getActive = function() {
 			return activeOverlay;
-		}
+		};
 
 		this.focus = function(overlay) {
 			var o = this.find(overlay);
@@ -95,11 +95,11 @@ YAHOO.widget.OverlayManager.prototype = {
 				this.overlays.sort(this.compareZIndexDesc);
 				var topZIndex = YAHOO.util.Dom.getStyle(this.overlays[0].element, "zIndex");
 				if (! isNaN(topZIndex) && this.overlays[0] != overlay) {
-					activeOverlay.cfg.setProperty("zIndex", (parseInt(topZIndex) + 2));
+					activeOverlay.cfg.setProperty("zIndex", (parseInt(topZIndex, 10) + 2));
 				}
 				this.overlays.sort(this.compareZIndexDesc);
 			}
-		}
+		};
 
 		this.remove = function(overlay) {
 			var o = this.find(overlay);
@@ -111,24 +111,24 @@ YAHOO.widget.OverlayManager.prototype = {
 				o.cfg.setProperty("zIndex", originalZ, true);
 
 				o.cfg.setProperty("manager", null);
-				o.focusEvent = null
+				o.focusEvent = null;
 				o.blurEvent = null;
 				o.focus = null;
 				o.blur = null;
 			}
-		}
+		};
 
 		this.blurAll = function() {
 			activeOverlay = null;
 			for (var o=0;o<this.overlays.length;o++) {
 				YAHOO.util.Dom.removeClass(this.overlays[o].element, YAHOO.widget.OverlayManager.CSS_FOCUSED);
 			}		
-		}
+		};
 
 		var overlays = this.cfg.getProperty("overlays");
 		
 		if (! this.overlays) {
-			this.overlays = new Array();
+			this.overlays = [];
 		}
 
 		if (overlays) {
@@ -155,23 +155,23 @@ YAHOO.widget.OverlayManager.prototype = {
 			overlay.focus = function() {
 				mgr.focus(this);
 				this.focusEvent.fire();
-			} 
+			};
 
 			overlay.blur = function() {
 				mgr.blurAll();
 				this.blurEvent.fire();
-			}
+			};
 
 			var focusOnDomEvent = function(e,obj) {
 				overlay.focus();
-			}
+			};
 			
 			var focusevent = this.cfg.getProperty("focusevent");
 			YAHOO.util.Event.addListener(overlay.element,focusevent,focusOnDomEvent,this,true);
 
 			var zIndex = YAHOO.util.Dom.getStyle(overlay.element, "zIndex");
 			if (! isNaN(zIndex)) {
-				overlay.cfg.setProperty("zIndex", parseInt(zIndex));
+				overlay.cfg.setProperty("zIndex", parseInt(zIndex, 10));
 			} else {
 				overlay.cfg.setProperty("zIndex", 0);
 			}
@@ -207,9 +207,9 @@ YAHOO.widget.OverlayManager.prototype = {
 				}
 			}
 		} else if (typeof overlay == "string") {
-			for (var o=0;o<this.overlays.length;o++) {
-				if (this.overlays[o].id == overlay) {
-					return this.overlays[o];
+			for (var p=0;p<this.overlays.length;p++) {
+				if (this.overlays[p].id == overlay) {
+					return this.overlays[p];
 				}
 			}			
 		}
@@ -259,4 +259,4 @@ YAHOO.widget.OverlayManager.prototype = {
 		return "OverlayManager";
 	}
 
-}
+};

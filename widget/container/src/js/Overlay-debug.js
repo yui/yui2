@@ -14,7 +14,7 @@ Version 0.11.2
 */
 YAHOO.widget.Overlay = function(el, userConfig) {
 	YAHOO.widget.Overlay.superclass.constructor.call(this, el, userConfig);
-}
+};
 
 YAHOO.extend(YAHOO.widget.Overlay, YAHOO.widget.Module);
 
@@ -102,7 +102,7 @@ YAHOO.widget.Overlay.prototype.init = function(el, userConfig) {
 
 	this.initEvent.fire(YAHOO.widget.Overlay);
 
-}
+};
 
 /**
 * Initializes the custom events for Overlay which are fired automatically at appropriate times by the Overlay class.
@@ -112,7 +112,7 @@ YAHOO.widget.Overlay.prototype.initEvents = function() {
 
 	this.beforeMoveEvent = new YAHOO.util.CustomEvent("beforeMove", this);
 	this.moveEvent = new YAHOO.util.CustomEvent("move", this);
-}
+};
 
 /**
 * Initializes the class's configurable properties which can be changed using the Overlay's Config object (cfg).
@@ -135,7 +135,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 
 	this.cfg.addProperty("constraintoviewport", { value:false, handler:this.configConstrainToViewport, validator:this.cfg.checkBoolean, supercedes:["iframe","x","y","xy"] } );
 	this.cfg.addProperty("iframe", { value:(this.browser == "ie" ? true : false), handler:this.configIframe, validator:this.cfg.checkBoolean, supercedes:["zIndex"] } );
-}
+};
 
 /**
 * Moves the Overlay to the specified position. This function is identical to calling this.cfg.setProperty("xy", [x,y]);
@@ -144,7 +144,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 */
 YAHOO.widget.Overlay.prototype.moveTo = function(x, y) {
 	this.cfg.setProperty("xy",[x,y]);
-}
+};
 
 /**
 * Adds a special CSS class to the Overlay when Mac/Gecko is in use, to work around a Gecko bug where
@@ -153,7 +153,7 @@ YAHOO.widget.Overlay.prototype.moveTo = function(x, y) {
 YAHOO.widget.Overlay.prototype.hideMacGeckoScrollbars = function() {
 	YAHOO.util.Dom.removeClass(this.element, "show-scrollbars");
 	YAHOO.util.Dom.addClass(this.element, "hide-scrollbars");
-}
+};
 
 /**
 * Removes a special CSS class from the Overlay when Mac/Gecko is in use, to work around a Gecko bug where
@@ -162,7 +162,7 @@ YAHOO.widget.Overlay.prototype.hideMacGeckoScrollbars = function() {
 YAHOO.widget.Overlay.prototype.showMacGeckoScrollbars = function() {
 	YAHOO.util.Dom.removeClass(this.element, "hide-scrollbars");
 	YAHOO.util.Dom.addClass(this.element, "show-scrollbars");
-}
+};
 
 // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
 
@@ -175,7 +175,7 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 
 	var effect = this.cfg.getProperty("effect");
 
-	var effectInstances = new Array();
+	var effectInstances = [];
 	if (effect) {
 		if (effect instanceof Array) {
 			for (var i=0;i<effect.length;i++) {
@@ -198,9 +198,9 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 			if (visible) { // Animate in if not showing
 				if (currentVis != "visible") {
 					this.beforeShowEvent.fire();
-					for (var i=0;i<effectInstances.length;i++) {
-						var e = effectInstances[i];
-						if (i == 0 && ! YAHOO.util.Config.alreadySubscribed(e.animateInCompleteEvent,this.showEvent.fire,this.showEvent)) {
+					for (var j=0;j<effectInstances.length;j++) {
+						var e = effectInstances[j];
+						if (j === 0 && ! YAHOO.util.Config.alreadySubscribed(e.animateInCompleteEvent,this.showEvent.fire,this.showEvent)) {
 							e.animateInCompleteEvent.subscribe(this.showEvent.fire,this.showEvent,true); // Delegate showEvent until end of animateInComplete
 						}
 						e.animateIn();
@@ -224,12 +224,12 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 		if (effect) { // Animate out if showing
 			if (currentVis == "visible") {
 				this.beforeHideEvent.fire();
-				for (var i=0;i<effectInstances.length;i++) {
-					var e = effectInstances[i];
-					if (i == 0 && ! YAHOO.util.Config.alreadySubscribed(e.animateOutCompleteEvent,this.hideEvent.fire,this.hideEvent)) {				
-						e.animateOutCompleteEvent.subscribe(this.hideEvent.fire,this.hideEvent,true); // Delegate hideEvent until end of animateOutComplete
+				for (var k=0;k<effectInstances.length;k++) {
+					var h = effectInstances[k];
+					if (k === 0 && ! YAHOO.util.Config.alreadySubscribed(h.animateOutCompleteEvent,this.hideEvent.fire,this.hideEvent)) {				
+						h.animateOutCompleteEvent.subscribe(this.hideEvent.fire,this.hideEvent,true); // Delegate hideEvent until end of animateOutComplete
 					}
-					e.animateOut();
+					h.animateOut();
 				}
 			}
 		} else { // Simple hide
@@ -241,7 +241,7 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 			}
 		}	
 	}
-}
+};
 
 /**
 * Center event handler used for centering on scroll/resize, but only if the Overlay is visible
@@ -250,7 +250,7 @@ YAHOO.widget.Overlay.prototype.doCenterOnDOMEvent = function() {
 	if (this.cfg.getProperty("visible")) {
 		this.center();
 	}
-}
+};
 
 /**
 * The default event handler fired when the "fixedcenter" property is changed.
@@ -276,7 +276,7 @@ YAHOO.widget.Overlay.prototype.configFixedCenter = function(type, args, obj) {
 		YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.doCenterOnDOMEvent, this);
 		YAHOO.widget.Overlay.windowScrollEvent.unsubscribe(this.doCenterOnDOMEvent, this);
 	}
-}
+};
 
 /**
 * The default event handler fired when the "height" property is changed.
@@ -286,7 +286,7 @@ YAHOO.widget.Overlay.prototype.configHeight = function(type, args, obj) {
 	var el = this.element;
 	YAHOO.util.Dom.setStyle(el, "height", height);
 	this.cfg.refireEvent("iframe");
-}
+};
 
 /**
 * The default event handler fired when the "width" property is changed.
@@ -296,7 +296,7 @@ YAHOO.widget.Overlay.prototype.configWidth = function(type, args, obj) {
 	var el = this.element;
 	YAHOO.util.Dom.setStyle(el, "width", width);
 	this.cfg.refireEvent("iframe");
-}
+};
 
 /**
 * The default event handler fired when the "zIndex" property is changed.
@@ -322,7 +322,7 @@ YAHOO.widget.Overlay.prototype.configzIndex = function(type, args, obj) {
 
 	YAHOO.util.Dom.setStyle(el, "zIndex", zIndex);
 	this.cfg.setProperty("zIndex", zIndex, true);
-}
+};
 
 /**
 * The default event handler fired when the "xy" property is changed.
@@ -344,7 +344,7 @@ YAHOO.widget.Overlay.prototype.configXY = function(type, args, obj) {
 
 	this.cfg.refireEvent("iframe");
 	this.moveEvent.fire([x,y]);
-}
+};
 
 /**
 * The default event handler fired when the "x" property is changed.
@@ -367,7 +367,7 @@ YAHOO.widget.Overlay.prototype.configX = function(type, args, obj) {
 
 	this.cfg.refireEvent("iframe");
 	this.moveEvent.fire([x, y]);
-}
+};
 
 /**
 * The default event handler fired when the "y" property is changed.
@@ -390,7 +390,7 @@ YAHOO.widget.Overlay.prototype.configY = function(type, args, obj) {
 
 	this.cfg.refireEvent("iframe");
 	this.moveEvent.fire([x, y]);
-}
+};
 
 /**
 * The default event handler fired when the "iframe" property is changed.
@@ -405,13 +405,13 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 		if (this.iframe) {
 			this.iframe.style.display = "block";
 		}
-	}
+	};
 
 	var hideIframe = function() {
 		if (this.iframe) {
 			this.iframe.style.display = "none";
 		}
-	}
+	};
 
 	if (val) { // IFRAME shim is enabled
 
@@ -485,7 +485,7 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 		this.showEvent.unsubscribe(showIframe, this);
 		this.hideEvent.unsubscribe(hideIframe, this);
 	}
-}
+};
 
 
 /**
@@ -500,7 +500,7 @@ YAHOO.widget.Overlay.prototype.configConstrainToViewport = function(type, args, 
 	} else {
 		this.beforeMoveEvent.unsubscribe(this.enforceConstraints, this);
 	}
-}
+};
 
 /**
 * The default event handler fired when the "context" property is changed.
@@ -523,7 +523,7 @@ YAHOO.widget.Overlay.prototype.configContext = function(type, args, obj) {
 			}
 		}	
 	}
-}
+};
 
 
 // END BUILT-IN PROPERTY EVENT HANDLERS //
@@ -568,7 +568,7 @@ YAHOO.widget.Overlay.prototype.align = function(elementAlign, contextAlign) {
 						me.moveTo(h-element.offsetWidth,v-element.offsetHeight);
 						break;
 				}
-			}
+			};
 
 			switch (contextAlign) {
 				case YAHOO.widget.Overlay.TOP_LEFT:
@@ -586,7 +586,7 @@ YAHOO.widget.Overlay.prototype.align = function(elementAlign, contextAlign) {
 			}
 		}
 	}
-}
+};
 
 /**
 * The default event handler executed when the moveEvent is fired, if the "constraintoviewport" is set to true.
@@ -626,7 +626,7 @@ YAHOO.widget.Overlay.prototype.enforceConstraints = function(type, args, obj) {
 	this.cfg.setProperty("x", x, true);
 	this.cfg.setProperty("y", y, true);
 	this.cfg.setProperty("xy", [x,y], true);
-}
+};
 
 /**
 * Centers the container in the viewport.
@@ -644,12 +644,12 @@ YAHOO.widget.Overlay.prototype.center = function() {
 	var x = (viewPortWidth / 2) - (elementWidth / 2) + scrollX;
 	var y = (viewPortHeight / 2) - (elementHeight / 2) + scrollY;
 	
-	this.element.style.left = parseInt(x) + "px";
-	this.element.style.top = parseInt(y) + "px";
+	this.element.style.left = parseInt(x, 10) + "px";
+	this.element.style.top = parseInt(y, 10) + "px";
 	this.syncPosition();
 
 	this.cfg.refireEvent("iframe");
-}
+};
 
 /**
 * Synchronizes the Panel's "xy", "x", and "y" properties with the Panel's position in the DOM. This is primarily used to update position information during drag & drop.
@@ -659,7 +659,7 @@ YAHOO.widget.Overlay.prototype.syncPosition = function() {
 	this.cfg.setProperty("x", pos[0], true);
 	this.cfg.setProperty("y", pos[1], true);
 	this.cfg.setProperty("xy", pos, true);
-}
+};
 
 /**
 * Event handler fired when the resize monitor element is resized.
@@ -667,7 +667,7 @@ YAHOO.widget.Overlay.prototype.syncPosition = function() {
 YAHOO.widget.Overlay.prototype.onDomResize = function(e, obj) {
 	YAHOO.widget.Overlay.superclass.onDomResize.call(this, e, obj);
 	this.cfg.refireEvent("iframe");
-}
+};
 
 /**
 * Removes the Overlay element from the DOM and sets all child elements to null.
@@ -688,7 +688,7 @@ YAHOO.widget.Overlay.prototype.destroy = function() {
 */ 
 YAHOO.widget.Overlay.prototype.toString = function() {
 	return "Overlay " + this.id;
-}
+};
 
 /**
 * A singleton CustomEvent used for reacting to the DOM event for window scroll
@@ -708,7 +708,7 @@ YAHOO.widget.Overlay.windowResizeEvent = new YAHOO.util.CustomEvent("windowResiz
 */
 YAHOO.widget.Overlay.windowScrollHandler = function(e) {
 	YAHOO.widget.Overlay.windowScrollEvent.fire();
-}
+};
 
 /**
 * The DOM event handler used to fire the CustomEvent for window resize
@@ -716,14 +716,14 @@ YAHOO.widget.Overlay.windowScrollHandler = function(e) {
 */
 YAHOO.widget.Overlay.windowResizeHandler = function(e) {
 	YAHOO.widget.Overlay.windowResizeEvent.fire();
-}
+};
 
 /**
 * @private
 */
-YAHOO.widget.Overlay._initialized == null;
+YAHOO.widget.Overlay._initialized = null;
 
-if (YAHOO.widget.Overlay._initialized == null) {
+if (YAHOO.widget.Overlay._initialized === null) {
 	YAHOO.util.Event.addListener(window, "scroll", YAHOO.widget.Overlay.windowScrollHandler);
 	YAHOO.util.Event.addListener(window, "resize", YAHOO.widget.Overlay.windowResizeHandler);
 

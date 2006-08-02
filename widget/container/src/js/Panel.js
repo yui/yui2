@@ -15,7 +15,7 @@ Version 0.11.2
 */
 YAHOO.widget.Panel = function(el, userConfig) {
 	YAHOO.widget.Panel.superclass.constructor.call(this, el, userConfig);
-}
+};
 
 YAHOO.extend(YAHOO.widget.Panel, YAHOO.widget.Overlay);
 
@@ -77,7 +77,7 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 
 	this.initEvent.fire(YAHOO.widget.Panel);
 
-}
+};
 
 /**
 * Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
@@ -89,7 +89,7 @@ YAHOO.widget.Panel.prototype.initEvents = function() {
 	this.hideMaskEvent = new YAHOO.util.CustomEvent("hideMask");
 
 	this.dragEvent = new YAHOO.util.CustomEvent("drag");
-}
+};
 
 /**
 * Initializes the class's configurable properties which can be changed using the Panel's Config object (cfg).
@@ -106,7 +106,7 @@ YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
 	this.cfg.addProperty("modal",	{ value:false, handler:this.configModal, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
 
 	this.cfg.addProperty("keylisteners", { handler:this.configKeyListeners, suppressEvent:true, supercedes:["visible"] } );
-}
+};
 
 // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
 
@@ -118,7 +118,7 @@ YAHOO.widget.Panel.prototype.configClose = function(type, args, obj) {
 
 	var doHide = function(e, obj) {
 		obj.hide();
-	}
+	};
 
 	if (val) {
 		if (! this.close) {
@@ -142,7 +142,7 @@ YAHOO.widget.Panel.prototype.configClose = function(type, args, obj) {
 			this.close.style.display = "none";
 		}
 	}
-}
+};
 
 /**
 * The default event handler fired when the "draggable" property is changed.
@@ -162,7 +162,7 @@ YAHOO.widget.Panel.prototype.configDraggable = function(type, args, obj) {
 			YAHOO.util.Dom.setStyle(this.header,"cursor","auto");
 		}
 	}
-}
+};
 
 /**
 * The default event handler fired when the "underlay" property is changed.
@@ -188,13 +188,12 @@ YAHOO.widget.Panel.prototype.configUnderlay = function(type, args, obj) {
 			YAHOO.util.Dom.removeClass(this.element, "shadow");
 			YAHOO.util.Dom.addClass(this.element, "matte");
 			break;
-		case "none":
 		default:
 			YAHOO.util.Dom.removeClass(this.element, "shadow");
 			YAHOO.util.Dom.removeClass(this.element, "matte");
 			break;
 	}
-}
+};
 
 /**
 * The default event handler fired when the "modal" property is changed. This handler subscribes or unsubscribes to the show and hide events to handle the display or hide of the modality mask.
@@ -223,7 +222,7 @@ YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 		YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.sizeMask);
 		YAHOO.widget.Overlay.windowScrollEvent.unsubscribe(this.sizeMask);
 	}
-}
+};
 
 /**
 * The default event handler fired when the "keylisteners" property is changed. 
@@ -254,7 +253,7 @@ YAHOO.widget.Panel.prototype.configKeyListeners = function(type, args, obj) {
 			}
 		}
 	} 
-}
+};
 
 // END BUILT-IN PROPERTY EVENT HANDLERS //
 
@@ -304,7 +303,7 @@ YAHOO.widget.Panel.prototype.buildWrapper = function() {
 	}
 
 	this.initDefaultConfig(); // We've changed the DOM, so the configuration must be re-tooled to get the DOM references right
-}
+};
 
 /**
 * Adjusts the size of the shadow based on the size of the element.
@@ -314,7 +313,7 @@ YAHOO.widget.Panel.prototype.sizeUnderlay = function() {
 		this.underlay.style.width = this.innerElement.offsetWidth + "px";
 		this.underlay.style.height = this.innerElement.offsetHeight + "px";
 	}
-}
+};
 
 /**
 * Event handler fired when the resize monitor element is resized.
@@ -361,7 +360,7 @@ YAHOO.widget.Panel.prototype.registerDragDrop = function() {
 				var bottomConstraint = scrollY + viewPortHeight - offsetHeight - 10;
 				var rightConstraint = scrollX + viewPortWidth - offsetWidth - 10;
 
-				this.minX = leftConstraint
+				this.minX = leftConstraint;
 				this.maxX = rightConstraint;
 				this.constrainX = true;
 
@@ -374,7 +373,7 @@ YAHOO.widget.Panel.prototype.registerDragDrop = function() {
 			}
 
 			me.dragEvent.fire("startDrag", arguments);
-		}
+		};
 		
 		this.dd.onDrag = function() {
 			me.syncPosition();
@@ -384,7 +383,7 @@ YAHOO.widget.Panel.prototype.registerDragDrop = function() {
 			}
 
 			me.dragEvent.fire("onDrag", arguments);
-		}
+		};
 
 		this.dd.endDrag = function() {
 			if (me.browser == "ie") {
@@ -392,14 +391,14 @@ YAHOO.widget.Panel.prototype.registerDragDrop = function() {
 			}
 
 			me.dragEvent.fire("endDrag", arguments);
-		}
+		};
 
 		this.dd.setHandleElId(this.header.id);
 		this.dd.addInvalidHandleType("INPUT");
 		this.dd.addInvalidHandleType("SELECT");
 		this.dd.addInvalidHandleType("TEXTAREA");
 	}
-}
+};
 
 /**
 * Builds the mask that is laid over the document when the Panel is configured to be modal.
@@ -413,13 +412,13 @@ YAHOO.widget.Panel.prototype.buildMask = function() {
 
 		var maskClick = function(e, obj) {
 			YAHOO.util.Event.stopEvent(e);
-		}
+		};
 
 		YAHOO.util.Event.addListener(this.mask, maskClick, this);
 
 		document.body.appendChild(this.mask);
 	}
-}
+};
 
 /**
 * Hides the modality mask.
@@ -430,7 +429,7 @@ YAHOO.widget.Panel.prototype.hideMask = function() {
 		this.hideMaskEvent.fire();
 		YAHOO.util.Dom.removeClass(document.body, "masked");
 	}
-}
+};
 
 /**
 * Shows the modality mask.
@@ -442,7 +441,7 @@ YAHOO.widget.Panel.prototype.showMask = function() {
 		this.mask.style.display = "block";
 		this.showMaskEvent.fire();
 	}
-}
+};
 
 /**
 * Sets the size of the modality mask to cover the entire scrollable area of the document
@@ -452,7 +451,7 @@ YAHOO.widget.Panel.prototype.sizeMask = function() {
 		this.mask.style.height = YAHOO.util.Dom.getDocumentHeight()+"px";
 		this.mask.style.width = YAHOO.util.Dom.getDocumentWidth()+"px";
 	}
-}
+};
 
 /**
 * The default event handler fired when the "height" property is changed.
@@ -463,7 +462,7 @@ YAHOO.widget.Panel.prototype.configHeight = function(type, args, obj) {
 	YAHOO.util.Dom.setStyle(el, "height", height);
 	this.cfg.refireEvent("underlay");
 	this.cfg.refireEvent("iframe");
-}
+};
 
 /**
 * The default event handler fired when the "width" property is changed.
@@ -474,7 +473,7 @@ YAHOO.widget.Panel.prototype.configWidth = function(type, args, obj) {
 	YAHOO.util.Dom.setStyle(el, "width", width);
 	this.cfg.refireEvent("underlay");
 	this.cfg.refireEvent("iframe");
-}
+};
 
 /**
 * Renders the Panel by inserting the elements that are not already in the main Panel into their correct places. Optionally appends the Panel to the specified node prior to the render's execution. NOTE: For Panels without existing markup, the appendToNode argument is REQUIRED. If this argument is ommitted and the current element is not present in the document, the function will return false, indicating that the render was a failure.
@@ -484,7 +483,7 @@ YAHOO.widget.Panel.prototype.configWidth = function(type, args, obj) {
 */
 YAHOO.widget.Panel.prototype.render = function(appendToNode) {
 	return YAHOO.widget.Panel.superclass.render.call(this, appendToNode, this.innerElement);
-}
+};
 
 /**
 * Returns a string representation of the object.
@@ -492,4 +491,4 @@ YAHOO.widget.Panel.prototype.render = function(appendToNode) {
 */ 
 YAHOO.widget.Panel.prototype.toString = function() {
 	return "Panel " + this.id;
-}
+};
