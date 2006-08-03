@@ -2009,7 +2009,7 @@ YAHOO.widget.MenuModule.prototype.enforceConstraints =
 * was fired.
 * @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance fired
 * the event.
-* @see YAHOO.widget.Overlay#configIframe
+* @see YAHOO.widget.Overlay#configPosition
 */
 YAHOO.widget.MenuModule.prototype.configPosition = 
 
