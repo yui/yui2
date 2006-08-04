@@ -139,7 +139,7 @@ YAHOO.example.LogReader = function() {
     };
 }();
 
-YAHOO.util.Event.addListener(this,'load',YAHOO.example.LogReader.init);
+YAHOO.util.Event.onAvailable("yui-log",YAHOO.example.LogReader.init);
 </script>
 </div>
 </body>

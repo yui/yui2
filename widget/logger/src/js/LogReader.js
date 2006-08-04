@@ -15,6 +15,8 @@
  */
 YAHOO.widget.LogReader = function(containerEl, oConfig) {
     var oSelf = this;
+    this._sName = YAHOO.widget.LogReader._index;
+    YAHOO.widget.LogReader._index++;
 
     // Parse config vars here
     if (typeof oConfig == "object") {
@@ -72,7 +74,7 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         // Create header
         if(!this._hdEl) {
             this._hdEl = this._containerEl.appendChild(document.createElement("div"));
-            this._hdEl.id = "yui-log-hd" + YAHOO.widget.LogReader._index;
+            this._hdEl.id = "yui-log-hd" + this._sName;
             this._hdEl.className = "yui-log-hd";
 
             this._collapseEl = this._hdEl.appendChild(document.createElement("div"));
@@ -166,8 +168,8 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
     YAHOO.widget.Logger.categoryCreateEvent.subscribe(this._onCategoryCreate, this);
     YAHOO.widget.Logger.sourceCreateEvent.subscribe(this._onSourceCreate, this);
 
-    YAHOO.widget.LogReader._index++;
     this._filterLogs();
+    YAHOO.log("LogReader initialized", null, this.toString());
 };
 
 /***************************************************************************
@@ -255,6 +257,14 @@ YAHOO.widget.LogReader.prototype.newestOnTop = true;
 /***************************************************************************
  * Public methods
  ***************************************************************************/
+ /**
+ * Public accessor to the unique name of the LogReader instance.
+ *
+ * @return {string} Unique name of the LogReader instance
+ */
+YAHOO.widget.LogReader.prototype.toString = function() {
+    return "LogReader instance" + this._sName;
+};
 /**
  * Pauses output of log messages. While paused, log messages are not lost, but
  * get saved to a buffer and then output upon resume of log reader.
@@ -293,11 +303,7 @@ YAHOO.widget.LogReader.prototype.show = function() {
  * @param {string} sTitle String to display in log reader's title bar.
  */
 YAHOO.widget.LogReader.prototype.setTitle = function(sTitle) {
-    var regEx = />/g;
-    sTitle = sTitle.replace(regEx,"&gt;");
-    regEx = /</g;
-    sTitle = sTitle.replace(regEx,"&lt;");
-    this._title.innerHTML = (sTitle);
+    this._title.innerHTML = this._HTML2Text(sTitle);
 };
  /***************************************************************************
  * Private members
@@ -309,6 +315,14 @@ YAHOO.widget.LogReader.prototype.setTitle = function(sTitle) {
  * @private
  */
 YAHOO.widget.LogReader._index = 0;
+
+/**
+ * Name of LogReader instance.
+ *
+ * @type string
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._sName = null;
 
 /**
  * A class member shared by all log readers if a container needs to be
@@ -476,7 +490,7 @@ YAHOO.widget.LogReader.prototype._createCategoryCheckbox = function(category) {
             // Append el at the end so IE 5.5 can set "type" attribute
             // and THEN set checked property
             var categoryChk = document.createElement("input");
-            categoryChk.id = "yui-log-filter-" + category + YAHOO.widget.LogReader._index;
+            categoryChk.id = "yui-log-filter-" + category + this._sName;
             categoryChk.className = "yui-log-filter-" + category;
             categoryChk.type = "checkbox";
             categoryChk.category = category;
@@ -509,7 +523,7 @@ YAHOO.widget.LogReader.prototype._createSourceCheckbox = function(source) {
         // Append el at the end so IE 5.5 can set "type" attribute
         // and THEN set checked property
         var sourceChk = document.createElement("input");
-        sourceChk.id = "yui-log-filter" + source + YAHOO.widget.LogReader._index;
+        sourceChk.id = "yui-log-filter" + source + this._sName;
         sourceChk.className = "yui-log-filter" + source;
         sourceChk.type = "checkbox";
         sourceChk.source = source;
@@ -637,23 +651,45 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
             var elapsedTime = msecs - this._lastTime;
             this._lastTime = msecs;
 
-            var verboseOutput = (this.verboseOutput) ? "<br>" : "";
+            var verboseOutput = (this.verboseOutput);
+            var container = (verboseOutput) ? "CODE" : "PRE";
             var sourceAndDetail = (sourceDetail) ?
                 source + " " + sourceDetail : source;
 
-            var output =  "<span class='"+category+"'>"+label+"</span> " +
-                totalTime + "ms (+" +
-                elapsedTime + ") " + localTime + ": " +
-                sourceAndDetail + ": " +
-                verboseOutput +
-                entry.msg;
+            // Verbose uses code tag instead of pre tag (for wrapping)
+            // and includes extra line breaks
+            var output =  (verboseOutput) ?
+                ["<p><span class='", category, "'>", label, "</span> ",
+                totalTime, "ms (+", elapsedTime, ") ",
+                localTime, ": ",
+                "</p><p>",
+                sourceAndDetail,
+                ": </p><p>",
+                this._HTML2Text(entry.msg),
+                "</p>"] :
+                
+                ["<p><span class='", category, "'>", label, "</span> ",
+                totalTime, "ms (+", elapsedTime, ") ",
+                localTime, ": ",
+                sourceAndDetail, ": ",
+                this._HTML2Text(entry.msg),"</p>"];
 
             var oNewElement = (this.newestOnTop) ?
-                this._consoleEl.insertBefore(document.createElement("p"),this._consoleEl.firstChild):
-                this._consoleEl.appendChild(document.createElement("p"));
-            oNewElement.innerHTML = output;
+                this._consoleEl.insertBefore(document.createElement(container),this._consoleEl.firstChild):
+                this._consoleEl.appendChild(document.createElement(container));
+
+            oNewElement.innerHTML = output.join("");
         }
     }
+};
+
+/**
+ * Converts input chars "<", ">", and "&" to HTML entities.
+ *
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._HTML2Text = function(html) {
+    return html.replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
 };
 
 /***************************************************************************

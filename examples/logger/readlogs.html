@@ -62,7 +62,7 @@
     myLogReader1 = new YAHOO.widget.LogReader();
     myLogReader2 = new YAHOO.widget.LogReader();
     myLogReader2.newestOnTop = false;
-    myLogReader2.setTitle("Logger Console: Oldest &gt; on &gt; Top!");
+    myLogReader2.setTitle("Logger Console: Oldest &#62; on &#62; Top!");
     </pre>
     </div>
     <!-- Code sample ends -->
@@ -85,9 +85,9 @@ YAHOO.example.LogReader = function() {
     
     return {
         init: function() {
-            myLogReader1 = new YAHOO.widget.LogReader();
-            myLogReader2 = new YAHOO.widget.LogReader();
-            myLogReader2.newestOnTop = false;
+            myLogReader1 = new YAHOO.widget.LogReader(null, {verboseOutput:false});
+            myLogReader1.setTitle("Compact Output!");
+            myLogReader2 = new YAHOO.widget.LogReader(null, {newestOnTop:false});
             myLogReader2.setTitle("Logger Console: Oldest > on > Top!");
         },
 
