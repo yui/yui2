@@ -1076,8 +1076,14 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
             if(oEM) {
     
-                aNodes[2] = oEM;  
+                aNodes[aNodes.length] = oEM;  
     
+            }
+            
+            if(oImg) {
+
+                aNodes[aNodes.length] = oImg;  
+            
             }
     
             if(bSelected) {

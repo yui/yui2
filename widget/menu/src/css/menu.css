@@ -257,6 +257,17 @@ div.yuimenu li.yuimenuitem img {
     margin:0 -16px 0 10px;
     border:0;
 
+    *margin-left:0;
+    *border-left-width:10px;
+    *border-style:solid;
+    *border-color:#f6f7ee;
+
+}
+
+div.yuimenu li.yuimenuitem.selected img.selected {
+
+    *border-color:#8c8ad0;
+
 }
 
 div.yuimenu li.checked {
