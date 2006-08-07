@@ -2430,8 +2430,6 @@ YAHOO.widget.MenuModule.prototype.initDefaultConfig = function() {
         } 
     );
 
-    oConfig.refireEvent("position");
-
     oConfig.addProperty("submenualignment", { value: ["tl","tr"] } );
 
 };

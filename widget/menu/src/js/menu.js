@@ -210,4 +210,17 @@ YAHOO.widget.Menu.prototype.onDomResize = function(e, obj) {
 
     YAHOO.widget.Menu.superclass.onDomResize.call(this, e, obj);
 
-};    
+};
+
+
+/**
+* Initializes the class's configurable properties which can be changed using 
+* the MenuModule's Config object (cfg).
+*/
+YAHOO.widget.Menu.prototype.initDefaultConfig = function() {
+
+    YAHOO.widget.Menu.superclass.initDefaultConfig.call(this);
+
+    this.cfg.refireEvent("position");
+
+};
