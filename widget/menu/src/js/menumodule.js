@@ -1693,27 +1693,40 @@ YAHOO.widget.MenuModule.prototype._onParentMenuModuleRender =
     function(p_sType, p_aArgs, p_oSubmenu) {
 
         /*
-            Set the "iframe" and "constraintoviewport" configuration 
-            properties to match the parent MenuModule
+            Set the "constraintoviewport" configuration 
+            property to match the parent MenuModule
         */ 
     
         var oParentMenu = p_oSubmenu.parent.parent;
-    
-        p_oSubmenu.cfg.applyConfig(
-        
-            {
+
+        var oConfig = {
+
                 constraintoviewport: 
                     oParentMenu.cfg.getProperty("constraintoviewport"),
     
-                xy: [0,0],
+                xy: [0,0]
     
-                iframe: oParentMenu.cfg.getProperty("iframe")
-    
-            }
+            };
+
+
+        /*
+            Only sync the "iframe" configuration property if the parent
+            MenuModule instance's position is of the same value
+        */
+
+        if(
+            this.cfg.getProperty("position") == 
+            oParentMenu.cfg.getProperty("position")
+        ) {
+
+            oConfig.iframe = oParentMenu.cfg.getProperty("iframe");
         
-        );
-    
-    
+        }
+                   
+
+        p_oSubmenu.cfg.applyConfig(oConfig);
+        
+
         if(this._oDom.inDocument(this.element)) {
     
             this.render();
@@ -2009,7 +2022,6 @@ YAHOO.widget.MenuModule.prototype.enforceConstraints =
 * was fired.
 * @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance fired
 * the event.
-* @see YAHOO.widget.Overlay#configPosition
 */
 YAHOO.widget.MenuModule.prototype.configPosition = 
 
@@ -2022,6 +2034,33 @@ YAHOO.widget.MenuModule.prototype.configPosition =
     };
 
 
+/**
+* Event handler for when the "iframe" configuration property of a
+* MenuModule changes.
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance fired
+* the event.
+* @see YAHOO.widget.Overlay#configIframe
+*/
+YAHOO.widget.MenuModule.prototype.configIframe = 
+
+    function(p_sType, p_aArgs, p_oMenuModule) {    
+
+        if(this.cfg.getProperty("position") == "dynamic") {
+
+            YAHOO.widget.MenuModule.superclass.configIframe.call(
+                this, 
+                p_sType, 
+                p_aArgs, 
+                p_oMenuModule
+            );
+    
+        }
+    
+    };
+    
 // Public methods
 
 YAHOO.widget.MenuModule.prototype.toString = function() {
@@ -2390,6 +2429,8 @@ YAHOO.widget.MenuModule.prototype.initDefaultConfig = function() {
             validator: this._checkPosition 
         } 
     );
+
+    oConfig.refireEvent("position");
 
     oConfig.addProperty("submenualignment", { value: ["tl","tr"] } );
 
