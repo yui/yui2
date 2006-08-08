@@ -70,6 +70,8 @@ YAHOO.widget.MenuItem.prototype.init = function(p_oObject, p_oConfig) {
     this.keyDownEvent.subscribe(this._onKeyDown, this, true);
     this.mouseOverEvent.subscribe(this._onMouseOver, this, true);
     this.mouseOutEvent.subscribe(this._onMouseOut, this, true);
+    this.clickEvent.subscribe(this._onClick, this, true);
+
 
     var oConfig = this.cfg;
 
@@ -144,14 +146,13 @@ YAHOO.widget.MenuItem.prototype._checkImage = null;
 
 // Private event handlers
 
-
 /**
 * "keydown" Custom Event handler for a MenuItem instance.
 * @private
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
-* @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
+* @param {YAHOO.widget.MenuItem} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */
 YAHOO.widget.MenuItem.prototype._onKeyDown = 
@@ -280,7 +281,7 @@ YAHOO.widget.MenuItem.prototype._onKeyDown =
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
-* @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
+* @param {YAHOO.widget.MenuItem} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */
 YAHOO.widget.MenuItem.prototype._onMouseOver = 
@@ -326,7 +327,7 @@ YAHOO.widget.MenuItem.prototype._onMouseOver =
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
-* @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
+* @param {YAHOO.widget.MenuItem} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */
 YAHOO.widget.MenuItem.prototype._onMouseOut = 
@@ -358,6 +359,59 @@ YAHOO.widget.MenuItem.prototype._onMouseOut =
     
     };
 
+
+/**
+* "click" Custom Event handler for a MenuItem instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.MenuItem} p_oMenuModule The MenuModule instance that 
+* fired the event.
+*/    
+YAHOO.widget.MenuItem.prototype._onClick = 
+
+    function(p_sType, p_aArgs, p_oMenuItem) {
+    
+        function findRoot(p_oMenu) {
+
+            var oItem = p_oMenu.parent; // The parent MenuItem instance
+        
+            if(oItem) {
+
+                var oParentMenu = oItem.parent;
+
+                if(
+                    oParentMenu && 
+                    (oParentMenu instanceof YAHOO.widget.Menu) && 
+                    oParentMenu.cfg.getProperty("position") == "dynamic"                
+                ) {
+
+                    return findRoot(oParentMenu);                
+
+                }
+        
+            }
+
+            return p_oMenu;
+        
+        }
+ 
+
+        var oRoot = findRoot(this.parent);
+        
+        if(
+            this.cfg.getProperty("url") == "#" && 
+            oRoot && 
+            oRoot.cfg.getProperty("position") == "dynamic"
+        ) {
+
+            oRoot.hide();
+
+        }
+
+    };
+    
 
 // Event handlers for configuration properties
 
