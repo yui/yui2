@@ -26,7 +26,33 @@ YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 YAHOO.extend(YAHOO.widget.ContextMenu, YAHOO.widget.Menu);
 
 
+// Private properties
+
+
+/**
+* Array of ContextMenu instances
+* @private
+* @type {Array}
+*/
+YAHOO.widget.ContextMenu._aMenus = [];
+
+
+/**
+* The id(s) or element(s) that trigger the display of the ContextMenu instance
+* @private
+* @type {String/Array/HTMLElement}
+*/
 YAHOO.widget.ContextMenu.prototype._oTrigger = null;
+
+
+// Public properties
+
+/**
+* Returns the HTMLElement node that was the target of the "contextmenu" 
+* DOM event.
+* @type HTMLElement
+*/
+YAHOO.widget.ContextMenu.prototype.contextEventTarget = null;
 
 
 /**
@@ -66,6 +92,10 @@ YAHOO.widget.ContextMenu.prototype.init = function(p_oElement, p_oConfig) {
     this.initEvent.fire(YAHOO.widget.ContextMenu);
 
 
+    var aMenus = YAHOO.widget.ContextMenu._aMenus;
+    
+    aMenus[aMenus.length] = this;
+    
 };
 
 
@@ -83,17 +113,7 @@ YAHOO.widget.ContextMenu.prototype._onDocumentMouseDown =
 
     function(p_oEvent, p_oMenu) {
     
-        var oTarget = YAHOO.util.Event.getTarget(p_oEvent);
-        var oTargetEl = this._oTargetElement;
-    
-        if(
-            oTarget != oTargetEl || 
-            !YAHOO.util.Dom.isAncestor(oTargetEl, oTarget)
-        ) {
-    
-            this.hide();
-        
-        }
+        this.hide();
     
     };
 
@@ -136,18 +156,25 @@ YAHOO.widget.ContextMenu.prototype._onTriggerContextMenu =
         var Event = YAHOO.util.Event;
         var oConfig = this.cfg;
 
-        if(p_oEvent.type == "mousedown") {
+
+        // Hide any other ContextMenu instances that might be visible
+
+        var aMenus = YAHOO.widget.ContextMenu._aMenus;
+        var i = aMenus.length - 1;
+
+        do {
+
+             aMenus[i].hide();
         
-            if(!p_oEvent.ctrlKey) {
-    
-                return;
+        }
+        while(i--);
             
-            }
-        
-            Event.stopEvent(p_oEvent);
+
+        if(p_oEvent.type == "mousedown" && !p_oEvent.ctrlKey) {
+    
+            return;
     
         }
-    
     
         this.contextEventTarget = Event.getTarget(p_oEvent);
     
@@ -158,25 +185,20 @@ YAHOO.widget.ContextMenu.prototype._onTriggerContextMenu =
         var nY = Event.getPageY(p_oEvent);
     
     
-        oConfig.applyConfig( { x:nX, y:nY, visible:true } );
+        oConfig.applyConfig( { xy:[nX, nY], visible:true } );
         oConfig.fireQueue();
     
     
-        // Prevent the browser's default context menu from appearing
+        /*
+             Prevent the browser's default context menu from appearing and 
+             stop the propagation of the "contextmenu" event so that 
+             other ContextMenu instances are no displayed.
+        */
     
-        Event.preventDefault(p_oEvent);
+        Event.stopEvent(p_oEvent);
     
     };
 
-
-// Public properties
-
-/**
-* Returns the HTMLElement node that was the target of the "contextmenu" 
-* DOM event.
-* @type HTMLElement
-*/
-YAHOO.widget.ContextMenu.prototype.contextEventTarget = null;
 
 
 // Public methods
