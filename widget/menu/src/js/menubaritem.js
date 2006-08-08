@@ -131,7 +131,7 @@ YAHOO.widget.MenuBarItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH =
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
-* @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
+* @param {YAHOO.widget.MenuBarItem} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */
 YAHOO.widget.MenuBarItem.prototype._onKeyDown =
