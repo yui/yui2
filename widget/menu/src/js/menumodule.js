@@ -564,7 +564,10 @@ YAHOO.widget.MenuModule.prototype._getFirstEnabledItem = function() {
             
                 oItem = aItemGroup[n];
                 
-                if(!oItem.cfg.getProperty("disabled")) {
+                if(
+                    !oItem.cfg.getProperty("disabled") && 
+                    oItem.element.style.display != "none"
+                ) {
                 
                     return oItem;
                 

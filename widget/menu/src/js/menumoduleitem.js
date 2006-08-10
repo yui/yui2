@@ -1348,8 +1348,11 @@ YAHOO.widget.MenuModuleItem.prototype = {
     
             }
     
-            return oNextItem.cfg.getProperty("disabled") ? 
-                        oNextItem.getNextEnabledSibling() : oNextItem;
+            return (
+                oNextItem.cfg.getProperty("disabled") || 
+                oNextItem.element.style.display == "none"
+            ) ? 
+            oNextItem.getNextEnabledSibling() : oNextItem;
 
         }
 
@@ -1439,9 +1442,12 @@ YAHOO.widget.MenuModuleItem.prototype = {
                     );
     
             }
-    
-            return oPreviousItem.cfg.getProperty("disabled") ? 
-                    oPreviousItem.getPreviousEnabledSibling() : oPreviousItem;
+
+            return (
+                oPreviousItem.cfg.getProperty("disabled") || 
+                oPreviousItem.element.style.display == "none"
+            ) ? 
+            oPreviousItem.getPreviousEnabledSibling() : oPreviousItem;
 
         }
 
@@ -1461,7 +1467,8 @@ YAHOO.widget.MenuModuleItem.prototype = {
         if(
             !this.cfg.getProperty("disabled") && 
             oParent && 
-            oParent.cfg.getProperty("visible")
+            oParent.cfg.getProperty("visible") && 
+            this.element.style.display != "none"
         ) {
 
             if(oActiveItem) {
@@ -1471,17 +1478,6 @@ YAHOO.widget.MenuModuleItem.prototype = {
             }
 
             oAnchor.focus();
-
-            /*
-                Opera 8.5 doesn't always focus the anchor if a MenuModuleItem
-                instance has a submenu, this is fixed by calling "focus"
-                twice.
-            */
-            if(oParent && this.browser == "opera" && this._oSubmenu) {
-
-                oAnchor.focus();
-
-            }
 
             this.focusEvent.fire();
 
