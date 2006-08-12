@@ -117,7 +117,7 @@ YAHOO.widget.Logger.reset = function() {
     this._stack = [];
     this._startTime = new Date().getTime();
     this.loggerEnabled = true;
-    this.log(null, "Logger reset");
+    this.log("Logger reset");
     this.logResetEvent.fire();
 };
 

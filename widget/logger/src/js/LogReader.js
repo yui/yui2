@@ -142,12 +142,15 @@ YAHOO.widget.LogReader = function(containerEl, oConfig) {
         }
     }
 
-    // Initialize buffer
+    // Initialize internal vars
     if(!this._buffer) {
         this._buffer = []; // output buffer
     }
-    YAHOO.widget.Logger.newLogEvent.subscribe(this._onNewLog, this);
     this._lastTime = YAHOO.widget.Logger.getStartTime(); // timestamp of last log message to console
+    
+    // Subscribe to Logger custom events
+    YAHOO.widget.Logger.newLogEvent.subscribe(this._onNewLog, this);
+    YAHOO.widget.Logger.logResetEvent.subscribe(this._onReset, this);
 
     // Initialize category filters
     this._categoryFilters = [];
@@ -689,7 +692,10 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
  * @private
  */
 YAHOO.widget.LogReader.prototype._HTML2Text = function(html) {
-    return html.replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
+    if(html) {
+        return html.replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
+    }
+    else return "";
 };
 
 /***************************************************************************
@@ -831,9 +837,9 @@ YAHOO.widget.LogReader.prototype._onClickClearBtn = function(v, oSelf) {
 };
 
 /**
- * Handles Logger's onNewEvent.
+ * Handles Logger's newLogEvent.
  *
- * @param {string} type The click event
+ * @param {string} type The newLog event
  * @param {array} args Data passed from event firer
  * @param {object} oSelf The log reader instance
  * @private
@@ -847,4 +853,15 @@ YAHOO.widget.LogReader.prototype._onNewLog = function(type, args, oSelf) {
     }
 };
 
+/**
+ * Handles Logger's resetEvent.
+ *
+ * @param {string} type The click event
+ * @param {array} args Data passed from event firer
+ * @param {object} oSelf The log reader instance
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._onReset = function(type, args, oSelf) {
+    oSelf._filterLogs();
+};
 
