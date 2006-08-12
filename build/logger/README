@@ -1,0 +1,17 @@
+Logger Release Notes
+
+*** version 0.11.0 ***
+
+* The Logger static method enableFirebug() has been RENAMED to
+enableBrowserConsole().
+
+* The Logger static method disableFirebug() has been RENAMED to
+disableBrowserConsole().
+
+* By default, the Logger will not automatically output to Firebug or Safari's
+JavaScript console. To enable this feature, implementers should now explicitly call
+YAHOO.widget.Logger.enableBrowserConsole().
+
+*** version 0.11.0 ***
+
+* Initial release

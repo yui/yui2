@@ -4,15 +4,16 @@
 /**
  * Singleton providing core logging functionality. Saves logs written through the
  * global YAHOO.log function or written by LogWriter. Provides access to logs
- * for reading by LogReader. Log messages are automatically output to Firebug,
- * if present.
+ * for reading by LogReader. Log messages can be automatically output to browser
+ * console such as the Firebug extension to Firefox or Safari's JavaScript
+ * console, if present.
  *
  * requires YAHOO.util.Event Event utility
  */
 YAHOO.widget.Logger = {
     // Initialize members
     loggerEnabled: true,
-    _firebugEnabled: true,
+    _browserConsoleEnabled: false,
     categories: ["info","warn","error","time","window"],
     sources: ["global"],
     _stack: [], // holds all log msgs
@@ -55,8 +56,8 @@ YAHOO.widget.Logger.logResetEvent = new YAHOO.util.CustomEvent("logReset", this,
 /**
  * Saves a log message to the stack and fires newLogEvent. If the log message is
  * assigned to an unknown category, creates a new category. If the log message is
- * from an unknown source, creates a new source.  If Firebug is enabled,
- * outputs the log message to Firebug.
+ * from an unknown source, creates a new source.  If browser console is enabled,
+ * outputs the log message to browser console.
  *
  * @param {string} sMsg The log message
  * @param {string} sCategory Category of log message, or null
@@ -98,8 +99,8 @@ YAHOO.widget.Logger.log = function(sMsg, sCategory, sSource) {
         this._stack.push(logEntry);
         this.newLogEvent.fire(logEntry);
 
-        if(this._firebugEnabled) {
-            this._printToFirebug(logEntry);
+        if(this._browserConsoleEnabled) {
+            this._printToBrowserConsole(logEntry);
         }
         return true;
     }
@@ -139,19 +140,21 @@ YAHOO.widget.Logger.getStartTime = function() {
 };
 
 /**
- * Disables output to the Firebug Firefox extension.
+ * Disables output to the browser's global console.log() function, which is used
+ * by the Firebug extension to Firefox as well as Safari.
  */
-YAHOO.widget.Logger.disableFirebug = function() {
-    YAHOO.log("YAHOO.Logger output to Firebug has been disabled.");
-    this._firebugEnabled = false;
+YAHOO.widget.Logger.disableBrowserConsole = function() {
+    YAHOO.log("Logger output to the function console.log() has been disabled.");
+    this._browserConsoleEnabled = false;
 };
 
 /**
- * Enables output to the Firebug Firefox extension.
+ * Enables output to the browser's global console.log() function, which is used
+ * by the Firebug extension to Firefox as well as Safari.
  */
-YAHOO.widget.Logger.enableFirebug = function() {
-    this._firebugEnabled = true;
-    YAHOO.log("YAHOO.Logger output to Firebug has been enabled.");
+YAHOO.widget.Logger.enableBrowserConsole = function() {
+    this._browserConsoleEnabled = true;
+    YAHOO.log("Logger output to the function console.log() has been enabled.");
 };
 
 /***************************************************************************
@@ -214,12 +217,12 @@ YAHOO.widget.Logger._isNewSource = function(source) {
 };
 
 /**
- * Outputs a log message to Firebug.
+ * Outputs a log message to global console.log() function.
  *
  * @param {object} entry Log entry object
  * @private
  */
-YAHOO.widget.Logger._printToFirebug = function(entry) {
+YAHOO.widget.Logger._printToBrowserConsole = function(entry) {
     if(window.console && console.log) {
         var category = entry.category;
         var label = entry.category.substring(0,4).toUpperCase();
@@ -237,12 +240,11 @@ YAHOO.widget.Logger._printToFirebug = function(entry) {
             (msecs - YAHOO.widget.Logger._lastTime) : 0;
         YAHOO.widget.Logger._lastTime = msecs;
 
-        var output = //Firebug doesn't support HTML "<span class='"+category+"'>"+label+"</span> " +
+        var output =
             localTime + " (" +
             elapsedTime + "ms): " +
             entry.source + ": " +
             entry.msg;
-
 
         console.log(output);
     }
