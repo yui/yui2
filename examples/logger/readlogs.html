@@ -6,6 +6,9 @@
 <link rel="stylesheet" href="../../build/fonts/fonts.css" type="text/css"  />
 <link rel="stylesheet" href="../../build/logger/assets/logger.css" type="text/css" />
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
+<style>
+.yui-log .mytype {background-color:#FF99CC;}
+</style>
 </head>
 
 <body>
@@ -34,7 +37,7 @@
         <p><input id="yui-log-inputwindow" class="yui-log-input" type="text" value="Log a window error.">
             <button onclick="someUndefinedFunction();">Log</button> (not supported in Opera, Safari)</p>
         <p><input id="yui-log-inputcustommsg" class="yui-log-input" type="text" value="Log a custom type message.">
-            <input id="yui-log-inputcustomtype" type="text" value="myType">
+            <input id="yui-log-inputcustomtype" type="text" value="mytype">
             <button onclick="YAHOO.log(document.getElementById('yui-log-inputcustommsg').value,document.getElementById('yui-log-inputcustomtype').value)">Log</button></p>
 
         <p><a href="javascript:YAHOO.example.LogReader.hideAllReaders();">Hide All LogReaders</a> ||
@@ -51,7 +54,11 @@
 
     <p>CSS:</p>
     <pre class="code">
-    No CSS styles were defined.
+    // A style was defined for a custom category
+    // By convention, it is defined with narrow-scope selectors to achieve namespacing
+    &lt;style&gt;
+    .yui-log .mytype {background-color:#FF99CC;}
+    &lt;/style&gt;
     </pre>
 
     <p>Markup:</p>

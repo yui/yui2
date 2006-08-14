@@ -24,6 +24,7 @@
 .yui-log .time {background-color:#A6C9D7;} /* A6C9D7 blue */
 .yui-log .window {background-color:#F2E886;} /* F2E886 tan */
 
+.yui-log .mytype {background-color:#FF99CC;} /* FF99CC pink */
 </style>
 </head>
 
@@ -59,7 +60,7 @@
         <p><input id="yui-log-inputwindow" class="yui-log-input" type="text" value="Log a window error.">
             <button onclick="someUndefinedFunction();">Log</button> (not supported in Opera, Safari)</p>
         <p><input id="yui-log-inputcustommsg" class="yui-log-input" type="text" value="Log a custom type message.">
-            <input id="yui-log-inputcustomtype" type="text" value="myType">
+            <input id="yui-log-inputcustomtype" type="text" value="mytype">
             <button onclick="YAHOO.log(document.getElementById('yui-log-inputcustommsg').value,document.getElementById('yui-log-inputcustomtype').value)">Log</button></p>
 
         <p><a href="javascript:YAHOO.example.LogReader.hideAllReaders();">Hide All LogReaders</a> ||
@@ -92,6 +93,12 @@
     .yui-log .error {background-color:#E32F0B;} /* E32F0B red */
     .yui-log .time {background-color:#A6C9D7;} /* A6C9D7 blue */
     .yui-log .window {background-color:#F2E886;} /* F2E886 tan */
+
+    // A style was defined for a custom category
+    &lt;style&gt;
+    .yui-log .mytype {background-color:#FF99CC;} /* FF99CC pink */
+    &lt;/style&gt;
+
     </pre>
 
     <p>Markup:</p>

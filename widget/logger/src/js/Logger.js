@@ -68,8 +68,11 @@ YAHOO.widget.Logger.log = function(sMsg, sCategory, sSource) {
         if(!sCategory) {
             sCategory = "info"; // default category
         }
-        else if(this._isNewCategory(sCategory)) {
-            this._createNewCategory(sCategory);
+        else {
+            sCategory = sCategory.toLocaleLowerCase();
+            if(this._isNewCategory(sCategory)) {
+                this._createNewCategory(sCategory);
+            }
         }
         var sClass = "global"; // default source
         var sDetail = null;
