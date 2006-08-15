@@ -942,8 +942,8 @@ YAHOO.widget.DS_JSArray.prototype.data = null;
  * @param {object} oParent The object instance that has requested data
  */
 YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
-    var aData = this.data;
-    var aResults = [];
+    var aData = this.data; // the array
+    var aResults = []; // container for results
     var bMatchFound = false;
     var bMatchContains = this.queryMatchContains;
     if(!this.queryMatchCase) {
@@ -951,25 +951,31 @@ YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParen
     }
 
     // Loop through each element of the array...
+    // which can be a string or an array of strings
     for(var i = aData.length-1; i >= 0; i--) {
         var aDataset = [];
-        if(typeof aData[i] == "string") {
-            aDataset[0] = aData[i];
-        }
-        else {
-            aDataset = aData[i];
+
+        if(aData[i]) {
+            if(aData[i].constructor == String) {
+                aDataset[0] = aData[i];
+            }
+            else if(aData[i].constructor == Array) {
+                aDataset = aData[i];
+            }
         }
 
-        var sKeyIndex = (this.queryMatchCase) ?
+        if(aDataset[0] && (aDataset[0].constructor == String)) {
+            var sKeyIndex = (this.queryMatchCase) ?
             encodeURIComponent(aDataset[0]).indexOf(sQuery):
             encodeURIComponent(aDataset[0]).toLowerCase().indexOf(sQuery);
 
-        // A STARTSWITH match is when the query is found at the beginning of the key string...
-        if((!bMatchContains && (sKeyIndex === 0)) ||
-        // A CONTAINS match is when the query is found anywhere within the key string...
-        (bMatchContains && (sKeyIndex > -1))) {
-            // Stash a match into aResults[].
-            aResults.unshift(aDataset);
+            // A STARTSWITH match is when the query is found at the beginning of the key string...
+            if((!bMatchContains && (sKeyIndex === 0)) ||
+            // A CONTAINS match is when the query is found anywhere within the key string...
+            (bMatchContains && (sKeyIndex > -1))) {
+                // Stash a match into aResults[].
+                aResults.unshift(aDataset);
+            }
         }
     }
 
