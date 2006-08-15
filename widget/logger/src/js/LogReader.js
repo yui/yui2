@@ -257,6 +257,21 @@ YAHOO.widget.LogReader.prototype.verboseOutput = true;
  */
 YAHOO.widget.LogReader.prototype.newestOnTop = true;
 
+/**
+ * Maximum number of messages a LogReader console will display. Default: 500;
+ *
+ * @type number
+ */
+YAHOO.widget.LogReader.prototype.thresholdMax = 500;
+
+/**
+ * When a LogReader console reaches its thresholdMax, it will clear out messages
+ * and print out the latest thresholdMin number of messages. Default: 100;
+ *
+ * @type number
+ */
+YAHOO.widget.LogReader.prototype.thresholdMin = 100;
+
 /***************************************************************************
  * Public methods
  ***************************************************************************/
@@ -344,6 +359,14 @@ YAHOO.widget.LogReader._defaultContainerEl = null;
  * @private
  */
 YAHOO.widget.LogReader.prototype._buffer = null;
+
+/**
+ * Number of log messages output to console.
+ *
+ * @type number
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._consoleMsgCount = 0;
 
 /**
  * Date of last output log message.
@@ -466,7 +489,7 @@ YAHOO.widget.LogReader.prototype._sourceFiltersEl = null;
 YAHOO.widget.LogReader.prototype._pauseBtn = null;
 
 /**
- * lear button element.
+ * Clear button element.
  *
  * @type HTMLElement
  * @private
@@ -569,6 +592,7 @@ YAHOO.widget.LogReader.prototype._clearConsole = function() {
     // Clear the buffer of any pending messages
     this._timeout = null;
     this._buffer = [];
+    this._consoleMsgCount = 0;
 
     // Reset the rolling timer
     this._lastTime = YAHOO.widget.Logger.getStartTime();
@@ -587,13 +611,21 @@ YAHOO.widget.LogReader.prototype._clearConsole = function() {
 YAHOO.widget.LogReader.prototype._printBuffer = function() {
     this._timeout = null;
 
-    if (this._consoleEl !== null) {
-        var entries = [];
-        for (var i=0; i<this._buffer.length; i++) {
-            entries[i] = this._buffer[i];
+    if(this._consoleEl !== null) {
+        var thresholdMax = this.thresholdMax;
+        thresholdMax = (thresholdMax && !isNaN(thresholdMax)) ? thresholdMax : 500;
+        if(this._consoleMsgCount < thresholdMax) {
+            var entries = [];
+            for (var i=0; i<this._buffer.length; i++) {
+                entries[i] = this._buffer[i];
+            }
+            this._buffer = [];
+            this._printToConsole(entries);
         }
-        this._buffer = [];
-        this._printToConsole(entries);
+        else {
+            this._filterLogs();
+        }
+        
         if(!this.newestOnTop) {
             this._consoleEl.scrollTop = this._consoleEl.scrollHeight;
         }
@@ -608,11 +640,18 @@ YAHOO.widget.LogReader.prototype._printBuffer = function() {
  * @private
  */
 YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
+    // Manage the number of messages displayed in the console
     var entriesLen = aEntries.length;
+    var thresholdMin = this.thresholdMin;
+    if(isNaN(thresholdMin) || (thresholdMin > this.thresholdMax)) {
+        thresholdMin = 0;
+    }
+    var entriesStartIndex = (entriesLen > thresholdMin) ? (entriesLen - thresholdMin) : 0;
+    
+    // Iterate through all log entries to print the ones that filter through
     var sourceFiltersLen = this._sourceFilters.length;
     var categoryFiltersLen = this._categoryFilters.length;
-    // Iterate through all log entries to print the ones that filter through
-    for(var i=0; i<entriesLen; i++) {
+    for(var i=entriesStartIndex; i<entriesLen; i++) {
         var entry = aEntries[i];
         var category = entry.category;
         var source = entry.source;
@@ -682,6 +721,7 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
                 this._consoleEl.appendChild(document.createElement(container));
 
             oNewElement.innerHTML = output.join("");
+            this._consoleMsgCount++;
         }
     }
 };

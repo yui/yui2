@@ -17,6 +17,7 @@ YAHOO.widget.Logger = {
     categories: ["info","warn","error","time","window"],
     sources: ["global"],
     _stack: [], // holds all log msgs
+    maxStackEntries: 2500,
     _startTime: new Date().getTime(), // static start timestamp
     _lastTime: null // timestamp of last logged message
 };
@@ -99,7 +100,12 @@ YAHOO.widget.Logger.log = function(sMsg, sCategory, sSource) {
             msg: sMsg
         };
 
-        this._stack.push(logEntry);
+        var stack = this._stack;
+        var maxStackEntries = this.maxStackEntries;
+        if(maxStackEntries && !isNaN(maxStackEntries) && (stack.length >= maxStackEntries)) {
+            stack.shift();
+        }
+        stack.push(logEntry);
         this.newLogEvent.fire(logEntry);
 
         if(this._browserConsoleEnabled) {
