@@ -306,15 +306,6 @@ YAHOO.widget.AutoComplete.prototype.useShadow = false;
  *
  * @return {string} Unique name of the auto complete instance
  */
-YAHOO.widget.AutoComplete.prototype.getName = function() {
-    return this._sName;
-};
-
- /**
- * Public accessor to the unique name of the auto complete instance.
- *
- * @return {string} Unique name of the auto complete instance
- */
 YAHOO.widget.AutoComplete.prototype.toString = function() {
     return "AutoComplete " + this._sName;
 };
@@ -1033,7 +1024,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
 };
 
 /**
- * Handles textbox keypress events, mainly for stopEvent in Safari.
+ * Handles textbox keypress events, for stopEvent in Safari and FF 1.5/Mac
  *
  * @param {event} v The keyup event
  * @param {object} oSelf The auto complete instance

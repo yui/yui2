@@ -699,6 +699,10 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                 break;
             }
 
+            if(jsonList.constructor != Array) {
+                jsonList = [jsonList];
+            }
+            
             // Loop through the array of all responses...
             for(var i = jsonList.length-1; i >= 0 ; i--) {
                 var aResultItem = [];
