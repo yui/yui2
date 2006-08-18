@@ -283,15 +283,6 @@ YAHOO.widget.AutoComplete.prototype.alwaysShowContainer = false;
 YAHOO.widget.AutoComplete.prototype.useIFrame = false;
 
 /**
- * Configurable iFrame src used when useIFrame = true. Implementations over SSL
- * should set this parameter to an appropriate https location in order to avoid
- * security-related browser errors. Default:"about:blank".
- *
- * @type boolean
- */
-YAHOO.widget.AutoComplete.prototype.iFrameSrc = "about:blank";
-
-/**
  * Whether or not the auto complete container should have a shadow. Default:false.
  *
  * @type boolean
@@ -708,6 +699,15 @@ YAHOO.widget.AutoComplete.prototype._nKeyCode = null;
  */
 YAHOO.widget.AutoComplete.prototype._nDelayID = -1;
 
+/**
+ * Src to iFrame used when useIFrame = true. Supports implementations over SSL
+ * as well.
+ *
+ * @type string
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._iFrameSrc = "javascript:false;";
+
 /***************************************************************************
  * Private methods
  ***************************************************************************/
@@ -778,7 +778,7 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelpers = function() {
     }
     if(this.useIFrame && !this._oContainer._oIFrame) {
         var oIFrame = document.createElement("iframe");
-        oIFrame.src = this.iFrameSrc;
+        oIFrame.src = this._iFrameSrc;
         oIFrame.frameBorder = 0;
         oIFrame.scrolling = "no";
         oIFrame.style.position = "absolute";
