@@ -2,6 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.com/yui/license.txt
+version: 0.11.0
 */
 
 /****************************************************************************/
@@ -289,15 +290,6 @@ YAHOO.widget.AutoComplete.prototype.alwaysShowContainer = false;
 YAHOO.widget.AutoComplete.prototype.useIFrame = false;
 
 /**
- * Configurable iFrame src used when useIFrame = true. Implementations over SSL
- * should set this parameter to an appropriate https location in order to avoid
- * security-related browser errors. Default:"about:blank".
- *
- * @type boolean
- */
-YAHOO.widget.AutoComplete.prototype.iFrameSrc = "about:blank";
-
-/**
  * Whether or not the auto complete container should have a shadow. Default:false.
  *
  * @type boolean
@@ -307,15 +299,6 @@ YAHOO.widget.AutoComplete.prototype.useShadow = false;
 /***************************************************************************
  * Public methods
  ***************************************************************************/
- /**
- * Public accessor to the unique name of the auto complete instance.
- *
- * @return {string} Unique name of the auto complete instance
- */
-YAHOO.widget.AutoComplete.prototype.getName = function() {
-    return this._sName;
-};
-
  /**
  * Public accessor to the unique name of the auto complete instance.
  *
@@ -723,6 +706,15 @@ YAHOO.widget.AutoComplete.prototype._nKeyCode = null;
  */
 YAHOO.widget.AutoComplete.prototype._nDelayID = -1;
 
+/**
+ * Src to iFrame used when useIFrame = true. Supports implementations over SSL
+ * as well.
+ *
+ * @type string
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._iFrameSrc = "javascript:false;";
+
 /***************************************************************************
  * Private methods
  ***************************************************************************/
@@ -793,7 +785,7 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelpers = function() {
     }
     if(this.useIFrame && !this._oContainer._oIFrame) {
         var oIFrame = document.createElement("iframe");
-        oIFrame.src = this.iFrameSrc;
+        oIFrame.src = this._iFrameSrc;
         oIFrame.frameBorder = 0;
         oIFrame.scrolling = "no";
         oIFrame.style.position = "absolute";
@@ -1039,7 +1031,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
 };
 
 /**
- * Handles textbox keypress events, mainly for stopEvent in Safari.
+ * Handles textbox keypress events, for stopEvent in Safari and FF 1.5/Mac
  *
  * @param {event} v The keyup event
  * @param {object} oSelf The auto complete instance
@@ -1768,33 +1760,36 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
         var oNewItem = this._aListItems[nNewItemIndex];
 
         // Scroll the container if necessary
-        if((YAHOO.util.Dom.getStyle(this._oContainer._oContent,"overflow") == "auto") &&
-        (nNewItemIndex > -1) && (nNewItemIndex < this._nDisplayedItems)) {
+        var oContent = this._oContainer._oContent;
+        var scrollOn = ((YAHOO.util.Dom.getStyle(oContent,"overflow") == "auto") ||
+            (YAHOO.util.Dom.getStyle(oContent,"overflowY") == "auto"));
+        if(scrollOn && (nNewItemIndex > -1) &&
+        (nNewItemIndex < this._nDisplayedItems)) {
             // User is keying down
             if(nKeyCode == 40) {
                 // Bottom of selected item is below scroll area...
-                if((oNewItem.offsetTop+oNewItem.offsetHeight) > (this._oContainer._oContent.scrollTop + this._oContainer._oContent.offsetHeight)) {
+                if((oNewItem.offsetTop+oNewItem.offsetHeight) > (oContent.scrollTop + oContent.offsetHeight)) {
                     // Set bottom of scroll area to bottom of selected item
-                    this._oContainer._oContent.scrollTop = (oNewItem.offsetTop+oNewItem.offsetHeight) - this._oContainer._oContent.offsetHeight;
+                    oContent.scrollTop = (oNewItem.offsetTop+oNewItem.offsetHeight) - oContent.offsetHeight;
                 }
                 // Bottom of selected item is above scroll area...
-                else if((oNewItem.offsetTop+oNewItem.offsetHeight) < this._oContainer._oContent.scrollTop) {
+                else if((oNewItem.offsetTop+oNewItem.offsetHeight) < oContent.scrollTop) {
                     // Set top of selected item to top of scroll area
-                    this._oContainer._oContent.scrollTop = oNewItem.offsetTop;
+                    oContent.scrollTop = oNewItem.offsetTop;
 
                 }
             }
             // User is keying up
             else {
                 // Top of selected item is above scroll area
-                if(oNewItem.offsetTop < this._oContainer._oContent.scrollTop) {
+                if(oNewItem.offsetTop < oContent.scrollTop) {
                     // Set top of scroll area to top of selected item
                     this._oContainer._oContent.scrollTop = oNewItem.offsetTop;
                 }
                 // Top of selected item is below scroll area
-                else if(oNewItem.offsetTop > (this._oContainer._oContent.scrollTop + this._oContainer._oContent.offsetHeight)) {
+                else if(oNewItem.offsetTop > (oContent.scrollTop + oContent.offsetHeight)) {
                     // Set bottom of selected item to bottom of scroll area
-                    this._oContainer._oContent.scrollTop = (oNewItem.offsetTop+oNewItem.offsetHeight) - this._oContainer._oContent.offsetHeight;
+                    this._oContainer._oContent.scrollTop = (oNewItem.offsetTop+oNewItem.offsetHeight) - oContent.offsetHeight;
                 }
             }
         }
@@ -2508,6 +2503,10 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                 break;
             }
 
+            if(jsonList.constructor != Array) {
+                jsonList = [jsonList];
+            }
+            
             // Loop through the array of all responses...
             for(var i = jsonList.length-1; i >= 0 ; i--) {
                 var aResultItem = [];
@@ -2747,8 +2746,8 @@ YAHOO.widget.DS_JSArray.prototype.data = null;
  * @param {object} oParent The object instance that has requested data
  */
 YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
-    var aData = this.data;
-    var aResults = [];
+    var aData = this.data; // the array
+    var aResults = []; // container for results
     var bMatchFound = false;
     var bMatchContains = this.queryMatchContains;
     if(!this.queryMatchCase) {
@@ -2756,25 +2755,31 @@ YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParen
     }
 
     // Loop through each element of the array...
+    // which can be a string or an array of strings
     for(var i = aData.length-1; i >= 0; i--) {
         var aDataset = [];
-        if(typeof aData[i] == "string") {
-            aDataset[0] = aData[i];
-        }
-        else {
-            aDataset = aData[i];
+
+        if(aData[i]) {
+            if(aData[i].constructor == String) {
+                aDataset[0] = aData[i];
+            }
+            else if(aData[i].constructor == Array) {
+                aDataset = aData[i];
+            }
         }
 
-        var sKeyIndex = (this.queryMatchCase) ?
+        if(aDataset[0] && (aDataset[0].constructor == String)) {
+            var sKeyIndex = (this.queryMatchCase) ?
             encodeURIComponent(aDataset[0]).indexOf(sQuery):
             encodeURIComponent(aDataset[0]).toLowerCase().indexOf(sQuery);
 
-        // A STARTSWITH match is when the query is found at the beginning of the key string...
-        if((!bMatchContains && (sKeyIndex === 0)) ||
-        // A CONTAINS match is when the query is found anywhere within the key string...
-        (bMatchContains && (sKeyIndex > -1))) {
-            // Stash a match into aResults[].
-            aResults.unshift(aDataset);
+            // A STARTSWITH match is when the query is found at the beginning of the key string...
+            if((!bMatchContains && (sKeyIndex === 0)) ||
+            // A CONTAINS match is when the query is found anywhere within the key string...
+            (bMatchContains && (sKeyIndex > -1))) {
+                // Stash a match into aResults[].
+                aResults.unshift(aDataset);
+            }
         }
     }
 
