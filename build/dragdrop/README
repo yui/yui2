@@ -1,5 +1,10 @@
 Drag and Drop Release Notes
 
+0.11.3
+ 
+   * Fixed a JavaScript error that would be generated when trying to implement
+     DDProxy using the default settings and a tiny element.
+
 0.11.2
 
    * Drag and drop will no longer interfere with selecting text on elements

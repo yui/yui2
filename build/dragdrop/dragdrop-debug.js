@@ -3,7 +3,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-version: 0.11.2
+version: 0.11.3
 */ 
 
 /**
@@ -1340,6 +1340,7 @@ if (!YAHOO.util.DragDropMgr) {
             for (var g in oDD.groups) {
                 if (g && this.ids[g][oDD.id]) {
                     delete this.ids[g][oDD.id];
+                    //this.logger.log("NEW LEN " + this.ids.length, "warn");
                 }
             }
             delete this.handleIds[oDD.id];
@@ -1594,6 +1595,7 @@ if (!YAHOO.util.DragDropMgr) {
          * @private
          */
         this.handleMouseMove = function(e) {
+            //this.logger.log("handlemousemove");
             if (! this.dragCurrent) {
                 // this.logger.log("no current drag obj");
                 return true;
@@ -1820,7 +1822,18 @@ if (!YAHOO.util.DragDropMgr) {
 
         /**
          * Refreshes the cache of the top-left and bottom-right points of the 
-         * drag and drop objects in the specified groups
+         * drag and drop objects in the specified group(s).  This is in the
+         * format that is stored in the drag and drop instance, so typical 
+         * usage is:
+         *
+         * YAHOO.util.DragDropMgr.refreshCache(ddinstance.groups);
+         *
+         * Alternatively:
+         *
+         * YAHOO.util.DragDropMgr.refreshCache({group1:true, group2:true});
+         *
+         * @TODO this really should be an indexed array.  Alternatively this
+         * method could accept both.
          *
          * @param {Object} groups an associative array of groups to refresh
          */
@@ -1956,7 +1969,8 @@ if (!YAHOO.util.DragDropMgr) {
             // location of the target as related to the actual location of the
             // dragged element.
             var dc = this.dragCurrent;
-            if (!dc || (!intersect && !dc.constrainX && !dc.constrainY)) {
+            if (!dc || !dc.getTargetCoord || 
+                    (!intersect && !dc.constrainX && !dc.constrainY)) {
                 return oTarget.cursorIsOver;
             }
 
@@ -2253,6 +2267,12 @@ if (!YAHOO.util.DragDropMgr) {
     YAHOO.util.DDM._addListeners();
 
 }
+
+YAHOO.util.DragDropMgr.enableWindow = function(win) {
+    var EU = YAHOO.util.Event;
+    EU.on(win.document, "mouseup",   this.handleMouseUp,   this, true);
+    EU.on(win.document, "mousemove", this.handleMouseMove, this, true);
+};
 
 /**
  * A DragDrop implementation where the linked element follows the 
@@ -2703,11 +2723,11 @@ YAHOO.util.DDProxy.prototype.showFrame = function(iPageX, iPageY) {
 };
 
 YAHOO.util.DDProxy.prototype._resizeProxy = function() {
-    var DOM    = YAHOO.util.Dom;
-    var el     = this.getEl();
-    var dragEl = this.getDragEl();
-
     if (this.resizeFrame) {
+        var DOM    = YAHOO.util.Dom;
+        var el     = this.getEl();
+        var dragEl = this.getDragEl();
+
         var bt = parseInt( DOM.getStyle(dragEl, "borderTopWidth"    ), 10);
         var br = parseInt( DOM.getStyle(dragEl, "borderRightWidth"  ), 10);
         var bb = parseInt( DOM.getStyle(dragEl, "borderBottomWidth" ), 10);
@@ -2720,8 +2740,8 @@ YAHOO.util.DDProxy.prototype._resizeProxy = function() {
 
         this.logger.log("proxy size: " + bt + "  " + br + " " + bb + " " + bl);
 
-        var newWidth  = el.offsetWidth - br - bl;
-        var newHeight = el.offsetHeight - bt - bb;
+        var newWidth  = Math.max(0, el.offsetWidth  - br - bl);                                                                                           
+        var newHeight = Math.max(0, el.offsetHeight - bt - bb);
 
         this.logger.log("Resizing proxy element");
 
