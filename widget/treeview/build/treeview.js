@@ -1,8 +1,8 @@
 /*                                                                                                                                                      
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.                                                                                                    
-Code licensed under the BSD License:                                                                                                                    
-http://developer.yahoo.net/yui/license.txt                                                                                                              
-version: 0.11.0                                                                                                                                         
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 0.11.3
 */ 
 
 /**
@@ -327,8 +327,8 @@ YAHOO.widget.TreeView.prototype = {
     },
 
     /**
-     * Removes the node and its children, and optionally refreshes the branch 
-     * of the tree that was affected.
+     * Removes the node and its children, and optionally refreshes the 
+     * branch of the tree that was affected.
      * @param {Node} The node to remove
      * @param {boolean} autoRefresh automatically refreshes branch if true
      * @return {boolean} False is there was a problem, true otherwise.
@@ -389,9 +389,9 @@ YAHOO.widget.TreeView.prototype = {
     },
 
     /**
-     * Removes the branch from the tree.  This differs from removeNode in
-     * that the child collection is preserved to make it possible to
-     * insert the branch into another part of the tree, or another tree.
+     * Removes the node from the tree, preserving the child collection 
+     * to make it possible to insert the branch into another part of the 
+     * tree, or another tree.
      * @param {Node} the node to remove
      */
     popNode: function(node) { 
@@ -419,6 +419,11 @@ YAHOO.widget.TreeView.prototype = {
         if (node.nextSibling) {
             node.nextSibling.previousSibling = node.previousSibling;
         }
+
+        node.parent = null;
+        node.previousSibling = null;
+        node.nextSibling = null;
+        node.tree = null;
 
         // Update the tree's node collection 
         delete this._nodes[node.index];
@@ -751,6 +756,7 @@ YAHOO.widget.Node.prototype = {
      * the parent is also applied to this node's children in order to
      * make it possible to move a branch from one tree to another.
      * @param {Node} parentNode this node's parent node
+     * @return {boolean} true if the application was successful
      */
     applyParent: function(parentNode) {
         if (!parentNode) {
@@ -802,6 +808,7 @@ YAHOO.widget.Node.prototype = {
     /**
      * Appends this node to the supplied node's child collection
      * @param parentNode {Node} the node to append to.
+     * @return {Node} The appended node
      */
     appendTo: function(parentNode) {
         return parentNode.appendChild(this);

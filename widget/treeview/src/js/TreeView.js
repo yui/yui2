@@ -420,6 +420,11 @@ YAHOO.widget.TreeView.prototype = {
             node.nextSibling.previousSibling = node.previousSibling;
         }
 
+        node.parent = null;
+        node.previousSibling = null;
+        node.nextSibling = null;
+        node.tree = null;
+
         // Update the tree's node collection 
         delete this._nodes[node.index];
     },

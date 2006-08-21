@@ -127,6 +127,8 @@
 	  <div id="expandcontractdiv">
 		<a href="javascript:tree.expandAll()">Expand all</a>
 		<a href="javascript:tree.collapseAll()">Collapse all</a>
+		<a href="javascript:checkAll()">Check all</a>
+		<a href="javascript:uncheckAll()">Uncheck all</a>
 	  </div>
 	  <div id="treeDiv1"></div>
 
@@ -204,6 +206,20 @@
         }
 
         alert(out.join("\n"));
+    }
+
+    function checkAll() {
+        var topNodes = tree.getRoot().children;
+        for(var i = 0; i <= topNodes.length; ++i) {
+            topNodes[i].check();
+        }
+    }
+
+    function uncheckAll() {
+        var topNodes = tree.getRoot().children;
+        for(var i = 0; i <= topNodes.length; ++i) {
+            topNodes[i].uncheck();
+        }
     }
 
     function showJSON() {

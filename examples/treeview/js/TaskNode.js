@@ -165,6 +165,7 @@ YAHOO.widget.TaskNode.prototype.setCheckState = function(state) {
  * Check this node
  */
 YAHOO.widget.TaskNode.prototype.check = function() { 
+    this.logger.log("check");
     this.setCheckState(2);
     for (var i=0; i<this.children.length; ++i) {
         this.children[i].check();
