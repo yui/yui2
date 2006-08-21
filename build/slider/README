@@ -1,5 +1,9 @@
 Slider - Release Notes
 
+0.11.3
+
+   * No change
+
 0.11.0
 
    * When the thumb is clicked and dragged, the click position delta is properly
