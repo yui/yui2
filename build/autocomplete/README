@@ -1,5 +1,15 @@
 AutoComplete Release Notes
 
+
+
+*** version 0.11.3 ***
+
+* The iFrameSrc property has been deprecated. Implementers no longer need to
+specify an https URL to avoid IE security warnings when working with sites over
+SSL.
+
+
+
 *** version 0.11.0 ***
 
 * The method getListIds() has been deprecated for getListItems(), which returns
