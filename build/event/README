@@ -1,6 +1,17 @@
 
 YUI Library - Event - Release Notes
 
+0.11.3
+
+   * The listener cache is now pruned when events are removed.  This fixes
+     a performance issue when adding many listeners, removing them, and
+     adding them again repeatedly.
+
+   * Safari click listeners will work correctly if a bound element is removed
+     from the DOM and a new element with the same ID is added.
+
+   * Removed the code that automatically unsubscribed custom event listeners.
+
 0.11.0
 
    * Added Event.purgeElement which will remove all listeners added via 

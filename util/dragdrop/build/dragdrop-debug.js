@@ -2268,11 +2268,11 @@ if (!YAHOO.util.DragDropMgr) {
 
 }
 
-YAHOO.util.DragDropMgr.enableWindow = function(win) {
-    var EU = YAHOO.util.Event;
-    EU.on(win.document, "mouseup",   this.handleMouseUp,   this, true);
-    EU.on(win.document, "mousemove", this.handleMouseMove, this, true);
-};
+//YAHOO.util.DragDropMgr.enableWindow = function(win) {
+    //var EU = YAHOO.util.Event;
+    //EU.on(win.document, "mouseup",   this.handleMouseUp,   this, true);
+    //EU.on(win.document, "mousemove", this.handleMouseMove, this, true);
+//};
 
 /**
  * A DragDrop implementation where the linked element follows the 

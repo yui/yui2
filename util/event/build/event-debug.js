@@ -78,9 +78,9 @@ YAHOO.util.CustomEvent.prototype = {
      *                            scope of the listener
      */
     subscribe: function(fn, obj, bOverride) {
-        if (this.subscribeEvent) {
-            this.subscribeEvent.fire(fn, obj, bOverride);
-        }
+        //if (this.subscribeEvent) {
+            //this.subscribeEvent.fire(fn, obj, bOverride);
+        //}
 
         this.subscribers.push( new YAHOO.util.Subscriber(fn, obj, bOverride) );
     },
