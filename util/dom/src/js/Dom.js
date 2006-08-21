@@ -236,9 +236,11 @@ YAHOO.util.Dom = function() {
       
             while (parentNode && parentNode.tagName.toUpperCase() != 'BODY' && parentNode.tagName.toUpperCase() != 'HTML') 
             { // account for any scrolled ancestors
-               pos[0] -= parentNode.scrollLeft;
-               pos[1] -= parentNode.scrollTop;
-      
+               if (util.Dom.getStyle(parentNode, 'display') != 'inline') { // work around opera inline scrollLeft/Top bug
+                  pos[0] -= parentNode.scrollLeft;
+                  pos[1] -= parentNode.scrollTop;
+               }
+               
                if (parentNode.parentNode) { parentNode = parentNode.parentNode; } 
                else { parentNode = null; }
             }
@@ -257,7 +259,11 @@ YAHOO.util.Dom = function() {
        * @return {String/Array} The X position of the element(s)
        */
       getX: function(el) {
-         return util.Dom.getXY(el)[0];
+         var f = function(el) {
+            return util.Dom.getXY(el)[0];
+         };
+         
+         return util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -266,7 +272,11 @@ YAHOO.util.Dom = function() {
        * @return {String/Array} The Y position of the element(s)
        */
       getY: function(el) {
-         return util.Dom.getXY(el)[1];
+         var f = function(el) {
+            return util.Dom.getXY(el)[1];
+         };
+         
+         return util.Dom.batch(el, f, util.Dom, true);
       },
       
       /**
@@ -451,6 +461,10 @@ YAHOO.util.Dom = function() {
        * @param {String} newClassName the class name that will be replacing the old class name
        */
       replaceClass: function(el, oldClassName, newClassName) {
+         if (oldClassName === newClassName) { // avoid infinite loop
+            return false;
+         };
+         
          var re = new RegExp('(?:^|\\s+)' + oldClassName + '(?:\\s+|$)', 'g');
 
          var f = function(el) {
@@ -528,7 +542,7 @@ YAHOO.util.Dom = function() {
                      logger.log('isAncestor returning true', 'info', 'Dom');
                      return true;
                   }
-                  else if (parent.tagName.toUpperCase() == 'HTML') {
+                  else if (!parent.tagName || parent.tagName.toUpperCase() == 'HTML') {
                      logger.log('isAncestor returning false', 'info', 'Dom');
                      return false;
                   }
@@ -670,23 +684,21 @@ YAHOO.util.Dom = function() {
                case 'CSS1Compat': // Standards mode
                   docWidth = document.documentElement.clientWidth;
                   bodyWidth = document.body.offsetWidth + marginLeft + marginRight;
-                  winWidth = self.innerWidth || -1;
                   break;
                   
                default: // Quirks
                   bodyWidth = document.body.clientWidth;
-                  winWidth = document.body.scrollWidth;
+                  docWidth = document.body.scrollWidth;
                   break;
             }
          } else { // Safari
             docWidth = document.documentElement.clientWidth;
             bodyWidth = document.body.offsetWidth + marginLeft + marginRight;
-            winWidth = self.innerWidth;
          }
       
-         var w = [docWidth,bodyWidth,winWidth].sort(function(a, b){return(a-b);});
+         var w = Math.max(docWidth, bodyWidth);
          logger.log('getDocumentWidth returning ' + w[2], 'info', 'Dom');
-         return w[2];
+         return w;
       },
 
       /**
