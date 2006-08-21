@@ -28,7 +28,7 @@ if ($mode == "dist") {
 		// center column
 		var i =0;
 
-		dds[i]= new YAHOO.example.DDMy2("mod_93156", "center") ;
+		dds[i]= new YAHOO.example.DDMy2("mod_93156", "center", {centerFrame: true, resizeFrame: false}) ;
 		dds[i].setHandleElId("mod_93156dh");
 		
 		i++;

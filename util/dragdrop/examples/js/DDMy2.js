@@ -30,12 +30,12 @@ YAHOO.example.DDMy2 = function(id, sGroup, config) {
 
     // Specify that we do not want to resize the drag frame... we want to keep
     // the drag frame the size of our miniature content channel image
-    this.resizeFrame = false;
+    //this.resizeFrame = false;
 
     // Specify that we want the drag frame centered around the cursor rather 
     // than relative to the click location so that the miniature content
     // channel appears in the location that was clicked
-    this.centerFrame = true;
+    // this.centerFrame = true;
 };
 
 // YAHOO.example.DDMy2.prototype = new YAHOO.util.DDProxy();

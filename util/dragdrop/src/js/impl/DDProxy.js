@@ -131,11 +131,11 @@ YAHOO.util.DDProxy.prototype.showFrame = function(iPageX, iPageY) {
 };
 
 YAHOO.util.DDProxy.prototype._resizeProxy = function() {
-    var DOM    = YAHOO.util.Dom;
-    var el     = this.getEl();
-    var dragEl = this.getDragEl();
-
     if (this.resizeFrame) {
+        var DOM    = YAHOO.util.Dom;
+        var el     = this.getEl();
+        var dragEl = this.getDragEl();
+
         var bt = parseInt( DOM.getStyle(dragEl, "borderTopWidth"    ), 10);
         var br = parseInt( DOM.getStyle(dragEl, "borderRightWidth"  ), 10);
         var bb = parseInt( DOM.getStyle(dragEl, "borderBottomWidth" ), 10);
@@ -148,8 +148,8 @@ YAHOO.util.DDProxy.prototype._resizeProxy = function() {
 
         this.logger.log("proxy size: " + bt + "  " + br + " " + bb + " " + bl);
 
-        var newWidth  = el.offsetWidth - br - bl;
-        var newHeight = el.offsetHeight - bt - bb;
+        var newWidth  = Math.max(0, el.offsetWidth  - br - bl);                                                                                           
+        var newHeight = Math.max(0, el.offsetHeight - bt - bb);
 
         this.logger.log("Resizing proxy element");
 

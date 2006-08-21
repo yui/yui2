@@ -295,6 +295,7 @@ if (!YAHOO.util.DragDropMgr) {
             for (var g in oDD.groups) {
                 if (g && this.ids[g][oDD.id]) {
                     delete this.ids[g][oDD.id];
+                    //this.logger.log("NEW LEN " + this.ids.length, "warn");
                 }
             }
             delete this.handleIds[oDD.id];
@@ -549,6 +550,7 @@ if (!YAHOO.util.DragDropMgr) {
          * @private
          */
         this.handleMouseMove = function(e) {
+            //this.logger.log("handlemousemove");
             if (! this.dragCurrent) {
                 // this.logger.log("no current drag obj");
                 return true;
@@ -775,7 +777,18 @@ if (!YAHOO.util.DragDropMgr) {
 
         /**
          * Refreshes the cache of the top-left and bottom-right points of the 
-         * drag and drop objects in the specified groups
+         * drag and drop objects in the specified group(s).  This is in the
+         * format that is stored in the drag and drop instance, so typical 
+         * usage is:
+         *
+         * YAHOO.util.DragDropMgr.refreshCache(ddinstance.groups);
+         *
+         * Alternatively:
+         *
+         * YAHOO.util.DragDropMgr.refreshCache({group1:true, group2:true});
+         *
+         * @TODO this really should be an indexed array.  Alternatively this
+         * method could accept both.
          *
          * @param {Object} groups an associative array of groups to refresh
          */
@@ -911,7 +924,8 @@ if (!YAHOO.util.DragDropMgr) {
             // location of the target as related to the actual location of the
             // dragged element.
             var dc = this.dragCurrent;
-            if (!dc || (!intersect && !dc.constrainX && !dc.constrainY)) {
+            if (!dc || !dc.getTargetCoord || 
+                    (!intersect && !dc.constrainX && !dc.constrainY)) {
                 return oTarget.cursorIsOver;
             }
 
@@ -1208,4 +1222,10 @@ if (!YAHOO.util.DragDropMgr) {
     YAHOO.util.DDM._addListeners();
 
 }
+
+YAHOO.util.DragDropMgr.enableWindow = function(win) {
+    var EU = YAHOO.util.Event;
+    EU.on(win.document, "mouseup",   this.handleMouseUp,   this, true);
+    EU.on(win.document, "mousemove", this.handleMouseMove, this, true);
+};
 

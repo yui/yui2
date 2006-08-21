@@ -68,16 +68,16 @@ if ($mode == "dist") {
 	  </p>
 
 	  <p><a href="targetable.<?php echo $ext ?>?mode=<?php echo $mode ?>">Targetable afforance</a>:
-        Demonstrates how multiple interaction groups and inportant moment hooks
-        can be used to provide user feedback during the drag.
+        Demonstrates how multiple interaction groups and the events exposed
+        by the utility can be used to provide user feedback during the drag.
 	  </p>
 
 	  <p><a href="grid.<?php echo $ext ?>?mode=<?php echo $mode ?>">Grid</a>:
-       Demonstrates the graduated movement feature of drag and drop 
+       Demonstrates the graduated movement feature of drag and drop.
 	  </p>
 
 	  <p><a href="resize.<?php echo $ext ?>?mode=<?php echo $mode ?>">Resize</a>:
-       Demonstrates a draggable and resizable module.
+       Demonstrates one approach to creating a draggable and resizable module.
 	  </p>
 
 
