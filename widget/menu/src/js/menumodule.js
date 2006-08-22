@@ -699,6 +699,7 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oConfig) {
 
         // Subscribe to Custom Events
 
+        this.initEvent.subscribe(this._onInit, this, true);
         this.beforeRenderEvent.subscribe(this._onBeforeRender, this, true);
         this.renderEvent.subscribe(this._onRender, this, true);
         this.showEvent.subscribe(this._onShow, this, true);
@@ -1399,6 +1400,26 @@ YAHOO.widget.MenuModule.prototype._getOffsetWidth = function() {
 
 
 // Private Custom Event handlers
+
+/**
+* "init" Custom Event handler for a MenuModule instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
+* fired the event.
+*/
+YAHOO.widget.MenuModule.prototype._onInit = 
+
+    function(p_sType, p_aArgs, p_oMenuModule) {
+        
+        var sCSSPosition = (this.cfg.getProperty("position") == "static") ? 
+                "static" : "absolute";
+
+        this._oDom.setStyle(this.element, "position", sCSSPosition);
+
+    };
 
 
 /**
@@ -2349,6 +2370,8 @@ YAHOO.widget.MenuModule.prototype.initDefaultConfig = function() {
             validator: this._checkPosition 
         }
     );
+
+//    this.cfg.refireEvent("position");
 
     oConfig.addProperty("submenualignment", { value: ["tl","tr"] } );
 
