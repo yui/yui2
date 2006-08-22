@@ -11,22 +11,22 @@
 	<script type="text/javascript" src="../../../build/event/event.js" ></script>
 	<script type="text/javascript" src="../../../build/dom/dom.js" ></script>
 
-	<script type="text/javascript" src="../../../build/calendar/calendar.js"></script>
-
 	<link type="text/css" rel="stylesheet" href="../../../build/fonts/fonts.css">
-	<link type="text/css" rel="stylesheet" href="../../../build/reset/reset.css">	
-	<link type="text/css" rel="stylesheet" href="../../../build/calendar/assets/calendar.css">	
+	<link type="text/css" rel="stylesheet" href="../../../build/reset/reset.css">
 
 	<link rel="stylesheet" type="text/css" href="../../../docs/assets/dpSyntaxHighlighter.css" />
+
+	<script type="text/javascript" src="../../../build/calendar/calendar.js"></script>
+	<link type="text/css" rel="stylesheet" href="../../../build/calendar/assets/calendar.css">
 	
 	<style> 
 		/* highlight the whole row */
-		tr.hilite-row td.calcell {
+		.yui-calendar tr.hilite-row td.calcell {
 			background-color:yellow;
 		}
 
 		/* highlight the current cell in the standard highlight color */
-		tr.hilite-row td.calcellhover {
+		.yui-calendar tr.hilite-row td.calcellhover {
 			cursor:pointer;
 			color:#FFF;
 			background-color:#FF9900;
@@ -34,7 +34,7 @@
 		}
 
 		/* make sure out of month cells don't highlight too */
-		tr.hilite-row td.calcell.oom {
+		.yui-calendar tr.hilite-row td.calcell.oom {
 			cursor:default;
 			color:#999;
 			background-color:#EEE;
@@ -88,12 +88,12 @@
 <textarea name="code" class="JScript" cols="60" rows="1">
 	<style> 
 		/* highlight the whole row */
-		tr.hilite-row td.calcell {
+		.yui-calendar tr.hilite-row td.calcell {
 			background-color:yellow;
 		}
 
 		/* highlight the current cell in the standard highlight color */
-		tr.hilite-row td.calcellhover {
+		.yui-calendar tr.hilite-row td.calcellhover {
 			cursor:pointer;
 			color:#FFF;
 			background-color:#FF9900;
@@ -101,7 +101,7 @@
 		}
 
 		/* make sure out of month cells don't highlight too */
-		tr.hilite-row td.calcell.oom {
+		.yui-calendar tr.hilite-row td.calcell.oom {
 			cursor:default;
 			color:#999;
 			background-color:#EEE;

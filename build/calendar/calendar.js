@@ -2,7 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.11.0
+Version 0.11.3
 */
 
 /**
@@ -278,12 +278,7 @@ YAHOO.widget.DateMath = new function() {
 		date.setHours(0,0,0,0);
 		return date;
 	};
-}/**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt 
-**/
-
+}
 /**
 * @class
 * <p>Calendar_Core is the base class for the Calendar widget. In its most basic
@@ -1558,7 +1553,7 @@ YAHOO.widget.Calendar_Core.prototype.select = function(date) {
 		this.parent.sync(this);
 	}
 
-	this.onSelect();
+	this.onSelect(aToBeSelected);
 
 	return this.getSelectedDates();
 };
@@ -1591,7 +1586,7 @@ YAHOO.widget.Calendar_Core.prototype.selectCell = function(cellIndex) {
 
 	this.renderCellStyleSelected(dCellDate,cell);
 
-	this.onSelect();
+	this.onSelect(selectDate);
 	this.doCellMouseOut.call(cell, null, this);
 
 	return this.getSelectedDates();
@@ -1626,7 +1621,7 @@ YAHOO.widget.Calendar_Core.prototype.deselect = function(date) {
 		this.parent.sync(this);
 	} 
 
-	this.onDeselect();
+	this.onDeselect(aToBeSelected);
 	return this.getSelectedDates();
 };
 
@@ -1664,7 +1659,7 @@ YAHOO.widget.Calendar_Core.prototype.deselectCell = function(i) {
 		this.parent.sync(this);
 	}
 
-	this.onDeselect();
+	this.onDeselect(selectDate);
 	return this.getSelectedDates();
 };
 
@@ -1679,6 +1674,7 @@ YAHOO.widget.Calendar_Core.prototype.deselectCell = function(i) {
 YAHOO.widget.Calendar_Core.prototype.deselectAll = function() {
 	this.onBeforeDeselect();
 	var count = this.selectedDates.length;
+	var sel = this.selectedDates.concat();
 	this.selectedDates.length = 0;
 
 	if (this.parent) {
@@ -1686,7 +1682,7 @@ YAHOO.widget.Calendar_Core.prototype.deselectAll = function() {
 	}
 	
 	if (count > 0) {
-		this.onDeselect();
+		this.onDeselect(sel);
 	}
 
 	return this.getSelectedDates();
@@ -2124,12 +2120,7 @@ YAHOO.widget.Calendar_Core.prototype.toString = function() {
 	return "Calendar_Core " + this.id;
 }
 
-YAHOO.widget.Cal_Core = YAHOO.widget.Calendar_Core;/**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt 
-**/
-
+YAHOO.widget.Cal_Core = YAHOO.widget.Calendar_Core;
 /**
 * @class
 * Calendar is the default implementation of the YAHOO.widget.Calendar_Core base class.
@@ -2206,12 +2197,7 @@ YAHOO.widget.Calendar.prototype.renderHeader = function() {
 	this.headerCell.appendChild(headerContainer);
 };
 
-YAHOO.widget.Cal = YAHOO.widget.Calendar;/**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt 
-**/
-
+YAHOO.widget.Cal = YAHOO.widget.Calendar;
 /**
 * @class
 * <p>YAHOO.widget.CalendarGroup is a special container class for YAHOO.widget.Calendar_Core. This class facilitates
@@ -2278,6 +2264,8 @@ YAHOO.widget.CalendarGroup.prototype.init = function(pageCount, id, containerId,
 		this.pages.push(cal);
 	}
 	
+	this.sync();
+
 	this.doNextMonth = function(e, calGroup) {
 		calGroup.nextMonth();
 	};
@@ -2635,12 +2623,7 @@ YAHOO.widget.CalendarGroup.prototype.toString = function() {
 	return "CalendarGroup " + this.id;
 }
 
-YAHOO.widget.CalGrp = YAHOO.widget.CalendarGroup;/**
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt 
-**/
-
+YAHOO.widget.CalGrp = YAHOO.widget.CalendarGroup;
 /**
 * @class
 * Calendar2up_Cal is the default implementation of the Calendar_Core base class, when used

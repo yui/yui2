@@ -1,0 +1,14 @@
+.panel {
+	overflow:visible;
+}
+
+.panel .bd {
+	overflow:auto;
+}
+
+.panel .ft {
+	padding:0px;
+	height:4px;
+	font-size:4px;
+	background-color:#CCC;
+}

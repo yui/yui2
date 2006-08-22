@@ -21,7 +21,6 @@ Version 0.11.0
 	font-weight:bold;
 	margin-bottom:5px;
 	height:auto;
-	width:304px;
 	position:relative;
 }
 
@@ -68,8 +67,7 @@ Version 0.11.0
 }
 
 .yui-calendar td.calcell {
-	width:1.5em;
-	height:1em;
+	padding:.1em .2em;
 	border:1px solid #E0E0E0;
 	background-color:#FFF;
 }
@@ -101,12 +99,6 @@ Version 0.11.0
 	color:#FFF;
 	background-color:#FF9900;
 	border:1px solid #FF9900;
-}
-
-/* Added to perform some correction for Opera 8.5
-   hover redraw bug */
-table.yui-calendar:hover {
-	background-color:#FFF;
 }
 
 .yui-calendar td.calcell.calcellhover a {

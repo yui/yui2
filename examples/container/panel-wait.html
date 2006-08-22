@@ -12,6 +12,8 @@
 <script type="text/javascript" src="../../build/connection/connection.js" ></script>
 
 <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css" />
+<link rel="stylesheet" type="text/css" href="../../build/reset/reset.css" />
+
 <link rel="stylesheet" type="text/css" href="css/example.css" />
 
 <link rel="stylesheet" type="text/css" href="../../build/container/assets/container.css" />
@@ -48,7 +50,6 @@
 								  fixedcenter:true, 
 								  underlay:"shadow", 
 								  close:false, 
-								  visible:true, 
 								  draggable:false, 
 								  modal:true, 
 								  effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration:0.5} 
@@ -71,6 +72,8 @@
 			}
 		}
 
+		YAHOO.example.panel.wait.show();
+
 		var conn = YAHOO.util.Connect.asyncRequest("GET", "php/somedata.php?r=" + new Date().getTime(), callback);
 	}
 
@@ -79,9 +82,7 @@
 </head>
 <body>
 
-<div id="content">
-
-</div>
+<div id="content"></div>
 
 </body>
 </html>

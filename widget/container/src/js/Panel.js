@@ -2,7 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.11.2
+Version 0.11.3
 */
 
 /**
@@ -75,8 +75,31 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 		}
 	}, this, true);
 
-	this.initEvent.fire(YAHOO.widget.Panel);
+	var me = this;
 
+	this.showMaskEvent.subscribe(function() {
+		var checkFocusable = function(el) {
+			if (el.tagName == "A" || el.tagName == "BUTTON" || el.tagName == "SELECT" || el.tagName == "INPUT" || el.tagName == "TEXTAREA" || el.tagName == "FORM") {
+				if (! YAHOO.util.Dom.isAncestor(me.element, el)) {
+					YAHOO.util.Event.addListener(el, "focus", el.blur);
+					return true;
+				}
+			} else {
+				return false;
+			}
+		};
+		
+		this.focusableElements = YAHOO.util.Dom.getElementsBy(checkFocusable);
+	}, this, true);
+
+	this.hideMaskEvent.subscribe(function() {
+		for (var i=0;i<this.focusableElements.length;i++) {
+			var el2 = this.focusableElements[i];
+			YAHOO.util.Event.removeListener(el2, "focus", el2.blur);
+		}
+	}, this, true);
+
+	this.initEvent.fire(YAHOO.widget.Panel);
 };
 
 /**
@@ -414,9 +437,12 @@ YAHOO.widget.Panel.prototype.buildMask = function() {
 			YAHOO.util.Event.stopEvent(e);
 		};
 
-		YAHOO.util.Event.addListener(this.mask, maskClick, this);
-
-		document.body.appendChild(this.mask);
+		var firstChild = document.body.firstChild;
+		if (firstChild)	{
+			document.body.insertBefore(this.mask, document.body.firstChild);
+		} else {
+			document.body.appendChild(this.mask);
+		}
 	}
 };
 

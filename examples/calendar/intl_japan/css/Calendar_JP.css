@@ -6,10 +6,10 @@
 	z-index:0;
 }
 
-.calendar td.sunday {
+.yui-calendar td.sunday {
 	background-color: rgb(253, 224, 224);
 }
 
-.calendar td.sunday a {
+.yui-calendar td.sunday a {
 	color:red;
 }
