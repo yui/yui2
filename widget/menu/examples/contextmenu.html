@@ -187,7 +187,7 @@
 
             // "click" event handler for each item in the context menu
             
-            function onContextMenuItemClick(p_sType, p_aArguments) {
+            function onContextMenuItemClick(p_sType, p_aArguments, p_oItem) {
 
                 var oLI = 
                     GetListItemFromEvenTarget(this.parent.contextEventTarget);
@@ -215,8 +215,6 @@
                     break;                    
                 
                 }
-
-                this.parent.hide();
             
             }
 
@@ -302,7 +300,11 @@
                         ContextMenuItem instance
                     */
 
-                    oMenuItem.clickEvent.subscribe(onContextMenuItemClick);
+                    oMenuItem.clickEvent.subscribe(
+                        onContextMenuItemClick, 
+                        oMenuItem, 
+                        true
+                    );
 
                     oContextMenu.addItem(oMenuItem);
 
