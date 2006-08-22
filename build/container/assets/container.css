@@ -108,7 +108,7 @@ Version 0.11.0
 	background-color:#FFF;
 	border:1px solid #000;
 	z-index:1;
-	overflow:auto;
+	overflow:hidden;
 }
 
 .panel .hd {

@@ -2,7 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.11.2
+Version 0.11.3
 */
 
 /**
@@ -1537,40 +1537,43 @@ YAHOO.widget.Overlay.prototype.configY = function(type, args, obj) {
 };
 
 /**
+* Shows the iframe shim, if it has been enabled
+*/
+YAHOO.widget.Overlay.prototype.showIframe = function() {
+	if (this.iframe) {
+		this.iframe.style.display = "block";
+	}
+}
+
+/**
+* Hides the iframe shim, if it has been enabled
+*/
+YAHOO.widget.Overlay.prototype.hideIframe = function() {
+	if (this.iframe) {
+		this.iframe.style.display = "none";
+	}
+}
+
+/**
 * The default event handler fired when the "iframe" property is changed.
 */
 YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 
 	var val = args[0];
 
-	var el = this.element;
-	
-	var showIframe = function() {
-		if (this.iframe) {
-			this.iframe.style.display = "block";
-		}
-	};
-
-	var hideIframe = function() {
-		if (this.iframe) {
-			this.iframe.style.display = "none";
-		}
-	};
-
 	if (val) { // IFRAME shim is enabled
 
-		if (! YAHOO.util.Config.alreadySubscribed(this.showEvent, showIframe, this)) {
-			this.showEvent.subscribe(showIframe, this, true);
+		if (! YAHOO.util.Config.alreadySubscribed(this.showEvent, this.showIframe, this)) {
+			this.showEvent.subscribe(this.showIframe, this, true);
 		}
-		if (! YAHOO.util.Config.alreadySubscribed(this.hideEvent, hideIframe, this)) {
-			this.hideEvent.subscribe(hideIframe, this, true);
+		if (! YAHOO.util.Config.alreadySubscribed(this.hideEvent, this.hideIframe, this)) {
+			this.hideEvent.subscribe(this.hideIframe, this, true);
 		}
 
 		var x = this.cfg.getProperty("x");
 		var y = this.cfg.getProperty("y");
 
 		if (! x || ! y) {
-			YAHOO.log("syncPosition needed for iframe", "iframe");
 			this.syncPosition();
 			x = this.cfg.getProperty("x");
 			y = this.cfg.getProperty("y");
@@ -1585,7 +1588,7 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 					this.iframe.src = this.imageRoot + YAHOO.widget.Overlay.IFRAME_SRC;
 				}
 				
-				var parent = el.parentNode;
+				var parent = this.element.parentNode;
 				if (parent) {
 					parent.appendChild(this.iframe);
 				} else {
@@ -1598,9 +1601,9 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 				YAHOO.util.Dom.setStyle(this.iframe, "padding", "0");
 				YAHOO.util.Dom.setStyle(this.iframe, "opacity", "0");
 				if (this.cfg.getProperty("visible")) {
-					showIframe.call(this);
+					this.showIframe();
 				} else {
-					hideIframe.call(this);
+					this.hideIframe();
 				}
 			}
 			
@@ -1612,8 +1615,8 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 
 			YAHOO.util.Dom.setXY(this.iframe, [x,y]);
 
-			var width = el.clientWidth;
-			var height = el.clientHeight;
+			var width = this.element.clientWidth;
+			var height = this.element.clientHeight;
 
 			YAHOO.util.Dom.setStyle(this.iframe, "width", (width+2) + "px");
 			YAHOO.util.Dom.setStyle(this.iframe, "height", (height+2) + "px");
@@ -1626,8 +1629,8 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 		if (this.iframe) {
 			this.iframe.style.display = "none";
 		}
-		this.showEvent.unsubscribe(showIframe, this);
-		this.hideEvent.unsubscribe(hideIframe, this);
+		this.showEvent.unsubscribe(this.showIframe, this);
+		this.hideEvent.unsubscribe(this.hideIframe, this);
 	}
 };
 
@@ -1873,6 +1876,7 @@ if (YAHOO.widget.Overlay._initialized === null) {
 
 	YAHOO.widget.Overlay._initialized = true;
 }
+
 
 /**
 * @class
@@ -2275,6 +2279,7 @@ YAHOO.util.KeyListener.prototype.enabledEvent = null;
 */
 YAHOO.util.KeyListener.prototype.disabledEvent = null;
 
+
 /**
 * @class
 * Tooltip is an implementation of Overlay that behaves like an OS tooltip, displaying when the user mouses over a particular element, and disappearing on mouse out.
@@ -2640,8 +2645,31 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 		}
 	}, this, true);
 
-	this.initEvent.fire(YAHOO.widget.Panel);
+	var me = this;
 
+	this.showMaskEvent.subscribe(function() {
+		var checkFocusable = function(el) {
+			if (el.tagName == "A" || el.tagName == "BUTTON" || el.tagName == "SELECT" || el.tagName == "INPUT" || el.tagName == "TEXTAREA" || el.tagName == "FORM") {
+				if (! YAHOO.util.Dom.isAncestor(me.element, el)) {
+					YAHOO.util.Event.addListener(el, "focus", el.blur);
+					return true;
+				}
+			} else {
+				return false;
+			}
+		};
+		
+		this.focusableElements = YAHOO.util.Dom.getElementsBy(checkFocusable);
+	}, this, true);
+
+	this.hideMaskEvent.subscribe(function() {
+		for (var i=0;i<this.focusableElements.length;i++) {
+			var el2 = this.focusableElements[i];
+			YAHOO.util.Event.removeListener(el2, "focus", el2.blur);
+		}
+	}, this, true);
+
+	this.initEvent.fire(YAHOO.widget.Panel);
 };
 
 /**
@@ -2979,9 +3007,12 @@ YAHOO.widget.Panel.prototype.buildMask = function() {
 			YAHOO.util.Event.stopEvent(e);
 		};
 
-		YAHOO.util.Event.addListener(this.mask, maskClick, this);
-
-		document.body.appendChild(this.mask);
+		var firstChild = document.body.firstChild;
+		if (firstChild)	{
+			document.body.insertBefore(this.mask, document.body.firstChild);
+		} else {
+			document.body.appendChild(this.mask);
+		}
 	}
 };
 
