@@ -173,6 +173,22 @@ YAHOO.widget.MenuModuleItem.prototype = {
     _oDom: YAHOO.util.Dom,
 
 
+    /** 
+    * The current state of a MenuModuleItem instance's "mouseover" event
+    * @private
+    * @type {Boolean}
+    */
+    _bFiredMouseOverEvent: false,
+    
+    
+    /** 
+    * The current state of a MenuModuleItem instance's "mouseout" event
+    * @private
+    * @type {Boolean}
+    */
+    _bFiredMouseOutEvent: false,
+
+
     // Public properties
 
 	/**
@@ -433,6 +449,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
                     var oAnchor = this._getFirstElement(p_oObject, "A");
                     var sURL = "#";
+                    var sTarget = null;
                     var sText = null;
 
 
@@ -441,6 +458,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
                     if(oAnchor) {
 
                         sURL = oAnchor.getAttribute("href");
+                        sTarget = oAnchor.getAttribute("target");
 
                         if(oAnchor.innerText) {
                 
@@ -526,6 +544,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
                     oConfig.setProperty("text", sText, true);
                     oConfig.setProperty("url", sURL, true);
+                    oConfig.setProperty("target", sTarget, true);
                     oConfig.setProperty("emphasis", bEmphasis, true);
                     oConfig.setProperty(
                         "strongemphasis", 
@@ -563,6 +582,11 @@ YAHOO.widget.MenuModuleItem.prototype = {
             this.keyUpEvent = new CustomEvent("keyUpEvent", this);
             this.focusEvent = new CustomEvent("focusEvent", this);
             this.blurEvent = new CustomEvent("blurEvent", this);
+
+
+            // Subscribe to custom event
+
+            this.clickEvent.subscribe(this._onMenuModuleItemClick, this, true);
 
 
             if(p_oConfig) {
@@ -730,6 +754,90 @@ YAHOO.widget.MenuModuleItem.prototype = {
     },
 
 
+    /**
+    * "click" event handler for a MenuModuleItem
+    * @private
+    * @param {String} p_sType The name of the event that was fired.
+    * @param {Array} p_aArgs Collection of arguments sent when the event 
+    * was fired.
+    * @param {YAHOO.widget.MenuItem} p_oMenuModuleItem The MenuModule instance  
+    * that fired the event.
+    */         
+    _onMenuModuleItemClick: function(p_sType, p_aArgs, p_oMenuModuleItem) {
+
+        var Event = YAHOO.util.Event;
+        var oEvent = p_aArgs[0];
+        var oTarget = Event.getTarget(oEvent);
+        var oSubmenu = this.cfg.getProperty("submenu");
+
+
+        /*
+            ACCESSIBILITY FEATURE FOR SCREEN READERS: Expand/collapse the
+            submenu when the user clicks on the submenu indicator image.
+        */        
+
+        if(oTarget == this.submenuIndicator && oSubmenu) {
+
+            if(oSubmenu.cfg.getProperty("visible")) {
+    
+                oSubmenu.hide();
+    
+            }
+            else {
+
+                var oActiveItem = this.parent.activeItem;
+           
+
+                // Hide any other submenus that might be visible
+            
+                if(oActiveItem && oActiveItem != this) {
+            
+                    this.parent.clearActiveItem();
+            
+                }
+
+                this.parent.activeItem = this;
+    
+                this.cfg.setProperty("selected", true);
+
+                oSubmenu.show();
+    
+            }
+    
+        }
+        else {
+
+            var sURL = this.cfg.getProperty("url");
+            var bCurrentPageURL = (sURL.substr((sURL.length-1),1) == "#");
+
+            var sTarget = this.cfg.getProperty("target");
+            var bHasTarget = (sTarget && sTarget.length > 0);
+
+            // Prevent the browser from following links equal to "#"
+
+            if(oTarget.tagName == "A" && bCurrentPageURL && !bHasTarget) {
+
+                Event.preventDefault(oEvent);
+            
+            }
+
+            if(oTarget.tagName != "A" && !bCurrentPageURL && !bHasTarget) {
+                
+                /*
+                    Follow the URL of the item regardless of whether or 
+                    not the user clicked specifically on the
+                    HTMLAnchorElement (&#60;A&#60;) node.
+                */
+    
+                document.location = sURL;
+        
+            }
+
+        }
+
+    },
+
+
     // Event handlers for configuration properties
 
     /**
@@ -887,6 +995,34 @@ YAHOO.widget.MenuModuleItem.prototype = {
         }
 
         this._oAnchor.setAttribute("href", sURL);
+
+    },
+
+
+    /**
+    * Event handler for when the "target" configuration property of
+    * a MenuModuleItem instance changes.  
+    * @param {String} p_sType The name of the event that was fired.
+    * @param {Array} p_aArgs Collection of arguments sent when the 
+    * event was fired.
+    * @param {YAHOO.widget.MenuModuleItem} p_oItem The MenuModuleItem instance 
+    * that fired the event.
+    */    
+    configTarget: function(p_sType, p_aArgs, p_oItem) {
+
+        var sTarget = p_aArgs[0];
+        var oAnchor = this._oAnchor;
+
+        if(sTarget && sTarget.length > 0) {
+
+            oAnchor.setAttribute("target", sTarget);
+
+        }
+        else {
+
+            oAnchor.removeAttribute("target");
+        
+        }
 
     },
 
@@ -1241,6 +1377,11 @@ YAHOO.widget.MenuModuleItem.prototype = {
             { value: "#", handler: this.configURL, suppressEvent: true }
         );
         
+        oConfig.addProperty(
+            "target", 
+            { handler: this.configTarget, suppressEvent: true }
+        );
+
         oConfig.addProperty(
             "emphasis", 
             { 

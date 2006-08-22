@@ -399,9 +399,10 @@ YAHOO.widget.MenuItem.prototype._onClick =
  
 
         var oRoot = findRoot(this.parent);
-        
+        var sURL = this.cfg.getProperty("url");
+
         if(
-            this.cfg.getProperty("url") == "#" && 
+            (sURL.substr((sURL.length-1),1) == "#") && 
             oRoot && 
             oRoot.cfg.getProperty("position") == "dynamic"
         ) {
