@@ -15,6 +15,10 @@ Version 0.11.0
 	border:1px solid #7B9EBD;
 }
 
+.yui-cal2upwrapper .yui-calcontainer {
+	width:24.5em;
+}
+
 .yui-calcontainer .title {
 	font:100% sans-serif;
 	color:#000;
@@ -67,7 +71,8 @@ Version 0.11.0
 }
 
 .yui-calendar td.calcell {
-	padding:.1em .2em;
+	width:1.5em;
+	height:1em;
 	border:1px solid #E0E0E0;
 	background-color:#FFF;
 }
