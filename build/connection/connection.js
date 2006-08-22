@@ -19,10 +19,10 @@ YAHOO.util.Connect =
    * @type array
    */
 	_msxml_progid:[
-			'MSXML2.XMLHTTP.3.0',
-			'MSXML2.XMLHTTP',
-			'Microsoft.XMLHTTP'
-			],
+		'MSXML2.XMLHTTP.3.0',
+		'MSXML2.XMLHTTP',
+		'Microsoft.XMLHTTP'
+		],
 
   /**
    * Object literal of HTTP header(s)
@@ -46,7 +46,17 @@ YAHOO.util.Connect =
   * @private
   * @type boolean
   */
-    _default_post_header:true,
+    _use_default_post_header:true,
+
+ /**
+  * Determines if a default header of
+  * Content-Type of 'application/x-www-form-urlencoded'
+  * will be added to any client HTTP headers sent for POST
+  * transactions.
+  * @private
+  * @type boolean
+  */
+    _default_post_header:'application/x-www-form-urlencoded',
 
  /**
   * Property modified by setForm() to determine if the data
@@ -83,16 +93,16 @@ YAHOO.util.Connect =
  /**
   * Collection of polling references to the polling mechanism in handleReadyState.
   * @private
-  * @type string
+  * @type object
   */
-    _poll:[],
+    _poll:{},
 
  /**
   * Queue of timeout values for each transaction callback with a defined timeout value.
   * @private
-  * @type string
+  * @type object
   */
-    _timeOut:[],
+    _timeOut:{},
 
   /**
    * The polling frequency, in milliseconds, for HandleReadyState.
@@ -131,7 +141,7 @@ YAHOO.util.Connect =
    */
 	setDefaultPostHeader:function(b)
 	{
-		this._default_post_header = b;
+		this._use_default_post_header = b;
 	},
 
   /**
@@ -143,7 +153,7 @@ YAHOO.util.Connect =
 	setPollingInterval:function(i)
 	{
 		if(typeof i == 'number' && isFinite(i)){
-				this._polling_interval = i;
+			this._polling_interval = i;
 		}
 	},
 
@@ -241,28 +251,27 @@ YAHOO.util.Connect =
 					uri += "?" +  this._sFormData;
 				}
 				else if(method == 'POST'){
-					postData =  this._sFormData;
+					//postData = this._sFormData;
+					postData += this._sFormData;
 				}
 				this._sFormData = '';
 			}
 
 			o.conn.open(method, uri, true);
 
-			if(this._isFormSubmit || (postData && this._default_post_header)){
-				this.initHeader('Content-Type','application/x-www-form-urlencoded');
+			if(this._isFormSubmit || (postData && this._use_default_post_header)){
+				this.initHeader('Content-Type', this._default_post_header);
 				if(this._isFormSubmit){
 					this._isFormSubmit = false;
 				}
 			}
 
-			//Verify whether the transaction has any user-defined HTTP headers
-			//and set them.
 			if(this._has_http_headers){
 				this.setHeader(o);
 			}
 
 			this.handleReadyState(o, callback);
-			postData?o.conn.send(postData):o.conn.send(null);
+			o.conn.send(postData?postData:null);
 
 			return o;
 		}
@@ -281,38 +290,27 @@ YAHOO.util.Connect =
    */
     handleReadyState:function(o, callback)
     {
-        var timeOut = callback.timeout;
-        var oConn = this;
 
-        try
-        {
-            if(timeOut !== undefined){
-            	this._timeOut[o.tId] = window.setTimeout(function(){ oConn.abort(o, callback, true) }, timeOut);
-            }
-            this._poll[o.tId] = window.setInterval(
-                function(){
-					if(o.conn && o.conn.readyState == 4){
-						window.clearInterval(oConn._poll[o.tId]);
-						oConn._poll.splice(o.tId);
-						if(timeOut){
-							oConn._timeOut.splice(o.tId);
-						}
+		var oConn = this;
 
-						oConn.handleTransactionResponse(o, callback);
-                    }
-                }
-            ,this._polling_interval);
-        }
-        catch(e)
-        {
-            window.clearInterval(oConn._poll[o.tId]);
-            oConn._poll.splice(o.tId);
-			if(timeOut){
-				oConn._timeOut.splice(o.tId);
+		if(callback.timeout){
+			this._timeOut[o.tId] = window.setTimeout(function(){ oConn.abort(o, callback, true); }, callback.timeout);
+		}
+
+		this._poll[o.tId] = window.setInterval(
+			function(){
+				if(o.conn && o.conn.readyState == 4){
+					window.clearInterval(oConn._poll[o.tId]);
+					delete oConn._poll[o.tId];
+
+					if(callback.timeout){
+						delete oConn._timeOut[o.tId];
+					}
+
+					oConn.handleTransactionResponse(o, callback);
+				}
 			}
-
-            oConn.handleTransactionResponse(o, callback);
-        }
+		,this._polling_interval);
     },
 
   /**
@@ -353,55 +351,64 @@ YAHOO.util.Connect =
 		}
 
 		if(httpStatus >= 200 && httpStatus < 300){
-			responseObject = this.createResponseObject(o, callback.argument);
-			if(callback.success){
-				if(!callback.scope){
-					callback.success(responseObject);
-				}
-				else{
-					// If a scope property is defined, the callback will be fired from
-					// the context of the object.
-					callback.success.apply(callback.scope, [responseObject]);
+			try
+			{
+				responseObject = this.createResponseObject(o, callback.argument);
+				if(callback.success){
+					if(!callback.scope){
+						callback.success(responseObject);
+					}
+					else{
+						// If a scope property is defined, the callback will be fired from
+						// the context of the object.
+						callback.success.apply(callback.scope, [responseObject]);
+					}
 				}
 			}
+			catch(e){}
 		}
 		else{
-			switch(httpStatus){
-				// The following case labels are wininet.dll error codes that may be encountered.
-				// Server timeout
-				case 12002:
-				// 12029 to 12031 correspond to dropped connections.
-				case 12029:
-				case 12030:
-				case 12031:
-				// Connection closed by server.
-				case 12152:
-				// See above comments for variable status.
-				case 13030:
-					responseObject = this.createExceptionObject(o.tId, callback.argument, isAbort);
-					if(callback.failure){
-						if(!callback.scope){
-							callback.failure(responseObject);
+			try
+			{
+				switch(httpStatus){
+					// The following case labels are wininet.dll error codes that may be encountered.
+					// Server timeout
+					case 12002:
+					// 12029 to 12031 correspond to dropped connections.
+					case 12029:
+					case 12030:
+					case 12031:
+					// Connection closed by server.
+					case 12152:
+					// See above comments for variable status.
+					case 13030:
+						responseObject = this.createExceptionObject(o.tId, callback.argument, (isAbort?isAbort:false));
+						if(callback.failure){
+							if(!callback.scope){
+								callback.failure(responseObject);
+							}
+							else{
+								callback.failure.apply(callback.scope, [responseObject]);
+							}
 						}
-						else{
-							callback.failure.apply(callback.scope, [responseObject]);
+						break;
+					default:
+						responseObject = this.createResponseObject(o, callback.argument);
+						if(callback.failure){
+							if(!callback.scope){
+								callback.failure(responseObject);
+							}
+							else{
+								callback.failure.apply(callback.scope, [responseObject]);
+							}
 						}
-					}
-					break;
-				default:
-					responseObject = this.createResponseObject(o, callback.argument);
-					if(callback.failure){
-						if(!callback.scope){
-							callback.failure(responseObject);
-						}
-						else{
-							callback.failure.apply(callback.scope, [responseObject]);
-						}
-					}
+				}
 			}
+			catch(e){}
 		}
 
 		this.releaseObject(o);
+		responseObject = null;
     },
 
   /**
@@ -499,6 +506,8 @@ YAHOO.util.Connect =
 			this._http_header[label] = value;
 		}
 		else{
+			// Concatenate multiple values, comma-delimited,
+			// for the same header label,
 			this._http_header[label] =  value + "," + this._http_header[label];
 		}
 
@@ -514,7 +523,7 @@ YAHOO.util.Connect =
 	setHeader:function(o)
 	{
 		for(var prop in this._http_header){
-			if(this._http_header.propertyIsEnumerable){
+			if(this._http_header.isPropertyEnumerable(prop)){
 				o.conn.setRequestHeader(prop, this._http_header[prop]);
 			}
 		}
@@ -546,6 +555,7 @@ YAHOO.util.Connect =
 			var oForm = (document.getElementById(formId) || document.forms[formId]);
 		}
 		else if(typeof formId == 'object'){
+			// Treat argument as an HTML form object.
 			var oForm = formId;
 		}
 		else{
@@ -559,7 +569,7 @@ YAHOO.util.Connect =
 		// where the secureURI string is a fully qualified HTTP path, used to set the source
 		// of the iframe, to a stub resource in the same domain.
 		if(isUpload){
-			(typeof secureUri == 'string')?this.createFrame(secureUri):this.createFrame();
+			this.createFrame(secureUri?secureUri:null);
 			this._isFormSubmit = true;
 			this._isFileUpload = true;
 			this._formNode = oForm;
@@ -591,7 +601,7 @@ YAHOO.util.Connect =
 					case 'select-multiple':
 						for(var j=0; j<oElement.options.length; j++){
 							if(oElement.options[j].selected){
-									this._sFormData += encodeURIComponent(oName) + '=' + encodeURIComponent(oElement.options[j].value || oElement.options[j].text) + '&';
+								this._sFormData += encodeURIComponent(oName) + '=' + encodeURIComponent(oElement.options[j].value || oElement.options[j].text) + '&';
 							}
 						}
 						break;
@@ -639,18 +649,22 @@ YAHOO.util.Connect =
 
 		// IE does not allow the setting of id and name attributes as DOM
 		// properties.  A different iframe creation pattern is required for IE.
+		var frameId = 'ioFrame' + this._transaction_id;
 		if(window.ActiveXObject){
-			var io = document.createElement('<IFRAME name="ioFrame" id="ioFrame">');
-			if(secureUri){
+			var io = document.createElement('<IFRAME id="' + frameId + '" name="' + frameId + '">');
+			if(typeof secureUri == 'boolean'){
 				// IE will throw a security exception in an SSL environment if the
-				// iframe source isn't set to a valid resource.
+				// iframe source isn't set.
+				io.src = 'javascript:false';
+			}
+			else{
 				io.src = secureUri;
 			}
 		}
 		else{
 			var io = document.createElement('IFRAME');
-			io.id = 'ioFrame';
-			io.name = 'ioFrame';
+			io.id = frameId;
+			io.name = frameId;
 		}
 
 		io.style.position = 'absolute';
@@ -671,12 +685,16 @@ YAHOO.util.Connect =
    * @return void
    */
 	uploadFile:function(id, callback, uri){
+
+		var frameId = 'ioFrame' + id;
+		var io = document.getElementById(frameId);
+
 		// Initialize the HTML form properties in case they are
 		// not defined in the HTML form.
 		this._formNode.action = uri;
 		this._formNode.enctype = 'multipart/form-data';
 		this._formNode.method = 'POST';
-		this._formNode.target = 'ioFrame';
+		this._formNode.target = frameId;
 		this._formNode.submit();
 
 		// Reset form status properties.
@@ -690,29 +708,50 @@ YAHOO.util.Connect =
 
 		var uploadCallback = function()
 		{
-			var oResponse =
-			{
-				tId: id,
-				responseText: document.getElementById("ioFrame").contentWindow.document.body.innerHTML,
-				argument: callback.argument
+			var obj = {};
+
+			obj.tId = id;
+			obj.responseText = io.contentWindow.document;
+			if(window.ActiveXObject){
+				obj.responseXML = io.contentWindow.document.XMLDocument;
 			}
+			else{
+				obj.responseXML = io.contentWindow.document;
+			}
+			obj.argument = callback.argument;
 
 			if(callback.upload){
 				if(!callback.scope){
-					callback.upload(oResponse);
+					callback.upload(obj);
 				}
 				else{
-					callback.upload.apply(callback.scope, [oResponse]);
+					callback.upload.apply(callback.scope, [obj]);
 				}
 			}
 
-			YAHOO.util.Event.removeListener("ioFrame", "load", uploadCallback);
-			window.ioFrame.location.replace('#');
-			setTimeout("document.body.removeChild(document.getElementById('ioFrame'))",100);
+			if(YAHOO.util.Event){
+				YAHOO.util.Event.removeListener(io, "load", uploadCallback);
+			}
+			else if(window.ActiveXObject){
+				io.detachEvent('onload', uploadCallback);
+			}
+			else{
+				io.removeEventListener('load', uploadCallback, false);
+			}
+			setTimeout(function(){ document.body.removeChild(io); }, 100);
 		};
 
+
 		// Bind the onload handler to the iframe to detect the file upload response.
-		YAHOO.util.Event.addListener("ioFrame", "load", uploadCallback);
+		if(YAHOO.util.Event){
+			YAHOO.util.Event.addListener(io, "load", uploadCallback);
+		}
+		else if(window.ActiveXObject){
+			io.attachEvent('onload', uploadCallback);
+		}
+		else{
+			io.addEventListener('load', uploadCallback, false);
+		}
 	},
 
   /**
@@ -726,12 +765,13 @@ YAHOO.util.Connect =
 	abort:function(o, callback, isTimeout)
 	{
 		if(this.isCallInProgress(o)){
-			window.clearInterval(this._poll[o.tId]);
-			this._poll.splice(o.tId);
-			if(isTimeout){
-				this._timeOut.splice(o.tId);
-			}
 			o.conn.abort();
+			window.clearInterval(this._poll[o.tId]);
+			delete this._poll[o.tId];
+			if(isTimeout){
+				delete this._timeOut[o.tId];
+			}
+
 			this.handleTransactionResponse(o, callback, true);
 
 			return true;
