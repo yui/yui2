@@ -82,8 +82,8 @@
 
             div.yuimenu li.yuimenuitem img {
             
-                height:9px;
-                width:9px;
+                height:8px;
+                width:8px;
                 margin:0 -16px 0 10px;
                 border:0;
             
@@ -294,7 +294,7 @@
                 oEditMenu.addItem(new MenuItem("Find Again", { helptext: "Ctrl + G" }), 3);
 
 
-                var oMenuBar = new YAHOO.widget.MenuBar("test");
+                var oMenuBar = new YAHOO.widget.MenuBar("menubar");
 
                 oMenuBar.addItem(new MenuBarItem("File", { submenu: oFileMenu }));
                 oMenuBar.addItem(new MenuBarItem("Edit", { submenu: oEditMenu }));
@@ -347,14 +347,23 @@
     
                 function onDocumentClick(p_oEvent) {
                 
-                    YAHOO.example.OverlayManager.hideAll();
-    
-                    oMenuBar.hasFocus = false;
-                    
-                    if(oMenuBar.activeItem) {
+                    var oTarget = YAHOO.util.Event.getTarget(p_oEvent);
 
-                        oMenuBar.clearActiveItem();
-                        oMenuBar.activeItem.blur();
+                    if(
+                        oTarget != oMenuBar.element && 
+                        !YAHOO.util.Dom.isAncestor(oMenuBar.element, oTarget)
+                    ) {
+
+                        YAHOO.example.OverlayManager.hideAll();
+        
+                        oMenuBar.hasFocus = false;
+                        
+                        if(oMenuBar.activeItem) {
+    
+                            oMenuBar.clearActiveItem();
+                            oMenuBar.activeItem.blur();
+                        
+                        }
                     
                     }
 
@@ -376,9 +385,7 @@
 
                 // Register the menus with the Overlay mananger
 
-                YAHOO.example.OverlayManager.register(oFileMenu);
-                YAHOO.example.OverlayManager.register(oApplicationsMenu);
-                YAHOO.example.OverlayManager.register(oEditMenu);
+                YAHOO.example.OverlayManager.register([oFileMenu, oApplicationsMenu, oEditMenu]);
 
             }
 
