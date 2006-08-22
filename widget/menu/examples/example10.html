@@ -120,6 +120,7 @@
                     oMenuItem;
                 
 
+
                 for(var i=0; i<nMenuItems; i++) {
 
                     oMenuItem = oMenu.addItem(aMenuItemData[i]);
@@ -132,8 +133,6 @@
                     oMenuItem.keyDownEvent.subscribe(onMenuItemEvent);
                     oMenuItem.keyUpEvent.subscribe(onMenuItemEvent);
                     oMenuItem.keyPressEvent.subscribe(onMenuItemEvent);
-
-                    oMenu.addItem(oMenuItem);
 
                 }
 
