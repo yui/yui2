@@ -146,14 +146,17 @@ YAHOO.widget.MenuModule._onDOMEvent = function(p_oEvent) {
         var oMenuItem;
         var oMenu = YAHOO.widget.MenuModule._menus[oMenuRootElement.id];
 
+        if(oMenuItemRootElement) {
 
-        if(oMenuItemRootElement && oMenuItemRootElement.id) {
-
-            oMenuItem = 
-                YAHOO.widget.MenuModule._menuItems[oMenuItemRootElement.id];
+            var sYUIId = oMenuItemRootElement.getAttribute("yuiid");
+    
+            if(sYUIId) {
+    
+                oMenuItem = YAHOO.widget.MenuModule._menuItems[sYUIId];
+    
+            }
 
         }
-
 
         if(oMenu) {
 
@@ -917,14 +920,12 @@ YAHOO.widget.MenuModule.prototype._addItemToGroup =
 
 
         if(oItem) {
-        
-            if(!oItem.element.id) {
 
-                Dom.generateId(oItem.element, "yuimenuitem");
+            var sYUIId = Dom.generateId();
 
-            }
+            oItem.element.setAttribute("yuiid", sYUIId);
 
-            YAHOO.widget.MenuModule._menuItems[oItem.element.id] = oItem;
+            YAHOO.widget.MenuModule._menuItems[sYUIId] = oItem;
 
 
             var nGroupIndex = typeof p_nGroupIndex == "number" ? 
