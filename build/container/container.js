@@ -3277,6 +3277,7 @@ YAHOO.widget.Dialog.prototype.configButtons = function(type, args, obj) {
 			var button = buttons[b];
 
 			var htmlButton = document.createElement("BUTTON");
+			htmlButton.setAttribute("type", "button");
 
 			if (button.isDefault) {
 				htmlButton.className = "default";
