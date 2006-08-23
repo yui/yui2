@@ -123,7 +123,6 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
         return {
             init: function() {
                 if (YAHOO.widget.Logger) {
-                    YAHOO.widget.Logger.disableFirebug();
                     var reader = new YAHOO.widget.LogReader( "logDiv", 
                             { newestOnTop: true, height: "400px" } );
 
