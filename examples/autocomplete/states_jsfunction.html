@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="../../build/fonts/fonts.css" type="text/css" />
 <link rel="stylesheet" href="../../build/logger/assets/logger.css" type="text/css" />
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
+<link rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css" />
 
 <style type="text/css">
     #statesmod {position:relative;padding:1em;}
@@ -62,96 +63,135 @@
     
     <!-- Sample code begins -->
     <div id="code" style="margin-top:15em;">
-    <h3>Sample Code</h3>
+        <h3>Sample Code</h3>
 
-    <p>CSS:</p>
-    <pre class="code">
-    #statesmod {position:relative;padding:1em;}
-    #statesautocomplete {position:relative;margin:1em;width:15em;}/* set width of widget here*/
-    #statesinput {position:absolute;width:100%;height:1.4em;}
-    #statescontainer {position:absolute;top:1.7em;width:100%;}
-    #statescontainer .yui-ac-content {position:absolute;width:100%;height:11em;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
-    #statescontainer .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
-    #statescontainer ul {padding:5px 0;width:100%;}
-    #statescontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
-    #statescontainer li.yui-ac-highlight {background:#ff0;}
-    </pre>
+        <p>CSS:</p>
+        <textarea name="code" class="CSS" cols="60" rows="1">
+            #statesmod {position:relative;padding:1em;}
+            #statesautocomplete {position:relative;margin:1em;width:15em;}/* set width of widget here*/
+            #statesinput {position:absolute;width:100%;height:1.4em;}
+            #statescontainer {position:absolute;top:1.7em;width:100%;}
+            #statescontainer .yui-ac-content {position:absolute;width:100%;height:11em;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
+            #statescontainer .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
+            #statescontainer ul {padding:5px 0;width:100%;}
+            #statescontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
+            #statescontainer li.yui-ac-highlight {background:#ff0;}
+        </textarea>
 
-    <p>Markup:</p>
-    <pre class="code">
-    &lt;!-- AutoComplete begins --&gt;
-    &lt;div id="statesmod"&gt;
-        &lt;form&gt;
-            &lt;h2&gt;Find a state:&lt;/h2&gt;
-            &lt;div id="statesautocomplete"&gt;
-                &lt;input id="statesinput"&gt;
-                &lt;div id="statescontainer"&gt;&lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/form&gt;
-    &lt;/div&gt;
-    &lt;!-- AutoComplete ends --&gt;
-    </pre>
+        <p>Markup:</p>
+        
+        <textarea name="code" class="JScript" cols="60" rows="1">
+            <!-- AutoComplete begins -->
+            <div id="statesmod">
+                <form onsubmit="return YAHOO.example.ACJSFunction.validateForm();">
+                    <h2>Find a state:</h2>
+                    <div id="statesautocomplete">
+                        <input id="statesinput">
+                        <div id="statescontainer"></div>
+                    </div>
+                </form>
+            </div>
+            <!-- AutoComplete ends -->
+        </textarea>
 
-    <p>JavaScript:</p>
-    <pre class="code">
-    function getStates(sQuery) {
-        aResults = [];
-        if(sQuery.length > 0) {
-            var charKey = sQuery.substring(0,1).toLowerCase();
-            var oResponse = dataset[charKey];
+        <p>JavaScript:</p>
+        
+        <textarea name="code" class="JScript" cols="60" rows="1">
+            function getStates(sQuery) {
+                aResults = [];
+                if(sQuery.length > 0) {
+                    var charKey = sQuery.substring(0,1).toLowerCase();
+                    var oResponse = dataset[charKey];
 
-            if(oResponse) {
-                for(var i = oResponse.length-1; i >= 0; i--) {
-                    var sKey = oResponse[i].STATE;
-                    var sKeyIndex = encodeURI(sKey.toLowerCase()).indexOf(sQuery.toLowerCase());
+                    if(oResponse) {
+                        for(var i = oResponse.length-1; i >= 0; i--) {
+                            var sKey = oResponse[i].STATE;
+                            var sKeyIndex = encodeURI(sKey.toLowerCase()).indexOf(sQuery.toLowerCase());
 
-                    // Query found at the beginning of the key string for STARTSWITH
-                    // returns an array of arrays where STATE is index=0, ABBR is index=1
-                    if(sKeyIndex === 0) {
-                        aResults.unshift([sKey, oResponse[i].ABBR]);
+                            // Query found at the beginning of the key string for STARTSWITH
+                            // returns an array of arrays where STATE is index=0, ABBR is index=1
+                            if(sKeyIndex === 0) {
+                                aResults.unshift([sKey, oResponse[i].ABBR]);
+                            }
+                        }
                     }
+                    return aResults;
                 }
+                else { return null; }
             }
-            return aResults;
-        }
-        else { return null; }
-    }
-    
-    var dataset =
-        {'a': [{"STATE" : "Alabama", "ABBR" : "AL"},
-    		{"STATE" : "Alaska", "ABBR" : "AK"},
-    		{"STATE" : "Arizona", "ABBR" : "AZ"},
-    		{"STATE" : "Arkansas", "ABBR" : "AR"}],
-    	'b' : [
-    		],
-    	'c' : [
-    		{"STATE" : "California", "ABBR" : "CA"},
-    		{"STATE" : "Colorado", "ABBR" : "CO"},
-            {"STATE" : "Connecticut", "ABBR" : "CT"}] // Entire dataset not shown
-        };
 
-    // Instantiate data source
-    oACDS = new YAHOO.widget.DS_JSFunction(getStates);
+            var dataset =
+                {'a': [{"STATE" : "Alabama", "ABBR" : "AL"},
+            		{"STATE" : "Alaska", "ABBR" : "AK"},
+            		{"STATE" : "Arizona", "ABBR" : "AZ"},
+            		{"STATE" : "Arkansas", "ABBR" : "AR"}],
+            	'b' : [
+            		],
+            	'c' : [
+            		{"STATE" : "California", "ABBR" : "CA"},
+            		{"STATE" : "Colorado", "ABBR" : "CO"},
+                    {"STATE" : "Connecticut", "ABBR" : "CT"}] // Entire dataset not shown
+                };
 
-    // Instantiate auto complete
-    oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
-    oAutoComp.alwaysShowContainer = true;
-    oAutoComp.queryDelay = 0;
-    oAutoComp.maxResultsDisplayed = 8;
-    oAutoComp.useShadow = true;
-    oAutoComp.setBody("<div id=\"statescontainerdefault\">Start typing to find a state</div>");
-    oAutoComp.formatResult = function(oResultItem, sQuery) {
-        var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";
-        return (sMarkup);
-    };
+            YAHOO.example.ACJSFunction = function(){
+                var mylogger;
+                var oACDS;
+                var oAutoComp;
 
-    // Subscribe to custom events
-    oAutoComp.dataReturnEvent.subscribe(myOnDataReturn);
-    oAutoComp.containerCollapseEvent.subscribe(myOnContainerCollapse);
-    </pre>
+                return {
+                    init: function() {
+                        //Logger
+                        mylogger = new YAHOO.widget.LogReader("logger");
+
+                        // Instantiate JS Function DataSource
+                        oACDS = new YAHOO.widget.DS_JSFunction(getStates);
+
+                        // Instantiate AutoComplete
+                        oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
+                        oAutoComp.alwaysShowContainer = true;
+                        oAutoComp.queryDelay = 0;
+                        oAutoComp.maxResultsDisplayed = 8;
+                        oAutoComp.useShadow = true;
+                        oAutoComp.setBody("<div id=\"statescontainerdefault\">Start typing to find a state</div>");
+                        oAutoComp.formatResult = function(oResultItem, sQuery) {
+                            var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";
+                            return (sMarkup);
+                        };
+
+                        // Subscribe to Custom Events
+                        oAutoComp.dataReturnEvent.subscribe(YAHOO.example.ACJSFunction.myOnDataReturn);
+                        oAutoComp.containerCollapseEvent.subscribe(YAHOO.example.ACJSFunction.myOnContainerCollapse);
+                    },
+
+                    // Define Custom Event handlers
+                    myOnDataReturn: function(sType, aArgs) {
+                        var oAutoComp = aArgs[0];
+                        var sQuery = aArgs[1];
+                        var aResults = aArgs[2];
+
+                        if(aResults.length == 0) {
+                            oAutoComp.setBody("<div id=\"statescontainerdefault\">No matching results</div>");
+                        }
+                    },
+
+                    myOnContainerCollapse: function(sType, aArgs) {
+                        var oAutoComp = aArgs[0];
+                        oAutoComp.setBody("<div id=\"statescontainerdefault\">Start typing to find a state</div>");
+                    },
+
+                    validateForm: function() {
+                        // Validate form inputs here
+                        return false;
+                    }
+                };
+            }();
+
+            YAHOO.util.Event.addListener(this,'load',YAHOO.example.ACJSFunction.init);
+        </textarea>
     </div>
     <!-- Code sample ends -->
-    <!-- Content ends -->
+</div>
+<!-- Content ends -->
 
 <!-- Libary begins -->
 <script src="../../build/yahoo/yahoo.js"></script>
@@ -178,10 +218,10 @@ YAHOO.example.ACJSFunction = function(){
             //Logger
             mylogger = new YAHOO.widget.LogReader("logger");
 
-            // Instantiate data source
+            // Instantiate JS Function DataSource
             oACDS = new YAHOO.widget.DS_JSFunction(getStates);
 
-            // Instantiate auto complete
+            // Instantiate AutoComplete
             oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
             oAutoComp.alwaysShowContainer = true;
             oAutoComp.queryDelay = 0;
@@ -193,28 +233,12 @@ YAHOO.example.ACJSFunction = function(){
                 return (sMarkup);
             };
 
-            // Define custom event handlers
-            myOnDataReturn = function(sType, aArgs) {
-                var oAutoComp = aArgs[0];
-                var sQuery = aArgs[1];
-                var aResults = aArgs[2];
-
-                if(aResults.length == 0) {
-                    oAutoComp.setBody("<div id=\"statescontainerdefault\">No matching results</div>");
-                }
-            };
-
-            myOnContainerCollapse = function(sType, aArgs) {
-                var oAutoComp = aArgs[0];
-                oAutoComp.setBody("<div id=\"statescontainerdefault\">Start typing to find a state</div>");
-            };
-
-            // Subscribe to custom events
+            // Subscribe to Custom Events
             oAutoComp.dataReturnEvent.subscribe(YAHOO.example.ACJSFunction.myOnDataReturn);
             oAutoComp.containerCollapseEvent.subscribe(YAHOO.example.ACJSFunction.myOnContainerCollapse);
         },
 
-        // Define custom event handlers
+        // Define Custom Event handlers
         myOnDataReturn: function(sType, aArgs) {
             var oAutoComp = aArgs[0];
             var sQuery = aArgs[1];
@@ -239,6 +263,11 @@ YAHOO.example.ACJSFunction = function(){
 
 YAHOO.util.Event.addListener(this,'load',YAHOO.example.ACJSFunction.init);
 </script>
-</div>
+
+<script src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
 </body>
 </html>

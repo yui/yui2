@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="../../build/fonts/fonts.css" type="text/css" />
 <link rel="stylesheet" href="../../build/logger/assets/logger.css" type="text/css" />
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
+<link rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css" />
 
 <style type="text/css">
     #ysearchmod {position:relative;text-align:center;z-index:9050;}
@@ -57,57 +58,60 @@
 
     <!-- Sample code begins -->
     <div id="code">
-    <h3>Sample Code</h3>
+        <h3>Sample Code</h3>
 
-    <p>CSS:</p>
-    <pre class="code">
-    #ysearchmod {position:relative;text-align:center;z-index:9050;}
-    #ysearchautocomplete {position:relative;}
-    #ysearchinput {position:relative;width:20em;height:1.4em;}
-    #ysearchcontainer {position:absolute;left:0;top:1.7em;display:inline;}
-    #ysearchcontainer .yui-ac-content {position:absolute;left:0;top:0;width:20em;border:1px solid #404040;background:#fff;overflow:hidden;text-align:left;z-index:9050;}
-    #ysearchcontainer .yui-ac-shadow {position:absolute;left:0;top:0;margin:.3em;background:#a0a0a0;z-index:9049;}
-    #ysearchcontainer ul {padding:5px 0;width:100%;}
-    #ysearchcontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
-    #ysearchcontainer li.yui-ac-highlight {background:#ff0;}
-    #ysearchsubmit {position:relative;}
-    </pre>
+        <p>CSS:</p>
+        
+        <textarea name="code" class="CSS" cols="60" rows="1">
+            #ysearchmod {position:relative;text-align:center;z-index:9050;}
+            #ysearchautocomplete {position:relative;}
+            #ysearchinput {position:relative;width:20em;height:1.4em;}
+            #ysearchcontainer {position:absolute;left:0;top:1.7em;display:inline;}
+            #ysearchcontainer .yui-ac-content {position:absolute;left:0;top:0;width:20em;border:1px solid #404040;background:#fff;overflow:hidden;text-align:left;z-index:9050;}
+            #ysearchcontainer .yui-ac-shadow {position:absolute;left:0;top:0;margin:.3em;background:#a0a0a0;z-index:9049;}
+            #ysearchcontainer ul {padding:5px 0;width:100%;}
+            #ysearchcontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
+            #ysearchcontainer li.yui-ac-highlight {background:#ff0;}
+            #ysearchsubmit {position:relative;}
+        </textarea>
 
-    <p>Markup:</p>
-    <pre class="code">
-    &lt;!-- AutoComplete begins --&gt;
-    &lt;div id="ysearchmod"&gt;
-        &lt;form&gt;
-            &lt;span&gt;Yahoo! Search&lt;/span&gt;
-            &lt;span id="ysearchautocomplete"&gt;
-                &lt;input id="ysearchinput"&gt;
-                &lt;div id="ysearchcontainer"&gt;&lt;/div&gt;
-            &lt;/span&gt;
-            &lt;input id="ysearchsubmit" type="submit" value="Submit Query"&gt;
-        &lt;/form&gt;
-    &lt;/div&gt;
-    &lt;!-- AutoComplete ends --&gt;
-    </pre>
+        <p>Markup:</p>
+        
+        <textarea name="code" class="JScript" cols="60" rows="1">
+            <!-- AutoComplete begins -->
+            <div id="ysearchmod">
+                <form onsubmit="return YAHOO.example.ACJson.validateForm();">
+                    <span>Yahoo! Search</span>
+                    <span id="ysearchautocomplete">
+                        <input id="ysearchinput">
+                        <div id="ysearchcontainer"></div>
+                    </span>
+                    <input id="ysearchsubmit" type="submit" value="Submit Query">
+                </form>
+            </div>
+            <!-- AutoComplete ends -->
+        </textarea>
 
-    <p>JavaScript:</p>
-    <pre class="code">
-    // Instantiate data source and define schema as an array:
-    //     ["Multi-depth.object.notation.to.find.a.single.result.item",
-    //     "Query Key",
-    //     "Additional Param Name 1",
-    //     ...
-    //     "Additional Param Name n"]
-    oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_proxy.php", ["ResultSet.Result", "Title", "Summary", "Cache"]);
-    oACDS.queryMatchContains = true;
-    oACDS.scriptQueryAppend = "output=json&results=100"; // Needed for YWS
+        <p>JavaScript:</p>
 
-    // Instantiate auto complete
-    oAutoComp = new YAHOO.widget.AutoComplete("ysearchinput","ysearchcontainer", oACDS);
-    </pre>
+        <textarea name="code" class="JScript" cols="60" rows="1">
+            // Instantiate an XHR DataSource and define schema as an array:
+            //     ["Multi-depth.object.notation.to.find.a.single.result.item",
+            //     "Query Key",
+            //     "Additional Param Name 1",
+            //     ...
+            //     "Additional Param Name n"]
+            oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_proxy.php", ["ResultSet.Result", "Title", "Summary", "Cache"]);
+            oACDS.queryMatchContains = true;
+            oACDS.scriptQueryAppend = "output=json&results=100"; // Needed for YWS
+
+            // Instantiate AutoComplete
+            oAutoComp = new YAHOO.widget.AutoComplete("ysearchinput","ysearchcontainer", oACDS);
+        </textarea>
     </div>
     <!-- Code sample ends -->
-    <!-- Content ends -->
 </div>
+<!-- Content ends -->
 
 <!-- Libary begins -->
 <script src="../../build/yahoo/yahoo.js"></script>
@@ -131,7 +135,7 @@ YAHOO.example.ACJson = function(){
             // Logger
             mylogger = new YAHOO.widget.LogReader("logger");
 
-            // Instantiate data source and define schema as an array:
+            // Instantiate an XHR DataSource and define schema as an array:
             //     ["Multi-depth.object.notation.to.find.a.single.result.item",
             //     "Query Key",
             //     "Additional Param Name 1",
@@ -141,7 +145,7 @@ YAHOO.example.ACJson = function(){
             oACDS.queryMatchContains = true;
             oACDS.scriptQueryAppend = "output=json&results=100"; // Needed for YWS
 
-            // Instantiate auto complete
+            // Instantiate AutoComplete
             oAutoComp = new YAHOO.widget.AutoComplete("ysearchinput","ysearchcontainer", oACDS);
         },
 
@@ -153,6 +157,11 @@ YAHOO.example.ACJson = function(){
 }();
 
 YAHOO.util.Event.addListener(this,"load",YAHOO.example.ACJson.init);
+</script>
+
+<script src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 </body>
 </html>
