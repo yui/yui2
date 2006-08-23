@@ -446,13 +446,13 @@ YAHOO.widget.MenuItem.prototype.configChecked =
 
                 if(!document.images[sPath]) {
 
-                    var oImg = document.createElement("img");
-                    oImg.src = sPath;
-                    oImg.name = sPath;
-                    oImg.id = sPath;
-                    oImg.style.display = "none";
+                    var oImage = document.createElement("img");
+                    oImage.src = sPath;
+                    oImage.name = sPath;
+                    oImage.id = sPath;
+                    oImage.style.display = "none";
                     
-                    document.body.appendChild(oImg);
+                    document.body.appendChild(oImage);
 
                 }
             
