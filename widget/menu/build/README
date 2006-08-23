@@ -80,3 +80,54 @@ Changes
 
 * Changed case of MenuModuleItem class's "subMenuIndicator" property 
   to "submenuIndicator"
+  
+
+*** version 0.11.3 ***
+
+Added the following features:
+-----------------------------
+
+* Added a "target" configuration property to the MenuModuleItem object that
+  allows the user to specificy the target of an item's anchor element.  Items 
+  that make use of the "target" configuration property will require the user 
+  to click exactly on the item's anchor element to navigate to the specified 
+  URL.
+
+* Items without a "url" property set will automatically hide their parent 
+  menu instance(s) when clicked.
+
+
+Fixed the following bugs:
+-------------------------
+
+* Items in a submenu should now navigate to their specified URL when clicked.
+
+* Removed MenuBar's use of "overflow:hidden."  This fixes an issue in Firefox
+  1.5 in which submenus of a Menubar instance cannot overlay other absolutely 
+  positioned elements on the page.
+
+* Submenus of a Menubar instance will now automatically have their iframe shim
+  enabled in IE.
+
+* Statically positioned Menubar and Menu instances will now render with the 
+  correct position and dimensions in Safari.
+
+* MenuModuleItem's "focus" method now checks to make sure that an item's 
+  "display" style property is not "none" before trying to set focus to it's
+  anchor element.
+  
+* A ContextMenu instance will now hide all other ContextMenu instances before
+  displaying itself.
+
+* Removed the dead space in front of an item's submenu indicator image in IE.  
+  This space was causing an item's submenu to flicker when the user hovered 
+  over it.
+
+
+Changes
+-------
+
+* Moved the DOM event handlers for every menu from the root DIV node of each 
+  instance to the document object.  This change reduces the number of DOM event 
+  handlers used by Menu to eight, improving the cleanup time required by the 
+  Event utility.
