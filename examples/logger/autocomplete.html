@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../build/grids/grids.css" type="text/css" />
 <link rel="stylesheet" href="../../build/logger/assets/logger.css" type="text/css" />
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
+<link rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css" />
 
 <style type="text/css">
     #statesmod {position:relative;}
@@ -50,26 +51,30 @@
 
     <!-- Sample code begins -->
     <div id="code">
-    <h3>Sample Code</h3>
+        <h3>Sample Code</h3>
 
-    <p>CSS:</p>
-    <pre class="code">
-    No CSS styles were defined.
-    </pre>
+        <p>CSS:</p>
+        <textarea name="code" class="CSS" cols="60" rows="1">
+        /*No custom CSS styles were defined.*/
+        </textarea>
 
-    <p>Markup:</p>
-    <pre class="code">
-    No markup was defined.
-    </pre>
+        <p>Markup:</p>
+        <textarea name="code" class="JScript" cols="60" rows="1">
+        <!-- No custom markup was defined. -->
+        </textarea>
 
-    <p>JavaScript:</p>
-    <pre class="code">
-    // Instatiate LogReader
-    var oLogReader = new YAHOO.widget.LogReader(null,{top:"auto",bottom:"10px",fontSize:"92%",width:"30em",height:"20em"});
-    </pre>
+        <p>JavaScript:</p>
+        <textarea name="code" class="JScript" cols="60" rows="1">
+        // We have first included the debug builds of YUI components
+        // event-debug.js and autocomplete-debug.js
+        
+        // Then we can see log messages being output to our LogReader
+        var oLogReader = new YAHOO.widget.LogReader(null,{top:"auto",bottom:"10px",fontSize:"92%",width:"30em",height:"20em"});
+        </textarea>
     </div>
     <!-- Code sample ends -->
     <!-- Content ends -->
+</div>
 
 <!-- Libary begins -->
 <script src="../../build/yahoo/yahoo.js"></script>
@@ -163,6 +168,11 @@ YAHOO.example.AutoCompleteLogger = function() {
 
 YAHOO.util.Event.addListener(this,'load',YAHOO.example.AutoCompleteLogger.init);
 </script>
-</div>
+
+<script src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
 </body>
 </html>

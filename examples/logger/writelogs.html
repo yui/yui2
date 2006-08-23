@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="../../build/fonts/fonts.css" type="text/css"  />
 <link rel="stylesheet" href="../../build/logger/assets/logger.css" type="text/css" />
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
+<link rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css" />
 </head>
 
 <body>
@@ -39,43 +40,44 @@
         <p><input id="yui-log-inputsource" class="yui-log-input" type="text" value="SomeClass instance1">
             <button id="btn_logsource">Generate some messages from a named source</button></p>
 
-    <!-- Sample code begins -->
-    <div id="code">
-    <h3>Sample Code</h3>
+        <!-- Sample code begins -->
+        <div id="code">
+            <h3>Sample Code</h3>
 
-    <p>CSS:</p>
-    <pre class="code">
-    No CSS styles were defined.
-    </pre>
+            <p>CSS:</p>
+            <textarea name="code" class="CSS" cols="60" rows="1">
+            /*No custom CSS styles were defined.*/
+            </textarea>
 
-    <p>Markup:</p>
-    <pre class="code">
-    No markup was defined.
-    </pre>
+            <p>Markup:</p>
 
-    <p>JavaScript:</p>
-    <pre class="code">
-    // Instantiate a logreader and a logwriter
-    myLogReader = new YAHOO.widget.LogReader(null,{top:"50%",right:"10px"});
-    myLogWriter = new YAHOO.widget.LogWriter("myWriter");
+            <textarea name="code" class="JScript" cols="60" rows="1">
+            <!--No custom markup was defined.-->
+            </textarea>
 
-    // You can call the global function YAHOO.log() anytime, anywhere
-    YAHOO.log("Yahoo! is great"); // defaults to type "info"
-    YAHOO.log("Here is a warning", "warn");
-    YAHOO.log("Some error has occurred", "error");
-    YAHOO.log("Use timers to profile your code", "time");
+            <p>JavaScript:</p>
+            <textarea name="code" class="JScript" cols="60" rows="1">
+            // Instantiate a logreader and a logwriter
+            myLogReader = new YAHOO.widget.LogReader(null,{top:"50%",right:"10px"});
+            myLogWriter = new YAHOO.widget.LogWriter("myWriter");
 
-    myLogWriter.log("something","info");
-    myLogWriter.log("something","warn");
-    myLogWriter.log("something","error");
-    myLogWriter.log("something","time");
-    myLogWriter.log("something","custom");
-    </pre>
-    </div>
-    <!-- Code sample ends -->
+            // You can call the global function YAHOO.log() anytime, anywhere
+            YAHOO.log("Yahoo! is great"); // defaults to type "info"
+            YAHOO.log("Here is a warning", "warn");
+            YAHOO.log("Some error has occurred", "error");
+            YAHOO.log("Use timers to profile your code", "time");
+
+            myLogWriter.log("something","info");
+            myLogWriter.log("something","warn");
+            myLogWriter.log("something","error");
+            myLogWriter.log("something","time");
+            myLogWriter.log("something","custom");
+            </textarea>
+        </div>
+        <!-- Code sample ends -->
     </div>
     <!-- Content ends -->
-    
+</div>
 <!-- Libary begins -->
 <script src="../../build/yahoo/yahoo.js"></script>
 <script src="../../build/dom/dom.js"></script>
@@ -156,6 +158,11 @@ YAHOO.example.LogWriter = function() {
 
 YAHOO.util.Event.addListener(this,'load',YAHOO.example.LogWriter.init);
 </script>
-</div>
+
+<script src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
 </body>
 </html>

@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="../../build/fonts/fonts.css" type="text/css"  />
 <link rel="stylesheet" href="../../build/logger/assets/logger.css" type="text/css" />
 <link rel="stylesheet" href="./css/examples.css" type="text/css" />
+<link rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css" />
 <style>
 .yui-log .mytype {background-color:#FF99CC;}
 </style>
@@ -50,34 +51,35 @@
 
     <!-- Sample code begins -->
     <div id="code">
-    <h3>Sample Code</h3>
+        <h3>Sample Code</h3>
 
-    <p>CSS:</p>
-    <pre class="code">
-    // A style was defined for a custom category
-    // By convention, it is defined with narrow-scope selectors to achieve namespacing
-    &lt;style&gt;
-    .yui-log .mytype {background-color:#FF99CC;}
-    &lt;/style&gt;
-    </pre>
+        <p>CSS:</p>
 
-    <p>Markup:</p>
-    <pre class="code">
-    No markup was defined
-    </pre>
+        <textarea name="code" class="CSS" cols="60" rows="1">
+        /* A style was defined for a custom category.
+        By convention, it is defined with narrow-scope
+        selectors to achieve namespacing*/
+        .yui-log .mytype {background-color:#FF99CC;}
+        </textarea>
 
-    <p>JavaScript:</p>
-    <pre class="code">
-    myLogReader1 = new YAHOO.widget.LogReader();
-    myLogReader2 = new YAHOO.widget.LogReader();
-    myLogReader2.newestOnTop = false;
-    myLogReader2.setTitle("Logger Console: Oldest &#62; on &#62; Top!");
-    </pre>
-    </div>
-    <!-- Code sample ends -->
+        <p>Markup:</p>
 
+        <textarea name="code" class="JScript" cols="60" rows="1">
+        <!-- No custom markup was defined -->
+        </textarea>
+
+        <p>JavaScript:</p>
+
+        <textarea name="code" class="JScript" cols="60" rows="1">
+        myLogReader1 = new YAHOO.widget.LogReader();
+        myLogReader2 = new YAHOO.widget.LogReader();
+        myLogReader2.newestOnTop = false;
+        myLogReader2.setTitle("Logger Console: Oldest > on > Top!");
+        </textarea>
+        <!-- Code sample ends -->
     </div>
     <!-- Content ends -->
+</div>
 
 <!-- Libary begins -->
 <script src="../../build/yahoo/yahoo.js"></script>
@@ -114,6 +116,11 @@ YAHOO.example.LogReader = function() {
 
 YAHOO.util.Event.addListener(this,'load',YAHOO.example.LogReader.init);
 </script>
-</div>
+
+<script src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
 </body>
 </html>
