@@ -4,79 +4,92 @@
 <title>Logger Widget :: Writing Logs</title>
 <link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
+<link type="text/css" rel="stylesheet" href="../../build/grids/grids.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
 <link type="text/css" rel="stylesheet" href="./css/examples.css">
 <link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
 </head>
 
 <body>
-<div id="hd">
-    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">Logger Widget</a> :: Writing Logs</h1>
-</div>
-
-<div id="bd">
-    <!-- Content begins -->
-    <div id="content">
-        <h3>Writing Log Messages From Your Code</h3>
-        <p>In this example, we instanatiate a simple LogReader to display log
-        messages. We use the global method YAHOO.log() to write simple messages,
-        and we also instantiate a LogWriter instance to write messages from a
-        custom-named source.</p>
-
-        <p><input id="yui-log-inputinfo" class="yui-log-input" type="text" value="Log an info message.">
-            <button id="btn_loginfo">Log this message</button></p>
-        <p><input id="yui-log-inputwarn" class="yui-log-input" type="text" value="Log a warning.">
-            <button id="btn_logwarn">Log this message</button></p>
-        <p><input id="yui-log-inputerror" class="yui-log-input" type="text" value="Log an error.">
-            <button id="btn_logerror">Log this message</button></p>
-        <p><input id="yui-log-inputtime" class="yui-log-input" type="text" value="Log a timing message.">
-            <button id="btn_logtime">Log this message</button></p>
-        <p><input id="yui-log-inputwindow" class="yui-log-input" type="text" value="Log a window error.">
-            <button onclick="someUndefinedFunction();">Log this message</button> (not supported in Opera, Safari)</p>
-        <p><input id="yui-log-inputcustommsg" class="yui-log-input" type="text" value="Log a custom type message.">
-            <input id="yui-log-inputcustomtype" type="text" value="myCategory">
-            <button id="btn_logcustom">Log this message with this category</button></p>
-
-        <p><input id="yui-log-inputsource" class="yui-log-input" type="text" value="SomeClass instance1">
-            <button id="btn_logsource">Generate some messages from a named source</button></p>
-
-        <!-- Sample code begins -->
-        <div id="code">
-            <h3>Sample Code</h3>
-
-            <p>CSS:</p>
-            <textarea name="code" class="HTML" cols="60" rows="1">
-            /*No custom CSS styles were defined.*/
-            </textarea>
-
-            <p>Markup:</p>
-
-            <textarea name="code" class="HTML" cols="60" rows="1">
-            <!--No custom markup was defined.-->
-            </textarea>
-
-            <p>JavaScript:</p>
-            <textarea name="code" class="JScript" cols="60" rows="1">
-            // Instantiate a logreader and a logwriter
-            myLogReader = new YAHOO.widget.LogReader(null,{top:"50%",right:"10px"});
-            myLogWriter = new YAHOO.widget.LogWriter("myWriter");
-
-            // You can call the global function YAHOO.log() anytime, anywhere
-            YAHOO.log("Yahoo! is great"); // defaults to type "info"
-            YAHOO.log("Here is a warning", "warn");
-            YAHOO.log("Some error has occurred", "error");
-            YAHOO.log("Use timers to profile your code", "time");
-
-            myLogWriter.log("something","info");
-            myLogWriter.log("something","warn");
-            myLogWriter.log("something","error");
-            myLogWriter.log("something","time");
-            myLogWriter.log("something","custom");
-            </textarea>
-        </div>
-        <!-- Code sample ends -->
+<div id="doc" class="yui-t7">
+    <div id="hd">
+        <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">Logger Widget</a> :: Writing Logs</h1>
     </div>
-    <!-- Content ends -->
+
+    <div id="bd">
+        <!-- Content begins -->
+        <div id="yui-main">
+        <div class="yui-b">
+            <div class="yui-gc">
+                <div class="yui-u first">
+                    <div id="content">
+                        <h3>Writing Log Messages From Your Code</h3>
+                        <p>In this example, we instanatiate a simple LogReader to display log
+                        messages. We use the global method YAHOO.log() to write simple messages,
+                        and we also instantiate a LogWriter instance to write messages from a
+                        custom-named source.</p>
+
+                        <p><input id="yui-log-inputinfo" class="yui-log-input" type="text" value="Log an info message.">
+                            <button id="btn_loginfo">Log this message</button></p>
+                        <p><input id="yui-log-inputwarn" class="yui-log-input" type="text" value="Log a warning.">
+                            <button id="btn_logwarn">Log this message</button></p>
+                        <p><input id="yui-log-inputerror" class="yui-log-input" type="text" value="Log an error.">
+                            <button id="btn_logerror">Log this message</button></p>
+                        <p><input id="yui-log-inputtime" class="yui-log-input" type="text" value="Log a timing message.">
+                            <button id="btn_logtime">Log this message</button></p>
+                        <p><input id="yui-log-inputwindow" class="yui-log-input" type="text" value="Log a window error.">
+                            <button onclick="someUndefinedFunction();">Log this message</button> (not supported in Opera, Safari)</p>
+                        <p><input id="yui-log-inputcustommsg" class="yui-log-input" type="text" value="Log a custom type message.">
+                            <input id="yui-log-inputcustomtype" type="text" value="myCategory">
+                            <button id="btn_logcustom">Log this message with this category</button></p>
+
+                        <p><input id="yui-log-inputsource" class="yui-log-input" type="text" value="SomeClass instance1">
+                            <button id="btn_logsource">Generate some messages from a named source</button></p>
+                    </div>
+                    <!-- Content ends -->
+                </div>
+            </div>
+            
+             <div class="yui-g">
+                <!-- Sample code begins -->
+                <div id="code">
+                    <h3>Sample Code</h3>
+
+                    <p>CSS:</p>
+                    <textarea name="code" class="HTML" cols="60" rows="1">
+                    /*No custom CSS styles were defined.*/
+                    </textarea>
+
+                    <p>Markup:</p>
+
+                    <textarea name="code" class="HTML" cols="60" rows="1">
+                    <!--No custom markup was defined.-->
+                    </textarea>
+
+                    <p>JavaScript:</p>
+                    <textarea name="code" class="JScript" cols="60" rows="1">
+                    // Instantiate a logreader and a logwriter
+                    myLogReader = new YAHOO.widget.LogReader(null,{top:"10%",right:"10px"});
+                    myLogWriter = new YAHOO.widget.LogWriter("myWriter");
+
+                    // You can call the global function YAHOO.log() anytime, anywhere
+                    YAHOO.log("Yahoo! is great"); // defaults to type "info"
+                    YAHOO.log("Here is a warning", "warn");
+                    YAHOO.log("Some error has occurred", "error");
+                    YAHOO.log("Use timers to profile your code", "time");
+
+                    myLogWriter.log("something","info");
+                    myLogWriter.log("something","warn");
+                    myLogWriter.log("something","error");
+                    myLogWriter.log("something","time");
+                    myLogWriter.log("something","custom");
+                    </textarea>
+                </div>
+                <!-- Code sample ends -->
+             </div>
+        </div>
+        </div>
+    </div>
 </div>
 <!-- Libary begins -->
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
@@ -94,7 +107,7 @@ YAHOO.example.LogWriter = function() {
     return {
         init: function() {
             // Instantiate a logreader and a logwriter
-            myLogReader = new YAHOO.widget.LogReader(null,{top:"50%",right:"10px"});
+            myLogReader = new YAHOO.widget.LogReader(null,{top:"10%",right:"10px"});
             myLogWriter = new YAHOO.widget.LogWriter("myWriter");
 
             // You can call the global function YAHOO.log() anytime, anywhere

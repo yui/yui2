@@ -24,56 +24,68 @@
 </head>
 
 <body>
-<div id="hd">
-    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">Logger Widget</a> :: YUI Integration Example</h1>
-</div>
+<div id="doc" class="yui-t7">
+    <div id="hd">
+        <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">Logger Widget</a> :: YUI Integration Example</h1>
+    </div>
 
-<div id="bd">
-    <!-- Content begins -->
-    <h3>Using Logger to Debug YUI Library Components</h3>
-    <p>In this example, we have set up an instance of AutoComplete. By using the
-    debug build of AutoComplete source code, we are able to instantiate a
-    LogReader on this page and read the messages generated from the component.
-    In order to place the LogReader in a convenient spot, we pass in a custom
-    bottom value into its constructor.</p>
+    <div id="bd">
+        <div id="yui-main">
+        <div class="yui-b">
+            <div class="yui-gc">
+                <div class="yui-u first">
+                    <!-- Content begins -->
+                    <h3>Using Logger to Debug YUI Library Components</h3>
+                    <p>In this example, we have set up an instance of AutoComplete. By using the
+                    debug build of AutoComplete source code, we are able to instantiate a
+                    LogReader on this page and read the messages generated from the component.
+                    In order to place the LogReader in a convenient spot, we pass in a custom
+                    bottom value into its constructor.</p>
 
-    <!-- AutoComplete begins -->
-    <div id="statesmod">
-        <form onsubmit="return validateForm();">
-            <h3>Find a state:</h3>
-            <div id="statesautocomplete">
-                <input id="statesinput">
-                <div id="statescontainer"></div>
+                    <!-- AutoComplete begins -->
+                    <div id="statesmod">
+                        <form onsubmit="return validateForm();">
+                            <h3>Find a state:</h3>
+                            <div id="statesautocomplete">
+                                <input id="statesinput">
+                                <div id="statescontainer"></div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- AutoComplete ends -->
+                </div>
+                <!-- Content ends -->
             </div>
-        </form>
-    </div>
-    <!-- AutoComplete ends -->
-
-    <!-- Sample code begins -->
-    <div id="code">
-        <h3>Sample Code</h3>
-
-        <p>CSS:</p>
-        <textarea name="code" class="HTML" cols="60" rows="1">
-        /*No custom CSS styles were defined.*/
-        </textarea>
-
-        <p>Markup:</p>
-        <textarea name="code" class="HTML" cols="60" rows="1">
-        <!-- No custom markup was defined. -->
-        </textarea>
-
-        <p>JavaScript:</p>
-        <textarea name="code" class="JScript" cols="60" rows="1">
-        // We have first included the debug builds of YUI components
-        // event-debug.js and autocomplete-debug.js
+        </div>
         
-        // Then we can see log messages being output to our LogReader
-        var oLogReader = new YAHOO.widget.LogReader(null,{top:"auto",bottom:"10px",fontSize:"92%",width:"30em",height:"20em"});
-        </textarea>
+        <div class="yui-g">
+            <!-- Sample code begins -->
+            <div id="code">
+                <h3>Sample Code</h3>
+
+                <p>CSS:</p>
+                <textarea name="code" class="HTML" cols="60" rows="1">
+                /*No custom CSS styles were defined.*/
+                </textarea>
+
+                <p>Markup:</p>
+                <textarea name="code" class="HTML" cols="60" rows="1">
+                <!-- No custom markup was defined. -->
+                </textarea>
+
+                <p>JavaScript:</p>
+                <textarea name="code" class="JScript" cols="60" rows="1">
+                // We have first included the debug builds of YUI components
+                // event-debug.js and autocomplete-debug.js
+
+                // Then we can see log messages being output to our LogReader
+                var oLogReader = new YAHOO.widget.LogReader(null,{top:"4em",fontSize:"92%",width:"30em",height:"20em"});
+                </textarea>
+            </div>
+            <!-- Code sample ends -->
+        </div>
     </div>
-    <!-- Code sample ends -->
-    <!-- Content ends -->
+    </div>
 </div>
 
 <!-- Libary begins -->
@@ -153,7 +165,7 @@ YAHOO.example.AutoCompleteLogger = function() {
 
         init: function() {
             // Instatiate LogReader
-            var oLogReader = new YAHOO.widget.LogReader(null,{top:"auto",bottom:"10px",fontSize:"92%",width:"30em",height:"20em"});
+            var oLogReader = new YAHOO.widget.LogReader(null,{top:"4em",fontSize:"92%",width:"30em",height:"20em"});
 
             // Instantiate DataSource
             var oACDS = new YAHOO.widget.DS_JSArray(statesArray);

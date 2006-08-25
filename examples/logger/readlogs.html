@@ -4,6 +4,7 @@
 <title>Logger Widget :: Reading Logs</title>
 <link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
+<link type="text/css" rel="stylesheet" href="../../build/grids/grids.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
 <link type="text/css" rel="stylesheet" href="./css/examples.css">
 <link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css" />
@@ -13,74 +14,84 @@
 </head>
 
 <body>
-<div id="hd">
-    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">Logger Widget</a> :: Reading Logs</h1>
-</div>
-
-<div id="bd">
-    <!-- Content begins -->
-    <div id="content">
-        <h3>Default LogReader Example</h3>
-        <p>With just a few lines of code, you can put a LogReader on any web
-        page that displays log messages built into the YUI Library or custom
-        log messages that you can insert into your own code. This example takes
-        advantage of the YUI Library's Drag and Drop utility to make the
-        LogReader draggable.</p>
-
-        <p><input id="yui-log-inputinfo" class="yui-log-input" type="text" value="Log an info message.">
-            <button onclick="YAHOO.log(document.getElementById('yui-log-inputinfo').value,'info')">Log</button></p>
-        <p><input id="yui-log-inputwarn" class="yui-log-input" type="text" value="Log a warning.">
-            <button onclick="YAHOO.log(document.getElementById('yui-log-inputwarn').value,'warn')">Log</button></p>
-        <p><input id="yui-log-inputerror" class="yui-log-input" type="text" value="Log an error.">
-            <button onclick="YAHOO.log(document.getElementById('yui-log-inputerror').value,'error')">Log</button></p>
-        <p><input id="yui-log-inputtime" class="yui-log-input" type="text" value="Log a timing message.">
-            <button onclick="YAHOO.log(document.getElementById('yui-log-inputtime').value,'time')">Log</button></p>
-        <p><input id="yui-log-inputwindow" class="yui-log-input" type="text" value="Log a window error.">
-            <button onclick="someUndefinedFunction();">Log</button> (not supported in Opera, Safari)</p>
-        <p><input id="yui-log-inputcustommsg" class="yui-log-input" type="text" value="Log a custom type message.">
-            <input id="yui-log-inputcustomtype" type="text" value="mytype">
-            <button onclick="YAHOO.log(document.getElementById('yui-log-inputcustommsg').value,document.getElementById('yui-log-inputcustomtype').value)">Log</button></p>
-
-        <p><a href="javascript:YAHOO.example.LogReader.hideAllReaders();">Hide All LogReaders</a> ||
-        <a href="javascript:YAHOO.example.LogReader.showAllReaders();">Show All LogReaders</a></p>
-        
-        <p><a href="javascript:YAHOO.widget.Logger.disableBrowserConsole();">Disable Output to console.log()</a> ||
-        <a href="javascript:YAHOO.widget.Logger.enableBrowserConsole();">Enable Output to console.log()</a></p>
-        
-        <p><a href="javascript:YAHOO.widget.Logger.reset();">Reset Logger stack</a></p>
-
-    <!-- Sample code begins -->
-    <div id="code">
-        <h3>Sample Code</h3>
-
-        <p>CSS:</p>
-
-        <textarea name="code" class="HTML" cols="60" rows="1">
-        /* A style was defined for a custom category.
-        By convention, it is defined with narrow-scope
-        selectors to achieve namespacing*/
-        .yui-log .mytype {background-color:#FF99CC;}
-        </textarea>
-
-        <p>Markup:</p>
-
-        <textarea name="code" class="HTML" cols="60" rows="1">
-        <!-- No custom markup was defined -->
-        </textarea>
-
-        <p>JavaScript:</p>
-
-        <textarea name="code" class="JScript" cols="60" rows="1">
-        myLogReader1 = new YAHOO.widget.LogReader();
-        myLogReader2 = new YAHOO.widget.LogReader();
-        myLogReader2.newestOnTop = false;
-        myLogReader2.setTitle("Logger Console: Oldest > on > Top!");
-        </textarea>
-        <!-- Code sample ends -->
+<div id="doc" class="yui-t7">
+    <div id="hd">
+        <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">Logger Widget</a> :: Reading Logs</h1>
     </div>
-    <!-- Content ends -->
-</div>
 
+    <div id="bd">
+        <!-- Content begins -->
+        <div id="yui-main">
+        <div class="yui-b">
+            <div class="yui-gc">
+                <div class="yui-u first">
+                    <h3>Default LogReader Example</h3>
+                    <p>With just a few lines of code, you can put a LogReader on any web
+                    page that displays log messages built into the YUI Library or custom
+                    log messages that you can insert into your own code. This example takes
+                    advantage of the YUI Library's Drag and Drop utility to make the
+                    LogReader draggable.</p>
+
+                    <p><input id="yui-log-inputinfo" class="yui-log-input" type="text" value="Log an info message.">
+                        <button onclick="YAHOO.log(document.getElementById('yui-log-inputinfo').value,'info')">Log</button></p>
+                    <p><input id="yui-log-inputwarn" class="yui-log-input" type="text" value="Log a warning.">
+                        <button onclick="YAHOO.log(document.getElementById('yui-log-inputwarn').value,'warn')">Log</button></p>
+                    <p><input id="yui-log-inputerror" class="yui-log-input" type="text" value="Log an error.">
+                        <button onclick="YAHOO.log(document.getElementById('yui-log-inputerror').value,'error')">Log</button></p>
+                    <p><input id="yui-log-inputtime" class="yui-log-input" type="text" value="Log a timing message.">
+                        <button onclick="YAHOO.log(document.getElementById('yui-log-inputtime').value,'time')">Log</button></p>
+                    <p><input id="yui-log-inputwindow" class="yui-log-input" type="text" value="Log a window error.">
+                        <button onclick="someUndefinedFunction();">Log</button> (not supported in Opera, Safari)</p>
+                    <p><input id="yui-log-inputcustommsg" class="yui-log-input" type="text" value="Log a custom type message.">
+                        <input id="yui-log-inputcustomtype" type="text" value="mytype">
+                        <button onclick="YAHOO.log(document.getElementById('yui-log-inputcustommsg').value,document.getElementById('yui-log-inputcustomtype').value)">Log</button></p>
+
+                    <p><a href="javascript:YAHOO.example.LogReader.hideAllReaders();">Hide All LogReaders</a> ||
+                    <a href="javascript:YAHOO.example.LogReader.showAllReaders();">Show All LogReaders</a></p>
+
+                    <p><a href="javascript:YAHOO.widget.Logger.enableBrowserConsole();">Enable Output to console.log()</a> ||
+                    <a href="javascript:YAHOO.widget.Logger.disableBrowserConsole();">Disable Output to console.log()</a></p>
+
+                    <p><a href="javascript:YAHOO.widget.Logger.reset();">Reset Logger stack</a></p>
+                </div>
+            </div>
+
+            <div class="yui-g">
+                <!-- Sample code begins -->
+                <div id="code">
+                    <h3>Sample Code</h3>
+
+                    <p>CSS:</p>
+
+                    <textarea name="code" class="HTML" cols="60" rows="1">
+                    /* A style was defined for a custom category.
+                    By convention, it is defined with narrow-scope
+                    selectors to achieve namespacing*/
+                    .yui-log .mytype {background-color:#FF99CC;}
+                    </textarea>
+
+                    <p>Markup:</p>
+
+                    <textarea name="code" class="HTML" cols="60" rows="1">
+                    <!-- No custom markup was defined -->
+                    </textarea>
+
+                    <p>JavaScript:</p>
+
+                    <textarea name="code" class="JScript" cols="60" rows="1">
+                    myLogReader1 = new YAHOO.widget.LogReader();
+                    myLogReader2 = new YAHOO.widget.LogReader();
+                    myLogReader2.newestOnTop = false;
+                    myLogReader2.setTitle("Logger Console: Oldest > on > Top!");
+                    </textarea>
+                </div>
+                <!-- Code sample ends -->
+            </div>
+        </div>
+        </div>
+        <!-- Content ends -->
+    </div>
+</div>
 <!-- Libary begins -->
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
