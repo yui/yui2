@@ -611,32 +611,10 @@ YAHOO.util.Dom = function() {
        * @return {Int} The height of the actual document (which includes the body and its margin).
        */
       getDocumentHeight: function() {
-         var scrollHeight=-1,windowHeight=-1,bodyHeight=-1;
-         var marginTop = parseInt(util.Dom.getStyle(document.body, 'marginTop'), 10);
-         var marginBottom = parseInt(util.Dom.getStyle(document.body, 'marginBottom'), 10);
-         
-         var mode = document.compatMode;
-         
-         if ( (mode || isIE) && !isOpera ) { // (IE, Gecko)
-            switch (mode) {
-               case 'CSS1Compat': // Standards mode
-                  scrollHeight = ((window.innerHeight && window.scrollMaxY) ?  window.innerHeight+window.scrollMaxY : -1);
-                  windowHeight = [document.documentElement.clientHeight,self.innerHeight||-1].sort(function(a, b){return(a-b);})[1];
-                  bodyHeight = document.body.offsetHeight + marginTop + marginBottom;
-                  break;
-               
-               default: // Quirks
-                  scrollHeight = document.body.scrollHeight;
-                  bodyHeight = document.body.clientHeight;
-            }
-         } else { // Safari & Opera
-            scrollHeight = document.documentElement.scrollHeight;
-            windowHeight = self.innerHeight;
-            bodyHeight = document.documentElement.clientHeight;
-         }
-      
-         var h = [scrollHeight,windowHeight,bodyHeight].sort(function(a, b){return(a-b);});
-         return h[2];
+         var scrollHeight = (document.compatMode != 'CSS1Compat') ? document.body.scrollHeight : document.documentElement.scrollHeight;
+
+         var h = Math.max(scrollHeight, util.Dom.getViewportHeight());
+         return h;
       },
       
       /**
@@ -644,30 +622,8 @@ YAHOO.util.Dom = function() {
        * @return {Int} The width of the actual document (which includes the body and its margin).
        */
       getDocumentWidth: function() {
-         var docWidth=-1,bodyWidth=-1,winWidth=-1;
-         var marginRight = parseInt(util.Dom.getStyle(document.body, 'marginRight'), 10);
-         var marginLeft = parseInt(util.Dom.getStyle(document.body, 'marginLeft'), 10);
-         
-         var mode = document.compatMode;
-         
-         if (mode || isIE) { // (IE, Gecko, Opera)
-            switch (mode) {
-               case 'CSS1Compat': // Standards mode
-                  docWidth = document.documentElement.clientWidth;
-                  bodyWidth = document.body.offsetWidth + marginLeft + marginRight;
-                  break;
-                  
-               default: // Quirks
-                  bodyWidth = document.body.clientWidth;
-                  docWidth = document.body.scrollWidth;
-                  break;
-            }
-         } else { // Safari
-            docWidth = document.documentElement.clientWidth;
-            bodyWidth = document.body.offsetWidth + marginLeft + marginRight;
-         }
-      
-         var w = Math.max(docWidth, bodyWidth);
+         var scrollWidth = (document.compatMode != 'CSS1Compat') ? document.body.scrollWidth : document.documentElement.scrollWidth;
+         var w = Math.max(scrollWidth, util.Dom.getViewportWidth());
          return w;
       },
 
