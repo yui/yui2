@@ -607,7 +607,8 @@ YAHOO.widget.MenuItem.prototype.initDefaultConfig = function() {
             value: false, 
             handler: this.configChecked, 
             validator: this.cfg.checkBoolean, 
-            suppressEvent: true 
+            suppressEvent: true,
+            supercedes:["disabled"]
         } 
     );
 
