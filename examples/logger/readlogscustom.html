@@ -2,11 +2,11 @@
 <html>
 <head>
 <title>Logger Widget :: Customizing LogReader</title>
-<link rel="stylesheet" href="../../build/reset/reset.css" type="text/css" />
-<link rel="stylesheet" href="../../build/fonts/fonts.css" type="text/css"  />
-<link rel="stylesheet" href="./css/examples.css" type="text/css" />
-<link rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css" />
-<style>
+<link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
+<link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
+<link type="text/css" rel="stylesheet" href="./css/examples.css">
+<link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
+<style type="text/css">
 /* customized ylogger styles - logger.css is NOT called above */
 /* font size is controlled here: default 77% */
 #yui-log {position:absolute;bottom:1em;right:1em;font-size:100%;}
@@ -126,13 +126,13 @@
 </div>
 
 <!-- Libary begins -->
-<script src="../../build/yahoo/yahoo.js"></script>
-<script src="../../build/dom/dom.js"></script>
-<script src="../../build/event/event.js"></script>
-<script src="../../build/logger/logger.js"></script>
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
 <!-- Library ends -->
 
-<script>
+<script type="text/javascript">
 YAHOO.example.LogReader = function() {
     var myLogReader1;
     var myLogReader2;
@@ -158,8 +158,8 @@ YAHOO.example.LogReader = function() {
 YAHOO.util.Event.onAvailable("yui-log",YAHOO.example.LogReader.init);
 </script>
 
-<script src="../../docs/assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript">
+<script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript">
 dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 
