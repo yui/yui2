@@ -1,14 +1,16 @@
 
 <html>
 <head>
-	<title>JavaScript Documentation - YAHOO.js</title>
+	<!--<title>YUI API - YAHOO.js</title>-->
+	<!--<title>YUI API - YAHOO.js </title>-->
+	<title>API: %%COMPONENT%% %%FILE%% (YUI Library)</title>
 	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
 
 <div id="header">
-	<h1>JavaScript Documentation</h1>
+	<h1>Yahoo! UI Library</h1>
 	<h3><a href="./index.html">Yahoo Global Namespace</a></h3>
 
 	<div class="breadcrumbs">
@@ -61,11 +63,6 @@
 								superclass</a>
 						</li>
 					
-						<li>
-							<a href="YAHOO.html">
-								YAHOO</a>
-						</li>
-					
 				</ul>
 			</div>
 		
@@ -97,39 +94,6 @@
 		
 		
 		
-			<div class="quick-links">
-				<strong>Quick Links:</strong>&nbsp;
-				
-					
-						<a href="#classSummary">Class Summary</a> |
-					
-					
-				
-				
-				
-					<a href="#source">Source Code</a>
-				
-			</div>
-		
-			
-				<div class="section class summaries">
-					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-			
-				<div class="content">
-					<table border="1" cellpadding="3" cellspacing="0">
-						
-						<tr>
-							<td class="name">
-								<a href="YAHOO.html">YAHOO</a>
-							</td>
-							<td class="overview">&nbsp;</td>
-						</tr>
-						
-					</table>
-				</div>
-			</div>
-		
-		
 		
 		
 		
@@ -141,8 +105,7 @@
  * The Yahoo global namespace
  * <span class="attrib">@constructor</span>
  */</span>
-<span class="comment">//var YAHOO = window.YAHOO || {};</span>
-<span class="reserved">function</span> YAHOO(){}
+window.YAHOO = window.YAHOO || {};
 
 <span class="comment">/**
  * Returns the namespace specified and creates it if it doesn't exist
@@ -152,6 +115,13 @@
  *
  * Either of the above would create YAHOO.property, then
  * YAHOO.property.package
+ *
+ * Be careful when naming packages. Reserved words may work on some browsers
+ * and not others. For instance, the following will fail in Safari:
+ *
+ * YAHOO.namespace("really.long.nested.namespace");
+ *
+ * This fails because "long" is a reserved word for that browser.
  *
  * <span class="attrib">@param</span>  {String} ns The name of the namespace
  * <span class="attrib">@return</span> {Object}    A reference to the namespace object

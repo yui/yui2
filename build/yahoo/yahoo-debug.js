@@ -26,7 +26,7 @@ window.YAHOO = window.YAHOO || {};
  *
  * YAHOO.namespace("really.long.nested.namespace");
  *
- * This fails because "long" is a reserved word for that browser.
+ * This fails because "long" is a future reserved word in ECMAScript
  *
  * @param  {String} ns The name of the namespace
  * @return {Object}    A reference to the namespace object
