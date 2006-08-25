@@ -1,6 +1,6 @@
 /**
  * Code Syntax Highlighter.
- * Version 1.2.0
+ * Version 1.3.0
  * Copyright (C) 2004 Alex Gorbatchev.
  * http://www.dreamprojections.com/syntaxhighlighter/
  * 
@@ -20,24 +20,24 @@
 // create namespaces
 //
 var dp = {
-	sh :						// dp.sh
+	sh :					// dp.sh
 	{
-			Utils	: {},		// dp.sh.Utils
-			Brushes	: {},		// dp.sh.Brushes
-			Strings : {}
-	},
-	Version : '1.2.0'
+		Utils	: {},		// dp.sh.Utils
+		Brushes	: {},		// dp.sh.Brushes
+		Strings : {},
+		Version : '1.3.0'
+	}
 };
 
 dp.sh.Strings = {
-	AboutDialog : '<html><head><title>About...</title></head><body class="dp-about"><table cellspacing="0"><tr><td class="copy"><div class="para title">dp.SyntaxHighlighter</div><div class="para">Version: {V}</div><div class="para"><a href="http://www.dreamprojections.com/sh/?ref=about" target="_blank">http://www.dreamprojections.com/SyntaxHighlighter</a></div>&copy;2004-2005 Alex Gorbatchev. All right reserved.</td></tr><tr><td class="footer"><input type="button" class="close" value="OK" onClick="window.close()"/></td></tr></table></body></html>',
+	AboutDialog : '<html><head><title>About...</title></head><body class="dp-about"><table cellspacing="0"><tr><td class="copy"><p class="title">dp.SyntaxHighlighter</div><div class="para">Version: {V}</p><p><a href="http://www.dreamprojections.com/syntaxhighlighter/?ref=about" target="_blank">http://www.dreamprojections.com/SyntaxHighlighter</a></p>&copy;2004-2005 Alex Gorbatchev. All right reserved.</td></tr><tr><td class="footer"><input type="button" class="close" value="OK" onClick="window.close()"/></td></tr></table></body></html>',
 	
 	// tools
 	ExpandCode : '+ expand code',
 	ViewPlain : 'view plain',
-	Print : '',
-	CopyToClipboard : '',
-	About : '',
+	Print : 'print',
+	CopyToClipboard : 'copy to clipboard',
+	About : '?',
 	
 	CopiedToClipboard : 'The code is in your clipboard now.'
 };
@@ -323,8 +323,9 @@ dp.sh.Highlighter.prototype.ProcessSmartTabs = function(code)
 
 dp.sh.Highlighter.prototype.SwitchToTable = function()
 {
-	// Safari fix: for some reason lowercase <br> isn't getting picked up, even though 'i' is set
-	var lines	= this.div.innerHTML.split(/<BR>/gi);
+	// thanks to Lachlan Donald from SitePoint.com for this <br/> tag fix.
+	var html	= this.div.innerHTML.replace(/<(br)\/?>/gi, '\n');
+	var lines	= html.split('\n');
 	var row		= null;
 	var cell	= null;
 	var tBody	= null;
@@ -375,14 +376,16 @@ dp.sh.Highlighter.prototype.SwitchToTable = function()
 			cell.innerHTML += '<span><b>' + UtilHref('Expand', dp.sh.Strings.ExpandCode) + '</b>' + pipe + '</span>';
 		}
 
-		cell.innerHTML += UtilHref('ViewSource', dp.sh.Strings.ViewPlain) ;
+		cell.innerHTML += UtilHref('ViewSource', dp.sh.Strings.ViewPlain) + pipe + UtilHref('PrintSource', dp.sh.Strings.Print);
 		
 		// IE has this clipboard object which is easy enough to use
 		if(window.clipboardData)
 			cell.innerHTML += pipe + UtilHref('ToClipboard', dp.sh.Strings.CopyToClipboard);
+		
+		cell.innerHTML += pipe + UtilHref('About', dp.sh.Strings.About);
 	}
 
-	for(var i = 0; i < lines.length - 1; i++)
+	for(var i = 0, lineIndex = this.firstLine; i < lines.length - 1; i++, lineIndex++)
 	{
 		row = tBody.insertRow(-1);
 		
@@ -390,7 +393,7 @@ dp.sh.Highlighter.prototype.SwitchToTable = function()
 		{
 			cell = row.insertCell(-1);
 			cell.className = 'gutter';
-			cell.innerHTML = i + 1;
+			cell.innerHTML = lineIndex;
 		}
 
 		cell = row.insertCell(-1);
@@ -511,7 +514,7 @@ dp.sh.Highlighter.prototype.GetKeywords = function(str)
 }
 
 // highlightes all elements identified by name and gets source code from specified property
-dp.sh.HighlightAll = function(name, showGutter /* optional */, showControls /* optional */, collapseAll /* optional */)
+dp.sh.HighlightAll = function(name, showGutter /* optional */, showControls /* optional */, collapseAll /* optional */, firstLine /* optional */)
 {
 	function FindValue()
 	{
@@ -539,6 +542,18 @@ dp.sh.HighlightAll = function(name, showGutter /* optional */, showControls /* o
 				return true;
 		
 		return false;
+	}
+	
+	function GetOptionValue(name, list, defaultValue)
+	{
+		var regex = new RegExp('^' + name + '\\[(\\w+)\\]$', 'gi');
+		var matches = null;
+
+		for(var i = 0; i < list.length; i++)
+			if((matches = regex.exec(list[i])) != null)
+				return matches[1];
+		
+		return defaultValue;
 	}
 
 	var elements = document.getElementsByName(name);
@@ -591,6 +606,9 @@ dp.sh.HighlightAll = function(name, showGutter /* optional */, showControls /* o
 		highlighter.addControls = (showControls == null) ? !IsOptionSet('nocontrols', options) : showControls;
 		highlighter.collapse = (collapseAll == null) ? IsOptionSet('collapse', options) : collapseAll;
 		
+		// first line idea comes from Andrew Collington, thanks!
+		highlighter.firstLine = (firstLine == null) ? parseInt(GetOptionValue('firstline', options, 1)) : firstLine;
+
 		highlighter.Highlight(element[propertyName]);
 
 		// place the result table inside a div
@@ -602,56 +620,6 @@ dp.sh.HighlightAll = function(name, showGutter /* optional */, showControls /* o
 		element.parentNode.insertBefore(div, element);		
 	}	
 }
-
-
-dp.sh.Brushes.JScript = function()
-{
-	var keywords =	'abstract boolean break byte case catch char class const continue debugger ' +
-					'default delete do double else enum export extends false final finally float ' +
-					'for function goto if implements import in instanceof int interface long native ' +
-					'new null package private protected public return short static super switch ' +
-					'synchronized this throw throws transient true try typeof var void volatile while with';
-
-	this.regexList = [
-		{ regex: new RegExp('//.*$', 'gm'),							css: 'comment' },			// one line comments
-		{ regex: new RegExp('/\\*[\\s\\S]*?\\*/', 'g'),				css: 'comment' },			// multiline comments
-		{ regex: new RegExp('"(?:[^"\n]|[\"])*"', 'g'),				css: 'string' },			// double quoted strings
-		{ regex: new RegExp("'(?:[^'\n]|[\'])*'", 'g'),				css: 'string' },			// single quoted strings
-		{ regex: new RegExp('^\\s*#.*', 'gm'),						css: 'preprocessor' },		// preprocessor tags like #region and #endregion
-		{ regex: new RegExp(this.GetKeywords(keywords), 'gm'),		css: 'keyword' }			// keywords
-		];
-
-	this.CssClass = 'dp-c';
-}
-
-dp.sh.Brushes.JScript.prototype	= new dp.sh.Highlighter();
-dp.sh.Brushes.JScript.Aliases	= ['js', 'jscript', 'javascript'];
-
-
-dp.sh.Brushes.Php = function()
-{
-	var keywords =	'and or xor __FILE__ __LINE__ array as break case ' +
-					'cfunction class const continue declare default die do echo else ' +
-					'elseif empty enddeclare endfor endforeach endif endswitch endwhile eval exit ' +
-					'extends for foreach function global if include include_once isset list ' +
-					'new old_function print require require_once return static switch unset use ' +
-					'var while __FUNCTION__ __CLASS__';
-
-	this.regexList = [
-		{ regex: new RegExp('//.*$', 'gm'),							css: 'comment' },			// one line comments
-		{ regex: new RegExp('/\\*[\\s\\S]*?\\*/', 'g'),				css: 'comment' },			// multiline comments
-		{ regex: new RegExp('"(?:[^"\n]|[\"])*"', 'g'),				css: 'string' },			// double quoted strings
-		{ regex: new RegExp("'(?:[^'\n]|[\'])*'", 'g'),				css: 'string' },			// single quoted strings
-		{ regex: new RegExp('\\$\\w+', 'g'),						css: 'vars' },				// variables
-		{ regex: new RegExp(this.GetKeywords(keywords), 'gm'),		css: 'keyword' }			// keyword
-		];
-
-	this.CssClass = 'dp-c';
-}
-
-dp.sh.Brushes.Php.prototype	= new dp.sh.Highlighter();
-dp.sh.Brushes.Php.Aliases	= ['php'];
-
 
 
 dp.sh.Brushes.Xml = function()
@@ -717,14 +685,44 @@ dp.sh.Brushes.Xml.prototype.ProcessRegexList = function()
 }
 
 
-dp.sh.Brushes.CSS = function()
+dp.sh.Brushes.Php = function()
 {
-	var keywords =	'link over active visited';
+	var keywords =	'and or xor __FILE__ __LINE__ array as break case ' +
+					'cfunction class const continue declare default die do echo else ' +
+					'elseif empty enddeclare endfor endforeach endif endswitch endwhile eval exit ' +
+					'extends for foreach function global if include include_once isset list ' +
+					'new old_function print require require_once return static switch unset use ' +
+					'var while __FUNCTION__ __CLASS__';
 
 	this.regexList = [
+		{ regex: new RegExp('//.*$', 'gm'),							css: 'comment' },			// one line comments
 		{ regex: new RegExp('/\\*[\\s\\S]*?\\*/', 'g'),				css: 'comment' },			// multiline comments
-		{ regex: new RegExp('"(?:[^"\n]|[\"])*"', 'g'),				css: 'string' },			// double quoted strings
-		{ regex: new RegExp("'(?:[^'\n]|[\'])*'", 'g'),				css: 'string' },			// single quoted strings
+		{ regex: new RegExp('"(?:[^"\n]|[\"])*?"', 'g'),			css: 'string' },			// double quoted strings
+		{ regex: new RegExp("'(?:[^'\n]|[\'])*?'", 'g'),			css: 'string' },			// single quoted strings
+		{ regex: new RegExp('\\$\\w+', 'g'),						css: 'vars' },				// variables
+		{ regex: new RegExp(this.GetKeywords(keywords), 'gm'),		css: 'keyword' }			// keyword
+		];
+
+	this.CssClass = 'dp-c';
+}
+
+dp.sh.Brushes.Php.prototype	= new dp.sh.Highlighter();
+dp.sh.Brushes.Php.Aliases	= ['php'];
+
+
+dp.sh.Brushes.JScript = function()
+{
+	var keywords =	'abstract boolean break byte case catch char class const continue debugger ' +
+					'default delete do double else enum export extends false final finally float ' +
+					'for function goto if implements import in instanceof int interface long native ' +
+					'new null package private protected public return short static super switch ' +
+					'synchronized this throw throws transient true try typeof var void volatile while with';
+
+	this.regexList = [
+		{ regex: new RegExp('//.*$', 'gm'),							css: 'comment' },			// one line comments
+		{ regex: new RegExp('/\\*[\\s\\S]*?\\*/', 'g'),				css: 'comment' },			// multiline comments
+		{ regex: new RegExp('"(?:[^"\n]|[\"])*?"', 'g'),			css: 'string' },			// double quoted strings
+		{ regex: new RegExp("'(?:[^'\n]|[\'])*?'", 'g'),			css: 'string' },			// single quoted strings
 		{ regex: new RegExp('^\\s*#.*', 'gm'),						css: 'preprocessor' },		// preprocessor tags like #region and #endregion
 		{ regex: new RegExp(this.GetKeywords(keywords), 'gm'),		css: 'keyword' }			// keywords
 		];
@@ -732,5 +730,6 @@ dp.sh.Brushes.CSS = function()
 	this.CssClass = 'dp-c';
 }
 
-dp.sh.Brushes.CSS.prototype	= new dp.sh.Highlighter();
-dp.sh.Brushes.CSS.Aliases	= ['css'];
+dp.sh.Brushes.JScript.prototype	= new dp.sh.Highlighter();
+dp.sh.Brushes.JScript.Aliases	= ['js', 'jscript', 'javascript'];
+
