@@ -10,7 +10,7 @@ version: 0.11.3
  * The Yahoo global namespace
  * @constructor
  */
-var YAHOO = window.YAHOO || {};
+window.YAHOO = window.YAHOO || {};
 
 /**
  * Returns the namespace specified and creates it if it doesn't exist
@@ -20,6 +20,13 @@ var YAHOO = window.YAHOO || {};
  *
  * Either of the above would create YAHOO.property, then
  * YAHOO.property.package
+ *
+ * Be careful when naming packages. Reserved words may work on some browsers
+ * and not others. For instance, the following will fail in Safari:
+ *
+ * YAHOO.namespace("really.long.nested.namespace");
+ *
+ * This fails because "long" is a reserved word for that browser.
  *
  * @param  {String} ns The name of the namespace
  * @return {Object}    A reference to the namespace object
