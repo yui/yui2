@@ -21,7 +21,7 @@ window.YAHOO = window.YAHOO || {};
  * Either of the above would create YAHOO.property, then
  * YAHOO.property.package
  *
- * Be careful when naming packages. Reserved words may work on some browsers
+ * Be careful when naming packages. Reserved words may work in some browsers
  * and not others. For instance, the following will fail in Safari:
  *
  * YAHOO.namespace("really.long.nested.namespace");

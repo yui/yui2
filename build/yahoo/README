@@ -2,7 +2,9 @@ YAHOO Global Namespace - Release Notes
 
 0.11.3
 
-   * No change
+   * Changed var YAHOO = window.YAHOO || {} to window.YAHOO = window.YAHOO || {}.
+     This fixes an issue in IE where YAHOO would get overwritten if previously
+     defined via array notation (window["YAHOO"]).
 
 0.11.0
 
