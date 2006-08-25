@@ -964,7 +964,13 @@ YAHOO.widget.MenuModule.prototype._addItemToGroup =
     
                 if(oGroupItem) {
     
-                    if(bAppend && !oGroupItem.element.parentNode) {
+                    if(
+                        bAppend && 
+                        (
+                            !oGroupItem.element.parentNode || 
+                            oGroupItem.element.parentNode.nodeType == 11
+                        )
+                    ) {
             
                         this._aListElements[nGroupIndex].appendChild(
                             oGroupItem.element
@@ -999,7 +1005,13 @@ YAHOO.widget.MenuModule.prototype._addItemToGroup =
                         var oNextItemSibling = 
                                 getNextItemSibling(aGroup, (p_nItemIndex+1));
         
-                        if(oNextItemSibling && !oGroupItem.element.parentNode) {
+                        if(
+                            oNextItemSibling && 
+                            (
+                                !oGroupItem.element.parentNode || 
+                                oGroupItem.element.parentNode.nodeType == 11
+                            )
+                        ) {
                 
                             this._aListElements[nGroupIndex].insertBefore(
                                     oGroupItem.element, 
