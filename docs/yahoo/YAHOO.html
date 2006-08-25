@@ -1,14 +1,16 @@
 
 <html>
 <head>
-	<title>JavaScript Documentation - </title>
+	<!--<title>YUI API - </title>-->
+	<!--<title>YUI API -  YAHOO</title>-->
+	<title>API: %%COMPONENT%% %%FILE%% (YUI Library)</title>
 	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
 
 <div id="header">
-	<h1>JavaScript Documentation</h1>
+	<h1>Yahoo! UI Library</h1>
 	<h3><a href="./index.html">Yahoo Global Namespace</a></h3>
 
 	<div class="breadcrumbs">
@@ -371,6 +373,13 @@
 
  Either of the above would create YAHOO.property, then
  YAHOO.property.package
+
+ Be careful when naming packages. Reserved words may work on some browsers
+ and not others. For instance, the following will fail in Safari:
+
+ YAHOO.namespace("really.long.nested.namespace");
+
+ This fails because "long" is a future reserved word in ECMAScript
 								
 								
 									<dl>
