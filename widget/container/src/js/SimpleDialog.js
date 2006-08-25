@@ -6,8 +6,8 @@ Version 0.11.3
 */
 
 /**
-* @class
-* SimpleDialog is a simple implementation of Dialog that can be used to submit a single value. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
+* @class SimpleDialog is a simple implementation of Dialog that can be used to submit a single value. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
+* @extends YAHOO.widget.Dialog
 * @param {string}	el	The element ID representing the SimpleDialog <em>OR</em>
 * @param {Element}	el	The element representing the SimpleDialog
 * @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this SimpleDialog. See configuration documentation for more details.

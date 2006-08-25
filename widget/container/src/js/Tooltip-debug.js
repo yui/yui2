@@ -6,8 +6,8 @@ Version 0.11.3
 */
 
 /**
-* @class
-* Tooltip is an implementation of Overlay that behaves like an OS tooltip, displaying when the user mouses over a particular element, and disappearing on mouse out.
+* @class Tooltip is an implementation of Overlay that behaves like an OS tooltip, displaying when the user mouses over a particular element, and disappearing on mouse out.
+* @extends YAHOO.widget.Overlay
 * @param {string}	el	The element ID representing the Tooltip <em>OR</em>
 * @param {Element}	el	The element representing the Tooltip
 * @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
