@@ -236,14 +236,10 @@ YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 		if (! YAHOO.util.Config.alreadySubscribed( YAHOO.widget.Overlay.windowResizeEvent, this.sizeMask, this ) ) {
 			YAHOO.widget.Overlay.windowResizeEvent.subscribe(this.sizeMask, this, true);
 		}
-		if (! YAHOO.util.Config.alreadySubscribed( YAHOO.widget.Overlay.windowScrollEvent, this.sizeMask, this ) ) {
-			YAHOO.widget.Overlay.windowScrollEvent.subscribe(this.sizeMask, this, true);
-		}
 	} else {
 		this.beforeShowEvent.unsubscribe(this.showMask, this);
 		this.hideEvent.unsubscribe(this.hideMask, this);
 		YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.sizeMask);
-		YAHOO.widget.Overlay.windowScrollEvent.unsubscribe(this.sizeMask);
 	}
 };
 
