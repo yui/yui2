@@ -79,11 +79,14 @@ php examples/example09.html > ../../examples/menu/example09.html
 php examples/example10.html > ../../examples/menu/example10.html
 php examples/example11.html > ../../examples/menu/example11.html
 php examples/example12.html > ../../examples/menu/example12.html
+php examples/example13.html > ../../examples/menu/example13.html
 php examples/applicationmenubar.html > ../../examples/menu/applicationmenubar.html
 php examples/contextmenu.html > ../../examples/menu/contextmenu.html
-php examples/leftnav.html > ../../examples/menu/leftnav.html
 php examples/programsmenu.html > ../../examples/menu/programsmenu.html
-php examples/topnav.html > ../../examples/menu/topnav.html
+php examples/leftnavfromjs.html > ../../examples/menu/leftnavfromjs.html
+php examples/leftnavfrommarkup.html > ../../examples/menu/leftnavfrommarkup.html
+php examples/topnavfromjs.html > ../../examples/menu/topnavfromjs.html
+php examples/topnavfrommarkup.html > ../../examples/menu/topnavfrommarkup.html
 
 
 # Copy the index file into the examples directory
