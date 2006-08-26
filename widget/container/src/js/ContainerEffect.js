@@ -6,7 +6,6 @@ Version 0.11.3
 */
 
 /**
-* @class
 * ContainerEffect encapsulates animation transitions that are executed when an Overlay is shown or hidden.
 * @param {Overlay}	overlay		The Overlay that the animation should be associated with
 * @param {object}	attrIn		The object literal representing the animation arguments to be used for the animate-in transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).

@@ -1,11 +1,11 @@
-/**
+/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt 
-**/
+http://developer.yahoo.net/yui/license.txt
+Version 0.11.3
+*/
 
 /**
-* @class
 * <p>YAHOO.widget.CalendarGroup is a special container class for YAHOO.widget.Calendar_Core. This class facilitates
 * the ability to have multi-page calendar views that share a single dataset and are
 * dependent on each other.</p>
@@ -70,6 +70,8 @@ YAHOO.widget.CalendarGroup.prototype.init = function(pageCount, id, containerId,
 		this.pages.push(cal);
 	}
 	
+	this.sync();
+
 	this.doNextMonth = function(e, calGroup) {
 		calGroup.nextMonth();
 	};

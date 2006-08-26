@@ -6,7 +6,7 @@ Version 0.11.3
 */
 
 /**
-* @class Module is a JavaScript representation of the Standard Module Format. Standard Module Format is a simple standard for markup containers where child nodes representing the header, body, and footer of the content are denoted using the CSS classes "hd", "bd", and "ft" respectively. Module is the base class for all other classes in the YUI Container package.
+* Module is a JavaScript representation of the Standard Module Format. Standard Module Format is a simple standard for markup containers where child nodes representing the header, body, and footer of the content are denoted using the CSS classes "hd", "bd", and "ft" respectively. Module is the base class for all other classes in the YUI Container package.
 * @param {string}	el	The element ID representing the Module <em>OR</em>
 * @param {Element}	el	The element representing the Module
 * @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this module. See configuration documentation for more details.

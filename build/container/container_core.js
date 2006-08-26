@@ -6,7 +6,6 @@ Version 0.11.3
 */
 
 /**
-* @class 
 * Config is a utility used within an object to allow the implementer to maintain a list of local configuration properties and listen for changes to those properties dynamically using CustomEvent. The initial values are also maintained so that the configuration can be reset at any given point to its initial state.
 * @param {object}	owner	The owner object to which this Config object belongs
 * @constructor
@@ -441,7 +440,6 @@ YAHOO.util.Config.alreadySubscribed = function(evt, fn, obj) {
 };
 
 /**
-* @class 
 * Module is a JavaScript representation of the Standard Module Format. Standard Module Format is a simple standard for markup containers where child nodes representing the header, body, and footer of the content are denoted using the CSS classes "hd", "bd", and "ft" respectively. Module is the base class for all other classes in the YUI Container package.
 * @param {string}	el	The element ID representing the Module <em>OR</em>
 * @param {Element}	el	The element representing the Module
@@ -1135,7 +1133,8 @@ YAHOO.widget.Module.prototype.toString = function() {
 };
 
 /**
-* @class Overlay is a Module that is absolutely positioned above the page flow. It has convenience methods for positioning and sizing, as well as options for controlling zIndex and constraining the Overlay's position to the current visible viewport. Overlay also contains a dynamicly generated IFRAME which is placed beneath it for Internet Explorer 6 and 5.x so that it will be properly rendered above SELECT elements.
+* Overlay is a Module that is absolutely positioned above the page flow. It has convenience methods for positioning and sizing, as well as options for controlling zIndex and constraining the Overlay's position to the current visible viewport. Overlay also contains a dynamicly generated IFRAME which is placed beneath it for Internet Explorer 6 and 5.x so that it will be properly rendered above SELECT elements.
+* @extends YAHOO.widget.Module
 * @param {string}	el	The element ID representing the Overlay <em>OR</em>
 * @param {Element}	el	The element representing the Overlay
 * @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
@@ -1860,7 +1859,6 @@ if (YAHOO.widget.Overlay._initialized === null) {
 
 
 /**
-* @class
 * OverlayManager is used for maintaining the focus status of multiple Overlays.
 * @param {Array}	overlays	Optional. A collection of Overlays to register with the manager.
 * @param {object}	userConfig		The object literal representing the user configuration of the OverlayManager

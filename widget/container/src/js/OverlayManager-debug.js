@@ -6,7 +6,6 @@ Version 0.11.3
 */
 
 /**
-* @class
 * OverlayManager is used for maintaining the focus status of multiple Overlays.
 * @param {Array}	overlays	Optional. A collection of Overlays to register with the manager.
 * @param {object}	userConfig		The object literal representing the user configuration of the OverlayManager

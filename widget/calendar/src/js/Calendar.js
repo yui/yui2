@@ -1,11 +1,11 @@
-/**
+/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt 
-**/
+http://developer.yahoo.net/yui/license.txt
+Version 0.11.3
+*/
 
 /**
-* @class
 * Calendar is the default implementation of the YAHOO.widget.Calendar_Core base class.
 * This class is the UED-approved version of the calendar selector widget. For all documentation
 * on the implemented methods listed here, see the documentation for YAHOO.widget.Calendar_Core.
@@ -18,6 +18,7 @@ http://developer.yahoo.net/yui/license.txt
 								MM/DD/YYYY-MM/DD/YYYY. Month/day combinations are defined using MM/DD.
 								Any combination of these can be combined by delimiting the string with
 								commas. Example: "12/24/2005,12/25,1/18/2006-1/21/2006"
+* @extends YAHOO.widget.Calendar_Core
 */
 YAHOO.widget.Calendar = function(id, containerId, monthyear, selected) {
 	if (arguments.length > 0) {

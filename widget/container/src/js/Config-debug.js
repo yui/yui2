@@ -6,7 +6,6 @@ Version 0.11.3
 */
 
 /**
-* @class 
 * Config is a utility used within an object to allow the implementer to maintain a list of local configuration properties and listen for changes to those properties dynamically using CustomEvent. The initial values are also maintained so that the configuration can be reset at any given point to its initial state.
 * @param {object}	owner	The owner object to which this Config object belongs
 * @constructor

@@ -1,7 +1,15 @@
 Container Release Notes
 
+*** version 0.11.3 ***
+
+	- Module: Fixed SSL warning issue in IE
+	- Overlay: Fixed memory leak related to iframe shim in IE
+	- Panel: No focusable elements under the mask can now be tabbed to
+	- Panel: Set Panel container overflow to hidden to fix scrolling issue in Opera 9
+
 *** version 0.11.2 ***
 
+	- All: JsLint optimization
 	- Overlay: Fixed SSL issues with monitorresize property
 	- OverlayManager: Fixed z-index incrementing issues
 	- Dialog: Form elements called "name" will now function properly

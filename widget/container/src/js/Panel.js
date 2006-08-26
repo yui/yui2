@@ -6,7 +6,7 @@ Version 0.11.3
 */
 
 /**
-* @class Panel is an implementation of Overlay that behaves like an OS window, with a draggable header and an optional close icon at the top right.
+* Panel is an implementation of Overlay that behaves like an OS window, with a draggable header and an optional close icon at the top right.
 * @extends YAHOO.widget.Overlay
 * @param {string}	el	The element ID representing the Panel <em>OR</em>
 * @param {Element}	el	The element representing the Panel

@@ -3,6 +3,8 @@ Calendar Release Notes
 *** version 0.11.3 ***
 
 	- Calendar_Core: Added arguments for selected/deselected dates to onSelect/onDeselect
+	- CalendarGroup: Fixed bug where selected dates passed to constructor were not represented in selectedDates
+	- Calendar2up: Now displays correctly in Opera 9
 
 *** version 0.11.0 ***
 

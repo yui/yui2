@@ -20,12 +20,12 @@
 	YAHOO.namespace("example.simpledialog");
 
 	function init() {
-		var handleCancel = function() {
+		var handleCancel = function(e) {
 			alert("You clicked 'Cancel'!");
 			this.hide();
 		}
 
-		var handleOK = function() {
+		var handleOK = function(e) {
 			alert("You clicked 'OK'!");
 			this.hide();
 		}

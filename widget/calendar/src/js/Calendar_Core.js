@@ -1,11 +1,11 @@
-/**
+/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt 
-**/
+http://developer.yahoo.net/yui/license.txt
+Version 0.11.3
+*/
 
 /**
-* @class
 * <p>Calendar_Core is the base class for the Calendar widget. In its most basic
 * implementation, it has the ability to render a calendar widget on the page
 * that can be manipulated to select a single date, move back and forth between
@@ -1278,7 +1278,7 @@ YAHOO.widget.Calendar_Core.prototype.select = function(date) {
 		this.parent.sync(this);
 	}
 
-	this.onSelect();
+	this.onSelect(aToBeSelected);
 
 	return this.getSelectedDates();
 };
@@ -1311,7 +1311,7 @@ YAHOO.widget.Calendar_Core.prototype.selectCell = function(cellIndex) {
 
 	this.renderCellStyleSelected(dCellDate,cell);
 
-	this.onSelect();
+	this.onSelect([selectDate]);
 	this.doCellMouseOut.call(cell, null, this);
 
 	return this.getSelectedDates();
@@ -1346,7 +1346,7 @@ YAHOO.widget.Calendar_Core.prototype.deselect = function(date) {
 		this.parent.sync(this);
 	} 
 
-	this.onDeselect();
+	this.onDeselect(aToBeSelected);
 	return this.getSelectedDates();
 };
 
@@ -1384,7 +1384,7 @@ YAHOO.widget.Calendar_Core.prototype.deselectCell = function(i) {
 		this.parent.sync(this);
 	}
 
-	this.onDeselect();
+	this.onDeselect(selectDate);
 	return this.getSelectedDates();
 };
 
@@ -1399,6 +1399,7 @@ YAHOO.widget.Calendar_Core.prototype.deselectCell = function(i) {
 YAHOO.widget.Calendar_Core.prototype.deselectAll = function() {
 	this.onBeforeDeselect();
 	var count = this.selectedDates.length;
+	var sel = this.selectedDates.concat();
 	this.selectedDates.length = 0;
 
 	if (this.parent) {
@@ -1406,7 +1407,7 @@ YAHOO.widget.Calendar_Core.prototype.deselectAll = function() {
 	}
 	
 	if (count > 0) {
-		this.onDeselect();
+		this.onDeselect(sel);
 	}
 
 	return this.getSelectedDates();
@@ -1531,8 +1532,9 @@ YAHOO.widget.Calendar_Core.prototype.onBeforeSelect = function() {
 
 /**
 * Event executed when a date is selected in the calendar widget.
+* @param	{Array}	selected	An array of date field arrays representing which date or dates were selected. Example: [ [2006,8,6],[2006,8,7],[2006,8,8] ]
 */
-YAHOO.widget.Calendar_Core.prototype.onSelect = function() { };
+YAHOO.widget.Calendar_Core.prototype.onSelect = function(selected) { };
 
 /**
 * Event executed before a date is deselected in the calendar widget.
@@ -1541,8 +1543,9 @@ YAHOO.widget.Calendar_Core.prototype.onBeforeDeselect = function() { };
 
 /**
 * Event executed when a date is deselected in the calendar widget.
+* @param	{Array}	selected	An array of date field arrays representing which date or dates were deselected. Example: [ [2006,8,6],[2006,8,7],[2006,8,8] ]
 */
-YAHOO.widget.Calendar_Core.prototype.onDeselect = function() { };
+YAHOO.widget.Calendar_Core.prototype.onDeselect = function(deselected) { };
 
 /**
 * Event executed when the user navigates to a different calendar page.
