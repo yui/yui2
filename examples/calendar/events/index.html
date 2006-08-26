@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+	<title>Yahoo! Calendar Control - Handling onSelect / onDeselect</title>
+	
+
+	<link rel="stylesheet" href="../css/examples.css" type="text/css">
+	
+	<script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
+	<script type="text/javascript" src="../../../build/event/event.js" ></script>
+	<script type="text/javascript" src="../../../build/dom/dom.js" ></script>
+
+	<link type="text/css" rel="stylesheet" href="../../../build/fonts/fonts.css">
+	<link type="text/css" rel="stylesheet" href="../../../build/reset/reset.css">	
+
+	<link rel="stylesheet" type="text/css" href="../../../docs/assets/dpSyntaxHighlighter.css" />
+
+	<script type="text/javascript" src="../../../build/calendar/calendar.js"></script>
+	<link type="text/css" rel="stylesheet" href="../../../build/calendar/assets/calendar.css">	
+	
+	<script language="javascript">
+		YAHOO.namespace("example.calendar");
+
+		function init() {
+			YAHOO.example.calendar.cal1 = new YAHOO.widget.Calendar("YAHOO.example.calendar.cal1", "cal1Container");
+			YAHOO.example.calendar.cal1.Options.MULTI_SELECT = true;
+
+			YAHOO.example.calendar.cal1.onSelect = function(selected) {
+				alert("selected: " + selected);
+			}
+
+			YAHOO.example.calendar.cal1.onDeselect = function(deselected) {
+				alert("deselected: " + deselected);
+			}
+
+			YAHOO.example.calendar.cal1.render();
+		}
+	</script>
+
+	
+
+</head>
+
+<body onload="init()">
+	<img id="logo" src="../img/logo.gif"/>
+	
+	<div id="pageTitle">
+		<h3>Calendar Control</h3>
+	</div>
+
+	<div class="column left">
+		<h4>Handling onSelect / onDeselect</h4>
+
+		<p>This implementation augments the <a href="../multi_select/index.html">multi-select Calendar</a> with event handlers for onSelect and onDeselect. The dates that are selected or deselected are passed as an argument to the event handlers.</p>
+
+		<p>Dates are passed as an array of date field arrays, in the format: [YYYY, M, D]. For instance, if two dates are selected at once (8/6/2006 and 8/7/2006), the argument passed to onSelect would be: [ [2006,8,6], [2006,8,7] ].</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">
+function init() {
+	cal1 = new YAHOO.widget.Calendar("cal1", "cal1Container");
+	cal1.Options.MULTI_SELECT = true;
+
+	cal1.onSelect = function(selected) {
+		alert("selected: " + selected);
+	}
+
+	cal1.onDeselect = function(deselected) {
+		alert("deselected: " + deselected);
+	}
+
+	cal1.render();
+}
+</textarea>
+</div>
+	<div class="column right">
+		<div style="margin-left:auto;margin-right:auto;width:150px">
+			<div id="cal1Container"></div>
+		</div>
+		<div style="margin-left:auto;margin-right:auto;text-align:center;width:150px;clear:both">
+			<a href="javascript:YAHOO.example.calendar.cal1.reset()" class="navLink" style="font-size:12px;text-decoration:underline">reset</a>|
+			<a href="javascript:alert(YAHOO.example.calendar.cal1.getSelectedDates())" class="navLink" style="font-size:12px;text-decoration:underline">what's selected?</a>
+		</div>
+	</div>
+
+<script src="../../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+</body>
+</html>
