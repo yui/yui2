@@ -6,11 +6,15 @@
         <title>Example 11: MenuItem Configuration Properties</title>
 
         <!-- Standard reset and fonts -->
-        <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
-        <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
 
+        <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
+
+        <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
+        
         <!-- CSS for Menu -->
+        
         <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
+ 
 
         <!-- Page-specific styles -->
         <style type="text/css">
@@ -31,24 +35,38 @@
         </style>
 
         <!-- Namespace source file -->
+        
         <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
         
+
+        
+
         <!-- Dependency source files -->
+        
         <script type="text/javascript" src="../../build/event/event.js"></script>
+        
         <script type="text/javascript" src="../../build/dom/dom.js"></script>
+
+
         
+
         <!-- Container source file -->
-        <script type="text/javascript" src="../../build/container/container_core.js"></script>
         
+        <script type="text/javascript" src="../../build/container/container_core.js"></script>
+
+        
+
         <!-- Menu source file -->
+        
         <script type="text/javascript" src="../../build/menu/menu.js"></script>
+
 
         <!-- Page-specific script -->
         <script type="text/javascript">
 
             // "load" event handler for the window
 
-            function onWindowLoad(p_oEvent) {
+            YAHOO.example.onWindowLoad = function(p_oEvent) {
 
                 // Create a menu
 
@@ -91,12 +109,15 @@
             }
 
 
-            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
             
         </script>
+
     </head>
     <body>
+
         <h1>Example 11: MenuItem Configuration Properties <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to set configuration properties when instantiating a MenuItem instance.</p>
+
     </body>
 </html>

@@ -7,8 +7,8 @@
         <link rel="stylesheet" type="text/css" media="screen" href="../../docs/assets/examples.css">
         <style type="text/css">
 
-            ul {
-               margin:60px 40px;
+            ul,ol {
+               margin:0 40px;
             }
             
             li {
@@ -22,6 +22,10 @@
             li a:link {
                color:#666;
             }
+
+            ol, ol li {
+                list-style-type:decimal;
+            }
         
         </style>
     </head>
@@ -34,7 +38,7 @@
             <div id="bd">
 
                 <h2>Fundamentals</h2>
-                <ul>
+                <ol>
                     <li><a href="example01.html">Basic Menu From Existing Markup</a></li>
                     <li><a href="example02.html">Basic Menu From Pure JavaScript</a></li>
                     <li><a href="example03.html">Grouped MenuItem Instances From Existing Markup</a></li>
@@ -47,13 +51,16 @@
                     <li><a href="example10.html">Listening For DOM-Related Events</a></li>
                     <li><a href="example11.html">MenuItem Configuration Properties</a></li>
                     <li><a href="example12.html">Setting Configuration Properties At Runtime</a></li>
-                </ul>
+                    <li><a href="example13.html">Multi-tiered Menu with Progressive Rendering of Submenus</a></li>
+                </ol>
                 
                 <h2>Putting It All Together</h2>
                 <ul>
                     <li><a href="contextmenu.html">Context Menu</a></li>
-                    <li><a href="leftnav.html">Website Left Nav</a></li>
-                    <li><a href="topnav.html">Website Top Nav</a></li>
+                    <li><a href="leftnavfrommarkup.html">Website Left Nav (with submenus built from markup)</a></li>
+                    <li><a href="leftnavfromjs.html">Website Left Nav (with submenus built from JavaScript)</a></li>
+                    <li><a href="topnavfrommarkup.html">Website Top Nav (with submenus built from markup)</a></li>
+                    <li><a href="topnavfromjs.html">Website Top Nav (with submenus built from JavaScript)</a></li>
                     <li><a href="programsmenu.html">OS-Style Programs Menu</a></li>
                     <li><a href="applicationmenubar.html">Application Menubar</a></li>                    
                 </ul>

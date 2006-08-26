@@ -26,11 +26,12 @@
         <script type="text/javascript" src="../../build/menu/menu.js"></script>
 
         <!-- Page-specific script -->
+        
         <script type="text/javascript">
 
-            function onWindowLoad(p_oEvent) {
+            YAHOO.example.onWindowLoad = function(p_oEvent) {
 
-                var oProductsServicesMenu = new YAHOO.widget.Menu("productsandservices", { fixedcenter: true });
+                var oProductsServicesMenu = new YAHOO.widget.Menu("productsandservices", { fixedcenter:true });
 
                 oProductsServicesMenu.render();
 
@@ -39,13 +40,14 @@
             }
 
 
-            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
             
         </script>
+
     </head>
     <body>
 
-        <h1>Example 7: Basic Menu From Existing Markup <em>[<a href="index.html">Examples Home</a>]</em></h1>
+        <h1>Example 7: Multi-tiered Menu From Existing Markup <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to create a multi-tiered menu using existing markup on the page.  The Menu API also supports building a menu like this <a href="example08.html">using nothing but JavaScript</a>.</p>
 
         <div id="productsandservices" class="yuimenu">
@@ -144,6 +146,6 @@
                 </ul>            
             </div>
         </div>
-
+        
     </body>
 </html>

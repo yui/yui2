@@ -9,6 +9,9 @@
         <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
         <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
 
+        <!-- Logger CSS -->
+        <link rel="stylesheet" type="text/css" href="../../build/logger/assets/logger.css">
+
         <!-- CSS for Menu -->
         <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
  
@@ -16,6 +19,20 @@
         <style type="text/css">
 
             body { margin:.5em; }
+
+            #logs {
+
+                position:absolute;
+                bottom:0;
+                right:0;
+            
+            }
+
+            .example9 {
+
+                background-color:#9c9;
+            
+            }
 
         </style>
 
@@ -25,7 +42,10 @@
         <!-- Dependency source files -->
         <script type="text/javascript" src="../../build/event/event.js"></script>
         <script type="text/javascript" src="../../build/dom/dom.js"></script>
-
+            
+        <!-- Logger source file -->
+        <script type="text/javascript" src="../../build/logger/logger.js"></script>
+        
         <!-- Container source file -->
         <script type="text/javascript" src="../../build/container/container_core.js"></script>
 
@@ -35,23 +55,28 @@
         <!-- Page-specific script -->
         <script type="text/javascript">
 
-            function onWindowLoad(p_oEvent) {
+            YAHOO.example.onWindowLoad = function(p_oEvent) {
 
                 // "click" event handler for a MenuItem instance
 
                 function onMenuItemClick(p_sType, p_aArguments, p_oValue) {
-                
-                    alert(
-                        "index: " + this.index + 
-                        ", text: " + this.cfg.getProperty("text") + 
-                        ", value:" + p_oValue
+
+                    YAHOO.log(
+                        (
+                            "index: " + this.index + 
+                            ", text: " + this.cfg.getProperty("text") + 
+                            ", value:" + p_oValue
+                        ),
+                        "info",
+                        "example9"
                     );
+                
+                    this.parent.show();
                 
                 }
 
 
-                var oMenu = 
-                        new YAHOO.widget.Menu("mymenu", { fixedcenter: true } );
+                var oMenu = new YAHOO.widget.Menu("mymenu");
 
                 var oItem1 = 
                         oMenu.addItem(new YAHOO.widget.MenuItem("Item One"));
@@ -85,15 +110,25 @@
     
                 oMenu.show();
 
+                var oLogs = document.createElement("div");
+                oLogs.id = "logs";
+                
+                document.body.appendChild(oLogs);
+
+                var oLogReader = new YAHOO.widget.LogReader("logs");
+
             }
 
 
-            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
             
         </script>
+
     </head>
     <body>
+
         <h1>Example 9: Handling Click Events <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to register a "click" event handler for a MenuItem instance.  All of the events for YUI Menu are instances of <a href="http://developer.yahoo.com/yui/event/#customevent">YAHOO.util.CustomEvent</a>.  To register a listener for an event, use the event's "subscribe" method passing a pointer to your handler as the first argument.  You can pass an argument to your event handler(s) as an additional second argument to the "subscribe" method.</p>
+
     </body>
 </html>

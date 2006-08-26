@@ -8,6 +8,7 @@
         <!-- Standard reset and fonts -->
         <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
         <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
+        <link rel="stylesheet" type="text/css" href="../../build/container/assets/container.css">
 
         <!-- CSS for Menu -->
         <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
@@ -92,6 +93,12 @@
 
             }
 
+            div.yuimenu li.yuimenuitem img {
+            
+                *border-color:#ccc;
+            
+            }
+
 
             /* Add icons to menu items */
 
@@ -140,17 +147,28 @@
                 
             }
 
+            div.yuimenu li.yuimenuitem.selected img.selected {
+            
+                *border-color:#039;
+            
+            }
+
         </style>
 
-        <!-- Namespace source file -->
+            <!-- Namespace source file -->
         <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+        
 
         <!-- Dependency source files -->
         <script type="text/javascript" src="../../build/event/event.js"></script>
         <script type="text/javascript" src="../../build/dom/dom.js"></script>
 
+            
+        <script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
+        <script type="text/javascript" src="../../build/animation/animation.js"></script>
+        
         <!-- Container source file -->
-        <script type="text/javascript" src="../../build/container/container_core.js"></script>
+        <script type="text/javascript" src="../../build/container/container.js"></script>
 
         <!-- Menu source file -->
         <script type="text/javascript" src="../../build/menu/menu.js"></script>
@@ -158,24 +176,24 @@
         <!-- Page-specific script -->
         <script type="text/javascript">
         
-            // "click" handler for the "Go to..." menu item
-
-            function onGotoClick() {
-            
-                var sURL = window.prompt("Enter a URL:","");
-
-                if(sURL && sURL.length > 0) {
-                    
-                    document.location = sURL;
-
-                }
-            
-            }
-            
-
             // "load" handler for the window
 
-            function onWindowLoad() {
+            YAHOO.example.onWindowLoad = function(p_oEvent) {
+
+                // "click" handler for the "Go to..." menu item
+    
+                function onGotoClick() {
+                
+                    var sURL = window.prompt("Enter a URL:","");
+    
+                    if(sURL && sURL.length > 0) {
+                        
+                        document.location = sURL;
+    
+                    }
+                
+                }
+
 
                 var oH1 = document.getElementsByTagName("h1")[0];
 
@@ -205,7 +223,7 @@
 
                 var oMenu = new YAHOO.widget.Menu(
                                     "yproducts", 
-                                    { constraintoviewport:true } 
+                                    { constraintoviewport:true, zIndex:2 } 
                                 );
 
 
@@ -311,15 +329,35 @@
                 */
 
                 YAHOO.util.Event.addListener(window, "resize", onWindowResize);
+
+
+                var oPanel = new YAHOO.widget.SimpleDialog(
+                                    "exampleinfo", 
+                                    { 
+                                        constraintoviewport: true,
+                                        fixedcenter:true,
+                                        width:"400px",
+                                        zIndex:1
+                                    }
+                                );
+                
+                
+                oPanel.setHeader("OS-Style Programs Menu Example");
+                oPanel.setBody("This example demonstrates how to transform existing markup on the page into an operating-system-like menu.");
+
+                oPanel.render(document.body);
+              
+                oPanel.show();
                 
             }
 
 
             // Add a "load" event handler for the window
 
-            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
 
         </script>
+
     </head>
     <body>
         

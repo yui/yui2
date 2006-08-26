@@ -19,14 +19,12 @@
 
         </style>
 
-            <!-- Namespace source file -->
+        <!-- Namespace source file -->
         <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
-        
 
         <!-- Dependency source files -->
         <script type="text/javascript" src="../../build/event/event.js"></script>
         <script type="text/javascript" src="../../build/dom/dom.js"></script>
-
 
         <!-- Container source file -->
         <script type="text/javascript" src="../../build/container/container_core.js"></script>
@@ -37,7 +35,7 @@
         <!-- Page-specific script -->
         <script type="text/javascript">
 
-            function onWindowLoad(p_oEvent) {
+            YAHOO.example.onWindowLoad = function(p_oEvent) {
 
                 var oMenu = new YAHOO.widget.Menu("basicmenu", { fixedcenter: true });
 
@@ -48,9 +46,10 @@
             }
 
 
-            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
             
         </script>
+
     </head>
     <body>
 
