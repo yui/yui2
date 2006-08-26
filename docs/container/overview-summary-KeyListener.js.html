@@ -50,10 +50,7 @@
 				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
 				<ul class="content">
 					
-						<li>
-							<a href="YAHOO.util.html">
-								YAHOO.util</a>
-						</li>
+
 					
 						<li>
 							<a href="YAHOO.util.Config.html">
@@ -65,10 +62,7 @@
 								YAHOO.util.KeyListener</a>
 						</li>
 					
-						<li>
-							<a href="YAHOO.widget.html">
-								YAHOO.widget</a>
-						</li>
+
 					
 						<li>
 							<a href="YAHOO.widget.ContainerEffect.html">
@@ -252,10 +246,14 @@
 		
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<pre class="sourceview"><span class="comment">/**
-* Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-* Code licensed under the BSD License:
-* http://developer.yahoo.net/yui/license.txt
+				<pre class="sourceview"><span class="comment">/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version 0.11.3
+*/</span>
+
+<span class="comment">/**
 * KeyListener is a utility that provides an easy interface for listening for keydown/keyup events fired against DOM elements.
 * <span class="attrib">@param</span> {Element}	attachTo	The element or element ID to which the key event should be attached
 * <span class="attrib">@param</span> {string}	attachTo	The element or element ID to which the key event should be attached
@@ -292,9 +290,15 @@ YAHOO.util.KeyListener = <span class="reserved">function</span>(attachTo, keyDat
 	<span class="reserved">function</span> handleKeyPress(e, obj) {
 		var keyPressed = e.charCode || e.keyCode;
 		
-		<span class="reserved">if</span> (! keyData.shift)	keyData.shift = false;
-		<span class="reserved">if</span> (! keyData.alt)		keyData.alt = false;
-		<span class="reserved">if</span> (! keyData.ctrl)		keyData.ctrl = false;
+		<span class="reserved">if</span> (! keyData.shift) {	
+			keyData.shift = false; 
+		}
+		<span class="reserved">if</span> (! keyData.alt) {	
+			keyData.alt = false;
+		}
+		<span class="reserved">if</span> (! keyData.ctrl) {
+			keyData.ctrl = false;
+		}
 
 		<span class="comment">// check held down modifying keys first</span>
 		<span class="reserved">if</span> (e.shiftKey == keyData.shift &amp;&amp; 
@@ -322,7 +326,7 @@ YAHOO.util.KeyListener = <span class="reserved">function</span>(attachTo, keyDat
 			<span class="reserved">this</span>.enabledEvent.fire(keyData);
 		}
 		<span class="reserved">this</span>.enabled = true;
-	}
+	};
 
 	<span class="reserved">this</span>.disable = <span class="reserved">function</span>() {
 		<span class="reserved">if</span> (<span class="reserved">this</span>.enabled) {
@@ -330,7 +334,7 @@ YAHOO.util.KeyListener = <span class="reserved">function</span>(attachTo, keyDat
 			<span class="reserved">this</span>.disabledEvent.fire(keyData);
 		}
 		<span class="reserved">this</span>.enabled = false;
-	}
+	};
 
 	<span class="comment">/**
 	* Returns a string representation of the object.
@@ -338,9 +342,9 @@ YAHOO.util.KeyListener = <span class="reserved">function</span>(attachTo, keyDat
 	*/</span> 
 	<span class="reserved">this</span>.toString = <span class="reserved">function</span>() {
 		<span class="reserved">return</span> <span class="literal">"KeyListener ["</span> + keyData.keys + <span class="literal">"] "</span> + attachTo.tagName + (attachTo.id ? <span class="literal">"["</span> + attachTo.id + <span class="literal">"]"</span> : <span class="literal">""</span>);
-	}
+	};
 
-}
+};
 
 <span class="comment">/**
 * Constant representing the DOM "keydown" event.

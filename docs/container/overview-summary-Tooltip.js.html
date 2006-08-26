@@ -50,10 +50,7 @@
 				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
 				<ul class="content">
 					
-						<li>
-							<a href="YAHOO.util.html">
-								YAHOO.util</a>
-						</li>
+
 					
 						<li>
 							<a href="YAHOO.util.Config.html">
@@ -65,10 +62,7 @@
 								YAHOO.util.KeyListener</a>
 						</li>
 					
-						<li>
-							<a href="YAHOO.widget.html">
-								YAHOO.widget</a>
-						</li>
+
 					
 						<li>
 							<a href="YAHOO.widget.ContainerEffect.html">
@@ -237,7 +231,7 @@
 							<td class="name">
 								<a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a>
 							</td>
-							<td class="overview">Tooltip is an implementation of Overlay that behaves like an OS tooltip, displaying when the user mouses over a particular element, and disappearing on mouse out.</td>
+							<td class="overview">&nbsp;</td>
 						</tr>
 						
 					</table>
@@ -252,12 +246,16 @@
 		
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<pre class="sourceview"><span class="comment">/**
+				<pre class="sourceview"><span class="comment">/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-* <span class="attrib">@class</span>
+Version 0.11.3
+*/</span>
+
+<span class="comment">/**
 * Tooltip is an implementation of Overlay that behaves like an OS tooltip, displaying when the user mouses over a particular element, and disappearing on mouse out.
+* <span class="attrib">@extends</span> YAHOO.widget.Overlay
 * <span class="attrib">@param</span> {string}	el	The element ID representing the Tooltip &lt;em&gt;OR&lt;/em&gt;
 * <span class="attrib">@param</span> {Element}	el	The element representing the Tooltip
 * <span class="attrib">@param</span> {object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
@@ -265,7 +263,7 @@ http://developer.yahoo.net/yui/license.txt
 */</span>
 YAHOO.widget.Tooltip = <span class="reserved">function</span>(el, userConfig) {
 	YAHOO.widget.Tooltip.superclass.constructor.call(<span class="reserved">this</span>, el, userConfig);
-}
+};
 
 YAHOO.extend(YAHOO.widget.Tooltip, YAHOO.widget.Overlay);
 
@@ -286,7 +284,7 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.init = <span class=
 	<span class="reserved">if</span> (document.readyState &amp;&amp; document.readyState != <span class="literal">"complete"</span>) {
 		var deferredInit = <span class="reserved">function</span>() {
 			<span class="reserved">this</span>.init(el, userConfig);
-		}
+		};
 		YAHOO.util.Event.addListener(window, <span class="literal">"load"</span>, deferredInit, <span class="reserved">this</span>, true);
 	} <span class="reserved">else</span> {
 		YAHOO.widget.Tooltip.superclass.init.call(<span class="reserved">this</span>, el);
@@ -307,7 +305,7 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.init = <span class=
 
 		<span class="reserved">this</span>.initEvent.fire(YAHOO.widget.Tooltip);
 	}
-}
+};
 
 <span class="comment">/**
 * Initializes the class's configurable properties which can be changed using the Overlay's Config object (cfg).
@@ -323,7 +321,7 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.initDefaultConfig =
 
 	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"text"</span>,				{ handler:<span class="reserved">this</span>.configText, suppressEvent:true } );
 	<span class="reserved">this</span>.cfg.addProperty(<span class="literal">"container"</span>,			{ value:document.body, handler:<span class="reserved">this</span>.configContainer } );
-}
+};
 
 <span class="comment">// BEGIN BUILT-IN PROPERTY EVENT HANDLERS //</span>
 
@@ -335,7 +333,7 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.configText = <span 
 	<span class="reserved">if</span> (text) {
 		<span class="reserved">this</span>.setBody(text);
 	}
-}
+};
 
 <span class="comment">/**
 * The default event handler fired when the "container" property is changed.
@@ -345,7 +343,7 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.configContainer = <
 	<span class="reserved">if</span> (typeof container == <span class="literal">'string'</span>) {
 		<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"container"</span>, document.getElementById(container), true);
 	}
-}
+};
 
 <span class="comment">/**
 * The default event handler fired when the "context" property is changed.
@@ -377,14 +375,14 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.configContext = <sp
 
 		<span class="comment">// Add mouseover/mouseout listeners to context elements</span>
 		<span class="reserved">this</span>._context = context;
-		<span class="reserved">for</span> (var c=0;c&lt;<span class="reserved">this</span>._context.length;++c) {
-			var el = <span class="reserved">this</span>._context[c];
-			YAHOO.util.Event.addListener(el, <span class="literal">"mouseover"</span>, <span class="reserved">this</span>.onContextMouseOver, <span class="reserved">this</span>);
-			YAHOO.util.Event.addListener(el, <span class="literal">"mousemove"</span>, <span class="reserved">this</span>.onContextMouseMove, <span class="reserved">this</span>);
-			YAHOO.util.Event.addListener(el, <span class="literal">"mouseout"</span>, <span class="reserved">this</span>.onContextMouseOut, <span class="reserved">this</span>);
+		<span class="reserved">for</span> (var d=0;d&lt;<span class="reserved">this</span>._context.length;++d) {
+			var el2 = <span class="reserved">this</span>._context[d];
+			YAHOO.util.Event.addListener(el2, <span class="literal">"mouseover"</span>, <span class="reserved">this</span>.onContextMouseOver, <span class="reserved">this</span>);
+			YAHOO.util.Event.addListener(el2, <span class="literal">"mousemove"</span>, <span class="reserved">this</span>.onContextMouseMove, <span class="reserved">this</span>);
+			YAHOO.util.Event.addListener(el2, <span class="literal">"mouseout"</span>, <span class="reserved">this</span>.onContextMouseOut, <span class="reserved">this</span>);
 		}
 	}
-}
+};
 
 <span class="comment">// END BUILT-IN PROPERTY EVENT HANDLERS //</span>
 
@@ -399,7 +397,7 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.onContextMouseMove 
 	obj.pageX = YAHOO.util.Event.getPageX(e);
 	obj.pageY = YAHOO.util.Event.getPageY(e);
 
-}
+};
 
 <span class="comment">/**
 * The default event handler fired when the user mouses over the context element.
@@ -426,7 +424,7 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.onContextMouseOver 
 	* <span class="attrib">@type</span> int
 	*/</span>
 	obj.showProcId = obj.doShow(e, context);
-}
+};
 
 <span class="comment">/**
 * The default event handler fired when the user mouses out of the context element.
@@ -455,7 +453,7 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.onContextMouseOut =
 	obj.hideProcId = setTimeout(<span class="reserved">function</span>() {
 				obj.hide();
 				}, obj.cfg.getProperty(<span class="literal">"hidedelay"</span>));
-}
+};
 
 <span class="comment">// END BUILT-IN DOM EVENT HANDLERS //</span>
 
@@ -491,7 +489,7 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.doShow = <span clas
 			me.hideProcId = me.doHide();
 		},
 	<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"showdelay"</span>));
-}
+};
 
 <span class="comment">/**
 * Sets the timeout for the auto-dismiss delay, which by default is 5 seconds, meaning that a tooltip will automatically dismiss itself after 5 seconds of being displayed.
@@ -503,7 +501,7 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.doHide = <span clas
 			me.hide();
 		},
 		<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"autodismissdelay"</span>));
-}
+};
 
 <span class="comment">/**
 * Fired when the Tooltip is moved, this event handler is used to prevent the Tooltip from overlapping with its context element.
@@ -522,9 +520,9 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.preventOverlap = <s
 	var mousePoint = new YAHOO.util.Point(pageX, pageY);
 	
 	<span class="reserved">if</span> (elementRegion.contains(mousePoint)) {
-		<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"y"</span>, (pageY-height-5))
+		<span class="reserved">this</span>.cfg.setProperty(<span class="literal">"y"</span>, (pageY-height-5));
 	}
-}
+};
 
 <span class="comment">/**
 * Returns a string representation of the object.
@@ -532,7 +530,7 @@ YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.preventOverlap = <s
 */</span> 
 YAHOO.widget.Tooltip.<span class="reserved">prototype</span>.toString = <span class="reserved">function</span>() {
 	<span class="reserved">return</span> <span class="literal">"Tooltip "</span> + <span class="reserved">this</span>.id;
-}</pre>
+};</pre>
 			</div>
 		
 	</div>

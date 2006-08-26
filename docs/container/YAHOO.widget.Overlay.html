@@ -50,10 +50,7 @@
 				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
 				<ul class="content">
 					
-						<li>
-							<a href="YAHOO.util.html">
-								YAHOO.util</a>
-						</li>
+
 					
 						<li>
 							<a href="YAHOO.util.Config.html">
@@ -65,10 +62,7 @@
 								YAHOO.util.KeyListener</a>
 						</li>
 					
-						<li>
-							<a href="YAHOO.widget.html">
-								YAHOO.widget</a>
-						</li>
+
 					
 						<li>
 							<a href="YAHOO.widget.ContainerEffect.html">
@@ -180,9 +174,18 @@
 		<h2>Class YAHOO.widget.Overlay</h2>
 		<pre>Object
    |
-   +--<b>YAHOO.widget.Overlay</b>
+   +--<a href='YAHOO.widget.Module.html'>YAHOO.widget.Module</a>
+         |
+         +--<b>YAHOO.widget.Overlay</b>
 </pre>
 		
+		
+			<dl class="subclasses">
+				<dt>Direct Known Subclasses:</dd>
+				<dd>
+					 <a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a>, <a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a>
+				</dd>
+		   </dl>
 		
 	
 		<hr />
@@ -197,6 +200,8 @@
 				<b>YAHOO.widget.Overlay</b>
 			</div>
 			<div class="class-extends">
+				
+					<dd>extends <a href='YAHOO.widget.Module.html'>YAHOO.widget.Module</a></dd>
 				
 			</div>
 		</div>
@@ -379,6 +384,15 @@
 		
 				
 		
+			
+				<div class="section field inheritance">
+					<h3>Fields inherited from class <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+					<div class="content">
+								<code><a href="YAHOO.widget.Module.html#element">element</a>, <a href="YAHOO.widget.Module.html#header">header</a>, <a href="YAHOO.widget.Module.html#body">body</a>, <a href="YAHOO.widget.Module.html#footer">footer</a>, <a href="YAHOO.widget.Module.html#id">id</a>, <a href="YAHOO.widget.Module.html#childNodesInDOM">childNodesInDOM</a>, <a href="YAHOO.widget.Module.html#imageRoot">imageRoot</a>, <a href="YAHOO.widget.Module.html#beforeInitEvent">beforeInitEvent</a>, <a href="YAHOO.widget.Module.html#initEvent">initEvent</a>, <a href="YAHOO.widget.Module.html#appendEvent">appendEvent</a>, <a href="YAHOO.widget.Module.html#beforeRenderEvent">beforeRenderEvent</a>, <a href="YAHOO.widget.Module.html#renderEvent">renderEvent</a>, <a href="YAHOO.widget.Module.html#changeHeaderEvent">changeHeaderEvent</a>, <a href="YAHOO.widget.Module.html#changeBodyEvent">changeBodyEvent</a>, <a href="YAHOO.widget.Module.html#changeFooterEvent">changeFooterEvent</a>, <a href="YAHOO.widget.Module.html#changeContentEvent">changeContentEvent</a>, <a href="YAHOO.widget.Module.html#destroyEvent">destroyEvent</a>, <a href="YAHOO.widget.Module.html#beforeShowEvent">beforeShowEvent</a>, <a href="YAHOO.widget.Module.html#showEvent">showEvent</a>, <a href="YAHOO.widget.Module.html#beforeHideEvent">beforeHideEvent</a>, <a href="YAHOO.widget.Module.html#hideEvent">hideEvent</a></code>
+					</div>
+				</div>
+			
+		
 		<!-- =========== END FIELD SUMMARY =========== -->
 
 
@@ -391,7 +405,7 @@
 						<a href="YAHOO.widget.Overlay.html#YAHOO.widget.Overlay()">YAHOO.widget.Overlay</a>
 					</code>
 					<div class="description">
-						Copyright (c) 2006, Yahoo!&nbsp;
+						Overlay is a Module that is absolutely positioned above the page flow.&nbsp;
 					</div>
 				</div>
 			</div>
@@ -618,6 +632,19 @@
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
+										<a href="#hideIframe">hideIframe</a>
+										()
+									</code>
+									<div class="description">
+										Hides the iframe shim, if it has been enabled&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
 										<a href="#hideMacGeckoScrollbars">hideMacGeckoScrollbars</a>
 										()
 									</code>
@@ -697,6 +724,19 @@
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
+										<a href="#showIframe">showIframe</a>
+										()
+									</code>
+									<div class="description">
+										Shows the iframe shim, if it has been enabled&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
 										<a href="#showMacGeckoScrollbars">showMacGeckoScrollbars</a>
 										()
 									</code>
@@ -764,6 +804,13 @@
 			</div>
 		
 		
+		
+			<div class="section method inheritance">
+				<h3>Methods inherited from class  <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></h3>
+				<div class="content">
+							<code><a href="YAHOO.widget.Module.html#platform">platform</a>, <a href="YAHOO.widget.Module.html#browser">browser</a>, <a href="YAHOO.widget.Module.html#isSecure">isSecure</a>, <a href="YAHOO.widget.Module.html#initResizeMonitor">initResizeMonitor</a>, <a href="YAHOO.widget.Module.html#setHeader">setHeader</a>, <a href="YAHOO.widget.Module.html#appendToHeader">appendToHeader</a>, <a href="YAHOO.widget.Module.html#setBody">setBody</a>, <a href="YAHOO.widget.Module.html#appendToBody">appendToBody</a>, <a href="YAHOO.widget.Module.html#setFooter">setFooter</a>, <a href="YAHOO.widget.Module.html#appendToFooter">appendToFooter</a>, <a href="YAHOO.widget.Module.html#render">render</a>, <a href="YAHOO.widget.Module.html#show">show</a>, <a href="YAHOO.widget.Module.html#hide">hide</a>, <a href="YAHOO.widget.Module.html#configMonitorResize">configMonitorResize</a></code>
+				</div>
+			</div>
 		
 		<!-- ========== END METHOD SUMMARY =========== -->
 
@@ -924,9 +971,7 @@
 						</code>
 						<div class="description">
 							
-								Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
+								Overlay is a Module that is absolutely positioned above the page flow. It has convenience methods for positioning and sizing, as well as options for controlling zIndex and constraining the Overlay's position to the current visible viewport. Overlay also contains a dynamicly generated IFRAME which is placed beneath it for Internet Explorer 6 and 5.x so that it will be properly rendered above SELECT elements.
 							
 							
 							
@@ -954,7 +999,7 @@ http://developer.yahoo.net/yui/license.txt
 							
 							
 							
-								HASH(0x1ce14e4)
+								HASH(0x1d6c080)
 							
 						</div>
 					</div>
@@ -1000,7 +1045,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1d1d064)
+									HASH(0x1e21878)
 								
 							</div>
 						</div>
@@ -1021,7 +1066,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1d1d334)
+									HASH(0x1e21ad0)
 								
 							</div>
 						</div>
@@ -1042,7 +1087,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1d1d40c)
+									HASH(0x1e21c8c)
 								
 							</div>
 						</div>
@@ -1063,7 +1108,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da2a40)
+									HASH(0x1d93224)
 								
 							</div>
 						</div>
@@ -1084,7 +1129,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da2b60)
+									HASH(0x1d93344)
 								
 							</div>
 						</div>
@@ -1105,7 +1150,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da2c80)
+									HASH(0x1d93464)
 								
 							</div>
 						</div>
@@ -1126,7 +1171,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da2da0)
+									HASH(0x1d93584)
 								
 							</div>
 						</div>
@@ -1147,7 +1192,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da2ec0)
+									HASH(0x1d936a4)
 								
 							</div>
 						</div>
@@ -1168,7 +1213,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da2fe0)
+									HASH(0x1d937c4)
 								
 							</div>
 						</div>
@@ -1189,7 +1234,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da8b6c)
+									HASH(0x1d938e4)
 								
 							</div>
 						</div>
@@ -1210,7 +1255,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da8c8c)
+									HASH(0x1d93a04)
 								
 							</div>
 						</div>
@@ -1231,7 +1276,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da8dac)
+									HASH(0x1d93b24)
 								
 							</div>
 						</div>
@@ -1252,7 +1297,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da8ecc)
+									HASH(0x1d93c44)
 								
 							</div>
 						</div>
@@ -1273,7 +1318,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da8fec)
+									HASH(0x1d93d64)
 								
 							</div>
 						</div>
@@ -1294,7 +1339,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da910c)
+									HASH(0x1d93e84)
 								
 							</div>
 						</div>
@@ -1315,7 +1360,28 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da922c)
+									HASH(0x1d93fa4)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="hideIframe">hideIframe</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>hideIframe</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Hides the iframe shim, if it has been enabled
+								
+								
+								
+								
+									HASH(0x1d9b0e0)
 								
 							</div>
 						</div>
@@ -1337,7 +1403,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da934c)
+									HASH(0x1d9b200)
 								
 							</div>
 						</div>
@@ -1378,7 +1444,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da9460)
+									HASH(0x1d9b314)
 								
 							</div>
 						</div>
@@ -1399,7 +1465,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da9604)
+									HASH(0x1d9b4b8)
 								
 							</div>
 						</div>
@@ -1420,7 +1486,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da9724)
+									HASH(0x1d9b5d8)
 								
 							</div>
 						</div>
@@ -1456,7 +1522,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da9838)
+									HASH(0x1d9b6ec)
 								
 							</div>
 						</div>
@@ -1477,7 +1543,28 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1da99ac)
+									HASH(0x1d9b860)
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="showIframe">showIframe</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>showIframe</strong>
+								()
+							</code>
+									
+							<div class="description">
+								
+									Shows the iframe shim, if it has been enabled
+								
+								
+								
+								
+									HASH(0x1d9b980)
 								
 							</div>
 						</div>
@@ -1499,7 +1586,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1d600b0)
+									HASH(0x1d9baa0)
 								
 							</div>
 						</div>
@@ -1520,7 +1607,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1d601d0)
+									HASH(0x1d9bbc0)
 								
 							</div>
 						</div>
@@ -1541,7 +1628,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1d602f0)
+									HASH(0x1d9bce0)
 								
 							</div>
 						</div>
@@ -1562,7 +1649,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1d60410)
+									HASH(0x1d9be00)
 								
 							</div>
 						</div>
@@ -1583,7 +1670,7 @@ http://developer.yahoo.net/yui/license.txt
 								
 								
 								
-									HASH(0x1d60530)
+									HASH(0x1d9bf20)
 								
 							</div>
 						</div>

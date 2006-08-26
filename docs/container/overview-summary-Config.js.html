@@ -50,10 +50,7 @@
 				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
 				<ul class="content">
 					
-						<li>
-							<a href="YAHOO.util.html">
-								YAHOO.util</a>
-						</li>
+
 					
 						<li>
 							<a href="YAHOO.util.Config.html">
@@ -65,10 +62,7 @@
 								YAHOO.util.KeyListener</a>
 						</li>
 					
-						<li>
-							<a href="YAHOO.widget.html">
-								YAHOO.widget</a>
-						</li>
+
 					
 						<li>
 							<a href="YAHOO.widget.ContainerEffect.html">
@@ -237,7 +231,7 @@
 							<td class="name">
 								<a href="YAHOO.util.Config.html">YAHOO.util.Config</a>
 							</td>
-							<td class="overview">Config is a utility used within an object to allow the implementer to maintain a list of local configuration properties and listen for changes to those properties dynamically using CustomEvent.</td>
+							<td class="overview">&nbsp;</td>
 						</tr>
 						
 					</table>
@@ -252,11 +246,14 @@
 		
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<pre class="sourceview"><span class="comment">/**
+				<pre class="sourceview"><span class="comment">/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-* <span class="attrib">@class</span> 
+Version 0.11.3
+*/</span>
+
+<span class="comment">/**
 * Config is a utility used within an object to allow the implementer to maintain a list of local configuration properties and listen for changes to those properties dynamically using CustomEvent. The initial values are also maintained so that the configuration can be reset at any given point to its initial state.
 * <span class="attrib">@param</span> {object}	owner	The owner object to which this Config object belongs
 * <span class="attrib">@constructor</span>
@@ -265,7 +262,7 @@ YAHOO.util.Config = <span class="reserved">function</span>(owner) {
 	<span class="reserved">if</span> (owner) {
 		<span class="reserved">this</span>.init(owner);
 	}
-}
+};
 
 YAHOO.util.Config.<span class="reserved">prototype</span> = {
 	
@@ -398,7 +395,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span> = {
 			<span class="reserved">return</span> true;
 		}
 	}
-}
+};
 
 
 <span class="comment">/**
@@ -431,7 +428,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 		<span class="reserved">if</span> (typeof property != <span class="literal">'undefined'</span> &amp;&amp; property.event) {
 			property.event.fire(value);
 		}	
-	}
+	};
 	<span class="comment">/* End Private Members */</span>
 
 	<span class="reserved">this</span>.addProperty = <span class="reserved">function</span>( key, propertyObject ) {
@@ -451,20 +448,20 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 		<span class="reserved">if</span> (! propertyObject.suppressEvent) {
 			<span class="reserved">this</span>.queueProperty(key, propertyObject.value);
 		}
-	}
+	};
 
 	<span class="reserved">this</span>.getConfig = <span class="reserved">function</span>() {
 		var cfg = {};
 			
 		<span class="reserved">for</span> (var prop in config) {
-			var property = config[prop]
+			var property = config[prop];
 			<span class="reserved">if</span> (typeof property != <span class="literal">'undefined'</span> &amp;&amp; property.event) {
 				cfg[prop] = property.value;
 			}
 		}
 		
 		<span class="reserved">return</span> cfg;
-	}
+	};
 
 	<span class="reserved">this</span>.getProperty = <span class="reserved">function</span>(key) {
 		key = key.toLowerCase();
@@ -475,7 +472,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 		} <span class="reserved">else</span> {
 			<span class="reserved">return</span> undefined;
 		}
-	}
+	};
 
 	<span class="reserved">this</span>.resetProperty = <span class="reserved">function</span>(key) {
 		key = key.toLowerCase();
@@ -486,7 +483,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 		} <span class="reserved">else</span> {
 			<span class="reserved">return</span> undefined;
 		}
-	}
+	};
 
 	<span class="reserved">this</span>.setProperty = <span class="reserved">function</span>(key, value, silent) {
 		key = key.toLowerCase();
@@ -511,7 +508,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 				<span class="reserved">return</span> false;
 			}
 		}
-	}
+	};
 
 	<span class="reserved">this</span>.queueProperty = <span class="reserved">function</span>(key, value) {
 		key = key.toLowerCase();
@@ -578,7 +575,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 		} <span class="reserved">else</span> {
 			<span class="reserved">return</span> false;
 		}
-	}
+	};
 
 	<span class="reserved">this</span>.refireEvent = <span class="reserved">function</span>(key) {
 		key = key.toLowerCase();
@@ -591,7 +588,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 				fireEvent(key, property.value);
 			}
 		}
-	}
+	};
 
 	<span class="reserved">this</span>.applyConfig = <span class="reserved">function</span>(userConfig, init) {
 		<span class="reserved">if</span> (init) {
@@ -600,13 +597,13 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 		<span class="reserved">for</span> (var prop in userConfig) {
 			<span class="reserved">this</span>.queueProperty(prop, userConfig[prop]);
 		}
-	}
+	};
 
 	<span class="reserved">this</span>.refresh = <span class="reserved">function</span>() {
 		<span class="reserved">for</span> (var prop in config) {
 			<span class="reserved">this</span>.refireEvent(prop);
 		}
-	}
+	};
 
 	<span class="reserved">this</span>.fireQueue = <span class="reserved">function</span>() {
 		<span class="reserved">this</span>.queueInProgress = true;
@@ -624,8 +621,8 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 		}
 		
 		<span class="reserved">this</span>.queueInProgress = false;
-		eventQueue = new Array();
-	}
+		eventQueue = [];
+	};
 
 	<span class="reserved">this</span>.subscribeToConfigEvent = <span class="reserved">function</span>(key, handler, obj, override) {
 		key = key.toLowerCase();
@@ -639,7 +636,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 		} <span class="reserved">else</span> {
 			<span class="reserved">return</span> false;
 		}
-	}
+	};
 
 
 	<span class="reserved">this</span>.unsubscribeFromConfigEvent = <span class="reserved">function</span>(key, handler, obj) {
@@ -651,7 +648,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 		} <span class="reserved">else</span> {
 			<span class="reserved">return</span> false;
 		}
-	}
+	};
 
 	<span class="reserved">this</span>.toString = <span class="reserved">function</span>() {
 		var output = <span class="literal">"Config"</span>;
@@ -659,7 +656,7 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 			output += <span class="literal">" ["</span> + <span class="reserved">this</span>.owner.toString() + <span class="literal">"]"</span>;
 		}
 		<span class="reserved">return</span> output;
-	}
+	};
 
 	<span class="reserved">this</span>.outputEventQueue = <span class="reserved">function</span>() {
 		var output = <span class="literal">""</span>;
@@ -670,8 +667,8 @@ YAHOO.util.Config.<span class="reserved">prototype</span>.init = <span class="re
 			}
 		}
 		<span class="reserved">return</span> output;
-	}
-}
+	};
+};
 
 <span class="comment">/**
 * Checks to determine if a particular function/object pair are already subscribed to the specified CustomEvent
@@ -685,11 +682,10 @@ YAHOO.util.Config.alreadySubscribed = <span class="reserved">function</span>(evt
 		var subsc = evt.subscribers[e];
 		<span class="reserved">if</span> (subsc &amp;&amp; subsc.obj == obj &amp;&amp; subsc.fn == fn) {
 			<span class="reserved">return</span> true;
-			break;
 		}
 	}
 	<span class="reserved">return</span> false;
-}</pre>
+};</pre>
 			</div>
 		
 	</div>
