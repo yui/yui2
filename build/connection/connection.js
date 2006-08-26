@@ -251,8 +251,9 @@ YAHOO.util.Connect =
 					uri += "?" +  this._sFormData;
 				}
 				else if(method == 'POST'){
-					//postData = this._sFormData;
-					postData += this._sFormData;
+					//If POST data exists in addition to the HTML form data,
+					//it will be concatenated to the form data.
+					postData = (postData?this._sFormData + "&" + postData:this._sFormData);
 				}
 				this._sFormData = '';
 			}
@@ -293,7 +294,7 @@ YAHOO.util.Connect =
 
 		var oConn = this;
 
-		if(callback.timeout){
+		if(callback && callback.timeout){
 			this._timeOut[o.tId] = window.setTimeout(function(){ oConn.abort(o, callback, true); }, callback.timeout);
 		}
 
@@ -303,7 +304,7 @@ YAHOO.util.Connect =
 					window.clearInterval(oConn._poll[o.tId]);
 					delete oConn._poll[o.tId];
 
-					if(callback.timeout){
+					if(callback && callback.timeout){
 						delete oConn._timeOut[o.tId];
 					}
 
@@ -372,16 +373,12 @@ YAHOO.util.Connect =
 			{
 				switch(httpStatus){
 					// The following case labels are wininet.dll error codes that may be encountered.
-					// Server timeout
-					case 12002:
-					// 12029 to 12031 correspond to dropped connections.
-					case 12029:
+					case 12002: // Server timeout
+					case 12029: // 12029 to 12031 correspond to dropped connections.
 					case 12030:
 					case 12031:
-					// Connection closed by server.
-					case 12152:
-					// See above comments for variable status.
-					case 13030:
+					case 12152: // Connection closed by server.
+					case 13030: // See above comments for variable status.
 						responseObject = this.createExceptionObject(o.tId, callback.argument, (isAbort?isAbort:false));
 						if(callback.failure){
 							if(!callback.scope){
@@ -523,7 +520,7 @@ YAHOO.util.Connect =
 	setHeader:function(o)
 	{
 		for(var prop in this._http_header){
-			if(this._http_header.isPropertyEnumerable(prop)){
+			if(this._http_header.hasOwnProperty(prop)){
 				o.conn.setRequestHeader(prop, this._http_header[prop]);
 			}
 		}
@@ -583,11 +580,8 @@ YAHOO.util.Connect =
 		// Iterate over the form elements collection to construct the
 		// label-value pairs.
 		for (var i=0; i<oForm.elements.length; i++){
-			oDisabled = oForm.elements[i].disabled;
-
-			// If the name attribute is not populated, the form field's
-			// value will not be submitted.
 			oElement = oForm.elements[i];
+			oDisabled = oForm.elements[i].disabled;
 			oName = oForm.elements[i].name;
 			oValue = oForm.elements[i].value;
 
@@ -601,7 +595,13 @@ YAHOO.util.Connect =
 					case 'select-multiple':
 						for(var j=0; j<oElement.options.length; j++){
 							if(oElement.options[j].selected){
-								this._sFormData += encodeURIComponent(oName) + '=' + encodeURIComponent(oElement.options[j].value || oElement.options[j].text) + '&';
+								if(window.ActiveXObject){
+									this._sFormData += encodeURIComponent(oName) + '=' + encodeURIComponent(oElement.options[j].attributes['value'].specified?oElement.options[j].value:oElement.options[j].text) + '&';
+								}
+								else{
+									this._sFormData += encodeURIComponent(oName) + '=' + encodeURIComponent(oElement.options[j].hasAttribute('value')?oElement.options[j].value:oElement.options[j].text) + '&';
+								}
+
 							}
 						}
 						break;
@@ -647,14 +647,16 @@ YAHOO.util.Connect =
    */
 	createFrame:function(secureUri){
 
-		// IE does not allow the setting of id and name attributes as DOM
-		// properties.  A different iframe creation pattern is required for IE.
-		var frameId = 'ioFrame' + this._transaction_id;
+		// IE does not allow the setting of id and name attributes as object
+		// properties via createElement().  A different iframe creation
+		// pattern is required for IE.
+		var frameId = 'yuiIO' + this._transaction_id;
 		if(window.ActiveXObject){
 			var io = document.createElement('<IFRAME id="' + frameId + '" name="' + frameId + '">');
+
+			// IE will throw a security exception in an SSL environment if the
+			// iframe source isn't set.
 			if(typeof secureUri == 'boolean'){
-				// IE will throw a security exception in an SSL environment if the
-				// iframe source isn't set.
 				io.src = 'javascript:false';
 			}
 			else{
@@ -686,7 +688,7 @@ YAHOO.util.Connect =
    */
 	uploadFile:function(id, callback, uri){
 
-		var frameId = 'ioFrame' + id;
+		var frameId = 'yuiIO' + id;
 		var io = document.getElementById(frameId);
 
 		// Initialize the HTML form properties in case they are
@@ -711,13 +713,8 @@ YAHOO.util.Connect =
 			var obj = {};
 
 			obj.tId = id;
-			obj.responseText = io.contentWindow.document;
-			if(window.ActiveXObject){
-				obj.responseXML = io.contentWindow.document.XMLDocument;
-			}
-			else{
-				obj.responseXML = io.contentWindow.document;
-			}
+			obj.responseText = io.contentWindow.document.body?io.contentWindow.document.body.innerHTML:null;
+			obj.responseXML = io.contentWindow.document.XMLDocument?io.contentWindow.document.XMLDocument:io.contentWindow.document;
 			obj.argument = callback.argument;
 
 			if(callback.upload){
