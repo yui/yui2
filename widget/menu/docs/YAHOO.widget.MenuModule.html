@@ -50,10 +50,6 @@
 				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
 				<ul class="content">
 					
-						<li>
-							<a href="YAHOO.widget.html">
-								YAHOO.widget</a>
-						</li>
 					
 						<li>
 							<a href="YAHOO.widget.ContextMenu.html">
@@ -465,6 +461,20 @@
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
+										<a href="#configIframe">configIframe</a>
+										(&lt;String&gt; p_sType, &lt;Array&gt; p_aArgs, &lt;<a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a>&gt; p_oMenuModule)
+									</code>
+									<div class="description">
+										Event handler for when the "iframe" configuration property of a
+ MenuModule changes.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
 										<a href="#configPosition">configPosition</a>
 										(&lt;String&gt; p_sType, &lt;Array&gt; p_aArgs, &lt;<a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a>&gt; p_oMenuModule)
 									</code>
@@ -857,8 +867,8 @@
 									<dt>Parameters:</dt>
 									
 										<dd>
-											<code>{String or HTMLElement} p_oElement </code> - 
-											  String id or HTMLElement   (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.  
+											<code>p_oElement</code> - 
+                                            String id or HTMLElement   (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.  
 										</dd>
 									
 										<dd>
@@ -945,6 +955,48 @@
 						</div>
 						<hr />
 					
+						<h4><a name="configIframe">configIframe</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>configIframe</strong>
+								(&lt;String&gt; p_sType, &lt;Array&gt; p_aArgs, &lt;<a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a>&gt; p_oMenuModule)
+							</code>
+									
+							<div class="description">
+								
+									Event handler for when the "iframe" configuration property of a
+ MenuModule changes.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>p_sType</code> - 
+												 The name of the event that was fired.  
+											</dd>
+										
+											<dd>
+												<code>p_aArgs</code> - 
+												 Collection of arguments sent when the event   was fired.  
+											</dd>
+										
+											<dd>
+												<code>p_oMenuModule</code> - 
+												 The MenuModule instance fired  the event.  
+											</dd>
+										
+									</dl>
+								
+								
+								
+									ARRAY(0x847fe70)
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="configPosition">configPosition</a></h4>
 						<div class="detail">
 							<code>
@@ -974,14 +1026,12 @@
 										
 											<dd>
 												<code>p_oMenuModule</code> - 
-												 The MenuModule instance fired  the event.  
+												 The MenuModule instance fired  the event.   
 											</dd>
 										
 									</dl>
 								
 								
-								
-									ARRAY(0x8475090)
 								
 							</div>
 						</div>
@@ -1109,13 +1159,13 @@
 										<dt>Parameters:</dt>
 										
 											<dd>
-												<code>{String or HTMLElement} p_oElement</code> - 
-												  String id or HTMLElement   (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.  
-											</dd>
-
-											<dd>
 												<code>p_oConfig</code> - 
 												 Optional. The configuration object literal   containing the configuration for a MenuModule instance. See   configuration class documentation for more details.   
+											</dd>
+										
+											<dd>
+												<code>String</code> - 
+												 or HTMLElement} p_oElement String id or HTMLElement   (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.  
 											</dd>
 										
 									</dl>

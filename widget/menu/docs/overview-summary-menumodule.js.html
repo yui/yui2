@@ -50,10 +50,6 @@
 				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
 				<ul class="content">
 					
-						<li>
-							<a href="YAHOO.widget.html">
-								YAHOO.widget</a>
-						</li>
 					
 						<li>
 							<a href="YAHOO.widget.ContextMenu.html">
@@ -151,10 +147,71 @@
 	
 	<div class="main">
 			
-       <h2>menumodule.js</h2>
+		
+		
+			
+			   <h2>menumodule.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+		
+		
+		
+		
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+					
+                    <a href="#classSummary">Class Summary</a> |
+				
+					<a href="#source">Source Code</a>
+				
+			</div>
+		
+			
+				<div class="section class summaries">
+					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+			
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+						<tr>
+							<td class="name">
+								<a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a>
+							</td>
+							<td class="overview">The superclass of all menu containers.</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
 		
 			<div class="section source">
-				<h3><a name="source">Souce Code</a></h3>
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<pre class="sourceview"><span class="comment">/**
 * <span class="attrib">@class</span> The superclass of all menu containers.
 * <span class="attrib">@constructor</span>
@@ -179,7 +236,291 @@ YAHOO.widget.MenuModule = <span class="reserved">function</span>(p_oElement, p_o
 YAHOO.extend(YAHOO.widget.MenuModule, YAHOO.widget.Overlay);
 <span class="comment">
 
+// Private globals</span>
+
+<span class="comment">/**
+* Private global flag indicating if the DOM event handlers have been attached
+* <span class="attrib">@private</span>
+* <span class="attrib">@type</span> {Boolean}
+*/</span>
+YAHOO.widget.MenuModule._initEventHandlers = true;
+
+
+<span class="comment">/**
+* Private global collection of menus
+* <span class="attrib">@private</span>
+* <span class="attrib">@type</span> {Object}
+*/</span>
+YAHOO.widget.MenuModule._menus = {};
+
+
+<span class="comment">/**
+* Private global collection of menu items 
+* <span class="attrib">@private</span>
+* <span class="attrib">@type</span> {Object}
+*/</span>
+YAHOO.widget.MenuModule._menuItems = {};
+
+
+<span class="comment">/**
+* Generic, global event handler for all of a menu's DOM-based events.  This 
+* listens for events against the document object.  If the target of a given 
+* event is a member of a menu or menu item's DOM, the instance's corresponding
+* Custom Event is fired.
+* <span class="attrib">@private</span>
+* <span class="attrib">@param</span> {Event} p_oEvent Event object passed back by the event 
+* utility (YAHOO.util.Event).
+*/</span>
+YAHOO.widget.MenuModule._onDOMEvent = <span class="reserved">function</span>(p_oEvent) {
+<span class="comment">
+
+    // Create references to the DOM and Event utilities</span>
+
+    var Dom = YAHOO.util.Dom;
+    var Event = YAHOO.util.Event;
+<span class="comment">
+
+    // The target node of the DOM event</span>
+
+    var oTarget = Event.getTarget(p_oEvent);
+<span class="comment">
+
+    // A reference to the root LI node of a menu item</span>
+
+    var oMenuItemRootElement;
+
+
+    <span class="comment">/**
+    * Finds the root DIV node of a menu and the root LI node of a menu item
+    * <span class="attrib">@private</span>
+    * <span class="attrib">@param</span> {HTMLElement} p_oElement An HTML element
+    */</span>
+    <span class="reserved">function</span> getMenuRootElement(p_oElement) {
+    
+        var oParentNode;
+
+        switch(p_oElement.tagName) {
+                
+            case <span class="literal">"DIV"</span>:
+
+                oParentNode = p_oElement.parentNode;
+<span class="comment">
+                // Check if the DIV is the inner "body" node of a menu</span>
+                <span class="reserved">if</span>(
+                    Dom.hasClass(p_oElement, <span class="literal">"bd"</span>) &amp;&amp; 
+                    oParentNode &amp;&amp; 
+                    oParentNode.tagName == <span class="literal">"DIV"</span>
+                ) {
+                
+                    <span class="reserved">return</span> oParentNode;
+                
+                }
+                <span class="reserved">else</span> {
+                
+                    <span class="reserved">return</span> p_oElement;
+                
+                }
+            
+            break;
+            
+            case <span class="literal">"LI"</span>:
+ 
+                <span class="comment">/*
+                    Capture the root LI node of the menu item and allow 
+                    fall through to keep climbing up to find the item's parent 
+                    root DIV 
+                */</span>
+
+                oMenuItemRootElement = p_oElement;
+
+            default:
+
+                oParentNode = p_oElement.parentNode;
+
+                <span class="reserved">if</span>(oParentNode) {
+                
+                    <span class="reserved">return</span> getMenuRootElement(oParentNode);
+                
+                }
+            
+            break;
+        
+        }
+    
+    }
+<span class="comment">
+
+    // The root DIV node of a menu</span>
+
+    var oMenuRootElement = getMenuRootElement(oTarget);
+
+
+    <span class="reserved">if</span>(oMenuRootElement &amp;&amp; oMenuRootElement.id) {
+
+        var oMenuItem;
+        var oMenu = YAHOO.widget.MenuModule._menus[oMenuRootElement.id];
+
+        <span class="reserved">if</span>(oMenuItemRootElement) {
+
+            var sYUIId = oMenuItemRootElement.getAttribute(<span class="literal">"yuiid"</span>);
+    
+            <span class="reserved">if</span>(sYUIId) {
+    
+                oMenuItem = YAHOO.widget.MenuModule._menuItems[sYUIId];
+    
+            }
+
+        }
+
+        <span class="reserved">if</span>(oMenu) {
+<span class="comment">
+            // Map of DOM event names to CustomEvent names</span>
+        
+            var oEventTypes =  {
+                    <span class="literal">"click"</span>: <span class="literal">"clickEvent"</span>,
+                    <span class="literal">"mousedown"</span>: <span class="literal">"mouseDownEvent"</span>,
+                    <span class="literal">"mouseup"</span>: <span class="literal">"mouseUpEvent"</span>,
+                    <span class="literal">"mouseover"</span>: <span class="literal">"mouseOverEvent"</span>,
+                    <span class="literal">"mouseout"</span>: <span class="literal">"mouseOutEvent"</span>,
+                    <span class="literal">"keydown"</span>: <span class="literal">"keyDownEvent"</span>,
+                    <span class="literal">"keyup"</span>: <span class="literal">"keyUpEvent"</span>,
+                    <span class="literal">"keypress"</span>: <span class="literal">"keyPressEvent"</span>
+                };
+
+            var sCustomEventType = oEventTypes[p_oEvent.type];
+
+            switch(p_oEvent.type) {
+            
+                case <span class="literal">"mouseover"</span>:
+
+                    <span class="reserved">if</span>(
+                        !oMenu._bFiredMouseOverEvent &amp;&amp;
+                        (
+                            oTarget == oMenu.element || 
+                            Dom.isAncestor(oMenu.element, oTarget)
+                        )
+                    ) {
+                    
+                        oMenu.mouseOverEvent.fire(p_oEvent);
+
+                        oMenu._bFiredMouseOverEvent = true;
+                        oMenu._bFiredMouseOutEvent = false;
+                    
+                    }
+
+
+                    <span class="reserved">if</span>(
+                        oMenuItem &amp;&amp; 
+                        !oMenuItem._bFiredMouseOverEvent &amp;&amp; 
+                        (
+                            oTarget == oMenuItem.element || 
+                            Dom.isAncestor(oMenuItem.element, oTarget)
+                        ) &amp;&amp; 
+                        !oMenuItem.cfg.getProperty(<span class="literal">"disabled"</span>)
+                    ) {
+
+                        oMenuItem.mouseOverEvent.fire(p_oEvent);
+
+                        oMenuItem._bFiredMouseOverEvent = true;
+                        oMenuItem._bFiredMouseOutEvent = false;
+
+                    }
+
+                break;
+
+                case <span class="literal">"mouseout"</span>:
+
+                    var oRelatedTarget = Event.getRelatedTarget(p_oEvent);
+                    var bMovingToSubmenu = false;
+
+                    <span class="reserved">if</span>(oMenuItem) {
+
+                        var oSubmenu = oMenuItem.cfg.getProperty(<span class="literal">"submenu"</span>);
+                
+                        <span class="reserved">if</span>(
+                            oSubmenu &amp;&amp; 
+                            (
+                                oRelatedTarget == oSubmenu.element ||
+                                Dom.isAncestor(oSubmenu.element, oRelatedTarget)
+                            )
+                        ) {
+                
+                            bMovingToSubmenu = true;
+                
+                        }
+
+                    }
+
+
+                    <span class="reserved">if</span>(
+                        oMenuItem &amp;&amp; 
+                        !oMenuItem._bFiredMouseOutEvent &amp;&amp; 
+                        (
+                            (
+                                oRelatedTarget != oMenuItem.element &amp;&amp;  
+                                !Dom.isAncestor(
+                                    oMenuItem.element, 
+                                    oRelatedTarget
+                                )
+                            ) || bMovingToSubmenu
+                        ) &amp;&amp; 
+                        !oMenuItem.cfg.getProperty(<span class="literal">"disabled"</span>)
+                    ) {
+<span class="comment">                
+                        // Fire the "mouseout" Custom Event for the item</span>
+                
+                        oMenuItem.mouseOutEvent.fire(p_oEvent);
+
+                        oMenuItem._bFiredMouseOutEvent = true;
+                        oMenuItem._bFiredMouseOverEvent = false;
+                
+                    }
+
+
+                    <span class="reserved">if</span>(
+                        !oMenu._bFiredMouseOutEvent &amp;&amp; 
+                        (
+                            (
+                                oRelatedTarget != oMenu.element &amp;&amp;  
+                                !Dom.isAncestor(oMenu.element, oRelatedTarget)
+                            ) 
+                            || bMovingToSubmenu
+                        )
+                    ) {
+
+                        oMenu.mouseOutEvent.fire(p_oEvent);
+                
+                        oMenu._bFiredMouseOutEvent = true;
+                        oMenu._bFiredMouseOverEvent = false;
+                
+                    }
+                
+                break;
+                
+                default:
+
+                    <span class="reserved">if</span>(oMenuItem &amp;&amp; !oMenuItem.cfg.getProperty(<span class="literal">"disabled"</span>)) {
+                    
+                        oMenuItem[sCustomEventType].fire(p_oEvent);                   
+                    
+                    }
+
+                    oMenu[sCustomEventType].fire(p_oEvent);
+                
+                break;
+            
+            }
+        
+        }
+
+    }
+
+};
+<span class="comment">
+
+
 // Constants</span>
+
 
 <span class="comment">/**
 * Constant representing the CSS class(es) to be applied to the root 
@@ -210,7 +551,25 @@ YAHOO.widget.MenuModule.<span class="reserved">prototype</span>.ITEM_TYPE = null
 YAHOO.widget.MenuModule.<span class="reserved">prototype</span>.GROUP_TITLE_TAG_NAME = <span class="literal">"H6"</span>;
 <span class="comment">
 
+
 // Private properties</span>
+
+
+<span class="comment">/** 
+* The current state of a MenuModule instance's "mouseover" event
+* <span class="attrib">@private</span>
+* <span class="attrib">@type</span> {Boolean}
+*/</span>
+YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._bFiredMouseOverEvent = false;
+
+
+<span class="comment">/** 
+* The current state of a MenuModule instance's "mouseout" event
+* <span class="attrib">@private</span>
+* <span class="attrib">@type</span> {Boolean}
+*/</span>
+YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._bFiredMouseOutEvent = false;
+
 
 <span class="comment">/**
 * Array of HTMLElements used to title groups of items.
@@ -251,31 +610,8 @@ YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._oEventUtil = YA
 * <span class="attrib">@type</span> {YAHOO.util.Dom}
 */</span>
 YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._oDom = YAHOO.util.Dom;
-
-
-<span class="comment">/**
-* Reference to the item the mouse is currently over.
-* <span class="attrib">@private</span>
-* <span class="attrib">@type</span> {YAHOO.widget.MenuModuleItem}
-*/</span>
-YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._oCurrentItem = null;
-
-
-<span class="comment">/** 
-* The current state of a MenuModule instance's "mouseover" event
-* <span class="attrib">@private</span>
-* <span class="attrib">@type</span> {Boolean}
-*/</span>
-YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._bFiredMouseOverEvent = false;
-
-
-<span class="comment">/** 
-* The current state of a MenuModule instance's "mouseout" event
-* <span class="attrib">@private</span>
-* <span class="attrib">@type</span> {Boolean}
-*/</span>
-YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._bFiredMouseOutEvent = false;
 <span class="comment">
+
 
 // Public properties</span>
 
@@ -301,6 +637,7 @@ YAHOO.widget.MenuModule.<span class="reserved">prototype</span>.parent = null;
 */</span>
 YAHOO.widget.MenuModule.<span class="reserved">prototype</span>.srcElement = null;
 <span class="comment">
+
 
 // Events</span>
 
@@ -546,21 +883,23 @@ YAHOO.widget.MenuModule.<span class="reserved">prototype</span>.init = <span cla
 <span class="comment">
         // Assign DOM event handlers</span>
 
-        Event.addListener(
-                oEl, 
-                <span class="literal">"mouseover"</span>, 
-                <span class="reserved">this</span>._onElementMouseOver, 
-                <span class="reserved">this</span>, 
-                true
-            );
+        <span class="reserved">if</span>(YAHOO.widget.MenuModule._initEventHandlers) {
 
-        Event.addListener(oEl, <span class="literal">"mouseout"</span>, <span class="reserved">this</span>._onElementMouseOut, <span class="reserved">this</span>, true);
-        Event.addListener(oEl, <span class="literal">"mousedown"</span>, <span class="reserved">this</span>._onDOMEvent, <span class="reserved">this</span>, true);
-        Event.addListener(oEl, <span class="literal">"mouseup"</span>, <span class="reserved">this</span>._onDOMEvent, <span class="reserved">this</span>, true);
-        Event.addListener(oEl, <span class="literal">"click"</span>, <span class="reserved">this</span>._onElementClick, <span class="reserved">this</span>, true);
-        Event.addListener(oEl, <span class="literal">"keydown"</span>, <span class="reserved">this</span>._onDOMEvent, <span class="reserved">this</span>, true);
-        Event.addListener(oEl, <span class="literal">"keyup"</span>, <span class="reserved">this</span>._onDOMEvent, <span class="reserved">this</span>, true);
-        Event.addListener(oEl, <span class="literal">"keypress"</span>, <span class="reserved">this</span>._onDOMEvent, <span class="reserved">this</span>, true);
+            var oDoc = document;
+            var onDOMEvent = YAHOO.widget.MenuModule._onDOMEvent;
+    
+            Event.addListener(oDoc, <span class="literal">"mouseover"</span>, onDOMEvent);
+            Event.addListener(oDoc, <span class="literal">"mouseout"</span>, onDOMEvent);
+            Event.addListener(oDoc, <span class="literal">"mousedown"</span>, onDOMEvent);
+            Event.addListener(oDoc, <span class="literal">"mouseup"</span>, onDOMEvent);
+            Event.addListener(oDoc, <span class="literal">"click"</span>, onDOMEvent);
+            Event.addListener(oDoc, <span class="literal">"keydown"</span>, onDOMEvent);
+            Event.addListener(oDoc, <span class="literal">"keyup"</span>, onDOMEvent);
+            Event.addListener(oDoc, <span class="literal">"keypress"</span>, onDOMEvent);
+
+            YAHOO.widget.MenuModule._initEventHandlers = false;
+
+        }
 <span class="comment">
 
         // Create custom events</span>
@@ -577,6 +916,7 @@ YAHOO.widget.MenuModule.<span class="reserved">prototype</span>.init = <span cla
 
         // Subscribe to Custom Events</span>
 
+        <span class="reserved">this</span>.initEvent.subscribe(<span class="reserved">this</span>._onInit, <span class="reserved">this</span>, true);
         <span class="reserved">this</span>.beforeRenderEvent.subscribe(<span class="reserved">this</span>._onBeforeRender, <span class="reserved">this</span>, true);
         <span class="reserved">this</span>.renderEvent.subscribe(<span class="reserved">this</span>._onRender, <span class="reserved">this</span>, true);
         <span class="reserved">this</span>.showEvent.subscribe(<span class="reserved">this</span>._onShow, <span class="reserved">this</span>, true);
@@ -598,6 +938,8 @@ YAHOO.widget.MenuModule.<span class="reserved">prototype</span>.init = <span cla
             <span class="reserved">this</span>._initSubTree();
 
         }
+
+        YAHOO.widget.MenuModule._menus[oEl.id] = <span class="reserved">this</span>;
 
     }
 
@@ -721,7 +1063,10 @@ YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._getFirstEnabled
             
                 oItem = aItemGroup[n];
                 
-                <span class="reserved">if</span>(!oItem.cfg.getProperty(<span class="literal">"disabled"</span>)) {
+                <span class="reserved">if</span>(
+                    !oItem.cfg.getProperty(<span class="literal">"disabled"</span>) &amp;&amp; 
+                    oItem.element.style.display != <span class="literal">"none"</span>
+                ) {
                 
                     <span class="reserved">return</span> oItem;
                 
@@ -789,7 +1134,14 @@ YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._addItemToGroup 
 
 
         <span class="reserved">if</span>(oItem) {
-        
+
+            var sYUIId = Dom.generateId();
+
+            oItem.element.setAttribute(<span class="literal">"yuiid"</span>, sYUIId);
+
+            YAHOO.widget.MenuModule._menuItems[sYUIId] = oItem;
+
+
             var nGroupIndex = typeof p_nGroupIndex == <span class="literal">"number"</span> ? 
                     p_nGroupIndex : 0;
             
@@ -826,7 +1178,13 @@ YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._addItemToGroup 
     
                 <span class="reserved">if</span>(oGroupItem) {
     
-                    <span class="reserved">if</span>(bAppend &amp;&amp; !oGroupItem.element.parentNode) {
+                    <span class="reserved">if</span>(
+                        bAppend &amp;&amp; 
+                        (
+                            !oGroupItem.element.parentNode || 
+                            oGroupItem.element.parentNode.nodeType == 11
+                        )
+                    ) {
             
                         <span class="reserved">this</span>._aListElements[nGroupIndex].appendChild(
                             oGroupItem.element
@@ -861,7 +1219,13 @@ YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._addItemToGroup 
                         var oNextItemSibling = 
                                 getNextItemSibling(aGroup, (p_nItemIndex+1));
         
-                        <span class="reserved">if</span>(oNextItemSibling &amp;&amp; !oGroupItem.element.parentNode) {
+                        <span class="reserved">if</span>(
+                            oNextItemSibling &amp;&amp; 
+                            (
+                                !oGroupItem.element.parentNode || 
+                                oGroupItem.element.parentNode.nodeType == 11
+                            )
+                        ) {
                 
                             <span class="reserved">this</span>._aListElements[nGroupIndex].insertBefore(
                                     oGroupItem.element, 
@@ -1260,407 +1624,29 @@ YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._getOffsetWidth 
     <span class="reserved">return</span> sWidth;
 
 };
-
-
-<span class="comment">/**
-* Determines if a DOM event was fired on an item and (if so) fires the item's
-* associated Custom Event
-* <span class="attrib">@private</span>
-* <span class="attrib">@param</span> {HTMLElement} p_oElement The original target of the event.
-* <span class="attrib">@param</span> {String} p_sEventType The type/name of the Custom Event to fire.
-* <span class="attrib">@param</span> {Event} p_oDOMEvent The DOM event to pass back when firing the 
-* Custom Event.
-* <span class="attrib">@return</span> An item.
-* <span class="attrib">@type</span> YAHOO.widget.MenuModuleItem
-*/</span>
-YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._fireItemEvent = 
-
-    <span class="reserved">function</span>(p_oElement, p_sEventType, p_oDOMEvent) {
-
-        var me = <span class="reserved">this</span>;
-    
-        <span class="comment">/**
-        * Returns the specified element's parent HTMLLIElement (&amp;#60;LI&amp;#60;)
-        * <span class="attrib">@param</span> {p_oElement} An HTMLElement node
-        * <span class="attrib">@ignore</span>
-        * <span class="attrib">@return</span> Returns an HTMLElement node
-        * <span class="attrib">@type</span> HTMLElement 
-        */</span>
-        <span class="reserved">function</span> getItemElement(p_oElement) {
-        
-            <span class="reserved">if</span>(p_oElement == me.element) {
-    
-                <span class="reserved">return</span>;
-            
-            }
-            <span class="reserved">else</span> <span class="reserved">if</span>(p_oElement.tagName == <span class="literal">"LI"</span>) {
-        
-                <span class="reserved">return</span> p_oElement;
-        
-            }
-            <span class="reserved">else</span> <span class="reserved">if</span>(p_oElement.parentNode) {
-    
-                <span class="reserved">return</span> getItemElement(p_oElement.parentNode);
-        
-            }
-        
-        }
-    
-    
-        var oElement = getItemElement(p_oElement);
-    
-        <span class="reserved">if</span>(oElement) {
-    
-            <span class="comment">/*
-                Retrieve the item that corresponds to the 
-                HTMLLIElement (&amp;#60;LI&amp;#60;) and fire the Custom Event        
-            */</span>
-    
-            var nGroupIndex = parseInt(oElement.getAttribute(<span class="literal">"groupindex"</span>), 10);
-            var nIndex = parseInt(oElement.getAttribute(<span class="literal">"index"</span>), 10);
-            var oItem = <span class="reserved">this</span>._aItemGroups[nGroupIndex][nIndex];
-    
-            <span class="reserved">if</span>(!oItem.cfg.getProperty(<span class="literal">"disabled"</span>)) {
-    
-                oItem[p_sEventType].fire(p_oDOMEvent);
-    
-                <span class="reserved">return</span> oItem;
-    
-            }
-    
-        }
-
-    };
-<span class="comment">
-
-// Private DOM event handlers</span>
-
-<span class="comment">/**
-* Generic event handler for the MenuModule's root HTMLDivElement node.  Used 
-* to handle "mousedown," "mouseup," "keydown," "keyup," and "keypress" events.
-* <span class="attrib">@private</span>
-* <span class="attrib">@param</span> {Event} p_oEvent Event object passed back by the event 
-* utility (YAHOO.util.Event).
-* <span class="attrib">@param</span> {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance 
-* corresponding to the HTMLDivElement that fired the event.
-*/</span>
-YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._onDOMEvent = 
-
-    <span class="reserved">function</span>(p_oEvent, p_oMenuModule) {
-
-        var Event = <span class="reserved">this</span>._oEventUtil;
-<span class="comment">
-        // Map of DOM event types to Custom Event types</span>
-
-        var oEventTypes =  {
-                <span class="literal">"mousedown"</span>: <span class="literal">"mouseDownEvent"</span>,
-                <span class="literal">"mouseup"</span>: <span class="literal">"mouseUpEvent"</span>,
-                <span class="literal">"keydown"</span>: <span class="literal">"keyDownEvent"</span>,
-                <span class="literal">"keyup"</span>: <span class="literal">"keyUpEvent"</span>,
-                <span class="literal">"keypress"</span>: <span class="literal">"keyPressEvent"</span>
-            };
-    
-        var sCustomEventType = oEventTypes[p_oEvent.type];
-        
-        var oTarget = Event.getTarget(p_oEvent);
-    
-        <span class="comment">/*
-            Check if the target was an element that is a part of a 
-            an item and (if so), fire the associated custom event.
-        */</span>
-    
-        <span class="reserved">this</span>._fireItemEvent(oTarget, sCustomEventType, p_oEvent);
-<span class="comment">
-    
-        // Fire the associated custom event for the MenuModule</span>
-    
-        <span class="reserved">this</span>[sCustomEventType].fire(p_oEvent);
-    
-    
-        <span class="comment">/*
-            Stop the propagation of the event at each MenuModule instance
-            since menus can be embedded in eachother.
-        */</span>
-            
-        Event.stopPropagation(p_oEvent);
-
-    };
-
-
-<span class="comment">/**
-* "mouseover" event handler for the MenuModule's root HTMLDivElement node.
-* <span class="attrib">@private</span>
-* <span class="attrib">@param</span> {Event} p_oEvent Event object passed back by the event
-* utility (YAHOO.util.Event).
-* <span class="attrib">@param</span> {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance 
-* corresponding to the HTMLDivElement that fired the event.
-*/</span>
-YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._onElementMouseOver = 
-
-    <span class="reserved">function</span>(p_oEvent, p_oMenuModule) {
-
-        var Event = <span class="reserved">this</span>._oEventUtil;
-        var oTarget = Event.getTarget(p_oEvent);
-    
-        <span class="reserved">if</span>(
-            (
-                oTarget == <span class="reserved">this</span>.element || 
-                <span class="reserved">this</span>._oDom.isAncestor(<span class="reserved">this</span>.element, oTarget)
-            )  &amp;&amp; 
-            !<span class="reserved">this</span>._bFiredMouseOverEvent
-        ) {
-<span class="comment">    
-            // Fire the "mouseover" Custom Event for the MenuModule instance</span>
-    
-            <span class="reserved">this</span>.mouseOverEvent.fire(p_oEvent);
-    
-            <span class="reserved">this</span>._bFiredMouseOverEvent = true;
-            <span class="reserved">this</span>._bFiredMouseOutEvent = false;
-    
-        }
-    
-    
-        <span class="comment">/*
-            Check if the target was an element that is a part of an item
-            and (if so), fire the "mouseover" Custom Event.
-        */</span>
-    
-        <span class="reserved">if</span>(!<span class="reserved">this</span>._oCurrentItem) {
-    
-            <span class="reserved">this</span>._oCurrentItem = 
-                <span class="reserved">this</span>._fireItemEvent(oTarget, <span class="literal">"mouseOverEvent"</span>, p_oEvent);
-    
-        }
-    
-    
-        <span class="comment">/*
-            Stop the propagation of the event at each MenuModule instance
-            since menus can be embedded in eachother.
-        */</span>
-    
-        Event.stopPropagation(p_oEvent);
-
-    };
-
-
-<span class="comment">/**
-* "mouseout" event handler for the MenuModule's root HTMLDivElement node.
-* <span class="attrib">@private</span>
-* <span class="attrib">@param</span> {Event} p_oEvent Event object passed back by the event
-* utility (YAHOO.util.Event).
-* <span class="attrib">@param</span> {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance 
-* corresponding to the HTMLDivElement that fired the event.
-*/</span>
-YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._onElementMouseOut = 
-
-    <span class="reserved">function</span>(p_oEvent, p_oMenuModule) {
-
-        var Dom = <span class="reserved">this</span>._oDom;
-        var Event = <span class="reserved">this</span>._oEventUtil;
-        var oRelatedTarget = Event.getRelatedTarget(p_oEvent);
-        var bLIMouseOut = true;
-        var bMovingToSubmenu = false;
-<span class="comment">            
-    
-        // Determine where the mouse is going</span>
-    
-        <span class="reserved">if</span>(<span class="reserved">this</span>._oCurrentItem &amp;&amp; oRelatedTarget) {
-    
-            <span class="reserved">if</span>(
-                oRelatedTarget == <span class="reserved">this</span>._oCurrentItem.element || 
-                Dom.isAncestor(<span class="reserved">this</span>._oCurrentItem.element, oRelatedTarget)
-            ) {
-    
-                bLIMouseOut = false;
-    
-            }
-    
-    
-            var oSubmenu = <span class="reserved">this</span>._oCurrentItem.cfg.getProperty(<span class="literal">"submenu"</span>);
-    
-            <span class="reserved">if</span>(
-                oSubmenu &amp;&amp; 
-                (
-                    oRelatedTarget == oSubmenu.element ||
-                    Dom.isAncestor(oSubmenu.element, oRelatedTarget)
-                )
-            ) {
-    
-                bMovingToSubmenu = true;
-    
-            }
-    
-        }
-    
-    
-        <span class="reserved">if</span>(<span class="reserved">this</span>._oCurrentItem &amp;&amp; (bLIMouseOut || bMovingToSubmenu)) {
-<span class="comment">    
-            // Fire the "mouseout" Custom Event for the item</span>
-    
-            <span class="reserved">this</span>._oCurrentItem.mouseOutEvent.fire(p_oEvent);
-    
-            <span class="reserved">this</span>._oCurrentItem = null;
-    
-        }
-    
-    
-        <span class="reserved">if</span>(
-            !<span class="reserved">this</span>._bFiredMouseOutEvent &amp;&amp; 
-            (
-                !Dom.isAncestor(<span class="reserved">this</span>.element, oRelatedTarget) ||
-                bMovingToSubmenu
-            )
-        ) {
-<span class="comment">    
-            // Fire the "mouseout" Custom Event for the MenuModule instance</span>
-    
-            <span class="reserved">this</span>.mouseOutEvent.fire(p_oEvent);
-    
-            <span class="reserved">this</span>._bFiredMouseOutEvent = true;
-            <span class="reserved">this</span>._bFiredMouseOverEvent = false;
-    
-        }
-    
-    
-        <span class="comment">/*
-            Stop the propagation of the event at each MenuModule instance
-            since menus can be embedded in eachother.
-        */</span>
-    
-        Event.stopPropagation(p_oEvent);
-
-    };
-
-
-<span class="comment">/**
-* "click" event handler for the MenuModule's root HTMLDivElement node.
-* <span class="attrib">@private</span>
-* <span class="attrib">@param</span> {Event} p_oEvent Event object passed back by the 
-* event utility (YAHOO.util.Event).
-* <span class="attrib">@param</span> {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance 
-* corresponding to the HTMLDivElement that fired the event.
-*/</span>         
-YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._onElementClick = 
-
-    <span class="reserved">function</span>(p_oEvent, p_oMenuModule) {
-
-        var Event = <span class="reserved">this</span>._oEventUtil;
-        
-        var oTarget = Event.getTarget(p_oEvent);
-        
-        <span class="comment">/*
-            Check if the target was a DOM element that is a part of an
-            item and (if so), fire the associated "click" 
-            Custom Event.
-        */</span>
-        
-        var oItem = <span class="reserved">this</span>._fireItemEvent(oTarget, <span class="literal">"clickEvent"</span>, p_oEvent);
-        
-        var bCurrentPageURL; // Indicates <span class="reserved">if</span> the URL points to the current page
-    
-    
-        <span class="reserved">if</span>(oItem) {
-    
-            var sURL = oItem.cfg.getProperty(<span class="literal">"url"</span>);
-            var oSubmenu = oItem.cfg.getProperty(<span class="literal">"submenu"</span>);
-            
-            bCurrentPageURL = (sURL.substr((sURL.length-1),1) == <span class="literal">"#"</span>);
-    
-            <span class="comment">/*
-                ACCESSIBILITY FEATURE FOR SCREEN READERS: Expand/collapse the
-                submenu when the user clicks on the submenu indicator image.
-            */</span>        
-    
-            <span class="reserved">if</span>(oTarget == oItem.submenuIndicator &amp;&amp; oSubmenu) {
-
-                <span class="reserved">if</span>(oSubmenu.cfg.getProperty(<span class="literal">"visible"</span>)) {
-        
-                    oSubmenu.hide();
-        
-                }
-                <span class="reserved">else</span> {
-
-                    var oActiveItem = <span class="reserved">this</span>.activeItem;
-<span class="comment">               
-
-                    // Hide any other submenus that might be visible</span>
-                
-                    <span class="reserved">if</span>(oActiveItem &amp;&amp; oActiveItem != <span class="reserved">this</span>) {
-                
-                        <span class="reserved">this</span>.clearActiveItem();
-                
-                    }
-
-                    <span class="reserved">this</span>.activeItem = oItem;
-        
-                    oItem.cfg.setProperty(<span class="literal">"selected"</span>, true);
-
-                    oSubmenu.show();
-        
-                }
-        
-            }
-            <span class="reserved">else</span> <span class="reserved">if</span>(oTarget.tagName != <span class="literal">"A"</span> &amp;&amp; !bCurrentPageURL) {
-                
-                <span class="comment">/*
-                    Follow the URL of the item regardless of whether or 
-                    not the user clicked specifically on the
-                    HTMLAnchorElement (&amp;#60;A&amp;#60;) node.
-                */</span>
-    
-                document.location = sURL;
-        
-            }
-        
-        }
-            
-    
-        switch(oTarget.tagName) {
-        
-            case <span class="literal">"A"</span>:
-            
-                <span class="reserved">if</span>(bCurrentPageURL) {
-<span class="comment">    
-                    // Don't follow URLs that are equal to "#"</span>
-    
-                    Event.preventDefault(p_oEvent);
-                
-                }
-                <span class="reserved">else</span> {
-    
-                    <span class="comment">/*
-                        Break if the anchor's URL is something other than "#" 
-                        to prevent the call to "stopPropagation" from be 
-                        executed.  This is required for Safari to be able to 
-                        follow the URL.
-                    */</span>
-                
-                    break;
-                
-                }
-            
-            default:
-    
-                <span class="comment">/*
-                    Stop the propagation of the event at each MenuModule 
-                    instance since Menus can be embedded in eachother.
-                */</span>
-    
-                Event.stopPropagation(p_oEvent);
-            
-            break;
-        
-        }
-<span class="comment">    
-    
-        // Fire the associated "click" Custom Event for the MenuModule instance</span>
-    
-        <span class="reserved">this</span>.clickEvent.fire(p_oEvent);
-
-    };
 <span class="comment">
 
 // Private Custom Event handlers</span>
+
+<span class="comment">/**
+* "init" Custom Event handler for a MenuModule instance.
+* <span class="attrib">@private</span>
+* <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
+* <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* <span class="attrib">@param</span> {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
+* fired the event.
+*/</span>
+YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._onInit = 
+
+    <span class="reserved">function</span>(p_sType, p_aArgs, p_oMenuModule) {
+        
+        var sCSSPosition = (<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"position"</span>) == <span class="literal">"static"</span>) ? 
+                <span class="literal">"static"</span> : <span class="literal">"absolute"</span>;
+
+        <span class="reserved">this</span>._oDom.setStyle(<span class="reserved">this</span>.element, <span class="literal">"position"</span>, sCSSPosition);
+
+    };
 
 
 <span class="comment">/**
@@ -1880,27 +1866,40 @@ YAHOO.widget.MenuModule.<span class="reserved">prototype</span>._onParentMenuMod
     <span class="reserved">function</span>(p_sType, p_aArgs, p_oSubmenu) {
 
         <span class="comment">/*
-            Set the "iframe" and "constraintoviewport" configuration 
-            properties to match the parent MenuModule
+            Set the "constraintoviewport" configuration 
+            property to match the parent MenuModule
         */</span> 
     
         var oParentMenu = p_oSubmenu.parent.parent;
-    
-        p_oSubmenu.cfg.applyConfig(
-        
-            {
+
+        var oConfig = {
+
                 constraintoviewport: 
                     oParentMenu.cfg.getProperty(<span class="literal">"constraintoviewport"</span>),
     
-                xy: [0,0],
+                xy: [0,0]
     
-                iframe: oParentMenu.cfg.getProperty(<span class="literal">"iframe"</span>)
-    
-            }
+            };
+
+
+        <span class="comment">/*
+            Only sync the "iframe" configuration property if the parent
+            MenuModule instance's position is of the same value
+        */</span>
+
+        <span class="reserved">if</span>(
+            <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"position"</span>) == 
+            oParentMenu.cfg.getProperty(<span class="literal">"position"</span>)
+        ) {
+
+            oConfig.iframe = oParentMenu.cfg.getProperty(<span class="literal">"iframe"</span>);
         
-        );
-    
-    
+        }
+                   
+
+        p_oSubmenu.cfg.applyConfig(oConfig);
+        
+
         <span class="reserved">if</span>(<span class="reserved">this</span>._oDom.inDocument(<span class="reserved">this</span>.element)) {
     
             <span class="reserved">this</span>.render();
@@ -2196,19 +2195,45 @@ YAHOO.widget.MenuModule.<span class="reserved">prototype</span>.enforceConstrain
 * was fired.
 * <span class="attrib">@param</span> {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance fired
 * the event.
-* <span class="attrib">@see</span> YAHOO.widget.Overlay#configIframe
 */</span>
 YAHOO.widget.MenuModule.<span class="reserved">prototype</span>.configPosition = 
 
     <span class="reserved">function</span>(p_sType, p_aArgs, p_oMenuModule) {
 
         var sCSSPosition = p_aArgs[0] == <span class="literal">"static"</span> ? <span class="literal">"static"</span> : <span class="literal">"absolute"</span>;
-    
+
         <span class="reserved">this</span>._oDom.setStyle(<span class="reserved">this</span>.element, <span class="literal">"position"</span>, sCSSPosition);
+
+    };
+
+
+<span class="comment">/**
+* Event handler for when the "iframe" configuration property of a
+* MenuModule changes.
+* <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
+* <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* <span class="attrib">@param</span> {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance fired
+* the event.
+* <span class="attrib">@see</span> YAHOO.widget.Overlay#configIframe
+*/</span>
+YAHOO.widget.MenuModule.<span class="reserved">prototype</span>.configIframe = 
+
+    <span class="reserved">function</span>(p_sType, p_aArgs, p_oMenuModule) {    
+
+        <span class="reserved">if</span>(<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"position"</span>) == <span class="literal">"dynamic"</span>) {
+
+            YAHOO.widget.MenuModule.superclass.configIframe.call(
+                <span class="reserved">this</span>, 
+                p_sType, 
+                p_aArgs, 
+                p_oMenuModule
+            );
+    
+        }
     
     };
-<span class="comment">
-
+<span class="comment">    
 // Public methods</span>
 
 YAHOO.widget.MenuModule.<span class="reserved">prototype</span>.toString = <span class="reserved">function</span>() {
@@ -2424,10 +2449,6 @@ YAHOO.widget.MenuModule.<span class="reserved">prototype</span>.getItem =
 */</span>
 YAHOO.widget.MenuModule.<span class="reserved">prototype</span>.destroy = <span class="reserved">function</span>() {
 <span class="comment">
-    // Remove DOM event handlers</span>
-
-    <span class="reserved">this</span>._oEventUtil.purgeElement(<span class="reserved">this</span>.element);
-<span class="comment">
 
     // Remove Custom Event listeners</span>
 
@@ -2439,7 +2460,6 @@ YAHOO.widget.MenuModule.<span class="reserved">prototype</span>.destroy = <span 
     <span class="reserved">this</span>.keyPressEvent.unsubscribeAll();
     <span class="reserved">this</span>.keyDownEvent.unsubscribeAll();
     <span class="reserved">this</span>.keyUpEvent.unsubscribeAll();
-    <span class="reserved">this</span>.beforeMoveEvent.unsubscribeAll();
 
 
     var nItemGroups = <span class="reserved">this</span>._aItemGroups.length;
@@ -2575,10 +2595,10 @@ YAHOO.widget.MenuModule.<span class="reserved">prototype</span>.initDefaultConfi
             value: <span class="literal">"dynamic"</span>, 
             handler: <span class="reserved">this</span>.configPosition, 
             validator: <span class="reserved">this</span>._checkPosition 
-        } 
+        }
     );
-
-    oConfig.refireEvent(<span class="literal">"position"</span>);
+<span class="comment">
+//    this.cfg.refireEvent("position");</span>
 
     oConfig.addProperty(<span class="literal">"submenualignment"</span>, { value: [<span class="literal">"tl"</span>,<span class="literal">"tr"</span>] } );
 

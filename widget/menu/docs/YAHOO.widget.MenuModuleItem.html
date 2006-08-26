@@ -50,10 +50,6 @@
 				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
 				<ul class="content">
 					
-						<li>
-							<a href="YAHOO.widget.html">
-								YAHOO.widget</a>
-						</li>
 					
 						<li>
 							<a href="YAHOO.widget.ContextMenu.html">
@@ -770,6 +766,20 @@
 								<td class="flags">void</td>
 								<td class="spec">
 									<code>
+										<a href="#configTarget">configTarget</a>
+										(&lt;String&gt; p_sType, &lt;Array&gt; p_aArgs, &lt;<a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a>&gt; p_oItem)
+									</code>
+									<div class="description">
+										Event handler for when the "target" configuration property of
+ a MenuModuleItem instance changes.&nbsp;
+									</div>
+								</td>
+							</tr>
+						
+							<tr>
+								<td class="flags">void</td>
+								<td class="spec">
+									<code>
 										<a href="#configText">configText</a>
 										(&lt;String&gt; p_sType, &lt;Array&gt; p_aArgs, &lt;<a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a>&gt; p_oItem)
 									</code>
@@ -854,7 +864,7 @@
 								<td class="spec">
 									<code>
 										<a href="#init">init</a>
-										(&lt;String Id or HTMLElement&gt; p_oObject, &lt;Object&gt; p_oConfig)
+										(p_oObject, &lt;Object&gt; p_oConfig)
 									</code>
 									<div class="description">
 										The MenuModuleItem class's initialization method.&nbsp;
@@ -1357,8 +1367,8 @@
 									<dt>Parameters:</dt>
 									
 										<dd>
-											<code>{String or HTMLElement} p_oObject</code> - 
-											  String or HTMLElement   (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the   source HTMLElement node.  
+											<code>p_oObject</code> - 
+                                           String or HTMLElement   (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the   source HTMLElement node.  
 										</dd>
 									
 										<dd>
@@ -1645,6 +1655,46 @@
 						</div>
 						<hr />
 					
+						<h4><a name="configTarget">configTarget</a></h4>
+						<div class="detail">
+							<code>
+								void 
+								<strong>configTarget</strong>
+								(&lt;String&gt; p_sType, &lt;Array&gt; p_aArgs, &lt;<a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a>&gt; p_oItem)
+							</code>
+									
+							<div class="description">
+								
+									Event handler for when the "target" configuration property of
+ a MenuModuleItem instance changes.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>p_sType</code> - 
+												 The name of the event that was fired.  
+											</dd>
+										
+											<dd>
+												<code>p_aArgs</code> - 
+												 Collection of arguments sent when the   event was fired.  
+											</dd>
+										
+											<dd>
+												<code>p_oItem</code> - 
+												 The MenuModuleItem instance   that fired the event.       
+											</dd>
+										
+									</dl>
+								
+								
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="configText">configText</a></h4>
 						<div class="detail">
 							<code>
@@ -1819,7 +1869,7 @@
 							<code>
 								void 
 								<strong>init</strong>
-								(&lt;String Id or HTMLElement&gt; p_oObject, &lt;Object&gt; p_oConfig)
+								(p_oObject, &lt;Object&gt; p_oConfig)
 							</code>
 									
 							<div class="description">
@@ -1834,13 +1884,13 @@
 										<dt>Parameters:</dt>
 										
 											<dd>
-												<code>{String or HTMLElement} p_oObject</code> - 
-												  String or HTMLElement   (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the   source HTMLElement node.  
-											</dd>
-
-											<dd>
 												<code>p_oConfig</code> - 
 												 The configuration object literal containing   the configuration for a MenuModuleItem instance. See the configuration   class documentation for more details.       
+											</dd>
+										
+											<dd>
+												<code>p_oObject</code> - 
+                                                 String or HTMLElement   (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the   source HTMLElement node.  
 											</dd>
 										
 									</dl>

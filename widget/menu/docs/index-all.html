@@ -51,11 +51,6 @@
 				<ul class="content">
 					
 						<li>
-							<a href="YAHOO.widget.html">
-								YAHOO.widget</a>
-						</li>
-					
-						<li>
 							<a href="YAHOO.widget.ContextMenu.html">
 								YAHOO.widget.ContextMenu</a>
 						</li>
@@ -154,8 +149,6 @@
 		<div class="elem-index">
 			
 				
-					&nbsp;<a href="#_____">_</a>
-				
 					&nbsp;<a href="#__A__">A</a>
 				
 					&nbsp;<a href="#__B__">B</a>
@@ -192,8 +185,6 @@
 				
 				<hr />
 				
-					<h3><a name="_____">_</a></h3>
-				
 					<h3><a name="__A__">A</a></h3>
 					
 						<dl>
@@ -202,6 +193,8 @@
 								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
 							
 						</dl>
+					
+					
 				
 					<h3><a name="__B__">B</a></h3>
 					
@@ -251,16 +244,16 @@
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuModule.html#clickEvent">clickEvent</a></dt>
+							<dt><a href="YAHOO.widget.MenuModuleItem.html#clickEvent">clickEvent</a></dt>
 							
-								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
+								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
 							
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuModuleItem.html#clickEvent">clickEvent</a></dt>
+							<dt><a href="YAHOO.widget.MenuModule.html#clickEvent">clickEvent</a></dt>
 							
-								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
+								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
 							
 						</dl>
 					
@@ -307,6 +300,13 @@
 						</dl>
 					
 						<dl>
+							<dt><a href="YAHOO.widget.MenuModule.html#configIframe">configIframe(p_sType, p_aArgs, p_oMenuModule)</a></dt>
+							
+								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
+							
+						</dl>
+					
+						<dl>
 							<dt><a href="YAHOO.widget.MenuModule.html#configPosition">configPosition(p_sType, p_aArgs, p_oMenuModule)</a></dt>
 							
 								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
@@ -314,16 +314,16 @@
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuItem.html#configSelected">configSelected(p_sType, p_aArgs, p_oItem)</a></dt>
+							<dt><a href="YAHOO.widget.MenuModuleItem.html#configSelected">configSelected(p_sType, p_aArgs, p_oItem)</a></dt>
 							
-								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></dd>
+								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
 							
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuModuleItem.html#configSelected">configSelected(p_sType, p_aArgs, p_oItem)</a></dt>
+							<dt><a href="YAHOO.widget.MenuItem.html#configSelected">configSelected(p_sType, p_aArgs, p_oItem)</a></dt>
 							
-								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
+								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></dd>
 							
 						</dl>
 					
@@ -336,6 +336,13 @@
 					
 						<dl>
 							<dt><a href="YAHOO.widget.MenuModuleItem.html#configSubmenu">configSubmenu(p_sType, p_aArgs, p_oItem)</a></dt>
+							
+								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
+							
+						</dl>
+					
+						<dl>
+							<dt><a href="YAHOO.widget.MenuModuleItem.html#configTarget">configTarget(p_sType, p_aArgs, p_oItem)</a></dt>
 							
 								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
 							
@@ -370,20 +377,6 @@
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuModule.html#CSS_CLASS_NAME">CSS_CLASS_NAME</a></dt>
-							
-								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
-							
-						</dl>
-					
-						<dl>
-							<dt><a href="YAHOO.widget.MenuModuleItem.html#CSS_CLASS_NAME">CSS_CLASS_NAME</a></dt>
-							
-								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
-							
-						</dl>
-					
-						<dl>
 							<dt><a href="YAHOO.widget.MenuBarItem.html#CSS_CLASS_NAME">CSS_CLASS_NAME</a></dt>
 							
 								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></dd>
@@ -397,20 +390,34 @@
 							
 						</dl>
 					
-				
-					<h3><a name="__D__">D</a></h3>
-					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuModuleItem.html#destroy">destroy()</a></dt>
+							<dt><a href="YAHOO.widget.MenuModule.html#CSS_CLASS_NAME">CSS_CLASS_NAME</a></dt>
 							
-								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
+								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
 							
 						</dl>
+					
+						<dl>
+							<dt><a href="YAHOO.widget.MenuModuleItem.html#CSS_CLASS_NAME">CSS_CLASS_NAME</a></dt>
+							
+								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
+							
+						</dl>
+					
+				
+					<h3><a name="__D__">D</a></h3>
 					
 						<dl>
 							<dt><a href="YAHOO.widget.MenuModule.html#destroy">destroy()</a></dt>
 							
 								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
+							
+						</dl>
+					
+						<dl>
+							<dt><a href="YAHOO.widget.MenuModuleItem.html#destroy">destroy()</a></dt>
+							
+								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
 							
 						</dl>
 					
@@ -443,16 +450,16 @@
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuModuleItem.html#DISABLED_SUBMENU_INDICATOR_IMAGE_PATH">DISABLED_SUBMENU_INDICATOR_IMAGE_PATH</a></dt>
+							<dt><a href="YAHOO.widget.MenuBarItem.html#DISABLED_SUBMENU_INDICATOR_IMAGE_PATH">DISABLED_SUBMENU_INDICATOR_IMAGE_PATH</a></dt>
 							
-								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
+								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></dd>
 							
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuBarItem.html#DISABLED_SUBMENU_INDICATOR_IMAGE_PATH">DISABLED_SUBMENU_INDICATOR_IMAGE_PATH</a></dt>
+							<dt><a href="YAHOO.widget.MenuModuleItem.html#DISABLED_SUBMENU_INDICATOR_IMAGE_PATH">DISABLED_SUBMENU_INDICATOR_IMAGE_PATH</a></dt>
 							
-								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></dd>
+								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
 							
 						</dl>
 					
@@ -500,6 +507,7 @@
 				
 					<h3><a name="__G__">G</a></h3>
 					
+					
 						<dl>
 							<dt><a href="YAHOO.widget.MenuModule.html#getItem">getItem(p_nItemIndex, p_nGroupIndex)</a></dt>
 							
@@ -514,12 +522,14 @@
 							
 						</dl>
 					
+					
 						<dl>
 							<dt><a href="YAHOO.widget.MenuModuleItem.html#getNextEnabledSibling">getNextEnabledSibling()</a></dt>
 							
 								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
 							
 						</dl>
+			
 					
 						<dl>
 							<dt><a href="YAHOO.widget.MenuModuleItem.html#getPreviousEnabledSibling">getPreviousEnabledSibling()</a></dt>
@@ -574,6 +584,13 @@
 						</dl>
 					
 						<dl>
+							<dt><a href="YAHOO.widget.ContextMenu.html#init">init(p_oElement, p_oConfig)</a></dt>
+							
+								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></dd>
+							
+						</dl>
+					
+						<dl>
 							<dt><a href="YAHOO.widget.MenuModule.html#init">init(p_oElement, p_oConfig)</a></dt>
 							
 								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
@@ -595,9 +612,9 @@
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.ContextMenu.html#init">init(p_oElement, p_oConfig)</a></dt>
+							<dt><a href="YAHOO.widget.MenuModuleItem.html#init">init(p_oObject, p_oConfig)</a></dt>
 							
-								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></dd>
+								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
 							
 						</dl>
 					
@@ -609,20 +626,6 @@
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuModuleItem.html#init">init(p_oObject, p_oConfig)</a></dt>
-							
-								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
-							
-						</dl>
-					
-						<dl>
-							<dt><a href="YAHOO.widget.MenuBarItem.html#init">init(p_oObject, p_oConfig)</a></dt>
-							
-								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></dd>
-							
-						</dl>
-					
-						<dl>
 							<dt><a href="YAHOO.widget.MenuItem.html#init">init(p_oObject, p_oConfig)</a></dt>
 							
 								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></dd>
@@ -630,9 +633,9 @@
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuModule.html#initDefaultConfig">initDefaultConfig()</a></dt>
+							<dt><a href="YAHOO.widget.MenuBarItem.html#init">init(p_oObject, p_oConfig)</a></dt>
 							
-								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
+								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></dd>
 							
 						</dl>
 					
@@ -654,6 +657,13 @@
 							<dt><a href="YAHOO.widget.MenuItem.html#initDefaultConfig">initDefaultConfig()</a></dt>
 							
 								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></dd>
+							
+						</dl>
+					
+						<dl>
+							<dt><a href="YAHOO.widget.MenuModule.html#initDefaultConfig">initDefaultConfig()</a></dt>
+							
+								<dd>&nbsp;-&nbsp;Instance method in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
 							
 						</dl>
 					
@@ -710,16 +720,16 @@
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuModuleItem.html#keyUpEvent">keyUpEvent</a></dt>
+							<dt><a href="YAHOO.widget.MenuModule.html#keyUpEvent">keyUpEvent</a></dt>
 							
-								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
+								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
 							
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuModule.html#keyUpEvent">keyUpEvent</a></dt>
+							<dt><a href="YAHOO.widget.MenuModuleItem.html#keyUpEvent">keyUpEvent</a></dt>
 							
-								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
+								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
 							
 						</dl>
 					
@@ -755,16 +765,16 @@
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuModule.html#mouseOverEvent">mouseOverEvent</a></dt>
+							<dt><a href="YAHOO.widget.MenuModuleItem.html#mouseOverEvent">mouseOverEvent</a></dt>
 							
-								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
+								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
 							
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuModuleItem.html#mouseOverEvent">mouseOverEvent</a></dt>
+							<dt><a href="YAHOO.widget.MenuModule.html#mouseOverEvent">mouseOverEvent</a></dt>
 							
-								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
+								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
 							
 						</dl>
 					
@@ -808,8 +818,10 @@
 								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
 							
 						</dl>
+					
 				
 					<h3><a name="__R__">R</a></h3>
+				
 					
 						<dl>
 							<dt><a href="YAHOO.widget.MenuModule.html#removeItem">removeItem(p_oObject, p_nGroupIndex)</a></dt>
@@ -829,16 +841,16 @@
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuModuleItem.html#SELECTED_SUBMENU_INDICATOR_IMAGE_PATH">SELECTED_SUBMENU_INDICATOR_IMAGE_PATH</a></dt>
+							<dt><a href="YAHOO.widget.MenuBarItem.html#SELECTED_SUBMENU_INDICATOR_IMAGE_PATH">SELECTED_SUBMENU_INDICATOR_IMAGE_PATH</a></dt>
 							
-								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
+								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></dd>
 							
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuBarItem.html#SELECTED_SUBMENU_INDICATOR_IMAGE_PATH">SELECTED_SUBMENU_INDICATOR_IMAGE_PATH</a></dt>
+							<dt><a href="YAHOO.widget.MenuModuleItem.html#SELECTED_SUBMENU_INDICATOR_IMAGE_PATH">SELECTED_SUBMENU_INDICATOR_IMAGE_PATH</a></dt>
 							
-								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></dd>
+								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
 							
 						</dl>
 					
@@ -864,13 +876,6 @@
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuModule.html#srcElement">srcElement</a></dt>
-							
-								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
-							
-						</dl>
-					
-						<dl>
 							<dt><a href="YAHOO.widget.MenuModuleItem.html#srcElement">srcElement</a></dt>
 							
 								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
@@ -878,9 +883,9 @@
 						</dl>
 					
 						<dl>
-							<dt><a href="YAHOO.widget.MenuModuleItem.html#SUBMENU_INDICATOR_IMAGE_PATH">SUBMENU_INDICATOR_IMAGE_PATH</a></dt>
+							<dt><a href="YAHOO.widget.MenuModule.html#srcElement">srcElement</a></dt>
 							
-								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
+								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></dd>
 							
 						</dl>
 					
@@ -888,6 +893,13 @@
 							<dt><a href="YAHOO.widget.MenuBarItem.html#SUBMENU_INDICATOR_IMAGE_PATH">SUBMENU_INDICATOR_IMAGE_PATH</a></dt>
 							
 								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></dd>
+							
+						</dl>
+					
+						<dl>
+							<dt><a href="YAHOO.widget.MenuModuleItem.html#SUBMENU_INDICATOR_IMAGE_PATH">SUBMENU_INDICATOR_IMAGE_PATH</a></dt>
+							
+								<dd>&nbsp;-&nbsp;Instance field in  class <a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></dd>
 							
 						</dl>
 					
@@ -934,13 +946,6 @@
 					
 				
 					<h3><a name="__Y__">Y</a></h3>
-					
-						<dl>
-							<dt><a href="YAHOO.widget.html#">YAHOO.widget</a></dt>
-							
-								<dd>&nbsp;-&nbsp; class <a href="YAHOO.widget.html">YAHOO.widget</a></dd>
-							
-						</dl>
 					
 						<dl>
 							<dt><a href="YAHOO.widget.ContextMenu.html#">YAHOO.widget.ContextMenu</a></dt>

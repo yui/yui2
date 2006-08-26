@@ -51,11 +51,6 @@
 				<ul class="content">
 					
 						<li>
-							<a href="YAHOO.widget.html">
-								YAHOO.widget</a>
-						</li>
-					
-						<li>
 							<a href="YAHOO.widget.ContextMenu.html">
 								YAHOO.widget.ContextMenu</a>
 						</li>
@@ -151,10 +146,71 @@
 	
 	<div class="main">
 			
-           <h2>menumoduleitem.js</h2>
+		
+		
+			
+			   <h2>menumoduleitem.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
+
+			
+		
+		
+		
+		
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+					
+                    <a href="#classSummary">Class Summary</a> |
+				
+					<a href="#source">Source Code</a>
+				
+			</div>
+		
+			
+				<div class="section class summaries">
+					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+			
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+						<tr>
+							<td class="name">
+								<a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a>
+							</td>
+							<td class="overview">The MenuModuleItem class allows you to create and modify an item for a  MenuModule instance.</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
 		
 			<div class="section source">
-				<h3><a name="source">Souce Code</a></h3>
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<pre class="sourceview">
 
 
@@ -328,6 +384,22 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     * <span class="attrib">@type</span> {YAHOO.util.Dom}
     */</span>
     _oDom: YAHOO.util.Dom,
+
+
+    <span class="comment">/** 
+    * The current state of a MenuModuleItem instance's "mouseover" event
+    * <span class="attrib">@private</span>
+    * <span class="attrib">@type</span> {Boolean}
+    */</span>
+    _bFiredMouseOverEvent: false,
+    
+    
+    <span class="comment">/** 
+    * The current state of a MenuModuleItem instance's "mouseout" event
+    * <span class="attrib">@private</span>
+    * <span class="attrib">@type</span> {Boolean}
+    */</span>
+    _bFiredMouseOutEvent: false,
 <span class="comment">
 
     // Public properties</span>
@@ -590,6 +662,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
                     var oAnchor = <span class="reserved">this</span>._getFirstElement(p_oObject, <span class="literal">"A"</span>);
                     var sURL = <span class="literal">"#"</span>;
+                    var sTarget = null;
                     var sText = null;
 <span class="comment">
 
@@ -598,6 +671,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
                     <span class="reserved">if</span>(oAnchor) {
 
                         sURL = oAnchor.getAttribute(<span class="literal">"href"</span>);
+                        sTarget = oAnchor.getAttribute(<span class="literal">"target"</span>);
 
                         <span class="reserved">if</span>(oAnchor.innerText) {
                 
@@ -683,6 +757,7 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
                     oConfig.setProperty(<span class="literal">"text"</span>, sText, true);
                     oConfig.setProperty(<span class="literal">"url"</span>, sURL, true);
+                    oConfig.setProperty(<span class="literal">"target"</span>, sTarget, true);
                     oConfig.setProperty(<span class="literal">"emphasis"</span>, bEmphasis, true);
                     oConfig.setProperty(
                         <span class="literal">"strongemphasis"</span>, 
@@ -720,6 +795,11 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
             <span class="reserved">this</span>.keyUpEvent = new CustomEvent(<span class="literal">"keyUpEvent"</span>, <span class="reserved">this</span>);
             <span class="reserved">this</span>.focusEvent = new CustomEvent(<span class="literal">"focusEvent"</span>, <span class="reserved">this</span>);
             <span class="reserved">this</span>.blurEvent = new CustomEvent(<span class="literal">"blurEvent"</span>, <span class="reserved">this</span>);
+<span class="comment">
+
+            // Subscribe to custom event</span>
+
+            <span class="reserved">this</span>.clickEvent.subscribe(<span class="reserved">this</span>._onMenuModuleItemClick, <span class="reserved">this</span>, true);
 
 
             <span class="reserved">if</span>(p_oConfig) {
@@ -885,6 +965,90 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
         }
 
     },
+
+
+    <span class="comment">/**
+    * "click" event handler for a MenuModuleItem
+    * <span class="attrib">@private</span>
+    * <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
+    * <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the event 
+    * was fired.
+    * <span class="attrib">@param</span> {YAHOO.widget.MenuItem} p_oMenuModuleItem The MenuModule instance  
+    * that fired the event.
+    */</span>         
+    _onMenuModuleItemClick: <span class="reserved">function</span>(p_sType, p_aArgs, p_oMenuModuleItem) {
+
+        var Event = YAHOO.util.Event;
+        var oEvent = p_aArgs[0];
+        var oTarget = Event.getTarget(oEvent);
+        var oSubmenu = <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"submenu"</span>);
+
+
+        <span class="comment">/*
+            ACCESSIBILITY FEATURE FOR SCREEN READERS: Expand/collapse the
+            submenu when the user clicks on the submenu indicator image.
+        */</span>        
+
+        <span class="reserved">if</span>(oTarget == <span class="reserved">this</span>.submenuIndicator &amp;&amp; oSubmenu) {
+
+            <span class="reserved">if</span>(oSubmenu.cfg.getProperty(<span class="literal">"visible"</span>)) {
+    
+                oSubmenu.hide();
+    
+            }
+            <span class="reserved">else</span> {
+
+                var oActiveItem = <span class="reserved">this</span>.parent.activeItem;
+<span class="comment">           
+
+                // Hide any other submenus that might be visible</span>
+            
+                <span class="reserved">if</span>(oActiveItem &amp;&amp; oActiveItem != <span class="reserved">this</span>) {
+            
+                    <span class="reserved">this</span>.parent.clearActiveItem();
+            
+                }
+
+                <span class="reserved">this</span>.parent.activeItem = <span class="reserved">this</span>;
+    
+                <span class="reserved">this</span>.cfg.setProperty(<span class="literal">"selected"</span>, true);
+
+                oSubmenu.show();
+    
+            }
+    
+        }
+        <span class="reserved">else</span> {
+
+            var sURL = <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"url"</span>);
+            var bCurrentPageURL = (sURL.substr((sURL.length-1),1) == <span class="literal">"#"</span>);
+
+            var sTarget = <span class="reserved">this</span>.cfg.getProperty(<span class="literal">"target"</span>);
+            var bHasTarget = (sTarget &amp;&amp; sTarget.length &gt; 0);
+<span class="comment">
+            // Prevent the browser from following links equal to "#"</span>
+
+            <span class="reserved">if</span>(oTarget.tagName == <span class="literal">"A"</span> &amp;&amp; bCurrentPageURL &amp;&amp; !bHasTarget) {
+
+                Event.preventDefault(oEvent);
+            
+            }
+
+            <span class="reserved">if</span>(oTarget.tagName != <span class="literal">"A"</span> &amp;&amp; !bCurrentPageURL &amp;&amp; !bHasTarget) {
+                
+                <span class="comment">/*
+                    Follow the URL of the item regardless of whether or 
+                    not the user clicked specifically on the
+                    HTMLAnchorElement (&amp;#60;A&amp;#60;) node.
+                */</span>
+    
+                document.location = sURL;
+        
+            }
+
+        }
+
+    },
 <span class="comment">
 
     // Event handlers for configuration properties</span>
@@ -1044,6 +1208,34 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
         }
 
         <span class="reserved">this</span>._oAnchor.setAttribute(<span class="literal">"href"</span>, sURL);
+
+    },
+
+
+    <span class="comment">/**
+    * Event handler for when the "target" configuration property of
+    * a MenuModuleItem instance changes.  
+    * <span class="attrib">@param</span> {String} p_sType The name of the event that was fired.
+    * <span class="attrib">@param</span> {Array} p_aArgs Collection of arguments sent when the 
+    * event was fired.
+    * <span class="attrib">@param</span> {YAHOO.widget.MenuModuleItem} p_oItem The MenuModuleItem instance 
+    * that fired the event.
+    */</span>    
+    configTarget: <span class="reserved">function</span>(p_sType, p_aArgs, p_oItem) {
+
+        var sTarget = p_aArgs[0];
+        var oAnchor = <span class="reserved">this</span>._oAnchor;
+
+        <span class="reserved">if</span>(sTarget &amp;&amp; sTarget.length &gt; 0) {
+
+            oAnchor.setAttribute(<span class="literal">"target"</span>, sTarget);
+
+        }
+        <span class="reserved">else</span> {
+
+            oAnchor.removeAttribute(<span class="literal">"target"</span>);
+        
+        }
 
     },
 
@@ -1233,8 +1425,14 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
             <span class="reserved">if</span>(oEM) {
     
-                aNodes[2] = oEM;  
+                aNodes[aNodes.length] = oEM;  
     
+            }
+            
+            <span class="reserved">if</span>(oImg) {
+
+                aNodes[aNodes.length] = oImg;  
+            
             }
     
             <span class="reserved">if</span>(bSelected) {
@@ -1299,13 +1497,13 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
 
                     <span class="reserved">if</span>(!document.images[sPath]) {
 
-                        var oImg = document.createElement(<span class="literal">"img"</span>);
-                        oImg.src = sPath;
-                        oImg.name = sPath;
-                        oImg.id = sPath;
-                        oImg.style.display = <span class="literal">"none"</span>;
+                        var oImage = document.createElement(<span class="literal">"img"</span>);
+                        oImage.src = sPath;
+                        oImage.name = sPath;
+                        oImage.id = sPath;
+                        oImage.style.display = <span class="literal">"none"</span>;
                         
-                        document.body.appendChild(oImg);
+                        document.body.appendChild(oImage);
 
                     }
                 
@@ -1392,6 +1590,11 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
             { value: <span class="literal">"#"</span>, handler: <span class="reserved">this</span>.configURL, suppressEvent: true }
         );
         
+        oConfig.addProperty(
+            <span class="literal">"target"</span>, 
+            { handler: <span class="reserved">this</span>.configTarget, suppressEvent: true }
+        );
+
         oConfig.addProperty(
             <span class="literal">"emphasis"</span>, 
             { 
@@ -1499,8 +1702,11 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
     
             }
     
-            <span class="reserved">return</span> oNextItem.cfg.getProperty(<span class="literal">"disabled"</span>) ? 
-                        oNextItem.getNextEnabledSibling() : oNextItem;
+            <span class="reserved">return</span> (
+                oNextItem.cfg.getProperty(<span class="literal">"disabled"</span>) || 
+                oNextItem.element.style.display == <span class="literal">"none"</span>
+            ) ? 
+            oNextItem.getNextEnabledSibling() : oNextItem;
 
         }
 
@@ -1590,9 +1796,12 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
                     );
     
             }
-    
-            <span class="reserved">return</span> oPreviousItem.cfg.getProperty(<span class="literal">"disabled"</span>) ? 
-                    oPreviousItem.getPreviousEnabledSibling() : oPreviousItem;
+
+            <span class="reserved">return</span> (
+                oPreviousItem.cfg.getProperty(<span class="literal">"disabled"</span>) || 
+                oPreviousItem.element.style.display == <span class="literal">"none"</span>
+            ) ? 
+            oPreviousItem.getPreviousEnabledSibling() : oPreviousItem;
 
         }
 
@@ -1612,7 +1821,8 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
         <span class="reserved">if</span>(
             !<span class="reserved">this</span>.cfg.getProperty(<span class="literal">"disabled"</span>) &amp;&amp; 
             oParent &amp;&amp; 
-            oParent.cfg.getProperty(<span class="literal">"visible"</span>)
+            oParent.cfg.getProperty(<span class="literal">"visible"</span>) &amp;&amp; 
+            <span class="reserved">this</span>.element.style.display != <span class="literal">"none"</span>
         ) {
 
             <span class="reserved">if</span>(oActiveItem) {
@@ -1622,17 +1832,6 @@ YAHOO.widget.MenuModuleItem.<span class="reserved">prototype</span> = {
             }
 
             oAnchor.focus();
-
-            <span class="comment">/*
-                Opera 8.5 doesn't always focus the anchor if a MenuModuleItem
-                instance has a submenu, this is fixed by calling "focus"
-                twice.
-            */</span>
-            <span class="reserved">if</span>(oParent &amp;&amp; <span class="reserved">this</span>.browser == <span class="literal">"opera"</span> &amp;&amp; <span class="reserved">this</span>._oSubmenu) {
-
-                oAnchor.focus();
-
-            }
 
             <span class="reserved">this</span>.focusEvent.fire();
 

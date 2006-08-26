@@ -51,11 +51,6 @@
 				<ul class="content">
 					
 						<li>
-							<a href="YAHOO.widget.html">
-								YAHOO.widget</a>
-						</li>
-					
-						<li>
 							<a href="YAHOO.widget.ContextMenu.html">
 								YAHOO.widget.ContextMenu</a>
 						</li>
@@ -150,11 +145,83 @@
 	</div>
 	
 	<div class="main">
-
+			
+		
+		
+			
 			   <h2>contextmenu.js</h2>
+			
+			
+				
+					
+				
+				
+				
+<div class="meta">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+</div>
 
+			
+		
+		
+		
+		
+			<div class="quick-links">
+				<strong>Quick Links:</strong>&nbsp;
+				
+					
+						<a href="#classSummary">Class Summary</a> |
+					
+					
+				
+				
+				
+					<a href="#source">Source Code</a>
+				
+			</div>
+		
+			
+				<div class="section class summaries">
+					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+			
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+						
+						<tr>
+							<td class="name">
+								<a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a>
+							</td>
+							<td class="overview">Creates a list of options which vary depending on the context in   which the menu is invoked.</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		
+		
+		
+		
 			<div class="section source">
-				<h3><a name="source">Souce Code</a></h3>
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<pre class="sourceview">
 
 
@@ -181,9 +248,35 @@ YAHOO.widget.ContextMenu = <span class="reserved">function</span>(p_oElement, p_
 };
 
 YAHOO.extend(YAHOO.widget.ContextMenu, YAHOO.widget.Menu);
+<span class="comment">
+
+// Private properties</span>
 
 
+<span class="comment">/**
+* Array of ContextMenu instances
+* <span class="attrib">@private</span>
+* <span class="attrib">@type</span> {Array}
+*/</span>
+YAHOO.widget.ContextMenu._aMenus = [];
+
+
+<span class="comment">/**
+* The id(s) or element(s) that trigger the display of the ContextMenu instance
+* <span class="attrib">@private</span>
+* <span class="attrib">@type</span> {String/Array/HTMLElement}
+*/</span>
 YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>._oTrigger = null;
+<span class="comment">
+
+// Public properties</span>
+
+<span class="comment">/**
+* Returns the HTMLElement node that was the target of the "contextmenu" 
+* DOM event.
+* <span class="attrib">@type</span> HTMLElement
+*/</span>
+YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>.contextEventTarget = null;
 
 
 <span class="comment">/**
@@ -223,34 +316,28 @@ YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>.init = <span cl
     <span class="reserved">this</span>.initEvent.fire(YAHOO.widget.ContextMenu);
 
 
+    var aMenus = YAHOO.widget.ContextMenu._aMenus;
+    
+    aMenus[aMenus.length] = <span class="reserved">this</span>;
+    
 };
 <span class="comment">
 
 // Private event handlers</span>
 
 <span class="comment">/**
-* "mousedown" event handler for the document object.
+* "click" event handler for the document object.
 * <span class="attrib">@private</span>
 * <span class="attrib">@param</span> {Event} p_oEvent Event object passed back by the 
 * event utility (YAHOO.util.Event).
 * <span class="attrib">@param</span> {YAHOO.widget.ContextMenu} p_oMenu The ContextMenu instance 
 * handling the event.
 */</span>
-YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>._onDocumentMouseDown = 
+YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>._onDocumentClick = 
 
     <span class="reserved">function</span>(p_oEvent, p_oMenu) {
-    
-        var oTarget = YAHOO.util.Event.getTarget(p_oEvent);
-        var oTargetEl = <span class="reserved">this</span>._oTargetElement;
-    
-        <span class="reserved">if</span>(
-            oTarget != oTargetEl || 
-            !YAHOO.util.Dom.isAncestor(oTargetEl, oTarget)
-        ) {
-    
-            <span class="reserved">this</span>.hide();
-        
-        }
+
+        <span class="reserved">this</span>.hide();
     
     };
 
@@ -292,19 +379,26 @@ YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>._onTriggerConte
 
         var Event = YAHOO.util.Event;
         var oConfig = <span class="reserved">this</span>.cfg;
+<span class="comment">
 
-        <span class="reserved">if</span>(p_oEvent.type == <span class="literal">"mousedown"</span>) {
+        // Hide any other ContextMenu instances that might be visible</span>
+
+        var aMenus = YAHOO.widget.ContextMenu._aMenus;
+        var i = aMenus.length - 1;
+
+        do {
+
+             aMenus[i].hide();
         
-            <span class="reserved">if</span>(!p_oEvent.ctrlKey) {
-    
-                <span class="reserved">return</span>;
+        }
+        <span class="reserved">while</span>(i--);
             
-            }
-        
-            Event.stopEvent(p_oEvent);
+
+        <span class="reserved">if</span>(p_oEvent.type == <span class="literal">"mousedown"</span> &amp;&amp; !p_oEvent.ctrlKey) {
+    
+            <span class="reserved">return</span>;
     
         }
-    
     
         <span class="reserved">this</span>.contextEventTarget = Event.getTarget(p_oEvent);
 <span class="comment">    
@@ -315,26 +409,21 @@ YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>._onTriggerConte
         var nY = Event.getPageY(p_oEvent);
     
     
-        oConfig.applyConfig( { x:nX, y:nY, visible:true } );
+        oConfig.applyConfig( { xy:[nX, nY], visible:true } );
         oConfig.fireQueue();
-<span class="comment">    
     
-        // Prevent the browser's default context menu from appearing</span>
     
-        Event.preventDefault(p_oEvent);
+        <span class="comment">/*
+             Prevent the browser's default context menu from appearing and 
+             stop the propagation of the "contextmenu" event so that 
+             other ContextMenu instances are no displayed.
+        */</span>
+    
+        Event.stopEvent(p_oEvent);
     
     };
 <span class="comment">
 
-// Public properties</span>
-
-<span class="comment">/**
-* Returns the HTMLElement node that was the target of the "contextmenu" 
-* DOM event.
-* <span class="attrib">@type</span> HTMLElement
-*/</span>
-YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>.contextEventTarget = null;
-<span class="comment">
 
 // Public methods</span>
 
@@ -427,8 +516,8 @@ YAHOO.widget.ContextMenu.<span class="reserved">prototype</span>.configTrigger =
         
             Event.addListener(
                 document, 
-                <span class="literal">"mousedown"</span>, 
-                <span class="reserved">this</span>._onDocumentMouseDown,
+                <span class="literal">"click"</span>, 
+                <span class="reserved">this</span>._onDocumentClick,
                 <span class="reserved">this</span>,
                 true
             );        
