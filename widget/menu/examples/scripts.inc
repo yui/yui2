@@ -35,7 +35,7 @@
 
 <?php
 
-        if($bUseContainerCore) {
+        if(!$bUseContainerCore) {
 ?>        
         <script type="text/javascript" src="../../container/src/js/Panel.js"></script>
         <script type="text/javascript" src="../../container/src/js/Dialog.js"></script>
