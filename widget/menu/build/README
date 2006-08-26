@@ -88,7 +88,7 @@ Added the following features:
 -----------------------------
 
 * Added a "target" configuration property to the MenuModuleItem object that
-  allows the user to specificy the target of an item's anchor element.  Items 
+  allows the user to specify the target of an item's anchor element.  Items 
   that make use of the "target" configuration property will require the user 
   to click exactly on the item's anchor element to navigate to the specified 
   URL.
@@ -107,13 +107,13 @@ Fixed the following bugs:
   positioned elements on the page.
 
 * Submenus of a Menubar instance will now automatically have their iframe shim
-  enabled in IE.
+  enabled in IE<7.
 
 * Statically positioned Menubar and Menu instances will now render with the 
   correct position and dimensions in Safari.
 
 * MenuModuleItem's "focus" method now checks to make sure that an item's 
-  "display" style property is not "none" before trying to set focus to it's
+  "display" style property is not "none" before trying to set focus to its
   anchor element.
   
 * A ContextMenu instance will now hide all other ContextMenu instances before
