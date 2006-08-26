@@ -61,28 +61,26 @@
                 <div id="code">
                     <h3>Sample Code</h3>
 
-                    <p>CSS:</p>
-
                     <textarea name="code" class="HTML" cols="60" rows="1">
+                    <head>
+                    <style type="text/css">
                     /* A style was defined for a custom category.
                     By convention, it is defined with narrow-scope
                     selectors to achieve namespacing*/
                     .yui-log .mytype {background-color:#FF99CC;}
-                    </textarea>
+                    </style>
+                    </head>
 
-                    <p>Markup:</p>
-
-                    <textarea name="code" class="HTML" cols="60" rows="1">
+                    <body>
                     <!-- No custom markup was defined -->
-                    </textarea>
 
-                    <p>JavaScript:</p>
-
-                    <textarea name="code" class="JScript" cols="60" rows="1">
+                    <script type="text/javascript">
                     myLogReader1 = new YAHOO.widget.LogReader();
                     myLogReader2 = new YAHOO.widget.LogReader();
                     myLogReader2.newestOnTop = false;
                     myLogReader2.setTitle("Logger Console: Oldest > on > Top!");
+                    </script>
+                    </body>
                     </textarea>
                 </div>
                 <!-- Code sample ends -->

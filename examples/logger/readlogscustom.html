@@ -69,8 +69,8 @@
                         <p><a href="javascript:YAHOO.example.LogReader.hideAllReaders();">Hide All LogReaders</a> ||
                         <a href="javascript:YAHOO.example.LogReader.showAllReaders();">Show All LogReaders</a></p>
 
-                        <p><a href="javascript:YAHOO.widget.Logger.disableBrowserConsole();">Disable Output to console.log()</a> ||
-                        <a href="javascript:YAHOO.widget.Logger.enableBrowserConsole();">Enable Output to console.log()</a></p>
+                        <p><a href="javascript:YAHOO.widget.Logger.enableBrowserConsole();">Enable Output to console.log()</a> || <a href="javascript:YAHOO.widget.Logger.disableBrowserConsole();">Disable Output to console.log()</a>
+                        </p>
 
                         <p><a href="javascript:YAHOO.widget.Logger.reset();">Reset Logger stack</a></p>
                     </div>
@@ -89,9 +89,9 @@
                 <div id="code">
                     <h3>Sample Code</h3>
 
-                    <p>Customized CSS overrides the default styles defined in logger.css:</p>
-
                     <textarea name="code" class="HTML" cols="60" rows="1">
+                    <head>
+                    <style type="text/css">
                     /* container is relatively positioned and
                     font size is adjusted here (default is 77%) */
                     #yui-log {position:relative;font-size:85%;}
@@ -116,21 +116,19 @@
 
                     /* a style for a custom category */
                     .yui-log .mytype {background-color:#FF99CC;} /* FF99CC pink */
-                    </textarea>
+                    </style>
+                    </head>
 
-                    <p>Markup:</p>
-
-                    <textarea name="code" class="HTML" cols="60" rows="1">
+                    <body>
                     <!-- Logger begins -->
                     <div id="yui-log" class="yui-log"></div>
                     <!-- Logger ends -->
-                    </textarea>
 
-                    <p>JavaScript:</p>
-
-                    <textarea name="code" class="JScript" cols="60" rows="1">
+                    <script type="text/javascript">
                     myLogReader1 = new YAHOO.widget.LogReader("yui-log");
                     myLogReader2 = new YAHOO.widget.LogReader("yui-log",{compactOutput: true});
+                    </script>
+                    </body>
                     </textarea>
                 </div>
                 <!-- Code sample ends -->
