@@ -41,8 +41,14 @@
             
             }
 
-        </style>
+            .example10 {
 
+                background-color:#9c9;
+            
+            }
+
+        </style>
+        
         <?php
 
             function include_custom_scripts() {
@@ -62,42 +68,50 @@
         <!-- Page-specific script -->
         <script type="text/javascript">
 
-            // Generic event handler for the Menu instance's DOM-related events
-            
-            function onMenuEvent(p_sType, p_aArguments) {
-            
-                var oDOMEvent = p_aArguments[0];
-
-                YAHOO.log(
-                    "Id: " + this.id + ", " +
-                    "Custom Event Type: " + p_sType + ", " +                  
-                    "DOM Event Type: " + oDOMEvent.type
-                );
-            }
-
-
-            /*
-                Generic event handler for each MenuItem instance's 
-                DOM-related events
-            */
-
-            function onMenuItemEvent(p_sType, p_aArguments) {
-
-                var oDOMEvent = p_aArguments[0];
-
-                YAHOO.log(
-                    "Index: " + this.index + ", " +
-                    "Group Index: " + this.groupIndex + ", " +
-                    "Custom Event Type: " + p_sType + ", " +                  
-                    "DOM Event Type: " + oDOMEvent.type
-                );
-                
-            }
-
-
             // "load" event handler for the window
 
-            function onWindowLoad(p_oEvent) {
+            YAHOO.example.onWindowLoad = function(p_oEvent) {
+
+                // Generic event handler for the Menu instance's DOM-related events
+                
+                function onMenuEvent(p_sType, p_aArguments) {
+                
+                    var oDOMEvent = p_aArguments[0];
+    
+                    YAHOO.log(
+                        (
+                        "Id: " + this.id + ", " +
+                        "Custom Event Type: " + p_sType + ", " +                  
+                        "DOM Event Type: " + oDOMEvent.type
+                        ),
+                        "info",
+                        "example10"
+                    );
+                }
+    
+    
+                /*
+                    Generic event handler for each MenuItem instance's 
+                    DOM-related events
+                */
+    
+                function onMenuItemEvent(p_sType, p_aArguments) {
+    
+                    var oDOMEvent = p_aArguments[0];
+    
+                    YAHOO.log(
+                        (
+                        "Index: " + this.index + ", " +
+                        "Group Index: " + this.groupIndex + ", " +
+                        "Custom Event Type: " + p_sType + ", " +                  
+                        "DOM Event Type: " + oDOMEvent.type
+                        ),
+                        "info",
+                        "example10"
+                    );
+                    
+                }
+
 
                 // Create a menu
 
@@ -173,12 +187,15 @@
             }
 
 
-            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
             
         </script>
+        
     </head>
     <body>
+
         <h1>Example 10: Listening For DOM-Related Events <em>[<a href="index.html">Examples Home</a>]</em></h1>
-        <p>This example demonstrates how to listen for DOM-related events.  Interaction with the Menu will result in event information being output to the console.  <em>Please note</em>: Disabled MenuItem instance do not fire DOM events.  This is demonstrated with the second MenuItem instance.</p>
+        <p>This example demonstrates how to listen for DOM-related events.  Interaction with the Menu will result in event information being output to the console.  <em>Please note</em>: Disabled MenuItem instances do not fire DOM events.  This is demonstrated with the MenuItem named "MenuItem 2."</p>
+
     </body>
 </html>

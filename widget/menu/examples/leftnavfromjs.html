@@ -73,61 +73,117 @@
         <!-- Page-specific script -->
         <script type="text/javascript">
 
-            YAHOO.example.OverlayManager = new YAHOO.widget.OverlayManager();
-
-            var g_nTimeoutId;
-
-
-            // "mouseover" event handler for each menu
-
-            function onMenuMouseOver(p_sType, p_aArguments, p_oMenu) {
-
-                if(g_nTimeoutId) {
-
-                    window.clearTimeout(g_nTimeoutId);
-
-                }
-
-            }
-
-
-            // "mouseout" event handler for each submenu
-            
-            function onSubmenuMouseOut(p_sType, p_aArguments, p_oMenu) {
-
-                function hideMenu() {
-
-                    YAHOO.example.OverlayManager.hideAll();
-
-                }
-
-
-                if(g_nTimeoutId) {
-
-                    window.clearTimeout(g_nTimeoutId);
-
-                }
-
-                g_nTimeoutId = window.setTimeout(hideMenu, 750);
-            
-            }
-
-
-            // "click" handler for the document
-
-            function onDocumentClick(p_oEvent) {
-            
-                YAHOO.example.OverlayManager.hideAll();
-
-            }
-
-
             // "load" handler for the window
 
-            function onWindowLoad() {
+            YAHOO.example.onWindowLoad = function(p_oEvent) {
+    
 
-                var Menu = YAHOO.widget.Menu,
-                    MenuItem = YAHOO.widget.MenuItem;
+                // Hides submenus of the root Menu instance
+                
+                function hideSubmenus() {
+
+                    if(oMenu.activeItem) {
+                    
+                        var oSubmenu = oMenu.activeItem.cfg.getProperty("submenu");
+
+                        if(oSubmenu) {
+                        
+                            oSubmenu.hide();
+                        
+                        }
+                    
+                    }
+
+                }
+
+
+                // Cancels the call to "hideSubmenus"
+
+                function cancelTimer() {
+
+                    if(nTimeoutId) {
+    
+                        window.clearTimeout(nTimeoutId);
+    
+                    }
+                
+                }
+
+    
+                // "mouseout" event handler for each submenu
+                
+                function onSubmenuMouseOut(p_sType, p_aArguments, p_oMenu) {
+    
+                    cancelTimer();
+    
+                    nTimeoutId = window.setTimeout(hideSubmenus, 750);
+                
+                }
+
+
+                // "beforeshow" handler for each submenu
+
+                function onMenuBeforeShow(p_sType, p_sArgs) {
+
+                    // Check if the menu has any items. If not, add them
+                    
+                    if(this.getItemGroups().length == 0) {
+
+                        var aItemsData = this.itemsData,
+                            nItems = aItemsData.length,
+                            oItemData,
+                            oItemConfig,
+                            oSubmenu;
+
+
+                        for(var i=0; i<nItems; i++) {
+
+                            oItemData = aItemsData[i];
+
+                            if(oItemData) {
+
+                                oItemConfig = {};
+    
+                                if(oItemData.url) {
+                                
+                                    oItemConfig.url = oItemData.url;
+                                
+                                }
+                                
+    
+                                if(oItemData.submenuItems) {
+    
+                                    oSubmenu = new YAHOO.widget.Menu(oItemData.submenuId);
+
+                                    oSubmenu.itemsData = oItemData.submenuItems;
+
+                                    oSubmenu.beforeShowEvent.subscribe(onMenuBeforeShow, oSubmenu, true);
+                                    oSubmenu.mouseOverEvent.subscribe(cancelTimer);
+                                    oSubmenu.mouseOutEvent.subscribe(onSubmenuMouseOut, oSubmenu, true);
+    
+                                    oItemConfig.submenu = oSubmenu;
+                                
+                                }
+    
+                                // Add the new YAHOO.widget.MenuItem instance to the Menu
+    
+                                this.addItem(new YAHOO.widget.MenuItem(oItemData.text, oItemConfig));
+
+                            }
+
+                        }
+
+
+                        // Render the submenu into its parent MenuItem instance's element
+
+                        this.render(this.parent.element);
+                        
+                    }
+                
+                }
+
+
+                var nTimeoutId;
 
 
                 /*
@@ -206,73 +262,6 @@
                 };
 
 
-                // "beforeshow" handler for each submenu
-
-                function onMenuBeforeShow(p_sType, p_sArgs) {
-
-                    // Check if the menu has any items. If not, add them
-                    
-                    if(this.getItemGroups().length == 0) {
-
-                        var aItemsData = this.itemsData,
-                            nItems = aItemsData.length,
-                            oItemData,
-                            oItemConfig,
-                            oSubmenu;
-
-
-                        for(var i=0; i<nItems; i++) {
-
-                            oItemData = aItemsData[i];
-
-                            if(oItemData) {
-
-                                oItemConfig = {};
-    
-                                if(oItemData.url) {
-                                
-                                    oItemConfig.url = oItemData.url;
-                                
-                                }
-                                
-    
-                                if(oItemData.submenuItems) {
-    
-                                    oSubmenu = new Menu(oItemData.submenuId);
-
-                                    oSubmenu.itemsData = oItemData.submenuItems;
-
-                                    oSubmenu.beforeShowEvent.subscribe(onMenuBeforeShow, oSubmenu, true);
-                                    oSubmenu.mouseOverEvent.subscribe(onMenuMouseOver, oSubmenu, true);
-                                    oSubmenu.mouseOutEvent.subscribe(onSubmenuMouseOut, oSubmenu, true);
-    
-                                    oItemConfig.submenu = oSubmenu;
-                                
-                                }
-    
-                                // Add the new MenuItem instance to the Menu
-    
-                                this.addItem(new MenuItem(oItemData.text, oItemConfig));
-
-
-                                // Register the menu with the OverlayManager instance
-
-                                YAHOO.example.OverlayManager.register(this);
-
-                            }
-
-                        }
-
-
-                        // Render the submenu into its parent MenuItem instance's element
-
-                        this.render(this.parent.element);
-                        
-                    }
-                
-                }
-
-
                 // Initialize the root menu
 
                 var oMenu = new YAHOO.widget.Menu("productsandservices", { position: "static" });
@@ -280,10 +269,10 @@
 
                 // Initialize the submenus of the items in the root menu
 
-                var oCommunicationsMenu = new Menu("communications"),
-                    oShoppingMenu = new Menu("shopping"),
-                    oEntertainmentMenu = new Menu("entertainment"),
-                    oInformationMenu = new Menu("information");
+                var oCommunication = new YAHOO.widget.Menu("communications"),
+                    oShopping = new YAHOO.widget.Menu("shopping"),
+                    oEntertainment = new YAHOO.widget.Menu("entertainment"),
+                    oInformation = new YAHOO.widget.Menu("information");
 
 
                 /*
@@ -293,60 +282,72 @@
                      the items to each submenu before it is displayed.
                 */
 
-                oCommunicationsMenu.itemsData = oMenuData["communications"];
-                oShoppingMenu.itemsData = oMenuData["shopping"];
-                oEntertainmentMenu.itemsData = oMenuData["entertainment"];
-                oInformationMenu.itemsData = oMenuData["information"];
+                oCommunication.itemsData = oMenuData["communications"];
+                oShopping.itemsData = oMenuData["shopping"];
+                oEntertainment.itemsData = oMenuData["entertainment"];
+                oInformation.itemsData = oMenuData["information"];
 
 
-                // Assign event handlers                
+                // Assign event handlers
 
-                oMenu.mouseOverEvent.subscribe(onMenuMouseOver, oMenu, true);
+                // Add a "mouseover" event handler to the root menu
 
-                oCommunicationsMenu.beforeShowEvent.subscribe(onMenuBeforeShow, oCommunicationsMenu, true);
-                oCommunicationsMenu.mouseOverEvent.subscribe(onMenuMouseOver, oCommunicationsMenu, true);
-                oCommunicationsMenu.mouseOutEvent.subscribe(onSubmenuMouseOut, oCommunicationsMenu, true);
+                oMenu.mouseOverEvent.subscribe(cancelTimer);
 
-                oShoppingMenu.beforeShowEvent.subscribe(onMenuBeforeShow, oShoppingMenu, true);
-                oShoppingMenu.mouseOverEvent.subscribe(onMenuMouseOver, oShoppingMenu, true);
-                oShoppingMenu.mouseOutEvent.subscribe(onSubmenuMouseOut, oShoppingMenu, true);
 
-                oEntertainmentMenu.beforeShowEvent.subscribe(onMenuBeforeShow, oEntertainmentMenu, true);
-                oEntertainmentMenu.mouseOverEvent.subscribe(onMenuMouseOver, oEntertainmentMenu, true);
-                oEntertainmentMenu.mouseOutEvent.subscribe(onSubmenuMouseOut, oEntertainmentMenu, true);
+                // Add a "beforeshow" event handler to each submenu
+                
+                oCommunication.beforeShowEvent.subscribe(onMenuBeforeShow, oCommunication, true);
+                oShopping.beforeShowEvent.subscribe(onMenuBeforeShow, oShopping, true);
+                oEntertainment.beforeShowEvent.subscribe(onMenuBeforeShow, oEntertainment, true);
+                oInformation.beforeShowEvent.subscribe(onMenuBeforeShow, oInformation, true);
 
-                oInformationMenu.beforeShowEvent.subscribe(onMenuBeforeShow, oInformationMenu, true);
-                oInformationMenu.mouseOverEvent.subscribe(onMenuMouseOver, oInformationMenu, true);
-                oInformationMenu.mouseOutEvent.subscribe(onSubmenuMouseOut, oInformationMenu, true);
+
+                // Add a "mouseover" event handler to each submenu
+                
+                oCommunication.mouseOverEvent.subscribe(cancelTimer);
+                oShopping.mouseOverEvent.subscribe(cancelTimer);
+                oEntertainment.mouseOverEvent.subscribe(cancelTimer);
+                oInformation.mouseOverEvent.subscribe(cancelTimer);
+                
+
+                // Add a "mouseout" event handler to each submenu
+
+                oCommunication.mouseOutEvent.subscribe(onSubmenuMouseOut, oCommunication, true);
+                oShopping.mouseOutEvent.subscribe(onSubmenuMouseOut, oShopping, true);
+                oEntertainment.mouseOutEvent.subscribe(onSubmenuMouseOut, oEntertainment, true);
+                oInformation.mouseOutEvent.subscribe(onSubmenuMouseOut, oInformation, true);
+
+
+                // Add a "click" handler to the document
+
+                YAHOO.util.Event.addListener(document, "click", hideSubmenus);
 
 
                 // Add the submenus to the items in the root menu 
 
-                oMenu.getItem(0).cfg.setProperty("submenu", oCommunicationsMenu);
-                oMenu.getItem(1).cfg.setProperty("submenu", oShoppingMenu);
-                oMenu.getItem(2).cfg.setProperty("submenu", oEntertainmentMenu);
-                oMenu.getItem(3).cfg.setProperty("submenu", oInformationMenu);
+                oMenu.getItem(0).cfg.setProperty("submenu", oCommunication);
+                oMenu.getItem(1).cfg.setProperty("submenu", oShopping);
+                oMenu.getItem(2).cfg.setProperty("submenu", oEntertainment);
+                oMenu.getItem(3).cfg.setProperty("submenu", oInformation);
 
 
                 // Render the root menu
 
                 oMenu.render();
 
-
-                // Add a "click" handler to the document
-
-                YAHOO.util.Event.addListener(document, "click", onDocumentClick);
-
             }
 
 
             // Add a "load" handler for the window
 
-            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
 
-        </script>
+        </script>   
+
     </head>
     <body id="yahoo-com">
+
         <div id="doc" class="yui-t1">
             <div id="hd">
                 <!-- start: your content here -->
@@ -394,5 +395,6 @@
 
             </div>
         </div>
+        
     </body>
 </html>

@@ -73,70 +73,66 @@
         <!-- Page-specific script -->
         <script type="text/javascript">
 
-            YAHOO.example.OverlayManager = new YAHOO.widget.OverlayManager();
-
-            var g_nTimeoutId;
-
-
-            // "mouseover" event handler for each menu
-
-            function onMenuMouseOver(p_sType, p_aArguments, p_oMenu) {
-
-                if(g_nTimeoutId) {
-
-                    window.clearTimeout(g_nTimeoutId);
-
-                }
-
-            }
-
-
-            // "mouseout" event handler for each submenu
-            
-            function onSubmenuMouseOut(p_sType, p_aArguments, p_oMenu) {
-
-                function hideMenu() {
-
-                    YAHOO.example.OverlayManager.hideAll();
-
-                }
-
-
-                if(g_nTimeoutId) {
-
-                    window.clearTimeout(g_nTimeoutId);
-
-                }
-
-                g_nTimeoutId = window.setTimeout(hideMenu, 750);
-            
-            }
-
-
-            // "click" handler for the document
-
-            function onDocumentClick(p_oEvent) {
-            
-                YAHOO.example.OverlayManager.hideAll();
-
-            }
-
-
             // "load" handler for the window
 
-            function onWindowLoad() {
+            YAHOO.example.onWindowLoad = function(p_oEvent) {
 
-                var oMenu = new YAHOO.widget.Menu(
-                                "productsandservices", 
-                                { position: "static" }
-                                );
+
+                // Hides submenus of the root Menu instance
+                
+                function hideSubmenus() {
+
+                    if(oMenu.activeItem) {
+                    
+                        var oSubmenu = oMenu.activeItem.cfg.getProperty("submenu");
+
+                        if(oSubmenu) {
+                        
+                            oSubmenu.hide();
+                        
+                        }
+                    
+                    }
+
+                }
+
+
+                // Cancels the call to "hideSubmenus"
+
+                function cancelTimer() {
+
+                    if(nTimeoutId) {
+    
+                        window.clearTimeout(nTimeoutId);
+    
+                    }
+                
+                }
+    
+    
+                // "mouseout" event handler for each submenu
+                
+                function onSubmenuMouseOut(p_sType, p_aArguments, p_oMenu) {
+    
+                    cancelTimer();
+    
+                    nTimeoutId = window.setTimeout(hideSubmenus, 750);
+                
+                }
+
+
+                var nTimeoutId;
+
+
+                // Initialize the root menu
+
+                var oMenu = new YAHOO.widget.Menu("productsandservices", { position: "static" });
+
 
                 // Render the root menu and corresponding submenus
 
                 oMenu.render();
 
-
-                // Register each submenu with the OverlayManager instance
 
                 var oCommunication = oMenu.getItem(0).cfg.getProperty("submenu"),
                     oPIM = oCommunication.getItem(5).cfg.getProperty("submenu"),
@@ -145,21 +141,20 @@
                     oInformation = oMenu.getItem(3).cfg.getProperty("submenu");
 
 
-                YAHOO.example.OverlayManager.register([oCommunication, oPIM, oShopping, oEntertainment, oInformation]);
-
+                // Assign event handlers
 
                 // Add a "mouseover" event handler to the root menu
                 
-                oMenu.mouseOverEvent.subscribe(onMenuMouseOver, oMenu, true);
+                oMenu.mouseOverEvent.subscribe(cancelTimer);
 
 
                 // Add a "mouseover" event handler to each submenu
                 
-                oCommunication.mouseOverEvent.subscribe(onMenuMouseOver, oCommunication, true);
-                oPIM.mouseOverEvent.subscribe(onMenuMouseOver, oPIM, true);
-                oShopping.mouseOverEvent.subscribe(onMenuMouseOver, oShopping, true);
-                oEntertainment.mouseOverEvent.subscribe(onMenuMouseOver, oEntertainment, true);
-                oInformation.mouseOverEvent.subscribe(onMenuMouseOver, oInformation, true);
+                oCommunication.mouseOverEvent.subscribe(cancelTimer);
+                oPIM.mouseOverEvent.subscribe(cancelTimer);
+                oShopping.mouseOverEvent.subscribe(cancelTimer);
+                oEntertainment.mouseOverEvent.subscribe(cancelTimer);
+                oInformation.mouseOverEvent.subscribe(cancelTimer);
                 
 
                 // Add a "mouseout" event handler to each submenu
@@ -173,18 +168,20 @@
 
                 // Add a "click" handler to the document
 
-                YAHOO.util.Event.addListener(document, "click", onDocumentClick);
+                YAHOO.util.Event.addListener(document, "click", hideSubmenus);
 
             }
 
 
             // Add a "load" handler for the window
 
-            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
 
         </script>
+
     </head>
     <body id="yahoo-com">
+
         <div id="doc" class="yui-t1">
             <div id="hd">
                 <!-- start: your content here -->
@@ -318,5 +315,6 @@
 
             </div>
         </div>
+        
     </body>
 </html>

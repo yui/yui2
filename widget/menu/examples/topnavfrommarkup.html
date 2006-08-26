@@ -25,7 +25,6 @@
         <!-- Page-specific styles -->
         <style type="text/css">
 
-
             div.yui-b p {
             
                 margin:0 0 .5em 0;
@@ -72,141 +71,126 @@
         <!-- Page-specific script -->
         <script type="text/javascript">
 
-            YAHOO.example.OverlayManager = new YAHOO.widget.OverlayManager();
-
-            var g_nTimeoutId;
-
-
-            // "mouseover" event handler for the menubar
-
-            function onMenuBarMouseOver(p_sType, p_aArguments, p_oMenu) {
-
-                if(g_nTimeoutId) {
-
-                    window.clearTimeout(g_nTimeoutId);
-
-                }
-            
-            }
-
-
-            // "mouseover" event handler for each submenu
-
-            function onSubmenuMouseOver(p_sType, p_aArguments, p_oMenu) {
-
-                if(g_nTimeoutId) {
-
-                    window.clearTimeout(g_nTimeoutId);
-
-                }
-
-            }
-
-
-            // "mouseout" event handler for each submenu
-            
-            function onSubmenuMouseOut(p_sType, p_aArguments, p_oMenu) {
-
-                function hideMenu() {
-
-                    YAHOO.example.OverlayManager.hideAll();
-
-                }
-
-
-                if(g_nTimeoutId) {
-
-                    window.clearTimeout(g_nTimeoutId);
-
-                }
-
-                g_nTimeoutId = window.setTimeout(hideMenu, 750);
-            
-            }
-
-
-            // "click" handler for the document
-
-            function onDocumentClick(p_oEvent) {
-            
-                YAHOO.example.OverlayManager.hideAll();
-
-            }
-
-
-            // "mouseover" handler for each item in the menu bar
-
-            function onMenuBarItemMouseOver(p_sType, p_aArguments, p_oMenuItem) {
-            
-                var oActiveItem = this.parent.activeItem;
-            
-            
-                // Hide any other submenus that might be visible
-            
-                if(oActiveItem && oActiveItem != this) {
-            
-                    this.parent.clearActiveItem();
-            
-                }
-            
-            
-                // Select and focus the current MenuItem instance
-            
-                this.cfg.setProperty("selected", true);
-                this.focus();
-            
-            
-                // Show the submenu for this instance
-            
-                var oSubmenu = this.cfg.getProperty("submenu");
-            
-                if(oSubmenu) {
-            
-                    oSubmenu.show();
-            
-                }
-            
-            }
-        
-
-            // "mouseout" handler for each item in the menu bar
-        
-            function onMenuBarItemMouseOut(p_sType, p_aArguments, p_oMenuItem) {
-            
-                this.cfg.setProperty("selected", false);
-            
-            
-                var oSubmenu = this.cfg.getProperty("submenu");
-            
-                if(oSubmenu) {
-            
-                    var oDOMEvent = p_aArguments[0],
-                        oRelatedTarget = YAHOO.util.Event.getRelatedTarget(oDOMEvent);
-            
-                    if(
-                        !(
-                            oRelatedTarget == oSubmenu.element || 
-                            this._oDom.isAncestor(oSubmenu.element, oRelatedTarget)
-                        )
-                    ) {
-            
-                        oSubmenu.hide();
-            
-                    }
-            
-                }
-            
-            }
-
-
             // "load" handler for the window
 
-            function onWindowLoad() {
+            YAHOO.example.onWindowLoad = function(p_oEvent) {
+
+                // Hides submenus of the root Menubar instance
+                
+                function hideSubmenus() {
+
+                    if(oMenuBar.activeItem) {
+                    
+                        var oSubmenu = oMenuBar.activeItem.cfg.getProperty("submenu");
+
+                        if(oSubmenu) {
+                        
+                            oSubmenu.hide();
+                        
+                        }
+                    
+                    }
+
+                }    
+
+
+                // Cancels the call to "hideSubmenus"
+
+                function cancelTimer() {
+
+                    if(nTimeoutId) {
+    
+                        window.clearTimeout(nTimeoutId);
+    
+                    }
+                
+                }
+    
+    
+                // "mouseout" event handler for each submenu of the menubar
+                
+                function onSubmenuMouseOut(p_sType, p_aArguments, p_oMenu) {
+    
+                    cancelTimer();
+    
+                    nTimeoutId = window.setTimeout(hideSubmenus, 750);
+                
+                }
+    
+    
+                // "mouseover" handler for each item in the menubar
+    
+                function onMenuBarItemMouseOver(p_sType, p_aArguments, p_oMenuItem) {
+                
+                    var oActiveItem = this.parent.activeItem;
+                
+                
+                    // Hide any other submenus that might be visible
+                
+                    if(oActiveItem && oActiveItem != this) {
+                
+                        this.parent.clearActiveItem();
+                
+                    }
+                
+                
+                    // Select and focus the current MenuItem instance
+                
+                    this.cfg.setProperty("selected", true);
+                    this.focus();
+                
+                
+                    // Show the submenu for this instance
+                
+                    var oSubmenu = this.cfg.getProperty("submenu");
+                
+                    if(oSubmenu) {
+                
+                        oSubmenu.show();
+                
+                    }
+                
+                }
+            
+    
+                // "mouseout" handler for each item in the menubar
+            
+                function onMenuBarItemMouseOut(p_sType, p_aArguments, p_oMenuItem) {
+                
+                    this.cfg.setProperty("selected", false);
+                
+                
+                    var oSubmenu = this.cfg.getProperty("submenu");
+                
+                    if(oSubmenu) {
+                
+                        var oDOMEvent = p_aArguments[0],
+                            oRelatedTarget = YAHOO.util.Event.getRelatedTarget(oDOMEvent);
+                
+                        if(
+                            !(
+                                oRelatedTarget == oSubmenu.element || 
+                                this._oDom.isAncestor(oSubmenu.element, oRelatedTarget)
+                            )
+                        ) {
+                
+                            oSubmenu.hide();
+                
+                        }
+                
+                    }
+                
+                }
+
+
+                var nTimeoutId;
+
 
                 // Instantiate and render the menubar and corresponding submenus
 
                 var oMenuBar = new YAHOO.widget.MenuBar("productsandservices");
                 oMenuBar.render();
+
 
                 /*
                     Add a "mouseover" and "mouseout" event handler each item 
@@ -218,28 +202,18 @@
 
                 do {
 
-                    aMenuBarItems[i].mouseOverEvent.subscribe(
-                        onMenuBarItemMouseOver
-                    );
-
-                    aMenuBarItems[i].mouseOutEvent.subscribe(
-                        onMenuBarItemMouseOut 
-                    );
+                    aMenuBarItems[i].mouseOverEvent.subscribe(onMenuBarItemMouseOver);
+                    aMenuBarItems[i].mouseOutEvent.subscribe(onMenuBarItemMouseOut);
                 
                 }
                 while(i--);
 
 
+                // Assign event handlers
+
                 // Add a "mouseover" handler to the menubar
 
-                oMenuBar.mouseOverEvent.subscribe(
-                        onMenuBarMouseOver, 
-                        oMenuBar, 
-                        true
-                    );
-
-
-                // Register each submenu with the OverlayManager instance
+                oMenuBar.mouseOverEvent.subscribe(cancelTimer);
 
                 var oCommunication = oMenuBar.getItem(0).cfg.getProperty("submenu"),
                     oPIM = oCommunication.getItem(5).cfg.getProperty("submenu"),
@@ -248,17 +222,14 @@
                     oInformation = oMenuBar.getItem(3).cfg.getProperty("submenu");
 
 
-                YAHOO.example.OverlayManager.register([oCommunication, oPIM, oShopping, oEntertainment, oInformation]);
-
-
                 // Add a "mouseover" event handler to each submenu
                 
-                oCommunication.mouseOverEvent.subscribe(onSubmenuMouseOver, oCommunication, true);
-                oPIM.mouseOverEvent.subscribe(onSubmenuMouseOver, oPIM, true);
-                oShopping.mouseOverEvent.subscribe(onSubmenuMouseOver, oShopping, true);
-                oEntertainment.mouseOverEvent.subscribe(onSubmenuMouseOver, oEntertainment, true);
-                oInformation.mouseOverEvent.subscribe(onSubmenuMouseOver, oInformation, true);
-                
+                oCommunication.mouseOverEvent.subscribe(cancelTimer);
+                oPIM.mouseOverEvent.subscribe(cancelTimer);
+                oShopping.mouseOverEvent.subscribe(cancelTimer);
+                oEntertainment.mouseOverEvent.subscribe(cancelTimer);
+                oInformation.mouseOverEvent.subscribe(cancelTimer);
+
 
                 // Add a "mouseout" event handler to each submenu
 
@@ -271,18 +242,20 @@
 
                 // Add a "click" handler to the document
 
-                YAHOO.util.Event.addListener(document, "click", onDocumentClick);
+                YAHOO.util.Event.addListener(document, "click", hideSubmenus);
 
             }
 
 
             // Add a "load" handler for the window
 
-            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
 
         </script>
+
     </head>
     <body id="yahoo-com">
+
         <div id="doc" class="yui-t1">
             <div id="hd">
                 <!-- start: your content here -->
@@ -415,8 +388,6 @@
 
                 <!-- start: secondary column from outer template -->
                 <div class="yui-b">
-
-
                 
                     <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metus. Nunc quam elit, posuere nec, auctor in, rhoncus quis, dui. Aliquam erat volutpat. Ut dignissim, massa sit amet dignissim cursus, quam lacus feugiat dolor, id aliquam leo tortor eget odio. Pellentesque orci arcu, eleifend at, iaculis sit amet, posuere eu, lorem. Aliquam erat volutpat. Phasellus vulputate. Vivamus id erat. Nulla facilisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Nunc gravida. Ut euismod, tortor eget convallis ullamcorper, arcu odio egestas pede, ut ornare urna elit vitae mauris. Aenean ullamcorper eros a lacus. Curabitur egestas tempus lectus. Donec et lectus et purus dapibus feugiat. Sed sit amet diam. Etiam ipsum leo, facilisis ac, rutrum nec, dignissim quis, tellus. Sed eleifend.</p>
                     
@@ -429,5 +400,6 @@
 
             </div>
         </div>
+
     </body>
 </html>

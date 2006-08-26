@@ -1,7 +1,7 @@
 /*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
+http://developer.yahoo.com/yui/license.txt
 */
 
 
@@ -90,7 +90,6 @@ div.yuimenubar ul {
     list-style-type:none;
     margin:0;
     padding:0;
-    overflow:hidden;
 
 }
 
@@ -265,6 +264,17 @@ div.yuimenu li.yuimenuitem img {
     width:8px;
     margin:0 -16px 0 10px;
     border:0;
+
+    *margin-left:0;
+    *border-left-width:10px;
+    *border-style:solid;
+    *border-color:#f6f7ee;
+
+}
+
+div.yuimenu li.yuimenuitem.selected img.selected {
+
+    *border-color:#8c8ad0;
 
 }
 

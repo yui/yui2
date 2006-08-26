@@ -5,7 +5,21 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <title>OS-Style Programs Menu Example</title>
 
-        <?php require_once("styles.inc"); ?>
+        <?php
+
+            function include_custom_styles() {
+
+                global $g_sBasePath;
+
+        ?>            
+
+        <link rel="stylesheet" type="text/css" href="<?php echo $g_sBasePath; ?>/build/container/assets/container.css">
+
+        <?php
+            }
+
+            require_once("styles.inc"); 
+        ?>
 
         <!-- Page-specific styles -->
         <style type="text/css">
@@ -149,29 +163,45 @@
 
         </style>
 
-        <?php require_once("scripts.inc"); ?>
+        <?php
+
+            $g_bUseContainerCore = false;
+
+            function include_custom_scripts() {
+
+                global $g_sBasePath;
+
+        ?>            
+        <script type="text/javascript" src="<?php echo $g_sBasePath; ?>/build/dragdrop/dragdrop.js"></script>
+        <script type="text/javascript" src="<?php echo $g_sBasePath; ?>/build/animation/animation.js"></script>
+        <?php
+            }        
+        
+            require_once("scripts.inc");
+
+        ?>
 
         <!-- Page-specific script -->
         <script type="text/javascript">
         
-            // "click" handler for the "Go to..." menu item
-
-            function onGotoClick() {
-            
-                var sURL = window.prompt("Enter a URL:","");
-
-                if(sURL && sURL.length > 0) {
-                    
-                    document.location = sURL;
-
-                }
-            
-            }
-            
-
             // "load" handler for the window
 
-            function onWindowLoad() {
+            YAHOO.example.onWindowLoad = function(p_oEvent) {
+
+                // "click" handler for the "Go to..." menu item
+    
+                function onGotoClick() {
+                
+                    var sURL = window.prompt("Enter a URL:","");
+    
+                    if(sURL && sURL.length > 0) {
+                        
+                        document.location = sURL;
+    
+                    }
+                
+                }
+
 
                 var oH1 = document.getElementsByTagName("h1")[0];
 
@@ -201,7 +231,7 @@
 
                 var oMenu = new YAHOO.widget.Menu(
                                     "yproducts", 
-                                    { constraintoviewport:true } 
+                                    { constraintoviewport:true, zIndex:2 } 
                                 );
 
 
@@ -307,15 +337,35 @@
                 */
 
                 YAHOO.util.Event.addListener(window, "resize", onWindowResize);
+
+
+                var oPanel = new YAHOO.widget.SimpleDialog(
+                                    "exampleinfo", 
+                                    { 
+                                        constraintoviewport: true,
+                                        fixedcenter:true,
+                                        width:"400px",
+                                        zIndex:1
+                                    }
+                                );
+                
+                
+                oPanel.setHeader("OS-Style Programs Menu Example");
+                oPanel.setBody("This example demonstrates how to transform existing markup on the page into an operating-system-like menu.");
+
+                oPanel.render(document.body);
+              
+                oPanel.show();
                 
             }
 
 
             // Add a "load" event handler for the window
 
-            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
 
         </script>
+
     </head>
     <body>
         

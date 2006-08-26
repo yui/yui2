@@ -5,18 +5,62 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <title>Example 13: Multi-tiered Menu with Progressive Rendering of Submenus</title>
 
-        <?php require_once("styles.inc"); ?>
+        <?php
 
-        <?php require_once("scripts.inc"); ?>
+            function include_custom_styles() {
+
+                global $g_sBasePath;
+
+        ?>            
+
+        <!-- Logger CSS -->
+        <link rel="stylesheet" type="text/css" href="<?php echo $g_sBasePath; ?>/build/logger/assets/logger.css">
+
+        <?php
+            }
+
+            require_once("styles.inc"); 
+        ?>
+        
+        <!-- Page-specific styles -->
+        <style type="text/css">
+
+            #logs {
+
+                position:absolute;
+                bottom:0;
+                right:0;
+            
+            }
+
+            .example13 {
+
+                background-color:#9c9;
+            
+            }
+
+        </style>        
+
+        <?php
+
+            function include_custom_scripts() {
+
+                global $g_sBasePath;
+
+        ?>            
+        <!-- Logger source file -->
+        <script type="text/javascript" src="<?php echo $g_sBasePath; ?>/build/logger/logger.js"></script>
+        <?php
+            }        
+        
+            require_once("scripts.inc"); 
+
+        ?>
 
         <!-- Page-specific script -->
         <script type="text/javascript">
 
-            function onWindowLoad(p_oEvent) {
-
-                var Menu = YAHOO.widget.Menu,
-                    MenuItem = YAHOO.widget.MenuItem;
-
+            YAHOO.example.onWindowLoad = function(p_oEvent) {
 
                 /*
                      Use a JSON-formatted data structure to define the data for 
@@ -105,6 +149,8 @@
 
                     if(this.getItemGroups().length == 0) {
 
+                        YAHOO.log(("Menu " + this.id + " has no items yet, so they need to be added."), "info", "example13");
+
                         var aItemsData = this.itemsData,
                             nItems = aItemsData.length,
                             oItemData,
@@ -129,7 +175,7 @@
     
                                 if(oItemData.submenuItems) {
     
-                                    oSubmenu = new Menu(oItemData.submenuId);
+                                    oSubmenu = new YAHOO.widget.Menu(oItemData.submenuId);
 
                                     oSubmenu.itemsData = oItemData.submenuItems;
 
@@ -139,9 +185,11 @@
                                 
                                 }
     
-                                // Add the new MenuItem instance to the Menu
+                                // Add the new YAHOO.widget.MenuItem instance to the Menu
     
-                                this.addItem(new MenuItem(oItemData.text, oItemConfig));
+                                this.addItem(new YAHOO.widget.MenuItem(oItemData.text, oItemConfig));
+
+                                YAHOO.log(("Added item \"" + oItemData.text + "\" to menu: " + this.id), "info", "example13");
 
                             }
 
@@ -156,21 +204,26 @@
                         this.render(this.parent.element);
                         
                     }
-                
+                    else {
+
+                        YAHOO.log(("Menu " + this.id + " has all of its items, so no need to add them."), "info", "example13");
+                    
+                    }
+                    
                 }
 
 
                 // Initialize the root menu
 
-                var oProductsServicesMenu = new Menu("productsandservices", { fixedcenter: true });
+                var oProductsServicesMenu = new YAHOO.widget.Menu("productsandservices");
 
 
                 // Initialize the submenus of the items in the root menu
 
-                var oCommunicationsMenu = new Menu("communications"),
-                    oShoppingMenu = new Menu("shopping"),
-                    oEntertainmentMenu = new Menu("entertainment"),
-                    oInformationMenu = new Menu("information");
+                var oCommunicationsMenu = new YAHOO.widget.Menu("communications"),
+                    oShoppingMenu = new YAHOO.widget.Menu("shopping"),
+                    oEntertainmentMenu = new YAHOO.widget.Menu("entertainment"),
+                    oInformationMenu = new YAHOO.widget.Menu("information");
 
 
                 /*
@@ -210,12 +263,21 @@
                 oProductsServicesMenu.render();
                 oProductsServicesMenu.show();
                 
+
+                var oLogs = document.createElement("div");
+                oLogs.id = "logs";
+                
+                document.body.appendChild(oLogs);
+
+                var oLogReader = new YAHOO.widget.LogReader("logs");                
+                
             }
 
 
-            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
             
         </script>
+
     </head>
     <body>
 

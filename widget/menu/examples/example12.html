@@ -52,6 +52,12 @@
             
             }
 
+            .example12 {
+
+                background-color:#9c9;
+            
+            }
+
         </style>
 
         <?php
@@ -63,6 +69,7 @@
         ?>            
         <!-- Logger source file -->
         <script type="text/javascript" src="<?php echo $g_sBasePath; ?>/build/logger/logger.js"></script>
+
         <?php
             }        
         
@@ -73,26 +80,30 @@
         <!-- Page-specific script -->
         <script type="text/javascript">
 
-            // "config change" event handler for each MenuItem instance 
-
-            function onMenuItemConfigChange(p_sType, p_aArguments, p_oMenuItem) {
-
-                var sPropertyName = p_aArguments[0][0],
-                    sPropertyValue = p_aArguments[0][1];
-
-                YAHOO.log(
-                    "Index: " + this.index + ", " +
-                    "Group Index: " + this.groupIndex + ", " +
-                    "Custom Event Type: " + p_sType + ", " +                  
-                    "\"" + sPropertyName + "\" Property Set To: \"" + sPropertyValue + "\""
-                );
-            
-            }
-
-
             // "load" event handler for the window
 
-            function onWindowLoad(p_oEvent) {
+            YAHOO.example.onWindowLoad = function(p_oEvent) {
+
+                // "config change" event handler for each MenuItem instance 
+    
+                function onMenuItemConfigChange(p_sType, p_aArguments, p_oMenuItem) {
+    
+                    var sPropertyName = p_aArguments[0][0],
+                        sPropertyValue = p_aArguments[0][1];
+    
+                    YAHOO.log(
+                        (
+                        "Index: " + this.index + ", " +
+                        "Group Index: " + this.groupIndex + ", " +
+                        "Custom Event Type: " + p_sType + ", " +                  
+                        "\"" + sPropertyName + "\" Property Set To: \"" + sPropertyValue + "\""
+                        ),
+                        "info",
+                        "example12"
+                    );
+                
+                }
+
 
                 // Create a menu
 
@@ -149,12 +160,15 @@
             }
 
 
-            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
             
         </script>
+
     </head>
     <body>
+
         <h1>Example 12: Setting Configuration Properties At Runtime <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to set MenuItem configuration properties at runtime and listen for the changes through the "configChangedEvent."</p>
+
     </body>
 </html>

@@ -32,7 +32,7 @@
 
             // "load" event handler for the window
 
-            function onWindowLoad(p_oEvent) {
+            YAHOO.example.onWindowLoad = function(p_oEvent) {
 
                 // Create a menu
 
@@ -75,12 +75,15 @@
             }
 
 
-            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
             
         </script>
+
     </head>
     <body>
+
         <h1>Example 11: MenuItem Configuration Properties <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to set configuration properties when instantiating a MenuItem instance.</p>
+
     </body>
 </html>

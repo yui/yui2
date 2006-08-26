@@ -19,7 +19,7 @@
         <!-- Page-specific script -->
         <script type="text/javascript">
 
-            function onWindowLoad(p_oEvent) {
+            YAHOO.example.onWindowLoad = function(p_oEvent) {
 
                 var oMenu = new YAHOO.widget.Menu("menuwithgroups", { fixedcenter: true });
 
@@ -30,11 +30,13 @@
             }
 
 
-            YAHOO.util.Event.addListener(window, "load", onWindowLoad);
+            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
             
         </script>
+
     </head>
     <body>
+
         <h1>Example 5: Grouped MenuItem Instances With Titles From Existing Markup <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to title groups of MenuItem instances.  The Menu API also supports building a menu like this <a href="example06.html">using nothing but JavaScript</a>.</p>
 
