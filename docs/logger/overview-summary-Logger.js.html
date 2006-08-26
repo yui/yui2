@@ -154,10 +154,11 @@
 YAHOO.widget.Logger = {
 <span class="comment">    // Initialize members</span>
     loggerEnabled: true,
-    _firebugEnabled: true,
+    _browserConsoleEnabled: true,
     categories: [<span class="literal">"info"</span>,<span class="literal">"warn"</span>,<span class="literal">"error"</span>,<span class="literal">"time"</span>,<span class="literal">"window"</span>],
     sources: [<span class="literal">"global"</span>],
     _stack: [], // holds all log msgs
+    maxStackEntries: 2500,
     _startTime: new Date().getTime(), // static start timestamp
     _lastTime: null // timestamp of last logged message
 };
@@ -236,12 +237,18 @@ YAHOO.widget.Logger.log = <span class="reserved">function</span>(sMsg, sCategory
             sourceDetail: sDetail,
             msg: sMsg
         };
-
-        <span class="reserved">this</span>._stack.push(logEntry);
+        
+        
+        var stack = <span class="reserved">this</span>._stack;
+        var maxStackEntries = <span class="reserved">this</span>.maxStackEntries;
+         <span class="reserved">if</span>(maxStackEntries && !isNaN(maxStackEntries) && (stack.length >= maxStackEntries)) {
+            stack.shift();
+        }
+        stack.push(logEntry);
         <span class="reserved">this</span>.newLogEvent.fire(logEntry);
 
-        <span class="reserved">if</span>(<span class="reserved">this</span>._firebugEnabled) {
-            <span class="reserved">this</span>._printToFirebug(logEntry);
+        <span class="reserved">if</span>(<span class="reserved">this</span>._browserConsoleEnabled) {
+            <span class="reserved">this</span>._printToBrowserConsole(logEntry);
         }
         <span class="reserved">return</span> true;
     }
@@ -281,19 +288,21 @@ YAHOO.widget.Logger.getStartTime = <span class="reserved">function</span>() {
 };
 
 <span class="comment">/**
- * Disables output to the Firebug Firefox extension.
+ * Disables output to the browser's global console.log() function, which is used
+ * by the Firebug extension to Firefox as well as Safari.
  */</span>
-YAHOO.widget.Logger.disableFirebug = <span class="reserved">function</span>() {
-    YAHOO.log(<span class="literal">"YAHOO.Logger output to Firebug has been disabled."</span>);
-    <span class="reserved">this</span>._firebugEnabled = false;
+YAHOO.widget.Logger.disableBrowserConsole = <span class="reserved">function</span>() {
+    YAHOO.log(<span class="literal">"Logger output to the function console.log() has been disabled."</span>);
+    <span class="reserved">this</span>._browserConsoleEnabled = false;
 };
 
 <span class="comment">/**
- * Enables output to the Firebug Firefox extension.
+ * Enables output to the browser's global console.log() function, which is used
+ * by the Firebug extension to Firefox as well as Safari.
  */</span>
-YAHOO.widget.Logger.enableFirebug = <span class="reserved">function</span>() {
-    <span class="reserved">this</span>._firebugEnabled = true;
-    YAHOO.log(<span class="literal">"YAHOO.Logger output to Firebug has been enabled."</span>);
+YAHOO.widget.Logger.enableBrowserConsole = <span class="reserved">function</span>() {
+    <span class="reserved">this</span>._browserConsoleEnabled = true;
+    YAHOO.log(<span class="literal">"Logger output to the function console.log() has been enabled."</span>);
 };
 
 <span class="comment">/***************************************************************************
@@ -361,7 +370,7 @@ YAHOO.widget.Logger._isNewSource = <span class="reserved">function</span>(source
  * <span class="attrib">@param</span> {object} entry Log entry object
  * <span class="attrib">@private</span>
  */</span>
-YAHOO.widget.Logger._printToFirebug = <span class="reserved">function</span>(entry) {
+YAHOO.widget.Logger._printToBrowserConsole = <span class="reserved">function</span>(entry) {
     <span class="reserved">if</span>(window.console &amp;&amp; console.log) {
         var category = entry.category;
         var label = entry.category.substring(0,4).toUpperCase();

@@ -269,7 +269,31 @@
 								</div>
 							</td>
 						</tr>
-					
+
+						<tr>
+							<td class="flags">number</td>
+							<td class="spec">
+								<code>
+									<a href="#thresholdMax">thresholdMax</a>
+								</code>
+								<div class="description">
+									Maximum number of messages a LogReader console will display.
+								</div>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="flags">number</td>
+							<td class="spec">
+								<code>
+									<a href="#thresholdMin">thresholdMin</a>
+								</code>
+								<div class="description">
+                                    When a LogReader console reaches its thresholdMax, it will clear out messages and print out the latest thresholdMin number of messages.
+								</div>
+							</td>
+						</tr>
+
 						<tr>
 							<td class="flags">string</td>
 							<td class="spec">
@@ -338,19 +362,6 @@
 				<h3><a name="methodSummary">Method Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
 					<table border="1" cellpadding="3" cellspacing="0">
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#_createSourceCheckbox">_createSourceCheckbox</a>
-										(source)
-									</code>
-									<div class="description">
-										&nbsp;
-									</div>
-								</td>
-							</tr>
 						
 							<tr>
 								<td class="flags">void</td>
@@ -538,6 +549,32 @@
 						</div>
 						<hr />
 					
+						<h4><a name="thresholdMax">thresholdMax</a></h4>
+						<div class="detail">
+							<code>
+								number
+								&nbsp;
+								<strong>thresholdMax</strong>
+							</code>
+							<div class="description">
+								Maximum number of messages a LogReader console will display. Default: 500;
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="thresholdMin">thresholdMin</a></h4>
+						<div class="detail">
+							<code>
+								number
+								&nbsp;
+								<strong>thresholdMin</strong>
+							</code>
+							<div class="description">
+                                When a LogReader console reaches its thresholdMax, it will clear out messages and print out the latest thresholdMin number of messages. Default: 100;
+							</div>
+						</div>
+						<hr />
+
 						<h4><a name="top">top</a></h4>
 						<div class="detail">
 							<code>
@@ -550,7 +587,7 @@
 							</div>
 						</div>
 						<hr />
-					
+
 						<h4><a name="verboseOutput">verboseOutput</a></h4>
 						<div class="detail">
 							<code>
@@ -636,23 +673,6 @@
 			<div class="section method details">
 				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<div class="content">
-					
-						<h4><a name="_createSourceCheckbox">_createSourceCheckbox</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>_createSourceCheckbox</strong>
-								(source)
-							</code>
-									
-							<div class="description">
-								
-								
-								
-								
-							</div>
-						</div>
-						<hr />
 					
 						<h4><a name="hide">hide</a></h4>
 						<div class="detail">

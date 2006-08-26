@@ -245,7 +245,7 @@ YAHOO.widget.LogReader = <span class="reserved">function</span>(containerEl, oCo
 
     <span class="reserved">if</span>(<span class="reserved">this</span>._containerEl) {
 <span class="comment">        // Create header</span>
-        <span class="comment">/*JSDOCif(!this._hdEl) {
+        if(!this._hdEl) {
             this._hdEl = this._containerEl.appendChild(document.createElement("div"));
             this._hdEl.id = "yui-log-hd" + YAHOO.widget.LogReader._index;
             this._hdEl.className = "yui-log-hd";
@@ -312,7 +312,7 @@ YAHOO.widget.LogReader = <span class="reserved">function</span>(containerEl, oCo
             this._categoryFiltersEl.className = "yui-log-categoryfilters";
             this._sourceFiltersEl = this._ftEl.appendChild(document.createElement("div"));
             this._sourceFiltersEl.className = "yui-log-sourcefilters";
-        }*/</span>
+        }
     }
 <span class="comment">
     // Initialize buffer</span>
@@ -426,6 +426,21 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>.verboseOutput = t
  * <span class="attrib">@type</span> boolean
  */</span>
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>.newestOnTop = true;
+
+<span class="comment">/**
+ * Maximum number of messages a LogReader console will display. Default: 500;
+ *
+ * <span class="attrib">@type</span> number
+ */</span>
+YAHOO.widget.LogReader.<span class="reserved">prototype</span>.thresholdMax = 500;
+
+<span class="comment">/**
+ * When a LogReader console reaches its thresholdMax, it will clear out messages
+ * and print out the latest thresholdMin number of messages. Default: 100;
+ *
+ * <span class="attrib">@type</span> number
+ */</span>
+YAHOO.widget.LogReader.<span class="reserved">prototype</span>.thresholdMin = 100;
 
 <span class="comment">/***************************************************************************
  * Public methods
@@ -745,13 +760,21 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>._clearConsole = <
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>._printBuffer = <span class="reserved">function</span>() {
     <span class="reserved">this</span>._timeout = null;
 
-    <span class="reserved">if</span> (<span class="reserved">this</span>._consoleEl !== null) {
-        var entries = [];
-        <span class="reserved">for</span> (var i=0; i&lt;<span class="reserved">this</span>._buffer.length; i++) {
-            entries[i] = <span class="reserved">this</span>._buffer[i];
+    <span class="reserved">if</span>(<span class="reserved">this</span>._consoleEl !== null) {
+        var thresholdMax = <span class="reserved">this</span>.thresholdMax;
+        thresholdMax = (thresholdMax && !isNaN(thresholdMax)) ? thresholdMax : 500;
+        <span class="reserved">if</span>(<span class="reserved">this</span>._consoleMsgCount &lt; thresholdMax) {
+            var entries = [];
+            <span class="reserved">for</span> (var i=0; i&lt;<span class="reserved">this</span>._buffer.length; i++) {
+                entries[i] = <span class="reserved">this</span>._buffer[i];
+            }
+            <span class="reserved">this</span>._buffer = [];
+            <span class="reserved">this</span>._printToConsole(entries);
         }
-        <span class="reserved">this</span>._buffer = [];
-        <span class="reserved">this</span>._printToConsole(entries);
+        <span class="reserved">else</span> {
+            <span class="reserved">this</span>._filterLogs();
+        }
+
         <span class="reserved">if</span>(!<span class="reserved">this</span>.newestOnTop) {
             <span class="reserved">this</span>._consoleEl.scrollTop = <span class="reserved">this</span>._consoleEl.scrollHeight;
         }
@@ -766,11 +789,19 @@ YAHOO.widget.LogReader.<span class="reserved">prototype</span>._printBuffer = <s
  * <span class="attrib">@private</span>
  */</span>
 YAHOO.widget.LogReader.<span class="reserved">prototype</span>._printToConsole = <span class="reserved">function</span>(aEntries) {
+<span class="comment">    // Manage the number of messages displayed in the console</span>
     var entriesLen = aEntries.length;
+    var thresholdMin = <span class="reserved">this</span>.thresholdMin;
+    <span class="reserved">if</span>(isNaN(thresholdMin) || (thresholdMin > <span class="reserved">this</span>.thresholdMax)) {
+        thresholdMin = 0;
+    }
+    var entriesStartIndex = (entriesLen &gt; thresholdMin) ? (entriesLen - thresholdMin) : 0;
+
+    
+<span class="comment">    // Iterate through all log entries to print the ones that filter through</span>
     var sourceFiltersLen = <span class="reserved">this</span>._sourceFilters.length;
     var categoryFiltersLen = <span class="reserved">this</span>._categoryFilters.length;
-<span class="comment">    // Iterate through all log entries to print the ones that filter through</span>
-    <span class="reserved">for</span>(var i=0; i&lt;entriesLen; i++) {
+    <span class="reserved">for</span>(var i=entriesStartIndex; i&lt;entriesLen; i++) {
         var entry = aEntries[i];
         var category = entry.category;
         var source = entry.source;
