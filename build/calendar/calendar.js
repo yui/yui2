@@ -2835,7 +2835,9 @@ YAHOO.widget.Calendar2up.prototype.renderHeader = function() {
 		this.titleDiv.appendChild(linkClose);
 	}
 
-	this.innerContainer.insertBefore(this.titleDiv, this.innerContainer.firstChild);
+	if (this.titleDiv != this.innerContainer.firstChild) {
+		this.innerContainer.insertBefore(this.titleDiv, this.innerContainer.firstChild);
+	}
 }
 
 /**

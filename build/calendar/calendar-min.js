@@ -142,7 +142,7 @@ if(!this.titleDiv)
 {this.titleDiv.style.display="none";}}
 this.titleDiv.className=YAHOO.widget.Calendar2up.CSS_2UPTITLE;this.titleDiv.innerHTML=this.title;if(this.outerContainer.style.position=="absolute")
 {var linkClose=document.createElement("A");linkClose.href="javascript:void(null)";YAHOO.util.Event.addListener(linkClose,"click",this.hide,this);var imgClose=document.createElement("IMG");imgClose.src=YAHOO.widget.Calendar_Core.IMG_ROOT+"us/my/bn/x_d.gif";imgClose.className=YAHOO.widget.Calendar2up.CSS_2UPCLOSE;linkClose.appendChild(imgClose);this.linkClose=linkClose;this.titleDiv.appendChild(linkClose);}
-this.innerContainer.insertBefore(this.titleDiv,this.innerContainer.firstChild);}
+if(this.titleDiv!=this.innerContainer.firstChild){this.innerContainer.insertBefore(this.titleDiv,this.innerContainer.firstChild);}}
 YAHOO.widget.Calendar2up.prototype.hide=function(e,cal){if(!cal)
 {cal=this;}
 cal.outerContainer.style.display="none";}
