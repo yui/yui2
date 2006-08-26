@@ -50,10 +50,7 @@
 				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
 				<ul class="content">
 					
-						<li>
-							<a href="YAHOO.widget.html">
-								YAHOO.widget</a>
-						</li>
+
 					
 						<li>
 							<a href="YAHOO.widget.Calendar.html">
@@ -187,7 +184,7 @@
 							<td class="name">
 								<a href="YAHOO.widget.Calendar_Core.html">YAHOO.widget.Calendar_Core</a>
 							</td>
-							<td class="overview"><p>Calendar_Core is the base class for the Calendar widget.</td>
+							<td class="overview">&nbsp;</td>
 						</tr>
 						
 					</table>
@@ -202,14 +199,14 @@
 		
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<pre class="sourceview"><span class="comment">/**
+				<pre class="sourceview"><span class="comment">/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt 
-**/</span>
+http://developer.yahoo.net/yui/license.txt
+Version 0.11.3
+*/</span>
 
 <span class="comment">/**
-* <span class="attrib">@class</span>
 * &lt;p&gt;Calendar_Core is the base class for the Calendar widget. In its most basic
 * implementation, it has the ability to render a calendar widget on the page
 * that can be manipulated to select a single date, move back and forth between
@@ -1482,7 +1479,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.select = <spa
 		<span class="reserved">this</span>.parent.sync(<span class="reserved">this</span>);
 	}
 
-	<span class="reserved">this</span>.onSelect();
+	<span class="reserved">this</span>.onSelect(aToBeSelected);
 
 	<span class="reserved">return</span> <span class="reserved">this</span>.getSelectedDates();
 };
@@ -1515,7 +1512,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.selectCell = 
 
 	<span class="reserved">this</span>.renderCellStyleSelected(dCellDate,cell);
 
-	<span class="reserved">this</span>.onSelect();
+	<span class="reserved">this</span>.onSelect([selectDate]);
 	<span class="reserved">this</span>.doCellMouseOut.call(cell, null, <span class="reserved">this</span>);
 
 	<span class="reserved">return</span> <span class="reserved">this</span>.getSelectedDates();
@@ -1550,7 +1547,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.deselect = <s
 		<span class="reserved">this</span>.parent.sync(<span class="reserved">this</span>);
 	} 
 
-	<span class="reserved">this</span>.onDeselect();
+	<span class="reserved">this</span>.onDeselect(aToBeSelected);
 	<span class="reserved">return</span> <span class="reserved">this</span>.getSelectedDates();
 };
 
@@ -1588,7 +1585,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.deselectCell 
 		<span class="reserved">this</span>.parent.sync(<span class="reserved">this</span>);
 	}
 
-	<span class="reserved">this</span>.onDeselect();
+	<span class="reserved">this</span>.onDeselect(selectDate);
 	<span class="reserved">return</span> <span class="reserved">this</span>.getSelectedDates();
 };
 
@@ -1603,6 +1600,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.deselectCell 
 YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.deselectAll = <span class="reserved">function</span>() {
 	<span class="reserved">this</span>.onBeforeDeselect();
 	var count = <span class="reserved">this</span>.selectedDates.length;
+	var sel = <span class="reserved">this</span>.selectedDates.concat();
 	<span class="reserved">this</span>.selectedDates.length = 0;
 
 	<span class="reserved">if</span> (<span class="reserved">this</span>.parent) {
@@ -1610,7 +1608,7 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.deselectAll =
 	}
 	
 	<span class="reserved">if</span> (count &gt; 0) {
-		<span class="reserved">this</span>.onDeselect();
+		<span class="reserved">this</span>.onDeselect(sel);
 	}
 
 	<span class="reserved">return</span> <span class="reserved">this</span>.getSelectedDates();
@@ -1735,8 +1733,9 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.onBeforeSelec
 
 <span class="comment">/**
 * Event executed when a date is selected in the calendar widget.
+* <span class="attrib">@param</span>	{Array}	selected	An array of date field arrays representing which date or dates were selected. Example: [ [2006,8,6],[2006,8,7],[2006,8,8] ]
 */</span>
-YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.onSelect = <span class="reserved">function</span>() { };
+YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.onSelect = <span class="reserved">function</span>(selected) { };
 
 <span class="comment">/**
 * Event executed before a date is deselected in the calendar widget.
@@ -1745,8 +1744,9 @@ YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.onBeforeDesel
 
 <span class="comment">/**
 * Event executed when a date is deselected in the calendar widget.
+* <span class="attrib">@param</span>	{Array}	selected	An array of date field arrays representing which date or dates were deselected. Example: [ [2006,8,6],[2006,8,7],[2006,8,8] ]
 */</span>
-YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.onDeselect = <span class="reserved">function</span>() { };
+YAHOO.widget.Calendar_Core.<span class="reserved">prototype</span>.onDeselect = <span class="reserved">function</span>(deselected) { };
 
 <span class="comment">/**
 * Event executed when the user navigates to a different calendar page.

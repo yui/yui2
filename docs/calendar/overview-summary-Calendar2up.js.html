@@ -50,10 +50,7 @@
 				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
 				<ul class="content">
 					
-						<li>
-							<a href="YAHOO.widget.html">
-								YAHOO.widget</a>
-						</li>
+
 					
 						<li>
 							<a href="YAHOO.widget.Calendar.html">
@@ -187,16 +184,14 @@
 							<td class="name">
 								<a href="YAHOO.widget.Calendar2up.html">YAHOO.widget.Calendar2up</a>
 							</td>
-							<td class="overview">Calendar2up is the default implementation of the CalendarGroup base class, when used
- in a 2-up view.</td>
+							<td class="overview">&nbsp;</td>
 						</tr>
 						
 						<tr>
 							<td class="name">
 								<a href="YAHOO.widget.Calendar2up_Cal.html">YAHOO.widget.Calendar2up_Cal</a>
 							</td>
-							<td class="overview">Calendar2up_Cal is the default implementation of the Calendar_Core base class, when used
- in a 2-up view.</td>
+							<td class="overview">&nbsp;</td>
 						</tr>
 						
 					</table>
@@ -211,14 +206,14 @@
 		
 			<div class="section source">
 				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<pre class="sourceview"><span class="comment">/**
+				<pre class="sourceview"><span class="comment">/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt 
-**/</span>
+http://developer.yahoo.net/yui/license.txt
+Version 0.11.3
+*/</span>
 
 <span class="comment">/**
-* <span class="attrib">@class</span>
 * Calendar2up_Cal is the default implementation of the Calendar_Core base class, when used
 * in a 2-up view. This class is the UED-approved version of the calendar selector widget. For all documentation
 * on the implemented methods listed here, see the documentation for Calendar_Core. This class
@@ -233,6 +228,7 @@ http://developer.yahoo.net/yui/license.txt
 								MM/DD/YYYY-MM/DD/YYYY. Month/day combinations are defined using MM/DD.
 								Any combination of these can be combined by delimiting the string with
 								commas. Example: "12/24/2005,12/25,1/18/2006-1/21/2006"
+* <span class="attrib">@extends</span> YAHOO.widget.Calendar_Core
 */</span>
 YAHOO.widget.Calendar2up_Cal = <span class="reserved">function</span>(id, containerId, monthyear, selected) {
 	<span class="reserved">if</span> (arguments.length &gt; 0)
@@ -291,7 +287,6 @@ YAHOO.widget.Calendar2up_Cal.<span class="reserved">prototype</span>.renderHeade
 
 
 <span class="comment">/**
-* <span class="attrib">@class</span>
 * Calendar2up is the default implementation of the CalendarGroup base class, when used
 * in a 2-up view. This class is the UED-approved version of the 2-up calendar selector widget. For all documentation
 * on the implemented methods listed here, see the documentation for CalendarGroup. 
@@ -304,6 +299,7 @@ YAHOO.widget.Calendar2up_Cal.<span class="reserved">prototype</span>.renderHeade
 								MM/DD/YYYY-MM/DD/YYYY. Month/day combinations are defined using MM/DD.
 								Any combination of these can be combined by delimiting the string with
 								commas. Example: "12/24/2005,12/25,1/18/2006-1/21/2006"
+* <span class="attrib">@extends</span> YAHOO.widget.CalendarGroup
 */</span>
 YAHOO.widget.Calendar2up = <span class="reserved">function</span>(id, containerId, monthyear, selected) {
 	<span class="reserved">if</span> (arguments.length &gt; 0)

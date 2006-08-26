@@ -6,7 +6,6 @@ Version 0.11.3
 */
 
 /**
-* @class
 * <p>YAHOO.widget.DateMath is used for simple date manipulation. The class is a static utility
 * used for adding, subtracting, and comparing dates.</p>
 */
@@ -280,7 +279,6 @@ YAHOO.widget.DateMath = new function() {
 	};
 }
 /**
-* @class
 * <p>Calendar_Core is the base class for the Calendar widget. In its most basic
 * implementation, it has the ability to render a calendar widget on the page
 * that can be manipulated to select a single date, move back and forth between
@@ -1621,7 +1619,7 @@ YAHOO.widget.Calendar_Core.prototype.selectCell = function(cellIndex) {
 
 	this.renderCellStyleSelected(dCellDate,cell);
 
-	this.onSelect(selectDate);
+	this.onSelect([selectDate]);
 	this.doCellMouseOut.call(cell, null, this);
 
 	return this.getSelectedDates();
@@ -1845,8 +1843,9 @@ YAHOO.widget.Calendar_Core.prototype.onBeforeSelect = function() {
 
 /**
 * Event executed when a date is selected in the calendar widget.
+* @param	{Array}	selected	An array of date field arrays representing which date or dates were selected. Example: [ [2006,8,6],[2006,8,7],[2006,8,8] ]
 */
-YAHOO.widget.Calendar_Core.prototype.onSelect = function() { };
+YAHOO.widget.Calendar_Core.prototype.onSelect = function(selected) { };
 
 /**
 * Event executed before a date is deselected in the calendar widget.
@@ -1855,8 +1854,9 @@ YAHOO.widget.Calendar_Core.prototype.onBeforeDeselect = function() { };
 
 /**
 * Event executed when a date is deselected in the calendar widget.
+* @param	{Array}	selected	An array of date field arrays representing which date or dates were deselected. Example: [ [2006,8,6],[2006,8,7],[2006,8,8] ]
 */
-YAHOO.widget.Calendar_Core.prototype.onDeselect = function() { };
+YAHOO.widget.Calendar_Core.prototype.onDeselect = function(deselected) { };
 
 /**
 * Event executed when the user navigates to a different calendar page.
@@ -2160,7 +2160,6 @@ YAHOO.widget.Calendar_Core.prototype.toString = function() {
 
 YAHOO.widget.Cal_Core = YAHOO.widget.Calendar_Core;
 /**
-* @class
 * Calendar is the default implementation of the YAHOO.widget.Calendar_Core base class.
 * This class is the UED-approved version of the calendar selector widget. For all documentation
 * on the implemented methods listed here, see the documentation for YAHOO.widget.Calendar_Core.
@@ -2173,6 +2172,7 @@ YAHOO.widget.Cal_Core = YAHOO.widget.Calendar_Core;
 								MM/DD/YYYY-MM/DD/YYYY. Month/day combinations are defined using MM/DD.
 								Any combination of these can be combined by delimiting the string with
 								commas. Example: "12/24/2005,12/25,1/18/2006-1/21/2006"
+* @extends YAHOO.widget.Calendar_Core
 */
 YAHOO.widget.Calendar = function(id, containerId, monthyear, selected) {
 	if (arguments.length > 0) {
@@ -2237,7 +2237,6 @@ YAHOO.widget.Calendar.prototype.renderHeader = function() {
 
 YAHOO.widget.Cal = YAHOO.widget.Calendar;
 /**
-* @class
 * <p>YAHOO.widget.CalendarGroup is a special container class for YAHOO.widget.Calendar_Core. This class facilitates
 * the ability to have multi-page calendar views that share a single dataset and are
 * dependent on each other.</p>
@@ -2667,7 +2666,6 @@ YAHOO.widget.CalendarGroup.prototype.toString = function() {
 
 YAHOO.widget.CalGrp = YAHOO.widget.CalendarGroup;
 /**
-* @class
 * Calendar2up_Cal is the default implementation of the Calendar_Core base class, when used
 * in a 2-up view. This class is the UED-approved version of the calendar selector widget. For all documentation
 * on the implemented methods listed here, see the documentation for Calendar_Core. This class
@@ -2682,6 +2680,7 @@ YAHOO.widget.CalGrp = YAHOO.widget.CalendarGroup;
 								MM/DD/YYYY-MM/DD/YYYY. Month/day combinations are defined using MM/DD.
 								Any combination of these can be combined by delimiting the string with
 								commas. Example: "12/24/2005,12/25,1/18/2006-1/21/2006"
+* @extends YAHOO.widget.Calendar_Core
 */
 YAHOO.widget.Calendar2up_Cal = function(id, containerId, monthyear, selected) {
 	if (arguments.length > 0)
@@ -2740,7 +2739,6 @@ YAHOO.widget.Calendar2up_Cal.prototype.renderHeader = function() {
 
 
 /**
-* @class
 * Calendar2up is the default implementation of the CalendarGroup base class, when used
 * in a 2-up view. This class is the UED-approved version of the 2-up calendar selector widget. For all documentation
 * on the implemented methods listed here, see the documentation for CalendarGroup. 
@@ -2753,6 +2751,7 @@ YAHOO.widget.Calendar2up_Cal.prototype.renderHeader = function() {
 								MM/DD/YYYY-MM/DD/YYYY. Month/day combinations are defined using MM/DD.
 								Any combination of these can be combined by delimiting the string with
 								commas. Example: "12/24/2005,12/25,1/18/2006-1/21/2006"
+* @extends YAHOO.widget.CalendarGroup
 */
 YAHOO.widget.Calendar2up = function(id, containerId, monthyear, selected) {
 	if (arguments.length > 0)

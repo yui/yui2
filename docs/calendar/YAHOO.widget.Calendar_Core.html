@@ -50,10 +50,7 @@
 				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
 				<ul class="content">
 					
-						<li>
-							<a href="YAHOO.widget.html">
-								YAHOO.widget</a>
-						</li>
+
 					
 						<li>
 							<a href="YAHOO.widget.Calendar.html">
@@ -529,7 +526,7 @@
 						<a href="YAHOO.widget.Calendar_Core.html#YAHOO.widget.Calendar_Core()">YAHOO.widget.Calendar_Core</a>
 					</code>
 					<div class="description">
-						&nbsp;
+						<p>Calendar_Core is the base class for the Calendar widget.&nbsp;
 					</div>
 				</div>
 			</div>
@@ -905,7 +902,7 @@
 								<td class="spec">
 									<code>
 										<a href="#onDeselect">onDeselect</a>
-										()
+										(deselected)
 									</code>
 									<div class="description">
 										Event executed when a date is deselected in the calendar widget.&nbsp;
@@ -944,7 +941,7 @@
 								<td class="spec">
 									<code>
 										<a href="#onSelect">onSelect</a>
-										()
+										(&lt;Array&gt; selected)
 									</code>
 									<div class="description">
 										Event executed when a date is selected in the calendar widget.&nbsp;
@@ -1766,6 +1763,18 @@ style, localization, and other display and behavioral options.&nbsp;
 						</code>
 						<div class="description">
 							
+								<p>Calendar_Core is the base class for the Calendar widget. In its most basic
+ implementation, it has the ability to render a calendar widget on the page
+ that can be manipulated to select a single date, move back and forth between
+ months and years.</p>
+ <p>To construct the placeholder for the calendar widget, the code is as
+ follows:
+	<xmp>
+		<div id="cal1Container"></div>
+	</xmp>
+ Note that the table can be replaced with any kind of element.
+ </p>
+							
 							
 							
 								<dl>
@@ -1797,7 +1806,7 @@ style, localization, and other display and behavioral options.&nbsp;
 							
 							
 							
-								HASH(0x1daea14)
+								HASH(0x1ddc754)
 							
 						</div>
 					</div>
@@ -1844,7 +1853,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1db6658)
+									HASH(0x1de1794)
 								
 							</div>
 						</div>
@@ -1876,7 +1885,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1db67c0)
+									HASH(0x1de18fc)
 								
 							</div>
 						</div>
@@ -1913,7 +1922,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1db68f8)
+									HASH(0x1de1a34)
 								
 							</div>
 						</div>
@@ -1950,7 +1959,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1db6a60)
+									HASH(0x1de1b9c)
 								
 							</div>
 						</div>
@@ -1982,7 +1991,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1db6bc8)
+									HASH(0x1de1d04)
 								
 							</div>
 						</div>
@@ -2008,7 +2017,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1db6cf4)
+									HASH(0x1de1e30)
 								
 							</div>
 						</div>
@@ -2035,7 +2044,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1db6dfc)
+									HASH(0x1de1f38)
 								
 							</div>
 						</div>
@@ -2059,7 +2068,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dc8020)
+									HASH(0x1df79ac)
 								
 							</div>
 						</div>
@@ -2080,7 +2089,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dc8140)
+									HASH(0x1df7acc)
 								
 							</div>
 						</div>
@@ -2102,7 +2111,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dc8260)
+									HASH(0x1df7bec)
 								
 							</div>
 						</div>
@@ -2123,7 +2132,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dc8380)
+									HASH(0x1df7d0c)
 								
 							</div>
 						</div>
@@ -2145,7 +2154,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dc84a0)
+									HASH(0x1df7e2c)
 								
 							</div>
 						</div>
@@ -2176,7 +2185,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dc85b4)
+									HASH(0x1df7f40)
 								
 							</div>
 						</div>
@@ -2207,7 +2216,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dc86ec)
+									HASH(0x1df8078)
 								
 							</div>
 						</div>
@@ -2233,7 +2242,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dc8830)
+									HASH(0x1df81bc)
 								
 							</div>
 						</div>
@@ -2271,7 +2280,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1dc892c)
+									HASH(0x1df82b8)
 								
 							</div>
 						</div>
@@ -2297,7 +2306,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1dc8a58)
+									HASH(0x1df83e4)
 								
 							</div>
 						</div>
@@ -2335,7 +2344,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1dc8b54)
+									HASH(0x1df84e0)
 								
 							</div>
 						</div>
@@ -2361,7 +2370,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1dc8c80)
+									HASH(0x1df860c)
 								
 							</div>
 						</div>
@@ -2407,7 +2416,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dc8d94)
+									HASH(0x1df8720)
 								
 							</div>
 						</div>
@@ -2443,7 +2452,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1dc8f44)
+									HASH(0x1df88d0)
 								
 							</div>
 						</div>
@@ -2464,7 +2473,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dca580)
+									HASH(0x1e0fd9c)
 								
 							</div>
 						</div>
@@ -2485,7 +2494,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dca6a0)
+									HASH(0x1e0febc)
 								
 							</div>
 						</div>
@@ -2506,7 +2515,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dca7c0)
+									HASH(0x1e0ffdc)
 								
 							</div>
 						</div>
@@ -2527,7 +2536,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dca8e0)
+									HASH(0x1e100fc)
 								
 							</div>
 						</div>
@@ -2548,7 +2557,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dcaa00)
+									HASH(0x1e1021c)
 								
 							</div>
 						</div>
@@ -2569,7 +2578,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dcab20)
+									HASH(0x1e1033c)
 								
 							</div>
 						</div>
@@ -2580,7 +2589,7 @@ style, localization, and other display and behavioral options.&nbsp;
 							<code>
 								void 
 								<strong>onDeselect</strong>
-								()
+								(deselected)
 							</code>
 									
 							<div class="description">
@@ -2588,9 +2597,19 @@ style, localization, and other display and behavioral options.&nbsp;
 									Event executed when a date is deselected in the calendar widget.
 								
 								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>selected</code> - 
+													An array of date field arrays representing which date or dates were deselected. Example: [ [2006,8,6],[2006,8,7],[2006,8,8] ]   
+											</dd>
+										
+									</dl>
 								
 								
-									HASH(0x1dcac40)
+								
+									HASH(0x1e10450)
 								
 							</div>
 						</div>
@@ -2611,7 +2630,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dcad60)
+									HASH(0x1e10594)
 								
 							</div>
 						</div>
@@ -2632,7 +2651,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dcae80)
+									HASH(0x1e106b4)
 								
 							</div>
 						</div>
@@ -2643,7 +2662,7 @@ style, localization, and other display and behavioral options.&nbsp;
 							<code>
 								void 
 								<strong>onSelect</strong>
-								()
+								(&lt;Array&gt; selected)
 							</code>
 									
 							<div class="description">
@@ -2651,9 +2670,19 @@ style, localization, and other display and behavioral options.&nbsp;
 									Event executed when a date is selected in the calendar widget.
 								
 								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>selected</code> - 
+													An array of date field arrays representing which date or dates were selected. Example: [ [2006,8,6],[2006,8,7],[2006,8,8] ]   
+											</dd>
+										
+									</dl>
 								
 								
-									HASH(0x1dcafa0)
+								
+									HASH(0x1e107c8)
 								
 							</div>
 						</div>
@@ -2674,7 +2703,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dcb0c0)
+									HASH(0x1e1090c)
 								
 							</div>
 						</div>
@@ -2695,7 +2724,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dcb1e0)
+									HASH(0x1e10a2c)
 								
 							</div>
 						</div>
@@ -2719,7 +2748,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dcb300)
+									HASH(0x1e10b4c)
 								
 							</div>
 						</div>
@@ -2756,7 +2785,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dcb414)
+									HASH(0x1e10c60)
 								
 							</div>
 						</div>
@@ -2798,7 +2827,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1dd3050)
+									HASH(0x1df90ec)
 								
 							</div>
 						</div>
@@ -2842,7 +2871,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1dd31a0)
+									HASH(0x1df923c)
 								
 							</div>
 						</div>
@@ -2884,7 +2913,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1dd32f0)
+									HASH(0x1df938c)
 								
 							</div>
 						</div>
@@ -2925,7 +2954,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1dd3440)
+									HASH(0x1df94dc)
 								
 							</div>
 						</div>
@@ -2966,7 +2995,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1dd3590)
+									HASH(0x1df962c)
 								
 							</div>
 						</div>
@@ -3007,7 +3036,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1dd36e0)
+									HASH(0x1df977c)
 								
 							</div>
 						</div>
@@ -3048,7 +3077,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1dd3830)
+									HASH(0x1df98cc)
 								
 							</div>
 						</div>
@@ -3089,7 +3118,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1dd3980)
+									HASH(0x1df9a1c)
 								
 							</div>
 						</div>
@@ -3130,7 +3159,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1dd3ad0)
+									HASH(0x1df9b6c)
 								
 							</div>
 						</div>
@@ -3153,7 +3182,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dd3c44)
+									HASH(0x1df9ce0)
 								
 							</div>
 						</div>
@@ -3174,7 +3203,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dd3d64)
+									HASH(0x1df9e00)
 								
 							</div>
 						</div>
@@ -3195,7 +3224,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dd3e84)
+									HASH(0x1df9f20)
 								
 							</div>
 						</div>
@@ -3232,7 +3261,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1dd3f8c)
+									HASH(0x1e01044)
 								
 							</div>
 						</div>
@@ -3269,7 +3298,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1de0a58)
+									HASH(0x1e011ac)
 								
 							</div>
 						</div>
@@ -3290,7 +3319,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1de0bcc)
+									HASH(0x1e01320)
 								
 							</div>
 						</div>
@@ -3312,7 +3341,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1de0cec)
+									HASH(0x1e01440)
 								
 							</div>
 						</div>
@@ -3333,7 +3362,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1de0e0c)
+									HASH(0x1e01560)
 								
 							</div>
 						</div>
@@ -3371,7 +3400,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1de0f08)
+									HASH(0x1e0165c)
 								
 							</div>
 						</div>
@@ -3409,7 +3438,7 @@ style, localization, and other display and behavioral options.&nbsp;
 									</dl>
 								
 								
-									HASH(0x1de1028)
+									HASH(0x1e0177c)
 								
 							</div>
 						</div>
@@ -3440,7 +3469,7 @@ style, localization, and other display and behavioral options.&nbsp;
 								
 								
 								
-									HASH(0x1de1160)
+									HASH(0x1e018b4)
 								
 							</div>
 						</div>
@@ -3524,7 +3553,7 @@ style, localization, and other display and behavioral options.
 								
 								
 								
-									HASH(0x1de12a4)
+									HASH(0x1e019f8)
 								
 							</div>
 						</div>
@@ -3555,7 +3584,7 @@ style, localization, and other display and behavioral options.
 								
 								
 								
-									HASH(0x1de13b8)
+									HASH(0x1e01b0c)
 								
 							</div>
 						</div>
@@ -3587,7 +3616,7 @@ style, localization, and other display and behavioral options.
 								
 								
 								
-									HASH(0x1de14f0)
+									HASH(0x1e01c44)
 								
 							</div>
 						</div>
@@ -3619,7 +3648,7 @@ style, localization, and other display and behavioral options.
 								
 								
 								
-									HASH(0x1de1628)
+									HASH(0x1e01d7c)
 								
 							</div>
 						</div>
@@ -3640,7 +3669,7 @@ style, localization, and other display and behavioral options.
 								
 								
 								
-									HASH(0x1de176c)
+									HASH(0x1e01ec0)
 								
 							</div>
 						</div>
@@ -3667,7 +3696,7 @@ style, localization, and other display and behavioral options.
 									</dl>
 								
 								
-									HASH(0x1de1874)
+									HASH(0x1e01fc8)
 								
 							</div>
 						</div>
@@ -3689,7 +3718,7 @@ style, localization, and other display and behavioral options.
 								
 								
 								
-									HASH(0x1dec090)
+									HASH(0x1e1c104)
 								
 							</div>
 						</div>
@@ -3711,7 +3740,7 @@ style, localization, and other display and behavioral options.
 								
 								
 								
-									HASH(0x1dec1b0)
+									HASH(0x1e1c224)
 								
 							</div>
 						</div>
@@ -3732,7 +3761,7 @@ style, localization, and other display and behavioral options.
 								
 								
 								
-									HASH(0x1dec2d0)
+									HASH(0x1e1c344)
 								
 							</div>
 						</div>
@@ -3768,7 +3797,7 @@ style, localization, and other display and behavioral options.
 								
 								
 								
-									HASH(0x1dec3e4)
+									HASH(0x1e1c458)
 								
 							</div>
 						</div>

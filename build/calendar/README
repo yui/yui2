@@ -1,5 +1,9 @@
 Calendar Release Notes
 
+*** version 0.11.3 ***
+
+	- Calendar_Core: Added arguments for selected/deselected dates to onSelect/onDeselect
+
 *** version 0.11.0 ***
 
 	- DateMath: DateMath.add now properly adds weeks
