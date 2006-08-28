@@ -1,5 +1,38 @@
 YUI Library Release Notes
 
+*** version 0.11.3 ***
+
+This update contains general fixes to the YUI library.  Please see the
+README file for each component in the build directory for updates and fixes
+since version 0.11.2.
+
+*** version 0.11.2 ***
+
+This update contains a high-priority fix to Drag and Drop that prevents text
+selection.  Additional details can be found in the README file for:
+
+* Drag and Drop
+
+*** version 0.11.1 ***
+
+Release 0.11.1 addresses some high-priority bugs reported in the recently
+released version 0.11.0. Additional details can be found in the README files for
+each updated component:
+
+* Animation
+* Dom
+* Drag and Drop
+* Connection Manager
+* Container
+
+*** version 0.11.0 ***
+
+This version introduces the Logger widget.  The YUI cheatsheets for version
+0.11.0 and 0.10.0 are also included in this distribution under docs/assets.
+
+Please see the README file for each component in the build directory for
+updates and fixes since version 0.10.0.
+
 *** version 0.10.0 ***
 
 In this release, the directory structure has been modified to provide more
@@ -63,6 +96,3 @@ stored as sub-directories: yui/examples/dom/css and yui/examples/dom/img.
 Each functional example is also available and functional on
 developer.yahoo.com/yui/.  They reproduced here as part of the distribution
 for your convenience.
-
-This new directory structure mirrors the YUI sourceforge project CVS
-directory.
