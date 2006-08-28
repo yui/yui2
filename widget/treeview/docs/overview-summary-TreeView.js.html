@@ -1,8 +1,6 @@
 
 <html>
 <head>
-	<!--<title>YUI API - TreeView.js</title>-->
-	<!--<title>YUI API - TreeView.js </title>-->
 	<title>API: TreeView overview-summary-TreeView.js.html (YUI Library)</title>
 	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
 </head>
@@ -204,7 +202,6 @@
 				<strong>Quick Links:</strong>&nbsp;
 				
 					
-						<a href="#classSummary">Class Summary</a> |
 					
 					
 				
@@ -216,19 +213,11 @@
 		
 			
 				<div class="section class summaries">
-					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 			
 				<div class="content">
-					<table border="1" cellpadding="3" cellspacing="0">
 						
-						<tr>
-							<td class="name">
-								<a href="YAHOO.widget.TreeView.html">YAHOO.widget.TreeView</a>
-							</td>
-							<td class="overview">&nbsp;</td>
-						</tr>
 						
-					</table>
+
 				</div>
 			</div>
 		
@@ -239,7 +228,19 @@
 		
 		
 			<div class="section source">
-				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+
+
+<style>
+strong.alert {color:red;}
+</style>
+<p><strong class="alert">Note:</strong> Code presented here has been
+modified from the original source to aid in processing and
+presentation.  This is <strong>NOT</strong> functional code.  To review this
+component's literal, functional source, please refer to its
+JavaScript files as provided in <a href="http://sourceforge.net/
+projects/yui/">the downloadable YUI Library distribution</a>.</p>
+
+				<h3><a name="source">Source Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<pre class="sourceview"><span class="comment">/**
  * Contains the tree view state data and the root node.  This is an
  * ordered tree; child nodes will be displayed in the order created, and
@@ -661,6 +662,11 @@ YAHOO.widget.TreeView.<span class="reserved">prototype</span> = {
         <span class="reserved">if</span> (node.nextSibling) {
             node.nextSibling.previousSibling = node.previousSibling;
         }
+
+        node.parent = null;
+        node.previousSibling = null;
+        node.nextSibling = null;
+        node.tree = null;
 <span class="comment">
         // Update the tree's node collection </span>
         delete <span class="reserved">this</span>._nodes[node.index];
