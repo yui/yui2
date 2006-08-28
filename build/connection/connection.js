@@ -539,7 +539,7 @@ YAHOO.util.Connect =
    * @public
    * @param {string || object} form id or name attribute, or form object.
    * @param {string} optional boolean to indicate SSL environment.
-   * @param {string} optional qualified path of iframe resource for SSL in IE.
+   * @param {string || boolean} optional qualified path of iframe resource for SSL in IE.
    * @return void
    */
 	setForm:function(formId, isUpload, secureUri)
