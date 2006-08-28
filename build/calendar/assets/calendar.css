@@ -2,7 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.11.0
+Version 0.11.3
 */
 
 .yui-cal2upwrapper {*height:1%;} /* IE */
@@ -13,10 +13,6 @@ Version 0.11.0
 	padding:5px;
 	background-color:#F7F9FB;
 	border:1px solid #7B9EBD;
-}
-
-.yui-cal2upwrapper .yui-calcontainer {
-	width:24.5em;
 }
 
 .yui-calcontainer .title {
@@ -71,8 +67,7 @@ Version 0.11.0
 }
 
 .yui-calendar td.calcell {
-	width:1.5em;
-	height:1em;
+	padding:.1em .2em;
 	border:1px solid #E0E0E0;
 	background-color:#FFF;
 }
