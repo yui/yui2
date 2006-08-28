@@ -1,8 +1,13 @@
 Animation Release Notes
 
+*** version 0.11.3 ***
+
+* no changes
+
 *** version 0.11.1 ***
 
-* changed "prototype" shorthand to "proto" (workaround firefox < 1.5 scoping bug)
+* changed "prototype" shorthand to "proto" (workaround firefox < 1.5 scoping
+bug)
 
 *** version 0.11.0 ***
 
@@ -14,11 +19,12 @@ Animation Release Notes
 
 *** version 0.10.0 ***
 
-* Scroll now handles relative ("by") animation correctly 
+* Scroll now handles relative ("by") animation correctly
 
 * Now converts "auto" values of "from" to appropriate initial values
 
 *** version 0.9.0 ***
 
 * Initial release
+
 
