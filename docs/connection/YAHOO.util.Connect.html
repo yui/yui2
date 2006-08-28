@@ -1,0 +1,1278 @@
+
+<html>
+<head>
+	<title>JavaScript Documentation - </title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">YAHOO</a></h3>
+
+	<div class="breadcrumbs">
+
+
+
+
+
+
+
+
+				<a href="./index.html">YAHOO</a>
+				&gt;
+				<strong>YAHOO.util.Connect</strong>
+
+
+
+
+
+
+
+
+	</div>
+</div>
+
+<div id="body">
+
+
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+
+
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+
+						<li>
+							<a href="YAHOO.util.Connect.html">
+								YAHOO.util.Connect</a>
+						</li>
+
+				</ul>
+			</div>
+
+
+
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">
+
+						<li>
+							<a href="overview-summary-connection.js.html">
+								connection.js</a>
+						</li>
+
+				</ul>
+			</div>
+
+	</div>
+
+	<div id="pri">
+        <div class="main">
+
+		<h2>Class YAHOO.util.Connect</h2>
+		<pre>Object
+   |
+   +--<b>YAHOO.util.Connect</b>
+</pre>
+
+
+
+		<hr />
+
+		<!-- Class definition -->
+		<div class="class-def">
+			<div class="class-name">
+				<span class="class-attribs">
+
+				</span>
+				<span class="class-type">class</span>
+				<b>YAHOO.util.Connect</b>
+			</div>
+			<div class="class-extends">
+
+			</div>
+		</div>
+
+
+<div class="meta">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+		<!-- ======== QUICK LINKS ======== -->
+		<div class="quick-links">
+			<strong>Quick Links:</strong>&nbsp;
+
+
+				<a href="#field_summary">Field Summary</a>
+
+
+
+
+				<a href="#methodSummary">Method Summary</a> |
+				<a href="#methodDetails">Method Details</a>
+
+		</div>
+		<!-- ======== END QUICK LINKS ======== -->
+
+		<!-- ======== NESTED CLASS SUMMARY ======== -->
+
+		<!-- ======== END NESTED CLASS SUMMARY ======== -->
+
+		<!-- =========== FIELD SUMMARY =========== -->
+
+			<div class="section field summaries">
+				<h3><a name="field_summary">Field Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#_has_http_headers">_has_http_headers</a>
+								</code>
+								<div class="description">
+									Determines if HTTP headers are set.&nbsp;
+								</div>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="flags">object</td>
+							<td class="spec">
+								<code>
+									<a href="#_http_header">_http_header</a>
+								</code>
+								<div class="description">
+									Object of HTTP header(s)&nbsp;
+								</div>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#_default_post_header">_default_post_header</a>
+								</code>
+								<div class="description">
+									Determines if a default header of Content-Type of 'application/x-www-form-urlencoded' will be added to any client HTTP headers for POST transactions.
+								</div>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="flags">object</td>
+							<td class="spec">
+								<code>
+									<a href="#_formNode">_formNode</a>
+								</code>
+								<div class="description">
+									Property modified by setForm() to set a reference to the HTML form node if the desired action is file upload.;
+								</div>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#_isFileUpload">_isFileUpload</a>
+								</code>
+								<div class="description">
+									Property modified by setForm() to set the HTML form data for each transaction.&nbsp;
+								</div>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="flags">boolean</td>
+							<td class="spec">
+								<code>
+									<a href="#_isFormSubmit">_isFormSubmit</a>
+								</code>
+								<div class="description">
+									Property modified by setForm() to determine if the data
+ should be submitted as an HTML form.&nbsp;
+								</div>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="flags">array</td>
+							<td class="spec">
+								<code>
+									<a href="#_msxml_progid">_msxml_progid</a>
+								</code>
+								<div class="description">
+									Array of MSFT ActiveX ids for XMLHttpRequest.&nbsp;
+								</div>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="flags">array</td>
+							<td class="spec">
+								<code>
+									<a href="#_poll">_poll</a>
+								</code>
+								<div class="description">
+									Collection of polling references to the polling mechanism in handleReadyState.&nbsp;
+								</div>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="flags">int</td>
+							<td class="spec">
+								<code>
+									<a href="#_polling_interval">_polling_interval</a>
+								</code>
+								<div class="description">
+									The polling frequency, in milliseconds, for HandleReadyState.&nbsp;
+								</div>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="flags">string</td>
+							<td class="spec">
+								<code>
+									<a href="#_sFormData">_sFormData</a>
+								</code>
+								<div class="description">
+									Property modified by setForm() to set the HTML form data
+ for each transaction.&nbsp;
+								</div>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="flags">array</td>
+							<td class="spec">
+								<code>
+									<a href="#_timeOut">_timeOut</a>
+								</code>
+								<div class="description">
+									Queue of timeout values for each transaction callback with a defined timeout value.&nbsp;
+								</div>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="flags">int</td>
+							<td class="spec">
+								<code>
+									<a href="#_transaction_id">_transaction_id</a>
+								</code>
+								<div class="description">
+									A transaction counter that increments the transaction id for each transaction.&nbsp;
+								</div>
+							</td>
+						</tr>
+
+					</table>
+				</div>
+			</div>
+
+
+
+		<!-- =========== END FIELD SUMMARY =========== -->
+
+
+		<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+
+		<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
+
+
+		<!-- ========== METHOD SUMMARY =========== -->
+
+			<div class="section method summaries">
+				<h3><a name="methodSummary">Method Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<table border="1" cellpadding="3" cellspacing="0">
+
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#abort">abort</a>
+										(&lt;object&gt; o)
+									</code>
+									<div class="description">
+										Public method to terminate a transaction, if it has not reached readyState 4.&nbsp;
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="flags">object</td>
+								<td class="spec">
+									<code>
+										<a href="#asyncRequest">asyncRequest</a>
+										(&lt;string&gt; method, &lt;string&gt; uri, callback, &lt;string&gt; postData)
+									</code>
+									<div class="description">
+										Method for initiating an asynchronous request via the XHR object.&nbsp;
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#createExceptionObject">createExceptionObject</a>
+										(&lt;int&gt; tId, &lt;object&gt; callbackArg)
+									</code>
+									<div class="description">
+										If a transaction cannot be completed due to dropped or closed connections,
+ there may be not be enough information to build a full response object.&nbsp;
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#createResponseObject">createResponseObject</a>
+										(&lt;object&gt; o, &lt;object&gt; callbackArg)
+									</code>
+									<div class="description">
+										This method evaluates the server response, creates and returns the results via
+ its properties.&nbsp;
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#createXhrObject">createXhrObject</a>
+										(&lt;int&gt; transactionId)
+									</code>
+									<div class="description">
+										Instantiates a XMLHttpRequest object and returns an object with two properties:
+ the XMLHttpRequest instance and the transaction id.&nbsp;
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#getConnectionObject">getConnectionObject</a>
+										()
+									</code>
+									<div class="description">
+										This method is called by asyncRequest to create a
+ valid connection object for the transaction.&nbsp;
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#handleReadyState">handleReadyState</a>
+										(&lt;object&gt; o, callback)
+									</code>
+									<div class="description">
+										This method serves as a timer that polls the XHR object's readyState
+ property during a transaction, instead of binding a callback to the
+ onreadystatechange event.&nbsp;
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#handleTransactionResponse">handleTransactionResponse</a>
+										(&lt;object&gt; o, &lt;function&gt; callback)
+									</code>
+									<div class="description">
+										This method attempts to interpret the server response and
+ determine whether the transaction was successful, or if an error or
+ exception was encountered.&nbsp;
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#initHeader">initHeader</a>
+										(&lt;string&gt; label,&lt;string&gt; value)
+									</code>
+									<div class="description">
+										Public method that stores the custom HTTP headers for each transaction.&nbsp;
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#isCallInProgress">isCallInProgress</a>
+										(&lt;object&gt; o)
+									</code>
+									<div class="description">
+										Public method to check if the transaction is still being processed.&nbsp;
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#releaseObject">releaseObject</a>
+										(&lt;object&gt; o)
+									</code>
+									<div class="description">
+										Dereference the XHR instance and the connection object after the transaction is completed.&nbsp;
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#setDefaultPostHeader">setDefaultPostHeader</a>
+										(&lt;boolean&gt; b)
+									</code>
+									<div class="description">
+										Member to enable or disable the default POST header.&nbsp;
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#setForm">setForm</a>
+										(formId)
+									</code>
+									<div class="description">
+										This method assembles the form label and value pairs and
+ constructs an encoded string.&nbsp;
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#setHeader">setHeader</a>
+										(&lt;object&gt; o)
+									</code>
+									<div class="description">
+										Accessor that sets the HTTP headers for each transaction.&nbsp;
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#setPollingInterval">setPollingInterval</a>
+										(&lt;int&gt; i)
+									</code>
+									<div class="description">
+										Member to modify the default polling interval.&nbsp;
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="flags">Object</td>
+								<td class="spec">
+									<code>
+										<a href="#setProgId">setProgId</a>
+										(id)
+									</code>
+									<div class="description">
+										Member to add an ActiveX id to the existing xml_progid array.&nbsp;
+									</div>
+								</td>
+							</tr>
+
+					</table>
+				</div>
+			</div>
+
+
+
+		<!-- ========== END METHOD SUMMARY =========== -->
+
+
+		<!-- ============ FIELD DETAIL START =========== -->
+
+			<div class="section field details">
+				<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+
+						<h4><a name="_has_http_headers">_has_http_headers</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>_has_http_headers</strong>
+							</code>
+							<div class="description">
+								Determines if HTTP headers are set.
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="_http_header">_http_header</a></h4>
+						<div class="detail">
+							<code>
+								object
+								&nbsp;
+								<strong>_http_header</strong>
+							</code>
+							<div class="description">
+								Object of HTTP header(s)
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="_isFormSubmit">_isFormSubmit</a></h4>
+						<div class="detail">
+							<code>
+								boolean
+								&nbsp;
+								<strong>_isFormSubmit</strong>
+							</code>
+							<div class="description">
+								Property modified by setForm() to determine if the data
+ should be submitted as an HTML form.
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="_msxml_progid">_msxml_progid</a></h4>
+						<div class="detail">
+							<code>
+								array
+								&nbsp;
+								<strong>_msxml_progid</strong>
+							</code>
+							<div class="description">
+								Array of MSFT ActiveX ids for XMLHttpRequest.
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="_poll">_poll</a></h4>
+						<div class="detail">
+							<code>
+								array
+								&nbsp;
+								<strong>_poll</strong>
+							</code>
+							<div class="description">
+								Collection of polling references to the polling mechanism in handleReadyState.
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="_polling_interval">_polling_interval</a></h4>
+						<div class="detail">
+							<code>
+								int
+								&nbsp;
+								<strong>_polling_interval</strong>
+							</code>
+							<div class="description">
+								The polling frequency, in milliseconds, for HandleReadyState.
+ when attempting to determine a transaction's XHR  readyState.
+ The default is 50 milliseconds.
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="_sFormData">_sFormData</a></h4>
+						<div class="detail">
+							<code>
+								string
+								&nbsp;
+								<strong>_sFormData</strong>
+							</code>
+							<div class="description">
+								Property modified by setForm() to set the HTML form data
+ for each transaction.
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="_transaction_id">_transaction_id</a></h4>
+						<div class="detail">
+							<code>
+								int
+								&nbsp;
+								<strong>_transaction_id</strong>
+							</code>
+							<div class="description">
+								A transaction counter that increments the transaction id for each transaction.
+							</div>
+						</div>
+						<hr />
+
+				</div>
+			</div>
+
+		<!-- ============ FIELD DETAIL END =========== -->
+
+		<!-- ========= CONSTRUCTOR DETAIL START ======== -->
+
+			<div class="section constructor details">
+				<h3><a name="constructor_detail">Constructor Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+					<h4><a name="YAHOO.util.Connect()">YAHOO.util.Connect</a></h4>
+					<div class="detail">
+						<code>
+							<strong>YAHOO.util.Connect</strong>
+
+						</code>
+						<div class="description">
+
+
+
+
+
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		<!-- ========= CONSTRUCTOR DETAIL END ======== -->
+
+
+		<!-- ============ METHOD DETAIL START ========== -->
+
+			<div class="section method details">
+				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<div class="content">
+
+						<h4><a name="abort">abort</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								<strong>abort</strong>
+								(&lt;object&gt; o)
+							</code>
+
+							<div class="description">
+
+									Public method to terminate a transaction, if it has not reached readyState 4.
+
+
+									<dl>
+										<dt>Parameters:</dt>
+
+											<dd>
+												<code>o</code> -
+												 The connection object returned by asyncRequest.
+											</dd>
+
+									</dl>
+
+
+									<dl>
+										<dt>Returns:</dt>
+										<dd>void</dd>
+									</dl>
+
+
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="asyncRequest">asyncRequest</a></h4>
+						<div class="detail">
+							<code>
+								object
+								<strong>asyncRequest</strong>
+								(&lt;string&gt; method, &lt;string&gt; uri, &lt;object&gt; callback, &lt;string&gt; postData)
+							</code>
+
+							<div class="description">
+
+									Method for initiating an asynchronous request via the XHR object.
+
+
+									<dl>
+										<dt>Parameters:</dt>
+
+											<dd>
+												<code>method</code> -
+												 HTTP transaction method
+											</dd>
+
+											<dd>
+												<code>uri</code> -
+												 Fully qualified path of resource
+											</dd>
+
+											<dd>
+												<code>callback</code> -
+												 User-defined callback function or object
+											</dd>
+
+											<dd>
+												<code>postData</code> -
+												 POST body
+											</dd>
+
+									</dl>
+
+
+									<dl>
+										<dt>Returns:</dt>
+										<dd> Returns the connection object</dd>
+									</dl>
+
+
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="createExceptionObject">createExceptionObject</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								<strong>createExceptionObject</strong>
+								(&lt;int&gt; tId, &lt;object&gt; callbackArg)
+							</code>
+
+							<div class="description">
+
+									If a transaction cannot be completed due to dropped or closed connections,
+ there may be not be enough information to build a full response object.
+ The failure callback will be fired and this specific condition can be identified
+ by a status property value of 0.
+
+
+									<dl>
+										<dt>Parameters:</dt>
+
+											<dd>
+												<code>tId</code> -
+												 Transaction Id
+											</dd>
+
+											<dd>
+												<code>callbackArg</code> -
+												 User-defined argument or arguments to be passed to the callback.
+											</dd>
+
+									</dl>
+
+
+									<dl>
+										<dt>Returns:</dt>
+										<dd>object</dd>
+									</dl>
+
+
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="createResponseObject">createResponseObject</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								<strong>createResponseObject</strong>
+								(&lt;object&gt; o, &lt;object&gt; callbackArg)
+							</code>
+
+							<div class="description">
+
+									This method evaluates the server response, creates and returns the results via
+ its properties.  Success and failure cases will differ in the response
+ object's property values.
+
+
+									<dl>
+										<dt>Parameters:</dt>
+
+											<dd>
+												<code>o</code> -
+												 The connection object
+											</dd>
+
+											<dd>
+												<code>callbackArg</code> -
+												 User-defined argument or arguments to be passed to the callback
+											</dd>
+
+									</dl>
+
+
+									<dl>
+										<dt>Returns:</dt>
+										<dd>object</dd>
+									</dl>
+
+
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="createXhrObject">createXhrObject</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								<strong>createXhrObject</strong>
+								(&lt;int&gt; transactionId)
+							</code>
+
+							<div class="description">
+
+									Instantiates a XMLHttpRequest object and returns an object with two properties:
+ the XMLHttpRequest instance and the transaction id.
+
+
+									<dl>
+										<dt>Parameters:</dt>
+
+											<dd>
+												<code>transactionId</code> -
+												 Property containing the transaction id for this transaction.
+											</dd>
+
+									</dl>
+
+
+									<dl>
+										<dt>Returns:</dt>
+										<dd>connection object</dd>
+									</dl>
+
+
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="getConnectionObject">getConnectionObject</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								<strong>getConnectionObject</strong>
+								()
+							</code>
+
+							<div class="description">
+
+									This method is called by asyncRequest to create a
+ valid connection object for the transaction.  It also passes a
+ transaction id and increments the transaction id counter.
+
+
+
+									<dl>
+										<dt>Returns:</dt>
+										<dd>object</dd>
+									</dl>
+
+
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="handleReadyState">handleReadyState</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								<strong>handleReadyState</strong>
+								(&lt;object&gt; o, &lt;object&gt; callback)
+							</code>
+
+							<div class="description">
+
+									This method serves as a timer that polls the XHR object's readyState
+ property during a transaction, instead of binding a callback to the
+ onreadystatechange event.  Upon readyState 4, handleTransactionResponse
+ will process the response, and the timer will be cleared.
+
+
+									<dl>
+										<dt>Parameters:</dt>
+
+											<dd>
+												<code>o</code> -
+												 The connection object
+											</dd>
+
+											<dd>
+												<code>callback</code> -
+												 User-defined callback object
+											</dd>
+
+									</dl>
+
+
+									<dl>
+										<dt>Returns:</dt>
+										<dd>void</dd>
+									</dl>
+
+
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="handleTransactionResponse">handleTransactionResponse</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								<strong>handleTransactionResponse</strong>
+								(&lt;object&gt; o, &lt;function&gt; callback)
+							</code>
+
+							<div class="description">
+
+									This method attempts to interpret the server response and
+ determine whether the transaction was successful, or if an error or
+ exception was encountered.
+
+
+									<dl>
+										<dt>Parameters:</dt>
+
+											<dd>
+												<code>o</code> -
+												 The connection object
+											</dd>
+
+											<dd>
+												<code>callback</code> -
+												 - User-defined callback object
+											</dd>
+
+									</dl>
+
+
+									<dl>
+										<dt>Returns:</dt>
+										<dd>void</dd>
+									</dl>
+
+
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="initHeader">initHeader</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								<strong>initHeader</strong>
+								(&lt;string&gt; label,&lt;string&gt; value)
+							</code>
+
+							<div class="description">
+
+									Public method that stores the custom HTTP headers for each transaction.
+
+
+									<dl>
+										<dt>Parameters:</dt>
+
+											<dd>
+												<code>label</code> -
+												 The HTTP header label
+											</dd>
+
+											<dd>
+												<code>value</code> -
+												 The HTTP header value
+											</dd>
+
+									</dl>
+
+
+									<dl>
+										<dt>Returns:</dt>
+										<dd>void</dd>
+									</dl>
+
+
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="isCallInProgress">isCallInProgress</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								<strong>isCallInProgress</strong>
+								(&lt;object&gt; o)
+							</code>
+
+							<div class="description">
+
+									Public method to check if the transaction is still being processed.
+
+
+									<dl>
+										<dt>Parameters:</dt>
+
+											<dd>
+												<code>o</code> -
+												 The connection object returned by asyncRequest
+											</dd>
+
+									</dl>
+
+
+									<dl>
+										<dt>Returns:</dt>
+										<dd>boolean</dd>
+									</dl>
+
+
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="releaseObject">releaseObject</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								<strong>releaseObject</strong>
+								(&lt;object&gt; o)
+							</code>
+
+							<div class="description">
+
+									Dereference the XHR instance and the connection object after the transaction is completed.
+
+
+									<dl>
+										<dt>Parameters:</dt>
+
+											<dd>
+												<code>o</code> -
+												 The connection object
+											</dd>
+
+									</dl>
+
+
+									<dl>
+										<dt>Returns:</dt>
+										<dd>void</dd>
+									</dl>
+
+
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="setForm">setForm</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								<strong>setForm</strong>
+								(formId)
+							</code>
+
+							<div class="description">
+
+									This method assembles the form label and value pairs and
+ constructs an encoded string.
+ asyncRequest() will automatically initialize the
+ transaction with a HTTP header Content-Type of
+ application/x-www-form-urlencoded.
+
+
+									<dl>
+										<dt>Parameters:</dt>
+
+											<dd>
+												<code>string</code> -
+												 || object} form id or name attribute, or form object.
+											</dd>
+
+									</dl>
+
+
+									<dl>
+										<dt>Returns:</dt>
+										<dd>void</dd>
+									</dl>
+
+
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="setHeader">setHeader</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								<strong>setHeader</strong>
+								(&lt;object&gt; o)
+							</code>
+
+							<div class="description">
+
+									Accessor that sets the HTTP headers for each transaction.
+
+
+									<dl>
+										<dt>Parameters:</dt>
+
+											<dd>
+												<code>o</code> -
+												 The connection object for the transaction.
+											</dd>
+
+									</dl>
+
+
+									<dl>
+										<dt>Returns:</dt>
+										<dd>void</dd>
+									</dl>
+
+
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="setPollingInterval">setPollingInterval</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								<strong>setPollingInterval</strong>
+								(&lt;int&gt; i)
+							</code>
+
+							<div class="description">
+
+									Member to modify the default polling interval.
+
+
+									<dl>
+										<dt>Parameters:</dt>
+
+											<dd>
+												<code>i</code> -
+												 The polling interval in milliseconds.
+											</dd>
+
+									</dl>
+
+
+									<dl>
+										<dt>Returns:</dt>
+										<dd>void</dd>
+									</dl>
+
+
+							</div>
+						</div>
+						<hr />
+
+						<h4><a name="setProgId">setProgId</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								<strong>setProgId</strong>
+								(id)
+							</code>
+
+							<div class="description">
+
+									Member to add an ActiveX id to the existing xml_progid array.
+ In the event a new ActiveX id is introduced, it can be added without internal code modifications.
+
+
+									<dl>
+										<dt>Parameters:</dt>
+
+											<dd>
+												<code>string</code> -
+												 id The ActiveX id to be added to initialize the XHR object.
+											</dd>
+
+									</dl>
+
+
+									<dl>
+										<dt>Returns:</dt>
+										<dd>void</dd>
+									</dl>
+
+
+							</div>
+						</div>
+						<hr />
+
+				</div>
+			</div>
+
+		<!-- ============ METHOD DETAIL END ========== -->
+		</div>
+	</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	<br />
+	<br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">
+	JSDoc</a>
+</div>
+
+
+
+</body>
+</html>

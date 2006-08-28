@@ -1,0 +1,889 @@
+
+<html>
+<head>
+	<title>JavaScript Documentation - connection.js</title>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+	<h1>JavaScript Documentation</h1>
+	<h3><a href="./index.html">Connection Manager</a></h3>
+
+	<div class="breadcrumbs">
+
+
+
+
+				<a href="./index.html">YAHOO</a>
+				&gt;
+				<strong>connection.js</strong>
+
+
+
+
+
+
+
+
+
+
+
+
+	</div>
+</div>
+
+<div id="body">
+
+
+	<div class="nav">
+		<div class="module resources">
+			<ul class="content">
+				<li><a href="overview-tree.html">Tree View</a></li>
+				<li><a href="index-all.html">Element Index</a></li>
+			</ul>
+		</div>
+
+
+			<div class="module">
+				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
+				<ul class="content">
+
+						<li>
+							<a href="YAHOO.util.Connect.html">
+								YAHOO.util.Connect</a>
+						</li>
+
+				</ul>
+			</div>
+
+
+
+			<div class="module">
+				<h4><a href="./overview-summary.html">Files</a></h4>
+				<ul class="content">
+
+						<li>
+							<a href="overview-summary-connection.js.html">
+								connection.js</a>
+						</li>
+
+				</ul>
+			</div>
+
+	</div>
+
+	<div class="main">
+
+
+
+
+			   <h2>connection.js</h2>
+
+
+
+
+
+
+
+
+
+
+
+			<div class="section source">
+				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<pre class="sourceview"><span class="comment">/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.com/yui/license.txt
+version: 0.11.0
+*/</span>
+
+<span class="comment">/**
+ * The Connection Manager provides a simplified interface to the XMLHttpRequest
+ * object.  It handles cross-browser instantiantion of XMLHttpRequest, negotiates the
+ * interactive states and server response, returning the results to a pre-defined
+ * callback you create.
+ * @ class
+ */</span>
+YAHOO.util.Connect =
+{
+<span class="comment">/**
+   * Array of MSFT ActiveX ids for XMLHttpRequest.
+   * <span class="attrib">@private</span>
+   * <span class="attrib">@type</span> array
+   */</span>
+	_msxml_progid:[
+			<span class="literal">'MSXML2.XMLHTTP.3.0'</span>,
+			<span class="literal">'MSXML2.XMLHTTP'</span>,
+			<span class="literal">'Microsoft.XMLHTTP'</span>
+			],
+
+  <span class="comment">/**
+   * Object literal of HTTP header(s)
+   * <span class="attrib">@private</span>
+   * <span class="attrib">@type</span> object
+   */</span>
+	_http_header:{},
+
+  <span class="comment">/**
+   * Determines if HTTP headers are set.
+   * <span class="attrib">@private</span>
+   * <span class="attrib">@type</span> boolean
+   */</span>
+	_has_http_headers:false,
+
+ <span class="comment">/**
+  * Determines if a default header of
+  * Content-Type of 'application/x-www-form-urlencoded'
+  * will be added to any client HTTP headers sent for POST
+  * transactions.
+  * <span class="attrib">@private</span>
+  * <span class="attrib">@type</span> boolean
+  */</span>
+    _default_post_header:true,
+
+ <span class="comment">/**
+  * Property modified by setForm() to determine if the data
+  * should be submitted as an HTML form.
+  * <span class="attrib">@private</span>
+  * <span class="attrib">@type</span> boolean
+  */</span>
+    _isFormSubmit:false,
+
+ <span class="comment">/**
+  * Property modified by setForm() to determine if a file(s)
+  * upload is expected.
+  * <span class="attrib">@private</span>
+  * <span class="attrib">@type</span> boolean
+  */</span>
+    _isFileUpload:false,
+
+ <span class="comment">/**
+  * Property modified by setForm() to set a reference to the HTML
+  * form node if the desired action is file upload.
+  * <span class="attrib">@private</span>
+  * <span class="attrib">@type</span> object
+  */</span>
+    _formNode:null,
+
+ <span class="comment">/**
+  * Property modified by setForm() to set the HTML form data
+  * for each transaction.
+  * <span class="attrib">@private</span>
+  * <span class="attrib">@type</span> string
+  */</span>
+    _sFormData:null,
+
+ <span class="comment">/**
+  * Collection of polling references to the polling mechanism in handleReadyState.
+  * <span class="attrib">@private</span>
+  * <span class="attrib">@type</span> string
+  */</span>
+    _poll:[],
+
+ <span class="comment">/**
+  * Queue of timeout values for each transaction callback with a defined timeout value.
+  * <span class="attrib">@private</span>
+  * <span class="attrib">@type</span> string
+  */</span>
+    _timeOut:[],
+
+  <span class="comment">/**
+   * The polling frequency, in milliseconds, for HandleReadyState.
+   * when attempting to determine a transaction's XHR readyState.
+   * The default is 50 milliseconds.
+   * <span class="attrib">@private</span>
+   * <span class="attrib">@type</span> int
+   */</span>
+     _polling_interval:50,
+
+  <span class="comment">/**
+   * A transaction counter that increments the transaction id for each transaction.
+   * <span class="attrib">@private</span>
+   * <span class="attrib">@type</span> int
+   */</span>
+     _transaction_id:0,
+
+  <span class="comment">/**
+   * Member to add an ActiveX id to the existing xml_progid array.
+   * In the event(unlikely) a new ActiveX id is introduced, it can be added
+   * without internal code modifications.
+   * <span class="attrib">@public</span>
+   * <span class="attrib">@param</span> string id The ActiveX id to be added to initialize the XHR object.
+   * <span class="attrib">@return</span> void
+   */</span>
+	setProgId:<span class="reserved">function</span>(id)
+	{
+		<span class="reserved">this</span>._msxml_progid.unshift(id);
+	},
+
+  <span class="comment">/**
+   * Member to enable or disable the default POST header.
+   * <span class="attrib">@public</span>
+   * <span class="attrib">@param</span> boolean b Set and use default header - true or false .
+   * <span class="attrib">@return</span> void
+   */</span>
+	setDefaultPostHeader:<span class="reserved">function</span>(b)
+	{
+		<span class="reserved">this</span>._default_post_header = b;
+	},
+
+  <span class="comment">/**
+   * Member to modify the default polling interval.
+   * <span class="attrib">@public</span>
+   * <span class="attrib">@param</span> {int} i The polling interval in milliseconds.
+   * <span class="attrib">@return</span> void
+   */</span>
+	setPollingInterval:<span class="reserved">function</span>(i)
+	{
+		<span class="reserved">if</span>(typeof i == <span class="literal">'number'</span> &amp;&amp; isFinite(i)){
+				<span class="reserved">this</span>._polling_interval = i;
+		}
+	},
+
+  <span class="comment">/**
+   * Instantiates a XMLHttpRequest object and returns an object with two properties:
+   * the XMLHttpRequest instance and the transaction id.
+   * <span class="attrib">@private</span>
+   * <span class="attrib">@param</span> {int} transactionId Property containing the transaction id for this transaction.
+   * <span class="attrib">@return</span> connection object
+   */</span>
+	createXhrObject:<span class="reserved">function</span>(transactionId)
+	{
+		var obj,http;
+		try
+		{
+<span class="comment">			// Instantiates XMLHttpRequest in non-IE browsers and assigns to http.</span>
+			http = new XMLHttpRequest();
+<span class="comment">			//  Object literal with http and tId properties</span>
+			obj = { conn:http, tId:transactionId };
+		}
+		catch(e)
+		{
+			<span class="reserved">for</span>(var i=0; i&lt;<span class="reserved">this</span>._msxml_progid.length; ++i){
+				try
+				{
+<span class="comment">					// Instantiates XMLHttpRequest for IE and assign to http.</span>
+					http = new ActiveXObject(<span class="reserved">this</span>._msxml_progid[i]);
+<span class="comment">					//  Object literal with http and tId properties</span>
+					obj = { conn:http, tId:transactionId };
+					break;
+				}
+				catch(e){}
+			}
+		}
+		finally
+		{
+			<span class="reserved">return</span> obj;
+		}
+	},
+
+  <span class="comment">/**
+   * This method is called by asyncRequest to create a
+   * valid connection object for the transaction.  It also passes a
+   * transaction id and increments the transaction id counter.
+   * <span class="attrib">@private</span>
+   * <span class="attrib">@return</span> object
+   */</span>
+	getConnectionObject:<span class="reserved">function</span>()
+	{
+		var o;
+		var tId = <span class="reserved">this</span>._transaction_id;
+
+		try
+		{
+			o = <span class="reserved">this</span>.createXhrObject(tId);
+			<span class="reserved">if</span>(o){
+				<span class="reserved">this</span>._transaction_id++;
+			}
+		}
+		catch(e){}
+		finally
+		{
+			<span class="reserved">return</span> o;
+		}
+	},
+
+  <span class="comment">/**
+   * Method for initiating an asynchronous request via the XHR object.
+   * <span class="attrib">@public</span>
+   * <span class="attrib">@param</span> {string} method HTTP transaction method
+   * <span class="attrib">@param</span> {string} uri Fully qualified path of resource
+   * <span class="attrib">@param</span> callback User-defined callback function or object
+   * <span class="attrib">@param</span> {string} postData POST body
+   * <span class="attrib">@return</span> {object} Returns the connection object
+   */</span>
+	asyncRequest:<span class="reserved">function</span>(method, uri, callback, postData)
+	{
+		var o = <span class="reserved">this</span>.getConnectionObject();
+
+		<span class="reserved">if</span>(!o){
+			<span class="reserved">return</span> null;
+		}
+		<span class="reserved">else</span>{
+			<span class="reserved">if</span>(<span class="reserved">this</span>._isFormSubmit){
+				<span class="reserved">if</span>(<span class="reserved">this</span>._isFileUpload){
+					<span class="reserved">this</span>.uploadFile(o.tId, callback, uri);
+					<span class="reserved">this</span>.releaseObject(o);
+					<span class="reserved">return</span>;
+				}
+<span class="comment">
+				//If the specified HTTP method is GET, setForm() will return an</span>
+<span class="comment">				//encoded string that is concatenated to the uri to</span>
+<span class="comment">				//create a querystring.</span>
+				<span class="reserved">if</span>(method == <span class="literal">'GET'</span>){
+					uri += <span class="literal">"?"</span> +  <span class="reserved">this</span>._sFormData;
+				}
+				<span class="reserved">else</span> <span class="reserved">if</span>(method == <span class="literal">'POST'</span>){
+					postData =  <span class="reserved">this</span>._sFormData;
+				}
+				<span class="reserved">this</span>._sFormData = <span class="literal">''</span>;
+			}
+
+			o.conn.open(method, uri, true);
+
+			<span class="reserved">if</span>(<span class="reserved">this</span>._isFormSubmit || (postData &amp;&amp; <span class="reserved">this</span>._default_post_header)){
+				<span class="reserved">this</span>.initHeader(<span class="literal">'Content-Type'</span>,<span class="literal">'application/x-www-form-urlencoded'</span>);
+				<span class="reserved">if</span>(<span class="reserved">this</span>._isFormSubmit){
+					<span class="reserved">this</span>._isFormSubmit = false;
+				}
+			}
+<span class="comment">
+			//Verify whether the transaction has any user-defined HTTP headers</span>
+<span class="comment">			//and set them.</span>
+			<span class="reserved">if</span>(<span class="reserved">this</span>._has_http_headers){
+				<span class="reserved">this</span>.setHeader(o);
+			}
+
+			<span class="reserved">this</span>.handleReadyState(o, callback);
+			postData?o.conn.send(postData):o.conn.send(null);
+
+			<span class="reserved">return</span> o;
+		}
+	},
+
+  <span class="comment">/**
+   * This method serves as a timer that polls the XHR object's readyState
+   * property during a transaction, instead of binding a callback to the
+   * onreadystatechange event.  Upon readyState 4, handleTransactionResponse
+   * will process the response, and the timer will be cleared.
+   *
+   * <span class="attrib">@private</span>
+   * <span class="attrib">@param</span> {object} o The connection object
+   * <span class="attrib">@param</span> callback User-defined callback object
+   * <span class="attrib">@return</span> void
+   */</span>
+    handleReadyState:<span class="reserved">function</span>(o, callback)
+    {
+        var timeOut = callback.timeout;
+        var oConn = <span class="reserved">this</span>;
+
+        try
+        {
+            <span class="reserved">if</span>(timeOut !== undefined){
+            	<span class="reserved">this</span>._timeOut[o.tId] = window.setTimeout(<span class="reserved">function</span>(){ oConn.abort(o, callback, true) }, timeOut);
+            }
+            <span class="reserved">this</span>._poll[o.tId] = window.setInterval(
+                <span class="reserved">function</span>(){
+					<span class="reserved">if</span>(o.conn &amp;&amp; o.conn.readyState == 4){
+						window.clearInterval(oConn._poll[o.tId]);
+						oConn._poll.splice(o.tId);
+						<span class="reserved">if</span>(timeOut){
+							oConn._timeOut.splice(o.tId);
+						}
+
+						oConn.handleTransactionResponse(o, callback);
+                    }
+                }
+            ,<span class="reserved">this</span>._polling_interval);
+        }
+        catch(e)
+        {
+            window.clearInterval(oConn._poll[o.tId]);
+            oConn._poll.splice(o.tId);
+			<span class="reserved">if</span>(timeOut){
+				oConn._timeOut.splice(o.tId);
+			}
+
+            oConn.handleTransactionResponse(o, callback);
+        }
+    },
+
+  <span class="comment">/**
+   * This method attempts to interpret the server response and
+   * determine whether the transaction was successful, or if an error or
+   * exception was encountered.
+   *
+   * <span class="attrib">@private</span>
+   * <span class="attrib">@param</span> {object} o The connection object
+   * <span class="attrib">@param</span> {object} callback - User-defined callback object
+   * <span class="attrib">@param</span> {boolean} determines if the transaction was aborted.
+   * <span class="attrib">@return</span> void
+   */</span>
+    handleTransactionResponse:<span class="reserved">function</span>(o, callback, isAbort)
+    {
+<span class="comment">		// If no valid callback is provided, then do not process any callback handling.</span>
+		<span class="reserved">if</span>(!callback){
+			<span class="reserved">this</span>.releaseObject(o);
+			<span class="reserved">return</span>;
+		}
+
+		var httpStatus, responseObject;
+
+		try
+		{
+			<span class="reserved">if</span>(o.conn.status !== undefined &amp;&amp; o.conn.status != 0){
+				httpStatus = o.conn.status;
+			}
+			<span class="reserved">else</span>{
+				httpStatus = 13030;
+			}
+		}
+		catch(e){
+<span class="comment">			// 13030 is the custom code to indicate the condition -- in Mozilla/FF --</span>
+<span class="comment">			// when the o object's status and statusText properties are</span>
+<span class="comment">			// unavailable, and a query attempt throws an exception.</span>
+			httpStatus = 13030;
+		}
+
+		<span class="reserved">if</span>(httpStatus &gt;= 200 &amp;&amp; httpStatus &lt; 300){
+			responseObject = <span class="reserved">this</span>.createResponseObject(o, callback.argument);
+			<span class="reserved">if</span>(callback.success){
+				<span class="reserved">if</span>(!callback.scope){
+					callback.success(responseObject);
+				}
+				<span class="reserved">else</span>{
+<span class="comment">					// If a scope property is defined, the callback will be fired from</span>
+<span class="comment">					// the context of the object.</span>
+					callback.success.apply(callback.scope, [responseObject]);
+				}
+			}
+		}
+		<span class="reserved">else</span>{
+			switch(httpStatus){
+<span class="comment">				// The following case labels are wininet.dll error codes that may be encountered.</span>
+<span class="comment">				// Server timeout</span>
+				case 12002:
+<span class="comment">				// 12029 to 12031 correspond to dropped connections.</span>
+				case 12029:
+				case 12030:
+				case 12031:
+<span class="comment">				// Connection closed by server.</span>
+				case 12152:
+<span class="comment">				// See above comments for variable status.</span>
+				case 13030:
+					responseObject = <span class="reserved">this</span>.createExceptionObject(o.tId, callback.argument, isAbort);
+					<span class="reserved">if</span>(callback.failure){
+						<span class="reserved">if</span>(!callback.scope){
+							callback.failure(responseObject);
+						}
+						<span class="reserved">else</span>{
+							callback.failure.apply(callback.scope, [responseObject]);
+						}
+					}
+					break;
+				default:
+					responseObject = <span class="reserved">this</span>.createResponseObject(o, callback.argument);
+					<span class="reserved">if</span>(callback.failure){
+						<span class="reserved">if</span>(!callback.scope){
+							callback.failure(responseObject);
+						}
+						<span class="reserved">else</span>{
+							callback.failure.apply(callback.scope, [responseObject]);
+						}
+					}
+			}
+		}
+
+		<span class="reserved">this</span>.releaseObject(o);
+    },
+
+  <span class="comment">/**
+   * This method evaluates the server response, creates and returns the results via
+   * its properties.  Success and failure cases will differ in the response
+   * object's property values.
+   * <span class="attrib">@private</span>
+   * <span class="attrib">@param</span> {object} o The connection object
+   * <span class="attrib">@param</span> {} callbackArg User-defined argument or arguments to be passed to the callback
+   * <span class="attrib">@return</span> object
+   */</span>
+    createResponseObject:<span class="reserved">function</span>(o, callbackArg)
+    {
+		var obj = {};
+		var headerObj = {};
+
+		try
+		{
+			var headerStr = o.conn.getAllResponseHeaders();
+			var header = headerStr.split(<span class="literal">'\n'</span>);
+			<span class="reserved">for</span>(var i=0; i &lt; header.length; i++){
+				var delimitPos = header[i].indexOf(<span class="literal">':'</span>);
+				<span class="reserved">if</span>(delimitPos != -1){
+					headerObj[header[i].substring(0,delimitPos)] = header[i].substring(delimitPos+1);
+				}
+			}
+		}
+		catch(e){}
+
+		obj.tId = o.tId;
+		obj.status = o.conn.status;
+		obj.statusText = o.conn.statusText;
+		obj.getResponseHeader = headerObj;
+		obj.getAllResponseHeaders = headerStr;
+		obj.responseText = o.conn.responseText;
+		obj.responseXML = o.conn.responseXML;
+
+		<span class="reserved">if</span>(typeof callbackArg !== undefined){
+			obj.argument = callbackArg;
+		}
+
+		<span class="reserved">return</span> obj;
+    },
+
+  <span class="comment">/**
+   * If a transaction cannot be completed due to dropped or closed connections,
+   * there may be not be enough information to build a full response object.
+   * The failure callback will be fired and this specific condition can be identified
+   * by a status property value of 0.
+   *
+   * If an abort was successful, the status property will report a value of -1.
+   *
+   * <span class="attrib">@private</span>
+   * <span class="attrib">@param</span> {int} tId Transaction Id
+   * <span class="attrib">@param</span> callbackArg The user-defined arguments
+   * <span class="attrib">@return</span> object
+   */</span>
+    createExceptionObject:<span class="reserved">function</span>(tId, callbackArg, isAbort)
+    {
+		var COMM_CODE = 0;
+		var COMM_ERROR = <span class="literal">'communication failure'</span>;
+		var ABORT_CODE = -1;
+		var ABORT_ERROR = <span class="literal">'transaction aborted'</span>;
+
+		var obj = {};
+
+		obj.tId = tId;
+		<span class="reserved">if</span>(isAbort){
+			obj.status = ABORT_CODE;
+			obj.statusText = ABORT_ERROR;
+		}
+		<span class="reserved">else</span>{
+			obj.status = COMM_CODE;
+			obj.statusText = COMM_ERROR;
+		}
+
+		<span class="reserved">if</span>(callbackArg){
+			obj.argument = callbackArg;
+		}
+
+		<span class="reserved">return</span> obj;
+    },
+
+  <span class="comment">/**
+   * Public method that stores the custom HTTP headers for each transaction.
+   * <span class="attrib">@public</span>
+   * <span class="attrib">@param</span> {string} label The HTTP header label
+   * <span class="attrib">@param</span> {string} value The HTTP header value
+   * <span class="attrib">@return</span> void
+   */</span>
+	initHeader:<span class="reserved">function</span>(label,value)
+	{
+		<span class="reserved">if</span>(<span class="reserved">this</span>._http_header[label] === undefined){
+			<span class="reserved">this</span>._http_header[label] = value;
+		}
+		<span class="reserved">else</span>{
+			<span class="reserved">this</span>._http_header[label] =  value + <span class="literal">","</span> + <span class="reserved">this</span>._http_header[label];
+		}
+
+		<span class="reserved">this</span>._has_http_headers = true;
+	},
+
+  <span class="comment">/**
+   * Accessor that sets the HTTP headers for each transaction.
+   * <span class="attrib">@private</span>
+   * <span class="attrib">@param</span> {object} o The connection object for the transaction.
+   * <span class="attrib">@return</span> void
+   */</span>
+	setHeader:<span class="reserved">function</span>(o)
+	{
+		<span class="reserved">for</span>(var prop in <span class="reserved">this</span>._http_header){
+			<span class="reserved">if</span>(<span class="reserved">this</span>._http_header.propertyIsEnumerable){
+				o.conn.setRequestHeader(prop, <span class="reserved">this</span>._http_header[prop]);
+			}
+		}
+		delete <span class="reserved">this</span>._http_header;
+
+		<span class="reserved">this</span>._http_header = {};
+		<span class="reserved">this</span>._has_http_headers = false;
+	},
+
+  <span class="comment">/**
+   * This method assembles the form label and value pairs and
+   * constructs an encoded string.
+   * asyncRequest() will automatically initialize the
+   * transaction with a HTTP header Content-Type of
+   * application/x-www-form-urlencoded.
+   * <span class="attrib">@public</span>
+   * <span class="attrib">@param</span> {string || object} form id or name attribute, or form object.
+   * <span class="attrib">@param</span> {string} optional boolean to indicate SSL environment.
+   * <span class="attrib">@param</span> {string} optional qualified path of iframe resource for SSL in IE.
+   * <span class="attrib">@return</span> void
+   */</span>
+	setForm:<span class="reserved">function</span>(formId, isUpload, secureUri)
+	{
+		<span class="reserved">this</span>._sFormData = <span class="literal">''</span>;
+		<span class="reserved">if</span>(typeof formId == <span class="literal">'string'</span>){
+<span class="comment">			// Determine if the argument is a form id or a form name.</span>
+<span class="comment">			// Note form name usage is deprecated by supported</span>
+<span class="comment">			// here for legacy reasons.</span>
+			var oForm = (document.getElementById(formId) || document.forms[formId]);
+		}
+		<span class="reserved">else</span> <span class="reserved">if</span>(typeof formId == <span class="literal">'object'</span>){
+			var oForm = formId;
+		}
+		<span class="reserved">else</span>{
+			<span class="reserved">return</span>;
+		}
+<span class="comment">
+		// If the isUpload argument is true, setForm will call createFrame to initialize</span>
+<span class="comment">		// an iframe as the form target.</span>
+<span class="comment">		//</span>
+<span class="comment">		// The argument secureURI is also required by IE in SSL environments</span>
+<span class="comment">		// where the secureURI string is a fully qualified HTTP path, used to set the source</span>
+<span class="comment">		// of the iframe, to a stub resource in the same domain.</span>
+		<span class="reserved">if</span>(isUpload){
+			(typeof secureUri == <span class="literal">'string'</span>)?<span class="reserved">this</span>.createFrame(secureUri):<span class="reserved">this</span>.createFrame();
+			<span class="reserved">this</span>._isFormSubmit = true;
+			<span class="reserved">this</span>._isFileUpload = true;
+			<span class="reserved">this</span>._formNode = oForm;
+
+			<span class="reserved">return</span>;
+		}
+
+		var oElement, oName, oValue, oDisabled;
+		var hasSubmit = false;
+<span class="comment">
+		// Iterate over the form elements collection to construct the</span>
+<span class="comment">		// label-value pairs.</span>
+		<span class="reserved">for</span> (var i=0; i&lt;oForm.elements.length; i++){
+			oDisabled = oForm.elements[i].disabled;
+<span class="comment">
+			// If the name attribute is not populated, the form field's</span>
+<span class="comment">			// value will not be submitted.</span>
+			oElement = oForm.elements[i];
+			oName = oForm.elements[i].name;
+			oValue = oForm.elements[i].value;
+<span class="comment">
+			// Do not submit fields that are disabled or</span>
+<span class="comment">			// do not have a name attribute value.</span>
+			<span class="reserved">if</span>(!oDisabled &amp;&amp; oName)
+			{
+				switch (oElement.type)
+				{
+					case <span class="literal">'select-one'</span>:
+					case <span class="literal">'select-multiple'</span>:
+						<span class="reserved">for</span>(var j=0; j&lt;oElement.options.length; j++){
+							<span class="reserved">if</span>(oElement.options[j].selected){
+									<span class="reserved">this</span>._sFormData += encodeURIComponent(oName) + <span class="literal">'='</span> + encodeURIComponent(oElement.options[j].value || oElement.options[j].text) + <span class="literal">'&amp;'</span>;
+							}
+						}
+						break;
+					case <span class="literal">'radio'</span>:
+					case <span class="literal">'checkbox'</span>:
+						<span class="reserved">if</span>(oElement.checked){
+							<span class="reserved">this</span>._sFormData += encodeURIComponent(oName) + <span class="literal">'='</span> + encodeURIComponent(oValue) + <span class="literal">'&amp;'</span>;
+						}
+						break;
+					case <span class="literal">'file'</span>:
+<span class="comment">						// stub case as XMLHttpRequest will only send the file path as a string.</span>
+					case undefined:
+<span class="comment">						// stub case for fieldset element which returns undefined.</span>
+					case <span class="literal">'reset'</span>:
+<span class="comment">						// stub case for input type reset button.</span>
+					case <span class="literal">'button'</span>:
+<span class="comment">						// stub case for input type button elements.</span>
+						break;
+					case <span class="literal">'submit'</span>:
+						<span class="reserved">if</span>(hasSubmit == false){
+							<span class="reserved">this</span>._sFormData += encodeURIComponent(oName) + <span class="literal">'='</span> + encodeURIComponent(oValue) + <span class="literal">'&amp;'</span>;
+							hasSubmit = true;
+						}
+						break;
+					default:
+						<span class="reserved">this</span>._sFormData += encodeURIComponent(oName) + <span class="literal">'='</span> + encodeURIComponent(oValue) + <span class="literal">'&amp;'</span>;
+						break;
+				}
+			}
+		}
+
+		<span class="reserved">this</span>._isFormSubmit = true;
+		<span class="reserved">this</span>._sFormData = <span class="reserved">this</span>._sFormData.substr(0, <span class="reserved">this</span>._sFormData.length - 1);
+	},
+
+  <span class="comment">/**
+   * Creates an iframe to be used for form file uploads.  It is remove from the
+   * document upon completion of the upload transaction.
+   *
+   * <span class="attrib">@private</span>
+   * <span class="attrib">@param</span> {string} optional qualified path of iframe resource for SSL in IE.
+   * <span class="attrib">@return</span> void
+   */</span>
+	createFrame:<span class="reserved">function</span>(secureUri){
+<span class="comment">
+		// IE does not allow the setting of id and name attributes as DOM</span>
+<span class="comment">		// properties.  A different iframe creation pattern is required for IE.</span>
+		<span class="reserved">if</span>(window.ActiveXObject){
+			var io = document.createElement(<span class="literal">'&lt;IFRAME name="ioFrame" id="ioFrame"&gt;'</span>);
+			<span class="reserved">if</span>(secureUri){
+<span class="comment">				// IE will throw a security exception in an SSL environment if the</span>
+<span class="comment">				// iframe source isn't set to a valid resource.</span>
+				io.src = secureUri;
+			}
+		}
+		<span class="reserved">else</span>{
+			var io = document.createElement(<span class="literal">'IFRAME'</span>);
+			io.id = <span class="literal">'ioFrame'</span>;
+			io.name = <span class="literal">'ioFrame'</span>;
+		}
+
+		io.style.position = <span class="literal">'absolute'</span>;
+		io.style.top = <span class="literal">'-1000px'</span>;
+		io.style.left = <span class="literal">'-1000px'</span>;
+
+		document.body.appendChild(io);
+	},
+
+  <span class="comment">/**
+   * Uploads HTML form, including files/attachments,  targeting the
+   * iframe created in createFrame.
+   *
+   * <span class="attrib">@private</span>
+   * <span class="attrib">@param</span> {int} id The transaction id.
+   * <span class="attrib">@param</span> {object} callback - User-defined callback object.
+   * <span class="attrib">@param</span> {string} uri Fully qualified path of resource.
+   * <span class="attrib">@return</span> void
+   */</span>
+	uploadFile:<span class="reserved">function</span>(id, callback, uri){
+<span class="comment">		// Initialize the HTML form properties in case they are</span>
+<span class="comment">		// not defined in the HTML form.</span>
+		<span class="reserved">this</span>._formNode.action = uri;
+		<span class="reserved">this</span>._formNode.enctype = <span class="literal">'multipart/form-data'</span>;
+		<span class="reserved">this</span>._formNode.method = <span class="literal">'POST'</span>;
+		<span class="reserved">this</span>._formNode.target = <span class="literal">'ioFrame'</span>;
+		<span class="reserved">this</span>._formNode.submit();
+<span class="comment">
+		// Reset form status properties.</span>
+		<span class="reserved">this</span>._formNode = null;
+		<span class="reserved">this</span>._isFileUpload = false;
+		<span class="reserved">this</span>._isFormSubmit = false;
+<span class="comment">
+		// Create the upload callback handler that fires when the iframe</span>
+<span class="comment">		// receives the load event.  Subsequently, the event handler is detached</span>
+<span class="comment">		// and the iframe removed from the document.</span>
+
+		var uploadCallback = <span class="reserved">function</span>()
+		{
+			var oResponse =
+			{
+				tId: id,
+				responseText: document.getElementById(<span class="literal">"ioFrame"</span>).contentWindow.document.body.innerHTML,
+				argument: callback.argument
+			}
+
+			<span class="reserved">if</span>(callback.upload &amp;&amp; !callback.scope){
+				callback.upload(oResponse);
+			}
+			<span class="reserved">else</span>{
+				callback.upload.apply(callback.scope, [oResponse]);
+			}
+
+			YAHOO.util.Event.removeListener(<span class="literal">"ioFrame"</span>, <span class="literal">"load"</span>, uploadCallback);
+			window.ioFrame.location.replace(<span class="literal">'#'</span>);
+			setTimeout(<span class="literal">"document.body.removeChild(document.getElementById('ioFrame'))"</span>,100);
+		};
+<span class="comment">
+		// Bind the onload handler to the iframe to detect the file upload response.</span>
+		YAHOO.util.Event.addListener(<span class="literal">"ioFrame"</span>, <span class="literal">"load"</span>, uploadCallback);
+	},
+
+  <span class="comment">/**
+   * Public method to terminate a transaction, if it has not reached readyState 4.
+   * <span class="attrib">@public</span>
+   * <span class="attrib">@param</span> {object} o The connection object returned by asyncRequest.
+   * <span class="attrib">@param</span> {object} callback  User-defined callback object.
+   * <span class="attrib">@param</span> {string} isTimeout boolean to indicate if abort was a timeout.
+   * <span class="attrib">@return</span> void
+   */</span>
+	abort:<span class="reserved">function</span>(o, callback, isTimeout)
+	{
+		<span class="reserved">if</span>(<span class="reserved">this</span>.isCallInProgress(o)){
+			window.clearInterval(<span class="reserved">this</span>._poll[o.tId]);
+			<span class="reserved">this</span>._poll.splice(o.tId);
+			<span class="reserved">if</span>(isTimeout){
+				<span class="reserved">this</span>._timeOut.splice(o.tId);
+			}
+			o.conn.abort();
+			<span class="reserved">this</span>.handleTransactionResponse(o, callback, true);
+
+			<span class="reserved">return</span> true;
+		}
+		<span class="reserved">else</span>{
+			<span class="reserved">return</span> false;
+		}
+	},
+
+  <span class="comment">/**
+   * Public method to check if the transaction is still being processed.
+   * <span class="attrib">@public</span>
+   * <span class="attrib">@param</span> {object} o The connection object returned by asyncRequest
+   * <span class="attrib">@return</span> boolean
+   */</span>
+	isCallInProgress:<span class="reserved">function</span>(o)
+	{
+<span class="comment">		// if the XHR object assigned to the transaction has not been dereferenced,</span>
+<span class="comment">		// then check its readyState status.  Otherwise, return false.</span>
+		<span class="reserved">if</span>(o.conn){
+			<span class="reserved">return</span> o.conn.readyState != 4 &amp;&amp; o.conn.readyState != 0;
+		}
+		<span class="reserved">else</span>{
+<span class="comment">			//The XHR object has been destroyed.</span>
+			<span class="reserved">return</span> false;
+		}
+	},
+
+  <span class="comment">/**
+   * Dereference the XHR instance and the connection object after the transaction is completed.
+   * <span class="attrib">@private</span>
+   * <span class="attrib">@param</span> {object} o The connection object
+   * <span class="attrib">@return</span> void
+   */</span>
+	releaseObject:<span class="reserved">function</span>(o)
+	{
+<span class="comment">		//dereference the XHR instance.</span>
+		o.conn = null;
+<span class="comment">		//dereference the connection object.</span>
+		o = null;
+	}
+};
+</pre>
+			</div>
+
+	</div>
+</div>
+
+
+<div id="footer">
+	<hr />
+	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	<br />
+	<br />
+	Documentation generated by <a href="http://jsdoc.sourceforge.net/">
+	JSDoc</a>
+</div>
+
+
+
+</body>
+</html>
