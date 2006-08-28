@@ -1,5 +1,14 @@
 Dom Release Notes
 
+*** version 0.11.2 ***
+
+* fixed getX and getY returning incorrect values for collections 
+* fixed getXY incorrectly calculated for Opera inline elements
+* fixed isAncestor failure in safari when 2nd arg is document.documentElement
+* fixed infinite loop in replaceClass when oldClassName == newClassName 
+* getDocumentWidth no longer includes scrollbars 
+
+
 *** version 0.11.1 ***
 
 * return null if el is null for get()
