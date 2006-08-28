@@ -1,14 +1,14 @@
 
 <html>
 <head>
-	<title>JavaScript Documentation - Event.js</title>
+	<title>API: Event overview-summary-Event.js.html (YUI Library)</title>
 	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
 
 <div id="header">
-	<h1>JavaScript Documentation</h1>
+	<h1>Yahoo! UI Library</h1>
 	<h3><a href="./index.html">Yui Event Utility</a></h3>
 
 	<div class="breadcrumbs">
@@ -137,7 +137,6 @@
 				<strong>Quick Links:</strong>&nbsp;
 				
 					
-						<a href="#classSummary">Class Summary</a> |
 					
 					
 				
@@ -149,19 +148,11 @@
 		
 			
 				<div class="section class summaries">
-					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 			
 				<div class="content">
-					<table border="1" cellpadding="3" cellspacing="0">
 						
-						<tr>
-							<td class="name">
-								<a href="YAHOO.util.Event.html">YAHOO.util.Event</a>
-							</td>
-							<td class="overview">The event utility provides functions to add and remove event listeners,  event cleansing.</td>
-						</tr>
 						
-					</table>
+
 				</div>
 			</div>
 		
@@ -172,7 +163,19 @@
 		
 		
 			<div class="section source">
-				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+
+
+<style>
+strong.alert {color:red;}
+</style>
+<p><strong class="alert">Note:</strong> Code presented here has been
+modified from the original source to aid in processing and
+presentation.  This is <strong>NOT</strong> functional code.  To review this
+component's literal, functional source, please refer to its
+JavaScript files as provided in <a href="http://sourceforge.net/
+projects/yui/">the downloadable YUI Library distribution</a>.</p>
+
+				<h3><a name="source">Source Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<pre class="sourceview"><span class="comment">// Only load this library once.  If it is loaded a second time, existing</span>
 <span class="comment">// events cannot be detached.</span>
 <span class="reserved">if</span> (!YAHOO.util.Event) {
@@ -185,7 +188,6 @@
  * <span class="attrib">@constructor</span>
  */</span>
     YAHOO.util.Event = <span class="reserved">function</span>() {
-
 
         YAHOO.util.Event.<span class="reserved">prototype</span> = {
 
@@ -364,7 +366,11 @@
 
                 <span class="reserved">if</span> (<span class="reserved">this</span>.useLegacyEvent(el, sType)) {
                     var legacyIndex = <span class="reserved">this</span>.getLegacyIndex(el, sType);
-                    <span class="reserved">if</span> (legacyIndex == -1) {
+<span class="comment">
+                    // Add a new dom0 wrapper if one is not detected for this</span>
+<span class="comment">                    // element</span>
+                    <span class="reserved">if</span> ( legacyIndex == -1 || 
+                                el != legacyEvents[legacyIndex][0] ) {
 
                         legacyIndex = legacyEvents.length;
                         legacyMap[el.id + sType] = legacyIndex;
@@ -398,6 +404,49 @@
 
                 <span class="reserved">return</span> true;
                 
+            },
+
+            <span class="comment">/**
+             * Returns the legacy event index that matches the supplied 
+             * signature
+             * <span class="attrib">@private</span>
+             */</span>
+            getLegacyIndex: <span class="reserved">function</span>(el, sType) {
+                <span class="comment">/*
+                for (var i=0,len=legacyEvents.length; i&lt;len; ++i) {
+                    var le = legacyEvents[i];
+                    if (le &amp;&amp; le[0] === el &amp;&amp; le[1] === sType) {
+                        return i;
+                    }
+                }
+                return -1;
+                */</span>
+
+                var key = <span class="reserved">this</span>.generateId(el) + sType;
+                <span class="reserved">if</span> (typeof legacyMap[key] == <span class="literal">"undefined"</span>) { 
+                    <span class="reserved">return</span> -1;
+                } <span class="reserved">else</span> {
+                    <span class="reserved">return</span> legacyMap[key];
+                }
+
+            },
+
+            <span class="comment">/**
+             * Logic that determines when we should automatically use legacy
+             * events instead of DOM2 events.
+             * <span class="attrib">@private</span>
+             */</span>
+            useLegacyEvent: <span class="reserved">function</span>(el, sType) {
+
+                <span class="reserved">if</span> (!el.addEventListener &amp;&amp; !el.attachEvent) {
+                    <span class="reserved">return</span> true;
+                } <span class="reserved">else</span> <span class="reserved">if</span> (<span class="reserved">this</span>.isSafari) {
+                    <span class="reserved">if</span> (<span class="literal">"click"</span> == sType || <span class="literal">"dblclick"</span> == sType) {
+                        <span class="reserved">return</span> true;
+                    }
+                }
+
+                <span class="reserved">return</span> false;
             },
                     
             <span class="comment">/**
@@ -437,7 +486,7 @@
                             li[0] == el &amp;&amp; 
                             li[1] == sType &amp;&amp; 
                             li[2] == fn) {
-                                delete unloadListeners[i];
+                                unloadListeners.splice(i, 1);
                                 <span class="reserved">return</span> true;
                         }
                     }
@@ -472,7 +521,7 @@
                 // removed the wrapped handler</span>
                 delete listeners[index][<span class="reserved">this</span>.WFN];
                 delete listeners[index][<span class="reserved">this</span>.FN];
-                delete listeners[index];
+                listeners.splice(index, 1);
 
                 <span class="reserved">return</span> true;
 
@@ -693,7 +742,9 @@
                 <span class="reserved">if</span> (elListeners) {
                     <span class="reserved">for</span> (var i=0,len=elListeners.length; i&lt;len ; ++i) {
                         var l = elListeners[i];
-                        <span class="reserved">this</span>.removeListener(el, l.type, l.fn, l.index);
+<span class="comment">                        // can't use the index on the changing collection</span>
+<span class="comment">                        //this.removeListener(el, l.type, l.fn, l.index);</span>
+                        <span class="reserved">this</span>.removeListener(el, l.type, l.fn);
                     }
                 }
 
@@ -737,82 +788,11 @@
 
                 <span class="reserved">return</span> (elListeners.length) ? elListeners : null;
             },
-
-            <span class="comment">/**
-             * Removes all listeners registered by pe.event.  Called 
-             * automatically during the unload event.
-             * <span class="attrib">@private</span>
-             */</span>
-            _unload: <span class="reserved">function</span>(e, me) {
-                <span class="reserved">for</span> (var i=0,len=unloadListeners.length; i&lt;len; ++i) {
-                    var l = unloadListeners[i];
-                    <span class="reserved">if</span> (l) {
-                        var scope = (l[<span class="reserved">this</span>.ADJ_SCOPE]) ? l[<span class="reserved">this</span>.SCOPE]: window;
-                        l[<span class="reserved">this</span>.FN].call(scope, <span class="reserved">this</span>.getEvent(e), l[<span class="reserved">this</span>.SCOPE] );
-                    }
-                }
-
-                <span class="reserved">if</span> (listeners &amp;&amp; listeners.length &gt; 0) {
-                    <span class="reserved">for</span> (i=0,len=listeners.length; i&lt;len ; ++i) {
-                        l = listeners[i];
-                        <span class="reserved">if</span> (l) {
-                            <span class="reserved">this</span>.removeListener(l[<span class="reserved">this</span>.EL], l[<span class="reserved">this</span>.TYPE], 
-                                    l[<span class="reserved">this</span>.FN], i);
-                        }
-                    }
-
-                    <span class="reserved">this</span>.clearCache();
-                }
-
-                <span class="reserved">for</span> (i=0,len=customEvents.length; i&lt;len; ++i) {
-                    customEvents[i].unsubscribeAll();
-                    delete customEvents[i];
-                }
-
-                <span class="reserved">for</span> (i=0,len=legacyEvents.length; i&lt;len; ++i) {
-<span class="comment">                    // dereference the element</span>
-                    delete legacyEvents[i][0];
-<span class="comment">                    // delete the array item</span>
-                    delete legacyEvents[i];
-                }
-            },
-
-            <span class="comment">/**
-             * Returns scrollLeft
-             * <span class="attrib">@private</span>
-             */</span>
-            _getScrollLeft: <span class="reserved">function</span>() {
-                <span class="reserved">return</span> <span class="reserved">this</span>._getScroll()[1];
-            },
-
-            <span class="comment">/**
-             * Returns scrollTop
-             * <span class="attrib">@private</span>
-             */</span>
-            _getScrollTop: <span class="reserved">function</span>() {
-                <span class="reserved">return</span> <span class="reserved">this</span>._getScroll()[0];
-            },
-
-            <span class="comment">/**
-             * Returns the scrollTop and scrollLeft.  Used to calculate the 
-             * pageX and pageY in Internet Explorer
-             * <span class="attrib">@private</span>
-             */</span>
-            _getScroll: <span class="reserved">function</span>() {
-                var dd = document.documentElement; db = document.body;
-                <span class="reserved">if</span> (dd &amp;&amp; dd.scrollTop) {
-                    <span class="reserved">return</span> [dd.scrollTop, dd.scrollLeft];
-                } <span class="reserved">else</span> <span class="reserved">if</span> (db) {
-                    <span class="reserved">return</span> [db.scrollTop, db.scrollLeft];
-                } <span class="reserved">else</span> {
-                    <span class="reserved">return</span> [0, 0];
-                }
-            }
         };
     } ();
 
     <span class="comment">/**
-     * <span class="attrib">@private</span>
+     * YAHOO.util.Event.on is an alias for YAHOO.util.Event.addListener
      */</span>
     YAHOO.util.Event.on = YAHOO.util.Event.addListener;
 
