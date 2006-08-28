@@ -9,6 +9,13 @@ Dom Release Notes
 * getDocumentWidth no longer includes scrollbars 
 
 
+*** version 0.11.2 ***
+* limit depth of parent.document crawl to 1 for getXY
+* test offsetParent instead of parentNode for getXY
+* return null if no el fo r get
+* just addClass if no class to replace for replaceClass
+
+
 *** version 0.11.1 ***
 
 * return null if el is null for get()
