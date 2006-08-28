@@ -1,5 +1,34 @@
 Connection Manager Release Notes
 
+*** version 0.11.3 ***
+
+* YUI Event dependency for file uploading is now optional.
+
+* uploadFile() now sets unique IDs for each file upload transaction to prevent
+iframe collisions with parallel uploads.
+
+* The callback object now has property responseXML to provide support for file
+upload transactions that return an XML document.
+
+* setForm() will verify if a select option value attribute is present and use
+its value, including empty string, before using the text node value.
+
+* Modified polling mechanism in handleReadyState() and
+handleTransactionResponse() to prevent infinite polling if JavaScript errors
+occur in the user-defined callback.
+
+* createFrame() will now accept a boolean argument of true to set the frame
+source to "javascript:false" to prevent IE from throwing security warnings in an
+HTTPS environment.
+
+* setHeader() now enumerates through the _http_header object using
+hasOwnProperty() to prevent collisions with members added to Object via
+prototype.
+
+*** version 0.11.2 ***
+
+* No revisions.
+
 *** version 0.11.1 ***
 
 * uploadFile() now verifies the existence of callback.upload before invoking
@@ -7,9 +36,9 @@ callback, with or without object scope.
 
 *** version 0.11.0 ***
 
-* Each transactions can be defined with a timeout threshold, in milliseconds,
+* Each transaction can be defined with a timeout threshold, in milliseconds,
 through the callback object.  If the threshold is reached, and the transaction
-hasn't completed, the transaction will call abort().
+hasn't yet completed, the transaction will call abort().
 
 * abort() will now accept a callback object as the second argument.  The
 failure callback will receive a response object to indicate the transaction was
@@ -78,6 +107,14 @@ and returns false if the connection object is no longer available.
 *** version 0.9.0 ***
 
 * Initial release
+
+
+
+
+
+
+
+
 
 
 
