@@ -16,30 +16,72 @@
 	<script type="text/javascript" src="../../../build/calendar/calendar.js"></script>
 	<link type="text/css" rel="stylesheet" href="../../../build/calendar/assets/calendar.css">	
 
-	<script type="text/javascript" src="js/Calendar2up_JP.js"></script>
 	<link rel="stylesheet" href="css/Calendar_JP.css" type="text/css">
 	
 	<script language="javascript">
 
+		/* Begin Japanese 2up Calendar */
+
+		YAHOO.widget.Calendar2up_JP_Cal = function(id, containerId, monthyear, selected) {
+			if (arguments.length > 0)
+			{
+				this.init(id, containerId, monthyear, selected);
+			}
+		}
+
+		YAHOO.widget.Calendar2up_JP_Cal.prototype = new YAHOO.widget.Calendar2up_Cal();
+
+		YAHOO.widget.Calendar2up_JP_Cal.prototype.customConfig = function() {
+			this.Config.Locale.MONTHS_SHORT = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
+			this.Config.Locale.MONTHS_LONG = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
+			this.Config.Locale.WEEKDAYS_1CHAR = ["日", "月", "火", "水", "木", "金", "土"];
+			this.Config.Locale.WEEKDAYS_SHORT = ["日", "月", "火", "水", "木", "金", "土"];
+			this.Config.Locale.WEEKDAYS_MEDIUM = ["日", "月", "火", "水", "木", "金", "土"];
+			this.Config.Locale.WEEKDAYS_LONG = ["日", "月", "火", "水", "木", "金", "土"];
+
+			this.Config.Options.START_WEEKDAY = 1;
+		}
+
+		/**********************************/
+
+		YAHOO.widget.Calendar2up_JP = function(id, containerId, monthyear, selected) {
+			if (arguments.length > 0)
+			{	
+				this.buildWrapper(containerId);
+				this.init(2, id, containerId, monthyear, selected);
+			}
+		}
+
+		YAHOO.widget.Calendar2up_JP.prototype = new YAHOO.widget.Calendar2up();
+
+		YAHOO.widget.Calendar2up_JP.prototype.constructChild = function(id,containerId,monthyear,selected) {
+			var cal = new YAHOO.widget.Calendar2up_JP_Cal(id,containerId,monthyear,selected);
+			return cal;
+		};
+
+		/* End Japanese 2up Calendar */
+
 		YAHOO.namespace("example.calendar");
 
-		function init() {
-			this.today = new Date();
+		var today,link1,selMonth1,selDay1,selYear1,container1;
 
-			var thisMonth = this.today.getMonth();
-			var thisDay = this.today.getDate();
-			var thisYear = this.today.getFullYear();
+		function initJapan() {
+			today = new Date();
 
-			this.container1 = document.getElementById('container1');
+			var thisMonth = today.getMonth();
+			var thisDay = today.getDate();
+			var thisYear = today.getFullYear();
 
-			this.link1 = document.getElementById('dateLink1');
+			container1 = document.getElementById('container1');
 
-			this.selMonth1 = document.getElementById('selMonth1');
-			this.selDay1 = document.getElementById('selDay1');
-			this.selYear1 = document.getElementById('selYear1');
+			link1 = document.getElementById('dateLink1');
 
-			this.selMonth1.selectedIndex = thisMonth;
-			this.selDay1.selectedIndex = thisDay-1;
+			selMonth1 = document.getElementById('selMonth1');
+			selDay1 = document.getElementById('selDay1');
+			selYear1 = document.getElementById('selYear1');
+
+			selMonth1.selectedIndex = thisMonth;
+			selDay1.selectedIndex = thisDay-1;
 
 			YAHOO.example.calendar.cal = new YAHOO.widget.Calendar2up_JP("YAHOO.example.calendar.cal","container1",(thisMonth+1)+"/"+thisYear,(thisMonth+1)+"/"+thisDay+"/"+thisYear);
 			YAHOO.example.calendar.cal.setChildFunction("onSelect",setDate1);
@@ -69,9 +111,9 @@
 		}
 
 		function changeDate1() {
-			var month = this.selMonth1.selectedIndex;
-			var day = this.selDay1.selectedIndex + 1;
-			var year = this.selYear1.options[this.selYear1.selectedIndex].value;
+			var month = selMonth1.selectedIndex;
+			var day = selDay1.selectedIndex + 1;
+			var year = selYear1.options[selYear1.selectedIndex].value;
 
 			YAHOO.example.calendar.cal.select((month+1) + "/" + day + "/" + year);
 			YAHOO.example.calendar.cal.setMonth(month);
@@ -79,14 +121,15 @@
 			
 			YAHOO.example.calendar.cal.render();
 		}
-	
+
+		YAHOO.util.Event.addListener(window, "load", initJapan);
 	</script>
 
 	
 
 </head>
 
-<body onload="init()" style="margin:0px">
+<body style="margin:0px">
 
 <img src="img/ytravel.gif" id="bgImg">
 
@@ -191,6 +234,6 @@
 <script language="javascript"> 
 dp.SyntaxHighlighter.HighlightAll('code'); 
 </script>
-
+<?php echo yadl_spaceid( '792401524' ); ?>
 </body>
 </html>

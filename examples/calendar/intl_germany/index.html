@@ -16,15 +16,56 @@
 	<script type="text/javascript" src="../../../build/calendar/calendar.js"></script>
 	<link type="text/css" rel="stylesheet" href="../../../build/calendar/assets/calendar.css">	
 
-	<script type="text/javascript" src="js/Calendar2up_DE.js"></script>
 	<link rel="stylesheet" href="css/Calendar_DE.css" type="text/css">
 
 	<script language="javascript">
+		
+		/* Begin German Calendar */
+
+		YAHOO.widget.Calendar2up_DE_Cal = function(id, containerId, monthyear, selected) {
+			if (arguments.length > 0)
+			{
+				this.init(id, containerId, monthyear, selected);
+			}
+		}
+
+		YAHOO.widget.Calendar2up_DE_Cal.prototype = new YAHOO.widget.Calendar2up_Cal();
+
+		YAHOO.widget.Calendar2up_DE_Cal.prototype.customConfig = function() {
+			this.Config.Locale.MONTHS_SHORT = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+			this.Config.Locale.MONTHS_LONG = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+			this.Config.Locale.WEEKDAYS_1CHAR = ["S", "M", "D", "M", "D", "F", "S"];
+			this.Config.Locale.WEEKDAYS_SHORT = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
+			this.Config.Locale.WEEKDAYS_MEDIUM = ["Son", "Mon", "Die", "Mit", "Don", "Fre", "Sam"];
+			this.Config.Locale.WEEKDAYS_LONG = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+
+			this.Config.Options.START_WEEKDAY = 1;
+		}
+
+		/*************************************/
+
+		YAHOO.widget.Calendar2up_DE = function(id, containerId, monthyear, selected) {
+			if (arguments.length > 0)
+			{	
+				this.buildWrapper(containerId);
+				this.init(2, id, containerId, monthyear, selected);
+			}
+		}
+
+		YAHOO.widget.Calendar2up_DE.prototype = new YAHOO.widget.Calendar2up();
+
+		YAHOO.widget.Calendar2up_DE.prototype.constructChild = function(id,containerId,monthyear,selected) {
+			var cal = new YAHOO.widget.Calendar2up_DE_Cal(id,containerId,monthyear,selected);
+			return cal;
+		};
+
+		/* End German Calendar */
+
 		YAHOO.namespace("example.calendar");
 
 		var today,link1,link2,selMonth1,selDay1,selMonth2,selDay2;
 
-		function init() {
+		function initDE() {
 			today = new Date();
 
 			var thisMonth = today.getMonth();
@@ -113,7 +154,7 @@
 			YAHOO.example.calendar.cal2.render();
 		}		
 
-		YAHOO.util.Event.addListener(window, "load", init);	
+		YAHOO.util.Event.addListener(window, "load", initDE);	
 	</script>
 
 </head>
@@ -405,6 +446,6 @@
 <script language="javascript"> 
 dp.SyntaxHighlighter.HighlightAll('code'); 
 </script>
-
+<?php echo yadl_spaceid( '792401513' ); ?>
 </body>
 </html>
