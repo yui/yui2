@@ -1,14 +1,14 @@
 
 <html>
 <head>
-	<title>JavaScript Documentation - </title>
+	<title>API: Drag and Drop YAHOO.util.DragDropMgr.html (YUI Library)</title>
 	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
 
 <div id="header">
-	<h1>JavaScript Documentation</h1>
+	<h1>Yahoo! UI Library</h1>
 	<h3><a href="./index.html">Drag and Drop</a></h3>
 
 	<div class="breadcrumbs">
@@ -223,6 +223,42 @@
 						</tr>
 					
 						<tr>
+							<td class="flags">Object</td>
+							<td class="spec">
+								<code>
+									<a href="#dragCurrent">dragCurrent</a>
+								</code>
+								<div class="description">
+									&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">Object</td>
+							<td class="spec">
+								<code>
+									<a href="#dragThreshMet">dragThreshMet</a>
+								</code>
+								<div class="description">
+									&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="flags">Object</td>
+							<td class="spec">
+								<code>
+									<a href="#ids">ids</a>
+								</code>
+								<div class="description">
+									&nbsp;
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="flags">int</td>
 							<td class="spec">
 								<code>
@@ -236,13 +272,13 @@
 						</tr>
 					
 						<tr>
-							<td class="flags">boolean</td>
+							<td class="flags">Object</td>
 							<td class="spec">
 								<code>
 									<a href="#locked">locked</a>
 								</code>
 								<div class="description">
-									Is drag and drop locked?&nbsp;
+									&nbsp;
 								</div>
 							</td>
 						</tr>
@@ -333,7 +369,7 @@
 					<table border="1" cellpadding="3" cellspacing="0">
 						
 							<tr>
-								<td class="flags">ygDragDrop</td>
+								<td class="flags">DragDrop</td>
 								<td class="spec">
 									<code>
 										<a href="#getBestMatch">getBestMatch</a>
@@ -418,11 +454,11 @@
 								<td class="spec">
 									<code>
 										<a href="#getLocation">getLocation</a>
-										(&lt;ygDragDrop&gt; oDD)
+										(&lt;DragDrop&gt; oDD)
 									</code>
 									<div class="description">
 										Returns the an array containing the drag and drop element's position
- and size, including the ygDragDrop.padding configured for it&nbsp;
+ and size, including the DragDrop.padding configured for it&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -458,7 +494,7 @@
 								<td class="spec">
 									<code>
 										<a href="#getRelated">getRelated</a>
-										(&lt;ygDragDrop&gt; p_oDD, &lt;boolean&gt; bTargetsOnly)
+										(&lt;DragDrop&gt; p_oDD, &lt;boolean&gt; bTargetsOnly)
 									</code>
 									<div class="description">
 										Returns the drag and drop instances that are in all groups the
@@ -585,7 +621,7 @@
 									</code>
 									<div class="description">
 										My goal is to be able to transparently determine if an object is
- typeof ygDragDrop, and the exact subclass of ygDragDrop.&nbsp;
+ typeof DragDrop, and the exact subclass of DragDrop.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -608,10 +644,11 @@
 								<td class="spec">
 									<code>
 										<a href="#moveToEl">moveToEl</a>
-										(moveEl, targetEl)
+										(&lt;HTMLElement&gt; moveEl, &lt;HTMLElement&gt; targetEl)
 									</code>
 									<div class="description">
-										&nbsp;
+										Sets the x/y position of an element to the location of the
+ target element.&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -634,11 +671,11 @@
 								<td class="spec">
 									<code>
 										<a href="#refreshCache">refreshCache</a>
-										(&lt;Array&gt; aGroups)
+										(&lt;Object&gt; groups)
 									</code>
 									<div class="description">
 										Refreshes the cache of the top-left and bottom-right points of the 
- drag and drop objects in the specified groups&nbsp;
+ drag and drop objects in the specified group(s).&nbsp;
 									</div>
 								</td>
 							</tr>
@@ -779,6 +816,45 @@
 						</div>
 						<hr />
 					
+						<h4><a name="dragCurrent">dragCurrent</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								&nbsp;
+								<strong>dragCurrent</strong>
+							</code>
+							<div class="description">
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="dragThreshMet">dragThreshMet</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								&nbsp;
+								<strong>dragThreshMet</strong>
+							</code>
+							<div class="description">
+								
+							</div>
+						</div>
+						<hr />
+					
+						<h4><a name="ids">ids</a></h4>
+						<div class="detail">
+							<code>
+								Object
+								&nbsp;
+								<strong>ids</strong>
+							</code>
+							<div class="description">
+								
+							</div>
+						</div>
+						<hr />
+					
 						<h4><a name="INTERSECT">INTERSECT</a></h4>
 						<div class="detail">
 							<code>
@@ -796,12 +872,12 @@
 						<h4><a name="locked">locked</a></h4>
 						<div class="detail">
 							<code>
-								boolean
+								Object
 								&nbsp;
 								<strong>locked</strong>
 							</code>
 							<div class="description">
-								Is drag and drop locked?
+								
 							</div>
 						</div>
 						<hr />
@@ -919,7 +995,7 @@
 						<h4><a name="getBestMatch">getBestMatch</a></h4>
 						<div class="detail">
 							<code>
-								ygDragDrop 
+								DragDrop 
 								<strong>getBestMatch</strong>
 								(dds)
 							</code>
@@ -937,7 +1013,7 @@
 										<dt>Parameters:</dt>
 										
 											<dd>
-												<code>ygDragDrop</code> - 
+												<code>DragDrop</code> - 
 												[]} dds The array of drag and drop objects   targeted  
 											</dd>
 										
@@ -970,7 +1046,7 @@
 								
 									<dl>
 										<dt>Returns:</dt>
-										<dd> client height in px</dd>
+										<dd> client height in px  </dd>
 									</dl>
 								
 								
@@ -994,7 +1070,7 @@
 								
 									<dl>
 										<dt>Returns:</dt>
-										<dd> client width in px</dd>
+										<dd> client width in px  </dd>
 									</dl>
 								
 								
@@ -1029,7 +1105,7 @@
 								
 									<dl>
 										<dt>Returns:</dt>
-										<dd> The style property of the element</dd>
+										<dd> The style property of the element  </dd>
 									</dl>
 								
 								
@@ -1097,7 +1173,7 @@
 								
 									<dl>
 										<dt>Returns:</dt>
-										<dd> The element</dd>
+										<dd> The element  </dd>
 									</dl>
 								
 								
@@ -1110,13 +1186,13 @@
 							<code>
 								Object 
 								<strong>getLocation</strong>
-								(&lt;ygDragDrop&gt; oDD)
+								(&lt;DragDrop&gt; oDD)
 							</code>
 									
 							<div class="description">
 								
 									Returns the an array containing the drag and drop element's position
- and size, including the ygDragDrop.padding configured for it
+ and size, including the DragDrop.padding configured for it
 								
 								
 									<dl>
@@ -1166,7 +1242,7 @@
 								
 									<dl>
 										<dt>Returns:</dt>
-										<dd> the X coordinate</dd>
+										<dd> the X coordinate  </dd>
 									</dl>
 								
 								
@@ -1200,7 +1276,7 @@
 								
 									<dl>
 										<dt>Returns:</dt>
-										<dd> the Y coordinate</dd>
+										<dd> the Y coordinate  </dd>
 									</dl>
 								
 								
@@ -1213,7 +1289,7 @@
 							<code>
 								Object 
 								<strong>getRelated</strong>
-								(&lt;ygDragDrop&gt; p_oDD, &lt;boolean&gt; bTargetsOnly)
+								(&lt;DragDrop&gt; p_oDD, &lt;boolean&gt; bTargetsOnly)
 							</code>
 									
 							<div class="description">
@@ -1240,7 +1316,7 @@
 								
 									<dl>
 										<dt>Returns:</dt>
-										<dd>{ygDragDrop[]} the related instances</dd>
+										<dd>{DragDrop[]} the related instances</dd>
 									</dl>
 								
 								
@@ -1327,7 +1403,7 @@
 								
 									<dl>
 										<dt>Returns:</dt>
-										<dd>     The value of the style property  </dd>
+										<dd> The value of the style property  </dd>
 									</dl>
 								
 								
@@ -1461,7 +1537,7 @@
 											</dd>
 										
 											<dd>
-												<code>ygDragDrop</code> - 
+												<code>DragDrop</code> - 
 												) the target  
 											</dd>
 										
@@ -1513,10 +1589,10 @@
 							<div class="description">
 								
 									My goal is to be able to transparently determine if an object is
- typeof ygDragDrop, and the exact subclass of ygDragDrop.  typeof 
+ typeof DragDrop, and the exact subclass of DragDrop.  typeof 
  returns "object", oDD.constructor.toString() always returns
- "ygDragDrop" and not the name of the subclass.  So for now it just
- evaluates a well-known variable in ygDragDrop.
+ "DragDrop" and not the name of the subclass.  So for now it just
+ evaluates a well-known variable in DragDrop.
 								
 								
 									<dl>
@@ -1532,7 +1608,7 @@
 								
 									<dl>
 										<dt>Returns:</dt>
-										<dd> true if typeof oDD = ygDragDrop</dd>
+										<dd> true if typeof oDD = DragDrop</dd>
 									</dl>
 								
 								
@@ -1564,11 +1640,29 @@
 							<code>
 								void 
 								<strong>moveToEl</strong>
-								(moveEl, targetEl)
+								(&lt;HTMLElement&gt; moveEl, &lt;HTMLElement&gt; targetEl)
 							</code>
 									
 							<div class="description">
 								
+									Sets the x/y position of an element to the location of the
+ target element.
+								
+								
+									<dl>
+										<dt>Parameters:</dt>
+										
+											<dd>
+												<code>moveEl</code> - 
+												      The element to move  
+											</dd>
+										
+											<dd>
+												<code>targetEl</code> - 
+												    The position reference element            
+											</dd>
+										
+									</dl>
 								
 								
 								
@@ -1600,20 +1694,28 @@
 							<code>
 								void 
 								<strong>refreshCache</strong>
-								(&lt;Array&gt; aGroups)
+								(&lt;Object&gt; groups)
 							</code>
 									
 							<div class="description">
 								
 									Refreshes the cache of the top-left and bottom-right points of the 
- drag and drop objects in the specified groups
+ drag and drop objects in the specified group(s).  This is in the
+ format that is stored in the drag and drop instance, so typical 
+ usage is:
+
+ YAHOO.util.DragDropMgr.refreshCache(ddinstance.groups);
+
+ Alternatively:
+
+ YAHOO.util.DragDropMgr.refreshCache({group1:true, group2:true});
 								
 								
 									<dl>
 										<dt>Parameters:</dt>
 										
 											<dd>
-												<code>aGroups</code> - 
+												<code>groups</code> - 
 												 an associative array of groups to refresh            
 											</dd>
 										
@@ -1636,7 +1738,7 @@
 							<div class="description">
 								
 									Each DragDrop instance must be registered with the DragDropMgr.  
- This is executed in ygDragDrop.init()
+ This is executed in DragDrop.init()
 								
 								
 									<dl>
@@ -1671,7 +1773,7 @@
 							<div class="description">
 								
 									Each DragDrop handle element must be registered.  This is done
- automatically when executing ygDragDrop.setHandleElId()
+ automatically when executing DragDrop.setHandleElId()
 								
 								
 									<dl>

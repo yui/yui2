@@ -1,14 +1,14 @@
 
 <html>
 <head>
-	<title>JavaScript Documentation - DDProxy.js</title>
+	<title>API: Drag and Drop overview-summary-DDProxy.js.html (YUI Library)</title>
 	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
 
 <div id="header">
-	<h1>JavaScript Documentation</h1>
+	<h1>Yahoo! UI Library</h1>
 	<h3><a href="./index.html">Drag and Drop</a></h3>
 
 	<div class="breadcrumbs">
@@ -162,7 +162,6 @@
 				<strong>Quick Links:</strong>&nbsp;
 				
 					
-						<a href="#classSummary">Class Summary</a> |
 					
 					
 				
@@ -174,19 +173,11 @@
 		
 			
 				<div class="section class summaries">
-					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 			
 				<div class="content">
-					<table border="1" cellpadding="3" cellspacing="0">
 						
-						<tr>
-							<td class="name">
-								<a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a>
-							</td>
-							<td class="overview">&nbsp;</td>
-						</tr>
 						
-					</table>
+
 				</div>
 			</div>
 		
@@ -197,7 +188,19 @@
 		
 		
 			<div class="section source">
-				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+
+
+<style>
+strong.alert {color:red;}
+</style>
+<p><strong class="alert">Note:</strong> Code presented here has been
+modified from the original source to aid in processing and
+presentation.  This is <strong>NOT</strong> functional code.  To review this
+component's literal, functional source, please refer to its
+JavaScript files as provided in <a href="http://sourceforge.net/
+projects/yui/">the downloadable YUI Library distribution</a>.</p>
+
+				<h3><a name="source">Source Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<pre class="sourceview"><span class="comment">/**
  * A DragDrop implementation that inserts an empty, bordered div into
  * the document that follows the cursor during drag operations.  At the time of
@@ -249,12 +252,6 @@ YAHOO.util.DDProxy.<span class="reserved">prototype</span>.resizeFrame = true;
  * <span class="attrib">@type</span> boolean
  */</span>
 YAHOO.util.DDProxy.<span class="reserved">prototype</span>.centerFrame = false;
-
-<span class="comment">/**
- * Previous proxy element size.
- * <span class="attrib">@private</span>
- */</span>
-YAHOO.util.DDProxy.<span class="reserved">prototype</span>._previousSize = [-1, -1];
 
 <span class="comment">/**
  * Create the drag frame if needed
@@ -332,17 +329,16 @@ YAHOO.util.DDProxy.<span class="reserved">prototype</span>.showFrame = <span cla
     }
 
     <span class="reserved">this</span>.setDragElPos(iPageX, iPageY);
-<span class="comment">
-    // s.visibility = "";</span>
+
     YAHOO.util.Dom.setStyle(dragEl, <span class="literal">"visibility"</span>, <span class="literal">"visible"</span>); 
 };
 
 YAHOO.util.DDProxy.<span class="reserved">prototype</span>._resizeProxy = <span class="reserved">function</span>() {
-    var DOM    = YAHOO.util.Dom;
-    var el     = <span class="reserved">this</span>.getEl();
-    var dragEl = <span class="reserved">this</span>.getDragEl();
-
     <span class="reserved">if</span> (<span class="reserved">this</span>.resizeFrame) {
+        var DOM    = YAHOO.util.Dom;
+        var el     = <span class="reserved">this</span>.getEl();
+        var dragEl = <span class="reserved">this</span>.getDragEl();
+
         var bt = parseInt( DOM.getStyle(dragEl, <span class="literal">"borderTopWidth"</span>    ), 10);
         var br = parseInt( DOM.getStyle(dragEl, <span class="literal">"borderRightWidth"</span>  ), 10);
         var bb = parseInt( DOM.getStyle(dragEl, <span class="literal">"borderBottomWidth"</span> ), 10);
@@ -355,19 +351,13 @@ YAHOO.util.DDProxy.<span class="reserved">prototype</span>._resizeProxy = <span 
 
         <span class="reserved">this</span>.logger.log(<span class="literal">"proxy size: "</span> + bt + <span class="literal">"  "</span> + br + <span class="literal">" "</span> + bb + <span class="literal">" "</span> + bl);
 
-        var newWidth  = el.offsetWidth - br - bl;
-        var newHeight = el.offsetHeight - bt - bb;
+        var newWidth  = Math.max(0, el.offsetWidth  - br - bl);                                                                                           
+        var newHeight = Math.max(0, el.offsetHeight - bt - bb);
 
-        <span class="reserved">if</span> (<span class="reserved">this</span>._previousSize[0] !== newWidth &amp;&amp; 
-                        <span class="reserved">this</span>._previousSize[1] !== newHeight) {
+        <span class="reserved">this</span>.logger.log(<span class="literal">"Resizing proxy element"</span>);
 
-            <span class="reserved">this</span>.logger.log(<span class="literal">"Resizing proxy element"</span>);
-
-            DOM.setStyle( dragEl, <span class="literal">"width"</span>,  newWidth  + <span class="literal">"px"</span> );
-            DOM.setStyle( dragEl, <span class="literal">"height"</span>, newHeight + <span class="literal">"px"</span> );
-
-            <span class="reserved">this</span>._previousSize = [newWidth, newHeight];
-        }
+        DOM.setStyle( dragEl, <span class="literal">"width"</span>,  newWidth  + <span class="literal">"px"</span> );
+        DOM.setStyle( dragEl, <span class="literal">"height"</span>, newHeight + <span class="literal">"px"</span> );
     }
 };
 <span class="comment">

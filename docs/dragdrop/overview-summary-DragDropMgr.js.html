@@ -1,14 +1,14 @@
 
 <html>
 <head>
-	<title>JavaScript Documentation - DragDropMgr.js</title>
+	<title>API: Drag and Drop overview-summary-DragDropMgr.js.html (YUI Library)</title>
 	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
 
 <div id="header">
-	<h1>JavaScript Documentation</h1>
+	<h1>Yahoo! UI Library</h1>
 	<h3><a href="./index.html">Drag and Drop</a></h3>
 
 	<div class="breadcrumbs">
@@ -158,47 +158,29 @@
 		
 		
 		
-			<div class="quick-links">
-				<strong>Quick Links:</strong>&nbsp;
-				
-					
-						<a href="#classSummary">Class Summary</a> |
-					
-					
-				
-				
-				
-					<a href="#source">Source Code</a>
-				
-			</div>
-		
-			
-				<div class="section class summaries">
-					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-			
-				<div class="content">
-					<table border="1" cellpadding="3" cellspacing="0">
-						
-						<tr>
-							<td class="name">
-								<a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a>
-							</td>
-							<td class="overview">&nbsp;</td>
-						</tr>
-						
-					</table>
-				</div>
-			</div>
-		
-		
 		
 		
 		
 		
 		
 			<div class="section source">
-				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<pre class="sourceview">
+
+
+<style>
+strong.alert {color:red;}
+</style>
+<p><strong class="alert">Note:</strong> Code presented here has been
+modified from the original source to aid in processing and
+presentation.  This is <strong>NOT</strong> functional code.  To review this
+component's literal, functional source, please refer to its
+JavaScript files as provided in <a href="http://sourceforge.net/
+projects/yui/">the downloadable YUI Library distribution</a>.</p>
+
+				<h3><a name="source">Source Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+				<pre class="sourceview"><span class="comment">// Only load the library once.  Rewriting the manager class would orphan </span>
+<span class="comment">// existing drag and drop instances.</span>
+<span class="reserved">if</span> (!YAHOO.util.DragDropMgr) {
+
     <span class="comment">/**
      * Handles the element interaction for all DragDrop items in the 
      * window.  Generally, you will not call this class directly, but it does
@@ -208,7 +190,8 @@
      *
      * <span class="attrib">@constructor</span>
      */</span>
-    YAHOO.util.DragDropMgr = <span class="reserved">function</span>() {
+    YAHOO.util.DragDropMgr = new <span class="reserved">function</span>() {
+
         <span class="comment">/**
          * Flag to determine if we should prevent the default behavior of the
          * events we define. By default this is true, but this can be set to 
@@ -264,6 +247,8 @@
          * <span class="attrib">@return</span> {boolean} True if drag and drop is locked, false otherwise.
          */</span>
         <span class="reserved">this</span>.isLocked = <span class="reserved">function</span>() { <span class="reserved">return</span> <span class="reserved">this</span>.locked; };
+
+
         <span class="comment">/**
          * Set useCache to false if you want to force object the lookup of each
          * drag and drop linked element constantly during a drag.
@@ -284,6 +269,8 @@
          * <span class="attrib">@type</span> int
          */</span>
         <span class="reserved">this</span>.clickTimeThresh = 1000;
+
+
         <span class="comment">/**
          * Each DragDrop instance must be registered with the DragDropMgr.  
          * This is executed in DragDrop.init()
@@ -449,147 +436,6 @@
 
 
         <span class="comment">/**
-         * Iterates over all of the DragDrop elements to find ones we are 
-         * hovering over or dropping on
-         *
-         * <span class="attrib">@param</span> {Event} e the event
-         * <span class="attrib">@param</span> {boolean} isDrop is this a drop op or a mouseover op?
-         * <span class="attrib">@private</span>
-         */</span>
-        <span class="reserved">this</span>.fireEvents = <span class="reserved">function</span>(e, isDrop) {
-            var dc = <span class="reserved">this</span>.dragCurrent;
-<span class="comment">
-            // If the user did the mouse up outside of the window, we could </span>
-<span class="comment">            // get here even though we have ended the drag.</span>
-            <span class="reserved">if</span> (!dc || dc.isLocked()) {
-                <span class="reserved">return</span>;
-            }
-
-            var x = YAHOO.util.Event.getPageX(e);
-            var y = YAHOO.util.Event.getPageY(e);
-            var pt = new YAHOO.util.Point(x,y);
-<span class="comment">
-            // cache the previous dragOver array</span>
-            var oldOvers = [];
-
-            var outEvts   = [];
-            var overEvts  = [];
-            var dropEvts  = [];
-            var enterEvts = [];
-<span class="comment">
-            // Check to see if the object(s) we were hovering over is no longer </span>
-<span class="comment">            // being hovered over so we can fire the onDragOut event</span>
-            <span class="reserved">for</span> (var i in <span class="reserved">this</span>.dragOvers) {
-
-                var ddo = <span class="reserved">this</span>.dragOvers[i];
-
-                <span class="reserved">if</span> (! <span class="reserved">this</span>.isTypeOfDD(ddo)) {
-                    continue;
-                }
-
-                <span class="reserved">if</span> (! <span class="reserved">this</span>.isOverTarget(pt, ddo, <span class="reserved">this</span>.mode)) {
-                    outEvts.push( ddo );
-                }
-
-                oldOvers[i] = true;
-                delete <span class="reserved">this</span>.dragOvers[i];
-            }
-
-            <span class="reserved">for</span> (var sGroup in dc.groups) {
-<span class="comment">                // this.logger.log("Processing group " + sGroup);</span>
-                
-                <span class="reserved">if</span> (<span class="literal">"string"</span> != typeof sGroup) {
-                    continue;
-                }
-
-                <span class="reserved">for</span> (i in <span class="reserved">this</span>.ids[sGroup]) {
-                    var oDD = <span class="reserved">this</span>.ids[sGroup][i];
-                    <span class="reserved">if</span> (! <span class="reserved">this</span>.isTypeOfDD(oDD)) {
-                        continue;
-                    }
-
-                    <span class="reserved">if</span> (oDD.isTarget &amp;&amp; !oDD.isLocked() &amp;&amp; oDD != dc) {
-                        <span class="reserved">if</span> (<span class="reserved">this</span>.isOverTarget(pt, oDD, <span class="reserved">this</span>.mode)) {
-<span class="comment">                            // look for drop interactions</span>
-                            <span class="reserved">if</span> (isDrop) {
-                                dropEvts.push( oDD );
-<span class="comment">                            // look for drag enter and drag over interactions</span>
-                            } <span class="reserved">else</span> {
-<span class="comment">
-                                // initial drag over: dragEnter fires</span>
-                                <span class="reserved">if</span> (!oldOvers[oDD.id]) {
-                                    enterEvts.push( oDD );
-<span class="comment">                                // subsequent drag overs: dragOver fires</span>
-                                } <span class="reserved">else</span> {
-                                    overEvts.push( oDD );
-                                }
-
-                                <span class="reserved">this</span>.dragOvers[oDD.id] = oDD;
-                            }
-                        }
-                    }
-                }
-            }
-
-            <span class="reserved">if</span> (<span class="reserved">this</span>.mode) {
-                <span class="reserved">if</span> (outEvts.length) {
-                    <span class="reserved">this</span>.logger.log(dc.id+<span class="literal">" onDragOut: "</span> + outEvts);
-                    dc.b4DragOut(e, outEvts);
-                    dc.onDragOut(e, outEvts);
-                }
-
-                <span class="reserved">if</span> (enterEvts.length) {
-                    <span class="reserved">this</span>.logger.log(dc.id+<span class="literal">" onDragEnter: "</span> + enterEvts);
-                    dc.onDragEnter(e, enterEvts);
-                }
-
-                <span class="reserved">if</span> (overEvts.length) {
-                    <span class="reserved">this</span>.logger.log(dc.id+<span class="literal">" onDragOver: "</span> + overEvts);
-                    dc.b4DragOver(e, overEvts);
-                    dc.onDragOver(e, overEvts);
-                }
-
-                <span class="reserved">if</span> (dropEvts.length) {
-                    <span class="reserved">this</span>.logger.log(dc.id+<span class="literal">" onDragDrop: "</span> + dropEvts);
-                    dc.b4DragDrop(e, dropEvts);
-                    dc.onDragDrop(e, dropEvts);
-                }
-
-            } <span class="reserved">else</span> {
-<span class="comment">                // fire dragout events</span>
-                var len = 0;
-                <span class="reserved">for</span> (i=0, len=outEvts.length; i&lt;len; ++i) {
-                    <span class="reserved">this</span>.logger.log(dc.id+<span class="literal">" onDragOut: "</span> + outEvts[i].id);
-                    dc.b4DragOut(e, outEvts[i].id);
-                    dc.onDragOut(e, outEvts[i].id);
-                }
-<span class="comment">                 
-                // fire enter events</span>
-                <span class="reserved">for</span> (i=0,len=enterEvts.length; i&lt;len; ++i) {
-                    <span class="reserved">this</span>.logger.log(dc.id + <span class="literal">" onDragEnter "</span> + enterEvts[i].id);
-<span class="comment">                    // dc.b4DragEnter(e, oDD.id);</span>
-                    dc.onDragEnter(e, enterEvts[i].id);
-                }
-<span class="comment">         
-                // fire over events</span>
-                <span class="reserved">for</span> (i=0,len=overEvts.length; i&lt;len; ++i) {
-                    <span class="reserved">this</span>.logger.log(dc.id + <span class="literal">" onDragOver "</span> + overEvts[i].id);
-                    dc.b4DragOver(e, overEvts[i].id);
-                    dc.onDragOver(e, overEvts[i].id);
-                }
-<span class="comment">
-                // fire drop events</span>
-                <span class="reserved">for</span> (i=0, len=dropEvts.length; i&lt;len; ++i) {
-                    <span class="reserved">this</span>.logger.log(dc.id + <span class="literal">" dropped on "</span> + dropEvts[i].id);
-                    dc.b4DragDrop(e, dropEvts[i].id);
-                    dc.onDragDrop(e, dropEvts[i].id);
-                }
-
-            }
-
-        };
-
-        <span class="comment">/**
          * Helper function for getting the best match from the list of drag 
          * and drop objects returned by the drag and drop events when we are 
          * in INTERSECT mode.  It returns either the first object that the 
@@ -637,7 +483,18 @@
 
         <span class="comment">/**
          * Refreshes the cache of the top-left and bottom-right points of the 
-         * drag and drop objects in the specified groups
+         * drag and drop objects in the specified group(s).  This is in the
+         * format that is stored in the drag and drop instance, so typical 
+         * usage is:
+         *
+         * YAHOO.util.DragDropMgr.refreshCache(ddinstance.groups);
+         *
+         * Alternatively:
+         *
+         * YAHOO.util.DragDropMgr.refreshCache({group1:true, group2:true});
+         *
+         * <span class="attrib">@TODO</span> this really should be an indexed array.  Alternatively this
+         * method could accept both.
          *
          * <span class="attrib">@param</span> {Object} groups an associative array of groups to refresh
          */</span>
@@ -773,7 +630,8 @@
 <span class="comment">            // location of the target as related to the actual location of the</span>
 <span class="comment">            // dragged element.</span>
             var dc = <span class="reserved">this</span>.dragCurrent;
-            <span class="reserved">if</span> (!dc || (!intersect &amp;&amp; !dc.constrainX &amp;&amp; !dc.constrainY)) {
+            <span class="reserved">if</span> (!dc || !dc.getTargetCoord || 
+                    (!intersect &amp;&amp; !dc.constrainX &amp;&amp; !dc.constrainY)) {
                 <span class="reserved">return</span> oTarget.cursorIsOver;
             }
 
@@ -1063,8 +921,19 @@
             <span class="reserved">return</span> false;
         };
 
-    };
+    } ();
+<span class="comment">
+    // shorter alias, save a few bytes</span>
+    YAHOO.util.DDM = YAHOO.util.DragDropMgr;
+    YAHOO.util.DDM._addListeners();
 
+}
+<span class="comment">
+//YAHOO.util.DragDropMgr.enableWindow = function(win) {</span>
+<span class="comment">    //var EU = YAHOO.util.Event;</span>
+<span class="comment">    //EU.on(win.document, "mouseup",   this.handleMouseUp,   this, true);</span>
+<span class="comment">    //EU.on(win.document, "mousemove", this.handleMouseMove, this, true);</span>
+<span class="comment">//};</span>
 
 </pre>
 			</div>

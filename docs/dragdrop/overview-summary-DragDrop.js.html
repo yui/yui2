@@ -1,14 +1,14 @@
 
 <html>
 <head>
-	<title>JavaScript Documentation - DragDrop.js</title>
+	<title>API: Drag and Drop overview-summary-DragDrop.js.html (YUI Library)</title>
 	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
 
 <div id="header">
-	<h1>JavaScript Documentation</h1>
+	<h1>Yahoo! UI Library</h1>
 	<h3><a href="./index.html">Drag and Drop</a></h3>
 
 	<div class="breadcrumbs">
@@ -162,7 +162,6 @@
 				<strong>Quick Links:</strong>&nbsp;
 				
 					
-						<a href="#classSummary">Class Summary</a> |
 					
 					
 				
@@ -174,19 +173,11 @@
 		
 			
 				<div class="section class summaries">
-					 <h3><a name="classSummary">Class Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 			
 				<div class="content">
-					<table border="1" cellpadding="3" cellspacing="0">
 						
-						<tr>
-							<td class="name">
-								<a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a>
-							</td>
-							<td class="overview">&nbsp;</td>
-						</tr>
 						
-					</table>
+
 				</div>
 			</div>
 		
@@ -197,7 +188,19 @@
 		
 		
 			<div class="section source">
-				<h3><a name="source">Souce Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
+
+
+<style>
+strong.alert {color:red;}
+</style>
+<p><strong class="alert">Note:</strong> Code presented here has been
+modified from the original source to aid in processing and
+presentation.  This is <strong>NOT</strong> functional code.  To review this
+component's literal, functional source, please refer to its
+JavaScript files as provided in <a href="http://sourceforge.net/
+projects/yui/">the downloadable YUI Library distribution</a>.</p>
+
+				<h3><a name="source">Source Code</a> <span class="top">[<a href="#top">top</a>]</span></h3>
 				<pre class="sourceview"><span class="comment">/**
  * Defines the interface and base operation of items that that can be 
  * dragged or can be drop targets.  It was designed to be extended, overriding
@@ -266,16 +269,15 @@ YAHOO.util.DragDrop.<span class="reserved">prototype</span> = {
     config: null,
 
 
-
     <span class="comment">/**
      * An associative array of HTML tags that will be ignored if clicked.
-     * <span class="attrib">@type</span> string[]
+     * <span class="attrib">@type</span> {string: string}
      */</span>
     invalidHandleTypes: null, 
 
     <span class="comment">/**
      * An associative array of ids for elements that will be ignored if clicked
-     * <span class="attrib">@type</span> string[]
+     * <span class="attrib">@type</span> {string: string}
      */</span>
     invalidHandleIds: null, 
 
@@ -285,12 +287,13 @@ YAHOO.util.DragDrop.<span class="reserved">prototype</span> = {
      * <span class="attrib">@type</span> string[]
      */</span>
     invalidHandleClasses: null, 
+
     <span class="comment">/**
      * The group defines a logical collection of DragDrop objects that are 
      * related.  Instances only get events when interacting with other 
      * DragDrop object in the same group.  This lets us define multiple 
      * groups using a single DragDrop subclass if we want.
-     * <span class="attrib">@type</span> string[]
+     * <span class="attrib">@type</span> {string: string}
      */</span>
     groups: null,
 
@@ -319,6 +322,7 @@ YAHOO.util.DragDrop.<span class="reserved">prototype</span> = {
      * <span class="attrib">@type</span> int[]
      */</span>
     padding: null,
+
     <span class="comment">/**
      * Maintain offsets when we resetconstraints.  Used to maintain the 
      * slider thumb value, and this needs to be fixed.
@@ -356,6 +360,7 @@ YAHOO.util.DragDrop.<span class="reserved">prototype</span> = {
      * <span class="attrib">@type</span> boolean
      */</span>
     available: false,
+
     <span class="comment">/**
      * Abstract method called after a drag/drop object is clicked
      * and the drag or mousedown time thresholds have beeen met.
@@ -382,8 +387,6 @@ YAHOO.util.DragDrop.<span class="reserved">prototype</span> = {
      * dragdrop items being hovered over.
      */</span>
     onDragEnter: <span class="reserved">function</span>(e, id) { <span class="comment">/* override this */</span> },
-
-
     <span class="comment">/**
      * Abstract method called when this element is hovering over another 
      * DragDrop obj
@@ -419,7 +422,6 @@ YAHOO.util.DragDrop.<span class="reserved">prototype</span> = {
      * <span class="attrib">@param</span> {Event} e
      */</span>
     endDrag: <span class="reserved">function</span>(e) { <span class="comment">/* override this */</span> },
-
     <span class="comment">/**
      * Event handler that fires when a drag/drop obj gets a mousedown
      * <span class="attrib">@param</span> {Event} e
@@ -509,7 +511,8 @@ YAHOO.util.DragDrop.<span class="reserved">prototype</span> = {
         YAHOO.util.Event.onAvailable(id, <span class="reserved">this</span>.handleOnAvailable, <span class="reserved">this</span>, true);
 <span class="comment">
         // create a logger instance</span>
-        <span class="reserved">this</span>.logger = new YAHOO.widget.LogWriter(<span class="reserved">this</span>.toString());
+        <span class="reserved">this</span>.logger = (YAHOO.widget.LogWriter) ? 
+                new YAHOO.widget.LogWriter(<span class="reserved">this</span>.toString()) : YAHOO;
 <span class="comment">
         // the linked element is the element that gets dragged by default</span>
         <span class="reserved">this</span>.setDragElId(id); 
@@ -588,7 +591,6 @@ YAHOO.util.DragDrop.<span class="reserved">prototype</span> = {
         <span class="reserved">this</span>.logger.log(<span class="reserved">this</span>.id + <span class="literal">" inital position: "</span> + <span class="reserved">this</span>.initPageX + 
                 <span class="literal">", "</span> + <span class="reserved">this</span>.initPageY);
 
-        <span class="reserved">this</span>.deltaSetXY = null;
 
         <span class="reserved">this</span>.setStartPosition(p);
     },
@@ -765,6 +767,7 @@ YAHOO.util.DragDrop.<span class="reserved">prototype</span> = {
         <span class="reserved">return</span> valid;
 
     },
+
     <span class="comment">/**
      * By default, the element can be dragged any place on the screen.  Use 
      * this method to limit the horizontal travel of the element.  Pass in 
