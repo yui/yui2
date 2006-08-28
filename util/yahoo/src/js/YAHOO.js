@@ -1,5 +1,5 @@
 /**
- * The Yahoo global namespace
+ * The YAHOO global namespace object
  * @constructor
  */
 window.YAHOO = window.YAHOO || {};
