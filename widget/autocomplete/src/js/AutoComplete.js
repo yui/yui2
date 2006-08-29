@@ -96,7 +96,6 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
         // Dom events
         YAHOO.util.Event.addListener(oTextbox,"keyup",oSelf._onTextboxKeyUp,oSelf);
         YAHOO.util.Event.addListener(oTextbox,"keydown",oSelf._onTextboxKeyDown,oSelf);
-        YAHOO.util.Event.addListener(oTextbox,"keypress",oSelf._onTextboxKeyPress,oSelf);
         YAHOO.util.Event.addListener(oTextbox,"focus",oSelf._onTextboxFocus,oSelf);
         YAHOO.util.Event.addListener(oTextbox,"blur",oSelf._onTextboxBlur,oSelf);
         YAHOO.util.Event.addListener(oContent,"mouseover",oSelf._onContainerMouseover,oSelf);
@@ -105,6 +104,11 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
         YAHOO.util.Event.addListener(oContent,"resize",oSelf._onContainerResize,oSelf);
         if(oTextbox.form) {
             YAHOO.util.Event.addListener(oTextbox.form,"submit",oSelf._onFormSubmit,oSelf);
+        }
+        //Expose only to Mac browsers, where stopEvent is ineffective on keydown events (bug 790337)
+        var isMac = (navigator.userAgent.toLowerCase().indexOf("mac") != -1);
+        if(isMac) {
+            YAHOO.util.Event.addListener(oTextbox,"keypress",oSelf._onTextboxKeyPress,oSelf);
         }
 
         // Custom events
@@ -1024,9 +1028,10 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
 };
 
 /**
- * Handles textbox keypress events, for stopEvent in Safari and FF 1.5/Mac
+ * Handles textbox keypress events. Exposed only to Mac browsers, where
+ * stopEvent is ineffective on keydown events (bug 790337)
  *
- * @param {event} v The keyup event
+ * @param {event} v The keypress event
  * @param {object} oSelf The auto complete instance
  * @private
  */
