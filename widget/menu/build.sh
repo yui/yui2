@@ -104,3 +104,21 @@ cp ../../examples/menu/*.html ~/dev/yahoo/properties/webservices/site/yui/exampl
 
 cp examples/img/*.jpg ../../examples/menu/img
 cp examples/img/*.jpg ~/dev/yahoo/properties/webservices/site/yui/examples/menu/img
+
+
+# Copy the source files to the directory that JSDoc lives in
+
+cp src/js/*.js ~/yjsdoc/js_src/menu/
+
+
+# Generate the documentation
+
+cd ~/yjsdoc/js_src/menu/
+/usr/local/bin/perl /home/kloots/yjsdoc/bin/jsdoc.pl -r
+
+
+# Copy the documentation to the three different locations where they are stored in CVS
+
+cp ~/yjsdoc/docs/*.* ~/dev/yahoo/presentation/2.x/widget/menu/docs/
+cp ~/yjsdoc/docs/*.* ~/dev/yahoo/presentation/2.x/docs/menu/
+cp ~/yjsdoc/docs/*.* ~/dev/yahoo/properties/webservices/site/yui/docs/menu/
