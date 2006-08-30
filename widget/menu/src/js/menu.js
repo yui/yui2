@@ -7,8 +7,10 @@
 * @constructor
 * @extends YAHOO.widget.MenuModule
 * @base YAHOO.widget.MenuModule
-* @param {String or HTMLElement} p_oElement String id or HTMLElement 
-* (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
+* @param {String} p_oElement The HTMLElement ID representing the source node 
+* (either HTMLSelectElement or HTMLDivElement) of the Menu <em>OR</em>
+* @param {Element} p_oElement The HTMLElement representing the Menu to 
+* be created
 * @param {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a Menu instance. See 
 * configuration class documentation for more details.
@@ -30,8 +32,10 @@ YAHOO.extend(YAHOO.widget.Menu, YAHOO.widget.MenuModule);
 * The Menu class's initialization method. This method is automatically 
 * called by the constructor, and sets up all DOM references for pre-existing 
 * markup, and creates required markup if it is not already present.
-* @param {String or HTMLElement} p_oElement String id or HTMLElement 
-* (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
+* @param {String} p_oElement The HTMLElement ID representing the source node 
+* (either HTMLSelectElement or HTMLDivElement) of the Menu <em>OR</em>
+* @param {Element} p_oElement The HTMLElement representing the Menu to 
+* be created
 * @param {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a Menu instance. See 
 * configuration class documentation for more details.
@@ -196,11 +200,18 @@ YAHOO.widget.Menu.prototype.onDomResize = function(e, obj) {
         
         if(this.parent && oConfig.getProperty("visible")) {
 
-            function align() {
+
+            /**
+            * Aligns the menu to its specified "context" element.  If the menu  
+            * is a submenu then its "context" element is always the parent 
+            * item's element.
+            * @private
+            */ 
+            var align = function() {
 
                 me.align();
             
-            }
+            };
 
             window.setTimeout(align, 0);
             

@@ -7,8 +7,10 @@
 * @constructor
 * @extends YAHOO.widget.Menu
 * @base YAHOO.widget.Menu
-* @param {String or HTMLElement} p_oElement String id or HTMLElement 
-* (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
+* @param {String} p_oElement The HTMLElement ID representing the source node 
+* (either HTMLSelectElement or HTMLDivElement) of the ContextMenu <em>OR</em>
+* @param {Element} p_oElement The HTMLElement representing the ContextMenu to 
+* be created
 * @param {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a ContextMenu instance. See 
 * configuration class documentation for more details.
@@ -32,7 +34,7 @@ YAHOO.extend(YAHOO.widget.ContextMenu, YAHOO.widget.Menu);
 /**
 * Array of ContextMenu instances
 * @private
-* @type {Array}
+* @type Array
 */
 YAHOO.widget.ContextMenu._aMenus = [];
 
@@ -40,7 +42,7 @@ YAHOO.widget.ContextMenu._aMenus = [];
 /**
 * The id(s) or element(s) that trigger the display of the ContextMenu instance
 * @private
-* @type {String/Array/HTMLElement}
+* @type String/Array/HTMLElement
 */
 YAHOO.widget.ContextMenu.prototype._oTrigger = null;
 
@@ -59,8 +61,10 @@ YAHOO.widget.ContextMenu.prototype.contextEventTarget = null;
 * The ContextMenu class's initialization method. This method is automatically  
 * called by the constructor, and sets up all DOM references for pre-existing 
 * markup, and creates required markup if it is not already present.
-* @param {String or HTMLElement} p_oElement String id or HTMLElement 
-* (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
+* @param {String} p_oElement The HTMLElement ID representing the source node 
+* (either HTMLSelectElement or HTMLDivElement) of the ContextMenu <em>OR</em>
+* @param {Element} p_oElement The HTMLElement representing the ContextMenu to 
+* be created
 * @param {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a ContextMenu instance. See 
 * configuration class documentation for more details.

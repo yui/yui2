@@ -6,9 +6,11 @@
 * @constructor
 * @extends YAHOO.widget.MenuItem
 * @base YAHOO.widget.MenuItem
-* @param {String or HTMLElement} p_oObject String or HTMLElement 
-* (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
-* source HTMLElement node.
+* @param {String} p_oObject The text of the ContextMenuItem to be 
+* created <em>OR</em>
+* @param {HTMLElement} p_oObject The HTMLElement representing the source node 
+* (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of 
+* the ContextMenuItem
 * @param {Object} p_oConfig The configuration object literal containing 
 * the configuration for a ContextMenuItem instance. See the configuration 
 * class documentation for more details.
@@ -31,9 +33,11 @@ YAHOO.extend(YAHOO.widget.ContextMenuItem, YAHOO.widget.MenuItem);
 * automatically called by the constructor, and sets up all DOM references for
 * pre-existing markup, and creates required markup if it is not
 * already present.
-* @param {String or HTMLElement} p_oObject String or HTMLElement 
-* (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
-* source HTMLElement node.
+* @param {String} p_oObject The text of the ContextMenuItem to be 
+* created <em>OR</em>
+* @param {HTMLElement} p_oObject The HTMLElement representing the source node 
+* (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of 
+* the ContextMenuItem
 * @param {Object} p_oConfig The configuration object literal containing 
 * the configuration for a ContextMenuItem instance. See the configuration 
 * class documentation for more details.

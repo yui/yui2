@@ -8,9 +8,10 @@
 * @constructor
 * @extends YAHOO.widget.MenuModuleItem
 * @base YAHOO.widget.MenuModuleItem
-* @param {String or HTMLElement} p_oObject String or HTMLElement 
-* (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
-* source HTMLElement node.
+* @param {String} p_oObject The text of the MenuItem to be created <em>OR</em>
+* @param {HTMLElement} p_oObject The HTMLElement representing the source node 
+* (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of 
+* the MenuItem
 * @param {Object} p_oConfig The configuration object literal containing 
 * the configuration for a MenuItem instance. See the configuration 
 * class documentation for more details.
@@ -33,9 +34,10 @@ YAHOO.extend(YAHOO.widget.MenuItem, YAHOO.widget.MenuModuleItem);
 * called by the constructor, and sets up all DOM references for
 * pre-existing markup, and creates required markup if it is not
 * already present.
-* @param {String or HTMLElement} p_oObject String or HTMLElement 
-* (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
-* source HTMLElement node.
+* @param {String} p_oObject The text of the MenuItem to be created <em>OR</em>
+* @param {HTMLElement} p_oObject The HTMLElement representing the source node 
+* (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of 
+* the MenuItem
 * @param {Object} p_oConfig The configuration object literal containing 
 * the configuration for a MenuItem instance. See the configuration 
 * class documentation for more details.
@@ -139,7 +141,7 @@ YAHOO.widget.MenuItem.prototype.DISABLED_CHECKED_IMAGE_ALT_TEXT =
 * Reference to the HTMLImageElement used to create the checked
 * indicator for a MenuItem instance.
 * @private
-* @type {HTMLImageElement}
+* @type HTMLImageElement
 */
 YAHOO.widget.MenuItem.prototype._checkImage = null;
 
@@ -373,7 +375,13 @@ YAHOO.widget.MenuItem.prototype._onClick =
 
     function(p_sType, p_aArgs, p_oMenuItem) {
     
-        function findRoot(p_oMenu) {
+
+        /**
+        * Finds an item's root Menu instance.
+        * @private
+        * @param {YAHOO.widget.Menu} p_oMenu A Menu instance.
+        */
+        var findRoot = function(p_oMenu) {
 
             var oItem = p_oMenu.parent; // The parent MenuItem instance
         
@@ -395,7 +403,7 @@ YAHOO.widget.MenuItem.prototype._onClick =
 
             return p_oMenu;
         
-        }
+        };
  
 
         var oRoot = findRoot(this.parent);
@@ -440,7 +448,14 @@ YAHOO.widget.MenuItem.prototype.configChecked =
 
             var me = this;
 
-            function preloadImage(p_sPath) {
+            /**
+            * Preloads an image by creating an image element from the 
+            * specified path and appending the image to the body of 
+            * the document
+            * @private
+            * @param {String} p_sPath The path to the image.                
+            */
+            var preloadImage = function(p_sPath) {
 
                 var sPath = me.imageRoot + p_sPath;
 
@@ -456,7 +471,7 @@ YAHOO.widget.MenuItem.prototype.configChecked =
 
                 }
             
-            }
+            };
 
             preloadImage(this.CHECKED_IMAGE_PATH);
             preloadImage(this.SELECTED_CHECKED_IMAGE_PATH);

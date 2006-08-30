@@ -5,9 +5,11 @@
 * @class The MenuModuleItem class allows you to create and modify an item for a
 * MenuModule instance.
 * @constructor
-* @param {String or HTMLElement} p_oObject String or HTMLElement 
-* (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
-* source HTMLElement node.
+* @param {String} p_oObject The text of the MenuModuleItem to be 
+* created <em>OR</em>
+* @param {HTMLElement} p_oObject The HTMLElement representing the source node 
+* (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of 
+* the MenuModuleItem
 * @param {Object} p_oConfig The configuration object literal containing 
 * the configuration for a MenuModuleItem instance. See the configuration 
 * class documentation for more details.
@@ -116,14 +118,14 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
     /**
     * Constant representing the prefix path to use for non-secure images
-    * @type string
+    * @type String
     */
     IMG_ROOT: "http://us.i1.yimg.com/us.yimg.com/i/",
     
 
     /**
     * Constant representing the prefix path to use for securely served images
-    * @type string
+    * @type String
     */
     IMG_ROOT_SSL: "https://a248.e.akamai.net/sec.yimg.com/i/",
 
@@ -134,7 +136,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     * Reference to the HTMLAnchorElement of the MenuModuleItem's core internal
     * DOM structure.
     * @private
-    * @type {HTMLAnchorElement}
+    * @type HTMLAnchorElement
     */
     _oAnchor: null,
     
@@ -143,7 +145,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     * Reference to the text node of the MenuModuleItem's core internal
     * DOM structure.
     * @private
-    * @type {Text}
+    * @type Text
     */
     _oText: null,
     
@@ -152,7 +154,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     * Reference to the HTMLElement (&#60;EM&#60;) used to create the optional
     * help text for a MenuModuleItem instance.
     * @private
-    * @type {HTMLElement}
+    * @type HTMLElement
     */
     _oHelpTextEM: null,
     
@@ -160,7 +162,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     /**
     * Reference to the submenu for a MenuModuleItem instance.
     * @private
-    * @type {YAHOO.widget.MenuModule}
+    * @type YAHOO.widget.MenuModule
     */
     _oSubmenu: null,
     
@@ -168,7 +170,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     /**
     * Reference to the Dom utility singleton.
     * @private
-    * @type {YAHOO.util.Dom}
+    * @type YAHOO.util.Dom
     */
     _oDom: YAHOO.util.Dom,
 
@@ -176,7 +178,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     /** 
     * The current state of a MenuModuleItem instance's "mouseover" event
     * @private
-    * @type {Boolean}
+    * @type Boolean
     */
     _bFiredMouseOverEvent: false,
     
@@ -184,7 +186,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     /** 
     * The current state of a MenuModuleItem instance's "mouseout" event
     * @private
-    * @type {Boolean}
+    * @type Boolean
     */
     _bFiredMouseOutEvent: false,
 
@@ -200,7 +202,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
 	/**
 	* The string representing the image root
-	* @type string
+	* @type String
 	*/
 	imageRoot: null,
 
@@ -208,7 +210,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 	/**
 	* Boolean representing whether or not the current browsing context 
 	* is secure (https)
-	* @type boolean
+	* @type Boolean
 	*/
 	isSecure: YAHOO.widget.Module.prototype.isSecure,
 
@@ -229,14 +231,14 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
     /**
     * Returns the parent object for a MenuModuleItem instance.
-    * @type {YAHOO.widget.MenuModule}
+    * @type YAHOO.widget.MenuModule
     */
     parent: null,
 
 
     /**
     * Returns the HTMLLIElement for a MenuModuleItem instance.
-    * @type {HTMLLIElement}
+    * @type HTMLLIElement
     */
     element: null,
 
@@ -244,14 +246,14 @@ YAHOO.widget.MenuModuleItem.prototype = {
     /**
     * Returns the HTMLElement (either HTMLLIElement, HTMLOptGroupElement or
     * HTMLOptionElement) used create the MenuModuleItem instance.
-    * @type {HTMLLIElement/HTMLOptGroupElement/HTMLOptionElement}
+    * @type HTMLLIElement/HTMLOptGroupElement/HTMLOptionElement
     */
     srcElement: null,
 
 
     /**
     * Specifies an arbitrary value for a MenuModuleItem instance.
-    * @type {Object}
+    * @type Object
     */
     value: null,
 
@@ -259,14 +261,14 @@ YAHOO.widget.MenuModuleItem.prototype = {
     /**
     * Reference to the HTMLImageElement used to create the submenu
     * indicator for a MenuModuleItem instance.
-    * @type {HTMLImageElement}
+    * @type HTMLImageElement
     */
     submenuIndicator: null,
 
 
 	/**
 	* String representing the browser
-	* @type string
+	* @type String
 	*/
 	browser: YAHOO.widget.Module.prototype.browser,
 
@@ -275,9 +277,8 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
     /**
     * Fires when a MenuModuleItem instances's HTMLLIElement is removed from
-    * it's parent HTMLUListElement node.
-    * @type {YAHOO.util.CustomEvent}
-    * @see YAHOO.util.CustomEvent
+    * its parent HTMLUListElement node.
+    * @type YAHOO.util.CustomEvent
     */
     destroyEvent: null,
 
@@ -285,8 +286,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     /**
     * Fires when the mouse has entered a MenuModuleItem instance.  Passes
     * back the DOM Event object as an argument.
-    * @type {YAHOO.util.CustomEvent}
-    * @see YAHOO.util.CustomEvent
+    * @type YAHOO.util.CustomEvent
     */
     mouseOverEvent: null,
 
@@ -294,8 +294,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     /**
     * Fires when the mouse has left a MenuModuleItem instance.  Passes back  
     * the DOM Event object as an argument.
-    * @type {YAHOO.util.CustomEvent}
-    * @see YAHOO.util.CustomEvent
+    * @type YAHOO.util.CustomEvent
     */
     mouseOutEvent: null,
 
@@ -303,8 +302,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     /**
     * Fires when the user mouses down on a MenuModuleItem instance.  Passes 
     * back the DOM Event object as an argument.
-    * @type {YAHOO.util.CustomEvent}
-    * @see YAHOO.util.CustomEvent
+    * @type YAHOO.util.CustomEvent
     */
     mouseDownEvent: null,
 
@@ -313,8 +311,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     * Fires when the user releases a mouse button while the mouse is 
     * over a MenuModuleItem instance.  Passes back the DOM Event object as
     * an argument.
-    * @type {YAHOO.util.CustomEvent}
-    * @see YAHOO.util.CustomEvent
+    * @type YAHOO.util.CustomEvent
     */
     mouseUpEvent: null,
 
@@ -322,8 +319,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     /**
     * Fires when the user clicks the on a MenuModuleItem instance.  Passes 
     * back the DOM Event object as an argument.
-    * @type {YAHOO.util.CustomEvent}
-    * @see YAHOO.util.CustomEvent
+    * @type YAHOO.util.CustomEvent
     */
     clickEvent: null,
 
@@ -331,8 +327,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     /**
     * Fires when the user presses an alphanumeric key.  Passes back the 
     * DOM Event object as an argument.
-    * @type {YAHOO.util.CustomEvent}
-    * @see YAHOO.util.CustomEvent
+    * @type YAHOO.util.CustomEvent
     */
     keyPressEvent: null,
 
@@ -340,8 +335,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     /**
     * Fires when the user presses a key.  Passes back the DOM Event 
     * object as an argument.
-    * @type {YAHOO.util.CustomEvent}
-    * @see YAHOO.util.CustomEvent
+    * @type YAHOO.util.CustomEvent
     */
     keyDownEvent: null,
 
@@ -349,24 +343,21 @@ YAHOO.widget.MenuModuleItem.prototype = {
     /**
     * Fires when the user releases a key.  Passes back the DOM Event 
     * object as an argument.
-    * @type {YAHOO.util.CustomEvent}
-    * @see YAHOO.util.CustomEvent
+    * @type YAHOO.util.CustomEvent
     */
     keyUpEvent: null,
 
 
     /**
     * Fires when a MenuModuleItem instance receives focus.
-    * @type {YAHOO.util.CustomEvent}
-    * @see YAHOO.util.CustomEvent
+    * @type YAHOO.util.CustomEvent
     */
     focusEvent: null,
 
 
     /**
     * Fires when a MenuModuleItem instance loses the input focus.
-    * @type {YAHOO.util.CustomEvent}
-    * @see YAHOO.util.CustomEvent
+    * @type YAHOO.util.CustomEvent
     */
     blurEvent: null,
 
@@ -376,9 +367,11 @@ YAHOO.widget.MenuModuleItem.prototype = {
     * automatically called by the constructor, and sets up all DOM references 
     * for pre-existing markup, and creates required markup if it is not
     * already present.
-    * @param {String or HTMLElement} p_oObject String or HTMLElement 
-    * (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
-    * source HTMLElement node.
+    * @param {String} p_oObject The text of the MenuModuleItem to be 
+    * created <em>OR</em>
+    * @param {HTMLElement} p_oObject The HTMLElement representing the source  
+    * node (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of 
+    * the MenuModuleItem
     * @param {Object} p_oConfig The configuration object literal containing 
     * the configuration for a MenuModuleItem instance. See the configuration 
     * class documentation for more details.
@@ -886,9 +879,9 @@ YAHOO.widget.MenuModuleItem.prototype = {
         /**
         * Adds the "hashelptext" class to the necessary nodes and refires the 
         * "selected" and "disabled" configuration events
-        * @ignore
+        * @private
         */
-        function initHelpText() {
+        var initHelpText = function() {
 
             Dom.addClass(aNodes, "hashelptext");
 
@@ -904,21 +897,21 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
             }                
 
-        }
+        };
 
 
         /**
         * Removes the "hashelptext" class and corresponding DOM element (EM)
-        * @ignore
+        * @private
         */
-        function removeHelpText() {
+        var removeHelpText = function() {
 
             Dom.removeClass(aNodes, "hashelptext");
 
             oEl.removeChild(me._oHelpTextEM);
             me._oHelpTextEM = null;
 
-        }
+        };
 
 
         if(this._checkDOMNode(oHelpText)) {
@@ -1278,7 +1271,14 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
                 var me = this;
 
-                function preloadImage(p_sPath) {
+                /**
+                * Preloads an image by creating an image element from the 
+                * specified path and appending the image to the body of 
+                * the document
+                * @private
+                * @param {String} p_sPath The path to the image.                
+                */
+                var preloadImage = function(p_sPath) {
 
                     var sPath = me.imageRoot + p_sPath;
 
@@ -1294,7 +1294,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
                     }
                 
-                }
+                };
 
                 preloadImage(this.SUBMENU_INDICATOR_IMAGE_PATH);
                 preloadImage(this.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH);
@@ -1440,18 +1440,18 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
             /**
             * Returns the next item in an array 
+            * @private
             * @param {p_aArray} An array
             * @param {p_nStartIndex} The index to start searching the array 
-            * @ignore
             * @return Returns an item in an array
             * @type Object 
             */
-            function getNextArrayItem(p_aArray, p_nStartIndex) {
+            var getNextArrayItem = function(p_aArray, p_nStartIndex) {
     
                 return p_aArray[p_nStartIndex] || 
                     getNextArrayItem(p_aArray, (p_nStartIndex+1));
     
-            }
+            };
     
     
             var aItemGroups = this.parent.getItemGroups();
@@ -1514,35 +1514,35 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
             /**
             * Returns the previous item in an array 
+            * @private
             * @param {p_aArray} An array
             * @param {p_nStartIndex} The index to start searching the array 
-            * @ignore
             * @return Returns an item in an array
             * @type Object 
             */
-            function getPreviousArrayItem(p_aArray, p_nStartIndex) {
+            var getPreviousArrayItem = function(p_aArray, p_nStartIndex) {
     
                 return p_aArray[p_nStartIndex] || 
                     getPreviousArrayItem(p_aArray, (p_nStartIndex-1));
     
-            }
+            };
 
 
             /**
             * Get the index of the first item in an array 
+            * @private
             * @param {p_aArray} An array
             * @param {p_nStartIndex} The index to start searching the array 
-            * @ignore
             * @return Returns an item in an array
             * @type Object 
             */    
-            function getFirstItemIndex(p_aArray, p_nStartIndex) {
+            var getFirstItemIndex = function(p_aArray, p_nStartIndex) {
     
                 return p_aArray[p_nStartIndex] ? 
                     p_nStartIndex : 
                     getFirstItemIndex(p_aArray, (p_nStartIndex+1));
     
-            }
+            };
     
             var aItemGroups = this.parent.getItemGroups();
             var oPreviousItem;
@@ -1650,7 +1650,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
 
 	/**
-	* Removes a MenuModuleItem instance's HTMLLIElement from it's parent
+	* Removes a MenuModuleItem instance's HTMLLIElement from its parent
     * HTMLUListElement node.
 	*/
     destroy: function() {

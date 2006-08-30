@@ -3,8 +3,10 @@
 * @constructor
 * @extends YAHOO.widget.Overlay
 * @base YAHOO.widget.Overlay
-* @param {String or HTMLElement} p_oElement String id or HTMLElement 
-* (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
+* @param {String} p_oElement The HTMLElement ID representing the source node 
+* (either HTMLSelectElement or HTMLDivElement) of the MenuModule <em>OR</em>
+* @param {Element} p_oElement The HTMLElement representing the MenuModule to 
+* be created
 * @param {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a MenuModule instance. See 
 * configuration class documentation for more details.
@@ -27,7 +29,7 @@ YAHOO.extend(YAHOO.widget.MenuModule, YAHOO.widget.Overlay);
 /**
 * Private global flag indicating if the DOM event handlers have been attached
 * @private
-* @type {Boolean}
+* @type Boolean
 */
 YAHOO.widget.MenuModule._initEventHandlers = true;
 
@@ -35,7 +37,7 @@ YAHOO.widget.MenuModule._initEventHandlers = true;
 /**
 * Private global collection of menus
 * @private
-* @type {Object}
+* @type Object
 */
 YAHOO.widget.MenuModule._menus = {};
 
@@ -43,7 +45,7 @@ YAHOO.widget.MenuModule._menus = {};
 /**
 * Private global collection of menu items 
 * @private
-* @type {Object}
+* @type Object
 */
 YAHOO.widget.MenuModule._menuItems = {};
 
@@ -81,7 +83,7 @@ YAHOO.widget.MenuModule._onDOMEvent = function(p_oEvent) {
     * @private
     * @param {HTMLElement} p_oElement An HTML element
     */
-    function getMenuRootElement(p_oElement) {
+    var getMenuRootElement = function(p_oElement) {
     
         var oParentNode;
 
@@ -133,7 +135,7 @@ YAHOO.widget.MenuModule._onDOMEvent = function(p_oEvent) {
         
         }
     
-    }
+    };
 
 
     // The root DIV node of a menu
@@ -344,7 +346,7 @@ YAHOO.widget.MenuModule.prototype.GROUP_TITLE_TAG_NAME = "H6";
 /** 
 * The current state of a MenuModule instance's "mouseover" event
 * @private
-* @type {Boolean}
+* @type Boolean
 */
 YAHOO.widget.MenuModule.prototype._bFiredMouseOverEvent = false;
 
@@ -352,7 +354,7 @@ YAHOO.widget.MenuModule.prototype._bFiredMouseOverEvent = false;
 /** 
 * The current state of a MenuModule instance's "mouseout" event
 * @private
-* @type {Boolean}
+* @type Boolean
 */
 YAHOO.widget.MenuModule.prototype._bFiredMouseOutEvent = false;
 
@@ -360,7 +362,7 @@ YAHOO.widget.MenuModule.prototype._bFiredMouseOutEvent = false;
 /**
 * Array of HTMLElements used to title groups of items.
 * @private
-* @type {Array}
+* @type Array
 */
 YAHOO.widget.MenuModule.prototype._aGroupTitleElements = null;
 
@@ -368,7 +370,7 @@ YAHOO.widget.MenuModule.prototype._aGroupTitleElements = null;
 /**
 * Multi-dimensional array of items.
 * @private
-* @type {Array}
+* @type Array
 */
 YAHOO.widget.MenuModule.prototype._aItemGroups = null;
 
@@ -377,7 +379,7 @@ YAHOO.widget.MenuModule.prototype._aItemGroups = null;
 * An array of HTMLUListElements, each of which is the parent node of each 
 * items's HTMLLIElement node.
 * @private
-* @type {Array}
+* @type Array
 */
 YAHOO.widget.MenuModule.prototype._aListElements = null;
 
@@ -385,7 +387,7 @@ YAHOO.widget.MenuModule.prototype._aListElements = null;
 /**
 * Reference to the Event utility singleton.
 * @private
-* @type {YAHOO.util.Event}
+* @type YAHOO.util.Event
 */
 YAHOO.widget.MenuModule.prototype._oEventUtil = YAHOO.util.Event;
 
@@ -393,7 +395,7 @@ YAHOO.widget.MenuModule.prototype._oEventUtil = YAHOO.util.Event;
 /**
 * Reference to the Dom utility singleton.
 * @private
-* @type {YAHOO.util.Dom}
+* @type YAHOO.util.Dom
 */
 YAHOO.widget.MenuModule.prototype._oDom = YAHOO.util.Dom;
 
@@ -404,14 +406,14 @@ YAHOO.widget.MenuModule.prototype._oDom = YAHOO.util.Dom;
 /**
 * Reference to the item that has focus.
 * @private
-* @type {YAHOO.widget.MenuModuleItem}
+* @type YAHOO.widget.MenuModuleItem
 */
 YAHOO.widget.MenuModule.prototype.activeItem = null;
 
 
 /**
 * Returns a MenuModule instance's parent object.
-* @type {YAHOO.widget.MenuModuleItem}
+* @type YAHOO.widget.MenuModuleItem
 */
 YAHOO.widget.MenuModule.prototype.parent = null;
 
@@ -419,7 +421,7 @@ YAHOO.widget.MenuModule.prototype.parent = null;
 /**
 * Returns the HTMLElement (either HTMLSelectElement or HTMLDivElement)
 * used create the MenuModule instance.
-* @type {HTMLSelectElement/HTMLDivElement}
+* @type HTMLSelectElement/HTMLDivElement
 */
 YAHOO.widget.MenuModule.prototype.srcElement = null;
 
@@ -430,8 +432,7 @@ YAHOO.widget.MenuModule.prototype.srcElement = null;
 /**
 * Fires when the mouse has entered a MenuModule instance.  Passes back the 
 * DOM Event object as an argument.
-* @type {YAHOO.util.CustomEvent}
-* @see YAHOO.util.CustomEvent
+* @type YAHOO.util.CustomEvent
 */
 YAHOO.widget.MenuModule.prototype.mouseOverEvent = null;
 
@@ -439,8 +440,7 @@ YAHOO.widget.MenuModule.prototype.mouseOverEvent = null;
 /**
 * Fires when the mouse has left a MenuModule instance.  Passes back the DOM 
 * Event object as an argument.
-* @type {YAHOO.util.CustomEvent}
-* @see YAHOO.util.CustomEvent
+* @type YAHOO.util.CustomEvent
 */
 YAHOO.widget.MenuModule.prototype.mouseOutEvent = null;
 
@@ -448,8 +448,7 @@ YAHOO.widget.MenuModule.prototype.mouseOutEvent = null;
 /**
 * Fires when the user mouses down on a MenuModule instance.  Passes back the 
 * DOM Event object as an argument.
-* @type {YAHOO.util.CustomEvent}
-* @see YAHOO.util.CustomEvent
+* @type YAHOO.util.CustomEvent
 */
 YAHOO.widget.MenuModule.prototype.mouseDownEvent = null;
 
@@ -457,8 +456,7 @@ YAHOO.widget.MenuModule.prototype.mouseDownEvent = null;
 /**
 * Fires when the user releases a mouse button while the mouse is over 
 * a MenuModule instance.  Passes back the DOM Event object as an argument.
-* @type {YAHOO.util.CustomEvent}
-* @see YAHOO.util.CustomEvent
+* @type YAHOO.util.CustomEvent
 */
 YAHOO.widget.MenuModule.prototype.mouseUpEvent = null;
 
@@ -466,8 +464,7 @@ YAHOO.widget.MenuModule.prototype.mouseUpEvent = null;
 /**
 * Fires when the user clicks the on a MenuModule instance.  Passes back the 
 * DOM Event object as an argument.
-* @type {YAHOO.util.CustomEvent}
-* @see YAHOO.util.CustomEvent
+* @type YAHOO.util.CustomEvent
 */
 YAHOO.widget.MenuModule.prototype.clickEvent = null;
 
@@ -475,8 +472,7 @@ YAHOO.widget.MenuModule.prototype.clickEvent = null;
 /**
 * Fires when the user presses an alphanumeric key.  Passes back the 
 * DOM Event object as an argument.
-* @type {YAHOO.util.CustomEvent}
-* @see YAHOO.util.CustomEvent
+* @type YAHOO.util.CustomEvent
 */
 YAHOO.widget.MenuModule.prototype.keyPressEvent = null;
 
@@ -484,8 +480,7 @@ YAHOO.widget.MenuModule.prototype.keyPressEvent = null;
 /**
 * Fires when the user presses a key.  Passes back the DOM Event 
 * object as an argument.
-* @type {YAHOO.util.CustomEvent}
-* @see YAHOO.util.CustomEvent
+* @type YAHOO.util.CustomEvent
 */
 YAHOO.widget.MenuModule.prototype.keyDownEvent = null;
 
@@ -493,8 +488,7 @@ YAHOO.widget.MenuModule.prototype.keyDownEvent = null;
 /**
 * Fires when the user releases a key.  Passes back the DOM Event 
 * object as an argument.
-* @type {YAHOO.util.CustomEvent}
-* @see YAHOO.util.CustomEvent
+* @type YAHOO.util.CustomEvent
 */
 YAHOO.widget.MenuModule.prototype.keyUpEvent = null;
 
@@ -503,8 +497,10 @@ YAHOO.widget.MenuModule.prototype.keyUpEvent = null;
 * The MenuModule class's initialization method. This method is automatically 
 * called  by the constructor, and sets up all DOM references for 
 * pre-existing markup, and creates required markup if it is not already present.
-* @param {String or HTMLElement} p_oElement String id or HTMLElement 
-* (either HTMLSelectElement or HTMLDivElement) of the source HTMLElement node.
+* @param {String} p_oElement The HTMLElement ID representing the source node 
+* (either HTMLSelectElement or HTMLDivElement) of the MenuModule <em>OR</em>
+* @param {Element} p_oElement The HTMLElement representing the MenuModule to 
+* be created
 * @param {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a MenuModule instance. See 
 * configuration class documentation for more details.
@@ -982,14 +978,14 @@ YAHOO.widget.MenuModule.prototype._addItemToGroup =
         
                         /**
                         * Returns the next sibling of an item in an array 
+                        * @private
                         * @param {p_aArray} An array
                         * @param {p_nStartIndex} The index to start searching
                         * the array 
-                        * @ignore
                         * @return Returns an item in an array
                         * @type Object 
                         */
-                        function getNextItemSibling(p_aArray, p_nStartIndex) {
+                        var getNextItemSibling = function(p_aArray, p_nStartIndex) {
                 
                             return (
                                     p_aArray[p_nStartIndex] || 
@@ -999,7 +995,7 @@ YAHOO.widget.MenuModule.prototype._addItemToGroup =
                                     )
                                 );
                 
-                        }
+                        };
         
         
                         var oNextItemSibling = 
@@ -1284,7 +1280,7 @@ YAHOO.widget.MenuModule.prototype._updateItemProperties =
 
 
 /**
-* Creates a new item group (array) and it's associated HTMLUlElement node 
+* Creates a new item group (array) and its associated HTMLUlElement node 
 * @private
 * @param {Number} p_nIndex Number indicating the group to create.
 * @return An item group.
@@ -1325,7 +1321,7 @@ YAHOO.widget.MenuModule.prototype._getItemGroup = function(p_nIndex) {
 
 
 /**
-* Subscribe's a MenuModule instance to it's parent MenuModule instance's events.
+* Subscribe's a MenuModule instance to its parent MenuModule instance's events.
 * @private
 * @param {YAHOO.widget.MenuModuleItem} p_oItem The item to listen
 * for events on.
@@ -1639,7 +1635,7 @@ YAHOO.widget.MenuModule.prototype._onParentMenuModuleConfigChange =
 
 /**
 * "render" Custom Event handler for a MenuModule instance.  Renders a  
-* submenu in response to the firing of it's parent's "render" event.
+* submenu in response to the firing of its parent's "render" event.
 * @private
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
@@ -2001,7 +1997,6 @@ YAHOO.widget.MenuModule.prototype.configPosition =
 * was fired.
 * @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance fired
 * the event.
-* @see YAHOO.widget.Overlay#configIframe
 */
 YAHOO.widget.MenuModule.prototype.configIframe = 
 
@@ -2102,6 +2097,7 @@ YAHOO.widget.MenuModule.prototype.setItemGroupTitle =
 /**
 * Appends the specified item to a MenuModule instance.
 * @param {YAHOO.widget.MenuModuleItem} p_oItem The item to be added.
+* @param {String} p_oItem The text of the item to be added.
 * @param {Number} p_nGroupIndex Optional. Number indicating the group to which
 * the item belongs.
 * @return The item that was added to the MenuModule.
@@ -2121,6 +2117,7 @@ YAHOO.widget.MenuModule.prototype.addItem = function(p_oItem, p_nGroupIndex) {
 /**
 * Inserts an item into a MenuModule instance at the specified index.
 * @param {YAHOO.widget.MenuModuleItem} p_oItem The item to be inserted.
+* @param {String} p_oItem The text of the item to be inserted.
 * @param {Number} p_nItemIndex Number indicating the ordinal position 
 * at which the item should be added.
 * @param {Number} p_nGroupIndex Optional. Number indicating the group to which
@@ -2143,8 +2140,8 @@ YAHOO.widget.MenuModule.prototype.insertItem =
 
 /**
 * Removes the specified item from a MenuModule instance.
-* @param {YAHOO.widget.MenuModuleItem/Number} p_oObject The item or index of 
-* the item to be removed.
+* @param {YAHOO.widget.MenuModuleItem} p_oObject The item to be removed.
+* @param {Number} p_oObject The index of the item to be removed.
 * @param {Number} p_nGroupIndex Optional. Number indicating the group to which
 * the item belongs.
 * @return The item that was removed from the MenuModule.
@@ -2383,8 +2380,6 @@ YAHOO.widget.MenuModule.prototype.initDefaultConfig = function() {
             validator: this._checkPosition 
         }
     );
-
-//    this.cfg.refireEvent("position");
 
     oConfig.addProperty("submenualignment", { value: ["tl","tr"] } );
 
