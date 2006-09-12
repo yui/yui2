@@ -87,52 +87,57 @@ YAHOO.widget.MenuModule._onDOMEvent = function(p_oEvent) {
     
         var oParentNode;
 
-        switch(p_oElement.tagName) {
-                
-            case "DIV":
-
-                oParentNode = p_oElement.parentNode;
-
-                // Check if the DIV is the inner "body" node of a menu
-                if(
-                    Dom.hasClass(p_oElement, "bd") && 
-                    oParentNode && 
-                    oParentNode.tagName == "DIV"
-                ) {
-                
-                    return oParentNode;
-                
-                }
-                else {
-                
-                    return p_oElement;
-                
-                }
-            
-            break;
-            
-            case "LI":
- 
-                /*
-                    Capture the root LI node of the menu item and allow 
-                    fall through to keep climbing up to find the item's parent 
-                    root DIV 
-                */
-
-                oMenuItemRootElement = p_oElement;
-
-            default:
-
-                oParentNode = p_oElement.parentNode;
-
-                if(oParentNode) {
-                
-                    return getMenuRootElement(oParentNode);
-                
-                }
-            
-            break;
+        if(p_oElement && p_oElement.tagName) {
         
+            switch(p_oElement.tagName.toUpperCase()) {
+                    
+                case "DIV":
+    
+                    oParentNode = p_oElement.parentNode;
+    
+                    // Check if the DIV is the inner "body" node of a menu
+                    if(
+                        Dom.hasClass(p_oElement, "bd") && 
+                        oParentNode && 
+                        oParentNode.tagName && 
+                        oParentNode.tagName.toUpperCase() == "DIV"
+                    ) {
+                    
+                        return oParentNode;
+                    
+                    }
+                    else {
+                    
+                        return p_oElement;
+                    
+                    }
+                
+                break;
+                
+                case "LI":
+     
+                    /*
+                        Capture the root LI node of the menu item and allow 
+                        fall through to keep climbing up to find the item's parent 
+                        root DIV 
+                    */
+    
+                    oMenuItemRootElement = p_oElement;
+    
+                default:
+    
+                    oParentNode = p_oElement.parentNode;
+    
+                    if(oParentNode) {
+                    
+                        return getMenuRootElement(oParentNode);
+                    
+                    }
+                
+                break;
+            
+            }
+
         }
     
     };
@@ -537,9 +542,9 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oConfig) {
     }
 
 
-    if(oElement) {
+    if(oElement && oElement.tagName) {
 
-        switch(oElement.tagName) {
+        switch(oElement.tagName.toUpperCase()) {
     
             case "DIV":
 
@@ -566,22 +571,26 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oConfig) {
 
                 do {
 
-                    switch(oNode.tagName) {
+                    if(oNode && oNode.tagName) {
 
-                        case this.GROUP_TITLE_TAG_NAME:
-                        
-                            this._aGroupTitleElements[i] = oNode;
-
-                        break;
-
-                        case "UL":
-
-                            this._aListElements[i] = oNode;
-                            this._aItemGroups[i] = [];
-                            i++;
-
-                        break;
-
+                        switch(oNode.tagName.toUpperCase()) {
+    
+                            case this.GROUP_TITLE_TAG_NAME:
+                            
+                                this._aGroupTitleElements[i] = oNode;
+    
+                            break;
+    
+                            case "UL":
+    
+                                this._aListElements[i] = oNode;
+                                this._aItemGroups[i] = [];
+                                i++;
+    
+                            break;
+    
+                        }
+                    
                     }
 
                 }
@@ -744,77 +753,89 @@ YAHOO.widget.MenuModule.prototype._initSubTree = function() {
 
     this.logger.log("Searching DOM for items to initialize.");
 
-    switch(this.srcElement.tagName) {
-
-        case "DIV":
-
-            if(this._aListElements.length > 0) {
-
-                this.logger.log("Found " + 
-                    this._aListElements.length + " item groups to initialize.");
-
-                var i = this._aListElements.length - 1;
-
-                do {
-
-                    oNode = this._aListElements[i].firstChild;
+    if(this.srcElement.tagName) {
     
-                    this.logger.log("Scanning " + 
-                        this._aListElements[i].childNodes.length + 
-                        " child nodes for items to initialize.");
-
+        switch(this.srcElement.tagName.toUpperCase()) {
+    
+            case "DIV":
+    
+                if(this._aListElements.length > 0) {
+    
+                    this.logger.log("Found " + 
+                        this._aListElements.length + " item groups to initialize.");
+    
+                    var i = this._aListElements.length - 1;
+    
                     do {
     
-                        switch(oNode.tagName) {
+                        oNode = this._aListElements[i].firstChild;
         
-                            case "LI":
-
-                                this.logger.log("Initializing " + 
+                        this.logger.log("Scanning " + 
+                            this._aListElements[i].childNodes.length + 
+                            " child nodes for items to initialize.");
+    
+                        do {
+        
+                            if(oNode && oNode.tagName) {
+                            
+                                switch(oNode.tagName.toUpperCase()) {
+                
+                                    case "LI":
+        
+                                        this.logger.log("Initializing " + 
+                                            oNode.tagName + " node.");
+        
+                                        this.addItem(new this.ITEM_TYPE(oNode), i);
+                
+                                    break;
+                
+                                }
+    
+                            }
+                
+                        }
+                        while((oNode = oNode.nextSibling));
+                
+                    }
+                    while(i--);
+    
+                }
+    
+            break;
+    
+            case "SELECT":
+    
+                this.logger.log("Scanning " +  this.srcElement.childNodes.length + 
+                    " child nodes for items to initialize.");
+    
+                oNode = this.srcElement.firstChild;
+    
+                do {
+    
+                    if(oNode && oNode.tagName) {
+                    
+                        switch(oNode.tagName.toUpperCase()) {
+        
+                            case "OPTGROUP":
+                            case "OPTION":
+        
+                                this.logger.log("Initializing " +  
                                     oNode.tagName + " node.");
-
-                                this.addItem(new this.ITEM_TYPE(oNode), i);
+        
+                                this.addItem(new this.ITEM_TYPE(oNode));
         
                             break;
         
                         }
-            
+
                     }
-                    while((oNode = oNode.nextSibling));
-            
+    
                 }
-                while(i--);
-
-            }
-
-        break;
-
-        case "SELECT":
-
-            this.logger.log("Scanning " +  this.srcElement.childNodes.length + 
-                " child nodes for items to initialize.");
-
-            oNode = this.srcElement.firstChild;
-
-            do {
-
-                switch(oNode.tagName) {
-
-                    case "OPTGROUP":
-                    case "OPTION":
-
-                        this.logger.log("Initializing " +  
-                            oNode.tagName + " node.");
-
-                        this.addItem(new this.ITEM_TYPE(oNode));
-
-                    break;
-
-                }
-
-            }
-            while((oNode = oNode.nextSibling));
-
-        break;
+                while((oNode = oNode.nextSibling));
+    
+            break;
+    
+        }
 
     }
 
@@ -1532,7 +1553,7 @@ YAHOO.widget.MenuModule.prototype._onRender =
 
         if(this.cfg.getProperty("position") == "dynamic") {
     
-            var sWidth = this.element.parentNode.tagName == "BODY" ? 
+            var sWidth = this.element.parentNode.tagName.toUpperCase() == "BODY" ? 
                     this.element.offsetWidth : this._getOffsetWidth();
         
             this.cfg.setProperty("width", (sWidth + "px"));
@@ -1896,7 +1917,7 @@ YAHOO.widget.MenuModule.prototype.enforceConstraints =
         var x = pos[0];
         var y = pos[1];
         
-        var bod = document.getElementsByTagName('body')[0];
+        var bod = document.getElementsByTaSgName('body')[0];
         var htm = document.getElementsByTagName('html')[0];
         
         var bodyOverflow = Dom.getStyle(bod, "overflow");

@@ -412,7 +412,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
         }
         else if(this._checkDOMNode(p_oObject)) {
 
-            switch(p_oObject.tagName) {
+            switch(p_oObject.tagName.toUpperCase()) {
 
                 case "OPTION":
 
@@ -503,7 +503,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
                         this._oText = oEmphasisNode.firstChild;
 
-                        switch(oEmphasisNode.tagName) {
+                        switch(oEmphasisNode.tagName.toUpperCase()) {
 
                             case "EM":
 
@@ -627,7 +627,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
         if(p_sTagName) {
 
-            return (oElement && oElement.tagName == p_sTagName) ? 
+            return (oElement && oElement.tagName.toUpperCase() == p_sTagName) ? 
                 oElement : false;
 
         }
@@ -705,20 +705,24 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
             do {
 
-                switch(oNode.tagName) {
-        
-                    case "DIV":
-        
-                        oConfig.setProperty("submenu", (new Menu(oNode)));
-        
-                    break;
- 
-                    case "OPTION":
+                if(oNode && oNode.tagName) {
 
-                        aOptions[aOptions.length] = oNode;
-
-                    break;
-       
+                    switch(oNode.tagName.toUpperCase()) {
+            
+                        case "DIV":
+            
+                            oConfig.setProperty("submenu", (new Menu(oNode)));
+            
+                        break;
+     
+                        case "OPTION":
+    
+                            aOptions[aOptions.length] = oNode;
+    
+                        break;
+           
+                    }
+                
                 }
             
             }        
@@ -808,13 +812,13 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
             // Prevent the browser from following links equal to "#"
 
-            if(oTarget.tagName == "A" && bCurrentPageURL && !bHasTarget) {
+            if(oTarget.tagName.toUpperCase() == "A" && bCurrentPageURL && !bHasTarget) {
 
                 Event.preventDefault(oEvent);
             
             }
 
-            if(oTarget.tagName != "A" && !bCurrentPageURL && !bHasTarget) {
+            if(oTarget.tagName.toUpperCase() != "A" && !bCurrentPageURL && !bHasTarget) {
                 
                 /*
                     Follow the URL of the item regardless of whether or 
