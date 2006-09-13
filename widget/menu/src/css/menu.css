@@ -20,12 +20,12 @@ div.yuimenubar {
 }
 
 /*
-    Application of "zoom:1" triggers "haslayout" in IE so that the module's
+    Applying a width triggers "haslayout" in IE so that the module's
     body clears its floated elements
 */
 div.yuimenubar div.bd {
 
-    zoom:1;
+    width:100%;
 
 }
 
