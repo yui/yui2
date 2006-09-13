@@ -2427,6 +2427,16 @@ YAHOO.widget.MenuModule.prototype.initDefaultConfig = function() {
 
 	// Add configuration properties
 
+	oConfig.addProperty(
+	   "constraintoviewport", 
+	   { 
+	       value: true, 
+	       handler: this.configConstrainToViewport, 
+	       validator: this.cfg.checkBoolean, 
+	       supercedes:["iframe","x","y","xy"] 
+       } 
+    );
+
     oConfig.addProperty(
         "position", 
         {
