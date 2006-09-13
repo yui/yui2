@@ -118,8 +118,8 @@ YAHOO.widget.MenuModule._onDOMEvent = function(p_oEvent) {
      
                     /*
                         Capture the root LI node of the menu item and allow 
-                        fall through to keep climbing up to find the item's parent 
-                        root DIV 
+                        fall through to keep climbing up to find the item's  
+                        parent root DIV 
                     */
     
                     oMenuItemRootElement = p_oElement;
@@ -1405,6 +1405,8 @@ YAHOO.widget.MenuModule.prototype._subscribeToItemEvents = function(p_oItem) {
         aArguments
     );
 
+    p_oItem.destroyEvent.subscribe(this._onItemDestroy, aArguments);
+
 };
 
 
@@ -1902,6 +1904,34 @@ YAHOO.widget.MenuModule.prototype._onItemConfigChange =
 
 
 /**
+* "destroy" YAHOO.util.CustomEvent handler for the MenuModule 
+* instance's items.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the 
+* event was fired.
+* @param {Array} p_aObjects Array containing the current MenuModule instance 
+* and the item that fired the event.
+*/
+YAHOO.widget.MenuModule.prototype._onItemDestroy = 
+
+    function(p_sType, p_aArgs, p_aObjects) {
+
+        var me = p_aObjects[0];
+        var oItem = p_aObjects[1];
+    
+        var sYUIId = oItem.element.getAttribute("yuiid");
+
+        if(sYUIId) {
+
+            delete YAHOO.widget.MenuModule._menuItems[sYUIId];
+
+        }
+
+    };
+
+
+/**
 * The default event handler executed when the moveEvent is fired, if the 
 * "constraintoviewport" configuration property is set to true.
 */
@@ -1917,7 +1947,7 @@ YAHOO.widget.MenuModule.prototype.enforceConstraints =
         var x = pos[0];
         var y = pos[1];
         
-        var bod = document.getElementsByTaSgName('body')[0];
+        var bod = document.getElementsByTagName('body')[0];
         var htm = document.getElementsByTagName('html')[0];
         
         var bodyOverflow = Dom.getStyle(bod, "overflow");
@@ -2252,6 +2282,10 @@ YAHOO.widget.MenuModule.prototype.getItem =
 * elements to null.
 */
 YAHOO.widget.MenuModule.prototype.destroy = function() {
+
+    // Remove the Menu from the "_menus" collection
+
+    delete YAHOO.widget.MenuModule._menus[this.id];
 
 
     // Remove Custom Event listeners
