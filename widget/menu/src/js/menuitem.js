@@ -408,8 +408,12 @@ YAHOO.widget.MenuItem.prototype._onClick =
 
         var oRoot = findRoot(this.parent);
         var sURL = this.cfg.getProperty("url");
+        var oEvent = p_aArgs[0];
+        var oTarget = YAHOO.util.Event.getTarget(oEvent);
+
 
         if(
+            oTarget != this.submenuIndicator && 
             (sURL.substr((sURL.length-1),1) == "#") && 
             oRoot && 
             oRoot.cfg.getProperty("position") == "dynamic"
