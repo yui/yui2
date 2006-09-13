@@ -204,6 +204,37 @@ YAHOO.widget.ContextMenu.prototype._onTriggerContextMenu =
     };
 
 
+// Private methods
+
+/**
+* Removes all of the DOM event handlers from the menu's trigger(s)
+* @private
+*/
+YAHOO.widget.ContextMenu.prototype._removeEventHandlers = function() {
+
+    var Event = YAHOO.util.Event;
+    var oTrigger = this._oTrigger;
+    var bOpera = (this.browser == "opera");
+
+
+    // Remove the event handlers from the trigger(s)
+
+    Event.removeListener(
+        oTrigger, 
+        (bOpera ? "mousedown" : "contextmenu"), 
+        this._onTriggerContextMenu
+    );    
+    
+    if(bOpera) {
+    
+        Event.removeListener(oTrigger, "click", this._onTriggerClick);
+
+    }
+
+    Event.removeListener(document, "click", this._onDocumentClick);
+
+};
+
 
 // Public methods
 
@@ -243,17 +274,16 @@ YAHOO.widget.ContextMenu.prototype.configTrigger =
     
         if(oTrigger) {
     
-
             /*
                 If there is a current "trigger" - remove the event handlers 
                 from that element(s) before assigning new ones
             */
+
             if(this._oTrigger) {
             
-                Event.purgeElement(this._oTrigger);
+                this._removeEventHandlers();
 
             }
-
 
             this._oTrigger = oTrigger;
 
@@ -303,5 +333,47 @@ YAHOO.widget.ContextMenu.prototype.configTrigger =
             );        
     
         }
+        else {
+        
+            this._removeEventHandlers();
+        
+        }
         
     };
+
+
+// Public methods
+
+/**
+* Removes the MenuModule instance's element from the DOM and sets all child 
+* elements to null.
+*/
+YAHOO.widget.ContextMenu.prototype.destroy = function() {
+
+    // Remove the menu from the array of known ContextMenu instances
+
+    var aMenus = YAHOO.widget.ContextMenu._aMenus;
+    var i = aMenus.length - 1;
+
+    do {
+
+        if(aMenus[i] == this) {
+
+            aMenus.splice(i, 1);
+        
+        }
+
+    }
+    while(i--);
+
+
+    // Remove the DOM event handlers from the current trigger(s)
+
+    this._removeEventHandlers();
+    
+
+    // Continue with the superclass implementation of this method
+
+    YAHOO.widget.ContextMenu.superclass.destroy.call(this);
+
+};    
