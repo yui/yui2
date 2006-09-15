@@ -307,6 +307,37 @@ YAHOO.widget.MenuModule._onDOMEvent = function(p_oEvent) {
         }
 
     }
+    else if(p_oEvent.type == "click")  {
+
+        var oMenus = YAHOO.widget.MenuModule._menus;
+        var oMenu;
+        var oActiveItem;
+
+        for(var i in oMenus) {
+
+            oMenu = oMenus[i];
+
+            if(oMenu.cfg.getProperty("position") == "dynamic") {
+            
+                oMenu.hide();
+            
+            }
+            else {
+            
+                oActiveItem = oMenu.activeItem;
+                
+                if(oActiveItem) {
+                
+                    oActiveItem.cfg.setProperty("selected", false);
+                    oActiveItem.blur();
+                
+                }
+            
+            }
+        
+        }
+    
+    }
 
 };
 
@@ -707,11 +738,11 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oConfig) {
 
         // Subscribe to Custom Events
 
-        this.initEvent.subscribe(this._onInit, this, true);
-        this.beforeRenderEvent.subscribe(this._onBeforeRender, this, true);
-        this.renderEvent.subscribe(this._onRender, this, true);
-        this.showEvent.subscribe(this._onShow, this, true);
-        this.beforeHideEvent.subscribe(this._onBeforeHide, this, true);
+        this.initEvent.subscribe(this._onMenuModuleInit, this, true);
+        this.beforeRenderEvent.subscribe(this._onMenuModuleBeforeRender, this, true);
+        this.renderEvent.subscribe(this._onMenuModuleRender, this, true);
+        this.showEvent.subscribe(this._onMenuModuleShow, this, true);
+        this.beforeHideEvent.subscribe(this._onMenuModuleBeforeHide, this, true);
 
 
         if(p_oConfig) {
@@ -1373,14 +1404,14 @@ YAHOO.widget.MenuModule.prototype._configureItemSubmenuModule =
             );
     
             oSubmenu.beforeShowEvent.subscribe(
-                this._onSubmenuBeforeShow, 
+                this._onSubmenuModuleBeforeShow, 
                 oSubmenu, 
                 true
             );
     
-            oSubmenu.showEvent.subscribe(this._onSubmenuShow, oSubmenu, true);
+            oSubmenu.showEvent.subscribe(this._onSubmenuModuleShow, oSubmenu, true);
     
-            oSubmenu.hideEvent.subscribe(this._onSubmenuHide, oSubmenu, true);
+            oSubmenu.hideEvent.subscribe(this._onSubmenuModuleHide, oSubmenu, true);
     
         }
 
@@ -1396,16 +1427,16 @@ YAHOO.widget.MenuModule.prototype._subscribeToItemEvents = function(p_oItem) {
 
     var aArguments = [this, p_oItem];
 
-    p_oItem.focusEvent.subscribe(this._onItemFocus, aArguments);
+    p_oItem.focusEvent.subscribe(this._onMenuModuleItemFocus, aArguments);
 
-    p_oItem.blurEvent.subscribe(this._onItemBlur, aArguments);
+    p_oItem.blurEvent.subscribe(this._onMenuModuleItemBlur, aArguments);
 
     p_oItem.cfg.configChangedEvent.subscribe(
-        this._onItemConfigChange,
+        this._onMenuModuleItemConfigChange,
         aArguments
     );
 
-    p_oItem.destroyEvent.subscribe(this._onItemDestroy, aArguments);
+    p_oItem.destroyEvent.subscribe(this._onMenuModuleItemDestroy, aArguments);
 
 };
 
@@ -1442,7 +1473,7 @@ YAHOO.widget.MenuModule.prototype._getOffsetWidth = function() {
 * @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */
-YAHOO.widget.MenuModule.prototype._onInit = 
+YAHOO.widget.MenuModule.prototype._onMenuModuleInit = 
 
     function(p_sType, p_aArgs, p_oMenuModule) {
         
@@ -1466,7 +1497,7 @@ YAHOO.widget.MenuModule.prototype._onInit =
 * @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */
-YAHOO.widget.MenuModule.prototype._onBeforeRender = 
+YAHOO.widget.MenuModule.prototype._onMenuModuleBeforeRender = 
 
     function(p_sType, p_aArgs, p_oMenuModule) {
 
@@ -1549,7 +1580,7 @@ YAHOO.widget.MenuModule.prototype._onBeforeRender =
 * @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */
-YAHOO.widget.MenuModule.prototype._onRender = 
+YAHOO.widget.MenuModule.prototype._onMenuModuleRender = 
 
     function(p_sType, p_aArgs, p_oMenuModule) {
 
@@ -1574,7 +1605,7 @@ YAHOO.widget.MenuModule.prototype._onRender =
 * @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */
-YAHOO.widget.MenuModule.prototype._onShow = 
+YAHOO.widget.MenuModule.prototype._onMenuModuleShow = 
 
     function(p_sType, p_aArgs, p_oMenuModule) {
     
@@ -1597,7 +1628,7 @@ YAHOO.widget.MenuModule.prototype._onShow =
 * @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
 * fired the event.
 */
-YAHOO.widget.MenuModule.prototype._onBeforeHide = 
+YAHOO.widget.MenuModule.prototype._onMenuModuleBeforeHide = 
 
     function(p_sType, p_aArgs, p_oMenuModule) {
 
@@ -1728,7 +1759,7 @@ YAHOO.widget.MenuModule.prototype._onParentMenuModuleRender =
 * @param {YAHOO.widget.MenuModule} p_oSubmenu The submenu that fired
 * the event.
 */
-YAHOO.widget.MenuModule.prototype._onSubmenuBeforeShow = 
+YAHOO.widget.MenuModule.prototype._onSubmenuModuleBeforeShow = 
 
     function(p_sType, p_aArgs, p_oSubmenu) {
     
@@ -1759,7 +1790,7 @@ YAHOO.widget.MenuModule.prototype._onSubmenuBeforeShow =
 * @param {YAHOO.widget.MenuModule} p_oSubmenu The submenu that fired
 * the event.
 */
-YAHOO.widget.MenuModule.prototype._onSubmenuShow = 
+YAHOO.widget.MenuModule.prototype._onSubmenuModuleShow = 
 
     function(p_sType, p_aArgs, p_oSubmenu) {
     
@@ -1780,7 +1811,7 @@ YAHOO.widget.MenuModule.prototype._onSubmenuShow =
 * @param {YAHOO.widget.MenuModule} p_oSubmenu The submenu that fired
 * the event.
 */
-YAHOO.widget.MenuModule.prototype._onSubmenuHide = 
+YAHOO.widget.MenuModule.prototype._onSubmenuModuleHide = 
 
     function(p_sType, p_aArgs, p_oSubmenu) {
     
@@ -1789,8 +1820,6 @@ YAHOO.widget.MenuModule.prototype._onSubmenuHide =
         if(oParent.parent.cfg.getProperty("visible")) {
 
             oParent.cfg.setProperty("selected", false);
-    
-            oParent.focus();
         
         }
 
@@ -1809,7 +1838,7 @@ YAHOO.widget.MenuModule.prototype._onSubmenuHide =
 * @param {Array} p_aObjects Array containing the current MenuModule instance 
 * and the item that fired the event.
 */
-YAHOO.widget.MenuModule.prototype._onItemFocus = 
+YAHOO.widget.MenuModule.prototype._onMenuModuleItemFocus = 
 
     function(p_sType, p_aArgs, p_aObjects) {
     
@@ -1830,7 +1859,7 @@ YAHOO.widget.MenuModule.prototype._onItemFocus =
 * @param {Array} p_aObjects Array containing the current MenuModule instance 
 * and the item that fired the event.
 */
-YAHOO.widget.MenuModule.prototype._onItemBlur = 
+YAHOO.widget.MenuModule.prototype._onMenuModuleItemBlur = 
 
     function(p_sType, p_aArgs, p_aObjects) {
     
@@ -1857,7 +1886,7 @@ YAHOO.widget.MenuModule.prototype._onItemBlur =
 * @param {Array} p_aObjects Array containing the current MenuModule instance 
 * and the item that fired the event.
 */
-YAHOO.widget.MenuModule.prototype._onItemConfigChange = 
+YAHOO.widget.MenuModule.prototype._onMenuModuleItemConfigChange = 
 
     function(p_sType, p_aArgs, p_aObjects) {
 
@@ -1913,7 +1942,7 @@ YAHOO.widget.MenuModule.prototype._onItemConfigChange =
 * @param {Array} p_aObjects Array containing the current MenuModule instance 
 * and the item that fired the event.
 */
-YAHOO.widget.MenuModule.prototype._onItemDestroy = 
+YAHOO.widget.MenuModule.prototype._onMenuModuleItemDestroy = 
 
     function(p_sType, p_aArgs, p_aObjects) {
 
@@ -2066,11 +2095,16 @@ YAHOO.widget.MenuModule.prototype.configIframe =
     
     };
     
+
+
 // Public methods
 
+/**
+* Returns a string representing the specified object.
+*/
 YAHOO.widget.MenuModule.prototype.toString = function() {
 
-    return ("Menu " + this.id);
+    return ("MenuModule " + this.id);
 
 };
 
@@ -2432,7 +2466,7 @@ YAHOO.widget.MenuModule.prototype.initDefaultConfig = function() {
 	   { 
 	       value: true, 
 	       handler: this.configConstrainToViewport, 
-	       validator: this.cfg.checkBoolean, 
+	       validator: oConfig.checkBoolean, 
 	       supercedes:["iframe","x","y","xy"] 
        } 
     );
@@ -2447,5 +2481,13 @@ YAHOO.widget.MenuModule.prototype.initDefaultConfig = function() {
     );
 
     oConfig.addProperty("submenualignment", { value: ["tl","tr"] } );
+
+	oConfig.addProperty(
+	   "autosubmenudisplay", 
+	   { 
+	       value: false, 
+	       validator: oConfig.checkBoolean
+       } 
+    );
 
 };
