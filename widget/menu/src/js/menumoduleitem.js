@@ -580,6 +580,8 @@ YAHOO.widget.MenuModuleItem.prototype = {
             // Subscribe to custom event
 
             this.clickEvent.subscribe(this._onMenuModuleItemClick, this, true);
+            this.mouseOverEvent.subscribe(this._onMenuModuleItemMouseOver, this, true);
+            this.mouseOutEvent.subscribe(this._onMenuModuleItemMouseOut, this, true);
 
 
             if(p_oConfig) {
@@ -757,9 +759,9 @@ YAHOO.widget.MenuModuleItem.prototype = {
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArgs Collection of arguments sent when the event 
     * was fired.
-    * @param {YAHOO.widget.MenuItem} p_oMenuModuleItem The MenuModule instance  
-    * that fired the event.
-    */         
+    * @param {YAHOO.widget.MenuModuleItem} p_oMenuModuleItem The MenuModule   
+    * instance that fired the event.
+    */
     _onMenuModuleItemClick: function(p_sType, p_aArgs, p_oMenuModuleItem) {
 
         var Event = YAHOO.util.Event;
@@ -833,6 +835,96 @@ YAHOO.widget.MenuModuleItem.prototype = {
         }
 
     },
+
+
+    /**
+    * "mouseover" event handler for a MenuModuleItem
+    * @private
+    * @param {String} p_sType The name of the event that was fired.
+    * @param {Array} p_aArgs Collection of arguments sent when the event 
+    * was fired.
+    * @param {YAHOO.widget.MenuModuleItem} p_oMenuModuleItem The MenuModule   
+    * instance that fired the event.
+    */         
+    _onMenuModuleItemMouseOver: function(p_sType, p_aArgs, p_oMenuModuleItem) {
+
+        var oParent = this.parent;
+        var oConfig = this.cfg;
+        var oActiveItem = oParent.activeItem;
+    
+    
+        // Hide any other submenus that might be visible
+    
+        if(oActiveItem && oActiveItem != this) {
+    
+            oParent.clearActiveItem();
+    
+        }
+    
+    
+        // Select and focus the current MenuItem instance
+    
+        oConfig.setProperty("selected", true);
+        this.focus();
+
+
+        if(oParent.cfg.getProperty("autosubmenudisplay")) {
+
+            // Show the submenu for this instance
+        
+            var oSubmenu = oConfig.getProperty("submenu");
+        
+            if(oSubmenu) {
+        
+                oSubmenu.show();
+        
+            }
+
+        }
+    
+    },
+
+
+    /**
+    * "mouseout" event handler for a MenuModuleItem
+    * @private
+    * @param {String} p_sType The name of the event that was fired.
+    * @param {Array} p_aArgs Collection of arguments sent when the event 
+    * was fired.
+    * @param {YAHOO.widget.MenuModuleItem} p_oMenuModuleItem The MenuModule   
+    * instance that fired the event.
+    */         
+    _onMenuModuleItemMouseOut: function(p_sType, p_aArgs, p_oMenuModuleItem) {
+
+        var oConfig = this.cfg;
+        var oSubmenu = oConfig.getProperty("submenu");
+
+        oConfig.setProperty("selected", false);
+    
+        if(this.parent.cfg.getProperty("autosubmenudisplay")) {
+
+            if(oSubmenu) {
+        
+                var oDOMEvent = p_aArgs[0];
+                var oRelatedTarget = YAHOO.util.Event.getRelatedTarget(oDOMEvent);
+        
+                if(
+                    !(
+                        oRelatedTarget == oSubmenu.element || 
+                        YAHOO.util.Dom.isAncestor(oSubmenu.element, oRelatedTarget)
+                    )
+                ) {
+        
+                    oSubmenu.hide();
+        
+                }
+        
+            }
+        
+        }
+    
+    },
+
 
 
     // Event handlers for configuration properties
