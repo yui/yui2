@@ -78,12 +78,12 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oConfig) {
 // Private event handlers
 
 /**
-* "show" Custom Event handler for a menu.
+* "show" Custom Event handler for a Menu instance.
 * @private
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
-* @param {YAHOO.widget.Menu} p_oMenu The menu that fired the event.
+* @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
 */
 YAHOO.widget.Menu.prototype._onMenuShow = 
 
@@ -132,7 +132,7 @@ YAHOO.widget.Menu.prototype._onMenuMouseOver =
 
 
 /**
-* "mouseover" Custom Event handler for a Menu instance.
+* "keydown" Custom Event handler for a Menu instance.
 * @private
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
@@ -220,5 +220,38 @@ YAHOO.widget.Menu.prototype.onDomResize = function(e, obj) {
     }
 
     YAHOO.widget.Menu.superclass.onDomResize.call(this, e, obj);
+
+};
+
+
+// Public methods
+
+/**
+* Returns a string representing the specified object.
+*/
+YAHOO.widget.Menu.prototype.toString = function() {
+
+    return ("Menu " + this.id);
+
+};
+
+
+/**
+* Initializes the class's configurable properties which can be changed using 
+* the MenuModule's Config object (cfg).
+*/
+YAHOO.widget.Menu.prototype.initDefaultConfig = function() {
+
+    YAHOO.widget.Menu.superclass.initDefaultConfig.call(this);
+
+    var oConfig = this.cfg;
+
+	oConfig.addProperty(
+	   "autosubmenudisplay", 
+	   { 
+	       value: true, 
+	       validator: oConfig.checkBoolean
+       } 
+    );
 
 };
