@@ -69,10 +69,8 @@ YAHOO.widget.MenuItem.prototype.init = function(p_oObject, p_oConfig) {
 
     // Add event handlers to each "MenuItem" instance
 
-    this.keyDownEvent.subscribe(this._onKeyDown, this, true);
-    this.mouseOverEvent.subscribe(this._onMouseOver, this, true);
-    this.mouseOutEvent.subscribe(this._onMouseOut, this, true);
-    this.clickEvent.subscribe(this._onClick, this, true);
+    this.keyDownEvent.subscribe(this._onMenuItemKeyDown, this, true);
+    this.clickEvent.subscribe(this._onMenuItemClick, this, true);
 
 
     var oConfig = this.cfg;
@@ -154,10 +152,10 @@ YAHOO.widget.MenuItem.prototype._checkImage = null;
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
-* @param {YAHOO.widget.MenuItem} p_oMenuModule The MenuModule instance that 
+* @param {YAHOO.widget.MenuItem} p_oMenuItem The MenuItem instance that 
 * fired the event.
 */
-YAHOO.widget.MenuItem.prototype._onKeyDown = 
+YAHOO.widget.MenuItem.prototype._onMenuItemKeyDown = 
 
     function(p_sType, p_aArgs, p_oMenuItem) {
 
@@ -278,100 +276,15 @@ YAHOO.widget.MenuItem.prototype._onKeyDown =
 
 
 /**
-* "mouseover" Custom Event handler for a MenuItem instance.
-* @private
-* @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArgs Collection of arguments sent when the event 
-* was fired.
-* @param {YAHOO.widget.MenuItem} p_oMenuModule The MenuModule instance that 
-* fired the event.
-*/
-YAHOO.widget.MenuItem.prototype._onMouseOver = 
-
-    function(p_sType, p_aArgs, p_oMenuItem) {
-
-        var oParent = this.parent;
-        var oConfig = this.cfg;
-        var oActiveItem = oParent.activeItem;
-    
-    
-        // Hide any other submenus that might be visible
-    
-        if(oActiveItem && oActiveItem != this) {
-    
-            oParent.clearActiveItem();
-    
-        }
-    
-    
-        // Select and focus the current MenuItem instance
-    
-        oConfig.setProperty("selected", true);
-        this.focus();
-    
-    
-        // Show the submenu for this instance
-    
-        var oSubmenu = oConfig.getProperty("submenu");
-    
-        if(oSubmenu) {
-    
-            oSubmenu.show();
-    
-        }
-    
-    };
-
-
-/**
-* "mouseout" Custom Event handler for a MenuItem instance.
-* @private
-* @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArgs Collection of arguments sent when the event 
-* was fired.
-* @param {YAHOO.widget.MenuItem} p_oMenuModule The MenuModule instance that 
-* fired the event.
-*/
-YAHOO.widget.MenuItem.prototype._onMouseOut = 
-
-    function(p_sType, p_aArgs, p_oMenuItem) {
-    
-        var oConfig = this.cfg;
-        var oSubmenu = oConfig.getProperty("submenu");
-
-        oConfig.setProperty("selected", false);
-    
-        if(oSubmenu) {
-    
-            var oDOMEvent = p_aArgs[0];
-            var oRelatedTarget = YAHOO.util.Event.getRelatedTarget(oDOMEvent);
-    
-            if(
-                !(
-                    oRelatedTarget == oSubmenu.element || 
-                    YAHOO.util.Dom.isAncestor(oSubmenu.element, oRelatedTarget)
-                )
-            ) {
-    
-                oSubmenu.hide();
-    
-            }
-    
-        }
-    
-    };
-
-
-/**
 * "click" Custom Event handler for a MenuItem instance.
 * @private
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
-* @param {YAHOO.widget.MenuItem} p_oMenuModule The MenuModule instance that 
+* @param {YAHOO.widget.MenuItem} p_oMenuItem The MenuItem instance that 
 * fired the event.
 */    
-YAHOO.widget.MenuItem.prototype._onClick = 
+YAHOO.widget.MenuItem.prototype._onMenuItemClick = 
 
     function(p_sType, p_aArgs, p_oMenuItem) {
     
