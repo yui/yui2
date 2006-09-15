@@ -71,7 +71,9 @@ YAHOO.widget.MenuBarItem.prototype.init = function(p_oObject, p_oConfig) {
 
     // Add event handlers to each "MenuBarItem" instance
 
-    this.keyDownEvent.subscribe(this._onKeyDown, this, true);
+    this.keyDownEvent.subscribe(this._onMenuBarItemKeyDown, this, true);
+    this.clickEvent.subscribe(this._onMenuBarItemClick, this, true);
+
 
     var oConfig = this.cfg;
 
@@ -135,12 +137,12 @@ YAHOO.widget.MenuBarItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH =
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
-* @param {YAHOO.widget.MenuBarItem} p_oMenuModule The MenuModule instance that 
+* @param {YAHOO.widget.MenuBarItem} p_oMenuBarItem The MenuBarItem instance that 
 * fired the event.
 */
-YAHOO.widget.MenuBarItem.prototype._onKeyDown =
+YAHOO.widget.MenuBarItem.prototype._onMenuBarItemKeyDown =
 
-    function(p_sType, p_aArgs, p_oMenuItem) {
+    function(p_sType, p_aArgs, p_oMenuBarItem) {
 
         var Event = YAHOO.util.Event;
         var oDOMEvent = p_aArgs[0];
@@ -206,3 +208,97 @@ YAHOO.widget.MenuBarItem.prototype._onKeyDown =
         }
     
     };
+
+
+/**
+* "click" Custom Event handler for a MenuBarItem instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.MenuBarItem} p_oMenuBarItem The MenuBarItem instance that 
+* fired the event.
+*/
+YAHOO.widget.MenuBarItem.prototype._onMenuBarItemClick =  
+
+    function(p_sType, p_aArgs, p_oMenuBarItem) {
+
+        var oParent = this.parent;
+        var oActiveItem = oParent.activeItem;
+        var Event = YAHOO.util.Event;
+        var Dom = YAHOO.util.Dom;
+
+
+        if(!oParent.cfg.getProperty("autosubmenudisplay")) {
+        
+            oParent.cfg.setProperty("autosubmenudisplay", true);
+        
+
+            /**
+            * "click" event handler for the document
+            * @private
+            * @param {Event} p_oEvent Event object passed back by the event 
+            * utility (YAHOO.util.Event).
+            */
+            var onDocumentClick = function(p_oEvent) {
+
+                /*  
+                    Set the "autosubmenudisplay" to "false" if the user
+                    clicks outside the MenuBar instance.
+                */
+
+                var oTarget = Event.getTarget(p_oEvent);
+                
+                if(
+                    oTarget != oParent.element || 
+                    !Dom.isAncestor(oParent.element, oTarget)
+                ) {
+
+                    oParent.cfg.setProperty("autosubmenudisplay", false);
+
+                    Event.removeListener(document, "click", onDocumentClick);
+                
+                }
+            
+            };
+
+            Event.addListener(document, "click", onDocumentClick);
+
+        }
+
+
+        // Hide any other submenus that might be visible
+    
+        if(oActiveItem && oActiveItem != this) {
+    
+            oParent.clearActiveItem();
+    
+        }
+    
+    
+        // Select and focus the current MenuItem instance
+    
+        this.cfg.setProperty("selected", true);
+        this.focus();
+    
+    
+        // Show the submenu for this instance
+    
+        var oSubmenu = this.cfg.getProperty("submenu");
+
+        if(oSubmenu) {
+    
+            if(oSubmenu.cfg.getProperty("visible")) {
+            
+                oSubmenu.hide();
+            
+            }
+            else {
+            
+                oSubmenu.show();                    
+            
+            }
+    
+        }
+
+    };   
