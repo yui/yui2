@@ -105,21 +105,7 @@ YAHOO.widget.ContextMenu.prototype.init = function(p_oElement, p_oConfig) {
 
 // Private event handlers
 
-/**
-* "click" event handler for the document object.
-* @private
-* @param {Event} p_oEvent Event object passed back by the 
-* event utility (YAHOO.util.Event).
-* @param {YAHOO.widget.ContextMenu} p_oMenu The ContextMenu instance 
-* handling the event.
-*/
-YAHOO.widget.ContextMenu.prototype._onDocumentClick = 
 
-    function(p_oEvent, p_oMenu) {
-
-        this.hide();
-    
-    };
 
 
 /**
@@ -231,12 +217,20 @@ YAHOO.widget.ContextMenu.prototype._removeEventHandlers = function() {
 
     }
 
-    Event.removeListener(document, "click", this._onDocumentClick);
-
 };
 
 
 // Public methods
+
+/**
+* Returns a string representing the specified object.
+*/
+YAHOO.widget.ContextMenu.prototype.toString = function() {
+
+    return ("ContextMenu " + this.id);
+
+};
+
 
 /**
 * Initializes the class's configurable properties which can be changed using 
@@ -320,17 +314,6 @@ YAHOO.widget.ContextMenu.prototype.configTrigger =
                 );
     
             }
-    
-    
-            // Assign a "mousedown" event handler to the document
-        
-            Event.addListener(
-                document, 
-                "click", 
-                this._onDocumentClick,
-                this,
-                true
-            );        
     
         }
         else {
