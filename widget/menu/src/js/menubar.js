@@ -100,3 +100,13 @@ YAHOO.widget.MenuBar.prototype.init = function(p_oElement, p_oConfig) {
 * @type String
 */
 YAHOO.widget.MenuBar.prototype.CSS_CLASS_NAME = "yuimenubar";
+
+
+/**
+* Returns a string representing the specified object.
+*/
+YAHOO.widget.MenuBar.prototype.toString = function() {
+
+    return ("MenuBar " + this.id);
+
+};
