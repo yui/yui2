@@ -1040,10 +1040,18 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
 
     switch (nKeyCode) {
     case 9: // tab
-    case 13: // enter
-        if((oSelf._nKeyCode != nKeyCode)) {
+        if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
+            if(oSelf._bContainerOpen) {
                 YAHOO.util.Event.stopEvent(v);
+            }
         }
+        break;
+    case 13: // enter
+            if(oSelf._nKeyCode != nKeyCode) {
+                if(oSelf._bContainerOpen) {
+                    YAHOO.util.Event.stopEvent(v);
+                }
+            }
         break;
     case 38: // up
     case 40: // down
