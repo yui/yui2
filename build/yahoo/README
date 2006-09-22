@@ -1,5 +1,11 @@
 YAHOO Global Namespace - Release Notes
 
+0.11.4
+
+   * Changed window.YAHOO = window.YAHOO || {} to 
+     if (typeof YAHOO == "undefined") YAHOO = {} because the previous statement
+     contributed to a memory leak when the library was hosted in an iframe.
+
 0.11.3
 
    * Changed var YAHOO = window.YAHOO || {} to window.YAHOO = window.YAHOO || {}.
@@ -13,5 +19,7 @@ YAHOO Global Namespace - Release Notes
      prevents the constructor of the superclass from being exectuted twice.
 
 0.10.0
+
    * Added YAHOO.log that provides a safe way to plumb logging statements in
      code that will work if the logging component isn't available.
+

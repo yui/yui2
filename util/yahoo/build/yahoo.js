@@ -6,10 +6,21 @@ version: 0.11.3
 */ 
 
 /**
- * The Yahoo global namespace
- * @constructor
+ * The YAHOO object is the single global object used by YUI Library.  It
+ * contains utility function for setting up namespaces, inheritance, and
+ * logging.  YAHOO.util, YAHOO.widget, and YAHOO.example are namespaces
+ * created automatically for and used by the library.
+ * @module YAHOO
  */
-window.YAHOO = window.YAHOO || {};
+
+/**
+ * The YAHOO global namespace object
+ * @class YAHOO
+ * @static
+ */
+if (typeof YAHOO == "undefined") {
+    YAHOO = {};
+}
 
 /**
  * Returns the namespace specified and creates it if it doesn't exist
@@ -26,7 +37,8 @@ window.YAHOO = window.YAHOO || {};
  * YAHOO.namespace("really.long.nested.namespace");
  *
  * This fails because "long" is a future reserved word in ECMAScript
- *
+ * @method namespace
+ * @static
  * @param  {String} ns The name of the namespace
  * @return {Object}    A reference to the namespace object
  */
@@ -51,6 +63,8 @@ YAHOO.namespace = function(ns) {
 /**
  * Uses YAHOO.widget.Logger to output a log message, if the widget is available.
  *
+ * @method log
+ * @static
  * @param  {string}  sMsg       The message to log.
  * @param  {string}  sCategory  The log category for the message.  Default
  *                              categories are "info", "warn", "error", time".
@@ -71,6 +85,8 @@ YAHOO.log = function(sMsg, sCategory, sSource) {
  * Utility to set up the prototype, constructor and superclass properties to
  * support an inheritance strategy that can chain constructors and methods.
  *
+ * @method extend
+ * @static
  * @param {function} subclass   the object to modify
  * @param {function} superclass the object to inherit
  */
