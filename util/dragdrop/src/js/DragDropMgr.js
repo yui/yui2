@@ -794,11 +794,11 @@ if (!YAHOO.util.DragDropMgr) {
          */
         this.refreshCache = function(groups) {
             this.logger.log("refreshing element location cache");
-            for (sGroup in groups) {
+            for (var sGroup in groups) {
                 if ("string" != typeof sGroup) {
                     continue;
                 }
-                for (i in this.ids[sGroup]) {
+                for (var i in this.ids[sGroup]) {
                     var oDD = this.ids[sGroup][i];
 
                     if (this.isTypeOfDD(oDD)) {
@@ -843,13 +843,14 @@ if (!YAHOO.util.DragDropMgr) {
         };
         
         /**
-         * Returns the an array containing the drag and drop element's position
-         * and size, including the DragDrop.padding configured for it
+         * Returns a Region object containing the drag and drop element's position
+         * and size, including the padding configured for it
          *
          * @param {DragDrop} oDD the drag and drop object to get the 
-         * location for
-         * @return array containing the top left and bottom right points of the 
-         * element 
+         *                       location for
+         * @return {YAHOO.util.Region} a Region object representing the total area
+         *                             the element occupies, including any padding
+         *                             the instance is configured for.
          */
         this.getLocation = function(oDD) {
             if (! this.isTypeOfDD(oDD)) {
@@ -857,40 +858,28 @@ if (!YAHOO.util.DragDropMgr) {
                 return null;
             }
 
-            var el = oDD.getEl();
+            var el = oDD.getEl(), pos, x1, x2, y1, y2, t, r, b, l;
 
-            // element will not have an offsetparent if it was removed from the
-            // document or display=none
-            // if (!this.verifyEl(el)) {
-                // this.logger.log(oDD + " element is not usable");
-                // return null;
-            // }
-
-            // this.logger.log(oDD.id + " padding: " + oDD.padding);
-
-            // var aPos = ygPos.getPos(el);
-            var aPos = null;
             try {
-                aPos= YAHOO.util.Dom.getXY(el);
+                pos= YAHOO.util.Dom.getXY(el);
             } catch (e) { }
 
-            if (!aPos) {
+            if (!pos) {
+                this.logger.log("getXY failed");
                 return null;
             }
 
-            x1 = aPos[0];
+            x1 = pos[0];
             x2 = x1 + el.offsetWidth;
-
-            y1 = aPos[1];
+            y1 = pos[1];
             y2 = y1 + el.offsetHeight;
 
-            var t = y1 - oDD.padding[0];
-            var r = x2 + oDD.padding[1];
-            var b = y2 + oDD.padding[2];
-            var l = x1 - oDD.padding[3];
+            t = y1 - oDD.padding[0];
+            r = x2 + oDD.padding[1];
+            b = y2 + oDD.padding[2];
+            l = x1 - oDD.padding[3];
 
             return new YAHOO.util.Region( t, r, b, l );
-
         };
 
         /**
@@ -913,9 +902,11 @@ if (!YAHOO.util.DragDropMgr) {
             }
 
             if (!loc) {
+                this.logger.log("could not get the location of the element");
                 return false;
             }
 
+            //this.logger.log("loc: " + loc + ", pt: " + pt);
             oTarget.cursorIsOver = loc.contains( pt );
 
             // DragDrop is using this as a sanity check for the initial mousedown
@@ -1080,11 +1071,17 @@ if (!YAHOO.util.DragDropMgr) {
             if (n1.swapNode) {
                 n1.swapNode(n2);
             } else {
-                // the node reference order for the swap is a little tricky. 
                 var p = n2.parentNode;
                 var s = n2.nextSibling;
-                n1.parentNode.replaceChild(n2, n1);
-                p.insertBefore(n1,s);
+
+                if (s == n1) {
+                    p.insertBefore(n1, n2);
+                } else if (n2 == n1.nextSibling) {
+                    p.insertBefore(n2, n1);
+                } else {
+                    n1.parentNode.replaceChild(n2, n1);
+                    p.insertBefore(n1, s);
+                }
             }
         };
 
@@ -1172,16 +1169,16 @@ if (!YAHOO.util.DragDropMgr) {
          * @private
          */
         this._addListeners = function() {
+            var DDM = YAHOO.util.DDM;
             if ( YAHOO.util.Event && document ) {
-                this._onLoad();
+                DDM._onLoad();
             } else {
-                if (this._timeoutCount > 1000) {
-                    this.logger.log("DragDrop requires the Event Utility");
+                if (DDM._timeoutCount > 2000) {
+                    DDM.logger.log("DragDrop requires the Event Utility");
                 } else {
-                    var DDM = YAHOO.util.DDM;
-                    setTimeout( function() { DDM._addListeners(); }, 10);
+                    setTimeout(DDM._addListeners, 10);
                     if (document && document.body) {
-                        this._timeoutCount += 1;
+                        DDM._timeoutCount += 1;
                     }
                 }
             }

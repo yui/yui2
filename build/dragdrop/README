@@ -1,5 +1,10 @@
 Drag and Drop Release Notes
 
+0.11.4
+
+   * YAHOO.util.DragDropMgr.swapNode now handles adjacent nodes properly
+   * Fixed missing variable declarations
+
 0.11.3
  
    * Fixed a JavaScript error that would be generated when trying to implement
@@ -53,7 +58,7 @@ Drag and Drop Release Notes
 
 0.10.0
 
-   * Improved the performance in intersect mode
+   * Improved the performance when in intersect mode
 
    * It was possible for the drag and drop initialization to be skipped
      for very slow loading pages.  This was fixed.

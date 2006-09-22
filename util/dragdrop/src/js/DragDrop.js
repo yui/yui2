@@ -699,7 +699,9 @@ YAHOO.util.DragDrop.prototype = {
         // this happens, the element gets the next mousedown event 
         // regardless of where on the screen it happened.  
         var pt = new YAHOO.util.Point(EU.getPageX(e), EU.getPageY(e));
-        if ( this.DDM.isOverTarget(pt, this) )  {
+        if ( !this.DDM.isOverTarget(pt, this) )  {
+                this.logger.log("Click was not over the element: " + this.id);
+        } else {
 
             this.logger.log("click is over target");
 
