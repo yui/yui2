@@ -1,6 +1,10 @@
 
 YUI Library - Event - Release Notes
 
+0.11.4
+   * Fixed a memory leak that occured when the utility was hosted in an iframe.
+   * Fixed an issue with Safari click listeners when listeners were removed.
+
 0.11.3
 
    * The listener cache is now pruned when events are removed.  This fixes
