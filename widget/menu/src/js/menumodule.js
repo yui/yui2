@@ -183,7 +183,7 @@ YAHOO.widget.MenuModule._onDOMEvent = function(p_oEvent) {
             var sCustomEventType = oEventTypes[p_oEvent.type];
 
             switch(p_oEvent.type) {
-            
+           
                 case "mouseover":
 
                     if(
@@ -377,6 +377,24 @@ YAHOO.widget.MenuModule.prototype.GROUP_TITLE_TAG_NAME = "H6";
 
 
 // Private properties
+
+
+/** 
+* Identifier used to cancel the showing or hiding of a MenuModule
+* @private
+* @type Number
+*/
+YAHOO.widget.MenuModule.prototype._nTimeoutID = null;
+
+
+/** 
+* Determines if the "mouseover" and "mouseout" event handlers used for 
+* hiding a menu via a call to "window.setTimeout" have already been assigned 
+* to the MenuModule instance
+* @private
+* @type Boolean
+*/
+YAHOO.widget.MenuModule.prototype._hideDelayEventHandlersAssigned = false;
 
 
 /** 
@@ -743,6 +761,7 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oConfig) {
         this.renderEvent.subscribe(this._onMenuModuleRender, this, true);
         this.showEvent.subscribe(this._onMenuModuleShow, this, true);
         this.beforeHideEvent.subscribe(this._onMenuModuleBeforeHide, this, true);
+        this.keyDownEvent.subscribe(this._onMenuModuleKeyDown, this, true);
 
 
         if(p_oConfig) {
@@ -1462,6 +1481,48 @@ YAHOO.widget.MenuModule.prototype._getOffsetWidth = function() {
 };
 
 
+/**
+* Finds a MenuModule's root MenuModule instance.
+* @private
+*/
+YAHOO.widget.MenuModule.prototype._getRoot = function() {
+
+    var oItem = this.parent; // The parent MenuModuleItem instance
+
+    if(oItem) {
+
+        var oParentMenu = oItem.parent;
+
+        return oParentMenu ? oParentMenu._getRoot() : this;
+
+    }
+    else {
+    
+        return this;
+    
+    }
+
+};
+
+
+/**
+* Cancels the call to "hideSubmenus"
+* @private
+*/
+YAHOO.widget.MenuModule.prototype._cancelTimer = function() {
+
+    var oRootMenuModule = this._getRoot();
+
+    if(oRootMenuModule._nTimeoutId) {
+
+        window.clearTimeout(oRootMenuModule._nTimeoutId);
+
+    }
+
+};
+
+
+
 // Private Custom Event handlers
 
 /**
@@ -1658,6 +1719,101 @@ YAHOO.widget.MenuModule.prototype._onMenuModuleBeforeHide =
 
 
 /**
+* "mouseover" Custom Event handler for a MenuModule instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
+* fired the event.
+*/
+YAHOO.widget.MenuModule.prototype._onMenuModuleMouseOver = 
+
+    function(p_sType, p_aArgs, p_oMenuModule) {
+
+        this._cancelTimer();
+
+    };
+
+
+/**
+* "mouseout" Custom Event handler for a MenuModule instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
+* fired the event.
+*/
+YAHOO.widget.MenuModule.prototype._onMenuModuleMouseOut = 
+
+    function(p_sType, p_aArgs, p_oMenuModule) {
+
+        this._cancelTimer();
+
+        var oRootMenuModule = this._getRoot();
+        var me = this;
+
+
+        /**
+        * Hides submenus of the root MenuModule instance
+        * @private
+        */
+        var hideSubmenus = function() {
+        
+            if(oRootMenuModule.activeItem) {
+            
+                var oSubmenu = oRootMenuModule.activeItem.cfg.getProperty("submenu");
+        
+                if(oSubmenu) {
+                
+                    oSubmenu.hide();
+                
+                }
+            
+            }
+
+            if(
+                oRootMenuModule == me && 
+                me.cfg.getProperty("position") == "dynamic"
+            ) {
+
+                me.hide();            
+            
+            }
+        
+        };
+
+
+        oRootMenuModule._nTimeoutId = 
+
+            window.setTimeout(
+                    hideSubmenus, 
+                    oRootMenuModule.cfg.getProperty("hidedelay")
+                );
+
+    };
+
+
+/**
+* "keydown" Custom Event handler for a MenuModule instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
+* fired the event.
+*/
+YAHOO.widget.MenuModule.prototype._onMenuModuleKeyDown = 
+
+    function(p_sType, p_aArgs, p_oMenuModule) {
+
+        this._cancelTimer();
+
+    };
+
+
+/**
 * "configchange" Custom Event handler for a submenu.
 * @private
 * @param {String} p_sType The name of the event that was fired.
@@ -1677,6 +1833,7 @@ YAHOO.widget.MenuModule.prototype._onParentMenuModuleConfigChange =
     
             case "iframe":
             case "constraintoviewport":
+            case "hidedelay":
     
                 p_oSubmenu.cfg.setProperty(sPropertyName, oPropertyValue);
                     
@@ -1713,8 +1870,11 @@ YAHOO.widget.MenuModule.prototype._onParentMenuModuleRender =
                 constraintoviewport: 
                     oParentMenu.cfg.getProperty("constraintoviewport"),
     
-                xy: [0,0]
-    
+                xy: [0,0],
+                
+                hidedelay:
+                    oParentMenu.cfg.getProperty("hidedelay")
+
             };
 
 
@@ -2094,7 +2254,53 @@ YAHOO.widget.MenuModule.prototype.configIframe =
         }
     
     };
-    
+
+
+/**
+* Event handler for when the "hidedelay" configuration property of a
+* MenuModule changes.
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance fired
+* the event.
+*/
+YAHOO.widget.MenuModule.prototype.configHideDelay = 
+
+    function(p_sType, p_aArgs, p_oMenuModule) {
+
+        var nHideDelay = p_aArgs[0];
+        var oMouseOutEvent = this.mouseOutEvent;
+        var oMouseOverEvent = this.mouseOverEvent;
+
+        if(nHideDelay > 0) {
+
+            /*
+                Only assign the "mouseover" and "mouseout" event handlers once.
+                This way the user change the value for the hidedelay as many 
+                times as they want.
+            */
+
+            if(!this._hideDelayEventHandlersAssigned) {
+
+                oMouseOutEvent.subscribe(this._onMenuModuleMouseOut, this, true);
+                oMouseOverEvent.subscribe(this._onMenuModuleMouseOver, this, true);
+
+                this._hideDelayEventHandlersAssigned = true;
+            
+            }
+
+        }
+        else {
+
+            oMouseOutEvent.unsubscribe(this._onMenuModuleMouseOut, this);
+            oMouseOverEvent.unsubscribe(this._onMenuModuleMouseOver, this);
+
+            this._hideDelayEventHandlersAssigned = false;
+
+        }
+
+    };
 
 
 // Public methods
@@ -2489,5 +2695,14 @@ YAHOO.widget.MenuModule.prototype.initDefaultConfig = function() {
 	       validator: oConfig.checkBoolean
        } 
     );
+    
+	oConfig.addProperty(
+	   "hidedelay", 
+	   { 
+	       value: 0, 
+	       validator: oConfig.checkNumber, 
+	       handler: this.configHideDelay
+       } 
+    );    
 
 };
