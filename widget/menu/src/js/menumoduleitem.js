@@ -605,7 +605,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
     * @param {HTMLElement} p_oElement The element to be evaluated.
     * @param {String} p_sTagName Optional. The tagname of the element.
     * @return Returns an HTMLElement node.
-    * @type Boolean
+    * @type HTMLElement
     */
     _getFirstElement: function(p_oElement, p_sTagName) {
 
