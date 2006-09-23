@@ -247,11 +247,15 @@ YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 	}
 };
 
+/**
+* Removes the modality mask.
+*/
 YAHOO.widget.Panel.prototype.removeMask = function() {
 	if (this.mask) {
 		if (this.mask.parentNode) {
 			this.mask.parentNode.removeChild(this.mask);
 		}
+		this.mask = null;
 	}
 }
 

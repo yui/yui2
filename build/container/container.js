@@ -1565,7 +1565,7 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 			if (! this.iframe) {
 				this.iframe = document.createElement("iframe");
 				if (this.isSecure) {
-					this.iframe.src = this.imageRoot + YAHOO.widget.Overlay.IFRAME_SRC;
+					this.iframe.src= this.imageRoot + YAHOO.widget.Overlay.IFRAME_SRC;
 				}
 				
 				var parent = this.element.parentNode;
@@ -1834,7 +1834,7 @@ YAHOO.widget.Overlay.windowResizeEvent = new YAHOO.util.CustomEvent("windowResiz
 * @type Function
 */
 YAHOO.widget.Overlay.windowScrollHandler = function(e) {
-	YAHOO.widget.Overlay.windowScrollEvent.fire();
+		YAHOO.widget.Overlay.windowScrollEvent.fire();
 };
 
 /**
@@ -1842,7 +1842,7 @@ YAHOO.widget.Overlay.windowScrollHandler = function(e) {
 * @type Function
 */
 YAHOO.widget.Overlay.windowResizeHandler = function(e) {
-	YAHOO.widget.Overlay.windowResizeEvent.fire();
+		YAHOO.widget.Overlay.windowResizeEvent.fire();
 };
 
 /**
@@ -2764,13 +2764,28 @@ YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 		if (! YAHOO.util.Config.alreadySubscribed( YAHOO.widget.Overlay.windowResizeEvent, this.sizeMask, this ) ) {
 			YAHOO.widget.Overlay.windowResizeEvent.subscribe(this.sizeMask, this, true);
 		}
-
+		if (! YAHOO.util.Config.alreadySubscribed( this.destroyEvent, this.removeMask, this) ) {
+			this.destroyEvent.subscribe(this.removeMask, this, true);
+		}
 	} else {
 		this.beforeShowEvent.unsubscribe(this.showMask, this);
 		this.hideEvent.unsubscribe(this.hideMask, this);
-		YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.sizeMask);
+		YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.sizeMask, this);
+		this.destroyEvent.unsubscribe(this.removeMask, this);
 	}
 };
+
+/**
+* Removes the modality mask.
+*/
+YAHOO.widget.Panel.prototype.removeMask = function() {
+	if (this.mask) {
+		if (this.mask.parentNode) {
+			this.mask.parentNode.removeChild(this.mask);
+		}
+		this.mask = null;
+	}
+}
 
 /**
 * The default event handler fired when the "keylisteners" property is changed. 
