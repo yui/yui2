@@ -1199,7 +1199,7 @@ if (!YAHOO.util.Event) {
                 for (var i=0,len=unloadListeners.length; i<len; ++i) {
                     var l = unloadListeners[i];
                     if (l) {
-                        var scope = (l[YAHOO.ADJ_SCOPE]) ? l[EU.SCOPE]: window;
+                        var scope = (l[EU.ADJ_SCOPE]) ? l[EU.SCOPE]: window;
                         l[EU.FN].call(scope, EU.getEvent(e), l[EU.SCOPE] );
                         delete unloadListeners[i];
                         l=null;
