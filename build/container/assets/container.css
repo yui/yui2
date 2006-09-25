@@ -97,6 +97,7 @@ Version 0.11.0
     -moz-opacity: 0.7;
     opacity:.70;
     filter:alpha(opacity=70);
+	zoom:1;
 }
 
 .panel {

@@ -1,5 +1,9 @@
 Container Release Notes
 
+*** version 0.11.4 ***
+	
+	- Panel: Modality mask is now properly removed from DOM on Panel destroy.
+	
 *** version 0.11.3 ***
 
 	- Module: Fixed SSL warning issue in IE
