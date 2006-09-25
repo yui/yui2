@@ -188,7 +188,6 @@ function buildRandomHTMLBranch(node) {
     var id = "htmlnode_" + counter++;
 
     var html = '<div id="' + id + '"' + 
-                ' onmouseover="enableDragDrop(this, \'' + id + '\')"' + 
                 ' style="border:1px solid #aaaaaa; ' +
                 ' position:relative; ' +
                 ' height:100px; width:200px; ' +
@@ -198,11 +197,6 @@ function buildRandomHTMLBranch(node) {
 
     // new YAHOO.widget.HTMLNode(html, node, false, true);
     new YAHOO.widget.HTMLNode(html, node, false, false);
-}
-
-function enableDragDrop(el, id) {
-    new YAHOO.util.DD(id);
-    el.onmouseover = null;
 }
 
 YAHOO.util.Event.addListener(window, "load", treeInit);

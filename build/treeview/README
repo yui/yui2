@@ -1,9 +1,16 @@
 TreeView - Release Notes
 
+0.11.4
+
+   * Fixed a javascript error on the HTML node example page.
+
 0.11.3
 
    * popNode now clears the tree, previousSibling, nextSibling, and parent
      properties of the node that is being removed from the tree.
+
+   * Fixed the paths to the images in the tree.css file that is included in
+     build/assets.
 
 0.11.0
 

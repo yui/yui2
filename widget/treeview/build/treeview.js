@@ -2,7 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-version: 0.11.3
+version: 0.11.4
 */ 
 
 /**
@@ -504,21 +504,33 @@ YAHOO.widget.TreeView.getNode = function(treeId, nodeIndex) {
 };
 
 /**
- * Adds an event.  Replace with event manager when available
+ * Add a DOM event
  *
  * @param el the elment to bind the handler to
  * @param {string} sType the type of event handler
  * @param {function} fn the callback to invoke
- * @param {boolean} capture if true event is capture phase, bubble otherwise
  */
-YAHOO.widget.TreeView.addHandler = function (el, sType, fn, capture) {
-    capture = (capture) ? true : false;
+YAHOO.widget.TreeView.addHandler = function (el, sType, fn) {
     if (el.addEventListener) {
-        el.addEventListener(sType, fn, capture);
+        el.addEventListener(sType, fn, false);
     } else if (el.attachEvent) {
         el.attachEvent("on" + sType, fn);
-    } else {
-        el["on" + sType] = fn;
+    }
+};
+
+/**
+ * Remove a DOM event
+ *
+ * @param el the elment to bind the handler to
+ * @param {string} sType the type of event handler
+ * @param {function} fn the callback to invoke
+ */
+
+YAHOO.widget.TreeView.removeHandler = function (el, sType, fn) {
+    if (el.removeEventListener) {
+        el.removeEventListener(sType, fn, false);
+    } else if (el.detachEvent) {
+        el.detachEvent("on" + sType, fn);
     }
 };
 
@@ -544,10 +556,22 @@ YAHOO.widget.TreeView.preload = function(prefix) {
     f.innerHTML = sb.join("");
 
     document.body.appendChild(f);
+
+    YAHOO.widget.TreeView.removeHandler(window, 
+                "load", YAHOO.widget.TreeView.preload);
+
+};
+
+YAHOO.widget.TreeView.unload = function() {
+    YAHOO.widget.TreeView.removeHandler(window, 
+                "beforeunload", YAHOO.widget.TreeView.unload);
 };
 
 YAHOO.widget.TreeView.addHandler(window, 
                 "load", YAHOO.widget.TreeView.preload);
+
+YAHOO.widget.TreeView.addHandler(window, 
+                "beforeunload", YAHOO.widget.TreeView.unload);
 
 /**
  * The base class for all tree nodes.  The node's presentation and behavior in

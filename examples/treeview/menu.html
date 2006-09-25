@@ -192,18 +192,13 @@
 					thisId = nodeIndex++;
 					thisLabel = l2 + "-" + k;
 
-                    /*
 					var data = {
 							id: thisId,
 							label: thisLabel, 
 							href: "javascript:onLabelClick(" + thisId + ")" 
 						}
-*/
 
-					var data = {
-							label: thisLabel, 
-                            href: "javascript:void(window.open('http://www.yahoo.com'))" 
-						}
+					//var data = { label: thisLabel, href: "javascript:void(window.open('http://www.yahoo.com'))" }
 					nodes[thisId] = new YAHOO.widget.TextNode(data, p2, false);
                     nodes[thisId].labelStyle = "emLabel";
 
