@@ -149,7 +149,7 @@ YAHOO.widget.Button.prototype = {
     
     _sType: null,
     _oSrcElement: null,
-    _oMenuSrcElement: null,
+    _oMenuDataSrc: null,
     _oMenu: null,
     _oElement: null,
     _oSelectElement: null,
@@ -579,23 +579,26 @@ YAHOO.widget.Button.prototype = {
 
     setMenu: function(p_oObject) {
 
+        var oElement;
+
         if(p_oObject instanceof YAHOO.widget.MenuModule) {
 
             this._oMenu = p_oObject;
 
         }
-
-
-        var oElement;
-
-        if(this._isString(p_oObject)) {
+        else if(this._isArray(p_oObject)) {
+        
+            this._oMenuDataSrc = p_oObject;
+        
+        }
+        else if(this._isString(p_oObject)) {
         
             oElement = document.getElementById(p_oObject);
 
         }
         else if(p_oObject.tagName) {
 
-             oElement = p_oObject;     
+            oElement = p_oObject;     
         
         }
 
@@ -605,7 +608,7 @@ YAHOO.widget.Button.prototype = {
 
             if(oElement) {
 
-                this._oMenuSrcElement = oElement;
+                this._oMenuDataSrc = oElement;
     
                 if(oElement.tagName.toUpperCase() == "SELECT") {
         
@@ -677,8 +680,14 @@ YAHOO.widget.Button.prototype = {
     _isObject: function(p_oValue) {
 
         return (p_oValue && typeof p_oValue == "object") || 
-            isFunction(p_oValue);
+            this._isFunction(p_oValue);
 
+    },
+
+    _isArray: function(p_oValue) {
+    
+        return this._isObject(p_oValue) && p_oValue.constructor == Array;
+    
     },
 
     _isTextAlignValue: function(p_oValue) {
@@ -1025,12 +1034,32 @@ YAHOO.widget.Button.prototype = {
 
 
 
-            if(this._oMenuSrcElement && !this._oMenu) {
+            if(this._oMenuDataSrc && !this._oMenu) {
 
-                var oMenu = new YAHOO.widget.Menu(this._oMenuSrcElement);
-                oMenu.render(this._oMenuSrcElement.parentNode);
-            
-                this._oMenu = oMenu;
+                var sTagName = this._oMenuDataSrc.tagName;
+
+                if(sTagName && sTagName.toUpperCase() == "SELECT") {
+
+                    this._oMenu = new YAHOO.widget.Menu(this._oMenuDataSrc);
+                    this._oMenu.render(this._oElement.parentNode);
+
+                }
+                else if(this._isArray(this._oMenuDataSrc)) {
+
+                    this._oMenu = new YAHOO.widget.Menu(YAHOO.util.Dom.generateId());
+
+                    var aItems = this._oMenuDataSrc;
+                    var nItems = aItems.length;
+                    
+                    for(var i=0; i<nItems; i++) { 
+
+                        this._oMenu.addItem(aItems[i]);
+                    
+                    }
+                    
+                    this._oMenu.render(this._oElement.parentNode);
+                
+                }
             
             }
 
