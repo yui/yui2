@@ -788,6 +788,7 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelpers = function() {
         oIFrame.style.position = "absolute";
         oIFrame.style.width = "100%";
         oIFrame.style.height = "100%";
+        oIFrame.tabIndex = -1;
         this._oContainer._oIFrame = this._oContainer.appendChild(oIFrame);
     }
 };
