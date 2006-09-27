@@ -416,13 +416,7 @@ YAHOO.widget.AutoComplete.prototype.formatResult = function(oResultItem, sQuery)
  * @param {string} sQuery Query string.
  */
 YAHOO.widget.AutoComplete.prototype.sendQuery = function(sQuery) {
-    if(sQuery) {
-        this._sendQuery(sQuery);
-    }
-    else {
-        YAHOO.log("Query could not be sent because the string value was empty or null.","warn",this.toString());
-        return;
-    }
+    this._sendQuery(sQuery);
 };
 
 /***************************************************************************
