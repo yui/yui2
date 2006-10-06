@@ -11,7 +11,7 @@ YAHOO.util.Dom = function() {
    var ua = navigator.userAgent.toLowerCase();
    var isOpera = (ua.indexOf('opera') > -1);
    var isSafari = (ua.indexOf('safari') > -1);
-   var isIE = (window.ActiveXObject);
+   var isIE = (!isOpera && ua.indexOf('msie') > -1); 
 
    var id_counter = 0;
    var util = YAHOO.util; // internal shorthand
@@ -90,6 +90,18 @@ YAHOO.util.Dom = function() {
          logger.log('element ' + el + ' not found', 'error', 'Dom');
          return null; // safety, should never happen
       },
+      
+      createElement: function(tagName, attributes, childNodes) {
+         var element = document.createElement(tagName);
+            
+         for (var attr in attributes) {
+            if ( attributes.propertyIsEnumerable(attr) ) {
+               element[attr] = attributes[attr];
+            }
+         }
+            
+        return element;
+      }
    
       /**
        * Normalizes currentStyle and ComputedStyle.
