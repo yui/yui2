@@ -4,10 +4,7 @@ Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 */
 
-/**
- * @class Provides helper methods for DOM elements.
- */
-YAHOO.util.Dom = function() {
+(function() {
     var ua = navigator.userAgent.toLowerCase();
     var isOpera = (ua.indexOf('opera') > -1);
     var isSafari = (ua.indexOf('safari') > -1);
@@ -58,8 +55,10 @@ YAHOO.util.Dom = function() {
             hyphen: toHyphen(property)
         };
     };
-    
-    return {
+    /**
+     * @class Provides helper methods for DOM elements.
+     */
+    YAHOO.util.Dom = {
         /**
          * Returns an HTMLElement reference
          * @param {String/HTMLElement/Array} el Accepts a string to use as an ID for getting a DOM reference, an actual DOM reference, or an Array of IDs and/or HTMLElements.
@@ -707,5 +706,4 @@ YAHOO.util.Dom = function() {
             return width;
         }
     };
-}();
-
+})();
