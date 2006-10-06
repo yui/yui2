@@ -90,18 +90,6 @@ YAHOO.util.Dom = function() {
             logger.log('element ' + el + ' not found', 'error', 'Dom');
             return null; // safety, should never happen
         },
-        
-        createElement: function(tagName, attributes, childNodes) {
-            var element = document.createElement(tagName);
-                
-            for (var attr in attributes) {
-                if ( attributes.propertyIsEnumerable(attr) ) {
-                    element[attr] = attributes[attr];
-                }
-            }
-                
-          return element;
-        }
     
         /**
          * Normalizes currentStyle and ComputedStyle.
