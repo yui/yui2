@@ -376,7 +376,8 @@ YAHOO.widget.Menu.prototype._onMenuClick = function(p_sType, p_aArgs, p_oMenu) {
 
         if(
             oTarget != oItem.submenuIndicator && 
-            sURL.substr((sURL.length-1),1) == "#"
+            sURL.substr((sURL.length-1),1) == "#" && 
+            !oItem.cfg.getProperty("submenu")
         ) {
 
             var oRoot = this.getRoot();
