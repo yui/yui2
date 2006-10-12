@@ -57,6 +57,13 @@ YAHOO.widget.MenuBar.prototype.init = function(p_oElement, p_oConfig) {
 
     this.beforeInitEvent.fire(YAHOO.widget.MenuBar);
 
+
+    // Add event handlers to each "MenuBar" instance
+
+    this.keyDownEvent.subscribe(this._onMenuBarKeyDown, this, true);
+    this.clickEvent.subscribe(this._onMenuBarClick, this, true);
+
+
     var oConfig = this.cfg;
 
     /*
@@ -110,3 +117,162 @@ YAHOO.widget.MenuBar.prototype.toString = function() {
     return ("MenuBar " + this.id);
 
 };
+
+
+// Private event handlers
+
+/**
+* "keydown" Custom Event handler for a MenuBar instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.MenuBar} p_oMenuBar The MenuBar instance that 
+* fired the event.
+*/
+YAHOO.widget.MenuBar.prototype._onMenuBarKeyDown =
+
+    function(p_sType, p_aArgs, p_oMenuBar) {
+
+        var Event = YAHOO.util.Event;
+        var oEvent = p_aArgs[0];
+        var oItem = p_aArgs[1];
+        var oItemCfg = oItem.cfg;
+        var oSubmenu;
+
+    
+        switch(oEvent.keyCode) {
+    
+            case 37:    // Left arrow
+            case 39:    // Right arrow
+    
+                if(
+                    oItem == this.activeItem && 
+                    !oItemCfg.getProperty("selected")
+                ) {
+    
+                    oItemCfg.setProperty("selected", true);
+    
+                }
+                else {
+    
+                    var oNextItem = (oEvent.keyCode == 37) ? 
+                            oItem.getPreviousEnabledSibling() : 
+                            oItem.getNextEnabledSibling();
+            
+                    if(oNextItem) {
+
+                        this.clearActiveItem();
+
+                        oNextItem.cfg.setProperty("selected", true);
+    
+
+                        if(this.cfg.getProperty("autosubmenudisplay")) {
+                        
+                            var oSubmenu = oNextItem.cfg.getProperty("submenu");
+                            
+                            if(oSubmenu) {
+                        
+                                oSubmenu.show();
+                                oSubmenu.activeItem.blur();
+                                oSubmenu.activeItem = null;
+                            
+                            }
+                
+                        }           
+    
+                        oNextItem.focus();
+    
+                    }
+    
+                }
+
+                Event.preventDefault(oEvent);
+    
+            break;
+    
+            case 40:    // Down arrow
+
+                this.clearActiveItem();
+
+                oItemCfg.setProperty("selected", true);
+                oItem.focus();
+
+                oSubmenu = oItemCfg.getProperty("submenu");
+
+                if(oSubmenu) {
+
+                    oSubmenu.show();
+                    oSubmenu.setInitialSelection();
+
+                }
+
+                Event.preventDefault(oEvent);
+
+            break;
+
+        }
+
+    };
+
+
+/**
+* "click" Custom Event handler for a MenuBar instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.MenuBar} p_oMenuBar The MenuBar instance that 
+* fired the event.
+*/
+YAHOO.widget.MenuBar.prototype._onMenuBarClick =  
+
+    function(p_sType, p_aArgs, p_oMenuBar) {
+
+        var oItem = p_aArgs[1];
+        
+        if(oItem) {
+
+            var Event = YAHOO.util.Event;
+            var Dom = YAHOO.util.Dom;
+            var oActiveItem = this.activeItem;
+            var oConfig = this.cfg;
+    
+    
+            // Hide any other submenus that might be visible
+        
+            if(oActiveItem && oActiveItem != oItem) {
+        
+                this.clearActiveItem();
+        
+            }
+        
+        
+            // Select and focus the current item
+        
+            oItem.cfg.setProperty("selected", true);
+            oItem.focus();
+        
+        
+            // Show the submenu for the item
+        
+            var oSubmenu = oItem.cfg.getProperty("submenu");
+    
+            if(oSubmenu) {
+        
+                if(oSubmenu.cfg.getProperty("visible")) {
+                
+                    oSubmenu.hide();
+                
+                }
+                else {
+                
+                    oSubmenu.show();                    
+                
+                }
+        
+            }
+        
+        }
+
+    };  
