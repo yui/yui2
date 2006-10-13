@@ -375,11 +375,19 @@ YAHOO.widget.MenuModule.prototype.GROUP_TITLE_TAG_NAME = "H6";
 
 
 /** 
-* Identifier used to cancel the showing or hiding of a MenuModule
+* Identifier used to cancel the hiding of a MenuModule
 * @private
 * @type Number
 */
 YAHOO.widget.MenuModule.prototype._nHideDelayId = null;
+
+
+/** 
+* Identifier used to cancel the showing of a MenuModule
+* @private
+* @type Number
+*/
+YAHOO.widget.MenuModule.prototype._nShowDelayId = null;
 
 
 /** 
@@ -1468,11 +1476,11 @@ YAHOO.widget.MenuModule.prototype._getOffsetWidth = function() {
 */
 YAHOO.widget.MenuModule.prototype._cancelHideDelay = function() {
 
-    var oRootMenuModule = this.getRoot();
+    var oRoot = this.getRoot();
 
-    if(oRootMenuModule._nHideDelayId) {
+    if(oRoot._nHideDelayId) {
 
-        window.clearTimeout(oRootMenuModule._nHideDelayId);
+        window.clearTimeout(oRoot._nHideDelayId);
 
     }
 
@@ -1515,6 +1523,54 @@ YAHOO.widget.MenuModule.prototype._execHideDelay = function() {
 
     oRoot._nHideDelayId = 
         window.setTimeout(hideSubmenus, oRoot.cfg.getProperty("hidedelay"));
+
+};
+
+
+/**
+* Cancels the call to "showMenu"
+* @private
+*/
+YAHOO.widget.MenuModule.prototype._cancelShowDelay = function() {
+
+    var oRoot = this.getRoot();
+
+    if(oRoot._nShowDelayId) {
+
+        window.clearTimeout(oRoot._nShowDelayId);
+
+    }
+
+};
+
+
+/**
+* Shows a MenuModule instance after the number of milliseconds specified 
+* by the "showdelay" configuration property.
+* @private
+* @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
+* should be made visible.
+*/
+YAHOO.widget.MenuModule.prototype._execShowDelay = function(p_oMenuModule) {
+
+    this._cancelShowDelay();
+
+    var oRoot = this.getRoot();
+
+
+    /**
+    * Shows a MenuModule instance.
+    * @private
+    */
+    var showMenu = function() {
+
+        p_oMenuModule.show();    
+    
+    };
+
+
+    oRoot._nShowDelayId = 
+        window.setTimeout(showMenu, oRoot.cfg.getProperty("showdelay"));
 
 };
 
@@ -1719,15 +1775,24 @@ YAHOO.widget.MenuModule.prototype._onMenuModuleMouseOver =
             if(this.cfg.getProperty("autosubmenudisplay")) {
     
                 // Show the submenu for this instance
-            
+
                 var oSubmenu = oItemCfg.getProperty("submenu");
             
                 if(oSubmenu) {
             
-                    oSubmenu.show();
+                    if(this.cfg.getProperty("showdelay") > 0) {
+
+                        this._execShowDelay(oSubmenu);
+            
+                    }
+                    else {
+
+                        oSubmenu.show();
+    
+                    }
             
                 }
-    
+
             }                        
 
             oItem.handledMouseOverEvent = true;
@@ -1784,7 +1849,15 @@ YAHOO.widget.MenuModule.prototype._onMenuModuleMouseOut =
                     ) || bMovingToSubmenu
                 )
             ) {
-    
+
+
+                if(this.cfg.getProperty("showdelay") > 0) {
+                
+                    this._cancelShowDelay();
+                
+                }
+
+
                 oItemCfg.setProperty("selected", false);
     
                 if(this.cfg.getProperty("autosubmenudisplay")) {
@@ -2002,6 +2075,7 @@ YAHOO.widget.MenuModule.prototype._onParentMenuModuleConfigChange =
             case "iframe":
             case "constraintoviewport":
             case "hidedelay":
+            case "showdelay":
             case "clicktohide":
     
                 p_oSubmenu.cfg.setProperty(sPropertyName, oPropertyValue);
@@ -2045,6 +2119,15 @@ YAHOO.widget.MenuModule.prototype._onParentMenuModuleRender =
                     oParentMenu.cfg.getProperty("clicktohide")
 
             };
+
+
+        var nShowDelay = oParentMenu.cfg.getProperty("showdelay");
+
+        if(nShowDelay > 0) {
+
+            oConfig.showdelay = nShowDelay;
+
+        }
 
 
         var nHideDelay = oParentMenu.cfg.getProperty("hidedelay");
@@ -2840,6 +2923,13 @@ YAHOO.widget.MenuModule.prototype.setInitialSelection = function() {
 */
 YAHOO.widget.MenuModule.prototype.clearActiveItem = function(p_bBlur) {
 
+    if(this.cfg.getProperty("showdelay") > 0) {
+    
+        this._cancelShowDelay();
+    
+    }
+
+
     var oActiveItem = this.activeItem;
 
     if(oActiveItem) {
@@ -2908,6 +2998,14 @@ YAHOO.widget.MenuModule.prototype.initDefaultConfig = function() {
        } 
     );
     
+	oConfig.addProperty(
+	   "showdelay", 
+	   { 
+	       value: 0, 
+	       validator: oConfig.checkNumber
+       } 
+    );
+
 	oConfig.addProperty(
 	   "hidedelay", 
 	   { 
