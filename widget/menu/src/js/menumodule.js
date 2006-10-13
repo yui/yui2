@@ -2384,6 +2384,13 @@ YAHOO.widget.MenuModule.prototype.configPosition =
 
         Dom.setStyle(this.element, "position", sCSSPosition);
 
+
+        if(sCSSPosition == "absolute") {
+
+            Dom.setStyle(this.element, "visibility", "hidden");    
+        
+        }
+
     };
 
 
