@@ -2480,6 +2480,18 @@ YAHOO.widget.MenuModule.prototype.configPosition =
 
             Dom.setStyle(this.element, "visibility", "hidden");
 
+
+            var nZIndex = this.cfg.getProperty("zIndex");
+            
+            if(!nZIndex) {
+
+                nZIndex = this.parent ? 
+                    this.parent.parent.cfg.getProperty("zIndex") : 1;
+
+                this.cfg.setProperty("zIndex", nZIndex);
+
+            }
+
         }
 
     };
