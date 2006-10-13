@@ -536,6 +536,12 @@ YAHOO.widget.LogReader.prototype._createCategoryCheckbox = function(category) {
     }
 };
 
+/**
+ * Creates a checkbox in the log reader footer element to filter by source .
+ *
+ * @param {string} source Source name
+ * @private
+ */
 YAHOO.widget.LogReader.prototype._createSourceCheckbox = function(source) {
     var oSelf = this;
 
@@ -733,9 +739,12 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
  */
 YAHOO.widget.LogReader.prototype._HTML2Text = function(html) {
     if(html) {
-        return html.replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
+        if(typeof html === "string") {
+            return html.replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
+        }
+        return html.toString() || "";
     }
-    else return "";
+    return "";
 };
 
 /***************************************************************************
