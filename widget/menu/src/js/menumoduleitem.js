@@ -85,6 +85,51 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
 
     /**
+    * Constant representing the path to the image to be used for the 
+    * checked state.
+    * @final
+    * @type String
+    */
+    CHECKED_IMAGE_PATH: "nt/ic/ut/bsc/menuchk8_nrm_1.gif",
+    
+
+    /**
+    * Constant representing the path to the image to be used for the selected 
+    * checked state.
+    * @final
+    * @type String
+    */
+    SELECTED_CHECKED_IMAGE_PATH: "nt/ic/ut/bsc/menuchk8_hov_1.gif",
+    
+
+    /**
+    * Constant representing the path to the image to be used for the disabled 
+    * checked state.
+    * @final
+    * @type String
+    */
+    DISABLED_CHECKED_IMAGE_PATH: "nt/ic/ut/bsc/menuchk8_dim_1.gif",
+    
+
+    /**
+    * Constant representing the alt text for the image to be used for the 
+    * checked image.
+    * @final
+    * @type String
+    */
+    CHECKED_IMAGE_ALT_TEXT: "Checked.",
+    
+    
+    /**
+    * Constant representing the alt text for the image to be used for the 
+    * checked image when the item is disabled.
+    * @final
+    * @type String
+    */
+    DISABLED_CHECKED_IMAGE_ALT_TEXT: "Checked. (Item disabled.)",
+
+
+    /**
     * Constant representing the CSS class(es) to be applied to the root 
     * HTMLLIElement of the MenuModuleItem.
     * @final
@@ -165,6 +210,15 @@ YAHOO.widget.MenuModuleItem.prototype = {
     * @type YAHOO.widget.MenuModule
     */
     _oSubmenu: null,
+
+
+    /**
+    * Reference to the HTMLImageElement used to create the checked
+    * indicator for a MenuItem instance.
+    * @private
+    * @type HTMLImageElement
+    */
+    _checkImage: null,
     
     
     /**
@@ -731,6 +785,31 @@ YAHOO.widget.MenuModuleItem.prototype = {
     },
 
 
+    /**
+    * Preloads an image by creating an image element from the 
+    * specified path and appending the image to the body of 
+    * the document
+    * @private
+    * @param {String} p_sPath The path to the image.                
+    */
+    _preloadImage: function(p_sPath) {
+
+        var sPath = this.imageRoot + p_sPath;
+
+        if(!document.images[sPath]) {
+
+            var oImage = document.createElement("img");
+            oImage.src = sPath;
+            oImage.name = sPath;
+            oImage.id = sPath;
+            oImage.style.display = "none";
+            
+            document.body.appendChild(oImage);
+
+        }
+    
+    },
+
 
     // Event handlers for configuration properties
 
@@ -1018,6 +1097,86 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
 
     /**
+    * Event handler for when the "checked" configuration property of
+    * a MenuModuleItem instance changes. 
+    * @param {String} p_sType The name of the event that was fired.
+    * @param {Array} p_aArgs Collection of arguments sent when the 
+    * event was fired.
+    * @param {YAHOO.widget.MenuModuleItem} p_oItem The MenuModuleItem instance 
+    * that fired the event.
+    */    
+    configChecked: function(p_sType, p_aArgs, p_oItem) {
+    
+        var Dom = this._oDom;
+        var bChecked = p_aArgs[0];
+        var oEl = this.element;
+        var oConfig = this.cfg;
+        var oImg;
+        
+
+        if(bChecked) {
+
+            this._preloadImage(this.CHECKED_IMAGE_PATH);
+            this._preloadImage(this.SELECTED_CHECKED_IMAGE_PATH);
+            this._preloadImage(this.DISABLED_CHECKED_IMAGE_PATH);
+
+
+            oImg = document.createElement("img");
+            oImg.src = (this.imageRoot + this.CHECKED_IMAGE_PATH);
+            oImg.alt = this.CHECKED_IMAGE_ALT_TEXT;
+
+            var oSubmenu = this.cfg.getProperty("submenu");
+
+            if(oSubmenu) {
+
+                oEl.insertBefore(oImg, oSubmenu.element);
+
+            }
+            else {
+
+                oEl.appendChild(oImg);            
+
+            }
+
+
+            Dom.addClass([oEl, oImg], "checked");
+
+            this._checkImage = oImg;
+
+            if(oConfig.getProperty("disabled")) {
+
+                oConfig.refireEvent("disabled");
+
+            }
+
+            if(oConfig.getProperty("selected")) {
+
+                oConfig.refireEvent("selected");
+
+            }
+        
+        }
+        else {
+
+            oImg = this._checkImage;
+
+            Dom.removeClass([oEl, oImg], "checked");
+
+            if(oImg) {
+
+                oEl.removeChild(oImg);
+
+            }
+
+            this._checkImage = null;
+        
+        }
+
+    },
+
+
+
+    /**
     * Event handler for when the "disabled" configuration property of
     * a MenuModuleItem instance changes. 
     * @param {String} p_sType The name of the event that was fired.
@@ -1034,9 +1193,9 @@ YAHOO.widget.MenuModuleItem.prototype = {
         var aNodes = [this.element, oAnchor];
         var oEM = this._oHelpTextEM;
         var oConfig = this.cfg;
-        var oImg = this.submenuIndicator;
-        var sImageSrc;
-        var sImageAlt;
+        var oImg;
+        var sImgSrc;
+        var sImgAlt;
 
 
         if(oEM) {
@@ -1044,6 +1203,28 @@ YAHOO.widget.MenuModuleItem.prototype = {
             aNodes[2] = oEM;
 
         }
+
+
+        if(this.cfg.getProperty("checked")) {
+    
+            sImgAlt = this.CHECKED_IMAGE_ALT_TEXT;
+            sImgSrc = this.CHECKED_IMAGE_PATH;
+            oImg = this._checkImage;
+            
+            if(bDisabled) {
+    
+                sImgAlt = this.DISABLED_CHECKED_IMAGE_ALT_TEXT;
+                sImgSrc = this.DISABLED_CHECKED_IMAGE_PATH;
+            
+            }
+
+            oImg.src = document.images[(this.imageRoot + sImgSrc)].src;
+            oImg.alt = sImgAlt;
+            
+        }    
+
+
+        oImg = this.submenuIndicator;
 
         if(bDisabled) {
 
@@ -1057,8 +1238,8 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
             Dom.addClass(aNodes, "disabled");
 
-            sImageSrc = this.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH;
-            sImageAlt = this.DISABLED_SUBMENU_INDICATOR_ALT_TEXT;
+            sImgSrc = this.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH;
+            sImgAlt = this.DISABLED_SUBMENU_INDICATOR_ALT_TEXT;
 
         }
         else {
@@ -1067,16 +1248,16 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
             Dom.removeClass(aNodes, "disabled");
 
-            sImageSrc = this.SUBMENU_INDICATOR_IMAGE_PATH;
-            sImageAlt = this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
+            sImgSrc = this.SUBMENU_INDICATOR_IMAGE_PATH;
+            sImgAlt = this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
 
         }
 
 
         if(oImg) {
 
-            oImg.src = this.imageRoot + sImageSrc;
-            oImg.alt = sImageAlt;
+            oImg.src = this.imageRoot + sImgSrc;
+            oImg.alt = sImgAlt;
 
         }
 
@@ -1101,7 +1282,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
             var oEM = this._oHelpTextEM;
             var aNodes = [this.element, this._oAnchor];
             var oImg = this.submenuIndicator;
-            var sImageSrc;
+            var sImgSrc;
 
 
             if(oEM) {
@@ -1116,22 +1297,33 @@ YAHOO.widget.MenuModuleItem.prototype = {
             
             }
     
+
+            if(this.cfg.getProperty("checked")) {
+    
+                sImgSrc = this.imageRoot + (bSelected ? 
+                    this.SELECTED_CHECKED_IMAGE_PATH : this.CHECKED_IMAGE_PATH);
+    
+                this._checkImage.src = document.images[sImgSrc].src;
+                
+            }
+
+
             if(bSelected) {
     
                 Dom.addClass(aNodes, "selected");
-                sImageSrc = this.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH;
+                sImgSrc = this.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH;
     
             }
             else {
     
                 Dom.removeClass(aNodes, "selected");
-                sImageSrc = this.SUBMENU_INDICATOR_IMAGE_PATH;
+                sImgSrc = this.SUBMENU_INDICATOR_IMAGE_PATH;
     
             }
     
             if(oImg) {
     
-                oImg.src = document.images[(this.imageRoot + sImageSrc)].src;
+                oImg.src = document.images[(this.imageRoot + sImgSrc)].src;
 
             }
 
@@ -1172,34 +1364,9 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
                 var me = this;
 
-                /**
-                * Preloads an image by creating an image element from the 
-                * specified path and appending the image to the body of 
-                * the document
-                * @private
-                * @param {String} p_sPath The path to the image.                
-                */
-                var preloadImage = function(p_sPath) {
-
-                    var sPath = me.imageRoot + p_sPath;
-
-                    if(!document.images[sPath]) {
-
-                        var oImage = document.createElement("img");
-                        oImage.src = sPath;
-                        oImage.name = sPath;
-                        oImage.id = sPath;
-                        oImage.style.display = "none";
-                        
-                        document.body.appendChild(oImage);
-
-                    }
-                
-                };
-
-                preloadImage(this.SUBMENU_INDICATOR_IMAGE_PATH);
-                preloadImage(this.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH);
-                preloadImage(this.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH);
+                this._preloadImage(this.SUBMENU_INDICATOR_IMAGE_PATH);
+                this._preloadImage(this.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH);
+                this._preloadImage(this.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH);
 
                 oImg = document.createElement("img");
                 oImg.src = (this.imageRoot + this.SUBMENU_INDICATOR_IMAGE_PATH);
@@ -1301,6 +1468,17 @@ YAHOO.widget.MenuModuleItem.prototype = {
                 validator: CheckBoolean,
                 suppressEvent: true
             }
+        );
+
+        oConfig.addProperty(
+            "checked", 
+            {
+                value: false, 
+                handler: this.configChecked, 
+                validator: this.cfg.checkBoolean, 
+                suppressEvent: true,
+                supercedes:["disabled"]
+            } 
         );
 
         oConfig.addProperty(
