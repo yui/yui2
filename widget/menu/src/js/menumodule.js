@@ -969,6 +969,15 @@ YAHOO.widget.MenuModule.prototype._addItemToGroup =
             oItem = new this.ITEM_TYPE(p_oItem);
         
         }
+        else if(typeof p_oItem == "object" && p_oItem.text) {
+        
+            var sText = p_oItem.text;
+            
+            delete p_oItem["text"];
+
+            oItem = new this.ITEM_TYPE(sText, p_oItem);
+        
+        }
 
 
         if(oItem) {
@@ -2467,11 +2476,10 @@ YAHOO.widget.MenuModule.prototype.configPosition =
 
         Dom.setStyle(this.element, "position", sCSSPosition);
 
-
         if(sCSSPosition == "absolute") {
 
-            Dom.setStyle(this.element, "visibility", "hidden");    
-        
+            Dom.setStyle(this.element, "visibility", "hidden");
+
         }
 
     };
@@ -2674,6 +2682,8 @@ YAHOO.widget.MenuModule.prototype.setItemGroupTitle =
 * Appends the specified item to a MenuModule instance.
 * @param {YAHOO.widget.MenuModuleItem} p_oItem The item to be added.
 * @param {String} p_oItem The text of the item to be added.
+* @param {Object} p_oItem An object literal containing a set of MenuModuleItem
+* configuration properties.
 * @param {Number} p_nGroupIndex Optional. Number indicating the group to which
 * the item belongs.
 * @return The item that was added to the MenuModule.
@@ -2691,9 +2701,50 @@ YAHOO.widget.MenuModule.prototype.addItem = function(p_oItem, p_nGroupIndex) {
 
 
 /**
+* Appends an array of items to a MenuModule instance.
+* @param {Array} p_aItems An array of items to be added to the MenuModule 
+* instance.  The array can contain strings representing the text for each item
+* to be created, object literals containing each of the MenuModuleItem
+* configuration properties, or MenuModuleItem instances.
+* @param {Number} p_nGroupIndex Optional. Number indicating the group to which
+* the items belongs.
+* @return An array containing the MenuModuleItem instances that were added to 
+* the MenuModule instance.
+* @type YAHOO.widget.MenuModuleItem
+*/
+YAHOO.widget.MenuModule.prototype.addItems = function(p_aItems, p_nGroupIndex) {
+
+    if(typeof p_aItems == "object" && p_aItems.constructor == Array) {
+
+        var nItems = p_aItems.length;
+
+        var aItems = [];
+
+        for(var i=0; i<nItems; i++) {
+
+            aItems[aItems.length] = 
+
+                this._addItemToGroup(p_nGroupIndex, p_aItems[i]);
+        
+        }
+
+        if(aItems.length) {
+        
+            return aItems;
+        
+        }
+    
+    }
+
+};
+
+
+/**
 * Inserts an item into a MenuModule instance at the specified index.
 * @param {YAHOO.widget.MenuModuleItem} p_oItem The item to be inserted.
 * @param {String} p_oItem The text of the item to be inserted.
+* @param {Object} p_oItem An object literal containing a set of MenuModuleItem
+* configuration properties.
 * @param {Number} p_nItemIndex Number indicating the ordinal position 
 * at which the item should be added.
 * @param {Number} p_nGroupIndex Optional. Number indicating the group to which
