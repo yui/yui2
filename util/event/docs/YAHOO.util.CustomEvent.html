@@ -1,622 +1,451 @@
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>API: Event YAHOO.util.CustomEvent.html (YUI Library)</title>
-	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+	<title>API: Event Utility  YAHOO.util.CustomEvent   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/reset.css">
+	<link rel="stylesheet" type="text/css" href="assets/fonts.css">
+	<link rel="stylesheet" type="text/css" href="assets/grids.css">
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
 
-<body>
+<body id="yahoo-com">
+<div id="doc" class="yui-t1">
 
-<div id="header">
-	<h1>Yahoo! UI Library</h1>
-	<h3><a href="./index.html">Yui Event Utility</a></h3>
-
-	<div class="breadcrumbs">
-		
-			
-			
-			
-			
-			
-			
-			
-				<a href="./index.html">Yui Event Utility</a>
-				&gt;
-				<strong>YAHOO.util.CustomEvent</strong>
-			
-			
-			
-			
-			
-			
-			
-		
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Event Utility</h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> &gt;
+        <a href="./module_EventUtility.html">Event Utility</a>
+             &gt; YAHOO.util.CustomEvent 
+            
+        </p>
 	</div>
-</div>
 
-	
-<div id="body">
-	
-	
-	<div class="nav">
-		<div class="module resources">
-			<ul class="content">
-				<li><a href="overview-tree.html">Tree View</a></li>
-				<li><a href="index-all.html">Element Index</a></li>
-			</ul>
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <h2>
+                            Class <b>YAHOO.util.CustomEvent</b>
+                        <span class="extends">
+                        </span>
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        The CustomEvent class lets you define events for your application
+that can be subscribed to by one or more independent component.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.util.CustomEvent</strong>
+                                <code>
+                                        (
+  
+                                        
+                                            &lt;String&gt; type, 
+                                            &lt;Object&gt; oScope, 
+                                            &lt;boolean&gt; silent
+                                        )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>type</code> - 
+                                                     The type of event, which is passed to the callback
+when the event fires
+                                                </dd>
+                                                <dd>
+                                                    <code>oScope</code> - 
+                                                     The context the event will fire from.  "this" will
+refer to this object in the callback.  Default value: 
+the window object.  The listener can override this.
+                                                </dd>
+                                                <dd>
+                                                    <code>silent</code> - 
+                                                     pass true to prevent the event from writing to
+the log system
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <h4><a name="YAHOO.util.CustomEvent.FLAT">YAHOO.util.CustomEvent.FLAT</a>
+                                        <code>&lt;static int&gt;</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Subscriber listener sigature constant.  The FLAT type returns two
+parameters: the first argument passed to fire and the optional 
+custom object
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h4><a name="YAHOO.util.CustomEvent.LIST">YAHOO.util.CustomEvent.LIST</a>
+                                        <code>&lt;static int&gt;</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Subscriber listener sigature constant.  The LIST type returns three
+parameters: the event type, the array of args passed to fire, and
+the optional custom object
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h4><a name="scope">scope</a>
+                                        <code>&lt;object&gt;</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The scope the the event will fire from by default.  Defaults to the window 
+obj
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h4><a name="signature">signature</a>
+                                        <code>&lt;int&gt;</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Custom events support two styles of arguments provided to the event
+subscribers.  
+<ul>
+<li>YAHOO.util.CustomEvent.LIST: 
+<ul>
+<li>param1: event name</li>
+<li>param2: array of arguments sent to fire</li>
+<li>param3: <optional> a custom object supplied by the subscriber</li>
+</ul>
+</li>
+<li>YAHOO.util.CustomEvent.FLAT
+<ul>
+<li>param1: the first argument passed to fire.  If you need to
+pass multiple parameters, use and array or object literal</li>
+<li>param2: <optional> a custom object supplied by the subscriber</li>
+</ul>
+</li>
+</ul>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h4><a name="silent">silent</a>
+                                        <code>&lt;boolean&gt;</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            By default all custom events are logged in the debug build, set silent
+to true to disable logging for this event.
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h4><a name="subscribeEvent">subscribeEvent</a>
+                                        <code>&lt;CustomEvent&gt;</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Custom events provide a custom event that fires whenever there is
+a new subscriber to the event.  This provides an opportunity to
+handle the case where there is a non-repeating event that has
+already fired has a new subscriber.
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h4><a name="subscribers">subscribers</a>
+                                        <code>&lt;Subscriber[]&gt;</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The subscribers to this event
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h4><a name="type">type</a>
+                                        <code>&lt;string&gt;</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The type of event, returned to subscribers when the event fires
+                                        </div>
+                                    </div>
+                                    <hr />
+ 
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="fire">fire</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        void
+                                            <strong>fire</strong>
+                                                (
+                                                
+                                                    &lt;Object*&gt; arguments
+                                                )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Notifies the subscribers.  The callback functions will be executed
+from the scope specified when the event was created, and with the 
+following parameters:
+<ul>
+<li>The type of event</li>
+<li>All of the arguments fire() was executed with as an array</li>
+<li>The custom object (if any) that was passed into the subscribe() 
+method</li>
+</ul>
+                                        </div>
+
+                                        <div class="description">
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>arguments</code> - 
+                                                             an arbitrary set of parameters to pass to 
+the handler.
+                                                        </dd>
+                                                </dl>
+
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="subscribe">subscribe</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        void
+                                            <strong>subscribe</strong>
+                                                (
+                                                
+                                                    &lt;Function&gt; fn, 
+                                                    &lt;Object&gt; obj, 
+                                                    &lt;boolean|Object&gt; override
+                                                )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Subscribes the caller to this event
+                                        </div>
+
+                                        <div class="description">
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>fn</code> - 
+                                                                    The function to execute
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj</code> - 
+                                                                   An object to be passed along when the event 
+fires
+                                                        </dd>
+                                                        <dd>
+                                                            <code>override</code> - 
+                                                             If true, the obj passed in becomes 
+the execution scope of the listener.
+if an object, that object becomes the
+the execution scope.
+                                                        </dd>
+                                                </dl>
+
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        void
+                                            <strong>toString</strong>
+                                        </code>
+                                        
+                                        <div class="description">
+                                            
+                                        </div>
+
+                                        <div class="description">
+
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="unsubscribe">unsubscribe</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        boolean
+                                            <strong>unsubscribe</strong>
+                                                (
+                                                
+                                                    &lt;Function&gt; fn, 
+                                                    &lt;Object&gt; obj
+                                                )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Unsubscribes the caller from this event
+                                        </div>
+
+                                        <div class="description">
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>fn</code> - 
+                                                              The function to execute
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj</code> - 
+                                                             An object to be passed along when the event fires
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>True if the subscriber was found and detached.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="unsubscribeAll">unsubscribeAll</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        void
+                                            <strong>unsubscribeAll</strong>
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes all listeners
+                                        </div>
+
+                                        <div class="description">
+
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+			</div>
 		</div>
-		
-		
-			<div class="module">
-				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
-				<ul class="content">
-					
-						<li>
-							<a href="YAHOO.util.html">
-								YAHOO.util</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.CustomEvent.html">
-								YAHOO.util.CustomEvent</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.Event.html">
-								YAHOO.util.Event</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.Subscriber.html">
-								YAHOO.util.Subscriber</a>
-						</li>
-					
-				</ul>
-			</div>
-		
-		
-		
-			<div class="module">
-				<h4><a href="./overview-summary.html">Files</a></h4>
-				<ul class="content">		
-					
-						<li>
-							<a href="overview-summary-CustomEvent.js.html">
-								CustomEvent.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-Event.js.html">
-								Event.js</a>
-						</li>
-					
-				</ul>
-			</div>
-		
-	</div>
-	
-	<div id="pri">
-        <div class="main">
-	
-		<h2>Class YAHOO.util.CustomEvent</h2>
-		<pre>Object
-   |
-   +--<b>YAHOO.util.CustomEvent</b>
-</pre>
-		
-		
-	
-		<hr />
-		
-		<!-- Class definition -->
-		<div class="class-def">
-			<div class="class-name">
-				<span class="class-attribs">
-					
-				</span>
-				<span class="class-type">class</span>
-				<b>YAHOO.util.CustomEvent</b>
-			</div>
-			<div class="class-extends">
-				
-			</div>
-		</div>
-			
-		
-<div class="meta">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-		
-	
-	
-	
-	
-	
-	
-</div>
+		<div class="yui-b">
+            <div class="nav">
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
+                                <li><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
+                                <li><a href="YAHOO.util.EventPublisher.html">YAHOO.util.EventPublisher</a></li>
+                                <li><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
+                        </ul>
+                    </div>
 
-		
-		<!-- ======== QUICK LINKS ======== -->
-		<div class="quick-links">
-			<strong>Quick Links:</strong>&nbsp;
-			
-			
-				<a href="#field_summary">Field Summary</a>
-				|
-			
-			
-				<a href="#constructor_summary">Constructor Summary</a>
-				|
-			
-			
-				<a href="#methodSummary">Method Summary</a> |
-				<a href="#methodDetails">Method Details</a>
-			
-		</div>
-		<!-- ======== END QUICK LINKS ======== -->
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li><a href="CustomEvent.js.html">CustomEvent.js</a></li>
+                                <li><a href="Event.js.html">Event.js</a></li>
+                                <li><a href="EventPublisher.js.html">EventPublisher.js</a></li>
+                        </ul>
+                    </div>
 
-		<!-- ======== NESTED CLASS SUMMARY ======== -->
-		
-		<!-- ======== END NESTED CLASS SUMMARY ======== -->
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li><a href="#YAHOO.util.CustomEvent.FLAT">YAHOO.util.CustomEvent.FLAT</a>
+                                        <!--<code>&lt;string&gt;</code>-->
+                                </li>
+                                <li><a href="#YAHOO.util.CustomEvent.LIST">YAHOO.util.CustomEvent.LIST</a>
+                                        <!--<code>&lt;string&gt;</code>-->
+                                </li>
+                                <li><a href="#scope">scope</a>
+                                        <!--<code>&lt;string&gt;</code>-->
+                                </li>
+                                <li><a href="#signature">signature</a>
+                                        <!--<code>&lt;string&gt;</code>-->
+                                </li>
+                                <li><a href="#silent">silent</a>
+                                        <!--<code>&lt;string&gt;</code>-->
+                                </li>
+                                <li><a href="#subscribeEvent">subscribeEvent</a>
+                                        <!--<code>&lt;string&gt;</code>-->
+                                </li>
+                                <li><a href="#subscribers">subscribers</a>
+                                        <!--<code>&lt;string&gt;</code>-->
+                                </li>
+                                <li><a href="#type">type</a>
+                                        <!--<code>&lt;string&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
 
-		<!-- =========== FIELD SUMMARY =========== -->
-		
-			<div class="section field summaries">
-				<h3><a name="field_summary">Field Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<table border="1" cellpadding="3" cellspacing="0">
-					
-						<tr>
-							<td class="flags">object</td>
-							<td class="spec">
-								<code>
-									<a href="#scope">scope</a>
-								</code>
-								<div class="description">
-									The scope the the event will fire from by default.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">boolean</td>
-							<td class="spec">
-								<code>
-									<a href="#silent">silent</a>
-								</code>
-								<div class="description">
-									By default all custom events are logged in the debug build, set silent
- to true to disable logging for this event.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">Subscriber[]</td>
-							<td class="spec">
-								<code>
-									<a href="#subscribers">subscribers</a>
-								</code>
-								<div class="description">
-									The subscribers to this event&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">string</td>
-							<td class="spec">
-								<code>
-									<a href="#type">type</a>
-								</code>
-								<div class="description">
-									The type of event, returned to subscribers when the event fires&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-					</table>
-				</div>
-			</div>
-		
-				
-		
-		<!-- =========== END FIELD SUMMARY =========== -->
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>void</code>-->
+                                <a href="#fire">fire</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#subscribe">subscribe</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                                <li><!--<code>boolean</code>-->
+                                <a href="#unsubscribe">unsubscribe</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#unsubscribeAll">unsubscribeAll</a>
+                                </li>
+                        </ul>
+                    </div>
 
-
-		<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-		
-			<div class="section contructor summaries">
-				<h3><a name="constructor_summary">Constructor Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<code class="spec">
-						<a href="YAHOO.util.CustomEvent.html#YAHOO.util.CustomEvent()">YAHOO.util.CustomEvent</a>
-					</code>
-					<div class="description">
-						The CustomEvent class lets you define events for your application
- that can be subscribed to by one or more independent component.&nbsp;
-					</div>
-				</div>
-			</div>
-		
-		<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
-
-
-		<!-- ========== METHOD SUMMARY =========== -->
-		
-			<div class="section method summaries">
-				<h3><a name="methodSummary">Method Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<table border="1" cellpadding="3" cellspacing="0">
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#fire">fire</a>
-										()
-									</code>
-									<div class="description">
-										Notifies the subscribers.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#subscribe">subscribe</a>
-										(&lt;Function&gt; fn, &lt;Object&gt; obj, &lt;boolean&gt; bOverride)
-									</code>
-									<div class="description">
-										Subscribes the caller to this event&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">Object</td>
-								<td class="spec">
-									<code>
-										<a href="#toString">toString</a>
-										()
-									</code>
-									<div class="description">
-										&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">boolean</td>
-								<td class="spec">
-									<code>
-										<a href="#unsubscribe">unsubscribe</a>
-										(&lt;Function&gt; fn, &lt;Object&gt; obj)
-									</code>
-									<div class="description">
-										Unsubscribes the caller from this event&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#unsubscribeAll">unsubscribeAll</a>
-										()
-									</code>
-									<div class="description">
-										Removes all listeners&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-					</table>
-				</div>
-			</div>
-		
-		
-		
-		<!-- ========== END METHOD SUMMARY =========== -->
-
-
-		<!-- ============ FIELD DETAIL START =========== -->
-		
-			<div class="section field details">
-				<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					
-						<h4><a name="scope">scope</a></h4>
-						<div class="detail">
-							<code>
-								object
-								&nbsp;
-								<strong>scope</strong>
-							</code>
-							<div class="description">
-								The scope the the event will fire from by default.  Defaults to the window 
- obj
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="silent">silent</a></h4>
-						<div class="detail">
-							<code>
-								boolean
-								&nbsp;
-								<strong>silent</strong>
-							</code>
-							<div class="description">
-								By default all custom events are logged in the debug build, set silent
- to true to disable logging for this event.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="subscribers">subscribers</a></h4>
-						<div class="detail">
-							<code>
-								Subscriber[]
-								&nbsp;
-								<strong>subscribers</strong>
-							</code>
-							<div class="description">
-								The subscribers to this event
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="type">type</a></h4>
-						<div class="detail">
-							<code>
-								string
-								&nbsp;
-								<strong>type</strong>
-							</code>
-							<div class="description">
-								The type of event, returned to subscribers when the event fires
-							</div>
-						</div>
-						<hr />
-					
-				</div>
-			</div>
-		
-		<!-- ============ FIELD DETAIL END =========== -->
-
-		<!-- ========= CONSTRUCTOR DETAIL START ======== -->
-		
-			<div class="section constructor details">
-				<h3><a name="constructor_detail">Constructor Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<h4><a name="YAHOO.util.CustomEvent()">YAHOO.util.CustomEvent</a></h4>
-					<div class="detail">
-						<code>
-							<strong>YAHOO.util.CustomEvent</strong>
-							()
-						</code>
-						<div class="description">
-							
-								The CustomEvent class lets you define events for your application
- that can be subscribed to by one or more independent component.
-							
-							
-							
-								<dl>
-									<dt>Parameters:</dt>
-									
-										<dd>
-											<code>type</code> - 
-											 The type of event, which is passed to the callback                   when the event fires  
-										</dd>
-									
-										<dd>
-											<code>oScope</code> - 
-											 The context the event will fire from.  "this" will                   refer to this object in the callback.  Default value:                    the window object.  The listener can override this.  
-										</dd>
-									
-										<dd>
-											<code>silent</code> - 
-											 pass true to prevent the event from writing to                   the log system  
-										</dd>
-									
-								</dl>
-							
-							
-							
-							
-							
-						</div>
-					</div>
-				</div>
-			</div>
-		
-		<!-- ========= CONSTRUCTOR DETAIL END ======== -->
-
-
-		<!-- ============ METHOD DETAIL START ========== -->
-		
-			<div class="section method details">
-				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					
-						<h4><a name="fire">fire</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>fire</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Notifies the subscribers.  The callback functions will be executed
- from the scope specified when the event was created, and with the following
- parameters:
-   <pre>
-   - The type of event
-   - All of the arguments fire() was executed with as an array
-   - The custom object (if any) that was passed into the subscribe() method
-   </pre>
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>an</code> - 
-												 arbitrary set of parameters to pass to the handler        
-											</dd>
-										
-									</dl>
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="subscribe">subscribe</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>subscribe</strong>
-								(&lt;Function&gt; fn, &lt;Object&gt; obj, &lt;boolean&gt; bOverride)
-							</code>
-									
-							<div class="description">
-								
-									Subscribes the caller to this event
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>fn</code> - 
-												       The function to execute  
-											</dd>
-										
-											<dd>
-												<code>obj</code> - 
-												      An object to be passed along when the event fires  
-											</dd>
-										
-											<dd>
-												<code>bOverride</code> - 
-												 If true, the obj passed in becomes the execution                             scope of the listener        
-											</dd>
-										
-									</dl>
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="toString">toString</a></h4>
-						<div class="detail">
-							<code>
-								Object 
-								<strong>toString</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="unsubscribe">unsubscribe</a></h4>
-						<div class="detail">
-							<code>
-								boolean 
-								<strong>unsubscribe</strong>
-								(&lt;Function&gt; fn, &lt;Object&gt; obj)
-							</code>
-									
-							<div class="description">
-								
-									Unsubscribes the caller from this event
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>fn</code> - 
-												  The function to execute  
-											</dd>
-										
-											<dd>
-												<code>obj</code> - 
-												 An object to be passed along when the event fires  
-											</dd>
-										
-									</dl>
-								
-								
-									<dl>
-										<dt>Returns:</dt>
-										<dd> True if the subscriber was found and detached.</dd>
-									</dl>
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="unsubscribeAll">unsubscribeAll</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>unsubscribeAll</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Removes all listeners
-								
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-				</div>
-			</div>
-		
-		<!-- ============ METHOD DETAIL END ========== -->
+            </div>
 		</div>
 	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	</div>
 </div>
-<!-- ========= END OF CLASS DATA ========= -->
-
-
-<div id="footer">
-    <hr />
-    Copyright &copy; 2004 - 2006 Yahoo! Inc. All rights reserved.
-</div>
-
-
 </body>
 </html>
