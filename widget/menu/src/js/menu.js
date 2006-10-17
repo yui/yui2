@@ -171,10 +171,6 @@ YAHOO.widget.Menu.prototype._onMenuShow =
 
         }
 
-
-    
-
-
     };
 
 
@@ -266,6 +262,7 @@ YAHOO.widget.Menu.prototype._onMenuKeyDown =
                 if(oSubmenu) {
 
                     oSubmenu.show();
+
                     oSubmenu.setInitialSelection();
 
                 }
@@ -286,7 +283,7 @@ YAHOO.widget.Menu.prototype._onMenuKeyDown =
                             oSubmenu = oNextItem.cfg.getProperty("submenu");
 
                             if(oSubmenu) {
-                            
+
                                 oSubmenu.show();
                             
                             }
