@@ -327,6 +327,22 @@ var MenuManager = new function() {
 */
 YAHOO.widget.MenuModule = function(p_oElement, p_oConfig) {
 
+    if(p_oConfig) {
+
+        this.lazyLoad = p_oConfig.lazyLoad || p_oConfig.lazyload;
+
+        var aItemData = p_oConfig.itemData || p_oConfig.itemdata;
+
+        if(typeof aItemData == "object" && aItemData.constructor == Array) {
+
+            this.itemData = aItemData;
+    
+        }
+
+        this.parent = p_oConfig.parent;
+    
+    }
+
     YAHOO.widget.MenuModule.superclass.constructor.call(
         this, 
         p_oElement, 
@@ -441,8 +457,27 @@ YAHOO.widget.MenuModule.prototype._aItemGroups = null;
 YAHOO.widget.MenuModule.prototype._aListElements = null;
 
 
-
 // Public properties
+
+/**
+* Flag representing whether or not the "lazy load" feature is enabled.  If
+* set to "true" items of a submenu will be initialized, added and rendered just
+* before the first time it is made visible.  If set to "false" all submenus are 
+* initialized and rendered upfront.  The default is "false."
+* @type Boolean
+*/
+YAHOO.widget.MenuModule.prototype.lazyLoad = false;
+
+
+/**
+* Array of items to be added to the MenuModule instance.  The array can contain 
+* strings representing the text for each item to be created, object literals 
+* containing each of the MenuModuleItem configuration properties, or 
+* MenuModuleItem instances.
+* @type Array
+*/
+YAHOO.widget.MenuModule.prototype.itemData = null;
+
 
 /**
 * Reference to the item that has focus.
@@ -465,7 +500,6 @@ YAHOO.widget.MenuModule.prototype.parent = null;
 * @type HTMLSelectElement/HTMLDivElement
 */
 YAHOO.widget.MenuModule.prototype.srcElement = null;
-
 
 
 // Events
@@ -592,51 +626,30 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oConfig) {
 
                 this.beforeInitEvent.fire(YAHOO.widget.MenuModule);
 
+                if(!this.parent && this.lazyLoad) {
 
-                /*
-                    Populate the collection of item groups and item
-                    group titles
-                */
 
-                var oNode = this.body.firstChild;
-                var i = 0;
+                    /*
+                        If the "lazyload" configuration property is 
+                        set to true, we need to hide all submenus that
+                        are children of the root menu.  Normally submenus
+                        are hidden and positioned as they are instantiated,
+                        however since the submenus are being instantiated on 
+                        the fly, we need to hide them all in advance.
+                    */
+                
+                    var hideSubmenu = function(p_oElement) {
 
-                do {
+                        if(p_oElement.parentNode.tagName == "LI") {
 
-                    if(oNode && oNode.tagName) {
+                            Dom.setStyle(p_oElement, "visibility", "hidden");
+                            Dom.setStyle(p_oElement, "position", "absolute");
 
-                        switch(oNode.tagName.toUpperCase()) {
-    
-                            case this.GROUP_TITLE_TAG_NAME:
-                            
-                                this._aGroupTitleElements[i] = oNode;
-    
-                            break;
-    
-                            case "UL":
-    
-                                this._aListElements[i] = oNode;
-                                this._aItemGroups[i] = [];
-                                i++;
-    
-                            break;
-    
                         }
                     
-                    }
+                    };
 
-                }
-                while((oNode = oNode.nextSibling));
-
-
-                /*
-                    Apply the "first-of-type" class to the first UL to mimic 
-                    the "first-of-type" CSS3 psuedo class.
-                */
-
-                if(this._aListElements[0]) {
-
-                    Dom.addClass(this._aListElements[0], "first-of-type");
+                    Dom.getElementsBy(hideSubmenu, "DIV", oElement);
 
                 }
 
@@ -649,13 +662,13 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oConfig) {
             case "SELECT":
     
                 this.srcElement = oElement;
-    
+
     
                 /*
                     The source element is not something that we can use 
                     outright, so we need to create a new Overlay
                 */
-    
+
                 var sId = Dom.generateId();
 
                 /* 
@@ -663,7 +676,7 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oConfig) {
                     because we only want it executed once, at the lowest 
                     subclass level.
                 */ 
-            
+
                 YAHOO.widget.MenuModule.superclass.init.call(this, sId); 
 
                 this.beforeInitEvent.fire(YAHOO.widget.MenuModule);
@@ -673,7 +686,7 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oConfig) {
                 this.logger.log("Source element: " + this.srcElement.tagName);
 
             break;
-    
+
         }
 
     }
@@ -748,21 +761,19 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oConfig) {
         if(p_oConfig) {
     
             this.cfg.applyConfig(p_oConfig, true);
-    
+
         }
 
+
+        /*
+            Change the default value for the "visible" configuration property
+            to "false"
+        */
 
         this.cfg.queueProperty("visible", false);
 
-
-        if(this.srcElement) {
-
-            this._initSubTree();
-
-        }
-
         MenuManager.addMenu(this);
-
+        
     }
 
 
@@ -781,6 +792,60 @@ YAHOO.widget.MenuModule.prototype.init = function(p_oElement, p_oConfig) {
 YAHOO.widget.MenuModule.prototype._initSubTree = function() {
 
     var oNode;
+
+    if(this.srcElement.tagName == "DIV") {
+
+        /*
+            Populate the collection of item groups and item
+            group titles
+        */
+
+        oNode = this.body.firstChild;
+        var nGroup = 0;
+
+        do {
+
+            if(oNode && oNode.tagName) {
+
+                switch(oNode.tagName.toUpperCase()) {
+
+                    case this.GROUP_TITLE_TAG_NAME:
+                    
+                        this._aGroupTitleElements[nGroup] = oNode;
+
+                    break;
+
+                    case "UL":
+
+                        this._aListElements[nGroup] = oNode;
+                        this._aItemGroups[nGroup] = [];
+                        nGroup++;
+
+                    break;
+
+                }
+            
+            }
+
+        }
+        while((oNode = oNode.nextSibling));
+
+
+        /*
+            Apply the "first-of-type" class to the first UL to mimic 
+            the "first-of-type" CSS3 psuedo class.
+        */
+
+        if(this._aListElements[0]) {
+
+            Dom.addClass(this._aListElements[0], "first-of-type");
+
+        }
+
+    }
+
+
+    oNode = null;
 
     this.logger.log("Searching DOM for items to initialize.");
 
@@ -818,7 +883,10 @@ YAHOO.widget.MenuModule.prototype._initSubTree = function() {
                                             oNode.tagName + " node.");
         
                                         this.addItem(
-                                                new this.ITEM_TYPE(oNode), 
+                                                new this.ITEM_TYPE(
+                                                    oNode, 
+                                                    { parent: this }
+                                                ), 
                                                 i
                                             );
                 
@@ -858,7 +926,12 @@ YAHOO.widget.MenuModule.prototype._initSubTree = function() {
                                 this.logger.log("Initializing " +  
                                     oNode.tagName + " node.");
         
-                                this.addItem(new this.ITEM_TYPE(oNode));
+                                this.addItem(
+                                        new this.ITEM_TYPE(
+                                                oNode, 
+                                                { parent: this }
+                                            )
+                                        );
         
                             break;
         
@@ -923,7 +996,8 @@ YAHOO.widget.MenuModule.prototype._getFirstEnabledItem = function() {
 
 
 /**
-* Determines if the value is one of the supported positions.
+* Checks to make sure that the value of the "position" property is one of the 
+* supported strings.
 * @private
 * @param {Object} p_sPosition The object to be evaluated.
 * @return Returns true if the position is supported.
@@ -961,22 +1035,25 @@ YAHOO.widget.MenuModule.prototype._addItemToGroup =
 
         if(p_oItem instanceof this.ITEM_TYPE) {
 
-            oItem = p_oItem;     
+            oItem = p_oItem;
+            oItem.parent = this;
 
         }
         else if(typeof p_oItem == "string") {
 
-            oItem = new this.ITEM_TYPE(p_oItem);
+            oItem = new this.ITEM_TYPE(p_oItem, { parent: this });
         
         }
         else if(typeof p_oItem == "object" && p_oItem.text) {
-        
+
             var sText = p_oItem.text;
-            
+
             delete p_oItem["text"];
 
+            p_oItem.parent = this;
+
             oItem = new this.ITEM_TYPE(sText, p_oItem);
-        
+
         }
 
 
@@ -1305,7 +1382,7 @@ YAHOO.widget.MenuModule.prototype._updateItemProperties =
             var oItem;
             var oLI;
     
-            // Update the index and className properties of each member        
+            // Update the index and className properties of each member
         
             do {
     
@@ -1394,7 +1471,7 @@ YAHOO.widget.MenuModule.prototype._configureItemSubmenuModule =
         var oSubmenu = p_oItem.cfg.getProperty("submenu");
     
         if(oSubmenu) {
-    
+                
             /*
                 Listen for configuration changes to the parent MenuModule 
                 instance so they they can be applied to the submenu.
@@ -1405,7 +1482,7 @@ YAHOO.widget.MenuModule.prototype._configureItemSubmenuModule =
                     oSubmenu, 
                     true
                 );
-            
+
             this.renderEvent.subscribe(
                     this._onParentMenuModuleRender,
                     oSubmenu, 
@@ -1599,10 +1676,27 @@ YAHOO.widget.MenuModule.prototype._onMenuModuleInit =
 
     function(p_sType, p_aArgs, p_oMenuModule) {
         
-        var sCSSPosition = (this.cfg.getProperty("position") == "static") ? 
-                "static" : "absolute";
+        if(p_aArgs[0] == YAHOO.widget.MenuModule) {
 
-        Dom.setStyle(this.element, "position", sCSSPosition);
+            if((this.parent && !this.lazyLoad) || !this.parent) {
+
+                if(this.srcElement) {
+    
+                    this._initSubTree();
+                
+                }
+    
+                if(this.itemData) {
+    
+                    this.addItems(this.itemData);
+                
+                }
+            
+            }
+
+            this.cfg.refireEvent("position");
+        
+        }
 
     };
 
@@ -2164,17 +2258,21 @@ YAHOO.widget.MenuModule.prototype._onParentMenuModuleRender =
                    
 
         p_oSubmenu.cfg.applyConfig(oConfig);
-        
 
-        if(Dom.inDocument(this.element)) {
-    
-            this.render();
-    
-        }
-        else {
-    
-            this.render(this.parent.element);
-    
+
+        if(!this.lazyLoad) {
+
+            if(Dom.inDocument(this.element)) {
+        
+                this.render();
+        
+            }
+            else {
+        
+                this.render(this.parent.element);
+        
+            }
+
         }
     
     };
@@ -2193,16 +2291,41 @@ YAHOO.widget.MenuModule.prototype._onSubmenuModuleBeforeShow =
 
     function(p_sType, p_aArgs, p_oSubmenu) {
     
+        if(this.lazyLoad && this.getItemGroups().length === 0) {
+
+            if(this.srcElement) {
+            
+                this._initSubTree();
+
+            }
+
+            if(this.itemData) {
+
+                this.addItems(this.itemData);
+            
+            }
+
+
+            if(this.srcElement) {
+
+                this.render();
+
+            }
+            else {
+
+                this.render(this.parent.element);
+
+            }
+    
+        }
+
+    
         var oParent = this.parent;
         var aAlignment = oParent.parent.cfg.getProperty("submenualignment");
 
         this.cfg.setProperty(
             "context", 
-            [
-                oParent.element, 
-                aAlignment[0], 
-                aAlignment[1]
-            ]
+            [oParent.element, aAlignment[0], aAlignment[1]]
         );
 
         oParent.submenuIndicator.alt = 
@@ -2476,10 +2599,10 @@ YAHOO.widget.MenuModule.prototype.configPosition =
 
         Dom.setStyle(this.element, "position", sCSSPosition);
 
+
         if(sCSSPosition == "absolute") {
 
-            Dom.setStyle(this.element, "visibility", "hidden");
-
+            this.cfg.refireEvent("visible");
 
             var nZIndex = this.cfg.getProperty("zIndex");
             
@@ -2586,6 +2709,7 @@ YAHOO.widget.MenuModule.prototype.configHideDelay =
         }
 
     };
+
 
 
 // Public methods
@@ -2729,14 +2853,13 @@ YAHOO.widget.MenuModule.prototype.addItems = function(p_aItems, p_nGroupIndex) {
     if(typeof p_aItems == "object" && p_aItems.constructor == Array) {
 
         var nItems = p_aItems.length;
-
         var aItems = [];
 
         for(var i=0; i<nItems; i++) {
 
             aItems[aItems.length] = 
 
-                this._addItemToGroup(p_nGroupIndex, p_aItems[i]);
+                this._addItemToGroup((p_aItems[i].group || p_nGroupIndex), p_aItems[i]);
         
         }
 

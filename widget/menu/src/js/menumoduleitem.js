@@ -18,6 +18,12 @@ YAHOO.widget.MenuModuleItem = function(p_oObject, p_oConfig) {
 
     if(p_oObject) {
 
+        if(p_oConfig) {
+    
+            this.parent = p_oConfig.parent;
+            
+        }
+
         this.init(p_oObject, p_oConfig);
 
     }
@@ -227,7 +233,6 @@ YAHOO.widget.MenuModuleItem.prototype = {
     * @type YAHOO.util.Dom
     */
     _oDom: YAHOO.util.Dom,
-
 
 
     // Public properties
@@ -726,7 +731,6 @@ YAHOO.widget.MenuModuleItem.prototype = {
     */
     _initSubTree: function() {
 
-        var Menu = this.SUBMENU_TYPE;
         var MenuModuleItem = this.SUBMENU_ITEM_TYPE;
         var oSrcEl = this.srcElement;
         var oConfig = this.cfg;
@@ -745,7 +749,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
             
                         case "DIV":
             
-                            oConfig.setProperty("submenu", (new Menu(oNode)));
+                            oConfig.setProperty("submenu", oNode);
             
                         break;
      
@@ -767,14 +771,14 @@ YAHOO.widget.MenuModuleItem.prototype = {
 
             if(nOptions > 0) {
     
-                oConfig.setProperty(
-                    "submenu", 
-                    (new Menu(this._oDom.generateId()))
-                );
+                var oMenu = oConfig.setProperty(
+                                "submenu", 
+                                (this._oDom.generateId())
+                            );
     
                 for(var n=0; n<nOptions; n++) {
     
-                    this._oSubmenu.addItem((new MenuModuleItem(aOptions[n])));
+                    oMenu.addItem((new MenuModuleItem(aOptions[n])));
     
                 }
     
@@ -1349,48 +1353,96 @@ YAHOO.widget.MenuModuleItem.prototype = {
         var oImg = this.submenuIndicator;
         var oConfig = this.cfg;
         var aNodes = [this.element, this._oAnchor];
+        var oMenu;
+        var bLazyLoad = this.parent && this.parent.lazyLoad;
 
 
         if(oSubmenu) {
 
-            // Set the submenu's parent to this MenuModuleItem instance
+            if(oSubmenu instanceof YAHOO.widget.MenuModule) {
 
-            oSubmenu.parent = this;
+                oMenu = oSubmenu;
+                oMenu.parent = this;
+                oMenu.lazyLoad = bLazyLoad;
 
-            this._oSubmenu = oSubmenu;
+            }
+            else if(typeof oSubmenu == "object" && oSubmenu.id) {
+
+                oMenu = new this.SUBMENU_TYPE(
+                                oSubmenu.id, 
+                                {
+                                    lazyload: bLazyLoad,
+                                    itemdata: oSubmenu.itemdata,
+                                    parent: this
+                                }
+                            );
+
+                // Set the value of the property to the MenuModule instance
+                
+                this.cfg.setProperty("submenu", oMenu, true);
+
+            }
+            else {
+
+                oMenu = new this.SUBMENU_TYPE(
+                                oSubmenu,
+                                {
+                                    lazyload: bLazyLoad,
+                                    itemdata: oSubmenu.itemdata,
+                                    parent: this
+                                }                
+                            );
 
 
-            if(!oImg) { 
+                // Set the value of the property to the MenuModule instance
+                
+                this.cfg.setProperty("submenu", oMenu, true);
 
-                var me = this;
-
-                this._preloadImage(this.SUBMENU_INDICATOR_IMAGE_PATH);
-                this._preloadImage(this.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH);
-                this._preloadImage(this.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH);
-
-                oImg = document.createElement("img");
-                oImg.src = (this.imageRoot + this.SUBMENU_INDICATOR_IMAGE_PATH);
-                oImg.alt = this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
-
-                oEl.appendChild(oImg);
-
-                this.submenuIndicator = oImg;
-
-                Dom.addClass(aNodes, "hassubmenu");
+            }
 
 
-                if(oConfig.getProperty("disabled")) {
+            if(oMenu) {
 
-                    oConfig.refireEvent("disabled");
+                this._oSubmenu = oMenu;
 
+
+                if(!oImg) { 
+
+                    this._preloadImage(this.SUBMENU_INDICATOR_IMAGE_PATH);
+                    this._preloadImage(
+                            this.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH
+                        );
+
+                    this._preloadImage(
+                            this.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH
+                        );
+
+                    oImg = document.createElement("img");
+                    oImg.src = 
+                        (this.imageRoot + this.SUBMENU_INDICATOR_IMAGE_PATH);
+                    oImg.alt = this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
+
+                    oEl.appendChild(oImg);
+
+                    this.submenuIndicator = oImg;
+
+                    Dom.addClass(aNodes, "hassubmenu");
+
+
+                    if(oConfig.getProperty("disabled")) {
+    
+                        oConfig.refireEvent("disabled");
+
+                    }
+
+                    if(oConfig.getProperty("selected")) {
+    
+                        oConfig.refireEvent("selected");
+    
+                    }                
+    
                 }
-
-                if(oConfig.getProperty("selected")) {
-
-                    oConfig.refireEvent("selected");
-
-                }                
-
+            
             }
 
         }
