@@ -25,7 +25,7 @@ YAHOO.widget.ContextMenuItem = function(p_oObject, p_oConfig) {
 
 };
 
-YAHOO.extend(YAHOO.widget.ContextMenuItem, YAHOO.widget.MenuItem);
+YAHOO.extend(YAHOO.widget.ContextMenuItem, YAHOO.widget.MenuItem, {
 
 
 /**
@@ -42,40 +42,40 @@ YAHOO.extend(YAHOO.widget.ContextMenuItem, YAHOO.widget.MenuItem);
 * the configuration for a ContextMenuItem instance. See the configuration 
 * class documentation for more details.
 */
-YAHOO.widget.ContextMenuItem.prototype.init = 
+init: function(p_oObject, p_oConfig) {
+    
+    if(!this.SUBMENU_TYPE) {
 
-    function(p_oObject, p_oConfig) {
-    
-        if(!this.SUBMENU_TYPE) {
-    
-            this.SUBMENU_TYPE = YAHOO.widget.ContextMenu;
-    
-        }
-    
-        if(!this.SUBMENU_ITEM_TYPE) {
-    
-            this.SUBMENU_ITEM_TYPE = YAHOO.widget.ContextMenuItem;
-    
-        }
-    
-    
-        /* 
-            Call the init of the superclass (YAHOO.widget.MenuItem)
-            Note: We don't pass the user config in here yet 
-            because we only want it executed once, at the lowest 
-            subclass level.
-        */ 
-    
-        YAHOO.widget.ContextMenuItem.superclass.init.call(this, p_oObject);
+        this.SUBMENU_TYPE = YAHOO.widget.ContextMenu;
 
-        var oConfig = this.cfg;
+    }
+
+    if(!this.SUBMENU_ITEM_TYPE) {
+
+        this.SUBMENU_ITEM_TYPE = YAHOO.widget.ContextMenuItem;
+
+    }
+
+
+    /* 
+        Call the init of the superclass (YAHOO.widget.MenuItem)
+        Note: We don't pass the user config in here yet 
+        because we only want it executed once, at the lowest 
+        subclass level.
+    */ 
+
+    YAHOO.widget.ContextMenuItem.superclass.init.call(this, p_oObject);
+
+    var oConfig = this.cfg;
+
+    if(p_oConfig) {
+
+        oConfig.applyConfig(p_oConfig, true);
+
+    }
+
+    oConfig.fireQueue();
+
+}
     
-        if(p_oConfig) {
-    
-            oConfig.applyConfig(p_oConfig, true);
-    
-        }
-    
-        oConfig.fireQueue();
-    
-    };
+}); // END YAHOO.extend

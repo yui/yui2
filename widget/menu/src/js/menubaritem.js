@@ -27,7 +27,7 @@ YAHOO.widget.MenuBarItem = function(p_oObject, p_oConfig) {
 
 };
 
-YAHOO.extend(YAHOO.widget.MenuBarItem, YAHOO.widget.MenuModuleItem);
+YAHOO.extend(YAHOO.widget.MenuBarItem, YAHOO.widget.MenuModuleItem, {
 
 
 /**
@@ -44,7 +44,7 @@ YAHOO.extend(YAHOO.widget.MenuBarItem, YAHOO.widget.MenuModuleItem);
 * the configuration for a MenuBarItem instance. See the configuration 
 * class documentation for more details.
 */
-YAHOO.widget.MenuBarItem.prototype.init = function(p_oObject, p_oConfig) {
+init: function(p_oObject, p_oConfig) {
 
     if(!this.SUBMENU_TYPE) {
 
@@ -79,7 +79,7 @@ YAHOO.widget.MenuBarItem.prototype.init = function(p_oObject, p_oConfig) {
 
     oConfig.fireQueue();
 
-};
+},
 
 
 // Constants
@@ -90,7 +90,7 @@ YAHOO.widget.MenuBarItem.prototype.init = function(p_oObject, p_oConfig) {
 * @final
 * @type String
 */
-YAHOO.widget.MenuBarItem.prototype.CSS_CLASS_NAME = "yuimenubaritem";
+CSS_CLASS_NAME: "yuimenubaritem",
 
 
 /**
@@ -99,8 +99,7 @@ YAHOO.widget.MenuBarItem.prototype.CSS_CLASS_NAME = "yuimenubaritem";
 * @final
 * @type String
 */
-YAHOO.widget.MenuBarItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH =
-    "nt/ic/ut/alt1/menuarodwn8_nrm_1.gif";
+SUBMENU_INDICATOR_IMAGE_PATH: "nt/ic/ut/alt1/menuarodwn8_nrm_1.gif",
 
 
 /**
@@ -109,8 +108,7 @@ YAHOO.widget.MenuBarItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH =
 * @final
 * @type String
 */
-YAHOO.widget.MenuBarItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH =
-    "nt/ic/ut/alt1/menuarodwn8_hov_1.gif";
+SELECTED_SUBMENU_INDICATOR_IMAGE_PATH: "nt/ic/ut/alt1/menuarodwn8_hov_1.gif",
 
 
 /**
@@ -119,5 +117,6 @@ YAHOO.widget.MenuBarItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH =
 * @final
 * @type String
 */
-YAHOO.widget.MenuBarItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH = 
-    "nt/ic/ut/alt1/menuarodwn8_dim_1.gif"; 
+DISABLED_SUBMENU_INDICATOR_IMAGE_PATH: "nt/ic/ut/alt1/menuarodwn8_dim_1.gif"
+    
+}); // END YAHOO.extend

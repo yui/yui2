@@ -26,7 +26,7 @@ YAHOO.widget.MenuItem = function(p_oObject, p_oConfig) {
 
 };
 
-YAHOO.extend(YAHOO.widget.MenuItem, YAHOO.widget.MenuModuleItem);
+YAHOO.extend(YAHOO.widget.MenuItem, YAHOO.widget.MenuModuleItem, {
 
 
 /**
@@ -42,7 +42,7 @@ YAHOO.extend(YAHOO.widget.MenuItem, YAHOO.widget.MenuModuleItem);
 * the configuration for a MenuItem instance. See the configuration 
 * class documentation for more details.
 */
-YAHOO.widget.MenuItem.prototype.init = function(p_oObject, p_oConfig) {
+init: function(p_oObject, p_oConfig) {
 
     if(!this.SUBMENU_TYPE) {
 
@@ -77,4 +77,6 @@ YAHOO.widget.MenuItem.prototype.init = function(p_oObject, p_oConfig) {
 
     oConfig.fireQueue();
 
-};
+}
+
+}); // END YAHOO.extend

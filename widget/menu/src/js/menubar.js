@@ -26,8 +26,7 @@ YAHOO.widget.MenuBar = function(p_oElement, p_oConfig) {
 
 };
 
-YAHOO.extend(YAHOO.widget.MenuBar, YAHOO.widget.MenuModule);
-
+YAHOO.extend(YAHOO.widget.MenuBar, YAHOO.widget.MenuModule, {
 
 /**
 * The MenuBar class's initialization method. This method is automatically 
@@ -41,7 +40,7 @@ YAHOO.extend(YAHOO.widget.MenuBar, YAHOO.widget.MenuModule);
 * containing the configuration for a MenuBar instance. See 
 * configuration class documentation for more details.
 */
-YAHOO.widget.MenuBar.prototype.init = function(p_oElement, p_oConfig) {
+init: function(p_oElement, p_oConfig) {
 
     if(!this.ITEM_TYPE) {
 
@@ -95,10 +94,12 @@ YAHOO.widget.MenuBar.prototype.init = function(p_oElement, p_oConfig) {
     
     this.initEvent.fire(YAHOO.widget.MenuBar);
 
-};
+},
+
 
 
 // Constants
+
 
 /**
 * Constant representing the CSS class(es) to be applied to the root 
@@ -106,17 +107,17 @@ YAHOO.widget.MenuBar.prototype.init = function(p_oElement, p_oConfig) {
 * @final
 * @type String
 */
-YAHOO.widget.MenuBar.prototype.CSS_CLASS_NAME = "yuimenubar";
+CSS_CLASS_NAME: "yuimenubar",
 
 
 /**
 * Returns a string representing the specified object.
 */
-YAHOO.widget.MenuBar.prototype.toString = function() {
+toString: function() {
 
     return ("MenuBar " + this.id);
 
-};
+},
 
 
 // Private event handlers
@@ -130,90 +131,88 @@ YAHOO.widget.MenuBar.prototype.toString = function() {
 * @param {YAHOO.widget.MenuBar} p_oMenuBar The MenuBar instance that 
 * fired the event.
 */
-YAHOO.widget.MenuBar.prototype._onMenuBarKeyDown =
+_onMenuBarKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
 
-    function(p_sType, p_aArgs, p_oMenuBar) {
+    var Event = YAHOO.util.Event;
+    var oEvent = p_aArgs[0];
+    var oItem = p_aArgs[1];
+    var oItemCfg = oItem.cfg;
+    var oSubmenu;
 
-        var Event = YAHOO.util.Event;
-        var oEvent = p_aArgs[0];
-        var oItem = p_aArgs[1];
-        var oItemCfg = oItem.cfg;
-        var oSubmenu;
 
-    
-        switch(oEvent.keyCode) {
-    
-            case 37:    // Left arrow
-            case 39:    // Right arrow
-    
-                if(
-                    oItem == this.activeItem && 
-                    !oItemCfg.getProperty("selected")
-                ) {
-    
-                    oItemCfg.setProperty("selected", true);
-    
-                }
-                else {
-    
-                    var oNextItem = (oEvent.keyCode == 37) ? 
-                            oItem.getPreviousEnabledSibling() : 
-                            oItem.getNextEnabledSibling();
-            
-                    if(oNextItem) {
+    switch(oEvent.keyCode) {
 
-                        this.clearActiveItem();
+        case 37:    // Left arrow
+        case 39:    // Right arrow
 
-                        oNextItem.cfg.setProperty("selected", true);
-    
-
-                        if(this.cfg.getProperty("autosubmenudisplay")) {
-                        
-                            oSubmenu = oNextItem.cfg.getProperty("submenu");
-                            
-                            if(oSubmenu) {
-                        
-                                oSubmenu.show();
-                                oSubmenu.activeItem.blur();
-                                oSubmenu.activeItem = null;
-                            
-                            }
-                
-                        }           
-    
-                        oNextItem.focus();
-    
-                    }
-    
-                }
-
-                Event.preventDefault(oEvent);
-    
-            break;
-    
-            case 40:    // Down arrow
-
-                this.clearActiveItem();
+            if(
+                oItem == this.activeItem && 
+                !oItemCfg.getProperty("selected")
+            ) {
 
                 oItemCfg.setProperty("selected", true);
-                oItem.focus();
 
-                oSubmenu = oItemCfg.getProperty("submenu");
+            }
+            else {
 
-                if(oSubmenu) {
+                var oNextItem = (oEvent.keyCode == 37) ? 
+                        oItem.getPreviousEnabledSibling() : 
+                        oItem.getNextEnabledSibling();
+        
+                if(oNextItem) {
 
-                    oSubmenu.show();
-                    oSubmenu.setInitialSelection();
+                    this.clearActiveItem();
+
+                    oNextItem.cfg.setProperty("selected", true);
+
+
+                    if(this.cfg.getProperty("autosubmenudisplay")) {
+                    
+                        oSubmenu = oNextItem.cfg.getProperty("submenu");
+                        
+                        if(oSubmenu) {
+                    
+                            oSubmenu.show();
+                            oSubmenu.activeItem.blur();
+                            oSubmenu.activeItem = null;
+                        
+                        }
+            
+                    }           
+
+                    oNextItem.focus();
 
                 }
 
-                Event.preventDefault(oEvent);
+            }
 
-            break;
+            Event.preventDefault(oEvent);
 
-        }
+        break;
 
-    };
+        case 40:    // Down arrow
+
+            this.clearActiveItem();
+
+            oItemCfg.setProperty("selected", true);
+            oItem.focus();
+
+            oSubmenu = oItemCfg.getProperty("submenu");
+
+            if(oSubmenu) {
+
+                oSubmenu.show();
+                oSubmenu.setInitialSelection();
+
+            }
+
+            Event.preventDefault(oEvent);
+
+        break;
+
+    }
+
+},
 
 
 /**
@@ -225,54 +224,54 @@ YAHOO.widget.MenuBar.prototype._onMenuBarKeyDown =
 * @param {YAHOO.widget.MenuBar} p_oMenuBar The MenuBar instance that 
 * fired the event.
 */
-YAHOO.widget.MenuBar.prototype._onMenuBarClick =  
+_onMenuBarClick: function(p_sType, p_aArgs, p_oMenuBar) {
 
-    function(p_sType, p_aArgs, p_oMenuBar) {
+    var oItem = p_aArgs[1];
+    
+    if(oItem) {
 
-        var oItem = p_aArgs[1];
-        
-        if(oItem) {
+        var Event = YAHOO.util.Event;
+        var Dom = YAHOO.util.Dom;
+        var oActiveItem = this.activeItem;
+        var oConfig = this.cfg;
 
-            var Event = YAHOO.util.Event;
-            var Dom = YAHOO.util.Dom;
-            var oActiveItem = this.activeItem;
-            var oConfig = this.cfg;
+
+        // Hide any other submenus that might be visible
     
+        if(oActiveItem && oActiveItem != oItem) {
     
-            // Hide any other submenus that might be visible
-        
-            if(oActiveItem && oActiveItem != oItem) {
-        
-                this.clearActiveItem();
-        
-            }
-        
-        
-            // Select and focus the current item
-        
-            oItem.cfg.setProperty("selected", true);
-            oItem.focus();
-        
-        
-            // Show the submenu for the item
-        
-            var oSubmenu = oItem.cfg.getProperty("submenu");
+            this.clearActiveItem();
     
-            if(oSubmenu) {
-        
-                if(oSubmenu.cfg.getProperty("visible")) {
-                
-                    oSubmenu.hide();
-                
-                }
-                else {
-                
-                    oSubmenu.show();                    
-                
-                }
-        
-            }
-        
         }
+    
+    
+        // Select and focus the current item
+    
+        oItem.cfg.setProperty("selected", true);
+        oItem.focus();
+    
+    
+        // Show the submenu for the item
+    
+        var oSubmenu = oItem.cfg.getProperty("submenu");
 
-    };  
+        if(oSubmenu) {
+    
+            if(oSubmenu.cfg.getProperty("visible")) {
+            
+                oSubmenu.hide();
+            
+            }
+            else {
+            
+                oSubmenu.show();                    
+            
+            }
+    
+        }
+    
+    }
+
+}
+ 
+}); // END YAHOO.extend    

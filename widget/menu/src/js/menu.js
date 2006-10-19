@@ -25,7 +25,7 @@ YAHOO.widget.Menu = function(p_oElement, p_oConfig) {
 
 };
 
-YAHOO.extend(YAHOO.widget.Menu, YAHOO.widget.MenuModule);
+YAHOO.extend(YAHOO.widget.Menu, YAHOO.widget.MenuModule, {
 
 
 /**
@@ -40,7 +40,7 @@ YAHOO.extend(YAHOO.widget.Menu, YAHOO.widget.MenuModule);
 * containing the configuration for a Menu instance. See 
 * configuration class documentation for more details.
 */
-YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oConfig) {
+init: function(p_oElement, p_oConfig) {
 
     if(!this.ITEM_TYPE) {
 
@@ -72,7 +72,7 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oConfig) {
     
     this.initEvent.fire(YAHOO.widget.Menu);
 
-};
+},
 
 
 // Private event handlers
@@ -85,93 +85,91 @@ YAHOO.widget.Menu.prototype.init = function(p_oElement, p_oConfig) {
 * was fired.
 * @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
 */
-YAHOO.widget.Menu.prototype._onMenuShow = 
+_onMenuShow: function(p_sType, p_aArgs, p_oMenu) {
 
-    function(p_sType, p_aArgs, p_oMenu) {
+    var Event = YAHOO.util.Event;
+    var oParent = this.parent;
 
-        var Event = YAHOO.util.Event;
-        var oParent = this.parent;
+    if(oParent) {
 
-        if(oParent) {
+        var oParentMenu = oParent.parent;
 
-            var oParentMenu = oParent.parent;
+        if(oParentMenu instanceof YAHOO.widget.Menu) {
 
-            if(oParentMenu instanceof YAHOO.widget.Menu) {
-
-                var aAlignment = oParent.parent.cfg.getProperty("submenualignment");
+            var aAlignment = oParent.parent.cfg.getProperty("submenualignment");
+    
+            this.cfg.setProperty(
+                "submenualignment", 
+                [ aAlignment[0], aAlignment[1] ]
+            );
         
-                this.cfg.setProperty(
-                    "submenualignment", 
-                    [ aAlignment[0], aAlignment[1] ]
-                );
-            
-            }
+        }
 
 
-            if(
-                !oParentMenu.cfg.getProperty("autosubmenudisplay") && 
-                oParentMenu.cfg.getProperty("position") == "static"
-            ) {
+        if(
+            !oParentMenu.cfg.getProperty("autosubmenudisplay") && 
+            oParentMenu.cfg.getProperty("position") == "static"
+        ) {
 
-                oParentMenu.cfg.setProperty("autosubmenudisplay", true);
+            oParentMenu.cfg.setProperty("autosubmenudisplay", true);
 
 
-                /**
-                * "click" event handler for the document
-                * @private
-                * @param {Event} p_oEvent Event object passed back by the event 
-                * utility (YAHOO.util.Event).
-                */
-                var disableAutoSubmenuDisplay = function(p_oEvent) {
+            /**
+            * "click" event handler for the document
+            * @private
+            * @param {Event} p_oEvent Event object passed back by the event 
+            * utility (YAHOO.util.Event).
+            */
+            var disableAutoSubmenuDisplay = function(p_oEvent) {
+
+                if(
+                    p_oEvent.type == "mousedown" || 
+                    (p_oEvent.type == "keydown" && p_oEvent.keyCode == 27)
+                ) {
+
+                    /*  
+                        Set the "autosubmenudisplay" to "false" if the user
+                        clicks outside the MenuBar instance.
+                    */
+
+                    var oTarget = Event.getTarget(p_oEvent);
 
                     if(
-                        p_oEvent.type == "mousedown" || 
-                        (p_oEvent.type == "keydown" && p_oEvent.keyCode == 27)
+                        oTarget != oParentMenu.element || 
+                        !YAHOO.util.Dom.isAncestor(oParentMenu.element, oTarget)
                     ) {
-    
-                        /*  
-                            Set the "autosubmenudisplay" to "false" if the user
-                            clicks outside the MenuBar instance.
-                        */
-    
-                        var oTarget = Event.getTarget(p_oEvent);
-    
-                        if(
-                            oTarget != oParentMenu.element || 
-                            !Dom.isAncestor(oParentMenu.element, oTarget)
-                        ) {
-    
-                            oParentMenu.cfg.setProperty(
-                                "autosubmenudisplay", 
-                                false
+
+                        oParentMenu.cfg.setProperty(
+                            "autosubmenudisplay", 
+                            false
+                        );
+
+                        Event.removeListener(
+                                document, 
+                                "mousedown", 
+                                disableAutoSubmenuDisplay
                             );
-    
-                            Event.removeListener(
-                                    document, 
-                                    "mousedown", 
-                                    disableAutoSubmenuDisplay
-                                );
-    
-                            Event.removeListener(
-                                    document, 
-                                    "keydown", 
-                                    disableAutoSubmenuDisplay
-                                );
-    
-                        }
-                    
+
+                        Event.removeListener(
+                                document, 
+                                "keydown", 
+                                disableAutoSubmenuDisplay
+                            );
+
                     }
+                
+                }
 
-                };
+            };
 
-                Event.addListener(document, "mousedown", disableAutoSubmenuDisplay);                             
-                Event.addListener(document, "keydown", disableAutoSubmenuDisplay);
-
-            }
+            Event.addListener(document, "mousedown", disableAutoSubmenuDisplay);                             
+            Event.addListener(document, "keydown", disableAutoSubmenuDisplay);
 
         }
 
-    };
+    }
+
+},
 
 
 /**
@@ -182,22 +180,20 @@ YAHOO.widget.Menu.prototype._onMenuShow =
 * was fired.
 * @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
 */
-YAHOO.widget.Menu.prototype._onMenuMouseOver = 
+_onMenuMouseOver: function(p_sType, p_aArgs, p_oMenu) {
+    
+    /*
+        If the menu is a submenu, then select the menu's parent
+        MenuItem instance
+    */
 
-    function(p_sType, p_aArgs, p_oMenu) {
-    
-        /*
-            If the menu is a submenu, then select the menu's parent
-            MenuItem instance
-        */
-    
-        if(this.parent) {
-    
-            this.parent.cfg.setProperty("selected", true);
-    
-        }
-    
-    };
+    if(this.parent) {
+
+        this.parent.cfg.setProperty("selected", true);
+
+    }
+
+},
 
 
 /**
@@ -208,148 +204,146 @@ YAHOO.widget.Menu.prototype._onMenuMouseOver =
 * was fired.
 * @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
 */
-YAHOO.widget.Menu.prototype._onMenuKeyDown = 
+_onMenuKeyDown: function(p_sType, p_aArgs, p_oMenu) {
 
-    function(p_sType, p_aArgs, p_oMenu) {
+    var Event = YAHOO.util.Event;
+    var oEvent = p_aArgs[0];
+    var oItem = p_aArgs[1];
+    var oItemCfg = oItem.cfg;
+    var oParentItem = this.parent;
+    var oRoot;
+    var oNextItem;
 
-        var Event = YAHOO.util.Event;
-        var oEvent = p_aArgs[0];
-        var oItem = p_aArgs[1];
-        var oItemCfg = oItem.cfg;
-        var oParentItem = this.parent;
-        var oRoot;
-        var oNextItem;
+    switch(oEvent.keyCode) {
 
-        switch(oEvent.keyCode) {
-    
-            case 38:    // Up arrow
-            case 40:    // Down arrow
-    
-                if(
-                    oItem == this.activeItem && 
-                    !oItemCfg.getProperty("selected")
-                ) {
-    
-                    oItemCfg.setProperty("selected", true);
-    
+        case 38:    // Up arrow
+        case 40:    // Down arrow
+
+            if(
+                oItem == this.activeItem && 
+                !oItemCfg.getProperty("selected")
+            ) {
+
+                oItemCfg.setProperty("selected", true);
+
+            }
+            else {
+
+                oNextItem = (oEvent.keyCode == 38) ? 
+                    oItem.getPreviousEnabledSibling() : 
+                    oItem.getNextEnabledSibling();
+        
+                if(oNextItem) {
+
+                    this.clearActiveItem();
+
+                    oNextItem.cfg.setProperty("selected", true);
+                    oNextItem.focus();
+
                 }
-                else {
-    
-                    oNextItem = (oEvent.keyCode == 38) ? 
-                        oItem.getPreviousEnabledSibling() : 
-                        oItem.getNextEnabledSibling();
-            
-                    if(oNextItem) {
 
-                        this.clearActiveItem();
+            }
+
+            Event.preventDefault(oEvent);
+
+        break;
+        
+
+        case 39:    // Right arrow
+
+            var oSubmenu = oItemCfg.getProperty("submenu");
+
+            if(oSubmenu) {
+
+                oSubmenu.show();
+
+                oSubmenu.setInitialSelection();
+
+            }
+            else {
+
+                oRoot = this.getRoot();
+                
+                if(oRoot instanceof YAHOO.widget.MenuBar) {
+
+                    oNextItem = oRoot.activeItem.getNextEnabledSibling();
+
+                    if(oNextItem) {
+                    
+                        oRoot.clearActiveItem();
 
                         oNextItem.cfg.setProperty("selected", true);
-                        oNextItem.focus();
 
-                    }
-    
-                }
-    
-                Event.preventDefault(oEvent);
+                        oSubmenu = oNextItem.cfg.getProperty("submenu");
 
-            break;
-            
-    
-            case 39:    // Right arrow
+                        if(oSubmenu) {
 
-                var oSubmenu = oItemCfg.getProperty("submenu");
-    
-                if(oSubmenu) {
-
-                    oSubmenu.show();
-
-                    oSubmenu.setInitialSelection();
-
-                }
-                else {
-
-                    oRoot = this.getRoot();
-                    
-                    if(oRoot instanceof YAHOO.widget.MenuBar) {
-
-                        oNextItem = oRoot.activeItem.getNextEnabledSibling();
-
-                        if(oNextItem) {
-                        
-                            oRoot.clearActiveItem();
-
-                            oNextItem.cfg.setProperty("selected", true);
-
-                            oSubmenu = oNextItem.cfg.getProperty("submenu");
-
-                            if(oSubmenu) {
-
-                                oSubmenu.show();
-                            
-                            }
-
-                            oNextItem.focus();
+                            oSubmenu.show();
                         
                         }
+
+                        oNextItem.focus();
                     
                     }
                 
                 }
+            
+            }
 
 
-                Event.preventDefault(oEvent);
+            Event.preventDefault(oEvent);
 
-            break;
-    
-    
-            case 37:    // Left arrow
+        break;
 
-                if(oParentItem) {
-    
-                    var oParentMenu = oParentItem.parent;
 
-                    if(oParentMenu instanceof YAHOO.widget.MenuBar) {
+        case 37:    // Left arrow
 
-                        oNextItem = 
-                            oParentMenu.activeItem.getPreviousEnabledSibling();
+            if(oParentItem) {
 
-                        if(oNextItem) {
-                        
-                            oParentMenu.clearActiveItem();
+                var oParentMenu = oParentItem.parent;
 
-                            oNextItem.cfg.setProperty("selected", true);
+                if(oParentMenu instanceof YAHOO.widget.MenuBar) {
 
-                            oSubmenu = oNextItem.cfg.getProperty("submenu");
+                    oNextItem = 
+                        oParentMenu.activeItem.getPreviousEnabledSibling();
 
-                            if(oSubmenu) {
-                            
-                                oSubmenu.show();
-                            
-                            }
-
-                            oNextItem.focus();
-                        
-                        } 
+                    if(oNextItem) {
                     
-                    }
-                    else {
+                        oParentMenu.clearActiveItem();
 
-                        this.hide();
-    
-                        oParentItem.focus();
-                        oParentItem.cfg.setProperty("selected", true);
+                        oNextItem.cfg.setProperty("selected", true);
+
+                        oSubmenu = oNextItem.cfg.getProperty("submenu");
+
+                        if(oSubmenu) {
+                        
+                            oSubmenu.show();
+                        
+                        }
+
+                        oNextItem.focus();
                     
-                    }
-    
+                    } 
+                
+                }
+                else {
+
+                    this.hide();
+
+                    oParentItem.focus();
+                    oParentItem.cfg.setProperty("selected", true);
+                
                 }
 
-                Event.preventDefault(oEvent);
-    
-            break;        
-    
-        }
-    
-    };
+            }
+
+            Event.preventDefault(oEvent);
+
+        break;        
+
+    }
+
+},
     
 
 /**
@@ -360,7 +354,7 @@ YAHOO.widget.Menu.prototype._onMenuKeyDown =
 * was fired.
 * @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
 */    
-YAHOO.widget.Menu.prototype._onMenuClick = function(p_sType, p_aArgs, p_oMenu) {
+_onMenuClick: function(p_sType, p_aArgs, p_oMenu) {
 
     var oItem = p_aArgs[1];
 
@@ -394,7 +388,7 @@ YAHOO.widget.Menu.prototype._onMenuClick = function(p_sType, p_aArgs, p_oMenu) {
 
     }
 
-};
+},
 
 
 /**
@@ -405,77 +399,76 @@ YAHOO.widget.Menu.prototype._onMenuClick = function(p_sType, p_aArgs, p_oMenu) {
 * was fired.
 * @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
 */
-YAHOO.widget.Menu.prototype._onMenuKeyPress = 
-
-    function(p_sType, p_aArgs, p_oMenu) {
+_onMenuKeyPress: function(p_sType, p_aArgs, p_oMenu) {
     
-        var oEvent = p_aArgs[0];
-        
-        if(this.activeItem && this.browser == "safari") {
+    var oEvent = p_aArgs[0];
+    
+    if(this.activeItem && this.browser == "safari") {
 
-            var oLI = this.activeItem.element;
-            var oBody = this.body;
+        var oLI = this.activeItem.element;
+        var oBody = this.body;
 
-            if(oEvent.keyCode == 40) {
+        if(oEvent.keyCode == 40) {
 
-                if(
-                    (oLI.offsetTop + oLI.offsetHeight) > 
-                    (oBody.scrollTop + oBody.offsetHeight)
-                ) {
-                
-                    oBody.scrollTop = 
-                        (oLI.offsetTop + oLI.offsetHeight) - oBody.offsetHeight;
-                
-                }
-                else if(
-                    (oLI.offsetTop + oLI.offsetHeight) < 
-                    oBody.scrollTop
-                ) {
-
-                    oBody.scrollTop = oLI.offsetTop;
-                
-                }
-
+            if(
+                (oLI.offsetTop + oLI.offsetHeight) > 
+                (oBody.scrollTop + oBody.offsetHeight)
+            ) {
+            
+                oBody.scrollTop = 
+                    (oLI.offsetTop + oLI.offsetHeight) - oBody.offsetHeight;
+            
             }
-            else {
+            else if(
+                (oLI.offsetTop + oLI.offsetHeight) < 
+                oBody.scrollTop
+            ) {
 
-                if(oLI.offsetTop < oBody.scrollTop) {
+                oBody.scrollTop = oLI.offsetTop;
+            
+            }
 
-                    oBody.scrollTop = oLI.offsetTop;
-                }
-
-                else if(
-                    oLI.offsetTop > 
-                    (oBody.scrollTop + oBody.offsetHeight)
-                ) {
-
-                    oBody.scrollTop = 
-                        (oLI.offsetTop + oLI.offsetHeight) - oBody.offsetHeight;
-                }
-            }                        
-        
         }
+        else {
 
+            if(oLI.offsetTop < oBody.scrollTop) {
 
-        if(
-            this.browser == "gecko" && 
-            (oEvent.keyCode == 40 || oEvent.keyCode == 38)
-        ) {
+                oBody.scrollTop = oLI.offsetTop;
+            }
 
-            YAHOO.util.Event.preventDefault(oEvent);
+            else if(
+                oLI.offsetTop > 
+                (oBody.scrollTop + oBody.offsetHeight)
+            ) {
+
+                oBody.scrollTop = 
+                    (oLI.offsetTop + oLI.offsetHeight) - oBody.offsetHeight;
+            }
+        }                        
     
-        }
-    
-    };
+    }
+
+
+    if(
+        this.browser == "gecko" && 
+        (oEvent.keyCode == 40 || oEvent.keyCode == 38)
+    ) {
+
+        YAHOO.util.Event.preventDefault(oEvent);
+
+    }
+
+},
 
 
 
 // Public event handlers
 
+
 /**
 * Event handler fired when the resize monitor element is resized.
 */
-YAHOO.widget.Menu.prototype.onDomResize = function(e, obj) {
+onDomResize: function(e, obj) {
 
     if(!this._handleResize) {
     
@@ -516,19 +509,21 @@ YAHOO.widget.Menu.prototype.onDomResize = function(e, obj) {
 
     YAHOO.widget.Menu.superclass.onDomResize.call(this, e, obj);
 
-};
+},
+
 
 
 // Public methods
 
+
 /**
 * Returns a string representing the specified object.
 */
-YAHOO.widget.Menu.prototype.toString = function() {
+toString: function() {
 
     return ("Menu " + this.id);
 
-};
+},
 
 
 /**
@@ -540,72 +535,70 @@ YAHOO.widget.Menu.prototype.toString = function() {
 * @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance fired
 * the event.
 */
-YAHOO.widget.Menu.prototype.configMaxHeight = 
+configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
 
-    function(p_sType, p_aArgs, p_oMenu) {
+    var nMaxHeight = p_aArgs[0];
+    var Dom = YAHOO.util.Dom;
+    var oBody = this.body;
+    var bIE = (this.browser == "ie");
+    var bHandleKeyPress = 
+            (this.browser == "gecko" || this.browser == "safari");
 
-        var nMaxHeight = p_aArgs[0];
-        var Dom = YAHOO.util.Dom;
-        var oBody = this.body;
-        var bIE = (this.browser == "ie");
-        var bHandleKeyPress = 
-                (this.browser == "gecko" || this.browser == "safari");
-
-        if(nMaxHeight && oBody.offsetHeight > nMaxHeight) {
-            
-            Dom.setStyle(oBody, "height", (nMaxHeight + "px"));
-
-            if(bIE) {
-            
-                Dom.setStyle(oBody, "overflow-y", "auto");
-                Dom.setStyle(oBody, "overflow-x", "visible");
-
-            }
-            else {
-
-                Dom.setStyle(oBody, "overflow", "auto");
-
-            }
-
-            if(bHandleKeyPress) {
+    if(nMaxHeight && oBody.offsetHeight > nMaxHeight) {
         
-                this.keyPressEvent.subscribe(this._onMenuKeyPress, this, true);
+        Dom.setStyle(oBody, "height", (nMaxHeight + "px"));
+
+        if(bIE) {
         
-            }
+            Dom.setStyle(oBody, "overflow-y", "auto");
+            Dom.setStyle(oBody, "overflow-x", "visible");
 
         }
         else {
 
-            Dom.setStyle(oBody, "height", "auto");
+            Dom.setStyle(oBody, "overflow", "auto");
 
-            if(bIE) {
-            
-                Dom.setStyle(oBody, "overflow-y", "visible");
-                Dom.setStyle(oBody, "overflow-x", "visible");
-            
-            }
-            else {
-
-                Dom.setStyle(oBody, "overflow", "visible");
-
-            }
-
-            if(bHandleKeyPress) {
-        
-                this.keyPressEvent.unsubscribe(this._onMenuKeyPress, this);
-        
-            }
-        
         }
 
-    };
+        if(bHandleKeyPress) {
+    
+            this.keyPressEvent.subscribe(this._onMenuKeyPress, this, true);
+    
+        }
+
+    }
+    else {
+
+        Dom.setStyle(oBody, "height", "auto");
+
+        if(bIE) {
+        
+            Dom.setStyle(oBody, "overflow-y", "visible");
+            Dom.setStyle(oBody, "overflow-x", "visible");
+        
+        }
+        else {
+
+            Dom.setStyle(oBody, "overflow", "visible");
+
+        }
+
+        if(bHandleKeyPress) {
+    
+            this.keyPressEvent.unsubscribe(this._onMenuKeyPress, this);
+    
+        }
+    
+    }
+
+},
 
 
 /**
 * Initializes the class's configurable properties which can be changed using 
 * the MenuModule's Config object (cfg).
 */
-YAHOO.widget.Menu.prototype.initDefaultConfig = function() {
+initDefaultConfig: function() {
 
     YAHOO.widget.Menu.superclass.initDefaultConfig.call(this);
 
@@ -627,4 +620,6 @@ YAHOO.widget.Menu.prototype.initDefaultConfig = function() {
        } 
     );
 
-};
+}
+
+}); // END YAHOO.extend
