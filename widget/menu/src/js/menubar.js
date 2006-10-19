@@ -169,7 +169,7 @@ YAHOO.widget.MenuBar.prototype._onMenuBarKeyDown =
 
                         if(this.cfg.getProperty("autosubmenudisplay")) {
                         
-                            var oSubmenu = oNextItem.cfg.getProperty("submenu");
+                            oSubmenu = oNextItem.cfg.getProperty("submenu");
                             
                             if(oSubmenu) {
                         
