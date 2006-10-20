@@ -105,11 +105,7 @@ YAHOO.widget.AutoComplete = function(inputEl,containerEl,oDataSource,oConfigs) {
         if(oTextbox.form) {
             YAHOO.util.Event.addListener(oTextbox.form,"submit",oSelf._onFormSubmit,oSelf);
         }
-        //Expose only to Mac browsers, where stopEvent is ineffective on keydown events (bug 790337)
-        var isMac = (navigator.userAgent.toLowerCase().indexOf("mac") != -1);
-        if(isMac) {
-            YAHOO.util.Event.addListener(oTextbox,"keypress",oSelf._onTextboxKeyPress,oSelf);
-        }
+        YAHOO.util.Event.addListener(oTextbox,"keypress",oSelf._onTextboxKeyPress,oSelf);
 
         // Custom events
         this.textboxFocusEvent = new YAHOO.util.CustomEvent("textboxFocus", this);
@@ -706,6 +702,24 @@ YAHOO.widget.AutoComplete.prototype._nDelayID = -1;
  */
 YAHOO.widget.AutoComplete.prototype._iFrameSrc = "javascript:false;";
 
+/**
+ * For users typing via certain IMEs, queries must be triggered by intervals,
+ * since key events yet supported across all browsers for all IMEs.
+ *
+ * @type object
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._queryInterval = null;
+
+/**
+ * Internal tracker to last known textbox value, used to determine whether or not
+ * to trigger a query via interval for certain IME users.
+ *
+ * @type string
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._sLastTextboxValue = null;
+
 /***************************************************************************
  * Private methods
  ***************************************************************************/
@@ -1033,27 +1047,71 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
 YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
     var nKeyCode = v.keyCode;
 
-    switch (nKeyCode) {
-    case 9: // tab
-        if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
-            if(oSelf._bContainerOpen) {
+        //Expose only to Mac browsers, where stopEvent is ineffective on keydown events (bug 790337)
+        var isMac = (navigator.userAgent.toLowerCase().indexOf("mac") != -1);
+        if(isMac) {
+            switch (nKeyCode) {
+            case 9: // tab
+                if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
+                    if(oSelf._bContainerOpen) {
+                        YAHOO.util.Event.stopEvent(v);
+                    }
+                }
+                break;
+            case 13: // enter
+                    if(oSelf._nKeyCode != nKeyCode) {
+                        if(oSelf._bContainerOpen) {
+                            YAHOO.util.Event.stopEvent(v);
+                        }
+                    }
+                break;
+            case 38: // up
+            case 40: // down
                 YAHOO.util.Event.stopEvent(v);
+                break;
+            default:
+                break;
             }
         }
-        break;
-    case 13: // enter
-            if(oSelf._nKeyCode != nKeyCode) {
-                if(oSelf._bContainerOpen) {
-                    YAHOO.util.Event.stopEvent(v);
-                }
-            }
-        break;
-    case 38: // up
-    case 40: // down
-        YAHOO.util.Event.stopEvent(v);
-        break;
-    default:
-        break;
+        
+        //TODO: expose only to non-IE, non-Mac-FF for Korean IME support (bug 811948)
+        switch (nKeyCode) {
+            case 229: // Korean IME detected
+                oSelf._queryInterval = setInterval(function() { oSelf._onIMEDetected(oSelf) },500);
+                break;
+        }
+};
+
+/**
+ * Enables interval detection for  Korean IME support (bug 811948).
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._onIMEDetected = function(oSelf) {
+    oSelf._enableIntervalDetection();
+};
+
+/**
+ * Enables query triggers based on text input detection by intervals (rather
+ * than by key events).
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._enableIntervalDetection = function() {
+    var currValue = this._oTextbox.value;
+    var lastValue = this._sLastTextboxValue;
+    if(currValue != lastValue) {
+        this._sLastTextboxValue = currValue;
+        this._sendQuery(currValue);
+    }
+};
+
+
+/**
+ * Cancels text input detection by intervals.
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._cancelIntervalDetection = function(oSelf) {
+    if(oSelf._queryInterval) {
+        clearInterval(oSelf._queryInterval);
     }
 };
 
@@ -1070,7 +1128,6 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
 
     var nKeyCode = v.keyCode;
     oSelf._nKeyCode = nKeyCode;
-    var sChar = String.fromCharCode(nKeyCode);
     var sText = this.value; //string in textbox
 
     // Filter out chars that don't trigger queries
@@ -1159,6 +1216,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
         if(oSelf._bContainerOpen) {
             oSelf._clearList();
         }
+        oSelf._cancelIntervalDetection(oSelf);
         oSelf._bFocused = false;
         oSelf.textboxBlurEvent.fire(oSelf);
     }
@@ -1687,6 +1745,7 @@ YAHOO.widget.AutoComplete.prototype._updateValue = function(oItem) {
 YAHOO.widget.AutoComplete.prototype._selectItem = function(oItem) {
     this._bItemSelected = true;
     this._updateValue(oItem);
+    this._cancelIntervalDetection(this);
     this.itemSelectEvent.fire(this, oItem, oItem._oResultData);
     this._clearList();
 };
