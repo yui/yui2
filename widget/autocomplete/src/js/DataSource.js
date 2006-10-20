@@ -324,7 +324,7 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
             var aAllResultItems = resultObj.results;
             // If case is unimportant, normalize match key for comparison
             var matchKey = (!this.queryMatchCase) ?
-                encodeURIComponent(resultObj.query.toLowerCase()):
+                encodeURIComponent(resultObj.query).toLowerCase():
                 encodeURIComponent(resultObj.query);
             
             // If a cached match key exactly matches the query...
