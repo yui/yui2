@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>Logger Widget :: Reading Logs</title>
+<title>Example: Logger - Reading Logs (YUI Library)</title>
 <link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
 <link type="text/css" rel="stylesheet" href="../../build/grids/grids.css">
@@ -27,10 +27,10 @@
                 <div class="yui-u first">
                     <h3>Default LogReader Example</h3>
                     <p>With just a few lines of code, you can put a LogReader on any web
-                    page that displays log messages built into the YUI Library or custom
-                    log messages that you can insert into your own code. This example takes
-                    advantage of the YUI Library's Drag and Drop utility to make the
-                    LogReader draggable.</p>
+                    page to display log messages built into the YUI Library or custom
+                    log messages that you write into your own code. The LogReader
+                    will look for the YUI Library's Drag and Drop
+                    utility to make the LogReader automatically draggable.</p>
 
                     <p><input id="yui-log-inputinfo" class="yui-log-input" type="text" value="Log an info message.">
                         <button onclick="YAHOO.log(document.getElementById('yui-log-inputinfo').value,'info')">Log</button></p>
@@ -75,8 +75,12 @@
                     <!-- No custom markup was defined -->
 
                     <script type="text/javascript">
+                    // A single line of JavaScript can get you up and logging
                     myLogReader1 = new YAHOO.widget.LogReader();
+
+                    // A couple configurations make for quick customization
                     myLogReader2 = new YAHOO.widget.LogReader();
+                    myLogReader2.compactOutput = true;
                     myLogReader2.newestOnTop = false;
                     myLogReader2.setTitle("Logger Console: Oldest > on > Top!");
                     </script>
@@ -105,10 +109,13 @@ YAHOO.example.LogReader = function() {
     
     return {
         init: function() {
+            // A single line of JavaScript can get you up and logging
             myLogReader1 = new YAHOO.widget.LogReader(null, {verboseOutput:false});
-            myLogReader1.setTitle("Compact Output!");
+            
+            // A couple configurations make for quick customization
             myLogReader2 = new YAHOO.widget.LogReader(null, {newestOnTop:false});
             myLogReader2.setTitle("Logger Console: Oldest > on > Top!");
+            myLogReader2.compactOutput = true;
         },
 
         hideAllReaders: function() {
