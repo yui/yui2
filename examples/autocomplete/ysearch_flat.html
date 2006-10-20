@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>AutoComplete Widget :: Complex Flat-data Implementation</title>
+<title>Example: AutoComplete - Flat-file Data (YUI Library)</title>
 <link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
@@ -29,7 +29,7 @@
 
 <body>
 <div id="hd">
-    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">AutoComplete Widget</a> :: Flat Data Custom Script</h1>
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">AutoComplete Widget</a> :: Flat-file Data</h1>
 </div>
 
 <div id="bd">
@@ -38,21 +38,19 @@
     <!-- Logger ends -->
 
     <!-- Content begins -->
-    <h3>DataSource</h3>
-    <p>This DataSource instance points to a custom PHP script that returns flat
-    demo data of recent search terms and number of results. The schema has
-    been defined to parse tab-delimited data rows that are separated by line
-    breaks. For maximum cache usage, the DataSource has been
-    configured to match query subsets in the cache, and the cache itself has
-    been turned up to 60 entries for fewer round trips to the server.
+    <p>This example's XHR DataSource instance points to a custom PHP script that
+    returns flat-file data. The DataSource schema is used to parse the tab- and
+    linebreak-delimited data. For maximum cache performance, the
+    <code>queryMatchSubset</code> property has been enabled, and the cache
+    itself has been turned up to 60 entries for fewer round trips to the server.
     </p>
 
-    <h3>AutoComplete</h3>
-    <p>Three AutoComplete instances are created that all point the a single
-    DataSource for maximimum cache efficiency. Queries can be delimited using
-    the semi-colon (;) character. For demonstration purposes, each instance
-    decreases the query delay slightly, and each instance presents the return
-    data in the container in a slightly different way.</p>
+    <p>On this page there are three separate AutoComplete instances that all
+    point to a single DataSource, which further maximizes cache efficiency.
+    Queries can be delimited using the semi-colon (;) character. For
+    demonstration purposes, each instance decreases the query delay slightly,
+    and each instance presents the return data in the container using slightly
+    different markup.</p>
 
     <!-- AutoComplete begins -->
     <div id="ysearchmod">

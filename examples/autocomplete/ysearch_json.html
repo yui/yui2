@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>AutoComplete Widget :: Basic JSON Implementation</title>
+<title>Example: AutoComplete - Basic JSON Data (YUI Library)</title>
 <link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
@@ -24,7 +24,7 @@
 
 <body>
 <div id="hd">
-    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">AutoComplete Widget</a> :: JSON Data Yahoo! Search Web Services</h1>
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">AutoComplete Widget</a> :: Basic JSON Data</h1>
 </div>
 
 <div id="bd">
@@ -46,16 +46,13 @@
     <!-- Logger ends -->
 
     <!-- Content begins -->
-    <h3>DataSource</h3>
-    <p>This DataSource instance points to Yahoo! Search Web Services, via a
-    simple PHP proxy. The DataSource schema is defined for JSON data. In order
-    to be compatible with the Yahoo! Search application, the DataSource's
-    queryMatchContains is set to true, and the scriptQueryAppend has been
-    defined to pass in additional arguments.</p>
-
-    <h3>AutoComplete</h3>
-    <p>This AutoComplete instance uses only default configuration values.</p>
-
+    <p>This example's DataSource instance points to Yahoo! Search Web Services,
+    which returns JSON data via a simple PHP proxy. The DataSource schema will
+    parse the data found in the object literal for fields named "Title",
+    "Summary", and "Cache". In order for the Yahoo! Search application to return
+    valid data, the DataSource property <code>scriptQueryAppend</code> is used
+    to pass along all the required query parameters, and the property
+    <code>queryMatchContains</code> has been enabled.</p>
     <!-- Sample code begins -->
     <div id="code">
         <h3>Sample Code</h3>

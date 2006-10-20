@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>AutoComplete Widget :: Customized XML Implementation</title>
+<title>Example: AutoComplete - Flickr XML (YUI Library)</title>
 <link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
@@ -24,7 +24,7 @@
 
 <body>
 <div id="hd">
-    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">AutoComplete Widget</a> :: XML Data Flickr Web Services</h1>
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">AutoComplete Widget</a> :: Flickr XML</h1>
 </div>
 
 <div id="bd">
@@ -33,18 +33,18 @@
     <!-- Logger ends -->
 
     <!-- Content begins -->
-    <h3>DataSource</h3>
-    <p>This DataSource instance points to Flickr Web Services, via a simple PHP
-    proxy. The DataSource schema is defined for XML data. In order to be
-    compatible with the Flickr application, the scriptQueryParameter has been
-    customized to be "tags", and scriptQueryAppend has been defined to pass in
-    additional arguments. Finally, the cache has been disabled so that each
-    query is forced to make a trip to the live source.</p>
+    <p>This example uses a DataSource that points to Flickr Web
+    Services, which returns XML data via a simple PHP proxy. In order to return
+    valid data from the Flickr application, <code>scriptQueryParameter</code>
+    has been customized to be <code>"tags"</code>, and <code>scriptQueryAppend</code> is used
+    to pass in additional required arguments. The cache has been disabled so
+    that each query is forced to make a trip to the live application.</p>
 
-    <h3>AutoComplete</h3>
-    <p>This AutoComplete instance defines a robust formatResult() function that
-    formats the result data into HTML markup that displays an image from Flickr
-    and its title. The autoHighlight feature has additionally been disabled.</p>
+    <p>This instance of AutoComplete defines a robust custom
+    <code>formatResult</code> function that parses result data into custom HTML
+    markup that displays an actual image from the Flickr server. Automatic
+    highlighting of the first result item in the container has been disabled by
+    setting <code>autoHighlight</code> to <code>false</code>.</p>
 
     <!-- AutoComplete begins -->
     <div id="flickrmod">

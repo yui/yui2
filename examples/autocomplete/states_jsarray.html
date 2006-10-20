@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>AutoComplete Widget :: JS Array Example</title>
+<title>Example: AutoComplete - JavaScript Array (YUI Library)</title>
 <link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
@@ -51,26 +51,23 @@
     <!-- AutoComplete ends -->
 
     <!-- Content begins -->
-    <h3>DataSource</h3>
-    <p>Two DataSource instances point to in-memory JavaScript arrays. The first
-    array holds the 50 US states. The second array itself holds arrays of US
-    area codes and their corresponding states.</p>
+    <p>There are two AutoComplete widgets on this page that each point to a
+    different DS_JSArray DataSource instance. Driving each DataSource is a local
+    JavaScript array of strings: <code>statesArray</code> and <code>areaCodesArray</code>.
+    By pointing to arrays that are already loaded into memory the widget is
+    very fast to return data. Therefore, both AutoComplete instances are
+    configured to have a query delay of zero
+    seconds.</p>
 
-    <h3>AutoComplete</h3>
-    <p>Since the two DataSources for this example are already loaded into memory
-    via JavaScript arrays, queries should be very fast to return data. Therefore,
-    both AutoComplete instances are configured to have a query delay of zero
-    seconds.</p.
+    <p>A few configurations have also been made to aid usability. The properties
+    <code>autoHighlight</code> and <code>typeAhead</code> have been enabled to
+    help reduce the number of user interactions. Enabling the
+    <code>prehighlightClassName</code> paramter provides supplemental visual
+    feedback for mouse events.</p>
 
-    <p>A few configurations have also been made to aid the usability of the
-    widgets. The autoHighlight and typeAhead features can help reduce the number
-    of user actions it takes to submit a valid selection. The
-    prehighlightClassName feature provides an supplemental visual feedback for mouse
-    events.</p>
-
-    <p>Additionally, the second AutoComplete instance also has been enhanced to
-    display two data fields in the container: the area code and the area code's
-    state. The forceSelection feature has been enabled to prevent the user from
+    <p>The <code>formatResult</code> method of the second AutoComplete instance
+    has been enhanced to display two data fields in the container, and the
+    <code>forceSelection</code> property has been enabled to prevent the user from
     typing in a free-form selection.</p>
 
     <!-- Sample code begins -->
