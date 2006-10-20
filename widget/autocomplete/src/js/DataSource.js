@@ -472,6 +472,15 @@ YAHOO.widget.DS_XHR.prototype.ERROR_DATAXHR = "XHR response failed";
  * Public member variables
  ***************************************************************************/
 /**
+ * Alias to YUI Connection Manager. Allows implementers to specify their own
+ * subclasses of the YUI Connection Manager utility.
+ * Default: YAHOO.util.Connect.
+ *
+ * @type object
+ */
+YAHOO.widget.DS_XHR.prototype.connMgr = YAHOO.util.Connect;
+
+/**
  * Number of milliseconds the XHR connection will wait for a server response. A
  * a value of zero indicates the XHR connection will wait forever. Any value
  * greater than zero will use the Connection utility's Auto-Abort feature.
@@ -480,7 +489,6 @@ YAHOO.widget.DS_XHR.prototype.ERROR_DATAXHR = "XHR response failed";
  * @type number
  */
 YAHOO.widget.DS_XHR.prototype.connTimeout = 0;
-
 
 /**
  * Absolute or relative URI to script that returns query results. For instance,
@@ -614,10 +622,10 @@ YAHOO.log('responseXML.xml: '+oResp.responseXML.xml,'warn');*/
     }
     
     if(this._oConn) {
-        YAHOO.util.Connect.abort(this._oConn);
+        this.connMgr.abort(this._oConn);
     }
     
-    oSelf._oConn = YAHOO.util.Connect.asyncRequest("GET", sUri, oCallback, null);
+    oSelf._oConn = this.connMgr.asyncRequest("GET", sUri, oCallback, null);
 };
 
 /**
