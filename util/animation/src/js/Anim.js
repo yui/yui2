@@ -1,3 +1,9 @@
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+*/
+
 /**
  *
  * Base class for animated DOM objects.
@@ -286,8 +292,10 @@ YAHOO.util.Anim.prototype = {
          YAHOO.util.AnimMgr.stop(this);
       };
       
-      var onStart = function() {
+      var onStart = function() {         
          this.onStart.fire();
+         
+         this.runtimeAttributes = {};
          for (var attr in this.attributes) {
             this.setRuntimeAttribute(attr);
          }
