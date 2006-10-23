@@ -1354,7 +1354,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
         var oConfig = this.cfg;
         var aNodes = [this.element, this._oAnchor];
         var oMenu;
-        var bLazyLoad = this.parent && this.parent.lazyLoad;
+        var bLazyLoad = this.parent && this.parent.cfg.getProperty("lazyload");
 
 
         if(oSubmenu) {
@@ -1750,7 +1750,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
             }
 
             oAnchor.focus();
-
+            
             this.focusEvent.fire();
 
         }
