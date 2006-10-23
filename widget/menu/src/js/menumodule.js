@@ -329,18 +329,8 @@ YAHOO.widget.MenuModule = function(p_oElement, p_oConfig) {
 
     if(p_oConfig) {
 
-        this.lazyLoad = p_oConfig.lazyLoad || p_oConfig.lazyload;
-
-        var aItemData = p_oConfig.itemData || p_oConfig.itemdata;
-
-        if(typeof aItemData == "object" && aItemData.constructor == Array) {
-
-            this.itemData = aItemData;
-    
-        }
-
         this.parent = p_oConfig.parent;
-    
+
     }
 
     YAHOO.widget.MenuModule.superclass.constructor.call(
@@ -461,25 +451,6 @@ _aListElements: null,
 
 // Public properties
 
-/**
-* Flag representing whether or not the "lazy load" feature is enabled.  If
-* set to "true" items of a submenu will be initialized, added and rendered just
-* before the first time it is made visible.  If set to "false" all submenus are 
-* initialized and rendered upfront.  The default is "false."
-* @type Boolean
-*/
-lazyLoad: false,
-
-
-/**
-* Array of items to be added to the MenuModule instance.  The array can contain 
-* strings representing the text for each item to be created, object literals 
-* containing each of the MenuModuleItem configuration properties, or 
-* MenuModuleItem instances.
-* @type Array
-*/
-itemData: null,
-
 
 /**
 * Reference to the item that has focus.
@@ -586,16 +557,16 @@ keyUpEvent: null,
 */
 init: function(p_oElement, p_oConfig) {
 
+    this._aItemGroups = [];
+    this._aListElements = [];
+    this._aGroupTitleElements = [];
+
+
     if(!this.ITEM_TYPE) {
 
         this.ITEM_TYPE = YAHOO.widget.MenuModuleItem;
 
     }
-
-
-    this._aItemGroups = [];
-    this._aListElements = [];
-    this._aGroupTitleElements = [];
 
 
     var oElement;
@@ -620,6 +591,14 @@ init: function(p_oElement, p_oConfig) {
 
                 this.srcElement = oElement;
 
+                if(!oElement.id) {
+
+                    var sId = Dom.generateId();
+
+                    oElement.setAttribute("id", sId);
+
+                }
+
                 /* 
                     Note: we don't pass the user config in here yet 
                     because we only want it executed once, at the lowest 
@@ -629,33 +608,6 @@ init: function(p_oElement, p_oConfig) {
                 YAHOO.widget.MenuModule.superclass.init.call(this, oElement);
 
                 this.beforeInitEvent.fire(YAHOO.widget.MenuModule);
-
-                if(!this.parent && this.lazyLoad) {
-
-
-                    /*
-                        If the "lazyload" configuration property is 
-                        set to true, we need to hide all submenus that
-                        are children of the root menu.  Normally submenus
-                        are hidden and positioned as they are instantiated,
-                        however since the submenus are being instantiated on 
-                        the fly, we need to hide them all in advance.
-                    */
-                
-                    var hideSubmenu = function(p_oElement) {
-
-                        if(p_oElement.parentNode.tagName == "LI") {
-
-                            Dom.setStyle(p_oElement, "visibility", "hidden");
-                            Dom.setStyle(p_oElement, "position", "absolute");
-
-                        }
-                    
-                    };
-
-                    Dom.getElementsBy(hideSubmenu, "DIV", oElement);
-
-                }
 
                 this.logger = new YAHOO.widget.LogWriter(this.toString());
 
@@ -716,26 +668,32 @@ init: function(p_oElement, p_oConfig) {
 
     if(this.element) {
 
-        var oEl = this.element;
-        var CustomEvent = YAHOO.util.CustomEvent;
+        Dom.addClass(this.element, this.CSS_CLASS_NAME);
 
-        Dom.addClass(oEl, this.CSS_CLASS_NAME);
+
+        if(p_oConfig.position != "static" && !p_oConfig.visible) {
+        
+            /*
+                Change the default value for the "visible" configuration 
+                property to "false"
+            */
+        
+            this.cfg.queueProperty("visible", false);
+
+        
+        }
+
+
+        if(p_oConfig) {
+    
+            this.cfg.applyConfig(p_oConfig, true);
+    
+        }
+
 
         // Assign DOM event handlers
 
         MenuManager.initEventHandlers();
-
-
-        // Create custom events
-
-        this.mouseOverEvent = new CustomEvent("mouseOverEvent", this);
-        this.mouseOutEvent = new CustomEvent("mouseOutEvent", this);
-        this.mouseDownEvent = new CustomEvent("mouseDownEvent", this);
-        this.mouseUpEvent = new CustomEvent("mouseUpEvent", this);
-        this.clickEvent = new CustomEvent("clickEvent", this);
-        this.keyPressEvent = new CustomEvent("keyPressEvent", this);
-        this.keyDownEvent = new CustomEvent("keyDownEvent", this);
-        this.keyUpEvent = new CustomEvent("keyUpEvent", this);
 
 
         // Subscribe to Custom Events
@@ -761,22 +719,6 @@ init: function(p_oElement, p_oConfig) {
         this.mouseOutEvent.subscribe(this._onMenuModuleMouseOut, this, true);
         this.clickEvent.subscribe(this._onMenuModuleClick, this, true);
         this.keyDownEvent.subscribe(this._onMenuModuleKeyDown, this, true);
-
-        if(p_oConfig) {
-    
-            this.cfg.applyConfig(p_oConfig, true);
-
-        }
-
-
-        /*
-            Change the default value for the "visible" configuration property
-            to "false"
-        */
-
-        this.cfg.queueProperty("visible", false);
-
-        MenuManager.addMenu(this);
         
     }
 
@@ -1018,6 +960,23 @@ _checkPosition: function(p_sPosition) {
         return ("dynamic,static".indexOf(sPosition) != -1);
 
     }
+
+},
+
+
+/**
+* Checks to make sure that the value of the "itemdata" property is an array.
+* @private
+* @param {Object} p_aItemData The object to be evaluated.
+* @return Returns true if the object is an array.
+* @type Boolean
+*/
+_checkItemData: function(p_aItemData) {
+
+     return (
+        typeof p_aItemData == "object" && 
+        p_aItemData.constructor == Array
+    );
 
 },
 
@@ -1660,20 +1619,47 @@ _execShowDelay: function(p_oMenuModule) {
 // Private Custom Event handlers
 
 
-/**
-* "init" Custom Event handler for a MenuModule instance.
-* @private
-* @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArgs Collection of arguments sent when the event 
-* was fired.
-* @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
-* fired the event.
-*/
 _onMenuModuleInit: function(p_sType, p_aArgs, p_oMenuModule) {
-        
+
     if(p_aArgs[0] == YAHOO.widget.MenuModule) {
 
-        if((this.parent && !this.lazyLoad) || !this.parent) {
+        var oEl = this.element;
+        var bLazyLoad = this.cfg.getProperty("lazyload");
+
+
+        if(
+            !this.parent && 
+            bLazyLoad && 
+            this.srcElement && 
+            this.srcElement.tagName == "DIV"
+        ) {
+
+            /*
+                If the "lazyload" configuration property is 
+                set to true, we need to hide all submenus that
+                are children of the root menu.  Normally submenus
+                are hidden and positioned as they are instantiated,
+                however since the submenus are being instantiated on 
+                the fly, we need to hide them all in advance.
+            */
+        
+            var hideSubmenu = function(p_oElement) {
+
+                if(p_oElement.parentNode.tagName == "LI") {
+
+                    Dom.setStyle(p_oElement, "position", "absolute");
+                    Dom.setStyle(p_oElement, "visibility", "hidden");
+
+                }
+            
+            };
+
+            Dom.getElementsBy(hideSubmenu, "DIV", oEl);
+
+        }
+
+
+        if((this.parent && !bLazyLoad) || !this.parent) {
 
             if(this.srcElement) {
 
@@ -1681,15 +1667,36 @@ _onMenuModuleInit: function(p_sType, p_aArgs, p_oMenuModule) {
             
             }
 
-            if(this.itemData) {
 
-                this.addItems(this.itemData);
+            var aItemData = this.cfg.getProperty("itemdata");
+
+            if(aItemData) {
+
+                this.addItems(aItemData);
             
             }
         
         }
 
-        this.cfg.refireEvent("position");
+
+        if(this.parent) {
+
+            if(bLazyLoad) {
+    
+                this.cfg.fireQueue();
+    
+            }
+            else {
+    
+                Dom.setStyle(oEl, "position", "absolute");
+                Dom.setStyle(oEl, "visibility", "hidden");
+            
+            }
+       
+        }
+
+
+        MenuManager.addMenu(this);
     
     }
 
@@ -1718,7 +1725,7 @@ _onMenuModuleBeforeRender: function(p_sType, p_aArgs, p_oMenuModule) {
     if(oConfig.getProperty("position") == "static") {
 
         oConfig.queueProperty("iframe", false);
-        oConfig.queueProperty("visible", true);
+        //oConfig.queueProperty("visible", true);
         
     }
 
@@ -2237,7 +2244,7 @@ _onParentMenuModuleRender: function(p_sType, p_aArgs, p_oSubmenu) {
     p_oSubmenu.cfg.applyConfig(oConfig);
 
 
-    if(!this.lazyLoad) {
+    if(!this.cfg.getProperty("lazyload")) {
 
         if(Dom.inDocument(this.element)) {
     
@@ -2245,7 +2252,7 @@ _onParentMenuModuleRender: function(p_sType, p_aArgs, p_oSubmenu) {
     
         }
         else {
-    
+
             this.render(this.parent.element);
     
         }
@@ -2266,7 +2273,7 @@ _onParentMenuModuleRender: function(p_sType, p_aArgs, p_oSubmenu) {
 */
 _onSubmenuModuleBeforeShow: function(p_sType, p_aArgs, p_oSubmenu) {
     
-    if(this.lazyLoad && this.getItemGroups().length === 0) {
+    if(this.cfg.getProperty("lazyload") && this.getItemGroups().length === 0) {
 
         if(this.srcElement) {
         
@@ -2274,9 +2281,11 @@ _onSubmenuModuleBeforeShow: function(p_sType, p_aArgs, p_oSubmenu) {
 
         }
 
-        if(this.itemData) {
+        var aItemData = this.cfg.getProperty("itemdata");
 
-            this.addItems(this.itemData);
+        if(aItemData) {
+
+            this.addItems(aItemData);
         
         }
 
@@ -2543,6 +2552,56 @@ enforceConstraints: function(type, args, obj) {
 
 
 /**
+* Event handler for when the "visible" configuration property of a
+* MenuModule changes.
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance fired
+* the event.
+*/
+configVisible: function(p_sType, p_aArgs, p_oMenuModule) {
+
+    if(this.cfg.getProperty("position") == "dynamic") {
+
+        YAHOO.widget.MenuModule.superclass.configVisible.call(
+            this, 
+            p_sType, 
+            p_aArgs, 
+            p_oMenuModule
+        );
+
+    }
+    else {
+
+        var bVisible = p_aArgs[0];
+    	var sDisplay = Dom.getStyle(this.element, "display");
+
+        if(bVisible) {
+
+            if(sDisplay != "block") {
+                this.beforeShowEvent.fire();
+                Dom.setStyle(this.element, "display", "block");
+                this.showEvent.fire();
+            }
+        
+        }
+        else {
+
+			if(sDisplay == "block") {
+				this.beforeHideEvent.fire();
+				Dom.setStyle(this.element, "display", "none");
+				this.hideEvent.fire();
+			}
+        
+        }
+
+    }
+
+},
+
+
+/**
 * Event handler for when the "position" configuration property of a
 * MenuModule changes.
 * @param {String} p_sType The name of the event that was fired.
@@ -2559,8 +2618,6 @@ configPosition: function(p_sType, p_aArgs, p_oMenuModule) {
 
 
     if(sCSSPosition == "absolute") {
-
-        this.cfg.refireEvent("visible");
 
         var nZIndex = this.cfg.getProperty("zIndex");
         
@@ -2652,6 +2709,30 @@ configHideDelay: function(p_sType, p_aArgs, p_oMenuModule) {
 
 
 // Public methods
+
+
+/**
+* Initializes the custom events for MenuModule which are fired automatically at 
+* appropriate times by the MenuModule class.
+*/
+initEvents: function() {
+
+	YAHOO.widget.MenuModule.superclass.initEvents.call(this);
+
+    // Create custom events
+
+    var CustomEvent = YAHOO.util.CustomEvent;
+
+    this.mouseOverEvent = new CustomEvent("mouseOverEvent", this);
+    this.mouseOutEvent = new CustomEvent("mouseOutEvent", this);
+    this.mouseDownEvent = new CustomEvent("mouseDownEvent", this);
+    this.mouseUpEvent = new CustomEvent("mouseUpEvent", this);
+    this.clickEvent = new CustomEvent("clickEvent", this);
+    this.keyPressEvent = new CustomEvent("keyPressEvent", this);
+    this.keyDownEvent = new CustomEvent("keyDownEvent", this);
+    this.keyUpEvent = new CustomEvent("keyUpEvent", this);
+
+},
 
 
 /**
@@ -3095,7 +3176,8 @@ initDefaultConfig: function() {
         {
             value: "dynamic", 
             handler: this.configPosition, 
-            validator: this._checkPosition 
+            validator: this._checkPosition,
+            supercedes: "visible"
         }
     );
 
@@ -3134,6 +3216,16 @@ initDefaultConfig: function() {
             validator: oConfig.checkBoolean
         }
     );
+
+    oConfig.addProperty(
+        "lazyload",
+        {
+            value: false,
+            validator: oConfig.checkBoolean
+        }
+    );
+
+    oConfig.addProperty("itemdata", { validator: this._checkItemData });    
 
 }
 
