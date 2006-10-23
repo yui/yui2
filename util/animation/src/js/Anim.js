@@ -288,7 +288,11 @@ YAHOO.util.Anim.prototype = {
       /**
        * Stops the animation.  Normally called by AnimMgr when animation completes.
        */ 
-      this.stop = function() {
+      this.stop = function(finish) {
+         if (finish) {
+             this.currentFrame = this.totalFrames;
+             this._onTween.fire();
+         }
          YAHOO.util.AnimMgr.stop(this);
       };
       
