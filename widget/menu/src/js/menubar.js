@@ -85,13 +85,20 @@ init: function(p_oElement, p_oConfig) {
 
     }
 
+    /*
+        Change the default value for the "visible" configuration property
+        to "true"
+    */
+
+    this.cfg.queueProperty("visible", true);
+
 
     if(p_oConfig) {
 
         oConfig.applyConfig(p_oConfig, true);
 
     }
-    
+
     this.initEvent.fire(YAHOO.widget.MenuBar);
 
 },
