@@ -5,56 +5,95 @@ http://developer.yahoo.net/yui/license.txt
 */
 
 (function() {
-    var ua = navigator.userAgent.toLowerCase();
-    var isOpera = (ua.indexOf('opera') > -1);
-    var isSafari = (ua.indexOf('safari') > -1);
-    var isIE = (!isOpera && ua.indexOf('msie') > -1); 
+    var Y = YAHOO.util,     // internal shorthand
+        getStyle,           // for load time browser branching
+        setStyle,           // ditto
+        id_counter = 0,     // for use with generateId
+        propertyCache = {}; // for faster hyphen converts
+    
+    // brower detection
+    var ua = navigator.userAgent.toLowerCase(),
+        isOpera = (ua.indexOf('opera') > -1),
+        isSafari = (ua.indexOf('safari') > -1),
+        isGecko = (ua.indexOf('gecko') > -1),
+        isIE = (!isOpera && ua.indexOf('msie') > -1); 
+    
+    // regex cache
+    var patterns = {
+        HYPHEN: /(-[a-z])/i
+    };
 
-    var id_counter = 0;
-    var util = YAHOO.util; // internal shorthand
-    var property_cache = {}; // to cache case conversion for set/getStyle
     var logger = {};
-    logger.log = function() {YAHOO.log.apply(window, arguments)};
+    logger.log = function() { YAHOO.log.apply(window, arguments); };
     
     var toCamel = function(property) {
-        var convert = function(prop) {
-            var test = /(-[a-z])/i.exec(prop);
-            return prop.replace(RegExp.$1, RegExp.$1.substr(1).toUpperCase());
-        };
-        
-        while(property.indexOf('-') > -1) {
-            property = convert(property);
+        if ( !patterns.HYPHEN.test(property) ) {
+            return property; // no hyphens
         }
-
+        
+        if (propertyCache[property]) { // already converted
+            return propertyCache[property];
+        }
+        
+        while( patterns.HYPHEN.exec(property) ) {
+            property = property.replace(RegExp.$1,
+                    RegExp.$1.substr(1).toUpperCase());
+        }
+        
+        propertyCache[property] = property;
         return property;
         //return property.replace(/-([a-z])/gi, function(m0, m1) {return m1.toUpperCase()}) // cant use function as 2nd arg yet due to safari bug
     };
     
-    var toHyphen = function(property) {
-        if (property.indexOf('-') > -1) { // assume hyphen
-            return property;
-        }
-        
-        var converted = '';
-        for (var i = 0, len = property.length;i < len; ++i) {
-            if (property.charAt(i) == property.charAt(i).toUpperCase()) {
-                converted = converted + '-' + property.charAt(i).toLowerCase();
-            } else {
-                converted = converted + property.charAt(i);
-            }
-        }
-
-        return converted;
-        //return property.replace(/([a-z])([A-Z]+)/g, function(m0, m1, m2) {return (m1 + '-' + m2.toLowerCase())});
-    };
-    
-    // improve performance by only looking up once
-    var cacheConvertedProperties = function(property) {
-        property_cache[property] = {
-            camel: toCamel(property),
-            hyphen: toHyphen(property)
+    // branching at load instead of runtime
+    if (window.getComputedStyle) { // W3C DOM method
+        getStyle = function(el, property) {
+            // check style object first
+            return el.style[property] || getComputedStyle(el, null)[property];
         };
-    };
+    } else if (document.documentElement.currentStyle && isIE) { // IE method
+        getStyle = function(el, property) {                         
+            switch( toCamel(property) ) {
+                case 'opacity' :// IE opacity uses filter
+                    try { // touching filter will error if el not in doc
+                        return (   
+                            el.filters['DXImageTransform.Microsoft.Alpha'] ||
+                            el.filters['alpha'] || 100 ) / 100;
+                    } catch(e) {
+                        logger.log('getStyle: IE filter failed', 'error', 'Dom');
+                    }
+                    break;
+                default:
+                    return (el.currentStyle) ? // currentStyle first
+                            el.currentStyle[property] : el.style[property];
+            }
+        };
+    } else { // default to inline only
+        getStyle = function(el, property) { return el.style[property]; };
+    }
+    
+    if (isIE) {
+        setStyle = function(el, property, val) {
+            switch (property) {
+                case 'opacity':
+                    if ( typeof el.style.filter == 'string' ) { // in case not appended
+                        el.style.filter = 'alpha(opacity=' + val * 100 + ')';
+                        
+                        if (!el.currentStyle || !el.currentStyle.hasLayout) {
+                            el.style.zoom = 1; // when no layout or cant tell
+                        }
+                    }
+                    break;
+                default:
+                el.style[property] = val;
+            }
+        };
+    } else {
+        setStyle = function(el, property, val) {
+            el.style[property] = val;
+        };
+    }
+    
     /**
      * @class Provides helper methods for DOM elements.
      */
@@ -79,7 +118,7 @@ http://developer.yahoo.net/yui/license.txt
             else { // array of ID's and/or elements
                 var collection = [];
                 for (var i = 0, len = el.length; i < len; ++i) {
-                    collection[collection.length] = util.Dom.get(el[i]);
+                    collection[collection.length] = Y.Dom.get(el[i]);
                 }
                 
                 logger.log('get("' + el + '") returning ' + collection, 'info', 'Dom');
@@ -97,45 +136,13 @@ http://developer.yahoo.net/yui/license.txt
          * @return {String/Array} The current value of the style property for the element(s).
          */
         getStyle: function(el, property) {
-            var f = function(el) {
-                var value = null;
-                var dv = document.defaultView;
-                
-                if (!property_cache[property]) {
-                    cacheConvertedProperties(property);
-                }
-                
-                var camel = property_cache[property]['camel'];
-                var hyphen = property_cache[property]['hyphen'];
-
-                if (property == 'opacity' && el.filters) {// IE opacity
-                    value = 1;
-                    try {
-                        value = el.filters.item('DXImageTransform.Microsoft.Alpha').opacity / 100;
-                    } catch(e) {
-                        try {
-                            value = el.filters.item('alpha').opacity / 100;
-                        } catch(e) {}
-                    }
-                } else if (el.style[camel]) { // camelCase for valid styles
-                    value = el.style[camel];
-                }
-                else if (isIE && el.currentStyle && el.currentStyle[camel]) { // camelCase for currentStyle; isIE to workaround broken Opera 9 currentStyle
-                    value = el.currentStyle[camel];
-                }
-                else if ( dv && dv.getComputedStyle ) { // hyphen-case for computedStyle
-                    var computed = dv.getComputedStyle(el, '');
-                    
-                    if (computed && computed.getPropertyValue(hyphen)) {
-                        value = computed.getPropertyValue(hyphen);
-                    }
-                }
-        
-                logger.log('getStyle ' + property + ' returning ' + value, 'info', 'Dom');
-                return value;
+            property = toCamel(property);
+            
+            var f = function(element) {
+                return getStyle(element, property);
             };
             
-            return util.Dom.batch(el, f, util.Dom, true);
+            return Y.Dom.batch(el, f, Y.Dom, true);
         },
     
         /**
@@ -145,37 +152,15 @@ http://developer.yahoo.net/yui/license.txt
          * @param {String} val The value to apply to the given property.
          */
         setStyle: function(el, property, val) {
-            if (!property_cache[property]) {
-                cacheConvertedProperties(property);
-            }
+            property = toCamel(property);
             
-            var camel = property_cache[property]['camel'];
-            
-            var f = function(el) {
-                switch(property) {
-                    case 'opacity' :
-                        if (isIE && typeof el.style.filter == 'string') { // in case not appended
-                            el.style.filter = 'alpha(opacity=' + val * 100 + ')';
-                            
-                            if (!el.currentStyle || !el.currentStyle.hasLayout) {
-                                el.style.zoom = 1; // when no layout or cant tell
-                            }
-                        } else {
-                            el.style.opacity = val;
-                            el.style['-moz-opacity'] = val;
-                            el.style['-khtml-opacity'] = val;
-                        }
-
-                        break;
-                    default :
-                        el.style[camel] = val;
-                }
-                
+            var f = function(element) {
+                setStyle(element, property, val);
                 logger.log('setStyle setting ' + property + ' to ' + val, 'info', 'Dom');
                 
             };
             
-            util.Dom.batch(el, f, util.Dom, true);
+            Y.Dom.batch(el, f, Y.Dom, true);
         },
         
         /**
@@ -235,13 +220,14 @@ http://developer.yahoo.net/yui/license.txt
         
                 while (parentNode && parentNode.tagName.toUpperCase() != 'BODY' && parentNode.tagName.toUpperCase() != 'HTML') 
                 { // account for any scrolled ancestors
-                    if (util.Dom.getStyle(parentNode, 'display') != 'inline') { // work around opera inline scrollLeft/Top bug
+                    if (Y.Dom.getStyle(parentNode, 'display') != 'inline') { // work around opera inline scrollLeft/Top bug
                         pos[0] -= parentNode.scrollLeft;
                         pos[1] -= parentNode.scrollTop;
                     }
                     
-                    if (parentNode.parentNode) { parentNode = parentNode.parentNode; } 
-                    else { parentNode = null; }
+                    if (parentNode.parentNode) {
+                        parentNode = parentNode.parentNode; 
+                    } else { parentNode = null; }
                 }
         
                 logger.log('getXY returning ' + pos, 'info', 'Dom');
@@ -249,7 +235,7 @@ http://developer.yahoo.net/yui/license.txt
                 return pos;
             };
             
-            return util.Dom.batch(el, f, util.Dom, true);
+            return Y.Dom.batch(el, f, Y.Dom, true);
         },
         
         /**
@@ -259,10 +245,10 @@ http://developer.yahoo.net/yui/license.txt
          */
         getX: function(el) {
             var f = function(el) {
-                return util.Dom.getXY(el)[0];
+                return Y.Dom.getXY(el)[0];
             };
             
-            return util.Dom.batch(el, f, util.Dom, true);
+            return Y.Dom.batch(el, f, Y.Dom, true);
         },
         
         /**
@@ -272,10 +258,10 @@ http://developer.yahoo.net/yui/license.txt
          */
         getY: function(el) {
             var f = function(el) {
-                return util.Dom.getXY(el)[1];
+                return Y.Dom.getXY(el)[1];
             };
             
-            return util.Dom.batch(el, f, util.Dom, true);
+            return Y.Dom.batch(el, f, Y.Dom, true);
         },
         
         /**
@@ -292,7 +278,7 @@ http://developer.yahoo.net/yui/license.txt
                     this.setStyle(el, 'position', 'relative');
                     style_pos = 'relative';
                 }
-                
+
                 var pageXY = this.getXY(el);
                 if (pageXY === false) { // has to be part of doc to have pageXY
                     logger.log('setXY failed: element not available', 'error', 'Dom');
@@ -324,7 +310,7 @@ http://developer.yahoo.net/yui/license.txt
                 logger.log('setXY setting position to ' + pos, 'info', 'Dom');
             };
             
-            util.Dom.batch(el, f, util.Dom, true);
+            Y.Dom.batch(el, f, Y.Dom, true);
         },
         
         /**
@@ -334,7 +320,7 @@ http://developer.yahoo.net/yui/license.txt
          * @param {Int} x to use as the X coordinate for the element(s).
          */
         setX: function(el, x) {
-            util.Dom.setXY(el, [x, null]);
+            Y.Dom.setXY(el, [x, null]);
         },
         
         /**
@@ -344,7 +330,7 @@ http://developer.yahoo.net/yui/license.txt
          * @param {Int} x to use as the Y coordinate for the element(s).
          */
         setY: function(el, y) {
-            util.Dom.setXY(el, [null, y]);
+            Y.Dom.setXY(el, [null, y]);
         },
         
         /**
@@ -355,12 +341,12 @@ http://developer.yahoo.net/yui/license.txt
          */
         getRegion: function(el) {
             var f = function(el) {
-                var region = new YAHOO.util.Region.getRegion(el);
+                var region = new Y.Region.getRegion(el);
                 logger.log('getRegion returning ' + region, 'info', 'Dom');
                 return region;
             };
             
-            return util.Dom.batch(el, f, util.Dom, true);
+            return Y.Dom.batch(el, f, Y.Dom, true);
         },
         
         /**
@@ -369,7 +355,7 @@ http://developer.yahoo.net/yui/license.txt
          * @return {Int} The width of the viewable area of the page.
          */
         getClientWidth: function() {
-            return util.Dom.getViewportWidth();
+            return Y.Dom.getViewportWidth();
         },
         
         /**
@@ -378,7 +364,7 @@ http://developer.yahoo.net/yui/license.txt
          * @return {Int} The height of the viewable area of the page.
          */
         getClientHeight: function() {
-            return util.Dom.getViewportHeight();
+            return Y.Dom.getViewportHeight();
         },
 
         /**
@@ -390,8 +376,8 @@ http://developer.yahoo.net/yui/license.txt
          * @return {Array} An array of elements that have the given class name
          */
         getElementsByClassName: function(className, tag, root) {
-            var method = function(el) { return util.Dom.hasClass(el, className) };
-            return util.Dom.getElementsBy(method, tag, root);
+            var method = function(el) { return Y.Dom.hasClass(el, className); };
+            return Y.Dom.getElementsBy(method, tag, root);
         },
 
         /**
@@ -408,7 +394,7 @@ http://developer.yahoo.net/yui/license.txt
                 return re.test(el['className']);
             };
             
-            return util.Dom.batch(el, f, util.Dom, true);
+            return Y.Dom.batch(el, f, Y.Dom, true);
         },
     
         /**
@@ -425,7 +411,7 @@ http://developer.yahoo.net/yui/license.txt
                 el['className'] = [el['className'], className].join(' ');
             };
             
-            util.Dom.batch(el, f, util.Dom, true);
+            Y.Dom.batch(el, f, Y.Dom, true);
         },
     
         /**
@@ -449,7 +435,7 @@ http://developer.yahoo.net/yui/license.txt
                 
             };
             
-            util.Dom.batch(el, f, util.Dom, true);
+            Y.Dom.batch(el, f, Y.Dom, true);
         },
         
         /**
@@ -462,7 +448,7 @@ http://developer.yahoo.net/yui/license.txt
         replaceClass: function(el, oldClassName, newClassName) {
             if (oldClassName === newClassName) { // avoid infinite loop
                 return false;
-            };
+            }
             
             var re = new RegExp('(?:^|\\s+)' + oldClassName + '(?:\\s+|$)', 'g');
 
@@ -481,7 +467,7 @@ http://developer.yahoo.net/yui/license.txt
                 }
             };
             
-            util.Dom.batch(el, f, util.Dom, true);
+            Y.Dom.batch(el, f, Y.Dom, true);
         },
         
         /**
@@ -496,7 +482,7 @@ http://developer.yahoo.net/yui/license.txt
             
             var f = function(el) {
                 if (el) {
-                    el = util.Dom.get(el);
+                    el = Y.Dom.get(el);
                 } else {
                     el = {}; // just generating ID in this case
                 }
@@ -511,7 +497,7 @@ http://developer.yahoo.net/yui/license.txt
                 return el.id;
             };
             
-            return util.Dom.batch(el, f, util.Dom, true);
+            return Y.Dom.batch(el, f, Y.Dom, true);
         },
         
         /**
@@ -521,7 +507,7 @@ http://developer.yahoo.net/yui/license.txt
          * @return {Boolean} Whether or not the haystack is an ancestor of needle
          */
         isAncestor: function(haystack, needle) {
-            haystack = util.Dom.get(haystack);
+            haystack = Y.Dom.get(haystack);
             if (!haystack || !needle) { return false; }
             
             var f = function(needle) {
@@ -553,7 +539,7 @@ http://developer.yahoo.net/yui/license.txt
                 }     
             };
             
-            return util.Dom.batch(needle, f, util.Dom, true);      
+            return Y.Dom.batch(needle, f, Y.Dom, true);      
         },
         
         /**
@@ -566,7 +552,7 @@ http://developer.yahoo.net/yui/license.txt
                 return this.isAncestor(document.documentElement, el);
             };
             
-            return util.Dom.batch(el, f, util.Dom, true);
+            return Y.Dom.batch(el, f, Y.Dom, true);
         },
         
         /**
@@ -578,7 +564,7 @@ http://developer.yahoo.net/yui/license.txt
          */
         getElementsBy: function(method, tag, root) {
             tag = tag || '*';
-            root = util.Dom.get(root) || document;
+            root = Y.Dom.get(root) || document;
             
             var nodes = [];
             var elements = root.getElementsByTagName(tag);
@@ -587,8 +573,7 @@ http://developer.yahoo.net/yui/license.txt
                 elements = root.all; // IE < 6
             }
             
-            for (var i = 0, len = elements.length; i < len; ++i) 
-            {
+            for (var i = 0, len = elements.length; i < len; ++i) {
                 if ( method(elements[i]) ) { nodes[nodes.length] = elements[i]; }
             }
 
@@ -608,7 +593,7 @@ http://developer.yahoo.net/yui/license.txt
          */
         batch: function(el, method, o, override) {
             var id = el;
-            el = util.Dom.get(el);
+            el = Y.Dom.get(el);
             
             var scope = (override) ? o : window;
             
@@ -624,7 +609,7 @@ http://developer.yahoo.net/yui/license.txt
             
             for (var i = 0, len = el.length; i < len; ++i) {
                 if (!el[i]) {
-                    id = id[i];
+                    id = el[i];
                     logger.log(id + ' not available', 'error', 'Dom');
                 }
                 collection[collection.length] = method.call(scope, el[i], o);
@@ -640,7 +625,7 @@ http://developer.yahoo.net/yui/license.txt
         getDocumentHeight: function() {
             var scrollHeight = (document.compatMode != 'CSS1Compat') ? document.body.scrollHeight : document.documentElement.scrollHeight;
 
-            var h = Math.max(scrollHeight, util.Dom.getViewportHeight());
+            var h = Math.max(scrollHeight, Y.Dom.getViewportHeight());
             logger.log('getDocumentHeight returning ' + h, 'info', 'Dom');
             return h;
         },
@@ -651,7 +636,7 @@ http://developer.yahoo.net/yui/license.txt
          */
         getDocumentWidth: function() {
             var scrollWidth = (document.compatMode != 'CSS1Compat') ? document.body.scrollWidth : document.documentElement.scrollWidth;
-            var w = Math.max(scrollWidth, util.Dom.getViewportWidth());
+            var w = Math.max(scrollWidth, Y.Dom.getViewportWidth());
             logger.log('getDocumentWidth returning ' + w, 'info', 'Dom');
             return w;
         },
@@ -661,20 +646,13 @@ http://developer.yahoo.net/yui/license.txt
          * @return {Int} The height of the viewable area of the page (excludes scrollbars).
          */
         getViewportHeight: function() {
-            var height = -1;
+            var height = self.innerHeight; // Safari, Opera
             var mode = document.compatMode;
         
-            if ( (mode || isIE) && !isOpera ) {
-                switch (mode) { // (IE, Gecko)
-                    case 'CSS1Compat': // Standards mode
-                        height = document.documentElement.clientHeight;
-                        break;
-        
-                    default: // Quirks
-                        height = document.body.clientHeight;
-                }
-            } else { // Safari, Opera
-                height = self.innerHeight;
+            if ( (mode || isIE) && !isOpera ) { // IE, Gecko
+                height = (mode == 'CSS1Compat') ?
+                        document.documentElement.clientHeight : // Standards
+                        document.body.clientHeight; // Quirks
             }
         
             logger.log('getViewportHeight returning ' + height, 'info', 'Dom');
@@ -687,20 +665,13 @@ http://developer.yahoo.net/yui/license.txt
          */
         
         getViewportWidth: function() {
-            var width = -1;
+            var width = self.innerWidth;  // Safari
             var mode = document.compatMode;
             
-            if (mode || isIE) { // (IE, Gecko, Opera)
-                switch (mode) {
-                case 'CSS1Compat': // Standards mode 
-                    width = document.documentElement.clientWidth;
-                    break;
-                    
-                default: // Quirks
-                    width = document.body.clientWidth;
-                }
-            } else { // Safari
-                width = self.innerWidth;
+            if (mode || isIE) { // IE, Gecko, Opera
+                width = (mode == 'CSS1Compat') ?
+                        document.documentElement.clientWidth : // Standards
+                        document.body.clientWidth; // Quirks
             }
             logger.log('getViewportWidth returning ' + width, 'info', 'Dom');
             return width;
