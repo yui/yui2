@@ -44,9 +44,10 @@
     * @type Object
     */
    proto.patterns.color = /color$/i;
-   proto.patterns.rgb    = /^rgb\(([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\)$/i;
-   proto.patterns.hex    = /^#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/i;
-   proto.patterns.hex3   = /^#?([0-9A-F]{1})([0-9A-F]{1})([0-9A-F]{1})$/i;
+   proto.patterns.rgb         = /^rgb\(([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\)$/i;
+   proto.patterns.hex         = /^#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/i;
+   proto.patterns.hex3        = /^#?([0-9A-F]{1})([0-9A-F]{1})([0-9A-F]{1})$/i;
+   proto.patterns.transparent = /^transparent|rgba\(0, 0, 0, 0\)$/; // need rgba for safari
    
    /**
     * Attempts to parse the given string and return a 3-tuple.
@@ -84,15 +85,15 @@
       if (  this.patterns.color.test(attr) ) {
          var val = YAHOO.util.Dom.getStyle(el, attr);
          
-         if (val == 'transparent') { // bgcolor default
+         if (this.patterns.transparent.test(val)) { // bgcolor default
             var parent = el.parentNode; // try and get from an ancestor
             val = Y.Dom.getStyle(parent, attr);
          
-            while (parent && val == 'transparent') {
+            while (parent && this.patterns.transparent.test(val)) {
                parent = parent.parentNode;
                val = Y.Dom.getStyle(parent, attr);
                if (parent.tagName.toUpperCase() == 'HTML') {
-                  val = 'ffffff';
+                  val = '#fff';
                }
             }
          }
