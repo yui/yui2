@@ -51,7 +51,7 @@ init: function(p_oElement, p_oConfig) {
 
     // Call the init of the superclass (YAHOO.widget.Menu)
 
-    YAHOO.widget.Menu.superclass.init.call(this, p_oElement);
+    YAHOO.widget.Menu.superclass.init.call(this, p_oElement, p_oConfig);
 
 
     this.beforeInitEvent.fire(YAHOO.widget.Menu);
@@ -63,6 +63,15 @@ init: function(p_oElement, p_oConfig) {
     this.mouseOverEvent.subscribe(this._onMenuMouseOver, this, true);
     this.keyDownEvent.subscribe(this._onMenuKeyDown, this, true);
     this.clickEvent.subscribe(this._onMenuClick, this, true);
+
+
+    /*
+        Change the default value for the "visible" configuration property
+        to "false"
+    */
+
+    this.cfg.queueProperty("autosubmenudisplay", true);
+
 
     if(p_oConfig) {
 
@@ -250,6 +259,15 @@ _onMenuKeyDown: function(p_sType, p_aArgs, p_oMenu) {
         
 
         case 39:    // Right arrow
+
+            if(
+                oItem == this.activeItem && 
+                !oItemCfg.getProperty("selected")
+            ) {
+
+                oItemCfg.setProperty("selected", true);
+
+            }
 
             var oSubmenu = oItemCfg.getProperty("submenu");
 
@@ -603,14 +621,6 @@ initDefaultConfig: function() {
     YAHOO.widget.Menu.superclass.initDefaultConfig.call(this);
 
     var oConfig = this.cfg;
-
-	oConfig.addProperty(
-	   "autosubmenudisplay", 
-	   { 
-	       value: true, 
-	       validator: oConfig.checkBoolean
-       }
-    );
 
 	oConfig.addProperty(
 	   "maxHeight", 
