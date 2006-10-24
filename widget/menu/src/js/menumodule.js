@@ -329,9 +329,35 @@ YAHOO.widget.MenuModule = function(p_oElement, p_oConfig) {
 
     if(p_oConfig) {
 
-        this.parent = p_oConfig.parent;
+        if(
+            p_oConfig.parent && 
+            p_oConfig.parent instanceof YAHOO.widget.MenuModuleItem
+        ) {
 
+            this.parent = p_oConfig.parent;
+
+        }
+
+
+        var bLazyLoad = p_oConfig.lazyLoad || p_oConfig.lazyload;
+
+        if(typeof bLazyLoad == "boolean") {
+
+            this.lazyLoad = bLazyLoad;
+
+        }
+
+
+        var aItemData = p_oConfig.itemData || p_oConfig.itemdata;
+
+        if(typeof aItemData == "object" && aItemData.constructor == Array) {
+
+            this.itemData = aItemData;
+
+        }
+    
     }
+
 
     YAHOO.widget.MenuModule.superclass.constructor.call(
         this, 
@@ -450,6 +476,26 @@ _aListElements: null,
 
 
 // Public properties
+
+
+/**
+* Flag representing whether or not the "lazy load" feature is enabled.  If
+* set to "true" items of a submenu will be initialized, added and rendered just
+* before the first time it is made visible.  If set to "false" all submenus are 
+* initialized and rendered upfront.  The default is "false."
+* @type Boolean
+*/
+lazyLoad: false,
+
+
+/**
+* Array of items to be added to the MenuModule instance.  The array can contain 
+* strings representing the text for each item to be created, object literals 
+* containing each of the MenuModuleItem configuration properties, or 
+* MenuModuleItem instances.
+* @type Array
+*/
+itemData: null,
 
 
 /**
@@ -593,11 +639,10 @@ init: function(p_oElement, p_oConfig) {
 
                 if(!oElement.id) {
 
-                    var sId = Dom.generateId();
-
-                    oElement.setAttribute("id", sId);
+                    oElement.setAttribute("id", Dom.generateId());
 
                 }
+
 
                 /* 
                     Note: we don't pass the user config in here yet 
@@ -608,6 +653,35 @@ init: function(p_oElement, p_oConfig) {
                 YAHOO.widget.MenuModule.superclass.init.call(this, oElement);
 
                 this.beforeInitEvent.fire(YAHOO.widget.MenuModule);
+
+
+                if(!this.parent && this.lazyLoad) {
+        
+                    /*
+                        If the "lazyload" configuration property is 
+                        set to true, we need to hide every submenu that
+                        is child node of the root menu.  Normally submenus
+                        are hidden and positioned as they are instantiated,
+                        however since the submenus are being instantiated on 
+                        the fly from existing markup, we need to hide them 
+                        all in advance.
+                    */
+                
+                    var hideSubmenu = function(p_oElement) {
+        
+                        if(p_oElement.parentNode.tagName == "LI") {
+        
+                            Dom.setStyle(p_oElement, "position", "absolute");
+                            Dom.setStyle(p_oElement, "visibility", "hidden");
+        
+                        }
+                    
+                    };
+        
+                    Dom.getElementsBy(hideSubmenu, "DIV", oElement);
+        
+                }
+
 
                 this.logger = new YAHOO.widget.LogWriter(this.toString());
 
@@ -623,17 +697,16 @@ init: function(p_oElement, p_oConfig) {
                 /*
                     The source element is not something that we can use 
                     outright, so we need to create a new Overlay
-                */
 
-                var sId = Dom.generateId();
-
-                /* 
                     Note: we don't pass the user config in here yet 
                     because we only want it executed once, at the lowest 
                     subclass level.
                 */ 
 
-                YAHOO.widget.MenuModule.superclass.init.call(this, sId); 
+                YAHOO.widget.MenuModule.superclass.init.call(
+                    this, 
+                    Dom.generateId()
+                );
 
                 this.beforeInitEvent.fire(YAHOO.widget.MenuModule);
 
@@ -668,27 +741,9 @@ init: function(p_oElement, p_oConfig) {
 
     if(this.element) {
 
-        Dom.addClass(this.element, this.CSS_CLASS_NAME);
+        var oEl = this.element;
 
-
-        if(p_oConfig.position != "static" && !p_oConfig.visible) {
-        
-            /*
-                Change the default value for the "visible" configuration 
-                property to "false"
-            */
-        
-            this.cfg.queueProperty("visible", false);
-
-        
-        }
-
-
-        if(p_oConfig) {
-    
-            this.cfg.applyConfig(p_oConfig, true);
-    
-        }
+        Dom.addClass(oEl, this.CSS_CLASS_NAME);
 
 
         // Assign DOM event handlers
@@ -719,11 +774,31 @@ init: function(p_oElement, p_oConfig) {
         this.mouseOutEvent.subscribe(this._onMenuModuleMouseOut, this, true);
         this.clickEvent.subscribe(this._onMenuModuleClick, this, true);
         this.keyDownEvent.subscribe(this._onMenuModuleKeyDown, this, true);
+
         
+        /*
+            Change the default value for the "visible" configuration 
+            property to "false"
+        */
+
+        this.cfg.queueProperty("visible", false);
+
+
+        if(p_oConfig) {
+    
+            this.cfg.applyConfig(p_oConfig, true);
+    
+        }
+
+
+        // Register the MenuModule instance with the MenuManager
+
+        MenuManager.addMenu(this);
+        
+
+        this.initEvent.fire(YAHOO.widget.MenuModule);
+
     }
-
-
-    this.initEvent.fire(YAHOO.widget.MenuModule);
 
 },
 
@@ -960,23 +1035,6 @@ _checkPosition: function(p_sPosition) {
         return ("dynamic,static".indexOf(sPosition) != -1);
 
     }
-
-},
-
-
-/**
-* Checks to make sure that the value of the "itemdata" property is an array.
-* @private
-* @param {Object} p_aItemData The object to be evaluated.
-* @return Returns true if the object is an array.
-* @type Boolean
-*/
-_checkItemData: function(p_aItemData) {
-
-     return (
-        typeof p_aItemData == "object" && 
-        p_aItemData.constructor == Array
-    );
 
 },
 
@@ -1623,43 +1681,7 @@ _onMenuModuleInit: function(p_sType, p_aArgs, p_oMenuModule) {
 
     if(p_aArgs[0] == YAHOO.widget.MenuModule) {
 
-        var oEl = this.element;
-        var bLazyLoad = this.cfg.getProperty("lazyload");
-
-
-        if(
-            !this.parent && 
-            bLazyLoad && 
-            this.srcElement && 
-            this.srcElement.tagName == "DIV"
-        ) {
-
-            /*
-                If the "lazyload" configuration property is 
-                set to true, we need to hide all submenus that
-                are children of the root menu.  Normally submenus
-                are hidden and positioned as they are instantiated,
-                however since the submenus are being instantiated on 
-                the fly, we need to hide them all in advance.
-            */
-        
-            var hideSubmenu = function(p_oElement) {
-
-                if(p_oElement.parentNode.tagName == "LI") {
-
-                    Dom.setStyle(p_oElement, "position", "absolute");
-                    Dom.setStyle(p_oElement, "visibility", "hidden");
-
-                }
-            
-            };
-
-            Dom.getElementsBy(hideSubmenu, "DIV", oEl);
-
-        }
-
-
-        if((this.parent && !bLazyLoad) || !this.parent) {
+        if((this.parent && !this.lazyLoad) || !this.parent) {
 
             if(this.srcElement) {
 
@@ -1668,35 +1690,20 @@ _onMenuModuleInit: function(p_sType, p_aArgs, p_oMenuModule) {
             }
 
 
-            var aItemData = this.cfg.getProperty("itemdata");
+            if(this.itemData) {
 
-            if(aItemData) {
-
-                this.addItems(aItemData);
+                this.addItems(this.itemData);
             
             }
         
         }
 
 
-        if(this.parent) {
-
-            if(bLazyLoad) {
+        if(this.parent && this.lazyLoad) {
     
-                this.cfg.fireQueue();
-    
-            }
-            else {
-    
-                Dom.setStyle(oEl, "position", "absolute");
-                Dom.setStyle(oEl, "visibility", "hidden");
-            
-            }
+            this.cfg.fireQueue();
        
         }
-
-
-        MenuManager.addMenu(this);
     
     }
 
@@ -1720,14 +1727,6 @@ _onMenuModuleBeforeRender: function(p_sType, p_aArgs, p_oMenuModule) {
     var oConfig = this.cfg;
     var oEl = this.element;
     var nListElements = this._aListElements.length;
-
-
-    if(oConfig.getProperty("position") == "static") {
-
-        oConfig.queueProperty("iframe", false);
-        //oConfig.queueProperty("visible", true);
-        
-    }
 
 
     if(nListElements > 0) {
@@ -2244,7 +2243,7 @@ _onParentMenuModuleRender: function(p_sType, p_aArgs, p_oSubmenu) {
     p_oSubmenu.cfg.applyConfig(oConfig);
 
 
-    if(!this.cfg.getProperty("lazyload")) {
+    if(!this.lazyLoad) {
 
         if(Dom.inDocument(this.element)) {
     
@@ -2273,7 +2272,7 @@ _onParentMenuModuleRender: function(p_sType, p_aArgs, p_oSubmenu) {
 */
 _onSubmenuModuleBeforeShow: function(p_sType, p_aArgs, p_oSubmenu) {
     
-    if(this.cfg.getProperty("lazyload") && this.getItemGroups().length === 0) {
+    if(this.lazyLoad && this.getItemGroups().length === 0) {
 
         if(this.srcElement) {
         
@@ -2281,11 +2280,10 @@ _onSubmenuModuleBeforeShow: function(p_sType, p_aArgs, p_oSubmenu) {
 
         }
 
-        var aItemData = this.cfg.getProperty("itemdata");
 
-        if(aItemData) {
+        if(this.itemData) {
 
-            this.addItems(aItemData);
+            this.addItems(this.itemData);
         
         }
 
@@ -2613,20 +2611,57 @@ configVisible: function(p_sType, p_aArgs, p_oMenuModule) {
 configPosition: function(p_sType, p_aArgs, p_oMenuModule) {
 
     var sCSSPosition = p_aArgs[0] == "static" ? "static" : "absolute";
-
+    var oCfg = this.cfg;
+    
     Dom.setStyle(this.element, "position", sCSSPosition);
+
+
+    if(sCSSPosition == "static") {
+
+        /*
+            Remove the iframe for statically positioned menus since it will 
+            intercept mouse events.
+        */
+
+        oCfg.setProperty("iframe", false);
+        
+
+        /*
+            Even though the "visible" property is queued to 
+            "false" by default, we need to set the "display" property to 
+            "none" since MenuModule's "configVisible" implementation checks the 
+            element's "display" style property before deciding whether 
+            or not to show a MenuModule instance.
+        */
+
+        Dom.setStyle(this.element, "display", "none");
+        
+    }
+    else {
+
+        /*
+            Even though the "visible" property is queued to 
+            "false" by default, we need to set the "visibility" property to 
+            "hidden" since Overlay's "configVisible" implementation checks the 
+            element's "visibility" style property before deciding whether 
+            or not to show an Overlay instance.
+        */
+
+        Dom.setStyle(this.element, "visibility", "hidden");
+    
+    }
 
 
     if(sCSSPosition == "absolute") {
 
-        var nZIndex = this.cfg.getProperty("zIndex");
+        var nZIndex = oCfg.getProperty("zIndex");
         
         if(!nZIndex) {
 
             nZIndex = this.parent ? 
                 this.parent.parent.cfg.getProperty("zIndex") : 1;
 
-            this.cfg.setProperty("zIndex", nZIndex);
+            oCfg.setProperty("zIndex", nZIndex);
 
         }
 
@@ -3216,16 +3251,6 @@ initDefaultConfig: function() {
             validator: oConfig.checkBoolean
         }
     );
-
-    oConfig.addProperty(
-        "lazyload",
-        {
-            value: false,
-            validator: oConfig.checkBoolean
-        }
-    );
-
-    oConfig.addProperty("itemdata", { validator: this._checkItemData });    
 
 }
 

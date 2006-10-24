@@ -20,7 +20,14 @@ YAHOO.widget.MenuModuleItem = function(p_oObject, p_oConfig) {
 
         if(p_oConfig) {
     
-            this.parent = p_oConfig.parent;
+            if(
+                p_oConfig.parent && 
+                p_oConfig.parent instanceof YAHOO.widget.MenuModule
+            ) {
+    
+                this.parent = p_oConfig.parent;
+    
+            }
             
         }
 
@@ -1354,7 +1361,7 @@ YAHOO.widget.MenuModuleItem.prototype = {
         var oConfig = this.cfg;
         var aNodes = [this.element, this._oAnchor];
         var oMenu;
-        var bLazyLoad = this.parent && this.parent.cfg.getProperty("lazyload");
+        var bLazyLoad = this.parent && this.parent.lazyLoad;
 
 
         if(oSubmenu) {
