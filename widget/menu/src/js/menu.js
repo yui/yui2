@@ -51,7 +51,7 @@ init: function(p_oElement, p_oConfig) {
 
     // Call the init of the superclass (YAHOO.widget.Menu)
 
-    YAHOO.widget.Menu.superclass.init.call(this, p_oElement, p_oConfig);
+    YAHOO.widget.Menu.superclass.init.call(this, p_oElement);
 
 
     this.beforeInitEvent.fire(YAHOO.widget.Menu);
