@@ -762,7 +762,7 @@ init: function(p_oElement, p_oConfig) {
             );
 
         this.renderEvent.subscribe(this._onMenuModuleRender, this, true);
-        this.showEvent.subscribe(this.setInitialFocus, this, true);
+        this.showEvent.subscribe(this._onMenuModuleShow, this, true);
 
         this.beforeHideEvent.subscribe(
                 this._onMenuModuleBeforeHide, 
@@ -1804,6 +1804,34 @@ _onMenuModuleRender: function(p_sType, p_aArgs, p_oMenuModule) {
     
         this.cfg.setProperty("width", (sWidth + "px"));
 
+    }
+
+},
+
+
+/**
+* "show" Custom Event handler for a MenuModule instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.MenuModule} p_oMenuModule The MenuModule instance that 
+* fired the event.
+*/
+_onMenuModuleShow: function(p_sType, p_aArgs, p_oMenuModule) {
+
+    this.setInitialFocus();
+    
+    var oParent = this.parent;
+    
+    if(oParent) {
+    
+        if(!oParent.cfg.getProperty("selected")) {
+        
+            oParent.cfg.setProperty("selected", true);
+        
+        }
+    
     }
 
 },
