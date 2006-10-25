@@ -25,18 +25,10 @@ YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 
 };
 
+
 YAHOO.extend(YAHOO.widget.ContextMenu, YAHOO.widget.Menu, {
 
 // Private properties
-
-
-/**
-* Array of ContextMenu instances
-* @private
-* @type Array
-*/
-_aMenus: [],
-
 
 /**
 * The id(s) or element(s) that trigger the display of the ContextMenu instance
@@ -94,11 +86,6 @@ init: function(p_oElement, p_oConfig) {
     
     
     this.initEvent.fire(YAHOO.widget.ContextMenu);
-
-
-    var aMenus = YAHOO.widget.ContextMenu._aMenus;
-    
-    aMenus[aMenus.length] = this;
     
 },
 
@@ -173,20 +160,6 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
     var Event = YAHOO.util.Event;
     var oConfig = this.cfg;
 
-
-    // Hide any other ContextMenu instances that might be visible
-
-    var aMenus = YAHOO.widget.ContextMenu._aMenus;
-    var i = aMenus.length - 1;
-
-    do {
-
-         aMenus[i].hide();
-    
-    }
-    while(i--);
-        
-
     if(p_oEvent.type == "mousedown" && !p_oEvent.ctrlKey) {
 
         return;
@@ -248,27 +221,10 @@ initDefaultConfig: function() {
 
 
 /**
-* Removes the MenuModule instance's element from the DOM and sets all child 
+* Removes the Menu instance's element from the DOM and sets all child 
 * elements to null.
 */
 destroy: function() {
-
-    // Remove the menu from the array of known ContextMenu instances
-
-    var aMenus = YAHOO.widget.ContextMenu._aMenus;
-    var i = aMenus.length - 1;
-
-    do {
-
-        if(aMenus[i] == this) {
-
-            aMenus.splice(i, 1);
-        
-        }
-
-    }
-    while(i--);
-
 
     // Remove the DOM event handlers from the current trigger(s)
 
