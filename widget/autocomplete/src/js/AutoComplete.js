@@ -265,8 +265,8 @@ YAHOO.widget.AutoComplete.prototype.allowBrowserAutocomplete = true;
 
 /**
  * Whether or not the auto complete container should always be displayed.
- * Enabling this feature prevents the toggling of the container to a collapsed
- * state. Default: false.
+ * Enabling this feature displays the container when the widget is instantiated
+ * and prevents the toggling of the container to a collapsed state. Default: false.
  *
  * @type boolean
  */
@@ -459,9 +459,8 @@ YAHOO.widget.AutoComplete.prototype.dataReturnEvent = null;
 YAHOO.widget.AutoComplete.prototype.dataErrorEvent = null;
 
 /**
- * Fired when the auto complete container is expanded. If alwaysShowContainer is
- * enabled, then containerExpandEvent will be fired when the container is
- * populated with results. Subscribers receive the following array:<br>
+ * Fired when the auto complete container is expanded. Subscribers receive the
+ *  following array:<br>
  *     - args[0] The auto complete object instance
  */
 YAHOO.widget.AutoComplete.prototype.containerExpandEvent = null;
@@ -534,9 +533,8 @@ YAHOO.widget.AutoComplete.prototype.unmatchedItemSelectEvent = null;
 YAHOO.widget.AutoComplete.prototype.selectionEnforceEvent = null;
 
 /**
- * Fired when the auto complete container is collapsed. If alwaysShowContainer is
- * enabled, then containerCollapseEvent will be fired when the container is
- * cleared of results. Subscribers receive the following array:<br>
+ * Fired when the auto complete container is collapsed. Subscribers receive the
+ * following array:<br>
  *     - args[0] The auto complete object instance
  */
 YAHOO.widget.AutoComplete.prototype.containerCollapseEvent = null;
@@ -767,13 +765,6 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
     if(this.forceSelection && this.delimChar) {
         YAHOO.log("The forceSelection feature has been enabled with delimChar defined.","warn", this.toString());
     }
-    if(this.alwaysShowContainer && (this.useShadow || this.useIFrame)) {
-        YAHOO.log("The features useShadow and useIFrame are not compatible with the alwaysShowContainer feature.","warn", this.toString());
-    }
-
-    if(this.alwaysShowContainer) {
-        this._bContainerOpen = true;
-    }
 };
 
 /**
@@ -1001,7 +992,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
                 oSelf._selectItem(oSelf._oCurItem);
             }
             else {
-                oSelf._clearList();
+                oSelf._toggleContainer(false);
             }
             break;
         case 13: // enter
@@ -1014,11 +1005,11 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
                 oSelf._selectItem(oSelf._oCurItem);
             }
             else {
-                oSelf._clearList();
+                oSelf._toggleContainer(false);
             }
             break;
         case 27: // esc
-            oSelf._clearList();
+            oSelf._toggleContainer(false);
             return;
         case 39: // right
             oSelf._jumpSelection();
@@ -1214,7 +1205,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
         }
 
         if(oSelf._bContainerOpen) {
-            oSelf._clearList();
+            oSelf._toggleContainer(false);
         }
         oSelf._cancelIntervalDetection(oSelf);
         oSelf._bFocused = false;
@@ -1286,11 +1277,11 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
     }
 
     // Don't search queries that are too short
-    if (sQuery.length < this.minQueryLength) {
+    if (sQuery && (sQuery.length < this.minQueryLength)) {
         if (this._nDelayID != -1) {
             clearTimeout(this._nDelayID);
         }
-        this._clearList();
+        this._toggleContainer(false);
         return;
     }
 
@@ -1298,31 +1289,6 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
     this._nDelayID = -1;    // Reset timeout ID because request has been made
     this.dataRequestEvent.fire(this, sQuery);
     this.dataSource.getResults(this._populateList, sQuery, this);
-};
-
-/**
- * Hides all visuals related to the array of &lt;li&gt; elements in the container.
- *
- * @private
- */
-YAHOO.widget.AutoComplete.prototype._clearList = function() {
-    this._oContainer._oContent.scrollTop = 0;
-    var aItems = this._aListItems;
-
-    if(aItems && (aItems.length > 0)) {
-        for(var i = aItems.length-1; i >= 0 ; i--) {
-            aItems[i].style.display = "none";
-        }
-    }
-
-    if (this._oCurItem) {
-        this._toggleHighlight(this._oCurItem,"from");
-    }
-
-    this._oCurItem = null;
-    this._nDisplayedItems = 0;
-    this._sCurQuery = null;
-    this._toggleContainer(false);
 };
 
 /**
@@ -1398,7 +1364,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         oSelf._toggleContainer(true);
     }
     else {
-        oSelf._clearList();
+        oSelf._toggleContainer(false);
     }
     oSelf.dataReturnEvent.fire(oSelf, sQuery, aResults);
 };
@@ -1513,7 +1479,7 @@ YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
 
     if(this.useIFrame && this._oContainer._oIFrame) {
         bFireEvent = true;
-        if(this.alwaysShowContainer || bShow) {
+        if(bShow) {
             this._oContainer._oIFrame.style.width = width;
             this._oContainer._oIFrame.style.height = height;
         }
@@ -1524,7 +1490,7 @@ YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
     }
     if(this.useShadow && this._oContainer._oShadow) {
         bFireEvent = true;
-        if(this.alwaysShowContainer || bShow) {
+        if(bShow) {
             this._oContainer._oShadow.style.width = width;
             this._oContainer._oShadow.style.height = height;
         }
@@ -1543,21 +1509,33 @@ YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
+    var oContainer = this._oContainer
+
     // Implementer has container always open so don't mess with it
-    if(this.alwaysShowContainer) {
-        // Fire these events to give implementers a hook into the container
-        // being populated and being emptied
-        if(bShow) {
-            this.containerExpandEvent.fire(this);
-        }
-        else {
-            this.containerCollapseEvent.fire(this);
-        }
-        this._bContainerOpen = bShow;
+    if(this.alwaysShowContainer && this._bContainerOpen) {
         return;
     }
+    
+    // Clear contents of container
+    if(!bShow) {
+        this._oContainer._oContent.scrollTop = 0;
+        var aItems = this._aListItems;
 
-    var oContainer = this._oContainer;
+        if(aItems && (aItems.length > 0)) {
+            for(var i = aItems.length-1; i >= 0 ; i--) {
+                aItems[i].style.display = "none";
+            }
+        }
+
+        if (this._oCurItem) {
+            this._toggleHighlight(this._oCurItem,"from");
+        }
+
+        this._oCurItem = null;
+        this._nDisplayedItems = 0;
+        this._sCurQuery = null;
+    }
+
     // Container is already closed
     if (!bShow && !this._bContainerOpen) {
         oContainer._oContent.style.display = "none";
@@ -1705,7 +1683,7 @@ YAHOO.widget.AutoComplete.prototype._togglePrehighlight = function(oNewItem, sTy
  */
 YAHOO.widget.AutoComplete.prototype._updateValue = function(oItem) {
     var oTextbox = this._oTextbox;
-    var sDelimChar = (this.delimChar) ? this.delimChar[0] : null;
+    var sDelimChar = (this.delimChar) ? (this.delimChar[0] || this.delimChar) : null;
     var sSavedQuery = this._sSavedQuery;
     var sResultKey = oItem._sResultKey;
     oTextbox.focus();
@@ -1747,7 +1725,7 @@ YAHOO.widget.AutoComplete.prototype._selectItem = function(oItem) {
     this._updateValue(oItem);
     this._cancelIntervalDetection(this);
     this.itemSelectEvent.fire(this, oItem, oItem._oResultData);
-    this._clearList();
+    this._toggleContainer(false);
 };
 
 /**
@@ -1761,7 +1739,7 @@ YAHOO.widget.AutoComplete.prototype._jumpSelection = function() {
         return;
     }
     else {
-        this._clearList();
+        this._toggleContainer(false);
     }
 };
 
@@ -1813,7 +1791,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
         }
         if (nNewItemIndex == -2) {
             // Close container
-            this._clearList();
+            this._toggleContainer(false);
             return;
         }
 

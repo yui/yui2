@@ -1,6 +1,6 @@
 function getStates(sQuery) {
     aResults = [];
-    if(sQuery.length > 0) {
+    if(sQuery && sQuery.length > 0) {
         var charKey = sQuery.substring(0,1).toLowerCase();
         var oResponse = dataset[charKey];
         
@@ -15,10 +15,19 @@ function getStates(sQuery) {
                     aResults.unshift([sKey, oResponse[i].ABBR]);
                 }
             }
+            return aResults;
+        }
+    }
+    // Empty queries return all states
+    else {
+        for(var letter in dataset) {
+            var oResponse = dataset[letter];
+            for(var i = oResponse.length-1; i >= 0; i--) {
+                aResults.push([oResponse[i].STATE, oResponse[i].ABBR]);
+            }
         }
         return aResults;
     }
-    else { return null; }
 }
 //{"STATE" : "", "ABBR" : ""}
 var dataset =
