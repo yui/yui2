@@ -3,11 +3,11 @@
 
 /**
 * @class Horizontal collection of items, each of which can contain a submenu.
-* Extends YAHOO.widget.MenuModule to provide a set of default mouse and 
+* Extends YAHOO.widget.Menu to provide a set of default mouse and 
 * key event behaviors.
 * @constructor
-* @extends YAHOO.widget.MenuModule
-* @base YAHOO.widget.MenuModule
+* @extends YAHOO.widget.Menu
+* @base YAHOO.widget.Menu
 * @param {String} p_oElement The HTMLElement ID representing the source node 
 * (either HTMLSelectElement or HTMLDivElement) of the MenuBar <em>OR</em>
 * @param {Element} p_oElement The HTMLElement representing the MenuBar to
@@ -26,7 +26,7 @@ YAHOO.widget.MenuBar = function(p_oElement, p_oConfig) {
 
 };
 
-YAHOO.extend(YAHOO.widget.MenuBar, YAHOO.widget.MenuModule, {
+YAHOO.extend(YAHOO.widget.MenuBar, YAHOO.widget.Menu, {
 
 /**
 * The MenuBar class's initialization method. This method is automatically 
@@ -49,7 +49,7 @@ init: function(p_oElement, p_oConfig) {
     }
 
 
-    // Call the init of the superclass (YAHOO.widget.MenuModule)
+    // Call the init of the superclass (YAHOO.widget.Menu)
 
     YAHOO.widget.MenuBar.superclass.init.call(this, p_oElement);
 
@@ -57,40 +57,31 @@ init: function(p_oElement, p_oConfig) {
     this.beforeInitEvent.fire(YAHOO.widget.MenuBar);
 
 
-    // Add event handlers to each "MenuBar" instance
-
-    this.keyDownEvent.subscribe(this._onMenuBarKeyDown, this, true);
-    this.clickEvent.subscribe(this._onMenuBarClick, this, true);
-
-
     var oConfig = this.cfg;
+
 
     /*
         Set the default value for the "position" configuration property
         to "static" 
     */
-    if(!p_oConfig || (p_oConfig && !p_oConfig.position)) {
 
-        oConfig.queueProperty("position", "static");
+    oConfig.queueProperty("position", "static");
 
-    }
 
     /*
         Set the default value for the "submenualignment" configuration property
         to "tl" and "bl" 
     */
-    if(!p_oConfig || (p_oConfig && !p_oConfig.submenualignment)) {
 
-        oConfig.queueProperty("submenualignment", ["tl","bl"]);
+    oConfig.queueProperty("submenualignment", ["tl","bl"]);
 
-    }
 
     /*
-        Change the default value for the "visible" configuration property
-        to "true"
+        Change the default value for the "autosubmenudisplay" configuration 
+        property to "false"
     */
 
-    this.cfg.queueProperty("visible", true);
+    oConfig.queueProperty("autosubmenudisplay", false);
 
 
     if(p_oConfig) {
@@ -138,7 +129,7 @@ toString: function() {
 * @param {YAHOO.widget.MenuBar} p_oMenuBar The MenuBar instance that 
 * fired the event.
 */
-_onMenuBarKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
+_onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
 
     var Event = YAHOO.util.Event;
     var oEvent = p_aArgs[0];
@@ -148,6 +139,43 @@ _onMenuBarKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
 
 
     switch(oEvent.keyCode) {
+
+        case 27:    // Esc key
+
+            if(this.cfg.getProperty("position") == "dynamic") {
+            
+                this.hide();
+    
+                if(this.parent) {
+    
+                    this.parent.focus();
+                
+                }
+    
+            }
+            else if(this.activeItem) {
+    
+                oSubmenu = this.activeItem.cfg.getProperty("submenu");
+    
+                if(oSubmenu && oSubmenu.cfg.getProperty("visible")) {
+                
+                    oSubmenu.hide();
+                    this.activeItem.focus();
+                
+                }
+                else {
+    
+                    this.activeItem.cfg.setProperty("selected", false);
+                    this.activeItem.blur();
+            
+                }
+            
+            }
+    
+    
+            Event.preventDefault(oEvent);
+        
+        break;
 
         case 37:    // Left arrow
         case 39:    // Right arrow
@@ -231,7 +259,15 @@ _onMenuBarKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
 * @param {YAHOO.widget.MenuBar} p_oMenuBar The MenuBar instance that 
 * fired the event.
 */
-_onMenuBarClick: function(p_sType, p_aArgs, p_oMenuBar) {
+_onClick: function(p_sType, p_aArgs, p_oMenuBar) {
+
+    YAHOO.widget.MenuBar.superclass._onClick.call(
+        this, 
+        p_sType, 
+        p_aArgs, 
+        p_oMenuBar
+    );
+
 
     var oItem = p_aArgs[1];
     
