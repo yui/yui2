@@ -76,6 +76,20 @@ init: function(p_oObject, p_oConfig) {
 
     oConfig.fireQueue();
 
+},
+
+
+
+// Public methods
+
+
+/**
+* Returns a string representing the specified object.
+*/
+toString: function() {
+
+    return ("MenuBarItem: " + this.cfg.getProperty("text"));
+
 }
     
 }); // END YAHOO.extend
