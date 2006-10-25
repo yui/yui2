@@ -3,11 +3,11 @@
 
 /**
 * @class The MenuBarItem class allows you to create and modify an item for a
-* MenuBar instance.  MenuBarItem extends YAHOO.widget.MenuModuleItem to provide 
+* MenuBar instance.  MenuBarItem extends YAHOO.widget.MenuItem to provide 
 * a set of default mouse and key event behaviors.
 * @constructor
-* @extends YAHOO.widget.MenuModuleItem
-* @base YAHOO.widget.MenuModuleItem
+* @extends YAHOO.widget.MenuItem
+* @base YAHOO.widget.MenuItem
 * @param {String} p_oObject The text of the MenuBarItem to be 
 * created <em>OR</em>
 * @param {HTMLElement} p_oObject The HTMLElement representing the source node
@@ -27,7 +27,7 @@ YAHOO.widget.MenuBarItem = function(p_oObject, p_oConfig) {
 
 };
 
-YAHOO.extend(YAHOO.widget.MenuBarItem, YAHOO.widget.MenuModuleItem, {
+YAHOO.extend(YAHOO.widget.MenuBarItem, YAHOO.widget.MenuItem, {
 
 
 /**
@@ -60,7 +60,7 @@ init: function(p_oObject, p_oConfig) {
 
 
     /* 
-        Call the init of the superclass (YAHOO.widget.MenuModuleItem)
+        Call the init of the superclass (YAHOO.widget.MenuItem)
         Note: We don't pass the user config in here yet 
         because we only want it executed once, at the lowest 
         subclass level.
@@ -80,6 +80,21 @@ init: function(p_oObject, p_oConfig) {
     oConfig.fireQueue();
 
 },
+
+
+
+// Public methods
+
+
+/**
+* Returns a string representing the specified object.
+*/
+toString: function() {
+
+    return ("MenuBarItem: " + this.cfg.getProperty("text"));
+
+},
+
 
 
 // Constants
