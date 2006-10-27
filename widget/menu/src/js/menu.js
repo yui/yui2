@@ -821,6 +821,7 @@ init: function(p_oElement, p_oConfig) {
         */
 
         /**
+        * @config visible
         * @description Determines whether or not the menu is visible.  If the  
         * menu's "position" configuration property is set to "dynamic" 
         * (the default), this property toggles the menu's root &#60;div&#62;  
@@ -829,11 +830,20 @@ init: function(p_oElement, p_oConfig) {
         * set to "static" this property toggles the menu's root &#60;div&#62;  
         * node's "display" style property between "block" (true) or   
         * "none" (false).
-        * @config visible
         * @default true
         * @type Boolean
         */
         this.cfg.queueProperty("visible", false);
+
+
+        /**
+        * @config constraintoviewport
+        * @description If set to true the menu will try to remain inside the 
+        * boundaries of the size of viewport.
+        * @default true
+        * @type Boolean
+        */
+        this.cfg.queueProperty("constraintoviewport", true);
 
 
         if(p_oConfig) {
