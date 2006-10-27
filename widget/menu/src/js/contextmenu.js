@@ -230,7 +230,14 @@ initDefaultConfig: function() {
     YAHOO.widget.ContextMenu.superclass.initDefaultConfig.call(this);
 
 
-	// Add a configuration property
+    /**
+    * @config trigger
+    * @description The id(s) or node reference(s) for the element whose  
+    * "contextmenu" event ("mousedown" for Opera) triggers the display of 
+    * the menu.
+    * @default null
+    * @type String|HTMLElement|Array
+    */
 
     this.cfg.addProperty("trigger", { handler: this.configTrigger });
 
