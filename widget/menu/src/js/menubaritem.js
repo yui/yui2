@@ -2,12 +2,10 @@
 
 
 /**
-* @class The MenuBarItem class allows you to create and modify an item for a
+* The MenuBarItem class allows you to create and modify an item for a
 * MenuBar instance.  MenuBarItem extends YAHOO.widget.MenuItem to provide 
 * a set of default mouse and key event behaviors.
-* @constructor
-* @extends YAHOO.widget.MenuItem
-* @base YAHOO.widget.MenuItem
+* 
 * @param {String} p_oObject The text of the MenuBarItem to be 
 * created <em>OR</em>
 * @param {HTMLElement} p_oObject The HTMLElement representing the source node
@@ -16,6 +14,9 @@
 * @param {Object} p_oConfig The configuration object literal containing 
 * the configuration for a MenuBarItem instance. See the configuration 
 * class documentation for more details.
+* @class MenuBarItem
+* @constructor
+* @extends YAHOO.widget.MenuItem
 */
 YAHOO.widget.MenuBarItem = function(p_oObject, p_oConfig) {
 
@@ -31,7 +32,8 @@ YAHOO.extend(YAHOO.widget.MenuBarItem, YAHOO.widget.MenuItem, {
 
 
 /**
-* The MenuBarItem class's initialization method. This method is automatically
+* @method init
+* @description The MenuBarItem class's initialization method. This method is automatically
 * called by the constructor, and sets up all DOM references for
 * pre-existing markup, and creates required markup if it is not
 * already present.
@@ -87,7 +89,8 @@ init: function(p_oObject, p_oConfig) {
 
 
 /**
-* Returns a string representing the specified object.
+* @method toString
+* @description Returns a string representing the specified object.
 */
 toString: function() {
 
@@ -100,7 +103,8 @@ toString: function() {
 // Constants
 
 /**
-* Constant representing the CSS class(es) to be applied to the root 
+* @property CSS_CLASS_NAME
+* @description Constant representing the CSS class(es) to be applied to the root 
 * HTMLLIElement of the MenuBarItem.
 * @final
 * @type String
@@ -109,7 +113,8 @@ CSS_CLASS_NAME: "yuimenubaritem",
 
 
 /**
-* Constant representing the path to the image to be used for the submenu
+* @property SUBMENU_INDICATOR_IMAGE_PATH
+* @description Constant representing the path to the image to be used for the submenu
 * arrow indicator.
 * @final
 * @type String
@@ -118,7 +123,8 @@ SUBMENU_INDICATOR_IMAGE_PATH: "nt/ic/ut/alt1/menuarodwn8_nrm_1.gif",
 
 
 /**
-* Constant representing the path to the image to be used for the submenu
+* @property SELECTED_SUBMENU_INDICATOR_IMAGE_PATH
+* @description Constant representing the path to the image to be used for the submenu
 * arrow indicator when a MenuBarItem instance is selected.
 * @final
 * @type String
@@ -127,7 +133,8 @@ SELECTED_SUBMENU_INDICATOR_IMAGE_PATH: "nt/ic/ut/alt1/menuarodwn8_hov_1.gif",
 
 
 /**
-* Constant representing the path to the image to be used for the submenu
+* @property DISABLED_SUBMENU_INDICATOR_IMAGE_PATH
+* @description Constant representing the path to the image to be used for the submenu
 * arrow indicator when a MenuBarItem instance is disabled.
 * @final
 * @type String

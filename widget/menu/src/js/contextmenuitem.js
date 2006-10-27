@@ -2,10 +2,8 @@
 
 
 /**
-* @class Creates an item for a context menu instance.
-* @constructor
-* @extends YAHOO.widget.MenuItem
-* @base YAHOO.widget.MenuItem
+* Creates an item for a context menu instance.
+* 
 * @param {String} p_oObject The text of the ContextMenuItem to be 
 * created <em>OR</em>
 * @param {HTMLElement} p_oObject The HTMLElement representing the source node 
@@ -14,6 +12,9 @@
 * @param {Object} p_oConfig The configuration object literal containing 
 * the configuration for a ContextMenuItem instance. See the configuration 
 * class documentation for more details.
+* @class ContextMenuItem
+* @constructor
+* @extends YAHOO.widget.MenuItem
 */
 YAHOO.widget.ContextMenuItem = function(p_oObject, p_oConfig) {
 
@@ -29,7 +30,8 @@ YAHOO.extend(YAHOO.widget.ContextMenuItem, YAHOO.widget.MenuItem, {
 
 
 /**
-* The ContextMenuItem class's initialization method. This method is
+* @method init
+* @description The ContextMenuItem class's initialization method. This method is
 * automatically called by the constructor, and sets up all DOM references for
 * pre-existing markup, and creates required markup if it is not
 * already present.
@@ -84,7 +86,8 @@ init: function(p_oObject, p_oConfig) {
 
 
 /**
-* Returns a string representing the specified object.
+* @method toString
+* @description Returns a string representing the specified object.
 */
 toString: function() {
 

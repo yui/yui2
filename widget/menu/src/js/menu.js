@@ -1,7 +1,7 @@
 /**
 * @module Menu
-* @description <p>The Menu Library features a collection of widgets that makes it 
-easy to add menus to your website or web application.  Use can use the Menu 
+* @description <p>The Menu Library features a collection of widgets that makes  
+it easy to add menus to your website or web application.  Use can use the Menu 
 Library to create things like application-style fly-out menus, customizable 
 context menus, or navigation-style menu bars with just a small amount of 
 scripting.</p> <p>The Menu library features:</p>
@@ -334,7 +334,7 @@ var MenuManager = new function() {
 
 /**
 * The Menu class creates a container that holds a vertical list of options 
-* or commands.
+* or commands.  Menu is the base class for all menuing containers.
 * 
 * @param {String} p_oElement The HTMLElement ID representing the source node 
 * (either HTMLSelectElement or HTMLDivElement) of the Menu <em>OR</em>
@@ -452,8 +452,8 @@ _nShowDelayId: null,
 
 /** 
 * @property _hideDelayEventHandlersAssigned
-* @description Determines if the "mouseover" and "mouseout" event handlers used for 
-* hiding a menu via a call to "window.setTimeout" have already been assigned 
+* @description Determines if the "mouseover" and "mouseout" event handlers used  
+* for hiding a menu via a call to "window.setTimeout" have already been assigned 
 * to the Menu instance
 * @private
 * @type Boolean
@@ -499,8 +499,8 @@ _aItemGroups: null,
 
 /**
 * @property _aListElements
-* @description An array of HTMLUListElements, each of which is the parent node of each 
-* items's HTMLLIElement node.
+* @description An array of HTMLUListElements, each of which is the parent node  
+* of each items's HTMLLIElement node.
 * @private
 * @type Array
 */
@@ -513,10 +513,12 @@ _aListElements: null,
 
 /**
 * @property lazyLoad
-* @description Flag representing whether or not the "lazy load" feature is enabled.  If
-* set to "true" items of a submenu will be initialized, added and rendered just
-* before the first time it is made visible.  If set to "false" all submenus are 
-* initialized and rendered upfront.  The default is "false."
+* @description Flag representing whether or not the "lazy load" feature is 
+* enabled.  If set to "true" items of a submenu will be initialized, added and
+* rendered just before the first time it is made visible.  If set to "false" all
+* submenus are initialized and rendered upfront.  The default is "false." 
+* This property should be set via the constructor using the configuration 
+* object.
 * @type Boolean
 */
 lazyLoad: false,
@@ -524,10 +526,12 @@ lazyLoad: false,
 
 /**
 * @property itemData
-* @description Array of items to be added to the Menu instance.  The array can contain 
-* strings representing the text for each item to be created, object literals 
-* containing each of the MenuItem configuration properties, or 
-* MenuItem instances.  The property can be set via in the 
+* @description Array of items to be added to the Menu instance.  The array can 
+* contain strings representing the text for each item to be created, object
+* literals containing each of the MenuItem configuration properties, or
+* MenuItem instances.  As a convenience this property can be set via the 
+* constructor using the configuration object.
+* 
 * @type Array
 */
 itemData: null,
@@ -543,7 +547,9 @@ activeItem: null,
 
 /**
 * @property parent
-* @description Returns a Menu instance's parent object.
+* @description Returns a Menu instance's parent MenuItem instance.  As a 
+* convenience this property can be set via the constructor using the 
+* configuration object.
 * @type YAHOO.widget.MenuItem
 */
 parent: null,
@@ -551,8 +557,8 @@ parent: null,
 
 /**
 * @property srcElement
-* @description Returns the HTMLElement (either HTMLSelectElement or HTMLDivElement)
-* used create the Menu instance.
+* @description Returns the HTMLElement (either HTMLSelectElement or 
+* HTMLDivElement) used create the Menu instance.
 * @type HTMLSelectElement/HTMLDivElement
 */
 srcElement: null,
@@ -564,16 +570,16 @@ srcElement: null,
 
 /**
 * @event mouseOverEvent
-* @description Fires when the mouse has entered a Menu instance.  Passes back the 
-* DOM Event object as an argument.
+* @description Fires when the mouse has entered a Menu instance.  Passes 
+* back the DOM Event object as an argument.
 */
 mouseOverEvent: null,
 
 
 /**
 * @event mouseOutEvent
-* @description Fires when the mouse has left a Menu instance.  Passes back the DOM 
-* Event object as an argument.
+* @description Fires when the mouse has left a Menu instance.  Passes back 
+* the DOM Event object as an argument.
 * @type YAHOO.util.CustomEvent
 */
 mouseOutEvent: null,
@@ -581,8 +587,8 @@ mouseOutEvent: null,
 
 /**
 * @event mouseDownEvent
-* @description Fires when the user mouses down on a Menu instance.  Passes back the 
-* DOM Event object as an argument.
+* @description Fires when the user mouses down on a Menu instance.  Passes 
+* back the DOM Event object as an argument.
 * @type YAHOO.util.CustomEvent
 */
 mouseDownEvent: null,
@@ -590,8 +596,8 @@ mouseDownEvent: null,
 
 /**
 * @event mouseUpEvent
-* @description Fires when the user releases a mouse button while the mouse is over 
-* a Menu instance.  Passes back the DOM Event object as an argument.
+* @description Fires when the user releases a mouse button while the mouse is  
+* over a Menu instance.  Passes back the DOM Event object as an argument.
 * @type YAHOO.util.CustomEvent
 */
 mouseUpEvent: null,
@@ -599,8 +605,8 @@ mouseUpEvent: null,
 
 /**
 * @event clickEvent
-* @description Fires when the user clicks the on a Menu instance.  Passes back the 
-* DOM Event object as an argument.
+* @description Fires when the user clicks the on a Menu instance.  Passes back  
+* the DOM Event object as an argument.
 * @type YAHOO.util.CustomEvent
 */
 clickEvent: null,
@@ -635,8 +641,8 @@ keyUpEvent: null,
 
 /**
 * @method init
-* @description The Menu class's initialization method. This method is automatically 
-* called  by the constructor, and sets up all DOM references for 
+* @description The Menu class's initialization method. This method is  
+* automatically called  by the constructor, and sets up all DOM references for 
 * pre-existing markup, and creates required markup if it is not already present.
 * @param {String} p_oElement The HTMLElement ID representing the source node 
 * (either HTMLSelectElement or HTMLDivElement) of the Menu <em>OR</em>
@@ -815,14 +821,14 @@ init: function(p_oElement, p_oConfig) {
         */
 
         /**
-        * @description Determines whether or not the menu is visible.  If the menu's 
-        * "position" configuration property is set to "dynamic" (the default), 
-        * this property toggles the menu's root &#60;div&#62; node's "visibility" 
-        * style property between "visible" (true) or "hidden" (false).  If the 
-        * menu's "position" configuration property is set to "static" this 
-        * property toggles the menu's root &#60;div&#62; node's "display" style 
-        * property between "display" (true) or "none" (false).  
-        * (CSS position: absolute).
+        * @description Determines whether or not the menu is visible.  If the  
+        * menu's "position" configuration property is set to "dynamic" 
+        * (the default), this property toggles the menu's root &#60;div&#62;  
+        * node's "visibility" style property between "visible" (true) or  
+        * "hidden" (false).  If the menu's "position" configuration property is 
+        * set to "static" this property toggles the menu's root &#60;div&#62;  
+        * node's "display" style property between "block" (true) or   
+        * "none" (false).
         * @config visible
         * @default true
         * @type Boolean
@@ -855,8 +861,8 @@ init: function(p_oElement, p_oConfig) {
 
 /**
 * @method _initSubTree
-* @description Iterates the source element's childNodes collection and uses the child 
-* nodes to instantiate Menu and MenuItem instances.
+* @description Iterates the source element's childNodes collection and uses the  
+* child nodes to instantiate Menu and MenuItem instances.
 * @private
 */
 _initSubTree: function() {
@@ -1067,8 +1073,8 @@ _getFirstEnabledItem: function() {
 
 /**
 * @method _checkPosition
-* @description Checks to make sure that the value of the "position" property is one of the 
-* supported strings. Returns true if the position is supported.
+* @description Checks to make sure that the value of the "position" property is 
+* one of the supported strings. Returns true if the position is supported.
 * @private
 * @param {Object} p_sPosition The object to be evaluated.
 * @return Boolean
@@ -1303,7 +1309,8 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
 
 /**
 * @method _removeItemFromGroupByIndex
-* @description Removes an item from a group by index.  Returns the item that was removed.
+* @description Removes an item from a group by index.  Returns the item that 
+* was removed.
 * @private
 * @param {Number} p_nGroupIndex Number indicating the group to which
 * the item belongs.
@@ -1378,7 +1385,8 @@ _removeItemFromGroupByIndex: function(p_nGroupIndex, p_nItemIndex) {
 
 /**
 * @method _removeItemFromGroupByValue
-* @description Removes a item from a group by reference.  Returns the item that was removed.
+* @description Removes a item from a group by reference.  Returns the item that 
+* was removed.
 * @private
 * @param {Number} p_nGroupIndex Number indicating the group to which
 * the item belongs.
@@ -1428,8 +1436,8 @@ _removeItemFromGroupByValue: function(p_nGroupIndex, p_oItem) {
 
 /**
 * @method _updateItemProperties
-* @description Updates the index, groupindex, and className properties of the items
-* in the specified group. 
+* @description Updates the index, groupindex, and className properties of the 
+* items in the specified group. 
 * @private
 * @param {Number} p_nGroupIndex Number indicating the group of items to update.
 */
@@ -1481,7 +1489,8 @@ _updateItemProperties: function(p_nGroupIndex) {
 
 /**
 * @method _createItemGroup
-* @description Creates a new item group (array) and its associated HTMLUlElement node.  
+* @description Creates a new item group (array) and its associated  
+* HTMLUlElement node.
 * Returns an item group.
 * @private
 * @param {Number} p_nIndex Number indicating the group to create.
@@ -1506,8 +1515,8 @@ _createItemGroup: function(p_nIndex) {
 
 /**
 * @method _getItemGroup
-* @description Returns the item group at the specified index.  Returns an array of MenuItem
-* instances.
+* @description Returns the item group at the specified index.  Returns an 
+* array of MenuItem instances.
 * @private
 * @param {Number} p_nIndex Number indicating the index of the item group to
 * be retrieved.
@@ -2786,7 +2795,8 @@ _onSubmenuHide: function(p_sType, p_aArgs, p_oSubmenu) {
 
 /**
 * @method _onMenuItemFocus
-* @description "focus" YAHOO.util.CustomEvent handler for a Menu instance's items.
+* @description "focus" YAHOO.util.CustomEvent handler for a Menu 
+* instance's items.
 * @private
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
@@ -2806,7 +2816,8 @@ _onMenuItemFocus: function(p_sType, p_aArgs, p_aObjects) {
 
 /**
 * @method _onMenuItemBlur
-* @description "blur" YAHOO.util.CustomEvent handler for a Menu instance's items.
+* @description "blur" YAHOO.util.CustomEvent handler for a Menu 
+* instance's items.
 * @private
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
@@ -2904,8 +2915,8 @@ _onMenuItemDestroy: function(p_sType, p_aArgs, p_aObjects) {
 
 /**
 * @method enforceConstraints
-* @description The default event handler executed when the moveEvent is fired, if the 
-* "constraintoviewport" configuration property is set to true.
+* @description The default event handler executed when the moveEvent is fired,  
+* if the "constraintoviewport" configuration property is set to true.
 * @param {String} type The name of the event that was fired.
 * @param {Array} args Collection of arguments sent when the 
 * event was fired.
@@ -3140,7 +3151,7 @@ configIframe: function(p_sType, p_aArgs, p_oMenu) {
 /**
 * @method configHideDelay
 * @description Event handler for when the "hidedelay" configuration property of a
-* Menu changes.
+* a Menu changes.
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
@@ -3187,8 +3198,8 @@ configHideDelay: function(p_sType, p_aArgs, p_oMenu) {
 
 /**
 * @method configMaxHeight
-* @description Event handler for when the "maxheight" configuration property of a
-* Menu changes.
+* @description Event handler for when the "maxheight" configuration property of 
+* a Menu changes.
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
@@ -3259,8 +3270,8 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
 
 /**
 * @method initEvents
-* @description Initializes the custom events for Menu which are fired automatically at 
-* appropriate times by the Menu class.
+* @description Initializes the custom events for Menu which are fired  
+* automatically at appropriate times by the Menu class.
 */
 initEvents: function() {
 
@@ -3381,8 +3392,8 @@ setItemGroupTitle: function(p_sGroupTitle, p_nGroupIndex) {
 
 /**
 * @method addItem
-* @description Appends the specified item to a Menu instance.  Returns the item that was 
-* added to the Menu.
+* @description Appends the specified item to a Menu instance.  Returns the item 
+* that was added to the Menu.
 * @param {YAHOO.widget.MenuItem} p_oItem The item to be added.
 * @param {String} p_oItem The text of the item to be added.
 * @param {Object} p_oItem An object literal containing a set of MenuItem
@@ -3404,8 +3415,8 @@ addItem: function(p_oItem, p_nGroupIndex) {
 
 /**
 * @method addItems
-* @description Appends an array of items to a Menu instance.  Returns an array containing 
-* the MenuItem instances that were added to the Menu instance.
+* @description Appends an array of items to a Menu instance.  Returns an array  
+* containing the MenuItem instances that were added to the Menu instance.
 * @param {Array} p_aItems An array of items to be added to the Menu 
 * instance.  The array can contain strings representing the text for each item
 * to be created, object literals containing each of the MenuItem
@@ -3443,8 +3454,8 @@ addItems: function(p_aItems, p_nGroupIndex) {
 
 /**
 * @method insertItem
-* @description Inserts an item into a Menu instance at the specified index.  Returns the 
-* item that was inserted into the Menu.
+* @description Inserts an item into a Menu instance at the specified index.  
+* Returns the item that was inserted into the Menu.
 * @param {YAHOO.widget.MenuItem} p_oItem The item to be inserted.
 * @param {String} p_oItem The text of the item to be inserted.
 * @param {Object} p_oItem An object literal containing a set of MenuItem
@@ -3468,8 +3479,8 @@ insertItem: function(p_oItem, p_nItemIndex, p_nGroupIndex) {
 
 /**
 * @method removeItem
-* @description Removes the specified item from a Menu instance.  Returns the item that was 
-* removed from the Menu.
+* @description Removes the specified item from a Menu instance.  Returns the 
+* item that was removed from the Menu.
 * @param {YAHOO.widget.MenuItem} p_oObject The item to be removed.
 * @param {Number} p_oObject The index of the item to be removed.
 * @param {Number} p_nGroupIndex Optional. Number indicating the group to which
@@ -3551,8 +3562,8 @@ getItem: function(p_nItemIndex, p_nGroupIndex) {
 
 /**
 * @method destroy
-* @description Removes the Menu instance's element from the DOM and sets all child 
-* elements to null.
+* @description Removes the Menu instance's element from the DOM and sets all  
+* child elements to null.
 */
 destroy: function() {
 
@@ -3648,8 +3659,8 @@ setInitialFocus: function() {
 
 /**
 * @method setInitialSelection
-* @description Sets the "selected" configuration property of a Menu instance's first
-* enabled item to "true."
+* @description Sets the "selected" configuration property of a Menu instance's 
+* first enabled item to "true."
 */
 setInitialSelection: function() {
 
@@ -3665,8 +3676,8 @@ setInitialSelection: function() {
 
 /**
 * @method clearActiveItem
-* @description Sets the "selected" configuration property of a Menu instance's active 
-* item to "false" and hide's the item's submenu.
+* @description Sets the "selected" configuration property of a Menu 
+* instance's active item to "false" and hide's the item's submenu.
 * @param {Boolean} p_bBlur Flag indicating if the Menu instance's 
 * active item should be blurred.  
 */
@@ -3707,8 +3718,8 @@ clearActiveItem: function(p_bBlur) {
 
 
 /**
-* @description Initializes the class's configurable properties which can be changed using 
-* the Menu's Config object (cfg).
+* @description Initializes the class's configurable properties which can be
+* changed using the Menu's Config object (cfg).
 * @method initDefaultConfig
 */
 initDefaultConfig: function() {
@@ -3721,12 +3732,12 @@ initDefaultConfig: function() {
 
     /**
     * @config position
-    * @description Defines how a menu should be positioned on the screen. Possible values 
-    * are "static" and "dynamic."  Static menus are visible by default and 
-    * reside in the normal flow of the document (CSS position: static). 
-    * Dynamic menus are hidden by default, reside out of the normal flow of 
-    * the document, and can overlay other elements on the screen 
-    * (CSS position: absolute).
+    * @description Defines how a menu should be positioned on the screen.  
+    * Possible values are "static" and "dynamic."  Static menus are visible by 
+    * default and reside in the normal flow of the document (CSS position:  
+    * static).  Dynamic menus are hidden by default, reside out of the normal  
+    * flow of the document (CSS position: absolute), and can overlay other  
+    * elements on the screen.
     * @default dynamic
     * @type String
     */
@@ -3743,9 +3754,10 @@ initDefaultConfig: function() {
 
     /**
     * @config submenualignment
-    * @description Defines how submenus should be aligned to their parent item instance. 
-    * The format is: [itemCorner, submenuCorner]. By default a submenu's top 
-    * left corner is aligned to its parent item's top right corner.
+    * @description Defines how submenus should be aligned to their parent   
+    * MenuItem instance. The format is: [itemCorner, submenuCorner]. By default  
+    * a submenu's top left corner is aligned to its parent item's top 
+    * right corner.
     * @default ["tl","tr"]
     * @type Array
     */
@@ -3754,8 +3766,8 @@ initDefaultConfig: function() {
 
     /**
     * @config autosubmenudisplay
-    * @description Defines whether or not submenus are automatically made visible when the
-    * user mouses over the items in a menu.
+    * @description Defines whether or not submenus are automatically made 
+    * visible when the user mouses over the items in a menu.
     * @default true
     * @type Boolean
     */
@@ -3770,8 +3782,8 @@ initDefaultConfig: function() {
 
     /**
     * @config showdelay
-    * @description Defines time (in milliseconds) that should expire before a submenu is
-    * made visible when the user mouses over the items in a menu.
+    * @description Defines the time (in milliseconds) that should expire before 
+    * a submenu is made visible when the user mouses over the items in a menu.
     * @default 0
     * @type Number
     */
@@ -3786,7 +3798,8 @@ initDefaultConfig: function() {
 
     /**
     * @config hidedelay
-    * @description Defines time (in milliseconds) that should expire before a menu is hidden
+    * @description Defines the time (in milliseconds) that should expire before  
+    * a menu is hidden.
     * @default 0
     * @type Number
     */
@@ -3803,8 +3816,8 @@ initDefaultConfig: function() {
 
     /**
     * @config clicktohide
-    * @description Defines the behavior that hides menu.  If set to "true" the menu will 
-    * automatically be hidden if the user clicks outside of it.
+    * @description Defines the behavior that hides a menu.  If set to "true" the  
+    * menu will automatically be hidden if the user clicks outside of it.
     * @default true
     * @type Boolean
     */
@@ -3819,8 +3832,10 @@ initDefaultConfig: function() {
 
     /**
     * @config maxheight
-    * @description Defines the maximum height (in pixels) that a menu can be before 
-    * scrollbars are introduced.
+    * @description Defines the maximum height (in pixels) for a menu's body 
+    * element (&#60;div class=&#34;bd&#34;&#62;).  If value of the body's  
+    * offsetHeight exceeds the value specified for "maxheight" scrollbars 
+    * will be applied to the body element via the CSS "overflow" style property.
     * @default null
     * @type Number
     */

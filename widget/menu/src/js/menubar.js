@@ -1,13 +1,8 @@
-
-
-
 /**
-* @class Horizontal collection of items, each of which can contain a submenu.
+* Horizontal collection of items, each of which can contain a submenu.
 * Extends YAHOO.widget.Menu to provide a set of default mouse and 
 * key event behaviors.
-* @constructor
-* @extends YAHOO.widget.Menu
-* @base YAHOO.widget.Menu
+* 
 * @param {String} p_oElement The HTMLElement ID representing the source node 
 * (either HTMLSelectElement or HTMLDivElement) of the MenuBar <em>OR</em>
 * @param {Element} p_oElement The HTMLElement representing the MenuBar to
@@ -15,6 +10,10 @@
 * @param {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a MenuBar instance. See 
 * configuration class documentation for more details.
+* @class Menubar
+* @constructor
+* @extends YAHOO.widget.Menu
+* @namespace YAHOO.widget
 */
 YAHOO.widget.MenuBar = function(p_oElement, p_oConfig) {
 
@@ -29,7 +28,8 @@ YAHOO.widget.MenuBar = function(p_oElement, p_oConfig) {
 YAHOO.extend(YAHOO.widget.MenuBar, YAHOO.widget.Menu, {
 
 /**
-* The MenuBar class's initialization method. This method is automatically 
+* @method init
+* @description The MenuBar class's initialization method. This method is automatically 
 * called by the constructor, and sets up all DOM references for pre-existing 
 * markup, and creates required markup if it is not already present.
 * @param {String} p_oElement The HTMLElement ID representing the source node 
@@ -100,7 +100,8 @@ init: function(p_oElement, p_oConfig) {
 
 
 /**
-* Constant representing the CSS class(es) to be applied to the root 
+* @property CSS_CLASS_NAME
+* @description Constant representing the CSS class(es) to be applied to the root 
 * HTMLDivElement of the MenuBar instance.
 * @final
 * @type String
@@ -109,7 +110,8 @@ CSS_CLASS_NAME: "yuimenubar",
 
 
 /**
-* Returns a string representing the specified object.
+* @method toString
+* @description Returns a string representing the specified object.
 */
 toString: function() {
 
@@ -121,7 +123,8 @@ toString: function() {
 // Private event handlers
 
 /**
-* "keydown" Custom Event handler for a MenuBar instance.
+* @method _onKeyDown
+* @description "keydown" Custom Event handler for a MenuBar instance.
 * @private
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
@@ -251,7 +254,8 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
 
 
 /**
-* "click" Custom Event handler for a MenuBar instance.
+* @method _onClick
+* @description "click" Custom Event handler for a MenuBar instance.
 * @private
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 

@@ -2,18 +2,20 @@
 
 
 /**
-* @class Creates a list of options which vary depending on the context in 
-* which the menu is invoked.
-* @constructor
-* @extends YAHOO.widget.Menu
-* @base YAHOO.widget.Menu
+* Creates a list of options or commands which are made visible in response to 
+* an element's "contextmenu" event ("mousedown" for Opera).
+*
 * @param {String} p_oElement The HTMLElement ID representing the source node 
-* (either HTMLSelectElement or HTMLDivElement) of the ContextMenu <em>OR</em>
+* (either HTMLSelectElement or HTMLDivElement) of the ContextMenu.
 * @param {Element} p_oElement The HTMLElement representing the ContextMenu to 
-* be created
+* be created.
 * @param {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a ContextMenu instance. See 
 * configuration class documentation for more details.
+* @class ContextMenu
+* @constructor
+* @extends YAHOO.widget.Menu
+* @namespace YAHOO.widget
 */
 YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 
@@ -28,12 +30,17 @@ YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 
 YAHOO.extend(YAHOO.widget.ContextMenu, YAHOO.widget.Menu, {
 
+
+
 // Private properties
 
+
 /**
-* The id(s) or element(s) that trigger the display of the ContextMenu instance
+* @property _oTrigger
+* @description The id(s) or node reference(s) for the element whose  
+* "contextmenu" event ("mousedown" for Opera) triggers the display of the menu.
 * @private
-* @type String/Array/HTMLElement
+* @type String|Array|HTMLElement
 */
 _oTrigger: null,
 
@@ -41,22 +48,26 @@ _oTrigger: null,
 
 // Public properties
 
+
 /**
-* Returns the HTMLElement node that was the target of the "contextmenu" 
-* DOM event.
+* @property contextEventTarget
+* @description The HTMLElement node that was the target of the 
+* "contextmenu" DOM event ("mousedown" for Opera) that triggered the display 
+* of the menu.
 * @type HTMLElement
 */
 contextEventTarget: null,
 
 
 /**
-* The ContextMenu class's initialization method. This method is automatically  
-* called by the constructor, and sets up all DOM references for pre-existing 
-* markup, and creates required markup if it is not already present.
+* @method init
+* @description The ContextMenu class's initialization method. This method is   
+* automatically called by the constructor, and sets up all DOM references for  
+* pre-existing markup, and creates required markup if it is not already present.
 * @param {String} p_oElement The HTMLElement ID representing the source node 
-* (either HTMLSelectElement or HTMLDivElement) of the ContextMenu <em>OR</em>
+* (either HTMLSelectElement or HTMLDivElement) of the ContextMenu.
 * @param {Element} p_oElement The HTMLElement representing the ContextMenu to 
-* be created
+* be created.
 * @param {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a ContextMenu instance. See 
 * configuration class documentation for more details.
@@ -95,7 +106,9 @@ init: function(p_oElement, p_oConfig) {
 
 
 /**
-* Removes all of the DOM event handlers from the menu's trigger(s)
+* @method _removeEventHandlers
+* @description Removes all of the DOM event handlers from the menu's  
+* trigger element(s).
 * @private
 */
 _removeEventHandlers: function() {
@@ -127,8 +140,9 @@ _removeEventHandlers: function() {
 
 
 /**
-* "click" event handler for the HTMLElement node that triggered the event. 
-* Used to cancel default behaviors in Opera.
+* @method _onTriggerClick
+* @description "click" event handler for the HTMLElement node that triggered  
+* the event.  Used to cancel default behaviors in Opera.
 * @private
 * @param {Event} p_oEvent Event object passed back by the 
 * event utility (YAHOO.util.Event).
@@ -147,8 +161,9 @@ _onTriggerClick: function(p_oEvent, p_oMenu) {
 
 
 /**
-* "contextmenu" event handler ("mousedown" for Opera) for the HTMLElement 
-* node that triggered the event.
+* @method _onTriggerContextMenu
+* @description "contextmenu" event handler ("mousedown" for Opera) for the  
+* HTMLElement node(s) that trigger the display of the menu.
 * @private
 * @param {Event} p_oEvent Event object passed back by the 
 * event utility (YAHOO.util.Event).
@@ -180,9 +195,9 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
 
 
     /*
-         Prevent the browser's default context menu from appearing and 
-         stop the propagation of the "contextmenu" event so that 
-         other ContextMenu instances are no displayed.
+        Prevent the browser's default context menu from appearing and 
+        stop the propagation of the "contextmenu" event so that 
+        other ContextMenu instances are no displayed.
     */
 
     Event.stopEvent(p_oEvent);
@@ -195,7 +210,8 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
 
 
 /**
-* Returns a string representing the specified object.
+* @method toString
+* @description Returns a string representing the specified object.
 */
 toString: function() {
 
@@ -205,8 +221,9 @@ toString: function() {
 
 
 /**
-* Initializes the class's configurable properties which can be changed using 
-* a ContextMenu instance's Config object (cfg).
+* @method initDefaultConfig
+* @description Initializes the class's configurable properties which can be 
+* changed using a ContextMenu instance's Config object (cfg).
 */
 initDefaultConfig: function() {
 
@@ -221,8 +238,9 @@ initDefaultConfig: function() {
 
 
 /**
-* Removes the Menu instance's element from the DOM and sets all child 
-* elements to null.
+* @method destroy
+* @description Removes a ContextMenu instance's from the DOM and removes the
+* element's event handlers.
 */
 destroy: function() {
 
@@ -243,8 +261,9 @@ destroy: function() {
 
 
 /**
-* Event handler for when the "trigger" configuration property of
-* a MenuItem instance. 
+* @method configTrigger
+* @description Event handler for when the value of the "trigger" configuration 
+* property changes. 
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the 
 * event was fired.
