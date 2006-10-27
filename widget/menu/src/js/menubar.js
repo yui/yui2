@@ -65,6 +65,17 @@ init: function(p_oElement, p_oConfig) {
         to "static" 
     */
 
+    /**
+    * @config position
+    * @description Defines how a menu should be positioned on the screen.  
+    * Possible values are "static" and "dynamic."  Static menus are visible by 
+    * default and reside in the normal flow of the document (CSS position:  
+    * static).  Dynamic menus are hidden by default, reside out of the normal  
+    * flow of the document (CSS position: absolute), and can overlay other  
+    * elements on the screen.
+    * @default static
+    * @type String
+    */
     oConfig.queueProperty("position", "static");
 
 
@@ -73,6 +84,15 @@ init: function(p_oElement, p_oConfig) {
         to "tl" and "bl" 
     */
 
+    /**
+    * @config submenualignment
+    * @description Defines how submenus should be aligned to their parent   
+    * MenuBarItem instance. The format is: [itemCorner, submenuCorner]. By   
+    * default, submenus of a menu bar are aligned to that their top left corner 
+    * is aligned to its parent item's bottom left corner.
+    * @default ["tl","bl"]
+    * @type Array
+    */
     oConfig.queueProperty("submenualignment", ["tl","bl"]);
 
 
@@ -81,6 +101,13 @@ init: function(p_oElement, p_oConfig) {
         property to "false"
     */
 
+    /**
+    * @config autosubmenudisplay
+    * @description Defines whether or not submenus are automatically made 
+    * visible when the user mouses over the items in a menu bar.
+    * @default false
+    * @type Boolean
+    */
     oConfig.queueProperty("autosubmenudisplay", false);
 
 
