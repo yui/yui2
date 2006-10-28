@@ -1,10 +1,20 @@
 YAHOO Global Namespace - Release Notes
 
+0.12.0
+
+   * Added YAHOO.augment, which copies all or part of the prototype of one
+     object to another.
+
+   * Added an optional third parameter to YAHOO.extend: overrides.  It takes
+     an object literal of properties/methods to apply to the subclass
+     prototype, overriding the superclass if present.
+
 0.11.4
 
    * Changed window.YAHOO = window.YAHOO || {} to 
      if (typeof YAHOO == "undefined") YAHOO = {} because the previous statement
-     contributed to a memory leak when the library was hosted in an iframe.
+     contributed to a memory leak in IE6 when the library was hosted in an 
+     iframe.
 
 0.11.3
 

@@ -342,7 +342,10 @@ YAHOO.util.Subscriber.prototype.toString = function() {
 /**
  * The Event Utility provides utilities for managing DOM Events and tools
  * for building event systems
- * @module Event Utility
+ * @module event
+ * @title Event Utility
+ * @namespace YAHOO.util
+ * @requires yahoo
  */
 
 // The first instance of Event will win if it is loaded more than once.
@@ -352,7 +355,6 @@ if (!YAHOO.util.Event) {
  * The event utility provides functions to add and remove event listeners,
  * event cleansing.  It also tries to automatically remove listeners it
  * registers during the unload event.
- * @namespace YAHOO.util
  * @class Event
  * @static
  */
@@ -375,15 +377,6 @@ if (!YAHOO.util.Event) {
          * @private
          */
         var listeners = [];
-
-        /**
-         * Listeners that will be attached during the onload event
-         * @property delayedListeners
-         * @type array
-         * @static
-         * @private
-         */
-        var delayedListeners = [];
 
         /**
          * User-defined unload function that will be fired before all events
@@ -457,6 +450,7 @@ if (!YAHOO.util.Event) {
              * @property POLL_RETRYS
              * @type int
              * @static
+             * @final
              */
             POLL_RETRYS: 200,
 
@@ -465,14 +459,16 @@ if (!YAHOO.util.Event) {
              * @property POLL_INTERVAL
              * @type int
              * @static
+             * @final
              */
-            POLL_INTERVAL: 50,
+            POLL_INTERVAL: 20,
 
             /**
              * Element to bind, int constant
              * @property EL
              * @type int
              * @static
+             * @final
              */
             EL: 0,
 
@@ -481,6 +477,7 @@ if (!YAHOO.util.Event) {
              * @property TYPE
              * @type int
              * @static
+             * @final
              */
             TYPE: 1,
 
@@ -489,6 +486,7 @@ if (!YAHOO.util.Event) {
              * @property FN
              * @type int
              * @static
+             * @final
              */
             FN: 2,
 
@@ -497,6 +495,7 @@ if (!YAHOO.util.Event) {
              * @property WFN
              * @type int
              * @static
+             * @final
              */
             WFN: 3,
 
@@ -506,6 +505,7 @@ if (!YAHOO.util.Event) {
              * @property OBJ
              * @type int
              * @static
+             * @final
              */
             OBJ: 3,
 
@@ -515,6 +515,7 @@ if (!YAHOO.util.Event) {
              * @property ADJ_SCOPE
              * @type int
              * @static
+             * @final
              */
             ADJ_SCOPE: 4,
 
@@ -541,34 +542,17 @@ if (!YAHOO.util.Event) {
                     navigator.userAgent.match(/msie/gi)),
 
             /**
-             * @method addDelayedListener
+             * @method startInterval
              * @static
              * @private
              */
-            addDelayedListener: function(el, sType, fn, obj, override) {
-                delayedListeners[delayedListeners.length] =
-                    [el, sType, fn, obj, override];
-
-                // If this happens after the inital page load, we need to
-                // reset the poll counter so that we continue to search for
-                // the element for a fixed period of time.
-                if (loadComplete) {
-                    retryCount = this.POLL_RETRYS;
-                    this.startTimeout(0);
-                    // this._tryPreloadAttach();
+            startInterval: function() {
+                if (!this._interval) {
+                    var self = this;
+                    var callback = function() { self._tryPreloadAttach(); };
+                    this._interval = setInterval(callback, this.POLL_INTERVAL);
+                    // this.timeout = setTimeout(callback, i);
                 }
-            },
-
-            /**
-             * @method startTimeout
-             * @static
-             * @private
-             */
-            startTimeout: function(interval) {
-                var i = (interval || interval === 0) ? interval : this.POLL_INTERVAL;
-                var self = this;
-                var callback = function() { self._tryPreloadAttach(); };
-                this.timeout = setTimeout(callback, i);
             },
 
             /**
@@ -591,14 +575,41 @@ if (!YAHOO.util.Event) {
              * @static
              */
             onAvailable: function(p_id, p_fn, p_obj, p_override) {
-                onAvailStack.push( { id:       p_id, 
-                                     fn:       p_fn, 
-                                     obj:      p_obj, 
-                                     override: p_override } );
+                onAvailStack.push( { id:         p_id, 
+                                     fn:         p_fn, 
+                                     obj:        p_obj, 
+                                     override:   p_override, 
+                                     checkReady: false    } );
 
                 retryCount = this.POLL_RETRYS;
-                this.startTimeout(0);
-                // this._tryPreloadAttach();
+                this.startInterval();
+            },
+
+            /**
+             * Works the same way as onAvailable, but additionally checks the
+             * state of sibling elements to determine if the content of the
+             * available element is safe to modify.
+             *
+             * @method onContentReady
+             *
+             * @param {string}   p_id the id of the element to look for.
+             * @param {function} p_fn what to execute when the element is ready.
+             * @param {object}   p_obj an optional object to be passed back as
+             *                   a parameter to p_fn.
+             * @param {boolean}  p_override If set to true, p_fn will execute
+             *                   in the scope of p_obj
+             *
+             * @static
+             */
+            onContentReady: function(p_id, p_fn, p_obj, p_override) {
+                onAvailStack.push( { id:         p_id, 
+                                     fn:         p_fn, 
+                                     obj:        p_obj, 
+                                     override:   p_override,
+                                     checkReady: true      } );
+
+                retryCount = this.POLL_RETRYS;
+                this.startInterval();
             },
 
             /**
@@ -646,15 +657,13 @@ if (!YAHOO.util.Event) {
 
                     // check to see if we need to delay hooking up the event 
                     // until after the page loads.
-                    if (loadComplete && oEl) {
+                    if (oEl) {
                         el = oEl;
                     } else {
-                        // defer adding the event until onload fires
-                        this.addDelayedListener(el, 
-                                                sType, 
-                                                fn, 
-                                                obj, 
-                                                override);
+                        // defer adding the event until the element is available
+                        this.onAvailable(el, function() {
+                           YAHOO.util.Event.on(el, sType, fn, obj, override);
+                        });
 
                         return true;
                     }
@@ -807,7 +816,7 @@ if (!YAHOO.util.Event) {
              * otherwise
              * @static
              */
-            removeListener: function(el, sType, fn, index) {
+            removeListener: function(el, sType, fn) {
 
                 if (!fn || !fn.call) {
                     return false;
@@ -845,7 +854,10 @@ if (!YAHOO.util.Event) {
 
                 var cacheItem = null;
 
-                //var index = arguments[3];
+                // The index is a hidden parameter; needed to remove it from
+                // the method signature because it was tempting users to
+                // try and take advantage of it, which is not possible.
+                var index = arguments[3];
   
                 if ("undefined" == typeof index) {
                     index = this._getCacheIndex(el, sType, fn);
@@ -908,8 +920,8 @@ if (!YAHOO.util.Event) {
              * the actual element that was targeted.  This normalizes the
              * return value for getTarget and getRelatedTarget.
              * @method resolveTextNode
-             * @param {HTMLElement} node to resolve
-             * @return the normized node
+             * @param {HTMLElement} node node to resolve
+             * @return {HTMLElement} the normized node
              * @static
              */
             resolveTextNode: function(node) {
@@ -1222,31 +1234,6 @@ if (!YAHOO.util.Event) {
                     tryAgain = (retryCount > 0);
                 }
 
-                // Delayed listeners
-                var stillDelayed = [];
-
-                for (var i=0,len=delayedListeners.length; i<len; ++i) {
-                    var d = delayedListeners[i];
-                    // There may be a race condition here, so we need to 
-                    // verify the array element is usable.
-                    if (d) {
-
-                        // el will be null if document.getElementById did not
-                        // work
-                        var el = this.getEl(d[this.EL]);
-
-                        if (el) {
-                            this.on(el, d[this.TYPE], d[this.FN], 
-                                    d[this.OBJ], d[this.ADJ_SCOPE]);
-                            delete delayedListeners[i];
-                        } else {
-                            stillDelayed.push(d);
-                        }
-                    }
-                }
-
-                delayedListeners = stillDelayed;
-
                 // onAvailable
                 var notAvail = [];
                 for (i=0,len=onAvailStack.length; i<len ; ++i) {
@@ -1255,27 +1242,37 @@ if (!YAHOO.util.Event) {
                         el = this.getEl(item.id);
 
                         if (el) {
-                            var scope = el;
-                            if (item.override) {
-                                if (item.override === true) {
-                                    scope = item.obj;
-                                } else {
-                                    scope = item.override;
+                            // The element is available, but not necessarily ready
+
+                            if ( !item.checkReady || 
+                                    loadComplete || 
+                                    el.nextSibling ||
+                                    (document && document.body) ) {
+
+                                var scope = el;
+                                if (item.override) {
+                                    if (item.override === true) {
+                                        scope = item.obj;
+                                    } else {
+                                        scope = item.override;
+                                    }
                                 }
+                                item.fn.call(scope, item.obj);
+                                delete onAvailStack[i];
                             }
-                            item.fn.call(scope, item.obj);
-                            delete onAvailStack[i];
                         } else {
                             notAvail.push(item);
                         }
                     }
                 }
 
-                retryCount = (stillDelayed.length === 0 && 
-                                    notAvail.length === 0) ? 0 : retryCount - 1;
+                retryCount = (notAvail.length === 0) ? 0 : retryCount - 1;
 
                 if (tryAgain) {
-                    this.startTimeout();
+                    this.startInterval();
+                } else {
+                    clearInterval(this._interval);
+                    this._interval = null;
                 }
 
                 this.locked = false;
@@ -1467,7 +1464,7 @@ if (!YAHOO.util.Event) {
                 } else {
                     return function(){};
                 }
-            } (),
+            }(),
 
             /**
              * Basic remove listener
@@ -1492,42 +1489,52 @@ if (!YAHOO.util.Event) {
                 } else {
                     return function(){};
                 }
-            } ()
+            }()
         };
 
-    } ();
+    }();
 
-    /**
-     * YAHOO.util.Event.on is an alias for addListener
-     * @method on
-     * @see addListener
-     * @static
-     */
-    YAHOO.util.Event.on = YAHOO.util.Event.addListener;
+    (function() {
+        var EU = YAHOO.util.Event;
 
-    if (document && document.body) {
-        YAHOO.util.Event._load();
-    } else {
-        YAHOO.util.Event._simpleAdd(window, "load", YAHOO.util.Event._load);
-    }
-    YAHOO.util.Event._simpleAdd(window, "unload", YAHOO.util.Event._unload);
-    YAHOO.util.Event._tryPreloadAttach();
+        /**
+         * YAHOO.util.Event.on is an alias for addListener
+         * @method on
+         * @see addListener
+         * @static
+         */
+        EU.on = EU.addListener;
+
+        // YAHOO.mix(EU, YAHOO.util.EventProvider.prototype);
+        // EU.createEvent("DOMContentReady");
+        // EU.subscribe("DOMContentReady", EU._load);
+
+        if (document && document.body) {
+            EU._load();
+        } else {
+            // EU._simpleAdd(document, "DOMContentLoaded", EU._load);
+            EU._simpleAdd(window, "load", EU._load);
+        }
+        EU._simpleAdd(window, "unload", EU._unload);
+        EU._tryPreloadAttach();
+    })();
 }
 
 /**
- * EventPublisher is designed to be used with YAHOO.augment to wrap 
+ * EventProvider is designed to be used with YAHOO.augment to wrap 
  * CustomEvents in an interface that allows events to be subscribed to 
  * and fired by name.  This makes it possible for implementing code to
  * subscribe to an event that either has not been created yet, or will
  * not be created at all.
- * @Class EventPublisher
+ * @Class EventProvider
  */
-YAHOO.util.EventPublisher = function() { };
+YAHOO.util.EventProvider = function() { };
 
-YAHOO.util.EventPublisher.prototype = {
+YAHOO.util.EventProvider.prototype = {
     
     /**
      * Subscribe to a CustomEvent by event type
+     *
      * @method subscribe
      * @param p_type     {string}   the type, or name of the event
      * @param p_fn       {function} the function to exectute when the event fires
@@ -1564,22 +1571,23 @@ YAHOO.util.EventPublisher.prototype = {
      *
      * @param p_type {string} the type, or name of the event
      * @param p_config {object} optional config params.  Valid properties are:
-     *      <ul>
-     *      <li>
+     *
+     *  <ul>
+     *    <li>
      *      scope: defines the default execution scope.  If not defined
      *      the default scope will be this instance.
-     *      </li>
-     *      <li>
+     *    </li>
+     *    <li>
      *      silent: if true, the custom event will not generate log messages.
      *      This is false by default.
-     *      </li>
-     *      <li>
+     *    </li>
+     *    <li>
      *      onSubscribeCallback: specifies a callback to execute when the
      *      event has a new subscriber.  This will fire immediately for
      *      each queued subscriber if any exist prior to the creation of
      *      the event.
-     *      </li>
-     *      </ul>
+     *    </li>
+     *  </ul>
      *
      *  @return {CustomEvent} the custom event
      *
@@ -1617,12 +1625,11 @@ YAHOO.util.EventPublisher.prototype = {
     },
 
    /**
-     * Fire and event by name.  The callback functions will be executed
+     * Fire a custom event by name.  The callback functions will be executed
      * from the scope specified when the event was created, and with the 
      * following parameters:
      *   <ul>
-     *   <li>The type of event</li>
-     *   <li>All of the arguments fire() was executed with as an array</li>
+     *   <li>The first argument fire() was executed with</li>
      *   <li>The custom object (if any) that was passed into the subscribe() 
      *       method</li>
      *   </ul>
@@ -1630,11 +1637,12 @@ YAHOO.util.EventPublisher.prototype = {
      * @param p_type    {string}  the type, or name of the event
      * @param arguments {Object*} an arbitrary set of parameters to pass to 
      *                            the handler.
+     * @return {boolean} the return value from CustomEvent.fire, or null if 
+     *                   the custom event does not exist.
      */
     fireEvent: function(p_type, arg1, arg2, etc) {
 
         this.__yui_events = this.__yui_events || {};
-        
         var ce = this.__yui_events[p_type];
 
         if (ce) {
@@ -1644,50 +1652,9 @@ YAHOO.util.EventPublisher.prototype = {
             }
             return ce.fire.apply(ce, args);
         } else {
-            return false;
+            return null;
         }
     }
 
 };
-
-///////////////////////////////////////////////////////////////
-
-/*
-function onClick(type, args) {
-    alert("1 " + args[0]);
-}
-
-function onClick2(type, args) {
-    alert("2 " + args[0]);
-}
-
-var Tree = function() { };
-YAHOO.augment(Tree, YAHOO.util.EventPublisher);
-
-var tree = new Tree();
-tree.subscribe("nodeClick", onClick);
-tree.createEvent("nodeClick");
-tree.fireEvent("nodeClick", "nodefoo");
-
-var tree2 = new Tree();
-tree2.subscribe("nodeClick", onClick2);
-tree2.createEvent("nodeClick");
-tree2.fireEvent("nodeClick", "nodefoo");
-*/
-
-///////////////////////////////////////////////////////////////
-
-/*
-alternative 1:
-
-var Tree = function() { 
-    this.eventHost = new YAHOO.util.EventPublisher();
-};
- 
-var tree = new Tree():
-tree.eventHost.subscribe("nodeClick", onClick);
-tree.eventHost.createEvent("nodeClick");
-tree.eventHost.fireEvent("nodeClick", "nodefoo");
-
-*/
 
