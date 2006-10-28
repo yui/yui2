@@ -1,4 +1,8 @@
+(function() {
 
+var Dom = YAHOO.util.Dom;
+var Module = YAHOO.widget.Module;
+var Menu = YAHOO.widget.Menu;
 
 
 /**
@@ -22,10 +26,7 @@ YAHOO.widget.MenuItem = function(p_oObject, p_oConfig) {
 
         if(p_oConfig) {
     
-            if(
-                p_oConfig.parent && 
-                p_oConfig.parent instanceof YAHOO.widget.Menu
-            ) {
+            if(p_oConfig.parent && p_oConfig.parent instanceof Menu) {
     
                 this.parent = p_oConfig.parent;
     
@@ -256,15 +257,6 @@ YAHOO.widget.MenuItem.prototype = {
     * @type HTMLImageElement
     */
     _checkImage: null,
-    
-    
-    /**
-    * @property _oDom
-    * @description Reference to the Dom utility singleton.
-    * @private
-    * @type YAHOO.util.Dom
-    */
-    _oDom: YAHOO.util.Dom,
 
 
 
@@ -292,7 +284,7 @@ YAHOO.widget.MenuItem.prototype = {
 	* is secure (https)
 	* @type Boolean
 	*/
-	isSecure: YAHOO.widget.Module.prototype.isSecure,
+	isSecure: Module.prototype.isSecure,
 
 
     /**
@@ -358,7 +350,7 @@ YAHOO.widget.MenuItem.prototype = {
 	* @description String representing the browser
 	* @type String
 	*/
-	browser: YAHOO.widget.Module.prototype.browser,
+	browser: Module.prototype.browser,
 
 
 
@@ -485,7 +477,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(!this.SUBMENU_TYPE) {
     
-            this.SUBMENU_TYPE = YAHOO.widget.Menu;
+            this.SUBMENU_TYPE = Menu;
     
         }
 
@@ -659,7 +651,7 @@ YAHOO.widget.MenuItem.prototype = {
         if(this.element) {
 
 
-            this._oDom.addClass(this.element, this.CSS_CLASS_NAME);
+            Dom.addClass(this.element, this.CSS_CLASS_NAME);
 
 
             // Create custom events
@@ -834,7 +826,7 @@ YAHOO.widget.MenuItem.prototype = {
     
                 var oMenu = oConfig.setProperty(
                                 "submenu", 
-                                (this._oDom.generateId())
+                                (Dom.generateId())
                             );
     
                 for(var n=0; n<nOptions; n++) {
@@ -918,7 +910,6 @@ YAHOO.widget.MenuItem.prototype = {
     configHelpText: function(p_sType, p_aArgs, p_oItem) {
 
         var me = this;
-        var Dom = this._oDom;
         var oHelpText = p_aArgs[0];
         var oEl = this.element;
         var oConfig = this.cfg;
@@ -1184,7 +1175,6 @@ YAHOO.widget.MenuItem.prototype = {
     */    
     configChecked: function(p_sType, p_aArgs, p_oItem) {
     
-        var Dom = this._oDom;
         var bChecked = p_aArgs[0];
         var oEl = this.element;
         var oConfig = this.cfg;
@@ -1266,7 +1256,6 @@ YAHOO.widget.MenuItem.prototype = {
     configDisabled: function(p_sType, p_aArgs, p_oItem) {
 
         var bDisabled = p_aArgs[0];
-        var Dom = this._oDom;
         var oAnchor = this._oAnchor;
         var aNodes = [this.element, oAnchor];
         var oEM = this._oHelpTextEM;
@@ -1356,7 +1345,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(!this.cfg.getProperty("disabled")) {
 
-            var Dom = this._oDom;
             var bSelected = p_aArgs[0];
             var oEM = this._oHelpTextEM;
             var aNodes = [this.element, this._oAnchor];
@@ -1423,7 +1411,6 @@ YAHOO.widget.MenuItem.prototype = {
     */
     configSubmenu: function(p_sType, p_aArgs, p_oItem) {
 
-        var Dom = this._oDom;
         var oEl = this.element;
         var oSubmenu = p_aArgs[0];
         var oImg = this.submenuIndicator;
@@ -1435,7 +1422,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(oSubmenu) {
 
-            if(oSubmenu instanceof YAHOO.widget.Menu) {
+            if(oSubmenu instanceof Menu) {
 
                 oMenu = oSubmenu;
                 oMenu.parent = this;
@@ -1712,7 +1699,7 @@ YAHOO.widget.MenuItem.prototype = {
     */
     getNextEnabledSibling: function() {
 
-        if(this.parent instanceof YAHOO.widget.Menu) {
+        if(this.parent instanceof Menu) {
 
             var nGroupIndex = this.groupIndex;
 
@@ -1787,7 +1774,7 @@ YAHOO.widget.MenuItem.prototype = {
     */
     getPreviousEnabledSibling: function() {
 
-        if(this.parent instanceof YAHOO.widget.Menu) {
+        if(this.parent instanceof Menu) {
 
             var nGroupIndex = this.groupIndex;
 
@@ -1918,7 +1905,7 @@ YAHOO.widget.MenuItem.prototype = {
         if(
             !this.cfg.getProperty("disabled") && 
             oParent && 
-            this._oDom.getStyle(oParent.element, "visibility") == "visible"
+            Dom.getStyle(oParent.element, "visibility") == "visible"
         ) {
 
             this._oAnchor.blur();
@@ -1986,3 +1973,5 @@ YAHOO.widget.MenuItem.prototype = {
     }
 
 };
+
+})();
