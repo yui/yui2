@@ -261,15 +261,17 @@ YAHOO.widget.MenuManager = new function() {
 
 
             /*
-                 If the target of the event wasn't a menu, hide all visible,
-                 dynamically positioned menus
+                If the target of the event wasn't a menu, hide all 
+                dynamically positioned menus
             */
-
-            for(var i in m_oVisibleMenus) {
+            
+            var oActiveItem;
     
-                if(m_oVisibleMenus.hasOwnProperty(i)) {
+            for(var i in m_oMenus) {
     
-                    oMenu = m_oVisibleMenus[i];
+                if(m_oMenus.hasOwnProperty(i)) {
+    
+                    oMenu = m_oMenus[i];
     
                     if(
                         oMenu.cfg.getProperty("clicktohide") && 
@@ -279,10 +281,15 @@ YAHOO.widget.MenuManager = new function() {
                         oMenu.hide();
     
                     }
+                    else {
+
+                        oMenu.clearActiveItem(true);
+    
+                    }
     
                 }
     
-            }
+            } 
 
         }
 
