@@ -58,11 +58,6 @@ YAHOO.widget.MenuManager = new function() {
     var m_oVisibleMenus = {};
 
 
-    // The current scope
-
-    var me = this;
-
-
 
     // Private methods
 
@@ -307,7 +302,7 @@ YAHOO.widget.MenuManager = new function() {
     */
     var onMenuDestroy = function(p_sType, p_aArgs, p_oMenu) {
         
-        me.removeMenu(p_oMenu);
+        this.removeMenu(p_oMenu);
 
     };
 
@@ -426,7 +421,7 @@ YAHOO.widget.MenuManager = new function() {
     
             }
     
-            p_oMenu.destroyEvent.subscribe(onMenuDestroy, p_oMenu);
+            p_oMenu.destroyEvent.subscribe(onMenuDestroy, p_oMenu, this);
             
             p_oMenu.cfg.subscribeToConfigEvent(
                 "visible", 
