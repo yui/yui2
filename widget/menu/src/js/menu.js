@@ -1,335 +1,7 @@
-/**
-* @module Menu
-* @description <p>The Menu Library features a collection of widgets that makes  
-it easy to add menus to your website or web application.  Use can use the Menu 
-Library to create things like application-style fly-out menus, customizable 
-context menus, or navigation-style menu bars with just a small amount of 
-scripting.</p> <p>The Menu library features:</p>
-<ul>
-    <li>Screen-reader accessibility.</li>
-    <li>Keyboard and mouse navigation.</li>
-    <li>A rich event model that provides access to all of a Menu instance's 
-    interesting moments.</li>
-    <li>Support for 
-    <a href="http://en.wikipedia.org/wiki/Progressive_Enhancement">Progressive
-    Enhancement</a>; Menus can be created from simple, 
-    semantic markup on the page or purely through JavaScript.</li>
-</ul>
-* @title Menu Library
-* @namespace YAHOO.widget
-* @requires Event, Dom, Container
-*/
 (function() {
 
 var Dom = YAHOO.util.Dom;
 var Event = YAHOO.util.Event;
-
-
-/**
-* Singleton that manages a collection of all menus and menu items.  Listens for 
-* DOM events at the document level and dispatches the events to the 
-* corresponding menu or menu item.
-*
-* @class MenuManager
-* @static
-* @private
-*/
-var MenuManager = new function() {
-
-    // Private member variables
-
-
-    // Flag indicating if the DOM event handlers have been attached
-
-    var m_bInitializedEventHandlers = true;
-
-
-    // Collection of menus
-
-    var m_oMenus = {};
-    
-    
-    //  Collection of menu items 
-
-    var m_oItems = {};
-
-
-    
-    // Private methods
-
-
-    /**
-    * @method getMenuRootElement
-    * @description Finds the root DIV node of a menu or the root LI node of a 
-    * menu item
-    * @private
-    * @param {HTMLElement} p_oElement An HTML element
-    */
-    var getMenuRootElement = function(p_oElement) {
-    
-        var oParentNode;
-
-        if(p_oElement && p_oElement.tagName) {
-        
-            switch(p_oElement.tagName.toUpperCase()) {
-                    
-                case "DIV":
-    
-                    oParentNode = p_oElement.parentNode;
-    
-                    // Check if the DIV is the inner "body" node of a menu
-                    if(
-                        Dom.hasClass(p_oElement, "bd") && 
-                        oParentNode && 
-                        oParentNode.tagName && 
-                        oParentNode.tagName.toUpperCase() == "DIV"
-                    ) {
-                    
-                        return oParentNode;
-                    
-                    }
-                    else {
-                    
-                        return p_oElement;
-                    
-                    }
-                
-                break;
-
-                case "LI":
-    
-                    return p_oElement;
-
-                default:
-    
-                    oParentNode = p_oElement.parentNode;
-    
-                    if(oParentNode) {
-                    
-                        return getMenuRootElement(oParentNode);
-                    
-                    }
-                
-                break;
-            
-            }
-
-        }
-        
-    };
-
-
-    /**
-    * @method onDOMEvent
-    * @description Generic, global event handler for all of a menu's DOM-based 
-    * events.  This listens for events against the document object.  If the 
-    * target of a given event is a member of a menu or menu item's DOM, the 
-    * instance's corresponding Custom Event is fired.
-    * @private
-    * @param {Event} p_oEvent Event object passed back by the event 
-    * utility (YAHOO.util.Event).
-    */
-    var onDOMEvent = function(p_oEvent) {
-
-        // Get the target node of the DOM event
-    
-        var oTarget = Event.getTarget(p_oEvent);
-
-
-        // See if the target of the event was a menu, or a menu item
-
-        var oElement = getMenuRootElement(oTarget);
-    
-        var oMenuItem;
-        var oMenu; 
-
-
-        if(oElement) {
-
-            var sTagName = oElement.tagName.toUpperCase();
-    
-            if(sTagName == "LI") {
-        
-                var sYUIId = oElement.getAttribute("yuiid");
-        
-                if(sYUIId) {
-        
-                    oMenuItem = m_oItems[sYUIId];
-                    oMenu = oMenuItem.parent;
-        
-                }
-            
-            }
-            else if(sTagName == "DIV") {
-            
-                if(oElement.id) {
-                
-                    oMenu = m_oMenus[oElement.id];
-                
-                }
-            
-            }
-
-        }
-
-        if(oMenu) {
-
-            // Map of DOM event names to CustomEvent names
-        
-            var oEventTypes =  {
-                    "click": "clickEvent",
-                    "mousedown": "mouseDownEvent",
-                    "mouseup": "mouseUpEvent",
-                    "mouseover": "mouseOverEvent",
-                    "mouseout": "mouseOutEvent",
-                    "keydown": "keyDownEvent",
-                    "keyup": "keyUpEvent",
-                    "keypress": "keyPressEvent"
-                };
-    
-            var sCustomEventType = oEventTypes[p_oEvent.type];
-
-
-            // Fire the Custom Even that corresponds the current DOM event    
-    
-            if(oMenuItem && !oMenuItem.cfg.getProperty("disabled")) {
-            
-                oMenuItem[sCustomEventType].fire(p_oEvent);                   
-            
-            }
-    
-            oMenu[sCustomEventType].fire(p_oEvent, oMenuItem);
-        
-        }
-        else if(p_oEvent.type == "mousedown") {
-
-            /*
-                 If the target of the event wasn't a menu, hide all 
-                 dynamically positioned menus
-            */
-            
-            var oActiveItem;
-    
-            for(var i in m_oMenus) {
-    
-                if(m_oMenus.hasOwnProperty(i)) {
-    
-                    oMenu = m_oMenus[i];
-    
-                    if(
-                        oMenu.cfg.getProperty("clicktohide") && 
-                        oMenu.cfg.getProperty("position") == "dynamic"
-                    ) {
-    
-                        oMenu.hide();
-    
-                    }
-                    else {
-
-                        oMenu.clearActiveItem(true);
-    
-                    }
-    
-                }
-    
-            } 
-            
-        }
-
-    };
-
-
-
-    // Privileged methods
-
-
-    /**
-    * @method initEventHandlers
-    * @description Assigns event handlers to the document object
-    */
-    this.initEventHandlers = function() {
-
-        if(m_bInitializedEventHandlers) {
-
-            var oDoc = document;
-    
-            Event.addListener(oDoc, "mouseover", onDOMEvent);
-            Event.addListener(oDoc, "mouseout", onDOMEvent);
-            Event.addListener(oDoc, "mousedown", onDOMEvent);
-            Event.addListener(oDoc, "mouseup", onDOMEvent);
-            Event.addListener(oDoc, "click", onDOMEvent);
-            Event.addListener(oDoc, "keydown", onDOMEvent);
-            Event.addListener(oDoc, "keyup", onDOMEvent);
-            Event.addListener(oDoc, "keypress", onDOMEvent);
-
-            m_bInitializedEventHandlers = false;
-
-        }
-    
-    };
-
-
-    /**
-    * @method addMenu
-    * @description Adds a menu to the collection of known menus
-    * @param {YAHOO.widget.Menu} p_oMenu Menu instance   
-    */
-    this.addMenu = function(p_oMenu) {
-
-        m_oMenus[p_oMenu.id] = p_oMenu;
-    
-    };
-
-
-    /**
-    * @method removeMenu
-    * @description Removes a menu from the collection of known menus
-    * @param {YAHOO.widget.Menu} p_oMenu Menu instance   
-    */
-    this.removeMenu = function(p_oMenu) {
-
-        delete m_oMenus[p_oMenu.id];
-    
-    };
-
-
-    /**
-    * @method addItem
-    * @description Adds an item to the collection of known menu item
-    * @param {YAHOO.widget.MenuItem} p_oItem MenuItem instance   
-    */
-    this.addItem = function(p_oItem) {
-    
-        var sYUIId = Dom.generateId();
-
-        p_oItem.element.setAttribute("yuiid", sYUIId);
-
-        m_oItems[sYUIId] = p_oItem;            
-    
-    };
-
-
-    /**
-    * @method removeItem
-    * @description Removes an item from the collection of known menu item
-    * @param {YAHOO.widget.MenuItem} p_oItem MenuItem instance   
-    */
-    this.removeItem = function(p_oItem) {
-    
-        var sYUIId = p_oItem.element.getAttribute("yuiid");
-
-        if(sYUIId) {
-
-            delete m_oItems[sYUIId];
-
-        }
-    
-    };
-
-};
-
-
-
 
 
 /**
@@ -343,6 +15,7 @@ var MenuManager = new function() {
 * @param {Object} p_oConfig Optional. The configuration object literal 
 * containing the configuration for a Menu instance. See 
 * configuration class documentation for more details.
+* @namespace YAHOO.widget
 * @class Menu
 * @constructor
 * @extends YAHOO.widget.Overlay
@@ -640,6 +313,22 @@ keyUpEvent: null,
 
 
 /**
+* @event itemAddedEvent
+* @description Fires when an item is added to a menu.
+* @type YAHOO.util.CustomEvent
+*/
+itemAddedEvent: null,
+
+
+/**
+* @event itemRemovedEvent
+* @description Fires when an item is removed to a menu.
+* @type YAHOO.util.CustomEvent
+*/
+itemRemovedEvent: null,
+
+
+/**
 * @method init
 * @description The Menu class's initialization method. This method is  
 * automatically called  by the constructor, and sets up all DOM references for 
@@ -797,11 +486,6 @@ init: function(p_oElement, p_oConfig) {
         Dom.addClass(oEl, this.CSS_CLASS_NAME);
 
 
-        // Assign DOM event handlers
-
-        MenuManager.initEventHandlers();
-
-
         // Subscribe to Custom Events
 
         this.initEvent.subscribe(this._onInit, this, true);
@@ -855,7 +539,7 @@ init: function(p_oElement, p_oConfig) {
 
         // Register the Menu instance with the MenuManager
 
-        MenuManager.addMenu(this);
+        YAHOO.widget.MenuManager.addMenu(this);
         
 
         this.initEvent.fire(YAHOO.widget.Menu);
@@ -1143,8 +827,6 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
 
     if(oItem) {
 
-        MenuManager.addItem(oItem);
-
         var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0;
         
         var aGroup = this._getItemGroup(nGroupIndex);
@@ -1254,6 +936,8 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
                     " Index: " + oGroupItem.index + ", " + 
                     " Group Index: " + oGroupItem.groupIndex);
 
+                this.itemAddedEvent.fire(oGroupItem);
+
                 return oGroupItem;
     
             }
@@ -1306,6 +990,9 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
                     " Index: " + oGroupItem.index + ", " + 
                     " Group Index: " + oGroupItem.groupIndex);
         
+
+                this.itemAddedEvent.fire(oGroupItem);
+
                 return oGroupItem;
     
             }
@@ -1381,7 +1068,10 @@ _removeItemFromGroupByIndex: function(p_nGroupIndex, p_nItemIndex) {
     
             }
     
-    
+
+            this.itemRemovedEvent.fire(oItem);    
+
+
             // Return a reference to the item that was removed
         
             return oItem;
@@ -1612,8 +1302,6 @@ _subscribeToItemEvents: function(p_oItem) {
         this._onMenuItemConfigChange,
         aArguments
     );
-
-    p_oItem.destroyEvent.subscribe(this._onMenuItemDestroy, aArguments);
 
 },
 
@@ -2899,26 +2587,6 @@ _onMenuItemConfigChange: function(p_sType, p_aArgs, p_aObjects) {
 },
 
 
-/**
-* @method _onMenuItemDestroy
-* @description "destroy" YAHOO.util.CustomEvent handler for the Menu 
-* instance's items.
-* @private
-* @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArgs Collection of arguments sent when the 
-* event was fired.
-* @param {Array} p_aObjects Array containing the current Menu instance 
-* and the item that fired the event.
-*/
-_onMenuItemDestroy: function(p_sType, p_aArgs, p_aObjects) {
-
-    var oItem = p_aObjects[1];
-
-    MenuManager.removeItem(oItem);
-
-},
-
-
 
 // Public event handlers for configuration properties
 
@@ -3299,6 +2967,8 @@ initEvents: function() {
     this.keyPressEvent = new CustomEvent("keyPressEvent", this);
     this.keyDownEvent = new CustomEvent("keyDownEvent", this);
     this.keyUpEvent = new CustomEvent("keyUpEvent", this);
+    this.itemAddedEvent = new CustomEvent("itemAddedEvent", this);
+    this.itemRemovedEvent = new CustomEvent("itemRemovedEvent", this);
 
 },
 
@@ -3576,11 +3246,6 @@ getItem: function(p_nItemIndex, p_nGroupIndex) {
 * child elements to null.
 */
 destroy: function() {
-
-    // Remove the Menu from the "_menus" collection
-
-    MenuManager.removeMenu(this);
-
 
     // Remove Custom Event listeners
 
