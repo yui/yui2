@@ -24,32 +24,11 @@ YAHOO.widget.Menu = function(p_oElement, p_oConfig) {
 
     if(p_oConfig) {
 
-        if(
-            p_oConfig.parent && 
-            p_oConfig.parent instanceof YAHOO.widget.MenuItem
-        ) {
+        this.parent = p_oConfig.parent;
 
-            this.parent = p_oConfig.parent;
+        this.lazyLoad = p_oConfig.lazyLoad || p_oConfig.lazyload;
 
-        }
-
-
-        var bLazyLoad = p_oConfig.lazyLoad || p_oConfig.lazyload;
-
-        if(typeof bLazyLoad == "boolean") {
-
-            this.lazyLoad = bLazyLoad;
-
-        }
-
-
-        var aItemData = p_oConfig.itemData || p_oConfig.itemdata;
-
-        if(typeof aItemData == "object" && aItemData.constructor == Array) {
-
-            this.itemData = aItemData;
-
-        }
+        this.itemData = p_oConfig.itemData || p_oConfig.itemdata;
     
     }
 
@@ -1292,15 +1271,14 @@ _configureItemSubmenuModule: function(p_oItem) {
 */
 _subscribeToItemEvents: function(p_oItem) {
 
-    var aArguments = [this, p_oItem];
+    p_oItem.focusEvent.subscribe(this._onMenuItemFocus, p_oItem, this);
 
-    p_oItem.focusEvent.subscribe(this._onMenuItemFocus, aArguments);
-
-    p_oItem.blurEvent.subscribe(this._onMenuItemBlur, aArguments);
+    p_oItem.blurEvent.subscribe(this._onMenuItemBlur, this, true);
 
     p_oItem.cfg.configChangedEvent.subscribe(
         this._onMenuItemConfigChange,
-        aArguments
+        p_oItem,
+        this
     );
 
 },
@@ -2421,7 +2399,31 @@ _onSubmenuBeforeShow: function(p_sType, p_aArgs, p_oSubmenu) {
 
         if(this.itemData) {
 
-            this.addItems(this.itemData);
+            var oParentMenu = this.parent.parent;
+
+            if(
+                oParentMenu.srcElement && 
+                oParentMenu.srcElement.tagName.toUpperCase() == "SELECT"
+            ) {
+
+                var nOptions = this.itemData.length;
+    
+                for(var n=0; n<nOptions; n++) {
+
+                    if(this.itemData[n].tagName) {
+
+                        this.addItem((new this.ITEM_TYPE(this.itemData[n])));
+    
+                    }
+    
+                }
+            
+            }
+            else {
+
+                this.addItems(this.itemData);
+            
+            }
         
         }
 
@@ -2499,15 +2501,11 @@ _onSubmenuHide: function(p_sType, p_aArgs, p_oSubmenu) {
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
-* @param {Array} p_aObjects Array containing the current Menu instance 
-* and the item that fired the event.
+* @param {YAHOO.widget.MenuItem} p_oItem The item that fired the event.
 */
-_onMenuItemFocus: function(p_sType, p_aArgs, p_aObjects) {
-    
-    var me = p_aObjects[0];
-    var oItem = p_aObjects[1];
+_onMenuItemFocus: function(p_sType, p_aArgs, p_oItem) {
 
-    me.activeItem = oItem;
+    this.activeItem = p_oItem;
 
 },
 
@@ -2520,14 +2518,10 @@ _onMenuItemFocus: function(p_sType, p_aArgs, p_aObjects) {
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
-* @param {Array} p_aObjects Array containing the current Menu instance 
-* and the item that fired the event.
 */
-_onMenuItemBlur: function(p_sType, p_aArgs, p_aObjects) {
-    
-    var me = p_aObjects[0];
+_onMenuItemBlur: function(p_sType, p_aArgs) {
 
-    me.activeItem = null;
+    this.activeItem = null;
 
 },
 
@@ -2540,14 +2534,11 @@ _onMenuItemBlur: function(p_sType, p_aArgs, p_aObjects) {
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the 
 * event was fired.
-* @param {Array} p_aObjects Array containing the current Menu instance 
-* and the item that fired the event.
+* @param {YAHOO.widget.MenuItem} p_oItem The item that fired the event.
 */
-_onMenuItemConfigChange: function(p_sType, p_aArgs, p_aObjects) {
+_onMenuItemConfigChange: function(p_sType, p_aArgs, p_oItem) {
 
-    var me = p_aObjects[0];    
     var sProperty = p_aArgs[0][0];
-    var oItem = p_aObjects[1];
 
     switch(sProperty) {
 
@@ -2557,7 +2548,7 @@ _onMenuItemConfigChange: function(p_sType, p_aArgs, p_aObjects) {
 
             if(oSubmenu) {
 
-                me._configureItemSubmenuModule(oItem);
+                this._configureItemSubmenuModule(p_oItem);
 
             }
 
@@ -2572,11 +2563,11 @@ _onMenuItemConfigChange: function(p_sType, p_aArgs, p_aObjects) {
                 Menu instance to be recalculated.
             */
 
-            if(me.element.style.width) {
+            if(this.element.style.width) {
     
-                var sWidth = me._getOffsetWidth() + "px";
+                var sWidth = this._getOffsetWidth() + "px";
 
-                Dom.setStyle(me.element, "width", sWidth);
+                Dom.setStyle(this.element, "width", sWidth);
 
             }
 
