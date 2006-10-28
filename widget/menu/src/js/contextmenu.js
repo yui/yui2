@@ -172,6 +172,11 @@ _onTriggerClick: function(p_oEvent, p_oMenu) {
 */
 _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
 
+    // Hide any other ContextMenu instances that might be visible
+
+    YAHOO.widget.MenuManager.hideVisible();
+
+
     var Event = YAHOO.util.Event;
     var oConfig = this.cfg;
 
