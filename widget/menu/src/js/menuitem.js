@@ -791,50 +791,65 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(oSrcEl.childNodes.length > 0) {
 
-            var oNode = oSrcEl.firstChild;
-            var aOptions = [];
+            if(
+                this.parent.lazyLoad && 
+                this.parent.srcElement && 
+                this.parent.srcElement.tagName.toUpperCase() == "SELECT"
+            ) {
 
-            do {
+                oConfig.setProperty(
+                        "submenu", 
+                        { id: Dom.generateId(), itemdata: oSrcEl.childNodes }
+                    );
 
-                if(oNode && oNode.tagName) {
+            }
+            else {
 
-                    switch(oNode.tagName.toUpperCase()) {
-            
-                        case "DIV":
-            
-                            oConfig.setProperty("submenu", oNode);
-            
-                        break;
-     
-                        case "OPTION":
+                var oNode = oSrcEl.firstChild;
+                var aOptions = [];
     
-                            aOptions[aOptions.length] = oNode;
+                do {
     
-                        break;
-           
+                    if(oNode && oNode.tagName) {
+    
+                        switch(oNode.tagName.toUpperCase()) {
+                
+                            case "DIV":
+                
+                                oConfig.setProperty("submenu", oNode);
+                
+                            break;
+         
+                            case "OPTION":
+        
+                                aOptions[aOptions.length] = oNode;
+        
+                            break;
+               
+                        }
+                    
                     }
                 
+                }        
+                while((oNode = oNode.nextSibling));
+    
+    
+                var nOptions = aOptions.length;
+    
+                if(nOptions > 0) {
+    
+                    var oMenu = new this.SUBMENU_TYPE(Dom.generateId());
+                    
+                    oConfig.setProperty("submenu", oMenu);
+    
+                    for(var n=0; n<nOptions; n++) {
+        
+                        oMenu.addItem((new MenuItem(aOptions[n])));
+        
+                    }
+        
                 }
             
-            }        
-            while((oNode = oNode.nextSibling));
-
-
-            var nOptions = aOptions.length;
-
-            if(nOptions > 0) {
-    
-                var oMenu = oConfig.setProperty(
-                                "submenu", 
-                                (Dom.generateId())
-                            );
-    
-                for(var n=0; n<nOptions; n++) {
-    
-                    oMenu.addItem((new MenuItem(aOptions[n])));
-    
-                }
-    
             }
 
         }
@@ -1449,11 +1464,7 @@ YAHOO.widget.MenuItem.prototype = {
 
                 oMenu = new this.SUBMENU_TYPE(
                                 oSubmenu,
-                                {
-                                    lazyload: bLazyLoad,
-                                    itemdata: oSubmenu.itemdata,
-                                    parent: this
-                                }                
+                                { lazyload: bLazyLoad, parent: this }                
                             );
 
 
