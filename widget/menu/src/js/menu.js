@@ -1976,6 +1976,7 @@ _onKeyPress: function(p_sType, p_aArgs, p_oMenu) {
 },
 
 
+
 // Private methods
 
 
@@ -2930,6 +2931,31 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
 
 
 /**
+* Event handler fired when the resize monitor element is resized.
+*/
+onDomResize: function(e, obj) {
+
+    if(!this._handleResize) {
+
+        this._handleResize = true;
+        return;
+    
+    }
+
+    var oConfig = this.cfg;
+
+    if(oConfig.getProperty("position") == "dynamic") {
+
+        oConfig.setProperty("width", (this._getOffsetWidth() + "px"));
+
+    }
+
+    YAHOO.widget.Menu.superclass.onDomResize.call(this, e, obj);
+
+},
+
+
+/**
 * @method initEvents
 * @description Initializes the custom events for Menu which are fired  
 * automatically at appropriate times by the Menu class.
@@ -3424,7 +3450,7 @@ initDefaultConfig: function() {
             value: "dynamic", 
             handler: this.configPosition, 
             validator: this._checkPosition,
-            supercedes: "visible"
+            supercedes: ["visible"]
         }
     );
 
