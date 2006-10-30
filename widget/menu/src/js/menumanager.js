@@ -58,6 +58,11 @@ YAHOO.widget.MenuManager = new function() {
     var m_oVisibleMenus = {};
 
 
+    // Create a logger
+
+    var m_oLogger = new YAHOO.widget.LogWriter(this.toString());
+
+
 
     // Private methods
 
@@ -80,6 +85,9 @@ YAHOO.widget.MenuManager = new function() {
     
             p_oItem.destroyEvent.subscribe(onItemDestroy, p_oItem);
 
+            m_oLogger.log("Item: " + 
+                p_oItem.toString() + " successfully registered.");
+
         }
     
     };
@@ -99,6 +107,9 @@ YAHOO.widget.MenuManager = new function() {
         if(sYUIId && m_oItems[sYUIId]) {
 
             delete m_oItems[sYUIId];
+
+            m_oLogger.log("Item: " + 
+                p_oItem.toString() + " successfully unregistered.");
 
         }
     
@@ -347,11 +358,19 @@ YAHOO.widget.MenuManager = new function() {
         if(bVisible) {
 
             m_oVisibleMenus[p_oMenu.id] = p_oMenu;
+            
+            m_oLogger.log("Menu: " + 
+                p_oMenu.toString() + 
+                " registered with the collection of visible menus.");
         
         }
         else if(m_oVisibleMenus[p_oMenu.id]) {
         
             delete m_oVisibleMenus[p_oMenu.id];
+            
+            m_oLogger.log("Menu: " + 
+                p_oMenu.toString() + 
+                " unregistered from the collection of visible menus.");
         
         }
     
@@ -418,6 +437,8 @@ YAHOO.widget.MenuManager = new function() {
                 Event.addListener(oDoc, "keypress", onDOMEvent, this, true);
     
                 m_bInitializedEventHandlers = true;
+                
+                m_oLogger.log("DOM event handlers initialized.");
     
             }
     
@@ -431,6 +452,9 @@ YAHOO.widget.MenuManager = new function() {
     
             p_oMenu.itemAddedEvent.subscribe(onItemAdded);
             p_oMenu.itemRemovedEvent.subscribe(onItemRemoved);
+
+            m_oLogger.log("Menu: " + 
+                p_oMenu.toString() + " successfully registered.");
 
         }
 
@@ -447,6 +471,9 @@ YAHOO.widget.MenuManager = new function() {
         if(p_oMenu && m_oMenus[p_oMenu.id]) {
 
             delete m_oMenus[p_oMenu.id];
+
+            m_oLogger.log("Menu: " + 
+                p_oMenu.toString() + " successfully unregistered.");
 
         }
 
@@ -503,6 +530,17 @@ YAHOO.widget.MenuManager = new function() {
             return m_oMenus[p_sId];
         
         }
+    
+    };
+
+    
+    /**
+    * @method toString
+    * @description Returns a string representing the object.
+    */
+    this.toString = function() {
+    
+        return ("MenuManager");
     
     };
 
