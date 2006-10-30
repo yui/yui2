@@ -1416,8 +1416,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method configSubmenu
-    * @description Event handler for when the "submenu" configuration property of
-    * a MenuItem instance changes. 
+    * @description Event handler for when the "submenu" configuration property 
+    * of a MenuItem instance changes. 
     * @param {String} p_sType The name of the event that was fired.
     * @param {Array} p_aArgs Collection of arguments sent when the 
     * event was fired.
