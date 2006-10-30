@@ -1,6 +1,5 @@
-    <!-- Namespace source file -->
+        <!-- Namespace source file -->
         <script type="text/javascript" src="<?php echo $g_sBasePath; ?>/build/yahoo/yahoo.js"></script>
-        
 
         <!-- Dependency source files -->
         <script type="text/javascript" src="<?php echo $g_sBasePath; ?>/build/event/event.js"></script>
@@ -69,8 +68,7 @@
 <?php
     if($g_sBuildType == "dev") {
 ?>
-        <script type="text/javascript" src="../src/js/menumodule.js"></script>
-        <script type="text/javascript" src="../src/js/menumoduleitem.js"></script>
+        <script type="text/javascript" src="../src/js/menumanager.js"></script>
         <script type="text/javascript" src="../src/js/menu.js"></script>
         <script type="text/javascript" src="../src/js/menuitem.js"></script>
         <script type="text/javascript" src="../src/js/menubar.js"></script>
