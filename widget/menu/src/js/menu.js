@@ -374,17 +374,9 @@ init: function(p_oElement, p_oConfig) {
                 this.beforeInitEvent.fire(YAHOO.widget.Menu);
 
 
-                if(!this.parent && this.lazyLoad) {
+                if(!this.parent) {
         
-                    /*
-                        If the "lazyload" configuration property is 
-                        set to true, we need to hide every submenu that
-                        is child node of the root menu.  Normally submenus
-                        are hidden and positioned as they are instantiated,
-                        however since the submenus are being instantiated on 
-                        the fly from existing markup, we need to hide them 
-                        all in advance.
-                    */
+                    // Hide all submenus by default
                 
                     var hideSubmenu = function(p_oElement) {
         
@@ -3098,19 +3090,38 @@ addItem: function(p_oItem, p_nGroupIndex) {
 */
 addItems: function(p_aItems, p_nGroupIndex) {
 
-    if(typeof p_aItems == "object" && p_aItems.constructor == Array) {
+    function isArray(p_oValue) {
+    
+        return (typeof p_oValue == "object" && p_oValue.constructor == Array);
+    
+    }
+
+
+    if(isArray(p_aItems)) {
 
         var nItems = p_aItems.length;
         var aItems = [];
+        var oItem;
+
 
         for(var i=0; i<nItems; i++) {
 
-            aItems[aItems.length] = this._addItemToGroup(
-                    (p_aItems[i].group || p_nGroupIndex), 
-                    p_aItems[i]
-                );
-        
+            oItem = p_aItems[i];
+
+            if(isArray(oItem)) {
+
+                aItems[aItems.length] = this.addItems(oItem, i);
+
+            }
+            else {
+
+                aItems[aItems.length] = 
+                    this._addItemToGroup(p_nGroupIndex, oItem);
+            
+            }
+    
         }
+
 
         if(aItems.length) {
         
