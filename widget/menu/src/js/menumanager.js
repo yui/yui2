@@ -519,11 +519,11 @@ YAHOO.widget.MenuManager = new function() {
 
 
     /**
-    * @method getMenuById
+    * @method getMenu
     * @description Returns a Menu instance with the specified id.
     * @param {String} p_sId The id of the Menu instance to be retrieved.
     */
-    this.getMenuById = function(p_sId) {
+    this.getMenu = function(p_sId) {
 
         if(m_oMenus[p_sId]) {
         
