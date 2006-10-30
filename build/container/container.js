@@ -2,13 +2,14 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.11.4
+Version 0.12
 */
 
 /**
-* Config is a utility used within an object to allow the implementer to maintain a list of local configuration properties and listen for changes to those properties dynamically using CustomEvent. The initial values are also maintained so that the configuration can be reset at any given point to its initial state.
-* @param {object}	owner	The owner object to which this Config object belongs
+* Config is a utility used within an Object to allow the implementer to maintain a list of local configuration properties and listen for changes to those properties dynamically using CustomEvent. The initial values are also maintained so that the configuration can be reset at any given point to its initial state.
+* @class YAHOO.util.Config
 * @constructor
+* @param {Object}	owner	The owner Object to which this Config Object belongs
 */
 YAHOO.util.Config = function(owner) {
 	if (owner) {
@@ -19,113 +20,25 @@ YAHOO.util.Config = function(owner) {
 YAHOO.util.Config.prototype = {
 	
 	/**
-	* Object reference to the owner of this Config object
-	* @type object
+	* Object reference to the owner of this Config Object
+	* @property owner
+	* @type Object
 	*/
 	owner : null,
 
 	/**
-	* Object reference to the owner of this Config object
-	* args: key, value
-	* @type YAHOO.util.CustomEvent
-	*/
-	configChangedEvent : null,
-
-	/**
 	* Boolean flag that specifies whether a queue is currently being executed
-	* @type boolean
+	* @property queueInProgress
+	* @type Boolean
 	*/
 	queueInProgress : false,
 
-	/**
-	* Adds a property to the Config object's private config hash. 
-	* @param {string}	key	The configuration property's name
-	* @param {object}	propertyObject	The object containing all of this property's arguments
-	*/
-	addProperty : function(key, propertyObject){},
 
 	/**
-	* Returns a key-value configuration map of the values currently set in the Config object.
-	* @return {object} The current config, represented in a key-value map
-	*/
-	getConfig : function(){},
-
-	/**
-	* Returns the value of specified property.
-	* @param {key}		The name of the property
-	* @return {object}	The value of the specified property
-	*/
-	getProperty : function(key){},
-
-	/**
-	* Resets the specified property's value to its initial value.
-	* @param {key}		The name of the property
-	*/
-	resetProperty : function(key){},
-
-	/**
-	* Sets the value of a property. If the silent property is passed as true, the property's event will not be fired.
-	* @param {key}		The name of the property
-	* @param {value}	The value to set the property to
-	* @param {boolean}	Whether the value should be set silently, without firing the property event.
-	* @return {boolean}	true, if the set was successful, false if it failed.
-	*/
-	setProperty : function(key,value,silent){},
-
-	/**
-	* Sets the value of a property and queues its event to execute. If the event is already scheduled to execute, it is
-	* moved from its current position to the end of the queue.
-	* @param {key}		The name of the property
-	* @param {value}	The value to set the property to
-	* @return {boolean}	true, if the set was successful, false if it failed.
-	*/	
-	queueProperty : function(key,value){},
-
-	/**
-	* Fires the event for a property using the property's current value.
-	* @param {key}		The name of the property
-	*/
-	refireEvent : function(key){},
-
-	/**
-	* Applies a key-value object literal to the configuration, replacing any existing values, and queueing the property events.
-	* Although the values will be set, fireQueue() must be called for their associated events to execute.
-	* @param {object}	userConfig	The configuration object literal
-	* @param {boolean}	init		When set to true, the initialConfig will be set to the userConfig passed in, so that calling a reset will reset the properties to the passed values.
-	*/
-	applyConfig : function(userConfig,init){},
-
-	/**
-	* Refires the events for all configuration properties using their current values.
-	*/
-	refresh : function(){},
-
-	/**
-	* Fires the normalized list of queued property change events
-	*/
-	fireQueue : function(){},
-
-	/**
-	* Subscribes an external handler to the change event for any given property. 
-	* @param {string}	key			The property name
-	* @param {Function}	handler		The handler function to use subscribe to the property's event
-	* @param {object}	obj			The object to use for scoping the event handler (see CustomEvent documentation)
-	* @param {boolean}	override	Optional. If true, will override "this" within the handler to map to the scope object passed into the method.
-	*/	
-	subscribeToConfigEvent : function(key,handler,obj,override){},
-
-	/**
-	* Unsubscribes an external handler from the change event for any given property. 
-	* @param {string}	key			The property name
-	* @param {Function}	handler		The handler function to use subscribe to the property's event
-	* @param {object}	obj			The object to use for scoping the event handler (see CustomEvent documentation)
-	*/
-	unsubscribeFromConfigEvent: function(key,handler,obj){},
-
-	/**
-	* Validates that the value passed in is a boolean.
-	* @param	{object}	val	The value to validate
-	* @return	{boolean}	true, if the value is valid
+	* Validates that the value passed in is a Boolean.
+	* @method checkBoolean
+	* @param	{Object}	val	The value to validate
+	* @return	{Boolean}	true, if the value is valid
 	*/	
 	checkBoolean: function(val) {
 		if (typeof val == 'boolean') {
@@ -137,8 +50,9 @@ YAHOO.util.Config.prototype = {
 
 	/**
 	* Validates that the value passed in is a number.
-	* @param	{object}	val	The value to validate
-	* @return	{boolean}	true, if the value is valid
+	* @method checkNumber
+	* @param	{Object}	val	The value to validate
+	* @return	{Boolean}	true, if the value is valid
 	*/
 	checkNumber: function(val) {
 		if (isNaN(val)) {
@@ -151,26 +65,55 @@ YAHOO.util.Config.prototype = {
 
 
 /**
-* Initializes the configuration object and all of its local members.
-* @param {object}	owner	The owner object to which this Config object belongs
+* Initializes the configuration Object and all of its local members.
+* @method init
+* @param {Object}	owner	The owner Object to which this Config Object belongs
 */
 YAHOO.util.Config.prototype.init = function(owner) {
 
 	this.owner = owner;
+
+	/**
+	* Object reference to the owner of this Config Object
+	* @event configChangedEvent
+	*/
 	this.configChangedEvent = new YAHOO.util.CustomEvent("configChanged");
+
 	this.queueInProgress = false;
 
 	/* Private Members */
 
+	/**
+	* Maintains the local collection of configuration property objects and their specified values
+	* @property config
+	* @private
+	* @type Object
+	*/ 
 	var config = {};
+
+	/**
+	* Maintains the local collection of configuration property objects as they were initially applied.
+	* This object is used when resetting a property.
+	* @property initialConfig
+	* @private
+	* @type Object
+	*/ 
 	var initialConfig = {};
+
+	/**
+	* Maintains the local, normalized CustomEvent queue
+	* @property eventQueue
+	* @private
+	* @type Object
+	*/ 
 	var eventQueue = [];
 
 	/**
-	* @private
 	* Fires a configuration property event using the specified value. 
-	* @param {string}	key			The configuration property's name
-	* @param {value}	object		The value of the correct type for the property
+	* @method fireEvent
+	* @private
+	* @param {String}	key			The configuration property's name
+	* @param {value}	Object		The value of the correct type for the property
 	*/ 
 	var fireEvent = function( key, value ) {
 		key = key.toLowerCase();
@@ -183,6 +126,12 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	};
 	/* End Private Members */
 
+	/**
+	* Adds a property to the Config Object's private config hash.
+	* @method addProperty
+	* @param {String}	key	The configuration property's name
+	* @param {Object}	propertyObject	The Object containing all of this property's arguments
+	*/
 	this.addProperty = function( key, propertyObject ) {
 		key = key.toLowerCase();
 
@@ -202,6 +151,11 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 	};
 
+	/**
+	* Returns a key-value configuration map of the values currently set in the Config Object.
+	* @method getConfig
+	* @return {Object} The current config, represented in a key-value map
+	*/
 	this.getConfig = function() {
 		var cfg = {};
 			
@@ -215,6 +169,12 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		return cfg;
 	};
 
+	/**
+	* Returns the value of specified property.
+	* @method getProperty
+	* @param {String} key	The name of the property
+	* @return {Object}		The value of the specified property
+	*/
 	this.getProperty = function(key) {
 		key = key.toLowerCase();
 
@@ -226,17 +186,32 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 	};
 
+	/**
+	* Resets the specified property's value to its initial value.
+	* @method resetProperty
+	* @param {String} key	The name of the property
+	*/
 	this.resetProperty = function(key) {
 		key = key.toLowerCase();
 
 		var property = config[key];
 		if (typeof property != 'undefined' && property.event) {
-			this.setProperty(key, initialConfig[key].value);
+			if (initialConfig[key] && initialConfig[key] != 'undefined')	{
+				this.setProperty(key, initialConfig[key].value);
+			}
 		} else {
 			return undefined;
 		}
 	};
 
+	/**
+	* Sets the value of a property. If the silent property is passed as true, the property's event will not be fired.
+	* @method setProperty
+	* @param {String} key		The name of the property
+	* @param {String} value		The value to set the property to
+	* @param {Boolean} silent	Whether the value should be set silently, without firing the property event.
+	* @return {Boolean}			True, if the set was successful, false if it failed.
+	*/
 	this.setProperty = function(key, value, silent) {
 		key = key.toLowerCase();
 
@@ -262,6 +237,14 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 	};
 
+	/**
+	* Sets the value of a property and queues its event to execute. If the event is already scheduled to execute, it is
+	* moved from its current position to the end of the queue.
+	* @method queueProperty
+	* @param {String} key	The name of the property
+	* @param {String} value	The value to set the property to
+	* @return {Boolean}		true, if the set was successful, false if it failed.
+	*/	
 	this.queueProperty = function(key, value) {
 		key = key.toLowerCase();
 
@@ -329,6 +312,11 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 	};
 
+	/**
+	* Fires the event for a property using the property's current value.
+	* @method refireEvent
+	* @param {String} key	The name of the property
+	*/
 	this.refireEvent = function(key) {
 		key = key.toLowerCase();
 
@@ -342,6 +330,13 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 	};
 
+	/**
+	* Applies a key-value Object literal to the configuration, replacing any existing values, and queueing the property events.
+	* Although the values will be set, fireQueue() must be called for their associated events to execute.
+	* @method applyConfig
+	* @param {Object}	userConfig	The configuration Object literal
+	* @param {Boolean}	init		When set to true, the initialConfig will be set to the userConfig passed in, so that calling a reset will reset the properties to the passed values.
+	*/
 	this.applyConfig = function(userConfig, init) {
 		if (init) {
 			initialConfig = userConfig;
@@ -351,12 +346,20 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 	};
 
+	/**
+	* Refires the events for all configuration properties using their current values.
+	* @method refresh
+	*/
 	this.refresh = function() {
 		for (var prop in config) {
 			this.refireEvent(prop);
 		}
 	};
 
+	/**
+	* Fires the normalized list of queued property change events
+	* @method fireQueue
+	*/
 	this.fireQueue = function() {
 		this.queueInProgress = true;
 		for (var i=0;i<eventQueue.length;i++) {
@@ -376,6 +379,15 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		eventQueue = [];
 	};
 
+	/**
+	* Subscribes an external handler to the change event for any given property. 
+	* @method subscribeToConfigEvent
+	* @param {String}	key			The property name
+	* @param {Function}	handler		The handler function to use subscribe to the property's event
+	* @param {Object}	obj			The Object to use for scoping the event handler (see CustomEvent documentation)
+	* @param {Boolean}	override	Optional. If true, will override "this" within the handler to map to the scope Object passed into the method.
+	* @return {Boolean}				True, if the subscription was successful, otherwise false.
+	*/	
 	this.subscribeToConfigEvent = function(key, handler, obj, override) {
 		key = key.toLowerCase();
 
@@ -390,7 +402,14 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 	};
 
-
+	/**
+	* Unsubscribes an external handler from the change event for any given property. 
+	* @method unsubscribeFromConfigEvent
+	* @param {String}	key			The property name
+	* @param {Function}	handler		The handler function to use subscribe to the property's event
+	* @param {Object}	obj			The Object to use for scoping the event handler (see CustomEvent documentation)
+	* @return {Boolean}				True, if the unsubscription was successful, otherwise false.
+	*/
 	this.unsubscribeFromConfigEvent = function(key, handler, obj) {
 		key = key.toLowerCase();
 
@@ -402,6 +421,11 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		}
 	};
 
+	/**
+	* Returns a string representation of the Config object
+	* @method toString
+	* @return {String}	The Config object in string format.
+	*/
 	this.toString = function() {
 		var output = "Config";
 		if (this.owner) {
@@ -410,6 +434,11 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		return output;
 	};
 
+	/**
+	* Returns a string representation of the Config object's current CustomEvent queue
+	* @method outputEventQueue
+	* @return {String}	The string list of CustomEvents currently queued for execution
+	*/
 	this.outputEventQueue = function() {
 		var output = "";
 		for (var q=0;q<eventQueue.length;q++) {
@@ -423,11 +452,13 @@ YAHOO.util.Config.prototype.init = function(owner) {
 };
 
 /**
-* Checks to determine if a particular function/object pair are already subscribed to the specified CustomEvent
+* Checks to determine if a particular function/Object pair are already subscribed to the specified CustomEvent
+* @method YAHOO.util.Config.alreadySubscribed
+* @static
 * @param {YAHOO.util.CustomEvent} evt	The CustomEvent for which to check the subscriptions
 * @param {Function}	fn	The function to look for in the subscribers list
-* @param {object}	obj	The execution scope object for the subscription
-* @return {boolean}	true, if the function/object pair is already subscribed to the CustomEvent passed in
+* @param {Object}	obj	The execution scope Object for the subscription
+* @return {Boolean}	true, if the function/Object pair is already subscribed to the CustomEvent passed in
 */
 YAHOO.util.Config.alreadySubscribed = function(evt, fn, obj) {
 	for (var e=0;e<evt.subscribers.length;e++) {
@@ -437,14 +468,27 @@ YAHOO.util.Config.alreadySubscribed = function(evt, fn, obj) {
 		}
 	}
 	return false;
-};
+};/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version 0.12
+*/
+
+/**
+*  The Container family of components is designed to enable developers to create different kinds of content-containing modules on the web. Module and Overlay are the most basic containers, and they can be used directly or extended to build custom containers. Also part of the Container family are four UI controls that extend Module and Overlay: Tooltip, Panel, Dialog, and SimpleDialog.
+* @module Container
+* @requires yahoo,dom,event,dragdrop,animation
+*/
 
 /**
 * Module is a JavaScript representation of the Standard Module Format. Standard Module Format is a simple standard for markup containers where child nodes representing the header, body, and footer of the content are denoted using the CSS classes "hd", "bd", and "ft" respectively. Module is the base class for all other classes in the YUI Container package.
-* @param {string}	el	The element ID representing the Module <em>OR</em>
-* @param {Element}	el	The element representing the Module
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this module. See configuration documentation for more details.
+* @class Module
+* @namespace YAHOO.widget
 * @constructor
+* @param {String} el			The element ID representing the Module <em>OR</em>
+* @param {HTMLElement} el		The element representing the Module
+* @param {Object} userConfig	The configuration Object literal containing the configuration that should be set for this module. See configuration documentation for more details.
 */
 YAHOO.widget.Module = function(el, userConfig) {
 	if (el) { 
@@ -454,228 +498,217 @@ YAHOO.widget.Module = function(el, userConfig) {
 
 /**
 * Constant representing the prefix path to use for non-secure images
-* @type string
+* @property YAHOO.widget.Module.IMG_ROOT
+* @static
+* @final
+* @type String
 */
 YAHOO.widget.Module.IMG_ROOT = "http://us.i1.yimg.com/us.yimg.com/i/";
 
 /**
 * Constant representing the prefix path to use for securely served images
-* @type string
+* @property YAHOO.widget.Module.IMG_ROOT_SSL
+* @static
+* @final
+* @type String
 */
 YAHOO.widget.Module.IMG_ROOT_SSL = "https://a248.e.akamai.net/sec.yimg.com/i/";
 
 /**
 * Constant for the default CSS class name that represents a Module
-* @type string
+* @property YAHOO.widget.Module.CSS_MODULE
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Module.CSS_MODULE = "module";
 
 /**
 * Constant representing the module header
-* @type string
+* @property YAHOO.widget.Module.CSS_HEADER
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Module.CSS_HEADER = "hd";
 
 /**
 * Constant representing the module body
-* @type string
+* @property YAHOO.widget.Module.CSS_BODY
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Module.CSS_BODY = "bd";
 
 /**
 * Constant representing the module footer
-* @type string
+* @property YAHOO.widget.Module.CSS_FOOTER
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Module.CSS_FOOTER = "ft";
 
 /**
 * Constant representing the url for the "src" attribute of the iframe used to monitor changes to the browser's base font size
-* @type string
+* @property YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL = "javascript:false";
 
 YAHOO.widget.Module.prototype = {
-
 	/**
 	* The class's constructor function
-	* @type function
+	* @property contructor
+	* @type Function
 	*/
 	constructor : YAHOO.widget.Module,
 
 	/**
 	* The main module element that contains the header, body, and footer
-	* @type Element
+	* @property element
+	* @type HTMLElement
 	*/
 	element : null, 
 
 	/**
 	* The header element, denoted with CSS class "hd"
-	* @type Element
+	* @property header
+	* @type HTMLElement
 	*/
 	header : null,
 
 	/**
 	* The body element, denoted with CSS class "bd"
-	* @type Element
+	* @property body
+	* @type HTMLElement
 	*/
 	body : null,
 
 	/**
 	* The footer element, denoted with CSS class "ft"
-	* @type Element
+	* @property footer
+	* @type HTMLElement
 	*/
 	footer : null,
 
 	/**
 	* The id of the element
-	* @type string
+	* @property id
+	* @type String
 	*/
 	id : null,
 
 	/**
-	* Array of elements
-	* @type Element[]
-	*/
-	childNodesInDOM : null,
-
-	/**
-	* The string representing the image root
-	* @type string
+	* The String representing the image root
+	* @property imageRoot
+	* @type String
 	*/
 	imageRoot : YAHOO.widget.Module.IMG_ROOT,
-
-	/**
-	* CustomEvent fired prior to class initalization.
-	* args: class reference of the initializing class, such as this.beforeInitEvent.fire(YAHOO.widget.Module)
-	* @type YAHOO.util.CustomEvent
-	*/
-	beforeInitEvent : null,
-
-	/**
-	* CustomEvent fired after class initalization.
-	* args: class reference of the initializing class, such as this.initEvent.fire(YAHOO.widget.Module)
-	* @type YAHOO.util.CustomEvent
-	*/
-	initEvent : null,
-
-	/**
-	* CustomEvent fired when the Module is appended to the DOM
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	appendEvent : null,
-
-	/**
-	* CustomEvent fired before the Module is rendered
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	beforeRenderEvent : null,
-
-	/**
-	* CustomEvent fired after the Module is rendered
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	renderEvent : null,
-
-	/**
-	* CustomEvent fired when the header content of the Module is modified
-	* args: string/element representing the new header content
-	* @type YAHOO.util.CustomEvent
-	*/
-	changeHeaderEvent : null,
-
-	/**
-	* CustomEvent fired when the body content of the Module is modified
-	* args: string/element representing the new body content
-	* @type YAHOO.util.CustomEvent
-	*/
-	changeBodyEvent : null,
-
-	/**
-	* CustomEvent fired when the footer content of the Module is modified
-	* args: string/element representing the new footer content
-	* @type YAHOO.util.CustomEvent
-	*/
-	changeFooterEvent : null,
-
-	/**
-	* CustomEvent fired when the content of the Module is modified
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	changeContentEvent : null,
-
-	/**
-	* CustomEvent fired when the Module is destroyed
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	destroyEvent : null,
-
-	/**
-	* CustomEvent fired before the Module is shown
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	beforeShowEvent : null,
-
-	/**
-	* CustomEvent fired after the Module is shown
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	showEvent : null,
-
-	/**
-	* CustomEvent fired before the Module is hidden
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	beforeHideEvent : null,
-	
-	/**
-	* CustomEvent fired after the Module is hidden
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	hideEvent : null,
 		
 	/**
 	* Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
+	* @method initEvents
 	*/
 	initEvents : function() {
 
-		this.beforeInitEvent		= new YAHOO.util.CustomEvent("beforeInit");
-		this.initEvent				= new YAHOO.util.CustomEvent("init");
+		/**
+		* CustomEvent fired prior to class initalization.
+		* @event beforeInitEvent
+		* @param {class} classRef	class reference of the initializing class, such as this.beforeInitEvent.fire(YAHOO.widget.Module)
+		*/
+		this.beforeInitEvent = new YAHOO.util.CustomEvent("beforeInit");
 
-		this.appendEvent			= new YAHOO.util.CustomEvent("append");
+		/**
+		* CustomEvent fired after class initalization.
+		* @event initEvent
+		* @param {class} classRef	class reference of the initializing class, such as this.beforeInitEvent.fire(YAHOO.widget.Module)
+		*/		
+		this.initEvent = new YAHOO.util.CustomEvent("init");
 
-		this.beforeRenderEvent		= new YAHOO.util.CustomEvent("beforeRender");
-		this.renderEvent			= new YAHOO.util.CustomEvent("render");
+		/**
+		* CustomEvent fired when the Module is appended to the DOM
+		* @event appendEvent
+		*/
+		this.appendEvent = new YAHOO.util.CustomEvent("append");
 
-		this.changeHeaderEvent		= new YAHOO.util.CustomEvent("changeHeader");
-		this.changeBodyEvent		= new YAHOO.util.CustomEvent("changeBody");
-		this.changeFooterEvent		= new YAHOO.util.CustomEvent("changeFooter");
+		/**
+		* CustomEvent fired before the Module is rendered
+		* @event beforeRenderEvent
+		*/
+		this.beforeRenderEvent = new YAHOO.util.CustomEvent("beforeRender");
 
-		this.changeContentEvent		= new YAHOO.util.CustomEvent("changeContent");
+		/**
+		* CustomEvent fired after the Module is rendered
+		* @event renderEvent
+		*/
+		this.renderEvent = new YAHOO.util.CustomEvent("render");
+	
+		/**
+		* CustomEvent fired when the header content of the Module is modified
+		* @event changeHeaderEvent
+		* @param {String/HTMLElement} content	String/element representing the new header content
+		*/
+		this.changeHeaderEvent = new YAHOO.util.CustomEvent("changeHeader");
+		
+		/**
+		* CustomEvent fired when the body content of the Module is modified
+		* @event changeBodyEvent
+		* @param {String/HTMLElement} content	String/element representing the new body content
+		*/		
+		this.changeBodyEvent = new YAHOO.util.CustomEvent("changeBody");
+		
+		/**
+		* CustomEvent fired when the footer content of the Module is modified
+		* @event changeFooterEvent
+		* @param {String/HTMLElement} content	String/element representing the new footer content
+		*/
+		this.changeFooterEvent = new YAHOO.util.CustomEvent("changeFooter");
 
-		this.destroyEvent			= new YAHOO.util.CustomEvent("destroy");
-		this.beforeShowEvent		= new YAHOO.util.CustomEvent("beforeShow");
-		this.showEvent				= new YAHOO.util.CustomEvent("show");
-		this.beforeHideEvent		= new YAHOO.util.CustomEvent("beforeHide");
-		this.hideEvent				= new YAHOO.util.CustomEvent("hide");
+		/**
+		* CustomEvent fired when the content of the Module is modified
+		* @event changeContentEvent
+		*/
+		this.changeContentEvent = new YAHOO.util.CustomEvent("changeContent");
+
+		/**
+		* CustomEvent fired when the Module is destroyed
+		* @event destroyEvent
+		*/
+		this.destroyEvent = new YAHOO.util.CustomEvent("destroy");
+		
+		/**
+		* CustomEvent fired before the Module is shown
+		* @event beforeShowEvent
+		*/
+		this.beforeShowEvent = new YAHOO.util.CustomEvent("beforeShow");
+
+		/**
+		* CustomEvent fired after the Module is shown
+		* @event showEvent
+		*/
+		this.showEvent = new YAHOO.util.CustomEvent("show");
+
+		/**
+		* CustomEvent fired before the Module is hidden
+		* @event beforeHideEvent
+		*/
+		this.beforeHideEvent = new YAHOO.util.CustomEvent("beforeHide");
+
+		/**
+		* CustomEvent fired after the Module is hidden
+		* @event hideEvent
+		*/
+		this.hideEvent = new YAHOO.util.CustomEvent("hide");
 	}, 
 
 	/**
 	* String representing the current user-agent platform
-	* @type string
+	* @property platform
+	* @type String
 	*/
 	platform : function() {
 					var ua = navigator.userAgent.toLowerCase();
@@ -690,7 +723,8 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* String representing the current user-agent browser
-	* @type string
+	* @property browser
+	* @type String
 	*/
 	browser : function() {
 			var ua = navigator.userAgent.toLowerCase();
@@ -711,7 +745,8 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Boolean representing whether or not the current browsing context is secure (https)
-	* @type boolean
+	* @property isSecure
+	* @type Boolean
 	*/
 	isSecure : function() {
 		if (window.location.href.toLowerCase().indexOf("https") === 0) {
@@ -726,17 +761,38 @@ YAHOO.widget.Module.prototype = {
 	*/
 	initDefaultConfig : function() {
 		// Add properties //
-
+		
+		/**
+		* Specifies whether the Module is visible on the page.
+		* @config visible
+		* @type Boolean
+		* @default true
+		*/
 		this.cfg.addProperty("visible", { value:true, handler:this.configVisible, validator:this.cfg.checkBoolean } );
+		
+		/**
+		* Object or array of objects representing the ContainerEffect classes that are active for animating the container.
+		* @config effect
+		* @type Object
+		* @default null
+		*/
 		this.cfg.addProperty("effect", { suppressEvent:true, supercedes:["visible"] } );
+		
+		/**
+		* Specifies whether to create a special proxy iframe to monitor for user font resizing in the document
+		* @config monitorresize
+		* @type Boolean
+		* @default true
+		*/
 		this.cfg.addProperty("monitorresize", { value:true, handler:this.configMonitorResize } );
 	},
 
 	/**
 	* The Module class's initialization method, which is executed for Module and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
-	* @param {string}	el	The element ID representing the Module <em>OR</em>
-	* @param {Element}	el	The element representing the Module
-	* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this module. See configuration documentation for more details.
+	* @method init
+	* @param {String}	el	The element ID representing the Module <em>OR</em>
+	* @param {HTMLElement}	el	The element representing the Module
+	* @param {Object}	userConfig	The configuration Object literal containing the configuration that should be set for this module. See configuration documentation for more details.
 	*/
 	init : function(el, userConfig) {
 
@@ -744,6 +800,11 @@ YAHOO.widget.Module.prototype = {
 
 		this.beforeInitEvent.fire(YAHOO.widget.Module);
 
+		/**
+		* The Module's Config object used for monitoring configuration properties.
+		* @property cfg
+		* @type YAHOO.util.Config
+		*/
 		this.cfg = new YAHOO.util.Config(this);
 		
 		if (this.isSecure) {
@@ -803,7 +864,8 @@ YAHOO.widget.Module.prototype = {
 	},
 
 	/**
-	* Initialized an empty DOM element that is placed out of the visible area that can be used to detect text resize.
+	* Initialized an empty IFRAME that is placed out of the visible area that can be used to detect text resize.
+	* @method initResizeMonitor
 	*/
 	initResizeMonitor : function() {
 
@@ -871,6 +933,9 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Event handler fired when the resize monitor element is resized.
+	* @method onDomResize
+	* @param {DOMEvent} e	The DOM resize event
+	* @param {Object} obj	The scope object passed to the handler
 	*/
 	onDomResize : function(e, obj) { 
 
@@ -884,8 +949,9 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Sets the Module's header content to the HTML specified, or appends the passed element to the header. If no header is present, one will be automatically created.
-	* @param {string}	headerContent	The HTML used to set the header <em>OR</em>
-	* @param {Element}	headerContent	The Element to append to the header
+	* @method setHeader
+	* @param {String}	headerContent	The HTML used to set the header <em>OR</em>
+	* @param {HTMLElement}	headerContent	The HTMLElement to append to the header
 	*/	
 	setHeader : function(headerContent) {
 		if (! this.header) {
@@ -906,7 +972,8 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Appends the passed element to the header. If no header is present, one will be automatically created.
-	* @param {Element}	element	The element to append to the header
+	* @method appendToHeader
+	* @param {HTMLElement}	element	The element to append to the header
 	*/	
 	appendToHeader : function(element) {
 		if (! this.header) {
@@ -921,8 +988,9 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Sets the Module's body content to the HTML specified, or appends the passed element to the body. If no body is present, one will be automatically created.
-	* @param {string}	bodyContent	The HTML used to set the body <em>OR</em>
-	* @param {Element}	bodyContent	The Element to append to the body
+	* @method setBody
+	* @param {String}	bodyContent	The HTML used to set the body <em>OR</em>
+	* @param {HTMLElement}	bodyContent	The HTMLElement to append to the body
 	*/		
 	setBody : function(bodyContent) {
 		if (! this.body) {
@@ -944,7 +1012,8 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Appends the passed element to the body. If no body is present, one will be automatically created.
-	* @param {Element}	element	The element to append to the body
+	* @method appendToBody
+	* @param {HTMLElement}	element	The element to append to the body
 	*/
 	appendToBody : function(element) {
 		if (! this.body) {
@@ -959,8 +1028,9 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Sets the Module's footer content to the HTML specified, or appends the passed element to the footer. If no footer is present, one will be automatically created.
-	* @param {string}	footerContent	The HTML used to set the footer <em>OR</em>
-	* @param {Element}	footerContent	The Element to append to the footer
+	* @method setFooter
+	* @param {String}	footerContent	The HTML used to set the footer <em>OR</em>
+	* @param {HTMLElement}	footerContent	The HTMLElement to append to the footer
 	*/	
 	setFooter : function(footerContent) {
 		if (! this.footer) {
@@ -981,7 +1051,8 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Appends the passed element to the footer. If no footer is present, one will be automatically created.
-	* @param {Element}	element	The element to append to the footer
+	* @method appendToFooter
+	* @param {HTMLElement}	element	The element to append to the footer
 	*/
 	appendToFooter : function(element) {
 		if (! this.footer) {
@@ -996,10 +1067,11 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Renders the Module by inserting the elements that are not already in the main Module into their correct places. Optionally appends the Module to the specified node prior to the render's execution. NOTE: For Modules without existing markup, the appendToNode argument is REQUIRED. If this argument is ommitted and the current element is not present in the document, the function will return false, indicating that the render was a failure.
-	* @param {string}	appendToNode	The element id to which the Module should be appended to prior to rendering <em>OR</em>
-	* @param {Element}	appendToNode	The element to which the Module should be appended to prior to rendering	
-	* @param {Element}	moduleElement	OPTIONAL. The element that represents the actual Standard Module container. 
-	* @return {boolean} Success or failure of the render
+	* @method render
+	* @param {String}	appendToNode	The element id to which the Module should be appended to prior to rendering <em>OR</em>
+	* @param {HTMLElement}	appendToNode	The element to which the Module should be appended to prior to rendering	
+	* @param {HTMLElement}	moduleElement	OPTIONAL. The element that represents the actual Standard Module container. 
+	* @return {Boolean} Success or failure of the render
 	*/
 	render : function(appendToNode, moduleElement) {
 		this.beforeRenderEvent.fire();
@@ -1060,6 +1132,7 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Removes the Module element from the DOM and sets all child elements to null.
+	* @method destroy
 	*/
 	destroy : function() {
 		if (this.element) {
@@ -1079,6 +1152,7 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Shows the Module element by setting the visible configuration property to true. Also fires two events: beforeShowEvent prior to the visibility change, and showEvent after.
+	* @method show
 	*/
 	show : function() {
 		this.cfg.setProperty("visible", true);
@@ -1086,6 +1160,7 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Hides the Module element by setting the visible configuration property to false. Also fires two events: beforeHideEvent prior to the visibility change, and hideEvent after.
+	* @method hide
 	*/
 	hide : function() {
 		this.cfg.setProperty("visible", false);
@@ -1096,6 +1171,10 @@ YAHOO.widget.Module.prototype = {
 	/**
 	* Default event handler for changing the visibility property of a Module. By default, this is achieved by switching the "display" style between "block" and "none".
 	* This method is responsible for firing showEvent and hideEvent.
+	* @param {String} type	The CustomEvent type (usually the property name)
+	* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+	* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+	* @method configVisible
 	*/
 	configVisible : function(type, args, obj) {
 		var visible = args[0];
@@ -1112,6 +1191,10 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Default event handler for the "monitorresize" configuration property
+	* @param {String} type	The CustomEvent type (usually the property name)
+	* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+	* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+	* @method configMonitorResize
 	*/
 	configMonitorResize : function(type, args, obj) {
 		var monitor = args[0];
@@ -1125,19 +1208,27 @@ YAHOO.widget.Module.prototype = {
 };
 
 /**
-* Returns a string representation of the object.
-* @type string
+* Returns a String representation of the Object.
+* @method toString
+* @return {String}	The string representation of the Module
 */ 
 YAHOO.widget.Module.prototype.toString = function() {
 	return "Module " + this.id;
-};
+};/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version 0.12
+*/
 
 /**
 * Overlay is a Module that is absolutely positioned above the page flow. It has convenience methods for positioning and sizing, as well as options for controlling zIndex and constraining the Overlay's position to the current visible viewport. Overlay also contains a dynamicly generated IFRAME which is placed beneath it for Internet Explorer 6 and 5.x so that it will be properly rendered above SELECT elements.
+* @class Overlay
+* @namespace YAHOO.widget
 * @extends YAHOO.widget.Module
-* @param {string}	el	The element ID representing the Overlay <em>OR</em>
-* @param {Element}	el	The element representing the Overlay
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
+* @param {String}	el	The element ID representing the Overlay <em>OR</em>
+* @param {HTMLElement}	el	The element representing the Overlay
+* @param {Object}	userConfig	The configuration object literal containing 10/23/2006the configuration that should be set for this Overlay. See configuration documentation for more details.
 * @constructor
 */
 YAHOO.widget.Overlay = function(el, userConfig) {
@@ -1148,65 +1239,64 @@ YAHOO.extend(YAHOO.widget.Overlay, YAHOO.widget.Module);
 
 /**
 * The URL of the blank image that will be placed in the iframe
-* @type string
+* @property YAHOO.widget.Overlay.IFRAME_SRC
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Overlay.IFRAME_SRC = "promo/m/irs/blank.gif";
 
 /**
 * Constant representing the top left corner of an element, used for configuring the context element alignment
-* @type string
+* @property YAHOO.widget.Overlay.TOP_LEFT
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Overlay.TOP_LEFT = "tl";
 
 /**
 * Constant representing the top right corner of an element, used for configuring the context element alignment
-* @type string
+* @property YAHOO.widget.Overlay.TOP_RIGHT
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Overlay.TOP_RIGHT = "tr";
 
 /**
 * Constant representing the top bottom left corner of an element, used for configuring the context element alignment
-* @type string
+* @property YAHOO.widget.Overlay.BOTTOM_LEFT
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Overlay.BOTTOM_LEFT = "bl";
 
 /**
 * Constant representing the bottom right corner of an element, used for configuring the context element alignment
-* @type string
+* @property YAHOO.widget.Overlay.BOTTOM_RIGHT
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Overlay.BOTTOM_RIGHT = "br";
 
 /**
 * Constant representing the default CSS class used for an Overlay
-* @type string
+* @property YAHOO.widget.Overlay.CSS_OVERLAY
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Overlay.CSS_OVERLAY = "overlay";
 
 /**
-* CustomEvent fired before the Overlay is moved.
-* args: x,y that the Overlay will be moved to
-* @type YAHOO.util.CustomEvent
-*/
-YAHOO.widget.Overlay.prototype.beforeMoveEvent = null;
-
-/**
-* CustomEvent fired after the Overlay is moved.
-* args: x,y that the Overlay was moved to
-* @type YAHOO.util.CustomEvent
-*/
-YAHOO.widget.Overlay.prototype.moveEvent = null;
-
-/**
 * The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
-* @param {string}	el	The element ID representing the Overlay <em>OR</em>
-* @param {Element}	el	The element representing the Overlay
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
+* @method init
+* @param {String}	el	The element ID representing the Overlay <em>OR</em>
+* @param {HTMLElement}	el	The element representing the Overlay
+* @param {Object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
 */
 YAHOO.widget.Overlay.prototype.init = function(el, userConfig) {
 	YAHOO.widget.Overlay.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
@@ -1229,46 +1319,127 @@ YAHOO.widget.Overlay.prototype.init = function(el, userConfig) {
 	}
 
 	this.initEvent.fire(YAHOO.widget.Overlay);
-
 };
 
 /**
 * Initializes the custom events for Overlay which are fired automatically at appropriate times by the Overlay class.
+* @method initEvents
 */
 YAHOO.widget.Overlay.prototype.initEvents = function() {
 	YAHOO.widget.Overlay.superclass.initEvents.call(this);
 
+	/**
+	* CustomEvent fired before the Overlay is moved.
+	* @event beforeMoveEvent
+	* @param {Number} x	x coordinate
+	* @param {Number} y	y coordinate
+	*/
 	this.beforeMoveEvent = new YAHOO.util.CustomEvent("beforeMove", this);
+
+	/**
+	* CustomEvent fired after the Overlay is moved.
+	* @event moveEvent
+	* @param {Number} x	x coordinate
+	* @param {Number} y	y coordinate
+	*/
 	this.moveEvent = new YAHOO.util.CustomEvent("move", this);
 };
 
 /**
 * Initializes the class's configurable properties which can be changed using the Overlay's Config object (cfg).
+* @method initDefaultConfig
 */
 YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	YAHOO.widget.Overlay.superclass.initDefaultConfig.call(this);
 
 	// Add overlay config properties //
+
+	/**
+	* The absolute x-coordinate position of the Overlay
+	* @config x
+	* @type Number
+	* @default null
+	*/	
 	this.cfg.addProperty("x", { handler:this.configX, validator:this.cfg.checkNumber, suppressEvent:true, supercedes:["iframe"] } );
+
+	/**
+	* The absolute y-coordinate position of the Overlay
+	* @config y
+	* @type Number
+	* @default null
+	*/	
 	this.cfg.addProperty("y", { handler:this.configY, validator:this.cfg.checkNumber, suppressEvent:true, supercedes:["iframe"] } );
+
+	/**
+	* An array with the absolute x and y positions of the Overlay
+	* @config xy
+	* @type Number[]
+	* @default null
+	*/	
 	this.cfg.addProperty("xy",{ handler:this.configXY, suppressEvent:true, supercedes:["iframe"] } );
 
+	/**
+	* The array of context arguments for context-sensitive positioning. The format is: [id or element, element corner, context corner]. For example, setting this property to ["img1", "tl", "bl"] would align the Overlay's top left corner to the context element's bottom left corner.
+	* @config context
+	* @type Array
+	* @default null
+	*/	
 	this.cfg.addProperty("context",	{ handler:this.configContext, suppressEvent:true, supercedes:["iframe"] } );
+
+	/**
+	* True if the Overlay should be anchored to the center of the viewport.
+	* @config fixedcenter
+	* @type Boolean
+	* @default false
+	*/
 	this.cfg.addProperty("fixedcenter", { value:false, handler:this.configFixedCenter, validator:this.cfg.checkBoolean, supercedes:["iframe","visible"] } );
 
+	/**
+	* CSS width of the Overlay.
+	* @config width
+	* @type String
+	* @default null
+	*/
 	this.cfg.addProperty("width", { handler:this.configWidth, suppressEvent:true, supercedes:["iframe"] } );
+
+	/**
+	* CSS height of the Overlay.
+	* @config height
+	* @type String
+	* @default null
+	*/
 	this.cfg.addProperty("height", { handler:this.configHeight, suppressEvent:true, supercedes:["iframe"] } );
 
+	/**
+	* CSS z-index of the Overlay.
+	* @config zIndex
+	* @type Number
+	* @default null
+	*/
 	this.cfg.addProperty("zIndex", { value:null, handler:this.configzIndex } );
 
+	/**
+	* True if the Overlay should be prevented from being positioned out of the viewport.
+	* @config constraintoviewport
+	* @type Boolean
+	* @default false
+	*/
 	this.cfg.addProperty("constraintoviewport", { value:false, handler:this.configConstrainToViewport, validator:this.cfg.checkBoolean, supercedes:["iframe","x","y","xy"] } );
+
+	/**
+	* True if the Overlay should have an IFRAME shim (for correcting the select z-index bug in IE6 and below).
+	* @config iframe
+	* @type Boolean
+	* @default true for IE6 and below, false for all others
+	*/
 	this.cfg.addProperty("iframe", { value:(this.browser == "ie" ? true : false), handler:this.configIframe, validator:this.cfg.checkBoolean, supercedes:["zIndex"] } );
 };
 
 /**
 * Moves the Overlay to the specified position. This function is identical to calling this.cfg.setProperty("xy", [x,y]);
-* @param {int}	x	The Overlay's new x position
-* @param {int}	y	The Overlay's new y position
+* @method moveTo
+* @param {Number}	x	The Overlay's new x position
+* @param {Number}	y	The Overlay's new y position
 */
 YAHOO.widget.Overlay.prototype.moveTo = function(x, y) {
 	this.cfg.setProperty("xy",[x,y]);
@@ -1277,6 +1448,7 @@ YAHOO.widget.Overlay.prototype.moveTo = function(x, y) {
 /**
 * Adds a special CSS class to the Overlay when Mac/Gecko is in use, to work around a Gecko bug where
 * scrollbars cannot be hidden. See https://bugzilla.mozilla.org/show_bug.cgi?id=187435
+* @method hideMacGeckoScrollbars
 */
 YAHOO.widget.Overlay.prototype.hideMacGeckoScrollbars = function() {
 	YAHOO.util.Dom.removeClass(this.element, "show-scrollbars");
@@ -1286,6 +1458,7 @@ YAHOO.widget.Overlay.prototype.hideMacGeckoScrollbars = function() {
 /**
 * Removes a special CSS class from the Overlay when Mac/Gecko is in use, to work around a Gecko bug where
 * scrollbars cannot be hidden. See https://bugzilla.mozilla.org/show_bug.cgi?id=187435
+* @method showMacGeckoScrollbars
 */
 YAHOO.widget.Overlay.prototype.showMacGeckoScrollbars = function() {
 	YAHOO.util.Dom.removeClass(this.element, "hide-scrollbars");
@@ -1296,9 +1469,14 @@ YAHOO.widget.Overlay.prototype.showMacGeckoScrollbars = function() {
 
 /**
 * The default event handler fired when the "visible" property is changed. This method is responsible for firing showEvent and hideEvent.
+* @method configVisible
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 	var visible = args[0];
+
 	var currentVis = YAHOO.util.Dom.getStyle(this.element, "visibility");
 
 	var effect = this.cfg.getProperty("effect");
@@ -1373,6 +1551,7 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 
 /**
 * Center event handler used for centering on scroll/resize, but only if the Overlay is visible
+* @method doCenterOnDOMEvent
 */
 YAHOO.widget.Overlay.prototype.doCenterOnDOMEvent = function() {
 	if (this.cfg.getProperty("visible")) {
@@ -1382,6 +1561,10 @@ YAHOO.widget.Overlay.prototype.doCenterOnDOMEvent = function() {
 
 /**
 * The default event handler fired when the "fixedcenter" property is changed.
+* @method configFixedCenter
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Overlay.prototype.configFixedCenter = function(type, args, obj) {
 	var val = args[0];
@@ -1408,6 +1591,10 @@ YAHOO.widget.Overlay.prototype.configFixedCenter = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "height" property is changed.
+* @method configHeight
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Overlay.prototype.configHeight = function(type, args, obj) {
 	var height = args[0];
@@ -1418,6 +1605,10 @@ YAHOO.widget.Overlay.prototype.configHeight = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "width" property is changed.
+* @method configWidth
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Overlay.prototype.configWidth = function(type, args, obj) {
 	var width = args[0];
@@ -1428,6 +1619,10 @@ YAHOO.widget.Overlay.prototype.configWidth = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "zIndex" property is changed.
+* @method configzIndex
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Overlay.prototype.configzIndex = function(type, args, obj) {
 	var zIndex = args[0];
@@ -1454,6 +1649,10 @@ YAHOO.widget.Overlay.prototype.configzIndex = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "xy" property is changed.
+* @method configXY
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Overlay.prototype.configXY = function(type, args, obj) {
 	var pos = args[0];
@@ -1474,6 +1673,10 @@ YAHOO.widget.Overlay.prototype.configXY = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "x" property is changed.
+* @method configX
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Overlay.prototype.configX = function(type, args, obj) {
 	var x = args[0];
@@ -1497,6 +1700,10 @@ YAHOO.widget.Overlay.prototype.configX = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "y" property is changed.
+* @method configY
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Overlay.prototype.configY = function(type, args, obj) {
 	var x = this.cfg.getProperty("x");
@@ -1520,6 +1727,7 @@ YAHOO.widget.Overlay.prototype.configY = function(type, args, obj) {
 
 /**
 * Shows the iframe shim, if it has been enabled
+* @method showIframe
 */
 YAHOO.widget.Overlay.prototype.showIframe = function() {
 	if (this.iframe) {
@@ -1529,6 +1737,7 @@ YAHOO.widget.Overlay.prototype.showIframe = function() {
 
 /**
 * Hides the iframe shim, if it has been enabled
+* @method hideIframe
 */
 YAHOO.widget.Overlay.prototype.hideIframe = function() {
 	if (this.iframe) {
@@ -1538,6 +1747,10 @@ YAHOO.widget.Overlay.prototype.hideIframe = function() {
 
 /**
 * The default event handler fired when the "iframe" property is changed.
+* @method configIframe
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 
@@ -1565,7 +1778,7 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 			if (! this.iframe) {
 				this.iframe = document.createElement("iframe");
 				if (this.isSecure) {
-					this.iframe.src= this.imageRoot + YAHOO.widget.Overlay.IFRAME_SRC;
+					this.iframe.src = this.imageRoot + YAHOO.widget.Overlay.IFRAME_SRC;
 				}
 				
 				var parent = this.element.parentNode;
@@ -1617,6 +1830,10 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "constraintoviewport" property is changed.
+* @method configConstrainToViewport
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Overlay.prototype.configConstrainToViewport = function(type, args, obj) {
 	var val = args[0];
@@ -1631,6 +1848,10 @@ YAHOO.widget.Overlay.prototype.configConstrainToViewport = function(type, args, 
 
 /**
 * The default event handler fired when the "context" property is changed.
+* @method configContext
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Overlay.prototype.configContext = function(type, args, obj) {
 	var contextArgs = args[0];
@@ -1657,8 +1878,9 @@ YAHOO.widget.Overlay.prototype.configContext = function(type, args, obj) {
 
 /**
 * Aligns the Overlay to its context element using the specified corner points (represented by the constants TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, and BOTTOM_RIGHT.
-* @param {string} elementAlign		The string representing the corner of the Overlay that should be aligned to the context element
-* @param {string} contextAlign		The corner of the context element that the elementAlign corner should stick to.
+* @method align
+* @param {String} elementAlign		The String representing the corner of the Overlay that should be aligned to the context element
+* @param {String} contextAlign		The corner of the context element that the elementAlign corner should stick to.
 */
 YAHOO.widget.Overlay.prototype.align = function(elementAlign, contextAlign) {
 	var contextArgs = this.cfg.getProperty("context");
@@ -1717,6 +1939,10 @@ YAHOO.widget.Overlay.prototype.align = function(elementAlign, contextAlign) {
 
 /**
 * The default event handler executed when the moveEvent is fired, if the "constraintoviewport" is set to true.
+* @method enforceConstraints
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Overlay.prototype.enforceConstraints = function(type, args, obj) {
 	var pos = args[0];
@@ -1757,6 +1983,7 @@ YAHOO.widget.Overlay.prototype.enforceConstraints = function(type, args, obj) {
 
 /**
 * Centers the container in the viewport.
+* @method center
 */
 YAHOO.widget.Overlay.prototype.center = function() {
 	var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
@@ -1770,16 +1997,15 @@ YAHOO.widget.Overlay.prototype.center = function() {
 
 	var x = (viewPortWidth / 2) - (elementWidth / 2) + scrollX;
 	var y = (viewPortHeight / 2) - (elementHeight / 2) + scrollY;
-	
-	this.element.style.left = parseInt(x, 10) + "px";
-	this.element.style.top = parseInt(y, 10) + "px";
-	this.syncPosition();
+		
+	this.cfg.setProperty("xy", [parseInt(x, 10), parseInt(y, 10)]);
 
 	this.cfg.refireEvent("iframe");
 };
 
 /**
 * Synchronizes the Panel's "xy", "x", and "y" properties with the Panel's position in the DOM. This is primarily used to update position information during drag & drop.
+* @method syncPosition
 */
 YAHOO.widget.Overlay.prototype.syncPosition = function() {
 	var pos = YAHOO.util.Dom.getXY(this.element);
@@ -1790,14 +2016,23 @@ YAHOO.widget.Overlay.prototype.syncPosition = function() {
 
 /**
 * Event handler fired when the resize monitor element is resized.
+* @method onDomResize
+* @param {DOMEvent} e	The resize DOM event
+* @param {Object} obj	The scope object
 */
 YAHOO.widget.Overlay.prototype.onDomResize = function(e, obj) {
 	YAHOO.widget.Overlay.superclass.onDomResize.call(this, e, obj);
-	this.cfg.refireEvent("iframe");
+	var me = this;
+	setTimeout(function() {
+		me.syncPosition();
+		me.cfg.refireEvent("iframe");
+		me.cfg.refireEvent("context");
+	}, 0);
 };
 
 /**
 * Removes the Overlay element from the DOM and sets all child elements to null.
+* @method destroy
 */
 YAHOO.widget.Overlay.prototype.destroy = function() {
 	if (this.iframe) {
@@ -1810,8 +2045,9 @@ YAHOO.widget.Overlay.prototype.destroy = function() {
 };
 
 /**
-* Returns a string representation of the object.
-* @type string
+* Returns a String representation of the object.
+* @method toString
+* @return {String} The string representation of the Overlay.
 */ 
 YAHOO.widget.Overlay.prototype.toString = function() {
 	return "Overlay " + this.id;
@@ -1819,34 +2055,57 @@ YAHOO.widget.Overlay.prototype.toString = function() {
 
 /**
 * A singleton CustomEvent used for reacting to the DOM event for window scroll
-* @type YAHOO.util.CustomEvent
+* @event YAHOO.widget.Overlay.windowScrollEvent
 */
 YAHOO.widget.Overlay.windowScrollEvent = new YAHOO.util.CustomEvent("windowScroll");
 
 /**
 * A singleton CustomEvent used for reacting to the DOM event for window resize
-* @type YAHOO.util.CustomEvent
+* @event YAHOO.widget.Overlay.windowResizeEvent
 */
 YAHOO.widget.Overlay.windowResizeEvent = new YAHOO.util.CustomEvent("windowResize");
 
 /**
 * The DOM event handler used to fire the CustomEvent for window scroll
-* @type Function
+* @method YAHOO.widget.Overlay.windowScrollHandler
+* @static
+* @param {DOMEvent} e The DOM scroll event
 */
 YAHOO.widget.Overlay.windowScrollHandler = function(e) {
+	if (YAHOO.widget.Module.prototype.browser == "ie" || YAHOO.widget.Module.prototype.browser == "ie7") {
+		if (! window.scrollEnd) {
+			window.scrollEnd = -1;
+		}
+		clearTimeout(window.scrollEnd);
+		window.scrollEnd = setTimeout(function() { YAHOO.widget.Overlay.windowScrollEvent.fire() }, 1);
+	} else {
 		YAHOO.widget.Overlay.windowScrollEvent.fire();
+	}
 };
 
 /**
 * The DOM event handler used to fire the CustomEvent for window resize
-* @type Function
+* @method YAHOO.widget.Overlay.windowResizeHandler
+* @static
+* @param {DOMEvent} e The DOM resize event
 */
 YAHOO.widget.Overlay.windowResizeHandler = function(e) {
+	if (YAHOO.widget.Module.prototype.browser == "ie" || YAHOO.widget.Module.prototype.browser == "ie7") {
+		if (! window.resizeEnd) {
+			window.resizeEnd = -1;
+		}
+		clearTimeout(window.resizeEnd);
+		window.resizeEnd = setTimeout(function() { YAHOO.widget.Overlay.windowResizeEvent.fire() }, 100);
+	} else {
 		YAHOO.widget.Overlay.windowResizeEvent.fire();
+	}
 };
 
 /**
+* A boolean that indicated whether the window resize and scroll events have already been subscribed to.
+* @property YAHOO.widget.Overlay._initialized
 * @private
+* @type Boolean
 */
 YAHOO.widget.Overlay._initialized = null;
 
@@ -1855,19 +2114,20 @@ if (YAHOO.widget.Overlay._initialized === null) {
 	YAHOO.util.Event.addListener(window, "resize", YAHOO.widget.Overlay.windowResizeHandler);
 
 	YAHOO.widget.Overlay._initialized = true;
-}
-/*
+}	/*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.11.4
+Version 0.12
 */
 
 /**
-* OverlayManager is used for maintaining the focus status of multiple Overlays.
-* @param {Array}	overlays	Optional. A collection of Overlays to register with the manager.
-* @param {object}	userConfig		The object literal representing the user configuration of the OverlayManager
+* OverlayManager is used for maintaining the focus status of multiple Overlays.* @namespace YAHOO.widget
+* @namespace YAHOO.widget
+* @class OverlayManager
 * @constructor
+* @param {Array}	overlays	Optional. A collection of Overlays to register with the manager.
+* @param {Object}	userConfig		The object literal representing the user configuration of the OverlayManager
 */
 YAHOO.widget.OverlayManager = function(userConfig) {
 	this.init(userConfig);
@@ -1875,59 +2135,62 @@ YAHOO.widget.OverlayManager = function(userConfig) {
 
 /**
 * The CSS class representing a focused Overlay
-* @type string
+* @property YAHOO.widget.OverlayManager.CSS_FOCUSED
+* @static
+* @final
+* @type String
 */
 YAHOO.widget.OverlayManager.CSS_FOCUSED = "focused";
 
 YAHOO.widget.OverlayManager.prototype = {
-
+	/**
+	* The class's constructor function
+	* @property contructor
+	* @type Function
+	*/
 	constructor : YAHOO.widget.OverlayManager,
 
 	/**
 	* The array of Overlays that are currently registered
-	* @type Array
+	* @property overlays
+	* @type YAHOO.widget.Overlay[]
 	*/
 	overlays : null,
 
 	/**
 	* Initializes the default configuration of the OverlayManager
+	* @method initDefaultConfig
 	*/	
 	initDefaultConfig : function() {
+		/**
+		* The collection of registered Overlays in use by the OverlayManager
+		* @config overlays
+		* @type YAHOO.widget.Overlay[]
+		* @default null
+		*/
 		this.cfg.addProperty("overlays", { suppressEvent:true } );
+
+		/**
+		* The default DOM event that should be used to focus an Overlay
+		* @config focusevent
+		* @type String
+		* @default "mousedown"
+		*/
 		this.cfg.addProperty("focusevent", { value:"mousedown" } );
 	}, 
 
 	/**
-	* Returns the currently focused Overlay
-	* @return {Overlay}	The currently focused Overlay
-	*/
-	getActive : function() {},
-
-	/**
-	* Focuses the specified Overlay
-	* @param {Overlay}	The Overlay to focus
-	* @param {string}	The id of the Overlay to focus
-	*/
-	focus : function(overlay) {},
-
-	/**
-	* Removes the specified Overlay from the manager
-	* @param {Overlay}	The Overlay to remove
-	* @param {string}	The id of the Overlay to remove
-	*/
-	remove: function(overlay) {},
-
-	/**
-	* Removes focus from all registered Overlays in the manager
-	*/
-	blurAll : function() {},
-
-	/**
 	* Initializes the OverlayManager
-	* @param {Array}	overlays	Optional. A collection of Overlays to register with the manager.
-	* @param {object}	userConfig		The object literal representing the user configuration of the OverlayManager
+	* @method init
+	* @param {YAHOO.widget.Overlay[]}	overlays	Optional. A collection of Overlays to register with the manager.
+	* @param {Object}	userConfig		The object literal representing the user configuration of the OverlayManager
 	*/
 	init : function(userConfig) {
+		/**
+		* The OverlayManager's Config object used for monitoring configuration properties.
+		* @property cfg
+		* @type YAHOO.util.Config
+		*/
 		this.cfg = new YAHOO.util.Config(this);
 
 		this.initDefaultConfig();
@@ -1937,12 +2200,29 @@ YAHOO.widget.OverlayManager.prototype = {
 		}
 		this.cfg.fireQueue();
 
+		/**
+		* The currently activated Overlay
+		* @property activeOverlay
+		* @private
+		* @type YAHOO.widget.Overlay
+		*/
 		var activeOverlay = null;
 
+		/**
+		* Returns the currently focused Overlay
+		* @method getActive
+		* @return {YAHOO.widget.Overlay}	The currently focused Overlay
+		*/
 		this.getActive = function() {
 			return activeOverlay;
 		};
 
+		/**
+		* Focuses the specified Overlay
+		* @method focus
+		* @param {YAHOO.widget.Overlay} overlay	The Overlay to focus
+		* @param {String} overlay	The id of the Overlay to focus
+		*/
 		this.focus = function(overlay) {
 			var o = this.find(overlay);
 			if (o) {
@@ -1958,6 +2238,12 @@ YAHOO.widget.OverlayManager.prototype = {
 			}
 		};
 
+		/**
+		* Removes the specified Overlay from the manager
+		* @method remove
+		* @param {YAHOO.widget.Overlay}	overlay	The Overlay to remove
+		* @param {String} overlay	The id of the Overlay to remove
+		*/
 		this.remove = function(overlay) {
 			var o = this.find(overlay);
 			if (o) {
@@ -1975,6 +2261,10 @@ YAHOO.widget.OverlayManager.prototype = {
 			}
 		};
 
+		/**
+		* Removes focus from all registered Overlays in the manager
+		* @method blurAll
+		*/
 		this.blurAll = function() {
 			activeOverlay = null;
 			for (var o=0;o<this.overlays.length;o++) {
@@ -1996,9 +2286,10 @@ YAHOO.widget.OverlayManager.prototype = {
 
 	/**
 	* Registers an Overlay or an array of Overlays with the manager. Upon registration, the Overlay receives functions for focus and blur, along with CustomEvents for each.
-	* @param {Overlay}	overlay		An Overlay to register with the manager.
-	* @param {Overlay[]}	overlay		An array of Overlays to register with the manager.
-	* @return	{boolean}	True if any Overlays are registered.
+	* @method register
+	* @param {YAHOO.widget.Overlay}	overlay		An Overlay to register with the manager.
+	* @param {YAHOO.widget.Overlay[]}	overlay		An array of Overlays to register with the manager.
+	* @return	{Boolean}	True if any Overlays are registered.
 	*/
 	register : function(overlay) {
 		if (overlay instanceof YAHOO.widget.Overlay) {
@@ -2052,9 +2343,10 @@ YAHOO.widget.OverlayManager.prototype = {
 
 	/**
 	* Attempts to locate an Overlay by instance or ID.
-	* @param {Overlay}	overlay		An Overlay to locate within the manager
-	* @param {string}	overlay		An Overlay id to locate within the manager
-	* @return	{Overlay}	The requested Overlay, if found, or null if it cannot be located.
+	* @method find
+	* @param {YAHOO.widget.Overlay}	overlay		An Overlay to locate within the manager
+	* @param {String}	overlay		An Overlay id to locate within the manager
+	* @return	{YAHOO.widget.Overlay}	The requested Overlay, if found, or null if it cannot be located.
 	*/
 	find : function(overlay) {
 		if (overlay instanceof YAHOO.widget.Overlay) {
@@ -2075,7 +2367,9 @@ YAHOO.widget.OverlayManager.prototype = {
 
 	/**
 	* Used for sorting the manager's Overlays by z-index.
+	* @method compareZIndexDesc
 	* @private
+	* @return {Number}	0, 1, or -1, depending on where the Overlay should fall in the stacking order.
 	*/
 	compareZIndexDesc : function(o1, o2) {
 		var zIndex1 = o1.cfg.getProperty("zIndex");
@@ -2092,6 +2386,7 @@ YAHOO.widget.OverlayManager.prototype = {
 
 	/**
 	* Shows all Overlays in the manager.
+	* @method showAll
 	*/
 	showAll : function() {
 		for (var o=0;o<this.overlays.length;o++) {
@@ -2101,6 +2396,7 @@ YAHOO.widget.OverlayManager.prototype = {
 
 	/**
 	* Hides all Overlays in the manager.
+	* @method hideAll
 	*/
 	hideAll : function() {
 		for (var o=0;o<this.overlays.length;o++) {
@@ -2108,34 +2404,60 @@ YAHOO.widget.OverlayManager.prototype = {
 		}
 	},
 
+
 	/**
 	* Returns a string representation of the object.
-	* @type string
+	* @method toString
+	* @return {String}	The string representation of the OverlayManager
 	*/ 
 	toString : function() {
 		return "OverlayManager";
 	}
 
-};
+};/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version 0.12
+*/
 
 /**
 * KeyListener is a utility that provides an easy interface for listening for keydown/keyup events fired against DOM elements.
-* @param {Element}	attachTo	The element or element ID to which the key event should be attached
-* @param {string}	attachTo	The element or element ID to which the key event should be attached
-* @param {object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).
-* @param {function}	handler		The CustomEvent handler to fire when the key event is detected
-* @param {object}	handler		An object literal representing the handler. 
-* @param {string}	event		Optional. The event (keydown or keyup) to listen for. Defaults automatically to keydown.
+* @namespace YAHOO.util
+* @class KeyListener
 * @constructor
+* @param {HTMLElement}	attachTo	The element or element ID to which the key event should be attached
+* @param {String}	attachTo	The element or element ID to which the key event should be attached
+* @param {Object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).
+* @param {Function}	handler		The CustomEvent handler to fire when the key event is detected
+* @param {Object}	handler		An object literal representing the handler. 
+* @param {String}	event		Optional. The event (keydown or keyup) to listen for. Defaults automatically to keydown.
 */
 YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 	if (! event) {
 		event = YAHOO.util.KeyListener.KEYDOWN;
 	}
 
+	/**
+	* The CustomEvent fired internally when a key is pressed
+	* @event keyEvent
+	* @private
+	* @param {Object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).
+	*/
 	var keyEvent = new YAHOO.util.CustomEvent("keyPressed");
 	
+	/**
+	* The CustomEvent fired when the KeyListener is enabled via the enable() function
+	* @event enabledEvent
+	* @param {Object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).
+	*/
 	this.enabledEvent = new YAHOO.util.CustomEvent("enabled");
+
+	/**
+	* The CustomEvent fired when the KeyListener is disabled via the disable() function
+	* @event disabledEvent
+	* @param {Object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).
+	*/
 	this.disabledEvent = new YAHOO.util.CustomEvent("disabled");
 
 	if (typeof attachTo == 'string') {
@@ -2150,6 +2472,9 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 
 	/**
 	* Handles the key event when a key is pressed.
+	* @method handleKeyPress
+	* @param {DOMEvent} e	The keypress DOM event
+	* @param {Object}	obj	The DOM event scope object
 	* @private
 	*/
 	function handleKeyPress(e, obj) {
@@ -2185,14 +2510,27 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 		}
 	}
 
+	/**
+	* Enables the KeyListener by attaching the DOM event listeners to the target DOM element
+	* @method enable
+	*/
 	this.enable = function() {
 		if (! this.enabled) {
 			YAHOO.util.Event.addListener(attachTo, event, handleKeyPress);
 			this.enabledEvent.fire(keyData);
 		}
+		/**
+		* Boolean indicating the enabled/disabled state of the Tooltip
+		* @property enabled
+		* @type Boolean
+		*/
 		this.enabled = true;
 	};
 
+	/**
+	* Disables the KeyListener by removing the DOM event listeners from the target DOM element
+	* @method disable
+	*/
 	this.disable = function() {
 		if (this.enabled) {
 			YAHOO.util.Event.removeListener(attachTo, event, handleKeyPress);
@@ -2202,8 +2540,9 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 	};
 
 	/**
-	* Returns a string representation of the object.
-	* @type string
+	* Returns a String representation of the object.
+	* @method toString
+	* @return {String}	The string representation of the KeyListener
 	*/ 
 	this.toString = function() {
 		return "KeyListener [" + keyData.keys + "] " + attachTo.tagName + (attachTo.id ? "[" + attachTo.id + "]" : "");
@@ -2213,54 +2552,37 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 
 /**
 * Constant representing the DOM "keydown" event.
+* @property YAHOO.util.KeyListener.KEYDOWN
+* @static
 * @final
+* @type String
 */
 YAHOO.util.KeyListener.KEYDOWN = "keydown";
 
 /**
 * Constant representing the DOM "keyup" event.
+* @property YAHOO.util.KeyListener.KEYUP
+* @static
 * @final
+* @type String
 */
 YAHOO.util.KeyListener.KEYUP = "keyup";
-
-/**
-* Boolean indicating the enabled/disabled state of the Tooltip
-* @type Booleam
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version 0.12
 */
-YAHOO.util.KeyListener.prototype.enabled = null;
-
-/**
-* Enables the KeyListener, by dynamically attaching the key event to the appropriate DOM element.
-*/
-YAHOO.util.KeyListener.prototype.enable = function() {};
-
-/**
-* Disables the KeyListener, by dynamically removing the key event from the appropriate DOM element.
-*/
-YAHOO.util.KeyListener.prototype.disable = function() {};
-
-/**
-* CustomEvent fired when the KeyListener is enabled
-* args: keyData
-* @type YAHOO.util.CustomEvent
-*/
-YAHOO.util.KeyListener.prototype.enabledEvent = null;
-
-/**
-* CustomEvent fired when the KeyListener is disabled
-* args: keyData
-* @type YAHOO.util.CustomEvent
-*/
-YAHOO.util.KeyListener.prototype.disabledEvent = null;
-
 
 /**
 * Tooltip is an implementation of Overlay that behaves like an OS tooltip, displaying when the user mouses over a particular element, and disappearing on mouse out.
+* @namespace YAHOO.widget
+* @class Tooltip
 * @extends YAHOO.widget.Overlay
-* @param {string}	el	The element ID representing the Tooltip <em>OR</em>
-* @param {Element}	el	The element representing the Tooltip
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
 * @constructor
+* @param {String}	el	The element ID representing the Tooltip <em>OR</em>
+* @param {HTMLElement}	el	The element representing the Tooltip
+* @param {Object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
 */
 YAHOO.widget.Tooltip = function(el, userConfig) {
 	YAHOO.widget.Tooltip.superclass.constructor.call(this, el, userConfig);
@@ -2270,16 +2592,19 @@ YAHOO.extend(YAHOO.widget.Tooltip, YAHOO.widget.Overlay);
 
 /**
 * Constant representing the Tooltip CSS class
-* @type string
+* @property YAHOO.widget.Tooltip.CSS_TOOLTIP
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Tooltip.CSS_TOOLTIP = "tt";
 
 /**
 * The Tooltip initialization method. This method is automatically called by the constructor. A Tooltip is automatically rendered by the init method, and it also is set to be invisible by default, and constrained to viewport by default as well.
-* @param {string}	el	The element ID representing the Tooltip <em>OR</em>
-* @param {Element}	el	The element representing the Tooltip
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Tooltip. See configuration documentation for more details.
+* @method init
+* @param {String}	el	The element ID representing the Tooltip <em>OR</em>
+* @param {HTMLElement}	el	The element representing the Tooltip
+* @param {Object}	userConfig	The configuration object literal containing the configuration that should be set for this Tooltip. See configuration documentation for more details.
 */
 YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 	if (document.readyState && document.readyState != "complete") {
@@ -2310,24 +2635,76 @@ YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 
 /**
 * Initializes the class's configurable properties which can be changed using the Overlay's Config object (cfg).
+* @method initDefaultConfig
 */
 YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	YAHOO.widget.Tooltip.superclass.initDefaultConfig.call(this);
 
+	/**
+	* Specifies whether the Tooltip should be kept from overlapping its context element.
+	* @config preventoverlap
+	* @type Boolean
+	* @default true
+	*/
 	this.cfg.addProperty("preventoverlap",		{ value:true, validator:this.cfg.checkBoolean, supercedes:["x","y","xy"] } );
 
+	/**
+	* The number of milliseconds to wait before showing a Tooltip on mouseover.
+	* @config showdelay
+	* @type Number
+	* @default 200
+	*/
 	this.cfg.addProperty("showdelay",			{ value:200, handler:this.configShowDelay, validator:this.cfg.checkNumber } );
+	
+	/**
+	* The number of milliseconds to wait before automatically dismissing a Tooltip after the mouse has been resting on the context element.
+	* @config autodismissdelay
+	* @type Number
+	* @default 5000
+	*/
 	this.cfg.addProperty("autodismissdelay",	{ value:5000, handler:this.configAutoDismissDelay, validator:this.cfg.checkNumber } );
+	
+	/**
+	* The number of milliseconds to wait before hiding a Tooltip on mouseover.
+	* @config hidedelay
+	* @type Number
+	* @default 250
+	*/
 	this.cfg.addProperty("hidedelay",			{ value:250, handler:this.configHideDelay, validator:this.cfg.checkNumber } );
 
+	/**
+	* Specifies the Tooltip's text.
+	* @config text
+	* @type String
+	* @default null
+	*/
 	this.cfg.addProperty("text",				{ handler:this.configText, suppressEvent:true } );
+	
+	/**
+	* Specifies the container element that the Tooltip's markup should be rendered into.
+	* @config container
+	* @type HTMLElement/String
+	* @default document.body
+	*/
 	this.cfg.addProperty("container",			{ value:document.body, handler:this.configContainer } );
+
+	/**
+	* Specifies the element or elements that the Tooltip should be anchored to on mouseover.
+	* @config context
+	* @type HTMLElement[]/String[]
+	* @default null
+	*/
+
 };
 
 // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
 
 /**
 * The default event handler fired when the "text" property is changed.
+* @method configText
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Tooltip.prototype.configText = function(type, args, obj) {
 	var text = args[0];
@@ -2338,6 +2715,10 @@ YAHOO.widget.Tooltip.prototype.configText = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "container" property is changed.
+* @method configContainer
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Tooltip.prototype.configContainer = function(type, args, obj) {
 	var container = args[0];
@@ -2348,6 +2729,10 @@ YAHOO.widget.Tooltip.prototype.configContainer = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "context" property is changed.
+* @method configContext
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Tooltip.prototype.configContext = function(type, args, obj) {
 	var context = args[0];
@@ -2391,8 +2776,9 @@ YAHOO.widget.Tooltip.prototype.configContext = function(type, args, obj) {
 
 /**
 * The default event handler fired when the user moves the mouse while over the context element.
+* @method onContextMouseMove
 * @param {DOMEvent} e	The current DOM event
-* @param {object}	obj	The object argument
+* @param {Object}	obj	The object argument
 */
 YAHOO.widget.Tooltip.prototype.onContextMouseMove = function(e, obj) {
 	obj.pageX = YAHOO.util.Event.getPageX(e);
@@ -2402,8 +2788,9 @@ YAHOO.widget.Tooltip.prototype.onContextMouseMove = function(e, obj) {
 
 /**
 * The default event handler fired when the user mouses over the context element.
+* @method onContextMouseOver
 * @param {DOMEvent} e	The current DOM event
-* @param {object}	obj	The object argument
+* @param {Object}	obj	The object argument
 */
 YAHOO.widget.Tooltip.prototype.onContextMouseOver = function(e, obj) {
 
@@ -2429,8 +2816,9 @@ YAHOO.widget.Tooltip.prototype.onContextMouseOver = function(e, obj) {
 
 /**
 * The default event handler fired when the user mouses out of the context element.
+* @method onContextMouseOut
 * @param {DOMEvent} e	The current DOM event
-* @param {object}	obj	The object argument
+* @param {Object}	obj	The object argument
 */
 YAHOO.widget.Tooltip.prototype.onContextMouseOut = function(e, obj) {
 	var el = this;
@@ -2460,8 +2848,9 @@ YAHOO.widget.Tooltip.prototype.onContextMouseOut = function(e, obj) {
 
 /**
 * Processes the showing of the Tooltip by setting the timeout delay and offset of the Tooltip.
+* @method doShow
 * @param {DOMEvent} e	The current DOM event
-* @return {int}	The process ID of the timeout function associated with doShow
+* @return {Number}	The process ID of the timeout function associated with doShow
 */
 YAHOO.widget.Tooltip.prototype.doShow = function(e, context) {
 	
@@ -2494,6 +2883,7 @@ YAHOO.widget.Tooltip.prototype.doShow = function(e, context) {
 
 /**
 * Sets the timeout for the auto-dismiss delay, which by default is 5 seconds, meaning that a tooltip will automatically dismiss itself after 5 seconds of being displayed.
+* @method doHide
 */
 YAHOO.widget.Tooltip.prototype.doHide = function() {
 	var me = this;
@@ -2506,6 +2896,9 @@ YAHOO.widget.Tooltip.prototype.doHide = function() {
 
 /**
 * Fired when the Tooltip is moved, this event handler is used to prevent the Tooltip from overlapping with its context element.
+* @method preventOverlay
+* @param {Number} pageX	The x coordinate position of the mouse pointer
+* @param {Number} pageY	The y coordinate position of the mouse pointer
 */
 YAHOO.widget.Tooltip.prototype.preventOverlap = function(pageX, pageY) {
 	
@@ -2527,19 +2920,27 @@ YAHOO.widget.Tooltip.prototype.preventOverlap = function(pageX, pageY) {
 
 /**
 * Returns a string representation of the object.
-* @type string
+* @method toString
+* @return {String}	The string representation of the Tooltip
 */ 
 YAHOO.widget.Tooltip.prototype.toString = function() {
 	return "Tooltip " + this.id;
-};
+};/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version 0.12
+*/
 
 /**
 * Panel is an implementation of Overlay that behaves like an OS window, with a draggable header and an optional close icon at the top right.
+* @namespace YAHOO.widget
+* @class Panel
 * @extends YAHOO.widget.Overlay
-* @param {string}	el	The element ID representing the Panel <em>OR</em>
-* @param {Element}	el	The element representing the Panel
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Panel. See configuration documentation for more details.
 * @constructor
+* @param {String}	el	The element ID representing the Panel <em>OR</em>
+* @param {HTMLElement}	el	The element representing the Panel
+* @param {Object}	userConfig	The configuration object literal containing the configuration that should be set for this Panel. See configuration documentation for more details.
 */
 YAHOO.widget.Panel = function(el, userConfig) {
 	YAHOO.widget.Panel.superclass.constructor.call(this, el, userConfig);
@@ -2549,37 +2950,28 @@ YAHOO.extend(YAHOO.widget.Panel, YAHOO.widget.Overlay);
 
 /**
 * Constant representing the default CSS class used for a Panel
-* @type string
+* @property YAHOO.widget.Panel.CSS_PANEL
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Panel.CSS_PANEL = "panel";
 
 /**
 * Constant representing the default CSS class used for a Panel's wrapping container
-* @type string
+* @property YAHOO.widget.Panel.CSS_PANEL_CONTAINER
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Panel.CSS_PANEL_CONTAINER = "panel-container";
 
 /**
-* CustomEvent fired after the modality mask is shown
-* args: none
-* @type YAHOO.util.CustomEvent
-*/
-YAHOO.widget.Panel.prototype.showMaskEvent = null;
-
-/**
-* CustomEvent fired after the modality mask is hidden
-* args: none
-* @type YAHOO.util.CustomEvent
-*/
-YAHOO.widget.Panel.prototype.hideMaskEvent = null;
-
-/**
 * The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
-* @param {string}	el	The element ID representing the Overlay <em>OR</em>
-* @param {Element}	el	The element representing the Overlay
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
+* @method init
+* @param {String}	el	The element ID representing the Overlay <em>OR</em>
+* @param {HTMLElement}	el	The element representing the Overlay
+* @param {Object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
 */
 YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 	YAHOO.widget.Panel.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
@@ -2636,26 +3028,72 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 YAHOO.widget.Panel.prototype.initEvents = function() {
 	YAHOO.widget.Panel.superclass.initEvents.call(this);
 
+	/**
+	* CustomEvent fired after the modality mask is shown
+	* @event showMaskEvent
+	*/
 	this.showMaskEvent = new YAHOO.util.CustomEvent("showMask");
+
+	/**
+	* CustomEvent fired after the modality mask is hidden
+	* @event hideMaskEvent
+	*/
 	this.hideMaskEvent = new YAHOO.util.CustomEvent("hideMask");
 
+	/**
+	* CustomEvent when the Panel is dragged
+	* @event dragEvent
+	*/
 	this.dragEvent = new YAHOO.util.CustomEvent("drag");
 };
 
 /**
 * Initializes the class's configurable properties which can be changed using the Panel's Config object (cfg).
+* @method initDefaultConfig
 */
 YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
 	YAHOO.widget.Panel.superclass.initDefaultConfig.call(this);
 
 	// Add panel config properties //
 
+	/**
+	* True if the Panel should display a "close" button
+	* @config close
+	* @type Boolean
+	* @default true
+	*/	
 	this.cfg.addProperty("close", { value:true, handler:this.configClose, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
+
+	/**
+	* True if the Panel should be draggable
+	* @config draggable
+	* @type Boolean
+	* @default true
+	*/	
 	this.cfg.addProperty("draggable", { value:true,	handler:this.configDraggable, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
 
+	/**
+	* Sets the type of underlay to display for the Panel. Valid values are "shadow", "matte", and "none".
+	* @config underlay
+	* @type String
+	* @default shadow
+	*/
 	this.cfg.addProperty("underlay", { value:"shadow", handler:this.configUnderlay, supercedes:["visible"] } );
+
+	/**
+	* True if the Panel should be displayed in a modal fashion, automatically creating a transparent mask over the document that will not be removed until the Panel is dismissed.
+	* @config modal
+	* @type Boolean
+	* @default false
+	*/	
 	this.cfg.addProperty("modal",	{ value:false, handler:this.configModal, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
 
+	/**
+	* A KeyListener (or array of KeyListeners) that will be enabled when the Panel is shown, and disabled when the Panel is hidden.
+	* @config keylisteners
+	* @type YAHOO.util.KeyListener[]
+	* @default null
+	*/	
 	this.cfg.addProperty("keylisteners", { handler:this.configKeyListeners, suppressEvent:true, supercedes:["visible"] } );
 };
 
@@ -2663,6 +3101,10 @@ YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
 
 /**
 * The default event handler fired when the "close" property is changed. The method controls the appending or hiding of the close icon at the top right of the Panel.
+* @method configClose
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Panel.prototype.configClose = function(type, args, obj) {
 	var val = args[0];
@@ -2697,6 +3139,10 @@ YAHOO.widget.Panel.prototype.configClose = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "draggable" property is changed.
+* @method configDraggable
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Panel.prototype.configDraggable = function(type, args, obj) {
 	var val = args[0];
@@ -2717,6 +3163,10 @@ YAHOO.widget.Panel.prototype.configDraggable = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "underlay" property is changed.
+* @method configUnderlay
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Panel.prototype.configUnderlay = function(type, args, obj) {
 	var val = args[0];
@@ -2748,6 +3198,10 @@ YAHOO.widget.Panel.prototype.configUnderlay = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "modal" property is changed. This handler subscribes or unsubscribes to the show and hide events to handle the display or hide of the modality mask.
+* @method configModal
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 	var modal = args[0];
@@ -2755,8 +3209,8 @@ YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 	if (modal) {
 		this.buildMask();
 
-		if (! YAHOO.util.Config.alreadySubscribed( this.showEvent, this.showMask, this ) ) {
-			this.showEvent.subscribe(this.showMask, this, true);
+		if (! YAHOO.util.Config.alreadySubscribed( this.beforeShowEvent, this.showMask, this ) ) {
+			this.beforeShowEvent.subscribe(this.showMask, this, true);
 		}
 		if (! YAHOO.util.Config.alreadySubscribed( this.hideEvent, this.hideMask, this) ) {
 			this.hideEvent.subscribe(this.hideMask, this, true);
@@ -2777,6 +3231,7 @@ YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 
 /**
 * Removes the modality mask.
+* @method removeMask
 */
 YAHOO.widget.Panel.prototype.removeMask = function() {
 	if (this.mask) {
@@ -2788,7 +3243,11 @@ YAHOO.widget.Panel.prototype.removeMask = function() {
 }
 
 /**
-* The default event handler fired when the "keylisteners" property is changed. 
+* The default event handler fired when the "keylisteners" property is changed.
+* @method configKeyListeners
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Panel.prototype.configKeyListeners = function(type, args, obj) {
 	var listeners = args[0];
@@ -2818,58 +3277,65 @@ YAHOO.widget.Panel.prototype.configKeyListeners = function(type, args, obj) {
 	} 
 };
 
-// END BUILT-IN PROPERTY EVENT HANDLERS //
+/**
+* The default event handler fired when the "height" property is changed.
+* @method configHeight
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+*/
+YAHOO.widget.Panel.prototype.configHeight = function(type, args, obj) {
+	var height = args[0];
+	var el = this.innerElement;
+	YAHOO.util.Dom.setStyle(el, "height", height);
+	this.cfg.refireEvent("underlay");
+	this.cfg.refireEvent("iframe");
+};
 
+/**
+* The default event handler fired when the "width" property is changed.
+* @method configWidth
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+*/
+YAHOO.widget.Panel.prototype.configWidth = function(type, args, obj) {
+	var width = args[0];
+	var el = this.innerElement;
+	YAHOO.util.Dom.setStyle(el, "width", width);
+	this.cfg.refireEvent("underlay");
+	this.cfg.refireEvent("iframe");
+};
+
+// END BUILT-IN PROPERTY EVENT HANDLERS //
 
 /**
 * Builds the wrapping container around the Panel that is used for positioning the shadow and matte underlays. The container element is assigned to a  local instance variable called container, and the element is reinserted inside of it.
+* @method buildWrapper
 */
 YAHOO.widget.Panel.prototype.buildWrapper = function() {
 	var elementParent = this.element.parentNode;
-
-	var elementClone = this.element.cloneNode(true);
-	this.innerElement = elementClone;
-	this.innerElement.style.visibility = "inherit";
-
-	YAHOO.util.Dom.addClass(this.innerElement, YAHOO.widget.Panel.CSS_PANEL);
-
+	var originalElement = this.element;
+	
 	var wrapper = document.createElement("DIV");
 	wrapper.className = YAHOO.widget.Panel.CSS_PANEL_CONTAINER;
-	wrapper.id = elementClone.id + "_c";
-	
-	wrapper.appendChild(elementClone);
+	wrapper.id = originalElement.id + "_c";
 	
 	if (elementParent) {
-		elementParent.replaceChild(wrapper, this.element);
+		elementParent.insertBefore(wrapper, originalElement);
 	}
+
+	wrapper.appendChild(originalElement);
 
 	this.element = wrapper;
+	this.innerElement = originalElement;
 
-	// Resynchronize the local field references
-
-	var childNodes = this.innerElement.childNodes;
-	if (childNodes) {
-		for (var i=0;i<childNodes.length;i++) {
-			var child = childNodes[i];
-			switch (child.className) {
-				case YAHOO.widget.Module.CSS_HEADER:
-					this.header = child;
-					break;
-				case YAHOO.widget.Module.CSS_BODY:
-					this.body = child;
-					break;
-				case YAHOO.widget.Module.CSS_FOOTER:
-					this.footer = child;
-					break;
-			}
-		}
-	}
-
-	this.initDefaultConfig(); // We've changed the DOM, so the configuration must be re-tooled to get the DOM references right
+	YAHOO.util.Dom.setStyle(this.innerElement, "visibility", "inherit");
 };
 
 /**
 * Adjusts the size of the shadow based on the size of the element.
+* @method sizeUnderlay
 */
 YAHOO.widget.Panel.prototype.sizeUnderlay = function() {
 	if (this.underlay && this.browser != "gecko" && this.browser != "safari") {
@@ -2880,6 +3346,9 @@ YAHOO.widget.Panel.prototype.sizeUnderlay = function() {
 
 /**
 * Event handler fired when the resize monitor element is resized.
+* @method onDomResize
+* @param {DOMEvent} e	The resize DOM event
+* @param {Object} obj	The scope object
 */
 YAHOO.widget.Panel.prototype.onDomResize = function(e, obj) { 
 	YAHOO.widget.Panel.superclass.onDomResize.call(this, e, obj);
@@ -2891,6 +3360,7 @@ YAHOO.widget.Panel.prototype.onDomResize = function(e, obj) {
 
 /**
 * Registers the Panel's header for drag & drop capability.
+* @method registerDragDrop
 */
 YAHOO.widget.Panel.prototype.registerDragDrop = function() {
 	if (this.header) {
@@ -2965,6 +3435,7 @@ YAHOO.widget.Panel.prototype.registerDragDrop = function() {
 
 /**
 * Builds the mask that is laid over the document when the Panel is configured to be modal.
+* @method buildMask
 */
 YAHOO.widget.Panel.prototype.buildMask = function() {
 	if (! this.mask) {
@@ -2988,6 +3459,7 @@ YAHOO.widget.Panel.prototype.buildMask = function() {
 
 /**
 * Hides the modality mask.
+* @method hideMask
 */
 YAHOO.widget.Panel.prototype.hideMask = function() {
 	if (this.cfg.getProperty("modal") && this.mask) {
@@ -2999,6 +3471,7 @@ YAHOO.widget.Panel.prototype.hideMask = function() {
 
 /**
 * Shows the modality mask.
+* @method showMask
 */
 YAHOO.widget.Panel.prototype.showMask = function() {
 	if (this.cfg.getProperty("modal") && this.mask) {
@@ -3011,6 +3484,7 @@ YAHOO.widget.Panel.prototype.showMask = function() {
 
 /**
 * Sets the size of the modality mask to cover the entire scrollable area of the document
+* @method sizeMask
 */
 YAHOO.widget.Panel.prototype.sizeMask = function() {
 	if (this.mask) {
@@ -3020,31 +3494,10 @@ YAHOO.widget.Panel.prototype.sizeMask = function() {
 };
 
 /**
-* The default event handler fired when the "height" property is changed.
-*/
-YAHOO.widget.Panel.prototype.configHeight = function(type, args, obj) {
-	var height = args[0];
-	var el = this.innerElement;
-	YAHOO.util.Dom.setStyle(el, "height", height);
-	this.cfg.refireEvent("underlay");
-	this.cfg.refireEvent("iframe");
-};
-
-/**
-* The default event handler fired when the "width" property is changed.
-*/
-YAHOO.widget.Panel.prototype.configWidth = function(type, args, obj) {
-	var width = args[0];
-	var el = this.innerElement;
-	YAHOO.util.Dom.setStyle(el, "width", width);
-	this.cfg.refireEvent("underlay");
-	this.cfg.refireEvent("iframe");
-};
-
-/**
 * Renders the Panel by inserting the elements that are not already in the main Panel into their correct places. Optionally appends the Panel to the specified node prior to the render's execution. NOTE: For Panels without existing markup, the appendToNode argument is REQUIRED. If this argument is ommitted and the current element is not present in the document, the function will return false, indicating that the render was a failure.
-* @param {string}	appendToNode	The element id to which the Module should be appended to prior to rendering <em>OR</em>
-* @param {Element}	appendToNode	The element to which the Module should be appended to prior to rendering	
+* @method render
+* @param {String}	appendToNode	The element id to which the Module should be appended to prior to rendering <em>OR</em>
+* @param {HTMLElement}	appendToNode	The element to which the Module should be appended to prior to rendering	
 * @return {boolean} Success or failure of the render
 */
 YAHOO.widget.Panel.prototype.render = function(appendToNode) {
@@ -3052,20 +3505,28 @@ YAHOO.widget.Panel.prototype.render = function(appendToNode) {
 };
 
 /**
-* Returns a string representation of the object.
-* @type string
+* Returns a String representation of the object.
+* @method toString
+* @return {String} The string representation of the Panel.
 */ 
 YAHOO.widget.Panel.prototype.toString = function() {
 	return "Panel " + this.id;
-};
+};/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version 0.12
+*/
 
 /**
 * Dialog is an implementation of Panel that can be used to submit form data. Built-in functionality for buttons with event handlers is included, and button sets can be build dynamically, or the preincluded ones for Submit/Cancel and OK/Cancel can be utilized. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
+* @namespace YAHOO.widget
+* @class Dialog
 * @extends YAHOO.widget.Panel
-* @param {string}	el	The element ID representing the Dialog <em>OR</em>
-* @param {Element}	el	The element representing the Dialog
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Dialog. See configuration documentation for more details.
 * @constructor
+* @param {String}	el	The element ID representing the Dialog <em>OR</em>
+* @param {HTMLElement}	el	The element representing the Dialog
+* @param {Object}	userConfig	The configuration object literal containing the configuration that should be set for this Dialog. See configuration documentation for more details.
 */
 YAHOO.widget.Dialog = function(el, userConfig) {
 	YAHOO.widget.Dialog.superclass.constructor.call(this, el, userConfig);
@@ -3075,86 +3536,54 @@ YAHOO.extend(YAHOO.widget.Dialog, YAHOO.widget.Panel);
 
 /**
 * Constant representing the default CSS class used for a Dialog
-* @type string
+* @property YAHOO.widget.Dialog.CSS_DIALOG
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Dialog.CSS_DIALOG = "dialog";
 
-
-/**
-* CustomEvent fired prior to submission
-* @type YAHOO.util.CustomEvent
-*/
-YAHOO.widget.Dialog.prototype.beforeSubmitEvent = null;
-
-/**
-* CustomEvent fired after submission
-* @type YAHOO.util.CustomEvent
-*/
-YAHOO.widget.Dialog.prototype.submitEvent = null;
-
-/**
-* CustomEvent fired prior to manual submission
-* @type YAHOO.util.CustomEvent
-*/
-YAHOO.widget.Dialog.prototype.manualSubmitEvent = null;
-
-/**
-* CustomEvent fired prior to asynchronous submission
-* @type YAHOO.util.CustomEvent
-*/
-YAHOO.widget.Dialog.prototype.asyncSubmitEvent = null;
-
-/**
-* CustomEvent fired prior to form-based submission
-* @type YAHOO.util.CustomEvent
-*/
-YAHOO.widget.Dialog.prototype.formSubmitEvent = null;
-
-/**
-* CustomEvent fired after cancel
-* @type YAHOO.util.CustomEvent
-*/
-YAHOO.widget.Dialog.prototype.cancelEvent = null;
-
-
 /**
 * Initializes the class's configurable properties which can be changed using the Dialog's Config object (cfg).
+* @method initDefaultConfig
 */
 YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 	YAHOO.widget.Dialog.superclass.initDefaultConfig.call(this);
 
 	/**
 	* The internally maintained callback object for use with the Connection utility
-	* @type object
-	* @private
+	* @property callback
+	* @type Object
 	*/
 	this.callback = {
+		/**
+		* The function to execute upon success of the Connection submission
+		* @property callback.success
+		* @type Function
+		*/
 		success : null,
+		/**
+		* The function to execute upon failure of the Connection submission
+		* @property callback.failure
+		* @type Function
+		*/
 		failure : null,
+		/**
+		* The arbitraty argument or arguments to pass to the Connection callback functions
+		* @property callback.argument
+		* @type Object
+		*/
 		argument: null
 	};
 
-	this.doSubmit = function() {
-		var method = this.cfg.getProperty("postmethod");
-		switch (method) {
-			case "async":
-				YAHOO.util.Connect.setForm(this.form);
-				var cObj = YAHOO.util.Connect.asyncRequest('POST', this.form.action, this.callback);
-				this.asyncSubmitEvent.fire();
-				break;
-			case "form":
-				this.form.submit();
-				this.formSubmitEvent.fire();
-				break;
-			case "none":
-			case "manual":
-				this.manualSubmitEvent.fire();
-				break;
-		}
-	};
-
 	// Add form dialog config properties //
+	
+	/**
+	* The method to use for posting the Dialog's form. Possible values are "async", "form", and "manual".
+	* @config postmethod 
+	* @type String
+	* @default async
+	*/
 	this.cfg.addProperty("postmethod", { value:"async", validator:function(val) { 
 													if (val != "form" && val != "async" && val != "none" && val != "manual") {
 														return false;
@@ -3163,30 +3592,65 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 													}
 												} });
 
+	/**
+	* Object literal(s) defining the buttons for the Dialog's footer.
+	* @config buttons
+	* @type Object[]
+	* @default "none"
+	*/
 	this.cfg.addProperty("buttons",		{ value:"none",	handler:this.configButtons } );
 };
 
 /**
 * Initializes the custom events for Dialog which are fired automatically at appropriate times by the Dialog class.
+* @method initEvents
 */
 YAHOO.widget.Dialog.prototype.initEvents = function() {
 	YAHOO.widget.Dialog.superclass.initEvents.call(this);
-	
+
+	/**
+	* CustomEvent fired prior to submission
+	* @event beforeSumitEvent
+	*/	
 	this.beforeSubmitEvent	= new YAHOO.util.CustomEvent("beforeSubmit");
+	
+	/**
+	* CustomEvent fired after submission
+	* @event submitEvent
+	*/
 	this.submitEvent		= new YAHOO.util.CustomEvent("submit");
 
+	/**
+	* CustomEvent fired prior to manual submission
+	* @event manualSubmitEvent
+	*/
 	this.manualSubmitEvent	= new YAHOO.util.CustomEvent("manualSubmit");
+
+	/**
+	* CustomEvent fired prior to asynchronous submission
+	* @event asyncSubmitEvent
+	*/	
 	this.asyncSubmitEvent	= new YAHOO.util.CustomEvent("asyncSubmit");
+
+	/**
+	* CustomEvent fired prior to form-based submission
+	* @event formSubmitEvent
+	*/
 	this.formSubmitEvent	= new YAHOO.util.CustomEvent("formSubmit");
 
+	/**
+	* CustomEvent fired after cancel
+	* @event cancelEvent
+	*/
 	this.cancelEvent		= new YAHOO.util.CustomEvent("cancel");
 };
 
 /**
 * The Dialog initialization method, which is executed for Dialog and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
-* @param {string}	el	The element ID representing the Dialog <em>OR</em>
-* @param {Element}	el	The element representing the Dialog
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Dialog. See configuration documentation for more details.
+* @method init
+* @param {String}	el	The element ID representing the Dialog <em>OR</em>
+* @param {HTMLElement}	el	The element representing the Dialog
+* @param {Object}	userConfig	The configuration object literal containing the configuration that should be set for this Dialog. See configuration documentation for more details.
 */
 YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
 	YAHOO.widget.Dialog.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
@@ -3219,7 +3683,31 @@ YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
 };
 
 /**
+* Performs the submission of the Dialog form depending on the value of "postmethod" property.
+* @method doSubmit
+*/
+YAHOO.widget.Dialog.prototype.doSubmit = function() {
+	var method = this.cfg.getProperty("postmethod");
+	switch (method) {
+		case "async":
+			YAHOO.util.Connect.setForm(this.form);
+			var cObj = YAHOO.util.Connect.asyncRequest('POST', this.form.getAttribute("action"), this.callback);
+			this.asyncSubmitEvent.fire();
+			break;
+		case "form":
+			this.form.submit();
+			this.formSubmitEvent.fire();
+			break;
+		case "none":
+		case "manual":
+			this.manualSubmitEvent.fire();
+			break;
+	}
+};
+
+/**
 * Prepares the Dialog's internal FORM object, creating one if one is not currently present.
+* @method registerForm
 */
 YAHOO.widget.Dialog.prototype.registerForm = function() {
 	var form = this.element.getElementsByTagName("FORM")[0];
@@ -3280,6 +3768,10 @@ YAHOO.widget.Dialog.prototype.registerForm = function() {
 
 /**
 * The default event handler for the "buttons" configuration property
+* @method configButtons
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Dialog.prototype.configButtons = function(type, args, obj) {
 	var buttons = args[0];
@@ -3333,23 +3825,10 @@ YAHOO.widget.Dialog.prototype.configButtons = function(type, args, obj) {
 	}
 };
 
-/**
-* The default handler fired when the "success" property is changed. Used for asynchronous submission only.
-*/ 
-YAHOO.widget.Dialog.prototype.configOnSuccess = function(type,args,obj){};
-
-/**
-* The default handler fired when the "failure" property is changed. Used for asynchronous submission only.
-*/ 
-YAHOO.widget.Dialog.prototype.configOnFailure = function(type,args,obj){};
-
-/**
-* Executes a submission of the form based on the value of the postmethod property.
-*/
-YAHOO.widget.Dialog.prototype.doSubmit = function() {};
 
 /**
 * The default event handler used to focus the first field of the form when the Dialog is shown.
+* @method focusFirst
 */
 YAHOO.widget.Dialog.prototype.focusFirst = function(type,args,obj) {
 	if (args) {
@@ -3368,6 +3847,7 @@ YAHOO.widget.Dialog.prototype.focusFirst = function(type,args,obj) {
 
 /**
 * Sets the focus to the last button in the button or form element in the Dialog
+* @method focusLast
 */
 YAHOO.widget.Dialog.prototype.focusLast = function(type,args,obj) {
 	if (args) {
@@ -3389,6 +3869,7 @@ YAHOO.widget.Dialog.prototype.focusLast = function(type,args,obj) {
 
 /**
 * Sets the focus to the button that is designated as the default. By default, his handler is executed when the show event is fired.
+* @method focusDefaultButton
 */
 YAHOO.widget.Dialog.prototype.focusDefaultButton = function() {
 	if (this.defaultHtmlButton) {
@@ -3398,6 +3879,7 @@ YAHOO.widget.Dialog.prototype.focusDefaultButton = function() {
 
 /**
 * Blurs all the html buttons
+* @method blurButtons
 */
 YAHOO.widget.Dialog.prototype.blurButtons = function() {
 	var buttons = this.cfg.getProperty("buttons");
@@ -3411,6 +3893,7 @@ YAHOO.widget.Dialog.prototype.blurButtons = function() {
 
 /**
 * Sets the focus to the first button in the button list
+* @method focusFirstButton
 */
 YAHOO.widget.Dialog.prototype.focusFirstButton = function() {
 	var buttons = this.cfg.getProperty("buttons");
@@ -3424,6 +3907,7 @@ YAHOO.widget.Dialog.prototype.focusFirstButton = function() {
 
 /**
 * Sets the focus to the first button in the button list
+* @method focusLastButton
 */
 YAHOO.widget.Dialog.prototype.focusLastButton = function() {
 	var buttons = this.cfg.getProperty("buttons");
@@ -3439,6 +3923,7 @@ YAHOO.widget.Dialog.prototype.focusLastButton = function() {
 
 /**
 * Built-in function hook for writing a validation function that will be checked for a "true" value prior to a submit. This function, as implemented by default, always returns true, so it should be overridden if validation is necessary.
+* @method validate
 */
 YAHOO.widget.Dialog.prototype.validate = function() {
 	return true;
@@ -3446,6 +3931,7 @@ YAHOO.widget.Dialog.prototype.validate = function() {
 
 /**
 * Executes a submit of the Dialog followed by a hide, if validation is successful.
+* @method submit
 */
 YAHOO.widget.Dialog.prototype.submit = function() {
 	if (this.validate()) {
@@ -3461,6 +3947,7 @@ YAHOO.widget.Dialog.prototype.submit = function() {
 
 /**
 * Executes the cancel of the Dialog followed by a hide.
+* @method cancel
 */
 YAHOO.widget.Dialog.prototype.cancel = function() {
 	this.cancelEvent.fire();
@@ -3469,7 +3956,8 @@ YAHOO.widget.Dialog.prototype.cancel = function() {
 
 /**
 * Returns a JSON-compatible data structure representing the data currently contained in the form.
-* @return {object} A JSON object reprsenting the data of the current form.
+* @method getData
+* @return {Object} A JSON object reprsenting the data of the current form.
 */
 YAHOO.widget.Dialog.prototype.getData = function() {
 	var form = this.form;
@@ -3545,19 +4033,27 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 
 /**
 * Returns a string representation of the object.
-* @type string
+* @method toString
+* @return {String}	The string representation of the Dialog
 */ 
 YAHOO.widget.Dialog.prototype.toString = function() {
 	return "Dialog " + this.id;
-};
+};/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version 0.12
+*/
 
 /**
 * SimpleDialog is a simple implementation of Dialog that can be used to submit a single value. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
+* @namespace YAHOO.widget
+* @class SimpleDialog
 * @extends YAHOO.widget.Dialog
-* @param {string}	el	The element ID representing the SimpleDialog <em>OR</em>
-* @param {Element}	el	The element representing the SimpleDialog
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this SimpleDialog. See configuration documentation for more details.
 * @constructor
+* @param {String}	el	The element ID representing the SimpleDialog <em>OR</em>
+* @param {HTMLElement}	el	The element representing the SimpleDialog
+* @param {Object}	userConfig	The configuration object literal containing the configuration that should be set for this SimpleDialog. See configuration documentation for more details.
 */
 YAHOO.widget.SimpleDialog = function(el, userConfig) {
 	YAHOO.widget.SimpleDialog.superclass.constructor.call(this, el, userConfig);
@@ -3567,70 +4063,100 @@ YAHOO.extend(YAHOO.widget.SimpleDialog, YAHOO.widget.Dialog);
 
 /**
 * Constant for the standard network icon for a blocking action
-* @type string
+* @property YAHOO.widget.SimpleDialog.ICON_BLOCK
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.SimpleDialog.ICON_BLOCK = "nt/ic/ut/bsc/blck16_1.gif";
 
 /**
 * Constant for the standard network icon for alarm
-* @type string
+* @property YAHOO.widget.SimpleDialog.ICON_ALARM
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.SimpleDialog.ICON_ALARM = "nt/ic/ut/bsc/alrt16_1.gif";
 
 /**
 * Constant for the standard network icon for help
-* @type string
+* @property YAHOO.widget.SimpleDialog.ICON_HELP
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.SimpleDialog.ICON_HELP  = "nt/ic/ut/bsc/hlp16_1.gif";
 
 /**
 * Constant for the standard network icon for info
-* @type string
+* @property YAHOO.widget.SimpleDialog.ICON_INFO
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.SimpleDialog.ICON_INFO  = "nt/ic/ut/bsc/info16_1.gif";
 
 /**
 * Constant for the standard network icon for warn
-* @type string
+* @property YAHOO.widget.SimpleDialog.ICON_WARN
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.SimpleDialog.ICON_WARN  = "nt/ic/ut/bsc/warn16_1.gif";
 
 /**
 * Constant for the standard network icon for a tip
-* @type string
+* @property YAHOO.widget.SimpleDialog.ICON_TIP
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.SimpleDialog.ICON_TIP   = "nt/ic/ut/bsc/tip16_1.gif";
 
 /**
 * Constant representing the default CSS class used for a SimpleDialog
-* @type string
+* @property YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG = "simple-dialog";
 
 /**
 * Initializes the class's configurable properties which can be changed using the SimpleDialog's Config object (cfg).
+* @method initDefaultConfig
 */
 YAHOO.widget.SimpleDialog.prototype.initDefaultConfig = function() {
 	YAHOO.widget.SimpleDialog.superclass.initDefaultConfig.call(this);
 
 	// Add dialog config properties //
+
+	/**
+	* Sets the informational icon for the SimpleDialog
+	* @config icon
+	* @type String
+	* @default "none"
+	*/
 	this.cfg.addProperty("icon",	{ value:"none",	handler:this.configIcon, suppressEvent:true } );
+	
+	/**
+	* Sets the text for the SimpleDialog
+	* @config text
+	* @type String
+	* @default ""
+	*/
 	this.cfg.addProperty("text",	{ value:"", handler:this.configText, suppressEvent:true, supercedes:["icon"] } );
 };
 
 
 /**
 * The SimpleDialog initialization method, which is executed for SimpleDialog and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
-* @param {string}	el	The element ID representing the SimpleDialog <em>OR</em>
-* @param {Element}	el	The element representing the SimpleDialog
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this SimpleDialog. See configuration documentation for more details.
+* @method init
+* @param {String}	el	The element ID representing the SimpleDialog <em>OR</em>
+* @param {HTMLElement}	el	The element representing the SimpleDialog
+* @param {Object}	userConfig	The configuration object literal containing the configuration that should be set for this SimpleDialog. See configuration documentation for more details.
 */
 YAHOO.widget.SimpleDialog.prototype.init = function(el, userConfig) {
 	YAHOO.widget.SimpleDialog.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
@@ -3656,6 +4182,7 @@ YAHOO.widget.SimpleDialog.prototype.init = function(el, userConfig) {
 };
 /**
 * Prepares the SimpleDialog's internal FORM object, creating one if one is not currently present, and adding the value hidden field.
+* @method registerForm
 */
 YAHOO.widget.SimpleDialog.prototype.registerForm = function() {
 	YAHOO.widget.SimpleDialog.superclass.registerForm.call(this);
@@ -3666,6 +4193,10 @@ YAHOO.widget.SimpleDialog.prototype.registerForm = function() {
 
 /**
 * Fired when the "icon" property is set.
+* @method configIcon
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.SimpleDialog.prototype.configIcon = function(type,args,obj) {
 	var icon = args[0];
@@ -3677,6 +4208,10 @@ YAHOO.widget.SimpleDialog.prototype.configIcon = function(type,args,obj) {
 
 /**
 * Fired when the "text" property is set.
+* @method configText
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.SimpleDialog.prototype.configText = function(type,args,obj) {
 	var text = args[0];
@@ -3689,20 +4224,28 @@ YAHOO.widget.SimpleDialog.prototype.configText = function(type,args,obj) {
 
 /**
 * Returns a string representation of the object.
-* @type string
+* @method toString
+* @return {String}	The string representation of the SimpleDialog
 */ 
 YAHOO.widget.SimpleDialog.prototype.toString = function() {
 	return "SimpleDialog " + this.id;
-};
+};/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version 0.12
+*/
 
 /**
 * ContainerEffect encapsulates animation transitions that are executed when an Overlay is shown or hidden.
-* @param {Overlay}	overlay		The Overlay that the animation should be associated with
-* @param {object}	attrIn		The object literal representing the animation arguments to be used for the animate-in transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
-* @param {object}	attrOut		The object literal representing the animation arguments to be used for the animate-out transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).
-* @param {Element}	targetElement	Optional. The target element that should be animated during the transition. Defaults to overlay.element.
-* @param {class}	Optional. The animation class to instantiate. Defaults to YAHOO.util.Anim. Other options include YAHOO.util.Motion.
+* @namespace YAHOO.widget
+* @class ContainerEffect
 * @constructor
+* @param {YAHOO.widget.Overlay}	overlay		The Overlay that the animation should be associated with
+* @param {Object}	attrIn		The object literal representing the animation arguments to be used for the animate-in transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(Number), and method(i.e. YAHOO.util.Easing.easeIn).
+* @param {Object}	attrOut		The object literal representing the animation arguments to be used for the animate-out transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(Number), and method(i.e. YAHOO.util.Easing.easeIn).
+* @param {HTMLElement}	targetElement	Optional. The target element that should be animated during the transition. Defaults to overlay.element.
+* @param {class}	Optional. The animation class to instantiate. Defaults to YAHOO.util.Anim. Other options include YAHOO.util.Motion.
 */
 YAHOO.widget.ContainerEffect = function(overlay, attrIn, attrOut, targetElement, animClass) {
 	if (! animClass) {
@@ -3711,28 +4254,39 @@ YAHOO.widget.ContainerEffect = function(overlay, attrIn, attrOut, targetElement,
 
 	/**
 	* The overlay to animate
+	* @property overlay
+	* @type YAHOO.widget.Overlay
 	*/
 	this.overlay = overlay;
 	/**
 	* The animation attributes to use when transitioning into view
+	* @property attrIn
+	* @type Object
 	*/
 	this.attrIn = attrIn;
 	/**
 	* The animation attributes to use when transitioning out of view
+	* @property attrOut
+	* @type Object
 	*/
 	this.attrOut = attrOut;
 	/**
 	* The target element to be animated
+	* @property targetElement
+	* @type HTMLElement
 	*/
 	this.targetElement = targetElement || overlay.element;
 	/**
 	* The animation class to use for animating the overlay
+	* @property animClass
+	* @type class
 	*/
 	this.animClass = animClass;
 };
 
 /**
 * Initializes the animation classes and events.
+* @method init
 */
 YAHOO.widget.ContainerEffect.prototype.init = function() {
 	this.beforeAnimateInEvent = new YAHOO.util.CustomEvent("beforeAnimateIn");
@@ -3754,6 +4308,7 @@ YAHOO.widget.ContainerEffect.prototype.init = function() {
 
 /**
 * Triggers the in-animation.
+* @method animateIn
 */
 YAHOO.widget.ContainerEffect.prototype.animateIn = function() {
 	this.beforeAnimateInEvent.fire();
@@ -3762,6 +4317,7 @@ YAHOO.widget.ContainerEffect.prototype.animateIn = function() {
 
 /**
 * Triggers the out-animation.
+* @method animateOut
 */
 YAHOO.widget.ContainerEffect.prototype.animateOut = function() {
 	this.beforeAnimateOutEvent.fire();
@@ -3770,33 +4326,58 @@ YAHOO.widget.ContainerEffect.prototype.animateOut = function() {
 
 /**
 * The default onStart handler for the in-animation.
+* @method handleStartAnimateIn
+* @param {String} type	The CustomEvent type
+* @param {Object[]}	args	The CustomEvent arguments
+* @param {Object} obj	The scope object
 */
 YAHOO.widget.ContainerEffect.prototype.handleStartAnimateIn = function(type, args, obj) { };
 /**
 * The default onTween handler for the in-animation.
+* @method handleTweenAnimateIn
+* @param {String} type	The CustomEvent type
+* @param {Object[]}	args	The CustomEvent arguments
+* @param {Object} obj	The scope object
 */
 YAHOO.widget.ContainerEffect.prototype.handleTweenAnimateIn = function(type, args, obj) { };
 /**
 * The default onComplete handler for the in-animation.
+* @method handleCompleteAnimateIn
+* @param {String} type	The CustomEvent type
+* @param {Object[]}	args	The CustomEvent arguments
+* @param {Object} obj	The scope object
 */
 YAHOO.widget.ContainerEffect.prototype.handleCompleteAnimateIn = function(type, args, obj) { };
 
 /**
 * The default onStart handler for the out-animation.
+* @method handleStartAnimateOut
+* @param {String} type	The CustomEvent type
+* @param {Object[]}	args	The CustomEvent arguments
+* @param {Object} obj	The scope object
 */
 YAHOO.widget.ContainerEffect.prototype.handleStartAnimateOut = function(type, args, obj) { };
 /**
 * The default onTween handler for the out-animation.
+* @method handleTweenAnimateOut
+* @param {String} type	The CustomEvent type
+* @param {Object[]}	args	The CustomEvent arguments
+* @param {Object} obj	The scope object
 */
 YAHOO.widget.ContainerEffect.prototype.handleTweenAnimateOut = function(type, args, obj) { };
 /**
 * The default onComplete handler for the out-animation.
+* @method handleCompleteAnimateOut
+* @param {String} type	The CustomEvent type
+* @param {Object[]}	args	The CustomEvent arguments
+* @param {Object} obj	The scope object
 */
 YAHOO.widget.ContainerEffect.prototype.handleCompleteAnimateOut = function(type, args, obj) { };
 
 /**
 * Returns a string representation of the object.
-* @type string
+* @method toString
+* @return {String}	The string representation of the ContainerEffect
 */ 
 YAHOO.widget.ContainerEffect.prototype.toString = function() {
 	var output = "ContainerEffect";
@@ -3808,9 +4389,11 @@ YAHOO.widget.ContainerEffect.prototype.toString = function() {
 
 /**
 * A pre-configured ContainerEffect instance that can be used for fading an overlay in and out.
+* @method FADE
+* @static
 * @param {Overlay}	The Overlay object to animate
-* @param {float}	The duration of the animation
-* @type ContainerEffect
+* @param {Number}	The duration of the animation
+* @return {ContainerEffect}	The configured ContainerEffect object
 */
 YAHOO.widget.ContainerEffect.FADE = function(overlay, dur) {
 	var fade = new YAHOO.widget.ContainerEffect(overlay, { attributes:{opacity: {from:0, to:1}}, duration:dur, method:YAHOO.util.Easing.easeIn }, { attributes:{opacity: {to:0}}, duration:dur, method:YAHOO.util.Easing.easeOut}, overlay.element );
@@ -3874,9 +4457,11 @@ YAHOO.widget.ContainerEffect.FADE = function(overlay, dur) {
 
 /**
 * A pre-configured ContainerEffect instance that can be used for sliding an overlay in and out.
+* @method SLIDE
+* @static
 * @param {Overlay}	The Overlay object to animate
-* @param {float}	The duration of the animation
-* @type ContainerEffect
+* @param {Number}	The duration of the animation
+* @return {ContainerEffect}	The configured ContainerEffect object
 */
 YAHOO.widget.ContainerEffect.SLIDE = function(overlay, dur) {
 	var x = overlay.cfg.getProperty("x") || YAHOO.util.Dom.getX(overlay.element);
