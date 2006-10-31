@@ -13,68 +13,30 @@
      * represents the TabView. An element will be created if none provided.
      * @param {Object} properties A key map of initial properties
      */
-    YAHOO.widget.Tab = function(element, properties) {
-        YAHOO.widget.Tab.superclass.constructor.apply(this, arguments);
-    };
-    
-    YAHOO.extend(YAHOO.widget.Tab, YAHOO.util.Element);
-    var proto = YAHOO.widget.Tab.prototype;
-    
-    /**
-     * Adds the active className to the element and updates the childNodes to 
-     * reflect the active state of the element.
-     * @method focus
-     * @private
-     * @param {YAHOO.widget.Tab} tab The tab instance to give focus
-     * @return void
-     */
-    var focus = function(tab) {
-        var el = tab.get('element');
-        var panel = tab.get('panel');
-        var inner = tab.getElementsByTagName(tab.LABEL_INNER_TAGNAME)[0];
-        var active = tab.getElementsByTagName(tab.ACTIVE_LABEL_INNER_TAGNAME)[0];
-
-        tab.getElementsByTagName(tab.LABEL_TAGNAME)[0].removeAttribute('tabindex');
-        if (panel) {
-            tab.showContent();
-        }
-        
-        if (active) {
-            return;  // nothing left to do if already active
+    Tab = function(el, attr) {
+        attr = attr || {};
+        if (arguments.length == 1 && !Lang.isString(el) && !el.nodeName) {
+            attr = el;
+            el = attr.element;
         }
 
-        // insert the active element around the inner element
-        tab.addClass(tab.ACTIVE_CLASSNAME);
-        active = document.createElement(tab.ACTIVE_LABEL_INNER_TAGNAME);
-        active.appendChild(inner);
-        el.getElementsByTagName(tab.LABEL_TAGNAME)[0].appendChild(active);
-    };
-    
-    /**
-     * Removes the active className from the element and updates the childNodes 
-     * to reflect the normal state of the element.
-     * @method blur
-     * @private
-     * @param {YAHOO.widget.Tab} tab The tab instance to blur
-     * @return void
-     */
-    var blur = function(tab) {
-        var el = tab.get('element');
-        var panel = tab.get('panel');
-        tab.removeClass(tab.ACTIVE_CLASSNAME);
-        var anchor = tab.getElementsByTagName(tab.LABEL_TAGNAME)[0];
-        var active = tab.getElementsByTagName(tab.ACTIVE_LABEL_INNER_TAGNAME)[0]; // TODO: abstract
-        var inner = tab.getElementsByTagName(tab.LABEL_INNER_TAGNAME)[0];
-        if (active) {
-            anchor.replaceChild(inner, active);
+        if (!el && !attr.element) {
+            el = _createTabElement.call(this, attr);
         }
-        
-        anchor.setAttribute('tabindex', -1);
-        
-        if (panel) {
-            tab.hideContent();
-        }
+
+        Tab.superclass.constructor.call(this, el, attr);
     };
+
+    YAHOO.extend(Tab, YAHOO.util.Element);
+    var proto = Tab.prototype;
+
+	/**
+     * The default tag name for a Tab's element.
+	 * @property TAGNAME
+	 * @type String
+     * @default 'li'
+	 */
+    proto.TAG = 'li';
     
 	/**
      * The default tag name for a Tab's element.
@@ -82,56 +44,15 @@
 	 * @type String
      * @default 'li'
 	 */
-    proto.TAGNAME = 'li';
+    proto.LABEL_TAG = 'a';
     
 	/**
-     * The default tag name for a Tab's label element.
-	 * @property LABEL_TAGNAME
+     * The default tag name for a Tab's inner element.
+	 * @property TAGNAME
 	 * @type String
-     * @default 'a'
+     * @default 'li'
 	 */
-	proto.LABEL_TAGNAME = 'a';
-    
-	/**
-     * The default tag name for a Tab's label element.
-	 * @property LABEL_TAGNAME
-	 * @type String
-     * @default 'a'
-	 */
-	proto.LABEL_CLASSNAME = '';
-    
-	/**
-     * The default tag name for a Tab's label's inner element.
-	 * @property LABEL_INNER_TAGNAME
-	 * @type String
-     * @default 'em'
-	 */
-    proto.LABEL_INNER_TAGNAME = 'em';
-    
-	/**
-     * The default tag name for a Tab's label's active inner element.
-     * This element is placed around the label's inner element.
-	 * @property ACTIVE_LABEL_INNER_TAGNAME
-	 * @type String
-     * @default 'strong'
-	 */
-    proto.ACTIVE_LABEL_INNER_TAGNAME = 'strong';
-    
-	/**
-     * The default tag name for a Tab's label's content element.
-	 * @property CONTENT_TAGNAME
-	 * @type String
-     * @default 'div'
-	 */
-	proto.PANEL_TAGNAME = 'div';
-    
-	/**
-     * The default tag name for a Tab's label element.
-	 * @property LABEL_TAGNAME
-	 * @type String
-     * @default 'a'
-	 */
-	proto.PANEL_CLASSNAME = '';
+    proto.LABEL_INNER_TAG = 'em';
     
 	/**
      * The class name applied to active tabs.
@@ -139,7 +60,15 @@
 	 * @type String
      * @default 'on'
 	 */
-    proto.ACTIVE_CLASSNAME = 'on';
+    proto.ACTIVE_CLASS = 'on';
+    
+	/**
+     * The class name applied to active tabs.
+	 * @property ACTIVE_CLASSNAME
+	 * @type String
+     * @default 'on'
+	 */
+    proto.DISABLED_CLASS = 'disabled';
     
 	/**
      * Dom events supported by the Tab instance.
@@ -168,124 +97,77 @@
         return "Tab " + id; 
     };
     
-    proto.hideContent = function() {
-        this.get('panel').set('visible', false);
-    };
-    
-    proto.showContent = function(callback) {
-        if ( this.get('dataUrl') ) {
-            this.loadData(callback);
-        }
-        
-        this.get('panel').set('visible', true);
-    };
-    
-    proto.loadData = function() {
-        var el = this.get('panel').get('element');
-
-        if (!YAHOO.util.Connect) {
-            YAHOO.log('YAHOO.util.Connect not available', 'error', 'Tab');
-            return false;
-        }
-        
-        if ( !this.get('loadHandler') ) {
-            callback = {
-                success: function(o) {
-                    el.innerHTML = o.responseText;
-                }
-            }
-        }
-        
-        var conn = YAHOO.util.Connect.asyncRequest('GET', this.get('dataUrl'), callback, null); 
-    };
-    
     /**
      * Registers TabView specific properties.
      * @method initProperties
      * @param {Object} properties Hash of initial properties
      */
-    proto.initConfigs = function(properties) {
-        properties = properties || {};
-        YAHOO.widget.Tab.superclass.initConfigs.apply(this, arguments);
+    proto.initConfigs = function(attr) {
+        attr = attr || {};
+        Tab.superclass.initConfigs.call(this, attr);
         
         var el = this.get('element');
         
-        var label = properties.label || '';
-        var panel = properties.panel || '';
-        
-        if (!label) { // try and get by class or tag name
-            label = Dom.getElementsByClassName(el, this.LABEL_CLASSNAME,
-                            this.LABEL_TAGNAME, el)[0] ||
-                    el.getElementsByTagName(this.LABEL_TAGNAME)[0];
+        /**
+         * The tab's label text (or innerHTML).
+         * @config label
+         * @type String
+         */
+        this.register('labelElement', {
+            value: attr.labelElement || _getLabelElement.call(this),
+            method: function(value) {
+                var current = this.get('labelElement');
+                if (current) {
+                    if (current == value) {
+                        return false; // already set
+                    }
+                    
+                    this.replaceChild(value, current);
+                } else if (el.firstChild) { // ensure label is firstChild by default
+                    this.insertBefore(value, el.firstChild);
+                } else {
+                    this.appendChild(value);
+                }  
+            } 
+        });
 
-            if (!label) {
-                label = document.createElement(this.LABEL_TAGNAME);
-                if (this.LABEL_CLASSNAME) {
-                    label.set('className') = this.LABEL_CLASSNAME;
+        /**
+         * The tab's label text (or innerHTML).
+         * @config label
+         * @type String
+         */
+        this.register('label', {
+            value: attr.label || _getLabel.call(this),
+            method: function(value) {
+                var labelEl = this.get('labelElement');
+                if (!labelEl) { // create if needed
+                    this.set('labelElement', _createLabelElement.call(this));
                 }
+                
+                _setLabel.call(this, value);
             }
+        });
 
-            label = new YAHOO.widget.TabLabel(label);
-        }
-        
-        if (!panel) { // try and get by class or tag name
-
-            panel = Dom.getElementsByClassName(el, 
-                            this.PANEL_CLASSNAME,
-                            this.PANEL_TAGNAME, el)[0] ||
-                    el.getElementsByTagName(this.PANEL_TAGNAME)[0];
-            
-            if (!panel) {
-                panel = document.createElement(this.PANEL_TAGNAME);
-                if (this.PANEL_CLASSNAME) {
-                    panel.set('className') = this.PANEL_CLASSNAME;
-                }
-            }
-
-            panel = new YAHOO.widget.TabPanel(panel);
-
-        }
-
-        if ( !this.hasClass(this.ACTIVE_CLASSNAME) ) {
-            this.getElementsByTagName(this.LABEL_TAGNAME)[0].tabIndex = -1;
-        }
-        
         /**
          * Whether or not the tab is currently active
          * @config active
          * @type Boolean
          */
         this.register('active', {
-            value: properties.active || this.hasClass(this.ACTIVE_CLASSNAME),
+            value: attr.active || this.hasClass(this.ACTIVE_CLASS),
             method: function(value) {
                 if (value === true) {
-                    focus(this);
+                    this.addClass(this.ACTIVE_CLASS);
+                    this.set('title', 'active');
                 } else {
-                    blur(this);
+                    this.removeClass(this.ACTIVE_CLASS);
+                    this.set('title', '');
                 }
             },
-            validator: Lang.isBoolean
+            validator: function(value) {
+                return Lang.isBoolean(value) && !this.get('disabled') ;
+            }
         });
-        
-        /**
-         * The tabIndex of the tab's label element.
-         * Inactive tabs are taken out of tab order (value set to -1).
-         * @config tabIndex
-         * @type Number
-         */
-        this.configure('tabIndex', {
-            value: this.getElementsByTagName(this.LABEL_TAGNAME)[0].tabIndex,
-            method: function(value) {
-                this.getElementsByTagName(this.LABEL_TAGNAME)[0].tabIndex = value;
-            },
-            validator: Lang.isNumber
-        });
-        
-        // create label element if content provided
-        if (properties.label) {
-            this.getElementsByTagName(this.LABEL_INNER_TAGNAME)[0].innerHTML =
-                    properties.label;
-        }
         
         /**
          * The tab's content element.
@@ -294,18 +176,15 @@
          * @default false
          */
         this.register('disabled', {
-            value: properties.disabled|| false,
+            value: attr.disabled || this.hasClass(this.DISABLED_CLASS),
+            method: function(value) {
+                if (value === true) {
+                    Dom.addClass(this.get('element'), this.DISABLED_CLASS);
+                } else {
+                    Dom.removeClass(this.get('element'), this.DISABLED_CLASS);
+                }
+            },
             validator: Lang.isBoolean
-        });
-        
-        /**
-         * The tab's label text (or innerHTML).
-         * @config label
-         * @type String
-         */
-        this.register('label', {
-            value: label,
-            readOnly: true
         });
         
         /**
@@ -314,21 +193,123 @@
          * @type HTMLElement
          */
         this.register('panel', {
-            value: panel, // TODO: map to ID?
-            readOnly: true
+            value: attr.panel,
+            method: function(value) {
+                var current = this.get('panel');
+                
+                if (current) {
+                    if (current == value) {
+                        return false; // already set
+                    }
+                    this.replaceChild(value, current);
+                }
+            }
         });
         
         /**
-         * The tab's label text (or innerHTML).
-         * @config label
-         * @type String
+         * The tab's content element.
+         * @config contentElement
+         * @type HTMLElement
          */
-        this.register('dataUrl', {
-            value: properties.dataUrl || null
-        });
-        
-        this.on(this.ACTIVATION_EVENT, function() {
-            this.set('active');
+        this.register('content', {
+            value: attr.content, // TODO: what about existing?
+            method: function(value) {
+                var panel = this.get('panel');
+
+                if (!panel) {
+                    panel = new YAHOO.widget.TabPanel(null, { 'innerHTML': value });
+                    this.set('panel', panel, true);
+
+                    // TODO: append?
+                } else {
+                    panel.set('innerHTML', value);
+                }
+                
+            }
         });
     };
+    
+    var _createTabElement = function(attr) {
+        var el = document.createElement(this.TAG);
+        var label = attr.label || null;
+        var labelElement = attr.labelElement || null;
+        var inner;
+        
+        if (labelElement) { // user supplied labelElement
+            if (!label) { // user supplied label
+                label = _getLabel.call(this, labelElement);
+            }
+        } else {
+            labelElement = _createLabelElement.call(this);
+        }
+
+        if (this.CLASS) {
+            el.className = this.CLASS;
+        }
+        
+        el.appendChild(labelElement);
+        
+        return el;
+    };
+    
+    var _getLabelElement = function() {
+        var el = this.getElementsByClassName(this.LABEL_CLASS, this.LABEL_TAG)[0]; 
+        
+        if (!el) {
+            el = this.getElementsByTagName(this.LABEL_TAG)[0];
+        }
+
+        return el;
+    };
+    
+    var _createLabelElement = function() {
+        var el = document.createElement(this.LABEL_TAG);
+        var inner;
+        
+        if (this.LABEL_CLASS) {
+            el.className = this.LABEL_CLASS;
+        }
+        
+        el.href = '#';
+        
+        if (this.LABEL_INNER_TAG) {
+            inner = document.createElement(this.LABEL_INNER_TAG);
+            el.appendChild(inner);
+        }
+        
+        return el;
+    };
+    
+    var _setLabel = function(label) {
+        var el = this.get('labelElement');
+        var inner = el.getElementsByTagName(this.LABEL_INNER_TAG)[0];
+        
+        if (inner) {
+            inner.innerHTML = label;
+        } else {
+            el.innerHTML = label;
+        }
+    };
+    
+    var _getLabel = function() {
+        var label,
+            inner,
+            el = this.get('labelElement');
+            
+            if (el) {
+                inner = el.getElementsByTagName(this.LABEL_INNER_TAG)[0];
+            } else {
+                return undefined;
+            }
+        
+        if (inner) {
+            label = inner.innerHTML;
+        } else {
+            label = el.innerHTML;
+        }
+        
+        return label;
+    };
+
+    YAHOO.widget.Tab = Tab;
 })();
