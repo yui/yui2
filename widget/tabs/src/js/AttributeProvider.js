@@ -29,13 +29,13 @@
          * @method get
          * @param {String} key The config whose value will be returned.
          */
-        get: function(key){
+        get: function(key){ // TODO: return copies of objects?
             var configs = this._configs || {};
             var config = configs[key];
             
             if (!config) {
                 YAHOO.log(key + ' not found', 'error', 'AttributeProvider');
-                return false;
+                return undefined;
             }
             
             return config.value;
@@ -120,10 +120,15 @@
          */
         refresh: function(key, silent){
             var configs = this._configs;
-            key = ( Lang.isString(key) ) ? [key] : key;
+            
+            key = ( ( Lang.isString(key) ) ? [key] : key ) || 
+                    this.getConfigKeys(); // if no key, refresh all TODO: keep?
             
             for (var i = 0, len = key.length; i < len; ++i) { 
-                if (configs[key[i]] && configs[key[i]].value !== undefined) {
+                if ( // only set if there is a value and not null
+                    configs[key[i]] && 
+                    ! Lang.isUndefined(configs[key[i]].value) &&
+                    ! Lang.isNull(configs[key[i]].value) ) {
                     configs[key[i]].refresh(silent);
                 }
             }
@@ -175,6 +180,25 @@
          * @param {Object} map A key-value map of config properties
          * @param {Boolean} init Whether or not this should become the intial config.
          */
+        setValues: function(map, silent, init) {// TODO: init?
+            var configs = this._configs || {};
+            
+            for (var key in map) {
+                if ( map.propertyIsEnumerable(key) ) {
+                    this.set(key, map[key], silent);
+                }
+            }
+        },
+        
+        // TODO: configure multiples?
+        
+        /**
+         * Sets or updates a Configuration instance's properties. 
+         * @method configure
+         * @param {String} key The config's name.
+         * @param {Object} map A key-value map of config properties
+         * @param {Boolean} init Whether or not this should become the intial config.
+         */
         configure: function(key, map, init) {
             var configs = this._configs || {};
             
@@ -204,8 +228,9 @@
          * @param {Any} arg An argument to pass to the listeners.
          */
         fireBeforeChangeEvent: function(key, arg) {
-            var type = key + 'Changebefore';
-            type += type.charAt(0).toUpperCase() + type.substr(1);
+            var type = 'before';
+            type += key.charAt(0).toUpperCase() + key.substr(1) + 'Change';
+
             return this.fireEvent(type, arg);
         },
         

@@ -181,17 +181,5 @@ YAHOO.util.Attribute.prototype = {
      */
     refresh: function(silent) {
         this.setValue(this.value, silent);
-    },
-    
-    setChildFunction: function(fnName, fn) {
-        var fnTokens = fnName.split(".");
-        for (var f=0;f<fnTokens.length;f++) {
-            var token = fnTokens[f];
-            if (f == (fnTokens.length-1)) {
-                obj[token] = fn;
-            } else {
-                obj = obj[token];
-            }
-        }
     }
 };

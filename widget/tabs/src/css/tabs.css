@@ -1,76 +1,91 @@
 .navset {
-   border:1px solid #000;
+    border:1px solid #000;
 }
 
 .navset .nav-content {
-   background-color:#F2F3F5;
-   border:1px solid #999;
+    background-color:#F2F3F5;
+    border:1px solid #999;
 }
 
 .navset .nav li a {
-   color:#666;
+    color:#666;
 }
 
-.navset .nav li.on strong, .navset .nav li.on strong a { /* selected tab */
-   color:#999;
+.navset .nav li.on, .navset .nav li.on a { /* selected tab */
+    color:#999;
 }
  
-.navset .nav .on strong {  /* border-color should match selected color */
-   background-color:#F2F3F5;
-   border-bottom:1px solid #F2F3F5;
+.navset .nav .on a {  /* border-color should match selected color */
+    background-color:#F2F3F5;
+    border-bottom:1px solid #F2F3F5;
 }
 
 .navset .nav .orphan, .navset .nav li.orphan a {color:#999;}
 
 /* bg images, defaults to #999 border-color on white bg */
-.navset .nav li a, .navset .nav li strong {
-   background:#ccc url(http://us.i1.yimg.com/us.yimg.com/i/us/nt/el/tb/tr_999.gif) no-repeat top right;
+.navset .nav li a {
+    background:#ccc url(http://us.i1.yimg.com/us.yimg.com/i/us/nt/el/tb/tr_999.gif) no-repeat top right;
 }
 
 .navset .nav li em {
-   background:transparent url(http://us.i1.yimg.com/us.yimg.com/i/us/nt/el/tb/tl_999.gif) no-repeat;
+    background:transparent url(http://us.i1.yimg.com/us.yimg.com/i/us/nt/el/tb/tl_999.gif) no-repeat;
 }
 
 .navset {
-   width:100%; /* IE: width */
+    width:100%; /* IE: width */
 }
 .navset a {
-   text-decoration:none;
+    text-decoration:none;
 }
 
 .navset .nav li {
-   float:left;display:inline; /* IE: inline for margin float bug */
+    float:left;display:inline; /* IE: inline for margin float bug */
 }
 .navset .nav li a:hover {
-   text-decoration:underline;
+    text-decoration:underline;
 }
 .navset .nav:after {clear:both;content:'.';display:block;height:0;visibility:hidden;} /* clear non-IE */
 .navset .nav {zoom:1;} /* clear IE */
 
 /* primary tabs */
 .navset .nav {
-   font:bold 77%/1.2em verdana;
-   margin-bottom:-1px;
-   padding-left:.3em;
-   position:relative; /* IE: quirks mode */
+    font:bold 77%/1.2em verdana;
+    margin-bottom:-1px;
+    padding-left:.3em;
+    position:relative; /* IE: quirks mode */
 }
-.navset .nav li {
-   margin-right:.33em;
-   padding:0;
+.navset .nav li em {
+    cursor:hand; cursor:pointer; 
+    margin-right:.33em;
+    padding:0;
 }
 .navset .nav .on strong a {cursor:default;}
-.navset .nav li a, .navset li strong, .navset li em {display:block;}
-.navset .nav li a, .navset li strong {*display:inline-block;}  /* IE: 100% clickable */
+.navset .nav li a, .navset li em {display:block;}
+.navset .nav li a {*display:inline-block;}  /* IE: 100% clickable */
 .navset .nav li em {font-style:normal;padding:.5em .6em;}
 .navset .nav li.orphan, .navset .nav li.orphan a, .navset .nav li.orphan em {background:transparent none;border-width:0;margin:0;}
 
 
+.navset .orient-left, .navset .orient-right {
+    border:1px solid red;
+    margin-bottom:0;
+    padding-left:0;
+    position:absolute;
+    Xwidth:8em;
+}
+
+.navset .orient-left li, .navset .orient-right li {
+    float:none;
+    display:block;
+    margin:0;
+}
+
 /* Tab Panels */
 .navset .nav-content div {
-   clear:both;
-   Xdisplay:none;
+    clear:both;
+    Xdisplay:none;
 }
 
 .navset .on {
-   display:block;
+    display:block;
 }

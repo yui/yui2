@@ -16,13 +16,13 @@ var Dom = YAHOO.util.Dom,
  * represents the Element.
  * @param {Object} map A key-value map of initial config names and values
  */
-Element = function(el, map) {
+YAHOO.util.Element = function(el, map) {
     if (arguments.length) {
         this.init(el, map);
     }
 };
 
-Element.prototype = {
+YAHOO.util.Element.prototype = {
 	/**
      * Dom events supported by the Element instance.
 	 * @config DOM_EVENTS
@@ -42,20 +42,12 @@ Element.prototype = {
 
 	/**
      * Wrapper for HTMLElement method.
-	 * @method cloneNode
+	 * @method appendChild
 	 * @param {Boolean} deep Whether or not to do a deep clone
 	 */
-    appendChild: function(element) {
-        return this.get('element').appendChild(element);
-    },
-    
-	/**
-     * Wrapper for HTMLElement method.
-	 * @method cloneNode
-	 * @param {Boolean} deep Whether or not to do a deep clone
-	 */
-    cloneNode: function(deep) {
-        return this.get('element').cloneNode(deep);
+    appendChild: function(child) {
+        child = child.get ? child.get('element') : child;
+        this.get('element').appendChild(child);
     },
     
 	/**
@@ -84,7 +76,10 @@ Element.prototype = {
      * the element before.
 	 */
     insertBefore: function(element, before) {
-        return this.get('element').insertBefore(element, before);
+        element = element.get ? element.get('element') : element;
+        before = (before && before.get) ? before.get('element') : before;
+        
+        this.get('element').insertBefore(element, before);
     },
     
 	/**
@@ -93,6 +88,7 @@ Element.prototype = {
 	 * @param {HTMLElement} child The HTMLElement to remove
 	 */
     removeChild: function(child) {
+        child = child.get ? child.get('element') : child;
         this.get('element').removeChild(child);
         return true;
     },
@@ -100,24 +96,18 @@ Element.prototype = {
 	/**
      * Wrapper for HTMLElement method.
 	 * @method replaceChild
-	 * @param {HTMLElement} oldNode The HTMLElement to replace
 	 * @param {HTMLElement} newNode The HTMLElement to insert
+	 * @param {HTMLElement} oldNode The HTMLElement to replace
 	 */
-    replaceChild: function(oldNode, newNode) { // TODO: is the order right?
-        return this.get('element').replaceChild(oldNode, newNode);
-    },
-    
-	/**
-     * Wrapper for HTMLElement method.
-	 * @method scrollIntoView
-	 */
-    scrollIntoView: function() {
-        return this.get('element').scrollIntoView();
+    replaceChild: function(newNode, oldNode) { // TODO: HTMLElement had get?
+        newNode = newNode.get ? newNode.get('element') : newNode;
+        oldNode = oldNode.get ? oldNode.get('element') : oldNode;
+        return this.get('element').replaceChild(newNode, oldNode);
     },
 
     
     /**
-     * Registers Element specific properties.
+     * Registers Element specific attribute.
      * @method initConfigs
      * @param {Object} map A key-value map of initial config names and values
      */
@@ -130,44 +120,14 @@ Element.prototype = {
          * @config element
          * @type HTMLElement
          */
-        this.register('element', { value: element, writeOnce: true });
+        this.register('element', {
+            value: element,
+            readOnly: true
+         });
         
         /**
-         * The x coordinate of the element.
-         * @config x
-         * @type Number
-         */
-        this.register('x', {
-            value: map.x || null, 
-            method: function(value) { Dom.setX(element, value); }, 
-            validator: Lang.isNumber
-        });
-        
-        /**
-         * The y coordinate of the element.
-         * @config y
-         * @type Number
-         */
-        this.register('y', {
-            value: map.y || null, // TODO: what about no element?
-            method: function(value) { Dom.setY(element, value); }, 
-            validator: Lang.isNumber
-        });
-        
-        /**
-         * The xy coordinates of the element.
-         * @config xy
-         * @type Array
-         */
-        this.register('xy', {
-            value: map.xy || null, 
-            method: function(value) { Dom.setXY(element, value); },
-            validator: Lang.isArray
-        });
-        
-        /**
-         * The xy coordinates of the element.
-         * @config xy
+         * Whether or not the element is visible.
+         * @config visible
          * @type Array
          */
          
@@ -261,8 +221,6 @@ Element.prototype = {
                 oldClassName, newClassName);
     },
     
-    mutationEvent: function() {},
-    
 	/**
      * Apply any queued set calls.
 	 * @method fireQueue
@@ -283,7 +241,7 @@ Element.prototype = {
 	 */
     appendTo: function(parent, before) {
         parent = (parent.get) ?  parent.get('element') : Dom.get(parent);
-                
+        
         before = (before && before.get) ? 
                 before.get('element') : Dom.get(before);
         var element = this.get('element');
@@ -314,8 +272,7 @@ Element.prototype = {
     
     get: function(key) {
         var configs = this._configs || {};
-        var el = configs.element;
-        
+        var el = configs.element; // avoid loop due to 'element'
         if (el && !configs[key] && !Lang.isUndefined(el.value[key]) ) {
             return el.value[key];
         }
@@ -332,7 +289,7 @@ Element.prototype = {
         
         // set it on the element if not a property
         if ( !this._configs[key] && !Lang.isUndefined(el[key]) ) {
-            registerHTMLAttr(this, key);
+            _registerHTMLAttr(this, key);
         }
 
         return AttributeProvider.prototype.set.apply(this, arguments);
@@ -340,7 +297,7 @@ Element.prototype = {
     
     register: function(key) { // protect html properties
         var configs = this._configs || {};
-        var element = configs.element || null;
+        var element = this.get('element') || null;
         
         if ( element && !Lang.isUndefined(element[key]) ) {
             YAHOO.log(key + ' is reserved for ' + element, 
@@ -354,7 +311,7 @@ Element.prototype = {
     configure: function(property, map, init) { // protect html properties
         if (!this._configs[property] && this._configs.element && 
                 !Lang.isUndefined(this._configs.element[property]) ) {
-            registerHTMLAttr(this, property, map);
+            _registerHTMLAttr(this, property, map);
             return false;
         }
         
@@ -375,34 +332,32 @@ Element.prototype = {
         return keys;
     },
     
-    init: function(el, properties) {
-        this._queue = {};
-        this._events = {};
-        this._configs = {};
-        properties = properties || {};
-        properties.element = el;
-        
-        var self = this;
+    init: function(el, attr) {
+        this._queue = this._queue || {};
+        this._events = this._events || {};
+        this._configs = this._configs || {};
+        attr = attr || {};
+        attr.element = attr.element || el || null;
         
         var readyHandler = function() {
-            self.initConfigs(properties);
-            self.setValues(properties, true);
-            self.fireQueue();
-            self.fireEvent('contentReady');
+            this.initConfigs(attr);
+            this.setValues(attr, true); // TODO: set HTMLElement attrs
+            this.fireQueue();
+            this.fireEvent('contentReady');
         };
 
         if ( Lang.isString(el) ) {
-            registerHTMLAttr(this, 'id', { value: el });
+            _registerHTMLAttr(this, 'id', { value: el });
             YAHOO.util.Event.onAvailable(el, function() {
-                self.fireEvent('available'); 
-                properties.element = Dom.get(el);
-            });
+                this.fireEvent('available'); 
+                attr.element = Dom.get(el);
+            }, this, true);
             
             YAHOO.util.Event.onContentReady(el, function() {
-                readyHandler();
-            });
+                readyHandler.call(this);
+            }, this, true);
         } else {
-            readyHandler();
+            readyHandler.call(this);
         }        
     }
 };
@@ -410,13 +365,13 @@ Element.prototype = {
 /**
  * Sets the value of the property and fires beforeChange and change events.
  * @private
- * @method registerHTMLAttr
+ * @method _registerHTMLAttr
  * @param {YAHOO.util.Element} element The Element instance to
  * register the config to.
  * @param {String} key The name of the config to register
  * @param {Object} map A key-value map of the config's params
  */
-var registerHTMLAttr = function(self, key, map) {
+var _registerHTMLAttr = function(self, key, map) {
     var el = self.get('element');
     map = map || {};
     map.name = key;
@@ -428,6 +383,5 @@ var registerHTMLAttr = function(self, key, map) {
 };
 
 
-YAHOO.augment(Element, AttributeProvider);
-YAHOO.util.Element = Element;
+YAHOO.augment(YAHOO.util.Element, AttributeProvider);
 })();
