@@ -13,15 +13,37 @@
      * represents the TabView. An element will be created if none provided.
      * @param {Object} properties A key map of initial properties
      */
-    YAHOO.widget.TabPanel = function(element, properties) {
-
-        properties = properties || {};
+    YAHOO.widget.TabPanel = function(el, attr) {
+        attr = attr || {};
         
-        YAHOO.widget.TabPanel.superclass.constructor.apply(this, arguments);
+        if (!el && !attr.element) {
+            el = _createPanelElement.call(this, attr);
+        } else if (arguments.length == 1 && !Lang.isString(el) && !el.nodeName) {
+            attr = el;
+            el = attr.element;
+        }
+        
+        YAHOO.widget.TabPanel.superclass.constructor.call(this, el, attr);
     };
     
     YAHOO.extend(YAHOO.widget.TabPanel, YAHOO.util.Element);
     var proto = YAHOO.widget.TabPanel.prototype;
+    
+	/**
+     * The default tag name for a Tab's label's content element.
+	 * @property CONTENT_TAGNAME
+	 * @type String
+     * @default 'div'
+	 */
+	proto.TAG = 'div';
+    
+	/**
+     * The default tag name for a Tab's label element.
+	 * @property LABEL_TAGNAME
+	 * @type String
+     * @default 'a'
+	 */
+	proto.CLASS = '';
     
     /**
      * Provides a readable name for the tab.
@@ -39,9 +61,8 @@
      * @method initProperties
      * @param {Object} properties Hash of initial properties
      */
-    proto.initConfigs = function(properties) {
-        properties = properties || {};
-        YAHOO.widget.TabPanel.superclass.initConfigs.apply(this, arguments);
+    proto.initConfigs = function(attr) {
+        YAHOO.widget.TabPanel.superclass.initConfigs.call(this, attr);
         
         var el = this.get('element');
 
@@ -54,5 +75,15 @@
                 }
             }
         });
+    };
+    
+    var _createPanelElement = function() {
+        var el = document.createElement(this.TAG);
+        
+        if (this.CLASS) {
+            el.className = this.CLASS;
+        }
+        
+        return el;
     };
 })();

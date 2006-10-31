@@ -11,61 +11,34 @@
      * @class TabView
      * @extends YAHOO.util.Element
      * @constructor
-     * @param element {HTMLElement | String} (optional) The html element that 
-     * represents the TabView. An element will be created if none provided.
-     * @param {Object} properties A key map of initial properties
+     * @param {HTMLElement | String | Object} el(optional) The html 
+     * element that represents the TabView, or the attribute object to use. 
+     * An element will be created if none provided.
+     * @param {Object} attr (obtional) A key map of the tabView's 
+     * initial attributes.  Ignored if first arg is attributes object.
      */
-    YAHOO.widget.TabView = function(element, properties) {
-    	YAHOO.widget.TabView.superclass.constructor.apply(this, arguments); 
+    YAHOO.widget.TabView = function(el, attr) {
+        attr = attr || {};
+        if (arguments.length == 1 && !Lang.isString(el) && !el.nodeName) {
+            attr = el; // treat first arg as attr object
+            el = attr.element || null;
+        }
+        
+        _registerStatic.call(this);
+        
+        if (!el && !attr.element) { // create if we dont have one
+            el = _createTabViewElement.call(this, attr);
+        }
+    	YAHOO.widget.TabView.superclass.constructor.call(this, el, attr); 
     };
 
     YAHOO.extend(YAHOO.widget.TabView, YAHOO.util.Element);
     
     var proto = YAHOO.widget.TabView.prototype;
     var Dom = YAHOO.util.Dom;
+    var Lang = YAHOO.util.Lang;
     var Event = YAHOO.util.Event;
-    
-	/**
-     * The className of a TabView's element.
-	 * @property TAB_MODULE_CLASSNAME
-	 * @type String
-     * @default 'navset'
-	 */
-	proto.TAB_MODULE_CLASSNAME = 'navset';
-    
-	/**
-     * The tag name of the tabs' containing element.
-	 * @property TAB_CONTAINER_TAGNAME
-	 * @type String
-     * @default 'ul'
-	 */
-	proto.TAB_CONTAINER_TAGNAME = 'ul';
-    
-	/**
-     * The className of the tabs' containing element.
-	 * @property TAB_CONTAINER_CLASSNAME
-	 * @type String
-     * @default 'nav'
-	 */
-	proto.TAB_CONTAINER_CLASSNAME = 'nav';
-    
-	/**
-     * The tag name of the tab contents' containing element.
-	 * @property CONTENT_CONTAINER_TAGNAME
-	 * @type String
-     * @default 'div'
-	 */
-	proto.PANEL_CONTAINER_TAGNAME = 'div';
-    
-	/**
-     * The tag name of the tab contents' containing element.
-	 * @property CONTENT_CONTAINER_CLASSNAME
-	 * @type String
-     * @default 'nav-content'
-	 */
-	proto.PANEL_CONTAINER_CLASSNAME = 'nav-content';
-    
-    proto.PANEL_TAGNAME = 'div';
+    var Tab = YAHOO.widget.Tab;
     
     /**
      * Adds a Tab to the TabView instance.  
@@ -76,38 +49,45 @@
      * @return void
      */
     proto.addTab = function(tab, index) {
-        var tabs = this._configs.tabs.value;
+        var tabs = this.get('tabs');
         index = (index === undefined) ? tabs.length : index;
-        tabs.splice(index, 0, tab);
+        
+        var before = this.getTab(index);
+        
         var self = this;
-        var tabElement = tab.get('element');
+        var el = this.get('element');
+        var labelGroup = this.get('labelGroup');
+        var contentGroup = this.get('contentGroup');
 
-        if ( !Dom.isAncestor(this.get('element'), tabElement) ) {
-            if (index == tabs.length) {
-                this.tabContainer.insertBefore(tabElement, 
-                        this.getTab(index).get('element'));
-            } else {
-                this.tabContainer.appendChild(tabElement);
-            }
+        var tabElement = tab.get('element');
+        var panelElement = (tab.get('panel')) ? 
+                tab.get('panel').get('element') : null;
+
+        if ( before ) {
+            labelGroup.insertBefore(tabElement, before.get('element'));
+        } else {
+            labelGroup.appendChild(tabElement);
+        }
+
+        if ( panelElement && !Dom.isAncestor(el, panelElement) ) { // TODO: match index?
+            contentGroup.appendChild(panelElement);
         }
         
+        if ( !tab.get('active') ) {
+            tab.get('panel').set('visible', false);
+        } else {
+            this.set('activeTab', tab);
+        }
+
         tab.addListener(
             tab.ACTIVATION_EVENT,
             function(e) {
-                var active = self.get('activeTab');
-                if (active) {
-                    active.set('active', false);
-                }
-                
-                this.set('active', true);
+                YAHOO.util.Event.preventDefault(e);
+                self.set('activeTab', this);
             }
         );
         
-        tab.addListener('activeChange', function(value) {
-            if (value === true) {
-                self._configs.activeTab.value = this;
-            }
-        });
+        tabs.splice(index, 0, tab);
     };
 
     /**
@@ -119,19 +99,22 @@
     proto.DOMEventHandler = function(e) {
         var el = this.get('element');
         var target = YAHOO.util.Event.getTarget(e);
+        var labelGroup = this.get('labelGroup');
         
-        YAHOO.util.Event.preventDefault(e);
+        //YAHOO.util.Event.preventDefault(e);
         
-        if (Dom.isAncestor(this.tabContainer, target )) {
+        if (Dom.isAncestor(labelGroup, target) ) {
             var tabEl;
             var tab = null;
+            var panel;
             var tabs = this.get('tabs');
-            
+
             for (var i = 0, len = tabs.length; i < len; i++) {
                 tabEl = tabs[i].get('element');
+                panel = tabs[i].get('panel');
 
                 if ( target == tabEl || Dom.isAncestor(tabEl, target) ) {
-                    tab = tabs[i];
+                    tab = tabs[i]; // TODO: what if panel in tab?
                     break; // note break
                 }
             } 
@@ -153,78 +136,35 @@
     };
     
     /**
+     * Returns the Tab instance at the specified index.
+     * @method getTab
+     * @param {Integer} index The position of the Tab.
+     * @return YAHOO.widget.Tab
+     */
+    proto.getTabIndex = function(tab) {
+        var index = null;
+        var tabs = this.get('tabs');
+    	for (var i = 0, len = tabs.length; i < len; ++i) {
+            if (tab == tabs[i]) {
+                index = i;
+                break;
+            }
+        }
+        
+        return index;
+    };
+    
+    /**
      * Removes the specified Tab from the TabView.
      * @method removeItem
      * @param {YAHOO.widget.Tab} item The Tab instance to be removed.
      * @return void
      */
-    proto.removeTab = function(item) {
+    proto.removeTab = function(tab) {
+        this.get('labelGroup').removeChild( tab.get('element') );
+        this.get('contentGroup').removeChild( tab.get('panel').get('element') );
+        this._configs.tabs.value.splice(this.getTabIndex(tab), 1);
     	
-    };
-    
-    /**
-     * Creates Tab instances from a collection of HTMLElements.
-     * @method createTabs
-     * @param {Array|HTMLCollection} elements The elements to use for Tabs.
-     * @return void
-     */
-    proto.createTabs = function(elements) {
-        var tab;
-        var props;
-        var element;
-        var h = 0;
-        var contentParent = this.getElementsByClassName(
-                this.PANEL_CONTAINER_CLASSNAME, 
-                this.PANEL_CONTAINER_TAGNAME)[0];
-                
-        var contentElements = [];
-        var node;
-        
-        for (var i = 0, len = contentParent.childNodes.length; i < len; ++i) {
-            node = contentParent.childNodes[i];
-            if (node.nodeType == 1) {
-                contentElements[contentElements.length] = node;
-            }
-        }
-
-        for (i = 0, len = elements.length; i < len; ++i) {
-            props = {};
-            props.contentParent = contentParent;
-            element = elements[i];
-
-            if (!contentElements[i]) {
-                contentElements[i] = 
-                        document.createElement(this.PANEL_TAGNAME);
-                contentParent.appendChild(contentElements[i]);
-                if (this.PANEL_CLASSNAME) {
-                    contentElements[i].set('className', this.PANEL_CLASSNAME);
-                }
-            }
-            
-            props.panel = new YAHOO.widget.TabPanel(contentElements[i]);
-            
-            tab = new YAHOO.widget.Tab(element, props);
-
-            this.addTab(tab);
-            if (tab.hasClass(tab.ACTIVE_CLASSNAME)) {
-                tab.set('active', true);
-            } else {
-                tab.set('active', false);
-            }
-        }
-    };
-    
-    
-    /**
-     * Creates a container for the Tab elements.
-     * @method createTabContainer
-     * @return HTMLElement
-     */
-    proto.createTabContainer = function() {        
-        var tabContainer = document.createElement(this.TAB_CONTAINER_TAGNAME);
-        Dom.addClass(this.TAB_CONTAINER_CLASSNAME, tabContainer);
-        element.appendChild(tabContainer);
-        return tabContainer;
     };
     
     /**
@@ -237,41 +177,25 @@
         return "TabView " + name; 
     };
     
+    proto.panelTransition = function(newPanel, oldPanel) {
+        if (newPanel) {  
+            newPanel.set('visible', true);
+        }
+        
+        if (oldPanel) {
+            oldPanel.set('visible', false);
+        }
+    };
+    
     /**
      * Registers TabView specific properties.
      * @method initProperties
      * @param {Object} properties Hash of initial properties
      */
-    proto.initConfigs = function(properties) {
-        properties = properties || {};
-        YAHOO.widget.TabView.superclass.initConfigs.call(this, properties); 
-        var tabElements = [];
-        var element = this.get('element');
+    proto.initConfigs = function(attr) {
+        YAHOO.widget.TabView.superclass.initConfigs.call(this, attr);
         
-        this.tabContainer = Dom.getElementsByClassName(this.TAB_CONTAINER_CLASSNAME, 
-                    this.TAB_CONTAINER_TAGNAME, element)[0] || this.createTabContainer();
-                    
-        tabElements = this.tabContainer.getElementsByTagName(YAHOO.widget.Tab.prototype.TAGNAME);
-        
-        
-        /**
-         * The tab currently active.
-         * @config activeTab
-         * @type YAHOO.widget.Tab
-         */
-        this.register('activeTab', {
-            value: properties.activeTab || null,
-            method: function(tab) {
-                var activeTab = this.get('activeTab');
-                
-                if (tab) { // might be unsetting
-                    tab.set('active', true);
-                    if (activeTab) {
-                        activeTab.set('active', false);
-                    }
-                }
-            }
-        });
+        var el = this.get('element');
         
         /**
          * The Tabs belonging to the TabView instance.
@@ -279,10 +203,110 @@
          * @type Array
          */
         this.register('tabs', {
-            value: properties.tabs || []
+            value: [],
+            readOnly: true
         });
 
-        this.createTabs(tabElements);
+        /**
+         * The tab currently active.
+         * @config activeTab
+         * @type YAHOO.widget.Tab
+         */
+        this.register('labelGroup', {
+            value: attr.labelGroup || 
+                    _getByClassOrTag( el, this.get('LABEL_GROUP_CLASS'), 
+                            this.get('LABEL_GROUP_TAG') )[0] || 
+                    _createLabelGroup.call(this)
+        });
+            
+        /**
+         * The tab currently active.
+         * @config activeTab
+         * @type YAHOO.widget.Tab
+         */
+        this.register('contentGroup', {
+            value: attr.contentGroup || 
+                    _getByClassOrTag( el, this.get('CONTENT_GROUP_CLASS'), 
+                            this.get('CONTENT_GROUP_TAG') )[0] || 
+                    _createContentGroup.call(this)
+        });
+        
+        /**
+         * The tab currently active.
+         * @config activeTab
+         * @type YAHOO.widget.Tab
+         */
+        this.register('activeTab', {
+            value: attr.activeTab,
+            method: function(tab) {
+                var activeTab = this.get('activeTab');
+                var newPanel,
+                    oldPanel;
+               
+                if (tab) { // might be unsetting
+                    tab.set('active', true);
+                    newPanel = tab.get('panel');
+                }
+                
+                if (activeTab && activeTab != tab) {
+                    activeTab.set('active', false); // refresh if active TODO: reload dynamic?
+                    oldPanel = activeTab.get('panel');
+                }
+                
+                this.panelTransition(newPanel, oldPanel);
+            },
+            validator: function(value) {
+                return !value.get('disabled');
+            }
+        });
+        
+        /**
+         * The orientation of Tabs relative to the TabView.
+         * @config orientation
+         * @type YAHOO.widget.Tab
+         */
+        this.register('orientation', {
+            value: attr.orientation || 'top',
+            method: function(value) {
+                var current = this.get('orientation');
+                
+                var prefix = 'orient-';
+                var pos;
+                var labelGroup = this.get('labelGroup');
+                var contentGroup = this.get('contentGroup');
+                Dom.removeClass(labelGroup, prefix + current); // TODO: bug in replace?
+                Dom.addClass(labelGroup, prefix + value);
+                
+                //console.log(labelGroup.offsetWidth);
+                
+                switch(value) {
+                    case 'top':
+                        Dom.setXY( labelGroup, Dom.getXY(panelGroup) );
+                        break;
+                    case 'bottom':
+                        var pos = Dom.getXY(contentGroup);
+                        Dom.setXY( labelGroup,
+                                [ pos[0], pos[1] + contentGroup.offsetHeight] );
+                        break;
+                    case 'left':
+                        var pos = Dom.getXY(contentGroup);
+                        Dom.setXY( labelGroup,
+                                [ pos[0], pos[1] ] );
+                        Dom.setStyle(contentGroup, 'marginLeft', labelGroup.offsetWidth + 'px');
+                        break;
+                    case 'right':
+                        var pos = Dom.getXY(contentGroup);
+                        Dom.setStyle(contentGroup, 'marginRight', labelGroup.offsetWidth + 'px');
+                        Dom.setXY( labelGroup,
+                                [ pos[0] + contentGroup.offsetWidth, pos[1] ] );
+                        break;
+                }
+            }
+        });
+
+        if ( this.get('labelGroup') ) {
+            _initTabs.call(this);
+        }
         
         for (var type in this.DOM_EVENTS) {
             if ( this.DOM_EVENTS.propertyIsEnumerable(type) ) {
@@ -290,4 +314,113 @@
             }
         }
     };
+    
+    /**
+     * Creates Tab instances from a collection of HTMLElements.
+     * @method createTabs
+     * @private
+     * @param {Array|HTMLCollection} elements The elements to use for Tabs.
+     * @return void
+     */
+    var _initTabs = function() {
+        var tab,
+            attr,
+            el = this.get('element'),
+            node,
+            tabs,
+            panels,
+            panel,
+            labelGroup = this.get('labelGroup') || _createLabelGroup.call(this),
+            contentGroup = this.get('contentGroup')  || _createContentGroup.call(this);
+            
+        tabs = _getChildNodes(labelGroup);
+        panels = _getChildNodes(contentGroup);
+
+        for (var i = 0, len = tabs.length; i < len; ++i) {
+            attr = {};
+            
+            panel = panels[i] || null;
+            attr.panel = new YAHOO.widget.TabPanel(panel);
+
+            tab = new YAHOO.widget.Tab(tabs[i], attr);
+
+            this.addTab(tab);
+            
+            if (tab.hasClass(tab.ACTIVE_CLASS) ) {
+                this._configs.activeTab.value = tab; // TODO: no method call ?
+            } else {
+                tab.get('panel').set('visible', false);
+            }
+        }
+    };
+    
+    var _createTabViewElement = function(attr) {
+        var el = document.createElement( this.get('TAG') );
+
+        if ( this.get('CLASS') ) {
+            el.className = this.get('CLASS');
+        }
+        
+        return el;
+    };
+    
+    var _createLabelGroup = function(attr) {
+        var el = document.createElement( this.get('LABEL_GROUP_TAG') );
+
+        if ( this.get('LABEL_GROUP_CLASS') ) {
+            el.className = this.get('LABEL_GROUP_CLASS');
+        }
+        
+        this.get('element').appendChild(el);
+        
+        return el;
+    };
+    
+    var _createContentGroup = function(attr) {
+        var el = document.createElement( this.get('CONTENT_GROUP_TAG') );
+
+        if ( this.get('CONTENT_GROUP_CLASS') ) {
+            el.className = this.get('CONTENT_GROUP_CLASS');
+        }
+        
+        this.get('element').appendChild(el);
+        
+        return el;
+    };
+    
+    var _getByClassOrTag = function(parent, className, tagName, depth) {
+        //TODO: implement depth
+        var collection = Dom.getElementsByClassName(className, tagName, parent);
+        
+        if (!collection || collection.length === 0) {
+            collection = parent.getElementsByTagName(tagName);
+        }
+
+        return collection;
+    };
+    
+    var _registerStatic = function(attr) { // TODO: feed attr?
+        this.register('TAG', { value: 'div', writeOnce: true });
+        this.register('CLASS', { value: 'navset', writeOnce: true });
+        this.register('LABEL_GROUP_TAG', { value: 'ul', writeOnce: true });
+        this.register('LABEL_GROUP_CLASS', { value: 'nav', writeOnce: true });
+        this.register('CONTENT_GROUP_TAG', { value: 'div', writeOnce: true });
+        this.register('CONTENT_GROUP_CLASS', { value: 'nav-content', writeOnce: true });
+        this.register('TAB_TAG', { value: 'li', writeOnce: true });
+        this.register('TAB_CLASS', { value: '', writeOnce: true });
+    };
+    
+    var _getChildNodes = function(el) {
+        var nodes = [];
+        var childNodes = el.childNodes;
+        
+        for (var i = 0, len = childNodes.length; i < len; ++i) {
+            if (childNodes[i].nodeType == 1) {
+                nodes[nodes.length] = childNodes[i];
+            }
+        }
+        
+        return nodes;
+    };
+    
 })();
