@@ -2,8 +2,8 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version: 0.11.1
 */
+
 /**
  *
  * Base class for animated DOM objects.
@@ -285,12 +285,18 @@ YAHOO.util.Anim.prototype = {
       /**
        * Stops the animation.  Normally called by AnimMgr when animation completes.
        */ 
-      this.stop = function() {
+      this.stop = function(finish) {
+         if (finish) {
+             this.currentFrame = this.totalFrames;
+             this._onTween.fire();
+         }
          YAHOO.util.AnimMgr.stop(this);
       };
       
-      var onStart = function() {
+      var onStart = function() {         
          this.onStart.fire();
+         
+         this.runtimeAttributes = {};
          for (var attr in this.attributes) {
             this.setRuntimeAttribute(attr);
          }
@@ -623,9 +629,10 @@ YAHOO.util.Bezier = new function()
     * @type Object
     */
    proto.patterns.color = /color$/i;
-   proto.patterns.rgb    = /^rgb\(([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\)$/i;
-   proto.patterns.hex    = /^#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/i;
-   proto.patterns.hex3   = /^#?([0-9A-F]{1})([0-9A-F]{1})([0-9A-F]{1})$/i;
+   proto.patterns.rgb         = /^rgb\(([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\)$/i;
+   proto.patterns.hex         = /^#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/i;
+   proto.patterns.hex3        = /^#?([0-9A-F]{1})([0-9A-F]{1})([0-9A-F]{1})$/i;
+   proto.patterns.transparent = /^transparent|rgba\(0, 0, 0, 0\)$/; // need rgba for safari
    
    /**
     * Attempts to parse the given string and return a 3-tuple.
@@ -663,15 +670,15 @@ YAHOO.util.Bezier = new function()
       if (  this.patterns.color.test(attr) ) {
          var val = YAHOO.util.Dom.getStyle(el, attr);
          
-         if (val == 'transparent') { // bgcolor default
+         if (this.patterns.transparent.test(val)) { // bgcolor default
             var parent = el.parentNode; // try and get from an ancestor
             val = Y.Dom.getStyle(parent, attr);
          
-            while (parent && val == 'transparent') {
+            while (parent && this.patterns.transparent.test(val)) {
                parent = parent.parentNode;
                val = Y.Dom.getStyle(parent, attr);
                if (parent.tagName.toUpperCase() == 'HTML') {
-                  val = 'ffffff';
+                  val = '#fff';
                }
             }
          }
@@ -977,7 +984,180 @@ YAHOO.util.Easing = {
    }
 };
 
-/**
+(function() {
+    YAHOO.util.Effect = function(el) {
+        YAHOO.util.Effect.superclass.constructor.call(this, el, {});
+    };
+    
+    var Y = YAHOO.util;
+    var Dom = Y.Dom;  
+    YAHOO.extend(YAHOO.util.Effect, YAHOO.util.Motion);
+    
+    proto = {
+        queue: [],
+        runQueueSubscribed: false,
+        autoClip: true, // inserts clipping mask when true
+        mask: null,
+        
+        fadeIn: function(duration, easing) {
+            this.run( { opacity: { to: 1 } }, duration, easing );
+        },
+        
+        fadeOut: function(duration, easing) {
+            this.run( { opacity: { to: 0 } }, duration, easing );
+        },
+        
+        // TODO: account for current offsets
+        rollUp: function(duration, easing) { 
+            this.roll( { top: { to: 0 - this.getEl().offsetHeight } }, duration, easing, true );
+        },
+        
+        rollDown: function(duration, easing) {
+            this.roll( { top: { from: 0 - this.getEl().offsetHeight, to: 0 } }, duration, easing );
+        },
+        
+        slideIn: function(duration, easing) {
+            this.roll( { left: { from: 0 - this.getEl().offsetWidth, to: 0 } }, duration, easing );
+        },
+        
+        slideOut: function(duration, easing) {
+            this.roll( { left: { to: 0 - this.getEl().offsetWidth } }, duration, easing, true );
+        },
+        
+        slideOutRight: function(duration, easing) {
+                this.roll( { left: { from: 0, to: this.getEl().offsetWidth } }, duration, easing, true );
+        },
+        
+        slideInRight: function(duration, easing) {
+            this.roll( { left: { from: this.getEl().offsetWidth, to: 0 } }, duration, easing );
+        },
+
+        roll: function(attr, duration, easing, noReset) {
+            if ( this.isAnimated() ) {
+                this.enQueue(this.roll, arguments);
+                return false;
+            };
+            
+            var before = function() {};
+            var after = function() {};
+            var el = this.getEl();
+            var position = Dom.getStyle(el, 'position');
+
+            before = function() {console.log(this.mask);
+                Dom.setStyle(this.mask, 'overflow', 'hidden');
+                
+                if (position == 'static') { // element needs positioning to move
+                    Dom.setStyle(el, 'position', 'relative');
+                }
+            }
+            
+            
+            if (!noReset) {
+                after = function() {
+                    console.log('reset' + this.mask);
+                    Dom.setStyle(this.mask, 'overflow', 'visible');
+                    
+                    if (position == 'static') { // only reset if needed
+                        Dom.setStyle(el, 'position', position);
+                    }
+    
+                    //this.run(attr, duration, easing, reset); /* only run once */
+                };
+            }
+            
+            this.run(attr, duration, easing, before, after);
+        },
+        
+        wait: function(duration) {
+            this.run(null, duration);
+        },
+        moveTo: function(xy, duration, easing) {
+            this.run( {points: { to: xy} }, duration, easing, function() {Dom.setStyle(this.mask, 'overflow', 'visible');});
+        },
+        
+        enQueue: function(method, args) {
+            method = method || this.run;
+            this.queue.push({method: method, args: args});
+        },
+        
+        runQueue: function() {//console.log('runQ');
+            var queue = this.queue;
+            var effect = queue[0];
+            
+            if (!effect) { // no queue
+                this.onComplete.unsubscribe(this.runQueue);
+                return false;
+            };
+
+            if (queue.length < 1) { // last one
+                this.onComplete.unsubscribe(this.runQueue);
+            }
+            queue.shift();
+            effect.method.apply(this, effect.args);
+        },
+        
+        run: function(attr, duration, easing, before, after) {
+            if ( this.isAnimated() ) { // queue animations if animated
+                var args = arguments;
+                this.enQueue(this.run, arguments);
+            } else {
+                this.attributes = attr;
+                this.duration = duration || this.duration; // TODO: revert to original? this uses the last
+                this.method = easing || this.method;
+                if (!this.runQueueSubscribed) { // not if already subscribed
+                    this.onComplete.subscribe(this.runQueue);
+                    this.runQueueSubscribed = true;
+                }
+                
+                
+                if (before) {
+                    before.call(this);
+                }
+                
+                this.animate();
+                
+                if (after) {
+                    after.call(this);
+                }
+            }
+        },
+        
+        insertMask: function() {
+            var el = this.getEl();
+            var mask = document.createElement('div');
+            var position = Dom.getStyle(el, 'position');
+            mask.style.width = el.offsetWidth + 'px';
+            el.parentNode.insertBefore(mask, el);
+            mask.appendChild(el);
+            this.mask = mask;
+            mask.style.zoom = 1;
+            
+
+            Dom.setStyle(this.mask, 'left', Dom.getStyle(el, 'left'));
+            Dom.setStyle(this.mask, 'top', Dom.getStyle(el, 'top'));
+            
+            if (position == 'static') {
+                position = 'relative';
+            }
+            
+            Dom.setStyle(this.mask, 'position', position);
+            
+            Dom.setStyle(el, 'left', 0);
+            Dom.setStyle(el, 'top', 0);
+        },
+        
+        init: function(el) {
+            YAHOO.util.Effect.superclass.init.call(this, el, {});
+            if (this.autoClip) {
+                this.insertMask(); // TODO: dont need for all effects
+            }
+        }
+    };
+    
+    for (var prop in proto) {
+        YAHOO.util.Effect.prototype[prop] = proto[prop];
+    }
+}());/**
  * @class Anim subclass for moving elements along a path defined by the "points" member of "attributes".  All "points" are arrays with x, y coordinates.
  * <p>Usage: <code>var myAnim = new YAHOO.util.Motion(el, { points: { to: [800, 800] } }, 1, YAHOO.util.Easing.easeOut);</code></p>
  * @requires YAHOO.util.Anim
