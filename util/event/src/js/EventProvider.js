@@ -4,6 +4,7 @@
  * and fired by name.  This makes it possible for implementing code to
  * subscribe to an event that either has not been created yet, or will
  * not be created at all.
+ *
  * @Class EventProvider
  */
 YAHOO.util.EventProvider = function() { };
@@ -81,8 +82,9 @@ YAHOO.util.EventProvider.prototype = {
         } else {
 
             var scope = opts.scope || this;
+            var silent = opts.silent || null;
 
-            var ce = new YAHOO.util.CustomEvent(p_type, scope, opts.silent,
+            var ce = new YAHOO.util.CustomEvent(p_type, scope, silent,
                     YAHOO.util.CustomEvent.FLAT);
             events[p_type] = ce;
 

@@ -94,8 +94,15 @@ YAHOO.util.CustomEvent = function(type, oScope, silent, signature) {
          * handle the case where there is a non-repeating event that has
          * already fired has a new subscriber.  
          *
-         * @property subscribeEvent
-         * @type CustomEvent
+         * @event subscribeEvent
+         * @type YAHOO.util.CustomEvent
+         * @param {Function} fn The function to execute
+         * @param {Object}   obj An object to be passed along when the event 
+         *                       fires
+         * @param {boolean|Object}  override If true, the obj passed in becomes 
+         *                                   the execution scope of the listener.
+         *                                   if an object, that object becomes the
+         *                                   the execution scope.
          */
         this.subscribeEvent = 
                 new YAHOO.util.CustomEvent(onsubscribeType, this, true);
@@ -353,6 +360,7 @@ YAHOO.util.Subscriber.prototype.toString = function() {
 /**
  * The Event Utility provides utilities for managing DOM Events and tools
  * for building event systems
+ *
  * @module event
  * @title Event Utility
  * @namespace YAHOO.util
@@ -366,6 +374,7 @@ if (!YAHOO.util.Event) {
  * The event utility provides functions to add and remove event listeners,
  * event cleansing.  It also tries to automatically remove listeners it
  * registers during the unload event.
+ *
  * @class Event
  * @static
  */
@@ -551,6 +560,13 @@ if (!YAHOO.util.Event) {
              */
             isIE: (!this.isSafari && !navigator.userAgent.match(/opera/gi) && 
                     navigator.userAgent.match(/msie/gi)),
+
+            /**
+             * poll handle
+             * @property _interval
+             * @private
+             */
+            _interval: null,
 
             /**
              * @method startInterval
@@ -1262,10 +1278,10 @@ if (!YAHOO.util.Event) {
 
                 // onAvailable
                 var notAvail = [];
-                for (i=0,len=onAvailStack.length; i<len ; ++i) {
+                for (var i=0,len=onAvailStack.length; i<len ; ++i) {
                     var item = onAvailStack[i];
                     if (item) {
-                        el = this.getEl(item.id);
+                        var el = this.getEl(item.id);
 
                         if (el) {
                             // The element is available, but not necessarily ready
@@ -1552,6 +1568,7 @@ if (!YAHOO.util.Event) {
  * and fired by name.  This makes it possible for implementing code to
  * subscribe to an event that either has not been created yet, or will
  * not be created at all.
+ *
  * @Class EventProvider
  */
 YAHOO.util.EventProvider = function() { };
@@ -1629,8 +1646,9 @@ YAHOO.util.EventProvider.prototype = {
         } else {
 
             var scope = opts.scope || this;
+            var silent = opts.silent || null;
 
-            var ce = new YAHOO.util.CustomEvent(p_type, scope, opts.silent,
+            var ce = new YAHOO.util.CustomEvent(p_type, scope, silent,
                     YAHOO.util.CustomEvent.FLAT);
             events[p_type] = ce;
 

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>API: Event Utility  YAHOO.util.CustomEvent   (YUI Library)</title>
+	<title>API: event  YAHOO.util.CustomEvent   (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/reset.css">
 	<link rel="stylesheet" type="text/css" href="assets/fonts.css">
 	<link rel="stylesheet" type="text/css" href="assets/grids.css">
@@ -13,24 +13,32 @@
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>Event Utility</h3>
+        <h3>Event Utility&nbsp;</h3>
         <p>
-        <a href="./index.html">Yahoo! UI Library</a> &gt;
-        <a href="./module_EventUtility.html">Event Utility</a>
-             &gt; YAHOO.util.CustomEvent 
-            
-        </p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_event.html">event</a>
+                 &gt; YAHOO.util.CustomEvent 
+                
+            </p>
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
 
-                    <h2>
 
+                    <h2>
+                        
+
+                        
+                        
                             Class <b>YAHOO.util.CustomEvent</b>
                         <span class="extends">
                         </span>
+
+                        <span class="extends">
+                        </span>
+                        
                         </code>
                     </h2>
                     <!-- class tree goes here -->
@@ -97,6 +105,10 @@ parameters: the first argument passed to fire and the optional
 custom object
                                         </div>
                                     </div>
+     
+                                        
+
+
                                     <hr />
                                     <h4><a name="YAHOO.util.CustomEvent.LIST">YAHOO.util.CustomEvent.LIST</a>
                                         <code>- static int</code>
@@ -108,6 +120,10 @@ parameters: the event type, the array of args passed to fire, and
 the optional custom object
                                         </div>
                                     </div>
+     
+                                        
+
+
                                     <hr />
                                     <h4><a name="scope">scope</a>
                                         <code>- object</code>
@@ -118,6 +134,10 @@ the optional custom object
 obj
                                         </div>
                                     </div>
+     
+                                        
+
+
                                     <hr />
                                     <h4><a name="signature">signature</a>
                                         <code>- int</code>
@@ -144,6 +164,10 @@ pass multiple parameters, use and array or object literal</li>
 </ul>
                                         </div>
                                     </div>
+     
+                                        
+
+
                                     <hr />
                                     <h4><a name="silent">silent</a>
                                         <code>- boolean</code>
@@ -154,18 +178,10 @@ pass multiple parameters, use and array or object literal</li>
 to true to disable logging for this event.
                                         </div>
                                     </div>
-                                    <hr />
-                                    <h4><a name="subscribeEvent">subscribeEvent</a>
-                                        <code>- CustomEvent</code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description">
-                                            Custom events provide a custom event that fires whenever there is
-a new subscriber to the event.  This provides an opportunity to
-handle the case where there is a non-repeating event that has
-already fired has a new subscriber.
-                                        </div>
-                                    </div>
+     
+                                        
+
+
                                     <hr />
                                     <h4><a name="subscribers">subscribers</a>
                                         <code>- Subscriber[]</code>
@@ -175,6 +191,10 @@ already fired has a new subscriber.
                                             The subscribers to this event
                                         </div>
                                     </div>
+     
+                                        
+
+
                                     <hr />
                                     <h4><a name="type">type</a>
                                         <code>- string</code>
@@ -184,8 +204,12 @@ already fired has a new subscriber.
                                             The type of event, returned to subscribers when the event fires
                                         </div>
                                     </div>
+     
+                                        
+
+
                                     <hr />
- 
+
 
                             </div>
                         </div>
@@ -198,6 +222,7 @@ already fired has a new subscriber.
                                         <a name="fire">fire</a></h4>
                                     <div class="detail">
                                         <code>
+                                        
                                         
                                         
                                         void
@@ -230,6 +255,13 @@ the handler.
                                                         </dd>
                                                 </dl>
 
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
              
                                         </div>
 
@@ -239,6 +271,7 @@ the handler.
                                         <a name="subscribe">subscribe</a></h4>
                                     <div class="detail">
                                         <code>
+                                        
                                         
                                         
                                         void
@@ -276,6 +309,13 @@ the execution scope.
                                                         </dd>
                                                 </dl>
 
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
              
                                         </div>
 
@@ -285,6 +325,7 @@ the execution scope.
                                         <a name="toString">toString</a></h4>
                                     <div class="detail">
                                         <code>
+                                        
                                         
                                         
                                         void
@@ -297,6 +338,13 @@ the execution scope.
 
                                         <div class="description">
 
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
              
                                         </div>
 
@@ -306,6 +354,7 @@ the execution scope.
                                         <a name="unsubscribe">unsubscribe</a></h4>
                                     <div class="detail">
                                         <code>
+                                        
                                         
                                         
                                         boolean
@@ -352,6 +401,7 @@ the execution scope.
                                         <code>
                                         
                                         
+                                        
                                         void
                                             <strong>unsubscribeAll</strong>
                                         </code>
@@ -362,7 +412,69 @@ the execution scope.
 
                                         <div class="description">
 
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
              
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Events</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="subscribeEvent">subscribeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>subscribeEvent</strong>
+                                                (
+                                                
+                                                    &lt;Function&gt; fn, 
+                                                    &lt;Object&gt; obj, 
+                                                    &lt;boolean|Object&gt; override
+                                                )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Custom events provide a custom event that fires whenever there is
+a new subscriber to the event.  This provides an opportunity to
+handle the case where there is a non-repeating event that has
+already fired has a new subscriber.
+                                        </div>
+
+                                        <div class="description">
+                                                <dl>
+                                                    <dt>Arguments:</dt>
+                                                        <dd>
+                                                            <code>fn</code> - 
+                                                             The function to execute
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj</code> - 
+                                                             An object to be passed along when the event 
+fires
+                                                        </dd>
+                                                        <dd>
+                                                            <code>override</code> - 
+                                                             If true, the obj passed in becomes 
+the execution scope of the listener.
+if an object, that object becomes the
+the execution scope.
+                                                        </dd>
+                                                </dl>
+
                                         </div>
 
                                     </div>
@@ -375,17 +487,24 @@ the execution scope.
 
 
 
-
 			</div>
 		</div>
 		<div class="yui-b">
             <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li><a href="module_event.html">event</a></li>
+                        </ul>
+                    </div>
+
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
                                 <li><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
                                 <li><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
-                                <li><a href="YAHOO.util.EventPublisher.html">YAHOO.util.EventPublisher</a></li>
+                                <li><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
                                 <li><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
                         </ul>
                     </div>
@@ -395,7 +514,7 @@ the execution scope.
                         <ul class="content">        
                                 <li><a href="CustomEvent.js.html">CustomEvent.js</a></li>
                                 <li><a href="Event.js.html">Event.js</a></li>
-                                <li><a href="EventPublisher.js.html">EventPublisher.js</a></li>
+                                <li><a href="EventProvider.js.html">EventProvider.js</a></li>
                         </ul>
                     </div>
 
@@ -415,9 +534,6 @@ the execution scope.
                                         <!--<code>&lt;string&gt;</code>-->
                                 </li>
                                 <li><a href="#silent">silent</a>
-                                        <!--<code>&lt;string&gt;</code>-->
-                                </li>
-                                <li><a href="#subscribeEvent">subscribeEvent</a>
                                         <!--<code>&lt;string&gt;</code>-->
                                 </li>
                                 <li><a href="#subscribers">subscribers</a>
@@ -450,6 +566,14 @@ the execution scope.
                         </ul>
                     </div>
 
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li>
+                                <a href="#subscribeEvent">subscribeEvent</a>
+                                </li>
+                        </ul>
+                    </div>
 
 
             </div>

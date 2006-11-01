@@ -86,8 +86,15 @@ YAHOO.util.CustomEvent = function(type, oScope, silent, signature) {
          * handle the case where there is a non-repeating event that has
          * already fired has a new subscriber.  
          *
-         * @property subscribeEvent
-         * @type CustomEvent
+         * @event subscribeEvent
+         * @type YAHOO.util.CustomEvent
+         * @param {Function} fn The function to execute
+         * @param {Object}   obj An object to be passed along when the event 
+         *                       fires
+         * @param {boolean|Object}  override If true, the obj passed in becomes 
+         *                                   the execution scope of the listener.
+         *                                   if an object, that object becomes the
+         *                                   the execution scope.
          */
         this.subscribeEvent = 
                 new YAHOO.util.CustomEvent(onsubscribeType, this, true);

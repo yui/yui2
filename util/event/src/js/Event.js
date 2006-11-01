@@ -1,6 +1,7 @@
 /**
  * The Event Utility provides utilities for managing DOM Events and tools
  * for building event systems
+ *
  * @module event
  * @title Event Utility
  * @namespace YAHOO.util
@@ -14,6 +15,7 @@ if (!YAHOO.util.Event) {
  * The event utility provides functions to add and remove event listeners,
  * event cleansing.  It also tries to automatically remove listeners it
  * registers during the unload event.
+ *
  * @class Event
  * @static
  */
@@ -199,6 +201,13 @@ if (!YAHOO.util.Event) {
              */
             isIE: (!this.isSafari && !navigator.userAgent.match(/opera/gi) && 
                     navigator.userAgent.match(/msie/gi)),
+
+            /**
+             * poll handle
+             * @property _interval
+             * @private
+             */
+            _interval: null,
 
             /**
              * @method startInterval
@@ -910,10 +919,10 @@ if (!YAHOO.util.Event) {
 
                 // onAvailable
                 var notAvail = [];
-                for (i=0,len=onAvailStack.length; i<len ; ++i) {
+                for (var i=0,len=onAvailStack.length; i<len ; ++i) {
                     var item = onAvailStack[i];
                     if (item) {
-                        el = this.getEl(item.id);
+                        var el = this.getEl(item.id);
 
                         if (el) {
                             // The element is available, but not necessarily ready

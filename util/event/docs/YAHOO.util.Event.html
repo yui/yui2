@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>API: Event Utility  YAHOO.util.Event   (YUI Library)</title>
+	<title>API: event  YAHOO.util.Event   (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/reset.css">
 	<link rel="stylesheet" type="text/css" href="assets/fonts.css">
 	<link rel="stylesheet" type="text/css" href="assets/grids.css">
@@ -13,25 +13,32 @@
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>Event Utility</h3>
+        <h3>Event Utility&nbsp;</h3>
         <p>
-        <a href="./index.html">Yahoo! UI Library</a> &gt;
-        <a href="./module_EventUtility.html">Event Utility</a>
-             &gt; YAHOO.util.Event 
-            
-        </p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_event.html">event</a>
+                 &gt; YAHOO.util.Event 
+                
+            </p>
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
 
-                    <h2>
 
-                            <code>static</code> 
+                    <h2>
+                        
+
+                        <code>static</code>
+                        
                             Class <b>YAHOO.util.Event</b>
                         <span class="extends">
                         </span>
+
+                        <span class="extends">
+                        </span>
+                        
                         </code>
                     </h2>
                     <!-- class tree goes here -->
@@ -50,7 +57,7 @@ registers during the unload event.
                             <h3><a name="field_detail">Properties</a></h3>
                             <div class="content">
                                     <h4><a name="ADJ_SCOPE">ADJ_SCOPE</a>
-                                        <code>- static int</code>
+                                        <code>- static final int</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -58,27 +65,39 @@ registers during the unload event.
 on or the custom object passed in by the listener, int constant
                                         </div>
                                     </div>
+     
+                                        
+
+
                                     <hr />
                                     <h4><a name="EL">EL</a>
-                                        <code>- static int</code>
+                                        <code>- static final int</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
                                             Element to bind, int constant
                                         </div>
                                     </div>
+     
+                                        
+
+
                                     <hr />
                                     <h4><a name="FN">FN</a>
-                                        <code>- static int</code>
+                                        <code>- static final int</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
                                             Function to execute, int constant
                                         </div>
                                     </div>
+     
+                                        
+
+
                                     <hr />
                                     <h4><a name="OBJ">OBJ</a>
-                                        <code>- static int</code>
+                                        <code>- static final int</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -86,18 +105,26 @@ on or the custom object passed in by the listener, int constant
 parameter to the callback, int constant
                                         </div>
                                     </div>
+     
+                                        
+
+
                                     <hr />
                                     <h4><a name="POLL_INTERVAL">POLL_INTERVAL</a>
-                                        <code>- static int</code>
+                                        <code>- static final int</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
                                             The poll interval in milliseconds
                                         </div>
                                     </div>
+     
+                                        
+
+
                                     <hr />
                                     <h4><a name="POLL_RETRYS">POLL_RETRYS</a>
-                                        <code>- static int</code>
+                                        <code>- static final int</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -108,26 +135,38 @@ for 10 seconds or until all outstanding handlers are bound
 (whichever comes first).
                                         </div>
                                     </div>
+     
+                                        
+
+
                                     <hr />
                                     <h4><a name="TYPE">TYPE</a>
-                                        <code>- static int</code>
+                                        <code>- static final int</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
                                             Type of event, int constant
                                         </div>
                                     </div>
+     
+                                        
+
+
                                     <hr />
                                     <h4><a name="WFN">WFN</a>
-                                        <code>- static int</code>
+                                        <code>- static final int</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
                                             Function wrapped for scope correction and cleanup, int constant
                                         </div>
                                     </div>
+     
+                                        
+
+
                                     <hr />
- 
+
 
                             </div>
                         </div>
@@ -142,6 +181,7 @@ for 10 seconds or until all outstanding handlers are bound
                                         <code>
                                         
                                          static 
+                                        
                                         boolean
                                             <strong>addListener</strong>
                                                 (
@@ -206,6 +246,7 @@ could not have the event bound to it.</dd>
                                         <code>
                                         
                                          static 
+                                        
                                         string
                                             <strong>generateId</strong>
                                                 (
@@ -246,6 +287,7 @@ have one.
                                         <code>
                                         
                                          static 
+                                        
                                         int
                                             <strong>getCharCode</strong>
                                                 (
@@ -285,6 +327,7 @@ have one.
                                         <code>
                                         
                                          static 
+                                        
                                         Event
                                             <strong>getEvent</strong>
                                                 (
@@ -328,6 +371,7 @@ this function at all.
                                         <code>
                                         
                                          static 
+                                        
                                         Object
                                             <strong>getListeners</strong>
                                                 (
@@ -379,6 +423,7 @@ left out, all listeners will be returned
                                         <code>
                                         
                                          static 
+                                        
                                         int
                                             <strong>getPageX</strong>
                                                 (
@@ -418,6 +463,7 @@ left out, all listeners will be returned
                                         <code>
                                         
                                          static 
+                                        
                                         int
                                             <strong>getPageY</strong>
                                                 (
@@ -457,6 +503,7 @@ left out, all listeners will be returned
                                         <code>
                                         
                                          static 
+                                        
                                         HTMLElement
                                             <strong>getRelatedTarget</strong>
                                                 (
@@ -496,6 +543,7 @@ left out, all listeners will be returned
                                         <code>
                                         
                                          static 
+                                        
                                         HTMLElement
                                             <strong>getTarget</strong>
                                                 (
@@ -543,6 +591,7 @@ now resolved automatically
                                         <code>
                                         
                                          static 
+                                        
                                         Date
                                             <strong>getTime</strong>
                                                 (
@@ -583,6 +632,7 @@ event is modified using the current time.
                                         <code>
                                         
                                          static 
+                                        
                                         void
                                             <strong>getXY</strong>
                                         </code>
@@ -593,6 +643,13 @@ event is modified using the current time.
 
                                         <div class="description">
 
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
              
                                         </div>
 
@@ -604,6 +661,7 @@ event is modified using the current time.
                                         <code>
                                         
                                          static 
+                                        
                                         void
                                             <strong>on</strong>
                                         </code>
@@ -614,6 +672,13 @@ event is modified using the current time.
 
                                         <div class="description">
 
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
              
                                         </div>
 
@@ -625,6 +690,7 @@ event is modified using the current time.
                                         <code>
                                         
                                          static 
+                                        
                                         void
                                             <strong>onAvailable</strong>
                                                 (
@@ -668,6 +734,72 @@ in the scope of p_obj
                                                         </dd>
                                                 </dl>
 
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="onContentReady">onContentReady</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>onContentReady</strong>
+                                                (
+                                                
+                                                    &lt;string&gt; p_id, 
+                                                    &lt;function&gt; p_fn, 
+                                                    &lt;object&gt; p_obj, 
+                                                    &lt;boolean&gt; p_override
+                                                )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Works the same way as onAvailable, but additionally checks the
+state of sibling elements to determine if the content of the
+available element is safe to modify.
+                                        </div>
+
+                                        <div class="description">
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_id</code> - 
+                                                             the id of the element to look for.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_fn</code> - 
+                                                             what to execute when the element is ready.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_obj</code> - 
+                                                             an optional object to be passed back as
+a parameter to p_fn.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_override</code> - 
+                                                             If set to true, p_fn will execute
+in the scope of p_obj
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
              
                                         </div>
 
@@ -679,6 +811,7 @@ in the scope of p_obj
                                         <code>
                                         
                                          static 
+                                        
                                         void
                                             <strong>preventDefault</strong>
                                                 (
@@ -700,6 +833,13 @@ in the scope of p_obj
                                                         </dd>
                                                 </dl>
 
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
              
                                         </div>
 
@@ -711,6 +851,7 @@ in the scope of p_obj
                                         <code>
                                         
                                          static 
+                                        
                                         void
                                             <strong>purgeElement</strong>
                                                 (
@@ -746,6 +887,13 @@ left out, all listeners will be removed
                                                         </dd>
                                                 </dl>
 
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
              
                                         </div>
 
@@ -757,6 +905,7 @@ left out, all listeners will be removed
                                         <code>
                                         
                                          static 
+                                        
                                         boolean
                                             <strong>removeListener</strong>
                                                 (
@@ -808,7 +957,8 @@ otherwise</dd>
                                         <code>
                                         
                                          static 
-                                        void
+                                        
+                                        HTMLElement
                                             <strong>resolveTextNode</strong>
                                                 (
                                                 
@@ -827,14 +977,14 @@ return value for getTarget and getRelatedTarget.
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>node</code> - 
-                                                             to resolve
+                                                             node to resolve
                                                         </dd>
                                                 </dl>
 
                                                 <dl>
                                                     <dt>Returns:
                                                     <code>
-                                                        void
+                                                        HTMLElement
                                                     </code></dt>
                                                     <dd>the normized node</dd>
                                                 </dl>
@@ -849,6 +999,7 @@ return value for getTarget and getRelatedTarget.
                                         <code>
                                         
                                          static 
+                                        
                                         void
                                             <strong>stopEvent</strong>
                                                 (
@@ -870,6 +1021,13 @@ return value for getTarget and getRelatedTarget.
                                                         </dd>
                                                 </dl>
 
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
              
                                         </div>
 
@@ -881,6 +1039,7 @@ return value for getTarget and getRelatedTarget.
                                         <code>
                                         
                                          static 
+                                        
                                         void
                                             <strong>stopPropagation</strong>
                                                 (
@@ -902,6 +1061,13 @@ return value for getTarget and getRelatedTarget.
                                                         </dd>
                                                 </dl>
 
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
              
                                         </div>
 
@@ -916,16 +1082,25 @@ return value for getTarget and getRelatedTarget.
 
 
 
+
 			</div>
 		</div>
 		<div class="yui-b">
             <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li><a href="module_event.html">event</a></li>
+                        </ul>
+                    </div>
+
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
                                 <li><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
                                 <li><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
-                                <li><a href="YAHOO.util.EventPublisher.html">YAHOO.util.EventPublisher</a></li>
+                                <li><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
                                 <li><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
                         </ul>
                     </div>
@@ -935,7 +1110,7 @@ return value for getTarget and getRelatedTarget.
                         <ul class="content">        
                                 <li><a href="CustomEvent.js.html">CustomEvent.js</a></li>
                                 <li><a href="Event.js.html">Event.js</a></li>
-                                <li><a href="EventPublisher.js.html">EventPublisher.js</a></li>
+                                <li><a href="EventProvider.js.html">EventProvider.js</a></li>
                         </ul>
                     </div>
 
@@ -1012,6 +1187,9 @@ return value for getTarget and getRelatedTarget.
                                 <a href="#onAvailable">onAvailable</a>
                                 </li>
                                 <li><!--<code>void</code>-->
+                                <a href="#onContentReady">onContentReady</a>
+                                </li>
+                                <li><!--<code>void</code>-->
                                 <a href="#preventDefault">preventDefault</a>
                                 </li>
                                 <li><!--<code>void</code>-->
@@ -1020,7 +1198,7 @@ return value for getTarget and getRelatedTarget.
                                 <li><!--<code>boolean</code>-->
                                 <a href="#removeListener">removeListener</a>
                                 </li>
-                                <li><!--<code>void</code>-->
+                                <li><!--<code>HTMLElement</code>-->
                                 <a href="#resolveTextNode">resolveTextNode</a>
                                 </li>
                                 <li><!--<code>void</code>-->
