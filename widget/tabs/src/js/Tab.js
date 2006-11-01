@@ -32,41 +32,41 @@
 
 	/**
      * The default tag name for a Tab's element.
-	 * @property TAGNAME
+	 * @property TAG
 	 * @type String
      * @default 'li'
 	 */
     proto.TAG = 'li';
     
 	/**
-     * The default tag name for a Tab's element.
-	 * @property TAGNAME
+     * The default tag name for a Tab's label element.
+	 * @property LABEL_TAG
 	 * @type String
-     * @default 'li'
+     * @default 'a'
 	 */
     proto.LABEL_TAG = 'a';
     
 	/**
      * The default tag name for a Tab's inner element.
-	 * @property TAGNAME
+	 * @property LABEL_INNER_TAG
 	 * @type String
-     * @default 'li'
+     * @default 'em'
 	 */
     proto.LABEL_INNER_TAG = 'em';
     
 	/**
      * The class name applied to active tabs.
-	 * @property ACTIVE_CLASSNAME
+	 * @property ACTIVE_CLASS
 	 * @type String
      * @default 'on'
 	 */
     proto.ACTIVE_CLASS = 'on';
     
 	/**
-     * The class name applied to active tabs.
-	 * @property ACTIVE_CLASSNAME
+     * The class name applied to disabled tabs.
+	 * @property DISABLED_CLASS
 	 * @type String
-     * @default 'on'
+     * @default 'disabled'
 	 */
     proto.DISABLED_CLASS = 'disabled';
     
@@ -85,7 +85,7 @@
      * @default 'click'
 	 */
     proto.ACTIVATION_EVENT = 'click';
-    
+
     /**
      * Provides a readable name for the tab.
      * @method toString
@@ -99,8 +99,8 @@
     
     /**
      * Registers TabView specific properties.
-     * @method initProperties
-     * @param {Object} properties Hash of initial properties
+     * @method initConfigs
+     * @param {Object} attr Hash of initial attributes
      */
     proto.initConfigs = function(attr) {
         attr = attr || {};
@@ -109,9 +109,9 @@
         var el = this.get('element');
         
         /**
-         * The tab's label text (or innerHTML).
-         * @config label
-         * @type String
+         * The element that contains the tab's label.
+         * @config labelElement
+         * @type HTMLElement
          */
         this.register('labelElement', {
             value: attr.labelElement || _getLabelElement.call(this),
@@ -148,8 +148,12 @@
             }
         });
 
+        var _dataLoaded = false;
+        
         /**
-         * Whether or not the tab is currently active
+         * Whether or not the tab is currently active.
+         * If a dataSrc is set for the tab, the content will be loaded from
+         * the given source.
          * @config active
          * @type Boolean
          */
@@ -159,6 +163,28 @@
                 if (value === true) {
                     this.addClass(this.ACTIVE_CLASS);
                     this.set('title', 'active');
+                    
+                    if ( this.get('dataSrc') ) { // load dynamic content
+                        if ( !_dataLoaded || !this.get('cacheData') ) { // unless already loaded and caching
+                            if (!YAHOO.util.Connect) {
+                                YAHOO.log('YAHOO.util.Connect dependency not met',
+                                        'error', 'Tab');
+                                return false;
+                            }
+                                console.log(this.get('dataSrc'));
+                            YAHOO.util.Connect.asyncRequest(
+                                'GET',
+                                this.get('dataSrc'),
+                                {
+                                    success: this.get('loadSuccessHandler'),
+                                    failure: this.get('loadFailureHandler'),
+                                    scope: this
+                                }
+                            );
+                            _dataLoaded = true;
+                        }
+                    }
+                    
                 } else {
                     this.removeClass(this.ACTIVE_CLASS);
                     this.set('title', '');
@@ -170,10 +196,9 @@
         });
         
         /**
-         * The tab's content element.
-         * @config diabled
+         * Whether or not the tab is disabled.
+         * @config disabled
          * @type Boolean
-         * @default false
          */
         this.register('disabled', {
             value: attr.disabled || this.hasClass(this.DISABLED_CLASS),
@@ -188,9 +213,9 @@
         });
         
         /**
-         * The tab's content element.
-         * @config contentElement
-         * @type HTMLElement
+         * The TabPanel that contains the tab's content.
+         * @config panel
+         * @type TabPanel
          */
         this.register('panel', {
             value: attr.panel,
@@ -207,9 +232,9 @@
         });
         
         /**
-         * The tab's content element.
-         * @config contentElement
-         * @type HTMLElement
+         * The tab's content.
+         * @config content
+         * @type String
          */
         this.register('content', {
             value: attr.content, // TODO: what about existing?
@@ -226,6 +251,53 @@
                 }
                 
             }
+        });
+        
+        /**
+         * The tab's data source, used for loading content dynamically.
+         * @config dataSrc
+         * @type String
+         */
+        this.register('dataSrc', {
+            value: attr.dataSrc
+        });
+        
+        /**
+         * The tab's label text (or innerHTML).
+         * @config label
+         * @type String
+         * @default ResponseText is used as content
+         */
+        this.register('loadSuccessHandler', {
+            value: attr.loadSuccessHandler || 
+                function(o) {
+                    this.set('content', o.responseText);
+                }
+        });
+        
+        /**
+         * The tab's label text (or innerHTML).
+         * @config label
+         * @type String
+         * @default Error is logged
+         */
+        this.register('loadFailureHandler', {
+            value: attr.loadFailureHandler || 
+                function(o) {
+                    YAHOO.log('loading failed: ' + o.statusText,
+                            'error', 'TabPanel');
+                }
+        });
+        
+        /**
+         * Whether or not content should be reloaded for every view.
+         * @config cacheData
+         * @type Boolean
+         * @default false
+         */
+        this.register('cacheData', {
+            value: attr.cacheData || false,
+            validator: Lang.isBoolean
         });
     };
     
@@ -310,6 +382,6 @@
         
         return label;
     };
-
+    
     YAHOO.widget.Tab = Tab;
 })();

@@ -136,10 +136,10 @@
     };
     
     /**
-     * Returns the Tab instance at the specified index.
-     * @method getTab
-     * @param {Integer} index The position of the Tab.
-     * @return YAHOO.widget.Tab
+     * Returns the index of given tab.
+     * @method getTabIndex
+     * @param {YAHOO.widget.Tab} tab The tab whose index will be returned.
+     * @return int
      */
     proto.getTabIndex = function(tab) {
         var index = null;
@@ -177,6 +177,10 @@
         return "TabView " + name; 
     };
     
+    /**
+     * The transiton to use when swapping tabPanels.
+     * @method panelTransition
+     */
     proto.panelTransition = function(newPanel, oldPanel) {
         if (newPanel) {  
             newPanel.set('visible', true);
@@ -189,8 +193,8 @@
     
     /**
      * Registers TabView specific properties.
-     * @method initProperties
-     * @param {Object} properties Hash of initial properties
+     * @method initConfigs
+     * @param {Object} attr Hash of initial attributes
      */
     proto.initConfigs = function(attr) {
         YAHOO.widget.TabView.superclass.initConfigs.call(this, attr);
@@ -208,9 +212,9 @@
         });
 
         /**
-         * The tab currently active.
-         * @config activeTab
-         * @type YAHOO.widget.Tab
+         * The container for the tabView's label elements.
+         * @config labelGroup
+         * @type HTMLElement
          */
         this.register('labelGroup', {
             value: attr.labelGroup || 
@@ -220,9 +224,9 @@
         });
             
         /**
-         * The tab currently active.
-         * @config activeTab
-         * @type YAHOO.widget.Tab
+         * The container for the tabView's TabPanel elements.
+         * @config contentGroup
+         * @type HTMLElement
          */
         this.register('contentGroup', {
             value: attr.contentGroup || 
@@ -257,50 +261,6 @@
             },
             validator: function(value) {
                 return !value.get('disabled');
-            }
-        });
-        
-        /**
-         * The orientation of Tabs relative to the TabView.
-         * @config orientation
-         * @type YAHOO.widget.Tab
-         */
-        this.register('orientation', {
-            value: attr.orientation || 'top',
-            method: function(value) {
-                var current = this.get('orientation');
-                
-                var prefix = 'orient-';
-                var pos;
-                var labelGroup = this.get('labelGroup');
-                var contentGroup = this.get('contentGroup');
-                Dom.removeClass(labelGroup, prefix + current); // TODO: bug in replace?
-                Dom.addClass(labelGroup, prefix + value);
-                
-                //console.log(labelGroup.offsetWidth);
-                
-                switch(value) {
-                    case 'top':
-                        Dom.setXY( labelGroup, Dom.getXY(panelGroup) );
-                        break;
-                    case 'bottom':
-                        var pos = Dom.getXY(contentGroup);
-                        Dom.setXY( labelGroup,
-                                [ pos[0], pos[1] + contentGroup.offsetHeight] );
-                        break;
-                    case 'left':
-                        var pos = Dom.getXY(contentGroup);
-                        Dom.setXY( labelGroup,
-                                [ pos[0], pos[1] ] );
-                        Dom.setStyle(contentGroup, 'marginLeft', labelGroup.offsetWidth + 'px');
-                        break;
-                    case 'right':
-                        var pos = Dom.getXY(contentGroup);
-                        Dom.setStyle(contentGroup, 'marginRight', labelGroup.offsetWidth + 'px');
-                        Dom.setXY( labelGroup,
-                                [ pos[0] + contentGroup.offsetWidth, pos[1] ] );
-                        break;
-                }
             }
         });
 

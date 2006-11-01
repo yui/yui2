@@ -30,23 +30,23 @@
     var proto = YAHOO.widget.TabPanel.prototype;
     
 	/**
-     * The default tag name for a Tab's label's content element.
-	 * @property CONTENT_TAGNAME
+     * The default tag name for a TabPanel's element.
+	 * @property TAG
 	 * @type String
      * @default 'div'
 	 */
 	proto.TAG = 'div';
     
 	/**
-     * The default tag name for a Tab's label element.
-	 * @property LABEL_TAGNAME
+     * The default class name for a TabPanel's element.
+	 * @property CLASS
 	 * @type String
      * @default 'a'
 	 */
 	proto.CLASS = '';
     
     /**
-     * Provides a readable name for the tab.
+     * Provides a readable name for the tabPanel.
      * @method toString
      * @return String
      */
@@ -58,8 +58,8 @@
     
     /**
      * Registers TabPanel specific properties.
-     * @method initProperties
-     * @param {Object} properties Hash of initial properties
+     * @method initConfigs
+     * @param {Object} attr Hash of initial attributes
      */
     proto.initConfigs = function(attr) {
         YAHOO.widget.TabPanel.superclass.initConfigs.call(this, attr);
