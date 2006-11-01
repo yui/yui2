@@ -57,63 +57,9 @@ init: function(p_oElement, p_oConfig) {
     this.beforeInitEvent.fire(YAHOO.widget.MenuBar);
 
 
-    var oConfig = this.cfg;
-
-
-    /*
-        Set the default value for the "position" configuration property
-        to "static" 
-    */
-
-    /**
-    * @config position
-    * @description Defines how a menu should be positioned on the screen.  
-    * Possible values are "static" and "dynamic."  Static menus are visible by 
-    * default and reside in the normal flow of the document (CSS position:  
-    * static).  Dynamic menus are hidden by default, reside out of the normal  
-    * flow of the document (CSS position: absolute), and can overlay other  
-    * elements on the screen.
-    * @default static
-    * @type String
-    */
-    oConfig.queueProperty("position", "static");
-
-
-    /*
-        Set the default value for the "submenualignment" configuration property
-        to "tl" and "bl" 
-    */
-
-    /**
-    * @config submenualignment
-    * @description Defines how submenus should be aligned to their parent   
-    * MenuBarItem instance. The format is: [itemCorner, submenuCorner]. By   
-    * default, submenus of a menu bar are aligned to that their top left corner 
-    * is aligned to its parent item's bottom left corner.
-    * @default ["tl","bl"]
-    * @type Array
-    */
-    oConfig.queueProperty("submenualignment", ["tl","bl"]);
-
-
-    /*
-        Change the default value for the "autosubmenudisplay" configuration 
-        property to "false"
-    */
-
-    /**
-    * @config autosubmenudisplay
-    * @description Defines whether or not submenus are automatically made 
-    * visible when the user mouses over the items in a menu bar.
-    * @default false
-    * @type Boolean
-    */
-    oConfig.queueProperty("autosubmenudisplay", false);
-
-
     if(p_oConfig) {
 
-        oConfig.applyConfig(p_oConfig, true);
+        this.cfg.applyConfig(p_oConfig, true);
 
     }
 
@@ -136,18 +82,9 @@ init: function(p_oElement, p_oConfig) {
 CSS_CLASS_NAME: "yuimenubar",
 
 
-/**
-* @method toString
-* @description Returns a string representing the specified object.
-*/
-toString: function() {
 
-    return ("MenuBar " + this.id);
+// Protected event handlers
 
-},
-
-
-// Private event handlers
 
 /**
 * @method _onKeyDown
@@ -345,6 +282,99 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
         }
     
     }
+
+},
+
+
+
+// Public methods
+
+
+/**
+* @method toString
+* @description Returns a string representing the specified object.
+*/
+toString: function() {
+
+    return ("MenuBar " + this.id);
+
+},
+
+
+/**
+* @description Initializes the class's configurable properties which can be
+* changed using the Menu's Config object (cfg).
+* @method initDefaultConfig
+*/
+initDefaultConfig: function() {
+
+    YAHOO.widget.MenuBar.superclass.initDefaultConfig.call(this);
+
+    var oConfig = this.cfg;
+
+	// Add configuration properties
+
+
+    /*
+        Set the default value for the "position" configuration property
+        to "static" 
+    */
+
+    /**
+    * @config position
+    * @description Defines how a menu should be positioned on the screen.  
+    * Possible values are "static" and "dynamic."  Static menus are visible by 
+    * default and reside in the normal flow of the document (CSS position:  
+    * static).  Dynamic menus are hidden by default, reside out of the normal  
+    * flow of the document (CSS position: absolute), and can overlay other  
+    * elements on the screen.
+    * @default static
+    * @type String
+    */
+    oConfig.addProperty(
+        "position", 
+        {
+            value: "static", 
+            handler: this.configPosition, 
+            validator: this._checkPosition,
+            supercedes: ["visible"]
+        }
+    );
+
+
+    /*
+        Set the default value for the "submenualignment" configuration property
+        to "tl" and "bl" 
+    */
+
+    /**
+    * @config submenualignment
+    * @description Defines how submenus should be aligned to their parent   
+    * MenuBarItem instance. The format is: [itemCorner, submenuCorner]. By   
+    * default, submenus of a menu bar are aligned to that their top left corner 
+    * is aligned to its parent item's bottom left corner.
+    * @default ["tl","bl"]
+    * @type Array
+    */
+    oConfig.addProperty("submenualignment", { value: ["tl","bl"] } );
+
+
+    /*
+        Change the default value for the "autosubmenudisplay" configuration 
+        property to "false"
+    */
+
+    /**
+    * @config autosubmenudisplay
+    * @description Defines whether or not submenus are automatically made 
+    * visible when the user mouses over the items in a menu bar.
+    * @default false
+    * @type Boolean
+    */
+	oConfig.addProperty(
+	   "autosubmenudisplay", 
+	   { value: false, validator: oConfig.checkBoolean } 
+    );
 
 }
  
