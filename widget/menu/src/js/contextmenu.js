@@ -269,7 +269,7 @@ destroy: function() {
 
 
 
-// Event handlers for configuration properties
+// Public event handlers for configuration properties
 
 
 /**
