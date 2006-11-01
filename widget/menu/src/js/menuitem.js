@@ -1492,8 +1492,10 @@ YAHOO.widget.MenuItem.prototype = {
                         );
 
                     oImg = document.createElement("img");
+
                     oImg.src = 
                         (this.imageRoot + this.SUBMENU_INDICATOR_IMAGE_PATH);
+
                     oImg.alt = this.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
 
                     oEl.appendChild(oImg);
