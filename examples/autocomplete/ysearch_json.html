@@ -98,12 +98,15 @@
             //     "Additional Param Name 1",
             //     ...
             //     "Additional Param Name n"]
-            oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_proxy.php", ["ResultSet.Result", "Title", "Summary", "Cache"]);
+            oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_proxy.php", ["ResultSet.Result","Title"]);
             oACDS.queryMatchContains = true;
             oACDS.scriptQueryAppend = "output=json&results=100"; // Needed for YWS
 
             // Instantiate AutoComplete
             oAutoComp = new YAHOO.widget.AutoComplete("ysearchinput","ysearchcontainer", oACDS);
+            oAutoComp.formatResult = function(oResultItem, sQuery) {
+                return oResultItem[1].Title + " (" + oResultItem[1].Url + ")";
+            };
         </textarea>
     </div>
     <!-- Code sample ends -->
@@ -138,12 +141,15 @@ YAHOO.example.ACJson = function(){
             //     "Additional Param Name 1",
             //     ...
             //     "Additional Param Name n"]
-            oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_proxy.php", ["ResultSet.Result", "Title", "Summary", "Cache"]);
+            oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_proxy.php", ["ResultSet.Result","Title"]);
             oACDS.queryMatchContains = true;
             oACDS.scriptQueryAppend = "output=json&results=100"; // Needed for YWS
 
             // Instantiate AutoComplete
             oAutoComp = new YAHOO.widget.AutoComplete("ysearchinput","ysearchcontainer", oACDS);
+            oAutoComp.formatResult = function(oResultItem, sQuery) {
+                return oResultItem[1].Title + " (" + oResultItem[1].Url + ")";
+            };
         },
 
         validateForm: function() {

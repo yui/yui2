@@ -725,6 +725,10 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                     //YAHOO.log("data: " + i + " value:" +j+" = "+dataFieldValue,"debug",this.toString());
                     aResultItem.unshift(dataFieldValue);
                 }
+                // If schema isn't well defined, pass along the entire result object
+                if(aResultItem.length == 1) {
+                    aResultItem.push(jsonResult);
+                }
                 // Capture the array of data field values in an array of results
                 aResults.unshift(aResultItem);
             }
