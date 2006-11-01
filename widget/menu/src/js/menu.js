@@ -29,7 +29,7 @@ YAHOO.widget.Menu = function(p_oElement, p_oConfig) {
         this.lazyLoad = p_oConfig.lazyLoad || p_oConfig.lazyload;
 
         this.itemData = p_oConfig.itemData || p_oConfig.itemdata;
-    
+
     }
 
 
@@ -462,43 +462,13 @@ init: function(p_oElement, p_oConfig) {
         this.initEvent.subscribe(this._onInit, this, true);
         this.beforeRenderEvent.subscribe(this._onBeforeRender, this, true);
         this.renderEvent.subscribe(this._onRender, this, true);
+        this.beforeShowEvent.subscribe(this._onBeforeShow, this, true);
         this.showEvent.subscribe(this._onShow, this, true);
         this.beforeHideEvent.subscribe(this._onBeforeHide, this, true);
         this.mouseOverEvent.subscribe(this._onMouseOver, this, true);
         this.mouseOutEvent.subscribe(this._onMouseOut, this, true);
         this.clickEvent.subscribe(this._onClick, this, true);
         this.keyDownEvent.subscribe(this._onKeyDown, this, true);
-
-        
-        /*
-            Change the default value for the "visible" configuration 
-            property to "false"
-        */
-
-        /**
-        * @config visible
-        * @description Determines whether or not the menu is visible.  If the  
-        * menu's "position" configuration property is set to "dynamic" 
-        * (the default), this property toggles the menu's root &#60;div&#62;  
-        * node's "visibility" style property between "visible" (true) or  
-        * "hidden" (false).  If the menu's "position" configuration property is 
-        * set to "static" this property toggles the menu's root &#60;div&#62;  
-        * node's "display" style property between "block" (true) or   
-        * "none" (false).
-        * @default true
-        * @type Boolean
-        */
-        this.cfg.queueProperty("visible", false);
-
-
-        /**
-        * @config constraintoviewport
-        * @description If set to true the menu will try to remain inside the 
-        * boundaries of the size of viewport.
-        * @default true
-        * @type Boolean
-        */
-        this.cfg.queueProperty("constraintoviewport", true);
 
 
         if(p_oConfig) {
@@ -1992,31 +1962,36 @@ _onKeyPress: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onInit: function(p_sType, p_aArgs, p_oMenu) {
 
-    if(p_aArgs[0] == YAHOO.widget.Menu) {
+    if(
+        (
+            (this.parent && !this.lazyLoad) || 
+            (!this.parent && this.cfg.getProperty("position") == "static") ||
+            (
+                !this.parent && 
+                !this.lazyLoad && 
+                this.cfg.getProperty("position") == "dynamic"
+            ) 
+        ) && 
+        this.getItemGroups().length === 0
+    ) {
+ 
+        if(this.srcElement) {
 
-        if((this.parent && !this.lazyLoad) || !this.parent) {
-
-            if(this.srcElement) {
-
-                this._initSubTree();
-            
-            }
-
-
-            if(this.itemData) {
-
-                this.addItems(this.itemData);
-            
-            }
+            this._initSubTree();
         
         }
 
 
-        if(this.parent && this.lazyLoad) {
-    
-            this.cfg.fireQueue();
-       
+        if(this.itemData) {
+
+            this.addItems(this.itemData);
+
         }
+    
+    }
+    else if(this.lazyLoad) {
+
+        this.cfg.fireQueue();
     
     }
 
@@ -2121,6 +2096,82 @@ _onRender: function(p_sType, p_aArgs, p_oMenu) {
 
     }
 
+},
+
+
+/**
+* @method _onBeforeShow
+* @description "beforeshow" event handler for a Menu instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.Menu} p_oMenu The Menu instance that 
+* fired the event.
+*/
+_onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
+    
+    if(this.lazyLoad && this.getItemGroups().length === 0) {
+
+        if(this.srcElement) {
+        
+            this._initSubTree();
+
+        }
+
+
+        if(this.itemData) {
+
+            if(
+                this.parent && this.parent.parent && 
+                this.parent.parent.srcElement && 
+                this.parent.parent.srcElement.tagName.toUpperCase() == "SELECT"
+            ) {
+
+                var nOptions = this.itemData.length;
+    
+                for(var n=0; n<nOptions; n++) {
+
+                    if(this.itemData[n].tagName) {
+
+                        this.addItem((new this.ITEM_TYPE(this.itemData[n])));
+    
+                    }
+    
+                }
+            
+            }
+            else {
+
+                this.addItems(this.itemData);
+            
+            }
+        
+        }
+
+
+        if(this.srcElement) {
+
+            this.render();
+
+        }
+        else {
+
+            if(this.parent) {
+
+                this.render(this.parent.element);            
+
+            }
+            else {
+
+                this.render(this.cfg.getProperty("container"));
+                
+            }                
+
+        }
+
+    }
+    
 },
 
 
@@ -2369,6 +2420,10 @@ _onParentMenuRender: function(p_sType, p_aArgs, p_oSubmenu) {
 },
 
 
+
+
+
+
 /**
 * @method _onSubmenuBeforeShow
 * @description "beforeshow" event handler for a submenu.
@@ -2380,60 +2435,6 @@ _onParentMenuRender: function(p_sType, p_aArgs, p_oSubmenu) {
 * the event.
 */
 _onSubmenuBeforeShow: function(p_sType, p_aArgs, p_oSubmenu) {
-    
-    if(this.lazyLoad && this.getItemGroups().length === 0) {
-
-        if(this.srcElement) {
-        
-            this._initSubTree();
-
-        }
-
-
-        if(this.itemData) {
-
-            var oParentMenu = this.parent.parent;
-
-            if(
-                oParentMenu.srcElement && 
-                oParentMenu.srcElement.tagName.toUpperCase() == "SELECT"
-            ) {
-
-                var nOptions = this.itemData.length;
-    
-                for(var n=0; n<nOptions; n++) {
-
-                    if(this.itemData[n].tagName) {
-
-                        this.addItem((new this.ITEM_TYPE(this.itemData[n])));
-    
-                    }
-    
-                }
-            
-            }
-            else {
-
-                this.addItems(this.itemData);
-            
-            }
-        
-        }
-
-
-        if(this.srcElement) {
-
-            this.render();
-
-        }
-        else {
-
-            this.render(this.parent.element);
-
-        }
-
-    }
-
     
     var oParent = this.parent;
     var aAlignment = oParent.parent.cfg.getProperty("submenualignment");
@@ -2922,6 +2923,33 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
         }
     
     }
+
+},
+
+
+/**
+* @method configContainer
+* @description Event handler for when the "container" configuration property of 
+* a Menu instance changes.
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.Menu} p_oMenu The Menu instance fired
+* the event.
+*/
+configContainer: function(p_sType, p_aArgs, p_oMenu) {
+
+	var oElement = p_aArgs[0];
+
+	if(typeof oElement == 'string') {
+
+        this.cfg.setProperty(
+                "container", 
+                document.getElementById(oElement), 
+                true
+            );
+
+	}
 
 },
 
@@ -3433,6 +3461,57 @@ initDefaultConfig: function() {
 
 	// Add configuration properties
 
+    /*
+        Change the default value for the "visible" configuration 
+        property to "false"
+    */
+
+    /**
+    * @config visible
+    * @description Determines whether or not the menu is visible.  If the  
+    * menu's "position" configuration property is set to "dynamic" 
+    * (the default), this property toggles the menu's root &#60;div&#62;  
+    * node's "visibility" style property between "visible" (true) or  
+    * "hidden" (false).  If the menu's "position" configuration property is 
+    * set to "static" this property toggles the menu's root &#60;div&#62;  
+    * node's "display" style property between "block" (true) or   
+    * "none" (false).
+    * @default true
+    * @type Boolean
+    */
+    oConfig.addProperty(
+        "visible", 
+        {
+            value:false, 
+            handler:this.configVisible, 
+            validator:this.cfg.checkBoolean
+         }
+     );
+
+
+    /*
+        Change the default value for the "constraintoviewport" configuration 
+        property to "true"
+    */
+
+    /**
+    * @config constraintoviewport
+    * @description If set to true the menu will try to remain inside the 
+    * boundaries of the size of viewport.
+    * @default true
+    * @type Boolean
+    */
+    oConfig.addProperty(
+        "constraintoviewport", 
+        {
+            value:true, 
+            handler:this.configConstrainToViewport, 
+            validator:this.cfg.checkBoolean, 
+            supercedes:["iframe","x","y","xy"] 
+        } 
+    );
+
+
     /**
     * @config position
     * @description Defines how a menu should be positioned on the screen.  
@@ -3549,6 +3628,19 @@ initDefaultConfig: function() {
 	       handler: this.configMaxHeight
        } 
     );
+
+
+	/**
+	* Specifies the container element that the menu's markup should be 
+	* rendered into.
+	* @config container
+	* @type HTMLElement/String
+	* @default document.body
+	*/
+	this.cfg.addProperty(
+	   "container", 
+	   { value:document.body, handler:this.configContainer } 
+   );
 
 }
 
