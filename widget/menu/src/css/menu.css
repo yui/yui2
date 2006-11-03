@@ -252,19 +252,9 @@ div.yuimenu li.yuimenuitem img {
 
     height:8px;
     width:8px;
-    margin:0 -16px 0 10px;
+    margin:0 -16px 0 0;
+    padding-left:10px;
     border:0;
-
-    *margin-left:0;
-    *border-left-width:10px;
-    *border-style:solid;
-    *border-color:#f6f7ee;
-
-}
-
-div.yuimenu li.yuimenuitem.selected img.selected {
-
-    *border-color:#8c8ad0;
 
 }
 
@@ -282,7 +272,7 @@ div.yuimenu li.checked img.checked {
     border:0;
     position:absolute;
     left:6px;
-    _left:-16px; /* Underscore hack b/c this is for IE 5.5 and IE 6 only */
+    _left:-16px; /* Underscore hack b/c this is for IE 6 only */
     top:.5em;
     
 }
