@@ -819,11 +819,8 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
  */
 YAHOO.widget.LogReader.prototype._HTML2Text = function(sHtml) {
     if(sHtml) {
-        if(typeof html === "string") {
-            return
-            sHtml.replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
-        }
-        return sHtml.toString() || "";
+        sHtml += "";
+        return sHtml.replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
     }
     return "";
 };
