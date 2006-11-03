@@ -164,7 +164,8 @@ http://developer.yahoo.net/yui/license.txt
             var f = function(el) {
     
             // has to be part of document to have pageXY
-                if (el.offsetParent === null || this.getStyle(el, 'display') == 'none') {
+                if (el.parentNode === null || el.offsetParent === null ||
+                        this.getStyle(el, 'display') == 'none') {
                     return false;
                 }
                 
@@ -533,8 +534,7 @@ http://developer.yahoo.net/yui/license.txt
         /**
          * Returns a array of HTMLElements that pass the test applied by supplied boolean method
          * For optimized performance, include a tag and/or root node if possible
-         * @param {Function} method - A boolean method for testing elements which receives the element as its only argument.
-
+         * @param {Function} method A boolean method to test elements with
          * @param {String} tag (optional) The tag name of the elements being collected
          * @param {String/HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
          */
@@ -648,60 +648,67 @@ http://developer.yahoo.net/yui/license.txt
     };
 })();
 /**
- * @class A region is a representation of an object on a grid.  It is defined
+ * A region is a representation of an object on a grid.  It is defined
  * by the top, right, bottom, left extents, so is rectangular by default.  If 
  * other shapes are required, this class could be extended to support it.
- *
- * @param {int} t the top extent
- * @param {int} r the right extent
- * @param {int} b the bottom extent
- * @param {int} l the left extent
+ * @namespace YAHOO.util
+ * @class Region
+ * @param {Int} t the top extent
+ * @param {Int} r the right extent
+ * @param {Int} b the bottom extent
+ * @param {Int} l the left extent
  * @constructor
  */
 YAHOO.util.Region = function(t, r, b, l) {
 
     /**
      * The region's top extent
-     * @type int
+     * @property top
+     * @type Int
      */
     this.top = t;
     
     /**
      * The region's top extent as index, for symmetry with set/getXY
-     * @type int
+     * @property 1
+     * @type Int
      */
     this[1] = t;
 
     /**
      * The region's right extent
+     * @property right
      * @type int
      */
     this.right = r;
 
     /**
      * The region's bottom extent
-     * @type int
+     * @property bottom
+     * @type Int
      */
     this.bottom = b;
 
     /**
      * The region's left extent
-     * @type int
+     * @property left
+     * @type Int
      */
     this.left = l;
     
     /**
      * The region's left extent as index, for symmetry with set/getXY
-     * @type int
+     * @property 0
+     * @type Int
      */
     this[0] = l;
 };
 
 /**
  * Returns true if this region contains the region passed in
- *
+ * @method contains
  * @param  {Region}  region The region to evaluate
- * @return {boolean}        True if the region is contained with this region, 
+ * @return {Boolean}        True if the region is contained with this region, 
  *                          else false
  */
 YAHOO.util.Region.prototype.contains = function(region) {
@@ -714,8 +721,8 @@ YAHOO.util.Region.prototype.contains = function(region) {
 
 /**
  * Returns the area of the region
- *
- * @return {int} the region's area
+ * @method getArea
+ * @return {Int} the region's area
  */
 YAHOO.util.Region.prototype.getArea = function() {
     return ( (this.bottom - this.top) * (this.right - this.left) );
@@ -723,7 +730,7 @@ YAHOO.util.Region.prototype.getArea = function() {
 
 /**
  * Returns the region where the passed in region overlaps with this one
- *
+ * @method intersect
  * @param  {Region} region The region that intersects
  * @return {Region}        The overlap region, or null if there is no overlap
  */
@@ -743,7 +750,7 @@ YAHOO.util.Region.prototype.intersect = function(region) {
 /**
  * Returns the region representing the smallest region that can contain both
  * the passed in region and this region.
- *
+ * @method union
  * @param  {Region} region The region that to create the union with
  * @return {Region}        The union region
  */
@@ -758,6 +765,7 @@ YAHOO.util.Region.prototype.union = function(region) {
 
 /**
  * toString
+ * @method toString
  * @return string the region properties
  */
 YAHOO.util.Region.prototype.toString = function() {
@@ -771,7 +779,7 @@ YAHOO.util.Region.prototype.toString = function() {
 
 /**
  * Returns a region that is occupied by the DOM element
- *
+ * @method getRegion
  * @param  {HTMLElement} el The element
  * @return {Region}         The region that the element occupies
  * @static
@@ -790,13 +798,12 @@ YAHOO.util.Region.getRegion = function(el) {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * @class
- *
  * A point is a region that is special in that it represents a single point on 
  * the grid.
- *
- * @param {int} x The X position of the point
- * @param {int} y The Y position of the point
+ * @namespace YAHOO.util
+ * @class Point
+ * @param {Int} x The X position of the point
+ * @param {Int} y The Y position of the point
  * @constructor
  * @extends Region
  */
@@ -808,14 +815,16 @@ YAHOO.util.Point = function(x, y) {
    
     /**
      * The X position of the point, which is also the right, left and index zero (for Dom.getXY symmetry)
-     * @type int
+     * @property x
+     * @type Int
      */
 
     this.x = this.right = this.left = this[0] = x;
      
     /**
      * The Y position of the point, which is also the top, bottom and index one (for Dom.getXY symmetry)
-     * @type int
+     * @property y
+     * @type Int
      */
     this.y = this.top = this.bottom = this[1] = y;
 };
