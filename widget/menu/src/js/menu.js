@@ -1692,256 +1692,189 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
 
     var oEvent = p_aArgs[0];
     var oItem = p_aArgs[1];
-    var oItemCfg = oItem.cfg;
-    var oParentItem = this.parent;
-    var oRoot;
-    var oNextItem;
     var oSubmenu;
 
-    switch(oEvent.keyCode) {
+    if(oItem) {
 
-        case 27:    // Esc key
+        var oItemCfg = oItem.cfg;
+        var oParentItem = this.parent;
+        var oRoot;
+        var oNextItem;
 
-            if(this.cfg.getProperty("position") == "dynamic") {
-            
-                this.hide();
+
+        switch(oEvent.keyCode) {
     
-                if(this.parent) {
+            case 38:    // Up arrow
+            case 40:    // Down arrow
     
-                    this.parent.focus();
-                
-                }
-    
-            }
-            else if(this.activeItem) {
-    
-                oSubmenu = this.activeItem.cfg.getProperty("submenu");
-    
-                if(oSubmenu && oSubmenu.cfg.getProperty("visible")) {
-                
-                    oSubmenu.hide();
-                    this.activeItem.focus();
-                
-                }
-                else {
-    
-                    this.activeItem.cfg.setProperty("selected", false);
-                    this.activeItem.blur();
-            
-                }
-            
-            }
-    
-    
-            Event.preventDefault(oEvent);
-        
-        break;
-
-        case 38:    // Up arrow
-        case 40:    // Down arrow
-
-            if(
-                oItem == this.activeItem && 
-                !oItemCfg.getProperty("selected")
-            ) {
-
-                oItemCfg.setProperty("selected", true);
-
-            }
-            else {
-
-                oNextItem = (oEvent.keyCode == 38) ? 
-                    oItem.getPreviousEnabledSibling() : 
-                    oItem.getNextEnabledSibling();
-        
-                if(oNextItem) {
-
-                    this.clearActiveItem();
-
-                    oNextItem.cfg.setProperty("selected", true);
-                    oNextItem.focus();
-
-                }
-
-            }
-
-            Event.preventDefault(oEvent);
-
-        break;
-        
-
-        case 39:    // Right arrow
-
-            oSubmenu = oItemCfg.getProperty("submenu");
-
-            if(oSubmenu) {
-
-                if(!oItemCfg.getProperty("selected")) {
+                if(
+                    oItem == this.activeItem && 
+                    !oItemCfg.getProperty("selected")
+                ) {
     
                     oItemCfg.setProperty("selected", true);
     
                 }
-
-                oSubmenu.show();
-
-                oSubmenu.setInitialSelection();
-
-            }
-            else {
-
-                oRoot = this.getRoot();
-                
-                if(oRoot instanceof YAHOO.widget.MenuBar) {
-
-                    oNextItem = oRoot.activeItem.getNextEnabledSibling();
-
+                else {
+    
+                    oNextItem = (oEvent.keyCode == 38) ? 
+                        oItem.getPreviousEnabledSibling() : 
+                        oItem.getNextEnabledSibling();
+            
                     if(oNextItem) {
-                    
-                        oRoot.clearActiveItem();
-
+    
+                        this.clearActiveItem();
+    
                         oNextItem.cfg.setProperty("selected", true);
+                        oNextItem.focus();
 
-                        oSubmenu = oNextItem.cfg.getProperty("submenu");
-
-                        if(oSubmenu) {
-
-                            oSubmenu.show();
+                    }
+    
+                }
+    
+                Event.preventDefault(oEvent);
+    
+            break;
+            
+    
+            case 39:    // Right arrow
+    
+                oSubmenu = oItemCfg.getProperty("submenu");
+    
+                if(oSubmenu) {
+    
+                    if(!oItemCfg.getProperty("selected")) {
+        
+                        oItemCfg.setProperty("selected", true);
+        
+                    }
+    
+                    oSubmenu.show();
+    
+                    oSubmenu.setInitialSelection();
+    
+                }
+                else {
+    
+                    oRoot = this.getRoot();
+                    
+                    if(oRoot instanceof YAHOO.widget.MenuBar) {
+    
+                        oNextItem = oRoot.activeItem.getNextEnabledSibling();
+    
+                        if(oNextItem) {
+                        
+                            oRoot.clearActiveItem();
+    
+                            oNextItem.cfg.setProperty("selected", true);
+    
+                            oSubmenu = oNextItem.cfg.getProperty("submenu");
+    
+                            if(oSubmenu) {
+    
+                                oSubmenu.show();
+                            
+                            }
+    
+                            oNextItem.focus();
                         
                         }
-
-                        oNextItem.focus();
                     
                     }
                 
                 }
-            
-            }
-
-
-            Event.preventDefault(oEvent);
-
-        break;
-
-
-        case 37:    // Left arrow
-
-            if(oParentItem) {
-
-                var oParentMenu = oParentItem.parent;
-
-                if(oParentMenu instanceof YAHOO.widget.MenuBar) {
-
-                    oNextItem = 
-                        oParentMenu.activeItem.getPreviousEnabledSibling();
-
-                    if(oNextItem) {
-                    
-                        oParentMenu.clearActiveItem();
-
-                        oNextItem.cfg.setProperty("selected", true);
-
-                        oSubmenu = oNextItem.cfg.getProperty("submenu");
-
-                        if(oSubmenu) {
+    
+    
+                Event.preventDefault(oEvent);
+    
+            break;
+    
+    
+            case 37:    // Left arrow
+    
+                if(oParentItem) {
+    
+                    var oParentMenu = oParentItem.parent;
+    
+                    if(oParentMenu instanceof YAHOO.widget.MenuBar) {
+    
+                        oNextItem = 
+                            oParentMenu.activeItem.getPreviousEnabledSibling();
+    
+                        if(oNextItem) {
                         
-                            oSubmenu.show();
+                            oParentMenu.clearActiveItem();
+    
+                            oNextItem.cfg.setProperty("selected", true);
+    
+                            oSubmenu = oNextItem.cfg.getProperty("submenu");
+    
+                            if(oSubmenu) {
+                            
+                                oSubmenu.show();
+                            
+                            }
+    
+                            oNextItem.focus();
                         
-                        }
-
-                        oNextItem.focus();
+                        } 
                     
-                    } 
-                
+                    }
+                    else {
+    
+                        this.hide();
+    
+                        oParentItem.focus();
+                    
+                    }
+    
                 }
-                else {
+    
+                Event.preventDefault(oEvent);
+    
+            break;        
+    
+        }
 
-                    this.hide();
-
-                    oParentItem.focus();
-                
-                }
-
-            }
-
-            Event.preventDefault(oEvent);
-
-        break;        
 
     }
-    
-},
+    else if(oEvent.keyCode == 27) { // Esc key
 
+        if(this.cfg.getProperty("position") == "dynamic") {
+        
+            this.hide();
 
-/**
-* @method _onKeyPress
-* @description "keypress" event handler for a Menu instance.  Added as a 
-* subscriber to the "keypress" event when a Menu instance's height exceeds 
-* the value specified for its "maxheight" configuration property.
-* @protected
-* @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArgs Collection of arguments sent when the event 
-* was fired.
-* @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
-*/
-_onKeyPress: function(p_sType, p_aArgs, p_oMenu) {
-    
-    var oEvent = p_aArgs[0];
-    
-    if(this.activeItem && this.browser == "safari") {
+            if(this.parent) {
 
-        var oLI = this.activeItem.element;
-        var oBody = this.body;
-
-        if(oEvent.keyCode == 40) {
-
-            if(
-                (oLI.offsetTop + oLI.offsetHeight) > 
-                (oBody.scrollTop + oBody.offsetHeight)
-            ) {
-            
-                oBody.scrollTop = 
-                    (oLI.offsetTop + oLI.offsetHeight) - oBody.offsetHeight;
-            
-            }
-            else if(
-                (oLI.offsetTop + oLI.offsetHeight) < 
-                oBody.scrollTop
-            ) {
-
-                oBody.scrollTop = oLI.offsetTop;
+                this.parent.focus();
             
             }
 
         }
-        else {
+        else if(this.activeItem) {
 
-            if(oLI.offsetTop < oBody.scrollTop) {
+            oSubmenu = this.activeItem.cfg.getProperty("submenu");
 
-                oBody.scrollTop = oLI.offsetTop;
+            if(oSubmenu && oSubmenu.cfg.getProperty("visible")) {
+            
+                oSubmenu.hide();
+                this.activeItem.focus();
+            
             }
+            else {
 
-            else if(
-                oLI.offsetTop > 
-                (oBody.scrollTop + oBody.offsetHeight)
-            ) {
-
-                oBody.scrollTop = 
-                    (oLI.offsetTop + oLI.offsetHeight) - oBody.offsetHeight;
+                this.activeItem.cfg.setProperty("selected", false);
+                this.activeItem.blur();
+        
             }
-        }                        
+        
+        }
+
+
+        Event.preventDefault(oEvent);
     
     }
-
-
-    if(
-        this.browser == "gecko" && 
-        (oEvent.keyCode == 40 || oEvent.keyCode == 38)
-    ) {
-
-        YAHOO.util.Event.preventDefault(oEvent);
-
-    }
-
+    
 },
 
 
@@ -2857,74 +2790,6 @@ configHideDelay: function(p_sType, p_aArgs, p_oMenu) {
 
 
 /**
-* @method configMaxHeight
-* @description Event handler for when the "maxheight" configuration property of 
-* a Menu changes.
-* @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArgs Collection of arguments sent when the event 
-* was fired.
-* @param {YAHOO.widget.Menu} p_oMenu The Menu instance fired
-* the event.
-*/
-configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
-
-    var nMaxHeight = p_aArgs[0];
-    var oBody = this.body;
-    var bIE = (this.browser == "ie");
-    var bHandleKeyPress = 
-            (this.browser == "gecko" || this.browser == "safari");
-
-    if(nMaxHeight && oBody.offsetHeight > nMaxHeight) {
-        
-        Dom.setStyle(oBody, "height", (nMaxHeight + "px"));
-
-        if(bIE) {
-        
-            Dom.setStyle(oBody, "overflow-y", "auto");
-            Dom.setStyle(oBody, "overflow-x", "visible");
-
-        }
-        else {
-
-            Dom.setStyle(oBody, "overflow", "auto");
-
-        }
-
-        if(bHandleKeyPress) {
-    
-            this.keyPressEvent.subscribe(this._onKeyPress, this, true);
-    
-        }
-
-    }
-    else {
-
-        Dom.setStyle(oBody, "height", "auto");
-
-        if(bIE) {
-        
-            Dom.setStyle(oBody, "overflow-y", "visible");
-            Dom.setStyle(oBody, "overflow-x", "visible");
-        
-        }
-        else {
-
-            Dom.setStyle(oBody, "overflow", "visible");
-
-        }
-
-        if(bHandleKeyPress) {
-    
-            this.keyPressEvent.unsubscribe(this._onKeyPress, this);
-    
-        }
-    
-    }
-
-},
-
-
-/**
 * @method configContainer
 * @description Event handler for when the "container" configuration property of 
 * a Menu instance changes.
@@ -3606,24 +3471,6 @@ initDefaultConfig: function() {
             value: true,
             validator: oConfig.checkBoolean
         }
-    );
-
-
-    /**
-    * @config maxheight
-    * @description Defines the maximum height (in pixels) for a menu's body 
-    * element (&#60;div class=&#34;bd&#34;&#62;).  If value of the body's  
-    * offsetHeight exceeds the value specified for "maxheight" scrollbars 
-    * will be applied to the body element via the CSS "overflow" style property.
-    * @default null
-    * @type Number
-    */
-	oConfig.addProperty(
-	   "maxheight", 
-	   { 
-	       validator: oConfig.checkNumber, 
-	       handler: this.configMaxHeight
-       } 
     );
 
 
