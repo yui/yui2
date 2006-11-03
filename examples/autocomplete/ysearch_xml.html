@@ -98,7 +98,7 @@
             //     ...
             //     "Additional Param Name n"]
             oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_proxy.php", ["Result", "Title"]);
-            oACDS.responseType = oACDS.TYPE_XML;
+            oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_XML;
             oACDS.queryMatchContains = true;
             oACDS.scriptQueryAppend = "results=100"; // Needed for YWS
 
@@ -138,7 +138,7 @@ YAHOO.example.ACXml = function(){
             //     ...
             //     "Additional Param Name n"]
             oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_proxy.php", ["Result", "Title"]);
-            oACDS.responseType = oACDS.TYPE_XML;
+            oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_XML;
             oACDS.queryMatchContains = true;
             oACDS.scriptQueryAppend = "results=100"; // Needed for YWS
 

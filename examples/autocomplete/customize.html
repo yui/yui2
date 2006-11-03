@@ -174,7 +174,7 @@ YAHOO.example.ACCustomizable = function(){
             // DataSource 1
             oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_flat.php", ["\n", "\t"]);
             // This is the one non-default value other than constructor params
-            oACDS.responseType = YAHOO.widget.DS_XHR.prototype.TYPE_FLAT;
+            oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 
             // AutoComplete 1
             oAutoComp = new YAHOO.widget.AutoComplete('custominput','customcontainer', oACDS);

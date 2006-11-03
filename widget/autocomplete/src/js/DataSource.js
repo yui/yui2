@@ -3,46 +3,61 @@
 /****************************************************************************/
 
 /**
- * Class providing encapsulation of a data source. 
+ * The DataSource classes manages sending a request and returning response from a live
+ * database. Supported data include local JavaScript arrays and objects and databases
+ * accessible via XHR connections. Supported response formats include JavaScript arrays,
+ * JSON, XML, and flat-file textual data.
  *  
+ * @class DataSource
  * @constructor
- *
  */
 YAHOO.widget.DataSource = function() { 
     /* abstract class */
 };
 
 
-/***************************************************************************
- * Public constants
- ***************************************************************************/
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public constants
+//
+/////////////////////////////////////////////////////////////////////////////
+
 /**
  * Error message for null data responses.
  *
- * @type constant
+ * @property ERROR_DATANULL
+ * @type String
+ * @static
  * @final
  */
-YAHOO.widget.DataSource.prototype.ERROR_DATANULL = "Response data was null";
+YAHOO.widget.DataSource.ERROR_DATANULL = "Response data was null";
 
 /**
  * Error message for data responses with parsing errors.
  *
- * @type constant
+ * @property ERROR_DATAPARSE
+ * @type String
+ * @static
  * @final
  */
-YAHOO.widget.DataSource.prototype.ERROR_DATAPARSE = "Response data could not be parsed";
+YAHOO.widget.DataSource.ERROR_DATAPARSE = "Response data could not be parsed";
 
 
-/***************************************************************************
- * Public member variables
- ***************************************************************************/
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
 /**
  * Max size of the local cache.  Set to 0 to turn off caching.  Caching is
  * useful to reduce the number of server connections.  Recommended only for data
  * sources that return comprehensive results for queries or when stale data is
- * not an issue. Default: 15.
+ * not an issue.
  *
- * @type number
+ * @property maxCacheEntries
+ * @type Number
+ * @default 15
  */
 YAHOO.widget.DataSource.prototype.maxCacheEntries = 15;
 
@@ -51,50 +66,52 @@ YAHOO.widget.DataSource.prototype.maxCacheEntries = 15;
  * data source. If caching is on and queryMatchContains is true, the cache
  * returns results that "contain" the query string. By default,
  * queryMatchContains is set to false, meaning the cache only returns results
- * that "start with" the query string. Default: false.
+ * that "start with" the query string.
  *
- * @type boolean
+ * @property queryMatchContains
+ * @type Boolean
+ * @default false
  */
 YAHOO.widget.DataSource.prototype.queryMatchContains = false;
 
 /**
- * Data source query subset matching. If caching is on and queryMatchSubset is
+ * Enables query subset matching. If caching is on and queryMatchSubset is
  * true, substrings of queries will return matching cached results. For
  * instance, if the first query is for "abc" susequent queries that start with
  * "abc", like "abcd", will be queried against the cache, and not the live data
- * source. Recommended only for data sources that return comprehensive results
- * for queries with very few characters. Default: false.
+ * source. Recommended only for DataSources that return comprehensive results
+ * for queries with very few characters.
  *
- * @type boolean
+ * @property queryMatchSubset
+ * @type Boolean
+ * @default false
+ *
  */
 YAHOO.widget.DataSource.prototype.queryMatchSubset = false;
 
 /**
- * Data source query case-sensitivity matching. If caching is on and
+ * Enables query case-sensitivity matching. If caching is on and
  * queryMatchCase is true, queries will only return results for case-sensitive
- * matches. Default: false.
+ * matches.
  *
- * @type boolean
+ * @property queryMatchCase
+ * @type Boolean
+ * @default false
  */
 YAHOO.widget.DataSource.prototype.queryMatchCase = false;
 
 
-/***************************************************************************
- * Public methods
- ***************************************************************************/
- /**
- * Public accessor to the unique name of the data source instance.
- *
- * @return {string} Unique name of the data source instance
- */
-YAHOO.widget.DataSource.prototype.getName = function() {
-    return this._sName;
-};
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public methods
+//
+/////////////////////////////////////////////////////////////////////////////
 
  /**
- * Public accessor to the unique name of the data source instance.
+ * Public accessor to the unique name of the DataSource instance.
  *
- * @return {string} Unique name of the data source instance
+ * @method toString
+ * @return {String} Unique name of the DataSource instance
  */
 YAHOO.widget.DataSource.prototype.toString = function() {
     return "DataSource " + this._sName;
@@ -104,10 +121,10 @@ YAHOO.widget.DataSource.prototype.toString = function() {
  * Retrieves query results, first checking the local cache, then making the
  * query request to the live data source as defined by the function doQuery.
  *
- * @param {object} oCallbackFn Callback function defined by oParent object to
- *                             which to return results 
- * @param {string} sQuery Query string
- * @param {object} oParent The object instance that has requested data
+ * @method getResults
+ * @param oCallbackFn {HTMLFunction} Callback function defined by oParent object to which to return results.
+ * @param sQuery {String} Query string.
+ * @param oParent {Object} The object instance that has requested data.
  */
 YAHOO.widget.DataSource.prototype.getResults = function(oCallbackFn, sQuery, oParent) {
     
@@ -126,10 +143,10 @@ YAHOO.widget.DataSource.prototype.getResults = function(oCallbackFn, sQuery, oPa
  * source. Must call the callback function with the response returned from the
  * query. Populates cache (if enabled).
  *
- * @param {object} oCallbackFn Callback function implemented by oParent to
- *                             which to return results 
- * @param {string} sQuery Query string
- * @param {object} oParent The object instance that has requested data
+ * @method doQuery
+ * @param oCallbackFn {HTMLFunction} Callback function implemented by oParent to which to return results.
+ * @param sQuery {String} Query string.
+ * @param oParent {Object} The object instance that has requested data.
  */
 YAHOO.widget.DataSource.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
     /* override this */ 
@@ -137,6 +154,8 @@ YAHOO.widget.DataSource.prototype.doQuery = function(oCallbackFn, sQuery, oParen
 
 /**
  * Flushes cache.
+ *
+ * @method flushCache
  */
 YAHOO.widget.DataSource.prototype.flushCache = function() {
     if(this._aCache) {
@@ -148,79 +167,94 @@ YAHOO.widget.DataSource.prototype.flushCache = function() {
     this.cacheFlushEvent.fire(this);
 };
 
-/***************************************************************************
- * Events
- ***************************************************************************/
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public events
+//
+/////////////////////////////////////////////////////////////////////////////
+
 /**
- * Fired when a query is made to the live data source. Subscribers receive the
- * following array:<br>
- *     - args[0] The data source instance
- *     - args[1] The requesting object
- *     - args[2] The query string
+ * Fired when a query is made to the live data source.
+ *
+ * @event queryEvent
+ * @param oSelf {Object} The DataSource instance.
+ * @param oParent {Object} The requesting object.
+ * @param sQuery {String} The query string.
  */
 YAHOO.widget.DataSource.prototype.queryEvent = null;
 
 /**
- * Fired when a query is made to the local cache. Subscribers receive the
- * following array:<br>
- *     - args[0] The data source instance
- *     - args[1] The requesting object
- *     - args[2] The query string
+ * Fired when a query is made to the local cache.
+ *
+ * @event cacheQueryEvent
+ * @param oSelf {Object} The DataSource instance.
+ * @param oParent {Object} The requesting object.
+ * @param sQuery {String} The query string.
  */
 YAHOO.widget.DataSource.prototype.cacheQueryEvent = null;
 
 /**
- * Fired when data is retrieved from the live data source. Subscribers receive
- * the following array:<br>
- *     - args[0] The data source instance
- *     - args[1] The requesting object
- *     - args[2] The query string
- *     - args[3] Array of result objects
+ * Fired when data is retrieved from the live data source.
+ *
+ * @event getResultsEvent
+ * @param oSelf {Object} The DataSource instance.
+ * @param oParent {Object} The requesting object.
+ * @param sQuery {String} The query string.
+ * @param aResults {Array} Array of result objects.
  */
 YAHOO.widget.DataSource.prototype.getResultsEvent = null;
     
 /**
- * Fired when data is retrieved from the local cache. Subscribers receive the
- * following array :<br>
- *     - args[0] The data source instance
- *     - args[1] The requesting object
- *     - args[2] The query string
- *     - args[3] Array of result objects
+ * Fired when data is retrieved from the local cache.
+ *
+ * @event getCachedResultsEvent
+ * @param oSelf {Object} The DataSource instance.
+ * @param oParent {Object} The requesting object.
+ * @param sQuery {String} The query string.
+ * @param aResults {Array} Array of result objects.
  */
 YAHOO.widget.DataSource.prototype.getCachedResultsEvent = null;
 
 /**
- * Fired when an error is encountered with the live data source. Subscribers
- * receive the following array:<br>
- *     - args[0] The data source instance
- *     - args[1] The requesting object
- *     - args[2] The query string
- *     - args[3] Error message string
+ * Fired when an error is encountered with the live data source.
+ *
+ * @event dataErrorEvent
+ * @param oSelf {Object} The DataSource instance.
+ * @param oParent {Object} The requesting object.
+ * @param sQuery {String} The query string.
+ * @param sMsg {String} Error message string
  */
 YAHOO.widget.DataSource.prototype.dataErrorEvent = null;
 
 /**
- * Fired when the local cache is flushed. Subscribers receive the following
- * array :<br>
- *     - args[0] The data source instance
+ * Fired when the local cache is flushed.
+ *
+ * @event cacheFlushEvent
+ * @param oSelf {Object} The DataSource instance
  */
 YAHOO.widget.DataSource.prototype.cacheFlushEvent = null;
 
-/***************************************************************************
- * Private member variables
- ***************************************************************************/
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
 /**
- * Internal class variable to index multiple data source instances.
+ * Internal class variable to index multiple DataSource instances.
  *
- * @type number
+ * @property _nIndex
+ * @type Number
  * @private
+ * @static
  */
 YAHOO.widget.DataSource._nIndex = 0;
 
 /**
- * Name of data source instance.
+ * Name of DataSource instance.
  *
- * @type string
+ * @property _sName
+ * @type String
  * @private
  */
 YAHOO.widget.DataSource.prototype._sName = null;
@@ -228,18 +262,23 @@ YAHOO.widget.DataSource.prototype._sName = null;
 /**
  * Local cache of data result objects indexed chronologically.
  *
- * @type array
+ * @property _aCache
+ * @type Array
  * @private
  */
 YAHOO.widget.DataSource.prototype._aCache = null;
 
 
-/***************************************************************************
- * Private methods
- ***************************************************************************/
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
 /**
- * Initializes data source instance.
+ * Initializes DataSource instance.
  *  
+ * @method _init
  * @private
  */
 YAHOO.widget.DataSource.prototype._init = function() {
@@ -269,14 +308,14 @@ YAHOO.widget.DataSource.prototype._init = function() {
  * cache is full. Newer items will have higher indexes, the oldest item will have
  * index of 0. 
  *
- * @param {object} resultObj  Object literal of data results, including internal
- *                            properties and an array of result objects
+ * @method _addCacheElem
+ * @param oResult {Object} Data result object, including array of results.
  * @private
  */
-YAHOO.widget.DataSource.prototype._addCacheElem = function(resultObj) {
+YAHOO.widget.DataSource.prototype._addCacheElem = function(oResult) {
     var aCache = this._aCache;
     // Don't add if anything important is missing.
-    if(!aCache || !resultObj || !resultObj.query || !resultObj.results) {
+    if(!aCache || !oResult || !oResult.query || !oResult.results) {
         return;
     }
     
@@ -286,7 +325,7 @@ YAHOO.widget.DataSource.prototype._addCacheElem = function(resultObj) {
     }
         
     // Add to cache, at the end of the array
-    aCache.push(resultObj);
+    aCache.push(oResult);
 };
 
 /**
@@ -294,12 +333,11 @@ YAHOO.widget.DataSource.prototype._addCacheElem = function(resultObj) {
  * function is called with the results, and the cached is refreshed so that it
  * is now the newest element.  
  *
- * @param {object} oCallbackFn Callback function defined by oParent object to 
- *                             which to return results 
- * @param {string} sQuery Query string
- * @param {object} oParent The object instance that has requested data
- * @return {array} aResults Result object from local cache if found, otherwise 
- *                          null
+ * @method _doQueryCache
+ * @param oCallbackFn {HTMLFunction} Callback function defined by oParent object to which to return results.
+ * @param sQuery {String} Query string.
+ * @param oParent {Object} The object instance that has requested data.
+ * @return aResults {Array} Array of results from local cache if found, otherwise null.
  * @private 
  */
 YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, oParent) {
@@ -401,14 +439,15 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
 /**
  * Implementation of YAHOO.widget.DataSource using XML HTTP requests that return
  * query results.
- * requires YAHOO.util.Connect XMLHTTPRequest library
- * extends YAHOO.widget.DataSource
  *  
+ * @class DS_XHR
+ * @extends YAHOO.widget.DataSource
+ * @requires connection
  * @constructor
- * @param {string} sScriptURI Absolute or relative URI to script that returns 
- *                            query results as JSON, XML, or delimited flat data
- * @param {array} aSchema Data schema definition of results
- * @param {object} oConfigs Optional object literal of config params
+ * @param sScriptURI {String} Absolute or relative URI to script that returns query
+ * results as JSON, XML, or delimited flat-file data.
+ * @param aSchema {Array} Data schema definition of results.
+ * @param oConfigs {Object} (optional) Object literal of config params.
  */
 YAHOO.widget.DS_XHR = function(sScriptURI, aSchema, oConfigs) {
     // Set any config params passed in to override defaults
@@ -433,50 +472,65 @@ YAHOO.widget.DS_XHR = function(sScriptURI, aSchema, oConfigs) {
 
 YAHOO.widget.DS_XHR.prototype = new YAHOO.widget.DataSource();
 
-/***************************************************************************
- * Public constants
- ***************************************************************************/
-/**
- * JSON data type
- *
- * @type constant
- * @final
- */
-YAHOO.widget.DS_XHR.prototype.TYPE_JSON = 0;
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public constants
+//
+/////////////////////////////////////////////////////////////////////////////
 
 /**
- * XML data type
+ * JSON data type.
  *
- * @type constant
+ * @property TYPE_JSON
+ * @type Number
+ * @static
  * @final
  */
-YAHOO.widget.DS_XHR.prototype.TYPE_XML = 1;
+YAHOO.widget.DS_XHR.TYPE_JSON = 0;
 
 /**
- * Flat file data type
+ * XML data type.
  *
- * @type constant
+ * @property TYPE_XML
+ * @type Number
+ * @static
  * @final
  */
-YAHOO.widget.DS_XHR.prototype.TYPE_FLAT = 2;
+YAHOO.widget.DS_XHR.TYPE_XML = 1;
+
+/**
+ * Flat-file data type.
+ *
+ * @property TYPE_FLAT
+ * @type Number
+ * @static
+ * @final
+ */
+YAHOO.widget.DS_XHR.TYPE_FLAT = 2;
 
 /**
  * Error message for XHR failure.
  *
- * @type constant
+ * @property ERROR_DATAXHR
+ * @type String
+ * @static
  * @final
  */
-YAHOO.widget.DS_XHR.prototype.ERROR_DATAXHR = "XHR response failed";
+YAHOO.widget.DS_XHR.ERROR_DATAXHR = "XHR response failed";
 
-/***************************************************************************
- * Public member variables
- ***************************************************************************/
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
 /**
  * Alias to YUI Connection Manager. Allows implementers to specify their own
  * subclasses of the YUI Connection Manager utility.
- * Default: YAHOO.util.Connect.
  *
- * @type object
+ * @property connMgr
+ * @type Object
+ * @default YAHOO.util.Connect
  */
 YAHOO.widget.DS_XHR.prototype.connMgr = YAHOO.util.Connect;
 
@@ -484,28 +538,29 @@ YAHOO.widget.DS_XHR.prototype.connMgr = YAHOO.util.Connect;
  * Number of milliseconds the XHR connection will wait for a server response. A
  * a value of zero indicates the XHR connection will wait forever. Any value
  * greater than zero will use the Connection utility's Auto-Abort feature.
- * Default: 0.
  *
- * @type number
+ * @property connTimeout
+ * @type Number
+ * @default 0
  */
 YAHOO.widget.DS_XHR.prototype.connTimeout = 0;
 
 /**
  * Absolute or relative URI to script that returns query results. For instance,
- * queries will be sent to
- *   <scriptURI>?<scriptQueryParam>=userinput
+ * queries will be sent to &lt;scriptURI&gt;?&lt;scriptQueryParam&gt;=userinput
  *
- * @type string
+ * @property scriptURI
+ * @type String
  */
 YAHOO.widget.DS_XHR.prototype.scriptURI = null;
 
 /**
  * Query string parameter name sent to scriptURI. For instance, queries will be
- * sent to
- *   <scriptURI>?<scriptQueryParam>=userinput
- * Default: "query".
+ * sent to &lt;scriptURI&gt;?&lt;scriptQueryParam&gt;=userinput
  *
- * @type string
+ * @property scriptQueryParam
+ * @type String
+ * @default "query"
  */
 YAHOO.widget.DS_XHR.prototype.scriptQueryParam = "query";
 
@@ -513,53 +568,61 @@ YAHOO.widget.DS_XHR.prototype.scriptQueryParam = "query";
  * String of key/value pairs to append to requests made to scriptURI. Define
  * this string when you want to send additional query parameters to your script.
  * When defined, queries will be sent to
- *   <scriptURI>?<scriptQueryParam>=userinput&<scriptQueryAppend>
- * Default: "".
+ * &lt;scriptURI&gt;?&lt;scriptQueryParam&gt;=userinput&&lt;scriptQueryAppend&gt;
  *
- * @type string
+ * @property scriptQueryAppend
+ * @type String
+ * @default ""
  */
 YAHOO.widget.DS_XHR.prototype.scriptQueryAppend = "";
 
 /**
- * XHR response data type. Other types that may be defined are TYPE_XML and
- * TYPE_FLAT. Default: TYPE_JSON.
+ * XHR response data type. Other types that may be defined are YAHOO.widget.DS_XHR.TYPE_XML
+ * and YAHOO.widget.DS_XHR.TYPE_FLAT.
  *
- * @type type
+ * @property responseType
+ * @type String
+ * @default YAHOO.widget.DS_XHR.TYPE_JSON
  */
-YAHOO.widget.DS_XHR.prototype.responseType = YAHOO.widget.DS_XHR.prototype.TYPE_JSON;
+YAHOO.widget.DS_XHR.prototype.responseType = YAHOO.widget.DS_XHR.TYPE_JSON;
 
 /**
  * String after which to strip results. If the results from the XHR are sent
  * back as HTML, the gzip HTML comment appears at the end of the data and should
  * be ignored.  Default: "\n&lt;!--"
  *
- * @type string
+ * @property responseStripAfter
+ * @type String
+ * @default "\n<!--"
  */
 YAHOO.widget.DS_XHR.prototype.responseStripAfter = "\n<!--";
 
-/***************************************************************************
- * Public methods
- ***************************************************************************/
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
 /**
  * Queries the live data source defined by scriptURI for results. Results are
  * passed back to a callback function.
  *  
- * @param {object} oCallbackFn Callback function defined by oParent object to 
- *                             which to return results 
- * @param {string} sQuery Query string
- * @param {object} oParent The object instance that has requested data
+ * @method doQuery
+ * @param oCallbackFn {HTMLFunction} Callback function defined by oParent object to which to return results.
+ * @param sQuery {String} Query string.
+ * @param oParent {Object} The object instance that has requested data.
  */
 YAHOO.widget.DS_XHR.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
-    var isXML = (this.responseType == this.TYPE_XML);
+    var isXML = (this.responseType == YAHOO.widget.DS_XHR.TYPE_XML);
     var sUri = this.scriptURI+"?"+this.scriptQueryParam+"="+sQuery;
     if(this.scriptQueryAppend.length > 0) {
         sUri += "&" + this.scriptQueryAppend;
     }
-    YAHOO.log("Data source is querying URL " + sUri, "info", this.toString());
+    YAHOO.log("DataSource is querying URL " + sUri, "info", this.toString());
     var oResponse = null;
     
     var oSelf = this;
-    /**
+    /*
      * Sets up ajax request callback
      *
      * @param {object} oReq          HTTPXMLRequest object
@@ -568,8 +631,8 @@ YAHOO.widget.DS_XHR.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
     var responseSuccess = function(oResp) {
         // Response ID does not match last made request ID.
         if(!oSelf._oConn || (oResp.tId != oSelf._oConn.tId)) {
-            oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATANULL);
-            YAHOO.log(oSelf.ERROR_DATANULL, "error", this.toString());
+            oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, YAHOO.widget.DataSource.ERROR_DATANULL);
+            YAHOO.log(YAHOO.widget.DataSource.ERROR_DATANULL, "error", this.toString());
             return;
         }
 //DEBUG
@@ -585,8 +648,8 @@ YAHOO.log('responseXML.xml: '+oResp.responseXML.xml,'warn');*/
             oResp = oResp.responseXML;
         }
         if(oResp === null) {
-            oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATANULL);
-            YAHOO.log(oSelf.ERROR_DATANULL, "error", oSelf.toString());
+            oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, YAHOO.widget.DataSource.ERROR_DATANULL);
+            YAHOO.log(YAHOO.widget.DataSource.ERROR_DATANULL, "error", oSelf.toString());
             return;
         }
 
@@ -595,8 +658,8 @@ YAHOO.log('responseXML.xml: '+oResp.responseXML.xml,'warn');*/
         resultObj.query = decodeURIComponent(sQuery);
         resultObj.results = aResults;
         if(aResults === null) {
-            oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATAPARSE);
-            YAHOO.log(oSelf.ERROR_DATAPARSE, "error", oSelf.toString());
+            oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, YAHOO.widget.DataSource.ERROR_DATAPARSE);
+            YAHOO.log(YAHOO.widget.DataSource.ERROR_DATAPARSE, "error", oSelf.toString());
             return;
         }
         else {
@@ -607,8 +670,8 @@ YAHOO.log('responseXML.xml: '+oResp.responseXML.xml,'warn');*/
     };
 
     var responseFailure = function(oResp) {
-        oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, oSelf.ERROR_DATAXHR);
-        YAHOO.log(oSelf.ERROR_DATAXHR + ": " + oResp.statusText, "error", oSelf.toString());
+        oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, YAHOO.widget.DS_XHR.ERROR_DATAXHR);
+        YAHOO.log(YAHOO.widget.DS_XHR.ERROR_DATAXHR + ": " + oResp.statusText, "error", oSelf.toString());
         return;
     };
     
@@ -632,10 +695,11 @@ YAHOO.log('responseXML.xml: '+oResp.responseXML.xml,'warn');*/
  * Parses raw response data into an array of result objects. The result data key
  * is always stashed in the [0] element of each result object. 
  *
- * @param {string} sQuery Query string
- * @param {object} oResponse The raw response data to parse
- * @param {object} oParent The object instance that has requested data
- * @returns {array} Array of result objects
+ * @method parseResponse
+ * @param sQuery {String} Query string.
+ * @param oResponse {Object} The raw response data to parse.
+ * @param oParent {Object} The object instance that has requested data.
+ * @returns {Array} Array of result objects.
  */
 YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParent) {
     var aSchema = this.schema;
@@ -650,7 +714,7 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
     }
 
     switch (this.responseType) {
-        case this.TYPE_JSON:
+        case YAHOO.widget.DS_XHR.TYPE_JSON:
             var jsonList;
             // Divert KHTML clients from JSON lib
             if(window.JSON && (navigator.userAgent.toLowerCase().indexOf('khtml')== -1)) {
@@ -733,7 +797,7 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                 aResults.unshift(aResultItem);
             }
             break;
-        case this.TYPE_XML:
+        case YAHOO.widget.DS_XHR.TYPE_XML:
             // Get the collection of results
             var xmlList = oResponse.getElementsByTagName(aSchema[0]);
             if(!xmlList) {
@@ -774,7 +838,7 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                 aResults.unshift(aFieldSet);
             }
             break;
-        case this.TYPE_FLAT:
+        case YAHOO.widget.DS_XHR.TYPE_FLAT:
             if(oResponse.length > 0) {
                 // Delete the last line delimiter at the end of the data if it exists
                 var newLength = oResponse.length-aSchema[0].length;
@@ -801,14 +865,17 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
     }
 };            
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private member variables
+//
+/////////////////////////////////////////////////////////////////////////////
 
-/***************************************************************************
- * Private member variables
- ***************************************************************************/
 /**
  * XHR connection object.
  *
- * @type object
+ * @property _oConn
+ * @type Object
  * @private
  */
 YAHOO.widget.DS_XHR.prototype._oConn = null;
@@ -819,15 +886,14 @@ YAHOO.widget.DS_XHR.prototype._oConn = null;
 /****************************************************************************/
 
 /**
- * Implementation of YAHOO.widget.DataSource using a native Javascript struct as
+ * Implementation of YAHOO.widget.DataSource using a native Javascript function as
  * its live data source.
  *  
+ * @class DS_JSFunction
  * @constructor
- * extends YAHOO.widget.DataSource 
- *  
- * @param {string} oFunction In-memory Javascript function that returns query
- *                           results as an array of objects
- * @param {object} oConfigs Optional object literal of config params
+ * @extends YAHOO.widget.DataSource
+ * @param oFunction {String} In-memory Javascript function that returns query results as an array of objects.
+ * @param oConfigs {Object} (optional) Object literal of config params.
  */
 YAHOO.widget.DS_JSFunction = function(oFunction, oConfigs) {
     // Set any config params passed in to override defaults
@@ -851,28 +917,34 @@ YAHOO.widget.DS_JSFunction = function(oFunction, oConfigs) {
 
 YAHOO.widget.DS_JSFunction.prototype = new YAHOO.widget.DataSource();
 
-/***************************************************************************
- * Public member variables
- ***************************************************************************/
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
 /**
  * In-memory Javascript function that returns query results.
  *
- * @type function
+ * @property dataFunction
+ * @type HTMLFunction
  */
 YAHOO.widget.DS_JSFunction.prototype.dataFunction = null;
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public methods
+//
+/////////////////////////////////////////////////////////////////////////////
 
-/***************************************************************************
- * Public methods
- ***************************************************************************/
 /**
  * Queries the live data source defined by function for results. Results are
  * passed back to a callback function.
  *  
- * @param {object} oCallbackFn Callback function defined by oParent object to 
- *                             which to return results 
- * @param {string} sQuery Query string
- * @param {object} oParent The object instance that has requested data
+ * @method doQuery
+ * @param oCallbackFn {HTMLFunction} Callback function defined by oParent object to which to return results.
+ * @param sQuery {String} Query string.
+ * @param oParent {Object} The object instance that has requested data.
  */
 YAHOO.widget.DS_JSFunction.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
     var oFunction = this.dataFunction;
@@ -880,8 +952,8 @@ YAHOO.widget.DS_JSFunction.prototype.doQuery = function(oCallbackFn, sQuery, oPa
     
     aResults = oFunction(sQuery);
     if(aResults === null) {
-        this.dataErrorEvent.fire(this, oParent, sQuery, this.ERROR_DATANULL);
-        YAHOO.log(oSelf.ERROR_DATANULL, "error", this.toString());
+        this.dataErrorEvent.fire(this, oParent, sQuery, YAHOO.widget.DataSource.ERROR_DATANULL);
+        YAHOO.log(YAHOO.widget.DataSource.ERROR_DATANULL, "error", this.toString());
         return;
     }
     
@@ -903,11 +975,11 @@ YAHOO.widget.DS_JSFunction.prototype.doQuery = function(oCallbackFn, sQuery, oPa
  * Implementation of YAHOO.widget.DataSource using a native Javascript array as
  * its live data source.
  *
+ * @class DS_JSArray
  * @constructor
- * extends YAHOO.widget.DataSource
- *
- * @param {string} aData In-memory Javascript array of simple string data
- * @param {object} oConfigs Optional object literal of config params
+ * @extends YAHOO.widget.DataSource
+ * @param aData {Array} In-memory Javascript array of simple string data.
+ * @param oConfigs {Object} (optional) Object literal of config params.
  */
 YAHOO.widget.DS_JSArray = function(aData, oConfigs) {
     // Set any config params passed in to override defaults
@@ -931,62 +1003,71 @@ YAHOO.widget.DS_JSArray = function(aData, oConfigs) {
 
 YAHOO.widget.DS_JSArray.prototype = new YAHOO.widget.DataSource();
 
-/***************************************************************************
- * Public member variables
- ***************************************************************************/
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
 /**
  * In-memory Javascript array of strings.
  *
- * @type array
+ * @property data
+ * @type Array
  */
 YAHOO.widget.DS_JSArray.prototype.data = null;
 
-/***************************************************************************
- * Public methods
- ***************************************************************************/
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
 /**
  * Queries the live data source defined by data for results. Results are passed
  * back to a callback function.
  *
- * @param {object} oCallbackFn Callback function defined by oParent object to
- *                             which to return results
- * @param {string} sQuery Query string
- * @param {object} oParent The object instance that has requested data
+ * @method doQuery
+ * @param oCallbackFn {HTMLFunction} Callback function defined by oParent object to which to return results.
+ * @param sQuery {String} Query string.
+ * @param oParent {Object} The object instance that has requested data.
  */
 YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
     var aData = this.data; // the array
     var aResults = []; // container for results
     var bMatchFound = false;
     var bMatchContains = this.queryMatchContains;
-    if(!this.queryMatchCase) {
-        sQuery = sQuery.toLowerCase();
-    }
-
-    // Loop through each element of the array...
-    // which can be a string or an array of strings
-    for(var i = aData.length-1; i >= 0; i--) {
-        var aDataset = [];
-
-        if(aData[i]) {
-            if(aData[i].constructor == String) {
-                aDataset[0] = aData[i];
-            }
-            else if(aData[i].constructor == Array) {
-                aDataset = aData[i];
-            }
+    if(sQuery) {
+        if(!this.queryMatchCase) {
+            sQuery = sQuery.toLowerCase();
         }
 
-        if(aDataset[0] && (aDataset[0].constructor == String)) {
-            var sKeyIndex = (this.queryMatchCase) ?
-            encodeURIComponent(aDataset[0]).indexOf(sQuery):
-            encodeURIComponent(aDataset[0]).toLowerCase().indexOf(sQuery);
+        // Loop through each element of the array...
+        // which can be a string or an array of strings
+        for(var i = aData.length-1; i >= 0; i--) {
+            var aDataset = [];
 
-            // A STARTSWITH match is when the query is found at the beginning of the key string...
-            if((!bMatchContains && (sKeyIndex === 0)) ||
-            // A CONTAINS match is when the query is found anywhere within the key string...
-            (bMatchContains && (sKeyIndex > -1))) {
-                // Stash a match into aResults[].
-                aResults.unshift(aDataset);
+            if(aData[i]) {
+                if(aData[i].constructor == String) {
+                    aDataset[0] = aData[i];
+                }
+                else if(aData[i].constructor == Array) {
+                    aDataset = aData[i];
+                }
+            }
+
+            if(aDataset[0] && (aDataset[0].constructor == String)) {
+                var sKeyIndex = (this.queryMatchCase) ?
+                encodeURIComponent(aDataset[0]).indexOf(sQuery):
+                encodeURIComponent(aDataset[0]).toLowerCase().indexOf(sQuery);
+
+                // A STARTSWITH match is when the query is found at the beginning of the key string...
+                if((!bMatchContains && (sKeyIndex === 0)) ||
+                // A CONTAINS match is when the query is found anywhere within the key string...
+                (bMatchContains && (sKeyIndex > -1))) {
+                    // Stash a match into aResults[].
+                    aResults.unshift(aDataset);
+                }
             }
         }
     }

@@ -105,7 +105,7 @@
             oACDS = new YAHOO.widget.DS_XHR("./php/flickr_proxy.php",
                 ["photo", "title", "id", "owner", "secret", "server"]);
             oACDS.scriptQueryParam = "tags";
-            oACDS.responseType = YAHOO.widget.DS_XHR.prototype.TYPE_XML;
+            oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_XML;
             oACDS.maxCacheEntries = 0;
             oACDS.scriptQueryAppend = "method=flickr.photos.search";
 
@@ -165,7 +165,7 @@ YAHOO.example.ACFlickr = function() {
             oACDS = new YAHOO.widget.DS_XHR("./php/flickr_proxy.php",
                 ["photo", "title", "id", "owner", "secret", "server"]);
             oACDS.scriptQueryParam = "tags";
-            oACDS.responseType = YAHOO.widget.DS_XHR.prototype.TYPE_XML;
+            oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_XML;
             oACDS.maxCacheEntries = 0;
             oACDS.scriptQueryAppend = "method=flickr.photos.search";
 
