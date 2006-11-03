@@ -97,12 +97,12 @@ body{text-align:center;}
 .yui-g .yui-u, 
 .yui-g .yui-g, 
 .yui-gc .yui-u,
-.yui-gc .yui-g .yui-u
+.yui-gc .yui-g .yui-u,
 .yui-ge .yui-u, 
 .yui-gf .yui-u{float:right;display:inline;}
 .yui-g .first, 
 .yui-gc .first,
-.yui-gc .first .first 
+.yui-gc .first .first,
 .yui-gd .first, 
 .yui-ge .first, 
 .yui-gf .first{float:left;}
