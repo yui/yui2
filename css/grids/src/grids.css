@@ -93,19 +93,23 @@ body{text-align:center;}
 	dispay:block;margin:0 0 1em 0;
 	float:none;width:auto;
 }
-
 /* GRIDS (not TEMPLATES) */
 .yui-g .yui-u, 
 .yui-g .yui-g, 
+.yui-gc .yui-u,
+.yui-gc .yui-g .yui-u
 .yui-ge .yui-u, 
 .yui-gf .yui-u{float:right;display:inline;}
 .yui-g .first, 
+.yui-gc .first,
+.yui-gc .first .first 
 .yui-gd .first, 
 .yui-ge .first, 
 .yui-gf .first{float:left;}
 .yui-g .yui-u, 
 .yui-g .yui-g{width:49.1%;}
-.yui-g .yui-g .yui-u{width:48.1%;}
+.yui-g .yui-g .yui-u,
+.yui-gc .yui-g .yui-u {width:48.1%;}
 .yui-gb .yui-u, 
 .yui-gc .yui-u, 
 .yui-gd .yui-u{float:left;margin-left:2%;*margin-left:1.895%;width:32%;}
