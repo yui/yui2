@@ -1606,6 +1606,8 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
 
                 this.activeItem = oItem;
 
+                oItem.cfg.setProperty("selected", true);
+
                 oSubmenu.show();
     
             }

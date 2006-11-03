@@ -243,6 +243,10 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
 
         var Event = YAHOO.util.Event;
         var Dom = YAHOO.util.Dom;
+
+        var oEvent = p_aArgs[0];
+        var oTarget = Event.getTarget(oEvent);
+
         var oActiveItem = this.activeItem;
         var oConfig = this.cfg;
 
@@ -261,13 +265,14 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
         oItem.cfg.setProperty("selected", true);
         oItem.focus();
     
-    
+
         // Show the submenu for the item
     
         var oSubmenu = oItem.cfg.getProperty("submenu");
 
-        if(oSubmenu) {
-    
+
+        if(oSubmenu && oTarget != oItem.submenuIndicator) {
+        
             if(oSubmenu.cfg.getProperty("visible")) {
             
                 oSubmenu.hide();
@@ -278,7 +283,7 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
                 oSubmenu.show();                    
             
             }
-    
+        
         }
     
     }
