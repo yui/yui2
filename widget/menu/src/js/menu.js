@@ -373,27 +373,6 @@ init: function(p_oElement, p_oConfig) {
 
                 this.beforeInitEvent.fire(YAHOO.widget.Menu);
 
-
-                if(!this.parent) {
-        
-                    // Hide all submenus by default
-                
-                    var hideSubmenu = function(p_oElement) {
-        
-                        if(p_oElement.parentNode.tagName == "LI") {
-        
-                            Dom.setStyle(p_oElement, "position", "absolute");
-                            Dom.setStyle(p_oElement, "visibility", "hidden");
-        
-                        }
-                    
-                    };
-        
-                    Dom.getElementsBy(hideSubmenu, "DIV", oElement);
-        
-                }
-
-
                 this.logger = new YAHOO.widget.LogWriter(this.toString());
 
                 this.logger.log("Source element: " + this.srcElement.tagName);
@@ -414,10 +393,7 @@ init: function(p_oElement, p_oConfig) {
                     subclass level.
                 */ 
 
-                YAHOO.widget.Menu.superclass.init.call(
-                    this, 
-                    Dom.generateId()
-                );
+                YAHOO.widget.Menu.superclass.init.call(this, Dom.generateId());
 
                 this.beforeInitEvent.fire(YAHOO.widget.Menu);
 

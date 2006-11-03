@@ -8,6 +8,15 @@ div.yuimenu {
     
 }
 
+/* Submenus are positioned absolute and hidden by default */
+
+div.yuimenu div.yuimenu,
+div.yuimenubar div.yuimenu {
+
+    position:absolute;
+    visibility:hidden;
+
+}
 
 /* MenuBar Styles */
 
