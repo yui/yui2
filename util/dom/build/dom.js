@@ -15,7 +15,7 @@ http://developer.yahoo.net/yui/license.txt
     var ua = navigator.userAgent.toLowerCase(),
         isOpera = (ua.indexOf('opera') > -1),
         isSafari = (ua.indexOf('safari') > -1),
-        isGecko = (ua.indexOf('gecko') > -1),
+        isGecko = (!isOpera && !isSafari && ua.indexOf('gecko') > -1),
         isIE = (!isOpera && ua.indexOf('msie') > -1); 
     
     // regex cache
