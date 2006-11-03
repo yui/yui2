@@ -1,14 +1,29 @@
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
-/**
- * Singleton providing core logging functionality. Saves logs written through the
- * global YAHOO.log function or written by LogWriter. Provides access to logs
- * for reading by LogReader. Log messages can be automatically output to browser
- * console such as the Firebug extension to Firefox or Safari's JavaScript
- * console, if present.
+ /**
+ * The Logger widget provides a simple way to read or write log messages in
+ * JavaScript code. Integration with the YUI Library's debug builds allow
+ * implementers to access under the hood events, errors, and debugging messages.
+ * Output may be read through a LogReader console and/or output to a browser
+ * console.
  *
- * requires YAHOO.util.Event Event utility
+ * @module logger
+ * @requires yahoo, event, dom
+ * @optional dragdrop
+ * @title Logger Widget
+ */
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+/**
+ * The singleton Logger class provides core log management functionality. Saves
+ * logs written through the global YAHOO.log function or written by a LogWriter
+ * instance. Provides access to logs for reading by a LogReader instance or
+ * native browser console such as the Firebug extension to Firefox or Safari's
+ * JavaScript console through integration with the console.log() method.
+ *
+ * @class Logger
+ * @static
  */
 YAHOO.widget.Logger = {
     // Initialize members
@@ -22,47 +37,21 @@ YAHOO.widget.Logger = {
     _lastTime: null // timestamp of last logged message
 };
 
-/***************************************************************************
- * Events
- ***************************************************************************/
-/**
- * Fired when a new category has been created. Subscribers receive the following
- * array:<br>
- *     - args[0] The category name
- */
-YAHOO.widget.Logger.categoryCreateEvent = new YAHOO.util.CustomEvent("categoryCreate", this, true);
-
-/**
- * Fired when a new source has been named. Subscribers receive the following
- * array:<br>
- *     - args[0] The source name
- */
-YAHOO.widget.Logger.sourceCreateEvent = new YAHOO.util.CustomEvent("sourceCreate", this, true);
-
-/**
- * Fired when a new log message has been created. Subscribers receive the
- * following array:<br>
- *     - args[0] The log message
- */
-YAHOO.widget.Logger.newLogEvent = new YAHOO.util.CustomEvent("newLog", this, true);
-
-/**
- * Fired when the Logger has been reset has been created.
- */
-YAHOO.widget.Logger.logResetEvent = new YAHOO.util.CustomEvent("logReset", this, true);
-
-/***************************************************************************
- * Public methods
- ***************************************************************************/
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public methods
+//
+/////////////////////////////////////////////////////////////////////////////
 /**
  * Saves a log message to the stack and fires newLogEvent. If the log message is
  * assigned to an unknown category, creates a new category. If the log message is
  * from an unknown source, creates a new source.  If browser console is enabled,
  * outputs the log message to browser console.
  *
- * @param {string} sMsg The log message
- * @param {string} sCategory Category of log message, or null
- * @param {string} sSource Source of LogWriter, or null if global
+ * @method log
+ * @param sMsg {String} The log message.
+ * @param sCategory {String} Category of log message, or null.
+ * @param sSource {String} Source of LogWriter, or null if global.
  */
 YAHOO.widget.Logger.log = function(sMsg, sCategory, sSource) {
     if(this.loggerEnabled) {
@@ -80,8 +69,10 @@ YAHOO.widget.Logger.log = function(sMsg, sCategory, sSource) {
         if(sSource) {
             var spaceIndex = sSource.indexOf(" ");
             if(spaceIndex > 0) {
-                sClass = sSource.substring(0,spaceIndex);// substring until first space
-                sDetail = sSource.substring(spaceIndex,sSource.length);// the rest of the source
+                // Substring until first space
+                sClass = sSource.substring(0,spaceIndex);
+                // The rest of the source
+                sDetail = sSource.substring(spaceIndex,sSource.length);
             }
             else {
                 sClass = sSource;
@@ -102,7 +93,8 @@ YAHOO.widget.Logger.log = function(sMsg, sCategory, sSource) {
 
         var stack = this._stack;
         var maxStackEntries = this.maxStackEntries;
-        if(maxStackEntries && !isNaN(maxStackEntries) && (stack.length >= maxStackEntries)) {
+        if(maxStackEntries && !isNaN(maxStackEntries) &&
+            (stack.length >= maxStackEntries)) {
             stack.shift();
         }
         stack.push(logEntry);
@@ -121,6 +113,7 @@ YAHOO.widget.Logger.log = function(sMsg, sCategory, sSource) {
 /**
  * Resets internal stack and startTime, enables Logger, and fires logResetEvent.
  *
+ * @method reset
  */
 YAHOO.widget.Logger.reset = function() {
     this._stack = [];
@@ -133,7 +126,8 @@ YAHOO.widget.Logger.reset = function() {
 /**
  * Public accessor to internal stack of log messages.
  *
- * @return {array} Array of log messages.
+ * @method getStack
+ * @return {Array} Array of log messages.
  */
 YAHOO.widget.Logger.getStack = function() {
     return this._stack;
@@ -142,7 +136,8 @@ YAHOO.widget.Logger.getStack = function() {
 /**
  * Public accessor to internal start time.
  *
- * @return {date} Internal date of when Logger singleton was initialized.
+ * @method getStartTime
+ * @return {Date} Internal date of when Logger singleton was initialized.
  */
 YAHOO.widget.Logger.getStartTime = function() {
     return this._startTime;
@@ -151,6 +146,8 @@ YAHOO.widget.Logger.getStartTime = function() {
 /**
  * Disables output to the browser's global console.log() function, which is used
  * by the Firebug extension to Firefox as well as Safari.
+ *
+ * @method disableBrowserConsole
  */
 YAHOO.widget.Logger.disableBrowserConsole = function() {
     YAHOO.log("Logger output to the function console.log() has been disabled.");
@@ -160,36 +157,82 @@ YAHOO.widget.Logger.disableBrowserConsole = function() {
 /**
  * Enables output to the browser's global console.log() function, which is used
  * by the Firebug extension to Firefox as well as Safari.
+ *
+ * @method enableBrowserConsole
  */
 YAHOO.widget.Logger.enableBrowserConsole = function() {
     this._browserConsoleEnabled = true;
     YAHOO.log("Logger output to the function console.log() has been enabled.");
 };
 
-/***************************************************************************
- * Private methods
- ***************************************************************************/
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public events
+//
+/////////////////////////////////////////////////////////////////////////////
+
+ /**
+ * Fired when a new category has been created.
+ *
+ * @event categoryCreateEvent
+ * @param sCategory {String} Category name.
+ */
+YAHOO.widget.Logger.categoryCreateEvent =
+    new YAHOO.util.CustomEvent("categoryCreate", this, true);
+
+ /**
+ * Fired when a new source has been named.
+ *
+ * @event sourceCreateEvent
+ * @param sSource {String} Source name.
+ */
+YAHOO.widget.Logger.sourceCreateEvent =
+    new YAHOO.util.CustomEvent("sourceCreate", this, true);
+
+ /**
+ * Fired when a new log message has been created.
+ *
+ * @event newLogEvent
+ * @param sMsg {String} Log message.
+ */
+YAHOO.widget.Logger.newLogEvent = new YAHOO.util.CustomEvent("newLog", this, true);
+
+/**
+ * Fired when the Logger has been reset has been created.
+ *
+ * @event logResetEvent
+ */
+YAHOO.widget.Logger.logResetEvent = new YAHOO.util.CustomEvent("logReset", this, true);
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
 /**
  * Creates a new category of log messages and fires categoryCreateEvent.
  *
- * @param {string} category Category name
+ * @method _createNewCategory
+ * @param sCategory {String} Category name.
  * @private
  */
-YAHOO.widget.Logger._createNewCategory = function(category) {
-    this.categories.push(category);
-    this.categoryCreateEvent.fire(category);
+YAHOO.widget.Logger._createNewCategory = function(sCategory) {
+    this.categories.push(sCategory);
+    this.categoryCreateEvent.fire(sCategory);
 };
 
 /**
  * Checks to see if a category has already been created.
  *
- * @param {string} category Category name
- * @return {boolean} Returns true if category is unknown, else returns false
+ * @method _isNewCategory
+ * @param sCategory {String} Category name.
+ * @return {Boolean} Returns true if category is unknown, else returns false.
  * @private
  */
-YAHOO.widget.Logger._isNewCategory = function(category) {
+YAHOO.widget.Logger._isNewCategory = function(sCategory) {
     for(var i=0; i < this.categories.length; i++) {
-        if(category == this.categories[i]) {
+        if(sCategory == this.categories[i]) {
             return false;
         }
     }
@@ -199,25 +242,27 @@ YAHOO.widget.Logger._isNewCategory = function(category) {
 /**
  * Creates a new source of log messages and fires sourceCreateEvent.
  *
- * @param {string} source Source name
+ * @method _createNewSource
+ * @param sSource {String} Source name.
  * @private
  */
-YAHOO.widget.Logger._createNewSource = function(source) {
-    this.sources.push(source);
-    this.sourceCreateEvent.fire(source);
+YAHOO.widget.Logger._createNewSource = function(sSource) {
+    this.sources.push(sSource);
+    this.sourceCreateEvent.fire(sSource);
 };
 
 /**
- * Checks to see if a source has already been created.
+ * Checks to see if a source already exists.
  *
- * @param {string} source Source name
- * @return {boolean} Returns true if source is unknown, else returns false
+ * @method _isNewSource
+ * @param sSource {String} Source name.
+ * @return {Boolean} Returns true if source is unknown, else returns false.
  * @private
  */
-YAHOO.widget.Logger._isNewSource = function(source) {
-    if(source) {
+YAHOO.widget.Logger._isNewSource = function(sSource) {
+    if(sSource) {
         for(var i=0; i < this.sources.length; i++) {
-            if(source == this.sources[i]) {
+            if(sSource == this.sources[i]) {
                 return false;
             }
         }
@@ -228,15 +273,16 @@ YAHOO.widget.Logger._isNewSource = function(source) {
 /**
  * Outputs a log message to global console.log() function.
  *
- * @param {object} entry Log entry object
+ * @method _printToBrowserConsole
+ * @param oEntry {Object} Log entry object.
  * @private
  */
-YAHOO.widget.Logger._printToBrowserConsole = function(entry) {
+YAHOO.widget.Logger._printToBrowserConsole = function(oEntry) {
     if(window.console && console.log) {
-        var category = entry.category;
-        var label = entry.category.substring(0,4).toUpperCase();
+        var category = oEntry.category;
+        var label = oEntry.category.substring(0,4).toUpperCase();
 
-        var time = entry.time;
+        var time = oEntry.time;
         if (time.toLocaleTimeString) {
             var localTime  = time.toLocaleTimeString();
         }
@@ -252,28 +298,32 @@ YAHOO.widget.Logger._printToBrowserConsole = function(entry) {
         var output =
             localTime + " (" +
             elapsedTime + "ms): " +
-            entry.source + ": " +
-            entry.msg;
+            oEntry.source + ": " +
+            oEntry.msg;
 
         console.log(output);
     }
 };
 
-/***************************************************************************
- * Private event handlers
- ***************************************************************************/
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private event handlers
+//
+/////////////////////////////////////////////////////////////////////////////
+
 /**
  * Handles logging of messages due to window error events.
  *
- * @param {string} msg The error message
- * @param {string} url URL of the error
- * @param {string} line Line number of the error
+ * @method _onWindowError
+ * @param sMsg {String} The error message.
+ * @param sUrl {String} URL of the error.
+ * @param sLine {String} Line number of the error.
  * @private
  */
-YAHOO.widget.Logger._onWindowError = function(msg,url,line) {
+YAHOO.widget.Logger._onWindowError = function(sMsg,sUrl,sLine) {
     // Logger is not in scope of this event handler
     try {
-        YAHOO.widget.Logger.log(msg+' ('+url+', line '+line+')', "window");
+        YAHOO.widget.Logger.log(sMsg+' ('+sUrl+', line '+sLine+')', "window");
         if(YAHOO.widget.Logger._origOnWindowError) {
             YAHOO.widget.Logger._origOnWindowError();
         }
@@ -283,18 +333,24 @@ YAHOO.widget.Logger._onWindowError = function(msg,url,line) {
     }
 };
 
-/**
- * Handle native JavaScript errors
- */
-//NB: Not all browsers support the window.onerror event
+/////////////////////////////////////////////////////////////////////////////
+//
+// Enable handling of native JavaScript errors
+// NB: Not all browsers support the window.onerror event
+//
+/////////////////////////////////////////////////////////////////////////////
+
 if(window.onerror) {
     // Save any previously defined handler to call
     YAHOO.widget.Logger._origOnWindowError = window.onerror;
 }
 window.onerror = YAHOO.widget.Logger._onWindowError;
 
-/**
- * First log
- */
+/////////////////////////////////////////////////////////////////////////////
+//
+// First log
+//
+/////////////////////////////////////////////////////////////////////////////
+
 YAHOO.widget.Logger.log("Logger initialized");
 
