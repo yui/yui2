@@ -4,6 +4,12 @@ Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 */
 
+/**
+ * The dom module provides helper methods for manipulating Dom elements.
+ * @module dom
+ *
+ */
+
 (function() {
     var Y = YAHOO.util,     // internal shorthand
         getStyle,           // for load time browser branching
@@ -95,13 +101,16 @@ http://developer.yahoo.net/yui/license.txt
     }
     
     /**
-     * @class Provides helper methods for DOM elements.
+     * Provides helper methods for DOM elements.
+     * @namespace YAHOO.util
+     * @class Dom
      */
     YAHOO.util.Dom = {
         /**
-         * Returns an HTMLElement reference
-         * @param {String/HTMLElement/Array} el Accepts a string to use as an ID for getting a DOM reference, an actual DOM reference, or an Array of IDs and/or HTMLElements.
-         * @return {HTMLElement/Array} A DOM reference to an HTML element or an array of HTMLElements.
+         * Returns an HTMLElement reference.
+         * @method get
+         * @param {String | HTMLElement |Array} el Accepts a string to use as an ID for getting a DOM reference, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+         * @return {HTMLElement | Array} A DOM reference to an HTML element or an array of HTMLElements.
          */
         get: function(el) {
             if (!el) { return null; } // nothing to work with
@@ -131,9 +140,10 @@ http://developer.yahoo.net/yui/license.txt
     
         /**
          * Normalizes currentStyle and ComputedStyle.
-         * @param {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+         * @method getStyle
+         * @param {String | HTMLElement |Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
          * @param {String} property The style property whose value is returned.
-         * @return {String/Array} The current value of the style property for the element(s).
+         * @return {String | Array} The current value of the style property for the element(s).
          */
         getStyle: function(el, property) {
             property = toCamel(property);
@@ -147,7 +157,8 @@ http://developer.yahoo.net/yui/license.txt
     
         /**
          * Wrapper for setting style properties of HTMLElements.  Normalizes "opacity" across modern browsers.
-         * @param {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+         * @method setStyle
+         * @param {String | HTMLElement | Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
          * @param {String} property The style property to be set.
          * @param {String} val The value to apply to the given property.
          */
@@ -165,8 +176,9 @@ http://developer.yahoo.net/yui/license.txt
         
         /**
          * Gets the current position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-         * @param {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
-         @ return {Array} The XY position of the element(s)
+         * @method getXY
+         * @param {String | HTMLElement | Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
+         * @return {Array} The XY position of the element(s)
          */
         getXY: function(el) {
             var f = function(el) {
@@ -240,8 +252,9 @@ http://developer.yahoo.net/yui/license.txt
         
         /**
          * Gets the current X position of an element based on page coordinates.  The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-         * @param {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
-         * @return {String/Array} The X position of the element(s)
+         * @method getX
+         * @param {String | HTMLElement | Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
+         * @return {String | Array} The X position of the element(s)
          */
         getX: function(el) {
             var f = function(el) {
@@ -253,8 +266,9 @@ http://developer.yahoo.net/yui/license.txt
         
         /**
          * Gets the current Y position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-         * @param {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
-         * @return {String/Array} The Y position of the element(s)
+         * @method getY
+         * @param {String | HTMLElement | Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
+         * @return {String | Array} The Y position of the element(s)
          */
         getY: function(el) {
             var f = function(el) {
@@ -267,7 +281,8 @@ http://developer.yahoo.net/yui/license.txt
         /**
          * Set the position of an html element in page coordinates, regardless of how the element is positioned.
          * The element(s) must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-         * @param {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
+         * @method setXY
+         * @param {String | HTMLElement | Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
          * @param {Array} pos Contains X & Y values for new position (coordinates are page-based)
          * @param {Boolean} noRetry By default we try and set the position a second time if the first fails
          */
@@ -316,8 +331,9 @@ http://developer.yahoo.net/yui/license.txt
         /**
          * Set the X position of an html element in page coordinates, regardless of how the element is positioned.
          * The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-         * @param {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
-         * @param {Int} x to use as the X coordinate for the element(s).
+         * @method setX
+         * @param {String | HTMLElement | Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+         * @param {Int} x The value to use as the X coordinate for the element(s).
          */
         setX: function(el, x) {
             Y.Dom.setXY(el, [x, null]);
@@ -326,8 +342,9 @@ http://developer.yahoo.net/yui/license.txt
         /**
          * Set the Y position of an html element in page coordinates, regardless of how the element is positioned.
          * The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
-         * @param {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
-         * @param {Int} x to use as the Y coordinate for the element(s).
+         * @method setY
+         * @param {String | HTMLElement | Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+         * @param {Int} x To use as the Y coordinate for the element(s).
          */
         setY: function(el, y) {
             Y.Dom.setXY(el, [null, y]);
@@ -336,8 +353,9 @@ http://developer.yahoo.net/yui/license.txt
         /**
          * Returns the region position of the given element.
          * The element must be part of the DOM tree to have a region (display:none or elements not appended return false).
-         * @param {String/HTMLElement/Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
-         * @return {Region/Array} A Region or array of Region instances containing "top, left, bottom, right" member data.
+         * @method getRegion
+         * @param {String | HTMLElement | Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+         * @return {Region | Array} A Region or array of Region instances containing "top, left, bottom, right" member data.
          */
         getRegion: function(el) {
             var f = function(el) {
@@ -351,7 +369,8 @@ http://developer.yahoo.net/yui/license.txt
         
         /**
          * Returns the width of the client (viewport).
-         * Now using getViewportWidth.  This interface left intact for back compat.
+         * @method getClientWidth
+         * @deprecated Now using getViewportWidth.  This interface left intact for back compat.
          * @return {Int} The width of the viewable area of the page.
          */
         getClientWidth: function() {
@@ -360,7 +379,8 @@ http://developer.yahoo.net/yui/license.txt
         
         /**
          * Returns the height of the client (viewport).
-         * Now using getViewportHeight.  This interface left intact for back compat.
+         * @method getClientHeight
+         * @deprecated Now using getViewportHeight.  This interface left intact for back compat.
          * @return {Int} The height of the viewable area of the page.
          */
         getClientHeight: function() {
@@ -368,11 +388,12 @@ http://developer.yahoo.net/yui/license.txt
         },
 
         /**
-         * Returns a array of HTMLElements with the given class
-         * For optimized performance, include a tag and/or root node if possible
+         * Returns a array of HTMLElements with the given class.
+         * For optimized performance, include a tag and/or root node when possible.
+         * @method getElementsByClassName
          * @param {String} className The class name to match against
          * @param {String} tag (optional) The tag name of the elements being collected
-         * @param {String/HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
+         * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
          * @return {Array} An array of elements that have the given class name
          */
         getElementsByClassName: function(className, tag, root) {
@@ -381,10 +402,11 @@ http://developer.yahoo.net/yui/license.txt
         },
 
         /**
-         * Determines whether an HTMLElement has the given className
-         * @param {String/HTMLElement/Array} el The element or collection to test
+         * Determines whether an HTMLElement has the given className.
+         * @method hasClass
+         * @param {String | HTMLElement | Array} el The element or collection to test
          * @param {String} className the class name to search for
-         * @return {Boolean/Array} A boolean value or array of boolean values
+         * @return {Boolean | Array} A boolean value or array of boolean values
          */
         hasClass: function(el, className) {
             var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
@@ -398,8 +420,9 @@ http://developer.yahoo.net/yui/license.txt
         },
     
         /**
-         * Adds a class name to a given element or collection of elements
-         * @param {String/HTMLElement/Array} el The element or collection to add the class to
+         * Adds a class name to a given element or collection of elements.
+         * @method addClass         
+         * @param {String | HTMLElement | Array} el The element or collection to add the class to
          * @param {String} className the class name to add to the class attribute
          */
         addClass: function(el, className) {
@@ -415,8 +438,9 @@ http://developer.yahoo.net/yui/license.txt
         },
     
         /**
-         * Removes a class name from a given element or collection of elements
-         * @param {String/HTMLElement/Array} el The element or collection to remove the class from
+         * Removes a class name from a given element or collection of elements.
+         * @method removeClass         
+         * @param {String | HTMLElement | Array} el The element or collection to remove the class from
          * @param {String} className the class name to remove from the class attribute
          */
         removeClass: function(el, className) {
@@ -441,7 +465,8 @@ http://developer.yahoo.net/yui/license.txt
         /**
          * Replace a class with another class for a given element or collection of elements.
          * If no oldClassName is present, the newClassName is simply added.
-         * @param {String/HTMLElement/Array} el The element or collection to remove the class from
+         * @method replaceClass  
+         * @param {String | HTMLElement | Array} el The element or collection to remove the class from
          * @param {String} oldClassName the class name to be replaced
          * @param {String} newClassName the class name that will be replacing the old class name
          */
@@ -472,9 +497,10 @@ http://developer.yahoo.net/yui/license.txt
         
         /**
          * Generates a unique ID
-         * @param {String/HTMLElement/Array} el (optional) An optional element array of elements to add an ID to (no ID is added if one is already present)
-         * @param {String} prefix (optional) an optional prefix to use (defaults to "yui-gen")
-         * @return {String/Array} The generated ID, or array of generated IDs (or original ID if already present on an element)
+         * @method generateId  
+         * @param {String | HTMLElement | Array} el (optional) An optional element array of elements to add an ID to (no ID is added if one is already present).
+         * @param {String} prefix (optional) an optional prefix to use (defaults to "yui-gen").
+         * @return {String | Array} The generated ID, or array of generated IDs (or original ID if already present on an element)
          */
         generateId: function(el, prefix) {
             prefix = prefix || 'yui-gen';
@@ -501,9 +527,10 @@ http://developer.yahoo.net/yui/license.txt
         },
         
         /**
-         * Determines whether an HTMLElement is an ancestor of another HTML element in the DOM hierarchy
-         * @param {String/HTMLElement} haystack The possible ancestor
-         * @param {String/HTMLElement} needle The possible descendent
+         * Determines whether an HTMLElement is an ancestor of another HTML element in the DOM hierarchy.
+         * @method isAncestor
+         * @param {String | HTMLElement} haystack The possible ancestor
+         * @param {String | HTMLElement} needle The possible descendent
          * @return {Boolean} Whether or not the haystack is an ancestor of needle
          */
         isAncestor: function(haystack, needle) {
@@ -543,8 +570,9 @@ http://developer.yahoo.net/yui/license.txt
         },
         
         /**
-         * Determines whether an HTMLElement is present in the current document
-         * @param {String/HTMLElement} el The element to search for
+         * Determines whether an HTMLElement is present in the current document.
+         * @method inDocument         
+         * @param {String | HTMLElement} el The element to search for
          * @return {Boolean} Whether or not the element is present in the current document
          */
         inDocument: function(el) {
@@ -556,12 +584,13 @@ http://developer.yahoo.net/yui/license.txt
         },
         
         /**
-         * Returns a array of HTMLElements that pass the test applied by supplied boolean method
-         * For optimized performance, include a tag and/or root node if possible
+         * Returns a array of HTMLElements that pass the test applied by supplied boolean method.
+         * For optimized performance, include a tag and/or root node when possible.
+         * @method getElementsBy
          * @param {Function} method - A boolean method for testing elements which receives the element as its only argument.
 
          * @param {String} tag (optional) The tag name of the elements being collected
-         * @param {String/HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
+         * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
          */
         getElementsBy: function(method, tag, root) {
             tag = tag || '*';
@@ -585,12 +614,13 @@ http://developer.yahoo.net/yui/license.txt
         
         /**
          * Returns an array of elements that have had the supplied method applied.
-         * The method is called with the element(s) as the first arg, and the optional param as the second ( method(el, o) )
-         * @param {String/HTMLElement/Array} el (optional) An element or array of elements to apply the method to
+         * The method is called with the element(s) as the first arg, and the optional param as the second ( method(el, o) ).
+         * @method batch
+         * @param {String | HTMLElement | Array} el (optional) An element or array of elements to apply the method to
          * @param {Function} method The method to apply to the element(s)
-         * @param {Generic} (optional) o An optional arg that is passed to the supplied method
-         * @param {Boolean} (optional) override Whether or not to override the scope of "method" with "o"
-         * @return {HTMLElement/Array} The element(s) with the method applied
+         * @param {Any} o (optional) An optional arg that is passed to the supplied method
+         * @param {Boolean} override (optional) Whether or not to override the scope of "method" with "o"
+         * @return {HTMLElement | Array} The element(s) with the method applied
          */
         batch: function(el, method, o, override) {
             var id = el;
@@ -621,6 +651,7 @@ http://developer.yahoo.net/yui/license.txt
         
         /**
          * Returns the height of the document.
+         * @method getDocumentHeight
          * @return {Int} The height of the actual document (which includes the body and its margin).
          */
         getDocumentHeight: function() {
@@ -633,6 +664,7 @@ http://developer.yahoo.net/yui/license.txt
         
         /**
          * Returns the width of the document.
+         * @method getDocumentWidth
          * @return {Int} The width of the actual document (which includes the body and its margin).
          */
         getDocumentWidth: function() {
@@ -644,6 +676,7 @@ http://developer.yahoo.net/yui/license.txt
 
         /**
          * Returns the current height of the viewport.
+         * @method getViewportHeight
          * @return {Int} The height of the viewable area of the page (excludes scrollbars).
          */
         getViewportHeight: function() {
@@ -662,6 +695,7 @@ http://developer.yahoo.net/yui/license.txt
         
         /**
          * Returns the current width of the viewport.
+         * @method getViewportWidth
          * @return {Int} The width of the viewable area of the page (excludes scrollbars).
          */
         
@@ -680,60 +714,67 @@ http://developer.yahoo.net/yui/license.txt
     };
 })();
 /**
- * @class A region is a representation of an object on a grid.  It is defined
+ * A region is a representation of an object on a grid.  It is defined
  * by the top, right, bottom, left extents, so is rectangular by default.  If 
  * other shapes are required, this class could be extended to support it.
- *
- * @param {int} t the top extent
- * @param {int} r the right extent
- * @param {int} b the bottom extent
- * @param {int} l the left extent
+ * @namespace YAHOO.util
+ * @class Region
+ * @param {Int} t the top extent
+ * @param {Int} r the right extent
+ * @param {Int} b the bottom extent
+ * @param {Int} l the left extent
  * @constructor
  */
 YAHOO.util.Region = function(t, r, b, l) {
 
     /**
      * The region's top extent
-     * @type int
+     * @property top
+     * @type Int
      */
     this.top = t;
     
     /**
      * The region's top extent as index, for symmetry with set/getXY
-     * @type int
+     * @property 1
+     * @type Int
      */
     this[1] = t;
 
     /**
      * The region's right extent
+     * @property right
      * @type int
      */
     this.right = r;
 
     /**
      * The region's bottom extent
-     * @type int
+     * @property bottom
+     * @type Int
      */
     this.bottom = b;
 
     /**
      * The region's left extent
-     * @type int
+     * @property left
+     * @type Int
      */
     this.left = l;
     
     /**
      * The region's left extent as index, for symmetry with set/getXY
-     * @type int
+     * @property 0
+     * @type Int
      */
     this[0] = l;
 };
 
 /**
  * Returns true if this region contains the region passed in
- *
+ * @method contains
  * @param  {Region}  region The region to evaluate
- * @return {boolean}        True if the region is contained with this region, 
+ * @return {Boolean}        True if the region is contained with this region, 
  *                          else false
  */
 YAHOO.util.Region.prototype.contains = function(region) {
@@ -747,8 +788,8 @@ YAHOO.util.Region.prototype.contains = function(region) {
 
 /**
  * Returns the area of the region
- *
- * @return {int} the region's area
+ * @method getArea
+ * @return {Int} the region's area
  */
 YAHOO.util.Region.prototype.getArea = function() {
     return ( (this.bottom - this.top) * (this.right - this.left) );
@@ -756,7 +797,7 @@ YAHOO.util.Region.prototype.getArea = function() {
 
 /**
  * Returns the region where the passed in region overlaps with this one
- *
+ * @method intersect
  * @param  {Region} region The region that intersects
  * @return {Region}        The overlap region, or null if there is no overlap
  */
@@ -776,7 +817,7 @@ YAHOO.util.Region.prototype.intersect = function(region) {
 /**
  * Returns the region representing the smallest region that can contain both
  * the passed in region and this region.
- *
+ * @method union
  * @param  {Region} region The region that to create the union with
  * @return {Region}        The union region
  */
@@ -791,6 +832,7 @@ YAHOO.util.Region.prototype.union = function(region) {
 
 /**
  * toString
+ * @method toString
  * @return string the region properties
  */
 YAHOO.util.Region.prototype.toString = function() {
@@ -804,7 +846,7 @@ YAHOO.util.Region.prototype.toString = function() {
 
 /**
  * Returns a region that is occupied by the DOM element
- *
+ * @method getRegion
  * @param  {HTMLElement} el The element
  * @return {Region}         The region that the element occupies
  * @static
@@ -824,13 +866,12 @@ YAHOO.util.Region.getRegion = function(el) {
 
 
 /**
- * @class
- *
  * A point is a region that is special in that it represents a single point on 
  * the grid.
- *
- * @param {int} x The X position of the point
- * @param {int} y The Y position of the point
+ * @namespace YAHOO.util
+ * @class Point
+ * @param {Int} x The X position of the point
+ * @param {Int} y The Y position of the point
  * @constructor
  * @extends Region
  */
@@ -842,14 +883,16 @@ YAHOO.util.Point = function(x, y) {
    
     /**
      * The X position of the point, which is also the right, left and index zero (for Dom.getXY symmetry)
-     * @type int
+     * @property x
+     * @type Int
      */
 
     this.x = this.right = this.left = this[0] = x;
      
     /**
      * The Y position of the point, which is also the top, bottom and index one (for Dom.getXY symmetry)
-     * @type int
+     * @property y
+     * @type Int
      */
     this.y = this.top = this.bottom = this[1] = y;
 };
