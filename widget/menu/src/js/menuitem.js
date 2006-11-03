@@ -26,11 +26,8 @@ YAHOO.widget.MenuItem = function(p_oObject, p_oConfig) {
 
         if(p_oConfig) {
     
-            if(p_oConfig.parent && p_oConfig.parent instanceof Menu) {
-    
-                this.parent = p_oConfig.parent;
-    
-            }
+            this.parent = p_oConfig.parent;
+            this.value = p_oConfig.value;
             
         }
 
@@ -1444,16 +1441,22 @@ YAHOO.widget.MenuItem.prototype = {
                 oMenu.lazyLoad = bLazyLoad;
 
             }
-            else if(typeof oSubmenu == "object" && oSubmenu.id) {
+            else if(
+                typeof oSubmenu == "object" && 
+                oSubmenu.id && 
+                !oSubmenu.nodeType
+            ) {
 
-                oMenu = new this.SUBMENU_TYPE(
-                                oSubmenu.id, 
-                                {
-                                    lazyload: bLazyLoad,
-                                    itemdata: oSubmenu.itemdata,
-                                    parent: this
-                                }
-                            );
+                var sSubmenuId = oSubmenu.id;
+                var oSubmenuConfig = oSubmenu;
+
+                delete oSubmenu["id"];
+
+                oSubmenuConfig.lazyload = bLazyLoad;
+                oSubmenuConfig.parent = this;
+
+                oMenu = new this.SUBMENU_TYPE(sSubmenuId, oSubmenuConfig);
+
 
                 // Set the value of the property to the Menu instance
                 
