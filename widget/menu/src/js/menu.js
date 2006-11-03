@@ -868,7 +868,7 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
         
                 this._subscribeToItemEvents(oGroupItem);
     
-                this._configureItemSubmenuModule(oGroupItem);
+                this._configureSubmenu(oGroupItem);
                 
                 this._updateItemProperties(nGroupIndex);
         
@@ -918,7 +918,7 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
         
                 this._subscribeToItemEvents(oGroupItem);
     
-                this._configureItemSubmenuModule(oGroupItem);
+                this._configureSubmenu(oGroupItem);
     
                 if(nItemIndex === 0) {
         
@@ -1173,13 +1173,13 @@ _getItemGroup: function(p_nIndex) {
 
 
 /**
-* @method _configureItemSubmenuModule
+* @method _configureSubmenu
 * @description Subscribe's a Menu instance to its parent Menu instance's events.
 * @private
 * @param {YAHOO.widget.MenuItem} p_oItem The item to listen
 * for events on.
 */
-_configureItemSubmenuModule: function(p_oItem) {
+_configureSubmenu: function(p_oItem) {
 
     var oSubmenu = p_oItem.cfg.getProperty("submenu");
 
@@ -1770,18 +1770,15 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
 
         case 39:    // Right arrow
 
-            if(
-                oItem == this.activeItem && 
-                !oItemCfg.getProperty("selected")
-            ) {
-
-                oItemCfg.setProperty("selected", true);
-
-            }
-
             oSubmenu = oItemCfg.getProperty("submenu");
 
             if(oSubmenu) {
+
+                if(!oItemCfg.getProperty("selected")) {
+    
+                    oItemCfg.setProperty("selected", true);
+    
+                }
 
                 oSubmenu.show();
 
@@ -2192,12 +2189,6 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
     var oParent = this.parent;
     
     if(oParent) {
-    
-        if(!oParent.cfg.getProperty("selected")) {
-        
-            oParent.cfg.setProperty("selected", true);
-        
-        }
 
 
         var oParentMenu = oParent.parent;
@@ -2323,6 +2314,7 @@ _onParentMenuConfigChange: function(p_sType, p_aArgs, p_oSubmenu) {
         case "hidedelay":
         case "showdelay":
         case "clicktohide":
+        case "effect":
 
             p_oSubmenu.cfg.setProperty(sPropertyName, oPropertyValue);
                 
@@ -2361,7 +2353,10 @@ _onParentMenuRender: function(p_sType, p_aArgs, p_oSubmenu) {
             xy: [0,0],
                 
             clicktohide:
-                oParentMenu.cfg.getProperty("clicktohide")
+                oParentMenu.cfg.getProperty("clicktohide"),
+                
+            effect:
+                oParentMenu.cfg.getProperty("effect")                
 
         };
 
@@ -2542,7 +2537,7 @@ _onMenuItemConfigChange: function(p_sType, p_aArgs, p_oItem) {
 
             if(oSubmenu) {
 
-                this._configureItemSubmenuModule(p_oItem);
+                this._configureSubmenu(p_oItem);
 
             }
 
