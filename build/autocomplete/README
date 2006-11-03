@@ -1,8 +1,22 @@
 AutoComplete Release Notes
 
+*** version 2.1 ***
+
+* The following constants must be defined as class variables and are no longer available
+as instance variables:
+
+YAHOO.widget.DataSource.ERROR_DATANULL
+YAHOO.widget.DataSource.ERROR_DATAPARSE
+YAHOO.widget.DS_XHR.TYPE_JSON
+YAHOO.widget.DS_XHR.TYPE_XML
+YAHOO.widget.DS_XHR.TYPE_FLAT
+YAHOO.widget.DS_XHR.ERROR_DATAXHR
+
+* Queries of null or empty strings are now supported for DS_JSFunction and DS_XHR objects.
 
 
-*** version 0.11.3 ***
+
+**** version 0.11.3 ***
 
 * The iFrameSrc property has been deprecated. Implementers no longer need to
 specify an https URL to avoid IE security warnings when working with sites over
