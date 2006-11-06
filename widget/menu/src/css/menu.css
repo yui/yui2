@@ -278,6 +278,7 @@ div.yuimenu li.checked img.checked {
     height:8px;
     width:8px;
     margin:0;
+    padding:0;
     border:0;
     position:absolute;
     left:6px;

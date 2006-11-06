@@ -43,12 +43,6 @@ init: function(p_oObject, p_oConfig) {
 
     }
 
-    if(!this.SUBMENU_ITEM_TYPE) {
-
-        this.SUBMENU_ITEM_TYPE = YAHOO.widget.MenuItem;
-
-    }
-
 
     /* 
         Call the init of the superclass (YAHOO.widget.MenuItem)
@@ -113,7 +107,7 @@ SELECTED_SUBMENU_INDICATOR_IMAGE_PATH: "nt/ic/ut/alt1/menuarodwn8_hov_1.gif",
 * @final
 * @type String
 */
-DISABLED_SUBMENU_INDICATOR_IMAGE_PATH: "nt/ic/ut/alt1/menuarodwn8_dim_1.gif"
+DISABLED_SUBMENU_INDICATOR_IMAGE_PATH: "nt/ic/ut/alt1/menuarodwn8_dim_1.gif",
 
 
 

@@ -1,3 +1,6 @@
+
+
+
 (function() {
 
 var Dom = YAHOO.util.Dom;
@@ -166,9 +169,6 @@ YAHOO.widget.MenuItem.prototype = {
     * @type YAHOO.widget.Menu
     */
     SUBMENU_TYPE: null,
-
-
-    SUBMENU_ITEM_TYPE: null,
 
 
     /**
@@ -450,12 +450,6 @@ YAHOO.widget.MenuItem.prototype = {
         if(!this.SUBMENU_TYPE) {
     
             this.SUBMENU_TYPE = Menu;
-    
-        }
-
-        if(!this.SUBMENU_ITEM_TYPE) {
-    
-            this.SUBMENU_ITEM_TYPE = YAHOO.widget.MenuItem;
     
         }
 
@@ -755,7 +749,6 @@ YAHOO.widget.MenuItem.prototype = {
     */
     _initSubTree: function() {
 
-        var MenuItem = this.SUBMENU_ITEM_TYPE;
         var oSrcEl = this.srcElement;
         var oConfig = this.cfg;
 
@@ -815,7 +808,7 @@ YAHOO.widget.MenuItem.prototype = {
     
                     for(var n=0; n<nOptions; n++) {
         
-                        oMenu.addItem((new MenuItem(aOptions[n])));
+                        oMenu.addItem((new oMenu.ITEM_TYPE(aOptions[n])));
         
                     }
         
