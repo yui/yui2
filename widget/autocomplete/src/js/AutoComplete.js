@@ -340,6 +340,16 @@ YAHOO.widget.AutoComplete.prototype.toString = function() {
     return "AutoComplete " + this._sName;
 };
 
+ /**
+ * Returns true if container is in an expanded state, false otherwise.
+ *
+ * @method isContainerOpen
+ * @return {Boolean} Returns true if container is in an expanded state, false otherwise.
+ */
+YAHOO.widget.AutoComplete.prototype.isContainerOpen = function() {
+    return this._bContainerOpen;
+};
+
 /**
  * Public accessor to the internal array of DOM &lt;li&gt; elements that
  * display query results within the results container.
