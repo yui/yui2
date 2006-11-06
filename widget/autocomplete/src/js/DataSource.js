@@ -660,13 +660,13 @@ YAHOO.log('responseXML.xml: '+oResp.responseXML.xml,'warn');*/
         if(aResults === null) {
             oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, YAHOO.widget.DataSource.ERROR_DATAPARSE);
             YAHOO.log(YAHOO.widget.DataSource.ERROR_DATAPARSE, "error", oSelf.toString());
-            return;
+            aResults = [];
         }
         else {
             oSelf.getResultsEvent.fire(oSelf, oParent, sQuery, aResults);
             oSelf._addCacheElem(resultObj);
-            oCallbackFn(sQuery, aResults, oParent);
         }
+        oCallbackFn(sQuery, aResults, oParent);
     };
 
     var responseFailure = function(oResp) {
@@ -725,8 +725,14 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                     break;
                 }
                 else {
-                    // eval is necessary here since aSchema[0] is of unknown depth
-                    jsonList = eval("jsonObjParsed." + aSchema[0]);
+                    try {
+                        // eval is necessary here since aSchema[0] is of unknown depth
+                        jsonList = eval("jsonObjParsed." + aSchema[0]);
+                    }
+                    catch(e) {
+                        bError = true;
+                        break;
+                   }
                 }
             }
             else {

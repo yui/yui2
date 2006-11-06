@@ -156,7 +156,9 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
 YAHOO.widget.AutoComplete.prototype.dataSource = null;
 
 /**
- * Number of characters that must be entered before querying for results.
+ * Number of characters that must be entered before querying for results. A negative value
+ * effectively turns off the widget. A value of 0 allows queries of null or empty string
+ * values.
  *
  * @property minQueryLength
  * @type Number
@@ -446,6 +448,16 @@ YAHOO.widget.AutoComplete.prototype.formatResult = function(oResultItem, sQuery)
     else {
         return "";
     }
+};
+
+/**
+ * Abstract method called before container expands allows implementers to access data
+ * and DOM elements.
+ *
+ * @method doBeforeExpandContainer
+ */
+YAHOO.widget.AutoComplete.prototype.doBeforeExpandContainer = function(oResultItem, sQuery) {
+    /* Abstract method */
 };
 
 /**
@@ -1045,6 +1057,11 @@ YAHOO.widget.AutoComplete.prototype._isIgnoreKey = function(nKeyCode) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
+    // Widget has been effectively turned off
+    if(this.minQueryLength == -1) {
+        this._toggleContainer(false);
+        return;
+    }
     // Delimiter has been enabled
     var aDelimChar = (this.delimChar) ? this.delimChar : null;
     if(aDelimChar) {
@@ -1086,7 +1103,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
     }
 
     // Don't search queries that are too short
-    if (sQuery && (sQuery.length < this.minQueryLength)) {
+    if (sQuery && (sQuery.length < this.minQueryLength) || (!sQuery && this.minQueryLength > 0)) {
         if (this._nDelayID != -1) {
             clearTimeout(this._nDelayID);
         }
@@ -1171,6 +1188,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         }
 
         // Expand the container
+        oSelf.doBeforeExpandContainer(oSelf._oTextbox, oSelf._oContainer, sQuery, aResults);
         oSelf._toggleContainer(true);
     }
     else {
