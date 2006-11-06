@@ -43,12 +43,6 @@ init: function(p_oObject, p_oConfig) {
 
     }
 
-    if(!this.SUBMENU_ITEM_TYPE) {
-
-        this.SUBMENU_ITEM_TYPE = YAHOO.widget.ContextMenuItem;
-
-    }
-
 
     /* 
         Call the init of the superclass (YAHOO.widget.MenuItem)
