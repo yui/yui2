@@ -245,7 +245,7 @@ YAHOO.example.ACCustomizable = function(){
 
         updateMinQueryLength: function() {
             var minQueryLength = document.getElementById("minquerylength").value;
-            if (isNaN(minQueryLength) || (minQueryLength < 1)) {
+            if (isNaN(minQueryLength)) {
                 document.getElementById("minquerylength").value = oAutoComp.minQueryLength;
                 mylogwriter.log("Could not update minQueryLength.", "warn");
                 return;
