@@ -6,17 +6,13 @@ var Menu = YAHOO.widget.Menu;
 
 
 /**
-* The MenuItem class allows you to create and modify an item for a
-* Menu instance.
+* Creates an item for a menu.
 * 
-* @param {String} p_oObject The text of the MenuItem to be 
-* created <em>OR</em>
-* @param {HTMLElement} p_oObject The HTMLElement representing the source node 
-* (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of 
-* the MenuItem
-* @param {Object} p_oConfig The configuration object literal containing 
-* the configuration for a MenuItem instance. See the configuration 
-* class documentation for more details.
+* @param {String} p_oObject String specifying the text of the menu item.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-74680021">HTMLLIElement</a>} p_oObject Object specifying the <code>&#60;li&#62;</code> element of the menu item.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-38450247">HTMLOptGroupElement</a>} p_oObject Object specifying the <code>&#60;optgroup&#62;</code> element of the menu item.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-70901257">HTMLOptionElement</a>} p_oObject Object specifying the <code>&#60;option&#62;</code> element of the menu item.
+* @param {Object} p_oConfig Optional. Object literal specifying the configuration for the menu item. See configuration class documentation for more details.
 * @class MenuItem
 * @constructor
 */
@@ -43,8 +39,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property SUBMENU_INDICATOR_IMAGE_PATH
-    * @description Constant representing the path to the image to be used for the submenu
-    * arrow indicator.
+    * @description String representing the path to the image to be used for the menu item's submenu arrow indicator.
+    * @default "nt/ic/ut/alt1/menuarorght8_nrm_1.gif"
     * @final
     * @type String
     */
@@ -53,8 +49,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property SELECTED_SUBMENU_INDICATOR_IMAGE_PATH
-    * @description Constant representing the path to the image to be used for the submenu
-    * arrow indicator when a MenuItem instance is selected.
+    * @description String representing the path to the image to be used for the submenu arrow indicator when the menu item is selected.
+    * @default "nt/ic/ut/alt1/menuarorght8_hov_1.gif"
     * @final
     * @type String
     */
@@ -64,8 +60,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property DISABLED_SUBMENU_INDICATOR_IMAGE_PATH
-    * @description Constant representing the path to the image to be used for the submenu
-    * arrow indicator when a MenuItem instance is disabled.
+    * @description String representing the path to the image to be used for the submenu arrow indicator when the menu item is disabled.
+    * @default "nt/ic/ut/alt1/menuarorght8_dim_1.gif"
     * @final
     * @type String
     */
@@ -75,8 +71,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT
-    * @description Constant representing the alt text for the image to be used for the 
-    * submenu arrow indicator.
+    * @description String representing the alt text for the image to be used for the submenu arrow indicator.
+    * @default "Collapsed.  Click to expand."
     * @final
     * @type String
     */
@@ -85,8 +81,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property EXPANDED_SUBMENU_INDICATOR_ALT_TEXT
-    * @description Constant representing the alt text for the image to be used for the 
-    * submenu arrow indicator when the submenu is visible.
+    * @description String representing the alt text for the image to be used for the submenu arrow indicator when the submenu is visible.
+    * @default "Expanded.  Click to collapse."
     * @final
     * @type String
     */
@@ -95,8 +91,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property DISABLED_SUBMENU_INDICATOR_ALT_TEXT
-    * @description Constant representing the alt text for the image to be used for the 
-    * submenu arrow indicator when a MenuItem instance is disabled.
+    * @description String representing the alt text for the image to be used for the submenu arrow indicator when the menu item is disabled.
+    * @default "Disabled."
     * @final
     * @type String
     */
@@ -105,8 +101,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property CHECKED_IMAGE_PATH
-    * @description Constant representing the path to the image to be used for the 
-    * checked state.
+    * @description String representing the path to the image to be used for the checked state.
+    * @default "nt/ic/ut/bsc/menuchk8_nrm_1.gif"
     * @final
     * @type String
     */
@@ -115,8 +111,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property SELECTED_CHECKED_IMAGE_PATH
-    * @description Constant representing the path to the image to be used for the selected 
-    * checked state.
+    * @description String representing the path to the image to be used for the selected checked state.
+    * @default "nt/ic/ut/bsc/menuchk8_hov_1.gif"
     * @final
     * @type String
     */
@@ -125,8 +121,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property DISABLED_CHECKED_IMAGE_PATH
-    * @description Constant representing the path to the image to be used for the disabled 
-    * checked state.
+    * @description String representing the path to the image to be used for the disabled checked state.
+    * @default "nt/ic/ut/bsc/menuchk8_dim_1.gif"
     * @final
     * @type String
     */
@@ -135,8 +131,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property CHECKED_IMAGE_ALT_TEXT
-    * @description Constant representing the alt text for the image to be used for the 
-    * checked image.
+    * @description String representing the alt text for the image to be used for the checked image.
+    * @default "Checked."
     * @final
     * @type String
     */
@@ -145,8 +141,8 @@ YAHOO.widget.MenuItem.prototype = {
     
     /**
     * @property DISABLED_CHECKED_IMAGE_ALT_TEXT
-    * @description Constant representing the alt text for the image to be used for the 
-    * checked image when the item is disabled.
+    * @description String representing the alt text for the image to be used for the checked image when the item is disabled.
+    * @default "Checked. (Item disabled.)"
     * @final
     * @type String
     */
@@ -155,8 +151,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property CSS_CLASS_NAME
-    * @description Constant representing the CSS class(es) to be applied to the root 
-    * HTMLLIElement of the MenuItem.
+    * @description String representing the CSS class(es) to be applied to the <code>&#60;li&#62;</code> element of the menu item.
+    * @default "yuimenuitem"
     * @final
     * @type String
     */
@@ -165,32 +161,20 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property SUBMENU_TYPE
-    * @description Constant representing the type of menu to instantiate when creating 
-    * submenu instances from parsing the child nodes (either HTMLSelectElement 
-    * or HTMLDivElement) of the item's DOM.  The default 
-    * is YAHOO.widget.Menu.
+    * @description Object representing the type of menu to instantiate and add when parsing the child nodes of the menu item's source HTML element.
     * @final
     * @type YAHOO.widget.Menu
     */
     SUBMENU_TYPE: null,
 
 
-    /**
-    * @property SUBMENU_ITEM_TYPE
-    * @description Constant representing the type of item to instantiate when 
-    * creating item instances from parsing the child nodes (either 
-    * HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of the 
-    * submenu's DOM.  
-    * The default is YAHOO.widget.MenuItem.
-    * @final
-    * @type YAHOO.widget.MenuItem
-    */
     SUBMENU_ITEM_TYPE: null,
 
 
     /**
     * @property IMG_ROOT
-    * @description Constant representing the prefix path to use for non-secure images
+    * @description String representing the prefix path to use for non-secure images.
+    * @default "http://us.i1.yimg.com/us.yimg.com/i/"
     * @type String
     */
     IMG_ROOT: "http://us.i1.yimg.com/us.yimg.com/i/",
@@ -198,7 +182,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property IMG_ROOT_SSL
-    * @description Constant representing the prefix path to use for securely served images
+    * @description String representing the prefix path to use for securely served images.
+    * @default "https://a248.e.akamai.net/sec.yimg.com/i/"
     * @type String
     */
     IMG_ROOT_SSL: "https://a248.e.akamai.net/sec.yimg.com/i/",
@@ -209,18 +194,18 @@ YAHOO.widget.MenuItem.prototype = {
     
     /**
     * @property _oAnchor
-    * @description Reference to the HTMLAnchorElement of the MenuItem's core internal
-    * DOM structure.
+    * @description Object reference to the menu item's <code>&#60;a&#62;</code> element.
+    * @default null 
     * @private
-    * @type HTMLAnchorElement
+    * @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-48250443">HTMLAnchorElement</a>
     */
     _oAnchor: null,
     
 
     /**
     * @property _oText
-    * @description Reference to the text node of the MenuItem's core internal
-    * DOM structure.
+    * @description Object reference to the menu item's text node.
+    * @default null
     * @private
     * @type TextNode
     */
@@ -229,17 +214,18 @@ YAHOO.widget.MenuItem.prototype = {
     
     /**
     * @property _oHelpTextEM
-    * @description Reference to the HTMLElement (&#60;EM&#60;) used to create the optional
-    * help text for a MenuItem instance.
+    * @description Object reference to the menu item's help text <code>&#60;em&#62;</code> element.
+    * @default null
     * @private
-    * @type HTMLElement
+    * @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">HTMLElement</a>
     */
     _oHelpTextEM: null,
     
     
     /**
     * @property _oSubmenu
-    * @description Reference to the submenu for a MenuItem instance.
+    * @description Object reference to the menu item's submenu.
+    * @default null
     * @private
     * @type YAHOO.widget.Menu
     */
@@ -248,10 +234,10 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property _checkImage
-    * @description Reference to the HTMLImageElement used to create the checked
-    * indicator for a MenuItem instance.
+    * @description Object reference to the menu item's checkmark image.
+    * @default null
     * @private
-    * @type HTMLImageElement
+    * @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-17701901">HTMLImageElement</a>
     */
     _checkImage: null,
 
@@ -261,7 +247,8 @@ YAHOO.widget.MenuItem.prototype = {
 
 	/**
     * @property constructor
-	* @description The class's constructor function
+	* @description Object reference to the menu item's constructor function.
+    * @default YAHOO.widget.MenuItem
 	* @type YAHOO.widget.MenuItem
 	*/
 	constructor: YAHOO.widget.MenuItem,
@@ -269,7 +256,7 @@ YAHOO.widget.MenuItem.prototype = {
 
 	/**
     * @property imageRoot
-	* @description The string representing the image root
+	* @description String representing the root path for all of the menu item's images.
 	* @type String
 	*/
 	imageRoot: null,
@@ -277,8 +264,7 @@ YAHOO.widget.MenuItem.prototype = {
 
 	/**
     * @property isSecure
-	* @description Boolean representing whether or not the current browsing context 
-	* is secure (https)
+	* @description Boolean representing whether or not the current browsing context is secure (HTTPS).
 	* @type Boolean
 	*/
 	isSecure: Module.prototype.isSecure,
@@ -286,7 +272,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property index
-    * @description Returns the ordinal position of a MenuItem instance in a group.
+    * @description Number indicating the ordinal position of the menu item in its group.
+    * @default null
     * @type Number
     */
     index: null,
@@ -294,7 +281,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property groupIndex
-    * @description Returns the index of the group to which a MenuItem instance belongs.
+    * @description Number indicating the index of the group to which the menu item belongs.
+    * @default null
     * @type Number
     */
     groupIndex: null,
@@ -302,7 +290,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property parent
-    * @description Returns the parent object for a MenuItem instance.
+    * @description Object reference to the menu item's parent menu.
+    * @default null
     * @type YAHOO.widget.Menu
     */
     parent: null,
@@ -310,24 +299,26 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property element
-    * @description Returns the HTMLLIElement for a MenuItem instance.
-    * @type HTMLLIElement
+    * @description Object reference to the menu item's <code>&#60;li&#62;</code> element.
+    * @default <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-74680021">HTMLLIElement</a>
+    * @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-74680021">HTMLLIElement</a>
     */
     element: null,
 
 
     /**
     * @property srcElement
-    * @description Returns the HTMLElement (either HTMLLIElement, HTMLOptGroupElement or
-    * HTMLOptionElement) used create the MenuItem instance.
-    * @type HTMLLIElement/HTMLOptGroupElement/HTMLOptionElement
+    * @description Object reference to the HTML element (either <code>&#60;li&#62;</code>, <code>&#60;optgroup&#62;</code> or <code>&#60;option&#62;</code>) used create the menu item.
+    * @default <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-74680021">HTMLLIElement</a>|<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-38450247">HTMLOptGroupElement</a>|<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-70901257">HTMLOptionElement</a>
+    * @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-74680021">HTMLLIElement</a>|<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-38450247">HTMLOptGroupElement</a>|<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-70901257">HTMLOptionElement</a>
     */
     srcElement: null,
 
 
     /**
     * @property value
-    * @description Specifies an arbitrary value for a MenuItem instance.
+    * @description Object reference to the menu item's value.
+    * @default null
     * @type Object
     */
     value: null,
@@ -335,16 +326,16 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property submenuIndicator
-    * @description Reference to the HTMLImageElement used to create the submenu
-    * indicator for a MenuItem instance.
-    * @type HTMLImageElement
+    * @description Object reference to the <code>&#60;img&#62;</code> element used to create the submenu indicator for the menu item.
+    * @default <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-17701901">HTMLImageElement</a>
+    * @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-17701901">HTMLImageElement</a>
     */
     submenuIndicator: null,
 
 
 	/**
     * @property browser
-	* @description String representing the browser
+	* @description String representing the browser.
 	* @type String
 	*/
 	browser: Module.prototype.browser,
@@ -356,8 +347,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @event destroyEvent
-    * @description Fires when a MenuItem instances's HTMLLIElement is removed from
-    * its parent HTMLUListElement node.
+    * @description Fires when the menu item's <code>&#60;li&#62;</code> element is removed from its parent <code>&#60;ul&#62;</code> element.
     * @type YAHOO.util.CustomEvent
     */
     destroyEvent: null,
@@ -365,8 +355,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @event mouseOverEvent
-    * @description Fires when the mouse has entered a MenuItem instance.  Passes
-    * back the DOM Event object as an argument.
+    * @description Fires when the mouse has entered the menu item.  Passes back the DOM Event object as an argument.
     * @type YAHOO.util.CustomEvent
     */
     mouseOverEvent: null,
@@ -374,8 +363,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @event mouseOutEvent
-    * @description Fires when the mouse has left a MenuItem instance.  Passes back  
-    * the DOM Event object as an argument.
+    * @description Fires when the mouse has left the menu item.  Passes back the DOM Event object as an argument.
     * @type YAHOO.util.CustomEvent
     */
     mouseOutEvent: null,
@@ -383,8 +371,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @event mouseDownEvent
-    * @description Fires when the user mouses down on a MenuItem instance.  Passes 
-    * back the DOM Event object as an argument.
+    * @description Fires when the user mouses down on the menu item.  Passes back the DOM Event object as an argument.
     * @type YAHOO.util.CustomEvent
     */
     mouseDownEvent: null,
@@ -392,9 +379,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @event mouseUpEvent
-    * @description Fires when the user releases a mouse button while the mouse is 
-    * over a MenuItem instance.  Passes back the DOM Event object as
-    * an argument.
+    * @description Fires when the user releases a mouse button while the mouse is over the menu item.  Passes back the DOM Event object as an argument.
     * @type YAHOO.util.CustomEvent
     */
     mouseUpEvent: null,
@@ -402,8 +387,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @event clickEvent
-    * @description Fires when the user clicks the on a MenuItem instance.  Passes 
-    * back the DOM Event object as an argument.
+    * @description Fires when the user clicks the on the menu item.  Passes back the DOM Event object as an argument.
     * @type YAHOO.util.CustomEvent
     */
     clickEvent: null,
@@ -411,8 +395,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @event keyPressEvent
-    * @description Fires when the user presses an alphanumeric key.  Passes back the 
-    * DOM Event object as an argument.
+    * @description Fires when the user presses an alphanumeric key when the menu item has focus.  Passes back the DOM Event object as an argument.
     * @type YAHOO.util.CustomEvent
     */
     keyPressEvent: null,
@@ -420,8 +403,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @event keyDownEvent
-    * @description Fires when the user presses a key.  Passes back the DOM Event 
-    * object as an argument.
+    * @description Fires when the user presses a key when the menu item has focus.  Passes back the DOM Event object as an argument.
     * @type YAHOO.util.CustomEvent
     */
     keyDownEvent: null,
@@ -429,8 +411,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @event keyUpEvent
-    * @description Fires when the user releases a key.  Passes back the DOM Event 
-    * object as an argument.
+    * @description Fires when the user releases a key when the menu item has focus.  Passes back the DOM Event object as an argument.
     * @type YAHOO.util.CustomEvent
     */
     keyUpEvent: null,
@@ -438,7 +419,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @event focusEvent
-    * @description Fires when a MenuItem instance receives focus.
+    * @description Fires when the menu item receives focus.
     * @type YAHOO.util.CustomEvent
     */
     focusEvent: null,
@@ -446,7 +427,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @event blurEvent
-    * @description Fires when a MenuItem instance loses the input focus.
+    * @description Fires when the menu item loses the input focus.
     * @type YAHOO.util.CustomEvent
     */
     blurEvent: null,
@@ -454,18 +435,12 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method init
-    * @description The MenuItem class's initialization method. This method is 
-    * automatically called by the constructor, and sets up all DOM references 
-    * for pre-existing markup, and creates required markup if it is not
-    * already present.
-    * @param {String} p_oObject The text of the MenuItem to be 
-    * created <em>OR</em>
-    * @param {HTMLElement} p_oObject The HTMLElement representing the source  
-    * node (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of 
-    * the MenuItem
-    * @param {Object} p_oConfig The configuration object literal containing 
-    * the configuration for a MenuItem instance. See the configuration 
-    * class documentation for more details.
+    * @description The MenuItem class's initialization method. This method is automatically called by the constructor, and sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
+    * @param {String} p_oObject String specifying the text of the menu item.
+    * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-74680021">HTMLLIElement</a>} p_oObject Object specifying the <code>&#60;li&#62;</code> element of the menu item.
+    * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-38450247">HTMLOptGroupElement</a>} p_oObject Object specifying the <code>&#60;optgroup&#62;</code> element of the menu item.
+    * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-70901257">HTMLOptionElement</a>} p_oObject Object specifying the <code>&#60;option&#62;</code> element of the menu item.
+    * @param {Object} p_oConfig Optional. Object literal specifying the configuration for the menu item. See configuration class documentation for more details.
     */
     init: function(p_oObject, p_oConfig) {
 
@@ -686,11 +661,11 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method _getFirstElement
-    * @description Returns an HTMLElement's first HTMLElement node
+    * @description Returns an HTML element's first HTML element node.
     * @private
-    * @param {HTMLElement} p_oElement The element to be evaluated.
-    * @param {String} p_sTagName Optional. The tagname of the element.
-    * @return HTMLElement
+    * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">HTMLElement</a>} p_oElement Object reference specifying the element to be evaluated.
+    * @param {String} p_sTagName Optional. String specifying the tagname of the element to be retrieved.
+    * @return {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">HTMLElement</a>}
     */
     _getFirstElement: function(p_oElement, p_sTagName) {
 
@@ -726,10 +701,10 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method _checkString
-    * @description Determines if an object is a string.  Returns true if the object is a string.
+    * @description Determines if an object is a string.
     * @private
-    * @param {Object} p_oObject The object to be evaluated.
-    * @return Boolean
+    * @param {Object} p_oObject Object to be evaluated.
+    * @return {Boolean}
     */
     _checkString: function(p_oObject) {
 
@@ -740,10 +715,10 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method _checkDOMNode
-    * @description Determines if an object is an HTMLElement.  Returns true if the object is an HTMLElement.
+    * @description Determines if an object is an HTML element.
     * @private
-    * @param {Object} p_oObject The object to be evaluated.
-    * @return Boolean
+    * @param {Object} p_oObject Object to be evaluated.
+    * @return {Boolean}
     */
     _checkDOMNode: function(p_oObject) {
 
@@ -754,7 +729,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method _createRootNodeStructure
-    * @description Creates the core DOM structure for a MenuItem instance.
+    * @description Creates the core DOM structure for the menu item.
     * @private
     */
     _createRootNodeStructure: function () {
@@ -775,8 +750,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method _initSubTree
-    * @description Iterates the source element's childNodes collection and uses the  
-    * child nodes to instantiate other menus.
+    * @description Iterates the source element's childNodes collection and uses the child nodes to instantiate other menus.
     * @private
     */
     _initSubTree: function() {
@@ -856,11 +830,9 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method _preloadImage
-    * @description Preloads an image by creating an image element from the 
-    * specified path and appending the image to the body of 
-    * the document
+    * @description Preloads an image by creating an image element from the specified path and appending the image to the body of the document.
     * @private
-    * @param {String} p_sPath The path to the image.                
+    * @param {String} p_sPath String specifying the path to the image.                
     */
     _preloadImage: function(p_sPath) {
 
@@ -887,13 +859,10 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method configText
-    * @description Event handler for when the "text" configuration property of
-    * a MenuItem instance changes. 
-    * @param {String} p_sType The name of the event that was fired.
-    * @param {Array} p_aArgs Collection of arguments sent when the 
-    * event was fired.
-    * @param {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
-    * that fired the event.
+    * @description Event handler for when the "text" configuration property of the menu item changes.
+    * @param {String} p_sType String representing the name of the event that was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item that fired the event.
     */
     configText: function(p_sType, p_aArgs, p_oItem) {
 
@@ -911,13 +880,10 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method configHelpText
-    * @description Event handler for when the "helptext" configuration property of
-    * a MenuItem instance changes. 
-    * @param {String} p_sType The name of the event that was fired.
-    * @param {Array} p_aArgs Collection of arguments sent when the 
-    * event was fired.
-    * @param {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
-    * that fired the event.
+    * @description Event handler for when the "helptext" configuration property of the menu item changes.
+    * @param {String} p_sType String representing the name of the event that was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item that fired the event.
     */    
     configHelpText: function(p_sType, p_aArgs, p_oItem) {
 
@@ -930,9 +896,7 @@ YAHOO.widget.MenuItem.prototype = {
 
 
         /**
-        * @method initHelpText
-        * @description Adds the "hashelptext" class to the necessary nodes and refires the 
-        * "selected" and "disabled" configuration events
+        * Adds the "hashelptext" class to the necessary nodes and refires the "selected" and "disabled" configuration events.
         * @private
         */
         var initHelpText = function() {
@@ -955,8 +919,7 @@ YAHOO.widget.MenuItem.prototype = {
 
 
         /**
-        * @method removeHelpText
-        * @description Removes the "hashelptext" class and corresponding DOM element (EM)
+        * Removes the "hashelptext" class and corresponding DOM element (EM).
         * @private
         */
         var removeHelpText = function() {
@@ -1025,13 +988,10 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method configURL
-    * @description Event handler for when the "url" configuration property of
-    * a MenuItem instance changes.  
-    * @param {String} p_sType The name of the event that was fired.
-    * @param {Array} p_aArgs Collection of arguments sent when the 
-    * event was fired.
-    * @param {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
-    * that fired the event.
+    * @description Event handler for when the "url" configuration property of the menu item changes.
+    * @param {String} p_sType String representing the name of the event that was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item that fired the event.
     */    
     configURL: function(p_sType, p_aArgs, p_oItem) {
 
@@ -1050,13 +1010,10 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method configTarget
-    * @description Event handler for when the "target" configuration property of
-    * a MenuItem instance changes.  
-    * @param {String} p_sType The name of the event that was fired.
-    * @param {Array} p_aArgs Collection of arguments sent when the 
-    * event was fired.
-    * @param {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
-    * that fired the event.
+    * @description Event handler for when the "target" configuration property of the menu item changes.  
+    * @param {String} p_sType String representing the name of the event that was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item that fired the event.
     */    
     configTarget: function(p_sType, p_aArgs, p_oItem) {
 
@@ -1079,13 +1036,10 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method configEmphasis
-    * @description Event handler for when the "emphasis" configuration property of
-    * a MenuItem instance changes.  
-    * @param {String} p_sType The name of the event that was fired.
-    * @param {Array} p_aArgs Collection of arguments sent when the 
-    * event was fired.
-    * @param {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
-    * that fired the event.
+    * @description Event handler for when the "emphasis" configuration property of the menu item changes.  
+    * @param {String} p_sType String representing the name of the event that was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item that fired the event.
     */    
     configEmphasis: function(p_sType, p_aArgs, p_oItem) {
 
@@ -1129,13 +1083,10 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method configStrongEmphasis
-    * @description Event handler for when the "strongemphasis" configuration property of
-    * a MenuItem instance changes. 
-    * @param {String} p_sType The name of the event that was fired.
-    * @param {Array} p_aArgs Collection of arguments sent when the 
-    * event was fired.
-    * @param {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
-    * that fired the event.
+    * @description Event handler for when the "strongemphasis" configuration property of the menu item changes. 
+    * @param {String} p_sType String representing the name of the event that was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item that fired the event.
     */    
     configStrongEmphasis: function(p_sType, p_aArgs, p_oItem) {
 
@@ -1177,13 +1128,10 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method configChecked
-    * @description Event handler for when the "checked" configuration property of
-    * a MenuItem instance changes. 
-    * @param {String} p_sType The name of the event that was fired.
-    * @param {Array} p_aArgs Collection of arguments sent when the 
-    * event was fired.
-    * @param {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
-    * that fired the event.
+    * @description Event handler for when the "checked" configuration property of the menu item changes. 
+    * @param {String} p_sType String representing the name of the event that was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item that fired the event.
     */    
     configChecked: function(p_sType, p_aArgs, p_oItem) {
     
@@ -1257,13 +1205,10 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method configDisabled
-    * @description Event handler for when the "disabled" configuration property of
-    * a MenuItem instance changes. 
-    * @param {String} p_sType The name of the event that was fired.
-    * @param {Array} p_aArgs Collection of arguments sent when the 
-    * event was fired.
-    * @param {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
-    * that fired the event.
+    * @description Event handler for when the "disabled" configuration property of the menu item changes. 
+    * @param {String} p_sType String representing the name of the event that was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item that fired the event.
     */    
     configDisabled: function(p_sType, p_aArgs, p_oItem) {
 
@@ -1345,13 +1290,10 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method configSelected
-    * @description Event handler for when the "selected" configuration property of
-    * a MenuItem instance changes. 
-    * @param {String} p_sType The name of the event that was fired.
-    * @param {Array} p_aArgs Collection of arguments sent when the 
-    * event was fired.
-    * @param {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
-    * that fired the event.
+    * @description Event handler for when the "selected" configuration property of the menu item changes. 
+    * @param {String} p_sType String representing the name of the event that was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item that fired the event.
     */    
     configSelected: function(p_sType, p_aArgs, p_oItem) {
 
@@ -1413,13 +1355,10 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method configSubmenu
-    * @description Event handler for when the "submenu" configuration property 
-    * of a MenuItem instance changes. 
-    * @param {String} p_sType The name of the event that was fired.
-    * @param {Array} p_aArgs Collection of arguments sent when the 
-    * event was fired.
-    * @param {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
-    * that fired the event.
+    * @description Event handler for when the "submenu" configuration property of the menu item changes. 
+    * @param {String} p_sType String representing the name of the event that was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item that fired the event.
     */
     configSubmenu: function(p_sType, p_aArgs, p_oItem) {
 
@@ -1562,7 +1501,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * @config text
-        * @description The text label for the MenuItem.
+        * @description String specifying the text label for the menu item.  When building a menu from existing HTML the value of this property will be interpreted from the menu's markup.
         * @default ""
         * @type String
         */
@@ -1579,16 +1518,16 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * @config helptext
-        * @description Additional instructional text to accompany the text for the MenuItem. For example: If the text of the MenuItem is set to "Copy" the help text might be "Ctrl + C" to inform the user there is a keyboard shortcut for the item.
+        * @description String specifying additional instructional text to accompany the text for the nenu item.
         * @default null
-        * @type String|Emphasis node (&#60;EM&#62;)
+        * @type String|<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">HTMLElement</a>
         */
         oConfig.addProperty("helptext", { handler: this.configHelpText });
 
 
         /**
         * @config url
-        * @description The URL for the MenuItem's anchor's "href" attribute.
+        * @description String specifying the URL for the menu item's anchor's "href" attribute.  When building a menu from existing HTML the value of this property will be interpreted from the menu's markup.
         * @default "#"
         * @type String
         */        
@@ -1600,7 +1539,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * @config target
-        * @description The value to be used for the MenuItem's anchor's "target" attribute. <strong>Specifying a target will require the user to click directly on an item's anchor node to cause the browser to navigate to the item's specified URL.</strong>
+        * @description String specifying the value for the "target" attribute of the menu item's anchor element. <strong>Specifying a target will require the user to click directly on the menu item's anchor node in order to cause the browser to navigate to the specified URL.</strong>  When building a menu from existing HTML the value of this property will be interpreted from the menu's markup.
         * @default null
         * @type String
         */        
@@ -1612,7 +1551,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * @config emphasis
-        * @description If set to "true" the text for the MenuItem will be rendered with emphasis (using &#60;EM&#62;).
+        * @description Boolean indicating if the text of the menu item will be rendered with emphasis.  When building a menu from existing HTML the value of this property will be interpreted from the menu's markup.
         * @default false
         * @type Boolean
         */
@@ -1629,7 +1568,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * @config strongemphasis
-        * @description If set to "true" the text for the MenuItem will be rendered with strong emphasis (using  &#60;STRONG&#62;).
+        * @description Boolean indicating if the text of the menu item will be rendered with strong emphasis.  When building a menu from existing HTML the value of this property will be interpreted from the menu's markup.
         * @default false
         * @type Boolean
         */
@@ -1646,7 +1585,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * @config checked
-        * @description If set to "true" the MenuItem will be rendered with a checkmark.
+        * @description Boolean indicating if the menu item should be rendered with a checkmark.
         * @default false
         * @type Boolean
         */
@@ -1664,7 +1603,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * @config disabled
-        * @description If set to "true" the MenuItem will be dimmed and will not respond to user input or fire events.
+        * @description Boolean indicating if the menu item should be disabled.  (Disabled menu items are  dimmed and will not respond to user input or fire events.)
         * @default false
         * @type Boolean
         */
@@ -1681,7 +1620,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * @config selected
-        * @description If set to "true" the MenuItem will be highlighted.
+        * @description Boolean indicating if the menu item should be highlighted.
         * @default false
         * @type Boolean
         */
@@ -1698,9 +1637,11 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * @config submenu
-        * @description Appends/removes a menu (and its associated DOM elements) to/from the item.  The value can be one of the following:<ul><li>A Menu instance</li><li>The id of an existing HTMLElement (HTMLOptGroupElement or HTMLDivElement)</li><li>An HTMLElement reference (HTMLOptGroupElement or HTMLDivElement)</li><li>An object literal representing the menu to be created.  Format: <code>{ id: [menu id], itemdata: [<a href="YAHOO.widget.Menu.html#itemData">array of values for items</a>] }</code></li><li>The id of the menu that you want to create</li></ul>
+        * @description Object specifying the submenu to be appended to the menu item.  The value can be one of the following: <ul><li>Object specifying a Menu instance.</li><li>Object literal specifying the menu to be created.  Format: <code>{ id: [menu id], itemdata: [<a href="YAHOO.widget.Menu.html#itemData">array of values for items</a>] }</code>.</li><li>String specifying the id attribute of the <code>&#60;div&#62;</code> element of the menu.</li><li>Object specifying the <code>&#60;div&#62;</code> element of the menu.</li></ul>
+
+
         * @default null
-        * @type Menu|String|Object|HTMLElement
+        * @type Menu|String|Object|<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">HTMLElement</a>
         */
         oConfig.addProperty("submenu", { handler: this.configSubmenu });
 
@@ -1709,9 +1650,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method getNextEnabledSibling
-    * @description Finds the next enabled MenuItem instance in a Menu instance 
-    * @return Returns a MenuItem instance.
-    * @type YAHOO.widget.MenuItem
+    * @description Finds the menu item's next enabled sibling.
+    * @return YAHOO.widget.MenuItem
     */
     getNextEnabledSibling: function() {
 
@@ -1720,12 +1660,12 @@ YAHOO.widget.MenuItem.prototype = {
             var nGroupIndex = this.groupIndex;
 
             /**
-            * Returns the next item in an array 
+            * Finds the next item in an array.
             * @private
-            * @param {p_aArray} An array
-            * @param {p_nStartIndex} The index to start searching the array 
-            * @return Returns an item in an array
-            * @type Object 
+            * @param {p_aArray} Array to search.
+            * @param {p_nStartIndex} Number indicating the index to 
+            * start searching the array.
+            * @return {Object}
             */
             var getNextArrayItem = function(p_aArray, p_nStartIndex) {
     
@@ -1764,7 +1704,7 @@ YAHOO.widget.MenuItem.prototype = {
     
                 var aNextGroup = getNextArrayItem(aItemGroups, nNextGroupIndex);
     
-                // Retrieve the first MenuItem instance in the next group
+                // Retrieve the first menu item in the next group
     
                 oNextItem = getNextArrayItem(aNextGroup, 0);
     
@@ -1783,10 +1723,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method getPreviousEnabledSibling
-    * @description Finds the previous enabled MenuItem instance in a 
-    * Menu instance 
-    * @return Returns a MenuItem instance.
-    * @type YAHOO.widget.MenuItem
+    * @description Finds the menu item's previous enabled sibling.
+    * @return {YAHOO.widget.MenuItem}
     */
     getPreviousEnabledSibling: function() {
 
@@ -1797,10 +1735,10 @@ YAHOO.widget.MenuItem.prototype = {
             /**
             * Returns the previous item in an array 
             * @private
-            * @param {p_aArray} An array
-            * @param {p_nStartIndex} The index to start searching the array 
-            * @return Returns an item in an array
-            * @type Object 
+            * @param {p_aArray} Array to search.
+            * @param {p_nStartIndex} Number indicating the index to 
+            * start searching the array.
+            * @return {Object}
             */
             var getPreviousArrayItem = function(p_aArray, p_nStartIndex) {
     
@@ -1813,10 +1751,10 @@ YAHOO.widget.MenuItem.prototype = {
             /**
             * Get the index of the first item in an array 
             * @private
-            * @param {p_aArray} An array
-            * @param {p_nStartIndex} The index to start searching the array 
-            * @return Returns an item in an array
-            * @type Object 
+            * @param {p_aArray} Array to search.
+            * @param {p_nStartIndex} Number indicating the index to 
+            * start searching the array.
+            * @return {Object}
             */    
             var getFirstItemIndex = function(p_aArray, p_nStartIndex) {
     
@@ -1879,8 +1817,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method focus
-    * @description Causes a MenuItem instance to receive the focus and fires the
-    * focus event.
+    * @description Causes the menu item to receive the focus and fires the focus event.
     */
     focus: function() {
 
@@ -1912,7 +1849,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method blur
-    * @description Causes a MenuItem instance to lose focus and fires the onblur event.
+    * @description Causes the menu item to lose focus and fires the onblur event.
     */    
     blur: function() {
 
@@ -1935,8 +1872,7 @@ YAHOO.widget.MenuItem.prototype = {
 
 	/**
     * @method destroy
-	* @description Removes a MenuItem instance's HTMLLIElement from its parent
-    * HTMLUListElement node.
+	* @description Removes the menu item's <code>&#60;li&#62;</code> element from its parent <code>&#60;ul&#62;</code> element.
 	*/
     destroy: function() {
 
@@ -1980,7 +1916,8 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method toString
-    * @description Returns a string representing the specified object.
+    * @description Returns a string representing the menu item.
+    * @return {String}
     */
     toString: function() {
     

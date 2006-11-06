@@ -5,12 +5,12 @@ var Event = YAHOO.util.Event;
 
 
 /**
-* The Menu class creates a container that holds a vertical list of options or commands.  Menu is the base class for all menuing containers.
-* @param {String} p_oElement String representing the id attribute of the <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/global.html#edef-DIV">HTMLDivElement</a> of the menu.
-* @param {String} p_oElement String representing the id attribute of the <a href="http://www.w3.org/TR/1999/REC-html401-19991224/interact/forms.html#edef-SELECT">HTMLSelectElement</a> to be used as the data source for the menu.
-* @param {<a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/global.html#edef-DIV">HTMLDivElement</a>} p_oElement Object specifying the <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/global.html#edef-DIV">HTMLDivElement</a> of the menu.
-* @param {<a href="http://www.w3.org/TR/1999/REC-html401-19991224/interact/forms.html#edef-SELECT">HTMLSelectElement</a>} p_oElement Object specifying the <a href="http://www.w3.org/TR/1999/REC-html401-19991224/interact/forms.html#edef-SELECT">HTMLSelectElement</a> to be used as the data source for the menu.
-* @param {Object} p_oConfig Optional. Object literal representing the configuration for the menu. See configuration class documentation for more details.
+* The Menu class creates a container that holds a vertical list of options or commands.  Menu is the base class for all menu containers.
+* @param {String} p_oElement String specifying the id attribute of the <code>&#60;div&#62;</code> element of the menu.
+* @param {String} p_oElement String specifying the id attribute of the <code>&#60;select&#62;</code> element to be used as the data source for the menu.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-22445964">HTMLDivElement</a>} p_oElement Object specifying the <code>&#60;div&#62;</code> element of the menu.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-94282980">HTMLSelectElement</a>} p_oElement Object specifying the <code>&#60;select&#62;</code> element to be used as the data source for the menu.
+* @param {Object} p_oConfig Optional. Object literal specifying the configuration for the menu. See configuration class documentation for more details.
 * @namespace YAHOO.widget
 * @class Menu
 * @constructor
@@ -46,7 +46,8 @@ YAHOO.extend(YAHOO.widget.Menu, YAHOO.widget.Overlay, {
 
 /**
 * @property CSS_CLASS_NAME
-* @description String representing the CSS class(es) to be applied to the menu's <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/global.html#edef-DIV">HTMLDivElement</a>.
+* @description String representing the CSS class(es) to be applied to the menu's <code>&#60;div&#62;</code> element.
+* @default "yuimenu"
 * @final
 * @type String
 */
@@ -55,7 +56,8 @@ CSS_CLASS_NAME: "yuimenu",
 
 /**
 * @property ITEM_TYPE
-* @description Object representing the type of menu item to instantiate and add when parsing the child nodes (either <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/lists.html#edef-LI">HTMLLIElement</a>, <a href="http://www.w3.org/TR/1999/REC-html401-19991224/interact/forms.html#edef-OPTGROUP">HTMLOptGroupElement</a> or <a href="http://www.w3.org/TR/1999/REC-html401-19991224/interact/forms.html#edef-OPTION">HTMLOptionElement</a>) of the menu's source HTML element.
+* @description Object representing the type of menu item to instantiate and add when parsing the child nodes (either <code>&#60;li&#62;</code> element, <code>&#60;optgroup&#62;</code> element or <code>&#60;option&#62;</code>) of the menu's source HTML element.
+* @default YAHOO.widget.MenuItem
 * @final
 * @type YAHOO.widget.MenuItem
 */
@@ -65,6 +67,7 @@ ITEM_TYPE: null,
 /**
 * @property GROUP_TITLE_TAG_NAME
 * @description String representing the tagname of the HTML element used to title the menu's item groups.
+* @default H6
 * @final
 * @type String
 */
@@ -78,6 +81,7 @@ GROUP_TITLE_TAG_NAME: "H6",
 /** 
 * @property _nHideDelayId
 * @description Number representing the time-out setting used to cancel the hiding of a menu.
+* @default null
 * @private
 * @type Number
 */
@@ -87,6 +91,7 @@ _nHideDelayId: null,
 /** 
 * @property _nShowDelayId
 * @description Number representing the time-out setting used to cancel the showing of a menu.
+* @default null
 * @private
 * @type Number
 */
@@ -96,6 +101,7 @@ _nShowDelayId: null,
 /** 
 * @property _hideDelayEventHandlersAssigned
 * @description Boolean indicating if the "mouseover" and "mouseout" event handlers used for hiding the menu via a call to "window.setTimeout" have already been assigned.
+* @default false
 * @private
 * @type Boolean
 */
@@ -105,6 +111,7 @@ _hideDelayEventHandlersAssigned: false,
 /**
 * @property _bHandledMouseOverEvent
 * @description Boolean indicating the current state of the menu's "mouseover" event.
+* @default false
 * @private
 * @type Boolean
 */
@@ -114,6 +121,7 @@ _bHandledMouseOverEvent: false,
 /**
 * @property _bHandledMouseOutEvent
 * @description Boolean indicating the current state of the menu's "mouseout" event.
+* @default false
 * @private
 * @type Boolean
 */
@@ -123,6 +131,7 @@ _bHandledMouseOutEvent: false,
 /**
 * @property _aGroupTitleElements
 * @description Array of HTML element used to title groups of menu items.
+* @default []
 * @private
 * @type Array
 */
@@ -132,6 +141,7 @@ _aGroupTitleElements: null,
 /**
 * @property _aItemGroups
 * @description Array of menu items.
+* @default []
 * @private
 * @type Array
 */
@@ -140,7 +150,8 @@ _aItemGroups: null,
 
 /**
 * @property _aListElements
-* @description Array of <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/lists.html#edef-UL">HTMLUListElement</a>s, each of which is the parent node for each item's <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/lists.html#edef-LI">HTMLLIElement</a> node.
+* @description Array of <code>&#60;ul&#62;</code> elements, each of which is the parent node for each item's <code>&#60;li&#62;</code> element.
+* @default []
 * @private
 * @type Array
 */
@@ -154,6 +165,7 @@ _aListElements: null,
 /**
 * @property lazyLoad
 * @description Boolean indicating if the menu's "lazy load" feature is enabled.  If set to "true," initialization and rendering of the menu's items will be deferred until the first time it is made visible.  This property should be set via the constructor using the configuration object literal.
+* @default false
 * @type Boolean
 */
 lazyLoad: false,
@@ -162,6 +174,7 @@ lazyLoad: false,
 /**
 * @property itemData
 * @description Array of items to be added to the menu.  The array can contain strings representing the text for each item to be created, object literals representing the menu item configuration properties, or MenuItem instances.  This property should be set via the constructor using the configuration object literal.
+* @default null
 * @type Array
 */
 itemData: null,
@@ -170,6 +183,7 @@ itemData: null,
 /**
 * @property activeItem
 * @description Object reference to the item in the menu that has focus.
+* @default null
 * @type YAHOO.widget.MenuItem
 */
 activeItem: null,
@@ -178,6 +192,7 @@ activeItem: null,
 /**
 * @property parent
 * @description Object reference to the menu's parent menu or menu item.  This property can be set via the constructor using the configuration object literal.
+* @default null
 * @type YAHOO.widget.MenuItem
 */
 parent: null,
@@ -185,8 +200,9 @@ parent: null,
 
 /**
 * @property srcElement
-* @description Object reference to the HTML element (either <a href="http://www.w3.org/TR/1999/REC-html401-19991224/interact/forms.html#edef-SELECT">HTMLSelectElement</a> or <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/global.html#edef-DIV">HTMLDivElement</a>) used to create the menu.
-* @type <a href="http://www.w3.org/TR/1999/REC-html401-19991224/interact/forms.html#edef-SELECT">HTMLSelectElement</a>/<a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/global.html#edef-DIV">HTMLDivElement</a>
+* @description Object reference to the HTML element (either <code>&#60;select&#62;</code> or <code>&#60;div&#62;</code>) used to create the menu.
+* @default null
+* @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-94282980">HTMLSelectElement</a>|<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-22445964">HTMLDivElement</a>
 */
 srcElement: null,
 
@@ -277,11 +293,11 @@ itemRemovedEvent: null,
 /**
 * @method init
 * @description The Menu class's initialization method. This method is automatically called by the constructor, and sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
-* @param {String} p_oElement String representing the id attribute of the <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/global.html#edef-DIV">HTMLDivElement</a> of the menu.
-* @param {String} p_oElement String representing the id attribute of the <a href="http://www.w3.org/TR/1999/REC-html401-19991224/interact/forms.html#edef-SELECT">HTMLSelectElement</a> to be used as the data source for the menu.
-* @param {<a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/global.html#edef-DIV">HTMLDivElement</a>} p_oElement Object specifying the <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/global.html#edef-DIV">HTMLDivElement</a> of the menu.
-* @param {<a href="http://www.w3.org/TR/1999/REC-html401-19991224/interact/forms.html#edef-SELECT">HTMLSelectElement</a>} p_oElement Object specifying the <a href="http://www.w3.org/TR/1999/REC-html401-19991224/interact/forms.html#edef-SELECT">HTMLSelectElement</a> to be used as the data source for the menu.
-* @param {Object} p_oConfig Optional. Object literal representing the configuration for the menu. See configuration class documentation for more details.
+* @param {String} p_oElement String specifying the id attribute of the <code>&#60;div&#62;</code> element of the menu.
+* @param {String} p_oElement String specifying the id attribute of the <code>&#60;select&#62;</code> element to be used as the data source for the menu.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-22445964">HTMLDivElement</a>} p_oElement Object specifying the <code>&#60;div&#62;</code> element of the menu.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-94282980">HTMLSelectElement</a>} p_oElement Object specifying the <code>&#60;select&#62;</code> element to be used as the data source for the menu.
+* @param {Object} p_oConfig Optional. Object literal specifying the configuration for the menu. See configuration class documentation for more details.
 */
 init: function(p_oElement, p_oConfig) {
 
@@ -603,7 +619,7 @@ _initSubTree: function() {
 /**
 * @method _getFirstEnabledItem
 * @description Returns the first enabled item in the menu.
-* @return YAHOO.widget.MenuItem
+* @return {YAHOO.widget.MenuItem}
 * @private
 */
 _getFirstEnabledItem: function() {
@@ -648,8 +664,8 @@ _getFirstEnabledItem: function() {
 * @method _checkPosition
 * @description Checks to make sure that the value of the "position" property is one of the supported strings. Returns true if the position is supported.
 * @private
-* @param {Object} p_sPosition String representing the position of the menu.
-* @return Boolean
+* @param {Object} p_sPosition String specifying the position of the menu.
+* @return {Boolean}
 */
 _checkPosition: function(p_sPosition) {
 
@@ -673,7 +689,7 @@ _checkPosition: function(p_sPosition) {
 * @param {String} p_oItem String specifying the text of the item to be added to the menu.
 * @param {Object} p_oItem Object literal containing a set of menu item configuration properties.
 * @param {Number} p_nItemIndex Optional. Number indicating the index at which the menu item should be added.
-* @return YAHOO.widget.MenuItem 
+* @return {YAHOO.widget.MenuItem}
 */
 _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
 
@@ -757,13 +773,12 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
   
     
                     /**
-                    * Returns the next sibling of an item in an array 
+                    * Returns the next sibling of an item in an array.
                     * @private
-                    * @param {p_aArray} An array
-                    * @param {p_nStartIndex} The index to start searching
-                    * the array 
-                    * @return Returns an item in an array
-                    * @type Object 
+                    * @param {p_aArray} Array to search.
+                    * @param {p_nStartIndex} Number indicating the index to 
+                    * start searching the array.
+                    * @return {Object}
                     */
                     var getNextItemSibling = 
                     
@@ -888,7 +903,7 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
 * @private
 * @param {Number} p_nGroupIndex Number indicating the group to which the menu item belongs.
 * @param {Number} p_nItemIndex Number indicating the index of the menu item to be removed.
-* @return YAHOO.widget.MenuItem
+* @return {YAHOO.widget.MenuItem}
 */    
 _removeItemFromGroupByIndex: function(p_nGroupIndex, p_nItemIndex) {
 
@@ -964,7 +979,7 @@ _removeItemFromGroupByIndex: function(p_nGroupIndex, p_nItemIndex) {
 * @private
 * @param {Number} p_nGroupIndex Number indicating the group to which the menu item belongs.
 * @param {YAHOO.widget.MenuItem} p_oItem Object reference for the MenuItem instance to be removed.
-* @return YAHOO.widget.MenuItem
+* @return {YAHOO.widget.MenuItem}
 */    
 _removeItemFromGroupByValue: function(p_nGroupIndex, p_oItem) {
 
@@ -1061,10 +1076,10 @@ _updateItemProperties: function(p_nGroupIndex) {
 
 /**
 * @method _createItemGroup
-* @description Creates a new menu item group (array) and its associated <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/lists.html#edef-UL">HTMLUListElement</a>. Returns an aray of menu item groups.
+* @description Creates a new menu item group (array) and its associated <code>&#60;ul&#62;</code> element. Returns an aray of menu item groups.
 * @private
 * @param {Number} p_nIndex Number indicating the group to create.
-* @return Array
+* @return {Array}
 */
 _createItemGroup: function(p_nIndex) {
 
@@ -1088,7 +1103,7 @@ _createItemGroup: function(p_nIndex) {
 * @description Returns the menu item group at the specified index.
 * @private
 * @param {Number} p_nIndex Number indicating the index of the menu item group to be retrieved.
-* @return Array
+* @return {Array}
 */
 _getItemGroup: function(p_nIndex) {
 
@@ -1174,7 +1189,7 @@ _subscribeToItemEvents: function(p_oItem) {
 
 /**
 * @method _getOffsetWidth
-* @description Returns the offset width of the menu's root <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/global.html#edef-DIV">HTMLDivElement</a>.
+* @description Returns the offset width of the menu's <code>&#60;div&#62;</code> element.
 * @private
 */
 _getOffsetWidth: function() {
@@ -1269,7 +1284,7 @@ _cancelShowDelay: function() {
 * @method _execShowDelay
 * @description Shows the menu after the number of milliseconds specified by the "showdelay" configuration property have ellapsed.
 * @private
-* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that should be made visible.
+* @param {YAHOO.widget.Menu} p_oMenu Object specifying the menu that should be made visible.
 */
 _execShowDelay: function(p_oMenu) {
 
@@ -1550,7 +1565,7 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
                 /*
                     Follow the URL of the item regardless of 
                     whether or not the user clicked specifically
-                    on the HTMLAnchorElement.
+                    on the anchor element.
                 */
     
                 document.location = sURL;
@@ -1837,7 +1852,7 @@ _onInit: function(p_sType, p_aArgs, p_oMenu) {
 
 /**
 * @method _onBeforeRender
-* @description "beforerender" event handler for the menu.  Appends all of the <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/lists.html#edef-UL">HTMLUListElement</a> nodes (and their child <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/lists.html#edef-LI">HTMLLIElement</a>) nodes and their accompanying title nodes to the body element of the menu.
+* @description "beforerender" event handler for the menu.  Appends all of the <code>&#60;ul&#62;</code>, <code>&#60;li&#62;</code> and their accompanying title elements to the body element of the menu.
 * @private
 * @param {String} p_sType String representing the name of the event that was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
@@ -2049,8 +2064,8 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
             /**
             * "click" event handler for the document
             * @private
-            * @param {Event} p_oEvent Event object passed back by the event 
-            * utility (YAHOO.util.Event).
+            * @param {Event} p_oEvent Object reference for the DOM event object 
+            * passed back by the event utility (YAHOO.util.Event).
             */
             var disableAutoSubmenuDisplay = function(p_oEvent) {
 
@@ -2470,7 +2485,7 @@ enforceConstraints: function(type, args, obj) {
 
 /**
 * @method configVisible
-* @description Event handler for when the "visible" configuration property the menu.
+* @description Event handler for when the "visible" configuration property the menu changes.
 * @param {String} p_sType String representing the name of the event that was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
 * @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that fired the event.
@@ -2755,6 +2770,7 @@ getRoot: function() {
 /**
 * @method toString
 * @description Returns a string representing the menu.
+* @return {String}
 */
 toString: function() {
 
@@ -2766,8 +2782,8 @@ toString: function() {
 /**
 * @method setItemGroupTitle
 * @description Sets the title of a group of menu items.
-* @param {String} p_sGroupTitle String representing the title of the group.
-* @param {Number} p_nGroupIndex Optional. Number indicating the group to which the title belongs.
+* @param {String} p_sGroupTitle String specifying the title of the group.
+* @param {Number} p_nGroupIndex Optional. Number specifying the group to which the title belongs.
 */
 setItemGroupTitle: function(p_sGroupTitle, p_nGroupIndex) {
         
@@ -2832,7 +2848,7 @@ setItemGroupTitle: function(p_sGroupTitle, p_nGroupIndex) {
 * @param {String} p_oItem String specifying the text of the item to be added to the menu.
 * @param {Object} p_oItem Object literal containing a set of menu item configuration properties.
 * @param {Number} p_nGroupIndex Optional. Number indicating the group to which the item belongs.
-* @return YAHOO.widget.MenuItem
+* @return {YAHOO.widget.MenuItem}
 */
 addItem: function(p_oItem, p_nGroupIndex) {
 
@@ -2848,9 +2864,9 @@ addItem: function(p_oItem, p_nGroupIndex) {
 /**
 * @method addItems
 * @description Adds an array of items to the menu.
-* @param {Array} p_aItems Array of items to be added to the menu.  The array can contain strings representing the text for each item to be created, object literals containing each of the menu item configuration properties, or MenuItem instances.
-* @param {Number} p_nGroupIndex Optional. Number indicating the group to which the items belongs.
-* @return Array
+* @param {Array} p_aItems Array of items to be added to the menu.  The array can contain strings specifying the text for each item to be created, object literals specifying each of the menu item configuration properties, or MenuItem instances.
+* @param {Number} p_nGroupIndex Optional. Number specifying the group to which the items belongs.
+* @return {Array}
 */
 addItems: function(p_aItems, p_nGroupIndex) {
 
@@ -2906,7 +2922,7 @@ addItems: function(p_aItems, p_nGroupIndex) {
 * @param {Object} p_oItem Object literal containing a set of menu item configuration properties.
 * @param {Number} p_nItemIndex Number indicating the ordinal position at which the item should be added.
 * @param {Number} p_nGroupIndex Optional. Number indicating the group to which the item belongs.
-* @return YAHOO.widget.MenuItem
+* @return {YAHOO.widget.MenuItem}
 */
 insertItem: function(p_oItem, p_nItemIndex, p_nGroupIndex) {
     
@@ -2923,9 +2939,9 @@ insertItem: function(p_oItem, p_nItemIndex, p_nGroupIndex) {
 * @method removeItem
 * @description Removes the specified item from the menu.
 * @param {YAHOO.widget.MenuItem} p_oObject Object reference for the MenuItem instance to be removed from the menu.
-* @param {Number} p_oObject Number representing the index of the item to be removed.
-* @param {Number} p_nGroupIndex Optional. Number indicating the group to which the item belongs.
-* @return YAHOO.widget.MenuItem
+* @param {Number} p_oObject Number specifying the index of the item to be removed.
+* @param {Number} p_nGroupIndex Optional. Number specifying the group to which the item belongs.
+* @return {YAHOO.widget.MenuItem}
 */
 removeItem: function(p_oObject, p_nGroupIndex) {
     
@@ -2965,7 +2981,7 @@ removeItem: function(p_oObject, p_nGroupIndex) {
 /**
 * @method getItemGroups
 * @description Returns a multi-dimensional array of all of the items in the menu.
-* @return Array
+* @return {Array}
 */        
 getItemGroups: function() {
 
@@ -2979,7 +2995,7 @@ getItemGroups: function() {
 * @description Returns the item at the specified index.
 * @param {Number} p_nItemIndex Number indicating the ordinal position of the item to be retrieved.
 * @param {Number} p_nGroupIndex Optional. Number indicating the group to which the item belongs.
-* @return YAHOO.widget.MenuItem
+* @return {YAHOO.widget.MenuItem}
 */
 getItem: function(p_nItemIndex, p_nGroupIndex) {
     
@@ -3000,7 +3016,7 @@ getItem: function(p_nItemIndex, p_nGroupIndex) {
 
 /**
 * @method destroy
-* @description Removes the menu's <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/global.html#edef-DIV">HTMLDivElement</a> (and accompanying child nodes) from the DOM.
+* @description Removes the menu's <code>&#60;div&#62;</code> element (and accompanying child nodes) from the document.
 */
 destroy: function() {
 
@@ -3166,7 +3182,7 @@ initDefaultConfig: function() {
 
     /**
     * @config visible
-    * @description Boolean indicating whether or not the menu is visible.  If the menu's "position" configuration property is set to "dynamic" (the default), this property toggles the menu's <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/global.html#edef-DIV">HTMLDivElement</a>'s "visibility" style property between "visible" (true) or  "hidden" (false).  If the menu's "position" configuration property is set to "static" this property toggles the menu's <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/global.html#edef-DIV">HTMLDivElement</a>'s "display" style property between "block" (true) or "none" (false).
+    * @description Boolean indicating whether or not the menu is visible.  If the menu's "position" configuration property is set to "dynamic" (the default), this property toggles the menu's <code>&#60;div&#62;</code> element's "visibility" style property between "visible" (true) or  "hidden" (false).  If the menu's "position" configuration property is set to "static" this property toggles the menu's <code>&#60;div&#62;</code> element's "display" style property between "block" (true) or "none" (false).
     * @default true
     * @type Boolean
     */
@@ -3204,8 +3220,7 @@ initDefaultConfig: function() {
 
     /**
     * @config position
-    * @description String indicating how a menu should be positioned on the screen.  Possible values are "static" and "dynamic."  Static menus are visible by default and reside in the normal flow of the document (CSS position: static).  Dynamic menus are hidden by default, reside out of the normal flow of the document (CSS position: absolute), and can overlay other  
-    * elements on the screen.
+    * @description String indicating how a menu should be positioned on the screen.  Possible values are "static" and "dynamic."  Static menus are visible by default and reside in the normal flow of the document (CSS position: static).  Dynamic menus are hidden by default, reside out of the normal flow of the document (CSS position: absolute), and can overlay other elements on the screen.
     * @default dynamic
     * @type String
     */
@@ -3293,8 +3308,8 @@ initDefaultConfig: function() {
 
 	/**
 	* @config container
-	* @description HTML element reference or string representing the id attribute of the HTML element that the menu's markup should be rendered into.
-	* @type HTML element/String
+	* @description HTML element reference or string specifying the id attribute of the HTML element that the menu's markup should be rendered into.
+	* @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">HTMLElement</a>|String
 	* @default document.body
 	*/
 	this.cfg.addProperty(

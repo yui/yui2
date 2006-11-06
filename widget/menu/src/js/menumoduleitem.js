@@ -1,15 +1,11 @@
 /**
-* The MenuModuleItem class allows you to create and modify an item for a
-* MenuModule instance.
+* Creates an item for a menu module.
 * 
-* @param {String} p_oObject The text of the MenuModuleItem to be 
-* created.
-* @param {HTMLElement} p_oObject The HTMLElement representing the source node 
-* (either HTMLLIElement, HTMLOptGroupElement or HTMLOptionElement) of 
-* the MenuModuleItem.
-* @param {Object} p_oConfig The configuration object literal containing 
-* the configuration for a MenuItem instance. See the configuration 
-* class documentation for more details.
+* @param {String} p_oObject String specifying the text of the menu module item.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-74680021">HTMLLIElement</a>} p_oObject Object specifying the <code>&#60;li&#62;</code> element of the menu module item.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-38450247">HTMLOptGroupElement</a>} p_oObject Object specifying the <code>&#60;optgroup&#62;</code> element of the menu module item.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-70901257">HTMLOptionElement</a>} p_oObject Object specifying the <code>&#60;option&#62;</code> element of the menu module item.
+* @param {Object} p_oConfig Optional. Object literal specifying the configuration for the menu module item. See configuration class documentation for more details.
 * @class MenuModuleItem
 * @constructor
 * @deprecated As of version 0.12, all MenuModuleItem functionality has been 

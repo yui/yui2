@@ -58,7 +58,7 @@ YAHOO.widget.MenuManager = new function() {
     var m_oVisibleMenus = {};
 
 
-    // Create a logger
+    // Logger
 
     var m_oLogger = new YAHOO.widget.LogWriter(this.toString());
 
@@ -68,10 +68,9 @@ YAHOO.widget.MenuManager = new function() {
 
 
     /**
-    * @method addItem
-    * @description Adds an item to the collection of known MenuItem instances.
+    * Adds an item to the collection of known menu items.
     * @private
-    * @param {YAHOO.widget.MenuItem} p_oItem MenuItem instance to be added.
+    * @param {YAHOO.widget.MenuItem} p_oItem Object specifying the MenuItem instance to be added.
     */
     var addItem = function(p_oItem) {
     
@@ -94,11 +93,9 @@ YAHOO.widget.MenuManager = new function() {
 
 
     /**
-    * @method removeItem
-    * @description Removes an item from the collection of known 
-    * MenuItem instances.
+    * Removes an item from the collection of known menu items.
     * @private
-    * @param {YAHOO.widget.MenuItem} p_oItem MenuItem instance
+    * @param {YAHOO.widget.MenuItem} p_oItem Object specifying the MenuItem instance to be removed.
     */
     var removeItem = function(p_oItem) {
     
@@ -117,11 +114,9 @@ YAHOO.widget.MenuManager = new function() {
 
 
     /**
-    * @method getMenuRootElement
-    * @description Finds the root DIV node of a menu or the root LI node of a 
-    * menu item
+    * Finds the root DIV node of a menu or the root LI node of a menu item.
     * @private
-    * @param {HTMLElement} p_oElement An HTML element
+    * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">HTMLElement</a>} p_oElement Object specifying an HTML element.
     */
     var getMenuRootElement = function(p_oElement) {
     
@@ -136,6 +131,7 @@ YAHOO.widget.MenuManager = new function() {
                     oParentNode = p_oElement.parentNode;
     
                     // Check if the DIV is the inner "body" node of a menu
+
                     if(
                         Dom.hasClass(p_oElement, "bd") && 
                         oParentNode && 
@@ -182,13 +178,12 @@ YAHOO.widget.MenuManager = new function() {
 
 
     /**
-    * @method onDOMEvent
-    * @description Generic, global event handler for all of a menu's DOM-based 
+    * Generic, global event handler for all of a menu's DOM-based 
     * events.  This listens for events against the document object.  If the 
     * target of a given event is a member of a menu or menu item's DOM, the 
     * instance's corresponding Custom Event is fired.
     * @private
-    * @param {Event} p_oEvent Event object passed back by the event 
+    * @param {Event} p_oEvent Object representing the DOM event object passed back by the event 
     * utility (YAHOO.util.Event).
     */
     var onDOMEvent = function(p_oEvent) {
@@ -303,13 +298,11 @@ YAHOO.widget.MenuManager = new function() {
 
 
     /**
-    * @method onMenuDestroy
-    * @description "destroy" event handler for a Menu instance.
+    * "destroy" event handler for a menu.
     * @private
-    * @param {String} p_sType The name of the event that was fired.
-    * @param {Array} p_aArgs Collection of arguments sent when the 
-    * event was fired.
-    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
+    * @param {String} p_sType String representing the name of the event that was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that fired the event.
     */
     var onMenuDestroy = function(p_sType, p_aArgs, p_oMenu) {
         
@@ -319,14 +312,11 @@ YAHOO.widget.MenuManager = new function() {
 
 
     /**
-    * @method onItemDestroy
-    * @description "destroy" event handler for a MenuItem instance.
+    * "destroy" event handler for a MenuItem instance.
     * @private
-    * @param {String} p_sType The name of the event that was fired.
-    * @param {Array} p_aArgs Collection of arguments sent when the 
-    * event was fired.
-    * @param {YAHOO.widget.MenuItem} p_oItem The MenuItem instance 
-    * that fired the event.
+    * @param {String} p_sType String representing the name of the event that was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item that fired the event.
     */
     var onItemDestroy = function(p_sType, p_aArgs, p_oItem) {
 
@@ -342,14 +332,12 @@ YAHOO.widget.MenuManager = new function() {
 
 
     /**
-    * @method onMenuVisibleConfigChange
-    * @description Event handler for when the "visible" configuration property 
+    * Event handler for when the "visible" configuration property 
     * of a Menu instance changes.
     * @private
-    * @param {String} p_sType The name of the event that was fired.
-    * @param {Array} p_aArgs Collection of arguments sent when the 
-    * event was fired.
-    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
+    * @param {String} p_sType String representing the name of the event that was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that fired the event.
     */
     var onMenuVisibleConfigChange = function(p_sType, p_aArgs, p_oMenu) {
 
@@ -378,12 +366,10 @@ YAHOO.widget.MenuManager = new function() {
 
 
     /**
-    * @method onItemAdded
-    * @description "itemadded" event handler for a Menu instance.
+    * "itemadded" event handler for a Menu instance.
     * @private
-    * @param {String} p_sType The name of the event that was fired.
-    * @param {Array} p_aArgs Collection of arguments sent when the 
-    * event was fired.
+    * @param {String} p_sType String representing the name of the event that was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
     */
     var onItemAdded = function(p_sType, p_aArgs) {
     
@@ -393,12 +379,10 @@ YAHOO.widget.MenuManager = new function() {
     
 
     /**
-    * @method onItemRemoved
-    * @description "itemremoved" event handler for a Menu instance.
+    * "itemremoved" event handler for a Menu instance.
     * @private
-    * @param {String} p_sType The name of the event that was fired.
-    * @param {Array} p_aArgs Collection of arguments sent when the 
-    * event was fired.
+    * @param {String} p_sType String representing the name of the event that was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
     */
     var onItemRemoved = function(p_sType, p_aArgs) {
 
@@ -413,8 +397,8 @@ YAHOO.widget.MenuManager = new function() {
 
     /**
     * @method addMenu
-    * @description Adds a Menu instance to the collection of known menus.
-    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance to be added.
+    * @description Adds a menu to the collection of known menus.
+    * @param {YAHOO.widget.Menu} p_oMenu Object specifying the Menu instance to be added.
     */
     this.addMenu = function(p_oMenu) {
 
@@ -463,8 +447,8 @@ YAHOO.widget.MenuManager = new function() {
 
     /**
     * @method removeMenu
-    * @description Removes a Menu instance from the collection of known menus.
-    * @param {YAHOO.widget.Menu} p_oMenu The Menu instance to be removed.
+    * @description Removes a menu from the collection of known menus.
+    * @param {YAHOO.widget.Menu} p_oMenu Object specifying the Menu instance to be removed.
     */
     this.removeMenu = function(p_oMenu) {
 
@@ -482,7 +466,7 @@ YAHOO.widget.MenuManager = new function() {
 
     /**
     * @method hideVisible
-    * @description Hides all visible, dynamically positioned Menu instances.
+    * @description Hides all visible, dynamically positioned menus.
     */
     this.hideVisible = function() {
 
@@ -509,7 +493,8 @@ YAHOO.widget.MenuManager = new function() {
 
     /**
     * @method getMenus
-    * @description Returns a collection of all Menu instances.
+    * @description Returns an array of all menus registered with the menu manger.
+    * @return {Array}
     */
     this.getMenus = function() {
     
@@ -520,8 +505,9 @@ YAHOO.widget.MenuManager = new function() {
 
     /**
     * @method getMenu
-    * @description Returns a Menu instance with the specified id.
-    * @param {String} p_sId The id of the Menu instance to be retrieved.
+    * @description Returns a menu with the specified id.
+    * @param {String} p_sId String specifying the id of the menu to be retrieved.
+    * @return {YAHOO.widget.Menu}
     */
     this.getMenu = function(p_sId) {
 
@@ -536,7 +522,8 @@ YAHOO.widget.MenuManager = new function() {
     
     /**
     * @method toString
-    * @description Returns a string representing the object.
+    * @description Returns a string representing the menu manager.
+    * @return {String}
     */
     this.toString = function() {
     

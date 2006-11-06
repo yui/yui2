@@ -1,15 +1,11 @@
 /**
-* Horizontal collection of items, each of which can contain a submenu.
-* Extends YAHOO.widget.Menu to provide a set of default mouse and 
-* key event behaviors.
+* Horizontal collection of items, each of which can contain a submenu. Extends YAHOO.widget.Menu to provide a set of default mouse and key event behaviors.
 * 
-* @param {String} p_oElement The HTMLElement ID representing the source node 
-* (either HTMLSelectElement or HTMLDivElement) of the MenuBar <em>OR</em>
-* @param {Element} p_oElement The HTMLElement representing the MenuBar to
-* be created
-* @param {Object} p_oConfig Optional. The configuration object literal 
-* containing the configuration for a MenuBar instance. See 
-* configuration class documentation for more details.
+* @param {String} p_oElement String specifying the id attribute of the <code>&#60;div&#62;</code> element of the menu bar.
+* @param {String} p_oElement String specifying the id attribute of the <code>&#60;select&#62;</code> element to be used as the data source for the menu bar.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-22445964">HTMLDivElement</a>} p_oElement Object specifying the <code>&#60;div&#62;</code> element of the menu bar.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-94282980">HTMLSelectElement</a>} p_oElement Object specifying the <code>&#60;select&#62;</code> element to be used as the data source for the menu bar.
+* @param {Object} p_oConfig Optional. Object literal specifying the configuration for the menu bar. See configuration class documentation for more details.
 * @class Menubar
 * @constructor
 * @extends YAHOO.widget.Menu
@@ -29,16 +25,12 @@ YAHOO.extend(YAHOO.widget.MenuBar, YAHOO.widget.Menu, {
 
 /**
 * @method init
-* @description The MenuBar class's initialization method. This method is automatically 
-* called by the constructor, and sets up all DOM references for pre-existing 
-* markup, and creates required markup if it is not already present.
-* @param {String} p_oElement The HTMLElement ID representing the source node 
-* (either HTMLSelectElement or HTMLDivElement) of the MenuBar <em>OR</em>
-* @param {Element} p_oElement The HTMLElement representing the MenuBar to
-* be created
-* @param {Object} p_oConfig Optional. The configuration object literal 
-* containing the configuration for a MenuBar instance. See 
-* configuration class documentation for more details.
+* @description The MenuBar class's initialization method. This method is automatically called by the constructor, and sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
+* @param {String} p_oElement String specifying the id attribute of the <code>&#60;div&#62;</code> element of the menu bar.
+* @param {String} p_oElement String specifying the id attribute of the <code>&#60;select&#62;</code> element to be used as the data source for the menu bar.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-22445964">HTMLDivElement</a>} p_oElement Object specifying the <code>&#60;div&#62;</code> element of the menu bar.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-94282980">HTMLSelectElement</a>} p_oElement Object specifying the <code>&#60;select&#62;</code> element to be used as the data source for the menu bar.
+* @param {Object} p_oConfig Optional. Object literal specifying the configuration for the menu bar. See configuration class documentation for more details.
 */
 init: function(p_oElement, p_oConfig) {
 
@@ -74,8 +66,8 @@ init: function(p_oElement, p_oConfig) {
 
 /**
 * @property CSS_CLASS_NAME
-* @description Constant representing the CSS class(es) to be applied to the root 
-* HTMLDivElement of the MenuBar instance.
+* @description String representing the CSS class(es) to be applied to the menu bar's <code>&#60;div&#62;</code> element.
+* @default "yuimenubar"
 * @final
 * @type String
 */
@@ -88,13 +80,11 @@ CSS_CLASS_NAME: "yuimenubar",
 
 /**
 * @method _onKeyDown
-* @description "keydown" Custom Event handler for a MenuBar instance.
+* @description "keydown" Custom Event handler for the menu bar.
 * @private
-* @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArgs Collection of arguments sent when the event 
-* was fired.
-* @param {YAHOO.widget.MenuBar} p_oMenuBar The MenuBar instance that 
-* fired the event.
+* @param {String} p_sType String representing the name of the event that was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+* @param {YAHOO.widget.MenuBar} p_oMenuBar Object representing the menu bar that fired the event.
 */
 _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
 
@@ -219,13 +209,11 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
 
 /**
 * @method _onClick
-* @description "click" Custom Event handler for a MenuBar instance.
-* @private
-* @param {String} p_sType The name of the event that was fired.
-* @param {Array} p_aArgs Collection of arguments sent when the event 
-* was fired.
-* @param {YAHOO.widget.MenuBar} p_oMenuBar The MenuBar instance that 
-* fired the event.
+* @description "click" event handler for the menu bar.
+* @protected
+* @param {String} p_sType String representing the name of the event that was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+* @param {YAHOO.widget.MenuBar} p_oMenuBar Object representing the menu bar that fired the event.
 */
 _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
 
@@ -297,7 +285,8 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
 
 /**
 * @method toString
-* @description Returns a string representing the specified object.
+* @description Returns a string representing the menu bar.
+* @return {String}
 */
 toString: function() {
 
@@ -308,7 +297,7 @@ toString: function() {
 
 /**
 * @description Initializes the class's configurable properties which can be
-* changed using the Menu's Config object (cfg).
+* changed using the menu bar's Config object ("cfg").
 * @method initDefaultConfig
 */
 initDefaultConfig: function() {
@@ -322,17 +311,12 @@ initDefaultConfig: function() {
 
     /*
         Set the default value for the "position" configuration property
-        to "static" 
+        to "static" by re-adding the property.
     */
 
     /**
     * @config position
-    * @description Defines how a menu should be positioned on the screen.  
-    * Possible values are "static" and "dynamic."  Static menus are visible by 
-    * default and reside in the normal flow of the document (CSS position:  
-    * static).  Dynamic menus are hidden by default, reside out of the normal  
-    * flow of the document (CSS position: absolute), and can overlay other  
-    * elements on the screen.
+    * @description String indicating how a menu bar should be positioned on the screen.  Possible values are "static" and "dynamic."  Static menu bars are visible by default and reside in the normal flow of the document (CSS position: static).  Dynamic menu bars are hidden by default, reside out of the normal flow of the document (CSS position: absolute), and can overlay other elements on the screen.
     * @default static
     * @type String
     */
@@ -349,15 +333,12 @@ initDefaultConfig: function() {
 
     /*
         Set the default value for the "submenualignment" configuration property
-        to "tl" and "bl" 
+        to ["tl","bl"] by re-adding the property.
     */
 
     /**
     * @config submenualignment
-    * @description Defines how submenus should be aligned to their parent   
-    * MenuBarItem instance. The format is: [itemCorner, submenuCorner]. By   
-    * default, submenus of a menu bar are aligned to that their top left corner 
-    * is aligned to its parent item's bottom left corner.
+    * @description Array defining how submenus should be aligned to their parent menu bar item. The format is: [itemCorner, submenuCorner].
     * @default ["tl","bl"]
     * @type Array
     */
@@ -366,13 +347,12 @@ initDefaultConfig: function() {
 
     /*
         Change the default value for the "autosubmenudisplay" configuration 
-        property to "false"
+        property to "false" by re-adding the property.
     */
 
     /**
     * @config autosubmenudisplay
-    * @description Defines whether or not submenus are automatically made 
-    * visible when the user mouses over the items in a menu bar.
+    * @description Boolean indicating if submenus are automatically made visible when the user mouses over the menu bar's items.
     * @default false
     * @type Boolean
     */
@@ -383,4 +363,4 @@ initDefaultConfig: function() {
 
 }
  
-}); // END YAHOO.extend    
+}); // END YAHOO.extend

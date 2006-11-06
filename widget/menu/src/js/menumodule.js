@@ -1,13 +1,11 @@
 /**
 * The base class for all menuing containers.
 * 
-* @param {String} p_oElement The HTMLElement ID representing the source node 
-* (either HTMLSelectElement or HTMLDivElement) of the MenuModule.
-* @param {Element} p_oElement The HTMLElement representing the MenuModule to 
-* be created.
-* @param {Object} p_oConfig Optional. The configuration object literal 
-* containing the configuration for a MenuModule instance. See 
-* configuration class documentation for more details.
+* @param {String} p_oElement String specifying the id attribute of the <code>&#60;div&#62;</code> element of the menu module.
+* @param {String} p_oElement String specifying the id attribute of the <code>&#60;select&#62;</code> element to be used as the data source for the menu module.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-22445964">HTMLDivElement</a>} p_oElement Object specifying the <code>&#60;div&#62;</code> element of the menu module.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-94282980">HTMLSelectElement</a>} p_oElement Object specifying the <code>&#60;select&#62;</code> element to be used as the data source for the menu module.
+* @param {Object} p_oConfig Optional. Object literal specifying the configuration for the menu module. See configuration class documentation for more details.
 * @class MenuModule
 * @constructor
 * @extends YAHOO.widget.Overlay
