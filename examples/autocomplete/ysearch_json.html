@@ -9,16 +9,14 @@
 <link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
 
 <style type="text/css">
-    #ysearchmod {position:relative;text-align:center;z-index:9050;}
-    #ysearchautocomplete {position:relative;}
-    #ysearchinput {position:relative;width:20em;height:1.4em;}
-    #ysearchcontainer {position:absolute;left:0;top:1.7em;display:inline;}
+    #ysearchmod {text-align:center;}
+    #ysearchinput {width:20em;height:1.4em;}
+    #ysearchcontainer {position:absolute;z-index:9050;}
     #ysearchcontainer .yui-ac-content {position:absolute;left:0;top:0;width:20em;border:1px solid #404040;background:#fff;overflow:hidden;text-align:left;z-index:9050;}
     #ysearchcontainer .yui-ac-shadow {position:absolute;left:0;top:0;margin:.3em;background:#a0a0a0;z-index:9049;}
     #ysearchcontainer ul {padding:5px 0;width:100%;}
     #ysearchcontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
     #ysearchcontainer li.yui-ac-highlight {background:#ff0;}
-    #ysearchsubmit {position:relative;}
 </style>
 </head>
 
@@ -31,12 +29,10 @@
     <!-- AutoComplete begins -->
     <div id="ysearchmod">
         <form onsubmit="return YAHOO.example.ACJson.validateForm();">
-            <span>Yahoo! Search</span>
-            <span id="ysearchautocomplete">
-                <input id="ysearchinput">
-                <div id="ysearchcontainer"></div>
-            </span>
+            <label>Yahoo! Search</label>
+            <input id="ysearchinput">
             <input id="ysearchsubmit" type="submit" value="Submit Query">
+            <div id="ysearchcontainer"></div>
         </form>
     </div>
     <!-- AutoComplete ends -->
@@ -53,6 +49,10 @@
     valid data, the DataSource property <code>scriptQueryAppend</code> is used
     to pass along all the required query parameters, and the property
     <code>queryMatchContains</code> has been enabled.</p>
+    
+    <p>To achieve the shrink-wrapped centered search module, not only have custom CSS
+    been applied, but the the <code>doBeforeExpandContainer</code> method has also been
+    customized to position the container directly below the input field.
     <!-- Sample code begins -->
     <div id="code">
         <h3>Sample Code</h3>
@@ -60,32 +60,28 @@
         <p>CSS:</p>
         
         <textarea name="code" class="HTML" cols="60" rows="1">
-            #ysearchmod {position:relative;text-align:center;z-index:9050;}
-            #ysearchautocomplete {position:relative;}
-            #ysearchinput {position:relative;width:20em;height:1.4em;}
-            #ysearchcontainer {position:absolute;left:0;top:1.7em;display:inline;}
+            #ysearchmod {text-align:center;}
+            #ysearchinput {width:20em;height:1.4em;}
+            #ysearchcontainer {position:absolute;z-index:9050;}
             #ysearchcontainer .yui-ac-content {position:absolute;left:0;top:0;width:20em;border:1px solid #404040;background:#fff;overflow:hidden;text-align:left;z-index:9050;}
             #ysearchcontainer .yui-ac-shadow {position:absolute;left:0;top:0;margin:.3em;background:#a0a0a0;z-index:9049;}
             #ysearchcontainer ul {padding:5px 0;width:100%;}
             #ysearchcontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
             #ysearchcontainer li.yui-ac-highlight {background:#ff0;}
-            #ysearchsubmit {position:relative;}
         </textarea>
 
         <p>Markup:</p>
         
         <textarea name="code" class="HTML" cols="60" rows="1">
             <!-- AutoComplete begins -->
-            <div id="ysearchmod">
-                <form onsubmit="return YAHOO.example.ACJson.validateForm();">
-                    <span>Yahoo! Search</span>
-                    <span id="ysearchautocomplete">
+                <div id="ysearchmod">
+                    <form onsubmit="return YAHOO.example.ACJson.validateForm();">
+                        <label>Yahoo! Search</label>
                         <input id="ysearchinput">
+                        <input id="ysearchsubmit" type="submit" value="Submit Query">
                         <div id="ysearchcontainer"></div>
-                    </span>
-                    <input id="ysearchsubmit" type="submit" value="Submit Query">
-                </form>
-            </div>
+                    </form>
+                </div>
             <!-- AutoComplete ends -->
         </textarea>
 
@@ -104,8 +100,14 @@
 
             // Instantiate AutoComplete
             oAutoComp = new YAHOO.widget.AutoComplete("ysearchinput","ysearchcontainer", oACDS);
+            oAutoComp.useShadow = true;
             oAutoComp.formatResult = function(oResultItem, sQuery) {
                 return oResultItem[1].Title + " (" + oResultItem[1].Url + ")";
+            };
+            oAutoComp.doBeforeExpandContainer = function(oTextbox, oContainer, sQuery, aResults) {
+                var pos = YAHOO.util.Dom.getXY(oTextbox);
+                pos[1] += YAHOO.util.Dom.get(oTextbox).offsetHeight;
+                YAHOO.util.Dom.setXY(oContainer,pos);
             };
         </textarea>
     </div>
@@ -147,8 +149,14 @@ YAHOO.example.ACJson = function(){
 
             // Instantiate AutoComplete
             oAutoComp = new YAHOO.widget.AutoComplete("ysearchinput","ysearchcontainer", oACDS);
+            oAutoComp.useShadow = true;
             oAutoComp.formatResult = function(oResultItem, sQuery) {
                 return oResultItem[1].Title + " (" + oResultItem[1].Url + ")";
+            };
+            oAutoComp.doBeforeExpandContainer = function(oTextbox, oContainer, sQuery, aResults) {
+                var pos = YAHOO.util.Dom.getXY(oTextbox);
+                pos[1] += YAHOO.util.Dom.get(oTextbox).offsetHeight;
+                YAHOO.util.Dom.setXY(oContainer,pos);
             };
         },
 
