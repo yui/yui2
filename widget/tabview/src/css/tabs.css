@@ -1,0 +1,86 @@
+.yui-navset .yui-content {
+    background-color:#F2F3F5;
+    border:1px solid #999;
+}
+
+.yui-navset .yui-nav li a {
+    color:#666;
+}
+
+.yui-navset .yui-nav li.on, .yui-navset .yui-nav li.on a { /* selected tab */
+    color:#999;
+}
+ 
+.yui-navset .yui-nav .on a {  /* border-color should match selected color */
+    background-color:#F2F3F5;
+    border-bottom:1px solid #F2F3F5;
+}
+
+.yui-navset .yui-nav .orphan, .yui-navset .yui-nav li.orphan a {color:#999;}
+
+/* bg images, defaults to #999 border-color on white bg */
+.yui-navset .yui-nav li a {
+    background:#ccc;
+    border:1px solid #999;
+    Xbackground:#ccc url(http://us.i1.yimg.com/us.yimg.com/i/us/nt/el/tb/tr_999.gif) no-repeat top right;
+}
+
+.yui-navset .yui-nav li em {
+    Xbackground:transparent url(http://us.i1.yimg.com/us.yimg.com/i/us/nt/el/tb/tl_999.gif) no-repeat;
+}
+
+.yui-navset {
+    width:100%; /* IE: width */
+}
+.yui-navset .yui-nav a {
+    text-decoration:none;
+}
+
+.yui-navset .yui-nav li {
+    float:left;display:inline; /* IE: inline for margin float bug */
+}
+.yui-navset .yui-nav li a:hover {
+    text-decoration:underline;
+}
+.yui-navset .yui-nav:after {clear:both;content:'.';display:block;height:0;visibility:hidden;} /* clear non-IE */
+.yui-navset .yui-nav {zoom:1;} /* clear IE */
+
+/* primary tabs */
+.yui-navset .yui-nav {
+    font:bold 77%/1.2em verdana;
+    margin-bottom:-1px;
+    padding-left:.3em;
+    position:relative; /* IE: quirks mode */
+}
+.yui-navset .yui-nav li a {
+    cursor:hand; cursor:pointer; 
+    margin-right:.33em;
+    padding:0;
+}
+.yui-navset .yui-nav .on strong a {cursor:default;}
+.yui-navset .yui-nav li a, .yui-navset li em {display:block;}
+.yui-navset .yui-nav li a {*display:inline-block;}  /* IE: 100% clickable */
+.yui-navset .yui-nav li em {font-style:normal;padding:.5em .6em;}
+.yui-navset .yui-nav li.orphan, .yui-navset .yui-nav li.orphan a, .yui-navset .yui-nav li.orphan em {background:transparent none;border-width:0;margin:0;}
+
+
+/* Tab Panels */
+.yui-navset .yui-content div {
+    clear:both;
+    Xdisplay:none;
+}
+
+.yui-navset .on {
+    display:block;
+}
+
+.yui-navset .loading {
+    background-image: url(http://us.i1.yimg.com/us.yimg.com/i/us/ph/bn/pixami/t/03282006/rl/3_0/default/waiting.gif);
+    background-repeat: no-repeat;
+    background-position: center center;
+    Xoverflow:hidden;
+}
+
+.yui-navset .loading div {
+    visibility:hidden;
+}
