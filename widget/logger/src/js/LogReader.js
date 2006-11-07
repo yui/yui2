@@ -8,7 +8,7 @@
  * @class LogReader
  * @constructor
  * @param elContainer {HTMLElement} DOM element reference or ID string to contain UI.
- * @param oConfigs {Object} Optional object literal of configuration params
+ * @param oConfigs {Object} Optional object literal of configuration params.
  */
 YAHOO.widget.LogReader = function(elContainer, oConfigs) {
     var oSelf = this;
@@ -16,9 +16,9 @@ YAHOO.widget.LogReader = function(elContainer, oConfigs) {
     YAHOO.widget.LogReader._index++;
 
     // Parse config vars here
-    if (typeof oConfig == "object") {
-        for(var param in oConfig) {
-            this[param] = oConfig[param];
+    if (typeof oConfigs == "object") {
+        for(var param in oConfigs) {
+            this[param] = oConfigs[param];
         }
     }
 
@@ -85,7 +85,7 @@ YAHOO.widget.LogReader = function(elContainer, oConfigs) {
             this._btnCollapse.value = "Collapse";
             this._btnCollapse = this._elCollapse.appendChild(this._btnCollapse);
             YAHOO.util.Event.addListener(
-                oSelf._btnCollapse,'click',oSelf._onClickBtnCollapse,oSelf);
+                oSelf._btnCollapse,'click',oSelf._onClickCollapseBtn,oSelf);
 
             this._title = this._elHd.appendChild(document.createElement("h4"));
             this._title.innerHTML = "Logger Console";
@@ -252,7 +252,7 @@ YAHOO.widget.LogReader.prototype.bottom = null;
 YAHOO.widget.LogReader.prototype.fontSize = null;
 
 /**
- * Whether or not the footer UI is enabled for the log reader. Default: true.
+ * Whether or not the footer UI is enabled for the log reader.
  *
  * @property footerEnabled
  * @type Boolean
@@ -262,7 +262,7 @@ YAHOO.widget.LogReader.prototype.footerEnabled = true;
 
 /**
  * Whether or not output is verbose (more readable). Setting to true will make
- * output more compact (less readable). Default: true.
+ * output more compact (less readable).
  *
  * @property verboseOutput
  * @type Boolean
@@ -271,14 +271,15 @@ YAHOO.widget.LogReader.prototype.footerEnabled = true;
 YAHOO.widget.LogReader.prototype.verboseOutput = true;
 
 /**
- * Whether or not newest message is printed on top. Default: true.
+ * Whether or not newest message is printed on top.
  *
- * @type boolean
+ * @property newestOnTop
+ * @type Boolean
  */
 YAHOO.widget.LogReader.prototype.newestOnTop = true;
 
 /**
- * Maximum number of messages a LogReader console will display. Default: 500;
+ * Maximum number of messages a LogReader console will display.
  *
  * @property thresholdMax
  * @type Number
@@ -288,7 +289,7 @@ YAHOO.widget.LogReader.prototype.thresholdMax = 500;
 
 /**
  * When a LogReader console reaches its thresholdMax, it will clear out messages
- * and print out the latest thresholdMin number of messages. Default: 100;
+ * and print out the latest thresholdMin number of messages.
  *
  * @property thresholdMin
  * @type Number
@@ -354,13 +355,94 @@ YAHOO.widget.LogReader.prototype.show = function() {
 /**
  * Updates title to given string.
  *
- * @param {string} sTitle String to display in log reader's title bar.
- *
  * @method setTitle
  * @param sTitle {String} New title.
  */
 YAHOO.widget.LogReader.prototype.setTitle = function(sTitle) {
-    this._title.innerHTML = this._HTML2Text(sTitle);
+    this._title.innerHTML = this.html2Text(sTitle);
+};
+
+/**
+ * Gets timestamp of the last log.
+ *
+ * @method getLastTime
+ * @return {Date} Timestamp of the last log.
+ */
+YAHOO.widget.LogReader.prototype.getLastTime = function() {
+    return this._lastTime;
+};
+
+/**
+ * Formats message string to HTML for output to console.
+ *
+ * @method formatMsg
+ * @param oLogMsg {Object} Log message object.
+ * @return {String} HTML-formatted message for output to console.
+ */
+YAHOO.widget.LogReader.prototype.formatMsg = function(oLogMsg) {
+    var category = oLogMsg.category;
+    
+    // Label for color-coded display
+    var label = category.substring(0,4).toUpperCase();
+
+    // Calculate the elapsed time to be from the last item that passed through the filter,
+    // not the absolute previous item in the stack
+
+    var time = oLogMsg.time;
+    if (time.toLocaleTimeString) {
+        var localTime  = time.toLocaleTimeString();
+    }
+    else {
+        localTime = time.toString();
+    }
+
+    var msecs = time.getTime();
+    var startTime = YAHOO.widget.Logger.getStartTime();
+    var totalTime = msecs - startTime;
+    var elapsedTime = msecs - this.getLastTime();
+
+    var source = oLogMsg.source;
+    var sourceDetail = oLogMsg.sourceDetail;
+    var sourceAndDetail = (sourceDetail) ?
+        source + " " + sourceDetail : source;
+        
+    // Escape HTML entities in the log message itself for output to console
+    var msg = this.html2Text(oLogMsg.msg);
+
+    // Verbose output includes extra line breaks
+    var output =  (this.verboseOutput) ?
+        ["<p><span class='", category, "'>", label, "</span> ",
+        totalTime, "ms (+", elapsedTime, ") ",
+        localTime, ": ",
+        "</p><p>",
+        sourceAndDetail,
+        ": </p><p>",
+        msg,
+        "</p>"] :
+
+        ["<p><span class='", category, "'>", label, "</span> ",
+        totalTime, "ms (+", elapsedTime, ") ",
+        localTime, ": ",
+        sourceAndDetail, ": ",
+        msg,"</p>"];
+
+    return output.join("");;
+};
+
+/**
+ * TODO: Include in util package.
+ * Converts input chars "<", ">", and "&" to HTML entities.
+ *
+ * @method html2Text
+ * @param sHtml {String} String to convert.
+ * @private
+ */
+YAHOO.widget.LogReader.prototype.html2Text = function(sHtml) {
+    if(sHtml) {
+        sHtml += "";
+        return sHtml.replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
+    }
+    return "";
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -731,16 +813,18 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
     }
     var entriesStartIndex = (entriesLen > thresholdMin) ? (entriesLen - thresholdMin) : 0;
     
-    // Iterate through all log entries to print the ones that filter through
+    // Iterate through all log entries 
     var sourceFiltersLen = this._sourceFilters.length;
     var categoryFiltersLen = this._categoryFilters.length;
     for(var i=entriesStartIndex; i<entriesLen; i++) {
-        var entry = aEntries[i];
-        var category = entry.category;
-        var source = entry.source;
-        var sourceDetail = entry.sourceDetail;
+        // Print only the ones that filter through
         var okToPrint = false;
         var okToFilterCats = false;
+
+        // Get log message details
+        var entry = aEntries[i];
+        var source = entry.source;
+        var category = entry.category;
 
         for(var j=0; j<sourceFiltersLen; j++) {
             if(source == this._sourceFilters[j]) {
@@ -757,72 +841,20 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
             }
         }
         if(okToPrint) {
-            // To format for console, calculate the elapsed time
-            // to be from the last item that passed through the filter,
-            // not the absolute previous item in the stack
-            var label = entry.category.substring(0,4).toUpperCase();
+            var output = this.formatMsg(entry);
 
-            var time = entry.time;
-            if (time.toLocaleTimeString) {
-                var localTime  = time.toLocaleTimeString();
-            }
-            else {
-                localTime = time.toString();
-            }
-
-            var msecs = time.getTime();
-            var startTime = YAHOO.widget.Logger.getStartTime();
-            var totalTime = msecs - startTime;
-            var elapsedTime = msecs - this._lastTime;
-            this._lastTime = msecs;
-
-            var verboseOutput = (this.verboseOutput);
-            var container = (verboseOutput) ? "CODE" : "PRE";
-            var sourceAndDetail = (sourceDetail) ?
-                source + " " + sourceDetail : source;
-
-            // Verbose uses code tag instead of pre tag (for wrapping)
-            // and includes extra line breaks
-            var output =  (verboseOutput) ?
-                ["<p><span class='", category, "'>", label, "</span> ",
-                totalTime, "ms (+", elapsedTime, ") ",
-                localTime, ": ",
-                "</p><p>",
-                sourceAndDetail,
-                ": </p><p>",
-                this._HTML2Text(entry.msg),
-                "</p>"] :
-                
-                ["<p><span class='", category, "'>", label, "</span> ",
-                totalTime, "ms (+", elapsedTime, ") ",
-                localTime, ": ",
-                sourceAndDetail, ": ",
-                this._HTML2Text(entry.msg),"</p>"];
-
+            // Verbose output uses <code> tag instead of <pre> tag (for wrapping)
+            var container = (this.verboseOutput) ? "CODE" : "PRE";
             var oNewElement = (this.newestOnTop) ?
                 this._elConsole.insertBefore(
                     document.createElement(container),this._elConsole.firstChild):
                 this._elConsole.appendChild(document.createElement(container));
 
-            oNewElement.innerHTML = output.join("");
+            oNewElement.innerHTML = output;
             this._consoleMsgCount++;
+            this._lastTime = entry.time.getTime();
         }
     }
-};
-
-/**
- * Converts input chars "<", ">", and "&" to HTML entities.
- *
- * @method _HTML2Text
- * @param sHtml {String} String to convert.
- * @private
- */
-YAHOO.widget.LogReader.prototype._HTML2Text = function(sHtml) {
-    if(sHtml) {
-        sHtml += "";
-        return sHtml.replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
-    }
-    return "";
 };
 
 /////////////////////////////////////////////////////////////////////////////

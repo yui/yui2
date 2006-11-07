@@ -1,13 +1,14 @@
  /**
  * The Logger widget provides a simple way to read or write log messages in
  * JavaScript code. Integration with the YUI Library's debug builds allow
- * implementers to access under the hood events, errors, and debugging messages.
+ * implementers to access under-the-hood events, errors, and debugging messages.
  * Output may be read through a LogReader console and/or output to a browser
  * console.
  *
  * @module logger
  * @requires yahoo, event, dom
  * @optional dragdrop
+ * @namespace YAHOO.widget
  * @title Logger Widget
  */
 
@@ -83,13 +84,12 @@ YAHOO.widget.Logger.log = function(sMsg, sCategory, sSource) {
         }
 
         var timestamp = new Date();
-        var logEntry = {
+        var logEntry = new YAHOO.widget.LogMsg(sMsg, {
             time: timestamp,
             category: sCategory,
             source: sClass,
-            sourceDetail: sDetail,
-            msg: sMsg
-        };
+            sourceDetail: sDetail
+        });
 
         var stack = this._stack;
         var maxStackEntries = this.maxStackEntries;

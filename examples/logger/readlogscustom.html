@@ -44,10 +44,11 @@
                     <!-- Content begins -->
                     <div id="content">
                         <h3>Customized LogReader Example</h3>
-                        <p>These LogReaders have been customized by
-                        modifying the default CSS, and the log messages of
-                        the second LogReader has been made more compact
-                        (i.e., the line break within each message has been removed).</p>
+                        <p>These LogReaders have been customized, not only by modifying
+                        the default CSS, but also, the <code>verboseOutput</code>
+                        properties have been disabled, and the log messages of the first
+                        LogReader have been formatted with a custom <code>formatMsg</code>
+                        method.</p>
 
                         <p><input id="yui-log-inputinfo" class="yui-log-input" type="text" value="Log an info message.">
                             <button onclick="YAHOO.log(document.getElementById('yui-log-inputinfo').value,'info')">Log</button></p>
@@ -122,7 +123,13 @@
                     <!-- Logger ends -->
 
                     <script type="text/javascript">
-                    myLogReader1 = new YAHOO.widget.LogReader("yui-log");
+                    myLogReader1 = new YAHOO.widget.LogReader("yui-log",{verboseOutput: false});
+                    myLogReader1.formatMsg = function(oLogMsg) {
+                        var category = oLogMsg.category;
+                        return "<p><span class='"+category+"'>"+category+"</span> "+
+                            this.html2Text(oLogMsg.msg)+"</p>";
+
+                    };
                     myLogReader2 = new YAHOO.widget.LogReader("yui-log",{verboseOutput: false});
                     </script>
                     </body>
@@ -149,7 +156,13 @@ YAHOO.example.LogReader = function() {
 
     return {
         init: function() {
-            myLogReader1 = new YAHOO.widget.LogReader("yui-log");
+            myLogReader1 = new YAHOO.widget.LogReader("yui-log",{verboseOutput: false});
+            myLogReader1.formatMsg = function(oLogMsg) {
+                var category = oLogMsg.category;
+                return "<p><span class='"+category+"'>"+category+"</span> "+
+                    this.html2Text(oLogMsg.msg)+"</p>";
+
+            };
             myLogReader2 = new YAHOO.widget.LogReader("yui-log",{verboseOutput: false});
         },
 
