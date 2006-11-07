@@ -26,7 +26,7 @@ body{text-align:center;}
 
 /* below required for all fluid grids; adjust widths and margins above accordingly */
 .yui-b {position:relative;}#yui-main .yui-b {position:static;} /* to preserve source-order independence for Gecko */
-#yui-main {overflow:hidden;width:100%;}
+#yui-main {width:100%;}
 .yui-t1 #yui-main,
 .yui-t2 #yui-main,
 .yui-t3 #yui-main{float:right;margin-left:-25em;/* IE: preserve layout at narrow widths */}
@@ -36,8 +36,7 @@ body{text-align:center;}
 .yui-t6 #yui-main{float:left;margin-right:-25em;/* IE: preserve layout at narrow widths */}
 
 .yui-t1 .yui-b {
-	float:left;overflow:auto;
-    overflow-y:hidden;/* IE: hide vertical scroll */
+	float:left;
     width:12.3207em;*width:12.0106em;}
 .yui-t1 #yui-main .yui-b{
 	float:none;width:auto;/* reset above */
@@ -45,8 +44,7 @@ body{text-align:center;}
 }
 
 .yui-t2 .yui-b {
-	float:left;overflow:auto;
-    overflow-y:hidden;/* IE: hide vertical scroll */
+	float:left;
     width:13.8456em;*width:13.512em;}
 .yui-t2 #yui-main .yui-b {
 	float:none;width:auto;/* reset above */
@@ -54,8 +52,7 @@ body{text-align:center;}
 }
 
 .yui-t3 .yui-b {
-	float:left;overflow:auto;
-    overflow-y:hidden;/* IE: hide vertical scroll */
+	float:left;
     width:23.0759em;*width:22.52em;}
 .yui-t3 #yui-main .yui-b {
 	float:none;width:auto;/* reset above */
@@ -63,8 +60,7 @@ body{text-align:center;}
 }
 
 .yui-t4 .yui-b {
-	float:right;overflow:auto;
-    overflow-y:hidden;/* IE: hide vertical scroll */
+	float:right;
     width:13.8456em;*width:13.512em;}
 .yui-t4 #yui-main .yui-b {
 	float:none;width:auto;/* reset above */
@@ -72,8 +68,7 @@ body{text-align:center;}
 }
 
 .yui-t5 .yui-b {
-	float:right;overflow:auto;
-    overflow-y:hidden;/* IE: hide vertical scroll */
+	float:right;
     width:18.4608em;*width:18.016em;}
 .yui-t5 #yui-main .yui-b {
 	float:none;width:auto;/* reset above via specificity */
@@ -81,8 +76,7 @@ body{text-align:center;}
 }
 
 .yui-t6 .yui-b {
-	float:right;overflow:auto;
-    overflow-y:hidden;/* IE: hide vertical scroll */
+	float:right;
     width:23.0759em;*width:22.52em;}
 .yui-t6 #yui-main .yui-b {
 	float:none;width:auto;/* reset above via specificity */
