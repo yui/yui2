@@ -2,6 +2,7 @@
     h2 {font-size:129%;}
     h3 {font-size:114%;}
     h4 {font-size:100%;}
+    h1,h2,h3,h4 {font-weight:bold;}
     body {margin:1em;font-family:verdana,arial,sans-serif;}
     ul {width:80%;}
     dl {padding:1em;}
