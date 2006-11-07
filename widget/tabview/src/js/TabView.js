@@ -61,15 +61,15 @@
      * The className of the HTMLElement containing the TabView's label elements
      * to look for when building from existing markup, or to add when building
      * from scratch. 
-     * All childNodes of the content container are treated as TabPanels when
+     * All childNodes of the content container are treated as content elements when
      * building from existing markup.
-     * @property PANEL_PARENT_CLASSNAME
+     * @property CONTENT_PARENT_CLASSNAME
      * @default "nav-content"
      */
-    proto.PANEL_PARENT_CLASSNAME = 'yui-content';
+    proto.CONTENT_PARENT_CLASSNAME = 'yui-content';
     
     proto._tabParent = null;
-    proto._panelParent = null; 
+    proto._contentParent = null; 
     
     /**
      * Adds a Tab to the TabView instance.  
@@ -81,6 +81,10 @@
      */
     proto.addTab = function(tab, index) {
         var tabs = this.get('tabs');
+        if (!tabs) { // not ready yet
+            this._queue[this._queue.length] = ['addTab', arguments];
+            return false;
+        }
         
         index = (index === undefined) ? tabs.length : index;
         
@@ -89,10 +93,10 @@
         var self = this;
         var el = this.get('element');
         var tabParent = this._tabParent;
-        var panelParent = this._panelParent;
+        var contentParent = this._contentParent;
 
         var tabElement = tab.get('element');
-        var panelElement = tab.get('panel').get('element');
+        var contentEl = tab.get('contentEl');
 
         if ( before ) {
             tabParent.insertBefore(tabElement, before.get('element'));
@@ -100,12 +104,13 @@
             tabParent.appendChild(tabElement);
         }
 
-        if ( panelElement && !Dom.isAncestor(panelParent, panelElement) ) { // TODO: match index?
-            panelParent.appendChild(panelElement);
+        if ( contentEl && !Dom.isAncestor(contentParent, contentEl) ) { // TODO: match index?
+            contentParent.appendChild(contentEl);
         }
         
         if ( !tab.get('active') ) {
-            tab.get('panel').set('visible', false);
+            //tab.get('panel').set('visible', false);
+            tab.get('contentEl').style.display = 'none';
         } else {
             this._configs.activeTab.value = tab;
         }
@@ -137,12 +142,12 @@
         if (Dom.isAncestor(tabParent, target) ) {
             var tabEl;
             var tab = null;
-            var panel;
+            var contentEl;
             var tabs = this.get('tabs');
 
             for (var i = 0, len = tabs.length; i < len; i++) {
                 tabEl = tabs[i].get('element');
-                panel = tabs[i].get('panel');
+                contentEl = tabs[i].get('contentEl');
 
                 if ( target == tabEl || Dom.isAncestor(tabEl, target) ) {
                     tab = tabs[i]; // TODO: what if panel in tab?
@@ -192,14 +197,23 @@
      * @return void
      */
     proto.removeTab = function(tab) {
-        if (!this._tabParent) { // not ready yet
-            this._queue[this._queue.length] = ['removeTab', arguments];
-            return false;
+        var tabCount = this.get('tabs').length;
+
+        var index = this.getTabIndex(tab);
+        var nextIndex = index + 1;
+        if ( tab == this.get('activeTab') ) { // select next tab
+            if (tabCount > 1) {
+                if (index + 1 == tabCount) {
+                    this.set('activeIndex', index - 1);
+                } else {
+                    this.set('activeIndex', index + 1);
+                }
+            }
         }
         
         this._tabParent.removeChild( tab.get('element') );
-        this._panelParent.removeChild( tab.get('panel').get('element') );
-        this._configs.tabs.value.splice(this.getTabIndex(tab), 1);
+        this._contentParent.removeChild( tab.get('contentEl') );
+        this._configs.tabs.value.splice(index, 1);
     	
     };
     
@@ -214,16 +228,16 @@
     };
     
     /**
-     * The transiton to use when swapping tabPanels.
-     * @method panelTransition
-     */
-    proto.panelTransition = function(newPanel, oldPanel) {
-        if (newPanel) {  
-            newPanel.set('visible', true);
+     * The transiton to use when switching between tab content.
+     * @method contentTransition
+     */ // TODO : abstract to show/hideContent
+    proto.contentTransition = function(newContentEl, oldContentEl) {
+        if (newContentEl) {  
+            newContentEl.style.display = 'block';
         }
         
-        if (oldPanel) {
-            oldPanel.set('visible', false);
+        if (oldContentEl) {
+            oldContentEl.style.display = 'none';
         }
     };
     
@@ -258,13 +272,52 @@
                         'ul' )[0] || _createTabParent.call(this);
             
         /**
-         * The container of the tabView's TabPanel elements.
-         * @config _panelParent
+         * The container of the tabView's content elements.
+         * @config _contentParent
          * @type HTMLElement
          */
-        this._panelParent = 
-                this.getElementsByClassName(this.PANEL_PARENT_CLASSNAME,
-                        'div')[0] ||  _createPanelParent.call(this);
+        this._contentParent = 
+                this.getElementsByClassName(this.CONTENT_PARENT_CLASSNAME,
+                        'div')[0] ||  _createContentParent.call(this);
+        
+        /**
+         * How the Tabs should be oriented relative to the TabView.
+         * @config orientation
+         * @type String
+         * @default "top"
+         */
+        this.register('orientation', {
+            value: attr.orientation || 'top',
+            method: function(value) {
+                var current = this.get('orientation');
+                this.addClass('yui-navset-' + value);
+                
+                if (current != value) {
+                    this.removeClass('yui-navset-' + current);
+                }
+                
+                switch(value) {
+                    case 'bottom':
+                    this.appendChild(this._tabParent);
+                    break;
+                }
+            }
+        });
+        
+        /**
+         * The tab currently active.
+         * @config activeTab
+         * @type YAHOO.widget.Tab
+         */
+        this.register('activeIndex', {
+            value: attr.activeIndex,
+            method: function(value) {
+                this.set('activeTab', this.getTab(value));
+            },
+            validator: function(value) {
+                return !this.getTab(value).get('disabled'); // cannot activate if disabled
+            }
+        });
         
         /**
          * The tab currently active.
@@ -275,18 +328,18 @@
             value: attr.activeTab,
             method: function(tab) {
                 var activeTab = this.get('activeTab');
-                var newPanel,
-                    oldPanel;
+                var newContentEl,
+                    oldContentEl;
                 
                 if (activeTab && activeTab != tab) {
                     activeTab.set('active', false); // refresh if active TODO: reload dynamic?
-                    oldPanel = activeTab.get('panel');
+                    oldContentEl = activeTab.get('contentEl');
                 }
                 
                 if (tab) { // might be unsetting
                     tab.set('active', true); // TODO: firing twice
-                    newPanel = tab.get('panel');
-                    this.panelTransition(newPanel, oldPanel);
+                    newContentEl = tab.get('contentEl');
+                    this.contentTransition(newContentEl, oldContentEl);
                 }
             },
             validator: function(value) {
@@ -318,28 +371,28 @@
             el = this.get('element'),
             node,
             tabs,
-            panels,
-            panel,
+            contentElements,
+            contentEl,
             tabParent = this._tabParent,
-            panelParent = this._panelParent;
+            contentParent = this._contentParent;
             
         tabs = _getChildNodes(tabParent);
-        panels = _getChildNodes(panelParent);
+        contentElements = _getChildNodes(contentParent);
 
         for (var i = 0, len = tabs.length; i < len; ++i) {
             attr = {};
             
-            panel = panels[i] || null;
-            attr.panel = new YAHOO.widget.TabPanel(panel); //TODO: why failing?
+            attr.contentEl = contentElements[i] || null;
+            //attr.panel = new YAHOO.widget.TabPanel(panel); //TODO: why failing?
 
             tab = new YAHOO.widget.Tab(tabs[i], attr);
-
             this.addTab(tab);
             
             if (tab.hasClass(tab.ACTIVE_CLASSNAME) ) {
                 this._configs.activeTab.value = tab; // TODO: no method call ?
             } else {
-                tab.get('panel').set('visible', false);
+                //tab.get('panel').set('visible', false);
+                tab.get('contentEl').style.display == 'none';
             }
         }
     };
@@ -366,11 +419,11 @@
         return el;
     };
     
-    var _createPanelParent = function(attr) {
+    var _createContentParent = function(attr) {
         var el = document.createElement('div');
 
-        if ( this.PANEL_PARENT_CLASSNAME ) {
-            el.className = this.PANEL_PARENT_CLASSNAME;
+        if ( this.CONTENT_PARENT_CLASSNAME ) {
+            el.className = this.CONTENT_PARENT_CLASSNAME;
         }
         
         this.get('element').appendChild(el);

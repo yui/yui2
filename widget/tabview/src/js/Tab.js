@@ -97,10 +97,6 @@
         return "Tab " + id; 
     };
     
-    proto.element = null;
-    
-    proto.labelElement = null;
-    
     /**
      * Registers TabView specific properties.
      * @method initConfigs
@@ -114,13 +110,13 @@
         
         /**
          * The element that contains the tab's label.
-         * @config labelElement
+         * @config labelEl
          * @type HTMLElement
          */
-        this.register('labelElement', {
-            value: attr.labelElement || _getLabelElement.call(this),
+        this.register('labelEl', {
+            value: attr.labelEl || _getlabelEl.call(this),
             method: function(value) {
-                var current = this.get('labelElement');
+                var current = this.get('labelEl');
                 if (current) {
                     if (current == value) {
                         return false; // already set
@@ -143,9 +139,9 @@
         this.register('label', {
             value: attr.label || _getLabel.call(this),
             method: function(value) {
-                var labelEl = this.get('labelElement');
+                var labelEl = this.get('labelEl');
                 if (!labelEl) { // create if needed
-                    this.set('labelElement', _createLabelElement.call(this));
+                    this.set('labelEl', _createlabelEl.call(this));
                 }
                 
                 _setLabel.call(this, value);
@@ -178,13 +174,13 @@
             value: {
                 success: function(o) {
                             this.set('content', o.responseText);
-                            Dom.removeClass(this.get('panel').get('parentNode'),
+                            Dom.removeClass(this.get('contentEl').get('parentNode'),
                                     this.LOADING_CLASSNAME);
                 },
                 failure: function(o) {
                             YAHOO.log('loading failed: ' + o.statusText,
-                                    'error', 'TabPanel');
-                            Dom.removeClass(this.get('panel').get('parentNode'),
+                                    'error', 'Tab');
+                            Dom.removeClass(this.get('contentEl').get('parentNode'),
                                     this.LOADING_CLASSNAME);
                 },
                 scope: this
@@ -214,7 +210,7 @@
                                 return false;
                             }
                             
-                            Dom.addClass(this.get('panel').get('parentNode'), this.LOADING_CLASSNAME);
+                            Dom.addClass(this.get('contentEl').get('parentNode'), this.LOADING_CLASSNAME);
                             
                             YAHOO.util.Connect.asyncRequest(
                                 'GET',
@@ -253,14 +249,14 @@
         });
         
         /**
-         * The TabPanel that contains the tab's content.
-         * @config panel
-         * @type TabPanel
+         * The HTMLElement that contains the tab's content.
+         * @config contentEl
+         * @type HTMLElement
          */
-        this.register('panel', {
-            value: attr.panel || new YAHOO.widget.TabPanel(),
+        this.register('contentEl', {
+            value: attr.contentEl || document.createElement('div'),
             method: function(value) {
-                var current = this.get('panel');
+                var current = this.get('contentEl');
                 
                 if (current) {
                     if (current == value) {
@@ -279,15 +275,7 @@
         this.register('content', {
             value: attr.content, // TODO: what about existing?
             method: function(value) {
-                var panel = this.get('panel');
-
-                if (!panel) {
-                    panel = new YAHOO.widget.TabPanel(null, { 'innerHTML': value });
-                    this.set('panel', panel, true);
-                } else {
-                    panel.set('innerHTML', value);
-                }
-                
+                this.get('contentEl').innerHTML = value;
             }
         });
     };
@@ -295,27 +283,27 @@
     var _createTabElement = function(attr) {
         var el = document.createElement('li');
         var label = attr.label || null;
-        var labelElement = attr.labelElement || null;
+        var labelEl = attr.labelEl || null;
         var inner;
         
-        if (labelElement) { // user supplied labelElement
+        if (labelEl) { // user supplied labelEl
             if (!label) { // user supplied label
-                label = _getLabel.call(this, labelElement);
+                label = _getLabel.call(this, labelEl);
             }
         } else {
-            labelElement = _createLabelElement.call(this);
+            labelEl = _createlabelEl.call(this);
         }
         
-        el.appendChild(labelElement);
+        el.appendChild(labelEl);
         
         return el;
     };
     
-    var _getLabelElement = function() {
+    var _getlabelEl = function() {
         return this.getElementsByTagName(this.LABEL_TAGNAME)[0];
     };
     
-    var _createLabelElement = function() {
+    var _createlabelEl = function() {
         var el = document.createElement(this.LABEL_TAGNAME);
         var inner;
         
@@ -330,7 +318,7 @@
     };
     
     var _setLabel = function(label) {
-        var el = this.get('labelElement');
+        var el = this.get('labelEl');
         var inner = el.getElementsByTagName(this.LABEL_INNER_TAGNAME)[0];
         
         if (inner) {
@@ -343,7 +331,7 @@
     var _getLabel = function() {
         var label,
             inner,
-            el = this.get('labelElement');
+            el = this.get('labelEl');
             
             if (el) {
                 inner = el.getElementsByTagName(this.LABEL_INNER_TAGNAME)[0];
