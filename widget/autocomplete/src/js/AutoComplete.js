@@ -4,7 +4,8 @@
  *
  * @module autocomplete
  * @requires yahoo, dom, event, datasource
- * @optional animation, json
+ * @optional animation, connection, json
+ * @namespace YAHOO.widget
  * @title AutoComplete Widget
  */
 
