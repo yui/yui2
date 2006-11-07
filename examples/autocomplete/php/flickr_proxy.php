@@ -7,11 +7,11 @@ define ('PATH', 'http://www.flickr.com/services/rest/');
 // Get all query params
 $query = "?";
 foreach ($_GET as $key => $value) {
-    $query .= urlencode($key)."=".urlencode($value)."&"; 
+    $query .= urlencode($key)."=".urlencode($value)."&";
 }
 
 foreach ($_POST as $key => $value) {
-    $query .= $key."=".$value."&"; 
+    $query .= $key."=".$value."&";
 }
 $query .= "&api_key=30cc0cf363608a1ffa3fc1631854c8b8";
 $url = PATH.$query;

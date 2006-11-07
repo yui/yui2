@@ -13,14 +13,14 @@ $type = "text/xml";
 $query = "?";
 foreach ($_GET as $key => $value) {
     if(($key == "output") && ($value == "json")) {
-        $type = "application/x-javascript";
+        $type = "application/json";
     }
     $query .= urlencode($key)."=".urlencode($value)."&";
 }
 
 foreach ($_POST as $key => $value) {
     if(($key == "output") && ($value == "json")) {
-        $type = "json";
+        $type = "application/json";
     }
     $query .= $key."=".$value."&";
 }
