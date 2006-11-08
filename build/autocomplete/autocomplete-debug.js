@@ -11,7 +11,8 @@ version: 0.11.0
  *
  * @module autocomplete
  * @requires yahoo, dom, event, datasource
- * @optional animation, json
+ * @optional animation, connection, json
+ * @namespace YAHOO.widget
  * @title AutoComplete Widget
  */
 
@@ -163,7 +164,9 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
 YAHOO.widget.AutoComplete.prototype.dataSource = null;
 
 /**
- * Number of characters that must be entered before querying for results.
+ * Number of characters that must be entered before querying for results. A negative value
+ * effectively turns off the widget. A value of 0 allows queries of null or empty string
+ * values.
  *
  * @property minQueryLength
  * @type Number
@@ -345,6 +348,16 @@ YAHOO.widget.AutoComplete.prototype.toString = function() {
     return "AutoComplete " + this._sName;
 };
 
+ /**
+ * Returns true if container is in an expanded state, false otherwise.
+ *
+ * @method isContainerOpen
+ * @return {Boolean} Returns true if container is in an expanded state, false otherwise.
+ */
+YAHOO.widget.AutoComplete.prototype.isContainerOpen = function() {
+    return this._bContainerOpen;
+};
+
 /**
  * Public accessor to the internal array of DOM &lt;li&gt; elements that
  * display query results within the results container.
@@ -453,6 +466,17 @@ YAHOO.widget.AutoComplete.prototype.formatResult = function(oResultItem, sQuery)
     else {
         return "";
     }
+};
+
+/**
+ * Overridable method called before container expands allows implementers to access data
+ * and DOM elements.
+ *
+ * @method doBeforeExpandContainer
+ * @return {Boolean} Return true to continue expanding container, false to cancel the expand.
+ */
+YAHOO.widget.AutoComplete.prototype.doBeforeExpandContainer = function(oResultItem, sQuery) {
+    return true;
 };
 
 /**
@@ -1052,6 +1076,11 @@ YAHOO.widget.AutoComplete.prototype._isIgnoreKey = function(nKeyCode) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
+    // Widget has been effectively turned off
+    if(this.minQueryLength == -1) {
+        this._toggleContainer(false);
+        return;
+    }
     // Delimiter has been enabled
     var aDelimChar = (this.delimChar) ? this.delimChar : null;
     if(aDelimChar) {
@@ -1093,7 +1122,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
     }
 
     // Don't search queries that are too short
-    if (sQuery && (sQuery.length < this.minQueryLength)) {
+    if (sQuery && (sQuery.length < this.minQueryLength) || (!sQuery && this.minQueryLength > 0)) {
         if (this._nDelayID != -1) {
             clearTimeout(this._nDelayID);
         }
@@ -1178,7 +1207,8 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         }
 
         // Expand the container
-        oSelf._toggleContainer(true);
+        var ok = oSelf.doBeforeExpandContainer(oSelf._oTextbox, oSelf._oContainer, sQuery, aResults);
+        oSelf._toggleContainer(ok);
     }
     else {
         oSelf._toggleContainer(false);
@@ -2644,13 +2674,13 @@ YAHOO.log('responseXML.xml: '+oResp.responseXML.xml,'warn');*/
         if(aResults === null) {
             oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, YAHOO.widget.DataSource.ERROR_DATAPARSE);
             YAHOO.log(YAHOO.widget.DataSource.ERROR_DATAPARSE, "error", oSelf.toString());
-            return;
+            aResults = [];
         }
         else {
             oSelf.getResultsEvent.fire(oSelf, oParent, sQuery, aResults);
             oSelf._addCacheElem(resultObj);
-            oCallbackFn(sQuery, aResults, oParent);
         }
+        oCallbackFn(sQuery, aResults, oParent);
     };
 
     var responseFailure = function(oResp) {
@@ -2709,8 +2739,14 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                     break;
                 }
                 else {
-                    // eval is necessary here since aSchema[0] is of unknown depth
-                    jsonList = eval("jsonObjParsed." + aSchema[0]);
+                    try {
+                        // eval is necessary here since aSchema[0] is of unknown depth
+                        jsonList = eval("jsonObjParsed." + aSchema[0]);
+                    }
+                    catch(e) {
+                        bError = true;
+                        break;
+                   }
                 }
             }
             else {
