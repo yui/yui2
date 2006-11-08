@@ -835,12 +835,6 @@ if (!YAHOO.util.Event) {
              * @static
              */
             removeListener: function(el, sType, fn) {
-
-                if (!fn || !fn.call) {
-                    //return false;
-                    return this.purgeElement(el, false, sType);
-                }
-
                 var i, len;
 
                 // The el argument can be a string
@@ -853,6 +847,11 @@ if (!YAHOO.util.Event) {
                         ok = ( this.removeListener(el[i], sType, fn) && ok );
                     }
                     return ok;
+                }
+
+                if (!fn || !fn.call) {
+                    //return false;
+                    return this.purgeElement(el, false, sType);
                 }
 
                 if ("unload" == sType) {
