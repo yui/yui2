@@ -25,7 +25,7 @@ body{text-align:center;}
 /*### END - NEW DEVELOPMENT ###*/
 
 /* below required for all fluid grids; adjust widths and margins above accordingly */
-.yui-b {position:relative;}#yui-main .yui-b {position:static;} /* to preserve source-order independence for Gecko */
+.yui-b {position:relative;}.yui-b{_position:static;}#yui-main .yui-b{position:static;} /* to preserve source-order independence for Gecko */
 #yui-main {width:100%;}
 .yui-t1 #yui-main,
 .yui-t2 #yui-main,
