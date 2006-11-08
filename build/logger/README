@@ -1,5 +1,10 @@
 Logger Release Notes
 
+*** version 0.12.0 ***
+
+* Added method formatMsg(oLogMsg) to support custom formatting of log messages for output
+to a LogReader.
+
 
 
 *** version 0.11.3 ***

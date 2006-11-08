@@ -1,9 +1,9 @@
 AutoComplete Release Notes
 
-*** version 2.1 ***
+*** version 0.12.0 ***
 
-* The following constants must be defined as class variables and are no longer available
-as instance variables:
+* The following constants must be defined as static class properties and are no longer
+available as instance properties:
 
 YAHOO.widget.DataSource.ERROR_DATANULL
 YAHOO.widget.DataSource.ERROR_DATAPARSE
@@ -12,7 +12,12 @@ YAHOO.widget.DS_XHR.TYPE_XML
 YAHOO.widget.DS_XHR.TYPE_FLAT
 YAHOO.widget.DS_XHR.ERROR_DATAXHR
 
-* Queries of null or empty strings are now supported for DS_JSFunction and DS_XHR objects.
+* The property minQueryLength now supports zero and negative number values for
+DS_JSFunction and DS_XHR objects, to enable null or empty string queries and to disable
+AutoComplete functionality altogether, respectively.
+
+* Enabling the alwaysShowContainer feature will no longer send containerExpandEvent or
+containerCollapseEvent.
 
 
 
