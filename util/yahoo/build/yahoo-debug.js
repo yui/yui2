@@ -21,7 +21,7 @@ version: 0.12.0
  * @static
  */
 if (typeof YAHOO == "undefined") {
-    YAHOO = {};
+    var YAHOO = {};
 }
 
 /**

@@ -13,7 +13,7 @@
  * @static
  */
 if (typeof YAHOO == "undefined") {
-    YAHOO = {};
+    var YAHOO = {};
 }
 
 /**

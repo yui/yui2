@@ -484,17 +484,20 @@ if (!YAHOO.util.Event) {
              *
              * @param {Object} el the html element or the id of the element to 
              * assign the event to.
-             * @param {String} sType the type of event to remove
-             * @param {Function} fn the method the event invokes
+             * @param {String} sType the type of event to remove.
+             * @param {Function} fn the method the event invokes.  If fn is
+             * undefined, then all event handlers for the type of event are 
+             * removed.
              * @return {boolean} true if the unbind was successful, false 
-             * otherwise
+             * otherwise.
              * @static
              */
             removeListener: function(el, sType, fn) {
 
                 if (!fn || !fn.call) {
                     // this.logger.debug("Error, function is not valid " + fn);
-                    return false;
+                    //return false;
+                    return this.purgeElement(el, false, sType);
                 }
 
                 var i, len;
@@ -510,7 +513,6 @@ if (!YAHOO.util.Event) {
                     }
                     return ok;
                 }
-
 
                 if ("unload" == sType) {
 

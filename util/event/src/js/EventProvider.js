@@ -10,6 +10,22 @@
 YAHOO.util.EventProvider = function() { };
 
 YAHOO.util.EventProvider.prototype = {
+
+    /**
+     * Private storage of custom events
+     * @property __yui_events
+     * @type Object[]
+     * @private
+     */
+    __yui_events: null,
+
+    /**
+     * Private storage of custom event subscribers
+     * @property __yui_subscribers
+     * @type Object[]
+     * @private
+     */
+    __yui_subscribers: null,
     
     /**
      * Subscribe to a CustomEvent by event type
@@ -137,6 +153,21 @@ YAHOO.util.EventProvider.prototype = {
             YAHOO.log("EventProvider.fire could not find event: " + p_type);
             return null;
         }
+    },
+
+    /**
+     * Returns true if the custom event of the provided type has been created
+     * with createEvent.
+     * @method hasEvent
+     * @param type {string} the type, or name of the event
+     */
+    hasEvent: function(type) {
+        if (this.__yui_events) {
+            if (this.__yui_events[type]) {
+                return true;
+            }
+        }
+        return false;
     }
 
 };

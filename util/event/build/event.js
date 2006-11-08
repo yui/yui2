@@ -826,16 +826,19 @@ if (!YAHOO.util.Event) {
              *
              * @param {Object} el the html element or the id of the element to 
              * assign the event to.
-             * @param {String} sType the type of event to remove
-             * @param {Function} fn the method the event invokes
+             * @param {String} sType the type of event to remove.
+             * @param {Function} fn the method the event invokes.  If fn is
+             * undefined, then all event handlers for the type of event are 
+             * removed.
              * @return {boolean} true if the unbind was successful, false 
-             * otherwise
+             * otherwise.
              * @static
              */
             removeListener: function(el, sType, fn) {
 
                 if (!fn || !fn.call) {
-                    return false;
+                    //return false;
+                    return this.purgeElement(el, false, sType);
                 }
 
                 var i, len;
@@ -1548,6 +1551,22 @@ if (!YAHOO.util.Event) {
 YAHOO.util.EventProvider = function() { };
 
 YAHOO.util.EventProvider.prototype = {
+
+    /**
+     * Private storage of custom events
+     * @property __yui_events
+     * @type Object[]
+     * @private
+     */
+    __yui_events: null,
+
+    /**
+     * Private storage of custom event subscribers
+     * @property __yui_subscribers
+     * @type Object[]
+     * @private
+     */
+    __yui_subscribers: null,
     
     /**
      * Subscribe to a CustomEvent by event type
@@ -1672,6 +1691,21 @@ YAHOO.util.EventProvider.prototype = {
         } else {
             return null;
         }
+    },
+
+    /**
+     * Returns true if the custom event of the provided type has been created
+     * with createEvent.
+     * @method hasEvent
+     * @param type {string} the type, or name of the event
+     */
+    hasEvent: function(type) {
+        if (this.__yui_events) {
+            if (this.__yui_events[type]) {
+                return true;
+            }
+        }
+        return false;
     }
 
 };
