@@ -39,27 +39,26 @@ if (typeof YAHOO == "undefined") {
  * YAHOO.namespace("really.long.nested.namespace");
  * </pre>
  * This fails because "long" is a future reserved word in ECMAScript
+ *
  * @method namespace
  * @static
- * @param  {String} ns The name of the namespace
- * @return {Object}    A reference to the namespace object
+ * @param  {String*} arguments 1-n namespaces to create 
+ * @return {Object}  A reference to the last namespace object created
  */
-YAHOO.namespace = function(ns) {
+YAHOO.namespace = function() {
+    var a=arguments, o=null, i, j, d;
+    for (i=0; i<a.length; ++i) {
+        d=a[i].split(".");
+        o=YAHOO;
 
-    if (!ns || !ns.length) {
-        return null;
+        // YAHOO is implied, so it is ignored if it is included
+        for (j=(d[0] == "YAHOO") ? 1 : 0; j<d.length; ++j) {
+            o[d[j]]=o[d[j]] || {};
+            o=o[d[j]];
+        }
     }
 
-    var levels = ns.split(".");
-    var nsobj = YAHOO;
-
-    // YAHOO is implied, so it is ignored if it is included
-    for (var i=(levels[0] == "YAHOO") ? 1 : 0; i<levels.length; ++i) {
-        nsobj[levels[i]] = nsobj[levels[i]] || {};
-        nsobj = nsobj[levels[i]];
-    }
-
-    return nsobj;
+    return o;
 };
 
 /**
@@ -67,17 +66,17 @@ YAHOO.namespace = function(ns) {
  *
  * @method log
  * @static
- * @param  {string}  sMsg       The message to log.
- * @param  {string}  sCategory  The log category for the message.  Default
- *                              categories are "info", "warn", "error", time".
- *                              Custom categories can be used as well. (opt)
- * @param  {string}  sSource    The source of the the message (opt)
- * @return {boolean}            True if the log operation was successful.
+ * @param  {String}  msg  The message to log.
+ * @param  {String}  cat  The log category for the message.  Default
+ *                        categories are "info", "warn", "error", time".
+ *                        Custom categories can be used as well. (opt)
+ * @param  {String}  src  The source of the the message (opt)
+ * @return {Boolean}      True if the log operation was successful.
  */
-YAHOO.log = function(sMsg, sCategory, sSource) {
-    var l = YAHOO.widget.Logger;
+YAHOO.log = function(msg, cat, src) {
+    var l=YAHOO.widget.Logger;
     if(l && l.log) {
-        return l.log(sMsg, sCategory, sSource);
+        return l.log(msg, cat, src);
     } else {
         return false;
     }
@@ -89,26 +88,26 @@ YAHOO.log = function(sMsg, sCategory, sSource) {
  *
  * @method extend
  * @static
- * @param {function} subclass   the object to modify
- * @param {function} superclass the object to inherit
- * @param {Object}   overrides  additional properties/methods to add to the
+ * @param {Function} subc   the object to modify
+ * @param {Function} superc the object to inherit
+ * @param {String[]} overrides  additional properties/methods to add to the
  *                              subclass prototype.  These will override the
  *                              matching items obtained from the superclass 
  *                              if present.
  */
-YAHOO.extend = function(subclass, superclass, overrides) {
-    var f = function() {};
-    f.prototype = superclass.prototype;
-    subclass.prototype = new f();
-    subclass.prototype.constructor = subclass;
-    subclass.superclass = superclass.prototype;
-    if (superclass.prototype.constructor == Object.prototype.constructor) {
-        superclass.prototype.constructor = superclass;
+YAHOO.extend = function(subc, superc, overrides) {
+    var F = function() {};
+    F.prototype=superc.prototype;
+    subc.prototype=new F();
+    subc.prototype.constructor=subc;
+    subc.superclass=superc.prototype;
+    if (superc.prototype.constructor == Object.prototype.constructor) {
+        superc.prototype.constructor=superc;
     }
 
     if (overrides) {
         for (var i in overrides) {
-            subclass.prototype[i] = overrides[i];
+            subc.prototype[i]=overrides[i];
         }
     }
 };
@@ -116,46 +115,65 @@ YAHOO.extend = function(subclass, superclass, overrides) {
 /**
  * Applies all prototype properties in the supplier to the receiver if the
  * receiver does not have these properties yet.  Optionally, one or more
- * methods/properties can be specifified (as additional parameters).  This
+ * methods/properties can be specified (as additional parameters).  This
  * option will overwrite the property if receiver has it already.
  *
  * @method augment
  * @static
- * @param {function} receiver  the object to augment
- * @param {function} supplier  the object to augment the receiver with
+ * @param {Function} r  the object to receive the augmentation
+ * @param {Function} s  the object that supplies the properties to augment
  * @param {String*}  arguments zero or more properties methods to augment the
  *                             receiver with.  If none specified, everything
  *                             in the supplier will be used unless it would
  *                             overwrite an existing property in the receiver
  */
-YAHOO.augment = function(receiver, supplier) {
-    var args = [receiver.prototype, supplier.prototype];
+YAHOO.augment = function(r, s) {
+    var args = [r.prototype, s.prototype];
     for (var i=2; i<arguments.length; ++i) {
         args.push(arguments[i]);
     }
-    YAHOO.mixin.apply(YAHOO, args);
+    r.prototype = YAHOO.compose.apply(YAHOO, args);
 };
 
-/*
- * Generic object mixer used by YAHOO.augment.  Included for completeness, and
- * in case there is need to use the mixin technique on static objects or 
- * instances.
+/**
+ * Returns an object composed of the two objects passed in.  Properties in
+ * object a will have priority over those in object b.  Optionally, one
+ * or more properties can be provided as additional parameters.  If specified,
+ * only those properties will be copied from object b, and these will overwrite
+ * the property in object a if it exists.
+ * @method compose
+ * @static
+ * @param {Object} a  the base object for the composition
+ * @param {Object} b  the object that contains additional properties to apply
+ *                    to the composition
+ * @param {String*}  arguments zero or more properties methods to add to the
+ *                             composition.  If none specified, everything
+ *                             in object b will be copied unless it would
+ *                             overwrite an existing property in object a.
+ * @return {Object} the new object
+ *
  */
-YAHOO.mixin = function(receiver, supplier) {
-    if (arguments[2]) {
-        for (var i=2; i<arguments.length; ++i) {
-            receiver[arguments[i]] = supplier[arguments[i]];
+YAHOO.compose = function(a, b) {
+    var args=arguments, c={}, i, p;
+
+    for (p in a) { 
+        c[p]=a[p];
+    }
+
+    if (args[2]) {
+        for (i=2; i<args.length; ++i) {
+            c[args[i]]=b[args[i]];
         }
     } else {
-        for (var prop in supplier) { 
-            if (!receiver[prop]) {
-                receiver[prop] = supplier[prop];
+        for (p in b) { 
+            if (!c[p]) {
+                c[p]=b[p];
             }
         }
     }
+
+    return c;
 };
 
-YAHOO.namespace("util");
-YAHOO.namespace("widget");
-YAHOO.namespace("example");
+YAHOO.namespace("util", "widget", "example");
 

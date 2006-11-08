@@ -3,7 +3,11 @@ YAHOO Global Namespace - Release Notes
 0.12.0
 
    * Added YAHOO.augment, which copies all or part of the prototype of one
-     object to another.
+     object to another.  
+
+   * YAHOO.namespace now can create multiple namespaces.
+
+   * Added YAHOO.compose, which returns the combination of two object.
 
    * Added an optional third parameter to YAHOO.extend: overrides.  It takes
      an object literal of properties/methods to apply to the subclass
