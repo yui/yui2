@@ -12,7 +12,7 @@
     #statesmod {position:relative;}
     #statesautocomplete, #statesautocomplete2 {position:relative;width:15em;margin-bottom:1em;}/* set width of widget here*/
     #statesautocomplete {z-index:9000} /* for IE z-index of absolute divs inside relative divs issue */
-    #statesinput, #statesinput2 {width:100%;height:1.4em;z-index:0;}
+    #statesinput, #statesinput2 {_position:absolute;width:100%;height:1.4em;z-index:0;} /* abs for ie quirks */
     #statescontainer, #statescontainer2 {position:absolute;top:1.7em;width:100%}
     #statescontainer .yui-ac-content, #statescontainer2 .yui-ac-content {position:absolute;width:100%;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
     #statescontainer .yui-ac-shadow, #statescontainer2 .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
@@ -80,7 +80,7 @@
             #statesmod {position:relative;}
             #statesautocomplete, #statesautocomplete2 {position:relative;width:15em;margin-bottom:1em;}/* set width of widget here*/
             #statesautocomplete {z-index:9000} /* for IE z-index of absolute divs inside relative divs issue */
-            #statesinput, #statesinput2 {width:100%;height:1.4em;z-index:0;}
+            #statesinput, #statesinput2 {_position:absolute;width:100%;height:1.4em;z-index:0;} /* abs for ie quirks */
             #statescontainer, #statescontainer2 {position:absolute;top:1.7em;width:100%}
             #statescontainer .yui-ac-content, #statescontainer2 .yui-ac-content {position:absolute;width:100%;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
             #statescontainer .yui-ac-shadow, #statescontainer2 .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
