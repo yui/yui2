@@ -1,758 +1,388 @@
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>API: Drag and Drop YAHOO.util.DDProxy.html (YUI Library)</title>
-	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+	<title>API: dragdrop  YAHOO.util.DDProxy   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/reset.css">
+	<link rel="stylesheet" type="text/css" href="assets/fonts.css">
+	<link rel="stylesheet" type="text/css" href="assets/grids.css">
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
 
-<body>
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
 
-<div id="header">
-	<h1>Yahoo! UI Library</h1>
-	<h3><a href="./index.html">Drag and Drop</a></h3>
-
-	<div class="breadcrumbs">
-		
-			
-			
-			
-			
-			
-			
-			
-				<a href="./index.html">Drag and Drop</a>
-				&gt;
-				<strong>YAHOO.util.DDProxy</strong>
-			
-			
-			
-			
-			
-			
-			
-		
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Drag and Drop&nbsp;</h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_dragdrop.html">dragdrop</a>
+                 &gt; YAHOO.util.DDProxy 
+                
+            </p>
 	</div>
-</div>
 
-	
-<div id="body">
-	
-	
-	<div class="nav">
-		<div class="module resources">
-			<ul class="content">
-				<li><a href="overview-tree.html">Tree View</a></li>
-				<li><a href="index-all.html">Element Index</a></li>
-			</ul>
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.util.DDProxy</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.util.DD.html">YAHOO.util.DD</a>
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        A DragDrop implementation that inserts an empty, bordered div into
+the document that follows the cursor during drag operations.  At the time of
+the click, the frame div is resized to the dimensions of the linked html
+element, and moved to the exact location of the linked element.
+References to the "frame" element refer to the single proxy element that
+was created to be dragged in place of all DDProxy elements on the
+page.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.util.DDProxy</strong>
+                                <code>
+                                        (
+  
+                                        
+                                            &lt;String&gt; id, 
+                                            &lt;String&gt; sGroup, 
+                                            &lt;object&gt; config
+                                        )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>id</code> - 
+                                                     the id of the linked html element
+                                                </dd>
+                                                <dd>
+                                                    <code>sGroup</code> - 
+                                                     the group of related DragDrop objects
+                                                </dd>
+                                                <dd>
+                                                    <code>config</code> - 
+                                                     an object containing configurable attributes
+Valid properties for DDProxy in addition to those in DragDrop: 
+resizeFrame, centerFrame, dragElId
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <h4><a name="YAHOO.util.DDProxy.dragElId">YAHOO.util.DDProxy.dragElId</a>
+                                        <code>- static String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The default drag frame div id
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="centerFrame">centerFrame</a>
+                                        <code>- boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            By default the frame is positioned exactly where the drag element is, so
+we use the cursor offset provided by YAHOO.util.DD.  Another option that works only if
+you do not have constraints on the obj is to have the drag frame centered
+around the cursor.  Set centerFrame to true for this effect.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="resizeFrame">resizeFrame</a>
+                                        <code>- boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            By default we resize the drag frame to be the same size as the element
+we want to drag (this is to get the frame effect).  We can turn it off
+if we want a different behavior.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.DD.html">YAHOO.util.DD</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.util.DD.html#scroll">scroll</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.util.DragDrop.html#available">available</a>,
+                                        <a href="YAHOO.util.DragDrop.html#config">config</a>,
+                                        <a href="YAHOO.util.DragDrop.html#groups">groups</a>,
+                                        <a href="YAHOO.util.DragDrop.html#hasOuterHandles">hasOuterHandles</a>,
+                                        <a href="YAHOO.util.DragDrop.html#id">id</a>,
+                                        <a href="YAHOO.util.DragDrop.html#invalidHandleClasses">invalidHandleClasses</a>,
+                                        <a href="YAHOO.util.DragDrop.html#invalidHandleIds">invalidHandleIds</a>,
+                                        <a href="YAHOO.util.DragDrop.html#invalidHandleTypes">invalidHandleTypes</a>,
+                                        <a href="YAHOO.util.DragDrop.html#maintainOffset">maintainOffset</a>,
+                                        <a href="YAHOO.util.DragDrop.html#primaryButtonOnly">primaryButtonOnly</a>,
+                                        <a href="YAHOO.util.DragDrop.html#xTicks">xTicks</a>,
+                                        <a href="YAHOO.util.DragDrop.html#yTicks">yTicks</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="createFrame">createFrame</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>createFrame</strong>
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Creates the proxy element if it does not yet exist
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="initFrame">initFrame</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initFrame</strong>
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initialization for the drag frame element.  Must be called in the
+constructor of all subclasses
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.DD.html">YAHOO.util.DD</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                        
+                                            <a href="YAHOO.util.DD.html#alignElWithMouse">alignElWithMouse</a>,
+                                            <a href="YAHOO.util.DD.html#autoOffset">autoOffset</a>,
+                                            <a href="YAHOO.util.DD.html#cachePosition">cachePosition</a>,
+                                            <a href="YAHOO.util.DD.html#setDelta">setDelta</a>,
+                                            <a href="YAHOO.util.DD.html#setDragElPos">setDragElPos</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                        
+                                            <a href="YAHOO.util.DragDrop.html#addInvalidHandleClass">addInvalidHandleClass</a>,
+                                            <a href="YAHOO.util.DragDrop.html#addInvalidHandleId">addInvalidHandleId</a>,
+                                            <a href="YAHOO.util.DragDrop.html#addInvalidHandleType">addInvalidHandleType</a>,
+                                            <a href="YAHOO.util.DragDrop.html#addToGroup">addToGroup</a>,
+                                            <a href="YAHOO.util.DragDrop.html#applyConfig">applyConfig</a>,
+                                            <a href="YAHOO.util.DragDrop.html#clearConstraints">clearConstraints</a>,
+                                            <a href="YAHOO.util.DragDrop.html#clearTicks">clearTicks</a>,
+                                            <a href="YAHOO.util.DragDrop.html#endDrag">endDrag</a>,
+                                            <a href="YAHOO.util.DragDrop.html#getDragEl">getDragEl</a>,
+                                            <a href="YAHOO.util.DragDrop.html#getEl">getEl</a>,
+                                            <a href="YAHOO.util.DragDrop.html#init">init</a>,
+                                            <a href="YAHOO.util.DragDrop.html#initTarget">initTarget</a>,
+                                            <a href="YAHOO.util.DragDrop.html#isLocked">isLocked</a>,
+                                            <a href="YAHOO.util.DragDrop.html#isTarget">isTarget</a>,
+                                            <a href="YAHOO.util.DragDrop.html#isValidHandleChild">isValidHandleChild</a>,
+                                            <a href="YAHOO.util.DragDrop.html#lock">lock</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onAvailable">onAvailable</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onDrag">onDrag</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onDragDrop">onDragDrop</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onDragEnter">onDragEnter</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onDragOut">onDragOut</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onDragOver">onDragOver</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onInvalidDrop">onInvalidDrop</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onMouseDown">onMouseDown</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onMouseUp">onMouseUp</a>,
+                                            <a href="YAHOO.util.DragDrop.html#padding">padding</a>,
+                                            <a href="YAHOO.util.DragDrop.html#removeFromGroup">removeFromGroup</a>,
+                                            <a href="YAHOO.util.DragDrop.html#removeInvalidHandleClass">removeInvalidHandleClass</a>,
+                                            <a href="YAHOO.util.DragDrop.html#removeInvalidHandleId">removeInvalidHandleId</a>,
+                                            <a href="YAHOO.util.DragDrop.html#removeInvalidHandleType">removeInvalidHandleType</a>,
+                                            <a href="YAHOO.util.DragDrop.html#resetConstraints">resetConstraints</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setDragElId">setDragElId</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setHandleElId">setHandleElId</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setInitialPosition">setInitialPosition</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setOuterHandleElId">setOuterHandleElId</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setPadding">setPadding</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setXConstraint">setXConstraint</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setYConstraint">setYConstraint</a>,
+                                            <a href="YAHOO.util.DragDrop.html#startDrag">startDrag</a>,
+                                            <a href="YAHOO.util.DragDrop.html#toString">toString</a>,
+                                            <a href="YAHOO.util.DragDrop.html#unlock">unlock</a>,
+                                            <a href="YAHOO.util.DragDrop.html#unreg">unreg</a>
+                                    </code>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+			</div>
 		</div>
-		
-		
-			<div class="module">
-				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
-				<ul class="content">
-					
-						<li>
-							<a href="YAHOO.util.html">
-								YAHOO.util</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.DD.html">
-								YAHOO.util.DD</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.DDProxy.html">
-								YAHOO.util.DDProxy</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.DDTarget.html">
-								YAHOO.util.DDTarget</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.DragDrop.html">
-								YAHOO.util.DragDrop</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.DragDropMgr.html">
-								YAHOO.util.DragDropMgr</a>
-						</li>
-					
-				</ul>
-			</div>
-		
-		
-		
-			<div class="module">
-				<h4><a href="./overview-summary.html">Files</a></h4>
-				<ul class="content">		
-					
-						<li>
-							<a href="overview-summary-DD.js.html">
-								DD.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-DDProxy.js.html">
-								DDProxy.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-DDTarget.js.html">
-								DDTarget.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-DragDrop.js.html">
-								DragDrop.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-DragDropMgr.js.html">
-								DragDropMgr.js</a>
-						</li>
-					
-				</ul>
-			</div>
-		
-	</div>
-	
-	<div id="pri">
-        <div class="main">
-	
-		<h2>Class YAHOO.util.DDProxy</h2>
-		<pre>Object
-   |
-   +--<a href='YAHOO.util.DragDrop.html'>YAHOO.util.DragDrop</a>
-         |
-         +--<a href='YAHOO.util.DD.html'>YAHOO.util.DD</a>
-               |
-               +--<b>YAHOO.util.DDProxy</b>
-</pre>
-		
-		
-	
-		<hr />
-		
-		<!-- Class definition -->
-		<div class="class-def">
-			<div class="class-name">
-				<span class="class-attribs">
-					
-				</span>
-				<span class="class-type">class</span>
-				<b>YAHOO.util.DDProxy</b>
-			</div>
-			<div class="class-extends">
-				
-					<dd>extends <a href='YAHOO.util.DD.html'>YAHOO.util.DD</a></dd>
-				
-			</div>
-		</div>
-			
-		
-<div class="meta">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-		
-	
-	
-	
-	
-	
-	
-</div>
+		<div class="yui-b">
+            <div class="nav">
 
-		
-		<!-- ======== QUICK LINKS ======== -->
-		<div class="quick-links">
-			<strong>Quick Links:</strong>&nbsp;
-			
-			
-				<a href="#field_summary">Field Summary</a>
-				|
-			
-			
-				<a href="#constructor_summary">Constructor Summary</a>
-				|
-			
-			
-				<a href="#methodSummary">Method Summary</a> |
-				<a href="#methodDetails">Method Details</a>
-			
-		</div>
-		<!-- ======== END QUICK LINKS ======== -->
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li><a href="module_dragdrop.html">dragdrop</a></li>
+                        </ul>
+                    </div>
 
-		<!-- ======== NESTED CLASS SUMMARY ======== -->
-		
-		<!-- ======== END NESTED CLASS SUMMARY ======== -->
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
+                                <li><a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a></li>
+                                <li><a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a></li>
+                                <li><a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></li>
+                                <li><a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a></li>
+                        </ul>
+                    </div>
 
-		<!-- =========== FIELD SUMMARY =========== -->
-		
-			<div class="section field summaries">
-				<h3><a name="field_summary">Field Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<table border="1" cellpadding="3" cellspacing="0">
-					
-						<tr>
-							<td class="flags">boolean</td>
-							<td class="spec">
-								<code>
-									<a href="#centerFrame">centerFrame</a>
-								</code>
-								<div class="description">
-									By default the frame is positioned exactly where the drag element is, so
- we use the cursor offset provided by YAHOO.util.DD.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">boolean</td>
-							<td class="spec">
-								<code>
-									<a href="#resizeFrame">resizeFrame</a>
-								</code>
-								<div class="description">
-									By default we resize the drag frame to be the same size as the element
- we want to drag (this is to get the frame effect).&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">String</td>
-							<td class="spec">
-								<code>
-									<a href="#dragElId">dragElId</a>
-								</code>
-								<div class="description">
-									The default drag frame div id&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-					</table>
-				</div>
-			</div>
-		
-				
-		
-			
-				<div class="section field inheritance">
-					<h3>Fields inherited from class <a href="YAHOO.util.DD.html">YAHOO.util.DD</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-					<div class="content">
-								<code><a href="YAHOO.util.DD.html#scroll">scroll</a></code>
-					</div>
-				</div>
-			
-		
-			
-				<div class="section field inheritance">
-					<h3>Fields inherited from class <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-					<div class="content">
-								<code><a href="YAHOO.util.DragDrop.html#id">id</a>, <a href="YAHOO.util.DragDrop.html#config">config</a>, <a href="YAHOO.util.DragDrop.html#invalidHandleTypes">invalidHandleTypes</a>, <a href="YAHOO.util.DragDrop.html#invalidHandleIds">invalidHandleIds</a>, <a href="YAHOO.util.DragDrop.html#invalidHandleClasses">invalidHandleClasses</a>, <a href="YAHOO.util.DragDrop.html#groups">groups</a>, <a href="YAHOO.util.DragDrop.html#isTarget">isTarget</a>, <a href="YAHOO.util.DragDrop.html#padding">padding</a>, <a href="YAHOO.util.DragDrop.html#maintainOffset">maintainOffset</a>, <a href="YAHOO.util.DragDrop.html#xTicks">xTicks</a>, <a href="YAHOO.util.DragDrop.html#yTicks">yTicks</a>, <a href="YAHOO.util.DragDrop.html#primaryButtonOnly">primaryButtonOnly</a>, <a href="YAHOO.util.DragDrop.html#available">available</a></code>
-					</div>
-				</div>
-			
-		
-		<!-- =========== END FIELD SUMMARY =========== -->
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li><a href="DD.js.html">DD.js</a></li>
+                                <li><a href="DDProxy.js.html">DDProxy.js</a></li>
+                                <li><a href="DDTarget.js.html">DDTarget.js</a></li>
+                                <li><a href="DragDrop.js.html">DragDrop.js</a></li>
+                                <li><a href="DragDropMgr.js.html">DragDropMgr.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li><a href="#YAHOO.util.DDProxy.dragElId">YAHOO.util.DDProxy.dragElId</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#centerFrame">centerFrame</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#resizeFrame">resizeFrame</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>void</code>-->
+                                <a href="#createFrame">createFrame</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#initFrame">initFrame</a>
+                                </li>
+                        </ul>
+                    </div>
 
 
-		<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-		
-			<div class="section contructor summaries">
-				<h3><a name="constructor_summary">Constructor Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<code class="spec">
-						<a href="YAHOO.util.DDProxy.html#YAHOO.util.DDProxy()">YAHOO.util.DDProxy</a>
-					</code>
-					<div class="description">
-						A DragDrop implementation that inserts an empty, bordered div into
- the document that follows the cursor during drag operations.&nbsp;
-					</div>
-				</div>
-			</div>
-		
-		<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
 
-
-		<!-- ========== METHOD SUMMARY =========== -->
-		
-			<div class="section method summaries">
-				<h3><a name="methodSummary">Method Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<table border="1" cellpadding="3" cellspacing="0">
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#_resizeProxy">_resizeProxy</a>
-										()
-									</code>
-									<div class="description">
-										&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#applyConfig">applyConfig</a>
-										()
-									</code>
-									<div class="description">
-										Applies the configuration parameters that were passed into the constructor.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#b4EndDrag">b4EndDrag</a>
-										(e)
-									</code>
-									<div class="description">
-										&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#b4MouseDown">b4MouseDown</a>
-										(e)
-									</code>
-									<div class="description">
-										Event that fires prior to the onMouseDown event.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#b4StartDrag">b4StartDrag</a>
-										(x, y)
-									</code>
-									<div class="description">
-										&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#createFrame">createFrame</a>
-										()
-									</code>
-									<div class="description">
-										Create the drag frame if needed&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#endDrag">endDrag</a>
-										(&lt;Event&gt; e)
-									</code>
-									<div class="description">
-										Fired when we are done dragging the object&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#initFrame">initFrame</a>
-										()
-									</code>
-									<div class="description">
-										Initialization for the drag frame element.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">Object</td>
-								<td class="spec">
-									<code>
-										<a href="#toString">toString</a>
-										()
-									</code>
-									<div class="description">
-										toString method&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-					</table>
-				</div>
-			</div>
-		
-		
-		
-			<div class="section method inheritance">
-				<h3>Methods inherited from class  <a href="YAHOO.util.DD.html">YAHOO.util.DD</a></h3>
-				<div class="content">
-							<code><a href="YAHOO.util.DD.html#autoOffset">autoOffset</a>, <a href="YAHOO.util.DD.html#setDelta">setDelta</a>, <a href="YAHOO.util.DD.html#setDragElPos">setDragElPos</a>, <a href="YAHOO.util.DD.html#alignElWithMouse">alignElWithMouse</a>, <a href="YAHOO.util.DD.html#cachePosition">cachePosition</a>, <a href="YAHOO.util.DD.html#b4Drag">b4Drag</a></code>
-				</div>
-			</div>
-		
-			<div class="section method inheritance">
-				<h3>Methods inherited from class  <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></h3>
-				<div class="content">
-							<code><a href="YAHOO.util.DragDrop.html#lock">lock</a>, <a href="YAHOO.util.DragDrop.html#unlock">unlock</a>, <a href="YAHOO.util.DragDrop.html#startDrag">startDrag</a>, <a href="YAHOO.util.DragDrop.html#onDrag">onDrag</a>, <a href="YAHOO.util.DragDrop.html#onDragEnter">onDragEnter</a>, <a href="YAHOO.util.DragDrop.html#onDragOver">onDragOver</a>, <a href="YAHOO.util.DragDrop.html#onDragOut">onDragOut</a>, <a href="YAHOO.util.DragDrop.html#onDragDrop">onDragDrop</a>, <a href="YAHOO.util.DragDrop.html#onMouseDown">onMouseDown</a>, <a href="YAHOO.util.DragDrop.html#onMouseUp">onMouseUp</a>, <a href="YAHOO.util.DragDrop.html#onAvailable">onAvailable</a>, <a href="YAHOO.util.DragDrop.html#getEl">getEl</a>, <a href="YAHOO.util.DragDrop.html#getDragEl">getDragEl</a>, <a href="YAHOO.util.DragDrop.html#init">init</a>, <a href="YAHOO.util.DragDrop.html#initTarget">initTarget</a>, <a href="YAHOO.util.DragDrop.html#setPadding">setPadding</a>, <a href="YAHOO.util.DragDrop.html#setInitPosition">setInitPosition</a>, <a href="YAHOO.util.DragDrop.html#addToGroup">addToGroup</a>, <a href="YAHOO.util.DragDrop.html#removeFromGroup">removeFromGroup</a>, <a href="YAHOO.util.DragDrop.html#setDragElId">setDragElId</a>, <a href="YAHOO.util.DragDrop.html#setHandleElId">setHandleElId</a>, <a href="YAHOO.util.DragDrop.html#setOuterHandleElId">setOuterHandleElId</a>, <a href="YAHOO.util.DragDrop.html#unreg">unreg</a>, <a href="YAHOO.util.DragDrop.html#isLocked">isLocked</a>, <a href="YAHOO.util.DragDrop.html#addInvalidHandleType">addInvalidHandleType</a>, <a href="YAHOO.util.DragDrop.html#addInvalidHandleId">addInvalidHandleId</a>, <a href="YAHOO.util.DragDrop.html#addInvalidHandleClass">addInvalidHandleClass</a>, <a href="YAHOO.util.DragDrop.html#removeInvalidHandleType">removeInvalidHandleType</a>, <a href="YAHOO.util.DragDrop.html#removeInvalidHandleId">removeInvalidHandleId</a>, <a href="YAHOO.util.DragDrop.html#removeInvalidHandleClass">removeInvalidHandleClass</a>, <a href="YAHOO.util.DragDrop.html#isValidHandleChild">isValidHandleChild</a>, <a href="YAHOO.util.DragDrop.html#setXConstraint">setXConstraint</a>, <a href="YAHOO.util.DragDrop.html#clearConstraints">clearConstraints</a>, <a href="YAHOO.util.DragDrop.html#clearTicks">clearTicks</a>, <a href="YAHOO.util.DragDrop.html#setYConstraint">setYConstraint</a>, <a href="YAHOO.util.DragDrop.html#resetConstraints">resetConstraints</a></code>
-				</div>
-			</div>
-		
-		<!-- ========== END METHOD SUMMARY =========== -->
-
-
-		<!-- ============ FIELD DETAIL START =========== -->
-		
-			<div class="section field details">
-				<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					
-						<h4><a name="centerFrame">centerFrame</a></h4>
-						<div class="detail">
-							<code>
-								boolean
-								&nbsp;
-								<strong>centerFrame</strong>
-							</code>
-							<div class="description">
-								By default the frame is positioned exactly where the drag element is, so
- we use the cursor offset provided by YAHOO.util.DD.  Another option that works only if
- you do not have constraints on the obj is to have the drag frame centered
- around the cursor.  Set centerFrame to true for this effect.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="resizeFrame">resizeFrame</a></h4>
-						<div class="detail">
-							<code>
-								boolean
-								&nbsp;
-								<strong>resizeFrame</strong>
-							</code>
-							<div class="description">
-								By default we resize the drag frame to be the same size as the element
- we want to drag (this is to get the frame effect).  We can turn it off
- if we want a different behavior.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="dragElId">dragElId</a></h4>
-						<div class="detail">
-							<code>
-								String
-								&nbsp;
-								<strong>dragElId</strong>
-							</code>
-							<div class="description">
-								The default drag frame div id
-							</div>
-						</div>
-						<hr />
-					
-				</div>
-			</div>
-		
-		<!-- ============ FIELD DETAIL END =========== -->
-
-		<!-- ========= CONSTRUCTOR DETAIL START ======== -->
-		
-			<div class="section constructor details">
-				<h3><a name="constructor_detail">Constructor Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<h4><a name="YAHOO.util.DDProxy()">YAHOO.util.DDProxy</a></h4>
-					<div class="detail">
-						<code>
-							<strong>YAHOO.util.DDProxy</strong>
-							()
-						</code>
-						<div class="description">
-							
-								A DragDrop implementation that inserts an empty, bordered div into
- the document that follows the cursor during drag operations.  At the time of
- the click, the frame div is resized to the dimensions of the linked html
- element, and moved to the exact location of the linked element.
-
- References to the "frame" element refer to the single proxy element that
- was created to be dragged in place of all DDProxy elements on the
- page.
-							
-							
-							
-								<dl>
-									<dt>Parameters:</dt>
-									
-										<dd>
-											<code>id</code> - 
-											 the id of the linked html element  
-										</dd>
-									
-										<dd>
-											<code>sGroup</code> - 
-											 the group of related DragDrop objects  
-										</dd>
-									
-										<dd>
-											<code>config</code> - 
-											 an object containing configurable attributes                 Valid properties for DDProxy in addition to those in DragDrop:                     resizeFrame, centerFrame, dragElId
-										</dd>
-									
-								</dl>
-							
-							
-							
-							
-							
-						</div>
-					</div>
-				</div>
-			</div>
-		
-		<!-- ========= CONSTRUCTOR DETAIL END ======== -->
-
-
-		<!-- ============ METHOD DETAIL START ========== -->
-		
-			<div class="section method details">
-				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					
-						<h4><a name="_resizeProxy">_resizeProxy</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>_resizeProxy</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="applyConfig">applyConfig</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>applyConfig</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Applies the configuration parameters that were passed into the constructor.
- This is supposed to happen at each level through the inheritance chain.  So
- a DDProxy implentation will execute apply config on DDProxy, DD, and 
- DragDrop in order to get all of the parameters that are available in
- each object.
-								
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="b4EndDrag">b4EndDrag</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>b4EndDrag</strong>
-								(e)
-							</code>
-									
-							<div class="description">
-								
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="b4MouseDown">b4MouseDown</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>b4MouseDown</strong>
-								(e)
-							</code>
-									
-							<div class="description">
-								
-									Event that fires prior to the onMouseDown event.  Overrides 
- YAHOO.util.DragDrop.
-								
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="b4StartDrag">b4StartDrag</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>b4StartDrag</strong>
-								(x, y)
-							</code>
-									
-							<div class="description">
-								
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="createFrame">createFrame</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>createFrame</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Create the drag frame if needed
-								
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="endDrag">endDrag</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>endDrag</strong>
-								(&lt;Event&gt; e)
-							</code>
-									
-							<div class="description">
-								
-									Fired when we are done dragging the object
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>e</code> - 
-												        
-											</dd>
-										
-									</dl>
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="initFrame">initFrame</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>initFrame</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Initialization for the drag frame element.  Must be called in the
- constructor of all subclasses
-								
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="toString">toString</a></h4>
-						<div class="detail">
-							<code>
-								Object 
-								<strong>toString</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									toString method
-								
-								
-								
-									<dl>
-										<dt>Returns:</dt>
-										<dd> string representation of the dd obj</dd>
-									</dl>
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-				</div>
-			</div>
-		
-		<!-- ============ METHOD DETAIL END ========== -->
+            </div>
 		</div>
 	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	</div>
 </div>
-<!-- ========= END OF CLASS DATA ========= -->
-
-
-<div id="footer">
-    <hr />
-    Copyright &copy; 2004 - 2006 Yahoo! Inc. All rights reserved.
-</div>
-
-
 </body>
 </html>

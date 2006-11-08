@@ -1,142 +1,183 @@
+/**
+ * The drag and drop utility provides a framework for building drag and drop
+ * applications.  In addition to enabling drag and drop for specific elements,
+ * the drag and drop elements are tracked by the manager class, and the
+ * interactions between the various elements are tracked during the drag and
+ * the implementing code is notified about these important moments.
+ * @module dragdrop
+ * @title Drag and Drop
+ * @requires yahoo,dom,event
+ * @namespace YAHOO.util
+ */
+
 // Only load the library once.  Rewriting the manager class would orphan 
 // existing drag and drop instances.
 if (!YAHOO.util.DragDropMgr) {
 
-    /**
-     * Handles the element interaction for all DragDrop items in the 
-     * window.  Generally, you will not call this class directly, but it does
-     * have helper methods that could be useful in your DragDrop 
-     * implementations.  This class should not be instantiated; all methods 
-     * are are static.
-     *
-     * @constructor
-     */
-    YAHOO.util.DragDropMgr = new function() {
+/**
+ * DragDropMgr is a singleton that tracks the element interaction for 
+ * all DragDrop items in the window.  Generally, you will not call 
+ * this class directly, but it does have helper methods that could 
+ * be useful in your DragDrop implementations.
+ * @class DragDropMgr
+ * @static
+ */
+YAHOO.util.DragDropMgr = function() {
+
+    var Event = YAHOO.util.Event;
+
+    return {
 
         /**
          * Two dimensional Array of registered DragDrop objects.  The first 
          * dimension is the DragDrop item group, the second the DragDrop 
          * object.
-         *
+         * @property ids
          * @type {string: string}
          * @private
+         * @static
          */
-        this.ids = {};
+        ids: {},
 
         /**
          * Array of element ids defined as drag handles.  Used to determine 
          * if the element that generated the mousedown event is actually the 
          * handle and not the html element itself.
-         *
+         * @property handleIds
          * @type {string: string}
          * @private
+         * @static
          */
-        this.handleIds = {};
+        handleIds: {},
 
         /**
          * the DragDrop object that is currently being dragged
-         *
+         * @property dragCurrent
          * @type DragDrop
          * @private
+         * @static
          **/
-        this.dragCurrent = null;
+        dragCurrent: null,
 
         /**
          * the DragDrop object(s) that are being hovered over
-         *
+         * @property dragOvers
          * @type Array
          * @private
+         * @static
          */
-        this.dragOvers = {};
+        dragOvers: {},
 
         /**
+         * LogWriter instance
+         * @property logger
+         * @type YAHOO.widget.LogWriter
          * @private
+         * @static
          */
-        this.logger = null;
+        logger: null,
 
         /**
          * the X distance between the cursor and the object being dragged
-         *
+         * @property deltaX
          * @type int
          * @private
+         * @static
          */
-        this.deltaX = 0;
+        deltaX: 0,
 
         /**
          * the Y distance between the cursor and the object being dragged
-         *
+         * @property deltaY
          * @type int
          * @private
+         * @static
          */
-        this.deltaY = 0;
+        deltaY: 0,
 
         /**
          * Flag to determine if we should prevent the default behavior of the
          * events we define. By default this is true, but this can be set to 
          * false if you need the default behavior (not recommended)
-         *
+         * @property preventDefault
          * @type boolean
+         * @static
          */
-        this.preventDefault = true;
+        preventDefault: true,
 
         /**
          * Flag to determine if we should stop the propagation of the events 
          * we generate. This is true by default but you may want to set it to
          * false if the html element contains other features that require the
          * mouse click.
-         *
+         * @property stopPropagation
          * @type boolean
+         * @static
          */
-        this.stopPropagation = true;
+        stopPropagation: true,
 
         /**
+         * Internal flag that is set to true when drag and drop has been
+         * intialized
+         * @property initialized
          * @private
+         * @static
          */
-        this.initalized = false;
+        initalized: false,
 
         /**
          * All drag and drop can be disabled.
-         *
+         * @property locked
          * @private
+         * @static
          */
-        this.locked = false;
+        locked: false,
         
         /**
          * Called the first time an element is registered.
-         *
+         * @method init
          * @private
+         * @static
          */
-        this.init = function() {
+        init: function() {
             this.logger = (YAHOO.widget.LogWriter) ?
                 new YAHOO.widget.LogWriter("DragDropMgr") : YAHOO;
             this.initialized = true;
-        };
+        },
 
         /**
          * In point mode, drag and drop interaction is defined by the 
          * location of the cursor during the drag/drop
+         * @property POINT
          * @type int
+         * @static
          */
-        this.POINT     = 0;
+        POINT: 0,
 
         /**
          * In intersect mode, drag and drop interactio nis defined by the 
          * overlap of two or more drag and drop objects.
+         * @property INTERSECT
          * @type int
+         * @static
          */
-        this.INTERSECT = 1;
+        INTERSECT: 1,
 
         /**
-         * The current drag and drop mode.  Default it point mode
+         * The current drag and drop mode.  Default: POINT
+         * @property mode
          * @type int
+         * @static
          */
-        this.mode = this.POINT;
+        mode: 0,
 
         /**
          * Runs method on all drag and drop objects
+         * @method _execOnAll
          * @private
+         * @static
          */
-        this._execOnAll = function(sMethod, args) {
+        _execOnAll: function(sMethod, args) {
             for (var i in this.ids) {
                 for (var j in this.ids[i]) {
                     var oDD = this.ids[i][j];
@@ -146,136 +187,161 @@ if (!YAHOO.util.DragDropMgr) {
                     oDD[sMethod].apply(oDD, args);
                 }
             }
-        };
+        },
 
         /**
          * Drag and drop initialization.  Sets up the global event handlers
+         * @method _onLoad
          * @private
+         * @static
          */
-        this._onLoad = function() {
+        _onLoad: function() {
 
             this.init();
 
             this.logger.log("DDM onload");
 
-            var EU = YAHOO.util.Event;
+            Event.on(document, "mouseup",   this.handleMouseUp, this, true);
+            Event.on(document, "mousemove", this.handleMouseMove, this, true);
+            Event.on(window,   "unload",    this._onUnload, this, true);
+            Event.on(window,   "resize",    this._onResize, this, true);
+            // Event.on(window,   "mouseout",    this._test);
 
-            EU.on(document, "mouseup",   this.handleMouseUp, this, true);
-            EU.on(document, "mousemove", this.handleMouseMove, this, true);
-            EU.on(window,   "unload",    this._onUnload, this, true);
-            EU.on(window,   "resize",    this._onResize, this, true);
-            // EU.on(window,   "mouseout",    this._test);
-
-        };
+        },
 
         /**
          * Reset constraints on all drag and drop objs
+         * @method _onResize
          * @private
+         * @static
          */
-        this._onResize = function(e) {
+        _onResize: function(e) {
             this.logger.log("window resize");
             this._execOnAll("resetConstraints", []);
-        };
+        },
 
         /**
          * Lock all drag and drop functionality
+         * @method lock
+         * @static
          */
-        this.lock = function() { this.locked = true; };
+        lock: function() { this.locked = true; },
 
         /**
          * Unlock all drag and drop functionality
+         * @method unlock
+         * @static
          */
-        this.unlock = function() { this.locked = false; };
+        unlock: function() { this.locked = false; },
 
         /**
          * Is drag and drop locked?
-         *
+         * @method isLocked
          * @return {boolean} True if drag and drop is locked, false otherwise.
+         * @static
          */
-        this.isLocked = function() { return this.locked; };
+        isLocked: function() { return this.locked; },
 
         /**
          * Location cache that is set for all drag drop objects when a drag is
          * initiated, cleared when the drag is finished.
-         *
+         * @property locationCache
          * @private
+         * @static
          */
-        this.locationCache = {};
+        locationCache: {},
 
         /**
          * Set useCache to false if you want to force object the lookup of each
          * drag and drop linked element constantly during a drag.
+         * @property useCache
          * @type boolean
+         * @static
          */
-        this.useCache = true;
+        useCache: true,
 
         /**
          * The number of pixels that the mouse needs to move after the 
          * mousedown before the drag is initiated.  Default=3;
+         * @property clickPixelThresh
          * @type int
+         * @static
          */
-        this.clickPixelThresh = 3;
+        clickPixelThresh: 3,
 
         /**
          * The number of milliseconds after the mousedown event to initiate the
          * drag if we don't get a mouseup event. Default=1000
+         * @property clickTimeThresh
          * @type int
+         * @static
          */
-        this.clickTimeThresh = 1000;
+        clickTimeThresh: 1000,
 
         /**
          * Flag that indicates that either the drag pixel threshold or the 
          * mousdown time threshold has been met
+         * @property dragThreshMet
          * @type boolean
          * @private
+         * @static
          */
-        this.dragThreshMet = false;
+        dragThreshMet: false,
 
         /**
          * Timeout used for the click time threshold
+         * @property clickTimeout
          * @type Object
          * @private
+         * @static
          */
-        this.clickTimeout = null;
+        clickTimeout: null,
 
         /**
          * The X position of the mousedown event stored for later use when a 
          * drag threshold is met.
+         * @property startX
          * @type int
          * @private
+         * @static
          */
-        this.startX = 0;
+        startX: 0,
 
         /**
          * The Y position of the mousedown event stored for later use when a 
          * drag threshold is met.
+         * @property startY
          * @type int
          * @private
+         * @static
          */
-        this.startY = 0;
+        startY: 0,
 
         /**
          * Each DragDrop instance must be registered with the DragDropMgr.  
          * This is executed in DragDrop.init()
-         *
+         * @method regDragDrop
          * @param {DragDrop} oDD the DragDrop object to register
          * @param {String} sGroup the name of the group this element belongs to
+         * @static
          */
-        this.regDragDrop = function(oDD, sGroup) {
+        regDragDrop: function(oDD, sGroup) {
             if (!this.initialized) { this.init(); }
             
             if (!this.ids[sGroup]) {
                 this.ids[sGroup] = {};
             }
             this.ids[sGroup][oDD.id] = oDD;
-        };
+        },
 
         /**
          * Removes the supplied dd instance from the supplied group. Executed
-         * by DragDrop.removeFromGroup.
+         * by DragDrop.removeFromGroup, so don't call this function directly.
+         * @method removeDDFromGroup
          * @private
+         * @static
          */
-        this.removeDDFromGroup = function(oDD, sGroup) {
+        removeDDFromGroup: function(oDD, sGroup) {
             if (!this.ids[sGroup]) {
                 this.ids[sGroup] = {};
             }
@@ -284,14 +350,16 @@ if (!YAHOO.util.DragDropMgr) {
             if (obj && obj[oDD.id]) {
                 delete obj[oDD.id];
             }
-        };
+        },
 
         /**
          * Unregisters a drag and drop item.  This is executed in 
          * DragDrop.unreg, use that method instead of calling this directly.
+         * @method _remove
          * @private
+         * @static
          */
-        this._remove = function(oDD) {
+        _remove: function(oDD) {
             for (var g in oDD.groups) {
                 if (g && this.ids[g][oDD.id]) {
                     delete this.ids[g][oDD.id];
@@ -299,44 +367,47 @@ if (!YAHOO.util.DragDropMgr) {
                 }
             }
             delete this.handleIds[oDD.id];
-        };
+        },
 
         /**
          * Each DragDrop handle element must be registered.  This is done
          * automatically when executing DragDrop.setHandleElId()
-         *
+         * @method regHandle
          * @param {String} sDDId the DragDrop id this element is a handle for
          * @param {String} sHandleId the id of the element that is the drag 
          * handle
+         * @static
          */
-        this.regHandle = function(sDDId, sHandleId) {
+        regHandle: function(sDDId, sHandleId) {
             if (!this.handleIds[sDDId]) {
                 this.handleIds[sDDId] = {};
             }
             this.handleIds[sDDId][sHandleId] = sHandleId;
-        };
+        },
 
         /**
          * Utility function to determine if a given element has been 
          * registered as a drag drop item.
-         *
+         * @method isDragDrop
          * @param {String} id the element id to check
          * @return {boolean} true if this element is a DragDrop item, 
          * false otherwise
+         * @static
          */
-        this.isDragDrop = function(id) {
+        isDragDrop: function(id) {
             return ( this.getDDById(id) ) ? true : false;
-        };
+        },
 
         /**
          * Returns the drag and drop instances that are in all groups the
          * passed in instance belongs to.
-         *
+         * @method getRelated
          * @param {DragDrop} p_oDD the obj to get related data for
          * @param {boolean} bTargetsOnly if true, only return targetable objs
          * @return {DragDrop[]} the related instances
+         * @static
          */
-        this.getRelated = function(p_oDD, bTargetsOnly) {
+        getRelated: function(p_oDD, bTargetsOnly) {
             var oDDs = [];
             for (var i in p_oDD.groups) {
                 for (j in this.ids[i]) {
@@ -351,18 +422,19 @@ if (!YAHOO.util.DragDropMgr) {
             }
 
             return oDDs;
-        };
+        },
 
         /**
          * Returns true if the specified dd target is a legal target for 
          * the specifice drag obj
-         *
+         * @method isLegalTarget
          * @param {DragDrop} the drag obj
-         * @param {DragDrop) the target
+         * @param {DragDrop} the target
          * @return {boolean} true if the target is a legal target for the 
          * dd obj
+         * @static
          */
-        this.isLegalTarget = function (oDD, oTargetDD) {
+        isLegalTarget: function (oDD, oTargetDD) {
             var targets = this.getRelated(oDD, true);
             for (var i=0, len=targets.length;i<len;++i) {
                 if (targets[i].id == oTargetDD.id) {
@@ -371,7 +443,7 @@ if (!YAHOO.util.DragDropMgr) {
             }
 
             return false;
-        };
+        },
 
         /**
          * My goal is to be able to transparently determine if an object is
@@ -379,51 +451,55 @@ if (!YAHOO.util.DragDropMgr) {
          * returns "object", oDD.constructor.toString() always returns
          * "DragDrop" and not the name of the subclass.  So for now it just
          * evaluates a well-known variable in DragDrop.
-         *
+         * @method isTypeOfDD
          * @param {Object} the object to evaluate
          * @return {boolean} true if typeof oDD = DragDrop
+         * @static
          */
-        this.isTypeOfDD = function (oDD) {
+        isTypeOfDD: function (oDD) {
             return (oDD && oDD.__ygDragDrop);
-        };
+        },
 
         /**
          * Utility function to determine if a given element has been 
          * registered as a drag drop handle for the given Drag Drop object.
-         *
+         * @method isHandle
          * @param {String} id the element id to check
          * @return {boolean} true if this element is a DragDrop handle, false 
          * otherwise
+         * @static
          */
-        this.isHandle = function(sDDId, sHandleId) {
+        isHandle: function(sDDId, sHandleId) {
             return ( this.handleIds[sDDId] && 
                             this.handleIds[sDDId][sHandleId] );
-        };
+        },
 
         /**
          * Returns the DragDrop instance for a given id
-         *
+         * @method getDDById
          * @param {String} id the id of the DragDrop object
          * @return {DragDrop} the drag drop object, null if it is not found
+         * @static
          */
-        this.getDDById = function(id) {
+        getDDById: function(id) {
             for (var i in this.ids) {
                 if (this.ids[i][id]) {
                     return this.ids[i][id];
                 }
             }
             return null;
-        };
+        },
 
         /**
          * Fired after a registered DragDrop object gets the mousedown event.
          * Sets up the events required to track the object being dragged
-         *
+         * @method handleMouseDown
          * @param {Event} e the event
          * @param oDD the DragDrop object being dragged
          * @private
+         * @static
          */
-        this.handleMouseDown = function(e, oDD) {
+        handleMouseDown: function(e, oDD) {
 
             this.currentTarget = YAHOO.util.Event.getTarget(e);
 
@@ -447,16 +523,17 @@ if (!YAHOO.util.DragDropMgr) {
                         DDM.startDrag(DDM.startX, DDM.startY); 
                     }, 
                     this.clickTimeThresh );
-        };
+        },
 
         /**
          * Fired when either the drag pixel threshol or the mousedown hold 
          * time threshold has been met.
-         * 
+         * @method startDrag
          * @param x {int} the X position of the original mousedown
          * @param y {int} the Y position of the original mousedown
+         * @static
          */
-        this.startDrag = function(x, y) {
+        startDrag: function(x, y) {
             this.logger.log("firing drag start events");
             clearTimeout(this.clickTimeout);
             if (this.dragCurrent) {
@@ -464,16 +541,17 @@ if (!YAHOO.util.DragDropMgr) {
                 this.dragCurrent.startDrag(x, y);
             }
             this.dragThreshMet = true;
-        };
+        },
 
         /**
          * Internal function to handle the mouseup event.  Will be invoked 
          * from the context of the document.
-         *
+         * @method handleMouseUp
          * @param {Event} e the event
          * @private
+         * @static
          */
-        this.handleMouseUp = function(e) {
+        handleMouseUp: function(e) {
 
             if (! this.dragCurrent) {
                 return;
@@ -491,15 +569,16 @@ if (!YAHOO.util.DragDropMgr) {
             this.stopDrag(e);
 
             this.stopEvent(e);
-        };
+        },
 
         /**
          * Utility to stop event propagation and event default, if these 
          * features are turned on.
-         *
+         * @method stopEvent
          * @param {Event} e the event as returned by this.getEvent()
+         * @static
          */
-        this.stopEvent = function(e) {
+        stopEvent: function(e) {
             if (this.stopPropagation) {
                 YAHOO.util.Event.stopPropagation(e);
             }
@@ -507,16 +586,17 @@ if (!YAHOO.util.DragDropMgr) {
             if (this.preventDefault) {
                 YAHOO.util.Event.preventDefault(e);
             }
-        };
+        },
 
         /** 
          * Internal function to clean up event handlers after the drag 
          * operation is complete
-         *
+         * @method stopDrag
          * @param {Event} e the event
          * @private
+         * @static
          */
-        this.stopDrag = function(e) {
+        stopDrag: function(e) {
             // this.logger.log("mouseup - removing event handlers");
 
             // Fire the drag end event for the item that was dragged
@@ -533,7 +613,7 @@ if (!YAHOO.util.DragDropMgr) {
 
             this.dragCurrent = null;
             this.dragOvers = {};
-        };
+        },
 
 
         /** 
@@ -545,11 +625,12 @@ if (!YAHOO.util.DragDropMgr) {
          * detect this in internet explorer by verifying that the mouse is 
          * down during the mousemove event.  Firefox doesn't give us the 
          * button state on the mousemove event.
-         *
+         * @method handleMouseMove
          * @param {Event} e the event
          * @private
+         * @static
          */
-        this.handleMouseMove = function(e) {
+        handleMouseMove: function(e) {
             //this.logger.log("handlemousemove");
             if (! this.dragCurrent) {
                 // this.logger.log("no current drag obj");
@@ -586,17 +667,18 @@ if (!YAHOO.util.DragDropMgr) {
             this.stopEvent(e);
 
             return true;
-        };
+        },
 
         /**
          * Iterates over all of the DragDrop elements to find ones we are 
          * hovering over or dropping on
-         *
+         * @method fireEvents
          * @param {Event} e the event
          * @param {boolean} isDrop is this a drop op or a mouseover op?
          * @private
+         * @static
          */
-        this.fireEvents = function(e, isDrop) {
+        fireEvents: function(e, isDrop) {
             var dc = this.dragCurrent;
 
             // If the user did the mouse up outside of the window, we could 
@@ -727,7 +809,13 @@ if (!YAHOO.util.DragDropMgr) {
 
             }
 
-        };
+            // notify about a drop that did not find a target
+            if (isDrop && !dropEvts.length) {
+                this.logger.log(dc.id + " dropped, but not on a target");
+                dc.onInvalidDrop(e);
+            }
+
+        },
 
         /**
          * Helper function for getting the best match from the list of drag 
@@ -735,12 +823,13 @@ if (!YAHOO.util.DragDropMgr) {
          * in INTERSECT mode.  It returns either the first object that the 
          * cursor is over, or the object that has the greatest overlap with 
          * the dragged element.
-         *
+         * @method getBestMatch
          * @param  {DragDrop[]} dds The array of drag and drop objects 
          * targeted
          * @return {DragDrop}       The best single match
+         * @static
          */
-        this.getBestMatch = function(dds) {
+        getBestMatch: function(dds) {
             var winner = null;
             // Return null if the input is not what we expect
             //if (!dds || !dds.length || dds.length == 0) {
@@ -773,26 +862,27 @@ if (!YAHOO.util.DragDropMgr) {
             }
 
             return winner;
-        };
+        },
 
         /**
          * Refreshes the cache of the top-left and bottom-right points of the 
          * drag and drop objects in the specified group(s).  This is in the
          * format that is stored in the drag and drop instance, so typical 
          * usage is:
-         *
+         * <code>
          * YAHOO.util.DragDropMgr.refreshCache(ddinstance.groups);
-         *
+         * </code>
          * Alternatively:
-         *
+         * <code>
          * YAHOO.util.DragDropMgr.refreshCache({group1:true, group2:true});
-         *
+         * </code>
          * @TODO this really should be an indexed array.  Alternatively this
          * method could accept both.
-         *
+         * @method refreshCache
          * @param {Object} groups an associative array of groups to refresh
+         * @static
          */
-        this.refreshCache = function(groups) {
+        refreshCache: function(groups) {
             this.logger.log("refreshing element location cache");
             for (var sGroup in groups) {
                 if ("string" != typeof sGroup) {
@@ -817,17 +907,19 @@ if (!YAHOO.util.DragDropMgr) {
                     }
                 }
             }
-        };
+        },
 
         /**
          * This checks to make sure an element exists and is in the DOM.  The
          * main purpose is to handle cases where innerHTML is used to remove
          * drag and drop objects from the DOM.  IE provides an 'unspecified
          * error' when trying to access the offsetParent of such an element
+         * @method verifyEl
          * @param {HTMLElement} el the element to check
          * @return {boolean} true if the element looks usable
+         * @static
          */
-        this.verifyEl = function(el) {
+        verifyEl: function(el) {
             try {
                 if (el) {
                     var parent = el.offsetParent;
@@ -840,19 +932,20 @@ if (!YAHOO.util.DragDropMgr) {
             }
 
             return false;
-        };
+        },
         
         /**
          * Returns a Region object containing the drag and drop element's position
          * and size, including the padding configured for it
-         *
+         * @method getLocation
          * @param {DragDrop} oDD the drag and drop object to get the 
          *                       location for
          * @return {YAHOO.util.Region} a Region object representing the total area
          *                             the element occupies, including any padding
          *                             the instance is configured for.
+         * @static
          */
-        this.getLocation = function(oDD) {
+        getLocation: function(oDD) {
             if (! this.isTypeOfDD(oDD)) {
                 this.logger.log(oDD + " is not a DD obj");
                 return null;
@@ -880,17 +973,18 @@ if (!YAHOO.util.DragDropMgr) {
             l = x1 - oDD.padding[3];
 
             return new YAHOO.util.Region( t, r, b, l );
-        };
+        },
 
         /**
          * Checks the cursor location to see if it over the target
-         * 
+         * @method isOverTarget
          * @param {YAHOO.util.Point} pt The point to evaluate
          * @param {DragDrop} oTarget the DragDrop object we are inspecting
          * @return {boolean} true if the mouse is over the target
          * @private
+         * @static
          */
-        this.isOverTarget = function(pt, oTarget, intersect) {
+        isOverTarget: function(pt, oTarget, intersect) {
             // use cache if available
             var loc = this.locationCache[oTarget.id];
             if (!loc || !this.useCache) {
@@ -942,20 +1036,25 @@ if (!YAHOO.util.DragDropMgr) {
             } else {
                 return false;
             }
-        };
+        },
 
         /**
+         * unload event handler
+         * @method _onUnload
          * @private
+         * @static
          */
-        this._onUnload = function(e, me) {
+        _onUnload: function(e, me) {
             this.unregAll();
-        };
+        },
 
         /**
          * Cleans up the drag and drop events and objects.
+         * @method unregAll
          * @private
+         * @static
          */
-        this.unregAll = function() {
+        unregAll: function() {
             this.logger.log("unregister all");
 
             if (this.dragCurrent) {
@@ -971,103 +1070,119 @@ if (!YAHOO.util.DragDropMgr) {
 
             this.elementCache = {};
             this.ids = {};
-        };
+        },
 
         /**
          * A cache of DOM elements
+         * @property elementCache
          * @private
+         * @static
          */
-        this.elementCache = {};
+        elementCache: {},
         
         /**
          * Get the wrapper for the DOM element specified
-         *
-         * @param {String} id the id of the elment to get
+         * @method getElWrapper
+         * @param {String} id the id of the element to get
          * @return {YAHOO.util.DDM.ElementWrapper} the wrapped element
          * @private
-         * @deprecated
+         * @deprecated This wrapper isn't that useful
+         * @static
          */
-        this.getElWrapper = function(id) {
+        getElWrapper: function(id) {
             var oWrapper = this.elementCache[id];
             if (!oWrapper || !oWrapper.el) {
                 oWrapper = this.elementCache[id] = 
                     new this.ElementWrapper(YAHOO.util.Dom.get(id));
             }
             return oWrapper;
-        };
+        },
 
         /**
          * Returns the actual DOM element
-         *
+         * @method getElement
          * @param {String} id the id of the elment to get
          * @return {Object} The element
-         * @deprecated
+         * @deprecated use YAHOO.util.Dom.get instead
+         * @static
          */
-        this.getElement = function(id) {
+        getElement: function(id) {
             return YAHOO.util.Dom.get(id);
-        };
+        },
         
         /**
          * Returns the style property for the DOM element (i.e., 
          * document.getElById(id).style)
-         *
+         * @method getCss
          * @param {String} id the id of the elment to get
          * @return {Object} The style property of the element
-         * @deprecated
+         * @deprecated use YAHOO.util.Dom instead
+         * @static
          */
-        this.getCss = function(id) {
+        getCss: function(id) {
             var el = YAHOO.util.Dom.get(id);
             return (el) ? el.style : null;
-        };
+        },
 
         /**
          * Inner class for cached elements
+         * @class DragDropMgr.ElementWrapper
+         * @for DragDropMgr
          * @private
          * @deprecated
          */
-        this.ElementWrapper = function(el) {
+        ElementWrapper: function(el) {
                 /**
-                 * @private
+                 * The element
+                 * @property el
                  */
                 this.el = el || null;
                 /**
-                 * @private
+                 * The element id
+                 * @property id
                  */
                 this.id = this.el && el.id;
                 /**
-                 * @private
+                 * A reference to the style property
+                 * @property css
                  */
                 this.css = this.el && el.style;
-            };
+            },
 
         /**
          * Returns the X position of an html element
+         * @method getPosX
          * @param el the element for which to get the position
          * @return {int} the X coordinate
-         * @deprecated
+         * @for DragDropMgr
+         * @deprecated use YAHOO.util.Dom.getX instead
+         * @static
          */
-        this.getPosX = function(el) {
+        getPosX: function(el) {
             return YAHOO.util.Dom.getX(el);
-        };
+        },
 
         /**
          * Returns the Y position of an html element
+         * @method getPosY
          * @param el the element for which to get the position
          * @return {int} the Y coordinate
-         * @deprecated
+         * @deprecated use YAHOO.util.Dom.getY instead
+         * @static
          */
-        this.getPosY = function(el) {
+        getPosY: function(el) {
             return YAHOO.util.Dom.getY(el); 
-        };
+        },
 
         /**
          * Swap two nodes.  In IE, we use the native method, for others we 
          * emulate the IE behavior
-         *
+         * @method swapNode
          * @param n1 the first node to swap
          * @param n2 the other node to swap
+         * @static
          */
-        this.swapNode = function(n1, n2) {
+        swapNode: function(n1, n2) {
             if (n1.swapNode) {
                 n1.swapNode(n2);
             } else {
@@ -1083,92 +1198,116 @@ if (!YAHOO.util.DragDropMgr) {
                     p.insertBefore(n1, s);
                 }
             }
-        };
+        },
 
         /**
+         * Returns the current scroll position
+         * @method getScroll
          * @private
+         * @static
          */
-        this.getScroll = function () {
-            var t, l;
-            if (document.documentElement && document.documentElement.scrollTop) {
-                t = document.documentElement.scrollTop;
-                l = document.documentElement.scrollLeft;
-            } else if (document.body) {
-                t = document.body.scrollTop;
-                l = document.body.scrollLeft;
+        getScroll: function () {
+            var t, l, dde=document.documentElement, db=document.body;
+            if (dde && (dde.scrollTop || dde.scrollLeft)) {
+                t = dde.scrollTop;
+                l = dde.scrollLeft;
+            } else if (db) {
+                t = db.scrollTop;
+                l = db.scrollLeft;
+            } else {
+                alert("no scroll");
             }
             return { top: t, left: l };
-        };
+        },
 
         /**
          * Returns the specified element style property
+         * @method getStyle
          * @param {HTMLElement} el          the element
          * @param {string}      styleProp   the style property
          * @return {string} The value of the style property
-         * @deprecated, use YAHOO.util.Dom.getStyle
+         * @deprecated use YAHOO.util.Dom.getStyle
+         * @static
          */
-        this.getStyle = function(el, styleProp) {
+        getStyle: function(el, styleProp) {
             return YAHOO.util.Dom.getStyle(el, styleProp);
-        };
+        },
 
         /**
          * Gets the scrollTop
+         * @method getScrollTop
          * @return {int} the document's scrollTop
+         * @static
          */
-        this.getScrollTop = function () { return this.getScroll().top; };
+        getScrollTop: function () { return this.getScroll().top; },
 
         /**
          * Gets the scrollLeft
+         * @method getScrollLeft
          * @return {int} the document's scrollTop
+         * @static
          */
-        this.getScrollLeft = function () { return this.getScroll().left; };
+        getScrollLeft: function () { return this.getScroll().left; },
 
         /**
          * Sets the x/y position of an element to the location of the
          * target element.
+         * @method moveToEl
          * @param {HTMLElement} moveEl      The element to move
          * @param {HTMLElement} targetEl    The position reference element
+         * @static
          */
-        this.moveToEl = function (moveEl, targetEl) {
+        moveToEl: function (moveEl, targetEl) {
             var aCoord = YAHOO.util.Dom.getXY(targetEl);
             this.logger.log("moveToEl: " + aCoord);
             YAHOO.util.Dom.setXY(moveEl, aCoord);
-        };
+        },
 
         /**
          * Gets the client height
+         * @method getClientHeight
          * @return {int} client height in px
-         * @deprecated
+         * @deprecated use YAHOO.util.Dom.getViewportHeight instead
+         * @static
          */
-        this.getClientHeight = function() {
-            return YAHOO.util.Dom.getClientHeight();
-        };
+        getClientHeight: function() {
+            return YAHOO.util.Dom.getViewportHeight();
+        },
 
         /**
          * Gets the client width
+         * @method getClientWidth
          * @return {int} client width in px
-         * @deprecated
+         * @deprecated use YAHOO.util.Dom.getViewportWidth instead
+         * @static
          */
-        this.getClientWidth = function() {
-            return YAHOO.util.Dom.getClientWidth();
-        };
+        getClientWidth: function() {
+            return YAHOO.util.Dom.getViewportWidth();
+        },
 
         /**
-         * numeric array sort function
+         * Numeric array sort function
+         * @method numericSort
+         * @static
          */
-        this.numericSort = function(a, b) { return (a - b); };
+        numericSort: function(a, b) { return (a - b); },
 
         /**
+         * Internal counter
+         * @property _timeoutCount
          * @private
+         * @static
          */
-        this._timeoutCount = 0;
+        _timeoutCount: 0,
 
         /**
          * Trying to make the load order less important.  Without this we get
          * an error if this file is loaded before the Event Utility.
+         * @method _addListeners
          * @private
+         * @static
          */
-        this._addListeners = function() {
+        _addListeners: function() {
             var DDM = YAHOO.util.DDM;
             if ( YAHOO.util.Event && document ) {
                 DDM._onLoad();
@@ -1182,15 +1321,17 @@ if (!YAHOO.util.DragDropMgr) {
                     }
                 }
             }
-        };
+        },
 
         /**
          * Recursively searches the immediate parent and all child nodes for 
          * the handle element in order to determine wheter or not it was 
          * clicked.
+         * @method handleWasClicked
          * @param node the html element to inspect
+         * @static
          */
-        this.handleWasClicked = function(node, id) {
+        handleWasClicked: function(node, id) {
             if (this.isHandle(id, node.id)) {
                 this.logger.log("clicked node is a handle");
                 return true;
@@ -1210,19 +1351,15 @@ if (!YAHOO.util.DragDropMgr) {
             }
 
             return false;
-        };
+        }
 
-    } ();
+    };
 
-    // shorter alias, save a few bytes
-    YAHOO.util.DDM = YAHOO.util.DragDropMgr;
-    YAHOO.util.DDM._addListeners();
+}();
+
+// shorter alias, save a few bytes
+YAHOO.util.DDM = YAHOO.util.DragDropMgr;
+YAHOO.util.DDM._addListeners();
 
 }
-
-//YAHOO.util.DragDropMgr.enableWindow = function(win) {
-    //var EU = YAHOO.util.Event;
-    //EU.on(win.document, "mouseup",   this.handleMouseUp,   this, true);
-    //EU.on(win.document, "mousemove", this.handleMouseMove, this, true);
-//};
 

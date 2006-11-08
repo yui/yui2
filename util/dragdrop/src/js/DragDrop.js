@@ -1,3 +1,8 @@
+(function() {
+
+var Event=YAHOO.util.Event; 
+var Dom=YAHOO.util.Dom;
+
 /**
  * Defines the interface and base operation of items that that can be 
  * dragged or can be drop targets.  It was designed to be extended, overriding
@@ -21,7 +26,7 @@
  * This class should not be instantiated until the onload event to ensure that
  * the associated elements are available.
  * The following would define a DragDrop obj that would interact with any 
- * other * DragDrop obj in the "group1" group:
+ * other DragDrop obj in the "group1" group:
  * <pre>
  *  dd = new YAHOO.util.DragDrop("div1", "group1");
  * </pre>
@@ -31,9 +36,11 @@
  * also override the methods you want on an instance of the class...
  * <pre>
  *  dd.onDragDrop = function(e, id) {
- *   alert("dd was dropped on " + id);
+ *  &nbsp;&nbsp;alert("dd was dropped on " + id);
  *  }
  * </pre>
+ * @namespace YAHOO.util
+ * @class DragDrop
  * @constructor
  * @param {String} id of the element that is linked to this instance
  * @param {String} sGroup the group of related DragDrop objects
@@ -54,13 +61,14 @@ YAHOO.util.DragDrop.prototype = {
      * refer to as the "linked element" because the size and position of 
      * this element is used to determine when the drag and drop objects have 
      * interacted.
-     *
+     * @property id
      * @type String
      */
     id: null,
 
     /**
      * Configuration attributes passed into the constructor
+     * @property config
      * @type object
      */
     config: null,
@@ -69,7 +77,7 @@ YAHOO.util.DragDrop.prototype = {
      * The id of the element that will be dragged.  By default this is same 
      * as the linked element , but could be changed to another element. Ex: 
      * YAHOO.util.DDProxy
-     *
+     * @property dragElId
      * @type String
      * @private
      */
@@ -80,7 +88,7 @@ YAHOO.util.DragDrop.prototype = {
      * this is the linked element, but could be changed to be a child of this
      * element.  This lets us do things like only starting the drag when the 
      * header element within the linked html element is clicked.
-     *
+     * @property handleElId
      * @type String
      * @private
      */
@@ -88,12 +96,14 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * An associative array of HTML tags that will be ignored if clicked.
+     * @property invalidHandleTypes
      * @type {string: string}
      */
     invalidHandleTypes: null, 
 
     /**
      * An associative array of ids for elements that will be ignored if clicked
+     * @property invalidHandleIds
      * @type {string: string}
      */
     invalidHandleIds: null, 
@@ -101,6 +111,7 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * An indexted array of css class names for elements that will be ignored
      * if clicked.
+     * @property invalidHandleClasses
      * @type string[]
      */
     invalidHandleClasses: null, 
@@ -108,7 +119,7 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * The linked element's absolute X position at the time the drag was 
      * started
-     *
+     * @property startPageX
      * @type int
      * @private
      */
@@ -117,7 +128,7 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * The linked element's absolute X position at the time the drag was 
      * started
-     *
+     * @property startPageY
      * @type int
      * @private
      */
@@ -128,6 +139,7 @@ YAHOO.util.DragDrop.prototype = {
      * related.  Instances only get events when interacting with other 
      * DragDrop object in the same group.  This lets us define multiple 
      * groups using a single DragDrop subclass if we want.
+     * @property groups
      * @type {string: string}
      */
     groups: null,
@@ -135,7 +147,7 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * Individual drag/drop instances can be locked.  This will prevent 
      * onmousedown start drag.
-     *
+     * @property locked
      * @type boolean
      * @private
      */
@@ -143,18 +155,20 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * Lock this instance
+     * @method lock
      */
     lock: function() { this.locked = true; },
 
     /**
      * Unlock this instace
+     * @method unlock
      */
     unlock: function() { this.locked = false; },
 
     /**
      * By default, all insances can be a drop target.  This can be disabled by
      * setting isTarget to false.
-     *
+     * @method isTarget
      * @type boolean
      */
     isTarget: true,
@@ -162,24 +176,28 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * The padding configured for this drag and drop object for calculating
      * the drop zone intersection with this object.
+     * @method padding
      * @type int[]
      */
     padding: null,
 
     /**
+     * Cached reference to the linked element
+     * @property _domRef
      * @private
      */
     _domRef: null,
 
     /**
      * Internal typeof flag
+     * @property __ygDragDrop
      * @private
      */
     __ygDragDrop: true,
 
     /**
      * Set to true when horizontal contraints are applied
-     *
+     * @property constrainX
      * @type boolean
      * @private
      */
@@ -187,7 +205,7 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * Set to true when vertical contraints are applied
-     *
+     * @property constrainY
      * @type boolean
      * @private
      */
@@ -195,7 +213,7 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * The left constraint
-     *
+     * @property minX
      * @type int
      * @private
      */
@@ -203,7 +221,7 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * The right constraint
-     *
+     * @property maxX
      * @type int
      * @private
      */
@@ -211,7 +229,8 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * The up constraint 
-     *
+     * @property minY
+     * @type int
      * @type int
      * @private
      */
@@ -219,15 +238,18 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * The down constraint 
-     *
+     * @property maxY
      * @type int
      * @private
      */
     maxY: 0,
 
     /**
-     * Maintain offsets when we resetconstraints.  Used to maintain the 
-     * slider thumb value, and this needs to be fixed.
+     * Maintain offsets when we resetconstraints.  Set to true when you want
+     * the position of the element relative to its parent to stay the same
+     * when the page changes
+     *
+     * @property maintainOffset
      * @type boolean
      */
     maintainOffset: false,
@@ -236,6 +258,7 @@ YAHOO.util.DragDrop.prototype = {
      * Array of pixel locations the element will snap to if we specified a 
      * horizontal graduation/interval.  This array is generated automatically
      * when you define a tick interval.
+     * @property xTicks
      * @type int[]
      */
     xTicks: null,
@@ -244,6 +267,7 @@ YAHOO.util.DragDrop.prototype = {
      * Array of pixel locations the element will snap to if we specified a 
      * vertical graduation/interval.  This array is generated automatically 
      * when you define a tick interval.
+     * @property yTicks
      * @type int[]
      */
     yTicks: null,
@@ -253,18 +277,34 @@ YAHOO.util.DragDrop.prototype = {
      * button click (left button for a right-handed mouse).  Set to true to
      * allow drag and drop to start with any mouse click that is propogated
      * by the browser
+     * @property primaryButtonOnly
      * @type boolean
      */
     primaryButtonOnly: true,
 
     /**
      * The availabe property is false until the linked dom element is accessible.
+     * @property available
      * @type boolean
      */
     available: false,
 
     /**
+     * By default, drags can only be initiated if the mousedown occurs in the
+     * region the linked element is.  This is done in part to work around a
+     * bug in some browsers that mis-report the mousedown if the previous
+     * mouseup happened outside of the window.  This property is set to true
+     * if outer handles are defined.
+     *
+     * @property hasOuterHandles
+     * @type boolean
+     * @default false
+     */
+    hasOuterHandles: false,
+
+    /**
      * Code that executes immediately before the startDrag event
+     * @method b4StartDrag
      * @private
      */
     b4StartDrag: function(x, y) { },
@@ -272,7 +312,7 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * Abstract method called after a drag/drop object is clicked
      * and the drag or mousedown time thresholds have beeen met.
-     *
+     * @method startDrag
      * @param {int} X click location
      * @param {int} Y click location
      */
@@ -280,6 +320,7 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * Code that executes immediately before the onDrag event
+     * @method b4Drag
      * @private
      */
     b4Drag: function(e) { },
@@ -287,23 +328,17 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * Abstract method called during the onMouseMove event while dragging an 
      * object.
-     *
-     * @param {Event} e
+     * @method onDrag
+     * @param {Event} e the mousemove event
      */
     onDrag: function(e) { /* override this */ },
 
     /**
-     * Code that executes immediately before the onDragEnter event
-     * @private
-     */
-    // b4DragEnter: function(e) { },
-
-    /**
      * Abstract method called when this element fist begins hovering over 
      * another DragDrop obj
-     *
-     * @param {Event} e
-     * @param {String || YAHOO.util.DragDrop[]} id In POINT mode, the element
+     * @method onDragEnter
+     * @param {Event} e the mousemove event
+     * @param {String|DragDrop[]} id In POINT mode, the element
      * id this is hovering over.  In INTERSECT mode, an array of one or more 
      * dragdrop items being hovered over.
      */
@@ -311,6 +346,7 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * Code that executes immediately before the onDragOver event
+     * @method b4DragOver
      * @private
      */
     b4DragOver: function(e) { },
@@ -318,9 +354,9 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * Abstract method called when this element is hovering over another 
      * DragDrop obj
-     *
-     * @param {Event} e
-     * @param {String || YAHOO.util.DragDrop[]} id In POINT mode, the element
+     * @method onDragOver
+     * @param {Event} e the mousemove event
+     * @param {String|DragDrop[]} id In POINT mode, the element
      * id this is hovering over.  In INTERSECT mode, an array of dd items 
      * being hovered over.
      */
@@ -328,15 +364,16 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * Code that executes immediately before the onDragOut event
+     * @method b4DragOut
      * @private
      */
     b4DragOut: function(e) { },
 
     /**
      * Abstract method called when we are no longer hovering over an element
-     *
-     * @param {Event} e
-     * @param {String || YAHOO.util.DragDrop[]} id In POINT mode, the element
+     * @method onDragOut
+     * @param {Event} e the mousemove event
+     * @param {String|DragDrop[]} id In POINT mode, the element
      * id this was hovering over.  In INTERSECT mode, an array of dd items 
      * that the mouse is no longer over.
      */
@@ -344,6 +381,7 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * Code that executes immediately before the onDragDrop event
+     * @method b4DragDrop
      * @private
      */
     b4DragDrop: function(e) { },
@@ -351,50 +389,62 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * Abstract method called when this item is dropped on another DragDrop 
      * obj
-     *
-     * @param {Event} e
-     * @param {String || YAHOO.util.DragDrop[]} id In POINT mode, the element
+     * @method onDragDrop
+     * @param {Event} e the mouseup event
+     * @param {String|DragDrop[]} id In POINT mode, the element
      * id this was dropped on.  In INTERSECT mode, an array of dd items this 
      * was dropped on.
      */
     onDragDrop: function(e, id) { /* override this */ },
 
     /**
+     * Abstract method called when this item is dropped on an area with no
+     * drop target
+     * @method onInvalidDrop
+     * @param {Event} e the mouseup event
+     */
+    onInvalidDrop: function(e) { /* override this */ },
+
+    /**
      * Code that executes immediately before the endDrag event
+     * @method b4EndDrag
      * @private
      */
     b4EndDrag: function(e) { },
 
     /**
      * Fired when we are done dragging the object
-     *
-     * @param {Event} e
+     * @method endDrag
+     * @param {Event} e the mouseup event
      */
     endDrag: function(e) { /* override this */ },
 
     /**
      * Code executed immediately before the onMouseDown event
-
-     * @param {Event} e
+     * @method b4MouseDown
+     * @param {Event} e the mousedown event
      * @private
      */
     b4MouseDown: function(e) {  },
 
     /**
      * Event handler that fires when a drag/drop obj gets a mousedown
-     * @param {Event} e
+     * @method onMouseDown
+     * @param {Event} e the mousedown event
      */
     onMouseDown: function(e) { /* override this */ },
 
     /**
      * Event handler that fires when a drag/drop obj gets a mouseup
-     * @param {Event} e
+     * @method onMouseUp
+     * @param {Event} e the mouseup event
      */
     onMouseUp: function(e) { /* override this */ },
    
     /**
      * Override the onAvailable method to do what is needed after the initial
      * position was determined.
+     * @method onAvailable
      */
     onAvailable: function () { 
         this.logger.log("onAvailable (base)"); 
@@ -402,12 +452,12 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * Returns a reference to the linked element
-     *
+     * @method getEl
      * @return {HTMLElement} the html element 
      */
     getEl: function() { 
         if (!this._domRef) {
-            this._domRef = YAHOO.util.Dom.get(this.id); 
+            this._domRef = Dom.get(this.id); 
         }
 
         return this._domRef;
@@ -417,31 +467,31 @@ YAHOO.util.DragDrop.prototype = {
      * Returns a reference to the actual element to drag.  By default this is
      * the same as the html element, but it can be assigned to another 
      * element. An example of this can be found in YAHOO.util.DDProxy
-     *
+     * @method getDragEl
      * @return {HTMLElement} the html element 
      */
     getDragEl: function() {
-        return YAHOO.util.Dom.get(this.dragElId);
+        return Dom.get(this.dragElId);
     },
 
     /**
      * Sets up the DragDrop object.  Must be called in the constructor of any
      * YAHOO.util.DragDrop subclass
-     *
+     * @method init
      * @param id the id of the linked element
      * @param {String} sGroup the group of related items
      * @param {object} config configuration attributes
      */
     init: function(id, sGroup, config) {
         this.initTarget(id, sGroup, config);
-        YAHOO.util.Event.addListener(this.id, "mousedown", 
-                                          this.handleMouseDown, this, true);
+        Event.on(this.id, "mousedown", this.handleMouseDown, this, true);
+        // Event.on(this.id, "selectstart", Event.preventDefault);
     },
 
     /**
      * Initializes Targeting functionality only... the object does not
      * get a mousedown handler.
-     *
+     * @method initTarget
      * @param id the id of the linked element
      * @param {String} sGroup the group of related items
      * @param {object} config configuration attributes
@@ -456,6 +506,13 @@ YAHOO.util.DragDrop.prototype = {
         // initialize the groups array
         this.groups = {};
 
+        // assume that we have an element reference instead of an id if the
+        // parameter is not a string
+        if (typeof id !== "string") {
+            YAHOO.log("id is not a string, assuming it is an HTMLElement");
+            id = Dom.generateId(id);
+        }
+
         // set the id
         this.id = id;
 
@@ -466,7 +523,7 @@ YAHOO.util.DragDrop.prototype = {
         // so we just set the id rather than calling the setter.
         this.handleElId = id;
 
-        YAHOO.util.Event.onAvailable(id, this.handleOnAvailable, this, true);
+        Event.onAvailable(id, this.handleOnAvailable, this, true);
 
         // create a logger instance
         this.logger = (YAHOO.widget.LogWriter) ? 
@@ -490,6 +547,7 @@ YAHOO.util.DragDrop.prototype = {
      * a DDProxy implentation will execute apply config on DDProxy, DD, and 
      * DragDrop in order to get all of the parameters that are available in
      * each object.
+     * @method applyConfig
      */
     applyConfig: function() {
 
@@ -504,6 +562,7 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * Executed when the linked element is available
+     * @method handleOnAvailable
      * @private
      */
     handleOnAvailable: function() {
@@ -519,6 +578,7 @@ YAHOO.util.DragDrop.prototype = {
      * Supports css-style shorthand; if only one parameter is passed, all sides
      * will have that padding, and if only two are passed, the top and bottom
      * will have the first param, the left and right the second.
+     * @method setPadding
      * @param {int} iTop    Top pad
      * @param {int} iRight  Right pad
      * @param {int} iBot    Bot pad
@@ -536,7 +596,10 @@ YAHOO.util.DragDrop.prototype = {
     },
 
     /**
-     * Stores the initial placement of the dd element
+     * Stores the initial placement of the linked element.
+     * @method setInitialPosition
+     * @param {int} diffX   the X offset, default 0
+     * @param {int} diffY   the Y offset, default 0
      */
     setInitPosition: function(diffX, diffY) {
         var el = this.getEl();
@@ -549,7 +612,7 @@ YAHOO.util.DragDrop.prototype = {
         var dx = diffX || 0;
         var dy = diffY || 0;
 
-        var p = YAHOO.util.Dom.getXY( el );
+        var p = Dom.getXY( el );
 
         this.initPageX = p[0] - dx;
         this.initPageY = p[1] - dy;
@@ -567,11 +630,12 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * Sets the start position of the element.  This is set when the obj
      * is initialized, the reset when a drag is started.
+     * @method setStartPosition
      * @param pos current position (from previous lookup)
      * @private
      */
     setStartPosition: function(pos) {
-        var p = pos || YAHOO.util.Dom.getXY( this.getEl() );
+        var p = pos || Dom.getXY( this.getEl() );
         this.deltaSetXY = null;
 
         this.startPageX = p[0];
@@ -582,7 +646,7 @@ YAHOO.util.DragDrop.prototype = {
      * Add this instance to a group of related drag/drop objects.  All 
      * instances belong to at least one group, and can belong to as many 
      * groups as needed.
-     *
+     * @method addToGroup
      * @param sGroup {string} the name of the group
      */
     addToGroup: function(sGroup) {
@@ -592,6 +656,7 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * Remove's this instance from the supplied interaction group
+     * @method removeFromGroup
      * @param {string}  sGroup  The group to drop
      */
     removeFromGroup: function(sGroup) {
@@ -606,8 +671,8 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * Allows you to specify that an element other than the linked element 
      * will be moved with the cursor during a drag
-     *
-     * @param id the id of the element that will be used to initiate the drag
+     * @method setDragElId
+     * @param id {string} the id of the element that will be used to initiate the drag
      */
     setDragElId: function(id) {
         this.dragElId = id;
@@ -620,10 +685,15 @@ YAHOO.util.DragDrop.prototype = {
      * content area would normally start the drag operation.  Use this method
      * to specify that an element inside of the content div is the element 
      * that starts the drag operation.
-     *
-     * @param id the id of the element that will be used to initiate the drag
+     * @method setHandleElId
+     * @param id {string} the id of the element that will be used to 
+     * initiate the drag.
      */
     setHandleElId: function(id) {
+        if (typeof id !== "string") {
+            YAHOO.log("id is not a string, assuming it is an HTMLElement");
+            id = Dom.generateId(id);
+        }
         this.handleElId = id;
         this.DDM.regHandle(this.id, id);
     },
@@ -631,20 +701,29 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * Allows you to set an element outside of the linked element as a drag 
      * handle
+     * @method setOuterHandleElId
+     * @param id the id of the element that will be used to initiate the drag
      */
     setOuterHandleElId: function(id) {
+        if (typeof id !== "string") {
+            YAHOO.log("id is not a string, assuming it is an HTMLElement");
+            id = Dom.generateId(id);
+        }
         this.logger.log("Adding outer handle event: " + id);
-        YAHOO.util.Event.addListener(id, "mousedown", 
+        Event.on(id, "mousedown", 
                 this.handleMouseDown, this, true);
         this.setHandleElId(id);
+
+        this.hasOuterHandles = true;
     },
 
     /**
      * Remove all drag and drop hooks for this element
+     * @method unreg
      */
     unreg: function() {
         this.logger.log("DragDrop obj cleanup " + this.id);
-        YAHOO.util.Event.removeListener(this.id, "mousedown", 
+        Event.removeListener(this.id, "mousedown", 
                 this.handleMouseDown);
         this._domRef = null;
         this.DDM._remove(this);
@@ -653,7 +732,7 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * Returns true if this instance is locked, or the drag drop mgr is locked
      * (meaning that all drag/drop is disabled on the page.)
-     *
+     * @method isLocked
      * @return {boolean} true if this obj or all drag/drop is locked, else 
      * false
      */
@@ -663,16 +742,12 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * Fired when this object is clicked
-     *
+     * @method handleMouseDown
      * @param {Event} e 
      * @param {YAHOO.util.DragDrop} oDD the clicked dd object (this dd obj)
      * @private
      */
     handleMouseDown: function(e, oDD) {
-
-        this.logger.log("isLocked: " + this.isLocked());
-
-        var EU = YAHOO.util.Event;
 
         var button = e.which || e.button;
         this.logger.log("button: " + button);
@@ -698,19 +773,11 @@ YAHOO.util.DragDrop.prototype = {
         // cursor in the time between the mousedown and mouseup events. When 
         // this happens, the element gets the next mousedown event 
         // regardless of where on the screen it happened.  
-        var pt = new YAHOO.util.Point(EU.getPageX(e), EU.getPageY(e));
-        if ( !this.DDM.isOverTarget(pt, this) )  {
+        var pt = new YAHOO.util.Point(Event.getPageX(e), Event.getPageY(e));
+        if (!this.hasOuterHandles && !this.DDM.isOverTarget(pt, this) )  {
                 this.logger.log("Click was not over the element: " + this.id);
         } else {
-
-            this.logger.log("click is over target");
-
-            //  check to see if the handle was clicked
-            var srcEl = EU.getTarget(e);
-
-            if (this.isValidHandleChild(srcEl) &&
-                    (this.id == this.handleElId || 
-                     this.DDM.handleWasClicked(srcEl, this.id)) ) {
+            if (this.clickValidator(e)) {
 
                 this.logger.log("click was a valid handle");
 
@@ -719,21 +786,31 @@ YAHOO.util.DragDrop.prototype = {
 
                 this.logger.log("firing onMouseDown events");
 
-
                 this.b4MouseDown(e);
                 this.onMouseDown(e);
                 this.DDM.handleMouseDown(e, this);
 
                 this.DDM.stopEvent(e);
+            } else {
+
+this.logger.log("clickValidator returned false, drag not initiated");
+
             }
         }
+    },
+
+    clickValidator: function(e) {
+        var target = Event.getTarget(e);
+        return ( this.isValidHandleChild(target) &&
+                    (this.id == this.handleElId || 
+                        this.DDM.handleWasClicked(target, this.id)) );
     },
 
     /**
      * Allows you to specify a tag name that should not start a drag operation
      * when clicked.  This is designed to facilitate embedding links within a
      * drag handle that do something other than start the drag.
-     * 
+     * @method addInvalidHandleType
      * @param {string} tagName the type of element to exclude
      */
     addInvalidHandleType: function(tagName) {
@@ -744,15 +821,21 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * Lets you to specify an element id for a child of a drag handle
      * that should not initiate a drag
+     * @method addInvalidHandleId
      * @param {string} id the element id of the element you wish to ignore
      */
     addInvalidHandleId: function(id) {
+        if (typeof id !== "string") {
+            YAHOO.log("id is not a string, assuming it is an HTMLElement");
+            id = Dom.generateId(id);
+        }
         this.invalidHandleIds[id] = id;
     },
 
 
     /**
      * Lets you specify a css class of elements that will not initiate a drag
+     * @method addInvalidHandleClass
      * @param {string} cssClass the class of the elements you wish to ignore
      */
     addInvalidHandleClass: function(cssClass) {
@@ -761,7 +844,7 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * Unsets an excluded tag name set by addInvalidHandleType
-     * 
+     * @method removeInvalidHandleType
      * @param {string} tagName the type of element to unexclude
      */
     removeInvalidHandleType: function(tagName) {
@@ -772,15 +855,22 @@ YAHOO.util.DragDrop.prototype = {
     
     /**
      * Unsets an invalid handle id
-     * @param {string} the id of the element to re-enable
+     * @method removeInvalidHandleId
+     * @param {string} id the id of the element to re-enable
      */
     removeInvalidHandleId: function(id) {
+        if (typeof id !== "string") {
+            YAHOO.log("id is not a string, assuming it is an HTMLElement");
+            id = Dom.generateId(id);
+        }
         delete this.invalidHandleIds[id];
     },
 
     /**
      * Unsets an invalid css class
-     * @param {string} the class of the element(s) you wish to re-enable
+     * @method removeInvalidHandleClass
+     * @param {string} cssClass the class of the element(s) you wish to 
+     * re-enable
      */
     removeInvalidHandleClass: function(cssClass) {
         for (var i=0, len=this.invalidHandleClasses.length; i<len; ++i) {
@@ -792,8 +882,8 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * Checks the tag exclusion list to see if this click should be ignored
-     *
-     * @param {ygNode} node
+     * @method isValidHandleChild
+     * @param {HTMLElement} node the HTMLElement to evaluate
      * @return {boolean} true if this is a valid tag type, false if not
      */
     isValidHandleChild: function(node) {
@@ -810,7 +900,7 @@ YAHOO.util.DragDrop.prototype = {
         valid = valid && !this.invalidHandleIds[node.id];
 
         for (var i=0, len=this.invalidHandleClasses.length; valid && i<len; ++i) {
-            valid = !YAHOO.util.Dom.hasClass(node, this.invalidHandleClasses[i]);
+            valid = !Dom.hasClass(node, this.invalidHandleClasses[i]);
         }
 
         this.logger.log("Valid handle? ... " + valid);
@@ -822,7 +912,7 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * Create the array of horizontal tick marks if an interval was specified
      * in setXConstraint().
-     *
+     * @method setXTicks
      * @private
      */
     setXTicks: function(iStartX, iTickSize) {
@@ -852,7 +942,7 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * Create the array of vertical tick marks if an interval was specified in 
      * setYConstraint().
-     *
+     * @method setYTicks
      * @private
      */
     setYTicks: function(iStartY, iTickSize) {
@@ -885,7 +975,7 @@ YAHOO.util.DragDrop.prototype = {
      * By default, the element can be dragged any place on the screen.  Use 
      * this method to limit the horizontal travel of the element.  Pass in 
      * 0,0 for the parameters if you want to lock the drag to the y axis.
-     *
+     * @method setXConstraint
      * @param {int} iLeft the number of pixels the element can move to the left
      * @param {int} iRight the number of pixels the element can move to the 
      * right
@@ -909,6 +999,7 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * Clears any constraints applied to this instance.  Also clears ticks
      * since they can't exist independent of a constraint at this time.
+     * @method clearConstraints
      */
     clearConstraints: function() {
         this.logger.log("Clearing constraints");
@@ -919,6 +1010,7 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * Clears any tick interval defined for this instance
+     * @method clearTicks
      */
     clearTicks: function() {
         this.logger.log("Clearing ticks");
@@ -932,7 +1024,7 @@ YAHOO.util.DragDrop.prototype = {
      * By default, the element can be dragged any place on the screen.  Set 
      * this to limit the vertical travel of the element.  Pass in 0,0 for the
      * parameters if you want to lock the drag to the x axis.
-     *
+     * @method setYConstraint
      * @param {int} iUp the number of pixels the element can move up
      * @param {int} iDown the number of pixels the element can move down
      * @param {int} iTickSize optional parameter for specifying that the 
@@ -955,6 +1047,7 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * resetConstraints must be called if you manually reposition a dd element.
+     * @method resetConstraints
      * @param {boolean} maintainOffset
      */
     resetConstraints: function() {
@@ -995,7 +1088,7 @@ YAHOO.util.DragDrop.prototype = {
      * Normally the drag element is moved pixel by pixel, but we can specify 
      * that it move a number of pixels at a time.  This method resolves the 
      * location when we have it set up like this.
-     *
+     * @method getTick
      * @param {int} val where we want to place the object
      * @param {int[]} tickArray sorted array of valid points
      * @return {int} the closest tick
@@ -1029,6 +1122,7 @@ YAHOO.util.DragDrop.prototype = {
 
     /**
      * toString method
+     * @method toString
      * @return {string} string representation of the dd obj
      */
     toString: function() {
@@ -1037,3 +1131,4 @@ YAHOO.util.DragDrop.prototype = {
 
 };
 
+})();

@@ -1,5 +1,4 @@
 /* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
-
 /////////////////////////////////////////////////////////////////////////
 
 /**
@@ -12,7 +11,7 @@
  * @param {String} sGroup the group of related DragDrop objects
  */
 YAHOO.example.DDPlayer = function(id, sGroup, config) {
-    this.initPlayer(id, sGroup);
+    this.initPlayer(id, sGroup, config);
 };
 
 // YAHOO.example.DDPlayer.prototype = new YAHOO.util.DDProxy();

@@ -1,101 +1,97 @@
 /* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
 
-YAHOO.util.Color = new function() {
-    
-    // Adapted from http://www.easyrgb.com/math.html
-    // hsv values = 0 - 1
-    // rgb values 0 - 255
-    this.hsv2rgb = function (h, s, v) {
-        var r, g, b;
-        if ( s == 0 ) {
-           r = v * 255;
-           g = v * 255;
-           b = v * 255;
-        } else {
+YAHOO.util.Color = function() {
 
-           // h must be < 1
-           var var_h = h * 6;
-           if ( var_h == 6 ) {
-               var_h = 0;
-           }
+    var hexchars = "0123456789ABCDEF";
 
-           //Or ... var_i = floor( var_h )
-           var var_i = Math.floor( var_h );
-           var var_1 = v * ( 1 - s );
-           var var_2 = v * ( 1 - s * ( var_h - var_i ) );
-           var var_3 = v * ( 1 - s * ( 1 - ( var_h - var_i ) ) );
-
-           if ( var_i == 0 ) { 
-               var_r = v; 
-               var_g = var_3; 
-               var_b = var_1;
-           } else if ( var_i == 1 ) { 
-               var_r = var_2;
-               var_g = v;
-               var_b = var_1;
-           } else if ( var_i == 2 ) {
-               var_r = var_1;
-               var_g = v;
-               var_b = var_3
-           } else if ( var_i == 3 ) {
-               var_r = var_1;
-               var_g = var_2;
-               var_b = v;
-           } else if ( var_i == 4 ) {
-               var_r = var_3;
-               var_g = var_1;
-               var_b = v;
-           } else { 
-               var_r = v;
-               var_g = var_1;
-               var_b = var_2
-           }
-
-           r = var_r * 255                  //rgb results = 0 ÷ 255
-           g = var_g * 255
-           b = var_b * 255
-
-           }
-        return [Math.round(r), Math.round(g), Math.round(b)];
+    var real2int = function(n) {
+        return Math.min(255, Math.round(n*256));
     };
 
-    this.rgb2hex = function (r,g,b) {
-        return this.toHex(r) + this.toHex(g) + this.toHex(b);
-    };
+    return {
 
-    this.hexchars = "0123456789ABCDEF";
+        /**
+         * HSV to RGB. h[0,360], s[0,1], v[0,1]
+         */
+        hsv2rgb: function(h,s,v) { 
+            var r,g,b,i,f,p,q,t;
+            i = Math.floor((h/60)%6);
+            f = (h/60)-i;
+            p = v*(1-s);
+            q = v*(1-f*s);
+            t = v*(1-(1-f)*s);
+            switch(i) {
+                case 0: r=v; g=t; b=p; break;
+                case 1: r=q; g=v; b=p; break;
+                case 2: r=p; g=v; b=t; break;
+                case 3: r=p; g=q; b=v; break;
+                case 4: r=t; g=p; b=v; break;
+                case 5: r=v; g=p; b=q; break;
+            }
+            //alert([h,s,v] + "-" + [r,g,b]);
 
-    this.toHex = function(n) {
-        n = n || 0;
-        n = parseInt(n, 10);
-        if (isNaN(n)) n = 0;
-        n = Math.round(Math.min(Math.max(0, n), 255));
+            return [real2int(r), real2int(g), real2int(b)];
+        },
 
-        return this.hexchars.charAt((n - n % 16) / 16) + this.hexchars.charAt(n % 16);
-    };
+        rgb2hsv: function(r,g,b) {
+            var min,max,delta,h,s,v;
+            min = Math.min(Math.min(r,g),b);
+            max = Math.max(Math.max(r,g),b);
+            delta = max-min;
 
-    this.toDec = function(hexchar) {
-        return this.hexchars.indexOf(hexchar.toUpperCase());
-    };
+            switch (max) {
+                case min: h=0; break;
+                case r:   h=(g-b)/delta; 
+                          if (g<b) {
+                              h+=360;
+                          }
+                          break;
+                case g:   h=((b-r)/delta)+120; break;
+                case b:   h=((r-g)/delta)+240; break;
+            }
+            
+            s = (max==0) ? 0 : 1-(mix/max);
 
-    this.hex2rgb = function(str) { 
-        var rgb = [];
-        rgb[0] = (this.toDec(str.substr(0, 1)) * 16) + 
-                        this.toDec(str.substr(1, 1));
-        rgb[1] = (this.toDec(str.substr(2, 1)) * 16) + 
-                        this.toDec(str.substr(3, 1));
-        rgb[2] = (this.toDec(str.substr(4, 1)) * 16) + 
-                        this.toDec(str.substr(5, 1));
-        // gLogger.debug("hex2rgb: " + str + ", " + rgb.toString());
-        return rgb;
-    };
+            return {"h": h, "s": s, "v": max};
 
-    this.isValidRGB = function(a) { 
-        if ((!a[0] && a[0] !=0) || isNaN(a[0]) || a[0] < 0 || a[0] > 255) return false;
-        if ((!a[1] && a[1] !=0) || isNaN(a[1]) || a[1] < 0 || a[1] > 255) return false;
-        if ((!a[2] && a[2] !=0) || isNaN(a[2]) || a[2] < 0 || a[2] > 255) return false;
+        },
 
-        return true;
-    };
-}
+        rgb2hex: function (r,g,b) {
+            return this.int2hex(r) + this.int2hex(g) + this.int2hex(b);
+        },
+     
+        /**
+         * Converts an int [0,255] to hex [00,FF]
+         */
+        int2hex: function(n) {
+            n = n || 0;
+            n = parseInt(n, 10);
+            if (isNaN(n)) n = 0;
+            n = Math.round(Math.min(Math.max(0, n), 255));
+
+            return hexchars.charAt((n - n % 16) / 16) + hexchars.charAt(n % 16);
+        },
+
+        hex2dec: function(hexchar) {
+            return hexchars.indexOf(hexchar.toUpperCase());
+        },
+
+        hex2rgb: function(s) { 
+            var rgb = [];
+            rgb[0] = (this.hex2dec(s.substr(0, 1)) * 16) + this.hex2dec(s.substr(1, 1));
+            rgb[1] = (this.hex2dec(s.substr(2, 1)) * 16) + this.hex2dec(s.substr(3, 1));
+            rgb[2] = (this.hex2dec(s.substr(4, 1)) * 16) + this.hex2dec(s.substr(5, 1));
+            // gLogger.debug("hex2rgb: " + str + ", " + rgb.toString());
+            return rgb;
+        },
+
+        isValidRGB: function(a) { 
+            if ((!a[0] && a[0] !=0) || isNaN(a[0]) || a[0] < 0 || a[0] > 255) return false;
+            if ((!a[1] && a[1] !=0) || isNaN(a[1]) || a[1] < 0 || a[1] > 255) return false;
+            if ((!a[2] && a[2] !=0) || isNaN(a[2]) || a[2] < 0 || a[2] > 255) return false;
+
+            return true;
+        }
+    }
+}();
 

@@ -7,6 +7,12 @@
   
 <?php include('inc/inc-alljs.php'); ?>
 
+<style>
+
+/*ul { height: 200px; overflow:auto } */
+
+</style>
+
 <script type="text/javascript" src="js/DDList.js" ></script>
 
 <script type="text/javascript">

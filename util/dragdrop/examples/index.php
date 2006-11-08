@@ -80,6 +80,12 @@ if ($mode == "dist") {
        Demonstrates one approach to creating a draggable and resizable module.
 	  </p>
 
+	  <p><a href="circle.<?php echo $ext ?>?mode=<?php echo $mode ?>">Custom Click Validator</a>:
+
+      In this example, we override clickValidator to provide custom logic for
+      determining if the initial mousedown should initiate a drag.  A drag is 
+      initiated only if the mousedown happens inside of the circle.  
+	  </p>
 
 	  <p>&nbsp;</p>
     </div>

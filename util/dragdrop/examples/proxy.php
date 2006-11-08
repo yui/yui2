@@ -41,7 +41,9 @@ YAHOO.example.DDApp = function() {
 
         // the third DD instance uses its own proxy element
         dd3 = new YAHOO.example.DDSwap("dragDiv3", "proxytest",
-                    { dragElId: "dragDiv4" });
+                    { dragElId: "dragDiv4", 
+                    centerFrame: true, resizeFrame: false });
+                    //{ dragElId: "dragDiv4" });
         // dd3.setPadding(10, 40);
         // dd3.setPadding(10, 0, 20, 40);
 
@@ -173,7 +175,7 @@ DDSwap
   <div id="dragDiv3" class="testSquare" style="background:url(img/sq3.png) 0 0 no-repeat;background-color:#7E5B60;top:430px; left:325px">DDSwap</div>
 </div>
 
-  <div id="dragDiv4" class="testSquare" style="visibility:hidden;border:0px solid black;height: 141px;width:160px;background-color:#7E5B60;top:630px; left:525px">a custom proxy element</div>
+  <div id="dragDiv4" class="testSquare" style="visibility:hidden;border:0px solid black;height: 141px;width:160px;background-color:#7E5B60;top:630px; left:525px;height:50px;width:50px">a custom proxy element</div>
 <!--
 </div>
 -->
