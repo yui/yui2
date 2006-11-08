@@ -17,13 +17,14 @@ catch(e){}
 finally
 {return o;}},asyncRequest:function(method,uri,callback,postData)
 {var o=this.getConnectionObject();if(!o){return null;}
-else{if(this._isFormSubmit){if(this._isFileUpload){this.uploadFile(o.tId,callback,uri);this.releaseObject(o);return;}
-if(method=='GET'){uri+="?"+this._sFormData;}
-else if(method=='POST'){postData=(postData?this._sFormData+"&"+postData:this._sFormData);}
-this._sFormData='';}
-o.conn.open(method,uri,true);if(this._isFormSubmit||(postData&&this._use_default_post_header)){this.initHeader('Content-Type',this._default_post_header);if(this._isFormSubmit){this._isFormSubmit=false;}}
+else{if(this._isFormSubmit){if(this._isFileUpload){this.uploadFile(o.tId,callback,uri,postData);this.releaseObject(o);return;}
+if(method=='GET'){if(this._sFormData.length!=0){uri+=((uri.indexOf('?')==-1)?'?':'&')+this._sFormData;}
+else{uri+="?"+this._sFormData;}}
+else if(method=='POST'){postData=postData?this._sFormData+"&"+postData:this._sFormData;}}
+o.conn.open(method,uri,true);if(this._isFormSubmit||(postData&&this._use_default_post_header)){this.initHeader('Content-Type',this._default_post_header);}
+else if(this._isFormSubmit){this.resetFormState();}
 if(this._has_http_headers){this.setHeader(o);}
-this.handleReadyState(o,callback);o.conn.send(postData?postData:null);return o;}},handleReadyState:function(o,callback)
+this.handleReadyState(o,callback);o.conn.send(postData||null);return o;}},handleReadyState:function(o,callback)
 {var oConn=this;if(callback&&callback.timeout){this._timeOut[o.tId]=window.setTimeout(function(){oConn.abort(o,callback,true);},callback.timeout);}
 this._poll[o.tId]=window.setInterval(function(){if(o.conn&&o.conn.readyState==4){window.clearInterval(oConn._poll[o.tId]);delete oConn._poll[o.tId];if(callback&&callback.timeout){delete oConn._timeOut[o.tId];}
 oConn.handleTransactionResponse(o,callback);}},this._polling_interval);},handleTransactionResponse:function(o,callback,isAbort)
@@ -32,16 +33,12 @@ var httpStatus,responseObject;try
 {if(o.conn.status!==undefined&&o.conn.status!=0){httpStatus=o.conn.status;}
 else{httpStatus=13030;}}
 catch(e){httpStatus=13030;}
-if(httpStatus>=200&&httpStatus<300){try
-{responseObject=this.createResponseObject(o,callback.argument);if(callback.success){if(!callback.scope){callback.success(responseObject);}
+if(httpStatus>=200&&httpStatus<300){responseObject=this.createResponseObject(o,callback.argument);if(callback.success){if(!callback.scope){callback.success(responseObject);}
 else{callback.success.apply(callback.scope,[responseObject]);}}}
-catch(e){}}
-else{try
-{switch(httpStatus){case 12002:case 12029:case 12030:case 12031:case 12152:case 13030:responseObject=this.createExceptionObject(o.tId,callback.argument,(isAbort?isAbort:false));if(callback.failure){if(!callback.scope){callback.failure(responseObject);}
+else{switch(httpStatus){case 12002:case 12029:case 12030:case 12031:case 12152:case 13030:responseObject=this.createExceptionObject(o.tId,callback.argument,(isAbort?isAbort:false));if(callback.failure){if(!callback.scope){callback.failure(responseObject);}
 else{callback.failure.apply(callback.scope,[responseObject]);}}
 break;default:responseObject=this.createResponseObject(o,callback.argument);if(callback.failure){if(!callback.scope){callback.failure(responseObject);}
 else{callback.failure.apply(callback.scope,[responseObject]);}}}}
-catch(e){}}
 this.releaseObject(o);responseObject=null;},createResponseObject:function(o,callbackArg)
 {var obj={};var headerObj={};try
 {var headerStr=o.conn.getAllResponseHeaders();var header=headerStr.split('\n');for(var i=0;i<header.length;i++){var delimitPos=header[i].indexOf(':');if(delimitPos!=-1){headerObj[header[i].substring(0,delimitPos)]=header[i].substring(delimitPos+2);}}}
@@ -57,28 +54,35 @@ else{this._http_header[label]=value+","+this._http_header[label];}
 this._has_http_headers=true;},setHeader:function(o)
 {for(var prop in this._http_header){if(this._http_header.hasOwnProperty(prop)){o.conn.setRequestHeader(prop,this._http_header[prop]);}}
 delete this._http_header;this._http_header={};this._has_http_headers=false;},setForm:function(formId,isUpload,secureUri)
-{this._sFormData='';if(typeof formId=='string'){var oForm=(document.getElementById(formId)||document.forms[formId]);}
+{if(typeof formId=='string'){var oForm=(document.getElementById(formId)||document.forms[formId]);}
 else if(typeof formId=='object'){var oForm=formId;}
 else{return;}
 if(isUpload){this.createFrame(secureUri?secureUri:null);this._isFormSubmit=true;this._isFileUpload=true;this._formNode=oForm;return;}
 var oElement,oName,oValue,oDisabled;var hasSubmit=false;for(var i=0;i<oForm.elements.length;i++){oElement=oForm.elements[i];oDisabled=oForm.elements[i].disabled;oName=oForm.elements[i].name;oValue=oForm.elements[i].value;if(!oDisabled&&oName)
-{switch(oElement.type)
+{alert(oElement.type);switch(oElement.type)
 {case'select-one':case'select-multiple':for(var j=0;j<oElement.options.length;j++){if(oElement.options[j].selected){if(window.ActiveXObject){this._sFormData+=encodeURIComponent(oName)+'='+encodeURIComponent(oElement.options[j].attributes['value'].specified?oElement.options[j].value:oElement.options[j].text)+'&';}
 else{this._sFormData+=encodeURIComponent(oName)+'='+encodeURIComponent(oElement.options[j].hasAttribute('value')?oElement.options[j].value:oElement.options[j].text)+'&';}}}
 break;case'radio':case'checkbox':if(oElement.checked){this._sFormData+=encodeURIComponent(oName)+'='+encodeURIComponent(oValue)+'&';}
 break;case'file':case undefined:case'reset':case'button':break;case'submit':if(hasSubmit==false){this._sFormData+=encodeURIComponent(oName)+'='+encodeURIComponent(oValue)+'&';hasSubmit=true;}
 break;default:this._sFormData+=encodeURIComponent(oName)+'='+encodeURIComponent(oValue)+'&';break;}}}
-this._isFormSubmit=true;this._sFormData=this._sFormData.substr(0,this._sFormData.length-1);},createFrame:function(secureUri){var frameId='yuiIO'+this._transaction_id;if(window.ActiveXObject){var io=document.createElement('<IFRAME id="'+frameId+'" name="'+frameId+'">');if(typeof secureUri=='boolean'){io.src='javascript:false';}
-else{io.src=secureUri;}}
-else{var io=document.createElement('IFRAME');io.id=frameId;io.name=frameId;}
-io.style.position='absolute';io.style.top='-1000px';io.style.left='-1000px';document.body.appendChild(io);},uploadFile:function(id,callback,uri){var frameId='yuiIO'+id;var io=document.getElementById(frameId);this._formNode.action=uri;this._formNode.enctype='multipart/form-data';this._formNode.method='POST';this._formNode.target=frameId;this._formNode.submit();this._formNode=null;this._isFileUpload=false;this._isFormSubmit=false;var uploadCallback=function()
-{var obj={};obj.tId=id;obj.responseText=io.contentWindow.document.body?io.contentWindow.document.body.innerHTML:null;obj.responseXML=io.contentWindow.document.XMLDocument?io.contentWindow.document.XMLDocument:io.contentWindow.document;obj.argument=callback.argument;if(callback.upload){if(!callback.scope){callback.upload(obj);}
+this._isFormSubmit=true;this._sFormData=this._sFormData.substr(0,this._sFormData.length-1);return this._sFormData;},resetFormState:function(isUpload){this._isFormSubmit=false;this._sFormData=null;if(isUpload){this._isFileUpload=false;this._formNode=null;}},createFrame:function(secureUri){var frameId='yuiIO'+this._transaction_id;if(window.ActiveXObject){var io=document.createElement('<iframe id="'+frameId+'" name="'+frameId+'">');if(typeof secureUri=='boolean'){io.src='javascript:false';}
+else if(typeof secureURI=='string'){io.src=secureUri;}}
+else{var io=document.createElement('iframe');io.id=frameId;io.name=frameId;}
+io.style.position='absolute';io.style.top='-1000px';io.style.left='-1000px';document.body.appendChild(io);},appendPostData:function(postData)
+{var fieldObj={};var postMessage=postData.split('&');for(var i=0;i<postMessage.length;i++){var delimitPos=postMessage[i].indexOf('=');if(delimitPos!=-1){var formField=document.createElement('input');formField.type='hidden';formField.name=postMessage[i].substring(0,delimitPos);formField.value=postMessage[i].substring(delimitPos+1);this._formNode.appendChild(formField);}}},uploadFile:function(id,callback,uri,postData){var frameId='yuiIO'+id;var io=document.getElementById(frameId);this._formNode.action=uri;this._formNode.method='POST';this._formNode.target=frameId;if(this._formNode.encoding){this._formNode.encoding='multipart/form-data';}
+else{this._formNode.enctype='multipart/form-data';}
+if(postData){this.appendPostData(postData);}
+this._formNode.submit();this.resetFormState(true);var uploadCallback=function()
+{var obj={};obj.tId=id;obj.argument=callback.argument;try
+{obj.responseText=io.contentWindow.document.body?io.contentWindow.document.body.innerHTML:null;obj.responseXML=io.contentWindow.document.XMLDocument?io.contentWindow.document.XMLDocument:io.contentWindow.document;}
+catch(e){}
+if(callback.upload){if(!callback.scope){callback.upload(obj);}
 else{callback.upload.apply(callback.scope,[obj]);}}
 if(YAHOO.util.Event){YAHOO.util.Event.removeListener(io,"load",uploadCallback);}
-else if(window.ActiveXObject){io.detachEvent('onload',uploadCallback);}
+else if(window.detachEvent){io.detachEvent('onload',uploadCallback);}
 else{io.removeEventListener('load',uploadCallback,false);}
 setTimeout(function(){document.body.removeChild(io);},100);};if(YAHOO.util.Event){YAHOO.util.Event.addListener(io,"load",uploadCallback);}
-else if(window.ActiveXObject){io.attachEvent('onload',uploadCallback);}
+else if(window.attachEvent){io.attachEvent('onload',uploadCallback);}
 else{io.addEventListener('load',uploadCallback,false);}},abort:function(o,callback,isTimeout)
 {if(this.isCallInProgress(o)){o.conn.abort();window.clearInterval(this._poll[o.tId]);delete this._poll[o.tId];if(isTimeout){delete this._timeOut[o.tId];}
 this.handleTransactionResponse(o,callback,true);return true;}
