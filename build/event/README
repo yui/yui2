@@ -3,6 +3,9 @@ YUI Library - Event - Release Notes
 
 0.12.0
 
+   * If the function argument is not provided to Event.removeListener, all
+     all listeners for the specified event type on the element will be removed.
+
    * CustomEvent now has an optional parameter that defines the signature of
      the listeners for this event.  Two signatures are supported:
 
