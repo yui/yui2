@@ -2279,7 +2279,7 @@ YAHOO.util.DragDropMgr = function() {
                 t = db.scrollTop;
                 l = db.scrollLeft;
             } else {
-                alert("no scroll");
+                YAHOO.log("could not get scroll property");
             }
             return { top: t, left: l };
         },
