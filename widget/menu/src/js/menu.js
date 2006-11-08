@@ -2583,14 +2583,14 @@ configPosition: function(p_sType, p_aArgs, p_oMenu) {
 
     if(sCSSPosition == "absolute") {
 
-        var nZIndex = oCfg.getProperty("zIndex");
-        
-        if(!nZIndex) {
+        var nZIndex = oCfg.getProperty("zindex");
+
+        if(!nZIndex || nZIndex === 0) {
 
             nZIndex = this.parent ? 
-                this.parent.parent.cfg.getProperty("zIndex") : 1;
+                (this.parent.parent.cfg.getProperty("zindex") + 1) : 1;
 
-            oCfg.setProperty("zIndex", nZIndex);
+            oCfg.setProperty("zindex", nZIndex);
 
         }
 
