@@ -1,9 +1,10 @@
+<?php require_once("titles.inc"); ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
         "http://www.w3.org/TR/html4/strict.dtd">
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>OS-Style Programs Menu Example</title>
+        <title><?php writeTitle(22); ?></title>
 
         <?php
 
@@ -22,6 +23,7 @@
         ?>
 
         <!-- Page-specific styles -->
+
         <style type="text/css">
 
             html {
@@ -29,6 +31,8 @@
                 overflow:hidden;
             
             }
+
+            h1 { font-weight:bold; }
 
             body {
             
@@ -182,11 +186,10 @@
         ?>
 
         <!-- Page-specific script -->
+
         <script type="text/javascript">
         
-            // "load" handler for the window
-
-            YAHOO.example.onWindowLoad = function(p_oEvent) {
+            YAHOO.example.onMenuAvailable = function(p_oEvent) {
 
                 // "click" handler for the "Go to..." menu item
     
@@ -204,6 +207,7 @@
 
 
                 var oH1 = document.getElementsByTagName("h1")[0];
+
 
                 /*
                     Apply the "ytoolbar" class to the H1 so that it is styled 
@@ -237,12 +241,7 @@
 
                 // Add a link back to the examples index page
 
-                var oExamples = oMenu.addItem(
-                                    new YAHOO.widget.MenuItem(
-                                            "Examples", 
-                                            { url: "index.html" } 
-                                        )
-                                    );
+                var oExamples = oMenu.addItem({ text: "Examples", url: "index.html" });
 
                 oExamples.element.id = "examples";
 
@@ -298,28 +297,6 @@
                 YAHOO.util.Event.addListener("yahoo", "click", onYahooClick);
 
 
-                // "click" event handler for the document
-    
-                function onDocumentClick(p_oEvent) {
-                
-                    // Hide the menu
-                    
-                    oMenu.hide();
-    
-                }
-
-                /*
-                    Assign a "click" event handler to the document that will
-                    hide the menu
-                */
-
-                YAHOO.util.Event.addListener(
-                        document, 
-                        "click", 
-                        onDocumentClick
-                    );
-
-
                 // "resize" handler for the window
     
                 function onWindowResize() {
@@ -360,9 +337,10 @@
             }
 
 
-            // Add a "load" event handler for the window
+            // Initialize and render the menu when it is available in the DOM
 
-            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
+            YAHOO.util.Event.onAvailable("yproducts", YAHOO.example.onMenuAvailable);
+
 
         </script>
 

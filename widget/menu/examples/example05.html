@@ -1,25 +1,37 @@
+<?php require_once("titles.inc"); ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
         "http://www.w3.org/TR/html4/strict.dtd">
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>Example 5: Grouped MenuItem Instances With Titles From Existing Markup</title>
+        <title><?php writeTitle(4); ?></title>
 
         <?php require_once("styles.inc"); ?>
 
         <!-- Page-specific styles -->
+
         <style type="text/css">
 
             body { margin:.5em; }
+            
+            h1 { font-weight:bold; }            
+
+            div.yuimenu {
+            
+                position:absolute;
+                visibility:hidden;
+            
+            }
 
         </style>
 
         <?php require_once("scripts.inc"); ?>
 
         <!-- Page-specific script -->
+
         <script type="text/javascript">
 
-            YAHOO.example.onWindowLoad = function(p_oEvent) {
+            YAHOO.example.onMenuAvailable = function(p_oEvent) {
 
                 var oMenu = new YAHOO.widget.Menu("menuwithgroups", { fixedcenter: true });
 
@@ -30,14 +42,14 @@
             }
 
 
-            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
+            YAHOO.util.Event.onAvailable("menuwithgroups", YAHOO.example.onMenuAvailable);
             
         </script>
 
     </head>
     <body>
 
-        <h1>Example 5: Grouped MenuItem Instances With Titles From Existing Markup <em>[<a href="index.html">Examples Home</a>]</em></h1>
+        <h1><?php writeTitle(4); ?> <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to title groups of MenuItem instances.  The Menu API also supports building a menu like this <a href="example06.html">using nothing but JavaScript</a>.</p>
 
         <div id="menuwithgroups" class="yuimenu">

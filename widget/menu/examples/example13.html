@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title><?php writeTitle(15); ?></title>
+        <title><?php writeTitle(12); ?></title>
 
         <?php
 
@@ -14,7 +14,6 @@
         ?>
  
         <!-- Page-specific styles -->
-
         <style type="text/css">
 
             div.yui-b p {
@@ -59,6 +58,36 @@
 
         <script type="text/javascript">
 
+
+            /*
+                 Change the root path for all menu item images to point to the 
+                 images in the "assets" directory.
+            */
+
+            YAHOO.widget.MenuItem.prototype.IMG_ROOT = "../build/assets/";
+
+
+            //  Change the path to the submenu indicator images for each menu item
+
+            YAHOO.widget.MenuItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH = "menuarorght8_nrm_1.gif";
+            YAHOO.widget.MenuItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH = "menuarorght8_hov_1.gif";
+            YAHOO.widget.MenuItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH = "menuarorght8_dim_1.gif";
+
+
+            //  Change the path to the checkmark images for each menu item
+                
+            YAHOO.widget.MenuItem.prototype.CHECKED_IMAGE_PATH = "menuchk8_nrm_1.gif";
+            YAHOO.widget.MenuItem.prototype.SELECTED_CHECKED_IMAGE_PATH = "menuchk8_hov_1.gif";
+            YAHOO.widget.MenuItem.prototype.DISABLED_CHECKED_IMAGE_PATH = "menuchk8_dim_1.gif";
+
+
+            // Change the path to the submenu images for each menu bar item
+
+            YAHOO.widget.MenuBarItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH = "menuarodwn8_nrm_1.gif";
+            YAHOO.widget.MenuBarItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH = "menuarodwn8_hov_1.gif";
+            YAHOO.widget.MenuBarItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH = "menuarodwn8_dim_1.gif";
+
+
             YAHOO.example.onMenuBarAvailable = function(p_oEvent) {
 
                 // Instantiate and render the menu bar
@@ -83,7 +112,7 @@
             <div id="hd">
                 <!-- start: your content here -->
                 
-                    <h1><?php writeTitle(15); ?> <em>[<a href="index.html">Examples Home</a>]</em></h1>
+                    <h1><?php writeTitle(12); ?> <em>[<a href="index.html">Examples Home</a>]</em></h1>
         
                 <!-- end: your content here -->
             </div>
@@ -191,7 +220,7 @@
                             </div>
                         </div>
                         
-                        <p id="note"><strong>NOTE:</strong> <em>This example demonstrates how to add submenus to a menu bar using existing markup.  Alternatively, you can <a href="topnavfromjs.html">add submenus to a menu bar using JavaScript</a>.</em></p>
+                        <p id="note"><strong>NOTE:</strong> <em>This example demonstrates how to modify the paths for all images used by the YUI Menu components.</em></p>
 
                         <form name="example">
                             <select name="test">

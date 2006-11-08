@@ -2,6 +2,7 @@
 
 $g_sBuildType = "dev";
 
+
 if($g_sBuildType == "dev") {
 
     $g_sBasePath = "../../..";
@@ -15,12 +16,26 @@ else if($g_sBuildType == "prod") {
 
 }
 
+
+if((isset($g_bUseGrids) && $g_bUseGrids == true)) {
 ?>
-    <!-- Standard reset and fonts -->
+
+        <!-- Standard reset, fonts and grids -->
+
+        <link rel="stylesheet" type="text/css" href="<?php echo $g_sBasePath; ?>/build/reset-fonts-grids/reset-fonts-grids.css">
+
+<?php
+}
+else {
+?>
+        <!-- Standard reset and fonts -->
+
         <link rel="stylesheet" type="text/css" href="<?php echo $g_sBasePath; ?>/build/reset/reset.css">
         <link rel="stylesheet" type="text/css" href="<?php echo $g_sBasePath; ?>/build/fonts/fonts.css">
 
 <?php
+}
+
         if(is_callable("include_custom_styles")) {
 
             include_custom_styles();
@@ -29,5 +44,6 @@ else if($g_sBuildType == "prod") {
 ?> 
 
         <!-- CSS for Menu -->
+
         <link rel="stylesheet" type="text/css" href="<?php echo $sMenuCSSPath; ?>/menu.css">
  

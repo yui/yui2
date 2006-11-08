@@ -1,9 +1,10 @@
+<?php require_once("titles.inc"); ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
         "http://www.w3.org/TR/html4/strict.dtd">
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>Example 12: Setting Configuration Properties At Runtime</title>
+        <title><?php writeTitle(11); ?></title>
 
         <?php
 
@@ -14,6 +15,7 @@
         ?>            
 
         <!-- Logger CSS -->
+
         <link rel="stylesheet" type="text/css" href="<?php echo $g_sBasePath; ?>/build/logger/assets/logger.css">
 
         <?php
@@ -23,9 +25,12 @@
         ?>
 
         <!-- Page-specific styles -->
+
         <style type="text/css">
 
             body { margin:.5em; }
+
+            h1 { font-weight:bold; }
 
             li.yuimenuitem a em {
             
@@ -68,6 +73,7 @@
 
         ?>            
         <!-- Logger source file -->
+
         <script type="text/javascript" src="<?php echo $g_sBasePath; ?>/build/logger/logger.js"></script>
 
         <?php
@@ -78,13 +84,14 @@
         ?>
 
         <!-- Page-specific script -->
+
         <script type="text/javascript">
 
             // "load" event handler for the window
 
             YAHOO.example.onWindowLoad = function(p_oEvent) {
 
-                // "config change" event handler for each MenuItem instance 
+                // "config change" event handler for each menu item
     
                 function onMenuItemConfigChange(p_sType, p_aArguments, p_oMenuItem) {
     
@@ -109,7 +116,7 @@
 
                 var oMenu = new YAHOO.widget.Menu("basicmenu"),
 
-                    // Add the MenuItem instance to the menu
+                    // Define the items for the menu
     
                     aMenuItemData = [
                     
@@ -150,6 +157,7 @@
                 oMenu.getItem(4).cfg.setProperty("strongemphasis", true);  
                 oMenu.getItem(5).cfg.setProperty("checked", true);
                 
+
                 var oLogs = document.createElement("div");
                 oLogs.id = "logs";
                 
@@ -167,7 +175,7 @@
     </head>
     <body>
 
-        <h1>Example 12: Setting Configuration Properties At Runtime <em>[<a href="index.html">Examples Home</a>]</em></h1>
+        <h1><?php writeTitle(11); ?> <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to set MenuItem configuration properties at runtime and listen for the changes through the "configChangedEvent."</p>
 
     </body>

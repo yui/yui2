@@ -1,9 +1,10 @@
+<?php require_once("titles.inc"); ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
         "http://www.w3.org/TR/html4/strict.dtd">
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>Example 9: Handling Click Events</title>
+        <title><?php writeTitle(8); ?></title>
 
         <?php
 
@@ -14,6 +15,7 @@
         ?>            
 
         <!-- Logger CSS -->
+
         <link rel="stylesheet" type="text/css" href="<?php echo $g_sBasePath; ?>/build/logger/assets/logger.css">
 
         <?php
@@ -23,9 +25,12 @@
         ?>
 
         <!-- Page-specific styles -->
+
         <style type="text/css">
 
             body { margin:.5em; }
+
+            h1 { font-weight:bold; }
 
             #logs {
 
@@ -50,8 +55,11 @@
                 global $g_sBasePath;
 
         ?>            
+
         <!-- Logger source file -->
+
         <script type="text/javascript" src="<?php echo $g_sBasePath; ?>/build/logger/logger.js"></script>
+
         <?php
             }        
         
@@ -60,13 +68,23 @@
         ?>
 
         <!-- Page-specific script -->
+
         <script type="text/javascript">
 
             YAHOO.example.onWindowLoad = function(p_oEvent) {
 
-                // "click" event handler for a MenuItem instance
+                // "click" event handler for the menu
 
-                function onMenuItemClick(p_sType, p_aArguments, p_oValue) {
+                function onMenuClick(p_sType, p_aArgs, p_oValue) {
+
+                    this.show();
+
+                }
+
+
+                // "click" event handler for each menu item
+
+                function onMenuItemClick(p_sType, p_aArgs, p_oValue) {
 
                     YAHOO.log(
                         (
@@ -85,37 +103,34 @@
 
                 var oMenu = new YAHOO.widget.Menu("mymenu");
 
-                var oItem1 = 
-                        oMenu.addItem(new YAHOO.widget.MenuItem("Item One"));
-
-                oItem1.clickEvent.subscribe(onMenuItemClick);
+                oMenu.addItems(["Item One","Item Two","Item Three"]);
 
 
-                var oItem2 = 
-                        oMenu.addItem(new YAHOO.widget.MenuItem("Item Two"));
+                oMenu.getItem(0).clickEvent.subscribe(onMenuItemClick);
+
 
                 /*
                      Register a "click" event handler for the first item, 
-                     passing a string arguemnt ("foo") to the event handler
+                     passing a string arguemnt ("foo") to the event handler.
                 */
 
-                oItem2.clickEvent.subscribe(onMenuItemClick, "foo");
+                oMenu.getItem(1).clickEvent.subscribe(onMenuItemClick, "foo");
 
-
-                var oItem2 = 
-                        oMenu.addItem(new YAHOO.widget.MenuItem("Item Three"));
 
                 /*
                      Register a "click" event handler for the third item and
-                     passing and array as an argument to the event handler
+                     passing and array as an argument to the event handler.
                 */
                 
-                oItem2.clickEvent.subscribe(onMenuItemClick, ["foo", "bar"]);
+                oMenu.getItem(2).clickEvent.subscribe(onMenuItemClick, ["foo", "bar"]);
 
+
+                oMenu.clickEvent.subscribe(onMenuClick, oMenu, true);
 
                 oMenu.render(document.body);
     
                 oMenu.show();
+
 
                 var oLogs = document.createElement("div");
                 oLogs.id = "logs";
@@ -134,7 +149,7 @@
     </head>
     <body>
 
-        <h1>Example 9: Handling Click Events <em>[<a href="index.html">Examples Home</a>]</em></h1>
+        <h1><?php writeTitle(8); ?> <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to register a "click" event handler for a MenuItem instance.  All of the events for YUI Menu are instances of <a href="http://developer.yahoo.com/yui/event/#customevent">YAHOO.util.CustomEvent</a>.  To register a listener for an event, use the event's "subscribe" method passing a pointer to your handler as the first argument.  You can pass an argument to your event handler(s) as an additional second argument to the "subscribe" method.</p>
 
     </body>

@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title><?php writeTitle(16); ?></title>
+        <title><?php writeTitle(20); ?></title>
 
         <?php
 
@@ -53,17 +53,138 @@
 
         </style>
 
-        <?php require_once("scripts.inc"); ?>
+        <?php
+
+            function include_custom_scripts() {
+
+                global $g_sBasePath;
+
+        ?>            
+        <script type="text/javascript" src="<?php echo $g_sBasePath; ?>/build/animation/animation.js"></script>
+        <?php
+            }        
+        
+            require_once("scripts.inc");
+
+        ?>
 
         <!-- Page-specific script -->
 
         <script type="text/javascript">
 
             YAHOO.example.onMenuBarAvailable = function(p_oEvent) {
+
+
+                // Animation object
+
+                var oAnim;
+
+
+                // Utility function used to setup animation for submenus
+
+                function setupMenuAnimation(p_oMenu) {
+
+                    if(!p_oMenu.animationSetup) {
+
+                        var aItems = p_oMenu.getItemGroups();
+    
+                        if(aItems && aItems[0]) {
+    
+                            var i = aItems[0].length - 1;
+                            var oSubmenu;
+
+                            do {
+
+                                oSubmenu = p_oMenu.getItem(i).cfg.getProperty("submenu");
+        
+                                if(oSubmenu) {
+        
+                                    oSubmenu.beforeShowEvent.subscribe(onMenuBeforeShow, oSubmenu, true);
+                                    oSubmenu.showEvent.subscribe(onMenuShow, oSubmenu, true);
+        
+                                }
+                            
+                            }
+                            while(i--);
+                        
+                        }
+
+                        p_oMenu.animationSetup = true;
+
+                    }
+
+                }
+
+
+                // "beforeshow" event handler for each submenu of the menu bar
+
+                function onMenuBeforeShow(p_sType, p_sArgs, p_oMenu) {
+
+                    if(oAnim && oAnim.isAnimated()) {
+                    
+                        oAnim.stop();
+                        oAnim = null;
+                    
+                    }
+
+                    YAHOO.util.Dom.setStyle(this.element, "overflow", "hidden");
+                    YAHOO.util.Dom.setStyle(this.body, "marginTop", ("-" + this.body.offsetHeight + "px"));
+
+                }
+
+
+                // "show" event handler for each submenu of the menu bar
+
+                function onMenuShow(p_sType, p_sArgs, p_oMenu) {
+
+                    oAnim = new YAHOO.util.Anim(
+                        this.body, 
+                        { marginTop: { to: 0 } },
+                        .5, 
+                        YAHOO.util.Easing.easeOut
+                    );
+
+                    oAnim.animate();
+
+                    var me = this;
+                        
+                    function onTween() {
+
+                        me.cfg.refireEvent("iframe");
+                    
+                    }
+
+                    function onAnimationComplete() {
+
+                        YAHOO.util.Dom.setStyle(me.body, "marginTop", ("0px"));
+                        YAHOO.util.Dom.setStyle(me.element, "overflow", "visible");
+
+                        setupMenuAnimation(me);
+
+                    }
+                    
+
+                    /*
+                         Refire the event handler for the "iframe" 
+                         configuration property with each tween so that the  
+                         size and position of the iframe shim remain in sync 
+                         with the menu.
+                    */
+
+                    if(this.cfg.getProperty("iframe") == true) {
+
+                        oAnim.onTween.subscribe(onTween);
+
+                    }
+
+                    oAnim.onComplete.subscribe(onAnimationComplete);
                 
+                }
+
+
                 // "beforerender" event handler for the menu bar
 
-                function onMenuBarBeforeRender(p_sType, p_sArgs, p_oMenu) {
+                function onMenuBeforeRender(p_sType, p_sArgs, p_oMenu) {
 
                     var oSubmenuData = {
                     
@@ -141,17 +262,19 @@
                     this.getItem(2).cfg.setProperty("submenu", { id:"entertainment", itemdata: oSubmenuData["entertainment"] });
                     this.getItem(3).cfg.setProperty("submenu", { id:"information", itemdata: oSubmenuData["information"] });
 
+                    setupMenuAnimation(this);
+
                 }
 
 
-                // Instantiate and render the menu bar
+                // Initialize the root menu bar
 
-                var oMenuBar = new YAHOO.widget.MenuBar("productsandservices", { autosubmenudisplay:true, showdelay:250, hidedelay:750, lazyload:true });
+                var oMenuBar = new YAHOO.widget.MenuBar("productsandservices", { autosubmenudisplay:true, hidedelay:750, lazyload:true });
 
 
                 // Subscribe to the "beforerender" event
 
-                oMenuBar.beforeRenderEvent.subscribe(onMenuBarBeforeRender, oMenuBar, true);
+                oMenuBar.beforeRenderEvent.subscribe(onMenuBeforeRender, oMenuBar, true);
 
 
                 // Render the menu bar
@@ -174,7 +297,7 @@
             <div id="hd">
                 <!-- start: your content here -->
                 
-                    <h1><?php writeTitle(16); ?> <em>[<a href="index.html">Examples Home</a>]</em></h1>
+                    <h1><?php writeTitle(20); ?> <em>[<a href="index.html">Examples Home</a>]</em></h1>
         
                 <!-- end: your content here -->
             </div>
@@ -196,7 +319,7 @@
                             </div>
                         </div>
 
-                        <p><strong>NOTE:</strong> <em>This example demonstrates how to add submenus via JavaScript to a menu bar built from existing markup.  The menu bar is constructed using markup and enables the user to navigate to different landing pages for each product category.  If JavaScript is enabled, submenus are constructed and appended to the items in the menu bar.  This allows the user to skip the product landing pages and proceed directly to a given property.  Alternatively, you can <a href="topnavfrommarkup.html">add submenus to a menu bar using markup</a>.</em></p>
+                        <p id="note"><strong>NOTE:</strong> <em>This example demonstrates how to add animation effects to a menu bar with submenus built using JavaScript.  You can also add animation to submenus built <a href="topnavfrommarkupwithanim.html">using existing markup</a>.</em></p>                        
 
                         <form name="example">
                             <select name="test">
