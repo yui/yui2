@@ -1,6 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W4C//DTD XHTML 1.0 Strict//EN" 
-		"http://www.w3.org/TR/xhtml2/DTD/xhtml1-strict.dtd">
-<html lang="en" xml:lang="en" xmlns="http://www.w4.org/1999/xhtml"
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
 		xmlns:x2="http://www.w3.org/TR/xhtml2"
 		xmlns:role="http://www.w3.org/2005/01/wai-rdf/GUIRoleTaxonomy#"
 		xmlns:state="http://www.w3.org/2005/07/aaa">
@@ -11,11 +11,11 @@
 <!-- Nav and logger start -->
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
-<script type="text/javascript" src="../../build/event/event.js" ></script>
-<script type="text/javascript" src="../../build/logger/logger.js" ></script>
-<script type="text/javascript" src="../../build/dom/dom.js" ></script>
+<script type="text/javascript" src="../../build/event/event-min.js" ></script>
+<script type="text/javascript" src="../../build/dom/dom-min.js" ></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js" ></script>
+<script type="text/javascript" src="../../build/logger/logger-min.js" ></script>
 <script type="text/javascript" src="../../build/animation/animation.js" ></script>
-<script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
 <script type="text/javascript" src="js/color.js" ></script>
 <script type="text/javascript" src="js/key.js" ></script>
 
@@ -116,55 +116,29 @@
 				25 pixels apart.
 			  </p>
 <strong>The logger is paused for performance reasons.  Click "Resume" to re-enable it.</strong>
-			  <p>
-              <!--
-				<a href="javascript:verticalSlider.lock()">Lock</a>
-				<a href="javascript:verticalSlider.unlock()">Unlock</a>
-                -->
-			  </p>
 
               <div id="vertWrapper">
-                <div
-                 id="vertBGDiv"
-                 name="vertBGDiv"
-                 tabindex="0" 
-                 x2:role="role:slider" 
-                 state:valuenow="0" 
-                 state:valuemin="0" 
-                 state:valuemax="200"
-                 title="Vertical Slider" 
-                 onkeydown="return handleVertSliderKey(this, YAHOO.util.Event.getEvent(event))" 
-                 onkeypress="YAHOO.util.Event.preventDefault(YAHOO.util.Event.getEvent(event))" >
+                <div id="vertBGDiv" tabindex="0" x2:role="role:slider" state:valuenow="0" state:valuemin="0" state:valuemax="200" title="Vertical Slider" >
                    <div id="vertHandleDiv"><img alt="" src="img/vertSlider.png" /></div> 
                 </div>
 
                 <div id="vertValueDiv">
-                  <form name="formV" onsubmit="return updateVert()">
-                  <input name="vertVal" id="vertVal" type="text" value="0" size="4" maxlength="4" />
-                  <input type="button" value="Update" onclick="updateVert()" />
+                  <form name="formV" onsubmit="return YAHOO.example.Sliders.updateVert()">
+                  <input autocomplete="off" name="vertVal" id="vertVal" type="text" value="0" size="4" maxlength="4" />
+                  <input type="button" value="Update" onclick="YAHOO.example.Sliders.updateVert()" />
                   </form>
                 </div>
               </div>
  
            <div id="horizWrapper">
-             <div
-                 id="horizBGDiv"
-                 name="horizBGDiv"
-                 tabindex="0" 
-                 x2:role="role:slider" 
-                 state:valuenow="0" 
-                 state:valuemin="-100" 
-                 state:valuemax="100"
-                 title="Horizontal Slider" 
-                 onkeydown="return handleHorizSliderKey(this, YAHOO.util.Event.getEvent(event))" 
-                 onkeypress="YAHOO.util.Event.preventDefault(YAHOO.util.Event.getEvent(event))" >
+             <div id="horizBGDiv" tabindex="0" x2:role="role:slider" state:valuenow="0" state:valuemin="-100" state:valuemax="100" title="Horizontal Slider" >
                <div id="horizHandleDiv" ><img alt="" src="img/horizSlider.png" /></div> 
               </div> 
 
             <div id="horizValueDiv">
-                <form name="formH" onsubmit="return updateHoriz()">
-                <input name="horizVal" id="horizVal" type="text" value="0" size="4" maxlength="4" />
-                <input type="button" value="Update" onclick="updateHoriz()" />
+                <form name="formH" onsubmit="return YAHOO.example.Sliders.updateHoriz()">
+                <input autocomplete="off" name="horizVal" id="horizVal" type="text" value="0" size="4" maxlength="4" />
+                <input type="button" value="Update" onclick="YAHOO.example.Sliders.updateHoriz()" />
                 </form>
             </div>
 
@@ -178,193 +152,195 @@
 
 <script type="text/javascript">
 //<![CDATA[
-function handleHorizSliderKey(slider, ev) {
-	if (gLogger) gLogger.debug("horizontal slider keypress");
 
-	// var valueNow = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuenow"), 10);
+YAHOO.example.Sliders = function() {
 
-	var valueNow = horizontalSlider.getValue();
+    var Dom = YAHOO.util.Dom;
+    var Event = YAHOO.util.Event;
 
-	// var valueMin = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuemin"), 10);
-	// var valueMax = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuemax"), 10);
+    var yslider, xslider;
 
-	var valueMin = horizontalSlider.thumb.rightConstraint;
-	var valueMax = horizontalSlider.thumb.leftConstraint;
+    function handleHorizSliderKey(e) {
+        YAHOO.log("horizontal slider keypress");
 
-	var delta = 0;
+        var valueNow = xslider.getValue();
+        var valueMin = xslider.thumb.rightConstraint;
+        var valueMax = xslider.thumb.leftConstraint;
+        var delta = 0;
+        var kc = Event.getCharCode(e);
 
-	var kc = ev.keyCode;
+        YAHOO.log("keycode: " + kc);
 
-	if (gLogger) gLogger.debug("keycode: " + kc);
+        if (kc == YAHOO.util.Key.DOM_VK_LEFT) {
+            delta = -25;
+        } else if (kc == YAHOO.util.Key.DOM_VK_RIGHT) {
+            delta = 25;
+        } else if (kc == YAHOO.util.Key.DOM_VK_HOME) {
+            delta = -( valueNow - valueMin );
+        } else if (kc == YAHOO.util.Key.DOM_VK_END) {
+            delta = valueMax - valueNow;
+        } else {
+            return true;
+        }
+        
+        valueNow += delta;
 
-	if (kc == YAHOO.util.Key.DOM_VK_LEFT) {
-		delta = -25;
-	} else if (kc == YAHOO.util.Key.DOM_VK_RIGHT) {
-		delta = 25;
-	} else if (kc == YAHOO.util.Key.DOM_VK_HOME) {
-		delta = -( valueNow - valueMin );
-	} else if (kc == YAHOO.util.Key.DOM_VK_END) {
-		delta = valueMax - valueNow;
-	} else {
-		return true;
-	}
-	
-	valueNow += delta;
-
-	horizontalSlider.setValue(valueNow, true);
-
-    if (slider.setAttributeNS) {
-	    slider.setAttributeNS("http://www.w3.org/2005/07/aaa", 
-                              "valuenow", 
-                              valueNow);
+        var sliderBg = Dom.get("horizBGDiv");
+        if (sliderBg.setAttributeNS) {
+            sliderBg.setAttributeNS("http://www.w3.org/2005/07/aaa", 
+                                    "valuenow", valueNow);
+        }
+        
+        Event.stopEvent(e);
+        return false;
     }
-	
-	// displaySlider(slider);
 
-    YAHOO.util.Event.stopEvent(ev);
-	return false;
-}
+    function handleVertSliderKey(e) {
+        YAHOO.log("vertical slider keypress");
+        var valueNow = yslider.getValue();
+        var valueMin = yslider.thumb.topConstraint;
+        var valueMax = yslider.thumb.bottomConstraint;
 
-function handleVertSliderKey(slider, ev) {
-	if (gLogger) gLogger.debug("vertical slider keypress");
+        var delta = 0;
+        var kc = Event.getCharCode(e);
+        if (kc == YAHOO.util.Key.DOM_VK_UP) {
+            delta = -20;
+        }
+        else if (kc == YAHOO.util.Key.DOM_VK_DOWN) {
+            delta = 20;
+        }
+        else if (kc == YAHOO.util.Key.DOM_VK_HOME) {
+            delta = -( valueNow - valueMin );
+        }
+        else if (kc == YAHOO.util.Key.DOM_VK_END) {
+            delta = valueMax - valueNow;
+        }
+        else {
+            return true;
+        }
+        
+        valueNow += delta;
+        if (valueNow < valueMin) {
+            valueNow = valueMin;
+        }
 
-	// var valueNow = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuenow"), 10);
+        if (valueNow > valueMax) {
+            valueNow = valueMax;
+        }  
 
-	var valueNow = verticalSlider.getValue();
-
-	// var valueMin = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuemin"), 10);
-	// var valueMax = parseInt(slider.getAttributeNS("http://www.w3.org/2005/07/aaa", "valuemax"), 10);
-
-	var valueMin = verticalSlider.thumb.topConstraint;
-	var valueMax = verticalSlider.thumb.bottomConstraint;
-
-	var delta = 0;
-	var kc = ev.keyCode;
-	if (kc == YAHOO.util.Key.DOM_VK_UP) {
-		delta = -20;
-	}
-	else if (kc == YAHOO.util.Key.DOM_VK_DOWN) {
-		delta = 20;
-	}
-	else if (kc == YAHOO.util.Key.DOM_VK_HOME) {
-		delta = -( valueNow - valueMin );
-	}
-	else if (kc == YAHOO.util.Key.DOM_VK_END) {
-		delta = valueMax - valueNow;
-	}
-	else {
-		return true;
-	}
-	
-	valueNow += delta;
-	if (valueNow < valueMin) {
-		valueNow = valueMin;
-	}
-
-	if (valueNow > valueMax) {
-		valueNow = valueMax;
-	}  
-
-    if (slider.setAttributeNS) {
-	    slider.setAttributeNS("http://www.w3.org/2005/07/aaa", 
-                              "valuenow", valueNow);
+        var sliderBg = Dom.get("vertBGDiv");
+        if (sliderBg.setAttributeNS) {
+            sliderBg.setAttributeNS("http://www.w3.org/2005/07/aaa", 
+                                    "valuenow", valueNow);
+        }
+        
+        Event.stopEvent(e);
+        return false;
     }
-	
-	// displaySlider(slider);
-	verticalSlider.setValue(valueNow, true);
 
-    YAHOO.util.Event.stopEvent(ev);
-	return false;
-}
+    var initVert = function() {
 
-	var verticalSlider, horizontalSlider;
-	var gLogger;
-	function init() {
-		if (typeof(ygLogger) != "undefined") {
-			ygLogger.init(document.getElementById("logDiv"));
-			gLogger = new ygLogger("slider.php");
-		}
+        var bg="vertBGDiv",thumb="vertHandleDiv",valFld="vertVal";
 
-        //////////////////////////////////////////////////////////////////
+        yslider = YAHOO.widget.Slider.getVertSlider(bg, 
+                         thumb, 0, 200);
 
-		verticalSlider = YAHOO.widget.Slider.getVertSlider("vertBGDiv", 
-                         "vertHandleDiv", 0, 200);
+        yslider.subscribe("change", function(offsetFromStart) {
+                if (this.moveComplete) {
+                    //alert("moveComplete");
+                }
+                Dom.get(valFld).value = offsetFromStart;
+                Dom.get(bg).title = "Vert Slider, value = " + offsetFromStart;
+            });
 
-		verticalSlider.onChange = function(offsetFromStart) {
-			document.getElementById("vertVal").value = offsetFromStart;
-			document.getElementById("vertBGDiv").title = 
-                        "Vertical Slider, value = " + offsetFromStart;
-		};
+        yslider.subscribe("slideStart", function() {
+                YAHOO.log("VERT slidestart", "warn");
+            });
 
-        verticalSlider.onSlideStart = function() {
-            //alert("slidestart");
-            YAHOO.log("VERT slidestart", "warn");
+        yslider.subscribe("slideEnd", function() {
+                // If you are only interested in the end value (when the
+                // animation completes, or the user stops dragging the
+                // slider handle), you can use this event rather than the
+                // change event
+
+                YAHOO.log("VERT slideend", "warn");
+                // var val = this.getValue();
+                // Dom.get(valFld).value = val;
+                // Dom.get(bg).title = "Vert Slider, value = " + val;
+            });
+
+        Dom.get(valFld).title = "Type in slider value between 0 and 200.";
+
+        Event.on(bg, "keydown", handleVertSliderKey);
+        Event.on(bg, "keypress", Event.preventDefault);
+
+    };
+
+    var initHoriz = function() {
+
+        var bg="horizBGDiv",thumb="horizHandleDiv",valFld="horizVal";
+
+        xslider = YAHOO.widget.Slider.getHorizSlider(bg, 
+                           thumb, 100, 100, 25);
+
+        xslider.subscribe("change", function(offsetFromStart) {
+                Dom.get(valFld).value = offsetFromStart;
+                Dom.get(bg).title = "Horiz Slider, value = " + offsetFromStart;
+            });
+
+        xslider.subscribe("slideStart", function() {
+                YAHOO.log("HORIZ slidestart", "warn");
+            });
+
+        xslider.subscribe("slideEnd", function() {
+                // If you are only interested in the end value (when the
+                // animation completes, or the user stops dragging the
+                // slider handle), you can use this event rather than the
+                // change event
+
+                YAHOO.log("HORIZ slideend", "warn");
+                // var val = this.getValue();
+                // Dom.get(valFld).value = val;
+                // Dom.get(bg).title = "Vert Slider, value = " + val;
+            });
+
+
+        Dom.get(valFld).title = "Type in slider value between -100 " +
+            "and 100. Values will be rounded to a number divisable by 25."
+
+        Event.on(bg, "keydown", handleHorizSliderKey);
+        Event.on(bg, "keypress", Event.preventDefault);
+    };
+
+    return {
+ 
+        init: function() {
+            initVert(); initHoriz();
+        },
+
+        updateVert: function() {
+            var v = parseFloat(document.forms['formV']['vertVal'].value, 10);
+            if ( isNaN(v) ) v = 0;
+            yslider.setValue(Math.round(v));
+            return false;
+        },
+
+        updateHoriz:function() {
+            var fld = document.forms["formH"]["horizVal"];
+            var v = parseFloat(fld.value, 10);
+            if ( isNaN(v) ) v = 0;
+            xslider.setValue(Math.round(v));
+            var newVal = xslider.getValue();
+            if (v != newVal) {
+                fld.value = newVal;
+            }
+            return false;
         }
 
-        verticalSlider.onSlideEnd = function() {
-            //alert("slideend");
-            YAHOO.log("VERT slideend", "warn");
-        }
+    }
+}();
 
-        // verticalSlider.setValue(20);
-        // verticalSlider.lock();
-        //verticalSlider.animate = false;
-
-
-
-	    document.getElementById("vertVal").title = 
-                            "Type in slider value between 0 and 200.";
-
-
-        //////////////////////////////////////////////////////////////////
-
-		horizontalSlider = YAHOO.widget.Slider.getHorizSlider("horizBGDiv", 
-                           "horizHandleDiv", 100, 100, 25);
-
-		horizontalSlider.onChange = function(offsetFromStart) {
-			document.getElementById("horizVal").value = offsetFromStart;
-			document.getElementById("horizBGDiv").title = 
-                        "Horizontal Slider, value = " + offsetFromStart;
-		};
-
-        horizontalSlider.onSlideStart = function() {
-            //alert("slidestart");
-            YAHOO.log("HORIZ slidestart", "warn");
-        };
-
-        horizontalSlider.onSlideEnd = function() {
-            // alert("slideend");
-            YAHOO.log("HORIZ slideend", "warn");
-        };
-
-
-        // horizontalSlider.lock();
-
-	    document.getElementById("horizVal").title = 
-                        "Type in slider value between -100 and 100. Values " +
-                        "will be rounded to a number divisable by 25."
-	}
-
-	function updateVert() {
-		var v = parseFloat(document.forms['formV']['vertVal'].value, 10);
-		if ( isNaN(v) ) v = 0;
-		verticalSlider.setValue(Math.round(v));
-		return false;
-	}
-	
-	function updateHoriz() {
-        var fld = document.forms["formH"]["horizVal"];
-		var v = parseFloat(fld.value, 10);
-		if ( isNaN(v) ) v = 0;
-		horizontalSlider.setValue(Math.round(v));
-        var newVal = horizontalSlider.getValue();
-        if (v != newVal) {
-            fld.value = newVal;
-        }
-		return false;
-	}
-
-	window.onload = init;
+YAHOO.util.Event.on(window, "load", YAHOO.example.Sliders.init);
  //]]>
 </script>
 
