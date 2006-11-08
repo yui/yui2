@@ -462,13 +462,14 @@ YAHOO.widget.AutoComplete.prototype.formatResult = function(oResultItem, sQuery)
 };
 
 /**
- * Abstract method called before container expands allows implementers to access data
+ * Overridable method called before container expands allows implementers to access data
  * and DOM elements.
  *
  * @method doBeforeExpandContainer
+ * @return {Boolean} Return true to continue expanding container, false to cancel the expand.
  */
 YAHOO.widget.AutoComplete.prototype.doBeforeExpandContainer = function(oResultItem, sQuery) {
-    /* Abstract method */
+    return true;
 };
 
 /**
@@ -1199,8 +1200,8 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         }
 
         // Expand the container
-        oSelf.doBeforeExpandContainer(oSelf._oTextbox, oSelf._oContainer, sQuery, aResults);
-        oSelf._toggleContainer(true);
+        var ok = oSelf.doBeforeExpandContainer(oSelf._oTextbox, oSelf._oContainer, sQuery, aResults);
+        oSelf._toggleContainer(ok);
     }
     else {
         oSelf._toggleContainer(false);
