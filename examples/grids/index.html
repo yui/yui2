@@ -13,6 +13,8 @@ ul,ol {margin:0 40px;}
 ol, ol li {list-style-type:decimal;}
 h2 {font-size:122%;font-weight:bold;margin-bottom:10px;}
 ul {margin-bottom:10px;}
+p em {font-style:italic;}
+#yui-main ul li a {font-family:monospace;}
 </style>
 </head>
 
@@ -26,40 +28,42 @@ ul {margin-bottom:10px;}
 		<div id="yui-main">
 			<div class="yui-b">
 			
-				<h2>The Three Widths</h2>
+				<h2>Page Widths</h2>
 				
-				<p>Choose your page width.</p>
+				<p>Choose the overall page width.</p>
 				
 				<ul>
-					<li><a href="url">#doc</a> - 750px centered (good for 800x600)</li>
-					<li><a href="url">#doc2</a> - 950px centered (good for 1024x768)</li>
-					<li><a href="url">#doc3</a> - 100% fluid (good for everybody)</li>
+					<li><a href="example_doc.html">#doc</a> - 750px centered (good for 800x600)</li>
+					<li><a href="example_doc2.html">#doc2</a> - 950px centered (good for 1024x768)</li>
+					<li><a href="example_doc3.html">#doc3</a> - 100% fluid (good for everybody)</li>
+					<li><a href="example_doc-custom.html">#doc-custom</a> - an example of a custom page width</li>
 				</ul>
 
-				<h2>The Seven Templates</h2>
+				<h2>Templates</h2>
 
-				<p>Choose between these seven structures.</p>
+				<p>Optionally choose the secondary column's width and orientation with one of seven <em>templates</em>.</p>
 				
 				<ul>
-					<li><a href="url">.yui-t1</a> - Two columns, narrow on left, 160px</li>
-					<li><a href="url">.yui-t2</a> - Two columns, narrow on left, 180px</li>
-					<li><a href="url">.yui-t3</a> - Two columns, narrow on left, 300px</li>
-					<li><a href="url">.yui-t4</a> - Two columns, narrow on right, 180px</li>
-					<li><a href="url">.yui-t5</a> - Two columns, narrow on right, 240px</li>
-					<li><a href="url">.yui-t6</a> - Two columns, narrow on right, 300px</li>
-					<li><a href="url">.yui-t7</a> - One full-width column</li>
+					<li><a href="example_t1.html">.yui-t1</a> - Two columns, narrow on left, 160px</li>
+					<li><a href="example_t2.html">.yui-t2</a> - Two columns, narrow on left, 180px</li>
+					<li><a href="example_t3.html">.yui-t3</a> - Two columns, narrow on left, 300px</li>
+					<li><a href="example_t4.html">.yui-t4</a> - Two columns, narrow on right, 180px</li>
+					<li><a href="example_t5.html">.yui-t5</a> - Two columns, narrow on right, 240px</li>
+					<li><a href="example_t6.html">.yui-t6</a> - Two columns, narrow on right, 300px</li>
+					<li><a href="example_t7.html">.yui-t7</a> - One full-width column</li>
 				</ul>				
 
-				<h2>The Nested Grids (Optional)</h2>
+				<h2>Nesting Grids (Optional)</h2>
 				
-				<p>Subdivide regions with nested grids.</p>
-				
+				<p>Optionally nest <em>standard</em> grids (<code>.yui-g</code>) and <em>special</em> grids (<code>.yui-b</code>, ... <code>.yui-f</code>) to subdivide.</p>
+								
 				<ul>
-					<li><a href="url">50% | 50%</a></li>
-					<li><a href="url">33% | 33% | 33%</a></li>
-					<li><a href="url">66% | 33%</a></li>
-					<li><a href="url">33% | 66%</a></li>
-					<li><a href="url">50% | 50%</a></li>
+					<li><a href="example_g.html">.yui-g</a> - Standard <em>half</em> grid (and <a href="example_g2.html">nest again for quarters</a>).</li>
+					<li><a href="example_gb.html">.yui-gb</a> - Special grid, 1/3 - 1/3 - 1/3</li>
+					<li><a href="example_gc.html">.yui-gc</a> - Special grid, 2/3 - 1/3</li>
+					<li><a href="example_gd.html">.yui-gd</a> - Special grid, 1/3 - 2/3</li>
+					<li><a href="example_ge.html">.yui-ge</a> - Special grid, 3/4 - 1/4</li>
+					<li><a href="example_gf.html">.yui-gf</a> - Special grid, 1/4 - 3/4</li>
 				</ul>
 				
 			</div>

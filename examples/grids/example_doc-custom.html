@@ -3,10 +3,24 @@
 <head>
 	<title>Grids CSS Example - YUI Grids</title>
 	<link type="text/css" rel="stylesheet" href="../../build/reset-fonts-grids/reset-fonts-grids.css">
+	<style>
+
+	/* 	for a custom page width, divide your desired 
+		pixel width by 13 to find em width. Multiply 
+		that value by 0.9759 for IE via *width. For 
+		example, this is a 600px page-width:		*/
+
+	#doc {
+		margin:auto;text-align:left;
+		width:46.15em;/* !IE */*width:45.04em;/*IE*/
+   		min-width:600px;}
+
+	</style>
+
 </head>
 
 <body id="yahoo-com">
-<div id="doc" class="yui-t3"><!-- "doc" here for example only; use any page width -->			
+<div id="doc" class="yui-t1"><!-- "t1" here for example only; use any template. -->
 	<div id="hd">
 		<p>MASTHEAD: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metus. Nunc quam elit, posuere nec, auctor in, rhoncus quis, dui. Aliquam erat volutpat. Ut dignissim, massa sit amet dignissim cursus, quam lacus feugiat.</p>
 	</div>
