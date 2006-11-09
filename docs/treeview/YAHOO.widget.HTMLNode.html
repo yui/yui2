@@ -1,632 +1,382 @@
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>API: TreeView YAHOO.widget.HTMLNode.html (YUI Library)</title>
-	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+	<title>API: treeview  YAHOO.widget.HTMLNode   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/reset.css">
+	<link rel="stylesheet" type="text/css" href="assets/fonts.css">
+	<link rel="stylesheet" type="text/css" href="assets/grids.css">
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
 
-<body>
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
 
-<div id="header">
-	<h1>Yahoo! UI Library</h1>
-	<h3><a href="./index.html">TreeView</a></h3>
-
-	<div class="breadcrumbs">
-		
-			
-			
-			
-			
-			
-			
-			
-				<a href="./index.html">TreeView</a>
-				&gt;
-				<strong>YAHOO.widget.HTMLNode</strong>
-			
-			
-			
-			
-			
-			
-			
-		
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>TreeView Widget&nbsp;</h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_treeview.html">treeview</a>
+                 &gt; YAHOO.widget.HTMLNode 
+                
+            </p>
 	</div>
-</div>
 
-	
-<div id="body">
-	
-	
-	<div class="nav">
-		<div class="module resources">
-			<ul class="content">
-				<li><a href="overview-tree.html">Tree View</a></li>
-				<li><a href="index-all.html">Element Index</a></li>
-			</ul>
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.HTMLNode</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a>
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        This implementation takes either a string or object for the
+oData argument.  If is it a string, we will use it for the display
+of this node (and it can contain any html code).  If the parameter
+is an object, we look for a parameter called "html" that will be
+used for this node's display.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.HTMLNode</strong>
+                                <code>
+                                        (
+  
+                                        
+                                                
+                                                oData
+
+                                                , 
+                                                oParent
+
+                                                , 
+                                                expanded
+
+                                                , 
+                                                hasIcon
+                                        )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>oData
+                                                    &lt;object&gt; 
+                                                    </code>
+                                                      a string or object containing the data that will
+be used to render this node
+                                                </dd>
+                                                <dd>
+                                                    <code>oParent
+                                                    &lt;YAHOO.widget.Node&gt; 
+                                                    </code>
+                                                      this node's parent node
+                                                </dd>
+                                                <dd>
+                                                    <code>expanded
+                                                    &lt;boolean&gt; 
+                                                    </code>
+                                                      the initial expanded/collapsed state
+                                                </dd>
+                                                <dd>
+                                                    <code>hasIcon
+                                                    &lt;boolean&gt; 
+                                                    </code>
+                                                      specifies whether or not leaf nodes should
+have an icon
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <h4><a name="content">content</a>
+                                        <code>- string</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The HTML content to use for this node's display
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="contentElId">contentElId</a>
+                                        <code>- string</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The generated id that will contain the data passed in by the implementer.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="contentStyle">contentStyle</a>
+                                        <code>- string</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The CSS class for the html content container.  Defaults to ygtvhtml, but 
+can be overridden to provide a custom presentation for a specific node.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="initContent">initContent</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Sets up the node label
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.widget.Node.html#children">children</a>,
+                                        <a href="YAHOO.widget.Node.html#childrenRendered">childrenRendered</a>,
+                                        <a href="YAHOO.widget.Node.html#data">data</a>,
+                                        <a href="YAHOO.widget.Node.html#dataLoader">dataLoader</a>,
+                                        <a href="YAHOO.widget.Node.html#depth">depth</a>,
+                                        <a href="YAHOO.widget.Node.html#dynamicLoadComplete">dynamicLoadComplete</a>,
+                                        <a href="YAHOO.widget.Node.html#expanded">expanded</a>,
+                                        <a href="YAHOO.widget.Node.html#hasIcon">hasIcon</a>,
+                                        <a href="YAHOO.widget.Node.html#href">href</a>,
+                                        <a href="YAHOO.widget.Node.html#iconMode">iconMode</a>,
+                                        <a href="YAHOO.widget.Node.html#index">index</a>,
+                                        <a href="YAHOO.widget.Node.html#isLoading">isLoading</a>,
+                                        <a href="YAHOO.widget.Node.html#multiExpand">multiExpand</a>,
+                                        <a href="YAHOO.widget.Node.html#nextSibling">nextSibling</a>,
+                                        <a href="YAHOO.widget.Node.html#parent">parent</a>,
+                                        <a href="YAHOO.widget.Node.html#previousSibling">previousSibling</a>,
+                                        <a href="YAHOO.widget.Node.html#renderHidden">renderHidden</a>,
+                                        <a href="YAHOO.widget.Node.html#target">target</a>,
+                                        <a href="YAHOO.widget.Node.html#tree">tree</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="getContentEl">getContentEl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        HTMLElement
+                                            <strong>getContentEl</strong>
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the outer html element for this node's content
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        HTMLElement
+                                                    </code></dt>
+                                                    <dd>the element</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                        
+                                            <a href="YAHOO.widget.Node.html#appendTo">appendTo</a>,
+                                            <a href="YAHOO.widget.Node.html#applyParent">applyParent</a>,
+                                            <a href="YAHOO.widget.Node.html#collapse
+toggle style.">collapse
+toggle style.</a>,
+                                            <a href="YAHOO.widget.Node.html#collapseAll">collapseAll</a>,
+                                            <a href="YAHOO.widget.Node.html#completeRender">completeRender</a>,
+                                            <a href="YAHOO.widget.Node.html#expand">expand</a>,
+                                            <a href="YAHOO.widget.Node.html#expandAll">expandAll</a>,
+                                            <a href="YAHOO.widget.Node.html#getAncestor">getAncestor</a>,
+                                            <a href="YAHOO.widget.Node.html#getChildrenEl">getChildrenEl</a>,
+                                            <a href="YAHOO.widget.Node.html#getChildrenElId">getChildrenElId</a>,
+                                            <a href="YAHOO.widget.Node.html#getDepthStyle">getDepthStyle</a>,
+                                            <a href="YAHOO.widget.Node.html#getEl">getEl</a>,
+                                            <a href="YAHOO.widget.Node.html#getElId">getElId</a>,
+                                            <a href="YAHOO.widget.Node.html#getHoverStyle">getHoverStyle</a>,
+                                            <a href="YAHOO.widget.Node.html#getHtml">getHtml</a>,
+                                            <a href="YAHOO.widget.Node.html#getIconMode">getIconMode</a>,
+                                            <a href="YAHOO.widget.Node.html#getNodeHtml">getNodeHtml</a>,
+                                            <a href="YAHOO.widget.Node.html#getSiblings">getSiblings</a>,
+                                            <a href="YAHOO.widget.Node.html#getStyle">getStyle</a>,
+                                            <a href="YAHOO.widget.Node.html#getToggleEl">getToggleEl</a>,
+                                            <a href="YAHOO.widget.Node.html#getToggleElId">getToggleElId</a>,
+                                            <a href="YAHOO.widget.Node.html#getToggleLink">getToggleLink</a>,
+                                            <a href="YAHOO.widget.Node.html#hasChildren">hasChildren</a>,
+                                            <a href="YAHOO.widget.Node.html#hideChildren">hideChildren</a>,
+                                            <a href="YAHOO.widget.Node.html#init">init</a>,
+                                            <a href="YAHOO.widget.Node.html#insertAfter">insertAfter</a>,
+                                            <a href="YAHOO.widget.Node.html#insertBefore">insertBefore</a>,
+                                            <a href="YAHOO.widget.Node.html#isDynamic">isDynamic</a>,
+                                            <a href="YAHOO.widget.Node.html#isRoot">isRoot</a>,
+                                            <a href="YAHOO.widget.Node.html#loadComplete">loadComplete</a>,
+                                            <a href="YAHOO.widget.Node.html#refresh">refresh</a>,
+                                            <a href="YAHOO.widget.Node.html#setDynamicLoad">setDynamicLoad</a>,
+                                            <a href="YAHOO.widget.Node.html#showChildren">showChildren</a>,
+                                            <a href="YAHOO.widget.Node.html#toString">toString</a>,
+                                            <a href="YAHOO.widget.Node.html#toggle">toggle</a>
+                                    </code>
+                                </div>
+                            </div>
+
+
+
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.widget.Node.html#parentChange">parentChange</a>
+                                </code>
+                            </div>
+                        </div>
+
+
+
+
+			</div>
 		</div>
-		
-		
-			<div class="module">
-				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
-				<ul class="content">
-					
-						<li>
-							<a href="YAHOO.widget.html">
-								YAHOO.widget</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.HTMLNode.html">
-								YAHOO.widget.HTMLNode</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.MenuNode.html">
-								YAHOO.widget.MenuNode</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.Node.html">
-								YAHOO.widget.Node</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.RootNode.html">
-								YAHOO.widget.RootNode</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.TextNode.html">
-								YAHOO.widget.TextNode</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.TreeView.html">
-								YAHOO.widget.TreeView</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.TVAnim.html">
-								YAHOO.widget.TVAnim</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.TVFadeIn.html">
-								YAHOO.widget.TVFadeIn</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.TVFadeOut.html">
-								YAHOO.widget.TVFadeOut</a>
-						</li>
-					
-				</ul>
-			</div>
-		
-		
-		
-			<div class="module">
-				<h4><a href="./overview-summary.html">Files</a></h4>
-				<ul class="content">		
-					
-						<li>
-							<a href="overview-summary-HTMLNode.js.html">
-								HTMLNode.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-MenuNode.js.html">
-								MenuNode.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-Node.js.html">
-								Node.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-RootNode.js.html">
-								RootNode.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-TextNode.js.html">
-								TextNode.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-TreeView.js.html">
-								TreeView.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-TVAnim.js.html">
-								TVAnim.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-TVFadeIn.js.html">
-								TVFadeIn.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-TVFadeOut.js.html">
-								TVFadeOut.js</a>
-						</li>
-					
-				</ul>
-			</div>
-		
-	</div>
-	
-	<div id="pri">
-        <div class="main">
-	
-		<h2>Class YAHOO.widget.HTMLNode</h2>
-		<pre>Object
-   |
-   +--<a href='YAHOO.widget.Node.html'>YAHOO.widget.Node</a>
-         |
-         +--<b>YAHOO.widget.HTMLNode</b>
-</pre>
-		
-		
-	
-		<hr />
-		
-		<!-- Class definition -->
-		<div class="class-def">
-			<div class="class-name">
-				<span class="class-attribs">
-					
-				</span>
-				<span class="class-type">class</span>
-				<b>YAHOO.widget.HTMLNode</b>
-			</div>
-			<div class="class-extends">
-				
-					<dd>extends <a href='YAHOO.widget.Node.html'>YAHOO.widget.Node</a></dd>
-				
-			</div>
-		</div>
-			
-		
-<div class="meta">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-		
-	
-	
-	
-	
-	
-	
-</div>
+		<div class="yui-b">
+            <div class="nav">
 
-		
-		<!-- ======== QUICK LINKS ======== -->
-		<div class="quick-links">
-			<strong>Quick Links:</strong>&nbsp;
-			
-			
-				<a href="#field_summary">Field Summary</a>
-				|
-			
-			
-				<a href="#constructor_summary">Constructor Summary</a>
-				|
-			
-			
-				<a href="#methodSummary">Method Summary</a> |
-				<a href="#methodDetails">Method Details</a>
-			
-		</div>
-		<!-- ======== END QUICK LINKS ======== -->
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li><a href="module_treeview.html">treeview</a></li>
+                        </ul>
+                    </div>
 
-		<!-- ======== NESTED CLASS SUMMARY ======== -->
-		
-		<!-- ======== END NESTED CLASS SUMMARY ======== -->
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li><a href="YAHOO.widget.HTMLNode.html">YAHOO.widget.HTMLNode</a></li>
+                                <li><a href="YAHOO.widget.MenuNode.html">YAHOO.widget.MenuNode</a></li>
+                                <li><a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a></li>
+                                <li><a href="YAHOO.widget.RootNode.html">YAHOO.widget.RootNode</a></li>
+                                <li><a href="YAHOO.widget.TVAnim.html">YAHOO.widget.TVAnim</a></li>
+                                <li><a href="YAHOO.widget.TVFadeIn.html">YAHOO.widget.TVFadeIn</a></li>
+                                <li><a href="YAHOO.widget.TVFadeOut.html">YAHOO.widget.TVFadeOut</a></li>
+                                <li><a href="YAHOO.widget.TextNode.html">YAHOO.widget.TextNode</a></li>
+                                <li><a href="YAHOO.widget.TreeView.html">YAHOO.widget.TreeView</a></li>
+                        </ul>
+                    </div>
 
-		<!-- =========== FIELD SUMMARY =========== -->
-		
-			<div class="section field summaries">
-				<h3><a name="field_summary">Field Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<table border="1" cellpadding="3" cellspacing="0">
-					
-						<tr>
-							<td class="flags">string</td>
-							<td class="spec">
-								<code>
-									<a href="#content">content</a>
-								</code>
-								<div class="description">
-									The HTML content to use for this node's display&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">string</td>
-							<td class="spec">
-								<code>
-									<a href="#contentElId">contentElId</a>
-								</code>
-								<div class="description">
-									The generated id that will contain the data passed in by the implementer.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">string</td>
-							<td class="spec">
-								<code>
-									<a href="#contentStyle">contentStyle</a>
-								</code>
-								<div class="description">
-									The CSS class for the html content container.&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-					</table>
-				</div>
-			</div>
-		
-				
-		
-			
-				<div class="section field inheritance">
-					<h3>Fields inherited from class <a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-					<div class="content">
-								<code><a href="YAHOO.widget.Node.html#index">index</a>, <a href="YAHOO.widget.Node.html#children">children</a>, <a href="YAHOO.widget.Node.html#tree">tree</a>, <a href="YAHOO.widget.Node.html#data">data</a>, <a href="YAHOO.widget.Node.html#parent">parent</a>, <a href="YAHOO.widget.Node.html#href">href</a>, <a href="YAHOO.widget.Node.html#target">target</a>, <a href="YAHOO.widget.Node.html#expanded">expanded</a>, <a href="YAHOO.widget.Node.html#multiExpand">multiExpand</a>, <a href="YAHOO.widget.Node.html#renderHidden">renderHidden</a>, <a href="YAHOO.widget.Node.html#childrenRendered">childrenRendered</a>, <a href="YAHOO.widget.Node.html#dynamicLoadComplete">dynamicLoadComplete</a>, <a href="YAHOO.widget.Node.html#previousSibling">previousSibling</a>, <a href="YAHOO.widget.Node.html#nextSibling">nextSibling</a>, <a href="YAHOO.widget.Node.html#dataLoader">dataLoader</a>, <a href="YAHOO.widget.Node.html#isLoading">isLoading</a>, <a href="YAHOO.widget.Node.html#hasIcon">hasIcon</a>, <a href="YAHOO.widget.Node.html#iconMode">iconMode</a></code>
-					</div>
-				</div>
-			
-		
-		<!-- =========== END FIELD SUMMARY =========== -->
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li><a href="HTMLNode.js.html">HTMLNode.js</a></li>
+                                <li><a href="MenuNode.js.html">MenuNode.js</a></li>
+                                <li><a href="Node.js.html">Node.js</a></li>
+                                <li><a href="RootNode.js.html">RootNode.js</a></li>
+                                <li><a href="TVAnim.js.html">TVAnim.js</a></li>
+                                <li><a href="TVFadeIn.js.html">TVFadeIn.js</a></li>
+                                <li><a href="TVFadeOut.js.html">TVFadeOut.js</a></li>
+                                <li><a href="TextNode.js.html">TextNode.js</a></li>
+                                <li><a href="TreeView.js.html">TreeView.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li><a href="#content">content</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#contentElId">contentElId</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#contentStyle">contentStyle</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#initContent">initContent</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>HTMLElement</code>-->
+                                <a href="#getContentEl">getContentEl</a>
+                                </li>
+                        </ul>
+                    </div>
 
 
-		<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-		
-			<div class="section contructor summaries">
-				<h3><a name="constructor_summary">Constructor Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<code class="spec">
-						<a href="YAHOO.widget.HTMLNode.html#YAHOO.widget.HTMLNode()">YAHOO.widget.HTMLNode</a>
-					</code>
-					<div class="description">
-						This implementation takes either a string or object for the
- oData argument.&nbsp;
-					</div>
-				</div>
-			</div>
-		
-		<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
 
-
-		<!-- ========== METHOD SUMMARY =========== -->
-		
-			<div class="section method summaries">
-				<h3><a name="methodSummary">Method Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<table border="1" cellpadding="3" cellspacing="0">
-						
-							<tr>
-								<td class="flags">HTMLElement</td>
-								<td class="spec">
-									<code>
-										<a href="#getContentEl">getContentEl</a>
-										()
-									</code>
-									<div class="description">
-										Returns the outer html element for this node's content&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">string</td>
-								<td class="spec">
-									<code>
-										<a href="#getNodeHtml">getNodeHtml</a>
-										()
-									</code>
-									<div class="description">
-										Get the markup for the node.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#initContent">initContent</a>
-										(oData, &lt;boolean&gt; hasIcon)
-									</code>
-									<div class="description">
-										Sets up the node label&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">string</td>
-								<td class="spec">
-									<code>
-										<a href="#toString">toString</a>
-										()
-									</code>
-									<div class="description">
-										toString&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-					</table>
-				</div>
-			</div>
-		
-		
-		
-			<div class="section method inheritance">
-				<h3>Methods inherited from class  <a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a></h3>
-				<div class="content">
-							<code><a href="YAHOO.widget.Node.html#init">init</a>, <a href="YAHOO.widget.Node.html#applyParent">applyParent</a>, <a href="YAHOO.widget.Node.html#appendTo">appendTo</a>, <a href="YAHOO.widget.Node.html#insertBefore">insertBefore</a>, <a href="YAHOO.widget.Node.html#insertAfter">insertAfter</a>, <a href="YAHOO.widget.Node.html#getSiblings">getSiblings</a>, <a href="YAHOO.widget.Node.html#showChildren">showChildren</a>, <a href="YAHOO.widget.Node.html#hideChildren">hideChildren</a>, <a href="YAHOO.widget.Node.html#getElId">getElId</a>, <a href="YAHOO.widget.Node.html#getChildrenElId">getChildrenElId</a>, <a href="YAHOO.widget.Node.html#getToggleElId">getToggleElId</a>, <a href="YAHOO.widget.Node.html#getEl">getEl</a>, <a href="YAHOO.widget.Node.html#getChildrenEl">getChildrenEl</a>, <a href="YAHOO.widget.Node.html#getToggleEl">getToggleEl</a>, <a href="YAHOO.widget.Node.html#getToggleLink">getToggleLink</a>, <a href="YAHOO.widget.Node.html#collapse">collapse</a>, <a href="YAHOO.widget.Node.html#expand">expand</a>, <a href="YAHOO.widget.Node.html#getStyle">getStyle</a>, <a href="YAHOO.widget.Node.html#getHoverStyle">getHoverStyle</a>, <a href="YAHOO.widget.Node.html#expandAll">expandAll</a>, <a href="YAHOO.widget.Node.html#collapseAll">collapseAll</a>, <a href="YAHOO.widget.Node.html#setDynamicLoad">setDynamicLoad</a>, <a href="YAHOO.widget.Node.html#isRoot">isRoot</a>, <a href="YAHOO.widget.Node.html#isDynamic">isDynamic</a>, <a href="YAHOO.widget.Node.html#getIconMode">getIconMode</a>, <a href="YAHOO.widget.Node.html#hasChildren">hasChildren</a>, <a href="YAHOO.widget.Node.html#toggle">toggle</a>, <a href="YAHOO.widget.Node.html#getHtml">getHtml</a>, <a href="YAHOO.widget.Node.html#completeRender">completeRender</a>, <a href="YAHOO.widget.Node.html#loadComplete">loadComplete</a>, <a href="YAHOO.widget.Node.html#getAncestor">getAncestor</a>, <a href="YAHOO.widget.Node.html#getDepthStyle">getDepthStyle</a>, <a href="YAHOO.widget.Node.html#refresh">refresh</a></code>
-				</div>
-			</div>
-		
-		<!-- ========== END METHOD SUMMARY =========== -->
-
-
-		<!-- ============ FIELD DETAIL START =========== -->
-		
-			<div class="section field details">
-				<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					
-						<h4><a name="content">content</a></h4>
-						<div class="detail">
-							<code>
-								string
-								&nbsp;
-								<strong>content</strong>
-							</code>
-							<div class="description">
-								The HTML content to use for this node's display
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="contentElId">contentElId</a></h4>
-						<div class="detail">
-							<code>
-								string
-								&nbsp;
-								<strong>contentElId</strong>
-							</code>
-							<div class="description">
-								The generated id that will contain the data passed in by the implementer.
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="contentStyle">contentStyle</a></h4>
-						<div class="detail">
-							<code>
-								string
-								&nbsp;
-								<strong>contentStyle</strong>
-							</code>
-							<div class="description">
-								The CSS class for the html content container.  Defaults to ygtvhtml, but 
- can be overridden to provide a custom presentation for a specific node.
-							</div>
-						</div>
-						<hr />
-					
-				</div>
-			</div>
-		
-		<!-- ============ FIELD DETAIL END =========== -->
-
-		<!-- ========= CONSTRUCTOR DETAIL START ======== -->
-		
-			<div class="section constructor details">
-				<h3><a name="constructor_detail">Constructor Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<h4><a name="YAHOO.widget.HTMLNode()">YAHOO.widget.HTMLNode</a></h4>
-					<div class="detail">
-						<code>
-							<strong>YAHOO.widget.HTMLNode</strong>
-							()
-						</code>
-						<div class="description">
-							
-								This implementation takes either a string or object for the
- oData argument.  If is it a string, we will use it for the display
- of this node (and it can contain any html code).  If the parameter
- is an object, we look for a parameter called "html" that will be
- used for this node's display.
-							
-							
-							
-								<dl>
-									<dt>Parameters:</dt>
-									
-										<dd>
-											<code>oData</code> - 
-											 {object} a string or object containing the data that will  be used to render this node  
-										</dd>
-									
-										<dd>
-											<code>oParent</code> - 
-											 {YAHOO.widget.Node} this node's parent node  
-										</dd>
-									
-										<dd>
-											<code>expanded</code> - 
-											 {boolean} the initial expanded/collapsed state  
-										</dd>
-									
-										<dd>
-											<code>hasIcon</code> - 
-											 {boolean} specifies whether or not leaf nodes should  have an icon
-										</dd>
-									
-								</dl>
-							
-							
-							
-							
-							
-						</div>
-					</div>
-				</div>
-			</div>
-		
-		<!-- ========= CONSTRUCTOR DETAIL END ======== -->
-
-
-		<!-- ============ METHOD DETAIL START ========== -->
-		
-			<div class="section method details">
-				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					
-						<h4><a name="getContentEl">getContentEl</a></h4>
-						<div class="detail">
-							<code>
-								HTMLElement 
-								<strong>getContentEl</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Returns the outer html element for this node's content
-								
-								
-								
-									<dl>
-										<dt>Returns:</dt>
-										<dd> the element</dd>
-									</dl>
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="getNodeHtml">getNodeHtml</a></h4>
-						<div class="detail">
-							<code>
-								string 
-								<strong>getNodeHtml</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Get the markup for the node.  This is designed to be overrided so that we can
- support different types of nodes.
-								
-								
-								
-									<dl>
-										<dt>Returns:</dt>
-										<dd> The HTML that will render this node.</dd>
-									</dl>
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="initContent">initContent</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>initContent</strong>
-								(oData, &lt;boolean&gt; hasIcon)
-							</code>
-									
-							<div class="description">
-								
-									Sets up the node label
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>hasIcon</code> - 
-												 determines if the node will be rendered with an  icon or not    
-											</dd>
-										
-											<dd>
-												<code>An</code> - 
-												 html string or object containing an html property  
-											</dd>
-										
-									</dl>
-								
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="toString">toString</a></h4>
-						<div class="detail">
-							<code>
-								string 
-								<strong>toString</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									toString
-								
-								
-								
-									<dl>
-										<dt>Returns:</dt>
-										<dd> string representation of the node</dd>
-									</dl>
-								
-								
-							</div>
-						</div>
-						<hr />
-					
-				</div>
-			</div>
-		
-		<!-- ============ METHOD DETAIL END ========== -->
+            </div>
 		</div>
 	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	</div>
 </div>
-<!-- ========= END OF CLASS DATA ========= -->
-
-
-<div id="footer">
-    <hr />
-    Copyright &copy; 2004 - 2006 Yahoo! Inc. All rights reserved.
-</div>
-
-
 </body>
 </html>

@@ -1,6 +1,6 @@
 /**
  * A 1/2 second fade-in animation.
- *
+ * @class TVFadeIn
  * @constructor
  * @param el {HTMLElement} the element to animate
  * @param callback {function} function to invoke when the animation is finished
@@ -8,27 +8,32 @@
 YAHOO.widget.TVFadeIn = function(el, callback) {
     /**
      * The element to animate
+     * @property el
      * @type HTMLElement
      */
     this.el = el;
 
     /**
      * the callback to invoke when the animation is complete
-     *
+     * @property callback
      * @type function
      */
     this.callback = callback;
 
     /**
+     * LogWriter instance, only available in the debug version
+     * @property logger
+     * @type YAHOO.widget.LogWriter
      * @private
      */
     this.logger = new YAHOO.widget.LogWriter(this.toString());
 };
 
-/**
- * Performs the animation
- */
 YAHOO.widget.TVFadeIn.prototype = {
+    /**
+     * Performs the animation
+     * @method animate
+     */
     animate: function() {
         var tvanim = this;
 
@@ -37,14 +42,7 @@ YAHOO.widget.TVFadeIn.prototype = {
         s.filter = "alpha(opacity=10)";
         s.display = "";
 
-        // var dur = ( navigator.userAgent.match(/msie/gi) ) ? 0.05 : 0.4;
         var dur = 0.4; 
-        // this.logger.log("duration: " + dur);
-        // var a = new ygAnim_Fade(this.el, dur, 1);
-        // a.setStart(0.1);
-        // a.onComplete = function() { tvanim.onComplete(); };
-
-        // var a = new YAHOO.util.Anim(this.el, 'opacity', 0.1, 1);
         var a = new YAHOO.util.Anim(this.el, {opacity: {from: 0.1, to: 1, unit:""}}, dur);
         a.onComplete.subscribe( function() { tvanim.onComplete(); } );
         a.animate();
@@ -52,11 +50,17 @@ YAHOO.widget.TVFadeIn.prototype = {
 
     /**
      * Clean up and invoke callback
+     * @method onComplete
      */
     onComplete: function() {
         this.callback();
     },
 
+    /**
+     * toString
+     * @method toString
+     * @return {string} the string representation of the instance
+     */
     toString: function() {
         return "TVFadeIn";
     }

@@ -1,8 +1,10 @@
 /**
  * A custom YAHOO.widget.Node that handles the unique nature of 
  * the virtual, presentationless root node.
- *
+ * @namespace YAHOO.widget
+ * @class RootNode
  * @extends YAHOO.widget.Node
+ * @param oTree {YAHOO.widget.TreeView} The tree instance this node belongs to
  * @constructor
  */
 YAHOO.widget.RootNode = function(oTree) {
@@ -11,26 +13,26 @@ YAHOO.widget.RootNode = function(oTree) {
 	// to alter the standard properties a bit.
 	this.init(null, null, true);
 	
-	/**
+	/*
 	 * For the root node, we get the tree reference from as a param
 	 * to the constructor instead of from the parent element.
-	 *
-	 * @type TreeView
 	 */
 	this.tree = oTree;
 };
 
-YAHOO.widget.RootNode.prototype = new YAHOO.widget.Node();
+YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
+    
+    // overrides YAHOO.widget.Node
+    getNodeHtml: function() { 
+        return ""; 
+    },
 
-// overrides YAHOO.widget.Node
-YAHOO.widget.RootNode.prototype.getNodeHtml = function() { 
-	return ""; 
-};
+    toString: function() { 
+        return "RootNode";
+    },
 
-YAHOO.widget.RootNode.prototype.toString = function() { 
-    return "RootNode";
-};
+    loadComplete: function() { 
+        this.tree.draw();
+    }
 
-YAHOO.widget.RootNode.prototype.loadComplete = function() { 
-    this.tree.draw();
-};
+});

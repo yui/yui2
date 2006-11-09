@@ -1,6 +1,6 @@
 /**
  * A 1/2 second fade out animation.
- *
+ * @class TVFadeOut
  * @constructor
  * @param el {HTMLElement} the element to animate
  * @param callback {Function} function to invoke when the animation is finished
@@ -8,36 +8,35 @@
 YAHOO.widget.TVFadeOut = function(el, callback) {
     /**
      * The element to animate
+     * @property el
      * @type HTMLElement
      */
     this.el = el;
 
     /**
      * the callback to invoke when the animation is complete
-     *
+     * @property callback
      * @type function
      */
     this.callback = callback;
 
     /**
+     * LogWriter instance, only available in the debug version
+     * @property logger
+     * @type YAHOO.widget.LogWriter
      * @private
      */
     this.logger = new YAHOO.widget.LogWriter(this.toString());
 };
 
-/**
- * Performs the animation
- */
 YAHOO.widget.TVFadeOut.prototype = {
+    /**
+     * Performs the animation
+     * @method animate
+     */
     animate: function() {
         var tvanim = this;
-        // var dur = ( navigator.userAgent.match(/msie/gi) ) ? 0.05 : 0.4;
         var dur = 0.4;
-        // this.logger.log("duration: " + dur);
-        // var a = new ygAnim_Fade(this.el, dur, 0.1);
-        // a.onComplete = function() { tvanim.onComplete(); };
-
-        // var a = new YAHOO.util.Anim(this.el, 'opacity', 1, 0.1);
         var a = new YAHOO.util.Anim(this.el, {opacity: {from: 1, to: 0.1, unit:""}}, dur);
         a.onComplete.subscribe( function() { tvanim.onComplete(); } );
         a.animate();
@@ -45,6 +44,7 @@ YAHOO.widget.TVFadeOut.prototype = {
 
     /**
      * Clean up and invoke callback
+     * @method onComplete
      */
     onComplete: function() {
         var s = this.el.style;
@@ -54,6 +54,11 @@ YAHOO.widget.TVFadeOut.prototype = {
         this.callback();
     },
 
+    /**
+     * toString
+     * @method toString
+     * @return {string} the string representation of the instance
+     */
     toString: function() {
         return "TVFadeOut";
     }

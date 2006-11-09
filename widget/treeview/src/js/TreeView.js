@@ -1,8 +1,16 @@
 /**
- * Contains the tree view state data and the root node.  This is an
- * ordered tree; child nodes will be displayed in the order created, and
- * there currently is no way to change this.
+ * The treeview widget is a generic tree building tool.
+ * @module treeview
+ * @title TreeView Widget
+ * @requires yahoo
+ * @optional animation
+ * @namespace YAHOO.widget
+ */
+
+/**
+ * Contains the tree view state data and the root node.
  *
+ * @class TreeView
  * @constructor
  * @param {string|HTMLElement} id The id of the element, or the element
  * itself that the tree will be inserted into.
@@ -11,30 +19,27 @@ YAHOO.widget.TreeView = function(id) {
     if (id) { this.init(id); }
 };
 
-/**
- * Count of all nodes in all trees
- * @type int
- */
-YAHOO.widget.TreeView.nodeCount = 0;
+
 
 YAHOO.widget.TreeView.prototype = {
 
     /**
      * The id of tree container element
-     *
+     * @property id
      * @type String
      */
     id: null,
 
     /**
      * The host element for this tree
+     * @property _el
      * @private
      */
     _el: null,
 
      /**
      * Flat collection of all nodes in this tree
-     *
+     * @property _nodes
      * @type Node[]
      * @private
      */
@@ -42,14 +47,14 @@ YAHOO.widget.TreeView.prototype = {
 
     /**
      * We lock the tree control while waiting for the dynamic loader to return
-     *
+     * @property locked
      * @type boolean
      */
     locked: false,
 
     /**
      * The animation to use for expanding children, if any
-     *
+     * @property _expandAnim
      * @type string
      * @private
      */
@@ -57,7 +62,7 @@ YAHOO.widget.TreeView.prototype = {
 
     /**
      * The animation to use for collapsing children, if any
-     *
+     * @property _collapseAnim
      * @type string
      * @private
      */
@@ -65,7 +70,7 @@ YAHOO.widget.TreeView.prototype = {
 
     /**
      * The current number of animations that are executing
-     *
+     * @property _animCount
      * @type int
      * @private
      */
@@ -73,16 +78,16 @@ YAHOO.widget.TreeView.prototype = {
 
     /**
      * The maximum number of animations to run at one time.
-     *
+     * @property maxAnim
      * @type int
      */
     maxAnim: 2,
 
     /**
      * Sets up the animation for expanding children
-     *
-     * @param {string} the type of animation (acceptable values defined in 
-     * YAHOO.widget.TVAnim)
+     * @method setExpandAnim
+     * @param {string} type the type of animation (acceptable values defined 
+     * in YAHOO.widget.TVAnim)
      */
     setExpandAnim: function(type) {
         if (YAHOO.widget.TVAnim.isValid(type)) {
@@ -92,7 +97,7 @@ YAHOO.widget.TreeView.prototype = {
 
     /**
      * Sets up the animation for collapsing children
-     *
+     * @method setCollapseAnim
      * @param {string} the type of animation (acceptable values defined in 
      * YAHOO.widget.TVAnim)
      */
@@ -105,20 +110,25 @@ YAHOO.widget.TreeView.prototype = {
     /**
      * Perform the expand animation if configured, or just show the
      * element if not configured or too many animations are in progress
-     *
+     * @method animateExpand
      * @param el {HTMLElement} the element to animate
+     * @param node {YAHOO.util.Node} the node that was expanded
      * @return {boolean} true if animation could be invoked, false otherwise
      */
-    animateExpand: function(el) {
+    animateExpand: function(el, node) {
         this.logger.log("animating expand");
 
         if (this._expandAnim && this._animCount < this.maxAnim) {
             // this.locked = true;
             var tree = this;
             var a = YAHOO.widget.TVAnim.getAnim(this._expandAnim, el, 
-                            function() { tree.expandComplete(); });
+                            function() { tree.expandComplete(node); });
             if (a) { 
                 ++this._animCount;
+                this.fireEvent("animStart", {
+                        "node": node, 
+                        "type": "expand"
+                    });
                 a.animate();
             }
 
@@ -131,20 +141,25 @@ YAHOO.widget.TreeView.prototype = {
     /**
      * Perform the collapse animation if configured, or just show the
      * element if not configured or too many animations are in progress
-     *
+     * @method animateCollapse
      * @param el {HTMLElement} the element to animate
+     * @param node {YAHOO.util.Node} the node that was expanded
      * @return {boolean} true if animation could be invoked, false otherwise
      */
-    animateCollapse: function(el) {
+    animateCollapse: function(el, node) {
         this.logger.log("animating collapse");
 
         if (this._collapseAnim && this._animCount < this.maxAnim) {
             // this.locked = true;
             var tree = this;
             var a = YAHOO.widget.TVAnim.getAnim(this._collapseAnim, el, 
-                            function() { tree.collapseComplete(); });
+                            function() { tree.collapseComplete(node); });
             if (a) { 
                 ++this._animCount;
+                this.fireEvent("animStart", {
+                        "node": node, 
+                        "type": "collapse"
+                    });
                 a.animate();
             }
 
@@ -156,25 +171,35 @@ YAHOO.widget.TreeView.prototype = {
 
     /**
      * Function executed when the expand animation completes
+     * @method expandComplete
      */
-    expandComplete: function() {
+    expandComplete: function(node) {
         this.logger.log("expand complete: " + this.id);
         --this._animCount;
+        this.fireEvent("animComplete", {
+                "node": node, 
+                "type": "expand"
+            });
         // this.locked = false;
     },
 
     /**
      * Function executed when the collapse animation completes
+     * @method collapseComplete
      */
-    collapseComplete: function() {
+    collapseComplete: function(node) {
         this.logger.log("collapse complete: " + this.id);
         --this._animCount;
+        this.fireEvent("animComplete", {
+                "node": node, 
+                "type": "collapse"
+            });
         // this.locked = false;
     },
 
     /**
      * Initializes the tree
-     *
+     * @method init
      * @parm {string|HTMLElement} id the id of the element that will hold the tree
      * @private
      */
@@ -186,6 +211,44 @@ YAHOO.widget.TreeView.prototype = {
             this._el = id;
             this.id = this.generateId(id);
         }
+
+        /**
+         * When animation is enabled, this event fires when the animation
+         * starts
+         * @event animStart
+         * @type CustomEvent
+         * @param {YAHOO.widget.Node} node the node that is expanding/collapsing
+         * @parm {String} type the type of animation ("expand" or "collapse")
+         */
+        this.createEvent("animStart", this);
+
+        /**
+         * When animation is enabled, this event fires when the animation
+         * completes
+         * @event animComplete
+         * @type CustomEvent
+         * @param {YAHOO.widget.Node} node the node that is expanding/collapsing
+         * @parm {String} type the type of animation ("expand" or "collapse")
+         */
+        this.createEvent("animComplete", this);
+
+        /**
+         * Fires when a node is going to be expanded.  Return false to stop
+         * the expand.
+         * @event collapse
+         * @type CustomEvent
+         * @param {YAHOO.widget.Node} node the node that is expanding/collapsing
+         */
+        this.createEvent("collapse", this);
+
+        /**
+         * Fires when a node is going to be collapsed.  Return false to stop
+         * the collapse.
+         * @event expand
+         * @type CustomEvent
+         * @param {YAHOO.widget.Node} node the node that is expanding/collapsing
+         */
+        this.createEvent("expand", this);
 
         this._nodes = [];
 
@@ -202,6 +265,7 @@ YAHOO.widget.TreeView.prototype = {
 
     /**
      * Renders the tree boilerplate and visible nodes
+     * @method draw
      */
     draw: function() {
         var html = this.root.getHtml();
@@ -211,6 +275,7 @@ YAHOO.widget.TreeView.prototype = {
 
     /**
      * Returns the tree's host element
+     * @method getEl
      * @return {HTMLElement} the host element
      */
     getEl: function() {
@@ -222,7 +287,7 @@ YAHOO.widget.TreeView.prototype = {
 
     /**
      * Nodes register themselves with the tree instance when they are created.
-     *
+     * @method regNode
      * @param node {Node} the node to register
      * @private
      */
@@ -232,7 +297,7 @@ YAHOO.widget.TreeView.prototype = {
 
     /**
      * Returns the root node of this tree
-     *
+     * @method getRoot
      * @return {Node} the root node
      */
     getRoot: function() {
@@ -241,7 +306,7 @@ YAHOO.widget.TreeView.prototype = {
 
     /**
      * Configures this tree to dynamically load all child data
-     *
+     * @method setDynamicLoad
      * @param {function} fnDataLoader the function that will be called to get the data
      * @param iconMode {int} configures the icon that is displayed when a dynamic
      * load node is expanded the first time without children.  By default, the 
@@ -257,6 +322,7 @@ YAHOO.widget.TreeView.prototype = {
      * node property.  If expand all is called in a tree with nodes that
      * do not allow multiple siblings to be displayed, only the last sibling
      * will be expanded.
+     * @method expandAll
      */
     expandAll: function() { 
         if (!this.locked) {
@@ -266,6 +332,7 @@ YAHOO.widget.TreeView.prototype = {
 
     /**
      * Collapses all expanded child nodes in the entire tree.
+     * @method collapseAll
      */
     collapseAll: function() { 
         if (!this.locked) {
@@ -277,7 +344,7 @@ YAHOO.widget.TreeView.prototype = {
      * Returns a node in the tree that has the specified index (this index
      * is created internally, so this function probably will only be used
      * in html generated for a given node.)
-     *
+     * @method getNodeByIndex
      * @param {int} nodeIndex the index of the node wanted
      * @return {Node} the node with index=nodeIndex, null if no match
      */
@@ -289,7 +356,7 @@ YAHOO.widget.TreeView.prototype = {
     /**
      * Returns a node that has a matching property and value in the data
      * object that was passed into its constructor.
-     *
+     * @method getNodeByProperty
      * @param {object} property the property to search (usually a string)
      * @param {object} value the value we want to find (usuall an int or string)
      * @return {Node} the matching node, null if no match
@@ -308,7 +375,7 @@ YAHOO.widget.TreeView.prototype = {
     /**
      * Returns a collection of nodes that have a matching property 
      * and value in the data object that was passed into its constructor.  
-     *
+     * @method getNodesByProperty
      * @param {object} property the property to search (usually a string)
      * @param {object} value the value we want to find (usuall an int or string)
      * @return {Array} the matching collection of nodes, null if no match
@@ -328,6 +395,7 @@ YAHOO.widget.TreeView.prototype = {
     /**
      * Removes the node and its children, and optionally refreshes the 
      * branch of the tree that was affected.
+     * @method removeNode
      * @param {Node} The node to remove
      * @param {boolean} autoRefresh automatically refreshes branch if true
      * @return {boolean} False is there was a problem, true otherwise.
@@ -361,6 +429,7 @@ YAHOO.widget.TreeView.prototype = {
      * the node, and resets the dynamic load flag.  The primary use for
      * this method is to purge a node and allow it to fetch its data
      * dynamically again.
+     * @method removeChildren
      * @param {Node} node the node to purge
      */
     removeChildren: function(node) { 
@@ -371,13 +440,16 @@ YAHOO.widget.TreeView.prototype = {
 
         node.childrenRendered = false;
         node.dynamicLoadComplete = false;
-        // node.collapse();
-        node.expand();
-        node.collapse();
+        if (node.expanded) {
+            node.collapse();
+        } else {
+            node.updateIcon();
+        }
     },
 
     /**
      * Deletes the node and recurses children
+     * @method _deleteNode
      * @private
      */
     _deleteNode: function(node) { 
@@ -392,6 +464,7 @@ YAHOO.widget.TreeView.prototype = {
      * Removes the node from the tree, preserving the child collection 
      * to make it possible to insert the branch into another part of the 
      * tree, or another tree.
+     * @method popNode
      * @param {Node} the node to remove
      */
     popNode: function(node) { 
@@ -431,7 +504,8 @@ YAHOO.widget.TreeView.prototype = {
 
 
     /**
-     * toString
+     * TreeView instance toString
+     * @method toString
      * @return {string} string representation of the tree
      */
     toString: function() {
@@ -439,14 +513,16 @@ YAHOO.widget.TreeView.prototype = {
     },
 
     /**
-     * private
+     * Generates an unique id for an element if it doesn't yet have one
+     * @method generateId
+     * @private
      */
     generateId: function(el) {
         var id = el.id;
 
         if (!id) {
             id = "yui-tv-auto-id-" + YAHOO.widget.TreeView.counter;
-            YAHOO.widget.TreeView.counter++;
+            ++YAHOO.widget.TreeView.counter;
         }
 
         return id;
@@ -454,27 +530,45 @@ YAHOO.widget.TreeView.prototype = {
 
     /**
      * Abstract method that is executed when a node is expanded
+     * @method onExpand
      * @param node {Node} the node that was expanded
+     * @deprecated use treeobj.subscribe("expand") instead
      */
     onExpand: function(node) { },
 
     /**
-     * Abstract method that is executed when a node is collapsed
+     * Abstract method that is executed when a node is collapsed.
+     * @method onCollapse
      * @param node {Node} the node that was collapsed.
+     * @deprecated use treeobj.subscribe("collapse") instead
      */
     onCollapse: function(node) { }
 
 };
 
+YAHOO.augment(YAHOO.widget.TreeView, YAHOO.util.EventProvider);
+
+/**
+ * Count of all nodes in all trees
+ * @property YAHOO.widget.TreeView.nodeCount
+ * @type int
+ * @static
+ */
+YAHOO.widget.TreeView.nodeCount = 0;
+
 /**
  * Global cache of tree instances
- *
+ * @property YAHOO.widget.TreeView.trees
  * @type Array
+ * @static
  * @private
  */
 YAHOO.widget.TreeView.trees = [];
 
 /**
+ * Counter for generating a new unique element id
+ * @property YAHOO.widget.TreeView.counter
+ * @static
  * @private
  */
 YAHOO.widget.TreeView.counter = 0;
@@ -482,9 +576,10 @@ YAHOO.widget.TreeView.counter = 0;
 /**
  * Global method for getting a tree by its id.  Used in the generated
  * tree html.
- *
+ * @method YAHOO.widget.TreeView.getTree
  * @param treeId {String} the id of the tree instance
  * @return {TreeView} the tree instance requested, null if not found.
+ * @static
  */
 YAHOO.widget.TreeView.getTree = function(treeId) {
     var t = YAHOO.widget.TreeView.trees[treeId];
@@ -495,10 +590,11 @@ YAHOO.widget.TreeView.getTree = function(treeId) {
 /**
  * Global method for getting a node by its id.  Used in the generated
  * tree html.
- *
+ * @method YAHOO.widget.TreeView.getNode
  * @param treeId {String} the id of the tree instance
  * @param nodeIndex {String} the index of the node to return
  * @return {Node} the node instance requested, null if not found
+ * @static
  */
 YAHOO.widget.TreeView.getNode = function(treeId, nodeIndex) {
     var t = YAHOO.widget.TreeView.getTree(treeId);
@@ -507,10 +603,11 @@ YAHOO.widget.TreeView.getNode = function(treeId, nodeIndex) {
 
 /**
  * Add a DOM event
- *
+ * @method YAHOO.widget.TreeView.addHandler
  * @param el the elment to bind the handler to
  * @param {string} sType the type of event handler
  * @param {function} fn the callback to invoke
+ * @static
  */
 YAHOO.widget.TreeView.addHandler = function (el, sType, fn) {
     if (el.addEventListener) {
@@ -522,10 +619,11 @@ YAHOO.widget.TreeView.addHandler = function (el, sType, fn) {
 
 /**
  * Remove a DOM event
- *
+ * @method YAHOO.widget.TreeView.removeHandler
  * @param el the elment to bind the handler to
  * @param {string} sType the type of event handler
  * @param {function} fn the callback to invoke
+ * @static
  */
 
 YAHOO.widget.TreeView.removeHandler = function (el, sType, fn) {
@@ -539,6 +637,10 @@ YAHOO.widget.TreeView.removeHandler = function (el, sType, fn) {
 /**
  * Attempts to preload the images defined in the styles used to draw the tree by
  * rendering off-screen elements that use the styles.
+ * @method YAHOO.widget.TreeView.preload
+ * @param {string} prefix the prefix to use to generate the names of the
+ * images to preload, default is ygtv
+ * @static
  */
 YAHOO.widget.TreeView.preload = function(prefix) {
     prefix = prefix || "ygtv";
@@ -550,7 +652,7 @@ YAHOO.widget.TreeView.preload = function(prefix) {
         sb[sb.length] = '<span class="' + prefix + styles[i] + '">&#160;</span>';
     }
 
-    var f = document.createElement("DIV");
+    var f = document.createElement("div");
     var s = f.style;
     s.position = "absolute";
     s.top = "-1000px";
@@ -564,14 +666,6 @@ YAHOO.widget.TreeView.preload = function(prefix) {
 
 };
 
-YAHOO.widget.TreeView.unload = function() {
-    YAHOO.widget.TreeView.removeHandler(window, 
-                "beforeunload", YAHOO.widget.TreeView.unload);
-};
-
 YAHOO.widget.TreeView.addHandler(window, 
                 "load", YAHOO.widget.TreeView.preload);
-
-YAHOO.widget.TreeView.addHandler(window, 
-                "beforeunload", YAHOO.widget.TreeView.unload);
 
