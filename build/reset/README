@@ -1,5 +1,10 @@
 CSS Reset Release Notes
 
+*** version 0.12.0 ***
+
+* added: h1,h2,h3,h4,h5,h6{font-weight:normal;}
+* added: abbr,acronym {border:0;}
+
 *** version 0.11.0 ***
 
 * No changes.
