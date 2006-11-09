@@ -7,12 +7,9 @@
  *
  * @class LogMsg
  * @constructor
- * @param sMsg {String} Log message.
- * @param oConfigs {Object} Optional object literal of configuration params.
+ * @param oConfigs {Object} Object literal of configuration params.
  */
- YAHOO.widget.LogMsg = function(sMsg, oConfigs) {
-    this.msg = sMsg;
-    
+ YAHOO.widget.LogMsg = function(oConfigs) {
     // Parse configs
     if (typeof oConfigs == "object") {
         for(var param in oConfigs) {

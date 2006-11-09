@@ -547,7 +547,7 @@ YAHOO.widget.DS_XHR.prototype.connTimeout = 0;
 
 /**
  * Absolute or relative URI to script that returns query results. For instance,
- * queries will be sent to &lt;scriptURI&gt;?&lt;scriptQueryParam&gt;=userinput
+ * queries will be sent to &#60;scriptURI&#62;?&#60;scriptQueryParam&#62;=userinput
  *
  * @property scriptURI
  * @type String
@@ -556,7 +556,7 @@ YAHOO.widget.DS_XHR.prototype.scriptURI = null;
 
 /**
  * Query string parameter name sent to scriptURI. For instance, queries will be
- * sent to &lt;scriptURI&gt;?&lt;scriptQueryParam&gt;=userinput
+ * sent to &#60;scriptURI&#62;?&#60;scriptQueryParam&#62;=userinput
  *
  * @property scriptQueryParam
  * @type String
@@ -568,7 +568,7 @@ YAHOO.widget.DS_XHR.prototype.scriptQueryParam = "query";
  * String of key/value pairs to append to requests made to scriptURI. Define
  * this string when you want to send additional query parameters to your script.
  * When defined, queries will be sent to
- * &lt;scriptURI&gt;?&lt;scriptQueryParam&gt;=userinput&&lt;scriptQueryAppend&gt;
+ * &#60;scriptURI&#62;?&#60;scriptQueryParam&#62;=userinput&#38;&#60;scriptQueryAppend&#62;
  *
  * @property scriptQueryAppend
  * @type String
@@ -589,13 +589,13 @@ YAHOO.widget.DS_XHR.prototype.responseType = YAHOO.widget.DS_XHR.TYPE_JSON;
 /**
  * String after which to strip results. If the results from the XHR are sent
  * back as HTML, the gzip HTML comment appears at the end of the data and should
- * be ignored.  Default: "\n&lt;!--"
+ * be ignored.
  *
  * @property responseStripAfter
  * @type String
- * @default "\n<!--"
+ * @default "\n&#60;!-"
  */
-YAHOO.widget.DS_XHR.prototype.responseStripAfter = "\n<!--";
+YAHOO.widget.DS_XHR.prototype.responseStripAfter = "\n<!-";
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -14,12 +14,9 @@ version: 0.12.0
  *
  * @class LogMsg
  * @constructor
- * @param sMsg {String} Log message.
- * @param oConfigs {Object} Optional object literal of configuration params.
+ * @param oConfigs {Object} Object literal of configuration params.
  */
- YAHOO.widget.LogMsg = function(sMsg, oConfigs) {
-    this.msg = sMsg;
-    
+ YAHOO.widget.LogMsg = function(oConfigs) {
     // Parse configs
     if (typeof oConfigs == "object") {
         for(var param in oConfigs) {
@@ -175,7 +172,7 @@ YAHOO.widget.LogWriter.prototype._source = null;
  *
  * @class LogReader
  * @constructor
- * @param elContainer {HTMLElement} DOM element reference or ID string to contain UI.
+ * @param elContainer {HTMLElement | String} DOM element reference or ID string to contain UI.
  * @param oConfigs {Object} Optional object literal of configuration params.
  */
 YAHOO.widget.LogReader = function(elContainer, oConfigs) {
@@ -1289,7 +1286,8 @@ YAHOO.widget.Logger.log = function(sMsg, sCategory, sSource) {
         }
 
         var timestamp = new Date();
-        var logEntry = new YAHOO.widget.LogMsg(sMsg, {
+        var logEntry = new YAHOO.widget.LogMsg({
+            msg: sMsg,
             time: timestamp,
             category: sCategory,
             source: sClass,

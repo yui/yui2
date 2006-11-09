@@ -84,7 +84,8 @@ YAHOO.widget.Logger.log = function(sMsg, sCategory, sSource) {
         }
 
         var timestamp = new Date();
-        var logEntry = new YAHOO.widget.LogMsg(sMsg, {
+        var logEntry = new YAHOO.widget.LogMsg({
+            msg: sMsg,
             time: timestamp,
             category: sCategory,
             source: sClass,

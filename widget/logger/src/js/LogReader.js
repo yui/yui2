@@ -7,7 +7,7 @@
  *
  * @class LogReader
  * @constructor
- * @param elContainer {HTMLElement} DOM element reference or ID string to contain UI.
+ * @param elContainer {HTMLElement | String} DOM element reference or ID string to contain UI.
  * @param oConfigs {Object} Optional object literal of configuration params.
  */
 YAHOO.widget.LogReader = function(elContainer, oConfigs) {

@@ -26,10 +26,10 @@
  *
  * @class AutoComplete
  * @constructor
- * @param elInput {HTMLElement} DOM element reference or string ID of an input field
- * @param elContainer {HTMLElement} DOM element reference or string ID of an existing DIV
+ * @param elInput {HTMLElement | String} DOM element reference or string ID of an input field
+ * @param elContainer {HTMLElement | String} DOM element reference or string ID of an existing DIV
  * @param oDataSource {Object} Instance of YAHOO.widget.DataSource for query/results
- * @param oConfigs {Object} Optional object literal of configuration params
+ * @param oConfigs {Object} (optional) Object literal of configuration params
  */
 YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
     if(elInput && elContainer && oDataSource) {
