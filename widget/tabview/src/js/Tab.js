@@ -24,7 +24,19 @@
             el = _createTabElement.call(this, attr);
         }
 
+        this.loadHandler =  {
+            success: function(o) {
+                this.set('content', o.responseText);
+            },
+            failure: function(o) {
+                YAHOO.log('loading failed: ' + o.statusText,
+                        'error', 'Tab');
+            }
+        };
+        
         Tab.superclass.constructor.call(this, el, attr);
+        
+        this.DOM_EVENTS = {}; // delegating to tabView
     };
 
     YAHOO.extend(Tab, YAHOO.util.Element);
@@ -71,14 +83,6 @@
     proto.LOADING_CLASSNAME = 'loading';
     
     /**
-     * Dom events supported by the Tab instance.
-     * These are deferred to TabView.
-     * @property DOM_EVENTS
-     * @type Object
-     */
-	proto.DOM_EVENTS = {};
-    
-    /**
      * The event that activates the tab.
      * @property ACTIVATION_EVENT
      * @type String
@@ -86,6 +90,37 @@
      */
     proto.ACTIVATION_EVENT = 'click';
 
+    /**
+     * Provides a reference to the connection request object when data is
+     * loaded dynamically.
+     * @property dataConnection
+     * @type Object
+     */
+    proto.dataConnection = null;
+    
+    /**
+     * Shows the tab's content element.
+     * @method showContent
+     */
+    proto.showContent = function() {
+        this.get('contentEl').style.display = 'block';
+    };
+    
+    /**
+     * Hides the tab's content element.
+     * @method hideContent
+     */
+    proto.hideContent = function() {
+        this.get('contentEl').style.display = 'none';
+    };
+    
+    /**
+     * Object containing success and failure callbacks for loading data.
+     * @property loadHandler
+     * @type object
+     */
+    proto.loadHandler = null;
+    
     /**
      * Provides a readable name for the tab.
      * @method toString
@@ -99,12 +134,12 @@
     
     /**
      * Registers TabView specific properties.
-     * @method initConfigs
+     * @method initAttributes
      * @param {Object} attr Hash of initial attributes
      */
-    proto.initConfigs = function(attr) {
+    proto.initAttributes = function(attr) {
         attr = attr || {};
-        Tab.superclass.initConfigs.call(this, attr);
+        Tab.superclass.initAttributes.call(this, attr);
         
         var el = this.get('element');
         
@@ -117,6 +152,7 @@
             value: attr.labelEl || _getlabelEl.call(this),
             method: function(value) {
                 var current = this.get('labelEl');
+
                 if (current) {
                     if (current == value) {
                         return false; // already set
@@ -147,6 +183,37 @@
                 _setLabel.call(this, value);
             }
         });
+        
+        /**
+         * The HTMLElement that contains the tab's content.
+         * @config contentEl
+         * @type HTMLElement
+         */
+        this.register('contentEl', { // TODO: apply className?
+            value: attr.contentEl || document.createElement('div'),
+            method: function(value) {
+                var current = this.get('contentEl');
+
+                if (current) {
+                    if (current == value) {
+                        return false; // already set
+                    }
+                    this.replaceChild(value, current);
+                }
+            }
+        });
+        
+        /**
+         * The tab's content.
+         * @config content
+         * @type String
+         */
+        this.register('content', {
+            value: attr.content, // TODO: what about existing?
+            method: function(value) {
+                this.get('contentEl').innerHTML = value;
+            }
+        });
 
         var _dataLoaded = false;
         
@@ -170,21 +237,37 @@
             validator: Lang.isBoolean
         });
         
-        this.register('connectionCallback', {
-            value: {
-                success: function(o) {
-                            this.set('content', o.responseText);
-                            Dom.removeClass(this.get('contentEl').get('parentNode'),
-                                    this.LOADING_CLASSNAME);
-                },
-                failure: function(o) {
-                            YAHOO.log('loading failed: ' + o.statusText,
-                                    'error', 'Tab');
-                            Dom.removeClass(this.get('contentEl').get('parentNode'),
-                                    this.LOADING_CLASSNAME);
-                },
-                scope: this
-            }
+        /**
+         * The method to use for the data request.
+         * @config loadMethod
+         * @type String
+         * @default "GET"
+         */
+        this.register('loadMethod', {
+            value: attr.loadMethod || 'GET',
+            validator: Lang.isString
+        });
+
+        /**
+         * Whether or not any data has been loaded from the server.
+         * @config dataLoaded
+         * @type Boolean
+         */        
+        this.register('dataLoaded', {
+            value: false,
+            validator: Lang.isBoolean,
+            writeOnce: true
+        });
+        
+        /**
+         * Number if milliseconds before aborting and calling failure handler.
+         * @config dataTimeout
+         * @type Number
+         * @default null
+         */
+        this.register('dataTimeout', {
+            value: attr.dataTimeout || null,
+            validator: Lang.isNumber
         });
         
         /**
@@ -202,25 +285,11 @@
                     this.set('title', 'active');
 
                     if ( this.get('dataSrc') ) {
-                     // load dynamic content
-                        if ( !_dataLoaded || !this.get('cacheData') ) { // unless already loaded and caching
-                            if (!YAHOO.util.Connect) {
-                                YAHOO.log('YAHOO.util.Connect dependency not met',
-                                        'error', 'Tab');
-                                return false;
-                            }
-                            
-                            Dom.addClass(this.get('contentEl').get('parentNode'), this.LOADING_CLASSNAME);
-                            
-                            YAHOO.util.Connect.asyncRequest(
-                                'GET',
-                                this.get('dataSrc'), 
-                                this.get('connectionCallback')
-                            );
-                            _dataLoaded = true;
+                     // load dynamic content unless already loaded and caching
+                        if ( !this.get('dataLoaded') || !this.get('cacheData') ) {
+                            _dataConnect.call(this);
                         }
                     }
-                    
                 } else {
                     this.removeClass(this.ACTIVE_CLASSNAME);
                     this.set('title', '');
@@ -246,37 +315,6 @@
                 }
             },
             validator: Lang.isBoolean
-        });
-        
-        /**
-         * The HTMLElement that contains the tab's content.
-         * @config contentEl
-         * @type HTMLElement
-         */
-        this.register('contentEl', {
-            value: attr.contentEl || document.createElement('div'),
-            method: function(value) {
-                var current = this.get('contentEl');
-                
-                if (current) {
-                    if (current == value) {
-                        return false; // already set
-                    }
-                    this.replaceChild(value, current);
-                }
-            }
-        });
-        
-        /**
-         * The tab's content.
-         * @config content
-         * @type String
-         */
-        this.register('content', {
-            value: attr.content, // TODO: what about existing?
-            method: function(value) {
-                this.get('contentEl').innerHTML = value;
-            }
         });
     };
     
@@ -348,5 +386,133 @@
         return label;
     };
     
+    var _dataConnect = function() {
+        if (!YAHOO.util.Connect) {
+            YAHOO.log('YAHOO.util.Connect dependency not met',
+                    'error', 'Tab');
+            return false;
+        }
+        
+        Dom.addClass(this.get('contentEl').parentNode, this.LOADING_CLASSNAME);
+        
+        this.dataConnection = YAHOO.util.Connect.asyncRequest(
+            this.get('loadMethod'),
+            this.get('dataSrc'), 
+            {
+                success: function(o) {
+                    this.loadHandler.success.call(this, o);
+                    this.set('dataLoaded', true);
+                    this.dataConnection = null;
+                    Dom.removeClass(this.get('contentEl').parentNode,
+                            this.LOADING_CLASSNAME);
+                },
+                failure: function(o) {
+                    this.loadHandler.failure.call(this, o);
+                    this.dataConnection = null;
+                    Dom.removeClass(this.get('contentEl').parentNode,
+                            this.LOADING_CLASSNAME);
+                },
+                scope: this,
+                timeout: this.get('dataTimeout')
+            }
+        );
+    };
+    
     YAHOO.widget.Tab = Tab;
+    
+    /**
+     * Fires before the active state is changed.
+     * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+     * <p>If handler returns false, the change will be cancelled, and the value will not
+     * be set.</p>
+     * <p><strong>Event fields:</strong><br>
+     * <code>&lt;String&gt; type</code> beforeActiveChange<br>
+     * <code>&lt;Boolean&gt;
+     * prevValue</code> the current value<br>
+     * <code>&lt;Boolean&gt;
+     * newValue</code> the new value</p>
+     * <p><strong>Usage:</strong><br>
+     * <code>var handler = function(e) {var previous = e.prevValue};<br>
+     * myTabs.addListener('beforeActiveChange', handler);</code></p>
+     * @event beforeActiveChange
+     */
+        
+    /**
+     * Fires after the active state is changed.
+     * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+     * <p><strong>Event fields:</strong><br>
+     * <code>&lt;String&gt; type</code> activeChange<br>
+     * <code>&lt;Boolean&gt;
+     * prevValue</code> the previous value<br>
+     * <code>&lt;Boolean&gt;
+     * newValue</code> the updated value</p>
+     * <p><strong>Usage:</strong><br>
+     * <code>var handler = function(e) {var previous = e.prevValue};<br>
+     * myTabs.addListener('activeChange', handler);</code></p>
+     * @event activeChange
+     */
+     
+    /**
+     * Fires before the tab label is changed.
+     * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+     * <p>If handler returns false, the change will be cancelled, and the value will not
+     * be set.</p>
+     * <p><strong>Event fields:</strong><br>
+     * <code>&lt;String&gt; type</code> beforeLabelChange<br>
+     * <code>&lt;String&gt;
+     * prevValue</code> the current value<br>
+     * <code>&lt;String&gt;
+     * newValue</code> the new value</p>
+     * <p><strong>Usage:</strong><br>
+     * <code>var handler = function(e) {var previous = e.prevValue};<br>
+     * myTabs.addListener('beforeLabelChange', handler);</code></p>
+     * @event beforeLabelChange
+     */
+        
+    /**
+     * Fires after the tab label is changed.
+     * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+     * <p><strong>Event fields:</strong><br>
+     * <code>&lt;String&gt; type</code> labelChange<br>
+     * <code>&lt;String&gt;
+     * prevValue</code> the previous value<br>
+     * <code>&lt;String&gt;
+     * newValue</code> the updated value</p>
+     * <p><strong>Usage:</strong><br>
+     * <code>var handler = function(e) {var previous = e.prevValue};<br>
+     * myTabs.addListener('labelChange', handler);</code></p>
+     * @event labelChange
+     */
+     
+    /**
+     * Fires before the tab content is changed.
+     * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+     * <p>If handler returns false, the change will be cancelled, and the value will not
+     * be set.</p>
+     * <p><strong>Event fields:</strong><br>
+     * <code>&lt;String&gt; type</code> beforeContentChange<br>
+     * <code>&lt;String&gt;
+     * prevValue</code> the current value<br>
+     * <code>&lt;String&gt;
+     * newValue</code> the new value</p>
+     * <p><strong>Usage:</strong><br>
+     * <code>var handler = function(e) {var previous = e.prevValue};<br>
+     * myTabs.addListener('beforeContentChange', handler);</code></p>
+     * @event beforeContentChange
+     */
+        
+    /**
+     * Fires after the tab content is changed.
+     * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+     * <p><strong>Event fields:</strong><br>
+     * <code>&lt;String&gt; type</code> contentChange<br>
+     * <code>&lt;String&gt;
+     * prevValue</code> the previous value<br>
+     * <code>&lt;Boolean&gt;
+     * newValue</code> the updated value</p>
+     * <p><strong>Usage:</strong><br>
+     * <code>var handler = function(e) {var previous = e.prevValue};<br>
+     * myTabs.addListener('contentChange', handler);</code></p>
+     * @event contentChange
+     */
 })();
