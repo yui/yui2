@@ -55,13 +55,18 @@ http://developer.yahoo.net/yui/license.txt
         getStyle = function(el, property) {                         
             switch( toCamel(property) ) {
                 case 'opacity' :// IE opacity uses filter
-                    try { // touching filter will error if el not in doc
-                        return (   
-                            el.filters['DXImageTransform.Microsoft.Alpha'] ||
-                            el.filters['alpha'] || 100 ) / 100;
+                    var val = 100;
+                    try { // will error if no DXImageTransform
+                        val = el.filters['DXImageTransform.Microsoft.Alpha'].opacity;
                     } catch(e) {
-                        logger.log('getStyle: IE filter failed', 'error', 'Dom');
+                        try { // make sure its in the document
+                            val = el.filters('alpha').opacity;
+                        } catch(e) {
+                            logger.log('getStyle: IE filter failed',
+                                    'error', 'Dom');
+                        }
                     }
+                    return val / 100;
                     break;
                 default:
                     return (el.currentStyle) ? // currentStyle first
@@ -77,6 +82,7 @@ http://developer.yahoo.net/yui/license.txt
             switch (property) {
                 case 'opacity':
                     if ( typeof el.style.filter == 'string' ) { // in case not appended
+
                         el.style.filter = 'alpha(opacity=' + val * 100 + ')';
                         
                         if (!el.currentStyle || !el.currentStyle.hasLayout) {
