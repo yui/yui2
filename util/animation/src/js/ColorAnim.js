@@ -1,7 +1,6 @@
 /**
  * Anim subclass for color transitions.
- * <p>Usage: <code>var myAnim = new Y.ColorAnim(el, { backgroundColor: { from: '#FF0000', to: '#FFFFFF' } }, 1, Y.Easing.easeOut);</code></p>
- * <p>Color values can be specified with either 112233, #112233, 
+ * <p>Usage: <code>var myAnim = new Y.ColorAnim(el, { backgroundColor: { from: '#FF0000', to: '#FFFFFF' } }, 1, Y.Easing.easeOut);</code> Color values can be specified with either 112233, #112233, 
  * [255,255,255], or rgb(255,255,255)</p>
  * @class ColorAnim
  * @namespace YAHOO.util
