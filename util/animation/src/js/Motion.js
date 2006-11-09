@@ -1,6 +1,9 @@
 /**
- * @class Anim subclass for moving elements along a path defined by the "points" member of "attributes".  All "points" are arrays with x, y coordinates.
+ * Anim subclass for moving elements along a path defined by the "points" 
+ * member of "attributes".  All "points" are arrays with x, y coordinates.
  * <p>Usage: <code>var myAnim = new YAHOO.util.Motion(el, { points: { to: [800, 800] } }, 1, YAHOO.util.Easing.easeOut);</code></p>
+ * @class Motion
+ * @namespace YAHOO.util
  * @requires YAHOO.util.Anim
  * @requires YAHOO.util.AnimMgr
  * @requires YAHOO.util.Easing
@@ -9,7 +12,8 @@
  * @requires YAHOO.util.Event
  * @requires YAHOO.util.CustomEvent 
  * @constructor
- * @param {String or HTMLElement} el Reference to the element that will be animated
+ * @extends YAHOO.util.Anim
+ * @param {String | HTMLElement} el Reference to the element that will be animated
  * @param {Object} attributes The attribute(s) to be animated.  
  * Each attribute is an object with at minimum a "to" or "by" member defined.  
  * Additional optional members are "from" (defaults to current value), "units" (defaults to "px").  
@@ -31,10 +35,6 @@
    var superclass = Y.Motion.superclass;
    var proto = Y.Motion.prototype;
 
-   /**
-    * toString method
-    * @return {String} string represenation of anim obj
-    */
    proto.toString = function() {
       var el = this.getEl();
       var id = el.id || el.tagName;
@@ -43,12 +43,6 @@
    
    proto.patterns.points = /^points$/i;
    
-   /**
-    * Applies a value to an attribute
-    * @param {String} attr The name of the attribute.
-    * @param {Number} val The value to be applied to the attribute.
-    * @param {String} unit The unit ('px', '%', etc.) of the value.
-    */
    proto.setAttribute = function(attr, val, unit) {
       if (  this.patterns.points.test(attr) ) {
          unit = unit || 'px';
@@ -58,12 +52,7 @@
          superclass.setAttribute.call(this, attr, val, unit);
       }
    };
-   
-   /**
-    * Sets the default value to be used when "from" is not supplied.
-    * @param {String} attr The attribute being set.
-    * @param {Number} val The default value to be applied to the attribute.
-    */
+
    proto.getAttribute = function(attr) {
       if (  this.patterns.points.test(attr) ) {
          var val = [
@@ -76,14 +65,7 @@
 
       return val;
    };
-   
-   /**
-    * Returns the value computed by the animation's "method".
-    * @param {String} attr The name of the attribute.
-    * @param {Number} start The value this attribute should start from for this animation.
-    * @param {Number} end  The value this attribute should end at for this animation.
-    * @return {Number} The Value to be applied to the attribute.
-    */
+
    proto.doMethod = function(attr, start, end) {
       var val = null;
 
@@ -95,13 +77,7 @@
       }
       return val;
    };
-   
-   /**
-    * Sets the actual values to be used during the animation.
-    * Should only be needed for subclass use.
-    * @param {Object} attr The attribute object
-    * @private 
-    */
+
    proto.setRuntimeAttribute = function(attr) {
       if ( this.patterns.points.test(attr) ) {
          var el = this.getEl();

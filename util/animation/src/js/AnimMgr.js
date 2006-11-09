@@ -1,10 +1,13 @@
 /**
- * @class Handles animation queueing and threading.
+ * Handles animation queueing and threading.
  * Used by Anim and subclasses.
+ * @class AnimMgr
+ * @namespace YAHOO.util
  */
 YAHOO.util.AnimMgr = new function() {
    /** 
-    * Reference to the animation Interval
+    * Reference to the animation Interval.
+    * @property thread
     * @private
     * @type Int
     */
@@ -12,6 +15,7 @@ YAHOO.util.AnimMgr = new function() {
    
    /** 
     * The current queue of registered animation objects.
+    * @property queue
     * @private
     * @type Array
     */   
@@ -19,6 +23,7 @@ YAHOO.util.AnimMgr = new function() {
 
    /** 
     * The number of active animations.
+    * @property tweenCount
     * @private
     * @type Int
     */      
@@ -27,6 +32,7 @@ YAHOO.util.AnimMgr = new function() {
    /** 
     * Base frame rate (frames per second). 
     * Arbitrarily high for better x-browser calibration (slower browsers drop more frames).
+    * @property fps
     * @type Int
     * 
     */
@@ -34,6 +40,7 @@ YAHOO.util.AnimMgr = new function() {
 
    /** 
     * Interval delay in milliseconds, defaults to fastest possible.
+    * @property delay
     * @type Int
     * 
     */
@@ -42,6 +49,7 @@ YAHOO.util.AnimMgr = new function() {
    /**
     * Adds an animation instance to the animation queue.
     * All animation instances must be registered in order to animate.
+    * @method registerElement
     * @param {object} tween The Anim instance to be be registered
     */
    this.registerElement = function(tween) {
@@ -51,6 +59,14 @@ YAHOO.util.AnimMgr = new function() {
       this.start();
    };
    
+   /**
+    * removes an animation instance from the animation queue.
+    * All animation instances must be registered in order to animate.
+    * @method unRegister
+    * @param {object} tween The Anim instance to be be registered
+    * @param {Int} index The index of the Anim instance
+    * @private
+    */
    this.unRegister = function(tween, index) {
       tween._onComplete.fire();
       index = index || getIndex(tween);
@@ -62,7 +78,8 @@ YAHOO.util.AnimMgr = new function() {
    
    /**
     * Starts the animation thread.
-	 * Only one thread can run at a time.
+	* Only one thread can run at a time.
+    * @method start
     */   
    this.start = function() {
       if (thread === null) { thread = setInterval(this.run, this.delay); }
@@ -70,6 +87,7 @@ YAHOO.util.AnimMgr = new function() {
 
    /**
     * Stops the animation thread or a specific animation instance.
+    * @method stop
     * @param {object} tween A specific Anim instance to stop (optional)
     * If no instance given, Manager stops thread and all animations.
     */   
@@ -92,6 +110,7 @@ YAHOO.util.AnimMgr = new function() {
    
    /**
     * Called per Interval to handle each animation frame.
+    * @method run
     */   
    this.run = function() {
       for (var i = 0, len = queue.length; i < len; ++i) {
@@ -122,6 +141,7 @@ YAHOO.util.AnimMgr = new function() {
    
    /**
     * On the fly frame correction to keep animation on time.
+    * @method correctFrame
     * @private
     * @param {Object} tween The Anim instance being corrected.
     */

@@ -1,6 +1,7 @@
 /**
- *
- * @class Used to calculate Bezier splines for any number of control points.
+ * Used to calculate Bezier splines for any number of control points.
+ * @class Bezier
+ * @namespace YAHOO.util
  *
  */
 YAHOO.util.Bezier = new function() 
@@ -11,6 +12,7 @@ YAHOO.util.Bezier = new function()
     * At least 2 points are required (start and end).
     * First point is start. Last point is end.
     * Additional control points are optional.    
+    * @method getPosition
     * @param {Array} points An array containing Bezier points
     * @param {Number} t A number between 0 and 1 which is the basis for determining current position
     * @return {Array} An array containing int x and y member data

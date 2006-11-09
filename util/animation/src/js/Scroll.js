@@ -1,6 +1,9 @@
 /**
- * @class Anim subclass for scrolling elements to a position defined by the "scroll" member of "attributes".  All "scroll" members are arrays with x, y scroll positions.
+ * Anim subclass for scrolling elements to a position defined by the "scroll"
+ * member of "attributes".  All "scroll" members are arrays with x, y scroll positions.
  * <p>Usage: <code>var myAnim = new YAHOO.util.Scroll(el, { scroll: { to: [0, 800] } }, 1, YAHOO.util.Easing.easeOut);</code></p>
+ * @class Scroll
+ * @namespace YAHOO.util
  * @requires YAHOO.util.Anim
  * @requires YAHOO.util.AnimMgr
  * @requires YAHOO.util.Easing
@@ -8,6 +11,7 @@
  * @requires YAHOO.util.Dom
  * @requires YAHOO.util.Event
  * @requires YAHOO.util.CustomEvent 
+ * @extends YAHOO.util.Anim
  * @constructor
  * @param {String or HTMLElement} el Reference to the element that will be animated
  * @param {Object} attributes The attribute(s) to be animated.  
@@ -31,23 +35,12 @@
    var superclass = Y.Scroll.superclass;
    var proto = Y.Scroll.prototype;
 
-   /**
-    * toString method
-    * @return {String} string represenation of anim obj
-    */
    proto.toString = function() {
       var el = this.getEl();
       var id = el.id || el.tagName;
       return ("Scroll " + id);
    };
-   
-   /**
-    * Returns the value computed by the animation's "method".
-    * @param {String} attr The name of the attribute.
-    * @param {Number} start The value this attribute should start from for this animation.
-    * @param {Number} end  The value this attribute should end at for this animation.
-    * @return {Number} The Value to be applied to the attribute.
-    */
+
    proto.doMethod = function(attr, start, end) {
       var val = null;
    
@@ -62,12 +55,7 @@
       }
       return val;
    };
-   
-   /**
-    * Returns current value of the attribute.
-    * @param {String} attr The name of the attribute.
-    * @return {Number} val The current value of the attribute.
-    */
+
    proto.getAttribute = function(attr) {
       var val = null;
       var el = this.getEl();
@@ -80,13 +68,7 @@
       
       return val;
    };
-   
-   /**
-    * Applies a value to an attribute
-    * @param {String} attr The name of the attribute.
-    * @param {Number} val The value to be applied to the attribute.
-    * @param {String} unit The unit ('px', '%', etc.) of the value.
-    */
+
    proto.setAttribute = function(attr, val, unit) {
       var el = this.getEl();
       

@@ -5,17 +5,23 @@ http://developer.yahoo.net/yui/license.txt
 */
 
 /**
+ * The animation module provides allows effects to be added to HTMLElements.
+ * @module animation
+ */
+
+/**
  *
- * Base class for animated DOM objects.
- * @class Base animation class that provides the interface for building animated effects.
+ * Base animation class that provides the interface for building animated effects.
  * <p>Usage: var myAnim = new YAHOO.util.Anim(el, { width: { from: 10, to: 100 } }, 1, YAHOO.util.Easing.easeOut);</p>
+ * @class Anim
+ * @namespace YAHOO.util
  * @requires YAHOO.util.AnimMgr
  * @requires YAHOO.util.Easing
  * @requires YAHOO.util.Dom
  * @requires YAHOO.util.Event
  * @requires YAHOO.util.CustomEvent
  * @constructor
- * @param {String or HTMLElement} el Reference to the element that will be animated
+ * @param {String | HTMLElement} el Reference to the element that will be animated
  * @param {Object} attributes The attribute(s) to be animated.  
  * Each attribute is an object with at minimum a "to" or "by" member defined.  
  * Additional optional members are "from" (defaults to current value), "units" (defaults to "px").  
@@ -32,8 +38,9 @@ YAHOO.util.Anim = function(el, attributes, duration, method) {
 
 YAHOO.util.Anim.prototype = {
    /**
-    * toString method
-    * @return {String} string represenation of anim obj
+    * Provides a readable name for the Anim instance.
+    * @method toString
+    * @return {String}
     */
    toString: function() {
       var el = this.getEl();
@@ -50,6 +57,7 @@ YAHOO.util.Anim.prototype = {
    
    /**
     * Returns the value computed by the animation's "method".
+    * @method doMethod
     * @param {String} attr The name of the attribute.
     * @param {Number} start The value this attribute should start from for this animation.
     * @param {Number} end  The value this attribute should end at for this animation.
@@ -60,7 +68,8 @@ YAHOO.util.Anim.prototype = {
    },
    
    /**
-    * Applies a value to an attribute
+    * Applies a value to an attribute.
+    * @method setAttribute
     * @param {String} attr The name of the attribute.
     * @param {Number} val The value to be applied to the attribute.
     * @param {String} unit The unit ('px', '%', etc.) of the value.
@@ -75,6 +84,7 @@ YAHOO.util.Anim.prototype = {
    
    /**
     * Returns current value of the attribute.
+    * @method getAttribute
     * @param {String} attr The name of the attribute.
     * @return {Number} val The current value of the attribute.
     */
@@ -102,7 +112,7 @@ YAHOO.util.Anim.prototype = {
    
    /**
     * Returns the unit to use when none is supplied.
-    * Applies the "defaultUnit" test to decide whether to use pixels or not
+    * @method getDefaultUnit
     * @param {attr} attr The name of the attribute.
     * @return {String} The default unit to be used.
     */
@@ -116,6 +126,7 @@ YAHOO.util.Anim.prototype = {
       
    /**
     * Sets the actual values to be used during the animation.
+    * @method setRuntimeAttribute
     * Should only be needed for subclass use.
     * @param {Object} attr The attribute object
     * @private 
@@ -159,7 +170,9 @@ YAHOO.util.Anim.prototype = {
    },
 
    /**
-    * @param {String or HTMLElement} el Reference to the element that will be animated
+    * Constructor for Anim instance.
+    * @method init
+    * @param {String | HTMLElement} el Reference to the element that will be animated
     * @param {Object} attributes The attribute(s) to be animated.  
     * Each attribute is an object with at minimum a "to" or "by" member defined.  
     * Additional optional members are "from" (defaults to current value), "units" (defaults to "px").  
@@ -170,6 +183,7 @@ YAHOO.util.Anim.prototype = {
    init: function(el, attributes, duration, method) {
       /**
        * Whether or not the animation is running.
+       * @property isAnimated
        * @private
        * @type Boolean
        */
@@ -177,6 +191,7 @@ YAHOO.util.Anim.prototype = {
       
       /**
        * A Date object that is created when the animation begins.
+       * @property startTime
        * @private
        * @type Date
        */
@@ -184,6 +199,7 @@ YAHOO.util.Anim.prototype = {
       
       /**
        * The number of frames this animation was able to execute.
+       * @property actualFrames
        * @private
        * @type Int
        */
@@ -191,6 +207,7 @@ YAHOO.util.Anim.prototype = {
 
       /**
        * The element to be animated.
+       * @property el
        * @private
        * @type HTMLElement
        */
@@ -202,14 +219,15 @@ YAHOO.util.Anim.prototype = {
        * If "to" is supplied, the animation will end with the attribute at that value.  
        * If "by" is supplied, the animation will end at that value plus its starting value. 
        * If both are supplied, "to" is used, and "by" is ignored. 
-       * @member YAHOO#util#Anim
        * Optional additional member include "from" (the value the attribute should start animating from, defaults to current value), and "unit" (the units to apply to the values).
+       * @property attributes
        * @type Object
        */
       this.attributes = attributes || {};
       
       /**
        * The length of the animation.  Defaults to "1" (second).
+       * @property duration
        * @type Number
        */
       this.duration = duration || 1;
@@ -217,6 +235,7 @@ YAHOO.util.Anim.prototype = {
       /**
        * The method that will provide values to the attribute(s) during the animation. 
        * Defaults to "YAHOO.util.Easing.easeNone".
+       * @property method
        * @type Function
        */
       this.method = method || YAHOO.util.Easing.easeNone;
@@ -224,6 +243,7 @@ YAHOO.util.Anim.prototype = {
       /**
        * Whether or not the duration should be treated as seconds.
        * Defaults to true.
+       * @property useSeconds
        * @type Boolean
        */
       this.useSeconds = true; // default to seconds
@@ -231,6 +251,7 @@ YAHOO.util.Anim.prototype = {
       /**
        * The location of the current animation on the timeline.
        * In time-based animations, this is used by AnimMgr to ensure the animation finishes on time.
+       * @property currentFrame
        * @type Int
        */
       this.currentFrame = 0;
@@ -238,6 +259,7 @@ YAHOO.util.Anim.prototype = {
       /**
        * The total number of frames to be executed.
        * In time-based animations, this is used by AnimMgr to ensure the animation finishes on time.
+       * @property totalFrames
        * @type Int
        */
       this.totalFrames = YAHOO.util.AnimMgr.fps;
@@ -245,12 +267,14 @@ YAHOO.util.Anim.prototype = {
       
       /**
        * Returns a reference to the animated element.
+       * @method getEl
        * @return {HTMLElement}
        */
       this.getEl = function() { return el; };
       
       /**
        * Checks whether the element is currently animated.
+       * @method isAnimated
        * @return {Boolean} current value of isAnimated.    
        */
       this.isAnimated = function() {
@@ -259,6 +283,7 @@ YAHOO.util.Anim.prototype = {
       
       /**
        * Returns the animation start time.
+       * @method getStartTime
        * @return {Date} current value of startTime.     
        */
       this.getStartTime = function() {
@@ -273,7 +298,8 @@ YAHOO.util.Anim.prototype = {
       logger.log('creating new instance of ' + this);
       
       /**
-       * Starts the animation by registering it with the animation manager.   
+       * Starts the animation by registering it with the animation manager. 
+       * @method animate  
        */
       this.animate = function() {
          if ( this.isAnimated() ) { return false; }
@@ -287,6 +313,8 @@ YAHOO.util.Anim.prototype = {
         
       /**
        * Stops the animation.  Normally called by AnimMgr when animation completes.
+       * @method stop
+       * @param {Boolean} finish (optional) If true, animation will jump to final frame.
        */ 
       this.stop = function(finish) {
          if (finish) {
@@ -369,12 +397,14 @@ YAHOO.util.Anim.prototype = {
       /**
        * Custom event that fires when animation begins
        * Listen via subscribe method (e.g. myAnim.onStart.subscribe(someFunction)
+       * @event onStart
        */   
       this.onStart = new YAHOO.util.CustomEvent('start', this);
       
       /**
        * Custom event that fires between each frame
        * Listen via subscribe method (e.g. myAnim.onTween.subscribe(someFunction)
+       * @event onTween
        */
       this.onTween = new YAHOO.util.CustomEvent('tween', this);
       
@@ -387,6 +417,7 @@ YAHOO.util.Anim.prototype = {
       /**
        * Custom event that fires when animation ends
        * Listen via subscribe method (e.g. myAnim.onComplete.subscribe(someFunction)
+       * @event onComplete
        */
       this.onComplete = new YAHOO.util.CustomEvent('complete', this);
       /**

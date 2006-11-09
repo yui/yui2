@@ -1,7 +1,10 @@
 /**
- * @class ColorAnim subclass for color fading
+ * Anim subclass for color transitions.
  * <p>Usage: <code>var myAnim = new Y.ColorAnim(el, { backgroundColor: { from: '#FF0000', to: '#FFFFFF' } }, 1, Y.Easing.easeOut);</code></p>
- * <p>Color values can be specified with either 112233, #112233, [255,255,255], or rgb(255,255,255)
+ * <p>Color values can be specified with either 112233, #112233, 
+ * [255,255,255], or rgb(255,255,255)</p>
+ * @class ColorAnim
+ * @namespace YAHOO.util
  * @requires YAHOO.util.Anim
  * @requires YAHOO.util.AnimMgr
  * @requires YAHOO.util.Easing
@@ -9,6 +12,7 @@
  * @requires YAHOO.util.Dom
  * @requires YAHOO.util.Event
  * @constructor
+ * @extends YAHOO.util.Anim
  * @param {HTMLElement | String} el Reference to the element that will be animated
  * @param {Object} attributes The attribute(s) to be animated.
  * Each attribute is an object with at minimum a "to" or "by" member defined.
@@ -29,20 +33,12 @@
    var superclass = Y.ColorAnim.superclass;
    var proto = Y.ColorAnim.prototype;
    
-   /**
-    * toString method
-    * @return {String} string represenation of anim obj
-    */
    proto.toString = function() {
       var el = this.getEl();
       var id = el.id || el.tagName;
       return ("ColorAnim " + id);
    };
-   
-   /**
-    * Only certain attributes should be treated as colors.
-    * @type Object
-    */
+
    proto.patterns.color = /color$/i;
    proto.patterns.rgb         = /^rgb\(([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\)$/i;
    proto.patterns.hex         = /^#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/i;
@@ -51,6 +47,7 @@
    
    /**
     * Attempts to parse the given string and return a 3-tuple.
+    * @method parseColor
     * @param {String} s The string to parse.
     * @return {Array} The 3-tuple of rgb values.
     */
@@ -74,12 +71,7 @@
       
       return null;
    };
-   
-   /**
-    * Returns current value of the attribute.
-    * @param {String} attr The name of the attribute.
-    * @return {Number} val The current value of the attribute.
-    */
+
    proto.getAttribute = function(attr) {
       var el = this.getEl();
       if (  this.patterns.color.test(attr) ) {
@@ -104,13 +96,6 @@
       return val;
    };
    
-   /**
-    * Returns the value computed by the animation's "method".
-    * @param {String} attr The name of the attribute.
-    * @param {Number} start The value this attribute should start from for this animation.
-    * @param {Number} end  The value this attribute should end at for this animation.
-    * @return {Number} The Value to be applied to the attribute.
-    */
    proto.doMethod = function(attr, start, end) {
       var val;
    
@@ -128,13 +113,7 @@
 
       return val;
    };
-   
-   /**
-    * Sets the actual values to be used during the animation.
-    * Should only be needed for subclass use.
-    * @param {Object} attr The attribute object
-    * @private 
-    */
+
    proto.setRuntimeAttribute = function(attr) {
       superclass.setRuntimeAttribute.call(this, attr);
       
