@@ -1,10 +1,10 @@
 /**
- * Provides Attribute options for properties.
+ * Provides Attribute configurations.
  * @namespace YAHOO.util
  * @class Attribute
  * @constructor
  * @param hash {Object} The intial Attribute.
- * @param {YAHOO.util.ConfigMgr} The owner of the Attribute instance.
+ * @param {YAHOO.util.AttributeProvider} The owner of the Attribute instance.
  */
 
 YAHOO.util.Attribute = function(hash, owner) {
@@ -16,42 +16,42 @@ YAHOO.util.Attribute = function(hash, owner) {
 
 YAHOO.util.Attribute.prototype = {
 	/**
-     * The name of the property.
+     * The name of the attribute.
 	 * @property name
 	 * @type String
 	 */
     name: undefined,
     
 	/**
-     * The value of the property.
+     * The value of the attribute.
 	 * @property value
 	 * @type String
 	 */
     value: null,
     
 	/**
-     * The owner of the property.
+     * The owner of the attribute.
 	 * @property owner
-	 * @type YAHOO.util.PropertyMgr
+	 * @type YAHOO.util.AttributeProvider
 	 */
     owner: null,
     
 	/**
-     * Whether or not the property is read only.
+     * Whether or not the attribute is read only.
 	 * @property readOnly
 	 * @type Boolean
 	 */
     readOnly: false,
     
 	/**
-     * Whether or not the property can only be written once.
+     * Whether or not the attribute can only be written once.
 	 * @property writeOnce
 	 * @type Boolean
 	 */
     writeOnce: false,
 
 	/**
-     * The property's initial Attribute.
+     * The attribute's initial configuration.
      * @private
 	 * @property _initialConfig
 	 * @type Object
@@ -59,7 +59,7 @@ YAHOO.util.Attribute.prototype = {
     _initialConfig: null,
     
 	/**
-     * Whether or not the property's value has been set.
+     * Whether or not the attribute's value has been set.
      * @private
 	 * @property _written
 	 * @type Boolean
@@ -67,7 +67,7 @@ YAHOO.util.Attribute.prototype = {
     _written: false,
     
 	/**
-     * The method to use when setting the property's value.
+     * The method to use when setting the attribute's value.
      * The method recieves the new value as the only argument.
 	 * @property method
 	 * @type Function
@@ -75,7 +75,7 @@ YAHOO.util.Attribute.prototype = {
     method: null,
     
 	/**
-     * The validator to use when setting the property's value.
+     * The validator to use when setting the attribute's value.
 	 * @property validator
 	 * @type Function
      * @return Boolean
@@ -83,18 +83,18 @@ YAHOO.util.Attribute.prototype = {
     validator: null,
     
     /**
-     * Retrieves the current value of the property.
+     * Retrieves the current value of the attribute.
      * @method getValue
-     * @return {any} The current value of the property.
+     * @return {any} The current value of the attribute.
      */
     getValue: function() {
         return this.value;
     },
     
     /**
-     * Sets the value of the property and fires beforeChange and change events.
+     * Sets the value of the attribute and fires beforeChange and change events.
      * @method setValue
-     * @param {Any} value The value to apply to the property.
+     * @param {Any} value The value to apply to the attribute.
      * @param {Boolean} silent If true the change events will not be fired.
      * @return {Boolean} Whether or not the value was set.
      */
@@ -102,6 +102,12 @@ YAHOO.util.Attribute.prototype = {
         var beforeRetVal;
         var owner = this.owner;
         var name = this.name;
+        
+        var event = {
+            type: name, 
+            prevValue: this.getValue(),
+            newValue: value
+        };
         
         if (this.readOnly || ( this.writeOnce && this._written) ) {
             return false; // write not allowed
@@ -111,15 +117,15 @@ YAHOO.util.Attribute.prototype = {
             return false; // invalid value
         }
 
-        if (!silent) { // TODO: should Property be a publisher?
-            beforeRetVal = owner.fireBeforeChangeEvent(name, value);
+        if (!silent) {
+            beforeRetVal = owner.fireBeforeChangeEvent(event);
             if (beforeRetVal === false) {
                 YAHOO.log('setValue ' + name + 
-                        'cancelled by beforeChange event', 'info', 'Property');
+                        'cancelled by beforeChange event', 'info', 'Attribute');
                 return false;
             }
         }
-        //console.log(name + ' ' + value);
+
         if (this.method) {
             this.method.call(owner, value);
         }
@@ -127,15 +133,17 @@ YAHOO.util.Attribute.prototype = {
         this.value = value;
         this._written = true;
         
+        event.type = name;
+        
         if (!silent) {
-            this.owner.fireChangeEvent.call(owner, name, value); // TODO: should this be current value?
+            this.owner.fireChangeEvent(event);
         }
         
         return true;
     },
     
     /**
-     * Sets the value of the property and fires beforeChange and change events.
+     * Allows for configuring the Attribute's properties.
      * @method configure
      * @param {Object} map A key-value map of Attribute properties.
      * @param {Boolean} init Whether or not this should become the initial config.
@@ -146,7 +154,7 @@ YAHOO.util.Attribute.prototype = {
         this._initialConfig = this._initialConfig || {};
         
         for (var key in map) {
-            if ( map.propertyIsEnumerable(key) ) {
+            if ( key && map.hasOwnProperty(key) ) {
                 this[key] = map[key];
                 if (init) {
                     this._initialConfig[key] = map[key];
@@ -158,7 +166,6 @@ YAHOO.util.Attribute.prototype = {
     /**
      * Resets the value to the initial config value.
      * @method resetValue
-     * @param {Object} The config to apply to the property.
      * @return {Boolean} Whether or not the value was set.
      */
     resetValue: function() {
@@ -166,7 +173,7 @@ YAHOO.util.Attribute.prototype = {
     },
     
     /**
-     * Resets the property config to the initial config state.
+     * Resets the attribute config to the initial config state.
      * @method resetConfig
      */
     resetConfig: function() {
