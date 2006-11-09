@@ -7,8 +7,6 @@ YAHOO Global Namespace - Release Notes
 
    * YAHOO.namespace now can create multiple namespaces.
 
-   * Added YAHOO.compose, which returns the combination of two object.
-
    * Added an optional third parameter to YAHOO.extend: overrides.  It takes
      an object literal of properties/methods to apply to the subclass
      prototype, overriding the superclass if present.
