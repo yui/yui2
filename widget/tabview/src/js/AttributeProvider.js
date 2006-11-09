@@ -8,7 +8,7 @@
     */
     
     /**
-     * Manages YAHOO.util.Configuration instances
+     * Provides and manages YAHOO.util.Attribute instances
      * @namespace YAHOO.util
      * @class AttributeProvider
      * @uses YAHOO.util.EventProvider
@@ -18,16 +18,17 @@
     YAHOO.util.AttributeProvider.prototype = {
         
         /**
-         * Returns the current value of the property.
+         * A key-value map of Attribute configurations
          * @property _configs
-         * @protected
-         * @type {Object} A key-value map of Configuration properties
+         * @protected (may be used by subclasses and augmentors)
+         * @private
+         * @type {Object}
          */
         _configs: null,
         /**
-         * Returns the current value of the config.
+         * Returns the current value of the attribute.
          * @method get
-         * @param {String} key The config whose value will be returned.
+         * @param {String} key The attribute whose value will be returned.
          */
         get: function(key){ // TODO: return copies of objects?
             var configs = this._configs || {};
@@ -44,10 +45,9 @@
         /**
          * Sets the value of a config.
          * @method set
-         * @param {String} key The name of the config
-         * @param {Any} value The value to apply to the config's value
-         * @param {Boolean} silent Whether the value should be set silently,
-         * without firing the change events.
+         * @param {String} key The name of the attribute
+         * @param {Any} value The value to apply to the attribute
+         * @param {Boolean} silent Whether or not to suppress change events
          * @return {Boolean} Whether or not the value was set.
          */
         set: function(key, value, silent){
@@ -64,17 +64,17 @@
         },
     
         /**
-         * Returns a key-value map of config names and their current values.
-         * @method getValues
-         * @return {Object} A key-value map of config names and values.
+         * Returns an array of attribute names.
+         * @method getAttributeKeys
+         * @return {Array} An array of attribute names.
          */
-        getConfigKeys: function(){
+        getAttributeKeys: function(){
             var configs = this._configs;
             var keys = [];
             var config;
             for (var key in configs) {
                 config = configs[key];
-                if ( configs.propertyIsEnumerable(key) && 
+                if ( configs.hasOwnProperty(key) && 
                         !Lang.isUndefined(config) ) {
                     keys[keys.length] = key;
                 }
@@ -84,23 +84,23 @@
         },
         
         /**
-         * Sets multiple config values.
-         * @method setValues
-         * @param {Object} map  A map of keys-values.
-         * @param {Boolean} silent If true, change events will not fire.
+         * Sets multiple attribute values.
+         * @method setAttributes
+         * @param {Object} map  A key-value map of attributes
+         * @param {Boolean} silent Whether or not to suppress change events
          */
-        setValues: function(map, silent){
+        setAttributes: function(map, silent){
             for (var key in map) {
-                if ( map.propertyIsEnumerable(key) ) {
+                if ( map.hasOwnProperty(key) ) {
                     this.set(key, map[key], silent);
                 }
             }
         },
     
         /**
-         * Resets the specified property's value to its initial value.
-         * @method resetProperty
-         * @param {String} key The name of the property
+         * Resets the specified attribute's value to its initial value.
+         * @method resetValue
+         * @param {String} key The name of the attribute
          * @param {Boolean} silent Whether or not to suppress change events
          * @return {Boolean} Whether or not the value was set
          */
@@ -114,15 +114,16 @@
         },
     
         /**
-         * Sets the config's value to its current value.
+         * Sets the attribute's value to its current value.
          * @method refresh
-         * @param {String | Array} key The config(s) to refresh
+         * @param {String | Array} key The attribute(s) to refresh
+         * @param {Boolean} silent Whether or not to suppress change events
          */
         refresh: function(key, silent){
             var configs = this._configs;
             
             key = ( ( Lang.isString(key) ) ? [key] : key ) || 
-                    this.getConfigKeys(); // if no key, refresh all TODO: keep?
+                    this.getAttributeKeys(); // if no key, refresh all TODO: keep?
             
             for (var i = 0, len = key.length; i < len; ++i) { 
                 if ( // only set if there is a value and not null
@@ -135,10 +136,11 @@
         },
     
         /**
-         * Adds a Configuration to the AttributeProvider instance. 
+         * Adds an Attribute to the AttributeProvider instance. 
          * @method register
-         * @param {String} key The property's name
-         * @param {Object} map A key-value map containing the config's properties.
+         * @param {String} key The attribute's name
+         * @param {Object} map A key-value map containing the
+         * attribute's properties.
          */
         register: function(key, map) {
             this._configs = this._configs || {};
@@ -153,19 +155,19 @@
         },
         
         /**
-         * Returns the config's properties.
-         * @method getConfig
-         * @param {String} key The config's name
+         * Returns the attribute's properties.
+         * @method getAttributeConfig
+         * @param {String} key The attribute's name
          * @return {object} A key-value map containing all of the
-         * config's properties.
+         * attribute's properties.
          */
-        getConfig: function(key) {
+        getAttributeConfig: function(key) {
             var configs = this._configs || {};
             var config = configs[key] || {};
             var map = {}; // returning a copy to prevent overrides
             
             for (key in config) {
-                if ( config.propertyIsEnumerable(key) ) {
+                if ( config.hasOwnProperty(key) ) {
                     map[key] = config[key];
                 }
             }
@@ -174,32 +176,13 @@
         },
         
         /**
-         * Sets or updates a Configuration instance's properties. 
-         * @method configure
-         * @param {String} key The config's name.
-         * @param {Object} map A key-value map of config properties
+         * Sets or updates an Attribute instance's properties. 
+         * @method configureAttribute
+         * @param {String} key The attribute's name.
+         * @param {Object} map A key-value map of attribute properties
          * @param {Boolean} init Whether or not this should become the intial config.
          */
-        setValues: function(map, silent, init) {// TODO: init?
-            var configs = this._configs || {};
-            
-            for (var key in map) {
-                if ( map.propertyIsEnumerable(key) ) {
-                    this.set(key, map[key], silent);
-                }
-            }
-        },
-        
-        // TODO: configure multiples?
-        
-        /**
-         * Sets or updates a Configuration instance's properties. 
-         * @method configure
-         * @param {String} key The config's name.
-         * @param {Object} map A key-value map of config properties
-         * @param {Boolean} init Whether or not this should become the intial config.
-         */
-        configure: function(key, map, init) {
+        configureAttribute: function(key, map, init) {
             var configs = this._configs || {};
             
             if (!configs[key]) {
@@ -212,36 +195,37 @@
         },
         
         /**
-         * Resets a config to its intial configuration. 
-         * @method resetConfig
-         * @param {String} key The config's name.
+         * Resets an attribute to its intial configuration. 
+         * @method resetAttributeConfig
+         * @param {String} key The attribute's name.
          */
-        resetConfig: function(key){
+        resetAttributeConfig: function(key){
             var configs = this._configs || {};
             configs[key].resetConfig();
         },
         
         /**
-         * Fires the config's beforeChange event. 
+         * Fires the attribute's beforeChange event. 
          * @method fireBeforeChangeEvent
-         * @param {String} key The property's name.
-         * @param {Any} arg An argument to pass to the listeners.
+         * @param {String} key The attribute's name.
+         * @param {Obj} e The event object to pass to handlers.
          */
-        fireBeforeChangeEvent: function(key, arg) {
+        fireBeforeChangeEvent: function(e) {
             var type = 'before';
-            type += key.charAt(0).toUpperCase() + key.substr(1) + 'Change';
-
-            return this.fireEvent(type, arg);
+            type += e.type.charAt(0).toUpperCase() + e.type.substr(1) + 'Change';
+            e.type = type;
+            return this.fireEvent(e.type, e);
         },
         
         /**
-         * Fires the config's change event. 
+         * Fires the attribute's change event. 
          * @method fireChangeEvent
-         * @param {String} key The property's name.
-         * @param {Any} arg An argument to pass to the listeners.
+         * @param {String} key The attribute's name.
+         * @param {Obj} e The event object to pass to the handlers.
          */
-        fireChangeEvent: function(key, arg) {
-            return this.fireEvent(key + 'Change', arg);
+        fireChangeEvent: function(e) {
+            e.type += 'Change';
+            return this.fireEvent(e.type, e);
         }
     };
     

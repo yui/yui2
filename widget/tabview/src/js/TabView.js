@@ -14,7 +14,7 @@
      * @param {HTMLElement | String | Object} el(optional) The html 
      * element that represents the TabView, or the attribute object to use. 
      * An element will be created if none provided.
-     * @param {Object} attr (obtional) A key map of the tabView's 
+     * @param {Object} attr (optional) A key map of the tabView's 
      * initial attributes.  Ignored if first arg is attributes object.
      */
     YAHOO.widget.TabView = function(el, attr) {
@@ -109,8 +109,7 @@
         }
         
         if ( !tab.get('active') ) {
-            //tab.get('panel').set('visible', false);
-            tab.get('contentEl').style.display = 'none';
+            tab.hideContent();
         } else {
             this._configs.activeTab.value = tab;
         }
@@ -228,26 +227,30 @@
     };
     
     /**
-     * The transiton to use when switching between tab content.
+     * The transiton to use when switching between tabs.
      * @method contentTransition
-     */ // TODO : abstract to show/hideContent
-    proto.contentTransition = function(newContentEl, oldContentEl) {
-        if (newContentEl) {  
-            newContentEl.style.display = 'block';
+     */
+    proto.contentTransition = function(newTab, oldTab) {
+        if (newTab) {  
+            newTab.showContent(); // TODO: firing twice?
         }
         
-        if (oldContentEl) {
-            oldContentEl.style.display = 'none';
+        if (oldTab) {
+            oldTab.hideContent();
         }
     };
     
     /**
      * Registers TabView specific properties.
-     * @method initConfigs
+     * @method initAttributes
      * @param {Object} attr Hash of initial attributes
      */
-    proto.initConfigs = function(attr) {
-        YAHOO.widget.TabView.superclass.initConfigs.call(this, attr);
+    proto.initAttributes = function(attr) {
+        YAHOO.widget.TabView.superclass.initAttributes.call(this, attr);
+        
+        if (!attr.orientation) {
+            attr.orientation = 'top';
+        }
         
         var el = this.get('element');
         
@@ -273,8 +276,9 @@
             
         /**
          * The container of the tabView's content elements.
-         * @config _contentParent
+         * @property _contentParent
          * @type HTMLElement
+         * @private
          */
         this._contentParent = 
                 this.getElementsByClassName(this.CONTENT_PARENT_CLASSNAME,
@@ -287,7 +291,7 @@
          * @default "top"
          */
         this.register('orientation', {
-            value: attr.orientation || 'top',
+            value: attr.orientation,
             method: function(value) {
                 var current = this.get('orientation');
                 this.addClass('yui-navset-' + value);
@@ -305,8 +309,8 @@
         });
         
         /**
-         * The tab currently active.
-         * @config activeTab
+         * The index of the tab currently active.
+         * @config activeIndex
          * @type YAHOO.widget.Tab
          */
         this.register('activeIndex', {
@@ -328,18 +332,17 @@
             value: attr.activeTab,
             method: function(tab) {
                 var activeTab = this.get('activeTab');
-                var newContentEl,
-                    oldContentEl;
                 
-                if (activeTab && activeTab != tab) {
-                    activeTab.set('active', false); // refresh if active TODO: reload dynamic?
-                    oldContentEl = activeTab.get('contentEl');
+                if (tab) {  
+                    tab.set('active', true); // TODO: firing twice?
                 }
                 
-                if (tab) { // might be unsetting
-                    tab.set('active', true); // TODO: firing twice
-                    newContentEl = tab.get('contentEl');
-                    this.contentTransition(newContentEl, oldContentEl);
+                if (activeTab) {
+                    activeTab.set('active', false);
+                }
+                
+                if (tab != activeTab) {
+                    this.contentTransition(tab, activeTab);
                 }
             },
             validator: function(value) {
@@ -352,7 +355,7 @@
         }
         
         for (var type in this.DOM_EVENTS) {
-            if ( this.DOM_EVENTS.propertyIsEnumerable(type) ) {
+            if ( this.DOM_EVENTS.hasOwnProperty(type) ) {
                 this.addListener.call(this, type, this.DOMEventHandler);
             }
         }
@@ -368,31 +371,24 @@
     var _initTabs = function() {
         var tab,
             attr,
-            el = this.get('element'),
-            node,
-            tabs,
-            contentElements,
-            contentEl,
-            tabParent = this._tabParent,
-            contentParent = this._contentParent;
+            contentEl;
             
-        tabs = _getChildNodes(tabParent);
-        contentElements = _getChildNodes(contentParent);
+        var el = this.get('element');   
+        var tabs = _getChildNodes(this._tabParent);
+        var contentElements = _getChildNodes(this._contentParent);
 
         for (var i = 0, len = tabs.length; i < len; ++i) {
             attr = {};
             
-            attr.contentEl = contentElements[i] || null;
-            //attr.panel = new YAHOO.widget.TabPanel(panel); //TODO: why failing?
+            if (contentElements[i]) {
+                attr.contentEl = contentElements[i];
+            }
 
             tab = new YAHOO.widget.Tab(tabs[i], attr);
             this.addTab(tab);
             
             if (tab.hasClass(tab.ACTIVE_CLASSNAME) ) {
-                this._configs.activeTab.value = tab; // TODO: no method call ?
-            } else {
-                //tab.get('panel').set('visible', false);
-                tab.get('contentEl').style.display == 'none';
+                this._configs.activeTab.value = tab; // dont invoke method
             }
         }
     };
@@ -443,5 +439,68 @@
         
         return nodes;
     };
+
+/**
+ * Fires before the activeTab is changed.
+ * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+ * <p>If handler returns false, the change will be cancelled, and the value will not
+ * be set.</p>
+ * <p><strong>Event fields:</strong><br>
+ * <code>&lt;String&gt; type</code> beforeActiveTabChange<br>
+ * <code>&lt;<a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>&gt;
+ * prevValue</code> the currently active tab<br>
+ * <code>&lt;<a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>&gt;
+ * newValue</code> the tab to be made active</p>
+ * <p><strong>Usage:</strong><br>
+ * <code>var handler = function(e) {var previous = e.prevValue};<br>
+ * myTabs.addListener('beforeActiveTabChange', handler);</code></p>
+ * @event beforeActiveTabChange
+ */
     
+/**
+ * Fires after the activeTab is changed.
+ * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+ * <p><strong>Event fields:</strong><br>
+ * <code>&lt;String&gt; type</code> activeTabChange<br>
+ * <code>&lt;<a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>&gt;
+ * prevValue</code> the formerly active tab<br>
+ * <code>&lt;<a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>&gt;
+ * newValue</code> the new active tab</p>
+ * <p><strong>Usage:</strong><br>
+ * <code>var handler = function(e) {var previous = e.prevValue};<br>
+ * myTabs.addListener('activeTabChange', handler);</code></p>
+ * @event activeTabChange
+ */
+ 
+/**
+ * Fires before the orientation is changed.
+ * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+ * <p>If handler returns false, the change will be cancelled, and the value will not
+ * be set.</p>
+ * <p><strong>Event fields:</strong><br>
+ * <code>&lt;String&gt; type</code> beforeOrientationChange<br>
+ * <code>&lt;String&gt;
+ * prevValue</code> the current orientation<br>
+ * <code>&lt;String&gt;
+ * newValue</code> the new orientation to be applied</p>
+ * <p><strong>Usage:</strong><br>
+ * <code>var handler = function(e) {var previous = e.prevValue};<br>
+ * myTabs.addListener('beforeOrientationChange', handler);</code></p>
+ * @event beforeOrientationChange
+ */
+    
+/**
+ * Fires after the orientation is changed.
+ * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+ * <p><strong>Event fields:</strong><br>
+ * <code>&lt;String&gt; type</code> orientationChange<br>
+ * <code>&lt;String&gt;
+ * prevValue</code> the former orientation<br>
+ * <code>&lt;String&gt;
+ * newValue</code> the new orientation</p>
+ * <p><strong>Usage:</strong><br>
+ * <code>var handler = function(e) {var previous = e.prevValue};<br>
+ * myTabs.addListener('orientationChange', handler);</code></p>
+ * @event orientationChange
+ */
 })();

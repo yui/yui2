@@ -6,8 +6,8 @@ var Dom = YAHOO.util.Dom,
     AttributeProvider = YAHOO.util.AttributeProvider;
 
 /**
- * Element provides an interface to an HTMLElement's properties and common
- * methods.  Other commonly used properties are added as well.
+ * Element provides an interface to an HTMLElement's attributes and common
+ * methods.  Other commonly used attributes are added as well.
  * @namespace YAHOO.util
  * @class Element
  * @uses YAHOO.util.AttributeProvider
@@ -25,20 +25,10 @@ YAHOO.util.Element = function(el, map) {
 YAHOO.util.Element.prototype = {
 	/**
      * Dom events supported by the Element instance.
-	 * @config DOM_EVENTS
+	 * @property DOM_EVENTS
 	 * @type Object
 	 */
-    DOM_EVENTS: {
-        'click': true,
-        'keydown': true,
-        'keypress': true,
-        'keyup': true,
-        'mousedown': true,
-        'mousemove': true,
-        'mouseout': true, 
-        'mouseover': true, 
-        'mouseup': true
-    },
+    DOM_EVENTS: null,
 
 	/**
      * Wrapper for HTMLElement method.
@@ -107,11 +97,11 @@ YAHOO.util.Element.prototype = {
 
     
     /**
-     * Registers Element specific attribute.
-     * @method initConfigs
-     * @param {Object} map A key-value map of initial config names and values
+     * Registers Element specific attributes.
+     * @method initAttributes
+     * @param {Object} map A key-value map of initial attribute configs
      */
-    initConfigs: function(map) {
+    initAttributes: function(map) {
         map = map || {}; 
         var element = Dom.get(map.element) || null;
         
@@ -124,36 +114,32 @@ YAHOO.util.Element.prototype = {
             value: element,
             readOnly: true
          });
-        
-        /**
-         * Whether or not the element is visible.
-         * @config visible
-         * @type Array
-         */
-         
-        this.register('visible', {
-            value: map.visible || null, 
-            method: function(value) {
-                if (value) {
-                    Dom.setStyle(element, 'visibility', 'visible');
-                } else {
-                    Dom.setStyle(element, 'visibility', 'hidden');
-                }
-            },
-            validator: Lang.isBoolean
-        });
     },
 
-    addListener: function(type, fn, obj, override) {
+    /**
+     * Adds a listener for the given event.  These may be DOM or 
+     * customEvent listeners.  Any event that is fired via fireEvent
+     * can be listened for.  All handlers receive an event object. 
+     * @method addListener
+     * @param {String} type The name of the event to listen for
+     * @param {Function} fn The handler to call when the event fires
+     * @param {Any} obj A variable to pass to the handler
+     * @param {Object} scope The object to use for the scope of the handler 
+     */
+    addListener: function(type, fn, obj, scope) {
         var el = this.get('element');
+        var scope = scope || this;
         
         el = this.get('id') || el;
         
         if (!this._events[type]) { // create on the fly
             if ( this.DOM_EVENTS[type] ) {
                 YAHOO.util.Event.addListener(el, type, function(e) {
+                    if (e.srcElement && !e.target) { // supplement IE with target
+                        e.target = e.srcElement;
+                    }
                     this.fireEvent(type, e);
-                }, this, true);
+                }, obj, scope);
             }
             
             this.createEvent(type, this);
@@ -163,9 +149,25 @@ YAHOO.util.Element.prototype = {
         this.subscribe.apply(this, arguments); // notify via customEvent
     },
     
+    
+    /**
+     * Alias for addListener
+     * @method on
+     * @param {String} type The name of the event to listen for
+     * @param {Function} fn The function call when the event fires
+     * @param {Any} obj A variable to pass to the handler
+     * @param {Object} scope The object to use for the scope of the handler 
+     */
     on: function() { this.addListener.apply(this, arguments); },
     
-    removeListener: function(type, fn, obj, override) {
+    
+    /**
+     * Remove an event listener
+     * @method removeListener
+     * @param {String} type The name of the event to listen for
+     * @param {Function} fn The function call when the event fires
+     */
+    removeListener: function(type, fn) {
         this.unsubscribe.apply(this, arguments);
     },
     
@@ -222,6 +224,26 @@ YAHOO.util.Element.prototype = {
     },
     
 	/**
+     * Wrapper for Dom method.
+	 * @method setStyle
+	 * @param {String} property The style property to set
+	 * @param {String} value The value to apply to the style property
+	 */
+    setStyle: function(property, value) {
+        return Dom.setStyle(this.get('element'),  property, value);
+    },
+    
+	/**
+     * Wrapper for Dom method.
+	 * @method getStyle
+	 * @param {String} property The style property to retrieve
+	 * @return {String} The current value of the property
+	 */
+    getStyle: function(property) {
+        return Dom.getStyle(this.get('element'),  property);
+    },
+    
+	/**
      * Apply any queued set calls.
 	 * @method fireQueue
 	 */
@@ -233,9 +255,8 @@ YAHOO.util.Element.prototype = {
     },
     
 	/**
-     * Renders the HTMLElement into either the supplied parentNode or
-     * the document.body.
-	 * @method render
+     * Appends the HTMLElement into either the supplied parentNode.
+	 * @method appendTo
 	 * @param {HTMLElement | Element} parentNode The node to append to
 	 * @param {HTMLElement | Element} before An optional node to insert before
 	 */
@@ -245,6 +266,8 @@ YAHOO.util.Element.prototype = {
         before = (before && before.get) ? 
                 before.get('element') : Dom.get(before);
         var element = this.get('element');
+        
+        var newAddition =  !Dom.inDocument(element);
         
         if (!element) {
             YAHOO.log('appendTo failed: element not available',
@@ -266,8 +289,20 @@ YAHOO.util.Element.prototype = {
             }
         }
         
-        this.refresh( this.getConfigKeys() );
         YAHOO.log(element + 'appended to ' + parent);
+        
+        if (!newAddition) {
+            return false; // note return
+        }
+        
+        // if a new addition, refresh HTMLElement any applied attributes
+        var keys = this.getAttributeKeys();
+        
+        for (var key in keys) { // only refresh HTMLElement attributes
+            if ( !Lang.isUndefined(element[key]) ) {
+                this.refresh(key); // TODO: verify
+            }
+        }
     },
     
     get: function(key) {
@@ -295,7 +330,7 @@ YAHOO.util.Element.prototype = {
         return AttributeProvider.prototype.set.apply(this, arguments);
     },
     
-    register: function(key) { // protect html properties
+    register: function(key) { // protect html attributes
         var configs = this._configs || {};
         var element = this.get('element') || null;
         
@@ -308,7 +343,7 @@ YAHOO.util.Element.prototype = {
         return AttributeProvider.prototype.register.apply(this, arguments);
     },
     
-    configure: function(property, map, init) { // protect html properties
+    configure: function(property, map, init) { // protect html attributes
         if (!this._configs[property] && this._configs.element && 
                 !Lang.isUndefined(this._configs.element[property]) ) {
             _registerHTMLAttr(this, property, map);
@@ -318,9 +353,9 @@ YAHOO.util.Element.prototype = {
         return AttributeProvider.prototype.configure.apply(this, arguments);
     },
     
-    getConfigKeys: function() {
+    getAttributeKeys: function() {
         var el = this.get('element');
-        var keys = AttributeProvider.prototype.getConfigKeys.call(this);
+        var keys = AttributeProvider.prototype.getAttributeKeys.call(this);
         
         //add any unconfigured element keys
         for (var key in el) {
@@ -338,19 +373,38 @@ YAHOO.util.Element.prototype = {
         this._configs = this._configs || {};
         attr = attr || {};
         attr.element = attr.element || el || null;
+
+        this.DOM_EVENTS = {
+            'click': true,
+            'keydown': true,
+            'keypress': true,
+            'keyup': true,
+            'mousedown': true,
+            'mousemove': true,
+            'mouseout': true, 
+            'mouseover': true, 
+            'mouseup': true
+        };
         
         var readyHandler = function() {
-            this.initConfigs(attr);
-            this.setValues(attr, true); // TODO: set HTMLElement attrs
+            this.initAttributes(attr);
+
+            this.setAttributes(attr, true); // TODO: set HTMLElement attrs
             this.fireQueue();
-            this.fireEvent('contentReady');
+            this.fireEvent('contentReady', {
+                type: 'contentReady',
+                target: attr.element
+            });
         };
 
         if ( Lang.isString(el) ) {
             _registerHTMLAttr(this, 'id', { value: el });
             YAHOO.util.Event.onAvailable(el, function() {
-                this.fireEvent('available'); 
                 attr.element = Dom.get(el);
+                this.fireEvent('available', {
+                    type: 'available',
+                    target: attr.element
+                }); 
             }, this, true);
             
             YAHOO.util.Event.onContentReady(el, function() {
@@ -381,6 +435,32 @@ var _registerHTMLAttr = function(self, key, map) {
     map.value = map.value || el[key];
     self._configs[key] = new YAHOO.util.Attribute(map, self);
 };
+
+/**
+ * Fires when the Element's HTMLElement can be retrieved by Id.
+ * <p>See: <a href="#addListener">Element.addListener</a></p>
+ * <p><strong>Event fields:</strong><br>
+ * <code>&lt;String&gt; type</code> available<br>
+ * <code>&lt;HTMLElement&gt;
+ * target</code> the HTMLElement bound to this Element instance<br>
+ * <p><strong>Usage:</strong><br>
+ * <code>var handler = function(e) {var target = e.target};<br>
+ * myTabs.addListener('available', handler);</code></p>
+ * @event available
+ */
+ 
+/**
+ * Fires when the Element's HTMLElement subtree is rendered.
+ * <p>See: <a href="#addListener">Element.addListener</a></p>
+ * <p><strong>Event fields:</strong><br>
+ * <code>&lt;String&gt; type</code> contentReady<br>
+ * <code>&lt;HTMLElement&gt;
+ * target</code> the HTMLElement bound to this Element instance<br>
+ * <p><strong>Usage:</strong><br>
+ * <code>var handler = function(e) {var target = e.target};<br>
+ * myTabs.addListener('contentReady', handler);</code></p>
+ * @event contentReady
+ */
 
 
 YAHOO.augment(YAHOO.util.Element, AttributeProvider);
