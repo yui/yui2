@@ -128,51 +128,18 @@ YAHOO.extend = function(subc, superc, overrides) {
  *                             overwrite an existing property in the receiver
  */
 YAHOO.augment = function(r, s) {
-    var args = [r.prototype, s.prototype];
-    for (var i=2; i<arguments.length; ++i) {
-        args.push(arguments[i]);
-    }
-    r.prototype = YAHOO.compose.apply(YAHOO, args);
-};
-
-/**
- * Returns an object composed of the two objects passed in.  Properties in
- * object a will have priority over those in object b.  Optionally, one
- * or more properties can be provided as additional parameters.  If specified,
- * only those properties will be copied from object b, and these will overwrite
- * the property in object a if it exists.
- * @method compose
- * @static
- * @param {Object} a  the base object for the composition
- * @param {Object} b  the object that contains additional properties to apply
- *                    to the composition
- * @param {String*}  arguments zero or more properties methods to add to the
- *                             composition.  If none specified, everything
- *                             in object b will be copied unless it would
- *                             overwrite an existing property in object a.
- * @return {Object} the new object
- *
- */
-YAHOO.compose = function(a, b) {
-    var args=arguments, c={}, i, p;
-
-    for (p in a) { 
-        c[p]=a[p];
-    }
-
-    if (args[2]) {
-        for (i=2; i<args.length; ++i) {
-            c[args[i]]=b[args[i]];
+    var rp=r.prototype, sp=s.prototype, a=arguments, i, p;
+    if (a[2]) {
+        for (i=2; i<a.length; ++i) {
+            rp[a[i]] = sp[a[i]];
         }
     } else {
-        for (p in b) { 
-            if (!c[p]) {
-                c[p]=b[p];
+        for (p in sp) { 
+            if (!rp[p]) {
+                rp[p] = sp[p];
             }
         }
     }
-
-    return c;
 };
 
 YAHOO.namespace("util", "widget", "example");
