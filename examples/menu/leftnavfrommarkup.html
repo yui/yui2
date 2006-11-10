@@ -3,19 +3,22 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>Website Left Nav Example (with submenus built from markup)</title>
+        <title>Example: Website Left Nav With Submenus Built From Markup (YUI Library)</title>
 
-        <!-- Standard reset and fonts -->
-        <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
-        <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
+        
+        <!-- Standard reset, fonts and grids -->
 
-        <!-- Grids -->
-        <link rel="stylesheet" type="text/css" href="../../build/grids/grids.css">
+        <link rel="stylesheet" type="text/css" href="../../build/reset-fonts-grids/reset-fonts-grids.css">
+
+ 
 
         <!-- CSS for Menu -->
+
         <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
  
+
         <!-- Page-specific styles -->
+
         <style type="text/css">
 
             div.yui-b p {
@@ -40,33 +43,24 @@
             
             h1 {
 
+                font-weight:bold;
+                margin:0 0 1em 0;
                 padding:.25em .5em;
                 background-color:#ccc;
 
             }
 
-            div.yuimenu {
-            
-                position:absolute;
-                visibility:hidden;
-            
-            }
-
-            #productsandservices {
-            
-                position:static;
-                visibility:visible;
-            
-            }
-
         </style>
 
-        <!-- Namespace source file -->
+                <!-- Namespace source file -->
+
         <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 
         <!-- Dependency source files -->
+
         <script type="text/javascript" src="../../build/event/event.js"></script>
         <script type="text/javascript" src="../../build/dom/dom.js"></script>
+
 
         <!-- Container source file -->
         <script type="text/javascript" src="../../build/container/container_core.js"></script>
@@ -75,111 +69,31 @@
         <script type="text/javascript" src="../../build/menu/menu.js"></script>
 
         <!-- Page-specific script -->
+
         <script type="text/javascript">
 
-            // "load" handler for the window
+            YAHOO.example.onMenuAvailable = function(p_oEvent) {
 
-            YAHOO.example.onWindowLoad = function(p_oEvent) {
+                // Instantiate and render the menu
 
-
-                // Hides submenus of the root Menu instance
-                
-                function hideSubmenus() {
-
-                    if(oMenu.activeItem) {
-                    
-                        var oSubmenu = oMenu.activeItem.cfg.getProperty("submenu");
-
-                        if(oSubmenu) {
-                        
-                            oSubmenu.hide();
-                        
-                        }
-                    
-                    }
-
-                }
-
-
-                // Cancels the call to "hideSubmenus"
-
-                function cancelTimer() {
-
-                    if(nTimeoutId) {
-    
-                        window.clearTimeout(nTimeoutId);
-    
-                    }
-                
-                }
-    
-    
-                // "mouseout" event handler for each submenu
-                
-                function onSubmenuMouseOut(p_sType, p_aArguments, p_oMenu) {
-    
-                    cancelTimer();
-    
-                    nTimeoutId = window.setTimeout(hideSubmenus, 750);
-                
-                }
-
-
-                var nTimeoutId;
-
-
-                // Initialize the root menu
-
-                var oMenu = new YAHOO.widget.Menu("productsandservices", { position: "static" });
-
-
-                // Render the root menu and corresponding submenus
+                var oMenu = new YAHOO.widget.Menu(
+                                    "productsandservices", 
+                                    {
+                                        position:"static", 
+                                        showdelay:250, 
+                                        hidedelay:750, 
+                                        lazyload:true 
+                                    }
+                                );
 
                 oMenu.render();
-
-
-                var oCommunication = oMenu.getItem(0).cfg.getProperty("submenu"),
-                    oPIM = oCommunication.getItem(5).cfg.getProperty("submenu"),
-                    oShopping = oMenu.getItem(1).cfg.getProperty("submenu"),
-                    oEntertainment = oMenu.getItem(2).cfg.getProperty("submenu"),
-                    oInformation = oMenu.getItem(3).cfg.getProperty("submenu");
-
-
-                // Assign event handlers
-
-                // Add a "mouseover" event handler to the root menu
-                
-                oMenu.mouseOverEvent.subscribe(cancelTimer);
-
-
-                // Add a "mouseover" event handler to each submenu
-                
-                oCommunication.mouseOverEvent.subscribe(cancelTimer);
-                oPIM.mouseOverEvent.subscribe(cancelTimer);
-                oShopping.mouseOverEvent.subscribe(cancelTimer);
-                oEntertainment.mouseOverEvent.subscribe(cancelTimer);
-                oInformation.mouseOverEvent.subscribe(cancelTimer);
-                
-
-                // Add a "mouseout" event handler to each submenu
-
-                oCommunication.mouseOutEvent.subscribe(onSubmenuMouseOut, oCommunication, true);
-                oPIM.mouseOutEvent.subscribe(onSubmenuMouseOut, oPIM, true);
-                oShopping.mouseOutEvent.subscribe(onSubmenuMouseOut, oShopping, true);
-                oEntertainment.mouseOutEvent.subscribe(onSubmenuMouseOut, oEntertainment, true);
-                oInformation.mouseOutEvent.subscribe(onSubmenuMouseOut, oInformation, true);
-
-
-                // Add a "click" handler to the document
-
-                YAHOO.util.Event.addListener(document, "click", hideSubmenus);
 
             }
 
 
-            // Add a "load" handler for the window
+            // Initialize and render the menu when it is available in the DOM
 
-            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
+            YAHOO.util.Event.onAvailable("productsandservices", YAHOO.example.onMenuAvailable);
 
         </script>
 
@@ -190,7 +104,7 @@
             <div id="hd">
                 <!-- start: your content here -->
 
-                    <h1>Website Left Nav Example (with submenus built from markup) <em>[<a href="index.html">Examples Home</a>]</em></h1>
+                    <h1>Example: Website Left Nav With Submenus Built From Markup (YUI Library) <em>[<a href="index.html">Examples Home</a>]</em></h1>
         
                 <!-- end: your content here -->
             </div>
@@ -201,7 +115,7 @@
                     <div class="yui-b">
                         <!-- start: stack grids here -->
                                 
-                        <p><strong>NOTE:</strong> <em>This example demonstrates how to build a menu with submenus created using existing markup.  Alternatively, you can <a href="leftnavfromjs.html">add submenus to a menu using JavaScript</a>.</em></p>
+                        <p><strong>NOTE:</strong> <em>This example demonstrates how to add submenus to a menu using existing markup.  Alternatively, you can <a href="leftnavfromjs.html">add submenus to a menu using JavaScript</a>.</em></p>
                         <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metus. Nunc quam elit, posuere nec, auctor in, rhoncus quis, dui. Aliquam erat volutpat. Ut dignissim, massa sit amet dignissim cursus, quam lacus feugiat dolor, id aliquam leo tortor eget odio. Pellentesque orci arcu, eleifend at, iaculis sit amet, posuere eu, lorem. Aliquam erat volutpat. Phasellus vulputate. Vivamus id erat. Nulla facilisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Nunc gravida. Ut euismod, tortor eget convallis ullamcorper, arcu odio egestas pede, ut ornare urna elit vitae mauris. Aenean ullamcorper eros a lacus. Curabitur egestas tempus lectus. Donec et lectus et purus dapibus feugiat. Sed sit amet diam. Etiam ipsum leo, facilisis ac, rutrum nec, dignissim quis, tellus. Sed eleifend.</p>
                         <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metus. Nunc quam elit, posuere nec, auctor in, rhoncus quis, dui. Aliquam erat volutpat. Ut dignissim, massa sit amet dignissim cursus, quam lacus feugiat dolor, id aliquam leo tortor eget odio. Pellentesque orci arcu, eleifend at, iaculis sit amet, posuere eu, lorem. Aliquam erat volutpat. Phasellus vulputate. Vivamus id erat. Nulla facilisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Nunc gravida. Ut euismod, tortor eget convallis ullamcorper, arcu odio egestas pede, ut ornare urna elit vitae mauris. Aenean ullamcorper eros a lacus. Curabitur egestas tempus lectus. Donec et lectus et purus dapibus feugiat. Sed sit amet diam. Etiam ipsum leo, facilisis ac, rutrum nec, dignissim quis, tellus. Sed eleifend.</p>
 

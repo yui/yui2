@@ -3,22 +3,33 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>Example 9: Handling Click Events</title>
+        <title>Example: Handling Menu Click Events (YUI Library)</title>
 
-        <!-- Standard reset and fonts -->
+                <!-- Standard reset and fonts -->
+
         <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
         <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
 
+            
+
         <!-- Logger CSS -->
+
         <link rel="stylesheet" type="text/css" href="../../build/logger/assets/logger.css">
 
+         
+
         <!-- CSS for Menu -->
+
         <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
  
+
         <!-- Page-specific styles -->
+
         <style type="text/css">
 
             body { margin:.5em; }
+
+            h1 { font-weight:bold; }
 
             #logs {
 
@@ -36,15 +47,21 @@
 
         </style>
 
-        <!-- Namespace source file -->
+                <!-- Namespace source file -->
+
         <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 
         <!-- Dependency source files -->
+
         <script type="text/javascript" src="../../build/event/event.js"></script>
         <script type="text/javascript" src="../../build/dom/dom.js"></script>
+
             
+
         <!-- Logger source file -->
+
         <script type="text/javascript" src="../../build/logger/logger.js"></script>
+
         
         <!-- Container source file -->
         <script type="text/javascript" src="../../build/container/container_core.js"></script>
@@ -53,13 +70,23 @@
         <script type="text/javascript" src="../../build/menu/menu.js"></script>
 
         <!-- Page-specific script -->
+
         <script type="text/javascript">
 
             YAHOO.example.onWindowLoad = function(p_oEvent) {
 
-                // "click" event handler for a MenuItem instance
+                // "click" event handler for the menu
 
-                function onMenuItemClick(p_sType, p_aArguments, p_oValue) {
+                function onMenuClick(p_sType, p_aArgs, p_oValue) {
+
+                    this.show();
+
+                }
+
+
+                // "click" event handler for each menu item
+
+                function onMenuItemClick(p_sType, p_aArgs, p_oValue) {
 
                     YAHOO.log(
                         (
@@ -78,37 +105,34 @@
 
                 var oMenu = new YAHOO.widget.Menu("mymenu");
 
-                var oItem1 = 
-                        oMenu.addItem(new YAHOO.widget.MenuItem("Item One"));
-
-                oItem1.clickEvent.subscribe(onMenuItemClick);
+                oMenu.addItems(["Item One","Item Two","Item Three"]);
 
 
-                var oItem2 = 
-                        oMenu.addItem(new YAHOO.widget.MenuItem("Item Two"));
+                oMenu.getItem(0).clickEvent.subscribe(onMenuItemClick);
+
 
                 /*
                      Register a "click" event handler for the first item, 
-                     passing a string arguemnt ("foo") to the event handler
+                     passing a string arguemnt ("foo") to the event handler.
                 */
 
-                oItem2.clickEvent.subscribe(onMenuItemClick, "foo");
+                oMenu.getItem(1).clickEvent.subscribe(onMenuItemClick, "foo");
 
-
-                var oItem2 = 
-                        oMenu.addItem(new YAHOO.widget.MenuItem("Item Three"));
 
                 /*
                      Register a "click" event handler for the third item and
-                     passing and array as an argument to the event handler
+                     passing and array as an argument to the event handler.
                 */
                 
-                oItem2.clickEvent.subscribe(onMenuItemClick, ["foo", "bar"]);
+                oMenu.getItem(2).clickEvent.subscribe(onMenuItemClick, ["foo", "bar"]);
 
+
+                oMenu.clickEvent.subscribe(onMenuClick, oMenu, true);
 
                 oMenu.render(document.body);
     
                 oMenu.show();
+
 
                 var oLogs = document.createElement("div");
                 oLogs.id = "logs";
@@ -127,7 +151,7 @@
     </head>
     <body>
 
-        <h1>Example 9: Handling Click Events <em>[<a href="index.html">Examples Home</a>]</em></h1>
+        <h1>Example: Handling Menu Click Events (YUI Library) <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to register a "click" event handler for a MenuItem instance.  All of the events for YUI Menu are instances of <a href="http://developer.yahoo.com/yui/event/#customevent">YAHOO.util.CustomEvent</a>.  To register a listener for an event, use the event's "subscribe" method passing a pointer to your handler as the first argument.  You can pass an argument to your event handler(s) as an additional second argument to the "subscribe" method.</p>
 
     </body>

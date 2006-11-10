@@ -3,28 +3,46 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>Example 5: Grouped MenuItem Instances With Titles From Existing Markup</title>
+        <title>Example: Grouped Menu Items With Titles From Markup (YUI Library)</title>
 
-        <!-- Standard reset and fonts -->
+                <!-- Standard reset and fonts -->
+
         <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
         <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
 
+ 
+
         <!-- CSS for Menu -->
+
         <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
  
+
         <!-- Page-specific styles -->
+
         <style type="text/css">
 
             body { margin:.5em; }
+            
+            h1 { font-weight:bold; }            
+
+            div.yuimenu {
+            
+                position:absolute;
+                visibility:hidden;
+            
+            }
 
         </style>
 
-        <!-- Namespace source file -->
+                <!-- Namespace source file -->
+
         <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 
         <!-- Dependency source files -->
+
         <script type="text/javascript" src="../../build/event/event.js"></script>
         <script type="text/javascript" src="../../build/dom/dom.js"></script>
+
 
         <!-- Container source file -->
         <script type="text/javascript" src="../../build/container/container_core.js"></script>
@@ -33,9 +51,10 @@
         <script type="text/javascript" src="../../build/menu/menu.js"></script>
 
         <!-- Page-specific script -->
+
         <script type="text/javascript">
 
-            YAHOO.example.onWindowLoad = function(p_oEvent) {
+            YAHOO.example.onMenuAvailable = function(p_oEvent) {
 
                 var oMenu = new YAHOO.widget.Menu("menuwithgroups", { fixedcenter: true });
 
@@ -46,14 +65,14 @@
             }
 
 
-            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
+            YAHOO.util.Event.onAvailable("menuwithgroups", YAHOO.example.onMenuAvailable);
             
         </script>
 
     </head>
     <body>
 
-        <h1>Example 5: Grouped MenuItem Instances With Titles From Existing Markup <em>[<a href="index.html">Examples Home</a>]</em></h1>
+        <h1>Example: Grouped Menu Items With Titles From Markup (YUI Library) <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to title groups of MenuItem instances.  The Menu API also supports building a menu like this <a href="example06.html">using nothing but JavaScript</a>.</p>
 
         <div id="menuwithgroups" class="yuimenu">

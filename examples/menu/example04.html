@@ -3,28 +3,39 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>Example 4: Grouped MenuItem Instances Using Pure JavaScript</title>
+        <title>Example: Grouped Menu Items Using JavaScript (YUI Library)</title>
 
-        <!-- Standard reset and fonts -->
+                <!-- Standard reset and fonts -->
+
         <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
         <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
 
+ 
+
         <!-- CSS for Menu -->
+
         <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
  
+
         <!-- Page-specific styles -->
+
         <style type="text/css">
 
             body { margin:.5em; }
 
+            h1 { font-weight:bold; }
+
         </style>
 
-        <!-- Namespace source file -->
+               <!-- Namespace source file -->
+
         <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 
         <!-- Dependency source files -->
+
         <script type="text/javascript" src="../../build/event/event.js"></script>
         <script type="text/javascript" src="../../build/dom/dom.js"></script>
+
 
         <!-- Container source file -->
         <script type="text/javascript" src="../../build/container/container_core.js"></script>
@@ -33,112 +44,41 @@
         <script type="text/javascript" src="../../build/menu/menu.js"></script>
 
         <!-- Page-specific script -->
+
         <script type="text/javascript">
 
             YAHOO.example.onWindowLoad = function(p_oEvent) {
 
                 var oMenu = new YAHOO.widget.Menu("menuwithgroups", { fixedcenter: true });
 
-                // Add MenuItem instances to the first group
+                oMenu.addItems([
 
-                oMenu.addItem(
-                        new YAHOO.widget.MenuItem(
-                            "Yahoo! Mail", 
-                            { url:"http://mail.yahoo.com"}
-                        )
-                    );
+                    [
+                        { text:"Yahoo! Mail", url:"http://mail.yahoo.com" },
+                        { text:"Yahoo! Address Book", url:"http://addressbook.yahoo.com" },
+                        { text:"Yahoo! Calendar", url:"http://calendar.yahoo.com" },
+                        { text:"Yahoo! Notepad", url:"http://notepad.yahoo.com" }
+                    ],
 
-                oMenu.addItem(
-                        new YAHOO.widget.MenuItem(
-                            "Yahoo! Address Book", 
-                            { url:"http://addressbook.yahoo.com"}
-                        )
-                    );
+                    [
 
-                oMenu.addItem(
-                        new YAHOO.widget.MenuItem(
-                            "Yahoo! Calendar", 
-                            { url:"http://calendar.yahoo.com"}
-                        )
-                    );
+                    { text:"Yahoo! Local", url:"http://local.yahoo.com" },
+                    { text:"Yahoo! Maps", url:"http://maps.yahoo.com" },
+                    { text:"Yahoo! Travel", url:"http://travel.yahoo.com" },
+                    { text:"Yahoo! Shopping", url:"http://shopping.yahoo.com" } 
+                    
+                    ],
 
-                oMenu.addItem(
-                        new YAHOO.widget.MenuItem(
-                            "Yahoo! Notepad", 
-                            { url:"http://notepad.yahoo.com"} 
-                        )
-                    );
+                    [
 
-
-                // Add MenuItem instances to the second group
-
-                oMenu.addItem(
-                        new YAHOO.widget.MenuItem(
-                            "Yahoo! Local", 
-                            { url:"http://local.yahoo.com"}
-                        ),
-                        1
-                    );
-
-                oMenu.addItem(
-                        new YAHOO.widget.MenuItem(
-                            "Yahoo! Maps", 
-                            { url:"http://maps.yahoo.com"}
-                        ),
-                        1
-                    );
-
-                oMenu.addItem(
-                        new YAHOO.widget.MenuItem(
-                            "Yahoo! Travel", 
-                            { url:"http://travel.yahoo.com"}
-                        ),
-                        1
-                    );
-
-                oMenu.addItem(
-                        new YAHOO.widget.MenuItem(
-                            "Yahoo! Shopping", 
-                            { url:"http://shopping.yahoo.com"} 
-                        ),
-                        1
-                    );
-
-
-                // Add MenuItem instances to the third group
-
-                oMenu.addItem(
-                        new YAHOO.widget.MenuItem(
-                            "Yahoo! Messenger", 
-                            { url:"http://messenger.yahoo.com"}
-                        ),
-                        2
-                    );
-
-                oMenu.addItem(
-                        new YAHOO.widget.MenuItem(
-                            "Yahoo! 360", 
-                            { url:"http://360.yahoo.com"}
-                        ),
-                        2
-                    );
-
-                oMenu.addItem(
-                        new YAHOO.widget.MenuItem(
-                            "Yahoo! Groups", 
-                            { url:"http://groups.yahoo.com"}
-                        ),
-                        2
-                    );
-
-                oMenu.addItem(
-                        new YAHOO.widget.MenuItem(
-                            "Yahoo! Photos", 
-                            { url:"http://photos.yahoo.com"} 
-                        ),
-                        2
-                    );
-
+                        { text:"Yahoo! Messenger", url:"http://messenger.yahoo.com" },
+                        { text:"Yahoo! 360", url:"http://360.yahoo.com" },
+                        { text:"Yahoo! Groups", url:"http://groups.yahoo.com" },
+                        { text:"Yahoo! Photos", url:"http://photos.yahoo.com" }
+                    
+                    ]
+                
+                ]);
 
                 oMenu.render(document.body);
     
@@ -154,7 +94,7 @@
     </head>
     <body>
 
-        <h1>Example 4: Grouped MenuItem Instances Using Pure JavaScript <em>[<a href="index.html">Examples Home</a>]</em></h1>
+        <h1>Example: Grouped Menu Items Using JavaScript (YUI Library) <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to group MenuItem instances.  The Menu API also supports building a menu like this <a href="example03.html">using existing markup</a>.</p>
 
     </body>

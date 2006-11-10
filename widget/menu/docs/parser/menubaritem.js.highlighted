@@ -1,0 +1,148 @@
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c">* Creates an item for a menu bar.</span>
+<span class="c">* </span>
+<span class="c">* @param {String} p_oObject String specifying the text of the menu bar item.</span>
+<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="c">* one-html.html#ID-74680021&quot;&gt;HTMLLIElement&lt;/a&gt;} p_oObject Object specifying the </span>
+<span class="c">* &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; element of the menu bar item.</span>
+<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="c">* one-html.html#ID-38450247&quot;&gt;HTMLOptGroupElement&lt;/a&gt;} p_oObject Object </span>
+<span class="c">* specifying the &lt;code&gt;&amp;#60;optgroup&amp;#62;&lt;/code&gt; element of the menu bar item.</span>
+<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="c">* one-html.html#ID-70901257&quot;&gt;HTMLOptionElement&lt;/a&gt;} p_oObject Object specifying </span>
+<span class="c">* the &lt;code&gt;&amp;#60;option&amp;#62;&lt;/code&gt; element of the menu bar item.</span>
+<span class="c">* @param {Object} p_oConfig Optional. Object literal specifying the </span>
+<span class="c">* configuration for the menu bar item. See configuration class documentation </span>
+<span class="c">* for more details.</span>
+<span class="c">* @class MenuBarItem</span>
+<span class="c">* @constructor</span>
+<span class="c">* @extends YAHOO.widget.MenuItem</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuBarItem</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_oObject</span><span class="o">,</span> <span class="nx">p_oConfig</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuBarItem</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span>
+        <span class="k">this</span><span class="o">,</span> 
+        <span class="nx">p_oObject</span><span class="o">,</span> 
+        <span class="nx">p_oConfig</span>
+    <span class="o">);</span>
+
+<span class="o">};</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuBarItem</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuItem</span><span class="o">,</span> <span class="o">{</span>
+
+
+<span class="c">/**</span>
+<span class="c">* @method init</span>
+<span class="c">* @description The MenuBarItem class&#39;s initialization method. This method is </span>
+<span class="c">* automatically called by the constructor, and sets up all DOM references for </span>
+<span class="c">* pre-existing markup, and creates required markup if it is not already present.</span>
+<span class="c">* @param {String} p_oObject String specifying the text of the menu bar item.</span>
+<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="c">* one-html.html#ID-74680021&quot;&gt;HTMLLIElement&lt;/a&gt;} p_oObject Object specifying the </span>
+<span class="c">* &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; element of the menu bar item.</span>
+<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="c">* one-html.html#ID-38450247&quot;&gt;HTMLOptGroupElement&lt;/a&gt;} p_oObject Object </span>
+<span class="c">* specifying the &lt;code&gt;&amp;#60;optgroup&amp;#62;&lt;/code&gt; element of the menu bar item.</span>
+<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="c">* one-html.html#ID-70901257&quot;&gt;HTMLOptionElement&lt;/a&gt;} p_oObject Object specifying </span>
+<span class="c">* the &lt;code&gt;&amp;#60;option&amp;#62;&lt;/code&gt; element of the menu bar item.</span>
+<span class="c">* @param {Object} p_oConfig Optional. Object literal specifying the </span>
+<span class="c">* configuration for the menu bar item. See configuration class documentation </span>
+<span class="c">* for more details.</span>
+<span class="c">*/</span>
+<span class="nx">init</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_oObject</span><span class="o">,</span> <span class="nx">p_oConfig</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="k">if</span><span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">SUBMENU_TYPE</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">SUBMENU_TYPE</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Menu</span><span class="o">;</span>
+
+    <span class="o">}</span>
+
+
+    <span class="c">/* </span>
+<span class="c">        Call the init of the superclass (YAHOO.widget.MenuItem)</span>
+<span class="c">        Note: We don&#39;t pass the user config in here yet </span>
+<span class="c">        because we only want it executed once, at the lowest </span>
+<span class="c">        subclass level.</span>
+<span class="c">    */</span> 
+
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuBarItem</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">init</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">p_oObject</span><span class="o">);</span>  
+
+
+    <span class="k">var</span> <span class="nx">oConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
+
+    <span class="k">if</span><span class="o">(</span><span class="nx">p_oConfig</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="nx">oConfig</span><span class="o">.</span><span class="nx">applyConfig</span><span class="o">(</span><span class="nx">p_oConfig</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+    <span class="o">}</span>
+
+    <span class="nx">oConfig</span><span class="o">.</span><span class="nx">fireQueue</span><span class="o">();</span>
+
+<span class="o">},</span>
+
+
+
+<span class="c">// Constants</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c">* @property CSS_CLASS_NAME</span>
+<span class="c">* @description String representing the CSS class(es) to be applied to the </span>
+<span class="c">* &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; element of the menu bar item.</span>
+<span class="c">* @default &quot;yuimenubaritem&quot;</span>
+<span class="c">* @final</span>
+<span class="c">* @type String</span>
+<span class="c">*/</span>
+<span class="nx">CSS_CLASS_NAME</span><span class="o">:</span> <span class="s2">&quot;yuimenubaritem&quot;</span><span class="o">,</span>
+
+
+<span class="c">/**</span>
+<span class="c">* @property SUBMENU_INDICATOR_IMAGE_PATH</span>
+<span class="c">* @description String representing the path to the image to be used for the </span>
+<span class="c">* menu bar item&#39;s submenu arrow indicator.</span>
+<span class="c">* @default &quot;nt/ic/ut/alt1/menuarodwn8_nrm_1.gif&quot;</span>
+<span class="c">* @final</span>
+<span class="c">* @type String</span>
+<span class="c">*/</span>
+<span class="nx">SUBMENU_INDICATOR_IMAGE_PATH</span><span class="o">:</span> <span class="s2">&quot;nt/ic/ut/alt1/menuarodwn8_nrm_1.gif&quot;</span><span class="o">,</span>
+
+
+<span class="c">/**</span>
+<span class="c">* @property SELECTED_SUBMENU_INDICATOR_IMAGE_PATH</span>
+<span class="c">* @description String representing the path to the image to be used for the </span>
+<span class="c">* submenu arrow indicator when the menu bar item is selected.</span>
+<span class="c">* @default &quot;nt/ic/ut/alt1/menuarodwn8_hov_1.gif&quot;</span>
+<span class="c">* @final</span>
+<span class="c">* @type String</span>
+<span class="c">*/</span>
+<span class="nx">SELECTED_SUBMENU_INDICATOR_IMAGE_PATH</span><span class="o">:</span> <span class="s2">&quot;nt/ic/ut/alt1/menuarodwn8_hov_1.gif&quot;</span><span class="o">,</span>
+
+
+<span class="c">/**</span>
+<span class="c">* @property DISABLED_SUBMENU_INDICATOR_IMAGE_PATH</span>
+<span class="c">* @description String representing the path to the image to be used for the </span>
+<span class="c">* submenu arrow indicator when the menu bar item is disabled.</span>
+<span class="c">* @default &quot;nt/ic/ut/alt1/menuarodwn8_dim_1.gif&quot;</span>
+<span class="c">* @final</span>
+<span class="c">* @type String</span>
+<span class="c">*/</span>
+<span class="nx">DISABLED_SUBMENU_INDICATOR_IMAGE_PATH</span><span class="o">:</span> <span class="s2">&quot;nt/ic/ut/alt1/menuarodwn8_dim_1.gif&quot;</span><span class="o">,</span>
+
+
+
+<span class="c">// Public methods</span>
+<span class="c"></span>
+
+<span class="c">/**</span>
+<span class="c">* @method toString</span>
+<span class="c">* @description Returns a string representing the menu bar item.</span>
+<span class="c">* @return {String}</span>
+<span class="c">*/</span>
+<span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="k">return</span> <span class="o">(</span><span class="s2">&quot;MenuBarItem: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;text&quot;</span><span class="o">));</span>
+
+<span class="o">}</span>
+    
+<span class="o">});</span> <span class="c">// END YAHOO.extend</span>
+<span class="c"></span></pre></div>

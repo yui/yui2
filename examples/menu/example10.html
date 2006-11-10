@@ -3,22 +3,33 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>Example 10: Listening For DOM-Related Events</title>
+        <title>Example: Listening For Menu Events (YUI Library)</title>
 
-        <!-- Standard reset and fonts -->
+                <!-- Standard reset and fonts -->
+
         <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
         <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
 
+            
+
         <!-- Logger CSS -->
+
         <link rel="stylesheet" type="text/css" href="../../build/logger/assets/logger.css">
 
+         
+
         <!-- CSS for Menu -->
+
         <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
  
+
         <!-- Page-specific styles -->
+
         <style type="text/css">
 
             body { margin:.5em; }
+
+            h1 { font-weight:bold; }
 
             p em {
             
@@ -42,14 +53,19 @@
 
         </style>
         
-        <!-- Namespace source file -->
+                <!-- Namespace source file -->
+
         <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 
         <!-- Dependency source files -->
+
         <script type="text/javascript" src="../../build/event/event.js"></script>
         <script type="text/javascript" src="../../build/dom/dom.js"></script>
+
             
+
         <!-- Logger source file -->
+
         <script type="text/javascript" src="../../build/logger/logger.js"></script>
         
         <!-- Container source file -->
@@ -59,13 +75,14 @@
         <script type="text/javascript" src="../../build/menu/menu.js"></script>
         
         <!-- Page-specific script -->
+
         <script type="text/javascript">
 
             // "load" event handler for the window
 
             YAHOO.example.onWindowLoad = function(p_oEvent) {
 
-                // Generic event handler for the Menu instance's DOM-related events
+                // Generic event handler for the menu events
                 
                 function onMenuEvent(p_sType, p_aArguments) {
                 
@@ -83,10 +100,7 @@
                 }
     
     
-                /*
-                    Generic event handler for each MenuItem instance's 
-                    DOM-related events
-                */
+                // Generic event handler for the menu item events
     
                 function onMenuItemEvent(p_sType, p_aArguments) {
     
@@ -148,17 +162,17 @@
                 oMenu.show();
 
 
-                // Focus the first MenuItem instance
+                // Focus the first menu item
 
                 oMenu.getItem(0).focus();
                 
 
-                // Disable the third MenuItem instance
+                // Disable the third menu item instance
 
                 oMenu.getItem(2).cfg.setProperty("disabled", true);
 
 
-                // Subscribe to the menu's DOM-related events
+                // Subscribe to the menu's events
 
                 oMenu.mouseOverEvent.subscribe(onMenuEvent);
                 oMenu.mouseOutEvent.subscribe(onMenuEvent);
@@ -187,7 +201,7 @@
     </head>
     <body>
 
-        <h1>Example 10: Listening For DOM-Related Events <em>[<a href="index.html">Examples Home</a>]</em></h1>
+        <h1>Example: Listening For Menu Events (YUI Library) <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to listen for DOM-related events.  Interaction with the Menu will result in event information being output to the console.  <em>Please note</em>: Disabled MenuItem instances do not fire DOM events.  This is demonstrated with the MenuItem named "MenuItem 2."</p>
 
     </body>

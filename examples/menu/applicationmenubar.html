@@ -3,16 +3,24 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>Application Menubar Example</title>
+        <title>Example: Application Menubar (YUI Library)</title>
 
-        <!-- Standard reset and fonts -->
+                <!-- Standard reset and fonts -->
+
         <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
         <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
+
+            
+
         <link rel="stylesheet" type="text/css" href="../../build/container/assets/container.css">
 
+         
+
         <!-- CSS for Menu -->
+
         <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
  
+
         <!-- Page-specific styles -->
         <style type="text/css">
 
@@ -23,7 +31,7 @@
             }
 
 
-            /* Define a new style for each menubar */
+            /* Define a new style for each menu bar */
 
             div.yuimenubar {
                 
@@ -135,12 +143,16 @@
     </head>
     <body>
 
-        <!-- Namespace source file -->
+                <!-- Namespace source file -->
+
         <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 
         <!-- Dependency source files -->
+
         <script type="text/javascript" src="../../build/event/event.js"></script>
         <script type="text/javascript" src="../../build/dom/dom.js"></script>
+
+            
         <script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
         <script type="text/javascript" src="../../build/animation/animation.js"></script>
         
@@ -188,218 +200,70 @@
             YAHOO.example.onWindowLoad = function(p_oEvent) {
 
 
-                // "click" event handler for each item in the root MenuBar instance
-    
-                function onMenuBarItemClick(p_sType, p_aArguments) {
+                var aItemData = [
                 
-                    this.parent.hasFocus = true;
-    
-                    var oActiveItem = this.parent.activeItem;
-                
-                
-                    // Hide any other submenus that might be visible
-                
-                    if(oActiveItem && oActiveItem != this) {
-                
-                        this.parent.clearActiveItem();
-                
-                    }
-                
-                
-                    // Select and focus the current MenuItem instance
-                
-                    this.cfg.setProperty("selected", true);
-                    this.focus();
-                
-                
-                    // Show the submenu for this instance
-                
-                    var oSubmenu = this.cfg.getProperty("submenu");
-    
-                    if(oSubmenu) {
-                
-                        if(oSubmenu.cfg.getProperty("visible")) {
-                        
-                            oSubmenu.hide();
-                        
-                        }
-                        else {
-                        
-                            oSubmenu.show();                    
-                        
-                        }
-                
-                    }
-    
-                }
-    
-    
-                // "mouseover" event handler for each item in the root MenuBar instance
-    
-                function onMenuBarItemMouseOver(p_sType, p_aArguments) {
-                
-                    var oActiveItem = this.parent.activeItem;
-                
-                
-                    // Hide any other submenus that might be visible
-                
-                    if(oActiveItem && oActiveItem != this) {
-                
-                        this.parent.clearActiveItem();
-                
-                    }
-                
-                
-                    // Select and focus the current MenuItem instance
-                
-                    this.cfg.setProperty("selected", true);
-                    this.focus();
-    
-                    if(this.parent.hasFocus) {            
-                
-                        // Show the submenu for this instance
+                    { text:"File", submenu:{  id:"filemenu", itemdata:[
+
+                            { text:"New File", helptext:"Ctrl + N" },
+                            "New Folder",
+                            { text:"Open", helptext:"Ctrl + O" },
+                            { text:"Open With...", submenu: { id:"applications", itemdata: [
+                                    "Application 1", 
+                                    "Application 2", 
+                                    "Application 3", 
+                                    "Application 4"
+                                ] } 
+                            },
+                            { text:"Print", helptext: "Ctrl + P" }
+
+                        ] }
                     
-                        var oSubmenu = this.cfg.getProperty("submenu");
-        
-                        if(oSubmenu) {
+                    },
                     
-                            if(oSubmenu.cfg.getProperty("visible")) {
+                    { text:"Edit", submenu:{ id: "editmenu", itemdata: [
+
+                            [ 
+                                { text:"Undo", helptext: "Ctrl + Z" },
+                                { text:"Redo", helptext: "Ctrl + Y", disabled: true }
+                            ],
                             
-                                oSubmenu.hide();
+                            [
+                                { text:"Cut", helptext: "Ctrl + X", disabled: true },
+                                { text:"Copy", helptext: "Ctrl + C", disabled: true },
+                                { text:"Paste", helptext: "Ctrl + V" },
+                                { text:"Delete", helptext: "Del", disabled: true }
+                            ],
                             
-                            }
-                            else {
-                            
-                                oSubmenu.show();                    
-                            
-                            }
+                            [ { text:"Select All", helptext: "Ctrl + A" } ],
+
+                            [
+                                { text:"Find", helptext: "Ctrl + F" },
+                                { text:"Find Again", helptext: "Ctrl + G" }
+                            ]
                     
-                        }
-    
-                    }
-    
-                }
+                        ] }
+
+                    },
+
+                    "View",
+
+                    "Favorites",
+
+                    "Tools",
+
+                    "Help",
+
+                    { text:"Examples Home", url:"index.html" }
+
+                ];
 
 
-                var oApplicationsMenu = new YAHOO.widget.Menu("applications");
-                
-                oApplicationsMenu.addItem("Application 1");
-                oApplicationsMenu.addItem("Application 2");
-                oApplicationsMenu.addItem("Application 3");
-                oApplicationsMenu.addItem("Application 3");
-
-
-                var oFileMenu = new YAHOO.widget.Menu("filemenu", { zIndex:2 });
-                
-                oFileMenu.addItem(new YAHOO.widget.MenuItem("New File", { helptext: "Ctrl + N" } ));
-                oFileMenu.addItem("New Folder");
-                oFileMenu.addItem(new YAHOO.widget.MenuItem("Open", { helptext: "Ctrl + O" }));
-                oFileMenu.addItem(new YAHOO.widget.MenuItem("Open With...", { submenu: oApplicationsMenu }));
-                oFileMenu.addItem(new YAHOO.widget.MenuItem("Print", { helptext: "Ctrl + P" }));
-
-
-                var oEditMenu = new YAHOO.widget.Menu("edit", { zIndex:2 });
-
-                oEditMenu.addItem(new YAHOO.widget.MenuItem("Undo", { helptext: "Ctrl + Z" }));
-                oEditMenu.addItem(new YAHOO.widget.MenuItem("Redo", { helptext: "Ctrl + Y", disabled: true }));
-                oEditMenu.addItem(new YAHOO.widget.MenuItem("Cut", { helptext: "Ctrl + X", disabled: true }), 1);
-                oEditMenu.addItem(new YAHOO.widget.MenuItem("Copy", { helptext: "Ctrl + C", disabled: true }), 1);
-                oEditMenu.addItem(new YAHOO.widget.MenuItem("Paste", { helptext: "Ctrl + V" }), 1);
-                oEditMenu.addItem(new YAHOO.widget.MenuItem("Delete", { helptext: "Del", disabled: true }), 1);
-                oEditMenu.addItem(new YAHOO.widget.MenuItem("Select All", { helptext: "Ctrl + A" }), 2);
-                oEditMenu.addItem(new YAHOO.widget.MenuItem("Find", { helptext: "Ctrl + F" }), 3);
-                oEditMenu.addItem(new YAHOO.widget.MenuItem("Find Again", { helptext: "Ctrl + G" }), 3);
-
-
-                var oMenuBar = new YAHOO.widget.MenuBar("menubar");
-
-                oMenuBar.addItem(new YAHOO.widget.MenuBarItem("File", { submenu: oFileMenu }));
-                oMenuBar.addItem(new YAHOO.widget.MenuBarItem("Edit", { submenu: oEditMenu }));
-                oMenuBar.addItem("View");
-                oMenuBar.addItem("Favorites");
-                oMenuBar.addItem("Tools");
-                oMenuBar.addItem("Tools");
-                oMenuBar.addItem("Help");
-                oMenuBar.addItem(new YAHOO.widget.MenuBarItem("Examples Home", { url: "index.html" }));
+                var oMenuBar = new YAHOO.widget.MenuBar("menubar", { itemdata:aItemData });
 
 
                 // Render the MenuBar instance and corresponding submenus
 
                 oMenuBar.render(document.body);
-
-
-                /*
-                    Add a "click" and "mouseover" event handler to each item 
-                    in the root MenuBar instnace
-                */
-
-                var i = oMenuBar.getItemGroups()[0].length - 1,
-                    oMenuBarItem;
-
-                do {
-
-                    oMenuBarItem = oMenuBar.getItem(i);
-                    
-                    if(oMenuBarItem) {
-
-                        oMenuBarItem.clickEvent.subscribe(
-                                onMenuBarItemClick,
-                                oMenuBarItem,
-                                true
-                            );
-
-                        oMenuBarItem.mouseOverEvent.subscribe(
-                                onMenuBarItemMouseOver,
-                                oMenuBarItem,
-                                true
-                            );
-
-                    }
-                
-                }
-                while(i--);
-
-
-                // "click" event handler for the document
-    
-                function onDocumentClick(p_oEvent) {
-                
-                    var oTarget = YAHOO.util.Event.getTarget(p_oEvent);
-
-                    if(
-                        oTarget != oMenuBar.element && 
-                        !YAHOO.util.Dom.isAncestor(oMenuBar.element, oTarget)
-                    ) {
-        
-                        oMenuBar.hasFocus = false;
-                        
-                        if(oMenuBar.activeItem) {
-    
-                            var oSubmenu = oMenuBar.activeItem.cfg.getProperty("submenu");
-
-                            if(oSubmenu) {
-                            
-                                oSubmenu.hide();
-                            
-                            }
-
-                            oMenuBar.clearActiveItem();
-                            oMenuBar.activeItem.blur();
-                        
-                        }
-                    
-                    }
-
-                }
-
-
-                // Add a "click" handler for the document
-
-                YAHOO.util.Event.addListener(
-                        document, 
-                        "click", 
-                        onDocumentClick
-                    );
 
 
                 var oPanel = new YAHOO.widget.SimpleDialog(
@@ -414,7 +278,7 @@
                 
                 
                 oPanel.setHeader("Application Menubar Example");
-                oPanel.setBody("This example demonstrates how to create an application-like menubar using nothing by JavaScript.");
+                oPanel.setBody("This example demonstrates how to create an application-like menu bar using JavaScript.");
 
                 oPanel.render(document.body);
               

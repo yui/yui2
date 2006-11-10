@@ -3,17 +3,26 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>OS-Style Programs Menu Example</title>
+        <title>Example: OS-Style Programs Menu (YUI Library)</title>
 
-        <!-- Standard reset and fonts -->
+                <!-- Standard reset and fonts -->
+
         <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
         <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
+
+            
+
         <link rel="stylesheet" type="text/css" href="../../build/container/assets/container.css">
 
+         
+
         <!-- CSS for Menu -->
+
         <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
  
+
         <!-- Page-specific styles -->
+
         <style type="text/css">
 
             html {
@@ -21,6 +30,8 @@
                 overflow:hidden;
             
             }
+
+            h1 { font-weight:bold; }
 
             body {
             
@@ -155,11 +166,12 @@
 
         </style>
 
-            <!-- Namespace source file -->
+                <!-- Namespace source file -->
+
         <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
-        
 
         <!-- Dependency source files -->
+
         <script type="text/javascript" src="../../build/event/event.js"></script>
         <script type="text/javascript" src="../../build/dom/dom.js"></script>
 
@@ -174,11 +186,10 @@
         <script type="text/javascript" src="../../build/menu/menu.js"></script>
 
         <!-- Page-specific script -->
+
         <script type="text/javascript">
         
-            // "load" handler for the window
-
-            YAHOO.example.onWindowLoad = function(p_oEvent) {
+            YAHOO.example.onMenuAvailable = function(p_oEvent) {
 
                 // "click" handler for the "Go to..." menu item
     
@@ -196,6 +207,7 @@
 
 
                 var oH1 = document.getElementsByTagName("h1")[0];
+
 
                 /*
                     Apply the "ytoolbar" class to the H1 so that it is styled 
@@ -229,12 +241,7 @@
 
                 // Add a link back to the examples index page
 
-                var oExamples = oMenu.addItem(
-                                    new YAHOO.widget.MenuItem(
-                                            "Examples", 
-                                            { url: "index.html" } 
-                                        )
-                                    );
+                var oExamples = oMenu.addItem({ text: "Examples", url: "index.html" });
 
                 oExamples.element.id = "examples";
 
@@ -290,28 +297,6 @@
                 YAHOO.util.Event.addListener("yahoo", "click", onYahooClick);
 
 
-                // "click" event handler for the document
-    
-                function onDocumentClick(p_oEvent) {
-                
-                    // Hide the menu
-                    
-                    oMenu.hide();
-    
-                }
-
-                /*
-                    Assign a "click" event handler to the document that will
-                    hide the menu
-                */
-
-                YAHOO.util.Event.addListener(
-                        document, 
-                        "click", 
-                        onDocumentClick
-                    );
-
-
                 // "resize" handler for the window
     
                 function onWindowResize() {
@@ -352,9 +337,10 @@
             }
 
 
-            // Add a "load" event handler for the window
+            // Initialize and render the menu when it is available in the DOM
 
-            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
+            YAHOO.util.Event.onAvailable("yproducts", YAHOO.example.onMenuAvailable);
+
 
         </script>
 

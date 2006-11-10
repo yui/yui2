@@ -3,19 +3,22 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>Website Top Nav (with submenus built from markup)</title>
+        <title>Example: Website Top Nav With Submenus Built From Markup (YUI Library)</title>
 
-        <!-- Standard reset and fonts -->
-        <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
-        <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
+        
+        <!-- Standard reset, fonts and grids -->
 
-        <!-- Grids -->
-        <link rel="stylesheet" type="text/css" href="../../build/grids/grids.css">
+        <link rel="stylesheet" type="text/css" href="../../build/reset-fonts-grids/reset-fonts-grids.css">
+
+ 
 
         <!-- CSS for Menu -->
+
         <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
-  
+ 
+ 
         <!-- Page-specific styles -->
+
         <style type="text/css">
 
             div.yui-b p {
@@ -40,6 +43,8 @@
             
             h1 {
 
+                font-weight:bold;
+                margin:0 0 1em 0;
                 padding:.25em .5em;
                 background-color:#ccc;
 
@@ -50,21 +55,18 @@
                 margin:0 0 10px 0;
             
             }
-            
-            div.yuimenu {
-            
-                position:absolute;
-            
-            }
 
         </style>
 
-        <!-- Namespace source file -->
+                <!-- Namespace source file -->
+
         <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 
         <!-- Dependency source files -->
+
         <script type="text/javascript" src="../../build/event/event.js"></script>
         <script type="text/javascript" src="../../build/dom/dom.js"></script>
+
 
         <!-- Container source file -->
         <script type="text/javascript" src="../../build/container/container_core.js"></script>
@@ -73,187 +75,23 @@
         <script type="text/javascript" src="../../build/menu/menu.js"></script>
 
         <!-- Page-specific script -->
+
         <script type="text/javascript">
 
-            // "load" handler for the window
+            YAHOO.example.onMenuBarAvailable = function(p_oEvent) {
 
-            YAHOO.example.onWindowLoad = function(p_oEvent) {
+                // Instantiate and render the menu bar
 
-                // Hides submenus of the root Menubar instance
-                
-                function hideSubmenus() {
+                var oMenuBar = new YAHOO.widget.MenuBar("productsandservices", { autosubmenudisplay:true, showdelay:250, hidedelay:750, lazyload:true });
 
-                    if(oMenuBar.activeItem) {
-                    
-                        var oSubmenu = oMenuBar.activeItem.cfg.getProperty("submenu");
-
-                        if(oSubmenu) {
-                        
-                            oSubmenu.hide();
-                        
-                        }
-                    
-                    }
-
-                }    
-
-
-                // Cancels the call to "hideSubmenus"
-
-                function cancelTimer() {
-
-                    if(nTimeoutId) {
-    
-                        window.clearTimeout(nTimeoutId);
-    
-                    }
-                
-                }
-    
-    
-                // "mouseout" event handler for each submenu of the menubar
-                
-                function onSubmenuMouseOut(p_sType, p_aArguments, p_oMenu) {
-    
-                    cancelTimer();
-    
-                    nTimeoutId = window.setTimeout(hideSubmenus, 750);
-                
-                }
-    
-    
-                // "mouseover" handler for each item in the menubar
-    
-                function onMenuBarItemMouseOver(p_sType, p_aArguments, p_oMenuItem) {
-                
-                    var oActiveItem = this.parent.activeItem;
-                
-                
-                    // Hide any other submenus that might be visible
-                
-                    if(oActiveItem && oActiveItem != this) {
-                
-                        this.parent.clearActiveItem();
-                
-                    }
-                
-                
-                    // Select and focus the current MenuItem instance
-                
-                    this.cfg.setProperty("selected", true);
-                    this.focus();
-                
-                
-                    // Show the submenu for this instance
-                
-                    var oSubmenu = this.cfg.getProperty("submenu");
-                
-                    if(oSubmenu) {
-                
-                        oSubmenu.show();
-                
-                    }
-                
-                }
-            
-    
-                // "mouseout" handler for each item in the menubar
-            
-                function onMenuBarItemMouseOut(p_sType, p_aArguments, p_oMenuItem) {
-                
-                    this.cfg.setProperty("selected", false);
-                
-                
-                    var oSubmenu = this.cfg.getProperty("submenu");
-                
-                    if(oSubmenu) {
-                
-                        var oDOMEvent = p_aArguments[0],
-                            oRelatedTarget = YAHOO.util.Event.getRelatedTarget(oDOMEvent);
-                
-                        if(
-                            !(
-                                oRelatedTarget == oSubmenu.element || 
-                                this._oDom.isAncestor(oSubmenu.element, oRelatedTarget)
-                            )
-                        ) {
-                
-                            oSubmenu.hide();
-                
-                        }
-                
-                    }
-                
-                }
-
-
-                var nTimeoutId;
-
-
-                // Instantiate and render the menubar and corresponding submenus
-
-                var oMenuBar = new YAHOO.widget.MenuBar("productsandservices");
                 oMenuBar.render();
-
-
-                /*
-                    Add a "mouseover" and "mouseout" event handler each item 
-                    in the menu bar 
-                */               
-
-                var aMenuBarItems = oMenuBar.getItemGroups()[0],
-                    i = aMenuBarItems.length - 1;
-
-                do {
-
-                    aMenuBarItems[i].mouseOverEvent.subscribe(onMenuBarItemMouseOver);
-                    aMenuBarItems[i].mouseOutEvent.subscribe(onMenuBarItemMouseOut);
-                
-                }
-                while(i--);
-
-
-                // Assign event handlers
-
-                // Add a "mouseover" handler to the menubar
-
-                oMenuBar.mouseOverEvent.subscribe(cancelTimer);
-
-                var oCommunication = oMenuBar.getItem(0).cfg.getProperty("submenu"),
-                    oPIM = oCommunication.getItem(5).cfg.getProperty("submenu"),
-                    oShopping = oMenuBar.getItem(1).cfg.getProperty("submenu"),
-                    oEntertainment = oMenuBar.getItem(2).cfg.getProperty("submenu"),
-                    oInformation = oMenuBar.getItem(3).cfg.getProperty("submenu");
-
-
-                // Add a "mouseover" event handler to each submenu
-                
-                oCommunication.mouseOverEvent.subscribe(cancelTimer);
-                oPIM.mouseOverEvent.subscribe(cancelTimer);
-                oShopping.mouseOverEvent.subscribe(cancelTimer);
-                oEntertainment.mouseOverEvent.subscribe(cancelTimer);
-                oInformation.mouseOverEvent.subscribe(cancelTimer);
-
-
-                // Add a "mouseout" event handler to each submenu
-
-                oCommunication.mouseOutEvent.subscribe(onSubmenuMouseOut, oCommunication, true);
-                oPIM.mouseOutEvent.subscribe(onSubmenuMouseOut, oPIM, true);
-                oShopping.mouseOutEvent.subscribe(onSubmenuMouseOut, oShopping, true);
-                oEntertainment.mouseOutEvent.subscribe(onSubmenuMouseOut, oEntertainment, true);
-                oInformation.mouseOutEvent.subscribe(onSubmenuMouseOut, oInformation, true);
-
-
-                // Add a "click" handler to the document
-
-                YAHOO.util.Event.addListener(document, "click", hideSubmenus);
 
             }
 
 
-            // Add a "load" handler for the window
+            // Initialize and render the menu bar when it is available in the DOM
 
-            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
+            YAHOO.util.Event.onAvailable("productsandservices", YAHOO.example.onMenuBarAvailable);
 
         </script>
 
@@ -264,7 +102,7 @@
             <div id="hd">
                 <!-- start: your content here -->
                 
-                    <h1>Website Top Nav (with submenus built from markup) <em>[<a href="index.html">Examples Home</a>]</em></h1>
+                    <h1>Example: Website Top Nav With Submenus Built From Markup (YUI Library) <em>[<a href="index.html">Examples Home</a>]</em></h1>
         
                 <!-- end: your content here -->
             </div>
@@ -372,7 +210,7 @@
                             </div>
                         </div>
                         
-                        <p><strong>NOTE:</strong> <em>This example demonstrates how to build a menubar with submenus created using existing markup.  Alternatively, you can <a href="topnavfromjs.html">add submenus to a menubar using JavaScript</a>.</em></p>
+                        <p id="note"><strong>NOTE:</strong> <em>This example demonstrates how to add submenus to a menu bar using existing markup.  Alternatively, you can <a href="topnavfromjs.html">add submenus to a menu bar using JavaScript</a>.</em></p>
 
                         <form name="example">
                             <select name="test">
