@@ -880,7 +880,7 @@ YAHOO.util.Region.getRegion = function(el) {
  * @param {Int} x The X position of the point
  * @param {Int} y The Y position of the point
  * @constructor
- * @extends Region
+ * @extends YAHOO.util.Region
  */
 YAHOO.util.Point = function(x, y) {
    if (x instanceof Array) { // accept output from Dom.getXY
