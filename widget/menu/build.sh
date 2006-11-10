@@ -6,6 +6,7 @@ echo "/*" > copyright.txt
 echo "Copyright (c) `date +%Y`, Yahoo! Inc. All rights reserved." >> copyright.txt
 echo "Code licensed under the BSD License:" >> copyright.txt
 echo "http://developer.yahoo.com/yui/license.txt" >> copyright.txt
+echo "Version: 0.12" >> copyright.txt
 echo "*/" >> copyright.txt
 echo "" >> copyright.txt
 echo "" >> copyright.txt
@@ -14,11 +15,15 @@ echo "" >> copyright.txt
 
 # Build the JavaScript
 
-cat src/js/menumodule.js src/js/menumoduleitem.js src/js/menu.js src/js/menuitem.js src/js/contextmenu.js src/js/contextmenuitem.js src/js/menubar.js src/js/menubaritem.js > build/menu-lib.js
+cat src/js/menumanager.js src/js/menu.js src/js/menumodule.js src/js/menuitem.js src/js/menumoduleitem.js src/js/contextmenu.js src/js/contextmenuitem.js src/js/menubar.js src/js/menubaritem.js > build/menu-lib.js
 
 cat copyright.txt build/menu-lib.js > build/menu-debug.js
 
+
+# Remove logger statements
+
 /usr/local/bin/perl -i -p00we 's/^.*?this\.log.*?(;|\).*;|(\n.*?)*?\).*;).*;?.*?\n/""/emg' build/menu-lib.js
+/usr/local/bin/perl -i -p00we 's/^.*?m_oLogger.*?(;|\).*;|(\n.*?)*?\).*;).*;?.*?\n/""/emg' build/menu-lib.js
 
 cat copyright.txt build/menu-lib.js > build/menu.js
 
@@ -65,6 +70,7 @@ cp build/assets/*.gif ~/dev/yahoo/properties/webservices/site/yui/build/menu/ass
 cp build/README ../../build/menu/
 cp build/README ~/dev/yahoo/properties/webservices/site/yui/build/menu/
 
+
 # Create example files
 
 php examples/example01.html > ../../examples/menu/example01.html
@@ -85,8 +91,12 @@ php examples/contextmenu.html > ../../examples/menu/contextmenu.html
 php examples/programsmenu.html > ../../examples/menu/programsmenu.html
 php examples/leftnavfromjs.html > ../../examples/menu/leftnavfromjs.html
 php examples/leftnavfrommarkup.html > ../../examples/menu/leftnavfrommarkup.html
+php examples/leftnavfromjswithanim.html > ../../examples/menu/leftnavfromjswithanim.html
+php examples/leftnavfrommarkupwithanim.html > ../../examples/menu/leftnavfrommarkupwithanim.html
 php examples/topnavfromjs.html > ../../examples/menu/topnavfromjs.html
 php examples/topnavfrommarkup.html > ../../examples/menu/topnavfrommarkup.html
+php examples/topnavfromjswithanim.html > ../../examples/menu/topnavfromjswithanim.html
+php examples/topnavfrommarkupwithanim.html > ../../examples/menu/topnavfrommarkupwithanim.html
 
 
 # Copy the index file into the examples directory
@@ -105,20 +115,15 @@ cp ../../examples/menu/*.html ~/dev/yahoo/properties/webservices/site/yui/exampl
 cp examples/img/*.jpg ../../examples/menu/img
 cp examples/img/*.jpg ~/dev/yahoo/properties/webservices/site/yui/examples/menu/img
 
-
-# Copy the source files to the directory that JSDoc lives in
-
-cp src/js/*.js ~/yjsdoc/js_src/menu/
-
+cp examples/img/*.png ../../examples/menu/img
+cp examples/img/*.png ~/dev/yahoo/properties/webservices/site/yui/examples/menu/img
 
 # Generate the documentation
 
-cd ~/yjsdoc/js_src/menu/
-/usr/local/bin/perl /home/kloots/yjsdoc/bin/jsdoc.pl -r
+./menudocsgen.sh
 
 
-# Copy the documentation to the three different locations where they are stored in CVS
+# Copy the documentation to the two different locations where they are stored in CVS
 
-cp ~/yjsdoc/docs/*.* ~/dev/yahoo/presentation/2.x/widget/menu/docs/
-cp ~/yjsdoc/docs/*.* ~/dev/yahoo/presentation/2.x/docs/menu/
-cp ~/yjsdoc/docs/*.* ~/dev/yahoo/properties/webservices/site/yui/docs/menu/
+cp ~/dev/yahoo/presentation/2.x/widget/menu/docs/*.* ~/dev/yahoo/presentation/2.x/docs/menu/
+cp ~/dev/yahoo/presentation/2.x/widget/menu/docs/*.* ~/dev/yahoo/properties/webservices/site/yui/docs/menu/
