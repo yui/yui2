@@ -517,7 +517,6 @@ YAHOO.widget.TreeView.prototype = {
      * @return {string} string representation of the tree
      */
     toString: function() {
-        alert("asdf");
         return "TreeView " + this.id;
     },
 

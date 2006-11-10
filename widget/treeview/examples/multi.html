@@ -21,9 +21,9 @@
 </div>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
 
 <!-- The following are required for the logger -->
-<script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <!-- End logger reqs -->
@@ -100,7 +100,8 @@
 
             onload: function() {
                 if (YAHOO.widget.Logger) {
-                    new YAHOO.widget.LogReader( "logDiv", { height: "400px" } );
+                    var reader = new YAHOO.widget.LogReader( "logDiv", { height: "400px" } );
+                    //reader._onClickPauseBtn(null, reader);
                 }
             }
         };

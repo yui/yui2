@@ -14,9 +14,9 @@
 </div>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
 
 <!-- The following are required for the logger -->
-<script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <!-- End logger reqs -->
@@ -93,7 +93,8 @@
 
             onload: function() {
                 if (YAHOO.widget.Logger) {
-                    new YAHOO.widget.LogReader( "logDiv", { height: "400px" } );
+                    var reader = new YAHOO.widget.LogReader( "logDiv", { height: "400px" } );
+                    //reader._onClickPauseBtn(null, reader);
                 }
             }
         };
@@ -141,17 +142,44 @@
   <script type="text/javascript">
 
 	var tree;
-	var nodes = new Array();
+	var nodes = [];
 	var nodeIndex;
 	
 	function treeInit() {
 		buildRandomTextNodeTree();
 	}
+
+    function handleExpand(node) {
+        YAHOO.log("handle expand " + node.index);
+    }
 	
+    function handleCollapse(node) {
+        YAHOO.log("handle collapse " + node.index);
+        // return false; // return false to cancel the collapse
+    }
+	
+    function handleAnimStart(info) {
+        YAHOO.log("handle animStart " + info.node.index);
+    }
+	
+    function handleAnimComplete(info) {
+        YAHOO.log("handle animComplete " + info.node.index);
+    }
+	
+    function handleLabelClick(node) {
+        YAHOO.log("handle labelClick " + node.toString());
+    }
+
 	function buildRandomTextNodeTree() {
 		tree = new YAHOO.widget.TreeView("treeDiv1");
 		tree.setExpandAnim(YAHOO.widget.TVAnim.FADE_IN);
 		tree.setCollapseAnim(YAHOO.widget.TVAnim.FADE_OUT);
+
+        tree.subscribe("expand", handleExpand);
+        tree.subscribe("collapse", handleCollapse);
+        tree.subscribe("animStart", handleAnimStart);
+        tree.subscribe("animComplete", handleAnimComplete);
+        tree.subscribe("labelClick", handleLabelClick);
 
 		for (var i = 0; i < Math.floor((Math.random()*4) + 3); i++) {
 			var tmpNode = new YAHOO.widget.TextNode("label-" + i, tree.getRoot(), false);
