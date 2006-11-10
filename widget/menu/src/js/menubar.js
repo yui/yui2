@@ -2,7 +2,7 @@
 
 
 /**
-* Horizontal collection of items, each of which can contain a submenu. Extends YAHOO.widget.Menu to provide a set of default mouse and key event behaviors.
+* Horizontal collection of items, each of which can contain a submenu.
 * 
 * @param {String} p_oElement String specifying the id attribute of the <code>&#60;div&#62;</code> element of the menu bar.
 * @param {String} p_oElement String specifying the id attribute of the <code>&#60;select&#62;</code> element to be used as the data source for the menu bar.
