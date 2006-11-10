@@ -1631,8 +1631,6 @@ YAHOO.widget.MenuItem.prototype = {
         /**
         * @config submenu
         * @description Object specifying the submenu to be appended to the menu item.  The value can be one of the following: <ul><li>Object specifying a Menu instance.</li><li>Object literal specifying the menu to be created.  Format: <code>{ id: [menu id], itemdata: [<a href="YAHOO.widget.Menu.html#itemData">array of values for items</a>] }</code>.</li><li>String specifying the id attribute of the <code>&#60;div&#62;</code> element of the menu.</li><li>Object specifying the <code>&#60;div&#62;</code> element of the menu.</li></ul>
-
-
         * @default null
         * @type Menu|String|Object|<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">HTMLElement</a>
         */
@@ -1831,7 +1829,14 @@ YAHOO.widget.MenuItem.prototype = {
 
             }
 
-            oAnchor.focus();
+            try {
+
+                oAnchor.focus();
+
+            }
+            catch(e) {
+            
+            }
             
             this.focusEvent.fire();
 
