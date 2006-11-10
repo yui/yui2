@@ -7,8 +7,9 @@
  *
  * @class LogReader
  * @constructor
- * @param elContainer {HTMLElement | String} DOM element reference or ID string to contain UI.
- * @param oConfigs {Object} Optional object literal of configuration params.
+ * @param elContainer {HTMLElement} (optional) DOM element reference of an existing DIV.
+ * @param elContainer {String} (optional) String ID of an existing DIV.
+ * @param oConfigs {Object} (optional) Object literal of configuration params.
  */
 YAHOO.widget.LogReader = function(elContainer, oConfigs) {
     var oSelf = this;
@@ -426,11 +427,10 @@ YAHOO.widget.LogReader.prototype.formatMsg = function(oLogMsg) {
         sourceAndDetail, ": ",
         msg,"</p>"];
 
-    return output.join("");;
+    return output.join("");
 };
 
 /**
- * TODO: Include in util package.
  * Converts input chars "<", ">", and "&" to HTML entities.
  *
  * @method html2Text
@@ -483,10 +483,10 @@ YAHOO.widget.LogReader.prototype._sName = null;
 YAHOO.widget.LogReader._elDefaultContainer = null;
 
 /**
- * Buffer of log messages for batch output.
+ * Buffer of log message objects for batch output.
  *
  * @property _buffer
- * @type Array
+ * @type Object[]
  * @private
  */
 YAHOO.widget.LogReader.prototype._buffer = null;
@@ -523,7 +523,7 @@ YAHOO.widget.LogReader.prototype._timeout = null;
  * Array of filters for log message categories.
  *
  * @property _categoryFilters
- * @type Array
+ * @type String[]
  * @private
  */
 YAHOO.widget.LogReader.prototype._categoryFilters = null;
@@ -532,7 +532,7 @@ YAHOO.widget.LogReader.prototype._categoryFilters = null;
  * Array of filters for log message sources.
  *
  * @property _sourceFilters
- * @type Array
+ * @type String[]
  * @private
  */
 YAHOO.widget.LogReader.prototype._sourceFilters = null;
@@ -760,7 +760,7 @@ YAHOO.widget.LogReader.prototype._clearConsole = function() {
     // Reset the rolling timer
     this._lastTime = YAHOO.widget.Logger.getStartTime();
 
-    var elConsole = this._elConsole
+    var elConsole = this._elConsole;
     while(elConsole.hasChildNodes()) {
         elConsole.removeChild(elConsole.firstChild);
     }
@@ -801,7 +801,7 @@ YAHOO.widget.LogReader.prototype._printBuffer = function() {
  * if its category has not been filtered out.
  *
  * @method _printToConsole
- * @param aEntries {Array} Array of entry objects to output to console.
+ * @param aEntries {Object[]} Array of LogMsg objects to output to console.
  * @private
  */
 YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
@@ -868,7 +868,7 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
  *
  * @method _onCategoryCreate
  * @param sType {String} The event.
- * @param aArgs {Array} Data passed from event firer.
+ * @param aArgs {Object[]} Data passed from event firer.
  * @param oSelf {Object} The LogReader instance.
  * @private
  */
@@ -884,7 +884,7 @@ YAHOO.widget.LogReader.prototype._onCategoryCreate = function(sType, aArgs, oSel
  *
  * @method _onSourceCreate
  * @param sType {String} The event.
- * @param aArgs {Array} Data passed from event firer.
+ * @param aArgs {Object[]} Data passed from event firer.
  * @param oSelf {Object} The LogReader instance.
  * @private
  */
@@ -1010,7 +1010,7 @@ YAHOO.widget.LogReader.prototype._onClickClearBtn = function(v, oSelf) {
  *
  * @method _onNewLog
  * @param sType {String} The event.
- * @param aArgs {Array} Data passed from event firer.
+ * @param aArgs {Object[]} Data passed from event firer.
  * @param oSelf {Object} The LogReader instance.
  * @private
  */
@@ -1028,7 +1028,7 @@ YAHOO.widget.LogReader.prototype._onNewLog = function(sType, aArgs, oSelf) {
  *
  * @method _onReset
  * @param sType {String} The event.
- * @param aArgs {Array} Data passed from event firer.
+ * @param aArgs {Object[]} Data passed from event firer.
  * @param oSelf {Object} The LogReader instance.
  * @private
  */

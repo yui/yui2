@@ -125,10 +125,10 @@ YAHOO.widget.Logger.reset = function() {
 };
 
 /**
- * Public accessor to internal stack of log messages.
+ * Public accessor to internal stack of log message objects.
  *
  * @method getStack
- * @return {Array} Array of log messages.
+ * @return {Object[]} Array of log message objects.
  */
 YAHOO.widget.Logger.getStack = function() {
     return this._stack;

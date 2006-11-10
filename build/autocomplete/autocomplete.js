@@ -33,8 +33,10 @@ version: 0.12.0
  *
  * @class AutoComplete
  * @constructor
- * @param elInput {HTMLElement | String} DOM element reference or string ID of an input field
- * @param elContainer {HTMLElement | String} DOM element reference or string ID of an existing DIV
+ * @param elInput {HTMLElement} DOM element reference of an input field
+ * @param elInput {String} String ID of an input field
+ * @param elContainer {HTMLElement} DOM element reference of an existing DIV
+ * @param elContainer {String} String ID of an existing DIV
  * @param oDataSource {Object} Instance of YAHOO.widget.DataSource for query/results
  * @param oConfigs {Object} (optional) Object literal of configuration params
  */
@@ -213,7 +215,7 @@ YAHOO.widget.AutoComplete.prototype.prehighlightClassName = null;
  * be true.
  *
  * @property delimChar
- * @type String | Array
+ * @type String | String[]
  */
 YAHOO.widget.AutoComplete.prototype.delimChar = null;
 
@@ -357,7 +359,7 @@ YAHOO.widget.AutoComplete.prototype.isContainerOpen = function() {
  * display query results within the results container.
  *
  * @method getListItems
- * @return {Array} Array of &lt;li&gt; elements within the results container.
+ * @return {HTMLElement[]} Array of &lt;li&gt; elements within the results container.
  */
 YAHOO.widget.AutoComplete.prototype.getListItems = function() {
     return this._aListItems;
@@ -1352,7 +1354,7 @@ YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
-    var oContainer = this._oContainer
+    var oContainer = this._oContainer;
 
     // Implementer has container always open so don't mess with it
     if(this.alwaysShowContainer && this._bContainerOpen) {
@@ -1891,10 +1893,9 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
         }
 
         //TODO: (?) limit only to non-IE, non-Mac-FF for Korean IME support (bug 811948)
-        switch (nKeyCode) {
-            case 229: // Korean IME detected
-                oSelf._queryInterval = setInterval(function() { oSelf._onIMEDetected(oSelf) },500);
-                break;
+        // Korean IME detected
+        else if(nKeyCode == 229) {
+            oSelf._queryInterval = setInterval(function() { oSelf._onIMEDetected(oSelf); },500);
         }
 };
 
@@ -2203,7 +2204,7 @@ YAHOO.widget.DataSource.prototype.cacheQueryEvent = null;
  * @param oSelf {Object} The DataSource instance.
  * @param oParent {Object} The requesting object.
  * @param sQuery {String} The query string.
- * @param aResults {Array} Array of result objects.
+ * @param aResults {Object[]} Array of result objects.
  */
 YAHOO.widget.DataSource.prototype.getResultsEvent = null;
     
@@ -2214,7 +2215,7 @@ YAHOO.widget.DataSource.prototype.getResultsEvent = null;
  * @param oSelf {Object} The DataSource instance.
  * @param oParent {Object} The requesting object.
  * @param sQuery {String} The query string.
- * @param aResults {Array} Array of result objects.
+ * @param aResults {Object[]} Array of result objects.
  */
 YAHOO.widget.DataSource.prototype.getCachedResultsEvent = null;
 
@@ -2266,7 +2267,7 @@ YAHOO.widget.DataSource.prototype._sName = null;
  * Local cache of data result objects indexed chronologically.
  *
  * @property _aCache
- * @type Array
+ * @type Object[]
  * @private
  */
 YAHOO.widget.DataSource.prototype._aCache = null;
@@ -2340,7 +2341,7 @@ YAHOO.widget.DataSource.prototype._addCacheElem = function(oResult) {
  * @param oCallbackFn {HTMLFunction} Callback function defined by oParent object to which to return results.
  * @param sQuery {String} Query string.
  * @param oParent {Object} The object instance that has requested data.
- * @return aResults {Array} Array of results from local cache if found, otherwise null.
+ * @return aResults {Object[]} Array of results from local cache if found, otherwise null.
  * @private 
  */
 YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, oParent) {
@@ -2449,7 +2450,7 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
  * @constructor
  * @param sScriptURI {String} Absolute or relative URI to script that returns query
  * results as JSON, XML, or delimited flat-file data.
- * @param aSchema {Array} Data schema definition of results.
+ * @param aSchema {String[]} Data schema definition of results.
  * @param oConfigs {Object} (optional) Object literal of config params.
  */
 YAHOO.widget.DS_XHR = function(sScriptURI, aSchema, oConfigs) {
@@ -2692,7 +2693,7 @@ for(var foo in oResp) {
  * @param sQuery {String} Query string.
  * @param oResponse {Object} The raw response data to parse.
  * @param oParent {Object} The object instance that has requested data.
- * @returns {Array} Array of result objects.
+ * @returns {Object[]} Array of result objects.
  */
 YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParent) {
     var aSchema = this.schema;
@@ -2968,7 +2969,7 @@ YAHOO.widget.DS_JSFunction.prototype.doQuery = function(oCallbackFn, sQuery, oPa
  * @class DS_JSArray
  * @constructor
  * @extends YAHOO.widget.DataSource
- * @param aData {Array} In-memory Javascript array of simple string data.
+ * @param aData {String[]} In-memory Javascript array of simple string data.
  * @param oConfigs {Object} (optional) Object literal of config params.
  */
 YAHOO.widget.DS_JSArray = function(aData, oConfigs) {

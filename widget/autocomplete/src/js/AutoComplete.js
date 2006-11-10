@@ -26,10 +26,12 @@
  *
  * @class AutoComplete
  * @constructor
- * @param elInput {HTMLElement | String} DOM element reference or string ID of an input field
- * @param elContainer {HTMLElement | String} DOM element reference or string ID of an existing DIV
- * @param oDataSource {Object} Instance of YAHOO.widget.DataSource for query/results
- * @param oConfigs {Object} (optional) Object literal of configuration params
+ * @param elInput {HTMLElement} DOM element reference of an input field.
+ * @param elInput {String} String ID of an input field.
+ * @param elContainer {HTMLElement} DOM element reference of an existing DIV.
+ * @param elContainer {String} String ID of an existing DIV.
+ * @param oDataSource {Object} Instance of YAHOO.widget.DataSource for query/results.
+ * @param oConfigs {Object} (optional) Object literal of configuration params.
  */
 YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
     if(elInput && elContainer && oDataSource) {
@@ -212,7 +214,7 @@ YAHOO.widget.AutoComplete.prototype.prehighlightClassName = null;
  * be true.
  *
  * @property delimChar
- * @type String | Array
+ * @type String | String[]
  */
 YAHOO.widget.AutoComplete.prototype.delimChar = null;
 
@@ -356,7 +358,7 @@ YAHOO.widget.AutoComplete.prototype.isContainerOpen = function() {
  * display query results within the results container.
  *
  * @method getListItems
- * @return {Array} Array of &lt;li&gt; elements within the results container.
+ * @return {HTMLElement[]} Array of &lt;li&gt; elements within the results container.
  */
 YAHOO.widget.AutoComplete.prototype.getListItems = function() {
     return this._aListItems;
@@ -1355,7 +1357,7 @@ YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
-    var oContainer = this._oContainer
+    var oContainer = this._oContainer;
 
     // Implementer has container always open so don't mess with it
     if(this.alwaysShowContainer && this._bContainerOpen) {
@@ -1895,10 +1897,9 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
         }
 
         //TODO: (?) limit only to non-IE, non-Mac-FF for Korean IME support (bug 811948)
-        switch (nKeyCode) {
-            case 229: // Korean IME detected
-                oSelf._queryInterval = setInterval(function() { oSelf._onIMEDetected(oSelf) },500);
-                break;
+        // Korean IME detected
+        else if(nKeyCode == 229) {
+            oSelf._queryInterval = setInterval(function() { oSelf._onIMEDetected(oSelf); },500);
         }
 };
 
