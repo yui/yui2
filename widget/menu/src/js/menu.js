@@ -1855,7 +1855,9 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
 
 
     }
-    else if(oEvent.keyCode == 27) { // Esc key
+
+
+    if(oEvent.keyCode == 27) { // Esc key
 
         if(this.cfg.getProperty("position") == "dynamic") {
         
@@ -3352,7 +3354,7 @@ initDefaultConfig: function() {
     * set to "static" this property toggles the menu's 
     * <code>&#60;div&#62;</code> element's "display" style property 
     * between "block" (true) or "none" (false).
-    * @default true
+    * @default false
     * @type Boolean
     */
     oConfig.addProperty(
