@@ -147,7 +147,7 @@ YAHOO.util.CustomEvent.prototype = {
      * Unsubscribes the caller from this event
      * @method unsubscribe
      * @param {Function} fn  The function to execute
-     * @param {Object}   obj An object to be passed along when the event fires
+     * @param {Object}   obj  The custom object passed to subscribe (optional)
      * @return {boolean} True if the subscriber was found and detached.
      */
     unsubscribe: function(fn, obj) {
@@ -338,7 +338,11 @@ YAHOO.util.Subscriber.prototype.getScope = function(defaultScope) {
  *                   subscriber's signature.
  */
 YAHOO.util.Subscriber.prototype.contains = function(fn, obj) {
-    return (this.fn == fn && this.obj == obj);
+    if (obj) {
+        return (this.fn == fn && this.obj == obj);
+    } else {
+        return (this.fn == fn);
+    }
 };
 
 /**

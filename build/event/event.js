@@ -152,7 +152,7 @@ YAHOO.util.CustomEvent.prototype = {
      * Unsubscribes the caller from this event
      * @method unsubscribe
      * @param {Function} fn  The function to execute
-     * @param {Object}   obj An object to be passed along when the event fires
+     * @param {Object}   obj  The custom object passed to subscribe (optional)
      * @return {boolean} True if the subscriber was found and detached.
      */
     unsubscribe: function(fn, obj) {
@@ -335,7 +335,11 @@ YAHOO.util.Subscriber.prototype.getScope = function(defaultScope) {
  *                   subscriber's signature.
  */
 YAHOO.util.Subscriber.prototype.contains = function(fn, obj) {
-    return (this.fn == fn && this.obj == obj);
+    if (obj) {
+        return (this.fn == fn && this.obj == obj);
+    } else {
+        return (this.fn == fn);
+    }
 };
 
 /**
@@ -1598,6 +1602,24 @@ YAHOO.util.EventProvider.prototype = {
     },
 
     /**
+     * Unsubscribes the from the specified event
+     * @method unsubscribe
+     * @param p_type {string}   The type, or name of the event
+     * @param p_fn   {Function} The function to execute
+     * @param p_obj  {Object}   The custom object passed to subscribe (optional)
+     * @return {boolean} true if the subscriber was found and detached.
+     */
+    unsubscribe: function(p_type, p_fn, p_obj) {
+        this.__yui_events = this.__yui_events || {};
+        var ce = this.__yui_events[p_type];
+        if (ce) {
+            return ce.unsubscribe(p_fn, p_obj);
+        } else {
+            return false;
+        }
+    },
+
+    /**
      * Creates a new custom event of the specified type.  If a custom event
      * by that name already exists, it will not be re-created.  In either
      * case the custom event is returned. 
@@ -1636,7 +1658,7 @@ YAHOO.util.EventProvider.prototype = {
         if (events[p_type]) {
         } else {
 
-            var scope = opts.scope || this;
+            var scope  = opts.scope  || this;
             var silent = opts.silent || null;
 
             var ce = new YAHOO.util.CustomEvent(p_type, scope, silent,

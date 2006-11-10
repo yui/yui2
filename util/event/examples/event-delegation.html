@@ -35,7 +35,7 @@ function clickHandler(e) {
 	//reach the container div
 	while (elTarget.id != "container") {
 		//are you an li?
-		if(elTarget.nodeName == "LI") {
+		if(elTarget.nodeName.toUpperCase() == "LI") {
 			//yes, an li: so write out a message to the log
 			YAHOO.log("The clicked li had an id of " + elTarget.id, "info", "clickExample");
 			//and then stop looking:
@@ -54,7 +54,7 @@ YAHOO.util.Event.on("container", "click", clickHandler);
 function mouseHandler(e) {
 	var elTarget = YAHOO.util.Event.getTarget(e);
 	while (elTarget.id != "container") {
-		if(elTarget.nodeName == "LI") {
+		if(elTarget.nodeName.toUpperCase() == "LI") {
 			YAHOO.log("The li that was mousedover had an id of " + elTarget.id, "info", "mouseExample");
 			break;
 		} else {
@@ -125,7 +125,7 @@ YAHOO.util.Event.on(window, "load", loggerInit);</textarea></pre>
 	//reach the container div
 	while (elTarget.id != "container") {
 		//are you an li?
-		if(elTarget.nodeName == "LI") {
+		if(elTarget.nodeName.toUpperCase() == "LI") {
 			//yes, an li: so write out a message to the log
 			YAHOO.log("The clicked li had an id of " + elTarget.id, "info", "clickExample");
 			//and then stop looking:
@@ -146,7 +146,7 @@ YAHOO.util.Event.on("container", "click", clickHandler);</textarea></pre>
 <pre><textarea name="code" class="JScript" cols="60" rows="1">function mouseHandler(e) {	
 	var elTarget = YAHOO.util.Event.getTarget(e);	
 	while (elTarget.id != "container") {
-		if(elTarget.nodeName == "LI") {
+		if(elTarget.nodeName.toUpperCase() == "LI") {
 			YAHOO.log("The li that was mousedover had an id of " + elTarget.id, "info", "mouseExample");
 			break;
 		} else {
