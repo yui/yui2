@@ -64,7 +64,7 @@
                  images in the "assets" directory.
             */
 
-            YAHOO.widget.MenuItem.prototype.IMG_ROOT = "../build/assets/";
+            YAHOO.widget.MenuItem.prototype.IMG_ROOT = "<?php echo ($g_sBuildType == "dev" ? "../build/assets/" : "../../build/menu/assets/");  ?>";
 
 
             //  Change the path to the submenu indicator images for each menu item
