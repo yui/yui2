@@ -8,7 +8,7 @@ var Event = YAHOO.util.Event;
 
 
 /**
-* The Menu class creates a container that holds a vertical list of options or commands.  Menu is the base class for all menu containers.
+* The Menu class creates a container that holds a vertical list representing a set of options or commands.  Menu is the base class for all menu containers. 
 * @param {String} p_oElement String specifying the id attribute of the <code>&#60;div&#62;</code> element of the menu.
 * @param {String} p_oElement String specifying the id attribute of the <code>&#60;select&#62;</code> element to be used as the data source for the menu.
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-22445964">HTMLDivElement</a>} p_oElement Object specifying the <code>&#60;div&#62;</code> element of the menu.
@@ -74,7 +74,7 @@ ITEM_TYPE: null,
 * @final
 * @type String
 */
-GROUP_TITLE_TAG_NAME: "H6",
+GROUP_TITLE_TAG_NAME: "h6",
 
 
 
