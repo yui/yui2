@@ -2,16 +2,16 @@
 <html>
 <head>
 <title>Yahoo! UI Library - Slider Widget</title>
-<link rel="stylesheet" type="text/css" href="css/screen.css">
+<link rel="stylesheet" type="text/css" href="css/screen.css"></link>
 
 <!-- Nav and logger start -->
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
-<script type="text/javascript" src="../../build/event/event.js" ></script>
-<script type="text/javascript" src="../../build/logger/logger.js" ></script>
-<script type="text/javascript" src="../../build/dom/dom.js" ></script>
+<script type="text/javascript" src="../../build/event/event-min.js" ></script>
+<script type="text/javascript" src="../../build/dom/dom-min.js" ></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js" ></script>
+<script type="text/javascript" src="../../build/logger/logger-min.js" ></script>
 <script type="text/javascript" src="../../build/animation/animation.js" ></script>
-<script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
 <script type="text/javascript" src="js/color.js" ></script>
 <script type="text/javascript" src="js/key.js" ></script>
 
@@ -23,7 +23,6 @@
   <div id="containerTop">
     <div id="header"><img id="ylogo" src="img/logo.gif" /></div>
 	<div id="main">
-
 
 		<!-- Nav and logger start -->
 
@@ -110,16 +109,15 @@
 
               <div id="vertWrapper">
                 <div
-                 tabindex="0" 
+                 tabindex="-1" 
                  id="vertBGDiv"
-                 name="vertBGDiv"
                  title="Vertical Slider">
                    <div id="vertHandleDiv"><img alt="" src="img/vertSlider.png" /></div> 
                 </div>
 
                 <div id="vertValueDiv">
                   <form name="formV" id="formV">
-                      <input name="vertVal" id="vertVal" type="text" value="0" size="4" maxlength="4" />
+                      <input autocomplete="off" name="vertVal" id="vertVal" type="text" value="0" size="4" maxlength="4" />
                       <input id="vertButton" type="button" value="Update" />
                   </form>
                 </div>
@@ -136,12 +134,11 @@
 
 <script type="text/javascript">
 
-// YAHOO.widget.SliderThumb.prototype.toString = function () { 
-    // return "ASDF";
-// }
-
 YAHOO.example.SliderApp = function() {
-	var verticalSlider;
+    var Event = YAHOO.util.Event;
+    var Dom   = YAHOO.util.Dom;
+    var Key   = YAHOO.util.Key;
+	var slider, bg="vertBGDiv", thumb="vertHandleDiv";
 
     // The slider can move 0 pixels up
     var topConstraint = 0;
@@ -152,38 +149,45 @@ YAHOO.example.SliderApp = function() {
     // Custom scale factor for converting the pixel offset into a real value
     var scaleFactor = 1.5;
 
+    // The amount the slider moves when the value is changed with the arrow
+    // keys
+    var keyIncrement = 25;
+
     return {
 
         init: function() {
 
-            YAHOO.util.Event.addListener("formV", "submit", this.updateVert);
-            YAHOO.util.Event.addListener("vertButton", "click", this.updateVert);
+            Event.on("formV", "submit", this.updateVert);
+            Event.on("vertButton", "click", this.updateVert);
 
-            verticalSlider = YAHOO.widget.Slider.getVertSlider("vertBGDiv", 
-                             "vertHandleDiv", topConstraint, bottomConstraint, 20);
+            slider = YAHOO.widget.Slider.getVertSlider(bg, 
+                             thumb, topConstraint, bottomConstraint, 20);
 
-            verticalSlider.onChange = function(offsetFromStart) {
+            slider.subscribe("change", this.updateUI);
+
+            slider.subscribe("slideStart", function() {
+                    YAHOO.log("slideStart fired", "warn");
+                });
+
+            slider.subscribe("slideEnd", function() {
+                    YAHOO.log("slideEnd fired", "warn");
+                });
+
+            slider.setValue(20);
+
+        },
+
+        updateUI: function(offsetFromStart) {
                 // use the scale factor to convert the pixel offset into a
                 // real value
                 var actualValue = parseInt(offsetFromStart * scaleFactor, 10);
-                document.getElementById("vertVal").value = actualValue;
-                document.getElementById("vertBGDiv").title = 
+
+                // update the text box with the actual value
+                Dom.get("vertVal").value = actualValue;
+
+                // update the title attribute on the background
+                Dom.get(bg).title = 
                             "Vertical Slider, value = " + actualValue;
-            };
-
-            verticalSlider.onSlideStart = function() {
-                YAHOO.log("slidestart");
-            };
-
-            verticalSlider.onSlideEnd = function() {
-                YAHOO.log("slideend");
-            };
-
-            // verticalSlider.unreg();
-            // verticalSlider.backgroundEnabled = false;
-
-            verticalSlider.setValue(20);
-
         },
 
         updateVert: function() {
@@ -191,17 +195,18 @@ YAHOO.example.SliderApp = function() {
             if ( isNaN(v) ) v = 0;
 
             // convert the real value into a pixel offset
-            verticalSlider.setValue(Math.round(v/scaleFactor));
+            slider.setValue(Math.round(v/scaleFactor));
             return false;
         },
 
         clearConstraints: function() {
-            verticalSlider.getThumb().clearConstraints();
+            slider.getThumb().clearConstraints();
         },
 
         clearTicks: function() {
-            verticalSlider.getThumb().clearTicks();
+            slider.getThumb().clearTicks();
         }
+        
     };
 } ();
 

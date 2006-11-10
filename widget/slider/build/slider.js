@@ -517,7 +517,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         var t = this.thumb;
         if (t._isRegion) {
             t.onChange(t.getXValue(), t.getYValue());
-            this.fireEvent("change", t.getXValue(), t.getYValue());
+            this.fireEvent("change", { x: t.getXValue(), y: t.getYValue() } );
         } else {
             t.onChange(t.getValue());
             this.fireEvent("change", t.getValue());
@@ -866,7 +866,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
                 if (newX != this.previousX || newY != this.previousY) {
                     this.onChange(newX, newY);
-                    this.fireEvent("change", newX, newY);
+                    this.fireEvent("change", { x: newX, y: newY });
                 }
 
                 this.previousX = newX;

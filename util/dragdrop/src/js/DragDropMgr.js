@@ -69,15 +69,6 @@ YAHOO.util.DragDropMgr = function() {
         dragOvers: {},
 
         /**
-         * LogWriter instance
-         * @property logger
-         * @type YAHOO.widget.LogWriter
-         * @private
-         * @static
-         */
-        logger: null,
-
-        /**
          * the X distance between the cursor and the object being dragged
          * @property deltaX
          * @type int
@@ -132,7 +123,7 @@ YAHOO.util.DragDropMgr = function() {
          * @static
          */
         locked: false,
-        
+
         /**
          * Called the first time an element is registered.
          * @method init
@@ -140,8 +131,7 @@ YAHOO.util.DragDropMgr = function() {
          * @static
          */
         init: function() {
-            this.logger = (YAHOO.widget.LogWriter) ?
-                new YAHOO.widget.LogWriter("DragDropMgr") : YAHOO;
+            this.logger = new YAHOO.widget.LogWriter("DragDropMgr");
             this.initialized = true;
         },
 

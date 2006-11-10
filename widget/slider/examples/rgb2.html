@@ -1,100 +1,30 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
-		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
-		xmlns:x2="http://www.w3.org/TR/xhtml2"
-		xmlns:role="http://www.w3.org/2005/01/wai-rdf/GUIRoleTaxonomy#"
-		xmlns:state="http://www.w3.org/2005/07/aaa">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
 <head>
 <title>Yahoo! UI Library - Slider Widget</title>
 <link rel="stylesheet" type="text/css" href="css/screen.css">
 <style type="text/css">
-	input { font-size: .85em }
-
-	#ddPicker { 
-		position: absolute;
-		background-color: #eeeeee;
-		top: 200px;
-		left: 20px;
-		width: 360px;
-		height: 240px;
-	}
-
-	#pickerHandle { 
-		background-color: #bbbbbb;
-		height: 10px;
-		cursor: move;
-	}
-
-	#hueThumb { 
-		cursor:default;
-		width:18px; 
-		height:18px; 
-		z-index: 9;
-		position:absolute; 
-	}
-
-	#hueBg {
-		position:absolute; 
-		left:216px; 
-		height:198px; 
-		width:18px; 
-		background:url(img/hue.png) no-repeat;
-		top:18px;
-	}
-	
-	#pickerDiv {
-		position:absolute; 
-		left:10px; 
-		height:187px; 
-		width:188px; 
-		/*
-		background:url(img/pickerbg.png) no-repeat;
-		*/
-		top:20px;
-	}
-
-	#pickerbg { 
-		position:absolute; 
-		z-index: 1;
-		top:0px;
-		left:0px;
-	}
-
-	#selector { 
-		cursor:default;
-		width:11px; 
-		height:11px; 
-		z-index: 9;
-		position:absolute; 
-		top:0px;
-		left:0px;
-	}
-
-	#valdiv { text-align:right; position:absolute; top: 86px; left:246px; } 
-
-	#rBG {top:180px}
-	#gBG {top:210px}
-	#bBG {top:240px}
-
-	#swatch {
-		position:absolute; 
-		left:260px; 
-		top:30px;
-		height:60px; 
-		width:60px; 
-		border:2px solid #aaaaaa;
-	}
-
+    #ddPicker { position: absolute; background-color: #eeeeee; top: 200px; left: 20px; width: 360px; height: 240px; }
+    #ddPicker input { font-size: .85em }
+    #pickerHandle { background-color: #bbbbbb; height: 10px; cursor: move; }
+    #hueThumb { cursor:default; width:18px; height:18px; z-index: 9; position:absolute; }
+    #hueBg {-moz-outline: none; outline:0px none; position:absolute; left:216px; height:198px; width:18px; background:url(img/hue.png) no-repeat; top:18px; }
+    #pickerDiv {-moz-outline: none; outline:0px none; position:absolute; left:10px; height:187px; width:188px; background-color:#FF0000; top:20px; }
+    #pickerbg { position:absolute; z-index: 1; top:0px; left:0px; } 
+    #selector { cursor:default; width:11px; height:11px; z-index: 9; position:absolute; top:0px; left:0px; }
+    #valdiv { text-align:right; position:absolute; top: 86px; left:246px; } 
+    #swatch { position:absolute; left:260px; top:30px; height:60px; width:60px; border:2px solid #aaaaaa; }
 </style>
 
 <!-- Nav and logger start -->
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
-<script type="text/javascript" src="../../build/event/event.js" ></script>
-<script type="text/javascript" src="../../build/logger/logger.js" ></script>
-<script type="text/javascript" src="../../build/dom/dom.js" ></script>
+<script type="text/javascript" src="../../build/event/event-min.js" ></script>
+<script type="text/javascript" src="../../build/dom/dom-min.js" ></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js" ></script>
+<script type="text/javascript" src="../../build/logger/logger-min.js" ></script>
 <script type="text/javascript" src="../../build/animation/animation.js" ></script>
-<script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
 <script type="text/javascript" src="js/color.js" ></script>
 <script type="text/javascript" src="js/key.js" ></script>
 
@@ -105,9 +35,9 @@
 <div id="container">
   <div id="containerTop">
     <div id="header"><img id="ylogo" src="img/logo.gif" /></div>
-	<div id="main">
+    <div id="main">
 
-		<!-- Nav and logger start -->
+        <!-- Nav and logger start -->
 
 <style type="text/css">
     #logButtonHeader input { font-size: 80% }
@@ -179,127 +109,134 @@
 <!-- Nav and logger end -->
  
 
-		<div id="content"> 
-		  <div class="newsItem"> 
-			<h3>HSV Color Picker</h3>
-			  <p>&nbsp;</p>
+        <div id="content"> 
+          <div class="newsItem"> 
+            <h3>HSV Color Picker</h3>
+              <p>&nbsp;</p>
 <strong>The logger is paused for performance reasons.  Click "Resume" to re-enable it.</strong>
-		  </div> 
-		</div> 
+          </div> 
+        </div> 
       
     </div>
   </div>
 </div>
 
 <div id="ddPicker">
-	<div id="pickerHandle">&nbsp;</div>
-	<div id="pickerDiv">
-	  <img id="pickerbg" src="img/pickerbg.png" alt="" />
-	  <div id="selector"><img src="img/select.gif" /></div> 
-	</div>
+    <div id="pickerHandle">&nbsp;</div>
+    <div id="pickerDiv" tabindex="-1" hidefocus="true">
+      <img id="pickerbg" src="img/pickerbg.png" alt="" />
+      <div id="selector"><img src="img/select.gif" /></div> 
+    </div>
 
-	 <div id="hueBg">
-	  <div id="hueThumb"><img src="img/hline.png" /></div> 
-	</div> 
+     <div id="hueBg" tabindex="-1" hidefocus="true">
+      <div id="hueThumb"><img src="img/hline.png" /></div> 
+    </div> 
 
-	<div id="valdiv">
-		<form name="rgbform" onsubmit="return userUpdate()">
-		<br />
-		R <input name="rval" id="rval" type="text" value="0" size="3" maxlength="3" />
-		H <input name="hval" id="hval" type="text" value="0" size="3" maxlength="3" />
-		<br />
-		G <input name="gval" id="gval" type="text" value="0" size="3" maxlength="3" />
-		S <input name="gsal" id="sval" type="text" value="0" size="3" maxlength="3" />
-		<br />
-		B <input name="bval" id="bval" type="text" value="0" size="3" maxlength="3" />
-		V <input name="vval" id="vval" type="text" value="0" size="3" maxlength="3" />
-		<br />
-		<br />
-		# <input name="hexval" id="hexval" type="text" value="0" size="6" maxlength="6" />
-		<br />
+    <div id="valdiv">
+        <form name="rgbform">
+        <br />
+        R <input autocomplete="off" name="rval" id="rval" type="text" value="0" size="3" maxlength="3" />
+        H <input autocomplete="off" name="hval" id="hval" type="text" value="0" size="3" maxlength="3" />
+        <br />
+        G <input autocomplete="off" name="gval" id="gval" type="text" value="0" size="3" maxlength="3" />
+        S <input autocomplete="off" name="gsal" id="sval" type="text" value="0" size="3" maxlength="3" />
+        <br />
+        B <input autocomplete="off" name="bval" id="bval" type="text" value="0" size="3" maxlength="3" />
+        V <input autocomplete="off" name="vval" id="vval" type="text" value="0" size="3" maxlength="3" />
+        <br />
+        <br />
+        # <input autocomplete="off" name="hexval" id="hexval" type="text" value="0" size="6" maxlength="6" />
+        <br />
 
-		</form>
-	</div>
+        </form>
+    </div>
 
-	<div id="swatch">&nbsp;</div>
+    <div id="swatch">&nbsp;</div>
 </div>
 
 
 <script type="text/javascript">
 
-	var hue;
-	var picker;
-	var dd;
+YAHOO.example.ColorPicker = function() {
 
-	function init() {
+    var Slider=YAHOO.widget.Slider;
+    var Color=YAHOO.util.Color;
+    var Dom=YAHOO.util.Dom;
 
-		hue = YAHOO.widget.Slider.getVertSlider("hueBg", "hueThumb", 0, 180);
-		hue.onChange = function(newVal) { hueUpdate(newVal); };
+    var pickerSize=180;
+    
+    var hue,picker,panel;
 
-		picker = YAHOO.widget.Slider.getSliderRegion("pickerDiv", "selector", 
-				0, 180, 0, 180);
-		picker.onChange = function(newX, newY) { pickerUpdate(newX, newY); };
+    // hue, int[0,359]
+    var getH = function() {
+        var h = (pickerSize - hue.getValue()) / pickerSize;
+        h = Math.round(h*360);
+        return (h == 360) ? 0 : h;
+    }
 
-		hueUpdate();
+    // saturation, int[0,1], left to right
+    var getS = function() {
+        return picker.getXValue() / pickerSize;
+    }
 
-		dd = new YAHOO.util.DD("ddPicker");
-		dd.setHandleElId("pickerHandle");
-		dd.endDrag = function(e) {
-			// picker.thumb.resetConstraints();
-			// hue.thumb.resetConstraints(); 
-        };
-	}
+    // value, int[0,1], top to bottom
+    var getV = function() {
+        return (pickerSize - picker.getYValue()) / pickerSize;
+    }
 
-	window.onload = init;
+    var swatchUpdate = function() {
+        var h=getH(), s=getS(), v=getV();
+        YAHOO.log("hsv " + [h,s,v]);
 
-	function pickerUpdate(newX, newY) {
-		swatchUpdate();
-	}
+        Dom.get("hval").value = h;
+        Dom.get("sval").value = Math.round(s*100);
+        Dom.get("vval").value = Math.round(v*100);
 
-	function hueUpdate(newVal) {
+        var rgb = Color.hsv2rgb(h, s, v);
 
-		var h = (180 - hue.getValue()) / 180;
-		if (h == 1) { h = 0; }
+        var styleDef = "rgb(" + rgb.join(",") + ")";
+        Dom.setStyle("swatch", "background-color", styleDef);
 
-		YAHOO.log("hue " + hue.getValue());
+        Dom.get("rval").value = rgb[0];
+        Dom.get("gval").value = rgb[1];
+        Dom.get("bval").value = rgb[2];
 
-		var a = YAHOO.util.Color.hsv2rgb( h, 1, 1);
+        Dom.get("hexval").value = Color.rgb2hex(rgb[0], rgb[1], rgb[2]);
+    };
 
-		document.getElementById("pickerDiv").style.backgroundColor = 
-			"rgb(" + a[0] + ", " + a[1] + ", " + a[2] + ")";
+    var hueUpdate = function() {
+        var rgb = Color.hsv2rgb(getH(), 1, 1);
+        var styleDef = "rgb(" + rgb.join(",") + ")";
+        Dom.setStyle("pickerDiv", "background-color", styleDef);
 
-		swatchUpdate();
-	}
+        swatchUpdate();
+    };
 
-	function swatchUpdate() {
-		var h = (180 - hue.getValue());
-		if (h == 180) { h = 0; }
-		document.getElementById("hval").value = (h*2);
+    pickerUpdate = function() {
+        swatchUpdate();
+    };
 
-		h = h / 180;
-		YAHOO.log("h " + hue.getValue());
+    return {
 
-		var s = picker.getXValue() / 180;
-		document.getElementById("sval").value = Math.round(s * 100);
+        init: function () {
 
-		YAHOO.log("s " + s);
+            hue = Slider.getVertSlider("hueBg", "hueThumb", 0, pickerSize);
+            hue.subscribe("slideEnd", hueUpdate);
 
-		var v = (180 - picker.getYValue()) / 180;
-		document.getElementById("vval").value = Math.round(v * 100);
+            picker = Slider.getSliderRegion("pickerDiv", "selector", 
+                    0, pickerSize, 0, pickerSize);
+            picker.subscribe("slideEnd", pickerUpdate);
 
-		YAHOO.log("v " + v);
+            hueUpdate();
 
-		var a = YAHOO.util.Color.hsv2rgb( h, s, v );
+            panel = new YAHOO.util.DD("ddPicker");
+            panel.setHandleElId("pickerHandle");
+        }
+    }
+}();
 
-		document.getElementById("swatch").style.backgroundColor = 
-			"rgb(" + a[0] + ", " + a[1] + ", " + a[2] + ")";
+YAHOO.util.Event.on(window, "load", YAHOO.example.ColorPicker.init);
 
-		document.getElementById("rval").value = a[0];
-		document.getElementById("gval").value = a[1];
-		document.getElementById("bval").value = a[2];
-		document.getElementById("hexval").value = 
-			YAHOO.util.Color.rgb2hex(a[0], a[1], a[2]);
-	}
 </script>
 
 
@@ -312,24 +249,24 @@ function correctPNG() // correctly handle PNG transparency in Win IE 5.5 or high
    {
    for(var i=0; i<document.images.length; i++)
       {
-	  var img = document.images[i]
-	  var imgName = img.src.toUpperCase()
-	  if (imgName.substring(imgName.length-3, imgName.length) == "PNG")
-	     {
-		 var imgID = (img.id) ? "id='" + img.id + "' " : ""
-		 var imgClass = (img.className) ? "class='" + img.className + "' " : ""
-		 var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
-		 var imgStyle = "display:inline-block;" + img.style.cssText 
-		 if (img.align == "left") imgStyle = "float:left;" + imgStyle
-		 if (img.align == "right") imgStyle = "float:right;" + imgStyle
-		 if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle		
-		 var strNewHTML = "<span " + imgID + imgClass + imgTitle
-		 + " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
-	     + "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
-		 + "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>" 
-		 img.outerHTML = strNewHTML
-		 i = i-1
-	     }
+      var img = document.images[i]
+      var imgName = img.src.toUpperCase()
+      if (imgName.substring(imgName.length-3, imgName.length) == "PNG")
+         {
+         var imgID = (img.id) ? "id='" + img.id + "' " : ""
+         var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+         var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+         var imgStyle = "display:inline-block;" + img.style.cssText 
+         if (img.align == "left") imgStyle = "float:left;" + imgStyle
+         if (img.align == "right") imgStyle = "float:right;" + imgStyle
+         if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle       
+         var strNewHTML = "<span " + imgID + imgClass + imgTitle
+         + " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+         + "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+         + "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>" 
+         img.outerHTML = strNewHTML
+         i = i-1
+         }
       }
    }
 
