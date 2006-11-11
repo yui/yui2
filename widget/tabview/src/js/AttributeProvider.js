@@ -158,6 +158,7 @@
          * Returns the attribute's properties.
          * @method getAttributeConfig
          * @param {String} key The attribute's name
+         * @private
          * @return {object} A key-value map containing all of the
          * attribute's properties.
          */
@@ -198,6 +199,7 @@
          * Resets an attribute to its intial configuration. 
          * @method resetAttributeConfig
          * @param {String} key The attribute's name.
+         * @private
          */
         resetAttributeConfig: function(key){
             var configs = this._configs || {};
