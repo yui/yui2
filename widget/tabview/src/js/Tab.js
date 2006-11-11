@@ -43,20 +43,12 @@
     var proto = Tab.prototype;
     
     /**
-     * The default tag name for a Tab's label element.
-     * @property LABEL_TAGNAME
-     * @type String
-     * @default "a"
-     */
-    proto.LABEL_TAGNAME = 'a';
-    
-    /**
      * The default tag name for a Tab's inner element.
      * @property LABEL_INNER_TAGNAME
      * @type String
      * @default "em"
      */
-    proto.LABEL_INNER_TAGNAME = 'em';
+    proto.LABEL_TAGNAME = 'em';
     
     /**
      * The class name applied to active tabs.
@@ -64,7 +56,7 @@
      * @type String
      * @default "on"
      */
-    proto.ACTIVE_CLASSNAME = 'on';
+    proto.ACTIVE_CLASSNAME = 'selected';
     
     /**
      * The class name applied to disabled tabs.
@@ -81,14 +73,6 @@
      * @default "disabled"
      */
     proto.LOADING_CLASSNAME = 'loading';
-    
-    /**
-     * The event that activates the tab.
-     * @property ACTIVATION_EVENT
-     * @type String
-     * @default "click"
-     */
-    proto.ACTIVATION_EVENT = 'click';
 
     /**
      * Provides a reference to the connection request object when data is
@@ -143,6 +127,15 @@
         
         var el = this.get('element');
         
+        /**
+         * The event that triggers the tab's activation.
+         * @config label
+         * @type String
+         */
+        this.register('activationEvent', {
+            value: attr.activationEvent || 'click'
+        });        
+
         /**
          * The element that contains the tab's label.
          * @config labelEl
@@ -316,13 +309,32 @@
             },
             validator: Lang.isBoolean
         });
+        
+        /**
+         * The href of the tab's anchor element.
+         * @config href
+         * @type String
+         * @default '#'
+         */
+        this.register('href', {
+            value: attr.href || '#',
+            method: function(value) {
+                this.getElementsByTagName('a')[0].href = value;
+            },
+            validator: Lang.isString
+        });
     };
     
     var _createTabElement = function(attr) {
         var el = document.createElement('li');
+        var a = document.createElement('a');
+        
+        a.href = attr.href || '#';
+        
+        el.appendChild(a);
+        
         var label = attr.label || null;
         var labelEl = attr.labelEl || null;
-        var inner;
         
         if (labelEl) { // user supplied labelEl
             if (!label) { // user supplied label
@@ -332,7 +344,7 @@
             labelEl = _createlabelEl.call(this);
         }
         
-        el.appendChild(labelEl);
+        a.appendChild(labelEl);
         
         return el;
     };
@@ -343,47 +355,23 @@
     
     var _createlabelEl = function() {
         var el = document.createElement(this.LABEL_TAGNAME);
-        var inner;
-        
-        el.href = '#';
-        
-        if (this.LABEL_INNER_TAGNAME) {
-            inner = document.createElement(this.LABEL_INNER_TAGNAME);
-            el.appendChild(inner);
-        }
-        
         return el;
     };
     
     var _setLabel = function(label) {
         var el = this.get('labelEl');
-        var inner = el.getElementsByTagName(this.LABEL_INNER_TAGNAME)[0];
-        
-        if (inner) {
-            inner.innerHTML = label;
-        } else {
-            el.innerHTML = label;
-        }
+        el.innerHTML = label;
     };
     
     var _getLabel = function() {
         var label,
-            inner,
             el = this.get('labelEl');
             
-            if (el) {
-                inner = el.getElementsByTagName(this.LABEL_INNER_TAGNAME)[0];
-            } else {
+            if (!el) {
                 return undefined;
             }
         
-        if (inner) {
-            label = inner.innerHTML;
-        } else {
-            label = el.innerHTML;
-        }
-        
-        return label;
+        return el.innerHTML;
     };
     
     var _dataConnect = function() {
