@@ -634,8 +634,8 @@
 
 <span class="c">/**</span>
 <span class="c">* Sets the calendar group&#39;s month explicitly. This month will be set into the first</span>
-<span class="c">* @method setMonth</span>
 <span class="c">* page of the multi-page calendar, and all other months will be iterated appropriately.</span>
+<span class="c">* @method setMonth</span>
 <span class="c">* @param {Number}	month		The numeric month, from 0 (January) to 11 (December)</span>
 <span class="c">*/</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">setMonth</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">month</span><span class="o">)</span> <span class="o">{</span>
@@ -647,8 +647,8 @@
 
 <span class="c">/**</span>
 <span class="c">* Sets the calendar group&#39;s year explicitly. This year will be set into the first</span>
-<span class="c">* @method setYear</span>
 <span class="c">* page of the multi-page calendar, and all other months will be iterated appropriately.</span>
+<span class="c">* @method setYear</span>
 <span class="c">* @param {Number}	year		The numeric 4-digit year</span>
 <span class="c">*/</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">setYear</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">year</span><span class="o">)</span> <span class="o">{</span>

@@ -7,8 +7,8 @@ Version 0.12
 
 /**
 * The Calendar component is a UI control that enables users to choose one or more dates from a graphical calendar presented in a one-month ("one-up") or two-month ("two-up") interface. Calendars are generated entirely via script and can be navigated without any page refreshes.
-* @module    Calendar
-* @title     Calendar Widget
+* @module    calendar
+* @title     Calendar
 * @namespace YAHOO.widget
 * @requires  yahoo,dom,event
 */

@@ -7,8 +7,8 @@
 
 <span class="c">/**</span>
 <span class="c">* The Calendar component is a UI control that enables users to choose one or more dates from a graphical calendar presented in a one-month (&quot;one-up&quot;) or two-month (&quot;two-up&quot;) interface. Calendars are generated entirely via script and can be navigated without any page refreshes.</span>
-<span class="c">* @module    Calendar</span>
-<span class="c">* @title     Calendar Widget</span>
+<span class="c">* @module    calendar</span>
+<span class="c">* @title     Calendar</span>
 <span class="c">* @namespace YAHOO.widget</span>
 <span class="c">* @requires  yahoo,dom,event</span>
 <span class="c">*/</span>

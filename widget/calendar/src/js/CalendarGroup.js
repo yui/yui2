@@ -634,8 +634,8 @@ YAHOO.widget.CalendarGroup.prototype.constructChild = function(id,containerId,co
 
 /**
 * Sets the calendar group's month explicitly. This month will be set into the first
-* @method setMonth
 * page of the multi-page calendar, and all other months will be iterated appropriately.
+* @method setMonth
 * @param {Number}	month		The numeric month, from 0 (January) to 11 (December)
 */
 YAHOO.widget.CalendarGroup.prototype.setMonth = function(month) {
@@ -647,8 +647,8 @@ YAHOO.widget.CalendarGroup.prototype.setMonth = function(month) {
 
 /**
 * Sets the calendar group's year explicitly. This year will be set into the first
-* @method setYear
 * page of the multi-page calendar, and all other months will be iterated appropriately.
+* @method setYear
 * @param {Number}	year		The numeric 4-digit year
 */
 YAHOO.widget.CalendarGroup.prototype.setYear = function(year) {

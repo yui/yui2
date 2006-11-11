@@ -8,7 +8,8 @@
 <span class="c">/**</span>
 <span class="c">* YAHOO.widget.DateMath is used for simple date manipulation. The class is a static utility</span>
 <span class="c">* used for adding, subtracting, and comparing dates.</span>
-<span class="c">* @class YAHOO.widget.DateMath</span>
+<span class="c">* @namespace YAHOO.widget</span>
+<span class="c">* @class DateMath</span>
 <span class="c">*/</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DateMath</span> <span class="o">=</span> <span class="o">{</span>
 	<span class="c">/**</span>

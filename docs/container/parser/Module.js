@@ -7,7 +7,8 @@ Version 0.12
 
 /**
 *  The Container family of components is designed to enable developers to create different kinds of content-containing modules on the web. Module and Overlay are the most basic containers, and they can be used directly or extended to build custom containers. Also part of the Container family are four UI controls that extend Module and Overlay: Tooltip, Panel, Dialog, and SimpleDialog.
-* @module Container
+* @module container
+* @title Container
 * @requires yahoo,dom,event,dragdrop,animation
 */
 
