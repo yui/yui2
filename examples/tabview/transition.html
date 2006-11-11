@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>TabView Example - Dynamic Loading</title>
+<link rel="stylesheet" type="text/css" href="css/example.css">
+
+<link rel="stylesheet" type="text/css" href="../../build/tabview/assets/tabs.css">
+<link rel="stylesheet" type="text/css" href="../../build/tabview/assets/border_tabs.css">
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/connection/connection.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
+<script type="text/javascript" src="../../build/tabview/tabview.js"></script>
+
+<style>
+#demo .yui-content {
+    border:1px solid #000;
+    height:4em;
+    padding:0 1em;
+}
+
+#demo .yui-content div {
+    background-color:#f6f7ee; /* for IE double text bug */
+    position:absolute; /* to overlap during transition */
+}
+
+
+</style>
+<script type="text/javascript">
+(function() {
+    var myTabs = new YAHOO.widget.TabView('demo');
+    myTabs.contentTransition = function(newTab, oldTab) {
+        //alert(YAHOO.util.Dom.getStyle(newTab.get('contentEl'), 'opacity'));
+        newTab.showContent();
+        if (!oldTab) {
+            return false;
+        }
+        
+        YAHOO.util.Dom.setStyle(newTab.get('contentEl'), 'opacity', 0);
+        var animIn = new YAHOO.util.Anim( newTab.get('contentEl') );
+        animIn.attributes.opacity = { to: 1 };
+        
+        var animOut = new YAHOO.util.Anim( oldTab.get('contentEl') );
+        animOut.attributes.opacity = { to: 0 };
+        
+        animOut.onComplete.subscribe(function() {oldTab.hideContent}, this, true);
+        
+        animIn.animate();
+        animOut.animate();
+    };
+
+})();
+</script>
+
+</head>
+<body>
+<div id="doc">
+    <h1>TabView Example - Dynamic Loading</h1>
+    <p>This example demonstrates how to load tab content dynamically.</p>
+
+    <div id="demo" class="yui-navset">
+        <ul class="yui-nav">
+            <li class="selected"><a href="#lorem"><em>lorem</em></a></li>
+            <li><a href="#ipsum"><em>ipsum</em></a></li>
+            <li><a href="#dolor"><em>dolor</em></a></li>
+        </ul>
+        <div class="yui-content">
+            <div>
+                <p>Lorem</p>
+            </div>
+            <div>
+                <p>Ipsum</p>
+            </div>
+            <div>
+                <p>Dolor</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+Version: 0.10.0
+*/
+
+body {
+    margin:0;
+    font:small arial;
+}
+
+#doc {
+    margin:10px;
+}
+
+ul, li {
+    list-style:none;
+}
+
+form, p, ul, li, h1, h2, h3, h4, h5, h6 {
+    margin:0;
+    padding:0;
+}
+
+p {
+    padding:1em 0;
+}
+
+h1 {
+    color:#666;
+    font:bold 150% palatino, georgia;
+}
+
+h2 {
+    font:bold 130% arial;
+    margin:1em 0 0.5em;
+}
+
+#hd img {
+    vertical-align:middle;
+}
+
+#hd h1 {
+    display:inline;
+    margin:0 0 0 20px;
+    vertical-align:middle;
+}
+
+#examples li {
+    padding:0.5em 1em;
+}
