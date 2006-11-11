@@ -315,11 +315,11 @@ YAHOO.util.Attribute.prototype = {
         
         /**
          * Sets multiple attribute values.
-         * @method setValues
+         * @method setAttributes
          * @param {Object} map  A key-value map of attributes
          * @param {Boolean} silent Whether or not to suppress change events
          */
-        setValues: function(map, silent){
+        setAttributes: function(map, silent){
             for (var key in map) {
                 if ( map.hasOwnProperty(key) ) {
                     this.set(key, map[key], silent);
@@ -388,6 +388,7 @@ YAHOO.util.Attribute.prototype = {
          * Returns the attribute's properties.
          * @method getAttributeConfig
          * @param {String} key The attribute's name
+         * @private
          * @return {object} A key-value map containing all of the
          * attribute's properties.
          */
@@ -428,6 +429,7 @@ YAHOO.util.Attribute.prototype = {
          * Resets an attribute to its intial configuration. 
          * @method resetAttributeConfig
          * @param {String} key The attribute's name.
+         * @private
          */
         resetAttributeConfig: function(key){
             var configs = this._configs || {};
@@ -597,7 +599,7 @@ YAHOO.util.Element.prototype = {
         if (!this._events[type]) { // create on the fly
             if ( this.DOM_EVENTS[type] ) {
                 YAHOO.util.Event.addListener(el, type, function(e) {
-                    if (e.srcElement) { // supplement IE with target
+                    if (e.srcElement && !e.target) { // supplement IE with target
                         e.target = e.srcElement;
                     }
                     this.fireEvent(type, e);
@@ -711,8 +713,8 @@ YAHOO.util.Element.prototype = {
 	 */
     fireQueue: function() {
         var queue = this._queue;
-        for (var key in queue) {
-            this[queue[key][0]].apply(this, queue[key][1]);
+        for (var i = 0, len = queue.length; i < len; ++i) {
+            this[queue[i][0]].apply(this, queue[i][1]);
         }
     },
     
@@ -805,7 +807,7 @@ YAHOO.util.Element.prototype = {
         return AttributeProvider.prototype.register.apply(this, arguments);
     },
     
-    configure: function(property, map, init) { // protect html attributes
+    configureAttribute: function(property, map, init) { // protect html attributes
         if (!this._configs[property] && this._configs.element && 
                 !Lang.isUndefined(this._configs.element[property]) ) {
             _registerHTMLAttr(this, property, map);
@@ -830,7 +832,7 @@ YAHOO.util.Element.prototype = {
     },
     
     init: function(el, attr) {
-        this._queue = this._queue || {};
+        this._queue = this._queue || [];
         this._events = this._events || {};
         this._configs = this._configs || {};
         attr = attr || {};
@@ -850,7 +852,8 @@ YAHOO.util.Element.prototype = {
         
         var readyHandler = function() {
             this.initAttributes(attr);
-            this.setValues(attr, true); // TODO: set HTMLElement attrs
+
+            this.setAttributes(attr, true); // TODO: set HTMLElement attrs
             this.fireQueue();
             this.fireEvent('contentReady', {
                 type: 'contentReady',
@@ -969,20 +972,12 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
     var proto = Tab.prototype;
     
     /**
-     * The default tag name for a Tab's label element.
-     * @property LABEL_TAGNAME
-     * @type String
-     * @default "a"
-     */
-    proto.LABEL_TAGNAME = 'a';
-    
-    /**
      * The default tag name for a Tab's inner element.
      * @property LABEL_INNER_TAGNAME
      * @type String
      * @default "em"
      */
-    proto.LABEL_INNER_TAGNAME = 'em';
+    proto.LABEL_TAGNAME = 'em';
     
     /**
      * The class name applied to active tabs.
@@ -990,7 +985,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
      * @type String
      * @default "on"
      */
-    proto.ACTIVE_CLASSNAME = 'on';
+    proto.ACTIVE_CLASSNAME = 'selected';
     
     /**
      * The class name applied to disabled tabs.
@@ -1007,14 +1002,6 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
      * @default "disabled"
      */
     proto.LOADING_CLASSNAME = 'loading';
-    
-    /**
-     * The event that activates the tab.
-     * @property ACTIVATION_EVENT
-     * @type String
-     * @default "click"
-     */
-    proto.ACTIVATION_EVENT = 'click';
 
     /**
      * Provides a reference to the connection request object when data is
@@ -1070,6 +1057,15 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
         var el = this.get('element');
         
         /**
+         * The event that triggers the tab's activation.
+         * @config label
+         * @type String
+         */
+        this.register('activationEvent', {
+            value: attr.activationEvent || 'click'
+        });        
+
+        /**
          * The element that contains the tab's label.
          * @config labelEl
          * @type HTMLElement
@@ -1078,6 +1074,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
             value: attr.labelEl || _getlabelEl.call(this),
             method: function(value) {
                 var current = this.get('labelEl');
+
                 if (current) {
                     if (current == value) {
                         return false; // already set
@@ -1106,6 +1103,37 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
                 }
                 
                 _setLabel.call(this, value);
+            }
+        });
+        
+        /**
+         * The HTMLElement that contains the tab's content.
+         * @config contentEl
+         * @type HTMLElement
+         */
+        this.register('contentEl', { // TODO: apply className?
+            value: attr.contentEl || document.createElement('div'),
+            method: function(value) {
+                var current = this.get('contentEl');
+
+                if (current) {
+                    if (current == value) {
+                        return false; // already set
+                    }
+                    this.replaceChild(value, current);
+                }
+            }
+        });
+        
+        /**
+         * The tab's content.
+         * @config content
+         * @type String
+         */
+        this.register('content', {
+            value: attr.content, // TODO: what about existing?
+            method: function(value) {
+                this.get('contentEl').innerHTML = value;
             }
         });
 
@@ -1212,42 +1240,30 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
         });
         
         /**
-         * The HTMLElement that contains the tab's content.
-         * @config contentEl
-         * @type HTMLElement
-         */
-        this.register('contentEl', { // TODO: apply className?
-            value: attr.contentEl || document.createElement('div'),
-            method: function(value) {
-                var current = this.get('contentEl');
-                
-                if (current) {
-                    if (current == value) {
-                        return false; // already set
-                    }
-                    this.replaceChild(value, current);
-                }
-            }
-        });
-        
-        /**
-         * The tab's content.
-         * @config content
+         * The href of the tab's anchor element.
+         * @config href
          * @type String
+         * @default '#'
          */
-        this.register('content', {
-            value: attr.content, // TODO: what about existing?
+        this.register('href', {
+            value: attr.href || '#',
             method: function(value) {
-                this.get('contentEl').innerHTML = value;
-            }
+                this.getElementsByTagName('a')[0].href = value;
+            },
+            validator: Lang.isString
         });
     };
     
     var _createTabElement = function(attr) {
         var el = document.createElement('li');
+        var a = document.createElement('a');
+        
+        a.href = attr.href || '#';
+        
+        el.appendChild(a);
+        
         var label = attr.label || null;
         var labelEl = attr.labelEl || null;
-        var inner;
         
         if (labelEl) { // user supplied labelEl
             if (!label) { // user supplied label
@@ -1257,7 +1273,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
             labelEl = _createlabelEl.call(this);
         }
         
-        el.appendChild(labelEl);
+        a.appendChild(labelEl);
         
         return el;
     };
@@ -1268,47 +1284,23 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
     
     var _createlabelEl = function() {
         var el = document.createElement(this.LABEL_TAGNAME);
-        var inner;
-        
-        el.href = '#';
-        
-        if (this.LABEL_INNER_TAGNAME) {
-            inner = document.createElement(this.LABEL_INNER_TAGNAME);
-            el.appendChild(inner);
-        }
-        
         return el;
     };
     
     var _setLabel = function(label) {
         var el = this.get('labelEl');
-        var inner = el.getElementsByTagName(this.LABEL_INNER_TAGNAME)[0];
-        
-        if (inner) {
-            inner.innerHTML = label;
-        } else {
-            el.innerHTML = label;
-        }
+        el.innerHTML = label;
     };
     
     var _getLabel = function() {
         var label,
-            inner,
             el = this.get('labelEl');
             
-            if (el) {
-                inner = el.getElementsByTagName(this.LABEL_INNER_TAGNAME)[0];
-            } else {
+            if (!el) {
                 return undefined;
             }
         
-        if (inner) {
-            label = inner.innerHTML;
-        } else {
-            label = el.innerHTML;
-        }
-        
-        return label;
+        return el.innerHTML;
     };
     
     var _dataConnect = function() {
@@ -1553,16 +1545,22 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
         if ( !tab.get('active') ) {
             tab.hideContent();
         } else {
-            this._configs.activeTab.value = tab;
+            this.set('activeTab', tab, true);
         }
 
-        tab.addListener(
-            tab.ACTIVATION_EVENT,
-            function(e) {
-                YAHOO.util.Event.preventDefault(e);
-                self.set('activeTab', this);
+        var activate = function(e) {
+            YAHOO.util.Event.preventDefault(e);
+            self.set('activeTab', this);
+        };
+        
+        tab.addListener( tab.get('activationEvent'), activate);
+        
+        tab.addListener('activationEventChange', function(e) {
+            if (e.prevValue != e.newValue) {
+                tab.removeListener(e.prevValue, activate);
+                tab.addListener(e.newValue, activate);
             }
-        );
+        });
         
         tabs.splice(index, 0, tab);
     };
@@ -1578,8 +1576,6 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
         var target = YAHOO.util.Event.getTarget(e);
         var tabParent = this._tabParent;
         
-        //YAHOO.util.Event.preventDefault(e);
-        
         if (Dom.isAncestor(tabParent, target) ) {
             var tabEl;
             var tab = null;
@@ -1591,7 +1587,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
                 contentEl = tabs[i].get('contentEl');
 
                 if ( target == tabEl || Dom.isAncestor(tabEl, target) ) {
-                    tab = tabs[i]; // TODO: what if panel in tab?
+                    tab = tabs[i];
                     break; // note break
                 }
             } 
@@ -1669,12 +1665,12 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
     };
     
     /**
-     * The transiton to use when switching between tab content.
+     * The transiton to use when switching between tabs.
      * @method contentTransition
-     */ // TODO : abstract to show/hideContent
+     */
     proto.contentTransition = function(newTab, oldTab) {
         if (newTab) {  
-            newTab.showContent();
+            newTab.showContent(); // TODO: firing twice?
         }
         
         if (oldTab) {
@@ -1753,7 +1749,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
         /**
          * The index of the tab currently active.
          * @config activeIndex
-         * @type YAHOO.widget.Tab
+         * @type Int
          */
         this.register('activeIndex', {
             value: attr.activeIndex,
@@ -1775,13 +1771,16 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
             method: function(tab) {
                 var activeTab = this.get('activeTab');
                 
-                if (activeTab && activeTab != tab) {
-                    activeTab.set('active', false);
-                    this.contentTransition(tab, activeTab);
+                if (tab) {  
+                    tab.set('active', true); // TODO: firing twice?
                 }
                 
-                if (tab) { // might be unsetting
-                    tab.set('active', true); // TODO: firing twice
+                if (activeTab && activeTab != tab) {
+                    activeTab.set('active', false);
+                }
+                
+                if (tab != activeTab) {
+                    this.contentTransition(tab, activeTab);
                 }
             },
             validator: function(value) {
@@ -1810,29 +1809,24 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
     var _initTabs = function() {
         var tab,
             attr,
-            el = this.get('element'),
-            node,
-            tabs,
-            contentElements,
-            contentEl,
-            tabParent = this._tabParent,
-            contentParent = this._contentParent;
+            contentEl;
             
-        tabs = _getChildNodes(tabParent);
-        contentElements = _getChildNodes(contentParent);
+        var el = this.get('element');   
+        var tabs = _getChildNodes(this._tabParent);
+        var contentElements = _getChildNodes(this._contentParent);
 
         for (var i = 0, len = tabs.length; i < len; ++i) {
             attr = {};
             
-            attr.contentEl = contentElements[i] || null;
+            if (contentElements[i]) {
+                attr.contentEl = contentElements[i];
+            }
 
             tab = new YAHOO.widget.Tab(tabs[i], attr);
             this.addTab(tab);
             
             if (tab.hasClass(tab.ACTIVE_CLASSNAME) ) {
-                this._configs.activeTab.value = tab; // TODO: no method call ?
-            } else {
-                tab.hideContent();
+                this._configs.activeTab.value = tab; // dont invoke method
             }
         }
     };

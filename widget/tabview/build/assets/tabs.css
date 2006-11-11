@@ -27,6 +27,8 @@
     zoom:1;
 }
 
+.yui-navset .yui-content { zoom:1; }
+
 .yui-navset-top .yui-nav li, .yui-navset-bottom .yui-nav li {
     display:inline-block;
     display:-moz-inline-stack;
@@ -59,6 +61,6 @@
 .yui-navset .yui-nav li a em { display:block; }
 
 /* position left and right oriented tabs */
-.yui-navset-left .yui-nav, .yui-navset-right .yui-nav { position:absolute; }
+.yui-navset-left .yui-nav, .yui-navset-right .yui-nav { position:absolute; z-index:1; }
 .yui-navset-left .yui-nav { left:0; }
 .yui-navset-right .yui-nav { right:0; }
