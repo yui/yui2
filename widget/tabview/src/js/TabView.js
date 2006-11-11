@@ -109,14 +109,15 @@
         }
         
         if ( !tab.get('active') ) {
-            tab.hideContent();
+            tab.set('contentVisible', false, true); /* hide if not active */
         } else {
-            this._configs.activeTab.value = tab; /* dont fire attr method */
+            this.set('activeTab', tab, true);
+            
         }
 
         var activate = function(e) {
             YAHOO.util.Event.preventDefault(e);
-            self.set('activeTab', this);
+            self.set('activeTab', this, true);
         };
         
         tab.addListener( tab.get('activationEvent'), activate);
@@ -235,8 +236,8 @@
      * @method contentTransition
      */
     proto.contentTransition = function(newTab, oldTab) {
-        newTab.showContent(); // TODO: firing twice?
-        oldTab.hideContent();
+        newTab.set('contentVisible', true);
+        oldTab.set('contentVisible', false);
     };
     
     /**
@@ -333,17 +334,17 @@
                 var activeTab = this.get('activeTab');
                 
                 if (tab) {  
-                    tab.set('active', true); // TODO: firing twice?
+                    tab.set('active', true);
                 }
                 
                 if (activeTab && activeTab != tab) {
                     activeTab.set('active', false);
                 }
                 
-                if (activeTab && tab != activeTab) {
+                if (activeTab && tab != activeTab) { // no transition if only 1
                     this.contentTransition(tab, activeTab);
                 } else if (tab) {
-                    tab.showContent();
+                    tab.set('contentVisible', true);
                 }
             },
             validator: function(value) {

@@ -83,22 +83,6 @@
     proto.dataConnection = null;
     
     /**
-     * Shows the tab's content element.
-     * @method showContent
-     */
-    proto.showContent = function() {
-        this.get('contentEl').style.display = 'block';
-    };
-    
-    /**
-     * Hides the tab's content element.
-     * @method hideContent
-     */
-    proto.hideContent = function() {
-        this.get('contentEl').style.display = 'none';
-    };
-    
-    /**
      * Object containing success and failure callbacks for loading data.
      * @property loadHandler
      * @type object
@@ -276,13 +260,6 @@
                 if (value === true) {
                     this.addClass(this.ACTIVE_CLASSNAME);
                     this.set('title', 'active');
-
-                    if ( this.get('dataSrc') ) {
-                     // load dynamic content unless already loaded and caching
-                        if ( !this.get('dataLoaded') || !this.get('cacheData') ) {
-                            _dataConnect.call(this);
-                        }
-                    }
                 } else {
                     this.removeClass(this.ACTIVE_CLASSNAME);
                     this.set('title', '');
@@ -322,6 +299,31 @@
                 this.getElementsByTagName('a')[0].href = value;
             },
             validator: Lang.isString
+        });
+        
+        /**
+         * The Whether or not the tab's content is visible.
+         * @config contentVisible
+         * @type Boolean
+         * @default false
+         */
+        this.register('contentVisible', {
+            value: attr.contentVisible,
+            method: function(value) {
+                if (value == true) {
+                    this.get('contentEl').style.display = 'block';
+                    
+                    if ( this.get('dataSrc') ) {
+                     // load dynamic content unless already loaded and caching
+                        if ( !this.get('dataLoaded') || !this.get('cacheData') ) {
+                            _dataConnect.call(this);
+                        }
+                    }
+                } else {
+                    this.get('contentEl').style.display = 'none';
+                }
+            },
+            validator: Lang.isBoolean
         });
     };
     
@@ -380,7 +382,7 @@
                     'error', 'Tab');
             return false;
         }
-        
+
         Dom.addClass(this.get('contentEl').parentNode, this.LOADING_CLASSNAME);
         
         this.dataConnection = YAHOO.util.Connect.asyncRequest(
