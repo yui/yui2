@@ -2,15 +2,23 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.11.3
+Version 0.12
+*/
+
+/**
+*  The Container family of components is designed to enable developers to create different kinds of content-containing modules on the web. Module and Overlay are the most basic containers, and they can be used directly or extended to build custom containers. Also part of the Container family are four UI controls that extend Module and Overlay: Tooltip, Panel, Dialog, and SimpleDialog.
+* @module Container
+* @requires yahoo,dom,event,dragdrop,animation
 */
 
 /**
 * Module is a JavaScript representation of the Standard Module Format. Standard Module Format is a simple standard for markup containers where child nodes representing the header, body, and footer of the content are denoted using the CSS classes "hd", "bd", and "ft" respectively. Module is the base class for all other classes in the YUI Container package.
-* @param {string}	el	The element ID representing the Module <em>OR</em>
-* @param {Element}	el	The element representing the Module
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this module. See configuration documentation for more details.
+* @class Module
+* @namespace YAHOO.widget
 * @constructor
+* @param {String} el			The element ID representing the Module <em>OR</em>
+* @param {HTMLElement} el		The element representing the Module
+* @param {Object} userConfig	The configuration Object literal containing the configuration that should be set for this module. See configuration documentation for more details.
 */
 YAHOO.widget.Module = function(el, userConfig) {
 	if (el) { 
@@ -22,228 +30,218 @@ YAHOO.widget.Module = function(el, userConfig) {
 
 /**
 * Constant representing the prefix path to use for non-secure images
-* @type string
+* @property YAHOO.widget.Module.IMG_ROOT
+* @static
+* @final
+* @type String
 */
 YAHOO.widget.Module.IMG_ROOT = "http://us.i1.yimg.com/us.yimg.com/i/";
 
 /**
 * Constant representing the prefix path to use for securely served images
-* @type string
+* @property YAHOO.widget.Module.IMG_ROOT_SSL
+* @static
+* @final
+* @type String
 */
 YAHOO.widget.Module.IMG_ROOT_SSL = "https://a248.e.akamai.net/sec.yimg.com/i/";
 
 /**
 * Constant for the default CSS class name that represents a Module
-* @type string
+* @property YAHOO.widget.Module.CSS_MODULE
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Module.CSS_MODULE = "module";
 
 /**
 * Constant representing the module header
-* @type string
+* @property YAHOO.widget.Module.CSS_HEADER
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Module.CSS_HEADER = "hd";
 
 /**
 * Constant representing the module body
-* @type string
+* @property YAHOO.widget.Module.CSS_BODY
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Module.CSS_BODY = "bd";
 
 /**
 * Constant representing the module footer
-* @type string
+* @property YAHOO.widget.Module.CSS_FOOTER
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Module.CSS_FOOTER = "ft";
 
 /**
 * Constant representing the url for the "src" attribute of the iframe used to monitor changes to the browser's base font size
-* @type string
+* @property YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL
+* @static
 * @final
+* @type String
 */
-YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL = "javascript:false";
+YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL = "javascript:false;";
 
 YAHOO.widget.Module.prototype = {
 
 	/**
 	* The class's constructor function
-	* @type function
+	* @property contructor
+	* @type Function
 	*/
 	constructor : YAHOO.widget.Module,
 
 	/**
 	* The main module element that contains the header, body, and footer
-	* @type Element
+	* @property element
+	* @type HTMLElement
 	*/
 	element : null, 
 
 	/**
 	* The header element, denoted with CSS class "hd"
-	* @type Element
+	* @property header
+	* @type HTMLElement
 	*/
 	header : null,
 
 	/**
 	* The body element, denoted with CSS class "bd"
-	* @type Element
+	* @property body
+	* @type HTMLElement
 	*/
 	body : null,
 
 	/**
 	* The footer element, denoted with CSS class "ft"
-	* @type Element
+	* @property footer
+	* @type HTMLElement
 	*/
 	footer : null,
 
 	/**
 	* The id of the element
-	* @type string
+	* @property id
+	* @type String
 	*/
 	id : null,
 
 	/**
-	* Array of elements
-	* @type Element[]
-	*/
-	childNodesInDOM : null,
-
-	/**
-	* The string representing the image root
-	* @type string
+	* The String representing the image root
+	* @property imageRoot
+	* @type String
 	*/
 	imageRoot : YAHOO.widget.Module.IMG_ROOT,
-
-	/**
-	* CustomEvent fired prior to class initalization.
-	* args: class reference of the initializing class, such as this.beforeInitEvent.fire(YAHOO.widget.Module)
-	* @type YAHOO.util.CustomEvent
-	*/
-	beforeInitEvent : null,
-
-	/**
-	* CustomEvent fired after class initalization.
-	* args: class reference of the initializing class, such as this.initEvent.fire(YAHOO.widget.Module)
-	* @type YAHOO.util.CustomEvent
-	*/
-	initEvent : null,
-
-	/**
-	* CustomEvent fired when the Module is appended to the DOM
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	appendEvent : null,
-
-	/**
-	* CustomEvent fired before the Module is rendered
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	beforeRenderEvent : null,
-
-	/**
-	* CustomEvent fired after the Module is rendered
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	renderEvent : null,
-
-	/**
-	* CustomEvent fired when the header content of the Module is modified
-	* args: string/element representing the new header content
-	* @type YAHOO.util.CustomEvent
-	*/
-	changeHeaderEvent : null,
-
-	/**
-	* CustomEvent fired when the body content of the Module is modified
-	* args: string/element representing the new body content
-	* @type YAHOO.util.CustomEvent
-	*/
-	changeBodyEvent : null,
-
-	/**
-	* CustomEvent fired when the footer content of the Module is modified
-	* args: string/element representing the new footer content
-	* @type YAHOO.util.CustomEvent
-	*/
-	changeFooterEvent : null,
-
-	/**
-	* CustomEvent fired when the content of the Module is modified
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	changeContentEvent : null,
-
-	/**
-	* CustomEvent fired when the Module is destroyed
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	destroyEvent : null,
-
-	/**
-	* CustomEvent fired before the Module is shown
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	beforeShowEvent : null,
-
-	/**
-	* CustomEvent fired after the Module is shown
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	showEvent : null,
-
-	/**
-	* CustomEvent fired before the Module is hidden
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	beforeHideEvent : null,
-	
-	/**
-	* CustomEvent fired after the Module is hidden
-	* args: none
-	* @type YAHOO.util.CustomEvent
-	*/
-	hideEvent : null,
 		
 	/**
 	* Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
+	* @method initEvents
 	*/
 	initEvents : function() {
 
-		this.beforeInitEvent		= new YAHOO.util.CustomEvent("beforeInit");
-		this.initEvent				= new YAHOO.util.CustomEvent("init");
+		/**
+		* CustomEvent fired prior to class initalization.
+		* @event beforeInitEvent
+		* @param {class} classRef	class reference of the initializing class, such as this.beforeInitEvent.fire(YAHOO.widget.Module)
+		*/
+		this.beforeInitEvent = new YAHOO.util.CustomEvent("beforeInit");
 
-		this.appendEvent			= new YAHOO.util.CustomEvent("append");
+		/**
+		* CustomEvent fired after class initalization.
+		* @event initEvent
+		* @param {class} classRef	class reference of the initializing class, such as this.beforeInitEvent.fire(YAHOO.widget.Module)
+		*/		
+		this.initEvent = new YAHOO.util.CustomEvent("init");
 
-		this.beforeRenderEvent		= new YAHOO.util.CustomEvent("beforeRender");
-		this.renderEvent			= new YAHOO.util.CustomEvent("render");
+		/**
+		* CustomEvent fired when the Module is appended to the DOM
+		* @event appendEvent
+		*/
+		this.appendEvent = new YAHOO.util.CustomEvent("append");
 
-		this.changeHeaderEvent		= new YAHOO.util.CustomEvent("changeHeader");
-		this.changeBodyEvent		= new YAHOO.util.CustomEvent("changeBody");
-		this.changeFooterEvent		= new YAHOO.util.CustomEvent("changeFooter");
+		/**
+		* CustomEvent fired before the Module is rendered
+		* @event beforeRenderEvent
+		*/
+		this.beforeRenderEvent = new YAHOO.util.CustomEvent("beforeRender");
 
-		this.changeContentEvent		= new YAHOO.util.CustomEvent("changeContent");
+		/**
+		* CustomEvent fired after the Module is rendered
+		* @event renderEvent
+		*/
+		this.renderEvent = new YAHOO.util.CustomEvent("render");
+	
+		/**
+		* CustomEvent fired when the header content of the Module is modified
+		* @event changeHeaderEvent
+		* @param {String/HTMLElement} content	String/element representing the new header content
+		*/
+		this.changeHeaderEvent = new YAHOO.util.CustomEvent("changeHeader");
+		
+		/**
+		* CustomEvent fired when the body content of the Module is modified
+		* @event changeBodyEvent
+		* @param {String/HTMLElement} content	String/element representing the new body content
+		*/		
+		this.changeBodyEvent = new YAHOO.util.CustomEvent("changeBody");
+		
+		/**
+		* CustomEvent fired when the footer content of the Module is modified
+		* @event changeFooterEvent
+		* @param {String/HTMLElement} content	String/element representing the new footer content
+		*/
+		this.changeFooterEvent = new YAHOO.util.CustomEvent("changeFooter");
 
-		this.destroyEvent			= new YAHOO.util.CustomEvent("destroy");
-		this.beforeShowEvent		= new YAHOO.util.CustomEvent("beforeShow");
-		this.showEvent				= new YAHOO.util.CustomEvent("show");
-		this.beforeHideEvent		= new YAHOO.util.CustomEvent("beforeHide");
-		this.hideEvent				= new YAHOO.util.CustomEvent("hide");
+		/**
+		* CustomEvent fired when the content of the Module is modified
+		* @event changeContentEvent
+		*/
+		this.changeContentEvent = new YAHOO.util.CustomEvent("changeContent");
+
+		/**
+		* CustomEvent fired when the Module is destroyed
+		* @event destroyEvent
+		*/
+		this.destroyEvent = new YAHOO.util.CustomEvent("destroy");
+		
+		/**
+		* CustomEvent fired before the Module is shown
+		* @event beforeShowEvent
+		*/
+		this.beforeShowEvent = new YAHOO.util.CustomEvent("beforeShow");
+
+		/**
+		* CustomEvent fired after the Module is shown
+		* @event showEvent
+		*/
+		this.showEvent = new YAHOO.util.CustomEvent("show");
+
+		/**
+		* CustomEvent fired before the Module is hidden
+		* @event beforeHideEvent
+		*/
+		this.beforeHideEvent = new YAHOO.util.CustomEvent("beforeHide");
+
+		/**
+		* CustomEvent fired after the Module is hidden
+		* @event hideEvent
+		*/
+		this.hideEvent = new YAHOO.util.CustomEvent("hide");
 	}, 
 
 	/**
 	* String representing the current user-agent platform
-	* @type string
+	* @property platform
+	* @type String
 	*/
 	platform : function() {
 					var ua = navigator.userAgent.toLowerCase();
@@ -258,7 +256,8 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* String representing the current user-agent browser
-	* @type string
+	* @property browser
+	* @type String
 	*/
 	browser : function() {
 			var ua = navigator.userAgent.toLowerCase();
@@ -279,7 +278,8 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Boolean representing whether or not the current browsing context is secure (https)
-	* @type boolean
+	* @property isSecure
+	* @type Boolean
 	*/
 	isSecure : function() {
 		if (window.location.href.toLowerCase().indexOf("https") === 0) {
@@ -294,17 +294,38 @@ YAHOO.widget.Module.prototype = {
 	*/
 	initDefaultConfig : function() {
 		// Add properties //
-
+		
+		/**
+		* Specifies whether the Module is visible on the page.
+		* @config visible
+		* @type Boolean
+		* @default true
+		*/
 		this.cfg.addProperty("visible", { value:true, handler:this.configVisible, validator:this.cfg.checkBoolean } );
+		
+		/**
+		* Object or array of objects representing the ContainerEffect classes that are active for animating the container.
+		* @config effect
+		* @type Object
+		* @default null
+		*/
 		this.cfg.addProperty("effect", { suppressEvent:true, supercedes:["visible"] } );
+		
+		/**
+		* Specifies whether to create a special proxy iframe to monitor for user font resizing in the document
+		* @config monitorresize
+		* @type Boolean
+		* @default true
+		*/
 		this.cfg.addProperty("monitorresize", { value:true, handler:this.configMonitorResize } );
 	},
 
 	/**
 	* The Module class's initialization method, which is executed for Module and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
-	* @param {string}	el	The element ID representing the Module <em>OR</em>
-	* @param {Element}	el	The element representing the Module
-	* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this module. See configuration documentation for more details.
+	* @method init
+	* @param {String}	el	The element ID representing the Module <em>OR</em>
+	* @param {HTMLElement}	el	The element representing the Module
+	* @param {Object}	userConfig	The configuration Object literal containing the configuration that should be set for this module. See configuration documentation for more details.
 	*/
 	init : function(el, userConfig) {
 
@@ -312,6 +333,11 @@ YAHOO.widget.Module.prototype = {
 
 		this.beforeInitEvent.fire(YAHOO.widget.Module);
 
+		/**
+		* The Module's Config object used for monitoring configuration properties.
+		* @property cfg
+		* @type YAHOO.util.Config
+		*/
 		this.cfg = new YAHOO.util.Config(this);
 		
 		if (this.isSecure) {
@@ -371,7 +397,8 @@ YAHOO.widget.Module.prototype = {
 	},
 
 	/**
-	* Initialized an empty DOM element that is placed out of the visible area that can be used to detect text resize.
+	* Initialized an empty IFRAME that is placed out of the visible area that can be used to detect text resize.
+	* @method initResizeMonitor
 	*/
 	initResizeMonitor : function() {
 
@@ -439,6 +466,9 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Event handler fired when the resize monitor element is resized.
+	* @method onDomResize
+	* @param {DOMEvent} e	The DOM resize event
+	* @param {Object} obj	The scope object passed to the handler
 	*/
 	onDomResize : function(e, obj) { 
 
@@ -452,8 +482,9 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Sets the Module's header content to the HTML specified, or appends the passed element to the header. If no header is present, one will be automatically created.
-	* @param {string}	headerContent	The HTML used to set the header <em>OR</em>
-	* @param {Element}	headerContent	The Element to append to the header
+	* @method setHeader
+	* @param {String}	headerContent	The HTML used to set the header <em>OR</em>
+	* @param {HTMLElement}	headerContent	The HTMLElement to append to the header
 	*/	
 	setHeader : function(headerContent) {
 		if (! this.header) {
@@ -474,7 +505,8 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Appends the passed element to the header. If no header is present, one will be automatically created.
-	* @param {Element}	element	The element to append to the header
+	* @method appendToHeader
+	* @param {HTMLElement}	element	The element to append to the header
 	*/	
 	appendToHeader : function(element) {
 		if (! this.header) {
@@ -489,8 +521,9 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Sets the Module's body content to the HTML specified, or appends the passed element to the body. If no body is present, one will be automatically created.
-	* @param {string}	bodyContent	The HTML used to set the body <em>OR</em>
-	* @param {Element}	bodyContent	The Element to append to the body
+	* @method setBody
+	* @param {String}	bodyContent	The HTML used to set the body <em>OR</em>
+	* @param {HTMLElement}	bodyContent	The HTMLElement to append to the body
 	*/		
 	setBody : function(bodyContent) {
 		if (! this.body) {
@@ -512,7 +545,8 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Appends the passed element to the body. If no body is present, one will be automatically created.
-	* @param {Element}	element	The element to append to the body
+	* @method appendToBody
+	* @param {HTMLElement}	element	The element to append to the body
 	*/
 	appendToBody : function(element) {
 		if (! this.body) {
@@ -527,8 +561,9 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Sets the Module's footer content to the HTML specified, or appends the passed element to the footer. If no footer is present, one will be automatically created.
-	* @param {string}	footerContent	The HTML used to set the footer <em>OR</em>
-	* @param {Element}	footerContent	The Element to append to the footer
+	* @method setFooter
+	* @param {String}	footerContent	The HTML used to set the footer <em>OR</em>
+	* @param {HTMLElement}	footerContent	The HTMLElement to append to the footer
 	*/	
 	setFooter : function(footerContent) {
 		if (! this.footer) {
@@ -549,7 +584,8 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Appends the passed element to the footer. If no footer is present, one will be automatically created.
-	* @param {Element}	element	The element to append to the footer
+	* @method appendToFooter
+	* @param {HTMLElement}	element	The element to append to the footer
 	*/
 	appendToFooter : function(element) {
 		if (! this.footer) {
@@ -564,10 +600,11 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Renders the Module by inserting the elements that are not already in the main Module into their correct places. Optionally appends the Module to the specified node prior to the render's execution. NOTE: For Modules without existing markup, the appendToNode argument is REQUIRED. If this argument is ommitted and the current element is not present in the document, the function will return false, indicating that the render was a failure.
-	* @param {string}	appendToNode	The element id to which the Module should be appended to prior to rendering <em>OR</em>
-	* @param {Element}	appendToNode	The element to which the Module should be appended to prior to rendering	
-	* @param {Element}	moduleElement	OPTIONAL. The element that represents the actual Standard Module container. 
-	* @return {boolean} Success or failure of the render
+	* @method render
+	* @param {String}	appendToNode	The element id to which the Module should be appended to prior to rendering <em>OR</em>
+	* @param {HTMLElement}	appendToNode	The element to which the Module should be appended to prior to rendering	
+	* @param {HTMLElement}	moduleElement	OPTIONAL. The element that represents the actual Standard Module container. 
+	* @return {Boolean} Success or failure of the render
 	*/
 	render : function(appendToNode, moduleElement) {
 		this.beforeRenderEvent.fire();
@@ -629,6 +666,7 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Removes the Module element from the DOM and sets all child elements to null.
+	* @method destroy
 	*/
 	destroy : function() {
 		if (this.element) {
@@ -648,6 +686,7 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Shows the Module element by setting the visible configuration property to true. Also fires two events: beforeShowEvent prior to the visibility change, and showEvent after.
+	* @method show
 	*/
 	show : function() {
 		this.cfg.setProperty("visible", true);
@@ -655,6 +694,7 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Hides the Module element by setting the visible configuration property to false. Also fires two events: beforeHideEvent prior to the visibility change, and hideEvent after.
+	* @method hide
 	*/
 	hide : function() {
 		this.cfg.setProperty("visible", false);
@@ -665,6 +705,10 @@ YAHOO.widget.Module.prototype = {
 	/**
 	* Default event handler for changing the visibility property of a Module. By default, this is achieved by switching the "display" style between "block" and "none".
 	* This method is responsible for firing showEvent and hideEvent.
+	* @param {String} type	The CustomEvent type (usually the property name)
+	* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+	* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+	* @method configVisible
 	*/
 	configVisible : function(type, args, obj) {
 		var visible = args[0];
@@ -681,6 +725,10 @@ YAHOO.widget.Module.prototype = {
 
 	/**
 	* Default event handler for the "monitorresize" configuration property
+	* @param {String} type	The CustomEvent type (usually the property name)
+	* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+	* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+	* @method configMonitorResize
 	*/
 	configMonitorResize : function(type, args, obj) {
 		var monitor = args[0];
@@ -694,8 +742,9 @@ YAHOO.widget.Module.prototype = {
 };
 
 /**
-* Returns a string representation of the object.
-* @type string
+* Returns a String representation of the Object.
+* @method toString
+* @return {String}	The string representation of the Module
 */ 
 YAHOO.widget.Module.prototype.toString = function() {
 	return "Module " + this.id;

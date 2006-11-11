@@ -2,52 +2,69 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.11.3
+Version 0.12
 */
 
 /**
-* <p>YAHOO.widget.DateMath is used for simple date manipulation. The class is a static utility
-* used for adding, subtracting, and comparing dates.</p>
+* YAHOO.widget.DateMath is used for simple date manipulation. The class is a static utility
+* used for adding, subtracting, and comparing dates.
+* @class YAHOO.widget.DateMath
 */
-YAHOO.widget.DateMath = new function() {
-
+YAHOO.widget.DateMath = {
 	/**
 	* Constant field representing Day
+	* @property DAY
+	* @static
+	* @final
 	* @type String
 	*/
-	this.DAY = "D";
+	DAY : "D",
 
 	/**
 	* Constant field representing Week
+	* @property WEEK
+	* @static
+	* @final
 	* @type String
 	*/
-	this.WEEK = "W";
+	WEEK : "W",
 
 	/**
 	* Constant field representing Year
+	* @property YEAR
+	* @static
+	* @final
 	* @type String
 	*/
-	this.YEAR = "Y";
+	YEAR : "Y",
 
 	/**
 	* Constant field representing Month
+	* @property MONTH
+	* @static
+	* @final
 	* @type String
 	*/
-	this.MONTH = "M";
+	MONTH : "M",
 
 	/**
 	* Constant field representing one day, in milliseconds
-	* @type Integer
+	* @property ONE_DAY_MS
+	* @static
+	* @final
+	* @type Number
 	*/
-	this.ONE_DAY_MS = 1000*60*60*24;
+	ONE_DAY_MS : 1000*60*60*24,
 
 	/**
 	* Adds the specified amount of time to the this instance.
+	* @method add
 	* @param {Date} date	The JavaScript Date object to perform addition on
-	* @param {string} field	The this field constant to be used for performing addition.
-	* @param {Integer} amount	The number of units (measured in the field constant) to add to the date.
+	* @param {String} field	The field constant to be used for performing addition.
+	* @param {Number} amount	The number of units (measured in the field constant) to add to the date.
+	* @return {Date} The resulting Date object
 	*/
-	this.add = function(date, field, amount) {
+	add : function(date, field, amount) {
 		var d = new Date(date.getTime());
 		switch (field) {
 			case this.MONTH:
@@ -81,86 +98,93 @@ YAHOO.widget.DateMath = new function() {
 				break;
 		}
 		return d;
-	};
+	},
 
 	/**
 	* Subtracts the specified amount of time from the this instance.
+	* @method subtract
 	* @param {Date} date	The JavaScript Date object to perform subtraction on
-	* @param {Integer} field	The this field constant to be used for performing subtraction.
-	* @param {Integer} amount	The number of units (measured in the field constant) to subtract from the date.
+	* @param {Number} field	The this field constant to be used for performing subtraction.
+	* @param {Number} amount	The number of units (measured in the field constant) to subtract from the date.
+	* @return {Date} The resulting Date object
 	*/
-	this.subtract = function(date, field, amount) {
+	subtract : function(date, field, amount) {
 		return this.add(date, field, (amount*-1));
-	};
+	},
 
 	/**
 	* Determines whether a given date is before another date on the calendar.
+	* @method before
 	* @param {Date} date		The Date object to compare with the compare argument
 	* @param {Date} compareTo	The Date object to use for the comparison
 	* @return {Boolean} true if the date occurs before the compared date; false if not.
 	*/
-	this.before = function(date, compareTo) {
+	before : function(date, compareTo) {
 		var ms = compareTo.getTime();
 		if (date.getTime() < ms) {
 			return true;
 		} else {
 			return false;
 		}
-	};
+	},
 
 	/**
 	* Determines whether a given date is after another date on the calendar.
+	* @method after
 	* @param {Date} date		The Date object to compare with the compare argument
 	* @param {Date} compareTo	The Date object to use for the comparison
 	* @return {Boolean} true if the date occurs after the compared date; false if not.
 	*/
-	this.after = function(date, compareTo) {
+	after : function(date, compareTo) {
 		var ms = compareTo.getTime();
 		if (date.getTime() > ms) {
 			return true;
 		} else {
 			return false;
 		}
-	};
+	},
 
 	/**
 	* Determines whether a given date is between two other dates on the calendar.
+	* @method between
 	* @param {Date} date		The date to check for
 	* @param {Date} dateBegin	The start of the range
 	* @param {Date} dateEnd		The end of the range
 	* @return {Boolean} true if the date occurs between the compared dates; false if not.
 	*/
-	this.between = function(date, dateBegin, dateEnd) {
+	between : function(date, dateBegin, dateEnd) {
 		if (this.after(date, dateBegin) && this.before(date, dateEnd)) {
 			return true;
 		} else {
 			return false;
 		}
-	};
+	},
 	
 	/**
 	* Retrieves a JavaScript Date object representing January 1 of any given year.
-	* @param {Integer} calendarYear		The calendar year for which to retrieve January 1
+	* @method getJan1
+	* @param {Number} calendarYear		The calendar year for which to retrieve January 1
 	* @return {Date}	January 1 of the calendar year specified.
 	*/
-	this.getJan1 = function(calendarYear) {
+	getJan1 : function(calendarYear) {
 		return new Date(calendarYear,0,1); 
-	};
+	},
 
 	/**
 	* Calculates the number of days the specified date is from January 1 of the specified calendar year.
 	* Passing January 1 to this function would return an offset value of zero.
+	* @method getDayOffset
 	* @param {Date}	date	The JavaScript date for which to find the offset
-	* @param {Integer} calendarYear	The calendar year to use for determining the offset
-	* @return {Integer}	The number of days since January 1 of the given year
+	* @param {Number} calendarYear	The calendar year to use for determining the offset
+	* @return {Number}	The number of days since January 1 of the given year
 	*/
-	this.getDayOffset = function(date, calendarYear) {
+	getDayOffset : function(date, calendarYear) {
 		var beginYear = this.getJan1(calendarYear); // Find the start of the year. This will be in week 1.
 		
 		// Find the number of days the passed in date is away from the calendar year start
 		var dayOffset = Math.ceil((date.getTime()-beginYear.getTime()) / this.ONE_DAY_MS);
 		return dayOffset;
-	};
+	},
 
 	/**
 	* Calculates the week number for the given date. This function assumes that week 1 is the
@@ -169,112 +193,86 @@ YAHOO.widget.DateMath = new function() {
 	* date if the date overlaps years. For instance, a week may be considered week 1 of 2005, or
 	* week 53 of 2004. Specifying the optional calendarYear allows one to make this distinction
 	* easily.
+	* @method getWeekNumber
 	* @param {Date}	date	The JavaScript date for which to find the week number
-	* @param {Integer} calendarYear	OPTIONAL - The calendar year to use for determining the week number. Default is
+	* @param {Number} calendarYear	OPTIONAL - The calendar year to use for determining the week number. Default is
 	*											the calendar year of parameter "date".
-	* @param {Integer} weekStartsOn	OPTIONAL - The integer (0-6) representing which day a week begins on. Default is 0 (for Sunday).
-	* @return {Integer}	The week number of the given date.
+	* @param {Number} weekStartsOn	OPTIONAL - The integer (0-6) representing which day a week begins on. Default is 0 (for Sunday).
+	* @return {Number}	The week number of the given date.
 	*/
-	this.getWeekNumber = function(date, calendarYear, weekStartsOn) {
-		date.setHours(12,0,0,0);
+	getWeekNumber : function(date, calendarYear) {
+		date = this.clearTime(date);
+		var nearestThurs = new Date(date.getTime() + (4 * this.ONE_DAY_MS) - ((date.getDay()) * this.ONE_DAY_MS));
 
-		if (! weekStartsOn) {
-			weekStartsOn = 0;
-		}
-		if (! calendarYear) {
-			calendarYear = date.getFullYear();
-		}
-		
-		var weekNum = -1;
-		
-		var jan1 = this.getJan1(calendarYear);
+		var jan1 = new Date(nearestThurs.getFullYear(),0,1);
+		var dayOfYear = ((nearestThurs.getTime() - jan1.getTime()) / this.ONE_DAY_MS) - 1;
 
-		var jan1Offset = jan1.getDay() - weekStartsOn;
-		var jan1DayOfWeek = (jan1Offset >= 0 ? jan1Offset : (7 + jan1Offset));
-
-		var endOfWeek1 = this.add(jan1, this.DAY, (6 - jan1DayOfWeek));
-		endOfWeek1.setHours(23,59,59,999);
-
-		var month = date.getMonth();
-		var day = date.getDate();
-		var year = date.getFullYear();
-		
-		var dayOffset = this.getDayOffset(date, calendarYear); // Days since Jan 1, Calendar Year
-			
-		if (dayOffset < 0 || this.before(date, endOfWeek1)) {
-			weekNum = 1;
-		} else {
-			weekNum = 2;
-			var weekBegin = new Date(endOfWeek1.getTime() + 1);
-			var weekEnd = this.add(weekBegin, this.WEEK, 1);
-
-			while (! this.between(date, weekBegin, weekEnd)) {
-				weekBegin = this.add(weekBegin, this.WEEK, 1);
-				weekEnd = this.add(weekEnd, this.WEEK, 1);
-				weekNum += 1;
-			}
-		}
-		
+		var weekNum = Math.ceil((dayOfYear)/ 7);
 		return weekNum;
-	};
+	},
 
 	/**
 	* Determines if a given week overlaps two different years.
+	* @method isYearOverlapWeek
 	* @param {Date}	weekBeginDate	The JavaScript Date representing the first day of the week.
 	* @return {Boolean}	true if the date overlaps two different years.
 	*/
-	this.isYearOverlapWeek = function(weekBeginDate) {
+	isYearOverlapWeek : function(weekBeginDate) {
 		var overlaps = false;
 		var nextWeek = this.add(weekBeginDate, this.DAY, 6);
 		if (nextWeek.getFullYear() != weekBeginDate.getFullYear()) {
 			overlaps = true;
 		}
 		return overlaps;
-	};
+	},
 
 	/**
 	* Determines if a given week overlaps two different months.
+	* @method isMonthOverlapWeek
 	* @param {Date}	weekBeginDate	The JavaScript Date representing the first day of the week.
 	* @return {Boolean}	true if the date overlaps two different months.
 	*/
-	this.isMonthOverlapWeek = function(weekBeginDate) {
+	isMonthOverlapWeek : function(weekBeginDate) {
 		var overlaps = false;
 		var nextWeek = this.add(weekBeginDate, this.DAY, 6);
 		if (nextWeek.getMonth() != weekBeginDate.getMonth()) {
 			overlaps = true;
 		}
 		return overlaps;
-	};
+	},
 
 	/**
 	* Gets the first day of a month containing a given date.
+	* @method findMonthStart
 	* @param {Date}	date	The JavaScript Date used to calculate the month start
 	* @return {Date}		The JavaScript Date representing the first day of the month
 	*/
-	this.findMonthStart = function(date) {
+	findMonthStart : function(date) {
 		var start = new Date(date.getFullYear(), date.getMonth(), 1);
 		return start;
-	};
+	},
 
 	/**
 	* Gets the last day of a month containing a given date.
+	* @method findMonthEnd
 	* @param {Date}	date	The JavaScript Date used to calculate the month end
 	* @return {Date}		The JavaScript Date representing the last day of the month
 	*/
-	this.findMonthEnd = function(date) {
+	findMonthEnd : function(date) {
 		var start = this.findMonthStart(date);
 		var nextMonth = this.add(start, this.MONTH, 1);
 		var end = this.subtract(nextMonth, this.DAY, 1);
 		return end;
-	};
+	},
 
 	/**
 	* Clears the time fields from a given date, effectively setting the time to midnight.
+	* @method clearTime
 	* @param {Date}	date	The JavaScript Date for which the time fields will be cleared
 	* @return {Date}		The JavaScript Date cleared of all time fields
 	*/
-	this.clearTime = function(date) {
-		date.setHours(0,0,0,0);
+	clearTime : function(date) {
+		date.setHours(12,0,0,0);
 		return date;
-	};
-}
+	}
+};

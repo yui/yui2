@@ -2,14 +2,16 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.11.3
+Version 0.12
 */
 
 /**
-* OverlayManager is used for maintaining the focus status of multiple Overlays.
-* @param {Array}	overlays	Optional. A collection of Overlays to register with the manager.
-* @param {object}	userConfig		The object literal representing the user configuration of the OverlayManager
+* OverlayManager is used for maintaining the focus status of multiple Overlays.* @namespace YAHOO.widget
+* @namespace YAHOO.widget
+* @class OverlayManager
 * @constructor
+* @param {Array}	overlays	Optional. A collection of Overlays to register with the manager.
+* @param {Object}	userConfig		The object literal representing the user configuration of the OverlayManager
 */
 YAHOO.widget.OverlayManager = function(userConfig) {
 	this.init(userConfig);
@@ -17,59 +19,62 @@ YAHOO.widget.OverlayManager = function(userConfig) {
 
 /**
 * The CSS class representing a focused Overlay
-* @type string
+* @property YAHOO.widget.OverlayManager.CSS_FOCUSED
+* @static
+* @final
+* @type String
 */
 YAHOO.widget.OverlayManager.CSS_FOCUSED = "focused";
 
 YAHOO.widget.OverlayManager.prototype = {
-
+	/**
+	* The class's constructor function
+	* @property contructor
+	* @type Function
+	*/
 	constructor : YAHOO.widget.OverlayManager,
 
 	/**
 	* The array of Overlays that are currently registered
-	* @type Array
+	* @property overlays
+	* @type YAHOO.widget.Overlay[]
 	*/
 	overlays : null,
 
 	/**
 	* Initializes the default configuration of the OverlayManager
+	* @method initDefaultConfig
 	*/	
 	initDefaultConfig : function() {
+		/**
+		* The collection of registered Overlays in use by the OverlayManager
+		* @config overlays
+		* @type YAHOO.widget.Overlay[]
+		* @default null
+		*/
 		this.cfg.addProperty("overlays", { suppressEvent:true } );
+
+		/**
+		* The default DOM event that should be used to focus an Overlay
+		* @config focusevent
+		* @type String
+		* @default "mousedown"
+		*/
 		this.cfg.addProperty("focusevent", { value:"mousedown" } );
 	}, 
 
 	/**
-	* Returns the currently focused Overlay
-	* @return {Overlay}	The currently focused Overlay
-	*/
-	getActive : function() {},
-
-	/**
-	* Focuses the specified Overlay
-	* @param {Overlay}	The Overlay to focus
-	* @param {string}	The id of the Overlay to focus
-	*/
-	focus : function(overlay) {},
-
-	/**
-	* Removes the specified Overlay from the manager
-	* @param {Overlay}	The Overlay to remove
-	* @param {string}	The id of the Overlay to remove
-	*/
-	remove: function(overlay) {},
-
-	/**
-	* Removes focus from all registered Overlays in the manager
-	*/
-	blurAll : function() {},
-
-	/**
 	* Initializes the OverlayManager
-	* @param {Array}	overlays	Optional. A collection of Overlays to register with the manager.
-	* @param {object}	userConfig		The object literal representing the user configuration of the OverlayManager
+	* @method init
+	* @param {YAHOO.widget.Overlay[]}	overlays	Optional. A collection of Overlays to register with the manager.
+	* @param {Object}	userConfig		The object literal representing the user configuration of the OverlayManager
 	*/
 	init : function(userConfig) {
+		/**
+		* The OverlayManager's Config object used for monitoring configuration properties.
+		* @property cfg
+		* @type YAHOO.util.Config
+		*/
 		this.cfg = new YAHOO.util.Config(this);
 
 		this.initDefaultConfig();
@@ -79,12 +84,29 @@ YAHOO.widget.OverlayManager.prototype = {
 		}
 		this.cfg.fireQueue();
 
+		/**
+		* The currently activated Overlay
+		* @property activeOverlay
+		* @private
+		* @type YAHOO.widget.Overlay
+		*/
 		var activeOverlay = null;
 
+		/**
+		* Returns the currently focused Overlay
+		* @method getActive
+		* @return {YAHOO.widget.Overlay}	The currently focused Overlay
+		*/
 		this.getActive = function() {
 			return activeOverlay;
 		};
 
+		/**
+		* Focuses the specified Overlay
+		* @method focus
+		* @param {YAHOO.widget.Overlay} overlay	The Overlay to focus
+		* @param {String} overlay	The id of the Overlay to focus
+		*/
 		this.focus = function(overlay) {
 			var o = this.find(overlay);
 			if (o) {
@@ -100,6 +122,12 @@ YAHOO.widget.OverlayManager.prototype = {
 			}
 		};
 
+		/**
+		* Removes the specified Overlay from the manager
+		* @method remove
+		* @param {YAHOO.widget.Overlay}	overlay	The Overlay to remove
+		* @param {String} overlay	The id of the Overlay to remove
+		*/
 		this.remove = function(overlay) {
 			var o = this.find(overlay);
 			if (o) {
@@ -117,6 +145,10 @@ YAHOO.widget.OverlayManager.prototype = {
 			}
 		};
 
+		/**
+		* Removes focus from all registered Overlays in the manager
+		* @method blurAll
+		*/
 		this.blurAll = function() {
 			activeOverlay = null;
 			for (var o=0;o<this.overlays.length;o++) {
@@ -138,9 +170,10 @@ YAHOO.widget.OverlayManager.prototype = {
 
 	/**
 	* Registers an Overlay or an array of Overlays with the manager. Upon registration, the Overlay receives functions for focus and blur, along with CustomEvents for each.
-	* @param {Overlay}	overlay		An Overlay to register with the manager.
-	* @param {Overlay[]}	overlay		An array of Overlays to register with the manager.
-	* @return	{boolean}	True if any Overlays are registered.
+	* @method register
+	* @param {YAHOO.widget.Overlay}	overlay		An Overlay to register with the manager.
+	* @param {YAHOO.widget.Overlay[]}	overlay		An array of Overlays to register with the manager.
+	* @return	{Boolean}	True if any Overlays are registered.
 	*/
 	register : function(overlay) {
 		if (overlay instanceof YAHOO.widget.Overlay) {
@@ -194,9 +227,10 @@ YAHOO.widget.OverlayManager.prototype = {
 
 	/**
 	* Attempts to locate an Overlay by instance or ID.
-	* @param {Overlay}	overlay		An Overlay to locate within the manager
-	* @param {string}	overlay		An Overlay id to locate within the manager
-	* @return	{Overlay}	The requested Overlay, if found, or null if it cannot be located.
+	* @method find
+	* @param {YAHOO.widget.Overlay}	overlay		An Overlay to locate within the manager
+	* @param {String}	overlay		An Overlay id to locate within the manager
+	* @return	{YAHOO.widget.Overlay}	The requested Overlay, if found, or null if it cannot be located.
 	*/
 	find : function(overlay) {
 		if (overlay instanceof YAHOO.widget.Overlay) {
@@ -217,7 +251,9 @@ YAHOO.widget.OverlayManager.prototype = {
 
 	/**
 	* Used for sorting the manager's Overlays by z-index.
+	* @method compareZIndexDesc
 	* @private
+	* @return {Number}	0, 1, or -1, depending on where the Overlay should fall in the stacking order.
 	*/
 	compareZIndexDesc : function(o1, o2) {
 		var zIndex1 = o1.cfg.getProperty("zIndex");
@@ -234,6 +270,7 @@ YAHOO.widget.OverlayManager.prototype = {
 
 	/**
 	* Shows all Overlays in the manager.
+	* @method showAll
 	*/
 	showAll : function() {
 		for (var o=0;o<this.overlays.length;o++) {
@@ -243,6 +280,7 @@ YAHOO.widget.OverlayManager.prototype = {
 
 	/**
 	* Hides all Overlays in the manager.
+	* @method hideAll
 	*/
 	hideAll : function() {
 		for (var o=0;o<this.overlays.length;o++) {
@@ -250,9 +288,11 @@ YAHOO.widget.OverlayManager.prototype = {
 		}
 	},
 
+
 	/**
 	* Returns a string representation of the object.
-	* @type string
+	* @method toString
+	* @return {String}	The string representation of the OverlayManager
 	*/ 
 	toString : function() {
 		return "OverlayManager";

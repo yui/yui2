@@ -2,16 +2,18 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.11.3
+Version 0.12
 */
 
 /**
 * Tooltip is an implementation of Overlay that behaves like an OS tooltip, displaying when the user mouses over a particular element, and disappearing on mouse out.
+* @namespace YAHOO.widget
+* @class Tooltip
 * @extends YAHOO.widget.Overlay
-* @param {string}	el	The element ID representing the Tooltip <em>OR</em>
-* @param {Element}	el	The element representing the Tooltip
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
 * @constructor
+* @param {String}	el	The element ID representing the Tooltip <em>OR</em>
+* @param {HTMLElement}	el	The element representing the Tooltip
+* @param {Object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
 */
 YAHOO.widget.Tooltip = function(el, userConfig) {
 	YAHOO.widget.Tooltip.superclass.constructor.call(this, el, userConfig);
@@ -19,20 +21,21 @@ YAHOO.widget.Tooltip = function(el, userConfig) {
 
 YAHOO.extend(YAHOO.widget.Tooltip, YAHOO.widget.Overlay);
 
-YAHOO.widget.Tooltip.logger = new YAHOO.widget.LogWriter("Tooltip");
-
 /**
 * Constant representing the Tooltip CSS class
-* @type string
+* @property YAHOO.widget.Tooltip.CSS_TOOLTIP
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Tooltip.CSS_TOOLTIP = "tt";
 
 /**
 * The Tooltip initialization method. This method is automatically called by the constructor. A Tooltip is automatically rendered by the init method, and it also is set to be invisible by default, and constrained to viewport by default as well.
-* @param {string}	el	The element ID representing the Tooltip <em>OR</em>
-* @param {Element}	el	The element representing the Tooltip
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Tooltip. See configuration documentation for more details.
+* @method init
+* @param {String}	el	The element ID representing the Tooltip <em>OR</em>
+* @param {HTMLElement}	el	The element representing the Tooltip
+* @param {Object}	userConfig	The configuration object literal containing the configuration that should be set for this Tooltip. See configuration documentation for more details.
 */
 YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 	this.logger = YAHOO.widget.Tooltip.logger;
@@ -65,24 +68,76 @@ YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 
 /**
 * Initializes the class's configurable properties which can be changed using the Overlay's Config object (cfg).
+* @method initDefaultConfig
 */
 YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	YAHOO.widget.Tooltip.superclass.initDefaultConfig.call(this);
 
+	/**
+	* Specifies whether the Tooltip should be kept from overlapping its context element.
+	* @config preventoverlap
+	* @type Boolean
+	* @default true
+	*/
 	this.cfg.addProperty("preventoverlap",		{ value:true, validator:this.cfg.checkBoolean, supercedes:["x","y","xy"] } );
 
+	/**
+	* The number of milliseconds to wait before showing a Tooltip on mouseover.
+	* @config showdelay
+	* @type Number
+	* @default 200
+	*/
 	this.cfg.addProperty("showdelay",			{ value:200, handler:this.configShowDelay, validator:this.cfg.checkNumber } );
+	
+	/**
+	* The number of milliseconds to wait before automatically dismissing a Tooltip after the mouse has been resting on the context element.
+	* @config autodismissdelay
+	* @type Number
+	* @default 5000
+	*/
 	this.cfg.addProperty("autodismissdelay",	{ value:5000, handler:this.configAutoDismissDelay, validator:this.cfg.checkNumber } );
+	
+	/**
+	* The number of milliseconds to wait before hiding a Tooltip on mouseover.
+	* @config hidedelay
+	* @type Number
+	* @default 250
+	*/
 	this.cfg.addProperty("hidedelay",			{ value:250, handler:this.configHideDelay, validator:this.cfg.checkNumber } );
 
+	/**
+	* Specifies the Tooltip's text.
+	* @config text
+	* @type String
+	* @default null
+	*/
 	this.cfg.addProperty("text",				{ handler:this.configText, suppressEvent:true } );
+	
+	/**
+	* Specifies the container element that the Tooltip's markup should be rendered into.
+	* @config container
+	* @type HTMLElement/String
+	* @default document.body
+	*/
 	this.cfg.addProperty("container",			{ value:document.body, handler:this.configContainer } );
+
+	/**
+	* Specifies the element or elements that the Tooltip should be anchored to on mouseover.
+	* @config context
+	* @type HTMLElement[]/String[]
+	* @default null
+	*/
+
 };
 
 // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
 
 /**
 * The default event handler fired when the "text" property is changed.
+* @method configText
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Tooltip.prototype.configText = function(type, args, obj) {
 	var text = args[0];
@@ -93,6 +148,10 @@ YAHOO.widget.Tooltip.prototype.configText = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "container" property is changed.
+* @method configContainer
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Tooltip.prototype.configContainer = function(type, args, obj) {
 	var container = args[0];
@@ -103,6 +162,10 @@ YAHOO.widget.Tooltip.prototype.configContainer = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "context" property is changed.
+* @method configContext
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Tooltip.prototype.configContext = function(type, args, obj) {
 	var context = args[0];
@@ -146,8 +209,9 @@ YAHOO.widget.Tooltip.prototype.configContext = function(type, args, obj) {
 
 /**
 * The default event handler fired when the user moves the mouse while over the context element.
+* @method onContextMouseMove
 * @param {DOMEvent} e	The current DOM event
-* @param {object}	obj	The object argument
+* @param {Object}	obj	The object argument
 */
 YAHOO.widget.Tooltip.prototype.onContextMouseMove = function(e, obj) {
 	obj.pageX = YAHOO.util.Event.getPageX(e);
@@ -157,8 +221,9 @@ YAHOO.widget.Tooltip.prototype.onContextMouseMove = function(e, obj) {
 
 /**
 * The default event handler fired when the user mouses over the context element.
+* @method onContextMouseOver
 * @param {DOMEvent} e	The current DOM event
-* @param {object}	obj	The object argument
+* @param {Object}	obj	The object argument
 */
 YAHOO.widget.Tooltip.prototype.onContextMouseOver = function(e, obj) {
 
@@ -186,8 +251,9 @@ YAHOO.widget.Tooltip.prototype.onContextMouseOver = function(e, obj) {
 
 /**
 * The default event handler fired when the user mouses out of the context element.
+* @method onContextMouseOut
 * @param {DOMEvent} e	The current DOM event
-* @param {object}	obj	The object argument
+* @param {Object}	obj	The object argument
 */
 YAHOO.widget.Tooltip.prototype.onContextMouseOut = function(e, obj) {
 	var el = this;
@@ -219,8 +285,9 @@ YAHOO.widget.Tooltip.prototype.onContextMouseOut = function(e, obj) {
 
 /**
 * Processes the showing of the Tooltip by setting the timeout delay and offset of the Tooltip.
+* @method doShow
 * @param {DOMEvent} e	The current DOM event
-* @return {int}	The process ID of the timeout function associated with doShow
+* @return {Number}	The process ID of the timeout function associated with doShow
 */
 YAHOO.widget.Tooltip.prototype.doShow = function(e, context) {
 	
@@ -255,6 +322,7 @@ YAHOO.widget.Tooltip.prototype.doShow = function(e, context) {
 
 /**
 * Sets the timeout for the auto-dismiss delay, which by default is 5 seconds, meaning that a tooltip will automatically dismiss itself after 5 seconds of being displayed.
+* @method doHide
 */
 YAHOO.widget.Tooltip.prototype.doHide = function() {
 	var me = this;
@@ -269,6 +337,9 @@ YAHOO.widget.Tooltip.prototype.doHide = function() {
 
 /**
 * Fired when the Tooltip is moved, this event handler is used to prevent the Tooltip from overlapping with its context element.
+* @method preventOverlay
+* @param {Number} pageX	The x coordinate position of the mouse pointer
+* @param {Number} pageY	The y coordinate position of the mouse pointer
 */
 YAHOO.widget.Tooltip.prototype.preventOverlap = function(pageX, pageY) {
 	
@@ -294,7 +365,8 @@ YAHOO.widget.Tooltip.prototype.preventOverlap = function(pageX, pageY) {
 
 /**
 * Returns a string representation of the object.
-* @type string
+* @method toString
+* @return {String}	The string representation of the Tooltip
 */ 
 YAHOO.widget.Tooltip.prototype.toString = function() {
 	return "Tooltip " + this.id;

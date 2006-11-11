@@ -2,16 +2,18 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.11.3
+Version 0.12
 */
 
 /**
 * Panel is an implementation of Overlay that behaves like an OS window, with a draggable header and an optional close icon at the top right.
+* @namespace YAHOO.widget
+* @class Panel
 * @extends YAHOO.widget.Overlay
-* @param {string}	el	The element ID representing the Panel <em>OR</em>
-* @param {Element}	el	The element representing the Panel
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Panel. See configuration documentation for more details.
 * @constructor
+* @param {String}	el	The element ID representing the Panel <em>OR</em>
+* @param {HTMLElement}	el	The element representing the Panel
+* @param {Object}	userConfig	The configuration object literal containing the configuration that should be set for this Panel. See configuration documentation for more details.
 */
 YAHOO.widget.Panel = function(el, userConfig) {
 	YAHOO.widget.Panel.superclass.constructor.call(this, el, userConfig);
@@ -21,37 +23,28 @@ YAHOO.extend(YAHOO.widget.Panel, YAHOO.widget.Overlay);
 
 /**
 * Constant representing the default CSS class used for a Panel
-* @type string
+* @property YAHOO.widget.Panel.CSS_PANEL
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Panel.CSS_PANEL = "panel";
 
 /**
 * Constant representing the default CSS class used for a Panel's wrapping container
-* @type string
+* @property YAHOO.widget.Panel.CSS_PANEL_CONTAINER
+* @static
 * @final
+* @type String
 */
 YAHOO.widget.Panel.CSS_PANEL_CONTAINER = "panel-container";
 
 /**
-* CustomEvent fired after the modality mask is shown
-* args: none
-* @type YAHOO.util.CustomEvent
-*/
-YAHOO.widget.Panel.prototype.showMaskEvent = null;
-
-/**
-* CustomEvent fired after the modality mask is hidden
-* args: none
-* @type YAHOO.util.CustomEvent
-*/
-YAHOO.widget.Panel.prototype.hideMaskEvent = null;
-
-/**
 * The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
-* @param {string}	el	The element ID representing the Overlay <em>OR</em>
-* @param {Element}	el	The element representing the Overlay
-* @param {object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
+* @method init
+* @param {String}	el	The element ID representing the Overlay <em>OR</em>
+* @param {HTMLElement}	el	The element representing the Overlay
+* @param {Object}	userConfig	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
 */
 YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 	YAHOO.widget.Panel.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
@@ -99,6 +92,9 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 		}
 	}, this, true);
 
+	this.beforeShowEvent.subscribe(function() {
+		this.cfg.refireEvent("underlay");
+	}, this, true);
 	this.initEvent.fire(YAHOO.widget.Panel);
 };
 
@@ -108,26 +104,72 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 YAHOO.widget.Panel.prototype.initEvents = function() {
 	YAHOO.widget.Panel.superclass.initEvents.call(this);
 
+	/**
+	* CustomEvent fired after the modality mask is shown
+	* @event showMaskEvent
+	*/
 	this.showMaskEvent = new YAHOO.util.CustomEvent("showMask");
+
+	/**
+	* CustomEvent fired after the modality mask is hidden
+	* @event hideMaskEvent
+	*/
 	this.hideMaskEvent = new YAHOO.util.CustomEvent("hideMask");
 
+	/**
+	* CustomEvent when the Panel is dragged
+	* @event dragEvent
+	*/
 	this.dragEvent = new YAHOO.util.CustomEvent("drag");
 };
 
 /**
 * Initializes the class's configurable properties which can be changed using the Panel's Config object (cfg).
+* @method initDefaultConfig
 */
 YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
 	YAHOO.widget.Panel.superclass.initDefaultConfig.call(this);
 
 	// Add panel config properties //
 
+	/**
+	* True if the Panel should display a "close" button
+	* @config close
+	* @type Boolean
+	* @default true
+	*/	
 	this.cfg.addProperty("close", { value:true, handler:this.configClose, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
+
+	/**
+	* True if the Panel should be draggable
+	* @config draggable
+	* @type Boolean
+	* @default true
+	*/	
 	this.cfg.addProperty("draggable", { value:true,	handler:this.configDraggable, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
 
+	/**
+	* Sets the type of underlay to display for the Panel. Valid values are "shadow", "matte", and "none".
+	* @config underlay
+	* @type String
+	* @default shadow
+	*/
 	this.cfg.addProperty("underlay", { value:"shadow", handler:this.configUnderlay, supercedes:["visible"] } );
+
+	/**
+	* True if the Panel should be displayed in a modal fashion, automatically creating a transparent mask over the document that will not be removed until the Panel is dismissed.
+	* @config modal
+	* @type Boolean
+	* @default false
+	*/	
 	this.cfg.addProperty("modal",	{ value:false, handler:this.configModal, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
 
+	/**
+	* A KeyListener (or array of KeyListeners) that will be enabled when the Panel is shown, and disabled when the Panel is hidden.
+	* @config keylisteners
+	* @type YAHOO.util.KeyListener[]
+	* @default null
+	*/	
 	this.cfg.addProperty("keylisteners", { handler:this.configKeyListeners, suppressEvent:true, supercedes:["visible"] } );
 };
 
@@ -135,6 +177,10 @@ YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
 
 /**
 * The default event handler fired when the "close" property is changed. The method controls the appending or hiding of the close icon at the top right of the Panel.
+* @method configClose
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Panel.prototype.configClose = function(type, args, obj) {
 	var val = args[0];
@@ -169,6 +215,10 @@ YAHOO.widget.Panel.prototype.configClose = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "draggable" property is changed.
+* @method configDraggable
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Panel.prototype.configDraggable = function(type, args, obj) {
 	var val = args[0];
@@ -189,6 +239,10 @@ YAHOO.widget.Panel.prototype.configDraggable = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "underlay" property is changed.
+* @method configUnderlay
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Panel.prototype.configUnderlay = function(type, args, obj) {
 	var val = args[0];
@@ -220,6 +274,10 @@ YAHOO.widget.Panel.prototype.configUnderlay = function(type, args, obj) {
 
 /**
 * The default event handler fired when the "modal" property is changed. This handler subscribes or unsubscribes to the show and hide events to handle the display or hide of the modality mask.
+* @method configModal
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 	var modal = args[0];
@@ -227,8 +285,8 @@ YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 	if (modal) {
 		this.buildMask();
 
-		if (! YAHOO.util.Config.alreadySubscribed( this.showEvent, this.showMask, this ) ) {
-			this.showEvent.subscribe(this.showMask, this, true);
+		if (! YAHOO.util.Config.alreadySubscribed( this.beforeShowEvent, this.showMask, this ) ) {
+			this.beforeShowEvent.subscribe(this.showMask, this, true);
 		}
 		if (! YAHOO.util.Config.alreadySubscribed( this.hideEvent, this.hideMask, this) ) {
 			this.hideEvent.subscribe(this.hideMask, this, true);
@@ -239,6 +297,8 @@ YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 		if (! YAHOO.util.Config.alreadySubscribed( this.destroyEvent, this.removeMask, this) ) {
 			this.destroyEvent.subscribe(this.removeMask, this, true);
 		}
+
+		this.cfg.refireEvent("zIndex");
 	} else {
 		this.beforeShowEvent.unsubscribe(this.showMask, this);
 		this.hideEvent.unsubscribe(this.hideMask, this);
@@ -249,6 +309,7 @@ YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 
 /**
 * Removes the modality mask.
+* @method removeMask
 */
 YAHOO.widget.Panel.prototype.removeMask = function() {
 	if (this.mask) {
@@ -257,10 +318,14 @@ YAHOO.widget.Panel.prototype.removeMask = function() {
 		}
 		this.mask = null;
 	}
-}
+};
 
 /**
-* The default event handler fired when the "keylisteners" property is changed. 
+* The default event handler fired when the "keylisteners" property is changed.
+* @method configKeyListeners
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Panel.prototype.configKeyListeners = function(type, args, obj) {
 	var listeners = args[0];
@@ -290,58 +355,94 @@ YAHOO.widget.Panel.prototype.configKeyListeners = function(type, args, obj) {
 	} 
 };
 
+/**
+* The default event handler fired when the "height" property is changed.
+* @method configHeight
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+*/
+YAHOO.widget.Panel.prototype.configHeight = function(type, args, obj) {
+	var height = args[0];
+	var el = this.innerElement;
+	YAHOO.util.Dom.setStyle(el, "height", height);
+	this.cfg.refireEvent("underlay");
+	this.cfg.refireEvent("iframe");
+};
+
+/**
+* The default event handler fired when the "width" property is changed.
+* @method configWidth
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+*/
+YAHOO.widget.Panel.prototype.configWidth = function(type, args, obj) {
+	var width = args[0];
+	var el = this.innerElement;
+	YAHOO.util.Dom.setStyle(el, "width", width);
+	this.cfg.refireEvent("underlay");
+	this.cfg.refireEvent("iframe");
+};
+
+/**
+* The default event handler fired when the "zIndex" property is changed.
+* @method configzIndex
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+*/
+YAHOO.widget.Panel.prototype.configzIndex = function(type, args, obj) {
+	YAHOO.widget.Panel.superclass.configzIndex.call(this, type, args, obj);
+	
+	var maskZ = 0;
+	var currentZ = YAHOO.util.Dom.getStyle(this.element, "zIndex");
+	
+	if (this.mask) {
+		if (! currentZ || isNaN(currentZ)) {
+			currentZ = 0;
+		}
+
+		if (currentZ === 0) {
+			this.cfg.setProperty("zIndex", 1);
+		} else {
+			maskZ = currentZ - 1;
+			YAHOO.util.Dom.setStyle(this.mask, "zIndex", maskZ);
+		}
+
+	}
+};
+
 // END BUILT-IN PROPERTY EVENT HANDLERS //
 
 
 /**
 * Builds the wrapping container around the Panel that is used for positioning the shadow and matte underlays. The container element is assigned to a  local instance variable called container, and the element is reinserted inside of it.
+* @method buildWrapper
 */
 YAHOO.widget.Panel.prototype.buildWrapper = function() {
 	var elementParent = this.element.parentNode;
-
-	var elementClone = this.element.cloneNode(true);
-	this.innerElement = elementClone;
-	this.innerElement.style.visibility = "inherit";
-
-	YAHOO.util.Dom.addClass(this.innerElement, YAHOO.widget.Panel.CSS_PANEL);
-
+	var originalElement = this.element;
+	
 	var wrapper = document.createElement("DIV");
 	wrapper.className = YAHOO.widget.Panel.CSS_PANEL_CONTAINER;
-	wrapper.id = elementClone.id + "_c";
-	
-	wrapper.appendChild(elementClone);
+	wrapper.id = originalElement.id + "_c";
 	
 	if (elementParent) {
-		elementParent.replaceChild(wrapper, this.element);
+		elementParent.insertBefore(wrapper, originalElement);
 	}
+
+	wrapper.appendChild(originalElement);
 
 	this.element = wrapper;
+	this.innerElement = originalElement;
 
-	// Resynchronize the local field references
-
-	var childNodes = this.innerElement.childNodes;
-	if (childNodes) {
-		for (var i=0;i<childNodes.length;i++) {
-			var child = childNodes[i];
-			switch (child.className) {
-				case YAHOO.widget.Module.CSS_HEADER:
-					this.header = child;
-					break;
-				case YAHOO.widget.Module.CSS_BODY:
-					this.body = child;
-					break;
-				case YAHOO.widget.Module.CSS_FOOTER:
-					this.footer = child;
-					break;
-			}
-		}
-	}
-
-	this.initDefaultConfig(); // We've changed the DOM, so the configuration must be re-tooled to get the DOM references right
+	YAHOO.util.Dom.setStyle(this.innerElement, "visibility", "inherit");
 };
 
 /**
 * Adjusts the size of the shadow based on the size of the element.
+* @method sizeUnderlay
 */
 YAHOO.widget.Panel.prototype.sizeUnderlay = function() {
 	if (this.underlay && this.browser != "gecko" && this.browser != "safari") {
@@ -352,6 +453,9 @@ YAHOO.widget.Panel.prototype.sizeUnderlay = function() {
 
 /**
 * Event handler fired when the resize monitor element is resized.
+* @method onDomResize
+* @param {DOMEvent} e	The resize DOM event
+* @param {Object} obj	The scope object
 */
 YAHOO.widget.Panel.prototype.onDomResize = function(e, obj) { 
 	YAHOO.widget.Panel.superclass.onDomResize.call(this, e, obj);
@@ -363,6 +467,7 @@ YAHOO.widget.Panel.prototype.onDomResize = function(e, obj) {
 
 /**
 * Registers the Panel's header for drag & drop capability.
+* @method registerDragDrop
 */
 YAHOO.widget.Panel.prototype.registerDragDrop = function() {
 	if (this.header) {
@@ -437,6 +542,7 @@ YAHOO.widget.Panel.prototype.registerDragDrop = function() {
 
 /**
 * Builds the mask that is laid over the document when the Panel is configured to be modal.
+* @method buildMask
 */
 YAHOO.widget.Panel.prototype.buildMask = function() {
 	if (! this.mask) {
@@ -460,6 +566,7 @@ YAHOO.widget.Panel.prototype.buildMask = function() {
 
 /**
 * Hides the modality mask.
+* @method hideMask
 */
 YAHOO.widget.Panel.prototype.hideMask = function() {
 	if (this.cfg.getProperty("modal") && this.mask) {
@@ -471,6 +578,7 @@ YAHOO.widget.Panel.prototype.hideMask = function() {
 
 /**
 * Shows the modality mask.
+* @method showMask
 */
 YAHOO.widget.Panel.prototype.showMask = function() {
 	if (this.cfg.getProperty("modal") && this.mask) {
@@ -483,6 +591,7 @@ YAHOO.widget.Panel.prototype.showMask = function() {
 
 /**
 * Sets the size of the modality mask to cover the entire scrollable area of the document
+* @method sizeMask
 */
 YAHOO.widget.Panel.prototype.sizeMask = function() {
 	if (this.mask) {
@@ -492,31 +601,10 @@ YAHOO.widget.Panel.prototype.sizeMask = function() {
 };
 
 /**
-* The default event handler fired when the "height" property is changed.
-*/
-YAHOO.widget.Panel.prototype.configHeight = function(type, args, obj) {
-	var height = args[0];
-	var el = this.innerElement;
-	YAHOO.util.Dom.setStyle(el, "height", height);
-	this.cfg.refireEvent("underlay");
-	this.cfg.refireEvent("iframe");
-};
-
-/**
-* The default event handler fired when the "width" property is changed.
-*/
-YAHOO.widget.Panel.prototype.configWidth = function(type, args, obj) {
-	var width = args[0];
-	var el = this.innerElement;
-	YAHOO.util.Dom.setStyle(el, "width", width);
-	this.cfg.refireEvent("underlay");
-	this.cfg.refireEvent("iframe");
-};
-
-/**
 * Renders the Panel by inserting the elements that are not already in the main Panel into their correct places. Optionally appends the Panel to the specified node prior to the render's execution. NOTE: For Panels without existing markup, the appendToNode argument is REQUIRED. If this argument is ommitted and the current element is not present in the document, the function will return false, indicating that the render was a failure.
-* @param {string}	appendToNode	The element id to which the Module should be appended to prior to rendering <em>OR</em>
-* @param {Element}	appendToNode	The element to which the Module should be appended to prior to rendering	
+* @method render
+* @param {String}	appendToNode	The element id to which the Module should be appended to prior to rendering <em>OR</em>
+* @param {HTMLElement}	appendToNode	The element to which the Module should be appended to prior to rendering	
 * @return {boolean} Success or failure of the render
 */
 YAHOO.widget.Panel.prototype.render = function(appendToNode) {
@@ -524,8 +612,9 @@ YAHOO.widget.Panel.prototype.render = function(appendToNode) {
 };
 
 /**
-* Returns a string representation of the object.
-* @type string
+* Returns a String representation of the object.
+* @method toString
+* @return {String} The string representation of the Panel.
 */ 
 YAHOO.widget.Panel.prototype.toString = function() {
 	return "Panel " + this.id;
