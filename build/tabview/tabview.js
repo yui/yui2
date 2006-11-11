@@ -1553,7 +1553,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
 
         var activate = function(e) {
             YAHOO.util.Event.preventDefault(e);
-            self.set('activeTab', this, true);
+            self.set('activeTab', this);
         };
         
         tab.addListener( tab.get('activationEvent'), activate);
