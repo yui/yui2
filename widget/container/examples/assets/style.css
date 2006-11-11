@@ -9,7 +9,7 @@ em { font-style:italic }
 
 #hd a#logo { display:block;margin:10px;width:378px; }
 #hd a#logo div { background:url(../assets/yui.gif) no-repeat;height:34px; }
-#hd h1 { font-weight:bold;text-indent:15px;text-indent:15px; background: url(http://us.i1.yimg.com/us.yimg.com/i/ydn/bg_hd.gif) 0 0 repeat-x #B6CDE1; border:1px solid #93B2CC; position:relative;font-size:120%;padding:5px 0;margin:0 auto;}
+#hd h1 { font-weight:bold;text-indent:15px; background: url(http://us.i1.yimg.com/us.yimg.com/i/ydn/bg_hd.gif) 0 0 repeat-x #B6CDE1; border:1px solid #93B2CC; position:relative;font-size:110%;padding:5px 0;margin:0 auto;}
 
 #toc { background-color:#ecf5fa; padding:0; border:1px solid #89d;overflow:hidden;zoom:1}
 #toc ul {list-style:none; margin:0; padding:0; font-size:90%;}
@@ -50,6 +50,7 @@ em { font-style:italic }
 
 #solution { margin-left:15px; }
 #solution a { display:block;margin-top:7px;margin-bottom:20px }
+#solution { zoom:1 }
 
 #ft { height:2px;line-height:2px;text-indent:15px; background:#B6CDE1;margin:10px auto;clear:both}
 

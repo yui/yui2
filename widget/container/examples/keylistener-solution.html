@@ -21,12 +21,14 @@
 
 				function init() {
 					// Build panel1 based on markup
-					YAHOO.example.container.panel1 = new YAHOO.widget.Panel("panel1", { xy:[150,100] } );
+					YAHOO.example.container.panel1 = new YAHOO.widget.Panel("panel1", { xy:[150,100], width:"250px" } );
 					
 					var kl = new YAHOO.util.KeyListener(document, { keys:27 },  							
 																  { fn:YAHOO.example.container.panel1.hide,
 																	scope:YAHOO.example.container.panel1,
-																	correctScope:true } );
+																	correctScope:true }, "keyup" ); 
+																	// keyup is used here because Safari won't recognize the ESC
+																	// keydown event, which would normally be used by default
 
 					YAHOO.example.container.panel1.cfg.queueProperty("keylisteners", kl);
 					YAHOO.example.container.panel1.render();

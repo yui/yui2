@@ -25,11 +25,13 @@
 				function init() {
 					// Initialize the temporary Panel to display while waiting for external content to load
 					YAHOO.example.container.wait = 
-							new YAHOO.widget.Panel("wait",  { width:"240px", 
+							new YAHOO.widget.Panel("wait",  
+															{ width:"240px", 
 															  fixedcenter:true, 
 															  close:false, 
 															  draggable:false, 
-															  modal:true, 
+															  modal:true,
+															  visible:false,
 															  effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration:0.5} 
 															} 
 														);

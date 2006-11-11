@@ -15,7 +15,7 @@
 		
 		<style>
 			body { background:#eee }
-			.mask { background-color:#000; -moz-opacity: 0.75; opacity:.75; filter:alpha(opacity=75); }
+			.mask { background-color:#000;-moz-opacity:0.75;opacity:.75;filter:alpha(opacity=75);}
 			.photobox {border:3px solid #666;overflow:visible;background-color:#333;padding:5px;}
 			.photobox .close {top:8px;right:8px;height:15px;width:18px;}
 			.photobox .close.nonsecure {background-image:url(../assets/img/ybox-close.gif);}
@@ -194,12 +194,16 @@
 					if (! YAHOO.util.Config.alreadySubscribed( this.beforeShowEvent, this.showMask, this ) ) {
 						this.beforeShowEvent.subscribe(this.showMask, this, true);
 					}
-					if (! YAHOO.util.Config.alreadySubscribed( this.beforeHideEvent, this.hideMask, this) ) {
-						this.beforeHideEvent.subscribe(this.hideMask, this, true);
+					if (! YAHOO.util.Config.alreadySubscribed( this.hideEvent, this.hideMask, this) ) {
+						this.hideEvent.subscribe(this.hideMask, this, true);
 					}
 					if (! YAHOO.util.Config.alreadySubscribed( YAHOO.widget.Overlay.windowResizeEvent, this.sizeMask, this ) ) {
 						YAHOO.widget.Overlay.windowResizeEvent.subscribe(this.sizeMask, this, true);
 					}
+					if (! YAHOO.util.Config.alreadySubscribed( this.destroyEvent, this.removeMask, this) ) {
+						this.destroyEvent.subscribe(this.removeMask, this, true);
+					}
+					this.cfg.refireEvent("zIndex");
 				} else {
 					this.beforeShowEvent.unsubscribe(this.showMask, this);
 					this.beforeHideEvent.unsubscribe(this.hideMask, this);
