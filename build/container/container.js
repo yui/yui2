@@ -190,6 +190,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* Resets the specified property's value to its initial value.
 	* @method resetProperty
 	* @param {String} key	The name of the property
+	* @return {Boolean} True is the property was reset, false if not
 	*/
 	this.resetProperty = function(key) {
 		key = key.toLowerCase();
@@ -199,8 +200,9 @@ YAHOO.util.Config.prototype.init = function(owner) {
 			if (initialConfig[key] && initialConfig[key] != 'undefined')	{
 				this.setProperty(key, initialConfig[key].value);
 			}
+			return true;
 		} else {
-			return undefined;
+			return false;
 		}
 	};
 
@@ -468,12 +470,7 @@ YAHOO.util.Config.alreadySubscribed = function(evt, fn, obj) {
 		}
 	}
 	return false;
-};/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12
-*/
+};
 
 /**
 *  The Container family of components is designed to enable developers to create different kinds of content-containing modules on the web. Module and Overlay are the most basic containers, and they can be used directly or extended to build custom containers. Also part of the Container family are four UI controls that extend Module and Overlay: Tooltip, Panel, Dialog, and SimpleDialog.
@@ -557,7 +554,7 @@ YAHOO.widget.Module.CSS_FOOTER = "ft";
 * @final
 * @type String
 */
-YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL = "javascript:false";
+YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL = "javascript:false;";
 
 YAHOO.widget.Module.prototype = {
 	/**
@@ -1214,12 +1211,7 @@ YAHOO.widget.Module.prototype = {
 */ 
 YAHOO.widget.Module.prototype.toString = function() {
 	return "Module " + this.id;
-};/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12
-*/
+};
 
 /**
 * Overlay is a Module that is absolutely positioned above the page flow. It has convenience methods for positioning and sizing, as well as options for controlling zIndex and constraining the Overlay's position to the current visible viewport. Overlay also contains a dynamicly generated IFRAME which is placed beneath it for Internet Explorer 6 and 5.x so that it will be properly rendered above SELECT elements.
@@ -1238,13 +1230,13 @@ YAHOO.widget.Overlay = function(el, userConfig) {
 YAHOO.extend(YAHOO.widget.Overlay, YAHOO.widget.Module);
 
 /**
-* The URL of the blank image that will be placed in the iframe
+* The URL that will be placed in the iframe
 * @property YAHOO.widget.Overlay.IFRAME_SRC
 * @static
 * @final
 * @type String
 */
-YAHOO.widget.Overlay.IFRAME_SRC = "promo/m/irs/blank.gif";
+YAHOO.widget.Overlay.IFRAME_SRC = "javascript:false;"
 
 /**
 * Constant representing the top left corner of an element, used for configuring the context element alignment
@@ -1479,6 +1471,18 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 
 	var currentVis = YAHOO.util.Dom.getStyle(this.element, "visibility");
 
+	if (currentVis == "inherit") { 
+		var e = this.element.parentNode;
+		while (e.nodeType != 9 && e.nodeType != 11) {
+			currentVis = YAHOO.util.Dom.getStyle(e, "visibility");
+			if (currentVis != "inherit") { break; }
+			e = e.parentNode;
+		}
+		if (currentVis == "inherit") { 
+			currentVis = "visible";
+		}
+	}
+
 	var effect = this.cfg.getProperty("effect");
 
 	var effectInstances = [];
@@ -1502,19 +1506,19 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 
 		if (effect) { // Animate in
 			if (visible) { // Animate in if not showing
-				if (currentVis != "visible") {
+				if (currentVis != "visible" || currentVis === "") {
 					this.beforeShowEvent.fire();
 					for (var j=0;j<effectInstances.length;j++) {
-						var e = effectInstances[j];
-						if (j === 0 && ! YAHOO.util.Config.alreadySubscribed(e.animateInCompleteEvent,this.showEvent.fire,this.showEvent)) {
-							e.animateInCompleteEvent.subscribe(this.showEvent.fire,this.showEvent,true); // Delegate showEvent until end of animateInComplete
+						var ei = effectInstances[j];
+						if (j === 0 && ! YAHOO.util.Config.alreadySubscribed(ei.animateInCompleteEvent,this.showEvent.fire,this.showEvent)) {
+							ei.animateInCompleteEvent.subscribe(this.showEvent.fire,this.showEvent,true); // Delegate showEvent until end of animateInComplete
 						}
-						e.animateIn();
+						ei.animateIn();
 					}
 				}
 			}
 		} else { // Show
-			if (currentVis != "visible") {
+			if (currentVis != "visible" || currentVis === "") {
 				this.beforeShowEvent.fire();
 				YAHOO.util.Dom.setStyle(this.element, "visibility", "visible");
 				this.cfg.refireEvent("iframe");
@@ -1537,9 +1541,11 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 					}
 					h.animateOut();
 				}
+			} else if (currentVis === "") {
+				YAHOO.util.Dom.setStyle(this.element, "visibility", "hidden");
 			}
 		} else { // Simple hide
-			if (currentVis == "visible") {
+			if (currentVis == "visible" || currentVis === "") {
 				this.beforeHideEvent.fire();
 				YAHOO.util.Dom.setStyle(this.element, "visibility", "hidden");
 				this.cfg.refireEvent("iframe");
@@ -1733,7 +1739,7 @@ YAHOO.widget.Overlay.prototype.showIframe = function() {
 	if (this.iframe) {
 		this.iframe.style.display = "block";
 	}
-}
+};
 
 /**
 * Hides the iframe shim, if it has been enabled
@@ -1743,7 +1749,7 @@ YAHOO.widget.Overlay.prototype.hideIframe = function() {
 	if (this.iframe) {
 		this.iframe.style.display = "none";
 	}
-}
+};
 
 /**
 * The default event handler fired when the "iframe" property is changed.
@@ -2077,7 +2083,7 @@ YAHOO.widget.Overlay.windowScrollHandler = function(e) {
 			window.scrollEnd = -1;
 		}
 		clearTimeout(window.scrollEnd);
-		window.scrollEnd = setTimeout(function() { YAHOO.widget.Overlay.windowScrollEvent.fire() }, 1);
+		window.scrollEnd = setTimeout(function() { YAHOO.widget.Overlay.windowScrollEvent.fire(); }, 1);
 	} else {
 		YAHOO.widget.Overlay.windowScrollEvent.fire();
 	}
@@ -2095,7 +2101,7 @@ YAHOO.widget.Overlay.windowResizeHandler = function(e) {
 			window.resizeEnd = -1;
 		}
 		clearTimeout(window.resizeEnd);
-		window.resizeEnd = setTimeout(function() { YAHOO.widget.Overlay.windowResizeEvent.fire() }, 100);
+		window.resizeEnd = setTimeout(function() { YAHOO.widget.Overlay.windowResizeEvent.fire(); }, 100);
 	} else {
 		YAHOO.widget.Overlay.windowResizeEvent.fire();
 	}
@@ -2114,12 +2120,7 @@ if (YAHOO.widget.Overlay._initialized === null) {
 	YAHOO.util.Event.addListener(window, "resize", YAHOO.widget.Overlay.windowResizeHandler);
 
 	YAHOO.widget.Overlay._initialized = true;
-}	/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12
-*/
+}
 
 /**
 * OverlayManager is used for maintaining the focus status of multiple Overlays.* @namespace YAHOO.widget
@@ -2414,12 +2415,7 @@ YAHOO.widget.OverlayManager.prototype = {
 		return "OverlayManager";
 	}
 
-};/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12
-*/
+};
 
 /**
 * KeyListener is a utility that provides an easy interface for listening for keydown/keyup events fired against DOM elements.
@@ -2478,8 +2474,6 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 	* @private
 	*/
 	function handleKeyPress(e, obj) {
-		var keyPressed = e.charCode || e.keyCode;
-		
 		if (! keyData.shift) {	
 			keyData.shift = false; 
 		}
@@ -2494,17 +2488,29 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 		if (e.shiftKey == keyData.shift && 
 			e.altKey   == keyData.alt &&
 			e.ctrlKey  == keyData.ctrl) { // if we pass this, all modifiers match
+			
+			var dataItem;
+			var keyPressed;
 
 			if (keyData.keys instanceof Array) {
 				for (var i=0;i<keyData.keys.length;i++) {
-					if (keyPressed == keyData.keys[i]) {
-						keyEvent.fire(keyPressed, e);
+					dataItem = keyData.keys[i];
+
+					if (dataItem == e.charCode ) {
+						keyEvent.fire(e.charCode, e);
+						break;
+					} else if (dataItem == e.keyCode) {
+						keyEvent.fire(e.keyCode, e);
 						break;
 					}
 				}
 			} else {
-				if (keyPressed == keyData.keys) {
-					keyEvent.fire(keyPressed, e);
+				dataItem = keyData.keys;
+
+				if (dataItem == e.charCode ) {
+					keyEvent.fire(e.charCode, e);
+				} else if (dataItem == e.keyCode) {
+					keyEvent.fire(e.keyCode, e);
 				}
 			}
 		}
@@ -2567,12 +2573,6 @@ YAHOO.util.KeyListener.KEYDOWN = "keydown";
 * @type String
 */
 YAHOO.util.KeyListener.KEYUP = "keyup";
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12
-*/
 
 /**
 * Tooltip is an implementation of Overlay that behaves like an OS tooltip, displaying when the user mouses over a particular element, and disappearing on mouse out.
@@ -2925,12 +2925,7 @@ YAHOO.widget.Tooltip.prototype.preventOverlap = function(pageX, pageY) {
 */ 
 YAHOO.widget.Tooltip.prototype.toString = function() {
 	return "Tooltip " + this.id;
-};/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12
-*/
+};
 
 /**
 * Panel is an implementation of Overlay that behaves like an OS window, with a draggable header and an optional close icon at the top right.
@@ -3017,6 +3012,10 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 			var el2 = this.focusableElements[i];
 			YAHOO.util.Event.removeListener(el2, "focus", el2.blur);
 		}
+	}, this, true);
+
+	this.beforeShowEvent.subscribe(function() {
+		this.cfg.refireEvent("underlay");
 	}, this, true);
 
 	this.initEvent.fire(YAHOO.widget.Panel);
@@ -3221,6 +3220,8 @@ YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 		if (! YAHOO.util.Config.alreadySubscribed( this.destroyEvent, this.removeMask, this) ) {
 			this.destroyEvent.subscribe(this.removeMask, this, true);
 		}
+
+		this.cfg.refireEvent("zIndex");
 	} else {
 		this.beforeShowEvent.unsubscribe(this.showMask, this);
 		this.hideEvent.unsubscribe(this.hideMask, this);
@@ -3240,7 +3241,7 @@ YAHOO.widget.Panel.prototype.removeMask = function() {
 		}
 		this.mask = null;
 	}
-}
+};
 
 /**
 * The default event handler fired when the "keylisteners" property is changed.
@@ -3305,6 +3306,34 @@ YAHOO.widget.Panel.prototype.configWidth = function(type, args, obj) {
 	YAHOO.util.Dom.setStyle(el, "width", width);
 	this.cfg.refireEvent("underlay");
 	this.cfg.refireEvent("iframe");
+};
+
+/**
+* The default event handler fired when the "zIndex" property is changed.
+* @method configzIndex
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+*/
+YAHOO.widget.Panel.prototype.configzIndex = function(type, args, obj) {
+	YAHOO.widget.Panel.superclass.configzIndex.call(this, type, args, obj);
+	
+	var maskZ = 0;
+	var currentZ = YAHOO.util.Dom.getStyle(this.element, "zIndex");
+	
+	if (this.mask) {
+		if (! currentZ || isNaN(currentZ)) {
+			currentZ = 0;
+		}
+
+		if (currentZ === 0) {
+			this.cfg.setProperty("zIndex", 1);
+		} else {
+			maskZ = currentZ - 1;
+			YAHOO.util.Dom.setStyle(this.mask, "zIndex", maskZ);
+		}
+
+	}
 };
 
 // END BUILT-IN PROPERTY EVENT HANDLERS //
@@ -3511,12 +3540,7 @@ YAHOO.widget.Panel.prototype.render = function(appendToNode) {
 */ 
 YAHOO.widget.Panel.prototype.toString = function() {
 	return "Panel " + this.id;
-};/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12
-*/
+};
 
 /**
 * Dialog is an implementation of Panel that can be used to submit form data. Built-in functionality for buttons with event handlers is included, and button sets can be build dynamically, or the preincluded ones for Submit/Cancel and OK/Cancel can be utilized. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
@@ -3687,11 +3711,13 @@ YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
 * @method doSubmit
 */
 YAHOO.widget.Dialog.prototype.doSubmit = function() {
-	var method = this.cfg.getProperty("postmethod");
-	switch (method) {
+	var pm = this.cfg.getProperty("postmethod");
+	switch (pm) {
 		case "async":
+			var method = this.form.getAttribute("method") || 'POST';
+			method = method.toUpperCase();
 			YAHOO.util.Connect.setForm(this.form);
-			var cObj = YAHOO.util.Connect.asyncRequest('POST', this.form.getAttribute("action"), this.callback);
+			var cObj = YAHOO.util.Connect.asyncRequest(method, this.form.getAttribute("action"), this.callback);
 			this.asyncSubmitEvent.fire();
 			break;
 		case "form":
@@ -4000,29 +4026,28 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 							break;
 					}
 				} else if (formItem[0] && formItem[0].tagName) { // this is an array of form items
-					switch (formItem[0].tagName) {
-						case "INPUT" :
-							switch (formItem[0].type) {
-								case "radio":
-									for (var r=0; r<formItem.length; r++) {
-										var radio = formItem[r];
-										if (radio.checked) {
-											data[radio.name] = radio.value;
-											break;
-										}
+					if (formItem[0].tagName == "INPUT") {
+						switch (formItem[0].type) {
+							case "radio":
+								for (var r=0; r<formItem.length; r++) {
+									var radio = formItem[r];
+									if (radio.checked) {
+										data[radio.name] = radio.value;
+										break;
 									}
-									break;
-								case "checkbox":
-									var cbArray = [];
-									for (var c=0; c<formItem.length; c++) {
-										var check = formItem[c];
-										if (check.checked) {
-											cbArray[cbArray.length] = check.value;
-										}
+								}
+								break;
+							case "checkbox":
+								var cbArray = [];
+								for (var c=0; c<formItem.length; c++) {
+									var check = formItem[c];
+									if (check.checked) {
+										cbArray[cbArray.length] = check.value;
 									}
-									data[formItem[0].name] = cbArray;
-									break;
-							}
+								}
+								data[formItem[0].name] = cbArray;
+								break;
+						}
 					}
 				}
 			}
@@ -4038,12 +4063,7 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 */ 
 YAHOO.widget.Dialog.prototype.toString = function() {
 	return "Dialog " + this.id;
-};/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12
-*/
+};
 
 /**
 * SimpleDialog is a simple implementation of Dialog that can be used to submit a single value. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
@@ -4229,12 +4249,7 @@ YAHOO.widget.SimpleDialog.prototype.configText = function(type,args,obj) {
 */ 
 YAHOO.widget.SimpleDialog.prototype.toString = function() {
 	return "SimpleDialog " + this.id;
-};/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12
-*/
+};
 
 /**
 * ContainerEffect encapsulates animation transitions that are executed when an Overlay is shown or hidden.
@@ -4514,30 +4529,28 @@ YAHOO.widget.ContainerEffect.SLIDE = function(overlay, dur) {
 	};
 
 	slide.handleStartAnimateOut = function(type, args, obj) {
-		var clientWidth = YAHOO.util.Dom.getViewportWidth();
+		var vw = YAHOO.util.Dom.getViewportWidth();
 		
 		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
 
-		var x = pos[0];
-		var y = pos[1];
+		var yso = pos[1];
 
 		var currentTo = obj.animOut.attributes.points.to;
-		obj.animOut.attributes.points.to = [(clientWidth+25), y];
+		obj.animOut.attributes.points.to = [(vw+25), yso];
 	};
 
 	slide.handleTweenAnimateOut = function(type, args, obj) {
 		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
 
-		var x = pos[0];
-		var y = pos[1];
+		var xto = pos[0];
+		var yto = pos[1];
 
-		obj.overlay.cfg.setProperty("xy", [x,y], true);
+		obj.overlay.cfg.setProperty("xy", [xto,yto], true);
 		obj.overlay.cfg.refireEvent("iframe");
 	};
 
 	slide.handleCompleteAnimateOut = function(type, args, obj) { 
-		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "hidden");		
-		var offsetWidth = obj.overlay.element.offsetWidth;
+		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "hidden");
 
 		obj.overlay.cfg.setProperty("xy", [x,y]);
 		obj.animateOutCompleteEvent.fire();
