@@ -1,961 +1,892 @@
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>API: Container YAHOO.widget.ContainerEffect.html (YUI Library)</title>
-	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+	<title>API: Container  YAHOO.widget.ContainerEffect   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/reset.css">
+	<link rel="stylesheet" type="text/css" href="assets/fonts.css">
+	<link rel="stylesheet" type="text/css" href="assets/grids.css">
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
 
-<body>
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
 
-<div id="header">
-	<h1>Yahoo! UI Library</h1>
-	<h3><a href="./index.html">Yahoo! UI Library: Container</a></h3>
-
-	<div class="breadcrumbs">
-		
-			
-			
-			
-			
-			
-			
-			
-				<a href="./index.html">Yahoo! UI Library: Container</a>
-				&gt;
-				<strong>YAHOO.widget.ContainerEffect</strong>
-			
-			
-			
-			
-			
-			
-			
-		
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Container&nbsp;</h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_Container.html">Container</a>
+                 &gt; YAHOO.widget.ContainerEffect 
+                
+            </p>
 	</div>
-</div>
 
-	
-<div id="body">
-	
-	
-	<div class="nav">
-		<div class="module resources">
-			<ul class="content">
-				<li><a href="overview-tree.html">Tree View</a></li>
-				<li><a href="index-all.html">Element Index</a></li>
-			</ul>
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.ContainerEffect</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        ContainerEffect encapsulates animation transitions that are executed when an Overlay is shown or hidden.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.ContainerEffect</strong>
+                                <code>
+                                        (
+  
+                                        
+                                                
+                                                overlay
+
+                                                , 
+                                                attrIn
+
+                                                , 
+                                                attrOut
+
+                                                , 
+                                                targetElement
+
+                                                , 
+                                                Optional.
+                                        )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>overlay
+                                                    &lt;YAHOO.widget.Overlay&gt; 
+                                                    </code>
+                                                    		The Overlay that the animation should be associated with
+                                                </dd>
+                                                <dd>
+                                                    <code>attrIn
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                    		The object literal representing the animation arguments to be used for the animate-in transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(Number), and method(i.e. YAHOO.util.Easing.easeIn).
+                                                </dd>
+                                                <dd>
+                                                    <code>attrOut
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                    		The object literal representing the animation arguments to be used for the animate-out transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(Number), and method(i.e. YAHOO.util.Easing.easeIn).
+                                                </dd>
+                                                <dd>
+                                                    <code>targetElement
+                                                    &lt;HTMLElement&gt; 
+                                                    </code>
+                                                    	Optional. The target element that should be animated during the transition. Defaults to overlay.element.
+                                                </dd>
+                                                <dd>
+                                                    <code>Optional.
+                                                    &lt;class&gt; 
+                                                    </code>
+                                                     The animation class to instantiate. Defaults to YAHOO.util.Anim. Other options include YAHOO.util.Motion.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <h4><a name="animClass">animClass</a>
+                                        <code>- class</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The animation class to use for animating the overlay
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="attrIn">attrIn</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The animation attributes to use when transitioning into view
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="attrOut">attrOut</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The animation attributes to use when transitioning out of view
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="overlay">overlay</a>
+                                        <code>- YAHOO.widget.Overlay</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The overlay to animate
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="targetElement">targetElement</a>
+                                        <code>- HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The target element to be animated
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="FADE">FADE</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        ContainerEffect
+                                            <strong>FADE</strong>
+                                                (
+                                                
+                                                        
+                                                         The
+                                                    
+                                                
+
+                                                
+                                                )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            A pre-configured ContainerEffect instance that can be used for fading an overlay in and out.
+                                        </div>
+
+                                        <div class="description">
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>The &lt;Overlay&gt;</code>
+                                                             Overlay object to animate
+                                                        </dd>
+                                                        <dd>
+                                                            <code>The &lt;Number&gt;</code>
+                                                             duration of the animation
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        ContainerEffect
+                                                    </code></dt>
+                                                    <dd>The configured ContainerEffect object</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="SLIDE">SLIDE</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        ContainerEffect
+                                            <strong>SLIDE</strong>
+                                                (
+                                                
+                                                        
+                                                         The
+                                                    
+                                                
+
+                                                
+                                                )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            A pre-configured ContainerEffect instance that can be used for sliding an overlay in and out.
+                                        </div>
+
+                                        <div class="description">
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>The &lt;Overlay&gt;</code>
+                                                             Overlay object to animate
+                                                        </dd>
+                                                        <dd>
+                                                            <code>The &lt;Number&gt;</code>
+                                                             duration of the animation
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        ContainerEffect
+                                                    </code></dt>
+                                                    <dd>The configured ContainerEffect object</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="animateIn">animateIn</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>animateIn</strong>
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Triggers the in-animation.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="animateOut">animateOut</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>animateOut</strong>
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Triggers the out-animation.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="handleCompleteAnimateIn">handleCompleteAnimateIn</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>handleCompleteAnimateIn</strong>
+                                                (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                                )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default onComplete handler for the in-animation.
+                                        </div>
+
+                                        <div class="description">
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="handleCompleteAnimateOut">handleCompleteAnimateOut</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>handleCompleteAnimateOut</strong>
+                                                (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                                )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default onComplete handler for the out-animation.
+                                        </div>
+
+                                        <div class="description">
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="handleStartAnimateIn">handleStartAnimateIn</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>handleStartAnimateIn</strong>
+                                                (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                                )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default onStart handler for the in-animation.
+                                        </div>
+
+                                        <div class="description">
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="handleStartAnimateOut">handleStartAnimateOut</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>handleStartAnimateOut</strong>
+                                                (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                                )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default onStart handler for the out-animation.
+                                        </div>
+
+                                        <div class="description">
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="handleTweenAnimateIn">handleTweenAnimateIn</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>handleTweenAnimateIn</strong>
+                                                (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                                )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default onTween handler for the in-animation.
+                                        </div>
+
+                                        <div class="description">
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="handleTweenAnimateOut">handleTweenAnimateOut</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>handleTweenAnimateOut</strong>
+                                                (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                                )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default onTween handler for the out-animation.
+                                        </div>
+
+                                        <div class="description">
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="init">init</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>init</strong>
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the animation classes and events.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>toString</strong>
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a string representation of the object.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd>The string representation of the ContainerEffect</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+			</div>
 		</div>
-		
-		
-			<div class="module">
-				<h4><a href="./allclasses-noframe.html">Classes</a></h4>
-				<ul class="content">
-					
-						<li>
-							<a href="YAHOO.util.html">
-								YAHOO.util</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.Config.html">
-								YAHOO.util.Config</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.util.KeyListener.html">
-								YAHOO.util.KeyListener</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.html">
-								YAHOO.widget</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.ContainerEffect.html">
-								YAHOO.widget.ContainerEffect</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.Dialog.html">
-								YAHOO.widget.Dialog</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.Module.html">
-								YAHOO.widget.Module</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.Overlay.html">
-								YAHOO.widget.Overlay</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.OverlayManager.html">
-								YAHOO.widget.OverlayManager</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.Panel.html">
-								YAHOO.widget.Panel</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.SimpleDialog.html">
-								YAHOO.widget.SimpleDialog</a>
-						</li>
-					
-						<li>
-							<a href="YAHOO.widget.Tooltip.html">
-								YAHOO.widget.Tooltip</a>
-						</li>
-					
-				</ul>
-			</div>
-		
-		
-		
-			<div class="module">
-				<h4><a href="./overview-summary.html">Files</a></h4>
-				<ul class="content">		
-					
-						<li>
-							<a href="overview-summary-Config.js.html">
-								Config.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-ContainerEffect.js.html">
-								ContainerEffect.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-Dialog.js.html">
-								Dialog.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-KeyListener.js.html">
-								KeyListener.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-Module.js.html">
-								Module.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-Overlay.js.html">
-								Overlay.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-OverlayManager.js.html">
-								OverlayManager.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-Panel.js.html">
-								Panel.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-SimpleDialog.js.html">
-								SimpleDialog.js</a>
-						</li>
-					
-						<li>
-							<a href="overview-summary-Tooltip.js.html">
-								Tooltip.js</a>
-						</li>
-					
-				</ul>
-			</div>
-		
-	</div>
-	
-	<div id="pri">
-        <div class="main">
-	
-		<h2>Class YAHOO.widget.ContainerEffect</h2>
-		<pre>Object
-   |
-   +--<b>YAHOO.widget.ContainerEffect</b>
-</pre>
-		
-		
-	
-		<hr />
-		
-		<!-- Class definition -->
-		<div class="class-def">
-			<div class="class-name">
-				<span class="class-attribs">
-					
-				</span>
-				<span class="class-type">class</span>
-				<b>YAHOO.widget.ContainerEffect</b>
-			</div>
-			<div class="class-extends">
-				
-			</div>
-		</div>
-			
-		
-<div class="meta">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-		
-	
-	
-	
-	
-	
-	
-</div>
+		<div class="yui-b">
+            <div class="nav">
 
-		
-		<!-- ======== QUICK LINKS ======== -->
-		<div class="quick-links">
-			<strong>Quick Links:</strong>&nbsp;
-			
-			
-				<a href="#field_summary">Field Summary</a>
-				|
-			
-			
-				<a href="#constructor_summary">Constructor Summary</a>
-				|
-			
-			
-				<a href="#methodSummary">Method Summary</a> |
-				<a href="#methodDetails">Method Details</a>
-			
-		</div>
-		<!-- ======== END QUICK LINKS ======== -->
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li><a href="module_Container.html">Container</a></li>
+                        </ul>
+                    </div>
 
-		<!-- ======== NESTED CLASS SUMMARY ======== -->
-		
-		<!-- ======== END NESTED CLASS SUMMARY ======== -->
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
+                                <li><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
+                                <li><a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a></li>
+                                <li><a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a></li>
+                                <li><a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></li>
+                                <li><a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></li>
+                                <li><a href="YAHOO.widget.OverlayManager.html">YAHOO.widget.OverlayManager</a></li>
+                                <li><a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></li>
+                                <li><a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a></li>
+                                <li><a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a></li>
+                        </ul>
+                    </div>
 
-		<!-- =========== FIELD SUMMARY =========== -->
-		
-			<div class="section field summaries">
-				<h3><a name="field_summary">Field Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<table border="1" cellpadding="3" cellspacing="0">
-					
-						<tr>
-							<td class="flags">Object</td>
-							<td class="spec">
-								<code>
-									<a href="#animClass">animClass</a>
-								</code>
-								<div class="description">
-									The animation class to use for animating the overlay&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">Object</td>
-							<td class="spec">
-								<code>
-									<a href="#attrIn">attrIn</a>
-								</code>
-								<div class="description">
-									The animation attributes to use when transitioning into view&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">Object</td>
-							<td class="spec">
-								<code>
-									<a href="#attrOut">attrOut</a>
-								</code>
-								<div class="description">
-									The animation attributes to use when transitioning out of view&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">Object</td>
-							<td class="spec">
-								<code>
-									<a href="#overlay">overlay</a>
-								</code>
-								<div class="description">
-									The overlay to animate&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="flags">Object</td>
-							<td class="spec">
-								<code>
-									<a href="#targetElement">targetElement</a>
-								</code>
-								<div class="description">
-									The target element to be animated&nbsp;
-								</div>
-							</td>
-						</tr>
-					
-					</table>
-				</div>
-			</div>
-		
-				
-		
-		<!-- =========== END FIELD SUMMARY =========== -->
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li><a href="Config.js.html">Config.js</a></li>
+                                <li><a href="ContainerEffect.js.html">ContainerEffect.js</a></li>
+                                <li><a href="Dialog.js.html">Dialog.js</a></li>
+                                <li><a href="KeyListener.js.html">KeyListener.js</a></li>
+                                <li><a href="Module.js.html">Module.js</a></li>
+                                <li><a href="Overlay.js.html">Overlay.js</a></li>
+                                <li><a href="OverlayManager.js.html">OverlayManager.js</a></li>
+                                <li><a href="Panel.js.html">Panel.js</a></li>
+                                <li><a href="SimpleDialog.js.html">SimpleDialog.js</a></li>
+                                <li><a href="Tooltip.js.html">Tooltip.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li><a href="#animClass">animClass</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li><a href="#attrIn">attrIn</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li><a href="#attrOut">attrOut</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li><a href="#overlay">overlay</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li><a href="#targetElement">targetElement</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>ContainerEffect</code>-->
+                                <a href="#FADE">FADE</a>
+                                </li>
+                                <li><!--<code>ContainerEffect</code>-->
+                                <a href="#SLIDE">SLIDE</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#animateIn">animateIn</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#animateOut">animateOut</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#handleCompleteAnimateIn">handleCompleteAnimateIn</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#handleCompleteAnimateOut">handleCompleteAnimateOut</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#handleStartAnimateIn">handleStartAnimateIn</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#handleStartAnimateOut">handleStartAnimateOut</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#handleTweenAnimateIn">handleTweenAnimateIn</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#handleTweenAnimateOut">handleTweenAnimateOut</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#init">init</a>
+                                </li>
+                                <li><!--<code>String</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                        </ul>
+                    </div>
 
 
-		<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-		
-			<div class="section contructor summaries">
-				<h3><a name="constructor_summary">Constructor Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<code class="spec">
-						<a href="YAHOO.widget.ContainerEffect.html#YAHOO.widget.ContainerEffect()">YAHOO.widget.ContainerEffect</a>
-					</code>
-					<div class="description">
-						ContainerEffect encapsulates animation transitions that are executed when an Overlay is shown or hidden.&nbsp;
-					</div>
-				</div>
-			</div>
-		
-		<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
 
-
-		<!-- ========== METHOD SUMMARY =========== -->
-		
-			<div class="section method summaries">
-				<h3><a name="methodSummary">Method Summary</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<table border="1" cellpadding="3" cellspacing="0">
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#animateIn">animateIn</a>
-										()
-									</code>
-									<div class="description">
-										Triggers the in-animation.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#animateOut">animateOut</a>
-										()
-									</code>
-									<div class="description">
-										Triggers the out-animation.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#handleCompleteAnimateIn">handleCompleteAnimateIn</a>
-										(type, args, obj)
-									</code>
-									<div class="description">
-										The default onComplete handler for the in-animation.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#handleCompleteAnimateOut">handleCompleteAnimateOut</a>
-										(type, args, obj)
-									</code>
-									<div class="description">
-										The default onComplete handler for the out-animation.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#handleStartAnimateIn">handleStartAnimateIn</a>
-										(type, args, obj)
-									</code>
-									<div class="description">
-										The default onStart handler for the in-animation.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#handleStartAnimateOut">handleStartAnimateOut</a>
-										(type, args, obj)
-									</code>
-									<div class="description">
-										The default onStart handler for the out-animation.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#handleTweenAnimateIn">handleTweenAnimateIn</a>
-										(type, args, obj)
-									</code>
-									<div class="description">
-										The default onTween handler for the in-animation.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#handleTweenAnimateOut">handleTweenAnimateOut</a>
-										(type, args, obj)
-									</code>
-									<div class="description">
-										The default onTween handler for the out-animation.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">void</td>
-								<td class="spec">
-									<code>
-										<a href="#init">init</a>
-										()
-									</code>
-									<div class="description">
-										Initializes the animation classes and events.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">string</td>
-								<td class="spec">
-									<code>
-										<a href="#toString">toString</a>
-										()
-									</code>
-									<div class="description">
-										Returns a string representation of the object.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">ContainerEffect</td>
-								<td class="spec">
-									<code>
-										<a href="#FADE">FADE</a>
-										(overlay, dur)
-									</code>
-									<div class="description">
-										A pre-configured ContainerEffect instance that can be used for fading an overlay in and out.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-							<tr>
-								<td class="flags">ContainerEffect</td>
-								<td class="spec">
-									<code>
-										<a href="#SLIDE">SLIDE</a>
-										(overlay, dur)
-									</code>
-									<div class="description">
-										A pre-configured ContainerEffect instance that can be used for sliding an overlay in and out.&nbsp;
-									</div>
-								</td>
-							</tr>
-						
-					</table>
-				</div>
-			</div>
-		
-		
-		
-		<!-- ========== END METHOD SUMMARY =========== -->
-
-
-		<!-- ============ FIELD DETAIL START =========== -->
-		
-			<div class="section field details">
-				<h3><a name="field_detail">Field Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					
-						<h4><a name="animClass">animClass</a></h4>
-						<div class="detail">
-							<code>
-								Object
-								&nbsp;
-								<strong>animClass</strong>
-							</code>
-							<div class="description">
-								The animation class to use for animating the overlay
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="attrIn">attrIn</a></h4>
-						<div class="detail">
-							<code>
-								Object
-								&nbsp;
-								<strong>attrIn</strong>
-							</code>
-							<div class="description">
-								The animation attributes to use when transitioning into view
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="attrOut">attrOut</a></h4>
-						<div class="detail">
-							<code>
-								Object
-								&nbsp;
-								<strong>attrOut</strong>
-							</code>
-							<div class="description">
-								The animation attributes to use when transitioning out of view
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="overlay">overlay</a></h4>
-						<div class="detail">
-							<code>
-								Object
-								&nbsp;
-								<strong>overlay</strong>
-							</code>
-							<div class="description">
-								The overlay to animate
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="targetElement">targetElement</a></h4>
-						<div class="detail">
-							<code>
-								Object
-								&nbsp;
-								<strong>targetElement</strong>
-							</code>
-							<div class="description">
-								The target element to be animated
-							</div>
-						</div>
-						<hr />
-					
-				</div>
-			</div>
-		
-		<!-- ============ FIELD DETAIL END =========== -->
-
-		<!-- ========= CONSTRUCTOR DETAIL START ======== -->
-		
-			<div class="section constructor details">
-				<h3><a name="constructor_detail">Constructor Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					<h4><a name="YAHOO.widget.ContainerEffect()">YAHOO.widget.ContainerEffect</a></h4>
-					<div class="detail">
-						<code>
-							<strong>YAHOO.widget.ContainerEffect</strong>
-							()
-						</code>
-						<div class="description">
-							
-								ContainerEffect encapsulates animation transitions that are executed when an Overlay is shown or hidden.
-							
-							
-							
-								<dl>
-									<dt>Parameters:</dt>
-									
-										<dd>
-											<code>overlay</code> - 
-													The Overlay that the animation should be associated with  
-										</dd>
-									
-										<dd>
-											<code>attrIn</code> - 
-													The object literal representing the animation arguments to be used for the animate-in transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).  
-										</dd>
-									
-										<dd>
-											<code>attrOut</code> - 
-													The object literal representing the animation arguments to be used for the animate-out transition. The arguments for this literal are: attributes(object, see YAHOO.util.Anim for description), duration(float), and method(i.e. YAHOO.util.Easing.easeIn).  
-										</dd>
-									
-										<dd>
-											<code>targetElement</code> - 
-												Optional. The target element that should be animated during the transition. Defaults to overlay.element.  
-										</dd>
-									
-										<dd>
-											<code>Optional</code> - 
-											. The animation class to instantiate. Defaults to YAHOO.util.Anim. Other options include YAHOO.util.Motion.  
-										</dd>
-									
-								</dl>
-							
-							
-							
-							
-							
-								HASH(0x1d2a164)
-							
-						</div>
-					</div>
-				</div>
-			</div>
-		
-		<!-- ========= CONSTRUCTOR DETAIL END ======== -->
-
-
-		<!-- ============ METHOD DETAIL START ========== -->
-		
-			<div class="section method details">
-				<h3><a name="methodDetails">Method Detail</a> <span class="top">[<a href="#top">top</a>]</span></h3>
-				<div class="content">
-					
-						<h4><a name="animateIn">animateIn</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>animateIn</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Triggers the in-animation.
-								
-								
-								
-								
-									HASH(0x1cfb41c)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="animateOut">animateOut</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>animateOut</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Triggers the out-animation.
-								
-								
-								
-								
-									HASH(0x1cfb854)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="handleCompleteAnimateIn">handleCompleteAnimateIn</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>handleCompleteAnimateIn</strong>
-								(type, args, obj)
-							</code>
-									
-							<div class="description">
-								
-									The default onComplete handler for the in-animation.
-								
-								
-								
-								
-									HASH(0x1d07df0)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="handleCompleteAnimateOut">handleCompleteAnimateOut</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>handleCompleteAnimateOut</strong>
-								(type, args, obj)
-							</code>
-									
-							<div class="description">
-								
-									The default onComplete handler for the out-animation.
-								
-								
-								
-								
-									HASH(0x1d08228)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="handleStartAnimateIn">handleStartAnimateIn</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>handleStartAnimateIn</strong>
-								(type, args, obj)
-							</code>
-									
-							<div class="description">
-								
-									The default onStart handler for the in-animation.
-								
-								
-								
-								
-									HASH(0x1d08348)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="handleStartAnimateOut">handleStartAnimateOut</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>handleStartAnimateOut</strong>
-								(type, args, obj)
-							</code>
-									
-							<div class="description">
-								
-									The default onStart handler for the out-animation.
-								
-								
-								
-								
-									HASH(0x1d48a40)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="handleTweenAnimateIn">handleTweenAnimateIn</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>handleTweenAnimateIn</strong>
-								(type, args, obj)
-							</code>
-									
-							<div class="description">
-								
-									The default onTween handler for the in-animation.
-								
-								
-								
-								
-									HASH(0x1d48dd0)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="handleTweenAnimateOut">handleTweenAnimateOut</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>handleTweenAnimateOut</strong>
-								(type, args, obj)
-							</code>
-									
-							<div class="description">
-								
-									The default onTween handler for the out-animation.
-								
-								
-								
-								
-									HASH(0x1d48f98)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="init">init</a></h4>
-						<div class="detail">
-							<code>
-								void 
-								<strong>init</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Initializes the animation classes and events.
-								
-								
-								
-								
-									HASH(0x1d9c39c)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="toString">toString</a></h4>
-						<div class="detail">
-							<code>
-								string 
-								<strong>toString</strong>
-								()
-							</code>
-									
-							<div class="description">
-								
-									Returns a string representation of the object.
-								
-								
-								
-								
-									HASH(0x1cdac14)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="FADE">FADE</a></h4>
-						<div class="detail">
-							<code>
-								ContainerEffect 
-								<strong>FADE</strong>
-								(overlay, dur)
-							</code>
-									
-							<div class="description">
-								
-									A pre-configured ContainerEffect instance that can be used for fading an overlay in and out.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>The</code> - 
-												 Overlay object to animate  
-											</dd>
-										
-											<dd>
-												<code>The</code> - 
-												 duration of the animation  
-											</dd>
-										
-									</dl>
-								
-								
-								
-									HASH(0x1ca77c4)
-								
-							</div>
-						</div>
-						<hr />
-					
-						<h4><a name="SLIDE">SLIDE</a></h4>
-						<div class="detail">
-							<code>
-								ContainerEffect 
-								<strong>SLIDE</strong>
-								(overlay, dur)
-							</code>
-									
-							<div class="description">
-								
-									A pre-configured ContainerEffect instance that can be used for sliding an overlay in and out.
-								
-								
-									<dl>
-										<dt>Parameters:</dt>
-										
-											<dd>
-												<code>The</code> - 
-												 Overlay object to animate  
-											</dd>
-										
-											<dd>
-												<code>The</code> - 
-												 duration of the animation  
-											</dd>
-										
-									</dl>
-								
-								
-								
-									HASH(0x1d53728)
-								
-							</div>
-						</div>
-						<hr />
-					
-				</div>
-			</div>
-		
-		<!-- ============ METHOD DETAIL END ========== -->
+            </div>
 		</div>
 	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	</div>
 </div>
-<!-- ========= END OF CLASS DATA ========= -->
-
-
-<div id="footer">
-	<hr />
-	Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
-	<br /><br />
-	Documentation generated by <a href="http://jsdoc.sourceforge.net/">
-	JSDoc</a>
-</div>
-
-
-
 </body>
 </html>
