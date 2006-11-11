@@ -1,5 +1,5 @@
 /**
-* @module Menu
+* @module menu
 * @description <p>The Menu Library features a collection of widgets that make 
 * it easy to add menus to your website or web application.  With the Menu 
 * Library you can create website fly-out menus, customized context menus, or 
