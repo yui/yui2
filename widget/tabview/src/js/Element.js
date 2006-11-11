@@ -292,7 +292,7 @@ YAHOO.util.Element.prototype = {
         YAHOO.log(element + 'appended to ' + parent);
         
         if (!newAddition) {
-            return false; // note return
+            return false; // note return; no refresh if in document
         }
         
         // if a new addition, refresh HTMLElement any applied attributes
