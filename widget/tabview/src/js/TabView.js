@@ -111,16 +111,22 @@
         if ( !tab.get('active') ) {
             tab.hideContent();
         } else {
-            this._configs.activeTab.value = tab;
+            this.set('activeTab', tab, true);
         }
 
-        tab.addListener(
-            tab.ACTIVATION_EVENT,
-            function(e) {
-                YAHOO.util.Event.preventDefault(e);
-                self.set('activeTab', this);
+        var activate = function(e) {
+            YAHOO.util.Event.preventDefault(e);
+            self.set('activeTab', this);
+        };
+        
+        tab.addListener( tab.get('activationEvent'), activate);
+        
+        tab.addListener('activationEventChange', function(e) {
+            if (e.prevValue != e.newValue) {
+                tab.removeListener(e.prevValue, activate);
+                tab.addListener(e.newValue, activate);
             }
-        );
+        });
         
         tabs.splice(index, 0, tab);
     };
@@ -136,8 +142,6 @@
         var target = YAHOO.util.Event.getTarget(e);
         var tabParent = this._tabParent;
         
-        //YAHOO.util.Event.preventDefault(e);
-        
         if (Dom.isAncestor(tabParent, target) ) {
             var tabEl;
             var tab = null;
@@ -149,7 +153,7 @@
                 contentEl = tabs[i].get('contentEl');
 
                 if ( target == tabEl || Dom.isAncestor(tabEl, target) ) {
-                    tab = tabs[i]; // TODO: what if panel in tab?
+                    tab = tabs[i];
                     break; // note break
                 }
             } 
@@ -311,7 +315,7 @@
         /**
          * The index of the tab currently active.
          * @config activeIndex
-         * @type YAHOO.widget.Tab
+         * @type Int
          */
         this.register('activeIndex', {
             value: attr.activeIndex,
@@ -337,7 +341,7 @@
                     tab.set('active', true); // TODO: firing twice?
                 }
                 
-                if (activeTab) {
+                if (activeTab && activeTab != tab) {
                     activeTab.set('active', false);
                 }
                 
