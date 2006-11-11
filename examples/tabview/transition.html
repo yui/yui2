@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>TabView Example - Dynamic Loading</title>
+<title>TabView Example - Adding Transition Effects</title>
 <link rel="stylesheet" type="text/css" href="css/example.css">
 
 <link rel="stylesheet" type="text/css" href="../../build/tabview/assets/tabs.css">
@@ -31,11 +31,7 @@
 (function() {
     var myTabs = new YAHOO.widget.TabView('demo');
     myTabs.contentTransition = function(newTab, oldTab) {
-        //alert(YAHOO.util.Dom.getStyle(newTab.get('contentEl'), 'opacity'));
         newTab.showContent();
-        if (!oldTab) {
-            return false;
-        }
         
         YAHOO.util.Dom.setStyle(newTab.get('contentEl'), 'opacity', 0);
         var animIn = new YAHOO.util.Anim( newTab.get('contentEl') );
@@ -56,8 +52,8 @@
 </head>
 <body>
 <div id="doc">
-    <h1>TabView Example - Dynamic Loading</h1>
-    <p>This example demonstrates how to load tab content dynamically.</p>
+    <h1>TabView Example - Adding Transition Effects</h1>
+    <p>This example demonstrates how to add transition effects.</p>
 
     <div id="demo" class="yui-navset">
         <ul class="yui-nav">
