@@ -28,7 +28,7 @@
 
 </style>
 <script type="text/javascript">
-(function() {
+YAHOO.example.init = function() {
     var myTabs = new YAHOO.widget.TabView('demo');
     myTabs.contentTransition = function(newTab, oldTab) {
         if ( newTab.anim && newTab.anim.isAnimated() ) {
@@ -54,7 +54,9 @@
         oldTab.anim.animate();
     };
 
-})();
+};
+
+YAHOO.example.init();
 </script>
 
 </head>
