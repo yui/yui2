@@ -104,14 +104,14 @@
             tabParent.appendChild(tabElement);
         }
 
-        if ( contentEl && !Dom.isAncestor(contentParent, contentEl) ) { // TODO: match index?
+        if ( contentEl && !Dom.isAncestor(contentParent, contentEl) ) {
             contentParent.appendChild(contentEl);
         }
         
         if ( !tab.get('active') ) {
             tab.hideContent();
         } else {
-            this.set('activeTab', tab, true);
+            this._configs.activeTab.value = tab; /* dont fire attr method */
         }
 
         var activate = function(e) {
@@ -235,13 +235,8 @@
      * @method contentTransition
      */
     proto.contentTransition = function(newTab, oldTab) {
-        if (newTab) {  
-            newTab.showContent(); // TODO: firing twice?
-        }
-        
-        if (oldTab) {
-            oldTab.hideContent();
-        }
+        newTab.showContent(); // TODO: firing twice?
+        oldTab.hideContent();
     };
     
     /**
@@ -345,8 +340,10 @@
                     activeTab.set('active', false);
                 }
                 
-                if (tab != activeTab) {
+                if (activeTab && tab != activeTab) {
                     this.contentTransition(tab, activeTab);
+                } else if (tab) {
+                    tab.showContent();
                 }
             },
             validator: function(value) {
