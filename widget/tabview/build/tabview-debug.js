@@ -1013,22 +1013,6 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
     proto.dataConnection = null;
     
     /**
-     * Shows the tab's content element.
-     * @method showContent
-     */
-    proto.showContent = function() {
-        this.get('contentEl').style.display = 'block';
-    };
-    
-    /**
-     * Hides the tab's content element.
-     * @method hideContent
-     */
-    proto.hideContent = function() {
-        this.get('contentEl').style.display = 'none';
-    };
-    
-    /**
      * Object containing success and failure callbacks for loading data.
      * @property loadHandler
      * @type object
@@ -1206,13 +1190,6 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
                 if (value === true) {
                     this.addClass(this.ACTIVE_CLASSNAME);
                     this.set('title', 'active');
-
-                    if ( this.get('dataSrc') ) {
-                     // load dynamic content unless already loaded and caching
-                        if ( !this.get('dataLoaded') || !this.get('cacheData') ) {
-                            _dataConnect.call(this);
-                        }
-                    }
                 } else {
                     this.removeClass(this.ACTIVE_CLASSNAME);
                     this.set('title', '');
@@ -1252,6 +1229,31 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
                 this.getElementsByTagName('a')[0].href = value;
             },
             validator: Lang.isString
+        });
+        
+        /**
+         * The Whether or not the tab's content is visible.
+         * @config contentVisible
+         * @type Boolean
+         * @default false
+         */
+        this.register('contentVisible', {
+            value: attr.contentVisible,
+            method: function(value) {
+                if (value == true) {
+                    this.get('contentEl').style.display = 'block';
+                    
+                    if ( this.get('dataSrc') ) {
+                     // load dynamic content unless already loaded and caching
+                        if ( !this.get('dataLoaded') || !this.get('cacheData') ) {
+                            _dataConnect.call(this);
+                        }
+                    }
+                } else {
+                    this.get('contentEl').style.display = 'none';
+                }
+            },
+            validator: Lang.isBoolean
         });
     };
     
@@ -1310,7 +1312,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
                     'error', 'Tab');
             return false;
         }
-        
+
         Dom.addClass(this.get('contentEl').parentNode, this.LOADING_CLASSNAME);
         
         this.dataConnection = YAHOO.util.Connect.asyncRequest(
@@ -1544,14 +1546,15 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
         }
         
         if ( !tab.get('active') ) {
-            tab.hideContent();
+            tab.set('contentVisible', false, true); /* hide if not active */
         } else {
-            this._configs.activeTab.value = tab; /* dont fire attr method */
+            this.set('activeTab', tab, true);
+            
         }
 
         var activate = function(e) {
             YAHOO.util.Event.preventDefault(e);
-            self.set('activeTab', this);
+            self.set('activeTab', this, true);
         };
         
         tab.addListener( tab.get('activationEvent'), activate);
@@ -1670,8 +1673,8 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
      * @method contentTransition
      */
     proto.contentTransition = function(newTab, oldTab) {
-        newTab.showContent(); // TODO: firing twice?
-        oldTab.hideContent();
+        newTab.set('contentVisible', true);
+        oldTab.set('contentVisible', false);
     };
     
     /**
@@ -1768,17 +1771,17 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
                 var activeTab = this.get('activeTab');
                 
                 if (tab) {  
-                    tab.set('active', true); // TODO: firing twice?
+                    tab.set('active', true);
                 }
                 
                 if (activeTab && activeTab != tab) {
                     activeTab.set('active', false);
                 }
                 
-                if (activeTab && tab != activeTab) {
+                if (activeTab && tab != activeTab) { // no transition if only 1
                     this.contentTransition(tab, activeTab);
                 } else if (tab) {
-                    tab.showContent();
+                    tab.set('contentVisible', true);
                 }
             },
             validator: function(value) {

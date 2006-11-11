@@ -38,7 +38,7 @@
     zoom:1; /* IE: kill space between horizontal tabs */
 }
 
-.yui-navset-top .yui-nav a {
+.yui-navset .yui-nav a {
     outline:0; /* gecko: keep from shifting */
 }
 
