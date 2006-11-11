@@ -249,8 +249,8 @@ YAHOO.util.Element.prototype = {
 	 */
     fireQueue: function() {
         var queue = this._queue;
-        for (var key in queue) {
-            this[queue[key][0]].apply(this, queue[key][1]);
+        for (var i = 0, len = queue.length; i < len; ++i) {
+            this[queue[i][0]].apply(this, queue[i][1]);
         }
     },
     
@@ -343,7 +343,7 @@ YAHOO.util.Element.prototype = {
         return AttributeProvider.prototype.register.apply(this, arguments);
     },
     
-    configure: function(property, map, init) { // protect html attributes
+    configureAttribute: function(property, map, init) { // protect html attributes
         if (!this._configs[property] && this._configs.element && 
                 !Lang.isUndefined(this._configs.element[property]) ) {
             _registerHTMLAttr(this, property, map);
@@ -368,7 +368,7 @@ YAHOO.util.Element.prototype = {
     },
     
     init: function(el, attr) {
-        this._queue = this._queue || {};
+        this._queue = this._queue || [];
         this._events = this._events || {};
         this._configs = this._configs || {};
         attr = attr || {};
