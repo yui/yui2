@@ -31,7 +31,7 @@
 (function() {
     var myTabs = new YAHOO.widget.TabView('demo');
     myTabs.contentTransition = function(newTab, oldTab) {
-        newTab.showContent();
+        newTab.set('contentVisible', true);
         
         YAHOO.util.Dom.setStyle(newTab.get('contentEl'), 'opacity', 0);
         var animIn = new YAHOO.util.Anim( newTab.get('contentEl') );
@@ -40,7 +40,9 @@
         var animOut = new YAHOO.util.Anim( oldTab.get('contentEl') );
         animOut.attributes.opacity = { to: 0 };
         
-        animOut.onComplete.subscribe(function() {oldTab.hideContent}, this, true);
+        animOut.onComplete.subscribe(function() {
+            oldTab.set('contentVisible', false)
+        }, this, true); /* scope to myTabs */
         
         animIn.animate();
         animOut.animate();
