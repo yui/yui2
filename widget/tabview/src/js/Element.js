@@ -89,7 +89,7 @@ YAHOO.util.Element.prototype = {
 	 * @param {HTMLElement} newNode The HTMLElement to insert
 	 * @param {HTMLElement} oldNode The HTMLElement to replace
 	 */
-    replaceChild: function(newNode, oldNode) { // TODO: HTMLElement had get?
+    replaceChild: function(newNode, oldNode) {
         newNode = newNode.get ? newNode.get('element') : newNode;
         oldNode = oldNode.get ? oldNode.get('element') : oldNode;
         return this.get('element').replaceChild(newNode, oldNode);
@@ -300,7 +300,7 @@ YAHOO.util.Element.prototype = {
         
         for (var key in keys) { // only refresh HTMLElement attributes
             if ( !Lang.isUndefined(element[key]) ) {
-                this.refresh(key); // TODO: verify
+                this.refresh(key);
             }
         }
     },
@@ -389,7 +389,7 @@ YAHOO.util.Element.prototype = {
         var readyHandler = function() {
             this.initAttributes(attr);
 
-            this.setAttributes(attr, true); // TODO: set HTMLElement attrs
+            this.setAttributes(attr, true);
             this.fireQueue();
             this.fireEvent('contentReady', {
                 type: 'contentReady',

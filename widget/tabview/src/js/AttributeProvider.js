@@ -30,7 +30,7 @@
          * @method get
          * @param {String} key The attribute whose value will be returned.
          */
-        get: function(key){ // TODO: return copies of objects?
+        get: function(key){
             var configs = this._configs || {};
             var config = configs[key];
             
@@ -123,7 +123,7 @@
             var configs = this._configs;
             
             key = ( ( Lang.isString(key) ) ? [key] : key ) || 
-                    this.getAttributeKeys(); // if no key, refresh all TODO: keep?
+                    this.getAttributeKeys();
             
             for (var i = 0, len = key.length; i < len; ++i) { 
                 if ( // only set if there is a value and not null
