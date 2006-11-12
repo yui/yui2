@@ -341,7 +341,6 @@ YAHOO.util.Connect =
    */
     handleReadyState:function(o, callback)
     {
-
 		var oConn = this;
 
 		if(callback && callback.timeout){
@@ -403,48 +402,56 @@ YAHOO.util.Connect =
 		}
 
 		if(httpStatus >= 200 && httpStatus < 300){
-			responseObject = this.createResponseObject(o, callback.argument);
-			if(callback.success){
-				if(!callback.scope){
-					callback.success(responseObject);
-				}
-				else{
-					// If a scope property is defined, the callback will be fired from
-					// the context of the object.
-					callback.success.apply(callback.scope, [responseObject]);
+			try
+			{
+				responseObject = this.createResponseObject(o, callback.argument);
+				if(callback.success){
+					if(!callback.scope){
+						callback.success(responseObject);
+					}
+					else{
+						// If a scope property is defined, the callback will be fired from
+						// the context of the object.
+						callback.success.apply(callback.scope, [responseObject]);
+					}
 				}
 			}
+			catch(e){}
 		}
 		else{
-			switch(httpStatus){
-				// The following cases are wininet.dll error codes that may be encountered.
-				case 12002: // Server timeout
-				case 12029: // 12029 to 12031 correspond to dropped connections.
-				case 12030:
-				case 12031:
-				case 12152: // Connection closed by server.
-				case 13030: // See above comments for variable status.
-					responseObject = this.createExceptionObject(o.tId, callback.argument, (isAbort?isAbort:false));
-					if(callback.failure){
-						if(!callback.scope){
-							callback.failure(responseObject);
+			try
+			{
+				switch(httpStatus){
+					// The following cases are wininet.dll error codes that may be encountered.
+					case 12002: // Server timeout
+					case 12029: // 12029 to 12031 correspond to dropped connections.
+					case 12030:
+					case 12031:
+					case 12152: // Connection closed by server.
+					case 13030: // See above comments for variable status.
+						responseObject = this.createExceptionObject(o.tId, callback.argument, (isAbort?isAbort:false));
+						if(callback.failure){
+							if(!callback.scope){
+								callback.failure(responseObject);
+							}
+							else{
+								callback.failure.apply(callback.scope, [responseObject]);
+							}
 						}
-						else{
-							callback.failure.apply(callback.scope, [responseObject]);
+						break;
+					default:
+						responseObject = this.createResponseObject(o, callback.argument);
+						if(callback.failure){
+							if(!callback.scope){
+								callback.failure(responseObject);
+							}
+							else{
+								callback.failure.apply(callback.scope, [responseObject]);
+							}
 						}
-					}
-					break;
-				default:
-					responseObject = this.createResponseObject(o, callback.argument);
-					if(callback.failure){
-						if(!callback.scope){
-							callback.failure(responseObject);
-						}
-						else{
-							callback.failure.apply(callback.scope, [responseObject]);
-						}
-					}
+				}
 			}
+			catch(e){}
 		}
 
 		this.releaseObject(o);
@@ -593,7 +600,7 @@ YAHOO.util.Connect =
    * @param {string || object} form id or name attribute, or form object.
    * @param {string} optional boolean to indicate SSL environment.
    * @param {string || boolean} optional qualified path of iframe resource for SSL in IE.
-   * @return {void}
+   * @return {string} string of the HTML form field name and value pairs..
    */
 	setForm:function(formId, isUpload, secureUri)
 	{
@@ -645,7 +652,6 @@ YAHOO.util.Connect =
 			// do not have a name attribute value.
 			if(!oDisabled && oName)
 			{
-				alert(oElement.type);
 				switch (oElement.type)
 				{
 					case 'select-one':
@@ -721,7 +727,7 @@ YAHOO.util.Connect =
 		// pattern is required for IE.
 		var frameId = 'yuiIO' + this._transaction_id;
 		if(window.ActiveXObject){
-			var io = document.createElement('<iframe id="' + frameId + '" name="' + frameId + '">');
+			var io = document.createElement('<iframe id="' + frameId + '" name="' + frameId + '" />');
 
 			// IE will throw a security exception in an SSL environment if the
 			// iframe source is undefined.
