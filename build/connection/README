@@ -1,5 +1,28 @@
 Connection Manager Release Notes
 
+*** version 0.12.0 ***
+
+* When uploading files via setForm() and asyncRequest includes a POST data
+argument, appendPostData() will create hidden input fields for each postData
+label/value and append each field to the form object.
+
+* setForm() returns the assembled label/value string of the parsed HTML form
+fields.
+
+* NOTE: Opera 9.02 does not allow for more than 12 concurrent Connection Manager
+objects.
+
+The following example creates 12 requests in a loop:
+for(var n=0; n<=12; i++){
+  conn[n] = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+}
+
+If n > 13, Opera 9.02 will crash.  Connection manager objects count n must be <=
+12 at all times.  This condition was not present in Opera version 9.01.
+
+This condition does not apply to other A-Grade browsers (
+http://developer.yahoo.com/yui/articles/gbs/gbs_browser-chart.html)
+
 *** version 0.11.3 ***
 
 * YUI Event dependency for file uploading is now optional.
@@ -24,6 +47,9 @@ HTTPS environment.
 * setHeader() now enumerates through the _http_header object using
 hasOwnProperty() to prevent collisions with members added to Object via
 prototype.
+
+* If using setForm() and asyncRequest includes a POST data argument, the data
+will be concatenated to the HTML form POST message.
 
 *** version 0.11.2 ***
 
@@ -107,6 +133,8 @@ and returns false if the connection object is no longer available.
 *** version 0.9.0 ***
 
 * Initial release
+
+
 
 
 

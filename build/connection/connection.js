@@ -311,9 +311,9 @@ YAHOO.util.Connect =
 
 			if(this._isFormSubmit || (postData && this._use_default_post_header)){
 				this.initHeader('Content-Type', this._default_post_header);
-			}
-			else if(this._isFormSubmit){
-				this.resetFormState();
+				if(this._isFormSubmit){
+					this.resetFormState();
+				}
 			}
 
 			if(this._has_http_headers){
@@ -604,15 +604,17 @@ YAHOO.util.Connect =
    */
 	setForm:function(formId, isUpload, secureUri)
 	{
+		this.resetFormState();
+		var oForm;
 		if(typeof formId == 'string'){
 			// Determine if the argument is a form id or a form name.
 			// Note form name usage is deprecated by supported
 			// here for legacy reasons.
-			var oForm = (document.getElementById(formId) || document.forms[formId]);
+			oForm = (document.getElementById(formId) || document.forms[formId]);
 		}
 		else if(typeof formId == 'object'){
 			// Treat argument as an HTML form object.
-			var oForm = formId;
+			oForm = formId;
 		}
 		else{
 			return;
@@ -702,13 +704,19 @@ YAHOO.util.Connect =
 		return this._sFormData;
 	},
 
-	resetFormState:function(isUpload){
+  /**
+   * @description Resets HTML form properties when an HTML form or HTML form
+   * with file upload transaction is sent.
+   * @method resetFormState
+   * @private
+   * @static
+   * @return {void}
+   */
+	resetFormState:function(){
 		this._isFormSubmit = false;
-		this._sFormData = null;
-		if(isUpload){
-			this._isFileUpload = false;
-			this._formNode = null;
-		}
+		this._isFileUpload = false;
+		this._formNode = null;
+		this._sFormData = "";
 	},
 
   /**
@@ -717,7 +725,7 @@ YAHOO.util.Connect =
    * @method createFrame
    * @private
    * @static
-   * @param {string} optional qualified path of iframe resource for SSL in IE.
+   * @param {string} secureUri Optional qualified path of iframe resource for SSL in IE.
    * @return {void}
    */
 	createFrame:function(secureUri){
@@ -759,22 +767,24 @@ YAHOO.util.Connect =
    * @private
    * @static
    * @param {string} postData The HTTP POST data
-   * @return {void}
+   * @return {array} formFields Collection of hidden fields.
    */
 	appendPostData:function(postData)
 	{
-		var fieldObj = {};
+		var formFields = new Array();
 		var postMessage = postData.split('&');
 		for(var i=0; i < postMessage.length; i++){
 			var delimitPos = postMessage[i].indexOf('=');
 			if(delimitPos != -1){
-				var formField = document.createElement('input');
-				formField.type = 'hidden';
-				formField.name = postMessage[i].substring(0,delimitPos);
-				formField.value = postMessage[i].substring(delimitPos+1);
-				this._formNode.appendChild(formField);
+				formFields[i] = document.createElement('input');
+				formFields[i].type = 'hidden';
+				formFields[i].name = postMessage[i].substring(0,delimitPos);
+				formFields[i].value = postMessage[i].substring(delimitPos+1);
+				this._formNode.appendChild(formFields[i]);
 			}
 		}
+
+		return formFields;
 	},
 
   /**
@@ -811,13 +821,19 @@ YAHOO.util.Connect =
 		}
 
 		if(postData){
-			this.appendPostData(postData);
+			var oElements = this.appendPostData(postData);
 		}
 
 		this._formNode.submit();
 
-		// Reset form status properties.
-		this.resetFormState(true);
+		if(oElements && oElements.length > 0){
+			for(var i=0; i < oElements.length; i++){
+				this._formNode.removeChild(oElements[i]);
+			}
+		}
+
+		// Reset HTML form status properties.
+		this.resetFormState();
 
 		// Create the upload callback handler that fires when the iframe
 		// receives the load event.  Subsequently, the event handler is detached

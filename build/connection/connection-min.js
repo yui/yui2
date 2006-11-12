@@ -1,3 +1,4 @@
+/* Copyright (c) 2006, Yahoo! Inc. All rights reserved. Code licensed under the BSD License: http://developer.yahoo.net/yui/license.txt */
 YAHOO.util.Connect={_msxml_progid:['MSXML2.XMLHTTP.3.0','MSXML2.XMLHTTP','Microsoft.XMLHTTP'],_http_header:{},_has_http_headers:false,_use_default_post_header:true,_default_post_header:'application/x-www-form-urlencoded',_isFormSubmit:false,_isFileUpload:false,_formNode:null,_sFormData:null,_poll:{},_timeOut:{},_polling_interval:50,_transaction_id:0,setProgId:function(id)
 {this._msxml_progid.unshift(id);},setDefaultPostHeader:function(b)
 {this._use_default_post_header=b;},setPollingInterval:function(i)
@@ -20,8 +21,7 @@ else{if(this._isFormSubmit){if(this._isFileUpload){this.uploadFile(o.tId,callbac
 if(method=='GET'){if(this._sFormData.length!=0){uri+=((uri.indexOf('?')==-1)?'?':'&')+this._sFormData;}
 else{uri+="?"+this._sFormData;}}
 else if(method=='POST'){postData=postData?this._sFormData+"&"+postData:this._sFormData;}}
-o.conn.open(method,uri,true);if(this._isFormSubmit||(postData&&this._use_default_post_header)){this.initHeader('Content-Type',this._default_post_header);}
-else if(this._isFormSubmit){this.resetFormState();}
+o.conn.open(method,uri,true);if(this._isFormSubmit||(postData&&this._use_default_post_header)){this.initHeader('Content-Type',this._default_post_header);if(this._isFormSubmit){this.resetFormState();}}
 if(this._has_http_headers){this.setHeader(o);}
 this.handleReadyState(o,callback);o.conn.send(postData||null);return o;}},handleReadyState:function(o,callback)
 {var oConn=this;if(callback&&callback.timeout){this._timeOut[o.tId]=window.setTimeout(function(){oConn.abort(o,callback,true);},callback.timeout);}
@@ -57,8 +57,8 @@ else{this._http_header[label]=value+","+this._http_header[label];}
 this._has_http_headers=true;},setHeader:function(o)
 {for(var prop in this._http_header){if(this._http_header.hasOwnProperty(prop)){o.conn.setRequestHeader(prop,this._http_header[prop]);}}
 delete this._http_header;this._http_header={};this._has_http_headers=false;},setForm:function(formId,isUpload,secureUri)
-{if(typeof formId=='string'){var oForm=(document.getElementById(formId)||document.forms[formId]);}
-else if(typeof formId=='object'){var oForm=formId;}
+{this.resetFormState();var oForm;if(typeof formId=='string'){oForm=(document.getElementById(formId)||document.forms[formId]);}
+else if(typeof formId=='object'){oForm=formId;}
 else{return;}
 if(isUpload){this.createFrame(secureUri?secureUri:null);this._isFormSubmit=true;this._isFileUpload=true;this._formNode=oForm;return;}
 var oElement,oName,oValue,oDisabled;var hasSubmit=false;for(var i=0;i<oForm.elements.length;i++){oElement=oForm.elements[i];oDisabled=oForm.elements[i].disabled;oName=oForm.elements[i].name;oValue=oForm.elements[i].value;if(!oDisabled&&oName)
@@ -68,14 +68,16 @@ else{this._sFormData+=encodeURIComponent(oName)+'='+encodeURIComponent(oElement.
 break;case'radio':case'checkbox':if(oElement.checked){this._sFormData+=encodeURIComponent(oName)+'='+encodeURIComponent(oValue)+'&';}
 break;case'file':case undefined:case'reset':case'button':break;case'submit':if(hasSubmit==false){this._sFormData+=encodeURIComponent(oName)+'='+encodeURIComponent(oValue)+'&';hasSubmit=true;}
 break;default:this._sFormData+=encodeURIComponent(oName)+'='+encodeURIComponent(oValue)+'&';break;}}}
-this._isFormSubmit=true;this._sFormData=this._sFormData.substr(0,this._sFormData.length-1);return this._sFormData;},resetFormState:function(isUpload){this._isFormSubmit=false;this._sFormData=null;if(isUpload){this._isFileUpload=false;this._formNode=null;}},createFrame:function(secureUri){var frameId='yuiIO'+this._transaction_id;if(window.ActiveXObject){var io=document.createElement('<iframe id="'+frameId+'" name="'+frameId+'" />');if(typeof secureUri=='boolean'){io.src='javascript:false';}
+this._isFormSubmit=true;this._sFormData=this._sFormData.substr(0,this._sFormData.length-1);return this._sFormData;},resetFormState:function(){this._isFormSubmit=false;this._isFileUpload=false;this._formNode=null;this._sFormData="";},createFrame:function(secureUri){var frameId='yuiIO'+this._transaction_id;if(window.ActiveXObject){var io=document.createElement('<iframe id="'+frameId+'" name="'+frameId+'" />');if(typeof secureUri=='boolean'){io.src='javascript:false';}
 else if(typeof secureURI=='string'){io.src=secureUri;}}
 else{var io=document.createElement('iframe');io.id=frameId;io.name=frameId;}
 io.style.position='absolute';io.style.top='-1000px';io.style.left='-1000px';document.body.appendChild(io);},appendPostData:function(postData)
-{var fieldObj={};var postMessage=postData.split('&');for(var i=0;i<postMessage.length;i++){var delimitPos=postMessage[i].indexOf('=');if(delimitPos!=-1){var formField=document.createElement('input');formField.type='hidden';formField.name=postMessage[i].substring(0,delimitPos);formField.value=postMessage[i].substring(delimitPos+1);this._formNode.appendChild(formField);}}},uploadFile:function(id,callback,uri,postData){var frameId='yuiIO'+id;var io=document.getElementById(frameId);this._formNode.action=uri;this._formNode.method='POST';this._formNode.target=frameId;if(this._formNode.encoding){this._formNode.encoding='multipart/form-data';}
+{var formFields=new Array();var postMessage=postData.split('&');for(var i=0;i<postMessage.length;i++){var delimitPos=postMessage[i].indexOf('=');if(delimitPos!=-1){formFields[i]=document.createElement('input');formFields[i].type='hidden';formFields[i].name=postMessage[i].substring(0,delimitPos);formFields[i].value=postMessage[i].substring(delimitPos+1);this._formNode.appendChild(formFields[i]);}}
+return formFields;},uploadFile:function(id,callback,uri,postData){var frameId='yuiIO'+id;var io=document.getElementById(frameId);this._formNode.action=uri;this._formNode.method='POST';this._formNode.target=frameId;if(this._formNode.encoding){this._formNode.encoding='multipart/form-data';}
 else{this._formNode.enctype='multipart/form-data';}
-if(postData){this.appendPostData(postData);}
-this._formNode.submit();this.resetFormState(true);var uploadCallback=function()
+if(postData){var oElements=this.appendPostData(postData);}
+this._formNode.submit();if(oElements&&oElements.length>0){for(var i=0;i<oElements.length;i++){this._formNode.removeChild(oElements[i]);}}
+this.resetFormState();var uploadCallback=function()
 {var obj={};obj.tId=id;obj.argument=callback.argument;try
 {obj.responseText=io.contentWindow.document.body?io.contentWindow.document.body.innerHTML:null;obj.responseXML=io.contentWindow.document.XMLDocument?io.contentWindow.document.XMLDocument:io.contentWindow.document;}
 catch(e){}
