@@ -198,7 +198,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		var property = config[key];
 		if (typeof property != 'undefined' && property.event) {
 			if (initialConfig[key] && initialConfig[key] != 'undefined')	{
-				this.setProperty(key, initialConfig[key].value);
+				this.setProperty(key, initialConfig[key]);
 			}
 			return true;
 		} else {
