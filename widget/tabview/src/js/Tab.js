@@ -113,7 +113,7 @@
         
         /**
          * The event that triggers the tab's activation.
-         * @config label
+         * @config activationEvent
          * @type String
          */
         this.register('activationEvent', {
