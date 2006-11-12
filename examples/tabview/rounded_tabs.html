@@ -23,4 +23,47 @@
 
 <script type="text/javascript">
 YAHOO.example.init = function() {
-    var tabView = new YAHOO.
+    var tabView = new YAHOO.widget.TabView('demo');
+};
+
+YAHOO.example.init();
+</script>
+
+</head>
+<body>
+<div id="doc">
+    <h1>TabView Example - Basic From Existing Markup</h1>
+    <p>This example demonstrates how to create a basic TabView widget from existing markup.</p>
+
+    <div id="demo" class="yui-navset">
+        <ul class="yui-nav">
+            <li class="selected"><a href="#lorem"><em>lorem</em></a></li>
+            <li><a href="#ipsum"><em>ipsum</em></a></li>
+            <li><a href="#dolor"><em>dolor</em></a></li>
+        </ul>
+        <div class="yui-content">
+            <div id="lorem">
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat.</p>
+            </div>
+            <div id="ispum">
+                <ul>
+                    <li><a href="#">Lorem ipsum dolor sit amet.</a></li>
+                    <li><a href="#">Lorem ipsum dolor sit amet.</a></li>
+                    <li><a href="#">Lorem ipsum dolor sit amet.</a></li>
+                    <li><a href="#">Lorem ipsum dolor sit amet.</a></li>
+                </ul>
+            </div>
+            <div id="dolor">
+                <form action="#">
+                    <fieldset>
+                        <legend>Lorem Ipsum</legend>
+                        <label for="foo"> <input id="foo" name="foo"></label>
+                        <input type="submit" value="submit">
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
