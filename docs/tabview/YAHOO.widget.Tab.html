@@ -87,22 +87,6 @@ represents the TabView. An element will be created if none provided.
                         <div class="section field details">
                             <h3><a name="field_detail">Properties</a></h3>
                             <div class="content">
-                                    <h4><a name="ACTIVATION_EVENT">ACTIVATION_EVENT</a>
-                                        <code>- String</code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description">
-                                            The event that activates the tab.
-                                        </div>
-                                    </div>
-     
-                                        
-                                    <div class="default">
-                                        Default Value: "click"
-                                    </div>        
-
-
-                                    <hr />
                                     <h4><a name="ACTIVE_CLASSNAME">ACTIVE_CLASSNAME</a>
                                         <code>- String</code>
                                     </h4>
@@ -147,22 +131,6 @@ represents the TabView. An element will be created if none provided.
                                         
                                     <div class="default">
                                         Default Value: "em"
-                                    </div>        
-
-
-                                    <hr />
-                                    <h4><a name="LABEL_TAGNAME">LABEL_TAGNAME</a>
-                                        <code>- String</code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description">
-                                            The default tag name for a Tab's label element.
-                                        </div>
-                                    </div>
-     
-                                        
-                                    <div class="default">
-                                        Default Value: "a"
                                     </div>        
 
 
@@ -237,35 +205,6 @@ loaded dynamically.
                             <h3><a name="methodDetails">Methods</a></h3>
                             <div class="content">
                                     <h4>
-                                        <a name="hideContent">hideContent</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                        
-                                        
-                                        void
-                                            <strong>hideContent</strong>
-                                        </code>
-                                        
-                                        <div class="description">
-                                            Hides the tab's content element.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code>
-                                                        void
-                                                    </code></dt>
-                                                    <dd></dd>
-                                                </dl>
-             
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    <h4>
                                         <a name="initAttributes">initAttributes</a></h4>
                                     <div class="detail">
                                         <code>
@@ -292,35 +231,6 @@ loaded dynamically.
                                                              Hash of initial attributes
                                                         </dd>
                                                 </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code>
-                                                        void
-                                                    </code></dt>
-                                                    <dd></dd>
-                                                </dl>
-             
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    <h4>
-                                        <a name="showContent">showContent</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                        
-                                        
-                                        void
-                                            <strong>showContent</strong>
-                                        </code>
-                                        
-                                        <div class="description">
-                                            Shows the tab's content element.
-                                        </div>
-
-                                        <div class="description">
 
                                                 <dl>
                                                     <dt>Returns:
@@ -402,14 +312,12 @@ loaded dynamically.
                                             <a href="YAHOO.util.AttributeProvider.html#fireBeforeChangeEvent">fireBeforeChangeEvent</a>,
                                             <a href="YAHOO.util.AttributeProvider.html#fireChangeEvent">fireChangeEvent</a>,
                                             <a href="YAHOO.util.AttributeProvider.html#get">get</a>,
-                                            <a href="YAHOO.util.AttributeProvider.html#getAttributeConfig">getAttributeConfig</a>,
                                             <a href="YAHOO.util.AttributeProvider.html#getAttributeKeys">getAttributeKeys</a>,
                                             <a href="YAHOO.util.AttributeProvider.html#refresh">refresh</a>,
                                             <a href="YAHOO.util.AttributeProvider.html#register">register</a>,
-                                            <a href="YAHOO.util.AttributeProvider.html#resetAttributeConfig">resetAttributeConfig</a>,
                                             <a href="YAHOO.util.AttributeProvider.html#resetValue">resetValue</a>,
                                             <a href="YAHOO.util.AttributeProvider.html#set">set</a>,
-                                            <a href="YAHOO.util.AttributeProvider.html#setValues">setValues</a>
+                                            <a href="YAHOO.util.AttributeProvider.html#setAttributes">setAttributes</a>
                                     </code>
                                 </div>
                             </div>
@@ -674,6 +582,21 @@ the given source.
      
 
                                     <hr />
+                                    <h4><a name="contentVisible">contentVisible</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The Whether or not the tab's content is visible.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
                                     <h4><a name="dataLoaded">dataLoaded</a>
                                         <code>- Boolean</code>
                                     </h4>
@@ -725,12 +648,27 @@ the given source.
      
 
                                     <hr />
+                                    <h4><a name="href">href</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The href of the tab's anchor element.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: '#'
+                                    </div>        
+
+                                    <hr />
                                     <h4><a name="label">label</a>
                                         <code>- String</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
-                                            The tab's label text (or innerHTML).
+                                            The event that triggers the tab's activation.
                                         </div>
                                     </div>
  
@@ -817,9 +755,6 @@ the given source.
                     <div class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li><a href="#ACTIVATION_EVENT">ACTIVATION_EVENT</a>
-                                        <!--<code>&lt;object&gt;</code>-->
-                                </li>
                                 <li><a href="#ACTIVE_CLASSNAME">ACTIVE_CLASSNAME</a>
                                         <!--<code>&lt;object&gt;</code>-->
                                 </li>
@@ -827,9 +762,6 @@ the given source.
                                         <!--<code>&lt;object&gt;</code>-->
                                 </li>
                                 <li><a href="#LABEL_INNER_TAGNAME">LABEL_INNER_TAGNAME</a>
-                                        <!--<code>&lt;object&gt;</code>-->
-                                </li>
-                                <li><a href="#LABEL_TAGNAME">LABEL_TAGNAME</a>
                                         <!--<code>&lt;object&gt;</code>-->
                                 </li>
                                 <li><a href="#LOADING_CLASSNAME">LOADING_CLASSNAME</a>
@@ -848,13 +780,7 @@ the given source.
                         <h4>Methods</h4>
                         <ul class="content">        
                                 <li><!--<code>void</code>-->
-                                <a href="#hideContent">hideContent</a>
-                                </li>
-                                <li><!--<code>void</code>-->
                                 <a href="#initAttributes">initAttributes</a>
-                                </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#showContent">showContent</a>
                                 </li>
                                 <li><!--<code>void</code>-->
                                 <a href="#toString">toString</a>
@@ -902,6 +828,9 @@ the given source.
                                 <a href="#contentEl">contentEl</a>
                                 </li>
                                 <li>
+                                <a href="#contentVisible">contentVisible</a>
+                                </li>
+                                <li>
                                 <a href="#dataLoaded">dataLoaded</a>
                                 </li>
                                 <li>
@@ -912,6 +841,9 @@ the given source.
                                 </li>
                                 <li>
                                 <a href="#disabled">disabled</a>
+                                </li>
+                                <li>
+                                <a href="#href">href</a>
                                 </li>
                                 <li>
                                 <a href="#label">label</a>

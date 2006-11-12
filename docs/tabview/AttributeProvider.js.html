@@ -59,8 +59,8 @@
 <span class="c">         * @method get</span>
 <span class="c">         * @param {String} key The attribute whose value will be returned.</span>
 <span class="c">         */</span>
-        <span class="nx">get</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">){</span> <span class="c">// TODO: return copies of objects?</span>
-<span class="c"></span>            <span class="k">var</span> <span class="nx">configs</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span> <span class="o">||</span> <span class="o">{};</span>
+        <span class="nx">get</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">){</span>
+            <span class="k">var</span> <span class="nx">configs</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span> <span class="o">||</span> <span class="o">{};</span>
             <span class="k">var</span> <span class="nx">config</span> <span class="o">=</span> <span class="nx">configs</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
             
             <span class="k">if</span> <span class="o">(!</span><span class="nx">config</span><span class="o">)</span> <span class="o">{</span>
@@ -114,11 +114,11 @@
         
         <span class="c">/**</span>
 <span class="c">         * Sets multiple attribute values.</span>
-<span class="c">         * @method setValues</span>
+<span class="c">         * @method setAttributes</span>
 <span class="c">         * @param {Object} map  A key-value map of attributes</span>
 <span class="c">         * @param {Boolean} silent Whether or not to suppress change events</span>
 <span class="c">         */</span>
-        <span class="nx">setValues</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">map</span><span class="o">,</span> <span class="nx">silent</span><span class="o">){</span>
+        <span class="nx">setAttributes</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">map</span><span class="o">,</span> <span class="nx">silent</span><span class="o">){</span>
             <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">map</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(</span> <span class="nx">map</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">key</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span> <span class="nx">map</span><span class="o">[</span><span class="nx">key</span><span class="o">],</span> <span class="nx">silent</span><span class="o">);</span>
@@ -152,8 +152,8 @@
             <span class="k">var</span> <span class="nx">configs</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">;</span>
             
             <span class="nx">key</span> <span class="o">=</span> <span class="o">(</span> <span class="o">(</span> <span class="nx">Lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">key</span><span class="o">)</span> <span class="o">)</span> <span class="o">?</span> <span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">:</span> <span class="nx">key</span> <span class="o">)</span> <span class="o">||</span> 
-                    <span class="k">this</span><span class="o">.</span><span class="nx">getAttributeKeys</span><span class="o">();</span> <span class="c">// if no key, refresh all TODO: keep?</span>
-<span class="c"></span>            
+                    <span class="k">this</span><span class="o">.</span><span class="nx">getAttributeKeys</span><span class="o">();</span>
+            
             <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">key</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span> 
                 <span class="k">if</span> <span class="o">(</span> <span class="c">// only set if there is a value and not null</span>
 <span class="c"></span>                    <span class="nx">configs</span><span class="o">[</span><span class="nx">key</span><span class="o">[</span><span class="nx">i</span><span class="o">]]</span> <span class="o">&amp;&amp;</span> 
@@ -187,6 +187,7 @@
 <span class="c">         * Returns the attribute&#39;s properties.</span>
 <span class="c">         * @method getAttributeConfig</span>
 <span class="c">         * @param {String} key The attribute&#39;s name</span>
+<span class="c">         * @private</span>
 <span class="c">         * @return {object} A key-value map containing all of the</span>
 <span class="c">         * attribute&#39;s properties.</span>
 <span class="c">         */</span>
@@ -227,6 +228,7 @@
 <span class="c">         * Resets an attribute to its intial configuration. </span>
 <span class="c">         * @method resetAttributeConfig</span>
 <span class="c">         * @param {String} key The attribute&#39;s name.</span>
+<span class="c">         * @private</span>
 <span class="c">         */</span>
         <span class="nx">resetAttributeConfig</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">){</span>
             <span class="k">var</span> <span class="nx">configs</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span> <span class="o">||</span> <span class="o">{};</span>

@@ -133,23 +133,30 @@
             <span class="nx">tabParent</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">tabElement</span><span class="o">);</span>
         <span class="o">}</span>
 
-        <span class="k">if</span> <span class="o">(</span> <span class="nx">contentEl</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">isAncestor</span><span class="o">(</span><span class="nx">contentParent</span><span class="o">,</span> <span class="nx">contentEl</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span> <span class="c">// TODO: match index?</span>
-<span class="c"></span>            <span class="nx">contentParent</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">contentEl</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span> <span class="nx">contentEl</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">isAncestor</span><span class="o">(</span><span class="nx">contentParent</span><span class="o">,</span> <span class="nx">contentEl</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="nx">contentParent</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">contentEl</span><span class="o">);</span>
         <span class="o">}</span>
         
         <span class="k">if</span> <span class="o">(</span> <span class="o">!</span><span class="nx">tab</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;active&#39;</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
-            <span class="nx">tab</span><span class="o">.</span><span class="nx">hideContent</span><span class="o">();</span>
+            <span class="nx">tab</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;contentVisible&#39;</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span> <span class="c">/* hide if not active */</span>
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">.</span><span class="nx">activeTab</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">tab</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;activeTab&#39;</span><span class="o">,</span> <span class="nx">tab</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            
         <span class="o">}</span>
 
-        <span class="nx">tab</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span>
-            <span class="nx">tab</span><span class="o">.</span><span class="nx">ACTIVATION_EVENT</span><span class="o">,</span>
-            <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
-                <span class="nx">self</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;activeTab&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">activate</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+            <span class="nx">self</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;activeTab&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+        <span class="o">};</span>
+        
+        <span class="nx">tab</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span> <span class="nx">tab</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;activationEvent&#39;</span><span class="o">),</span> <span class="nx">activate</span><span class="o">);</span>
+        
+        <span class="nx">tab</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="s1">&#39;activationEventChange&#39;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">prevValue</span> <span class="o">!=</span> <span class="nx">e</span><span class="o">.</span><span class="nx">newValue</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">tab</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">prevValue</span><span class="o">,</span> <span class="nx">activate</span><span class="o">);</span>
+                <span class="nx">tab</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">newValue</span><span class="o">,</span> <span class="nx">activate</span><span class="o">);</span>
             <span class="o">}</span>
-        <span class="o">);</span>
+        <span class="o">});</span>
         
         <span class="nx">tabs</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">index</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="nx">tab</span><span class="o">);</span>
     <span class="o">};</span>
@@ -165,8 +172,6 @@
         <span class="k">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getTarget</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
         <span class="k">var</span> <span class="nx">tabParent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_tabParent</span><span class="o">;</span>
         
-        <span class="c">//YAHOO.util.Event.preventDefault(e);</span>
-<span class="c"></span>        
         <span class="k">if</span> <span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">isAncestor</span><span class="o">(</span><span class="nx">tabParent</span><span class="o">,</span> <span class="nx">target</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">tabEl</span><span class="o">;</span>
             <span class="k">var</span> <span class="nx">tab</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
@@ -178,8 +183,8 @@
                 <span class="nx">contentEl</span> <span class="o">=</span> <span class="nx">tabs</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;contentEl&#39;</span><span class="o">);</span>
 
                 <span class="k">if</span> <span class="o">(</span> <span class="nx">target</span> <span class="o">==</span> <span class="nx">tabEl</span> <span class="o">||</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">isAncestor</span><span class="o">(</span><span class="nx">tabEl</span><span class="o">,</span> <span class="nx">target</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">tab</span> <span class="o">=</span> <span class="nx">tabs</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span> <span class="c">// TODO: what if panel in tab?</span>
-<span class="c"></span>                    <span class="k">break</span><span class="o">;</span> <span class="c">// note break</span>
+                    <span class="nx">tab</span> <span class="o">=</span> <span class="nx">tabs</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                    <span class="k">break</span><span class="o">;</span> <span class="c">// note break</span>
 <span class="c"></span>                <span class="o">}</span>
             <span class="o">}</span> 
             
@@ -256,17 +261,12 @@
     <span class="o">};</span>
     
     <span class="c">/**</span>
-<span class="c">     * The transiton to use when switching between tab content.</span>
+<span class="c">     * The transiton to use when switching between tabs.</span>
 <span class="c">     * @method contentTransition</span>
-<span class="c">     */</span> <span class="c">// TODO : abstract to show/hideContent</span>
-<span class="c"></span>    <span class="nx">proto</span><span class="o">.</span><span class="nx">contentTransition</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">newTab</span><span class="o">,</span> <span class="nx">oldTab</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">newTab</span><span class="o">)</span> <span class="o">{</span>  
-            <span class="nx">newTab</span><span class="o">.</span><span class="nx">showContent</span><span class="o">();</span>
-        <span class="o">}</span>
-        
-        <span class="k">if</span> <span class="o">(</span><span class="nx">oldTab</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">oldTab</span><span class="o">.</span><span class="nx">hideContent</span><span class="o">();</span>
-        <span class="o">}</span>
+<span class="c">     */</span>
+    <span class="nx">proto</span><span class="o">.</span><span class="nx">contentTransition</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">newTab</span><span class="o">,</span> <span class="nx">oldTab</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">newTab</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;contentVisible&#39;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="nx">oldTab</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;contentVisible&#39;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
     <span class="o">};</span>
     
     <span class="c">/**</span>
@@ -340,7 +340,7 @@
         <span class="c">/**</span>
 <span class="c">         * The index of the tab currently active.</span>
 <span class="c">         * @config activeIndex</span>
-<span class="c">         * @type YAHOO.widget.Tab</span>
+<span class="c">         * @type Int</span>
 <span class="c">         */</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">register</span><span class="o">(</span><span class="s1">&#39;activeIndex&#39;</span><span class="o">,</span> <span class="o">{</span>
             <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">activeIndex</span><span class="o">,</span>
@@ -362,14 +362,19 @@
             <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">tab</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">var</span> <span class="nx">activeTab</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;activeTab&#39;</span><span class="o">);</span>
                 
-                <span class="k">if</span> <span class="o">(</span><span class="nx">activeTab</span> <span class="o">&amp;&amp;</span> <span class="nx">activeTab</span> <span class="o">!=</span> <span class="nx">tab</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">activeTab</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;active&#39;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">contentTransition</span><span class="o">(</span><span class="nx">tab</span><span class="o">,</span> <span class="nx">activeTab</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">tab</span><span class="o">)</span> <span class="o">{</span>  
+                    <span class="nx">tab</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;active&#39;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
                 <span class="o">}</span>
                 
-                <span class="k">if</span> <span class="o">(</span><span class="nx">tab</span><span class="o">)</span> <span class="o">{</span> <span class="c">// might be unsetting</span>
-<span class="c"></span>                    <span class="nx">tab</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;active&#39;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span> <span class="c">// TODO: firing twice</span>
-<span class="c"></span>                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">activeTab</span> <span class="o">&amp;&amp;</span> <span class="nx">activeTab</span> <span class="o">!=</span> <span class="nx">tab</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">activeTab</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;active&#39;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+                <span class="o">}</span>
+                
+                <span class="k">if</span> <span class="o">(</span><span class="nx">activeTab</span> <span class="o">&amp;&amp;</span> <span class="nx">tab</span> <span class="o">!=</span> <span class="nx">activeTab</span><span class="o">)</span> <span class="o">{</span> <span class="c">// no transition if only 1</span>
+<span class="c"></span>                    <span class="k">this</span><span class="o">.</span><span class="nx">contentTransition</span><span class="o">(</span><span class="nx">tab</span><span class="o">,</span> <span class="nx">activeTab</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">tab</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">tab</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;contentVisible&#39;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                <span class="o">}</span>
             <span class="o">},</span>
             <span class="nx">validator</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">return</span> <span class="o">!</span><span class="nx">value</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;disabled&#39;</span><span class="o">);</span> <span class="c">// cannot activate if disabled</span>
@@ -397,30 +402,25 @@
     <span class="k">var</span> <span class="nx">_initTabs</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">tab</span><span class="o">,</span>
             <span class="nx">attr</span><span class="o">,</span>
-            <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">),</span>
-            <span class="nx">node</span><span class="o">,</span>
-            <span class="nx">tabs</span><span class="o">,</span>
-            <span class="nx">contentElements</span><span class="o">,</span>
-            <span class="nx">contentEl</span><span class="o">,</span>
-            <span class="nx">tabParent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_tabParent</span><span class="o">,</span>
-            <span class="nx">contentParent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_contentParent</span><span class="o">;</span>
+            <span class="nx">contentEl</span><span class="o">;</span>
             
-        <span class="nx">tabs</span> <span class="o">=</span> <span class="nx">_getChildNodes</span><span class="o">(</span><span class="nx">tabParent</span><span class="o">);</span>
-        <span class="nx">contentElements</span> <span class="o">=</span> <span class="nx">_getChildNodes</span><span class="o">(</span><span class="nx">contentParent</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">);</span>   
+        <span class="k">var</span> <span class="nx">tabs</span> <span class="o">=</span> <span class="nx">_getChildNodes</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_tabParent</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">contentElements</span> <span class="o">=</span> <span class="nx">_getChildNodes</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_contentParent</span><span class="o">);</span>
 
         <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">tabs</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">attr</span> <span class="o">=</span> <span class="o">{};</span>
             
-            <span class="nx">attr</span><span class="o">.</span><span class="nx">contentEl</span> <span class="o">=</span> <span class="nx">contentElements</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">||</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">contentElements</span><span class="o">[</span><span class="nx">i</span><span class="o">])</span> <span class="o">{</span>
+                <span class="nx">attr</span><span class="o">.</span><span class="nx">contentEl</span> <span class="o">=</span> <span class="nx">contentElements</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+            <span class="o">}</span>
 
             <span class="nx">tab</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Tab</span><span class="o">(</span><span class="nx">tabs</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">attr</span><span class="o">);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">addTab</span><span class="o">(</span><span class="nx">tab</span><span class="o">);</span>
             
             <span class="k">if</span> <span class="o">(</span><span class="nx">tab</span><span class="o">.</span><span class="nx">hasClass</span><span class="o">(</span><span class="nx">tab</span><span class="o">.</span><span class="nx">ACTIVE_CLASSNAME</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">.</span><span class="nx">activeTab</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">tab</span><span class="o">;</span> <span class="c">// TODO: no method call ?</span>
-<span class="c"></span>            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="nx">tab</span><span class="o">.</span><span class="nx">hideContent</span><span class="o">();</span>
-            <span class="o">}</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">.</span><span class="nx">activeTab</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">tab</span><span class="o">;</span> <span class="c">// dont invoke method</span>
+<span class="c"></span>            <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">};</span>
     
