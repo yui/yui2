@@ -1,5 +1,10 @@
 Dom Release Notes
 
+*** version .12.0 ***
+
+* fixed getXY for IE null parent
+* branching set/getStyle at load time instead of run time 
+
 *** version 0.11.3 ***
 
 * fixed getX and getY returning incorrect values for collections 
