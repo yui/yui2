@@ -1,5 +1,9 @@
 Animation Release Notes
 
+*** version 0.12.0 ***
+
+* added boolean finish argument to Anim.stop()
+
 *** version 0.11.3 ***
 
 * no changes
