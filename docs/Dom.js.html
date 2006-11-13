@@ -79,10 +79,16 @@
 <span class="c"></span>    <span class="o">};</span>
     
     <span class="c">// branching at load instead of runtime</span>
-<span class="c"></span>    <span class="k">if</span> <span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">getComputedStyle</span><span class="o">)</span> <span class="o">{</span> <span class="c">// W3C DOM method</span>
+<span class="c"></span>    <span class="k">if</span> <span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">defaultView</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span><span class="o">.</span><span class="nx">defaultView</span><span class="o">.</span><span class="nx">getComputedStyle</span><span class="o">)</span> <span class="o">{</span> <span class="c">// W3C DOM method</span>
 <span class="c"></span>        <span class="nx">getStyle</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">property</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c">// check style object first</span>
-<span class="c"></span>            <span class="k">return</span> <span class="nx">el</span><span class="o">.</span><span class="nx">style</span><span class="o">[</span><span class="nx">property</span><span class="o">]</span> <span class="o">||</span> <span class="nx">getComputedStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="kc">null</span><span class="o">)[</span><span class="nx">property</span><span class="o">];</span>
+            <span class="k">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            
+            <span class="k">var</span> <span class="nx">computed</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">defaultView</span><span class="o">.</span><span class="nx">getComputedStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s1">&#39;&#39;</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">computed</span><span class="o">)</span> <span class="o">{</span> <span class="c">// test computed before touching for safari</span>
+<span class="c"></span>                <span class="nx">value</span> <span class="o">=</span> <span class="nx">computed</span><span class="o">[</span><span class="nx">toCamel</span><span class="o">(</span><span class="nx">property</span><span class="o">)];</span>
+            <span class="o">}</span>
+            
+            <span class="k">return</span> <span class="nx">el</span><span class="o">.</span><span class="nx">style</span><span class="o">[</span><span class="nx">property</span><span class="o">]</span> <span class="o">||</span> <span class="nx">value</span><span class="o">;</span>
         <span class="o">};</span>
     <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">.</span><span class="nx">currentStyle</span> <span class="o">&amp;&amp;</span> <span class="nx">isIE</span><span class="o">)</span> <span class="o">{</span> <span class="c">// IE method</span>
 <span class="c"></span>        <span class="nx">getStyle</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">property</span><span class="o">)</span> <span class="o">{</span>                         
@@ -102,9 +108,10 @@
                     <span class="o">}</span>
                     <span class="k">return</span> <span class="nx">val</span> <span class="o">/</span> <span class="m">100</span><span class="o">;</span>
                     <span class="k">break</span><span class="o">;</span>
-                <span class="nx">default</span><span class="o">:</span>
-                    <span class="k">return</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">currentStyle</span><span class="o">)</span> <span class="o">?</span> <span class="c">// currentStyle first</span>
-<span class="c"></span>                            <span class="nx">el</span><span class="o">.</span><span class="nx">currentStyle</span><span class="o">[</span><span class="nx">property</span><span class="o">]</span> <span class="o">:</span> <span class="nx">el</span><span class="o">.</span><span class="nx">style</span><span class="o">[</span><span class="nx">property</span><span class="o">];</span>
+                <span class="nx">default</span><span class="o">:</span> 
+                    <span class="c">// test currentStyle before touching</span>
+<span class="c"></span>                    <span class="k">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">el</span><span class="o">.</span><span class="nx">currentStyle</span> <span class="o">?</span> <span class="nx">el</span><span class="o">.</span><span class="nx">currentStyle</span><span class="o">[</span><span class="nx">property</span><span class="o">]</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+                    <span class="k">return</span> <span class="o">(</span> <span class="nx">el</span><span class="o">.</span><span class="nx">style</span><span class="o">[</span><span class="nx">property</span><span class="o">]</span> <span class="o">||</span> <span class="nx">value</span> <span class="o">);</span>
             <span class="o">}</span>
         <span class="o">};</span>
     <span class="o">}</span> <span class="k">else</span> <span class="o">{</span> <span class="c">// default to inline only</span>
