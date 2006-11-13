@@ -20,12 +20,6 @@ YAHOO.widget.TVFadeOut = function(el, callback) {
      */
     this.callback = callback;
 
-    /**
-     * LogWriter instance, only available in the debug version
-     * @property logger
-     * @type YAHOO.widget.LogWriter
-     * @private
-     */
     this.logger = new YAHOO.widget.LogWriter(this.toString());
 };
 

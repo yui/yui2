@@ -2082,8 +2082,6 @@ YAHOO.widget.TVFadeIn = function(el, callback) {
      */
     this.callback = callback;
 
-    /**
-     * LogWriter instance, only available in the debug version
 };
 
 YAHOO.widget.TVFadeIn.prototype = {
@@ -2145,8 +2143,6 @@ YAHOO.widget.TVFadeOut = function(el, callback) {
      */
     this.callback = callback;
 
-    /**
-     * LogWriter instance, only available in the debug version
 };
 
 YAHOO.widget.TVFadeOut.prototype = {

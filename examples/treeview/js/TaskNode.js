@@ -45,7 +45,8 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
          * Custom event that is fired when the check box is clicked.  The
          * custom event is defined on the tree instance, so there is a single
          * event that handles all nodes in the tree.  The node clicked is 
-         * provided as an argument
+         * provided as an argument.  Note, your custom node implentation can
+         * implement its own node specific events this way.
          *
          * @event checkClick
          * @for YAHOO.widget.TreeView
