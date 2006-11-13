@@ -8,7 +8,7 @@ Version: 0.12
 
 
 /**
-* @module Menu
+* @module menu
 * @description <p>The Menu Library features a collection of widgets that make 
 * it easy to add menus to your website or web application.  With the Menu 
 * Library you can create website fly-out menus, customized context menus, or 
@@ -6451,17 +6451,30 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
 
         case 40:    // Down arrow
 
-            this.clearActiveItem();
+            if(this.activeItem != oItem) {
 
-            oItemCfg.setProperty("selected", true);
-            oItem.focus();
+                this.clearActiveItem();
+
+                oItemCfg.setProperty("selected", true);
+                oItem.focus();
+            
+            }
 
             oSubmenu = oItemCfg.getProperty("submenu");
 
             if(oSubmenu) {
 
-                oSubmenu.show();
-                oSubmenu.setInitialSelection();
+                if(oSubmenu.cfg.getProperty("visible")) {
+
+                    oSubmenu.setInitialSelection();
+                    oSubmenu.setInitialFocus();
+                
+                }
+                else {
+
+                    oSubmenu.show();
+                
+                }
 
             }
 
