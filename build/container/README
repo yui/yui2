@@ -1,5 +1,37 @@
 Container Release Notes
 
+*** version 0.12 ***
+
+	All Classes
+	   - New documentation format implemented, and removed unnecessary prototype null references previously used for generating documentation
+	   - Modified the 
+
+	Config
+	   - Added 'undefined' check when reading initial properties for .reset() 
+	   - Fixed Firefox warning on .resetProperty()
+	   - Fixed issue preventing resetProperty() from resetting values correctly
+
+	Module
+	   - Removed unused "childNodesInDom" property
+
+	Overlay
+	   - Converted center() to use Dom utility
+	   - Fixed configVisible() to properly detect actual visible/hidden status in Internet Explorer, which reports "inherit" for all elements by default.
+	   - Updated onDomResize to properly reapply "context" property
+	   - Unified scroll/resize handlers so that they fire properly (when the event has completed) as opposed to constantly (as seen in Mozilla-based browsers)
+		
+	Panel
+	   - Modified modality mask to show before Panel is shown (prior to any animation)
+	   - Modified buildWrapper to eliminate cloning of the initial markup module, which fixes issues with select options not maintaining their default selections in IE
+	   - Modality mask is now z-indexed properly so that the mask z-index is always one less than the Panel z-index
+		
+	Dialog
+	   - Fixed Connection to get "action" attribute using getAttribute, to allow for form fields named "action"
+	   - Added support for "GET" by retrieving the form "method" rather than always defaulting to "POST"
+		
+	KeyListener
+	   - Fixed to work properly with Safari 2.0 by matching against keyCode or charCode
+
 *** version 0.11.4 ***
 	
 	- Panel: Modality mask is now properly removed from DOM on Panel destroy.
