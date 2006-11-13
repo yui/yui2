@@ -2,14 +2,12 @@
 <html>
 <head>
 	<title>API: event  YAHOO.util.CustomEvent   (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/reset.css">
-	<link rel="stylesheet" type="text/css" href="assets/fonts.css">
-	<link rel="stylesheet" type="text/css" href="assets/grids.css">
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css">
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
 
 <body id="yahoo-com">
-<div id="doc" class="yui-t1">
+<div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
@@ -57,30 +55,41 @@ that can be subscribed to by one or more independent component.
                             <div class="detail">
                                 <strong>YAHOO.util.CustomEvent</strong>
                                 <code>
-                                        (
+                                    (
   
                                         
-                                            &lt;String&gt; type, 
-                                            &lt;Object&gt; oScope, 
-                                            &lt;boolean&gt; silent
-                                        )
+                                                
+                                                type
+
+                                                , 
+                                                oScope
+
+                                                , 
+                                                silent
+                                    )
                                 </code>
                                 <div class="description">
                                         <dl>
                                             <dt>Parameters:</dt>
                                                 <dd>
-                                                    <code>type</code> - 
+                                                    <code>type
+                                                    &lt;String&gt; 
+                                                    </code>
                                                      The type of event, which is passed to the callback
 when the event fires
                                                 </dd>
                                                 <dd>
-                                                    <code>oScope</code> - 
+                                                    <code>oScope
+                                                    &lt;Object&gt; 
+                                                    </code>
                                                      The context the event will fire from.  "this" will
 refer to this object in the callback.  Default value: 
 the window object.  The listener can override this.
                                                 </dd>
                                                 <dd>
-                                                    <code>silent</code> - 
+                                                    <code>silent
+                                                    &lt;boolean&gt; 
+                                                    </code>
                                                      pass true to prevent the event from writing to
 the log system
                                                 </dd>
@@ -95,36 +104,6 @@ the log system
                         <div class="section field details">
                             <h3><a name="field_detail">Properties</a></h3>
                             <div class="content">
-                                    <h4><a name="YAHOO.util.CustomEvent.FLAT">YAHOO.util.CustomEvent.FLAT</a>
-                                        <code>- static int</code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description">
-                                            Subscriber listener sigature constant.  The FLAT type returns two
-parameters: the first argument passed to fire and the optional 
-custom object
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    <h4><a name="YAHOO.util.CustomEvent.LIST">YAHOO.util.CustomEvent.LIST</a>
-                                        <code>- static int</code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description">
-                                            Subscriber listener sigature constant.  The LIST type returns three
-parameters: the event type, the array of args passed to fire, and
-the optional custom object
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
                                     <h4><a name="scope">scope</a>
                                         <code>- object</code>
                                     </h4>
@@ -209,6 +188,36 @@ to true to disable logging for this event.
 
 
                                     <hr />
+                                    <h4><a name="YAHOO.util.CustomEvent.FLAT">YAHOO.util.CustomEvent.FLAT</a>
+                                        <code>- static int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Subscriber listener sigature constant.  The FLAT type returns two
+parameters: the first argument passed to fire and the optional 
+custom object
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="YAHOO.util.CustomEvent.LIST">YAHOO.util.CustomEvent.LIST</a>
+                                        <code>- static int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Subscriber listener sigature constant.  The LIST type returns three
+parameters: the event type, the array of args passed to fire, and
+the optional custom object
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
 
 
                             </div>
@@ -227,10 +236,13 @@ to true to disable logging for this event.
                                         
                                         void
                                             <strong>fire</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Object*&gt; arguments
-                                                )
+                                                        
+                                                         arguments
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -246,10 +258,11 @@ method</li>
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>arguments</code> - 
+                                                            <code>arguments &lt;Object*&gt;</code>
                                                              an arbitrary set of parameters to pass to 
 the handler.
                                                         </dd>
@@ -276,12 +289,21 @@ the handler.
                                         
                                         void
                                             <strong>subscribe</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Function&gt; fn, 
-                                                    &lt;Object&gt; obj, 
-                                                    &lt;boolean|Object&gt; override
-                                                )
+                                                        
+                                                         fn
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                                        , 
+                                                         override
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -289,19 +311,20 @@ the handler.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>fn</code> - 
+                                                            <code>fn &lt;Function&gt;</code>
                                                                     The function to execute
                                                         </dd>
                                                         <dd>
-                                                            <code>obj</code> - 
+                                                            <code>obj &lt;Object&gt;</code>
                                                                    An object to be passed along when the event 
 fires
                                                         </dd>
                                                         <dd>
-                                                            <code>override</code> - 
+                                                            <code>override &lt;boolean|Object&gt;</code>
                                                              If true, the obj passed in becomes 
 the execution scope of the listener.
 if an object, that object becomes the
@@ -330,6 +353,8 @@ the execution scope.
                                         
                                         void
                                             <strong>toString</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -337,6 +362,7 @@ the execution scope.
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -359,11 +385,17 @@ the execution scope.
                                         
                                         boolean
                                             <strong>unsubscribe</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Function&gt; fn, 
-                                                    &lt;Object&gt; obj
-                                                )
+                                                        
+                                                         fn
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -371,15 +403,16 @@ the execution scope.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>fn</code> - 
+                                                            <code>fn &lt;Function&gt;</code>
                                                               The function to execute
                                                         </dd>
                                                         <dd>
-                                                            <code>obj</code> - 
-                                                             An object to be passed along when the event fires
+                                                            <code>obj &lt;Object&gt;</code>
+                                                              The custom object passed to subscribe (optional)
                                                         </dd>
                                                 </dl>
 
@@ -404,6 +437,8 @@ the execution scope.
                                         
                                         void
                                             <strong>unsubscribeAll</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -411,6 +446,7 @@ the execution scope.
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -439,12 +475,23 @@ the execution scope.
                                         
                                         
                                             <strong>subscribeEvent</strong>
-                                                (
+
+                                            (
                                                 
-                                                    &lt;Function&gt; fn, 
-                                                    &lt;Object&gt; obj, 
-                                                    &lt;boolean|Object&gt; override
-                                                )
+                                                        
+                                                         fn
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                                        , 
+                                                         override
+                                                    
+                                                
+                                            )
+
                                         </code>
                                         
                                         <div class="description">
@@ -455,25 +502,28 @@ already fired has a new subscriber.
                                         </div>
 
                                         <div class="description">
+
+
                                                 <dl>
-                                                    <dt>Arguments:</dt>
+                                                    <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>fn</code> - 
+                                                            <code>fn &lt;Function&gt;</code>
                                                              The function to execute
                                                         </dd>
                                                         <dd>
-                                                            <code>obj</code> - 
+                                                            <code>obj &lt;Object&gt;</code>
                                                              An object to be passed along when the event 
 fires
                                                         </dd>
                                                         <dd>
-                                                            <code>override</code> - 
+                                                            <code>override &lt;boolean|Object&gt;</code>
                                                              If true, the obj passed in becomes 
 the execution scope of the listener.
 if an object, that object becomes the
 the execution scope.
                                                         </dd>
                                                 </dl>
+
 
                                         </div>
 
@@ -521,26 +571,26 @@ the execution scope.
                     <div class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li><a href="#YAHOO.util.CustomEvent.FLAT">YAHOO.util.CustomEvent.FLAT</a>
-                                        <!--<code>&lt;string&gt;</code>-->
-                                </li>
-                                <li><a href="#YAHOO.util.CustomEvent.LIST">YAHOO.util.CustomEvent.LIST</a>
-                                        <!--<code>&lt;string&gt;</code>-->
-                                </li>
                                 <li><a href="#scope">scope</a>
-                                        <!--<code>&lt;string&gt;</code>-->
+                                        <!--<code>&lt;int&gt;</code>-->
                                 </li>
                                 <li><a href="#signature">signature</a>
-                                        <!--<code>&lt;string&gt;</code>-->
+                                        <!--<code>&lt;int&gt;</code>-->
                                 </li>
                                 <li><a href="#silent">silent</a>
-                                        <!--<code>&lt;string&gt;</code>-->
+                                        <!--<code>&lt;int&gt;</code>-->
                                 </li>
                                 <li><a href="#subscribers">subscribers</a>
-                                        <!--<code>&lt;string&gt;</code>-->
+                                        <!--<code>&lt;int&gt;</code>-->
                                 </li>
                                 <li><a href="#type">type</a>
-                                        <!--<code>&lt;string&gt;</code>-->
+                                        <!--<code>&lt;int&gt;</code>-->
+                                </li>
+                                <li><a href="#YAHOO.util.CustomEvent.FLAT">YAHOO.util.CustomEvent.FLAT</a>
+                                        <!--<code>&lt;int&gt;</code>-->
+                                </li>
+                                <li><a href="#YAHOO.util.CustomEvent.LIST">YAHOO.util.CustomEvent.LIST</a>
+                                        <!--<code>&lt;int&gt;</code>-->
                                 </li>
                         </ul>
                     </div>

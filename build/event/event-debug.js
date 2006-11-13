@@ -1252,7 +1252,11 @@ if (!YAHOO.util.Event) {
             _load: function(e) {
                 loadComplete = true;
                 var EU = YAHOO.util.Event;
-                EU._simpleRemove(window, "load", EU._load);
+                // Remove the listener to assist with the IE memory issue, but not
+                // for other browsers because FF 1.0x does not like it.
+                if (this.isIE) {
+                    EU._simpleRemove(window, "load", EU._load);
+                }
             },
 
             /**
