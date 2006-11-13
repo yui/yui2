@@ -767,24 +767,24 @@ YAHOO.util.Connect =
    * @private
    * @static
    * @param {string} postData The HTTP POST data
-   * @return {array} formFields Collection of hidden fields.
+   * @return {array} formElements Collection of hidden fields.
    */
 	appendPostData:function(postData)
 	{
-		var formFields = new Array();
+		var formElements = new Array();
 		var postMessage = postData.split('&');
 		for(var i=0; i < postMessage.length; i++){
 			var delimitPos = postMessage[i].indexOf('=');
 			if(delimitPos != -1){
-				formFields[i] = document.createElement('input');
-				formFields[i].type = 'hidden';
-				formFields[i].name = postMessage[i].substring(0,delimitPos);
-				formFields[i].value = postMessage[i].substring(delimitPos+1);
-				this._formNode.appendChild(formFields[i]);
+				formElements[i] = document.createElement('input');
+				formElements[i].type = 'hidden';
+				formElements[i].name = postMessage[i].substring(0,delimitPos);
+				formElements[i].value = postMessage[i].substring(delimitPos+1);
+				this._formNode.appendChild(formElements[i]);
 			}
 		}
 
-		return formFields;
+		return formElements;
 	},
 
   /**
@@ -827,9 +827,13 @@ YAHOO.util.Connect =
 		this._formNode.submit();
 
 		if(oElements && oElements.length > 0){
-			for(var i=0; i < oElements.length; i++){
-				this._formNode.removeChild(oElements[i]);
+			try
+			{
+				for(var i=0; i < oElements.length; i++){
+					this._formNode.removeChild(oElements[i]);
+				}
 			}
+			catch(e){}
 		}
 
 		// Reset HTML form status properties.

@@ -72,11 +72,13 @@ this._isFormSubmit=true;this._sFormData=this._sFormData.substr(0,this._sFormData
 else if(typeof secureURI=='string'){io.src=secureUri;}}
 else{var io=document.createElement('iframe');io.id=frameId;io.name=frameId;}
 io.style.position='absolute';io.style.top='-1000px';io.style.left='-1000px';document.body.appendChild(io);},appendPostData:function(postData)
-{var formFields=new Array();var postMessage=postData.split('&');for(var i=0;i<postMessage.length;i++){var delimitPos=postMessage[i].indexOf('=');if(delimitPos!=-1){formFields[i]=document.createElement('input');formFields[i].type='hidden';formFields[i].name=postMessage[i].substring(0,delimitPos);formFields[i].value=postMessage[i].substring(delimitPos+1);this._formNode.appendChild(formFields[i]);}}
-return formFields;},uploadFile:function(id,callback,uri,postData){var frameId='yuiIO'+id;var io=document.getElementById(frameId);this._formNode.action=uri;this._formNode.method='POST';this._formNode.target=frameId;if(this._formNode.encoding){this._formNode.encoding='multipart/form-data';}
+{var formElements=new Array();var postMessage=postData.split('&');for(var i=0;i<postMessage.length;i++){var delimitPos=postMessage[i].indexOf('=');if(delimitPos!=-1){formElements[i]=document.createElement('input');formElements[i].type='hidden';formElements[i].name=postMessage[i].substring(0,delimitPos);formElements[i].value=postMessage[i].substring(delimitPos+1);this._formNode.appendChild(formElements[i]);}}
+return formElements;},uploadFile:function(id,callback,uri,postData){var frameId='yuiIO'+id;var io=document.getElementById(frameId);this._formNode.action=uri;this._formNode.method='POST';this._formNode.target=frameId;if(this._formNode.encoding){this._formNode.encoding='multipart/form-data';}
 else{this._formNode.enctype='multipart/form-data';}
 if(postData){var oElements=this.appendPostData(postData);}
-this._formNode.submit();if(oElements&&oElements.length>0){for(var i=0;i<oElements.length;i++){this._formNode.removeChild(oElements[i]);}}
+this._formNode.submit();if(oElements&&oElements.length>0){try
+{for(var i=0;i<oElements.length;i++){this._formNode.removeChild(oElements[i]);}}
+catch(e){}}
 this.resetFormState();var uploadCallback=function()
 {var obj={};obj.tId=id;obj.argument=callback.argument;try
 {obj.responseText=io.contentWindow.document.body?io.contentWindow.document.body.innerHTML:null;obj.responseXML=io.contentWindow.document.XMLDocument?io.contentWindow.document.XMLDocument:io.contentWindow.document;}
