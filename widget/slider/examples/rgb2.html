@@ -204,7 +204,8 @@ YAHOO.example.ColorPicker = function() {
         Dom.get("hexval").value = Color.rgb2hex(rgb[0], rgb[1], rgb[2]);
     };
 
-    var hueUpdate = function() {
+    var hueUpdate = function(newOffset) {
+        YAHOO.log("hue update: " + newOffset , "warn");
         var rgb = Color.hsv2rgb(getH(), 1, 1);
         var styleDef = "rgb(" + rgb.join(",") + ")";
         Dom.setStyle("pickerDiv", "background-color", styleDef);
@@ -212,7 +213,8 @@ YAHOO.example.ColorPicker = function() {
         swatchUpdate();
     };
 
-    pickerUpdate = function() {
+    pickerUpdate = function(newOffset) {
+        YAHOO.log("picker update [" + newOffset.x + ", " + newOffset.y + "]" , "warn");
         swatchUpdate();
     };
 
@@ -221,13 +223,13 @@ YAHOO.example.ColorPicker = function() {
         init: function () {
 
             hue = Slider.getVertSlider("hueBg", "hueThumb", 0, pickerSize);
-            hue.subscribe("slideEnd", hueUpdate);
+            hue.subscribe("change", hueUpdate);
 
             picker = Slider.getSliderRegion("pickerDiv", "selector", 
                     0, pickerSize, 0, pickerSize);
-            picker.subscribe("slideEnd", pickerUpdate);
+            picker.subscribe("change", pickerUpdate);
 
-            hueUpdate();
+            hueUpdate(0);
 
             panel = new YAHOO.util.DD("ddPicker");
             panel.setHandleElId("pickerHandle");

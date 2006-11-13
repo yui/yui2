@@ -49,12 +49,6 @@ YAHOO.widget.Slider = function(sElementId, sGroup, oThumb, sType) {
 
         //this.removeInvalidHandleType("A");
 
-        /**
-         * Logger instance, only available in the debug version
-         * @property logger
-         * @type YAHOO.widget.LogWriter
-         * @private
-         */
         this.logger = new YAHOO.widget.LogWriter(this.toString());
 
         var self = this;
@@ -975,12 +969,6 @@ YAHOO.widget.SliderThumb = function(id, sGroup, iLeft, iRight, iUp, iDown, iTick
 
     //this.removeInvalidHandleType("A");
 
-    /**
-     * Logger instance, only available in debug version
-     * @property logger
-     * @type {YAHOO.widget.LogWriter}
-     * @private
-     */
     this.logger = new YAHOO.widget.LogWriter(this.toString());
 
     /**

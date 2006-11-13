@@ -48,8 +48,6 @@ YAHOO.widget.Slider = function(sElementId, sGroup, oThumb, sType) {
 
         //this.removeInvalidHandleType("A");
 
-        /**
-         * Logger instance, only available in the debug version
 
         var self = this;
 
@@ -933,8 +931,6 @@ YAHOO.widget.SliderThumb = function(id, sGroup, iLeft, iRight, iUp, iDown, iTick
 
     //this.removeInvalidHandleType("A");
 
-    /**
-     * Logger instance, only available in debug version
 
     /**
      * Overrides the isTarget property in YAHOO.util.DragDrop
