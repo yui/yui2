@@ -1,8 +1,5 @@
 <?php
 header("Content-type: text/html");
-include_once('nonsenseGenerator/nonsenseGenerator.class.php');
-
-$nonsense = new nonSenseGenerator();
 
 $items = 5;
 $type = isset($_GET['type']) ? $_GET['type'] : 'list';
@@ -16,7 +13,7 @@ if ($type == 'list') {
 <ul>
 <?php
 for ($i =0; $i < $items; $i++) {
-    ?><li><a href="#"><?php echo $nonsense->getNonSense(1) ?></a></li>
+    ?><li><a href="#">lorem ipsum dolor sit amet</a></li>
 <?php
 }
 ?>
@@ -24,15 +21,8 @@ for ($i =0; $i < $items; $i++) {
 
 <?php
 } else if ($type == 'para') {
-    ?><p><?php echo $nonsense->getNonSense(1) . '. ' . 
-                    $nonsense->getNonSense(1) . '. ' .
-                    $nonsense->getNonSense(1)?>.</p>
-<p><?php echo $nonsense->getNonSense(1) . '. ' . 
-                    $nonsense->getNonSense(1) . '. ' .
-                    $nonsense->getNonSense(1)?>.</p>
-    <?php
+    ?><p> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut.</p> 
+<p> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut.</p> 
+<?php    
 }
-
-
-
 ?>
