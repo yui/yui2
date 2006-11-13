@@ -1,0 +1,1170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: autocomplete   DataSource.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css">
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>AutoComplete Widget&nbsp;</h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_autocomplete.html">autocomplete</a>
+                
+                 &gt; DataSource.js (source view) 
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <div id="srcout">
+<div class="highlight" ><pre><span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+
+<span class="c">/**</span>
+<span class="c"> * The DataSource classes manages sending a request and returning response from a live</span>
+<span class="c"> * database. Supported data include local JavaScript arrays and objects and databases</span>
+<span class="c"> * accessible via XHR connections. Supported response formats include JavaScript arrays,</span>
+<span class="c"> * JSON, XML, and flat-file textual data.</span>
+<span class="c"> *  </span>
+<span class="c"> * @class DataSource</span>
+<span class="c"> * @constructor</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
+    <span class="c">/* abstract class */</span>
+<span class="o">};</span>
+
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public constants</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Error message for null data responses.</span>
+<span class="c"> *</span>
+<span class="c"> * @property ERROR_DATANULL</span>
+<span class="c"> * @type String</span>
+<span class="c"> * @static</span>
+<span class="c"> * @final</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span> <span class="o">=</span> <span class="s2">&quot;Response data was null&quot;</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Error message for data responses with parsing errors.</span>
+<span class="c"> *</span>
+<span class="c"> * @property ERROR_DATAPARSE</span>
+<span class="c"> * @type String</span>
+<span class="c"> * @static</span>
+<span class="c"> * @final</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATAPARSE</span> <span class="o">=</span> <span class="s2">&quot;Response data could not be parsed&quot;</span><span class="o">;</span>
+
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public member variables</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Max size of the local cache.  Set to 0 to turn off caching.  Caching is</span>
+<span class="c"> * useful to reduce the number of server connections.  Recommended only for data</span>
+<span class="c"> * sources that return comprehensive results for queries or when stale data is</span>
+<span class="c"> * not an issue.</span>
+<span class="c"> *</span>
+<span class="c"> * @property maxCacheEntries</span>
+<span class="c"> * @type Number</span>
+<span class="c"> * @default 15</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">maxCacheEntries</span> <span class="o">=</span> <span class="m">15</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Use this to equate cache matching with the type of matching done by your live</span>
+<span class="c"> * data source. If caching is on and queryMatchContains is true, the cache</span>
+<span class="c"> * returns results that &quot;contain&quot; the query string. By default,</span>
+<span class="c"> * queryMatchContains is set to false, meaning the cache only returns results</span>
+<span class="c"> * that &quot;start with&quot; the query string.</span>
+<span class="c"> *</span>
+<span class="c"> * @property queryMatchContains</span>
+<span class="c"> * @type Boolean</span>
+<span class="c"> * @default false</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">queryMatchContains</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Enables query subset matching. If caching is on and queryMatchSubset is</span>
+<span class="c"> * true, substrings of queries will return matching cached results. For</span>
+<span class="c"> * instance, if the first query is for &quot;abc&quot; susequent queries that start with</span>
+<span class="c"> * &quot;abc&quot;, like &quot;abcd&quot;, will be queried against the cache, and not the live data</span>
+<span class="c"> * source. Recommended only for DataSources that return comprehensive results</span>
+<span class="c"> * for queries with very few characters.</span>
+<span class="c"> *</span>
+<span class="c"> * @property queryMatchSubset</span>
+<span class="c"> * @type Boolean</span>
+<span class="c"> * @default false</span>
+<span class="c"> *</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">queryMatchSubset</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Enables query case-sensitivity matching. If caching is on and</span>
+<span class="c"> * queryMatchCase is true, queries will only return results for case-sensitive</span>
+<span class="c"> * matches.</span>
+<span class="c"> *</span>
+<span class="c"> * @property queryMatchCase</span>
+<span class="c"> * @type Boolean</span>
+<span class="c"> * @default false</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">queryMatchCase</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+ <span class="c">/**</span>
+<span class="c"> * Public accessor to the unique name of the DataSource instance.</span>
+<span class="c"> *</span>
+<span class="c"> * @method toString</span>
+<span class="c"> * @return {String} Unique name of the DataSource instance</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">toString</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s2">&quot;DataSource &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sName</span><span class="o">;</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Retrieves query results, first checking the local cache, then making the</span>
+<span class="c"> * query request to the live data source as defined by the function doQuery.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getResults</span>
+<span class="c"> * @param oCallbackFn {HTMLFunction} Callback function defined by oParent object to which to return results.</span>
+<span class="c"> * @param sQuery {String} Query string.</span>
+<span class="c"> * @param oParent {Object} The object instance that has requested data.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">getResults</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oCallbackFn</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">)</span> <span class="o">{</span>
+    
+    <span class="c">// First look in cache</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">aResults</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_doQueryCache</span><span class="o">(</span><span class="nx">oCallbackFn</span><span class="o">,</span><span class="nx">sQuery</span><span class="o">,</span><span class="nx">oParent</span><span class="o">);</span>
+    
+    <span class="c">// Not in cache, so get results from server</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">aResults</span><span class="o">.</span><span class="nx">length</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">queryEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">doQuery</span><span class="o">(</span><span class="nx">oCallbackFn</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Abstract method implemented by subclasses to make a query to the live data</span>
+<span class="c"> * source. Must call the callback function with the response returned from the</span>
+<span class="c"> * query. Populates cache (if enabled).</span>
+<span class="c"> *</span>
+<span class="c"> * @method doQuery</span>
+<span class="c"> * @param oCallbackFn {HTMLFunction} Callback function implemented by oParent to which to return results.</span>
+<span class="c"> * @param sQuery {String} Query string.</span>
+<span class="c"> * @param oParent {Object} The object instance that has requested data.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">doQuery</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oCallbackFn</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">/* override this */</span> 
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Flushes cache.</span>
+<span class="c"> *</span>
+<span class="c"> * @method flushCache</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">flushCache</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_aCache</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_aCache</span> <span class="o">=</span> <span class="o">[];</span>
+    <span class="o">}</span>
+    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_aCacheHelper</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_aCacheHelper</span> <span class="o">=</span> <span class="o">[];</span>
+    <span class="o">}</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">cacheFlushEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public events</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Fired when a query is made to the live data source.</span>
+<span class="c"> *</span>
+<span class="c"> * @event queryEvent</span>
+<span class="c"> * @param oSelf {Object} The DataSource instance.</span>
+<span class="c"> * @param oParent {Object} The requesting object.</span>
+<span class="c"> * @param sQuery {String} The query string.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">queryEvent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Fired when a query is made to the local cache.</span>
+<span class="c"> *</span>
+<span class="c"> * @event cacheQueryEvent</span>
+<span class="c"> * @param oSelf {Object} The DataSource instance.</span>
+<span class="c"> * @param oParent {Object} The requesting object.</span>
+<span class="c"> * @param sQuery {String} The query string.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">cacheQueryEvent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Fired when data is retrieved from the live data source.</span>
+<span class="c"> *</span>
+<span class="c"> * @event getResultsEvent</span>
+<span class="c"> * @param oSelf {Object} The DataSource instance.</span>
+<span class="c"> * @param oParent {Object} The requesting object.</span>
+<span class="c"> * @param sQuery {String} The query string.</span>
+<span class="c"> * @param aResults {Object[]} Array of result objects.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">getResultsEvent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    
+<span class="c">/**</span>
+<span class="c"> * Fired when data is retrieved from the local cache.</span>
+<span class="c"> *</span>
+<span class="c"> * @event getCachedResultsEvent</span>
+<span class="c"> * @param oSelf {Object} The DataSource instance.</span>
+<span class="c"> * @param oParent {Object} The requesting object.</span>
+<span class="c"> * @param sQuery {String} The query string.</span>
+<span class="c"> * @param aResults {Object[]} Array of result objects.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">getCachedResultsEvent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Fired when an error is encountered with the live data source.</span>
+<span class="c"> *</span>
+<span class="c"> * @event dataErrorEvent</span>
+<span class="c"> * @param oSelf {Object} The DataSource instance.</span>
+<span class="c"> * @param oParent {Object} The requesting object.</span>
+<span class="c"> * @param sQuery {String} The query string.</span>
+<span class="c"> * @param sMsg {String} Error message string</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">dataErrorEvent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Fired when the local cache is flushed.</span>
+<span class="c"> *</span>
+<span class="c"> * @event cacheFlushEvent</span>
+<span class="c"> * @param oSelf {Object} The DataSource instance</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">cacheFlushEvent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Private member variables</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Internal class variable to index multiple DataSource instances.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _nIndex</span>
+<span class="c"> * @type Number</span>
+<span class="c"> * @private</span>
+<span class="c"> * @static</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">_nIndex</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Name of DataSource instance.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _sName</span>
+<span class="c"> * @type String</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_sName</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Local cache of data result objects indexed chronologically.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _aCache</span>
+<span class="c"> * @type Object[]</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_aCache</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Private methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Initializes DataSource instance.</span>
+<span class="c"> *  </span>
+<span class="c"> * @method _init</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_init</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c">// Validate and initialize public configs</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">maxCacheEntries</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">maxCacheEntries</span><span class="o">;</span>
+    <span class="k">if</span><span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">maxCacheEntries</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="nx">maxCacheEntries</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">))</span> <span class="o">{</span>
+        <span class="nx">maxCacheEntries</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="c">// Initialize local cache</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">maxCacheEntries</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_aCache</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_aCache</span> <span class="o">=</span> <span class="o">[];</span>
+    <span class="o">}</span>
+    
+    <span class="k">this</span><span class="o">.</span><span class="nx">_sName</span> <span class="o">=</span> <span class="s2">&quot;instance&quot;</span> <span class="o">+</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">_nIndex</span><span class="o">;</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">_nIndex</span><span class="o">++;</span>
+    
+    <span class="k">this</span><span class="o">.</span><span class="nx">queryEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;query&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">cacheQueryEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;cacheQuery&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">getResultsEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;getResults&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">getCachedResultsEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;getCachedResults&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">dataErrorEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;dataError&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">cacheFlushEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;cacheFlush&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Adds a result object to the local cache, evicting the oldest element if the </span>
+<span class="c"> * cache is full. Newer items will have higher indexes, the oldest item will have</span>
+<span class="c"> * index of 0. </span>
+<span class="c"> *</span>
+<span class="c"> * @method _addCacheElem</span>
+<span class="c"> * @param oResult {Object} Data result object, including array of results.</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_addCacheElem</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oResult</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">aCache</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_aCache</span><span class="o">;</span>
+    <span class="c">// Don&#39;t add if anything important is missing.</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(!</span><span class="nx">aCache</span> <span class="o">||</span> <span class="o">!</span><span class="nx">oResult</span> <span class="o">||</span> <span class="o">!</span><span class="nx">oResult</span><span class="o">.</span><span class="nx">query</span> <span class="o">||</span> <span class="o">!</span><span class="nx">oResult</span><span class="o">.</span><span class="nx">results</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="c">// If the cache is full, make room by removing from index=0</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">aCache</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;=</span> <span class="k">this</span><span class="o">.</span><span class="nx">maxCacheEntries</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">aCache</span><span class="o">.</span><span class="nx">shift</span><span class="o">();</span>
+    <span class="o">}</span>
+        
+    <span class="c">// Add to cache, at the end of the array</span>
+<span class="c"></span>    <span class="nx">aCache</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">oResult</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Queries the local cache for results. If query has been cached, the callback</span>
+<span class="c"> * function is called with the results, and the cached is refreshed so that it</span>
+<span class="c"> * is now the newest element.  </span>
+<span class="c"> *</span>
+<span class="c"> * @method _doQueryCache</span>
+<span class="c"> * @param oCallbackFn {HTMLFunction} Callback function defined by oParent object to which to return results.</span>
+<span class="c"> * @param sQuery {String} Query string.</span>
+<span class="c"> * @param oParent {Object} The object instance that has requested data.</span>
+<span class="c"> * @return aResults {Object[]} Array of results from local cache if found, otherwise null.</span>
+<span class="c"> * @private </span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_doQueryCache</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oCallbackFn</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">aResults</span> <span class="o">=</span> <span class="o">[];</span>
+    <span class="k">var</span> <span class="nx">bMatchFound</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">aCache</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_aCache</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">nCacheLength</span> <span class="o">=</span> <span class="o">(</span><span class="nx">aCache</span><span class="o">)</span> <span class="o">?</span> <span class="nx">aCache</span><span class="o">.</span><span class="nx">length</span> <span class="o">:</span> <span class="m">0</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">bMatchContains</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">queryMatchContains</span><span class="o">;</span>
+    
+    <span class="c">// If cache is enabled...</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="nx">maxCacheEntries</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">aCache</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">nCacheLength</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">cacheQueryEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">);</span>
+        <span class="c">// If case is unimportant, normalize query now instead of in loops</span>
+<span class="c"></span>        <span class="k">if</span><span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">queryMatchCase</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">sOrigQuery</span> <span class="o">=</span> <span class="nx">sQuery</span><span class="o">;</span>
+            <span class="nx">sQuery</span> <span class="o">=</span> <span class="nx">sQuery</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="c">// Loop through each cached element&#39;s query property...</span>
+<span class="c"></span>        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">nCacheLength</span><span class="o">-</span><span class="m">1</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">resultObj</span> <span class="o">=</span> <span class="nx">aCache</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+            <span class="k">var</span> <span class="nx">aAllResultItems</span> <span class="o">=</span> <span class="nx">resultObj</span><span class="o">.</span><span class="nx">results</span><span class="o">;</span>
+            <span class="c">// If case is unimportant, normalize match key for comparison</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">matchKey</span> <span class="o">=</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">queryMatchCase</span><span class="o">)</span> <span class="o">?</span>
+                <span class="nb">encodeURIComponent</span><span class="o">(</span><span class="nx">resultObj</span><span class="o">.</span><span class="nx">query</span><span class="o">).</span><span class="nx">toLowerCase</span><span class="o">():</span>
+                <span class="nb">encodeURIComponent</span><span class="o">(</span><span class="nx">resultObj</span><span class="o">.</span><span class="nx">query</span><span class="o">);</span>
+            
+            <span class="c">// If a cached match key exactly matches the query...</span>
+<span class="c"></span>            <span class="k">if</span><span class="o">(</span><span class="nx">matchKey</span> <span class="o">==</span> <span class="nx">sQuery</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c">// Stash all result objects into aResult[] and stop looping through the cache.</span>
+<span class="c"></span>                    <span class="nx">bMatchFound</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="nx">aResults</span> <span class="o">=</span> <span class="nx">aAllResultItems</span><span class="o">;</span>
+                    
+                    <span class="c">// The matching cache element was not the most recent,</span>
+<span class="c"></span>                    <span class="c">// so now we need to refresh the cache.</span>
+<span class="c"></span>                    <span class="k">if</span><span class="o">(</span><span class="nx">i</span> <span class="o">!=</span> <span class="nx">nCacheLength</span><span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>                        
+                        <span class="c">// Remove element from its original location</span>
+<span class="c"></span>                        <span class="nx">aCache</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">i</span><span class="o">,</span><span class="m">1</span><span class="o">);</span>
+                        <span class="c">// Add element as newest</span>
+<span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">_addCacheElem</span><span class="o">(</span><span class="nx">resultObj</span><span class="o">);</span>
+                    <span class="o">}</span>
+                    <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="c">// Else if this query is not an exact match and subset matching is enabled...</span>
+<span class="c"></span>            <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">queryMatchSubset</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c">// Loop through substrings of each cached element&#39;s query property...</span>
+<span class="c"></span>                <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">sQuery</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span> <span class="nx">j</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">;</span> <span class="nx">j</span><span class="o">--)</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">subQuery</span> <span class="o">=</span> <span class="nx">sQuery</span><span class="o">.</span><span class="nx">substr</span><span class="o">(</span><span class="m">0</span><span class="o">,</span><span class="nx">j</span><span class="o">);</span>
+                    
+                    <span class="c">// If a substring of a cached sQuery exactly matches the query...</span>
+<span class="c"></span>                    <span class="k">if</span><span class="o">(</span><span class="nx">matchKey</span> <span class="o">==</span> <span class="nx">subQuery</span><span class="o">)</span> <span class="o">{</span>                    
+                        <span class="nx">bMatchFound</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                        
+                        <span class="c">// Go through each cached result object to match against the query...</span>
+<span class="c"></span>                        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">k</span> <span class="o">=</span> <span class="nx">aAllResultItems</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span> <span class="nx">k</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">k</span><span class="o">--)</span> <span class="o">{</span>
+                            <span class="k">var</span> <span class="nx">aRecord</span> <span class="o">=</span> <span class="nx">aAllResultItems</span><span class="o">[</span><span class="nx">k</span><span class="o">];</span>
+                            <span class="k">var</span> <span class="nx">sKeyIndex</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">queryMatchCase</span><span class="o">)</span> <span class="o">?</span>
+                                <span class="nb">encodeURIComponent</span><span class="o">(</span><span class="nx">aRecord</span><span class="o">[</span><span class="m">0</span><span class="o">]).</span><span class="nx">indexOf</span><span class="o">(</span><span class="nx">sQuery</span><span class="o">):</span>
+                                <span class="nb">encodeURIComponent</span><span class="o">(</span><span class="nx">aRecord</span><span class="o">[</span><span class="m">0</span><span class="o">]).</span><span class="nx">toLowerCase</span><span class="o">().</span><span class="nx">indexOf</span><span class="o">(</span><span class="nx">sQuery</span><span class="o">);</span>
+                            
+                            <span class="c">// A STARTSWITH match is when the query is found at the beginning of the key string...</span>
+<span class="c"></span>                            <span class="k">if</span><span class="o">((!</span><span class="nx">bMatchContains</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">sKeyIndex</span> <span class="o">===</span> <span class="m">0</span><span class="o">))</span> <span class="o">||</span>
+                            <span class="c">// A CONTAINS match is when the query is found anywhere within the key string...</span>
+<span class="c"></span>                            <span class="o">(</span><span class="nx">bMatchContains</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">sKeyIndex</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)))</span> <span class="o">{</span>
+                                <span class="c">// Stash a match into aResults[].</span>
+<span class="c"></span>                                <span class="nx">aResults</span><span class="o">.</span><span class="nx">unshift</span><span class="o">(</span><span class="nx">aRecord</span><span class="o">);</span>
+                            <span class="o">}</span>
+                        <span class="o">}</span>
+                        
+                        <span class="c">// Add the subset match result set object as the newest element to cache,</span>
+<span class="c"></span>                        <span class="c">// and stop looping through the cache.</span>
+<span class="c"></span>                        <span class="nx">resultObj</span> <span class="o">=</span> <span class="o">{};</span>
+                        <span class="nx">resultObj</span><span class="o">.</span><span class="nx">query</span> <span class="o">=</span> <span class="nx">sQuery</span><span class="o">;</span>
+                        <span class="nx">resultObj</span><span class="o">.</span><span class="nx">results</span> <span class="o">=</span> <span class="nx">aResults</span><span class="o">;</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_addCacheElem</span><span class="o">(</span><span class="nx">resultObj</span><span class="o">);</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+                <span class="k">if</span><span class="o">(</span><span class="nx">bMatchFound</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        
+        <span class="c">// If there was a match, send along the results.</span>
+<span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="nx">bMatchFound</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">getCachedResultsEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">sOrigQuery</span><span class="o">,</span> <span class="nx">aResults</span><span class="o">);</span>
+            <span class="nx">oCallbackFn</span><span class="o">(</span><span class="nx">sOrigQuery</span><span class="o">,</span> <span class="nx">aResults</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="nx">aResults</span><span class="o">;</span>
+<span class="o">};</span>
+
+
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+
+<span class="c">/**</span>
+<span class="c"> * Implementation of YAHOO.widget.DataSource using XML HTTP requests that return</span>
+<span class="c"> * query results.</span>
+<span class="c"> *  </span>
+<span class="c"> * @class DS_XHR</span>
+<span class="c"> * @extends YAHOO.widget.DataSource</span>
+<span class="c"> * @requires connection</span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param sScriptURI {String} Absolute or relative URI to script that returns query</span>
+<span class="c"> * results as JSON, XML, or delimited flat-file data.</span>
+<span class="c"> * @param aSchema {String[]} Data schema definition of results.</span>
+<span class="c"> * @param oConfigs {Object} (optional) Object literal of config params.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sScriptURI</span><span class="o">,</span> <span class="nx">aSchema</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Set any config params passed in to override defaults</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="k">typeof</span> <span class="nx">oConfigs</span> <span class="o">==</span> <span class="s2">&quot;object&quot;</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">sConfig</span> <span class="k">in</span> <span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">[</span><span class="nx">sConfig</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oConfigs</span><span class="o">[</span><span class="nx">sConfig</span><span class="o">];</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    
+    <span class="c">// Initialization sequence</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(!</span><span class="nx">aSchema</span> <span class="o">||</span> <span class="o">(</span><span class="nx">aSchema</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">!=</span> <span class="nb">Array</span><span class="o">))</span> <span class="o">{</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not instantiate XHR DataSource due to invalid arguments&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="k">return</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">schema</span> <span class="o">=</span> <span class="nx">aSchema</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">scriptURI</span> <span class="o">=</span> <span class="nx">sScriptURI</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_init</span><span class="o">();</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;XHR DataSource initialized&quot;</span><span class="o">,</span><span class="s2">&quot;info&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+<span class="o">};</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">();</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public constants</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * JSON data type.</span>
+<span class="c"> *</span>
+<span class="c"> * @property TYPE_JSON</span>
+<span class="c"> * @type Number</span>
+<span class="c"> * @static</span>
+<span class="c"> * @final</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">TYPE_JSON</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * XML data type.</span>
+<span class="c"> *</span>
+<span class="c"> * @property TYPE_XML</span>
+<span class="c"> * @type Number</span>
+<span class="c"> * @static</span>
+<span class="c"> * @final</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">TYPE_XML</span> <span class="o">=</span> <span class="m">1</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Flat-file data type.</span>
+<span class="c"> *</span>
+<span class="c"> * @property TYPE_FLAT</span>
+<span class="c"> * @type Number</span>
+<span class="c"> * @static</span>
+<span class="c"> * @final</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">TYPE_FLAT</span> <span class="o">=</span> <span class="m">2</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Error message for XHR failure.</span>
+<span class="c"> *</span>
+<span class="c"> * @property ERROR_DATAXHR</span>
+<span class="c"> * @type String</span>
+<span class="c"> * @static</span>
+<span class="c"> * @final</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">ERROR_DATAXHR</span> <span class="o">=</span> <span class="s2">&quot;XHR response failed&quot;</span><span class="o">;</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public member variables</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Alias to YUI Connection Manager. Allows implementers to specify their own</span>
+<span class="c"> * subclasses of the YUI Connection Manager utility.</span>
+<span class="c"> *</span>
+<span class="c"> * @property connMgr</span>
+<span class="c"> * @type Object</span>
+<span class="c"> * @default YAHOO.util.Connect</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">connMgr</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Connect</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Number of milliseconds the XHR connection will wait for a server response. A</span>
+<span class="c"> * a value of zero indicates the XHR connection will wait forever. Any value</span>
+<span class="c"> * greater than zero will use the Connection utility&#39;s Auto-Abort feature.</span>
+<span class="c"> *</span>
+<span class="c"> * @property connTimeout</span>
+<span class="c"> * @type Number</span>
+<span class="c"> * @default 0</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">connTimeout</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Absolute or relative URI to script that returns query results. For instance,</span>
+<span class="c"> * queries will be sent to &amp;#60;scriptURI&amp;#62;?&amp;#60;scriptQueryParam&amp;#62;=userinput</span>
+<span class="c"> *</span>
+<span class="c"> * @property scriptURI</span>
+<span class="c"> * @type String</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">scriptURI</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Query string parameter name sent to scriptURI. For instance, queries will be</span>
+<span class="c"> * sent to &amp;#60;scriptURI&amp;#62;?&amp;#60;scriptQueryParam&amp;#62;=userinput</span>
+<span class="c"> *</span>
+<span class="c"> * @property scriptQueryParam</span>
+<span class="c"> * @type String</span>
+<span class="c"> * @default &quot;query&quot;</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">scriptQueryParam</span> <span class="o">=</span> <span class="s2">&quot;query&quot;</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * String of key/value pairs to append to requests made to scriptURI. Define</span>
+<span class="c"> * this string when you want to send additional query parameters to your script.</span>
+<span class="c"> * When defined, queries will be sent to</span>
+<span class="c"> * &amp;#60;scriptURI&amp;#62;?&amp;#60;scriptQueryParam&amp;#62;=userinput&amp;#38;&amp;#60;scriptQueryAppend&amp;#62;</span>
+<span class="c"> *</span>
+<span class="c"> * @property scriptQueryAppend</span>
+<span class="c"> * @type String</span>
+<span class="c"> * @default &quot;&quot;</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">scriptQueryAppend</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * XHR response data type. Other types that may be defined are YAHOO.widget.DS_XHR.TYPE_XML</span>
+<span class="c"> * and YAHOO.widget.DS_XHR.TYPE_FLAT.</span>
+<span class="c"> *</span>
+<span class="c"> * @property responseType</span>
+<span class="c"> * @type String</span>
+<span class="c"> * @default YAHOO.widget.DS_XHR.TYPE_JSON</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">TYPE_JSON</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * String after which to strip results. If the results from the XHR are sent</span>
+<span class="c"> * back as HTML, the gzip HTML comment appears at the end of the data and should</span>
+<span class="c"> * be ignored.</span>
+<span class="c"> *</span>
+<span class="c"> * @property responseStripAfter</span>
+<span class="c"> * @type String</span>
+<span class="c"> * @default &quot;\n&amp;#60;!-&quot;</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">responseStripAfter</span> <span class="o">=</span> <span class="s2">&quot;\n&lt;!-&quot;</span><span class="o">;</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Queries the live data source defined by scriptURI for results. Results are</span>
+<span class="c"> * passed back to a callback function.</span>
+<span class="c"> *  </span>
+<span class="c"> * @method doQuery</span>
+<span class="c"> * @param oCallbackFn {HTMLFunction} Callback function defined by oParent object to which to return results.</span>
+<span class="c"> * @param sQuery {String} Query string.</span>
+<span class="c"> * @param oParent {Object} The object instance that has requested data.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">doQuery</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oCallbackFn</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">isXML</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">==</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">TYPE_XML</span><span class="o">);</span>
+    <span class="k">var</span> <span class="nx">sUri</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">scriptURI</span><span class="o">+</span><span class="s2">&quot;?&quot;</span><span class="o">+</span><span class="k">this</span><span class="o">.</span><span class="nx">scriptQueryParam</span><span class="o">+</span><span class="s2">&quot;=&quot;</span><span class="o">+</span><span class="nx">sQuery</span><span class="o">;</span>
+    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">scriptQueryAppend</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">sUri</span> <span class="o">+=</span> <span class="s2">&quot;&amp;&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">scriptQueryAppend</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;DataSource is querying URL &quot;</span> <span class="o">+</span> <span class="nx">sUri</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="k">var</span> <span class="nx">oResponse</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    
+    <span class="k">var</span> <span class="nx">oSelf</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+    <span class="c">/*</span>
+<span class="c">     * Sets up ajax request callback</span>
+<span class="c">     *</span>
+<span class="c">     * @param {object} oReq          HTTPXMLRequest object</span>
+<span class="c">     * @private</span>
+<span class="c">     */</span>
+    <span class="k">var</span> <span class="nx">responseSuccess</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oResp</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c">// Response ID does not match last made request ID.</span>
+<span class="c"></span>        <span class="k">if</span><span class="o">(!</span><span class="nx">oSelf</span><span class="o">.</span><span class="nx">_oConn</span> <span class="o">||</span> <span class="o">(</span><span class="nx">oResp</span><span class="o">.</span><span class="nx">tId</span> <span class="o">!=</span> <span class="nx">oSelf</span><span class="o">.</span><span class="nx">_oConn</span><span class="o">.</span><span class="nx">tId</span><span class="o">))</span> <span class="o">{</span>
+            <span class="nx">oSelf</span><span class="o">.</span><span class="nx">dataErrorEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">oSelf</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+<span class="c">//DEBUG</span>
+<span class="c">/*YAHOO.log(oResp.responseXML.getElementsByTagName(&quot;Result&quot;),&#39;warn&#39;);</span>
+<span class="c">for(var foo in oResp) {</span>
+<span class="c">    YAHOO.log(foo + &quot;: &quot;+oResp[foo],&#39;warn&#39;);</span>
+<span class="c">}</span>
+<span class="c">YAHOO.log(&#39;responseXML.xml: &#39;+oResp.responseXML.xml,&#39;warn&#39;);*/</span>
+        <span class="k">if</span><span class="o">(!</span><span class="nx">isXML</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">oResp</span> <span class="o">=</span> <span class="nx">oResp</span><span class="o">.</span><span class="nx">responseText</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span> 
+            <span class="nx">oResp</span> <span class="o">=</span> <span class="nx">oResp</span><span class="o">.</span><span class="nx">responseXML</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">oResp</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">oSelf</span><span class="o">.</span><span class="nx">dataErrorEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">oSelf</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="nx">oSelf</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">var</span> <span class="nx">aResults</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="o">.</span><span class="nx">parseResponse</span><span class="o">(</span><span class="nx">sQuery</span><span class="o">,</span> <span class="nx">oResp</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">resultObj</span> <span class="o">=</span> <span class="o">{};</span>
+        <span class="nx">resultObj</span><span class="o">.</span><span class="nx">query</span> <span class="o">=</span> <span class="nb">decodeURIComponent</span><span class="o">(</span><span class="nx">sQuery</span><span class="o">);</span>
+        <span class="nx">resultObj</span><span class="o">.</span><span class="nx">results</span> <span class="o">=</span> <span class="nx">aResults</span><span class="o">;</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">aResults</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">oSelf</span><span class="o">.</span><span class="nx">dataErrorEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">oSelf</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATAPARSE</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATAPARSE</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="nx">oSelf</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+            <span class="nx">aResults</span> <span class="o">=</span> <span class="o">[];</span>
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span>
+            <span class="nx">oSelf</span><span class="o">.</span><span class="nx">getResultsEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">oSelf</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">,</span> <span class="nx">aResults</span><span class="o">);</span>
+            <span class="nx">oSelf</span><span class="o">.</span><span class="nx">_addCacheElem</span><span class="o">(</span><span class="nx">resultObj</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="nx">oCallbackFn</span><span class="o">(</span><span class="nx">sQuery</span><span class="o">,</span> <span class="nx">aResults</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">);</span>
+    <span class="o">};</span>
+
+    <span class="k">var</span> <span class="nx">responseFailure</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oResp</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">oSelf</span><span class="o">.</span><span class="nx">dataErrorEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">oSelf</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">ERROR_DATAXHR</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">ERROR_DATAXHR</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="nx">oResp</span><span class="o">.</span><span class="nx">statusText</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="nx">oSelf</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="k">return</span><span class="o">;</span>
+    <span class="o">};</span>
+    
+    <span class="k">var</span> <span class="nx">oCallback</span> <span class="o">=</span> <span class="o">{</span>
+        <span class="nx">success</span><span class="o">:</span><span class="nx">responseSuccess</span><span class="o">,</span>
+        <span class="nx">failure</span><span class="o">:</span><span class="nx">responseFailure</span>
+    <span class="o">};</span>
+    
+    <span class="k">if</span><span class="o">(!</span><span class="nb">isNaN</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">connTimeout</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">connTimeout</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">oCallback</span><span class="o">.</span><span class="nx">timeout</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">connTimeout</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_oConn</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">connMgr</span><span class="o">.</span><span class="nx">abort</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_oConn</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="nx">oSelf</span><span class="o">.</span><span class="nx">_oConn</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">connMgr</span><span class="o">.</span><span class="nx">asyncRequest</span><span class="o">(</span><span class="s2">&quot;GET&quot;</span><span class="o">,</span> <span class="nx">sUri</span><span class="o">,</span> <span class="nx">oCallback</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Parses raw response data into an array of result objects. The result data key</span>
+<span class="c"> * is always stashed in the [0] element of each result object. </span>
+<span class="c"> *</span>
+<span class="c"> * @method parseResponse</span>
+<span class="c"> * @param sQuery {String} Query string.</span>
+<span class="c"> * @param oResponse {Object} The raw response data to parse.</span>
+<span class="c"> * @param oParent {Object} The object instance that has requested data.</span>
+<span class="c"> * @returns {Object[]} Array of result objects.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">parseResponse</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sQuery</span><span class="o">,</span> <span class="nx">oResponse</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">aSchema</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">schema</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">aResults</span> <span class="o">=</span> <span class="o">[];</span>
+    <span class="k">var</span> <span class="nx">bError</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+    <span class="c">// Strip out comment at the end of results</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">nEnd</span> <span class="o">=</span> <span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="nx">responseStripAfter</span> <span class="o">!==</span> <span class="s2">&quot;&quot;</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">oResponse</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">))</span> <span class="o">?</span>
+        <span class="nx">oResponse</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">responseStripAfter</span><span class="o">)</span> <span class="o">:</span> <span class="o">-</span><span class="m">1</span><span class="o">;</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">nEnd</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">oResponse</span> <span class="o">=</span> <span class="nx">oResponse</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">0</span><span class="o">,</span><span class="nx">nEnd</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nx">switch</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">responseType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">case</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">TYPE_JSON</span><span class="o">:</span>
+            <span class="k">var</span> <span class="nx">jsonList</span><span class="o">;</span>
+            <span class="c">// Divert KHTML clients from JSON lib</span>
+<span class="c"></span>            <span class="k">if</span><span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">JSON</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">().</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">&#39;khtml&#39;</span><span class="o">)==</span> <span class="o">-</span><span class="m">1</span><span class="o">))</span> <span class="o">{</span>
+                <span class="c">// Use the JSON utility if available</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">jsonObjParsed</span> <span class="o">=</span> <span class="nx">JSON</span><span class="o">.</span><span class="nx">parse</span><span class="o">(</span><span class="nx">oResponse</span><span class="o">);</span>
+                <span class="k">if</span><span class="o">(!</span><span class="nx">jsonObjParsed</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">bError</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">else</span> <span class="o">{</span>
+                    <span class="k">try</span> <span class="o">{</span>
+                        <span class="c">// eval is necessary here since aSchema[0] is of unknown depth</span>
+<span class="c"></span>                        <span class="nx">jsonList</span> <span class="o">=</span> <span class="nb">eval</span><span class="o">(</span><span class="s2">&quot;jsonObjParsed.&quot;</span> <span class="o">+</span> <span class="nx">aSchema</span><span class="o">[</span><span class="m">0</span><span class="o">]);</span>
+                    <span class="o">}</span>
+                    <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">bError</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                        <span class="k">break</span><span class="o">;</span>
+                   <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">else</span> <span class="o">{</span>
+                <span class="c">// Parse the JSON response as a string</span>
+<span class="c"></span>                <span class="k">try</span> <span class="o">{</span>
+                    <span class="c">// Trim leading spaces</span>
+<span class="c"></span>                    <span class="k">while</span> <span class="o">(</span><span class="nx">oResponse</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">0</span><span class="o">,</span><span class="m">1</span><span class="o">)</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">oResponse</span> <span class="o">=</span> <span class="nx">oResponse</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">1</span><span class="o">,</span> <span class="nx">oResponse</span><span class="o">.</span><span class="nx">length</span><span class="o">);</span>
+                    <span class="o">}</span>
+
+                    <span class="c">// Invalid JSON response</span>
+<span class="c"></span>                    <span class="k">if</span><span class="o">(</span><span class="nx">oResponse</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;{&quot;</span><span class="o">)</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">bError</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="o">}</span>
+
+                    <span class="c">// Empty (but not invalid) JSON response</span>
+<span class="c"></span>                    <span class="k">if</span><span class="o">(</span><span class="nx">oResponse</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;{}&quot;</span><span class="o">)</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="o">}</span>
+
+                    <span class="c">// Turn the string into an object literal...</span>
+<span class="c"></span>                    <span class="c">// ...eval is necessary here</span>
+<span class="c"></span>                    <span class="k">var</span> <span class="nx">jsonObjRaw</span> <span class="o">=</span> <span class="nb">eval</span><span class="o">(</span><span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="nx">oResponse</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="o">);</span>
+                    <span class="k">if</span><span class="o">(!</span><span class="nx">jsonObjRaw</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">bError</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="o">}</span>
+
+                    <span class="c">// Grab the object member that contains an array of all reponses...</span>
+<span class="c"></span>                    <span class="c">// ...eval is necessary here since aSchema[0] is of unknown depth</span>
+<span class="c"></span>                    <span class="nx">jsonList</span> <span class="o">=</span> <span class="nb">eval</span><span class="o">(</span><span class="s2">&quot;(jsonObjRaw.&quot;</span> <span class="o">+</span> <span class="nx">aSchema</span><span class="o">[</span><span class="m">0</span><span class="o">]+</span><span class="s2">&quot;)&quot;</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">bError</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="k">break</span><span class="o">;</span>
+               <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span><span class="o">(!</span><span class="nx">jsonList</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">bError</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span><span class="o">(</span><span class="nx">jsonList</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">!=</span> <span class="nb">Array</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">jsonList</span> <span class="o">=</span> <span class="o">[</span><span class="nx">jsonList</span><span class="o">];</span>
+            <span class="o">}</span>
+            
+            <span class="c">// Loop through the array of all responses...</span>
+<span class="c"></span>            <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">jsonList</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">;</span> <span class="nx">i</span><span class="o">--)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">aResultItem</span> <span class="o">=</span> <span class="o">[];</span>
+                <span class="k">var</span> <span class="nx">jsonResult</span> <span class="o">=</span> <span class="nx">jsonList</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                <span class="c">// ...and loop through each data field value of each response</span>
+<span class="c"></span>                <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">aSchema</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span> <span class="nx">j</span> <span class="o">&gt;=</span> <span class="m">1</span> <span class="o">;</span> <span class="nx">j</span><span class="o">--)</span> <span class="o">{</span>
+                    <span class="c">// ...and capture data into an array mapped according to the schema...</span>
+<span class="c"></span>                    <span class="k">var</span> <span class="nx">dataFieldValue</span> <span class="o">=</span> <span class="nx">jsonResult</span><span class="o">[</span><span class="nx">aSchema</span><span class="o">[</span><span class="nx">j</span><span class="o">]];</span>
+                    <span class="k">if</span><span class="o">(!</span><span class="nx">dataFieldValue</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">dataFieldValue</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="c">//YAHOO.log(&quot;data: &quot; + i + &quot; value:&quot; +j+&quot; = &quot;+dataFieldValue,&quot;debug&quot;,this.toString());</span>
+<span class="c"></span>                    <span class="nx">aResultItem</span><span class="o">.</span><span class="nx">unshift</span><span class="o">(</span><span class="nx">dataFieldValue</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="c">// If schema isn&#39;t well defined, pass along the entire result object</span>
+<span class="c"></span>                <span class="k">if</span><span class="o">(</span><span class="nx">aResultItem</span><span class="o">.</span><span class="nx">length</span> <span class="o">==</span> <span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">aResultItem</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">jsonResult</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="c">// Capture the array of data field values in an array of results</span>
+<span class="c"></span>                <span class="nx">aResults</span><span class="o">.</span><span class="nx">unshift</span><span class="o">(</span><span class="nx">aResultItem</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">break</span><span class="o">;</span>
+        <span class="nx">case</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">TYPE_XML</span><span class="o">:</span>
+            <span class="c">// Get the collection of results</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">xmlList</span> <span class="o">=</span> <span class="nx">oResponse</span><span class="o">.</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="nx">aSchema</span><span class="o">[</span><span class="m">0</span><span class="o">]);</span>
+            <span class="k">if</span><span class="o">(!</span><span class="nx">xmlList</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">bError</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="c">// Loop through each result</span>
+<span class="c"></span>            <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">k</span> <span class="o">=</span> <span class="nx">xmlList</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span> <span class="nx">k</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">;</span> <span class="nx">k</span><span class="o">--)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">xmlList</span><span class="o">.</span><span class="nx">item</span><span class="o">(</span><span class="nx">k</span><span class="o">);</span>
+                <span class="c">//YAHOO.log(&quot;Result&quot;+k+&quot; is &quot;+result.attributes.item(0).firstChild.nodeValue,&quot;debug&quot;,this.toString());</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">aFieldSet</span> <span class="o">=</span> <span class="o">[];</span>
+                <span class="c">// Loop through each data field in each result using the schema</span>
+<span class="c"></span>                <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">aSchema</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span> <span class="nx">m</span> <span class="o">&gt;=</span> <span class="m">1</span> <span class="o">;</span> <span class="nx">m</span><span class="o">--)</span> <span class="o">{</span>
+                    <span class="c">//YAHOO.log(aSchema[m]+&quot; is &quot;+result.attributes.getNamedItem(aSchema[m]).firstChild.nodeValue);</span>
+<span class="c"></span>                    <span class="k">var</span> <span class="nx">sValue</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                    <span class="c">// Values may be held in an attribute...</span>
+<span class="c"></span>                    <span class="k">var</span> <span class="nx">xmlAttr</span> <span class="o">=</span> <span class="nx">result</span><span class="o">.</span><span class="nx">attributes</span><span class="o">.</span><span class="nx">getNamedItem</span><span class="o">(</span><span class="nx">aSchema</span><span class="o">[</span><span class="nx">m</span><span class="o">]);</span>
+                    <span class="k">if</span><span class="o">(</span><span class="nx">xmlAttr</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">sValue</span> <span class="o">=</span> <span class="nx">xmlAttr</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+                        <span class="c">//YAHOO.log(&quot;Attr value is &quot;+sValue,&quot;debug&quot;,this.toString());</span>
+<span class="c"></span>                    <span class="o">}</span>
+                    <span class="c">// ...or in a node</span>
+<span class="c"></span>                    <span class="k">else</span><span class="o">{</span>
+                        <span class="k">var</span> <span class="nx">xmlNode</span> <span class="o">=</span> <span class="nx">result</span><span class="o">.</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="nx">aSchema</span><span class="o">[</span><span class="nx">m</span><span class="o">]);</span>
+                        <span class="k">if</span><span class="o">(</span><span class="nx">xmlNode</span> <span class="o">&amp;&amp;</span> <span class="nx">xmlNode</span><span class="o">.</span><span class="nx">item</span><span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">xmlNode</span><span class="o">.</span><span class="nx">item</span><span class="o">(</span><span class="m">0</span><span class="o">).</span><span class="nx">firstChild</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="nx">sValue</span> <span class="o">=</span> <span class="nx">xmlNode</span><span class="o">.</span><span class="nx">item</span><span class="o">(</span><span class="m">0</span><span class="o">).</span><span class="nx">firstChild</span><span class="o">.</span><span class="nx">nodeValue</span><span class="o">;</span>
+                            <span class="c">//YAHOO.log(&quot;Node value is &quot;+sValue,&quot;debug&quot;,this.toString());</span>
+<span class="c"></span>                        <span class="o">}</span>
+                        <span class="k">else</span> <span class="o">{</span>
+                            <span class="nx">sValue</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+                            <span class="c">//YAHOO.log(&quot;Value not found&quot;,&quot;debug&quot;,this.toString());</span>
+<span class="c"></span>                        <span class="o">}</span>
+                    <span class="o">}</span>
+                    <span class="c">// Capture the schema-mapped data field values into an array</span>
+<span class="c"></span>                    <span class="nx">aFieldSet</span><span class="o">.</span><span class="nx">unshift</span><span class="o">(</span><span class="nx">sValue</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="c">// Capture each array of values into an array of results</span>
+<span class="c"></span>                <span class="nx">aResults</span><span class="o">.</span><span class="nx">unshift</span><span class="o">(</span><span class="nx">aFieldSet</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">break</span><span class="o">;</span>
+        <span class="nx">case</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">TYPE_FLAT</span><span class="o">:</span>
+            <span class="k">if</span><span class="o">(</span><span class="nx">oResponse</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c">// Delete the last line delimiter at the end of the data if it exists</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">newLength</span> <span class="o">=</span> <span class="nx">oResponse</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="nx">aSchema</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">length</span><span class="o">;</span>
+                <span class="k">if</span><span class="o">(</span><span class="nx">oResponse</span><span class="o">.</span><span class="nx">substr</span><span class="o">(</span><span class="nx">newLength</span><span class="o">)</span> <span class="o">==</span> <span class="nx">aSchema</span><span class="o">[</span><span class="m">0</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="nx">oResponse</span> <span class="o">=</span> <span class="nx">oResponse</span><span class="o">.</span><span class="nx">substr</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="nx">newLength</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="k">var</span> <span class="nx">aRecords</span> <span class="o">=</span> <span class="nx">oResponse</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span><span class="nx">aSchema</span><span class="o">[</span><span class="m">0</span><span class="o">]);</span>
+                <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">aRecords</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span> <span class="nx">n</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">n</span><span class="o">--)</span> <span class="o">{</span>
+                    <span class="nx">aResults</span><span class="o">[</span><span class="nx">n</span><span class="o">]</span> <span class="o">=</span> <span class="nx">aRecords</span><span class="o">[</span><span class="nx">n</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span><span class="nx">aSchema</span><span class="o">[</span><span class="m">1</span><span class="o">]);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">break</span><span class="o">;</span>
+        <span class="nx">default</span><span class="o">:</span>
+            <span class="k">break</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="nx">sQuery</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="nx">oResponse</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="nx">oParent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">bError</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nx">aResults</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">};</span>            
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Private member variables</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * XHR connection object.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _oConn</span>
+<span class="c"> * @type Object</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_XHR</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_oConn</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+
+<span class="c">/**</span>
+<span class="c"> * Implementation of YAHOO.widget.DataSource using a native Javascript function as</span>
+<span class="c"> * its live data source.</span>
+<span class="c"> *  </span>
+<span class="c"> * @class DS_JSFunction</span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @extends YAHOO.widget.DataSource</span>
+<span class="c"> * @param oFunction {HTMLFunction} In-memory Javascript function that returns query results as an array of objects.</span>
+<span class="c"> * @param oConfigs {Object} (optional) Object literal of config params.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_JSFunction</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oFunction</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Set any config params passed in to override defaults</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="k">typeof</span> <span class="nx">oConfigs</span> <span class="o">==</span> <span class="s2">&quot;object&quot;</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">sConfig</span> <span class="k">in</span> <span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">[</span><span class="nx">sConfig</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oConfigs</span><span class="o">[</span><span class="nx">sConfig</span><span class="o">];</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="c">// Initialization sequence</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(!</span><span class="nx">oFunction</span>  <span class="o">||</span> <span class="o">(</span><span class="nx">oFunction</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">!=</span> <span class="nb">Function</span><span class="o">))</span> <span class="o">{</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not instantiate JSFunction DataSource due to invalid arguments&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="k">return</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">dataFunction</span> <span class="o">=</span> <span class="nx">oFunction</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_init</span><span class="o">();</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;JS Function DataSource initialized&quot;</span><span class="o">,</span><span class="s2">&quot;info&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_JSFunction</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">();</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public member variables</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * In-memory Javascript function that returns query results.</span>
+<span class="c"> *</span>
+<span class="c"> * @property dataFunction</span>
+<span class="c"> * @type HTMLFunction</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_JSFunction</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">dataFunction</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Queries the live data source defined by function for results. Results are</span>
+<span class="c"> * passed back to a callback function.</span>
+<span class="c"> *  </span>
+<span class="c"> * @method doQuery</span>
+<span class="c"> * @param oCallbackFn {HTMLFunction} Callback function defined by oParent object to which to return results.</span>
+<span class="c"> * @param sQuery {String} Query string.</span>
+<span class="c"> * @param oParent {Object} The object instance that has requested data.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_JSFunction</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">doQuery</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oCallbackFn</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">oFunction</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">dataFunction</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">aResults</span> <span class="o">=</span> <span class="o">[];</span>
+    
+    <span class="nx">aResults</span> <span class="o">=</span> <span class="nx">oFunction</span><span class="o">(</span><span class="nx">sQuery</span><span class="o">);</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">aResults</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">dataErrorEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="k">return</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="k">var</span> <span class="nx">resultObj</span> <span class="o">=</span> <span class="o">{};</span>
+    <span class="nx">resultObj</span><span class="o">.</span><span class="nx">query</span> <span class="o">=</span> <span class="nb">decodeURIComponent</span><span class="o">(</span><span class="nx">sQuery</span><span class="o">);</span>
+    <span class="nx">resultObj</span><span class="o">.</span><span class="nx">results</span> <span class="o">=</span> <span class="nx">aResults</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_addCacheElem</span><span class="o">(</span><span class="nx">resultObj</span><span class="o">);</span>
+    
+    <span class="k">this</span><span class="o">.</span><span class="nx">getResultsEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">,</span> <span class="nx">aResults</span><span class="o">);</span>
+    <span class="nx">oCallbackFn</span><span class="o">(</span><span class="nx">sQuery</span><span class="o">,</span> <span class="nx">aResults</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">);</span>
+    <span class="k">return</span><span class="o">;</span>
+<span class="o">};</span>
+
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+
+<span class="c">/**</span>
+<span class="c"> * Implementation of YAHOO.widget.DataSource using a native Javascript array as</span>
+<span class="c"> * its live data source.</span>
+<span class="c"> *</span>
+<span class="c"> * @class DS_JSArray</span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @extends YAHOO.widget.DataSource</span>
+<span class="c"> * @param aData {String[]} In-memory Javascript array of simple string data.</span>
+<span class="c"> * @param oConfigs {Object} (optional) Object literal of config params.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_JSArray</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">aData</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Set any config params passed in to override defaults</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="k">typeof</span> <span class="nx">oConfigs</span> <span class="o">==</span> <span class="s2">&quot;object&quot;</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">sConfig</span> <span class="k">in</span> <span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">[</span><span class="nx">sConfig</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oConfigs</span><span class="o">[</span><span class="nx">sConfig</span><span class="o">];</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="c">// Initialization sequence</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(!</span><span class="nx">aData</span> <span class="o">||</span> <span class="o">(</span><span class="nx">aData</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">!=</span> <span class="nb">Array</span><span class="o">))</span> <span class="o">{</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not instantiate JSArray DataSource due to invalid arguments&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="k">return</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">data</span> <span class="o">=</span> <span class="nx">aData</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_init</span><span class="o">();</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;JS Array DataSource initialized&quot;</span><span class="o">,</span><span class="s2">&quot;info&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_JSArray</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">();</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public member variables</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * In-memory Javascript array of strings.</span>
+<span class="c"> *</span>
+<span class="c"> * @property data</span>
+<span class="c"> * @type Array</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_JSArray</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">data</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Queries the live data source defined by data for results. Results are passed</span>
+<span class="c"> * back to a callback function.</span>
+<span class="c"> *</span>
+<span class="c"> * @method doQuery</span>
+<span class="c"> * @param oCallbackFn {HTMLFunction} Callback function defined by oParent object to which to return results.</span>
+<span class="c"> * @param sQuery {String} Query string.</span>
+<span class="c"> * @param oParent {Object} The object instance that has requested data.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DS_JSArray</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">doQuery</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oCallbackFn</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">aData</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">data</span><span class="o">;</span> <span class="c">// the array</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">aResults</span> <span class="o">=</span> <span class="o">[];</span> <span class="c">// container for results</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">bMatchFound</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">bMatchContains</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">queryMatchContains</span><span class="o">;</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">sQuery</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">queryMatchCase</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">sQuery</span> <span class="o">=</span> <span class="nx">sQuery</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="c">// Loop through each element of the array...</span>
+<span class="c"></span>        <span class="c">// which can be a string or an array of strings</span>
+<span class="c"></span>        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">aData</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">aDataset</span> <span class="o">=</span> <span class="o">[];</span>
+
+            <span class="k">if</span><span class="o">(</span><span class="nx">aData</span><span class="o">[</span><span class="nx">i</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">if</span><span class="o">(</span><span class="nx">aData</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">String</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">aDataset</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">=</span> <span class="nx">aData</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                <span class="o">}</span>
+                <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">aData</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Array</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">aDataset</span> <span class="o">=</span> <span class="nx">aData</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span><span class="o">(</span><span class="nx">aDataset</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">aDataset</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">String</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">sKeyIndex</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">queryMatchCase</span><span class="o">)</span> <span class="o">?</span>
+                <span class="nb">encodeURIComponent</span><span class="o">(</span><span class="nx">aDataset</span><span class="o">[</span><span class="m">0</span><span class="o">]).</span><span class="nx">indexOf</span><span class="o">(</span><span class="nx">sQuery</span><span class="o">):</span>
+                <span class="nb">encodeURIComponent</span><span class="o">(</span><span class="nx">aDataset</span><span class="o">[</span><span class="m">0</span><span class="o">]).</span><span class="nx">toLowerCase</span><span class="o">().</span><span class="nx">indexOf</span><span class="o">(</span><span class="nx">sQuery</span><span class="o">);</span>
+
+                <span class="c">// A STARTSWITH match is when the query is found at the beginning of the key string...</span>
+<span class="c"></span>                <span class="k">if</span><span class="o">((!</span><span class="nx">bMatchContains</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">sKeyIndex</span> <span class="o">===</span> <span class="m">0</span><span class="o">))</span> <span class="o">||</span>
+                <span class="c">// A CONTAINS match is when the query is found anywhere within the key string...</span>
+<span class="c"></span>                <span class="o">(</span><span class="nx">bMatchContains</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">sKeyIndex</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)))</span> <span class="o">{</span>
+                    <span class="c">// Stash a match into aResults[].</span>
+<span class="c"></span>                    <span class="nx">aResults</span><span class="o">.</span><span class="nx">unshift</span><span class="o">(</span><span class="nx">aDataset</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="k">this</span><span class="o">.</span><span class="nx">getResultsEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">,</span> <span class="nx">aResults</span><span class="o">);</span>
+    <span class="nx">oCallbackFn</span><span class="o">(</span><span class="nx">sQuery</span><span class="o">,</span> <span class="nx">aResults</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">);</span>
+<span class="o">};</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li><a href="module_animation.html">animation</a></li>
+                                <li><a href="module_autocomplete.html">autocomplete</a></li>
+                                <li><a href="module_calendar.html">calendar</a></li>
+                                <li><a href="module_connection.html">connection</a></li>
+                                <li><a href="module_container.html">container</a></li>
+                                <li><a href="module_dom.html">dom</a></li>
+                                <li><a href="module_dragdrop.html">dragdrop</a></li>
+                                <li><a href="module_event.html">event</a></li>
+                                <li><a href="module_logger.html">logger</a></li>
+                                <li><a href="module_menu.html">menu</a></li>
+                                <li><a href="module_slider.html">slider</a></li>
+                                <li><a href="module_tabview.html">tabview</a></li>
+                                <li><a href="module_treeview.html">treeview</a></li>
+                                <li><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li><a href="YAHOO.widget.AutoComplete.html">YAHOO.widget.AutoComplete</a></li>
+                                <li><a href="YAHOO.widget.DataSource.html">YAHOO.widget.DataSource</a></li>
+                                <li><a href="YAHOO.widget.DS_JSArray.html">YAHOO.widget.DS_JSArray</a></li>
+                                <li><a href="YAHOO.widget.DS_JSFunction.html">YAHOO.widget.DS_JSFunction</a></li>
+                                <li><a href="YAHOO.widget.DS_XHR.html">YAHOO.widget.DS_XHR</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li><a href="AutoComplete.js.html">AutoComplete.js</a></li>
+                                <li><a href="DataSource.js.html">DataSource.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2006 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>
