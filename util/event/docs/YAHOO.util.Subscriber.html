@@ -2,14 +2,12 @@
 <html>
 <head>
 	<title>API: event  YAHOO.util.Subscriber   (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/reset.css">
-	<link rel="stylesheet" type="text/css" href="assets/fonts.css">
-	<link rel="stylesheet" type="text/css" href="assets/grids.css">
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css">
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
 
 <body id="yahoo-com">
-<div id="doc" class="yui-t1">
+<div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
@@ -56,27 +54,38 @@
                             <div class="detail">
                                 <strong>YAHOO.util.Subscriber</strong>
                                 <code>
-                                        (
+                                    (
   
                                         
-                                            &lt;Function&gt; fn, 
-                                            &lt;Object&gt; obj, 
-                                            &lt;boolean&gt; override
-                                        )
+                                                
+                                                fn
+
+                                                , 
+                                                obj
+
+                                                , 
+                                                override
+                                    )
                                 </code>
                                 <div class="description">
                                         <dl>
                                             <dt>Parameters:</dt>
                                                 <dd>
-                                                    <code>fn</code> - 
+                                                    <code>fn
+                                                    &lt;Function&gt; 
+                                                    </code>
                                                            The function to execute
                                                 </dd>
                                                 <dd>
-                                                    <code>obj</code> - 
+                                                    <code>obj
+                                                    &lt;Object&gt; 
+                                                    </code>
                                                           An object to be passed along when the event fires
                                                 </dd>
                                                 <dd>
-                                                    <code>override</code> - 
+                                                    <code>override
+                                                    &lt;boolean&gt; 
+                                                    </code>
                                                      If true, the obj passed in becomes the execution
 scope of the listener
                                                 </dd>
@@ -153,11 +162,17 @@ object becomes the scope.
                                         
                                         boolean
                                             <strong>contains</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Function&gt; fn, 
-                                                    &lt;Object&gt; obj
-                                                )
+                                                        
+                                                         fn
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -166,14 +181,15 @@ Used by the unsubscribe method to match the right subscriber.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>fn</code> - 
+                                                            <code>fn &lt;Function&gt;</code>
                                                              the function to execute
                                                         </dd>
                                                         <dd>
-                                                            <code>obj</code> - 
+                                                            <code>obj &lt;Object&gt;</code>
                                                              an object to be passed along when the event fires
                                                         </dd>
                                                 </dl>
@@ -200,10 +216,13 @@ subscriber's signature.</dd>
                                         
                                         void
                                             <strong>getScope</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Object&gt; defaultScope
-                                                )
+                                                        
+                                                         defaultScope
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -213,10 +232,11 @@ scope, otherwise the default scope will be used.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>defaultScope</code> - 
+                                                            <code>defaultScope &lt;Object&gt;</code>
                                                              the scope to use if this listener does not
 override it.
                                                         </dd>
@@ -243,6 +263,8 @@ override it.
                                         
                                         void
                                             <strong>toString</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -250,6 +272,7 @@ override it.
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:

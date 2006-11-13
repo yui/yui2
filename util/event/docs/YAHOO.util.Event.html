@@ -2,14 +2,12 @@
 <html>
 <head>
 	<title>API: event  YAHOO.util.Event   (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/reset.css">
-	<link rel="stylesheet" type="text/css" href="assets/fonts.css">
-	<link rel="stylesheet" type="text/css" href="assets/grids.css">
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css">
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
 
 <body id="yahoo-com">
-<div id="doc" class="yui-t1">
+<div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
@@ -184,14 +182,29 @@ for 10 seconds or until all outstanding handlers are bound
                                         
                                         boolean
                                             <strong>addListener</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Object&gt; el, 
-                                                    &lt;String&gt; sType, 
-                                                    &lt;Function&gt; fn, 
-                                                    &lt;Object&gt; obj, 
-                                                    &lt;boolean&gt; override
-                                                )
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         sType
+                                                    
+                                                
+                                                        , 
+                                                         fn
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                                        , 
+                                                         override
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -199,28 +212,29 @@ for 10 seconds or until all outstanding handlers are bound
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>el</code> - 
+                                                            <code>el &lt;Object&gt;</code>
                                                                     The html element to assign the 
 event to
                                                         </dd>
                                                         <dd>
-                                                            <code>sType</code> - 
+                                                            <code>sType &lt;String&gt;</code>
                                                                  The type of event to append
                                                         </dd>
                                                         <dd>
-                                                            <code>fn</code> - 
+                                                            <code>fn &lt;Function&gt;</code>
                                                                     The method the event invokes
                                                         </dd>
                                                         <dd>
-                                                            <code>obj</code> - 
+                                                            <code>obj &lt;Object&gt;</code>
                                                                 An arbitrary object that will be 
 passed as a parameter to the handler
                                                         </dd>
                                                         <dd>
-                                                            <code>override</code> - 
+                                                            <code>override &lt;boolean&gt;</code>
                                                               If true, the obj passed in becomes
 the execution scope of the listener
                                                         </dd>
@@ -249,10 +263,13 @@ could not have the event bound to it.</dd>
                                         
                                         string
                                             <strong>generateId</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Object&gt; el
-                                                )
+                                                        
+                                                         el
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -261,10 +278,11 @@ have one.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>el</code> - 
+                                                            <code>el &lt;Object&gt;</code>
                                                              the element to create the id for
                                                         </dd>
                                                 </dl>
@@ -290,10 +308,13 @@ have one.
                                         
                                         int
                                             <strong>getCharCode</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Event&gt; ev
-                                                )
+                                                        
+                                                         ev
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -301,10 +322,11 @@ have one.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>ev</code> - 
+                                                            <code>ev &lt;Event&gt;</code>
                                                              the event
                                                         </dd>
                                                 </dl>
@@ -330,10 +352,13 @@ have one.
                                         
                                         Event
                                             <strong>getEvent</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Event&gt; e
-                                                )
+                                                        
+                                                         e
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -345,10 +370,11 @@ this function at all.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>e</code> - 
+                                                            <code>e &lt;Event&gt;</code>
                                                              the event parameter from the handler
                                                         </dd>
                                                 </dl>
@@ -374,11 +400,17 @@ this function at all.
                                         
                                         Object
                                             <strong>getListeners</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;HTMLElement&gt; el, 
-                                                    &lt;string&gt; sType
-                                                )
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         sType
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -387,14 +419,15 @@ Optionally, you can specify a specific type of event to return.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>el</code> - 
+                                                            <code>el &lt;HTMLElement&gt;</code>
                                                               the element to inspect
                                                         </dd>
                                                         <dd>
-                                                            <code>sType</code> - 
+                                                            <code>sType &lt;string&gt;</code>
                                                               optional type of listener to return. If
 left out, all listeners will be returned
                                                         </dd>
@@ -426,10 +459,13 @@ left out, all listeners will be returned
                                         
                                         int
                                             <strong>getPageX</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Event&gt; ev
-                                                )
+                                                        
+                                                         ev
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -437,10 +473,11 @@ left out, all listeners will be returned
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>ev</code> - 
+                                                            <code>ev &lt;Event&gt;</code>
                                                              the event
                                                         </dd>
                                                 </dl>
@@ -466,10 +503,13 @@ left out, all listeners will be returned
                                         
                                         int
                                             <strong>getPageY</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Event&gt; ev
-                                                )
+                                                        
+                                                         ev
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -477,10 +517,11 @@ left out, all listeners will be returned
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>ev</code> - 
+                                                            <code>ev &lt;Event&gt;</code>
                                                              the event
                                                         </dd>
                                                 </dl>
@@ -506,10 +547,13 @@ left out, all listeners will be returned
                                         
                                         HTMLElement
                                             <strong>getRelatedTarget</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Event&gt; ev
-                                                )
+                                                        
+                                                         ev
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -517,10 +561,11 @@ left out, all listeners will be returned
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>ev</code> - 
+                                                            <code>ev &lt;Event&gt;</code>
                                                              the event
                                                         </dd>
                                                 </dl>
@@ -546,11 +591,17 @@ left out, all listeners will be returned
                                         
                                         HTMLElement
                                             <strong>getTarget</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Event&gt; ev, 
-                                                    &lt;boolean&gt; resolveTextNode
-                                                )
+                                                        
+                                                         ev
+                                                    
+                                                
+                                                        , 
+                                                         resolveTextNode
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -558,14 +609,15 @@ left out, all listeners will be returned
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>ev</code> - 
+                                                            <code>ev &lt;Event&gt;</code>
                                                              the event
                                                         </dd>
                                                         <dd>
-                                                            <code>resolveTextNode</code> - 
+                                                            <code>resolveTextNode &lt;boolean&gt;</code>
                                                              when set to true the target's
 parent will be returned if the target is a 
 text node.  @deprecated, the text node is
@@ -594,10 +646,13 @@ now resolved automatically
                                         
                                         Date
                                             <strong>getTime</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Event&gt; ev
-                                                )
+                                                        
+                                                         ev
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -606,10 +661,11 @@ event is modified using the current time.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>ev</code> - 
+                                                            <code>ev &lt;Event&gt;</code>
                                                              the event
                                                         </dd>
                                                 </dl>
@@ -635,6 +691,8 @@ event is modified using the current time.
                                         
                                         void
                                             <strong>getXY</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -642,6 +700,7 @@ event is modified using the current time.
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -664,6 +723,8 @@ event is modified using the current time.
                                         
                                         void
                                             <strong>on</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -671,6 +732,7 @@ event is modified using the current time.
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -693,13 +755,25 @@ event is modified using the current time.
                                         
                                         void
                                             <strong>onAvailable</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;string&gt; p_id, 
-                                                    &lt;function&gt; p_fn, 
-                                                    &lt;object&gt; p_obj, 
-                                                    &lt;boolean&gt; p_override
-                                                )
+                                                        
+                                                         p_id
+                                                    
+                                                
+                                                        , 
+                                                         p_fn
+                                                    
+                                                
+                                                        , 
+                                                         p_obj
+                                                    
+                                                
+                                                        , 
+                                                         p_override
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -712,23 +786,24 @@ configurable.  By default it will poll for 10 seconds.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>p_id</code> - 
+                                                            <code>p_id &lt;string&gt;</code>
                                                              the id of the element to look for.
                                                         </dd>
                                                         <dd>
-                                                            <code>p_fn</code> - 
+                                                            <code>p_fn &lt;function&gt;</code>
                                                              what to execute when the element is found.
                                                         </dd>
                                                         <dd>
-                                                            <code>p_obj</code> - 
+                                                            <code>p_obj &lt;object&gt;</code>
                                                              an optional object to be passed back as
 a parameter to p_fn.
                                                         </dd>
                                                         <dd>
-                                                            <code>p_override</code> - 
+                                                            <code>p_override &lt;boolean&gt;</code>
                                                              If set to true, p_fn will execute
 in the scope of p_obj
                                                         </dd>
@@ -755,13 +830,25 @@ in the scope of p_obj
                                         
                                         void
                                             <strong>onContentReady</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;string&gt; p_id, 
-                                                    &lt;function&gt; p_fn, 
-                                                    &lt;object&gt; p_obj, 
-                                                    &lt;boolean&gt; p_override
-                                                )
+                                                        
+                                                         p_id
+                                                    
+                                                
+                                                        , 
+                                                         p_fn
+                                                    
+                                                
+                                                        , 
+                                                         p_obj
+                                                    
+                                                
+                                                        , 
+                                                         p_override
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -771,23 +858,24 @@ available element is safe to modify.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>p_id</code> - 
+                                                            <code>p_id &lt;string&gt;</code>
                                                              the id of the element to look for.
                                                         </dd>
                                                         <dd>
-                                                            <code>p_fn</code> - 
+                                                            <code>p_fn &lt;function&gt;</code>
                                                              what to execute when the element is ready.
                                                         </dd>
                                                         <dd>
-                                                            <code>p_obj</code> - 
+                                                            <code>p_obj &lt;object&gt;</code>
                                                              an optional object to be passed back as
 a parameter to p_fn.
                                                         </dd>
                                                         <dd>
-                                                            <code>p_override</code> - 
+                                                            <code>p_override &lt;boolean&gt;</code>
                                                              If set to true, p_fn will execute
 in the scope of p_obj
                                                         </dd>
@@ -814,10 +902,13 @@ in the scope of p_obj
                                         
                                         void
                                             <strong>preventDefault</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Event&gt; ev
-                                                )
+                                                        
+                                                         ev
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -825,10 +916,11 @@ in the scope of p_obj
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>ev</code> - 
+                                                            <code>ev &lt;Event&gt;</code>
                                                              the event
                                                         </dd>
                                                 </dl>
@@ -854,12 +946,21 @@ in the scope of p_obj
                                         
                                         void
                                             <strong>purgeElement</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;HTMLElement&gt; el, 
-                                                    &lt;boolean&gt; recurse, 
-                                                    &lt;string&gt; sType
-                                                )
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         recurse
+                                                    
+                                                
+                                                        , 
+                                                         sType
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -869,19 +970,20 @@ Optionally, you can specify a specific type of event to remove.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>el</code> - 
+                                                            <code>el &lt;HTMLElement&gt;</code>
                                                              the element to purge
                                                         </dd>
                                                         <dd>
-                                                            <code>recurse</code> - 
+                                                            <code>recurse &lt;boolean&gt;</code>
                                                              recursively purge this element's children
 as well.  Use with caution.
                                                         </dd>
                                                         <dd>
-                                                            <code>sType</code> - 
+                                                            <code>sType &lt;string&gt;</code>
                                                              optional type of listener to purge. If
 left out, all listeners will be removed
                                                         </dd>
@@ -908,12 +1010,21 @@ left out, all listeners will be removed
                                         
                                         boolean
                                             <strong>removeListener</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Object&gt; el, 
-                                                    &lt;String&gt; sType, 
-                                                    &lt;Function&gt; fn
-                                                )
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         sType
+                                                    
+                                                
+                                                        , 
+                                                         fn
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -921,20 +1032,23 @@ left out, all listeners will be removed
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>el</code> - 
+                                                            <code>el &lt;Object&gt;</code>
                                                              the html element or the id of the element to 
 assign the event to.
                                                         </dd>
                                                         <dd>
-                                                            <code>sType</code> - 
-                                                             the type of event to remove
+                                                            <code>sType &lt;String&gt;</code>
+                                                             the type of event to remove.
                                                         </dd>
                                                         <dd>
-                                                            <code>fn</code> - 
-                                                             the method the event invokes
+                                                            <code>fn &lt;Function&gt;</code>
+                                                             the method the event invokes.  If fn is
+undefined, then all event handlers for the type of event are 
+removed.
                                                         </dd>
                                                 </dl>
 
@@ -944,7 +1058,7 @@ assign the event to.
                                                         boolean
                                                     </code></dt>
                                                     <dd>true if the unbind was successful, false 
-otherwise</dd>
+otherwise.</dd>
                                                 </dl>
              
                                         </div>
@@ -960,10 +1074,13 @@ otherwise</dd>
                                         
                                         HTMLElement
                                             <strong>resolveTextNode</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;HTMLElement&gt; node
-                                                )
+                                                        
+                                                         node
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -973,10 +1090,11 @@ return value for getTarget and getRelatedTarget.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>node</code> - 
+                                                            <code>node &lt;HTMLElement&gt;</code>
                                                              node to resolve
                                                         </dd>
                                                 </dl>
@@ -1002,10 +1120,13 @@ return value for getTarget and getRelatedTarget.
                                         
                                         void
                                             <strong>stopEvent</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Event&gt; ev
-                                                )
+                                                        
+                                                         ev
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -1013,10 +1134,11 @@ return value for getTarget and getRelatedTarget.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>ev</code> - 
+                                                            <code>ev &lt;Event&gt;</code>
                                                              the event
                                                         </dd>
                                                 </dl>
@@ -1042,10 +1164,13 @@ return value for getTarget and getRelatedTarget.
                                         
                                         void
                                             <strong>stopPropagation</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Event&gt; ev
-                                                )
+                                                        
+                                                         ev
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -1053,10 +1178,11 @@ return value for getTarget and getRelatedTarget.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>ev</code> - 
+                                                            <code>ev &lt;Event&gt;</code>
                                                              the event
                                                         </dd>
                                                 </dl>
