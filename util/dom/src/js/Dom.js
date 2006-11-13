@@ -52,10 +52,16 @@ http://developer.yahoo.net/yui/license.txt
     };
     
     // branching at load instead of runtime
-    if (window.getComputedStyle) { // W3C DOM method
+    if (document.defaultView && document.defaultView.getComputedStyle) { // W3C DOM method
         getStyle = function(el, property) {
-            // check style object first
-            return el.style[property] || getComputedStyle(el, null)[property];
+            var value = null;
+            
+            var computed = document.defaultView.getComputedStyle(el, '');
+            if (computed) { // test computed before touching for safari
+                value = computed[toCamel(property)];
+            }
+            
+            return el.style[property] || value;
         };
     } else if (document.documentElement.currentStyle && isIE) { // IE method
         getStyle = function(el, property) {                         
@@ -75,9 +81,10 @@ http://developer.yahoo.net/yui/license.txt
                     }
                     return val / 100;
                     break;
-                default:
-                    return (el.currentStyle) ? // currentStyle first
-                            el.currentStyle[property] : el.style[property];
+                default: 
+                    // test currentStyle before touching
+                    var value = el.currentStyle ? el.currentStyle[property] : null;
+                    return ( el.style[property] || value );
             }
         };
     } else { // default to inline only
