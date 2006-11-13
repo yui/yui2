@@ -79,7 +79,7 @@ body{text-align:center;}
 }
 
 .yui-t7 #yui-main .yui-b {
-	dispay:block;margin:0 0 1em 0;
+	display:block;margin:0 0 1em 0;
 }
 #yui-main .yui-b {float:none;width:auto;}
 /* GRIDS (not TEMPLATES) */
