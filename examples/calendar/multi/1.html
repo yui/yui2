@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>YUI Calendar - Multi-Select Calendar (YUI Library)</title>
+
+	<link type="text/css" rel="stylesheet" href="../../../build/reset-fonts-grids/reset-fonts-grids.css">
+
+	<link rel="stylesheet" type="text/css" href="../../../docs/assets/dpSyntaxHighlighter.css">
+	<link type="text/css" rel="stylesheet" href="../assets/style.css">
+</head>
+
+<body>
+
+	<div id="doc3" class="yui-t4">
+		<div id="hd">
+			<a href="http://developer.yahoo.com/yui" id="logo"><div></div></a>
+			<h1>YUI Calendar: Multi-Select Calendar</h1>
+		</div>
+
+		<div id="bd">
+
+					<div id="toc" class="yui-b">
+			<ul>
+				<li class="sect"><a href="../index.html">YUI Calendar: Tutorials</a></li>
+
+<li class="item"><a href="../quickstart/1.html">Quickstart Tutorial</a></li>
+<li class="item selected"><a href="1.html">Multi-Select Calendar</a></li>
+<li class="child active"><a href="1.html">Setting up the Calendar</a></li>
+<li class="child"><a href="2.html">Functional Example</a></li>
+<li class="item"><a href="../dual/1.html">Dual Calendars</a></li>
+<li class="item"><a href="../minmax/1.html">Minimum / Maximum Dates</a></li>
+<li class="item"><a href="../events/1.html">Handling Events</a></li>
+<li class="item"><a href="../formtxt/1.html">Calendar & Text Fields</a></li>
+<li class="item"><a href="../formsel/1.html">Calendar & Select Fields</a></li>
+<li class="item"><a href="../render/1.html">Using the Render Stack</a></li>
+<li class="item"><a href="../germany/1.html">Localization: Germany</a></li>
+<li class="item"><a href="../japan/1.html">Localization: Japan</a></li>
+<li class="item"><a href="../popup/1.html">Popup Calendar</a></li>
+			</ul>
+		</div>
+			<div id="yui-main">
+				<div class="yui-b">
+					<h1 class="first">Setting up the Calendar</h1>
+
+								<p>Although the default Calendar control only allows for a single selection to be made, it's easy to configure a Calendar to accept multiple selections.</p>
+
+			<p>The markup for our multi-select Calendar example looks indentical to the single-select Calendar:</p>
+
+			<textarea name="code" class="HTML" cols="60" rows="1">
+				<div id="cal1Container"></div>
+			</textarea>
+
+			<p>Instantiating a multi-select Calendar is similar to instantiating a single-select Calendar; however, to specify the multi-select configuration we pass a configuration object into the constructor. The configuration object is a JavaScript object literal can be passed to the Calendar constructor in the form of key/value pairs for the purpose of setting the Calendar's various configuration properties. In this case, we'll specify that the "MULTI-SELECT" option has a value of true in line 6 below.</p>
+
+			<textarea name="code" class="JScript" cols="60" rows="1">
+				<script>
+						YAHOO.namespace("example.calendar");
+
+						function init() {
+							YAHOO.example.calendar.cal1 =
+								new YAHOO.widget.Calendar("cal1","cal1Container", { MULTI_SELECT: true } );
+
+							YAHOO.example.calendar.cal1.render();
+						}
+
+						YAHOO.util.Event.addListener(window, "load", init);
+				</script>
+			</textarea>
+
+			<p>You will see Calendar's various other configuration properties at work throughout the remainder of the tutorials, and you can also view the Calendar's <a href="#"http://developer.yahoo.com/yui/calendar/">configuration properties reference</a> for more details.</p>
+					<div id="stepnav">
+						<a class="next" href="2.html">Continue to <em>Functional Example</em> &gt;</a>					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="ft">&nbsp;</div>
+	</div>	
+
+	<script src="../../../docs/assets/dpSyntaxHighlighter.js"></script>
+	<script language="javascript"> 
+		dp.SyntaxHighlighter.HighlightAll('code'); 
+	</script>
+
+</body>
+</html>

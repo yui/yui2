@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		
+		<script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
+		<script type="text/javascript" src="../../../build/event/event.js" ></script>
+		<script type="text/javascript" src="../../../build/dom/dom.js" ></script>
+
+		<script type="text/javascript" src="../../../build/container/container_core.js"></script>
+		
+		<style>
+			.module { border:1px dotted black;padding:5px;margin:10px; }
+			.module .hd { border:1px solid red;padding:5px; }
+			.module .bd { border:1px solid green;padding:5px; }
+			.module .ft { border:1px solid blue;padding:5px; }
+		</style>
+
+		<script>
+				YAHOO.namespace("example.container");
+
+				function init() {
+					YAHOO.example.container.module1 = new YAHOO.widget.Module("module1");
+					YAHOO.example.container.module1.render();
+
+					YAHOO.example.container.module2 = new YAHOO.widget.Module("module2");
+					YAHOO.example.container.module2.setHeader("Module #2 from Script");
+					YAHOO.example.container.module2.setBody("This is a dynamically generated Module.");
+					YAHOO.example.container.module2.setFooter("End of Module #2");
+					YAHOO.example.container.module2.render(document.body);
+
+					YAHOO.util.Event.addListener("show1", "click", YAHOO.example.container.module1.show, YAHOO.example.container.module1, true);
+					YAHOO.util.Event.addListener("hide1", "click", YAHOO.example.container.module1.hide, YAHOO.example.container.module1, true);
+
+					YAHOO.util.Event.addListener("show2", "click", YAHOO.example.container.module2.show, YAHOO.example.container.module2, true);
+					YAHOO.util.Event.addListener("hide2", "click", YAHOO.example.container.module2.hide, YAHOO.example.container.module2, true);
+				}
+
+				YAHOO.util.Event.addListener(window, "load", init);
+		</script>
+
+	</head>
+	<body>
+		<div>
+			<button id="show1">Show module1</button> 
+			<button id="hide1">Hide module1</button>
+		</div>
+
+		<div id="module1">
+			<div class="hd">Module #1 from Markup</div>
+			<div class="bd">This is a Module that was marked up in the document.</div>
+			<div class="ft">End of Module #1</div>
+		</div>
+
+		<div>
+			<button id="show2">Show module2</button> 
+			<button id="hide2">Hide module2</button>
+		</div>
+
+	</body>
+</html>

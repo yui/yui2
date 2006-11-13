@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>YUI Calendar - Using the Render Stack (YUI Library)</title>
+
+	<link type="text/css" rel="stylesheet" href="../../../build/reset-fonts-grids/reset-fonts-grids.css">
+
+	<link rel="stylesheet" type="text/css" href="../../../docs/assets/dpSyntaxHighlighter.css">
+	<link type="text/css" rel="stylesheet" href="../assets/style.css">
+</head>
+
+<body>
+
+	<div id="doc3" class="yui-t4">
+		<div id="hd">
+			<a href="http://developer.yahoo.com/yui" id="logo"><div></div></a>
+			<h1>YUI Calendar: Using the Render Stack</h1>
+		</div>
+
+		<div id="bd">
+
+					<div id="toc" class="yui-b">
+			<ul>
+				<li class="sect"><a href="../index.html">YUI Calendar: Tutorials</a></li>
+
+<li class="item"><a href="../quickstart/1.html">Quickstart Tutorial</a></li>
+<li class="item"><a href="../multi/1.html">Multi-Select Calendar</a></li>
+<li class="item"><a href="../dual/1.html">Dual Calendars</a></li>
+<li class="item"><a href="../minmax/1.html">Minimum / Maximum Dates</a></li>
+<li class="item"><a href="../events/1.html">Handling Events</a></li>
+<li class="item"><a href="../formtxt/1.html">Calendar & Text Fields</a></li>
+<li class="item"><a href="../formsel/1.html">Calendar & Select Fields</a></li>
+<li class="item selected"><a href="1.html">Using the Render Stack</a></li>
+<li class="child active"><a href="1.html">Setting up the Calendar</a></li>
+<li class="child"><a href="2.html">Functional Example</a></li>
+<li class="item"><a href="../germany/1.html">Localization: Germany</a></li>
+<li class="item"><a href="../japan/1.html">Localization: Japan</a></li>
+<li class="item"><a href="../popup/1.html">Popup Calendar</a></li>
+			</ul>
+		</div>
+			<div id="yui-main">
+				<div class="yui-b">
+					<h1 class="first">Setting up the Calendar</h1>
+
+					
+			<p>Calendar employs a feature called the <em>Render Stack</em> to allow you to customize the way that certain date cells are rendered on the Calendar. The Render Stack consists of a collection of functions that can be executed when rendering certain dates. When the Calendar is rendered, each function in the Render Stack is executed for each applicable date. This functionality allows developers implementing the Calendar to alter the contents of date cells based on a set of rules.</p>
+			
+			<p>The built-in renderers are:</p>
+
+			<ul class="properties">
+				<li><strong>renderCellDefault</strong> - Places a clickable link in the date cell</li>
+				<li><strong>renderBodyCellRestricted</strong> - Renders a text=only cell with the "restricted" style</li>
+				<li><strong>renderOutOfBoundsDate</strong> - Renders an out-of-bounds date (beyond the specified min/max dates)</li>
+				<li><strong>renderCellNotThisMonth</strong> - Renders a cell that is displayed in the current page, but precedes or follows the current month</li>
+				<li><strong>renderCellStyleToday</strong> - Renders the cell representing today's date</li>
+				<li><strong>renderCellStyleSelected</strong> - Renders a selected cell</li>
+				<li><strong>renderCellStyleHighlight1</strong> - Adds the "highlight1" class to the date cell</li>
+				<li><strong>renderCellStyleHighlight2</strong> - Adds the "highlight2" class to the date cell</li>
+				<li><strong>renderCellStyleHighlight3</strong> - Adds the "highlight3" class to the date cell</li>
+				<li><strong>renderCellStyleHighlight4</strong> - Adds the "highlight4" class to the date cell</li>
+			</ul>
+
+			<p>In this tutorial, we will create a Calendar that makes use of the built-in renderers, and we will also create one of our own. To begin, we will instantiate a new Calendar and apply the restricted renderer to 2/29 of any year, and the "highlight1" style to the range of dates between 2/1/2008 and 2/7/2008.</p>
+
+			<textarea name="code" class="JScript" cols="60" rows="1">
+					YAHOO.example.calendar.cal1 = new YAHOO.widget.CalendarGroup("cal1","cal1Container", 
+																			    { pagedate:"2/2008" } );
+
+					YAHOO.example.calendar.cal1.addRenderer("2/29", YAHOO.example.calendar.cal1.renderBodyCellRestricted);
+					YAHOO.example.calendar.cal1.addRenderer("2/1/2008-2/7/2008", YAHOO.example.calendar.cal1.renderCellStyleHighlight1);
+			</textarea>
+
+
+			<p>Next, we will create a custom renderer that will place an "X" in the cell for every Sunday, and style it in a dark gray color. In order to specify that our renderer should override the default renderer (renderCellDefault), the custom function must return YAHOO.widget.Calendar.STOP_RENDER. This tells the Calendar to ignore the rest of the Render Stack and continue rendering the rest of the Calendar.</p>
+
+			<textarea name="code" class="JScript" cols="60" rows="1">
+					var myCustomRenderer = function(workingDate, cell) {
+						cell.innerHTML = "X";
+						YAHOO.util.Dom.addClass(cell, "sunday");
+						return YAHOO.widget.Calendar.STOP_RENDER;
+					}
+					YAHOO.example.calendar.cal1.addWeekdayRenderer(1, myCustomRenderer);
+			</textarea>
+
+					<div id="stepnav">
+						<a class="next" href="2.html">Continue to <em>Functional Example</em> &gt;</a>					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="ft">&nbsp;</div>
+	</div>	
+
+	<script src="../../../docs/assets/dpSyntaxHighlighter.js"></script>
+	<script language="javascript"> 
+		dp.SyntaxHighlighter.HighlightAll('code'); 
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+		<link type="text/css" rel="stylesheet" href="../../../build/fonts/fonts.css">
+		<link type="text/css" rel="stylesheet" href="../../../build/reset/reset.css">
+		
+		<script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
+		<script type="text/javascript" src="../../../build/event/event.js" ></script>
+		<script type="text/javascript" src="../../../build/dom/dom.js" ></script>
+
+		<script type="text/javascript" src="../../../build/calendar/calendar.js"></script>
+		<link type="text/css" rel="stylesheet" href="../../../build/calendar/assets/calendar.css">
+
+		<script>
+				YAHOO.namespace("example.calendar");
+
+				function init() {
+					YAHOO.example.calendar.cal1 = new YAHOO.widget.Calendar("cal1","cal1Container", 
+																			{ pagedate : "1/2006",
+																			  mindate: "1/5/2006",
+																			  maxdate: "1/15/2006" }
+																			);
+					YAHOO.example.calendar.cal1.render();
+				}
+
+				YAHOO.util.Event.addListener(window, "load", init);
+		</script>
+
+	</head>
+	<body>
+		<div id="cal1Container"></div>
+	</body>
+</html>
