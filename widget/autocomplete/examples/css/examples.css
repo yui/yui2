@@ -1,0 +1,24 @@
+    h1 {font-size:144%;}
+    h2 {font-size:129%;}
+    h3 {font-size:114%;}
+    h4 {font-size:100%;}
+    h1,h2,h3,h4 {font-weight:bold;}
+    body {margin:1em;font-family:verdana,arial,sans-serif;}
+    ul {width:80%;}
+    dl {padding:1em;}
+    
+    #hd {position:relative;}
+    #hd .logo {width:65px;height:38px;vertical-align:middle;padding-right:10px;}
+
+    #bd h1,h2,h3,p{padding:.5em;}
+    
+    #code {clear:both;}
+    #code .code {padding:1em;background:#DEDEDE;border:1px solid black;font-size:92%;}
+    
+    #logger {position:relative;float:right;clear:both;margin:1em;width:30em;padding:.5em;}
+    
+    #panel {width:40%;background:#DEDEDE;border:1px solid #000;margin:2em;padding:1em;}
+    #panel div {margin-top:1em;padding-bottom:.5em;border-bottom:1px solid #404040;}
+    
+    #coder {position:absolute;background:#DEDEDE;border:1px solid #000;margin:1em;padding:.5em;bottom:10px;right:10px;}
+    #output {position:relative;width:30em;height:15em;margin-top:1em;}

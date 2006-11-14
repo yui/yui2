@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Example: AutoComplete - Basic JSON Data (YUI Library)</title>
+<link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
+<link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
+<link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
+<link type="text/css" rel="stylesheet" href="./css/examples.css">
+<link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
+
+<style type="text/css">
+    #ysearchmod {text-align:center;}
+    #ysearchinput {width:20em;height:1.4em;}
+    #ysearchcontainer {position:absolute;z-index:9050;}
+    #ysearchcontainer .yui-ac-content {position:absolute;left:0;top:0;width:20em;border:1px solid #404040;background:#fff;overflow:hidden;text-align:left;z-index:9050;}
+    #ysearchcontainer .yui-ac-shadow {position:absolute;left:0;top:0;margin:.3em;background:#a0a0a0;z-index:9049;}
+    #ysearchcontainer ul {padding:5px 0;width:100%;}
+    #ysearchcontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
+    #ysearchcontainer li.yui-ac-highlight {background:#ff0;}
+</style>
+</head>
+
+<body>
+<div id="hd">
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">AutoComplete Widget</a> :: Basic JSON Data</h1>
+</div>
+
+<div id="bd">
+    <!-- AutoComplete begins -->
+    <div id="ysearchmod">
+        <form onsubmit="return YAHOO.example.ACJson.validateForm();">
+            <label>Yahoo! Search</label>
+            <input id="ysearchinput">
+            <input id="ysearchsubmit" type="submit" value="Submit Query">
+            <div id="ysearchcontainer"></div>
+        </form>
+    </div>
+    <!-- AutoComplete ends -->
+
+    <!-- Logger begins -->
+    <div id="logger"></div>
+    <!-- Logger ends -->
+
+    <!-- Content begins -->
+    <p>This example's DataSource instance points to Yahoo! Search Web Services,
+    which returns JSON data via a simple PHP proxy. The DataSource schema will
+    parse the data found in the object literal for fields named "Title",
+    "Summary", and "Cache". In order for the Yahoo! Search application to return
+    valid data, the DataSource property <code>scriptQueryAppend</code> is used
+    to pass along all the required query parameters, and the property
+    <code>queryMatchContains</code> has been enabled.</p>
+    
+    <p>To achieve the shrink-wrapped centered search module, not only have custom CSS
+    been applied, but the the <code>doBeforeExpandContainer</code> method has also been
+    customized to position the container directly below the input field.
+    <!-- Sample code begins -->
+    <div id="code">
+        <h3>Sample Code</h3>
+
+        <p>CSS:</p>
+        
+        <textarea name="code" class="HTML" cols="60" rows="1">
+            #ysearchmod {text-align:center;}
+            #ysearchinput {width:20em;height:1.4em;}
+            #ysearchcontainer {position:absolute;z-index:9050;}
+            #ysearchcontainer .yui-ac-content {position:absolute;left:0;top:0;width:20em;border:1px solid #404040;background:#fff;overflow:hidden;text-align:left;z-index:9050;}
+            #ysearchcontainer .yui-ac-shadow {position:absolute;left:0;top:0;margin:.3em;background:#a0a0a0;z-index:9049;}
+            #ysearchcontainer ul {padding:5px 0;width:100%;}
+            #ysearchcontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
+            #ysearchcontainer li.yui-ac-highlight {background:#ff0;}
+        </textarea>
+
+        <p>Markup:</p>
+        
+        <textarea name="code" class="HTML" cols="60" rows="1">
+            <!-- AutoComplete begins -->
+                <div id="ysearchmod">
+                    <form onsubmit="return YAHOO.example.ACJson.validateForm();">
+                        <label>Yahoo! Search</label>
+                        <input id="ysearchinput">
+                        <input id="ysearchsubmit" type="submit" value="Submit Query">
+                        <div id="ysearchcontainer"></div>
+                    </form>
+                </div>
+            <!-- AutoComplete ends -->
+        </textarea>
+
+        <p>JavaScript:</p>
+
+        <textarea name="code" class="JScript" cols="60" rows="1">
+            // Instantiate an XHR DataSource and define schema as an array:
+            //     ["Multi-depth.object.notation.to.find.a.single.result.item",
+            //     "Query Key",
+            //     "Additional Param Name 1",
+            //     ...
+            //     "Additional Param Name n"]
+            oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_proxy.php", ["ResultSet.Result","Title"]);
+            oACDS.queryMatchContains = true;
+            oACDS.scriptQueryAppend = "output=json&results=100"; // Needed for YWS
+
+            // Instantiate AutoComplete
+            oAutoComp = new YAHOO.widget.AutoComplete("ysearchinput","ysearchcontainer", oACDS);
+            oAutoComp.useShadow = true;
+            oAutoComp.formatResult = function(oResultItem, sQuery) {
+                return oResultItem[1].Title + " (" + oResultItem[1].Url + ")";
+            };
+            oAutoComp.doBeforeExpandContainer = function(oTextbox, oContainer, sQuery, aResults) {
+                var pos = YAHOO.util.Dom.getXY(oTextbox);
+                pos[1] += YAHOO.util.Dom.get(oTextbox).offsetHeight;
+                YAHOO.util.Dom.setXY(oContainer,pos);
+                return true;
+            };
+        </textarea>
+    </div>
+    <!-- Code sample ends -->
+</div>
+<!-- Content ends -->
+
+<!-- Libary begins -->
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/event/event-debug.js"></script>
+<script type="text/javascript" src="../../build/connection/connection.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
+<script type="text/javascript" src="./js/json.js"></script>
+<script type="text/javascript" src="../../build/autocomplete/autocomplete-debug.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
+<!-- Library ends -->
+
+<script type="text/javascript">
+YAHOO.example.ACJson = function(){
+    var mylogger;
+    var oACDS;
+    var oAutoComp;
+    
+    return {
+        init: function() {
+            // Logger
+            mylogger = new YAHOO.widget.LogReader("logger");
+
+            // Instantiate an XHR DataSource and define schema as an array:
+            //     ["Multi-depth.object.notation.to.find.a.single.result.item",
+            //     "Query Key",
+            //     "Additional Param Name 1",
+            //     ...
+            //     "Additional Param Name n"]
+            oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_proxy.php", ["ResultSet.Result","Title"]);
+            oACDS.queryMatchContains = true;
+            oACDS.scriptQueryAppend = "output=json&results=100"; // Needed for YWS
+
+            // Instantiate AutoComplete
+            oAutoComp = new YAHOO.widget.AutoComplete("ysearchinput","ysearchcontainer", oACDS);
+            oAutoComp.useShadow = true;
+            oAutoComp.formatResult = function(oResultItem, sQuery) {
+                return oResultItem[1].Title + " (" + oResultItem[1].Url + ")";
+            };
+            oAutoComp.doBeforeExpandContainer = function(oTextbox, oContainer, sQuery, aResults) {
+                var pos = YAHOO.util.Dom.getXY(oTextbox);
+                pos[1] += YAHOO.util.Dom.get(oTextbox).offsetHeight;
+                YAHOO.util.Dom.setXY(oContainer,pos);
+                return true;
+            };
+        },
+
+        validateForm: function() {
+            // Validate form inputs here
+            return false;
+        }
+    };
+}();
+
+YAHOO.util.Event.addListener(this,"load",YAHOO.example.ACJson.init);
+</script>
+
+<script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+</body>
+</html>

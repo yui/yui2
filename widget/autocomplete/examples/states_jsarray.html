@@ -1,0 +1,672 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Example: AutoComplete - JavaScript Array (YUI Library)</title>
+<link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
+<link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
+<link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
+<link type="text/css" rel="stylesheet" href="./css/examples.css">
+<link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
+
+<style type="text/css">
+    #statesmod {position:relative;}
+    #statesautocomplete, #statesautocomplete2 {position:relative;width:15em;margin-bottom:1em;}/* set width of widget here*/
+    #statesautocomplete {z-index:9000} /* for IE z-index of absolute divs inside relative divs issue */
+    #statesinput, #statesinput2 {_position:absolute;width:100%;height:1.4em;z-index:0;} /* abs for ie quirks */
+    #statescontainer, #statescontainer2 {position:absolute;top:1.7em;width:100%}
+    #statescontainer .yui-ac-content, #statescontainer2 .yui-ac-content {position:absolute;width:100%;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
+    #statescontainer .yui-ac-shadow, #statescontainer2 .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
+    #statescontainer ul, #statescontainer2 ul {padding:5px 0;width:100%;}
+    #statescontainer li, #statescontainer2 li {padding:0 5px;cursor:default;white-space:nowrap;}
+    #statescontainer li.yui-ac-highlight, #statescontainer2 li.yui-ac-highlight {background:#ff0;}
+    #statescontainer li.yui-ac-prehighlight,#statescontainer2 li.yui-ac-prehighlight {background:#FFFFCC;}
+</style>
+</head>
+
+<body>
+<div id="hd">
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">AutoComplete Widget</a> :: JavaScript Array</h1>
+</div>
+
+<div id="bd">
+    <!-- Logger begins -->
+    <div id="logger"></div>
+    <!-- Logger ends -->
+
+    <!-- AutoComplete begins -->
+    <div id="statesmod">
+        <form onsubmit="return YAHOO.example.ACJSArray.validateForm();">
+            <h3>Find a state:</h3>
+            <div id="statesautocomplete">
+                <input id="statesinput">
+                <div id="statescontainer"></div>
+            </div>
+            <h3>Find an area code</h3>
+            <div id="statesautocomplete2">
+                <input id="statesinput2">
+                <div id="statescontainer2"></div>
+            </div>
+        </form>
+    </div>
+    <!-- AutoComplete ends -->
+
+    <!-- Content begins -->
+    <p>There are two AutoComplete widgets on this page that each point to a
+    different DS_JSArray DataSource instance. Driving each DataSource is a local
+    JavaScript array of strings: <code>statesArray</code> and <code>areaCodesArray</code>.
+    By pointing to arrays that are already loaded into memory the widget is
+    very fast to return data. Therefore, both AutoComplete instances are
+    configured to have a query delay of zero
+    seconds.</p>
+
+    <p>A few configurations have also been made to aid usability. The properties
+    <code>autoHighlight</code> and <code>typeAhead</code> have been enabled to
+    help reduce the number of user interactions. Enabling the
+    <code>prehighlightClassName</code> paramter provides supplemental visual
+    feedback for mouse events.</p>
+
+    <p>The <code>formatResult</code> method of the second AutoComplete instance
+    has been enhanced to display two data fields in the container, and the
+    <code>forceSelection</code> property has been enabled to prevent the user from
+    typing in a free-form selection.</p>
+
+    <!-- Sample code begins -->
+    <div id="code">
+    <h3>Sample Code</h3>
+
+        <p>CSS:</p>
+        
+        <textarea name="code" class="HTML" cols="60" rows="1">
+            #statesmod {position:relative;}
+            #statesautocomplete, #statesautocomplete2 {position:relative;width:15em;margin-bottom:1em;}/* set width of widget here*/
+            #statesautocomplete {z-index:9000} /* for IE z-index of absolute divs inside relative divs issue */
+            #statesinput, #statesinput2 {_position:absolute;width:100%;height:1.4em;z-index:0;} /* abs for ie quirks */
+            #statescontainer, #statescontainer2 {position:absolute;top:1.7em;width:100%}
+            #statescontainer .yui-ac-content, #statescontainer2 .yui-ac-content {position:absolute;width:100%;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
+            #statescontainer .yui-ac-shadow, #statescontainer2 .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
+            #statescontainer ul, #statescontainer2 ul {padding:5px 0;width:100%;}
+            #statescontainer li, #statescontainer2 li {padding:0 5px;cursor:default;white-space:nowrap;}
+            #statescontainer li.yui-ac-highlight, #statescontainer2 li.yui-ac-highlight {background:#ff0;}
+            #statescontainer li.yui-ac-prehighlight,#statescontainer2 li.yui-ac-prehighlight {background:#FFFFCC;}
+        </textarea>
+
+        <p>Markup:</p>
+        
+        <textarea name="code" class="HTML" cols="60" rows="1">
+            <!-- AutoComplete begins -->
+            <div id="statesmod">
+                <form onsubmit="return YAHOO.example.ACJSArray.validateForm();">
+                    <h3>Find a state:</h3>
+                    <div id="statesautocomplete">
+                        <input id="statesinput">
+                        <div id="statescontainer"></div>
+                    </div>
+                    <h3>Find an area code</h3>
+                    <div id="statesautocomplete2">
+                        <input id="statesinput2">
+                        <div id="statescontainer2"></div>
+                    </div>
+                </form>
+            </div>
+            <!-- AutoComplete ends -->
+        </textarea>
+
+        <p>JavaScript:</p>
+        
+        <textarea name="code" class="JScript" cols="60" rows="1">
+            var statesArray = [
+                "Alabama",
+                "Alaska",
+                "Arizona",
+                "Arkansas",
+                "California",
+                "Colorado",
+                "Connecticut",
+                "Delaware",
+                "Florida" // Entire array not shown
+            ];
+
+            var areacodesArray = [
+                ["201", "New Jersey"],
+                ["202", "Washington, DC"],
+                ["203", "Connecticut"],
+                ["204", "Manitoba, Canada"],
+                ["205", "Alabama"],
+                ["206", "Washington"],
+                ["207", "Maine"] // Entire array not shown
+            ];
+
+            // Instantiate first JS Array DataSource
+            oACDS = new YAHOO.widget.DS_JSArray(statesArray);
+
+            // Instantiate first AutoComplete
+            oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
+            oAutoComp.queryDelay = 0;
+            oAutoComp.prehighlightClassName = "yui-ac-prehighlight";
+            oAutoComp.typeAhead = true;
+            oAutoComp.useShadow = true;
+
+            // Instantiate second JS Array DataSource
+            oACDS2 = new YAHOO.widget.DS_JSArray(areacodesArray);
+
+            // Instantiate second AutoComplete
+            oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput2','statescontainer2', oACDS2);
+            oAutoComp2.queryDelay = 0;
+            oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
+            oAutoComp2.typeAhead = true;
+            oAutoComp2.useShadow = true;
+            oAutoComp2.forceSelection = true;
+            oAutoComp2.formatResult = function(oResultItem, sQuery) {
+                var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";
+                return (sMarkup);
+            };
+        </textarea>
+    </div>
+    <!-- Code sample ends -->
+</div>
+<!-- Content ends -->
+
+<!-- Libary begins -->
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/event/event-debug.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
+<script type="text/javascript" src="../../build/autocomplete/autocomplete-debug.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
+<!-- Library ends -->
+
+<!-- In-memory JS array begins-->
+<script type="text/javascript">
+var statesArray = [
+    "Alabama",
+    "Alaska",
+    "Arizona",
+    "Arkansas",
+    "California",
+    "Colorado",
+    "Connecticut",
+    "Delaware",
+    "Florida",
+    "Georgia",
+    "Hawaii",
+    "Idaho",
+    "Illinois",
+    "Indiana",
+    "Iowa",
+    "Kansas",
+    "Kentucky",
+    "Louisiana",
+    "Maine",
+    "Maryland",
+    "Massachusetts",
+    "Michigan",
+    "Minnesota",
+    "Mississippi",
+    "Missouri",
+    "Montana",
+    "Nebraska",
+    "Nevada",
+    "New Hampshire",
+    "New Jersey",
+    "New Mexico",
+    "New York",
+    "North Dakota",
+    "North Carolina",
+    "Ohio",
+    "Oklahoma",
+    "Oregon",
+    "Pennsylvania",
+    "Rhode Island",
+    "South Carolina",
+    "South Dakota",
+    "Tennessee",
+    "Texas",
+    "Utah",
+    "Vermont",
+    "Virginia",
+    "Washington",
+    "West Virginia",
+    "Wisconsin",
+    "Wyoming"
+];
+var areacodesArray = [
+    ["201", "New Jersey"],
+    ["202", "Washington, DC"],
+    ["203", "Connecticut"],
+    ["204", "Manitoba, Canada"],
+    ["205", "Alabama"],
+    ["206", "Washington"],
+    ["207", "Maine"],
+
+    ["208", "Idaho"],
+    ["209", "California"],
+    ["210", "Texas"],
+    ["212", "New York"],
+    ["213", "California"],
+    ["214", "Texas"],
+
+    ["215", "Pennsylvania"],
+    ["216", "Ohio"],
+    ["217", "Illinois"],
+    ["218", "Minnesota"],
+    ["219", "Indiana"],
+    ["224", "Illinois"],
+
+    ["225", "Louisiana"],
+    ["227", "Maryland"],
+    ["228", "Mississippi"],
+    ["229", "Georgia"],
+    ["231", "Michigan"],
+    ["234", "Ohio"],
+
+    ["239", "Florida"],
+    ["240", "Maryland"],
+    ["242", "Bahamas"],
+    ["246", "Barbados"],
+    ["248", "Michigan"],
+    ["250", "British Columbia"],
+
+    ["251", "Alabama"],
+    ["252", "North Carolina"],
+    ["253", "Washington"],
+    ["254", "Texas"],
+    ["256", "Alabama"],
+    ["260", "Indiana"],
+
+    ["262", "Wisconsin"],
+    ["264", "Anguilla"],
+    ["267", "Pennsylvania"],
+    ["268", "Antigua and Barbuda"],
+    ["269", "Michigan"],
+    ["270", "Kentucky"],
+
+    ["276", "Virginia"],
+    ["281", "Texas"],
+    ["283", "Ohio"],
+    ["284", "British Virgin Islands"],
+    ["289", "Ontario"],
+    ["301", "Maryland"],
+
+    ["302", "Delaware"],
+    ["303", "Colorado"],
+    ["304", "West Virginia"],
+    ["305", "Florida"],
+    ["306", "Saskatchewan, Canada"],
+    ["307", "Wyoming"],
+
+    ["308", "Nebraska"],
+    ["309", "Illinois"],
+    ["310", "California"],
+    ["312", "Illinois"],
+    ["313", "Michigan"],
+    ["314", "Missouri"],
+
+    ["315", "New York"],
+    ["316", "Kansas"],
+    ["317", "Indiana"],
+    ["318", "Louisiana"],
+    ["319", "Iowa"],
+    ["320", "Minnesota"],
+
+    ["321", "Florida"],
+    ["323", "California"],
+    ["330", "Ohio"],
+    ["331", "Illinois"],
+    ["334", "Alabama"],
+    ["336", "North Carolina"],
+
+    ["337", "Louisiana"],
+    ["339", "Massachusetts"],
+    ["340", "US Virgin Islands"],
+    ["345", "Cayman Islands"],
+    ["347", "New York"],
+    ["351", "Massachusetts"],
+
+    ["352", "Florida"],
+    ["360", "Washington"],
+    ["361", "Texas"],
+    ["386", "Florida"],
+    ["401", "Rhode Island"],
+    ["402", "Nebraska"],
+
+    ["403", "Alberta, Canada"],
+    ["404", "Georgia"],
+    ["405", "Oklahoma"],
+    ["406", "Montana"],
+    ["407", "Florida"],
+    ["408", "California"],
+
+    ["409", "Texas"],
+    ["410", "Maryland"],
+    ["412", "Pennsylvania"],
+    ["413", "Massachusetts"],
+    ["414", "Wisconsin"],
+    ["415", "California"],
+
+    ["416", "Ontario, Canada"],
+    ["417", "Missouri"],
+    ["418", "Quebec, Canada"],
+    ["419", "Ohio"],
+    ["423", "Tennessee"],
+    ["424", "California"],
+
+    ["425", "Washington"],
+    ["434", "Virginia"],
+    ["435", "Utah"],
+    ["440", "Ohio"],
+    ["441", "Bermuda"],
+    ["443", "Maryland"],
+
+    ["445", "Pennsylvania"],
+    ["450", "Quebec, Canada"],
+    ["464", "Illinois"],
+    ["469", "Texas"],
+    ["470", "Georgia"],
+    ["473", "Grenada"],
+
+    ["475", "Connecticut"],
+    ["478", "Georgia"],
+    ["479", "Arkansas"],
+    ["480", "Arizona"],
+    ["484", "Pennsylvania"],
+    ["501", "Arkansas"],
+
+    ["502", "Kentucky"],
+    ["503", "Oregon"],
+    ["504", "Louisiana"],
+    ["505", "New Mexico"],
+    ["506", "New Brunswick, Canada"],
+    ["507", "Minnesota"],
+
+    ["508", "Massachusetts"],
+    ["509", "Washington"],
+    ["510", "California"],
+    ["512", "Texas"],
+    ["513", "Ohio"],
+    ["514", "Quebec, Canada"],
+
+    ["515", "Iowa"],
+    ["516", "New York"],
+    ["517", "Michigan"],
+    ["518", "New York"],
+    ["519", "Ontario, Canada"],
+    ["520", "Arizona"],
+
+    ["530", "California"],
+    ["540", "Virginia"],
+    ["541", "Oregon"],
+    ["551", "New Jersey"],
+    ["557", "Missouri"],
+    ["559", "California"],
+
+    ["561", "Florida"],
+    ["562", "California"],
+    ["563", "Iowa"],
+    ["564", "Washington"],
+    ["567", "Ohio"],
+    ["570", "Pennsylvania"],
+
+    ["571", "Virginia"],
+    ["573", "Missouri"],
+    ["574", "Indiana"],
+    ["580", "Oklahoma"],
+    ["585", "New York"],
+    ["586", "Michigan"],
+
+    ["601", "Mississippi"],
+    ["602", "Arizona"],
+    ["603", "New Hampshire"],
+    ["604", "British Columbia, Canada"],
+    ["605", "South Dakota"],
+    ["606", "Kentucky"],
+
+    ["607", "New York"],
+    ["608", "Wisconsin"],
+    ["609", "New Jersey"],
+    ["610", "Pennsylvania"],
+    ["612", "Minnesota"],
+    ["613", "Ontario, Canada"],
+
+    ["614", "Ohio"],
+    ["615", "Tennessee"],
+    ["616", "Michigan"],
+    ["617", "Massachusetts"],
+    ["618", "Illinois"],
+    ["619", "California"],
+
+    ["620", "Kansas"],
+    ["623", "Arizona"],
+    ["626", "California"],
+    ["630", "Illinois"],
+    ["631", "New York"],
+    ["636", "Missouri"],
+
+    ["641", "Iowa"],
+    ["646", "New York"],
+    ["647", "Ontario, Canada"],
+    ["649", "Turks and Caicos Islands"],
+    ["650", "California"],
+    ["651", "Minnesota"],
+
+    ["660", "Missouri"],
+    ["661", "California"],
+    ["662", "Mississippi"],
+    ["664", "Montserrat"],
+    ["667", "Maryland"],
+    ["670", "CNMI"],
+
+    ["671", "Guam"],
+    ["678", "Georgia"],
+    ["682", "Texas"],
+    ["701", "North Dakota"],
+    ["702", "Nevada"],
+    ["703", "Virginia"],
+
+    ["704", "North Carolina"],
+    ["705", "Ontario, Canada"],
+    ["706", "Georgia"],
+    ["707", "California"],
+    ["708", "Illinois"],
+    ["709", "Newfoundland, Canada"],
+
+    ["712", "Iowa"],
+    ["713", "Texas"],
+    ["714", "California"],
+    ["715", "Wisconsin"],
+    ["716", "New York"],
+    ["717", "Pennsylvania"],
+
+    ["718", "New York"],
+    ["719", "Colorado"],
+    ["720", "Colorado"],
+    ["724", "Pennsylvania"],
+    ["727", "Florida"],
+    ["731", "Tennessee"],
+
+    ["732", "New Jersey"],
+    ["734", "Michigan"],
+    ["737", "Texas"],
+    ["740", "Ohio"],
+    ["754", "Florida"],
+    ["757", "Viriginia"],
+
+    ["758", "St. Lucia"],
+    ["760", "California"],
+    ["763", "Minnesota"],
+    ["765", "Indiana"],
+    ["767", "Dominica"],
+    ["770", "Georgia"],
+
+    ["772", "Florida"],
+    ["773", "Illinois"],
+    ["774", "Massachusetts"],
+    ["775", "Nevada"],
+    ["778", "British Columbia, Canada"],
+    ["780", "Alberta, Canada"],
+
+    ["781", "Massachusetts"],
+    ["784", "St. Vincent &amp; Gren."],
+    ["785", "Kansas"],
+    ["786", "Florida"],
+    ["787", "Puerto Rico"],
+
+    ["801", "Utah"],
+    ["802", "Vermont"],
+    ["803", "South Carolina"],
+    ["804", "Virginia"],
+    ["805", "California"],
+    ["806", "Texas"],
+
+    ["807", "Ontario, Canada"],
+    ["808", "Hawaii"],
+    ["809", "Dominican Republic"],
+    ["810", "Michigan"],
+    ["812", "Indiana"],
+    ["813", "Florida"],
+
+    ["814", "Pennsylvania"],
+    ["815", "Illinois"],
+    ["816", "Missouri"],
+    ["817", "Texas"],
+    ["818", "California"],
+    ["819", "Quebec, Canada"],
+
+    ["828", "North Carolina"],
+    ["830", "Texas"],
+    ["831", "California"],
+    ["832", "Texas"],
+    ["835", "Pennsylvania"],
+    ["843", "South Carolina"],
+
+    ["845", "New York"],
+    ["847", "Illinois"],
+    ["848", "New Jersey"],
+    ["850", "Florida"],
+    ["856", "New Jersey"],
+    ["857", "Massachusetts"],
+
+    ["858", "California"],
+    ["859", "Kentucky"],
+    ["860", "Connecticut"],
+    ["862", "New Jersey"],
+    ["863", "Florida"],
+    ["864", "South Carolina"],
+
+    ["865", "Tennessee"],
+    ["867", "Yukon, NW Territories, Canada"],
+    ["868", "Trinidad and Tobago"],
+    ["869", "St. Kitts &amp; Nevis"],
+    ["870", "Arkansas"],
+
+    ["872", "Illinois"],
+    ["876", "Jamaica"],
+    ["878", "Pennsylvania"],
+    ["901", "Tennessee"],
+    ["902", "Nova Scotia, Canada"],
+    ["903", "Texas"],
+
+    ["904", "Florida"],
+    ["905", "Ontario, Canada"],
+    ["906", "Michigan"],
+    ["907", "Alaska"],
+    ["908", "New Jersey"],
+    ["909", "California"],
+
+    ["910", "North Carolina"],
+    ["912", "Georgia"],
+    ["913", "Kansas"],
+    ["914", "New York"],
+    ["915", "Texas"],
+    ["916", "California"],
+
+    ["917", "New York"],
+    ["918", "Oklahoma"],
+    ["919", "North Carolina"],
+    ["920", "Wisconsin"],
+    ["925", "California"],
+    ["928", "Arizona"],
+
+    ["931", "Tennessee"],
+    ["936", "Texas"],
+    ["937", "Ohio"],
+    ["939", "Puerto Rico"],
+    ["940", "Texas"],
+    ["941", "Florida"],
+
+    ["947", "Michigan"],
+    ["949", "California"],
+    ["952", "Minnesota"],
+    ["954", "Florida"],
+    ["956", "Texas"],
+    ["959", "Connecticut"],
+
+    ["970", "Colorado"],
+    ["971", "Oregon"],
+    ["972", "Texas"],
+    ["973", "New Jersey"],
+    ["975", "Missouri"],
+    ["978", "Massachusetts"],
+
+    ["979", "Texas"],
+    ["980", "North Carolina"],
+    ["984", "North Carolina"],
+    ["985", "Louisiana"],
+    ["989", "Michigan"]
+];
+</script>
+<!-- In-memory JS array ends-->
+
+
+<script type="text/javascript">
+YAHOO.example.ACJSArray = function() {
+    var mylogger;
+    var oACDS,oACDS2;
+    var oAutoComp,oAutoComp2;
+    return {
+        init: function() {
+            //Logger
+            mylogger = new YAHOO.widget.LogReader("logger");
+
+            // Instantiate first JS Array DataSource
+            oACDS = new YAHOO.widget.DS_JSArray(statesArray);
+
+            // Instantiate first AutoComplete
+            oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
+            oAutoComp.queryDelay = 0;
+            oAutoComp.prehighlightClassName = "yui-ac-prehighlight";
+            oAutoComp.typeAhead = true;
+            oAutoComp.useShadow = true;
+            
+            // Instantiate second JS Array DataSource
+            oACDS2 = new YAHOO.widget.DS_JSArray(areacodesArray);
+
+            // Instantiate second AutoComplete
+            oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput2','statescontainer2', oACDS2);
+            oAutoComp2.queryDelay = 0;
+            oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
+            oAutoComp2.typeAhead = true;
+            oAutoComp2.useShadow = true;
+            oAutoComp2.forceSelection = true;
+            oAutoComp2.formatResult = function(oResultItem, sQuery) {
+                var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";
+                return (sMarkup);
+            };
+        },
+
+        validateForm: function() {
+            // Validate form inputs here
+            return false;
+        }
+    };
+}();
+
+YAHOO.util.Event.addListener(this,'load',YAHOO.example.ACJSArray.init);
+</script>
+
+<script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</body>
+</html>

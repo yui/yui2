@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Example: AutoComplete - Basic XML Data (YUI Library)</title>
+<link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
+<link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
+<link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
+<link type="text/css" rel="stylesheet" href="./css/examples.css">
+<link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
+
+<style type="text/css">
+    #ysearchmod {position:relative;padding:1em;}
+    #ysearchautocomplete {position:relative;margin:1em;width:40%;}/* set width of widget here*/
+    #ysearchinput {position:absolute;width:100%;height:1.4em;}
+    #ysearchcontainer {position:absolute;top:1.7em;width:100%;}
+    #ysearchcontainer .yui-ac-content {position:absolute;width:100%;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
+    #ysearchcontainer .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
+    #ysearchcontainer ul {padding:5px 0;width:100%;}
+    #ysearchcontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
+    #ysearchcontainer li.yui-ac-highlight {background:#ff0;}
+</style>
+</head>
+
+<body>
+<div id="hd">
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">AutoComplete Widget</a> :: Basic XML Data</h1>
+</div>
+
+<div id="bd">
+    <!-- Logger begins -->
+    <div id="logger"></div>
+    <!-- Logger ends -->
+
+    <!-- Content begins -->
+    <h3>DataSource</h3>
+    <p>This DataSource instance points to Yahoo! Search Web Services, via a
+    simple PHP proxy. The DataSource schema is defined for XML data. In order
+    to be compatible with the Yahoo! Search application, the DataSource's
+    queryMatchContains is set to true, and the scriptQueryAppend has been
+    defined to pass in additional arguments.</p>
+
+    <h3>AutoComplete</h3>
+    <p>This AutoComplete instance uses only default configuration values.</p>
+
+    <!-- AutoComplete begins -->
+    <div id="ysearchmod">
+        <form onsubmit="return YAHOO.example.ACXml.validateForm();">
+            <h2>Yahoo! Search</h2>
+            <div id="ysearchautocomplete">
+                <input id="ysearchinput">
+                <div id="ysearchcontainer"></div>
+            </div>
+        </form>
+    </div>
+    <!-- AutoComplete ends -->
+    
+    <!-- Sample code begins -->
+    <div id="code">
+        <h3>Sample Code</h3>
+
+        <p>CSS:</p>
+        
+        <textarea name="code" class="HTML" cols="60" rows="1">
+            #ysearchmod {position:relative;padding:1em;}
+            #ysearchautocomplete {position:relative;margin:1em;width:40%;}/* set width of widget here*/
+            #ysearchinput {position:absolute;width:100%;height:1.4em;}
+            #ysearchcontainer {position:absolute;top:1.7em;width:100%;}
+            #ysearchcontainer .yui-ac-content {position:absolute;width:100%;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
+            #ysearchcontainer .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
+            #ysearchcontainer ul {padding:5px 0;width:100%;}
+            #ysearchcontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
+            #ysearchcontainer li.yui-ac-highlight {background:#ff0;}
+        </textarea>
+
+        <p>Markup:</p>
+        
+        <textarea name="code" class="HTML" cols="60" rows="1">
+            <!-- AutoComplete begins -->
+            <div id="ysearchmod">
+                <form onsubmit="return YAHOO.example.ACXml.validateForm();">
+                    <h2>Yahoo! Search</h2>
+                    <div id="ysearchautocomplete">
+                        <input id="ysearchinput">
+                        <div id="ysearchcontainer"></div>
+                    </div>
+                </form>
+            </div>
+            <!-- AutoComplete ends -->
+        </textarea>
+
+        <p>JavaScript:</p>
+        
+        <textarea name="code" class="JScript" cols="60" rows="1">
+            // Instantiate an XHR DataSource and define schema as an array:
+            //     ["Multi-depth.object.notation.to.find.a.single.result.item",
+            //     "Query Key",
+            //     "Additional Param Name 1",
+            //     ...
+            //     "Additional Param Name n"]
+            oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_proxy.php", ["Result", "Title"]);
+            oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_XML;
+            oACDS.queryMatchContains = true;
+            oACDS.scriptQueryAppend = "results=100"; // Needed for YWS
+
+            // Instantiate AutoComplete
+            oAutoComp = new YAHOO.widget.AutoComplete("ysearchinput","ysearchcontainer", oACDS);
+        </textarea>
+    </div>
+    <!-- Code sample ends -->
+</div>
+<!-- Content ends -->
+
+<!-- Libary begins -->
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/event/event-debug.js"></script>
+<script type="text/javascript" src="../../build/connection/connection.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
+<script type="text/javascript" src="../../build/autocomplete/autocomplete-debug.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
+<!-- Library ends -->
+
+<script type="text/javascript">
+YAHOO.example.ACXml = function(){
+    var mylogger;
+    var oACDS;
+    var oAutoComp;
+
+    return {
+        init: function() {
+            //Logger
+            mylogger = new YAHOO.widget.LogReader("logger");
+
+            // Instantiate an XHR DataSource and define schema as an array:
+            //     ["Multi-depth.object.notation.to.find.a.single.result.item",
+            //     "Query Key",
+            //     "Additional Param Name 1",
+            //     ...
+            //     "Additional Param Name n"]
+            oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_proxy.php", ["Result", "Title"]);
+            oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_XML;
+            oACDS.queryMatchContains = true;
+            oACDS.scriptQueryAppend = "results=100"; // Needed for YWS
+
+            // Instantiate AutoComplete
+            oAutoComp = new YAHOO.widget.AutoComplete("ysearchinput","ysearchcontainer", oACDS);
+        },
+
+        validateForm: function() {
+            // Validate form inputs here
+            return false;
+        }
+    };
+}();
+
+YAHOO.util.Event.addListener(this,"load",YAHOO.example.ACXml.init);
+</script>
+
+<script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Example: AutoComplete - Flickr XML (YUI Library)</title>
+<link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
+<link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
+<link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
+<link type="text/css" rel="stylesheet" href="./css/examples.css">
+<link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
+
+<style type="text/css">
+    #flickrmod {position:relative;padding:1em;}
+    #flickrautocomplete {position:relative;margin:1em;width:40%;}/* set width of widget here*/
+    #flickrinput {position:absolute;width:100%;height:1.4em;}
+    #flickrcontainer {position:absolute;top:1.7em;width:100%;}
+    #flickrcontainer .yui-ac-content {position:absolute;width:100%;height:30em;border:1px solid #404040;background:#fff;overflow:auto;overflow-x:hidden;z-index:9050;}
+    #flickrcontainer .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
+    #flickrcontainer .yui-ac-flickrImg {width:6em;height:6em;padding:.1em;vertical-align:middle;}
+    #flickrcontainer ul {padding:5px 0;width:100%;}
+    #flickrcontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
+    #flickrcontainer li.yui-ac-highlight {background:#ff0;}
+</style>
+</head>
+
+<body>
+<div id="hd">
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">AutoComplete Widget</a> :: Flickr XML</h1>
+</div>
+
+<div id="bd">
+    <!-- Logger begins -->
+    <div id="logger"></div>
+    <!-- Logger ends -->
+
+    <!-- Content begins -->
+    <p>This example uses a DataSource that points to Flickr Web
+    Services, which returns XML data via a simple PHP proxy. In order to return
+    valid data from the Flickr application, <code>scriptQueryParameter</code>
+    has been customized to be <code>"tags"</code>, and <code>scriptQueryAppend</code> is used
+    to pass in additional required arguments. The cache has been disabled so
+    that each query is forced to make a trip to the live application.</p>
+
+    <p>This instance of AutoComplete defines a robust custom
+    <code>formatResult</code> function that parses result data into custom HTML
+    markup that displays an actual image from the Flickr server. Automatic
+    highlighting of the first result item in the container has been disabled by
+    setting <code>autoHighlight</code> to <code>false</code>.</p>
+
+    <!-- AutoComplete begins -->
+    <div id="flickrmod">
+        <form onsubmit="return YAHOO.example.ACFlickr.validateForm();">
+            <h2>Enter Flickr tags to find a photo (separate with commas):</h2>
+            <div id="flickrautocomplete">
+                <input id="flickrinput">
+                <div id="flickrcontainer"></div>
+            </div>
+        </form>
+    </div>
+    <!-- AutoComplete ends -->
+
+    <!-- Sample code begins -->
+    <div id="code">
+        <h3>Sample Code</h3>
+
+        <p>CSS:</p>
+        
+        <textarea name="code" class="HTML" cols="60" rows="1">
+            #flickrmod {position:relative;padding:1em;}
+            #flickrautocomplete {position:relative;margin:1em;width:40%;}/* set width of widget here*/
+            #flickrinput {position:absolute;width:100%;height:1.4em;}
+            #flickrcontainer {position:absolute;top:1.7em;width:100%;}
+            #flickrcontainer .yui-ac-content {position:absolute;width:100%;height:30em;border:1px solid #404040;background:#fff;overflow:auto;overflow-x:hidden;z-index:9050;}
+            #flickrcontainer .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
+            #flickrcontainer .yui-ac-flickrImg {width:6em;height:6em;padding:.1em;vertical-align:middle;}
+            #flickrcontainer ul {padding:5px 0;width:100%;}
+            #flickrcontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
+            #flickrcontainer li.yui-ac-highlight {background:#ff0;}
+        </textarea>
+
+        <p>Markup:</p>
+        
+        <textarea name="code" class="HTML" cols="60" rows="1">
+            <!-- AutoComplete begins -->
+            <div id="flickrmod">
+                <form onsubmit="return YAHOO.example.ACFlickr.validateForm();">
+                    <h2>Enter Flickr tags to find a photo (separate with commas):</h2>
+                    <div id="flickrautocomplete">
+                        <input id="flickrinput">
+                        <div id="flickrcontainer"></div>
+                    </div>
+                </form>
+            </div>
+            <!-- AutoComplete ends -->
+        </textarea>
+
+        <p>JavaScript:</p>
+        
+        <textarea name="code" class="JScript" cols="60" rows="1">
+            // Instantiate an XHR DataSource and define schema as an array:
+            //     ["ResultNodeName",
+            //     "QueryKeyAttributeOrNodeName",
+            //     "AdditionalParamAttributeOrNodeName1",
+            //     ...
+            //     "AdditionalParamAttributeOrNodeNameN"]
+            oACDS = new YAHOO.widget.DS_XHR("./php/flickr_proxy.php",
+                ["photo", "title", "id", "owner", "secret", "server"]);
+            oACDS.scriptQueryParam = "tags";
+            oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_XML;
+            oACDS.maxCacheEntries = 0;
+            oACDS.scriptQueryAppend = "method=flickr.photos.search";
+
+            // Instantiate AutoComplete
+            oAutoComp = new YAHOO.widget.AutoComplete('flickrinput','flickrcontainer', oACDS);
+            oAutoComp.autoHighlight = false;
+            oAutoComp.formatResult = function(oResultItem, sQuery) {
+                // This was defined by the schema array of the data source
+                var sTitle = oResultItem[0];
+                var sId = oResultItem[1];
+                var sOwner = oResultItem[2];
+                var sSecret = oResultItem[3];
+                var sServer = oResultItem[4];
+                var sUrl = "http://static.flickr.com/" +
+                    sServer +
+                    "/" +
+                    sId +
+                    "_" +
+                    sSecret +
+                    "_s.jpg";
+                var sMarkup = "<img src='" + sUrl + "' class='yui-ac-flickrImg'> " + sTitle;
+                return (sMarkup);
+            };
+        </textarea>
+    </div>
+    <!-- Code sample ends -->
+</div>
+<!-- Content ends -->
+
+<!-- Libary begins -->
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/event/event-debug.js"></script>
+<script type="text/javascript" src="../../build/connection/connection.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
+<script type="text/javascript" src="../../build/autocomplete/autocomplete-debug.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
+<!-- Library ends -->
+
+<script type="text/javascript">
+YAHOO.example.ACFlickr = function() {
+    var mylogger;
+    var oACDS;
+    var oAutoComp;
+    
+    return {
+        init: function() {
+            //Logger
+            mylogger = new YAHOO.widget.LogReader("logger");
+
+            // Instantiate an XHR DataSource and define schema as an array:
+            //     ["ResultNodeName",
+            //     "QueryKeyAttributeOrNodeName",
+            //     "AdditionalParamAttributeOrNodeName1",
+            //     ...
+            //     "AdditionalParamAttributeOrNodeNameN"]
+            oACDS = new YAHOO.widget.DS_XHR("./php/flickr_proxy.php",
+                ["photo", "title", "id", "owner", "secret", "server"]);
+            oACDS.scriptQueryParam = "tags";
+            oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_XML;
+            oACDS.maxCacheEntries = 0;
+            oACDS.scriptQueryAppend = "method=flickr.photos.search";
+
+            // Instantiate AutoComplete
+            oAutoComp = new YAHOO.widget.AutoComplete('flickrinput','flickrcontainer', oACDS);
+            oAutoComp.autoHighlight = false;
+            oAutoComp.formatResult = function(oResultItem, sQuery) {
+                // This was defined by the schema array of the data source
+                var sTitle = oResultItem[0];
+                var sId = oResultItem[1];
+                var sOwner = oResultItem[2];
+                var sSecret = oResultItem[3];
+                var sServer = oResultItem[4];
+                var sUrl = "http://static.flickr.com/" +
+                    sServer +
+                    "/" +
+                    sId +
+                    "_" +
+                    sSecret +
+                    "_s.jpg";
+                var sMarkup = "<img src='" + sUrl + "' class='yui-ac-flickrImg'> " + sTitle;
+                return (sMarkup);
+            };
+        },
+
+        validateForm: function() {
+            // Validate form inputs here
+            return false;
+        }
+    };
+}();
+
+YAHOO.util.Event.addListener(this,'load',YAHOO.example.ACFlickr.init);
+</script>
+
+<script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</body>
+</html>

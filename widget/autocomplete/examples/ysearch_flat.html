@@ -1,0 +1,279 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Example: AutoComplete - Flat-file Data (YUI Library)</title>
+<link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
+<link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
+<link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
+<link type="text/css" rel="stylesheet" href="./css/examples.css">
+<link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
+
+<style type="text/css">
+    #ysearchmod {position:relative;padding:1em;}
+    #ysearchautocomplete0, #ysearchautocomplete1, #ysearchautocomplete2 {position:relative;margin-bottom:1.5em;width:40%;}/* set width of widget here*/
+    #ysearchautocomplete0 {z-index:9001;} /* for IE z-index of absolute divs inside relative divs issue */
+    #ysearchautocomplete1 {z-index:9000;} /* for IE z-index of absolute divs inside relative divs issue */
+    #ysearchinput0, #ysearchinput1, #ysearchinput2 {_position:absolute;width:100%;height:1.4em;} /* abs for ie quirks */
+    #ysearchcontainer0, #ysearchcontainer1, #ysearchcontainer2 {position:absolute;top:1.7em;width:100%;}
+    #ysearchcontainer0 .yui-ac-content, #ysearchcontainer1 .yui-ac-content, #ysearchcontainer2 .yui-ac-content {position:absolute;width:100%;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
+    #ysearchcontainer0 .ysearchquery, #ysearchcontainer1 .ysearchquery {position:absolute;right:10px;color:#808080;z-index:10;}
+    #ysearchcontainer0 .yui-ac-shadow, #ysearchcontainer1 .yui-ac-shadow, #ysearchcontainer2 .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
+    #ysearchcontainer0 ul, #ysearchcontainer1 ul, #ysearchcontainer2 ul {padding:5px 0;width:100%;}
+    #ysearchcontainer0 li, #ysearchcontainer1 li, #ysearchcontainer2 li {padding:0 5px;cursor:default;white-space:nowrap;}
+    #ysearchcontainer0 li.yui-ac-highlight {background:#ff0;}
+    #ysearchcontainer1 li.yui-ac-highlight {background:#0ff;}
+    #ysearchcontainer2 li.yui-ac-highlight {background:#a0a0a0;}
+    #ysearchcontainer2 li.yui-ac-prehighlight {background:pink;}
+</style>
+</head>
+
+<body>
+<div id="hd">
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">AutoComplete Widget</a> :: Flat-file Data</h1>
+</div>
+
+<div id="bd">
+    <!-- Logger begins -->
+    <div id="logger"></div>
+    <!-- Logger ends -->
+
+    <!-- Content begins -->
+    <p>This example's XHR DataSource instance points to a custom PHP script that
+    returns flat-file data. The DataSource schema is used to parse the tab- and
+    linebreak-delimited data. For maximum cache performance, the
+    <code>queryMatchSubset</code> property has been enabled, and the cache
+    itself has been turned up to 60 entries for fewer round trips to the server.
+    </p>
+
+    <p>On this page there are three separate AutoComplete instances that all
+    point to a single DataSource, which further maximizes cache efficiency.
+    Queries can be delimited using the semi-colon (;) character. For
+    demonstration purposes, each instance decreases the query delay slightly,
+    and each instance presents the return data in the container using slightly
+    different markup.</p>
+
+    <!-- AutoComplete begins -->
+    <div id="ysearchmod">
+        <form onsubmit="return YAHOO.example.ACFlatData.validateForm();">
+            <h2>Yahoo! Search (1 sec query delay):</h2>
+            <div id="ysearchautocomplete0">
+                <input id="ysearchinput0">
+                <div id="ysearchcontainer0"></div>
+            </div>
+            <h2>Yahoo! Search (0.5 sec query delay):</h2>
+            <div id="ysearchautocomplete1">
+                <input id="ysearchinput1">
+                <div id="ysearchcontainer1"></div>
+            </div>
+            <h2>Yahoo! Search (0 sec query delay):</h2>
+            <div id="ysearchautocomplete2">
+                <input id="ysearchinput2">
+                <div id="ysearchcontainer2"></div>
+            </div>
+        </form>
+    </div>
+    <!-- AutoComplete ends -->
+    
+    <!-- Sample code begins -->
+    <div id="code">
+        <h3>Sample Code</h3>
+
+        <p>CSS:</p>
+
+        <textarea name="code" class="HTML" cols="60" rows="1">
+            #ysearchmod {position:relative;padding:1em;}
+            #ysearchautocomplete0, #ysearchautocomplete1, #ysearchautocomplete2 {position:relative;margin-bottom:1.5em;width:40%;}/* set width of widget here*/
+            #ysearchautocomplete0 {z-index:9001;} /* for IE z-index of absolute divs inside relative divs issue */
+            #ysearchautocomplete1 {z-index:9000;} /* for IE z-index of absolute divs inside relative divs issue */
+            #ysearchinput0, #ysearchinput1, #ysearchinput2 {_position:absolute;width:100%;height:1.4em;} /* abs for ie quirks */
+            #ysearchcontainer0, #ysearchcontainer1, #ysearchcontainer2 {position:absolute;top:1.7em;width:100%;}
+            #ysearchcontainer0 .yui-ac-content, #ysearchcontainer1 .yui-ac-content, #ysearchcontainer2 .yui-ac-content {position:absolute;width:100%;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
+            #ysearchcontainer0 .ysearchquery, #ysearchcontainer1 .ysearchquery {position:absolute;right:10px;color:#808080;z-index:10;}
+            #ysearchcontainer0 .yui-ac-shadow, #ysearchcontainer1 .yui-ac-shadow, #ysearchcontainer2 .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
+            #ysearchcontainer0 ul, #ysearchcontainer1 ul, #ysearchcontainer2 ul {padding:5px 0;width:100%;}
+            #ysearchcontainer0 li, #ysearchcontainer1 li, #ysearchcontainer2 li {padding:0 5px;cursor:default;white-space:nowrap;}
+            #ysearchcontainer0 li.yui-ac-highlight {background:#ff0;}
+            #ysearchcontainer1 li.yui-ac-highlight {background:#0ff;}
+            #ysearchcontainer2 li.yui-ac-highlight {background:#a0a0a0;}
+            #ysearchcontainer2 li.yui-ac-prehighlight {background:pink;}
+        </textarea>
+
+        <p>Markup:</p>
+
+        <textarea name="code" class="HTML" cols="60" rows="1">
+            <!-- AutoComplete begins -->
+            <div id="ysearchmod">
+                <form onsubmit="return YAHOO.example.ACFlatData.validateForm();">
+                    <h2>Yahoo! Search (1 sec query delay):</h2>
+                    <div id="ysearchautocomplete0">
+                        <input id="ysearchinput0">
+                        <div id="ysearchcontainer0"></div>
+                    </div>
+                    <h2>Yahoo! Search (0.5 sec query delay):</h2>
+                    <div id="ysearchautocomplete1">
+                        <input id="ysearchinput1">
+                        <div id="ysearchcontainer1"></div>
+                    </div>
+                    <h2>Yahoo! Search (0 sec query delay):</h2>
+                    <div id="ysearchautocomplete2">
+                        <input id="ysearchinput2">
+                        <div id="ysearchcontainer2"></div>
+                    </div>
+                </form>
+            </div>
+            <!-- AutoComplete ends -->
+        </textarea>
+
+        <p>JavaScript:</p>
+
+        <textarea name="code" class="JScript" cols="60" rows="1">
+            // Instantiate one XHR DataSource and define schema as an array:
+            //     ["Record Delimiter",
+            //     "Field Delimiter"]
+            oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_flat.php", ["\n", "\t"]);
+            oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
+            oACDS.maxCacheEntries = 60;
+            oACDS.queryMatchSubset = true;
+
+            // Instantiate first AutoComplete
+            var myInput = document.getElementById('ysearchinput0');
+            var myContainer = document.getElementById('ysearchcontainer0');
+            oAutoComp0 = new YAHOO.widget.AutoComplete(myInput,myContainer,oACDS);
+            oAutoComp0.delimChar = ";";
+            oAutoComp0.queryDelay = 1;
+            oAutoComp0.formatResult = function(oResultItem, sQuery) {
+                var sKey = oResultItem[0];
+                var nQuantity = oResultItem[1];
+                var sKeyQuery = sKey.substr(0, sQuery.length);
+                var sKeyRemainder = sKey.substr(sQuery.length);
+                var aMarkup = ["<div id='ysearchresult'><div class='ysearchquery'>",
+                    nQuantity,
+                    "</div><span style='font-weight:bold'>",
+                    sKeyQuery,
+                    "</span>",
+                    sKeyRemainder,
+                    "</div>"];
+                return (aMarkup.join(""));
+            };
+
+            // Instantiate second AutoComplete
+            oAutoComp1 = new YAHOO.widget.AutoComplete('ysearchinput1','ysearchcontainer1', oACDS);
+            oAutoComp1.delimChar = ";";
+            oAutoComp1.formatResult = function(oResultItem, sQuery) {
+                var sKey = oResultItem[0];
+                var nQuantity = oResultItem[1];
+                var sKeyQuery = sKey.substr(0, sQuery.length);
+                var sKeyRemainder = sKey.substr(sQuery.length);
+                var aMarkup = ["<div class='ysearchresult'><div class='ysearchquery'>",
+                    nQuantity,
+                    "</div><span style='color:red'>",
+                    sKeyQuery,
+                    "</span>",
+                    sKeyRemainder,
+                    "</div>"];
+                return (aMarkup.join(""));
+            };
+
+            // Instantiate third AutoComplete
+            oAutoComp2 = new YAHOO.widget.AutoComplete('ysearchinput2','ysearchcontainer2', oACDS);
+            oAutoComp2.delimChar = ";";
+            oAutoComp2.queryDelay = 0;
+            oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
+        </textarea>
+    </div>
+    <!-- Code sample ends -->
+</div>
+<!-- Content ends -->
+
+<!-- Libary begins -->
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/event/event-debug.js"></script>
+<script type="text/javascript" src="../../build/connection/connection.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
+<script type="text/javascript" src="../../build/autocomplete/autocomplete-debug.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
+<!-- Library ends -->
+
+<script type="text/javascript">
+YAHOO.example.ACFlatData = function(){
+    var mylogger;
+    var oACDS;
+    var oAutoComp0,oAutoComp1,oAutoComp2;
+
+    return {
+        init: function() {
+            //Logger
+            mylogger = new YAHOO.widget.LogReader("logger");
+
+            // Instantiate one XHR DataSource and define schema as an array:
+            //     ["Record Delimiter",
+            //     "Field Delimiter"]
+            oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_flat.php", ["\n", "\t"]);
+            oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
+            oACDS.maxCacheEntries = 60;
+            oACDS.queryMatchSubset = true;
+
+            // Instantiate first AutoComplete
+            var myInput = document.getElementById('ysearchinput0');
+            var myContainer = document.getElementById('ysearchcontainer0');
+            oAutoComp0 = new YAHOO.widget.AutoComplete(myInput,myContainer,oACDS);
+            oAutoComp0.delimChar = ";";
+            oAutoComp0.queryDelay = 1;
+            oAutoComp0.formatResult = function(oResultItem, sQuery) {
+                var sKey = oResultItem[0];
+                var nQuantity = oResultItem[1];
+                var sKeyQuery = sKey.substr(0, sQuery.length);
+                var sKeyRemainder = sKey.substr(sQuery.length);
+                var aMarkup = ["<div id='ysearchresult'><div class='ysearchquery'>",
+                    nQuantity,
+                    "</div><span style='font-weight:bold'>",
+                    sKeyQuery,
+                    "</span>",
+                    sKeyRemainder,
+                    "</div>"];
+                return (aMarkup.join(""));
+            };
+
+            // Instantiate second AutoComplete
+            oAutoComp1 = new YAHOO.widget.AutoComplete('ysearchinput1','ysearchcontainer1', oACDS);
+            oAutoComp1.delimChar = ";";
+            oAutoComp1.formatResult = function(oResultItem, sQuery) {
+                var sKey = oResultItem[0];
+                var nQuantity = oResultItem[1];
+                var sKeyQuery = sKey.substr(0, sQuery.length);
+                var sKeyRemainder = sKey.substr(sQuery.length);
+                var aMarkup = ["<div class='ysearchresult'><div class='ysearchquery'>",
+                    nQuantity,
+                    "</div><span style='color:red'>",
+                    sKeyQuery,
+                    "</span>",
+                    sKeyRemainder,
+                    "</div>"];
+                return (aMarkup.join(""));
+            };
+
+            // Instantiate third AutoComplete
+            oAutoComp2 = new YAHOO.widget.AutoComplete('ysearchinput2','ysearchcontainer2', oACDS);
+            oAutoComp2.delimChar = ";";
+            oAutoComp2.queryDelay = 0;
+            oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
+        },
+            
+        validateForm: function() {
+            // Validate form inputs here
+            return false;
+        }
+    };
+}();
+
+YAHOO.util.Event.addListener(this,'load',YAHOO.example.ACFlatData.init);
+</script>
+
+<script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</body>
+</html>

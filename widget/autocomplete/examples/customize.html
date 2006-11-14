@@ -1,0 +1,350 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Example: AutoComplete - Configurations Dashboard (YUI Library)</title>
+<link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
+<link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
+<link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
+<link type="text/css" rel="stylesheet" href="./css/examples.css">
+
+<style type="text/css">
+    #custommod {position:relative;padding:1em;}
+    #customautocomplete {position:relative;margin:1em;width:40%;}/* set width of widget here*/
+    #custominput {position:absolute;width:100%;height:1.4em;}
+    #customcontainer {position:absolute;top:1.7em;width:100%;}
+    #customcontainer .yui-ac-content {position:absolute;width:100%;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
+    #customcontainer .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
+    #customcontainer ul {padding:5px 0;width:100%;}
+    #customcontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
+    #customcontainer li.yui-ac-highlight {background:#ff0;}
+    #customcontainer li.yui-ac-prehighlight {background:#FFFFCC;}
+</style>
+</head>
+
+<body>
+<div id="hd">
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">AutoComplete Widget</a> :: Configurations Dashboard</h1>
+</div>
+
+<div id="bd">
+    <!-- Logger begins -->
+    <div id="logger"></div>
+    <!-- Logger ends -->
+
+    <!-- Code generator begins
+    <div id="coder">
+        <h3>Sample code</h3>
+        <textarea id="output"></textarea>
+    </div>
+     Code generator ends -->
+
+    <!-- Content begins -->
+    <p>In this example, an AutoComplete instance is created that points to the
+    same DataSource as the <a href="./ysearch_flat.html">Flat-file Data</a>
+    example. However, by changing the values below, you can easily customize the
+    configuration properties of the implementation.
+    </p>
+
+    <!-- AutoComplete begins -->
+    <div id="custommod">
+        <form onsubmit="return YAHOO.example.ACCustomizable.validateForm();">
+            <h2>Customize your own AutoComplete widget:</h2>
+            <div id="customautocomplete">
+                <input id="custominput">
+                <div id="customcontainer"></div>
+            </div>
+        </form>
+    </div>
+    <!-- AutoComplete ends -->
+
+    <!-- Panel begins -->
+    <form id="panel">
+    
+        <!-- The following is in a select to demonstrate the useIFrame feature -->
+        <select><option>Customize configurations for AutoComplete</option></select>
+
+        <div>
+            <input id="animhoriz" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleAnimHoriz(this);">
+            <label for="animhoriz">Animate Horizontally</label>
+        </div>
+        <div>
+            <input id="animvert" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleAnimVert(this);" checked>
+            <label for="animvert">Animate Vertically</label>
+        </div>
+        <div>
+            <label for="animspeed">Animation Speed: </label>
+            <input id="animspeed" type="text" size="2" value="0.3">
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateAnimSpeed();">
+        </div>
+        <div>
+            <input id="useshadow" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleShadow(this);">
+            <label for="useshadow">Use Shadow</label>
+        </div>
+        <div>
+            <input id="useiframe" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleIFrame(this);">
+            <label for="useiframe">Use IFrame</label>
+        </div>
+        <div>
+            <input id="typeahead" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleTypeAhead(this);">
+            <label for="typeahead">Type Ahead</label>
+        </div>
+        <div>
+            <input id="forceselection" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleForceSelection(this);">
+            <label for="forceselection">Force a Selection</label>
+        </div>
+        <div>
+            <label for="maxresults">Maximum Results: </label>
+            <input id="maxresults" type="text" size="2" value="10">
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateMaxResults();">
+        </div>
+        <div>
+            <label for="minquerylength">Minimum Query Length: </label>
+            <input id="minquerylength" type="text" size="2" value="1">
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateMinQueryLength();"
+        </div>
+        <div>
+            <label for="querydelay">Query Delay: </label>
+            <input id="querydelay" type="text" size="2" value="0.5">
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateQueryDelay();">
+        </div>
+        <div>
+            <label for="delimchar">Array of Delimiter Character(s)</label><br>
+            <input id="delimchar" type="text" size="30" value="">
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateDelimChar();">
+        </div>
+        <div>
+            <label for="highlightclass">Highlight Classname</label><br>
+            <input id="highlightclass" type="text" size="30" value="yui-ac-highlight" maxlength="30">
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateHighlight();">
+        </div>
+        <div>
+            <label for="prehighlightclass">Pre-highlight Classname</label><br>
+            <input id="prehighlightclass" type="text" size="30" value="" maxlength="30">
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updatePrehighlight();">
+        </div>
+        <div>
+            <input id="allowbrowserautocomplete" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleAllowBrowserAutocomplete(this);" checked>
+            <label for="allowbrowserautocomplete">Allow Browser Autocomplete</label>
+        </div>
+        <div>
+            <input id="alwaysshowcontainer" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleAlwaysShowContainer(this);">
+            <label for="alwaysshowcontainer">Always Show Container</label>
+        </div>
+        <div>
+            <label for="header">Set Header</label>
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateHeader();"><br>
+            <textarea id="header" cols="25" rows="5"></textarea>
+        </div>
+        <div>
+            <label for="body">Set Body</label>
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateBody();"><br>
+            <textarea id="body" cols="25" rows="5"></textarea>
+        </div>
+        <div>
+            <label for="footer">Set Footer</label>
+            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateFooter();"><br>
+            <textarea id="footer" cols="25" rows="5"></textarea>
+        </div>
+    </form>
+    <!-- Panel ends -->
+    <!-- Content ends -->
+    
+<!-- Libary begins -->
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/event/event-debug.js"></script>
+<script type="text/javascript" src="../../build/connection/connection.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
+<script type="text/javascript" src="../../build/autocomplete/autocomplete-debug.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
+<!-- Library ends -->
+
+<script type="text/javascript">
+YAHOO.example.ACCustomizable = function(){
+    var mylogreader, mylogwriter;
+    var oACDS;
+    var oAutoComp;
+
+    return {
+        init: function() {
+            //Logger
+            mylogreader = new YAHOO.widget.LogReader("logger");
+            mylogwriter = new YAHOO.widget.LogWriter("Custom configs");
+
+            // DataSource 1
+            oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_flat.php", ["\n", "\t"]);
+            // This is the one non-default value other than constructor params
+            oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
+
+            // AutoComplete 1
+            oAutoComp = new YAHOO.widget.AutoComplete('custominput','customcontainer', oACDS);
+
+            var ua = navigator.userAgent.toLowerCase();
+            if(ua.indexOf('msie') != -1 && ua.indexOf('opera') < 0) {
+                oAutoComp.useIFrame = true;
+                YAHOO.util.Dom.get("useiframe").checked = true;
+            }
+        },
+
+        toggleAnimHoriz: function(animHoriz) {
+            oAutoComp.animHoriz = animHoriz.checked;
+            mylogwriter.log("Updated animHoriz to " + oAutoComp.animHoriz + ".");
+        },
+
+        toggleAnimVert: function(animVert) {
+            oAutoComp.animVert = animVert.checked;
+            mylogwriter.log("Updated animVert to " + oAutoComp.animVert + ".");
+        },
+
+        updateAnimSpeed: function() {
+            var animSpeed = document.getElementById("animspeed").value;
+            if (isNaN(animSpeed) || (animSpeed < 1)) {
+                document.getElementById("animspeed").value = oAutoComp.animSpeed;
+                mylogwriter.log("Could not update animSpeed.", "warn");
+                return;
+            }
+            else {
+                oAutoComp.animSpeed = animSpeed;
+                mylogwriter.log("Updated animSpeed to " + oAutoComp.animSpeed + ".");
+            }
+        },
+
+        toggleShadow: function(useShadow) {
+            oAutoComp.useShadow = useShadow.checked;
+            mylogwriter.log("Updated useShadow to " + oAutoComp.useShadow + ".");
+        },
+
+        toggleIFrame: function(useIFrame) {
+            oAutoComp.useIFrame = useIFrame.checked;
+            mylogwriter.log("Updated useIFrame to " + oAutoComp.useIFrame + ".");
+        },
+
+        toggleTypeAhead: function(typeAhead) {
+            oAutoComp.typeAhead = typeAhead.checked;
+            mylogwriter.log("Updated typeAhead to " + oAutoComp.typeAhead + ".");
+        },
+
+        toggleForceSelection: function(forceSelection) {
+            oAutoComp.forceSelection = forceSelection.checked;
+            oAutoComp.forceSelection = forceSelection.checked;
+            mylogwriter.log("Updated forceSelection to " + oAutoComp.forceSelection + ".");
+        },
+
+        updateMaxResults: function() {
+            var maxResults = document.getElementById("maxresults").value;
+            if (isNaN(maxResults) || (maxResults < 1)) {
+                document.getElementById("maxresults").value = oAutoComp.maxResultsDisplayed;
+                mylogwriter.log("Could not update maxResultsDisplayed.", "warn");
+                return;
+            }
+            else {
+                oAutoComp.maxResultsDisplayed = maxResults;
+                mylogwriter.log("Updated maxResultsDisplayed to " + oAutoComp.maxResultsDisplayed + ".");
+            }
+        },
+
+        updateMinQueryLength: function() {
+            var minQueryLength = document.getElementById("minquerylength").value;
+            if (isNaN(minQueryLength)) {
+                document.getElementById("minquerylength").value = oAutoComp.minQueryLength;
+                mylogwriter.log("Could not update minQueryLength.", "warn");
+                return;
+            }
+            else {
+                oAutoComp.minQueryLength = minQueryLength;
+                mylogwriter.log("Updated minQueryLength to " + oAutoComp.minQueryLength + ".");
+            }
+        },
+
+        updateQueryDelay: function() {
+            var queryDelay = document.getElementById("querydelay").value;
+            if (isNaN(queryDelay) || (queryDelay < 0)) {
+                document.getElementById("querydelay").value = oAutoComp.queryDelay;
+                mylogwriter.log("Could not update queryDelay.", "warn");
+                return;
+            }
+            else {
+                    oAutoComp.queryDelay = queryDelay;
+                    mylogwriter.log("Updated query delay to " + oAutoComp.queryDelay + ".");
+            }
+        },
+
+        updateDelimChar: function() {
+            var sValue = document.getElementById("delimchar").value;
+            if((sValue.indexOf("[") == 0) && (sValue.indexOf("]") == sValue.length-1)) {
+                oAutoComp.delimChar = eval(sValue);
+            }
+            else if(sValue.length < 2){
+                oAutoComp.delimChar = sValue;
+            }
+            else {
+                document.getElementById("delimchar").value = oAutoComp.delimChar;
+                mylogwriter.log("Could not update delimChar.", "warn");
+                return;
+            }
+            mylogwriter.log("Updated delimChar to " + oAutoComp.delimChar + ".");
+        },
+
+        updateHighlight: function() {
+            oAutoComp.highlightClassName = document.getElementById("highlightclass").value;
+            mylogwriter.log("Updated highlightClassName to " + oAutoComp.highlightClassName + ".");
+        },
+
+        updatePrehighlight: function() {
+            oAutoComp.prehighlightClassName = document.getElementById("prehighlightclass").value;
+            mylogwriter.log("Updated prehighlightClassName to " + oAutoComp.prehighlightClassName + ".");
+        },
+
+        toggleAllowBrowserAutocomplete: function(allowBrowserAutocomplete) {
+            oAutoComp.allowBrowserAutocomplete = allowBrowserAutocomplete.checked;
+            mylogwriter.log("Updated allowBrowserAutocomplete to " + oAutoComp.allowBrowserAutocomplete + ".");
+        },
+
+        toggleAlwaysShowContainer: function(alwaysShowContainer) {
+            var container = YAHOO.util.Dom.getElementsByClassName("yui-ac-content","div","customcontainer")[0];
+            if(container) {
+                oAutoComp.alwaysShowContainer = alwaysShowContainer.checked;
+                if(oAutoComp.alwaysShowContainer) {
+                    oAutoComp.setBody("alwaysShowContainer enabled");
+                }
+                else {
+                    container.style.height = "0";
+                    oAutoComp.setBody();
+                }
+                mylogwriter.log("Updated alwaysShowContainer to " + oAutoComp.alwaysShowContainer + ".");
+            }
+            else {
+                mylogwriter.log("Could not update alwaysShowContainer.","warn");
+            }
+        },
+
+        updateHeader: function() {
+            var header = document.getElementById("header").value;
+            oAutoComp.setHeader(header);
+            mylogwriter.log("Header updated.");
+        },
+        
+        updateBody: function() {
+            var body = document.getElementById("body").value;
+            oAutoComp.setBody(body);
+            mylogwriter.log("Body updated.");
+        },
+
+        updateFooter: function() {
+            var footer = document.getElementById("footer").value;
+            oAutoComp.setFooter(footer);
+            mylogwriter.log("Footer updated.");
+        },
+
+        validateForm: function() {
+            // Validate form inputs here
+            return true;
+        }
+    };
+}();
+
+YAHOO.util.Event.addListener(this,'load',YAHOO.example.ACCustomizable.init);
+</script>
+</div>
+</body>
+</html>

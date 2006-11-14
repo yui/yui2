@@ -1,0 +1,19 @@
+    h1 {font-size:144%;}
+    h2 {font-size:129%;}
+    h3 {font-size:114%;}
+    h4 {font-size:100%;}
+    h1,h2,h3,h4 {font-weight:bold;}
+    body {margin:1em;font-family:verdana,arial,sans-serif;}
+    ul {width:80%;}
+    dl {padding:1em;}
+    
+    #hd {position:relative;}
+    #hd .logo {width:65px;height:38px;vertical-align:middle;padding-right:10px;}
+
+    #bd h1,h2,h3,p{margin:1em;}
+    
+    #content .yui-log-input {width:40%;}
+
+    #code {clear:both;}
+    #code .code {padding:1em;background:#DEDEDE;border:1px solid black;font-size:92%;}
+
