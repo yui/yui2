@@ -18,6 +18,10 @@
     border:1px solid #dcdcdc;
 }
 
+.yui-navset .yui-nav li a em {
+    padding:0.5em;
+}
+
 .yui-navset .yui-nav .selected a {
     background:#293852 url(../img/tab_right.gif) no-repeat top right;
     color:#fff;

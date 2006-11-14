@@ -10,6 +10,7 @@
 }
 .yui-navset .yui-nav li a em {
     background:transparent url(../img/round_4px_trans_gray.gif) no-repeat top right;
+    padding:0.5em;
 }
 
 /* top oriented */
