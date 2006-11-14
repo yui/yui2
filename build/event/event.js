@@ -904,6 +904,7 @@ if (!YAHOO.util.Event) {
                                 li[this.TYPE] == sType && 
                                 li[this.FN] == fn) {
                                     llist.splice(i, 1);
+                                    break;
                             }
                         }
                     }
