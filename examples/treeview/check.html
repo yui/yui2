@@ -197,14 +197,14 @@
 
     function checkAll() {
         var topNodes = tree.getRoot().children;
-        for(var i = 0; i <= topNodes.length; ++i) {
+        for(var i=0; i<topNodes.length; ++i) {
             topNodes[i].check();
         }
     }
 
     function uncheckAll() {
         var topNodes = tree.getRoot().children;
-        for(var i = 0; i <= topNodes.length; ++i) {
+        for(var i=0; i<topNodes.length; ++i) {
             topNodes[i].uncheck();
         }
     }
