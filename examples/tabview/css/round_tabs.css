@@ -1,0 +1,75 @@
+.yui-navset .yui-content {
+    border:1px solid #ccc;
+}
+.yui-navset .yui-nav .selected a, .yui-navset .yui-nav a:hover {
+    background-color:#fff;
+}
+
+.yui-navset .yui-nav li a {
+    background:#e5e5e5 url(../img/round_4px_trans_gray.gif) no-repeat;
+}
+.yui-navset .yui-nav li a em {
+    background:transparent url(../img/round_4px_trans_gray.gif) no-repeat top right;
+}
+
+/* top oriented */
+
+.yui-navset-top .yui-nav { margin-bottom:-1px; } /* for overlap, based on content border-width */
+.yui-navset-top .yui-nav li a {
+    border-bottom:1px solid #ccc;
+}
+
+.yui-navset-top .yui-nav .selected a { border-bottom:0; }
+.yui-navset-top .yui-nav .selected a em { padding-bottom:0.6em; } /* adjust height */
+
+/* top & bottom oriented */
+.yui-navset-top .yui-nav li a em, .yui-navset-bottom .yui-nav li a em {
+    margin-left:4px; /* based on border-radius */
+    padding-right:8px; /* based on border-radius (2x left to balance margin) */
+    padding-left:4px;
+}
+
+/* bottom oriented */
+
+.yui-navset-bottom .yui-nav { margin-top:-1px; } /* for overlap, based on content border-width */
+.yui-navset-bottom .yui-nav li a { border-top:1px solid #ccc; }
+
+.yui-navset-bottom .yui-nav .selected a { border-top:0; }
+.yui-navset-bottom .yui-nav .selected a em { padding-top:0.6em; } /* adjust height */
+
+.yui-navset-bottom .yui-nav li a { background-position:bottom left; }
+.yui-navset-bottom .yui-nav li a em { background-position:bottom right; }
+
+/* left oriented */
+
+.yui-navset-left .yui-content { margin-left:-1px; } /* for overlap, based on content border-width */
+
+.yui-navset-left .yui-nav li a {
+    border-right:1px solid #ccc;
+    padding-bottom:4px;
+}
+
+.yui-navset-left .yui-nav li a em, .yui-navset-right .yui-nav li a em {
+    padding-top:8px; /* based on border-radius (2x left to balance margin) */
+}
+
+.yui-navset-left .yui-nav .selected a { border-right:0; }
+.yui-navset-left .yui-nav .selected a em { padding-left:0.6em; } /* adjust width */
+
+.yui-navset-left .yui-nav li a { background-position:bottom left; }
+.yui-navset-left .yui-nav li a em { background-position:top left; }
+
+/* right oriented */
+
+.yui-navset-right .yui-content { margin-right:-1px; } /* for overlap, based on content border-width */
+
+.yui-navset-right .yui-nav li a {
+    border-left:1px solid #ccc;
+    padding-bottom:4px;
+}
+
+.yui-navset-right .yui-nav .selected a { border-left:0; }
+.yui-navset-right .yui-nav .selected a em { padding-left:0.6em; } /* adjust width */
+
+.yui-navset-right .yui-nav li a { background-position:bottom right; }
+.yui-navset-right .yui-nav li a em { background-position:top right; }
