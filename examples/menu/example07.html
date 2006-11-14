@@ -30,6 +30,18 @@
             
             }
 
+            p#clicknote {
+
+                margin-top:1em;
+
+            }
+
+            p#clicknote em {
+            
+                font-weight:bold;
+            
+            }
+
         </style>
 
                 <!-- Namespace source file -->
@@ -60,6 +72,17 @@
 
                 oMenu.render();
 
+
+                function onMenuToggleMouseDown(p_oEvent) {
+
+                    YAHOO.util.Event.stopPropagation(p_oEvent);
+                                    
+                    oMenu.show();
+                
+                }
+
+                YAHOO.util.Event.addListener("menutoggle", "mousedown", onMenuToggleMouseDown);
+
             }
 
 
@@ -74,6 +97,8 @@
 
         <h1>Example: Multi-tiered Menu From Markup (YUI Library) <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to create a multi-tiered menu using existing markup on the page.  The Menu API also supports building a menu like this <a href="example08.html">using nothing but JavaScript</a>.</p>
+        <p id="clicknote"><em>Note:</em> By default clicking outside of a menu will hide it.  Additionally, menu items without a submenu or a URL to navigate will hide their parent menu when clicked.  Click the "Show Menu" button below to make the menu visible if it is hidden.</p>
+        <button id="menutoggle">Show Menu</button>
 
         <div id="productsandservices" class="yuimenu">
             <div class="bd">

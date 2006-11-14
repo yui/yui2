@@ -25,6 +25,18 @@
 
             h1 { font-weight:bold; }
 
+            p#clicknote {
+
+                margin-top:1em;
+
+            }
+
+            p#clicknote em {
+            
+                font-weight:bold;
+            
+            }
+
         </style>
 
                <!-- Namespace source file -->
@@ -84,6 +96,17 @@
     
                 oMenu.show();
 
+
+                function onMenuToggleMouseDown(p_oEvent) {
+
+                    YAHOO.util.Event.stopPropagation(p_oEvent);
+                                    
+                    oMenu.show();
+                
+                }
+
+                YAHOO.util.Event.addListener("menutoggle", "mousedown", onMenuToggleMouseDown);
+
             }
 
 
@@ -96,6 +119,8 @@
 
         <h1>Example: Grouped Menu Items Using JavaScript (YUI Library) <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to group MenuItem instances.  The Menu API also supports building a menu like this <a href="example03.html">using existing markup</a>.</p>
+        <p id="clicknote"><em>Note:</em> By default clicking outside of a menu will hide it.  Additionally, menu items without a submenu or a URL to navigate will hide their parent menu when clicked.  Click the "Show Menu" button below to make the menu visible if it is hidden.</p>
+        <button id="menutoggle">Show Menu</button>
 
     </body>
 </html>
