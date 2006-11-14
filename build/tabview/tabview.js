@@ -159,8 +159,6 @@ YAHOO.util.Attribute.prototype = {
         if (!silent) {
             beforeRetVal = owner.fireBeforeChangeEvent(event);
             if (beforeRetVal === false) {
-                YAHOO.log('setValue ' + name + 
-                        'cancelled by beforeChange event', 'info', 'Attribute');
                 return false;
             }
         }
@@ -265,7 +263,6 @@ YAHOO.util.Attribute.prototype = {
             var config = configs[key];
             
             if (!config) {
-                YAHOO.log(key + ' not found', 'error', 'AttributeProvider');
                 return undefined;
             }
             
@@ -285,8 +282,6 @@ YAHOO.util.Attribute.prototype = {
             var config = configs[key];
             
             if (!config) {
-                YAHOO.log('set failed: ' + key + ' not found',
-                        'error', 'AttributeProvider');
                 return false;
             }
             
@@ -417,8 +412,6 @@ YAHOO.util.Attribute.prototype = {
             var configs = this._configs || {};
             
             if (!configs[key]) {
-                YAHOO.log('unable to configure, ' + key + ' not found',
-                        'error', 'AttributeProvider');
                 return false;
             }
             
@@ -734,14 +727,10 @@ YAHOO.util.Element.prototype = {
         var newAddition =  !Dom.inDocument(element);
         
         if (!element) {
-            YAHOO.log('appendTo failed: element not available',
-                    'error', 'Element');
             return false;
         }
         
         if (!parent) {
-            YAHOO.log('appendTo failed: parent not available',
-                    'error', 'Element');
             return false;
         }
         
@@ -753,7 +742,6 @@ YAHOO.util.Element.prototype = {
             }
         }
         
-        YAHOO.log(element + 'appended to ' + parent);
         
         if (!newAddition) {
             return false; // note return; no refresh if in document
@@ -799,8 +787,6 @@ YAHOO.util.Element.prototype = {
         var element = this.get('element') || null;
         
         if ( element && !Lang.isUndefined(element[key]) ) {
-            YAHOO.log(key + ' is reserved for ' + element, 
-                    'error', 'Element');
             return false;
         }
         
@@ -958,8 +944,6 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
                 this.set('content', o.responseText);
             },
             failure: function(o) {
-                YAHOO.log('loading failed: ' + o.statusText,
-                        'error', 'Tab');
             }
         };
         
@@ -1307,8 +1291,6 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
     
     var _dataConnect = function() {
         if (!YAHOO.util.Connect) {
-            YAHOO.log('YAHOO.util.Connect dependency not met',
-                    'error', 'Tab');
             return false;
         }
 

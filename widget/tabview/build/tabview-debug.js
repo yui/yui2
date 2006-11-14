@@ -953,13 +953,13 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
         if (!el && !attr.element) {
             el = _createTabElement.call(this, attr);
         }
-        
+
         this.loadHandler =  {
             success: function(o) {
                 this.set('content', o.responseText);
             },
             failure: function(o) {
-                logger.log('loading failed: ' + o.statusText,
+                YAHOO.log('loading failed: ' + o.statusText,
                         'error', 'Tab');
             }
         };
@@ -1308,7 +1308,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
     
     var _dataConnect = function() {
         if (!YAHOO.util.Connect) {
-            logger.log('YAHOO.util.Connect dependency not met',
+            YAHOO.log('YAHOO.util.Connect dependency not met',
                     'error', 'Tab');
             return false;
         }

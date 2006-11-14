@@ -938,7 +938,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
         if (!el && !attr.element) {
             el = _createTabElement.call(this, attr);
         }
-        
+
         this.loadHandler =  {
             success: function(o) {
                 this.set('content', o.responseText);
