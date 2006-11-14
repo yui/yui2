@@ -6,6 +6,8 @@
     background-color:#f6f7ee; /* active tab, tab hover, and content bgcolor */
 }
 
+.yui-navset .yui-nav li em { padding:.5em; } /* tab padding */
+
 .yui-navset-top .yui-nav .selected a {
     border-bottom:0; /* no bottom border for active tab */
     padding-bottom:1px; /* to match height of other tabs */
