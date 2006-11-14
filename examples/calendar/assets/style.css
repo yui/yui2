@@ -51,6 +51,7 @@ em { font-style:italic }
 
 #solution { margin-left:15px; }
 #solution a { display:block;margin-top:7px;margin-bottom:20px }
+#solution { zoom:1 }
 
 #ft { height:2px;line-height:2px;text-indent:15px; background:#B6CDE1;margin:10px auto;clear:both}
 
