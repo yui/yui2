@@ -1429,6 +1429,7 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
 
     if(
         oItem && !oItem.handledMouseOverEvent && 
+        !oItem.cfg.getProperty("disabled") && 
         (oTarget == oItem.element || Dom.isAncestor(oItem.element, oTarget))
     ) {
 
@@ -1488,7 +1489,7 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
     var oRelatedTarget = Event.getRelatedTarget(oEvent);
     var bMovingToSubmenu = false;
 
-    if(oItem) {
+    if(oItem && !oItem.cfg.getProperty("disabled")) {
 
         var oItemCfg = oItem.cfg;
         var oSubmenu = oItemCfg.getProperty("submenu");
@@ -1597,7 +1598,7 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
     var oItem = p_aArgs[1];
     var oTarget = Event.getTarget(oEvent);
 
-    if(oItem) {
+    if(oItem && !oItem.cfg.getProperty("disabled")) {
 
         var oItemCfg = oItem.cfg;
         var oSubmenu = oItemCfg.getProperty("submenu");
@@ -1711,7 +1712,7 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
     var oItem = p_aArgs[1];
     var oSubmenu;
 
-    if(oItem) {
+    if(oItem && !oItem.cfg.getProperty("disabled")) {
 
         var oItemCfg = oItem.cfg;
         var oParentItem = this.parent;

@@ -119,130 +119,120 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
     var Event = YAHOO.util.Event;
     var oEvent = p_aArgs[0];
     var oItem = p_aArgs[1];
-    var oItemCfg = oItem.cfg;
     var oSubmenu;
 
 
-    switch(oEvent.keyCode) {
+    if(oItem && !oItem.cfg.getProperty("disabled")) {
 
-        case 27:    // Esc key
+        var oItemCfg = oItem.cfg;
 
-            if(this.cfg.getProperty("position") == "dynamic") {
-            
-                this.hide();
+        switch(oEvent.keyCode) {
     
-                if(this.parent) {
+            case 37:    // Left arrow
+            case 39:    // Right arrow
     
-                    this.parent.focus();
-                
-                }
+                if(
+                    oItem == this.activeItem && 
+                    !oItemCfg.getProperty("selected")
+                ) {
     
-            }
-            else if(this.activeItem) {
+                    oItemCfg.setProperty("selected", true);
     
-                oSubmenu = this.activeItem.cfg.getProperty("submenu");
-    
-                if(oSubmenu && oSubmenu.cfg.getProperty("visible")) {
-                
-                    oSubmenu.hide();
-                    this.activeItem.focus();
-                
                 }
                 else {
     
-                    this.activeItem.cfg.setProperty("selected", false);
-                    this.activeItem.blur();
+                    var oNextItem = (oEvent.keyCode == 37) ? 
+                            oItem.getPreviousEnabledSibling() : 
+                            oItem.getNextEnabledSibling();
             
+                    if(oNextItem) {
+    
+                        this.clearActiveItem();
+    
+                        oNextItem.cfg.setProperty("selected", true);
+    
+    
+                        if(this.cfg.getProperty("autosubmenudisplay")) {
+                        
+                            oSubmenu = oNextItem.cfg.getProperty("submenu");
+                            
+                            if(oSubmenu) {
+                        
+                                oSubmenu.show();
+                                oSubmenu.activeItem.blur();
+                                oSubmenu.activeItem = null;
+                            
+                            }
+                
+                        }           
+    
+                        oNextItem.focus();
+    
+                    }
+    
                 }
-            
-            }
     
+                Event.preventDefault(oEvent);
     
-            Event.preventDefault(oEvent);
-        
-        break;
-
-        case 37:    // Left arrow
-        case 39:    // Right arrow
-
-            if(
-                oItem == this.activeItem && 
-                !oItemCfg.getProperty("selected")
-            ) {
-
-                oItemCfg.setProperty("selected", true);
-
-            }
-            else {
-
-                var oNextItem = (oEvent.keyCode == 37) ? 
-                        oItem.getPreviousEnabledSibling() : 
-                        oItem.getNextEnabledSibling();
-        
-                if(oNextItem) {
-
+            break;
+    
+            case 40:    // Down arrow
+    
+                if(this.activeItem != oItem) {
+    
                     this.clearActiveItem();
-
-                    oNextItem.cfg.setProperty("selected", true);
-
-
-                    if(this.cfg.getProperty("autosubmenudisplay")) {
-                    
-                        oSubmenu = oNextItem.cfg.getProperty("submenu");
-                        
-                        if(oSubmenu) {
-                    
-                            oSubmenu.show();
-                            oSubmenu.activeItem.blur();
-                            oSubmenu.activeItem = null;
-                        
-                        }
-            
-                    }           
-
-                    oNextItem.focus();
-
-                }
-
-            }
-
-            Event.preventDefault(oEvent);
-
-        break;
-
-        case 40:    // Down arrow
-
-            if(this.activeItem != oItem) {
-
-                this.clearActiveItem();
-
-                oItemCfg.setProperty("selected", true);
-                oItem.focus();
-            
-            }
-
-            oSubmenu = oItemCfg.getProperty("submenu");
-
-            if(oSubmenu) {
-
-                if(oSubmenu.cfg.getProperty("visible")) {
-
-                    oSubmenu.setInitialSelection();
-                    oSubmenu.setInitialFocus();
+    
+                    oItemCfg.setProperty("selected", true);
+                    oItem.focus();
                 
                 }
-                else {
-
-                    oSubmenu.show();
-                
+    
+                oSubmenu = oItemCfg.getProperty("submenu");
+    
+                if(oSubmenu) {
+    
+                    if(oSubmenu.cfg.getProperty("visible")) {
+    
+                        oSubmenu.setInitialSelection();
+                        oSubmenu.setInitialFocus();
+                    
+                    }
+                    else {
+    
+                        oSubmenu.show();
+                    
+                    }
+    
                 }
+    
+                Event.preventDefault(oEvent);
+    
+            break;
+    
+        }
 
-            }
+    }
 
-            Event.preventDefault(oEvent);
 
-        break;
+    if(oEvent.keyCode == 27 && this.activeItem) { // Esc key
 
+        oSubmenu = this.activeItem.cfg.getProperty("submenu");
+
+        if(oSubmenu && oSubmenu.cfg.getProperty("visible")) {
+        
+            oSubmenu.hide();
+            this.activeItem.focus();
+        
+        }
+        else {
+
+            this.activeItem.cfg.setProperty("selected", false);
+            this.activeItem.blur();
+    
+        }
+
+        Event.preventDefault(oEvent);
+    
     }
 
 },
@@ -270,7 +260,7 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
 
     var oItem = p_aArgs[1];
     
-    if(oItem) {
+    if(oItem && !oItem.cfg.getProperty("disabled")) {
 
         var Event = YAHOO.util.Event;
         var Dom = YAHOO.util.Dom;
