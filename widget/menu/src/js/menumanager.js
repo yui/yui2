@@ -32,7 +32,7 @@ var Event = YAHOO.util.Event;
 * @class MenuManager
 * @static
 */
-YAHOO.widget.MenuManager = new function() {
+YAHOO.widget.MenuManager = function() {
 
     // Private member variables
 
@@ -62,18 +62,21 @@ YAHOO.widget.MenuManager = new function() {
     var m_oLogger = new YAHOO.widget.LogWriter(this.toString());
 
 
+    var me = this;
+
 
     // Private methods
 
 
     /**
-    * Adds an item to the collection of known menu items.
+    * @method addItem
+    * @description Adds an item to the collection of known menu items.
     * @private
     * @param {YAHOO.widget.MenuItem} p_oItem Object specifying the MenuItem 
     * instance to be added.
     */
-    var addItem = function(p_oItem) {
-    
+    function addItem(p_oItem) {
+
         var sYUIId = Dom.generateId();
 
         if(p_oItem && m_oItems[sYUIId] != p_oItem) {
@@ -89,16 +92,17 @@ YAHOO.widget.MenuManager = new function() {
 
         }
     
-    };
+    }
 
 
     /**
-    * Removes an item from the collection of known menu items.
+    * @method removeItem
+    * @description Removes an item from the collection of known menu items.
     * @private
     * @param {YAHOO.widget.MenuItem} p_oItem Object specifying the MenuItem 
     * instance to be removed.
     */
-    var removeItem = function(p_oItem) {
+    function removeItem(p_oItem) {
     
         var sYUIId = p_oItem.element.getAttribute("yuiid");
 
@@ -111,17 +115,19 @@ YAHOO.widget.MenuManager = new function() {
 
         }
     
-    };
+    }
 
 
     /**
-    * Finds the root DIV node of a menu or the root LI node of a menu item.
+    * @method getMenuRootElement
+    * @description Finds the root DIV node of a menu or the root LI node of a 
+    * menu item.
     * @private
     * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
     * one-html.html#ID-58190037">HTMLElement</a>} p_oElement Object specifying 
     * an HTML element.
     */
-    var getMenuRootElement = function(p_oElement) {
+    function getMenuRootElement(p_oElement) {
     
         var oParentNode;
 
@@ -173,7 +179,7 @@ YAHOO.widget.MenuManager = new function() {
 
         }
         
-    };
+    }
 
 
 
@@ -181,7 +187,8 @@ YAHOO.widget.MenuManager = new function() {
 
 
     /**
-    * Generic, global event handler for all of a menu's DOM-based 
+    * @method onDOMEvent
+    * @description Generic, global event handler for all of a menu's DOM-based 
     * events.  This listens for events against the document object.  If the 
     * target of a given event is a member of a menu or menu item's DOM, the 
     * instance's corresponding Custom Event is fired.
@@ -189,7 +196,7 @@ YAHOO.widget.MenuManager = new function() {
     * @param {Event} p_oEvent Object representing the DOM event object passed 
     * back by the event utility (YAHOO.util.Event).
     */
-    var onDOMEvent = function(p_oEvent) {
+    function onDOMEvent(p_oEvent) {
 
         // Get the target node of the DOM event
     
@@ -297,11 +304,12 @@ YAHOO.widget.MenuManager = new function() {
 
         }
 
-    };
+    }
 
 
     /**
-    * "destroy" event handler for a menu.
+    * @method onMenuDestroy
+    * @description "destroy" event handler for a menu.
     * @private
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
@@ -309,15 +317,23 @@ YAHOO.widget.MenuManager = new function() {
     * @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
     * fired the event.
     */
-    var onMenuDestroy = function(p_sType, p_aArgs, p_oMenu) {
-        
-        this.removeMenu(p_oMenu);
+    function onMenuDestroy(p_sType, p_aArgs, p_oMenu) {
 
-    };
+        if(p_oMenu && m_oMenus[p_oMenu.id]) {
+
+            delete m_oMenus[p_oMenu.id];
+
+            m_oLogger.log("Menu: " + 
+                p_oMenu.toString() + " successfully unregistered.");
+
+        }
+
+    }
 
 
     /**
-    * "destroy" event handler for a MenuItem instance.
+    * @method onItemDestroy
+    * @description "destroy" event handler for a MenuItem instance.
     * @private
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
@@ -325,7 +341,7 @@ YAHOO.widget.MenuManager = new function() {
     * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item 
     * that fired the event.
     */
-    var onItemDestroy = function(p_sType, p_aArgs, p_oItem) {
+    function onItemDestroy(p_sType, p_aArgs, p_oItem) {
 
         var sYUIId = p_oItem.element.getAttribute("yuiid");
 
@@ -335,11 +351,12 @@ YAHOO.widget.MenuManager = new function() {
 
         }
 
-    };
+    }
 
 
     /**
-    * Event handler for when the "visible" configuration property 
+    * @method onMenuVisibleConfigChange
+    * @description Event handler for when the "visible" configuration property 
     * of a Menu instance changes.
     * @private
     * @param {String} p_sType String representing the name of the event that 
@@ -348,7 +365,7 @@ YAHOO.widget.MenuManager = new function() {
     * @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
     * fired the event.
     */
-    var onMenuVisibleConfigChange = function(p_sType, p_aArgs, p_oMenu) {
+    function onMenuVisibleConfigChange(p_sType, p_aArgs, p_oMenu) {
 
         var bVisible = p_aArgs[0];
         
@@ -371,181 +388,187 @@ YAHOO.widget.MenuManager = new function() {
         
         }
     
-    };
+    }
 
 
     /**
-    * "itemadded" event handler for a Menu instance.
+    * @method onItemAdded
+    * @description "itemadded" event handler for a Menu instance.
     * @private
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
     * @param {Array} p_aArgs Array of arguments sent when the event was fired.
     */
-    var onItemAdded = function(p_sType, p_aArgs) {
+    function onItemAdded(p_sType, p_aArgs) {
     
         addItem(p_aArgs[0]);
     
-    };
+    }
     
 
     /**
-    * "itemremoved" event handler for a Menu instance.
+    * @method onItemRemoved
+    * @description "itemremoved" event handler for a Menu instance.
     * @private
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
     * @param {Array} p_aArgs Array of arguments sent when the event was fired.
     */
-    var onItemRemoved = function(p_sType, p_aArgs) {
+    function onItemRemoved(p_sType, p_aArgs) {
 
         removeItem(p_aArgs[0]);
     
-    };
+    }
 
 
 
-    // Privileged methods
+    return {
+
+        // Privileged methods
 
 
-    /**
-    * @method addMenu
-    * @description Adds a menu to the collection of known menus.
-    * @param {YAHOO.widget.Menu} p_oMenu Object specifying the Menu instance 
-    * to be added.
-    */
-    this.addMenu = function(p_oMenu) {
-
-        if(p_oMenu && p_oMenu.id && !m_oMenus[p_oMenu.id]) {
-
-            m_oMenus[p_oMenu.id] = p_oMenu;
-        
+        /**
+        * @method addMenu
+        * @description Adds a menu to the collection of known menus.
+        * @param {YAHOO.widget.Menu} p_oMenu Object specifying the Menu  
+        * instance to be added.
+        */
+        addMenu: function(p_oMenu) {
     
-            if(!m_bInitializedEventHandlers) {
+            if(p_oMenu && p_oMenu.id && !m_oMenus[p_oMenu.id]) {
     
-                var oDoc = document;
-        
-                Event.addListener(oDoc, "mouseover", onDOMEvent, this, true);
-                Event.addListener(oDoc, "mouseout", onDOMEvent, this, true);
-                Event.addListener(oDoc, "mousedown", onDOMEvent, this, true);
-                Event.addListener(oDoc, "mouseup", onDOMEvent, this, true);
-                Event.addListener(oDoc, "click", onDOMEvent, this, true);
-                Event.addListener(oDoc, "keydown", onDOMEvent, this, true);
-                Event.addListener(oDoc, "keyup", onDOMEvent, this, true);
-                Event.addListener(oDoc, "keypress", onDOMEvent, this, true);
-    
-                m_bInitializedEventHandlers = true;
-                
-                m_oLogger.log("DOM event handlers initialized.");
-    
-            }
-    
-            p_oMenu.destroyEvent.subscribe(onMenuDestroy, p_oMenu, this);
+                m_oMenus[p_oMenu.id] = p_oMenu;
             
-            p_oMenu.cfg.subscribeToConfigEvent(
-                "visible", 
-                onMenuVisibleConfigChange, 
-                p_oMenu
-            );
-    
-            p_oMenu.itemAddedEvent.subscribe(onItemAdded);
-            p_oMenu.itemRemovedEvent.subscribe(onItemRemoved);
-
-            m_oLogger.log("Menu: " + 
-                p_oMenu.toString() + " successfully registered.");
-
-        }
-
-    };
-
-
-    /**
-    * @method removeMenu
-    * @description Removes a menu from the collection of known menus.
-    * @param {YAHOO.widget.Menu} p_oMenu Object specifying the Menu instance 
-    * to be removed.
-    */
-    this.removeMenu = function(p_oMenu) {
-
-        if(p_oMenu && m_oMenus[p_oMenu.id]) {
-
-            delete m_oMenus[p_oMenu.id];
-
-            m_oLogger.log("Menu: " + 
-                p_oMenu.toString() + " successfully unregistered.");
-
-        }
-
-    };
-
-
-    /**
-    * @method hideVisible
-    * @description Hides all visible, dynamically positioned menus.
-    */
-    this.hideVisible = function() {
-
-        var oMenu;
-
-        for(var i in m_oVisibleMenus) {
-
-            if(m_oVisibleMenus.hasOwnProperty(i)) {
-
-                oMenu = m_oVisibleMenus[i];
-
-                if(oMenu.cfg.getProperty("position") == "dynamic") {
-
-                    oMenu.hide();
-
+        
+                if(!m_bInitializedEventHandlers) {
+        
+                    var oDoc = document;
+            
+                    Event.addListener(oDoc, "mouseover", onDOMEvent, me, true);
+                    Event.addListener(oDoc, "mouseout", onDOMEvent, me, true);
+                    Event.addListener(oDoc, "mousedown", onDOMEvent, me, true);
+                    Event.addListener(oDoc, "mouseup", onDOMEvent, me, true);
+                    Event.addListener(oDoc, "click", onDOMEvent, me, true);
+                    Event.addListener(oDoc, "keydown", onDOMEvent, me, true);
+                    Event.addListener(oDoc, "keyup", onDOMEvent, me, true);
+                    Event.addListener(oDoc, "keypress", onDOMEvent, me, true);
+        
+                    m_bInitializedEventHandlers = true;
+                    
+                    m_oLogger.log("DOM event handlers initialized.");
+        
                 }
-
-            }
-
-        }        
-    
-    };
-
-
-    /**
-    * @method getMenus
-    * @description Returns an array of all menus registered with the 
-    * menu manger.
-    * @return {Array}
-    */
-    this.getMenus = function() {
-    
-        return m_oMenus;
-    
-    };
-
-
-    /**
-    * @method getMenu
-    * @description Returns a menu with the specified id.
-    * @param {String} p_sId String specifying the id of the menu to
-    * be retrieved.
-    * @return {YAHOO.widget.Menu}
-    */
-    this.getMenu = function(p_sId) {
-
-        if(m_oMenus[p_sId]) {
         
-            return m_oMenus[p_sId];
+                p_oMenu.destroyEvent.subscribe(onMenuDestroy, p_oMenu, me);
+                
+                p_oMenu.cfg.subscribeToConfigEvent(
+                    "visible", 
+                    onMenuVisibleConfigChange, 
+                    p_oMenu
+                );
+        
+                p_oMenu.itemAddedEvent.subscribe(onItemAdded);
+                p_oMenu.itemRemovedEvent.subscribe(onItemRemoved);
+    
+                m_oLogger.log("Menu: " + 
+                    p_oMenu.toString() + " successfully registered.");
+    
+            }
+    
+        },
+
+    
+        /**
+        * @method removeMenu
+        * @description Removes a menu from the collection of known menus.
+        * @param {YAHOO.widget.Menu} p_oMenu Object specifying the Menu  
+        * instance to be removed.
+        */
+        removeMenu: function(p_oMenu) {
+    
+            if(p_oMenu && m_oMenus[p_oMenu.id]) {
+    
+                delete m_oMenus[p_oMenu.id];
+    
+                m_oLogger.log("Menu: " + 
+                    p_oMenu.toString() + " successfully unregistered.");
+    
+            }
+    
+        },
+    
+    
+        /**
+        * @method hideVisible
+        * @description Hides all visible, dynamically positioned menus.
+        */
+        hideVisible: function() {
+    
+            var oMenu;
+    
+            for(var i in m_oVisibleMenus) {
+    
+                if(m_oVisibleMenus.hasOwnProperty(i)) {
+    
+                    oMenu = m_oVisibleMenus[i];
+    
+                    if(oMenu.cfg.getProperty("position") == "dynamic") {
+    
+                        oMenu.hide();
+    
+                    }
+    
+                }
+    
+            }        
+        
+        },
+
+
+        /**
+        * @method getMenus
+        * @description Returns an array of all menus registered with the 
+        * menu manger.
+        * @return {Array}
+        */
+        getMenus: function() {
+        
+            return m_oMenus;
+        
+        },
+
+
+        /**
+        * @method getMenu
+        * @description Returns a menu with the specified id.
+        * @param {String} p_sId String specifying the id of the menu to
+        * be retrieved.
+        * @return {YAHOO.widget.Menu}
+        */
+        getMenu: function(p_sId) {
+    
+            if(m_oMenus[p_sId]) {
+            
+                return m_oMenus[p_sId];
+            
+            }
+        
+        },
+
+    
+        /**
+        * @method toString
+        * @description Returns a string representing the menu manager.
+        * @return {String}
+        */
+        toString: function() {
+        
+            return ("MenuManager");
         
         }
-    
-    };
 
-    
-    /**
-    * @method toString
-    * @description Returns a string representing the menu manager.
-    * @return {String}
-    */
-    this.toString = function() {
-    
-        return ("MenuManager");
-    
-    };
+    }
 
-};
+}();
 
 })();
