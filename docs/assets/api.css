@@ -70,10 +70,9 @@ a:visited { color: #003399;}
 #searchresults li span { position:relative; left:46% }
 
 /* source code view */
-#srcout {border: 1px solid silver; overflow: auto; min-width: 580px; padding-bottom: 1em; overflow-y: hidden} 
-*html #srcout { width: 100%} 
+#srcout {min-width: 580px; } 
+*html #srcout { width: 100%; padding-bottom:1em; overflow-x:auto } 
 
-.highlight { background-color: #f7f7f7; }
 .highlight .c { color: #60a0b0; font-style: italic } /* Comment */
 .highlight .err { border: 1px solid #FF0000 } /* Error */
 .highlight .k { color: #007020; font-weight: bold } /* Keyword */
