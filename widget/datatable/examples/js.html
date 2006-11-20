@@ -95,19 +95,19 @@ var myLogger = new YAHOO.widget.LogReader();
 
 var myWebstatsColumnset =
 [
-    {id:"webstats20", key:"network", text:"Web statics across Y! Properties",
+    {id:"webstats20", key:"network", text:"Web statistics across Y! properties",
         columnset: [
-            {id:"webstats00", key:"property", text:"Property Name", type:"text"},
+            {id:"webstats00", key:"property", text:"Property Name", type:"text", sortable:true, resizeable:true},
             {id:"webstats10", key:"visits", text:"Visits", type: "number",
                 columnset: [
-                    {id:"webstats01",key:"visitspercent",text:"%"},
-                    {id:"webstats02",key:"visitstotal",text:"Total"}
+                    {id:"webstats01",key:"visitspercent",text:"%", sortable:true, resizeable:true},
+                    {id:"webstats02",key:"visitstotal",text:"Total", sortable:true, resizeable:true}
                 ]
             },
             {id:"webstats11",key:"views",text:"Views",colspan:2,
                 columnset: [
-                    {id:"webstats03",key:"viewspercent",text:"%",type:"number"},
-                    {id:"webstats04",key:"viewstotal",text:"Total",type:"number"}
+                    {id:"webstats03",key:"viewspercent",text:"%",type:"number", sortable:true, resizeable:true},
+                    {id:"webstats04",key:"viewstotal",text:"Total",type:"number", sortable:true, resizeable:true}
                 ]
 
             }
@@ -116,21 +116,21 @@ var myWebstatsColumnset =
 ];
 
 myFormatCell = function(elCell, oRecord, oColumn) {
-    elCell.innerHTML = oRecord[oColumn.index];
+    elCell.innerHTML = oRecord[oColumn.key];
 };
 
-//var myWebstatsDriver = new YAHOO.widget.Driver();
-//var myWebstatsDataSource = new YAHOO.widget.DataSource(aWebstats, myWebstatsDriver);
-//var myWebstatsDataTable = new YAHOO.widget.DataTable("webstats", myWebstatsColumnset, myWebstatsDataSource, {formatCell:myFormatCell});
+var myWebstatsDriver = new YAHOO.widget.Driver();
+var myWebstatsDataSource = new YAHOO.widget.DataSource(aWebstats, myWebstatsDriver);
+var myWebstatsDataTable = new YAHOO.widget.DataTable("webstats", myWebstatsColumnset, myWebstatsDataSource, {formatCell:myFormatCell});
 
 
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
 YAHOO.example.Orders = function() {
-    //this.driver = new YAHOO.widget.Driver();
+    this.driver = new YAHOO.widget.Driver();
     // Customized driver functionality
-    /*this.driver.makeConnection = function(sRequest, oCallback, oCaller, oDataSource) {
+    this.driver.makeConnection = function(sRequest, oCallback, oCaller, oDataSource) {
         var aOrders = oDataSource.livedata;
         var oRawResponse = [];
 
@@ -157,14 +157,14 @@ YAHOO.example.Orders = function() {
             oDataSource.addToCache(sRequest, oRawResponse);
             oCallback(sRequest, oRawResponse, oCaller);
         }
-    };*/
+    };
 
     this.columnset = [
 
-        {id:"po1",key:"id",text:"PO ID",sortable:true,currentSortDir:"asc",resizeable:true},
-        {id:"po3",key:"quantity",text:"Quantity",sortable:true,resizeable:true},
-        {id:"po4",key:"amount",text:"$ Total",sortable:true,resizeable:true,editable:true},
-        {id:"po2",key:"date",text:"Date",sortable:true,resizeable:true,defaultSortDir:"desc",isLast:true}
+        {id:"po1",key:"id",text:"PO ID",sortable:true,resizeable:true,currentlyAsc:true},
+        {id:"po2",key:"quantity",text:"Quantity",sortable:true,resizeable:true},
+        {id:"po3",key:"amount",text:"$ Total",sortable:true,resizeable:true,editable:true},
+        {id:"po4",key:"date",text:"Date",sortable:true,resizeable:true,isLast:true,sortDesc:true}
 
     ];
 
@@ -183,8 +183,8 @@ YAHOO.example.Orders = function() {
         }
     };
 
-    //this.datasource = new YAHOO.widget.DataSource(aOrderObjects, this.driver);
-    //this.datatable = new YAHOO.widget.DataTable("fixed", this.columnset, this.datasource, {defaultRequest: "", formatCell: this.formatCell, fixedwidth:true});
+    this.datasource = new YAHOO.widget.DataSource(aPurchaseOrderObjects, this.driver);
+    this.datatable = new YAHOO.widget.DataTable("fixed", this.columnset, this.datasource, {defaultRequest: "", formatCell: this.formatCell, fixedwidth:true});
 }();
 
 /****************************************************************************/
@@ -193,29 +193,25 @@ YAHOO.example.Orders = function() {
 
 // Custom sort functionality to sort by areacode within states
 YAHOO.example.sortStatesAsc = function(a, b) {
-    if(YAHOO.util.Sort.compareAsc(a.state, b.state) !== 0) {
-        return YAHOO.util.Sort.compareAsc(a.state, b.state);
-    }
-    else {
-        return YAHOO.util.Sort.compareAsc(a.areacode, b.areacode);
-    }
+    var comp = YAHOO.util.Sort.compareAsc;
+    var compState = comp(a.state, b.state);
+    return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
 };
 YAHOO.example.sortStatesDesc = function(a, b) {
-    if(YAHOO.util.Sort.compareDesc(a.state, b.state) !== 0) {
-        return YAHOO.util.Sort.compareDesc(a.state, b.state);
-    }
-    else {
-        return YAHOO.util.Sort.compareDesc(b.areacode, a.areacode);
-    }
+    var comp = YAHOO.util.Sort.compareDesc;
+    var compState = comp(a.state, b.state);
+    return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
 };
 
+var myAreacodesDriver = new YAHOO.widget.Driver();
+
 var myAreacodesColumnset = [
-    {id:"c1",key:"areacode",text:"Area Codes",sortable:true,currentSortDir:"asc"},
-    {id:"c2",key:"state",text:"States",sortable:true,sortAsc:YAHOO.example.sortStatesAsc,sortDesc:YAHOO.example.sortStatesDesc}
+    {id:"ac1",key:"areacode",text:"Area Codes",sortable:true,currentlyAsc:true},
+    {id:"ac2",key:"state",text:"States",sortable:true,sortAscHandler:YAHOO.example.sortStatesAsc,sortDescHandler:YAHOO.example.sortStatesDesc}
 ];
 
-//var myAreacodesDataSource = new YAHOO.widget.DataSource(aAreacodeObjects);
-//var myAreacodesDataTable = new YAHOO.widget.DataTable("scroll",myAreacodesColumnset,myAreacodesDataSource);
+var myAreacodesDataSource = new YAHOO.widget.DataSource(aAreacodeObjects, myAreacodesDriver);
+var myAreacodesDataTable = new YAHOO.widget.DataTable("scroll",myAreacodesColumnset,myAreacodesDataSource);
 
 
 /****************************************************************************/
@@ -223,22 +219,23 @@ var myAreacodesColumnset = [
 /****************************************************************************/
 
 var myXHRColumnset = [
-    {id:"c2",key:"Title",text:"Title",sortable:true,resizeable:true,sortAsc:YAHOO.util.Sort.compareTextAsc,sortDesc:YAHOO.util.Sort.compareTextDesc},
-    {id:"c1",key:"Summary",text:"Summary",sortable:true,resizeable:true,sortAsc:YAHOO.util.Sort.compareTextAsc,sortDesc:YAHOO.util.Sort.compareTextDesc}
+    {id:"search1",key:"Title",text:"Title",sortable:true,resizeable:true,sortAscHandler:YAHOO.util.Sort.compareTextAsc,sortDescHandler:YAHOO.util.Sort.compareTextDesc},
+    {id:"search1",key:"Summary",text:"Summary",sortable:true,resizeable:true,sortAscHandler:YAHOO.util.Sort.compareTextAsc,sortDescHandler:YAHOO.util.Sort.compareTextDesc}
 ];
 
+// Converts XML results into an array of key/value objects
 var myXMLParser = new YAHOO.widget.Parser();
 myXMLParser.parseResponse = function(sRequest, oRawResponse, oCallback, oCaller) {
-    var oParsedResponse = [];
-    var aSchema = ["Result","Title","Summary"];alert(oRawResponse.responseXML.getElementsByTagName("Result"));
+    var aParsedResponse = [];
+    var aSchema = ["Result","Title","Summary"];
     var xmlList = oRawResponse.responseXML.getElementsByTagName(aSchema[0]);
     if(!xmlList) {
         bError = true;
-        }
+    }
     // Loop through each result
     for(var k = xmlList.length-1; k >= 0 ; k--) {
         var result = xmlList.item(k);
-        var aFieldSet = [];
+        var oResult = {};
         // Loop through each data field in each result using the schema
         for(var m = aSchema.length-1; m >= 1 ; m--) {
             var sValue = null;
@@ -248,7 +245,7 @@ myXMLParser.parseResponse = function(sRequest, oRawResponse, oCallback, oCaller)
                 sValue = xmlAttr.value;
             }
             // ...or in a node
-            else{
+            else {
                 var xmlNode = result.getElementsByTagName(aSchema[m]);
                 if(xmlNode && xmlNode.item(0) && xmlNode.item(0).firstChild) {
                     sValue = xmlNode.item(0).firstChild.nodeValue;
@@ -258,17 +255,17 @@ myXMLParser.parseResponse = function(sRequest, oRawResponse, oCallback, oCaller)
                 }
             }
             // Capture the schema-mapped data field values into an array
-            aFieldSet.unshift(sValue);
+            oResult[aSchema[m]] = sValue;
         }
         // Capture each array of values into an array of results
-        oParsedResponse.unshift(aFieldSet);
+        aParsedResponse.unshift(oResult);
     }
     
     // Cache the response before sending it back to the widget
-    oDataSource.addToCache(oRequest, oParsedResponse);
+    oCaller.oDataSource.addToCache(sRequest, aParsedResponse);
 
     // The parser sends back the parsed response back to the caller
-    oCallback(sRequest, oParsedResponse, oCaller);
+    oCallback(sRequest, aParsedResponse, oCaller);
 
 }
 
@@ -278,7 +275,6 @@ myXHRDataSource.responseType = myXHRDataSource.TYPE_XML;
 myXHRDataSource.queryMatchContains = true;
 myXHRDataSource.scriptQueryAppend = "results=5"; // Needed for YWS
 myXHRDataSource.resultsAsObjects = true;
-
 
 var myXHRDataTable = new YAHOO.widget.DataTable("xhr", myXHRColumnset, myXHRDataSource,{defaultRequest:"query=madonna&results=5"});
 myXHRDataTable.aSchema = ["Result","Title","Summary"];

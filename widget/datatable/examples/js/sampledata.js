@@ -1,7 +1,7 @@
 var aWebstats = [
-    ["360",20,400,44,657],
+    ["food",20,400,44,657],
     ["autos",24,377,32,567],
-    ["food",32,548,12,543],
+    ["360",32,548,12,543],
     ["mail",8,465,34,946]
 ];
 
@@ -390,9 +390,9 @@ var aAreacodeObjects = [
     {areacode: "989", state: "Michigan"}
 ];
 
-var aOrderObjects = [
-    {id: "1", date:new Date(1980, 2, 24), quantity:4, amount:4.00},
-    {id: "2", date:new Date(1981, 1, 11), quantity:3, amount:2.12},
-    {id: "3", date:new Date(1978, 11, 12), quantity:12, amount:6.25},
-    {id: "4", date:new Date(1974, 1, 11), quantity:6, amount:3.50}
+var aPurchaseOrderObjects = [
+    {id: "167", date:new Date(1980, 2, 24), quantity:4, amount:4.00},
+    {id: "267", date:new Date(1981, 1, 11), quantity:3, amount:2.12},
+    {id: "367", date:new Date(1978, 11, 12), quantity:12, amount:6.25},
+    {id: "467", date:new Date(1974, 1, 11), quantity:6, amount:3.50}
 ];

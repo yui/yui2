@@ -30,8 +30,9 @@ th {background-color:#696969;color:#fff;}
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <script type="text/javascript" src="./js/sampledata.js"></script>
 <script language="JavaScript">
-YAHOO.example.initTable = function() {
+YAHOO.example.initPOTable = function() {
     var myColumnset = [
+        {id:"po0",key:"index",text:"Index",sortable:true,resizeable:true},
         {id:"po1",key:"id",text:"PO ID",sortable:true,resizeable:true},
         {id:"po3",key:"quantity",text:"Quantity",sortable:true,resizeable:true},
         {id:"po4",key:"amount",text:"$ Total",sortable:true,resizeable:true},
@@ -69,19 +70,82 @@ YAHOO.example.initTable = function() {
             oRecord[oColumn.key] = data;
     };
 
-    var myDataSource = new YAHOO.widget.DataSource(aPurchaseOrderObjects);
-    var myDataTable = new YAHOO.widget.DataTable("table",myColumnset,myDataSource,{parseCell:myParseCell,formatCell:myFormatCell});
+    var myDriver = new YAHOO.widget.Driver();
+    var myDataSource = new YAHOO.widget.DataSource(aPurchaseOrderObjects, myDriver);
+    var myDataTable = new YAHOO.widget.DataTable("potable",myColumnset,myDataSource,{parseCell:myParseCell,formatCell:myFormatCell});
 };
-YAHOO.util.Event.onAvailable("tablediv",YAHOO.example.initTable);
+YAHOO.util.Event.onAvailable("purchaseorders",YAHOO.example.initPOTable);
+
+
+YAHOO.example.initWebstatsTable = function() {
+    var myColumnset = [
+        {id:"webstats20", key:"network", text:"Web statistics across Y! Properties",
+            columnset: [
+                {id:"webstats00", key:"property", text:"Property Name", type:"text", sortable:true, resizeable:true},
+                {id:"webstats10", key:"visits", text:"Visits", type: "number",
+                    columnset: [
+                        {id:"webstats01",key:"visitspercent",text:"%", sortable:true, resizeable:true},
+                        {id:"webstats02",key:"visitstotal",text:"Total", sortable:true, resizeable:true}
+                    ]
+                },
+                {id:"webstats11",key:"views",text:"Views",colspan:2,
+                    columnset: [
+                        {id:"webstats03",key:"viewspercent",text:"%",type:"number", sortable:true, resizeable:true},
+                        {id:"webstats04",key:"viewstotal",text:"Total",type:"number", sortable:true, resizeable:true}
+                    ]
+
+                }
+            ]
+        }
+    ];
+
+    // formatCell:myFormatCell
+    var myFormatCell = function(elCell, oRecord, oColumn){
+        var value = oRecord[oColumn.key];
+        if(oColumn.key === "date") {
+            //value = oRecord[oColumn.key].getMonth() + " / " + oRecord[oColumn.key].getDate()  + " / " + oRecord[oColumn.key].getYear();
+        }
+        else if(oColumn.key === "amount") {
+            value = "$"+oRecord[oColumn.key];
+            if(value.lastIndexOf(".") == -1) {
+                value += ".00";
+            }
+            else {
+                while(value.substring(value.lastIndexOf(".")).length < 3) {
+                    value += "0";
+                }
+            }
+        }
+        elCell.innerHTML = value;
+    };
+
+    var myParseCell = function(elCell, oRecord, oColumn){
+        var data = elCell.innerHTML;
+        if(oColumn.key === "date") {
+            // data = mm/dd/yy
+        }
+        else if(oColumn.key === "amount") {
+            //data = $nn.nn
+            data = parseFloat(data.substring(1));
+        }
+            oRecord[oColumn.key] = data;
+    };
+
+    var myDriver = new YAHOO.widget.Driver();
+    var myDataSource = new YAHOO.widget.DataSource(aWebstats, myDriver);
+    var myDataTable = new YAHOO.widget.DataTable("webstatstable",myColumnset,myDataSource,{parseCell:myParseCell});
+};
+YAHOO.util.Event.onAvailable("webstats",YAHOO.example.initWebstatsTable);
 </script>
 
 </head>
 <body>
 <h1>Build Table from Markup</h1>
-<div id="tablediv">
-<table id="table">
+<div id="purchaseorders">
+<table id="potable">
     <thead>
         <tr>
+            <th>Index</th>
             <th>PO ID</th>
             <th>Quantity</th>
             <th>$ Total</th>
@@ -90,25 +154,29 @@ YAHOO.util.Event.onAvailable("tablediv",YAHOO.example.initTable);
     </thead>
     <tbody>
         <tr>
-            <td>4</td>
+            <td>1</td>
+            <td>467</td>
             <td>6</td>
             <td>$11.2</td>
             <td>1 / 11 / 74</td>
         </tr>
         <tr>
-            <td>3</td>
+            <td>2</td>
+            <td>367</td>
             <td>12</td>
             <td>$1.25</td>
             <td>11 / 12 / 78</td>
         </tr>
         <tr>
-            <td>1</td>
+            <td>3</td>
+            <td>167</td>
             <td>4</td>
             <td>$4</td>
             <td>2 / 24 / 80</td>
         </tr>
         <tr>
-            <td>2</td>
+            <td>4</td>
+            <td>267</td>
             <td>3</td>
             <td>$2.12</td>
             <td>1 / 11 / 81</td>
@@ -118,7 +186,57 @@ YAHOO.util.Event.onAvailable("tablediv",YAHOO.example.initTable);
 </div>
 
 
+<div id="webstats">
+    <table id="webstatstable">
+        <thead>
+            <tr>
+                <th colspan="7" rowspan="1" id="tabletitle">Web statistics across Y! properties</th>
+            </tr>
+            <tr>
+                <th colspan="1" rowspan="2" id="propname">Property Name</th>
+                <th colspan="2" rowspan="1" id="visits">Visits</th>
+                <th colspan="2" rowspan="1" id="views">Views</th>
+            </tr>
+            <tr>
+                <th colspan="1" rowspan="1" id="visitspercent">%</th>
+                <th colspan="1" rowspan="1" id="visitstotal">Total</th>
+                <th colspan="1" rowspan="1" id="viewspercent">%</th>
+                <th colspan="1" rowspan="1" id="viewstotal">Total</th>
+            </tr>
+        </thead>
 
+        <tbody>
+            <tr>
+                <td>food</td>
+                <td>20</td>
+                <td>400</td>
+                <td>44</td>
+                <td>657</td>
+            </tr>
+            <tr>
+                <td>autos</td>
+                <td>24</td>
+                <td>377</td>
+                <td>32</td>
+                <td>567</td>
+            </tr>
+            <tr>
+                <td>360</td>
+                <td>32</td>
+                <td>548</td>
+                <td>12</td>
+                <td>543</td>
+                </tr>
+            <tr>
+                <td>mail</td>
+                <td>8</td>
+                <td>465</td>
+                <td>34</td>
+                <td>946</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 <script language="JavaScript">
 YAHOO.example.initPage = function() {
