@@ -198,7 +198,12 @@ YAHOO.widget.Button.prototype = {
 
         if(typeof this[p_sName] != "undefined") {
 
-            if(this._aProperties && this._aProperties[p_sName] && this._aProperties[p_sName].validator && !this._aProperties[p_sName].validator.call(this, p_oValue)) {
+            if(
+                this._aProperties && 
+                this._aProperties[p_sName] && 
+                this._aProperties[p_sName].validator && 
+                !this._aProperties[p_sName].validator.call(this, p_oValue)
+            ) {
     
                 return;
             
@@ -581,7 +586,7 @@ YAHOO.widget.Button.prototype = {
 
         var oElement;
 
-        if(p_oObject instanceof YAHOO.widget.MenuModule) {
+        if(p_oObject instanceof YAHOO.widget.Menu) {
 
             this._oMenu = p_oObject;
 
