@@ -10,7 +10,27 @@
  * @constructor
  */
 YAHOO.widget.Recordset = function(aRecords, oColumnset) {
+//TODO: account for zero records?
+//TODO: internal index?
     this._records = [];
+    this.addRecords(aRecords, oColumnset);
+};
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Adds records to the end of the Recordset.
+ *
+ * @method addRecords
+ * @param aRecords {Array}
+ * @param oColumnset {Object}
+ */
+YAHOO.widget.Recordset.prototype.addRecords = function(aRecords, oColumnset) {
+    //TODO: anything else to validate record?
     for(var i=0; i<aRecords.length; i++) {
         var record = aRecords[i];
         var oRecord = {};
@@ -20,16 +40,9 @@ YAHOO.widget.Recordset = function(aRecords, oColumnset) {
             }
         }
         else oRecord = record;
-        this.addRecord(oRecord,oColumnset.columns[j],i);
-
+        this.addRecord(oRecord);
    }
 };
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Public methods
-//
-/////////////////////////////////////////////////////////////////////////////
 
 /**
  * Adds the given record to the Recordset at the given index. If index is null,
@@ -40,7 +53,7 @@ YAHOO.widget.Recordset = function(aRecords, oColumnset) {
  * @param oColumn {Object}
  * @param i {Number} (optional) Record index
  */
-YAHOO.widget.Recordset.prototype.addRecord = function(oRecord, oColumn, i) {
+YAHOO.widget.Recordset.prototype.addRecord = function(oRecord, i) {
     //TODO: anything else to validate record?
     if(oRecord) {
         if(i) {

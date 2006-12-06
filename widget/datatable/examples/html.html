@@ -7,8 +7,8 @@
 <style type="text/css">
 table {border-collapse:collapse;margin:1em;}
 th, td {border:1px solid black;}
-.yui-dt-odd {background-color:#eee;}
-
+.yui-dt-odd {background-color:#eee;} /*light gray*/
+.yui-dt-selected {background-color:#97C0A5;} /*green*/
 
 
 
@@ -70,8 +70,8 @@ YAHOO.example.initPOTable = function() {
             oRecord[oColumn.key] = data;
     };
 
-    var myDriver = new YAHOO.widget.Driver();
-    var myDataSource = new YAHOO.widget.DataSource(aPurchaseOrderObjects, myDriver);
+    var myDataDriver = new YAHOO.widget.DataDriver();
+    var myDataSource = new YAHOO.widget.DataSource(aPurchaseOrderObjects, myDataDriver);
     var myDataTable = new YAHOO.widget.DataTable("potable",myColumnset,myDataSource,{parseCell:myParseCell,formatCell:myFormatCell});
 };
 YAHOO.util.Event.onAvailable("purchaseorders",YAHOO.example.initPOTable);
@@ -131,8 +131,8 @@ YAHOO.example.initWebstatsTable = function() {
             oRecord[oColumn.key] = data;
     };
 
-    var myDriver = new YAHOO.widget.Driver();
-    var myDataSource = new YAHOO.widget.DataSource(aWebstats, myDriver);
+    var myDataDriver = new YAHOO.widget.DataDriver();
+    var myDataSource = new YAHOO.widget.DataSource(aWebstats, myDataDriver);
     var myDataTable = new YAHOO.widget.DataTable("webstatstable",myColumnset,myDataSource,{parseCell:myParseCell});
 };
 YAHOO.util.Event.onAvailable("webstats",YAHOO.example.initWebstatsTable);

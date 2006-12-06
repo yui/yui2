@@ -5,26 +5,23 @@
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
 <style type="text/css">
-table {border-collapse:collapse;margin:1em;}
-th, td {border:1px solid black;}
-.yui-dt-odd {background-color:#eee;}
-.yui-dt-rowselected {background-color:#f00;}
-
+/* customizable css*/
 #fixed table{width:30em;}
+.example {margin:1em;}
+table {border-collapse:collapse;cursor:default;}
+th, td {border:1px solid #000;}
+th {background-color:#696969;color:#fff;}/*dark gray*/
+.yui-dt-odd {background-color:#eee;} /*light gray*/
+.yui-dt-selected {background-color:#97C0A5;} /*green*/
 
 
-
-th {background-color:#696969;color:#fff;}
-.yui-dt-sortable {cursor:hand;cursor:pointer;margin:0 4px 0 4px;}
+/*foundational css*/
 .yui-dt-headcontainer {position:relative;}
 .yui-dt-headresizer {position:absolute;right:-4px;bottom:0;width:6px;height:100%;cursor:w-resize;cursor:col-resize;}
-
-
-
-
+.yui-dt-sortable {cursor:hand;cursor:pointer;margin:0 4px 0 4px;}
 
 #scroll  {
-   width:40em;margin-bottom:3em;
+   width:20em;margin-bottom:3em;
 }
 
 
@@ -69,13 +66,13 @@ th {background-color:#696969;color:#fff;}
 <body>
 <h1>Build Table from Scratch</h1>
 
-<div id="webstats"></div>
+<div id="webstats" class="example"></div>
 
-<div id="fixed"></div>
+<div id="fixed" class="example"></div>
 
-<div id="scroll"></div>
+<div id="scroll" class="example"></div>
 
-<div id="xhr"></div>
+<div id="xhr" class="example"><form id="xhrform"><input id="xhrinput" type="text"><input id="xhrsubmit" type="submit" value="Add Rows"></form></div>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
@@ -119,8 +116,8 @@ myFormatCell = function(elCell, oRecord, oColumn) {
     elCell.innerHTML = oRecord[oColumn.key];
 };
 
-var myWebstatsDriver = new YAHOO.widget.Driver();
-var myWebstatsDataSource = new YAHOO.widget.DataSource(aWebstats, myWebstatsDriver);
+var myWebstatsDataDriver = new YAHOO.widget.DataDriver();
+var myWebstatsDataSource = new YAHOO.widget.DataSource(aWebstats, myWebstatsDataDriver);
 var myWebstatsDataTable = new YAHOO.widget.DataTable("webstats", myWebstatsColumnset, myWebstatsDataSource, {formatCell:myFormatCell});
 
 
@@ -128,9 +125,9 @@ var myWebstatsDataTable = new YAHOO.widget.DataTable("webstats", myWebstatsColum
 /****************************************************************************/
 /****************************************************************************/
 YAHOO.example.Orders = function() {
-    this.driver = new YAHOO.widget.Driver();
-    // Customized driver functionality
-    this.driver.makeConnection = function(sRequest, oCallback, oCaller, oDataSource) {
+    this.datadriver = new YAHOO.widget.DataDriver();
+    // Customized DataDriver functionality
+    this.datadriver.makeConnection = function(sRequest, oCallback, oCaller, oDataSource) {
         var aOrders = oDataSource.livedata;
         var oRawResponse = [];
 
@@ -147,9 +144,9 @@ YAHOO.example.Orders = function() {
             oRawResponse = aOrders;
         }
 
-        // The driver forwards the raw response to the parser...
-        if(oDataSource.parser) {
-            oDataSource.parser.parseResponse(sRequest, oRawResponse, oCallback, oCaller);
+        // The DataDriver forwards the raw response to the DataParser...
+        if(oDataSource.dataparser) {
+            oDataSource.dataparser.parseResponse(sRequest, oRawResponse, oCallback, oCaller);
         }
         // ...or else sends the raw response directly back to the caller
         else {
@@ -183,7 +180,7 @@ YAHOO.example.Orders = function() {
         }
     };
 
-    this.datasource = new YAHOO.widget.DataSource(aPurchaseOrderObjects, this.driver);
+    this.datasource = new YAHOO.widget.DataSource(aPurchaseOrderObjects, this.datadriver);
     this.datatable = new YAHOO.widget.DataTable("fixed", this.columnset, this.datasource, {defaultRequest: "", formatCell: this.formatCell, fixedwidth:true});
 }();
 
@@ -203,14 +200,14 @@ YAHOO.example.sortStatesDesc = function(a, b) {
     return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
 };
 
-var myAreacodesDriver = new YAHOO.widget.Driver();
+var myAreacodesDataDriver = new YAHOO.widget.DataDriver();
 
 var myAreacodesColumnset = [
     {id:"ac1",key:"areacode",text:"Area Codes",sortable:true,currentlyAsc:true},
     {id:"ac2",key:"state",text:"States",sortable:true,sortAscHandler:YAHOO.example.sortStatesAsc,sortDescHandler:YAHOO.example.sortStatesDesc}
 ];
 
-var myAreacodesDataSource = new YAHOO.widget.DataSource(aAreacodeObjects, myAreacodesDriver);
+var myAreacodesDataSource = new YAHOO.widget.DataSource(aAreacodeObjects, myAreacodesDataDriver);
 var myAreacodesDataTable = new YAHOO.widget.DataTable("scroll",myAreacodesColumnset,myAreacodesDataSource);
 
 
@@ -224,8 +221,8 @@ var myXHRColumnset = [
 ];
 
 // Converts XML results into an array of key/value objects
-var myXMLParser = new YAHOO.widget.Parser();
-myXMLParser.parseResponse = function(sRequest, oRawResponse, oCallback, oCaller) {
+var myXMLDataParser = new YAHOO.widget.DataParser();
+myXMLDataParser.parseResponse = function(sRequest, oRawResponse, oCallback, oCaller) {
     var aParsedResponse = [];
     var aSchema = ["Result","Title","Summary"];
     var xmlList = oRawResponse.responseXML.getElementsByTagName(aSchema[0]);
@@ -262,15 +259,15 @@ myXMLParser.parseResponse = function(sRequest, oRawResponse, oCallback, oCaller)
     }
     
     // Cache the response before sending it back to the widget
-    oCaller.oDataSource.addToCache(sRequest, aParsedResponse);
+    oCaller.datasource.addToCache(sRequest, aParsedResponse);
 
-    // The parser sends back the parsed response back to the caller
+    // The DataParser sends back the parsed response back to the caller
     oCallback(sRequest, aParsedResponse, oCaller);
 
 }
 
-var myXHRDriver = new YAHOO.widget.Driver();
-var myXHRDataSource = new YAHOO.widget.DataSource("./php/ysearch_proxy.php", myXHRDriver, myXMLParser);
+var myXHRDataDriver = new YAHOO.widget.DataDriver();
+var myXHRDataSource = new YAHOO.widget.DataSource("./php/ysearch_proxy.php", myXHRDataDriver, myXMLDataParser);
 myXHRDataSource.responseType = myXHRDataSource.TYPE_XML;
 myXHRDataSource.queryMatchContains = true;
 myXHRDataSource.scriptQueryAppend = "results=5"; // Needed for YWS
@@ -279,6 +276,14 @@ myXHRDataSource.resultsAsObjects = true;
 var myXHRDataTable = new YAHOO.widget.DataTable("xhr", myXHRColumnset, myXHRDataSource,{defaultRequest:"query=madonna&results=5"});
 myXHRDataTable.aSchema = ["Result","Title","Summary"];
 myXHRDataTable.responseStripAfter = "\n<!-";
+
+
+var onFormSubmit = function(e, oDataTable) {
+    var value = YAHOO.util.Dom.get("xhrinput").value || "madonna";
+    YAHOO.util.Event.stopEvent(e);
+    myXHRDataTable.addRows("query="+YAHOO.util.Dom.get("xhrinput").value+"&results=5");
+};
+YAHOO.util.Event.addListener(YAHOO.util.Dom.get("xhrform"), "submit", onFormSubmit, myXHRDataTable);
 
 
 </script>

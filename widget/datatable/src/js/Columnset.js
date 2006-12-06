@@ -61,13 +61,12 @@ YAHOO.widget.Column.prototype.key = null;
 YAHOO.widget.Column.prototype.text = null;
 
 /**
- * Width of the column, including units.
+ * Current offsetWidth of the column (in pixels).
  *
  * @property width
- * @type String
- * @default "auto"
+ * @type Number
  */
-YAHOO.widget.Column.prototype.width = "auto";
+YAHOO.widget.Column.prototype.width = null;
 
 /**
  * True if column is sortable, false otherwise.
@@ -172,7 +171,6 @@ YAHOO.widget.Columnset = function(aColumnset) {
     // parse into an array of rows
     var parseColumnsToRows = function(oneColumnset, parentcell) {
         currentrow++;
-        YAHOO.log("Parsing " + oneColumnset.length + " columns in row " + currentrow, "warn");
         // A row is an array of header cells
         if(!rows[currentrow]) {
             rows[currentrow] = [];
@@ -231,14 +229,6 @@ YAHOO.widget.Columnset = function(aColumnset) {
         parseColumnsToRows(aColumnset);
     }
 
-    // Some logging
-    for(var i=0;i<rows.length;i++) {
-        YAHOO.log("row"+i+": "+rows[i],"warn");
-        for(var j=0; j<rows[i].length; j++) {
-            var cell = rows[i][j];
-            YAHOO.log("cell"+j+": "+cell.text + " rowspan: " + cell.rowspan + " colspan: " + cell.colspan ,"warn");
-        }
-    }
     this.rows = rows;
     this.columns = columns;
     //this.numColsInTable = numColsInTable;
@@ -249,15 +239,6 @@ YAHOO.widget.Columnset = function(aColumnset) {
 // Public member variables
 //
 /////////////////////////////////////////////////////////////////////////////
-
-/**
- * Total number of columns in the DataTable.
- *
- * @property numColumnsInTable
- * @type Number
- * @default 0
- */
-//YAHOO.widget.Columnset.prototype.numColsInTable = 0;
 
 /**
  * Array of rows.
@@ -276,5 +257,3 @@ YAHOO.widget.Columnset.prototype.rows = [];
  * @default []
  */
 YAHOO.widget.Columnset.prototype.columns = [];
-
-
