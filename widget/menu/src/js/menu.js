@@ -2527,37 +2527,37 @@ _onMenuItemConfigChange: function(p_sType, p_aArgs, p_oItem) {
 */
 enforceConstraints: function(type, args, obj) {
 
-    var oConfig = this.cfg,
+     var oConfig = this.cfg,
+         pos = args[0],
+    
+         x = pos[0],
+         y = pos[1],
+    
+         offsetHeight = this.element.offsetHeight,
+         offsetWidth = this.element.offsetWidth,
+    
+         viewPortWidth = YAHOO.util.Dom.getViewportWidth(),
+         viewPortHeight = YAHOO.util.Dom.getViewportHeight(),
+    
+         scrollX = Math.max(
+                        document.documentElement.scrollLeft, 
+                        document.body.scrollLeft
+                    ),
 
-        pos = args[0],
-        
-        x = pos[0],
-        y = pos[1],
-        
-        bod = document.getElementsByTagName('body')[0],
-        htm = document.getElementsByTagName('html')[0],
-        
-        bodyOverflow = Dom.getStyle(bod, "overflow"),
-        htmOverflow = Dom.getStyle(htm, "overflow"),
-        
-        offsetHeight = this.element.offsetHeight,
-        offsetWidth = this.element.offsetWidth,
-        
-        viewPortWidth = Dom.getClientWidth(),
-        viewPortHeight = Dom.getClientHeight(),
-        
-        scrollX = window.scrollX || document.body.scrollLeft,
-        scrollY = window.scrollY || document.body.scrollTop,
-        
-        topConstraint = scrollY + 10,
-        leftConstraint = scrollX + 10,
-        bottomConstraint = scrollY + viewPortHeight - offsetHeight - 10,
-        rightConstraint = scrollX + viewPortWidth - offsetWidth - 10,
-        
-        aContext = oConfig.getProperty("context"),
-        oContextElement = aContext ? aContext[0] : null;
+         scrollY = Math.max(
+                        document.documentElement.scrollTop, 
+                        document.body.scrollTop
+                    ),
     
+         topConstraint = scrollY + 10,
+         leftConstraint = scrollX + 10,
+         bottomConstraint = scrollY + viewPortHeight - offsetHeight - 10,
+         rightConstraint = scrollX + viewPortWidth - offsetWidth - 10,
     
+         aContext = oConfig.getProperty("context"),
+         oContextElement = aContext ? aContext[0] : null;
+
+
     if (x < 10) {
 
         x = leftConstraint;
@@ -2565,7 +2565,7 @@ enforceConstraints: function(type, args, obj) {
     } else if ((x + offsetWidth) > viewPortWidth) {
 
         if(
-            oContextElement && 
+            oContextElement &&
             ((x - oContextElement.offsetWidth) > offsetWidth)
         ) {
 
@@ -2601,6 +2601,7 @@ enforceConstraints: function(type, args, obj) {
 
     oConfig.setProperty("x", x, true);
     oConfig.setProperty("y", y, true);
+    oConfig.setProperty("xy", [x,y], true);
 
 },
 
