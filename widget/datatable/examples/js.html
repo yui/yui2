@@ -72,6 +72,8 @@ th {background-color:#696969;color:#fff;}/*dark gray*/
 
 <div id="scroll" class="example"></div>
 
+<div id="page" class="example"><form id="pageform"><input id="pagesubmitprev" type="submit" value="Get Prev Set" disabled><input id="pagesubmitnext" type="submit" value="Get Next Set"><select id="pagerange"><option id="10">10</option><option id="25">25</option><option id="50">50</option><option id="100">100</option></select></form></div>
+
 <div id="xhr" class="example"><form id="xhrform"><input id="xhrinput" type="text"><input id="xhrsubmit" type="submit" value="Add Rows"></form></div>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
@@ -214,6 +216,54 @@ var myAreacodesDataTable = new YAHOO.widget.DataTable("scroll",myAreacodesColumn
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
+var thispagestart = null;
+var nextpagestart = null;
+var pagerange = 10;
+var fnAreaCodeObjects = function(oArgs) {
+    thispagestart = (oArgs) ? parseInt(oArgs.nStart) : 0;
+    nextpagestart = thispagestart + parseInt(pagerange);
+    if(thispagestart <= 0) {
+        //disable get prev btn
+        YAHOO.util.Dom.get("pagesubmitprev").disabled = true;
+    }
+    else {
+        YAHOO.util.Dom.get("pagesubmitprev").disabled = false;
+    }
+    
+    if(nextpagestart > aAreacodeObjects.length) {
+        // disable get next btn
+        YAHOO.util.Dom.get("pagesubmitnext").disabled = true;
+    }
+    else {
+        YAHOO.util.Dom.get("pagesubmitnext").disabled = false;
+    }
+
+    return aAreacodeObjects.slice(thispagestart, nextpagestart);
+};
+
+var myPagedAreacodesDataSource = new YAHOO.widget.DataSource(fnAreaCodeObjects, myAreacodesDataDriver);
+var myPagedAreacodesDataTable = new YAHOO.widget.DataTable("page",myAreacodesColumnset,myPagedAreacodesDataSource);
+
+var onPageNextSubmit = function(e, oDataTable) {
+    YAHOO.util.Event.stopEvent(e);
+    myPagedAreacodesDataTable.replaceRows({nStart:nextpagestart});
+};
+var onPagePrevSubmit = function(e, oDataTable) {
+    YAHOO.util.Event.stopEvent(e);
+    myPagedAreacodesDataTable.replaceRows({nStart:thispagestart-pagerange});
+};
+var onPageRangeChange = function(e, oDataTable) {
+    YAHOO.util.Event.stopEvent(e);
+    pagerange = this.value;
+    myPagedAreacodesDataTable.replaceRows({nStart:thispagestart});
+};
+YAHOO.util.Event.addListener(YAHOO.util.Dom.get("pagesubmitnext"), "click", onPageNextSubmit, myPagedAreacodesDataTable);
+YAHOO.util.Event.addListener(YAHOO.util.Dom.get("pagesubmitprev"), "click", onPagePrevSubmit, myPagedAreacodesDataTable);
+YAHOO.util.Event.addListener(YAHOO.util.Dom.get("pagerange"), "change", onPageRangeChange, myPagedAreacodesDataTable);
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
 
 var myXHRColumnset = [
     {id:"search1",key:"Title",text:"Title",sortable:true,resizeable:true,sortAscHandler:YAHOO.util.Sort.compareTextAsc,sortDescHandler:YAHOO.util.Sort.compareTextDesc},
@@ -278,12 +328,12 @@ myXHRDataTable.aSchema = ["Result","Title","Summary"];
 myXHRDataTable.responseStripAfter = "\n<!-";
 
 
-var onFormSubmit = function(e, oDataTable) {
+var onXHRFormSubmit = function(e, oDataTable) {
     var value = YAHOO.util.Dom.get("xhrinput").value || "madonna";
     YAHOO.util.Event.stopEvent(e);
     myXHRDataTable.addRows("query="+YAHOO.util.Dom.get("xhrinput").value+"&results=5");
 };
-YAHOO.util.Event.addListener(YAHOO.util.Dom.get("xhrform"), "submit", onFormSubmit, myXHRDataTable);
+YAHOO.util.Event.addListener(YAHOO.util.Dom.get("xhrform"), "submit", onXHRFormSubmit, myXHRDataTable);
 
 
 </script>

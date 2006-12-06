@@ -220,6 +220,15 @@ YAHOO.widget.DataTable.prototype.addRows = function(sRequest) {
 };
 
  /**
+ * Replaces existing rows based on query results.
+ *
+ * @method replaceRows
+ */
+YAHOO.widget.DataTable.prototype.replaceRows = function(sRequest) {
+    this.datasource.sendRequest(sRequest, this._replaceRows, this);
+};
+
+ /**
  * Appends a row into the bottom of the table body.
  *
  * @method appendRow
@@ -914,6 +923,28 @@ YAHOO.widget.DataTable.prototype._addRows = function(sRequest, oResponse, oSelf)
     }
 };
 
+/**
+ * Replaces existing rows. Called from DataSource as the callback handler.
+ *
+ * @method _replaceRows
+ * @param sRequest {String} Original request.
+ * @param oResponse {Object} Response object.
+ * @param oSelf {Object} The DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._replaceRows = function(sRequest, oResponse, oSelf) {
+    var elTable = oSelf._elTable;
+    var oColumnset = oSelf._oColumnset;
+    var oRecordset = oSelf._oRecordset;
+
+    // Update the Recordset from the response
+    // TODO: get rid of old records?
+    oRecordset.addRecords(oResponse, oColumnset);
+    oSelf._elTbody.innerHTML = "";
+    for(var i=0; i<oResponse.length; i++) {
+        oSelf.appendRow(oResponse[i]);
+    }
+};
 
 /////////////////////////////////////////////////////////////////////////////
 //
