@@ -3,9 +3,9 @@
 
 (function() {
 
-var Dom = YAHOO.util.Dom;
-var Module = YAHOO.widget.Module;
-var Menu = YAHOO.widget.Menu;
+var Dom = YAHOO.util.Dom,
+    Module = YAHOO.widget.Module,
+    Menu = YAHOO.widget.Menu;
 
 
 /**
@@ -568,10 +568,10 @@ YAHOO.widget.MenuItem.prototype = {
 
                     // Get the anchor node (if it exists)
 
-                    var oAnchor = this._getFirstElement(p_oObject, "A");
-                    var sURL = "#";
-                    var sTarget = null;
-                    var sText = null;
+                    var oAnchor = this._getFirstElement(p_oObject, "A"),
+                        sURL = "#",
+                        sTarget,
+                        sText;
 
 
                     // Capture the "text" and/or the "URL"
@@ -621,9 +621,9 @@ YAHOO.widget.MenuItem.prototype = {
 
                     // Check if emphasis has been applied to the MenuItem
 
-                    var oEmphasisNode = this._getFirstElement(oAnchor);
-                    var bEmphasis = false;
-                    var bStrongEmphasis = false;
+                    var oEmphasisNode = this._getFirstElement(oAnchor),
+                        bEmphasis = false,
+                        bStrongEmphasis = false;
 
                     if(oEmphasisNode) {
 
@@ -822,8 +822,8 @@ YAHOO.widget.MenuItem.prototype = {
     */
     _initSubTree: function() {
 
-        var oSrcEl = this.srcElement;
-        var oConfig = this.cfg;
+        var oSrcEl = this.srcElement,
+            oConfig = this.cfg;
 
 
         if(oSrcEl.childNodes.length > 0) {
@@ -842,8 +842,8 @@ YAHOO.widget.MenuItem.prototype = {
             }
             else {
 
-                var oNode = oSrcEl.firstChild;
-                var aOptions = [];
+                var oNode = oSrcEl.firstChild,
+                    aOptions = [];
     
                 do {
     
@@ -960,12 +960,12 @@ YAHOO.widget.MenuItem.prototype = {
     */    
     configHelpText: function(p_sType, p_aArgs, p_oItem) {
 
-        var me = this;
-        var oHelpText = p_aArgs[0];
-        var oEl = this.element;
-        var oConfig = this.cfg;
-        var aNodes = [oEl, this._oAnchor];
-        var oImg = this.submenuIndicator;
+        var me = this,
+            oHelpText = p_aArgs[0],
+            oEl = this.element,
+            oConfig = this.cfg,
+            aNodes = [oEl, this._oAnchor],
+            oImg = this.submenuIndicator;
 
 
         /**
@@ -973,7 +973,7 @@ YAHOO.widget.MenuItem.prototype = {
         * "selected" and "disabled" configuration events.
         * @private
         */
-        var initHelpText = function() {
+        function initHelpText() {
 
             Dom.addClass(aNodes, "hashelptext");
 
@@ -989,21 +989,21 @@ YAHOO.widget.MenuItem.prototype = {
 
             }                
 
-        };
+        }
 
 
         /**
         * Removes the "hashelptext" class and corresponding DOM element (EM).
         * @private
         */
-        var removeHelpText = function() {
+        function removeHelpText() {
 
             Dom.removeClass(aNodes, "hashelptext");
 
             oEl.removeChild(me._oHelpTextEM);
             me._oHelpTextEM = null;
 
-        };
+        }
 
 
         if(this._checkDOMNode(oHelpText)) {
@@ -1097,8 +1097,8 @@ YAHOO.widget.MenuItem.prototype = {
     */    
     configTarget: function(p_sType, p_aArgs, p_oItem) {
 
-        var sTarget = p_aArgs[0];
-        var oAnchor = this._oAnchor;
+        var sTarget = p_aArgs[0],
+            oAnchor = this._oAnchor;
 
         if(sTarget && sTarget.length > 0) {
 
@@ -1126,11 +1126,11 @@ YAHOO.widget.MenuItem.prototype = {
     */    
     configEmphasis: function(p_sType, p_aArgs, p_oItem) {
 
-        var bEmphasis = p_aArgs[0];
-        var oAnchor = this._oAnchor;
-        var oText = this._oText;
-        var oConfig = this.cfg;
-        var oEM;
+        var bEmphasis = p_aArgs[0],
+            oAnchor = this._oAnchor,
+            oText = this._oText,
+            oConfig = this.cfg,
+            oEM;
 
 
         if(bEmphasis && oConfig.getProperty("strongemphasis")) {
@@ -1176,11 +1176,11 @@ YAHOO.widget.MenuItem.prototype = {
     */    
     configStrongEmphasis: function(p_sType, p_aArgs, p_oItem) {
 
-        var bStrongEmphasis = p_aArgs[0];
-        var oAnchor = this._oAnchor;
-        var oText = this._oText;
-        var oConfig = this.cfg;
-        var oStrong;
+        var bStrongEmphasis = p_aArgs[0],
+            oAnchor = this._oAnchor,
+            oText = this._oText,
+            oConfig = this.cfg,
+            oStrong;
 
         if(bStrongEmphasis && oConfig.getProperty("emphasis")) {
 
@@ -1224,10 +1224,10 @@ YAHOO.widget.MenuItem.prototype = {
     */    
     configChecked: function(p_sType, p_aArgs, p_oItem) {
     
-        var bChecked = p_aArgs[0];
-        var oEl = this.element;
-        var oConfig = this.cfg;
-        var oImg;
+        var bChecked = p_aArgs[0],
+            oEl = this.element,
+            oConfig = this.cfg,
+            oImg;
         
 
         if(bChecked) {
@@ -1304,14 +1304,14 @@ YAHOO.widget.MenuItem.prototype = {
     */    
     configDisabled: function(p_sType, p_aArgs, p_oItem) {
 
-        var bDisabled = p_aArgs[0];
-        var oAnchor = this._oAnchor;
-        var aNodes = [this.element, oAnchor];
-        var oEM = this._oHelpTextEM;
-        var oConfig = this.cfg;
-        var oImg;
-        var sImgSrc;
-        var sImgAlt;
+        var bDisabled = p_aArgs[0],
+            oAnchor = this._oAnchor,
+            aNodes = [this.element, oAnchor],
+            oEM = this._oHelpTextEM,
+            oConfig = this.cfg,
+            oImg,
+            sImgSrc,
+            sImgAlt;
 
 
         if(oEM) {
@@ -1394,11 +1394,11 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(!this.cfg.getProperty("disabled")) {
 
-            var bSelected = p_aArgs[0];
-            var oEM = this._oHelpTextEM;
-            var aNodes = [this.element, this._oAnchor];
-            var oImg = this.submenuIndicator;
-            var sImgSrc;
+            var bSelected = p_aArgs[0],
+                oEM = this._oHelpTextEM,
+                aNodes = [this.element, this._oAnchor],
+                oImg = this.submenuIndicator,
+                sImgSrc;
 
 
             if(oEM) {
@@ -1460,13 +1460,13 @@ YAHOO.widget.MenuItem.prototype = {
     */
     configSubmenu: function(p_sType, p_aArgs, p_oItem) {
 
-        var oEl = this.element;
-        var oSubmenu = p_aArgs[0];
-        var oImg = this.submenuIndicator;
-        var oConfig = this.cfg;
-        var aNodes = [this.element, this._oAnchor];
-        var oMenu;
-        var bLazyLoad = this.parent && this.parent.lazyLoad;
+        var oEl = this.element,
+            oSubmenu = p_aArgs[0],
+            oImg = this.submenuIndicator,
+            oConfig = this.cfg,
+            aNodes = [this.element, this._oAnchor],
+            oMenu,
+            bLazyLoad = this.parent && this.parent.lazyLoad;
 
 
         if(oSubmenu) {
@@ -1484,8 +1484,8 @@ YAHOO.widget.MenuItem.prototype = {
                 !oSubmenu.nodeType
             ) {
 
-                var sSubmenuId = oSubmenu.id;
-                var oSubmenuConfig = oSubmenu;
+                var sSubmenuId = oSubmenu.id,
+                    oSubmenuConfig = oSubmenu;
 
                 delete oSubmenu["id"];
 
@@ -1591,8 +1591,8 @@ YAHOO.widget.MenuItem.prototype = {
 	*/
 	initDefaultConfig : function() {
 
-        var oConfig = this.cfg;
-        var CheckBoolean = oConfig.checkBoolean;
+        var oConfig = this.cfg,
+            CheckBoolean = oConfig.checkBoolean;
 
 
         // Define the config properties
@@ -1794,16 +1794,16 @@ YAHOO.widget.MenuItem.prototype = {
             * start searching the array.
             * @return {Object}
             */
-            var getNextArrayItem = function(p_aArray, p_nStartIndex) {
+            function getNextArrayItem(p_aArray, p_nStartIndex) {
     
                 return p_aArray[p_nStartIndex] || 
                     getNextArrayItem(p_aArray, (p_nStartIndex+1));
     
-            };
+            }
     
     
-            var aItemGroups = this.parent.getItemGroups();
-            var oNextItem;
+            var aItemGroups = this.parent.getItemGroups(),
+                oNextItem;
     
     
             if(this.index < (aItemGroups[nGroupIndex].length - 1)) {
@@ -1867,12 +1867,12 @@ YAHOO.widget.MenuItem.prototype = {
             * start searching the array.
             * @return {Object}
             */
-            var getPreviousArrayItem = function(p_aArray, p_nStartIndex) {
+            function getPreviousArrayItem(p_aArray, p_nStartIndex) {
     
                 return p_aArray[p_nStartIndex] || 
                     getPreviousArrayItem(p_aArray, (p_nStartIndex-1));
     
-            };
+            }
 
 
             /**
@@ -1883,16 +1883,16 @@ YAHOO.widget.MenuItem.prototype = {
             * start searching the array.
             * @return {Object}
             */    
-            var getFirstItemIndex = function(p_aArray, p_nStartIndex) {
+            function getFirstItemIndex(p_aArray, p_nStartIndex) {
     
                 return p_aArray[p_nStartIndex] ? 
                     p_nStartIndex : 
                     getFirstItemIndex(p_aArray, (p_nStartIndex+1));
     
-            };
+            }
     
-            var aItemGroups = this.parent.getItemGroups();
-            var oPreviousItem;
+            var aItemGroups = this.parent.getItemGroups(),
+                oPreviousItem;
     
             if(
                 this.index > getFirstItemIndex(aItemGroups[nGroupIndex], 0)
@@ -1949,9 +1949,9 @@ YAHOO.widget.MenuItem.prototype = {
     */
     focus: function() {
 
-        var oParent = this.parent;
-        var oAnchor = this._oAnchor;
-        var oActiveItem = oParent.activeItem;
+        var oParent = this.parent,
+            oAnchor = this._oAnchor,
+            oActiveItem = oParent.activeItem;
 
         if(
             !this.cfg.getProperty("disabled") && 

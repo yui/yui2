@@ -3,8 +3,8 @@
 
 (function() {
 
-var Dom = YAHOO.util.Dom;
-var Event = YAHOO.util.Event;
+var Dom = YAHOO.util.Dom,
+    Event = YAHOO.util.Event;
 
 
 /**
@@ -531,8 +531,8 @@ _initSubTree: function() {
 
         oNode = this.body.firstChild;
 
-        var nGroup = 0;
-        var sGroupTitleTagName = this.GROUP_TITLE_TAG_NAME.toUpperCase();
+        var nGroup = 0,
+            sGroupTitleTagName = this.GROUP_TITLE_TAG_NAME.toUpperCase();
 
         do {
 
@@ -690,9 +690,9 @@ _initSubTree: function() {
 */
 _getFirstEnabledItem: function() {
 
-    var nGroups = this._aItemGroups.length;
-    var oItem;
-    var aItemGroup;
+    var nGroups = this._aItemGroups.length,
+        oItem,
+        aItemGroup;
 
     for(var i=0; i<nGroups; i++) {
 
@@ -793,11 +793,9 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
 
     if(oItem) {
 
-        var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0;
-        
-        var aGroup = this._getItemGroup(nGroupIndex);
-        
-        var oGroupItem;
+        var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
+            aGroup = this._getItemGroup(nGroupIndex),
+            oGroupItem;
 
 
         if(!aGroup) {
@@ -852,9 +850,7 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
                     * start searching the array.
                     * @return {Object}
                     */
-                    var getNextItemSibling = 
-                    
-                        function(p_aArray, p_nStartIndex) {
+                    function getNextItemSibling(p_aArray, p_nStartIndex) {
                 
                             return (
                                     p_aArray[p_nStartIndex] || 
@@ -863,8 +859,8 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
                                         (p_nStartIndex+1)
                                     )
                                 );
-                
-                        };
+
+                    }
     
     
                     var oNextItemSibling = 
@@ -982,13 +978,13 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
 */    
 _removeItemFromGroupByIndex: function(p_nGroupIndex, p_nItemIndex) {
 
-    var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0;
-    var aGroup = this._getItemGroup(nGroupIndex);
+    var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
+        aGroup = this._getItemGroup(nGroupIndex);
 
     if(aGroup) {
 
-        var aArray = aGroup.splice(p_nItemIndex, 1);
-        var oItem = aArray[0];
+        var aArray = aGroup.splice(p_nItemIndex, 1),
+            oItem = aArray[0];
     
         if(oItem) {
     
@@ -1065,8 +1061,8 @@ _removeItemFromGroupByValue: function(p_nGroupIndex, p_oItem) {
 
     if(aGroup) {
 
-        var nItems = aGroup.length;
-        var nItemIndex = -1;
+        var nItems = aGroup.length,
+            nItemIndex = -1;
     
         if(nItems > 0) {
     
@@ -1109,14 +1105,14 @@ _removeItemFromGroupByValue: function(p_nGroupIndex, p_oItem) {
 */
 _updateItemProperties: function(p_nGroupIndex) {
 
-    var aGroup = this._getItemGroup(p_nGroupIndex);
-    var nItems = aGroup.length;
+    var aGroup = this._getItemGroup(p_nGroupIndex),
+        nItems = aGroup.length;
 
     if(nItems > 0) {
 
-        var i = nItems - 1;
-        var oItem;
-        var oLI;
+        var i = nItems - 1,
+            oItem,
+            oLI;
 
         // Update the index and className properties of each member
     
@@ -1321,10 +1317,10 @@ _execHideDelay: function() {
 
     this._cancelHideDelay();
 
-    var oRoot = this.getRoot();
-    var me = this;
+    var oRoot = this.getRoot(),
+        me = this;
 
-    var hideMenu = function() {
+    function hideMenu() {
     
         if(oRoot.activeItem) {
 
@@ -1338,7 +1334,7 @@ _execHideDelay: function() {
         
         }
     
-    };
+    }
 
 
     oRoot._nHideDelayId = 
@@ -1379,11 +1375,11 @@ _execShowDelay: function(p_oMenu) {
 
     var oRoot = this.getRoot();
 
-    var showMenu = function() {
+    function showMenu() {
 
         p_oMenu.show();    
     
-    };
+    }
 
 
     oRoot._nShowDelayId = 
@@ -1408,9 +1404,9 @@ _execShowDelay: function(p_oMenu) {
 */
 _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
 
-    var oEvent = p_aArgs[0];
-    var oItem = p_aArgs[1];
-    var oTarget = Event.getTarget(oEvent);
+    var oEvent = p_aArgs[0],
+        oItem = p_aArgs[1],
+        oTarget = Event.getTarget(oEvent);
 
     if(
         !this._bHandledMouseOverEvent && 
@@ -1484,15 +1480,15 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
     
-    var oEvent = p_aArgs[0];
-    var oItem = p_aArgs[1];
-    var oRelatedTarget = Event.getRelatedTarget(oEvent);
-    var bMovingToSubmenu = false;
+    var oEvent = p_aArgs[0],
+        oItem = p_aArgs[1],
+        oRelatedTarget = Event.getRelatedTarget(oEvent),
+        bMovingToSubmenu = false;
 
     if(oItem && !oItem.cfg.getProperty("disabled")) {
 
-        var oItemCfg = oItem.cfg;
-        var oSubmenu = oItemCfg.getProperty("submenu");
+        var oItemCfg = oItem.cfg,
+            oSubmenu = oItemCfg.getProperty("submenu");
 
 
         if(
@@ -1594,14 +1590,14 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onClick: function(p_sType, p_aArgs, p_oMenu) {
 
-    var oEvent = p_aArgs[0];
-    var oItem = p_aArgs[1];
-    var oTarget = Event.getTarget(oEvent);
+    var oEvent = p_aArgs[0],
+        oItem = p_aArgs[1],
+        oTarget = Event.getTarget(oEvent);
 
     if(oItem && !oItem.cfg.getProperty("disabled")) {
 
-        var oItemCfg = oItem.cfg;
-        var oSubmenu = oItemCfg.getProperty("submenu");
+        var oItemCfg = oItem.cfg,
+            oSubmenu = oItemCfg.getProperty("submenu");
 
 
         /*
@@ -1632,10 +1628,10 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
         }
         else {
 
-            var sURL = oItemCfg.getProperty("url");
-            var bCurrentPageURL = (sURL.substr((sURL.length-1),1) == "#");
-            var sTarget = oItemCfg.getProperty("target");
-            var bHasTarget = (sTarget && sTarget.length > 0);
+            var sURL = oItemCfg.getProperty("url"),
+                bCurrentPageURL = (sURL.substr((sURL.length-1),1) == "#"),
+                sTarget = oItemCfg.getProperty("target"),
+                bHasTarget = (sTarget && sTarget.length > 0);
 
             /*
                 Prevent the browser from following links 
@@ -1708,16 +1704,16 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
 
-    var oEvent = p_aArgs[0];
-    var oItem = p_aArgs[1];
-    var oSubmenu;
+    var oEvent = p_aArgs[0],
+        oItem = p_aArgs[1],
+        oSubmenu;
 
     if(oItem && !oItem.cfg.getProperty("disabled")) {
 
-        var oItemCfg = oItem.cfg;
-        var oParentItem = this.parent;
-        var oRoot;
-        var oNextItem;
+        var oItemCfg = oItem.cfg,
+            oParentItem = this.parent,
+            oRoot,
+            oNextItem;
 
 
         switch(oEvent.keyCode) {
@@ -1964,17 +1960,17 @@ _onInit: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onBeforeRender: function(p_sType, p_aArgs, p_oMenu) {
 
-    var oConfig = this.cfg;
-    var oEl = this.element;
-    var nListElements = this._aListElements.length;
+    var oConfig = this.cfg,
+        oEl = this.element,
+        nListElements = this._aListElements.length;
 
 
     if(nListElements > 0) {
 
-        var i = 0;
-        var bFirstList = true;
-        var oUL;
-        var oGroupTitle;
+        var i = 0,
+            bFirstList = true,
+            oUL,
+            oGroupTitle;
 
 
         do {
@@ -2144,11 +2140,10 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
     
     if(oParent) {
 
+        var oParentMenu = oParent.parent,
+            aParentAlignment = oParentMenu.cfg.getProperty("submenualignment"),
+            aAlignment = this.cfg.getProperty("submenualignment");
 
-        var oParentMenu = oParent.parent;
-
-        var aParentAlignment = oParentMenu.cfg.getProperty("submenualignment");
-        var aAlignment = this.cfg.getProperty("submenualignment");
 
         if(
             (aParentAlignment[0] != aAlignment[0]) &&
@@ -2177,7 +2172,7 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
             * @param {Event} p_oEvent Object reference for the DOM event object 
             * passed back by the event utility (YAHOO.util.Event).
             */
-            var disableAutoSubmenuDisplay = function(p_oEvent) {
+            function disableAutoSubmenuDisplay(p_oEvent) {
 
                 if(
                     p_oEvent.type == "mousedown" || 
@@ -2217,7 +2212,7 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
                 
                 }
 
-            };
+            }
 
             Event.addListener(document, "mousedown", disableAutoSubmenuDisplay);                             
             Event.addListener(document, "keydown", disableAutoSubmenuDisplay);
@@ -2258,8 +2253,8 @@ _onBeforeHide: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onParentMenuConfigChange: function(p_sType, p_aArgs, p_oSubmenu) {
     
-    var sPropertyName = p_aArgs[0][0];
-    var oPropertyValue = p_aArgs[0][1];
+    var sPropertyName = p_aArgs[0][0],
+        oPropertyValue = p_aArgs[0][1];
 
     switch(sPropertyName) {
 
@@ -2297,9 +2292,9 @@ _onParentMenuRender: function(p_sType, p_aArgs, p_oSubmenu) {
         property to match the parent Menu
     */ 
 
-    var oParentMenu = p_oSubmenu.parent.parent;
+    var oParentMenu = p_oSubmenu.parent.parent,
 
-    var oConfig = {
+        oConfig = {
 
             constraintoviewport: 
                 oParentMenu.cfg.getProperty("constraintoviewport"),
@@ -2312,10 +2307,12 @@ _onParentMenuRender: function(p_sType, p_aArgs, p_oSubmenu) {
             effect:
                 oParentMenu.cfg.getProperty("effect")                
 
-        };
+        },
 
+        nShowDelay = oParentMenu.cfg.getProperty("showdelay"),
 
-    var nShowDelay = oParentMenu.cfg.getProperty("showdelay");
+        nHideDelay = oParentMenu.cfg.getProperty("hidedelay");
+
 
     if(nShowDelay > 0) {
 
@@ -2323,8 +2320,6 @@ _onParentMenuRender: function(p_sType, p_aArgs, p_oSubmenu) {
 
     }
 
-
-    var nHideDelay = oParentMenu.cfg.getProperty("hidedelay");
 
     if(nHideDelay > 0) {
 
@@ -2381,8 +2376,8 @@ _onParentMenuRender: function(p_sType, p_aArgs, p_oSubmenu) {
 */
 _onSubmenuBeforeShow: function(p_sType, p_aArgs, p_oSubmenu) {
     
-    var oParent = this.parent;
-    var aAlignment = oParent.parent.cfg.getProperty("submenualignment");
+    var oParent = this.parent,
+        aAlignment = oParent.parent.cfg.getProperty("submenualignment");
 
     this.cfg.setProperty(
         "context", 
@@ -2532,35 +2527,35 @@ _onMenuItemConfigChange: function(p_sType, p_aArgs, p_oItem) {
 */
 enforceConstraints: function(type, args, obj) {
 
-    var oConfig = this.cfg;
+    var oConfig = this.cfg,
 
-    var pos = args[0];
+        pos = args[0],
         
-    var x = pos[0];
-    var y = pos[1];
-    
-    var bod = document.getElementsByTagName('body')[0];
-    var htm = document.getElementsByTagName('html')[0];
-    
-    var bodyOverflow = Dom.getStyle(bod, "overflow");
-    var htmOverflow = Dom.getStyle(htm, "overflow");
-    
-    var offsetHeight = this.element.offsetHeight;
-    var offsetWidth = this.element.offsetWidth;
-    
-    var viewPortWidth = Dom.getClientWidth();
-    var viewPortHeight = Dom.getClientHeight();
-    
-    var scrollX = window.scrollX || document.body.scrollLeft;
-    var scrollY = window.scrollY || document.body.scrollTop;
-    
-    var topConstraint = scrollY + 10;
-    var leftConstraint = scrollX + 10;
-    var bottomConstraint = scrollY + viewPortHeight - offsetHeight - 10;
-    var rightConstraint = scrollX + viewPortWidth - offsetWidth - 10;
-    
-    var aContext = oConfig.getProperty("context");
-    var oContextElement = aContext ? aContext[0] : null;
+        x = pos[0],
+        y = pos[1],
+        
+        bod = document.getElementsByTagName('body')[0],
+        htm = document.getElementsByTagName('html')[0],
+        
+        bodyOverflow = Dom.getStyle(bod, "overflow"),
+        htmOverflow = Dom.getStyle(htm, "overflow"),
+        
+        offsetHeight = this.element.offsetHeight,
+        offsetWidth = this.element.offsetWidth,
+        
+        viewPortWidth = Dom.getClientWidth(),
+        viewPortHeight = Dom.getClientHeight(),
+        
+        scrollX = window.scrollX || document.body.scrollLeft,
+        scrollY = window.scrollY || document.body.scrollTop,
+        
+        topConstraint = scrollY + 10,
+        leftConstraint = scrollX + 10,
+        bottomConstraint = scrollY + viewPortHeight - offsetHeight - 10,
+        rightConstraint = scrollX + viewPortWidth - offsetWidth - 10,
+        
+        aContext = oConfig.getProperty("context"),
+        oContextElement = aContext ? aContext[0] : null;
     
     
     if (x < 10) {
@@ -2634,8 +2629,8 @@ configVisible: function(p_sType, p_aArgs, p_oMenu) {
     }
     else {
 
-        var bVisible = p_aArgs[0];
-    	var sDisplay = Dom.getStyle(this.element, "display");
+        var bVisible = p_aArgs[0],
+    	    sDisplay = Dom.getStyle(this.element, "display");
 
         if(bVisible) {
 
@@ -2673,8 +2668,8 @@ configVisible: function(p_sType, p_aArgs, p_oMenu) {
 */
 configPosition: function(p_sType, p_aArgs, p_oMenu) {
 
-    var sCSSPosition = p_aArgs[0] == "static" ? "static" : "absolute";
-    var oCfg = this.cfg;
+    var sCSSPosition = p_aArgs[0] == "static" ? "static" : "absolute",
+        oCfg = this.cfg;
 
     Dom.setStyle(this.element, "position", sCSSPosition);
 
@@ -2767,10 +2762,10 @@ configIframe: function(p_sType, p_aArgs, p_oMenu) {
 */
 configHideDelay: function(p_sType, p_aArgs, p_oMenu) {
 
-    var nHideDelay = p_aArgs[0];
-    var oMouseOutEvent = this.mouseOutEvent;
-    var oMouseOverEvent = this.mouseOverEvent;
-    var oKeyDownEvent = this.keyDownEvent;
+    var nHideDelay = p_aArgs[0],
+        oMouseOutEvent = this.mouseOutEvent,
+        oMouseOverEvent = this.mouseOverEvent,
+        oKeyDownEvent = this.keyDownEvent;
 
     if(nHideDelay > 0) {
 
@@ -2932,8 +2927,8 @@ setItemGroupTitle: function(p_sGroupTitle, p_nGroupIndex) {
         
     if(typeof p_sGroupTitle == "string" && p_sGroupTitle.length > 0) {
 
-        var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0;
-        var oTitle = this._aGroupTitleElements[nGroupIndex];
+        var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
+            oTitle = this._aGroupTitleElements[nGroupIndex];
 
 
         if(oTitle) {
@@ -2952,8 +2947,8 @@ setItemGroupTitle: function(p_sGroupTitle, p_nGroupIndex) {
         }
 
 
-        var i = this._aGroupTitleElements.length - 1;
-        var nFirstIndex;
+        var i = this._aGroupTitleElements.length - 1,
+            nFirstIndex;
 
         do {
 
@@ -3030,9 +3025,9 @@ addItems: function(p_aItems, p_nGroupIndex) {
 
     if(isArray(p_aItems)) {
 
-        var nItems = p_aItems.length;
-        var aItems = [];
-        var oItem;
+        var nItems = p_aItems.length,
+            aItems = [],
+            oItem;
 
 
         for(var i=0; i<nItems; i++) {
@@ -3194,12 +3189,12 @@ destroy: function() {
     this.keyUpEvent.unsubscribeAll();
 
 
-    var nItemGroups = this._aItemGroups.length;
-    var nItems;
-    var oItemGroup;
-    var oItem;
-    var i;
-    var n;
+    var nItemGroups = this._aItemGroups.length,
+        nItems,
+        oItemGroup,
+        oItem,
+        i,
+        n;
 
 
     // Remove all items

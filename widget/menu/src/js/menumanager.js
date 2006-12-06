@@ -20,8 +20,8 @@
 */
 (function() {
 
-var Dom = YAHOO.util.Dom;
-var Event = YAHOO.util.Event;
+var Dom = YAHOO.util.Dom,
+    Event = YAHOO.util.Event;
 
 /**
 * Singleton that manages a collection of all menus and menu items.  Listens for 
@@ -39,30 +39,30 @@ YAHOO.widget.MenuManager = function() {
 
     // Flag indicating if the DOM event handlers have been attached
 
-    var m_bInitializedEventHandlers = false;
+    var m_bInitializedEventHandlers = false,
 
 
-    // Collection of menus
+        // Collection of menus
 
-    var m_oMenus = {};
+        m_oMenus = {},
     
     
-    //  Collection of menu items 
+        //  Collection of menu items 
 
-    var m_oItems = {};
+        m_oItems = {},
 
 
-    // Collection of visible menus
+        // Collection of visible menus
     
-    var m_oVisibleMenus = {};
+        m_oVisibleMenus = {},
 
 
-    // Logger
+        // Logger
 
-    var m_oLogger = new YAHOO.widget.LogWriter(this.toString());
+        m_oLogger = new YAHOO.widget.LogWriter(this.toString()),
 
 
-    var me = this;
+        me = this;
 
 
     // Private methods
@@ -83,7 +83,7 @@ YAHOO.widget.MenuManager = function() {
 
             p_oItem.element.setAttribute("yuiid", sYUIId);
     
-            m_oItems[sYUIId] = p_oItem;            
+            m_oItems[sYUIId] = p_oItem;
     
             p_oItem.destroyEvent.subscribe(onItemDestroy, p_oItem);
 
@@ -200,15 +200,14 @@ YAHOO.widget.MenuManager = function() {
 
         // Get the target node of the DOM event
     
-        var oTarget = Event.getTarget(p_oEvent);
+        var oTarget = Event.getTarget(p_oEvent),
 
 
         // See if the target of the event was a menu, or a menu item
 
-        var oElement = getMenuRootElement(oTarget);
-    
-        var oMenuItem;
-        var oMenu; 
+            oElement = getMenuRootElement(oTarget),
+            oMenuItem,
+            oMenu; 
 
 
         if(oElement) {
@@ -252,9 +251,9 @@ YAHOO.widget.MenuManager = function() {
                     "keydown": "keyDownEvent",
                     "keyup": "keyUpEvent",
                     "keypress": "keyPressEvent"
-                };
+                },
     
-            var sCustomEventType = oEventTypes[p_oEvent.type];
+                sCustomEventType = oEventTypes[p_oEvent.type];
 
 
             // Fire the Custom Even that corresponds the current DOM event    
@@ -567,7 +566,7 @@ YAHOO.widget.MenuManager = function() {
         
         }
 
-    }
+    };
 
 }();
 

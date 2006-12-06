@@ -116,10 +116,10 @@ CSS_CLASS_NAME: "yuimenubar",
 */
 _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
 
-    var Event = YAHOO.util.Event;
-    var oEvent = p_aArgs[0];
-    var oItem = p_aArgs[1];
-    var oSubmenu;
+    var Event = YAHOO.util.Event,
+        oEvent = p_aArgs[0],
+        oItem = p_aArgs[1],
+        oSubmenu;
 
 
     if(oItem && !oItem.cfg.getProperty("disabled")) {
@@ -262,14 +262,14 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
     
     if(oItem && !oItem.cfg.getProperty("disabled")) {
 
-        var Event = YAHOO.util.Event;
-        var Dom = YAHOO.util.Dom;
-
-        var oEvent = p_aArgs[0];
-        var oTarget = Event.getTarget(oEvent);
-
-        var oActiveItem = this.activeItem;
-        var oConfig = this.cfg;
+         var Event = YAHOO.util.Event,
+             Dom = YAHOO.util.Dom,
+    
+             oEvent = p_aArgs[0],
+             oTarget = Event.getTarget(oEvent),
+    
+             oActiveItem = this.activeItem,
+             oConfig = this.cfg;
 
 
         // Hide any other submenus that might be visible

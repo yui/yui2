@@ -134,9 +134,9 @@ init: function(p_oElement, p_oConfig) {
 */
 _removeEventHandlers: function() {
 
-    var Event = YAHOO.util.Event;
-    var oTrigger = this._oTrigger;
-    var bOpera = (this.browser == "opera");
+    var Event = YAHOO.util.Event,
+        oTrigger = this._oTrigger,
+        bOpera = (this.browser == "opera");
 
 
     // Remove the event handlers from the trigger(s)
@@ -198,8 +198,8 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
     YAHOO.widget.MenuManager.hideVisible();
 
 
-    var Event = YAHOO.util.Event;
-    var oConfig = this.cfg;
+    var Event = YAHOO.util.Event,
+        oConfig = this.cfg;
 
     if(p_oEvent.type == "mousedown" && !p_oEvent.ctrlKey) {
 
@@ -212,8 +212,8 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
 
     // Position and display the context menu
 
-    var nX = Event.getPageX(p_oEvent);
-    var nY = Event.getPageY(p_oEvent);
+    var nX = Event.getPageX(p_oEvent),
+        nY = Event.getPageY(p_oEvent);
 
 
     oConfig.applyConfig( { xy:[nX, nY], visible:true } );
@@ -306,8 +306,8 @@ destroy: function() {
 */
 configTrigger: function(p_sType, p_aArgs, p_oMenu) {
     
-    var Event = YAHOO.util.Event;
-    var oTrigger = p_aArgs[0];
+    var Event = YAHOO.util.Event,
+        oTrigger = p_aArgs[0];
 
     if(oTrigger) {
 
