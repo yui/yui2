@@ -1953,6 +1953,21 @@ YAHOO.widget.MenuItem.prototype = {
             oAnchor = this._oAnchor,
             oActiveItem = oParent.activeItem;
 
+
+        function setFocus() {
+
+            try {
+
+                oAnchor.focus();
+
+            }
+            catch(e) {
+            
+            }
+
+        }
+
+
         if(
             !this.cfg.getProperty("disabled") && 
             oParent && 
@@ -1966,14 +1981,14 @@ YAHOO.widget.MenuItem.prototype = {
 
             }
 
-            try {
 
-                oAnchor.focus();
+            /*
+                Setting focus via a timer fixes a race condition in Firefox, IE 
+                and Opera where the browser viewport jumps as it trys to 
+                position and focus the menu.
+            */
 
-            }
-            catch(e) {
-            
-            }
+            window.setTimeout(setFocus, 0);
             
             this.focusEvent.fire();
 
