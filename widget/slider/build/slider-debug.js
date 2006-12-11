@@ -1,11 +1,9 @@
-
 /*                                                                                                                                                      
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-version: 0.12.0
+version: 0.12.1
 */ 
-
 /**
  * The Slider component is a UI control that enables the user to adjust 
  * values in a finite range along one or two axes. Typically, the Slider 
@@ -30,148 +28,18 @@ version: 0.12.0
  *
  * @class Slider
  * @extends YAHOO.util.DragDrop
+ * @uses YAHOO.util.EventProvider
  * @constructor
- * @param {String} id     The id of the element linked to this instance
- * @param {String} sGroup The group of related DragDrop items
- * @param {String} sType  The type of slider (horiz, vert, region)
+ * @param {String}      id     The id of the element linked to this instance
+ * @param {String}      sGroup The group of related DragDrop items
+ * @param {SliderThumb} oThumb The thumb for this slider
+ * @param {String}      sType  The type of slider (horiz, vert, region)
  */
 YAHOO.widget.Slider = function(sElementId, sGroup, oThumb, sType) {
     if (sElementId) {
-
-        /**
-         * The type of the slider (horiz, vert, region)
-         * @property type
-         * @type string
-         */
-        this.type = sType;
-
         this.init(sElementId, sGroup, true);
-
-        //this.removeInvalidHandleType("A");
-
-        this.logger = new YAHOO.widget.LogWriter(this.toString());
-
-        var self = this;
-
-        /**
-         * Event the fires when the value of the control changes.  If 
-         * the control is animated the event will fire every point
-         * along the way.
-         * @event change
-         * @param {int} new
-         * @param {int} firstOffset the number of pixels the thumb has moved
-         * from its start position. Normal horizontal and vertical sliders will only
-         * have the firstOffset.  Regions will have both, the first is the horizontal
-         * offset, the second the vertical.
-         * @param {int} secondOffset the y offset for region sliders
-         */
-        this.createEvent("change", this);
-
-        /**
-         * Event that fires at the end of a slider thumb move.
-         * @event slideStart
-         */
-        this.createEvent("slideStart", this);
-
-        /**
-         * Event that fires at the end of a slider thumb move
-         * @event slideEnd
-         */
-        this.createEvent("slideEnd", this);
-
-        /**
-         * A YAHOO.widget.SliderThumb instance that we will use to 
-         * reposition the thumb when the background is clicked
-         * @property thumb
-         * @type YAHOO.widget.SliderThumb
-         */
-        this.thumb = oThumb;
-
-        // add handler for the handle onchange event
-        oThumb.onChange = function() { 
-            self.handleThumbChange(); 
-        };
-
-        /**
-         * Overrides the isTarget property in YAHOO.util.DragDrop
-         * @property isTarget
-         * @private
-         */
-        this.isTarget = false;
-    
-        /**
-         * Flag that determines if the thumb will animate when moved
-         * @property animate
-         * @type boolean
-         */
-        this.animate = YAHOO.widget.Slider.ANIM_AVAIL;
-
-        /**
-         * Set to false to disable a background click thumb move
-         * @property backgroundEnabled
-         * @type boolean
-         */
-        this.backgroundEnabled = true;
-
-        /**
-         * Adjustment factor for tick animation, the more ticks, the
-         * faster the animation (by default)
-         * @property tickPause
-         * @type int
-         */
-        this.tickPause = 40;
-
-        /**
-         * Enables the arrow, home and end keys, defaults to true.
-         * @property enableKeys
-         * @type boolean
-         */
-        this.enableKeys = true;
-
-        /**
-         * Specifies the number of pixels the arrow keys will move the slider.
-         * Default is 25.
-         * @property keyIncrement
-         * @type int
-         */
-        this.keyIncrement = 20;
-
-        /**
-         * moveComplete is set to true when the slider has moved to its final
-         * destination.  For animated slider, this value can be checked in 
-         * the onChange handler to make it possible to execute logic only
-         * when the move is complete rather than at all points along the way.
-         *
-         * @property moveComplete
-         * @type Boolean
-         */
-        this.moveComplete = true;
-
-        /**
-         * If animation is configured, specifies the length of the animation
-         * in seconds.
-         * @property animationDuration
-         * @type int
-         * @default 0.2
-         */
-        this.animationDuration = 0.2;
-
-        if (oThumb._isHoriz && oThumb.xTicks && oThumb.xTicks.length) {
-            this.tickPause = Math.round(360 / oThumb.xTicks.length);
-        } else if (oThumb.yTicks && oThumb.yTicks.length) {
-            this.tickPause = Math.round(360 / oThumb.yTicks.length);
-        }
-
-        this.logger.log("tickPause: " + this.tickPause);
-
-        // delegate thumb methods
-        oThumb.onMouseDown = function () { return self.focus(); };
-        //oThumb.b4MouseDown = function () { return self.b4MouseDown(); };
-        // oThumb.lock = function() { self.lock(); };
-        // oThumb.unlock = function() { self.unlock(); };
-        oThumb.onMouseUp = function() { self.thumbMouseUp(); };
-        oThumb.onDrag = function() { self.fireEvents(); };
-        oThumb.onAvailable = function() { return self.setStartSliderState(); };
+        this.initSlider(sType);
+        this.initThumb(oThumb);
     }
 };
 
@@ -245,12 +113,169 @@ YAHOO.widget.Slider.ANIM_AVAIL = true;
 
 YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
+    /**
+     * Initializes the slider.  Executed in the constructor
+     * @method initSlider
+     * @param {string} sType the type of slider (horiz, vert, region)
+     */
+    initSlider: function(sType) {
+
+        /**
+         * The type of the slider (horiz, vert, region)
+         * @property type
+         * @type string
+         */
+        this.type = sType;
+
+        //this.removeInvalidHandleType("A");
+
+        this.logger = new YAHOO.widget.LogWriter(this.toString());
+
+        /**
+         * Event the fires when the value of the control changes.  If 
+         * the control is animated the event will fire every point
+         * along the way.
+         * @event change
+         * @param {int} newOffset|x the new offset for normal sliders, or the new
+         *                          x offset for region sliders
+         * @param {int} y the number of pixels the thumb has moved on the y axis
+         *                (region sliders only)
+         */
+        this.createEvent("change", this);
+
+        /**
+         * Event that fires at the beginning of a slider thumb move.
+         * @event slideStart
+         */
+        this.createEvent("slideStart", this);
+
+        /**
+         * Event that fires at the end of a slider thumb move
+         * @event slideEnd
+         */
+        this.createEvent("slideEnd", this);
+
+        /**
+         * Overrides the isTarget property in YAHOO.util.DragDrop
+         * @property isTarget
+         * @private
+         */
+        this.isTarget = false;
+    
+        /**
+         * Flag that determines if the thumb will animate when moved
+         * @property animate
+         * @type boolean
+         */
+        this.animate = YAHOO.widget.Slider.ANIM_AVAIL;
+
+        /**
+         * Set to false to disable a background click thumb move
+         * @property backgroundEnabled
+         * @type boolean
+         */
+        this.backgroundEnabled = true;
+
+        /**
+         * Adjustment factor for tick animation, the more ticks, the
+         * faster the animation (by default)
+         * @property tickPause
+         * @type int
+         */
+        this.tickPause = 40;
+
+        /**
+         * Enables the arrow, home and end keys, defaults to true.
+         * @property enableKeys
+         * @type boolean
+         */
+        this.enableKeys = true;
+
+        /**
+         * Specifies the number of pixels the arrow keys will move the slider.
+         * Default is 25.
+         * @property keyIncrement
+         * @type int
+         */
+        this.keyIncrement = 20;
+
+        /**
+         * moveComplete is set to true when the slider has moved to its final
+         * destination.  For animated slider, this value can be checked in 
+         * the onChange handler to make it possible to execute logic only
+         * when the move is complete rather than at all points along the way.
+         *
+         * @property moveComplete
+         * @type Boolean
+         */
+        this.moveComplete = true;
+
+        /**
+         * If animation is configured, specifies the length of the animation
+         * in seconds.
+         * @property animationDuration
+         * @type int
+         * @default 0.2
+         */
+        this.animationDuration = 0.2;
+    },
+
+    /**
+     * Initializes the slider's thumb. Executed in the constructor.
+     * @method initThumb
+     * @param {YAHOO.widget.SliderThumb} t the slider thumb
+     */
+    initThumb: function(t) {
+
+        var self = this;
+
+        /**
+         * A YAHOO.widget.SliderThumb instance that we will use to 
+         * reposition the thumb when the background is clicked
+         * @property thumb
+         * @type YAHOO.widget.SliderThumb
+         */
+        this.thumb = t;
+        t.cacheBetweenDrags = true;
+
+        // add handler for the handle onchange event
+        t.onChange = function() { 
+            self.handleThumbChange(); 
+        };
+
+        if (t._isHoriz && t.xTicks && t.xTicks.length) {
+            this.tickPause = Math.round(360 / t.xTicks.length);
+        } else if (t.yTicks && t.yTicks.length) {
+            this.tickPause = Math.round(360 / t.yTicks.length);
+        }
+
+        this.logger.log("tickPause: " + this.tickPause);
+
+        // delegate thumb methods
+        t.onMouseDown = function () { return self.focus(); };
+        t.onMouseUp = function() { self.thumbMouseUp(); };
+        t.onDrag = function() { self.fireEvents(true); };
+        t.onAvailable = function() { return self.setStartSliderState(); };
+
+    },
+
+    /**
+     * Executed when the slider element is available
+     * @method onAvailable
+     */
     onAvailable: function() {
         var Event = YAHOO.util.Event;
         Event.on(this.id, "keydown",  this.handleKeyDown,  this, true);
         Event.on(this.id, "keypress", this.handleKeyPress, this, true);
     },
  
+    /**
+     * Executed when a keypress event happens with the control focused.
+     * Prevents the default behavior for navigation keys.  The actual
+     * logic for moving the slider thumb in response to a key event
+     * happens in handleKeyDown.
+     * @param {Event} e the keypress event
+     */
     handleKeyPress: function(e) {
         if (this.enableKeys) {
             var Event = YAHOO.util.Event;
@@ -267,8 +292,14 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
                 default:
             }
         }
-   },
+    },
 
+    /**
+     * Executed when a keydown event happens with the control focused.
+     * Updates the slider value and display when the keypress is an
+     * arrow key, home, or end as long as enableKeys is set to true.
+     * @param {Event} e the keydown event
+     */
     handleKeyDown: function(e) {
         if (this.enableKeys) {
             var Event = YAHOO.util.Event;
@@ -320,7 +351,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
     /**
      * Initialization that sets up the value offsets once the elements are ready
-     * @method setSliderStartState
+     * @method setStartSliderState
      */
     setStartSliderState: function() {
 
@@ -634,7 +665,9 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      */
     verifyOffset: function() {
 
-        var newPos = YAHOO.util.Dom.getXY(this.getEl());
+        //var newPos = YAHOO.util.Dom.getXY(this.getEl());
+        var newPos = [this.initPageX, this.initPageY];
+
         this.logger.log("newPos: " + newPos);
 
         if (newPos[0] != this.baselinePos[0] || newPos[1] != this.baselinePos[1]) {
@@ -685,7 +718,10 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
             this.logger.log("graduated");
             // this.thumb._animating = true;
             this.lock();
-            
+
+            // cache the current thumb pos
+            this.curCoord = YAHOO.util.Dom.getXY(this.thumb.getEl());
+
             setTimeout( function() { self.moveOneTick(p); }, this.tickPause );
 
         } else if (this.animate && YAHOO.widget.Slider.ANIM_AVAIL && !skipAnim) {
@@ -717,9 +753,15 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      */
     moveOneTick: function(finalCoord) {
 
-        var t = this.thumb;
-        var curCoord = YAHOO.util.Dom.getXY(t.getEl());
-        var tmp;
+        var t = this.thumb, tmp;
+
+
+        // redundant call to getXY since we set the position most of time prior 
+        // to getting here.  Moved to this.curCoord
+        //var curCoord = YAHOO.util.Dom.getXY(t.getEl());
+
+        // alignElWithMouse caches position in lastPageX, lastPageY .. doesn't work
+        //var curCoord = [this.lastPageX, this.lastPageY];
 
         // var thresh = Math.min(t.tickSize + (Math.floor(t.tickSize/2)), 10);
         // var thresh = 10;
@@ -728,22 +770,25 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         var nextCoord = null;
 
         if (t._isRegion) {
-            nextCoord = this._getNextX(curCoord, finalCoord);
-            var tmpX = (nextCoord) ? nextCoord[0] : curCoord[0];
-            nextCoord = this._getNextY([tmpX, curCoord[1]], finalCoord);
+            nextCoord = this._getNextX(this.curCoord, finalCoord);
+            var tmpX = (nextCoord) ? nextCoord[0] : this.curCoord[0];
+            nextCoord = this._getNextY([tmpX, this.curCoord[1]], finalCoord);
 
         } else if (t._isHoriz) {
-            nextCoord = this._getNextX(curCoord, finalCoord);
+            nextCoord = this._getNextX(this.curCoord, finalCoord);
         } else {
-            nextCoord = this._getNextY(curCoord, finalCoord);
+            nextCoord = this._getNextY(this.curCoord, finalCoord);
         }
 
         this.logger.log("moveOneTick: " + 
                 " finalCoord: " + finalCoord +
-                " curCoord: " + curCoord +
+                " this.curCoord: " + this.curCoord +
                 " nextCoord: " + nextCoord);
 
         if (nextCoord) {
+
+            // cache the position
+            this.curCoord = nextCoord;
 
             // move to the next coord
             // YAHOO.util.Dom.setXY(t.getEl(), nextCoord);
@@ -882,14 +927,21 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * the middle of an animation as the event will fire when the animation is
      * complete
      * @method fireEvents
+     * @param {boolean} thumbEvent set to true if this event is fired from an event
+     *                  that occurred on the thumb.  If it is, the state of the
+     *                  thumb dd object should be correct.  Otherwise, the event
+     *                  originated on the background, so the thumb state needs to
+     *                  be refreshed before proceeding.
      * @private
      */
-    fireEvents: function () {
+    fireEvents: function (thumbEvent) {
 
         var t = this.thumb;
         // this.logger.log("FireEvents: " + t._isRegion);
 
-        t.cachePosition();
+        if (!thumbEvent) {
+            t.cachePosition();
+        }
 
         if (! this.isLocked()) {
             if (t._isRegion) {
@@ -955,7 +1007,8 @@ YAHOO.augment(YAHOO.widget.Slider, YAHOO.util.EventProvider);
 YAHOO.widget.SliderThumb = function(id, sGroup, iLeft, iRight, iUp, iDown, iTickSize) {
 
     if (id) {
-        this.init(id, sGroup);
+        //this.init(id, sGroup);
+        YAHOO.widget.SliderThumb.superclass.constructor.call(this, id, sGroup);
 
         /**
          * The id of the thumbs parent HTML element (the slider background 
@@ -1041,17 +1094,53 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      */
     _graduated: false,
 
+
     /**
      * Returns the difference between the location of the thumb and its parent.
      * @method getOffsetFromParent
      * @param {[int, int]} parentPos Optionally accepts the position of the parent
      * @type [int, int]
      */
-    getOffsetFromParent: function(parentPos) {
+    getOffsetFromParent0: function(parentPos) {
         var myPos = YAHOO.util.Dom.getXY(this.getEl());
         var ppos  = parentPos || YAHOO.util.Dom.getXY(this.parentElId);
 
         return [ (myPos[0] - ppos[0]), (myPos[1] - ppos[1]) ];
+    },
+
+    getOffsetFromParent: function(parentPos) {
+
+        var el = this.getEl();
+
+        if (!this.deltaOffset) {
+
+            var myPos = YAHOO.util.Dom.getXY(el);
+            var ppos  = parentPos || YAHOO.util.Dom.getXY(this.parentElId);
+
+            var newOffset = [ (myPos[0] - ppos[0]), (myPos[1] - ppos[1]) ];
+
+            var l = parseInt( YAHOO.util.Dom.getStyle(el, "left"), 10 );
+            var t = parseInt( YAHOO.util.Dom.getStyle(el, "top" ), 10 );
+
+            var deltaX = l - newOffset[0];
+            var deltaY = t - newOffset[1];
+
+            if (isNaN(deltaX) || isNaN(deltaY)) {
+                this.logger.log("element does not have a position style def yet");
+            } else {
+                this.deltaOffset = [deltaX, deltaY];
+            }
+
+        } else {
+            var newLeft = parseInt( YAHOO.util.Dom.getStyle(el, "left"), 10 );
+            var newTop  = parseInt( YAHOO.util.Dom.getStyle(el, "top" ), 10 );
+
+            newOffset  = [newLeft + this.deltaOffset[0], newTop + this.deltaOffset[1]];
+        }
+
+        return newOffset;
+
+        //return [ (myPos[0] - ppos[0]), (myPos[1] - ppos[1]) ];
     },
 
     /**
@@ -1064,6 +1153,13 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      * @param {int} iTickSize the width of the tick interval.
      */
     initSlider: function (iLeft, iRight, iUp, iDown, iTickSize) {
+
+
+        //document these.  new for 0.12.1
+        this.initLeft = iLeft;
+        this.initRight = iRight;
+        this.initUp = iUp;
+        this.initDown = iDown;
 
         this.setXConstraint(iLeft, iRight, iTickSize);
         this.setYConstraint(iUp, iDown, iTickSize);
@@ -1084,8 +1180,10 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      */
     clearTicks: function () {
         YAHOO.widget.SliderThumb.superclass.clearTicks.call(this);
+        this.tickSize = 0;
         this._graduated = false;
     },
+
 
     /**
      * Gets the current offset from the element's start position in
@@ -1097,7 +1195,7 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
     getValue: function () {
         if (!this.available) { return 0; }
         var val = (this._isHoriz) ? this.getXValue() : this.getYValue();
-        this.logger.log("getVal: " + val);
+        //this.logger.log("getVal: " + val);
         return val;
     },
 
