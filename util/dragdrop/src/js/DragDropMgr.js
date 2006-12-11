@@ -141,17 +141,30 @@ YAHOO.util.DragDropMgr = function() {
          * @property POINT
          * @type int
          * @static
+         * @final
          */
         POINT: 0,
 
         /**
-         * In intersect mode, drag and drop interactio nis defined by the 
-         * overlap of two or more drag and drop objects.
+         * In intersect mode, drag and drop interaction is defined by the 
+         * cursor position or the amount of overlap of two or more drag and 
+         * drop objects.
          * @property INTERSECT
          * @type int
          * @static
+         * @final
          */
         INTERSECT: 1,
+
+        /**
+         * In intersect mode, drag and drop interaction is defined only by the 
+         * overlap of two or more drag and drop objects.
+         * @property STRICT_INTERSECT
+         * @type int
+         * @static
+         * @final
+         */
+        STRICT_INTERSECT: 2,
 
         /**
          * The current drag and drop mode.  Default: POINT
@@ -821,11 +834,6 @@ YAHOO.util.DragDropMgr = function() {
          */
         getBestMatch: function(dds) {
             var winner = null;
-            // Return null if the input is not what we expect
-            //if (!dds || !dds.length || dds.length == 0) {
-               // winner = null;
-            // If there is only one item, it wins
-            //} else if (dds.length == 1) {
 
             var len = dds.length;
 
@@ -838,13 +846,13 @@ YAHOO.util.DragDropMgr = function() {
                     // If the cursor is over the object, it wins.  If the 
                     // cursor is over multiple matches, the first one we come
                     // to wins.
-                    if (dd.cursorIsOver) {
+                    if (this.mode == this.INTERSECT && dd.cursorIsOver) {
                         winner = dd;
                         break;
                     // Otherwise the object with the most overlap wins
                     } else {
-                        if (!winner || 
-                            winner.overlap.getArea() < dd.overlap.getArea()) {
+                        if (!winner || !winner.overlap || (dd.overlap &&
+                            winner.overlap.getArea() < dd.overlap.getArea())) {
                             winner = dd;
                         }
                     }

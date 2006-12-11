@@ -2,9 +2,7 @@
 <html>
 <head>
 	<title>API: dragdrop  YAHOO.util.DragDropMgr   (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/reset.css">
-	<link rel="stylesheet" type="text/css" href="assets/fonts.css">
-	<link rel="stylesheet" type="text/css" href="assets/grids.css">
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css">
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
 
@@ -57,34 +55,6 @@ be useful in your DragDrop implementations.
                         <div class="section field details">
                             <h3><a name="field_detail">Properties</a></h3>
                             <div class="content">
-                                    <h4><a name="INTERSECT">INTERSECT</a>
-                                        <code>- static int</code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description">
-                                            In intersect mode, drag and drop interactio nis defined by the 
-overlap of two or more drag and drop objects.
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    <h4><a name="POINT">POINT</a>
-                                        <code>- static int</code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description">
-                                            In point mode, drag and drop interaction is defined by the 
-location of the cursor during the drag/drop
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
                                     <h4><a name="clickPixelThresh">clickPixelThresh</a>
                                         <code>- static int</code>
                                     </h4>
@@ -113,12 +83,41 @@ drag if we don't get a mouseup event. Default=1000
 
 
                                     <hr />
+                                    <h4><a name="INTERSECT">INTERSECT</a>
+                                        <code>- static final int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            In intersect mode, drag and drop interaction is defined by the 
+cursor position or the amount of overlap of two or more drag and 
+drop objects.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
                                     <h4><a name="mode">mode</a>
                                         <code>- static int</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
                                             The current drag and drop mode.  Default: POINT
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="POINT">POINT</a>
+                                        <code>- static final int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            In point mode, drag and drop interaction is defined by the 
+location of the cursor during the drag/drop
                                         </div>
                                     </div>
      
@@ -150,6 +149,20 @@ false if you need the default behavior (not recommended)
 we generate. This is true by default but you may want to set it to
 false if the html element contains other features that require the
 mouse click.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="STRICT_INTERSECT">STRICT_INTERSECT</a>
+                                        <code>- static final int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            In intersect mode, drag and drop interaction is defined only by the 
+overlap of two or more drag and drop objects.
                                         </div>
                                     </div>
      
@@ -189,10 +202,13 @@ drag and drop linked element constantly during a drag.
                                         
                                         DragDrop
                                             <strong>getBestMatch</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;DragDrop[]&gt; dds
-                                                )
+                                                        
+                                                         dds
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -204,10 +220,11 @@ the dragged element.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>dds</code> - 
+                                                            <code>dds &lt;DragDrop[]&gt;</code>
                                                              The array of drag and drop objects 
 targeted
                                                         </dd>
@@ -234,6 +251,8 @@ targeted
                                         
                                         int
                                             <strong>getClientHeight</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -241,6 +260,7 @@ targeted
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -266,6 +286,8 @@ targeted
                                         
                                         int
                                             <strong>getClientWidth</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -273,6 +295,7 @@ targeted
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -298,10 +321,13 @@ targeted
                                         
                                         Object
                                             <strong>getCss</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;String&gt; id
-                                                )
+                                                        
+                                                         id
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -310,10 +336,11 @@ document.getElById(id).style)
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>id</code> - 
+                                                            <code>id &lt;String&gt;</code>
                                                              the id of the elment to get
                                                         </dd>
                                                 </dl>
@@ -342,10 +369,13 @@ document.getElById(id).style)
                                         
                                         DragDrop
                                             <strong>getDDById</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;String&gt; id
-                                                )
+                                                        
+                                                         id
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -353,10 +383,11 @@ document.getElById(id).style)
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>id</code> - 
+                                                            <code>id &lt;String&gt;</code>
                                                              the id of the DragDrop object
                                                         </dd>
                                                 </dl>
@@ -382,10 +413,13 @@ document.getElById(id).style)
                                         
                                         Object
                                             <strong>getElement</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;String&gt; id
-                                                )
+                                                        
+                                                         id
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -393,10 +427,11 @@ document.getElById(id).style)
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>id</code> - 
+                                                            <code>id &lt;String&gt;</code>
                                                              the id of the elment to get
                                                         </dd>
                                                 </dl>
@@ -425,10 +460,13 @@ document.getElById(id).style)
                                         
                                         YAHOO.util.Region
                                             <strong>getLocation</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;DragDrop&gt; oDD
-                                                )
+                                                        
+                                                         oDD
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -437,10 +475,11 @@ and size, including the padding configured for it
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>oDD</code> - 
+                                                            <code>oDD &lt;DragDrop&gt;</code>
                                                              the drag and drop object to get the 
 location for
                                                         </dd>
@@ -469,10 +508,13 @@ the instance is configured for.</dd>
                                         
                                         int
                                             <strong>getPosX</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Object&gt; el
-                                                )
+                                                        
+                                                         el
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -480,10 +522,11 @@ the instance is configured for.</dd>
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>el</code> - 
+                                                            <code>el &lt;object&gt;</code>
                                                              the element for which to get the position
                                                         </dd>
                                                 </dl>
@@ -512,10 +555,13 @@ the instance is configured for.</dd>
                                         
                                         int
                                             <strong>getPosY</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Object&gt; el
-                                                )
+                                                        
+                                                         el
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -523,10 +569,11 @@ the instance is configured for.</dd>
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>el</code> - 
+                                                            <code>el &lt;object&gt;</code>
                                                              the element for which to get the position
                                                         </dd>
                                                 </dl>
@@ -555,11 +602,17 @@ the instance is configured for.</dd>
                                         
                                         DragDrop[]
                                             <strong>getRelated</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;DragDrop&gt; p_oDD, 
-                                                    &lt;boolean&gt; bTargetsOnly
-                                                )
+                                                        
+                                                         p_oDD
+                                                    
+                                                
+                                                        , 
+                                                         bTargetsOnly
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -568,14 +621,15 @@ passed in instance belongs to.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>p_oDD</code> - 
+                                                            <code>p_oDD &lt;DragDrop&gt;</code>
                                                              the obj to get related data for
                                                         </dd>
                                                         <dd>
-                                                            <code>bTargetsOnly</code> - 
+                                                            <code>bTargetsOnly &lt;boolean&gt;</code>
                                                              if true, only return targetable objs
                                                         </dd>
                                                 </dl>
@@ -601,6 +655,8 @@ passed in instance belongs to.
                                         
                                         int
                                             <strong>getScrollLeft</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -608,6 +664,7 @@ passed in instance belongs to.
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -630,6 +687,8 @@ passed in instance belongs to.
                                         
                                         int
                                             <strong>getScrollTop</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -637,6 +696,7 @@ passed in instance belongs to.
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -659,11 +719,17 @@ passed in instance belongs to.
                                         
                                         string
                                             <strong>getStyle</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;HTMLElement&gt; el, 
-                                                    &lt;string&gt; styleProp
-                                                )
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         styleProp
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -671,14 +737,15 @@ passed in instance belongs to.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>el</code> - 
+                                                            <code>el &lt;HTMLElement&gt;</code>
                                                                       the element
                                                         </dd>
                                                         <dd>
-                                                            <code>styleProp</code> - 
+                                                            <code>styleProp &lt;string&gt;</code>
                                                                the style property
                                                         </dd>
                                                 </dl>
@@ -707,10 +774,13 @@ passed in instance belongs to.
                                         
                                         void
                                             <strong>handleWasClicked</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Object&gt; node
-                                                )
+                                                        
+                                                         node
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -720,10 +790,11 @@ clicked.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>node</code> - 
+                                                            <code>node &lt;object&gt;</code>
                                                              the html element to inspect
                                                         </dd>
                                                 </dl>
@@ -749,10 +820,13 @@ clicked.
                                         
                                         boolean
                                             <strong>isDragDrop</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;String&gt; id
-                                                )
+                                                        
+                                                         id
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -761,10 +835,11 @@ registered as a drag drop item.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>id</code> - 
+                                                            <code>id &lt;String&gt;</code>
                                                              the element id to check
                                                         </dd>
                                                 </dl>
@@ -791,10 +866,13 @@ false otherwise</dd>
                                         
                                         boolean
                                             <strong>isHandle</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;String&gt; id
-                                                )
+                                                        
+                                                         id
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -803,10 +881,11 @@ registered as a drag drop handle for the given Drag Drop object.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>id</code> - 
+                                                            <code>id &lt;String&gt;</code>
                                                              the element id to check
                                                         </dd>
                                                 </dl>
@@ -833,11 +912,15 @@ otherwise</dd>
                                         
                                         boolean
                                             <strong>isLegalTarget</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;DragDrop&gt; the, 
-                                                    &lt;DragDrop&gt; the
-                                                )
+                                                        
+                                                         the
+                                                    
+                                                
+
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -846,14 +929,15 @@ the specifice drag obj
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>the</code> - 
+                                                            <code>the &lt;DragDrop&gt;</code>
                                                              drag obj
                                                         </dd>
                                                         <dd>
-                                                            <code>the</code> - 
+                                                            <code>the &lt;DragDrop&gt;</code>
                                                              target
                                                         </dd>
                                                 </dl>
@@ -880,6 +964,8 @@ dd obj</dd>
                                         
                                         boolean
                                             <strong>isLocked</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -887,6 +973,7 @@ dd obj</dd>
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -909,10 +996,13 @@ dd obj</dd>
                                         
                                         boolean
                                             <strong>isTypeOfDD</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Object&gt; the
-                                                )
+                                                        
+                                                         the
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -924,10 +1014,11 @@ evaluates a well-known variable in DragDrop.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>the</code> - 
+                                                            <code>the &lt;Object&gt;</code>
                                                              object to evaluate
                                                         </dd>
                                                 </dl>
@@ -953,6 +1044,8 @@ evaluates a well-known variable in DragDrop.
                                         
                                         void
                                             <strong>lock</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -960,6 +1053,7 @@ evaluates a well-known variable in DragDrop.
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -982,11 +1076,17 @@ evaluates a well-known variable in DragDrop.
                                         
                                         void
                                             <strong>moveToEl</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;HTMLElement&gt; moveEl, 
-                                                    &lt;HTMLElement&gt; targetEl
-                                                )
+                                                        
+                                                         moveEl
+                                                    
+                                                
+                                                        , 
+                                                         targetEl
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -995,14 +1095,15 @@ target element.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>moveEl</code> - 
+                                                            <code>moveEl &lt;HTMLElement&gt;</code>
                                                                   The element to move
                                                         </dd>
                                                         <dd>
-                                                            <code>targetEl</code> - 
+                                                            <code>targetEl &lt;HTMLElement&gt;</code>
                                                                 The position reference element
                                                         </dd>
                                                 </dl>
@@ -1028,6 +1129,8 @@ target element.
                                         
                                         void
                                             <strong>numericSort</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -1035,6 +1138,7 @@ target element.
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -1057,10 +1161,13 @@ target element.
                                         
                                         void
                                             <strong>refreshCache</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Object&gt; groups
-                                                )
+                                                        
+                                                         groups
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -1078,10 +1185,11 @@ YAHOO.util.DragDropMgr.refreshCache({group1:true, group2:true});
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>groups</code> - 
+                                                            <code>groups &lt;Object&gt;</code>
                                                              an associative array of groups to refresh
                                                         </dd>
                                                 </dl>
@@ -1107,11 +1215,17 @@ YAHOO.util.DragDropMgr.refreshCache({group1:true, group2:true});
                                         
                                         void
                                             <strong>regDragDrop</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;DragDrop&gt; oDD, 
-                                                    &lt;String&gt; sGroup
-                                                )
+                                                        
+                                                         oDD
+                                                    
+                                                
+                                                        , 
+                                                         sGroup
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -1120,14 +1234,15 @@ This is executed in DragDrop.init()
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>oDD</code> - 
+                                                            <code>oDD &lt;DragDrop&gt;</code>
                                                              the DragDrop object to register
                                                         </dd>
                                                         <dd>
-                                                            <code>sGroup</code> - 
+                                                            <code>sGroup &lt;String&gt;</code>
                                                              the name of the group this element belongs to
                                                         </dd>
                                                 </dl>
@@ -1153,11 +1268,17 @@ This is executed in DragDrop.init()
                                         
                                         void
                                             <strong>regHandle</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;String&gt; sDDId, 
-                                                    &lt;String&gt; sHandleId
-                                                )
+                                                        
+                                                         sDDId
+                                                    
+                                                
+                                                        , 
+                                                         sHandleId
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -1166,14 +1287,15 @@ automatically when executing DragDrop.setHandleElId()
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>sDDId</code> - 
+                                                            <code>sDDId &lt;String&gt;</code>
                                                              the DragDrop id this element is a handle for
                                                         </dd>
                                                         <dd>
-                                                            <code>sHandleId</code> - 
+                                                            <code>sHandleId &lt;String&gt;</code>
                                                              the id of the element that is the drag 
 handle
                                                         </dd>
@@ -1200,11 +1322,17 @@ handle
                                         
                                         void
                                             <strong>startDrag</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;int&gt; x, 
-                                                    &lt;int&gt; y
-                                                )
+                                                        
+                                                         x
+                                                    
+                                                
+                                                        , 
+                                                         y
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -1213,14 +1341,15 @@ time threshold has been met.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>x</code> - 
+                                                            <code>x &lt;int&gt;</code>
                                                               the X position of the original mousedown
                                                         </dd>
                                                         <dd>
-                                                            <code>y</code> - 
+                                                            <code>y &lt;int&gt;</code>
                                                               the Y position of the original mousedown
                                                         </dd>
                                                 </dl>
@@ -1246,10 +1375,13 @@ time threshold has been met.
                                         
                                         void
                                             <strong>stopEvent</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Event&gt; e
-                                                )
+                                                        
+                                                         e
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -1258,10 +1390,11 @@ features are turned on.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>e</code> - 
+                                                            <code>e &lt;Event&gt;</code>
                                                              the event as returned by this.getEvent()
                                                         </dd>
                                                 </dl>
@@ -1287,11 +1420,17 @@ features are turned on.
                                         
                                         void
                                             <strong>swapNode</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Object&gt; n1, 
-                                                    &lt;Object&gt; n2
-                                                )
+                                                        
+                                                         n1
+                                                    
+                                                
+                                                        , 
+                                                         n2
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -1300,14 +1439,15 @@ emulate the IE behavior
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>n1</code> - 
+                                                            <code>n1 &lt;object&gt;</code>
                                                              the first node to swap
                                                         </dd>
                                                         <dd>
-                                                            <code>n2</code> - 
+                                                            <code>n2 &lt;object&gt;</code>
                                                              the other node to swap
                                                         </dd>
                                                 </dl>
@@ -1333,6 +1473,8 @@ emulate the IE behavior
                                         
                                         void
                                             <strong>unlock</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -1340,6 +1482,7 @@ emulate the IE behavior
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -1362,10 +1505,13 @@ emulate the IE behavior
                                         
                                         boolean
                                             <strong>verifyEl</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;HTMLElement&gt; el
-                                                )
+                                                        
+                                                         el
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -1376,10 +1522,11 @@ error' when trying to access the offsetParent of such an element
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>el</code> - 
+                                                            <code>el &lt;HTMLElement&gt;</code>
                                                              the element to check
                                                         </dd>
                                                 </dl>
@@ -1414,54 +1561,58 @@ error' when trying to access the offsetParent of such an element
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class="selected"><a href="module_dragdrop.html">dragdrop</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
-                                <li><a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a></li>
-                                <li><a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a></li>
-                                <li><a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></li>
-                                <li><a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a></li>
+                                <li class=""><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
+                                <li class=""><a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a></li>
+                                <li class=""><a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a></li>
+                                <li class=""><a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></li>
+                                <li class="selected"><a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="DD.js.html">DD.js</a></li>
-                                <li><a href="DDProxy.js.html">DDProxy.js</a></li>
-                                <li><a href="DDTarget.js.html">DDTarget.js</a></li>
-                                <li><a href="DragDrop.js.html">DragDrop.js</a></li>
-                                <li><a href="DragDropMgr.js.html">DragDropMgr.js</a></li>
+                                <li class=""><a href="DD.js.html">DD.js</a></li>
+                                <li class=""><a href="DDProxy.js.html">DDProxy.js</a></li>
+                                <li class=""><a href="DDTarget.js.html">DDTarget.js</a></li>
+                                <li class=""><a href="DragDrop.js.html">DragDrop.js</a></li>
+                                <li class=""><a href="DragDropMgr.js.html">DragDropMgr.js</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li><a href="#INTERSECT">INTERSECT</a>
-                                        <!--<code>&lt;boolean&gt;</code>-->
-                                </li>
-                                <li><a href="#POINT">POINT</a>
-                                        <!--<code>&lt;boolean&gt;</code>-->
-                                </li>
                                 <li><a href="#clickPixelThresh">clickPixelThresh</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
                                 <li><a href="#clickTimeThresh">clickTimeThresh</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
+                                <li><a href="#INTERSECT">INTERSECT</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
                                 <li><a href="#mode">mode</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#POINT">POINT</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
                                 <li><a href="#preventDefault">preventDefault</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
                                 <li><a href="#stopPropagation">stopPropagation</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#STRICT_INTERSECT">STRICT_INTERSECT</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
                                 <li><a href="#useCache">useCache</a>

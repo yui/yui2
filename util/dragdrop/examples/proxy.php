@@ -50,13 +50,17 @@ YAHOO.example.DDApp = function() {
 
     }
 
-    function initIntersectMode() {
+    function initIntersectMode(strict) {
 
         YAHOO.log("intersect mode");
 
         unreg();
 
-        YAHOO.util.DDM.mode = YAHOO.util.DDM.INTERSECT;
+        if (strict) {
+            YAHOO.util.DDM.mode = YAHOO.util.DDM.STRICT_INTERSECT;
+        } else {
+            YAHOO.util.DDM.mode = YAHOO.util.DDM.INTERSECT;
+        }
 
         dd = new YAHOO.example.DDSwap_i("dragDiv1");
         //dd.setPadding(10);
@@ -95,8 +99,10 @@ YAHOO.example.DDApp = function() {
         },
 
         changeMode: function(val) {
-            if (val == 1) {
-                initIntersectMode();
+            if (val ==1) {
+                initIntersectMode(false);
+            } else if (val == 2) {
+                initIntersectMode(true);
             } else {
                 initPointMode();
             }
@@ -142,8 +148,9 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
         on another.
         Mode: 
         <select onchange="YAHOO.example.DDApp.changeMode(this.selectedIndex)">
-          <option value="0" selected>Point</point>
-          <option value="1">Intersect</point>
+          <option value="0" selected>Point</option>
+          <option value="1">Intersect</option>
+          <option value="2">Strict Intersect</option>
         </select>
 <!--
         <input name="testtext" id="testtext" type="text" />

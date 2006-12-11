@@ -2,9 +2,7 @@
 <html>
 <head>
 	<title>API: dragdrop  YAHOO.util.DD   (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/reset.css">
-	<link rel="stylesheet" type="text/css" href="assets/fonts.css">
-	<link rel="stylesheet" type="text/css" href="assets/grids.css">
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css">
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
 
@@ -64,27 +62,38 @@ mouse cursor during a drag.
                             <div class="detail">
                                 <strong>YAHOO.util.DD</strong>
                                 <code>
-                                        (
+                                    (
   
                                         
-                                            &lt;String&gt; id, 
-                                            &lt;String&gt; sGroup, 
-                                            &lt;object&gt; config
-                                        )
+                                                
+                                                id
+
+                                                , 
+                                                sGroup
+
+                                                , 
+                                                config
+                                    )
                                 </code>
                                 <div class="description">
                                         <dl>
                                             <dt>Parameters:</dt>
                                                 <dd>
-                                                    <code>id</code> - 
+                                                    <code>id
+                                                    &lt;String&gt; 
+                                                    </code>
                                                      the id of the linked element
                                                 </dd>
                                                 <dd>
-                                                    <code>sGroup</code> - 
+                                                    <code>sGroup
+                                                    &lt;String&gt; 
+                                                    </code>
                                                      the group of related DragDrop items
                                                 </dd>
                                                 <dd>
-                                                    <code>config</code> - 
+                                                    <code>config
+                                                    &lt;object&gt; 
+                                                    </code>
                                                      an object containing configurable attributes
 Valid properties for DD: 
 scroll
@@ -153,12 +162,21 @@ Defaults to true.
                                         
                                         void
                                             <strong>alignElWithMouse</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;HTMLElement&gt; el, 
-                                                    &lt;int&gt; iPageX, 
-                                                    &lt;int&gt; iPageY
-                                                )
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         iPageX
+                                                    
+                                                
+                                                        , 
+                                                         iPageY
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -169,18 +187,19 @@ location other than where the cursor is.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>el</code> - 
+                                                            <code>el &lt;HTMLElement&gt;</code>
                                                              the element to move
                                                         </dd>
                                                         <dd>
-                                                            <code>iPageX</code> - 
+                                                            <code>iPageX &lt;int&gt;</code>
                                                              the X coordinate of the mousedown or drag event
                                                         </dd>
                                                         <dd>
-                                                            <code>iPageY</code> - 
+                                                            <code>iPageY &lt;int&gt;</code>
                                                              the Y coordinate of the mousedown or drag event
                                                         </dd>
                                                 </dl>
@@ -206,11 +225,17 @@ location other than where the cursor is.
                                         
                                         void
                                             <strong>autoOffset</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;int&gt; iPageX, 
-                                                    &lt;int&gt; iPageY
-                                                )
+                                                        
+                                                         iPageX
+                                                    
+                                                
+                                                        , 
+                                                         iPageY
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -219,14 +244,15 @@ left corner and the location the element was clicked
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>iPageX</code> - 
+                                                            <code>iPageX &lt;int&gt;</code>
                                                              the X coordinate of the click
                                                         </dd>
                                                         <dd>
-                                                            <code>iPageY</code> - 
+                                                            <code>iPageY &lt;int&gt;</code>
                                                              the Y coordinate of the click
                                                         </dd>
                                                 </dl>
@@ -252,11 +278,17 @@ left corner and the location the element was clicked
                                         
                                         void
                                             <strong>cachePosition</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Object&gt; iPageX, 
-                                                    &lt;Object&gt; iPageY
-                                                )
+                                                        
+                                                         iPageX
+                                                    
+                                                
+                                                        , 
+                                                         iPageY
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -266,15 +298,16 @@ number of pixels the element is offset from its original position.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>iPageX</code> - 
+                                                            <code>iPageX &lt;object&gt;</code>
                                                              the current x position (optional, this just makes it so we
 don't have to look it up again)
                                                         </dd>
                                                         <dd>
-                                                            <code>iPageY</code> - 
+                                                            <code>iPageY &lt;object&gt;</code>
                                                              the current y position (optional, this just makes it so we
 don't have to look it up again)
                                                         </dd>
@@ -301,11 +334,17 @@ don't have to look it up again)
                                         
                                         void
                                             <strong>setDelta</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;int&gt; iDeltaX, 
-                                                    &lt;int&gt; iDeltaY
-                                                )
+                                                        
+                                                         iDeltaX
+                                                    
+                                                
+                                                        , 
+                                                         iDeltaY
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -315,14 +354,15 @@ to the center of the object, as done in YAHOO.widget.Slider)
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>iDeltaX</code> - 
+                                                            <code>iDeltaX &lt;int&gt;</code>
                                                              the distance from the left
                                                         </dd>
                                                         <dd>
-                                                            <code>iDeltaY</code> - 
+                                                            <code>iDeltaY &lt;int&gt;</code>
                                                              the distance from the top
                                                         </dd>
                                                 </dl>
@@ -348,11 +388,17 @@ to the center of the object, as done in YAHOO.widget.Slider)
                                         
                                         void
                                             <strong>setDragElPos</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;int&gt; iPageX, 
-                                                    &lt;int&gt; iPageY
-                                                )
+                                                        
+                                                         iPageX
+                                                    
+                                                
+                                                        , 
+                                                         iPageY
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -363,14 +409,15 @@ location other than where the cursor is.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>iPageX</code> - 
+                                                            <code>iPageX &lt;int&gt;</code>
                                                              the X coordinate of the mousedown or drag event
                                                         </dd>
                                                         <dd>
-                                                            <code>iPageY</code> - 
+                                                            <code>iPageY &lt;int&gt;</code>
                                                              the Y coordinate of the mousedown or drag event
                                                         </dd>
                                                 </dl>
@@ -455,29 +502,30 @@ location other than where the cursor is.
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class="selected"><a href="module_dragdrop.html">dragdrop</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
-                                <li><a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a></li>
-                                <li><a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a></li>
-                                <li><a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></li>
-                                <li><a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a></li>
+                                <li class="selected"><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
+                                <li class=""><a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a></li>
+                                <li class=""><a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a></li>
+                                <li class=""><a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></li>
+                                <li class=""><a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="DD.js.html">DD.js</a></li>
-                                <li><a href="DDProxy.js.html">DDProxy.js</a></li>
-                                <li><a href="DDTarget.js.html">DDTarget.js</a></li>
-                                <li><a href="DragDrop.js.html">DragDrop.js</a></li>
-                                <li><a href="DragDropMgr.js.html">DragDropMgr.js</a></li>
+                                <li class=""><a href="DD.js.html">DD.js</a></li>
+                                <li class=""><a href="DDProxy.js.html">DDProxy.js</a></li>
+                                <li class=""><a href="DDTarget.js.html">DDTarget.js</a></li>
+                                <li class=""><a href="DragDrop.js.html">DragDrop.js</a></li>
+                                <li class=""><a href="DragDropMgr.js.html">DragDropMgr.js</a></li>
                         </ul>
                     </div>
 

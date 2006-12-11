@@ -2,9 +2,7 @@
 <html>
 <head>
 	<title>API: dragdrop  YAHOO.util.DDProxy   (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/reset.css">
-	<link rel="stylesheet" type="text/css" href="assets/fonts.css">
-	<link rel="stylesheet" type="text/css" href="assets/grids.css">
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css">
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
 
@@ -63,27 +61,38 @@ page.
                             <div class="detail">
                                 <strong>YAHOO.util.DDProxy</strong>
                                 <code>
-                                        (
+                                    (
   
                                         
-                                            &lt;String&gt; id, 
-                                            &lt;String&gt; sGroup, 
-                                            &lt;object&gt; config
-                                        )
+                                                
+                                                id
+
+                                                , 
+                                                sGroup
+
+                                                , 
+                                                config
+                                    )
                                 </code>
                                 <div class="description">
                                         <dl>
                                             <dt>Parameters:</dt>
                                                 <dd>
-                                                    <code>id</code> - 
+                                                    <code>id
+                                                    &lt;String&gt; 
+                                                    </code>
                                                      the id of the linked html element
                                                 </dd>
                                                 <dd>
-                                                    <code>sGroup</code> - 
+                                                    <code>sGroup
+                                                    &lt;String&gt; 
+                                                    </code>
                                                      the group of related DragDrop objects
                                                 </dd>
                                                 <dd>
-                                                    <code>config</code> - 
+                                                    <code>config
+                                                    &lt;object&gt; 
+                                                    </code>
                                                      an object containing configurable attributes
 Valid properties for DDProxy in addition to those in DragDrop: 
 resizeFrame, centerFrame, dragElId
@@ -99,19 +108,6 @@ resizeFrame, centerFrame, dragElId
                         <div class="section field details">
                             <h3><a name="field_detail">Properties</a></h3>
                             <div class="content">
-                                    <h4><a name="YAHOO.util.DDProxy.dragElId">YAHOO.util.DDProxy.dragElId</a>
-                                        <code>- static String</code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description">
-                                            The default drag frame div id
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
                                     <h4><a name="centerFrame">centerFrame</a>
                                         <code>- boolean</code>
                                     </h4>
@@ -136,6 +132,19 @@ around the cursor.  Set centerFrame to true for this effect.
                                             By default we resize the drag frame to be the same size as the element
 we want to drag (this is to get the frame effect).  We can turn it off
 if we want a different behavior.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="YAHOO.util.DDProxy.dragElId">YAHOO.util.DDProxy.dragElId</a>
+                                        <code>- static String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The default drag frame div id
                                         </div>
                                     </div>
      
@@ -190,6 +199,8 @@ if we want a different behavior.
                                         
                                         void
                                             <strong>createFrame</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -197,6 +208,7 @@ if we want a different behavior.
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -219,6 +231,8 @@ if we want a different behavior.
                                         
                                         void
                                             <strong>initFrame</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -227,6 +241,7 @@ constructor of all subclasses
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -321,43 +336,44 @@ constructor of all subclasses
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class="selected"><a href="module_dragdrop.html">dragdrop</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
-                                <li><a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a></li>
-                                <li><a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a></li>
-                                <li><a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></li>
-                                <li><a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a></li>
+                                <li class=""><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
+                                <li class="selected"><a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a></li>
+                                <li class=""><a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a></li>
+                                <li class=""><a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></li>
+                                <li class=""><a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="DD.js.html">DD.js</a></li>
-                                <li><a href="DDProxy.js.html">DDProxy.js</a></li>
-                                <li><a href="DDTarget.js.html">DDTarget.js</a></li>
-                                <li><a href="DragDrop.js.html">DragDrop.js</a></li>
-                                <li><a href="DragDropMgr.js.html">DragDropMgr.js</a></li>
+                                <li class=""><a href="DD.js.html">DD.js</a></li>
+                                <li class=""><a href="DDProxy.js.html">DDProxy.js</a></li>
+                                <li class=""><a href="DDTarget.js.html">DDTarget.js</a></li>
+                                <li class=""><a href="DragDrop.js.html">DragDrop.js</a></li>
+                                <li class=""><a href="DragDropMgr.js.html">DragDropMgr.js</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li><a href="#YAHOO.util.DDProxy.dragElId">YAHOO.util.DDProxy.dragElId</a>
-                                        <!--<code>&lt;boolean&gt;</code>-->
-                                </li>
                                 <li><a href="#centerFrame">centerFrame</a>
-                                        <!--<code>&lt;boolean&gt;</code>-->
+                                        <!--<code>&lt;String&gt;</code>-->
                                 </li>
                                 <li><a href="#resizeFrame">resizeFrame</a>
-                                        <!--<code>&lt;boolean&gt;</code>-->
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#YAHOO.util.DDProxy.dragElId">YAHOO.util.DDProxy.dragElId</a>
+                                        <!--<code>&lt;String&gt;</code>-->
                                 </li>
                         </ul>
                     </div>
