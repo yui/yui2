@@ -39,6 +39,7 @@ YAHOO.widget.DataTable = function(elElement,aColumnset,oDataSource,oConfigs) {
     if(oDataSource && (oDataSource instanceof YAHOO.widget.DataSource)) {
         this.datasource = oDataSource;
     }
+    //TODO: support null datasource for v simple tables
     else {
         YAHOO.log("Could not instantiate DataTable due to an invalid DataSource", "error", this.toString());
         return;
@@ -69,7 +70,7 @@ YAHOO.widget.DataTable = function(elElement,aColumnset,oDataSource,oConfigs) {
             // Create a Recordset
             var aRecords = [];
             //TODO: Is this too hardcoded? Supoprts at most one TBODY in the TABLE!
-            var elTbody = this._elTbody
+            var elTbody = elElement.tBodies[0];
             if(elTbody) {
                 var numRows = elTbody.rows.length;
                 if(numRows > 0) {
@@ -82,9 +83,8 @@ YAHOO.widget.DataTable = function(elElement,aColumnset,oDataSource,oConfigs) {
                         if(numCells > 0) {
                             for(var j=0; j<numCells; j++) {
                                 var elCell = elRow.cells[j];
-                                //TODO: customizable parse cell function
                                 elCell.id = "yui-dt"+index+"-bodycell"+i+"-"+j;
-                                this.parseCell(elCell,oRecord,oColumnset.columns[j]);
+                                oRecord[oColumnset.columns[j].key] = oColumnset.columns[j].parse(elCell.innerHTML);
                             }
                         aRecords.push(oRecord);
                         }
@@ -204,7 +204,7 @@ YAHOO.widget.DataTable.prototype.toString = function() {
  * @param {String} (optional) Policy name.
  */
 YAHOO.widget.DataTable.prototype.setPolicy = function() {
-    this.subscribe("rowClickEvent",this.doSelect);
+    this.subscribe("cellClickEvent",this.doSelectRow);
     this.subscribe("theadClickEvent",this.doSort);
     this.subscribe("tableClickEvent",this.doFocus);
     this.subscribe("tableKeypressEvent",this.doKeypress);
@@ -251,7 +251,7 @@ YAHOO.widget.DataTable.prototype.appendRow = function(oRecord) {
     for(var j=0; j<oColumnset.columns.length; j++) {
         var elCell = elRecordRow.appendChild(document.createElement("td"));
         elCell.id = "yui-dt"+index+"-bodycell"+i+"-"+j;
-        this.formatCell(elCell, oRecord, oColumnset.columns[j]);
+        oColumnset.columns[j].format(elCell, oRecord);
     }
 };
 
@@ -290,81 +290,50 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(elRow) {
     for(var i=0; i< allRows.length; i++) {
         if(elRow.id == allRows[i].id) {
             this._elTbody.deleteRow(i);
+            this.fireEvent("deleteRowEvent");
             break;
         }
     }
 };
 
  /**
- * Sets one row to the selected state.
- *
- * @method selectRow
- * @param oRow {HTMLElement | String } HTML TR element reference or ID String.
- */
-YAHOO.widget.DataTable.prototype.selectRow = function(oRow) {
-    if(oRow.constructor == String) {
-        oRow = YAHOO.util.Dom.get("oRow");
-    }
-    YAHOO.util.Dom.addClass(oRow,YAHOO.widget.DataTable.CLASS_SELECTED);
-};
-
- /**
  * Sets one or more rows to the selected state.
  *
- * @method selectRows
+ * @method select
  * @param aRows {HTMLElement | String | HTMLElement[] | String[]} HTML TR element
  * reference, TR String ID, array of HTML TR element, or array of TR element IDs.
  */
-YAHOO.widget.DataTable.prototype.selectRows = function(aRows) {
-    if(aRows.constructor == Array) {
-        for(var i=0; i<aRows.length; i++) {
-            this.selectRow(aRows[i]);
-        }
-    
+YAHOO.widget.DataTable.prototype.select = function(els) {
+    if(els.constructor != Array) {
+        els = [els];
     }
-    else {
-        this.selectRow(aRows);
+    for(var i=0; i<els.length; i++) {
+        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
     }
-};
-
- /**
- * Sets one row to the unselected state.
- *
- * @method unselectRow
- * @param oRow {HTMLElement | String } HTML TR element reference or ID String.
- */
-YAHOO.widget.DataTable.prototype.unselectRow = function(oRow) {
-    if(oRow.constructor == String) {
-        oRow = YAHOO.util.Dom.get("oRow");
-    }
-    YAHOO.util.Dom.removeClass(oRow,YAHOO.widget.DataTable.CLASS_SELECTED);
 };
 
  /**
  * Sets one or more rows to the unselected.
  *
- * @method unselectRows
- * @param aRows {HTMLElement | String | HTMLElement[] | String[]} HTML TR element
- * reference, TR element ID, array of HTML TR elements, or array of TR element IDs
+ * @method unselect
+ * @param aRows {HTMLElement | String | HTMLElement[] | String[]} HTML element
+ * reference, element ID, array of HTML elements, or array of element IDs
  */
-YAHOO.widget.DataTable.prototype.unselectRows = function(aRows) {
-    if(aRows.constructor == Array) {
-        for(var i=0; i<aRows.length; i++) {
-            this.unselectRow(aRows[i]);
-        }
-
+YAHOO.widget.DataTable.prototype.unselect = function(els) {
+    if(els.constructor != Array) {
+        els = [els];
     }
-    else {
-        this.unselectRow(aRows);
+    for(var i=0; i<els.length; i++) {
+        YAHOO.util.Dom.removeClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
     }
 };
 
  /**
- * Returns true if given row element is select, false otherwise.
+ * Returns true if given element is select, false otherwise.
  *
  * @method isSelected
- * @param elRow {element} HTML table row element reference.
- * @return {boolean} True if row is selected.
+ * @param el {element} HTML element reference.
+ * @return {boolean} True if element is selected.
  */
 YAHOO.widget.DataTable.prototype.isSelected = function(el) {
     return YAHOO.util.Dom.hasClass(el,YAHOO.widget.DataTable.CLASS_SELECTED);
@@ -379,46 +348,6 @@ YAHOO.widget.DataTable.prototype.isSelected = function(el) {
 YAHOO.widget.DataTable.prototype.getSelectedRows = function() {
     //TODO
 };
-
- /**
- * Updates a table cell element with data and presentation.
- *
- * @method formatCell
- * @param elCell {element} HTML table cell element reference.
- * @param oRecord {object} DataTable record object.
- * @param oColumn {object} DataTable column object.
- *
- */
-YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn) {
-    elCell.innerHTML = oRecord[oColumn.key];
-    //TODO: make sure this gets propagated to overriders
-    if(oColumn.editable) {
-        YAHOO.util.Dom.addClass(elCell,"yui-dt-editable");
-    }
-};
-
- /**
- * Parses cell contents to extract data and presentation for internal storage by
- * the DataTable class.
- *
- * @method parseCell
- * @param elCell {element} HTML table cell element reference.
- * @param oRecord {object} DataTable record object.
- * @param oColumn {object} DataTable column object.
- */
-YAHOO.widget.DataTable.prototype.parseCell = function(elCell, oRecord, oColumn) {
-    oRecord[oColumn.key] = elCell.innerHTML;
-};
-
- /**
- * Sorts a column.
- *
- * @method sortColumn
- * @param oColumn {object} DataTable column object.
- */
-//YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
-    //TODO
-//};
 
  /**
  * Returns pointer to the DataTable instance's Columnset instance.
@@ -476,13 +405,16 @@ YAHOO.widget.DataTable.prototype.doFocus = function(oArgs) {
 /**
  * Handles selection based on DOM events.
  *
- * @method doSelect
+ * @method doSelectRow
  * @param oArgs.event {HTMLEvent} Event object.
  * @param oArgs.target {HTMLElement} Target element.
  */
-YAHOO.widget.DataTable.prototype.doSelect = function(oArgs) {
+YAHOO.widget.DataTable.prototype.doSelectRow = function(oArgs) {
     var evt = oArgs.event;
     var row = oArgs.target;
+    while(row.nodeName.toLowerCase() != "tr") {
+        row = row.parentNode;
+    }
     
     if(this.singleSelect && !evt.ctrlKey) {
         //TODO: convenience method to get to tbody
@@ -494,10 +426,10 @@ YAHOO.widget.DataTable.prototype.doSelect = function(oArgs) {
     //TODO: allow arrow key selection
 
     if(this.isSelected(row)) {
-        this.unselectRow(row);
+        this.unselect(row);
     }
     else {
-        this.selectRow(row);
+        this.select(row);
     }
 };
 
@@ -644,7 +576,7 @@ YAHOO.widget.DataTable.prototype._oRecordset = null;
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Initializes DataTable once DOM is finalized
+ * Initializes DataTable's DOM-related properties once DOM is finalized
  *
  * @method _initTable
  * @private
@@ -726,7 +658,6 @@ YAHOO.widget.DataTable.prototype._createThead = function(elTable, oColumnset) {
             var oColumn = oColumnset.rows[i][j];
             var elHeadCell = elHeadRow.appendChild(document.createElement("th"));
             elHeadCell.id = "yui-dt"+index+"-headcell"+i+"-"+j;
-            elHeadCell.colId = oColumn.id;
             this._enhanceTheadCell(elHeadCell,oColumn,i,j);
         }
     }
@@ -848,7 +779,7 @@ YAHOO.widget.DataTable.prototype._enhanceTheadCell = function(elHeadCell,oColumn
     // Clear out the cell of prior content
     // TODO: purgeListeners and other validation-related things
     var index = this._nIndex;
-    
+    elHeadCell.colId = oColumn.id;
     elHeadCell.innerHTML = "";
 
     var elHeadContainer = elHeadCell.appendChild(document.createElement("div"));
@@ -896,7 +827,7 @@ YAHOO.widget.DataTable.prototype._updateTableBody = function(aNewRecords) {
             // ...Update tbody cells with new data
             for(var j=0; j<columns.length; j++) {
                 elCell = elRecordRow.cells[j];
-                this.formatCell(elCell, aNewRecords[i], columns[j]);
+                columns[j].format(elCell, aNewRecords[i]);
             }
         }
     }
@@ -980,14 +911,24 @@ YAHOO.widget.DataTable.prototype._registerEvents = function() {
     /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Fired when a TR element is clicked.
+     * Fired when a TD element is clicked.
      *
-     * @event rowClickEvent
+     * @event cellClickEvent
+     * @param sType {String} CustomEvent type.
+     * @param oEvent {HTMLEvent} The event object.
+     * @param elTarget {HTMLElement} The TD element.
+     */
+    this.createEvent("cellClickEvent");
+
+    /**
+     * Fired when a TR element is deleted.
+     *
+     * @event rowDeleteEvent
      * @param sType {String} CustomEvent type.
      * @param oEvent {HTMLEvent} The event object.
      * @param elTarget {HTMLElement} The TR element.
      */
-    this.createEvent("rowClickEvent");
+    this.createEvent("rowDeleteEvent");
 
     /**
      * Fired when a TH element is clicked.
@@ -1037,9 +978,37 @@ YAHOO.widget.DataTable.prototype._registerEvents = function() {
 YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
 	    var elTarget = YAHOO.util.Event.getTarget(e);
 	    var elTag = elTarget.nodeName.toLowerCase();
-	    var childWasHead = false;
-        while (elTag != "table") {
-	        if(elTag == "td") {
+	    var knownTag = false;
+
+        if (elTag != "table") {
+            while(!knownTag) {
+                switch(elTag) {
+                    case "input":
+                        oSelf.fireEvent("checkClickEvent",{target:elTarget,event:e});
+                        knownTag = true;
+                        break;
+                    case "td":
+    	               oSelf.fireEvent("cellClickEvent",{target:elTarget,event:e});
+    	               knownTag = true;
+    	               break;
+        	        case "th":
+                    	oSelf.fireEvent("theadClickEvent",{target:elTarget,event:e});
+                    	knownTag = true;
+                    	break;
+                    default:
+                        break;
+                }
+                elTarget = elTarget.parentNode;
+                elTag = elTarget.nodeName.toLowerCase();
+            }
+        }
+        /*
+                while (elTag != "table") {
+            if(elTag == "input") {
+                oSelf.fireEvent("checkClickEvent",{target:elTarget,event:e});
+                break;
+            }
+	        else if(elTag == "td") {
 	            //oSelf.fireEvent("cellClickEvent",{target:elTarget});
 	        }
 	        else if (elTag == "th") {
@@ -1058,6 +1027,7 @@ YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
             elTarget = elTarget.parentNode;
             elTag = elTarget.nodeName.toLowerCase();
 	    }
+        */
 	    oSelf.fireEvent("tableClickEvent",{target:elTarget,event:e});
 };
 

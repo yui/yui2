@@ -390,9 +390,23 @@ var aAreacodeObjects = [
     {areacode: "989", state: "Michigan"}
 ];
 
+var aEmailObjects = {
+    account:"jenny@yahoo.com",
+    currStorage: .47,
+    maxStorage: 2,
+    emails: [
+        {id: "9897", date:new Date(1981, 2, 24), to: "joe", from: "Jenny", size:4},
+        {id: "7899", date:new Date(1980, 1, 11), to: "Joe", from: "Jenny", size:23},
+        {id: "6789", date:new Date(1978, 11, 12), to: "Jane", from: "Jenny", size:7},
+        {id: "4996", date:new Date(1974, 1, 11), to: "Jane", from: "Jenny", size:4},
+        {id: "4544", date:new Date(1974, 1, 10), to: "jane", from: "Jenny", size:1}
+    ]
+};
+
+
 var aPurchaseOrderObjects = [
-    {id: "167", date:new Date(1980, 2, 24), quantity:4, amount:4.00},
-    {id: "267", date:new Date(1981, 1, 11), quantity:3, amount:2.12},
-    {id: "367", date:new Date(1978, 11, 12), quantity:12, amount:6.25},
-    {id: "467", date:new Date(1974, 1, 11), quantity:6, amount:3.50}
+    {id: "167", date:new Date(1980, 2, 24), quantity:4, amount:4.00, markup:"<b>boldstuff</b>"},
+    {id: "267", date:new Date(1981, 1, 11), quantity:3, amount:12.12, markup:"<i>italicstuff</i>"},
+    {id: "367", date:new Date(1978, 11, 12), quantity:12, amount:6.25, markup:"<big>bigstuff</big>"},
+    {id: "467", date:new Date(1974, 1, 11), quantity:6, amount:3.50, markup:"<small>smallstuff</small>"}
 ];

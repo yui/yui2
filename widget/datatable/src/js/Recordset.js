@@ -3,6 +3,69 @@
 /****************************************************************************/
 
 /**
+ * The Record class defines and manages attributes of DataTable records.
+ *
+ *
+ * @class Record
+ * @constructor
+ * @param oConfigs {Object} (optional) Object literal of configuration values.
+ */
+YAHOO.widget.Record = function(oConfigs) {
+    if(typeof oConfigs == "object") {
+        for(var sConfig in oConfigs) {
+            if(sConfig) {
+                this[sConfig] = oConfigs[sConfig];
+            }
+        }
+    }
+    this._nIndex = YAHOO.widget.Record._nCount;
+    YAHOO.widget.Record._nCount++;
+};
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Record's associated database or external ID.
+ *
+ * @property sExtId
+ * @type String
+ */
+YAHOO.widget.Record.prototype.extId = null;
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Internal class variable to index multiple data table instances.
+ *
+ * @property _nCount
+ * @type number
+ * @private
+ * @static
+ */
+YAHOO.widget.Record._nCount = 0;
+
+/**
+ * Instance index.
+ *
+ * @property _nIndex
+ * @type number
+ * @private
+ */
+YAHOO.widget.Record.prototype._nIndex = null;
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+/**
  * A generic data model class is a sparsely populated JavaScript array of uniquely
  * identifiable records.
  *

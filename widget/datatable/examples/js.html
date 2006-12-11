@@ -114,13 +114,9 @@ var myWebstatsColumnset =
     }
 ];
 
-myFormatCell = function(elCell, oRecord, oColumn) {
-    elCell.innerHTML = oRecord[oColumn.key];
-};
-
 var myWebstatsDataDriver = new YAHOO.widget.DataDriver();
 var myWebstatsDataSource = new YAHOO.widget.DataSource(aWebstats, myWebstatsDataDriver);
-var myWebstatsDataTable = new YAHOO.widget.DataTable("webstats", myWebstatsColumnset, myWebstatsDataSource, {formatCell:myFormatCell});
+var myWebstatsDataTable = new YAHOO.widget.DataTable("webstats", myWebstatsColumnset, myWebstatsDataSource);
 
 
 /****************************************************************************/
@@ -159,31 +155,17 @@ YAHOO.example.Orders = function() {
     };
 
     this.columnset = [
-
-        {id:"po1",key:"id",text:"PO ID",sortable:true,resizeable:true,currentlyAsc:true},
-        {id:"po2",key:"quantity",text:"Quantity",sortable:true,resizeable:true},
-        {id:"po3",key:"amount",text:"$ Total",sortable:true,resizeable:true,editable:true},
-        {id:"po4",key:"date",text:"Date",sortable:true,resizeable:true,isLast:true,sortDesc:true}
-
+        {id:"po_paid",type:"checkbox",text:"Paid",sortable:true},
+        {id:"po_due",type:"radio",text:"Due Next"},
+        {id:"po_deprecated",type:"html",key:"markup",text:"Deprecated Stuff"},
+        {id:"po_id",key:"id",type:"number",text:"PO ID",sortable:true,resizeable:true},
+        {id:"po_quantity",key:"quantity",type:"number",text:"Quantity",sortable:true,resizeable:true},
+        {id:"po_total",key:"amount",type:"currency",text:"$ Total",sortable:true,resizeable:true,editable:true},
+        {id:"po_date",key:"date",type:"date",text:"Date",sortable:true,sortOptions:{defaultOrder:"desc"},resizeable:true,isLast:true}
     ];
 
-    this.formatCell = function(elCell, oRecord, oColumn){
-        if(oColumn.key === "date") {
-            elCell.innerHTML = oRecord[oColumn.key].getMonth() + "/" + oRecord[oColumn.key].getDate()  + "/" + oRecord[oColumn.key].getYear();
-        }
-        else if(oColumn.key === "amount") {
-            elCell.innerHTML = "$"+oRecord[oColumn.key];
-        }
-        else {
-            elCell.innerHTML = oRecord[oColumn.key];
-        }
-        if(oColumn.editable) {
-            YAHOO.util.Dom.addClass(elCell,"yui-dt-editable");
-        }
-    };
-
     this.datasource = new YAHOO.widget.DataSource(aPurchaseOrderObjects, this.datadriver);
-    this.datatable = new YAHOO.widget.DataTable("fixed", this.columnset, this.datasource, {defaultRequest: "", formatCell: this.formatCell, fixedwidth:true});
+    this.datatable = new YAHOO.widget.DataTable("fixed", this.columnset, this.datasource, {defaultRequest: "", fixedwidth:true});
 }();
 
 /****************************************************************************/
@@ -205,12 +187,12 @@ YAHOO.example.sortStatesDesc = function(a, b) {
 var myAreacodesDataDriver = new YAHOO.widget.DataDriver();
 
 var myAreacodesColumnset = [
-    {id:"ac1",key:"areacode",text:"Area Codes",sortable:true,currentlyAsc:true},
-    {id:"ac2",key:"state",text:"States",sortable:true,sortAscHandler:YAHOO.example.sortStatesAsc,sortDescHandler:YAHOO.example.sortStatesDesc}
+    {id:"ac1",key:"areacode",text:"Area Codes",sortable:true},
+    {id:"ac2",key:"state",text:"States",sortable:true,sortOptions:{ascHandler:YAHOO.example.sortStatesAsc,descHandler:YAHOO.example.sortStatesDesc}}
 ];
 
 var myAreacodesDataSource = new YAHOO.widget.DataSource(aAreacodeObjects, myAreacodesDataDriver);
-var myAreacodesDataTable = new YAHOO.widget.DataTable("scroll",myAreacodesColumnset,myAreacodesDataSource);
+var myAreacodesDataTable = new YAHOO.widget.DataTable("scroll",myAreacodesColumnset,myAreacodesDataSource,{sortedBy:"ac1"});
 
 
 /****************************************************************************/
@@ -266,8 +248,8 @@ YAHOO.util.Event.addListener(YAHOO.util.Dom.get("pagerange"), "change", onPageRa
 /****************************************************************************/
 
 var myXHRColumnset = [
-    {id:"search1",key:"Title",text:"Title",sortable:true,resizeable:true,sortAscHandler:YAHOO.util.Sort.compareTextAsc,sortDescHandler:YAHOO.util.Sort.compareTextDesc},
-    {id:"search1",key:"Summary",text:"Summary",sortable:true,resizeable:true,sortAscHandler:YAHOO.util.Sort.compareTextAsc,sortDescHandler:YAHOO.util.Sort.compareTextDesc}
+    {id:"search1",key:"Title",text:"Title",sortable:true, sortOptions:{ascHandler:YAHOO.util.Sort.compareTextAsc,descHandler:YAHOO.util.Sort.compareTextDesc},resizeable:true},
+    {id:"search1",key:"Summary",text:"Summary",sortable:true,sortOptions:{ascHandler:YAHOO.util.Sort.compareTextAsc,descHandler:YAHOO.util.Sort.compareTextDesc},resizeable:true}
 ];
 
 // Converts XML results into an array of key/value objects
