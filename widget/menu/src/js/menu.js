@@ -581,8 +581,11 @@ _initSubTree: function() {
     this.logger.log("Searching DOM for items to initialize.");
 
     if(this.srcElement.tagName) {
-    
-        switch(this.srcElement.tagName.toUpperCase()) {
+
+        var sSrcElementTagName = this.srcElement.tagName.toUpperCase();
+
+
+        switch(sSrcElementTagName) {
     
             case "DIV":
     
@@ -604,26 +607,22 @@ _initSubTree: function() {
     
                         do {
         
-                            if(oNode && oNode.tagName) {
-                            
-                                switch(oNode.tagName.toUpperCase()) {
-                
-                                    case "LI":
+                            if(
+                                oNode && 
+                                oNode.tagName && 
+                                oNode.tagName.toUpperCase() == "LI"
+                            ) {
         
-                                        this.logger.log("Initializing " + 
-                                            oNode.tagName + " node.");
-        
-                                        this.addItem(
-                                                new this.ITEM_TYPE(
-                                                    oNode, 
-                                                    { parent: this }
-                                                ), 
-                                                i
-                                            );
-                
-                                    break;
-                
-                                }
+                                this.logger.log("Initializing " + 
+                                    oNode.tagName + " node.");
+
+                                this.addItem(
+                                        new this.ITEM_TYPE(
+                                            oNode, 
+                                            { parent: this }
+                                        ), 
+                                        i
+                                    );
     
                             }
                 
@@ -782,7 +781,7 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
 
         var sText = p_oItem.text;
 
-        delete p_oItem["text"];
+        delete p_oItem.text;
 
         p_oItem.parent = this;
 
@@ -1594,7 +1593,7 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
             else if(
                 !bMovingToSubmenu && 
                 oSubmenu && 
-                this.cfg.getProperty("hidedelay") == 0 &&
+                this.cfg.getProperty("hidedelay") === 0 &&
                 this instanceof YAHOO.widget.MenuBar
             ) {
 

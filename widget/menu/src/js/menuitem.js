@@ -1487,7 +1487,7 @@ YAHOO.widget.MenuItem.prototype = {
                 var sSubmenuId = oSubmenu.id,
                     oSubmenuConfig = oSubmenu;
 
-                delete oSubmenu["id"];
+                delete oSubmenu.id;
 
                 oSubmenuConfig.lazyload = bLazyLoad;
                 oSubmenuConfig.parent = this;
