@@ -22,16 +22,29 @@ cat copyright.txt build/menu-lib.js > build/menu-debug.js
 
 # Remove logger statements
 
-/usr/local/bin/perl -i -p00we 's/^.*?this\.log.*?(;|\).*;|(\n.*?)*?\).*;).*;?.*?\n/""/emg' build/menu-lib.js
-/usr/local/bin/perl -i -p00we 's/^.*?m_oLogger.*?(;|\).*;|(\n.*?)*?\).*;).*;?.*?\n/""/emg' build/menu-lib.js
+/usr/local/bin/perl -i -p00we 's/^.*?this\.log.*?(;|,|\).*;|(\n.*?)*?\).*;).*;?.*?\n/""/emg' build/menu-lib.js
+/usr/local/bin/perl -i -p00we 's/^.*?m_oLogger.*?(;|,|\).*;|(\n.*?)*?\).*;).*;?.*?\n/""/emg' build/menu-lib.js
 
 cat copyright.txt build/menu-lib.js > build/menu.js
 
-java -jar /usr/local/Dojo\ JavaScript\ Compressor/custom_rhino.jar -c build/menu-lib.js > build/menu-compressed.js 2>&1
-
-/usr/local/bin/perl -i -pwe 's/\n/""/eg' build/menu-compressed.js
+~/jsmin/jsmin < build/menu-lib.js > build/menu-compressed.js
 
 cat copyright.txt build/menu-compressed.js > build/menu-min.js
+
+
+# Run JSLint over the three build files
+
+echo menu-debug.js JSLint warnings:
+
+/usr/local/bin/jslint build/menu-debug.js
+
+echo menu-min.js JSLint  warnings:
+
+/usr/local/bin/jslint build/menu-min.js
+
+echo menu.js JSLint warnings:
+
+/usr/local/bin/jslint build/menu.js
 
 
 # Add the copyright notice to the CSS file
@@ -73,6 +86,7 @@ cp build/README ~/dev/yahoo/properties/webservices/site/yui/build/menu/
 
 # Create example files
 
+php examples/index.html > ../../examples/menu/index.html
 php examples/example01.html > ../../examples/menu/example01.html
 php examples/example02.html > ../../examples/menu/example02.html
 php examples/example03.html > ../../examples/menu/example03.html
@@ -99,12 +113,6 @@ php examples/topnavfromjswithanim.html > ../../examples/menu/topnavfromjswithani
 php examples/topnavfrommarkupwithanim.html > ../../examples/menu/topnavfrommarkupwithanim.html
 
 
-# Copy the index file into the examples directory
-
-cp examples/index.html ../../examples/menu
-cp examples/index.html ~/dev/yahoo/properties/webservices/site/yui/examples/menu
-
-
 # Copy the examples into the build directory for YDN
 
 cp ../../examples/menu/*.html ~/dev/yahoo/properties/webservices/site/yui/examples/menu
@@ -125,5 +133,8 @@ cp examples/img/*.png ~/dev/yahoo/properties/webservices/site/yui/examples/menu/
 
 # Copy the documentation to the two different locations where they are stored in CVS
 
-cp ~/dev/yahoo/presentation/2.x/widget/menu/docs/*.* ~/dev/yahoo/presentation/2.x/docs/menu/
-cp ~/dev/yahoo/presentation/2.x/widget/menu/docs/*.* ~/dev/yahoo/properties/webservices/site/yui/docs/menu/
+cp ~/dev/yahoo/presentation/2.x/widget/menu/docs/* ~/dev/yahoo/presentation/2.x/docs/menu/
+cp ~/dev/yahoo/presentation/2.x/widget/menu/docs/assets/* ~/dev/yahoo/presentation/2.x/docs/menu/assets/
+
+cp ~/dev/yahoo/presentation/2.x/widget/menu/docs/* ~/dev/yahoo/properties/webservices/site/yui/docs/menu/
+cp ~/dev/yahoo/presentation/2.x/widget/menu/docs/assets/* ~/dev/yahoo/properties/webservices/site/yui/docs/menu/assets/
