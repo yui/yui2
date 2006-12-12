@@ -318,7 +318,7 @@ YAHOO.util.Element.prototype = {
     set: function(key, value, silent) {
         var el = this.get('element');
         if (!el) {
-            this._queue[key] = ['set', arguments];
+            this._queue[this._queue.length] = ['set', arguments];
             return false;
         }
         
