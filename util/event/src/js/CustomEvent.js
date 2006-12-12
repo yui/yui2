@@ -9,7 +9,11 @@
  *                  refer to this object in the callback.  Default value: 
  *                  the window object.  The listener can override this.
  * @param {boolean} silent pass true to prevent the event from writing to
- *                  the log system
+ *                  the debugsystem
+ * @param {int}     signature the signature that the custom event subscriber
+ *                  will receive. YAHOO.util.CustomEvent.LIST or 
+ *                  YAHOO.util.CustomEvent.FLAT.  The default is
+ *                  YAHOO.util.CustomEvent.LIST.
  * @namespace YAHOO.util
  * @class CustomEvent
  * @constructor
@@ -33,7 +37,7 @@ YAHOO.util.CustomEvent = function(type, oScope, silent, signature) {
 
     /**
      * By default all custom events are logged in the debug build, set silent
-     * to true to disable logging for this event.
+     * to true to disable debug outpu for this event.
      * @property silent
      * @type boolean
      */
@@ -176,6 +180,8 @@ YAHOO.util.CustomEvent.prototype = {
      * @method fire 
      * @param {Object*} arguments an arbitrary set of parameters to pass to 
      *                            the handler.
+     * @return {boolean} false if one of the subscribers returned false, 
+     *                   true otherwise
      */
     fire: function() {
         var len=this.subscribers.length;

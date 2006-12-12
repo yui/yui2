@@ -66,6 +66,9 @@ that can be subscribed to by one or more independent component.
 
                                                 , 
                                                 silent
+
+                                                , 
+                                                signature
                                     )
                                 </code>
                                 <div class="description">
@@ -92,6 +95,15 @@ the window object.  The listener can override this.
                                                     </code>
                                                      pass true to prevent the event from writing to
 the log system
+                                                </dd>
+                                                <dd>
+                                                    <code>signature
+                                                    &lt;int&gt; 
+                                                    </code>
+                                                     the signature that the custom event subscriber
+will receive. YAHOO.util.CustomEvent.LIST or 
+YAHOO.util.CustomEvent.FLAT.  The default is
+YAHOO.util.CustomEvent.LIST.
                                                 </dd>
                                         </dl>
                                     
@@ -234,7 +246,7 @@ the optional custom object
                                         
                                         
                                         
-                                        void
+                                        boolean
                                             <strong>fire</strong>
                                            (
                                                 
@@ -271,9 +283,10 @@ the handler.
                                                 <dl>
                                                     <dt>Returns:
                                                     <code>
-                                                        void
+                                                        boolean
                                                     </code></dt>
-                                                    <dd></dd>
+                                                    <dd>false if one of the subscribers returned false, 
+true otherwise</dd>
                                                 </dl>
              
                                         </div>
@@ -545,26 +558,28 @@ the execution scope.
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_event.html">event</a></li>
+
+                                <li class="selected"><a href="module_event.html">event</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
-                                <li><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
-                                <li><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
-                                <li><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
+                                <li class="selected"><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
+                                <li class=""><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
+                                <li class=""><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
+                                <li class=""><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="CustomEvent.js.html">CustomEvent.js</a></li>
-                                <li><a href="Event.js.html">Event.js</a></li>
-                                <li><a href="EventProvider.js.html">EventProvider.js</a></li>
+                                <li class=""><a href="CustomEvent.js.html">CustomEvent.js</a></li>
+                                <li class=""><a href="Dispatch.js.html">Dispatch.js</a></li>
+                                <li class=""><a href="Event.js.html">Event.js</a></li>
+                                <li class=""><a href="EventProvider.js.html">EventProvider.js</a></li>
                         </ul>
                     </div>
 
@@ -598,7 +613,7 @@ the execution scope.
                     <div class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
-                                <li><!--<code>void</code>-->
+                                <li><!--<code>boolean</code>-->
                                 <a href="#fire">fire</a>
                                 </li>
                                 <li><!--<code>void</code>-->

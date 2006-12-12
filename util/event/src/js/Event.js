@@ -295,7 +295,8 @@ if (!YAHOO.util.Event) {
              *                             the execution scope of the listener
              * @return {boolean} True if the action was successful or defered,
              *                        false if one or more of the elements 
-             *                        could not have the event bound to it.
+             *                        could not have the listener attached,
+             *                        or if the operation throws an exception.
              * @static
              */
             addListener: function(el, sType, fn, obj, override) {
@@ -412,7 +413,14 @@ if (!YAHOO.util.Event) {
                     legacyHandlers[legacyIndex].push(li);
 
                 } else {
-                    this._simpleAdd(el, sType, wrappedFn, false);
+                    try {
+                        this._simpleAdd(el, sType, wrappedFn, false);
+                    } catch(e) {
+                        // handle an error trying to attach an event.  If it fails
+                        // we need to clean up the cache
+                        this.removeListener(el, sType, fn);
+                        return false;
+                    }
                 }
 
                 return true;
@@ -569,7 +577,11 @@ if (!YAHOO.util.Event) {
                     }
 
                 } else {
-                    this._simpleRemove(el, sType, cacheItem[this.WFN], false);
+                    try {
+                        this._simpleRemove(el, sType, cacheItem[this.WFN], false);
+                    } catch(e) {
+                        return false;
+                    }
                 }
 
                 // removed the wrapped handler
@@ -933,7 +945,9 @@ if (!YAHOO.util.Event) {
 
                         if (el) {
                             // The element is available, but not necessarily ready
-
+                            // @todo verify IE7 compatibility
+                            // @todo should we test parentNode.nextSibling?
+                            // @todo re-evaluate global content ready
                             if ( !item.checkReady || 
                                     loadComplete || 
                                     el.nextSibling ||
@@ -948,7 +962,9 @@ if (!YAHOO.util.Event) {
                                     }
                                 }
                                 item.fn.call(scope, item.obj);
-                                delete onAvailStack[i];
+                                //delete onAvailStack[i];
+                                // null out instead of delete for Opera
+                                onAvailStack[i] = null;
                             }
                         } else {
                             notAvail.push(item);
@@ -959,6 +975,7 @@ if (!YAHOO.util.Event) {
                 retryCount = (notAvail.length === 0) ? 0 : retryCount - 1;
 
                 if (tryAgain) {
+                    onAvailStack = notAvail; // cleanse the array
                     this.startInterval();
                 } else {
                     clearInterval(this._interval);
@@ -1060,11 +1077,13 @@ if (!YAHOO.util.Event) {
                             }
                         }
                         l[EU.FN].call(scope, EU.getEvent(e), l[EU.OBJ] );
-                        delete unloadListeners[i];
+                        unloadListeners[i] = null;
                         l=null;
                         scope=null;
                     }
                 }
+
+                unloadListeners = null;
 
                 if (listeners && listeners.length > 0) {
                     j = listeners.length;
@@ -1084,10 +1103,15 @@ if (!YAHOO.util.Event) {
 
                 for (i=0,len=legacyEvents.length; i<len; ++i) {
                     // dereference the element
-                    delete legacyEvents[i][0];
+                    //delete legacyEvents[i][0];
+                    legacyEvents[i][0] = null;
+
                     // delete the array item
-                    delete legacyEvents[i];
+                    //delete legacyEvents[i];
+                    legacyEvents[i] = null;
                 }
+
+                legacyEvents = null;
 
                 EU._simpleRemove(window, "unload", EU._unload);
 
