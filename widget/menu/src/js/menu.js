@@ -1371,8 +1371,6 @@ _cancelShowDelay: function() {
 */
 _execShowDelay: function(p_oMenu) {
 
-    this._cancelShowDelay();
-
     var oRoot = this.getRoot();
 
     function showMenu() {
@@ -1408,14 +1406,30 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
         oItem = p_aArgs[1],
         oTarget = Event.getTarget(oEvent);
 
+
     if(
         !this._bHandledMouseOverEvent && 
         (oTarget == this.element || Dom.isAncestor(this.element, oTarget))
     ) {
-    
-        // MENU  MOUSEOVER LOGIC HERE
 
         this.clearActiveItem();
+
+
+        if(this.parent && this._nSubmenuHideDelayId) {
+
+            window.clearTimeout(this._nSubmenuHideDelayId);
+
+            this.parent.cfg.setProperty("selected", true);
+
+            var oParentMenu = this.parent.parent;
+
+            oParentMenu.activeItem = this.parent;
+
+            oParentMenu._bHandledMouseOutEvent = true;
+            oParentMenu._bHandledMouseOverEvent = false;
+
+        }
+
 
         this._bHandledMouseOverEvent = true;
         this._bHandledMouseOutEvent = false;
@@ -1428,6 +1442,50 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
         !oItem.cfg.getProperty("disabled") && 
         (oTarget == oItem.element || Dom.isAncestor(oItem.element, oTarget))
     ) {
+
+        if(this.cfg.getProperty("showdelay") > 0) {
+        
+            this._cancelShowDelay();
+        
+        }
+    
+    
+        var oActiveItem = this.activeItem;
+    
+        if(oActiveItem) {
+    
+            oActiveItem.cfg.setProperty("selected", false);
+    
+            var oActiveSubmenu = oActiveItem.cfg.getProperty("submenu");
+    
+            if(oActiveSubmenu) {
+
+                if(
+                    !(this instanceof YAHOO.widget.MenuBar) && 
+                    this.cfg.getProperty("showdelay") >= 100
+                ) {
+
+                    function hideSubmenu() {
+                    
+                        oActiveSubmenu.hide();
+        
+                    }
+                    
+                    oActiveSubmenu._nSubmenuHideDelayId =  
+    
+                            window.setTimeout(hideSubmenu, 100);
+
+                }
+                else {
+
+                    oActiveSubmenu.hide();
+
+                }
+    
+            }
+    
+        }
+
 
         var oItemCfg = oItem.cfg;
     
@@ -1485,6 +1543,7 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
         oRelatedTarget = Event.getRelatedTarget(oEvent),
         bMovingToSubmenu = false;
 
+
     if(oItem && !oItem.cfg.getProperty("disabled")) {
 
         var oItemCfg = oItem.cfg,
@@ -1514,42 +1573,37 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
             )
         ) {
 
+            if(
+                !oSubmenu || 
+                (oSubmenu && !oSubmenu.cfg.getProperty("visible"))
+            ) {
 
-            if(this.cfg.getProperty("showdelay") > 0) {
-            
-                this._cancelShowDelay();
-            
-            }
+                oItem.cfg.setProperty("selected", false);
 
-
-            if(!bMovingToSubmenu) {
-
-                oItemCfg.setProperty("selected", false);
-            
-            }
-
-
-            if(this.cfg.getProperty("autosubmenudisplay")) {
-            
-                if(oSubmenu) {
-            
-                    if(
-                        !(
-                            oRelatedTarget == oSubmenu.element || 
-                            YAHOO.util.Dom.isAncestor(
-                                oSubmenu.element, 
-                                oRelatedTarget
-                            )
-                        )
-                    ) {
-
-                        oSubmenu.hide();
-            
-                    }
-            
+                if(
+                    oSubmenu && 
+                    oSubmenu.cfg.getProperty("showdelay") && 
+                    !oSubmenu.cfg.getProperty("visible")
+                ) {
+                
+                     this._cancelShowDelay();
+                
                 }
-            
+
             }
+            else if(
+                !bMovingToSubmenu && 
+                oSubmenu && 
+                this.cfg.getProperty("hidedelay") == 0 &&
+                this instanceof YAHOO.widget.MenuBar
+            ) {
+
+                oItem.cfg.setProperty("selected", false);
+            
+                oSubmenu.hide();
+
+            }
+
 
             oItem.handledMouseOutEvent = true;
             oItem.handledMouseOverEvent = false;
@@ -1569,7 +1623,7 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
             || bMovingToSubmenu
         )
     ) {
-        
+
         this._bHandledMouseOutEvent = true;
         this._bHandledMouseOverEvent = false;
 
@@ -2236,7 +2290,25 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onBeforeHide: function(p_sType, p_aArgs, p_oMenu) {
 
-    this.clearActiveItem(true);
+    var oActiveItem = this.activeItem;
+
+    if(oActiveItem) {
+
+        var oConfig = oActiveItem.cfg;
+
+        oConfig.setProperty("selected", false);
+
+        var oSubmenu = oConfig.getProperty("submenu");
+
+        if(oSubmenu) {
+
+            oSubmenu.hide();
+
+        }
+
+        oActiveItem.blur();
+
+    }
 
 },
 
@@ -2287,11 +2359,6 @@ _onParentMenuConfigChange: function(p_sType, p_aArgs, p_oSubmenu) {
 */
 _onParentMenuRender: function(p_sType, p_aArgs, p_oSubmenu) {
 
-    /*
-        Set the "constraintoviewport" configuration 
-        property to match the parent Menu
-    */ 
-
     var oParentMenu = p_oSubmenu.parent.parent,
 
         oConfig = {
@@ -2305,27 +2372,15 @@ _onParentMenuRender: function(p_sType, p_aArgs, p_oSubmenu) {
                 oParentMenu.cfg.getProperty("clicktohide"),
                 
             effect:
-                oParentMenu.cfg.getProperty("effect")                
+                oParentMenu.cfg.getProperty("effect"),
 
-        },
+            showdelay:
+                oParentMenu.cfg.getProperty("showdelay"),
+            
+            hidedelay:
+                oParentMenu.cfg.getProperty("hidedelay")
 
-        nShowDelay = oParentMenu.cfg.getProperty("showdelay"),
-
-        nHideDelay = oParentMenu.cfg.getProperty("hidedelay");
-
-
-    if(nShowDelay > 0) {
-
-        oConfig.showdelay = nShowDelay;
-
-    }
-
-
-    if(nHideDelay > 0) {
-
-        oConfig.hidedelay = nHideDelay;
-
-    }
+        };
 
 
     /*
@@ -2383,8 +2438,6 @@ _onSubmenuBeforeShow: function(p_sType, p_aArgs, p_oSubmenu) {
         "context", 
         [oParent.element, aAlignment[0], aAlignment[1]]
     );
-
-    oParent.submenuIndicator.alt = oParent.EXPANDED_SUBMENU_INDICATOR_ALT_TEXT;
     
 },
 
@@ -3448,7 +3501,7 @@ initDefaultConfig: function() {
 	oConfig.addProperty(
 	   "showdelay", 
 	   { 
-	       value: 0, 
+	       value: 100, 
 	       validator: oConfig.checkNumber
        } 
     );
