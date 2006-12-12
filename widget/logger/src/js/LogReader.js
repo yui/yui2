@@ -51,20 +51,25 @@ YAHOO.widget.LogReader = function(elContainer, oConfigs) {
         if(this.width) {
             containerStyle.width = this.width;
         }
-        if(this.left) {
-            containerStyle.left = this.left;
-        }
         if(this.right) {
             containerStyle.right = this.right;
-        }
-        if(this.bottom) {
-            containerStyle.bottom = this.bottom;
         }
         if(this.top) {
             containerStyle.top = this.top;
         }
-        if(this.fontSize) {
+         if(this.left) {
+            containerStyle.left = this.left;
+            containerStyle.right = "auto";
+        }
+        if(this.bottom) {
+            containerStyle.bottom = this.bottom;
+            containerStyle.top = "auto";
+        }
+       if(this.fontSize) {
             containerStyle.fontSize = this.fontSize;
+        }
+        if(window.opera) {
+            document.body.style += '';
         }
     }
 
