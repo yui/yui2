@@ -1268,7 +1268,7 @@ YAHOO.widget.AutoComplete.prototype._textMatchesOption = function() {
  */
 YAHOO.widget.AutoComplete.prototype._typeAhead = function(oItem, sQuery) {
     // Don't update if turned off
-    if (!this.typeAhead) {
+    if (!this.typeAhead || (this._nKeyCode == 8)) {
         return;
     }
 
