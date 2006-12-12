@@ -63,6 +63,18 @@
             
             }
 
+            p#clicknote {
+
+                margin-top:1em;
+
+            }
+
+            p#clicknote em {
+            
+                font-weight:bold;
+            
+            }
+
         </style>
 
         <?php
@@ -164,7 +176,32 @@
                 document.body.appendChild(oLogs);
 
                 var oLogReader = new YAHOO.widget.LogReader("logs");
+
+
+                function onMenuToggleMouseDown(p_oEvent) {
+
+                    YAHOO.util.Event.stopPropagation(p_oEvent);
+                                    
+                    oMenu.show();
                 
+                }
+
+                YAHOO.util.Event.addListener("menutoggle", "mousedown", onMenuToggleMouseDown);
+
+
+                /*
+                     Add a "mousedown" event handler to prevent the menu from 
+                     hiding when the user mouses down on the logger.
+                */
+
+                function onLogsMouseDown(p_oEvent) {
+
+                    YAHOO.util.Event.stopPropagation(p_oEvent);
+
+                }
+
+                YAHOO.util.Event.addListener("logs", "mousedown", onLogsMouseDown);
+
             }
 
 
@@ -177,6 +214,8 @@
 
         <h1><?php writeTitle(11); ?> <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to set MenuItem configuration properties at runtime and listen for the changes through the "configChangedEvent."</p>
+        <p id="clicknote"><em>Note:</em> By default clicking outside of a menu will hide it.  Additionally, menu items without a submenu or a URL to navigate will hide their parent menu when clicked.  Click the "Show Menu" button below to make the menu visible if it is hidden.</p>
+        <button id="menutoggle">Show Menu</button>
 
     </body>
 </html>

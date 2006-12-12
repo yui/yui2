@@ -16,6 +16,18 @@
             
             h1 { font-weight:bold; }            
 
+            p#clicknote {
+
+                margin-top:1em;
+
+            }
+
+            p#clicknote em {
+            
+                font-weight:bold;
+            
+            }
+
         </style>
 
         <?php require_once("scripts.inc"); ?>
@@ -65,6 +77,17 @@
     
                 oMenu.show();
 
+
+                function onMenuToggleMouseDown(p_oEvent) {
+
+                    YAHOO.util.Event.stopPropagation(p_oEvent);
+                                    
+                    oMenu.show();
+                
+                }
+
+                YAHOO.util.Event.addListener("menutoggle", "mousedown", onMenuToggleMouseDown);
+
             }
 
 
@@ -77,6 +100,8 @@
 
         <h1><?php writeTitle(5); ?> <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to title groups of MenuItem instances.  The Menu API also supports building a menu like this <a href="example05.html">using existing markup</a>.</p>
+        <p id="clicknote"><em>Note:</em> By default clicking outside of a menu will hide it.  Additionally, menu items without a submenu or a URL to navigate will hide their parent menu when clicked.  Click the "Show Menu" button below to make the menu visible if it is hidden.</p>
+        <button id="menutoggle">Show Menu</button>
 
     </body>
 </html>
