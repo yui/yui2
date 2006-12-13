@@ -611,9 +611,18 @@ http://developer.yahoo.net/yui/license.txt
          */
         getElementsBy: function(method, tag, root) {
             tag = tag || '*';
-            root = Y.Dom.get(root) || document;
             
             var nodes = [];
+            
+            if (root) {
+                root = Y.Dom.get(root);
+                if (!root) { // if no root node, then no children
+                    return nodes;
+                }
+            } else {
+                root = document;
+            }
+            
             var elements = root.getElementsByTagName(tag);
             
             if ( !elements.length && (tag == '*' && root.all) ) {
