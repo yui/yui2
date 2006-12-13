@@ -1154,8 +1154,12 @@ YAHOO.widget.MenuItem.prototype = {
 
                 oEM = this._getFirstElement(oAnchor, "EM");
 
-                oAnchor.removeChild(oEM);
-                oAnchor.appendChild(oText);
+                if(oEM) {
+
+                    oAnchor.removeChild(oEM);
+                    oAnchor.appendChild(oText);
+
+                }
 
             }
 
@@ -1202,8 +1206,12 @@ YAHOO.widget.MenuItem.prototype = {
 
                 oStrong = this._getFirstElement(oAnchor, "STRONG");
 
-                oAnchor.removeChild(oStrong);
-                oAnchor.appendChild(oText);
+                if(oStrong) {
+
+                    oAnchor.removeChild(oStrong);
+                    oAnchor.appendChild(oText);
+
+                }
 
             }
 
@@ -1484,15 +1492,14 @@ YAHOO.widget.MenuItem.prototype = {
                 !oSubmenu.nodeType
             ) {
 
-                var sSubmenuId = oSubmenu.id,
-                    oSubmenuConfig = oSubmenu;
-
-                delete oSubmenu.id;
-
-                oSubmenuConfig.lazyload = bLazyLoad;
-                oSubmenuConfig.parent = this;
-
-                oMenu = new this.SUBMENU_TYPE(sSubmenuId, oSubmenuConfig);
+                oMenu = new this.SUBMENU_TYPE(
+                                oSubmenu.id, 
+                                { 
+                                    itemdata: oSubmenu.itemdata, 
+                                    lazyload: bLazyLoad, 
+                                    parent:this 
+                                }
+                            );
 
 
                 // Set the value of the property to the Menu instance
@@ -2031,6 +2038,18 @@ YAHOO.widget.MenuItem.prototype = {
         var oEl = this.element;
 
         if(oEl) {
+
+
+            // If the item has a submenu, destroy it first
+
+            var oSubmenu = this.cfg.getProperty("submenu");
+
+            if(oSubmenu) {
+            
+                oSubmenu.destroy();
+            
+            }
+
 
             // Remove CustomEvent listeners
     
