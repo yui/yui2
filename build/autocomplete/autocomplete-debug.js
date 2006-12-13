@@ -33,12 +33,12 @@ version: 0.12.0
  *
  * @class AutoComplete
  * @constructor
- * @param elInput {HTMLElement} DOM element reference of an input field
- * @param elInput {String} String ID of an input field
- * @param elContainer {HTMLElement} DOM element reference of an existing DIV
- * @param elContainer {String} String ID of an existing DIV
- * @param oDataSource {Object} Instance of YAHOO.widget.DataSource for query/results
- * @param oConfigs {Object} (optional) Object literal of configuration params
+ * @param elInput {HTMLElement} DOM element reference of an input field.
+ * @param elInput {String} String ID of an input field.
+ * @param elContainer {HTMLElement} DOM element reference of an existing DIV.
+ * @param elContainer {String} String ID of an existing DIV.
+ * @param oDataSource {Object} Instance of YAHOO.widget.DataSource for query/results.
+ * @param oConfigs {Object} (optional) Object literal of configuration params.
  */
 YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
     if(elInput && elContainer && oDataSource) {
@@ -1275,7 +1275,7 @@ YAHOO.widget.AutoComplete.prototype._textMatchesOption = function() {
  */
 YAHOO.widget.AutoComplete.prototype._typeAhead = function(oItem, sQuery) {
     // Don't update if turned off
-    if (!this.typeAhead) {
+    if (!this.typeAhead || (this._nKeyCode == 8)) {
         return;
     }
 
@@ -2913,7 +2913,7 @@ YAHOO.widget.DS_XHR.prototype._oConn = null;
  * @class DS_JSFunction
  * @constructor
  * @extends YAHOO.widget.DataSource
- * @param oFunction {String} In-memory Javascript function that returns query results as an array of objects.
+ * @param oFunction {HTMLFunction} In-memory Javascript function that returns query results as an array of objects.
  * @param oConfigs {Object} (optional) Object literal of config params.
  */
 YAHOO.widget.DS_JSFunction = function(oFunction, oConfigs) {
