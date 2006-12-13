@@ -782,7 +782,7 @@ YAHOO.util.Element.prototype = {
     set: function(key, value, silent) {
         var el = this.get('element');
         if (!el) {
-            this._queue[key] = ['set', arguments];
+            this._queue[this._queue.length] = ['set', arguments];
             return false;
         }
         
@@ -928,7 +928,8 @@ var _registerHTMLAttr = function(self, key, map) {
 
 
 YAHOO.augment(YAHOO.util.Element, AttributeProvider);
-})();(function() {
+})();
+(function() {
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
         Lang = YAHOO.util.Lang;

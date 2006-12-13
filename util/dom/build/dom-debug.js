@@ -328,14 +328,17 @@ http://developer.yahoo.net/yui/license.txt
         
                 if (pos[0] !== null) { el.style.left = pos[0] - pageXY[0] + delta[0] + 'px'; }
                 if (pos[1] !== null) { el.style.top = pos[1] - pageXY[1] + delta[1] + 'px'; }
+              
+                if (!noRetry) {
+                    var newXY = this.getXY(el);
+
+                    // if retry is true, try one more time if we miss 
+                   if ( (pos[0] !== null && newXY[0] != pos[0]) || 
+                        (pos[1] !== null && newXY[1] != pos[1]) ) {
+                       this.setXY(el, pos, true);
+                   }
+                }        
         
-                var newXY = this.getXY(el);
-        
-                // if retry is true, try one more time if we miss 
-                if (!noRetry && (newXY[0] != pos[0] || newXY[1] != pos[1]) ) {
-                    this.setXY(el, pos, true);
-                }
-                
                 logger.log('setXY setting position to ' + pos, 'info', 'Dom');
             };
             
@@ -608,9 +611,18 @@ http://developer.yahoo.net/yui/license.txt
          */
         getElementsBy: function(method, tag, root) {
             tag = tag || '*';
-            root = Y.Dom.get(root) || document;
             
             var nodes = [];
+            
+            if (root) {
+                root = Y.Dom.get(root);
+                if (!root) { // if no root node, then no children
+                    return nodes;
+                }
+            } else {
+                root = document;
+            }
+            
             var elements = root.getElementsByTagName(tag);
             
             if ( !elements.length && (tag == '*' && root.all) ) {
