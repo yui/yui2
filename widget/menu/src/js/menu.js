@@ -499,6 +499,12 @@ init: function(p_oElement, p_oConfig) {
         this.clickEvent.subscribe(this._onClick, this, true);
         this.keyDownEvent.subscribe(this._onKeyDown, this, true);
 
+        YAHOO.widget.Module.textResizeEvent.subscribe(
+            this._onTextResize, 
+            this, 
+            true
+        );
+
 
         if(p_oConfig) {
     
@@ -1979,6 +1985,37 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
 },
 
 
+/**
+* @method _onTextResize
+* @description "textresize" event handler for the menu.
+* @protected
+* @param {String} p_sType String representing the name of the event that 
+* was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
+* fired the event.
+*/
+_onTextResize: function(p_sType, p_aArgs, p_oMenu) {
+
+    if(this.browser == "gecko" && !this._handleResize) {
+
+        this._handleResize = true;
+        return;
+    
+    }
+
+
+    var oConfig = this.cfg;
+
+    if(oConfig.getProperty("position") == "dynamic") {
+
+        oConfig.setProperty("width", (this._getOffsetWidth() + "px"));
+
+    }
+
+},
+
+
 
 // Private methods
 
@@ -2916,31 +2953,6 @@ configContainer: function(p_sType, p_aArgs, p_oMenu) {
 
 
 // Public methods
-
-
-/**
-* Event handler called when the resize monitor element's "resize" evet is fired.
-*/
-onDomResize: function(e, obj) {
-
-    if(!this._handleResize) {
-
-        this._handleResize = true;
-        return;
-    
-    }
-
-    var oConfig = this.cfg;
-
-    if(oConfig.getProperty("position") == "dynamic") {
-
-        oConfig.setProperty("width", (this._getOffsetWidth() + "px"));
-
-    }
-
-    YAHOO.widget.Menu.superclass.onDomResize.call(this, e, obj);
-
-},
 
 
 /**
