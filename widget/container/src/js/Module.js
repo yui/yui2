@@ -698,6 +698,8 @@ YAHOO.widget.Module.prototype = {
 		this.body = null;
 		this.footer = null;
 
+		YAHOO.widget.Module.textResizeEvent.unsubscribe(this.onDomResize, this);
+
 		this.destroyEvent.fire();
 	},
 

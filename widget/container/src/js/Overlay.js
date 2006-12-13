@@ -839,6 +839,9 @@ YAHOO.widget.Overlay.prototype.destroy = function() {
 	
 	this.iframe = null;
 
+	YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.doCenterOnDOMEvent, this);
+	YAHOO.widget.Overlay.windowScrollEvent.unsubscribe(this.doCenterOnDOMEvent, this);
+
 	YAHOO.widget.Overlay.superclass.destroy.call(this);  
 };
 
