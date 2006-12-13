@@ -1,9 +1,9 @@
 /* default space between tabs */
-.yui-navset-top .yui-nav li, .yui-navset-bottom .yui-nav li {
+.yui-navset .yui-nav li {
     margin-right:0.5em; /* horizontal tabs */
 }
 .yui-navset-left .yui-nav li, .yui-navset-right .yui-nav li {
-    margin-bottom:0.5em; /* vertical tabs */
+    margin:0 0 0.5em; /* vertical tabs */
 }
 
 /* default width for side tabs */
@@ -27,13 +27,17 @@
 
 .yui-navset .yui-content { zoom:1; }
 
-.yui-navset-top .yui-nav li, .yui-navset-bottom .yui-nav li {
+.yui-navset .yui-nav li {
     display:inline-block;
     display:-moz-inline-stack;
     *display:inline; /* IE */
     vertical-align:bottom; /* safari: for overlap */
     cursor:pointer; /* gecko: due to -moz-inline-stack on anchor */
     zoom:1; /* IE: kill space between horizontal tabs */
+}
+
+.yui-navset-left .yui-nav li, .yui-navset-right .yui-nav li {
+    display:block;
 }
 
 .yui-navset .yui-nav a {
@@ -44,12 +48,13 @@
 
 .yui-navset .yui-nav li a {
     display:block;
+    display:inline-block;
+    vertical-align:bottom; /* safari: for overlap */
     zoom:1;
 }
 
-.yui-navset-top .yui-nav li a, .yui-navset-bottom .yui-nav li a {
-    display:inline-block;
-    vertical-align:bottom; /* safari: for overlap */
+.yui-navset-left .yui-nav li a, .yui-navset-right .yui-nav li a {
+    display:block;
 }
 
 .yui-navset-bottom .yui-nav li a {
