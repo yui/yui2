@@ -121,6 +121,17 @@ _nShowDelayId: null,
 
 
 /** 
+* @property _nSubmenuHideDelayId
+* @description Number representing the time-out setting used to cancel the 
+* hiding of a submenu.
+* @default null
+* @private
+* @type Number
+*/
+_nSubmenuHideDelayId: null,
+
+
+/** 
 * @property _hideDelayEventHandlersAssigned
 * @description Boolean indicating if the "mouseover" and "mouseout" event 
 * handlers used for hiding the menu via a call to "window.setTimeout" have 
@@ -779,13 +790,21 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
     }
     else if(typeof p_oItem == "object" && p_oItem.text) {
 
-        var sText = p_oItem.text;
-
-        delete p_oItem.text;
-
-        p_oItem.parent = this;
-
-        oItem = new this.ITEM_TYPE(sText, p_oItem);
+        oItem = new this.ITEM_TYPE(
+                        p_oItem.text, 
+                        {
+                            parent: this,
+                            helptext: p_oItem.helptext,
+                            url: p_oItem.url,
+                            target: p_oItem.target,
+                            emphasis: p_oItem.emphasis,
+                            strongemphasis: p_oItem.strongemphasis,
+                            checked: p_oItem.checked,
+                            disabled: p_oItem.disabled,
+                            selected: p_oItem.selected,
+                            submenu: p_oItem.submenu
+                        }
+                    );
 
     }
 
@@ -1442,7 +1461,16 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
         (oTarget == oItem.element || Dom.isAncestor(oItem.element, oTarget))
     ) {
 
-        if(this.cfg.getProperty("showdelay") > 0) {
+        var nShowDelay = this.cfg.getProperty("showdelay"),
+            bShowDelay = (nShowDelay > 0),
+            nMenuX = this.cfg.getProperty("x") || Dom.getX(this.element),
+            nPageX = Event.getPageX(oEvent);
+        
+        oItem.targetX = 
+            ((((this.element.offsetWidth + nMenuX) - nPageX) * 0.15) + nPageX);
+
+
+        if(bShowDelay) {
         
             this._cancelShowDelay();
         
@@ -1459,9 +1487,13 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
     
             if(oActiveSubmenu) {
 
+                var nSubmenuHideDelay = 
+                        this.cfg.getProperty("submenuhidedelay");
+
                 if(
+                    (nPageX >= oActiveItem.targetX) && 
                     !(this instanceof YAHOO.widget.MenuBar) && 
-                    this.cfg.getProperty("showdelay") >= 100
+                    nShowDelay >= nSubmenuHideDelay
                 ) {
 
                     function hideSubmenu() {
@@ -1472,7 +1504,7 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
                     
                     oActiveSubmenu._nSubmenuHideDelayId =  
     
-                            window.setTimeout(hideSubmenu, 100);
+                            window.setTimeout(hideSubmenu, nSubmenuHideDelay);
 
                 }
                 else {
@@ -1502,7 +1534,7 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
         
             if(oSubmenu) {
         
-                if(this.cfg.getProperty("showdelay") > 0) {
+                if(bShowDelay) {
 
                     this._execShowDelay(oSubmenu);
         
@@ -2332,6 +2364,7 @@ _onParentMenuConfigChange: function(p_sType, p_aArgs, p_oSubmenu) {
         case "iframe":
         case "constraintoviewport":
         case "hidedelay":
+        case "submenuhidedelay":
         case "showdelay":
         case "clicktohide":
         case "effect":
@@ -2377,7 +2410,10 @@ _onParentMenuRender: function(p_sType, p_aArgs, p_oSubmenu) {
                 oParentMenu.cfg.getProperty("showdelay"),
             
             hidedelay:
-                oParentMenu.cfg.getProperty("hidedelay")
+                oParentMenu.cfg.getProperty("hidedelay"),
+
+            submenuhidedelay:
+                oParentMenu.cfg.getProperty("submenuhidedelay")
 
         };
 
@@ -3240,7 +3276,8 @@ destroy: function() {
     this.keyPressEvent.unsubscribeAll();
     this.keyDownEvent.unsubscribeAll();
     this.keyUpEvent.unsubscribeAll();
-
+    this.itemAddedEvent.unsubscribeAll();
+    this.itemRemovedEvent.unsubscribeAll();
 
     var nItemGroups = this._aItemGroups.length,
         nItems,
@@ -3494,13 +3531,31 @@ initDefaultConfig: function() {
     * @description Number indicating the time (in milliseconds) that should 
     * expire before a submenu is made visible when the user mouses over 
     * the menu's items.
-    * @default 0
+    * @default 250
     * @type Number
     */
 	oConfig.addProperty(
 	   "showdelay", 
 	   { 
-	       value: 100, 
+	       value: 250, 
+	       validator: oConfig.checkNumber
+       } 
+    );
+
+
+    /**
+    * @config submenuhidedelay
+    * @description Number indicating the time (in milliseconds) that should 
+    * expire before a submenu is hidden when the user mouses out of a menu item 
+    * heading in the direction of a submenu.  The value must be greater than or 
+    * equal to the value specified for the "showdelay" configuration property.
+    * @default 250
+    * @type Number
+    */
+	oConfig.addProperty(
+	   "submenuhidedelay", 
+	   { 
+	       value: 250, 
 	       validator: oConfig.checkNumber
        } 
     );
