@@ -2,7 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.12
+Version 0.12.1
 */
 
 /**
@@ -63,18 +63,22 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 		var draggable = this.cfg.getProperty("draggable");
 		if (draggable) {
 			if (! this.header) {
-				this.setHeader("&nbsp;");
+				this.setHeader("&#160;");
 			}
 		}
 	}, this, true);
 
 	var me = this;
 
+	var doBlur = function() {
+		this.blur();
+	};
+
 	this.showMaskEvent.subscribe(function() {
 		var checkFocusable = function(el) {
-			if (el.tagName == "A" || el.tagName == "BUTTON" || el.tagName == "SELECT" || el.tagName == "INPUT" || el.tagName == "TEXTAREA" || el.tagName == "FORM") {
+			if ((el.tagName == "A" || el.tagName == "BUTTON" || el.tagName == "SELECT" || el.tagName == "INPUT" || el.tagName == "TEXTAREA" || el.tagName == "FORM") && el.type != "hidden") {
 				if (! YAHOO.util.Dom.isAncestor(me.element, el)) {
-					YAHOO.util.Event.addListener(el, "focus", el.blur);
+					YAHOO.util.Event.addListener(el, "focus", doBlur, el, true);
 					return true;
 				}
 			} else {
@@ -88,7 +92,7 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 	this.hideMaskEvent.subscribe(function() {
 		for (var i=0;i<this.focusableElements.length;i++) {
 			var el2 = this.focusableElements[i];
-			YAHOO.util.Event.removeListener(el2, "focus", el2.blur);
+			YAHOO.util.Event.removeListener(el2, "focus", doBlur);
 		}
 	}, this, true);
 
@@ -201,7 +205,7 @@ YAHOO.widget.Panel.prototype.configClose = function(type, args, obj) {
 				YAHOO.util.Dom.addClass(this.close, "nonsecure");
 			}
 
-			this.close.innerHTML = "&nbsp;";
+			this.close.innerHTML = "&#160;";
 			this.innerElement.appendChild(this.close);
 			YAHOO.util.Event.addListener(this.close, "click", doHide, this);	
 		} else {
@@ -256,7 +260,7 @@ YAHOO.widget.Panel.prototype.configUnderlay = function(type, args, obj) {
 			if (! this.underlay) { // create if not already in DOM
 				this.underlay = document.createElement("DIV");
 				this.underlay.className = "underlay";
-				this.underlay.innerHTML = "&nbsp;";
+				this.underlay.innerHTML = "&#160;";
 				this.element.appendChild(this.underlay);
 			} 
 
@@ -549,7 +553,7 @@ YAHOO.widget.Panel.prototype.buildMask = function() {
 		this.mask = document.createElement("DIV");
 		this.mask.id = this.id + "_mask";
 		this.mask.className = "mask";
-		this.mask.innerHTML = "&nbsp;";
+		this.mask.innerHTML = "&#160;";
 
 		var maskClick = function(e, obj) {
 			YAHOO.util.Event.stopEvent(e);

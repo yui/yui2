@@ -2,7 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.12
+Version 0.12.1
 */
 
 /**
@@ -89,6 +89,13 @@ YAHOO.widget.Module.CSS_FOOTER = "ft";
 * @type String
 */
 YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL = "javascript:false;";
+
+/**
+* Singleton CustomEvent fired when the font size is changed in the browser.
+* Opera's "zoom" functionality currently does not support text size detection.
+* @event YAHOO.widget.Module.textResizeEvent
+*/	
+YAHOO.widget.Module.textResizeEvent = new YAHOO.util.CustomEvent("textResize");
 
 YAHOO.widget.Module.prototype = {
 	/**
@@ -447,15 +454,25 @@ YAHOO.widget.Module.prototype = {
                     doc.close();
                 
                 }
-    
             }
     
+			var fireTextResize = function() {
+				YAHOO.widget.Module.textResizeEvent.fire();
+			};
+
             if(resizeMonitor && resizeMonitor.contentWindow) {
-    
                 this.resizeMonitor = resizeMonitor;
-    
-                YAHOO.util.Event.addListener(this.resizeMonitor.contentWindow, "resize", this.onDomResize, this, true);
-    
+				
+				YAHOO.widget.Module.textResizeEvent.subscribe(this.onDomResize, this, true);
+				
+				if (! YAHOO.widget.Module.textResizeInitialized) {
+					if (! YAHOO.util.Event.addListener(this.resizeMonitor.contentWindow, "resize", fireTextResize)) {
+						// This will fail in IE if document.domain has changed, so we must change the listener to
+						// use the resizeMonitor element instead
+						YAHOO.util.Event.addListener(this.resizeMonitor, "resize", fireTextResize);
+					}
+					YAHOO.widget.Module.textResizeInitialized = true;
+				}
             }
         
         }
@@ -666,8 +683,11 @@ YAHOO.widget.Module.prototype = {
 	* @method destroy
 	*/
 	destroy : function() {
+		var parent;
+
 		if (this.element) {
-			var parent = this.element.parentNode;
+			YAHOO.util.Event.purgeElement(this.element, true);
+			parent = this.element.parentNode;
 		}
 		if (parent) {
 			parent.removeChild(this.element);

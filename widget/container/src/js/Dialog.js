@@ -2,7 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.12
+Version 0.12.1
 */
 
 /**
@@ -71,7 +71,7 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 	* @type String
 	* @default async
 	*/
-	this.cfg.addProperty("postmethod", { value:"async", validator:function(val) { 
+	this.cfg.addProperty("postmethod", { value:"async", handler:this.configPostMethod, validator:function(val) { 
 													if (val != "form" && val != "async" && val != "none" && val != "manual") {
 														return false;
 													} else {
@@ -152,7 +152,7 @@ YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
 		this.cfg.applyConfig(userConfig, true);
 	}
 
-	this.renderEvent.subscribe(this.registerForm, this, true);
+	//this.renderEvent.subscribe(this.registerForm, this, true);
 
 	this.showEvent.subscribe(this.focusFirst, this, true);
 	this.beforeHideEvent.subscribe(this.blurButtons, this, true);
@@ -406,6 +406,24 @@ YAHOO.widget.Dialog.prototype.focusLastButton = function() {
 			html.focus();
 		}
 	}
+};
+
+/**
+* The default event handler for the "postmethod" configuration property
+* @method configPostMethod
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+*/
+YAHOO.widget.Dialog.prototype.configPostMethod = function(type, args, obj) {
+	var postmethod = args[0];
+
+	this.registerForm();
+	YAHOO.util.Event.addListener(this.form, "submit", function(e) {
+														YAHOO.util.Event.stopEvent(e);
+														this.submit();
+														this.form.blur();
+													  }, this, true); 
 };
 
 // END BUILT-IN PROPERTY EVENT HANDLERS //
