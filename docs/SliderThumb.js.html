@@ -42,7 +42,8 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SliderThumb</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">sGroup</span><span class="o">,</span> <span class="nx">iLeft</span><span class="o">,</span> <span class="nx">iRight</span><span class="o">,</span> <span class="nx">iUp</span><span class="o">,</span> <span class="nx">iDown</span><span class="o">,</span> <span class="nx">iTickSize</span><span class="o">)</span> <span class="o">{</span>
 
     <span class="k">if</span> <span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">init</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">sGroup</span><span class="o">);</span>
+        <span class="c">//this.init(id, sGroup);</span>
+<span class="c"></span>        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SliderThumb</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">id</span><span class="o">,</span> <span class="nx">sGroup</span><span class="o">);</span>
 
         <span class="c">/**</span>
 <span class="c">         * The id of the thumbs parent HTML element (the slider background </span>
@@ -128,18 +129,54 @@
 <span class="c">     */</span>
     <span class="nx">_graduated</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
 
+
     <span class="c">/**</span>
 <span class="c">     * Returns the difference between the location of the thumb and its parent.</span>
 <span class="c">     * @method getOffsetFromParent</span>
 <span class="c">     * @param {[int, int]} parentPos Optionally accepts the position of the parent</span>
 <span class="c">     * @type [int, int]</span>
 <span class="c">     */</span>
-    <span class="nx">getOffsetFromParent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">parentPos</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">getOffsetFromParent0</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">parentPos</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">myPos</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">());</span>
         <span class="k">var</span> <span class="nx">ppos</span>  <span class="o">=</span> <span class="nx">parentPos</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">parentElId</span><span class="o">);</span>
 
         <span class="k">return</span> <span class="o">[</span> <span class="o">(</span><span class="nx">myPos</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">-</span> <span class="nx">ppos</span><span class="o">[</span><span class="m">0</span><span class="o">]),</span> <span class="o">(</span><span class="nx">myPos</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">-</span> <span class="nx">ppos</span><span class="o">[</span><span class="m">1</span><span class="o">])</span> <span class="o">];</span>
     <span class="o">},</span>
+
+    <span class="nx">getOffsetFromParent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">parentPos</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">();</span>
+
+        <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">deltaOffset</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">myPos</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">ppos</span>  <span class="o">=</span> <span class="nx">parentPos</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">parentElId</span><span class="o">);</span>
+
+            <span class="k">var</span> <span class="nx">newOffset</span> <span class="o">=</span> <span class="o">[</span> <span class="o">(</span><span class="nx">myPos</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">-</span> <span class="nx">ppos</span><span class="o">[</span><span class="m">0</span><span class="o">]),</span> <span class="o">(</span><span class="nx">myPos</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">-</span> <span class="nx">ppos</span><span class="o">[</span><span class="m">1</span><span class="o">])</span> <span class="o">];</span>
+
+            <span class="k">var</span> <span class="nx">l</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;left&quot;</span><span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
+            <span class="k">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;top&quot;</span> <span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
+
+            <span class="k">var</span> <span class="nx">deltaX</span> <span class="o">=</span> <span class="nx">l</span> <span class="o">-</span> <span class="nx">newOffset</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+            <span class="k">var</span> <span class="nx">deltaY</span> <span class="o">=</span> <span class="nx">t</span> <span class="o">-</span> <span class="nx">newOffset</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">deltaX</span><span class="o">)</span> <span class="o">||</span> <span class="nb">isNaN</span><span class="o">(</span><span class="nx">deltaY</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;element does not have a position style def yet&quot;</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">deltaOffset</span> <span class="o">=</span> <span class="o">[</span><span class="nx">deltaX</span><span class="o">,</span> <span class="nx">deltaY</span><span class="o">];</span>
+            <span class="o">}</span>
+
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">newLeft</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;left&quot;</span><span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
+            <span class="k">var</span> <span class="nx">newTop</span>  <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;top&quot;</span> <span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
+
+            <span class="nx">newOffset</span>  <span class="o">=</span> <span class="o">[</span><span class="nx">newLeft</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">deltaOffset</span><span class="o">[</span><span class="m">0</span><span class="o">],</span> <span class="nx">newTop</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">deltaOffset</span><span class="o">[</span><span class="m">1</span><span class="o">]];</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="nx">newOffset</span><span class="o">;</span>
+
+        <span class="c">//return [ (myPos[0] - ppos[0]), (myPos[1] - ppos[1]) ];</span>
+<span class="c"></span>    <span class="o">},</span>
 
     <span class="c">/**</span>
 <span class="c">     * Set up the slider, must be called in the constructor of all subclasses</span>
@@ -151,6 +188,13 @@
 <span class="c">     * @param {int} iTickSize the width of the tick interval.</span>
 <span class="c">     */</span>
     <span class="nx">initSlider</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">iLeft</span><span class="o">,</span> <span class="nx">iRight</span><span class="o">,</span> <span class="nx">iUp</span><span class="o">,</span> <span class="nx">iDown</span><span class="o">,</span> <span class="nx">iTickSize</span><span class="o">)</span> <span class="o">{</span>
+
+
+        <span class="c">//document these.  new for 0.12.1</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">initLeft</span> <span class="o">=</span> <span class="nx">iLeft</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">initRight</span> <span class="o">=</span> <span class="nx">iRight</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">initUp</span> <span class="o">=</span> <span class="nx">iUp</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">initDown</span> <span class="o">=</span> <span class="nx">iDown</span><span class="o">;</span>
 
         <span class="k">this</span><span class="o">.</span><span class="nx">setXConstraint</span><span class="o">(</span><span class="nx">iLeft</span><span class="o">,</span> <span class="nx">iRight</span><span class="o">,</span> <span class="nx">iTickSize</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">setYConstraint</span><span class="o">(</span><span class="nx">iUp</span><span class="o">,</span> <span class="nx">iDown</span><span class="o">,</span> <span class="nx">iTickSize</span><span class="o">);</span>
@@ -171,8 +215,10 @@
 <span class="c">     */</span>
     <span class="nx">clearTicks</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
         <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SliderThumb</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">clearTicks</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">tickSize</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">_graduated</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
     <span class="o">},</span>
+
 
     <span class="c">/**</span>
 <span class="c">     * Gets the current offset from the element&#39;s start position in</span>
@@ -184,8 +230,8 @@
     <span class="nx">getValue</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">available</span><span class="o">)</span> <span class="o">{</span> <span class="k">return</span> <span class="m">0</span><span class="o">;</span> <span class="o">}</span>
         <span class="k">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_isHoriz</span><span class="o">)</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">getXValue</span><span class="o">()</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">getYValue</span><span class="o">();</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;getVal: &quot;</span> <span class="o">+</span> <span class="nx">val</span><span class="o">);</span>
-        <span class="k">return</span> <span class="nx">val</span><span class="o">;</span>
+        <span class="c">//this.logger.log(&quot;getVal: &quot; + val);</span>
+<span class="c"></span>        <span class="k">return</span> <span class="nx">val</span><span class="o">;</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -247,36 +293,50 @@
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_animation.html">animation</a></li>
-                                <li><a href="module_autocomplete.html">autocomplete</a></li>
-                                <li><a href="module_calendar.html">calendar</a></li>
-                                <li><a href="module_connection.html">connection</a></li>
-                                <li><a href="module_container.html">container</a></li>
-                                <li><a href="module_dom.html">dom</a></li>
-                                <li><a href="module_dragdrop.html">dragdrop</a></li>
-                                <li><a href="module_event.html">event</a></li>
-                                <li><a href="module_logger.html">logger</a></li>
-                                <li><a href="module_menu.html">menu</a></li>
-                                <li><a href="module_slider.html">slider</a></li>
-                                <li><a href="module_tabview.html">tabview</a></li>
-                                <li><a href="module_treeview.html">treeview</a></li>
-                                <li><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_Connection.html">Connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class="selected"><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.widget.Slider.html">YAHOO.widget.Slider</a></li>
-                                <li><a href="YAHOO.widget.SliderThumb.html">YAHOO.widget.SliderThumb</a></li>
+                                <li class=""><a href="YAHOO.widget.Slider.html">YAHOO.widget.Slider</a></li>
+                                <li class=""><a href="YAHOO.widget.SliderThumb.html">YAHOO.widget.SliderThumb</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="Slider.js.html">Slider.js</a></li>
-                                <li><a href="SliderThumb.js.html">SliderThumb.js</a></li>
+                                <li class=""><a href="Slider.js.html">Slider.js</a></li>
+                                <li class="selected"><a href="SliderThumb.js.html">SliderThumb.js</a></li>
                         </ul>
                     </div>
 

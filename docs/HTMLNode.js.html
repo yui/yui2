@@ -110,7 +110,8 @@
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;tr&gt;&#39;</span><span class="o">;</span>
         
         <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">depth</span><span class="o">;++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;td class=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getDepthStyle</span><span class="o">(</span><span class="nx">i</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&amp;#160;&lt;/td&gt;&#39;</span><span class="o">;</span>
+            <span class="c">//sb[sb.length] = &#39;&lt;td class=&quot;&#39; + this.getDepthStyle(i) + &#39;&quot;&gt;&amp;#160;&lt;/td&gt;&#39;;</span>
+<span class="c"></span>            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;td class=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getDepthStyle</span><span class="o">(</span><span class="nx">i</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;div class=&quot;ygtvspacer&quot;&gt;&lt;/div&gt;&lt;/td&gt;&#39;</span><span class="o">;</span>
         <span class="o">}</span>
 
         <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">hasIcon</span><span class="o">)</span> <span class="o">{</span>
@@ -126,12 +127,14 @@
                 <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;YAHOO.widget.TreeView.getNode(\&#39;&#39;</span><span class="o">;</span>
                 <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;\&#39;,&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">index</span> <span class="o">+</span>  <span class="s1">&#39;).getStyle()&quot;&#39;</span><span class="o">;</span>
             <span class="o">}</span>
-            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&gt;&amp;#160;&lt;/td&gt;&#39;</span><span class="o">;</span>
+            <span class="c">//sb[sb.length] = &#39;&gt;&amp;#160;&lt;/td&gt;&#39;;</span>
+<span class="c"></span>            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&gt;&lt;div class=&quot;ygtvspacer&quot;&gt;&lt;/div&gt;&lt;/td&gt;&#39;</span><span class="o">;</span>
         <span class="o">}</span>
 
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;td&#39;</span><span class="o">;</span>
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; id=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">contentElId</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; class=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">contentStyle</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">nowrap</span><span class="o">)</span> <span class="o">?</span> <span class="s1">&#39; nowrap=&quot;nowrap&quot; &#39;</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="o">;</span>
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; &gt;&#39;</span><span class="o">;</span>
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">html</span><span class="o">;</span>
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/td&gt;&#39;</span><span class="o">;</span>
@@ -156,50 +159,64 @@
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_animation.html">animation</a></li>
-                                <li><a href="module_autocomplete.html">autocomplete</a></li>
-                                <li><a href="module_calendar.html">calendar</a></li>
-                                <li><a href="module_connection.html">connection</a></li>
-                                <li><a href="module_container.html">container</a></li>
-                                <li><a href="module_dom.html">dom</a></li>
-                                <li><a href="module_dragdrop.html">dragdrop</a></li>
-                                <li><a href="module_event.html">event</a></li>
-                                <li><a href="module_logger.html">logger</a></li>
-                                <li><a href="module_menu.html">menu</a></li>
-                                <li><a href="module_slider.html">slider</a></li>
-                                <li><a href="module_tabview.html">tabview</a></li>
-                                <li><a href="module_treeview.html">treeview</a></li>
-                                <li><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_Connection.html">Connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class="selected"><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.widget.HTMLNode.html">YAHOO.widget.HTMLNode</a></li>
-                                <li><a href="YAHOO.widget.MenuNode.html">YAHOO.widget.MenuNode</a></li>
-                                <li><a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a></li>
-                                <li><a href="YAHOO.widget.RootNode.html">YAHOO.widget.RootNode</a></li>
-                                <li><a href="YAHOO.widget.TextNode.html">YAHOO.widget.TextNode</a></li>
-                                <li><a href="YAHOO.widget.TreeView.html">YAHOO.widget.TreeView</a></li>
-                                <li><a href="YAHOO.widget.TVAnim.html">YAHOO.widget.TVAnim</a></li>
-                                <li><a href="YAHOO.widget.TVFadeIn.html">YAHOO.widget.TVFadeIn</a></li>
-                                <li><a href="YAHOO.widget.TVFadeOut.html">YAHOO.widget.TVFadeOut</a></li>
+                                <li class=""><a href="YAHOO.util.Node.html">YAHOO.util.Node</a></li>
+                                <li class=""><a href="YAHOO.widget.HTMLNode.html">YAHOO.widget.HTMLNode</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuNode.html">YAHOO.widget.MenuNode</a></li>
+                                <li class=""><a href="YAHOO.widget.RootNode.html">YAHOO.widget.RootNode</a></li>
+                                <li class=""><a href="YAHOO.widget.TextNode.html">YAHOO.widget.TextNode</a></li>
+                                <li class=""><a href="YAHOO.widget.TreeView.html">YAHOO.widget.TreeView</a></li>
+                                <li class=""><a href="YAHOO.widget.TVAnim.html">YAHOO.widget.TVAnim</a></li>
+                                <li class=""><a href="YAHOO.widget.TVFadeIn.html">YAHOO.widget.TVFadeIn</a></li>
+                                <li class=""><a href="YAHOO.widget.TVFadeOut.html">YAHOO.widget.TVFadeOut</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="HTMLNode.js.html">HTMLNode.js</a></li>
-                                <li><a href="MenuNode.js.html">MenuNode.js</a></li>
-                                <li><a href="Node.js.html">Node.js</a></li>
-                                <li><a href="RootNode.js.html">RootNode.js</a></li>
-                                <li><a href="TextNode.js.html">TextNode.js</a></li>
-                                <li><a href="TreeView.js.html">TreeView.js</a></li>
-                                <li><a href="TVAnim.js.html">TVAnim.js</a></li>
-                                <li><a href="TVFadeIn.js.html">TVFadeIn.js</a></li>
-                                <li><a href="TVFadeOut.js.html">TVFadeOut.js</a></li>
+                                <li class="selected"><a href="HTMLNode.js.html">HTMLNode.js</a></li>
+                                <li class=""><a href="MenuNode.js.html">MenuNode.js</a></li>
+                                <li class=""><a href="Node.js.html">Node.js</a></li>
+                                <li class=""><a href="RootNode.js.html">RootNode.js</a></li>
+                                <li class=""><a href="TextNode.js.html">TextNode.js</a></li>
+                                <li class=""><a href="TreeView.js.html">TreeView.js</a></li>
+                                <li class=""><a href="TVAnim.js.html">TVAnim.js</a></li>
+                                <li class=""><a href="TVFadeIn.js.html">TVFadeIn.js</a></li>
+                                <li class=""><a href="TVFadeOut.js.html">TVFadeOut.js</a></li>
                         </ul>
                     </div>
 

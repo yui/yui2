@@ -29,7 +29,7 @@
 <span class="c">Copyright (c) 2006, Yahoo! Inc. All rights reserved.</span>
 <span class="c">Code licensed under the BSD License:</span>
 <span class="c">http://developer.yahoo.net/yui/license.txt</span>
-<span class="c">Version 0.12</span>
+<span class="c">Version 0.12.1</span>
 <span class="c">*/</span>
 
 <span class="c">/**</span>
@@ -116,6 +116,13 @@
 <span class="c">* @type String</span>
 <span class="c">*/</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Module</span><span class="o">.</span><span class="nx">RESIZE_MONITOR_SECURE_URL</span> <span class="o">=</span> <span class="s2">&quot;javascript:false;&quot;</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c">* Singleton CustomEvent fired when the font size is changed in the browser.</span>
+<span class="c">* Opera&#39;s &quot;zoom&quot; functionality currently does not support text size detection.</span>
+<span class="c">* @event YAHOO.widget.Module.textResizeEvent</span>
+<span class="c">*/</span>	
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;textResize&quot;</span><span class="o">);</span>
 
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Module</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="o">{</span>
 	<span class="c">/**</span>
@@ -474,15 +481,25 @@
                     <span class="nx">doc</span><span class="o">.</span><span class="nx">close</span><span class="o">();</span>
                 
                 <span class="o">}</span>
-    
             <span class="o">}</span>
     
+			<span class="k">var</span> <span class="nx">fireTextResize</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+			<span class="o">};</span>
+
             <span class="k">if</span><span class="o">(</span><span class="nx">resizeMonitor</span> <span class="o">&amp;&amp;</span> <span class="nx">resizeMonitor</span><span class="o">.</span><span class="nx">contentWindow</span><span class="o">)</span> <span class="o">{</span>
-    
                 <span class="k">this</span><span class="o">.</span><span class="nx">resizeMonitor</span> <span class="o">=</span> <span class="nx">resizeMonitor</span><span class="o">;</span>
-    
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">resizeMonitor</span><span class="o">.</span><span class="nx">contentWindow</span><span class="o">,</span> <span class="s2">&quot;resize&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">onDomResize</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-    
+				
+				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">onDomResize</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+				
+				<span class="k">if</span> <span class="o">(!</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeInitialized</span><span class="o">)</span> <span class="o">{</span>
+					<span class="k">if</span> <span class="o">(!</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">resizeMonitor</span><span class="o">.</span><span class="nx">contentWindow</span><span class="o">,</span> <span class="s2">&quot;resize&quot;</span><span class="o">,</span> <span class="nx">fireTextResize</span><span class="o">))</span> <span class="o">{</span>
+						<span class="c">// This will fail in IE if document.domain has changed, so we must change the listener to</span>
+<span class="c"></span>						<span class="c">// use the resizeMonitor element instead</span>
+<span class="c"></span>						<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">resizeMonitor</span><span class="o">,</span> <span class="s2">&quot;resize&quot;</span><span class="o">,</span> <span class="nx">fireTextResize</span><span class="o">);</span>
+					<span class="o">}</span>
+					<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeInitialized</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+				<span class="o">}</span>
             <span class="o">}</span>
         
         <span class="o">}</span>
@@ -693,8 +710,11 @@
 <span class="c">	* @method destroy</span>
 <span class="c">	*/</span>
 	<span class="nx">destroy</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">parent</span><span class="o">;</span>
+
 		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">)</span> <span class="o">{</span>
-			<span class="k">var</span> <span class="nx">parent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">purgeElement</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+			<span class="nx">parent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
 		<span class="o">}</span>
 		<span class="k">if</span> <span class="o">(</span><span class="nx">parent</span><span class="o">)</span> <span class="o">{</span>
 			<span class="nx">parent</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">);</span>
@@ -704,6 +724,14 @@
 		<span class="k">this</span><span class="o">.</span><span class="nx">header</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">body</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">footer</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">e</span> <span class="k">in</span> <span class="k">this</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">e</span> <span class="k">instanceof</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">)</span> <span class="o">{</span>
+				<span class="nx">e</span><span class="o">.</span><span class="nx">unsubscribeAll</span><span class="o">();</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+
+		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">onDomResize</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
 
 		<span class="k">this</span><span class="o">.</span><span class="nx">destroyEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
 	<span class="o">},</span>
@@ -783,52 +811,66 @@
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_animation.html">animation</a></li>
-                                <li><a href="module_autocomplete.html">autocomplete</a></li>
-                                <li><a href="module_calendar.html">calendar</a></li>
-                                <li><a href="module_connection.html">connection</a></li>
-                                <li><a href="module_container.html">container</a></li>
-                                <li><a href="module_dom.html">dom</a></li>
-                                <li><a href="module_dragdrop.html">dragdrop</a></li>
-                                <li><a href="module_event.html">event</a></li>
-                                <li><a href="module_logger.html">logger</a></li>
-                                <li><a href="module_menu.html">menu</a></li>
-                                <li><a href="module_slider.html">slider</a></li>
-                                <li><a href="module_tabview.html">tabview</a></li>
-                                <li><a href="module_treeview.html">treeview</a></li>
-                                <li><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_Connection.html">Connection</a></li>
+
+                                <li class="selected"><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
-                                <li><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
-                                <li><a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a></li>
-                                <li><a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a></li>
-                                <li><a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></li>
-                                <li><a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></li>
-                                <li><a href="YAHOO.widget.OverlayManager.html">YAHOO.widget.OverlayManager</a></li>
-                                <li><a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></li>
-                                <li><a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a></li>
-                                <li><a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a></li>
+                                <li class=""><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
+                                <li class=""><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
+                                <li class=""><a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a></li>
+                                <li class=""><a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></li>
+                                <li class=""><a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></li>
+                                <li class=""><a href="YAHOO.widget.OverlayManager.html">YAHOO.widget.OverlayManager</a></li>
+                                <li class=""><a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></li>
+                                <li class=""><a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="Config.js.html">Config.js</a></li>
-                                <li><a href="ContainerEffect.js.html">ContainerEffect.js</a></li>
-                                <li><a href="Dialog.js.html">Dialog.js</a></li>
-                                <li><a href="KeyListener.js.html">KeyListener.js</a></li>
-                                <li><a href="Module.js.html">Module.js</a></li>
-                                <li><a href="Overlay.js.html">Overlay.js</a></li>
-                                <li><a href="OverlayManager.js.html">OverlayManager.js</a></li>
-                                <li><a href="Panel.js.html">Panel.js</a></li>
-                                <li><a href="SimpleDialog.js.html">SimpleDialog.js</a></li>
-                                <li><a href="Tooltip.js.html">Tooltip.js</a></li>
+                                <li class=""><a href="Config.js.html">Config.js</a></li>
+                                <li class=""><a href="ContainerEffect.js.html">ContainerEffect.js</a></li>
+                                <li class=""><a href="Dialog.js.html">Dialog.js</a></li>
+                                <li class=""><a href="KeyListener.js.html">KeyListener.js</a></li>
+                                <li class="selected"><a href="Module.js.html">Module.js</a></li>
+                                <li class=""><a href="Overlay.js.html">Overlay.js</a></li>
+                                <li class=""><a href="OverlayManager.js.html">OverlayManager.js</a></li>
+                                <li class=""><a href="Panel.js.html">Panel.js</a></li>
+                                <li class=""><a href="SimpleDialog.js.html">SimpleDialog.js</a></li>
+                                <li class=""><a href="Tooltip.js.html">Tooltip.js</a></li>
                         </ul>
                     </div>
 

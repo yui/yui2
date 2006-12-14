@@ -38,6 +38,7 @@
 <span class="c"> * Contains the tree view state data and the root node.</span>
 <span class="c"> *</span>
 <span class="c"> * @class TreeView</span>
+<span class="c"> * @uses YAHOO.util.EventProvider</span>
 <span class="c"> * @constructor</span>
 <span class="c"> * @param {string|HTMLElement} id The id of the element, or the element</span>
 <span class="c"> * itself that the tree will be inserted into.</span>
@@ -260,22 +261,40 @@
         <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;animComplete&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
 
         <span class="c">/**</span>
-<span class="c">         * Fires when a node is going to be expanded.  Return false to stop</span>
-<span class="c">         * the expand.</span>
+<span class="c">         * Fires when a node is going to be collapsed.  Return false to stop</span>
+<span class="c">         * the collapse.</span>
 <span class="c">         * @event collapse</span>
 <span class="c">         * @type CustomEvent</span>
-<span class="c">         * @param {YAHOO.widget.Node} node the node that is expanding/collapsing</span>
+<span class="c">         * @param {YAHOO.widget.Node} node the node that is collapsing</span>
 <span class="c">         */</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;collapse&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
 
         <span class="c">/**</span>
-<span class="c">         * Fires when a node is going to be collapsed.  Return false to stop</span>
+<span class="c">         * Fires after a node is successfully collapsed.  This event will not fire</span>
+<span class="c">         * if the &quot;collapse&quot; event was cancelled.</span>
+<span class="c">         * @event collapseComplete</span>
+<span class="c">         * @type CustomEvent</span>
+<span class="c">         * @param {YAHOO.widget.Node} node the node that was collapsed</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;collapseComplete&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Fires when a node is going to be expanded.  Return false to stop</span>
 <span class="c">         * the collapse.</span>
 <span class="c">         * @event expand</span>
 <span class="c">         * @type CustomEvent</span>
-<span class="c">         * @param {YAHOO.widget.Node} node the node that is expanding/collapsing</span>
+<span class="c">         * @param {YAHOO.widget.Node} node the node that is expanding</span>
 <span class="c">         */</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;expand&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Fires after a node is successfully expanded.  This event will not fire</span>
+<span class="c">         * if the &quot;expand&quot; event was cancelled.</span>
+<span class="c">         * @event expandComplete</span>
+<span class="c">         * @type CustomEvent</span>
+<span class="c">         * @param {YAHOO.widget.Node} node the node that was expanded</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;expandComplete&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
 
         <span class="k">this</span><span class="o">.</span><span class="nx">_nodes</span> <span class="o">=</span> <span class="o">[];</span>
 
@@ -288,8 +307,17 @@
         <span class="k">this</span><span class="o">.</span><span class="nx">logger</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 
         <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;tree init: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">);</span>
+
+        <span class="c">//YAHOO.util.Event.onContentReady(this.id, this.handleAvailable, this, true);</span>
+<span class="c"></span>        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">,</span> <span class="s2">&quot;click&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">handleClick</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
     <span class="o">},</span>
 
+
+    <span class="c">//handleAvailable: function() {</span>
+<span class="c"></span>        <span class="c">//var Event = YAHOO.util.Event;</span>
+<span class="c"></span>        <span class="c">//Event.on(this.id, </span>
+<span class="c"></span>    <span class="c">//},</span>
+<span class="c"></span>
     <span class="c">/**</span>
 <span class="c">     * Renders the tree boilerplate and visible nodes</span>
 <span class="c">     * @method draw</span>
@@ -705,50 +733,64 @@
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_animation.html">animation</a></li>
-                                <li><a href="module_autocomplete.html">autocomplete</a></li>
-                                <li><a href="module_calendar.html">calendar</a></li>
-                                <li><a href="module_connection.html">connection</a></li>
-                                <li><a href="module_container.html">container</a></li>
-                                <li><a href="module_dom.html">dom</a></li>
-                                <li><a href="module_dragdrop.html">dragdrop</a></li>
-                                <li><a href="module_event.html">event</a></li>
-                                <li><a href="module_logger.html">logger</a></li>
-                                <li><a href="module_menu.html">menu</a></li>
-                                <li><a href="module_slider.html">slider</a></li>
-                                <li><a href="module_tabview.html">tabview</a></li>
-                                <li><a href="module_treeview.html">treeview</a></li>
-                                <li><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_Connection.html">Connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class="selected"><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.widget.HTMLNode.html">YAHOO.widget.HTMLNode</a></li>
-                                <li><a href="YAHOO.widget.MenuNode.html">YAHOO.widget.MenuNode</a></li>
-                                <li><a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a></li>
-                                <li><a href="YAHOO.widget.RootNode.html">YAHOO.widget.RootNode</a></li>
-                                <li><a href="YAHOO.widget.TextNode.html">YAHOO.widget.TextNode</a></li>
-                                <li><a href="YAHOO.widget.TreeView.html">YAHOO.widget.TreeView</a></li>
-                                <li><a href="YAHOO.widget.TVAnim.html">YAHOO.widget.TVAnim</a></li>
-                                <li><a href="YAHOO.widget.TVFadeIn.html">YAHOO.widget.TVFadeIn</a></li>
-                                <li><a href="YAHOO.widget.TVFadeOut.html">YAHOO.widget.TVFadeOut</a></li>
+                                <li class=""><a href="YAHOO.util.Node.html">YAHOO.util.Node</a></li>
+                                <li class=""><a href="YAHOO.widget.HTMLNode.html">YAHOO.widget.HTMLNode</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuNode.html">YAHOO.widget.MenuNode</a></li>
+                                <li class=""><a href="YAHOO.widget.RootNode.html">YAHOO.widget.RootNode</a></li>
+                                <li class=""><a href="YAHOO.widget.TextNode.html">YAHOO.widget.TextNode</a></li>
+                                <li class=""><a href="YAHOO.widget.TreeView.html">YAHOO.widget.TreeView</a></li>
+                                <li class=""><a href="YAHOO.widget.TVAnim.html">YAHOO.widget.TVAnim</a></li>
+                                <li class=""><a href="YAHOO.widget.TVFadeIn.html">YAHOO.widget.TVFadeIn</a></li>
+                                <li class=""><a href="YAHOO.widget.TVFadeOut.html">YAHOO.widget.TVFadeOut</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="HTMLNode.js.html">HTMLNode.js</a></li>
-                                <li><a href="MenuNode.js.html">MenuNode.js</a></li>
-                                <li><a href="Node.js.html">Node.js</a></li>
-                                <li><a href="RootNode.js.html">RootNode.js</a></li>
-                                <li><a href="TextNode.js.html">TextNode.js</a></li>
-                                <li><a href="TreeView.js.html">TreeView.js</a></li>
-                                <li><a href="TVAnim.js.html">TVAnim.js</a></li>
-                                <li><a href="TVFadeIn.js.html">TVFadeIn.js</a></li>
-                                <li><a href="TVFadeOut.js.html">TVFadeOut.js</a></li>
+                                <li class=""><a href="HTMLNode.js.html">HTMLNode.js</a></li>
+                                <li class=""><a href="MenuNode.js.html">MenuNode.js</a></li>
+                                <li class=""><a href="Node.js.html">Node.js</a></li>
+                                <li class=""><a href="RootNode.js.html">RootNode.js</a></li>
+                                <li class=""><a href="TextNode.js.html">TextNode.js</a></li>
+                                <li class="selected"><a href="TreeView.js.html">TreeView.js</a></li>
+                                <li class=""><a href="TVAnim.js.html">TVAnim.js</a></li>
+                                <li class=""><a href="TVFadeIn.js.html">TVFadeIn.js</a></li>
+                                <li class=""><a href="TVFadeOut.js.html">TVFadeOut.js</a></li>
                         </ul>
                     </div>
 

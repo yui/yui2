@@ -185,9 +185,9 @@ bar's <code>&#60;div&#62;</code> element.
                                         <a href="YAHOO.widget.Menu.html#_hideDelayEventHandlersAssigned">_hideDelayEventHandlersAssigned</a>,
                                         <a href="YAHOO.widget.Menu.html#_nHideDelayId">_nHideDelayId</a>,
                                         <a href="YAHOO.widget.Menu.html#_nShowDelayId">_nShowDelayId</a>,
+                                        <a href="YAHOO.widget.Menu.html#_nSubmenuHideDelayId">_nSubmenuHideDelayId</a>,
                                         <a href="YAHOO.widget.Menu.html#activeItem">activeItem</a>,
                                         <a href="YAHOO.widget.Menu.html#CSS_CLASS_NAME">CSS_CLASS_NAME</a>,
-                                        <a href="YAHOO.widget.Menu.html#getNextItemSibling">getNextItemSibling</a>,
                                         <a href="YAHOO.widget.Menu.html#GROUP_TITLE_TAG_NAME">GROUP_TITLE_TAG_NAME</a>,
                                         <a href="YAHOO.widget.Menu.html#ITEM_TYPE">ITEM_TYPE</a>,
                                         <a href="YAHOO.widget.Menu.html#itemData">itemData</a>,
@@ -571,6 +571,7 @@ changed using the menu bar's Config object ("cfg").
                                             <a href="YAHOO.widget.Menu.html#_onSubmenuBeforeShow">_onSubmenuBeforeShow</a>,
                                             <a href="YAHOO.widget.Menu.html#_onSubmenuHide">_onSubmenuHide</a>,
                                             <a href="YAHOO.widget.Menu.html#_onSubmenuShow">_onSubmenuShow</a>,
+                                            <a href="YAHOO.widget.Menu.html#_onTextResize">_onTextResize</a>,
                                             <a href="YAHOO.widget.Menu.html#_removeItemFromGroupByIndex">_removeItemFromGroupByIndex</a>,
                                             <a href="YAHOO.widget.Menu.html#_removeItemFromGroupByValue">_removeItemFromGroupByValue</a>,
                                             <a href="YAHOO.widget.Menu.html#_subscribeToItemEvents">_subscribeToItemEvents</a>,
@@ -584,7 +585,6 @@ changed using the menu bar's Config object ("cfg").
                                             <a href="YAHOO.widget.Menu.html#configPosition">configPosition</a>,
                                             <a href="YAHOO.widget.Menu.html#configVisible">configVisible</a>,
                                             <a href="YAHOO.widget.Menu.html#destroy">destroy</a>,
-                                            <a href="YAHOO.widget.Menu.html#disableAutoSubmenuDisplay">disableAutoSubmenuDisplay</a>,
                                             <a href="YAHOO.widget.Menu.html#enforceConstraints">enforceConstraints</a>,
                                             <a href="YAHOO.widget.Menu.html#getItem">getItem</a>,
                                             <a href="YAHOO.widget.Menu.html#getItemGroups">getItemGroups</a>,
@@ -593,7 +593,6 @@ changed using the menu bar's Config object ("cfg").
                                             <a href="YAHOO.widget.Menu.html#initDefaultConfig">initDefaultConfig</a>,
                                             <a href="YAHOO.widget.Menu.html#initEvents">initEvents</a>,
                                             <a href="YAHOO.widget.Menu.html#insertItem">insertItem</a>,
-                                            <a href="YAHOO.widget.Menu.html#onDomResize">onDomResize</a>,
                                             <a href="YAHOO.widget.Menu.html#removeItem">removeItem</a>,
                                             <a href="YAHOO.widget.Menu.html#setInitialFocus">setInitialFocus</a>,
                                             <a href="YAHOO.widget.Menu.html#setInitialSelection">setInitialSelection</a>,
@@ -635,7 +634,8 @@ changed using the menu bar's Config object ("cfg").
                                         <a href="YAHOO.widget.Module.html#hideEvent">hideEvent</a>,
                                         <a href="YAHOO.widget.Module.html#initEvent">initEvent</a>,
                                         <a href="YAHOO.widget.Module.html#renderEvent">renderEvent</a>,
-                                        <a href="YAHOO.widget.Module.html#showEvent">showEvent</a>
+                                        <a href="YAHOO.widget.Module.html#showEvent">showEvent</a>,
+                                        <a href="YAHOO.widget.Module.html#YAHOO.widget.Module.textResizeEvent">YAHOO.widget.Module.textResizeEvent</a>
                                 </code>
                             </div>
                         </div>
@@ -759,6 +759,7 @@ parent menu bar item. The format is: [itemCorner, submenuCorner].
                                         <a href="YAHOO.widget.Menu.html#position">position</a>,
                                         <a href="YAHOO.widget.Menu.html#showdelay">showdelay</a>,
                                         <a href="YAHOO.widget.Menu.html#submenualignment">submenualignment</a>,
+                                        <a href="YAHOO.widget.Menu.html#submenuhidedelay">submenuhidedelay</a>,
                                         <a href="YAHOO.widget.Menu.html#visible">visible</a>
                                 </code>
                             </div>
@@ -773,50 +774,64 @@ parent menu bar item. The format is: [itemCorner, submenuCorner].
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_animation.html">animation</a></li>
-                                <li><a href="module_autocomplete.html">autocomplete</a></li>
-                                <li><a href="module_calendar.html">calendar</a></li>
-                                <li><a href="module_connection.html">connection</a></li>
-                                <li><a href="module_container.html">container</a></li>
-                                <li><a href="module_dom.html">dom</a></li>
-                                <li><a href="module_dragdrop.html">dragdrop</a></li>
-                                <li><a href="module_event.html">event</a></li>
-                                <li><a href="module_logger.html">logger</a></li>
-                                <li><a href="module_menu.html">menu</a></li>
-                                <li><a href="module_slider.html">slider</a></li>
-                                <li><a href="module_tabview.html">tabview</a></li>
-                                <li><a href="module_treeview.html">treeview</a></li>
-                                <li><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_Connection.html">Connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class="selected"><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
-                                <li><a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a></li>
-                                <li><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></li>
-                                <li><a href="YAHOO.widget.Menubar.html">YAHOO.widget.Menubar</a></li>
-                                <li><a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></li>
-                                <li><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></li>
-                                <li><a href="YAHOO.widget.MenuManager.html">YAHOO.widget.MenuManager</a></li>
-                                <li><a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></li>
-                                <li><a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></li>
+                                <li class=""><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
+                                <li class=""><a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a></li>
+                                <li class=""><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></li>
+                                <li class="selected"><a href="YAHOO.widget.Menubar.html">YAHOO.widget.Menubar</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuManager.html">YAHOO.widget.MenuManager</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="contextmenu.js.html">contextmenu.js</a></li>
-                                <li><a href="contextmenuitem.js.html">contextmenuitem.js</a></li>
-                                <li><a href="menu.js.html">menu.js</a></li>
-                                <li><a href="menubar.js.html">menubar.js</a></li>
-                                <li><a href="menubaritem.js.html">menubaritem.js</a></li>
-                                <li><a href="menuitem.js.html">menuitem.js</a></li>
-                                <li><a href="menumanager.js.html">menumanager.js</a></li>
-                                <li><a href="menumodule.js.html">menumodule.js</a></li>
-                                <li><a href="menumoduleitem.js.html">menumoduleitem.js</a></li>
+                                <li class=""><a href="contextmenu.js.html">contextmenu.js</a></li>
+                                <li class=""><a href="contextmenuitem.js.html">contextmenuitem.js</a></li>
+                                <li class=""><a href="menu.js.html">menu.js</a></li>
+                                <li class=""><a href="menubar.js.html">menubar.js</a></li>
+                                <li class=""><a href="menubaritem.js.html">menubaritem.js</a></li>
+                                <li class=""><a href="menuitem.js.html">menuitem.js</a></li>
+                                <li class=""><a href="menumanager.js.html">menumanager.js</a></li>
+                                <li class=""><a href="menumodule.js.html">menumodule.js</a></li>
+                                <li class=""><a href="menumoduleitem.js.html">menumoduleitem.js</a></li>
                         </ul>
                     </div>
 

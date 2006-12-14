@@ -55,7 +55,7 @@ registers during the unload event.
                             <h3><a name="field_detail">Properties</a></h3>
                             <div class="content">
                                     <h4><a name="_interval">_interval</a>
-                                        <code>- private Object</code>
+                                        <code>- private object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -82,7 +82,7 @@ on or the custom object passed in by the listener, int constant
 
                                     <hr />
                                     <h4><a name="counter">counter</a>
-                                        <code>- private static Object</code>
+                                        <code>- private static object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -110,7 +110,7 @@ on or the custom object passed in by the listener, int constant
                                     <h4><a name="elCache
 DOM element cache">elCache
 DOM element cache</a>
-                                        <code>- private static Object</code>
+                                        <code>- private static object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -136,7 +136,7 @@ DOM element cache</a>
 
                                     <hr />
                                     <h4><a name="isIE">isIE</a>
-                                        <code>- private static Object</code>
+                                        <code>- private static object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -152,7 +152,7 @@ calculated in a different manner than IE.
 
                                     <hr />
                                     <h4><a name="isSafari">isSafari</a>
-                                        <code>- private static Object</code>
+                                        <code>- private static object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -167,7 +167,7 @@ handler.  There is not a capabilities check we can use here.
 
                                     <hr />
                                     <h4><a name="legacyEvents">legacyEvents</a>
-                                        <code>- private static Object</code>
+                                        <code>- private static object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -181,7 +181,7 @@ in Safari
 
                                     <hr />
                                     <h4><a name="legacyHandlers">legacyHandlers</a>
-                                        <code>- private static Object</code>
+                                        <code>- private static object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -194,7 +194,7 @@ in Safari
 
                                     <hr />
                                     <h4><a name="legacyMap">legacyMap</a>
-                                        <code>- private static Object</code>
+                                        <code>- private static object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -247,7 +247,7 @@ parameter to the callback, int constant
 
                                     <hr />
                                     <h4><a name="onAvailStack">onAvailStack</a>
-                                        <code>- private static Object</code>
+                                        <code>- private static object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -290,7 +290,7 @@ for 10 seconds or until all outstanding handlers are bound
 
                                     <hr />
                                     <h4><a name="retryCount">retryCount</a>
-                                        <code>- private static Object</code>
+                                        <code>- private static object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -513,7 +513,7 @@ fail if the object is an array, but is empty.
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>o &lt;Object&gt;</code>
+                                                            <code>o &lt;object&gt;</code>
                                                              the object to test
                                                         </dd>
                                                 </dl>
@@ -839,7 +839,8 @@ the execution scope of the listener
                                                     </code></dt>
                                                     <dd>True if the action was successful or defered,
 false if one or more of the elements 
-could not have the event bound to it.</dd>
+could not have the listener attached,
+or if the operation throws an exception.</dd>
                                                 </dl>
              
                                         </div>
@@ -942,7 +943,7 @@ have one.
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>el &lt;Object&gt;</code>
+                                                            <code>el &lt;object&gt;</code>
                                                              the element to create the id for
                                                         </dd>
                                                 </dl>
@@ -2008,39 +2009,53 @@ events instead of DOM2 events.
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_animation.html">animation</a></li>
-                                <li><a href="module_autocomplete.html">autocomplete</a></li>
-                                <li><a href="module_calendar.html">calendar</a></li>
-                                <li><a href="module_connection.html">connection</a></li>
-                                <li><a href="module_container.html">container</a></li>
-                                <li><a href="module_dom.html">dom</a></li>
-                                <li><a href="module_dragdrop.html">dragdrop</a></li>
-                                <li><a href="module_event.html">event</a></li>
-                                <li><a href="module_logger.html">logger</a></li>
-                                <li><a href="module_menu.html">menu</a></li>
-                                <li><a href="module_slider.html">slider</a></li>
-                                <li><a href="module_tabview.html">tabview</a></li>
-                                <li><a href="module_treeview.html">treeview</a></li>
-                                <li><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_Connection.html">Connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class="selected"><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
-                                <li><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
-                                <li><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
-                                <li><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
+                                <li class=""><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
+                                <li class="selected"><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
+                                <li class=""><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
+                                <li class=""><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="CustomEvent.js.html">CustomEvent.js</a></li>
-                                <li><a href="Event.js.html">Event.js</a></li>
-                                <li><a href="EventProvider.js.html">EventProvider.js</a></li>
+                                <li class=""><a href="CustomEvent.js.html">CustomEvent.js</a></li>
+                                <li class=""><a href="Event.js.html">Event.js</a></li>
+                                <li class=""><a href="EventProvider.js.html">EventProvider.js</a></li>
                         </ul>
                     </div>
 

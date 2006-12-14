@@ -36,6 +36,10 @@
                         </span>
 
                         <span class="extends">
+                          - uses 
+                            
+                                <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>
+                            
                         </span>
                         
                         </code>
@@ -69,6 +73,9 @@ clicked.
                                                 sGroup
 
                                                 , 
+                                                oThumb
+
+                                                , 
                                                 sType
                                     )
                                 </code>
@@ -86,6 +93,12 @@ clicked.
                                                     &lt;String&gt; 
                                                     </code>
                                                      The group of related DragDrop items
+                                                </dd>
+                                                <dd>
+                                                    <code>oThumb
+                                                    &lt;SliderThumb&gt; 
+                                                    </code>
+                                                     The thumb for this slider
                                                 </dd>
                                                 <dd>
                                                     <code>sType
@@ -176,7 +189,7 @@ operation.
 
                                     <hr />
                                     <h4><a name="isTarget">isTarget</a>
-                                        <code>- private Object</code>
+                                        <code>- private object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -324,6 +337,16 @@ faster the animation (by default)
                                 </code>
                             </div>
                         </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.util.EventProvider.html#__yui_events">__yui_events</a>,
+                                        <a href="YAHOO.util.EventProvider.html#__yui_subscribers">__yui_subscribers</a>
+                                </code>
+                            </div>
+                        </div>
 
                         <div class="section method details">
                             <h3><a name="methodDetails">Methods</a></h3>
@@ -466,6 +489,11 @@ faster the animation (by default)
                                         void
                                             <strong>fireEvents</strong>
                                            (
+                                                
+                                                        
+                                                         thumbEvent
+                                                    
+                                                
                                             )
                                         </code>
                                         
@@ -477,6 +505,17 @@ complete
 
                                         <div class="description">
 
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>thumbEvent &lt;boolean&gt;</code>
+                                                             set to true if this event is fired from an event
+that occurred on the thumb.  If it is, the state of the
+thumb dd object should be correct.  Otherwise, the event
+originated on the background, so the thumb state needs to
+be refreshed before proceeding.
+                                                        </dd>
+                                                </dl>
 
                                                 <dl>
                                                     <dt>Returns:
@@ -652,6 +691,99 @@ accessibility features
                                     </div>
                                     <hr />
                                     <h4>
+                                        <a name="handleKeyDown">handleKeyDown</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>handleKeyDown</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Executed when a keydown event happens with the control focused.
+Updates the slider value and display when the keypress is an
+arrow key, home, or end as long as enableKeys is set to true.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;Event&gt;</code>
+                                                             the keydown event
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="handleKeyPress">handleKeyPress</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>handleKeyPress</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Executed when a keypress event happens with the control focused.
+Prevents the default behavior for navigation keys.  The actual
+logic for moving the slider thumb in response to a key event
+happens in handleKeyDown.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;Event&gt;</code>
+                                                             the keypress event
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
                                         <a name="handleThumbChange">handleThumbChange</a></h4>
                                     <div class="detail">
                                         <code>
@@ -670,6 +802,94 @@ accessibility features
 
                                         <div class="description">
 
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="initSlider">initSlider</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initSlider</strong>
+                                           (
+                                                
+                                                        
+                                                         sType
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the slider.  Executed in the constructor
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sType &lt;string&gt;</code>
+                                                             the type of slider (horiz, vert, region)
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="initThumb">initThumb</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initThumb</strong>
+                                           (
+                                                
+                                                        
+                                                         t
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the slider's thumb. Executed in the constructor.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>t &lt;YAHOO.widget.SliderThumb&gt;</code>
+                                                             the slider thumb
+                                                        </dd>
+                                                </dl>
 
                                                 <dl>
                                                     <dt>Returns:
@@ -809,6 +1029,38 @@ cursor and the background during the mouseup event
                                                              don't animate if the move happend onDrag
                                                         </dd>
                                                 </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="onAvailable">onAvailable</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>onAvailable</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Executed when the slider element is available
+                                        </div>
+
+                                        <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -1086,14 +1338,14 @@ for this move action (but not others).
                                     </div>
                                     <hr />
                                     <h4>
-                                        <a name="setSliderStartState">setSliderStartState</a></h4>
+                                        <a name="setStartSliderState">setStartSliderState</a></h4>
                                     <div class="detail">
                                         <code>
                                         
                                         
                                         
                                         void
-                                            <strong>setSliderStartState</strong>
+                                            <strong>setStartSliderState</strong>
                                            (
                                             )
                                         </code>
@@ -1318,6 +1570,11 @@ for this move action (but not others).
                                         boolean
                                             <strong>verifyOffset</strong>
                                            (
+                                                
+                                                        
+                                                         checkPos
+                                                    
+                                                
                                             )
                                         </code>
                                         
@@ -1328,6 +1585,13 @@ baseline position, the constraints for the thumb are reset
 
                                         <div class="description">
 
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>checkPos &lt;boolean&gt;</code>
+                                                              check the position instead of using cached value
+                                                        </dd>
+                                                </dl>
 
                                                 <dl>
                                                     <dt>Returns:
@@ -1655,6 +1919,19 @@ should move a certain number pixels at a time.
                                     </code>
                                 </div>
                             </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                        
+                                            <a href="YAHOO.util.EventProvider.html#createEvent">createEvent</a>,
+                                            <a href="YAHOO.util.EventProvider.html#fireEvent">fireEvent</a>,
+                                            <a href="YAHOO.util.EventProvider.html#hasEvent">hasEvent</a>,
+                                            <a href="YAHOO.util.EventProvider.html#subscribe">subscribe</a>,
+                                            <a href="YAHOO.util.EventProvider.html#unsubscribe">unsubscribe</a>
+                                    </code>
+                                </div>
+                            </div>
 
                         <div class="section method details">
                             <h3><a name="methodDetails">Events</a></h3>
@@ -1671,15 +1948,11 @@ should move a certain number pixels at a time.
                                             (
                                                 
                                                         
-                                                         new
+                                                         newOffset|x
                                                     
                                                 
                                                         , 
-                                                         firstOffset
-                                                    
-                                                
-                                                        , 
-                                                         secondOffset
+                                                         y
                                                     
                                                 
                                             )
@@ -1698,19 +1971,14 @@ along the way.
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>new &lt;int&gt;</code>
-                                                            
+                                                            <code>newOffset|x &lt;int&gt;</code>
+                                                             the new offset for normal sliders, or the new
+x offset for region sliders
                                                         </dd>
                                                         <dd>
-                                                            <code>firstOffset &lt;int&gt;</code>
-                                                             the number of pixels the thumb has moved
-from its start position. Normal horizontal and vertical sliders will only
-have the firstOffset.  Regions will have both, the first is the horizontal
-offset, the second the vertical.
-                                                        </dd>
-                                                        <dd>
-                                                            <code>secondOffset &lt;int&gt;</code>
-                                                             the y offset for region sliders
+                                                            <code>y &lt;int&gt;</code>
+                                                             the number of pixels the thumb has moved on the y axis
+(region sliders only)
                                                         </dd>
                                                 </dl>
 
@@ -1761,7 +2029,7 @@ offset, the second the vertical.
                                         </code>
                                         
                                         <div class="description">
-                                            Event that fires at the end of a slider thumb move.
+                                            Event that fires at the beginning of a slider thumb move.
                                         </div>
 
                                         <div class="description">
@@ -1789,36 +2057,50 @@ offset, the second the vertical.
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_animation.html">animation</a></li>
-                                <li><a href="module_autocomplete.html">autocomplete</a></li>
-                                <li><a href="module_calendar.html">calendar</a></li>
-                                <li><a href="module_connection.html">connection</a></li>
-                                <li><a href="module_container.html">container</a></li>
-                                <li><a href="module_dom.html">dom</a></li>
-                                <li><a href="module_dragdrop.html">dragdrop</a></li>
-                                <li><a href="module_event.html">event</a></li>
-                                <li><a href="module_logger.html">logger</a></li>
-                                <li><a href="module_menu.html">menu</a></li>
-                                <li><a href="module_slider.html">slider</a></li>
-                                <li><a href="module_tabview.html">tabview</a></li>
-                                <li><a href="module_treeview.html">treeview</a></li>
-                                <li><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_Connection.html">Connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class="selected"><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.widget.Slider.html">YAHOO.widget.Slider</a></li>
-                                <li><a href="YAHOO.widget.SliderThumb.html">YAHOO.widget.SliderThumb</a></li>
+                                <li class="selected"><a href="YAHOO.widget.Slider.html">YAHOO.widget.Slider</a></li>
+                                <li class=""><a href="YAHOO.widget.SliderThumb.html">YAHOO.widget.SliderThumb</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="Slider.js.html">Slider.js</a></li>
-                                <li><a href="SliderThumb.js.html">SliderThumb.js</a></li>
+                                <li class=""><a href="Slider.js.html">Slider.js</a></li>
+                                <li class=""><a href="SliderThumb.js.html">SliderThumb.js</a></li>
                         </ul>
                     </div>
 
@@ -1901,7 +2183,19 @@ offset, the second the vertical.
                                 <a href="#getYValue">getYValue</a>
                                 </li>
                                 <li><!--<code>void</code>-->
+                                <a href="#handleKeyDown">handleKeyDown</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#handleKeyPress">handleKeyPress</a>
+                                </li>
+                                <li><!--<code>void</code>-->
                                 <a href="#handleThumbChange">handleThumbChange</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#initSlider">initSlider</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#initThumb">initThumb</a>
                                 </li>
                                 <li><!--<code>void</code>-->
                                 <a href="#lock">lock</a>
@@ -1911,6 +2205,9 @@ offset, the second the vertical.
                                 </li>
                                 <li><!--<code>void</code>-->
                                 <a href="#moveThumb">moveThumb</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#onAvailable">onAvailable</a>
                                 </li>
                                 <li><!--<code>void</code>-->
                                 <a href="#onChange">onChange</a>
@@ -1931,7 +2228,7 @@ offset, the second the vertical.
                                 <a href="#setRegionValue">setRegionValue</a>
                                 </li>
                                 <li><!--<code>void</code>-->
-                                <a href="#setSliderStartState">setSliderStartState</a>
+                                <a href="#setStartSliderState">setStartSliderState</a>
                                 </li>
                                 <li><!--<code>void</code>-->
                                 <a href="#setThumbCenterPoint">setThumbCenterPoint</a>

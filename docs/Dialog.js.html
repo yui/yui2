@@ -29,7 +29,7 @@
 <span class="c">Copyright (c) 2006, Yahoo! Inc. All rights reserved.</span>
 <span class="c">Code licensed under the BSD License:</span>
 <span class="c">http://developer.yahoo.net/yui/license.txt</span>
-<span class="c">Version 0.12</span>
+<span class="c">Version 0.12.1</span>
 <span class="c">*/</span>
 
 <span class="c">/**</span>
@@ -98,7 +98,7 @@
 <span class="c">	* @type String</span>
 <span class="c">	* @default async</span>
 <span class="c">	*/</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;postmethod&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="s2">&quot;async&quot;</span><span class="o">,</span> <span class="nx">validator</span><span class="o">:</span><span class="k">function</span><span class="o">(</span><span class="nx">val</span><span class="o">)</span> <span class="o">{</span> 
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;postmethod&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="s2">&quot;async&quot;</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">configPostMethod</span><span class="o">,</span> <span class="nx">validator</span><span class="o">:</span><span class="k">function</span><span class="o">(</span><span class="nx">val</span><span class="o">)</span> <span class="o">{</span> 
 													<span class="k">if</span> <span class="o">(</span><span class="nx">val</span> <span class="o">!=</span> <span class="s2">&quot;form&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">val</span> <span class="o">!=</span> <span class="s2">&quot;async&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">val</span> <span class="o">!=</span> <span class="s2">&quot;none&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">val</span> <span class="o">!=</span> <span class="s2">&quot;manual&quot;</span><span class="o">)</span> <span class="o">{</span>
 														<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
 													<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
@@ -178,8 +178,6 @@
 	<span class="k">if</span> <span class="o">(</span><span class="nx">userConfig</span><span class="o">)</span> <span class="o">{</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">applyConfig</span><span class="o">(</span><span class="nx">userConfig</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 	<span class="o">}</span>
-
-	<span class="k">this</span><span class="o">.</span><span class="nx">renderEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">registerForm</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 
 	<span class="k">this</span><span class="o">.</span><span class="nx">showEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">focusFirst</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 	<span class="k">this</span><span class="o">.</span><span class="nx">beforeHideEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">blurButtons</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
@@ -435,6 +433,24 @@
 	<span class="o">}</span>
 <span class="o">};</span>
 
+<span class="c">/**</span>
+<span class="c">* The default event handler for the &quot;postmethod&quot; configuration property</span>
+<span class="c">* @method configPostMethod</span>
+<span class="c">* @param {String} type	The CustomEvent type (usually the property name)</span>
+<span class="c">* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.</span>
+<span class="c">* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Dialog</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">configPostMethod</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">args</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">var</span> <span class="nx">postmethod</span> <span class="o">=</span> <span class="nx">args</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+
+	<span class="k">this</span><span class="o">.</span><span class="nx">registerForm</span><span class="o">();</span>
+	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">form</span><span class="o">,</span> <span class="s2">&quot;submit&quot;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+														<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">stopEvent</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+														<span class="k">this</span><span class="o">.</span><span class="nx">submit</span><span class="o">();</span>
+														<span class="k">this</span><span class="o">.</span><span class="nx">form</span><span class="o">.</span><span class="nx">blur</span><span class="o">();</span>
+													  <span class="o">},</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span> 
+<span class="o">};</span>
+
 <span class="c">// END BUILT-IN PROPERTY EVENT HANDLERS //</span>
 <span class="c"></span>
 <span class="c">/**</span>
@@ -480,25 +496,25 @@
 	<span class="k">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="o">{};</span>
 
 	<span class="k">if</span> <span class="o">(</span><span class="nx">form</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">form</span><span class="o">)</span> <span class="o">{</span>
-			<span class="k">var</span> <span class="nx">formItem</span> <span class="o">=</span> <span class="nx">form</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">form</span><span class="o">.</span><span class="nx">elements</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+			<span class="k">var</span> <span class="nx">formItem</span> <span class="o">=</span> <span class="nx">form</span><span class="o">.</span><span class="nx">elements</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
 			<span class="k">if</span> <span class="o">(</span><span class="nx">formItem</span><span class="o">)</span> <span class="o">{</span>
 				<span class="k">if</span> <span class="o">(</span><span class="nx">formItem</span><span class="o">.</span><span class="nx">tagName</span><span class="o">)</span> <span class="o">{</span> <span class="c">// Got a single form item</span>
 <span class="c"></span>					<span class="nx">switch</span> <span class="o">(</span><span class="nx">formItem</span><span class="o">.</span><span class="nx">tagName</span><span class="o">)</span> <span class="o">{</span>
 						<span class="nx">case</span> <span class="s2">&quot;INPUT&quot;</span><span class="o">:</span>
 							<span class="nx">switch</span> <span class="o">(</span><span class="nx">formItem</span><span class="o">.</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
 								<span class="nx">case</span> <span class="s2">&quot;checkbox&quot;</span><span class="o">:</span> 
-									<span class="nx">data</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">formItem</span><span class="o">.</span><span class="nx">checked</span><span class="o">;</span>
+									<span class="nx">data</span><span class="o">[</span><span class="nx">formItem</span><span class="o">.</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="nx">formItem</span><span class="o">.</span><span class="nx">checked</span><span class="o">;</span>
 									<span class="k">break</span><span class="o">;</span>
 								<span class="nx">case</span> <span class="s2">&quot;textbox&quot;</span><span class="o">:</span>
 								<span class="nx">case</span> <span class="s2">&quot;text&quot;</span><span class="o">:</span>
 								<span class="nx">case</span> <span class="s2">&quot;hidden&quot;</span><span class="o">:</span>
-									<span class="nx">data</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">formItem</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+									<span class="nx">data</span><span class="o">[</span><span class="nx">formItem</span><span class="o">.</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="nx">formItem</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
 									<span class="k">break</span><span class="o">;</span>
 							<span class="o">}</span>
 							<span class="k">break</span><span class="o">;</span>
 						<span class="nx">case</span> <span class="s2">&quot;TEXTAREA&quot;</span><span class="o">:</span>
-							<span class="nx">data</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">formItem</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+							<span class="nx">data</span><span class="o">[</span><span class="nx">formItem</span><span class="o">.</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="nx">formItem</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
 							<span class="k">break</span><span class="o">;</span>
 						<span class="nx">case</span> <span class="s2">&quot;SELECT&quot;</span><span class="o">:</span>
 							<span class="k">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="o">[];</span>
@@ -512,7 +528,7 @@
 									<span class="nx">val</span><span class="o">[</span><span class="nx">val</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">selval</span><span class="o">;</span>
 								<span class="o">}</span>
 							<span class="o">}</span>
-							<span class="nx">data</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">val</span><span class="o">;</span>
+							<span class="nx">data</span><span class="o">[</span><span class="nx">formItem</span><span class="o">.</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="nx">val</span><span class="o">;</span>
 							<span class="k">break</span><span class="o">;</span>
 					<span class="o">}</span>
 				<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">formItem</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nx">formItem</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">tagName</span><span class="o">)</span> <span class="o">{</span> <span class="c">// this is an array of form items</span>
@@ -564,52 +580,66 @@
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_animation.html">animation</a></li>
-                                <li><a href="module_autocomplete.html">autocomplete</a></li>
-                                <li><a href="module_calendar.html">calendar</a></li>
-                                <li><a href="module_connection.html">connection</a></li>
-                                <li><a href="module_container.html">container</a></li>
-                                <li><a href="module_dom.html">dom</a></li>
-                                <li><a href="module_dragdrop.html">dragdrop</a></li>
-                                <li><a href="module_event.html">event</a></li>
-                                <li><a href="module_logger.html">logger</a></li>
-                                <li><a href="module_menu.html">menu</a></li>
-                                <li><a href="module_slider.html">slider</a></li>
-                                <li><a href="module_tabview.html">tabview</a></li>
-                                <li><a href="module_treeview.html">treeview</a></li>
-                                <li><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_Connection.html">Connection</a></li>
+
+                                <li class="selected"><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
-                                <li><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
-                                <li><a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a></li>
-                                <li><a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a></li>
-                                <li><a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></li>
-                                <li><a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></li>
-                                <li><a href="YAHOO.widget.OverlayManager.html">YAHOO.widget.OverlayManager</a></li>
-                                <li><a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></li>
-                                <li><a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a></li>
-                                <li><a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a></li>
+                                <li class=""><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
+                                <li class=""><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
+                                <li class=""><a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a></li>
+                                <li class=""><a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></li>
+                                <li class=""><a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></li>
+                                <li class=""><a href="YAHOO.widget.OverlayManager.html">YAHOO.widget.OverlayManager</a></li>
+                                <li class=""><a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></li>
+                                <li class=""><a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="Config.js.html">Config.js</a></li>
-                                <li><a href="ContainerEffect.js.html">ContainerEffect.js</a></li>
-                                <li><a href="Dialog.js.html">Dialog.js</a></li>
-                                <li><a href="KeyListener.js.html">KeyListener.js</a></li>
-                                <li><a href="Module.js.html">Module.js</a></li>
-                                <li><a href="Overlay.js.html">Overlay.js</a></li>
-                                <li><a href="OverlayManager.js.html">OverlayManager.js</a></li>
-                                <li><a href="Panel.js.html">Panel.js</a></li>
-                                <li><a href="SimpleDialog.js.html">SimpleDialog.js</a></li>
-                                <li><a href="Tooltip.js.html">Tooltip.js</a></li>
+                                <li class=""><a href="Config.js.html">Config.js</a></li>
+                                <li class=""><a href="ContainerEffect.js.html">ContainerEffect.js</a></li>
+                                <li class="selected"><a href="Dialog.js.html">Dialog.js</a></li>
+                                <li class=""><a href="KeyListener.js.html">KeyListener.js</a></li>
+                                <li class=""><a href="Module.js.html">Module.js</a></li>
+                                <li class=""><a href="Overlay.js.html">Overlay.js</a></li>
+                                <li class=""><a href="OverlayManager.js.html">OverlayManager.js</a></li>
+                                <li class=""><a href="Panel.js.html">Panel.js</a></li>
+                                <li class=""><a href="SimpleDialog.js.html">SimpleDialog.js</a></li>
+                                <li class=""><a href="Tooltip.js.html">Tooltip.js</a></li>
                         </ul>
                     </div>
 

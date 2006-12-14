@@ -322,7 +322,8 @@
 <span class="c">             *                             the execution scope of the listener</span>
 <span class="c">             * @return {boolean} True if the action was successful or defered,</span>
 <span class="c">             *                        false if one or more of the elements </span>
-<span class="c">             *                        could not have the event bound to it.</span>
+<span class="c">             *                        could not have the listener attached,</span>
+<span class="c">             *                        or if the operation throws an exception.</span>
 <span class="c">             * @static</span>
 <span class="c">             */</span>
             <span class="nx">addListener</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">override</span><span class="o">)</span> <span class="o">{</span>
@@ -439,7 +440,14 @@
 <span class="c"></span>                    <span class="nx">legacyHandlers</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">].</span><span class="nx">push</span><span class="o">(</span><span class="nx">li</span><span class="o">);</span>
 
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">_simpleAdd</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">wrappedFn</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+                    <span class="k">try</span> <span class="o">{</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_simpleAdd</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">wrappedFn</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+                    <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="c">// handle an error trying to attach an event.  If it fails</span>
+<span class="c"></span>                        <span class="c">// we need to clean up the cache</span>
+<span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
+                        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                    <span class="o">}</span>
                 <span class="o">}</span>
 
                 <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
@@ -596,7 +604,11 @@
                     <span class="o">}</span>
 
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">_simpleRemove</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">cacheItem</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">WFN</span><span class="o">],</span> <span class="kc">false</span><span class="o">);</span>
+                    <span class="k">try</span> <span class="o">{</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_simpleRemove</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">cacheItem</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">WFN</span><span class="o">],</span> <span class="kc">false</span><span class="o">);</span>
+                    <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                    <span class="o">}</span>
                 <span class="o">}</span>
 
                 <span class="c">// removed the wrapped handler</span>
@@ -960,8 +972,10 @@
 
                         <span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
                             <span class="c">// The element is available, but not necessarily ready</span>
-<span class="c"></span>
-                            <span class="k">if</span> <span class="o">(</span> <span class="o">!</span><span class="nx">item</span><span class="o">.</span><span class="nx">checkReady</span> <span class="o">||</span> 
+<span class="c"></span>                            <span class="c">// @todo verify IE7 compatibility</span>
+<span class="c"></span>                            <span class="c">// @todo should we test parentNode.nextSibling?</span>
+<span class="c"></span>                            <span class="c">// @todo re-evaluate global content ready</span>
+<span class="c"></span>                            <span class="k">if</span> <span class="o">(</span> <span class="o">!</span><span class="nx">item</span><span class="o">.</span><span class="nx">checkReady</span> <span class="o">||</span> 
                                     <span class="nx">loadComplete</span> <span class="o">||</span> 
                                     <span class="nx">el</span><span class="o">.</span><span class="nx">nextSibling</span> <span class="o">||</span>
                                     <span class="o">(</span><span class="nb">document</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
@@ -975,7 +989,9 @@
                                     <span class="o">}</span>
                                 <span class="o">}</span>
                                 <span class="nx">item</span><span class="o">.</span><span class="nx">fn</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">scope</span><span class="o">,</span> <span class="nx">item</span><span class="o">.</span><span class="nx">obj</span><span class="o">);</span>
-                                <span class="nx">delete</span> <span class="nx">onAvailStack</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                                <span class="c">//delete onAvailStack[i];</span>
+<span class="c"></span>                                <span class="c">// null out instead of delete for Opera</span>
+<span class="c"></span>                                <span class="nx">onAvailStack</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
                             <span class="o">}</span>
                         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                             <span class="nx">notAvail</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">item</span><span class="o">);</span>
@@ -986,7 +1002,8 @@
                 <span class="nx">retryCount</span> <span class="o">=</span> <span class="o">(</span><span class="nx">notAvail</span><span class="o">.</span><span class="nx">length</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">?</span> <span class="m">0</span> <span class="o">:</span> <span class="nx">retryCount</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span>
 
                 <span class="k">if</span> <span class="o">(</span><span class="nx">tryAgain</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">startInterval</span><span class="o">();</span>
+                    <span class="nx">onAvailStack</span> <span class="o">=</span> <span class="nx">notAvail</span><span class="o">;</span> <span class="c">// cleanse the array</span>
+<span class="c"></span>                    <span class="k">this</span><span class="o">.</span><span class="nx">startInterval</span><span class="o">();</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                     <span class="nx">clearInterval</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">);</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">_interval</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
@@ -1087,11 +1104,13 @@
                             <span class="o">}</span>
                         <span class="o">}</span>
                         <span class="nx">l</span><span class="o">[</span><span class="nx">EU</span><span class="o">.</span><span class="nx">FN</span><span class="o">].</span><span class="nx">call</span><span class="o">(</span><span class="nx">scope</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">getEvent</span><span class="o">(</span><span class="nx">e</span><span class="o">),</span> <span class="nx">l</span><span class="o">[</span><span class="nx">EU</span><span class="o">.</span><span class="nx">OBJ</span><span class="o">]</span> <span class="o">);</span>
-                        <span class="nx">delete</span> <span class="nx">unloadListeners</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                        <span class="nx">unloadListeners</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
                         <span class="nx">l</span><span class="o">=</span><span class="kc">null</span><span class="o">;</span>
                         <span class="nx">scope</span><span class="o">=</span><span class="kc">null</span><span class="o">;</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
+
+                <span class="nx">unloadListeners</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
                 <span class="k">if</span> <span class="o">(</span><span class="nx">listeners</span> <span class="o">&amp;&amp;</span> <span class="nx">listeners</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">j</span> <span class="o">=</span> <span class="nx">listeners</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
@@ -1111,10 +1130,15 @@
 
                 <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">legacyEvents</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
                     <span class="c">// dereference the element</span>
-<span class="c"></span>                    <span class="nx">delete</span> <span class="nx">legacyEvents</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="m">0</span><span class="o">];</span>
+<span class="c"></span>                    <span class="c">//delete legacyEvents[i][0];</span>
+<span class="c"></span>                    <span class="nx">legacyEvents</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="m">0</span><span class="o">]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
                     <span class="c">// delete the array item</span>
-<span class="c"></span>                    <span class="nx">delete</span> <span class="nx">legacyEvents</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+<span class="c"></span>                    <span class="c">//delete legacyEvents[i];</span>
+<span class="c"></span>                    <span class="nx">legacyEvents</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
                 <span class="o">}</span>
+
+                <span class="nx">legacyEvents</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
                 <span class="nx">EU</span><span class="o">.</span><span class="nx">_simpleRemove</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span> <span class="s2">&quot;unload&quot;</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">_unload</span><span class="o">);</span>
 
@@ -1246,39 +1270,53 @@
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_animation.html">animation</a></li>
-                                <li><a href="module_autocomplete.html">autocomplete</a></li>
-                                <li><a href="module_calendar.html">calendar</a></li>
-                                <li><a href="module_connection.html">connection</a></li>
-                                <li><a href="module_container.html">container</a></li>
-                                <li><a href="module_dom.html">dom</a></li>
-                                <li><a href="module_dragdrop.html">dragdrop</a></li>
-                                <li><a href="module_event.html">event</a></li>
-                                <li><a href="module_logger.html">logger</a></li>
-                                <li><a href="module_menu.html">menu</a></li>
-                                <li><a href="module_slider.html">slider</a></li>
-                                <li><a href="module_tabview.html">tabview</a></li>
-                                <li><a href="module_treeview.html">treeview</a></li>
-                                <li><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_Connection.html">Connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class="selected"><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
-                                <li><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
-                                <li><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
-                                <li><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
+                                <li class=""><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
+                                <li class=""><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
+                                <li class=""><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
+                                <li class=""><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="CustomEvent.js.html">CustomEvent.js</a></li>
-                                <li><a href="Event.js.html">Event.js</a></li>
-                                <li><a href="EventProvider.js.html">EventProvider.js</a></li>
+                                <li class=""><a href="CustomEvent.js.html">CustomEvent.js</a></li>
+                                <li class="selected"><a href="Event.js.html">Event.js</a></li>
+                                <li class=""><a href="EventProvider.js.html">EventProvider.js</a></li>
                         </ul>
                     </div>
 

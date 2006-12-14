@@ -158,9 +158,9 @@
 <span class="c">*/</span>
 <span class="nx">_removeEventHandlers</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 
-    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">oTrigger</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_oTrigger</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">bOpera</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">browser</span> <span class="o">==</span> <span class="s2">&quot;opera&quot;</span><span class="o">);</span>
+    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+        <span class="nx">oTrigger</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_oTrigger</span><span class="o">,</span>
+        <span class="nx">bOpera</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">browser</span> <span class="o">==</span> <span class="s2">&quot;opera&quot;</span><span class="o">);</span>
 
 
     <span class="c">// Remove the event handlers from the trigger(s)</span>
@@ -222,8 +222,8 @@
     <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuManager</span><span class="o">.</span><span class="nx">hideVisible</span><span class="o">();</span>
 
 
-    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">oConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+        <span class="nx">oConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
 
     <span class="k">if</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;mousedown&quot;</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">p_oEvent</span><span class="o">.</span><span class="nx">ctrlKey</span><span class="o">)</span> <span class="o">{</span>
 
@@ -236,8 +236,8 @@
 
     <span class="c">// Position and display the context menu</span>
 <span class="c"></span>
-    <span class="k">var</span> <span class="nx">nX</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">);</span>
-    <span class="k">var</span> <span class="nx">nY</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getPageY</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">);</span>
+    <span class="k">var</span> <span class="nx">nX</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">),</span>
+        <span class="nx">nY</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getPageY</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">);</span>
 
 
     <span class="nx">oConfig</span><span class="o">.</span><span class="nx">applyConfig</span><span class="o">(</span> <span class="o">{</span> <span class="nx">xy</span><span class="o">:[</span><span class="nx">nX</span><span class="o">,</span> <span class="nx">nY</span><span class="o">],</span> <span class="nx">visible</span><span class="o">:</span><span class="kc">true</span> <span class="o">}</span> <span class="o">);</span>
@@ -330,8 +330,8 @@
 <span class="c">*/</span>
 <span class="nx">configTrigger</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oMenu</span><span class="o">)</span> <span class="o">{</span>
     
-    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">oTrigger</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+        <span class="nx">oTrigger</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
 
     <span class="k">if</span><span class="o">(</span><span class="nx">oTrigger</span><span class="o">)</span> <span class="o">{</span>
 
@@ -402,50 +402,64 @@
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_animation.html">animation</a></li>
-                                <li><a href="module_autocomplete.html">autocomplete</a></li>
-                                <li><a href="module_calendar.html">calendar</a></li>
-                                <li><a href="module_connection.html">connection</a></li>
-                                <li><a href="module_container.html">container</a></li>
-                                <li><a href="module_dom.html">dom</a></li>
-                                <li><a href="module_dragdrop.html">dragdrop</a></li>
-                                <li><a href="module_event.html">event</a></li>
-                                <li><a href="module_logger.html">logger</a></li>
-                                <li><a href="module_menu.html">menu</a></li>
-                                <li><a href="module_slider.html">slider</a></li>
-                                <li><a href="module_tabview.html">tabview</a></li>
-                                <li><a href="module_treeview.html">treeview</a></li>
-                                <li><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_Connection.html">Connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class="selected"><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
-                                <li><a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a></li>
-                                <li><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></li>
-                                <li><a href="YAHOO.widget.Menubar.html">YAHOO.widget.Menubar</a></li>
-                                <li><a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></li>
-                                <li><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></li>
-                                <li><a href="YAHOO.widget.MenuManager.html">YAHOO.widget.MenuManager</a></li>
-                                <li><a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></li>
-                                <li><a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></li>
+                                <li class=""><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
+                                <li class=""><a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a></li>
+                                <li class=""><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></li>
+                                <li class=""><a href="YAHOO.widget.Menubar.html">YAHOO.widget.Menubar</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuManager.html">YAHOO.widget.MenuManager</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="contextmenu.js.html">contextmenu.js</a></li>
-                                <li><a href="contextmenuitem.js.html">contextmenuitem.js</a></li>
-                                <li><a href="menu.js.html">menu.js</a></li>
-                                <li><a href="menubar.js.html">menubar.js</a></li>
-                                <li><a href="menubaritem.js.html">menubaritem.js</a></li>
-                                <li><a href="menuitem.js.html">menuitem.js</a></li>
-                                <li><a href="menumanager.js.html">menumanager.js</a></li>
-                                <li><a href="menumodule.js.html">menumodule.js</a></li>
-                                <li><a href="menumoduleitem.js.html">menumoduleitem.js</a></li>
+                                <li class="selected"><a href="contextmenu.js.html">contextmenu.js</a></li>
+                                <li class=""><a href="contextmenuitem.js.html">contextmenuitem.js</a></li>
+                                <li class=""><a href="menu.js.html">menu.js</a></li>
+                                <li class=""><a href="menubar.js.html">menubar.js</a></li>
+                                <li class=""><a href="menubaritem.js.html">menubaritem.js</a></li>
+                                <li class=""><a href="menuitem.js.html">menuitem.js</a></li>
+                                <li class=""><a href="menumanager.js.html">menumanager.js</a></li>
+                                <li class=""><a href="menumodule.js.html">menumodule.js</a></li>
+                                <li class=""><a href="menumoduleitem.js.html">menumoduleitem.js</a></li>
                         </ul>
                     </div>
 

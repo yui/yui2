@@ -56,7 +56,7 @@ be useful in your DragDrop implementations.
                             <h3><a name="field_detail">Properties</a></h3>
                             <div class="content">
                                     <h4><a name="_timeoutCount">_timeoutCount</a>
-                                        <code>- private static Object</code>
+                                        <code>- private static object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -176,7 +176,7 @@ mousdown time threshold has been met
 
                                     <hr />
                                     <h4><a name="elementCache">elementCache</a>
-                                        <code>- private static Object</code>
+                                        <code>- private static object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -219,7 +219,7 @@ object.
 
                                     <hr />
                                     <h4><a name="initialized">initialized</a>
-                                        <code>- private static Object</code>
+                                        <code>- private static object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -233,12 +233,13 @@ intialized
 
                                     <hr />
                                     <h4><a name="INTERSECT">INTERSECT</a>
-                                        <code>- static int</code>
+                                        <code>- static final int</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
-                                            In intersect mode, drag and drop interactio nis defined by the 
-overlap of two or more drag and drop objects.
+                                            In intersect mode, drag and drop interaction is defined by the 
+cursor position or the amount of overlap of two or more drag and 
+drop objects.
                                         </div>
                                     </div>
      
@@ -247,7 +248,7 @@ overlap of two or more drag and drop objects.
 
                                     <hr />
                                     <h4><a name="locationCache">locationCache</a>
-                                        <code>- private static Object</code>
+                                        <code>- private static object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -261,7 +262,7 @@ initiated, cleared when the drag is finished.
 
                                     <hr />
                                     <h4><a name="locked">locked</a>
-                                        <code>- private static Object</code>
+                                        <code>- private static object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -287,7 +288,7 @@ initiated, cleared when the drag is finished.
 
                                     <hr />
                                     <h4><a name="POINT">POINT</a>
-                                        <code>- static int</code>
+                                        <code>- static final int</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -352,6 +353,20 @@ drag threshold is met.
 we generate. This is true by default but you may want to set it to
 false if the html element contains other features that require the
 mouse click.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="STRICT_INTERSECT">STRICT_INTERSECT</a>
+                                        <code>- static final int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            In intersect mode, drag and drop interaction is defined only by the 
+overlap of two or more drag and drop objects.
                                         </div>
                                     </div>
      
@@ -1009,7 +1024,7 @@ the instance is configured for.</dd>
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>el &lt;Object&gt;</code>
+                                                            <code>el &lt;object&gt;</code>
                                                              the element for which to get the position
                                                         </dd>
                                                 </dl>
@@ -1056,7 +1071,7 @@ the instance is configured for.</dd>
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>el &lt;Object&gt;</code>
+                                                            <code>el &lt;object&gt;</code>
                                                              the element for which to get the position
                                                         </dd>
                                                 </dl>
@@ -1316,7 +1331,7 @@ Sets up the events required to track the object being dragged
                                                              the event
                                                         </dd>
                                                         <dd>
-                                                            <code>oDD &lt;Object&gt;</code>
+                                                            <code>oDD &lt;object&gt;</code>
                                                              the DragDrop object being dragged
                                                         </dd>
                                                 </dl>
@@ -1452,7 +1467,7 @@ clicked.
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>node &lt;Object&gt;</code>
+                                                            <code>node &lt;object&gt;</code>
                                                              the html element to inspect
                                                         </dd>
                                                 </dl>
@@ -2263,11 +2278,11 @@ emulate the IE behavior
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>n1 &lt;Object&gt;</code>
+                                                            <code>n1 &lt;object&gt;</code>
                                                              the first node to swap
                                                         </dd>
                                                         <dd>
-                                                            <code>n2 &lt;Object&gt;</code>
+                                                            <code>n2 &lt;object&gt;</code>
                                                              the other node to swap
                                                         </dd>
                                                 </dl>
@@ -2413,43 +2428,57 @@ error' when trying to access the offsetParent of such an element
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_animation.html">animation</a></li>
-                                <li><a href="module_autocomplete.html">autocomplete</a></li>
-                                <li><a href="module_calendar.html">calendar</a></li>
-                                <li><a href="module_connection.html">connection</a></li>
-                                <li><a href="module_container.html">container</a></li>
-                                <li><a href="module_dom.html">dom</a></li>
-                                <li><a href="module_dragdrop.html">dragdrop</a></li>
-                                <li><a href="module_event.html">event</a></li>
-                                <li><a href="module_logger.html">logger</a></li>
-                                <li><a href="module_menu.html">menu</a></li>
-                                <li><a href="module_slider.html">slider</a></li>
-                                <li><a href="module_tabview.html">tabview</a></li>
-                                <li><a href="module_treeview.html">treeview</a></li>
-                                <li><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_Connection.html">Connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class="selected"><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
-                                <li><a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a></li>
-                                <li><a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a></li>
-                                <li><a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></li>
-                                <li><a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a></li>
-                                <li><a href="YAHOO.util.DragDropMgr.ElementWrapper.html">YAHOO.util.DragDropMgr.ElementWrapper</a></li>
+                                <li class=""><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
+                                <li class=""><a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a></li>
+                                <li class=""><a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a></li>
+                                <li class=""><a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></li>
+                                <li class="selected"><a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a></li>
+                                <li class=""><a href="YAHOO.util.DragDropMgr.ElementWrapper.html">YAHOO.util.DragDropMgr.ElementWrapper</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="DD.js.html">DD.js</a></li>
-                                <li><a href="DDProxy.js.html">DDProxy.js</a></li>
-                                <li><a href="DDTarget.js.html">DDTarget.js</a></li>
-                                <li><a href="DragDrop.js.html">DragDrop.js</a></li>
-                                <li><a href="DragDropMgr.js.html">DragDropMgr.js</a></li>
+                                <li class=""><a href="DD.js.html">DD.js</a></li>
+                                <li class=""><a href="DDProxy.js.html">DDProxy.js</a></li>
+                                <li class=""><a href="DDTarget.js.html">DDTarget.js</a></li>
+                                <li class=""><a href="DragDrop.js.html">DragDrop.js</a></li>
+                                <li class=""><a href="DragDropMgr.js.html">DragDropMgr.js</a></li>
                         </ul>
                     </div>
 
@@ -2520,6 +2549,9 @@ error' when trying to access the offsetParent of such an element
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
                                 <li><a href="#stopPropagation">stopPropagation</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#STRICT_INTERSECT">STRICT_INTERSECT</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
                                 <li><a href="#useCache">useCache</a>

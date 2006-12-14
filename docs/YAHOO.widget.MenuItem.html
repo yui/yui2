@@ -70,6 +70,7 @@
 
 
 
+
                                                 , 
                                                 p_oConfig
                                     )
@@ -106,6 +107,13 @@ one-html.html#ID-70901257">HTMLOptionElement</a>&gt;
                                                     </code>
                                                      Object 
 specifying the <code>&#60;option&#62;</code> element of the menu item.
+                                                </dd>
+                                                <dd>
+                                                    <code>p_oObject
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                     Object literal specifying the configuration
+for the menu item. See configuration class documentation for more details.
                                                 </dd>
                                                 <dd>
                                                     <code>p_oConfig
@@ -1644,112 +1652,6 @@ focus event.
                                     </div>
                                     <hr />
                                     <h4>
-                                        <a name="getFirstItemIndex">getFirstItemIndex</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        Object
-                                            <strong>getFirstItemIndex</strong>
-                                           (
-                                                
-                                                        
-                                                         Array
-                                                    
-                                                
-                                                        , 
-                                                         Number
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description">
-                                            Get the index of the first item in an array
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl>
-                                                    <dt>Parameters:</dt>
-                                                        <dd>
-                                                            <code>Array &lt;p_aArray&gt;</code>
-                                                             to search.
-                                                        </dd>
-                                                        <dd>
-                                                            <code>Number &lt;p_nStartIndex&gt;</code>
-                                                             indicating the index to 
-start searching the array.
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code>
-                                                        Object
-                                                    </code></dt>
-                                                    <dd></dd>
-                                                </dl>
-             
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    <h4>
-                                        <a name="getNextArrayItem">getNextArrayItem</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        Object
-                                            <strong>getNextArrayItem</strong>
-                                           (
-                                                
-                                                        
-                                                         Array
-                                                    
-                                                
-                                                        , 
-                                                         Number
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description">
-                                            Finds the next item in an array.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl>
-                                                    <dt>Parameters:</dt>
-                                                        <dd>
-                                                            <code>Array &lt;p_aArray&gt;</code>
-                                                             to search.
-                                                        </dd>
-                                                        <dd>
-                                                            <code>Number &lt;p_nStartIndex&gt;</code>
-                                                             indicating the index to 
-start searching the array.
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code>
-                                                        Object
-                                                    </code></dt>
-                                                    <dd></dd>
-                                                </dl>
-             
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    <h4>
                                         <a name="getNextEnabledSibling">getNextEnabledSibling</a></h4>
                                     <div class="detail">
                                         <code>
@@ -1775,59 +1677,6 @@ start searching the array.
                                                         void
                                                     </code></dt>
                                                     <dd>YAHOO.widget.MenuItem</dd>
-                                                </dl>
-             
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    <h4>
-                                        <a name="getPreviousArrayItem">getPreviousArrayItem</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        Object
-                                            <strong>getPreviousArrayItem</strong>
-                                           (
-                                                
-                                                        
-                                                         Array
-                                                    
-                                                
-                                                        , 
-                                                         Number
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description">
-                                            Returns the previous item in an array
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl>
-                                                    <dt>Parameters:</dt>
-                                                        <dd>
-                                                            <code>Array &lt;p_aArray&gt;</code>
-                                                             to search.
-                                                        </dd>
-                                                        <dd>
-                                                            <code>Number &lt;p_nStartIndex&gt;</code>
-                                                             indicating the index to 
-start searching the array.
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code>
-                                                        Object
-                                                    </code></dt>
-                                                    <dd></dd>
                                                 </dl>
              
                                         </div>
@@ -1887,6 +1736,8 @@ start searching the array.
                                                 
 
                                                 
+
+                                                
                                                         , 
                                                          p_oConfig
                                                     
@@ -1928,6 +1779,11 @@ one-html.html#ID-70901257">HTMLOptionElement</a>&gt;</code>
 specifying the <code>&#60;option&#62;</code> element of the menu item.
                                                         </dd>
                                                         <dd>
+                                                            <code>p_oObject &lt;Object&gt;</code>
+                                                             Object literal specifying the configuration
+for the menu item. See configuration class documentation for more details.
+                                                        </dd>
+                                                        <dd>
                                                             <code>p_oConfig &lt;Object&gt;</code>
                                                              Optional. Object literal specifying the 
 configuration for the menu item. See configuration class documentation 
@@ -1962,71 +1818,6 @@ for more details.
                                         
                                         <div class="description">
                                             Initializes an item's configurable properties.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code>
-                                                        void
-                                                    </code></dt>
-                                                    <dd></dd>
-                                                </dl>
-             
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    <h4>
-                                        <a name="initHelpText">initHelpText</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong>initHelpText</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description">
-                                            Adds the "hashelptext" class to the necessary nodes and refires the 
-"selected" and "disabled" configuration events.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code>
-                                                        void
-                                                    </code></dt>
-                                                    <dd></dd>
-                                                </dl>
-             
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    <h4>
-                                        <a name="removeHelpText">removeHelpText</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong>removeHelpText</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description">
-                                            Removes the "hashelptext" class and corresponding DOM element (EM).
                                         </div>
 
                                         <div class="description">
@@ -2592,50 +2383,64 @@ of this property will be interpreted from the menu's markup.
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_animation.html">animation</a></li>
-                                <li><a href="module_autocomplete.html">autocomplete</a></li>
-                                <li><a href="module_calendar.html">calendar</a></li>
-                                <li><a href="module_connection.html">connection</a></li>
-                                <li><a href="module_container.html">container</a></li>
-                                <li><a href="module_dom.html">dom</a></li>
-                                <li><a href="module_dragdrop.html">dragdrop</a></li>
-                                <li><a href="module_event.html">event</a></li>
-                                <li><a href="module_logger.html">logger</a></li>
-                                <li><a href="module_menu.html">menu</a></li>
-                                <li><a href="module_slider.html">slider</a></li>
-                                <li><a href="module_tabview.html">tabview</a></li>
-                                <li><a href="module_treeview.html">treeview</a></li>
-                                <li><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_Connection.html">Connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class="selected"><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
-                                <li><a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a></li>
-                                <li><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></li>
-                                <li><a href="YAHOO.widget.Menubar.html">YAHOO.widget.Menubar</a></li>
-                                <li><a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></li>
-                                <li><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></li>
-                                <li><a href="YAHOO.widget.MenuManager.html">YAHOO.widget.MenuManager</a></li>
-                                <li><a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></li>
-                                <li><a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></li>
+                                <li class=""><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
+                                <li class=""><a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a></li>
+                                <li class=""><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></li>
+                                <li class=""><a href="YAHOO.widget.Menubar.html">YAHOO.widget.Menubar</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></li>
+                                <li class="selected"><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuManager.html">YAHOO.widget.MenuManager</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="contextmenu.js.html">contextmenu.js</a></li>
-                                <li><a href="contextmenuitem.js.html">contextmenuitem.js</a></li>
-                                <li><a href="menu.js.html">menu.js</a></li>
-                                <li><a href="menubar.js.html">menubar.js</a></li>
-                                <li><a href="menubaritem.js.html">menubaritem.js</a></li>
-                                <li><a href="menuitem.js.html">menuitem.js</a></li>
-                                <li><a href="menumanager.js.html">menumanager.js</a></li>
-                                <li><a href="menumodule.js.html">menumodule.js</a></li>
-                                <li><a href="menumoduleitem.js.html">menumoduleitem.js</a></li>
+                                <li class=""><a href="contextmenu.js.html">contextmenu.js</a></li>
+                                <li class=""><a href="contextmenuitem.js.html">contextmenuitem.js</a></li>
+                                <li class=""><a href="menu.js.html">menu.js</a></li>
+                                <li class=""><a href="menubar.js.html">menubar.js</a></li>
+                                <li class=""><a href="menubaritem.js.html">menubaritem.js</a></li>
+                                <li class=""><a href="menuitem.js.html">menuitem.js</a></li>
+                                <li class=""><a href="menumanager.js.html">menumanager.js</a></li>
+                                <li class=""><a href="menumodule.js.html">menumodule.js</a></li>
+                                <li class=""><a href="menumoduleitem.js.html">menumoduleitem.js</a></li>
                         </ul>
                     </div>
 
@@ -2799,17 +2604,8 @@ level-one-html.html#ID-58190037">HTMLElement</a></code>-->
                                 <li><!--<code>void</code>-->
                                 <a href="#focus">focus</a>
                                 </li>
-                                <li><!--<code>Object</code>-->
-                                <a href="#getFirstItemIndex">getFirstItemIndex</a>
-                                </li>
-                                <li><!--<code>Object</code>-->
-                                <a href="#getNextArrayItem">getNextArrayItem</a>
-                                </li>
                                 <li><!--<code>void</code>-->
                                 <a href="#getNextEnabledSibling">getNextEnabledSibling</a>
-                                </li>
-                                <li><!--<code>Object</code>-->
-                                <a href="#getPreviousArrayItem">getPreviousArrayItem</a>
                                 </li>
                                 <li><!--<code>YAHOO.widget.MenuItem</code>-->
                                 <a href="#getPreviousEnabledSibling">getPreviousEnabledSibling</a>
@@ -2819,12 +2615,6 @@ level-one-html.html#ID-58190037">HTMLElement</a></code>-->
                                 </li>
                                 <li><!--<code>void</code>-->
                                 <a href="#initDefaultConfig">initDefaultConfig</a>
-                                </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#initHelpText">initHelpText</a>
-                                </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#removeHelpText">removeHelpText</a>
                                 </li>
                                 <li><!--<code>String</code>-->
                                 <a href="#toString">toString</a>

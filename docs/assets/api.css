@@ -34,9 +34,11 @@ a:visited { color: #003399;}
 #doc3 .nav .module {width:100%; background:#EEEEEE; margin: 0 0 15px 0; padding: 0; overflow:hidden}
 #doc3 .nav .module h4 { padding: 3px 5px; border-bottom: #947DB2 1px solid; }
 #doc3 .nav .module h4 A { color: #000; text-decoration: none; }
-#doc3 .nav .module .content { padding: 7px; }
-#doc3 .nav .module UL.content LI { padding: 0 0 3px 0; font-size: 90%; }
+#doc3 .nav .module .content { padding: 2px; }
+#doc3 .nav .module UL.content LI { font-size: 90%; }
 #doc3 .nav .module UL.content A { text-decoration: none; }
+#doc3 .nav .module LI { padding: 2px 4px 2px 4px; }
+#doc3 .nav .module LI.selected { background: #CDC6D5; }
 
 #doc3 .section { margin: 0 0 16px 0; }
 #doc3 .section strong { font-weight: bold;}

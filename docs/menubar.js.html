@@ -140,133 +140,123 @@
 <span class="c">*/</span>
 <span class="nx">_onKeyDown</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oMenuBar</span><span class="o">)</span> <span class="o">{</span>
 
-    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">oEvent</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
-    <span class="k">var</span> <span class="nx">oItem</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
-    <span class="k">var</span> <span class="nx">oItemCfg</span> <span class="o">=</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">oSubmenu</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+        <span class="nx">oEvent</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+        <span class="nx">oItem</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">1</span><span class="o">],</span>
+        <span class="nx">oSubmenu</span><span class="o">;</span>
 
 
-    <span class="nx">switch</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">.</span><span class="nx">keyCode</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">oItem</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;disabled&quot;</span><span class="o">))</span> <span class="o">{</span>
 
-        <span class="nx">case</span> <span class="m">27</span><span class="o">:</span>    <span class="c">// Esc key</span>
-<span class="c"></span>
-            <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;position&quot;</span><span class="o">)</span> <span class="o">==</span> <span class="s2">&quot;dynamic&quot;</span><span class="o">)</span> <span class="o">{</span>
-            
-                <span class="k">this</span><span class="o">.</span><span class="nx">hide</span><span class="o">();</span>
+        <span class="k">var</span> <span class="nx">oItemCfg</span> <span class="o">=</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
+
+        <span class="nx">switch</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">.</span><span class="nx">keyCode</span><span class="o">)</span> <span class="o">{</span>
     
-                <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">case</span> <span class="m">37</span><span class="o">:</span>    <span class="c">// Left arrow</span>
+<span class="c"></span>            <span class="nx">case</span> <span class="m">39</span><span class="o">:</span>    <span class="c">// Right arrow</span>
+<span class="c"></span>    
+                <span class="k">if</span><span class="o">(</span>
+                    <span class="nx">oItem</span> <span class="o">==</span> <span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span> <span class="o">&amp;&amp;</span> 
+                    <span class="o">!</span><span class="nx">oItemCfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">)</span>
+                <span class="o">)</span> <span class="o">{</span>
     
-                    <span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
-                
-                <span class="o">}</span>
+                    <span class="nx">oItemCfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
     
-            <span class="o">}</span>
-            <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span><span class="o">)</span> <span class="o">{</span>
-    
-                <span class="nx">oSubmenu</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenu&quot;</span><span class="o">);</span>
-    
-                <span class="k">if</span><span class="o">(</span><span class="nx">oSubmenu</span> <span class="o">&amp;&amp;</span> <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;visible&quot;</span><span class="o">))</span> <span class="o">{</span>
-                
-                    <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">hide</span><span class="o">();</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
-                
                 <span class="o">}</span>
                 <span class="k">else</span> <span class="o">{</span>
     
-                    <span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span><span class="o">.</span><span class="nx">blur</span><span class="o">();</span>
+                    <span class="k">var</span> <span class="nx">oNextItem</span> <span class="o">=</span> <span class="o">(</span><span class="nx">oEvent</span><span class="o">.</span><span class="nx">keyCode</span> <span class="o">==</span> <span class="m">37</span><span class="o">)</span> <span class="o">?</span> 
+                            <span class="nx">oItem</span><span class="o">.</span><span class="nx">getPreviousEnabledSibling</span><span class="o">()</span> <span class="o">:</span> 
+                            <span class="nx">oItem</span><span class="o">.</span><span class="nx">getNextEnabledSibling</span><span class="o">();</span>
             
+                    <span class="k">if</span><span class="o">(</span><span class="nx">oNextItem</span><span class="o">)</span> <span class="o">{</span>
+    
+                        <span class="k">this</span><span class="o">.</span><span class="nx">clearActiveItem</span><span class="o">();</span>
+    
+                        <span class="nx">oNextItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+    
+    
+                        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;autosubmenudisplay&quot;</span><span class="o">))</span> <span class="o">{</span>
+                        
+                            <span class="nx">oSubmenu</span> <span class="o">=</span> <span class="nx">oNextItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenu&quot;</span><span class="o">);</span>
+                            
+                            <span class="k">if</span><span class="o">(</span><span class="nx">oSubmenu</span><span class="o">)</span> <span class="o">{</span>
+                        
+                                <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">show</span><span class="o">();</span>
+                                <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">activeItem</span><span class="o">.</span><span class="nx">blur</span><span class="o">();</span>
+                                <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">activeItem</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                            
+                            <span class="o">}</span>
+                
+                        <span class="o">}</span>           
+    
+                        <span class="nx">oNextItem</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
+    
+                    <span class="o">}</span>
+    
                 <span class="o">}</span>
-            
-            <span class="o">}</span>
     
+                <span class="nx">Event</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">);</span>
     
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">);</span>
-        
-        <span class="k">break</span><span class="o">;</span>
-
-        <span class="nx">case</span> <span class="m">37</span><span class="o">:</span>    <span class="c">// Left arrow</span>
-<span class="c"></span>        <span class="nx">case</span> <span class="m">39</span><span class="o">:</span>    <span class="c">// Right arrow</span>
-<span class="c"></span>
-            <span class="k">if</span><span class="o">(</span>
-                <span class="nx">oItem</span> <span class="o">==</span> <span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span> <span class="o">&amp;&amp;</span> 
-                <span class="o">!</span><span class="nx">oItemCfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">)</span>
-            <span class="o">)</span> <span class="o">{</span>
-
-                <span class="nx">oItemCfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-
-            <span class="o">}</span>
-            <span class="k">else</span> <span class="o">{</span>
-
-                <span class="k">var</span> <span class="nx">oNextItem</span> <span class="o">=</span> <span class="o">(</span><span class="nx">oEvent</span><span class="o">.</span><span class="nx">keyCode</span> <span class="o">==</span> <span class="m">37</span><span class="o">)</span> <span class="o">?</span> 
-                        <span class="nx">oItem</span><span class="o">.</span><span class="nx">getPreviousEnabledSibling</span><span class="o">()</span> <span class="o">:</span> 
-                        <span class="nx">oItem</span><span class="o">.</span><span class="nx">getNextEnabledSibling</span><span class="o">();</span>
-        
-                <span class="k">if</span><span class="o">(</span><span class="nx">oNextItem</span><span class="o">)</span> <span class="o">{</span>
-
+            <span class="k">break</span><span class="o">;</span>
+    
+            <span class="nx">case</span> <span class="m">40</span><span class="o">:</span>    <span class="c">// Down arrow</span>
+<span class="c"></span>    
+                <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span> <span class="o">!=</span> <span class="nx">oItem</span><span class="o">)</span> <span class="o">{</span>
+    
                     <span class="k">this</span><span class="o">.</span><span class="nx">clearActiveItem</span><span class="o">();</span>
-
-                    <span class="nx">oNextItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-
-
-                    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;autosubmenudisplay&quot;</span><span class="o">))</span> <span class="o">{</span>
-                    
-                        <span class="nx">oSubmenu</span> <span class="o">=</span> <span class="nx">oNextItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenu&quot;</span><span class="o">);</span>
-                        
-                        <span class="k">if</span><span class="o">(</span><span class="nx">oSubmenu</span><span class="o">)</span> <span class="o">{</span>
-                    
-                            <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">show</span><span class="o">();</span>
-                            <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">activeItem</span><span class="o">.</span><span class="nx">blur</span><span class="o">();</span>
-                            <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">activeItem</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-                        
-                        <span class="o">}</span>
-            
-                    <span class="o">}</span>           
-
-                    <span class="nx">oNextItem</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
-
+    
+                    <span class="nx">oItemCfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                    <span class="nx">oItem</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
+                
                 <span class="o">}</span>
+    
+                <span class="nx">oSubmenu</span> <span class="o">=</span> <span class="nx">oItemCfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenu&quot;</span><span class="o">);</span>
+    
+                <span class="k">if</span><span class="o">(</span><span class="nx">oSubmenu</span><span class="o">)</span> <span class="o">{</span>
+    
+                    <span class="k">if</span><span class="o">(</span><span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;visible&quot;</span><span class="o">))</span> <span class="o">{</span>
+    
+                        <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">setInitialSelection</span><span class="o">();</span>
+                        <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">setInitialFocus</span><span class="o">();</span>
+                    
+                    <span class="o">}</span>
+                    <span class="k">else</span> <span class="o">{</span>
+    
+                        <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">show</span><span class="o">();</span>
+                    
+                    <span class="o">}</span>
+    
+                <span class="o">}</span>
+    
+                <span class="nx">Event</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">);</span>
+    
+            <span class="k">break</span><span class="o">;</span>
+    
+        <span class="o">}</span>
 
-            <span class="o">}</span>
+    <span class="o">}</span>
 
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">);</span>
 
-        <span class="k">break</span><span class="o">;</span>
-
-        <span class="nx">case</span> <span class="m">40</span><span class="o">:</span>    <span class="c">// Down arrow</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">.</span><span class="nx">keyCode</span> <span class="o">==</span> <span class="m">27</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span><span class="o">)</span> <span class="o">{</span> <span class="c">// Esc key</span>
 <span class="c"></span>
-            <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span> <span class="o">!=</span> <span class="nx">oItem</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">oSubmenu</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenu&quot;</span><span class="o">);</span>
 
-                <span class="k">this</span><span class="o">.</span><span class="nx">clearActiveItem</span><span class="o">();</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">oSubmenu</span> <span class="o">&amp;&amp;</span> <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;visible&quot;</span><span class="o">))</span> <span class="o">{</span>
+        
+            <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">hide</span><span class="o">();</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
+        
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span>
 
-                <span class="nx">oItemCfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-                <span class="nx">oItem</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
-            
-            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span><span class="o">.</span><span class="nx">blur</span><span class="o">();</span>
+    
+        <span class="o">}</span>
 
-            <span class="nx">oSubmenu</span> <span class="o">=</span> <span class="nx">oItemCfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenu&quot;</span><span class="o">);</span>
-
-            <span class="k">if</span><span class="o">(</span><span class="nx">oSubmenu</span><span class="o">)</span> <span class="o">{</span>
-
-                <span class="k">if</span><span class="o">(</span><span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;visible&quot;</span><span class="o">))</span> <span class="o">{</span>
-
-                    <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">setInitialSelection</span><span class="o">();</span>
-                    <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">setInitialFocus</span><span class="o">();</span>
-                
-                <span class="o">}</span>
-                <span class="k">else</span> <span class="o">{</span>
-
-                    <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">show</span><span class="o">();</span>
-                
-                <span class="o">}</span>
-
-            <span class="o">}</span>
-
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">);</span>
-
-        <span class="k">break</span><span class="o">;</span>
-
+        <span class="nx">Event</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">);</span>
+    
     <span class="o">}</span>
 
 <span class="o">},</span>
@@ -294,16 +284,16 @@
 
     <span class="k">var</span> <span class="nx">oItem</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
     
-    <span class="k">if</span><span class="o">(</span><span class="nx">oItem</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">oItem</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;disabled&quot;</span><span class="o">))</span> <span class="o">{</span>
 
-        <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">;</span>
-
-        <span class="k">var</span> <span class="nx">oEvent</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
-        <span class="k">var</span> <span class="nx">oTarget</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getTarget</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">);</span>
-
-        <span class="k">var</span> <span class="nx">oActiveItem</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">oConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
+         <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+             <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
+    
+             <span class="nx">oEvent</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+             <span class="nx">oTarget</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getTarget</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">),</span>
+    
+             <span class="nx">oActiveItem</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span><span class="o">,</span>
+             <span class="nx">oConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
 
 
         <span class="c">// Hide any other submenus that might be visible</span>
@@ -448,50 +438,64 @@
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_animation.html">animation</a></li>
-                                <li><a href="module_autocomplete.html">autocomplete</a></li>
-                                <li><a href="module_calendar.html">calendar</a></li>
-                                <li><a href="module_connection.html">connection</a></li>
-                                <li><a href="module_container.html">container</a></li>
-                                <li><a href="module_dom.html">dom</a></li>
-                                <li><a href="module_dragdrop.html">dragdrop</a></li>
-                                <li><a href="module_event.html">event</a></li>
-                                <li><a href="module_logger.html">logger</a></li>
-                                <li><a href="module_menu.html">menu</a></li>
-                                <li><a href="module_slider.html">slider</a></li>
-                                <li><a href="module_tabview.html">tabview</a></li>
-                                <li><a href="module_treeview.html">treeview</a></li>
-                                <li><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_Connection.html">Connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class="selected"><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
-                                <li><a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a></li>
-                                <li><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></li>
-                                <li><a href="YAHOO.widget.Menubar.html">YAHOO.widget.Menubar</a></li>
-                                <li><a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></li>
-                                <li><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></li>
-                                <li><a href="YAHOO.widget.MenuManager.html">YAHOO.widget.MenuManager</a></li>
-                                <li><a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></li>
-                                <li><a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></li>
+                                <li class=""><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
+                                <li class=""><a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a></li>
+                                <li class=""><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></li>
+                                <li class=""><a href="YAHOO.widget.Menubar.html">YAHOO.widget.Menubar</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuManager.html">YAHOO.widget.MenuManager</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="contextmenu.js.html">contextmenu.js</a></li>
-                                <li><a href="contextmenuitem.js.html">contextmenuitem.js</a></li>
-                                <li><a href="menu.js.html">menu.js</a></li>
-                                <li><a href="menubar.js.html">menubar.js</a></li>
-                                <li><a href="menubaritem.js.html">menubaritem.js</a></li>
-                                <li><a href="menuitem.js.html">menuitem.js</a></li>
-                                <li><a href="menumanager.js.html">menumanager.js</a></li>
-                                <li><a href="menumodule.js.html">menumodule.js</a></li>
-                                <li><a href="menumoduleitem.js.html">menumoduleitem.js</a></li>
+                                <li class=""><a href="contextmenu.js.html">contextmenu.js</a></li>
+                                <li class=""><a href="contextmenuitem.js.html">contextmenuitem.js</a></li>
+                                <li class=""><a href="menu.js.html">menu.js</a></li>
+                                <li class="selected"><a href="menubar.js.html">menubar.js</a></li>
+                                <li class=""><a href="menubaritem.js.html">menubaritem.js</a></li>
+                                <li class=""><a href="menuitem.js.html">menuitem.js</a></li>
+                                <li class=""><a href="menumanager.js.html">menumanager.js</a></li>
+                                <li class=""><a href="menumodule.js.html">menumodule.js</a></li>
+                                <li class=""><a href="menumoduleitem.js.html">menumoduleitem.js</a></li>
                         </ul>
                     </div>
 

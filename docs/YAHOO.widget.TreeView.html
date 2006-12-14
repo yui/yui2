@@ -35,6 +35,10 @@
                         </span>
 
                         <span class="extends">
+                          - uses 
+                            
+                                <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>
+                            
                         </span>
                         
                         </code>
@@ -109,7 +113,7 @@ itself that the tree will be inserted into.
 
                                     <hr />
                                     <h4><a name="_el">_el</a>
-                                        <code>- private Object</code>
+                                        <code>- private object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -187,7 +191,7 @@ itself that the tree will be inserted into.
 
                                     <hr />
                                     <h4><a name="YAHOO.widget.TreeView.counter">YAHOO.widget.TreeView.counter</a>
-                                        <code>- private static Object</code>
+                                        <code>- private static object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
@@ -230,6 +234,16 @@ itself that the tree will be inserted into.
                             </div>
                         </div>
 
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.util.EventProvider.html#__yui_events">__yui_events</a>,
+                                        <a href="YAHOO.util.EventProvider.html#__yui_subscribers">__yui_subscribers</a>
+                                </code>
+                            </div>
+                        </div>
 
                         <div class="section method details">
                             <h3><a name="methodDetails">Methods</a></h3>
@@ -1271,7 +1285,7 @@ in YAHOO.widget.TVAnim)
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>oData &lt;Object&gt;</code>
+                                                            <code>oData &lt;object&gt;</code>
                                                              string containing the label, or an object with a label property
                                                         </dd>
                                                 </dl>
@@ -1355,7 +1369,7 @@ in YAHOO.widget.TVAnim)
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>el &lt;Object&gt;</code>
+                                                            <code>el &lt;object&gt;</code>
                                                              the elment to bind the handler to
                                                         </dd>
                                                         <dd>
@@ -1559,7 +1573,7 @@ images to preload, default is ygtv
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>el &lt;Object&gt;</code>
+                                                            <code>el &lt;object&gt;</code>
                                                              the elment to bind the handler to
                                                         </dd>
                                                         <dd>
@@ -1587,6 +1601,19 @@ images to preload, default is ygtv
                             </div>
                         </div>
 
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                        
+                                            <a href="YAHOO.util.EventProvider.html#createEvent">createEvent</a>,
+                                            <a href="YAHOO.util.EventProvider.html#fireEvent">fireEvent</a>,
+                                            <a href="YAHOO.util.EventProvider.html#hasEvent">hasEvent</a>,
+                                            <a href="YAHOO.util.EventProvider.html#subscribe">subscribe</a>,
+                                            <a href="YAHOO.util.EventProvider.html#unsubscribe">unsubscribe</a>
+                                    </code>
+                                </div>
+                            </div>
 
                         <div class="section method details">
                             <h3><a name="methodDetails">Events</a></h3>
@@ -1691,8 +1718,8 @@ starts
                                         </code>
                                         
                                         <div class="description">
-                                            Fires when a node is going to be expanded.  Return false to stop
-the expand.
+                                            Fires when a node is going to be collapsed.  Return false to stop
+the collapse.
                                         </div>
 
                                         <div class="description">
@@ -1702,7 +1729,47 @@ the expand.
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>node &lt;YAHOO.widget.Node&gt;</code>
-                                                             the node that is expanding/collapsing
+                                                             the node that is collapsing
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="collapseComplete">collapseComplete</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>collapseComplete</strong>
+
+                                            (
+                                                
+                                                        
+                                                         node
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires after a node is successfully collapsed.  This event will not fire
+if the "collapse" event was cancelled.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>node &lt;YAHOO.widget.Node&gt;</code>
+                                                             the node that was collapsed
                                                         </dd>
                                                 </dl>
 
@@ -1731,7 +1798,7 @@ the expand.
                                         </code>
                                         
                                         <div class="description">
-                                            Fires when a node is going to be collapsed.  Return false to stop
+                                            Fires when a node is going to be expanded.  Return false to stop
 the collapse.
                                         </div>
 
@@ -1742,7 +1809,47 @@ the collapse.
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>node &lt;YAHOO.widget.Node&gt;</code>
-                                                             the node that is expanding/collapsing
+                                                             the node that is expanding
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="expandComplete">expandComplete</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>expandComplete</strong>
+
+                                            (
+                                                
+                                                        
+                                                         node
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires after a node is successfully expanded.  This event will not fire
+if the "expand" event was cancelled.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>node &lt;YAHOO.widget.Node&gt;</code>
+                                                             the node that was expanded
                                                         </dd>
                                                 </dl>
 
@@ -1809,50 +1916,64 @@ provided as an argument
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_animation.html">animation</a></li>
-                                <li><a href="module_autocomplete.html">autocomplete</a></li>
-                                <li><a href="module_calendar.html">calendar</a></li>
-                                <li><a href="module_connection.html">connection</a></li>
-                                <li><a href="module_container.html">container</a></li>
-                                <li><a href="module_dom.html">dom</a></li>
-                                <li><a href="module_dragdrop.html">dragdrop</a></li>
-                                <li><a href="module_event.html">event</a></li>
-                                <li><a href="module_logger.html">logger</a></li>
-                                <li><a href="module_menu.html">menu</a></li>
-                                <li><a href="module_slider.html">slider</a></li>
-                                <li><a href="module_tabview.html">tabview</a></li>
-                                <li><a href="module_treeview.html">treeview</a></li>
-                                <li><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_Connection.html">Connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class="selected"><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.widget.HTMLNode.html">YAHOO.widget.HTMLNode</a></li>
-                                <li><a href="YAHOO.widget.MenuNode.html">YAHOO.widget.MenuNode</a></li>
-                                <li><a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a></li>
-                                <li><a href="YAHOO.widget.RootNode.html">YAHOO.widget.RootNode</a></li>
-                                <li><a href="YAHOO.widget.TextNode.html">YAHOO.widget.TextNode</a></li>
-                                <li><a href="YAHOO.widget.TreeView.html">YAHOO.widget.TreeView</a></li>
-                                <li><a href="YAHOO.widget.TVAnim.html">YAHOO.widget.TVAnim</a></li>
-                                <li><a href="YAHOO.widget.TVFadeIn.html">YAHOO.widget.TVFadeIn</a></li>
-                                <li><a href="YAHOO.widget.TVFadeOut.html">YAHOO.widget.TVFadeOut</a></li>
+                                <li class=""><a href="YAHOO.util.Node.html">YAHOO.util.Node</a></li>
+                                <li class=""><a href="YAHOO.widget.HTMLNode.html">YAHOO.widget.HTMLNode</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuNode.html">YAHOO.widget.MenuNode</a></li>
+                                <li class=""><a href="YAHOO.widget.RootNode.html">YAHOO.widget.RootNode</a></li>
+                                <li class=""><a href="YAHOO.widget.TextNode.html">YAHOO.widget.TextNode</a></li>
+                                <li class="selected"><a href="YAHOO.widget.TreeView.html">YAHOO.widget.TreeView</a></li>
+                                <li class=""><a href="YAHOO.widget.TVAnim.html">YAHOO.widget.TVAnim</a></li>
+                                <li class=""><a href="YAHOO.widget.TVFadeIn.html">YAHOO.widget.TVFadeIn</a></li>
+                                <li class=""><a href="YAHOO.widget.TVFadeOut.html">YAHOO.widget.TVFadeOut</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="HTMLNode.js.html">HTMLNode.js</a></li>
-                                <li><a href="MenuNode.js.html">MenuNode.js</a></li>
-                                <li><a href="Node.js.html">Node.js</a></li>
-                                <li><a href="RootNode.js.html">RootNode.js</a></li>
-                                <li><a href="TextNode.js.html">TextNode.js</a></li>
-                                <li><a href="TreeView.js.html">TreeView.js</a></li>
-                                <li><a href="TVAnim.js.html">TVAnim.js</a></li>
-                                <li><a href="TVFadeIn.js.html">TVFadeIn.js</a></li>
-                                <li><a href="TVFadeOut.js.html">TVFadeOut.js</a></li>
+                                <li class=""><a href="HTMLNode.js.html">HTMLNode.js</a></li>
+                                <li class=""><a href="MenuNode.js.html">MenuNode.js</a></li>
+                                <li class=""><a href="Node.js.html">Node.js</a></li>
+                                <li class=""><a href="RootNode.js.html">RootNode.js</a></li>
+                                <li class=""><a href="TextNode.js.html">TextNode.js</a></li>
+                                <li class=""><a href="TreeView.js.html">TreeView.js</a></li>
+                                <li class=""><a href="TVAnim.js.html">TVAnim.js</a></li>
+                                <li class=""><a href="TVFadeIn.js.html">TVFadeIn.js</a></li>
+                                <li class=""><a href="TVFadeOut.js.html">TVFadeOut.js</a></li>
                         </ul>
                     </div>
 
@@ -2007,7 +2128,13 @@ provided as an argument
                                 <a href="#collapse">collapse</a>
                                 </li>
                                 <li>
+                                <a href="#collapseComplete">collapseComplete</a>
+                                </li>
+                                <li>
                                 <a href="#expand">expand</a>
+                                </li>
+                                <li>
+                                <a href="#expandComplete">expandComplete</a>
                                 </li>
                                 <li>
                                 <a href="#labelClick">labelClick</a>
