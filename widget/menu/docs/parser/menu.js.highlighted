@@ -1,7 +1,7 @@
 <div class="highlight" ><pre><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 
-<span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">;</span>
-<span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
+<span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
+    <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
 
 
 <span class="c">/**</span>
@@ -115,6 +115,17 @@
 <span class="c">* @type Number</span>
 <span class="c">*/</span>
 <span class="nx">_nShowDelayId</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+
+<span class="c">/** </span>
+<span class="c">* @property _nSubmenuHideDelayId</span>
+<span class="c">* @description Number representing the time-out setting used to cancel the </span>
+<span class="c">* hiding of a submenu.</span>
+<span class="c">* @default null</span>
+<span class="c">* @private</span>
+<span class="c">* @type Number</span>
+<span class="c">*/</span>
+<span class="nx">_nSubmenuHideDelayId</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
 
 
 <span class="c">/** </span>
@@ -485,6 +496,12 @@
         <span class="k">this</span><span class="o">.</span><span class="nx">clickEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_onClick</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">keyDownEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_onKeyDown</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_onTextResize</span><span class="o">,</span> 
+            <span class="k">this</span><span class="o">,</span> 
+            <span class="kc">true</span>
+        <span class="o">);</span>
+
 
         <span class="k">if</span><span class="o">(</span><span class="nx">p_oConfig</span><span class="o">)</span> <span class="o">{</span>
     
@@ -528,8 +545,8 @@
 
         <span class="nx">oNode</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">;</span>
 
-        <span class="k">var</span> <span class="nx">nGroup</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">sGroupTitleTagName</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">GROUP_TITLE_TAG_NAME</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">();</span>
+        <span class="k">var</span> <span class="nx">nGroup</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span>
+            <span class="nx">sGroupTitleTagName</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">GROUP_TITLE_TAG_NAME</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">();</span>
 
         <span class="k">do</span> <span class="o">{</span>
 
@@ -578,8 +595,11 @@
     <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Searching DOM for items to initialize.&quot;</span><span class="o">);</span>
 
     <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">srcElement</span><span class="o">.</span><span class="nx">tagName</span><span class="o">)</span> <span class="o">{</span>
-    
-        <span class="nx">switch</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">srcElement</span><span class="o">.</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">())</span> <span class="o">{</span>
+
+        <span class="k">var</span> <span class="nx">sSrcElementTagName</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">srcElement</span><span class="o">.</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">();</span>
+
+
+        <span class="nx">switch</span><span class="o">(</span><span class="nx">sSrcElementTagName</span><span class="o">)</span> <span class="o">{</span>
     
             <span class="nx">case</span> <span class="s2">&quot;DIV&quot;</span><span class="o">:</span>
     
@@ -601,26 +621,22 @@
     
                         <span class="k">do</span> <span class="o">{</span>
         
-                            <span class="k">if</span><span class="o">(</span><span class="nx">oNode</span> <span class="o">&amp;&amp;</span> <span class="nx">oNode</span><span class="o">.</span><span class="nx">tagName</span><span class="o">)</span> <span class="o">{</span>
-                            
-                                <span class="nx">switch</span><span class="o">(</span><span class="nx">oNode</span><span class="o">.</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">())</span> <span class="o">{</span>
-                
-                                    <span class="nx">case</span> <span class="s2">&quot;LI&quot;</span><span class="o">:</span>
+                            <span class="k">if</span><span class="o">(</span>
+                                <span class="nx">oNode</span> <span class="o">&amp;&amp;</span> 
+                                <span class="nx">oNode</span><span class="o">.</span><span class="nx">tagName</span> <span class="o">&amp;&amp;</span> 
+                                <span class="nx">oNode</span><span class="o">.</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">()</span> <span class="o">==</span> <span class="s2">&quot;LI&quot;</span>
+                            <span class="o">)</span> <span class="o">{</span>
         
-                                        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Initializing &quot;</span> <span class="o">+</span> 
-                                            <span class="nx">oNode</span><span class="o">.</span><span class="nx">tagName</span> <span class="o">+</span> <span class="s2">&quot; node.&quot;</span><span class="o">);</span>
-        
-                                        <span class="k">this</span><span class="o">.</span><span class="nx">addItem</span><span class="o">(</span>
-                                                <span class="k">new</span> <span class="k">this</span><span class="o">.</span><span class="nx">ITEM_TYPE</span><span class="o">(</span>
-                                                    <span class="nx">oNode</span><span class="o">,</span> 
-                                                    <span class="o">{</span> <span class="nx">parent</span><span class="o">:</span> <span class="k">this</span> <span class="o">}</span>
-                                                <span class="o">),</span> 
-                                                <span class="nx">i</span>
-                                            <span class="o">);</span>
-                
-                                    <span class="k">break</span><span class="o">;</span>
-                
-                                <span class="o">}</span>
+                                <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Initializing &quot;</span> <span class="o">+</span> 
+                                    <span class="nx">oNode</span><span class="o">.</span><span class="nx">tagName</span> <span class="o">+</span> <span class="s2">&quot; node.&quot;</span><span class="o">);</span>
+
+                                <span class="k">this</span><span class="o">.</span><span class="nx">addItem</span><span class="o">(</span>
+                                        <span class="k">new</span> <span class="k">this</span><span class="o">.</span><span class="nx">ITEM_TYPE</span><span class="o">(</span>
+                                            <span class="nx">oNode</span><span class="o">,</span> 
+                                            <span class="o">{</span> <span class="nx">parent</span><span class="o">:</span> <span class="k">this</span> <span class="o">}</span>
+                                        <span class="o">),</span> 
+                                        <span class="nx">i</span>
+                                    <span class="o">);</span>
     
                             <span class="o">}</span>
                 
@@ -687,9 +703,9 @@
 <span class="c">*/</span>
 <span class="nx">_getFirstEnabledItem</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 
-    <span class="k">var</span> <span class="nx">nGroups</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_aItemGroups</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">oItem</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">aItemGroup</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">nGroups</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_aItemGroups</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span>
+        <span class="nx">oItem</span><span class="o">,</span>
+        <span class="nx">aItemGroup</span><span class="o">;</span>
 
     <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">nGroups</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
 
@@ -775,26 +791,20 @@
         <span class="nx">oItem</span> <span class="o">=</span> <span class="k">new</span> <span class="k">this</span><span class="o">.</span><span class="nx">ITEM_TYPE</span><span class="o">(</span><span class="nx">p_oItem</span><span class="o">,</span> <span class="o">{</span> <span class="nx">parent</span><span class="o">:</span> <span class="k">this</span> <span class="o">});</span>
     
     <span class="o">}</span>
-    <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="k">typeof</span> <span class="nx">p_oItem</span> <span class="o">==</span> <span class="s2">&quot;object&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">p_oItem</span><span class="o">.</span><span class="nx">text</span><span class="o">)</span> <span class="o">{</span>
-
-        <span class="k">var</span> <span class="nx">sText</span> <span class="o">=</span> <span class="nx">p_oItem</span><span class="o">.</span><span class="nx">text</span><span class="o">;</span>
-
-        <span class="nx">delete</span> <span class="nx">p_oItem</span><span class="o">[</span><span class="s2">&quot;text&quot;</span><span class="o">];</span>
+    <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="k">typeof</span> <span class="nx">p_oItem</span> <span class="o">==</span> <span class="s2">&quot;object&quot;</span><span class="o">)</span> <span class="o">{</span>
 
         <span class="nx">p_oItem</span><span class="o">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
 
-        <span class="nx">oItem</span> <span class="o">=</span> <span class="k">new</span> <span class="k">this</span><span class="o">.</span><span class="nx">ITEM_TYPE</span><span class="o">(</span><span class="nx">sText</span><span class="o">,</span> <span class="nx">p_oItem</span><span class="o">);</span>
+        <span class="nx">oItem</span> <span class="o">=</span> <span class="k">new</span> <span class="k">this</span><span class="o">.</span><span class="nx">ITEM_TYPE</span><span class="o">(</span><span class="nx">p_oItem</span><span class="o">);</span>
 
     <span class="o">}</span>
 
 
     <span class="k">if</span><span class="o">(</span><span class="nx">oItem</span><span class="o">)</span> <span class="o">{</span>
 
-        <span class="k">var</span> <span class="nx">nGroupIndex</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">p_nGroupIndex</span> <span class="o">==</span> <span class="s2">&quot;number&quot;</span> <span class="o">?</span> <span class="nx">p_nGroupIndex</span> <span class="o">:</span> <span class="m">0</span><span class="o">;</span>
-        
-        <span class="k">var</span> <span class="nx">aGroup</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getItemGroup</span><span class="o">(</span><span class="nx">nGroupIndex</span><span class="o">);</span>
-        
-        <span class="k">var</span> <span class="nx">oGroupItem</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">nGroupIndex</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">p_nGroupIndex</span> <span class="o">==</span> <span class="s2">&quot;number&quot;</span> <span class="o">?</span> <span class="nx">p_nGroupIndex</span> <span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+            <span class="nx">aGroup</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getItemGroup</span><span class="o">(</span><span class="nx">nGroupIndex</span><span class="o">),</span>
+            <span class="nx">oGroupItem</span><span class="o">;</span>
 
 
         <span class="k">if</span><span class="o">(!</span><span class="nx">aGroup</span><span class="o">)</span> <span class="o">{</span>
@@ -849,9 +859,7 @@
 <span class="c">                    * start searching the array.</span>
 <span class="c">                    * @return {Object}</span>
 <span class="c">                    */</span>
-                    <span class="k">var</span> <span class="nx">getNextItemSibling</span> <span class="o">=</span> 
-                    
-                        <span class="k">function</span><span class="o">(</span><span class="nx">p_aArray</span><span class="o">,</span> <span class="nx">p_nStartIndex</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">function</span> <span class="nx">getNextItemSibling</span><span class="o">(</span><span class="nx">p_aArray</span><span class="o">,</span> <span class="nx">p_nStartIndex</span><span class="o">)</span> <span class="o">{</span>
                 
                             <span class="k">return</span> <span class="o">(</span>
                                     <span class="nx">p_aArray</span><span class="o">[</span><span class="nx">p_nStartIndex</span><span class="o">]</span> <span class="o">||</span> 
@@ -860,8 +868,8 @@
                                         <span class="o">(</span><span class="nx">p_nStartIndex</span><span class="o">+</span><span class="m">1</span><span class="o">)</span>
                                     <span class="o">)</span>
                                 <span class="o">);</span>
-                
-                        <span class="o">};</span>
+
+                    <span class="o">}</span>
     
     
                     <span class="k">var</span> <span class="nx">oNextItemSibling</span> <span class="o">=</span> 
@@ -979,13 +987,13 @@
 <span class="c">*/</span>    
 <span class="nx">_removeItemFromGroupByIndex</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_nGroupIndex</span><span class="o">,</span> <span class="nx">p_nItemIndex</span><span class="o">)</span> <span class="o">{</span>
 
-    <span class="k">var</span> <span class="nx">nGroupIndex</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">p_nGroupIndex</span> <span class="o">==</span> <span class="s2">&quot;number&quot;</span> <span class="o">?</span> <span class="nx">p_nGroupIndex</span> <span class="o">:</span> <span class="m">0</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">aGroup</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getItemGroup</span><span class="o">(</span><span class="nx">nGroupIndex</span><span class="o">);</span>
+    <span class="k">var</span> <span class="nx">nGroupIndex</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">p_nGroupIndex</span> <span class="o">==</span> <span class="s2">&quot;number&quot;</span> <span class="o">?</span> <span class="nx">p_nGroupIndex</span> <span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+        <span class="nx">aGroup</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getItemGroup</span><span class="o">(</span><span class="nx">nGroupIndex</span><span class="o">);</span>
 
     <span class="k">if</span><span class="o">(</span><span class="nx">aGroup</span><span class="o">)</span> <span class="o">{</span>
 
-        <span class="k">var</span> <span class="nx">aArray</span> <span class="o">=</span> <span class="nx">aGroup</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">p_nItemIndex</span><span class="o">,</span> <span class="m">1</span><span class="o">);</span>
-        <span class="k">var</span> <span class="nx">oItem</span> <span class="o">=</span> <span class="nx">aArray</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+        <span class="k">var</span> <span class="nx">aArray</span> <span class="o">=</span> <span class="nx">aGroup</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">p_nItemIndex</span><span class="o">,</span> <span class="m">1</span><span class="o">),</span>
+            <span class="nx">oItem</span> <span class="o">=</span> <span class="nx">aArray</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
     
         <span class="k">if</span><span class="o">(</span><span class="nx">oItem</span><span class="o">)</span> <span class="o">{</span>
     
@@ -1062,8 +1070,8 @@
 
     <span class="k">if</span><span class="o">(</span><span class="nx">aGroup</span><span class="o">)</span> <span class="o">{</span>
 
-        <span class="k">var</span> <span class="nx">nItems</span> <span class="o">=</span> <span class="nx">aGroup</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">nItemIndex</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">nItems</span> <span class="o">=</span> <span class="nx">aGroup</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span>
+            <span class="nx">nItemIndex</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span><span class="o">;</span>
     
         <span class="k">if</span><span class="o">(</span><span class="nx">nItems</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
     
@@ -1106,14 +1114,14 @@
 <span class="c">*/</span>
 <span class="nx">_updateItemProperties</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_nGroupIndex</span><span class="o">)</span> <span class="o">{</span>
 
-    <span class="k">var</span> <span class="nx">aGroup</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getItemGroup</span><span class="o">(</span><span class="nx">p_nGroupIndex</span><span class="o">);</span>
-    <span class="k">var</span> <span class="nx">nItems</span> <span class="o">=</span> <span class="nx">aGroup</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">aGroup</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getItemGroup</span><span class="o">(</span><span class="nx">p_nGroupIndex</span><span class="o">),</span>
+        <span class="nx">nItems</span> <span class="o">=</span> <span class="nx">aGroup</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
 
     <span class="k">if</span><span class="o">(</span><span class="nx">nItems</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
 
-        <span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">nItems</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">oItem</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">oLI</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">nItems</span> <span class="o">-</span> <span class="m">1</span><span class="o">,</span>
+            <span class="nx">oItem</span><span class="o">,</span>
+            <span class="nx">oLI</span><span class="o">;</span>
 
         <span class="c">// Update the index and className properties of each member</span>
 <span class="c"></span>    
@@ -1318,10 +1326,10 @@
 
     <span class="k">this</span><span class="o">.</span><span class="nx">_cancelHideDelay</span><span class="o">();</span>
 
-    <span class="k">var</span> <span class="nx">oRoot</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getRoot</span><span class="o">();</span>
-    <span class="k">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">oRoot</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getRoot</span><span class="o">(),</span>
+        <span class="nx">me</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
 
-    <span class="k">var</span> <span class="nx">hideMenu</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">function</span> <span class="nx">hideMenu</span><span class="o">()</span> <span class="o">{</span>
     
         <span class="k">if</span><span class="o">(</span><span class="nx">oRoot</span><span class="o">.</span><span class="nx">activeItem</span><span class="o">)</span> <span class="o">{</span>
 
@@ -1335,7 +1343,7 @@
         
         <span class="o">}</span>
     
-    <span class="o">};</span>
+    <span class="o">}</span>
 
 
     <span class="nx">oRoot</span><span class="o">.</span><span class="nx">_nHideDelayId</span> <span class="o">=</span> 
@@ -1372,15 +1380,13 @@
 <span class="c">*/</span>
 <span class="nx">_execShowDelay</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_oMenu</span><span class="o">)</span> <span class="o">{</span>
 
-    <span class="k">this</span><span class="o">.</span><span class="nx">_cancelShowDelay</span><span class="o">();</span>
-
     <span class="k">var</span> <span class="nx">oRoot</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getRoot</span><span class="o">();</span>
 
-    <span class="k">var</span> <span class="nx">showMenu</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">function</span> <span class="nx">showMenu</span><span class="o">()</span> <span class="o">{</span>
 
         <span class="nx">p_oMenu</span><span class="o">.</span><span class="nx">show</span><span class="o">();</span>    
     
-    <span class="o">};</span>
+    <span class="o">}</span>
 
 
     <span class="nx">oRoot</span><span class="o">.</span><span class="nx">_nShowDelayId</span> <span class="o">=</span> 
@@ -1405,18 +1411,34 @@
 <span class="c">*/</span>
 <span class="nx">_onMouseOver</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oMenu</span><span class="o">)</span> <span class="o">{</span>
 
-    <span class="k">var</span> <span class="nx">oEvent</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
-    <span class="k">var</span> <span class="nx">oItem</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
-    <span class="k">var</span> <span class="nx">oTarget</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getTarget</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">);</span>
+    <span class="k">var</span> <span class="nx">oEvent</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+        <span class="nx">oItem</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">1</span><span class="o">],</span>
+        <span class="nx">oTarget</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getTarget</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">);</span>
+
 
     <span class="k">if</span><span class="o">(</span>
         <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_bHandledMouseOverEvent</span> <span class="o">&amp;&amp;</span> 
         <span class="o">(</span><span class="nx">oTarget</span> <span class="o">==</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span> <span class="o">||</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">isAncestor</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="nx">oTarget</span><span class="o">))</span>
     <span class="o">)</span> <span class="o">{</span>
-    
-        <span class="c">// MENU  MOUSEOVER LOGIC HERE</span>
-<span class="c"></span>
+
         <span class="k">this</span><span class="o">.</span><span class="nx">clearActiveItem</span><span class="o">();</span>
+
+
+        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">parent</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">_nSubmenuHideDelayId</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="nb">window</span><span class="o">.</span><span class="nx">clearTimeout</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_nSubmenuHideDelayId</span><span class="o">);</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+            <span class="k">var</span> <span class="nx">oParentMenu</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">parent</span><span class="o">;</span>
+
+            <span class="nx">oParentMenu</span><span class="o">.</span><span class="nx">activeItem</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">;</span>
+
+            <span class="nx">oParentMenu</span><span class="o">.</span><span class="nx">_bHandledMouseOutEvent</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="nx">oParentMenu</span><span class="o">.</span><span class="nx">_bHandledMouseOverEvent</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+        <span class="o">}</span>
+
 
         <span class="k">this</span><span class="o">.</span><span class="nx">_bHandledMouseOverEvent</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">_bHandledMouseOutEvent</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
@@ -1426,8 +1448,66 @@
 
     <span class="k">if</span><span class="o">(</span>
         <span class="nx">oItem</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oItem</span><span class="o">.</span><span class="nx">handledMouseOverEvent</span> <span class="o">&amp;&amp;</span> 
+        <span class="o">!</span><span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;disabled&quot;</span><span class="o">)</span> <span class="o">&amp;&amp;</span> 
         <span class="o">(</span><span class="nx">oTarget</span> <span class="o">==</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">element</span> <span class="o">||</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">isAncestor</span><span class="o">(</span><span class="nx">oItem</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="nx">oTarget</span><span class="o">))</span>
     <span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">var</span> <span class="nx">nShowDelay</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;showdelay&quot;</span><span class="o">),</span>
+            <span class="nx">bShowDelay</span> <span class="o">=</span> <span class="o">(</span><span class="nx">nShowDelay</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">),</span>
+            <span class="nx">nMenuX</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;x&quot;</span><span class="o">)</span> <span class="o">||</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getX</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">),</span>
+            <span class="nx">nPageX</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">);</span>
+        
+        <span class="nx">oItem</span><span class="o">.</span><span class="nx">targetX</span> <span class="o">=</span> 
+            <span class="o">((((</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">+</span> <span class="nx">nMenuX</span><span class="o">)</span> <span class="o">-</span> <span class="nx">nPageX</span><span class="o">)</span> <span class="o">*</span> <span class="m">0</span><span class="o">.</span><span class="m">15</span><span class="o">)</span> <span class="o">+</span> <span class="nx">nPageX</span><span class="o">);</span>
+
+
+        <span class="k">if</span><span class="o">(</span><span class="nx">bShowDelay</span><span class="o">)</span> <span class="o">{</span>
+        
+            <span class="k">this</span><span class="o">.</span><span class="nx">_cancelShowDelay</span><span class="o">();</span>
+        
+        <span class="o">}</span>
+    
+    
+        <span class="k">var</span> <span class="nx">oActiveItem</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span><span class="o">;</span>
+    
+        <span class="k">if</span><span class="o">(</span><span class="nx">oActiveItem</span><span class="o">)</span> <span class="o">{</span>
+    
+            <span class="nx">oActiveItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+    
+            <span class="k">var</span> <span class="nx">oActiveSubmenu</span> <span class="o">=</span> <span class="nx">oActiveItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenu&quot;</span><span class="o">);</span>
+    
+            <span class="k">if</span><span class="o">(</span><span class="nx">oActiveSubmenu</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="k">var</span> <span class="nx">nSubmenuHideDelay</span> <span class="o">=</span> 
+                        <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenuhidedelay&quot;</span><span class="o">);</span>
+
+                <span class="k">if</span><span class="o">(</span>
+                    <span class="o">(</span><span class="nx">nPageX</span> <span class="o">&gt;=</span> <span class="nx">oActiveItem</span><span class="o">.</span><span class="nx">targetX</span><span class="o">)</span> <span class="o">&amp;&amp;</span> 
+                    <span class="o">!(</span><span class="k">this</span> <span class="k">instanceof</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuBar</span><span class="o">)</span> <span class="o">&amp;&amp;</span> 
+                    <span class="nx">nShowDelay</span> <span class="o">&gt;=</span> <span class="nx">nSubmenuHideDelay</span>
+                <span class="o">)</span> <span class="o">{</span>
+
+                    <span class="k">function</span> <span class="nx">hideSubmenu</span><span class="o">()</span> <span class="o">{</span>
+                    
+                        <span class="nx">oActiveSubmenu</span><span class="o">.</span><span class="nx">hide</span><span class="o">();</span>
+        
+                    <span class="o">}</span>
+                    
+                    <span class="nx">oActiveSubmenu</span><span class="o">.</span><span class="nx">_nSubmenuHideDelayId</span> <span class="o">=</span>  
+    
+                            <span class="nb">window</span><span class="o">.</span><span class="nx">setTimeout</span><span class="o">(</span><span class="nx">hideSubmenu</span><span class="o">,</span> <span class="nx">nSubmenuHideDelay</span><span class="o">);</span>
+
+                <span class="o">}</span>
+                <span class="k">else</span> <span class="o">{</span>
+
+                    <span class="nx">oActiveSubmenu</span><span class="o">.</span><span class="nx">hide</span><span class="o">();</span>
+
+                <span class="o">}</span>
+    
+            <span class="o">}</span>
+    
+        <span class="o">}</span>
+
 
         <span class="k">var</span> <span class="nx">oItemCfg</span> <span class="o">=</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
     
@@ -1445,7 +1525,7 @@
         
             <span class="k">if</span><span class="o">(</span><span class="nx">oSubmenu</span><span class="o">)</span> <span class="o">{</span>
         
-                <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;showdelay&quot;</span><span class="o">)</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span><span class="o">(</span><span class="nx">bShowDelay</span><span class="o">)</span> <span class="o">{</span>
 
                     <span class="k">this</span><span class="o">.</span><span class="nx">_execShowDelay</span><span class="o">(</span><span class="nx">oSubmenu</span><span class="o">);</span>
         
@@ -1480,15 +1560,16 @@
 <span class="c">*/</span>
 <span class="nx">_onMouseOut</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oMenu</span><span class="o">)</span> <span class="o">{</span>
     
-    <span class="k">var</span> <span class="nx">oEvent</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
-    <span class="k">var</span> <span class="nx">oItem</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
-    <span class="k">var</span> <span class="nx">oRelatedTarget</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getRelatedTarget</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">);</span>
-    <span class="k">var</span> <span class="nx">bMovingToSubmenu</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">oEvent</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+        <span class="nx">oItem</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">1</span><span class="o">],</span>
+        <span class="nx">oRelatedTarget</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getRelatedTarget</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">),</span>
+        <span class="nx">bMovingToSubmenu</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
 
-    <span class="k">if</span><span class="o">(</span><span class="nx">oItem</span><span class="o">)</span> <span class="o">{</span>
 
-        <span class="k">var</span> <span class="nx">oItemCfg</span> <span class="o">=</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">oSubmenu</span> <span class="o">=</span> <span class="nx">oItemCfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenu&quot;</span><span class="o">);</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">oItem</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;disabled&quot;</span><span class="o">))</span> <span class="o">{</span>
+
+        <span class="k">var</span> <span class="nx">oItemCfg</span> <span class="o">=</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">,</span>
+            <span class="nx">oSubmenu</span> <span class="o">=</span> <span class="nx">oItemCfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenu&quot;</span><span class="o">);</span>
 
 
         <span class="k">if</span><span class="o">(</span>
@@ -1514,42 +1595,37 @@
             <span class="o">)</span>
         <span class="o">)</span> <span class="o">{</span>
 
+            <span class="k">if</span><span class="o">(</span>
+                <span class="o">!</span><span class="nx">oSubmenu</span> <span class="o">||</span> 
+                <span class="o">(</span><span class="nx">oSubmenu</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;visible&quot;</span><span class="o">))</span>
+            <span class="o">)</span> <span class="o">{</span>
 
-            <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;showdelay&quot;</span><span class="o">)</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
-            
-                <span class="k">this</span><span class="o">.</span><span class="nx">_cancelShowDelay</span><span class="o">();</span>
-            
-            <span class="o">}</span>
+                <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
 
-
-            <span class="k">if</span><span class="o">(!</span><span class="nx">bMovingToSubmenu</span><span class="o">)</span> <span class="o">{</span>
-
-                <span class="nx">oItemCfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
-            
-            <span class="o">}</span>
-
-
-            <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;autosubmenudisplay&quot;</span><span class="o">))</span> <span class="o">{</span>
-            
-                <span class="k">if</span><span class="o">(</span><span class="nx">oSubmenu</span><span class="o">)</span> <span class="o">{</span>
-            
-                    <span class="k">if</span><span class="o">(</span>
-                        <span class="o">!(</span>
-                            <span class="nx">oRelatedTarget</span> <span class="o">==</span> <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">element</span> <span class="o">||</span> 
-                            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">isAncestor</span><span class="o">(</span>
-                                <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> 
-                                <span class="nx">oRelatedTarget</span>
-                            <span class="o">)</span>
-                        <span class="o">)</span>
-                    <span class="o">)</span> <span class="o">{</span>
-
-                        <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">hide</span><span class="o">();</span>
-            
-                    <span class="o">}</span>
-            
+                <span class="k">if</span><span class="o">(</span>
+                    <span class="nx">oSubmenu</span> <span class="o">&amp;&amp;</span> 
+                    <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;showdelay&quot;</span><span class="o">)</span> <span class="o">&amp;&amp;</span> 
+                    <span class="o">!</span><span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;visible&quot;</span><span class="o">)</span>
+                <span class="o">)</span> <span class="o">{</span>
+                
+                     <span class="k">this</span><span class="o">.</span><span class="nx">_cancelShowDelay</span><span class="o">();</span>
+                
                 <span class="o">}</span>
-            
+
             <span class="o">}</span>
+            <span class="k">else</span> <span class="k">if</span><span class="o">(</span>
+                <span class="o">!</span><span class="nx">bMovingToSubmenu</span> <span class="o">&amp;&amp;</span> 
+                <span class="nx">oSubmenu</span> <span class="o">&amp;&amp;</span> 
+                <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;hidedelay&quot;</span><span class="o">)</span> <span class="o">===</span> <span class="m">0</span> <span class="o">&amp;&amp;</span>
+                <span class="k">this</span> <span class="k">instanceof</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuBar</span>
+            <span class="o">)</span> <span class="o">{</span>
+
+                <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+            
+                <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">hide</span><span class="o">();</span>
+
+            <span class="o">}</span>
+
 
             <span class="nx">oItem</span><span class="o">.</span><span class="nx">handledMouseOutEvent</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
             <span class="nx">oItem</span><span class="o">.</span><span class="nx">handledMouseOverEvent</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
@@ -1569,7 +1645,7 @@
             <span class="o">||</span> <span class="nx">bMovingToSubmenu</span>
         <span class="o">)</span>
     <span class="o">)</span> <span class="o">{</span>
-        
+
         <span class="k">this</span><span class="o">.</span><span class="nx">_bHandledMouseOutEvent</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">_bHandledMouseOverEvent</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
 
@@ -1590,14 +1666,14 @@
 <span class="c">*/</span>
 <span class="nx">_onClick</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oMenu</span><span class="o">)</span> <span class="o">{</span>
 
-    <span class="k">var</span> <span class="nx">oEvent</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
-    <span class="k">var</span> <span class="nx">oItem</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
-    <span class="k">var</span> <span class="nx">oTarget</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getTarget</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">);</span>
+    <span class="k">var</span> <span class="nx">oEvent</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+        <span class="nx">oItem</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">1</span><span class="o">],</span>
+        <span class="nx">oTarget</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getTarget</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">);</span>
 
-    <span class="k">if</span><span class="o">(</span><span class="nx">oItem</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">oItem</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;disabled&quot;</span><span class="o">))</span> <span class="o">{</span>
 
-        <span class="k">var</span> <span class="nx">oItemCfg</span> <span class="o">=</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">oSubmenu</span> <span class="o">=</span> <span class="nx">oItemCfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenu&quot;</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">oItemCfg</span> <span class="o">=</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">,</span>
+            <span class="nx">oSubmenu</span> <span class="o">=</span> <span class="nx">oItemCfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenu&quot;</span><span class="o">);</span>
 
 
         <span class="c">/*</span>
@@ -1628,10 +1704,10 @@
         <span class="o">}</span>
         <span class="k">else</span> <span class="o">{</span>
 
-            <span class="k">var</span> <span class="nx">sURL</span> <span class="o">=</span> <span class="nx">oItemCfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;url&quot;</span><span class="o">);</span>
-            <span class="k">var</span> <span class="nx">bCurrentPageURL</span> <span class="o">=</span> <span class="o">(</span><span class="nx">sURL</span><span class="o">.</span><span class="nx">substr</span><span class="o">((</span><span class="nx">sURL</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">),</span><span class="m">1</span><span class="o">)</span> <span class="o">==</span> <span class="s2">&quot;#&quot;</span><span class="o">);</span>
-            <span class="k">var</span> <span class="nx">sTarget</span> <span class="o">=</span> <span class="nx">oItemCfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;target&quot;</span><span class="o">);</span>
-            <span class="k">var</span> <span class="nx">bHasTarget</span> <span class="o">=</span> <span class="o">(</span><span class="nx">sTarget</span> <span class="o">&amp;&amp;</span> <span class="nx">sTarget</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">sURL</span> <span class="o">=</span> <span class="nx">oItemCfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;url&quot;</span><span class="o">),</span>
+                <span class="nx">bCurrentPageURL</span> <span class="o">=</span> <span class="o">(</span><span class="nx">sURL</span><span class="o">.</span><span class="nx">substr</span><span class="o">((</span><span class="nx">sURL</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">),</span><span class="m">1</span><span class="o">)</span> <span class="o">==</span> <span class="s2">&quot;#&quot;</span><span class="o">),</span>
+                <span class="nx">sTarget</span> <span class="o">=</span> <span class="nx">oItemCfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;target&quot;</span><span class="o">),</span>
+                <span class="nx">bHasTarget</span> <span class="o">=</span> <span class="o">(</span><span class="nx">sTarget</span> <span class="o">&amp;&amp;</span> <span class="nx">sTarget</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">);</span>
 
             <span class="c">/*</span>
 <span class="c">                Prevent the browser from following links </span>
@@ -1704,16 +1780,16 @@
 <span class="c">*/</span>
 <span class="nx">_onKeyDown</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oMenu</span><span class="o">)</span> <span class="o">{</span>
 
-    <span class="k">var</span> <span class="nx">oEvent</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
-    <span class="k">var</span> <span class="nx">oItem</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
-    <span class="k">var</span> <span class="nx">oSubmenu</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">oEvent</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+        <span class="nx">oItem</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">1</span><span class="o">],</span>
+        <span class="nx">oSubmenu</span><span class="o">;</span>
 
-    <span class="k">if</span><span class="o">(</span><span class="nx">oItem</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">oItem</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;disabled&quot;</span><span class="o">))</span> <span class="o">{</span>
 
-        <span class="k">var</span> <span class="nx">oItemCfg</span> <span class="o">=</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">oParentItem</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">oRoot</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">oNextItem</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">oItemCfg</span> <span class="o">=</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">,</span>
+            <span class="nx">oParentItem</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">,</span>
+            <span class="nx">oRoot</span><span class="o">,</span>
+            <span class="nx">oNextItem</span><span class="o">;</span>
 
 
         <span class="nx">switch</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">.</span><span class="nx">keyCode</span><span class="o">)</span> <span class="o">{</span>
@@ -1894,6 +1970,37 @@
 <span class="o">},</span>
 
 
+<span class="c">/**</span>
+<span class="c">* @method _onTextResize</span>
+<span class="c">* @description &quot;textresize&quot; event handler for the menu.</span>
+<span class="c">* @protected</span>
+<span class="c">* @param {String} p_sType String representing the name of the event that </span>
+<span class="c">* was fired.</span>
+<span class="c">* @param {Array} p_aArgs Array of arguments sent when the event was fired.</span>
+<span class="c">* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that </span>
+<span class="c">* fired the event.</span>
+<span class="c">*/</span>
+<span class="nx">_onTextResize</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oMenu</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">browser</span> <span class="o">==</span> <span class="s2">&quot;gecko&quot;</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_handleResize</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">_handleResize</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="k">return</span><span class="o">;</span>
+    
+    <span class="o">}</span>
+
+
+    <span class="k">var</span> <span class="nx">oConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
+
+    <span class="k">if</span><span class="o">(</span><span class="nx">oConfig</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;position&quot;</span><span class="o">)</span> <span class="o">==</span> <span class="s2">&quot;dynamic&quot;</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="nx">oConfig</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;width&quot;</span><span class="o">,</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_getOffsetWidth</span><span class="o">()</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">));</span>
+
+    <span class="o">}</span>
+
+<span class="o">},</span>
+
+
 
 <span class="c">// Private methods</span>
 <span class="c"></span>
@@ -1960,17 +2067,17 @@
 <span class="c">*/</span>
 <span class="nx">_onBeforeRender</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oMenu</span><span class="o">)</span> <span class="o">{</span>
 
-    <span class="k">var</span> <span class="nx">oConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">oEl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">nListElements</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_aListElements</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">oConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">,</span>
+        <span class="nx">oEl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span>
+        <span class="nx">nListElements</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_aListElements</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
 
 
     <span class="k">if</span><span class="o">(</span><span class="nx">nListElements</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
 
-        <span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">bFirstList</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">oUL</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">oGroupTitle</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span>
+            <span class="nx">bFirstList</span> <span class="o">=</span> <span class="kc">true</span><span class="o">,</span>
+            <span class="nx">oUL</span><span class="o">,</span>
+            <span class="nx">oGroupTitle</span><span class="o">;</span>
 
 
         <span class="k">do</span> <span class="o">{</span>
@@ -2140,11 +2247,10 @@
     
     <span class="k">if</span><span class="o">(</span><span class="nx">oParent</span><span class="o">)</span> <span class="o">{</span>
 
+        <span class="k">var</span> <span class="nx">oParentMenu</span> <span class="o">=</span> <span class="nx">oParent</span><span class="o">.</span><span class="nx">parent</span><span class="o">,</span>
+            <span class="nx">aParentAlignment</span> <span class="o">=</span> <span class="nx">oParentMenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenualignment&quot;</span><span class="o">),</span>
+            <span class="nx">aAlignment</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenualignment&quot;</span><span class="o">);</span>
 
-        <span class="k">var</span> <span class="nx">oParentMenu</span> <span class="o">=</span> <span class="nx">oParent</span><span class="o">.</span><span class="nx">parent</span><span class="o">;</span>
-
-        <span class="k">var</span> <span class="nx">aParentAlignment</span> <span class="o">=</span> <span class="nx">oParentMenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenualignment&quot;</span><span class="o">);</span>
-        <span class="k">var</span> <span class="nx">aAlignment</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenualignment&quot;</span><span class="o">);</span>
 
         <span class="k">if</span><span class="o">(</span>
             <span class="o">(</span><span class="nx">aParentAlignment</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">!=</span> <span class="nx">aAlignment</span><span class="o">[</span><span class="m">0</span><span class="o">])</span> <span class="o">&amp;&amp;</span>
@@ -2173,7 +2279,7 @@
 <span class="c">            * @param {Event} p_oEvent Object reference for the DOM event object </span>
 <span class="c">            * passed back by the event utility (YAHOO.util.Event).</span>
 <span class="c">            */</span>
-            <span class="k">var</span> <span class="nx">disableAutoSubmenuDisplay</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">function</span> <span class="nx">disableAutoSubmenuDisplay</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">)</span> <span class="o">{</span>
 
                 <span class="k">if</span><span class="o">(</span>
                     <span class="nx">p_oEvent</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;mousedown&quot;</span> <span class="o">||</span> 
@@ -2213,7 +2319,7 @@
                 
                 <span class="o">}</span>
 
-            <span class="o">};</span>
+            <span class="o">}</span>
 
             <span class="nx">Event</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="nb">document</span><span class="o">,</span> <span class="s2">&quot;mousedown&quot;</span><span class="o">,</span> <span class="nx">disableAutoSubmenuDisplay</span><span class="o">);</span>                             
             <span class="nx">Event</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="nb">document</span><span class="o">,</span> <span class="s2">&quot;keydown&quot;</span><span class="o">,</span> <span class="nx">disableAutoSubmenuDisplay</span><span class="o">);</span>
@@ -2237,7 +2343,25 @@
 <span class="c">*/</span>
 <span class="nx">_onBeforeHide</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oMenu</span><span class="o">)</span> <span class="o">{</span>
 
-    <span class="k">this</span><span class="o">.</span><span class="nx">clearActiveItem</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+    <span class="k">var</span> <span class="nx">oActiveItem</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">activeItem</span><span class="o">;</span>
+
+    <span class="k">if</span><span class="o">(</span><span class="nx">oActiveItem</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">var</span> <span class="nx">oConfig</span> <span class="o">=</span> <span class="nx">oActiveItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
+
+        <span class="nx">oConfig</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+
+        <span class="k">var</span> <span class="nx">oSubmenu</span> <span class="o">=</span> <span class="nx">oConfig</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenu&quot;</span><span class="o">);</span>
+
+        <span class="k">if</span><span class="o">(</span><span class="nx">oSubmenu</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">hide</span><span class="o">();</span>
+
+        <span class="o">}</span>
+
+        <span class="nx">oActiveItem</span><span class="o">.</span><span class="nx">blur</span><span class="o">();</span>
+
+    <span class="o">}</span>
 
 <span class="o">},</span>
 
@@ -2254,14 +2378,15 @@
 <span class="c">*/</span>
 <span class="nx">_onParentMenuConfigChange</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oSubmenu</span><span class="o">)</span> <span class="o">{</span>
     
-    <span class="k">var</span> <span class="nx">sPropertyName</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">][</span><span class="m">0</span><span class="o">];</span>
-    <span class="k">var</span> <span class="nx">oPropertyValue</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">][</span><span class="m">1</span><span class="o">];</span>
+    <span class="k">var</span> <span class="nx">sPropertyName</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">][</span><span class="m">0</span><span class="o">],</span>
+        <span class="nx">oPropertyValue</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">][</span><span class="m">1</span><span class="o">];</span>
 
     <span class="nx">switch</span><span class="o">(</span><span class="nx">sPropertyName</span><span class="o">)</span> <span class="o">{</span>
 
         <span class="nx">case</span> <span class="s2">&quot;iframe&quot;</span><span class="o">:</span>
         <span class="nx">case</span> <span class="s2">&quot;constraintoviewport&quot;</span><span class="o">:</span>
         <span class="nx">case</span> <span class="s2">&quot;hidedelay&quot;</span><span class="o">:</span>
+        <span class="nx">case</span> <span class="s2">&quot;submenuhidedelay&quot;</span><span class="o">:</span>
         <span class="nx">case</span> <span class="s2">&quot;showdelay&quot;</span><span class="o">:</span>
         <span class="nx">case</span> <span class="s2">&quot;clicktohide&quot;</span><span class="o">:</span>
         <span class="nx">case</span> <span class="s2">&quot;effect&quot;</span><span class="o">:</span>
@@ -2288,14 +2413,9 @@
 <span class="c">*/</span>
 <span class="nx">_onParentMenuRender</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oSubmenu</span><span class="o">)</span> <span class="o">{</span>
 
-    <span class="c">/*</span>
-<span class="c">        Set the &quot;constraintoviewport&quot; configuration </span>
-<span class="c">        property to match the parent Menu</span>
-<span class="c">    */</span> 
+    <span class="k">var</span> <span class="nx">oParentMenu</span> <span class="o">=</span> <span class="nx">p_oSubmenu</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">parent</span><span class="o">,</span>
 
-    <span class="k">var</span> <span class="nx">oParentMenu</span> <span class="o">=</span> <span class="nx">p_oSubmenu</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">parent</span><span class="o">;</span>
-
-    <span class="k">var</span> <span class="nx">oConfig</span> <span class="o">=</span> <span class="o">{</span>
+        <span class="nx">oConfig</span> <span class="o">=</span> <span class="o">{</span>
 
             <span class="nx">constraintoviewport</span><span class="o">:</span> 
                 <span class="nx">oParentMenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;constraintoviewport&quot;</span><span class="o">),</span>
@@ -2306,27 +2426,18 @@
                 <span class="nx">oParentMenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;clicktohide&quot;</span><span class="o">),</span>
                 
             <span class="nx">effect</span><span class="o">:</span>
-                <span class="nx">oParentMenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;effect&quot;</span><span class="o">)</span>                
+                <span class="nx">oParentMenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;effect&quot;</span><span class="o">),</span>
+
+            <span class="nx">showdelay</span><span class="o">:</span>
+                <span class="nx">oParentMenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;showdelay&quot;</span><span class="o">),</span>
+            
+            <span class="nx">hidedelay</span><span class="o">:</span>
+                <span class="nx">oParentMenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;hidedelay&quot;</span><span class="o">),</span>
+
+            <span class="nx">submenuhidedelay</span><span class="o">:</span>
+                <span class="nx">oParentMenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenuhidedelay&quot;</span><span class="o">)</span>
 
         <span class="o">};</span>
-
-
-    <span class="k">var</span> <span class="nx">nShowDelay</span> <span class="o">=</span> <span class="nx">oParentMenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;showdelay&quot;</span><span class="o">);</span>
-
-    <span class="k">if</span><span class="o">(</span><span class="nx">nShowDelay</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
-
-        <span class="nx">oConfig</span><span class="o">.</span><span class="nx">showdelay</span> <span class="o">=</span> <span class="nx">nShowDelay</span><span class="o">;</span>
-
-    <span class="o">}</span>
-
-
-    <span class="k">var</span> <span class="nx">nHideDelay</span> <span class="o">=</span> <span class="nx">oParentMenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;hidedelay&quot;</span><span class="o">);</span>
-
-    <span class="k">if</span><span class="o">(</span><span class="nx">nHideDelay</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
-
-        <span class="nx">oConfig</span><span class="o">.</span><span class="nx">hidedelay</span> <span class="o">=</span> <span class="nx">nHideDelay</span><span class="o">;</span>
-
-    <span class="o">}</span>
 
 
     <span class="c">/*</span>
@@ -2377,15 +2488,13 @@
 <span class="c">*/</span>
 <span class="nx">_onSubmenuBeforeShow</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oSubmenu</span><span class="o">)</span> <span class="o">{</span>
     
-    <span class="k">var</span> <span class="nx">oParent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">aAlignment</span> <span class="o">=</span> <span class="nx">oParent</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenualignment&quot;</span><span class="o">);</span>
+    <span class="k">var</span> <span class="nx">oParent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">,</span>
+        <span class="nx">aAlignment</span> <span class="o">=</span> <span class="nx">oParent</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenualignment&quot;</span><span class="o">);</span>
 
     <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span>
         <span class="s2">&quot;context&quot;</span><span class="o">,</span> 
         <span class="o">[</span><span class="nx">oParent</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="nx">aAlignment</span><span class="o">[</span><span class="m">0</span><span class="o">],</span> <span class="nx">aAlignment</span><span class="o">[</span><span class="m">1</span><span class="o">]]</span>
     <span class="o">);</span>
-
-    <span class="nx">oParent</span><span class="o">.</span><span class="nx">submenuIndicator</span><span class="o">.</span><span class="nx">alt</span> <span class="o">=</span> <span class="nx">oParent</span><span class="o">.</span><span class="nx">EXPANDED_SUBMENU_INDICATOR_ALT_TEXT</span><span class="o">;</span>
     
 <span class="o">},</span>
 
@@ -2528,37 +2637,37 @@
 <span class="c">*/</span>
 <span class="nx">enforceConstraints</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">args</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
 
-    <span class="k">var</span> <span class="nx">oConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
+     <span class="k">var</span> <span class="nx">oConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">,</span>
+         <span class="nx">pos</span> <span class="o">=</span> <span class="nx">args</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+    
+         <span class="nx">x</span> <span class="o">=</span> <span class="nx">pos</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+         <span class="nx">y</span> <span class="o">=</span> <span class="nx">pos</span><span class="o">[</span><span class="m">1</span><span class="o">],</span>
+    
+         <span class="nx">offsetHeight</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">,</span>
+         <span class="nx">offsetWidth</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">,</span>
+    
+         <span class="nx">viewPortWidth</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getViewportWidth</span><span class="o">(),</span>
+         <span class="nx">viewPortHeight</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getViewportHeight</span><span class="o">(),</span>
+    
+         <span class="nx">scrollX</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span>
+                        <span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">,</span> 
+                        <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">scrollLeft</span>
+                    <span class="o">),</span>
 
-    <span class="k">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="nx">args</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
-        
-    <span class="k">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">pos</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
-    <span class="k">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">pos</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
+         <span class="nx">scrollY</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span>
+                        <span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">.</span><span class="nx">scrollTop</span><span class="o">,</span> 
+                        <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">scrollTop</span>
+                    <span class="o">),</span>
     
-    <span class="k">var</span> <span class="nx">bod</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s1">&#39;body&#39;</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
-    <span class="k">var</span> <span class="nx">htm</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s1">&#39;html&#39;</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
+         <span class="nx">topConstraint</span> <span class="o">=</span> <span class="nx">scrollY</span> <span class="o">+</span> <span class="m">10</span><span class="o">,</span>
+         <span class="nx">leftConstraint</span> <span class="o">=</span> <span class="nx">scrollX</span> <span class="o">+</span> <span class="m">10</span><span class="o">,</span>
+         <span class="nx">bottomConstraint</span> <span class="o">=</span> <span class="nx">scrollY</span> <span class="o">+</span> <span class="nx">viewPortHeight</span> <span class="o">-</span> <span class="nx">offsetHeight</span> <span class="o">-</span> <span class="m">10</span><span class="o">,</span>
+         <span class="nx">rightConstraint</span> <span class="o">=</span> <span class="nx">scrollX</span> <span class="o">+</span> <span class="nx">viewPortWidth</span> <span class="o">-</span> <span class="nx">offsetWidth</span> <span class="o">-</span> <span class="m">10</span><span class="o">,</span>
     
-    <span class="k">var</span> <span class="nx">bodyOverflow</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">bod</span><span class="o">,</span> <span class="s2">&quot;overflow&quot;</span><span class="o">);</span>
-    <span class="k">var</span> <span class="nx">htmOverflow</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">htm</span><span class="o">,</span> <span class="s2">&quot;overflow&quot;</span><span class="o">);</span>
-    
-    <span class="k">var</span> <span class="nx">offsetHeight</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">offsetWidth</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">;</span>
-    
-    <span class="k">var</span> <span class="nx">viewPortWidth</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getClientWidth</span><span class="o">();</span>
-    <span class="k">var</span> <span class="nx">viewPortHeight</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getClientHeight</span><span class="o">();</span>
-    
-    <span class="k">var</span> <span class="nx">scrollX</span> <span class="o">=</span> <span class="nb">window</span><span class="o">.</span><span class="nx">scrollX</span> <span class="o">||</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">scrollY</span> <span class="o">=</span> <span class="nb">window</span><span class="o">.</span><span class="nx">scrollY</span> <span class="o">||</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">scrollTop</span><span class="o">;</span>
-    
-    <span class="k">var</span> <span class="nx">topConstraint</span> <span class="o">=</span> <span class="nx">scrollY</span> <span class="o">+</span> <span class="m">10</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">leftConstraint</span> <span class="o">=</span> <span class="nx">scrollX</span> <span class="o">+</span> <span class="m">10</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">bottomConstraint</span> <span class="o">=</span> <span class="nx">scrollY</span> <span class="o">+</span> <span class="nx">viewPortHeight</span> <span class="o">-</span> <span class="nx">offsetHeight</span> <span class="o">-</span> <span class="m">10</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">rightConstraint</span> <span class="o">=</span> <span class="nx">scrollX</span> <span class="o">+</span> <span class="nx">viewPortWidth</span> <span class="o">-</span> <span class="nx">offsetWidth</span> <span class="o">-</span> <span class="m">10</span><span class="o">;</span>
-    
-    <span class="k">var</span> <span class="nx">aContext</span> <span class="o">=</span> <span class="nx">oConfig</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;context&quot;</span><span class="o">);</span>
-    <span class="k">var</span> <span class="nx">oContextElement</span> <span class="o">=</span> <span class="nx">aContext</span> <span class="o">?</span> <span class="nx">aContext</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
-    
-    
+         <span class="nx">aContext</span> <span class="o">=</span> <span class="nx">oConfig</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;context&quot;</span><span class="o">),</span>
+         <span class="nx">oContextElement</span> <span class="o">=</span> <span class="nx">aContext</span> <span class="o">?</span> <span class="nx">aContext</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+
+
     <span class="k">if</span> <span class="o">(</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="m">10</span><span class="o">)</span> <span class="o">{</span>
 
         <span class="nx">x</span> <span class="o">=</span> <span class="nx">leftConstraint</span><span class="o">;</span>
@@ -2566,7 +2675,7 @@
     <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">((</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">offsetWidth</span><span class="o">)</span> <span class="o">&gt;</span> <span class="nx">viewPortWidth</span><span class="o">)</span> <span class="o">{</span>
 
         <span class="k">if</span><span class="o">(</span>
-            <span class="nx">oContextElement</span> <span class="o">&amp;&amp;</span> 
+            <span class="nx">oContextElement</span> <span class="o">&amp;&amp;</span>
             <span class="o">((</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">oContextElement</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">)</span> <span class="o">&gt;</span> <span class="nx">offsetWidth</span><span class="o">)</span>
         <span class="o">)</span> <span class="o">{</span>
 
@@ -2602,6 +2711,7 @@
 
     <span class="nx">oConfig</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;x&quot;</span><span class="o">,</span> <span class="nx">x</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
     <span class="nx">oConfig</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;y&quot;</span><span class="o">,</span> <span class="nx">y</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+    <span class="nx">oConfig</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;xy&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">x</span><span class="o">,</span><span class="nx">y</span><span class="o">],</span> <span class="kc">true</span><span class="o">);</span>
 
 <span class="o">},</span>
 
@@ -2630,8 +2740,8 @@
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
 
-        <span class="k">var</span> <span class="nx">bVisible</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
-    	<span class="k">var</span> <span class="nx">sDisplay</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="s2">&quot;display&quot;</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">bVisible</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+    	    <span class="nx">sDisplay</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="s2">&quot;display&quot;</span><span class="o">);</span>
 
         <span class="k">if</span><span class="o">(</span><span class="nx">bVisible</span><span class="o">)</span> <span class="o">{</span>
 
@@ -2669,8 +2779,8 @@
 <span class="c">*/</span>
 <span class="nx">configPosition</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oMenu</span><span class="o">)</span> <span class="o">{</span>
 
-    <span class="k">var</span> <span class="nx">sCSSPosition</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">==</span> <span class="s2">&quot;static&quot;</span> <span class="o">?</span> <span class="s2">&quot;static&quot;</span> <span class="o">:</span> <span class="s2">&quot;absolute&quot;</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">oCfg</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">sCSSPosition</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">==</span> <span class="s2">&quot;static&quot;</span> <span class="o">?</span> <span class="s2">&quot;static&quot;</span> <span class="o">:</span> <span class="s2">&quot;absolute&quot;</span><span class="o">,</span>
+        <span class="nx">oCfg</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
 
     <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="s2">&quot;position&quot;</span><span class="o">,</span> <span class="nx">sCSSPosition</span><span class="o">);</span>
 
@@ -2763,10 +2873,10 @@
 <span class="c">*/</span>
 <span class="nx">configHideDelay</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oMenu</span><span class="o">)</span> <span class="o">{</span>
 
-    <span class="k">var</span> <span class="nx">nHideDelay</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
-    <span class="k">var</span> <span class="nx">oMouseOutEvent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">mouseOutEvent</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">oMouseOverEvent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">mouseOverEvent</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">oKeyDownEvent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">keyDownEvent</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">nHideDelay</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+        <span class="nx">oMouseOutEvent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">mouseOutEvent</span><span class="o">,</span>
+        <span class="nx">oMouseOverEvent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">mouseOverEvent</span><span class="o">,</span>
+        <span class="nx">oKeyDownEvent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">keyDownEvent</span><span class="o">;</span>
 
     <span class="k">if</span><span class="o">(</span><span class="nx">nHideDelay</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
 
@@ -2829,31 +2939,6 @@
 
 <span class="c">// Public methods</span>
 <span class="c"></span>
-
-<span class="c">/**</span>
-<span class="c">* Event handler called when the resize monitor element&#39;s &quot;resize&quot; evet is fired.</span>
-<span class="c">*/</span>
-<span class="nx">onDomResize</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
-
-    <span class="k">if</span><span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_handleResize</span><span class="o">)</span> <span class="o">{</span>
-
-        <span class="k">this</span><span class="o">.</span><span class="nx">_handleResize</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-        <span class="k">return</span><span class="o">;</span>
-    
-    <span class="o">}</span>
-
-    <span class="k">var</span> <span class="nx">oConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
-
-    <span class="k">if</span><span class="o">(</span><span class="nx">oConfig</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;position&quot;</span><span class="o">)</span> <span class="o">==</span> <span class="s2">&quot;dynamic&quot;</span><span class="o">)</span> <span class="o">{</span>
-
-        <span class="nx">oConfig</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;width&quot;</span><span class="o">,</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_getOffsetWidth</span><span class="o">()</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">));</span>
-
-    <span class="o">}</span>
-
-    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Menu</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">onDomResize</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">e</span><span class="o">,</span> <span class="nx">obj</span><span class="o">);</span>
-
-<span class="o">},</span>
-
 
 <span class="c">/**</span>
 <span class="c">* @method initEvents</span>
@@ -2928,8 +3013,8 @@
         
     <span class="k">if</span><span class="o">(</span><span class="k">typeof</span> <span class="nx">p_sGroupTitle</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">p_sGroupTitle</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
 
-        <span class="k">var</span> <span class="nx">nGroupIndex</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">p_nGroupIndex</span> <span class="o">==</span> <span class="s2">&quot;number&quot;</span> <span class="o">?</span> <span class="nx">p_nGroupIndex</span> <span class="o">:</span> <span class="m">0</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">oTitle</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_aGroupTitleElements</span><span class="o">[</span><span class="nx">nGroupIndex</span><span class="o">];</span>
+        <span class="k">var</span> <span class="nx">nGroupIndex</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">p_nGroupIndex</span> <span class="o">==</span> <span class="s2">&quot;number&quot;</span> <span class="o">?</span> <span class="nx">p_nGroupIndex</span> <span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+            <span class="nx">oTitle</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_aGroupTitleElements</span><span class="o">[</span><span class="nx">nGroupIndex</span><span class="o">];</span>
 
 
         <span class="k">if</span><span class="o">(</span><span class="nx">oTitle</span><span class="o">)</span> <span class="o">{</span>
@@ -2948,8 +3033,8 @@
         <span class="o">}</span>
 
 
-        <span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_aGroupTitleElements</span><span class="o">.</span><span class="nx">length</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">nFirstIndex</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_aGroupTitleElements</span><span class="o">.</span><span class="nx">length</span> <span class="o">-</span> <span class="m">1</span><span class="o">,</span>
+            <span class="nx">nFirstIndex</span><span class="o">;</span>
 
         <span class="k">do</span> <span class="o">{</span>
 
@@ -3026,9 +3111,9 @@
 
     <span class="k">if</span><span class="o">(</span><span class="nx">isArray</span><span class="o">(</span><span class="nx">p_aItems</span><span class="o">))</span> <span class="o">{</span>
 
-        <span class="k">var</span> <span class="nx">nItems</span> <span class="o">=</span> <span class="nx">p_aItems</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">aItems</span> <span class="o">=</span> <span class="o">[];</span>
-        <span class="k">var</span> <span class="nx">oItem</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">nItems</span> <span class="o">=</span> <span class="nx">p_aItems</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span>
+            <span class="nx">aItems</span> <span class="o">=</span> <span class="o">[],</span>
+            <span class="nx">oItem</span><span class="o">;</span>
 
 
         <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">nItems</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
@@ -3188,14 +3273,15 @@
     <span class="k">this</span><span class="o">.</span><span class="nx">keyPressEvent</span><span class="o">.</span><span class="nx">unsubscribeAll</span><span class="o">();</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">keyDownEvent</span><span class="o">.</span><span class="nx">unsubscribeAll</span><span class="o">();</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">keyUpEvent</span><span class="o">.</span><span class="nx">unsubscribeAll</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">itemAddedEvent</span><span class="o">.</span><span class="nx">unsubscribeAll</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">itemRemovedEvent</span><span class="o">.</span><span class="nx">unsubscribeAll</span><span class="o">();</span>
 
-
-    <span class="k">var</span> <span class="nx">nItemGroups</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_aItemGroups</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">nItems</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">oItemGroup</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">oItem</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">i</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">n</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">nItemGroups</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_aItemGroups</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span>
+        <span class="nx">nItems</span><span class="o">,</span>
+        <span class="nx">oItemGroup</span><span class="o">,</span>
+        <span class="nx">oItem</span><span class="o">,</span>
+        <span class="nx">i</span><span class="o">,</span>
+        <span class="nx">n</span><span class="o">;</span>
 
 
     <span class="c">// Remove all items</span>
@@ -3442,13 +3528,31 @@
 <span class="c">    * @description Number indicating the time (in milliseconds) that should </span>
 <span class="c">    * expire before a submenu is made visible when the user mouses over </span>
 <span class="c">    * the menu&#39;s items.</span>
-<span class="c">    * @default 0</span>
+<span class="c">    * @default 250</span>
 <span class="c">    * @type Number</span>
 <span class="c">    */</span>
 	<span class="nx">oConfig</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span>
 	   <span class="s2">&quot;showdelay&quot;</span><span class="o">,</span> 
 	   <span class="o">{</span> 
-	       <span class="nx">value</span><span class="o">:</span> <span class="m">0</span><span class="o">,</span> 
+	       <span class="nx">value</span><span class="o">:</span> <span class="m">250</span><span class="o">,</span> 
+	       <span class="nx">validator</span><span class="o">:</span> <span class="nx">oConfig</span><span class="o">.</span><span class="nx">checkNumber</span>
+       <span class="o">}</span> 
+    <span class="o">);</span>
+
+
+    <span class="c">/**</span>
+<span class="c">    * @config submenuhidedelay</span>
+<span class="c">    * @description Number indicating the time (in milliseconds) that should </span>
+<span class="c">    * expire before a submenu is hidden when the user mouses out of a menu item </span>
+<span class="c">    * heading in the direction of a submenu.  The value must be greater than or </span>
+<span class="c">    * equal to the value specified for the &quot;showdelay&quot; configuration property.</span>
+<span class="c">    * @default 250</span>
+<span class="c">    * @type Number</span>
+<span class="c">    */</span>
+	<span class="nx">oConfig</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span>
+	   <span class="s2">&quot;submenuhidedelay&quot;</span><span class="o">,</span> 
+	   <span class="o">{</span> 
+	       <span class="nx">value</span><span class="o">:</span> <span class="m">250</span><span class="o">,</span> 
 	       <span class="nx">validator</span><span class="o">:</span> <span class="nx">oConfig</span><span class="o">.</span><span class="nx">checkNumber</span>
        <span class="o">}</span> 
     <span class="o">);</span>

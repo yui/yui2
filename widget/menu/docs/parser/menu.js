@@ -3,8 +3,8 @@
 
 (function() {
 
-var Dom = YAHOO.util.Dom;
-var Event = YAHOO.util.Event;
+var Dom = YAHOO.util.Dom,
+    Event = YAHOO.util.Event;
 
 
 /**
@@ -118,6 +118,17 @@ _nHideDelayId: null,
 * @type Number
 */
 _nShowDelayId: null,
+
+
+/** 
+* @property _nSubmenuHideDelayId
+* @description Number representing the time-out setting used to cancel the 
+* hiding of a submenu.
+* @default null
+* @private
+* @type Number
+*/
+_nSubmenuHideDelayId: null,
 
 
 /** 
@@ -488,6 +499,12 @@ init: function(p_oElement, p_oConfig) {
         this.clickEvent.subscribe(this._onClick, this, true);
         this.keyDownEvent.subscribe(this._onKeyDown, this, true);
 
+        YAHOO.widget.Module.textResizeEvent.subscribe(
+            this._onTextResize, 
+            this, 
+            true
+        );
+
 
         if(p_oConfig) {
     
@@ -531,8 +548,8 @@ _initSubTree: function() {
 
         oNode = this.body.firstChild;
 
-        var nGroup = 0;
-        var sGroupTitleTagName = this.GROUP_TITLE_TAG_NAME.toUpperCase();
+        var nGroup = 0,
+            sGroupTitleTagName = this.GROUP_TITLE_TAG_NAME.toUpperCase();
 
         do {
 
@@ -581,8 +598,11 @@ _initSubTree: function() {
     this.logger.log("Searching DOM for items to initialize.");
 
     if(this.srcElement.tagName) {
-    
-        switch(this.srcElement.tagName.toUpperCase()) {
+
+        var sSrcElementTagName = this.srcElement.tagName.toUpperCase();
+
+
+        switch(sSrcElementTagName) {
     
             case "DIV":
     
@@ -604,26 +624,22 @@ _initSubTree: function() {
     
                         do {
         
-                            if(oNode && oNode.tagName) {
-                            
-                                switch(oNode.tagName.toUpperCase()) {
-                
-                                    case "LI":
+                            if(
+                                oNode && 
+                                oNode.tagName && 
+                                oNode.tagName.toUpperCase() == "LI"
+                            ) {
         
-                                        this.logger.log("Initializing " + 
-                                            oNode.tagName + " node.");
-        
-                                        this.addItem(
-                                                new this.ITEM_TYPE(
-                                                    oNode, 
-                                                    { parent: this }
-                                                ), 
-                                                i
-                                            );
-                
-                                    break;
-                
-                                }
+                                this.logger.log("Initializing " + 
+                                    oNode.tagName + " node.");
+
+                                this.addItem(
+                                        new this.ITEM_TYPE(
+                                            oNode, 
+                                            { parent: this }
+                                        ), 
+                                        i
+                                    );
     
                             }
                 
@@ -690,9 +706,9 @@ _initSubTree: function() {
 */
 _getFirstEnabledItem: function() {
 
-    var nGroups = this._aItemGroups.length;
-    var oItem;
-    var aItemGroup;
+    var nGroups = this._aItemGroups.length,
+        oItem,
+        aItemGroup;
 
     for(var i=0; i<nGroups; i++) {
 
@@ -778,26 +794,20 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
         oItem = new this.ITEM_TYPE(p_oItem, { parent: this });
     
     }
-    else if(typeof p_oItem == "object" && p_oItem.text) {
-
-        var sText = p_oItem.text;
-
-        delete p_oItem["text"];
+    else if(typeof p_oItem == "object") {
 
         p_oItem.parent = this;
 
-        oItem = new this.ITEM_TYPE(sText, p_oItem);
+        oItem = new this.ITEM_TYPE(p_oItem);
 
     }
 
 
     if(oItem) {
 
-        var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0;
-        
-        var aGroup = this._getItemGroup(nGroupIndex);
-        
-        var oGroupItem;
+        var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
+            aGroup = this._getItemGroup(nGroupIndex),
+            oGroupItem;
 
 
         if(!aGroup) {
@@ -852,9 +862,7 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
                     * start searching the array.
                     * @return {Object}
                     */
-                    var getNextItemSibling = 
-                    
-                        function(p_aArray, p_nStartIndex) {
+                    function getNextItemSibling(p_aArray, p_nStartIndex) {
                 
                             return (
                                     p_aArray[p_nStartIndex] || 
@@ -863,8 +871,8 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
                                         (p_nStartIndex+1)
                                     )
                                 );
-                
-                        };
+
+                    }
     
     
                     var oNextItemSibling = 
@@ -982,13 +990,13 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
 */    
 _removeItemFromGroupByIndex: function(p_nGroupIndex, p_nItemIndex) {
 
-    var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0;
-    var aGroup = this._getItemGroup(nGroupIndex);
+    var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
+        aGroup = this._getItemGroup(nGroupIndex);
 
     if(aGroup) {
 
-        var aArray = aGroup.splice(p_nItemIndex, 1);
-        var oItem = aArray[0];
+        var aArray = aGroup.splice(p_nItemIndex, 1),
+            oItem = aArray[0];
     
         if(oItem) {
     
@@ -1065,8 +1073,8 @@ _removeItemFromGroupByValue: function(p_nGroupIndex, p_oItem) {
 
     if(aGroup) {
 
-        var nItems = aGroup.length;
-        var nItemIndex = -1;
+        var nItems = aGroup.length,
+            nItemIndex = -1;
     
         if(nItems > 0) {
     
@@ -1109,14 +1117,14 @@ _removeItemFromGroupByValue: function(p_nGroupIndex, p_oItem) {
 */
 _updateItemProperties: function(p_nGroupIndex) {
 
-    var aGroup = this._getItemGroup(p_nGroupIndex);
-    var nItems = aGroup.length;
+    var aGroup = this._getItemGroup(p_nGroupIndex),
+        nItems = aGroup.length;
 
     if(nItems > 0) {
 
-        var i = nItems - 1;
-        var oItem;
-        var oLI;
+        var i = nItems - 1,
+            oItem,
+            oLI;
 
         // Update the index and className properties of each member
     
@@ -1321,10 +1329,10 @@ _execHideDelay: function() {
 
     this._cancelHideDelay();
 
-    var oRoot = this.getRoot();
-    var me = this;
+    var oRoot = this.getRoot(),
+        me = this;
 
-    var hideMenu = function() {
+    function hideMenu() {
     
         if(oRoot.activeItem) {
 
@@ -1338,7 +1346,7 @@ _execHideDelay: function() {
         
         }
     
-    };
+    }
 
 
     oRoot._nHideDelayId = 
@@ -1375,15 +1383,13 @@ _cancelShowDelay: function() {
 */
 _execShowDelay: function(p_oMenu) {
 
-    this._cancelShowDelay();
-
     var oRoot = this.getRoot();
 
-    var showMenu = function() {
+    function showMenu() {
 
         p_oMenu.show();    
     
-    };
+    }
 
 
     oRoot._nShowDelayId = 
@@ -1408,18 +1414,34 @@ _execShowDelay: function(p_oMenu) {
 */
 _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
 
-    var oEvent = p_aArgs[0];
-    var oItem = p_aArgs[1];
-    var oTarget = Event.getTarget(oEvent);
+    var oEvent = p_aArgs[0],
+        oItem = p_aArgs[1],
+        oTarget = Event.getTarget(oEvent);
+
 
     if(
         !this._bHandledMouseOverEvent && 
         (oTarget == this.element || Dom.isAncestor(this.element, oTarget))
     ) {
-    
-        // MENU  MOUSEOVER LOGIC HERE
 
         this.clearActiveItem();
+
+
+        if(this.parent && this._nSubmenuHideDelayId) {
+
+            window.clearTimeout(this._nSubmenuHideDelayId);
+
+            this.parent.cfg.setProperty("selected", true);
+
+            var oParentMenu = this.parent.parent;
+
+            oParentMenu.activeItem = this.parent;
+
+            oParentMenu._bHandledMouseOutEvent = true;
+            oParentMenu._bHandledMouseOverEvent = false;
+
+        }
+
 
         this._bHandledMouseOverEvent = true;
         this._bHandledMouseOutEvent = false;
@@ -1429,8 +1451,66 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
 
     if(
         oItem && !oItem.handledMouseOverEvent && 
+        !oItem.cfg.getProperty("disabled") && 
         (oTarget == oItem.element || Dom.isAncestor(oItem.element, oTarget))
     ) {
+
+        var nShowDelay = this.cfg.getProperty("showdelay"),
+            bShowDelay = (nShowDelay > 0),
+            nMenuX = this.cfg.getProperty("x") || Dom.getX(this.element),
+            nPageX = Event.getPageX(oEvent);
+        
+        oItem.targetX = 
+            ((((this.element.offsetWidth + nMenuX) - nPageX) * 0.15) + nPageX);
+
+
+        if(bShowDelay) {
+        
+            this._cancelShowDelay();
+        
+        }
+    
+    
+        var oActiveItem = this.activeItem;
+    
+        if(oActiveItem) {
+    
+            oActiveItem.cfg.setProperty("selected", false);
+    
+            var oActiveSubmenu = oActiveItem.cfg.getProperty("submenu");
+    
+            if(oActiveSubmenu) {
+
+                var nSubmenuHideDelay = 
+                        this.cfg.getProperty("submenuhidedelay");
+
+                if(
+                    (nPageX >= oActiveItem.targetX) && 
+                    !(this instanceof YAHOO.widget.MenuBar) && 
+                    nShowDelay >= nSubmenuHideDelay
+                ) {
+
+                    function hideSubmenu() {
+                    
+                        oActiveSubmenu.hide();
+        
+                    }
+                    
+                    oActiveSubmenu._nSubmenuHideDelayId =  
+    
+                            window.setTimeout(hideSubmenu, nSubmenuHideDelay);
+
+                }
+                else {
+
+                    oActiveSubmenu.hide();
+
+                }
+    
+            }
+    
+        }
+
 
         var oItemCfg = oItem.cfg;
     
@@ -1448,7 +1528,7 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
         
             if(oSubmenu) {
         
-                if(this.cfg.getProperty("showdelay") > 0) {
+                if(bShowDelay) {
 
                     this._execShowDelay(oSubmenu);
         
@@ -1483,15 +1563,16 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
     
-    var oEvent = p_aArgs[0];
-    var oItem = p_aArgs[1];
-    var oRelatedTarget = Event.getRelatedTarget(oEvent);
-    var bMovingToSubmenu = false;
+    var oEvent = p_aArgs[0],
+        oItem = p_aArgs[1],
+        oRelatedTarget = Event.getRelatedTarget(oEvent),
+        bMovingToSubmenu = false;
 
-    if(oItem) {
 
-        var oItemCfg = oItem.cfg;
-        var oSubmenu = oItemCfg.getProperty("submenu");
+    if(oItem && !oItem.cfg.getProperty("disabled")) {
+
+        var oItemCfg = oItem.cfg,
+            oSubmenu = oItemCfg.getProperty("submenu");
 
 
         if(
@@ -1517,42 +1598,37 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
             )
         ) {
 
+            if(
+                !oSubmenu || 
+                (oSubmenu && !oSubmenu.cfg.getProperty("visible"))
+            ) {
 
-            if(this.cfg.getProperty("showdelay") > 0) {
-            
-                this._cancelShowDelay();
-            
-            }
+                oItem.cfg.setProperty("selected", false);
 
-
-            if(!bMovingToSubmenu) {
-
-                oItemCfg.setProperty("selected", false);
-            
-            }
-
-
-            if(this.cfg.getProperty("autosubmenudisplay")) {
-            
-                if(oSubmenu) {
-            
-                    if(
-                        !(
-                            oRelatedTarget == oSubmenu.element || 
-                            YAHOO.util.Dom.isAncestor(
-                                oSubmenu.element, 
-                                oRelatedTarget
-                            )
-                        )
-                    ) {
-
-                        oSubmenu.hide();
-            
-                    }
-            
+                if(
+                    oSubmenu && 
+                    oSubmenu.cfg.getProperty("showdelay") && 
+                    !oSubmenu.cfg.getProperty("visible")
+                ) {
+                
+                     this._cancelShowDelay();
+                
                 }
-            
+
             }
+            else if(
+                !bMovingToSubmenu && 
+                oSubmenu && 
+                this.cfg.getProperty("hidedelay") === 0 &&
+                this instanceof YAHOO.widget.MenuBar
+            ) {
+
+                oItem.cfg.setProperty("selected", false);
+            
+                oSubmenu.hide();
+
+            }
+
 
             oItem.handledMouseOutEvent = true;
             oItem.handledMouseOverEvent = false;
@@ -1572,7 +1648,7 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
             || bMovingToSubmenu
         )
     ) {
-        
+
         this._bHandledMouseOutEvent = true;
         this._bHandledMouseOverEvent = false;
 
@@ -1593,14 +1669,14 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onClick: function(p_sType, p_aArgs, p_oMenu) {
 
-    var oEvent = p_aArgs[0];
-    var oItem = p_aArgs[1];
-    var oTarget = Event.getTarget(oEvent);
+    var oEvent = p_aArgs[0],
+        oItem = p_aArgs[1],
+        oTarget = Event.getTarget(oEvent);
 
-    if(oItem) {
+    if(oItem && !oItem.cfg.getProperty("disabled")) {
 
-        var oItemCfg = oItem.cfg;
-        var oSubmenu = oItemCfg.getProperty("submenu");
+        var oItemCfg = oItem.cfg,
+            oSubmenu = oItemCfg.getProperty("submenu");
 
 
         /*
@@ -1631,10 +1707,10 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
         }
         else {
 
-            var sURL = oItemCfg.getProperty("url");
-            var bCurrentPageURL = (sURL.substr((sURL.length-1),1) == "#");
-            var sTarget = oItemCfg.getProperty("target");
-            var bHasTarget = (sTarget && sTarget.length > 0);
+            var sURL = oItemCfg.getProperty("url"),
+                bCurrentPageURL = (sURL.substr((sURL.length-1),1) == "#"),
+                sTarget = oItemCfg.getProperty("target"),
+                bHasTarget = (sTarget && sTarget.length > 0);
 
             /*
                 Prevent the browser from following links 
@@ -1707,16 +1783,16 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
 
-    var oEvent = p_aArgs[0];
-    var oItem = p_aArgs[1];
-    var oSubmenu;
+    var oEvent = p_aArgs[0],
+        oItem = p_aArgs[1],
+        oSubmenu;
 
-    if(oItem) {
+    if(oItem && !oItem.cfg.getProperty("disabled")) {
 
-        var oItemCfg = oItem.cfg;
-        var oParentItem = this.parent;
-        var oRoot;
-        var oNextItem;
+        var oItemCfg = oItem.cfg,
+            oParentItem = this.parent,
+            oRoot,
+            oNextItem;
 
 
         switch(oEvent.keyCode) {
@@ -1897,6 +1973,37 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
 },
 
 
+/**
+* @method _onTextResize
+* @description "textresize" event handler for the menu.
+* @protected
+* @param {String} p_sType String representing the name of the event that 
+* was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
+* fired the event.
+*/
+_onTextResize: function(p_sType, p_aArgs, p_oMenu) {
+
+    if(this.browser == "gecko" && !this._handleResize) {
+
+        this._handleResize = true;
+        return;
+    
+    }
+
+
+    var oConfig = this.cfg;
+
+    if(oConfig.getProperty("position") == "dynamic") {
+
+        oConfig.setProperty("width", (this._getOffsetWidth() + "px"));
+
+    }
+
+},
+
+
 
 // Private methods
 
@@ -1963,17 +2070,17 @@ _onInit: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onBeforeRender: function(p_sType, p_aArgs, p_oMenu) {
 
-    var oConfig = this.cfg;
-    var oEl = this.element;
-    var nListElements = this._aListElements.length;
+    var oConfig = this.cfg,
+        oEl = this.element,
+        nListElements = this._aListElements.length;
 
 
     if(nListElements > 0) {
 
-        var i = 0;
-        var bFirstList = true;
-        var oUL;
-        var oGroupTitle;
+        var i = 0,
+            bFirstList = true,
+            oUL,
+            oGroupTitle;
 
 
         do {
@@ -2143,11 +2250,10 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
     
     if(oParent) {
 
+        var oParentMenu = oParent.parent,
+            aParentAlignment = oParentMenu.cfg.getProperty("submenualignment"),
+            aAlignment = this.cfg.getProperty("submenualignment");
 
-        var oParentMenu = oParent.parent;
-
-        var aParentAlignment = oParentMenu.cfg.getProperty("submenualignment");
-        var aAlignment = this.cfg.getProperty("submenualignment");
 
         if(
             (aParentAlignment[0] != aAlignment[0]) &&
@@ -2176,7 +2282,7 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
             * @param {Event} p_oEvent Object reference for the DOM event object 
             * passed back by the event utility (YAHOO.util.Event).
             */
-            var disableAutoSubmenuDisplay = function(p_oEvent) {
+            function disableAutoSubmenuDisplay(p_oEvent) {
 
                 if(
                     p_oEvent.type == "mousedown" || 
@@ -2216,7 +2322,7 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
                 
                 }
 
-            };
+            }
 
             Event.addListener(document, "mousedown", disableAutoSubmenuDisplay);                             
             Event.addListener(document, "keydown", disableAutoSubmenuDisplay);
@@ -2240,7 +2346,25 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onBeforeHide: function(p_sType, p_aArgs, p_oMenu) {
 
-    this.clearActiveItem(true);
+    var oActiveItem = this.activeItem;
+
+    if(oActiveItem) {
+
+        var oConfig = oActiveItem.cfg;
+
+        oConfig.setProperty("selected", false);
+
+        var oSubmenu = oConfig.getProperty("submenu");
+
+        if(oSubmenu) {
+
+            oSubmenu.hide();
+
+        }
+
+        oActiveItem.blur();
+
+    }
 
 },
 
@@ -2257,14 +2381,15 @@ _onBeforeHide: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onParentMenuConfigChange: function(p_sType, p_aArgs, p_oSubmenu) {
     
-    var sPropertyName = p_aArgs[0][0];
-    var oPropertyValue = p_aArgs[0][1];
+    var sPropertyName = p_aArgs[0][0],
+        oPropertyValue = p_aArgs[0][1];
 
     switch(sPropertyName) {
 
         case "iframe":
         case "constraintoviewport":
         case "hidedelay":
+        case "submenuhidedelay":
         case "showdelay":
         case "clicktohide":
         case "effect":
@@ -2291,14 +2416,9 @@ _onParentMenuConfigChange: function(p_sType, p_aArgs, p_oSubmenu) {
 */
 _onParentMenuRender: function(p_sType, p_aArgs, p_oSubmenu) {
 
-    /*
-        Set the "constraintoviewport" configuration 
-        property to match the parent Menu
-    */ 
+    var oParentMenu = p_oSubmenu.parent.parent,
 
-    var oParentMenu = p_oSubmenu.parent.parent;
-
-    var oConfig = {
+        oConfig = {
 
             constraintoviewport: 
                 oParentMenu.cfg.getProperty("constraintoviewport"),
@@ -2309,27 +2429,18 @@ _onParentMenuRender: function(p_sType, p_aArgs, p_oSubmenu) {
                 oParentMenu.cfg.getProperty("clicktohide"),
                 
             effect:
-                oParentMenu.cfg.getProperty("effect")                
+                oParentMenu.cfg.getProperty("effect"),
+
+            showdelay:
+                oParentMenu.cfg.getProperty("showdelay"),
+            
+            hidedelay:
+                oParentMenu.cfg.getProperty("hidedelay"),
+
+            submenuhidedelay:
+                oParentMenu.cfg.getProperty("submenuhidedelay")
 
         };
-
-
-    var nShowDelay = oParentMenu.cfg.getProperty("showdelay");
-
-    if(nShowDelay > 0) {
-
-        oConfig.showdelay = nShowDelay;
-
-    }
-
-
-    var nHideDelay = oParentMenu.cfg.getProperty("hidedelay");
-
-    if(nHideDelay > 0) {
-
-        oConfig.hidedelay = nHideDelay;
-
-    }
 
 
     /*
@@ -2380,15 +2491,13 @@ _onParentMenuRender: function(p_sType, p_aArgs, p_oSubmenu) {
 */
 _onSubmenuBeforeShow: function(p_sType, p_aArgs, p_oSubmenu) {
     
-    var oParent = this.parent;
-    var aAlignment = oParent.parent.cfg.getProperty("submenualignment");
+    var oParent = this.parent,
+        aAlignment = oParent.parent.cfg.getProperty("submenualignment");
 
     this.cfg.setProperty(
         "context", 
         [oParent.element, aAlignment[0], aAlignment[1]]
     );
-
-    oParent.submenuIndicator.alt = oParent.EXPANDED_SUBMENU_INDICATOR_ALT_TEXT;
     
 },
 
@@ -2531,37 +2640,37 @@ _onMenuItemConfigChange: function(p_sType, p_aArgs, p_oItem) {
 */
 enforceConstraints: function(type, args, obj) {
 
-    var oConfig = this.cfg;
+     var oConfig = this.cfg,
+         pos = args[0],
+    
+         x = pos[0],
+         y = pos[1],
+    
+         offsetHeight = this.element.offsetHeight,
+         offsetWidth = this.element.offsetWidth,
+    
+         viewPortWidth = YAHOO.util.Dom.getViewportWidth(),
+         viewPortHeight = YAHOO.util.Dom.getViewportHeight(),
+    
+         scrollX = Math.max(
+                        document.documentElement.scrollLeft, 
+                        document.body.scrollLeft
+                    ),
 
-    var pos = args[0];
-        
-    var x = pos[0];
-    var y = pos[1];
+         scrollY = Math.max(
+                        document.documentElement.scrollTop, 
+                        document.body.scrollTop
+                    ),
     
-    var bod = document.getElementsByTagName('body')[0];
-    var htm = document.getElementsByTagName('html')[0];
+         topConstraint = scrollY + 10,
+         leftConstraint = scrollX + 10,
+         bottomConstraint = scrollY + viewPortHeight - offsetHeight - 10,
+         rightConstraint = scrollX + viewPortWidth - offsetWidth - 10,
     
-    var bodyOverflow = Dom.getStyle(bod, "overflow");
-    var htmOverflow = Dom.getStyle(htm, "overflow");
-    
-    var offsetHeight = this.element.offsetHeight;
-    var offsetWidth = this.element.offsetWidth;
-    
-    var viewPortWidth = Dom.getClientWidth();
-    var viewPortHeight = Dom.getClientHeight();
-    
-    var scrollX = window.scrollX || document.body.scrollLeft;
-    var scrollY = window.scrollY || document.body.scrollTop;
-    
-    var topConstraint = scrollY + 10;
-    var leftConstraint = scrollX + 10;
-    var bottomConstraint = scrollY + viewPortHeight - offsetHeight - 10;
-    var rightConstraint = scrollX + viewPortWidth - offsetWidth - 10;
-    
-    var aContext = oConfig.getProperty("context");
-    var oContextElement = aContext ? aContext[0] : null;
-    
-    
+         aContext = oConfig.getProperty("context"),
+         oContextElement = aContext ? aContext[0] : null;
+
+
     if (x < 10) {
 
         x = leftConstraint;
@@ -2569,7 +2678,7 @@ enforceConstraints: function(type, args, obj) {
     } else if ((x + offsetWidth) > viewPortWidth) {
 
         if(
-            oContextElement && 
+            oContextElement &&
             ((x - oContextElement.offsetWidth) > offsetWidth)
         ) {
 
@@ -2605,6 +2714,7 @@ enforceConstraints: function(type, args, obj) {
 
     oConfig.setProperty("x", x, true);
     oConfig.setProperty("y", y, true);
+    oConfig.setProperty("xy", [x,y], true);
 
 },
 
@@ -2633,8 +2743,8 @@ configVisible: function(p_sType, p_aArgs, p_oMenu) {
     }
     else {
 
-        var bVisible = p_aArgs[0];
-    	var sDisplay = Dom.getStyle(this.element, "display");
+        var bVisible = p_aArgs[0],
+    	    sDisplay = Dom.getStyle(this.element, "display");
 
         if(bVisible) {
 
@@ -2672,8 +2782,8 @@ configVisible: function(p_sType, p_aArgs, p_oMenu) {
 */
 configPosition: function(p_sType, p_aArgs, p_oMenu) {
 
-    var sCSSPosition = p_aArgs[0] == "static" ? "static" : "absolute";
-    var oCfg = this.cfg;
+    var sCSSPosition = p_aArgs[0] == "static" ? "static" : "absolute",
+        oCfg = this.cfg;
 
     Dom.setStyle(this.element, "position", sCSSPosition);
 
@@ -2766,10 +2876,10 @@ configIframe: function(p_sType, p_aArgs, p_oMenu) {
 */
 configHideDelay: function(p_sType, p_aArgs, p_oMenu) {
 
-    var nHideDelay = p_aArgs[0];
-    var oMouseOutEvent = this.mouseOutEvent;
-    var oMouseOverEvent = this.mouseOverEvent;
-    var oKeyDownEvent = this.keyDownEvent;
+    var nHideDelay = p_aArgs[0],
+        oMouseOutEvent = this.mouseOutEvent,
+        oMouseOverEvent = this.mouseOverEvent,
+        oKeyDownEvent = this.keyDownEvent;
 
     if(nHideDelay > 0) {
 
@@ -2831,31 +2941,6 @@ configContainer: function(p_sType, p_aArgs, p_oMenu) {
 
 
 // Public methods
-
-
-/**
-* Event handler called when the resize monitor element's "resize" evet is fired.
-*/
-onDomResize: function(e, obj) {
-
-    if(!this._handleResize) {
-
-        this._handleResize = true;
-        return;
-    
-    }
-
-    var oConfig = this.cfg;
-
-    if(oConfig.getProperty("position") == "dynamic") {
-
-        oConfig.setProperty("width", (this._getOffsetWidth() + "px"));
-
-    }
-
-    YAHOO.widget.Menu.superclass.onDomResize.call(this, e, obj);
-
-},
 
 
 /**
@@ -2931,8 +3016,8 @@ setItemGroupTitle: function(p_sGroupTitle, p_nGroupIndex) {
         
     if(typeof p_sGroupTitle == "string" && p_sGroupTitle.length > 0) {
 
-        var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0;
-        var oTitle = this._aGroupTitleElements[nGroupIndex];
+        var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
+            oTitle = this._aGroupTitleElements[nGroupIndex];
 
 
         if(oTitle) {
@@ -2951,8 +3036,8 @@ setItemGroupTitle: function(p_sGroupTitle, p_nGroupIndex) {
         }
 
 
-        var i = this._aGroupTitleElements.length - 1;
-        var nFirstIndex;
+        var i = this._aGroupTitleElements.length - 1,
+            nFirstIndex;
 
         do {
 
@@ -3029,9 +3114,9 @@ addItems: function(p_aItems, p_nGroupIndex) {
 
     if(isArray(p_aItems)) {
 
-        var nItems = p_aItems.length;
-        var aItems = [];
-        var oItem;
+        var nItems = p_aItems.length,
+            aItems = [],
+            oItem;
 
 
         for(var i=0; i<nItems; i++) {
@@ -3191,14 +3276,15 @@ destroy: function() {
     this.keyPressEvent.unsubscribeAll();
     this.keyDownEvent.unsubscribeAll();
     this.keyUpEvent.unsubscribeAll();
+    this.itemAddedEvent.unsubscribeAll();
+    this.itemRemovedEvent.unsubscribeAll();
 
-
-    var nItemGroups = this._aItemGroups.length;
-    var nItems;
-    var oItemGroup;
-    var oItem;
-    var i;
-    var n;
+    var nItemGroups = this._aItemGroups.length,
+        nItems,
+        oItemGroup,
+        oItem,
+        i,
+        n;
 
 
     // Remove all items
@@ -3445,13 +3531,31 @@ initDefaultConfig: function() {
     * @description Number indicating the time (in milliseconds) that should 
     * expire before a submenu is made visible when the user mouses over 
     * the menu's items.
-    * @default 0
+    * @default 250
     * @type Number
     */
 	oConfig.addProperty(
 	   "showdelay", 
 	   { 
-	       value: 0, 
+	       value: 250, 
+	       validator: oConfig.checkNumber
+       } 
+    );
+
+
+    /**
+    * @config submenuhidedelay
+    * @description Number indicating the time (in milliseconds) that should 
+    * expire before a submenu is hidden when the user mouses out of a menu item 
+    * heading in the direction of a submenu.  The value must be greater than or 
+    * equal to the value specified for the "showdelay" configuration property.
+    * @default 250
+    * @type Number
+    */
+	oConfig.addProperty(
+	   "submenuhidedelay", 
+	   { 
+	       value: 250, 
 	       validator: oConfig.checkNumber
        } 
     );

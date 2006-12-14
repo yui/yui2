@@ -131,9 +131,9 @@
 <span class="c">*/</span>
 <span class="nx">_removeEventHandlers</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 
-    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">oTrigger</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_oTrigger</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">bOpera</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">browser</span> <span class="o">==</span> <span class="s2">&quot;opera&quot;</span><span class="o">);</span>
+    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+        <span class="nx">oTrigger</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_oTrigger</span><span class="o">,</span>
+        <span class="nx">bOpera</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">browser</span> <span class="o">==</span> <span class="s2">&quot;opera&quot;</span><span class="o">);</span>
 
 
     <span class="c">// Remove the event handlers from the trigger(s)</span>
@@ -195,8 +195,8 @@
     <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuManager</span><span class="o">.</span><span class="nx">hideVisible</span><span class="o">();</span>
 
 
-    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">oConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+        <span class="nx">oConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
 
     <span class="k">if</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;mousedown&quot;</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">p_oEvent</span><span class="o">.</span><span class="nx">ctrlKey</span><span class="o">)</span> <span class="o">{</span>
 
@@ -209,8 +209,8 @@
 
     <span class="c">// Position and display the context menu</span>
 <span class="c"></span>
-    <span class="k">var</span> <span class="nx">nX</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">);</span>
-    <span class="k">var</span> <span class="nx">nY</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getPageY</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">);</span>
+    <span class="k">var</span> <span class="nx">nX</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">),</span>
+        <span class="nx">nY</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getPageY</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">);</span>
 
 
     <span class="nx">oConfig</span><span class="o">.</span><span class="nx">applyConfig</span><span class="o">(</span> <span class="o">{</span> <span class="nx">xy</span><span class="o">:[</span><span class="nx">nX</span><span class="o">,</span> <span class="nx">nY</span><span class="o">],</span> <span class="nx">visible</span><span class="o">:</span><span class="kc">true</span> <span class="o">}</span> <span class="o">);</span>
@@ -303,8 +303,8 @@
 <span class="c">*/</span>
 <span class="nx">configTrigger</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oMenu</span><span class="o">)</span> <span class="o">{</span>
     
-    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">oTrigger</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+        <span class="nx">oTrigger</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
 
     <span class="k">if</span><span class="o">(</span><span class="nx">oTrigger</span><span class="o">)</span> <span class="o">{</span>
 

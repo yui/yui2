@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>API: Menu  YAHOO.widget.Menu   (YUI Library)</title>
+	<title>API: menu  YAHOO.widget.Menu   (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/reset.css">
 	<link rel="stylesheet" type="text/css" href="assets/fonts.css">
 	<link rel="stylesheet" type="text/css" href="assets/grids.css">
@@ -16,7 +16,7 @@
         <h3>Menu Library&nbsp;</h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
-            &gt; <a href="./module_Menu.html">Menu</a>
+            &gt; <a href="./module_menu.html">menu</a>
                  &gt; YAHOO.widget.Menu 
                 
             </p>
@@ -501,6 +501,67 @@ fired the event.
                                         
                                         <div class="description">
                                             "mouseover" event handler for the menu.
+                                        </div>
+
+                                        <div class="description">
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event that 
+was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oMenu &lt;YAHOO.widget.Menu&gt;</code>
+                                                             Object representing the menu that 
+fired the event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_onTextResize">_onTextResize</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong>_onTextResize</strong>
+                                                (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                                        , 
+                                                         p_oMenu
+                                                    
+                                                
+                                                )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            "textresize" event handler for the menu.
                                         </div>
 
                                         <div class="description">
@@ -1432,35 +1493,6 @@ the item belongs.
                                     </div>
                                     <hr />
                                     <h4>
-                                        <a name="onDomResize">onDomResize</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                        
-                                        
-                                        void
-                                            <strong>onDomResize</strong>
-                                        </code>
-                                        
-                                        <div class="description">
-                                            Event handler called when the resize monitor element's "resize" evet is fired.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code>
-                                                        void
-                                                    </code></dt>
-                                                    <dd></dd>
-                                                </dl>
-             
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    <h4>
                                         <a name="removeItem">removeItem</a></h4>
                                     <div class="detail">
                                         <code>
@@ -1997,7 +2029,7 @@ the menu's items.
  
      
                                     <div class="default">
-                                        Default Value: 0
+                                        Default Value: 250
                                     </div>        
 
                                     <hr />
@@ -2016,6 +2048,24 @@ right corner.
      
                                     <div class="default">
                                         Default Value: ["tl","tr"]
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="submenuhidedelay">submenuhidedelay</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Number indicating the time (in milliseconds) that should 
+expire before a submenu is hidden when the user mouses out of a menu item 
+heading in the direction of a submenu.  The value must be greater than or 
+equal to the value specified for the "showdelay" configuration property.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: 250
                                     </div>        
 
                                     <hr />
@@ -2055,7 +2105,7 @@ between "block" (true) or "none" (false).
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_Menu.html">Menu</a></li>
+                                <li><a href="module_menu.html">menu</a></li>
                         </ul>
                     </div>
 
@@ -2158,6 +2208,9 @@ html#ID-22445964">HTMLDivElement</a>&gt;</code>-->
                                 <li><!--<code>void</code>-->
                                 <a href="#_onMouseOver">_onMouseOver</a>
                                 </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_onTextResize">_onTextResize</a>
+                                </li>
                                 <li><!--<code>YAHOO.widget.MenuItem</code>-->
                                 <a href="#addItem">addItem</a>
                                 </li>
@@ -2208,9 +2261,6 @@ html#ID-22445964">HTMLDivElement</a>&gt;</code>-->
                                 </li>
                                 <li><!--<code>YAHOO.widget.MenuItem</code>-->
                                 <a href="#insertItem">insertItem</a>
-                                </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#onDomResize">onDomResize</a>
                                 </li>
                                 <li><!--<code>YAHOO.widget.MenuItem</code>-->
                                 <a href="#removeItem">removeItem</a>
@@ -2292,6 +2342,9 @@ html#ID-22445964">HTMLDivElement</a>&gt;</code>-->
                                 </li>
                                 <li>
                                 <a href="#submenualignment">submenualignment</a>
+                                </li>
+                                <li>
+                                <a href="#submenuhidedelay">submenuhidedelay</a>
                                 </li>
                                 <li>
                                 <a href="#visible">visible</a>
