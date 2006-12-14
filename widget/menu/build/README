@@ -222,3 +222,44 @@ Changes:
 
 * "hide" and "show" methods of statically positioned menus now toggle the their
   element's "display" style property between "block" and "none."
+  
+  
+*** version 0.12.1 ***
+
+Added the following features:
+-----------------------------
+* Added a "submenuhidedelay" configuration property to the Menu class that 
+  defines the time (in milliseconds) that should expire before a submenu is 
+  hidden when the user mouses out of a menu item heading in the direction of a 
+  submenu.  This property allows the user to mouse more easily from a menu 
+  item to its corresponding submenu.  The value of "submenuhidedelay" must 
+  be greater than or equal to the value specified for the "showdelay" 
+  configuration property.
+
+
+Fixed the following bugs:
+-------------------------
+
+* [SourceForge Bug #1609027] Placed the call to the DOM "focus" method used by 
+  the MenuItem class inside a zero-second timeout to resolve a race condition 
+  between menu positioning and focusing of a menu item that resulted in the 
+  browser viewport scrolling unnecessarily.
+
+* [SourceForge Bug #1601064 and #1596184] Switched to JSMin for JavaScript 
+  compression to resolve issues with minified version.  
+
+* Disabled menu item instances will no longer display a submenu if the item is 
+  clicked or moused over. 
+
+* Can no longer select more than one item in a menu if using the keyboard and 
+  mouse simultaneously.
+
+* Calling the "destory" method on a menu will now unregister all of the menu's 
+  submenus from the MenuManager.
+
+
+Changes:
+--------
+
+* Default value of the "showdelay" configuration property of the Menu class is
+  now 250 milliseconds.
