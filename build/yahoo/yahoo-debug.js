@@ -13,12 +13,12 @@ version: 0.12.1
  * @title  YAHOO Global
  */
 
-/**
- * The YAHOO global namespace object
- * @class YAHOO
- * @static
- */
 if (typeof YAHOO == "undefined") {
+    /**
+     * The YAHOO global namespace object
+     * @class YAHOO
+     * @static
+     */
     var YAHOO = {};
 }
 
