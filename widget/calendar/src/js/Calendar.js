@@ -454,7 +454,7 @@ YAHOO.widget.Calendar.prototype.doSelectCell = function(e, cal) {
 		index = cell.id.split("cell")[1];
 		d = cal.cellDates[index];
 		date = new Date(d[0],d[1]-1,d[2]);
-		
+	
 		var link;
 
 		if (cal.Options.MULTI_SELECT) {
