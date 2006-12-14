@@ -2,7 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.12
+Version 0.12.1
 */
 
 /**
@@ -160,8 +160,8 @@ YAHOO.widget.ContainerEffect.prototype.toString = function() {
 * A pre-configured ContainerEffect instance that can be used for fading an overlay in and out.
 * @method FADE
 * @static
-* @param {Overlay}	The Overlay object to animate
-* @param {Number}	The duration of the animation
+* @param {Overlay}	overlay	The Overlay object to animate
+* @param {Number}	dur	The duration of the animation
 * @return {ContainerEffect}	The configured ContainerEffect object
 */
 YAHOO.widget.ContainerEffect.FADE = function(overlay, dur) {
@@ -228,8 +228,8 @@ YAHOO.widget.ContainerEffect.FADE = function(overlay, dur) {
 * A pre-configured ContainerEffect instance that can be used for sliding an overlay in and out.
 * @method SLIDE
 * @static
-* @param {Overlay}	The Overlay object to animate
-* @param {Number}	The duration of the animation
+* @param {Overlay}	overlay	The Overlay object to animate
+* @param {Number}	dur	The duration of the animation
 * @return {ContainerEffect}	The configured ContainerEffect object
 */
 YAHOO.widget.ContainerEffect.SLIDE = function(overlay, dur) {

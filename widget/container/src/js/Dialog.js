@@ -152,8 +152,6 @@ YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
 		this.cfg.applyConfig(userConfig, true);
 	}
 
-	//this.renderEvent.subscribe(this.registerForm, this, true);
-
 	this.showEvent.subscribe(this.focusFirst, this, true);
 	this.beforeHideEvent.subscribe(this.blurButtons, this, true);
 

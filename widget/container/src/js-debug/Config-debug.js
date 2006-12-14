@@ -2,12 +2,13 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.12
+Version 0.12.1
 */
 
 /**
 * Config is a utility used within an Object to allow the implementer to maintain a list of local configuration properties and listen for changes to those properties dynamically using CustomEvent. The initial values are also maintained so that the configuration can be reset at any given point to its initial state.
-* @class YAHOO.util.Config
+* @namespace YAHOO.util
+* @class Config
 * @constructor
 * @param {Object}	owner	The owner Object to which this Config Object belongs
 */

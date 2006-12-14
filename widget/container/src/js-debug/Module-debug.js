@@ -2,19 +2,20 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.12
+Version 0.12.1
 */
 
 /**
 *  The Container family of components is designed to enable developers to create different kinds of content-containing modules on the web. Module and Overlay are the most basic containers, and they can be used directly or extended to build custom containers. Also part of the Container family are four UI controls that extend Module and Overlay: Tooltip, Panel, Dialog, and SimpleDialog.
-* @module Container
+* @module container
+* @title Container
 * @requires yahoo,dom,event,dragdrop,animation
 */
 
 /**
 * Module is a JavaScript representation of the Standard Module Format. Standard Module Format is a simple standard for markup containers where child nodes representing the header, body, and footer of the content are denoted using the CSS classes "hd", "bd", and "ft" respectively. Module is the base class for all other classes in the YUI Container package.
-* @class Module
 * @namespace YAHOO.widget
+* @class Module
 * @constructor
 * @param {String} el			The element ID representing the Module <em>OR</em>
 * @param {HTMLElement} el		The element representing the Module
@@ -91,8 +92,14 @@ YAHOO.widget.Module.CSS_FOOTER = "ft";
 */
 YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL = "javascript:false;";
 
-YAHOO.widget.Module.prototype = {
+/**
+* Singleton CustomEvent fired when the font size is changed in the browser.
+* Opera's "zoom" functionality currently does not support text size detection.
+* @event YAHOO.widget.Module.textResizeEvent
+*/	
+YAHOO.widget.Module.textResizeEvent = new YAHOO.util.CustomEvent("textResize");
 
+YAHOO.widget.Module.prototype = {
 	/**
 	* The class's constructor function
 	* @property contructor
@@ -449,15 +456,25 @@ YAHOO.widget.Module.prototype = {
                     doc.close();
                 
                 }
-    
             }
     
+			var fireTextResize = function() {
+				YAHOO.widget.Module.textResizeEvent.fire();
+			};
+
             if(resizeMonitor && resizeMonitor.contentWindow) {
-    
                 this.resizeMonitor = resizeMonitor;
-    
-                YAHOO.util.Event.addListener(this.resizeMonitor.contentWindow, "resize", this.onDomResize, this, true);
-    
+				
+				YAHOO.widget.Module.textResizeEvent.subscribe(this.onDomResize, this, true);
+				
+				if (! YAHOO.widget.Module.textResizeInitialized) {
+					if (! YAHOO.util.Event.addListener(this.resizeMonitor.contentWindow, "resize", fireTextResize)) {
+						// This will fail in IE if document.domain has changed, so we must change the listener to
+						// use the resizeMonitor element instead
+						YAHOO.util.Event.addListener(this.resizeMonitor, "resize", fireTextResize);
+					}
+					YAHOO.widget.Module.textResizeInitialized = true;
+				}
             }
         
         }
@@ -669,8 +686,11 @@ YAHOO.widget.Module.prototype = {
 	* @method destroy
 	*/
 	destroy : function() {
+		var parent;
+
 		if (this.element) {
-			var parent = this.element.parentNode;
+			YAHOO.util.Event.purgeElement(this.element, true);
+			parent = this.element.parentNode;
 		}
 		if (parent) {
 			parent.removeChild(this.element);
@@ -680,6 +700,14 @@ YAHOO.widget.Module.prototype = {
 		this.header = null;
 		this.body = null;
 		this.footer = null;
+
+		for (var e in this) {
+			if (e instanceof YAHOO.util.CustomEvent) {
+				e.unsubscribeAll();
+			}
+		}
+
+		YAHOO.widget.Module.textResizeEvent.unsubscribe(this.onDomResize, this);
 
 		this.destroyEvent.fire();
 	},

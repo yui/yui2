@@ -2,7 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.12
+Version 0.12.1
 */
 
 /**
@@ -71,7 +71,7 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 	* @type String
 	* @default async
 	*/
-	this.cfg.addProperty("postmethod", { value:"async", validator:function(val) { 
+	this.cfg.addProperty("postmethod", { value:"async", handler:this.configPostMethod, validator:function(val) { 
 													if (val != "form" && val != "async" && val != "none" && val != "manual") {
 														return false;
 													} else {
@@ -151,8 +151,6 @@ YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
 	if (userConfig) {
 		this.cfg.applyConfig(userConfig, true);
 	}
-
-	this.renderEvent.subscribe(this.registerForm, this, true);
 
 	this.showEvent.subscribe(this.focusFirst, this, true);
 	this.beforeHideEvent.subscribe(this.blurButtons, this, true);
@@ -408,6 +406,24 @@ YAHOO.widget.Dialog.prototype.focusLastButton = function() {
 	}
 };
 
+/**
+* The default event handler for the "postmethod" configuration property
+* @method configPostMethod
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+*/
+YAHOO.widget.Dialog.prototype.configPostMethod = function(type, args, obj) {
+	var postmethod = args[0];
+
+	this.registerForm();
+	YAHOO.util.Event.addListener(this.form, "submit", function(e) {
+														YAHOO.util.Event.stopEvent(e);
+														this.submit();
+														this.form.blur();
+													  }, this, true); 
+};
+
 // END BUILT-IN PROPERTY EVENT HANDLERS //
 
 /**
@@ -453,25 +469,25 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 	var data = {};
 
 	if (form) {
-		for (var i in this.form) {
-			var formItem = form[i];
+		for (var i=0;i<form.elements.length;i++) {
+			var formItem = form.elements[i];
 			if (formItem) {
 				if (formItem.tagName) { // Got a single form item
 					switch (formItem.tagName) {
 						case "INPUT":
 							switch (formItem.type) {
 								case "checkbox": 
-									data[i] = formItem.checked;
+									data[formItem.name] = formItem.checked;
 									break;
 								case "textbox":
 								case "text":
 								case "hidden":
-									data[i] = formItem.value;
+									data[formItem.name] = formItem.value;
 									break;
 							}
 							break;
 						case "TEXTAREA":
-							data[i] = formItem.value;
+							data[formItem.name] = formItem.value;
 							break;
 						case "SELECT":
 							var val = [];
@@ -485,7 +501,7 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 									val[val.length] = selval;
 								}
 							}
-							data[i] = val;
+							data[formItem.name] = val;
 							break;
 					}
 				} else if (formItem[0] && formItem[0].tagName) { // this is an array of form items

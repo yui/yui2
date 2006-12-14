@@ -2,13 +2,13 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.12
+Version 0.12.1
 */
 
 /**
 * Overlay is a Module that is absolutely positioned above the page flow. It has convenience methods for positioning and sizing, as well as options for controlling zIndex and constraining the Overlay's position to the current visible viewport. Overlay also contains a dynamicly generated IFRAME which is placed beneath it for Internet Explorer 6 and 5.x so that it will be properly rendered above SELECT elements.
-* @class Overlay
 * @namespace YAHOO.widget
+* @class Overlay
 * @extends YAHOO.widget.Module
 * @param {String}	el	The element ID representing the Overlay <em>OR</em>
 * @param {HTMLElement}	el	The element representing the Overlay
@@ -580,7 +580,7 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 			if (! this.iframe) {
 				this.iframe = document.createElement("iframe");
 				if (this.isSecure) {
-					this.iframe.src = this.imageRoot + YAHOO.widget.Overlay.IFRAME_SRC;
+					this.iframe.src = YAHOO.widget.Overlay.IFRAME_SRC;
 				}
 				
 				var parent = this.element.parentNode;
@@ -842,6 +842,9 @@ YAHOO.widget.Overlay.prototype.destroy = function() {
 	}
 	
 	this.iframe = null;
+
+	YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.doCenterOnDOMEvent, this);
+	YAHOO.widget.Overlay.windowScrollEvent.unsubscribe(this.doCenterOnDOMEvent, this);
 
 	YAHOO.widget.Overlay.superclass.destroy.call(this);  
 };
