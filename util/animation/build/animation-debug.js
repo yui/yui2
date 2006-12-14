@@ -639,6 +639,7 @@ YAHOO.util.Bezier = new function()
    
    };
 };
+(function() {
 /**
  * Anim subclass for color transitions.
  * <p>Usage: <code>var myAnim = new Y.ColorAnim(el, { backgroundColor: { from: '#FF0000', to: '#FFFFFF' } }, 1, Y.Easing.easeOut);</code> Color values can be specified with either 112233, #112233, 
@@ -661,7 +662,6 @@ YAHOO.util.Bezier = new function()
  * @param {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
  * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
  */
-(function() {
    YAHOO.util.ColorAnim = function(el, attributes, duration,  method) {
       YAHOO.util.ColorAnim.superclass.constructor.call(this, el, attributes, duration, method);
    };
@@ -1039,6 +1039,7 @@ YAHOO.util.Easing = {
    }
 };
 
+(function() {
 /**
  * Anim subclass for moving elements along a path defined by the "points" 
  * member of "attributes".  All "points" are arrays with x, y coordinates.
@@ -1062,7 +1063,6 @@ YAHOO.util.Easing = {
  * @param {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
  * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
  */
-(function() {
    YAHOO.util.Motion = function(el, attributes, duration,  method) {
       if (el) { // dont break existing subclasses not using YAHOO.extend
          YAHOO.util.Motion.superclass.constructor.call(this, el, attributes, duration, method);
@@ -1191,6 +1191,7 @@ YAHOO.util.Easing = {
       return (typeof prop !== 'undefined');
    };
 })();
+(function() {
 /**
  * Anim subclass for scrolling elements to a position defined by the "scroll"
  * member of "attributes".  All "scroll" members are arrays with x, y scroll positions.
@@ -1214,7 +1215,6 @@ YAHOO.util.Easing = {
  * @param {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
  * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
  */
-(function() {
    YAHOO.util.Scroll = function(el, attributes, duration,  method) {
       if (el) { // dont break existing subclasses not using YAHOO.extend
          YAHOO.util.Scroll.superclass.constructor.call(this, el, attributes, duration, method);
