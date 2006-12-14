@@ -1,7 +1,6 @@
 /**
  * The base class for all tree nodes.  The node's presentation and behavior in
  * response to mouse events is handled in Node subclasses.
- * @namespace YAHOO.util
  * @namespace YAHOO.widget
  * @class Node
  * @uses YAHOO.util.EventProvider

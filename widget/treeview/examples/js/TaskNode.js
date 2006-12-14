@@ -260,6 +260,7 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
             sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
             sb[sb.length] = this.tree.id + '\',' + this.index +  ').getStyle()"';
         }
+        sb[sb.length] = (this.nowrap) ? ' nowrap="nowrap" ' : '';
         sb[sb.length] = ' >';
         sb[sb.length] = this.label;
         sb[sb.length] = '</a>';
