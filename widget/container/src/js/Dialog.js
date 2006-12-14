@@ -471,25 +471,25 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 	var data = {};
 
 	if (form) {
-		for (var i in this.form) {
-			var formItem = form[i];
+		for (var i=0;i<form.elements.length;i++) {
+			var formItem = form.elements[i];
 			if (formItem) {
 				if (formItem.tagName) { // Got a single form item
 					switch (formItem.tagName) {
 						case "INPUT":
 							switch (formItem.type) {
 								case "checkbox": 
-									data[i] = formItem.checked;
+									data[formItem.name] = formItem.checked;
 									break;
 								case "textbox":
 								case "text":
 								case "hidden":
-									data[i] = formItem.value;
+									data[formItem.name] = formItem.value;
 									break;
 							}
 							break;
 						case "TEXTAREA":
-							data[i] = formItem.value;
+							data[formItem.name] = formItem.value;
 							break;
 						case "SELECT":
 							var val = [];
@@ -503,7 +503,7 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 									val[val.length] = selval;
 								}
 							}
-							data[i] = val;
+							data[formItem.name] = val;
 							break;
 					}
 				} else if (formItem[0] && formItem[0].tagName) { // this is an array of form items
