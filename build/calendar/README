@@ -1,5 +1,9 @@
 Calendar Release Notes
 
+*** version 0.12.1 ***
+
+	- Calendar and CalendarGroup now automatically parse the argument passed to setMonth and setYear into an integer, eliminating potential concatenation bugs. 
+
 *** version 0.12 ***
 
 	- New documentation format implemented
