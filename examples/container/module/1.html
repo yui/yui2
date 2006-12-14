@@ -55,11 +55,11 @@
 			<p>In addition, the JavaScript file for Container must be included. If you will not be using any of the pre-packaged rich controls (Tooltip, Panel, Dialog, or SimpleDialog), you can include the core libary (container_core.js), which only contains Module, Overlay, and its supporting classes (Config, OverlayManager, and KeyListener). Otherwise, the full library should be included (container.js). You can see what the full list of included files looks like below. Please note that your file paths may vary depending on the location in which you installed the YUI libraries.</p>
 
 			<textarea name="code" class="HTML" cols="60" rows="1">
-				<script type="text/javascript" src="yui/build/yahoo/yahoo.html"></script>
-				<script type="text/javascript" src="yui/event/event.html" ></script>
-				<script type="text/javascript" src="yui/dom/dom.html" ></script>
+				<script type="text/javascript" src="yahoo.js"></script>
+				<script type="text/javascript" src="event.js" ></script>
+				<script type="text/javascript" src="dom.js" ></script>
 
-				<script type="text/javascript" src="yui/build/container/container_core.html"></script>
+				<script type="text/javascript" src="container_core.js"></script>
 			</textarea>
 
 			<p>Modules can be built using existing markup or dynamically at runtime using JavaScript. In this tutorial, we will construct two Modules: one from markup, and one from script only. First, we'll add the Module from markup to the document. The markup is in Standard Module Format, which consists of an outer container div element and three possible child div elements that represent the header, body, and/or footer:</p>
