@@ -538,6 +538,19 @@ YAHOO.widget.MenuItem.prototype = {
             oConfig.setProperty("text", p_oObject);
 
         }
+        else if(
+            !p_oConfig && 
+            p_oObject.text && 
+            this._checkString(p_oObject.text)
+        ) {
+
+            p_oConfig = p_oObject;
+
+            this._createRootNodeStructure();
+
+            oConfig.setProperty("text", p_oObject.text);
+
+        }
         else if(this._checkDOMNode(p_oObject)) {
 
             switch(p_oObject.tagName.toUpperCase()) {
@@ -1492,14 +1505,13 @@ YAHOO.widget.MenuItem.prototype = {
                 !oSubmenu.nodeType
             ) {
 
-                oMenu = new this.SUBMENU_TYPE(
-                                oSubmenu.id, 
-                                { 
-                                    itemdata: oSubmenu.itemdata, 
-                                    lazyload: bLazyLoad, 
-                                    parent:this 
-                                }
-                            );
+                var sSubmenuId = oSubmenu.id,
+                    oSubmenuConfig = oSubmenu;
+
+                oSubmenuConfig.lazyload = bLazyLoad;
+                oSubmenuConfig.parent = this;
+
+                oMenu = new this.SUBMENU_TYPE(sSubmenuId, oSubmenuConfig);
 
 
                 // Set the value of the property to the Menu instance
