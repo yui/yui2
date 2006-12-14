@@ -1,5 +1,21 @@
 Container Release Notes
 
+*** version 0.12.1 ***
+
+	All Classes
+	   - "monitorresize" property now functions in situations where document.domain has been modified.
+	   - YAHOO.widget.Module.textResizeEvent now fires when the font size is changed (except for Opera, which uses "zoom" functionality that prevents this)
+	   - Event listeners attached to container elements are now properly purged on destroy using YAHOO.util.Event.purgeElement
+
+	Panel
+	   - Fixed issue where focus events were broken on the page when a modal Panel was created
+
+	Dialog
+	   - Fixed bug where hitting "enter" on a Dialog was forcing the default submission behavior of the form's action to execute
+	   - Dialog no longer tries to give focus to hidden form elements.
+	   - Replaced &nbsp; references in Panel with &#160; for XHTML compliance.
+	   - Fixed issue that was preventing Safari from successfully using the getData() function
+
 *** version 0.12 ***
 
 	All Classes
