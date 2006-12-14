@@ -6,7 +6,7 @@ echo "/*" > copyright.txt
 echo "Copyright (c) `date +%Y`, Yahoo! Inc. All rights reserved." >> copyright.txt
 echo "Code licensed under the BSD License:" >> copyright.txt
 echo "http://developer.yahoo.com/yui/license.txt" >> copyright.txt
-echo "Version: 0.12" >> copyright.txt
+echo "Version: 0.12.1" >> copyright.txt
 echo "*/" >> copyright.txt
 echo "" >> copyright.txt
 echo "" >> copyright.txt
