@@ -590,7 +590,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
         var t = this.thumb;
         var newX, newY;
-        this.verifyOffset();
+        this.verifyOffset(true);
         if (t._isRegion) {
             return false;
         } else if (t._isHoriz) {
@@ -654,15 +654,16 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
     /**
      * Checks the background position element position.  If it has moved from the
      * baseline position, the constraints for the thumb are reset
+     * @param checkPos {boolean} check the position instead of using cached value
      * @method verifyOffset
      * @return {boolean} True if the offset is the same as the baseline.
      */
-    verifyOffset: function() {
+    verifyOffset: function(checkPos) {
 
-        //var newPos = YAHOO.util.Dom.getXY(this.getEl());
-        var newPos = [this.initPageX, this.initPageY];
+        var newPos = YAHOO.util.Dom.getXY(this.getEl());
+        //var newPos = [this.initPageX, this.initPageY];
 
-        this.logger.log("newPos: " + newPos);
+        this.logger.log("newPos: " + newPos, "warn");
 
         if (newPos[0] != this.baselinePos[0] || newPos[1] != this.baselinePos[1]) {
             this.logger.log("background moved, resetting constraints");
