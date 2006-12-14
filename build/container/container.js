@@ -1266,7 +1266,7 @@ YAHOO.extend(YAHOO.widget.Overlay, YAHOO.widget.Module);
 * @final
 * @type String
 */
-YAHOO.widget.Overlay.IFRAME_SRC = "javascript:false;"
+YAHOO.widget.Overlay.IFRAME_SRC = "javascript:false;";
 
 /**
 * Constant representing the top left corner of an element, used for configuring the context element alignment
