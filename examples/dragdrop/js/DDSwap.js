@@ -124,7 +124,7 @@ YAHOO.example.DDSwap.prototype.onDragOver = function(e) { };
 
 
 
-YAHOO.example.DDSwap_i = function(id, sGroup) {
+YAHOO.example.DDSwap_i = function(id, sGroup, strict) {
     this.swapInit(id, sGroup);
 };
 
@@ -132,7 +132,7 @@ YAHOO.example.DDSwap_i.prototype = new YAHOO.example.DDSwap();
 
 YAHOO.example.DDSwap_i.prototype.onDragDrop = function(e, dds) {
     // this.logger.log(this.id + " onDragDrop swap");
-    var dd = YAHOO.util.DDM.getBestMatch(dds);
+    var dd = YAHOO.util.DDM.getBestMatch(dds, this.strict);
     this.swap(this.getEl(), dd.getEl());
 
     this.resetConstraints();
@@ -147,7 +147,7 @@ YAHOO.example.DDSwap_i.prototype.onDragOver = function(e, dds) {
  
     this.resetStyles();
 
-    var dd = YAHOO.util.DDM.getBestMatch(dds);
+    var dd = YAHOO.util.DDM.getBestMatch(dds, this.strict);
 
     this.els[dd.id] = true;
 

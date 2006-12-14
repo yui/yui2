@@ -47,7 +47,6 @@ var Dom=YAHOO.util.Dom;
  * @param {object} config an object containing configurable attributes
  *                Valid properties for DragDrop: 
  *                    padding, isTarget, maintainOffset, primaryButtonOnly,
- *                    cacheBetweenDrags
  */
 YAHOO.util.DragDrop = function(id, sGroup, config) {
     if (id) {
@@ -289,20 +288,6 @@ YAHOO.util.DragDrop.prototype = {
      * @type boolean
      */
     available: false,
-
-    /**
-     * When an element is dragged the first time, its position is set with 
-     * YAHOO.util.Dom.setXY, and then the resulting relative position is cached
-     * during the drag.  This value is reset each drag by default to account
-     * for when the relative position is invalidated because of a Dom
-     * operation.  Setting this to true will preserve this value between drags,
-     * and can improve performance when it is known that the parent element
-     * will not change.  
-     * @property cacheBetweenDrags 
-     * @type boolean 
-     * @default false
-     */
-    cacheBetweenDrags: false,
 
     /**
      * By default, drags can only be initiated if the mousedown occurs in the
@@ -567,12 +552,11 @@ YAHOO.util.DragDrop.prototype = {
     applyConfig: function() {
 
         // configurable properties: 
-        //    padding, isTarget, maintainOffset, primaryButtonOnly, cacheBetweenDrags
+        //    padding, isTarget, maintainOffset, primaryButtonOnly
         this.padding           = this.config.padding || [0, 0, 0, 0];
         this.isTarget          = (this.config.isTarget !== false);
         this.maintainOffset    = (this.config.maintainOffset);
         this.primaryButtonOnly = (this.config.primaryButtonOnly !== false);
-        this.cacheBetweenDrags = (this.config.cacheBetweenDrags !== false);
 
     },
 
@@ -653,9 +637,7 @@ YAHOO.util.DragDrop.prototype = {
     setStartPosition: function(pos) {
         var p = pos || Dom.getXY( this.getEl() );
 
-        if (!this.cacheBetweenDrags) {
-            this.deltaSetXY = null;
-        }
+        this.deltaSetXY = null;
 
         this.startPageX = p[0];
         this.startPageY = p[1];
