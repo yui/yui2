@@ -1157,7 +1157,6 @@ YAHOO.widget.Module.prototype = {
 			YAHOO.util.Event.purgeElement(this.element, true);
 			parent = this.element.parentNode;
 		}
-
 		if (parent) {
 			parent.removeChild(this.element);
 		}
