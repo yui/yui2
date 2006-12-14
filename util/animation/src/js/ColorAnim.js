@@ -1,3 +1,4 @@
+(function() {
 /**
  * Anim subclass for color transitions.
  * <p>Usage: <code>var myAnim = new Y.ColorAnim(el, { backgroundColor: { from: '#FF0000', to: '#FFFFFF' } }, 1, Y.Easing.easeOut);</code> Color values can be specified with either 112233, #112233, 
@@ -20,7 +21,6 @@
  * @param {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
  * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
  */
-(function() {
    YAHOO.util.ColorAnim = function(el, attributes, duration,  method) {
       YAHOO.util.ColorAnim.superclass.constructor.call(this, el, attributes, duration, method);
    };

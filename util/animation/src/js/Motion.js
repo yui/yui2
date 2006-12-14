@@ -1,3 +1,4 @@
+(function() {
 /**
  * Anim subclass for moving elements along a path defined by the "points" 
  * member of "attributes".  All "points" are arrays with x, y coordinates.
@@ -21,7 +22,6 @@
  * @param {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
  * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
  */
-(function() {
    YAHOO.util.Motion = function(el, attributes, duration,  method) {
       if (el) { // dont break existing subclasses not using YAHOO.extend
          YAHOO.util.Motion.superclass.constructor.call(this, el, attributes, duration, method);
