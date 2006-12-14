@@ -83,7 +83,8 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
         sb[sb.length] = '<tr>';
         
         for (var i=0;i<this.depth;++i) {
-            sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&#160;</td>';
+            //sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&#160;</td>';
+            sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '"><div class="ygtvspacer"></div></td>';
         }
 
         if (this.hasIcon) {
@@ -99,12 +100,14 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
                 sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
                 sb[sb.length] = this.tree.id + '\',' + this.index +  ').getStyle()"';
             }
-            sb[sb.length] = '>&#160;</td>';
+            //sb[sb.length] = '>&#160;</td>';
+            sb[sb.length] = '><div class="ygtvspacer"></div></td>';
         }
 
         sb[sb.length] = '<td';
         sb[sb.length] = ' id="' + this.contentElId + '"';
         sb[sb.length] = ' class="' + this.contentStyle + '"';
+        sb[sb.length] = (this.nowrap) ? ' nowrap="nowrap" ' : '';
         sb[sb.length] = ' >';
         sb[sb.length] = this.html;
         sb[sb.length] = '</td>';

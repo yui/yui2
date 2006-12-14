@@ -1,8 +1,10 @@
 /**
  * The base class for all tree nodes.  The node's presentation and behavior in
  * response to mouse events is handled in Node subclasses.
+ * @namespace YAHOO.util
  * @namespace YAHOO.widget
  * @class Node
+ * @uses YAHOO.util.EventProvider
  * @param oData {object} a string or object containing the data that will
  * be used to render this node
  * @param oParent {Node} this node's parent node
@@ -170,6 +172,15 @@ YAHOO.widget.Node.prototype = {
     iconMode: 0,
 
     /**
+     * Specifies whether or not the content area of the node should be allowed
+     * to wrap.
+     * @property nowrap
+     * @type boolean
+     * @default true
+     */
+    nowrap: false,
+
+    /**
      * The node type
      * @property _type
      * @private
@@ -204,7 +215,7 @@ YAHOO.widget.Node.prototype = {
          * The parentChange event is fired when a parent element is applied
          * to the node.  This is useful if you need to apply tree-level
          * properties to a tree that need to happen if a node is moved from
-         * one tre to another.
+         * one tree to another.
          *
          * @event parentChange
          * @type CustomEvent
@@ -535,16 +546,17 @@ YAHOO.widget.Node.prototype = {
 
         if (!this.getEl()) {
             this.expanded = false;
-            return;
+        } else {
+            // hide the child div
+            this.hideChildren();
+            this.expanded = false;
+
+            this.updateIcon();
         }
 
-        // hide the child div
-        this.hideChildren();
-        this.expanded = false;
-
-        this.updateIcon();
-
         // this.getSpacer().title = this.getStateText();
+
+        ret = this.tree.fireEvent("collapseComplete", this);
 
     },
 
@@ -609,6 +621,8 @@ YAHOO.widget.Node.prototype = {
         }
 
         this.showChildren();
+
+        ret = this.tree.fireEvent("expandComplete", this);
     },
 
     updateIcon: function() {

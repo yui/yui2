@@ -120,8 +120,9 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
         sb[sb.length] = '<tr>';
         
         for (var i=0;i<this.depth;++i) {
-            // sb[sb.length] = '<td class="ygtvdepthcell">&#160;</td>';
-            sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&#160;</td>';
+            //sb[sb.length] = '<td><div class="' + this.getDepthStyle(i) + '">&#160;</div></td>';
+            //sb[sb.length] = '<td><div class="' + this.getDepthStyle(i) + '"></div></td>';
+            sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '"><div class="ygtvspacer"></div></td>';
         }
 
         var getNode = 'YAHOO.widget.TreeView.getNode(\'' +
@@ -139,6 +140,8 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
         }
         sb[sb.length] = ' onclick="javascript:' + this.getToggleLink() + '">';
 
+        sb[sb.length] = '<div class="ygtvspacer">';
+
         /*
         sb[sb.length] = '<img id="' + this.getSpacerId() + '"';
         sb[sb.length] = ' alt=""';
@@ -150,10 +153,13 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
         sb[sb.length] = ' />';
         */
 
-        sb[sb.length] = '&#160;';
+        //sb[sb.length] = '&#160;';
 
+        sb[sb.length] = '</div>';
         sb[sb.length] = '</td>';
-        sb[sb.length] = '<td>';
+        sb[sb.length] = '<td ';
+        sb[sb.length] = (this.nowrap) ? ' nowrap="nowrap" ' : '';
+        sb[sb.length] = ' >';
         sb[sb.length] = '<a';
         sb[sb.length] = ' id="' + this.labelElId + '"';
         sb[sb.length] = ' class="' + this.labelStyle + '"';

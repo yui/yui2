@@ -11,6 +11,7 @@
  * Contains the tree view state data and the root node.
  *
  * @class TreeView
+ * @uses YAHOO.util.EventProvider
  * @constructor
  * @param {string|HTMLElement} id The id of the element, or the element
  * itself that the tree will be inserted into.
@@ -233,22 +234,40 @@ YAHOO.widget.TreeView.prototype = {
         this.createEvent("animComplete", this);
 
         /**
-         * Fires when a node is going to be expanded.  Return false to stop
-         * the expand.
+         * Fires when a node is going to be collapsed.  Return false to stop
+         * the collapse.
          * @event collapse
          * @type CustomEvent
-         * @param {YAHOO.widget.Node} node the node that is expanding/collapsing
+         * @param {YAHOO.widget.Node} node the node that is collapsing
          */
         this.createEvent("collapse", this);
 
         /**
-         * Fires when a node is going to be collapsed.  Return false to stop
+         * Fires after a node is successfully collapsed.  This event will not fire
+         * if the "collapse" event was cancelled.
+         * @event collapseComplete
+         * @type CustomEvent
+         * @param {YAHOO.widget.Node} node the node that was collapsed
+         */
+        this.createEvent("collapseComplete", this);
+
+        /**
+         * Fires when a node is going to be expanded.  Return false to stop
          * the collapse.
          * @event expand
          * @type CustomEvent
-         * @param {YAHOO.widget.Node} node the node that is expanding/collapsing
+         * @param {YAHOO.widget.Node} node the node that is expanding
          */
         this.createEvent("expand", this);
+
+        /**
+         * Fires after a node is successfully expanded.  This event will not fire
+         * if the "expand" event was cancelled.
+         * @event expandComplete
+         * @type CustomEvent
+         * @param {YAHOO.widget.Node} node the node that was expanded
+         */
+        this.createEvent("expandComplete", this);
 
         this._nodes = [];
 
@@ -261,7 +280,16 @@ YAHOO.widget.TreeView.prototype = {
         this.logger = new YAHOO.widget.LogWriter(this.toString());
 
         this.logger.log("tree init: " + this.id);
+
+        //YAHOO.util.Event.onContentReady(this.id, this.handleAvailable, this, true);
+        YAHOO.util.Event.on(this.id, "click", this.handleClick, this, true);
     },
+
+
+    //handleAvailable: function() {
+        //var Event = YAHOO.util.Event;
+        //Event.on(this.id, 
+    //},
 
     /**
      * Renders the tree boilerplate and visible nodes

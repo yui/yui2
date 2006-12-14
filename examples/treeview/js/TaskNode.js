@@ -216,7 +216,8 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
         sb[sb.length] = '<tr>';
         
         for (var i=0;i<this.depth;++i) {
-            sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&#160;</td>';
+            //sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&#160;</td>';
+            sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '"><div class="ygtvspacer"></div></td>';
         }
 
         sb[sb.length] = '<td';
@@ -231,14 +232,16 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
             sb[sb.length] = this.tree.id + '\',' + this.index +  ').getStyle()"';
         }
         sb[sb.length] = ' onclick="javascript:' + this.getToggleLink() + '">&#160;';
-        sb[sb.length] = '</td>';
+        //sb[sb.length] = '</td>';
+        sb[sb.length] = '<div class="ygtvspacer"></div></td>';
 
         // check box
         sb[sb.length] = '<td';
         sb[sb.length] = ' id="' + this.getCheckElId() + '"';
         sb[sb.length] = ' class="' + this.getCheckStyle() + '"';
         sb[sb.length] = ' onclick="javascript:' + this.getCheckLink() + '">';
-        sb[sb.length] = '&#160;</td>';
+        //sb[sb.length] = '&#160;</td>';
+        sb[sb.length] = '<div class="ygtvspacer"></div></td>';
         
 
         sb[sb.length] = '<td>';
@@ -257,6 +260,7 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
             sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
             sb[sb.length] = this.tree.id + '\',' + this.index +  ').getStyle()"';
         }
+        sb[sb.length] = (this.nowrap) ? ' nowrap="nowrap" ' : '';
         sb[sb.length] = ' >';
         sb[sb.length] = this.label;
         sb[sb.length] = '</a>';
