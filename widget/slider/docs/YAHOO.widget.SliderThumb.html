@@ -1,37 +1,43 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>API: Slider  YAHOO.widget.SliderThumb   (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/reset.css">
-	<link rel="stylesheet" type="text/css" href="assets/fonts.css">
-	<link rel="stylesheet" type="text/css" href="assets/grids.css">
+	<title>API: slider  YAHOO.widget.SliderThumb   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css">
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
 
 <body id="yahoo-com">
-<div id="doc" class="yui-t1">
+<div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>Slider</h3>
+        <h3>Slider Widget&nbsp;</h3>
         <p>
-        <a href="./index.html">Yahoo! UI Library</a> &gt;
-        <a href="./module_Slider.html">Slider</a>
-             &gt; YAHOO.widget.SliderThumb 
-            
-        </p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_slider.html">slider</a>
+                 &gt; YAHOO.widget.SliderThumb 
+                
+            </p>
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
 
-                    <h2>
 
+                    <h2>
+                        
+
+                        
+                        
                             Class <b>YAHOO.widget.SliderThumb</b>
                         <span class="extends">
-                            extends <a href="YAHOO.util.DD.html">YAHOO.util.DD</a>
+                           - extends <a href="YAHOO.util.DD.html">YAHOO.util.DD</a>
                         </span>
+
+                        <span class="extends">
+                        </span>
+                        
                         </code>
                     </h2>
                     <!-- class tree goes here -->
@@ -49,47 +55,74 @@
                             <div class="detail">
                                 <strong>YAHOO.widget.SliderThumb</strong>
                                 <code>
-                                        (
+                                    (
   
                                         
-                                            &lt;String&gt; id, 
-                                            &lt;String&gt; sGroup, 
-                                            &lt;int&gt; iLeft, 
-                                            &lt;int&gt; iRight, 
-                                            &lt;int&gt; iUp, 
-                                            &lt;int&gt; iDown, 
-                                            &lt;int&gt; iTickSize
-                                        )
+                                                
+                                                id
+
+                                                , 
+                                                sGroup
+
+                                                , 
+                                                iLeft
+
+                                                , 
+                                                iRight
+
+                                                , 
+                                                iUp
+
+                                                , 
+                                                iDown
+
+                                                , 
+                                                iTickSize
+                                    )
                                 </code>
                                 <div class="description">
                                         <dl>
                                             <dt>Parameters:</dt>
                                                 <dd>
-                                                    <code>id</code> - 
+                                                    <code>id
+                                                    &lt;String&gt; 
+                                                    </code>
                                                      the id of the slider html element
                                                 </dd>
                                                 <dd>
-                                                    <code>sGroup</code> - 
+                                                    <code>sGroup
+                                                    &lt;String&gt; 
+                                                    </code>
                                                      the group of related DragDrop items
                                                 </dd>
                                                 <dd>
-                                                    <code>iLeft</code> - 
+                                                    <code>iLeft
+                                                    &lt;int&gt; 
+                                                    </code>
                                                      the number of pixels the element can move left
                                                 </dd>
                                                 <dd>
-                                                    <code>iRight</code> - 
+                                                    <code>iRight
+                                                    &lt;int&gt; 
+                                                    </code>
                                                      the number of pixels the element can move right
                                                 </dd>
                                                 <dd>
-                                                    <code>iUp</code> - 
+                                                    <code>iUp
+                                                    &lt;int&gt; 
+                                                    </code>
                                                      the number of pixels the element can move up
                                                 </dd>
                                                 <dd>
-                                                    <code>iDown</code> - 
+                                                    <code>iDown
+                                                    &lt;int&gt; 
+                                                    </code>
                                                      the number of pixels the element can move down
                                                 </dd>
                                                 <dd>
-                                                    <code>iTickSize</code> - 
+                                                    <code>iTickSize
+                                                    &lt;int&gt; 
+                                                    </code>
                                                      optional parameter for specifying that the element 
 should move a certain number pixels at a time.
                                                 </dd>
@@ -113,6 +146,10 @@ should move a certain number pixels at a time.
 element).
                                         </div>
                                     </div>
+     
+                                        
+
+
                                     <hr />
                                     <h4><a name="startOffset">startOffset</a>
                                         <code>- [int, int]</code>
@@ -123,8 +160,12 @@ element).
 (the slider background) when the control is instantiated.
                                         </div>
                                     </div>
+     
+                                        
+
+
                                     <hr />
- 
+
 
                             </div>
                         </div>
@@ -139,8 +180,11 @@ element).
                                         <code>
                                         
                                         
+                                        
                                         void
                                             <strong>clearTicks</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -149,6 +193,14 @@ element).
 
                                         <div class="description">
 
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
              
                                         </div>
 
@@ -160,12 +212,16 @@ element).
                                         <code>
                                         
                                         
+                                        
                                         void
                                             <strong>getOffsetFromParent</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;[int, int]&gt; parentPos
-                                                )
+                                                        
+                                                         parentPos
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -173,14 +229,22 @@ element).
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>parentPos</code> - 
+                                                            <code>parentPos &lt;[int, int]&gt;</code>
                                                              Optionally accepts the position of the parent
                                                         </dd>
                                                 </dl>
 
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
              
                                         </div>
 
@@ -192,8 +256,11 @@ element).
                                         <code>
                                         
                                         
+                                        
                                         int
                                             <strong>getValue</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -202,6 +269,7 @@ pixels.
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -222,8 +290,11 @@ slider has moved from the start position.</dd>
                                         <code>
                                         
                                         
+                                        
                                         int
                                             <strong>getXValue</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -232,6 +303,7 @@ pixels.
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -252,8 +324,11 @@ slider has moved horizontally from the start position.</dd>
                                         <code>
                                         
                                         
+                                        
                                         int
                                             <strong>getYValue</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -262,6 +337,7 @@ pixels.
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -282,16 +358,32 @@ slider has moved vertically from the start position.</dd>
                                         <code>
                                         
                                         
+                                        
                                         void
                                             <strong>initSlider</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;int&gt; iLeft, 
-                                                    &lt;int&gt; iRight, 
-                                                    &lt;int&gt; iUp, 
-                                                    &lt;int&gt; iDown, 
-                                                    &lt;int&gt; iTickSize
-                                                )
+                                                        
+                                                         iLeft
+                                                    
+                                                
+                                                        , 
+                                                         iRight
+                                                    
+                                                
+                                                        , 
+                                                         iUp
+                                                    
+                                                
+                                                        , 
+                                                         iDown
+                                                    
+                                                
+                                                        , 
+                                                         iTickSize
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -299,30 +391,38 @@ slider has moved vertically from the start position.</dd>
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>iLeft</code> - 
+                                                            <code>iLeft &lt;int&gt;</code>
                                                              the number of pixels the element can move left
                                                         </dd>
                                                         <dd>
-                                                            <code>iRight</code> - 
+                                                            <code>iRight &lt;int&gt;</code>
                                                              the number of pixels the element can move right
                                                         </dd>
                                                         <dd>
-                                                            <code>iUp</code> - 
+                                                            <code>iUp &lt;int&gt;</code>
                                                              the number of pixels the element can move up
                                                         </dd>
                                                         <dd>
-                                                            <code>iDown</code> - 
+                                                            <code>iDown &lt;int&gt;</code>
                                                              the number of pixels the element can move down
                                                         </dd>
                                                         <dd>
-                                                            <code>iTickSize</code> - 
+                                                            <code>iTickSize &lt;int&gt;</code>
                                                              the width of the tick interval.
                                                         </dd>
                                                 </dl>
 
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
              
                                         </div>
 
@@ -334,8 +434,11 @@ slider has moved vertically from the start position.</dd>
                                         <code>
                                         
                                         
+                                        
                                         string
                                             <strong>toString</strong>
+                                           (
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -343,6 +446,7 @@ slider has moved vertically from the start position.</dd>
                                         </div>
 
                                         <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -360,23 +464,38 @@ slider has moved vertically from the start position.</dd>
                         </div>
 
 
+
+
+
+
+
+
 			</div>
 		</div>
 		<div class="yui-b">
             <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class="selected"><a href="module_slider.html">slider</a></li>
+                        </ul>
+                    </div>
+
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.widget.Slider.html">YAHOO.widget.Slider</a></li>
-                                <li><a href="YAHOO.widget.SliderThumb.html">YAHOO.widget.SliderThumb</a></li>
+                                <li class=""><a href="YAHOO.widget.Slider.html">YAHOO.widget.Slider</a></li>
+                                <li class="selected"><a href="YAHOO.widget.SliderThumb.html">YAHOO.widget.SliderThumb</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="Slider.js.html">Slider.js</a></li>
-                                <li><a href="SliderThumb.js.html">SliderThumb.js</a></li>
+                                <li class=""><a href="Slider.js.html">Slider.js</a></li>
+                                <li class=""><a href="SliderThumb.js.html">SliderThumb.js</a></li>
                         </ul>
                     </div>
 
@@ -418,6 +537,8 @@ slider has moved vertically from the start position.</dd>
                                 </li>
                         </ul>
                     </div>
+
+
 
             </div>
 		</div>
