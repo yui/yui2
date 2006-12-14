@@ -608,7 +608,7 @@ YAHOO.util.Connect =
 		var oForm;
 		if(typeof formId == 'string'){
 			// Determine if the argument is a form id or a form name.
-			// Note form name usage is deprecated by supported
+			// Note form name usage is deprecated but supported
 			// here for legacy reasons.
 			oForm = (document.getElementById(formId) || document.forms[formId]);
 		}
@@ -771,7 +771,7 @@ YAHOO.util.Connect =
    */
 	appendPostData:function(postData)
 	{
-		var formElements = new Array();
+		var formElements = [];
 		var postMessage = postData.split('&');
 		for(var i=0; i < postMessage.length; i++){
 			var delimitPos = postMessage[i].indexOf('=');
