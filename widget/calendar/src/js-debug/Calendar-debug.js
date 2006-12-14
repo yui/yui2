@@ -2,13 +2,13 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.12
+Version 0.12.1
 */
 
 /**
 * The Calendar component is a UI control that enables users to choose one or more dates from a graphical calendar presented in a one-month ("one-up") or two-month ("two-up") interface. Calendars are generated entirely via script and can be navigated without any page refreshes.
-* @module    Calendar
-* @title     Calendar Widget
+* @module    calendar
+* @title     Calendar
 * @namespace YAHOO.widget
 * @requires  yahoo,dom,event
 */
@@ -459,6 +459,8 @@ YAHOO.widget.Calendar.prototype.doSelectCell = function(e, cal) {
 		index = cell.id.split("cell")[1];
 		d = cal.cellDates[index];
 		date = new Date(d[0],d[1]-1,d[2]);
+	
+		var link;
 
 		cal.logger.log("Selecting cell " + index + " via click", "info");
 
@@ -2402,7 +2404,7 @@ YAHOO.widget.Calendar.prototype.clearAllBodyCellStyles = function(style) {
 */
 YAHOO.widget.Calendar.prototype.setMonth = function(month) {
 	var current = this.cfg.getProperty("pagedate");
-	current.setMonth(month);
+	current.setMonth(parseInt(month, 10));
 	this.cfg.setProperty("pagedate", current);
 };
 
@@ -2413,7 +2415,7 @@ YAHOO.widget.Calendar.prototype.setMonth = function(month) {
 */
 YAHOO.widget.Calendar.prototype.setYear = function(year) {
 	var current = this.cfg.getProperty("pagedate");
-	current.setFullYear(year);
+	current.setFullYear(parseInt(year, 10));
 	this.cfg.setProperty("pagedate", current);
 };
 
