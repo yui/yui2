@@ -2,9 +2,8 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-version: 0.12.0
+version: 0.12.1
 */ 
-
 /**
  * The YAHOO object is the single global object used by YUI Library.  It
  * contains utility function for setting up namespaces, inheritance, and
@@ -89,7 +88,7 @@ YAHOO.log = function(msg, cat, src) {
  * @static
  * @param {Function} subc   the object to modify
  * @param {Function} superc the object to inherit
- * @param {String[]} overrides  additional properties/methods to add to the
+ * @param {Object} overrides  additional properties/methods to add to the
  *                              subclass prototype.  These will override the
  *                              matching items obtained from the superclass 
  *                              if present.

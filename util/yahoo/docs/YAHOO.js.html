@@ -2,9 +2,7 @@
 <html>
 <head>
 	<title>API: yahoo   YAHOO.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/reset.css">
-	<link rel="stylesheet" type="text/css" href="assets/fonts.css">
-	<link rel="stylesheet" type="text/css" href="assets/grids.css">
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css">
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
 
@@ -42,7 +40,7 @@
 <span class="c"> * @static</span>
 <span class="c"> */</span>
 <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">YAHOO</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="o">)</span> <span class="o">{</span>
-    <span class="nx">YAHOO</span> <span class="o">=</span> <span class="o">{};</span>
+    <span class="k">var</span> <span class="nx">YAHOO</span> <span class="o">=</span> <span class="o">{};</span>
 <span class="o">}</span>
 
 <span class="c">/**</span>
@@ -111,7 +109,7 @@
 <span class="c"> * @static</span>
 <span class="c"> * @param {Function} subc   the object to modify</span>
 <span class="c"> * @param {Function} superc the object to inherit</span>
-<span class="c"> * @param {String[]} overrides  additional properties/methods to add to the</span>
+<span class="c"> * @param {Object} overrides  additional properties/methods to add to the</span>
 <span class="c"> *                              subclass prototype.  These will override the</span>
 <span class="c"> *                              matching items obtained from the superclass </span>
 <span class="c"> *                              if present.</span>
@@ -149,51 +147,18 @@
 <span class="c"> *                             overwrite an existing property in the receiver</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">augment</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">r</span><span class="o">,</span> <span class="nx">s</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="o">[</span><span class="nx">r</span><span class="o">.</span><span class="nx">prototype</span><span class="o">,</span> <span class="nx">s</span><span class="o">.</span><span class="nx">prototype</span><span class="o">];</span>
-    <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">2</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">arguments</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">args</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">arguments</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
-    <span class="o">}</span>
-    <span class="nx">r</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">compose</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">,</span> <span class="nx">args</span><span class="o">);</span>
-<span class="o">};</span>
-
-<span class="c">/**</span>
-<span class="c"> * Returns an object composed of the two objects passed in.  Properties in</span>
-<span class="c"> * object a will have priority over those in object b.  Optionally, one</span>
-<span class="c"> * or more properties can be provided as additional parameters.  If specified,</span>
-<span class="c"> * only those properties will be copied from object b, and these will overwrite</span>
-<span class="c"> * the property in object a if it exists.</span>
-<span class="c"> * @method compose</span>
-<span class="c"> * @static</span>
-<span class="c"> * @param {Object} a  the base object for the composition</span>
-<span class="c"> * @param {Object} b  the object that contains additional properties to apply</span>
-<span class="c"> *                    to the composition</span>
-<span class="c"> * @param {String*}  arguments zero or more properties methods to add to the</span>
-<span class="c"> *                             composition.  If none specified, everything</span>
-<span class="c"> *                             in object b will be copied unless it would</span>
-<span class="c"> *                             overwrite an existing property in object a.</span>
-<span class="c"> * @return {Object} the new object</span>
-<span class="c"> *</span>
-<span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">compose</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">a</span><span class="o">,</span> <span class="nx">b</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">var</span> <span class="nx">args</span><span class="o">=</span><span class="nx">arguments</span><span class="o">,</span> <span class="nx">c</span><span class="o">={},</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">p</span><span class="o">;</span>
-
-    <span class="k">for</span> <span class="o">(</span><span class="nx">p</span> <span class="k">in</span> <span class="nx">a</span><span class="o">)</span> <span class="o">{</span> 
-        <span class="nx">c</span><span class="o">[</span><span class="nx">p</span><span class="o">]=</span><span class="nx">a</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
-    <span class="o">}</span>
-
-    <span class="k">if</span> <span class="o">(</span><span class="nx">args</span><span class="o">[</span><span class="m">2</span><span class="o">])</span> <span class="o">{</span>
-        <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">2</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">args</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">c</span><span class="o">[</span><span class="nx">args</span><span class="o">[</span><span class="nx">i</span><span class="o">]]=</span><span class="nx">b</span><span class="o">[</span><span class="nx">args</span><span class="o">[</span><span class="nx">i</span><span class="o">]];</span>
+    <span class="k">var</span> <span class="nx">rp</span><span class="o">=</span><span class="nx">r</span><span class="o">.</span><span class="nx">prototype</span><span class="o">,</span> <span class="nx">sp</span><span class="o">=</span><span class="nx">s</span><span class="o">.</span><span class="nx">prototype</span><span class="o">,</span> <span class="nx">a</span><span class="o">=</span><span class="nx">arguments</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">p</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="nx">a</span><span class="o">[</span><span class="m">2</span><span class="o">])</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">2</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">a</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">rp</span><span class="o">[</span><span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">]]</span> <span class="o">=</span> <span class="nx">sp</span><span class="o">[</span><span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">]];</span>
         <span class="o">}</span>
     <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-        <span class="k">for</span> <span class="o">(</span><span class="nx">p</span> <span class="k">in</span> <span class="nx">b</span><span class="o">)</span> <span class="o">{</span> 
-            <span class="k">if</span> <span class="o">(!</span><span class="nx">c</span><span class="o">[</span><span class="nx">p</span><span class="o">])</span> <span class="o">{</span>
-                <span class="nx">c</span><span class="o">[</span><span class="nx">p</span><span class="o">]=</span><span class="nx">b</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nx">p</span> <span class="k">in</span> <span class="nx">sp</span><span class="o">)</span> <span class="o">{</span> 
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">rp</span><span class="o">[</span><span class="nx">p</span><span class="o">])</span> <span class="o">{</span>
+                <span class="nx">rp</span><span class="o">[</span><span class="nx">p</span><span class="o">]</span> <span class="o">=</span> <span class="nx">sp</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
             <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">}</span>
-
-    <span class="k">return</span> <span class="nx">c</span><span class="o">;</span>
 <span class="o">};</span>
 
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">namespace</span><span class="o">(</span><span class="s2">&quot;util&quot;</span><span class="o">,</span> <span class="s2">&quot;widget&quot;</span><span class="o">,</span> <span class="s2">&quot;example&quot;</span><span class="o">);</span>
@@ -207,21 +172,22 @@
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class="selected"><a href="module_yahoo.html">yahoo</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.html">YAHOO</a></li>
+                                <li class=""><a href="YAHOO.html">YAHOO</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="YAHOO.js.html">YAHOO.js</a></li>
+                                <li class="selected"><a href="YAHOO.js.html">YAHOO.js</a></li>
                         </ul>
                     </div>
 

@@ -82,7 +82,7 @@ YAHOO.log = function(msg, cat, src) {
  * @static
  * @param {Function} subc   the object to modify
  * @param {Function} superc the object to inherit
- * @param {String[]} overrides  additional properties/methods to add to the
+ * @param {Object} overrides  additional properties/methods to add to the
  *                              subclass prototype.  These will override the
  *                              matching items obtained from the superclass 
  *                              if present.

@@ -2,9 +2,7 @@
 <html>
 <head>
 	<title>API: yahoo  YAHOO   (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/reset.css">
-	<link rel="stylesheet" type="text/css" href="assets/fonts.css">
-	<link rel="stylesheet" type="text/css" href="assets/grids.css">
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css">
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
 
@@ -65,12 +63,21 @@
                                         
                                         void
                                             <strong>augment</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Function&gt; r, 
-                                                    &lt;Function&gt; s, 
-                                                    &lt;String*&gt; arguments
-                                                )
+                                                        
+                                                         r
+                                                    
+                                                
+                                                        , 
+                                                         s
+                                                    
+                                                
+                                                        , 
+                                                         arguments
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -81,18 +88,19 @@ option will overwrite the property if receiver has it already.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>r</code> - 
+                                                            <code>r &lt;Function&gt;</code>
                                                               the object to receive the augmentation
                                                         </dd>
                                                         <dd>
-                                                            <code>s</code> - 
+                                                            <code>s &lt;Function&gt;</code>
                                                               the object that supplies the properties to augment
                                                         </dd>
                                                         <dd>
-                                                            <code>arguments</code> - 
+                                                            <code>arguments &lt;String*&gt;</code>
                                                              zero or more properties methods to augment the
 receiver with.  If none specified, everything
 in the supplier will be used unless it would
@@ -113,64 +121,6 @@ overwrite an existing property in the receiver
                                     </div>
                                     <hr />
                                     <h4>
-                                        <a name="compose">compose</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                         static 
-                                        
-                                        Object
-                                            <strong>compose</strong>
-                                                (
-                                                
-                                                    &lt;Object&gt; a, 
-                                                    &lt;Object&gt; b, 
-                                                    &lt;String*&gt; arguments
-                                                )
-                                        </code>
-                                        
-                                        <div class="description">
-                                            Returns an object composed of the two objects passed in.  Properties in
-object a will have priority over those in object b.  Optionally, one
-or more properties can be provided as additional parameters.  If specified,
-only those properties will be copied from object b, and these will overwrite
-the property in object a if it exists.
-                                        </div>
-
-                                        <div class="description">
-                                                <dl>
-                                                    <dt>Parameters:</dt>
-                                                        <dd>
-                                                            <code>a</code> - 
-                                                              the base object for the composition
-                                                        </dd>
-                                                        <dd>
-                                                            <code>b</code> - 
-                                                              the object that contains additional properties to apply
-to the composition
-                                                        </dd>
-                                                        <dd>
-                                                            <code>arguments</code> - 
-                                                             zero or more properties methods to add to the
-composition.  If none specified, everything
-in object b will be copied unless it would
-overwrite an existing property in object a.
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code>
-                                                        Object
-                                                    </code></dt>
-                                                    <dd>the new object</dd>
-                                                </dl>
-             
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    <h4>
                                         <a name="extend">extend</a></h4>
                                     <div class="detail">
                                         <code>
@@ -179,12 +129,21 @@ overwrite an existing property in object a.
                                         
                                         void
                                             <strong>extend</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;Function&gt; subc, 
-                                                    &lt;Function&gt; superc, 
-                                                    &lt;String[]&gt; overrides
-                                                )
+                                                        
+                                                         subc
+                                                    
+                                                
+                                                        , 
+                                                         superc
+                                                    
+                                                
+                                                        , 
+                                                         overrides
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -193,18 +152,19 @@ support an inheritance strategy that can chain constructors and methods.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>subc</code> - 
+                                                            <code>subc &lt;Function&gt;</code>
                                                                the object to modify
                                                         </dd>
                                                         <dd>
-                                                            <code>superc</code> - 
+                                                            <code>superc &lt;Function&gt;</code>
                                                              the object to inherit
                                                         </dd>
                                                         <dd>
-                                                            <code>overrides</code> - 
+                                                            <code>overrides &lt;Object&gt;</code>
                                                               additional properties/methods to add to the
 subclass prototype.  These will override the
 matching items obtained from the superclass 
@@ -233,12 +193,21 @@ if present.
                                         
                                         Boolean
                                             <strong>log</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;String&gt; msg, 
-                                                    &lt;String&gt; cat, 
-                                                    &lt;String&gt; src
-                                                )
+                                                        
+                                                         msg
+                                                    
+                                                
+                                                        , 
+                                                         cat
+                                                    
+                                                
+                                                        , 
+                                                         src
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -246,20 +215,21 @@ if present.
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>msg</code> - 
+                                                            <code>msg &lt;String&gt;</code>
                                                               The message to log.
                                                         </dd>
                                                         <dd>
-                                                            <code>cat</code> - 
+                                                            <code>cat &lt;String&gt;</code>
                                                               The log category for the message.  Default
 categories are "info", "warn", "error", time".
 Custom categories can be used as well. (opt)
                                                         </dd>
                                                         <dd>
-                                                            <code>src</code> - 
+                                                            <code>src &lt;String&gt;</code>
                                                               The source of the the message (opt)
                                                         </dd>
                                                 </dl>
@@ -285,10 +255,13 @@ Custom categories can be used as well. (opt)
                                         
                                         Object
                                             <strong>namespace</strong>
-                                                (
+                                           (
                                                 
-                                                    &lt;String*&gt; arguments
-                                                )
+                                                        
+                                                         arguments
+                                                    
+                                                
+                                            )
                                         </code>
                                         
                                         <div class="description">
@@ -308,10 +281,11 @@ This fails because "long" is a future reserved word in ECMAScript
                                         </div>
 
                                         <div class="description">
+
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>arguments</code> - 
+                                                            <code>arguments &lt;String*&gt;</code>
                                                              1-n namespaces to create
                                                         </dd>
                                                 </dl>
@@ -346,21 +320,22 @@ This fails because "long" is a future reserved word in ECMAScript
                     <div class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-                                <li><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class="selected"><a href="module_yahoo.html">yahoo</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li><a href="YAHOO.html">YAHOO</a></li>
+                                <li class="selected"><a href="YAHOO.html">YAHOO</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li><a href="YAHOO.js.html">YAHOO.js</a></li>
+                                <li class=""><a href="YAHOO.js.html">YAHOO.js</a></li>
                         </ul>
                     </div>
 
@@ -370,9 +345,6 @@ This fails because "long" is a future reserved word in ECMAScript
                         <ul class="content">        
                                 <li><!--<code>void</code>-->
                                 <a href="#augment">augment</a>
-                                </li>
-                                <li><!--<code>Object</code>-->
-                                <a href="#compose">compose</a>
                                 </li>
                                 <li><!--<code>void</code>-->
                                 <a href="#extend">extend</a>
