@@ -794,23 +794,11 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
         oItem = new this.ITEM_TYPE(p_oItem, { parent: this });
     
     }
-    else if(typeof p_oItem == "object" && p_oItem.text) {
+    else if(typeof p_oItem == "object") {
 
-        oItem = new this.ITEM_TYPE(
-                        p_oItem.text, 
-                        {
-                            parent: this,
-                            helptext: p_oItem.helptext,
-                            url: p_oItem.url,
-                            target: p_oItem.target,
-                            emphasis: p_oItem.emphasis,
-                            strongemphasis: p_oItem.strongemphasis,
-                            checked: p_oItem.checked,
-                            disabled: p_oItem.disabled,
-                            selected: p_oItem.selected,
-                            submenu: p_oItem.submenu
-                        }
-                    );
+        p_oItem.parent = this;
+
+        oItem = new this.ITEM_TYPE(p_oItem);
 
     }
 
