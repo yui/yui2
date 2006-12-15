@@ -240,13 +240,13 @@ Added the following features:
 Fixed the following bugs:
 -------------------------
 
-* [SourceForge Bug #1609027] Placed the call to the DOM "focus" method used by 
-  the MenuItem class inside a zero-second timeout to resolve a race condition 
-  between menu positioning and focusing of a menu item that resulted in the 
-  browser viewport scrolling unnecessarily.
+* Placed the call to the DOM "focus" method used by the MenuItem class inside 
+  a zero-second timeout to resolve a race condition between menu positioning 
+  and focusing of a menu item that resulted in the browser viewport 
+  scrolling unnecessarily.
 
-* [SourceForge Bug #1601064 and #1596184] Switched to JSMin for JavaScript 
-  compression to resolve issues with minified version.  
+* Switched to JSMin for JavaScript compression to resolve issues with the 
+  minified version.  
 
 * Disabled menu item instances will no longer display a submenu if the item is 
   clicked or moused over. 
