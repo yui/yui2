@@ -14,6 +14,8 @@
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-70901257">HTMLOptionElement</a>} p_oObject Object specifying 
 * the <code>&#60;option&#62;</code> element of the menu bar item.
+* @param {Object} p_oObject Object literal specifying the configuration
+* for the menu item. See configuration class documentation for more details.
 * @param {Object} p_oConfig Optional. Object literal specifying the 
 * configuration for the menu bar item. See configuration class documentation 
 * for more details.
@@ -49,6 +51,8 @@ YAHOO.extend(YAHOO.widget.MenuBarItem, YAHOO.widget.MenuItem, {
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-70901257">HTMLOptionElement</a>} p_oObject Object specifying 
 * the <code>&#60;option&#62;</code> element of the menu bar item.
+* @param {Object} p_oObject Object literal specifying the configuration
+* for the menu item. See configuration class documentation for more details.
 * @param {Object} p_oConfig Optional. Object literal specifying the 
 * configuration for the menu bar item. See configuration class documentation 
 * for more details.
