@@ -32,6 +32,39 @@
 <span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
     <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
 
+<span class="c">/**</span>
+<span class="c">* Returns true if a point is inside the area of a triangle.</span>
+<span class="c">* @private</span>
+<span class="c">* @param {p_aRegion} Array containing the x and y coordinates of the triangle.</span>
+<span class="c">* @param {p_aPoint} Array containing the x and y coordinates of the point.</span>
+<span class="c">* @return {Boolean}</span>
+<span class="c">*/</span>
+<span class="k">function</span> <span class="nx">pointInTriangle</span><span class="o">(</span><span class="nx">p_aRegion</span><span class="o">,</span> <span class="nx">p_aPoint</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="k">var</span> <span class="nx">x1</span> <span class="o">=</span> <span class="nx">p_aRegion</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+        <span class="nx">y1</span> <span class="o">=</span> <span class="nx">p_aRegion</span><span class="o">[</span><span class="m">1</span><span class="o">],</span>
+        
+        <span class="nx">x2</span> <span class="o">=</span> <span class="nx">p_aRegion</span><span class="o">[</span><span class="m">2</span><span class="o">],</span>
+        <span class="nx">y2</span> <span class="o">=</span> <span class="nx">p_aRegion</span><span class="o">[</span><span class="m">3</span><span class="o">],</span>
+        
+        <span class="nx">x3</span> <span class="o">=</span> <span class="nx">p_aRegion</span><span class="o">[</span><span class="m">4</span><span class="o">],</span>
+        <span class="nx">y3</span> <span class="o">=</span> <span class="nx">p_aRegion</span><span class="o">[</span><span class="m">5</span><span class="o">],</span>
+        
+        <span class="nx">xx</span> <span class="o">=</span> <span class="nx">p_aPoint</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+        <span class="nx">yy</span> <span class="o">=</span> <span class="nx">p_aPoint</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
+    
+    
+    <span class="k">return</span> <span class="o">(</span>
+        <span class="nb">Math</span><span class="o">.</span><span class="nx">abs</span><span class="o">(</span>
+            <span class="nb">Math</span><span class="o">.</span><span class="nx">abs</span><span class="o">((</span><span class="nx">x1</span><span class="o">-</span><span class="nx">xx</span><span class="o">)*(</span><span class="nx">y2</span><span class="o">-</span><span class="nx">yy</span><span class="o">)-(</span><span class="nx">x2</span><span class="o">-</span><span class="nx">xx</span><span class="o">)*(</span><span class="nx">y1</span><span class="o">-</span><span class="nx">yy</span><span class="o">))</span> <span class="o">+</span>
+            <span class="nb">Math</span><span class="o">.</span><span class="nx">abs</span><span class="o">((</span><span class="nx">x2</span><span class="o">-</span><span class="nx">xx</span><span class="o">)*(</span><span class="nx">y3</span><span class="o">-</span><span class="nx">yy</span><span class="o">)-(</span><span class="nx">x3</span><span class="o">-</span><span class="nx">xx</span><span class="o">)*(</span><span class="nx">y2</span><span class="o">-</span><span class="nx">yy</span><span class="o">))</span> <span class="o">+</span>
+            <span class="nb">Math</span><span class="o">.</span><span class="nx">abs</span><span class="o">((</span><span class="nx">x3</span><span class="o">-</span><span class="nx">xx</span><span class="o">)*(</span><span class="nx">y1</span><span class="o">-</span><span class="nx">yy</span><span class="o">)-(</span><span class="nx">x1</span><span class="o">-</span><span class="nx">xx</span><span class="o">)*(</span><span class="nx">y3</span><span class="o">-</span><span class="nx">yy</span><span class="o">))</span> <span class="o">-</span>
+            <span class="nb">Math</span><span class="o">.</span><span class="nx">abs</span><span class="o">((</span><span class="nx">x2</span><span class="o">-</span><span class="nx">x1</span><span class="o">)*(</span><span class="nx">y3</span><span class="o">-</span><span class="nx">y1</span><span class="o">)-(</span><span class="nx">x3</span><span class="o">-</span><span class="nx">x1</span><span class="o">)*(</span><span class="nx">y2</span><span class="o">-</span><span class="nx">y1</span><span class="o">))</span>
+        <span class="o">)</span> <span class="o">&lt;=</span> <span class="m">1</span><span class="o">/</span><span class="m">256</span>
+    <span class="o">);</span>             
+
+<span class="o">}</span>
+
 
 <span class="c">/**</span>
 <span class="c">* The Menu class creates a container that holds a vertical list representing </span>
@@ -1482,12 +1515,7 @@
     <span class="o">)</span> <span class="o">{</span>
 
         <span class="k">var</span> <span class="nx">nShowDelay</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;showdelay&quot;</span><span class="o">),</span>
-            <span class="nx">bShowDelay</span> <span class="o">=</span> <span class="o">(</span><span class="nx">nShowDelay</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">),</span>
-            <span class="nx">nMenuX</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;x&quot;</span><span class="o">)</span> <span class="o">||</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getX</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">),</span>
-            <span class="nx">nPageX</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">);</span>
-        
-        <span class="nx">oItem</span><span class="o">.</span><span class="nx">targetX</span> <span class="o">=</span> 
-            <span class="o">((((</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">+</span> <span class="nx">nMenuX</span><span class="o">)</span> <span class="o">-</span> <span class="nx">nPageX</span><span class="o">)</span> <span class="o">*</span> <span class="m">0</span><span class="o">.</span><span class="m">15</span><span class="o">)</span> <span class="o">+</span> <span class="nx">nPageX</span><span class="o">);</span>
+            <span class="nx">bShowDelay</span> <span class="o">=</span> <span class="o">(</span><span class="nx">nShowDelay</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">);</span>
 
 
         <span class="k">if</span><span class="o">(</span><span class="nx">bShowDelay</span><span class="o">)</span> <span class="o">{</span>
@@ -1511,7 +1539,13 @@
                         <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;submenuhidedelay&quot;</span><span class="o">);</span>
 
                 <span class="k">if</span><span class="o">(</span>
-                    <span class="o">(</span><span class="nx">nPageX</span> <span class="o">&gt;=</span> <span class="nx">oActiveItem</span><span class="o">.</span><span class="nx">targetX</span><span class="o">)</span> <span class="o">&amp;&amp;</span> 
+                    <span class="k">this</span><span class="o">.</span><span class="nx">submenuShowRegion</span> <span class="o">&amp;&amp;</span> 
+                    <span class="o">(</span>
+                        <span class="nx">pointInTriangle</span><span class="o">(</span>
+                                <span class="k">this</span><span class="o">.</span><span class="nx">submenuShowRegion</span><span class="o">,</span> 
+                                <span class="nx">Event</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">)</span>
+                            <span class="o">)</span>
+                    <span class="o">)</span> <span class="o">&amp;&amp;</span> 
                     <span class="o">!(</span><span class="k">this</span> <span class="k">instanceof</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuBar</span><span class="o">)</span> <span class="o">&amp;&amp;</span> 
                     <span class="nx">nShowDelay</span> <span class="o">&gt;=</span> <span class="nx">nSubmenuHideDelay</span>
                 <span class="o">)</span> <span class="o">{</span>
@@ -1623,6 +1657,28 @@
                 <span class="o">)</span> <span class="o">||</span> <span class="nx">bMovingToSubmenu</span>
             <span class="o">)</span>
         <span class="o">)</span> <span class="o">{</span>
+
+
+            <span class="k">if</span><span class="o">(</span><span class="nx">oSubmenu</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="k">var</span> <span class="nx">aSubmenuXY</span> <span class="o">=</span> <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;xy&quot;</span><span class="o">),</span>
+                    <span class="nx">aPageXY</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">);</span>
+
+                <span class="k">this</span><span class="o">.</span><span class="nx">submenuShowRegion</span> <span class="o">=</span> <span class="o">[</span>
+                
+                        <span class="nx">aPageXY</span><span class="o">[</span><span class="m">0</span><span class="o">],</span> 
+                        <span class="nx">aPageXY</span><span class="o">[</span><span class="m">1</span><span class="o">],</span>
+                        
+                        <span class="nx">aSubmenuXY</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+                        <span class="nx">aPageXY</span><span class="o">[</span><span class="m">1</span><span class="o">],</span>
+                        
+                        <span class="nx">aSubmenuXY</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+                        <span class="o">(</span><span class="nx">aSubmenuXY</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">+</span> <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">)</span>
+
+                    <span class="o">];</span>
+
+            <span class="o">}</span>
+
 
             <span class="k">if</span><span class="o">(</span>
                 <span class="o">!</span><span class="nx">oSubmenu</span> <span class="o">||</span> 
