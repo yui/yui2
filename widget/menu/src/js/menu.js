@@ -6,6 +6,39 @@
 var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event;
 
+/**
+* Returns true if a point is inside the area of a triangle.
+* @private
+* @param {p_aRegion} Array containing the x and y coordinates of the triangle.
+* @param {p_aPoint} Array containing the x and y coordinates of the point.
+* @return {Boolean}
+*/
+function pointInTriangle(p_aRegion, p_aPoint) {
+
+    var x1 = p_aRegion[0],
+        y1 = p_aRegion[1],
+        
+        x2 = p_aRegion[2],
+        y2 = p_aRegion[3],
+        
+        x3 = p_aRegion[4],
+        y3 = p_aRegion[5],
+        
+        xx = p_aPoint[0],
+        yy = p_aPoint[1];
+    
+    
+    return (
+        Math.abs(
+            Math.abs((x1-xx)*(y2-yy)-(x2-xx)*(y1-yy)) +
+            Math.abs((x2-xx)*(y3-yy)-(x3-xx)*(y2-yy)) +
+            Math.abs((x3-xx)*(y1-yy)-(x1-xx)*(y3-yy)) -
+            Math.abs((x2-x1)*(y3-y1)-(x3-x1)*(y2-y1))
+        ) <= 1/256
+    );             
+
+}
+
 
 /**
 * The Menu class creates a container that holds a vertical list representing 
@@ -1456,12 +1489,7 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
     ) {
 
         var nShowDelay = this.cfg.getProperty("showdelay"),
-            bShowDelay = (nShowDelay > 0),
-            nMenuX = this.cfg.getProperty("x") || Dom.getX(this.element),
-            nPageX = Event.getPageX(oEvent);
-        
-        oItem.targetX = 
-            ((((this.element.offsetWidth + nMenuX) - nPageX) * 0.15) + nPageX);
+            bShowDelay = (nShowDelay > 0);
 
 
         if(bShowDelay) {
@@ -1485,7 +1513,13 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
                         this.cfg.getProperty("submenuhidedelay");
 
                 if(
-                    (nPageX >= oActiveItem.targetX) && 
+                    this.submenuShowRegion && 
+                    (
+                        pointInTriangle(
+                                this.submenuShowRegion, 
+                                Event.getXY(oEvent)
+                            )
+                    ) && 
                     !(this instanceof YAHOO.widget.MenuBar) && 
                     nShowDelay >= nSubmenuHideDelay
                 ) {
@@ -1597,6 +1631,28 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
                 ) || bMovingToSubmenu
             )
         ) {
+
+
+            if(oSubmenu) {
+
+                var aSubmenuXY = oSubmenu.cfg.getProperty("xy"),
+                    aPageXY = Event.getXY(oEvent);
+
+                this.submenuShowRegion = [
+                
+                        aPageXY[0], 
+                        aPageXY[1],
+                        
+                        aSubmenuXY[0],
+                        aPageXY[1],
+                        
+                        aSubmenuXY[0],
+                        (aSubmenuXY[1] + oSubmenu.element.offsetHeight)
+
+                    ];
+
+            }
+
 
             if(
                 !oSubmenu || 
