@@ -1,6 +1,6 @@
 <html>
 	<head>
-        <script src = "../../build/yahoo.js" ></script>
+        <script src = "../../build/yahoo-min.js" ></script>
         <script src = "../../build/connection-min.js" ></script>
 		<link rel="stylesheet" type="text/css" href="../../docs/assets/dpSyntaxHighlighter.css" />
 	</head>
@@ -74,7 +74,7 @@ the server response data.
 Note: Caching and GET idempotency.
 </p>
 
-<pre><textarea name="code" class="JScript" cols="60" rows="1">var request = YAHOO.util.Connection.asyncRequest('GET', sUrl, callback);</textarea></pre>
+<pre><textarea name="code" class="JScript" cols="60" rows="1">var request = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);</textarea></pre>
 
 <div id="container"></div>
 <script>
@@ -116,8 +116,8 @@ function makeRequest(){
 <form><input type="button" value="Send a GET Request" onClick="makeRequest();"></form>
 
 <script src="../../docs/assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 </body>
 </html>
