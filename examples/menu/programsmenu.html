@@ -189,7 +189,7 @@
 
         <script type="text/javascript">
         
-            YAHOO.example.onMenuAvailable = function(p_oEvent) {
+            YAHOO.example.onMenuReady = function(p_oEvent) {
 
                 // "click" handler for the "Go to..." menu item
     
@@ -339,7 +339,7 @@
 
             // Initialize and render the menu when it is available in the DOM
 
-            YAHOO.util.Event.onAvailable("yproducts", YAHOO.example.onMenuAvailable);
+            YAHOO.util.Event.onContentReady("yproducts", YAHOO.example.onMenuReady);
 
 
         </script>

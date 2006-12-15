@@ -107,7 +107,7 @@
             YAHOO.widget.MenuBarItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH = "menuarodwn8_dim_1.gif";
 
 
-            YAHOO.example.onMenuBarAvailable = function(p_oEvent) {
+            YAHOO.example.onMenuBarReady = function(p_oEvent) {
 
                 // Instantiate and render the menu bar
 
@@ -120,7 +120,7 @@
 
             // Initialize and render the menu bar when it is available in the DOM
 
-            YAHOO.util.Event.onAvailable("productsandservices", YAHOO.example.onMenuBarAvailable);
+            YAHOO.util.Event.onContentReady("productsandservices", YAHOO.example.onMenuBarReady);
 
         </script>
 

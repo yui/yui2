@@ -78,7 +78,7 @@
 
         <script type="text/javascript">
 
-            YAHOO.example.onMenuBarAvailable = function(p_oEvent) {
+            YAHOO.example.onMenuBarReady = function(p_oEvent) {
                 
                 // "beforerender" event handler for the menu bar
 
@@ -182,7 +182,7 @@
 
             // Initialize and render the menu bar when it is available in the DOM
 
-            YAHOO.util.Event.onAvailable("productsandservices", YAHOO.example.onMenuBarAvailable);
+            YAHOO.util.Event.onContentReady("productsandservices", YAHOO.example.onMenuBarReady);
 
         </script>
 

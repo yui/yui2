@@ -66,7 +66,7 @@
 
         <script type="text/javascript">
 
-            YAHOO.example.onMenuAvailable = function(p_oEvent) {
+            YAHOO.example.onMenuReady = function(p_oEvent) {
 
                 var oMenu = new YAHOO.widget.Menu("menuwithgroups", { fixedcenter: true });
 
@@ -88,7 +88,7 @@
             }
 
 
-            YAHOO.util.Event.onAvailable("menuwithgroups", YAHOO.example.onMenuAvailable);
+            YAHOO.util.Event.onContentReady("menuwithgroups", YAHOO.example.onMenuReady);
             
         </script>
 
