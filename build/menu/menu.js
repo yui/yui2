@@ -544,6 +544,39 @@ var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event;
 
 /**
+* Returns true if a point is inside the area of a triangle.
+* @private
+* @param {p_aRegion} Array containing the x and y coordinates of the triangle.
+* @param {p_aPoint} Array containing the x and y coordinates of the point.
+* @return {Boolean}
+*/
+function pointInTriangle(p_aRegion, p_aPoint) {
+
+    var x1 = p_aRegion[0],
+        y1 = p_aRegion[1],
+        
+        x2 = p_aRegion[2],
+        y2 = p_aRegion[3],
+        
+        x3 = p_aRegion[4],
+        y3 = p_aRegion[5],
+        
+        xx = p_aPoint[0],
+        yy = p_aPoint[1];
+    
+    
+    return (
+        Math.abs(
+            Math.abs((x1-xx)*(y2-yy)-(x2-xx)*(y1-yy)) +
+            Math.abs((x2-xx)*(y3-yy)-(x3-xx)*(y2-yy)) +
+            Math.abs((x3-xx)*(y1-yy)-(x1-xx)*(y3-yy)) -
+            Math.abs((x2-x1)*(y3-y1)-(x3-x1)*(y2-y1))
+        ) <= 1/256
+    );             
+
+}
+
+/**
 * The Menu class creates a container that holds a vertical list representing 
 * a set of options or commands.  Menu is the base class for all 
 * menu containers. 
@@ -1875,12 +1908,7 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
     ) {
 
         var nShowDelay = this.cfg.getProperty("showdelay"),
-            bShowDelay = (nShowDelay > 0),
-            nMenuX = this.cfg.getProperty("x") || Dom.getX(this.element),
-            nPageX = Event.getPageX(oEvent);
-        
-        oItem.targetX = 
-            ((((this.element.offsetWidth + nMenuX) - nPageX) * 0.15) + nPageX);
+            bShowDelay = (nShowDelay > 0);
 
         if(bShowDelay) {
         
@@ -1903,7 +1931,13 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
                         this.cfg.getProperty("submenuhidedelay");
 
                 if(
-                    (nPageX >= oActiveItem.targetX) && 
+                    this.submenuShowRegion && 
+                    (
+                        pointInTriangle(
+                                this.submenuShowRegion, 
+                                Event.getXY(oEvent)
+                            )
+                    ) && 
                     !(this instanceof YAHOO.widget.MenuBar) && 
                     nShowDelay >= nSubmenuHideDelay
                 ) {
@@ -2009,6 +2043,26 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
                 ) || bMovingToSubmenu
             )
         ) {
+
+            if(oSubmenu) {
+
+                var aSubmenuXY = oSubmenu.cfg.getProperty("xy"),
+                    aPageXY = Event.getXY(oEvent);
+
+                this.submenuShowRegion = [
+                
+                        aPageXY[0], 
+                        aPageXY[1],
+                        
+                        aSubmenuXY[0],
+                        aPageXY[1],
+                        
+                        aSubmenuXY[0],
+                        (aSubmenuXY[1] + oSubmenu.element.offsetHeight)
+
+                    ];
+
+            }
 
             if(
                 !oSubmenu || 
@@ -5978,6 +6032,8 @@ YAHOO.widget.MenuItem.prototype = {
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-
 * html.html#ID-70901257">HTMLOptionElement</a>} p_oObject Object specifying the 
 * <code>&#60;option&#62;</code> element of the menu module item.
+* @param {Object} p_oObject Object literal specifying the configuration
+* for the menu item. See configuration class documentation for more details.
 * @param {Object} p_oConfig Optional. Object literal specifying the 
 * configuration for the menu module item. See configuration class documentation
 * for more details.
@@ -6338,6 +6394,8 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-70901257">HTMLOptionElement</a>} p_oObject Object specifying 
 * the <code>&#60;option&#62;</code> element of the context menu item.
+* @param {Object} p_oObject Object literal specifying the configuration
+* for the menu item. See configuration class documentation for more details.
 * @param {Object} p_oConfig Optional. Object literal specifying the 
 * configuration for the context menu item. See configuration class 
 * documentation for more details.
@@ -6374,6 +6432,8 @@ YAHOO.extend(YAHOO.widget.ContextMenuItem, YAHOO.widget.MenuItem, {
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-70901257">HTMLOptionElement</a>} p_oObject Object specifying 
 * the <code>&#60;option&#62;</code> element of the context menu item.
+* @param {Object} p_oObject Object literal specifying the configuration
+* for the menu item. See configuration class documentation for more details.
 * @param {Object} p_oConfig Optional. Object literal specifying the 
 * configuration for the context menu item. See configuration class 
 * documentation for more details.
@@ -6817,6 +6877,8 @@ initDefaultConfig: function() {
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-70901257">HTMLOptionElement</a>} p_oObject Object specifying 
 * the <code>&#60;option&#62;</code> element of the menu bar item.
+* @param {Object} p_oObject Object literal specifying the configuration
+* for the menu item. See configuration class documentation for more details.
 * @param {Object} p_oConfig Optional. Object literal specifying the 
 * configuration for the menu bar item. See configuration class documentation 
 * for more details.
@@ -6851,6 +6913,8 @@ YAHOO.extend(YAHOO.widget.MenuBarItem, YAHOO.widget.MenuItem, {
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-70901257">HTMLOptionElement</a>} p_oObject Object specifying 
 * the <code>&#60;option&#62;</code> element of the menu bar item.
+* @param {Object} p_oObject Object literal specifying the configuration
+* for the menu item. See configuration class documentation for more details.
 * @param {Object} p_oConfig Optional. Object literal specifying the 
 * configuration for the menu bar item. See configuration class documentation 
 * for more details.
