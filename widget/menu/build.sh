@@ -129,12 +129,3 @@ cp examples/img/*.png ~/dev/yahoo/properties/webservices/site/yui/examples/menu/
 # Generate the documentation
 
 ./menudocsgen.sh
-
-
-# Copy the documentation to the two different locations where they are stored in CVS
-
-cp ~/dev/yahoo/presentation/2.x/widget/menu/docs/* ~/dev/yahoo/presentation/2.x/docs/menu/
-cp ~/dev/yahoo/presentation/2.x/widget/menu/docs/assets/* ~/dev/yahoo/presentation/2.x/docs/menu/assets/
-
-cp ~/dev/yahoo/presentation/2.x/widget/menu/docs/* ~/dev/yahoo/properties/webservices/site/yui/docs/menu/
-cp ~/dev/yahoo/presentation/2.x/widget/menu/docs/assets/* ~/dev/yahoo/properties/webservices/site/yui/docs/menu/assets/
