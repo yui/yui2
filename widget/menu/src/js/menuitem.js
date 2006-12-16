@@ -21,8 +21,6 @@ var Dom = YAHOO.util.Dom,
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-70901257">HTMLOptionElement</a>} p_oObject Object 
 * specifying the <code>&#60;option&#62;</code> element of the menu item.
-* @param {Object} p_oObject Object literal specifying the configuration
-* for the menu item. See configuration class documentation for more details.
 * @param {Object} p_oConfig Optional. Object literal specifying the 
 * configuration for the menu item. See configuration class documentation 
 * for more details.
@@ -38,12 +36,6 @@ YAHOO.widget.MenuItem = function(p_oObject, p_oConfig) {
             this.parent = p_oConfig.parent;
             this.value = p_oConfig.value;
             
-        }
-        else {
-
-            this.parent = p_oObject.parent;
-            this.value = p_oObject.value;
-
         }
 
         this.init(p_oObject, p_oConfig);
@@ -514,8 +506,6 @@ YAHOO.widget.MenuItem.prototype = {
     * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
     * one-html.html#ID-70901257">HTMLOptionElement</a>} p_oObject Object 
     * specifying the <code>&#60;option&#62;</code> element of the menu item.
-    * @param {Object} p_oObject Object literal specifying the configuration
-    * for the menu item. See configuration class documentation for more details.
     * @param {Object} p_oConfig Optional. Object literal specifying the 
     * configuration for the menu item. See configuration class documentation 
     * for more details.
@@ -546,19 +536,6 @@ YAHOO.widget.MenuItem.prototype = {
             this._createRootNodeStructure();
 
             oConfig.setProperty("text", p_oObject);
-
-        }
-        else if(
-            !p_oConfig && 
-            p_oObject.text && 
-            this._checkString(p_oObject.text)
-        ) {
-
-            p_oConfig = p_oObject;
-
-            this._createRootNodeStructure();
-
-            oConfig.setProperty("text", p_oObject.text);
 
         }
         else if(this._checkDOMNode(p_oObject)) {
