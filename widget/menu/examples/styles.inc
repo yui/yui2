@@ -1,6 +1,6 @@
 <?php
 
-$g_sBuildType = "dev";
+$g_sBuildType = "prod";
 
 
 if($g_sBuildType == "dev") {

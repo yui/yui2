@@ -54,7 +54,7 @@
 
         <script type="text/javascript">
 
-            YAHOO.example.onMenuAvailable = function(p_oEvent) {
+            YAHOO.example.onMenuReady = function(p_oEvent) {
                 
                 // "beforerender" event handler for the menu
 
@@ -141,7 +141,7 @@
 
                 // Instantiate and render the menu
 
-                var oMenu = new YAHOO.widget.Menu("productsandservices", { position:"static", hidedelay:750, lazyload:true });
+                var oMenu = new YAHOO.widget.Menu("productsandservices", { position:"static", showdelay:250, hidedelay:750, lazyload:true });
 
 
                 // Subscribe to the "beforerender" event
@@ -155,7 +155,7 @@
 
             // Initialize and render the menu when it is available in the DOM
 
-            YAHOO.util.Event.onAvailable("productsandservices", YAHOO.example.onMenuAvailable);
+            YAHOO.util.Event.onContentReady("productsandservices", YAHOO.example.onMenuReady);
 
         </script>   
 

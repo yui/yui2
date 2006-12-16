@@ -73,7 +73,7 @@
 
         <script type="text/javascript">
 
-            YAHOO.example.onMenuBarAvailable = function(p_oEvent) {
+            YAHOO.example.onMenuBarReady = function(p_oEvent) {
 
 
                 // Animation object
@@ -270,7 +270,7 @@
 
                 // Initialize the root menu bar
 
-                var oMenuBar = new YAHOO.widget.MenuBar("productsandservices", { autosubmenudisplay:true, hidedelay:750, lazyload:true });
+                var oMenuBar = new YAHOO.widget.MenuBar("productsandservices", { autosubmenudisplay:true, showdelay:250, hidedelay:750, lazyload:true });
 
 
                 // Subscribe to the "beforerender" event
@@ -287,7 +287,7 @@
 
             // Initialize and render the menu bar when it is available in the DOM
 
-            YAHOO.util.Event.onAvailable("productsandservices", YAHOO.example.onMenuBarAvailable);
+            YAHOO.util.Event.onContentReady("productsandservices", YAHOO.example.onMenuBarReady);
 
         </script>
 
