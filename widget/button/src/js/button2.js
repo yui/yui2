@@ -1,8 +1,10 @@
 (function() {
 
-var Dom = YAHOO.util.Dom;
-var Event = YAHOO.util.Event;
-var Lang = YAHOO.util.Lang;
+var Dom = YAHOO.util.Dom,
+    Event = YAHOO.util.Event,
+    Lang = YAHOO.util.Lang,
+
+    m_oActiveButton = null;
 
 
 function getFirstElement(p_oElement) {
@@ -31,8 +33,6 @@ function getFirstElement(p_oElement) {
 
 function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
 
-    var me = this;
-
 
     function setAttributeFromDOMAttribute(p_sAttribute) {
 
@@ -58,39 +58,13 @@ function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
     }
 
 
-    function setImageAttributes() {
-
-        if(
-            Lang.isUndefined(p_oAttributes["imagesrc"]) &&
-            Lang.isUndefined(p_oAttributes["imagealt"])
-        ) {
-        
-            var aImg = p_oElement.getElementsByTagName("img");
-            
-
-            if(aImg.length == 1) {
-    
-                var oImg = aImg[0];
-    
-                me._oImage = oImg;
-    
-                p_oAttributes["imagesrc"] = oImg.src;
-                p_oAttributes["imagealt"] = oImg.alt;
-                            
-            }
-        
-        }
-    
-    }
-
-
     function setFormElementProperties() {
 
         setAttributeFromDOMAttribute("type");
 
-        if(Lang.isUndefined(p_oAttributes["disabled"])) {
+        if(Lang.isUndefined(p_oAttributes.disabled)) {
 
-            p_oAttributes["disabled"] = p_oElement.disabled;
+            p_oAttributes.disabled = p_oElement.disabled;
 
         }
 
@@ -104,40 +78,17 @@ function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
     var sSrcElementTagName = p_oElement.tagName.toUpperCase();
 
 
-    if(Lang.isUndefined(p_oAttributes["text"])) {
+    if(Lang.isUndefined(p_oAttributes.label)) {
 
-        // Set the "text" property
+        // Set the "label" property
     
-        var sText = "";
-    
-    
-        if(sSrcElementTagName == "INPUT") {
-    
-            sText = p_oElement.value;       
-        
-        }
-        else {
-    
-            if(p_oElement.innerText) {
-    
-                sText = p_oElement.innerText;
-    
-            }
-            else {
-    
-                var oRange = p_oElement.ownerDocument.createRange();
-                oRange.selectNodeContents(p_oElement);
-    
-                sText = oRange.toString();
-            
-            }
-    
-        }
+        var sText = sSrcElementTagName == "INPUT" ? 
+                        p_oElement.value : p_oElement.innerHTML;
     
     
         if(sText && sText.length > 0) {
             
-            p_oAttributes["text"] = sText;
+            p_oAttributes.label = sText;
             
         } 
 
@@ -157,25 +108,21 @@ function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
             setAttributeFromDOMAttribute("href");
             setAttributeFromDOMAttribute("target");
 
-            setImageAttributes();
-
         break;
 
         case "INPUT":
 
             setFormElementProperties();
 
-            if(Lang.isUndefined(p_oAttributes["checked"])) {
+            if(Lang.isUndefined(p_oAttributes.checked)) {
     
-                p_oAttributes["checked"] = p_oElement.checked;
+                p_oAttributes.checked = p_oElement.checked;
     
             }
 
         break;
 
         case "BUTTON":
-
-            setImageAttributes();
 
             setFormElementProperties();
             
@@ -184,20 +131,154 @@ function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
 
             p_oElement.setAttribute("type", "button");
 
-            var aChildNodes = p_oElement.childNodes;
-            var i = aChildNodes.length - 1;
+        break;
+    
+    }
 
-            do {
+}
+
+
+function createHiddenField(p_sType, p_sName) {
+
+    var oField,
+        sType;
+
+    switch(p_sType) {
+    
+        case "radio":
+        case "checkbox":
             
-                if(aChildNodes[i].nodeType == 3) {
-                
-                    me._oText = aChildNodes[i];
-                    break;
-                
-                }
+            sType = p_sType;
+            
+        break;
+        
+        case "submit":
+
+            sType = "hidden";            
+        
+        break;
+    
+    }
+    
+
+    if(navigator.userAgent.indexOf("MSIE") != -1) {
+    
+        var aTag = ["<input type=\""];
+        aTag[1] = sType;
+        aTag[2] = "\"";
+
+        if(this.name) {
+        
+            aTag[3] = " name=\"";
+            aTag[4] = p_sName;
+            aTag[5] = "\"";
+            
+        }
+
+        aTag[6] = ">";
+        
+        oField = document.createElement(aTag.join(""));
+    
+    }
+    else {
+    
+        oField = document.createElement("input");
+        oField.type = sType;
+        oField.name = p_sName;
+
+    }
+    
+
+    if(sType != "hidden") {
+
+        oField.style.display = "none";
+
+    }
+
+    return oField;   
+
+}
+
+
+function createButtonElement(p_oAttributes) {
+
+    var aTag = ["<span>"];
+
+    if(p_oAttributes.type == "link") {
+
+        aTag[1] = ["<a></a>"];    
+    }
+    else {
+
+        aTag[1] = ["<button type=\"button\"></button>"];
+    
+    }
+
+    aTag[2] = ["</span>"];
+
+
+    var oSpan = document.createElement("span");
+
+    oSpan.innerHTML = aTag.join("");
+
+
+    return oSpan;
+
+}
+
+
+function initConfig(p_oConfig) {
+
+    var oAttributes = p_oConfig.attributes,
+        oSrcElement = oAttributes.srcelement,
+        sSrcElementTagName = oSrcElement.tagName.toUpperCase();
+
+
+    switch(sSrcElementTagName) {
+    
+        case "SPAN":
+
+            p_oConfig.element = oSrcElement;
+
+
+            if(Lang.isUndefined(oAttributes.id) && p_oConfig.element.id) {
+            
+                oAttributes.id = p_oConfig.element.id;
             
             }
-            while(i--);
+
+            var oSpan = getFirstElement(p_oConfig.element);
+
+
+            if(oSpan) {
+
+                var oButton = getFirstElement(oSpan);
+
+
+                if(oButton) {
+
+                    var sButtonTagName = oButton.tagName.toUpperCase();
+
+
+                    if(sButtonTagName == "A" || sButtonTagName == "BUTTON") {
+
+                        setAttributesFromSrcElement.call(
+                                this, 
+                                oButton, 
+                                oAttributes
+                            );
+                    
+                    }
+                
+                }
+
+            }
+        
+        break;
+
+        case "INPUT":
+
+            setAttributesFromSrcElement.call(this, oSrcElement, oAttributes);
 
         break;
     
@@ -206,12 +287,21 @@ function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
 }
 
 
+function appendHiddenFieldToForm() {
+
+    var oForm = this._oButton.form,
+        oHiddenField = this._oHiddenField;
+
+    if(oForm) {
+
+        oForm.appendChild(oHiddenField);
+    
+    }
+
+}
+
+
 YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
-
-    var oElement;
-    var oSrcElement;
-    var oAttributes;
-
 
     if(
         arguments.length == 1 && 
@@ -219,162 +309,281 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
         !p_oElement.nodeName
     ) { // Object literal representing the attributes of a button
 
-        oAttributes = p_oElement;
-        oSrcElement = oAttributes.element;
+        YAHOO.widget.Button.superclass.constructor.call(
+            this,
+            (createButtonElement.call(this, p_oElement)),
+            p_oElement
+        );
 
     }
-    else {  // Element and optional set of attributes for a button
+    else {  // Source HTML element and optional set of attributes for a button
 
-        oSrcElement = p_oElement;
-        oAttributes = p_oAttributes || {};
+        var oConfig = {
+        
+            element: null,
+            attributes: (p_oAttributes || {})
+            
+        };
+
+
+        if(Lang.isString(p_oElement)) {
+
+            var me = this;
+
+            Event.onAvailable(p_oElement, function() {
+
+                oConfig.attributes.srcelement = this;
+                
+                initConfig.call(me, oConfig);
+
+                if(!oConfig.element) {
+            
+                    oConfig.element = 
+                        createButtonElement.call(me, oConfig.attributes);
+            
+                }
+            
+            
+                YAHOO.widget.Button.superclass.constructor.call(
+                    me,
+                    oConfig.element,
+                    oConfig.attributes
+                );
+
+            });
+
+        }
+        else {
+
+            oConfig.attributes.srcelement = p_oElement;
+        
+            initConfig.call(this, oConfig);
+
+
+            if(!oConfig.element) {
+        
+                oConfig.element = 
+                    createButtonElement.call(this, oConfig.attributes);
+        
+            }
+        
+        
+            YAHOO.widget.Button.superclass.constructor.call(
+                this,
+                oConfig.element,
+                oConfig.attributes
+            );
+        
+        }
     
     }
 
-
-    if(oSrcElement) {
-
-
-        if(Lang.isString(oSrcElement)) {
-
-            oSrcElement = document.getElementById(oSrcElement);
-
-        }
-
-
-        oAttributes["srcelement"] = oSrcElement;
-
-
-        switch(oSrcElement.tagName.toUpperCase()) {
-        
-            case "SPAN":
-
-                oElement = oSrcElement;
-
-
-                if(Lang.isUndefined(oAttributes["id"]) && oElement.id) {
-                
-                    oAttributes["id"] = oElement.id;
-                
-                }
-
-
-                var oSpan = getFirstElement(oElement);
-
-
-                if(oSpan) {
-
-
-                    var oButton = getFirstElement(oSpan);
-
-
-                    if(oButton) {
-
-
-                        switch(oButton.tagName.toUpperCase()) {
-
-                            case "INPUT":
-
-                                this._oHiddenField = oButton;
-
-
-                                if(Dom.inDocument(oButton)) {
-
-                                    oButton.parentNode.removeChild(oButton);
-
-                                }
-
-
-                                setAttributesFromSrcElement.call(this, oButton, oAttributes);
-
-                            break;
-
-                            case "A":
-                            case "BUTTON":
-
-                                this._oButton = oButton;
-
-                                setAttributesFromSrcElement.call(this, oButton, oAttributes);
-                            
-                            break;
-                        
-                        }
-                    
-                    }
-
-                }
-            
-            break;
-
-            case "INPUT":
-            
-                this._oHiddenField = oSrcElement;
-
-
-                if(Dom.inDocument(oSrcElement)) {
-
-                    oSrcElement.parentNode.removeChild(oSrcElement);
-
-                }
-
-                setAttributesFromSrcElement.call(this, oSrcElement, oAttributes);
-
-            break;
-
-            case "BUTTON":
-            case "A":
-
-                this._oButton = oSrcElement;
-
-                setAttributesFromSrcElement.call(this, oSrcElement, oAttributes);
-
-            break;
-        
-        }
-
-    }
-
-
-    if(!oElement) {
-
-        oElement = this._createButtonElement();
-
-    }
-
-
-    YAHOO.widget.Button.superclass.constructor.call(
-        this,
-        oElement,
-        oAttributes
-    );
-
 };
 
+
 YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
+
+    init: function(p_oElement, p_oAttributes) {
+
+        var sType = p_oAttributes.type,
+            sTagName = sType == "link" ? "A" : "BUTTON",
+            bCheckable = (sType == "radio" || sType == "checkbox"),
+            oSrcElement = p_oAttributes.srcelement;
+
+
+        this._oButton = p_oElement.getElementsByTagName(sTagName)[0];
+
+
+        if(oSrcElement && bCheckable) {
+
+            this._oHiddenField = oSrcElement;
+            this._oHiddenField.style.display = "none";
+
+        }
+        else if(bCheckable || sType == "submit") {
+    
+            this._oHiddenField = 
+                createHiddenField.call(this, sType, p_oAttributes.name);
+        
+        }
+
+
+        YAHOO.widget.Button.superclass.init.call(
+                this, p_oElement, 
+                p_oAttributes
+            );
+
+
+        this.addClass(this.CSS_CLASS_NAME);
+    
+
+        Event.addListener(this._oButton, "focus", this._onFocus, this, true);
+        Event.addListener(this._oButton, "blur", this._onBlur, this, true);
+    
+        this.addListener("mouseover", this._onMouseOver);
+        this.addListener("mouseout", this._onMouseOut);
+        this.addListener("mousedown", this._onMouseDown);
+        this.addListener("mouseup", this._onMouseUp);
+
+
+        this.createEvent("focus");
+        this.createEvent("blur");
+
+
+        var oContainer = this.get("container"),
+            oElement = this.get("element"),
+            me = this;
+
+
+        if(oContainer) {
+
+            if(Lang.isString(oContainer)) {
+
+
+                function appendToContainer() {
+    
+                    this.appendChild(oElement);
+    
+                    if(bCheckable) {
+    
+                        appendHiddenFieldToForm.call(me);
+    
+                    }
+    
+                }
+
+
+                Event.onAvailable(oContainer, appendToContainer);
+
+            }
+            else {
+
+                oContainer.appendChild(oElement);
+
+                if(bCheckable) {
+
+                    appendHiddenFieldToForm.call(me);
+
+                }
+
+            }
+
+        }
+        else if(
+            !Dom.inDocument(oElement) && 
+            oSrcElement && 
+            oSrcElement.tagName.toUpperCase() == "INPUT"
+        ) {
+
+            oSrcElement.parentNode.replaceChild(oElement, oSrcElement);
+
+            if(bCheckable) {
+
+                appendHiddenFieldToForm.call(me);
+
+            }
+
+        }
+        else {
+
+            if(bCheckable) {
+
+                appendHiddenFieldToForm.call(me);
+
+            }
+        
+        }
+
+    },
+
+
+    _oButton: null,
+    
+    
+    _oHiddenField: null,
+
+
+    CSS_CLASS_NAME: "yuibutton",
+
 
     initAttributes: function(p_oAttributes) {
 
         var oAttributes = p_oAttributes || {};
 
-
         YAHOO.widget.Button.superclass.initAttributes.call(this, oAttributes);
-
 
         this.register("type", {
 
             value: oAttributes.type,
             validator: Lang.isString,
-            writeOnce: true
+            writeOnce: true,
+            method: function(p_sType) {
+
+                switch(p_sType) {
+                
+                    case "checkbox":
+                    case "radio":
+
+                        if(
+                            this._oHiddenField.type == "radio" ||
+                            this._oHiddenField.type == "checkbox"
+                        ) {
+    
+                            this.addListener("click", function(p_oEvent) {
+    
+                                this.set("checked", !(this.get("checked")) );
+                            
+                            });
+    
+                        }
+                    
+                    break;
+
+                    case "submit":
+
+                        this.addListener("click", function(p_oEvent) {
+
+                            if(this._oButton.form) {
+
+                                appendHiddenFieldToForm.call(this);
+
+                                this._oButton.form.submit();
+                            
+                            }
+
+                        }, this, true);
+                    
+                    break;
+
+                    case "reset":
+
+                        this.addListener("click", function(p_oEvent) {
+
+                            if(this._oButton.form) {
+
+                                this._oButton.form.reset();
+                            
+                            }
+
+                        });
+
+                    break;
+
+
+                }
+
+            }
 
         });
 
 
-        this.register("text", {
+        this.register("label", {
 
-            value: oAttributes.text,
+            value: oAttributes.label,
             validator: Lang.isString,
-            method: function(p_sText) {
+            method: function(p_sLabel) {
 
-                this._oText.nodeValue = p_sText;                
+                this._oButton.innerHTML = p_sLabel;                
 
             }
 
@@ -462,11 +671,13 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
 
             value: oAttributes.disabled,
             validator: Lang.isBoolean,
-            method: function(value) {
+            method: function(p_bDisabled) {
 
                 if(this.get("type") != "link") {
-        
-                    if(value) {
+
+                    var oHiddenField = this._oHiddenField;
+
+                    if(p_bDisabled) {
             
                         if(this.hasFocus()) {
                         
@@ -476,79 +687,29 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         
                         this._oButton.setAttribute("disabled", "disabled");
         
-                        if(this._oHiddenField) {
+                        if(oHiddenField) {
         
-                            this._oHiddenField.setAttribute("disabled", "disabled");
+                            oHiddenField.setAttribute("disabled", "disabled");
         
                         }
         
-                        Dom.addClass(this.get("element"), "disabled");
+                        this.addClass("disabled");
         
                     }
                     else {
             
                         this._oButton.removeAttribute("disabled");
                         
-                        if(this._oHiddenField) {
+                        if(oHiddenField) {
                         
-                            this._oHiddenField.removeAttribute("disabled");
+                            oHiddenField.removeAttribute("disabled");
         
                         }
         
-                        Dom.removeClass(this.get("element"), "disabled");
+                        this.removeClass("disabled");
                     
                     }
            
-                }
-
-            }
-
-        });
-
-
-        this.register("imagesrc", {
-
-            value: oAttributes.imagesrc,
-            validator: Lang.isString,
-            method: function(p_sImageSrc) {
-
-                var oImage = this._oImage;
-        
-                if(!oImage) {
-                
-                    oImage = document.createElement("img");
-        
-                    this._oButton.appendChild(oImage);
-                    
-                    this._oImage = oImage;
-                
-                }
-        
-                oImage.src = p_sImageSrc;
-                
-                if(this.imageAlt) {
-                
-                    this.setImageAlt();
-                
-                }        
-
-            }
-
-        });
-
-
-        this.register("imagealt", {
-
-            value: oAttributes.imagealt,
-            validator: Lang.isString,
-            method: function(p_sImageAlt) {
-
-                var oImage = this._oImage;
-                
-                if(oImage) {
-        
-                    oImage.alt = p_sImageAlt;
-                
                 }
 
             }
@@ -603,81 +764,33 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         });
 
 
-        this.register("textalign", {
-
-            value: oAttributes.textalign,
-            validator: Lang.isString,
-            method: function(p_sTextAlign) {
-
-                var oImage = this._oImage;
-                var oText = this._oText;
-                var oParent = this._oText.parentNode;
-        
-                if(oImage) {
-        
-                    switch(p_sTextAlign) {
-                    
-                        case "top":
-                            
-                            oImage.style.display = "block";
-                            oParent.insertBefore(oImage, oText);
-                            oParent.style.textAlign = "center";
-                            
-                        break;
-                        
-                        case "right":
-        
-                            oImage.style.display = "inline";
-                            oParent.insertBefore(oImage, oText);
-                            oParent.style.textAlign = "left";
-                        
-                        break;
-                        
-                        case "bottom":
-        
-                            oImage.style.display = "block";
-                            oParent.insertBefore(oText, oImage);
-                            oParent.style.textAlign = "center";
-                        
-                        break;
-                        
-                        case "left":
-        
-                            oImage.style.display = "inline";
-                            oParent.insertBefore(oText, oImage);
-                            oParent.style.textAlign = "left";
-                        
-                        break;
-                    
-                    }
-                
-                }
-
-            }
-
-        });
-
-
         this.register("checked", {
 
             value: oAttributes.checked,
             validator: Lang.isBoolean,
             method: function(p_bChecked) {
 
-                var sType = this.get("type");
+                var sType = this.get("type"),
+                    oHiddenField = this._oHiddenField;
 
-                if((sType == "radio" || sType == "checkbox") && this._oHiddenField) {
+                if(
+                    (sType == "radio" || sType == "checkbox") && 
+                    (
+                        oHiddenField.type == "radio" ||
+                        oHiddenField.type == "checkbox"
+                    )
+                ) {
         
                     if(p_bChecked) {
         
-                        this._oHiddenField.checked = true;
-                        Dom.addClass(this._oElement, "active");
+                        oHiddenField.checked = true;
+                        this.addClass("active");
                     
                     }
                     else {
         
-                        this._oHiddenField.checked = false;
-                        Dom.removeClass(this._oElement, "active");
+                        oHiddenField.checked = false;
+                        this.removeClass("active");
                     
                     }
                 
@@ -688,461 +801,132 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         });
 
 
-        this.register("menu", {
+        this.register("container", {
 
-            value: oAttributes.menu,
-            method: function(p_oObject) {
-
-                var oElement;
-        
-                if(p_oObject instanceof YAHOO.widget.Menu) {
-        
-                    this._oMenu = p_oObject;
-        
-                }
-                else if(this._isArray(p_oObject)) {
-                
-                    this._oMenuDataSrc = p_oObject;
-                
-                }
-                else if(this._isString(p_oObject)) {
-                
-                    oElement = document.getElementById(p_oObject);
-        
-                }
-                else if(p_oObject.tagName) {
-        
-                    oElement = p_oObject;     
-                
-                }
-        
-        
-        
-                if(this._oMenu || oElement) {
-        
-                    if(oElement) {
-        
-                        this._oMenuDataSrc = oElement;
-            
-                        if(oElement.tagName.toUpperCase() == "SELECT") {
-                
-                            oElement.style.display = "none";
-        
-                            this._oSelectElement = oElement;
-                        
-                        }
-                    
-                    }
-            
-                    YAHOO.util.Dom.addClass(this._oElement, ("yui" + this._sType));
-        
-                }
-
-            }
+            value: oAttributes.container
 
         });
 
 
+        this.register("srcelement", {
+
+            value: oAttributes.srcelement,
+            writeOnce: true
+
+        });
+
 
     },
     
 
-    _createHiddenField: function() {
-    
-        var oField;
-        var sType;
+    _onFocus: function(p_oEvent) {
 
-        switch(this._sType) {
-        
-            case "radio":
-            case "checkbox":
-                
-                sType = this._sType;
-                
-            break;
-            
-            case "submit":
+        this.addClass("focus");
 
-                sType = "hidden";            
-            
-            break;
-        
-        }
-        
-        if(navigator.userAgent.indexOf("MSIE") != -1) {
-        
-            var aTag = ["<input type=\""];
-            aTag[1] = sType;
-            aTag[2] = "\"";
+        m_oActiveButton = this;
 
-            if(this.name) {
-            
-                aTag[3] = " name=\"";
-                aTag[4] = this.name;
-                aTag[5] = "\"";
-                
-            }
+        this.fireEvent("focus");
 
-            aTag[6] = ">";
-            
-            oField = document.createElement(aTag.join(""));
-        
-        }
-        else {
-        
-            oField = document.createElement("input");
-            oField.type = sType;
-            oField.name = this.name;
-
-        }
-        
-        oField.value = this.value;
-
-        if(this.disabled) {
-        
-            oField.setAttribute("disabled", "disabled");
-        
-        }
-
-        if(sType != "hidden") {
-    
-            oField.style.display = "none";
-    
-        }
-
-        return oField;   
-    
     },
-
-    _createButtonElement: function() {
-
-        if(!this._oButton) {
-
-            var sTagName = (this.get("type") == "link") ? "a" : "button";
-            var oButton = document.createElement(sTagName);
     
-            if(sTagName == "button") {
-    
-                oButton.setAttribute("type", "button");
-            
-            }
 
-            this._oButton = oButton;
+    _onBlur: function(p_oEvent) {
 
-        }
+        this.removeClass("focus");
 
+        m_oActiveButton = null;
 
-        if(!this._oText) {
-
-            var oText = document.createTextNode("");
-    
-            this._oButton.appendChild(oText);
-
-            this._oText = oText;
-        
-        }
-
-
-        var oOuterSpan = document.createElement("span");
-        var oInnerSpan = document.createElement("span");
-
-        oInnerSpan.appendChild(this._oButton);
-        oOuterSpan.appendChild(oInnerSpan);
-
-        return oOuterSpan;
-        
     },
 
 
-    // Private DOM event handlers
+    _onMouseOver: function(p_oEvent) {
 
-    _onMenuItemMouseDown: function(p_sType, p_aArgs, p_oButton) {
+        if(!this.get("disabled")) {
 
-        p_oButton._oSelectElement.selectedIndex = this.index;
-
-        if(p_oButton.form && p_oButton._bSubmitFormOnClick) {
-
-            var oHiddenField = p_oButton._createHiddenField();
-
-            p_oButton.form.appendChild(oHiddenField);
-            p_oButton.form.submit();
-
-        }
-    
-    },
-
-    _onClick: function(p_sType, p_aArgs, p_oButton) {
-
-        if(!this.disabled) {
-
-            if(this._sType == "radio" || this._sType == "checkbox") {
-    
-                this.setChecked(!this.getChecked());
-    
-            }
-            else {
-
-                if(!this._bMouseDownTargetIsArrow && (this._sType == "submit" || (this._bSubmitFormOnClick && this._sType == "splitbutton"))) {
-    
-                    var oHiddenField = this._createHiddenField();
-    
-                    this.form.appendChild(oHiddenField);
-                    this.form.submit();
-                
-                }
-            
-            }
-        
-        }
-
-    },
-
-    _onMouseOver: function(p_sType, p_aArgs, p_oButton) {
-
-        if(!this.disabled) {
-
-            YAHOO.util.Dom.addClass(this._oElement, "hover");
+            this.addClass("hover");
 
         }
 
     },
 
-    _onMouseOut: function(p_sType, p_aArgs, p_oButton) {
 
-        if(!this.disabled) {
+    _onMouseOut: function(p_oEvent) {
 
-            YAHOO.util.Dom.removeClass(this._oElement, "hover");
-    
-            if(!(this._sType == "radio" || this._sType == "checkbox" || (this._sType == "splitbutton" && this._bMouseDownTargetIsArrow) || this._sType == "menubutton")) {
-                
-                YAHOO.util.Dom.removeClass(this._oElement, "active");
-        
-            }
-        
-        }
-        
-    },
+        if(!this.get("disabled")) {
 
-    _onMouseDown: function(p_sType, p_aArgs, p_oButton) {
-
-        if(!this.disabled) {
-
-            if(this._bMouseDownTargetIsArrow) {
-            
-                YAHOO.util.Dom.removeClass(this._oElement, "activemenu");
-                
-                if(this._oMenu && this._oMenu.cfg.getProperty("visible")) {
-                
-                    this._oMenu.hide();
-                
-                }
-            
-            }
+            this.removeClass("hover");
 
 
-
-            if(this._oMenuDataSrc && !this._oMenu) {
-
-                var sTagName = this._oMenuDataSrc.tagName;
-
-                if(sTagName && sTagName.toUpperCase() == "SELECT") {
-
-                    this._oMenu = new YAHOO.widget.Menu(this._oMenuDataSrc);
-                    this._oMenu.render(this._oElement.parentNode);
-
-                }
-                else if(this._isArray(this._oMenuDataSrc)) {
-
-                    this._oMenu = new YAHOO.widget.Menu(YAHOO.util.Dom.generateId());
-
-                    var aItems = this._oMenuDataSrc;
-                    var nItems = aItems.length;
-                    
-                    for(var i=0; i<nItems; i++) { 
-
-                        this._oMenu.addItem(aItems[i]);
-                    
-                    }
-                    
-                    this._oMenu.render(this._oElement.parentNode);
-                
-                }
-            
-            }
-
-
-            if(!this.hasFocus()) {
-            
-                this.focus();
-            
-            }
-
-            var sClassName = "";
-
-            this._bMouseDownTargetIsArrow = false;
-    
-            if(this._sType == "splitbutton") {
-            
-                var oEvent = p_aArgs[0];
-
-                var nX = oEvent.layerX || oEvent.offsetX;
-    
-                if((this._oElement.offsetWidth - 20) < nX) {
-    
-                    sClassName = "activemenu";
-                
-                    this._bMouseDownTargetIsArrow = true;
-
-                }
-                else {
-    
-                    sClassName = "active";
-                
-                }
-    
-            }
-            else {
-    
-                sClassName = "active";
-            
-            }
-    
-
-            YAHOO.util.Dom.addClass(this._oElement, sClassName);
-
+            var sType = this.get("type");
 
             if(
-                (
-                    this._sType == "menubutton" || 
-                    (this._sType == "splitbutton" && this._bMouseDownTargetIsArrow)
-                ) &&
-                this._oMenu
+                sType != "checkbox" && 
+                sType != "radio" && 
+                this.hasClass("active")
             ) {
+    
+                Event.addListener(
+                            document, 
+                            "mouseup", 
+                            this._onDocumentMouseOut, 
+                            this, 
+                            true
+                        );
 
-                if(this._oSelectElement && !this._bAddedMenuEventHandlers) {
-                
-                    var aItems = this._oMenu.getItemGroups()[0];
-                    var i = aItems.length - 1;
-                    
-                    do {
-                    
-                        aItems[i].mouseDownEvent.subscribe(this._onMenuItemMouseDown, this);
-                    
-                    }
-                    while(i--);
-                
-                    this._bAddedMenuEventHandlers = true;
-                
-                }
-
-                this._oMenu.cfg.applyConfig({ context:[this.id, "tl", "bl"], clicktohide: false, visible: true });
-                this._oMenu.cfg.fireQueue();
-            
             }
-        
+
         }
+        
+    },
+
+
+    _onDocumentMouseOut: function(p_oEvent) {
+    
+        this.removeClass("active");
+
+        Event.removeListener(document, "mouseup", this.onDocumentMouseUp);
 
     },
-    
-    _onMouseUp: function(p_sType, p_aArgs, p_oButton) {
 
-        if(!this.disabled) {
-    
-            if(!(this._sType == "radio" || this._sType == "checkbox" || (this._sType == "splitbutton" && this._bMouseDownTargetIsArrow) || this._sType == "menubutton")) {
-                
-                YAHOO.util.Dom.removeClass(this._oElement, "active");
-        
-            }
+
+    _onMouseDown: function(p_oEvent) {
+
+        if(!this.get("disabled")) {
+
+            this.addClass("active");
         
         }
         
     },
 
-    _onElementRender: function(p_sType, p_sArgs, p_oButton) {
-    
-        if(!this._oHiddenField && (this._sType == "radio" || this._sType == "checkbox")) {
 
-            var oHiddenField = this._createHiddenField();
-            
-            this._oElement.parentNode.appendChild(oHiddenField);
+    _onMouseUp: function(p_oEvent) {
 
-            this._oHiddenField = oHiddenField;
-            
-            if(this._bChecked) {
+        if(!this.get("disabled")) {
 
-                this.setChecked(true);
-
-            }
-            
+            this.removeClass("active");
+        
         }
-    
+        
     },
-
 
 
     focus: function() {
 
         if(!this.get("disabled")) {
-
-            if(YAHOO.widget.Button._activeButton) {
-            
-                YAHOO.widget.Button._activeButton.blur();
-                
-            }
-
-            YAHOO.util.Dom.addClass(this._oElement, "focus");
     
             this._oButton.focus();
-
-            this._bHasFocus = true;
-            
-            YAHOO.widget.Button._activeButton = this;
-
-            this.focusEvent.fire();
         
         }
 
     },
     
+
     blur: function() {
 
         if(!this.get("disabled")) {
 
-            Dom.removeClass(this.get("element"), "focus");
-    
-
-            if(this.get("type") == "splitbutton") {
-
-                YAHOO.util.Dom.removeClass(this.get("element"), "activemenu");
-
-            }
-
-            if(this.get("type") == "menubutton") {
-
-                YAHOO.util.Dom.removeClass(this.get("element"), "active");
-
-            }
-
-
             this._oButton.blur();
-
-//             this._bHasFocus = false;
-// 
-//             if(YAHOO.widget.Button._activeButton == this) {
-//             
-//                 YAHOO.widget.Button._activeButton = null;
-//             
-//             }
-// 
-//             var oMenu = this.getMenu();
-//             
-//             if(oMenu) {
-//             
-//                 oMenu.hide();
-//             
-//             }
-// 
-//             this.blurEvent.fire();
 
         }
 
@@ -1151,14 +935,20 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
 
     hasFocus: function() {
 
-        return this._bHasFocus;
+        return (m_oActiveButton == this);
     
     },
     
-    render: function() {
-
-        document.body.appendChild(this.get("element"));
     
+    destroy: function() {
+
+        var oElement = this.get("element"),
+            oParentNode = oElement.parentNode;
+
+        Event.purgeElement(oElement);
+
+        oParentNode.removeChild(oElement);
+
     }
 
 });
