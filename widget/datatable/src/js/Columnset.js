@@ -20,6 +20,9 @@ YAHOO.widget.Column = function(nIndex, oConfigs) {
             }
         }
     }
+    if(!this.key) {
+        YAHOO.log("Invalid column definition: key is required");
+    }
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -76,6 +79,15 @@ YAHOO.widget.Column.prototype.text = null;
  * @type Number
  */
 YAHOO.widget.Column.prototype.width = null;
+
+/**
+ * Minimum width the column can support (in pixels). Value is populated only if table
+ * is fixedwidth, null otherwise.
+ *
+ * @property minWidth
+ * @type Number
+ */
+YAHOO.widget.Column.prototype.minWidth = null;
 
 /**
  * True if column is sortable, false otherwise.
@@ -140,6 +152,15 @@ YAHOO.widget.Column.prototype.resizeable = false;
  * @default 1
  */
 YAHOO.widget.Column.prototype.span = 1;
+
+/**
+ * True if column is last.
+ *
+ * @property isLast
+ * @type Boolean
+ * @default false
+ */
+YAHOO.widget.Column.prototype.isLast = false;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -370,7 +391,7 @@ YAHOO.widget.Column.radioFormatter = function(bChecked, oRecord) {
  * @return {String} Unique name of the Column instance.
  */
 YAHOO.widget.Column.prototype.toString = function() {
-    return "Column " + this.index + " (" + this.id + ")";
+    return "Column " + this.index + " (" + this.key + ")";
 };
 
  /**
@@ -519,9 +540,11 @@ YAHOO.widget.Columnset = function(aColumnset) {
             if(subcolumnset) {
                 // Subheaders increase the colspan of the header cell...
                 cell.colspan = subcolumnset.length;
+                //YAHOO.log("cell"+cell.text + cell.colspan, "warn");
                 // ...as well as its parent header cell (if any)
                 if (parentcell && parentcell.colspan) {
-                    parentcell.colspan += subcolumnset.length;
+                    parentcell.colspan += subcolumnset.length-1;
+                    YAHOO.log("parent"+parentcell.text + parentcell.colspan,"warn");
                 }
                 if(!rows[currentrow+1]) {
                     rows[currentrow+1] = [];
@@ -540,8 +563,8 @@ YAHOO.widget.Columnset = function(aColumnset) {
                 //numColsInTable++;
             }
 
-            // Add the headre cell to the row array
-            rows[currentrow].push(cell);
+            // Add the header cell to the row array
+            rows[currentrow].push(new YAHOO.widget.Column(rows.length, cell));
         }
         currentrow--;
     };
@@ -551,7 +574,10 @@ YAHOO.widget.Columnset = function(aColumnset) {
         parseColumnsToRows(aColumnset);
     }
 
+    var lastRowCellsLn = rows[rows.length-1].length;
+    rows[rows.length-1][lastRowCellsLn-1].isLast =
     this.rows = rows;
+    columns[columns.length-1].isLast = true;
     this.columns = columns;
     //this.numColsInTable = numColsInTable;
 };

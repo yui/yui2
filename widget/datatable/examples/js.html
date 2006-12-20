@@ -2,11 +2,11 @@
 <html>
 <head>
 <title>Build Table from Scratch</title>
+<link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
 <style type="text/css">
 /* customizable css*/
-#fixed table{width:30em;}
 .example {margin:1em;}
 table {border-collapse:collapse;cursor:default;}
 th, td {border:1px solid #000;}
@@ -16,9 +16,10 @@ th {background-color:#696969;color:#fff;}/*dark gray*/
 
 
 /*foundational css*/
+td {overflow:hidden;}
 .yui-dt-headcontainer {position:relative;}
-.yui-dt-headresizer {position:absolute;right:-4px;bottom:0;width:6px;height:100%;cursor:w-resize;cursor:col-resize;}
-.yui-dt-sortable {cursor:hand;cursor:pointer;margin:0 4px 0 4px;}
+.yui-dt-headresizer {position:absolute;margin-right:-6px;right:0;bottom:0;width:6px;height:100%;cursor:w-resize;cursor:col-resize;}
+.yui-dt-sortable {cursor:hand;cursor:pointer;}/*margin:0 4px 0 4px;*/
 
 #scroll  {
    width:20em;margin-bottom:3em;
@@ -60,6 +61,9 @@ th {background-color:#696969;color:#fff;}/*dark gray*/
 }
 
 
+/* implementation css */
+#fixed table {width:40em;}
+#webstats span, #webstats .yui-dt-columntext,#fixed span,#fixed .yui-dt-columntext {border:1px solid red;}
 
 </style>
 </head>
@@ -78,11 +82,11 @@ th {background-color:#696969;color:#fff;}/*dark gray*/
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
-<script type="text/javascript" src="../../build/event/event-debug.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/connection/connection.js"></script>
-<script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
-<script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop-debug.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
 <script type="text/javascript" src="./js/sampledata.js"></script>
 <script language="JavaScript">
 var myLogger = new YAHOO.widget.LogReader();
@@ -94,79 +98,82 @@ var myLogger = new YAHOO.widget.LogReader();
 
 var myWebstatsColumnset =
 [
-    {id:"webstats20", key:"network", text:"Web statistics across Y! properties",
+    {key:"network", text:"Web statistics across Y! properties",
         columnset: [
-            {id:"webstats00", key:"property", text:"Property Name", type:"text", sortable:true, resizeable:true},
-            {id:"webstats10", key:"visits", text:"Visits", type: "number",
+            {key:"property", text:"Property Name", type:"text", sortable:true, resizeable:true},
+            {key:"visits", text:"Visits", type: "number",
                 columnset: [
-                    {id:"webstats01",key:"visitspercent",text:"%", sortable:true, resizeable:true},
-                    {id:"webstats02",key:"visitstotal",text:"Total", sortable:true, resizeable:true}
+                    {key:"visitspercent",text:"%", sortable:true, resizeable:true},
+                    {key:"visitstotal",text:"Total", sortable:true, resizeable:true}
                 ]
             },
-            {id:"webstats11",key:"views",text:"Views",colspan:2,
+            {key:"views",text:"Views",colspan:2,
                 columnset: [
-                    {id:"webstats03",key:"viewspercent",text:"%",type:"number", sortable:true, resizeable:true},
-                    {id:"webstats04",key:"viewstotal",text:"Total",type:"number", sortable:true, resizeable:true}
+                    {key:"viewspercent",text:"%",type:"number", sortable:true, resizeable:true},
+                    {key:"viewstotal",text:"Total",type:"number", sortable:true, resizeable:true}
                 ]
 
             }
         ]
     }
 ];
+var setPolicy = function() {
+    this.subscribe("cellMouseoverEvent",this.doSelectRow);
+};
 
 var myWebstatsDataDriver = new YAHOO.widget.DataDriver();
 var myWebstatsDataSource = new YAHOO.widget.DataSource(aWebstats, myWebstatsDataDriver);
-var myWebstatsDataTable = new YAHOO.widget.DataTable("webstats", myWebstatsColumnset, myWebstatsDataSource);
+var myWebstatsDataTable = new YAHOO.widget.DataTable("webstats", myWebstatsColumnset, myWebstatsDataSource,{setPolicy:setPolicy,singleSelect:true});
+
 
 
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
-YAHOO.example.Orders = function() {
-    this.datadriver = new YAHOO.widget.DataDriver();
-    // Customized DataDriver functionality
-    this.datadriver.makeConnection = function(sRequest, oCallback, oCaller, oDataSource) {
-        var aOrders = oDataSource.livedata;
-        var oRawResponse = [];
+var orders = {};
+orders.datadriver = new YAHOO.widget.DataDriver();
+// Customized DataDriver functionality
+orders.datadriver.makeConnection = function(sRequest, oCallback, oCaller, oDataSource) {
+    var aOrders = oDataSource.livedata;
+    var oRawResponse = [];
 
-        // Match the request against the orders database
-        if(sRequest) {
-            // Else here is where we go through and define the matching algorithm
+    // Match the request against the orders database
+    if(sRequest) {
+        // Else here is where we go through and define the matching algorithm
 
-            //for(var i=0; i<aOrders.length; i++) {
-               //oRawResponse.push(aOrders
-            //}
-        }
-        // Or just return all the orders
-        else {
-            oRawResponse = aOrders;
-        }
+        //for(var i=0; i<aOrders.length; i++) {
+           //oRawResponse.push(aOrders
+        //}
+    }
+    // Or just return all the orders
+    else {
+        oRawResponse = aOrders;
+    }
 
-        // The DataDriver forwards the raw response to the DataParser...
-        if(oDataSource.dataparser) {
-            oDataSource.dataparser.parseResponse(sRequest, oRawResponse, oCallback, oCaller);
-        }
-        // ...or else sends the raw response directly back to the caller
-        else {
-            // Cache the response first
-            oDataSource.addToCache(sRequest, oRawResponse);
-            oCallback(sRequest, oRawResponse, oCaller);
-        }
-    };
+    // The DataDriver forwards the raw response to the DataParser...
+    if(oDataSource.dataparser) {
+        oDataSource.dataparser.parseResponse(sRequest, oRawResponse, oCallback, oCaller);
+    }
+    // ...or else sends the raw response directly back to the caller
+    else {
+        // Cache the response first
+        oDataSource.addToCache(sRequest, oRawResponse);
+        oCallback(sRequest, oRawResponse, oCaller);
+    }
+};
 
-    this.columnset = [
-        {id:"po_paid",type:"checkbox",text:"Paid",sortable:true},
-        {id:"po_due",type:"radio",text:"Due Next"},
-        {id:"po_deprecated",type:"html",key:"markup",text:"Deprecated Stuff"},
-        {id:"po_id",key:"id",type:"number",text:"PO ID",sortable:true,resizeable:true},
-        {id:"po_quantity",key:"quantity",type:"number",text:"Quantity",sortable:true,resizeable:true},
-        {id:"po_total",key:"amount",type:"currency",text:"$ Total",sortable:true,resizeable:true,editable:true},
-        {id:"po_date",key:"date",type:"date",text:"Date",sortable:true,sortOptions:{defaultOrder:"desc"},resizeable:true,isLast:true}
-    ];
+orders.columnset = [
+    {key:"paid",type:"checkbox",text:"Paid",sortable:true},
+    {key:"due",type:"radio",text:"Due"},
+    {key:"deprecated",type:"html",key:"markup",text:"Stuff",resizeable:true},
+    {key:"id",type:"number",text:"PO ID",sortable:true,resizeable:true},
+    {key:"quantity",type:"number",text:"Quantity",sortable:true,resizeable:true},
+    {key:"amount",type:"currency",text:"$&nbsp;Total",sortable:true,resizeable:true,editable:true},
+    {key:"date",type:"date",text:"Date",sortable:true,sortOptions:{defaultOrder:"desc"},resizeable:true}
+];
 
-    this.datasource = new YAHOO.widget.DataSource(aPurchaseOrderObjects, this.datadriver);
-    this.datatable = new YAHOO.widget.DataTable("fixed", this.columnset, this.datasource, {defaultRequest: "", fixedwidth:true});
-}();
+orders.datasource = new YAHOO.widget.DataSource(aPurchaseOrderObjects, orders.datadriver);
+orders.datatable = new YAHOO.widget.DataTable("fixed", orders.columnset, orders.datasource, {defaultRequest: "", fixedwidth:true});
 
 /****************************************************************************/
 /****************************************************************************/
@@ -187,12 +194,12 @@ YAHOO.example.sortStatesDesc = function(a, b) {
 var myAreacodesDataDriver = new YAHOO.widget.DataDriver();
 
 var myAreacodesColumnset = [
-    {id:"ac1",key:"areacode",text:"Area Codes",sortable:true},
-    {id:"ac2",key:"state",text:"States",sortable:true,sortOptions:{ascHandler:YAHOO.example.sortStatesAsc,descHandler:YAHOO.example.sortStatesDesc}}
+    {key:"areacode",text:"Area Codes",sortable:true},
+    {key:"state",text:"States",sortable:true,sortOptions:{ascHandler:YAHOO.example.sortStatesAsc,descHandler:YAHOO.example.sortStatesDesc}}
 ];
 
 var myAreacodesDataSource = new YAHOO.widget.DataSource(aAreacodeObjects, myAreacodesDataDriver);
-var myAreacodesDataTable = new YAHOO.widget.DataTable("scroll",myAreacodesColumnset,myAreacodesDataSource,{sortedBy:"ac1"});
+//var myAreacodesDataTable = new YAHOO.widget.DataTable("scroll",myAreacodesColumnset,myAreacodesDataSource,{sortedBy:"areacode"});
 
 
 /****************************************************************************/
@@ -224,7 +231,7 @@ var fnAreaCodeObjects = function(oArgs) {
 };
 
 var myPagedAreacodesDataSource = new YAHOO.widget.DataSource(fnAreaCodeObjects, myAreacodesDataDriver);
-var myPagedAreacodesDataTable = new YAHOO.widget.DataTable("page",myAreacodesColumnset,myPagedAreacodesDataSource);
+/*var myPagedAreacodesDataTable = new YAHOO.widget.DataTable("page",myAreacodesColumnset,myPagedAreacodesDataSource);
 
 var onPageNextSubmit = function(e, oDataTable) {
     YAHOO.util.Event.stopEvent(e);
@@ -242,14 +249,14 @@ var onPageRangeChange = function(e, oDataTable) {
 YAHOO.util.Event.addListener(YAHOO.util.Dom.get("pagesubmitnext"), "click", onPageNextSubmit, myPagedAreacodesDataTable);
 YAHOO.util.Event.addListener(YAHOO.util.Dom.get("pagesubmitprev"), "click", onPagePrevSubmit, myPagedAreacodesDataTable);
 YAHOO.util.Event.addListener(YAHOO.util.Dom.get("pagerange"), "change", onPageRangeChange, myPagedAreacodesDataTable);
-
+*/
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
 
 var myXHRColumnset = [
-    {id:"search1",key:"Title",text:"Title",sortable:true, sortOptions:{ascHandler:YAHOO.util.Sort.compareTextAsc,descHandler:YAHOO.util.Sort.compareTextDesc},resizeable:true},
-    {id:"search1",key:"Summary",text:"Summary",sortable:true,sortOptions:{ascHandler:YAHOO.util.Sort.compareTextAsc,descHandler:YAHOO.util.Sort.compareTextDesc},resizeable:true}
+    {key:"Title",sortable:true, sortOptions:{ascHandler:YAHOO.util.Sort.compareTextAsc,descHandler:YAHOO.util.Sort.compareTextDesc},resizeable:true},
+    {key:"Summary",sortable:true,sortOptions:{ascHandler:YAHOO.util.Sort.compareTextAsc,descHandler:YAHOO.util.Sort.compareTextDesc},resizeable:true}
 ];
 
 // Converts XML results into an array of key/value objects
@@ -305,7 +312,7 @@ myXHRDataSource.queryMatchContains = true;
 myXHRDataSource.scriptQueryAppend = "results=5"; // Needed for YWS
 myXHRDataSource.resultsAsObjects = true;
 
-var myXHRDataTable = new YAHOO.widget.DataTable("xhr", myXHRColumnset, myXHRDataSource,{defaultRequest:"query=madonna&results=5"});
+/*var myXHRDataTable = new YAHOO.widget.DataTable("xhr", myXHRColumnset, myXHRDataSource,{defaultRequest:"query=madonna&results=5"});
 myXHRDataTable.aSchema = ["Result","Title","Summary"];
 myXHRDataTable.responseStripAfter = "\n<!-";
 
@@ -316,7 +323,7 @@ var onXHRFormSubmit = function(e, oDataTable) {
     myXHRDataTable.addRows("query="+YAHOO.util.Dom.get("xhrinput").value+"&results=5");
 };
 YAHOO.util.Event.addListener(YAHOO.util.Dom.get("xhrform"), "submit", onXHRFormSubmit, myXHRDataTable);
-
+*/
 
 </script>
 

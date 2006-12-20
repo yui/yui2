@@ -32,14 +32,14 @@ th {background-color:#696969;color:#fff;}
 <script language="JavaScript">
 YAHOO.example.initPOTable = function() {
     var myColumnset = [
-        {id:"po_paid",type:"checkbox",text:"Paid",sortable:true},
-        {id:"po_due",type:"radio",text:"Due Next"},
-        {id:"po_deprecated",type:"html",key:"markup",text:"Deprecated Stuff"},
-        {id:"po_index",key:"index",text:"Index",sortable:true,resizeable:true},
-        {id:"po_id",key:"id",text:"PO ID",sortable:true,resizeable:true},
-        {id:"po_quantity",key:"quantity",type:"int",text:"Quantity",sortable:true,resizeable:true},
-        {id:"po_total",key:"amount",type:"currency",text:"$ Total",sortable:true,resizeable:true},
-        {id:"po_date",key:"date",type:"date",text:"Date",sortable:true,sortOptions:{defaultOrder:"desc"},resizeable:true}
+        {key:"paid",type:"checkbox",text:"Paid",sortable:true},
+        {key:"due",type:"radio",text:"Due Next"},
+        {key:"deprecated",type:"html",key:"markup",text:"Deprecated Stuff"},
+        {key:"index",text:"Index",sortable:true,resizeable:true},
+        {key:"id",text:"PO ID",sortable:true,resizeable:true},
+        {key:"quantity",type:"int",text:"Quantity",sortable:true,resizeable:true},
+        {key:"amount",type:"currency",text:"$ Total",sortable:true,resizeable:true},
+        {key:"date",type:"date",text:"Date",sortable:true,sortOptions:{defaultOrder:"desc"},resizeable:true}
     ];
 
     var myDataDriver = new YAHOO.widget.DataDriver();
@@ -51,19 +51,19 @@ YAHOO.util.Event.onAvailable("purchaseorders",YAHOO.example.initPOTable);
 
 YAHOO.example.initWebstatsTable = function() {
     var myColumnset = [
-        {id:"webstats20", key:"network", text:"Web statistics across Y! Properties",
+        {key:"network", text:"Web statistics across Y! Properties",
             columnset: [
-                {id:"webstats00", key:"property", text:"Property Name", type:"text", sortable:true, resizeable:true},
-                {id:"webstats10", key:"visits", text:"Visits", type: "number",
+                {key:"property", text:"Property Name", type:"text", sortable:true, resizeable:true},
+                {key:"visits", text:"Visits", type: "number",
                     columnset: [
-                        {id:"webstats01",key:"visitspercent",text:"%", sortable:true, resizeable:true},
-                        {id:"webstats02",key:"visitstotal",text:"Total", sortable:true, resizeable:true}
+                        {key:"visitspercent",text:"%", sortable:true, resizeable:true},
+                        {key:"visitstotal",text:"Total", sortable:true, resizeable:true}
                     ]
                 },
-                {id:"webstats11",key:"views",text:"Views",colspan:2,
+                {key:"views",text:"Views",colspan:2,
                     columnset: [
-                        {id:"webstats03",key:"viewspercent",text:"%",type:"number", sortable:true, resizeable:true},
-                        {id:"webstats04",key:"viewstotal",text:"Total",type:"number", sortable:true, resizeable:true}
+                        {key:"viewspercent",text:"%",type:"number", sortable:true, resizeable:true},
+                        {key:"viewstotal",text:"Total",type:"number", sortable:true, resizeable:true}
                     ]
 
                 }

@@ -142,18 +142,18 @@ YAHOO.widget.Recordset.prototype.getCount = function() {
 };
 
 /**
- * Returns the record with the given ID
+ * Returns the record with the given external ID
  *
- * @method getRecordById
- * @param id {String} Record ID.
- * @return {Object} Record with given ID, or null.
+ * @method getRecordByExtId
+ * @param id {String} Record external ID.
+ * @return {Object} Record with given external ID, or null.
  */
-YAHOO.widget.Recordset.prototype.getRecordById = function(id) {
+YAHOO.widget.Recordset.prototype.getRecordByExtId = function(extId) {
     var record = null;
     var length = this._records.length;
     for(var i=length-1; i>0; i--) {
         record = this._records[i];
-        if(record && (record.id == id)) {
+        if(record && (record.extid == extId)) {
             return record;
         }
     }

@@ -129,6 +129,16 @@ YAHOO.augment(YAHOO.widget.DataTable, YAHOO.util.EventProvider);
 /////////////////////////////////////////////////////////////////////////////
 
  /**
+ * Class name of column text.
+ *
+ * @property CLASS_COLUMNTEXT
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_COLUMNTEXT = "yui-dt-columntext";
+
+ /**
  * Class name of selected element.
  *
  * @property CLASS_SELECTED
@@ -138,6 +148,15 @@ YAHOO.augment(YAHOO.widget.DataTable, YAHOO.util.EventProvider);
  */
 YAHOO.widget.DataTable.CLASS_SELECTED = "yui-dt-selected";
 
+ /**
+ * Class name of sortable column text.
+ *
+ * @property CLASS_SORTABLE
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_SORTABLE = "yui-dt-sortable";
 /////////////////////////////////////////////////////////////////////////////
 //
 // Public member variables
@@ -252,6 +271,19 @@ YAHOO.widget.DataTable.prototype.appendRow = function(oRecord) {
         var elCell = elRecordRow.appendChild(document.createElement("td"));
         elCell.id = "yui-dt"+index+"-bodycell"+i+"-"+j;
         oColumnset.columns[j].format(elCell, oRecord);
+        /*p.abx {word-wrap:break-word;}
+ought to solve the problem for Safari (the long words will wrap in your
+tds, instead of overflowing to the next td.
+(this is supported by IE win as well, so hide it if needed).
+
+One thing, though: it doesn't work in combination with
+'white-space:nowrap'.*/
+
+// need a div wrapper for safari?
+        if(this.fixedwidth) {
+            elCell.style.overflow = "hidden";
+            //elCell.style.width = "20px";
+        }
     }
 };
 
@@ -418,7 +450,7 @@ YAHOO.widget.DataTable.prototype.doSelectRow = function(oArgs) {
     
     if(this.singleSelect && !evt.ctrlKey) {
         //TODO: convenience method to get to tbody
-        this.unselectRows(YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elTbody));
+        this.unselect(YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elTbody));
     }
     
     //TODO: if singleSelect allow shift click to select multiple rows
@@ -448,23 +480,41 @@ YAHOO.widget.DataTable.prototype.doSort = function(oArgs) {
     var column = null;
     for(var i=0; i<columns.length; i++) {
         // Which column are we sorting?
-        if(target.colId == columns[i].id) {
+        if(target.key == columns[i].key) {
             column = columns[i];
             break;
         }
     }
 
     if(column) {
-        // Do we want to sort in DESCENDING order
-        var sortDesc = (column.currentlyAsc !== null) ? column.currentlyAsc : column.sortDesc;
+        // What is the default sort direction?
+        var sortDir = (column.sortOptions && column.sortOptions.defaultOrder) ? column.sortOptions.defaultOrder : "asc";
+        
+        // Is the column sorted already?
+        if(this.sortedBy == column.key) {
+            if(this.sortedByDir) {
+                sortDir = (this.sortedByDir == "asc") ? "desc" : "asc";
+            }
+            else {
+                sortDir = (sortDir == "asc") ? "desc" : "asc";
+            }
+        }
+        
 
         // Define the sort handler function based on the direction
-        var sortFnc = (sortDesc) ? column.sortDescHandler : column.sortAscHandler;
+        var sortFnc = null;
+        if((sortDir == "desc") && column.sortOptions && column.sortOptions.sortDescHandler) {
+            sortFnc = column.sortOptions.sortDescHandler
+        }
+        else if((sortDir == "asc") && column.sortOptions && column.sortOptions.sortAscHandler) {
+            sortFnc = column.sortOptions.sortAscHandler
+        }
+
         // One was not provided so use the default generic sort handler function
         // TODO: use diff default functions based on column data type
         if(!sortFnc) {
             sortFnc = function(a, b) {
-                if(sortDesc) {
+                if(sortDir == "desc") {
                     return YAHOO.util.Sort.compareDesc(a[column.key],b[column.key]);
                 }
                 else {
@@ -480,17 +530,10 @@ YAHOO.widget.DataTable.prototype.doSort = function(oArgs) {
         //TODO: expose thru events
         this._updateTableBody(newRecords);
 
-        // Set current direction of sorted column and
-        // reset direction of all other columns to null
-        for(var j=0; j<columns.length; j++) {
-            if(j != i) {
-                columns[j].currentlyAsc = null;
-            }
-            else {
-                columns[j].currentlyAsc = !sortDesc;
-            }
-        }
-        YAHOO.log("Column \"" + target.id + "\" sorted " + (sortDesc?"desc":"asc") + " on " + column.key,"info",this.toString());
+        // Keep track of currently sorted column
+        this.sortedBy = column.key;
+        this.sortedByDir = sortDir;
+        YAHOO.log("Column \"" + target.key + "\" sorted " + sortDir,"info",this.toString());
     }
     else {
         //TODO
@@ -593,12 +636,22 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
     var topRowCells = this._elTbody.rows[0].cells;
     var columns = this._oColumnset.columns;
     for(var i=0; i<topRowCells.length; i++) {
-        columns[i].width = topRowCells[i].offsetWidth
+        columns[i].width = topRowCells[i].offsetWidth;
     }
 
     this._elTable.tabIndex = 0;
     this._registerEvents();
     this.setPolicy();
+    
+    //TODO: finish support for fixed width table :-(
+    if(this.fixedwidth) {
+        this._elTable.style.tableLayout = "fixed";
+        for(var j=0; j<topRowCells.length; j++) {
+            columns[j].width = topRowCells[j].offsetWidth;
+            //elHeadRow.cells[j].style.width = setWidth;
+        }
+    }
+
 };
 
 /**
@@ -662,13 +715,6 @@ YAHOO.widget.DataTable.prototype._createThead = function(elTable, oColumnset) {
         }
     }
 
-    //TODO: finish support for fixed width table :-(
-    if(this.fixedwidth) {
-        for(var j=0; j<elHeadRow.cells.length; j++) {
-            var setWidth = elHeadRow.cells[j].offsetWidth + "px";
-            elHeadRow.cells[j].style.width = setWidth;
-        }
-    }
     YAHOO.log("Markup for " + oColumnset.length + " columns created in the thead element","info",this.toString());
     return true;
 };
@@ -779,29 +825,37 @@ YAHOO.widget.DataTable.prototype._enhanceTheadCell = function(elHeadCell,oColumn
     // Clear out the cell of prior content
     // TODO: purgeListeners and other validation-related things
     var index = this._nIndex;
-    elHeadCell.colId = oColumn.id;
+    elHeadCell.key = oColumn.key;
+    elHeadCell.index = oColumn.index;
     elHeadCell.innerHTML = "";
 
     var elHeadContainer = elHeadCell.appendChild(document.createElement("div"));
     elHeadContainer.id = "yui-dt"+index+"-headcontainer"+row+"-"+col;
+    oColumn.id = elHeadContainer.id;
     YAHOO.util.Dom.addClass(elHeadContainer,"yui-dt-headcontainer");
     var elHeadContent = elHeadContainer.appendChild(document.createElement("span"));
     elHeadContent.id = "yui-dt"+index+"-headcontent"+row+"-"+col;
-    elHeadContent.innerHTML = oColumn.text;
+    YAHOO.util.Dom.addClass(elHeadContent,YAHOO.widget.DataTable.CLASS_COLUMNTEXT);
+    elHeadContent.innerHTML = oColumn.text || oColumn.key;
+
     elHeadCell.rowSpan = oColumn.rowspan;
     elHeadCell.colSpan = oColumn.colspan;
 
     if(oColumn.sortable) {
-        YAHOO.util.Dom.addClass(elHeadContent,"yui-dt-sortable");
+        YAHOO.util.Dom.addClass(elHeadContent,YAHOO.widget.DataTable.CLASS_SORTABLE);
     }
     if(oColumn.resizeable) {
         //TODO: deal with fixed width tables
         //TODO: figure out whether this is last column programmatically
-        if(!(this.fixedwidth && oColumn.isLast)) {
+        if(!this.fixedwidth || (this.fixedwidth && !oColumn.isLast)) {
             var elHeadResizer = elHeadContainer.appendChild(document.createElement("span"));
             elHeadResizer.id = "yui-dt"+index+"-headresizer"+row+"-"+col;
             YAHOO.util.Dom.addClass(elHeadResizer,"yui-dt-headresizer");
-            var ddResizer = new YAHOO.util.WidthResizer(this, elHeadCell.id, elHeadResizer.id, elHeadResizer.id);
+            oColumn.ddResizer = new YAHOO.util.WidthResizer(this, elHeadCell.id, elHeadResizer.id, elHeadResizer.id);
+        }
+        if(this.fixedwidth) {
+            elHeadContainer.style.overflow = "hidden";
+            elHeadContent.style.overflow = "hidden";
         }
     }
 };
@@ -911,12 +965,29 @@ YAHOO.widget.DataTable.prototype._registerEvents = function() {
     /////////////////////////////////////////////////////////////////////////////
 
     /**
+     * Fired when a mouseover occurs on a TD element.
+     *
+     * @event cellMouseoverEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TD element.
+     */
+    this.createEvent("cellMouseoverEvent");
+
+    /**
+     * Fired when a mouseout occurs on a TD element.
+     *
+     * @event cellMouseoutEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TD element.
+     */
+    this.createEvent("cellMouseoutEvent");
+
+    /**
      * Fired when a TD element is clicked.
      *
      * @event cellClickEvent
-     * @param sType {String} CustomEvent type.
-     * @param oEvent {HTMLEvent} The event object.
-     * @param elTarget {HTMLElement} The TD element.
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TD element.
      */
     this.createEvent("cellClickEvent");
 
@@ -924,9 +995,8 @@ YAHOO.widget.DataTable.prototype._registerEvents = function() {
      * Fired when a TR element is deleted.
      *
      * @event rowDeleteEvent
-     * @param sType {String} CustomEvent type.
-     * @param oEvent {HTMLEvent} The event object.
-     * @param elTarget {HTMLElement} The TR element.
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TR element.
      */
     this.createEvent("rowDeleteEvent");
 
@@ -934,9 +1004,8 @@ YAHOO.widget.DataTable.prototype._registerEvents = function() {
      * Fired when a TH element is clicked.
      *
      * @event theadClickEvent
-     * @param sType {String} CustomEvent type.
-     * @param oEvent {HTMLEvent} The event object.
-     * @param elTarget {HTMLElement} The TH element.
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TH element.
      */
     this.createEvent("theadClickEvent");
 
@@ -944,9 +1013,9 @@ YAHOO.widget.DataTable.prototype._registerEvents = function() {
      * Fired when a TABLE element is clicked.
      *
      * @event tableClickEvent
-     * @param oSelf {YAHOO.widget.DataTable} The DataTable instance.
-     * @param elTarget {HTMLElement} The TABLE element.
-     * @param oEvent {HTMLEvent} The event object.
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TABLE element.
+     * 
      */
     this.createEvent("tableClickEvent");
     
@@ -954,11 +1023,19 @@ YAHOO.widget.DataTable.prototype._registerEvents = function() {
      * Fired when a TABLE element receives a keypress.
      *
      * @event tableKeyEvent
-     * @param oSelf {YAHOO.widget.DataTable} The DataTable instance.
-     * @param elTarget {HTMLElement} The TABLE element.
-     * @param oEvent {HTMLEvent} The event object.
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TABLE element.
+     * 
      */
     this.createEvent("tableKeypressEvent");
+
+    /**
+     * Fired when a column is resized.
+     *
+     * @event columnResizeEvent
+     * @param oArgs.target {HTMLElement} The TH element.
+     */
+    this.createEvent("columnResizeEvent");
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -966,6 +1043,40 @@ YAHOO.widget.DataTable.prototype._registerEvents = function() {
 // DOM Event Handlers
 //
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Handles mouseover events on the TABLE element.
+ *
+ * @method _onMouseover
+ * @param e {event} The mouseover event.
+ * @param oSelf {object} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
+	    var elTarget = YAHOO.util.Event.getTarget(e);
+	    var elTag = elTarget.nodeName.toLowerCase();
+	    var knownTag = false;
+
+        if (elTag != "table") {
+            while(!knownTag) {
+                switch(elTag) {
+                    case "td":
+    	               oSelf.fireEvent("cellMouseoverEvent",{target:elTarget,event:e});
+    	               knownTag = true;
+    	               break;
+        	        case "th":
+                    	oSelf.fireEvent("theadMouseoverEvent",{target:elTarget,event:e});
+                    	knownTag = true;
+                    	break;
+                    default:
+                        break;
+                }
+                elTarget = elTarget.parentNode;
+                elTag = elTarget.nodeName.toLowerCase();
+            }
+        }
+	    oSelf.fireEvent("tableMouseoverEvent",{target:elTarget,event:e});
+};
 
 /**
  * Handles click events on the TABLE element.
@@ -1052,10 +1163,10 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
  * @param oSelf {object} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onMouseout = function(e, oSelf) {
+/*YAHOO.widget.DataTable.prototype._onMouseout = function(e, oSelf) {
     var target = YAHOO.util.Event.getTarget(e);
 //    YAHOO.log(e.type + ": " + target, "warn");
-};
+};*/
 
 /**
  * Handles mouseover events on the TABLE element.
@@ -1065,10 +1176,10 @@ YAHOO.widget.DataTable.prototype._onMouseout = function(e, oSelf) {
  * @param oSelf {object} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
+/*YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
     var target = YAHOO.util.Event.getTarget(e);
 //    YAHOO.log(e.type + ": " + target, "warn");
-};
+};*/
 
 /**
  * Handles key events on the TABLE element.
@@ -1202,21 +1313,20 @@ YAHOO.util.Sort.compareDesc = function(a, b) {
  * @param handleElId {string} ID of the handle element that causes the resize
  * @param sGroup {string} Group name of related DragDrop items
  */
-YAHOO.util.WidthResizer = function(oDataTable, colElId, handleElId, sGroup, config) {
-    if (colElId) {
+YAHOO.util.WidthResizer = function(oDataTable, colId, handleId, sGroup, config) {
+    if (colId) {
+        this.cell = YAHOO.util.Dom.get(colId);
+        this.init(handleId, sGroup, config);
+        //this.initFrame();
         this.datatable = oDataTable;
-        this.init(colElId, sGroup, config);
-        this.handleElId = handleElId;
-        this.setHandleElId(handleElId);
-        this.logger = this.logger || YAHOO;
+        this.setYConstraint(0,0);
     }
     else {
         YAHOO.log("Column resizer could not be created due to invalid colElId","warn");
     }
 };
 
-// YAHOO.example.DDResize.prototype = new YAHOO.util.DragDrop();
-YAHOO.extend(YAHOO.util.WidthResizer, YAHOO.util.DragDrop);
+YAHOO.extend(YAHOO.util.WidthResizer, YAHOO.util.DD);
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1231,8 +1341,51 @@ YAHOO.extend(YAHOO.util.WidthResizer, YAHOO.util.DragDrop);
  * @param e {string} The mousedown event
  */
 YAHOO.util.WidthResizer.prototype.onMouseDown = function(e) {
-    this.startWidth = this.getEl().offsetWidth;
-    this.startPos = YAHOO.util.Event.getPageX(e);
+    this.startWidth = this.cell.offsetWidth;
+    this.startPos = YAHOO.util.Dom.getX(this.getDragEl());
+
+    if(this.datatable.fixedwidth) {
+        var cellText = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_COLUMNTEXT,"span",this.cell)[0];
+        this.minWidth = cellText.offsetWidth + 6;
+        var sib = this.cell.nextSibling;
+        var sibCellText = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_COLUMNTEXT,"span",sib)[0];
+        this.sibMinWidth = sibCellText.offsetWidth + 6;
+//!!
+        var left = ((this.startWidth - this.minWidth) < 0) ? 0 : (this.startWidth - this.minWidth);
+        var right = ((sib.offsetWidth - this.sibMinWidth) < 0) ? 0 : (sib.offsetWidth - this.sibMinWidth);
+        this.setXConstraint(left, right);
+        YAHOO.log("cellstartwidth:" + this.startWidth,"time");
+        YAHOO.log("cellminwidth:" + this.minWidth,"time");
+        YAHOO.log("sibstartwidth:" + sib.offsetWidth,"time");
+        YAHOO.log("sibminwidth:" + this.sibMinWidth,"time");
+        YAHOO.log("l:" + left + " AND r:" + right,"time");
+    }
+
+};
+
+/**
+ * Handles mouseup events on the column resizer.
+ *
+ * @method onMouseUp
+ * @param e {string} The mouseup event
+ */
+YAHOO.util.WidthResizer.prototype.onMouseUp = function(e) {
+    //TODO: replace the resizer where it belongs:
+    var resizeStyle = YAHOO.util.Dom.get(this.handleElId).style;
+    resizeStyle.left = "auto";
+    resizeStyle.right = 0;
+    resizeStyle.marginRight = "-6px";
+    resizeStyle.width = "6px";
+    //.yui-dt-headresizer {position:absolute;margin-right:-6px;right:0;bottom:0;width:6px;height:100%;cursor:w-resize;cursor:col-resize;}
+
+
+    //var cells = this.datatable._elTable.tHead.rows[this.datatable._elTable.tHead.rows.length-1].cells;
+    //for(var i=0; i<cells.length; i++) {
+        //cells[i].style.width = "5px";
+    //}
+
+    //TODO: set new columnset width values
+    this.datatable.fireEvent("columnResizeEvent",{datatable:this.datatable,target:YAHOO.util.Dom.get(this.id)});
 };
 
 /**
@@ -1242,43 +1395,46 @@ YAHOO.util.WidthResizer.prototype.onMouseDown = function(e) {
  * @param e {string} The drag event
  */
 YAHOO.util.WidthResizer.prototype.onDrag = function(e) {
-    var newPos = YAHOO.util.Event.getPageX(e);
-    var offsetX = newPos - this.startPos;
-    var newWidth;
+    var newPos = YAHOO.util.Dom.getX(this.getDragEl());//YAHOO.log("newpos:"+newPos,"warn");//YAHOO.util.Event.getPageX(e);
+    var offsetX = newPos - this.startPos;//YAHOO.log("offset:"+offsetX,"warn");
+    YAHOO.log("startwidth:"+this.startWidth + " and offset:"+offsetX,"warn");
+    var newWidth = this.startWidth + offsetX;//YAHOO.log("newwidth:"+newWidth,"warn");
 
-    if(offsetX > 0) { // moving to the right
-        newWidth = this.startWidth + offsetX; //Math.max(this.startWidth + offsetX, edge);
+    if(newWidth < this.minWidth) {
+        newWidth = this.minWidth;
     }
-    else { // moving to the left
-        newWidth = this.startWidth + offsetX;
-    }
-    //var newWidth = Math.max(this.startWidth + offsetX, edge);
-    //YAHOO.log("start:"+this.startWidth+ " and new: "+newWidth,"warn");
-    //if(newWidth < this.maxWidth) {
-        //var column = this.getEl();
-        //column.style.width = newWidth + "px";
-    //}
 
+    // Resize the column
     var oDataTable = this.datatable;
-    var elColumn = this.getEl();
+    var elCell = this.cell;
+    
+    //YAHOO.log("newwidth" + newWidth,"warn");
+    //YAHOO.log(newWidth + " AND "+ elColumn.offsetWidth + " AND " + elColumn.id,"warn");
+    
+    // Resize the other columns
     if(oDataTable.fixedwidth) {
-        /*var aColumns = oDataTable._oColumnset.columns;
-        for(var i=0; i<aColumns.length; i++) {
-            // Which column are we sorting?
-            if(elColumn.colId == aColumns[i].id) {
-                oDataTable._elTable.tBodies[0].rows[0].cells[i].style.width = newWidth + "px";
-                YAHOO.log("COL"+i+": "+newWidth,"warn");
-                return;
+        // Moving right or left?
+        var sib = elCell.nextSibling;
+        var sibIndex = elCell.index + 1;
+        var sibnewwidth = sib.offsetWidth - offsetX;
+        if(sibnewwidth < this.sibMinWidth) {
+            sibnewwidth = this.sibMinWidth;
+        }
+        for(var i=0; i<oDataTable._oColumnset.length; i++) {
+            if((i != elCell.index) &&  (i!=sibIndex)) {
+                YAHOO.util.Dom.get(oDataTable._oColumnset.columns[i].id).style.width = oDataTable._oColumnset.columns[i].width + "px";
             }
-            else {
-                oDataTable._elTable.tBodies[0].rows[0].cells[i].style.width = aColumns[i].width + "px";
-                YAHOO.log("COL" + i + ": " + oDataTable._elTable.tBodies[0].rows[0].cells[i].style.width);
-            }
-        }*/
-        /*oDataTable._elTable.tBodies[0].rows[0].cells[1].style.width = 92 + "px";
-        oDataTable._elTable.tBodies[0].rows[0].cells[1].style.width = newWidth + "px";*/
+        }
+        sib.style.width = sibnewwidth;
+        elCell.style.width = newWidth + "px";
+        oDataTable._oColumnset.columns[sibIndex].width = sibnewwidth;
+        oDataTable._oColumnset.columns[elCell.index].width = newWidth;
+        
     }
-    elColumn.style.width = newWidth + "px";
+    else {
+        elCell.style.width = newWidth + "px";
+    }
+
 };
 
 
