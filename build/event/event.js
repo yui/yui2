@@ -1321,7 +1321,7 @@ if (!YAHOO.util.Event) {
                 retryCount = (notAvail.length === 0) ? 0 : retryCount - 1;
 
                 if (tryAgain) {
-                    onAvailStack = notAvail; // cleanse the array
+                    //onAvailStack = notAvail; // cleanse the array
                     this.startInterval();
                 } else {
                     clearInterval(this._interval);
