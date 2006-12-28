@@ -2,11 +2,15 @@
 <head>
         <script src = "../../build/yahoo/yahoo-min.js" ></script>
         <script src = "../../build/connection/connection-min.js" ></script>
+		<link rel="stylesheet" type="text/css" href="../../docs/assets/dpSyntaxHighlighter.css" />
+		<style>
+			#wform {margin-top:1em;}
+		</style>
 </head>
 <body>
 <h1> Retrieving a Y! Weather RSS Feed</h1>
 <p>
-This example demonstrates how to use the Connection Manager and a PHP proxy -- to work around XMLHttpRequest's same-domain policy -- to retrieve an XML document from http://xml.weather.yahoo.com/forecastrss.
+This example demonstrates how to use the Connection Manager and a PHP proxy -- to work around XMLHttpRequest's same-domain policy &mdash; to retrieve an XML document from http://xml.weather.yahoo.com/forecastrss.
 </p>
 
 <h3>Source file and dependencies</h3>
@@ -132,8 +136,6 @@ echo $feed;
 ?>
 </textarea>
 
-
-
 <form id="wForm">
 <fieldset>
 	<label>Zip Code or Location ID</label> <input type="text" name="zip" value="94089">
@@ -144,7 +146,7 @@ echo $feed;
 <p>Enter *F* for Fahrenheit or *C* for Celsius temperature unit.
 </fieldset>
 <div id="weatherModule"></div>
-<input type="button" value="Get Weather RSS" onclick="getModule()">
+<input type="button" value="Get Weather RSS" onClick="getModule()">
 </form>
 <script>
 var div = document.getElementById('weatherModule');
@@ -172,6 +174,10 @@ function getModule(){
 	var request = YAHOO.util.Connect.asyncRequest('GET', sUrl, { success:successHandler, failure:failureHandler });
 }
 
+</script>
+<script src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 </body>
 </html>

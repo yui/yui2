@@ -1,7 +1,7 @@
 <html>
 	<head>
-        <script src = "../../build/yahoo-min.js" ></script>
-        <script src = "../../build/connection-min.js" ></script>
+        <script src = "../../build/yahoo/yahoo-min.js" ></script>
+        <script src = "../../build/connection/connection-min.js" ></script>
 		<link rel="stylesheet" type="text/css" href="../../docs/assets/dpSyntaxHighlighter.css" />
 	</head>
 <body>
@@ -27,7 +27,7 @@ The following code example provides a step-by-step approach to creating a simple
    * if and when the string contains special characters.
    *
    */
-  var sUrl = "get.php?username=anonymous&userid=0";</textarea></pre>
+  var sUrl = "php/get.php?username=anonymous&userid=0";</textarea></pre>
 
 <h3>The Callback Object</h3>
 <p>Create a callback object to handle the response, and pass an object literal to both success and failure as the argument.</p>
@@ -107,7 +107,7 @@ var callback =
   argument: { foo:"foo", bar:"bar" }
 };
 
-var sUrl = "get.php?username=anonymous&userid=0";
+var sUrl = "php/get.php?username=anonymous&userid=0";
 
 function makeRequest(){
 	var request = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
