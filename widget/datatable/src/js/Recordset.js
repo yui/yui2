@@ -18,7 +18,7 @@ YAHOO.widget.Record = function(oConfigs) {
             }
         }
     }
-    this._nIndex = YAHOO.widget.Record._nCount;
+    this.id = "yui-dt-rec"+YAHOO.widget.Record._nCount;
     YAHOO.widget.Record._nCount++;
 };
 
@@ -27,6 +27,15 @@ YAHOO.widget.Record = function(oConfigs) {
 // Public member variables
 //
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Unique name assigned at instantation.
+ *
+ * @property name
+ * @type string
+ * @private
+ */
+YAHOO.widget.Record.prototype.id = null;
 
 /**
  * Record's associated database or external ID.
@@ -51,15 +60,6 @@ YAHOO.widget.Record.prototype.extId = null;
  * @static
  */
 YAHOO.widget.Record._nCount = 0;
-
-/**
- * Instance index.
- *
- * @property _nIndex
- * @type number
- * @private
- */
-YAHOO.widget.Record.prototype._nIndex = null;
 
 /****************************************************************************/
 /****************************************************************************/
@@ -98,8 +98,8 @@ YAHOO.widget.Recordset.prototype.addRecords = function(aRecords, oColumnset) {
         var record = aRecords[i];
         var oRecord = {};
         if(record.constructor == Array) {
-            for(var j=0; j<oColumnset.columns.length; j++) {
-                oRecord[oColumnset.columns[j].key] = record[j];
+            for(var j=0; j<oColumnset.bottom.length; j++) {
+                oRecord[oColumnset.bottom[j].key] = record[j];
             }
         }
         else oRecord = record;
@@ -119,6 +119,7 @@ YAHOO.widget.Recordset.prototype.addRecords = function(aRecords, oColumnset) {
 YAHOO.widget.Recordset.prototype.addRecord = function(oRecord, i) {
     //TODO: anything else to validate record?
     if(oRecord) {
+        oRecord = new YAHOO.widget.Record(oRecord);
         if(i) {
             this._records.splice(i,0,oRecord);
         }
@@ -188,14 +189,27 @@ YAHOO.widget.Recordset.prototype.removeRecord = function(i, range) {
 };
 
 /**
- * Returns record at the given index, or null.
+ * Returns record with given name, at the given index, or null.
  *
  * @method getRecord
- * @param i {Number} Record index
+ * @param identifier {String || Number} Record name or record index
  * @return {Object} Record object
  */
-YAHOO.widget.Recordset.prototype.getRecord = function(i) {
-    return this._records[i];
+YAHOO.widget.Recordset.prototype.getRecord = function(identifier) {
+    if(identifier) {
+        if(identifier.constructor == String) {
+            for(var i=0; i<this._records.length; i++) {
+                if(this._records[i].id == identifier) {
+                    return this._records[i];
+                }
+            }
+            return null;
+        }
+        else {
+            return this._records[identifier];
+        }
+    }
+    return null;
 };
 
 /**

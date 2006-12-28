@@ -1,0 +1,69 @@
+/*debug css
+.example span, .example .yui-dt-columntext {border:1px solid red;}*/
+
+/*foundational css*/
+td {
+    overflow:hidden;
+}
+
+.yui-dt-headcontainer {
+    position:relative;
+}
+
+.yui-dt-headresizer {
+    position:absolute;
+    margin-right:-6px;
+    right:0;
+    bottom:0;
+    width:6px;
+    height:100%;
+    cursor:w-resize;
+    cursor:col-resize;
+}
+
+.yui-dt-sortable {
+    cursor:hand;
+    cursor:pointer;
+}/*margin:0 4px 0 4px;*/
+
+#scroll  {
+   width:20em;
+   margin-bottom:3em;
+}
+
+
+#scroll  thead {
+   background:#696969; /*  IE needs a bgcolor to hide tbody as it scrolls */
+   border:1px solid #000;
+   display:block; /* enables tbody scrolling for safari and opera */
+}
+
+#scroll  thead th {
+   width:10em; /* any value seems to here, just need something */
+}
+
+#scroll  tbody {
+   display:block; /* enables tbody scrolling for safari and opera */
+   height:10em;
+   overflow:auto; /* for scrolling other than IE */
+}
+
+/* IE specific */
+#scroll  {
+   height:10em;
+   *overflow-y:auto;
+}
+
+#scroll  tbody {
+   *height:auto; /* override the non IE height */
+}
+
+#scroll thead tr {
+   position:relative;  /* IE cant scroll tbody, so trick it into fixing thead */
+}
+
+#scroll tbody td {
+    width:10em;
+}
+
+

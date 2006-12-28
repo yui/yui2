@@ -3,7 +3,8 @@
 /****************************************************************************/
 
 /**
- * The Column class defines and manages attributes of DataTable columns.
+ * The Column class defines and manages attributes of DataTable Columns,
+ * including certain DOM attributes of the associated TH.
  *
  *
  * @class Column
@@ -20,9 +21,8 @@ YAHOO.widget.Column = function(nIndex, oConfigs) {
             }
         }
     }
-    if(!this.key) {
-        YAHOO.log("Invalid column definition: key is required");
-    }
+    this.id = "yui-dt-col"+YAHOO.widget.Column._nCount;
+    YAHOO.widget.Column._nCount++;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -40,12 +40,88 @@ YAHOO.widget.Column = function(nIndex, oConfigs) {
 YAHOO.widget.Column.prototype.id = null;
 
 /**
- * Column's index.
+ * Current offsetWidth of the column (in pixels).
+ *
+ * @property width
+ * @type Number
+ */
+YAHOO.widget.Column.prototype.width = null;
+
+/**
+ * Minimum width the column can support (in pixels). Value is populated only if table
+ * is fixedwidth, null otherwise.
+ *
+ * @property minWidth
+ * @type Number
+ */
+YAHOO.widget.Column.prototype.minWidth = null;
+
+/**
+ * Number of table cells the Column spans.
+ *
+ * @property colspan
+ * @type Number
+ * @default 1
+ */
+YAHOO.widget.Column.prototype.colspan = 1;
+
+/**
+ * Number of table rows the Column spans.
+ *
+ * @property colspan
+ * @type Number
+ * @default 1
+ */
+YAHOO.widget.Column.prototype.rowspan = 1;
+
+/**
+ * Column's index within its Columnset's flat array.
  *
  * @property index
  * @type Number
  */
 YAHOO.widget.Column.prototype.index = null;
+
+/**
+ * Column's chilren within its Columnset's tree hierarchy, or null.
+ *
+ * @property children
+ * @type YAHOO.widget.Column
+ */
+YAHOO.widget.Column.prototype.children = null;
+
+/**
+ * Column's parent within its Columnset's tree hierarchy, or null.
+ *
+ * @property parent
+ * @type YAHOO.widget.Column
+ */
+YAHOO.widget.Column.prototype.parent = null;
+
+/**
+ * Column's previous sibling within its Columnset's tree hierarchy, or null.
+ *
+ * @property prevSibling
+ * @type YAHOO.widget.Column
+ */
+YAHOO.widget.Column.prototype.prevSibling = null;
+
+/**
+ * Column's next sibling within its Columnset's tree hierarchy, or null.
+ *
+ * @property nextSibling
+ * @type YAHOO.widget.Column
+ */
+YAHOO.widget.Column.prototype.nextSibling = null;
+
+/**
+ * True if column is last. //TODO: do this programmatically
+ *
+ * @property isLast
+ * @type Boolean
+ * @default false
+ */
+YAHOO.widget.Column.prototype.isLast = false;
 
 /**
  * Associated database column.
@@ -73,21 +149,22 @@ YAHOO.widget.Column.prototype.type = "string";
 YAHOO.widget.Column.prototype.text = null;
 
 /**
- * Current offsetWidth of the column (in pixels).
+ * If column is editable, defines the type of editor, otherwise null.
  *
- * @property width
- * @type Number
+ * @property editable
+ * @type String
+ * @default false
  */
-YAHOO.widget.Column.prototype.width = null;
+YAHOO.widget.Column.prototype.editable = null;
 
 /**
- * Minimum width the column can support (in pixels). Value is populated only if table
- * is fixedwidth, null otherwise.
+ * True if column is resizeable, false otherwise.
  *
- * @property minWidth
- * @type Number
+ * @property resizeable
+ * @type Boolean
+ * @default false
  */
-YAHOO.widget.Column.prototype.minWidth = null;
+YAHOO.widget.Column.prototype.resizeable = false;
 
 /**
  * True if column is sortable, false otherwise.
@@ -135,33 +212,6 @@ YAHOO.widget.Column.prototype.sortDescHandler = null;
  */
 YAHOO.widget.Column.prototype.sortAscHandler = null;
 
-/**
- * True if column is resizeable, false otherwise.
- *
- * @property resizeable
- * @type Boolean
- * @default false
- */
-YAHOO.widget.Column.prototype.resizeable = false;
-
-/**
- * Number of table cells column spans.
- *
- * @property colspan
- * @type Number
- * @default 1
- */
-YAHOO.widget.Column.prototype.span = 1;
-
-/**
- * True if column is last.
- *
- * @property isLast
- * @type Boolean
- * @default false
- */
-YAHOO.widget.Column.prototype.isLast = false;
-
 /////////////////////////////////////////////////////////////////////////////
 //
 // Public methods
@@ -176,7 +226,7 @@ YAHOO.widget.Column.prototype.isLast = false;
  * @param sMarkup
  * @return {bChecked} True if checkbox is checked.
  */
-YAHOO.widget.Column.checkboxParser = function(sMarkup) {
+YAHOO.widget.Column.prototype.checkboxParser = function(sMarkup) {
     return (sMarkup.indexOf("checked") < 0) ? false : true;
 };
 
@@ -188,7 +238,7 @@ YAHOO.widget.Column.checkboxParser = function(sMarkup) {
  * @param sMarkup
  * @return {nAmount} Floating point amount.
  */
-YAHOO.widget.Column.currencyParser = function(sMarkup) {
+YAHOO.widget.Column.prototype.currencyParser = function(sMarkup) {
     return parseFloat(sMarkup.substring(1));
 };
 
@@ -199,7 +249,7 @@ YAHOO.widget.Column.currencyParser = function(sMarkup) {
  * @param sMarkup
  * @return {oData} Data.
  */
-YAHOO.widget.Column.customParser = function(sMarkup) {
+YAHOO.widget.Column.prototype.customParser = function(sMarkup) {
     return sMarkup;
 };
 
@@ -211,7 +261,7 @@ YAHOO.widget.Column.customParser = function(sMarkup) {
  * @param sMarkup
  * @return {oDate} Date instance.
  */
-YAHOO.widget.Column.dateParser = function(sMarkup) {
+YAHOO.widget.Column.prototype.dateParser = function(sMarkup) {
     var mm = sMarkup.substring(0,sMarkup.indexOf("/"));
     sMarkup = sMarkup.substring(sMarkup.indexOf("/")+1);
     var dd = sMarkup.substring(0,sMarkup.indexOf("/"));
@@ -227,7 +277,7 @@ YAHOO.widget.Column.dateParser = function(sMarkup) {
  * @param sMarkup
  * @return {nFloat} Float number.
  */
-YAHOO.widget.Column.floatParser = function(sMarkup) {
+YAHOO.widget.Column.prototype.floatParser = function(sMarkup) {
     return parseFloat(sMarkup);
 };
 
@@ -238,7 +288,7 @@ YAHOO.widget.Column.floatParser = function(sMarkup) {
  * @param sMarkup
  * @return {sMarkup} HTML markup.
  */
-YAHOO.widget.Column.htmlParser = function(sMarkup) {
+YAHOO.widget.Column.prototype.htmlParser = function(sMarkup) {
     return sMarkup;
 };
 
@@ -249,7 +299,7 @@ YAHOO.widget.Column.htmlParser = function(sMarkup) {
  * @param sMarkup
  * @return {nInt} Int number.
  */
-YAHOO.widget.Column.intParser = function(sMarkup) {
+YAHOO.widget.Column.prototype.intParser = function(sMarkup) {
     return parseInt(sMarkup);
 };
 
@@ -261,7 +311,7 @@ YAHOO.widget.Column.intParser = function(sMarkup) {
  * @param sMarkup
  * @return {bChecked} True if radio is checked.
  */
-YAHOO.widget.Column.radioParser = function(sMarkup) {
+YAHOO.widget.Column.prototype.radioParser = function(sMarkup) {
     return (sMarkup.indexOf("checked") < 0) ? false : true;
 };
 
@@ -274,7 +324,7 @@ YAHOO.widget.Column.radioParser = function(sMarkup) {
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @return {HTML} Markup of formatted checkbox.
  */
-YAHOO.widget.Column.checkboxFormatter = function(bChecked, oRecord) {
+YAHOO.widget.Column.prototype.checkboxFormatter = function(bChecked, oRecord) {
     bChecked = (bChecked) ? " checked" : "";
     return "<input type=\"checkbox\"" + bChecked + ">";
 };
@@ -288,7 +338,7 @@ YAHOO.widget.Column.checkboxFormatter = function(bChecked, oRecord) {
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @return {HTML} Markup of formatted currency.
  */
-YAHOO.widget.Column.currencyFormatter = function(nAmount, oRecord) {
+YAHOO.widget.Column.prototype.currencyFormatter = function(nAmount, oRecord) {
     // Make it dollars
     var markup = "$"+nAmount;
     
@@ -314,7 +364,7 @@ YAHOO.widget.Column.currencyFormatter = function(nAmount, oRecord) {
  * @param oRecord {YAHOO.widget.Record} Record Object
  * @return {HTML} Markup of formatted data.
  */
-YAHOO.widget.Column.customFormatter = function(oData, oRecord) {
+YAHOO.widget.Column.prototype.customFormatter = function(oData, oRecord) {
     return (oData) ? oData.toString() : "";
 };
 
@@ -327,7 +377,7 @@ YAHOO.widget.Column.customFormatter = function(oData, oRecord) {
  * @param oRecord {YAHOO.widget.Record} Record Object
  * @return {HTML} Markup of formatted date.
  */
-YAHOO.widget.Column.dateFormatter = function(oDate, oRecord) {
+YAHOO.widget.Column.prototype.dateFormatter = function(oDate, oRecord) {
     return oDate.getMonth() + "/" + oDate.getDate()  + "/" + oDate.getYear();
 };
 
@@ -340,7 +390,7 @@ YAHOO.widget.Column.dateFormatter = function(oDate, oRecord) {
  * @param oRecord {YAHOO.widget.Record} Record Object
  * @return {HTML} Markup of formatted float.
  */
-YAHOO.widget.Column.floatFormatter = function(nFloat, oRecord) {
+YAHOO.widget.Column.prototype.floatFormatter = function(nFloat, oRecord) {
     return nFloat.toString();
 };
 
@@ -353,7 +403,7 @@ YAHOO.widget.Column.floatFormatter = function(nFloat, oRecord) {
  * @param oRecord {YAHOO.widget.Record} Record Object
  * @return {HTML} Markup.
  */
-YAHOO.widget.Column.htmlFormatter = function(sMarkup, oRecord) {
+YAHOO.widget.Column.prototype.htmlFormatter = function(sMarkup, oRecord) {
     return sMarkup;
 };
 
@@ -366,7 +416,7 @@ YAHOO.widget.Column.htmlFormatter = function(sMarkup, oRecord) {
  * @param oRecord {YAHOO.widget.Record} Record Object
  * @return {HTML} Markup of formatted float.
  */
-YAHOO.widget.Column.intFormatter = function(nInt, oRecord) {
+YAHOO.widget.Column.prototype.intFormatter = function(nInt, oRecord) {
     return nInt.toString();
 };
 
@@ -379,7 +429,7 @@ YAHOO.widget.Column.intFormatter = function(nInt, oRecord) {
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @return {HTML} Markup of formatted radio.
  */
-YAHOO.widget.Column.radioFormatter = function(bChecked, oRecord) {
+YAHOO.widget.Column.prototype.radioFormatter = function(bChecked, oRecord) {
     bChecked = (bChecked) ? " checked" : "";
     return "<input type=\"radio\"" + bChecked + ">";
 };
@@ -406,28 +456,28 @@ YAHOO.widget.Column.prototype.parse = function(sMarkup) {
     var data = null;
     switch(this.type) {
         case "checkbox":
-            data = YAHOO.widget.Column.checkboxParser(sMarkup);
+            data = this.checkboxParser(sMarkup);
             break;
         case "currency":
-            data = YAHOO.widget.Column.currencyParser(sMarkup);
+            data = this.currencyParser(sMarkup);
             break;
         case "custom":
-            data = YAHOO.widget.Column.customParser(sMarkup);
+            data = this.customParser(sMarkup);
             break;
         case "date":
-            data = YAHOO.widget.Column.dateParser(sMarkup);
+            data = this.dateParser(sMarkup);
             break;
         case "float":
-            data = YAHOO.widget.Column.floatParser(sMarkup);
+            data = this.floatParser(sMarkup);
             break;
         case "html":
-            data = YAHOO.widget.Column.htmlParser(sMarkup);
+            data = this.htmlParser(sMarkup);
             break;
         case "int":
-            data = YAHOO.widget.Column.intParser(sMarkup);
+            data = this.intParser(sMarkup);
             break;
         case "radio":
-            data = YAHOO.widget.Column.radioParser(sMarkup);
+            data = this.radioParser(sMarkup);
             break;
        default:
             if(sMarkup) {
@@ -442,39 +492,38 @@ YAHOO.widget.Column.prototype.parse = function(sMarkup) {
  * Outputs markup into the given TD based on given Record.
  *
  * @method format
- * @param elCell {HTMLElement} TD to format for display
+ * @param elCell {HTMLElement} TD to format for display.
  * @param oRecord {YAHOO.widget.Record} Record that holds data for the row.
  * @return {HTML} Markup.
  */
 YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
-    //TODO: switch statement
     var data = oRecord[this.key];
     var type = this.type;
     var markup = "";
     switch(type) {
         case "checkbox":
-            markup = YAHOO.widget.Column.checkboxFormatter(data, oRecord);
+            markup = this.checkboxFormatter(data, oRecord);
             break;
         case "currency":
-            markup = YAHOO.widget.Column.currencyFormatter(data, oRecord);
+            markup = this.currencyFormatter(data, oRecord);
             break;
         case "custom":
-            markup = YAHOO.widget.Column.customFormatter(data, oRecord);
+            markup = this.customFormatter(data, oRecord);
             break;
         case "date":
-            markup = YAHOO.widget.Column.dateFormatter(data, oRecord);
+            markup = this.dateFormatter(data, oRecord);
             break;
         case "float":
-            markup = YAHOO.widget.Column.floatFormatter(data, oRecord);
+            markup = this.floatFormatter(data, oRecord);
             break;
         case "html":
-            markup = YAHOO.widget.Column.htmlFormatter(data, oRecord);
+            markup = this.htmlFormatter(data, oRecord);
             break;
         case "int":
-            markup = YAHOO.widget.Column.intFormatter(data, oRecord);
+            markup = this.intFormatter(data, oRecord);
             break;
         case "radio":
-            markup = YAHOO.widget.Column.radioFormatter(data, oRecord);
+            markup = this.radioFormatter(data, oRecord);
             break;
        default:
             if(data) {
@@ -483,103 +532,163 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
             break;
     }
     
+    elCell.columnKey = this.key;
+    elCell.recordId = oRecord.id;
     elCell.innerHTML = markup;
+    YAHOO.util.Dom.addClass(elCell, "yui-dt-"+this.type);
     
     //TODO: make classname a constant
     if(this.editable) {
-        YAHOO.util.Dom.addClass(elCell,"yui-dt-editable");
+        YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_EDITABLE);
     }
 };
+
+ /**
+ * Outputs editor markup into the given TD based on given Record.
+ *
+ * @method showEditor
+ * @param elCell {HTMLElement} TD to format for display.
+ * @param oRecord {YAHOO.widget.Record} Record that holds data for the row.
+ */
+YAHOO.widget.Column.prototype.showEditor = function(elCell,oRecord) {
+    var oEditor = this.editor;
+    if(!oEditor) {
+        oEditor = new YAHOO.widget.ColumnEditor(this, elCell);
+        this.editor = oEditor;
+    }
+    if(oEditor) {
+        oEditor.show(elCell, oRecord, this);
+    }
+};
+
+ /**
+ * Hides editor markup for the Column.
+ *
+ * @method hideEditor
+ */
+YAHOO.widget.Column.prototype.hideEditor = function() {
+    var oEditor = this.editor;
+    if(oEditor) {
+        oEditor.hide();
+    }
+};
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Internal instance counter.
+ *
+ * @property _nCount
+ * @type Number
+ * @static
+ * @default 0
+ */
+YAHOO.widget.Column._nCount =0;
 
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
 
 /**
- * The Columnset class defines and manages the complete set of DataTable columns,
- * including nested column headers.
+ * The Columnset class defines and manages the complete set of DataTable Columns,
+ * including nested hierarchies, based on an array of columns object literals.
  *
  * @class Columnset
  * @constructor
- * @param aColumnset {Object[]} Array of column object literals.
+ * @param aHeaderCells {Object[]} Array of header cells defined by object literals.
  */
-YAHOO.widget.Columnset = function(aColumnset) {
-    // Array of rows
-    var rows = [];
-    var columns = [];
-    var currentrow = -1;
-    //var numColsInTable = 0;
+YAHOO.widget.Columnset = function(aHeaderCells) {
+//TODO: COL.prevSibling, COL.nextSibling
+    // Tree representation of all Columns
+    var tree = [];
+    // Flat representation of all Columns
+    var flat = [];
+    // Flat representation of Columns in the bottom row of headers
+    var bottom = [];
 
-    // The implementer passes in an array of columns which we will
-    // parse into an array of rows
-    var parseColumnsToRows = function(oneColumnset, parentcell) {
-        currentrow++;
-        // A row is an array of header cells
-        if(!rows[currentrow]) {
-            rows[currentrow] = [];
+    var nodelevel = -1;
+
+    // Internal recursive function to parse columns
+    var parseColumns = function(nodeList, parent) {
+        nodelevel++;
+        // A node level is an array of Columns
+        if(!tree[nodelevel]) {
+            tree[nodelevel] = [];
         }
 
-        // Tracking variable to determine if rowspan > 1
-        var rowHasNested = false;
-        for(var i=0; i<oneColumnset.length; i++) {
-            if(oneColumnset[i].columnset) {
-                rowHasNested = true;
+        // Determine if any nodes at this level have children
+        var nodeLevelHasChildren = false;
+        for(var i=0; i<nodeList.length; i++) {
+            if(nodeList[i].children) {
+                nodeLevelHasChildren = true;
             }
         }
 
-        // Parse each column for attributes and nested header cells
-        for(var i=0; i<oneColumnset.length; i++) {
-            // Current header cell cell
-            var cell = oneColumnset[i];
+        // Parse each node for attributes and any children
+        for(var i=0; i<nodeList.length; i++) {
+            // A node is a Column
+            var oColumn = new YAHOO.widget.Column(tree.length, nodeList[i]);
+            flat.push(oColumn);
+            
+            // Assign parent, if any
+            if(parent) {
+                oColumn.parent = parent;
+            }
+
             // Start with default values
-            cell.rowspan = 1;
-            cell.colspan = 1;
+            oColumn.rowspan = 1;
+            oColumn.colspan = 1;
 
-            // The header cell may have a columnset to define subheaders
-            var subcolumnset = cell.columnset;
-            if(subcolumnset) {
-                // Subheaders increase the colspan of the header cell...
-                cell.colspan = subcolumnset.length;
-                //YAHOO.log("cell"+cell.text + cell.colspan, "warn");
-                // ...as well as its parent header cell (if any)
-                if (parentcell && parentcell.colspan) {
-                    parentcell.colspan += subcolumnset.length-1;
-                    YAHOO.log("parent"+parentcell.text + parentcell.colspan,"warn");
+            // Column may have a children that defines children
+            var children = oColumn.children;
+            if(children) {
+                // Children increase colspan of the Column
+                oColumn.colspan = children.length;
+
+                // Children increase colspan of the Column's parent
+                if (parent && parent.colspan) {
+                    parent.colspan += children.length-1;
                 }
-                if(!rows[currentrow+1]) {
-                    rows[currentrow+1] = [];
+                
+                // Children must also be parsed
+                if(!tree[nodelevel+1]) {
+                    tree[nodelevel+1] = [];
                 }
-                parseColumnsToRows(subcolumnset, cell);
+                parseColumns(children, oColumn);
             }
-            // This header cell does not have subheaders, but other header cells on this row seem to
-            else if(rowHasNested) {
-                cell.rowspan = 2;
-                columns.push(new YAHOO.widget.Column(columns.length, cell));
-                //numColsInTable++;
+            
+            // This Column does not have children,
+            // but other Columns at this level do
+            else if(nodeLevelHasChildren) {
+                // Children of siblings increase the rowspan of the Column
+                oColumn.rowspan = 2;
+                bottom.push(oColumn);
             }
-            // This header cell does not have subheaders, and this entire row does not have any subheaders
+            // This entire node level does not have any children
             else {
-                columns.push(new YAHOO.widget.Column(columns.length, cell));
-                //numColsInTable++;
+                bottom.push(oColumn);
             }
 
-            // Add the header cell to the row array
-            rows[currentrow].push(new YAHOO.widget.Column(rows.length, cell));
+            // Add the Column to the row array
+            tree[nodelevel].push(oColumn);
         }
-        currentrow--;
+        nodelevel--;
     };
 
     // Do the parsing
-    if(aColumnset.length > 0) {
-        parseColumnsToRows(aColumnset);
+    if(aHeaderCells.length > 0) {
+        parseColumns(aHeaderCells);
     }
 
-    var lastRowCellsLn = rows[rows.length-1].length;
-    rows[rows.length-1][lastRowCellsLn-1].isLast =
-    this.rows = rows;
-    columns[columns.length-1].isLast = true;
-    this.columns = columns;
-    //this.numColsInTable = numColsInTable;
+    //var lastRowCellsLn = tree[tree.length-1].length;
+    //tree[tree.length-1][lastRowCellsLn-1].isLast = true
+    this.tree = tree;
+    this.flat = flat;
+    //bottom[bottom.length-1].isLast = true;
+    this.bottom = bottom;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -589,19 +698,387 @@ YAHOO.widget.Columnset = function(aColumnset) {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Array of rows.
+ * Tree representation of column hierarchy.
  *
- * @property rows
- * @type Object[]
+ * @property tree
+ * @type YAHOO.widget.Column[]
  * @default []
  */
-YAHOO.widget.Columnset.prototype.rows = [];
+YAHOO.widget.Columnset.prototype.tree = [];
 
 /**
- * Array of columns.
+ * Flat array of all columns.
  *
- * @property columns
- * @type Object[]
+ * @property flat
+ * @type YAHOO.widget.Column[]
  * @default []
  */
-YAHOO.widget.Columnset.prototype.columns = [];
+YAHOO.widget.Columnset.prototype.flat = [];
+
+/**
+ * Flat array of columns that comprise the bottom row of headers.
+ *
+ * @property bottom
+ * @type YAHOO.widget.Column[]
+ * @default []
+ */
+YAHOO.widget.Columnset.prototype.bottom = [];
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+/**
+ * The ColumnEditor defines and manages inline editing functionality for a
+ * DataTable Column.
+ *
+ * @class ColumnEditor
+ * @constructor
+ * @param oColumn {YAHOO.widget.Column} DataTable Column instance.
+ * @parem sType {String} Type identifier
+ */
+YAHOO.widget.ColumnEditor = function(oColumn, elCell) {
+    this.column = oColumn;
+    
+    var container = document.body.appendChild(document.createElement("div"));
+    container.style.position = "absolute";
+    container.style.zIndex = 9000;
+    container.id = "yui-dt-coled" + YAHOO.widget.ColumnEditor._nCount;
+    this.container = container;
+
+    switch(oColumn.editable) {
+        case "textbox":
+            this.createTextboxEditor();
+            break;
+        default:
+            break;
+    }
+    
+    YAHOO.widget.ColumnEditor._nCount++;
+};
+
+YAHOO.extend(YAHOO.widget.ColumnEditor, YAHOO.util.Element);
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+ /**
+ * Reference to the container DOM element for the ColumnEditor.
+ *
+ * @property container
+ * @type HTMLElement
+ */
+YAHOO.widget.ColumnEditor.prototype.container = null;
+
+ /**
+ * Reference to the Column object for the ColumnEditor.
+ *
+ * @property column
+ * @type YAHOO.widget.Column
+ */
+YAHOO.widget.ColumnEditor.prototype.column = null;
+
+ /**
+ * Reference to form element(s) of the ColumnEditor.
+ *
+ * @property input
+ * @type HTMLElement || HTMLElement[]
+ */
+YAHOO.widget.ColumnEditor.prototype.input = null;
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
+ /**
+ * Shows ColumnEditor.
+ *
+ * @method show
+ */
+YAHOO.widget.ColumnEditor.prototype.show = function(elCell, oRecord, oColumn) {
+    switch(oColumn.editable) {
+        case "textbox":
+            this.showTextboxEditor(elCell, oRecord, oColumn);
+            break;
+        default:
+            break;
+    }
+}
+
+ /**
+ * Creates a textbox editor in the DOM.
+ *
+ * @method createTextboxEditor
+ * @return {HTML} ???
+ */
+YAHOO.widget.ColumnEditor.prototype.createTextboxEditor = function() {
+    var elTextbox = this.container.appendChild(document.createElement("input"));
+    // For FF bug 236791
+    elTextbox.setAttribute("autocomplete","off");
+    this.input = elTextbox;
+};
+
+ /**
+ * Shows ColumnEditor
+ *
+ * @method showTextboxEditor
+ */
+YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord, oColumn) {
+    // Size and value
+    this.input.style.width = (parseInt(elCell.offsetWidth)-7) + "px";
+    this.input.style.height = (parseInt(elCell.offsetHeight)-7) + "px";
+    this.input.value = oRecord[oColumn.key];
+    
+    // Position and show
+    var x = parseInt(YAHOO.util.Dom.getX(elCell))+1 || 0;
+    var y = parseInt(YAHOO.util.Dom.getY(elCell))+1 || 0;
+    this.container.style.left = x + "px";
+    this.container.style.top = y + "px";
+    this.container.style.display = "block";
+    
+    this.input.focus();
+    this.input.select();
+};
+
+ /**
+ * Hides ColumnEditor
+ *
+ * @method hide
+ */
+YAHOO.widget.ColumnEditor.prototype.hide = function() {
+    this.container.style.display = "none";
+};
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Internal instance counter.
+ *
+ * @property _nCount
+ * @type Number
+ * @static
+ * @default 0
+ */
+YAHOO.widget.ColumnEditor._nCount =0;
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+/**
+ * Sort utility class to support column sorting.
+ *
+ * @class Sort
+ * @static
+ */
+
+YAHOO.util.Sort = {};
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
+ /**
+ * Comparator function for sort in ascending order. String sorting is case insensitive.
+ *
+ * @method compareAsc
+ * @param a {object} First sort argument.
+ * @param b {object} Second sort argument.
+ */
+YAHOO.util.Sort.compareAsc = function(a, b) {
+    //TODO: is typeof better or is constructor property better?
+    if(a.constructor == String) {
+        a = a.toLowerCase();
+    }
+    if(b.constructor == String) {
+        b = b.toLowerCase();
+    }
+    if(a < b) {
+        return -1;
+    }
+    else if (a > b) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+};
+
+ /**
+ * Comparator function for sort in descending order. String sorting is case insensitive.
+ *
+ * @method compareDesc
+ * @param a {object} First sort argument.
+ * @param b {object} Second sort argument.
+ */
+YAHOO.util.Sort.compareDesc = function(a, b) {
+    //TODO: is typeof better or is constructor property better?
+    if(a.constructor == String) {
+        a = a.toLowerCase();
+    }
+    if(b.constructor == String) {
+        b = b.toLowerCase();
+    }
+    if(a < b) {
+        return 1;
+    }
+    else if (a > b) {
+        return -1;
+    }
+    else {
+        return 0;
+    }
+};
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+/**
+ * WidthResizer subclasses DragDrop to support resizeable columns.
+ *
+ * @class WidthResizer
+ * @extends YAHOO.util.DragDrop
+ * @constructor
+ * @param colElId {string} ID of the column element being resized
+ * @param handleElId {string} ID of the handle element that causes the resize
+ * @param sGroup {string} Group name of related DragDrop items
+ */
+YAHOO.util.WidthResizer = function(oDataTable, colId, handleId, sGroup, config) {
+    if (colId) {
+        this.cell = YAHOO.util.Dom.get(colId);
+        this.init(handleId, sGroup, config);
+        //this.initFrame();
+        this.datatable = oDataTable;
+        this.setYConstraint(0,0);
+    }
+    else {
+        YAHOO.log("Column resizer could not be created due to invalid colElId","warn");
+    }
+};
+
+YAHOO.extend(YAHOO.util.WidthResizer, YAHOO.util.DD);
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public event handlers
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Handles mousedown events on the column resizer.
+ *
+ * @method onMouseDown
+ * @param e {string} The mousedown event
+ */
+YAHOO.util.WidthResizer.prototype.onMouseDown = function(e) {
+    this.startWidth = this.cell.offsetWidth;
+    this.startPos = YAHOO.util.Dom.getX(this.getDragEl());
+
+    if(this.datatable.fixedwidth) {
+        var cellText = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_COLUMNTEXT,"span",this.cell)[0];
+        this.minWidth = cellText.offsetWidth + 6;
+        var sib = this.cell.nextSibling;
+        var sibCellText = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_COLUMNTEXT,"span",sib)[0];
+        this.sibMinWidth = sibCellText.offsetWidth + 6;
+//!!
+        var left = ((this.startWidth - this.minWidth) < 0) ? 0 : (this.startWidth - this.minWidth);
+        var right = ((sib.offsetWidth - this.sibMinWidth) < 0) ? 0 : (sib.offsetWidth - this.sibMinWidth);
+        this.setXConstraint(left, right);
+        YAHOO.log("cellstartwidth:" + this.startWidth,"time");
+        YAHOO.log("cellminwidth:" + this.minWidth,"time");
+        YAHOO.log("sibstartwidth:" + sib.offsetWidth,"time");
+        YAHOO.log("sibminwidth:" + this.sibMinWidth,"time");
+        YAHOO.log("l:" + left + " AND r:" + right,"time");
+    }
+
+};
+
+/**
+ * Handles mouseup events on the column resizer.
+ *
+ * @method onMouseUp
+ * @param e {string} The mouseup event
+ */
+YAHOO.util.WidthResizer.prototype.onMouseUp = function(e) {
+    //TODO: replace the resizer where it belongs:
+    var resizeStyle = YAHOO.util.Dom.get(this.handleElId).style;
+    resizeStyle.left = "auto";
+    resizeStyle.right = 0;
+    resizeStyle.marginRight = "-6px";
+    resizeStyle.width = "6px";
+    //.yui-dt-headresizer {position:absolute;margin-right:-6px;right:0;bottom:0;width:6px;height:100%;cursor:w-resize;cursor:col-resize;}
+
+
+    //var cells = this.datatable._elTable.tHead.rows[this.datatable._elTable.tHead.rows.length-1].cells;
+    //for(var i=0; i<cells.length; i++) {
+        //cells[i].style.width = "5px";
+    //}
+
+    //TODO: set new columnset width values
+    this.datatable.fireEvent("columnResizeEvent",{datatable:this.datatable,target:YAHOO.util.Dom.get(this.id)});
+};
+
+/**
+ * Handles drag events on the column resizer.
+ *
+ * @method onDrag
+ * @param e {string} The drag event
+ */
+YAHOO.util.WidthResizer.prototype.onDrag = function(e) {
+    var newPos = YAHOO.util.Dom.getX(this.getDragEl());//YAHOO.log("newpos:"+newPos,"warn");//YAHOO.util.Event.getPageX(e);
+    var offsetX = newPos - this.startPos;//YAHOO.log("offset:"+offsetX,"warn");
+    YAHOO.log("startwidth:"+this.startWidth + " and offset:"+offsetX,"warn");
+    var newWidth = this.startWidth + offsetX;//YAHOO.log("newwidth:"+newWidth,"warn");
+
+    if(newWidth < this.minWidth) {
+        newWidth = this.minWidth;
+    }
+
+    // Resize the column
+    var oDataTable = this.datatable;
+    var elCell = this.cell;
+
+    //YAHOO.log("newwidth" + newWidth,"warn");
+    //YAHOO.log(newWidth + " AND "+ elColumn.offsetWidth + " AND " + elColumn.id,"warn");
+
+    // Resize the other columns
+    if(oDataTable.fixedwidth) {
+        // Moving right or left?
+        var sib = elCell.nextSibling;
+        var sibIndex = elCell.index + 1;
+        var sibnewwidth = sib.offsetWidth - offsetX;
+        if(sibnewwidth < this.sibMinWidth) {
+            sibnewwidth = this.sibMinWidth;
+        }
+        for(var i=0; i<oDataTable._oColumnset.length; i++) {
+            if((i != elCell.index) &&  (i!=sibIndex)) {
+                YAHOO.util.Dom.get(oDataTable._oColumnset.bottom[i].id).style.width = oDataTable._oColumnset.bottom[i].width + "px";
+            }
+        }
+        sib.style.width = sibnewwidth;
+        elCell.style.width = newWidth + "px";
+        oDataTable._oColumnset.bottom[sibIndex].width = sibnewwidth;
+        oDataTable._oColumnset.bottom[elCell.index].width = newWidth;
+
+    }
+    else {
+        elCell.style.width = newWidth + "px";
+    }
+
+};
+
+
