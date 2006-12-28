@@ -2,7 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.12.1
+Version 0.12.2
 */
 
 /**
@@ -76,7 +76,7 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 
 	this.showMaskEvent.subscribe(function() {
 		var checkFocusable = function(el) {
-			if ((el.tagName == "A" || el.tagName == "BUTTON" || el.tagName == "SELECT" || el.tagName == "INPUT" || el.tagName == "TEXTAREA" || el.tagName == "FORM") && el.type != "hidden") {
+			if ((el.tagName == "A" || el.tagName == "BUTTON" || el.tagName == "SELECT" || el.tagName == "INPUT" || el.tagName == "TEXTAREA") && el.type != "hidden") {
 				if (! YAHOO.util.Dom.isAncestor(me.element, el)) {
 					YAHOO.util.Event.addListener(el, "focus", doBlur, el, true);
 					return true;

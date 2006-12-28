@@ -208,7 +208,7 @@ YAHOO.widget.Dialog.prototype.registerForm = function() {
 	this.firstFormElement = function() {
 		for (var f=0;f<form.elements.length;f++ ) {
 			var el = form.elements[f];
-			if (el.focus) {
+			if (el.focus && ! el.disabled) {
 				if (el.type && el.type != "hidden") {
 					return el;
 				}
@@ -220,7 +220,7 @@ YAHOO.widget.Dialog.prototype.registerForm = function() {
 	this.lastFormElement = function() {
 		for (var f=form.elements.length-1;f>=0;f-- ) {
 			var el = form.elements[f];
-			if (el.focus) {
+			if (el.focus && ! el.disabled) {
 				if (el.type && el.type != "hidden") {
 					return el;
 				}
@@ -252,6 +252,44 @@ YAHOO.widget.Dialog.prototype.registerForm = function() {
 };
 
 // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
+
+/**
+* The default event handler fired when the "close" property is changed. The method controls the appending or hiding of the close icon at the top right of the Dialog.
+* @method configClose
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+*/
+YAHOO.widget.Dialog.prototype.configClose = function(type, args, obj) {
+	var val = args[0];
+
+	var doCancel = function(e, obj) {
+		obj.cancel();
+	};
+
+	if (val) {
+		if (! this.close) {
+			this.close = document.createElement("DIV");
+			YAHOO.util.Dom.addClass(this.close, "close");
+
+			if (this.isSecure) {
+				YAHOO.util.Dom.addClass(this.close, "secure");
+			} else {
+				YAHOO.util.Dom.addClass(this.close, "nonsecure");
+			}
+
+			this.close.innerHTML = "&#160;";
+			this.innerElement.appendChild(this.close);
+			YAHOO.util.Event.addListener(this.close, "click", doCancel, this);	
+		} else {
+			this.close.style.display = "block";
+		}
+	} else {
+		if (this.close) {
+			this.close.style.display = "none";
+		}
+	}
+};
 
 /**
 * The default event handler for the "buttons" configuration property

@@ -486,7 +486,6 @@ YAHOO.widget.Module.prototype = {
 	* @param {Object} obj	The scope object passed to the handler
 	*/
 	onDomResize : function(e, obj) { 
-
         var nLeft = -1 * this.resizeMonitor.offsetWidth,
             nTop = -1 * this.resizeMonitor.offsetHeight;
         
@@ -760,7 +759,7 @@ YAHOO.widget.Module.prototype = {
 		if (monitor) {
 			this.initResizeMonitor();
 		} else {
-			YAHOO.util.Event.removeListener(this.resizeMonitor, "resize", this.onDomResize);
+			YAHOO.widget.Module.textResizeEvent.unsubscribe(this.onDomResize, this, true);
 			this.resizeMonitor = null;
 		}
 	}
