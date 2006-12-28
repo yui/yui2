@@ -267,7 +267,7 @@ YAHOO.widget.DateMath = {
 	},
 
 	/**
-	* Clears the time fields from a given date, effectively setting the time to midnight.
+	* Clears the time fields from a given date, effectively setting the time to 12 noon.
 	* @method clearTime
 	* @param {Date}	date	The JavaScript Date for which the time fields will be cleared
 	* @return {Date}		The JavaScript Date cleared of all time fields
