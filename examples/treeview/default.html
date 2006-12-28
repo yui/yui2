@@ -77,6 +77,7 @@
 
 
 <li><a href="folders.html?mode=dist">Folder view</a></li>
+<li><a href="customicons.html?mode=dist">Custom icons</a></li>
 <li><a href="menu.html?mode=dist">Menu</a></li>
 <li><a href="html.html?mode=dist">HTML node</a></li>
 <li><a href="multi.html?mode=dist">Multiple trees, different styles</a></li>
@@ -149,10 +150,14 @@
 
 <script type="text/javascript">
 //<![CDATA[
+
+        function blah() {
+            alert("blah");
+        }
+        YAHOO.util.Event.on(window, "load", blah);
+
 var tree;
 (function() {
-
-    var nodeIndex, nodes=[], callback = null;
 
     function treeInit() {
         buildRandomTextNodeTree();

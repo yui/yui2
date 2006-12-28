@@ -463,7 +463,7 @@ YAHOO.widget.TreeView.prototype = {
     removeChildren: function(node) { 
         this.logger.log("Removing children for " + node);
         while (node.children.length) {
-             this._deleteNode(node.children[0]);
+            this._deleteNode(node.children[0]);
         }
 
         node.childrenRendered = false;

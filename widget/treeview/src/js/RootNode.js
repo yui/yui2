@@ -33,6 +33,9 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
 
     loadComplete: function() { 
         this.tree.draw();
-    }
+    },
+
+    collapse: function() {},
+    expand: function() {}
 
 });
