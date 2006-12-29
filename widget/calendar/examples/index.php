@@ -80,7 +80,7 @@ if ($_section && $_step) {
 		<div id="ft">&nbsp;</div>
 	</div>	
 
-	<script src="/docs/assets/dpSyntaxHighlighter.js"></script>
+	<script src="<?=$docPath?>/assets/dpSyntaxHighlighter.js"></script>
 	<script language="javascript"> 
 		dp.SyntaxHighlighter.HighlightAll('code'); 
 	</script>

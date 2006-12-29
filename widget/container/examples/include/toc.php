@@ -25,7 +25,7 @@ foreach ($sections as $key => $data) {
 		$selected = true;
 	}
 
-	print "<li class=\"$itemClass\"><a href=\"$tocpath$key/1\">$name</a><a title=\"Printer-Friendly Version\" class=\"printer\" href=\"print\" target=\"_blank\">&nbsp</a></li>\n";
+	print "<li class=\"$itemClass\"><a href=\"$tocpath$key/1\">$name</a></li>\n";
 
 	if ($selected) {
 		foreach ($steps as $stepNumber => $stepName) {

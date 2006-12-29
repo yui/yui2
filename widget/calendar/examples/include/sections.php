@@ -89,7 +89,7 @@ $sections = array(
 															2 => "Functional Example"
 														),
 										"desc" => "Configure and Calendar and CalendarGroup for use as a popup layer that is displayed above the document."
-									  ),
+									  )/*,
 				"flickr" => array(
 										"name" => "Complete Example: FlickrCal",
 										"pages" => array(
@@ -97,6 +97,6 @@ $sections = array(
 															2 => "Functional Example"
 														),
 										"desc" => "Build a functional Calendar application that displays popular photos from flickr for each day on the Calendar using Panel and Connection Manager."
-									  )
+									  )*/
 			);
 ?>
