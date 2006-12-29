@@ -41,6 +41,14 @@ $sections = array(
 														),
 										"desc" => "Create and display a simple draggable content Panel."
 									  ),
+				"skin" => array(
+										"name" => "Panel: Skinning",
+										"pages" => array(
+															1 => "Skinning the Panel",
+															2 => "Functional Example"
+														),
+										"desc" => "Learn how to use Panel's CSS hooks to customize its look and feel."
+									  ),
 				"panelskin" => array(
 										"name" => "Panel: Advanced Skinning using CSS",
 										"pages" => array(
