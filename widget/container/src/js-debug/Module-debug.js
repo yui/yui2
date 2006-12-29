@@ -2,7 +2,7 @@
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.12.1
+Version 0.12.2
 */
 
 /**
@@ -763,7 +763,7 @@ YAHOO.widget.Module.prototype = {
 		if (monitor) {
 			this.initResizeMonitor();
 		} else {
-			YAHOO.util.Event.removeListener(this.resizeMonitor, "resize", this.onDomResize);
+			YAHOO.widget.Module.textResizeEvent.unsubscribe(this.onDomResize, this, true);
 			this.resizeMonitor = null;
 		}
 	}
