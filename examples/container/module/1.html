@@ -31,6 +31,7 @@
 <li class="item"><a href="../tooltip/1.html">Tooltip: Quickstart</a></li>
 <li class="item"><a href="../tooltipmulti/1.html">Tooltip: One Tooltip, Many Elements</a></li>
 <li class="item"><a href="../panel/1.html">Panel: Quickstart</a></li>
+<li class="item"><a href="../skin/1.html">Panel: Skinning</a></li>
 <li class="item"><a href="../panelskin/1.html">Panel: Advanced Skinning using CSS</a></li>
 <li class="item"><a href="../panelwait/1.html">Panel: Creating a 'Loading' Popup</a></li>
 <li class="item"><a href="../panelphotobox/1.html">PhotoBox: Subclassing Panel</a></li>
@@ -56,8 +57,8 @@
 
 			<textarea name="code" class="HTML" cols="60" rows="1">
 				<script type="text/javascript" src="yahoo.js"></script>
-				<script type="text/javascript" src="event.js"></script>
-				<script type="text/javascript" src="dom.js"></script>
+				<script type="text/javascript" src="event.js" ></script>
+				<script type="text/javascript" src="dom.js" ></script>
 
 				<script type="text/javascript" src="container_core.js"></script>
 			</textarea>
@@ -77,20 +78,22 @@
 			<p>Next, we'll build the JavaScript for our Modules and wrap it in a function to be executed when the window is finished loading. The Module called "module1" will be associated with our existing markup;  "module2" will be created dynamically from script. In this tutorial, we  pass to the Module constructor the one required argument: the id associated with that Module's container element.</p>
 
 			<textarea name="code" class="JScript" cols="60" rows="1">
-				YAHOO.namespace("example.container");
+				<script>
+					YAHOO.namespace("example.container");
 
-				function init() {
-					YAHOO.example.container.module1 = new YAHOO.widget.Module("module1");
-					YAHOO.example.container.module1.render();
+					function init() {
+						YAHOO.example.container.module1 = new YAHOO.widget.Module("module1");
+						YAHOO.example.container.module1.render();
 
-					YAHOO.example.container.module2 = new YAHOO.widget.Module("module2");
-					YAHOO.example.container.module2.setHeader("Module #2 from Script");
-					YAHOO.example.container.module2.setBody("This is a dynamically generated Module.");
-					YAHOO.example.container.module2.setFooter("End of Module #2");
-					YAHOO.example.container.module2.render(document.body);
-				}
+						YAHOO.example.container.module2 = new YAHOO.widget.Module("module2");
+						YAHOO.example.container.module2.setHeader("Module #2 from Script");
+						YAHOO.example.container.module2.setBody("This is a dynamically generated Module.");
+						YAHOO.example.container.module2.setFooter("End of Module #2");
+						YAHOO.example.container.module2.render(document.body);
+					}
 
-				YAHOO.util.Event.addListener(window, "load", init);
+					YAHOO.util.Event.addListener(window, "load", init);
+				</script>
 			</textarea>
 
 			<p>Note that to avoid using the global variable space, we are placing our example Modules into the YAHOO.example.container namespace. For more information about namespacing, see the <a href="http://developer.yahoo.com/yui/yahoo/">YAHOO Global object</a>.</p>
@@ -122,7 +125,7 @@
 					<button id="hide2">Hide module2</button>
 				</div>
 			</textarea>
-
+			
 			<p></p>
 
 			<textarea name="code" class="JScript" cols="60" rows="1">
