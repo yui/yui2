@@ -36,7 +36,7 @@ YAHOO.util.AnimMgr = new function() {
     * @type Int
     * 
     */
-   this.fps = 200;
+   this.fps = 1000;
 
    /** 
     * Interval delay in milliseconds, defaults to fastest possible.
