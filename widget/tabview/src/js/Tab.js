@@ -13,7 +13,7 @@
      * represents the TabView. An element will be created if none provided.
      * @param {Object} properties A key map of initial properties
      */
-    Tab = function(el, attr) {
+    var Tab = function(el, attr) {
         attr = attr || {};
         if (arguments.length == 1 && !Lang.isString(el) && !el.nodeName) {
             attr = el;
@@ -506,3 +506,4 @@
      * @event contentChange
      */
 })();
+
