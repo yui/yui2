@@ -5,7 +5,6 @@ http://developer.yahoo.net/yui/license.txt
 */
 
 /**
- * 84.5% for !IE, keywords for IE to preserve user font-size adjustment
  * Percents could work for IE, but for backCompat purposes, we are using keywords.
  * x-small is for IE6/7 quirks mode.
  * 

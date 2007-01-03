@@ -6,7 +6,6 @@ version: 0.11.0
 */
 
 /**
- * 84.5% for !IE, keywords for IE
  * Percents could work for IE, but for backCompat purposes, we are using keywords.
  * x-small is for IE < 6 and IE6 quirks mode.
  * 
