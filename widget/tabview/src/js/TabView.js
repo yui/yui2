@@ -3,6 +3,7 @@
     /**
      * The tabview module provides a widget for managing content bound to tabs.
      * @module tabview
+     * @requires yahoo, dom, event
      *
      */
     /**

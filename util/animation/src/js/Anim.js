@@ -7,6 +7,7 @@ http://developer.yahoo.net/yui/license.txt
 /**
  * The animation module provides allows effects to be added to HTMLElements.
  * @module animation
+ * @requires yahoo, event, dom
  */
 
 /**
