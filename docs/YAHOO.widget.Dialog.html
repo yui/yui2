@@ -339,6 +339,66 @@
                                     </div>
                                     <hr />
                                     <h4>
+                                        <a name="configClose">configClose</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configClose</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler fired when the "close" property is changed. The method controls the appending or hiding of the close icon at the top right of the Dialog.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
                                         <a name="configPostMethod">configPostMethod</a></h4>
                                     <div class="detail">
                                         <code>
@@ -1279,7 +1339,7 @@
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
-                                <li class=""><a href="module_Connection.html">Connection</a></li>
+                                <li class=""><a href="module_connection.html">connection</a></li>
 
                                 <li class="selected"><a href="module_container.html">container</a></li>
 
@@ -1367,6 +1427,9 @@
                                 </li>
                                 <li><!--<code>void</code>-->
                                 <a href="#configButtons">configButtons</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configClose">configClose</a>
                                 </li>
                                 <li><!--<code>void</code>-->
                                 <a href="#configPostMethod">configPostMethod</a>

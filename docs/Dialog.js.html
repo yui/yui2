@@ -29,7 +29,7 @@
 <span class="c">Copyright (c) 2006, Yahoo! Inc. All rights reserved.</span>
 <span class="c">Code licensed under the BSD License:</span>
 <span class="c">http://developer.yahoo.net/yui/license.txt</span>
-<span class="c">Version 0.12.1</span>
+<span class="c">Version 0.12.2</span>
 <span class="c">*/</span>
 
 <span class="c">/**</span>
@@ -235,7 +235,7 @@
 	<span class="k">this</span><span class="o">.</span><span class="nx">firstFormElement</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">f</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">f</span><span class="o">&lt;</span><span class="nx">form</span><span class="o">.</span><span class="nx">elements</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">f</span><span class="o">++</span> <span class="o">)</span> <span class="o">{</span>
 			<span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">form</span><span class="o">.</span><span class="nx">elements</span><span class="o">[</span><span class="nx">f</span><span class="o">];</span>
-			<span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">focus</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">focus</span> <span class="o">&amp;&amp;</span> <span class="o">!</span> <span class="nx">el</span><span class="o">.</span><span class="nx">disabled</span><span class="o">)</span> <span class="o">{</span>
 				<span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">type</span> <span class="o">&amp;&amp;</span> <span class="nx">el</span><span class="o">.</span><span class="nx">type</span> <span class="o">!=</span> <span class="s2">&quot;hidden&quot;</span><span class="o">)</span> <span class="o">{</span>
 					<span class="k">return</span> <span class="nx">el</span><span class="o">;</span>
 				<span class="o">}</span>
@@ -247,7 +247,7 @@
 	<span class="k">this</span><span class="o">.</span><span class="nx">lastFormElement</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">f</span><span class="o">=</span><span class="nx">form</span><span class="o">.</span><span class="nx">elements</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span><span class="nx">f</span><span class="o">&gt;=</span><span class="m">0</span><span class="o">;</span><span class="nx">f</span><span class="o">--</span> <span class="o">)</span> <span class="o">{</span>
 			<span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">form</span><span class="o">.</span><span class="nx">elements</span><span class="o">[</span><span class="nx">f</span><span class="o">];</span>
-			<span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">focus</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">focus</span> <span class="o">&amp;&amp;</span> <span class="o">!</span> <span class="nx">el</span><span class="o">.</span><span class="nx">disabled</span><span class="o">)</span> <span class="o">{</span>
 				<span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">type</span> <span class="o">&amp;&amp;</span> <span class="nx">el</span><span class="o">.</span><span class="nx">type</span> <span class="o">!=</span> <span class="s2">&quot;hidden&quot;</span><span class="o">)</span> <span class="o">{</span>
 					<span class="k">return</span> <span class="nx">el</span><span class="o">;</span>
 				<span class="o">}</span>
@@ -280,6 +280,44 @@
 
 <span class="c">// BEGIN BUILT-IN PROPERTY EVENT HANDLERS //</span>
 <span class="c"></span>
+<span class="c">/**</span>
+<span class="c">* The default event handler fired when the &quot;close&quot; property is changed. The method controls the appending or hiding of the close icon at the top right of the Dialog.</span>
+<span class="c">* @method configClose</span>
+<span class="c">* @param {String} type	The CustomEvent type (usually the property name)</span>
+<span class="c">* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.</span>
+<span class="c">* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Dialog</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">configClose</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">args</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="nx">args</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+
+	<span class="k">var</span> <span class="nx">doCancel</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nx">obj</span><span class="o">.</span><span class="nx">cancel</span><span class="o">();</span>
+	<span class="o">};</span>
+
+	<span class="k">if</span> <span class="o">(</span><span class="nx">val</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(!</span> <span class="k">this</span><span class="o">.</span><span class="nx">close</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">close</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;DIV&quot;</span><span class="o">);</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">close</span><span class="o">,</span> <span class="s2">&quot;close&quot;</span><span class="o">);</span>
+
+			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isSecure</span><span class="o">)</span> <span class="o">{</span>
+				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">close</span><span class="o">,</span> <span class="s2">&quot;secure&quot;</span><span class="o">);</span>
+			<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">close</span><span class="o">,</span> <span class="s2">&quot;nonsecure&quot;</span><span class="o">);</span>
+			<span class="o">}</span>
+
+			<span class="k">this</span><span class="o">.</span><span class="nx">close</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&amp;#160;&quot;</span><span class="o">;</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">innerElement</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">close</span><span class="o">);</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">close</span><span class="o">,</span> <span class="s2">&quot;click&quot;</span><span class="o">,</span> <span class="nx">doCancel</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>	
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">close</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;block&quot;</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">close</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">close</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
 <span class="c">/**</span>
 <span class="c">* The default event handler for the &quot;buttons&quot; configuration property</span>
 <span class="c">* @method configButtons</span>
@@ -587,7 +625,7 @@
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
-                                <li class=""><a href="module_Connection.html">Connection</a></li>
+                                <li class=""><a href="module_connection.html">connection</a></li>
 
                                 <li class="selected"><a href="module_container.html">container</a></li>
 
