@@ -136,7 +136,10 @@ YAHOO.util.Easing = {
             return b;
         }
         if ( (t /= d) == 1 ) {
-            return b+c;  if (!p) p=d*.3;
+            return b+c;
+        }
+        if (!p) {
+            p=d*.3;
         }
         
     	if (!a || a < Math.abs(c)) {
