@@ -9,6 +9,7 @@
  * remote data such as data retrieved through an XHR connection.
  *
  * @class DataSource
+ * @uses YAHOO.util.EventProvider
  * @constructor
  * @param oLiveData {Object} Pointer to live database
  * @param oDataDriver {Object} DataDriver object makes connections to the live database
@@ -19,6 +20,8 @@ YAHOO.widget.DataSource = function(oLiveData, oDataDriver, oDataParser, oConfigs
     //TODO: provide default driver and parser if none provided
     this.init(oLiveData, oDataDriver, oDataParser, oConfigs);
 };
+
+YAHOO.augment(YAHOO.widget.DataSource, YAHOO.util.EventProvider);
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -43,6 +46,47 @@ YAHOO.widget.DataSource.ERROR_DATAINVALID = "Response was invalid";
  * @final
  */
 YAHOO.widget.DataSource.ERROR_DATANULL = "Response was null";
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Internal class variable to index multiple DataSource instances.
+ *
+ * @property _nIndex
+ * @type Number
+ * @private
+ */
+YAHOO.widget.DataSource._nIndex = 0;
+
+/**
+ * Name of DataSource instance.
+ *
+ * @property _sName
+ * @type String
+ * @private
+ */
+YAHOO.widget.DataSource.prototype._sName = null;
+
+/**
+ * Local cache of data result objects indexed chronologically.
+ *
+ * @property _aCache
+ * @type array
+ * @private
+ */
+YAHOO.widget.DataSource.prototype._aCache = null;
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -94,6 +138,7 @@ YAHOO.widget.DataSource.prototype.dataparser = null;
  * @default ""
  */
 YAHOO.widget.DataSource.prototype.defaultRequest = "";
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Public methods
@@ -160,14 +205,83 @@ YAHOO.widget.DataSource.prototype.init = function(oLiveData, oDataDriver, oDataP
     this._sName = "instance" + YAHOO.widget.DataSource._nIndex;
     YAHOO.widget.DataSource._nIndex++;
 
-    // Create custom events
-    this.requestEvent = new YAHOO.util.CustomEvent("request", this);
-    this.cacheRequestEvent = new YAHOO.util.CustomEvent("cacheRequest", this);
-    this.getResponseEvent = new YAHOO.util.CustomEvent("getResponse", this);
-    this.getCachedResponseEvent = new YAHOO.util.CustomEvent("getCachedResponse", this);
-    this.dataErrorEvent = new YAHOO.util.CustomEvent("dataError", this);
-    this.dataNullEvent = new YAHOO.util.CustomEvent("dataNull", this);
-    this.cacheFlushEvent = new YAHOO.util.CustomEvent("cacheFlush", this);
+    /////////////////////////////////////////////////////////////////////////////
+    //
+    // Custom Events
+    //
+    /////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Fired when a request is made to the live data source.
+     *
+     * @event requestEvent
+     * @param oSelf {Object} The DataSource instance.
+     * @param oCaller {Object} The calling object.
+     * @param sRequest {String} The request string.
+     */
+    this.createEvent("requestEvent");
+
+    /**
+     * Fired when a request is made to the local cache.
+     *
+     * @event cacheRequestEvent
+     * @param oSelf {Object} The DataSource instance.
+     * @param oCaller {Object} The requesting object.
+     * @param sRequest {String} The request string.
+     */
+    this.createEvent("cacheRequestEvent");
+    
+    /**
+     * Fired when response is received from the live data source.
+     *
+     * @event getResponseEvent
+     * @param oSelf {Object} The DataSource instance.
+     * @param oCaller {Object} The calling object.
+     * @param sRequest {String} The request string.
+     * @param oRawResponse {Object} Raw (unparsed) response.
+     */
+    this.createEvent("getResponseEvent");
+
+    /**
+     * Fired when data is retrieved from the local cache.
+     *
+     * @event getCachedResponseEvent
+     * @param oSelf {Object} The DataSource instance.
+     * @param oCaller {Object} The calling object.
+     * @param sRequest {String} The request string.
+     * @param oCachedResponse {Object} Cached response (may or may not be parsed).
+     */
+    this.createEvent("getCachedResponseEvent");
+
+    /**
+     * Fired when an error is encountered with the live data source.
+     *
+     * @event dataErrorEvent
+     * @param oSelf {Object} The DataSource instance.
+     * @param oCaller {Object} The calling object.
+     * @param sRequest {String} The request string.
+     * @param sMsg {String} Error message string.
+     */
+    this.createEvent("dataErrorEvent");
+
+    /**
+     * Fired when live data source returns null response.
+     *
+     * @event dataNullEvent
+     * @param oSelf {Object} The DataSource instance.
+     * @param oCaller {Object} The calling object.
+     * @param sRequest {String} The request string.
+     * @param sMsg {String} Error message string.
+     */
+    this.createEvent("dataNullEvent");
+
+    /**
+     * Fired when the local cache is flushed.
+     *
+     * @event cacheFlushEvent
+     * @param oSelf {Object} The DataSource instance.
+     */
+    this.createEvent("cacheFlushEvent");
 };
 
  /**
@@ -186,9 +300,9 @@ YAHOO.widget.DataSource.prototype.sendRequest = function(sRequest, oCallback, oC
         oCallback(sRequest, oCachedResponse, oCaller);
         return;
     }
-    
+
     // Not in cache, so make connection to live database through the DataDriver
-    this.requestEvent.fire(this, sRequest, oCallback, oCaller);
+    this.fireEvent("requestEvent", this, sRequest, oCallback, oCaller);
     this.datadriver.makeConnection(sRequest, oCallback, oCaller, this);
 };
 
@@ -208,7 +322,7 @@ YAHOO.widget.DataSource.prototype.getCachedResponse = function(sRequest) {
 
     // If cache is enabled...
     if((this.maxCacheEntries > 0) && aCache && (nCacheLength > 0)) {
-        this.cacheRequestEvent.fire(this, sRequest);
+        this.fireEvent("cacheRequestEvent", this, sRequest);
 
         // Loop through each cached element
         for(var i = nCacheLength-1; i >= 0; i--) {
@@ -221,7 +335,7 @@ YAHOO.widget.DataSource.prototype.getCachedResponse = function(sRequest) {
                 aCache.splice(i,1);
                 // Add as newest
                 this.addToCache(sRequest, oResponse);
-                this.getCachedResponseEvent.fire(this, sRequest, oResponse);
+                this.fireEvent("getCachedResponseEvent", this, sRequest, oResponse);
                 break;
             }
         }
@@ -278,113 +392,5 @@ YAHOO.widget.DataSource.prototype.flushCache = function() {
     if(this._aCache) {
         this._aCache = [];
     }
-    this.cacheFlushEvent.fire(this);
+    this.fireEvent("cacheFlushEvent", this);
 };
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Public events
-//
-/////////////////////////////////////////////////////////////////////////////
-
-/**
- * Fired when a request is made to the live data source.
- *
- * @event requestEvent
- * @param oSelf {Object} The DataSource instance.
- * @param oCaller {Object} The calling object.
- * @param sRequest {String} The request string.
- */
-YAHOO.widget.DataSource.prototype.requestEvent = null;
-
-/**
- * Fired when a request is made to the local cache.
- *
- * @event cacheRequestEvent
- * @param oSelf {Object} The DataSource instance.
- * @param oCaller {Object} The requesting object.
- * @param sRequest {String} The request string.
- */
-YAHOO.widget.DataSource.prototype.cacheRequestEvent = null;
-
-/**
- * Fired when response is received from the live data source.
- *
- * @event getResponseEvent
- * @param oSelf {Object} The DataSource instance.
- * @param oCaller {Object} The calling object.
- * @param sRequest {String} The request string.
- * @param oRawResponse {Object} Raw (unparsed) response.
- */
-YAHOO.widget.DataSource.prototype.getResponseEvent = null;
-
-/**
- * Fired when data is retrieved from the local cache.
- *
- * @event getCachedResponseEvent
- * @param oSelf {Object} The DataSource instance.
- * @param oCaller {Object} The calling object.
- * @param sRequest {String} The request string.
- * @param oCachedResponse {Object} Cached response (may or may not be parsed).
- */
-YAHOO.widget.DataSource.prototype.getCachedResponseEvent = null;
-
-/**
- * Fired when an error is encountered with the live data source.
- *
- * @event dataErrorEvent
- * @param oSelf {Object} The DataSource instance.
- * @param oCaller {Object} The calling object.
- * @param sRequest {String} The request string.
- * @param sMsg {String} Error message string.
- */
-YAHOO.widget.DataSource.prototype.dataErrorEvent = null;
-
-/**
- * Fired when the local cache is flushed.
- *
- * @event cacheFlushEvent
- * @param oSelf {Object} The DataSource instance.
- */
-YAHOO.widget.DataSource.prototype.cacheFlushEvent = null;
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Private member variables
-//
-/////////////////////////////////////////////////////////////////////////////
-
-/**
- * Internal class variable to index multiple DataSource instances.
- *
- * @property _nIndex
- * @type Number
- * @private
- */
-YAHOO.widget.DataSource._nIndex = 0;
-
-/**
- * Name of DataSource instance.
- *
- * @property _sName
- * @type String
- * @private
- */
-YAHOO.widget.DataSource.prototype._sName = null;
-
-/**
- * Local cache of data result objects indexed chronologically.
- *
- * @property _aCache
- * @type array
- * @private
- */
-YAHOO.widget.DataSource.prototype._aCache = null;
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Private methods
-//
-/////////////////////////////////////////////////////////////////////////////
-

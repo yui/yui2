@@ -29,49 +29,6 @@ YAHOO.widget.DataParser = function() {
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Public member variables
-//
-/////////////////////////////////////////////////////////////////////////////
-
-/**
- * Description.
- *
- * @property propName
- * @type Type
- * @default null
- */
-//YAHOO.widget.ClassName.prototype.propName = null;
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Public methods
-//
-/////////////////////////////////////////////////////////////////////////////
-
- /**
- * Makes a connection to a live database in order to senda request and receive
- * a response.
- *
- * @method parseResponse
- * @param sRequest {String} Request string
- * @param oRawResponse {Object} The raw response from the live database
- * @param oCallback {Function} Handler function to receive the response
- * @param oCaller {Object} The calling object that is making the request
- */
-YAHOO.widget.DataParser.prototype.parseResponse = function(sRequest, oRawResponse, oCallback, oCaller) {
-    //TODO: NEED DEFAULT AND CUSTOM IMPLEMENTATIONS
-    //TODO: THIS IS PSEUDOCODE
-    var oParsedResponse = oRawResponse.doStuff();
-
-    // Cache the response before sending it back to the widget
-    oDataSource.addToCache(oRequest, oParsedResponse);
-
-    // The DataParser sends back the parsed response back to the caller
-    oCallback(sRequest, oParsedResponse, oCaller);
-};
-
-/////////////////////////////////////////////////////////////////////////////
-//
 // Private member variables
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -99,3 +56,47 @@ YAHOO.widget.DataParser.prototype.parseResponse = function(sRequest, oRawRespons
  * @private
  */
 //YAHOO.widget.ClassName._methodName = null;
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Description.
+ *
+ * @property propName
+ * @type Type
+ * @default null
+ */
+//YAHOO.widget.ClassName.prototype.propName = null;
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
+ /**
+ * Receives a raw response from a DataSource and parses it for data to be consumed
+ * by a widget.
+ *
+ * @method parseResponse
+ * @param sRequest {String} Request string
+ * @param oRawResponse {Object} The raw response from the live database
+ * @param oCallback {Function} Handler function to receive the response
+ * @param oCaller {Object} The calling object that is making the request
+ */
+YAHOO.widget.DataParser.prototype.parseResponse = function(sRequest, oRawResponse, oCallback, oCaller) {
+    //TODO: NEED DEFAULT AND CUSTOM IMPLEMENTATIONS
+    //TODO: THIS IS PSEUDOCODE
+    var oParsedResponse = oRawResponse.doStuff();
+
+    // Cache the response before sending it back to the widget
+    oDataSource.addToCache(oRequest, oParsedResponse);
+
+    // The DataParser sends back the parsed response back to the caller
+    oCallback(sRequest, oParsedResponse, oCaller);
+};
+

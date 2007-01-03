@@ -21,9 +21,25 @@ YAHOO.widget.Column = function(nIndex, oConfigs) {
             }
         }
     }
-    this.id = "yui-dt-col"+YAHOO.widget.Column._nCount;
+    this.id = "yui-dtcol"+YAHOO.widget.Column._nCount;
     YAHOO.widget.Column._nCount++;
 };
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Internal instance counter.
+ *
+ * @property _nCount
+ * @type Number
+ * @static
+ * @default 0
+ */
+YAHOO.widget.Column._nCount =0;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -132,7 +148,8 @@ YAHOO.widget.Column.prototype.isLast = false;
 YAHOO.widget.Column.prototype.key = null;
 
 /**
- * Data type: "string", "int", "float", "date", "object", "array", "boolean".
+ * Data type: "string", "number", "float", "date", "object", "array", "boolean",
+ * "currency", "checkbox", "select", "email", "link".
  *
  * @property type
  * @type String
@@ -219,222 +236,6 @@ YAHOO.widget.Column.prototype.sortAscHandler = null;
 /////////////////////////////////////////////////////////////////////////////
 
  /**
- * Default checkbox parser for columns of type "checkbox". Can be overridden for custom
- * checkbox parsing.
- *
- * @method checkboxParser
- * @param sMarkup
- * @return {bChecked} True if checkbox is checked.
- */
-YAHOO.widget.Column.prototype.checkboxParser = function(sMarkup) {
-    return (sMarkup.indexOf("checked") < 0) ? false : true;
-};
-
- /**
- * Default currency parser for columns of type "currency". Can be overridden for custom
- * currency parsing.
- *
- * @method currencyParser
- * @param sMarkup
- * @return {nAmount} Floating point amount.
- */
-YAHOO.widget.Column.prototype.currencyParser = function(sMarkup) {
-    return parseFloat(sMarkup.substring(1));
-};
-
- /**
- * Custom parser for columns of type "custom". Should be overridden for custom parsing.
- *
- * @method customParser
- * @param sMarkup
- * @return {oData} Data.
- */
-YAHOO.widget.Column.prototype.customParser = function(sMarkup) {
-    return sMarkup;
-};
-
- /**
- * Default date parser for columns of type "date". Can be overridden for custom date
- * parsing.
- *
- * @method dateParser
- * @param sMarkup
- * @return {oDate} Date instance.
- */
-YAHOO.widget.Column.prototype.dateParser = function(sMarkup) {
-    var mm = sMarkup.substring(0,sMarkup.indexOf("/"));
-    sMarkup = sMarkup.substring(sMarkup.indexOf("/")+1);
-    var dd = sMarkup.substring(0,sMarkup.indexOf("/"));
-    var yy = sMarkup.substring(sMarkup.indexOf("/")+1);
-    return new Date(yy, mm, dd);
-};
-
- /**
- * Default float parser for columns of type "float". Can be overridden for custom float
- * parsing.
- *
- * @method floatParser
- * @param sMarkup
- * @return {nFloat} Float number.
- */
-YAHOO.widget.Column.prototype.floatParser = function(sMarkup) {
-    return parseFloat(sMarkup);
-};
-
- /**
- * Default HTML parser for columns of type "html". Can be overridden for custom html parsing.
- *
- * @method htmlParser
- * @param sMarkup
- * @return {sMarkup} HTML markup.
- */
-YAHOO.widget.Column.prototype.htmlParser = function(sMarkup) {
-    return sMarkup;
-};
-
- /**
- * Default int parser for columns of type "int". Can be overridden for custom int parsing.
- *
- * @method intParser
- * @param sMarkup
- * @return {nInt} Int number.
- */
-YAHOO.widget.Column.prototype.intParser = function(sMarkup) {
-    return parseInt(sMarkup);
-};
-
- /**
- * Default radio parser for columns of type "radio". Can be overridden for custom
- * radio parsing.
- *
- * @method radioParser
- * @param sMarkup
- * @return {bChecked} True if radio is checked.
- */
-YAHOO.widget.Column.prototype.radioParser = function(sMarkup) {
-    return (sMarkup.indexOf("checked") < 0) ? false : true;
-};
-
- /**
- * Default checkbox formatter for columns of type "checkbox". Can be overridden for custom
- * checkbox formatting.
- *
- * @method checkboxFormatter
- * @param bChecked {Boolean} Whether or not checkbox is checked.
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @return {HTML} Markup of formatted checkbox.
- */
-YAHOO.widget.Column.prototype.checkboxFormatter = function(bChecked, oRecord) {
-    bChecked = (bChecked) ? " checked" : "";
-    return "<input type=\"checkbox\"" + bChecked + ">";
-};
-
- /**
- * Default currency formatter for columns of type "currency". Can be overridden for custom
- * currency formatting.
- *
- * @method currencyFormatter
- * @param nAmount (Float) Currency amount.
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @return {HTML} Markup of formatted currency.
- */
-YAHOO.widget.Column.prototype.currencyFormatter = function(nAmount, oRecord) {
-    // Make it dollars
-    var markup = "$"+nAmount;
-    
-    // Normalize to the penny
-    var dotIndex = markup.indexOf(".")
-    if(dotIndex < 0) {
-        markup += ".00";
-    }
-    else {//alert(markup.length);
-        while(dotIndex != markup.length-3) {
-            markup += "0";
-        }
-    }
-    return markup;
-};
-
- /**
- * Custom formatter. Should be overridden for custom formatting of columns where type is
- * "custom".
- *
- * @method customFormatter
- * @param oData (Object) Data for formatting.
- * @param oRecord {YAHOO.widget.Record} Record Object
- * @return {HTML} Markup of formatted data.
- */
-YAHOO.widget.Column.prototype.customFormatter = function(oData, oRecord) {
-    return (oData) ? oData.toString() : "";
-};
-
- /**
- * Default date formatter for columns of type "date". Can be overridden for custom date
- * formatting.
- *
- * @method dateFormatter
- * @param oDate (Date) Date instance.
- * @param oRecord {YAHOO.widget.Record} Record Object
- * @return {HTML} Markup of formatted date.
- */
-YAHOO.widget.Column.prototype.dateFormatter = function(oDate, oRecord) {
-    return oDate.getMonth() + "/" + oDate.getDate()  + "/" + oDate.getYear();
-};
-
- /**
- * Default flat formatter for columns of type "float". Can be overridden for custom float
- * formatting.
- *
- * @method floatFormatter
- * @param nFloat (Number) Float.
- * @param oRecord {YAHOO.widget.Record} Record Object
- * @return {HTML} Markup of formatted float.
- */
-YAHOO.widget.Column.prototype.floatFormatter = function(nFloat, oRecord) {
-    return nFloat.toString();
-};
-
- /**
- * Public static HTML formatter for columns of type "html". Can be overridden for custom
- * HTML formatting.
- *
- * @method htmlFormatter
- * @param sMarkup (HTML) Markup.
- * @param oRecord {YAHOO.widget.Record} Record Object
- * @return {HTML} Markup.
- */
-YAHOO.widget.Column.prototype.htmlFormatter = function(sMarkup, oRecord) {
-    return sMarkup;
-};
-
- /**
- * Default flat formatter for columns of type "float". Can be overridden for custom float
- * formatting.
- *
- * @method intFormatter
- * @param nInt (Number) Integer.
- * @param oRecord {YAHOO.widget.Record} Record Object
- * @return {HTML} Markup of formatted float.
- */
-YAHOO.widget.Column.prototype.intFormatter = function(nInt, oRecord) {
-    return nInt.toString();
-};
-
- /**
- * Public static radio formatter for columns of type "radio". Can be overridden for custom
- * radio formatting.
- *
- * @method radioFormatter
- * @param bChecked {Boolean} Whether or not radio is checked.
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @return {HTML} Markup of formatted radio.
- */
-YAHOO.widget.Column.prototype.radioFormatter = function(bChecked, oRecord) {
-    bChecked = (bChecked) ? " checked" : "";
-    return "<input type=\"radio\"" + bChecked + ">";
-};
-
- /**
  * Public accessor to the unique name of the Column instance.
  *
  * @method toString
@@ -442,6 +243,76 @@ YAHOO.widget.Column.prototype.radioFormatter = function(bChecked, oRecord) {
  */
 YAHOO.widget.Column.prototype.toString = function() {
     return "Column " + this.index + " (" + this.key + ")";
+};
+
+ /**
+ * Outputs markup into the given TD based on given Record.
+ *
+ * @method format
+ * @param elCell {HTMLElement} TD to format for display.
+ * @param oRecord {YAHOO.widget.Record} Record that holds data for the row.
+ * @return {HTML} Markup.
+ */
+YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
+    var oData = oRecord[this.key];
+    var type = this.type;
+    var markup = "";
+    var classname = "";
+    switch(type) {
+        case "checkbox":
+            YAHOO.widget.DataTable.checkboxFormatter(elCell, oData, oRecord, this);
+            classname = YAHOO.widget.DataTable.CLASS_CHECKBOX;
+            break;
+        case "currency":
+            YAHOO.widget.DataTable.currencyFormatter(elCell, oData, oRecord, this);
+            classname = YAHOO.widget.DataTable.CLASS_CURRENCY;
+            break;
+        case "custom":
+            YAHOO.widget.DataTable.customFormatter(elCell, oData, oRecord, this);
+            classname = YAHOO.widget.DataTable.CLASS_CUSTOM;
+            break;
+        case "date":
+            YAHOO.widget.DataTable.dateFormatter(elCell, oData, oRecord, this);
+            classname = YAHOO.widget.DataTable.CLASS_DATE;
+            break;
+        case "email":
+            YAHOO.widget.DataTable.emailFormatter(elCell, oData, oRecord, this);
+            classname = YAHOO.widget.DataTable.CLASS_EMAIL;
+            break;
+        case "float":
+            YAHOO.widget.DataTable.floatFormatter(elCell, oData, oRecord, this);
+            classname = YAHOO.widget.DataTable.CLASS_FLOAT;
+            break;
+        case "html":
+            YAHOO.widget.DataTable.htmlFormatter(elCell, oData, oRecord, this);
+            classname = YAHOO.widget.DataTable.CLASS_HTML;
+            break;
+        case "link":
+            YAHOO.widget.DataTable.linkFormatter(elCell, oData, oRecord, this);
+            classname = YAHOO.widget.DataTable.CLASS_LINK;
+            break;
+        case "number":
+            YAHOO.widget.DataTable.numberFormatter(elCell, oData, oRecord, this);
+            classname = YAHOO.widget.DataTable.CLASS_NUMBER;
+            break;
+        case "select":
+            YAHOO.widget.DataTable.selectFormatter(elCell, oData, oRecord, this);
+            classname = YAHOO.widget.DataTable.CLASS_SELECT;
+            break;
+       default:
+            if(oData) {
+                elCell.innerHTML = oData.toString();
+                classname = YAHOO.widget.DataTable.CLASS_STRING;
+            }
+            break;
+    }
+
+    elCell.columnKey = this.key;
+    YAHOO.util.Dom.addClass(elCell, classname);
+
+    if(this.editable) {
+        YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_EDITABLE);
+    }
 };
 
  /**
@@ -456,28 +327,28 @@ YAHOO.widget.Column.prototype.parse = function(sMarkup) {
     var data = null;
     switch(this.type) {
         case "checkbox":
-            data = this.checkboxParser(sMarkup);
+            data = YAHOO.widget.Column.checkboxParser(sMarkup);
             break;
         case "currency":
-            data = this.currencyParser(sMarkup);
+            data = YAHOO.widget.Column.currencyParser(sMarkup);
             break;
         case "custom":
-            data = this.customParser(sMarkup);
+            data = YAHOO.widget.Column.customParser(sMarkup);
             break;
         case "date":
-            data = this.dateParser(sMarkup);
+            data = YAHOO.widget.Column.dateParser(sMarkup);
             break;
         case "float":
-            data = this.floatParser(sMarkup);
+            data = YAHOO.widget.Column.floatParser(sMarkup);
             break;
         case "html":
-            data = this.htmlParser(sMarkup);
+            data = YAHOO.widget.Column.htmlParser(sMarkup);
             break;
-        case "int":
-            data = this.intParser(sMarkup);
+        case "number":
+            data = YAHOO.widget.Column.numberParser(sMarkup);
             break;
-        case "radio":
-            data = this.radioParser(sMarkup);
+        case "select":
+            data = YAHOO.widget.Column.selectParser(sMarkup);
             break;
        default:
             if(sMarkup) {
@@ -489,58 +360,103 @@ YAHOO.widget.Column.prototype.parse = function(sMarkup) {
 };
 
  /**
- * Outputs markup into the given TD based on given Record.
+ * Default parser for columns of type "checkbox" takes markup and extracts data.
+ * Can be overridden for custom parsing.
  *
- * @method format
- * @param elCell {HTMLElement} TD to format for display.
- * @param oRecord {YAHOO.widget.Record} Record that holds data for the row.
- * @return {HTML} Markup.
+ * @method checkboxParser
+ * @param sMarkup
+ * @return {bChecked} True if checkbox is checked.
  */
-YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
-    var data = oRecord[this.key];
-    var type = this.type;
-    var markup = "";
-    switch(type) {
-        case "checkbox":
-            markup = this.checkboxFormatter(data, oRecord);
-            break;
-        case "currency":
-            markup = this.currencyFormatter(data, oRecord);
-            break;
-        case "custom":
-            markup = this.customFormatter(data, oRecord);
-            break;
-        case "date":
-            markup = this.dateFormatter(data, oRecord);
-            break;
-        case "float":
-            markup = this.floatFormatter(data, oRecord);
-            break;
-        case "html":
-            markup = this.htmlFormatter(data, oRecord);
-            break;
-        case "int":
-            markup = this.intFormatter(data, oRecord);
-            break;
-        case "radio":
-            markup = this.radioFormatter(data, oRecord);
-            break;
-       default:
-            if(data) {
-                markup = data.toString();
-            }
-            break;
-    }
-    
-    elCell.columnKey = this.key;
-    elCell.recordId = oRecord.id;
-    elCell.innerHTML = markup;
-    YAHOO.util.Dom.addClass(elCell, "yui-dt-"+this.type);
-    
-    //TODO: make classname a constant
-    if(this.editable) {
-        YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_EDITABLE);
-    }
+YAHOO.widget.Column.checkboxParser = function(sMarkup) {
+    return (sMarkup.indexOf("checked") < 0) ? false : true;
+};
+
+ /**
+ * Default parser for columns of type "currency" takes markup and extracts data.
+ * Can be overridden for custom parsing.
+ *
+ * @method currencyParser
+ * @param sMarkup
+ * @return {nAmount} Floating point amount.
+ */
+YAHOO.widget.Column.currencyParser = function(sMarkup) {
+    return parseFloat(sMarkup.substring(1));
+};
+
+ /**
+ * Default parser for columns of type "custom" takes markup and extracts data.
+ * Should be overridden for custom parsing.
+ *
+ * @method customParser
+ * @param sMarkup
+ * @return {oData} Data.
+ */
+YAHOO.widget.Column.customParser = function(sMarkup) {
+    return sMarkup;
+};
+
+ /**
+ * Default parser for columns of type "date" takes markup and extracts data.
+ * Can be overridden for custom parsing.
+ *
+ * @method dateParser
+ * @param sMarkup
+ * @return {oDate} Date instance.
+ */
+YAHOO.widget.Column.dateParser = function(sMarkup) {
+    var mm = sMarkup.substring(0,sMarkup.indexOf("/"));
+    sMarkup = sMarkup.substring(sMarkup.indexOf("/")+1);
+    var dd = sMarkup.substring(0,sMarkup.indexOf("/"));
+    var yy = sMarkup.substring(sMarkup.indexOf("/")+1);
+    return new Date(yy, mm, dd);
+};
+
+ /**
+ * Default parser for columns of type "float" takes markup and extracts data.
+ * Can be overridden for custom parsing.
+ *
+ * @method floatParser
+ * @param sMarkup
+ * @return {nFloat} Float number.
+ */
+YAHOO.widget.Column.floatParser = function(sMarkup) {
+    return parseFloat(sMarkup);
+};
+
+ /**
+ * Default parser for columns of type "html" takes markup and extracts data.
+ * Can be overridden for custom parsing.
+ *
+ * @method htmlParser
+ * @param sMarkup
+ * @return {sMarkup} HTML markup.
+ */
+YAHOO.widget.Column.htmlParser = function(sMarkup) {
+    return sMarkup;
+};
+
+ /**
+ * Default parser for columns of type "number" takes markup and extracts data.
+ * Can be overridden for custom parsing.
+ *
+ * @method numberParser
+ * @param sMarkup
+ * @return {nNumber} Number.
+ */
+YAHOO.widget.Column.numberParser = function(sMarkup) {
+    return parseInt(sMarkup);
+};
+
+ /**
+ * Default parser for columns of type "select" takes markup and extracts data.
+ * Can be overridden for custom parsing.
+ *
+ * @method selectParser
+ * @param sMarkup
+ * @return {sValue} Value of selected option.
+ */
+YAHOO.widget.Column.selectParser = function(sMarkup) {
+    //return (sMarkup.indexOf("checked") < 0) ? false : true;
 };
 
  /**
@@ -550,7 +466,7 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
  * @param elCell {HTMLElement} TD to format for display.
  * @param oRecord {YAHOO.widget.Record} Record that holds data for the row.
  */
-YAHOO.widget.Column.prototype.showEditor = function(elCell,oRecord) {
+YAHOO.widget.Column.showEditor = function(elCell,oRecord) {
     var oEditor = this.editor;
     if(!oEditor) {
         oEditor = new YAHOO.widget.ColumnEditor(this, elCell);
@@ -566,27 +482,12 @@ YAHOO.widget.Column.prototype.showEditor = function(elCell,oRecord) {
  *
  * @method hideEditor
  */
-YAHOO.widget.Column.prototype.hideEditor = function() {
+YAHOO.widget.Column.hideEditor = function() {
     var oEditor = this.editor;
     if(oEditor) {
         oEditor.hide();
     }
 };
-/////////////////////////////////////////////////////////////////////////////
-//
-// Private member variables
-//
-/////////////////////////////////////////////////////////////////////////////
-
-/**
- * Internal instance counter.
- *
- * @property _nCount
- * @type Number
- * @static
- * @default 0
- */
-YAHOO.widget.Column._nCount =0;
 
 /****************************************************************************/
 /****************************************************************************/
@@ -761,6 +662,22 @@ YAHOO.extend(YAHOO.widget.ColumnEditor, YAHOO.util.Element);
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Private member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Internal instance counter.
+ *
+ * @property _nCount
+ * @type Number
+ * @static
+ * @default 0
+ */
+YAHOO.widget.ColumnEditor._nCount =0;
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // Public member variables
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -853,24 +770,6 @@ YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord
 YAHOO.widget.ColumnEditor.prototype.hide = function() {
     this.container.style.display = "none";
 };
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Private member variables
-//
-/////////////////////////////////////////////////////////////////////////////
-
-/**
- * Internal instance counter.
- *
- * @property _nCount
- * @type Number
- * @static
- * @default 0
- */
-YAHOO.widget.ColumnEditor._nCount =0;
 
 /****************************************************************************/
 /****************************************************************************/
@@ -974,7 +873,7 @@ YAHOO.extend(YAHOO.util.WidthResizer, YAHOO.util.DD);
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Public event handlers
+// Public DOM event handlers
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -1078,7 +977,6 @@ YAHOO.util.WidthResizer.prototype.onDrag = function(e) {
     else {
         elCell.style.width = newWidth + "px";
     }
-
 };
 
 

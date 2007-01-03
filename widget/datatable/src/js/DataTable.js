@@ -24,8 +24,9 @@
  * @param oConfigs {object} (optional) Object literal of configuration values
  */
 YAHOO.widget.DataTable = function(elElement,aColumnset,oDataSource,oConfigs) {
-    // Internal var needed right away
+    // Internal vars
     this._nIndex = YAHOO.widget.DataTable._nCount;
+    this.id = "yui-dt"+this._nIndex;
 
     // Validate configs
     if(typeof oConfigs == "object") {
@@ -66,7 +67,7 @@ YAHOO.widget.DataTable = function(elElement,aColumnset,oDataSource,oConfigs) {
 
         // Progressively enhance an existing table from markup
         if(elType == "table") {
-            elElement.id = "yui-dt"+this._nIndex;
+            elElement.id = this.id+"-table";
             // Create a Recordset
             var aRecords = [];
             //TODO: Is this too hardcoded? Supoprts at most one TBODY in the TABLE!
@@ -78,12 +79,12 @@ YAHOO.widget.DataTable = function(elElement,aColumnset,oDataSource,oConfigs) {
                     for(var i=0; i<numRows; i++) {
                         var oRecord = {};
                         var elRow = elTbody.rows[i];
-                        elRow.id = "yui-dt"+index+"-bodyrow"+i;
+                        elRow.id = this.id+"-bdrow"+i;
                         var numCells = elRow.cells.length;
                         if(numCells > 0) {
                             for(var j=0; j<numCells; j++) {
                                 var elCell = elRow.cells[j];
-                                elCell.id = "yui-dt"+index+"-bodycell"+i+"-"+j;
+                                elCell.id = this.id+"-bdrow"+i+"-cell"+j;
                                 oRecord[oColumnset.bottom[j].key] = oColumnset.bottom[j].parse(elCell.innerHTML);
                             }
                         aRecords.push(oRecord);
@@ -129,6 +130,26 @@ YAHOO.augment(YAHOO.widget.DataTable, YAHOO.util.EventProvider);
 /////////////////////////////////////////////////////////////////////////////
 
  /**
+ * Class name of even element.
+ *
+ * @property CLASS_EVEN
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_EVEN = "yui-dt-even";
+
+ /**
+ * Class name of odd element.
+ *
+ * @property CLASS_ODD
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_ODD = "yui-dt-odd";
+
+ /**
  * Class name of column text.
  *
  * @property CLASS_COLUMNTEXT
@@ -149,7 +170,7 @@ YAHOO.widget.DataTable.CLASS_COLUMNTEXT = "yui-dt-columntext";
 YAHOO.widget.DataTable.CLASS_SELECTED = "yui-dt-selected";
 
  /**
- * Class name of sortable column text.
+ * Class name of sortable column.
  *
  * @property CLASS_SORTABLE
  * @type String
@@ -159,6 +180,25 @@ YAHOO.widget.DataTable.CLASS_SELECTED = "yui-dt-selected";
 YAHOO.widget.DataTable.CLASS_SORTABLE = "yui-dt-sortable";
 
  /**
+ * Class name of sorted column in ascending order.
+ *
+ * @property CLASS_SORTEDBYASC
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_SORTEDBYASC = "yui-dt-sortedbyasc";
+
+ /**
+ * Class name of sorted column in descending order.
+ *
+ * @property CLASS_SORTEDBYDESC
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_SORTEDBYDESC = "yui-dt-sortedbydesc";
+ /**
  * Class name of editable column.
  *
  * @property CLASS_EDITABLE
@@ -167,6 +207,116 @@ YAHOO.widget.DataTable.CLASS_SORTABLE = "yui-dt-sortable";
  * @final
  */
 YAHOO.widget.DataTable.CLASS_EDITABLE = "yui-dt-editable";
+
+ /**
+ * Class name of cell type checkbox.
+ *
+ * @property CLASS_CHECKBOX
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_CHECKBOX = "yui-dt-checkbox";
+
+ /**
+ * Class name of cell type currency.
+ *
+ * @property CLASS_CURRENCY
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_CURRENCY = "yui-dt-currency";
+
+ /**
+ * Class name of cell type custom.
+ *
+ * @property CLASS_CUSTOM
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_CUSTOM = "yui-dt-custom";
+
+ /**
+ * Class name of cell type date.
+ *
+ * @property CLASS_DATE
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_DATE = "yui-dt-date";
+
+ /**
+ * Class name of cell type EMAIL.
+ *
+ * @property CLASS_EMAIL
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_EMAIL = "yui-dt-email";
+
+ /**
+ * Class name of cell type float.
+ *
+ * @property CLASS_FLOAT
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_FLOAT = "yui-dt-float";
+
+ /**
+ * Class name of cell type HTML.
+ *
+ * @property CLASS_HTML
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_HTML = "yui-dt-html";
+
+ /**
+ * Class name of cell type LINK.
+ *
+ * @property CLASS_LINK
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_LINK = "yui-dt-link";
+
+ /**
+ * Class name of cell type int.
+ *
+ * @property CLASS_INT
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_NUMBER = "yui-dt-number";
+
+ /**
+ * Class name of cell type radio.
+ *
+ * @property CLASS_RADIO
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_RADIO = "yui-dt-radio";
+
+ /**
+ * Class name of cell type string.
+ *
+ * @property CLASS_STRING
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_STRING = "yui-dt-string";
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -273,6 +423,12 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
         }
     }
 
+    if(this.contextmenu && this.contextmenuOptions) {
+        this.contextmenu = new YAHOO.widget.ContextMenu(this.id+"-cm", { trigger: this._elTbody.rows } );
+        this.contextmenu.addItem("delete item");
+        this.contextmenu.render(document.body);
+    }
+
     /////////////////////////////////////////////////////////////////////////////
     //
     // DOM Events
@@ -364,6 +520,14 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
     this.createEvent("checkboxClickEvent");
 
     /**
+     * Fired when a RADIO element is clicked.
+     *
+     * @event radioClickEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The RADIO element.
+     */
+    this.createEvent("radioClickEvent");
+    /**
      * Fired when a TD element is clicked.
      *
      * @event cellClickEvent
@@ -435,34 +599,15 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
 
 
     /**
-     * Fired when a mouseout occurs on a TD element.
-     *
-     * @event cellMouseoutEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TD element.
-     */
-    //this.createEvent("cellMouseoutEvent");
-
-    /**
      * Fired when a TR element is deleted.
      *
      * @event rowDeleteEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TR element.
+     * @param oArgs.rowIndex {Number || Array} The index(es) of the deleted row(s).
+     * @param oArgs.rowId {String || Array} DOM ID(s) of the deleted row(s).
+     * @param oArgs.recordId {String || Array} The Record ID(s) of the deleted row(s).
      */
-    //this.createEvent("rowDeleteEvent");
-
-    /**
-     * Fired when a TABLE element receives a keypress.
-     *
-     * @event tableKeyEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TABLE element.
-     *
-     */
-    //this.createEvent("tableKeypressEvent");
-
-
+    this.createEvent("rowDeleteEvent");
+    this.subscribe("rowDeleteEvent", this._onRowDelete);
 };
 
 /**
@@ -515,13 +660,13 @@ YAHOO.widget.DataTable.prototype._createThead = function(elTable, oColumnset) {
     // Iterate through each row...
     for(var i=0; i<oColumnset.tree.length; i++) {
         var elHeadRow = elHead.appendChild(document.createElement("tr"));
-        elHeadRow.id = "yui-dt"+index+"-headrow"+i;
+        elHeadRow.id = this.id+"-hdrow"+i;
 
         // ...and create header cells
         for(var j=0; j<oColumnset.tree[i].length; j++) {
             var oColumn = oColumnset.tree[i][j];
             var elHeadCell = elHeadRow.appendChild(document.createElement("th"));
-            elHeadCell.id = "yui-dt"+index+"-headcell"+i+"-"+j;
+            elHeadCell.id = oColumn.id;
             this._enhanceTheadCell(elHeadCell,oColumn,i,j);
         }
     }
@@ -585,13 +730,13 @@ YAHOO.widget.DataTable.prototype._enhanceThead = function() {
     var index = this._nIndex;
     for(var nodelevel=0; nodelevel<oColumnset.tree.length; nodelevel++) {
         var elRow = elThead.rows[nodelevel];
-        elRow.id = "yui-dt"+index+"-headrow"+nodelevel;
+        elRow.id = this.id+"-hdrow"+nodelevel;
         var elTheadCellsInRow = elRow.cells;
         var columnsetRow = oColumnset.tree[nodelevel];
         for(var col=0; col< columnsetRow.length; col++) {
             var oColumn = columnsetRow[col];
             var elHeadCell = elTheadCellsInRow[col];
-            elHeadCell.id = "yui-dt"+index+"-headcell"+nodelevel+"-"+col;
+            elHeadCell.id = oColumn.id;
             this._enhanceTheadCell(elHeadCell,oColumn,nodelevel,col);
         }
     }
@@ -617,11 +762,10 @@ YAHOO.widget.DataTable.prototype._enhanceTheadCell = function(elHeadCell,oColumn
     elHeadCell.innerHTML = "";
 
     var elHeadContainer = elHeadCell.appendChild(document.createElement("div"));
-    elHeadContainer.id = "yui-dt"+index+"-headcontainer"+row+"-"+col;
-    oColumn.id = elHeadContainer.id;
+    elHeadContainer.id = this.id+"-hdrow"+row+"-container"+col;
     YAHOO.util.Dom.addClass(elHeadContainer,"yui-dt-headcontainer");
     var elHeadContent = elHeadContainer.appendChild(document.createElement("span"));
-    elHeadContent.id = "yui-dt"+index+"-headcontent"+row+"-"+col;
+    elHeadContent.id = this.id+"-hdrow"+row+"-columntext"+col;
     YAHOO.util.Dom.addClass(elHeadContent,YAHOO.widget.DataTable.CLASS_COLUMNTEXT);
     elHeadContent.innerHTML = oColumn.text || oColumn.key;
 
@@ -636,7 +780,7 @@ YAHOO.widget.DataTable.prototype._enhanceTheadCell = function(elHeadCell,oColumn
         //TODO: figure out whether this is last column programmatically
         if(!this.fixedwidth || (this.fixedwidth && !oColumn.isLast)) {
             var elHeadResizer = elHeadContainer.appendChild(document.createElement("span"));
-            elHeadResizer.id = "yui-dt"+index+"-headresizer"+row+"-"+col;
+            elHeadResizer.id = this.id+"-hdrow"+row+"-resizer"+col;
             YAHOO.util.Dom.addClass(elHeadResizer,"yui-dt-headresizer");
             oColumn.ddResizer = new YAHOO.util.WidthResizer(this, elHeadCell.id, elHeadResizer.id, elHeadResizer.id);
             var cancelClick = function(e) {
@@ -667,11 +811,12 @@ YAHOO.widget.DataTable.prototype._updateTableBody = function(aNewRecords) {
     var elTableBodyRows = this._elTbody.rows;
     for(var i=0; i< elTableBodyRows.length; i++) {
         if(aNewRecords[i]) {
-            var elRecordRow = elTableBodyRows[i];
+            var elRow = elTableBodyRows[i];
+            elRow.recordId = aNewRecords[i].id;
 
             // ...Update tbody cells with new data
             for(var j=0; j<columns.length; j++) {
-                elCell = elRecordRow.cells[j];
+                elCell = elRow.cells[j];
                 columns[j].format(elCell, aNewRecords[i]);
             }
         }
@@ -722,9 +867,35 @@ YAHOO.widget.DataTable.prototype._replaceRows = function(sRequest, oResponse, oS
     }
 };
 
+/**
+ * Restripes rows with class YAHOO.widget.DataTable.CLASS_EVEN or
+ * YAHOO.widget.DataTable.CLASS_ODD.
+ *
+ * @method _restripeRows
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._restripeRows = function(range) {
+    if(!range) {
+        var rows = this._elTbody.rows;
+        for(var i=0; i<rows.length; i++) {
+            if(i%2) {
+                YAHOO.util.Dom.removeClass(rows[i], YAHOO.widget.DataTable.CLASS_EVEN);
+                YAHOO.util.Dom.addClass(rows[i], YAHOO.widget.DataTable.CLASS_ODD);
+            }
+            else {
+                YAHOO.util.Dom.removeClass(rows[i], YAHOO.widget.DataTable.CLASS_ODD);
+                YAHOO.util.Dom.addClass(rows[i], YAHOO.widget.DataTable.CLASS_EVEN);
+            }
+        }
+    }
+    else {
+        //TODO: allow restriping of a subset of rows for performance
+    }
+};
+
 /////////////////////////////////////////////////////////////////////////////
 //
-// DOM Event Handlers
+// Private DOM Event Handlers
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -818,7 +989,7 @@ YAHOO.widget.DataTable.prototype._onMousedown = function(e, oSelf) {
 YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.nodeName.toLowerCase();
-    var knownTag = false;
+    var knownTag = false; // True if event should stop propagating
 
     if(oSelf.activeEditor) { //&& (oSelf.activeEditor != column)
         oSelf.activeEditor.hideEditor();
@@ -829,8 +1000,14 @@ YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
         while(!knownTag) {
             switch(elTag) {
                 case "input":
-                    oSelf.fireEvent("checkboxClickEvent",{target:elTarget,event:e});
-                    knownTag = true;
+                    if(elTarget.type.toLowerCase() == "checkbox") {
+                        oSelf.fireEvent("checkboxClickEvent",{target:elTarget,event:e});
+                        knownTag = true;
+                    }
+                    else if(elTarget.type.toLowerCase() == "radio") {
+                        oSelf.fireEvent("radioClickEvent",{target:elTarget,event:e});
+                        knownTag = true;
+                    }
                     break;
                 case "td":
 	               oSelf.fireEvent("cellClickEvent",{target:elTarget,event:e});
@@ -904,12 +1081,31 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Private Custom Event Handlers
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Handles row delete events.
+ *
+ * @method _onRowDelete
+ * @param oArgs.rowIndex {Number || Array} The index(es) of the deleted row(s).
+ * @param oArgs.rowId {String || Array} DOM ID(s) of the deleted row(s).
+ * @param oArgs.recordId {String || Array} The Record ID(s) of the deleted row(s).
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onRowDelete = function(oArgs) {
+    this._restripeRows();
+};
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // Public member variables
 //
 /////////////////////////////////////////////////////////////////////////////
 
  /**
- * DataSource
+ * DataSource instance.
  *
  * @property datasource
  * @type YAHOO.widget.DataSource
@@ -943,6 +1139,13 @@ YAHOO.widget.DataTable.prototype.scrollable = false;
  */
 YAHOO.widget.DataTable.prototype.singleSelect = false;
 
+ /**
+ * Context menu.
+ *
+ * @property contextmenu
+ * @type YAHOO.widget.ContextMenu
+ */
+YAHOO.widget.DataTable.prototype.contextmenu = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -988,20 +1191,21 @@ YAHOO.widget.DataTable.prototype.appendRow = function(oRecord) {
     var index = this._nIndex;
     var oColumnset = this._oColumnset;
 
-    var elRecordRow = this._elTbody.appendChild(document.createElement("tr"));
+    var elRow = this._elTbody.appendChild(document.createElement("tr"));
     var i = this._elTbody.rows.length-1;
-    elRecordRow.id = "yui-dt"+index+"-bodyrow"+i;
+    elRow.id = this.id+"-bdrow"+i;
+    elRow.recordId = oRecord.id;
     if(i%2) {
-        YAHOO.util.Dom.addClass(elRecordRow,"yui-dt-odd");
+        YAHOO.util.Dom.addClass(elRow, YAHOO.widget.DataTable.CLASS_ODD);
     }
     else {
-        YAHOO.util.Dom.addClass(elRecordRow,"yui-dt-even");
+        YAHOO.util.Dom.addClass(elRow, YAHOO.widget.DataTable.CLASS_EVEN);
     }
 
     // Create tbody cells
     for(var j=0; j<oColumnset.bottom.length; j++) {
-        var elCell = elRecordRow.appendChild(document.createElement("td"));
-        elCell.id = "yui-dt"+index+"-bodycell"+i+"-"+j;
+        var elCell = elRow.appendChild(document.createElement("td"));
+        elCell.id = this.id+"-bdrow"+i+"-cell"+j;
         oColumnset.bottom[j].format(elCell, oRecord);
         /*p.abx {word-wrap:break-word;}
 ought to solve the problem for Safari (the long words will wrap in your
@@ -1040,13 +1244,18 @@ YAHOO.widget.DataTable.prototype.deleteSelectedRows = function() {
  */
 YAHOO.widget.DataTable.prototype.deleteRow = function(elRow) {
     var allRows = this._elTbody.rows;
+    var id = elRow.id;
+    var recordId = elRow.recordId;
     for(var i=0; i< allRows.length; i++) {
-        if(elRow.id == allRows[i].id) {
+        if(id == allRows[i].id) {
             this._elTbody.deleteRow(i);
-            this.fireEvent("deleteRowEvent");
+
+            // Update the Recordset
+            this._oRecordset.deleteRecord(i);
             break;
         }
     }
+    this.fireEvent("rowDeleteEvent",{rowIndex: i, rowId: id, recordId: recordId});
 };
 
  /**
@@ -1161,15 +1370,18 @@ YAHOO.widget.DataTable.prototype.doKeypress = function(oArgs) {
  * Sort given column.
  *
  * @method sortColumn
- * @param oColumn {YAHOO.widget.Column} Column to sort.
+ * @param oColumn {YAHOO.widget.Column} Column to sort. TODO: accept the TH or TH.key
  */
 YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
+    if(oColumn.constructor != YAHOO.widget.Column) {
+        // Figure out the column based on TH ref or TH.key
+    }
     if(oColumn && oColumn.sortable) {
         // What is the default sort direction?
         var sortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultOrder) ? oColumn.sortOptions.defaultOrder : "asc";
 
         // Is the column sorted already?
-        if(this.sortedBy == oColumn.key) {
+        if(this.sortedBy == oColumn.id) {
             if(this.sortedByDir) {
                 sortDir = (this.sortedByDir == "asc") ? "desc" : "asc";
             }
@@ -1208,8 +1420,12 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
         this._updateTableBody(newRecords);
 
         // Keep track of currently sorted column
-        this.sortedBy = oColumn.key;
+        YAHOO.util.Dom.removeClass(this.sortedBy,YAHOO.widget.DataTable.CLASS_SORTEDBYASC);
+        YAHOO.util.Dom.removeClass(this.sortedBy,YAHOO.widget.DataTable.CLASS_SORTEDBYDESC);
+        this.sortedBy = oColumn.id;
         this.sortedByDir = sortDir;
+        var newClass = (sortDir == "asc") ? YAHOO.widget.DataTable.CLASS_SORTEDBYASC : YAHOO.widget.DataTable.CLASS_SORTEDBYDESC;
+        YAHOO.util.Dom.addClass(oColumn.id, newClass);
         YAHOO.log("Column \"" + oColumn.key + "\" sorted " + sortDir,"info",this.toString());
     }
     else {
@@ -1235,14 +1451,196 @@ YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
     }
 
     if(column && column.editable) {
-        column.showEditor(elCell,this._oRecordset.getRecord(elCell.recordId));
+        column.showEditor(elCell,this._oRecordset.getRecord(elCell.parentNode.recordId));
         this.activeEditor = column;
     }
 };
 
+ /**
+ * Default formatter for cells in columns of type "checkbox".
+ * Can be overridden for custom formatting.
+ *
+ * @method checkboxFormatter
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oData {Object} Data value for the cell.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ */
+YAHOO.widget.DataTable.checkboxFormatter = function(elCell, oData, oRecord, oColumn) {
+    var bChecked = oData;
+    bChecked = (bChecked) ? " checked" : "";
+    elCell.innerHTML = "<input type=\"checkbox\"" + bChecked + ">";
+};
+
+ /**
+ * Default formatter for cells in columns of type "currency".
+ * Can be overridden for custom formatting.
+ *
+ * @method currencyFormatter
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oData {Object} Data value for the cell.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ */
+YAHOO.widget.DataTable.currencyFormatter = function(elCell, oData, oRecord, oColumn) {
+    // Make it dollars
+    var nAmount = oData;
+    var markup = "$"+nAmount;
+
+    // Normalize to the penny
+    var dotIndex = markup.indexOf(".")
+    if(dotIndex < 0) {
+        markup += ".00";
+    }
+    else {//alert(markup.length);
+        while(dotIndex != markup.length-3) {
+            markup += "0";
+        }
+    }
+    elCell.innerHTML = markup;
+};
+
+ /**
+ * Default formatter for cells in columns of type "custom".
+ * Should be overridden for custom formatting.
+ *
+ * @method customFormatter
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oData {Object} Data value for the cell.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ */
+YAHOO.widget.DataTable.customFormatter = function(elCell, oData, oRecord, oColumn) {
+    elCell.innerHTML = (oData) ? oData.toString() : "";
+};
+
+ /**
+ * Default formatter for cells in columns of type "date".
+ * Can be overridden for custom formatting.
+ *
+ * @method dateFormatter
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oData {Object} Data value for the cell.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ */
+YAHOO.widget.DataTable.dateFormatter = function(elCell, oData, oRecord, oColumn) {
+    var oDate = oData;
+    elCell.innerHTML = oDate.getMonth() + "/" + oDate.getDate()  + "/" + oDate.getYear();
+};
+
+ /**
+ * Default formatter for cells in columns of type "email".
+ * Can be overridden for custom formatting.
+ *
+ * @method emailFormatter
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oData {Object} Data value for the cell.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ */
+YAHOO.widget.DataTable.emailFormatter = function(elCell, oData, oRecord, oColumn) {
+    var sEmail = oData;
+    elCell.innerHTML = "<a href=\"mailto:" + sEmail + "\">" + sEmail + "</a>";
+};
+
+ /**
+ * Default formatter for cells in columns of type "float".
+ * Can be overridden for custom formatting.
+ *
+ * @method floatFormatter
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oData {Object} Data value for the cell.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ */
+YAHOO.widget.DataTable.floatFormatter = function(elCell, oData, oRecord, oColumn) {
+    var nFloat = oData;
+    elCell.innerHTML = nFloat.toString();
+};
+
+ /**
+ * Default formatter for cells in columns of type "html".
+ * Can be overridden for custom formatting.
+ *
+ * @method htmlFormatter
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oData {Object} Data value for the cell.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ */
+YAHOO.widget.DataTable.htmlFormatter = function(elCell, oData, oRecord, oColumn) {
+    var sMarkup = oData;
+    elCell.innerHTML = sMarkup;
+};
+
+ /**
+ * Default formatter for cells in columns of type "link".
+ * Can be overridden for custom formatting.
+ *
+ * @method linkFormatter
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oData {Object} Data value for the cell.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ */
+YAHOO.widget.DataTable.linkFormatter = function(elCell, oData, oRecord, oColumn) {
+    var sLink = oData;
+    elCell.innerHTML = "<a href=\"" + sLink + "\">" + sLink + "</a>";
+};
+
+ /**
+ * Default formatter for cells in columns of type "number".
+ * Can be overridden for custom formatting.
+ *
+ * @method numberFormatter
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oData {Object} Data value for the cell.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ */
+YAHOO.widget.DataTable.numberFormatter = function(elCell, oData, oRecord, oColumn) {
+    var nNumber = oData;
+    elCell.innerHTML = nNumber.toString();
+};
+
+ /**
+ * Default formatter for cells in columns of type "select".
+ * Can be overridden for custom formatting.
+ *
+ * @method selectFormatter
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oData {Object} Data value for the cell.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ */
+YAHOO.widget.DataTable.selectFormatter = function(elCell, oData, oRecord, oColumn) {
+    var selectedValue = oData;
+    var options = oColumn.selectOptions;
+
+    var markup = "<select>";
+    if(options) {
+        for(var i=0; i<options.length; i++) {
+            var option = options[i];
+            markup += "<option value=\"" + option + "\"";
+            if(selectedValue == option) {
+                markup += " selected";
+            }
+            markup += ">" + option + "</option>";
+        }
+    }
+    else {
+        markup += "<option value=\"" + selectedValue + "\" selected>" + selectedValue + "</option>";
+    }
+    markup += "</select>";
+    elCell.innerHTML = markup;
+};
+
+
+
 /////////////////////////////////////////////////////////////////////////////
 //
-// Custom Event Handlers
+// Public Custom Event Handlers
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -1258,9 +1656,7 @@ YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
     var target = oArgs.target;
     //TODO: traverse DOM to find a columnKey, incl safety net if none exists
     var whichColumn = target.columnKey;
-
     if(whichColumn) {
-        //TODO: implement a COLUMNSET.getColumnByKey(key) method
         var allColumns = this._oColumnset.flat;
         var oColumn = null;
         for(var i=0; i<allColumns.length; i++) {
@@ -1271,6 +1667,7 @@ YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
             }
         }
 
+        //TODO: pass in just the column key and find the column object in the sortColumn method or the TH ref?
         this.sortColumn(oColumn);
     }
 };

@@ -18,9 +18,25 @@ YAHOO.widget.Record = function(oConfigs) {
             }
         }
     }
-    this.id = "yui-dt-rec"+YAHOO.widget.Record._nCount;
+    this.id = "yui-dtrec"+YAHOO.widget.Record._nCount;
     YAHOO.widget.Record._nCount++;
 };
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Internal class variable to index multiple data table instances.
+ *
+ * @property _nCount
+ * @type number
+ * @private
+ * @static
+ */
+YAHOO.widget.Record._nCount = 0;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -45,22 +61,6 @@ YAHOO.widget.Record.prototype.id = null;
  */
 YAHOO.widget.Record.prototype.extId = null;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Private member variables
-//
-/////////////////////////////////////////////////////////////////////////////
-
-/**
- * Internal class variable to index multiple data table instances.
- *
- * @property _nCount
- * @type number
- * @private
- * @static
- */
-YAHOO.widget.Record._nCount = 0;
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -78,6 +78,20 @@ YAHOO.widget.Recordset = function(aRecords, oColumnset) {
     this._records = [];
     this.addRecords(aRecords, oColumnset);
 };
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Internal counter of how many records are in the Recordset
+ *
+ * @property _count
+ * @private
+ */
+YAHOO.widget.Recordset.prototype._count = 0;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -176,11 +190,11 @@ YAHOO.widget.Recordset.prototype.updateRecord = function(i, newRecord) {
  * Removes the record at the given index from the Recordset. If a range is
  * given, starts at the given index and removes all records in the range.
  *
- * @method removeRecord
+ * @method deleteRecord
  * @param i {Number} Record index
  * @param range {Number} (optional) Range of records to remove, or null.
  */
-YAHOO.widget.Recordset.prototype.removeRecord = function(i, range) {
+YAHOO.widget.Recordset.prototype.deleteRecord = function(i, range) {
     if(isNaN(range)) {
         range = 1;
     }
@@ -192,7 +206,7 @@ YAHOO.widget.Recordset.prototype.removeRecord = function(i, range) {
  * Returns record with given name, at the given index, or null.
  *
  * @method getRecord
- * @param identifier {String || Number} Record name or record index
+ * @param identifier {String || Number} Record ID or record index
  * @return {Object} Record object
  */
 YAHOO.widget.Recordset.prototype.getRecord = function(identifier) {
@@ -264,18 +278,3 @@ YAHOO.widget.Recordset.prototype.reset = function() {
 YAHOO.widget.Recordset.prototype.replace = function(aNewRecords) {
     this._records = aNewRecords;
 };
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Private member variables
-//
-/////////////////////////////////////////////////////////////////////////////
-
-/**
- * Internal counter of how many records are in the Recordset
- *
- * @property _count
- * @private
- */
-YAHOO.widget.Recordset.prototype._count = 0;
-

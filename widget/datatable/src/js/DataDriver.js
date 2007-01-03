@@ -14,6 +14,36 @@ YAHOO.widget.DataDriver = function() {
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Private member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Description.
+ *
+ * @property _memberName
+ * @type Type
+ * @private
+ */
+//YAHOO.widget.ClassName.prototype._memberName = null;
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Description.
+ *
+ * @property _methodName
+ * @param oParam {Type} Description
+ * @private
+ */
+//YAHOO.widget.ClassName._methodName = null;
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // Public methods
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -55,13 +85,13 @@ YAHOO.widget.DataDriver.prototype.makeConnection = function(sRequest, oCallback,
         var responseSuccess = function(oResp) {
             // Response ID does not match last made request ID.
             if(!oSelf._oConn || (oResp.tId != oSelf._oConn.tId)) {
-                //TODO: oSelf.dataErrorEvent.fire(oSelf, sRequest, YAHOO.widget.DataSource.ERROR_DATAINVALID);
+                //TODO: oSelf.fireEvent("dataErrorEvent", oSelf, sRequest, YAHOO.widget.DataSource.ERROR_DATAINVALID);
                 //TODO: YAHOO.log(YAHOO.widget.DataSource.ERROR_DATAINVALID, "error", oSelf.toString());
                 return null;
             }
             // TODO: is a null response possible?
             if(oResp === null) {
-                //TODO: oSelf.dataErrorEvent.fire(oSelf, oCaller, sQuery, oSelf.ERROR_DATANULL);
+                //TODO: oSelf.fireEvent("dataErrorEvent", oSelf, oCaller, sQuery, oSelf.ERROR_DATANULL);
                 //TODO: YAHOO.log(YAHOO.widget.DataSource.ERROR_DATANULL, "error", oSelf.toString());
                 return null;
             }
@@ -81,7 +111,7 @@ YAHOO.widget.DataDriver.prototype.makeConnection = function(sRequest, oCallback,
         };
 
         var responseFailure = function(oResp) {
-            //TODO: oSelf.dataErrorEvent.fire(oSelf, oCaller, sQuery, oSelf.ERROR_DATAXHR);
+            //TODO: oSelf.fireEvent("dataErrorEvent", oSelf, oCaller, sQuery, oSelf.ERROR_DATAXHR);
             //TODO: YAHOO.log(oSelf.ERROR_DATAXHR + ": " + oResp.statusText, "error", oSelf.toString());
             return null;
         };
@@ -102,7 +132,7 @@ YAHOO.widget.DataDriver.prototype.makeConnection = function(sRequest, oCallback,
             YAHOO.util.Connect.abort(this._oConn);
         }
 
-        //TODO: this.makeConnectionEvent.fire(this, sRequest, oCallback, oCaller);
+        //TODO: this.fireEvent("makeConnectionEvent", this, sRequest, oCallback, oCaller);
         this._oConn = YAHOO.util.Connect.asyncRequest("GET", sUri, oConnCallback, null);
     }
 
@@ -119,34 +149,3 @@ YAHOO.widget.DataDriver.prototype.makeConnection = function(sRequest, oCallback,
         }
     }
 };
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Private member variables
-//
-/////////////////////////////////////////////////////////////////////////////
-
-/**
- * Description.
- *
- * @property _memberName
- * @type Type
- * @private
- */
-//YAHOO.widget.ClassName.prototype._memberName = null;
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Private methods
-//
-/////////////////////////////////////////////////////////////////////////////
-
-/**
- * Description.
- *
- * @property _methodName
- * @param oParam {Type} Description
- * @private
- */
-//YAHOO.widget.ClassName._methodName = null;
-
