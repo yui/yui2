@@ -126,9 +126,8 @@ YAHOO.util.Anim.prototype = {
     },
         
     /**
-     * Sets the actual values to be used during the animation.
+     * Sets the actual values to be used during the animation.  Should only be needed for subclass use.
      * @method setRuntimeAttribute
-     * Should only be needed for subclass use.
      * @param {Object} attr The attribute object
      * @private 
      */
