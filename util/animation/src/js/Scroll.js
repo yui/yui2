@@ -22,61 +22,61 @@
  * @param {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
  * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
  */
-   YAHOO.util.Scroll = function(el, attributes, duration,  method) {
-      if (el) { // dont break existing subclasses not using YAHOO.extend
-         YAHOO.util.Scroll.superclass.constructor.call(this, el, attributes, duration, method);
-      }
-   };
+    YAHOO.util.Scroll = function(el, attributes, duration,  method) {
+        if (el) { // dont break existing subclasses not using YAHOO.extend
+            YAHOO.util.Scroll.superclass.constructor.call(this, el, attributes, duration, method);
+        }
+    };
 
-   YAHOO.extend(YAHOO.util.Scroll, YAHOO.util.ColorAnim);
-   
-   // shorthand
-   var Y = YAHOO.util;
-   var superclass = Y.Scroll.superclass;
-   var proto = Y.Scroll.prototype;
+    YAHOO.extend(YAHOO.util.Scroll, YAHOO.util.ColorAnim);
+    
+    // shorthand
+    var Y = YAHOO.util;
+    var superclass = Y.Scroll.superclass;
+    var proto = Y.Scroll.prototype;
 
-   proto.toString = function() {
-      var el = this.getEl();
-      var id = el.id || el.tagName;
-      return ("Scroll " + id);
-   };
+    proto.toString = function() {
+        var el = this.getEl();
+        var id = el.id || el.tagName;
+        return ("Scroll " + id);
+    };
 
-   proto.doMethod = function(attr, start, end) {
-      var val = null;
-   
-      if (attr == 'scroll') {
-         val = [
-            this.method(this.currentFrame, start[0], end[0] - start[0], this.totalFrames),
-            this.method(this.currentFrame, start[1], end[1] - start[1], this.totalFrames)
-         ];
-         
-      } else {
-         val = superclass.doMethod.call(this, attr, start, end);
-      }
-      return val;
-   };
+    proto.doMethod = function(attr, start, end) {
+        var val = null;
+    
+        if (attr == 'scroll') {
+            val = [
+                this.method(this.currentFrame, start[0], end[0] - start[0], this.totalFrames),
+                this.method(this.currentFrame, start[1], end[1] - start[1], this.totalFrames)
+            ];
+            
+        } else {
+            val = superclass.doMethod.call(this, attr, start, end);
+        }
+        return val;
+    };
 
-   proto.getAttribute = function(attr) {
-      var val = null;
-      var el = this.getEl();
-      
-      if (attr == 'scroll') {
-         val = [ el.scrollLeft, el.scrollTop ];
-      } else {
-         val = superclass.getAttribute.call(this, attr);
-      }
-      
-      return val;
-   };
+    proto.getAttribute = function(attr) {
+        var val = null;
+        var el = this.getEl();
+        
+        if (attr == 'scroll') {
+            val = [ el.scrollLeft, el.scrollTop ];
+        } else {
+            val = superclass.getAttribute.call(this, attr);
+        }
+        
+        return val;
+    };
 
-   proto.setAttribute = function(attr, val, unit) {
-      var el = this.getEl();
-      
-      if (attr == 'scroll') {
-         el.scrollLeft = val[0];
-         el.scrollTop = val[1];
-      } else {
-         superclass.setAttribute.call(this, attr, val, unit);
-      }
-   };
+    proto.setAttribute = function(attr, val, unit) {
+        var el = this.getEl();
+        
+        if (attr == 'scroll') {
+            el.scrollLeft = val[0];
+            el.scrollTop = val[1];
+        } else {
+            superclass.setAttribute.call(this, attr, val, unit);
+        }
+    };
 })();
