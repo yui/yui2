@@ -1,43 +1,42 @@
-(function() {
-    
-    YAHOO.util.Lang = {
-        isArray: function(val) { // frames lose type, so test constructor string
-            if (val.constructor && val.constructor.toString().indexOf('Array') > -1) {
-                return true;
-            } else {
-                return YAHOO.util.Lang.isObject(val) && val.constructor == Array;
-            }
-        },
-        
-        isBoolean: function(val) {
-            return typeof val == 'boolean';
-        },
-    
-        isFunction: function(val) {
-            return typeof val == 'function';
-        },
-        
-        isNull: function(val) {
-            return val === null;
-        },
-        
-        isNumber: function(val) {
-            return !isNaN(val);
-        },
-        
-        isObject: function(val) {
-            return typeof val == 'object' || YAHOO.util.Lang.isFunction(val);
-        },
-        
-        isString: function(val) {
-            return typeof val == 'string';
-        },
-        
-        isUndefined: function(val) {
-            return typeof val == 'undefined';
+YAHOO.util.Lang = {
+    isArray: function(val) { // frames lose type, so test constructor string
+        if (val.constructor && val.constructor.toString().indexOf('Array') > -1) {
+            return true;
+        } else {
+            return YAHOO.util.Lang.isObject(val) && val.constructor == Array;
         }
-    };
-})();/**
+    },
+        
+    isBoolean: function(val) {
+        return typeof val == 'boolean';
+    },
+    
+    isFunction: function(val) {
+        return typeof val == 'function';
+    },
+        
+    isNull: function(val) {
+        return val === null;
+    },
+        
+    isNumber: function(val) {
+        return !isNaN(val);
+    },
+        
+    isObject: function(val) {
+        return typeof val == 'object' || YAHOO.util.Lang.isFunction(val);
+    },
+        
+    isString: function(val) {
+        return typeof val == 'string';
+    },
+        
+    isUndefined: function(val) {
+        return typeof val == 'undefined';
+    }
+};
+
+/**
  * Provides Attribute configurations.
  * @namespace YAHOO.util
  * @class Attribute
@@ -226,7 +225,9 @@ YAHOO.util.Attribute.prototype = {
     refresh: function(silent) {
         this.setValue(this.value, silent);
     }
-};(function() {
+};
+
+(function() {
     var Lang = YAHOO.util.Lang;
 
     /*
@@ -455,7 +456,9 @@ YAHOO.util.Attribute.prototype = {
     };
     
     YAHOO.augment(YAHOO.util.AttributeProvider, YAHOO.util.EventProvider);
-})();(function() {
+})();
+
+(function() {
 // internal shorthand
 var Dom = YAHOO.util.Dom,
     Lang = YAHOO.util.Lang,
@@ -914,6 +917,7 @@ var _registerHTMLAttr = function(self, key, map) {
 
 YAHOO.augment(YAHOO.util.Element, AttributeProvider);
 })();
+
 (function() {
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
@@ -929,7 +933,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
      * represents the TabView. An element will be created if none provided.
      * @param {Object} properties A key map of initial properties
      */
-    Tab = function(el, attr) {
+    var Tab = function(el, attr) {
         attr = attr || {};
         if (arguments.length == 1 && !Lang.isString(el) && !el.nodeName) {
             attr = el;
@@ -1417,7 +1421,9 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
      * myTabs.addListener('contentChange', handler);</code></p>
      * @event contentChange
      */
-})();(function() {
+})();
+
+(function() {
 
     /**
      * The tabview module provides a widget for managing content bound to tabs.
@@ -1925,3 +1931,4 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
  * @event orientationChange
  */
 })();
+
