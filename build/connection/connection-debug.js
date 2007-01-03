@@ -5,16 +5,23 @@ http://developer.yahoo.net/yui/license.txt
 */
 
 /**
- * @description
  * The Connection Manager provides a simplified interface to the XMLHttpRequest
  * object.  It handles cross-browser instantiantion of XMLHttpRequest, negotiates the
  * interactive states and server response, returning the results to a pre-defined
  * callback you create.
  *
  * @namespace YAHOO.util
- * @module Connection
- * @Class Connect
+ * @module connection
+ * @requires yahoo
  */
+
+/**
+ * The Connection Manager singleton provides methods for creating and managing
+ * asynchronous transactions.
+ *
+ * @class Connect
+ */
+
 YAHOO.util.Connect =
 {
   /**
