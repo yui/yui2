@@ -233,3 +233,4 @@
     
     YAHOO.augment(YAHOO.util.AttributeProvider, YAHOO.util.EventProvider);
 })();
+

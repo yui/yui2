@@ -190,3 +190,4 @@ YAHOO.util.Attribute.prototype = {
         this.setValue(this.value, silent);
     }
 };
+

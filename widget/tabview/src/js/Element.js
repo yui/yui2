@@ -465,3 +465,4 @@ var _registerHTMLAttr = function(self, key, map) {
 
 YAHOO.augment(YAHOO.util.Element, AttributeProvider);
 })();
+
