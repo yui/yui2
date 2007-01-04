@@ -1342,7 +1342,7 @@ if (!YAHOO.util.Event) {
                 retryCount = (notAvail.length === 0) ? 0 : retryCount - 1;
 
                 if (tryAgain) {
-                    //onAvailStack = notAvail; // cleanse the array
+                    // we may need to strip the nulled out items here
                     this.startInterval();
                 } else {
                     clearInterval(this._interval);
