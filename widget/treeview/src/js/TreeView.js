@@ -2,7 +2,7 @@
  * The treeview widget is a generic tree building tool.
  * @module treeview
  * @title TreeView Widget
- * @requires yahoo
+ * @requires yahoo, event
  * @optional animation
  * @namespace YAHOO.widget
  */
@@ -19,8 +19,6 @@
 YAHOO.widget.TreeView = function(id) {
     if (id) { this.init(id); }
 };
-
-
 
 YAHOO.widget.TreeView.prototype = {
 

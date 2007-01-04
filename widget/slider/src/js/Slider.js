@@ -369,7 +369,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
                 this.setRegionValue.apply(this, this.deferredSetRegionValue, true);
                 this.deferredSetRegionValue = null;
             } else {
-                this.setRegionValue(0, 0, true);
+                this.setRegionValue(0, 0, true, true);
             }
         } else {
             if (this.deferredSetValue) {
@@ -392,8 +392,8 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
         if (el) {
             /**
-             * The center of the slider element is stored so we can position 
-             * place it in the correct position when the background is clicked
+             * The center of the slider element is stored so we can 
+             * place it in the correct position when the background is clicked.
              * @property thumbCenterPoint
              * @type {"x": int, "y": int}
              */
@@ -620,7 +620,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @param {boolean} force ignore the locked setting and set value anyway
      * @return {boolean} true if the move was performed, false if it failed
      */
-    setRegionValue: function(newOffset, newOffset2, skipAnim) {
+    setRegionValue: function(newOffset, newOffset2, skipAnim, force) {
 
         if (!this.thumb.available) {
             this.logger.log("defer setRegionValue until after onAvailble");

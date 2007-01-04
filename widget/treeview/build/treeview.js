@@ -1,14 +1,8 @@
-/*                                                                                                                                                      
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-version: 0.12.1
-*/ 
 /**
  * The treeview widget is a generic tree building tool.
  * @module treeview
  * @title TreeView Widget
- * @requires yahoo
+ * @requires yahoo, event
  * @optional animation
  * @namespace YAHOO.widget
  */
@@ -459,7 +453,7 @@ YAHOO.widget.TreeView.prototype = {
      */
     removeChildren: function(node) { 
         while (node.children.length) {
-             this._deleteNode(node.children[0]);
+            this._deleteNode(node.children[0]);
         }
 
         node.childrenRendered = false;
@@ -1696,7 +1690,10 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
 
     loadComplete: function() { 
         this.tree.draw();
-    }
+    },
+
+    collapse: function() {},
+    expand: function() {}
 
 });
 /**

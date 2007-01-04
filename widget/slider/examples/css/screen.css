@@ -261,7 +261,8 @@ height: 240px;
 
 /* standard horizontal and vertical sliders */
 #horizHandleDiv { 
-    position:relative; 
+    /* position:relative; */
+    position:absolute; 
     left: 100px; /* the default position is the center of the bg */
     top: 8px;  /* force the image down a bit */
     cursor:default;
@@ -269,14 +270,20 @@ height: 240px;
     height:18px; 
 }
 
+/*
 #horizWrapper {position:relative; margin-left:60px;width:218px;float:left;height:300px;}
+*/
+#horizWrapper {position:relative; margin-left:60px;width:218px;float:left;}
 #horizBGDiv {position:relative; top:60px; background:url(../img/horizBg.png) no-repeat; height:26px; width:218px;zindex:5 }
 #horizValueDiv { position:relative; top: 70px; left:66px; } 
 
 #vertWrapper {position:relative; width:90px;float:left}
 #vertHandleDiv { cursor:default; width:20px; height:18px; position:absolute; }
 #vertBGDiv {position:relative;top:0px; float:left; width:26px; left:10px;background:url(../img/vertBg.png) no-repeat;height:218px; }
+/*
 #vertValueDiv { position:relative; top: 100px; left:40px; width:300px; }
+*/
+#vertValueDiv { position:relative; top: 100px; left:40px; }
 
 
 

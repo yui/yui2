@@ -2,7 +2,7 @@ TreeView - Release Notes
 
 0.12.2
 
-  * removeChildren now works properly when executed on the root node.
+  * removeChildren will now work properly on the root node.
 
 0.12.1
 
