@@ -1,9 +1,5 @@
 Logger Release Notes
 
-* Implemented LogReader APIs for collapse(), expand(), and isCollapsed.
-
-
-
 **** version 0.12.1 ***
 
 * Fixed issues with setting LogReader's "bottom" property.
