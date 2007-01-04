@@ -6,7 +6,7 @@
 
 <p><img src="../assets/img/skin-chart.gif" width="313" height="86"/></p>
 
-<p>The Panel, like all other YUI Container controls, has a header, body, and footer. In addition, the Panel also has a "close" element containing a background image to give it the appearance of a UI window close control. In this tutorial, we will manipulate the CSS styles for these elements and create several new elements to allow for addition pieces of the skin to be styled.</p>
+<p>The Panel, like all other YUI Container controls, has a header, body, and footer. In addition, the Panel also has a "close" element containing a background image to give it the appearance of a UI window close control. In this tutorial, we will manipulate the CSS styles for these elements and create several new elements to allow for additional pieces of the skin to be styled.</p>
 
 <p>First, we will create rounded corners for our skin by applying images to the top left and top right corners of the Panel header. All of our CSS styles are applied to this Panel instance using ID selectors. In this case, the Panel's ID will be "myPanel", so all styles will begin with "#myPanel". In order to facilitate the creation of these corners, we will create two new empty <code>div</code> elements in the header, classed as "tl" and "tr" for "top left" and "top right":</p>
 
