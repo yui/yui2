@@ -135,4 +135,3 @@ YAHOO.augment = function(r, s) {
 };
 
 YAHOO.namespace("util", "widget", "example");
-
