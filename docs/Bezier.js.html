@@ -31,38 +31,36 @@
 <span class="c"> * @namespace YAHOO.util</span>
 <span class="c"> *</span>
 <span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Bezier</span> <span class="o">=</span> <span class="k">new</span> <span class="k">function</span><span class="o">()</span> 
-<span class="o">{</span>
-   <span class="c">/**</span>
-<span class="c">    * Get the current position of the animated element based on t.</span>
-<span class="c">    * Each point is an array of &quot;x&quot; and &quot;y&quot; values (0 = x, 1 = y)</span>
-<span class="c">    * At least 2 points are required (start and end).</span>
-<span class="c">    * First point is start. Last point is end.</span>
-<span class="c">    * Additional control points are optional.    </span>
-<span class="c">    * @method getPosition</span>
-<span class="c">    * @param {Array} points An array containing Bezier points</span>
-<span class="c">    * @param {Number} t A number between 0 and 1 which is the basis for determining current position</span>
-<span class="c">    * @return {Array} An array containing int x and y member data</span>
-<span class="c">    */</span>
-   <span class="k">this</span><span class="o">.</span><span class="nx">getPosition</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">points</span><span class="o">,</span> <span class="nx">t</span><span class="o">)</span>
-   <span class="o">{</span>  
-      <span class="k">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">points</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
-      <span class="k">var</span> <span class="nx">tmp</span> <span class="o">=</span> <span class="o">[];</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Bezier</span> <span class="o">=</span> <span class="k">new</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c">/**</span>
+<span class="c">     * Get the current position of the animated element based on t.</span>
+<span class="c">     * Each point is an array of &quot;x&quot; and &quot;y&quot; values (0 = x, 1 = y)</span>
+<span class="c">     * At least 2 points are required (start and end).</span>
+<span class="c">     * First point is start. Last point is end.</span>
+<span class="c">     * Additional control points are optional.     </span>
+<span class="c">     * @method getPosition</span>
+<span class="c">     * @param {Array} points An array containing Bezier points</span>
+<span class="c">     * @param {Number} t A number between 0 and 1 which is the basis for determining current position</span>
+<span class="c">     * @return {Array} An array containing int x and y member data</span>
+<span class="c">     */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">getPosition</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">points</span><span class="o">,</span> <span class="nx">t</span><span class="o">)</span> <span class="o">{</span>  
+        <span class="k">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">points</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">tmp</span> <span class="o">=</span> <span class="o">[];</span>
 
-      <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">){</span>
-         <span class="nx">tmp</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="o">[</span><span class="nx">points</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="m">0</span><span class="o">],</span> <span class="nx">points</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="m">1</span><span class="o">]];</span> <span class="c">// save input</span>
-<span class="c"></span>      <span class="o">}</span>
-      
-      <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="m">1</span><span class="o">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="o">;</span> <span class="o">++</span><span class="nx">j</span><span class="o">)</span> <span class="o">{</span>
-         <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span> <span class="o">-</span> <span class="nx">j</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">tmp</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="m">0</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="m">1</span> <span class="o">-</span> <span class="nx">t</span><span class="o">)</span> <span class="o">*</span> <span class="nx">tmp</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="nx">t</span> <span class="o">*</span> <span class="nx">tmp</span><span class="o">[</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">i</span> <span class="o">+</span> <span class="m">1</span><span class="o">,</span> <span class="m">10</span><span class="o">)][</span><span class="m">0</span><span class="o">];</span>
-            <span class="nx">tmp</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="m">1</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="m">1</span> <span class="o">-</span> <span class="nx">t</span><span class="o">)</span> <span class="o">*</span> <span class="nx">tmp</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="m">1</span><span class="o">]</span> <span class="o">+</span> <span class="nx">t</span> <span class="o">*</span> <span class="nx">tmp</span><span class="o">[</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">i</span> <span class="o">+</span> <span class="m">1</span><span class="o">,</span> <span class="m">10</span><span class="o">)][</span><span class="m">1</span><span class="o">];</span> 
-         <span class="o">}</span>
-      <span class="o">}</span>
-   
-      <span class="k">return</span> <span class="o">[</span> <span class="nx">tmp</span><span class="o">[</span><span class="m">0</span><span class="o">][</span><span class="m">0</span><span class="o">],</span> <span class="nx">tmp</span><span class="o">[</span><span class="m">0</span><span class="o">][</span><span class="m">1</span><span class="o">]</span> <span class="o">];</span> 
-   
-   <span class="o">};</span>
+        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">){</span>
+            <span class="nx">tmp</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="o">[</span><span class="nx">points</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="m">0</span><span class="o">],</span> <span class="nx">points</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="m">1</span><span class="o">]];</span> <span class="c">// save input</span>
+<span class="c"></span>        <span class="o">}</span>
+        
+        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="m">1</span><span class="o">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="o">;</span> <span class="o">++</span><span class="nx">j</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span> <span class="o">-</span> <span class="nx">j</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">tmp</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="m">0</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="m">1</span> <span class="o">-</span> <span class="nx">t</span><span class="o">)</span> <span class="o">*</span> <span class="nx">tmp</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="nx">t</span> <span class="o">*</span> <span class="nx">tmp</span><span class="o">[</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">i</span> <span class="o">+</span> <span class="m">1</span><span class="o">,</span> <span class="m">10</span><span class="o">)][</span><span class="m">0</span><span class="o">];</span>
+                <span class="nx">tmp</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="m">1</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="m">1</span> <span class="o">-</span> <span class="nx">t</span><span class="o">)</span> <span class="o">*</span> <span class="nx">tmp</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="m">1</span><span class="o">]</span> <span class="o">+</span> <span class="nx">t</span> <span class="o">*</span> <span class="nx">tmp</span><span class="o">[</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">i</span> <span class="o">+</span> <span class="m">1</span><span class="o">,</span> <span class="m">10</span><span class="o">)][</span><span class="m">1</span><span class="o">];</span> 
+            <span class="o">}</span>
+        <span class="o">}</span>
+    
+        <span class="k">return</span> <span class="o">[</span> <span class="nx">tmp</span><span class="o">[</span><span class="m">0</span><span class="o">][</span><span class="m">0</span><span class="o">],</span> <span class="nx">tmp</span><span class="o">[</span><span class="m">0</span><span class="o">][</span><span class="m">1</span><span class="o">]</span> <span class="o">];</span> 
+    
+    <span class="o">};</span>
 <span class="o">};</span>
 </pre></div>
                     </div>

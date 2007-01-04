@@ -396,7 +396,7 @@
                 <span class="k">this</span><span class="o">.</span><span class="nx">setRegionValue</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">deferredSetRegionValue</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">deferredSetRegionValue</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">setRegionValue</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">setRegionValue</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
             <span class="o">}</span>
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
             <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">deferredSetValue</span><span class="o">)</span> <span class="o">{</span>
@@ -419,8 +419,8 @@
 
         <span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
             <span class="c">/**</span>
-<span class="c">             * The center of the slider element is stored so we can position </span>
-<span class="c">             * place it in the correct position when the background is clicked</span>
+<span class="c">             * The center of the slider element is stored so we can </span>
+<span class="c">             * place it in the correct position when the background is clicked.</span>
 <span class="c">             * @property thumbCenterPoint</span>
 <span class="c">             * @type {&quot;x&quot;: int, &quot;y&quot;: int}</span>
 <span class="c">             */</span>
@@ -647,7 +647,7 @@
 <span class="c">     * @param {boolean} force ignore the locked setting and set value anyway</span>
 <span class="c">     * @return {boolean} true if the move was performed, false if it failed</span>
 <span class="c">     */</span>
-    <span class="nx">setRegionValue</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">newOffset</span><span class="o">,</span> <span class="nx">newOffset2</span><span class="o">,</span> <span class="nx">skipAnim</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">setRegionValue</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">newOffset</span><span class="o">,</span> <span class="nx">newOffset2</span><span class="o">,</span> <span class="nx">skipAnim</span><span class="o">,</span> <span class="nx">force</span><span class="o">)</span> <span class="o">{</span>
 
         <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">.</span><span class="nx">available</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;defer setRegionValue until after onAvailble&quot;</span><span class="o">);</span>

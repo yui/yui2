@@ -1002,7 +1002,7 @@
                 <span class="nx">retryCount</span> <span class="o">=</span> <span class="o">(</span><span class="nx">notAvail</span><span class="o">.</span><span class="nx">length</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">?</span> <span class="m">0</span> <span class="o">:</span> <span class="nx">retryCount</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span>
 
                 <span class="k">if</span> <span class="o">(</span><span class="nx">tryAgain</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">onAvailStack</span> <span class="o">=</span> <span class="nx">notAvail</span><span class="o">;</span> <span class="c">// cleanse the array</span>
+                    <span class="c">// we may need to strip the nulled out items here</span>
 <span class="c"></span>                    <span class="k">this</span><span class="o">.</span><span class="nx">startInterval</span><span class="o">();</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                     <span class="nx">clearInterval</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">);</span>

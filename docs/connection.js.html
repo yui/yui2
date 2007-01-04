@@ -43,8 +43,8 @@
 <span class="c"> */</span>
 
 <span class="c">/**</span>
-<span class="c"> * YAHOO.util.Connect is a singleton that provides the utility methods for managing</span>
-<span class="c"> * your XMLHttpRequests.</span>
+<span class="c"> * The Connection Manager singleton provides methods for creating and managing</span>
+<span class="c"> * asynchronous transactions.</span>
 <span class="c"> *</span>
 <span class="c"> * @class Connect</span>
 <span class="c"> */</span>
@@ -641,7 +641,7 @@
 		<span class="k">var</span> <span class="nx">oForm</span><span class="o">;</span>
 		<span class="k">if</span><span class="o">(</span><span class="k">typeof</span> <span class="nx">formId</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span><span class="o">){</span>
 			<span class="c">// Determine if the argument is a form id or a form name.</span>
-<span class="c"></span>			<span class="c">// Note form name usage is deprecated by supported</span>
+<span class="c"></span>			<span class="c">// Note form name usage is deprecated but supported</span>
 <span class="c"></span>			<span class="c">// here for legacy reasons.</span>
 <span class="c"></span>			<span class="nx">oForm</span> <span class="o">=</span> <span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">formId</span><span class="o">)</span> <span class="o">||</span> <span class="nb">document</span><span class="o">.</span><span class="nx">forms</span><span class="o">[</span><span class="nx">formId</span><span class="o">]);</span>
 		<span class="o">}</span>
@@ -804,7 +804,7 @@
 <span class="c">   */</span>
 	<span class="nx">appendPostData</span><span class="o">:</span><span class="k">function</span><span class="o">(</span><span class="nx">postData</span><span class="o">)</span>
 	<span class="o">{</span>
-		<span class="k">var</span> <span class="nx">formElements</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="o">();</span>
+		<span class="k">var</span> <span class="nx">formElements</span> <span class="o">=</span> <span class="o">[];</span>
 		<span class="k">var</span> <span class="nx">postMessage</span> <span class="o">=</span> <span class="nx">postData</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span><span class="s1">&#39;&amp;&#39;</span><span class="o">);</span>
 		<span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">postMessage</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
 			<span class="k">var</span> <span class="nx">delimitPos</span> <span class="o">=</span> <span class="nx">postMessage</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">&#39;=&#39;</span><span class="o">);</span>
