@@ -1,12 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.com/yui/license.txt
-Version: 0.12.1
-*/
-
-
-
 
 (function(){var Dom=YAHOO.util.Dom,Event=YAHOO.util.Event;YAHOO.widget.MenuManager=function(){var m_bInitializedEventHandlers=false,m_oMenus={},m_oItems={},m_oVisibleMenus={},me=this;function addItem(p_oItem){var sYUIId=Dom.generateId();if(p_oItem&&m_oItems[sYUIId]!=p_oItem){p_oItem.element.setAttribute("yuiid",sYUIId);m_oItems[sYUIId]=p_oItem;p_oItem.destroyEvent.subscribe(onItemDestroy,p_oItem);}}
 function removeItem(p_oItem){var sYUIId=p_oItem.element.getAttribute("yuiid");if(sYUIId&&m_oItems[sYUIId]){delete m_oItems[sYUIId];}}

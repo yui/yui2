@@ -1,12 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.com/yui/license.txt
-Version: 0.12.1
-*/
-
-
-
 /**
 * @module menu
 * @description <p>The Menu Library features a collection of widgets that make 

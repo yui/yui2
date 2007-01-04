@@ -1,10 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.com/yui/license.txt
-version: 0.12.0
-*/
-
  /**
  * The AutoComplete control provides the front-end logic for text-entry suggestion and
  * completion functionality.
