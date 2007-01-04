@@ -1,10 +1,3 @@
-/*                                                                                                                                                      
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-version: 0.12.1
-*/ 
-
 /**
  * The CustomEvent class lets you define events for your application
  * that can be subscribed to by one or more independent component.
