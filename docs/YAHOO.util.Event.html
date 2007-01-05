@@ -1416,9 +1416,14 @@ event is modified using the current time.
                                         
                                          static 
                                         
-                                        void
+                                        [x, y]
                                             <strong>getXY</strong>
                                            (
+                                                
+                                                        
+                                                         ev
+                                                    
+                                                
                                             )
                                         </code>
                                         
@@ -1428,13 +1433,20 @@ event is modified using the current time.
 
                                         <div class="description">
 
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>ev &lt;Event&gt;</code>
+                                                             the event
+                                                        </dd>
+                                                </dl>
 
                                                 <dl>
                                                     <dt>Returns:
                                                     <code>
-                                                        void
+                                                        [x, y]
                                                     </code></dt>
-                                                    <dd></dd>
+                                                    <dd>the pageX and pageY properties of the event</dd>
                                                 </dl>
              
                                         </div>
@@ -2205,7 +2217,7 @@ DOM element cache</a>
                                 <li><!--<code>Date</code>-->
                                 <a href="#getTime">getTime</a>
                                 </li>
-                                <li><!--<code>void</code>-->
+                                <li><!--<code>[x, y]</code>-->
                                 <a href="#getXY">getXY</a>
                                 </li>
                                 <li><!--<code>void</code>-->
