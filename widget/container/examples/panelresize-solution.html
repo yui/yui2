@@ -46,13 +46,41 @@
 					this.resizeHandle.id = this.id + "_r";
 					this.resizeHandle.className = YAHOO.widget.ResizePanel.CSS_RESIZE_HANDLE;
 						
+                    this.beforeShowEvent.subscribe(function() {
+
+                        this.body.style.overflow = "auto";
+                    
+                    }, this, true);
+
+
+                    this.beforeHideEvent.subscribe(function() {
+
+                        /*
+                             Set the CSS "overflow" property to "hidden" before
+                             hiding the panel to prevent the scrollbars from 
+                             bleeding through on Firefox for OS X.
+                        */
+
+                        this.body.style.overflow = "hidden";
+                    
+                    }, this, true);
+
+
 					this.beforeRenderEvent.subscribe(function() {
-							if (! this.footer) {
-								this.setFooter("");
-							}
-						}, 
-						this, true
-					);
+
+                        /*
+                             Set the CSS "overflow" property to "hidden" by
+                             default to prevent the scrollbars from bleeding
+                             through on Firefox for OS X.
+                        */
+
+                        this.body.style.overflow = "hidden";
+
+                        if (! this.footer) {
+                            this.setFooter("");
+                        }
+
+                    }, this, true);
 
 					this.renderEvent.subscribe(function() {
 						var me = this;
