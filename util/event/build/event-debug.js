@@ -1034,7 +1034,8 @@ if (!YAHOO.util.Event) {
             /**
              * Returns the pageX and pageY properties as an indexed array.
              * @method getXY
-             * @type int[]
+             * @param {Event} ev the event
+             * @return {[x, y]} the pageX and pageY properties of the event
              * @static
              */
             getXY: function(ev) {
