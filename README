@@ -1,5 +1,12 @@
 YUI Library Release Notes
 
+*** version 0.12.2 ***
+
+This update contains general fixes to the YUI library.  Please see the
+README file for each component in the build directory for specific updates since
+version 0.12.1.  As part of the 0.12.2 update, a number of corrections have been
+made to functional examples that were configured incorrectly in 0.12.1.
+
 *** version 0.12.1 ***
 
 This update contains general fixes to the YUI library.  Please see the
