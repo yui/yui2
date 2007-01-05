@@ -1,18 +1,5 @@
 #!/bin/sh
 
-# Create the copyright notice
-
-echo "/*" > copyright.txt
-echo "Copyright (c) `date +%Y`, Yahoo! Inc. All rights reserved." >> copyright.txt
-echo "Code licensed under the BSD License:" >> copyright.txt
-echo "http://developer.yahoo.com/yui/license.txt" >> copyright.txt
-echo "Version: 0.12.1" >> copyright.txt
-echo "*/" >> copyright.txt
-echo "" >> copyright.txt
-echo "" >> copyright.txt
-echo "" >> copyright.txt
-
-
 # Build the JavaScript
 
 cat src/js/menumanager.js src/js/menu.js src/js/menumodule.js src/js/menuitem.js src/js/menumoduleitem.js src/js/contextmenu.js src/js/contextmenuitem.js src/js/menubar.js src/js/menubaritem.js > build/menu-lib.js
