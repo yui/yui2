@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 
 		<link type="text/css" rel="stylesheet" href="../../../build/fonts/fonts.css">
 		<link type="text/css" rel="stylesheet" href="../../../build/reset/reset.css">
@@ -32,12 +33,20 @@
 			function updateCal() {
 				var txtDate1 = document.getElementById("date1");
 
-				YAHOO.example.calendar.cal1.select(txtDate1.value);
-				
-				var firstDate = YAHOO.example.calendar.cal1.getSelectedDates()[0];
-				YAHOO.example.calendar.cal1.cfg.setProperty("pagedate", (firstDate.getMonth()+1) + "/" + firstDate.getFullYear());
-				
-				YAHOO.example.calendar.cal1.render();
+				if (txtDate1.value != "") {
+					YAHOO.example.calendar.cal1.select(txtDate1.value);
+					
+					var firstDate = YAHOO.example.calendar.cal1.getSelectedDates()[0];
+					YAHOO.example.calendar.cal1.cfg.setProperty("pagedate", (firstDate.getMonth()+1) + "/" + firstDate.getFullYear());
+					
+					YAHOO.example.calendar.cal1.render();
+				}
+			}
+
+			// For this example page, stop the Form from being submitted, and update the cal instead
+			function handleSubmit(e) {
+				updateCal();
+				YAHOO.util.Event.preventDefault(e);
 			}
 
 			function init() {
@@ -48,6 +57,7 @@
 				YAHOO.example.calendar.cal1.render();
 
 				YAHOO.util.Event.addListener("update", "click", updateCal);
+				YAHOO.util.Event.addListener("dates", "submit", handleSubmit);
 			}
 
 			YAHOO.util.Event.addListener(window, "load", init);
@@ -57,7 +67,7 @@
 	<body>
 		<div id="cal1Container"></div>
 
-		<form name="dates">
+		<form name="dates" id="dates">
 			<input type="text" name="date1" id="date1" />
 			<button type="button" id="update">&lt; Update Calendar</button>
 		</form>
