@@ -779,7 +779,7 @@ YAHOO.util.Element.prototype = {
         
         // set it on the element if not a property
         if ( !this._configs[key] && !Lang.isUndefined(el[key]) ) {
-            _registerHTMLAttr(this, key);
+            _registerHTMLAttr.call(this, key);
         }
 
         return AttributeProvider.prototype.set.apply(this, arguments);
@@ -797,13 +797,17 @@ YAHOO.util.Element.prototype = {
     },
     
     configureAttribute: function(property, map, init) { // protect html attributes
-        if (!this._configs[property] && this._configs.element && 
-                !Lang.isUndefined(this._configs.element[property]) ) {
-            _registerHTMLAttr(this, property, map);
-            return false;
+        var el = this.get('element');
+        if (!el) {
+            this._queue[this._queue.length] = ['configureAttribute', arguments];
+            return;
         }
         
-        return AttributeProvider.prototype.configure.apply(this, arguments);
+        if (!this._configs[property] && !Lang.isUndefined(el[property]) ) {
+            _registerHTMLAttr.call(this, property, map);
+        }
+        
+        return AttributeProvider.prototype.configureAttribute.apply(this, arguments);
     },
     
     getAttributeKeys: function() {
@@ -851,7 +855,7 @@ YAHOO.util.Element.prototype = {
         };
 
         if ( Lang.isString(el) ) {
-            _registerHTMLAttr(this, 'id', { value: el });
+            _registerHTMLAttr.call(this, 'id', { value: el });
             YAHOO.util.Event.onAvailable(el, function() {
                 attr.element = Dom.get(el);
                 this.fireEvent('available', {
@@ -878,15 +882,15 @@ YAHOO.util.Element.prototype = {
  * @param {String} key The name of the config to register
  * @param {Object} map A key-value map of the config's params
  */
-var _registerHTMLAttr = function(self, key, map) {
-    var el = self.get('element');
+var _registerHTMLAttr = function(key, map) {
+    var el = this.get('element');
     map = map || {};
     map.name = key;
     map.method = map.method || function(value) {
         el[key] = value;
     };
     map.value = map.value || el[key];
-    self._configs[key] = new YAHOO.util.Attribute(map, self);
+    this._configs[key] = new YAHOO.util.Attribute(map, this);
 };
 
 /**
