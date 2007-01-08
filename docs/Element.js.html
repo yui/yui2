@@ -351,7 +351,7 @@
         
         <span class="c">// set it on the element if not a property</span>
 <span class="c"></span>        <span class="k">if</span> <span class="o">(</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">el</span><span class="o">[</span><span class="nx">key</span><span class="o">])</span> <span class="o">)</span> <span class="o">{</span>
-            <span class="nx">_registerHTMLAttr</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">key</span><span class="o">);</span>
+            <span class="nx">_registerHTMLAttr</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">key</span><span class="o">);</span>
         <span class="o">}</span>
 
         <span class="k">return</span> <span class="nx">AttributeProvider</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">set</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
@@ -371,13 +371,17 @@
     <span class="o">},</span>
     
     <span class="nx">configureAttribute</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">property</span><span class="o">,</span> <span class="nx">map</span><span class="o">,</span> <span class="nx">init</span><span class="o">)</span> <span class="o">{</span> <span class="c">// protect html attributes</span>
-<span class="c"></span>        <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">[</span><span class="nx">property</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">.</span><span class="nx">element</span> <span class="o">&amp;&amp;</span> 
-                <span class="o">!</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">.</span><span class="nx">element</span><span class="o">[</span><span class="nx">property</span><span class="o">])</span> <span class="o">)</span> <span class="o">{</span>
-            <span class="nx">_registerHTMLAttr</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">property</span><span class="o">,</span> <span class="nx">map</span><span class="o">);</span>
-            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_queue</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">_queue</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;configureAttribute&#39;</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">];</span>
+            <span class="k">return</span><span class="o">;</span>
         <span class="o">}</span>
         
-        <span class="k">return</span> <span class="nx">AttributeProvider</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">configure</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">[</span><span class="nx">property</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">el</span><span class="o">[</span><span class="nx">property</span><span class="o">])</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="nx">_registerHTMLAttr</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">property</span><span class="o">,</span> <span class="nx">map</span><span class="o">);</span>
+        <span class="o">}</span>
+        
+        <span class="k">return</span> <span class="nx">AttributeProvider</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">configureAttribute</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
     <span class="o">},</span>
     
     <span class="nx">getAttributeKeys</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
@@ -425,7 +429,7 @@
         <span class="o">};</span>
 
         <span class="k">if</span> <span class="o">(</span> <span class="nx">Lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
-            <span class="nx">_registerHTMLAttr</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s1">&#39;id&#39;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">el</span> <span class="o">});</span>
+            <span class="nx">_registerHTMLAttr</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s1">&#39;id&#39;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">el</span> <span class="o">});</span>
             <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">onAvailable</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
                 <span class="nx">attr</span><span class="o">.</span><span class="nx">element</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;available&#39;</span><span class="o">,</span> <span class="o">{</span>
@@ -452,15 +456,15 @@
 <span class="c"> * @param {String} key The name of the config to register</span>
 <span class="c"> * @param {Object} map A key-value map of the config&#39;s params</span>
 <span class="c"> */</span>
-<span class="k">var</span> <span class="nx">_registerHTMLAttr</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">self</span><span class="o">,</span> <span class="nx">key</span><span class="o">,</span> <span class="nx">map</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">self</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">);</span>
+<span class="k">var</span> <span class="nx">_registerHTMLAttr</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span> <span class="nx">map</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">);</span>
     <span class="nx">map</span> <span class="o">=</span> <span class="nx">map</span> <span class="o">||</span> <span class="o">{};</span>
     <span class="nx">map</span><span class="o">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">key</span><span class="o">;</span>
     <span class="nx">map</span><span class="o">.</span><span class="nx">method</span> <span class="o">=</span> <span class="nx">map</span><span class="o">.</span><span class="nx">method</span> <span class="o">||</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
         <span class="nx">el</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
     <span class="o">};</span>
     <span class="nx">map</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">map</span><span class="o">.</span><span class="nx">value</span> <span class="o">||</span> <span class="nx">el</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
-    <span class="nx">self</span><span class="o">.</span><span class="nx">_configs</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Attribute</span><span class="o">(</span><span class="nx">map</span><span class="o">,</span> <span class="nx">self</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Attribute</span><span class="o">(</span><span class="nx">map</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
