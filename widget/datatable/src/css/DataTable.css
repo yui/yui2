@@ -8,6 +8,12 @@ td {
 
 .yui-dt-headcontainer {
     position:relative;
+    
+}
+
+.yui-dt-columntext {
+    position:relative;
+    border-right:10px;
 }
 
 .yui-dt-headresizer {
@@ -24,6 +30,7 @@ td {
 .yui-dt-sortable {
     cursor:hand;
     cursor:pointer;
+    text-decoration:underline;
 }/*margin:0 4px 0 4px;*/
 
 #scroll  {

@@ -3,8 +3,146 @@
 /****************************************************************************/
 
 /**
- * The Column class defines and manages attributes of DataTable Columns,
- * including certain DOM attributes of the associated TH.
+ * The Columnset class defines and manages a DataTable's Columns,
+ * including nested hierarchies and access to individual Column instances.
+ *
+ * @class Columnset
+ * @constructor
+ * @param aHeaders {Object[]} Array of object literals that define header cells.
+ */
+YAHOO.widget.Columnset = function(aHeaders) {
+//TODO: Do we need COL.prevSibling, COL.nextSibling?
+    // Tree representation of all Columns
+    var tree = [];
+    // Flat representation of all Columns
+    var flat = [];
+    // Flat representation of Columns that display data
+    var keys = [];
+
+    var nodelevel = -1;
+
+    // Internal recursive function to parse columns
+    var parseColumns = function(nodeList, parent) {
+        nodelevel++;
+        // A node level is an array of Columns
+        if(!tree[nodelevel]) {
+            tree[nodelevel] = [];
+        }
+
+        // Determine if any nodes at this level have children
+        var nodeLevelHasChildren = false;
+        for(var i=0; i<nodeList.length; i++) {
+            if(nodeList[i].children) {
+                nodeLevelHasChildren = true;
+            }
+        }
+
+        // Parse each node for attributes and any children
+        for(var i=0; i<nodeList.length; i++) {
+            // Instantiate a Column for each node
+            var oColumn = new YAHOO.widget.Column(flat.length, nodeList[i]);
+            flat.push(oColumn);
+            
+            // Assign parent, if applicable
+            if(parent) {
+                oColumn.parent = parent;
+            }
+
+            // Start with default values
+            oColumn.rowspan = 1;
+            oColumn.colspan = 1;
+
+            // Column may have children
+            if(oColumn.children) {
+                var children = oColumn.children;
+                // Children increase colspan of the Column
+                oColumn.colspan = children.length;
+
+                // Children increase colspan of the Column's parent
+                if (parent && parent.colspan) {
+                    parent.colspan += children.length-1;
+                }
+                
+                // Children must also be parsed
+                if(!tree[nodelevel+1]) {
+                    tree[nodelevel+1] = [];
+                }
+               parseColumns(children, oColumn);
+            }
+            
+            // This Column does not have children,
+            // but other Columns at this level do
+            else if(nodeLevelHasChildren) {
+                // Children of siblings increase the rowspan of the Column
+                oColumn.rowspan = 2;
+                if(oColumn.key) {
+                    keys.push(oColumn);
+                }
+            }
+            // This entire node level does not have any children
+            else {
+                if(oColumn.key) {
+                    keys.push(oColumn);
+                }
+            }
+
+            // Add the Column to the tree's row array
+            tree[nodelevel].push(oColumn);
+        }
+        nodelevel--;
+    };
+
+    // Do the parsing
+    if(aHeaders.length > 0) {
+        parseColumns(aHeaders);
+    }
+
+    this.tree = tree;
+    this.flat = flat;
+    this.keys = keys
+    
+    YAHOO.log("Columnset initialized", "info", this.toString());
+};
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Tree representation of Column hierarchy.
+ *
+ * @property tree
+ * @type YAHOO.widget.Column[]
+ * @default []
+ */
+YAHOO.widget.Columnset.prototype.tree = [];
+
+/**
+ * Flattened representation of all Columns.
+ *
+ * @property flat
+ * @type YAHOO.widget.Column[]
+ * @default []
+ */
+YAHOO.widget.Columnset.prototype.flat = [];
+
+/**
+ * Array of Columns that hold keys to data.
+ *
+ * @property keys
+ * @type YAHOO.widget.Column[]
+ * @default []
+ */
+YAHOO.widget.Columnset.prototype.keys = [];
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+/**
+ * The Column class defines and manages attributes of DataTable Columns
  *
  *
  * @class Column
@@ -13,7 +151,11 @@
  * @param oConfigs {Object} Object literal of configuration values.
  */
 YAHOO.widget.Column = function(nIndex, oConfigs) {
+    // Internal variables
+    this.id = "yui-dtcol"+YAHOO.widget.Column._nCount;
     this.index = nIndex;
+    
+    // Object literal defines Column attributes
     if(typeof oConfigs == "object") {
         for(var sConfig in oConfigs) {
             if(sConfig) {
@@ -21,7 +163,7 @@ YAHOO.widget.Column = function(nIndex, oConfigs) {
             }
         }
     }
-    this.id = "yui-dtcol"+YAHOO.widget.Column._nCount;
+    
     YAHOO.widget.Column._nCount++;
 };
 
@@ -39,7 +181,7 @@ YAHOO.widget.Column = function(nIndex, oConfigs) {
  * @static
  * @default 0
  */
-YAHOO.widget.Column._nCount =0;
+YAHOO.widget.Column._nCount = 0;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -48,7 +190,7 @@ YAHOO.widget.Column._nCount =0;
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Unique DOM id attribute.
+ * Unique ID, also assigned as DOM ID.
  *
  * @property id
  * @type String
@@ -56,21 +198,12 @@ YAHOO.widget.Column._nCount =0;
 YAHOO.widget.Column.prototype.id = null;
 
 /**
- * Current offsetWidth of the column (in pixels).
+ * Reference to Column's index within its Columnset's flat array.
  *
- * @property width
+ * @property index
  * @type Number
  */
-YAHOO.widget.Column.prototype.width = null;
-
-/**
- * Minimum width the column can support (in pixels). Value is populated only if table
- * is fixedwidth, null otherwise.
- *
- * @property minWidth
- * @type Number
- */
-YAHOO.widget.Column.prototype.minWidth = null;
+YAHOO.widget.Column.prototype.index = null;
 
 /**
  * Number of table cells the Column spans.
@@ -91,23 +224,7 @@ YAHOO.widget.Column.prototype.colspan = 1;
 YAHOO.widget.Column.prototype.rowspan = 1;
 
 /**
- * Column's index within its Columnset's flat array.
- *
- * @property index
- * @type Number
- */
-YAHOO.widget.Column.prototype.index = null;
-
-/**
- * Column's chilren within its Columnset's tree hierarchy, or null.
- *
- * @property children
- * @type YAHOO.widget.Column
- */
-YAHOO.widget.Column.prototype.children = null;
-
-/**
- * Column's parent within its Columnset's tree hierarchy, or null.
+ * Column's parent, or null.
  *
  * @property parent
  * @type YAHOO.widget.Column
@@ -115,32 +232,15 @@ YAHOO.widget.Column.prototype.children = null;
 YAHOO.widget.Column.prototype.parent = null;
 
 /**
- * Column's previous sibling within its Columnset's tree hierarchy, or null.
+ * Array of Column's chilren, or null.
  *
- * @property prevSibling
- * @type YAHOO.widget.Column
+ * @property children
+ * @type YAHOO.widget.Column[]
  */
-YAHOO.widget.Column.prototype.prevSibling = null;
+YAHOO.widget.Column.prototype.children = null;
 
 /**
- * Column's next sibling within its Columnset's tree hierarchy, or null.
- *
- * @property nextSibling
- * @type YAHOO.widget.Column
- */
-YAHOO.widget.Column.prototype.nextSibling = null;
-
-/**
- * True if column is last. //TODO: do this programmatically
- *
- * @property isLast
- * @type Boolean
- * @default false
- */
-YAHOO.widget.Column.prototype.isLast = false;
-
-/**
- * Associated database column.
+ * Associated database column, or null.
  *
  * @property key
  * @type String
@@ -192,6 +292,61 @@ YAHOO.widget.Column.prototype.resizeable = false;
  */
 YAHOO.widget.Column.prototype.sortable = false;
 
+
+
+
+
+
+
+
+
+
+
+
+//TODO: clean these up
+
+/**
+ * Current offsetWidth of the column (in pixels).
+ *
+ * @property width
+ * @type Number
+ */
+YAHOO.widget.Column.prototype.width = null;
+
+/**
+ * Minimum width the column can support (in pixels). Value is populated only if table
+ * is fixedwidth, null otherwise.
+ *
+ * @property minWidth
+ * @type Number
+ */
+YAHOO.widget.Column.prototype.minWidth = null;
+
+/**
+ * Column's previous sibling within its Columnset's tree hierarchy, or null.
+ *
+ * @property prevSibling
+ * @type YAHOO.widget.Column
+ */
+YAHOO.widget.Column.prototype.prevSibling = null;
+
+/**
+ * Column's next sibling within its Columnset's tree hierarchy, or null.
+ *
+ * @property nextSibling
+ * @type YAHOO.widget.Column
+ */
+YAHOO.widget.Column.prototype.nextSibling = null;
+
+/**
+ * True if column is last. //TODO: do this programmatically
+ *
+ * @property isLast
+ * @type Boolean
+ * @default false
+ */
+YAHOO.widget.Column.prototype.isLast = false;
+
 /**
  * True if column is currently sorted in ascending order.
  *
@@ -229,21 +384,25 @@ YAHOO.widget.Column.prototype.sortDescHandler = null;
  */
 YAHOO.widget.Column.prototype.sortAscHandler = null;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Public methods
 //
 /////////////////////////////////////////////////////////////////////////////
-
- /**
- * Public accessor to the unique name of the Column instance.
- *
- * @method toString
- * @return {String} Unique name of the Column instance.
- */
-YAHOO.widget.Column.prototype.toString = function() {
-    return "Column " + this.index + " (" + this.key + ")";
-};
 
  /**
  * Outputs markup into the given TD based on given Record.
@@ -314,6 +473,16 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
         YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_EDITABLE);
     }
 };
+
+
+
+
+
+
+
+//TODO: clean these up
+
+
 
  /**
  * Takes innerHTML from TD and parses out data for storage in Recordset.
@@ -466,7 +635,7 @@ YAHOO.widget.Column.selectParser = function(sMarkup) {
  * @param elCell {HTMLElement} TD to format for display.
  * @param oRecord {YAHOO.widget.Record} Record that holds data for the row.
  */
-YAHOO.widget.Column.showEditor = function(elCell,oRecord) {
+YAHOO.widget.Column.prototype.showEditor = function(elCell,oRecord) {
     var oEditor = this.editor;
     if(!oEditor) {
         oEditor = new YAHOO.widget.ColumnEditor(this, elCell);
@@ -482,148 +651,29 @@ YAHOO.widget.Column.showEditor = function(elCell,oRecord) {
  *
  * @method hideEditor
  */
-YAHOO.widget.Column.hideEditor = function() {
+YAHOO.widget.Column.prototype.hideEditor = function() {
     var oEditor = this.editor;
     if(oEditor) {
         oEditor.hide();
     }
 };
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
 
-/**
- * The Columnset class defines and manages the complete set of DataTable Columns,
- * including nested hierarchies, based on an array of columns object literals.
- *
- * @class Columnset
- * @constructor
- * @param aHeaderCells {Object[]} Array of header cells defined by object literals.
- */
-YAHOO.widget.Columnset = function(aHeaderCells) {
-//TODO: COL.prevSibling, COL.nextSibling
-    // Tree representation of all Columns
-    var tree = [];
-    // Flat representation of all Columns
-    var flat = [];
-    // Flat representation of Columns in the bottom row of headers
-    var bottom = [];
 
-    var nodelevel = -1;
 
-    // Internal recursive function to parse columns
-    var parseColumns = function(nodeList, parent) {
-        nodelevel++;
-        // A node level is an array of Columns
-        if(!tree[nodelevel]) {
-            tree[nodelevel] = [];
-        }
 
-        // Determine if any nodes at this level have children
-        var nodeLevelHasChildren = false;
-        for(var i=0; i<nodeList.length; i++) {
-            if(nodeList[i].children) {
-                nodeLevelHasChildren = true;
-            }
-        }
 
-        // Parse each node for attributes and any children
-        for(var i=0; i<nodeList.length; i++) {
-            // A node is a Column
-            var oColumn = new YAHOO.widget.Column(tree.length, nodeList[i]);
-            flat.push(oColumn);
-            
-            // Assign parent, if any
-            if(parent) {
-                oColumn.parent = parent;
-            }
 
-            // Start with default values
-            oColumn.rowspan = 1;
-            oColumn.colspan = 1;
 
-            // Column may have a children that defines children
-            var children = oColumn.children;
-            if(children) {
-                // Children increase colspan of the Column
-                oColumn.colspan = children.length;
 
-                // Children increase colspan of the Column's parent
-                if (parent && parent.colspan) {
-                    parent.colspan += children.length-1;
-                }
-                
-                // Children must also be parsed
-                if(!tree[nodelevel+1]) {
-                    tree[nodelevel+1] = [];
-                }
-                parseColumns(children, oColumn);
-            }
-            
-            // This Column does not have children,
-            // but other Columns at this level do
-            else if(nodeLevelHasChildren) {
-                // Children of siblings increase the rowspan of the Column
-                oColumn.rowspan = 2;
-                bottom.push(oColumn);
-            }
-            // This entire node level does not have any children
-            else {
-                bottom.push(oColumn);
-            }
 
-            // Add the Column to the row array
-            tree[nodelevel].push(oColumn);
-        }
-        nodelevel--;
-    };
 
-    // Do the parsing
-    if(aHeaderCells.length > 0) {
-        parseColumns(aHeaderCells);
-    }
 
-    //var lastRowCellsLn = tree[tree.length-1].length;
-    //tree[tree.length-1][lastRowCellsLn-1].isLast = true
-    this.tree = tree;
-    this.flat = flat;
-    //bottom[bottom.length-1].isLast = true;
-    this.bottom = bottom;
-};
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Public member variables
-//
-/////////////////////////////////////////////////////////////////////////////
 
-/**
- * Tree representation of column hierarchy.
- *
- * @property tree
- * @type YAHOO.widget.Column[]
- * @default []
- */
-YAHOO.widget.Columnset.prototype.tree = [];
 
-/**
- * Flat array of all columns.
- *
- * @property flat
- * @type YAHOO.widget.Column[]
- * @default []
- */
-YAHOO.widget.Columnset.prototype.flat = [];
 
-/**
- * Flat array of columns that comprise the bottom row of headers.
- *
- * @property bottom
- * @type YAHOO.widget.Column[]
- * @default []
- */
-YAHOO.widget.Columnset.prototype.bottom = [];
+
 
 /****************************************************************************/
 /****************************************************************************/
@@ -640,7 +690,7 @@ YAHOO.widget.Columnset.prototype.bottom = [];
  */
 YAHOO.widget.ColumnEditor = function(oColumn, elCell) {
     this.column = oColumn;
-    
+
     var container = document.body.appendChild(document.createElement("div"));
     container.style.position = "absolute";
     container.style.zIndex = 9000;
@@ -654,7 +704,7 @@ YAHOO.widget.ColumnEditor = function(oColumn, elCell) {
         default:
             break;
     }
-    
+
     YAHOO.widget.ColumnEditor._nCount++;
 };
 
@@ -750,14 +800,14 @@ YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord
     this.input.style.width = (parseInt(elCell.offsetWidth)-7) + "px";
     this.input.style.height = (parseInt(elCell.offsetHeight)-7) + "px";
     this.input.value = oRecord[oColumn.key];
-    
+
     // Position and show
     var x = parseInt(YAHOO.util.Dom.getX(elCell))+1 || 0;
     var y = parseInt(YAHOO.util.Dom.getY(elCell))+1 || 0;
     this.container.style.left = x + "px";
     this.container.style.top = y + "px";
     this.container.style.display = "block";
-    
+
     this.input.focus();
     this.input.select();
 };
@@ -958,25 +1008,28 @@ YAHOO.util.WidthResizer.prototype.onDrag = function(e) {
     if(oDataTable.fixedwidth) {
         // Moving right or left?
         var sib = elCell.nextSibling;
-        var sibIndex = elCell.index + 1;
+        //var sibIndex = elCell.index + 1;
         var sibnewwidth = sib.offsetWidth - offsetX;
         if(sibnewwidth < this.sibMinWidth) {
             sibnewwidth = this.sibMinWidth;
         }
+
+        //TODO: how else to cycle through all the columns without having to use an index property?""
         for(var i=0; i<oDataTable._oColumnset.length; i++) {
             if((i != elCell.index) &&  (i!=sibIndex)) {
-                YAHOO.util.Dom.get(oDataTable._oColumnset.bottom[i].id).style.width = oDataTable._oColumnset.bottom[i].width + "px";
+                YAHOO.util.Dom.get(oDataTable._oColumnset.keys[i].id).style.width = oDataTable._oColumnset.keys[i].width + "px";
             }
         }
         sib.style.width = sibnewwidth;
         elCell.style.width = newWidth + "px";
-        oDataTable._oColumnset.bottom[sibIndex].width = sibnewwidth;
-        oDataTable._oColumnset.bottom[elCell.index].width = newWidth;
+        //oDataTable._oColumnset.flat[sibIndex].width = sibnewwidth;
+        //oDataTable._oColumnset.flat[elCell.index].width = newWidth;
 
     }
     else {
         elCell.style.width = newWidth + "px";
     }
 };
+
 
 

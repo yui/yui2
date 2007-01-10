@@ -1,9 +1,13 @@
 <!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>Build Table from Markup</title>
+<title>Example: DataTable - From Markup (YUI Library)</title>
+<link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
+<link type="text/css" rel="stylesheet" href="../../build/datatable/assets/datatable.css">
+<link type="text/css" rel="stylesheet" href="./css/examples.css">
+<link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
 <style type="text/css">
 table {border-collapse:collapse;margin:1em;}
 th, td {border:1px solid black;}
@@ -31,7 +35,7 @@ th {background-color:#696969;color:#fff;}
 <script type="text/javascript" src="./js/sampledata.js"></script>
 <script language="JavaScript">
 YAHOO.example.initPOTable = function() {
-    var myColumnset = [
+    var myHeaders = [
         {key:"paid",type:"checkbox",text:"Paid",sortable:true},
         {key:"due",type:"radio",text:"Due Next"},
         {key:"deprecated",type:"html",key:"markup",text:"Deprecated Stuff"},
@@ -44,24 +48,24 @@ YAHOO.example.initPOTable = function() {
 
     var myDataDriver = new YAHOO.widget.DataDriver();
     var myDataSource = new YAHOO.widget.DataSource(aPurchaseOrderObjects, myDataDriver);
-    var myDataTable = new YAHOO.widget.DataTable("potable",myColumnset,myDataSource);
+    var myDataTable = new YAHOO.widget.DataTable("potable",myHeaders,myDataSource);
 };
 YAHOO.util.Event.onAvailable("purchaseorders",YAHOO.example.initPOTable);
 
 
 YAHOO.example.initWebstatsTable = function() {
-    var myColumnset = [
+    var myHeaders = [
         {key:"network", text:"Web statistics across Y! Properties",
-            columnset: [
+            children: [
                 {key:"property", text:"Property Name", type:"text", sortable:true, resizeable:true},
                 {key:"visits", text:"Visits", type: "number",
-                    columnset: [
+                    children: [
                         {key:"visitspercent",text:"%", sortable:true, resizeable:true},
                         {key:"visitstotal",text:"Total", sortable:true, resizeable:true}
                     ]
                 },
                 {key:"views",text:"Views",colspan:2,
-                    columnset: [
+                    children: [
                         {key:"viewspercent",text:"%",type:"number", sortable:true, resizeable:true},
                         {key:"viewstotal",text:"Total",type:"number", sortable:true, resizeable:true}
                     ]
@@ -73,125 +77,127 @@ YAHOO.example.initWebstatsTable = function() {
 
     var myDataDriver = new YAHOO.widget.DataDriver();
     var myDataSource = new YAHOO.widget.DataSource(aWebstats, myDataDriver);
-    var myDataTable = new YAHOO.widget.DataTable("webstatstable",myColumnset,myDataSource);
+    var myDataTable = new YAHOO.widget.DataTable("webstatstable",myHeaders,myDataSource);
 };
 YAHOO.util.Event.onAvailable("webstats",YAHOO.example.initWebstatsTable);
 </script>
 
 </head>
-<body>
-<h1>Build Table from Markup</h1>
-<div id="purchaseorders">
-<table id="potable">
-    <thead>
-        <tr>
-            <th>Paid</th>
-            <th>Due Next</th>
-            <th>Deprecated Stuff</th>
-            <th>Index</th>
-            <th>PO ID</th>
-            <th>Quantity</th>
-            <th>$ Total</th>
-            <th>Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><input type="checkbox"></td>
-            <td><input type="radio"></td>
-            <td><b>boldstuff</b></td>
-            <td>1</td>
-            <td>467</td>
-            <td>6</td>
-            <td>$11.20</td>
-            <td>1/11/74</td>
-        </tr>
-        <tr>
-            <td><input type="checkbox"></td>
-            <td><input type="radio"></td>
-            <td><i>italicstuff</i></td>
-            <td>2</td>
-            <td>367</td>
-            <td>12</td>
-            <td>$1.25</td>
-            <td>11/12/82</td>
-        </tr>
-        <tr>
-            <td><input type="checkbox"></td>
-            <td><input type="radio"></td>
-            <td><big>bigstuff</big></td>
-            <td>3</td>
-            <td>167</td>
-            <td>4</td>
-            <td>$4.00</td>
-            <td>2/24/80</td>
-        </tr>
-        <tr>
-            <td><input type="checkbox"></td>
-            <td><input type="radio"></td>
-            <td><small>smallstuff</small></td>
-            <td>4</td>
-            <td>267</td>
-            <td>3</td>
-            <td>$2.12</td>
-            <td>1/11/81</td>
-        </tr>
-    </tbody>
-</table>
+<div id="hd">
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: From Markup</h1>
 </div>
-
-
-<div id="webstats">
-    <table id="webstatstable">
+<div id="bd">
+    <div id="purchaseorders">
+    <table id="potable">
         <thead>
             <tr>
-                <th colspan="7" rowspan="1" id="tabletitle">Web statistics across Y! properties</th>
-            </tr>
-            <tr>
-                <th colspan="1" rowspan="2" id="propname">Property Name</th>
-                <th colspan="2" rowspan="1" id="visits">Visits</th>
-                <th colspan="2" rowspan="1" id="views">Views</th>
-            </tr>
-            <tr>
-                <th colspan="1" rowspan="1" id="visitspercent">%</th>
-                <th colspan="1" rowspan="1" id="visitstotal">Total</th>
-                <th colspan="1" rowspan="1" id="viewspercent">%</th>
-                <th colspan="1" rowspan="1" id="viewstotal">Total</th>
+                <th>Paid</th>
+                <th>Due Next</th>
+                <th>Deprecated Stuff</th>
+                <th>Index</th>
+                <th>PO ID</th>
+                <th>Quantity</th>
+                <th>$ Total</th>
+                <th>Date</th>
             </tr>
         </thead>
-
         <tbody>
             <tr>
-                <td>food</td>
-                <td>20</td>
-                <td>400</td>
-                <td>44</td>
-                <td>657</td>
+                <td><input type="checkbox"></td>
+                <td><input type="radio"></td>
+                <td><b>boldstuff</b></td>
+                <td>1</td>
+                <td>467</td>
+                <td>6</td>
+                <td>$11.20</td>
+                <td>1/11/74</td>
             </tr>
             <tr>
-                <td>autos</td>
-                <td>24</td>
-                <td>377</td>
-                <td>32</td>
-                <td>567</td>
-            </tr>
-            <tr>
-                <td>360</td>
-                <td>32</td>
-                <td>548</td>
+                <td><input type="checkbox"></td>
+                <td><input type="radio"></td>
+                <td><i>italicstuff</i></td>
+                <td>2</td>
+                <td>367</td>
                 <td>12</td>
-                <td>543</td>
-                </tr>
+                <td>$1.25</td>
+                <td>11/12/82</td>
+            </tr>
             <tr>
-                <td>mail</td>
-                <td>8</td>
-                <td>465</td>
-                <td>34</td>
-                <td>946</td>
+                <td><input type="checkbox"></td>
+                <td><input type="radio"></td>
+                <td><big>bigstuff</big></td>
+                <td>3</td>
+                <td>167</td>
+                <td>4</td>
+                <td>$4.00</td>
+                <td>2/24/80</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox"></td>
+                <td><input type="radio"></td>
+                <td><small>smallstuff</small></td>
+                <td>4</td>
+                <td>267</td>
+                <td>3</td>
+                <td>$2.12</td>
+                <td>1/11/81</td>
             </tr>
         </tbody>
     </table>
-</div>
+    </div>
+
+
+    <div id="webstats">
+        <table id="webstatstable">
+            <thead>
+                <tr>
+                    <th colspan="7" rowspan="1" id="tabletitle">Web statistics across Y! properties</th>
+                </tr>
+                <tr>
+                    <th colspan="1" rowspan="2" id="propname">Property Name</th>
+                    <th colspan="2" rowspan="1" id="visits">Visits</th>
+                    <th colspan="2" rowspan="1" id="views">Views</th>
+                </tr>
+                <tr>
+                    <th colspan="1" rowspan="1" id="visitspercent">%</th>
+                    <th colspan="1" rowspan="1" id="visitstotal">Total</th>
+                    <th colspan="1" rowspan="1" id="viewspercent">%</th>
+                    <th colspan="1" rowspan="1" id="viewstotal">Total</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>food</td>
+                    <td>20</td>
+                    <td>400</td>
+                    <td>44</td>
+                    <td>657</td>
+                </tr>
+                <tr>
+                    <td>autos</td>
+                    <td>24</td>
+                    <td>377</td>
+                    <td>32</td>
+                    <td>567</td>
+                </tr>
+                <tr>
+                    <td>360</td>
+                    <td>32</td>
+                    <td>548</td>
+                    <td>12</td>
+                    <td>543</td>
+                    </tr>
+                <tr>
+                    <td>mail</td>
+                    <td>8</td>
+                    <td>465</td>
+                    <td>34</td>
+                    <td>946</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
 <script language="JavaScript">
 YAHOO.example.initPage = function() {
@@ -199,5 +205,6 @@ YAHOO.example.initPage = function() {
 };
 YAHOO.util.Event.addListener(window,"load",YAHOO.example.initPage);
 </script>
+</div>
 </body>
 </html>
