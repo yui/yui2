@@ -1416,7 +1416,7 @@ YAHOO.widget.DataTable.prototype.getSelectedRows = function() {
  * Returns pointer to the DataTable instance's Columnset instance.
  *
  * @method getColumnset
- * @return {YAHOO.widget.Columnset} Columsnet instance.
+ * @return {YAHOO.widget.Columnset} Columnset instance.
  */
 YAHOO.widget.DataTable.prototype.getColumnset = function() {
     return this._oColumnset;
@@ -1815,15 +1815,15 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
  */
 YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
     var evt = oArgs.event;
-    var target = oArgs.target;
+    var element = oArgs.target;
 
     //TODO: add a safety net in case TD is never reached
     // Walk up the DOM until we get to the TD
-    while(target.nodeName.toLowerCase() != "td") {
-        target = target.parentNode;
+    while(element.nodeName.toLowerCase() != "td") {
+        element = element.parentNode;
     }
 
-    this.editCell(target);
+    this.editCell(element);
 };
 
 /**

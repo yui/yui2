@@ -691,7 +691,17 @@ YAHOO.widget.Column.prototype.hideEditor = function() {
 YAHOO.widget.ColumnEditor = function(oColumn, elCell) {
     this.column = oColumn;
 
-    var container = document.body.appendChild(document.createElement("div"));
+    //TODO: make sure columneditors get destroyed if widget gets destroyed
+    // Works better to attach ColumnEditor to document.body
+    // rather than the DataTable container
+    // elTable comes in as a cell. Traverse up DOM to find the table.
+    // TODO: safety net in case table is never found.
+    //while(elCell.nodeName.toLowerCase() != "table") {
+    //    elCell = elCell.parentNode;
+    //}
+    //this.tableContainer = elCell.parentNode;
+    
+    var container = document.body.appendChild(document.createElement("div"));//this.tableContainer.appendChild(document.createElement("div"));
     container.style.position = "absolute";
     container.style.zIndex = 9000;
     container.id = "yui-dt-coled" + YAHOO.widget.ColumnEditor._nCount;
@@ -739,6 +749,14 @@ YAHOO.widget.ColumnEditor._nCount =0;
  * @type HTMLElement
  */
 YAHOO.widget.ColumnEditor.prototype.container = null;
+
+ /**
+ * Reference to the container DOM element for the DataTable.
+ *
+ * @property tableContainer
+ * @type HTMLElement
+ */
+//YAHOO.widget.ColumnEditor.prototype.tableContainer = null;
 
  /**
  * Reference to the Column object for the ColumnEditor.
@@ -802,8 +820,26 @@ YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord
     this.input.value = oRecord[oColumn.key];
 
     // Position and show
-    var x = parseInt(YAHOO.util.Dom.getX(elCell))+1 || 0;
-    var y = parseInt(YAHOO.util.Dom.getY(elCell))+1 || 0;
+    var x,y;
+    
+    // Don't use getXY for Opera
+    if(window.opera) {
+        x = elCell.offsetLeft;
+        y = elCell.offsetTop;
+        while(elCell.offsetParent) {
+            x += elCell.offsetParent.offsetLeft;
+            y += elCell.offsetParent.offsetTop
+            elCell = elCell.offsetParent;
+        }
+    }
+    else {
+        var xy = YAHOO.util.Dom.getXY(elCell);
+        x = parseInt(YAHOO.util.Dom.getX(elCell))//xy[0] + 1;
+        y = parseInt(YAHOO.util.Dom.getY(elCell))//xy[1] + 1;
+    }
+    //YAHOO.log("xy "+xy,"debug",this.toString());
+    //YAHOO.log("x "+x,"debug",this.toString());
+    //YAHOO.log("y "+y,"debug",this.toString());
     this.container.style.left = x + "px";
     this.container.style.top = y + "px";
     this.container.style.display = "block";
