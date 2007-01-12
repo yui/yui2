@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <title>Button Gallery</title>
+
+        <link rel="stylesheet" type="text/css" href="../../../build/fonts/fonts.css">
+        <link rel="stylesheet" type="text/css" href="../src/css/button.css">
+
+        <style>
+
+            #pushbutton3 button,
+            #pushbutton5 button {
+
+                padding-left:2em;
+                background:url(http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/bsc/add16_nrm_1.gif) 10% 50% no-repeat;
+            
+            }
+
+            #pushbutton2 button img,
+            #pushbutton4 button img,
+            #linkbutton2 a img,
+            #linkbutton5 a img {
+            
+                margin:-2px 0;
+            
+            }
+
+
+            #linkbutton3 a, 
+            #linkbutton6 a {
+
+                padding-left:2em;
+                background:url(http://us.i1.yimg.com/us.yimg.com/i/us/nt/b/purpley.1.0.gif) 10% 50% no-repeat;
+            
+            }
+
+            .yuibutton img {
+
+                border:none;
+                vertical-align:middle;
+
+            }
+
+
+        </style>
+
+        <script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
+        <script type="text/javascript" src="../../../build/event/event.js"></script>
+        <script type="text/javascript" src="../../../build/dom/dom.js"></script>
+
+        <script type="text/javascript" src="../../tabview/src/js/Lang.js"></script>
+        <script type="text/javascript" src="../../tabview/src/js/Attribute.js"></script>
+        <script type="text/javascript" src="../../tabview/src/js/AttributeProvider.js"></script>
+        <script type="text/javascript" src="../../tabview/src/js/Element.js"></script>
+
+        <script type="text/javascript" src="../src/js/button.js"></script>
+
+        <script type="text/javascript">
+
+            YAHOO.example.onWindowLoad = function(p_oEvent) {
+        
+                var oPushButton1 = new YAHOO.widget.Button("pushbutton1");
+                var oPushButton2 = new YAHOO.widget.Button("pushbutton2", { id:"pushbutton2" });
+                var oPushButton3 = new YAHOO.widget.Button("pushbutton3");
+    
+                var oPushButton4 = new YAHOO.widget.Button( { id:"pushbutton4", label:"<img src=\"http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/bsc/add16_nrm_1.gif\" alt=\"Add\">", container:"pushbuttonsfromjavascript" });
+                var oPushButton5 = new YAHOO.widget.Button( { label:"Add", id:"pushbutton5", container:"pushbuttonsfromjavascript" });
+                var oPushButton6 = new YAHOO.widget.Button( { label:"Push Me!", container:"pushbuttonsfromjavascript" });
+    
+                var oLinkButton1 = new YAHOO.widget.Button("linkbutton1");
+                var oLinkButton2 = new YAHOO.widget.Button("linkbutton2");
+                var oLinkButton3 = new YAHOO.widget.Button("linkbutton3");
+    
+                var oLinkButton4 = new YAHOO.widget.Button( { type: "link", label:"Yahoo!", href: "http://www.yahoo.com", target:"_blank", container:"navbuttonsfromjavascript" });
+                var oLinkButton5 = new YAHOO.widget.Button( { type: "link", id:"linkbutton5", label:"<img src=\"http://us.i1.yimg.com/us.yimg.com/i/us/nt/b/purpley.1.0.gif\" alt=\"Yahoo\">", container:"navbuttonsfromjavascript" } );
+                var oLinkButton6 = new YAHOO.widget.Button( { type: "link", id:"linkbutton6", label:"Yahoo!", href: "http://www.yahoo.com", target:"_blank", container:"navbuttonsfromjavascript" });
+    
+                var oCheck1 = new YAHOO.widget.Button("check1");
+                var oCheck2 = new YAHOO.widget.Button("check2");
+                var oCheck3 = new YAHOO.widget.Button("check3");
+                var oCheck4 = new YAHOO.widget.Button("check4");
+    
+                var oCheck5 = new YAHOO.widget.Button( { type:"checkbox", label:"Check 5", name:"checkboxfield", value:"Check 5", container:"checkboxbuttonsfromjavascript" } );
+                var oCheck6 = new YAHOO.widget.Button( { type:"checkbox", label:"Check 6", name:"checkboxfield", value:"Check 6", container:"checkboxbuttonsfromjavascript" } );
+                var oCheck7 = new YAHOO.widget.Button( { type:"checkbox", label:"Check 7", name:"checkboxfield", value:"Check 7", container:"checkboxbuttonsfromjavascript" } );
+                var oCheck8 = new YAHOO.widget.Button( { type:"checkbox", label:"Check 8", name:"checkboxfield", value:"Check 8", container:"checkboxbuttonsfromjavascript" } );
+    
+                var oSubmitButton1 = new YAHOO.widget.Button("submitbuttonfield1", { label:"Submit Form" });
+                var oSubmitButton2 = new YAHOO.widget.Button( { type:"submit", label:"Submit Form", name:"submitbuttonfield2", value:"submitbuttonfield2value", container:"submitbuttonsfromjavascript" } );
+
+            };
+
+            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
+
+        </script>
+
+    </head>
+    <body>
+
+<?php
+    if(isset($_POST) && count($_POST) > 0) {
+?>
+        <div id="postdata">
+            <h2>Post Data</h2>
+            <pre>
+<?php    
+print_r($_POST);        
+?>
+            </pre>
+        </div>
+<?php    
+    }
+?>
+
+        <form id="test" name="s" method="post" action="example01.html">
+
+            <fieldset id="pushbuttons">
+                <legend>Push Buttons</legend>
+
+                <fieldset id="pushbuttonsfrommarkup">
+                    <legend>From Markup</legend>
+
+                    <input type="button" id="pushbutton1" name="pushbutton1" value="Push Me!">
+                    <span id="pushbutton2" class="yuibutton"><span><button type="button" name="stateexample4"><img src="http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/bsc/add16_nrm_1.gif" alt="Add"></button></span></span>
+                    <span id="pushbutton3" class="yuibutton"><span><button type="button" name="stateexample4">Add</button></span></span>
+
+                </fieldset>
+                
+                <fieldset id="pushbuttonsfromjavascript">
+                    <legend>From JavaScript</legend>
+                </fieldset>
+
+            </fieldset>
+
+            <fieldset id="navbuttons">
+                <legend>Navigational Buttons</legend>
+
+                <fieldset id="navbuttonsfrommarkup">
+                    <legend>From Markup</legend>
+
+                    <span id="linkbutton1"><span><a href="http://www.yahoo.com">Yahoo!</a></span></span>
+                    <span id="linkbutton2"><span><a href="http://www.yahoo.com"><img src="http://us.i1.yimg.com/us.yimg.com/i/us/nt/b/purpley.1.0.gif" alt="Yahoo!"></a></span></span>
+                    <span id="linkbutton3"><span><a href="http://www.yahoo.com">Yahoo!</a></span></span>
+
+                </fieldset>
+                
+                <fieldset id="navbuttonsfromjavascript">
+                    <legend>From JavaScript</legend>
+                </fieldset>              
+
+            </fieldset>
+
+            <fieldset id="checkboxbuttons">
+                <legend>Checkbox Buttons</legend>
+
+                <fieldset id="checkboxbuttonsfrommarkup">
+                    <legend>From Markup</legend>
+
+                    <input id="check1" type="checkbox" name="checkboxfield" value="Check 1">
+                    <input id="check2" type="checkbox" name="checkboxfield" value="Check 2">
+                    <input id="check3" type="checkbox" name="checkboxfield" value="Check 3">
+                    <input id="check4" type="checkbox" name="checkboxfield" value="Check 4">
+
+                </fieldset>
+
+                <fieldset id="checkboxbuttonsfromjavascript">
+                    <legend>From JavaScript</legend>
+                </fieldset>
+
+            </fieldset>
+
+            <fieldset id="submitbuttons">
+                <legend>Submit Buttons</legend>
+
+                <fieldset id="submitbuttonsfrommarkup">
+                    <legend>From Markup</legend>
+
+                    <input id="submitbuttonfield1" type="submit" name="submitbuttonfield1" value="submitbuttonfield1value">
+
+                </fieldset>
+
+                <fieldset id="submitbuttonsfromjavascript">
+                    <legend>From JavaScript</legend>
+                </fieldset>
+
+            </fieldset>
+
+        </form>
+
+    </body>
+</html>

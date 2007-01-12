@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <title>ButtonGroup Example</title>
+
+        <link rel="stylesheet" type="text/css" href="../../../build/fonts/fonts.css">
+        <link rel="stylesheet" type="text/css" href="../src/css/button.css">
+
+        <style type="text/css">
+
+            #buttongroup2, #buttongroup3 {
+
+                border:2px groove #ccc;
+                margin:.5em;
+                padding:.5em;
+
+            }
+
+            .yuibutton.submit {
+
+                margin:.5em 0;
+
+            }
+
+        </style>
+
+        <script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
+        <script type="text/javascript" src="../../../build/event/event.js"></script>
+        <script type="text/javascript" src="../../../build/dom/dom.js"></script>
+
+        <script type="text/javascript" src="../../tabview/src/js/Lang.js"></script>
+        <script type="text/javascript" src="../../tabview/src/js/Attribute.js"></script>
+        <script type="text/javascript" src="../../tabview/src/js/AttributeProvider.js"></script>
+        <script type="text/javascript" src="../../tabview/src/js/Element.js"></script>
+
+        <script type="text/javascript" src="../src/js/button.js"></script>
+        <script type="text/javascript" src="../src/js/buttongroup.js"></script>
+
+        <script type="text/javascript">
+
+            YAHOO.example.onWindowLoad = function(p_oEvent) {
+        
+                var oButtonGroup1 = new YAHOO.widget.ButtonGroup("buttongroup1", { name: "radiofield1" });
+
+                oButtonGroup1.addButtons([
+
+                    { label:"Radio 1", value:"Radio 1" },
+                    { label:"Radio 2", value:"Radio 2" }, 
+                    { label:"Radio 3", value:"Radio 3" }, 
+                    { label:"Radio 4", value:"Radio 4" }
+
+                ]);
+
+                var oButtonGroup2 = new YAHOO.widget.ButtonGroup("buttongroup2");
+
+                var oButtonGroup3 = new YAHOO.widget.ButtonGroup("buttongroup3");
+
+                var oSubmitButton = new YAHOO.widget.Button("submitbuttonfield");
+
+            };
+
+            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
+            
+        </script>
+
+    </head>
+    <body>
+
+<?php
+    if(isset($_POST) && count($_POST) > 0) {
+?>
+        <div id="postdata">
+            <h2>Post Data</h2>
+            <pre>
+<?php    
+print_r($_POST);        
+?>
+            </pre>
+        </div>
+<?php    
+    }
+?>
+        <form id="test" name="test" method="post" action="example02.html">
+
+            <fieldset id="radiobuttons">
+                <legend>Radio-Style Buttons</legend>
+
+                <fieldset>
+                    <legend>From JavaScript</legend>
+
+                    <div id="buttongroup1"></div>
+
+                </fieldset>
+
+                <fieldset>
+                    <legend>From Markup</legend>
+
+                    <div id="buttongroup2">
+                        <input id="radio5" type="radio" name="radiofield2" value="Radio 5">
+                        <input id="radio6" type="radio" name="radiofield2" value="Radio 6">
+                        <input id="radio7" type="radio" name="radiofield2" value="Radio 7">
+                        <input id="radio8" type="radio" name="radiofield2" value="Radio 8">
+                    </div>
+
+                    <div id="buttongroup3">
+                        <span id="radio9" class="yuibutton"><span><button type="button" name="radiofield3" value="Radio 9">Radio 9</button></span></span>
+                        <span id="radio10" class="yuibutton"><span><button type="button" name="radiofield3" value="Radio 10">Radio 10</button></span></span>
+                        <span id="radio11" class="yuibutton"><span><button type="button" name="radiofield3" value="Radio 11">Radio 11</button></span></span>
+                        <span id="radio12" class="yuibutton"><span><button type="button" name="radiofield3" value="Radio 12">Radio 12</button></span></span>
+                    </div>
+
+                </fieldset>
+
+            </fieldset>
+
+            <input id="submitbuttonfield" type="submit" name="submitbuttonfield" value="Submit Form">
+
+        </form>
+
+    </body>
+</html>
