@@ -11,6 +11,7 @@
  * @param aHeaders {Object[]} Array of object literals that define header cells.
  */
 YAHOO.widget.Columnset = function(aHeaders) {
+    this._sName = "instance" + YAHOO.widget.Columnset._nCount;
 //TODO: Do we need COL.prevSibling, COL.nextSibling?
     // Tree representation of all Columns
     var tree = [];
@@ -99,10 +100,36 @@ YAHOO.widget.Columnset = function(aHeaders) {
 
     this.tree = tree;
     this.flat = flat;
-    this.keys = keys
+    this.keys = keys;
     
+    YAHOO.widget.Columnset._nCount++;
     YAHOO.log("Columnset initialized", "info", this.toString());
 };
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Internal class variable to index multiple data table instances.
+ *
+ * @property _nCount
+ * @type number
+ * @private
+ * @static
+ */
+YAHOO.widget.Columnset._nCount = 0;
+
+/**
+ * Unique instance name.
+ *
+ * @property _sName
+ * @type String
+ * @private
+ */
+YAHOO.widget.Columnset.prototype._sName = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -136,6 +163,22 @@ YAHOO.widget.Columnset.prototype.flat = [];
  * @default []
  */
 YAHOO.widget.Columnset.prototype.keys = [];
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public methods
+//
+/////////////////////////////////////////////////////////////////////////////
+ /**
+ * Public accessor to the unique name of the Columnset instance.
+ *
+ * @method toString
+ * @return {String} Unique name of the Columnset instance.
+ */
+
+YAHOO.widget.Columnset.prototype.toString = function() {
+    return "Columnset " + this._sName;
+};
 
 /****************************************************************************/
 /****************************************************************************/

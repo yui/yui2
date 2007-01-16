@@ -207,7 +207,7 @@ YAHOO.widget.DataSource.TYPE_FLAT = 5;
  * @type String
  * @final
  */
-YAHOO.widget.DataSource.ERROR_DATAINVALID = "Response was invalid";
+YAHOO.widget.DataSource.ERROR_DATAINVALID = "Invalid data";
 
 /**
  * Error message for null data responses.
@@ -216,7 +216,7 @@ YAHOO.widget.DataSource.ERROR_DATAINVALID = "Response was invalid";
  * @type String
  * @final
  */
-YAHOO.widget.DataSource.ERROR_DATANULL = "Response was null";
+YAHOO.widget.DataSource.ERROR_DATANULL = "Null data";
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -557,25 +557,25 @@ YAHOO.widget.DataSource.prototype.handleResponse = function(oRequest, oRawRespon
     //TODO: break out into overridable methods
     switch(this.responseType) {
         case YAHOO.widget.DataSource.TYPE_JSARRAY:
-            if(xhr) {
+            if(xhr && oRawResponse.responseText) {
                 oRawResponse = oRawResponse.responseText;
             }
             oParsedResponse = this.parseArrayData(oRequest, oRawResponse);
             break;
         case YAHOO.widget.DataSource.TYPE_JSON:
-            if(xhr) {
+            if(xhr && oRawResponse.responseText) {
                 oRawResponse = oRawResponse.responseText;
             }
-            oParsedResponse = this.parseJSONData(oRequest, oRawResponse.responseText);
+            oParsedResponse = this.parseJSONData(oRequest, oRawResponse);
             break;
         case YAHOO.widget.DataSource.TYPE_XML:
-            if(xhr) {
+            if(xhr && oRawResponse.responseXML) {
                 oRawResponse = oRawResponse.responseXML;
             }
             oParsedResponse = this.parseXMLData(oRequest, oRawResponse);
             break;
         case YAHOO.widget.DataSource.TYPE_FLAT:
-            if(xhr) {
+            if(xhr && oRawResponse.responseText) {
                 oRawResponse = oRawResponse.responseText;
             }
             oParsedResponse = this.parseFlatData(oRequest, oRawResponse);
@@ -584,9 +584,15 @@ YAHOO.widget.DataSource.prototype.handleResponse = function(oRequest, oRawRespon
             break;
     }
 
-    // Cache the response
-    this.addToCache(oRequest, oParsedResponse);
-    this.fireEvent("handleResponseEvent", {request:oRequest,response:oParsedResponse,callback:oCallback,caller:oCaller});
+    if(oParsedResponse) {
+        // Cache the response
+        this.addToCache(oRequest, oParsedResponse);
+        this.fireEvent("handleResponseEvent", {request:oRequest,response:oParsedResponse,callback:oCallback,caller:oCaller});
+    }
+    else {
+        this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.widget.DataSource.ERROR_DATANULL});
+        YAHOO.log(YAHOO.widget.DataSource.ERROR_DATANULL, "error", this.toString());
+    }
 
     // Send the response back to the caller
     oCallback.call(oCaller, oRequest, oParsedResponse);
@@ -666,39 +672,45 @@ YAHOO.widget.DataSource.prototype.parseFlatData = function(oRequest, oRawRespons
  * @return {Object} Parsed response object
  */
 YAHOO.widget.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) {
+    var bError = false;
     var oParsedResponse = [];
     var xmlList = oRawResponse.getElementsByTagName(this.responseSchema.resultNode);
     if(!xmlList) {
         bError = true;
     }
     // Loop through each result
-    for(var k = xmlList.length-1; k >= 0 ; k--) {
-        var result = xmlList.item(k);
-        var oResult = {};
-        // Loop through each data field in each result using the schema
-        for(var m = this.responseSchema.fields.length-1; m >= 0 ; m--) {
-            var field = this.responseSchema.fields[m];
-            var sValue = null;
-            // Values may be held in an attribute...
-            var xmlAttr = result.attributes.getNamedItem(field);
-            if(xmlAttr) {
-                sValue = xmlAttr.value;
-            }
-            // ...or in a node
-            else {
-                var xmlNode = result.getElementsByTagName(field);
-                if(xmlNode && xmlNode.item(0) && xmlNode.item(0).firstChild) {
-                    sValue = xmlNode.item(0).firstChild.nodeValue;
+    else {
+        for(var k = xmlList.length-1; k >= 0 ; k--) {
+            var result = xmlList.item(k);
+            var oResult = {};
+            // Loop through each data field in each result using the schema
+            for(var m = this.responseSchema.fields.length-1; m >= 0 ; m--) {
+                var field = this.responseSchema.fields[m];
+                var sValue = null;
+                // Values may be held in an attribute...
+                var xmlAttr = result.attributes.getNamedItem(field);
+                if(xmlAttr) {
+                    sValue = xmlAttr.value;
                 }
+                // ...or in a node
                 else {
-                       sValue = "";
+                    var xmlNode = result.getElementsByTagName(field);
+                    if(xmlNode && xmlNode.item(0) && xmlNode.item(0).firstChild) {
+                        sValue = xmlNode.item(0).firstChild.nodeValue;
+                    }
+                    else {
+                           sValue = "";
+                    }
                 }
+                // Capture the schema-mapped data field values into an array
+                oResult[field] = sValue;
             }
-            // Capture the schema-mapped data field values into an array
-            oResult[field] = sValue;
+            // Capture each array of values into an array of results
+            oParsedResponse.unshift(oResult);
         }
-        // Capture each array of values into an array of results
-        oParsedResponse.unshift(oResult);
+    }
+    if(bError) {
+        return null;
     }
     return oParsedResponse;
 };
@@ -712,6 +724,8 @@ YAHOO.widget.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse
  * @return {Object} Parsed response object
  */
 YAHOO.widget.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse) {
+    //TODO: validate oRawResponse
+    var bError = false;
     var oParsedResponse = [];
     var aSchema = this.responseSchema.fields;
 
@@ -766,9 +780,10 @@ YAHOO.widget.DataSource.prototype.parseJSONData = function(oRequest, oRawRespons
        }
     }
 
-    if(!jsonList) {
-        bError = true;
-    }
+    if(bError || !jsonList) {
+        //TODO: validation in the other parse methods
+        return null;
+   }
 
     if(jsonList.constructor != Array) {
         jsonList = [jsonList];

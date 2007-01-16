@@ -6,21 +6,20 @@
  * A Recordset defines and manages a set of Records.
  *
  * @class Recordset
- * @param aObjectLiterals {Array} Array of data object literals.
+ * @param data {Object || Object[]} An object literal or an array of data.
  * @constructor
  */
-YAHOO.widget.Recordset = function(aObjectLiterals) {
+YAHOO.widget.Recordset = function(data) {
     // Internal variables
     this._nIndex = YAHOO.widget.Recordset._nCount;
     this._records = [];
     
-    if(aObjectLiterals) {
-        if(aObjectLiterals.constructor == Array) {
-            this.addRecords(aObjectLiterals);
+    if(data) {
+        if(data.constructor == Array) {
+            this.addRecords(data);
         }
-        else {
-            YAHOO.log("Could not instantiate Recordset due to an invalid data", "error", this.toString());
-            return;
+        else if(data.constructor == Object) {
+            this.addRecord(data);
         }
     }
     
@@ -61,6 +60,12 @@ YAHOO.widget.Recordset.prototype._nIndex = null;
  * @private
  */
 YAHOO.widget.Recordset.prototype._length = null;
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private methods
+//
+/////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -131,15 +136,21 @@ YAHOO.widget.Recordset.prototype.getRecord = function(identifier) {
  * given range. If range is null, entire Recordset array is returned.
  */
 YAHOO.widget.Recordset.prototype.getRecords = function(i, range) {
-    if(!i) {
+    if(i == undefined) {
         return this._records;
     }
-    else if(!range) {
-        //TODO: return all records from i until end
+    i = parseInt(i);
+    if(isNaN(i)) {
+        return null;
     }
-    else {
-        //TODO: return all records from i to range
+    if(range == undefined) {
+        return this._records.slice(i);
     }
+    range = parseInt(range);
+    if(isNaN(range)) {
+        return null;
+    }
+    return this._records.slice(i, i+range);
 };
 
 /**
@@ -178,18 +189,18 @@ YAHOO.widget.Recordset.prototype.getRecords = function(i, range) {
 };*/
 
 /**
- * Adds the given data to the Recordset at the given index as a Record. If index
- * is null, then adds the Record to the end of the Recordset.
+ * Adds one Record to the Recordset at the given index. If index is null,
+ * then adds the Record to the end of the Recordset.
  *
  * @method addRecord
- * @param oRecord {YAHOO.widget.Record} A Record.
- * @param i {Number} (optional) Record index.
- * @return {YAHOO.widget.Record} Record instance.
+ * @param oObjectLiteral {Object} An object literal of data.
+ * @param index {Number} (optional) Position index.
+ * @return {YAHOO.widget.Record} A Record instance.
  */
-YAHOO.widget.Recordset.prototype.addRecord = function(oObjectLiteral, i) {
+YAHOO.widget.Recordset.prototype.addRecord = function(oObjectLiteral, index) {
     var oRecord = new YAHOO.widget.Record(oObjectLiteral);
-    if(i) {
-        this._records.splice(i,0,oRecord);
+    if(!isNaN(index) && (index > -1)) {
+        this._records.splice(index,0,oRecord);
     }
     else {
         this._records.push(oRecord);
@@ -199,19 +210,83 @@ YAHOO.widget.Recordset.prototype.addRecord = function(oObjectLiteral, i) {
 };
 
 /**
- * Adds the given data to the Recordset at the given index as a Record. If index
- * is null, then adds Records to the end of the Recordset.
+ * Adds multiple Records to the Recordset at the given index. If index is null,
+ * then adds the Records to the end of the Recordset.
  *
  * @method addRecords
- * @param aRecords {Object[]} Array of data.
- * @return {YAHOO.widget.Record[]} Array of Records.
+ * @param data {Object[]} An array of object literal data.
+ * @param index {Number} (optional) Position index.
+ * @return {YAHOO.widget.Record} An array of Record instances.
  */
-YAHOO.widget.Recordset.prototype.addRecords = function(aObjectLiterals, i) {
-    var newRecords = [];
-    for(var i=aObjectLiterals.length-1; i>-1; i--) {
-        newRecords.push(this.addRecord(aObjectLiterals[i], i));
-   }
-   return newRecords;
+YAHOO.widget.Recordset.prototype.addRecords = function(data, index) {
+    if(data.constructor == Array) {
+        var newRecords = [];
+        // Preserve order
+        for(var i=data.length-1; i>-1; i--) {
+            var record = this.addRecord(data[i], index);
+            newRecords.push(record);
+       }
+       return newRecords;
+    }
+    else if(data.constructor == Object) {
+        return this.addRecord(data);
+    }
+};
+
+/**
+ * Convenience method to append the given data to the end of the Recordset.
+ *
+ * @method append
+ * @param data {Object || Object[]} An object literal or array of data.
+ * @return {YAHOO.widget.Record || YAHOO.widget.Record[]} A Record or array of Records.
+ */
+YAHOO.widget.Recordset.prototype.append = function(data) {
+    if(data.constructor == Array) {
+        var newRecords = [];
+        // Preserve order
+        for(var i=0; i<data.length; i++) {
+            var record = this.addRecord(data[i]);
+            newRecords.unshift(record);
+       }
+       return newRecords;
+    }
+    else if(data.constructor == Object) {
+        return this.addRecord(data);
+    }
+};
+
+/**
+ * Convenience method to insert the given data into the beginning of the Recordset.
+ *
+ * @method insert
+ * @param data {Object || Object[]} An object literal or array of data.
+ * @return {YAHOO.widget.Record || YAHOO.widget.Record[]} A Record or array of Records.
+ */
+YAHOO.widget.Recordset.prototype.insert = function(data) {
+    if(data.constructor == Array) {
+        var newRecords = [];
+        // Preserve order
+        for(var i=data.length-1; i>-1; i--) {
+            var record = this.addRecord(data[i], 0);
+            newRecords.push(record);
+       }
+       return newRecords;
+    }
+    else if(data.constructor == Object) {
+        return this.addRecord(data, 0);
+    }
+};
+
+/**
+ * Replaces all Records in Recordset with new data.
+ *
+ * @method replace
+ * @param data {Object || Object[]} An object literal or array or data.
+ * @return {YAHOO.widget.Record || YAHOO.widget.Record[]} A Record or array of Records.
+ */
+YAHOO.widget.Recordset.prototype.replace = function(data) {
+    this.reset();
+    return this.append(data);
 };
 
 /**
@@ -225,23 +300,6 @@ YAHOO.widget.Recordset.prototype.sort = function(fnSort) {
     return this._records.sort(fnSort);
 };
 
-
-/**
- * Replaces the record at the given index with the given record.
- *
- * @method updateRecord
- * @param i {Number} Record index
- * @param newRecord {Object} Record object to add
- */
-/*YAHOO.widget.Recordset.prototype.replaceRecord = function(i, oRecord) {
-    if(oRecord.constructor == YAHOO.widget.Record) {
-        this._records[i] = oRecord;
-    }
-    else {
-        YAHOO.log("Could not update Recordset at index " + i + " due to an invalid Record", "error", this.toString());
-        return;
-    }
-};*/
 
 /**
  * Removes the record at the given index from the Recordset. If a range is
@@ -260,20 +318,14 @@ YAHOO.widget.Recordset.prototype.deleteRecord = function(i, range) {
 };
 
 /**
- * Removes all records from the recordset.
+ * Removes all Records from the Recordset.
  *
  * @method reset
  */
-/*YAHOO.widget.Recordset.prototype.reset = function(newObjectLiterals) {
-    if(newObjectLiterals) {
-        this._records = aNewRecords
-        this._length = aNewRe
-    }
-    else {
-        this._records = [];
-        this._length = 0;
-    }
-};*/
+YAHOO.widget.Recordset.prototype.reset = function() {
+    this._records = [];
+    this._length = 0;
+};
 
 
 /****************************************************************************/

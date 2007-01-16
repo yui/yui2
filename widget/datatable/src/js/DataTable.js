@@ -113,7 +113,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
         // Create a DataTable from scratch
         else {
             // Send out for recordset data in an asynchronous request
-            oDataSource.sendRequest(this.defaultRequest, this._createTable, this);
+            oDataSource.sendRequest(this.initialRequest, this._createTable, this);
         }
     }
     // Element not found in document
@@ -363,6 +363,15 @@ YAHOO.widget.DataTable._nCount = 0;
  */
 YAHOO.widget.DataTable.prototype._nIndex = null;
 
+/**
+ * Unique instance name.
+ *
+ * @property _sName
+ * @type String
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._sName = null;
+
 //TODO: convert these to public members
 
 /**
@@ -603,6 +612,16 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
      */
     this.createEvent("columnResizeEvent");
 
+    /**
+     * Fired when a paginator element is clicked.
+     *
+     * @event pagerClickEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The paginator element.
+     *
+     */
+    this.createEvent("pagerClickEvent");
+
 
 
 
@@ -660,7 +679,7 @@ YAHOO.widget.DataTable.prototype._createTable = function(sRequest, oResponse) {
     //TODO: provide public accessors
 
     // Create the element to populate
-    var elTable = this._elContainer.appendChild(document.createElement("table"));
+    var elTable = document.createElement("table");
     this._elTable = elTable;
 
     // Get the Columnset
@@ -675,6 +694,8 @@ YAHOO.widget.DataTable.prototype._createTable = function(sRequest, oResponse) {
     this._createTbody(elTable, oColumnset, oRecordset);
 
     this._initTable();
+    this._elTable = this._elContainer.appendChild(elTable);
+    
 };
 
 /**
@@ -725,15 +746,49 @@ YAHOO.widget.DataTable.prototype._createTbody = function(elTable, oColumnset, oR
     if(oRecordset && (oRecordset.getLength() > 0)) {
         var aRecords = oRecordset.getRecords();
         if(aRecords) {
-            for(var i=0; i<aRecords.length; i++) {
-                var oRecord = aRecords[i];
-                // TODO: support sparse array
-                if(oRecord) {
-                    this.isEmpty = false;
-                    this.addRow(oRecord);
+            // Set up pagination values
+            if(this.paginator) {
+                var pag = this.paginator;
+                
+                // Validate range
+                var currentRange = pag.currentRange = parseInt(pag.initialRange);
+                if(!isNaN(currentRange)) {
+
+                    // Validate current page number
+                    var currentPage = pag.currentPage = parseInt(pag.initialPage) || 1;
+
+                    // How many rows this page
+                    var maxRows = (currentRange && (currentRange < aRecords.length)) ?
+                    currentRange : aRecords.length;
+
+                    // How many total pages
+                    var totalPages = pag.totalPages = Math.ceil(aRecords.length / maxRows);
+                    
+                    // First row of this page
+                    pag.currentStartRecord = (currentPage-1) * currentRange;
+
+                    // How many page links to display
+                    var maxLinksDisplayed = pag.maxLinksDisplayed =
+                        (!isNaN(pag.maxLinksDisplayed) && (pag.maxLinksDisplayed < totalPages)) ?
+                        pag.maxLinksDisplayed : totalPages;
+                        
+                    // First link of this page
+                    pag.currentStartLink = (currentPage < maxLinksDisplayed) ? 1 : currentPage;
+
+                    this.paginate();
                 }
             }
-            YAHOO.log("Table body with " + aRecords.length + " records created","info",this.toString());
+            else {
+                // Add rows
+                for(var i=0; i<aRecords.length; i++) {
+                    var oRecord = aRecords[i];
+                    // TODO: support sparse array
+                    if(oRecord) {
+                        this.addRow(oRecord);
+                    }
+                }
+            }
+            YAHOO.log("Table with " + aRecords.length + " records and " + maxRows + " rows created","info",this.toString());
             return true;
         }
     }
@@ -911,10 +966,13 @@ YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
         if (elTag != "table") {
             while(!knownTag) {
                 switch(elTag) {
+                    case "body":
+                        knownTag = true;
+                        break;
                     case "td":
-    	               oSelf.fireEvent("cellMouseoverEvent",{target:elTarget,event:e});
-    	               knownTag = true;
-    	               break;
+    	                oSelf.fireEvent("cellMouseoverEvent",{target:elTarget,event:e});
+    	                knownTag = true;
+    	                break;
         	        case "th":
                     	oSelf.fireEvent("theadMouseoverEvent",{target:elTarget,event:e});
                     	knownTag = true;
@@ -951,6 +1009,9 @@ YAHOO.widget.DataTable.prototype._onMousedown = function(e, oSelf) {
         if (elTag != "table") {
             while(!knownTag) {
                 switch(elTag) {
+                    case "body":
+                        knownTag = true;
+                        break;
                     case "td":
     	               oSelf.fireEvent("cellMousedownEvent",{target:elTarget,event:e});
     	               knownTag = true;
@@ -995,15 +1056,17 @@ YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
     if (elTag != "table") {
         while(!knownTag) {
             switch(elTag) {
+                case "body":
+                    knownTag = true;
+                    break;
                 case "input":
                     if(elTarget.type.toLowerCase() == "checkbox") {
                         oSelf.fireEvent("checkboxClickEvent",{target:elTarget,event:e});
-                        knownTag = true;
                     }
                     else if(elTarget.type.toLowerCase() == "radio") {
                         oSelf.fireEvent("radioClickEvent",{target:elTarget,event:e});
-                        knownTag = true;
                     }
+                    knownTag = true;
                     break;
                 case "td":
 	               oSelf.fireEvent("cellClickEvent",{target:elTarget,event:e});
@@ -1044,10 +1107,13 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
     if (elTag != "table") {
         while(!knownTag) {
             switch(elTag) {
+                case "body":
+                    knownTag = true;
+                    break;
                 case "td":
-	               oSelf.fireEvent("cellDoubleclickEvent",{target:elTarget,event:e});
-	               knownTag = true;
-	               break;
+	                oSelf.fireEvent("cellDoubleclickEvent",{target:elTarget,event:e});
+	                knownTag = true;
+	                break;
     	        case "th":
                 	oSelf.fireEvent("theadDoubleclickEvent",{target:elTarget,event:e});
                 	knownTag = true;
@@ -1064,16 +1130,96 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
 
 
 /**
- * Handles key events on the TABLE element.
+ * Handles click events on paginator elements.
  *
- * @method _onKeypress
+ * @method _onPagerClick
  * @param e {event} The click event.
  * @param oSelf {object} DataTable instance.
  * @private
  */
-//YAHOO.widget.DataTable.prototype._onKeypress = function(e, oSelf) {
-//    oSelf.fireEvent("tableKeypressEvent",{target:YAHOO.util.Event.getTarget(e),event:e});
-//};
+YAHOO.widget.DataTable.prototype._onPagerClick = function(e, oSelf) {
+    var elTarget = YAHOO.util.Event.getTarget(e);
+    var elTag = elTarget.nodeName.toLowerCase();
+    var knownTag = false; // True if event should stop propagating
+
+    if (elTag != "table") {
+        while(!knownTag) {
+            switch(elTag) {
+                case "body":
+                    knownTag = true;
+                    break;
+                case "a":
+                    switch(elTarget.className) {
+                        case "yui-dt-pagelink":
+                            oSelf.showPage(parseInt(elTarget.innerHTML));
+                            break;
+                        case "yui-dt-firstlink":
+                            oSelf.showPage(1);
+                            break;
+                        case "yui-dt-lastlink":
+                            oSelf.showPage(parseInt(oSelf.paginator.totalPages));
+                            break;
+                        case "yui-dt-prevlink":
+                            oSelf.showPage(parseInt(oSelf.paginator.currentPage-1));
+                            break;
+                        case "yui-dt-nextlink":
+                            oSelf.showPage(parseInt(oSelf.paginator.currentPage+1));
+                            break;
+                    }
+                    knownTag = true;
+                    break;
+                case "select":
+                    var newRange = parseInt(elTarget[elTarget.selectedIndex].text);
+                    if(newRange != oSelf.paginator.currentRange) {
+                        // New range
+                        var currentRange = oSelf.paginator.currentRange = newRange;
+                        
+                        // How many records
+                        var recordsLength = oSelf._oRecordset.getRecords().length;
+                        
+                        // First row of this page
+                        var currentStartRecord = oSelf.paginator.currentStartRecord = (currentRange > recordsLength ) ?
+                            0: oSelf.paginator.currentStartRecord;
+
+                        // Current page
+                        var currentPage = oSelf.paginator.currentPage = (currentRange > recordsLength ) ?
+                            1 : Math.ceil(currentStartRecord / currentRange) + 1;
+                        
+                        // How many rows this page
+                        var maxRows = (currentRange && (currentRange < recordsLength)) ?
+                        currentRange : recordsLength;
+
+                        // How many total pages
+                        oSelf.paginator.totalPages = (currentRange > recordsLength) ?
+                            1 : Math.ceil(recordsLength / maxRows);
+
+                        // First link of this page
+                        if(currentRange > recordsLength) {
+                            oSelf.paginator.currentStartLink = 1;
+                        }
+                        else {
+                            oSelf.paginator.currentStartLink = currentPage;
+                        }
+
+                        oSelf.paginate();
+                            
+                    }
+                    knownTag = true;
+                    break;
+                default:
+                    break;
+            }
+            elTarget = elTarget.parentNode;
+            if(elTarget) {
+                elTag = elTarget.nodeName.toLowerCase();
+            }
+            else {
+                break;
+            }
+        }
+    }
+    oSelf.fireEvent("pagerClickEvent",{target:elTarget,event:e});
+};
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1109,13 +1255,13 @@ YAHOO.widget.DataTable.prototype._onRowDelete = function(oArgs) {
 YAHOO.widget.DataTable.prototype.dataSource = null;
 
  /**
- * Default request to make to DataSource.
+ * Initial request to make to DataSource.
  *
- * @property defaultRequest
+ * @property initialRequest
  * @type String
  * @default ""
  */
-YAHOO.widget.DataTable.prototype.defaultRequest = "";
+YAHOO.widget.DataTable.prototype.initialRequest = "";
 
  /**
  * True if TABLE width is a fixed size.
@@ -1153,13 +1299,21 @@ YAHOO.widget.DataTable.prototype.singleSelect = false;
 YAHOO.widget.DataTable.prototype.contextMenu = null;
 
 /**
+ * Object literal defines and manages pagination behavior.
+ *
+ * @property paginator
+ * @type Object
+ */
+YAHOO.widget.DataTable.prototype.paginator = null;
+
+/**
  * True if the DataTable is empty of data. False if table is populated with
  * data from Recordset.
  *
  * @property isEmpty
  * @type Boolean
  */
-YAHOO.widget.DataTable.prototype.isEmpty = true;
+YAHOO.widget.DataTable.prototype.isEmpty = false;
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1241,7 +1395,7 @@ YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
  * @param i {Number} Position at which to add row and Record.
  */
 YAHOO.widget.DataTable.prototype.addRow = function(oRecord, i) {
-    if(this.isEmpty) {
+    if(this.isEmpty && (this._elTbody.rows.length == 1)) {
         this._elTbody.deleteRow(0);
     }
 
@@ -1440,12 +1594,91 @@ YAHOO.widget.DataTable.prototype.getRecordset = function() {
  * @param oArgs.target {HTMLElement} Target element.
  */
 YAHOO.widget.DataTable.prototype.doKeypress = function(oArgs) {
+    //TODO: hook this up
     var key = YAHOO.util.Event.getCharCode(oArgs.event);
     switch (key) {
         case 46: // delete
             this.deleteSelectedRows();
             break;
     }
+};
+
+ /**
+ * Displays a specific page of a paginated DataTable.
+ *
+ * @method showPage
+ * @param nPage {Number} Which page.
+ */
+YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
+//TODO: much optimization
+    if(isNaN(nPage) || (nPage < 1) || (nPage > this.paginator.totalPages)) {
+        nPage = 1;
+    }
+    if(nPage < this.paginator.currentStartLink){
+        this.paginator.currentStartLink = nPage;
+    }
+    else if (nPage >= (this.paginator.currentStartLink + this.paginator.maxLinksDisplayed)) {
+        this.paginator.currentStartLink = nPage - this.paginator.maxLinksDisplayed + 1;
+    }
+    var currentRange = this.paginator.currentRange;
+    var startRecord = this.paginator.currentStartRecord = (nPage-1) * currentRange;
+    var pageRecords = this._oRecordset.getRecords(startRecord, currentRange);
+    this.paginator.currentPage = nPage;
+    this.paginate();
+};
+
+ /**
+ * Renders paginator with current values.
+ *
+ * @method repaginate
+ */
+YAHOO.widget.DataTable.prototype.paginate = function() {
+    var pag = this.paginator;
+    var pageRecords = this._oRecordset.getRecords(pag.currentStartRecord, pag.currentRange);
+    this.replaceRows(pageRecords);
+
+
+    
+    // Markup for page links
+    pag.firstLink = " <a href=# class=\"yui-dt-firstlink\">&lt;&lt;</a> ";
+    pag.prevLink = " <a href=# class=\"yui-dt-prevlink\">&lt;</a> ";
+    pag.nextLink = " <a href=# class=\"yui-dt-nextlink\">&gt;</a> ";
+    pag.lastLink = " <a href=# class=\"yui-dt-lastlink\">&gt;&gt;</a> ";
+    var markup = pag.firstLink + pag.prevLink;
+    var maxLinks = (pag.currentStartLink+pag.maxLinksDisplayed < pag.totalPages) ?
+        pag.currentStartLink+pag.maxLinksDisplayed-1 : pag.totalPages;
+    for(var i=pag.currentStartLink; i<=maxLinks; i++) {
+         if(i != pag.currentPage) {
+            markup += " <a href=# class=\"yui-dt-pagelink\">" + i + "</a> ";
+        }
+        else {
+            markup += " <span class=\"yui-dt-currentpage\">" + i + "</span>";
+        }
+    }
+    markup += pag.nextLink + pag.lastLink;
+
+    // Markup for range selector
+    if(pag.ranges) {
+        markup+= "<select class=\"yui-dt-rangeselect\">";
+            for(var i=0; i<pag.ranges.length; i++) {
+                var option = pag.ranges[i];
+                markup += "<option value=\"" + option + "\"";
+                if(pag.currentRange === option) {
+                    markup += " selected";
+                }
+                markup += ">" + option + "</option>";
+            }
+        markup += "</select>";
+    }
+
+    // Populate each pager container with markup
+    this.pagers = YAHOO.util.Dom.getElementsByClassName("yui-dt-pager","div",document.body);
+    for(var i=0; i<this.pagers.length; i++) {
+        YAHOO.util.Event.purgeElement(this.pagers[i]);
+        this.pagers[i].innerHTML = markup;
+        YAHOO.util.Event.addListener(this.pagers[i],"click",this._onPagerClick,this);
+    }
+
 };
 
 /**
@@ -1835,7 +2068,8 @@ YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
  */
 YAHOO.widget.DataTable.prototype.onDataReturnAppendRows = function(sRequest, oResponse) {
     // Update the Recordset from the response
-    var newRecords = this._oRecordset.addRecords(oResponse, this._oColumnset);
+    var newRecords = this._oRecordset.append(oResponse);
+    // Update markup
     this.appendRows(newRecords);
 };
 
@@ -1848,9 +2082,9 @@ YAHOO.widget.DataTable.prototype.onDataReturnAppendRows = function(sRequest, oRe
  */
 YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oResponse) {
     // Update the Recordset from the response
-    //TODO: implement insertRecords instead of addrecords
-    var newRecords = this._oRecordset.addRecords(oResponse, this._oColumnset);
-    this.insertRows(newRecords)
+    var newRecords = this._oRecordset.insert(oResponse);
+    // Update markup
+    this.insertRows(newRecords);
 };
 
 /**
@@ -1862,8 +2096,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
  */
 YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oResponse) {
     // Update the Recordset from the response
-    // TODO: remove old records from recordset via replaceRecords instead of add
-    var newRecords = this._oRecordset.addRecords(oResponse, this._oColumnset);
+    var newRecords = this._oRecordset.replace(oResponse);
     this.replaceRows(newRecords);
 };
 
