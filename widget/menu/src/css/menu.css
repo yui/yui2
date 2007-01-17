@@ -261,8 +261,7 @@ div.yuimenu li.yuimenuitem img {
 
     height:8px;
     width:8px;
-    margin:0 -16px 0 0;
-    padding-left:10px;
+    margin:0 -16px 0 10px;
     border:0;
 
 }
