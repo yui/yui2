@@ -1005,7 +1005,7 @@ YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onMousedown = function(e, oSelf) {
-        YAHOO.util.Event.stopEvent(e);
+        //YAHOO.util.Event.stopEvent(e);
 	    var elTarget = YAHOO.util.Event.getTarget(e);
 	    var elTag = elTarget.nodeName.toLowerCase();
 	    var knownTag = false;

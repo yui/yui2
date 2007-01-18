@@ -581,6 +581,8 @@ YAHOO.widget.DataSource.prototype.handleResponse = function(oRequest, oRawRespon
             oParsedResponse = this.parseFlatData(oRequest, oRawResponse);
             break;
         default:
+            //TODO: can still try to do the right thing
+            var contentType = oRawResponse.getResponseHeader["Content-Type"];
             break;
     }
 
