@@ -212,6 +212,15 @@ YAHOO.widget.MenuItem.prototype = {
     IMG_ROOT_SSL: "https://a248.e.akamai.net/sec.yimg.com/i/",
 
 
+    /**
+    * @property COMMAND_KEYS
+    * @description Array of key codes that trigger the menu item's 
+    * "command" event.
+    * @default [13, 32]
+    * @type Array
+    */
+    COMMAND_KEYS: [13, 32],
+
 
     // Private member variables
     
@@ -268,6 +277,26 @@ YAHOO.widget.MenuItem.prototype = {
     * one-html.html#ID-17701901">HTMLImageElement</a>
     */
     _checkImage: null,
+
+
+    /**
+    * @property _oCommand
+    * @description Reference to the object literal representing the function to 
+    * be executed in response to either the "keyup" or "mouseup" event.
+    * @default null
+    * @private
+    * @type Object
+    */
+    _oCommand: null,
+
+
+    /**
+    * @event _commandEvent
+    * @description Fires in response to a "keyup" or "mouseup" event.
+    * @private
+    * @type YAHOO.util.CustomEvent
+    */
+    _commandEvent: null,
 
 
 
@@ -488,6 +517,7 @@ YAHOO.widget.MenuItem.prototype = {
     * @type YAHOO.util.CustomEvent
     */
     blurEvent: null,
+
 
 
     /**
@@ -914,6 +944,88 @@ YAHOO.widget.MenuItem.prototype = {
             oImage.style.display = "none";
             
             document.body.appendChild(oImage);
+
+        }
+    
+    },
+
+
+
+    // Protected methods
+
+
+    /**
+    * @method _isCommandKey
+    * @description Determines if a key code is one that should be used to fire
+    * the menu item's "command" event.
+    * @protected
+    * @param {Number} p_nKeyCode Number representing the key code to evalutate.
+    */
+    _isCommandKey: function(p_nKeyCode) {
+
+        var aKeyCodes = this.COMMAND_KEYS,
+            nKeyCodes = aKeyCodes.length;
+
+        if(nKeyCodes > 0) {
+
+            var i = nKeyCodes - 1;
+
+            do {
+
+                if(p_nKeyCode == aKeyCodes[i]) {
+
+                    return true;
+
+                }
+
+            }
+            while(i--);
+        
+        }
+
+    },
+
+
+
+    // Protected event handlers
+
+
+    /**
+    * @method _onMouseUp
+    * @description "mouseup" event handler for the menu item.
+    * @protected
+    * @param {String} p_sType String representing the name of the event that 
+    * was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item 
+    * that fired the event.
+    */
+    _onMouseUp: function(p_sType, p_aArgs, p_oItem) {
+
+        this._commandEvent.fire(p_aArgs[0]);
+
+    },
+
+
+    /**
+    * @method _onKeyDown
+    * @description "keydown" event handler for the menu item.
+    * @protected
+    * @param {String} p_sType String representing the name of the event that 
+    * was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item 
+    * that fired the event.
+    */
+    _onKeyDown: function(p_sType, p_aArgs, p_oItem) {
+    
+        var oEvent = p_aArgs[0];
+
+        if(this._isCommandKey(oEvent.keyCode)) {
+
+            this._commandEvent.fire(oEvent);
+
+            this.parent.hide();
 
         }
     
@@ -1589,6 +1701,66 @@ YAHOO.widget.MenuItem.prototype = {
     },
 
 
+    /**
+    * @method configCommand
+    * @description Event handler for when the "command" configuration property 
+    * of the menu item changes. 
+    * @param {String} p_sType String representing the name of the event that 
+    * was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item
+    * that fired the event.
+    */
+    configCommand: function(p_sType, p_aArgs, p_oItem) {
+
+        var oCommand = p_aArgs[0];
+
+        /*
+            Remove any existing listeners if a command has already 
+            been specified.
+        */
+
+        if(this._oCommand && (this._oCommand != oCommand)) {
+
+            this.keyDownEvent.unsubscribe(this._onKeyDown);
+            this.mouseUpEvent.unsubscribe(this._onMouseUp);
+            this._commandEvent.unsubscribe(this._oCommand.fn);
+
+            this._oCommand = null;
+
+        }
+
+
+        if(
+            !this._oCommand && 
+            typeof oCommand == "object" && 
+            ("fn" in oCommand) && 
+            typeof oCommand.fn == "function"
+        ) {
+
+            this.keyDownEvent.subscribe(this._onKeyDown, this, true);
+            this.mouseUpEvent.subscribe(this._onMouseUp, this, true);
+
+            if(!this._commandEvent) {
+
+                this._commandEvent = 
+                        new YAHOO.util.CustomEvent("commandEvent", this);
+            
+            }
+
+            this._commandEvent.subscribe(
+                    oCommand.fn, 
+                    (oCommand.obj || this), 
+                    (oCommand.scope || true)
+                );
+
+            this._oCommand = oCommand;
+
+        }
+    
+    },
+
+
     // Public methods
 
 	/**
@@ -1777,6 +1949,9 @@ YAHOO.widget.MenuItem.prototype = {
         * HTMLElement</a>
         */
         oConfig.addProperty("submenu", { handler: this.configSubmenu });
+
+
+        oConfig.addProperty("command", { handler: this.configCommand });
 
 	},
 
@@ -2062,6 +2237,7 @@ YAHOO.widget.MenuItem.prototype = {
             this.keyUpEvent.unsubscribeAll();
             this.focusEvent.unsubscribeAll();
             this.blurEvent.unsubscribeAll();
+            this._commandEvent.unsubscribeAll();
             this.cfg.configChangedEvent.unsubscribeAll();
 
 
