@@ -165,8 +165,19 @@ _aGroupTitleElements: null,
 
 
 /**
+* @property _aItems
+* @description Array of items in the menu.
+* @default []
+* @private
+* @type Array
+*/
+_aItems: null,
+
+
+/**
 * @property _aItemGroups
-* @description Array of menu items.
+* @description Multi-dimensional Array representing the menu items as they
+* are grouped in the menu.
 * @default []
 * @private
 * @type Array
@@ -364,6 +375,7 @@ itemRemovedEvent: null,
 */
 init: function(p_oElement, p_oConfig) {
 
+    this._aItems = [];
     this._aItemGroups = [];
     this._aListElements = [];
     this._aGroupTitleElements = [];
@@ -796,7 +808,8 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
 
         var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
             aGroup = this._getItemGroup(nGroupIndex),
-            oGroupItem;
+            oGroupItem,
+            aItems = this._aItems;
 
 
         if(!aGroup) {
@@ -811,14 +824,40 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
             var bAppend = (p_nItemIndex >= aGroup.length);            
 
 
+            /**
+            * Returns the previous item in an array 
+            * @private
+            * @param {p_aArray} Array to search.
+            * @param {p_nStartIndex} Number indicating the index to 
+            * start searching the array.
+            * @return {Object}
+            */
+            function getPreviousArrayItem(p_aArray, p_nStartIndex) {
+    
+                return p_aArray[p_nStartIndex] || 
+                    getPreviousArrayItem(p_aArray, (p_nStartIndex-1));
+    
+            }
+
+
+            var nLength = (nGroupIndex === 0) ? 0 : 
+                    getPreviousArrayItem(
+                        this._aItemGroups, (nGroupIndex - 1)
+                    ).length,
+
+                nIndex = nLength + p_nItemIndex;
+
+
             if(aGroup[p_nItemIndex]) {
     
                 aGroup.splice(p_nItemIndex, 0, oItem);
-    
+                aItems.splice(nIndex, 0, oItem);
+
             }
             else {
     
                 aGroup[p_nItemIndex] = oItem;
+                aItems[nIndex] = oItem;
     
             }
 
@@ -911,8 +950,10 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
     
             aGroup[nItemIndex] = oItem;
 
+            aItems[aItems.length] = oItem;
+
             oGroupItem = aGroup[nItemIndex];
-    
+
 
             if(oGroupItem) {
     
@@ -3149,8 +3190,21 @@ removeItem: function(p_oObject, p_nGroupIndex) {
 
 
 /**
+* @method getItems
+* @description Returns an array of all of the items in the menu.
+* @return {Array}
+*/        
+getItems: function() {
+
+    return this._aItems;
+
+},
+
+
+/**
 * @method getItemGroups
-* @description Returns a multi-dimensional array of all of the items in the menu.
+* @description Multi-dimensional Array representing the menu items as they 
+* are grouped in the menu.
 * @return {Array}
 */        
 getItemGroups: function() {
