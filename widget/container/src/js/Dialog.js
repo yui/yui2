@@ -503,74 +503,153 @@ YAHOO.widget.Dialog.prototype.cancel = function() {
 * @return {Object} A JSON object reprsenting the data of the current form.
 */
 YAHOO.widget.Dialog.prototype.getData = function() {
-	var form = this.form;
-	var data = {};
 
-	if (form) {
-		for (var i=0;i<form.elements.length;i++) {
-			var formItem = form.elements[i];
-			if (formItem) {
-				if (formItem.tagName) { // Got a single form item
-					switch (formItem.tagName) {
-						case "INPUT":
-							switch (formItem.type) {
-								case "checkbox": 
-									data[formItem.name] = formItem.checked;
-									break;
-								case "textbox":
-								case "text":
-								case "hidden":
-									data[formItem.name] = formItem.value;
-									break;
-							}
-							break;
-						case "TEXTAREA":
-							data[formItem.name] = formItem.value;
-							break;
-						case "SELECT":
-							var val = [];
-							for (var x=0;x<formItem.options.length;x++)	{
-								var option = formItem.options[x];
-								if (option.selected) {
-									var selval = option.value;
-									if (! selval || selval === "") {
-										selval = option.text;
-									}
-									val[val.length] = selval;
-								}
-							}
-							data[formItem.name] = val;
-							break;
-					}
-				} else if (formItem[0] && formItem[0].tagName) { // this is an array of form items
-					if (formItem[0].tagName == "INPUT") {
-						switch (formItem[0].type) {
-							case "radio":
-								for (var r=0; r<formItem.length; r++) {
-									var radio = formItem[r];
-									if (radio.checked) {
-										data[radio.name] = radio.value;
-										break;
-									}
-								}
-								break;
-							case "checkbox":
-								var cbArray = [];
-								for (var c=0; c<formItem.length; c++) {
-									var check = formItem[c];
-									if (check.checked) {
-										cbArray[cbArray.length] = check.value;
-									}
-								}
-								data[formItem[0].name] = cbArray;
-								break;
-						}
-					}
-				}
-			}
-		}	
-	}
-	return data;
+    var oForm = this.form;
+
+    if(oForm) {
+
+        var aElements = oForm.elements,
+            nTotalElements = aElements.length,
+            oData = {},
+            sName,
+            oElement;
+
+
+        for(var i=0; i<nTotalElements; i++) {
+
+            sName = aElements[i].name,
+            oElement = aElements[sName];
+
+
+            if(oElement) {
+
+                if(oElement.tagName) {
+
+                    var sType = oElement.type,
+                        sTagName = oElement.tagName.toUpperCase();
+
+                    switch(sTagName) {
+
+                        case "INPUT":
+
+                            if(sType == "checkbox") {
+        
+                                oData[sName] = oElement.checked;
+                            
+                            }
+                            else if(sType != "radio") {
+        
+                                oData[sName] = oElement.value;
+        
+                            }
+                        
+                        break;
+
+                        case "TEXTAREA":
+
+                            oData[sName] = oElement.value;
+
+                        break;
+
+                        case "SELECT":
+
+                            var aOptions = oElement.options,
+                                nOptions = aOptions.length,
+                                aValues = [],
+                                oOption,
+                                sValue;
+
+
+                            for(var n=0; n<nOptions; n++) {
+
+                                oOption = aOptions[n];
+
+                                if(oOption.selected) {
+
+                                    sValue = oOption.value;
+
+                                    if(!sValue || sValue === "") {
+
+                                        sValue = oOption.text;
+
+                                    }
+
+                                    aValues[aValues.length] = sValue;
+                                
+                                }
+
+                            }
+
+                            oData[sName] = aValues;
+
+                        break;
+
+                    }
+
+
+                }
+                else {
+
+                    var nElements = oElement.length,
+                        sType = oElement[0].type,
+                        sTagName = oElement[0].tagName.toUpperCase();
+
+
+                    switch(sType) {
+
+                        case "radio":
+
+                            var oRadio;
+
+                            for(var n=0; n<nElements; n++) {
+
+                                oRadio = oElement[n];
+
+                                if(oRadio.checked) {
+
+                                    oData[sName] = oRadio.value;
+                                    break;
+
+                                }
+
+                            }
+
+                        break;
+                        
+                        case "checkbox":
+
+                            var aValues = [],
+                                oCheckbox;
+
+                            for(var n=0; n<nElements; n++) {
+
+                                oCheckbox = oElement[n];
+
+                                if(oCheckbox.checked) {
+
+                                    aValues[aValues.length] = oCheckbox.value;
+
+                                }
+
+                            }
+                            
+                            oData[sName] = aValues;
+
+                        break;
+
+                    }
+
+                }
+            
+            }
+        
+        }
+
+    }
+
+
+    return oData;
+
 };
 
 /**
