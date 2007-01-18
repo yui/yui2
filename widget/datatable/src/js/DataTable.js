@@ -34,7 +34,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
             this[sConfig] = oConfigs[sConfig];
         }
     }
-;
+
     // Validate DataSource
     if(oDataSource && (oDataSource instanceof YAHOO.widget.DataSource)) {
         this.dataSource = oDataSource;
@@ -81,17 +81,17 @@ YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
                 var numRows = elTbody.rows.length;
                 if(numRows > 0) {
                     var index = this._nIndex;
-                    for(var i=0; i<numRows; i++) {
+                    for(var j=0; j<numRows; j++) {
                         var oRecord = {};
-                        var elRow = elTbody.rows[i];
+                        var elRow = elTbody.rows[j];
                         //TODO: we need the record before this
                         elRow.id = this.id+"-bdrow"+oRecord.id;
                         var numCells = elRow.cells.length;
                         if(numCells > 0) {
-                            for(var j=0; j<numCells; j++) {
-                                var elCell = elRow.cells[j];
-                                elCell.id = this.id+"-bdrow"+i+"-cell"+j;
-                                oRecord[oColumnset.keys[j].key] = oColumnset.keys[j].parse(elCell.innerHTML);
+                            for(var k=0; k<numCells; k++) {
+                                var elCell = elRow.cells[k];
+                                elCell.id = this.id+"-bdrow"+j+"-cell"+k;
+                                oRecord[oColumnset.keys[k].key] = oColumnset.keys[k].parse(elCell.innerHTML);
                             }
                         aRecords.push(oRecord);
                         }
@@ -462,9 +462,9 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
     YAHOO.util.Event.addListener(elTable, "mousedown", this._onMousedown, this);
     //YAHOO.util.Event.addListener(elTable, "mouseup", this._onMouseup, this);
     //YAHOO.util.Event.addListener(elTable, "mousemove", this._onMousemove, this);
-    YAHOO.util.Event.addListener(elTable, "keydown", this._onKeydown, this);
-    YAHOO.util.Event.addListener(elTable, "keyup", this._onKeypress, this);
-    //YAHOO.util.Event.addListener(elTable, "keyup", this._onKeyup, this);
+    //YAHOO.util.Event.addListener(elTable, "keydown", this._onKeydown, this);
+    //YAHOO.util.Event.addListener(elTable, "keypress", this._onKeypress, this);
+    YAHOO.util.Event.addListener(document, "keyup", this._onKeyup, this);
     //YAHOO.util.Event.addListener(elTable, "focus", this._onFocus, this);
     //YAHOO.util.Event.addListener(elTable, "blur", this._onBlur, this);
 
@@ -680,7 +680,7 @@ YAHOO.widget.DataTable.prototype._createTable = function(sRequest, oResponse) {
 
     // Create the element to populate
     var elTable = document.createElement("table");
-    this._elTable = elTable;
+    this._elTable = this._elContainer.appendChild(elTable);//    this._elTable = elTable;
 
     // Get the Columnset
     var oColumnset = this._oColumnset;
@@ -691,10 +691,12 @@ YAHOO.widget.DataTable.prototype._createTable = function(sRequest, oResponse) {
     // Create the Recordset from the response
     var oRecordset = new YAHOO.widget.Recordset(oResponse, oColumnset);
     this._oRecordset = oRecordset;
+    
+    // TODO: Give implementers a chance to sort Recordset before DOM gets created
     this._createTbody(elTable, oColumnset, oRecordset);
 
     this._initTable();
-    this._elTable = this._elContainer.appendChild(elTable);
+
     
 };
 
@@ -709,7 +711,7 @@ YAHOO.widget.DataTable.prototype._createTable = function(sRequest, oResponse) {
  */
 YAHOO.widget.DataTable.prototype._createThead = function(elTable, oColumnset) {
     // Create thead row
-    var elHead= elTable.appendChild(document.createElement("thead"));
+    var elHead = document.createElement("thead");
     var index = this._nIndex;
 
     // Iterate through each row...
@@ -726,6 +728,7 @@ YAHOO.widget.DataTable.prototype._createThead = function(elTable, oColumnset) {
         }
     }
 
+    this._elHead = this._elTable.appendChild(elHead);
     YAHOO.log("Table head with " + oColumnset.keys.length + " columns created","info",this.toString());
     return true;
 };
@@ -746,38 +749,39 @@ YAHOO.widget.DataTable.prototype._createTbody = function(elTable, oColumnset, oR
     if(oRecordset && (oRecordset.getLength() > 0)) {
         var aRecords = oRecordset.getRecords();
         if(aRecords) {
-            // Set up pagination values
+            // Set up pagination
             if(this.paginator) {
-                var pag = this.paginator;
-                
+                var pag = (typeof this.paginator == "object") ? this.paginator : {};
+
                 // Validate range
-                var currentRange = pag.currentRange = parseInt(pag.initialRange);
-                if(!isNaN(currentRange)) {
-
-                    // Validate current page number
-                    var currentPage = pag.currentPage = parseInt(pag.initialPage) || 1;
-
-                    // How many rows this page
-                    var maxRows = (currentRange && (currentRange < aRecords.length)) ?
-                    currentRange : aRecords.length;
-
-                    // How many total pages
-                    var totalPages = pag.totalPages = Math.ceil(aRecords.length / maxRows);
+                var currentRange = pag.currentRange =
+                        (pag.initialRange && !isNaN(pag.initialRange)) ? pag.initialRange : 100;
                     
-                    // First row of this page
-                    pag.currentStartRecord = (currentPage-1) * currentRange;
+                // Validate current page number
+                var currentPage = pag.currentPage = parseInt(pag.initialPage) || 1;
 
-                    // How many page links to display
-                    var maxLinksDisplayed = pag.maxLinksDisplayed =
-                        (!isNaN(pag.maxLinksDisplayed) && (pag.maxLinksDisplayed < totalPages)) ?
-                        pag.maxLinksDisplayed : totalPages;
-                        
-                    // First link of this page
-                    pag.currentStartLink = (currentPage < maxLinksDisplayed) ? 1 : currentPage;
+                // How many rows this page
+                var maxRows = (currentRange && (currentRange < aRecords.length)) ?
+                currentRange : aRecords.length;
 
-                    this.paginate();
-                }
+                // How many total pages
+                var totalPages = pag.totalPages = Math.ceil(aRecords.length / maxRows);
+                
+                // First row of this page
+                pag.currentStartRecord = (currentPage-1) * currentRange;
+
+                // How many page links to display
+                var maxLinksDisplayed = pag.maxLinksDisplayed =
+                    (!isNaN(pag.maxLinksDisplayed) && (pag.maxLinksDisplayed < totalPages)) ?
+                    pag.maxLinksDisplayed : totalPages;
+                    
+                // First link of this page
+                pag.currentStartLink = (currentPage < maxLinksDisplayed) ? 1 : currentPage;
+
+                this.paginator = pag;
+                this.paginate();
             }
+            // Show all rows on one page
             else {
                 // Add rows
                 for(var i=0; i<aRecords.length; i++) {
@@ -788,7 +792,7 @@ YAHOO.widget.DataTable.prototype._createTbody = function(elTable, oColumnset, oR
                     }
                 }
             }
-            YAHOO.log("Table with " + aRecords.length + " records and " + maxRows + " rows created","info",this.toString());
+            YAHOO.log("Table with " + aRecords.length + " records and " + (maxRows || aRecords.length) + " rows created","info",this.toString());
             return true;
         }
     }
@@ -1128,6 +1132,21 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
     oSelf.fireEvent("tableDoubleclickEvent",{target:elTarget,event:e});
 };
 
+/**
+ * Handles keyup events on the DOCUMENT.
+ *
+ * @method _onKeyup
+ * @param e {event} The mouseover event.
+ * @param oSelf {object} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onKeyup = function(e, oSelf) {
+    // esc
+    if((e.keyCode == 27) && (oSelf.activeEditor)) {
+        oSelf.activeEditor.hideEditor();
+        oSelf.activeEditor = null;
+    }
+};
 
 /**
  * Handles click events on paginator elements.
@@ -1630,7 +1649,7 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
  /**
  * Renders paginator with current values.
  *
- * @method repaginate
+ * @method paginate
  */
 YAHOO.widget.DataTable.prototype.paginate = function() {
     var pag = this.paginator;
@@ -1673,6 +1692,15 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
 
     // Populate each pager container with markup
     this.pagers = YAHOO.util.Dom.getElementsByClassName("yui-dt-pager","div",document.body);
+    if(this.pagers.length == 0) {
+        var pager1 = document.createElement("div");
+        pager1.className = "yui-dt-pager";
+        var pager2 = document.createElement("div");
+        pager2.className = "yui-dt-pager";
+        pager1 = this._elContainer.insertBefore(pager1, this._elTable);
+        pager2 = this._elContainer.insertBefore(pager2, this._elTable.nextSibling);
+        this.pagers = [pager1,pager2];
+    }
     for(var i=0; i<this.pagers.length; i++) {
         YAHOO.util.Event.purgeElement(this.pagers[i]);
         this.pagers[i].innerHTML = markup;
@@ -1689,7 +1717,7 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
  */
 YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
     if(oColumn.constructor != YAHOO.widget.Column) {
-        // Figure out the column based on TH ref or TH.key
+        //TODO: Figure out the column based on TH ref or TH.key
     }
     if(oColumn && oColumn.sortable) {
         // What is the default sort direction?
@@ -1716,13 +1744,27 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
 
         // One was not provided so use the default generic sort handler function
         // TODO: use diff default functions based on column data type
+        // TODO: nested/cumulative/hierarchical sorting
+        // TODO: support server side sorting
         if(!sortFnc) {
             sortFnc = function(a, b) {
                 if(sortDir == "desc") {
-                    return YAHOO.util.Sort.compareDesc(a[oColumn.key],b[oColumn.key]);
+                    var sorted = YAHOO.util.Sort.compareDesc(a[oColumn.key],b[oColumn.key]);
+                    if(sorted == 0) {
+                        return YAHOO.util.Sort.compareDesc(a.id,b.id);
+                    }
+                    else {
+                        return sorted;
+                    }
                 }
                 else {
-                    return YAHOO.util.Sort.compareAsc(a[oColumn.key],b[oColumn.key]);
+                    var sorted = YAHOO.util.Sort.compareAsc(a[oColumn.key],b[oColumn.key]);
+                    if(sorted == 0) {
+                        return YAHOO.util.Sort.compareAsc(a.id,b.id);
+                    }
+                    else {
+                        return sorted;
+                    }
                 }
             };
         }
