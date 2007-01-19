@@ -30,13 +30,21 @@ YAHOO.widget.Columnset = function(aHeaders) {
             tree[nodelevel] = [];
         }
 
-        // Determine if any nodes at this level have children
-        var nodeLevelHasChildren = false;
-        for(var i=0; i<nodeList.length; i++) {
-            if(nodeList[i].children) {
-                nodeLevelHasChildren = true;
+        // Determine depth of descendants at this level for node's rowspan
+        var nodeLevelMaxChildren = 0;
+        var recurseChildren = function(nodeList) {
+            var tmpMax = 0;
+            for(var i=0; i<nodeList.length; i++) {
+                if(nodeList[i].children) {
+                    tmpMax++;
+                    recurseChildren(nodeList[i].children);
+                }
+                if(tmpMax > nodeLevelMaxChildren) {
+                    nodeLevelMaxChildren = tmpMax;
+                }
             }
         }
+        recurseChildren(nodeList);
 
         // Parse each node for attributes and any children
         for(var i=0; i<nodeList.length; i++) {
@@ -73,9 +81,9 @@ YAHOO.widget.Columnset = function(aHeaders) {
             
             // This Column does not have children,
             // but other Columns at this level do
-            else if(nodeLevelHasChildren) {
+            else if(nodeLevelMaxChildren > 0) {
                 // Children of siblings increase the rowspan of the Column
-                oColumn.rowspan = 2;
+                oColumn.rowspan += nodeLevelMaxChildren;
                 if(oColumn.key) {
                     keys.push(oColumn);
                 }
@@ -307,6 +315,14 @@ YAHOO.widget.Column.prototype.type = "string";
  * @type String
  */
 YAHOO.widget.Column.prototype.text = null;
+
+/**
+ * Column head cell ABBR for accessibility.
+ *
+ * @property abbr
+ * @type String
+ */
+YAHOO.widget.Column.prototype.abbr = null;
 
 /**
  * If column is editable, defines the type of editor, otherwise null.

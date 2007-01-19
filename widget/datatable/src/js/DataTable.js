@@ -681,6 +681,17 @@ YAHOO.widget.DataTable.prototype._createTable = function(sRequest, oResponse) {
     // Create the element to populate
     var elTable = document.createElement("table");
     this._elTable = this._elContainer.appendChild(elTable);//    this._elTable = elTable;
+    
+    // Create summary, if applicable
+    if(this.summary) {
+        this._elTable.summary = this.summary;
+    }
+    
+    // Create caption, if applicable
+    if(this.caption) {
+        this._elCaption = this._elTable.appendChild(document.createElement("caption"));
+        this._elCaption.innerHTML = this.caption;
+    }
 
     // Get the Columnset
     var oColumnset = this._oColumnset;
@@ -859,6 +870,20 @@ YAHOO.widget.DataTable.prototype._enhanceTheadCell = function(elHeadCell,oColumn
     var index = this._nIndex;
     elHeadCell.columnKey = oColumn.key;
     elHeadCell.index = oColumn.index;
+    if(oColumn.abbr) {
+        elHeadCell.abbr = oColumn.abbr;
+    }
+
+    var recurseAncestors = function(oParent) {
+        if(oParent) {
+            elHeadCell.headers += oColumn.parent.id + " ";
+            if(oParent.parent) {
+                recurseAncestors(oParent.parent);
+            }
+        }
+    };
+    recurseAncestors(oColumn.parent);
+    
     elHeadCell.innerHTML = "";
 
     var elHeadContainer = elHeadCell.appendChild(document.createElement("div"));
@@ -1274,13 +1299,21 @@ YAHOO.widget.DataTable.prototype._onRowDelete = function(oArgs) {
 YAHOO.widget.DataTable.prototype.dataSource = null;
 
  /**
- * Initial request to make to DataSource.
+ * Initial request parameters to send to DataSource.
  *
  * @property initialRequest
  * @type String
  * @default ""
  */
 YAHOO.widget.DataTable.prototype.initialRequest = "";
+
+ /**
+ * Summary of table data for SUMMARY attribute. Recommended for accessibility.
+ *
+ * @property summary
+ * @type String
+ */
+YAHOO.widget.DataTable.prototype.summary = null;
 
  /**
  * True if TABLE width is a fixed size.
