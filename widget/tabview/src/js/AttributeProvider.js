@@ -141,18 +141,12 @@
          * @param {String} key The attribute's name
          * @param {Object} map A key-value map containing the
          * attribute's properties.
+         * @deprecated Use setAttributeConfig
          */
         register: function(key, map) {
-            this._configs = this._configs || {};
-            
-            if (this._configs[key]) { // dont override
-                return false;
-            }
-            
-            map.name = key;
-            this._configs[key] = new YAHOO.util.Attribute(map, this);
-            return true;
+            this.setAttributeConfig(key, map);
         },
+        
         
         /**
          * Returns the attribute's properties.
@@ -178,21 +172,31 @@
         
         /**
          * Sets or updates an Attribute instance's properties. 
+         * @method setAttributeConfig
+         * @param {String} key The attribute's name.
+         * @param {Object} map A key-value map of attribute properties
+         * @param {Boolean} init Whether or not this should become the intial config.
+         */
+        setAttributeConfig: function(key, map, init) {
+            var configs = this._configs || {};
+            map = map || {};
+            if (!configs[key]) {
+                map.name = key;
+                configs[key] = new YAHOO.util.Attribute(map, this);
+            } else {
+                configs[key].configure(map, init);
+            }
+        },
+        
+        /**
+         * Sets or updates an Attribute instance's properties. 
          * @method configureAttribute
          * @param {String} key The attribute's name.
          * @param {Object} map A key-value map of attribute properties
          * @param {Boolean} init Whether or not this should become the intial config.
          */
         configureAttribute: function(key, map, init) {
-            var configs = this._configs || {};
-            
-            if (!configs[key]) {
-                YAHOO.log('unable to configure, ' + key + ' not found',
-                        'error', 'AttributeProvider');
-                return false;
-            }
-            
-            configs[key].configure(map, init);
+            this.setAttributeConfig(key, map, init);
         },
         
         /**
