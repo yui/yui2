@@ -6,6 +6,52 @@
 var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event;
 
+/**
+* @method pointInTriangle
+* @description Returns true if a point is inside the area of a triangle.
+* @private
+* @param {p_aRegion} Array containing the x and y coordinates of each point in
+* the triangle.
+* @param {p_aPoint} Array containing the x and y coordinates of the point.
+* @return {Boolean}
+*/
+function pointInTriangle(p_aRegion, p_aPoint) {
+
+    var nX1 = p_aRegion[0],
+        nY1 = p_aRegion[1],
+        
+        nX2 = p_aRegion[2],
+        nY2 = p_aRegion[3],
+        
+        nX3 = p_aRegion[4],
+        nY3 = p_aRegion[5],
+        
+        nXX = p_aPoint[0],
+        nYY = p_aPoint[1];
+    
+    
+    return (
+        Math.abs(
+            Math.abs((nX1-nXX)*(nY2-nYY)-(nX2-nXX)*(nY1-nYY)) +
+            Math.abs((nX2-nXX)*(nY3-nYY)-(nX3-nXX)*(nY2-nYY)) +
+            Math.abs((nX3-nXX)*(nY1-nYY)-(nX1-nXX)*(nY3-nYY)) -
+            Math.abs((nX2-nX1)*(nY3-nY1)-(nX3-nX1)*(nY2-nY1))
+        ) <= 1/256
+    );
+
+}
+
+
+/**
+* @property m_aSubmenuRegion
+* @description Array of points (x and y coordinates) representing the 
+* triangular region between a menu item and its corresponding submenu.
+* @default null
+* @private
+* @type Array
+*/
+var m_aSubmenuRegion = null;
+
 
 /**
 * The Menu class creates a container that holds a vertical list representing 
@@ -118,6 +164,39 @@ _nHideDelayId: null,
 * @type Number
 */
 _nShowDelayId: null,
+
+
+/** 
+* @property _nSubmenuHideDelayId
+* @description Number representing the time-out setting used to cancel the 
+* hiding of a submenu.
+* @default null
+* @private
+* @type Number
+*/
+_nSubmenuHideDelayId: null,
+
+
+/** 
+* @property _bHasMouseMoveHandler
+* @description Boolean indicating if the "mousemove" event handler has 
+* been assigned.
+* @default false
+* @private
+* @type Boolean
+*/
+_bHasMouseMoveHandler: false,
+
+
+/** 
+* @property _bMouseInSubmenuRegion
+* @description Boolean indicating if the mouse is in the triangular region 
+* between a menu item and its corresponding submenu.
+* @default false
+* @private
+* @type Boolean
+*/
+_bMouseInSubmenuRegion: false,
 
 
 /** 
@@ -1417,8 +1496,12 @@ _execShowDelay: function(p_oMenu) {
 
     function showMenu() {
 
-        p_oMenu.show();    
-    
+        if(p_oMenu.parent.cfg.getProperty("selected")) {
+
+            p_oMenu.show();
+
+        }
+
     }
 
 
@@ -1427,6 +1510,60 @@ _execShowDelay: function(p_oMenu) {
 
 },
 
+
+/**
+* @method _execSubmenuHideDelay
+* @description Hides a submenu after the number of milliseconds specified by 
+* the "submenuhidedelay" configuration property have ellapsed.
+* @private
+* @param {YAHOO.widget.Menu} p_oSubmenu Object specifying the submenu that  
+* should be hidden.
+* @param {Number} p_nHideDelay The number of milliseconds that should ellapse
+* before the submenu is hidden.
+*/
+_execSubmenuHideDelay: function(p_oSubmenu, p_nHideDelay) {
+
+    if(!this._bHasMouseMoveHandler) {
+
+        Event.addListener(
+                this.element, 
+                "mousemove", 
+                this._onMouseMove, 
+                this, 
+                true
+            );
+
+        this._bHasMouseMoveHandler = true;
+
+    }
+
+
+    var me = this;
+
+    p_oSubmenu._nSubmenuHideDelayId = 
+    
+                    window.setTimeout(function () {
+            
+                        if(me._bMouseInSubmenuRegion) {
+            
+                            p_oSubmenu._nSubmenuHideDelayId = 
+                            
+                                            window.setTimeout(function () {
+                        
+                                                p_oSubmenu.hide();
+                                
+                                            }, p_nHideDelay);
+            
+                        }
+                        else {
+            
+                            p_oSubmenu.hide();
+                        
+                        }
+            
+                    }, 50);
+
+},
 
 
 // Protected methods
@@ -1454,7 +1591,26 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
         (oTarget == this.element || Dom.isAncestor(this.element, oTarget))
     ) {
 
+        // Menu mouseover logic
+
         this.clearActiveItem();
+
+
+        if(this.parent && this._nSubmenuHideDelayId) {
+
+            window.clearTimeout(this._nSubmenuHideDelayId);
+
+            this.parent.cfg.setProperty("selected", true);
+
+            var oParentMenu = this.parent.parent;
+
+            oParentMenu.activeItem = this.parent;
+
+            oParentMenu._bHandledMouseOutEvent = true;
+            oParentMenu._bHandledMouseOverEvent = false;
+
+        }
+
 
         this._bHandledMouseOverEvent = true;
         this._bHandledMouseOutEvent = false;
@@ -1468,6 +1624,8 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
         (oTarget == oItem.element || Dom.isAncestor(oItem.element, oTarget))
     ) {
 
+        // Menu Item mouseover logic
+
         var nShowDelay = this.cfg.getProperty("showdelay"),
             bShowDelay = (nShowDelay > 0);
 
@@ -1477,21 +1635,13 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
             this._cancelShowDelay();
         
         }
-    
-    
+
+
         var oActiveItem = this.activeItem;
     
         if(oActiveItem) {
     
             oActiveItem.cfg.setProperty("selected", false);
-    
-            var oActiveSubmenu = oActiveItem.cfg.getProperty("submenu");
-    
-            if(oActiveSubmenu) {
-						
-                oActiveSubmenu.hide();
-    
-            }
     
         }
 
@@ -1522,7 +1672,7 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
                     oSubmenu.show();
 
                 }
-        
+
             }
 
         }                        
@@ -1582,21 +1732,58 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
             )
         ) {
 
-            if(
-                !oSubmenu || 
-                (oSubmenu && !oSubmenu.cfg.getProperty("visible"))
-            ) {
+
+            if(!bMovingToSubmenu) {
 
                 oItem.cfg.setProperty("selected", false);
 
-                if(
-                    oSubmenu && 
-                    oSubmenu.cfg.getProperty("showdelay") && 
-                    !oSubmenu.cfg.getProperty("visible")
-                ) {
-                
-                     this._cancelShowDelay();
-                
+
+                if(oSubmenu) {
+
+                    var nSubmenuHideDelay = 
+                            this.cfg.getProperty("submenuhidedelay"),
+
+                        nShowDelay = this.cfg.getProperty("showdelay");
+
+                    if(
+                        nSubmenuHideDelay > 0 && 
+                        nShowDelay >= nSubmenuHideDelay
+                    ) {
+
+                        var aSubmenuXY = oSubmenu.cfg.getProperty("xy"),
+                            aPageXY = Event.getXY(oEvent);
+                    
+                        m_aSubmenuRegion = [
+                        
+                                aPageXY[0], 
+                                aPageXY[1],
+                                
+                                aSubmenuXY[0],
+                                aPageXY[1],
+                                
+                                aSubmenuXY[0],
+                                (aSubmenuXY[1] + oSubmenu.element.offsetHeight)
+                    
+                            ];
+
+
+                        this._execSubmenuHideDelay(
+                                oSubmenu, 
+                                nSubmenuHideDelay
+                            );
+
+                    }
+                    else {
+
+                        oSubmenu.hide();
+
+                    }
+
+                }
+                else {
+
+                    m_aSubmenuRegion = null;
+    
                 }
 
             }
@@ -1623,6 +1810,28 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
 
         this._bHandledMouseOutEvent = true;
         this._bHandledMouseOverEvent = false;
+
+    }
+
+},
+
+
+/**
+* @method _onMouseMove
+* @description "click" event handler for the menu.
+* @protected
+* @param {Event} p_oEvent Object representing the DOM event object passed 
+* back by the event utility (YAHOO.util.Event).
+* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
+* fired the event.
+*/
+_onMouseMove: function(p_oEvent, p_oMenu) {
+
+    if(m_aSubmenuRegion) {
+        
+        this._bMouseInSubmenuRegion = 
+        
+                pointInTriangle(m_aSubmenuRegion, Event.getXY(p_oEvent));
 
     }
 
@@ -2362,6 +2571,7 @@ _onParentMenuConfigChange: function(p_sType, p_aArgs, p_oSubmenu) {
         case "constraintoviewport":
         case "hidedelay":
         case "showdelay":
+        case "submenuhidedelay":        
         case "clicktohide":
         case "effect":
 
@@ -2406,7 +2616,10 @@ _onParentMenuRender: function(p_sType, p_aArgs, p_oSubmenu) {
                 oParentMenu.cfg.getProperty("showdelay"),
             
             hidedelay:
-                oParentMenu.cfg.getProperty("hidedelay")
+                oParentMenu.cfg.getProperty("hidedelay"),
+
+            submenuhidedelay:
+                oParentMenu.cfg.getProperty("submenuhidedelay")
 
         };
 
@@ -3247,6 +3460,11 @@ getItem: function(p_nItemIndex, p_nGroupIndex) {
 */
 destroy: function() {
 
+    // Remove all DOM event listeners
+
+    Event.purgeElement(this.element);
+
+
     // Remove Custom Event listeners
 
     this.mouseOverEvent.unsubscribeAll();
@@ -3512,13 +3730,13 @@ initDefaultConfig: function() {
     * @description Number indicating the time (in milliseconds) that should 
     * expire before a submenu is made visible when the user mouses over 
     * the menu's items.
-    * @default 0
+    * @default 250
     * @type Number
     */
 	oConfig.addProperty(
 	   "showdelay", 
 	   { 
-	       value: 0, 
+	       value: 250, 
 	       validator: oConfig.checkNumber
        } 
     );
@@ -3538,6 +3756,24 @@ initDefaultConfig: function() {
 	       validator: oConfig.checkNumber, 
 	       handler: this.configHideDelay,
 	       suppressEvent: true
+       } 
+    );
+
+
+    /**
+    * @config submenuhidedelay
+    * @description Number indicating the time (in milliseconds) that should 
+    * expire before a submenu is hidden when the user mouses out of a menu item 
+    * heading in the direction of a submenu.  The value must be greater than or 
+    * equal to the value specified for the "showdelay" configuration property.
+    * @default 250
+    * @type Number
+    */
+	oConfig.addProperty(
+	   "submenuhidedelay", 
+	   { 
+	       value: 250, 
+	       validator: oConfig.checkNumber
        } 
     );
 
