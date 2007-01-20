@@ -372,18 +372,12 @@ YAHOO.util.Attribute.prototype = {
          * @param {String} key The attribute's name
          * @param {Object} map A key-value map containing the
          * attribute's properties.
+         * @deprecated Use setAttributeConfig
          */
         register: function(key, map) {
-            this._configs = this._configs || {};
-            
-            if (this._configs[key]) { // dont override
-                return false;
-            }
-            
-            map.name = key;
-            this._configs[key] = new YAHOO.util.Attribute(map, this);
-            return true;
+            this.setAttributeConfig(key, map);
         },
+        
         
         /**
          * Returns the attribute's properties.
@@ -409,21 +403,31 @@ YAHOO.util.Attribute.prototype = {
         
         /**
          * Sets or updates an Attribute instance's properties. 
+         * @method setAttributeConfig
+         * @param {String} key The attribute's name.
+         * @param {Object} map A key-value map of attribute properties
+         * @param {Boolean} init Whether or not this should become the intial config.
+         */
+        setAttributeConfig: function(key, map, init) {
+            var configs = this._configs || {};
+            map = map || {};
+            if (!configs[key]) {
+                map.name = key;
+                configs[key] = new YAHOO.util.Attribute(map, this);
+            } else {
+                configs[key].configure(map, init);
+            }
+        },
+        
+        /**
+         * Sets or updates an Attribute instance's properties. 
          * @method configureAttribute
          * @param {String} key The attribute's name.
          * @param {Object} map A key-value map of attribute properties
          * @param {Boolean} init Whether or not this should become the intial config.
          */
         configureAttribute: function(key, map, init) {
-            var configs = this._configs || {};
-            
-            if (!configs[key]) {
-                YAHOO.log('unable to configure, ' + key + ' not found',
-                        'error', 'AttributeProvider');
-                return false;
-            }
-            
-            configs[key].configure(map, init);
+            this.setAttributeConfig(key, map, init);
         },
         
         /**
@@ -577,7 +581,7 @@ YAHOO.util.Element.prototype = {
          * @config element
          * @type HTMLElement
          */
-        this.register('element', {
+        this.setAttributeConfig('element', {
             value: element,
             readOnly: true
          });
@@ -697,6 +701,11 @@ YAHOO.util.Element.prototype = {
 	 * @param {String} value The value to apply to the style property
 	 */
     setStyle: function(property, value) {
+        var el = this.get('element');
+        if (!el) {
+            this._queue[this._queue.length] = ['setStyle', arguments];
+            return false;
+        }        
         return Dom.setStyle(this.get('element'),  property, value);
     },
     
@@ -728,13 +737,12 @@ YAHOO.util.Element.prototype = {
 	 * @param {HTMLElement | Element} before An optional node to insert before
 	 */
     appendTo: function(parent, before) {
+        this.fireEvent('beforeAppendTo');
         parent = (parent.get) ?  parent.get('element') : Dom.get(parent);
         
         before = (before && before.get) ? 
                 before.get('element') : Dom.get(before);
         var element = this.get('element');
-        
-        var newAddition =  !Dom.inDocument(element);
         
         if (!element) {
             YAHOO.log('appendTo failed: element not available',
@@ -757,7 +765,10 @@ YAHOO.util.Element.prototype = {
         }
         
         YAHOO.log(element + 'appended to ' + parent);
+        this.fireEvent('appendTo');
         
+        /* TODO: move to TabView or deprecate?
+        var newAddition =  !Dom.inDocument(element);
         if (!newAddition) {
             return false; // note return; no refresh if in document
         }
@@ -770,6 +781,7 @@ YAHOO.util.Element.prototype = {
                 this.refresh(key);
             }
         }
+        */
     },
     
     get: function(key) {
@@ -786,10 +798,11 @@ YAHOO.util.Element.prototype = {
         var el = this.get('element');
         if (!el) {
             this._queue[this._queue.length] = ['set', arguments];
-            return false;
+            this._configs[key].value = value; // so "get" works while queueing
+            return;
         }
         
-        // set it on the element if not a property
+        // set it on the element if not configured and is an HTML attribute
         if ( !this._configs[key] && !Lang.isUndefined(el[key]) ) {
             _registerHTMLAttr.call(this, key);
         }
@@ -797,31 +810,14 @@ YAHOO.util.Element.prototype = {
         return AttributeProvider.prototype.set.apply(this, arguments);
     },
     
-    register: function(key) { // protect html attributes
-        var configs = this._configs || {};
-        var element = this.get('element') || null;
-        
-        if ( element && !Lang.isUndefined(element[key]) ) {
-            YAHOO.log(key + ' is reserved for ' + element, 
-                    'error', 'Element');
-            return false;
-        }
-        
-        return AttributeProvider.prototype.register.apply(this, arguments);
-    },
-    
-    configureAttribute: function(property, map, init) { // protect html attributes
+    setAttributeConfig: function(key, map, init) {
         var el = this.get('element');
-        if (!el) {
-            this._queue[this._queue.length] = ['configureAttribute', arguments];
-            return;
+
+        if (el && !this._configs[key] && !Lang.isUndefined(el[key]) ) {
+            _registerHTMLAttr.call(this, key, map);
+        } else {
+            AttributeProvider.prototype.setAttributeConfig.apply(this, arguments);
         }
-        
-        if (!this._configs[property] && !Lang.isUndefined(el[property]) ) {
-            _registerHTMLAttr.call(this, property, map);
-        }
-        
-        return AttributeProvider.prototype.configureAttribute.apply(this, arguments);
     },
     
     getAttributeKeys: function() {
@@ -859,7 +855,6 @@ YAHOO.util.Element.prototype = {
         
         var readyHandler = function() {
             this.initAttributes(attr);
-
             this.setAttributes(attr, true);
             this.fireQueue();
             this.fireEvent('contentReady', {
