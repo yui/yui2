@@ -178,6 +178,17 @@ _nSubmenuHideDelayId: null,
 
 
 /** 
+* @property _nBodyScrollId
+* @description Number representing the time-out setting used to cancel the 
+* scrolling of the menu's body element.
+* @default null
+* @private
+* @type Number
+*/
+_nBodyScrollId: null,
+
+
+/** 
 * @property _bHasMouseMoveHandler
 * @description Boolean indicating if the "mousemove" event handler has 
 * been assigned.
@@ -574,10 +585,12 @@ init: function(p_oElement, p_oConfig) {
         this.beforeShowEvent.subscribe(this._onBeforeShow, this, true);
         this.showEvent.subscribe(this._onShow, this, true);
         this.beforeHideEvent.subscribe(this._onBeforeHide, this, true);
+        this.hideEvent.subscribe(this._onHide, this, true);
         this.mouseOverEvent.subscribe(this._onMouseOver, this, true);
         this.mouseOutEvent.subscribe(this._onMouseOut, this, true);
         this.clickEvent.subscribe(this._onClick, this, true);
         this.keyDownEvent.subscribe(this._onKeyDown, this, true);
+        this.keyPressEvent.subscribe(this._onKeyPress, this, true);
 
         YAHOO.widget.Module.textResizeEvent.subscribe(
             this._onTextResize, 
@@ -2002,6 +2015,18 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
                         oNextItem.cfg.setProperty("selected", true);
                         oNextItem.focus();
 
+
+                        if(this.cfg.getProperty("maxheight") > 0) {
+
+                            this.body.scrollTop = 
+
+                                (
+                                    oNextItem.element.offsetTop + 
+                                    oNextItem.element.offsetHeight
+                                ) - this.body.offsetHeight;
+                        
+                        }
+
                     }
     
                 }
@@ -2155,6 +2180,29 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
 
 
 /**
+* @method _onKeyPress
+* @description "keypress" event handler for a Menu instance.
+* @protected
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
+*/
+_onKeyPress: function(p_sType, p_aArgs, p_oMenu) {
+    
+    var oEvent = p_aArgs[0];
+
+
+    if(oEvent.keyCode == 40 || oEvent.keyCode == 38) {
+
+        YAHOO.util.Event.preventDefault(oEvent);
+
+    }
+
+},
+
+
+/**
 * @method _onTextResize
 * @description "textresize" event handler for the menu.
 * @protected
@@ -2181,6 +2229,135 @@ _onTextResize: function(p_sType, p_aArgs, p_oMenu) {
         oConfig.setProperty("width", (this._getOffsetWidth() + "px"));
 
     }
+
+},
+
+
+/**
+* @method _onScrollTargetMouseOver
+* @description "mouseover" event handler for the menu's "header" and "footer" 
+* elements.  Used to scroll the body of the menu up and down when the 
+* menu's "maxheight" configuration property is set to a value greater than 0.
+* @protected
+* @param {Event} p_oEvent Object representing the DOM event object passed 
+* back by the event utility (YAHOO.util.Event).
+* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
+* fired the event.
+*/
+_onScrollTargetMouseOver: function(p_oEvent, p_oMenu) {
+
+    var oTarget = Event.getTarget(p_oEvent),
+        oBody = this.body,
+        me = this,
+        nScrollTarget,
+        fnScrollFunction;
+
+
+    function scrollBodyDown() {
+
+        var nScrollTop = oBody.scrollTop;
+
+
+        if(nScrollTop < nScrollTarget) {
+
+            oBody.scrollTop = (nScrollTop + 1);
+
+
+            if(me._bHeaderDisabled) {
+
+                Dom.removeClass(me.header, "disabled");
+
+                me._bHeaderDisabled = false;
+
+            }
+
+        }
+        else {
+
+            oBody.scrollTop = nScrollTarget;
+            
+            window.clearInterval(me._nBodyScrollId);
+
+            Dom.addClass(me.footer, "disabled");
+
+            me._bFooterDisabled = true;
+
+        }
+
+    }
+
+
+    function scrollBodyUp() {
+
+        var nScrollTop = oBody.scrollTop;
+
+
+        if(nScrollTop > 0) {
+
+            oBody.scrollTop = (nScrollTop - 1);
+
+
+            if(me._bFooterDisabled) {
+
+                Dom.removeClass(me.footer, "disabled");
+
+                me._bFooterDisabled = false;
+
+            }
+
+        }
+        else {
+
+            oBody.scrollTop = 0;
+            
+            window.clearInterval(me._nBodyScrollId);
+
+            Dom.addClass(me.header, "disabled");
+            
+            me._bHeaderDisabled = true;
+
+        }
+
+    }
+
+    
+    if(Dom.hasClass(oTarget, "hd")) {
+
+        fnScrollFunction = scrollBodyUp;
+    
+    }
+    else {
+
+        nScrollTarget = oBody.scrollHeight - oBody.offsetHeight;
+
+        fnScrollFunction = scrollBodyDown;
+    
+    }
+
+
+    this._nBodyScrollId = window.setInterval(fnScrollFunction, 10);
+    
+    this._cancelHideDelay();
+
+},
+
+
+/**
+* @method _onScrollTargetMouseOut
+* @description "mouseout" event handler for the menu's "header" and "footer" 
+* elements.  Used to stop scrolling the body of the menu up and down when the 
+* menu's "maxheight" configuration property is set to a value greater than 0.
+* @protected
+* @param {Event} p_oEvent Object representing the DOM event object passed 
+* back by the event utility (YAHOO.util.Event).
+* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
+* fired the event.
+*/
+_onScrollTargetMouseOut: function(p_oEvent, p_oMenu) {
+
+    window.clearInterval(this._nBodyScrollId);
+
+    this._execHideDelay();
 
 },
 
@@ -2348,7 +2525,7 @@ _onRender: function(p_sType, p_aArgs, p_oMenu) {
 * fired the event.
 */
 _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
-    
+
     if(this.lazyLoad && this.getItemGroups().length === 0) {
 
         if(this.srcElement) {
@@ -2409,7 +2586,43 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
         }
 
     }
+
+
+    var nViewportHeight = Dom.getViewportHeight(),
+        nMaxHeight;
+
+
+    if(this.element.offsetHeight >= nViewportHeight) {
+
+        /*
+            Cache the original value for the "maxheight" configuration property 
+            so that we can set it back when the menu is hidden.
+        */
+
+        this._originalMaxHeight = this.cfg.getProperty("maxheight");
+
+        this.cfg.setProperty("maxheight", (nViewportHeight - 50));
     
+    }
+
+
+    if(this.cfg.getProperty("maxheight") > 0) {
+
+        var oBody = this.body;
+
+        if(oBody.scrollTop > 0) {
+
+            oBody.scrollTop = 0;
+
+        }
+
+        Dom.addClass(this.header, "disabled");
+
+        this._bHeaderDisabled = true;
+        this._bFooterDisabled = false;
+
+    }
+
 },
 
 
@@ -2551,6 +2764,23 @@ _onBeforeHide: function(p_sType, p_aArgs, p_oMenu) {
 
 
 /**
+* @method _onHide
+* @description "hide" event handler for the menu.
+* @private
+* @param {String} p_sType String representing the name of the event that 
+* was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that fired 
+* the event.
+*/
+_onHide: function(p_sType, p_aArgs, p_oMenu) {
+
+    this.cfg.setProperty("maxheight", this._originalMaxHeight);
+
+},
+
+
+/**
 * @method _onParentMenuConfigChange
 * @description "configchange" event handler for a submenu.
 * @private
@@ -2679,7 +2909,20 @@ _onSubmenuBeforeShow: function(p_sType, p_aArgs, p_oSubmenu) {
         "context", 
         [oParent.element, aAlignment[0], aAlignment[1]]
     );
+
+
+    var nScrollTop = oParent.parent.body.scrollTop;
+
+
+    if(
+        (this.browser == "gecko" || this.browser == "safari") 
+        && nScrollTop > 0
+    ) {
+
+         this.cfg.setProperty("y", (this.cfg.getProperty("y") - nScrollTop));
     
+    }
+
 },
 
 
@@ -3119,6 +3362,72 @@ configContainer: function(p_sType, p_aArgs, p_oMenu) {
 
 },
 
+
+/**
+* @method configMaxHeight
+* @description Event handler for when the "maxheight" configuration property of 
+* a Menu changes.
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* @param {YAHOO.widget.Menu} p_oMenu The Menu instance fired
+* the event.
+*/
+configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
+
+    var nMaxHeight = p_aArgs[0],
+        oBody = this.body,
+        oHeader = this.header,
+        oFooter = this.footer,
+        fnMouseOver = this._onScrollTargetMouseOver,
+        fnMouseOut = this._onScrollTargetMouseOut;
+
+
+    if(nMaxHeight && oBody.offsetHeight > nMaxHeight) {
+        
+        Dom.setStyle(oBody, "height", (nMaxHeight + "px"));
+        Dom.setStyle(oBody, "overflow", "hidden");
+
+
+        if(!oHeader && !oFooter) {
+
+            this.setHeader("&#32;");
+            this.setFooter("&#32;");
+
+            oHeader = this.header,
+            oFooter = this.footer;
+   
+            this.element.insertBefore(oHeader, oBody);
+            this.element.appendChild(oFooter);
+        
+        }
+
+
+        Event.addListener(oFooter, "mouseover", fnMouseOver, this, true);
+        Event.addListener(oFooter, "mouseout", fnMouseOut, this, true);
+        Event.addListener(oHeader, "mouseover", fnMouseOver, this, true);
+        Event.addListener(oHeader, "mouseout", fnMouseOut, this, true);
+
+    }
+    else if(oHeader && oFooter) {
+
+        Dom.setStyle(oBody, "height", "auto");
+        Dom.setStyle(oBody, "overflow", "visible");
+
+        Event.removeListener(oFooter, "mouseover", fnMouseOver);
+        Event.removeListener(oFooter, "mouseout", fnMouseOut);
+        Event.removeListener(oHeader, "mouseover", fnMouseOver);
+        Event.removeListener(oHeader, "mouseout", fnMouseOut);
+
+        this.element.removeChild(oHeader);
+        this.element.removeChild(oFooter);
+    
+        this.header = null;
+        this.footer = null;
+    
+    }
+
+},
 
 
 // Public methods
@@ -3806,6 +4115,23 @@ initDefaultConfig: function() {
 	   "container", 
 	   { value:document.body, handler:this.configContainer } 
    );
+
+
+    /**
+    * @config maxheight
+    * @description Defines the maximum height (in pixels) for a menu's body 
+    * element before the contents of the body are scrolled.
+    * @default null
+    * @type Number
+    */
+    oConfig.addProperty(
+       "maxheight", 
+       {
+            value: 0,
+            validator: oConfig.checkNumber, 
+            handler: this.configMaxHeight
+       } 
+    );
 
 }
 
