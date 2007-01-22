@@ -1,10 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12.2
-*/
-
 /**
 * The Calendar component is a UI control that enables users to choose one or more dates from a graphical calendar presented in a one-month ("one-up") or two-month ("two-up") interface. Calendars are generated entirely via script and can be navigated without any page refreshes.
 * @module    calendar
@@ -217,16 +210,13 @@ YAHOO.widget.Calendar.prototype = {
 */
 YAHOO.widget.Calendar.prototype.init = function(id, containerId, config) {
 	this.logger = new YAHOO.widget.LogWriter("Calendar_Core " + id);
-	
 	this.initEvents();
 	this.today = new Date();
 	YAHOO.widget.DateMath.clearTime(this.today);
 
 	this.id = id;
 	this.oDomContainer = document.getElementById(containerId);
-	if (! this.oDomContainer) {
-		this.logger.log("No valid container present.", "error");
-	}
+	if (! this.oDomContainer) { this.logger.log("No valid container present.", "error"); }
 
 	/**
 	* The Config object used to hold the configuration variables for the Calendar
@@ -463,7 +453,6 @@ YAHOO.widget.Calendar.prototype.doSelectCell = function(e, cal) {
 		var link;
 
 		cal.logger.log("Selecting cell " + index + " via click", "info");
-
 		if (cal.Options.MULTI_SELECT) {
 			link = cell.getElementsByTagName("a")[0];
 			if (link) {
@@ -858,9 +847,7 @@ YAHOO.widget.Calendar.prototype.configPageDate = function(type, args, obj) {
 	}
 	
 	this.cfg.setProperty("pagedate", new Date(year, month, 1), true);
-	
 	this.logger.log("Set month/year to " + month + "/" + year, "info");
-
 	if (! this._pageDate) {
 		this._pageDate = this.cfg.getProperty("pagedate");
 	}
@@ -1133,7 +1120,6 @@ YAHOO.widget.Calendar.prototype.buildDayLabel = function(workingDate) {
 */
 YAHOO.widget.Calendar.prototype.renderHeader = function(html) {
 	this.logger.log("Rendering header", "info");
-
 	var colSpan = 7;
 	
 	if (this.cfg.getProperty("SHOW_WEEK_HEADER")) {
@@ -1238,7 +1224,6 @@ YAHOO.widget.Calendar.prototype.renderBody = function(workingDate, html) {
 	
 	this.monthDays = YAHOO.widget.DateMath.findMonthEnd(workingDate).getDate();
 	this.postMonthDays = YAHOO.widget.Calendar.DISPLAY_DAYS-this.preMonthDays-this.monthDays;
-
 	this.logger.log(this.preMonthDays + " preciding out-of-month days", "info");
 	this.logger.log(this.monthDays + " month days", "info");
 	this.logger.log(this.postMonthDays + " post-month days", "info");
@@ -1410,7 +1395,6 @@ YAHOO.widget.Calendar.prototype.renderBody = function(workingDate, html) {
 				for (var x=0;x<cellRenderers.length;++x) {
 					var ren = cellRenderers[x];
 					this.logger.log("renderer[" + x + "] for (" + workingDate.getFullYear() + "-" + (workingDate.getMonth()+1) + "-" + workingDate.getDate() + ")", "cellrender");
-
 					if (ren.call((this.parent || this),workingDate,cell) == YAHOO.widget.Calendar.STOP_RENDER) {
 						break;
 					}
@@ -1857,7 +1841,6 @@ YAHOO.widget.Calendar.prototype.clear = function() {
 */
 YAHOO.widget.Calendar.prototype.select = function(date) {
 	this.logger.log("Select: " + date, "info");
-
 	this.beforeSelectEvent.fire();
 
 	var selected = this.cfg.getProperty("selected");

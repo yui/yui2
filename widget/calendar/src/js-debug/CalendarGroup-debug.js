@@ -1,10 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12.2
-*/
-
 /**
 * YAHOO.widget.CalendarGroup is a special container class for YAHOO.widget.Calendar. This class facilitates
 * the ability to have multi-page calendar views that share a single dataset and are
@@ -41,7 +34,6 @@ YAHOO.widget.CalendarGroup = function(id, containerId, config) {
 */
 YAHOO.widget.CalendarGroup.prototype.init = function(id, containerId, config) {
 	this.logger = new YAHOO.widget.LogWriter("CalendarGroup " + id);
-
 	this.initEvents();
 	this.initStyles();
 
@@ -120,7 +112,6 @@ YAHOO.widget.CalendarGroup.prototype.init = function(id, containerId, config) {
 		};
 		this.renderEvent.subscribe(fixWidth,this,true);
 	}
-	
 	this.logger.log("Initialized " + pageCount + "-page CalendarGroup", "info");
 };
 
@@ -659,6 +650,7 @@ YAHOO.widget.CalendarGroup.prototype.setMonth = function(month) {
 */
 YAHOO.widget.CalendarGroup.prototype.setYear = function(year) {
 	year = parseInt(year, 10);
+
 	for (var p=0;p<this.pages.length;++p) {
 		var cal = this.pages[p];
 		var pageDate = cal.cfg.getProperty("pageDate");
