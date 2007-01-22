@@ -142,7 +142,12 @@ YAHOO.widget.MenuManager = function() {
                     // Check if the DIV is the inner "body" node of a menu
 
                     if(
-                        Dom.hasClass(p_oElement, "bd") && 
+                        (
+                            Dom.hasClass(p_oElement, "hd") ||
+                            Dom.hasClass(p_oElement, "bd") ||
+                            Dom.hasClass(p_oElement, "ft")
+                        )
+                        && 
                         oParentNode && 
                         oParentNode.tagName && 
                         oParentNode.tagName.toUpperCase() == "DIV"
