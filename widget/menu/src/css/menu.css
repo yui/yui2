@@ -112,6 +112,45 @@ div.yuimenu h6.first-of-type {
 }
 
 
+div.yuimenu div.ft,
+div.yuimenu div.hd {
+
+    height:16px;
+    background-position: center center;
+    background-repeat: no-repeat;
+
+}
+
+
+div.yuimenu div.hd {
+
+    background-image:url(../img/menuaroup8_nrm_1.gif);
+
+}
+
+
+div.yuimenu div.hd.disabled {
+
+    background-image:url(../img/menuaroup8_dim_1.gif);
+
+}
+
+
+div.yuimenu div.ft {
+
+    background-image:url(../img/menuarodwn8_nrm_1.gif);
+
+}
+
+
+div.yuimenu div.ft.disabled {
+
+    background-image:url(../img/menuarodwn8_dim_1.gif);
+
+}
+
+
+
 /* MenuItem and MenuBarItem styles */
 
 div.yuimenu li,
