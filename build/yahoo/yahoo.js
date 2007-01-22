@@ -9,12 +9,37 @@
 
 if (typeof YAHOO == "undefined") {
     /**
-     * The YAHOO global namespace object
+     * The YAHOO global namespace object.  If YAHOO is already defined, the
+     * existing YAHOO object will not be overwritten so that defined namespaces
+     * are preserved.
+     *
+     * YAHOO can be configured by defining YAHOO_config prior to loading YAHOO.
+     * YAHOO_config can have the following properties:
+     * <dl>
+     *     <dt>listener</dt>
+     *          <dd>A reference to a function that will be executed every time
+     *              a YAHOO module is loaded.  As parameter, this function will
+     *              receive the version information for the module.  
+     *              @see YAHOO.getVersion for the description of the version
+     *              data structure.</dd>
+     * </dl>
      * @class YAHOO
      * @static
      */
     var YAHOO = {};
 }
+
+/**
+ * An object that contains information about the current environment
+ * @property env
+ * @type Object
+ * @static
+ */
+YAHOO.env = YAHOO.env || { 
+    modules: [],
+    listeners: []
+    // other things may go here.  browser.. anything else?
+};
 
 /**
  * Returns the namespace specified and creates it if it doesn't exist
@@ -39,12 +64,12 @@ if (typeof YAHOO == "undefined") {
  */
 YAHOO.namespace = function() {
     var a=arguments, o=null, i, j, d;
-    for (i=0; i<a.length; ++i) {
+    for (i=0; i<a.length; i=i+1) {
         d=a[i].split(".");
         o=YAHOO;
 
         // YAHOO is implied, so it is ignored if it is included
-        for (j=(d[0] == "YAHOO") ? 1 : 0; j<d.length; ++j) {
+        for (j=(d[0] == "YAHOO") ? 1 : 0; j<d.length; j=j+1) {
             o[d[j]]=o[d[j]] || {};
             o=o[d[j]];
         }
@@ -122,7 +147,7 @@ YAHOO.extend = function(subc, superc, overrides) {
 YAHOO.augment = function(r, s) {
     var rp=r.prototype, sp=s.prototype, a=arguments, i, p;
     if (a[2]) {
-        for (i=2; i<a.length; ++i) {
+        for (i=2; i<a.length; i=i+1) {
             rp[a[i]] = sp[a[i]];
         }
     } else {
@@ -134,4 +159,99 @@ YAHOO.augment = function(r, s) {
     }
 };
 
-YAHOO.namespace("util", "widget", "example");
+/**
+ * Registers a module with the YAHOO object
+ * @param {String}   name    the name of the module (event, slider, etc)
+ * @param {Function} mainClass a reference to class in the module.  This
+ *                             class will be tagged with the version info
+ *                             so that it will be possible to identify the
+ *                             version that is in use when multiple versions
+ *                             have loaded
+ * @param {Object}   data      metadata object for the module.  Currently it
+ *                             is expected to contain a "version" property
+ *                             and a "build" property at minimum.
+ * @return {boolean} true if successful, false if not (either the data object 
+ *                   was did not have the expected properties or the 
+ *                   mainClass was not valid.)
+ */
+YAHOO.register = function(name, mainClass, data) {
+    var mods = YAHOO.env.modules;
+    if (!mods[name]) {
+        mods[name] = { versions:[], builds:[] };
+    }
+    try {
+        var m = mods[name], v=data.version, b=data.build, ls=YAHOO.env.listeners;
+        m.name = name;
+        m.version = v;
+        m.build = b;
+        m.versions.push(v);
+        m.builds.push(b);
+        m.mainClass = mainClass;
+        mainClass.VERSION = v;
+        mainClass.BUILD = b;
+        // fire the module load listeners
+        for (var i=0;i<ls.length;i=i+1) {
+            ls[i](m);
+        }
+        return true;
+    } catch(e) {
+        return e;
+    }
+};
+
+/**
+ * Returns the version data for the specified module:
+ * {
+ *      name:      The name of the module
+ *      version:   The version in use
+ *      build:     The build number in use
+ *      versions:  All versions that were registered
+ *      builds:    All builds that were registered.
+ *      mainClass: An object that was was stamped with the current version.
+ *                 mainClass.VERSION != version or mainClass.BUILD != build,
+ *                 multiple versions of pieces of the library have been
+ *                 loaded, potentially causing issues.
+ * }
+ *
+ * @param {String}   name the name of the module (event, slider, etc)
+ * return {{name: string, version: string, build: string, versions:string[], builds:string[], mainClass:function}|null}
+ * The version info
+ */
+YAHOO.getVersion = function(name) {
+    return YAHOO.env.modules[name] || null;
+};
+
+/**
+ * Initializes the global by creating the default namespaces and applying
+ * any new configuration information that is detected.
+ * @method init
+ * @static
+ */
+YAHOO.init = function() {
+    this.namespace("util", "widget", "example");
+    if (typeof YAHOO_config != "undefined") {
+        var l=YAHOO_config.listener,ls=YAHOO.env.listeners,unique=true,i;
+        if (l) {
+            // if YAHOO is loaded multiple times we need to check to see if
+            // this is a new config object.  If it is, add the new component
+            // load listener to the stack
+            for (i=0;i<ls.length;i=i+1) {
+                if (ls[1]==l) {
+                    unique=false;
+                    break;
+                }
+            }
+            if (unique) {
+                ls.push(l);
+            }
+        }
+    }
+};
+
+YAHOO.init();
+
+// to be applied by the build
+//YAHOO.register("yahoo", YAHOO, {
+        //version: "9.9.9",
+        //build: "999"
+    //});
