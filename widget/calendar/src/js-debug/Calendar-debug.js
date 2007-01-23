@@ -176,14 +176,6 @@ YAHOO.widget.Calendar.prototype = {
 	_renderStack : null,
 
 	/**
-	* A Date object representing the month/year that the calendar is initially set to
-	* @property _pageDate
-	* @private
-	* @type Date
-	*/
-	_pageDate : null,
-
-	/**
 	* The private list of initially selected dates.
 	* @property _selectedDates
 	* @private
@@ -825,32 +817,7 @@ YAHOO.widget.Calendar.prototype.setupConfig = function() {
 * @method configPageDate
 */
 YAHOO.widget.Calendar.prototype.configPageDate = function(type, args, obj) {
-	var val = args[0];
-	var month, year, aMonthYear;
-
-	if (val) {
-		if (val instanceof Date) {
-			val = YAHOO.widget.DateMath.findMonthStart(val);
-			this.cfg.setProperty("pagedate", val, true);
-			if (! this._pageDate) {
-				this._pageDate = this.cfg.getProperty("pagedate");
-			}
-			return;
-		} else {
-			aMonthYear = val.split(this.cfg.getProperty("DATE_FIELD_DELIMITER"));
-			month = parseInt(aMonthYear[this.cfg.getProperty("MY_MONTH_POSITION")-1], 10)-1;
-			year = parseInt(aMonthYear[this.cfg.getProperty("MY_YEAR_POSITION")-1], 10);
-		}
-	} else {
-		month = this.today.getMonth();
-		year = this.today.getFullYear();
-	}
-	
-	this.cfg.setProperty("pagedate", new Date(year, month, 1), true);
-	this.logger.log("Set month/year to " + month + "/" + year, "info");
-	if (! this._pageDate) {
-		this._pageDate = this.cfg.getProperty("pagedate");
-	}
+	this.cfg.setProperty("pagedate", this._parsePageDate(args[0]), true);
 };
 
 /**
@@ -2114,6 +2081,34 @@ YAHOO.widget.Calendar.prototype.isDateOOM = function(date) {
 		isOOM = true;
 	}
 	return isOOM;
+};
+
+/**
+ * Parses a pagedate configuration property value. The value can either be specified as a string of form "mm/yyyy" or a Date object 
+ * and is parsed into a Date object normalized to the first day of the month. If no value is passed in, the month and year from today's date are used to create the Date object 
+ * @method	_parsePageDate
+ * @private
+ * @param {Date | String} date Pagedate value which needs to be parsed
+ * @return {Date} The Date object representing the pagedate
+ */
+YAHOO.widget.Calendar.prototype._parsePageDate = function(date) {
+	var parsedDate;
+
+	if (date) {
+		if (date instanceof Date) {
+			parsedDate = YAHOO.widget.DateMath.findMonthStart(date);
+		} else {
+			var month, year, aMonthYear;
+			aMonthYear = date.split(this.cfg.getProperty("DATE_FIELD_DELIMITER"));
+			month = parseInt(aMonthYear[this.cfg.getProperty("MY_MONTH_POSITION")-1], 10)-1;
+			year = parseInt(aMonthYear[this.cfg.getProperty("MY_YEAR_POSITION")-1], 10);
+			
+			parsedDate = new Date(year, month, 1);
+		}
+	} else {
+		parsedDate = new Date(this.today.getFullYear(), this.today.getMonth(), 1);
+	}
+	return parsedDate;
 };
 
 // END UTILITY METHODS

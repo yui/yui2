@@ -1,5 +1,12 @@
 Calendar Release Notes
 
+*** version 0.12.3 ***
+
+	- Corrected problem with Safari setting Calendar pages to incorrect dates if the pages spanned a year boundary in CalendarGroups with 3 or more pages, due to a bug in Safari's impl of Date setMonth
+	- Corrected problem with CalendarGroup setMonth rendering Calendar pages with incorrect dates in all browsers if current pages spanned years
+	- Fixed incorrect logging statement in calendar-debug.js
+	- Removed unused private property : _pageDate from Calendar class
+
 *** version 0.12.2 ***
 
 	- Corrected documentation for clearTime function to reflect the change from midnight to noon

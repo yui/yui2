@@ -72,7 +72,6 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @event configChangedEvent
 	*/
 	this.configChangedEvent = new YAHOO.util.CustomEvent("configChanged");
-
 	this.queueInProgress = false;
 
 	/* Private Members */
@@ -917,14 +916,6 @@ YAHOO.widget.Calendar.prototype = {
 	_renderStack : null,
 
 	/**
-	* A Date object representing the month/year that the calendar is initially set to
-	* @property _pageDate
-	* @private
-	* @type Date
-	*/
-	_pageDate : null,
-
-	/**
 	* The private list of initially selected dates.
 	* @property _selectedDates
 	* @private
@@ -1563,31 +1554,7 @@ YAHOO.widget.Calendar.prototype.setupConfig = function() {
 * @method configPageDate
 */
 YAHOO.widget.Calendar.prototype.configPageDate = function(type, args, obj) {
-	var val = args[0];
-	var month, year, aMonthYear;
-
-	if (val) {
-		if (val instanceof Date) {
-			val = YAHOO.widget.DateMath.findMonthStart(val);
-			this.cfg.setProperty("pagedate", val, true);
-			if (! this._pageDate) {
-				this._pageDate = this.cfg.getProperty("pagedate");
-			}
-			return;
-		} else {
-			aMonthYear = val.split(this.cfg.getProperty("DATE_FIELD_DELIMITER"));
-			month = parseInt(aMonthYear[this.cfg.getProperty("MY_MONTH_POSITION")-1], 10)-1;
-			year = parseInt(aMonthYear[this.cfg.getProperty("MY_YEAR_POSITION")-1], 10);
-		}
-	} else {
-		month = this.today.getMonth();
-		year = this.today.getFullYear();
-	}
-	
-	this.cfg.setProperty("pagedate", new Date(year, month, 1), true);
-	if (! this._pageDate) {
-		this._pageDate = this.cfg.getProperty("pagedate");
-	}
+	this.cfg.setProperty("pagedate", this._parsePageDate(args[0]), true);
 };
 
 /**
@@ -2842,6 +2809,34 @@ YAHOO.widget.Calendar.prototype.isDateOOM = function(date) {
 	return isOOM;
 };
 
+/**
+ * Parses a pagedate configuration property value. The value can either be specified as a string of form "mm/yyyy" or a Date object 
+ * and is parsed into a Date object normalized to the first day of the month. If no value is passed in, the month and year from today's date are used to create the Date object 
+ * @method	_parsePageDate
+ * @private
+ * @param {Date | String} date Pagedate value which needs to be parsed
+ * @return {Date} The Date object representing the pagedate
+ */
+YAHOO.widget.Calendar.prototype._parsePageDate = function(date) {
+	var parsedDate;
+
+	if (date) {
+		if (date instanceof Date) {
+			parsedDate = YAHOO.widget.DateMath.findMonthStart(date);
+		} else {
+			var month, year, aMonthYear;
+			aMonthYear = date.split(this.cfg.getProperty("DATE_FIELD_DELIMITER"));
+			month = parseInt(aMonthYear[this.cfg.getProperty("MY_MONTH_POSITION")-1], 10)-1;
+			year = parseInt(aMonthYear[this.cfg.getProperty("MY_YEAR_POSITION")-1], 10);
+			
+			parsedDate = new Date(year, month, 1);
+		}
+	} else {
+		parsedDate = new Date(this.today.getFullYear(), this.today.getMonth(), 1);
+	}
+	return parsedDate;
+};
+
 // END UTILITY METHODS
 
 // BEGIN EVENT HANDLERS
@@ -3724,7 +3719,7 @@ YAHOO.widget.CalendarGroup.prototype.configPages = function(type, args, obj) {
 
 		var cal = this.constructChild(calId, calContainerId, childConfig);
 		var caldate = cal.cfg.getProperty("pagedate");
-		caldate.setMonth(caldate.getMonth()+p);
+		this._setMonthOnDate(caldate, caldate.getMonth() + p);
 		cal.cfg.setProperty("pagedate", caldate);
 		
 		YAHOO.util.Dom.removeClass(cal.oDomContainer, this.Style.CSS_SINGLE);
@@ -3754,12 +3749,18 @@ YAHOO.widget.CalendarGroup.prototype.configPages = function(type, args, obj) {
 */
 YAHOO.widget.CalendarGroup.prototype.configPageDate = function(type, args, obj) {
 	var val = args[0];
-
+	var firstPageDate;
+	
 	for (var p=0;p<this.pages.length;++p) {
 		var cal = this.pages[p];
-		cal.cfg.setProperty("pagedate", val);
-		var calDate = cal.cfg.getProperty("pagedate");
-		calDate.setMonth(calDate.getMonth()+p);
+		if (p === 0) {
+			firstPageDate = cal._parsePageDate(val);
+			cal.cfg.setProperty("pagedate", firstPageDate);
+		} else {
+			var pageDate = new Date(firstPageDate);
+			this._setMonthOnDate(pageDate, pageDate.getMonth() + p);
+			cal.cfg.setProperty("pagedate", pageDate);
+		}
 	}
 };
 
@@ -3841,10 +3842,18 @@ YAHOO.widget.CalendarGroup.prototype.constructChild = function(id,containerId,co
 */
 YAHOO.widget.CalendarGroup.prototype.setMonth = function(month) {
 	month = parseInt(month, 10);
-
-	for (var p=0;p<this.pages.length;++p) {
+	var currYear;
+	
+	for (var p=0; p<this.pages.length; ++p) {
 		var cal = this.pages[p];
-		cal.setMonth(month+p);
+		var pageDate = cal.cfg.getProperty("pagedate");
+		if (p === 0) {
+			currYear = pageDate.getFullYear();
+		} else {
+			pageDate.setYear(currYear);
+		}
+		this._setMonthOnDate(pageDate, month+p); 
+		cal.cfg.setProperty("pagedate", pageDate);
 	}
 };
 
@@ -3856,7 +3865,6 @@ YAHOO.widget.CalendarGroup.prototype.setMonth = function(month) {
 */
 YAHOO.widget.CalendarGroup.prototype.setYear = function(year) {
 	year = parseInt(year, 10);
-
 	for (var p=0;p<this.pages.length;++p) {
 		var cal = this.pages[p];
 		var pageDate = cal.cfg.getProperty("pageDate");
@@ -4153,6 +4161,26 @@ YAHOO.widget.CalendarGroup.prototype.subtractYears = function(count) {
 };
 
 /**
+* Sets the month on a Date object, taking into account year rollover if the month is less than 0 or greater than 11.
+* The Date object passed in is modified and hence should be cloned before passing in if the original value needs to be maintained
+* @method	_setMonthOnDate
+* @private
+* @param	{Date}	date	The Date object on which to set the month index
+* @param	{Number}	iMonth	The month index to set
+*/
+YAHOO.widget.CalendarGroup.prototype._setMonthOnDate = function(date, iMonth) {
+	// BUG in Safari 1.3, 2.0 (WebKit build < 420), Date.setMonth does not work consistently if iMonth is not 0-11
+	if (this.browser == "safari" && (iMonth < 0 || iMonth > 11)) {
+		var DM = YAHOO.widget.DateMath;
+		var newDate = DM.add(date, DM.MONTH, iMonth-date.getMonth());
+		date.setTime(newDate.getTime());
+	} else {
+		date.setMonth(iMonth);
+	}
+};
+
+
+/**
 * CSS class representing the container for the calendar
 * @property YAHOO.widget.CalendarGroup.CSS_CONTAINER
 * @static
@@ -4236,3 +4264,5 @@ YAHOO.extend(YAHOO.widget.Calendar2up, YAHOO.widget.CalendarGroup);
 * @deprecated The old Calendar2up class is no longer necessary, since CalendarGroup renders in a 2up view by default.
 */
 YAHOO.widget.Cal2up = YAHOO.widget.Calendar2up;
+
+YAHOO.register("calendar", YAHOO.widget.Calendar, {version: "@VERSION@", build: "@BUILD@"});
