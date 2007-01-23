@@ -132,9 +132,8 @@ YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
         this.contextMenu.render(document.body);
     }
 
-    YAHOO.widget.DataTable._nCount++;
-    YAHOO.log("DataTable initialized", "info", this.toString());
-
+    // Set up event model
+    var elTable = this._elTable;
     /////////////////////////////////////////////////////////////////////////////
     //
     // DOM Events
@@ -147,7 +146,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
     YAHOO.util.Event.addListener(elTable, "mousedown", this._onMousedown, this);
     //YAHOO.util.Event.addListener(elTable, "mouseup", this._onMouseup, this);
     //YAHOO.util.Event.addListener(elTable, "mousemove", this._onMousemove, this);
-    //YAHOO.util.Event.addListener(elTable, "keydown", this._onKeydown, this);
+    YAHOO.util.Event.addListener(elTable, "keydown", this._onKeydown, this);
     //YAHOO.util.Event.addListener(elTable, "keypress", this._onKeypress, this);
     YAHOO.util.Event.addListener(document, "keyup", this._onKeyup, this);
     //YAHOO.util.Event.addListener(elTable, "focus", this._onFocus, this);
@@ -233,6 +232,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
      * @param oArgs.target {HTMLElement} The RADIO element.
      */
     this.createEvent("radioClickEvent");
+    
     /**
      * Fired when a TD element is clicked.
      *
@@ -290,6 +290,25 @@ YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
     this.createEvent("tableDoubleclickEvent");
 
     /**
+     * Fired when up-arrow is typed.
+     *
+     * @event tableDoubleclickEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TABLE element.
+     *
+     */
+    this.createEvent("arrowUpEvent");
+
+    /**
+     * Fired when down-arrow is typed.
+     *
+     * @event tableDoubleclickEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TABLE element.
+     *
+     */
+    this.createEvent("arrowDownEvent");
+    /**
      * Fired when a column is resized.
      *
      * @event columnResizeEvent
@@ -325,6 +344,12 @@ YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
      */
     this.createEvent("rowDeleteEvent");
     this.subscribe("rowDeleteEvent", this._onRowDelete);
+    
+    
+    
+    
+    YAHOO.widget.DataTable._nCount++;
+    YAHOO.log("DataTable initialized", "info", this.toString());
 };
 
 YAHOO.augment(YAHOO.widget.DataTable, YAHOO.util.EventProvider);
@@ -334,6 +359,16 @@ YAHOO.augment(YAHOO.widget.DataTable, YAHOO.util.EventProvider);
 // Public constants
 //
 /////////////////////////////////////////////////////////////////////////////
+
+ /**
+ * Class name of TBODY element.
+ *
+ * @property CLASS_TBODY
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_TBODY = "yui-dt-tbody";
 
  /**
  * Class name of even element.
@@ -385,6 +420,7 @@ YAHOO.widget.DataTable.CLASS_EMPTY = "yui-dt-empty";
  * @final
  */
 YAHOO.widget.DataTable.CLASS_LOADING = "yui-dt-loading";
+
  /**
  * Class name of selected element.
  *
@@ -646,6 +682,15 @@ YAHOO.widget.DataTable.prototype._oColumnset = null;
  */
 YAHOO.widget.DataTable.prototype._oRecordset = null;
 
+/**
+ * Array of Records that are in the selected state.
+ *
+ * @property _aSelectedRecords
+ * @type YAHOO.widget.Record[]
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._aSelectedRecords = [];
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Private methods
@@ -717,6 +762,7 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
 
     // Create TBODY for data
     this._elBody = elTable.appendChild(document.createElement("tbody"));
+    this._elBody.className = YAHOO.widget.DataTable.CLASS_TBODY;
 };
 
 /**
@@ -1090,10 +1136,47 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
 };
 
 /**
+ * Handles keyup events on the TABLE.
+ *
+ * @method _onKeydown
+ * @param e {event} The key event.
+ * @param oSelf {object} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
+    var oldRow = oSelf._lastSelected;
+    var newRow;
+    // arrow down
+    if(e.keyCode == 40) {
+        
+        if(oldRow && oSelf.isSelected(oldRow) && (oldRow.sectionRowIndex+1 < oSelf._elBody.rows.length)) {
+                    if(!e.shiftKey) {
+                        oSelf.unselectAllRows();
+                    }
+                    newRow = oSelf._elBody.rows[oldRow.sectionRowIndex+1];
+                    oSelf.select(newRow);
+                    oSelf._lastSelected = newRow;
+        }
+    }
+    // arrow up
+    else if(e.keyCode == 38) {
+        
+        if(oldRow && oSelf.isSelected(oldRow) && (oldRow.sectionRowIndex > 0)) {
+                    if(!e.shiftKey) {
+                        oSelf.unselectAllRows();
+                    }
+                    newRow = oSelf._elBody.rows[oldRow.sectionRowIndex-1];
+                    oSelf.select(newRow);
+                    oSelf._lastSelected = newRow;
+        }
+    }
+};
+
+/**
  * Handles keyup events on the DOCUMENT.
  *
  * @method _onKeyup
- * @param e {event} The mouseover event.
+ * @param e {event} The key event.
  * @param oSelf {object} DataTable instance.
  * @private
  */
@@ -1585,6 +1668,7 @@ YAHOO.widget.DataTable.prototype.select = function(els) {
     }
     for(var i=0; i<els.length; i++) {
         YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
+        this._aSelectedRecords.push(els[i].recordId);
     }
     this.fireEvent("selectEvent",{el:els});
 };
@@ -1600,8 +1684,14 @@ YAHOO.widget.DataTable.prototype.unselect = function(els) {
     if(els.constructor != Array) {
         els = [els];
     }
+    var array = this._aSelectedRecords;
     for(var i=0; i<els.length; i++) {
         YAHOO.util.Dom.removeClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
+        for(var j=0; j<array.length; j++) {
+            if(els[i].recordId == array[j]) {
+                array.splice(j);
+            }
+        }
     }
 };
 
@@ -1646,6 +1736,15 @@ YAHOO.widget.DataTable.prototype.getSelectedRows = function() {
     return YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elBody);
 };
 
+ /**
+ * Returns array of selected Record IDs.
+ *
+ * @method getSelectedRecords
+ * @return {HTMLElement[]} Array of selected TR elements.
+ */
+YAHOO.widget.DataTable.prototype.getSelectedRecords = function() {
+    return this._aSelectedRecords;
+};
  /**
  * Returns array of selected TD cells.
  *
@@ -2118,10 +2217,32 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
         this.unselect(target);
     }
     else {
-        if(this.singleSelect && !evt.ctrlKey) {
+        if(this.singleSelect && !evt.ctrlKey && !evt.shiftKey) {
             this.unselectAllRows();
         }
-        this.select(target);
+        if(evt.shiftKey) {
+            var startRow = this._lastSelected;
+            if(startRow && this.isSelected(startRow)) {
+                this.unselectAllRows();
+                if(startRow.sectionRowIndex < target.sectionRowIndex) {
+                    for(var i=startRow.sectionRowIndex; i <= target.sectionRowIndex; i++) {
+                        this.select(this._elBody.rows[i]);
+                    }
+                }
+                else {
+                    for(var i=target.sectionRowIndex; i <= startRow.sectionRowIndex; i++) {
+                        this.select(this._elBody.rows[i]);
+                    }
+                }
+            }
+            else {
+                this.select(target);
+            }
+        }
+        else {
+            this.select(target);
+            this._lastSelected = target;
+        }
     }
 };
 

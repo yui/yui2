@@ -49,7 +49,7 @@ td {
    width:10em; /* any value seems to here, just need something */
 }
 
-#scroll  tbody {
+#scroll  tbody.yui-dt-tbody {
    display:block; /* enables tbody scrolling for safari and opera */
    height:10em;
    overflow:auto; /* for scrolling other than IE */
