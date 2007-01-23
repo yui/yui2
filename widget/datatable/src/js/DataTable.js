@@ -222,7 +222,8 @@ YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The CHECKBOX element.
      */
-    this.createEvent("checkboxClickEvent");
+    this.checkboxClickEvent = this.createEvent("checkboxClickEvent");
+    //this.checkboxClickEvent.subscribeEvent.subscribe(this._registerEvent,{type:"checkboxClickEvent"},this);
 
     /**
      * Fired when a RADIO element is clicked.
@@ -333,6 +334,14 @@ YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
      * @param oArgs.els {Array} An array of the selected element(s).
      */
     this.createEvent("selectEvent");
+
+    /**
+     * Fired when an element is unselected.
+     *
+     * @event unselectEvent
+     * @param oArgs.els {Array} An array of the unselected element(s).
+     */
+    this.createEvent("unselectEvent");
 
     /**
      * Fired when a TR element is deleted.
@@ -1144,30 +1153,64 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
-    var oldRow = oSelf._lastSelected;
-    var newRow;
-    // arrow down
-    if(e.keyCode == 40) {
-        
-        if(oldRow && oSelf.isSelected(oldRow) && (oldRow.sectionRowIndex+1 < oSelf._elBody.rows.length)) {
-                    if(!e.shiftKey) {
-                        oSelf.unselectAllRows();
-                    }
-                    newRow = oSelf._elBody.rows[oldRow.sectionRowIndex+1];
-                    oSelf.select(newRow);
-                    oSelf._lastSelected = newRow;
+    var oldSelected = oSelf._lastSelected;
+    // Only move selection if one is already selected
+    // TODO: config to allow selection even if one is NOT already selected
+    if(oldSelected && oSelf.isSelected(oldSelected)) {
+        var newSelected;
+        // arrow down
+        if(e.keyCode == 40) {
+            // row mode
+            if(oldSelected.nodeName.toLowerCase() == "tr") {
+                // We have room to move down
+                if(oldSelected.sectionRowIndex+1 < oSelf._elBody.rows.length) {
+                            if(!e.shiftKey) {
+                                oSelf.unselectAllRows();
+                            }
+                            newSelected = oSelf._elBody.rows[oldSelected.sectionRowIndex+1];
+                            oSelf.select(newSelected);
+                            oSelf._lastSelected = newSelected;
+                }
+            }
+            // cell mode
+            else if(oldSelected.nodeName.toLowerCase() == "td") {
+                /*// We have room to move down
+                if(oldSelected.sectionRowIndex+1 < oSelf._elBody.rows.length) {
+                            if(!e.shiftKey) {
+                                oSelf.unselectAllRows();
+                            }
+                            newSelected = oSelf._elBody.rows[oldSelected.sectionRowIndex+1];
+                            oSelf.select(newSelected);
+                            oSelf._lastSelected = newSelected;
+                }*/
+            }
         }
-    }
-    // arrow up
-    else if(e.keyCode == 38) {
-        
-        if(oldRow && oSelf.isSelected(oldRow) && (oldRow.sectionRowIndex > 0)) {
-                    if(!e.shiftKey) {
-                        oSelf.unselectAllRows();
-                    }
-                    newRow = oSelf._elBody.rows[oldRow.sectionRowIndex-1];
-                    oSelf.select(newRow);
-                    oSelf._lastSelected = newRow;
+        // arrow up
+        else if(e.keyCode == 38) {
+            // row mode
+            if(oldSelected.nodeName.toLowerCase() == "tr") {
+                // We have room to move up
+                if((oldSelected.sectionRowIndex > 0)) {
+                            if(!e.shiftKey) {
+                                oSelf.unselectAllRows();
+                            }
+                            newSelected = oSelf._elBody.rows[oldSelected.sectionRowIndex-1];
+                            oSelf.select(newSelected);
+                            oSelf._lastSelected = newSelected;
+                }
+            }
+            // cell mode
+            else if(oldSelected.nodeName.toLowerCase() == "td") {
+                // We have room to move up
+                if((oldSelected.sectionRowIndex > 0)) {
+                            if(!e.shiftKey) {
+                                oSelf.unselectAllRows();
+                            }
+                            newSelected = oSelf._elBody.rows[oldSelected.sectionRowIndex-1];
+                            oSelf.select(newSelected);
+                            oSelf._lastSelected = newSelected;
+                }
+            }
         }
     }
 };
@@ -1670,7 +1713,7 @@ YAHOO.widget.DataTable.prototype.select = function(els) {
         YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
         this._aSelectedRecords.push(els[i].recordId);
     }
-    this.fireEvent("selectEvent",{el:els});
+    this.fireEvent("selectEvent",{els:els});
 };
 
  /**
@@ -1693,6 +1736,7 @@ YAHOO.widget.DataTable.prototype.unselect = function(els) {
             }
         }
     }
+    this.fireEvent("unselectEvent",{els:els});
 };
 
 /**
@@ -1993,7 +2037,7 @@ YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
 YAHOO.widget.DataTable.checkboxFormatter = function(elCell, oData, oRecord, oColumn) {
     var bChecked = oData;
     bChecked = (bChecked) ? " checked" : "";
-    elCell.innerHTML = "<input type=\"checkbox\"" + bChecked + ">";
+    elCell.innerHTML = "<input type=\"checkbox\"" + bChecked + " class=\"yui-dt-checkbox\">";
 };
 
  /**
