@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="YuiBuild" default="core">
+<project name="YuiBuild" default="local">
 
     <description>Calendar Build File</description>
 
     <dirname property="buildfile.dir" file="${ant.file}" />
     <property environment="env" />
-    <property name="srcdir" value="${env.YUI_SRC_HOME}" />
-    <property name="builddir" value="${env.YUI_BUILD_HOME}" />
+    <property name="srcdir" value="${env.YUI_SRC_DIR}" />
+    <property name="builddir" value="${env.YUI_BUILD_DIR}" />
     <property file="${buildfile.dir}/build.properties" />
 
     <import file="${builddir}/buildproperties.xml" description="Shared Build Properties - tools, build paths etc." />
