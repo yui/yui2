@@ -1,10 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12.2
-*/
-
 /**
 * YAHOO.widget.CalendarGroup is a special container class for YAHOO.widget.Calendar. This class facilitates
 * the ability to have multi-page calendar views that share a single dataset and are
@@ -40,6 +33,7 @@ YAHOO.widget.CalendarGroup = function(id, containerId, config) {
 * @param {Object}	config		The configuration object containing the Calendar's arguments
 */
 YAHOO.widget.CalendarGroup.prototype.init = function(id, containerId, config) {
+	this.logger = new YAHOO.widget.LogWriter("CalendarGroup " + id);
 	this.initEvents();
 	this.initStyles();
 
@@ -118,6 +112,7 @@ YAHOO.widget.CalendarGroup.prototype.init = function(id, containerId, config) {
 		};
 		this.renderEvent.subscribe(fixWidth,this,true);
 	}
+	this.logger.log("Initialized " + this.pages.length + "-page CalendarGroup", "info");
 };
 
 
@@ -523,7 +518,7 @@ YAHOO.widget.CalendarGroup.prototype.configPages = function(type, args, obj) {
 
 		var cal = this.constructChild(calId, calContainerId, childConfig);
 		var caldate = cal.cfg.getProperty("pagedate");
-		caldate.setMonth(caldate.getMonth()+p);
+		this._setMonthOnDate(caldate, caldate.getMonth() + p);
 		cal.cfg.setProperty("pagedate", caldate);
 		
 		YAHOO.util.Dom.removeClass(cal.oDomContainer, this.Style.CSS_SINGLE);
@@ -553,12 +548,18 @@ YAHOO.widget.CalendarGroup.prototype.configPages = function(type, args, obj) {
 */
 YAHOO.widget.CalendarGroup.prototype.configPageDate = function(type, args, obj) {
 	var val = args[0];
-
+	var firstPageDate;
+	
 	for (var p=0;p<this.pages.length;++p) {
 		var cal = this.pages[p];
-		cal.cfg.setProperty("pagedate", val);
-		var calDate = cal.cfg.getProperty("pagedate");
-		calDate.setMonth(calDate.getMonth()+p);
+		if (p === 0) {
+			firstPageDate = cal._parsePageDate(val);
+			cal.cfg.setProperty("pagedate", firstPageDate);
+		} else {
+			var pageDate = new Date(firstPageDate);
+			this._setMonthOnDate(pageDate, pageDate.getMonth() + p);
+			cal.cfg.setProperty("pagedate", pageDate);
+		}
 	}
 };
 
@@ -640,10 +641,18 @@ YAHOO.widget.CalendarGroup.prototype.constructChild = function(id,containerId,co
 */
 YAHOO.widget.CalendarGroup.prototype.setMonth = function(month) {
 	month = parseInt(month, 10);
-
-	for (var p=0;p<this.pages.length;++p) {
+	var currYear;
+	
+	for (var p=0; p<this.pages.length; ++p) {
 		var cal = this.pages[p];
-		cal.setMonth(month+p);
+		var pageDate = cal.cfg.getProperty("pagedate");
+		if (p === 0) {
+			currYear = pageDate.getFullYear();
+		} else {
+			pageDate.setYear(currYear);
+		}
+		this._setMonthOnDate(pageDate, month+p); 
+		cal.cfg.setProperty("pagedate", pageDate);
 	}
 };
 
@@ -655,7 +664,6 @@ YAHOO.widget.CalendarGroup.prototype.setMonth = function(month) {
 */
 YAHOO.widget.CalendarGroup.prototype.setYear = function(year) {
 	year = parseInt(year, 10);
-
 	for (var p=0;p<this.pages.length;++p) {
 		var cal = this.pages[p];
 		var pageDate = cal.cfg.getProperty("pageDate");
@@ -950,6 +958,26 @@ YAHOO.widget.CalendarGroup.prototype.addYears = function(count) {
 YAHOO.widget.CalendarGroup.prototype.subtractYears = function(count) {
 	this.callChildFunction("subtractYears", count);
 };
+
+/**
+* Sets the month on a Date object, taking into account year rollover if the month is less than 0 or greater than 11.
+* The Date object passed in is modified and hence should be cloned before passing in if the original value needs to be maintained
+* @method	_setMonthOnDate
+* @private
+* @param	{Date}	date	The Date object on which to set the month index
+* @param	{Number}	iMonth	The month index to set
+*/
+YAHOO.widget.CalendarGroup.prototype._setMonthOnDate = function(date, iMonth) {
+	// BUG in Safari 1.3, 2.0 (WebKit build < 420), Date.setMonth does not work consistently if iMonth is not 0-11
+	if (this.browser == "safari" && (iMonth < 0 || iMonth > 11)) {
+		var DM = YAHOO.widget.DateMath;
+		var newDate = DM.add(date, DM.MONTH, iMonth-date.getMonth());
+		date.setTime(newDate.getTime());
+	} else {
+		date.setMonth(iMonth);
+	}
+};
+
 
 /**
 * CSS class representing the container for the calendar

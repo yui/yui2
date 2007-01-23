@@ -1,10 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12.2
-*/
-
 /**
 * The Calendar component is a UI control that enables users to choose one or more dates from a graphical calendar presented in a one-month ("one-up") or two-month ("two-up") interface. Calendars are generated entirely via script and can be navigated without any page refreshes.
 * @module    calendar
@@ -183,14 +176,6 @@ YAHOO.widget.Calendar.prototype = {
 	_renderStack : null,
 
 	/**
-	* A Date object representing the month/year that the calendar is initially set to
-	* @property _pageDate
-	* @private
-	* @type Date
-	*/
-	_pageDate : null,
-
-	/**
 	* The private list of initially selected dates.
 	* @property _selectedDates
 	* @private
@@ -216,12 +201,14 @@ YAHOO.widget.Calendar.prototype = {
 * @param {Object}	config		The configuration object containing the Calendar's arguments
 */
 YAHOO.widget.Calendar.prototype.init = function(id, containerId, config) {
+	this.logger = new YAHOO.widget.LogWriter("Calendar_Core " + id);
 	this.initEvents();
 	this.today = new Date();
 	YAHOO.widget.DateMath.clearTime(this.today);
 
 	this.id = id;
 	this.oDomContainer = document.getElementById(containerId);
+	if (! this.oDomContainer) { this.logger.log("No valid container present.", "error"); }
 
 	/**
 	* The Config object used to hold the configuration variables for the Calendar
@@ -457,6 +444,7 @@ YAHOO.widget.Calendar.prototype.doSelectCell = function(e, cal) {
 	
 		var link;
 
+		cal.logger.log("Selecting cell " + index + " via click", "info");
 		if (cal.Options.MULTI_SELECT) {
 			link = cell.getElementsByTagName("a")[0];
 			if (link) {
@@ -829,31 +817,7 @@ YAHOO.widget.Calendar.prototype.setupConfig = function() {
 * @method configPageDate
 */
 YAHOO.widget.Calendar.prototype.configPageDate = function(type, args, obj) {
-	var val = args[0];
-	var month, year, aMonthYear;
-
-	if (val) {
-		if (val instanceof Date) {
-			val = YAHOO.widget.DateMath.findMonthStart(val);
-			this.cfg.setProperty("pagedate", val, true);
-			if (! this._pageDate) {
-				this._pageDate = this.cfg.getProperty("pagedate");
-			}
-			return;
-		} else {
-			aMonthYear = val.split(this.cfg.getProperty("DATE_FIELD_DELIMITER"));
-			month = parseInt(aMonthYear[this.cfg.getProperty("MY_MONTH_POSITION")-1], 10)-1;
-			year = parseInt(aMonthYear[this.cfg.getProperty("MY_YEAR_POSITION")-1], 10);
-		}
-	} else {
-		month = this.today.getMonth();
-		year = this.today.getFullYear();
-	}
-	
-	this.cfg.setProperty("pagedate", new Date(year, month, 1), true);
-	if (! this._pageDate) {
-		this._pageDate = this.cfg.getProperty("pagedate");
-	}
+	this.cfg.setProperty("pagedate", this._parsePageDate(args[0]), true);
 };
 
 /**
@@ -1122,6 +1086,7 @@ YAHOO.widget.Calendar.prototype.buildDayLabel = function(workingDate) {
 * @return {Array} The current working HTML array
 */
 YAHOO.widget.Calendar.prototype.renderHeader = function(html) {
+	this.logger.log("Rendering header", "info");
 	var colSpan = 7;
 	
 	if (this.cfg.getProperty("SHOW_WEEK_HEADER")) {
@@ -1212,6 +1177,7 @@ YAHOO.widget.Calendar.prototype.buildWeekdays = function(html) {
 * @return {Array} The current working HTML array
 */
 YAHOO.widget.Calendar.prototype.renderBody = function(workingDate, html) {
+	this.logger.log("Rendering body", "info");
 	
 	var startDay = this.cfg.getProperty("START_WEEKDAY");
 
@@ -1225,8 +1191,12 @@ YAHOO.widget.Calendar.prototype.renderBody = function(workingDate, html) {
 	
 	this.monthDays = YAHOO.widget.DateMath.findMonthEnd(workingDate).getDate();
 	this.postMonthDays = YAHOO.widget.Calendar.DISPLAY_DAYS-this.preMonthDays-this.monthDays;
+	this.logger.log(this.preMonthDays + " preciding out-of-month days", "info");
+	this.logger.log(this.monthDays + " month days", "info");
+	this.logger.log(this.postMonthDays + " post-month days", "info");
 	
 	workingDate = YAHOO.widget.DateMath.subtract(workingDate, YAHOO.widget.DateMath.DAY, this.preMonthDays);
+	this.logger.log("Calendar page starts on " + workingDate, "info");
 
 	var useDate,weekNum,weekClass;
 	useDate = this.cfg.getProperty("pagedate");
@@ -1266,6 +1236,7 @@ YAHOO.widget.Calendar.prototype.renderBody = function(workingDate, html) {
 				YAHOO.util.Dom.addClass(cell, "calcell");
 
 				cell.id = this.id + "_cell" + i;
+				this.logger.log("Rendering cell " + cell.id + " (" + workingDate.getFullYear() + "-" + (workingDate.getMonth()+1) + "-" + workingDate.getDate() + ")", "cellrender");
 
 				cell.innerHTML = i;
 
@@ -1390,6 +1361,7 @@ YAHOO.widget.Calendar.prototype.renderBody = function(workingDate, html) {
 				
 				for (var x=0;x<cellRenderers.length;++x) {
 					var ren = cellRenderers[x];
+					this.logger.log("renderer[" + x + "] for (" + workingDate.getFullYear() + "-" + (workingDate.getMonth()+1) + "-" + workingDate.getDate() + ")", "cellrender");
 					if (ren.call((this.parent || this),workingDate,cell) == YAHOO.widget.Calendar.STOP_RENDER) {
 						break;
 					}
@@ -1835,10 +1807,12 @@ YAHOO.widget.Calendar.prototype.clear = function() {
 * @return	{Date[]}			Array of JavaScript Date objects representing all individual dates that are currently selected.
 */
 YAHOO.widget.Calendar.prototype.select = function(date) {
+	this.logger.log("Select: " + date, "info");
 	this.beforeSelectEvent.fire();
 
 	var selected = this.cfg.getProperty("selected");
 	var aToBeSelected = this._toFieldArray(date);
+	this.logger.log("Selection field array: " + aToBeSelected, "info");
 
 	for (var a=0;a<aToBeSelected.length;++a) {
 		var toSelect = aToBeSelected[a]; // For each date item in the list of dates we're trying to select
@@ -1875,6 +1849,7 @@ YAHOO.widget.Calendar.prototype.selectCell = function(cellIndex) {
 	var cellDate = this.cellDates[cellIndex];
 
 	var dCellDate = this._toDate(cellDate);
+	this.logger.log("Select: " + dCellDate, "info");
 
 	var selectDate = cellDate.concat();
 
@@ -2106,6 +2081,34 @@ YAHOO.widget.Calendar.prototype.isDateOOM = function(date) {
 		isOOM = true;
 	}
 	return isOOM;
+};
+
+/**
+ * Parses a pagedate configuration property value. The value can either be specified as a string of form "mm/yyyy" or a Date object 
+ * and is parsed into a Date object normalized to the first day of the month. If no value is passed in, the month and year from today's date are used to create the Date object 
+ * @method	_parsePageDate
+ * @private
+ * @param {Date | String} date Pagedate value which needs to be parsed
+ * @return {Date} The Date object representing the pagedate
+ */
+YAHOO.widget.Calendar.prototype._parsePageDate = function(date) {
+	var parsedDate;
+
+	if (date) {
+		if (date instanceof Date) {
+			parsedDate = YAHOO.widget.DateMath.findMonthStart(date);
+		} else {
+			var month, year, aMonthYear;
+			aMonthYear = date.split(this.cfg.getProperty("DATE_FIELD_DELIMITER"));
+			month = parseInt(aMonthYear[this.cfg.getProperty("MY_MONTH_POSITION")-1], 10)-1;
+			year = parseInt(aMonthYear[this.cfg.getProperty("MY_YEAR_POSITION")-1], 10);
+			
+			parsedDate = new Date(year, month, 1);
+		}
+	} else {
+		parsedDate = new Date(this.today.getFullYear(), this.today.getMonth(), 1);
+	}
+	return parsedDate;
 };
 
 // END UTILITY METHODS
