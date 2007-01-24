@@ -58,9 +58,11 @@ YAHOO.extend(YAHOO.widget.ButtonGroup, YAHOO.util.Element, {
 
     CSS_CLASS_NAME: "yuibuttongroup",
 
-    _aButtons: [],
+    _oButtons: null,
 
-    _activeButton: null,
+    _aButtons: null,
+
+    _checkedButton: null,
     
 
     _createGroupElement: function(p_oAttributes) {
@@ -96,13 +98,16 @@ YAHOO.extend(YAHOO.widget.ButtonGroup, YAHOO.util.Element, {
 
     init: function(p_oElement, p_oAttributes) {
 
+        this._aButtons = [];
+        this._oButtons = {};
+
         YAHOO.widget.ButtonGroup.superclass.init.call(
                 this, p_oElement, 
                 p_oAttributes
             );
 
 
-        var aButtons = this.getElementsByClassName("yuibutton", "span");
+        var aButtons = this.getElementsByClassName("yuibutton");
 
 
         if(aButtons.length > 0) {
@@ -128,6 +133,8 @@ YAHOO.extend(YAHOO.widget.ButtonGroup, YAHOO.util.Element, {
 
         }
 
+        this.addListener("keydown", this._onKeyDown);
+
     },
 
 
@@ -140,14 +147,14 @@ YAHOO.extend(YAHOO.widget.ButtonGroup, YAHOO.util.Element, {
             oAttributes
         );
 
-        this.register("name", {
+        this.setAttributeConfig("name", {
 
             value: null,
             validator: Lang.isString
 
         });
 
-        this.register("disabled", {
+        this.setAttributeConfig("disabled", {
 
             value: false,
             validator: Lang.isBoolean,
@@ -155,7 +162,7 @@ YAHOO.extend(YAHOO.widget.ButtonGroup, YAHOO.util.Element, {
 
         });
 
-        this.register("value", {
+        this.setAttributeConfig("value", {
 
             value: null
 
@@ -163,31 +170,62 @@ YAHOO.extend(YAHOO.widget.ButtonGroup, YAHOO.util.Element, {
 
     },
 
-    _onCheckedChange: function(p_oArgs, p_oButton) {
 
-        var oActiveButton = this._activeButton;
+    _onKeyDown: function(p_oEvent) {
+    
+        var oTarget = Event.getTarget(p_oEvent),
+            nCharCode = Event.getCharCode(p_oEvent),
+            sId = oTarget.parentNode.parentNode.id,
+            oButton = this._oButtons[sId],
+            nIndex = -1;
 
-        if(p_oArgs.newValue && oActiveButton != p_oButton) {
 
-            this.fireEvent("beforeActiveButtonChange", p_oButton);
+        if(nCharCode == 37 || nCharCode == 38) {
 
-            if(oActiveButton) {
+            nIndex = (oButton.index === 0) ? 
+                        (this._aButtons.length -1) : (oButton.index - 1);
+        
+        }
+        else if(nCharCode == 39 || nCharCode == 40) {
 
-                oActiveButton.set("checked", false, true);
+            nIndex = (oButton.index === (this._aButtons.length - 1)) ? 
+                        0 : (oButton.index + 1);
+
+        }
+
+
+        if(nIndex > -1) {
+
+            this.check(nIndex);
+            this.getButton(nIndex).focus();
+        
+        }        
+    
+    },
+    
+
+    _onCheckedChange: function(p_oEvent, p_oButton) {
+
+        var bChecked = p_oEvent.newValue,
+            oCheckedButton = this._checkedButton;
+
+        if(bChecked && oCheckedButton != p_oButton) {
+
+            if(oCheckedButton) {
+
+                oCheckedButton.set("checked", false, true);
 
             }
 
 
-            this._activeButton = p_oButton;
+            this._checkedButton = p_oButton;
             
             this.set("value", p_oButton.get("value"));
 
-            this.fireEvent("activeButtonChange", p_oButton);
-
         }
-        else if(!oActiveButton.set("checked")) {
+        else if(!oCheckedButton.set("checked")) {
 
-            oActiveButton.set("checked", true, true);
+            oCheckedButton.set("checked", true, true);
     
         }
        
@@ -221,10 +259,14 @@ YAHOO.extend(YAHOO.widget.ButtonGroup, YAHOO.util.Element, {
 
         if(oButton) {
 
-            this._aButtons[this._aButtons.length] = oButton;
-
-            var sButtonName = oButton.get("name"),
+            var nIndex = this._aButtons.length,
+                sButtonName = oButton.get("name"),
                 sGroupName = this.get("name");
+
+            oButton.index = nIndex;
+
+            this._aButtons[nIndex] = oButton;
+            this._oButtons[oButton.get("id")] = oButton;
 
 
             if(sButtonName != sGroupName) {
@@ -280,9 +322,27 @@ YAHOO.extend(YAHOO.widget.ButtonGroup, YAHOO.util.Element, {
         
         if(oButton) {
 
-            oButton.destroy();      
-
             this._aButtons.splice(p_nIndex, 1);
+            delete this._oButtons[oButton.get("id")];
+
+            oButton.removeListener("checkedChange", this._onCheckedChange);
+            oButton.destroy();
+
+
+            var nButtons = this._aButtons.length;
+            
+            if(nButtons > 0) {
+    
+                var i = this._aButtons.length - 1;
+                
+                do {
+    
+                    this._aButtons[i].index = i;
+    
+                }
+                while(i--);
+            
+            }
 
         }
 
@@ -360,8 +420,22 @@ YAHOO.extend(YAHOO.widget.ButtonGroup, YAHOO.util.Element, {
     
     destroy: function() {
 
-        var oElement = this.get("element"),
+        var nButtons = this._aButtons.length,
+            oElement = this.get("element"),
             oParentNode = oElement.parentNode;
+        
+        if(nButtons > 0) {
+
+            var i = this._aButtons.length - 1;
+            
+            do {
+
+                this._aButtons[i].destroy();
+
+            }
+            while(i--);
+        
+        }
 
         Event.purgeElement(oElement);
 

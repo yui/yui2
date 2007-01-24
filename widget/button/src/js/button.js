@@ -159,53 +159,49 @@ function initConfig(p_oConfig) {
         sSrcElementTagName = oSrcElement.tagName.toUpperCase();
 
 
-    switch(sSrcElementTagName) {
-    
-        case "SPAN":
+    if(sSrcElementTagName == this.TAG_NAME) {
 
-            p_oConfig.element = oSrcElement;
+        p_oConfig.element = oSrcElement;
 
 
-            if( !("id" in oAttributes) && p_oConfig.element.id) {
-            
-                oAttributes.id = p_oConfig.element.id;
-            
-            }
+        if(!("id" in oAttributes) && p_oConfig.element.id) {
+        
+            oAttributes.id = p_oConfig.element.id;
+        
+        }
 
-            var oSpan = getFirstElement(p_oConfig.element);
+        var oFirstChild = getFirstElement(p_oConfig.element);
 
+        Dom.addClass(oFirstChild, "first-child");
 
-            if(oSpan) {
+        if(oFirstChild) {
 
-                var oButton = getFirstElement(oSpan);
-
-
-                if(oButton) {
-
-                    var sButtonTagName = oButton.tagName.toUpperCase();
+            var oButton = getFirstElement(oFirstChild);
 
 
-                    if(sButtonTagName == "A" || sButtonTagName == "BUTTON") {
+            if(oButton) {
 
-                        setAttributesFromSrcElement.call(
-                                this, 
-                                oButton, 
-                                oAttributes
-                            );
-                    
-                    }
+                var sButtonTagName = oButton.tagName.toUpperCase();
+
+
+                if(sButtonTagName == "A" || sButtonTagName == "BUTTON") {
+
+                    setAttributesFromSrcElement.call(
+                            this, 
+                            oButton, 
+                            oAttributes
+                        );
                 
                 }
-
+            
             }
-        
-        break;
 
-        case "INPUT":
+        }
+    
+    }
+    else if(sSrcElementTagName == "INPUT") {
 
-            setAttributesFromSrcElement.call(this, oSrcElement, oAttributes);
-
-        break;
+        setAttributesFromSrcElement.call(this, oSrcElement, oAttributes);
     
     }
 
@@ -291,6 +287,7 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
     _bHasKeyUpHandler: false,
     _bCheckable: false,
 
+    TAG_NAME: "SPAN",
 
     ACTIVATION_BUTTON: 1,
     CHECK_ACTIVATION_KEYS: [32],
@@ -299,8 +296,24 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
 
     CSS_CLASS_NAME: "yuibutton",
 
+    RADIO_DEFAULT_TITLE: "Unchecked.  Click to check.",
+    RADIO_CHECKED_TITLE: "Checked.  Click to uncheck.",
 
-    
+    CHECKBOX_DEFAULT_TITLE: "Unchecked.  Click to check.",
+    CHECKBOX_CHECKED_TITLE: "Checked.  Click to uncheck.",
+
+    MENUBUTTON_DEFAULT_TITLE: "Menu collapsed.  Click to expand.",
+    MENUBUTTON_MENU_VISIBLE_TITLE: "Menu expanded.  Click to collapse.",
+
+    SPLITBUTTON_DEFAULT_TITLE: 
+        "Menu collapsed. Press Ctrl + Shift + M to show the menu.",
+
+    SPLITBUTTON_OPTION_VISIBLE_TITLE: 
+        "Menu expanded. Press Esc to hide the menu.",
+
+    SUBMIT_DEFAULT_TITLE: "Click to submit form.",
+
+
     // Protected attribute setter methods
 
 
@@ -310,7 +323,7 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         
         if(p_sType == "splitbutton") {
 
-            this.addListener("option", this._showMenu);
+            this.addListener("option", this._onOption, this, true);
 
         }
     
@@ -335,7 +348,50 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
 
         if(this.get("type") != "link") {
 
-            this._oButton.title = p_sTitle;
+            var sTitle = p_sTitle;
+
+            if(!sTitle) {
+
+
+                var sType = this.get("type");
+
+                switch(sType) {
+
+                    case "radio":
+
+                        sTitle = this.RADIO_DEFAULT_TITLE;
+
+                    break;
+
+                    case "checkbox":
+
+                        sTitle = this.CHECKBOX_DEFAULT_TITLE;
+
+                    break;
+                    
+                    case "menubutton":
+
+                        sTitle = this.MENUBUTTON_DEFAULT_TITLE;
+
+                    break;
+
+                    case "splitbutton":
+
+                        sTitle = this.SPLITBUTTON_DEFAULT_TITLE;
+
+                    break;
+
+                    case "submit":
+
+                        sTitle = this.SUBMIT_DEFAULT_TITLE;
+
+                    break;
+
+                }
+
+            }
+
+            this._oButton.title = sTitle;
    
         }
 
@@ -405,17 +461,30 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
 
         if(this._bCheckable) {
 
+            var sType = this.get("type"),
+                sTitle;
+
             if(p_bChecked) {
 
                 this.addClass("checked");
+                
+                sTitle = (sType == "radio") ? 
+                            this.RADIO_CHECKED_TITLE : 
+                            this.CHECKBOX_CHECKED_TITLE;
             
             }
             else {
 
                 this.removeClass("checked");
+
+                sTitle = (sType == "radio") ? 
+                            this.RADIO_DEFAULT_TITLE : 
+                            this.CHECKBOX_DEFAULT_TITLE;
             
             }
-        
+
+            this.set("title", sTitle);
+
         }
 
     },
@@ -469,14 +538,15 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         }
         else if(Lang.isArray(p_oMenu)) {
 
-            oMenu = new YAHOO.widget.Menu(Dom.generateId());
-
-            oMenu.addItems(p_oMenu);
+            oMenu = new YAHOO.widget.Menu(
+                                        Dom.generateId(), 
+                                        { lazyload: true, itemdata: p_oMenu }
+                                    );
            
         }
         else if(Lang.isString(p_oMenu) || (p_oMenu && p_oMenu.nodeName)) {
 
-            oMenu = new YAHOO.widget.Menu(p_oMenu);
+            oMenu = new YAHOO.widget.Menu(p_oMenu, { lazyload: true });
         
         }
 
@@ -484,6 +554,8 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         if(oMenu) {
 
             oMenu.showEvent.subscribe(this._onMenuShow, this, true);
+            oMenu.hideEvent.subscribe(this._onMenuHide, this, true);
+            oMenu.keyDownEvent.subscribe(this._onMenuKeyDown, this, true);
 
             var oSrcElement = oMenu.srcElement;
 
@@ -491,46 +563,19 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
 
                 oSrcElement.style.display = "none";
 
-
-                // subscribe to the command events            
-
-                var aItems = oMenu.getItems(),
-                    nItems = aItems.length,
-                    oItem;
-
-                if(nItems > 0) {
-
-                    var i = nItems - 1;
-
-                    do {
-
-                        oItem = aItems[i];
-
-                        if(oItem) {
-
-                            oItem.cfg.setProperty("command", {
-                            
-                                fn: this._onMenuItemCommand,
-                                obj: oItem,
-                                scope: this
-                            
-                            });
-
-                        }
-                    
-                    }
-                    while(i--);
-
-                }
+                oMenu.renderEvent.subscribe(this._onMenuRender, this, true);
 
             }
-        
-            this.addListener("appendTo", this._onAppendTo);
+
+ 
+            oMenu.cfg.setProperty("container", this.get("container"));
  
             this._oMenu = oMenu;
  
         }
         else {
+
+            this._oMenu.destroy();
 
             this._oMenu = null;
 
@@ -548,12 +593,16 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         var sTag = p_oAttributes.type == "link" ? 
                         "<a></a>" : "<button type=\"button\"></button>",
     
-            oSpan = document.createElement("span");
+            oFirstChild = document.createElement(this.TAG_NAME);
     
-        oSpan.innerHTML = "<span>" + sTag + "</span>";
+        oFirstChild.innerHTML = 
+        
+            "<" + this.TAG_NAME + " class=\"first-child\">" + 
+            sTag + 
+            "</" + this.TAG_NAME + ">";
     
     
-        return oSpan;
+        return oFirstChild;
     
     },
 
@@ -568,7 +617,7 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
             oField = document.createElement(
                                 "<input type=\"" + sType + "\" name=\" \">"
                             );
-        
+
         }
         else {
         
@@ -577,7 +626,7 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
     
         }
     
-    
+        oField.id = this.get("id");
         oField.name = this.get("name");
         oField.value = this.get("value");
     
@@ -637,6 +686,17 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
     },
 
 
+    _isSplitButtonOptionKey: function(p_oEvent) {
+
+        return (
+            p_oEvent.ctrlKey && 
+            p_oEvent.shiftKey && 
+            Event.getCharCode(p_oEvent) == 77
+        );
+    
+    },
+
+
     _showMenu: function() {
 
         var oMenu = this._oMenu;
@@ -655,6 +715,19 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
 
         }            
     
+    },
+
+
+    _hideMenu: function() {
+
+        var oMenu = this._oMenu;
+
+        if(oMenu && oMenu.cfg.getProperty("visible")) {
+
+            oMenu.hide();
+
+        }
+
     },
 
 
@@ -677,14 +750,13 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
 
     _fireCommandEvent: function(p_oEvent) {
 
-        if(this.isActive()) {
-
+        if(this.isActive() && this.hasFocus()) {
+        
             this.fireEvent("command", p_oEvent);
         
         }
     
     },
-
 
 
     // Protected event handlers
@@ -712,6 +784,13 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
 
             }
 
+
+            if(this._bOptionPressed) {
+
+                this.addClass("activeoption");
+            
+            }
+
         }
 
     },
@@ -723,10 +802,13 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
 
             this.removeClass("hover");
 
-            this.removeClass("active");
+            if(this.get("type") != "menubutton") {
 
+                this.removeClass("active");
 
-            if(this._bActivationButtonPressed) {
+            }
+
+            if(this._bActivationButtonPressed || this._bOptionPressed) {
 
                 Event.addListener(
                             document, 
@@ -743,9 +825,22 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
     },
 
 
-    _onDocumentMouseUp: function(p_oEvent) {
-    
+    _onDocumentMouseUp: function(p_oEvent, p_oButton) {
+
         this._bActivationButtonPressed = false;
+        this._bOptionPressed = false;
+
+        var sType = this.get("type");
+
+        if(sType == "menubutton" || sType == "splitbutton") {
+
+            this.removeClass(
+                    (sType == "menubutton" ? "active" : "activeoption")
+                );
+
+            this._hideMenu();
+
+        }
 
         Event.removeListener(document, "mouseup", this._onDocumentMouseUp);
 
@@ -767,9 +862,6 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
 
             if((p_oEvent.which || p_oEvent.button) == this.ACTIVATION_BUTTON) {
 
-        
-                var sClassName;
-
                 if(this.get("type") == "splitbutton") {
                 
                     var oElement = this.get("element"),
@@ -781,29 +873,44 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
                             this.OPTION_AREA_WIDTH
                         ) < nX
                     ) {
-
-                        sClassName = "activemenu";
                         
-                        this.fireEvent("option");
+                        this.fireEvent("option", { type: "option" });
 
                     }
                     else {
 
-                        sClassName = "active";
+                        this.addClass("active");
+
+                        this._bActivationButtonPressed = true;
 
                     }
-        
+
+                }
+                else if(this.get("type") == "menubutton") {
+
+                    if(this.hasClass("active")) {
+
+                        this._hideMenu();
+
+                        this._bActivationButtonPressed = false;
+
+                    }
+                    else {
+
+                        this._showMenu();
+
+                        this._bActivationButtonPressed = true;
+                    
+                    }
+
                 }
                 else {
         
-                    sClassName = "active";
+                    this.addClass("active");
+
+                    this._bActivationButtonPressed = true;
                 
                 }
-
-
-                this.addClass(sClassName);
-    
-                this._bActivationButtonPressed = true;
             
             }
 
@@ -816,24 +923,30 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
 
         if(!this.get("disabled")) {
 
+            if(this._bCheckable) {
+
+                this.set("checked", !(this.get("checked")));
+            
+            }
+
+
             this._fireCommandEvent(p_oEvent);
 
-            this.removeClass("active");
-            
-            if(this.get("type") == "splitbutton") {
-
-                this.removeClass("activemenu");                
-
-            }
-            
             this._bActivationButtonPressed = false;
+            
+
+            if(this.get("type") != "menubutton") {
+    
+                this.removeClass("active");
+            
+            }
         
         }
         
     },
 
 
-    _onFocus: function(p_oEvent) {
+    _onFocus: function(p_oEvent, p_oButton) {
 
         if(!this.get("disabled")) {
 
@@ -866,26 +979,39 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
                         true
                     );
     
+                Event.addListener(
+                        this._oButton, 
+                        "keyup", 
+                        this._onKeyUp, 
+                        this, 
+                        true
+                    );
+
                 this._bHasBlurHandler = true;
                 this._bHasKeyDownHandler = true;
+                this._bHasKeyUpHandler = true;
     
             }
     
     
-            this.fireEvent("focus");
+            this.fireEvent("focus", p_oEvent);
 
         }
 
     },
     
 
-    _onBlur: function(p_oEvent) {
+    _onBlur: function(p_oEvent, p_oButton) {
 
         if(!this.get("disabled")) {
 
             this.removeClass("focus");
-            this.removeClass("active");
-    
+
+            if(this.get("type") != "menubutton") {
+
+                this.removeClass("active");
+
+            }    
     
             if(this._bActivationKeyPressed) {
     
@@ -902,16 +1028,16 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
     
             m_oFocusedButton = null;
     
-            this.fireEvent("blur");
+            this.fireEvent("blur", p_oEvent);
 
         }
        
     },
 
 
-    _onDocumentKeyUp: function(p_oEvent) {
+    _onDocumentKeyUp: function(p_oEvent, p_oButton) {
 
-        if(this._isActivationKey(p_oEvent.keyCode)) {
+        if(this._isActivationKey(Event.getCharCode(p_oEvent))) {
 
             this._bActivationKeyPressed = false;
             
@@ -922,30 +1048,45 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
     },
 
 
-    _onKeyDown: function(p_oEvent) {
+    _onKeyDown: function(p_oEvent, p_oButton) {
 
         if(!this.get("disabled")) {
 
-            if(this._isActivationKey(p_oEvent.keyCode)) {
+            if(
+                this.get("type") == "splitbutton" && 
+                this._isSplitButtonOptionKey(p_oEvent)
+            ) {
 
-                this._bActivationKeyPressed = true;
+                this.fireEvent("option", { type: "option" });
+
+            }
+            else if(this._isActivationKey(Event.getCharCode(p_oEvent))) {
+
+                if(this.get("type") == "menubutton") {
+    
+                    this._showMenu();
+    
+                }
+                else {
+    
+                    this._bActivationKeyPressed = true;
+                    
+                    this.addClass("active");
                 
-                this.addClass("active");
+                }
             
             }
 
-    
-            if(!this._bHasKeyUpHandler) {
-    
-                Event.addListener(
-                        this._oButton, 
-                        "keyup", 
-                        this._onKeyUp, 
-                        this, 
-                        true
-                    );
-    
-                this._bHasKeyUpHandler = true;
+
+            var oMenu = this._oMenu;
+
+            if(
+                oMenu && oMenu.cfg.getProperty("visible") && 
+                Event.getCharCode(p_oEvent) == 27
+            ) {
+            
+                oMenu.hide();
+                this.focus();
             
             }
 
@@ -954,22 +1095,28 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
     },
 
 
-    _onKeyUp: function(p_oEvent) {
+    _onKeyUp: function(p_oEvent, p_oButton) {
 
         if(!this.get("disabled")) {
 
-            if(this._isActivationKey(p_oEvent.keyCode)) {
+            if(this._isActivationKey(Event.getCharCode(p_oEvent))) {
+
+
+                if(this._bCheckable) {
+
+                    this.set("checked", !(this.get("checked")));
+                
+                }
+    
+
 
                 this._fireCommandEvent(p_oEvent);
-    
+
                 this._bActivationKeyPressed = false;
-    
-                this.removeClass("active");
 
-
-                if(this.get("type") == "splitbutton") {
+                if(this.get("type") != "menubutton") {
     
-                    this.removeClass("activemenu");                
+                    this.removeClass("active");
     
                 }
 
@@ -985,13 +1132,6 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         var sType = this.get("type");
 
         switch(sType) {
-        
-            case "checkbox":
-            case "radio":
-
-                this.set("checked", !(this.get("checked")));
-            
-            break;
 
             case "submit":
 
@@ -1011,19 +1151,9 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
 
             break;
 
-            case "menubutton":
-
-                this._showMenu();
-
-            break;
-
             case "splitbutton":
 
-                if(this._oMenu) {
-
-                    this._oMenu.hide();
-
-                }
+                this._hideMenu();
 
                 var oSrcElement = this.get("srcelement");
 
@@ -1037,6 +1167,30 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
 
         }
     
+    },
+
+
+    _onAppendTo: function(p_oEvent) {
+
+        var oForm = this.getForm();
+        
+        if(oForm) {
+
+            Event.addListener(oForm, "reset", this._onFormReset, this, true);
+        
+        }
+    
+    },
+
+
+    _onFormReset: function(p_oEvent, p_oButton) {
+
+        if(this._bCheckable) {
+
+            this.resetValue("checked");
+    
+        }
+        
     },
 
     
@@ -1053,8 +1207,8 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
             !Dom.isAncestor(oMenuElement, oTarget)
         ) {
 
-            this._oMenu.hide();
-            
+            this._hideMenu();
+
             Event.removeListener(
                     document, 
                     "mousedown", 
@@ -1064,7 +1218,27 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         }
 
     },
+
+
+    _onOption: function(p_oEvent, p_oButton) {
+
+        if(this.hasClass("activeoption")) {
+
+            this._hideMenu();
+
+            this._bOptionPressed = false;
+
+        }
+        else {
+
+            this._showMenu();    
+
+            this._bOptionPressed = true;
+
+        }
     
+    },
+
 
     _onMenuShow: function(p_sType, p_aArgs, p_oButton) {
 
@@ -1075,6 +1249,103 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
             this, 
             true
         );
+
+        var sTitle,
+            sClass;
+        
+        if(this.get("type") == "splitbutton") {
+
+            sTitle = this.SPLITBUTTON_OPTION_VISIBLE_TITLE;
+            sClass = "activeoption";
+        
+        }
+        else {
+
+            sTitle = this.MENUBUTTON_MENU_VISIBLE_TITLE;        
+            sClass = "active";
+
+        }
+
+        this.addClass(sClass);
+        this.set("title", sTitle);
+
+    },
+
+
+    _onMenuHide: function(p_sType, p_aArgs, p_oButton) {
+
+        var sTitle,
+            sClass;
+        
+        if(this.get("type") == "splitbutton") {
+        
+            sTitle = this.SPLITBUTTON_DEFAULT_TITLE;
+            sClass = "activeoption";
+        
+        }
+        else {
+
+            sTitle = this.MENUBUTTON_DEFAULT_TITLE;        
+            sClass = "active";
+        }
+
+
+        this.removeClass(sClass);
+        this.set("title", sTitle);
+
+    },
+
+
+    _onMenuKeyDown: function(p_sType, p_aArgs, p_oButton) {
+
+        var oEvent = p_aArgs[0];
+
+        if(Event.getCharCode(oEvent) == 27) {
+
+            this.focus();
+
+            if(this.get("type") == "splitbutton") {
+            
+                this._bOptionPressed = false;
+            
+            }
+
+        }
+
+    },
+
+    _onMenuRender: function(p_sType, p_aArgs, p_oButton) {
+
+        // subscribe to the command events            
+
+        var aItems = this._oMenu.getItems(),
+            nItems = aItems.length,
+            oItem;
+
+        if(nItems > 0) {
+
+            var i = nItems - 1;
+
+            do {
+
+                oItem = aItems[i];
+
+                if(oItem) {
+
+                    oItem.cfg.setProperty("command", {
+                    
+                        fn: this._onMenuItemCommand,
+                        obj: oItem,
+                        scope: this
+                    
+                    });
+
+                }
+            
+            }
+            while(i--);
+
+        }
     
     },
 
@@ -1089,13 +1360,6 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
 
         }
 
-    },
-
-
-    _onAppendTo: function() {
-
-        this._oMenu.render(this.get("element").parentNode);   
-    
     },
 
 
@@ -1139,6 +1403,7 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
 
         this.addListener("mouseover", this._onMouseOver);
         this.addListener("command", this._onCommand);
+        this.addListener("appendTo", this._onAppendTo);
 
 
         /**
@@ -1149,12 +1414,17 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         /**
         * Fires when the button loses focus.
         * @event blur
-        */        
+        */
 
         /**
         * Fires when the button loses focus.
         * @event command
-        */        
+        */
+
+        /**
+        * Fires when the user invokes the button's option.
+        * @event option
+        */
 
         var oContainer = this.get("container"),
             oElement = this.get("element");
@@ -1189,8 +1459,11 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
             oSrcElement.tagName.toUpperCase() == "INPUT"
         ) {
 
-            this.appendTo(oSrcElement.parentNode);
-            oSrcElement.parentNode.removeChild(oSrcElement);
+            this.fireEvent("beforeAppendTo");
+
+            oSrcElement.parentNode.replaceChild(oElement, oSrcElement);
+
+            this.fireEvent("appendTo");
 
         }
 
@@ -1204,9 +1477,9 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         YAHOO.widget.Button.superclass.initAttributes.call(this, oAttributes);
 
 
-        this.register("type", {
+        this.setAttributeConfig("type", {
 
-            value: oAttributes.type,
+            value: (oAttributes.type || "button"),
             validator: Lang.isString,
             writeOnce: true,
             method: this._setType
@@ -1214,7 +1487,7 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         });
 
 
-        this.register("label", {
+        this.setAttributeConfig("label", {
 
             value: oAttributes.label,
             validator: Lang.isString,
@@ -1223,14 +1496,14 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         });
 
 
-        this.register("value", {
+        this.setAttributeConfig("value", {
 
             value: oAttributes.value
 
         });
 
 
-        this.register("name", {
+        this.setAttributeConfig("name", {
 
             value: oAttributes.name,
             validator: Lang.isString
@@ -1238,7 +1511,7 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         });
 
     
-        this.register("tabindex", {
+        this.setAttributeConfig("tabindex", {
 
             value: oAttributes.tabindex,
             validator: Lang.isNumber,
@@ -1256,16 +1529,16 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         });
 
 
-        this.register("disabled", {
+        this.setAttributeConfig("disabled", {
 
-            value: oAttributes.disabled,
+            value: (oAttributes.disabled || false),
             validator: Lang.isBoolean,
             method: this._setDisabled
 
         });
 
 
-        this.register("accesskey", {
+        this.setAttributeConfig("accesskey", {
 
             value: oAttributes.accesskey,
             validator: Lang.isString,
@@ -1274,7 +1547,7 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         });
 
 
-        this.register("href", {
+        this.setAttributeConfig("href", {
 
             value: oAttributes.href,
             validator: Lang.isString,
@@ -1283,7 +1556,7 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         });
 
 
-        this.register("target", {
+        this.setAttributeConfig("target", {
 
             value: oAttributes.target,
             validator: Lang.isString,
@@ -1292,23 +1565,23 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         });
 
 
-        this.register("checked", {
+        this.setAttributeConfig("checked", {
 
-            value: oAttributes.checked,
+            value: (oAttributes.checked || false),
             validator: Lang.isBoolean,
             method: this._setChecked
 
         });
 
 
-        this.register("container", {
+        this.setAttributeConfig("container", {
 
             value: oAttributes.container
 
         });
 
 
-        this.register("srcelement", {
+        this.setAttributeConfig("srcelement", {
 
             value: oAttributes.srcelement,
             writeOnce: true
@@ -1316,7 +1589,7 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         });
 
 
-        this.register("command", {
+        this.setAttributeConfig("command", {
 
             value: oAttributes.command,
             method: this._setCommand
@@ -1324,31 +1597,12 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
         });
 
 
-        this.register("menu", {
+        this.setAttributeConfig("menu", {
 
             value: null,
             method: this._setMenu
         
         });
-
-    },
-
-
-    /**
-    * Appends the HTMLElement into either the supplied parentNode.
-    * @method appendTo
-    * @param {HTMLElement | Element} parentNode The node to append to
-    * @param {HTMLElement | Element} before An optional node to insert before
-    */
-    appendTo: function(parent, before) {
-
-        YAHOO.widget.Button.superclass.appendTo.call(this, parent, before);
-
-        if(this.get("element").parentNode) {
-
-            this.fireEvent("appendTo");
-        
-        }
 
     },
 
@@ -1389,6 +1643,13 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
     },
 
 
+    getMenu: function() {
+
+        return this._oMenu;
+    
+    },
+
+
     getForm: function() {
 
         return this._oButton.form;
@@ -1399,12 +1660,19 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
     destroy: function() {
 
         var oElement = this.get("element"),
-            oParentNode = oElement.parentNode;
+            oParentNode = oElement.parentNode,
+            oMenu = this._oMenu;
+
+        if(oMenu) {
+
+            oMenu.destroy();
+
+        }
 
         Event.purgeElement(oElement);
 
         oParentNode.removeChild(oElement);
-        
+
         delete m_oButtons[this.get("id")];
 
     },
@@ -1426,7 +1694,7 @@ YAHOO.extend(YAHOO.widget.Button, YAHOO.util.Element, {
 
 YAHOO.widget.Button.addHiddenFieldsToForm = function(p_oForm) {
 
-    var aButtons = Dom.getElementsByClassName("yuibutton", "span", p_oForm),
+    var aButtons = Dom.getElementsByClassName("yuibutton", "*", p_oForm),
         nButtons = aButtons.length;
 
 
