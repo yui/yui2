@@ -1609,6 +1609,7 @@ YAHOO.widget.DataTable.prototype.addRow = function(oRecord, i) {
         if(oColumnset.keys[j].key) {
             var elCell = elRow.appendChild(document.createElement("td"));
             elCell.id = this.id+"-bdrow"+i+"-cell"+j;
+            elCell.headers = oColumnset.keys[j].id;
             oColumnset.keys[j].format(elCell, oRecord);
         /*p.abx {word-wrap:break-word;}
 ought to solve the problem for Safari (the long words will wrap in your
@@ -1946,7 +1947,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
         var sortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultOrder) ? oColumn.sortOptions.defaultOrder : "asc";
 
         // Is the column sorted already?
-        if(this.sortedBy == oColumn.id) {
+        if(this.sortedBy == oColumn.key) {
             if(this.sortedByDir) {
                 sortDir = (this.sortedByDir == "asc") ? "desc" : "asc";
             }
@@ -1957,11 +1958,11 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
 
         // Define the sort handler function based on the direction
         var sortFnc = null;
-        if((sortDir == "desc") && oColumn.sortOptions && oColumn.sortOptions.sortDescHandler) {
-            sortFnc = oColumn.sortOptions.sortDescHandler
+        if((sortDir == "desc") && oColumn.sortOptions && oColumn.sortOptions.descHandler) {
+            sortFnc = oColumn.sortOptions.descHandler
         }
-        else if((sortDir == "asc") && oColumn.sortOptions && oColumn.sortOptions.sortAscHandler) {
-            sortFnc = oColumn.sortOptions.sortAscHandler
+        else if((sortDir == "asc") && oColumn.sortOptions && oColumn.sortOptions.ascHandler) {
+            sortFnc = oColumn.sortOptions.ascHandler
         }
 
         // One was not provided so use the default generic sort handler function
@@ -1997,7 +1998,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
         // Keep track of currently sorted column
         YAHOO.util.Dom.removeClass(this.sortedBy,YAHOO.widget.DataTable.CLASS_SORTEDBYASC);
         YAHOO.util.Dom.removeClass(this.sortedBy,YAHOO.widget.DataTable.CLASS_SORTEDBYDESC);
-        this.sortedBy = oColumn.id;
+        this.sortedBy = oColumn.key;
         this.sortedByDir = sortDir;
         var newClass = (sortDir == "asc") ? YAHOO.widget.DataTable.CLASS_SORTEDBYASC : YAHOO.widget.DataTable.CLASS_SORTEDBYDESC;
         YAHOO.util.Dom.addClass(oColumn.id, newClass);
@@ -2227,6 +2228,7 @@ YAHOO.widget.DataTable.selectFormatter = function(elCell, oData, oRecord, oColum
  * @param oArgs.target {HTMLElement} Target element.
  */
 YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
+
     var evt = oArgs.event;
     var target = oArgs.target;
     //TODO: traverse DOM to find a columnKey, incl safety net if none exists
