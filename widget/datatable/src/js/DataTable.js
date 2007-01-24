@@ -735,6 +735,11 @@ YAHOO.widget.DataTable.prototype._initRows = function() {
 YAHOO.widget.DataTable.prototype._initTable = function() {
     // Clear the container
     this._elContainer.innerHTML = "";
+    if(this.scrolling) {
+        //TODO: make class name a constant
+        //TODO: conf height
+        YAHOO.util.Dom.addClass(this._elContainer,"yui-dt-scrolling");
+    }
 
     // Create TABLE
     this._elTable = this._elContainer.appendChild(document.createElement("table"));

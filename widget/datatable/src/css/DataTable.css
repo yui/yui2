@@ -33,43 +33,43 @@ td {
     text-decoration:underline;
 }/*margin:0 4px 0 4px;*/
 
-#scroll  {
+.yui-dt-scrolling  {
    width:20em;
    margin-bottom:3em;
 }
 
 
-#scroll  thead {
+.yui-dt-scrolling  thead {
    background:#696969; /*  IE needs a bgcolor to hide tbody as it scrolls */
    border:1px solid #000;
    display:block; /* enables tbody scrolling for safari and opera */
 }
 
-#scroll  thead th {
+.yui-dt-scrolling  thead th {
    width:10em; /* any value seems to here, just need something */
 }
 
-#scroll  tbody.yui-dt-tbody {
+.yui-dt-scrolling  tbody.yui-dt-tbody {
    display:block; /* enables tbody scrolling for safari and opera */
    height:10em;
    overflow:auto; /* for scrolling other than IE */
 }
 
 /* IE specific */
-#scroll  {
+.yui-dt-scrolling  {
    height:10em;
    *overflow-y:auto;
 }
 
-#scroll  tbody {
+.yui-dt-scrolling  tbody {
    *height:auto; /* override the non IE height */
 }
 
-#scroll thead tr {
+.yui-dt-scrolling thead tr {
    position:relative;  /* IE cant scroll tbody, so trick it into fixing thead */
 }
 
-#scroll tbody td {
+.yui-dt-scrolling tbody td {
     width:10em;
 }
 
