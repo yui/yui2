@@ -16,7 +16,6 @@
     <!-- Hook into customlocal, to build container_core and concat CSS -->
     <target name="customlocal">
        <ant antfile="${buildfile.dir}/buildcore.xml" target="container_local_subtask" inheritAll="false" />
-	    <concatsource destfile="${component.srcdir}/css/${component}.css" sourcedir="${component.srcdir}/css" sourcefiles="Panel.css, Dialog.css" />
     </target>
     
     <target name="examples" description="Component Specific Over-ride">
