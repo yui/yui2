@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="YuiBuildContainer" default="local">
+
+    <description>Container Build File</description>
+
+    <dirname property="buildfile.dir" file="${ant.file}" />
+    <property environment="env" />
+    <property name="srcdir" value="${env.YUI_SRC_DIR}" />
+    <property name="builddir" value="${env.YUI_BUILD_DIR}" />
+    
+    <property file="${buildfile.dir}/build.properties" />
+
+    <import file="${builddir}/buildproperties.xml" description="Shared Build Properties - tools, build paths etc." />
+    <import file="${builddir}/targetlib.xml" description="Component Build Targets" />
+
+    <!-- Hook into customlocal, to build container_core and concat CSS -->
+    <target name="customlocal">
+       <ant antfile="${buildfile.dir}/buildcore.xml" target="container_local_subtask" inheritAll="false" />
+	    <concatsource destfile="${component.srcdir}/css/${component}.css" sourcedir="${component.srcdir}/css" sourcefiles="Panel.css, Dialog.css" />
+    </target>
+    
+    <target name="examples" description="Component Specific Over-ride">
+        <echo>DOES NOT DO ANYTHING CURRENTLY</echo>
+    </target>
+
+</project>
+
