@@ -1,4 +1,3 @@
-
 /**
  * The Slider component is a UI control that enables the user to adjust 
  * values in a finite range along one or two axes. Typically, the Slider 
@@ -1245,3 +1244,4 @@ if ("undefined" == typeof YAHOO.util.Anim) {
     YAHOO.widget.Slider.ANIM_AVAIL = false;
 }
 
+YAHOO.register("slider", YAHOO.widget.Slider, {version: "@VERSION@", build: "@BUILD@"});

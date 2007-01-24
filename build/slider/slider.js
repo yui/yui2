@@ -684,6 +684,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         var _p = t.getTargetCoord(x, y);
         var p = [_p.x, _p.y];
 
+
         this.fireEvent("slideStart");
 
         if (this.animate && YAHOO.widget.Slider.ANIM_AVAIL && t._graduated && !skipAnim) {
@@ -724,6 +725,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
     moveOneTick: function(finalCoord) {
 
         var t = this.thumb, tmp;
+
 
         // redundant call to getXY since we set the position most of time prior 
         // to getting here.  Moved to this.curCoord
@@ -839,6 +841,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         this.thumb.autoOffset();
         this.thumb.resetConstraints();
     },
+
 
     /**
      * Handles the mousedown event for the slider background
@@ -977,6 +980,7 @@ YAHOO.widget.SliderThumb = function(id, sGroup, iLeft, iRight, iUp, iDown, iTick
         this.parentElId = sGroup;
     }
 
+
     //this.removeInvalidHandleType("A");
 
 
@@ -1050,6 +1054,7 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      */
     _graduated: false,
 
+
     /**
      * Returns the difference between the location of the thumb and its parent.
      * @method getOffsetFromParent
@@ -1108,6 +1113,7 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      */
     initSlider: function (iLeft, iRight, iUp, iDown, iTickSize) {
 
+
         //document these.  new for 0.12.1
         this.initLeft = iLeft;
         this.initRight = iRight;
@@ -1136,6 +1142,7 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
         this.tickSize = 0;
         this._graduated = false;
     },
+
 
     /**
      * Gets the current offset from the element's start position in
@@ -1200,3 +1207,4 @@ if ("undefined" == typeof YAHOO.util.Anim) {
     YAHOO.widget.Slider.ANIM_AVAIL = false;
 }
 
+YAHOO.register("slider", YAHOO.widget.Slider, {version: "@VERSION@", build: "@BUILD@"});

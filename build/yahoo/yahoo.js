@@ -7,22 +7,29 @@
  * @title  YAHOO Global
  */
 
+/**
+ * YAHOO_config is not included part of the library.  Instead it is an object
+ * that can be defined by the implementer immediately before including the
+ * YUI library.  The properties included in this object will be used to
+ * configure global properties needed as soon as the library begins to load.
+ * @class YAHOO_config
+ * @static
+ */
+
+/**
+ * A reference to a function that will be executed every time a YAHOO module
+ * is loaded.  As parameter, this function will receive the version
+ * information for the module. @see YAHOO.getVersion for the description of
+ * the version data structure.
+ * @property listener
+ * @static
+ */
+
 if (typeof YAHOO == "undefined") {
     /**
      * The YAHOO global namespace object.  If YAHOO is already defined, the
-     * existing YAHOO object will not be overwritten so that defined namespaces
-     * are preserved.
-     *
-     * YAHOO can be configured by defining YAHOO_config prior to loading YAHOO.
-     * YAHOO_config can have the following properties:
-     * <dl>
-     *     <dt>listener</dt>
-     *          <dd>A reference to a function that will be executed every time
-     *              a YAHOO module is loaded.  As parameter, this function will
-     *              receive the version information for the module.  
-     *              @see YAHOO.getVersion for the description of the version
-     *              data structure.</dd>
-     * </dl>
+     * existing YAHOO object will not be overwritten so that defined
+     * namespaces are preserved.
      * @class YAHOO
      * @static
      */
@@ -38,7 +45,6 @@ if (typeof YAHOO == "undefined") {
 YAHOO.env = YAHOO.env || { 
     modules: [],
     listeners: []
-    // other things may go here.  browser.. anything else?
 };
 
 /**
@@ -79,7 +85,8 @@ YAHOO.namespace = function() {
 };
 
 /**
- * Uses YAHOO.widget.Logger to output a log message, if the widget is available.
+ * Uses YAHOO.widget.Logger to output a log message, if the widget is
+ * available.
  *
  * @method log
  * @static
@@ -161,6 +168,8 @@ YAHOO.augment = function(r, s) {
 
 /**
  * Registers a module with the YAHOO object
+ * @method register
+ * @static
  * @param {String}   name    the name of the module (event, slider, etc)
  * @param {Function} mainClass a reference to class in the module.  This
  *                             class will be tagged with the version info
@@ -170,52 +179,51 @@ YAHOO.augment = function(r, s) {
  * @param {Object}   data      metadata object for the module.  Currently it
  *                             is expected to contain a "version" property
  *                             and a "build" property at minimum.
- * @return {boolean} true if successful, false if not (either the data object 
- *                   was did not have the expected properties or the 
- *                   mainClass was not valid.)
  */
 YAHOO.register = function(name, mainClass, data) {
     var mods = YAHOO.env.modules;
     if (!mods[name]) {
         mods[name] = { versions:[], builds:[] };
     }
-    try {
-        var m = mods[name], v=data.version, b=data.build, ls=YAHOO.env.listeners;
-        m.name = name;
-        m.version = v;
-        m.build = b;
-        m.versions.push(v);
-        m.builds.push(b);
-        m.mainClass = mainClass;
+    var m=mods[name],v=data.version,b=data.build,ls=YAHOO.env.listeners;
+    m.name = name;
+    m.version = v;
+    m.build = b;
+    m.versions.push(v);
+    m.builds.push(b);
+    m.mainClass = mainClass;
+    // fire the module load listeners
+    for (var i=0;i<ls.length;i=i+1) {
+        ls[i](m);
+    }
+    // label the main class
+    if (mainClass) {
         mainClass.VERSION = v;
         mainClass.BUILD = b;
-        // fire the module load listeners
-        for (var i=0;i<ls.length;i=i+1) {
-            ls[i](m);
-        }
-        return true;
-    } catch(e) {
-        return e;
+    } else {
+        YAHOO.log("mainClass is undefined for module " + name, "warn");
     }
 };
 
 /**
  * Returns the version data for the specified module:
- * {
- *      name:      The name of the module
- *      version:   The version in use
- *      build:     The build number in use
- *      versions:  All versions that were registered
- *      builds:    All builds that were registered.
- *      mainClass: An object that was was stamped with the current version.
+ *      <dl>
+ *      <dt>name:</dt>      <dd>The name of the module</dd>
+ *      <dt>version:</dt>   <dd>The version in use</dd>
+ *      <dt>build:</dt>     <dd>The build number in use</dd>
+ *      <dt>versions:</dt>  <dd>All versions that were registered</dd>
+ *      <dt>builds:</dt>    <dd>All builds that were registered.</dd>
+ *      <dt>mainClass:</dt> <dd>An object that was was stamped with the
+ *                 current version and build. If 
  *                 mainClass.VERSION != version or mainClass.BUILD != build,
  *                 multiple versions of pieces of the library have been
- *                 loaded, potentially causing issues.
- * }
+ *                 loaded, potentially causing issues.</dd>
+ *       </dl>
  *
- * @param {String}   name the name of the module (event, slider, etc)
- * return {{name: string, version: string, build: string, versions:string[], builds:string[], mainClass:function}|null}
- * The version info
+ * @method getVersion
+ * @static
+ * @param {String}  name the name of the module (event, slider, etc)
+ * @return {Object} The version info
  */
 YAHOO.getVersion = function(name) {
     return YAHOO.env.modules[name] || null;
@@ -249,9 +257,4 @@ YAHOO.init = function() {
 };
 
 YAHOO.init();
-
-// to be applied by the build
-//YAHOO.register("yahoo", YAHOO, {
-        //version: "9.9.9",
-        //build: "999"
-    //});
+YAHOO.register("yahoo", YAHOO, {version: "@VERSION@", build: "@BUILD@"});

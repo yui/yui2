@@ -200,7 +200,7 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
                     var reader = new YAHOO.widget.LogReader( "logDiv", 
                             { newestOnTop: true, height: "400px" } );
 
-                    reader._onClickPauseBtn(null, reader);
+                    //reader._onClickPauseBtn(null, reader);
 
                 }
             }
@@ -231,7 +231,9 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
       -->
       <p>
         This example builds on
-        <a href="../test/test_draggable.php?mode=dist">YAHOO.util.DD</a>.
+        <a href="../test/test_draggable.php?mode=
+Notice: Undefined index:  mode in /Library/WebServer/Documents/DragDrop.dev/examples/proxy.php on line 142
+">YAHOO.util.DD</a>.
         Instead of moving the actual html element that was clicked, we have a hidden
         layer, empty aside from a border, absolutely positioned, that we place in the same 
         location of the clicked object.  The onDrag event handler was implemented so

@@ -1,4 +1,3 @@
-
 /**
  * The treeview widget is a generic tree building tool.
  * @module treeview
@@ -1693,47 +1692,6 @@ YAHOO.widget.Node.prototype = {
 YAHOO.augment(YAHOO.widget.Node, YAHOO.util.EventProvider);
 
 /**
- * A custom YAHOO.widget.Node that handles the unique nature of 
- * the virtual, presentationless root node.
- * @namespace YAHOO.widget
- * @class RootNode
- * @extends YAHOO.widget.Node
- * @param oTree {YAHOO.widget.TreeView} The tree instance this node belongs to
- * @constructor
- */
-YAHOO.widget.RootNode = function(oTree) {
-	// Initialize the node with null params.  The root node is a
-	// special case where the node has no presentation.  So we have
-	// to alter the standard properties a bit.
-	this.init(null, null, true);
-	
-	/*
-	 * For the root node, we get the tree reference from as a param
-	 * to the constructor instead of from the parent element.
-	 */
-	this.tree = oTree;
-};
-
-YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
-    
-    // overrides YAHOO.widget.Node
-    getNodeHtml: function() { 
-        return ""; 
-    },
-
-    toString: function() { 
-        return "RootNode";
-    },
-
-    loadComplete: function() { 
-        this.tree.draw();
-    },
-
-    collapse: function() {},
-    expand: function() {}
-
-});
-/**
  * The default node presentation.  The first parameter should be
  * either a string that will be used as the node's label, or an object
  * that has a string propery called label.  By default, the clicking the
@@ -1939,37 +1897,44 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
 
 });
 /**
- * A menu-specific implementation that differs from TextNode in that only 
- * one sibling can be expanded at a time.
+ * A custom YAHOO.widget.Node that handles the unique nature of 
+ * the virtual, presentationless root node.
  * @namespace YAHOO.widget
- * @class MenuNode
- * @extends YAHOO.widget.TextNode
- * @param oData {object} a string or object containing the data that will
- * be used to render this node
- * @param oParent {YAHOO.widget.Node} this node's parent node
- * @param expanded {boolean} the initial expanded/collapsed state
+ * @class RootNode
+ * @extends YAHOO.widget.Node
+ * @param oTree {YAHOO.widget.TreeView} The tree instance this node belongs to
  * @constructor
  */
-YAHOO.widget.MenuNode = function(oData, oParent, expanded) {
-	if (oData) { 
-		this.init(oData, oParent, expanded);
-		this.setUpLabel(oData);
-	}
-
-    /*
-     * Menus usually allow only one branch to be open at a time.
-     */
-	this.multiExpand = false;
-
-    this.logger     = new YAHOO.widget.LogWriter(this.toString());
-
+YAHOO.widget.RootNode = function(oTree) {
+	// Initialize the node with null params.  The root node is a
+	// special case where the node has no presentation.  So we have
+	// to alter the standard properties a bit.
+	this.init(null, null, true);
+	
+	/*
+	 * For the root node, we get the tree reference from as a param
+	 * to the constructor instead of from the parent element.
+	 */
+	this.tree = oTree;
 };
 
-YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
+YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
+    
+    // overrides YAHOO.widget.Node
+    getNodeHtml: function() { 
+        return ""; 
+    },
 
     toString: function() { 
-        return "MenuNode (" + this.index + ") " + this.label;
-    }
+        return "RootNode";
+    },
+
+    loadComplete: function() { 
+        this.tree.draw();
+    },
+
+    collapse: function() {},
+    expand: function() {}
 
 });
 /**
@@ -2093,6 +2058,40 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
 
     toString: function() { 
         return "HTMLNode (" + this.index + ")";
+    }
+
+});
+/**
+ * A menu-specific implementation that differs from TextNode in that only 
+ * one sibling can be expanded at a time.
+ * @namespace YAHOO.widget
+ * @class MenuNode
+ * @extends YAHOO.widget.TextNode
+ * @param oData {object} a string or object containing the data that will
+ * be used to render this node
+ * @param oParent {YAHOO.widget.Node} this node's parent node
+ * @param expanded {boolean} the initial expanded/collapsed state
+ * @constructor
+ */
+YAHOO.widget.MenuNode = function(oData, oParent, expanded) {
+	if (oData) { 
+		this.init(oData, oParent, expanded);
+		this.setUpLabel(oData);
+	}
+
+    /*
+     * Menus usually allow only one branch to be open at a time.
+     */
+	this.multiExpand = false;
+
+    this.logger     = new YAHOO.widget.LogWriter(this.toString());
+
+};
+
+YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
+
+    toString: function() { 
+        return "MenuNode (" + this.index + ") " + this.label;
     }
 
 });
@@ -2271,3 +2270,4 @@ YAHOO.widget.TVFadeOut.prototype = {
     }
 };
 
+YAHOO.register("treeview", YAHOO.widget.TreeView, {version: "@VERSION@", build: "@BUILD@"});
