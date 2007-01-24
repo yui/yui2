@@ -19,7 +19,7 @@
     
 }
 
-.yuibutton span {
+.yuibutton .first-child {
 
     display:-moz-inline-box; /* Mozilla */
     display:block; /* Opera and Safari */
@@ -96,7 +96,7 @@
 
 }
 
-.yuibutton.focus span {
+.yuibutton.focus .first-child {
 
     border-color:#5e5c95;
 
@@ -119,7 +119,7 @@
 
 }
 
-.yuibutton.hover span {
+.yuibutton.hover .first-child {
 
     border-color:#406fac;
 
@@ -142,7 +142,7 @@
     
 }
 
-.yuibutton.active span {
+.yuibutton.active .first-child {
 
     border-color:#7a8180;
 
@@ -155,7 +155,7 @@
 
 }
 
-.yuibutton.splitbutton.activemenu button {
+.yuibutton.splitbutton.activeoption button {
 
     background-color:transparent;
     background-image:url(../img/splitarrow_active.gif);
@@ -170,12 +170,14 @@
 .yuibutton.checkbox.checked {
     
     border-color:#7a8180;
-    background-color:#333;
+/*    background-color:#333;    */
+    
+    background-color:yellow;
     
 }
 
-.yuibutton.radio.checked span,
-.yuibutton.checkbox.checked span {
+.yuibutton.radio.checked .first-child,
+.yuibutton.checkbox.checked .first-child {
 
     border-color:#7a8180;
 
@@ -201,7 +203,7 @@
     
 }
 
-.yuibutton.disabled span {
+.yuibutton.disabled .first-child {
 
     border-color:#cbcdc5;
 
