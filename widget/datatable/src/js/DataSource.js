@@ -39,6 +39,9 @@ YAHOO.widget.DataSource = function(oLiveData, oConfigs) {
             case String:
                 this.dataType = YAHOO.widget.DataSource.TYPE_XHR;
                 break;
+            case Object:
+                this.dataType = YAHOO.widget.DataSource.TYPE_JSON;
+                break;
             default:
                 this.dataType = YAHOO.widget.DataSource.TYPE_UNKNOWN;
                 break;
@@ -453,6 +456,7 @@ YAHOO.widget.DataSource.prototype.makeConnection = function(oRequest, oCallback,
         // If the live data is a JavaScript Array
         // simply forward the entire array to the handler
         case YAHOO.widget.DataSource.TYPE_JSARRAY:
+        case YAHOO.widget.DataSource.TYPE_JSON:
             oRawResponse = this.liveData;
             this.handleResponse(oRequest, oRawResponse, oCallback, oCaller);
             break;
@@ -581,8 +585,9 @@ YAHOO.widget.DataSource.prototype.handleResponse = function(oRequest, oRawRespon
             oParsedResponse = this.parseFlatData(oRequest, oRawResponse);
             break;
         default:
-            //TODO: can still try to do the right thing
-            var contentType = oRawResponse.getResponseHeader["Content-Type"];
+            //TODO: pass off to custom function
+            //var contentType = oRawResponse.getResponseHeader["Content-Type"];
+            YAHOO.log("Unknown response type","warn",this.toStrin());
             break;
     }
 
@@ -751,35 +756,39 @@ YAHOO.widget.DataSource.prototype.parseJSONData = function(oRequest, oRawRespons
     }
     else {
         // Parse the JSON response as a string
-        try {
-            // Trim leading spaces
-            while (oRawResponse.substring(0,1) == " ") {
-                oRawResponse = oRawResponse.substring(1, oResponse.length);
-            }
+        if(oRawResponse.constructor == String) {
+            
+            try {
+                // Trim leading spaces
+                while (oRawResponse.substring(0,1) == " ") {
+                    oRawResponse = oRawResponse.substring(1, oResponse.length);
+                }
 
-            // Invalid JSON response
-            if(oRawResponse.indexOf("{") < 0) {
+                // Invalid JSON response
+                if(oRawResponse.indexOf("{") < 0) {
+                    bError = true;
+                }
+
+                // Empty (but not invalid) JSON response
+                if(oRawResponse.indexOf("{}") === 0) {
+                }
+
+                // Turn the string into an object literal...
+                // ...eval is necessary here
+                oRawResponse = eval("(" + oRawResponse + ")");
+                if(!oRawResponse) {
+                    bError = true;
+                }
+
+                // Grab the object member that contains an array of all reponses...
+                // ...eval is necessary here since aSchema[0] is of unknown depth
+                //jsonList = eval("(oRawResponse." + this.responseSchema.resultsList+")");
+            }
+            catch(e) {
                 bError = true;
-            }
-
-            // Empty (but not invalid) JSON response
-            if(oRawResponse.indexOf("{}") === 0) {
-            }
-
-            // Turn the string into an object literal...
-            // ...eval is necessary here
-            var jsonObjRaw = eval("(" + oRawResponse + ")");
-            if(!jsonObjRaw) {
-                bError = true;
-            }
-
-            // Grab the object member that contains an array of all reponses...
-            // ...eval is necessary here since aSchema[0] is of unknown depth
-            jsonList = eval("(jsonObjRaw." + this.responseSchema.resultsList+")");
+           }
         }
-        catch(e) {
-            bError = true;
-       }
+        jsonList = eval("(oRawResponse." + this.responseSchema.resultsList + ")");
     }
 
     if(bError || !jsonList) {

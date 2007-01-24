@@ -130,6 +130,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
     // DOM Events
     //
     /////////////////////////////////////////////////////////////////////////////
+    //YAHOO.util.Event.addListener(this._elContainer, "focus", this._onFocus, this);
     YAHOO.util.Event.addListener(elTable, "click", this._onClick, this);
     YAHOO.util.Event.addListener(elTable, "dblclick", this._onDoubleclick, this);
     YAHOO.util.Event.addListener(elTable, "mouseout", this._onMouseout, this);
@@ -735,6 +736,7 @@ YAHOO.widget.DataTable.prototype._initRows = function() {
 YAHOO.widget.DataTable.prototype._initTable = function() {
     // Clear the container
     this._elContainer.innerHTML = "";
+    
     if(this.scrolling) {
         //TODO: make class name a constant
         //TODO: conf height
@@ -762,6 +764,7 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
 
     // Create TBODY for messages
     var elMsgBody = document.createElement("tbody");
+    elMsgBody.tabIndex = -1;
     this._elMsgRow = elMsgBody.appendChild(document.createElement("tr"));
     var elMsgRow = this._elMsgRow;
     var elMsgCell = elMsgRow.appendChild(document.createElement("td"));
@@ -772,6 +775,7 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
 
     // Create TBODY for data
     this._elBody = elTable.appendChild(document.createElement("tbody"));
+    this._elBody.tabIndex = -1;
     this._elBody.className = YAHOO.widget.DataTable.CLASS_TBODY;
 };
 
@@ -784,6 +788,7 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
 YAHOO.widget.DataTable.prototype._initHead = function() {
     // Create THEAD
     var elHead = document.createElement("thead");
+    elHead.tabIndex = -1;
 
     // Iterate through each row of Column headers...
     var colTree = this._oColumnset.tree;
@@ -970,6 +975,49 @@ YAHOO.widget.DataTable.prototype._restripeRows = function(range) {
     }
 };
 
+ /**
+ * Changes element CSS to CLASS_SELECTED and fires selectEvent.
+ *
+ * @method _select
+ * @param aRows {HTMLElement | String | HTMLElement[] | String[]} HTML TR element
+ * reference, TR String ID, array of HTML TR element, or array of TR element IDs.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._select = function(els) {
+    if(els.constructor != Array) {
+        els = [els];
+    }
+    for(var i=0; i<els.length; i++) {
+        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
+        this._aSelectedRecords.push(els[i].recordId);
+    }
+    this.fireEvent("selectEvent",{els:els});
+};
+
+ /**
+ * Sets one or more rows to the unselected.
+ *
+ * @method _unselect
+ * @param aRows {HTMLElement | String | HTMLElement[] | String[]} HTML element
+ * reference, element ID, array of HTML elements, or array of element IDs
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._unselect = function(els) {
+    if(els.constructor != Array) {
+        els = [els];
+    }
+    var array = this._aSelectedRecords;
+    for(var i=0; i<els.length; i++) {
+        YAHOO.util.Dom.removeClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
+        for(var j=0; j<array.length; j++) {
+            if(els[i].recordId == array[j]) {
+                array.splice(j);
+            }
+        }
+    }
+    this.fireEvent("unselectEvent",{els:els});
+};
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Private DOM Event Handlers
@@ -1109,6 +1157,7 @@ YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
             elTag = elTarget.nodeName.toLowerCase();
         }
     }
+    oSelf.focusTable();
     oSelf.fireEvent("tableClickEvent",{target:elTarget,event:e});
 };
 
@@ -1155,7 +1204,7 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
 };
 
 /**
- * Handles keyup events on the TABLE.
+ * Handles keydown events on the TABLE.
  *
  * @method _onKeydown
  * @param e {event} The key event.
@@ -1166,6 +1215,7 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
     var oldSelected = oSelf._lastSelected;
     // Only move selection if one is already selected
     // TODO: config to allow selection even if one is NOT already selected
+    // TODO: if something isn't selected already, arrow key should select first or last one
     if(oldSelected && oSelf.isSelected(oldSelected)) {
         var newSelected;
         // arrow down
@@ -1179,7 +1229,7 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
                             }
                             newSelected = oSelf._elBody.rows[oldSelected.sectionRowIndex+1];
                             oSelf.select(newSelected);
-                            oSelf._lastSelected = newSelected;
+                            
                 }
             }
             // cell mode
@@ -1191,9 +1241,9 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
                             }
                             newSelected = oSelf._elBody.rows[oldSelected.sectionRowIndex+1];
                             oSelf.select(newSelected);
-                            oSelf._lastSelected = newSelected;
                 }*/
             }
+            oSelf.focusTable();
         }
         // arrow up
         else if(e.keyCode == 38) {
@@ -1206,7 +1256,6 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
                             }
                             newSelected = oSelf._elBody.rows[oldSelected.sectionRowIndex-1];
                             oSelf.select(newSelected);
-                            oSelf._lastSelected = newSelected;
                 }
             }
             // cell mode
@@ -1218,9 +1267,9 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
                             }
                             newSelected = oSelf._elBody.rows[oldSelected.sectionRowIndex-1];
                             oSelf.select(newSelected);
-                            oSelf._lastSelected = newSelected;
                 }
             }
+            oSelf.focusTable();
         }
     }
 };
@@ -1472,6 +1521,16 @@ YAHOO.widget.DataTable.prototype.getCell = function(row, col) {
 };
 
  /**
+ * Returns element reference to given TR cell.
+ *
+ * @method getRow
+ * @param index {Number} Row number.
+ */
+YAHOO.widget.DataTable.prototype.getRow = function(index) {
+    return(this._elBody.rows[index]);
+};
+
+ /**
  * Placeholder row to indicate table data is empty.
  *
  * @method showEmptyMessage
@@ -1526,6 +1585,18 @@ YAHOO.widget.DataTable.prototype.hideTableMessages = function() {
     this.isEmpty = false;
     this.isLoading = false;
 };
+
+/**
+ * Sets focus on the TABLE element.
+ *
+ * @method focusTable
+ */
+YAHOO.widget.DataTable.prototype.focusTable = function() {
+//TODO: fix scope issue with timeout
+gTable = this._elTable;
+    setTimeout("gTable.focus();",0);
+};
+
 
  /**
  * Add rows to bottom of table body.
@@ -1718,37 +1789,22 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(elRow) {
  * reference, TR String ID, array of HTML TR element, or array of TR element IDs.
  */
 YAHOO.widget.DataTable.prototype.select = function(els) {
+    this._select(els);
     if(els.constructor != Array) {
         els = [els];
     }
-    for(var i=0; i<els.length; i++) {
-        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
-        this._aSelectedRecords.push(els[i].recordId);
-    }
-    this.fireEvent("selectEvent",{els:els});
+    this._lastSelected = YAHOO.util.Dom.get(els[(els.length-1)]);
 };
 
  /**
- * Sets one or more rows to the unselected.
+ * Sets one or more rows to the unselected state.
  *
  * @method unselect
  * @param aRows {HTMLElement | String | HTMLElement[] | String[]} HTML element
  * reference, element ID, array of HTML elements, or array of element IDs
  */
 YAHOO.widget.DataTable.prototype.unselect = function(els) {
-    if(els.constructor != Array) {
-        els = [els];
-    }
-    var array = this._aSelectedRecords;
-    for(var i=0; i<els.length; i++) {
-        YAHOO.util.Dom.removeClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
-        for(var j=0; j<array.length; j++) {
-            if(els[i].recordId == array[j]) {
-                array.splice(j);
-            }
-        }
-    }
-    this.fireEvent("unselectEvent",{els:els});
+    this._unselect(els);
 };
 
 /**
@@ -1757,7 +1813,7 @@ YAHOO.widget.DataTable.prototype.unselect = function(els) {
  * @method unselectAllRows
  */
 YAHOO.widget.DataTable.prototype.unselectAllRows = function() {
-    this.unselect(YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elBody));
+    this._unselect(YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elBody));
 };
 
 /**
@@ -1766,7 +1822,7 @@ YAHOO.widget.DataTable.prototype.unselectAllRows = function() {
  * @method unselectAllCells
  */
 YAHOO.widget.DataTable.prototype.unselectAllCells = function() {
-    this.unselect(YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this._elBody));
+    this._unselect(YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this._elBody));
 };
 
 
@@ -2284,22 +2340,21 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
                 this.unselectAllRows();
                 if(startRow.sectionRowIndex < target.sectionRowIndex) {
                     for(var i=startRow.sectionRowIndex; i <= target.sectionRowIndex; i++) {
-                        this.select(this._elBody.rows[i]);
+                        this._select(this._elBody.rows[i]);
                     }
                 }
                 else {
                     for(var i=target.sectionRowIndex; i <= startRow.sectionRowIndex; i++) {
-                        this.select(this._elBody.rows[i]);
+                        this._select(this._elBody.rows[i]);
                     }
                 }
             }
             else {
-                this.select(target);
+                this._select(target);
             }
         }
         else {
             this.select(target);
-            this._lastSelected = target;
         }
     }
 };
