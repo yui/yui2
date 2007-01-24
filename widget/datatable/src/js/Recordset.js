@@ -222,7 +222,7 @@ YAHOO.widget.Recordset.prototype.addRecords = function(data, index) {
     if(data.constructor == Array) {
         var newRecords = [];
         // Preserve order
-        for(var i=data.length-1; i>-1; i--) {
+        for(var i=0; i<data.length; i++) {
             var record = this.addRecord(data[i], index);
             newRecords.push(record);
        }

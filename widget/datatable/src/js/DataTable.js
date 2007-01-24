@@ -39,11 +39,6 @@ YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
     if(oDataSource && (oDataSource instanceof YAHOO.widget.DataSource)) {
         this.dataSource = oDataSource;
     }
-    //TODO: support null datasource for v simple tables??
-    else {
-        YAHOO.log("Could not instantiate DataTable due to an invalid DataSource", "error", this.toString());
-        return;
-    }
 
     // Validate Columnset
     if(oColumnset && (oColumnset instanceof YAHOO.widget.Columnset)) {
@@ -75,44 +70,40 @@ YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
 
         // Progressively enhance an existing table from markup
         if(elTable) {
-            elTable.id = this.id+"-table";
-            //TODO: Fill Recordset with data parsed from table
-            // Create a Recordset
+            // Fill Recordset with data parsed out of table
             var aRecords = [];
-            //TODO: Is this too hardcoded? Supoprts at most one TBODY in the TABLE!
-            var elBody = elTable.tBodies[0];
-            if(elBody) {
-                var numRows = elBody.rows.length;
-                if(numRows > 0) {
-                    var index = this._nIndex;
-                    for(var j=0; j<numRows; j++) {
-                        var oRecord = {};
-                        var elRow = elBody.rows[j];
-                        //TODO: we need the record before this
-                        elRow.id = this.id+"-bdrow"+oRecord.id;
-                        var numCells = elRow.cells.length;
-                        if(numCells > 0) {
-                            for(var k=0; k<numCells; k++) {
-                                var elCell = elRow.cells[k];
-                                elCell.id = this.id+"-bdrow"+j+"-cell"+k;
-                                oRecord[oColumnset.keys[k].key] = oColumnset.keys[k].parse(elCell.innerHTML);
-                            }
-                        aRecords.push(oRecord);
-                        }
+
+            // Iterate through each TBODY
+            for(var j=0; j<elTable.tBodies.length; j++) {
+                var elBody = elTable.tBodies[j];
+
+                // Iterate through each TR
+                for(var k=0; k<elBody.rows.length; k++) {
+                    var elRow = elBody.rows[k];
+                    var oRecord = {};
+
+                    // Iterate through each TD
+                    for(var l=0; l<elRow.cells.length; l++) {
+
+                        //var elCell = elRow.cells[l];
+                        //elCell.id = this.id+"-bdrow"+k+"-cell"+l;
+                        oRecord[oColumnset.keys[l].key] = oColumnset.keys[l].parse(elRow.cells[l].innerHTML);
                     }
+                    aRecords.push(oRecord);
                 }
+
             }
             this._oRecordset.addRecords(aRecords);
 
             // Then re-do the markup
             this._initTable();
-            this.onDataReturnReplaceRows(null,this._oRecordset.getRecords());
+            this.appendRows(this._oRecordset.getRecords());
         }
         // Create markup from scratch
         else {
             this._initTable();
             // Send out for data in an asynchronous request
-            oDataSource.sendRequest(this.initialRequest, this.onDataReturnReplaceRows, this);
+            oDataSource.sendRequest(this.initialRequest, this.onDataReturnAppendRows, this);
         }
     }
     // Container element not found in document
@@ -133,7 +124,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
     }
 
     // Set up event model
-    var elTable = this._elTable;
+    elTable = this._elTable;
     /////////////////////////////////////////////////////////////////////////////
     //
     // DOM Events
@@ -361,7 +352,12 @@ YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
     YAHOO.log("DataTable initialized", "info", this.toString());
 };
 
-YAHOO.augment(YAHOO.widget.DataTable, YAHOO.util.EventProvider);
+if(YAHOO.util.EventProvider) {
+    YAHOO.augment(YAHOO.widget.DataTable, YAHOO.util.EventProvider);
+}
+else {
+    YAHOO.log("Missing dependency: YAHOO.util.EventProvider","error",this.toString());
+}
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -800,7 +796,34 @@ YAHOO.widget.DataTable.prototype._initHead = function() {
     }
 
     this._elHead = this._elTable.appendChild(elHead);
-    YAHOO.log("Table head with " + this._oColumnset.keys.length + " columns created","info",this.toString());
+    
+    // Add Resizer only after DOM has been updated...
+    // ...and skip the last column
+    for(var k=0; k<this._oColumnset.keys.length-1; k++) {
+        var oColumn = this._oColumnset.keys[k];
+        if(oColumn.resizeable && YAHOO.util.DD) {
+            //TODO: deal with fixed width tables
+            if(!this.fixedWidth || (this.fixedwidth && !oColumn.isLast)) {
+                // TODO: better way to get elHeadContainer
+                var elHeadContainer = (YAHOO.util.Dom.getElementsByClassName("yui-dt-headcontainer","div",YAHOO.util.Dom.get(oColumn.id)))[0];
+                var elHeadResizer = elHeadContainer.appendChild(document.createElement("span"));
+                elHeadResizer.id = oColumn.id + "-resizer";
+                YAHOO.util.Dom.addClass(elHeadResizer,"yui-dt-headresizer");
+                oColumn.ddResizer = new YAHOO.util.WidthResizer(
+                        this, oColumn.id, elHeadResizer.id, elHeadResizer.id);
+                var cancelClick = function(e) {
+                    YAHOO.util.Event.stopPropagation(e);
+                };
+                YAHOO.util.Event.addListener(elHeadResizer,"click",cancelClick);
+            }
+            if(this.fixedWidth) {
+                elHeadContainer.style.overflow = "hidden";
+                elHeadContent.style.overflow = "hidden";
+            }
+        }
+    }
+
+    YAHOO.log("THEAD with " + this._oColumnset.keys.length + " columns created","info",this.toString());
 };
 
 /**
@@ -848,24 +871,6 @@ YAHOO.widget.DataTable.prototype._initHeadCell = function(elHeadCell,oColumn,row
 
     if(oColumn.sortable) {
         YAHOO.util.Dom.addClass(elHeadCell,YAHOO.widget.DataTable.CLASS_SORTABLE);
-    }
-    if(oColumn.resizeable) {
-        //TODO: deal with fixed width tables
-        //TODO: figure out whether this is last column programmatically
-        if(!this.fixedWidth || (this.fixedwidth && !oColumn.isLast)) {
-            var elHeadResizer = elHeadContainer.appendChild(document.createElement("span"));
-            elHeadResizer.id = this.id+"-hdrow"+row+"-resizer"+col;
-            YAHOO.util.Dom.addClass(elHeadResizer,"yui-dt-headresizer");
-            oColumn.ddResizer = new YAHOO.util.WidthResizer(this, elHeadCell.id, elHeadResizer.id, elHeadResizer.id);
-            var cancelClick = function(e) {
-                YAHOO.util.Event.stopPropagation(e);
-            };
-            YAHOO.util.Event.addListener(elHeadResizer,"click",cancelClick);
-        }
-        if(this.fixedWidth) {
-            elHeadContainer.style.overflow = "hidden";
-            elHeadContent.style.overflow = "hidden";
-        }
     }
 };
 
@@ -1543,6 +1548,7 @@ YAHOO.widget.DataTable.prototype.insertRows = function(aRecords) {
     for(var i=0; i<aRecords.length; i++) {
         this.addRow(aRecords[i],0);
     }
+    
 };
 
  /**
@@ -1855,7 +1861,8 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
         this.paginator.currentStartLink = nPage - this.paginator.maxLinksDisplayed + 1;
     }
     var currentRange = this.paginator.currentRange;
-    var startRecord = this.paginator.currentStartRecord = (nPage-1) * currentRange;
+    this.paginator.currentStartRecord = (nPage-1) * currentRange;
+    var startRecord = this.paginator.currentStartRecord;
     var pageRecords = this._oRecordset.getRecords(startRecord, currentRange);
     this.paginator.currentPage = nPage;
     this.paginate();
@@ -2094,7 +2101,7 @@ YAHOO.widget.DataTable.customFormatter = function(elCell, oData, oRecord, oColum
  */
 YAHOO.widget.DataTable.dateFormatter = function(elCell, oData, oRecord, oColumn) {
     var oDate = oData;
-    elCell.innerHTML = oDate.getMonth() + "/" + oDate.getDate()  + "/" + oDate.getYear();
+    elCell.innerHTML = oDate.getMonth() + "/" + oDate.getDate()  + "/" + oDate.getFullYear();
 };
 
  /**
@@ -2350,6 +2357,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnAppendRows = function(sRequest, oRe
     var newRecords = this._oRecordset.append(oResponse);
     // Update markup
     this.appendRows(newRecords);
+    YAHOO.log("Data returned for " + newRecords.length + " rows","info",this.toString());
 };
 
 /**
@@ -2364,6 +2372,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
     var newRecords = this._oRecordset.insert(oResponse);
     // Update markup
     this.insertRows(newRecords);
+    YAHOO.log("Data returned for " + newRecords.length + " rows","info",this.toString());
 };
 
 /**
@@ -2377,5 +2386,6 @@ YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oR
     // Update the Recordset from the response
     var newRecords = this._oRecordset.replace(oResponse);
     this.replaceRows(newRecords);
+    YAHOO.log("Data returned for " + newRecords.length + " rows","info",this.toString());
 };
 

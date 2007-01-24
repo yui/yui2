@@ -777,7 +777,13 @@ YAHOO.widget.ColumnEditor = function(oColumn, elCell) {
     YAHOO.widget.ColumnEditor._nCount++;
 };
 
-YAHOO.extend(YAHOO.widget.ColumnEditor, YAHOO.util.Element);
+if(YAHOO.util.Element) {
+    YAHOO.extend(YAHOO.widget.ColumnEditor, YAHOO.util.Element);
+}
+else {
+    YAHOO.log("Missing dependency: YAHOO.util.Element","error",this.toString());
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1014,7 +1020,9 @@ YAHOO.util.WidthResizer = function(oDataTable, colId, handleId, sGroup, config) 
     }
 };
 
-YAHOO.extend(YAHOO.util.WidthResizer, YAHOO.util.DD);
+if(YAHOO.util.DD) {
+    YAHOO.extend(YAHOO.util.WidthResizer, YAHOO.util.DD);
+}
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1085,7 +1093,7 @@ YAHOO.util.WidthResizer.prototype.onMouseUp = function(e) {
 YAHOO.util.WidthResizer.prototype.onDrag = function(e) {
     var newPos = YAHOO.util.Dom.getX(this.getDragEl());//YAHOO.log("newpos:"+newPos,"warn");//YAHOO.util.Event.getPageX(e);
     var offsetX = newPos - this.startPos;//YAHOO.log("offset:"+offsetX,"warn");
-    YAHOO.log("startwidth:"+this.startWidth + " and offset:"+offsetX,"warn");
+    //YAHOO.log("startwidth:"+this.startWidth + " and offset:"+offsetX,"warn");
     var newWidth = this.startWidth + offsetX;//YAHOO.log("newwidth:"+newWidth,"warn");
 
     if(newWidth < this.minWidth) {
