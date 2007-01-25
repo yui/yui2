@@ -1,7 +1,7 @@
 <!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>Example: DataTable - Basic Table (YUI Library)</title>
+<title>Example: DataTable - Custom Sorting (YUI Library)</title>
 <link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
@@ -10,56 +10,56 @@
 <link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
 <style type="text/css">
 /* custom css*/
-#basic {margin:1em;}
-#basic table {border-collapse:collapse;cursor:default;}
-#basic th, #basic td {border:1px solid #000;padding:.25em;}
-#basic th {background-color:#696969;color:#fff;}/*dark gray*/
-#basic .yui-dt-odd {background-color:#eee;} /*light gray*/
-#basic em {font-style:italic;}
-#basic strong {font-weight:bold;}
-#basic .big {font-size:136%;}
-#basic .small {font-size:77%}
+#sort {margin:1em;}
+#sort table {border-collapse:collapse;cursor:default;}
+#sort th, #sort td {border:1px solid #000;}
+#sort th {background-color:#696969;color:#fff;}/*dark gray*/
+#sort .yui-dt-odd {background-color:#eee;} /*light gray*/
 </style>
 </head>
 <body>
 <div id="hd">
-    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Basic Table</h1>
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Custom Sorting</h1>
 </div>
 <div id="bd">
-    <div id="basic" class="example"></div>
+    <div id="sort"></div>
 </div>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
-<script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
 <script type="text/javascript" src="../../build/tabview/tabview.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
 <script type="text/javascript" src="./js/data.js"></script>
 <script language="JavaScript">
 var myLogger = new YAHOO.widget.LogReader();
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
-var myColumnHeaders = [
-    {key:"POID", sortable:true, resizeable:true},
-    {key:"Date", type:"date", sortable:true, resizeable:true},
-    {key:"Quantity", type:"number", sortable:true, resizeable:true},
-    {key:"Amount", type:"currency", sortable:true, resizeable:true},
-    {key:"Title", type:"html", sortable:true, resizeable:true},
-];
-
-var myColumnset = new YAHOO.widget.Columnset(myColumnHeaders);
-
-var myDataSource = new YAHOO.widget.DataSource(YAHOO.example.Data.bookorders);
-myDataSource.responseType = YAHOO.widget.DataSource.TYPE_JSARRAY;
-myDataSource.responseSchema = {
-    fields: ["POID","Date","Quantity","Amount","Title"]
+// Custom sort functionality to sort by areacode within states
+YAHOO.example.sortStatesAsc = function(a, b) {
+    var comp = YAHOO.util.Sort.compareAsc;
+    var compState = comp(a.state, b.state);
+    return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
+};
+YAHOO.example.sortStatesDesc = function(a, b) {
+    var comp = YAHOO.util.Sort.compareDesc;
+    var compState = comp(a.state, b.state);
+    return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
 };
 
-var myDataTable = new YAHOO.widget.DataTable("basic", myColumnset, myDataSource,{caption:"Example: Basic Table"});
+var myColumnHeaders = [
+    {key:"areacode",text:"Area Codes",sortable:true},
+    {key:"state",text:"States",sortable:true,sortOptions:{ascHandler:YAHOO.example.sortStatesAsc,descHandler:YAHOO.example.sortStatesDesc}}
+];
+var myColumnset = new YAHOO.widget.Columnset(myColumnHeaders);
+
+var myDataSource = new YAHOO.widget.DataSource(YAHOO.example.Data.areacodes);
+myDataSource.responseType = YAHOO.widget.DataSource.TYPE_JSARRAY;
+myDataSource.responseSchema = {
+    fields: ["areacode","state"]
+};
+
+var myDataTable = new YAHOO.widget.DataTable("sort",myColumnset,myDataSource,{caption:"Example: Custom Sorting",sortedBy:"areacode",sortedByDir:"asc"});
 </script>
 </body>
 </html>
