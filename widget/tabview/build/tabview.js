@@ -732,8 +732,13 @@ YAHOO.util.Element.prototype = {
 	 * @param {HTMLElement | Element} before An optional node to insert before
 	 */
     appendTo: function(parent, before) {
-        this.fireEvent('beforeAppendTo');
         parent = (parent.get) ?  parent.get('element') : Dom.get(parent);
+        
+        this.fireEvent('beforeAppendTo', {
+            type: 'beforeAppendTo',
+            target: parent
+        });
+        
         
         before = (before && before.get) ? 
                 before.get('element') : Dom.get(before);
@@ -755,7 +760,11 @@ YAHOO.util.Element.prototype = {
             }
         }
         
-        this.fireEvent('appendTo');
+        
+        this.fireEvent('appendTo', {
+            type: 'appendTo',
+            target: parent
+        });
         
         /* TODO: move to TabView or deprecate?
         var newAddition =  !Dom.inDocument(element);
@@ -788,7 +797,10 @@ YAHOO.util.Element.prototype = {
         var el = this.get('element');
         if (!el) {
             this._queue[this._queue.length] = ['set', arguments];
-            this._configs[key].value = value; // so "get" works while queueing
+            if (this._configs[key]) {
+                this._configs[key].value = value; // so "get" works while queueing
+            
+            }
             return;
         }
         
@@ -1022,7 +1034,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
     };
     
     /**
-     * Registers TabView specific properties.
+     * setAttributeConfigs TabView specific properties.
      * @method initAttributes
      * @param {Object} attr Hash of initial attributes
      */
@@ -1037,7 +1049,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @config activationEvent
          * @type String
          */
-        this.register('activationEvent', {
+        this.setAttributeConfig('activationEvent', {
             value: attr.activationEvent || 'click'
         });        
 
@@ -1046,7 +1058,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @config labelEl
          * @type HTMLElement
          */
-        this.register('labelEl', {
+        this.setAttributeConfig('labelEl', {
             value: attr.labelEl || _getlabelEl.call(this),
             method: function(value) {
                 var current = this.get('labelEl');
@@ -1070,7 +1082,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @config label
          * @type String
          */
-        this.register('label', {
+        this.setAttributeConfig('label', {
             value: attr.label || _getLabel.call(this),
             method: function(value) {
                 var labelEl = this.get('labelEl');
@@ -1087,7 +1099,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @config contentEl
          * @type HTMLElement
          */
-        this.register('contentEl', { // TODO: apply className?
+        this.setAttributeConfig('contentEl', { // TODO: apply className?
             value: attr.contentEl || document.createElement('div'),
             method: function(value) {
                 var current = this.get('contentEl');
@@ -1106,7 +1118,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @config content
          * @type String
          */
-        this.register('content', {
+        this.setAttributeConfig('content', {
             value: attr.content, // TODO: what about existing?
             method: function(value) {
                 this.get('contentEl').innerHTML = value;
@@ -1120,7 +1132,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @config dataSrc
          * @type String
          */
-        this.register('dataSrc', {
+        this.setAttributeConfig('dataSrc', {
             value: attr.dataSrc
         });
         
@@ -1130,7 +1142,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @type Boolean
          * @default false
          */
-        this.register('cacheData', {
+        this.setAttributeConfig('cacheData', {
             value: attr.cacheData || false,
             validator: Lang.isBoolean
         });
@@ -1141,7 +1153,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @type String
          * @default "GET"
          */
-        this.register('loadMethod', {
+        this.setAttributeConfig('loadMethod', {
             value: attr.loadMethod || 'GET',
             validator: Lang.isString
         });
@@ -1151,7 +1163,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @config dataLoaded
          * @type Boolean
          */        
-        this.register('dataLoaded', {
+        this.setAttributeConfig('dataLoaded', {
             value: false,
             validator: Lang.isBoolean,
             writeOnce: true
@@ -1163,7 +1175,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @type Number
          * @default null
          */
-        this.register('dataTimeout', {
+        this.setAttributeConfig('dataTimeout', {
             value: attr.dataTimeout || null,
             validator: Lang.isNumber
         });
@@ -1175,7 +1187,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @config active
          * @type Boolean
          */
-        this.register('active', {
+        this.setAttributeConfig('active', {
             value: attr.active || this.hasClass(this.ACTIVE_CLASSNAME),
             method: function(value) {
                 if (value === true) {
@@ -1196,7 +1208,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @config disabled
          * @type Boolean
          */
-        this.register('disabled', {
+        this.setAttributeConfig('disabled', {
             value: attr.disabled || this.hasClass(this.DISABLED_CLASSNAME),
             method: function(value) {
                 if (value === true) {
@@ -1214,7 +1226,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @type String
          * @default '#'
          */
-        this.register('href', {
+        this.setAttributeConfig('href', {
             value: attr.href || '#',
             method: function(value) {
                 this.getElementsByTagName('a')[0].href = value;
@@ -1228,7 +1240,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @type Boolean
          * @default false
          */
-        this.register('contentVisible', {
+        this.setAttributeConfig('contentVisible', {
             value: attr.contentVisible,
             method: function(value) {
                 if (value == true) {
@@ -1670,7 +1682,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
     };
     
     /**
-     * Registers TabView specific properties.
+     * setAttributeConfigs TabView specific properties.
      * @method initAttributes
      * @param {Object} attr Hash of initial attributes
      */
@@ -1688,7 +1700,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @config tabs
          * @type Array
          */
-        this.register('tabs', {
+        this.setAttributeConfig('tabs', {
             value: [],
             readOnly: true
         });
@@ -1719,7 +1731,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @type String
          * @default "top"
          */
-        this.register('orientation', {
+        this.setAttributeConfig('orientation', {
             value: attr.orientation,
             method: function(value) {
                 var current = this.get('orientation');
@@ -1742,7 +1754,7 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @config activeIndex
          * @type Int
          */
-        this.register('activeIndex', {
+        this.setAttributeConfig('activeIndex', {
             value: attr.activeIndex,
             method: function(value) {
                 this.set('activeTab', this.getTab(value));
@@ -1757,13 +1769,14 @@ YAHOO.augment(YAHOO.util.Element, AttributeProvider);
          * @config activeTab
          * @type YAHOO.widget.Tab
          */
-        this.register('activeTab', {
+        this.setAttributeConfig('activeTab', {
             value: attr.activeTab,
             method: function(tab) {
                 var activeTab = this.get('activeTab');
                 
                 if (tab) {  
                     tab.set('active', true);
+                    this._configs['activeIndex'].value = this.getTabIndex(tab); // keep in sync
                 }
                 
                 if (activeTab && activeTab != tab) {
