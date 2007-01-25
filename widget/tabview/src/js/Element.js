@@ -266,8 +266,13 @@ YAHOO.util.Element.prototype = {
 	 * @param {HTMLElement | Element} before An optional node to insert before
 	 */
     appendTo: function(parent, before) {
-        this.fireEvent('beforeAppendTo');
         parent = (parent.get) ?  parent.get('element') : Dom.get(parent);
+        
+        this.fireEvent('beforeAppendTo', {
+            type: 'beforeAppendTo',
+            target: parent
+        });
+        
         
         before = (before && before.get) ? 
                 before.get('element') : Dom.get(before);
@@ -294,7 +299,11 @@ YAHOO.util.Element.prototype = {
         }
         
         YAHOO.log(element + 'appended to ' + parent);
-        this.fireEvent('appendTo');
+        
+        this.fireEvent('appendTo', {
+            type: 'appendTo',
+            target: parent
+        });
         
         /* TODO: move to TabView or deprecate?
         var newAddition =  !Dom.inDocument(element);
@@ -327,7 +336,10 @@ YAHOO.util.Element.prototype = {
         var el = this.get('element');
         if (!el) {
             this._queue[this._queue.length] = ['set', arguments];
-            this._configs[key].value = value; // so "get" works while queueing
+            if (this._configs[key]) {
+                this._configs[key].value = value; // so "get" works while queueing
+            
+            }
             return;
         }
         
