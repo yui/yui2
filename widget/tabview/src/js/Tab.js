@@ -101,7 +101,7 @@
     };
     
     /**
-     * Registers TabView specific properties.
+     * setAttributeConfigs TabView specific properties.
      * @method initAttributes
      * @param {Object} attr Hash of initial attributes
      */
@@ -116,7 +116,7 @@
          * @config activationEvent
          * @type String
          */
-        this.register('activationEvent', {
+        this.setAttributeConfig('activationEvent', {
             value: attr.activationEvent || 'click'
         });        
 
@@ -125,7 +125,7 @@
          * @config labelEl
          * @type HTMLElement
          */
-        this.register('labelEl', {
+        this.setAttributeConfig('labelEl', {
             value: attr.labelEl || _getlabelEl.call(this),
             method: function(value) {
                 var current = this.get('labelEl');
@@ -149,7 +149,7 @@
          * @config label
          * @type String
          */
-        this.register('label', {
+        this.setAttributeConfig('label', {
             value: attr.label || _getLabel.call(this),
             method: function(value) {
                 var labelEl = this.get('labelEl');
@@ -166,7 +166,7 @@
          * @config contentEl
          * @type HTMLElement
          */
-        this.register('contentEl', { // TODO: apply className?
+        this.setAttributeConfig('contentEl', { // TODO: apply className?
             value: attr.contentEl || document.createElement('div'),
             method: function(value) {
                 var current = this.get('contentEl');
@@ -185,7 +185,7 @@
          * @config content
          * @type String
          */
-        this.register('content', {
+        this.setAttributeConfig('content', {
             value: attr.content, // TODO: what about existing?
             method: function(value) {
                 this.get('contentEl').innerHTML = value;
@@ -199,7 +199,7 @@
          * @config dataSrc
          * @type String
          */
-        this.register('dataSrc', {
+        this.setAttributeConfig('dataSrc', {
             value: attr.dataSrc
         });
         
@@ -209,7 +209,7 @@
          * @type Boolean
          * @default false
          */
-        this.register('cacheData', {
+        this.setAttributeConfig('cacheData', {
             value: attr.cacheData || false,
             validator: Lang.isBoolean
         });
@@ -220,7 +220,7 @@
          * @type String
          * @default "GET"
          */
-        this.register('loadMethod', {
+        this.setAttributeConfig('loadMethod', {
             value: attr.loadMethod || 'GET',
             validator: Lang.isString
         });
@@ -230,7 +230,7 @@
          * @config dataLoaded
          * @type Boolean
          */        
-        this.register('dataLoaded', {
+        this.setAttributeConfig('dataLoaded', {
             value: false,
             validator: Lang.isBoolean,
             writeOnce: true
@@ -242,7 +242,7 @@
          * @type Number
          * @default null
          */
-        this.register('dataTimeout', {
+        this.setAttributeConfig('dataTimeout', {
             value: attr.dataTimeout || null,
             validator: Lang.isNumber
         });
@@ -254,7 +254,7 @@
          * @config active
          * @type Boolean
          */
-        this.register('active', {
+        this.setAttributeConfig('active', {
             value: attr.active || this.hasClass(this.ACTIVE_CLASSNAME),
             method: function(value) {
                 if (value === true) {
@@ -275,7 +275,7 @@
          * @config disabled
          * @type Boolean
          */
-        this.register('disabled', {
+        this.setAttributeConfig('disabled', {
             value: attr.disabled || this.hasClass(this.DISABLED_CLASSNAME),
             method: function(value) {
                 if (value === true) {
@@ -293,7 +293,7 @@
          * @type String
          * @default '#'
          */
-        this.register('href', {
+        this.setAttributeConfig('href', {
             value: attr.href || '#',
             method: function(value) {
                 this.getElementsByTagName('a')[0].href = value;
@@ -307,7 +307,7 @@
          * @type Boolean
          * @default false
          */
-        this.register('contentVisible', {
+        this.setAttributeConfig('contentVisible', {
             value: attr.contentVisible,
             method: function(value) {
                 if (value == true) {

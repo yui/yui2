@@ -242,7 +242,7 @@
     };
     
     /**
-     * Registers TabView specific properties.
+     * setAttributeConfigs TabView specific properties.
      * @method initAttributes
      * @param {Object} attr Hash of initial attributes
      */
@@ -260,7 +260,7 @@
          * @config tabs
          * @type Array
          */
-        this.register('tabs', {
+        this.setAttributeConfig('tabs', {
             value: [],
             readOnly: true
         });
@@ -291,7 +291,7 @@
          * @type String
          * @default "top"
          */
-        this.register('orientation', {
+        this.setAttributeConfig('orientation', {
             value: attr.orientation,
             method: function(value) {
                 var current = this.get('orientation');
@@ -314,7 +314,7 @@
          * @config activeIndex
          * @type Int
          */
-        this.register('activeIndex', {
+        this.setAttributeConfig('activeIndex', {
             value: attr.activeIndex,
             method: function(value) {
                 this.set('activeTab', this.getTab(value));
@@ -329,13 +329,14 @@
          * @config activeTab
          * @type YAHOO.widget.Tab
          */
-        this.register('activeTab', {
+        this.setAttributeConfig('activeTab', {
             value: attr.activeTab,
             method: function(tab) {
                 var activeTab = this.get('activeTab');
                 
                 if (tab) {  
                     tab.set('active', true);
+                    this._configs['activeIndex'].value = this.getTabIndex(tab); // keep in sync
                 }
                 
                 if (activeTab && activeTab != tab) {
