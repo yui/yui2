@@ -142,7 +142,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
     //YAHOO.util.Event.addListener(elTable, "keypress", this._onKeypress, this);
     YAHOO.util.Event.addListener(document, "keyup", this._onKeyup, this);
     //YAHOO.util.Event.addListener(elTable, "focus", this._onFocus, this);
-    //YAHOO.util.Event.addListener(elTable, "blur", this._onBlur, this);
+    YAHOO.util.Event.addListener(elTable, "blur", this._onBlur, this);
 
     /////////////////////////////////////////////////////////////////////////////
     //
@@ -697,6 +697,15 @@ YAHOO.widget.DataTable.prototype._oRecordset = null;
  */
 YAHOO.widget.DataTable.prototype._aSelectedRecords = [];
 
+/**
+ * Internal variable to track whether widget has focus.
+ *
+ * @property _bFocused
+ * @type Boolean
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._bFocused = false;
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Private methods
@@ -1025,6 +1034,18 @@ YAHOO.widget.DataTable.prototype._unselect = function(els) {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Handles blur events on the TABLE element.
+ *
+ * @method _onBlur
+ * @param e {event} The mouseover event.
+ * @param oSelf {object} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onBlur = function(e, oSelf) {
+    this._bFocused = false;
+};
+
+/**
  * Handles mouseover events on the TABLE element.
  *
  * @method _onMouseover
@@ -1125,6 +1146,10 @@ YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
     if(oSelf.activeEditor) { //&& (oSelf.activeEditor != column)
         oSelf.activeEditor.hideEditor();
         oSelf.activeEditor = null;
+
+        // Editor causes widget to lose focus
+        oSelf._bFocused = false;
+        oSelf.focusTable();
     }
 
     if (elTag != "table") {
@@ -1177,6 +1202,10 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
     if(oSelf.activeEditor) { //&& (oSelf.activeEditor != column)
         oSelf.activeEditor.hideEditor();
         oSelf.activeEditor = null;
+        
+        // Editor causes widget to lose focus
+        oSelf._bFocused = false;
+        oSelf.focusTable();
     }
 
     if (elTag != "table") {
@@ -1243,6 +1272,8 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
                             oSelf.select(newSelected);
                 }*/
             }
+            // Arrows can cause widget to lose focus
+            oSelf._bFocused = false;
             oSelf.focusTable();
         }
         // arrow up
@@ -1269,6 +1300,8 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
                             oSelf.select(newSelected);
                 }
             }
+            // Arrows can cause widget to lose focus
+            oSelf._bFocused = false;
             oSelf.focusTable();
         }
     }
@@ -1287,6 +1320,10 @@ YAHOO.widget.DataTable.prototype._onKeyup = function(e, oSelf) {
     if((e.keyCode == 27) && (oSelf.activeEditor)) {
         oSelf.activeEditor.hideEditor();
         oSelf.activeEditor = null;
+        
+        // Editor causes widget to lose focus
+        oSelf._bFocused = false;
+        oSelf.focusTable();
     }
 };
 
@@ -1592,9 +1629,12 @@ YAHOO.widget.DataTable.prototype.hideTableMessages = function() {
  * @method focusTable
  */
 YAHOO.widget.DataTable.prototype.focusTable = function() {
-//TODO: fix scope issue with timeout
-gTable = this._elTable;
-    setTimeout("gTable.focus();",0);
+    if(!this._bFocused) {
+        //TODO: fix scope issue with timeout
+        gTable = this._elTable;
+            setTimeout("gTable.focus();",0);
+            this._bFocused = true;
+    }
 };
 
 
@@ -2091,6 +2131,7 @@ YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
         column.showEditor(elCell,this._oRecordset.getRecord(elCell.parentNode.recordId));
         this.activeEditor = column;
     }
+    this._bFocused = true;
 };
 
  /**

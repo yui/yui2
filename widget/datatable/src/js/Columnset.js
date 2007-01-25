@@ -767,10 +767,11 @@ YAHOO.widget.ColumnEditor = function(oColumn, elCell) {
     this.container = container;
 
     switch(oColumn.editable) {
-        case "textbox":
-            this.createTextboxEditor();
+        case "textarea":
+            this.createTextareaEditor();
             break;
         default:
+            this.createTextboxEditor();
             break;
     }
 
@@ -909,6 +910,7 @@ YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord
     this.container.style.top = y + "px";
     this.container.style.display = "block";
 
+    this.input.tabIndex = 0;
     this.input.focus();
     this.input.select();
 };
@@ -919,6 +921,7 @@ YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord
  * @method hide
  */
 YAHOO.widget.ColumnEditor.prototype.hide = function() {
+    this.input.tabIndex = -1;
     this.container.style.display = "none";
 };
 
