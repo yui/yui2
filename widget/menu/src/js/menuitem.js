@@ -292,7 +292,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @event _commandEvent
-    * @description Fires in response to a "keyup" or "mouseup" event.
+    * @description Fires in response to a "keyup" or "click" event.
     * @private
     * @type YAHOO.util.CustomEvent
     */
@@ -992,7 +992,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method _onMouseUp
-    * @description "mouseup" event handler for the menu item.
+    * @description "click" event handler for the menu item.
     * @protected
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
@@ -1008,8 +1008,8 @@ YAHOO.widget.MenuItem.prototype = {
 
 
     /**
-    * @method _onKeyDown
-    * @description "keydown" event handler for the menu item.
+    * @method _onKeyUp
+    * @description "keyup" event handler for the menu item.
     * @protected
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
@@ -1017,11 +1017,14 @@ YAHOO.widget.MenuItem.prototype = {
     * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item 
     * that fired the event.
     */
-    _onKeyDown: function(p_sType, p_aArgs, p_oItem) {
+    _onKeyUp: function(p_sType, p_aArgs, p_oItem) {
     
         var oEvent = p_aArgs[0];
 
-        if(this._isCommandKey(oEvent.keyCode)) {
+        if(
+            this.cfg.getProperty("selected") && 
+            this._isCommandKey(YAHOO.util.Event.getCharCode(oEvent))
+        ) {
 
             this._commandEvent.fire(oEvent);
 
@@ -1722,7 +1725,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(this._oCommand && (this._oCommand != oCommand)) {
 
-            this.keyDownEvent.unsubscribe(this._onKeyDown);
+            this.keyUpEvent.unsubscribe(this._onKeyUp);
             this.mouseUpEvent.unsubscribe(this._onMouseUp);
             this._commandEvent.unsubscribe(this._oCommand.fn);
 
@@ -1738,7 +1741,7 @@ YAHOO.widget.MenuItem.prototype = {
             typeof oCommand.fn == "function"
         ) {
 
-            this.keyDownEvent.subscribe(this._onKeyDown, this, true);
+            this.keyUpEvent.subscribe(this._onKeyUp, this, true);
             this.mouseUpEvent.subscribe(this._onMouseUp, this, true);
 
             if(!this._commandEvent) {
@@ -1951,6 +1954,12 @@ YAHOO.widget.MenuItem.prototype = {
         oConfig.addProperty("submenu", { handler: this.configSubmenu });
 
 
+        /**
+        * @config command
+        * @description Allows 
+        * @default null
+        * @type Object
+        */
         oConfig.addProperty("command", { handler: this.configCommand });
 
 	},
