@@ -80,11 +80,16 @@
                 var oCheck3 = new YAHOO.widget.Button("check3");
                 var oCheck4 = new YAHOO.widget.Button("check4");
     
-                var oCheck5 = new YAHOO.widget.Button( { type:"checkbox", label:"Check 5", name:"checkboxfield", value:"Check 5", container:"checkboxbuttonsfromjavascript" } );
-                var oCheck6 = new YAHOO.widget.Button( { type:"checkbox", label:"Check 6", name:"checkboxfield", value:"Check 6", container:"checkboxbuttonsfromjavascript" } );
+                var oCheck5 = new YAHOO.widget.Button( { type:"checkbox", disabled:true, label:"Check 5", name:"checkboxfield", value:"Check 5", container:"checkboxbuttonsfromjavascript" } );
+                var oCheck6 = new YAHOO.widget.Button( { type:"checkbox", checked:true, label:"Check 6", name:"checkboxfield", value:"Check 6", container:"checkboxbuttonsfromjavascript" } );
                 var oCheck7 = new YAHOO.widget.Button( { type:"checkbox", label:"Check 7", name:"checkboxfield", value:"Check 7", container:"checkboxbuttonsfromjavascript" } );
                 var oCheck8 = new YAHOO.widget.Button( { type:"checkbox", label:"Check 8", name:"checkboxfield", value:"Check 8", container:"checkboxbuttonsfromjavascript" } );
     
+
+                var oResetButton1 = new YAHOO.widget.Button("resetbuttonfield1", { label:"Reset Form" });
+                var oResetButton2 = new YAHOO.widget.Button({ type:"reset", label:"Reset Form", container: "resetbuttonsfromjavascript" });
+
+
                 var oSubmitButton1 = new YAHOO.widget.Button("submitbuttonfield1", { label:"Submit Form" });
                 var oSubmitButton2 = new YAHOO.widget.Button( { type:"submit", label:"Submit Form", name:"submitbuttonfield2", value:"submitbuttonfield2value", container:"submitbuttonsfromjavascript" } );
 
@@ -120,9 +125,9 @@ print_r($_POST);
                 <fieldset id="pushbuttonsfrommarkup">
                     <legend>From Markup</legend>
 
-                    <input type="button" id="pushbutton1" name="pushbutton1" value="Push Me!">
                     <span id="pushbutton2" class="yuibutton"><span><button type="button" name="stateexample4"><img src="http://us.i1.yimg.com/us.yimg.com/i/nt/ic/ut/bsc/add16_nrm_1.gif" alt="Add"></button></span></span>
                     <span id="pushbutton3" class="yuibutton"><span><button type="button" name="stateexample4">Add</button></span></span>
+                    <input type="button" id="pushbutton1" name="pushbutton1" value="Push Me!">
 
                 </fieldset>
                 
@@ -156,7 +161,7 @@ print_r($_POST);
                 <fieldset id="checkboxbuttonsfrommarkup">
                     <legend>From Markup</legend>
 
-                    <input id="check1" type="checkbox" name="checkboxfield" value="Check 1">
+                    <input id="check1" type="checkbox" name="checkboxfield" value="Check 1" checked>
                     <input id="check2" type="checkbox" name="checkboxfield" value="Check 2">
                     <input id="check3" type="checkbox" name="checkboxfield" value="Check 3">
                     <input id="check4" type="checkbox" name="checkboxfield" value="Check 4">
@@ -164,6 +169,22 @@ print_r($_POST);
                 </fieldset>
 
                 <fieldset id="checkboxbuttonsfromjavascript">
+                    <legend>From JavaScript</legend>
+                </fieldset>
+
+            </fieldset>
+
+            <fieldset id="resetbuttons">
+                <legend>Reset Buttons</legend>
+
+                <fieldset id="resetbuttonsfrommarkup">
+                    <legend>From Markup</legend>
+
+                    <input id="resetbuttonfield1" type="reset" name="resetbuttonfield1" value="resetbuttonfield1value">
+
+                </fieldset>
+
+                <fieldset id="resetbuttonsfromjavascript">
                     <legend>From JavaScript</legend>
                 </fieldset>
 

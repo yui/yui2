@@ -25,6 +25,9 @@
         <script type="text/javascript" src="../../menu/src/js/menu.js"></script>
         <script type="text/javascript" src="../../menu/src/js/menuitem.js"></script>
 
+        <script type="text/javascript" src="../../menu/src/js/buttonmenu.js"></script>
+        <script type="text/javascript" src="../../menu/src/js/buttonmenuitem.js"></script>
+
         <script type="text/javascript">
 
             YAHOO.example.onWindowLoad = function(p_oEvent) {
@@ -51,6 +54,10 @@
                 function onCommand(p_sType, p_aArgs, p_oItem) {
 
                     oMenuButton3.set("label", p_oItem.cfg.getProperty("text"));
+                    
+//                    YAHOO.widget.Button.addHiddenFieldsToForm(oMenuButton3.getForm());
+                    
+//                    oMenuButton3.getForm().submit();
                 
                 }
 
@@ -59,10 +66,17 @@
                     { text: "one", value: 1, command: { fn: onCommand } },
                     { text: "two", value: 2, command: { fn: onCommand } },
                     { text: "three", value: 3, command: { fn: onCommand } },
+                    { text: "four", value: 4, command: { fn: onCommand } },
+                    { text: "five", value: 5, command: { fn: onCommand } },
+                    { text: "six", value: 6, command: { fn: onCommand } },
+                    { text: "seven", value: 7, command: { fn: onCommand } },
+                    { text: "eight", value: 8, command: { fn: onCommand } },
+                    { text: "nine", value: 9, command: { fn: onCommand } },
+                    { text: "ten", value: 10, command: { fn: onCommand } }
                 
                 ];
 
-                var oMenuButton3 = new YAHOO.widget.Button({ type: "menubutton", label: "one", menu: aMenuButton3Menu, container: "menubuttonsfromjavascript" });
+                var oMenuButton3 = new YAHOO.widget.Button({ type: "menubutton", label: "one", name:"mymenubutton", menu: aMenuButton3Menu, container: "menubuttonsfromjavascript" });
 
             };
 
@@ -97,7 +111,7 @@ print_r($_POST);
                     <legend>From Markup</legend>
 
                     <input type="submit" id="splitbutton1" name="splitbutton1" value="Split Button 1">
-                    <select id="splitbutton1select" name="splitbutton1select">
+                    <select id="splitbutton1select" name="splitbutton1select" multiple>
                         <option value="0">One</option>
                         <option value="1">Two</option>
                         <option value="2">Three</option>                
