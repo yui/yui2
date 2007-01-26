@@ -1,5 +1,20 @@
 YAHOO Global - Release Notes
 
+2.2.0
+
+  * Added configuration of the library via a YAHOO_config object defined
+    prior to the reference to the library.  Currently it supports a listener
+    parameter that will execute every time a new module YUI module is loaded.
+
+  * Added YAHOO.register & YAHOO.getVersion for version stamping modules.
+  
+  * Added YAHOO.env which is the home for the information about the loaded
+    YUI modules, and will host more info later.
+    
+  * YAHOO.util.Lang was relocated to this package and is now YAHOO.lang.
+    YAHOO.extend and YAHOO.augment have moved to env (the original
+    functions still work).
+
 0.12.2
 
   * No change
