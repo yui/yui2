@@ -74,6 +74,19 @@ YAHOO.util.EventProvider.prototype = {
             return false;
         }
     },
+    
+    /**
+     * Removes all listeners from the specified event
+     * @method unsubscribeAll
+     * @param p_type {string}   The type, or name of the event
+     */
+    unsubscribeAll: function(p_type) {
+        this.__yui_events = this.__yui_events || {};
+        var ce = this.__yui_events[p_type];
+        if (ce) {
+            ce.unsubscribeAll();
+        }
+    },
 
     /**
      * Creates a new custom event of the specified type.  If a custom event

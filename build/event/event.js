@@ -186,13 +186,38 @@ if (!YAHOO.util.Event) {
             /**
              * Safari detection is necessary to work around the preventDefault
              * bug that makes it so you can't cancel a href click from the 
-             * handler.  There is not a capabilities check we can use here.
+             * handler.  Since this function has been used outside of this
+             * utility, it was changed to detect all KHTML browser to be more
+             * friendly towards the non-Safari browsers that share the engine.
+             * Internally, the preventDefault bug detection now uses the
+             * webkit property.
              * @property isSafari
              * @private
              * @static
+             * @deprecated
              */
-            isSafari: (/Safari|Konqueror|KHTML/gi).test(navigator.userAgent),
-
+            isSafari: (/KHTML/gi).test(navigator.userAgent),
+            
+            /**
+             * If WebKit is detected, we keep track of the version number of
+             * the engine.
+             * Safari 1.3.2 (312.6): 312.8.1 <-- currently the latest
+             *                       available on Mac OSX 10.3.
+             * Safari 2.0.2: 416 <-- hasOwnProperty introduced
+             * Safari 2.0.4: 418 <-- preventDefault fixed (I believe)
+             * Safari 2.0.4 (419.3): 418.9.1 <-- current release
+             *
+             * http://developer.apple.com/internet/safari/uamatrix.html
+             * @property webkit
+             */
+            webkit: function() {
+                var v=navigator.userAgent.match(/AppleWebKit\/([^ ]*)/);
+                if (v&&v[1]) {
+                    return v[1];
+                }
+                return null;
+            }(),
+            
             /**
              * IE detection needed to properly calculate pageX and pageY.  
              * capabilities checking didn't seem to work because another 
@@ -202,7 +227,7 @@ if (!YAHOO.util.Event) {
              * @private
              * @static
              */
-            isIE: (!this.isSafari && !navigator.userAgent.match(/opera/gi) && 
+            isIE: (!this.webkit && !navigator.userAgent.match(/opera/gi) && 
                     navigator.userAgent.match(/msie/gi)),
 
             /**
@@ -435,14 +460,20 @@ if (!YAHOO.util.Event) {
              * @private
              */
             fireLegacyEvent: function(e, legacyIndex) {
-                var ok = true;
-
-                var le = legacyHandlers[legacyIndex];
-                for (var i=0,len=le.length; i<len; ++i) {
-                    var li = le[i];
+                var ok=true,le,lh,li,scope,ret;
+                
+                // Fire the original handler if we replaced one
+                le = legacyEvents[legacyIndex];
+                if (le && le[2]) {
+                    le[2](e);
+                }
+                
+                lh = legacyHandlers[legacyIndex];
+                for (var i=0,len=lh.length; i<len; ++i) {
+                    li = lh[i];
                     if ( li && li[this.WFN] ) {
-                        var scope = li[this.ADJ_SCOPE];
-                        var ret = li[this.WFN].call(scope, e);
+                        scope = li[this.ADJ_SCOPE];
+                        ret = li[this.WFN].call(scope, e);
                         ok = (ok && ret);
                     }
                 }
@@ -468,16 +499,16 @@ if (!YAHOO.util.Event) {
 
             /**
              * Logic that determines when we should automatically use legacy
-             * events instead of DOM2 events.
+             * events instead of DOM2 events.  Currently this is limited to old
+             * Safari browsers with a broken preventDefault
              * @method useLegacyEvent
              * @static
              * @private
              */
             useLegacyEvent: function(el, sType) {
-                if (!el.addEventListener && !el.attachEvent) {
-                    return true;
-                } else if (this.isSafari) {
-                    if ("click" == sType || "dblclick" == sType) {
+                if (this.webkit && ("click"==sType || "dblclick"==sType)) {
+                    var v = parseInt(this.webkit, 10);
+                    if (!isNaN(v) && v<418) {
                         return true;
                     }
                 }
@@ -1785,4 +1816,187 @@ YAHOO.util.EventProvider.prototype = {
 
 };
 
+/**
+* KeyListener is a utility that provides an easy interface for listening for
+* keydown/keyup events fired against DOM elements.
+* @namespace YAHOO.util
+* @class KeyListener
+* @constructor
+* @param {HTMLElement} attachTo The element or element ID to which the key 
+*                               event should be attached
+* @param {String}      attachTo The element or element ID to which the key
+*                               event should be attached
+* @param {Object}      keyData  The object literal representing the key(s) 
+*                               to detect. Possible attributes are 
+*                               shift(boolean), alt(boolean), ctrl(boolean) 
+*                               and keys(either an int or an array of ints 
+*                               representing keycodes).
+* @param {Function}    handler  The CustomEvent handler to fire when the 
+*                               key event is detected
+* @param {Object}      handler  An object literal representing the handler. 
+* @param {String}      event    Optional. The event (keydown or keyup) to 
+*                               listen for. Defaults automatically to keydown.
+*/
+YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
+    if (!attachTo) {
+    } else if (!keyData) {
+    } else if (!handler) {
+    } 
+    
+    if (!event) {
+        event = YAHOO.util.KeyListener.KEYDOWN;
+    }
+
+    /**
+    * The CustomEvent fired internally when a key is pressed
+    * @event keyEvent
+    * @private
+    * @param {Object} keyData The object literal representing the key(s) to 
+    *                         detect. Possible attributes are shift(boolean), 
+    *                         alt(boolean), ctrl(boolean) and keys(either an 
+    *                         int or an array of ints representing keycodes).
+    */
+    var keyEvent = new YAHOO.util.CustomEvent("keyPressed");
+    
+    /**
+    * The CustomEvent fired when the KeyListener is enabled via the enable() 
+    * function
+    * @event enabledEvent
+    * @param {Object} keyData The object literal representing the key(s) to 
+    *                         detect. Possible attributes are shift(boolean), 
+    *                         alt(boolean), ctrl(boolean) and keys(either an 
+    *                         int or an array of ints representing keycodes).
+    */
+    this.enabledEvent = new YAHOO.util.CustomEvent("enabled");
+
+    /**
+    * The CustomEvent fired when the KeyListener is disabled via the 
+    * disable() function
+    * @event disabledEvent
+    * @param {Object} keyData The object literal representing the key(s) to 
+    *                         detect. Possible attributes are shift(boolean), 
+    *                         alt(boolean), ctrl(boolean) and keys(either an 
+    *                         int or an array of ints representing keycodes).
+    */
+    this.disabledEvent = new YAHOO.util.CustomEvent("disabled");
+
+    if (typeof attachTo == 'string') {
+        attachTo = document.getElementById(attachTo);
+    }
+
+    if (typeof handler == 'function') {
+        keyEvent.subscribe(handler);
+    } else {
+        keyEvent.subscribe(handler.fn, handler.scope, handler.correctScope);
+    }
+
+    /**
+    * Handles the key event when a key is pressed.
+    * @method handleKeyPress
+    * @param {DOMEvent} e   The keypress DOM event
+    * @param {Object}   obj The DOM event scope object
+    * @private
+    */
+    function handleKeyPress(e, obj) {
+        if (! keyData.shift) {  
+            keyData.shift = false; 
+        }
+        if (! keyData.alt) {    
+            keyData.alt = false;
+        }
+        if (! keyData.ctrl) {
+            keyData.ctrl = false;
+        }
+
+        // check held down modifying keys first
+        if (e.shiftKey == keyData.shift && 
+            e.altKey   == keyData.alt &&
+            e.ctrlKey  == keyData.ctrl) { // if we pass this, all modifiers match
+            
+            var dataItem;
+            var keyPressed;
+
+            if (keyData.keys instanceof Array) {
+                for (var i=0;i<keyData.keys.length;i++) {
+                    dataItem = keyData.keys[i];
+
+                    if (dataItem == e.charCode ) {
+                        keyEvent.fire(e.charCode, e);
+                        break;
+                    } else if (dataItem == e.keyCode) {
+                        keyEvent.fire(e.keyCode, e);
+                        break;
+                    }
+                }
+            } else {
+                dataItem = keyData.keys;
+                if (dataItem == e.charCode ) {
+                    keyEvent.fire(e.charCode, e);
+                } else if (dataItem == e.keyCode) {
+                    keyEvent.fire(e.keyCode, e);
+                }
+            }
+        }
+    }
+
+    /**
+    * Enables the KeyListener by attaching the DOM event listeners to the 
+    * target DOM element
+    * @method enable
+    */
+    this.enable = function() {
+        if (! this.enabled) {
+            YAHOO.util.Event.addListener(attachTo, event, handleKeyPress);
+            this.enabledEvent.fire(keyData);
+        }
+        /**
+        * Boolean indicating the enabled/disabled state of the Tooltip
+        * @property enabled
+        * @type Boolean
+        */
+        this.enabled = true;
+    };
+
+    /**
+    * Disables the KeyListener by removing the DOM event listeners from the 
+    * target DOM element
+    * @method disable
+    */
+    this.disable = function() {
+        if (this.enabled) {
+            YAHOO.util.Event.removeListener(attachTo, event, handleKeyPress);
+            this.disabledEvent.fire(keyData);
+        }
+        this.enabled = false;
+    };
+
+    /**
+    * Returns a String representation of the object.
+    * @method toString
+    * @return {String}  The string representation of the KeyListener
+    */ 
+    this.toString = function() {
+        return "KeyListener [" + keyData.keys + "] " + attachTo.tagName + 
+                (attachTo.id ? "[" + attachTo.id + "]" : "");
+    };
+
+};
+
+/**
+* Constant representing the DOM "keydown" event.
+* @property YAHOO.util.KeyListener.KEYDOWN
+* @static
+* @final
+* @type String
+*/
+YAHOO.util.KeyListener.KEYDOWN = "keydown";
+
+/**
+* Constant representing the DOM "keyup" event.
+* @property YAHOO.util.KeyListener.KEYUP
+* @static
+* @final
+* @type String
+*/
+YAHOO.util.KeyListener.KEYUP = "keyup";
 YAHOO.register("event", YAHOO.util.Event, {version: "@VERSION@", build: "@BUILD@"});

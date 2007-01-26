@@ -1,6 +1,24 @@
 
 YUI Library - Event - Release Notes
 
+2.2.0
+
+  * YAHOO.util.KeyListener was moved from the container package into event.
+  
+  * The Safari bug that made it so preventDefault would not work with click
+    and double-click listeners on anchor tags was resolved in version 2.0.4.
+    The workaround (using DOM0 events for these instead of the normal DOM2
+    events) is now only used for releases prior to 2.0.4.
+    
+  * When legacyEvents are used (Safari<2.0.4 click events), if there was an
+    existing DOM0 event that the utility replaced, it is executed along with
+    the listeners that were added with the utility.
+
+  * Restored Event.regCE for compatibility with a beta release of the library
+    that in use in an external API.
+
+  * Added unsubscribeAll to EventProvider
+
 0.12.2
 
   * Fixed a bug introduced in 0.12.1 release caused nested onAvailable

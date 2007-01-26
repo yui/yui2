@@ -9,6 +9,9 @@
  */
 
 // The first instance of Event will win if it is loaded more than once.
+// @TODO this needs to be changed so that only the state data that needs to
+// be preserved is kept, while methods are overwritten/added as needed.
+// This means that the module pattern can't be used.
 if (!YAHOO.util.Event) {
 
 /**
@@ -100,7 +103,7 @@ if (!YAHOO.util.Event) {
          */
         var counter = 0;
 
-        return { // PREPROCESS
+        return {
 
             /**
              * The number of times we should look for elements that are not
@@ -183,13 +186,38 @@ if (!YAHOO.util.Event) {
             /**
              * Safari detection is necessary to work around the preventDefault
              * bug that makes it so you can't cancel a href click from the 
-             * handler.  There is not a capabilities check we can use here.
+             * handler.  Since this function has been used outside of this
+             * utility, it was changed to detect all KHTML browser to be more
+             * friendly towards the non-Safari browsers that share the engine.
+             * Internally, the preventDefault bug detection now uses the
+             * webkit property.
              * @property isSafari
              * @private
              * @static
+             * @deprecated
              */
-            isSafari: (/Safari|Konqueror|KHTML/gi).test(navigator.userAgent),
-
+            isSafari: (/KHTML/gi).test(navigator.userAgent),
+            
+            /**
+             * If WebKit is detected, we keep track of the version number of
+             * the engine.
+             * Safari 1.3.2 (312.6): 312.8.1 <-- currently the latest
+             *                       available on Mac OSX 10.3.
+             * Safari 2.0.2: 416 <-- hasOwnProperty introduced
+             * Safari 2.0.4: 418 <-- preventDefault fixed (I believe)
+             * Safari 2.0.4 (419.3): 418.9.1 <-- current release
+             *
+             * http://developer.apple.com/internet/safari/uamatrix.html
+             * @property webkit
+             */
+            webkit: function() {
+                var v=navigator.userAgent.match(/AppleWebKit\/([^ ]*)/);
+                if (v&&v[1]) {
+                    return v[1];
+                }
+                return null;
+            }(),
+            
             /**
              * IE detection needed to properly calculate pageX and pageY.  
              * capabilities checking didn't seem to work because another 
@@ -199,7 +227,7 @@ if (!YAHOO.util.Event) {
              * @private
              * @static
              */
-            isIE: (!this.isSafari && !navigator.userAgent.match(/opera/gi) && 
+            isIE: (!this.webkit && !navigator.userAgent.match(/opera/gi) && 
                     navigator.userAgent.match(/msie/gi)),
 
             /**
@@ -436,14 +464,20 @@ if (!YAHOO.util.Event) {
              */
             fireLegacyEvent: function(e, legacyIndex) {
                 // this.logger.debug("fireLegacyEvent " + legacyIndex);
-                var ok = true;
-
-                var le = legacyHandlers[legacyIndex];
-                for (var i=0,len=le.length; i<len; ++i) {
-                    var li = le[i];
+                var ok=true,le,lh,li,scope,ret;
+                
+                // Fire the original handler if we replaced one
+                le = legacyEvents[legacyIndex];
+                if (le && le[2]) {
+                    le[2](e);
+                }
+                
+                lh = legacyHandlers[legacyIndex];
+                for (var i=0,len=lh.length; i<len; ++i) {
+                    li = lh[i];
                     if ( li && li[this.WFN] ) {
-                        var scope = li[this.ADJ_SCOPE];
-                        var ret = li[this.WFN].call(scope, e);
+                        scope = li[this.ADJ_SCOPE];
+                        ret = li[this.WFN].call(scope, e);
                         ok = (ok && ret);
                     }
                 }
@@ -469,16 +503,16 @@ if (!YAHOO.util.Event) {
 
             /**
              * Logic that determines when we should automatically use legacy
-             * events instead of DOM2 events.
+             * events instead of DOM2 events.  Currently this is limited to old
+             * Safari browsers with a broken preventDefault
              * @method useLegacyEvent
              * @static
              * @private
              */
             useLegacyEvent: function(el, sType) {
-                if (!el.addEventListener && !el.attachEvent) {
-                    return true;
-                } else if (this.isSafari) {
-                    if ("click" == sType || "dblclick" == sType) {
+                if (this.webkit && ("click"==sType || "dblclick"==sType)) {
+                    var v = parseInt(this.webkit, 10);
+                    if (!isNaN(v) && v<418) {
                         return true;
                     }
                 }
@@ -1155,6 +1189,16 @@ if (!YAHOO.util.Event) {
                     return [0, 0];
                 }
             },
+            
+            /**
+             * Used by old versions of CustomEvent, restored for backwards
+             * compatibility
+             * @method regCE
+             * @private
+             */
+            regCE: function() {
+                // does nothing
+            },
 
             /**
              * Adds a DOM event directly without the caching, cleanup, scope adj, etc
@@ -1234,4 +1278,3 @@ if (!YAHOO.util.Event) {
         EU._tryPreloadAttach();
     })();
 }
-
