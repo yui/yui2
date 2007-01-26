@@ -757,40 +757,41 @@ YAHOO.widget.DataSource.prototype.parseJSONData = function(oRequest, oRawRespons
     else {
         // Parse the JSON response as a string
         if(oRawResponse.constructor == String) {
-            
             try {
                 // Trim leading spaces
-                while (oRawResponse.substring(0,1) == " ") {
+                while (oRawResponse.length > 0 &&
+                        (oRawResponse.charAt(0) != "{") &&
+                        (oRawResponse.charAt(0) != "[")) {
                     oRawResponse = oRawResponse.substring(1, oResponse.length);
                 }
 
-                // Invalid JSON response
-                if(oRawResponse.indexOf("{") < 0) {
-                    bError = true;
-                }
+                if(oRawResponse.length > 0) {
+                    // Strip extraneous stuff at the end
+                    var objEnd = Math.max(oRawResponse.lastIndexOf("]"),oRawResponse.lastIndexOf("}"));
+                    oRawResponse = oRawResponse.substring(0,objEnd+1);
 
-                // Empty (but not invalid) JSON response
-                if(oRawResponse.indexOf("{}") === 0) {
-                }
+                    // Turn the string into an object literal...
+                    // ...eval is necessary here
+                    oRawResponse = eval("(" + oRawResponse + ")");
+                    if(!oRawResponse) {
+                        bError = true;
+                    }
 
-                // Turn the string into an object literal...
-                // ...eval is necessary here
-                oRawResponse = eval("(" + oRawResponse + ")");
-                if(!oRawResponse) {
-                    bError = true;
+                    // Grab the object member that contains an array of all reponses...
+                    // ...eval is necessary here since aSchema[0] is of unknown depth
+                    jsonList = eval("(oRawResponse." + this.responseSchema.resultsList+")");
                 }
-
-                // Grab the object member that contains an array of all reponses...
-                // ...eval is necessary here since aSchema[0] is of unknown depth
-                //jsonList = eval("(oRawResponse." + this.responseSchema.resultsList+")");
             }
             catch(e) {
                 bError = true;
            }
         }
-        jsonList = eval("(oRawResponse." + this.responseSchema.resultsList + ")");
+        // Parse the JSON response as an object
+        else if(oRawResponse.constructor == Object) {
+            jsonList = oRawResponse[this.responseSchema.resultsList];
+        }
+        
     }
-
     if(bError || !jsonList) {
         //TODO: validation in the other parse methods
         return null;
