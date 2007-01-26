@@ -166,7 +166,7 @@
          * @config contentEl
          * @type HTMLElement
          */
-        this.setAttributeConfig('contentEl', { // TODO: apply className?
+        this.setAttributeConfig('contentEl', {
             value: attr.contentEl || document.createElement('div'),
             method: function(value) {
                 var current = this.get('contentEl');
@@ -186,7 +186,7 @@
          * @type String
          */
         this.setAttributeConfig('content', {
-            value: attr.content, // TODO: what about existing?
+            value: attr.content,bout existing?
             method: function(value) {
                 this.get('contentEl').innerHTML = value;
             }
