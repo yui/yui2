@@ -186,7 +186,7 @@
          * @type String
          */
         this.setAttributeConfig('content', {
-            value: attr.content,bout existing?
+            value: attr.content,
             method: function(value) {
                 this.get('contentEl').innerHTML = value;
             }
