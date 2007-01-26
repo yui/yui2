@@ -1579,7 +1579,77 @@ _execSubmenuHideDelay: function(p_oSubmenu, p_nHideDelay) {
 },
 
 
+
 // Protected methods
+
+
+/**
+* @method _disableScrollHeader
+* @description Disables the header used for scrolling the body of the menu.
+* @protected
+*/
+_disableScrollHeader: function() {
+
+    if(!this._bHeaderDisabled) {
+
+        Dom.addClass(this.header, "disabled");
+        this._bHeaderDisabled = true;
+
+    }
+
+},
+
+
+/**
+* @method _disableScrollFooter
+* @description Disables the footer used for scrolling the body of the menu.
+* @protected
+*/
+_disableScrollFooter: function() {
+
+    if(!this._bFooterDisabled) {
+
+        Dom.addClass(this.footer, "disabled");
+        this._bFooterDisabled = true;
+
+    }
+
+},
+
+
+/**
+* @method _enableScrollHeader
+* @description Enables the header used for scrolling the body of the menu.
+* @protected
+*/
+_enableScrollHeader: function() {
+
+    if(this._bHeaderDisabled) {
+
+        Dom.removeClass(this.header, "disabled");
+        this._bHeaderDisabled = false;
+
+    }
+
+},
+
+
+/**
+* @method _enableScrollFooter
+* @description Enables the footer used for scrolling the body of the menu.
+* @protected
+*/
+_enableScrollFooter: function() {
+
+    if(this._bFooterDisabled) {
+
+        Dom.removeClass(this.footer, "disabled");
+        this._bFooterDisabled = false;
+
+    }
+
+},
+
 
 
 /**
@@ -2018,13 +2088,39 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
 
                         if(this.cfg.getProperty("maxheight") > 0) {
 
-                            this.body.scrollTop = 
+                            var oBody = this.body;
+
+                            oBody.scrollTop = 
 
                                 (
                                     oNextItem.element.offsetTop + 
                                     oNextItem.element.offsetHeight
-                                ) - this.body.offsetHeight;
-                        
+                                ) - oBody.offsetHeight;
+
+
+                            var nScrollTop = oBody.scrollTop,
+                                nScrollTarget = 
+                                    oBody.scrollHeight - oBody.offsetHeight;
+
+                            if(nScrollTop == 0) {
+
+                                this._disableScrollHeader();
+                                this._enableScrollFooter();
+
+                            }
+                            else if(nScrollTop == nScrollTarget) {
+
+                                 this._enableScrollHeader();
+                                 this._disableScrollFooter();
+
+                            }
+                            else {
+
+                                this._enableScrollHeader();
+                                this._enableScrollFooter();
+
+                            }
+
                         }
 
                     }
@@ -2246,6 +2342,8 @@ _onTextResize: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onScrollTargetMouseOver: function(p_oEvent, p_oMenu) {
 
+    this._cancelHideDelay();
+
     var oTarget = Event.getTarget(p_oEvent),
         oBody = this.body,
         me = this,
@@ -2262,14 +2360,7 @@ _onScrollTargetMouseOver: function(p_oEvent, p_oMenu) {
 
             oBody.scrollTop = (nScrollTop + 1);
 
-
-            if(me._bHeaderDisabled) {
-
-                Dom.removeClass(me.header, "disabled");
-
-                me._bHeaderDisabled = false;
-
-            }
+            me._enableScrollHeader();
 
         }
         else {
@@ -2278,9 +2369,7 @@ _onScrollTargetMouseOver: function(p_oEvent, p_oMenu) {
             
             window.clearInterval(me._nBodyScrollId);
 
-            Dom.addClass(me.footer, "disabled");
-
-            me._bFooterDisabled = true;
+            me._disableScrollFooter();
 
         }
 
@@ -2296,14 +2385,7 @@ _onScrollTargetMouseOver: function(p_oEvent, p_oMenu) {
 
             oBody.scrollTop = (nScrollTop - 1);
 
-
-            if(me._bFooterDisabled) {
-
-                Dom.removeClass(me.footer, "disabled");
-
-                me._bFooterDisabled = false;
-
-            }
+            me._enableScrollFooter();
 
         }
         else {
@@ -2312,9 +2394,7 @@ _onScrollTargetMouseOver: function(p_oEvent, p_oMenu) {
             
             window.clearInterval(me._nBodyScrollId);
 
-            Dom.addClass(me.header, "disabled");
-            
-            me._bHeaderDisabled = true;
+            me._disableScrollHeader();
 
         }
 
@@ -2336,8 +2416,6 @@ _onScrollTargetMouseOver: function(p_oEvent, p_oMenu) {
 
 
     this._nBodyScrollId = window.setInterval(fnScrollFunction, 10);
-    
-    this._cancelHideDelay();
 
 },
 
@@ -2588,40 +2666,45 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
     }
 
 
-    var nViewportHeight = Dom.getViewportHeight(),
-        nMaxHeight;
 
+    if(this.cfg.getProperty("position") == "dynamic") {
 
-    if(this.element.offsetHeight >= nViewportHeight) {
-
-        /*
-            Cache the original value for the "maxheight" configuration property 
-            so that we can set it back when the menu is hidden.
-        */
-
-        this._originalMaxHeight = this.cfg.getProperty("maxheight");
-
-        this.cfg.setProperty("maxheight", (nViewportHeight - 50));
+        var nViewportHeight = Dom.getViewportHeight(),
+            nMaxHeight;
     
-    }
+        if(this.element.offsetHeight >= nViewportHeight) {
+    
+            /*
+                Cache the original value for the "maxheight" configuration property 
+                so that we can set it back when the menu is hidden.
+            */
+    
+            this._originalMaxHeight = this.cfg.getProperty("maxheight");
 
-
-    if(this.cfg.getProperty("maxheight") > 0) {
-
-        var oBody = this.body;
-
-        if(oBody.scrollTop > 0) {
-
-            oBody.scrollTop = 0;
-
+            this.cfg.setProperty("maxheight", (nViewportHeight - 20));
+        
+        }
+    
+    
+        if(this.cfg.getProperty("maxheight") > 0) {
+    
+            var oBody = this.body;
+    
+            if(oBody.scrollTop > 0) {
+    
+                oBody.scrollTop = 0;
+    
+            }
+    
+            Dom.addClass(this.header, "disabled");
+    
+            this._bHeaderDisabled = true;
+            this._bFooterDisabled = false;
+    
         }
 
-        Dom.addClass(this.header, "disabled");
-
-        this._bHeaderDisabled = true;
-        this._bFooterDisabled = false;
-
     }
+
 
 },
 
@@ -2639,7 +2722,7 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
 _onShow: function(p_sType, p_aArgs, p_oMenu) {
 
     this.setInitialFocus();
-    
+
     var oParent = this.parent;
     
     if(oParent) {
@@ -3384,10 +3467,6 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
 
 
     if(nMaxHeight && oBody.offsetHeight > nMaxHeight) {
-        
-        Dom.setStyle(oBody, "height", (nMaxHeight + "px"));
-        Dom.setStyle(oBody, "overflow", "hidden");
-
 
         if(!oHeader && !oFooter) {
 
@@ -3402,6 +3481,15 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
         
         }
 
+        var nHeight = 
+
+                (
+                    nMaxHeight - 
+                    (this.footer.offsetHeight + this.header.offsetHeight)
+                );
+
+        Dom.setStyle(oBody, "height", (nHeight + "px"));
+        Dom.setStyle(oBody, "overflow", "hidden");
 
         Event.addListener(oFooter, "mouseover", fnMouseOver, this, true);
         Event.addListener(oFooter, "mouseout", fnMouseOut, this, true);
