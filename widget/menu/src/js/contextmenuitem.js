@@ -98,7 +98,7 @@ init: function(p_oObject, p_oConfig) {
 */
 toString: function() {
 
-    return ("MenuBarItem: " + this.cfg.getProperty("text"));
+    return ("ContextMenuItem: " + this.cfg.getProperty("text"));
 
 }
     
