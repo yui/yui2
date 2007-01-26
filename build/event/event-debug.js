@@ -466,12 +466,6 @@ if (!YAHOO.util.Event) {
                 // this.logger.debug("fireLegacyEvent " + legacyIndex);
                 var ok=true,le,lh,li,scope,ret;
                 
-                // Fire the original handler if we replaced one
-                le = legacyEvents[legacyIndex];
-                if (le && le[2]) {
-                    le[2](e);
-                }
-                
                 lh = legacyHandlers[legacyIndex];
                 for (var i=0,len=lh.length; i<len; ++i) {
                     li = lh[i];
@@ -482,6 +476,15 @@ if (!YAHOO.util.Event) {
                     }
                 }
 
+                // Fire the original handler if we replaced one.  We fire this
+                // after the other events to keep stopPropagation/preventDefault
+                // that happened in the DOM0 handler from touching our DOM2
+                // substitute
+                le = legacyEvents[legacyIndex];
+                if (le && le[2]) {
+                    le[2](e);
+                }
+                
                 return ok;
             },
 
