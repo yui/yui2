@@ -84,15 +84,15 @@ YAHOO.widget.Columnset = function(aHeaders) {
             else if(nodeLevelMaxChildren > 0) {
                 // Children of siblings increase the rowspan of the Column
                 oColumn.rowspan += nodeLevelMaxChildren;
-                if(oColumn.key) {
+                //if(oColumn.key) {
                     keys.push(oColumn);
-                }
+                //}
             }
             // This entire node level does not have any children
             else {
-                if(oColumn.key) {
+                //if(oColumn.key) {
                     keys.push(oColumn);
-                }
+                //}
             }
 
             // Add the Column to the tree's row array
@@ -164,7 +164,7 @@ YAHOO.widget.Columnset.prototype.tree = [];
 YAHOO.widget.Columnset.prototype.flat = [];
 
 /**
- * Array of Columns that hold keys to data.
+ * Array of Columns that map one-to-one to a table column.
  *
  * @property keys
  * @type YAHOO.widget.Column[]
@@ -299,8 +299,8 @@ YAHOO.widget.Column.prototype.children = null;
 YAHOO.widget.Column.prototype.key = null;
 
 /**
- * Data type: "string", "number", "float", "date", "object", "array", "boolean",
- * "currency", "checkbox", "select", "email", "link".
+ * Data types: "string", "number", "date", "currency", "checkbox", "select",
+ * "email", "link".
  *
  * @property type
  * @type String
@@ -472,62 +472,57 @@ YAHOO.widget.Column.prototype.sortAscHandler = null;
  * @return {HTML} Markup.
  */
 YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
-    var oData = oRecord[this.key];
-    var type = this.type;
-    var markup = "";
-    var classname = "";
-    switch(type) {
-        case "checkbox":
-            YAHOO.widget.DataTable.checkboxFormatter(elCell, oData, oRecord, this);
-            classname = YAHOO.widget.DataTable.CLASS_CHECKBOX;
-            break;
-        case "currency":
-            YAHOO.widget.DataTable.currencyFormatter(elCell, oData, oRecord, this);
-            classname = YAHOO.widget.DataTable.CLASS_CURRENCY;
-            break;
-        case "custom":
-            YAHOO.widget.DataTable.customFormatter(elCell, oData, oRecord, this);
-            classname = YAHOO.widget.DataTable.CLASS_CUSTOM;
-            break;
-        case "date":
-            YAHOO.widget.DataTable.dateFormatter(elCell, oData, oRecord, this);
-            classname = YAHOO.widget.DataTable.CLASS_DATE;
-            break;
-        case "email":
-            YAHOO.widget.DataTable.emailFormatter(elCell, oData, oRecord, this);
-            classname = YAHOO.widget.DataTable.CLASS_EMAIL;
-            break;
-        case "float":
-            YAHOO.widget.DataTable.floatFormatter(elCell, oData, oRecord, this);
-            classname = YAHOO.widget.DataTable.CLASS_FLOAT;
-            break;
-        case "html":
-            YAHOO.widget.DataTable.htmlFormatter(elCell, oData, oRecord, this);
-            classname = YAHOO.widget.DataTable.CLASS_HTML;
-            break;
-        case "link":
-            YAHOO.widget.DataTable.linkFormatter(elCell, oData, oRecord, this);
-            classname = YAHOO.widget.DataTable.CLASS_LINK;
-            break;
-        case "number":
-            YAHOO.widget.DataTable.numberFormatter(elCell, oData, oRecord, this);
-            classname = YAHOO.widget.DataTable.CLASS_NUMBER;
-            break;
-        case "select":
-            YAHOO.widget.DataTable.selectFormatter(elCell, oData, oRecord, this);
-            classname = YAHOO.widget.DataTable.CLASS_SELECT;
-            break;
-       default:
-            if(oData) {
-                elCell.innerHTML = oData.toString();
-                classname = YAHOO.widget.DataTable.CLASS_STRING;
-            }
-            break;
+    var oData = (this.key) ? oRecord[this.key] : null;
+    if(this.formatter) {
+        this.formatter(elCell, this, oRecord, oData);
     }
+    else {
+        var type = this.type;
+        var markup = "";
+        var classname = "";
+        switch(type) {
+            case "checkbox":
+                YAHOO.widget.DataTable.formatCheckbox(elCell, this, oRecord, oData);
+                classname = YAHOO.widget.DataTable.CLASS_CHECKBOX;
+                break;
+            case "currency":
+                YAHOO.widget.DataTable.formatCurrency(elCell, this, oRecord, oData);
+                classname = YAHOO.widget.DataTable.CLASS_CURRENCY;
+                break;
+            case "date":
+                YAHOO.widget.DataTable.formatDate(elCell, this, oRecord, oData);
+                classname = YAHOO.widget.DataTable.CLASS_DATE;
+                break;
+            case "email":
+                YAHOO.widget.DataTable.formatEmail(elCell, this, oRecord, oData);
+                classname = YAHOO.widget.DataTable.CLASS_EMAIL;
+                break;
+            /*case "html":
+                YAHOO.widget.DataTable.formatHTML(elCell, this, oRecord, oData);
+                classname = YAHOO.widget.DataTable.CLASS_HTML;
+                break;*/
+            case "link":
+                YAHOO.widget.DataTable.formatLink(elCell, this, oRecord, oData);
+                classname = YAHOO.widget.DataTable.CLASS_LINK;
+                break;
+            case "number":
+                YAHOO.widget.DataTable.formatNumber(elCell, this, oRecord, oData);
+                classname = YAHOO.widget.DataTable.CLASS_NUMBER;
+                break;
+            case "select":
+                YAHOO.widget.DataTable.formatSelect(elCell, this, oRecord, oData);
+                classname = YAHOO.widget.DataTable.CLASS_SELECT;
+                break;
+           default:
+                elCell.innerHTML = (oData) ? oData.toString() : "";
+                classname = YAHOO.widget.DataTable.CLASS_STRING;
+                break;
+        }
 
-    elCell.columnKey = this.key;
-    YAHOO.util.Dom.addClass(elCell, classname);
-
+        elCell.columnKey = this.key;
+        YAHOO.util.Dom.addClass(elCell, classname);
+    }
+    
     if(this.editable) {
         YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_EDITABLE);
     }
