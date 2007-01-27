@@ -49,7 +49,7 @@ YAHOO.widget.Columnset = function(aHeaders) {
         // Parse each node for attributes and any children
         for(var i=0; i<nodeList.length; i++) {
             // Instantiate a Column for each node
-            var oColumn = new YAHOO.widget.Column(flat.length, nodeList[i]);
+            var oColumn = new YAHOO.widget.Column(nodeList[i]);
             flat.push(oColumn);
             
             // Assign parent, if applicable
@@ -85,12 +85,14 @@ YAHOO.widget.Columnset = function(aHeaders) {
                 // Children of siblings increase the rowspan of the Column
                 oColumn.rowspan += nodeLevelMaxChildren;
                 //if(oColumn.key) {
+                    oColumn.index = keys.length;
                     keys.push(oColumn);
                 //}
             }
             // This entire node level does not have any children
             else {
                 //if(oColumn.key) {
+                    oColumn.index = keys.length;
                     keys.push(oColumn);
                 //}
             }
@@ -198,13 +200,11 @@ YAHOO.widget.Columnset.prototype.toString = function() {
  *
  * @class Column
  * @constructor
- * @param nIndex {Number} Index of column.
  * @param oConfigs {Object} Object literal of configuration values.
  */
-YAHOO.widget.Column = function(nIndex, oConfigs) {
+YAHOO.widget.Column = function(oConfigs) {
     // Internal variables
     this.id = "yui-dtcol"+YAHOO.widget.Column._nCount;
-    this.index = nIndex;
     
     // Object literal defines Column attributes
     if(typeof oConfigs == "object") {
@@ -249,7 +249,7 @@ YAHOO.widget.Column._nCount = 0;
 YAHOO.widget.Column.prototype.id = null;
 
 /**
- * Reference to Column's index within its Columnset's flat array.
+ * Reference to Column's index within its Columnset's key array, or null if not applicable.
  *
  * @property index
  * @type Number
@@ -325,13 +325,12 @@ YAHOO.widget.Column.prototype.text = null;
 YAHOO.widget.Column.prototype.abbr = null;
 
 /**
- * If column is editable, defines the type of editor, otherwise null.
+ * Defines the type of editor for Column, otherwise Column is not editable.
  *
- * @property editable
+ * @property editor
  * @type String
- * @default false
  */
-YAHOO.widget.Column.prototype.editable = null;
+YAHOO.widget.Column.prototype.editor = null;
 
 /**
  * True if column is resizeable, false otherwise.
@@ -519,11 +518,10 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
                 break;
         }
 
-        elCell.columnKey = this.key;
         YAHOO.util.Dom.addClass(elCell, classname);
     }
     
-    if(this.editable) {
+    if(this.editor) {
         YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_EDITABLE);
     }
 };
@@ -691,11 +689,11 @@ YAHOO.widget.Column.selectParser = function(sMarkup) {
  */
 YAHOO.widget.Column.prototype.showEditor = function(elCell,oRecord) {
     var oEditor = this.editor;
-    if(!oEditor) {
+    if(oEditor.constructor == String) {
         oEditor = new YAHOO.widget.ColumnEditor(this, elCell);
         this.editor = oEditor;
     }
-    if(oEditor) {
+    if(oEditor.constructor == YAHOO.widget.ColumnEditor) {
         oEditor.show(elCell, oRecord, this);
     }
 };
@@ -744,6 +742,7 @@ YAHOO.widget.Column.prototype.hideEditor = function() {
  */
 YAHOO.widget.ColumnEditor = function(oColumn, elCell) {
     this.column = oColumn;
+    this.type = oColumn.editor;
 
     //TODO: make sure columneditors get destroyed if widget gets destroyed
     // Works better to attach ColumnEditor to document.body
@@ -761,12 +760,11 @@ YAHOO.widget.ColumnEditor = function(oColumn, elCell) {
     container.id = "yui-dt-coled" + YAHOO.widget.ColumnEditor._nCount;
     this.container = container;
 
-    switch(oColumn.editable) {
-        case "textarea":
-            this.createTextareaEditor();
+    switch(this.type) {
+        case "textbox":
+            this.createTextboxEditor();
             break;
         default:
-            this.createTextboxEditor();
             break;
     }
 
@@ -812,20 +810,22 @@ YAHOO.widget.ColumnEditor._nCount =0;
 YAHOO.widget.ColumnEditor.prototype.container = null;
 
  /**
- * Reference to the container DOM element for the DataTable.
- *
- * @property tableContainer
- * @type HTMLElement
- */
-//YAHOO.widget.ColumnEditor.prototype.tableContainer = null;
-
- /**
  * Reference to the Column object for the ColumnEditor.
  *
  * @property column
  * @type YAHOO.widget.Column
  */
 YAHOO.widget.ColumnEditor.prototype.column = null;
+
+ /**
+ * Type of editor: "textbox", etc.
+ *
+ * @property type
+ * @type String
+ */
+YAHOO.widget.ColumnEditor.prototype.type = null;
+
+
 
  /**
  * Reference to form element(s) of the ColumnEditor.
@@ -847,7 +847,7 @@ YAHOO.widget.ColumnEditor.prototype.input = null;
  * @method show
  */
 YAHOO.widget.ColumnEditor.prototype.show = function(elCell, oRecord, oColumn) {
-    switch(oColumn.editable) {
+    switch(this.type) {
         case "textbox":
             this.showTextboxEditor(elCell, oRecord, oColumn);
             break;
@@ -878,7 +878,7 @@ YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord
     // Size and value
     this.input.style.width = (parseInt(elCell.offsetWidth)-7) + "px";
     this.input.style.height = (parseInt(elCell.offsetHeight)-7) + "px";
-    this.input.value = oRecord[oColumn.key];
+    this.input.value = (oColumn.key) ? oRecord[oColumn.key] : elCell.innerHTML;
 
     // Position and show
     var x,y;

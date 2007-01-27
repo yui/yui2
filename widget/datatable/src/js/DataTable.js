@@ -794,6 +794,7 @@ YAHOO.widget.DataTable.prototype._initRows = function() {
     var topRowCells = this._elBody.rows[0].cells;
     var columns = this._oColumnset.keys;
     for(var i=0; i<topRowCells.length; i++) {
+    //TODO: column might not have a key
         if(columns[i].key) {
             columns[i].width = topRowCells[i].offsetWidth;
         }
@@ -938,8 +939,7 @@ YAHOO.widget.DataTable.prototype._initHeadCell = function(elHeadCell,oColumn,row
     // Clear out the cell of prior content
     // TODO: purgeListeners and other validation-related things
     var index = this._nIndex;
-    elHeadCell.columnKey = oColumn.key;
-    elHeadCell.index = oColumn.index;
+    elHeadCell.columnIndex = col;
     if(oColumn.abbr) {
         elHeadCell.abbr = oColumn.abbr;
     }
@@ -1830,11 +1830,11 @@ YAHOO.widget.DataTable.prototype.addRow = function(oRecord, i) {
 
         // Create TBODY cells
         for(var j=0; j<oColumnset.keys.length; j++) {
-            //if(oColumnset.keys[j].key) {
-                var elCell = elRow.appendChild(document.createElement("td"));
-                elCell.id = this.id+"-bdrow"+i+"-cell"+j;
-                elCell.headers = oColumnset.keys[j].id;
-                oColumnset.keys[j].format(elCell, oRecord);
+            var elCell = elRow.appendChild(document.createElement("td"));
+            elCell.id = this.id+"-bdrow"+i+"-cell"+j;
+            elCell.headers = oColumnset.keys[j].id;
+            elCell.columnIndex = j;
+            oColumnset.keys[j].format(elCell, oRecord);
             /*p.abx {word-wrap:break-word;}
     ought to solve the problem for Safari (the long words will wrap in your
     tds, instead of overflowing to the next td.
@@ -1844,11 +1844,10 @@ YAHOO.widget.DataTable.prototype.addRow = function(oRecord, i) {
     'white-space:nowrap'.*/
 
     // need a div wrapper for safari?
-                if(this.fixedWidth) {
-                    elCell.style.overflow = "hidden";
-                    //elCell.style.width = "20px";
-                }
-            //}
+            if(this.fixedWidth) {
+                elCell.style.overflow = "hidden";
+                //elCell.style.width = "20px";
+            }
         }
 
         if(this.isEmpty && (this._elBody.rows.length > 0)) {
@@ -2179,13 +2178,18 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
  * @param oColumn {YAHOO.widget.Column} Column to sort. TODO: accept the TH or TH.key
  */
 YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
+    if(!oColumn) {
+        return;
+    }
     if(oColumn.constructor != YAHOO.widget.Column) {
         //TODO: Figure out the column based on TH ref or TH.key
+        return;
     }
-    if(oColumn && oColumn.sortable) {
+    if(oColumn.sortable) {
         // What is the default sort direction?
         var sortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultOrder) ? oColumn.sortOptions.defaultOrder : "asc";
 
+        //TODO: what if column doesn't have key?
         // Is the column sorted already?
         if(oColumn.key && (this.sortedBy == oColumn.key)) {
             if(this.sortedByDir) {
@@ -2254,26 +2258,31 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
 };
 
 /**
- * Handles editors based on DOM events.
+ * Shows editor for given cell.
  *
  * @method editCell
  */
 YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
-    var columns = this._oColumnset.keys;
-    var column = null;
-    for(var i=0; i<columns.length; i++) {
-        // Which column are we editing?
-        if(columns[i].key && (columns[i].key == elCell.columnKey)) {
-            column = columns[i];
-            break;
+    if(elCell && !isNaN(elCell.columnIndex)) {
+        var column = this._oColumnset.keys[elCell.columnIndex];
+        if(column && column.editor) {
+            column.showEditor(elCell,this._oRecordset.getRecord(elCell.parentNode.recordId));
+            this.activeEditor = column;
         }
+        this._bFocused = true;
     }
+};
 
-    if(column && column.editable) {
-        column.showEditor(elCell,this._oRecordset.getRecord(elCell.parentNode.recordId));
-        this.activeEditor = column;
+/**
+ * Formats given cell.
+ *
+ * @method formatCell
+ */
+YAHOO.widget.DataTable.prototype.formatCell = function(elCell) {
+    if(elCell && !isNaN(elCell.columnIndex)) {
+        var column = this._oColumnset.keys[elCell.columnIndex];
+        column.format(elCell,this._oRecordset.getRecord(elCell.parentNode.recordId));
     }
-    this._bFocused = true;
 };
 
  /**
@@ -2455,24 +2464,12 @@ YAHOO.widget.DataTable.formatSelect = function(elCell, oColumn, oRecord, oData) 
  * @param oArgs.target {HTMLElement} Target element.
  */
 YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
-
     var evt = oArgs.event;
     var target = oArgs.target;
-    //TODO: traverse DOM to find a columnKey, incl safety net if none exists
-    var whichColumn = target.columnKey;
-    if(whichColumn) {
-        var allColumns = this._oColumnset.keys;
-        var oColumn = null;
-        for(var i=0; i<allColumns.length; i++) {
-            // Which column are we sorting?
-            if(allColumns[i].key && (allColumns[i].key == target.columnKey)) {
-                oColumn = allColumns[i];
-                break;
-            }
-        }
-
-        //TODO: pass in just the column key and find the column object in the sortColumn method or the TH ref?
-        this.sortColumn(oColumn);
+    //TODO: traverse DOM to find a columnIndex, incl safety net if none exists
+    var columnIndex = target.columnIndex;
+    if(!isNaN(columnIndex)) {
+        this.sortColumn(this._oColumnset.keys[columnIndex]);
     }
 };
 
