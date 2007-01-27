@@ -1,0 +1,88 @@
+<!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Example: DataTable - Paginated Over XHR (YUI Library)</title>
+<link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
+<link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
+<link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
+<link type="text/css" rel="stylesheet" href="../../build/datatable/assets/datatable.css">
+<link type="text/css" rel="stylesheet" href="./css/examples.css">
+<link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
+<style type="text/css">
+/* custom css*/
+#paginated {margin:1em;}
+#paginated table {border-collapse:collapse;cursor:default;}
+#paginated th, #paginated td {border:1px solid #000;}
+#paginated th {background-color:#696969;color:#fff;}/*dark gray*/
+#paginated .yui-dt-odd {background-color:#eee;} /*light gray*/
+#paginated yui-dt-selected {background-color:#97C0A5;} /*green*/
+</style>
+</head>
+<body>
+<div id="hd">
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Paginated Over XHR</h1>
+</div>
+<div id="bd">
+    <div id="paginated"></div>
+</div>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/connection/connection.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
+<script type="text/javascript" src="../../build/tabview/tabview.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
+<script language="JavaScript">
+var myLogger = new YAHOO.widget.LogReader();
+myLogger.collapse();
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+var myColumnHeaders = [
+    {key:"extid",text:"ID"},
+    {key:"name",text:"Name"},
+    {key:"date",text:"Date"},
+    {key:"price",text:"Price"},
+    {key:"number",text:"Number"},
+    {key:"address",text:"Address"},
+    {key:"company",text:"Company"},
+    {key:"desc",text:"Description"},
+    {key:"age",text:"Age"},
+    {key:"title",text:"Title"},
+    {key:"phone",text:"Phone"},
+    {key:"email",text:"Email"},
+    {key:"zip",text:"Zip"},
+    {key:"country",text:"Country"}
+];
+var myColumnset = new YAHOO.widget.Columnset(myColumnHeaders);
+
+var myDataSource = new YAHOO.util.DataSource("./php/data_proxy.php");
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+myDataSource.responseSchema = {
+    resultsList: "result",
+    fields: ["extid","name","date","price","number","address","company","desc","age","title","phone","email","zip","country"]
+};
+
+var initialRequest = "get=all&output=json";
+var oConfigs = {
+        caption:"Example: Paginated Over XHR",
+        initialRequest:initialRequest,
+
+        pageNumber: 1,
+        rowsPerPage: 50,
+        startRecordIndex: 1,
+        pageLinksLength: 10,
+        rowsPerPageDropdown: [25,50,100,500]
+};
+var myDataTable = new YAHOO.widget.DataTable("paginated", myColumnset, myDataSource, oConfigs);
+</script>
+</body>
+</html>
+
+
+
+
+
