@@ -102,6 +102,15 @@ if (!YAHOO.util.Event) {
          * @private
          */
         var counter = 0;
+        
+        /**
+         * addListener/removeListener can throw errors in unexpected scenarios.
+         * These errors are suppressed, the method returns false, and this property
+         * is set
+         * @property lastError
+         * @type Error
+         */
+        var lastError = null;
 
         return {
 
@@ -443,9 +452,10 @@ if (!YAHOO.util.Event) {
                 } else {
                     try {
                         this._simpleAdd(el, sType, wrappedFn, false);
-                    } catch(e) {
+                    } catch(ex) {
                         // handle an error trying to attach an event.  If it fails
                         // we need to clean up the cache
+                        this.lastError = ex;
                         this.removeListener(el, sType, fn);
                         return false;
                     }
@@ -616,7 +626,8 @@ if (!YAHOO.util.Event) {
                 } else {
                     try {
                         this._simpleRemove(el, sType, cacheItem[this.WFN], false);
-                    } catch(e) {
+                    } catch(ex) {
+                        this.lastError = ex;
                         return false;
                     }
                 }
@@ -750,7 +761,8 @@ if (!YAHOO.util.Event) {
                     var t = new Date().getTime();
                     try {
                         ev.time = t;
-                    } catch(e) { 
+                    } catch(ex) { 
+                        this.lastError = ex;
                         return t;
                     }
                 }
