@@ -2551,6 +2551,27 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
 };
 
 /**
+ * Overridable custom event handler to format cell.
+ *
+ * @method onEventFormatCell
+ * @param oArgs.event {HTMLEvent} Event object.
+ * @param oArgs.target {HTMLElement} Target element.
+ */
+YAHOO.widget.DataTable.prototype.onEventFormatCell = function(oArgs) {
+    var evt = oArgs.event;
+    var element = oArgs.target;
+
+    //TODO: add a safety net in case TD is never reached
+    // Walk up the DOM until we get to the TD
+    while(element.nodeName.toLowerCase() != "td") {
+        element = element.parentNode;
+    }
+
+    this.formatCell(element);
+};
+
+
+/**
  * Overridable custom event handler to edit cell.
  *
  * @method onEventEditCell
