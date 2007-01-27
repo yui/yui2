@@ -779,9 +779,10 @@ YAHOO.widget.Calendar = function(id, containerId, config) {
 * The path to be used for images loaded for the Calendar
 * @property YAHOO.widget.Calendar.IMG_ROOT
 * @static
+* @deprecated. You can now customize images by overriding the span.close-icon, calnavleft and calnavright (default) CSS classes in calendar.css
 * @type String
 */
-YAHOO.widget.Calendar.IMG_ROOT = (window.location.href.toLowerCase().indexOf("https") === 0 ? "https://a248.e.akamai.net/sec.yimg.com/i/" : "http://us.i1.yimg.com/us.yimg.com/i/");
+YAHOO.widget.Calendar.IMG_ROOT = null;
 
 /**
 * Type constant used for renderers to represent an individual date (M/D/Y)
@@ -1062,6 +1063,8 @@ YAHOO.widget.Calendar.prototype.configTitle = function(type, args, obj) {
 YAHOO.widget.Calendar.prototype.configClose = function(type, args, obj) {
 	var close = args[0];
 	var title = this.cfg.getProperty("title");
+	
+	var DEPR_CLOSE_PATH = "us/my/bn/x_d.gif";
 
 	var linkClose;
 
@@ -1070,15 +1073,20 @@ YAHOO.widget.Calendar.prototype.configClose = function(type, args, obj) {
 		linkClose.href = "javascript:void(null);";
 		linkClose.className = "link-close";
 		YAHOO.util.Event.addListener(linkClose, "click", this.hide, this, true);
-		var imgClose = document.createElement("img");
-		imgClose.src = YAHOO.widget.Calendar.IMG_ROOT + "us/my/bn/x_d.gif";
-		imgClose.className = YAHOO.widget.CalendarGroup.CSS_2UPCLOSE;
-		linkClose.appendChild(imgClose);
+		
+		if (YAHOO.widget.Calendar.IMG_ROOT !== null) {
+			var imgClose = document.createElement("img");
+			imgClose.src = YAHOO.widget.Calendar.IMG_ROOT + DEPR_CLOSE_PATH;
+			imgClose.className = YAHOO.widget.CalendarGroup.CSS_2UPCLOSE;
+			linkClose.appendChild(imgClose);
+		} else {
+			linkClose.innerHTML = '<span class="' + YAHOO.widget.CalendarGroup.CSS_2UPCLOSE + '"></span>';
+		}
+		
 		this.oDomContainer.appendChild(linkClose);
 		YAHOO.util.Dom.addClass(this.oDomContainer, "withtitle");
 	} else {
 		linkClose = YAHOO.util.Dom.getElementsByClassName("link-close", "a", this.oDomContainer)[0] || null;
-
 		if (linkClose) {
 			YAHOO.util.Event.purgeElement(linkClose);
 			this.oDomContainer.removeChild(linkClose);
@@ -1376,22 +1384,24 @@ YAHOO.widget.Calendar.prototype.setupConfig = function() {
 	* @default false
 	*/	
 	this.cfg.addProperty("HIDE_BLANK_WEEKS",{ value:false, handler:this.configOptions, validator:this.cfg.checkBoolean } );
-
+	
 	/**
 	* The image that should be used for the left navigation arrow.
 	* @config NAV_ARROW_LEFT
 	* @type String
-	* @default YAHOO.widget.Calendar.IMG_ROOT + "us/tr/callt.gif"
+	* @deprecated You can customize the image by overriding the default CSS class for the left arrow - calnavleft, defined in calendar.css  
+	* @default null
 	*/	
-	this.cfg.addProperty("NAV_ARROW_LEFT",	{ value:YAHOO.widget.Calendar.IMG_ROOT + "us/tr/callt.gif", handler:this.configOptions } );
+	this.cfg.addProperty("NAV_ARROW_LEFT",	{ value:null, handler:this.configOptions } );
 
 	/**
-	* The image that should be used for the left navigation arrow.
+	* The image that should be used for the right navigation arrow.
 	* @config NAV_ARROW_RIGHT
 	* @type String
-	* @default YAHOO.widget.Calendar.IMG_ROOT + "us/tr/calrt.gif"
+	* @deprecated You can customize the image by overriding the default CSS class for the right arrow - calnavright, defined in calendar.css
+	* @default null
 	*/	
-	this.cfg.addProperty("NAV_ARROW_RIGHT",	{ value:YAHOO.widget.Calendar.IMG_ROOT + "us/tr/calrt.gif", handler:this.configOptions } );
+	this.cfg.addProperty("NAV_ARROW_RIGHT",	{ value:null, handler:this.configOptions } );
 
 	// Locale properties
 
@@ -1835,6 +1845,9 @@ YAHOO.widget.Calendar.prototype.renderHeader = function(html) {
 	this.logger.log("Rendering header", "info");
 	var colSpan = 7;
 	
+	var DEPR_NAV_LEFT = "us/tr/callt.gif";
+	var DEPR_NAV_RIGHT = "us/tr/calrt.gif";	
+	
 	if (this.cfg.getProperty("SHOW_WEEK_HEADER")) {
 		colSpan += 1;
 	}
@@ -1848,32 +1861,42 @@ YAHOO.widget.Calendar.prototype.renderHeader = function(html) {
 	html[html.length] =			'<th colspan="' + colSpan + '" class="' + this.Style.CSS_HEADER_TEXT + '">';
 	html[html.length] =				'<div class="' + this.Style.CSS_HEADER + '">';
 
-		var renderLeft, renderRight = false;
+	var renderLeft, renderRight = false;
 
-		if (this.parent) {
-			if (this.index === 0) {
-				renderLeft = true;
-			}
-			if (this.index == (this.parent.cfg.getProperty("pages") -1)) {
-				renderRight = true;
-			}
-		} else {
+	if (this.parent) {
+		if (this.index === 0) {
 			renderLeft = true;
+		}
+		if (this.index == (this.parent.cfg.getProperty("pages") -1)) {
 			renderRight = true;
 		}
+	} else {
+		renderLeft = true;
+		renderRight = true;
+	}
 
-		var cal = this.parent || this;
-
-		if (renderLeft) {
-			html[html.length] = '<a class="' + this.Style.CSS_NAV_LEFT + '" style="background-image:url(' + this.cfg.getProperty("NAV_ARROW_LEFT") + ')">&#160;</a>';
+	var cal = this.parent || this;
+	
+	if (renderLeft) {
+		var leftArrow = this.cfg.getProperty("NAV_ARROW_LEFT");
+		// Check for deprecated customization - If someone set IMG_ROOT, but didn't set NAV_ARROW_LEFT, then set NAV_ARROW_LEFT to the old deprecated value
+		if (leftArrow === null && YAHOO.widget.Calendar.IMG_ROOT !== null) {
+			leftArrow = YAHOO.widget.Calendar.IMG_ROOT + DEPR_NAV_LEFT;
 		}
-		
-		html[html.length] = this.buildMonthLabel();
-		
-		if (renderRight) {
-			html[html.length] = '<a class="' + this.Style.CSS_NAV_RIGHT + '" style="background-image:url(' + this.cfg.getProperty("NAV_ARROW_RIGHT") + ')">&#160;</a>';
+		var leftStyle = (leftArrow === null) ? "" : ' style="background-image:url(' + leftArrow + ')"';
+		html[html.length] = '<a class="' + this.Style.CSS_NAV_LEFT + '"' + leftStyle + ' >&#160;</a>';
+	}
+	
+	html[html.length] = this.buildMonthLabel();
+	
+	if (renderRight) {
+		var rightArrow = this.cfg.getProperty("NAV_ARROW_RIGHT");
+		if (rightArrow === null && YAHOO.widget.Calendar.IMG_ROOT !== null) {
+			rightArrow = YAHOO.widget.Calendar.IMG_ROOT + DEPR_NAV_RIGHT;
 		}
-
+		var rightStyle = (rightArrow === null) ? "" : ' style="background-image:url(' + rightArrow + ')"';
+		html[html.length] = '<a class="' + this.Style.CSS_NAV_RIGHT + '"' + rightStyle + ' >&#160;</a>';
+	}
 
 	html[html.length] =				'</div>';
 	html[html.length] =			'</th>';
@@ -3458,17 +3481,19 @@ YAHOO.widget.CalendarGroup.prototype.setupConfig = function() {
 	* The image that should be used for the left navigation arrow.
 	* @config NAV_ARROW_LEFT
 	* @type String
-	* @default YAHOO.widget.Calendar.IMG_ROOT + "us/tr/callt.gif"
+	* @deprecated You can customize the image by overriding the default CSS class for the left arrow - calnavleft, defined in calendar.css
+	* @default null
 	*/		
-	this.cfg.addProperty("NAV_ARROW_LEFT",	{ value:YAHOO.widget.Calendar.IMG_ROOT + "us/tr/callt.gif", handler:this.delegateConfig } );
+	this.cfg.addProperty("NAV_ARROW_LEFT",	{ value:null, handler:this.delegateConfig } );
 	
 	/**
-	* The image that should be used for the left navigation arrow.
+	* The image that should be used for the right navigation arrow.
 	* @config NAV_ARROW_RIGHT
 	* @type String
-	* @default YAHOO.widget.Calendar.IMG_ROOT + "us/tr/calrt.gif"
+	* @deprecated You can customize the image by overriding the default CSS class for the right arrow - calnavright, defined in calendar.css
+	* @default null
 	*/		
-	this.cfg.addProperty("NAV_ARROW_RIGHT",	{ value:YAHOO.widget.Calendar.IMG_ROOT + "us/tr/calrt.gif", handler:this.delegateConfig } );
+	this.cfg.addProperty("NAV_ARROW_RIGHT",	{ value:null, handler:this.delegateConfig } );
 
 	// Locale properties
 	

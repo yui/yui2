@@ -235,17 +235,19 @@ YAHOO.widget.CalendarGroup.prototype.setupConfig = function() {
 	* The image that should be used for the left navigation arrow.
 	* @config NAV_ARROW_LEFT
 	* @type String
-	* @default YAHOO.widget.Calendar.IMG_ROOT + "us/tr/callt.gif"
+	* @deprecated You can customize the image by overriding the default CSS class for the left arrow - calnavleft, defined in calendar.css
+	* @default null
 	*/		
-	this.cfg.addProperty("NAV_ARROW_LEFT",	{ value:YAHOO.widget.Calendar.IMG_ROOT + "us/tr/callt.gif", handler:this.delegateConfig } );
+	this.cfg.addProperty("NAV_ARROW_LEFT",	{ value:null, handler:this.delegateConfig } );
 	
 	/**
-	* The image that should be used for the left navigation arrow.
+	* The image that should be used for the right navigation arrow.
 	* @config NAV_ARROW_RIGHT
 	* @type String
-	* @default YAHOO.widget.Calendar.IMG_ROOT + "us/tr/calrt.gif"
+	* @deprecated You can customize the image by overriding the default CSS class for the right arrow - calnavright, defined in calendar.css
+	* @default null
 	*/		
-	this.cfg.addProperty("NAV_ARROW_RIGHT",	{ value:YAHOO.widget.Calendar.IMG_ROOT + "us/tr/calrt.gif", handler:this.delegateConfig } );
+	this.cfg.addProperty("NAV_ARROW_RIGHT",	{ value:null, handler:this.delegateConfig } );
 
 	// Locale properties
 	
