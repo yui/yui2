@@ -1,5 +1,11 @@
 Logger Release Notes
 
+*** version 2.2.0 ***
+
+* Implemented expand() and collapse() in LogReader class.
+
+
+
 *** version 0.12.2 ***
 
 * No changes.
