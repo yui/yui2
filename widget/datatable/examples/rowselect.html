@@ -44,8 +44,8 @@ var myColumnHeaders = [
 ];
 var myColumnset = new YAHOO.widget.Columnset(myColumnHeaders);
 
-var myDataSource = new YAHOO.widget.DataSource(YAHOO.example.Data.emails);
-myDataSource.responseType = YAHOO.widget.DataSource.TYPE_JSON;
+var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
 myDataSource.responseSchema = {
     resultsList: ["messages"],
     fields: ["Date","To","From","Subject","XID","Date","Attachment"]

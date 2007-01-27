@@ -14,7 +14,7 @@
  * @param oLiveData {Object} Pointer to live database
  * @param oConfigs {Object} (optional) Object literal of configuration values
  */
-YAHOO.widget.DataSource = function(oLiveData, oConfigs) {
+YAHOO.util.DataSource = function(oLiveData, oConfigs) {
     // Set any config params passed in to override defaults
     if(typeof oConfigs == "object") {
         for(var sConfig in oConfigs) {
@@ -31,19 +31,19 @@ YAHOO.widget.DataSource = function(oLiveData, oConfigs) {
     else {
         switch(oLiveData.constructor) {
             case Function:
-                this.dataType = YAHOO.widget.DataSource.TYPE_JSFUNCTION;
+                this.dataType = YAHOO.util.DataSource.TYPE_JSFUNCTION;
                 break;
             case Array:
-                this.dataType = YAHOO.widget.DataSource.TYPE_JSARRAY;
+                this.dataType = YAHOO.util.DataSource.TYPE_JSARRAY;
                 break;
             case String:
-                this.dataType = YAHOO.widget.DataSource.TYPE_XHR;
+                this.dataType = YAHOO.util.DataSource.TYPE_XHR;
                 break;
             case Object:
-                this.dataType = YAHOO.widget.DataSource.TYPE_JSON;
+                this.dataType = YAHOO.util.DataSource.TYPE_JSON;
                 break;
             default:
-                this.dataType = YAHOO.widget.DataSource.TYPE_UNKNOWN;
+                this.dataType = YAHOO.util.DataSource.TYPE_UNKNOWN;
                 break;
         }
         this.liveData = oLiveData;
@@ -61,8 +61,8 @@ YAHOO.widget.DataSource = function(oLiveData, oConfigs) {
         YAHOO.log("Cache initialized","info",this.toString());
     }
 
-    this._sName = "instance" + YAHOO.widget.DataSource._nIndex;
-    YAHOO.widget.DataSource._nIndex++;
+    this._sName = "instance" + YAHOO.util.DataSource._nIndex;
+    YAHOO.util.DataSource._nIndex++;
     YAHOO.log("DataSource initialized", "info", this.toString());
 
 
@@ -133,7 +133,7 @@ YAHOO.widget.DataSource = function(oLiveData, oConfigs) {
     this.createEvent("cacheFlushEvent");
 };
 
-YAHOO.augment(YAHOO.widget.DataSource, YAHOO.util.EventProvider);
+YAHOO.augment(YAHOO.util.DataSource, YAHOO.util.EventProvider);
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -148,7 +148,7 @@ YAHOO.augment(YAHOO.widget.DataSource, YAHOO.util.EventProvider);
  * @type Number
  * @final
  */
-YAHOO.widget.DataSource.TYPE_UNKNOWN = -1;
+YAHOO.util.DataSource.TYPE_UNKNOWN = -1;
 
 /**
  * Type is a JavaScript Array.
@@ -157,7 +157,7 @@ YAHOO.widget.DataSource.TYPE_UNKNOWN = -1;
  * @type Number
  * @final
  */
-YAHOO.widget.DataSource.TYPE_JSARRAY = 0;
+YAHOO.util.DataSource.TYPE_JSARRAY = 0;
 
 /**
  * Type is a JavaScript Function.
@@ -166,7 +166,7 @@ YAHOO.widget.DataSource.TYPE_JSARRAY = 0;
  * @type Number
  * @final
  */
-YAHOO.widget.DataSource.TYPE_JSFUNCTION = 1;
+YAHOO.util.DataSource.TYPE_JSFUNCTION = 1;
 
 /**
  * Type is hosted on a server via an XHR connection.
@@ -175,7 +175,7 @@ YAHOO.widget.DataSource.TYPE_JSFUNCTION = 1;
  * @type Number
  * @final
  */
-YAHOO.widget.DataSource.TYPE_XHR = 2;
+YAHOO.util.DataSource.TYPE_XHR = 2;
 
 /**
  * Type is JSON.
@@ -184,7 +184,7 @@ YAHOO.widget.DataSource.TYPE_XHR = 2;
  * @type Number
  * @final
  */
-YAHOO.widget.DataSource.TYPE_JSON = 3;
+YAHOO.util.DataSource.TYPE_JSON = 3;
 
 /**
  * Type is XML.
@@ -193,7 +193,7 @@ YAHOO.widget.DataSource.TYPE_JSON = 3;
  * @type Number
  * @final
  */
-YAHOO.widget.DataSource.TYPE_XML = 4;
+YAHOO.util.DataSource.TYPE_XML = 4;
 
 /**
  * Type is flat-file text.
@@ -202,7 +202,7 @@ YAHOO.widget.DataSource.TYPE_XML = 4;
  * @type Number
  * @final
  */
-YAHOO.widget.DataSource.TYPE_FLAT = 5;
+YAHOO.util.DataSource.TYPE_FLAT = 5;
 /**
  * Error message for invalid data responses.
  *
@@ -210,7 +210,7 @@ YAHOO.widget.DataSource.TYPE_FLAT = 5;
  * @type String
  * @final
  */
-YAHOO.widget.DataSource.ERROR_DATAINVALID = "Invalid data";
+YAHOO.util.DataSource.ERROR_DATAINVALID = "Invalid data";
 
 /**
  * Error message for null data responses.
@@ -219,7 +219,7 @@ YAHOO.widget.DataSource.ERROR_DATAINVALID = "Invalid data";
  * @type String
  * @final
  */
-YAHOO.widget.DataSource.ERROR_DATANULL = "Null data";
+YAHOO.util.DataSource.ERROR_DATANULL = "Null data";
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -234,7 +234,7 @@ YAHOO.widget.DataSource.ERROR_DATANULL = "Null data";
  * @type Number
  * @private
  */
-YAHOO.widget.DataSource._nIndex = 0;
+YAHOO.util.DataSource._nIndex = 0;
 
 /**
  * Name of DataSource instance.
@@ -243,7 +243,7 @@ YAHOO.widget.DataSource._nIndex = 0;
  * @type String
  * @private
  */
-YAHOO.widget.DataSource.prototype._sName = null;
+YAHOO.util.DataSource.prototype._sName = null;
 
 /**
  * Local cache of data result objects indexed chronologically.
@@ -252,7 +252,7 @@ YAHOO.widget.DataSource.prototype._sName = null;
  * @type array
  * @private
  */
-YAHOO.widget.DataSource.prototype._aCache = null;
+YAHOO.util.DataSource.prototype._aCache = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -278,7 +278,7 @@ YAHOO.widget.DataSource.prototype._aCache = null;
  * @type Number
  * @default 0
  */
-YAHOO.widget.DataSource.prototype.maxCacheEntries = 0;
+YAHOO.util.DataSource.prototype.maxCacheEntries = 0;
 
  /**
  * Pointer to live database.
@@ -286,26 +286,26 @@ YAHOO.widget.DataSource.prototype.maxCacheEntries = 0;
  * @property liveData
  * @type Object
  */
-YAHOO.widget.DataSource.prototype.liveData = null;
+YAHOO.util.DataSource.prototype.liveData = null;
 
  /**
  * Where the live data is held.
  *
  * @property dataType
  * @type Number
- * @default YAHOO.widget.DataSource.TYPE_UNKNOWN
+ * @default YAHOO.util.DataSource.TYPE_UNKNOWN
  *
  */
-YAHOO.widget.DataSource.prototype.dataType = YAHOO.widget.DataSource.TYPE_UNKNOWN;
+YAHOO.util.DataSource.prototype.dataType = YAHOO.util.DataSource.TYPE_UNKNOWN;
 
  /**
  * Format of response.
  *
  * @property responseType
  * @type Number
- * @default YAHOO.widget.DataSource.TYPE_UNKNOWN
+ * @default YAHOO.util.DataSource.TYPE_UNKNOWN
  */
-YAHOO.widget.DataSource.prototype.responseType = YAHOO.widget.DataSource.TYPE_UNKNOWN;
+YAHOO.util.DataSource.prototype.responseType = YAHOO.util.DataSource.TYPE_UNKNOWN;
 /////////////////////////////////////////////////////////////////////////////
 //
 // Public methods
@@ -318,7 +318,7 @@ YAHOO.widget.DataSource.prototype.responseType = YAHOO.widget.DataSource.TYPE_UN
  * @method toString
  * @return {String} Unique name of the DataSource instance.
  */
-YAHOO.widget.DataSource.prototype.toString = function() {
+YAHOO.util.DataSource.prototype.toString = function() {
     return "DataSource " + this._sName;
 };
 
@@ -333,7 +333,7 @@ YAHOO.widget.DataSource.prototype.toString = function() {
  * @param oCaller {Object} The Calling object that is making the request
  * @return {Object} Cached response object or null.
  */
-YAHOO.widget.DataSource.prototype.getCachedResponse = function(oRequest, oCallback, oCaller) {
+YAHOO.util.DataSource.prototype.getCachedResponse = function(oRequest, oCallback, oCaller) {
     var aCache = this._aCache;
     var nCacheLength = (aCache) ? aCache.length : 0;
     var oResponse = null;
@@ -373,7 +373,7 @@ YAHOO.widget.DataSource.prototype.getCachedResponse = function(oRequest, oCallba
  * @param oCachedRequest {Object} Cached request object.
  * @return {Boolean} True if given request matches cached request, false otherwise.
  */
-YAHOO.widget.DataSource.prototype.isCacheHit = function(oRequest, oCachedRequest) {
+YAHOO.util.DataSource.prototype.isCacheHit = function(oRequest, oCachedRequest) {
     return (oRequest === oCachedRequest);
 };
 
@@ -385,7 +385,7 @@ YAHOO.widget.DataSource.prototype.isCacheHit = function(oRequest, oCachedRequest
  * @param oRequest {Object} Request object.
  * @param oResponse {Object} Response object to cache.
  */
-YAHOO.widget.DataSource.prototype.addToCache = function(oRequest, oResponse) {
+YAHOO.util.DataSource.prototype.addToCache = function(oRequest, oResponse) {
     //TODO: check for duplicate entries
     var aCache = this._aCache;
     // Don't add if anything important is missing.
@@ -408,7 +408,7 @@ YAHOO.widget.DataSource.prototype.addToCache = function(oRequest, oResponse) {
  *
  * @method flushCache
  */
-YAHOO.widget.DataSource.prototype.flushCache = function() {
+YAHOO.util.DataSource.prototype.flushCache = function() {
     if(this._aCache) {
         this._aCache = [];
     }
@@ -423,7 +423,7 @@ YAHOO.widget.DataSource.prototype.flushCache = function() {
  * @param oCallback {Function} Handler function to receive the response
  * @param oCaller {Object} The Calling object that is making the request
  */
-YAHOO.widget.DataSource.prototype.sendRequest = function(oRequest, oCallback, oCaller) {
+YAHOO.util.DataSource.prototype.sendRequest = function(oRequest, oCallback, oCaller) {
     // First look in cache
     var oCachedResponse = this.getCachedResponse(oRequest, oCallback, oCaller);
     if(oCachedResponse) {
@@ -447,7 +447,7 @@ YAHOO.widget.DataSource.prototype.sendRequest = function(oRequest, oCallback, oC
  * @param oCallback {Function} Handler function to receive the response
  * @param oCaller {Object} The Calling object that is making the request
  */
-YAHOO.widget.DataSource.prototype.makeConnection = function(oRequest, oCallback, oCaller) {
+YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, oCaller) {
     var oRawResponse = null;
     
     // How to make the connection depends on the type of data
@@ -455,8 +455,8 @@ YAHOO.widget.DataSource.prototype.makeConnection = function(oRequest, oCallback,
     
         // If the live data is a JavaScript Array
         // simply forward the entire array to the handler
-        case YAHOO.widget.DataSource.TYPE_JSARRAY:
-        case YAHOO.widget.DataSource.TYPE_JSON:
+        case YAHOO.util.DataSource.TYPE_JSARRAY:
+        case YAHOO.util.DataSource.TYPE_JSON:
             oRawResponse = this.liveData;
             this.handleResponse(oRequest, oRawResponse, oCallback, oCaller);
             break;
@@ -464,7 +464,7 @@ YAHOO.widget.DataSource.prototype.makeConnection = function(oRequest, oCallback,
         // If the live data is a JavaScript Function
         // pass the request in as a parameter and
         // forward the return value to the handler
-        case YAHOO.widget.DataSource.TYPE_JSFUNCTION:
+        case YAHOO.util.DataSource.TYPE_JSFUNCTION:
             oRawResponse = this.liveData(oRequest);
             this.handleResponse(oRequest, oRawResponse, oCallback, oCaller);
             break;
@@ -473,7 +473,7 @@ YAHOO.widget.DataSource.prototype.makeConnection = function(oRequest, oCallback,
         // set up the callback object and
         // pass the request in as a URL query and
         // forward the response to the handler
-        case YAHOO.widget.DataSource.TYPE_XHR:
+        case YAHOO.util.DataSource.TYPE_XHR:
             /**
              * Connection Manager success handler
              *
@@ -484,14 +484,14 @@ YAHOO.widget.DataSource.prototype.makeConnection = function(oRequest, oCallback,
             var _xhrSuccess = function(oResponse) {
                 // Error if no response
                 if(!oResponse) {
-                    this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.widget.DataSource.ERROR_DATANULL});
-                    YAHOO.log(YAHOO.widget.DataSource.ERROR_DATANULL, "error", this.toString());
+                    this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATANULL});
+                    YAHOO.log(YAHOO.util.DataSource.ERROR_DATANULL, "error", this.toString());
                     return null;
                 }
                 // Error if response ID does not match last made request ID.
                else if(!this._oConn || (oResponse.tId != this._oConn.tId)) {
-                    this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.widget.DataSource.ERROR_DATAINVALID});
-                    YAHOO.log(YAHOO.widget.DataSource.ERROR_DATAINVALID, "error", this.toString());
+                    this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATAINVALID});
+                    YAHOO.log(YAHOO.util.DataSource.ERROR_DATAINVALID, "error", this.toString());
                     return null;
                 }
                 // Forward to handler
@@ -508,7 +508,7 @@ YAHOO.widget.DataSource.prototype.makeConnection = function(oRequest, oCallback,
              * @private
              */
             var _xhrFailure = function(oResponse) {
-                this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.widget.DataSource.ERROR_DATAXHR});
+                this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATAXHR});
                 YAHOO.log(this.ERROR_DATAXHR + ": " + oResp.statusText, "error", this.toString());
                 return null;
             };
@@ -555,30 +555,30 @@ YAHOO.widget.DataSource.prototype.makeConnection = function(oRequest, oCallback,
  * @param oCallback {Function} Handler function to receive the response
  * @param oCaller {Object} The calling object that is making the request
  */
-YAHOO.widget.DataSource.prototype.handleResponse = function(oRequest, oRawResponse, oCallback, oCaller) {
-    var xhr = (this.dataType == YAHOO.widget.DataSource.TYPE_XHR) ? true : false;
+YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse, oCallback, oCaller) {
+    var xhr = (this.dataType == YAHOO.util.DataSource.TYPE_XHR) ? true : false;
     var oParsedResponse = null;
     //TODO: break out into overridable methods
     switch(this.responseType) {
-        case YAHOO.widget.DataSource.TYPE_JSARRAY:
+        case YAHOO.util.DataSource.TYPE_JSARRAY:
             if(xhr && oRawResponse.responseText) {
                 oRawResponse = oRawResponse.responseText;
             }
             oParsedResponse = this.parseArrayData(oRequest, oRawResponse);
             break;
-        case YAHOO.widget.DataSource.TYPE_JSON:
+        case YAHOO.util.DataSource.TYPE_JSON:
             if(xhr && oRawResponse.responseText) {
                 oRawResponse = oRawResponse.responseText;
             }
             oParsedResponse = this.parseJSONData(oRequest, oRawResponse);
             break;
-        case YAHOO.widget.DataSource.TYPE_XML:
+        case YAHOO.util.DataSource.TYPE_XML:
             if(xhr && oRawResponse.responseXML) {
                 oRawResponse = oRawResponse.responseXML;
             }
             oParsedResponse = this.parseXMLData(oRequest, oRawResponse);
             break;
-        case YAHOO.widget.DataSource.TYPE_FLAT:
+        case YAHOO.util.DataSource.TYPE_FLAT:
             if(xhr && oRawResponse.responseText) {
                 oRawResponse = oRawResponse.responseText;
             }
@@ -597,8 +597,8 @@ YAHOO.widget.DataSource.prototype.handleResponse = function(oRequest, oRawRespon
         this.fireEvent("handleResponseEvent", {request:oRequest,response:oParsedResponse,callback:oCallback,caller:oCaller});
     }
     else {
-        this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.widget.DataSource.ERROR_DATANULL});
-        YAHOO.log(YAHOO.widget.DataSource.ERROR_DATANULL, "error", this.toString());
+        this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATANULL});
+        YAHOO.log(YAHOO.util.DataSource.ERROR_DATANULL, "error", this.toString());
     }
 
     // Send the response back to the caller
@@ -613,7 +613,7 @@ YAHOO.widget.DataSource.prototype.handleResponse = function(oRequest, oRawRespon
  * @param oRawResponse {Object} The raw response from the live database
  * @return {Object} Parsed response object
  */
-YAHOO.widget.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse) {
+YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse) {
     var oParsedResponse = [];
     var fields = this.responseSchema.fields;
     for(var i=0; i<oRawResponse.length; i++) {
@@ -634,7 +634,7 @@ YAHOO.widget.DataSource.prototype.parseArrayData = function(oRequest, oRawRespon
  * @param oRawResponse {Object} The raw response from the live database
  * @return {Object} Parsed response object
  */
-YAHOO.widget.DataSource.prototype.parseFlatData = function(oRequest, oRawResponse) {
+YAHOO.util.DataSource.prototype.parseFlatData = function(oRequest, oRawResponse) {
     var oParsedResponse = [];
     var recDelim = this.responseSchema.recordDelim;
     var fieldDelim = this.responseSchema.fieldDelim;
@@ -678,7 +678,7 @@ YAHOO.widget.DataSource.prototype.parseFlatData = function(oRequest, oRawRespons
  * @param oRawResponse {Object} The raw response from the live database
  * @return {Object} Parsed response object
  */
-YAHOO.widget.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) {
+YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) {
     var bError = false;
     var oParsedResponse = [];
     var xmlList = oRawResponse.getElementsByTagName(this.responseSchema.resultNode);
@@ -730,7 +730,7 @@ YAHOO.widget.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse
  * @param oRawResponse {Object} The raw response from the live database
  * @return {Object} Parsed response object
  */
-YAHOO.widget.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse) {
+YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse) {
     //TODO: validate oRawResponse
     var bError = false;
     var oParsedResponse = [];

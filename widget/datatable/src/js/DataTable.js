@@ -19,7 +19,7 @@
  * @constructor
  * @param elContainer {HTMLElement} Container element for the TABLE.
  * @param oColumnset {YAHOO.widget.Columnset} Columnset instance.
- * @param oDataSource {YAHOO.widget.DataSource} DataSource instance.
+ * @param oDataSource {YAHOO.util.DataSource} DataSource instance.
  * @param oConfigs {object} (optional) Object literal of configuration values.
  */
 YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
@@ -36,7 +36,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnset,oDataSource,oConfigs) {
     }
 
     // Validate DataSource
-    if(oDataSource && (oDataSource instanceof YAHOO.widget.DataSource)) {
+    if(oDataSource && (oDataSource instanceof YAHOO.util.DataSource)) {
         this.dataSource = oDataSource;
     }
 
@@ -1495,7 +1495,7 @@ YAHOO.widget.DataTable.prototype._onRowDelete = function(oArgs) {
  * DataSource instance.
  *
  * @property dataSource
- * @type YAHOO.widget.DataSource
+ * @type YAHOO.util.DataSource
  */
 YAHOO.widget.DataTable.prototype.dataSource = null;
 

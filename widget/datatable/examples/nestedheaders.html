@@ -59,8 +59,8 @@ var myColumnHeaders = [
 
 var myColumnset = new YAHOO.widget.Columnset(myColumnHeaders);
 
-var myDataSource = new YAHOO.widget.DataSource(YAHOO.example.Data.webstats);
-myDataSource.responseType = YAHOO.widget.DataSource.TYPE_JSARRAY;
+var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.webstats);
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
 myDataSource.responseSchema = {
     fields: ["page","visitsmonth","visitsytd","viewsmonth","viewsytd"]
 };
