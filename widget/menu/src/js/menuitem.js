@@ -279,24 +279,15 @@ YAHOO.widget.MenuItem.prototype = {
     _checkImage: null,
 
 
-    /**
+    /** 
     * @property _oCommand
-    * @description Reference to the object literal representing the function to 
-    * be executed in response to either the "keyup" or "mouseup" event.
+    * @description Object reference to the menu item's current value for the 
+    * "command" attribute.
     * @default null
     * @private
     * @type Object
     */
     _oCommand: null,
-
-
-    /**
-    * @event _commandEvent
-    * @description Fires in response to a "keyup" or "click" event.
-    * @private
-    * @type YAHOO.util.CustomEvent
-    */
-    _commandEvent: null,
 
 
 
@@ -519,6 +510,18 @@ YAHOO.widget.MenuItem.prototype = {
     blurEvent: null,
 
 
+    /**
+    * @event commandEvent
+    * @description Fires in response to the "keyup" or "mouseup" up event.  
+    * Passes back a single object representing the original DOM event object 
+    * passed back by the event utility (YAHOO.util.Event) when the event was 
+    * fired.  See <a href="YAHOO.util.CustomEvent.html#subscribe">
+    * CustomEvent.subscribe</a> or "command" configuration attribute for more 
+    * information on listening for this event.
+    * @type YAHOO.util.CustomEvent
+    */
+    commandEvent: null,
+
 
     /**
     * @method init
@@ -733,6 +736,12 @@ YAHOO.widget.MenuItem.prototype = {
             this.keyUpEvent = new CustomEvent("keyUpEvent", this);
             this.focusEvent = new CustomEvent("focusEvent", this);
             this.blurEvent = new CustomEvent("blurEvent", this);
+            this.commandEvent = new CustomEvent("commandEvent", this);
+            
+            // Subscribe to Custom Events
+
+            this.keyUpEvent.subscribe(this._onKeyUp, this, true);
+            this.mouseUpEvent.subscribe(this._onMouseUp, this, true);
 
 
             if(p_oConfig) {
@@ -992,7 +1001,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method _onMouseUp
-    * @description "click" event handler for the menu item.
+    * @description "mouseup" event handler for the menu item.
     * @protected
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
@@ -1002,7 +1011,7 @@ YAHOO.widget.MenuItem.prototype = {
     */
     _onMouseUp: function(p_sType, p_aArgs, p_oItem) {
 
-        this._commandEvent.fire(p_aArgs[0]);
+        this.commandEvent.fire(p_aArgs[0]);
 
     },
 
@@ -1026,7 +1035,7 @@ YAHOO.widget.MenuItem.prototype = {
             this._isCommandKey(YAHOO.util.Event.getCharCode(oEvent))
         ) {
 
-            this._commandEvent.fire(oEvent);
+            this.commandEvent.fire(oEvent);
 
             this.parent.hide();
 
@@ -1725,9 +1734,10 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(this._oCommand && (this._oCommand != oCommand)) {
 
-            this.keyUpEvent.unsubscribe(this._onKeyUp);
-            this.mouseUpEvent.unsubscribe(this._onMouseUp);
-            this._commandEvent.unsubscribe(this._oCommand.fn);
+            this.commandEvent.unsubscribe(
+                    this._oCommand.fn, 
+                    this._oCommand.obj
+                );
 
             this._oCommand = null;
 
@@ -1741,17 +1751,7 @@ YAHOO.widget.MenuItem.prototype = {
             typeof oCommand.fn == "function"
         ) {
 
-            this.keyUpEvent.subscribe(this._onKeyUp, this, true);
-            this.mouseUpEvent.subscribe(this._onMouseUp, this, true);
-
-            if(!this._commandEvent) {
-
-                this._commandEvent = 
-                        new YAHOO.util.CustomEvent("commandEvent", this);
-            
-            }
-
-            this._commandEvent.subscribe(
+            this.commandEvent.subscribe(
                     oCommand.fn, 
                     (oCommand.obj || this), 
                     (oCommand.scope || true)
@@ -1764,7 +1764,9 @@ YAHOO.widget.MenuItem.prototype = {
     },
 
 
+
     // Public methods
+
 
 	/**
     * @method initDefaultConfig
@@ -1956,9 +1958,15 @@ YAHOO.widget.MenuItem.prototype = {
 
         /**
         * @config command
-        * @description Allows 
-        * @default null
+        * @description Object literal representing the code to be executed in 
+        * response the "keyup" or "mouseup" events.  Format:<br> <code> {<br> 
+        * <strong>fn:</strong> Function,   &#47;&#47; The handler to call when 
+        * the event fires.<br> <strong>obj:</strong> Object, &#47;&#47; An 
+        * object to  pass back to the handler.<br> <strong>scope:</strong> 
+        * Object &#47;&#47; The object to use for the scope of the handler.
+        * <br> } </code>
         * @type Object
+        * @default null
         */
         oConfig.addProperty("command", { handler: this.configCommand });
 
@@ -2246,7 +2254,7 @@ YAHOO.widget.MenuItem.prototype = {
             this.keyUpEvent.unsubscribeAll();
             this.focusEvent.unsubscribeAll();
             this.blurEvent.unsubscribeAll();
-            this._commandEvent.unsubscribeAll();
+            this.commandEvent.unsubscribeAll();
             this.cfg.configChangedEvent.unsubscribeAll();
 
 

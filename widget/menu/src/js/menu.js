@@ -287,6 +287,13 @@ _aListElements: null,
 
 
 
+// Protected properties
+
+
+_originalMaxHeight: -1,
+
+
+
 // Public properties
 
 
@@ -2020,8 +2027,8 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
                     oRoot.clearActiveItem();
     
                 }
-                else {
-    
+                else if(oRoot.cfg.getProperty("clicktohide")) {{
+
                     oRoot.hide();
                 
                 }
@@ -2435,7 +2442,7 @@ _onScrollTargetMouseOut: function(p_oEvent, p_oMenu) {
 
     window.clearInterval(this._nBodyScrollId);
 
-    this._execHideDelay();
+    this._cancelHideDelay();
 
 },
 
@@ -2645,7 +2652,7 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
 
         if(this.srcElement) {
 
-            this.render();
+            this.render(this.cfg.getProperty("container"));
 
         }
         else {
@@ -2674,12 +2681,16 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
     
         if(this.element.offsetHeight >= nViewportHeight) {
     
-            /*
-                Cache the original value for the "maxheight" configuration property 
-                so that we can set it back when the menu is hidden.
-            */
-    
-            this._originalMaxHeight = this.cfg.getProperty("maxheight");
+            if(this._originalMaxHeight == -1) {
+
+                /*
+                    Cache the original value for the "maxheight" configuration  
+                    property so that we can set it back when the menu is hidden.
+                */
+        
+                this._originalMaxHeight = this.cfg.getProperty("maxheight");
+
+            }
 
             this.cfg.setProperty("maxheight", (nViewportHeight - 20));
         
@@ -2858,7 +2869,11 @@ _onBeforeHide: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onHide: function(p_sType, p_aArgs, p_oMenu) {
 
-    this.cfg.setProperty("maxheight", this._originalMaxHeight);
+    if(this._originalMaxHeight != -1) {
+
+        this.cfg.setProperty("maxheight", this._originalMaxHeight);
+
+    }
 
 },
 
@@ -2884,7 +2899,7 @@ _onParentMenuConfigChange: function(p_sType, p_aArgs, p_oSubmenu) {
         case "constraintoviewport":
         case "hidedelay":
         case "showdelay":
-        case "submenuhidedelay":        
+        case "submenuhidedelay":
         case "clicktohide":
         case "effect":
 
@@ -3466,7 +3481,7 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
         fnMouseOut = this._onScrollTargetMouseOut;
 
 
-    if(nMaxHeight && oBody.offsetHeight > nMaxHeight) {
+    if((nMaxHeight > 0) && (oBody.offsetHeight > nMaxHeight)) {
 
         if(!oHeader && !oFooter) {
 
@@ -3491,10 +3506,10 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
         Dom.setStyle(oBody, "height", (nHeight + "px"));
         Dom.setStyle(oBody, "overflow", "hidden");
 
-        Event.addListener(oFooter, "mouseover", fnMouseOver, this, true);
-        Event.addListener(oFooter, "mouseout", fnMouseOut, this, true);
         Event.addListener(oHeader, "mouseover", fnMouseOver, this, true);
         Event.addListener(oHeader, "mouseout", fnMouseOut, this, true);
+        Event.addListener(oFooter, "mouseover", fnMouseOver, this, true);
+        Event.addListener(oFooter, "mouseout", fnMouseOut, this, true);
 
     }
     else if(oHeader && oFooter) {
@@ -3502,10 +3517,10 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
         Dom.setStyle(oBody, "height", "auto");
         Dom.setStyle(oBody, "overflow", "visible");
 
-        Event.removeListener(oFooter, "mouseover", fnMouseOver);
-        Event.removeListener(oFooter, "mouseout", fnMouseOut);
         Event.removeListener(oHeader, "mouseover", fnMouseOver);
         Event.removeListener(oHeader, "mouseout", fnMouseOut);
+        Event.removeListener(oFooter, "mouseover", fnMouseOver);
+        Event.removeListener(oFooter, "mouseout", fnMouseOut);
 
         this.element.removeChild(oHeader);
         this.element.removeChild(oFooter);
@@ -4194,22 +4209,26 @@ initDefaultConfig: function() {
 	/**
 	* @config container
 	* @description HTML element reference or string specifying the id 
-	* attribute of the HTML element that the menu's markup should be rendered into.
+	* attribute of the HTML element that the menu's markup should be 
+	* rendered into.
 	* @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
 	* level-one-html.html#ID-58190037">HTMLElement</a>|String
 	* @default document.body
 	*/
-	this.cfg.addProperty(
+	oConfig.addProperty(
 	   "container", 
-	   { value:document.body, handler:this.configContainer } 
+	   { 
+	       value:document.body, 
+	       handler:this.configContainer 
+       } 
    );
 
 
     /**
     * @config maxheight
-    * @description Defines the maximum height (in pixels) for a menu's body 
-    * element before the contents of the body are scrolled.
-    * @default null
+    * @description Defines the maximum height (in pixels) for a menu before the
+    * contents of the body are scrolled.
+    * @default 0
     * @type Number
     */
     oConfig.addProperty(
