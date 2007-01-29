@@ -45,7 +45,9 @@
   
 
                     <div class="summary description">
-                        The YAHOO global namespace object
+                        The YAHOO global namespace object.  If YAHOO is already defined, the
+existing YAHOO object will not be overwritten so that defined
+namespaces are preserved.
                     </div>
 
 
@@ -81,10 +83,7 @@
                                         </code>
                                         
                                         <div class="description">
-                                            Applies all prototype properties in the supplier to the receiver if the
-receiver does not have these properties yet.  Optionally, one or more
-methods/properties can be specified (as additional parameters).  This
-option will overwrite the property if receiver has it already.
+                                            An alias for <a href="YAHOO.lang.html#augment">YAHOO.lang.augment</a>
                                         </div>
 
                                         <div class="description">
@@ -147,8 +146,7 @@ overwrite an existing property in the receiver
                                         </code>
                                         
                                         <div class="description">
-                                            Utility to set up the prototype, constructor and superclass properties to
-support an inheritance strategy that can chain constructors and methods.
+                                            An alias for <a href="YAHOO.lang.html#extend">YAHOO.lang.extend</a>
                                         </div>
 
                                         <div class="description">
@@ -171,6 +169,39 @@ matching items obtained from the superclass
 if present.
                                                         </dd>
                                                 </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="init">init</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>init</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the global by creating the default namespaces and applying
+any new configuration information that is detected.
+                                        </div>
+
+                                        <div class="description">
+
 
                                                 <dl>
                                                     <dt>Returns:
@@ -211,7 +242,8 @@ if present.
                                         </code>
                                         
                                         <div class="description">
-                                            Uses YAHOO.widget.Logger to output a log message, if the widget is available.
+                                            Uses YAHOO.widget.Logger to output a log message, if the widget is
+available.
                                         </div>
 
                                         <div class="description">
@@ -302,6 +334,72 @@ This fails because "long" is a future reserved word in ECMAScript
 
                                     </div>
                                     <hr />
+                                    <h4>
+                                        <a name="register">register</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>register</strong>
+                                           (
+                                                
+                                                        
+                                                         name
+                                                    
+                                                
+                                                        , 
+                                                         mainClass
+                                                    
+                                                
+                                                        , 
+                                                         data
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Registers a module with the YAHOO object
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>name &lt;String&gt;</code>
+                                                                the name of the module (event, slider, etc)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>mainClass &lt;Function&gt;</code>
+                                                             a reference to class in the module.  This
+class will be tagged with the version info
+so that it will be possible to identify the
+version that is in use when multiple versions
+have loaded
+                                                        </dd>
+                                                        <dd>
+                                                            <code>data &lt;Object&gt;</code>
+                                                                  metadata object for the module.  Currently it
+is expected to contain a "version" property
+and a "build" property at minimum.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
                             </div>
                         </div>
 
@@ -329,6 +427,9 @@ This fails because "long" is a future reserved word in ECMAScript
                         <h4>Classes</h4>
                         <ul class="content">
                                 <li class="selected"><a href="YAHOO.html">YAHOO</a></li>
+                                <li class=""><a href="YAHOO.env.html">YAHOO.env</a></li>
+                                <li class=""><a href="YAHOO.lang.html">YAHOO.lang</a></li>
+                                <li class=""><a href="YAHOO_config.html">YAHOO_config</a></li>
                         </ul>
                     </div>
 
@@ -349,11 +450,17 @@ This fails because "long" is a future reserved word in ECMAScript
                                 <li><!--<code>void</code>-->
                                 <a href="#extend">extend</a>
                                 </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#init">init</a>
+                                </li>
                                 <li><!--<code>Boolean</code>-->
                                 <a href="#log">log</a>
                                 </li>
                                 <li><!--<code>Object</code>-->
                                 <a href="#namespace">namespace</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#register">register</a>
                                 </li>
                         </ul>
                     </div>
