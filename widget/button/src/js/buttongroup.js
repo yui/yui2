@@ -4,7 +4,12 @@
 
 var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event,
-    Lang = YAHOO.util.Lang;
+    Lang = YAHOO.util.Lang,
+    
+
+    // Private collection of radio buttons
+
+    m_oButtons = {};
 
 
 
@@ -32,7 +37,7 @@ YAHOO.widget.ButtonGroup = function(p_oElement, p_oAttributes) {
         oElement = document.getElementById(p_oElement);
 
         if(!oElement) {
-        
+
             oElement = this._createGroupElement();
 
         }
@@ -57,7 +62,16 @@ YAHOO.widget.ButtonGroup = function(p_oElement, p_oAttributes) {
 
             oElement.id = Dom.generateId();
 
+            YAHOO.log(
+                "No value specified for the button group's \"id\" " +
+                "attribute. Setting button group id " +
+                "to \"" + oElement.id + "\".",
+                "warn"
+            );
+
         }
+
+        this.logger = new YAHOO.widget.LogWriter("ButtonGroup " + oElement.id);
 
         YAHOO.widget.ButtonGroup.superclass.constructor.call(
             this,
@@ -77,34 +91,24 @@ YAHOO.extend(YAHOO.widget.ButtonGroup, YAHOO.util.Element, {
 
 
 /** 
-* @property _oButtons
-* @description Collection of buttons in the button group.
-* @default null
-* @protected
-* @type Object
-*/
-_oButtons: null,
-
-
-/** 
-* @property _aButtons
+* @property _buttons
 * @description Array of buttons in the button group.
 * @default null
 * @protected
 * @type Array
 */
-_aButtons: null,
+_buttons: null,
 
 
 /** 
-* @property _oCheckedButton
+* @property _checkedButton
 * @description Object reference for the button in the button group that 
 * is checked.
 * @default null
 * @protected
 * @type Boolean
 */
-_oCheckedButton: null,
+_checkedButton: null,
 
 
 
@@ -175,7 +179,7 @@ _setDisabled: function(p_bDisabled) {
         
         do {
 
-            this._aButtons[i].set("disabled", p_bDisabled);
+            this._buttons[i].set("disabled", p_bDisabled);
         
         }
         while(i--);
@@ -201,19 +205,19 @@ _onKeyDown: function(p_oEvent) {
     var oTarget = Event.getTarget(p_oEvent),
         nCharCode = Event.getCharCode(p_oEvent),
         sId = oTarget.parentNode.parentNode.id,
-        oButton = this._oButtons[sId],
+        oButton = m_oButtons[sId],
         nIndex = -1;
 
 
     if(nCharCode == 37 || nCharCode == 38) {
 
         nIndex = (oButton.index === 0) ? 
-                    (this._aButtons.length -1) : (oButton.index - 1);
+                    (this._buttons.length -1) : (oButton.index - 1);
     
     }
     else if(nCharCode == 39 || nCharCode == 40) {
 
-        nIndex = (oButton.index === (this._aButtons.length - 1)) ? 
+        nIndex = (oButton.index === (this._buttons.length - 1)) ? 
                     0 : (oButton.index + 1);
 
     }
@@ -241,7 +245,7 @@ _onKeyDown: function(p_oEvent) {
 _onButtonCheckedChange: function(p_oEvent, p_oButton) {
 
     var bChecked = p_oEvent.newValue,
-        oCheckedButton = this._oCheckedButton;
+        oCheckedButton = this._checkedButton;
 
     if(bChecked && oCheckedButton != p_oButton) {
 
@@ -252,7 +256,7 @@ _onButtonCheckedChange: function(p_oEvent, p_oButton) {
         }
 
 
-        this._oCheckedButton = p_oButton;
+        this._checkedButton = p_oButton;
         
         this.set("value", p_oButton.get("value"));
 
@@ -283,8 +287,7 @@ _onButtonCheckedChange: function(p_oEvent, p_oButton) {
 */
 init: function(p_oElement, p_oAttributes) {
 
-    this._aButtons = [];
-    this._oButtons = {};
+    this._buttons = [];
 
     YAHOO.widget.ButtonGroup.superclass.init.call(
             this, p_oElement, 
@@ -292,15 +295,30 @@ init: function(p_oElement, p_oAttributes) {
         );
 
 
+    this.logger.log(
+        "Searching for child nodes with the class name " +
+        "\"yuibutton\" to add to the button group."
+    );
+
     var aButtons = this.getElementsByClassName("yuibutton");
 
 
     if(aButtons.length > 0) {
 
+        this.logger.log(
+            "Found " + aButtons.length + " child nodes with the class " + 
+            "name \"yuibutton.\"  Attempting to add to button group."
+        );
+
         this.addButtons(aButtons);
 
     }
 
+
+    this.logger.log(
+        "Searching for child nodes with the type of \"radio\" to add to the " +
+        " button group."
+    );
 
     function isRadioButton(p_oElement) {
 
@@ -313,11 +331,18 @@ init: function(p_oElement, p_oAttributes) {
 
     if(aButtons.length > 0) {
 
+        this.logger.log(
+            "Found " + aButtons.length + " child nodes with the type of " +
+            "\"radio.\"  Attempting to add to button group."
+        );
+
         this.addButtons(aButtons);
 
     }
 
     this.on("keydown", this._onKeyDown);
+
+    this.logger.log("Initialization completed.");
 
 },
 
@@ -434,14 +459,14 @@ addButton: function(p_oButton) {
 
     if(oButton) {
 
-        var nIndex = this._aButtons.length,
+        var nIndex = this._buttons.length,
             sButtonName = oButton.get("name"),
             sGroupName = this.get("name");
 
         oButton.index = nIndex;
 
-        this._aButtons[nIndex] = oButton;
-        this._oButtons[oButton.get("id")] = oButton;
+        this._buttons[nIndex] = oButton;
+        m_oButtons[oButton.get("id")] = oButton;
 
 
         if(sButtonName != sGroupName) {
@@ -461,6 +486,8 @@ addButton: function(p_oButton) {
         oButton.appendTo(this.get("element"));
         
         oButton.on("checkedChange", this._onButtonCheckedChange, oButton, this);
+
+        this.logger.log("Button " + oButton.get("id") + " added.");
 
         return oButton;
 
@@ -500,13 +527,15 @@ addButtons: function(p_aButtons) {
                 
                 if(oButton) {
 
-                    aButtons[aButtons.length] = oButton
+                    aButtons[aButtons.length] = oButton;
 
                 }
             
             }
 
             if(aButtons.length > 0) {
+
+                this.logger.log(aButtons.length + " buttons added.");
 
                 return aButtons;
 
@@ -531,27 +560,31 @@ removeButton: function(p_nIndex) {
     
     if(oButton) {
 
-        this._aButtons.splice(p_nIndex, 1);
-        delete this._oButtons[oButton.get("id")];
+        this.logger.log("Removing button " + oButton.get("id") + ".");
+
+        this._buttons.splice(p_nIndex, 1);
+        delete m_oButtons[oButton.get("id")];
 
         oButton.removeListener("checkedChange", this._onButtonCheckedChange);
         oButton.destroy();
 
 
-        var nButtons = this._aButtons.length;
+        var nButtons = this._buttons.length;
         
         if(nButtons > 0) {
 
-            var i = this._aButtons.length - 1;
+            var i = this._buttons.length - 1;
             
             do {
 
-                this._aButtons[i].index = i;
+                this._buttons[i].index = i;
 
             }
             while(i--);
         
         }
+
+        this.logger.log("Button " + oButton.get("id") + " removed.");
 
     }
 
@@ -569,7 +602,7 @@ getButton: function(p_nIndex) {
 
     if(Lang.isNumber(p_nIndex)) {
 
-        return this._aButtons[p_nIndex];
+        return this._buttons[p_nIndex];
 
     }
 
@@ -583,7 +616,7 @@ getButton: function(p_nIndex) {
 */
 getButtons: function() {
 
-    return this._aButtons;
+    return this._buttons;
 
 },
 
@@ -595,7 +628,7 @@ getButtons: function() {
 */
 getCount: function() {
 
-    return this._aButtons.length;
+    return this._buttons.length;
 
 },
 
@@ -611,7 +644,7 @@ focus: function(p_nIndex) {
 
     if(Lang.isNumber(p_nIndex)) {
 
-        oButton = this._aButtons[p_nIndex];
+        oButton = this._buttons[p_nIndex];
         
         if(oButton) {
 
@@ -626,7 +659,7 @@ focus: function(p_nIndex) {
 
         for(var i=0; i<nButtons; i++) {
 
-            oButton = this._aButtons[i];
+            oButton = this._buttons[i];
 
             if(!oButton.get("disabled")) {
 
@@ -667,24 +700,30 @@ check: function(p_nIndex) {
 */
 destroy: function() {
 
-    var nButtons = this._aButtons.length,
+    this.logger.log("Destroying...");
+
+    var nButtons = this._buttons.length,
         oElement = this.get("element"),
         oParentNode = oElement.parentNode;
     
     if(nButtons > 0) {
 
-        var i = this._aButtons.length - 1;
+        var i = this._buttons.length - 1;
         
         do {
 
-            this._aButtons[i].destroy();
+            this._buttons[i].destroy();
 
         }
         while(i--);
     
     }
 
+    this.logger.log("Removing DOM event handlers.");
+
     Event.purgeElement(oElement);
+    
+    this.logger.log("Removing from document.");
 
     oParentNode.removeChild(oElement);
 
