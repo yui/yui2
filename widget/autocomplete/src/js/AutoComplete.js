@@ -382,7 +382,7 @@ YAHOO.widget.AutoComplete.prototype.getListItemData = function(oListItem) {
 
 /**
  * Sets HTML markup for the results container header. This markup will be
- * inserted within a &lt;div&gt; tag with a class of "ac_hd".
+ * inserted within a &lt;div&gt; tag with a class of "yui-ac-hd".
  *
  * @method setHeader
  * @param sHeader {String} HTML markup for results container header.
@@ -402,7 +402,7 @@ YAHOO.widget.AutoComplete.prototype.setHeader = function(sHeader) {
 
 /**
  * Sets HTML markup for the results container footer. This markup will be
- * inserted within a &lt;div&gt; tag with a class of "ac_ft".
+ * inserted within a &lt;div&gt; tag with a class of "yui-ac-ft".
  *
  * @method setFooter
  * @param sFooter {String} HTML markup for results container footer.
@@ -422,10 +422,10 @@ YAHOO.widget.AutoComplete.prototype.setFooter = function(sFooter) {
 
 /**
  * Sets HTML markup for the results container body. This markup will be
- * inserted within a &lt;div&gt; tag with a class of "ac_bd".
+ * inserted within a &lt;div&gt; tag with a class of "yui-ac-bd".
  *
  * @method setBody
- * @param sHeader {String} HTML markup for results container body.
+ * @param sBody {String} HTML markup for results container body.
  */
 YAHOO.widget.AutoComplete.prototype.setBody = function(sBody) {
     if(sBody) {
