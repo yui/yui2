@@ -884,7 +884,7 @@ YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord
     var x,y;
     
     // Don't use getXY for Opera
-    if(window.opera) {
+    if(navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
         x = elCell.offsetLeft;
         y = elCell.offsetTop;
         while(elCell.offsetParent) {
