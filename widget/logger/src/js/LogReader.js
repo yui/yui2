@@ -68,7 +68,8 @@ YAHOO.widget.LogReader = function(elContainer, oConfigs) {
        if(this.fontSize) {
             containerStyle.fontSize = this.fontSize;
         }
-        if(window.opera) {
+        // For Opera
+        if(navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
             document.body.style += '';
         }
     }
