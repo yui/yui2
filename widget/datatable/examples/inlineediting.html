@@ -26,8 +26,8 @@
 </div>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
-<script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <script type="text/javascript" src="../../build/tabview/tabview.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
@@ -45,7 +45,7 @@ var myColumnHeaders = [
     {key:"Description",editor:"textbox"}
 ];
 
-var myColumnset = new YAHOO.widget.Columnset(myColumnHeaders);
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
 var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.inventory);
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
@@ -53,7 +53,7 @@ myDataSource.responseSchema = {
     fields: ["SKU","Quantity","Item","Description"]
 };
 
-var myDataTable = new YAHOO.widget.DataTable("editing", myColumnset, myDataSource,{caption:"Example: Inline Editing"});
+var myDataTable = new YAHOO.widget.DataTable("editing", myColumnSet, myDataSource,{caption:"Example: Inline Editing"});
 myDataTable.subscribe("cellClickEvent",myDataTable.onEventEditCell);
 </script>
 </body>

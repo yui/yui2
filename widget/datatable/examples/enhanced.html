@@ -18,8 +18,8 @@
 </style>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
-<script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 
@@ -33,10 +33,10 @@ YAHOO.example.enhanceFromMarkup = function() {
         {key:"account",text:"Account Number",sortable:true},
         {key:"amount",text:"Amount Due",type:"currency",sortable:true}
     ];
-    this.columnset = new YAHOO.widget.Columnset(this.columnHeaders);
+    this.columnSet = new YAHOO.widget.ColumnSet(this.columnHeaders);
 
     var markup = YAHOO.util.Dom.get("markup");
-    this.dataTable = new YAHOO.widget.DataTable(markup,this.columnset,markup,{caption:"Example: Progressively Enhanced Table from Markup"});
+    this.dataTable = new YAHOO.widget.DataTable(markup,this.columnSet,markup,{caption:"Example: Progressively Enhanced Table from Markup"});
 };
 
 YAHOO.util.Event.onAvailable("markup",YAHOO.example.enhanceFromMarkup,YAHOO.example.enhanceFromMarkup,true);

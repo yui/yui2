@@ -26,8 +26,8 @@
 </div>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
-<script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <script type="text/javascript" src="../../build/tabview/tabview.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
@@ -51,7 +51,7 @@ var myColumnHeaders = [
     {key:"areacode",text:"Area Codes",sortable:true},
     {key:"state",text:"States",sortable:true,sortOptions:{ascHandler:YAHOO.example.sortStatesAsc,descHandler:YAHOO.example.sortStatesDesc}}
 ];
-var myColumnset = new YAHOO.widget.Columnset(myColumnHeaders);
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
 var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
@@ -59,7 +59,7 @@ myDataSource.responseSchema = {
     fields: ["areacode","state"]
 };
 
-var myDataTable = new YAHOO.widget.DataTable("sort",myColumnset,myDataSource,{caption:"Example: Custom Sorting",sortedBy:"areacode",sortedByDir:"asc"});
+var myDataTable = new YAHOO.widget.DataTable("sort",myColumnSet,myDataSource,{caption:"Example: Custom Sorting",sortedBy:"areacode",sortedByDir:"asc"});
 </script>
 </body>
 </html>

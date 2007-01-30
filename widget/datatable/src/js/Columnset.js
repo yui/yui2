@@ -3,15 +3,15 @@
 /****************************************************************************/
 
 /**
- * The Columnset class defines and manages a DataTable's Columns,
+ * The ColumnSet class defines and manages a DataTable's Columns,
  * including nested hierarchies and access to individual Column instances.
  *
- * @class Columnset
+ * @class ColumnSet
  * @constructor
  * @param aHeaders {Object[]} Array of object literals that define header cells.
  */
-YAHOO.widget.Columnset = function(aHeaders) {
-    this._sName = "instance" + YAHOO.widget.Columnset._nCount;
+YAHOO.widget.ColumnSet = function(aHeaders) {
+    this._sName = "instance" + YAHOO.widget.ColumnSet._nCount;
 //TODO: Do we need COL.prevSibling, COL.nextSibling?
     // Tree representation of all Columns
     var tree = [];
@@ -112,8 +112,8 @@ YAHOO.widget.Columnset = function(aHeaders) {
     this.flat = flat;
     this.keys = keys;
     
-    YAHOO.widget.Columnset._nCount++;
-    YAHOO.log("Columnset initialized", "info", this.toString());
+    YAHOO.widget.ColumnSet._nCount++;
+    YAHOO.log("ColumnSet initialized", "info", this.toString());
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -130,7 +130,7 @@ YAHOO.widget.Columnset = function(aHeaders) {
  * @private
  * @static
  */
-YAHOO.widget.Columnset._nCount = 0;
+YAHOO.widget.ColumnSet._nCount = 0;
 
 /**
  * Unique instance name.
@@ -139,7 +139,7 @@ YAHOO.widget.Columnset._nCount = 0;
  * @type String
  * @private
  */
-YAHOO.widget.Columnset.prototype._sName = null;
+YAHOO.widget.ColumnSet.prototype._sName = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -154,7 +154,7 @@ YAHOO.widget.Columnset.prototype._sName = null;
  * @type YAHOO.widget.Column[]
  * @default []
  */
-YAHOO.widget.Columnset.prototype.tree = [];
+YAHOO.widget.ColumnSet.prototype.tree = [];
 
 /**
  * Flattened representation of all Columns.
@@ -163,7 +163,7 @@ YAHOO.widget.Columnset.prototype.tree = [];
  * @type YAHOO.widget.Column[]
  * @default []
  */
-YAHOO.widget.Columnset.prototype.flat = [];
+YAHOO.widget.ColumnSet.prototype.flat = [];
 
 /**
  * Array of Columns that map one-to-one to a table column.
@@ -172,7 +172,7 @@ YAHOO.widget.Columnset.prototype.flat = [];
  * @type YAHOO.widget.Column[]
  * @default []
  */
-YAHOO.widget.Columnset.prototype.keys = [];
+YAHOO.widget.ColumnSet.prototype.keys = [];
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -180,14 +180,14 @@ YAHOO.widget.Columnset.prototype.keys = [];
 //
 /////////////////////////////////////////////////////////////////////////////
  /**
- * Public accessor to the unique name of the Columnset instance.
+ * Public accessor to the unique name of the ColumnSet instance.
  *
  * @method toString
- * @return {String} Unique name of the Columnset instance.
+ * @return {String} Unique name of the ColumnSet instance.
  */
 
-YAHOO.widget.Columnset.prototype.toString = function() {
-    return "Columnset " + this._sName;
+YAHOO.widget.ColumnSet.prototype.toString = function() {
+    return "ColumnSet " + this._sName;
 };
 
 /****************************************************************************/
@@ -249,7 +249,7 @@ YAHOO.widget.Column._nCount = 0;
 YAHOO.widget.Column.prototype.id = null;
 
 /**
- * Reference to Column's index within its Columnset's key array, or null if not applicable.
+ * Reference to Column's index within its ColumnSet's key array, or null if not applicable.
  *
  * @property index
  * @type Number
@@ -381,7 +381,7 @@ YAHOO.widget.Column.prototype.width = null;
 YAHOO.widget.Column.prototype.minWidth = null;
 
 /**
- * Column's previous sibling within its Columnset's tree hierarchy, or null.
+ * Column's previous sibling within its ColumnSet's tree hierarchy, or null.
  *
  * @property prevSibling
  * @type YAHOO.widget.Column
@@ -389,7 +389,7 @@ YAHOO.widget.Column.prototype.minWidth = null;
 YAHOO.widget.Column.prototype.prevSibling = null;
 
 /**
- * Column's next sibling within its Columnset's tree hierarchy, or null.
+ * Column's next sibling within its ColumnSet's tree hierarchy, or null.
  *
  * @property nextSibling
  * @type YAHOO.widget.Column
@@ -537,7 +537,7 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
 
 
  /**
- * Takes innerHTML from TD and parses out data for storage in Recordset.
+ * Takes innerHTML from TD and parses out data for storage in RecordSet.
  *
  * @method parse
  * @param sMarkup {String} The TD's innerHTML value.
@@ -1116,15 +1116,15 @@ YAHOO.util.WidthResizer.prototype.onDrag = function(e) {
         }
 
         //TODO: how else to cycle through all the columns without having to use an index property?""
-        for(var i=0; i<oDataTable._oColumnset.length; i++) {
+        for(var i=0; i<oDataTable._oColumnSet.length; i++) {
             if((i != elCell.index) &&  (i!=sibIndex)) {
-                YAHOO.util.Dom.get(oDataTable._oColumnset.keys[i].id).style.width = oDataTable._oColumnset.keys[i].width + "px";
+                YAHOO.util.Dom.get(oDataTable._oColumnSet.keys[i].id).style.width = oDataTable._oColumnSet.keys[i].width + "px";
             }
         }
         sib.style.width = sibnewwidth;
         elCell.style.width = newWidth + "px";
-        //oDataTable._oColumnset.flat[sibIndex].width = sibnewwidth;
-        //oDataTable._oColumnset.flat[elCell.index].width = newWidth;
+        //oDataTable._oColumnSet.flat[sibIndex].width = sibnewwidth;
+        //oDataTable._oColumnSet.flat[elCell.index].width = newWidth;
 
     }
     else {

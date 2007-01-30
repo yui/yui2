@@ -30,11 +30,10 @@
 </div>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
-<script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
-<script type="text/javascript" src="../../build/tabview/tabview.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
 <script type="text/javascript" src="./js/data.js"></script>
 <script language="JavaScript">
@@ -51,15 +50,14 @@ var myColumnHeaders = [
     {key:"Title", type:"html", sortable:true, resizeable:true}
 ];
 
-var myColumnset = new YAHOO.widget.Columnset(myColumnHeaders);
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
 var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders);
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
 myDataSource.responseSchema = {
     fields: ["POID","Date","Quantity","Amount","Title"]
 };
-
-var myDataTable = new YAHOO.widget.DataTable("basic", myColumnset, myDataSource,{caption:"Example: Basic Table"});
+var myDataTable = new YAHOO.widget.DataTable("basic", myColumnSet, myDataSource,{caption:"Example: Basic Table"});
 </script>
 </body>
 </html>

@@ -27,8 +27,8 @@
 </div>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
-<script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <script type="text/javascript" src="../../build/tabview/tabview.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
@@ -42,7 +42,7 @@ var myColumnHeaders = [
     {key:"From"},
     {key:"Subject"}
 ];
-var myColumnset = new YAHOO.widget.Columnset(myColumnHeaders);
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
 var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
@@ -51,7 +51,7 @@ myDataSource.responseSchema = {
     fields: ["Date","To","From","Subject","XID","Date","Attachment"]
 };
 
-var myDataTable = new YAHOO.widget.DataTable("rowselect",myColumnset,myDataSource,{caption:"Example: Row Selection",singleSelect:true});
+var myDataTable = new YAHOO.widget.DataTable("rowselect",myColumnSet,myDataSource,{caption:"Example: Row Selection",singleSelect:true});
 myDataTable.subscribe("cellClickEvent",myDataTable.onEventSelectRow);
 myDataTable.select(myDataTable.getRow(0));
 </script>

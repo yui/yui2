@@ -26,8 +26,8 @@
 </div>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
-<script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <script type="text/javascript" src="../../build/tabview/tabview.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
@@ -39,7 +39,7 @@ var myColumnHeaders = [
     {key:"areacode"},
     {key:"state"}
 ];
-var myColumnset = new YAHOO.widget.Columnset(myColumnHeaders);
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
 var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
@@ -47,7 +47,7 @@ myDataSource.responseSchema = {
     fields: ["areacode","state"]
 };
 
-var myDataTable = new YAHOO.widget.DataTable("scroll",myColumnset,myDataSource,{scrollable:true,rowsPerPage:350});
+var myDataTable = new YAHOO.widget.DataTable("scroll",myColumnSet,myDataSource,{scrollable:true});
 </script>
 </body>
 </html>
