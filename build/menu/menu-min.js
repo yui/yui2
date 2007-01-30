@@ -1,8 +1,6 @@
 
-(function(){var Dom=YAHOO.util.Dom,Event=YAHOO.util.Event;YAHOO.widget.MenuManager=function(){var m_bInitializedEventHandlers=false,m_oMenus={},m_oItems={},m_oVisibleMenus={},m_oLogger=new YAHOO.widget.LogWriter(this.toString()),me=this;function addItem(p_oItem){var sYUIId=Dom.generateId();if(p_oItem&&m_oItems[sYUIId]!=p_oItem){p_oItem.element.setAttribute("yuiid",sYUIId);m_oItems[sYUIId]=p_oItem;p_oItem.destroyEvent.subscribe(onItemDestroy,p_oItem);m_oLogger.log("Item: "+
-p_oItem.toString()+" successfully registered.");}}
-function removeItem(p_oItem){var sYUIId=p_oItem.element.getAttribute("yuiid");if(sYUIId&&m_oItems[sYUIId]){delete m_oItems[sYUIId];m_oLogger.log("Item: "+
-p_oItem.toString()+" successfully unregistered.");}}
+(function(){var Dom=YAHOO.util.Dom,Event=YAHOO.util.Event;YAHOO.widget.MenuManager=function(){var m_bInitializedEventHandlers=false,m_oMenus={},m_oItems={},m_oVisibleMenus={},me=this;function addItem(p_oItem){var sYUIId=Dom.generateId();if(p_oItem&&m_oItems[sYUIId]!=p_oItem){p_oItem.element.setAttribute("yuiid",sYUIId);m_oItems[sYUIId]=p_oItem;p_oItem.destroyEvent.subscribe(onItemDestroy,p_oItem);}}
+function removeItem(p_oItem){var sYUIId=p_oItem.element.getAttribute("yuiid");if(sYUIId&&m_oItems[sYUIId]){delete m_oItems[sYUIId];}}
 function getMenuRootElement(p_oElement){var oParentNode;if(p_oElement&&p_oElement.tagName){switch(p_oElement.tagName.toUpperCase()){case"DIV":oParentNode=p_oElement.parentNode;if((Dom.hasClass(p_oElement,"hd")||Dom.hasClass(p_oElement,"bd")||Dom.hasClass(p_oElement,"ft"))&&oParentNode&&oParentNode.tagName&&oParentNode.tagName.toUpperCase()=="DIV"){return oParentNode;}
 else{return p_oElement;}
 break;case"LI":return p_oElement;default:oParentNode=p_oElement.parentNode;if(oParentNode){return getMenuRootElement(oParentNode);}
@@ -13,19 +11,14 @@ if(oMenu){var oEventTypes={"click":"clickEvent","mousedown":"mouseDownEvent","mo
 oMenu[sCustomEventType].fire(p_oEvent,oMenuItem);}
 else if(p_oEvent.type=="mousedown"){var oActiveItem;for(var i in m_oMenus){if(m_oMenus.hasOwnProperty(i)){oMenu=m_oMenus[i];if(oMenu.cfg.getProperty("clicktohide")&&oMenu.cfg.getProperty("position")=="dynamic"){oMenu.hide();}
 else{oMenu.clearActiveItem(true);}}}}}
-function onMenuDestroy(p_sType,p_aArgs,p_oMenu){if(p_oMenu&&m_oMenus[p_oMenu.id]){delete m_oMenus[p_oMenu.id];m_oLogger.log("Menu: "+
-p_oMenu.toString()+" successfully unregistered.");}}
+function onMenuDestroy(p_sType,p_aArgs,p_oMenu){if(p_oMenu&&m_oMenus[p_oMenu.id]){delete m_oMenus[p_oMenu.id];}}
 function onItemDestroy(p_sType,p_aArgs,p_oItem){var sYUIId=p_oItem.element.getAttribute("yuiid");if(sYUIId){delete m_oItems[sYUIId];}}
-function onMenuVisibleConfigChange(p_sType,p_aArgs,p_oMenu){var bVisible=p_aArgs[0];if(bVisible){m_oVisibleMenus[p_oMenu.id]=p_oMenu;m_oLogger.log("Menu: "+
-p_oMenu.toString()+" registered with the collection of visible menus.");}
-else if(m_oVisibleMenus[p_oMenu.id]){delete m_oVisibleMenus[p_oMenu.id];m_oLogger.log("Menu: "+
-p_oMenu.toString()+" unregistered from the collection of visible menus.");}}
+function onMenuVisibleConfigChange(p_sType,p_aArgs,p_oMenu){var bVisible=p_aArgs[0];if(bVisible){m_oVisibleMenus[p_oMenu.id]=p_oMenu;}
+else if(m_oVisibleMenus[p_oMenu.id]){delete m_oVisibleMenus[p_oMenu.id];}}
 function onItemAdded(p_sType,p_aArgs){addItem(p_aArgs[0]);}
 function onItemRemoved(p_sType,p_aArgs){removeItem(p_aArgs[0]);}
-return{addMenu:function(p_oMenu){if(p_oMenu&&p_oMenu.id&&!m_oMenus[p_oMenu.id]){m_oMenus[p_oMenu.id]=p_oMenu;if(!m_bInitializedEventHandlers){var oDoc=document;Event.addListener(oDoc,"mouseover",onDOMEvent,me,true);Event.addListener(oDoc,"mouseout",onDOMEvent,me,true);Event.addListener(oDoc,"mousedown",onDOMEvent,me,true);Event.addListener(oDoc,"mouseup",onDOMEvent,me,true);Event.addListener(oDoc,"click",onDOMEvent,me,true);Event.addListener(oDoc,"keydown",onDOMEvent,me,true);Event.addListener(oDoc,"keyup",onDOMEvent,me,true);Event.addListener(oDoc,"keypress",onDOMEvent,me,true);m_bInitializedEventHandlers=true;m_oLogger.log("DOM event handlers initialized.");}
-p_oMenu.destroyEvent.subscribe(onMenuDestroy,p_oMenu,me);p_oMenu.cfg.subscribeToConfigEvent("visible",onMenuVisibleConfigChange,p_oMenu);p_oMenu.itemAddedEvent.subscribe(onItemAdded);p_oMenu.itemRemovedEvent.subscribe(onItemRemoved);m_oLogger.log("Menu: "+
-p_oMenu.toString()+" successfully registered.");}},removeMenu:function(p_oMenu){if(p_oMenu&&m_oMenus[p_oMenu.id]){delete m_oMenus[p_oMenu.id];m_oLogger.log("Menu: "+
-p_oMenu.toString()+" successfully unregistered.");}},hideVisible:function(){var oMenu;for(var i in m_oVisibleMenus){if(m_oVisibleMenus.hasOwnProperty(i)){oMenu=m_oVisibleMenus[i];if(oMenu.cfg.getProperty("position")=="dynamic"){oMenu.hide();}}}},getMenus:function(){return m_oMenus;},getMenu:function(p_sId){if(m_oMenus[p_sId]){return m_oMenus[p_sId];}},toString:function(){return("MenuManager");}};}();})();(function(){var Dom=YAHOO.util.Dom,Event=YAHOO.util.Event;function pointInTriangle(p_aRegion,p_aPoint){var nX1=p_aRegion[0],nY1=p_aRegion[1],nX2=p_aRegion[2],nY2=p_aRegion[3],nX3=p_aRegion[4],nY3=p_aRegion[5],nXX=p_aPoint[0],nYY=p_aPoint[1];return(Math.abs(Math.abs((nX1-nXX)*(nY2-nYY)-(nX2-nXX)*(nY1-nYY))+
+return{addMenu:function(p_oMenu){if(p_oMenu&&p_oMenu.id&&!m_oMenus[p_oMenu.id]){m_oMenus[p_oMenu.id]=p_oMenu;if(!m_bInitializedEventHandlers){var oDoc=document;Event.addListener(oDoc,"mouseover",onDOMEvent,me,true);Event.addListener(oDoc,"mouseout",onDOMEvent,me,true);Event.addListener(oDoc,"mousedown",onDOMEvent,me,true);Event.addListener(oDoc,"mouseup",onDOMEvent,me,true);Event.addListener(oDoc,"click",onDOMEvent,me,true);Event.addListener(oDoc,"keydown",onDOMEvent,me,true);Event.addListener(oDoc,"keyup",onDOMEvent,me,true);Event.addListener(oDoc,"keypress",onDOMEvent,me,true);m_bInitializedEventHandlers=true;}
+p_oMenu.destroyEvent.subscribe(onMenuDestroy,p_oMenu,me);p_oMenu.cfg.subscribeToConfigEvent("visible",onMenuVisibleConfigChange,p_oMenu);p_oMenu.itemAddedEvent.subscribe(onItemAdded);p_oMenu.itemRemovedEvent.subscribe(onItemRemoved);}},removeMenu:function(p_oMenu){if(p_oMenu&&m_oMenus[p_oMenu.id]){delete m_oMenus[p_oMenu.id];}},hideVisible:function(){var oMenu;for(var i in m_oVisibleMenus){if(m_oVisibleMenus.hasOwnProperty(i)){oMenu=m_oVisibleMenus[i];if(oMenu.cfg.getProperty("position")=="dynamic"){oMenu.hide();}}}},getMenus:function(){return m_oMenus;},getMenu:function(p_sId){if(m_oMenus[p_sId]){return m_oMenus[p_sId];}},toString:function(){return("MenuManager");}};}();})();(function(){var Dom=YAHOO.util.Dom,Event=YAHOO.util.Event;function pointInTriangle(p_aRegion,p_aPoint){var nX1=p_aRegion[0],nY1=p_aRegion[1],nX2=p_aRegion[2],nY2=p_aRegion[3],nX3=p_aRegion[4],nY3=p_aRegion[5],nXX=p_aPoint[0],nYY=p_aPoint[1];return(Math.abs(Math.abs((nX1-nXX)*(nY2-nYY)-(nX2-nXX)*(nY1-nYY))+
 Math.abs((nX2-nXX)*(nY3-nYY)-(nX3-nXX)*(nY2-nYY))+
 Math.abs((nX3-nXX)*(nY1-nYY)-(nX1-nXX)*(nY3-nYY))-
 Math.abs((nX2-nX1)*(nY3-nY1)-(nX3-nX1)*(nY2-nY1)))<=1/256);}
