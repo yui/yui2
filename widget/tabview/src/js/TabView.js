@@ -20,7 +20,7 @@
      */
     YAHOO.widget.TabView = function(el, attr) {
         attr = attr || {};
-        if (arguments.length == 1 && !Lang.isString(el) && !el.nodeName) {
+        if (arguments.length == 1 && !YAHOO.lang.isString(el) && !el.nodeName) {
             attr = el; // treat first arg as attr object
             el = attr.element || null;
         }
@@ -35,7 +35,6 @@
     
     var proto = YAHOO.widget.TabView.prototype;
     var Dom = YAHOO.util.Dom;
-    var Lang = YAHOO.util.Lang;
     var Event = YAHOO.util.Event;
     var Tab = YAHOO.widget.Tab;
     
@@ -359,7 +358,7 @@
         }
         
         for (var type in this.DOM_EVENTS) {
-            if ( this.DOM_EVENTS.hasOwnProperty(type) ) {
+            if ( YAHOO.lang.hasOwnProperty(this.DOM_EVENTS, type) ) {
                 this.addListener.call(this, type, this.DOMEventHandler);
             }
         }
