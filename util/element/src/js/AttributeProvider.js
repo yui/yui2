@@ -74,7 +74,7 @@
             var config;
             for (var key in configs) {
                 config = configs[key];
-                if ( configs.hasOwnProperty(key) && 
+                if ( Lang.hasOwnProperty(configs, key) && 
                         !Lang.isUndefined(config) ) {
                     keys[keys.length] = key;
                 }
@@ -91,7 +91,7 @@
          */
         setAttributes: function(map, silent){
             for (var key in map) {
-                if ( map.hasOwnProperty(key) ) {
+                if ( Lang.hasOwnProperty(map, key) ) {
                     this.set(key, map[key], silent);
                 }
             }
@@ -162,7 +162,7 @@
             var map = {}; // returning a copy to prevent overrides
             
             for (key in config) {
-                if ( config.hasOwnProperty(key) ) {
+                if ( Lang.hasOwnProperty(config, key) ) {
                     map[key] = config[key];
                 }
             }

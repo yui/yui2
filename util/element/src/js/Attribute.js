@@ -154,7 +154,7 @@ YAHOO.util.Attribute.prototype = {
         this._initialConfig = this._initialConfig || {};
         
         for (var key in map) {
-            if ( key && map.hasOwnProperty(key) ) {
+            if ( key && YAHOO.lang.hasOwnProperty(map, key) ) {
                 this[key] = map[key];
                 if (init) {
                     this._initialConfig[key] = map[key];
