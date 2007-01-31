@@ -530,74 +530,153 @@
 <span class="c">* @return {Object} A JSON object reprsenting the data of the current form.</span>
 <span class="c">*/</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Dialog</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">getData</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-	<span class="k">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">form</span><span class="o">;</span>
-	<span class="k">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="o">{};</span>
 
-	<span class="k">if</span> <span class="o">(</span><span class="nx">form</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">form</span><span class="o">.</span><span class="nx">elements</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
-			<span class="k">var</span> <span class="nx">formItem</span> <span class="o">=</span> <span class="nx">form</span><span class="o">.</span><span class="nx">elements</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
-			<span class="k">if</span> <span class="o">(</span><span class="nx">formItem</span><span class="o">)</span> <span class="o">{</span>
-				<span class="k">if</span> <span class="o">(</span><span class="nx">formItem</span><span class="o">.</span><span class="nx">tagName</span><span class="o">)</span> <span class="o">{</span> <span class="c">// Got a single form item</span>
-<span class="c"></span>					<span class="nx">switch</span> <span class="o">(</span><span class="nx">formItem</span><span class="o">.</span><span class="nx">tagName</span><span class="o">)</span> <span class="o">{</span>
-						<span class="nx">case</span> <span class="s2">&quot;INPUT&quot;</span><span class="o">:</span>
-							<span class="nx">switch</span> <span class="o">(</span><span class="nx">formItem</span><span class="o">.</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
-								<span class="nx">case</span> <span class="s2">&quot;checkbox&quot;</span><span class="o">:</span> 
-									<span class="nx">data</span><span class="o">[</span><span class="nx">formItem</span><span class="o">.</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="nx">formItem</span><span class="o">.</span><span class="nx">checked</span><span class="o">;</span>
-									<span class="k">break</span><span class="o">;</span>
-								<span class="nx">case</span> <span class="s2">&quot;textbox&quot;</span><span class="o">:</span>
-								<span class="nx">case</span> <span class="s2">&quot;text&quot;</span><span class="o">:</span>
-								<span class="nx">case</span> <span class="s2">&quot;hidden&quot;</span><span class="o">:</span>
-									<span class="nx">data</span><span class="o">[</span><span class="nx">formItem</span><span class="o">.</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="nx">formItem</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
-									<span class="k">break</span><span class="o">;</span>
-							<span class="o">}</span>
-							<span class="k">break</span><span class="o">;</span>
-						<span class="nx">case</span> <span class="s2">&quot;TEXTAREA&quot;</span><span class="o">:</span>
-							<span class="nx">data</span><span class="o">[</span><span class="nx">formItem</span><span class="o">.</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="nx">formItem</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
-							<span class="k">break</span><span class="o">;</span>
-						<span class="nx">case</span> <span class="s2">&quot;SELECT&quot;</span><span class="o">:</span>
-							<span class="k">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="o">[];</span>
-							<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">x</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">x</span><span class="o">&lt;</span><span class="nx">formItem</span><span class="o">.</span><span class="nx">options</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">x</span><span class="o">++)</span>	<span class="o">{</span>
-								<span class="k">var</span> <span class="nx">option</span> <span class="o">=</span> <span class="nx">formItem</span><span class="o">.</span><span class="nx">options</span><span class="o">[</span><span class="nx">x</span><span class="o">];</span>
-								<span class="k">if</span> <span class="o">(</span><span class="nx">option</span><span class="o">.</span><span class="nx">selected</span><span class="o">)</span> <span class="o">{</span>
-									<span class="k">var</span> <span class="nx">selval</span> <span class="o">=</span> <span class="nx">option</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
-									<span class="k">if</span> <span class="o">(!</span> <span class="nx">selval</span> <span class="o">||</span> <span class="nx">selval</span> <span class="o">===</span> <span class="s2">&quot;&quot;</span><span class="o">)</span> <span class="o">{</span>
-										<span class="nx">selval</span> <span class="o">=</span> <span class="nx">option</span><span class="o">.</span><span class="nx">text</span><span class="o">;</span>
-									<span class="o">}</span>
-									<span class="nx">val</span><span class="o">[</span><span class="nx">val</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">selval</span><span class="o">;</span>
-								<span class="o">}</span>
-							<span class="o">}</span>
-							<span class="nx">data</span><span class="o">[</span><span class="nx">formItem</span><span class="o">.</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="nx">val</span><span class="o">;</span>
-							<span class="k">break</span><span class="o">;</span>
-					<span class="o">}</span>
-				<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">formItem</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nx">formItem</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">tagName</span><span class="o">)</span> <span class="o">{</span> <span class="c">// this is an array of form items</span>
-<span class="c"></span>					<span class="k">if</span> <span class="o">(</span><span class="nx">formItem</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">tagName</span> <span class="o">==</span> <span class="s2">&quot;INPUT&quot;</span><span class="o">)</span> <span class="o">{</span>
-						<span class="nx">switch</span> <span class="o">(</span><span class="nx">formItem</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
-							<span class="nx">case</span> <span class="s2">&quot;radio&quot;</span><span class="o">:</span>
-								<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">r</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">r</span><span class="o">&lt;</span><span class="nx">formItem</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">r</span><span class="o">++)</span> <span class="o">{</span>
-									<span class="k">var</span> <span class="nx">radio</span> <span class="o">=</span> <span class="nx">formItem</span><span class="o">[</span><span class="nx">r</span><span class="o">];</span>
-									<span class="k">if</span> <span class="o">(</span><span class="nx">radio</span><span class="o">.</span><span class="nx">checked</span><span class="o">)</span> <span class="o">{</span>
-										<span class="nx">data</span><span class="o">[</span><span class="nx">radio</span><span class="o">.</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="nx">radio</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
-										<span class="k">break</span><span class="o">;</span>
-									<span class="o">}</span>
-								<span class="o">}</span>
-								<span class="k">break</span><span class="o">;</span>
-							<span class="nx">case</span> <span class="s2">&quot;checkbox&quot;</span><span class="o">:</span>
-								<span class="k">var</span> <span class="nx">cbArray</span> <span class="o">=</span> <span class="o">[];</span>
-								<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">c</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">c</span><span class="o">&lt;</span><span class="nx">formItem</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">c</span><span class="o">++)</span> <span class="o">{</span>
-									<span class="k">var</span> <span class="nx">check</span> <span class="o">=</span> <span class="nx">formItem</span><span class="o">[</span><span class="nx">c</span><span class="o">];</span>
-									<span class="k">if</span> <span class="o">(</span><span class="nx">check</span><span class="o">.</span><span class="nx">checked</span><span class="o">)</span> <span class="o">{</span>
-										<span class="nx">cbArray</span><span class="o">[</span><span class="nx">cbArray</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">check</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
-									<span class="o">}</span>
-								<span class="o">}</span>
-								<span class="nx">data</span><span class="o">[</span><span class="nx">formItem</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="nx">cbArray</span><span class="o">;</span>
-								<span class="k">break</span><span class="o">;</span>
-						<span class="o">}</span>
-					<span class="o">}</span>
-				<span class="o">}</span>
-			<span class="o">}</span>
-		<span class="o">}</span>	
-	<span class="o">}</span>
-	<span class="k">return</span> <span class="nx">data</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">oForm</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">form</span><span class="o">;</span>
+
+    <span class="k">if</span><span class="o">(</span><span class="nx">oForm</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">var</span> <span class="nx">aElements</span> <span class="o">=</span> <span class="nx">oForm</span><span class="o">.</span><span class="nx">elements</span><span class="o">,</span>
+            <span class="nx">nTotalElements</span> <span class="o">=</span> <span class="nx">aElements</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span>
+            <span class="nx">oData</span> <span class="o">=</span> <span class="o">{},</span>
+            <span class="nx">sName</span><span class="o">,</span>
+            <span class="nx">oElement</span><span class="o">;</span>
+
+
+        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">nTotalElements</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+
+            <span class="nx">sName</span> <span class="o">=</span> <span class="nx">aElements</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">name</span><span class="o">,</span>
+            <span class="nx">oElement</span> <span class="o">=</span> <span class="nx">aElements</span><span class="o">[</span><span class="nx">sName</span><span class="o">];</span>
+
+
+            <span class="k">if</span><span class="o">(</span><span class="nx">oElement</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="k">if</span><span class="o">(</span><span class="nx">oElement</span><span class="o">.</span><span class="nx">tagName</span><span class="o">)</span> <span class="o">{</span>
+
+                    <span class="k">var</span> <span class="nx">sType</span> <span class="o">=</span> <span class="nx">oElement</span><span class="o">.</span><span class="nx">type</span><span class="o">,</span>
+                        <span class="nx">sTagName</span> <span class="o">=</span> <span class="nx">oElement</span><span class="o">.</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">();</span>
+
+                    <span class="nx">switch</span><span class="o">(</span><span class="nx">sTagName</span><span class="o">)</span> <span class="o">{</span>
+
+                        <span class="nx">case</span> <span class="s2">&quot;INPUT&quot;</span><span class="o">:</span>
+
+                            <span class="k">if</span><span class="o">(</span><span class="nx">sType</span> <span class="o">==</span> <span class="s2">&quot;checkbox&quot;</span><span class="o">)</span> <span class="o">{</span>
+        
+                                <span class="nx">oData</span><span class="o">[</span><span class="nx">sName</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oElement</span><span class="o">.</span><span class="nx">checked</span><span class="o">;</span>
+                            
+                            <span class="o">}</span>
+                            <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">sType</span> <span class="o">!=</span> <span class="s2">&quot;radio&quot;</span><span class="o">)</span> <span class="o">{</span>
+        
+                                <span class="nx">oData</span><span class="o">[</span><span class="nx">sName</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oElement</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+        
+                            <span class="o">}</span>
+                        
+                        <span class="k">break</span><span class="o">;</span>
+
+                        <span class="nx">case</span> <span class="s2">&quot;TEXTAREA&quot;</span><span class="o">:</span>
+
+                            <span class="nx">oData</span><span class="o">[</span><span class="nx">sName</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oElement</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+
+                        <span class="k">break</span><span class="o">;</span>
+
+                        <span class="nx">case</span> <span class="s2">&quot;SELECT&quot;</span><span class="o">:</span>
+
+                            <span class="k">var</span> <span class="nx">aOptions</span> <span class="o">=</span> <span class="nx">oElement</span><span class="o">.</span><span class="nx">options</span><span class="o">,</span>
+                                <span class="nx">nOptions</span> <span class="o">=</span> <span class="nx">aOptions</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span>
+                                <span class="nx">aValues</span> <span class="o">=</span> <span class="o">[],</span>
+                                <span class="nx">oOption</span><span class="o">,</span>
+                                <span class="nx">sValue</span><span class="o">;</span>
+
+
+                            <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">n</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">n</span><span class="o">&lt;</span><span class="nx">nOptions</span><span class="o">;</span> <span class="nx">n</span><span class="o">++)</span> <span class="o">{</span>
+
+                                <span class="nx">oOption</span> <span class="o">=</span> <span class="nx">aOptions</span><span class="o">[</span><span class="nx">n</span><span class="o">];</span>
+
+                                <span class="k">if</span><span class="o">(</span><span class="nx">oOption</span><span class="o">.</span><span class="nx">selected</span><span class="o">)</span> <span class="o">{</span>
+
+                                    <span class="nx">sValue</span> <span class="o">=</span> <span class="nx">oOption</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+
+                                    <span class="k">if</span><span class="o">(!</span><span class="nx">sValue</span> <span class="o">||</span> <span class="nx">sValue</span> <span class="o">===</span> <span class="s2">&quot;&quot;</span><span class="o">)</span> <span class="o">{</span>
+
+                                        <span class="nx">sValue</span> <span class="o">=</span> <span class="nx">oOption</span><span class="o">.</span><span class="nx">text</span><span class="o">;</span>
+
+                                    <span class="o">}</span>
+
+                                    <span class="nx">aValues</span><span class="o">[</span><span class="nx">aValues</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">sValue</span><span class="o">;</span>
+                                
+                                <span class="o">}</span>
+
+                            <span class="o">}</span>
+
+                            <span class="nx">oData</span><span class="o">[</span><span class="nx">sName</span><span class="o">]</span> <span class="o">=</span> <span class="nx">aValues</span><span class="o">;</span>
+
+                        <span class="k">break</span><span class="o">;</span>
+
+                    <span class="o">}</span>
+
+
+                <span class="o">}</span>
+                <span class="k">else</span> <span class="o">{</span>
+
+                    <span class="k">var</span> <span class="nx">nElements</span> <span class="o">=</span> <span class="nx">oElement</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span>
+                        <span class="nx">sType</span> <span class="o">=</span> <span class="nx">oElement</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">type</span><span class="o">,</span>
+                        <span class="nx">sTagName</span> <span class="o">=</span> <span class="nx">oElement</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">();</span>
+
+
+                    <span class="nx">switch</span><span class="o">(</span><span class="nx">sType</span><span class="o">)</span> <span class="o">{</span>
+
+                        <span class="nx">case</span> <span class="s2">&quot;radio&quot;</span><span class="o">:</span>
+
+                            <span class="k">var</span> <span class="nx">oRadio</span><span class="o">;</span>
+
+                            <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">n</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">n</span><span class="o">&lt;</span><span class="nx">nElements</span><span class="o">;</span> <span class="nx">n</span><span class="o">++)</span> <span class="o">{</span>
+
+                                <span class="nx">oRadio</span> <span class="o">=</span> <span class="nx">oElement</span><span class="o">[</span><span class="nx">n</span><span class="o">];</span>
+
+                                <span class="k">if</span><span class="o">(</span><span class="nx">oRadio</span><span class="o">.</span><span class="nx">checked</span><span class="o">)</span> <span class="o">{</span>
+
+                                    <span class="nx">oData</span><span class="o">[</span><span class="nx">sName</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oRadio</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+                                    <span class="k">break</span><span class="o">;</span>
+
+                                <span class="o">}</span>
+
+                            <span class="o">}</span>
+
+                        <span class="k">break</span><span class="o">;</span>
+                        
+                        <span class="nx">case</span> <span class="s2">&quot;checkbox&quot;</span><span class="o">:</span>
+
+                            <span class="k">var</span> <span class="nx">aValues</span> <span class="o">=</span> <span class="o">[],</span>
+                                <span class="nx">oCheckbox</span><span class="o">;</span>
+
+                            <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">n</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">n</span><span class="o">&lt;</span><span class="nx">nElements</span><span class="o">;</span> <span class="nx">n</span><span class="o">++)</span> <span class="o">{</span>
+
+                                <span class="nx">oCheckbox</span> <span class="o">=</span> <span class="nx">oElement</span><span class="o">[</span><span class="nx">n</span><span class="o">];</span>
+
+                                <span class="k">if</span><span class="o">(</span><span class="nx">oCheckbox</span><span class="o">.</span><span class="nx">checked</span><span class="o">)</span> <span class="o">{</span>
+
+                                    <span class="nx">aValues</span><span class="o">[</span><span class="nx">aValues</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oCheckbox</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+
+                                <span class="o">}</span>
+
+                            <span class="o">}</span>
+                            
+                            <span class="nx">oData</span><span class="o">[</span><span class="nx">sName</span><span class="o">]</span> <span class="o">=</span> <span class="nx">aValues</span><span class="o">;</span>
+
+                        <span class="k">break</span><span class="o">;</span>
+
+                    <span class="o">}</span>
+
+                <span class="o">}</span>
+            
+            <span class="o">}</span>
+        
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+
+
+    <span class="k">return</span> <span class="nx">oData</span><span class="o">;</span>
+
 <span class="o">};</span>
 
 <span class="c">/**</span>
@@ -622,6 +701,8 @@
                                 <li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 

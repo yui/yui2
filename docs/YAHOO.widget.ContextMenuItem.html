@@ -118,29 +118,61 @@ documentation for more details.
                         </div>
                     </div>
 
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <h4><a name="m_aSubmenuRegion">m_aSubmenuRegion</a>
+                                        <code>- private Array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Array of points (x and y coordinates) representing the 
+triangular region between a menu item and its corresponding submenu.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+
+
+                            </div>
+                        </div>
 
                         <div class="section field inheritance">
                             <h4>Properties inherited from <a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>:</h4>
                             <div class="content">
                                 <code>
                                     
+                                        <a href="YAHOO.widget.MenuItem.html#_checkedIndicator">_checkedIndicator</a>,
                                         <a href="YAHOO.widget.MenuItem.html#_checkImage">_checkImage</a>,
                                         <a href="YAHOO.widget.MenuItem.html#_oAnchor">_oAnchor</a>,
+                                        <a href="YAHOO.widget.MenuItem.html#_oCommand">_oCommand</a>,
                                         <a href="YAHOO.widget.MenuItem.html#_oHelpTextEM">_oHelpTextEM</a>,
                                         <a href="YAHOO.widget.MenuItem.html#_oSubmenu">_oSubmenu</a>,
                                         <a href="YAHOO.widget.MenuItem.html#_oText">_oText</a>,
                                         <a href="YAHOO.widget.MenuItem.html#browser">browser</a>,
                                         <a href="YAHOO.widget.MenuItem.html#CHECKED_IMAGE_ALT_TEXT">CHECKED_IMAGE_ALT_TEXT</a>,
                                         <a href="YAHOO.widget.MenuItem.html#CHECKED_IMAGE_PATH">CHECKED_IMAGE_PATH</a>,
+                                        <a href="YAHOO.widget.MenuItem.html#CHECKED_TEXT">CHECKED_TEXT</a>,
                                         <a href="YAHOO.widget.MenuItem.html#COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT">COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT</a>,
+                                        <a href="YAHOO.widget.MenuItem.html#COLLAPSED_SUBMENU_INDICATOR_TEXT">COLLAPSED_SUBMENU_INDICATOR_TEXT</a>,
+                                        <a href="YAHOO.widget.MenuItem.html#COMMAND_KEYS">COMMAND_KEYS</a>,
                                         <a href="YAHOO.widget.MenuItem.html#constructor">constructor</a>,
                                         <a href="YAHOO.widget.MenuItem.html#CSS_CLASS_NAME">CSS_CLASS_NAME</a>,
                                         <a href="YAHOO.widget.MenuItem.html#DISABLED_CHECKED_IMAGE_ALT_TEXT">DISABLED_CHECKED_IMAGE_ALT_TEXT</a>,
                                         <a href="YAHOO.widget.MenuItem.html#DISABLED_CHECKED_IMAGE_PATH">DISABLED_CHECKED_IMAGE_PATH</a>,
+                                        <a href="YAHOO.widget.MenuItem.html#DISABLED_CHECKED_TEXT">DISABLED_CHECKED_TEXT</a>,
                                         <a href="YAHOO.widget.MenuItem.html#DISABLED_SUBMENU_INDICATOR_ALT_TEXT">DISABLED_SUBMENU_INDICATOR_ALT_TEXT</a>,
                                         <a href="YAHOO.widget.MenuItem.html#DISABLED_SUBMENU_INDICATOR_IMAGE_PATH">DISABLED_SUBMENU_INDICATOR_IMAGE_PATH</a>,
+                                        <a href="YAHOO.widget.MenuItem.html#DISABLED_SUBMENU_INDICATOR_TEXT">DISABLED_SUBMENU_INDICATOR_TEXT</a>,
                                         <a href="YAHOO.widget.MenuItem.html#element">element</a>,
                                         <a href="YAHOO.widget.MenuItem.html#EXPANDED_SUBMENU_INDICATOR_ALT_TEXT">EXPANDED_SUBMENU_INDICATOR_ALT_TEXT</a>,
+                                        <a href="YAHOO.widget.MenuItem.html#EXPANDED_SUBMENU_INDICATOR_TEXT">EXPANDED_SUBMENU_INDICATOR_TEXT</a>,
                                         <a href="YAHOO.widget.MenuItem.html#groupIndex">groupIndex</a>,
                                         <a href="YAHOO.widget.MenuItem.html#imageRoot">imageRoot</a>,
                                         <a href="YAHOO.widget.MenuItem.html#IMG_ROOT">IMG_ROOT</a>,
@@ -245,6 +277,57 @@ documentation for more details.
                                     </div>
                                     <hr />
                                     <h4>
+                                        <a name="pointInTriangle">pointInTriangle</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        Boolean
+                                            <strong>pointInTriangle</strong>
+                                           (
+                                                
+                                                        
+                                                         Array
+                                                    
+                                                
+
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns true if a point is inside the area of a triangle.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>Array &lt;p_aRegion&gt;</code>
+                                                             containing the x and y coordinates of each point in
+the triangle.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>Array &lt;p_aPoint&gt;</code>
+                                                             containing the x and y coordinates of the point.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
                                         <a name="toString">toString</a></h4>
                                     <div class="detail">
                                         <code>
@@ -289,9 +372,13 @@ documentation for more details.
                                             <a href="YAHOO.widget.MenuItem.html#_createRootNodeStructure">_createRootNodeStructure</a>,
                                             <a href="YAHOO.widget.MenuItem.html#_getFirstElement">_getFirstElement</a>,
                                             <a href="YAHOO.widget.MenuItem.html#_initSubTree">_initSubTree</a>,
+                                            <a href="YAHOO.widget.MenuItem.html#_isCommandKey">_isCommandKey</a>,
+                                            <a href="YAHOO.widget.MenuItem.html#_onKeyUp">_onKeyUp</a>,
+                                            <a href="YAHOO.widget.MenuItem.html#_onMouseUp">_onMouseUp</a>,
                                             <a href="YAHOO.widget.MenuItem.html#_preloadImage">_preloadImage</a>,
                                             <a href="YAHOO.widget.MenuItem.html#blur">blur</a>,
                                             <a href="YAHOO.widget.MenuItem.html#configChecked">configChecked</a>,
+                                            <a href="YAHOO.widget.MenuItem.html#configCommand">configCommand</a>,
                                             <a href="YAHOO.widget.MenuItem.html#configDisabled">configDisabled</a>,
                                             <a href="YAHOO.widget.MenuItem.html#configEmphasis">configEmphasis</a>,
                                             <a href="YAHOO.widget.MenuItem.html#configHelpText">configHelpText</a>,
@@ -321,6 +408,7 @@ documentation for more details.
                                     
                                         <a href="YAHOO.widget.MenuItem.html#blurEvent">blurEvent</a>,
                                         <a href="YAHOO.widget.MenuItem.html#clickEvent">clickEvent</a>,
+                                        <a href="YAHOO.widget.MenuItem.html#commandEvent">commandEvent</a>,
                                         <a href="YAHOO.widget.MenuItem.html#destroyEvent">destroyEvent</a>,
                                         <a href="YAHOO.widget.MenuItem.html#focusEvent">focusEvent</a>,
                                         <a href="YAHOO.widget.MenuItem.html#keyDownEvent">keyDownEvent</a>,
@@ -341,6 +429,7 @@ documentation for more details.
                                 <code>
                                     
                                         <a href="YAHOO.widget.MenuItem.html#checked">checked</a>,
+                                        <a href="YAHOO.widget.MenuItem.html#command">command</a>,
                                         <a href="YAHOO.widget.MenuItem.html#disabled">disabled</a>,
                                         <a href="YAHOO.widget.MenuItem.html#emphasis">emphasis</a>,
                                         <a href="YAHOO.widget.MenuItem.html#helptext">helptext</a>,
@@ -367,6 +456,8 @@ documentation for more details.
                                 <li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
@@ -424,12 +515,23 @@ documentation for more details.
                         </ul>
                     </div>
 
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li><a href="#m_aSubmenuRegion">m_aSubmenuRegion</a>
+                                        <!--<code>&lt;Array&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
 
                     <div class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
                                 <li><!--<code>void</code>-->
                                 <a href="#init">init</a>
+                                </li>
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#pointInTriangle">pointInTriangle</a>
                                 </li>
                                 <li><!--<code>String</code>-->
                                 <a href="#toString">toString</a>

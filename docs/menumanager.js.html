@@ -169,7 +169,12 @@
                     <span class="c">// Check if the DIV is the inner &quot;body&quot; node of a menu</span>
 <span class="c"></span>
                     <span class="k">if</span><span class="o">(</span>
-                        <span class="nx">Dom</span><span class="o">.</span><span class="nx">hasClass</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">,</span> <span class="s2">&quot;bd&quot;</span><span class="o">)</span> <span class="o">&amp;&amp;</span> 
+                        <span class="o">(</span>
+                            <span class="nx">Dom</span><span class="o">.</span><span class="nx">hasClass</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">,</span> <span class="s2">&quot;hd&quot;</span><span class="o">)</span> <span class="o">||</span>
+                            <span class="nx">Dom</span><span class="o">.</span><span class="nx">hasClass</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">,</span> <span class="s2">&quot;bd&quot;</span><span class="o">)</span> <span class="o">||</span>
+                            <span class="nx">Dom</span><span class="o">.</span><span class="nx">hasClass</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">,</span> <span class="s2">&quot;ft&quot;</span><span class="o">)</span>
+                        <span class="o">)</span>
+                        <span class="o">&amp;&amp;</span> 
                         <span class="nx">oParentNode</span> <span class="o">&amp;&amp;</span> 
                         <span class="nx">oParentNode</span><span class="o">.</span><span class="nx">tagName</span> <span class="o">&amp;&amp;</span> 
                         <span class="nx">oParentNode</span><span class="o">.</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">()</span> <span class="o">==</span> <span class="s2">&quot;DIV&quot;</span>
@@ -612,6 +617,8 @@
                                 <li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 

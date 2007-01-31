@@ -268,6 +268,59 @@ The tables for the calendars ("cal1_0" and "cal1_1") will be inserted into those
                             <h3><a name="methodDetails">Methods</a></h3>
                             <div class="content">
                                     <h4>
+                                        <a name="_setMonthOnDate">_setMonthOnDate</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_setMonthOnDate</strong>
+                                           (
+                                                
+                                                        
+                                                         date
+                                                    
+                                                
+                                                        , 
+                                                         iMonth
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the month on a Date object, taking into account year rollover if the month is less than 0 or greater than 11.
+The Date object passed in is modified and hence should be cloned before passing in if the original value needs to be maintained
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>date &lt;Date&gt;</code>
+                                                            	The Date object on which to set the month index
+                                                        </dd>
+                                                        <dd>
+                                                            <code>iMonth &lt;Number&gt;</code>
+                                                            	The month index to set
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
                                         <a name="addMonthRenderer">addMonthRenderer</a></h4>
                                     <div class="detail">
                                         <code>
@@ -2418,9 +2471,12 @@ calendar page date to the new month.
                                         </div>
                                     </div>
  
+                                    <div class="deprecated">
+                                        <strong>Deprecated</strong>You can customize the image by overriding the default CSS class for the left arrow - calnavleft, defined in calendar.css
+                                    </div>        
      
                                     <div class="default">
-                                        Default Value: YAHOO.widget.Calendar.IMG_ROOT + "us/tr/callt.gif"
+                                        Default Value: null
                                     </div>        
 
                                     <hr />
@@ -2429,13 +2485,16 @@ calendar page date to the new month.
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
-                                            The image that should be used for the left navigation arrow.
+                                            The image that should be used for the right navigation arrow.
                                         </div>
                                     </div>
  
+                                    <div class="deprecated">
+                                        <strong>Deprecated</strong>You can customize the image by overriding the default CSS class for the right arrow - calnavright, defined in calendar.css
+                                    </div>        
      
                                     <div class="default">
-                                        Default Value: YAHOO.widget.Calendar.IMG_ROOT + "us/tr/calrt.gif"
+                                        Default Value: null
                                     </div>        
 
                                     <hr />
@@ -2638,6 +2697,8 @@ calendar page date to the new month.
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
+                                <li class=""><a href="module_button.html">button</a></li>
+
                                 <li class="selected"><a href="module_calendar.html">calendar</a></li>
 
                                 <li class=""><a href="module_connection.html">connection</a></li>
@@ -2726,6 +2787,9 @@ calendar page date to the new month.
                     <div class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
+                                <li><!--<code>void</code>-->
+                                <a href="#_setMonthOnDate">_setMonthOnDate</a>
+                                </li>
                                 <li><!--<code>void</code>-->
                                 <a href="#addMonthRenderer">addMonthRenderer</a>
                                 </li>

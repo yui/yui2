@@ -95,7 +95,8 @@
        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">fontSize</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">containerStyle</span><span class="o">.</span><span class="nx">fontSize</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">fontSize</span><span class="o">;</span>
         <span class="o">}</span>
-        <span class="k">if</span><span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">opera</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c">// For Opera</span>
+<span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">().</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;opera&quot;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
             <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">style</span> <span class="o">+=</span> <span class="s1">&#39;&#39;</span><span class="o">;</span>
         <span class="o">}</span>
     <span class="o">}</span>
@@ -1109,6 +1110,8 @@
                                 <li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 

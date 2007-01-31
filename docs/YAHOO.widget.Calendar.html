@@ -115,19 +115,6 @@ Note that the table can be replaced with any kind of element.
                         <div class="section field details">
                             <h3><a name="field_detail">Properties</a></h3>
                             <div class="content">
-                                    <h4><a name="_pageDate">_pageDate</a>
-                                        <code>- private Date</code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description">
-                                            A Date object representing the month/year that the calendar is initially set to
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
                                     <h4><a name="_renderStack">_renderStack</a>
                                         <code>- private Array</code>
                                     </h4>
@@ -753,6 +740,9 @@ Note that the table can be replaced with any kind of element.
      
                                         
 
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>. You can now customize images by overriding the span.close-icon, calnavleft and calnavright (default) CSS classes in calendar.css
+                                    </div>        
 
                                     <hr />
                                     <h4><a name="YAHOO.widget.Calendar.MONTH">YAHOO.widget.Calendar.MONTH</a>
@@ -1072,6 +1062,51 @@ on the renderer type
                                                         void
                                                     </code></dt>
                                                     <dd>An array of date field arrays</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_parsePageDate">_parsePageDate</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        Date
+                                            <strong>_parsePageDate</strong>
+                                           (
+                                                
+                                                        
+                                                         date
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Parses a pagedate configuration property value. The value can either be specified as a string of form "mm/yyyy" or a Date object 
+and is parsed into a Date object normalized to the first day of the month. If no value is passed in, the month and year from today's date are used to create the Date object
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>date &lt;Date | String&gt;</code>
+                                                             Pagedate value which needs to be parsed
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Date
+                                                    </code></dt>
+                                                    <dd>The Date object representing the pagedate</dd>
                                                 </dl>
              
                                         </div>
@@ -5026,9 +5061,12 @@ it doesn't.</dd>
                                         </div>
                                     </div>
  
+                                    <div class="deprecated">
+                                        <strong>Deprecated</strong>You can customize the image by overriding the default CSS class for the left arrow - calnavleft, defined in calendar.css
+                                    </div>        
      
                                     <div class="default">
-                                        Default Value: YAHOO.widget.Calendar.IMG_ROOT + "us/tr/callt.gif"
+                                        Default Value: null
                                     </div>        
 
                                     <hr />
@@ -5037,13 +5075,16 @@ it doesn't.</dd>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
-                                            The image that should be used for the left navigation arrow.
+                                            The image that should be used for the right navigation arrow.
                                         </div>
                                     </div>
  
+                                    <div class="deprecated">
+                                        <strong>Deprecated</strong>You can customize the image by overriding the default CSS class for the right arrow - calnavright, defined in calendar.css
+                                    </div>        
      
                                     <div class="default">
-                                        Default Value: YAHOO.widget.Calendar.IMG_ROOT + "us/tr/calrt.gif"
+                                        Default Value: null
                                     </div>        
 
                                     <hr />
@@ -5231,6 +5272,8 @@ it doesn't.</dd>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
+                                <li class=""><a href="module_button.html">button</a></li>
+
                                 <li class="selected"><a href="module_calendar.html">calendar</a></li>
 
                                 <li class=""><a href="module_connection.html">connection</a></li>
@@ -5280,9 +5323,6 @@ it doesn't.</dd>
                     <div class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li><a href="#_pageDate">_pageDate</a>
-                                        <!--<code>&lt;String&gt;</code>-->
-                                </li>
                                 <li><a href="#_renderStack">_renderStack</a>
                                         <!--<code>&lt;String&gt;</code>-->
                                 </li>
@@ -5462,6 +5502,9 @@ it doesn't.</dd>
                                 </li>
                                 <li><!--<code>void</code>-->
                                 <a href="#_parseDates">_parseDates</a>
+                                </li>
+                                <li><!--<code>Date</code>-->
+                                <a href="#_parsePageDate">_parsePageDate</a>
                                 </li>
                                 <li><!--<code>void</code>-->
                                 <a href="#_parseRange">_parseRange</a>

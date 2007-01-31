@@ -36,6 +36,9 @@
 <span class="c"> */</span>
 
 <span class="c">// The first instance of Event will win if it is loaded more than once.</span>
+<span class="c">// @TODO this needs to be changed so that only the state data that needs to</span>
+<span class="c">// be preserved is kept, while methods are overwritten/added as needed.</span>
+<span class="c">// This means that the module pattern can&#39;t be used.</span>
 <span class="c"></span><span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">)</span> <span class="o">{</span>
 
 <span class="c">/**</span>
@@ -127,8 +130,8 @@
 <span class="c">         */</span>
         <span class="k">var</span> <span class="nx">counter</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
 
-        <span class="k">return</span> <span class="o">{</span> <span class="c">// PREPROCESS</span>
-<span class="c"></span>
+        <span class="k">return</span> <span class="o">{</span>
+
             <span class="c">/**</span>
 <span class="c">             * The number of times we should look for elements that are not</span>
 <span class="c">             * in the DOM at the time the event is requested after the document</span>
@@ -210,13 +213,38 @@
             <span class="c">/**</span>
 <span class="c">             * Safari detection is necessary to work around the preventDefault</span>
 <span class="c">             * bug that makes it so you can&#39;t cancel a href click from the </span>
-<span class="c">             * handler.  There is not a capabilities check we can use here.</span>
+<span class="c">             * handler.  Since this function has been used outside of this</span>
+<span class="c">             * utility, it was changed to detect all KHTML browser to be more</span>
+<span class="c">             * friendly towards the non-Safari browsers that share the engine.</span>
+<span class="c">             * Internally, the preventDefault bug detection now uses the</span>
+<span class="c">             * webkit property.</span>
 <span class="c">             * @property isSafari</span>
 <span class="c">             * @private</span>
 <span class="c">             * @static</span>
+<span class="c">             * @deprecated</span>
 <span class="c">             */</span>
-            <span class="nx">isSafari</span><span class="o">:</span> <span class="o">(</span><span class="sr">/Safari|Konqueror|KHTML/gi</span><span class="o">).</span><span class="nx">test</span><span class="o">(</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">),</span>
-
+            <span class="nx">isSafari</span><span class="o">:</span> <span class="o">(</span><span class="sr">/KHTML/gi</span><span class="o">).</span><span class="nx">test</span><span class="o">(</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">),</span>
+            
+            <span class="c">/**</span>
+<span class="c">             * If WebKit is detected, we keep track of the version number of</span>
+<span class="c">             * the engine.</span>
+<span class="c">             * Safari 1.3.2 (312.6): 312.8.1 &lt;-- currently the latest</span>
+<span class="c">             *                       available on Mac OSX 10.3.</span>
+<span class="c">             * Safari 2.0.2: 416 &lt;-- hasOwnProperty introduced</span>
+<span class="c">             * Safari 2.0.4: 418 &lt;-- preventDefault fixed (I believe)</span>
+<span class="c">             * Safari 2.0.4 (419.3): 418.9.1 &lt;-- current release</span>
+<span class="c">             *</span>
+<span class="c">             * http://developer.apple.com/internet/safari/uamatrix.html</span>
+<span class="c">             * @property webkit</span>
+<span class="c">             */</span>
+            <span class="nx">webkit</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">v</span><span class="o">=</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">match</span><span class="o">(</span><span class="sr">/AppleWebKit\/([^ ]*)/</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">v</span><span class="o">&amp;&amp;</span><span class="nx">v</span><span class="o">[</span><span class="m">1</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="nx">v</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
+                <span class="o">}</span>
+                <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="o">}(),</span>
+            
             <span class="c">/**</span>
 <span class="c">             * IE detection needed to properly calculate pageX and pageY.  </span>
 <span class="c">             * capabilities checking didn&#39;t seem to work because another </span>
@@ -226,7 +254,7 @@
 <span class="c">             * @private</span>
 <span class="c">             * @static</span>
 <span class="c">             */</span>
-            <span class="nx">isIE</span><span class="o">:</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">isSafari</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">match</span><span class="o">(</span><span class="sr">/opera/gi</span><span class="o">)</span> <span class="o">&amp;&amp;</span> 
+            <span class="nx">isIE</span><span class="o">:</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">webkit</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">match</span><span class="o">(</span><span class="sr">/opera/gi</span><span class="o">)</span> <span class="o">&amp;&amp;</span> 
                     <span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">match</span><span class="o">(</span><span class="sr">/msie/gi</span><span class="o">)),</span>
 
             <span class="c">/**</span>
@@ -463,14 +491,20 @@
 <span class="c">             */</span>
             <span class="nx">fireLegacyEvent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">legacyIndex</span><span class="o">)</span> <span class="o">{</span>
                 <span class="c">// this.logger.debug(&quot;fireLegacyEvent &quot; + legacyIndex);</span>
-<span class="c"></span>                <span class="k">var</span> <span class="nx">ok</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-
-                <span class="k">var</span> <span class="nx">le</span> <span class="o">=</span> <span class="nx">legacyHandlers</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">];</span>
-                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">le</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">var</span> <span class="nx">li</span> <span class="o">=</span> <span class="nx">le</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">ok</span><span class="o">=</span><span class="kc">true</span><span class="o">,</span><span class="nx">le</span><span class="o">,</span><span class="nx">lh</span><span class="o">,</span><span class="nx">li</span><span class="o">,</span><span class="nx">scope</span><span class="o">,</span><span class="nx">ret</span><span class="o">;</span>
+                
+                <span class="c">// Fire the original handler if we replaced one</span>
+<span class="c"></span>                <span class="nx">le</span> <span class="o">=</span> <span class="nx">legacyEvents</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">le</span> <span class="o">&amp;&amp;</span> <span class="nx">le</span><span class="o">[</span><span class="m">2</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="nx">le</span><span class="o">[</span><span class="m">2</span><span class="o">](</span><span class="nx">e</span><span class="o">);</span>
+                <span class="o">}</span>
+                
+                <span class="nx">lh</span> <span class="o">=</span> <span class="nx">legacyHandlers</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">];</span>
+                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">lh</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">li</span> <span class="o">=</span> <span class="nx">lh</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
                     <span class="k">if</span> <span class="o">(</span> <span class="nx">li</span> <span class="o">&amp;&amp;</span> <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">WFN</span><span class="o">]</span> <span class="o">)</span> <span class="o">{</span>
-                        <span class="k">var</span> <span class="nx">scope</span> <span class="o">=</span> <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ADJ_SCOPE</span><span class="o">];</span>
-                        <span class="k">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">WFN</span><span class="o">].</span><span class="nx">call</span><span class="o">(</span><span class="nx">scope</span><span class="o">,</span> <span class="nx">e</span><span class="o">);</span>
+                        <span class="nx">scope</span> <span class="o">=</span> <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ADJ_SCOPE</span><span class="o">];</span>
+                        <span class="nx">ret</span> <span class="o">=</span> <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">WFN</span><span class="o">].</span><span class="nx">call</span><span class="o">(</span><span class="nx">scope</span><span class="o">,</span> <span class="nx">e</span><span class="o">);</span>
                         <span class="nx">ok</span> <span class="o">=</span> <span class="o">(</span><span class="nx">ok</span> <span class="o">&amp;&amp;</span> <span class="nx">ret</span><span class="o">);</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
@@ -496,16 +530,16 @@
 
             <span class="c">/**</span>
 <span class="c">             * Logic that determines when we should automatically use legacy</span>
-<span class="c">             * events instead of DOM2 events.</span>
+<span class="c">             * events instead of DOM2 events.  Currently this is limited to old</span>
+<span class="c">             * Safari browsers with a broken preventDefault</span>
 <span class="c">             * @method useLegacyEvent</span>
 <span class="c">             * @static</span>
 <span class="c">             * @private</span>
 <span class="c">             */</span>
             <span class="nx">useLegacyEvent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(!</span><span class="nx">el</span><span class="o">.</span><span class="nx">addEventListener</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">el</span><span class="o">.</span><span class="nx">attachEvent</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isSafari</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="s2">&quot;click&quot;</span> <span class="o">==</span> <span class="nx">sType</span> <span class="o">||</span> <span class="s2">&quot;dblclick&quot;</span> <span class="o">==</span> <span class="nx">sType</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">webkit</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="s2">&quot;click&quot;</span><span class="o">==</span><span class="nx">sType</span> <span class="o">||</span> <span class="s2">&quot;dblclick&quot;</span><span class="o">==</span><span class="nx">sType</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">v</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">webkit</span><span class="o">,</span> <span class="m">10</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(!</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">v</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">v</span><span class="o">&lt;</span><span class="m">418</span><span class="o">)</span> <span class="o">{</span>
                         <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
@@ -1182,6 +1216,16 @@
                     <span class="k">return</span> <span class="o">[</span><span class="m">0</span><span class="o">,</span> <span class="m">0</span><span class="o">];</span>
                 <span class="o">}</span>
             <span class="o">},</span>
+            
+            <span class="c">/**</span>
+<span class="c">             * Used by old versions of CustomEvent, restored for backwards</span>
+<span class="c">             * compatibility</span>
+<span class="c">             * @method regCE</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">regCE</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                <span class="c">// does nothing</span>
+<span class="c"></span>            <span class="o">},</span>
 
             <span class="c">/**</span>
 <span class="c">             * Adds a DOM event directly without the caching, cleanup, scope adj, etc</span>
@@ -1276,6 +1320,8 @@
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
+                                <li class=""><a href="module_button.html">button</a></li>
+
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
                                 <li class=""><a href="module_connection.html">connection</a></li>
@@ -1308,6 +1354,7 @@
                                 <li class=""><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
                                 <li class=""><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
                                 <li class=""><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
+                                <li class=""><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
                                 <li class=""><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
                         </ul>
                     </div>
@@ -1318,6 +1365,7 @@
                                 <li class=""><a href="CustomEvent.js.html">CustomEvent.js</a></li>
                                 <li class="selected"><a href="Event.js.html">Event.js</a></li>
                                 <li class=""><a href="EventProvider.js.html">EventProvider.js</a></li>
+                                <li class=""><a href="KeyListener.js.html">KeyListener.js</a></li>
                         </ul>
                     </div>
 

@@ -158,12 +158,19 @@ calculated in a different manner than IE.
                                         <div class="description">
                                             Safari detection is necessary to work around the preventDefault
 bug that makes it so you can't cancel a href click from the 
-handler.  There is not a capabilities check we can use here.
+handler.  Since this function has been used outside of this
+utility, it was changed to detect all KHTML browser to be more
+friendly towards the non-Safari browsers that share the engine.
+Internally, the preventDefault bug detection now uses the
+webkit property.
                                         </div>
                                     </div>
      
                                         
 
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>&#160;
+                                    </div>        
 
                                     <hr />
                                     <h4><a name="legacyEvents">legacyEvents</a>
@@ -324,6 +331,26 @@ the page load.
                                         <div class="description">
                                             User-defined unload function that will be fired before all events
 are detached
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="webkit">webkit</a>
+                                        <code>- object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            If WebKit is detected, we keep track of the version number of
+the engine.
+Safari 1.3.2 (312.6): 312.8.1 <-- currently the latest
+available on Mac OSX 10.3.
+Safari 2.0.2: 416 <-- hasOwnProperty introduced
+Safari 2.0.4: 418 <-- preventDefault fixed (I believe)
+Safari 2.0.4 (419.3): 418.9.1 <-- current release
+http://developer.apple.com/internet/safari/uamatrix.html
                                         </div>
                                     </div>
      
@@ -1741,6 +1768,39 @@ left out, all listeners will be removed
                                     </div>
                                     <hr />
                                     <h4>
+                                        <a name="regCE">regCE</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>regCE</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Used by old versions of CustomEvent, restored for backwards
+compatibility
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
                                         <a name="removeListener">removeListener</a></h4>
                                     <div class="detail">
                                         <code>
@@ -1985,7 +2045,8 @@ return value for getTarget and getRelatedTarget.
                                         
                                         <div class="description">
                                             Logic that determines when we should automatically use legacy
-events instead of DOM2 events.
+events instead of DOM2 events.  Currently this is limited to old
+Safari browsers with a broken preventDefault
                                         </div>
 
                                         <div class="description">
@@ -2026,6 +2087,8 @@ events instead of DOM2 events.
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
+                                <li class=""><a href="module_button.html">button</a></li>
+
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
                                 <li class=""><a href="module_connection.html">connection</a></li>
@@ -2058,6 +2121,7 @@ events instead of DOM2 events.
                                 <li class=""><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
                                 <li class="selected"><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
                                 <li class=""><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
+                                <li class=""><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
                                 <li class=""><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
                         </ul>
                     </div>
@@ -2068,6 +2132,7 @@ events instead of DOM2 events.
                                 <li class=""><a href="CustomEvent.js.html">CustomEvent.js</a></li>
                                 <li class=""><a href="Event.js.html">Event.js</a></li>
                                 <li class=""><a href="EventProvider.js.html">EventProvider.js</a></li>
+                                <li class=""><a href="KeyListener.js.html">KeyListener.js</a></li>
                         </ul>
                     </div>
 
@@ -2134,6 +2199,9 @@ DOM element cache</a>
                                         <!--<code>&lt;int&gt;</code>-->
                                 </li>
                                 <li><a href="#unloadListeners">unloadListeners</a>
+                                        <!--<code>&lt;int&gt;</code>-->
+                                </li>
+                                <li><a href="#webkit">webkit</a>
                                         <!--<code>&lt;int&gt;</code>-->
                                 </li>
                                 <li><a href="#WFN">WFN</a>
@@ -2234,6 +2302,9 @@ DOM element cache</a>
                                 </li>
                                 <li><!--<code>void</code>-->
                                 <a href="#purgeElement">purgeElement</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#regCE">regCE</a>
                                 </li>
                                 <li><!--<code>boolean</code>-->
                                 <a href="#removeListener">removeListener</a>

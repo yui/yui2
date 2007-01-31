@@ -25,14 +25,7 @@
 			<div class="yui-b">
 
                     <div id="srcout">
-<div class="highlight" ><pre><span class="c">/*</span>
-<span class="c">Copyright (c) 2006, Yahoo! Inc. All rights reserved.</span>
-<span class="c">Code licensed under the BSD License:</span>
-<span class="c">http://developer.yahoo.net/yui/license.txt</span>
-<span class="c">Version 0.12.2</span>
-<span class="c">*/</span>
-
-<span class="c">/**</span>
+<div class="highlight" ><pre><span class="c">/**</span>
 <span class="c">* YAHOO.widget.CalendarGroup is a special container class for YAHOO.widget.Calendar. This class facilitates</span>
 <span class="c">* the ability to have multi-page calendar views that share a single dataset and are</span>
 <span class="c">* dependent on each other.</span>
@@ -67,6 +60,7 @@
 <span class="c">* @param {Object}	config		The configuration object containing the Calendar&#39;s arguments</span>
 <span class="c">*/</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">init</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">containerId</span><span class="o">,</span> <span class="nx">config</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">logger</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">(</span><span class="s2">&quot;CalendarGroup &quot;</span> <span class="o">+</span> <span class="nx">id</span><span class="o">);</span>
 	<span class="k">this</span><span class="o">.</span><span class="nx">initEvents</span><span class="o">();</span>
 	<span class="k">this</span><span class="o">.</span><span class="nx">initStyles</span><span class="o">();</span>
 
@@ -145,6 +139,7 @@
 		<span class="o">};</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">renderEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">fixWidth</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
 	<span class="o">}</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Initialized &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s2">&quot;-page CalendarGroup&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">);</span>
 <span class="o">};</span>
 
 
@@ -267,17 +262,19 @@
 <span class="c">	* The image that should be used for the left navigation arrow.</span>
 <span class="c">	* @config NAV_ARROW_LEFT</span>
 <span class="c">	* @type String</span>
-<span class="c">	* @default YAHOO.widget.Calendar.IMG_ROOT + &quot;us/tr/callt.gif&quot;</span>
+<span class="c">	* @deprecated You can customize the image by overriding the default CSS class for the left arrow - calnavleft, defined in calendar.css</span>
+<span class="c">	* @default null</span>
 <span class="c">	*/</span>		
-	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;NAV_ARROW_LEFT&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Calendar</span><span class="o">.</span><span class="nx">IMG_ROOT</span> <span class="o">+</span> <span class="s2">&quot;us/tr/callt.gif&quot;</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;NAV_ARROW_LEFT&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="kc">null</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
 	
 	<span class="c">/**</span>
-<span class="c">	* The image that should be used for the left navigation arrow.</span>
+<span class="c">	* The image that should be used for the right navigation arrow.</span>
 <span class="c">	* @config NAV_ARROW_RIGHT</span>
 <span class="c">	* @type String</span>
-<span class="c">	* @default YAHOO.widget.Calendar.IMG_ROOT + &quot;us/tr/calrt.gif&quot;</span>
+<span class="c">	* @deprecated You can customize the image by overriding the default CSS class for the right arrow - calnavright, defined in calendar.css</span>
+<span class="c">	* @default null</span>
 <span class="c">	*/</span>		
-	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;NAV_ARROW_RIGHT&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Calendar</span><span class="o">.</span><span class="nx">IMG_ROOT</span> <span class="o">+</span> <span class="s2">&quot;us/tr/calrt.gif&quot;</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;NAV_ARROW_RIGHT&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="kc">null</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
 
 	<span class="c">// Locale properties</span>
 <span class="c"></span>	
@@ -550,7 +547,7 @@
 
 		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">constructChild</span><span class="o">(</span><span class="nx">calId</span><span class="o">,</span> <span class="nx">calContainerId</span><span class="o">,</span> <span class="nx">childConfig</span><span class="o">);</span>
 		<span class="k">var</span> <span class="nx">caldate</span> <span class="o">=</span> <span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;pagedate&quot;</span><span class="o">);</span>
-		<span class="nx">caldate</span><span class="o">.</span><span class="nx">setMonth</span><span class="o">(</span><span class="nx">caldate</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">()+</span><span class="nx">p</span><span class="o">);</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_setMonthOnDate</span><span class="o">(</span><span class="nx">caldate</span><span class="o">,</span> <span class="nx">caldate</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">()</span> <span class="o">+</span> <span class="nx">p</span><span class="o">);</span>
 		<span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;pagedate&quot;</span><span class="o">,</span> <span class="nx">caldate</span><span class="o">);</span>
 		
 		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">Style</span><span class="o">.</span><span class="nx">CSS_SINGLE</span><span class="o">);</span>
@@ -580,12 +577,18 @@
 <span class="c">*/</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">configPageDate</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">args</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
 	<span class="k">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="nx">args</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
-
+	<span class="k">var</span> <span class="nx">firstPageDate</span><span class="o">;</span>
+	
 	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
 		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
-		<span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;pagedate&quot;</span><span class="o">,</span> <span class="nx">val</span><span class="o">);</span>
-		<span class="k">var</span> <span class="nx">calDate</span> <span class="o">=</span> <span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;pagedate&quot;</span><span class="o">);</span>
-		<span class="nx">calDate</span><span class="o">.</span><span class="nx">setMonth</span><span class="o">(</span><span class="nx">calDate</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">()+</span><span class="nx">p</span><span class="o">);</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">p</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">firstPageDate</span> <span class="o">=</span> <span class="nx">cal</span><span class="o">.</span><span class="nx">_parsePageDate</span><span class="o">(</span><span class="nx">val</span><span class="o">);</span>
+			<span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;pagedate&quot;</span><span class="o">,</span> <span class="nx">firstPageDate</span><span class="o">);</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">var</span> <span class="nx">pageDate</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">(</span><span class="nx">firstPageDate</span><span class="o">);</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">_setMonthOnDate</span><span class="o">(</span><span class="nx">pageDate</span><span class="o">,</span> <span class="nx">pageDate</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">()</span> <span class="o">+</span> <span class="nx">p</span><span class="o">);</span>
+			<span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;pagedate&quot;</span><span class="o">,</span> <span class="nx">pageDate</span><span class="o">);</span>
+		<span class="o">}</span>
 	<span class="o">}</span>
 <span class="o">};</span>
 
@@ -667,10 +670,18 @@
 <span class="c">*/</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">setMonth</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">month</span><span class="o">)</span> <span class="o">{</span>
 	<span class="nx">month</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">month</span><span class="o">,</span> <span class="m">10</span><span class="o">);</span>
-
-	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">var</span> <span class="nx">currYear</span><span class="o">;</span>
+	
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="o">++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
 		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
-		<span class="nx">cal</span><span class="o">.</span><span class="nx">setMonth</span><span class="o">(</span><span class="nx">month</span><span class="o">+</span><span class="nx">p</span><span class="o">);</span>
+		<span class="k">var</span> <span class="nx">pageDate</span> <span class="o">=</span> <span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;pagedate&quot;</span><span class="o">);</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">p</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">currYear</span> <span class="o">=</span> <span class="nx">pageDate</span><span class="o">.</span><span class="nx">getFullYear</span><span class="o">();</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="nx">pageDate</span><span class="o">.</span><span class="nx">setYear</span><span class="o">(</span><span class="nx">currYear</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_setMonthOnDate</span><span class="o">(</span><span class="nx">pageDate</span><span class="o">,</span> <span class="nx">month</span><span class="o">+</span><span class="nx">p</span><span class="o">);</span> 
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;pagedate&quot;</span><span class="o">,</span> <span class="nx">pageDate</span><span class="o">);</span>
 	<span class="o">}</span>
 <span class="o">};</span>
 
@@ -682,7 +693,6 @@
 <span class="c">*/</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">setYear</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">year</span><span class="o">)</span> <span class="o">{</span>
 	<span class="nx">year</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">year</span><span class="o">,</span> <span class="m">10</span><span class="o">);</span>
-
 	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
 		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
 		<span class="k">var</span> <span class="nx">pageDate</span> <span class="o">=</span> <span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;pageDate&quot;</span><span class="o">);</span>
@@ -979,6 +989,26 @@
 <span class="o">};</span>
 
 <span class="c">/**</span>
+<span class="c">* Sets the month on a Date object, taking into account year rollover if the month is less than 0 or greater than 11.</span>
+<span class="c">* The Date object passed in is modified and hence should be cloned before passing in if the original value needs to be maintained</span>
+<span class="c">* @method	_setMonthOnDate</span>
+<span class="c">* @private</span>
+<span class="c">* @param	{Date}	date	The Date object on which to set the month index</span>
+<span class="c">* @param	{Number}	iMonth	The month index to set</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_setMonthOnDate</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">date</span><span class="o">,</span> <span class="nx">iMonth</span><span class="o">)</span> <span class="o">{</span>
+	<span class="c">// BUG in Safari 1.3, 2.0 (WebKit build &lt; 420), Date.setMonth does not work consistently if iMonth is not 0-11</span>
+<span class="c"></span>	<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">browser</span> <span class="o">==</span> <span class="s2">&quot;safari&quot;</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">iMonth</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="nx">iMonth</span> <span class="o">&gt;</span> <span class="m">11</span><span class="o">))</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">DM</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DateMath</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">newDate</span> <span class="o">=</span> <span class="nx">DM</span><span class="o">.</span><span class="nx">add</span><span class="o">(</span><span class="nx">date</span><span class="o">,</span> <span class="nx">DM</span><span class="o">.</span><span class="nx">MONTH</span><span class="o">,</span> <span class="nx">iMonth</span><span class="o">-</span><span class="nx">date</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">());</span>
+		<span class="nx">date</span><span class="o">.</span><span class="nx">setTime</span><span class="o">(</span><span class="nx">newDate</span><span class="o">.</span><span class="nx">getTime</span><span class="o">());</span>
+	<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+		<span class="nx">date</span><span class="o">.</span><span class="nx">setMonth</span><span class="o">(</span><span class="nx">iMonth</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+
+<span class="c">/**</span>
 <span class="c">* CSS class representing the container for the calendar</span>
 <span class="c">* @property YAHOO.widget.CalendarGroup.CSS_CONTAINER</span>
 <span class="c">* @static</span>
@@ -1076,6 +1106,8 @@
                                 <li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
 
                                 <li class="selected"><a href="module_calendar.html">calendar</a></li>
 

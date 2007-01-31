@@ -101,6 +101,19 @@
             <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
         <span class="o">}</span>
     <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Removes all listeners from the specified event</span>
+<span class="c">     * @method unsubscribeAll</span>
+<span class="c">     * @param p_type {string}   The type, or name of the event</span>
+<span class="c">     */</span>
+    <span class="nx">unsubscribeAll</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_type</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">__yui_events</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__yui_events</span> <span class="o">||</span> <span class="o">{};</span>
+        <span class="k">var</span> <span class="nx">ce</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__yui_events</span><span class="o">[</span><span class="nx">p_type</span><span class="o">];</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">ce</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">ce</span><span class="o">.</span><span class="nx">unsubscribeAll</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
 
     <span class="c">/**</span>
 <span class="c">     * Creates a new custom event of the specified type.  If a custom event</span>
@@ -231,6 +244,8 @@
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
+                                <li class=""><a href="module_button.html">button</a></li>
+
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
                                 <li class=""><a href="module_connection.html">connection</a></li>
@@ -263,6 +278,7 @@
                                 <li class=""><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
                                 <li class=""><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
                                 <li class=""><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
+                                <li class=""><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
                                 <li class=""><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
                         </ul>
                     </div>
@@ -273,6 +289,7 @@
                                 <li class=""><a href="CustomEvent.js.html">CustomEvent.js</a></li>
                                 <li class=""><a href="Event.js.html">Event.js</a></li>
                                 <li class="selected"><a href="EventProvider.js.html">EventProvider.js</a></li>
+                                <li class=""><a href="KeyListener.js.html">KeyListener.js</a></li>
                         </ul>
                     </div>
 

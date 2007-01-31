@@ -97,10 +97,14 @@
     <span class="k">this</span><span class="o">.</span><span class="nx">unRegister</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">tween</span><span class="o">,</span> <span class="nx">index</span><span class="o">)</span> <span class="o">{</span>
         <span class="nx">tween</span><span class="o">.</span><span class="nx">_onComplete</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
         <span class="nx">index</span> <span class="o">=</span> <span class="nx">index</span> <span class="o">||</span> <span class="nx">getIndex</span><span class="o">(</span><span class="nx">tween</span><span class="o">);</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">index</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span> <span class="nx">queue</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">index</span><span class="o">,</span> <span class="m">1</span><span class="o">);</span> <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">index</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">queue</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">index</span><span class="o">,</span> <span class="m">1</span><span class="o">);</span>
+        <span class="o">}</span>
         
         <span class="nx">tweenCount</span> <span class="o">-=</span> <span class="m">1</span><span class="o">;</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">tweenCount</span> <span class="o">&lt;=</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">stop</span><span class="o">();</span> <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">tweenCount</span> <span class="o">&lt;=</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">stop</span><span class="o">();</span>
+        <span class="o">}</span>
     <span class="o">};</span>
     
     <span class="c">/**</span>
@@ -109,7 +113,9 @@
 <span class="c">     * @method start</span>
 <span class="c">     */</span>    
     <span class="k">this</span><span class="o">.</span><span class="nx">start</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">thread</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span> <span class="nx">thread</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">run</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">delay</span><span class="o">);</span> <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">thread</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">thread</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">run</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">delay</span><span class="o">);</span>
+        <span class="o">}</span>
     <span class="o">};</span>
 
     <span class="c">/**</span>
@@ -121,11 +127,13 @@
     <span class="k">this</span><span class="o">.</span><span class="nx">stop</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">tween</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(!</span><span class="nx">tween</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">clearInterval</span><span class="o">(</span><span class="nx">thread</span><span class="o">);</span>
+            
             <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">queue</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="nx">queue</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">isAnimated</span><span class="o">())</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">unRegister</span><span class="o">(</span><span class="nx">tween</span><span class="o">,</span> <span class="nx">i</span><span class="o">);</span>  
+                <span class="k">if</span> <span class="o">(</span> <span class="nx">queue</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">isAnimated</span><span class="o">()</span> <span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">unRegister</span><span class="o">(</span><span class="nx">queue</span><span class="o">[</span><span class="m">0</span><span class="o">],</span> <span class="m">0</span><span class="o">);</span>  
                 <span class="o">}</span>
             <span class="o">}</span>
+
             <span class="nx">queue</span> <span class="o">=</span> <span class="o">[];</span>
             <span class="nx">thread</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
             <span class="nx">tweenCount</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
@@ -208,6 +216,8 @@
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
+                                <li class=""><a href="module_button.html">button</a></li>
+
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
                                 <li class=""><a href="module_connection.html">connection</a></li>
@@ -239,9 +249,12 @@
                         <ul class="content">
                                 <li class=""><a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a></li>
                                 <li class=""><a href="YAHOO.util.AnimMgr.html">YAHOO.util.AnimMgr</a></li>
+                                <li class=""><a href="YAHOO.util.Attribute.html">YAHOO.util.Attribute</a></li>
+                                <li class=""><a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a></li>
                                 <li class=""><a href="YAHOO.util.Bezier.html">YAHOO.util.Bezier</a></li>
                                 <li class=""><a href="YAHOO.util.ColorAnim.html">YAHOO.util.ColorAnim</a></li>
                                 <li class=""><a href="YAHOO.util.Easing.html">YAHOO.util.Easing</a></li>
+                                <li class=""><a href="YAHOO.util.Element.html">YAHOO.util.Element</a></li>
                                 <li class=""><a href="YAHOO.util.Motion.html">YAHOO.util.Motion</a></li>
                                 <li class=""><a href="YAHOO.util.Scroll.html">YAHOO.util.Scroll</a></li>
                         </ul>
@@ -252,9 +265,12 @@
                         <ul class="content">        
                                 <li class=""><a href="Anim.js.html">Anim.js</a></li>
                                 <li class="selected"><a href="AnimMgr.js.html">AnimMgr.js</a></li>
+                                <li class=""><a href="Attribute.js.html">Attribute.js</a></li>
+                                <li class=""><a href="AttributeProvider.js.html">AttributeProvider.js</a></li>
                                 <li class=""><a href="Bezier.js.html">Bezier.js</a></li>
                                 <li class=""><a href="ColorAnim.js.html">ColorAnim.js</a></li>
                                 <li class=""><a href="Easing.js.html">Easing.js</a></li>
+                                <li class=""><a href="Element.js.html">Element.js</a></li>
                                 <li class=""><a href="Motion.js.html">Motion.js</a></li>
                                 <li class=""><a href="Scroll.js.html">Scroll.js</a></li>
                         </ul>

@@ -126,6 +126,24 @@ for more details.
                         <div class="section field details">
                             <h3><a name="field_detail">Properties</a></h3>
                             <div class="content">
+                                    <h4><a name="_checkedIndicator">_checkedIndicator</a>
+                                        <code>- private <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+level-one-html.html#ID-58190037">HTMLElement</a></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the menu item's checkmark image.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+level-one-html.html#ID-58190037">HTMLElement</a>
+                                    </div>        
+
+
+                                    <hr />
                                     <h4><a name="_checkImage">_checkImage</a>
                                         <code>- private <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 one-html.html#ID-17701901">HTMLImageElement</a></code>
@@ -141,6 +159,9 @@ one-html.html#ID-17701901">HTMLImageElement</a></code>
                                         Default Value: null
                                     </div>        
 
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>Use _checkedIndicator.
+                                    </div>        
 
                                     <hr />
                                     <h4><a name="_oAnchor">_oAnchor</a>
@@ -151,6 +172,23 @@ one-html.html#ID-48250443">HTMLAnchorElement</a></code>
                                         <div class="description">
                                             Object reference to the menu item's 
 <code>&#60;a&#62;</code> element.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="_oCommand">_oCommand</a>
+                                        <code>- private Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the menu item's current value for the 
+"command" attribute.
                                         </div>
                                     </div>
      
@@ -239,6 +277,9 @@ for the checked image.
                                         Default Value: "Checked."
                                     </div>        
 
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>Use CHECKED_TEXT.
+                                    </div>        
 
                                     <hr />
                                     <h4><a name="CHECKED_IMAGE_PATH">CHECKED_IMAGE_PATH</a>
@@ -256,6 +297,27 @@ the checked state.
                                         Default Value: "nt/ic/ut/bsc/menuchk8_nrm_1.gif"
                                     </div>        
 
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All checked indicator images are applied via a CSS 
+background image.  See "checkedindicator" class name in menu.css.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="CHECKED_TEXT">CHECKED_TEXT</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the text to be used for the checked 
+indicator element (<code>&#60;em&#62;<code>).
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Checked."
+                                    </div>        
+
 
                                     <hr />
                                     <h4><a name="COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT">COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT</a>
@@ -271,6 +333,43 @@ for the submenu arrow indicator.
                                         
                                     <div class="default">
                                         Default Value: "Collapsed.  Click to expand."
+                                    </div>        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>Use COLLAPSED_SUBMENU_INDICATOR_TEXT.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="COLLAPSED_SUBMENU_INDICATOR_TEXT">COLLAPSED_SUBMENU_INDICATOR_TEXT</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the text for the <code>&#60;em&#62;<code>
+element used for the submenu arrow indicator.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Submenu collapsed.  Click to expand submenu."
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="COMMAND_KEYS">COMMAND_KEYS</a>
+                                        <code>- Array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Array of key codes that trigger the menu item's 
+"command" event.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: [13, 32]
                                     </div>        
 
 
@@ -323,6 +422,9 @@ for the checked image when the item is disabled.
                                         Default Value: "Checked. (Item disabled.)"
                                     </div>        
 
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>Use DISABLED_CHECKED_TEXT.
+                                    </div>        
 
                                     <hr />
                                     <h4><a name="DISABLED_CHECKED_IMAGE_PATH">DISABLED_CHECKED_IMAGE_PATH</a>
@@ -338,6 +440,28 @@ the disabled checked state.
                                         
                                     <div class="default">
                                         Default Value: "nt/ic/ut/bsc/menuchk8_dim_1.gif"
+                                    </div>        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All checked indicator images are applied via a CSS 
+background image.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="DISABLED_CHECKED_TEXT">DISABLED_CHECKED_TEXT</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the text to be used for the checked 
+indicator element (<code>&#60;em&#62;<code>) when the menu item 
+is disabled.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Checked. (Item disabled.)"
                                     </div>        
 
 
@@ -357,6 +481,9 @@ for the submenu arrow indicator when the menu item is disabled.
                                         Default Value: "Disabled."
                                     </div>        
 
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>Use DISABLED_SUBMENU_INDICATOR_TEXT.
+                                    </div>        
 
                                     <hr />
                                     <h4><a name="DISABLED_SUBMENU_INDICATOR_IMAGE_PATH">DISABLED_SUBMENU_INDICATOR_IMAGE_PATH</a>
@@ -372,6 +499,27 @@ submenu arrow indicator when the menu item is disabled.
                                         
                                     <div class="default">
                                         Default Value: "nt/ic/ut/alt1/menuarorght8_dim_1.gif"
+                                    </div>        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All submenu indicator images are applied via a CSS 
+background image.  See "submenuindicator" class name in menu.css.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="DISABLED_SUBMENU_INDICATOR_TEXT">DISABLED_SUBMENU_INDICATOR_TEXT</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the text for the submenu arrow indicator 
+element (<code>&#60;em&#62;<code>) when the menu item is disabled.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Submenu collapsed.  (Item disabled.)."
                                     </div>        
 
 
@@ -410,6 +558,26 @@ for the submenu arrow indicator when the submenu is visible.
                                         Default Value: "Expanded.  Click to collapse."
                                     </div>        
 
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>Use EXPANDED_SUBMENU_INDICATOR_TEXT.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="EXPANDED_SUBMENU_INDICATOR_TEXT">EXPANDED_SUBMENU_INDICATOR_TEXT</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the text for the submenu arrow indicator 
+element (<code>&#60;em&#62;<code>) when the submenu is visible.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Submenu expanded.  Click to collapse submenu."
+                                    </div>        
+
 
                                     <hr />
                                     <h4><a name="groupIndex">groupIndex</a>
@@ -441,6 +609,10 @@ item's images.
      
                                         
 
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All menu item images are now applied via CSS 
+background images.
+                                    </div>        
 
                                     <hr />
                                     <h4><a name="IMG_ROOT">IMG_ROOT</a>
@@ -458,6 +630,10 @@ non-secure images.
                                         Default Value: "http://us.i1.yimg.com/us.yimg.com/i/"
                                     </div>        
 
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All menu item images are now applied via CSS 
+background images.
+                                    </div>        
 
                                     <hr />
                                     <h4><a name="IMG_ROOT_SSL">IMG_ROOT_SSL</a>
@@ -475,6 +651,10 @@ served images.
                                         Default Value: "https://a248.e.akamai.net/sec.yimg.com/i/"
                                     </div>        
 
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All menu item images are now applied via CSS 
+background images.
+                                    </div>        
 
                                     <hr />
                                     <h4><a name="index">index</a>
@@ -506,6 +686,10 @@ context is secure (HTTPS).
      
                                         
 
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All menu item images are now applied via CSS 
+background images.
+                                    </div>        
 
                                     <hr />
                                     <h4><a name="parent">parent</a>
@@ -539,6 +723,10 @@ the selected checked state.
                                         Default Value: "nt/ic/ut/bsc/menuchk8_hov_1.gif"
                                     </div>        
 
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All checked indicator images are applied via a CSS 
+background image.  See "checkedindicator" class name in menu.css.
+                                    </div>        
 
                                     <hr />
                                     <h4><a name="SELECTED_SUBMENU_INDICATOR_IMAGE_PATH">SELECTED_SUBMENU_INDICATOR_IMAGE_PATH</a>
@@ -556,6 +744,10 @@ submenu arrow indicator when the menu item is selected.
                                         Default Value: "nt/ic/ut/alt1/menuarorght8_hov_1.gif"
                                     </div>        
 
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All submenu indicator images are applied via a CSS 
+background image.  See "submenuindicator" class name in menu.css.
+                                    </div>        
 
                                     <hr />
                                     <h4><a name="srcElement">srcElement</a>
@@ -599,6 +791,10 @@ menu item's submenu arrow indicator.
                                         Default Value: "nt/ic/ut/alt1/menuarorght8_nrm_1.gif"
                                     </div>        
 
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All submenu indicator images are applied via a CSS 
+background image.  See "submenuindicator" class name in menu.css.
+                                    </div>        
 
                                     <hr />
                                     <h4><a name="SUBMENU_TYPE">SUBMENU_TYPE</a>
@@ -617,11 +813,11 @@ add when parsing the child nodes of the menu item's source HTML element.
                                     <hr />
                                     <h4><a name="submenuIndicator">submenuIndicator</a>
                                         <code>- <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-level-one-html.html#ID-17701901">HTMLImageElement</a></code>
+level-one-html.html#ID-58190037">HTMLElement</a></code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
-                                            Object reference to the <code>&#60;img&#62;</code> element 
+                                            Object reference to the <code>&#60;em&#62;</code> element 
 used to create the submenu indicator for the menu item.
                                         </div>
                                     </div>
@@ -629,7 +825,7 @@ used to create the submenu indicator for the menu item.
                                         
                                     <div class="default">
                                         Default Value: <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-level-one-html.html#ID-17701901">HTMLImageElement</a>
+level-one-html.html#ID-58190037">HTMLElement</a>
                                     </div>        
 
 
@@ -870,6 +1066,175 @@ the child nodes to instantiate other menus.
                                     </div>
                                     <hr />
                                     <h4>
+                                        <a name="_isCommandKey">_isCommandKey</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong>_isCommandKey</strong>
+                                           (
+                                                
+                                                        
+                                                         p_nKeyCode
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Determines if a key code is one that should be used to fire
+the menu item's "command" event.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_nKeyCode &lt;Number&gt;</code>
+                                                             Number representing the key code to evalutate.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_onKeyUp">_onKeyUp</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong>_onKeyUp</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                                        , 
+                                                         p_oItem
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            "keyup" event handler for the menu item.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event that 
+was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oItem &lt;YAHOO.widget.MenuItem&gt;</code>
+                                                             Object representing the menu item 
+that fired the event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_onMouseUp">_onMouseUp</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong>_onMouseUp</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                                        , 
+                                                         p_oItem
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            "mouseup" event handler for the menu item.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event that 
+was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oItem &lt;YAHOO.widget.MenuItem&gt;</code>
+                                                             Object representing the menu item 
+that fired the event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
                                         <a name="_preloadImage">_preloadImage</a></h4>
                                     <div class="detail">
                                         <code>
@@ -910,6 +1275,10 @@ specified path and appending the image to the body of the document.
                                                     <dd></dd>
                                                 </dl>
              
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> All menu item images are now applied via CSS 
+background images.
+                                            </div>        
                                         </div>
 
                                     </div>
@@ -975,6 +1344,69 @@ onblur event.
                                         
                                         <div class="description">
                                             Event handler for when the "checked" configuration property 
+of the menu item changes.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event that 
+was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oItem &lt;YAHOO.widget.MenuItem&gt;</code>
+                                                             Object representing the menu item
+that fired the event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configCommand">configCommand</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configCommand</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                                        , 
+                                                         p_oItem
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event handler for when the "command" configuration property 
 of the menu item changes.
                                         </div>
 
@@ -1915,6 +2347,38 @@ back the DOM Event object as an argument.
                                     </div>
                                     <hr />
                                     <h4>
+                                        <a name="commandEvent">commandEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>commandEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires in response to the "keyup" or "mouseup" up event.  
+Passes back a single object representing the original DOM event object 
+passed back by the event utility (YAHOO.util.Event) when the event was 
+fired.  See <a href="YAHOO.util.CustomEvent.html#subscribe">
+CustomEvent.subscribe</a> or "command" configuration attribute for more 
+information on listening for this event.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
                                         <a name="destroyEvent">destroyEvent</a></h4>
                                     <div class="detail">
                                         <code>
@@ -2189,6 +2653,27 @@ with a checkmark.
                                     </div>        
 
                                     <hr />
+                                    <h4><a name="command">command</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object literal representing the code to be executed in 
+response the "keyup" or "mouseup" events.  Format:<br> <code> {<br> 
+<strong>fn:</strong> Function,   &#47;&#47; The handler to call when 
+the event fires.<br> <strong>obj:</strong> Object, &#47;&#47; An 
+object to  pass back to the handler.<br> <strong>scope:</strong> 
+Object &#47;&#47; The object to use for the scope of the handler.
+<br> } </code>
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <hr />
                                     <h4><a name="disabled">disabled</a>
                                         <code>- Boolean</code>
                                     </h4>
@@ -2373,6 +2858,8 @@ of this property will be interpreted from the menu's markup.
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
+                                <li class=""><a href="module_button.html">button</a></li>
+
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
                                 <li class=""><a href="module_connection.html">connection</a></li>
@@ -2432,10 +2919,16 @@ of this property will be interpreted from the menu's markup.
                     <div class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
+                                <li><a href="#_checkedIndicator">_checkedIndicator</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
                                 <li><a href="#_checkImage">_checkImage</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
                                 <li><a href="#_oAnchor">_oAnchor</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#_oCommand">_oCommand</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
                                 <li><a href="#_oHelpTextEM">_oHelpTextEM</a>
@@ -2456,7 +2949,16 @@ of this property will be interpreted from the menu's markup.
                                 <li><a href="#CHECKED_IMAGE_PATH">CHECKED_IMAGE_PATH</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
+                                <li><a href="#CHECKED_TEXT">CHECKED_TEXT</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
                                 <li><a href="#COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT">COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#COLLAPSED_SUBMENU_INDICATOR_TEXT">COLLAPSED_SUBMENU_INDICATOR_TEXT</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#COMMAND_KEYS">COMMAND_KEYS</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
                                 <li><a href="#constructor">constructor</a>
@@ -2471,16 +2973,25 @@ of this property will be interpreted from the menu's markup.
                                 <li><a href="#DISABLED_CHECKED_IMAGE_PATH">DISABLED_CHECKED_IMAGE_PATH</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
+                                <li><a href="#DISABLED_CHECKED_TEXT">DISABLED_CHECKED_TEXT</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
                                 <li><a href="#DISABLED_SUBMENU_INDICATOR_ALT_TEXT">DISABLED_SUBMENU_INDICATOR_ALT_TEXT</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
                                 <li><a href="#DISABLED_SUBMENU_INDICATOR_IMAGE_PATH">DISABLED_SUBMENU_INDICATOR_IMAGE_PATH</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
+                                <li><a href="#DISABLED_SUBMENU_INDICATOR_TEXT">DISABLED_SUBMENU_INDICATOR_TEXT</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
                                 <li><a href="#element">element</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
                                 <li><a href="#EXPANDED_SUBMENU_INDICATOR_ALT_TEXT">EXPANDED_SUBMENU_INDICATOR_ALT_TEXT</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#EXPANDED_SUBMENU_INDICATOR_TEXT">EXPANDED_SUBMENU_INDICATOR_TEXT</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
                                 <li><a href="#groupIndex">groupIndex</a>
@@ -2548,6 +3059,15 @@ level-one-html.html#ID-58190037">HTMLElement</a></code>-->
                                 <a href="#_initSubTree">_initSubTree</a>
                                 </li>
                                 <li><!--<code>void</code>-->
+                                <a href="#_isCommandKey">_isCommandKey</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_onKeyUp">_onKeyUp</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_onMouseUp">_onMouseUp</a>
+                                </li>
+                                <li><!--<code>void</code>-->
                                 <a href="#_preloadImage">_preloadImage</a>
                                 </li>
                                 <li><!--<code>void</code>-->
@@ -2555,6 +3075,9 @@ level-one-html.html#ID-58190037">HTMLElement</a></code>-->
                                 </li>
                                 <li><!--<code>void</code>-->
                                 <a href="#configChecked">configChecked</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configCommand">configCommand</a>
                                 </li>
                                 <li><!--<code>void</code>-->
                                 <a href="#configDisabled">configDisabled</a>
@@ -2617,6 +3140,9 @@ level-one-html.html#ID-58190037">HTMLElement</a></code>-->
                                 <a href="#clickEvent">clickEvent</a>
                                 </li>
                                 <li>
+                                <a href="#commandEvent">commandEvent</a>
+                                </li>
+                                <li>
                                 <a href="#destroyEvent">destroyEvent</a>
                                 </li>
                                 <li>
@@ -2651,6 +3177,9 @@ level-one-html.html#ID-58190037">HTMLElement</a></code>-->
                         <ul class="content">        
                                 <li>
                                 <a href="#checked">checked</a>
+                                </li>
+                                <li>
+                                <a href="#command">command</a>
                                 </li>
                                 <li>
                                 <a href="#disabled">disabled</a>

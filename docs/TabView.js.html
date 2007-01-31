@@ -47,7 +47,7 @@
 <span class="c">     */</span>
     <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TabView</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">attr</span><span class="o">)</span> <span class="o">{</span>
         <span class="nx">attr</span> <span class="o">=</span> <span class="nx">attr</span> <span class="o">||</span> <span class="o">{};</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">arguments</span><span class="o">.</span><span class="nx">length</span> <span class="o">==</span> <span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">el</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">arguments</span><span class="o">.</span><span class="nx">length</span> <span class="o">==</span> <span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">el</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">attr</span> <span class="o">=</span> <span class="nx">el</span><span class="o">;</span> <span class="c">// treat first arg as attr object</span>
 <span class="c"></span>            <span class="nx">el</span> <span class="o">=</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">element</span> <span class="o">||</span> <span class="kc">null</span><span class="o">;</span>
         <span class="o">}</span>
@@ -62,7 +62,6 @@
     
     <span class="k">var</span> <span class="nx">proto</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TabView</span><span class="o">.</span><span class="nx">prototype</span><span class="o">;</span>
     <span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Lang</span><span class="o">;</span>
     <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
     <span class="k">var</span> <span class="nx">Tab</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Tab</span><span class="o">;</span>
     
@@ -269,7 +268,7 @@
     <span class="o">};</span>
     
     <span class="c">/**</span>
-<span class="c">     * Registers TabView specific properties.</span>
+<span class="c">     * setAttributeConfigs TabView specific properties.</span>
 <span class="c">     * @method initAttributes</span>
 <span class="c">     * @param {Object} attr Hash of initial attributes</span>
 <span class="c">     */</span>
@@ -287,7 +286,7 @@
 <span class="c">         * @config tabs</span>
 <span class="c">         * @type Array</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">register</span><span class="o">(</span><span class="s1">&#39;tabs&#39;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;tabs&#39;</span><span class="o">,</span> <span class="o">{</span>
             <span class="nx">value</span><span class="o">:</span> <span class="o">[],</span>
             <span class="nx">readOnly</span><span class="o">:</span> <span class="kc">true</span>
         <span class="o">});</span>
@@ -318,7 +317,7 @@
 <span class="c">         * @type String</span>
 <span class="c">         * @default &quot;top&quot;</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">register</span><span class="o">(</span><span class="s1">&#39;orientation&#39;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;orientation&#39;</span><span class="o">,</span> <span class="o">{</span>
             <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">orientation</span><span class="o">,</span>
             <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">var</span> <span class="nx">current</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;orientation&#39;</span><span class="o">);</span>
@@ -341,7 +340,7 @@
 <span class="c">         * @config activeIndex</span>
 <span class="c">         * @type Int</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">register</span><span class="o">(</span><span class="s1">&#39;activeIndex&#39;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;activeIndex&#39;</span><span class="o">,</span> <span class="o">{</span>
             <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">activeIndex</span><span class="o">,</span>
             <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;activeTab&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTab</span><span class="o">(</span><span class="nx">value</span><span class="o">));</span>
@@ -356,14 +355,15 @@
 <span class="c">         * @config activeTab</span>
 <span class="c">         * @type YAHOO.widget.Tab</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">register</span><span class="o">(</span><span class="s1">&#39;activeTab&#39;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;activeTab&#39;</span><span class="o">,</span> <span class="o">{</span>
             <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">activeTab</span><span class="o">,</span>
             <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">tab</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">var</span> <span class="nx">activeTab</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;activeTab&#39;</span><span class="o">);</span>
                 
                 <span class="k">if</span> <span class="o">(</span><span class="nx">tab</span><span class="o">)</span> <span class="o">{</span>  
                     <span class="nx">tab</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;active&#39;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-                <span class="o">}</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">[</span><span class="s1">&#39;activeIndex&#39;</span><span class="o">].</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTabIndex</span><span class="o">(</span><span class="nx">tab</span><span class="o">);</span> <span class="c">// keep in sync</span>
+<span class="c"></span>                <span class="o">}</span>
                 
                 <span class="k">if</span> <span class="o">(</span><span class="nx">activeTab</span> <span class="o">&amp;&amp;</span> <span class="nx">activeTab</span> <span class="o">!=</span> <span class="nx">tab</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">activeTab</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;active&#39;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
@@ -385,7 +385,7 @@
         <span class="o">}</span>
         
         <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">type</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">DOM_EVENTS</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">DOM_EVENTS</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">type</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">DOM_EVENTS</span><span class="o">,</span> <span class="nx">type</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">addListener</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">type</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">DOMEventHandler</span><span class="o">);</span>
             <span class="o">}</span>
         <span class="o">}</span>
@@ -549,6 +549,8 @@
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
+                                <li class=""><a href="module_button.html">button</a></li>
+
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
                                 <li class=""><a href="module_connection.html">connection</a></li>
@@ -578,9 +580,6 @@
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li class=""><a href="YAHOO.util.Attribute.html">YAHOO.util.Attribute</a></li>
-                                <li class=""><a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a></li>
-                                <li class=""><a href="YAHOO.util.Element.html">YAHOO.util.Element</a></li>
                                 <li class=""><a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a></li>
                                 <li class=""><a href="YAHOO.widget.TabView.html">YAHOO.widget.TabView</a></li>
                         </ul>
@@ -589,10 +588,6 @@
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li class=""><a href="Attribute.js.html">Attribute.js</a></li>
-                                <li class=""><a href="AttributeProvider.js.html">AttributeProvider.js</a></li>
-                                <li class=""><a href="Element.js.html">Element.js</a></li>
-                                <li class=""><a href="Lang.js.html">Lang.js</a></li>
                                 <li class=""><a href="Tab.js.html">Tab.js</a></li>
                                 <li class="selected"><a href="TabView.js.html">TabView.js</a></li>
                         </ul>

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>API: tabview   Attribute.js  (YUI Library)</title>
+	<title>API: animation   Attribute.js  (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css">
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
@@ -11,10 +11,10 @@
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>tabview&nbsp;</h3>
+        <h3>animation&nbsp;</h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
-            &gt; <a href="./module_tabview.html">tabview</a>
+            &gt; <a href="./module_animation.html">animation</a>
                 
                  &gt; Attribute.js (source view) 
             </p>
@@ -181,7 +181,7 @@
 <span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">_initialConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_initialConfig</span> <span class="o">||</span> <span class="o">{};</span>
         
         <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">map</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span> <span class="nx">key</span> <span class="o">&amp;&amp;</span> <span class="nx">map</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">key</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="nx">key</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">map</span><span class="o">,</span> <span class="nx">key</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">=</span> <span class="nx">map</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">init</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">_initialConfig</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">=</span> <span class="nx">map</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
@@ -228,9 +228,11 @@
                         <h4>Modules</h4>
                         <ul class="content">
 
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                                <li class="selected"><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
@@ -250,7 +252,7 @@
 
                                 <li class=""><a href="module_slider.html">slider</a></li>
 
-                                <li class="selected"><a href="module_tabview.html">tabview</a></li>
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
 
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
@@ -261,23 +263,32 @@
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
+                                <li class=""><a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a></li>
+                                <li class=""><a href="YAHOO.util.AnimMgr.html">YAHOO.util.AnimMgr</a></li>
                                 <li class=""><a href="YAHOO.util.Attribute.html">YAHOO.util.Attribute</a></li>
                                 <li class=""><a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a></li>
+                                <li class=""><a href="YAHOO.util.Bezier.html">YAHOO.util.Bezier</a></li>
+                                <li class=""><a href="YAHOO.util.ColorAnim.html">YAHOO.util.ColorAnim</a></li>
+                                <li class=""><a href="YAHOO.util.Easing.html">YAHOO.util.Easing</a></li>
                                 <li class=""><a href="YAHOO.util.Element.html">YAHOO.util.Element</a></li>
-                                <li class=""><a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a></li>
-                                <li class=""><a href="YAHOO.widget.TabView.html">YAHOO.widget.TabView</a></li>
+                                <li class=""><a href="YAHOO.util.Motion.html">YAHOO.util.Motion</a></li>
+                                <li class=""><a href="YAHOO.util.Scroll.html">YAHOO.util.Scroll</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
+                                <li class=""><a href="Anim.js.html">Anim.js</a></li>
+                                <li class=""><a href="AnimMgr.js.html">AnimMgr.js</a></li>
                                 <li class="selected"><a href="Attribute.js.html">Attribute.js</a></li>
                                 <li class=""><a href="AttributeProvider.js.html">AttributeProvider.js</a></li>
+                                <li class=""><a href="Bezier.js.html">Bezier.js</a></li>
+                                <li class=""><a href="ColorAnim.js.html">ColorAnim.js</a></li>
+                                <li class=""><a href="Easing.js.html">Easing.js</a></li>
                                 <li class=""><a href="Element.js.html">Element.js</a></li>
-                                <li class=""><a href="Lang.js.html">Lang.js</a></li>
-                                <li class=""><a href="Tab.js.html">Tab.js</a></li>
-                                <li class=""><a href="TabView.js.html">TabView.js</a></li>
+                                <li class=""><a href="Motion.js.html">Motion.js</a></li>
+                                <li class=""><a href="Scroll.js.html">Scroll.js</a></li>
                         </ul>
                     </div>
 
