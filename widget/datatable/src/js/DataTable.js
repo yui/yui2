@@ -1778,14 +1778,15 @@ YAHOO.widget.DataTable.prototype.hideTableMessages = function() {
  * @method focusTable
  */
 YAHOO.widget.DataTable.prototype.focusTable = function() {
+    var elTable = this._elTable;
     if(!this._bFocused) {
-        //TODO: fix scope issue with timeout
-        gTable = this._elTable;
-            setTimeout("gTable.focus();",0);
-            this._bFocused = true;
+        // http://developer.mozilla.org/en/docs/index.php?title=Key-navigable_custom_DHTML_widgets
+        // The timeout is necessary in both IE and Firefox 1.5, to prevent scripts from doing
+        // strange unexpected things as the user clicks on buttons and other controls.
+        setTimeout(function() { elTable.focus(); },0);
+        this._bFocused = true;
     }
 };
-
 
  /**
  * Add rows to bottom of table body.
