@@ -72,6 +72,7 @@ YAHOO.widget.RecordSet.prototype._length = null;
 // Public methods
 //
 /////////////////////////////////////////////////////////////////////////////
+
 /**
  * Public accessor to the unique name of the RecordSet instance.
  *
@@ -227,7 +228,7 @@ YAHOO.widget.RecordSet.prototype.addRecords = function(data, index) {
     if(data) {
         if(data.constructor == Array) {
             var newRecords = [];
-            // Preserve order
+            // Can't go backwards bc we need to preserve order
             for(var i=0; i<data.length; i++) {
                 var record = this.addRecord(data[i], index);
                 newRecords.push(record);
@@ -254,10 +255,10 @@ YAHOO.widget.RecordSet.prototype.append = function(data) {
     if(data) {
         if(data.constructor == Array) {
             var newRecords = [];
-            // Preserve order
+            // Cant't go backwards bc we need to preserve order
             for(var i=0; i<data.length; i++) {
                 var record = this.addRecord(data[i]);
-                newRecords.unshift(record);
+                newRecords.push(record);
            }
            return newRecords;
         }
@@ -282,7 +283,7 @@ YAHOO.widget.RecordSet.prototype.insert = function(data) {
     if(data) {
         if(data.constructor == Array) {
             var newRecords = [];
-            // Preserve order
+            // Can't go backwards bc we need to preserve order
             for(var i=data.length-1; i>-1; i--) {
                 var record = this.addRecord(data[i], 0);
                 newRecords.push(record);

@@ -179,7 +179,8 @@ YAHOO.widget.ColumnSet.prototype.keys = [];
 // Public methods
 //
 /////////////////////////////////////////////////////////////////////////////
- /**
+
+/**
  * Public accessor to the unique name of the ColumnSet instance.
  *
  * @method toString
@@ -477,7 +478,7 @@ YAHOO.widget.Column.prototype.sortAscHandler = null;
 //
 /////////////////////////////////////////////////////////////////////////////
 
- /**
+/**
  * Outputs markup into the given TD based on given Record.
  *
  * @method format
@@ -554,7 +555,7 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
 
 
 
- /**
+/**
  * Takes innerHTML from TD and parses out data for storage in RecordSet.
  *
  * @method parse
@@ -598,7 +599,7 @@ YAHOO.widget.Column.prototype.parse = function(sMarkup) {
     return data;
 };
 
- /**
+/**
  * Default parser for columns of type "checkbox" takes markup and extracts data.
  * Can be overridden for custom parsing.
  *
@@ -610,7 +611,7 @@ YAHOO.widget.Column.checkboxParser = function(sMarkup) {
     return (sMarkup.indexOf("checked") < 0) ? false : true;
 };
 
- /**
+/**
  * Default parser for columns of type "currency" takes markup and extracts data.
  * Can be overridden for custom parsing.
  *
@@ -622,7 +623,7 @@ YAHOO.widget.Column.currencyParser = function(sMarkup) {
     return parseFloat(sMarkup.substring(1));
 };
 
- /**
+/**
  * Default parser for columns of type "custom" takes markup and extracts data.
  * Should be overridden for custom parsing.
  *
@@ -634,7 +635,7 @@ YAHOO.widget.Column.customParser = function(sMarkup) {
     return sMarkup;
 };
 
- /**
+/**
  * Default parser for columns of type "date" takes markup and extracts data.
  * Can be overridden for custom parsing.
  *
@@ -650,7 +651,7 @@ YAHOO.widget.Column.dateParser = function(sMarkup) {
     return new Date(yy, mm, dd);
 };
 
- /**
+/**
  * Default parser for columns of type "float" takes markup and extracts data.
  * Can be overridden for custom parsing.
  *
@@ -662,7 +663,7 @@ YAHOO.widget.Column.floatParser = function(sMarkup) {
     return parseFloat(sMarkup);
 };
 
- /**
+/**
  * Default parser for columns of type "html" takes markup and extracts data.
  * Can be overridden for custom parsing.
  *
@@ -674,7 +675,7 @@ YAHOO.widget.Column.htmlParser = function(sMarkup) {
     return sMarkup;
 };
 
- /**
+/**
  * Default parser for columns of type "number" takes markup and extracts data.
  * Can be overridden for custom parsing.
  *
@@ -686,7 +687,7 @@ YAHOO.widget.Column.numberParser = function(sMarkup) {
     return parseInt(sMarkup);
 };
 
- /**
+/**
  * Default parser for columns of type "select" takes markup and extracts data.
  * Can be overridden for custom parsing.
  *
@@ -698,7 +699,7 @@ YAHOO.widget.Column.selectParser = function(sMarkup) {
     //return (sMarkup.indexOf("checked") < 0) ? false : true;
 };
 
- /**
+/**
  * Outputs editor markup into the given TD based on given Record.
  *
  * @method showEditor
@@ -716,7 +717,7 @@ YAHOO.widget.Column.prototype.showEditor = function(elCell,oRecord) {
     }
 };
 
- /**
+/**
  * Hides editor markup for the Column.
  *
  * @method hideEditor
@@ -819,7 +820,7 @@ YAHOO.widget.ColumnEditor._nCount =0;
 //
 /////////////////////////////////////////////////////////////////////////////
 
- /**
+/**
  * Reference to the container DOM element for the ColumnEditor.
  *
  * @property container
@@ -827,7 +828,7 @@ YAHOO.widget.ColumnEditor._nCount =0;
  */
 YAHOO.widget.ColumnEditor.prototype.container = null;
 
- /**
+/**
  * Reference to the Column object for the ColumnEditor.
  *
  * @property column
@@ -835,7 +836,7 @@ YAHOO.widget.ColumnEditor.prototype.container = null;
  */
 YAHOO.widget.ColumnEditor.prototype.column = null;
 
- /**
+/**
  * Type of editor: "textbox", etc.
  *
  * @property type
@@ -845,7 +846,7 @@ YAHOO.widget.ColumnEditor.prototype.type = null;
 
 
 
- /**
+/**
  * Reference to form element(s) of the ColumnEditor.
  *
  * @property input
@@ -859,7 +860,7 @@ YAHOO.widget.ColumnEditor.prototype.input = null;
 //
 /////////////////////////////////////////////////////////////////////////////
 
- /**
+/**
  * Shows ColumnEditor.
  *
  * @method show
@@ -874,7 +875,7 @@ YAHOO.widget.ColumnEditor.prototype.show = function(elCell, oRecord, oColumn) {
     }
 }
 
- /**
+/**
  * Creates a textbox editor in the DOM.
  *
  * @method createTextboxEditor
@@ -887,7 +888,7 @@ YAHOO.widget.ColumnEditor.prototype.createTextboxEditor = function() {
     this.input = elTextbox;
 };
 
- /**
+/**
  * Shows ColumnEditor
  *
  * @method showTextboxEditor
@@ -928,7 +929,7 @@ YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord
     this.input.select();
 };
 
- /**
+/**
  * Hides ColumnEditor
  *
  * @method hide
@@ -957,7 +958,7 @@ YAHOO.util.Sort = {};
 //
 /////////////////////////////////////////////////////////////////////////////
 
- /**
+/**
  * Comparator function for sort in ascending order. String sorting is case insensitive.
  *
  * @method compareAsc
@@ -983,7 +984,7 @@ YAHOO.util.Sort.compareAsc = function(a, b) {
     }
 };
 
- /**
+/**
  * Comparator function for sort in descending order. String sorting is case insensitive.
  *
  * @method compareDesc

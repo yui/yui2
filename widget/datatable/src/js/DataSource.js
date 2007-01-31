@@ -2,7 +2,7 @@
 /****************************************************************************/
 /****************************************************************************/
 
- /**
+/**
  * The DataSource class defines and manages a live set of data for widgets to
  * interact with. Examples of live databases include in-memory
  * local data such as a JavaScript array, a JavaScript function, or JSON, or
@@ -288,7 +288,7 @@ YAHOO.util.DataSource.prototype.maxCacheEntries = 0;
  */
 YAHOO.util.DataSource.prototype.liveData = null;
 
- /**
+/**
  * Where the live data is held.
  *
  * @property dataType
@@ -298,7 +298,7 @@ YAHOO.util.DataSource.prototype.liveData = null;
  */
 YAHOO.util.DataSource.prototype.dataType = YAHOO.util.DataSource.TYPE_UNKNOWN;
 
- /**
+/**
  * Format of response.
  *
  * @property responseType
@@ -306,13 +306,14 @@ YAHOO.util.DataSource.prototype.dataType = YAHOO.util.DataSource.TYPE_UNKNOWN;
  * @default YAHOO.util.DataSource.TYPE_UNKNOWN
  */
 YAHOO.util.DataSource.prototype.responseType = YAHOO.util.DataSource.TYPE_UNKNOWN;
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Public methods
 //
 /////////////////////////////////////////////////////////////////////////////
 
- /**
+/**
  * Public accessor to the unique name of the DataSource instance.
  *
  * @method toString
@@ -322,7 +323,7 @@ YAHOO.util.DataSource.prototype.toString = function() {
     return "DataSource " + this._sName;
 };
 
- /**
+/**
  * Overridable method passes request to cache and returns cached response if any,
  * refreshing the hit in the cache as the newest item. Returns null if there is
  * no cache hit.
@@ -363,7 +364,7 @@ YAHOO.util.DataSource.prototype.getCachedResponse = function(oRequest, oCallback
     return oResponse;
 };
 
- /**
+/**
  * Default overridable method matches given request to given cached request.
  * Returns true if is a hit, returns false otherwise.  Implementers should
  * override this method to customize the cache-matching algorithm.
@@ -377,7 +378,7 @@ YAHOO.util.DataSource.prototype.isCacheHit = function(oRequest, oCachedRequest) 
     return (oRequest === oCachedRequest);
 };
 
- /**
+/**
  * Adds a new item to the cache. If cache is full, evicts the stalest item
  * before adding the new item.
  *
@@ -403,7 +404,7 @@ YAHOO.util.DataSource.prototype.addToCache = function(oRequest, oResponse) {
     aCache.push(oCacheElem);
 };
 
- /**
+/**
  * Flushes cache.
  *
  * @method flushCache
@@ -415,7 +416,7 @@ YAHOO.util.DataSource.prototype.flushCache = function() {
     this.fireEvent("cacheFlushEvent");
 };
 
- /**
+/**
  * First looks for cached response, then sends request to live data.
  *
  * @method sendRequest
@@ -546,7 +547,7 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
     }
 };
 
- /**
+/**
  * Parses a raw response for data to be consumed by a widget.
  *
  * @method parseResponse
@@ -605,7 +606,7 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
     oCallback.call(oCaller, oRequest, oParsedResponse);
 };
 
- /**
+/**
  * Overridable method parses raw array data into a response object.
  *
  * @method parseArrayData
@@ -616,9 +617,9 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
 YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse) {
     var oParsedResponse = [];
     var fields = this.responseSchema.fields;
-    for(var i=0; i<oRawResponse.length; i++) {
+    for(var i=oRawResponse.length-1; i>-1; i--) {
         var oResult = {};
-        for(var j=0; j<fields.length; j++) {
+        for(var j=fields.length; j>-1; j--) {
             oResult[fields[j]] = oRawResponse[i][j] || oRawResponse[i][fields[j]];
         }
         oParsedResponse.unshift(oResult);
@@ -626,7 +627,7 @@ YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse
     return oParsedResponse;
 };
 
- /**
+/**
  * Overridable method parses raw flat text data into a response object.
  *
  * @method parseFlatData
@@ -670,7 +671,7 @@ YAHOO.util.DataSource.prototype.parseFlatData = function(oRequest, oRawResponse)
     return oParsedResponse;
 };
 
- /**
+/**
  * Overridable method parses raw XML data into a response object.
  *
  * @method parseXMLData
@@ -722,7 +723,7 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) 
     return oParsedResponse;
 };
 
- /**
+/**
  * Overridable method parses raw JSON data into a response object.
  *
  * @method parseJSONData
