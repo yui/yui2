@@ -1,7 +1,6 @@
 (function() {
     var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event,
-        Lang = YAHOO.util.Lang;
+        Event = YAHOO.util.Event;
     
     /**
      * A representation of a Tab's label and content.
@@ -15,7 +14,7 @@
      */
     var Tab = function(el, attr) {
         attr = attr || {};
-        if (arguments.length == 1 && !Lang.isString(el) && !el.nodeName) {
+        if (arguments.length == 1 && !YAHOO.lang.isString(el) && !el.nodeName) {
             attr = el;
             el = attr.element;
         }
@@ -211,7 +210,7 @@
          */
         this.setAttributeConfig('cacheData', {
             value: attr.cacheData || false,
-            validator: Lang.isBoolean
+            validator: YAHOO.lang.isBoolean
         });
         
         /**
@@ -222,7 +221,7 @@
          */
         this.setAttributeConfig('loadMethod', {
             value: attr.loadMethod || 'GET',
-            validator: Lang.isString
+            validator: YAHOO.lang.isString
         });
 
         /**
@@ -232,7 +231,7 @@
          */        
         this.setAttributeConfig('dataLoaded', {
             value: false,
-            validator: Lang.isBoolean,
+            validator: YAHOO.lang.isBoolean,
             writeOnce: true
         });
         
@@ -244,7 +243,7 @@
          */
         this.setAttributeConfig('dataTimeout', {
             value: attr.dataTimeout || null,
-            validator: Lang.isNumber
+            validator: YAHOO.lang.isNumber
         });
         
         /**
@@ -266,7 +265,7 @@
                 }
             },
             validator: function(value) {
-                return Lang.isBoolean(value) && !this.get('disabled') ;
+                return YAHOO.lang.isBoolean(value) && !this.get('disabled') ;
             }
         });
         
@@ -284,7 +283,7 @@
                     Dom.removeClass(this.get('element'), this.DISABLED_CLASSNAME);
                 }
             },
-            validator: Lang.isBoolean
+            validator: YAHOO.lang.isBoolean
         });
         
         /**
@@ -298,7 +297,7 @@
             method: function(value) {
                 this.getElementsByTagName('a')[0].href = value;
             },
-            validator: Lang.isString
+            validator: YAHOO.lang.isString
         });
         
         /**
@@ -310,7 +309,7 @@
         this.setAttributeConfig('contentVisible', {
             value: attr.contentVisible,
             method: function(value) {
-                if (value == true) {
+                if (value) {
                     this.get('contentEl').style.display = 'block';
                     
                     if ( this.get('dataSrc') ) {
@@ -323,7 +322,7 @@
                     this.get('contentEl').style.display = 'none';
                 }
             },
-            validator: Lang.isBoolean
+            validator: YAHOO.lang.isBoolean
         });
     };
     
