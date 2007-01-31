@@ -325,6 +325,14 @@ YAHOO.widget.Column.prototype.text = null;
 YAHOO.widget.Column.prototype.abbr = null;
 
 /**
+ * Column width.
+ *
+ * @property width
+ * @type String
+ */
+YAHOO.widget.Column.prototype.width = null;
+
+/**
  * Defines the type of editor for Column, otherwise Column is not editable.
  *
  * @property editor
