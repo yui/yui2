@@ -608,6 +608,7 @@ http://developer.yahoo.net/yui/license.txt
 
          * @param {String} tag (optional) The tag name of the elements being collected
          * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
+         * @return {Array} Array of HTMLElements
          */
         getElementsBy: function(method, tag, root) {
             tag = tag || '*';
