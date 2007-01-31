@@ -99,39 +99,6 @@ init: function(p_oObject, p_oConfig) {
 CSS_CLASS_NAME: "yuimenubaritem",
 
 
-/**
-* @property SUBMENU_INDICATOR_IMAGE_PATH
-* @description String representing the path to the image to be used for the 
-* menu bar item's submenu arrow indicator.
-* @default "nt/ic/ut/alt1/menuarodwn8_nrm_1.gif"
-* @final
-* @type String
-*/
-SUBMENU_INDICATOR_IMAGE_PATH: "nt/ic/ut/alt1/menuarodwn8_nrm_1.gif",
-
-
-/**
-* @property SELECTED_SUBMENU_INDICATOR_IMAGE_PATH
-* @description String representing the path to the image to be used for the 
-* submenu arrow indicator when the menu bar item is selected.
-* @default "nt/ic/ut/alt1/menuarodwn8_hov_1.gif"
-* @final
-* @type String
-*/
-SELECTED_SUBMENU_INDICATOR_IMAGE_PATH: "nt/ic/ut/alt1/menuarodwn8_hov_1.gif",
-
-
-/**
-* @property DISABLED_SUBMENU_INDICATOR_IMAGE_PATH
-* @description String representing the path to the image to be used for the 
-* submenu arrow indicator when the menu bar item is disabled.
-* @default "nt/ic/ut/alt1/menuarodwn8_dim_1.gif"
-* @final
-* @type String
-*/
-DISABLED_SUBMENU_INDICATOR_IMAGE_PATH: "nt/ic/ut/alt1/menuarodwn8_dim_1.gif",
-
-
 
 // Public methods
 
