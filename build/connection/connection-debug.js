@@ -38,7 +38,7 @@ YAHOO.util.Connect =
    * @static
    * @type object
    */
-	_http_header:{},
+	_http_headers:{},
 
   /**
    * @description Determines if HTTP headers are set.
@@ -64,7 +64,7 @@ YAHOO.util.Connect =
  /**
   * @description Determines if a default header of
   * Content-Type of 'application/x-www-form-urlencoded'
-  * will be added to any client HTTP headers sent for POST
+  * will be added to client HTTP headers sent for POST
   * transactions.
   * @property _default_post_header
   * @private
@@ -72,6 +72,49 @@ YAHOO.util.Connect =
   * @type boolean
   */
     _default_post_header:'application/x-www-form-urlencoded',
+
+ /**
+  * @description Determines if a default header of
+  * 'X-Requested-With: XMLHttpRequest'
+  * will be added to each transaction.
+  * @property _use_default_xhr_header
+  * @private
+  * @static
+  * @type boolean
+  */
+    _use_default_xhr_header:true,
+
+ /**
+  * @description The default header value for the label
+  * "X-Requested-With".  This is sent with each
+  * transaction, by default, to identify the
+  * request as being made by YUI Connection Manager.
+  * @property _default_xhr_header
+  * @private
+  * @static
+  * @type boolean
+  */
+    _default_xhr_header:'XMLHttpRequest',
+
+ /**
+  * @description Determines if custom, default headers
+  * are set for each transaction.
+  * @property _has_default_header
+  * @private
+  * @static
+  * @type boolean
+  */
+    _has_default_headers:true,
+
+ /**
+  * @description Determines if custom, default headers
+  * are set for each transaction.
+  * @property _has_default_header
+  * @private
+  * @static
+  * @type boolean
+  */
+    _default_headers:{},
 
  /**
   * @description Property modified by setForm() to determine if the data
@@ -179,6 +222,20 @@ YAHOO.util.Connect =
 	{
 		this._use_default_post_header = b;
 		YAHOO.log('Use default POST header set to  ' + b, 'info', 'Connection');
+	},
+
+  /**
+   * @description Member to enable or disable the default POST header.
+   * @method setDefaultXhrHeader
+   * @public
+   * @static
+   * @param {boolean} b Set and use default header - true or false .
+   * @return void
+   */
+	setDefaultXhrHeader:function(b)
+	{
+		this._use_default_xhr_header = b;
+		YAHOO.log('Use default transaction header set to  ' + b, 'info', 'Connection');
 	},
 
   /**
@@ -297,7 +354,7 @@ YAHOO.util.Connect =
 				//If the specified HTTP method is GET, setForm() will return an
 				//encoded string that is concatenated to the uri to
 				//create a querystring.
-				if(method == 'GET'){
+				if(method.toUpperCase() == 'GET'){
 					if(this._sFormData.length != 0){
 						// If the URI already contains a querystring, append an ampersand
 						// and then concatenate _sFormData to the URI.
@@ -307,7 +364,7 @@ YAHOO.util.Connect =
 						uri += "?" + this._sFormData;
 					}
 				}
-				else if(method == 'POST'){
+				else if(method.toUpperCase() == 'POST'){
 					//If POST data exist in addition to the HTML form data,
 					//it will be concatenated to the form data.
 					postData = postData?this._sFormData + "&" + postData:this._sFormData;
@@ -316,15 +373,21 @@ YAHOO.util.Connect =
 
 			o.conn.open(method, uri, true);
 
+			if(this._use_default_xhr_header){
+				if(!this._default_headers['X-Requested-With']){
+					this.initHeader('X-Requested-With', this._default_xhr_header, true);
+					YAHOO.log('Initialize transaction header X-Request-Header to XMLHttpRequest.', 'info', 'Connection');
+				}
+			}
 			if(this._isFormSubmit || (postData && this._use_default_post_header)){
 				this.initHeader('Content-Type', this._default_post_header);
-				YAHOO.log('Initialize default header Content-Type to application/x-www-form-urlencoded.', 'info', 'Connection');
+				YAHOO.log('Initialize header Content-Type to application/x-www-form-urlencoded for POST transaction.', 'info', 'Connection');
 				if(this._isFormSubmit){
 					this.resetFormState();
 				}
 			}
 
-			if(this._has_http_headers){
+			if(this._has_default_headers || this._has_http_headers){
 				this.setHeader(o);
 			}
 
@@ -552,27 +615,37 @@ YAHOO.util.Connect =
     },
 
   /**
-   * @description Public method that stores the custom HTTP headers for each transaction.
+   * @description Method that initializes the custom HTTP headers for the each transaction.
    * @method initHeader
    * @public
    * @static
    * @param {string} label The HTTP header label
    * @param {string} value The HTTP header value
+   * @param {string} isDefault Determines if the specific header is a default header
+   * automatically sent with each transaction.
    * @return {void}
    */
-	initHeader:function(label,value)
+	initHeader:function(label,value,isDefault)
 	{
-		if(this._http_header[label] === undefined){
-			this._http_header[label] = value;
+		var headerObj = (isDefault)?this._default_headers:this._http_headers;
+
+		if(headerObj[label] === undefined){
+			headerObj[label] = value;
 		}
 		else{
 			// Concatenate multiple values, comma-delimited,
 			// for the same header label,
-			this._http_header[label] =  value + "," + this._http_header[label];
+			headerObj[label] =  value + "," + headerObj[label];
 		}
 
-		this._has_http_headers = true;
+		if(isDefault){
+			this._has_default_headers = true;
+		}
+		else{
+			this._has_http_headers = true;
+		}
 	},
+
 
   /**
    * @description Accessor that sets the HTTP headers for each transaction.
@@ -584,16 +657,40 @@ YAHOO.util.Connect =
    */
 	setHeader:function(o)
 	{
-		for(var prop in this._http_header){
-			if(this._http_header.hasOwnProperty(prop)){
-				o.conn.setRequestHeader(prop, this._http_header[prop]);
-				YAHOO.log('HTTP header ' + prop + ' set with value of ' + this._http_header[prop], 'info', 'Connection');
+		if(this._has_default_headers){
+			for(var prop in this._default_headers){
+				if(this._default_headers.hasOwnProperty(prop)){
+					o.conn.setRequestHeader(prop, this._default_headers[prop]);
+					YAHOO.log('Default HTTP header ' + prop + ' set with value of ' + this._default_headers[prop], 'info', 'Connection');
+				}
 			}
 		}
-		delete this._http_header;
 
-		this._http_header = {};
-		this._has_http_headers = false;
+		if(this._has_http_headers){
+			for(var prop in this._http_headers){
+				if(this._http_headers.hasOwnProperty(prop)){
+					o.conn.setRequestHeader(prop, this._http_headers[prop]);
+					YAHOO.log('HTTP header ' + prop + ' set with value of ' + this._http_headers[prop], 'info', 'Connection');
+				}
+			}
+			delete this._http_headers;
+
+			this._http_headers = {};
+			this._has_http_headers = false;
+		}
+	},
+
+  /**
+   * @description Resets the default HTTP headers object
+   * @method resetDefaultHeaders
+   * @public
+   * @static
+   * @return {void}
+   */
+	resetDefaultHeaders:function(){
+		delete this._default_headers
+		this._default_headers = {};
+		this._has_default_headers = false;
 	},
 
   /**
@@ -815,6 +912,7 @@ YAHOO.util.Connect =
 		// Each iframe has an id prefix of "yuiIO" followed
 		// by the unique transaction id.
 		var frameId = 'yuiIO' + id;
+		var uploadEncoding = 'multipart/form-data';
 		var io = document.getElementById(frameId);
 
 		// Initialize the HTML form properties in case they are
@@ -825,11 +923,11 @@ YAHOO.util.Connect =
 
 		if(this._formNode.encoding){
 			// IE does not respect property enctype for HTML forms.
-			// Instead use property encoding.
-			this._formNode.encoding = 'multipart/form-data';
+			// Instead it uses the property - "encoding".
+			this._formNode.encoding = uploadEncoding;
 		}
 		else{
-			this._formNode.enctype = 'multipart/form-data';
+			this._formNode.enctype = uploadEncoding;
 		}
 
 
