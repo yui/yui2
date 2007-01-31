@@ -1961,6 +1961,8 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
             if(oSubmenu.cfg.getProperty("visible")) {
 
                 oSubmenu.hide();
+                
+                oSubmenu.parent.focus();
     
             }
             else {
@@ -2027,7 +2029,7 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
                     oRoot.clearActiveItem();
     
                 }
-                else if(oRoot.cfg.getProperty("clicktohide")) {{
+                else if(oRoot.cfg.getProperty("clicktohide")) {
 
                     oRoot.hide();
                 
@@ -2109,7 +2111,7 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
                                 nScrollTarget = 
                                     oBody.scrollHeight - oBody.offsetHeight;
 
-                            if(nScrollTop == 0) {
+                            if(nScrollTop === 0) {
 
                                 this._disableScrollHeader();
                                 this._enableScrollFooter();
@@ -3038,7 +3040,8 @@ _onSubmenuShow: function(p_sType, p_aArgs, p_oSubmenu) {
     
     var oParent = this.parent;
 
-    oParent.submenuIndicator.alt = oParent.EXPANDED_SUBMENU_INDICATOR_ALT_TEXT;
+    oParent.submenuIndicator.innerHTML =
+        oParent.EXPANDED_SUBMENU_INDICATOR_TEXT;
 
 },
 
@@ -3057,7 +3060,8 @@ _onSubmenuHide: function(p_sType, p_aArgs, p_oSubmenu) {
     
     var oParent = this.parent;
 
-    oParent.submenuIndicator.alt = oParent.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT;
+    oParent.submenuIndicator.innerHTML =
+        oParent.COLLAPSED_SUBMENU_INDICATOR_TEXT;
 
 },
 
@@ -3488,7 +3492,7 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
             this.setHeader("&#32;");
             this.setFooter("&#32;");
 
-            oHeader = this.header,
+            oHeader = this.header;
             oFooter = this.footer;
    
             this.element.insertBefore(oHeader, oBody);
