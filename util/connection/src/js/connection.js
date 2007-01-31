@@ -1,9 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-*/
-
 /**
  * The Connection Manager provides a simplified interface to the XMLHttpRequest
  * object.  It handles cross-browser instantiantion of XMLHttpRequest, negotiates the
@@ -918,7 +912,7 @@ YAHOO.util.Connect =
 		// Each iframe has an id prefix of "yuiIO" followed
 		// by the unique transaction id.
 		var frameId = 'yuiIO' + id;
-		var fileHeader = 'multipart/form-data';
+		var uploadEncoding = 'multipart/form-data';
 		var io = document.getElementById(frameId);
 
 		// Initialize the HTML form properties in case they are
@@ -930,10 +924,10 @@ YAHOO.util.Connect =
 		if(this._formNode.encoding){
 			// IE does not respect property enctype for HTML forms.
 			// Instead it uses the property - "encoding".
-			this._formNode.encoding = fileHeader;
+			this._formNode.encoding = uploadEncoding;
 		}
 		else{
-			this._formNode.enctype = fileHeader;
+			this._formNode.enctype = uploadEncoding;
 		}
 
 
