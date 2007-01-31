@@ -736,64 +736,72 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
     var oParsedResponse = [];
     var aSchema = this.responseSchema.fields;
 
-    var jsonList;
-    // Divert KHTML clients from JSON lib
-    if(window.JSON && (navigator.userAgent.toLowerCase().indexOf('khtml')== -1)) {
-        // Use the JSON utility if available
-        var jsonObjParsed = JSON.parse(oRawResponse);
-        if(!jsonObjParsed) {
-            bError = true;
-        }
-        else {
-            try {
-                // eval is necessary here since aSchema[0] is of unknown depth
-                jsonList = eval("jsonObjParsed." + this.responseSchema.resultsList);
-            }
-            catch(e) {
-                bError = true;
-           }
-        }
-    }
-    else {
-        // Parse the JSON response as a string
+    var jsonObj,jsonList;
+    if(oRawResponse) {
+        // Parse JSON object out if it's a string
         if(oRawResponse.constructor == String) {
-            try {
-                // Trim leading spaces
-                while (oRawResponse.length > 0 &&
-                        (oRawResponse.charAt(0) != "{") &&
-                        (oRawResponse.charAt(0) != "[")) {
-                    oRawResponse = oRawResponse.substring(1, oResponse.length);
+            // Check for latest JSON lib but divert KHTML clients
+            if(oRawResponse.parseJSON && (navigator.userAgent.toLowerCase().indexOf('khtml')== -1)) {
+                // Use the new JSON utility if available
+                var jsonObj = oRawResponse.parseJSON();
+                if(!jsonObj) {
+                    bError = true;
                 }
-
-                if(oRawResponse.length > 0) {
-                    // Strip extraneous stuff at the end
-                    var objEnd = Math.max(oRawResponse.lastIndexOf("]"),oRawResponse.lastIndexOf("}"));
-                    oRawResponse = oRawResponse.substring(0,objEnd+1);
-
-                    // Turn the string into an object literal...
-                    // ...eval is necessary here
-                    oRawResponse = eval("(" + oRawResponse + ")");
-                    if(!oRawResponse) {
-                        bError = true;
+            }
+            // Check for older JSON lib but divert KHTML clients
+            else if(window.JSON && JSON.parse && (navigator.userAgent.toLowerCase().indexOf('khtml')== -1)) {
+                // Use the JSON utility if available
+                var jsonObj = JSON.parse(oRawResponse);
+                if(!jsonObj) {
+                    bError = true;
+                }
+            }
+            // No JSON lib found so parse the string
+            else {
+                try {
+                    // Trim leading spaces
+                    while (oRawResponse.length > 0 &&
+                            (oRawResponse.charAt(0) != "{") &&
+                            (oRawResponse.charAt(0) != "[")) {
+                        oRawResponse = oRawResponse.substring(1, oResponse.length);
                     }
 
-                    // Grab the object member that contains an array of all reponses...
-                    // ...eval is necessary here since aSchema[0] is of unknown depth
-                    jsonList = eval("(oRawResponse." + this.responseSchema.resultsList+")");
+                    if(oRawResponse.length > 0) {
+                        // Strip extraneous stuff at the end
+                        var objEnd = Math.max(oRawResponse.lastIndexOf("]"),oRawResponse.lastIndexOf("}"));
+                        oRawResponse = oRawResponse.substring(0,objEnd+1);
+
+                        // Turn the string into an object literal...
+                        // ...eval is necessary here
+                        jsonObj = eval("(" + oRawResponse + ")");
+                        if(!jsonObj) {
+                            bError = true;
+                        }
+
+                    }
                 }
+                catch(e) {
+                    bError = true;
+               }
+            }
+        }
+        // Response must already be a JSON object
+        else if(oRawResponse.constructor == Object) {
+            jsonObj = oRawResponse;
+        }
+        // Now that we have a JSON object, parse a jsonList out of it
+        if(jsonObj && jsonObj.constructor == Object) {
+            try {
+                // eval is necessary here since schema can be of unknown depth
+                jsonList = eval("jsonObj." + this.responseSchema.resultsList);
             }
             catch(e) {
                 bError = true;
-           }
+            }
         }
-        // Parse the JSON response as an object
-        else if(oRawResponse.constructor == Object) {
-            jsonList = oRawResponse[this.responseSchema.resultsList];
-        }
-        
     }
     if(bError || !jsonList) {
-        //TODO: validation in the other parse methods
+        // Something went wrong
         return null;
    }
 
