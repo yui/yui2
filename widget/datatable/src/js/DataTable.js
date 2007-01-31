@@ -946,6 +946,9 @@ YAHOO.widget.DataTable.prototype._initHeadCell = function(elHeadCell,oColumn,row
     if(oColumn.width) {
         elHeadCell.style.width = oColumn.width;
     }
+    if(oColumn.className) {
+        YAHOO.util.Dom.addClass(elHeadCell,oColumn.className);
+    }
 
     var recurseAncestors = function(oParent) {
         if(oParent) {

@@ -333,6 +333,13 @@ YAHOO.widget.Column.prototype.abbr = null;
 YAHOO.widget.Column.prototype.width = null;
 
 /**
+ * Custom CSS class to be applied to every cell in the Column.
+ *
+ * @property className
+ * @type String
+ */
+YAHOO.widget.Column.prototype.className = null;
+/**
  * Defines the type of editor for Column, otherwise Column is not editable.
  *
  * @property editor
@@ -527,6 +534,9 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
         }
 
         YAHOO.util.Dom.addClass(elCell, classname);
+        if(this.className) {
+            YAHOO.util.Dom.addClass(elCell, this.className)
+        }
     }
     
     if(this.editor) {
