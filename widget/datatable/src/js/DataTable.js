@@ -498,7 +498,7 @@ YAHOO.widget.DataTable.CLASS_SORTEDBYASC = "yui-dt-sortedbyasc";
  */
 YAHOO.widget.DataTable.CLASS_SORTEDBYDESC = "yui-dt-sortedbydesc";
 
-  /**
+/**
  * Class name of pagination link to first page.
  *
  * @property CLASS_FIRSTLINK
@@ -508,7 +508,17 @@ YAHOO.widget.DataTable.CLASS_SORTEDBYDESC = "yui-dt-sortedbydesc";
  */
 YAHOO.widget.DataTable.CLASS_FIRSTLINK = "yui-dt-firstlink";
 
-  /**
+/**
+ * Class name of pagination non-link to first page.
+ *
+ * @property CLASS_FIRSTPAGE
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_FIRSTPAGE = "yui-dt-firstpage";
+
+/**
  * Class name of pagination link to last page.
  *
  * @property CLASS_LASTLINK
@@ -518,7 +528,17 @@ YAHOO.widget.DataTable.CLASS_FIRSTLINK = "yui-dt-firstlink";
  */
 YAHOO.widget.DataTable.CLASS_LASTLINK = "yui-dt-lastlink";
 
-  /**
+/**
+ * Class name of pagination non-link to last page.
+ *
+ * @property CLASS_LASTPAGE
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_LASTPAGE = "yui-dt-lastpage";
+
+/**
  * Class name of pagination link to previous page.
  *
  * @property CLASS_PREVLINK
@@ -527,6 +547,16 @@ YAHOO.widget.DataTable.CLASS_LASTLINK = "yui-dt-lastlink";
  * @final
  */
 YAHOO.widget.DataTable.CLASS_PREVLINK = "yui-dt-prevlink";
+
+/**
+ * Class name of pagination non-link to previous page.
+ *
+ * @property CLASS_PREVPAGE
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_FIRSTPAGE = "yui-dt-prevpage";
 
   /**
  * Class name of pagination link to next page.
@@ -537,6 +567,17 @@ YAHOO.widget.DataTable.CLASS_PREVLINK = "yui-dt-prevlink";
  * @final
  */
 YAHOO.widget.DataTable.CLASS_NEXTLINK = "yui-dt-nextlink";
+
+/**
+ * Class name of pagination non-link to next page.
+ *
+ * @property CLASS_NEXTPAGE
+ * @type String
+ * @static
+ * @final
+ */
+YAHOO.widget.DataTable.CLASS_NEXTPAGE = "yui-dt-nextpage";
+
 
 /**
  * Class name of pagination link to specific page number.
@@ -2116,7 +2157,7 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
             this.pageLinksLength : this.totalPages;
 
     // First link of this page
-    this.pageLinksStart = (this.pageNumber < this.pageLinksLength) ? 1 : this.pageNumber;
+    this.pageLinksStart = (Math.ceil(this.pageNumber/this.pageLinksLength -1) * this.pageLinksLength) + 1;
 
     // Which Records this page
     var pageRecords = this._oRecordSet.getRecords(this.startRecordIndex, this.rowsPerPage);
@@ -2124,20 +2165,26 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
 
     if(this.rowsPerPage < recordsLength) {
         // Markup for page links
-        //TODO: disable as appropriate
-        //TODO: fallback links
-        var isFirstPage;
-        var isLastPage;
-        var firstPageLink = " <a href=# class=\"" + YAHOO.widget.DataTable.CLASS_FIRSTLINK + "\">&lt;&lt;</a> ";
-        var prevPageLink = " <a href=# class=\"" + YAHOO.widget.DataTable.CLASS_PREVLINK + "\">&lt;</a> ";
-        var nextPageLink = " <a href=# class=\"" + YAHOO.widget.DataTable.CLASS_NEXTLINK + "\">&gt;</a> ";
-        var lastPageLink = " <a href=# class=\"" + YAHOO.widget.DataTable.CLASS_LASTLINK + "\">&gt;&gt;</a> ";
+        var isFirstPage = (this.pageNumber == 1) ? true : false;
+        var isLastPage = (this.pageNumber == this.totalPages) ? true : false;
+        var firstPageLink = (isFirstPage) ?
+                " <span class=\"" + YAHOO.widget.DataTable.CLASS_FIRSTPAGE + "\">&lt;&lt;</span> " :
+                " <a class=\"" + YAHOO.widget.DataTable.CLASS_FIRSTLINK + "\">&lt;&lt;</a> ";
+        var prevPageLink = (isFirstPage) ?
+                " <span class=\"" + YAHOO.widget.DataTable.CLASS_PREVPAGE + "\">&lt;</span> " :
+                " <a class=\"" + YAHOO.widget.DataTable.CLASS_PREVLINK + "\">&lt;</a> " ;
+        var nextPageLink = (isLastPage) ?
+                " <span class=\"" + YAHOO.widget.DataTable.CLASS_NEXTPAGE + "\">&gt;</span> " :
+                " <a class=\"" + YAHOO.widget.DataTable.CLASS_NEXTLINK + "\">&gt;</a> " ;
+        var lastPageLink = (isLastPage) ?
+                " <span class=\"" + YAHOO.widget.DataTable.CLASS_LASTPAGE + "\">&gt;&gt;</span> " :
+                " <a class=\"" + YAHOO.widget.DataTable.CLASS_LASTLINK + "\">&gt;&gt;</a> ";
         var markup = firstPageLink + prevPageLink;
         var maxLinks = (this.pageLinksStart+this.pageLinksLength < this.totalPages) ?
             this.pageLinksStart+this.pageLinksLength-1 : this.totalPages;
         for(var i=this.pageLinksStart; i<=maxLinks; i++) {
              if(i != this.pageNumber) {
-                markup += " <a href=# class=\"" + YAHOO.widget.DataTable.CLASS_PAGELINK + "\">" + i + "</a> ";
+                markup += " <a class=\"" + YAHOO.widget.DataTable.CLASS_PAGELINK + "\">" + i + "</a> ";
             }
             else {
                 markup += " <span class=\"" + YAHOO.widget.DataTable.CLASS_CURRENTPAGE + "\">" + i + "</span>";
