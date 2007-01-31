@@ -21,6 +21,7 @@ http://developer.yahoo.net/yui/license.txt
  *
  * @class Connect
  */
+
 YAHOO.util.Connect =
 {
   /**
@@ -43,7 +44,7 @@ YAHOO.util.Connect =
    * @static
    * @type object
    */
-	_http_header:{},
+	_http_headers:{},
 
   /**
    * @description Determines if HTTP headers are set.
@@ -69,7 +70,7 @@ YAHOO.util.Connect =
  /**
   * @description Determines if a default header of
   * Content-Type of 'application/x-www-form-urlencoded'
-  * will be added to any client HTTP headers sent for POST
+  * will be added to client HTTP headers sent for POST
   * transactions.
   * @property _default_post_header
   * @private
@@ -77,6 +78,49 @@ YAHOO.util.Connect =
   * @type boolean
   */
     _default_post_header:'application/x-www-form-urlencoded',
+
+ /**
+  * @description Determines if a default header of
+  * 'X-Requested-With: XMLHttpRequest'
+  * will be added to each transaction.
+  * @property _use_default_xhr_header
+  * @private
+  * @static
+  * @type boolean
+  */
+    _use_default_xhr_header:true,
+
+ /**
+  * @description The default header value for the label
+  * "X-Requested-With".  This is sent with each
+  * transaction, by default, to identify the
+  * request as being made by YUI Connection Manager.
+  * @property _default_xhr_header
+  * @private
+  * @static
+  * @type boolean
+  */
+    _default_xhr_header:'XMLHttpRequest',
+
+ /**
+  * @description Determines if custom, default headers
+  * are set for each transaction.
+  * @property _has_default_header
+  * @private
+  * @static
+  * @type boolean
+  */
+    _has_default_headers:true,
+
+ /**
+  * @description Determines if custom, default headers
+  * are set for each transaction.
+  * @property _has_default_header
+  * @private
+  * @static
+  * @type boolean
+  */
+    _default_headers:{},
 
  /**
   * @description Property modified by setForm() to determine if the data
@@ -169,6 +213,7 @@ YAHOO.util.Connect =
 	setProgId:function(id)
 	{
 		this._msxml_progid.unshift(id);
+		YAHOO.log('ActiveX Program Id  ' + id + ' added to _msxml_progid.', 'info', 'Connection');
 	},
 
   /**
@@ -182,6 +227,21 @@ YAHOO.util.Connect =
 	setDefaultPostHeader:function(b)
 	{
 		this._use_default_post_header = b;
+		YAHOO.log('Use default POST header set to  ' + b, 'info', 'Connection');
+	},
+
+  /**
+   * @description Member to enable or disable the default POST header.
+   * @method setDefaultXhrHeader
+   * @public
+   * @static
+   * @param {boolean} b Set and use default header - true or false .
+   * @return void
+   */
+	setDefaultXhrHeader:function(b)
+	{
+		this._use_default_xhr_header = b;
+		YAHOO.log('Use default transaction header set to  ' + b, 'info', 'Connection');
 	},
 
   /**
@@ -196,6 +256,7 @@ YAHOO.util.Connect =
 	{
 		if(typeof i == 'number' && isFinite(i)){
 			this._polling_interval = i;
+			YAHOO.log('Default polling interval set to ' + i +'ms', 'info', 'Connection');
 		}
 	},
 
@@ -217,6 +278,7 @@ YAHOO.util.Connect =
 			http = new XMLHttpRequest();
 			//  Object literal with http and tId properties
 			obj = { conn:http, tId:transactionId };
+			YAHOO.log('XHR object created for transaction ' + transactionId, 'info', 'Connection');
 		}
 		catch(e)
 		{
@@ -227,6 +289,7 @@ YAHOO.util.Connect =
 					http = new ActiveXObject(this._msxml_progid[i]);
 					//  Object literal with conn and tId properties
 					obj = { conn:http, tId:transactionId };
+					YAHOO.log('ActiveX XHR object created for transaction ' + transactionId, 'info', 'Connection');
 					break;
 				}
 				catch(e){}
@@ -282,6 +345,7 @@ YAHOO.util.Connect =
 		var o = this.getConnectionObject();
 
 		if(!o){
+			YAHOO.log('Unable to create connection object.', 'error', 'Connection');
 			return null;
 		}
 		else{
@@ -296,7 +360,7 @@ YAHOO.util.Connect =
 				//If the specified HTTP method is GET, setForm() will return an
 				//encoded string that is concatenated to the uri to
 				//create a querystring.
-				if(method == 'GET'){
+				if(method.toUpperCase() == 'GET'){
 					if(this._sFormData.length != 0){
 						// If the URI already contains a querystring, append an ampersand
 						// and then concatenate _sFormData to the URI.
@@ -306,7 +370,7 @@ YAHOO.util.Connect =
 						uri += "?" + this._sFormData;
 					}
 				}
-				else if(method == 'POST'){
+				else if(method.toUpperCase() == 'POST'){
 					//If POST data exist in addition to the HTML form data,
 					//it will be concatenated to the form data.
 					postData = postData?this._sFormData + "&" + postData:this._sFormData;
@@ -315,14 +379,21 @@ YAHOO.util.Connect =
 
 			o.conn.open(method, uri, true);
 
+			if(this._use_default_xhr_header){
+				if(!this._default_headers['X-Requested-With']){
+					this.initHeader('X-Requested-With', this._default_xhr_header, true);
+					YAHOO.log('Initialize transaction header X-Request-Header to XMLHttpRequest.', 'info', 'Connection');
+				}
+			}
 			if(this._isFormSubmit || (postData && this._use_default_post_header)){
 				this.initHeader('Content-Type', this._default_post_header);
+				YAHOO.log('Initialize header Content-Type to application/x-www-form-urlencoded for POST transaction.', 'info', 'Connection');
 				if(this._isFormSubmit){
 					this.resetFormState();
 				}
 			}
 
-			if(this._has_http_headers){
+			if(this._has_default_headers || this._has_http_headers){
 				this.setHeader(o);
 			}
 
@@ -386,6 +457,7 @@ YAHOO.util.Connect =
 		// If no valid callback is provided, then do not process any callback handling.
 		if(!callback){
 			this.releaseObject(o);
+			YAHOO.log('No callback object to process. Transaction complete.', 'warn', 'Connection');
 			return;
 		}
 
@@ -408,56 +480,54 @@ YAHOO.util.Connect =
 		}
 
 		if(httpStatus >= 200 && httpStatus < 300){
-			try
-			{
-				responseObject = this.createResponseObject(o, callback.argument);
-				if(callback.success){
-					if(!callback.scope){
-						callback.success(responseObject);
-					}
-					else{
-						// If a scope property is defined, the callback will be fired from
-						// the context of the object.
-						callback.success.apply(callback.scope, [responseObject]);
-					}
+			responseObject = this.createResponseObject(o, callback.argument);
+			if(callback.success){
+				if(!callback.scope){
+					callback.success(responseObject);
+					YAHOO.log('Success callback. HTTP code is ' + httpStatus, 'info', 'Connection');
+				}
+				else{
+					// If a scope property is defined, the callback will be fired from
+					// the context of the object.
+					callback.success.apply(callback.scope, [responseObject]);
+					YAHOO.log('Success callback with scope. HTTP code is ' + httpStatus, 'info', 'Connection');
 				}
 			}
-			catch(e){}
 		}
 		else{
-			try
-			{
-				switch(httpStatus){
-					// The following cases are wininet.dll error codes that may be encountered.
-					case 12002: // Server timeout
-					case 12029: // 12029 to 12031 correspond to dropped connections.
-					case 12030:
-					case 12031:
-					case 12152: // Connection closed by server.
-					case 13030: // See above comments for variable status.
-						responseObject = this.createExceptionObject(o.tId, callback.argument, (isAbort?isAbort:false));
-						if(callback.failure){
-							if(!callback.scope){
-								callback.failure(responseObject);
-							}
-							else{
-								callback.failure.apply(callback.scope, [responseObject]);
-							}
+			switch(httpStatus){
+				// The following cases are wininet.dll error codes that may be encountered.
+				case 12002: // Server timeout
+				case 12029: // 12029 to 12031 correspond to dropped connections.
+				case 12030:
+				case 12031:
+				case 12152: // Connection closed by server.
+				case 13030: // See above comments for variable status.
+					responseObject = this.createExceptionObject(o.tId, callback.argument, (isAbort?isAbort:false));
+					if(callback.failure){
+						if(!callback.scope){
+							callback.failure(responseObject);
+							YAHOO.log('Failure callback. Exception detected. Status code is ' + httpStatus, 'warn', 'Connection');
 						}
-						break;
-					default:
-						responseObject = this.createResponseObject(o, callback.argument);
-						if(callback.failure){
-							if(!callback.scope){
-								callback.failure(responseObject);
-							}
-							else{
-								callback.failure.apply(callback.scope, [responseObject]);
-							}
+						else{
+							callback.failure.apply(callback.scope, [responseObject]);
+							YAHOO.log('Failure callback with scope. Exception detected. Status code is ' + httpStatus, 'warn', 'Connection');
 						}
-				}
+					}
+					break;
+				default:
+					responseObject = this.createResponseObject(o, callback.argument);
+					if(callback.failure){
+						if(!callback.scope){
+							callback.failure(responseObject);
+							YAHOO.log('Failure callback. HTTP status code is ' + httpStatus, 'warn', 'Connection');
+						}
+						else{
+							callback.failure.apply(callback.scope, [responseObject]);
+							YAHOO.log('Failure callback with scope. HTTP status code is ' + httpStatus, 'warn', 'Connection');
+						}
+					}
 			}
-			catch(e){}
 		}
 
 		this.releaseObject(o);
@@ -551,27 +621,37 @@ YAHOO.util.Connect =
     },
 
   /**
-   * @description Public method that stores the custom HTTP headers for each transaction.
+   * @description Method that initializes the custom HTTP headers for the each transaction.
    * @method initHeader
    * @public
    * @static
    * @param {string} label The HTTP header label
    * @param {string} value The HTTP header value
+   * @param {string} isDefault Determines if the specific header is a default header
+   * automatically sent with each transaction.
    * @return {void}
    */
-	initHeader:function(label,value)
+	initHeader:function(label,value,isDefault)
 	{
-		if(this._http_header[label] === undefined){
-			this._http_header[label] = value;
+		var headerObj = (isDefault)?this._default_headers:this._http_headers;
+
+		if(headerObj[label] === undefined){
+			headerObj[label] = value;
 		}
 		else{
 			// Concatenate multiple values, comma-delimited,
 			// for the same header label,
-			this._http_header[label] =  value + "," + this._http_header[label];
+			headerObj[label] =  value + "," + headerObj[label];
 		}
 
-		this._has_http_headers = true;
+		if(isDefault){
+			this._has_default_headers = true;
+		}
+		else{
+			this._has_http_headers = true;
+		}
 	},
+
 
   /**
    * @description Accessor that sets the HTTP headers for each transaction.
@@ -583,15 +663,40 @@ YAHOO.util.Connect =
    */
 	setHeader:function(o)
 	{
-		for(var prop in this._http_header){
-			if(this._http_header.hasOwnProperty(prop)){
-				o.conn.setRequestHeader(prop, this._http_header[prop]);
+		if(this._has_default_headers){
+			for(var prop in this._default_headers){
+				if(this._default_headers.hasOwnProperty(prop)){
+					o.conn.setRequestHeader(prop, this._default_headers[prop]);
+					YAHOO.log('Default HTTP header ' + prop + ' set with value of ' + this._default_headers[prop], 'info', 'Connection');
+				}
 			}
 		}
-		delete this._http_header;
 
-		this._http_header = {};
-		this._has_http_headers = false;
+		if(this._has_http_headers){
+			for(var prop in this._http_headers){
+				if(this._http_headers.hasOwnProperty(prop)){
+					o.conn.setRequestHeader(prop, this._http_headers[prop]);
+					YAHOO.log('HTTP header ' + prop + ' set with value of ' + this._http_headers[prop], 'info', 'Connection');
+				}
+			}
+			delete this._http_headers;
+
+			this._http_headers = {};
+			this._has_http_headers = false;
+		}
+	},
+
+  /**
+   * @description Resets the default HTTP headers object
+   * @method resetDefaultHeaders
+   * @public
+   * @static
+   * @return {void}
+   */
+	resetDefaultHeaders:function(){
+		delete this._default_headers
+		this._default_headers = {};
+		this._has_default_headers = false;
 	},
 
   /**
@@ -614,7 +719,7 @@ YAHOO.util.Connect =
 		var oForm;
 		if(typeof formId == 'string'){
 			// Determine if the argument is a form id or a form name.
-			// Note form name usage is deprecated but supported
+			// Note form name usage is deprecated by supported
 			// here for legacy reasons.
 			oForm = (document.getElementById(formId) || document.forms[formId]);
 		}
@@ -623,6 +728,7 @@ YAHOO.util.Connect =
 			oForm = formId;
 		}
 		else{
+			YAHOO.log('Unable to create form object ' + formId, 'warn', 'Connection');
 			return;
 		}
 
@@ -707,6 +813,8 @@ YAHOO.util.Connect =
 		this._isFormSubmit = true;
 		this._sFormData = this._sFormData.substr(0, this._sFormData.length - 1);
 
+		YAHOO.log('Form initialized for transaction. HTML form POST message is: ' + this._sFormData, 'info', 'Connection');
+
 		return this._sFormData;
 	},
 
@@ -731,7 +839,7 @@ YAHOO.util.Connect =
    * @method createFrame
    * @private
    * @static
-   * @param {string} secureUri Optional qualified path of iframe resource for SSL in IE.
+   * @param {string} optional qualified path of iframe resource for SSL in IE.
    * @return {void}
    */
 	createFrame:function(secureUri){
@@ -764,6 +872,7 @@ YAHOO.util.Connect =
 		io.style.left = '-1000px';
 
 		document.body.appendChild(io);
+		YAHOO.log('File upload iframe created. Id is:' + frameId, 'info', 'Connection');
 	},
 
   /**
@@ -809,6 +918,7 @@ YAHOO.util.Connect =
 		// Each iframe has an id prefix of "yuiIO" followed
 		// by the unique transaction id.
 		var frameId = 'yuiIO' + id;
+		var fileHeader = 'multipart/form-data';
 		var io = document.getElementById(frameId);
 
 		// Initialize the HTML form properties in case they are
@@ -819,12 +929,13 @@ YAHOO.util.Connect =
 
 		if(this._formNode.encoding){
 			// IE does not respect property enctype for HTML forms.
-			// Instead use property encoding.
-			this._formNode.encoding = 'multipart/form-data';
+			// Instead it uses the property - "encoding".
+			this._formNode.encoding = fileHeader;
 		}
 		else{
-			this._formNode.enctype = 'multipart/form-data';
+			this._formNode.enctype = fileHeader;
 		}
+
 
 		if(postData){
 			var oElements = this.appendPostData(postData);
@@ -833,13 +944,9 @@ YAHOO.util.Connect =
 		this._formNode.submit();
 
 		if(oElements && oElements.length > 0){
-			try
-			{
-				for(var i=0; i < oElements.length; i++){
-					this._formNode.removeChild(oElements[i]);
-				}
+			for(var i=0; i < oElements.length; i++){
+				this._formNode.removeChild(oElements[i]);
 			}
-			catch(e){}
 		}
 
 		// Reset HTML form status properties.
@@ -865,9 +972,11 @@ YAHOO.util.Connect =
 			if(callback.upload){
 				if(!callback.scope){
 					callback.upload(obj);
+					YAHOO.log('Upload callback.', 'info', 'Connection');
 				}
 				else{
 					callback.upload.apply(callback.scope, [obj]);
+					YAHOO.log('Upload callback with scope.', 'info', 'Connection');
 				}
 			}
 
@@ -880,7 +989,11 @@ YAHOO.util.Connect =
 			else{
 				io.removeEventListener('load', uploadCallback, false);
 			}
-			setTimeout(function(){ document.body.removeChild(io); }, 100);
+			setTimeout(
+				function(){
+					document.body.removeChild(io);
+					YAHOO.log('File upload iframe destroyed. Id is:' + frameId, 'info', 'Connection');
+				}, 100);
 		};
 
 
@@ -917,10 +1030,12 @@ YAHOO.util.Connect =
 			}
 
 			this.handleTransactionResponse(o, callback, true);
+			YAHOO.log('Transaction ' + o.tId + ' aborted.', 'info', 'Connection');
 
 			return true;
 		}
 		else{
+			YAHOO.log('Transaction ' + o.tId + ' abort call failed.', 'warn', 'Connection');
 			return false;
 		}
 	},
@@ -959,6 +1074,7 @@ YAHOO.util.Connect =
 	{
 		//dereference the XHR instance.
 		o.conn = null;
+		YAHOO.log('Connection object for transaction ' + o.tId + ' destroyed.', 'info', 'Connection');
 		//dereference the connection object.
 		o = null;
 	}
