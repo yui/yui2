@@ -1,18 +1,19 @@
 (function() {
 // internal shorthand
 var Dom = YAHOO.util.Dom,
-    Lang = YAHOO.util.Lang,
     EventPublisher = YAHOO.util.EventPublisher,
     AttributeProvider = YAHOO.util.AttributeProvider;
 
 /**
+ * Element provides an wrapper object to simplify adding
+ * event listeners, using dom methods, and managing attributes.  
  * @module element
  *
  */
 
 /**
  * Element provides an interface to an HTMLElement's attributes and common
- * methods.  Other commonly used attributes are added as well.
+ * methods.
  * @namespace YAHOO.util
  * @class Element
  * @requires yahoo, dom, event
@@ -310,28 +311,12 @@ YAHOO.util.Element.prototype = {
             type: 'appendTo',
             target: parent
         });
-        
-        /* TODO: move to TabView or deprecate?
-        var newAddition =  !Dom.inDocument(element);
-        if (!newAddition) {
-            return false; // note return; no refresh if in document
-        }
-        
-        // if a new addition, refresh HTMLElement any applied attributes
-        var keys = this.getAttributeKeys();
-        
-        for (var key in keys) { // only refresh HTMLElement attributes
-            if ( !Lang.isUndefined(element[key]) ) {
-                this.refresh(key);
-            }
-        }
-        */
     },
     
     get: function(key) {
         var configs = this._configs || {};
         var el = configs.element; // avoid loop due to 'element'
-        if (el && !configs[key] && !Lang.isUndefined(el.value[key]) ) {
+        if (el && !configs[key] && !YAHOO.lang.isUndefined(el.value[key]) ) {
             return el.value[key];
         }
 
@@ -350,7 +335,7 @@ YAHOO.util.Element.prototype = {
         }
         
         // set it on the element if not configured and is an HTML attribute
-        if ( !this._configs[key] && !Lang.isUndefined(el[key]) ) {
+        if ( !this._configs[key] && !YAHOO.lang.isUndefined(el[key]) ) {
             _registerHTMLAttr.call(this, key);
         }
 
@@ -360,7 +345,7 @@ YAHOO.util.Element.prototype = {
     setAttributeConfig: function(key, map, init) {
         var el = this.get('element');
 
-        if (el && !this._configs[key] && !Lang.isUndefined(el[key]) ) {
+        if (el && !this._configs[key] && !YAHOO.lang.isUndefined(el[key]) ) {
             _registerHTMLAttr.call(this, key, map);
         } else {
             AttributeProvider.prototype.setAttributeConfig.apply(this, arguments);
@@ -410,7 +395,7 @@ YAHOO.util.Element.prototype = {
             });
         };
 
-        if ( Lang.isString(el) ) {
+        if ( YAHOO.lang.isString(el) ) {
             _registerHTMLAttr.call(this, 'id', { value: el });
             YAHOO.util.Event.onAvailable(el, function() {
                 attr.element = Dom.get(el);
