@@ -1003,12 +1003,17 @@ YAHOO.util.DragDropMgr = function() {
 
             // DragDrop is using this as a sanity check for the initial mousedown
             // in this case we are done.  In POINT mode, if the drag obj has no
-            // contraints, we are also done. Otherwise we need to evaluate the 
-            // location of the target as related to the actual location of the
-            // dragged element.
+            // contraints, we are done. Otherwise we need to evaluate the 
+            // region the target as occupies to determine if the dragged element
+            // overlaps with it.
+            
             var dc = this.dragCurrent;
             if (!dc || !dc.getTargetCoord || 
                     (!intersect && !dc.constrainX && !dc.constrainY)) {
+
+                //if (oTarget.cursorIsOver) {
+                    //this.logger.log("over " + oTarget + ", " + loc + ", " + pt, "warn");
+                //}
                 return oTarget.cursorIsOver;
             }
 

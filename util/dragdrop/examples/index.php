@@ -1,10 +1,12 @@
 
 <?php
-if (isset($_GET["mode"])) {
-    $mode = $_GET["mode"];
-} else {
-    $mode = "";
-}
+    if (in_array('dist', $_SERVER['argv'])) {
+        $mode='dist';
+    } else if (isset($_GET["mode"])) {
+        $mode = $_GET["mode"];
+    } else {
+        $mode = "";
+    }
 
 if ($mode == "dist") {
         $ext = "html";

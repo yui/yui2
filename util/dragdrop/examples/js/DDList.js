@@ -44,6 +44,10 @@ YAHOO.example.DDList.prototype.endDrag = function(e) {
     // disable moving the linked element
 };
 
+YAHOO.example.DDList.prototype.onDragDrop = function(e, id) {
+    YAHOO.log("DROP: " + id, "warn");
+};
+
 YAHOO.example.DDList.prototype.onDrag = function(e, id) {
     
 };
