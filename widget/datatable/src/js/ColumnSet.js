@@ -530,6 +530,7 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
                 break;
            default:
                 elCell.innerHTML = (oData) ? oData.toString() : "";
+                //elCell.innerHTML = (oData) ? "<a href=\"#\">"+oData.toString()+"</a>" : "";
                 classname = YAHOO.widget.DataTable.CLASS_STRING;
                 break;
         }
@@ -703,47 +704,23 @@ YAHOO.widget.Column.selectParser = function(sMarkup) {
  * Outputs editor markup into the given TD based on given Record.
  *
  * @method showEditor
- * @param elCell {HTMLElement} TD to format for display.
- * @param oRecord {YAHOO.widget.Record} Record that holds data for the row.
+ * @param elCell {HTMLElement} The cell to edit.
+ * @param oRecord {YAHOO.widget.Record} The DataTable Record of the cell.
+ * @return YAHOO.widget.ColumnEditor
  */
-YAHOO.widget.Column.prototype.showEditor = function(elCell,oRecord) {
+YAHOO.widget.Column.prototype.getEditor = function(elCell, oRecord) {
+//Sync up the arg signature for ColumnEditor constructor and show()
     var oEditor = this.editor;
     if(oEditor.constructor == String) {
-        oEditor = new YAHOO.widget.ColumnEditor(this, elCell);
+        oEditor = new YAHOO.widget.ColumnEditor(this.editor);
+        oEditor.show(elCell, oRecord, this);
         this.editor = oEditor;
     }
-    if(oEditor.constructor == YAHOO.widget.ColumnEditor) {
+    else if(oEditor.constructor == YAHOO.widget.ColumnEditor) {
         oEditor.show(elCell, oRecord, this);
     }
+    return oEditor;
 };
-
-/**
- * Hides editor markup for the Column.
- *
- * @method hideEditor
- */
-YAHOO.widget.Column.prototype.hideEditor = function() {
-    var oEditor = this.editor;
-    if(oEditor) {
-        oEditor.hide();
-    }
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /****************************************************************************/
@@ -756,12 +733,13 @@ YAHOO.widget.Column.prototype.hideEditor = function() {
  *
  * @class ColumnEditor
  * @constructor
- * @param oColumn {YAHOO.widget.Column} DataTable Column instance.
+ * @param elCell {HTMLElement} The cell to edit.
+ * @param oRecord {YAHOO.widget.Record} The DataTable Record of the cell.
+ * @param oColumn {YAHOO.widget.Column} The DataTable Column of the cell.
  * @parem sType {String} Type identifier
  */
-YAHOO.widget.ColumnEditor = function(oColumn, elCell) {
-    this.column = oColumn;
-    this.type = oColumn.editor;
+YAHOO.widget.ColumnEditor = function(sType) {
+    this.type = sType;
 
     //TODO: make sure columneditors get destroyed if widget gets destroyed
     // Works better to attach ColumnEditor to document.body
@@ -790,12 +768,6 @@ YAHOO.widget.ColumnEditor = function(oColumn, elCell) {
     YAHOO.widget.ColumnEditor._nCount++;
 };
 
-if(YAHOO.util.Element) {
-    YAHOO.extend(YAHOO.widget.ColumnEditor, YAHOO.util.Element);
-}
-else {
-    YAHOO.log("Missing dependency: YAHOO.util.Element","error",this.toString());
-}
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -864,8 +836,14 @@ YAHOO.widget.ColumnEditor.prototype.input = null;
  * Shows ColumnEditor.
  *
  * @method show
+ * @param elCell {HTMLElement} The cell to edit.
+ * @param oRecord {YAHOO.widget.Record} The DataTable Record of the cell.
+ * @param oColumn {YAHOO.widget.Column} The DataTable Column of the cell.
  */
 YAHOO.widget.ColumnEditor.prototype.show = function(elCell, oRecord, oColumn) {
+    this.cell = elCell;
+    this.record = oRecord;
+    this.column = oColumn;
     switch(this.type) {
         case "textbox":
             this.showTextboxEditor(elCell, oRecord, oColumn);
@@ -874,6 +852,22 @@ YAHOO.widget.ColumnEditor.prototype.show = function(elCell, oRecord, oColumn) {
             break;
     }
 }
+
+/**
+ * Returns ColumnEditor data value.
+ *
+ * @method getValue
+ * @return Object
+ */
+YAHOO.widget.ColumnEditor.prototype.getValue = function() {
+    switch(this.type) {
+        case "textbox":
+            return this.getTextboxEditorValue();
+            break;
+        default:
+            break;
+    }
+};
 
 /**
  * Creates a textbox editor in the DOM.
@@ -892,12 +886,15 @@ YAHOO.widget.ColumnEditor.prototype.createTextboxEditor = function() {
  * Shows ColumnEditor
  *
  * @method showTextboxEditor
+ * @param elCell {HTMLElement} The cell to edit.
+ * @param oRecord {YAHOO.widget.Record} The DataTable Record of the cell.
+ * @param oColumn {YAHOO.widget.Column} The DataTable Column of the cell.
  */
 YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord, oColumn) {
     // Size and value
     this.input.style.width = (parseInt(elCell.offsetWidth)-7) + "px";
     this.input.style.height = (parseInt(elCell.offsetHeight)-7) + "px";
-    this.input.value = (oColumn.key) ? oRecord[oColumn.key] : elCell.innerHTML;
+    this.input.value = elCell.innerHTML;
 
     // Position and show
     var x,y;
@@ -937,6 +934,16 @@ YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord
 YAHOO.widget.ColumnEditor.prototype.hide = function() {
     this.input.tabIndex = -1;
     this.container.style.display = "none";
+};
+
+/**
+ * Returns ColumnEditor value
+ *
+ * @method getTextboxEditorValue
+ * @return String
+ */
+YAHOO.widget.ColumnEditor.prototype.getTextboxEditorValue = function() {
+    return this.input.value;
 };
 
 /****************************************************************************/

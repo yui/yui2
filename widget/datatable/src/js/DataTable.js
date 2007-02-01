@@ -1238,8 +1238,8 @@ YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
     var elTag = elTarget.nodeName.toLowerCase();
     var knownTag = false; // True if event should stop propagating
 
-    if(oSelf.activeEditor) { //&& (oSelf.activeEditor != column)
-        oSelf.activeEditor.hideEditor();
+    if(oSelf.activeEditor) { //&& (oSelf.activeEditor.column != column)
+        oSelf.activeEditor.hide();
         oSelf.activeEditor = null;
 
         // Editor causes widget to lose focus
@@ -1294,8 +1294,8 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
     var elTag = elTarget.nodeName.toLowerCase();
     var knownTag = false;
 
-    if(oSelf.activeEditor) { //&& (oSelf.activeEditor != column)
-        oSelf.activeEditor.hideEditor();
+    if(oSelf.activeEditor) { //&& (oSelf.activeEditor.column != column)
+        oSelf.activeEditor.hide();
         oSelf.activeEditor = null;
         
         // Editor causes widget to lose focus
@@ -1411,11 +1411,28 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onKeyup = function(e, oSelf) {
-    // esc
+    // esc Clears active editor
     if((e.keyCode == 27) && (oSelf.activeEditor)) {
-        oSelf.activeEditor.hideEditor();
+        oSelf.activeEditor.hide();
         oSelf.activeEditor = null;
         
+        // Editor causes widget to lose focus
+        oSelf._bFocused = false;
+        oSelf.focusTable();
+    }
+    // enter Saves active editor data
+    if((e.keyCode == 13) && (oSelf.activeEditor)) {
+        var elCell = oSelf.activeEditor.cell;
+        var oColumn = oSelf.activeEditor.column;
+        var oRecord = oSelf.activeEditor.record;
+        var newValue = oSelf.activeEditor.getValue();
+        //TODO: Column.key may be null!
+        oRecord[oColumn.key] = newValue;
+        oSelf.formatCell(elCell);
+
+        oSelf.activeEditor.hide();
+        oSelf.activeEditor = null;
+
         // Editor causes widget to lose focus
         oSelf._bFocused = false;
         oSelf.focusTable();
@@ -2376,8 +2393,7 @@ YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
     if(elCell && !isNaN(elCell.columnIndex)) {
         var column = this._oColumnSet.keys[elCell.columnIndex];
         if(column && column.editor) {
-            column.showEditor(elCell,this._oRecordSet.getRecord(elCell.parentNode.recordId));
-            this.activeEditor = column;
+            this.activeEditor = column.getEditor(elCell,this._oRecordSet.getRecord(elCell.parentNode.recordId));
         }
         this._bFocused = true;
     }
