@@ -176,14 +176,13 @@ YAHOO.util.History = ( function() {
 
         var doc = _iframe.contentWindow.document;
         var elem = doc.getElementById( "state" );
-        // We must une innerText, and not innerHTML because our string contains
+        // We must use innerText, and not innerHTML because our string contains
         // the "&" character (which would end up being escaped as "&amp;") and
         // the string comparison would fail...
         var fqstate = elem ? elem.innerText : null;
 
         setInterval( function() {
-            doc = doc || _iframe.contentWindow.document;
-            elem = elem || doc.getElementById( "state" );
+            elem = doc.getElementById( "state" );
             // See my comment above about using innerText instead of innerHTML...
             var newfqstate = elem ? elem.innerText : null;
             if ( newfqstate != fqstate ) {
