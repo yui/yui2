@@ -1,4 +1,9 @@
 /**
+ *
+ * The Browser History Manager provides the ability to use the 
+ * back/forward navigation buttons in a DHTML application. It also allows 
+ * a DHTML application to be bookmarked in a specific state.
+ *
  * @module history
  * @requires yahoo,event
  * @namespace YAHOO.util
