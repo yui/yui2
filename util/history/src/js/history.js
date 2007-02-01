@@ -15,14 +15,14 @@
 
 
 /**
- * The BHM class provides the ability to use the back/forward navigation
+ * The History class provides the ability to use the back/forward navigation
  * buttons in a DHTML application. It also allows a DHTML application to
  * be bookmarked in a specific state.
  *
- * @class BHM
+ * @class History
  * @constructor
  */
-YAHOO.util.BHM = ( function() {
+YAHOO.util.History = ( function() {
 
     /**
      * String identifying which browser we are in.
@@ -58,7 +58,7 @@ YAHOO.util.BHM = ( function() {
     var _storageField = null;
 
     /**
-     * Flag used to tell whether YAHOO.util.BHM.initialize has been called.
+     * Flag used to tell whether YAHOO.util.History.initialize has been called.
      *
      * @property _initialized
      * @type boolean
@@ -173,8 +173,8 @@ YAHOO.util.BHM = ( function() {
         // Start the thread that will have the responsibility to
         // periodically check whether a navigate operation has been
         // requested on the main window. This will happen when
-        // YAHOO.util.BHM.navigate has been called or after the
-        // user has hit the back/forward button.
+        // YAHOO.util.History.navigate has been called or after
+        // the user has hit the back/forward button.
 
         var doc = _iframe.contentWindow.document;
         var elem = doc.getElementById( "state" );
@@ -213,7 +213,7 @@ YAHOO.util.BHM = ( function() {
 
         _bhmReady = true;
 
-        YAHOO.util.BHM.onLoadEvent.fire();
+        YAHOO.util.History.onLoadEvent.fire();
     }
 
     /**
@@ -316,8 +316,8 @@ YAHOO.util.BHM = ( function() {
             // Start the thread that will have the responsibility to
             // periodically check whether a navigate operation has been
             // requested on the main window. This will happen when
-            // YAHOO.util.BHM.navigate has been called or after the
-            // user has hit the back/forward button.
+            // YAHOO.util.History.navigate has been called or after
+            // the user has hit the back/forward button.
 
             // On Safari 1.x and 2.0, the only way to catch a back/forward
             // operation is to watch history.length... We basically exploit
@@ -353,7 +353,7 @@ YAHOO.util.BHM = ( function() {
 
             _bhmReady = true;
 
-            YAHOO.util.BHM.onLoadEvent.fire();
+            YAHOO.util.History.onLoadEvent.fire();
         }
     }
 
@@ -399,19 +399,20 @@ YAHOO.util.BHM = ( function() {
             if ( typeof module != "string" || _trim( module ) == "" ||
                  typeof initialState != "string" ||
                  typeof onStateChange != "function" )
-                throw new Error( "Missing or invalid argument passed to YAHOO.util.BHM.register" );
+                throw new Error( "Missing or invalid argument passed to YAHOO.util.History.register" );
 
             if ( _modules[module] )
                 throw new Error( "A module cannot be registered twice" );
 
             // Note: A module CANNOT be registered after calling
-            // YAHOO.util.BHM.initialize. Indeed, we set the initial state of
-            // each registered module in YAHOO.util.BHM.initialize. If you
-            // could register a module after initializing the BHM, you would
-            // not read the correct state using YAHOO.util.BHM.getCurrentState
-            // when coming back to the page using the back button.
+            // YAHOO.util.History.initialize. Indeed, we set the initial state
+            // of each registered module in YAHOO.util.History.initialize.
+            // If you could register a module after initializing the Browser
+            // History Manager, you would not read the correct state using
+            // YAHOO.util.History.getCurrentState when coming back to the
+            // page using the back button.
             if ( _initialized )
-                throw new Error( "All modules must be registered before calling YAHOO.util.BHM.initialize" );
+                throw new Error( "All modules must be registered before calling YAHOO.util.History.initialize" );
 
             // Make sure the strings passed in do not contain our separators "," and "|"
             module = escape( module );
@@ -447,7 +448,7 @@ YAHOO.util.BHM = ( function() {
                 iframeTarget = "blank.html";
 
             if ( typeof iframeTarget != "string" || _trim( iframeTarget ) == "" )
-                throw new Error( "Invalid argument passed to YAHOO.util.BHM.initialize" );
+                throw new Error( "Invalid argument passed to YAHOO.util.History.initialize" );
 
             document.write( '<input type="hidden" id="yui_hist_field">' );
             if ( _browser == "msie" ) {
@@ -478,7 +479,7 @@ YAHOO.util.BHM = ( function() {
          */
         navigate : function( module, state ) {
             if ( typeof module != "string" || _trim( module ) == "" || typeof state != "string" )
-                throw new Error( "Missing or invalid argument passed to YAHOO.util.BHM.navigate" );
+                throw new Error( "Missing or invalid argument passed to YAHOO.util.History.navigate" );
 
             if ( !_bhmReady )
                 throw new Error( "The Browser History Manager is not initialized" );
@@ -549,7 +550,7 @@ YAHOO.util.BHM = ( function() {
          */
         getCurrentState : function( module ) {
             if ( typeof module != "string" || _trim( module ) == "" )
-                throw new Error( "Missing or invalid argument passed to YAHOO.util.BHM.getCurrentState" );
+                throw new Error( "Missing or invalid argument passed to YAHOO.util.History.getCurrentState" );
 
             if ( !_storageFieldReady )
                 throw new Error( "The Browser History Manager is not initialized" );
@@ -573,7 +574,7 @@ YAHOO.util.BHM = ( function() {
          */
         getBookmarkedState : function( module ) {
             if ( typeof module != "string" || _trim( module ) == "" )
-                throw new Error( "Missing or invalid argument passed to YAHOO.util.BHM.getBookmarkedState" );
+                throw new Error( "Missing or invalid argument passed to YAHOO.util.History.getBookmarkedState" );
 
             var hash = top.location.hash.substr(1);
             var states = hash.split( "&" );
