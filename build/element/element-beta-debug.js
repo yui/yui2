@@ -439,17 +439,12 @@ var Dom = YAHOO.util.Dom,
 
 /**
  * Element provides an wrapper object to simplify adding
- * event listeners, using dom methods, and managing attributes.  
- * @module element
- *
- */
-
-/**
- * Element provides an interface to an HTMLElement's attributes and common
- * methods.
+ * event listeners, using dom methods, and managing attributes. 
+ * @module
  * @namespace YAHOO.util
  * @class Element
  * @requires yahoo, dom, event
+ * @beta
  * @uses YAHOO.util.AttributeProvider
  * @constructor
  * @param el {HTMLElement | String} The html element that 
