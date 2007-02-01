@@ -80,6 +80,7 @@
 	height:12px;   
 	left:2px;
 	z-index:1;
+	background: url("callt.gif") no-repeat;
 }
 
 .yui-calendar .calnavright {
@@ -91,14 +92,7 @@
 	height:12px;
 	right:2px;
 	z-index:1;
-}
-
-.yui-calendar .calnavright, .yui-calendar a.calnavright:hover {
 	background: url("calrt.gif") no-repeat;
-}
-
-.yui-calendar .calnavleft, .yui-calendar a.calnavleft:hover {
-	background: url("callt.gif") no-repeat;
 }
 
 .yui-calendar td.calcell {
@@ -193,5 +187,5 @@
 }
 
 /* Specific changes for calendar running under fonts/reset */
-.yui-calendar a:hover {background:inherit;}
+.yui-calendar .calbody a:hover {background:inherit;}
 p#clear {clear:left; padding-top:10px;}

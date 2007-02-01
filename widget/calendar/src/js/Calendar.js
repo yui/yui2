@@ -1224,7 +1224,7 @@ YAHOO.widget.Calendar.prototype.renderBody = function(workingDate, html) {
 	var useDate,weekNum,weekClass;
 	useDate = this.cfg.getProperty("pagedate");
 
-	html[html.length] = '<tbody class="m' + (useDate.getMonth()+1) + '">';
+	html[html.length] = '<tbody class="m' + (useDate.getMonth()+1) + ' calbody">';
 	
 	var i = 0;
 
@@ -1504,7 +1504,7 @@ YAHOO.widget.Calendar.prototype.applyListeners = function() {
 	if (this.domEventMap) {
 		var el,elements;
 		for (var cls in this.domEventMap) {	
-			if (this.domEventMap.hasOwnProperty(cls)) {
+			if (YAHOO.lang.hasOwnProperty(this.domEventMap, cls)) {
 				var items = this.domEventMap[cls];
 				
 				if (! (items instanceof Array)) {

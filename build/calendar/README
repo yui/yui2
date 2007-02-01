@@ -4,9 +4,10 @@ Calendar Release Notes
 
 	- Corrected problem with Safari setting Calendar pages to incorrect dates if the pages spanned a year boundary in CalendarGroups with 3 or more pages, due to a bug in Safari's impl of Date setMonth
 	- Corrected problem with CalendarGroup setMonth rendering Calendar pages with incorrect dates in all browsers if current pages spanned years
-	- Images for Close, Left and Right Arrows are now pulled in using CSS defined in calendar.css and by default use relative paths to the images in the same directory as calendar.css.
+	- Images for Close, Left and Right Arrows are now pulled in using CSS defined in calendar.css and by default use relative paths to the images in the same directory as calendar.css. Image customization can now be done through CSS 
 	- As a result IMG_ROOT, NAV_ARROW_LEFT, NAV_ARROW_RIGHT have been deprecated, but will still work if being used in customizations from past releases
 	- Fixed incorrect logging statement in calendar-debug.js
+	- Fixed domEventMap support for Safari versions prior to 2.0.2, caused by hasOwnProperty not being supported
 	- Removed unused private property : _pageDate from Calendar class
 
 *** version 0.12.2 ***
