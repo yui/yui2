@@ -4,8 +4,8 @@
 
 var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event,
-    Lang = YAHOO.util.Lang,
-    
+    Lang = YAHOO.lang,
+    Button = YAHOO.widget.Button;    
 
     // Private collection of radio buttons
 
@@ -21,8 +21,10 @@ var Dom = YAHOO.util.Dom,
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
 * level-one-html.html#ID-22445964">HTMLDivElement</a>} p_oElement Object 
 * specifying the <code>&#60;div&#62;</code> element of the button group.
+* @param {Object} p_oElement Object literal specifying a set of 
+* attributes used to configure the button group.
 * @param {Object} p_oAttributes Optional. Object literal specifying a set of 
-* attributes used to configure the button.
+* attributes used to configure the button group.
 * @namespace YAHOO.widget
 * @class ButtonGroup
 * @constructor
@@ -30,54 +32,81 @@ var Dom = YAHOO.util.Dom,
 */
 YAHOO.widget.ButtonGroup = function(p_oElement, p_oAttributes) {
 
-    var oElement;
+    var fnSuperClass = YAHOO.widget.ButtonGroup.superclass.constructor;
 
-    if(Lang.isString(p_oElement)) {
+    if(
+        arguments.length == 1 && 
+        !Lang.isString(p_oElement) && 
+        !p_oElement.nodeName
+    ) {
 
-        oElement = document.getElementById(p_oElement);
+        if(!p_oElement.id) {
 
-        if(!oElement) {
+            var sId = Dom.generateId();
 
-            oElement = this._createGroupElement();
+            p_oElement.id = sId;
+
+            YAHOO.log(
+                "No value specified for the button group's \"id\" attribute. " +
+                "Setting button group id to \"" + sId + "\".",
+                "warn"
+            );
 
         }
 
+        this.logger = new YAHOO.widget.LogWriter("ButtonGroup " + sId);
+
+        this.logger.log(
+                "No source HTML element.  "  +
+                "Building the button group using the set of attributes."
+            );
+
+        fnSuperClass.call(this, (this._createGroupElement()), p_oElement);
+
+    }
+    else if(Lang.isString(p_oElement)) {
+
+        var me = this;
+
+        Event.onContentReady(p_oElement, function() {
+        
+            if(this.nodeName.toUpperCase() == me.TAG_NAME) {
+
+                me.logger = 
+                    new YAHOO.widget.LogWriter("ButtonGroup " + p_oElement);
+        
+                fnSuperClass.call(me, this, p_oAttributes);
+
+            }
+
+        });
+    
     }
     else {
 
         var sNodeName = p_oElement.nodeName;
 
         if(sNodeName && sNodeName == this.TAG_NAME) {
-
-            oElement = p_oElement;
-
-        }
-
-    }
-
-
-    if(oElement) {
-
-        if(!oElement.id) {
-
-            oElement.id = Dom.generateId();
-
-            YAHOO.log(
-                "No value specified for the button group's \"id\" " +
-                "attribute. Setting button group id " +
-                "to \"" + oElement.id + "\".",
-                "warn"
-            );
+    
+            if(!p_oElement.id) {
+    
+                p_oElement.id = Dom.generateId();
+    
+                YAHOO.log(
+                    "No value specified for the button group's \"id\" " +
+                    "attribute. Setting button group id " +
+                    "to \"" + p_oElement.id + "\".",
+                    "warn"
+                );
+    
+            }
+    
+            this.logger = 
+                    new YAHOO.widget.LogWriter("ButtonGroup " + p_oElement.id);
+    
+            fnSuperClass.call(this, p_oElement, p_oAttributes);
 
         }
-
-        this.logger = new YAHOO.widget.LogWriter("ButtonGroup " + oElement.id);
-
-        YAHOO.widget.ButtonGroup.superclass.constructor.call(
-            this,
-            oElement,
-            p_oAttributes
-        );
 
     }
 
@@ -282,8 +311,10 @@ _onButtonCheckedChange: function(p_oEvent, p_oButton) {
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
 * level-one-html.html#ID-22445964">HTMLDivElement</a>} p_oElement Object 
 * specifying the <code>&#60;div&#62;</code> element of the button group.
+* @param {Object} p_oElement Object literal specifying a set of 
+* attributes used to configure the button group.
 * @param {Object} p_oAttributes Optional. Object literal specifying a set of 
-* attributes used to configure the button.
+* attributes used to configure the button group.
 */
 init: function(p_oElement, p_oAttributes) {
 
@@ -342,6 +373,31 @@ init: function(p_oElement, p_oAttributes) {
 
     this.on("keydown", this._onKeyDown);
 
+
+    var oContainer = this.get("container");
+
+    if(oContainer) {
+
+        if(Lang.isString(oContainer)) {
+
+            var me = this;
+
+            Event.onContentReady(oContainer, function() {
+
+                me.appendTo(this);            
+            
+            });
+
+        }
+        else {
+
+            this.appendTo(oContainer);
+
+        }
+
+    }
+
+
     this.logger.log("Initialization completed.");
 
 },
@@ -373,7 +429,7 @@ initAttributes: function(p_oAttributes) {
     */
     this.setAttributeConfig("name", {
 
-        value: null,
+        value: oAttributes.name,
         validator: Lang.isString
 
     });
@@ -390,7 +446,7 @@ initAttributes: function(p_oAttributes) {
     */
     this.setAttributeConfig("disabled", {
 
-        value: false,
+        value: (oAttributes.disabled || false),
         validator: Lang.isBoolean,
         method: this._setDisabled
 
@@ -405,7 +461,23 @@ initAttributes: function(p_oAttributes) {
     */
     this.setAttributeConfig("value", {
 
-        value: null
+        value: oAttributes.value
+
+    });
+
+
+	/**
+	* @config container
+	* @description HTML element reference or string specifying the id 
+	* attribute of the HTML element that the button group's markup should be 
+	* rendered into.
+	* @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+	* level-one-html.html#ID-58190037">HTMLElement</a>|String
+	* @default null
+	*/
+    this.setAttributeConfig("container", {
+
+        value: oAttributes.container
 
     });
 
@@ -435,10 +507,8 @@ addButton: function(p_oButton) {
 
     var oButton;
 
-    if(
-        p_oButton instanceof YAHOO.widget.Button && 
-        p_oButton.get("type") == "radio"
-    ) {
+
+    if(p_oButton instanceof Button && p_oButton.get("type") == "radio") {
 
         oButton = p_oButton;
 
@@ -447,12 +517,12 @@ addButton: function(p_oButton) {
 
         p_oButton.type = "radio";
 
-        oButton = new YAHOO.widget.Button(p_oButton);
+        oButton = new Button(p_oButton);
     
     }
     else {
 
-        oButton = new YAHOO.widget.Button(p_oButton, { type: "radio" });
+        oButton = new Button(p_oButton, { type: "radio" });
 
     }
 
@@ -611,7 +681,7 @@ getButton: function(p_nIndex) {
 
 /**
 * @method getButtons
-* @description Returns an array of the buttons in the group.
+* @description Returns an array of the buttons in the button group.
 * @return {Array}
 */
 getButtons: function() {
