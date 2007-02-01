@@ -697,7 +697,7 @@ YAHOO.widget.Overlay.prototype.align = function(elementAlign, contextAlign) {
 		}
 
 		if (element && context) {
-			var elementRegion = YAHOO.util.Dom.getRegion(element);
+
 			var contextRegion = YAHOO.util.Dom.getRegion(context);
 
 			var doAlign = function(v,h) {
