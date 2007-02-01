@@ -39,7 +39,7 @@
 
 var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event,
-    Lang = YAHOO.util.Lang,
+    Lang = YAHOO.lang,
 
 
     // Private member variables
@@ -76,6 +76,8 @@ var Dom = YAHOO.util.Dom,
 */
 YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
 
+    var fnSuperClass = YAHOO.widget.Button.superclass.constructor;
+
     if(
         arguments.length == 1 && 
         !Lang.isString(p_oElement) && 
@@ -101,7 +103,7 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
                 "Building the button using the set of attributes."
             );
 
-        YAHOO.widget.Button.superclass.constructor.call(
+        fnSuperClass.call(
             this,
             (this._createButtonElement(p_oElement.type)),
             p_oElement
@@ -110,26 +112,81 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
     }
     else {
 
-        var oSrcElement = Lang.isString(p_oElement) ? 
-                            document.getElementById(p_oElement) : p_oElement;
-
-        if(oSrcElement) {
-
-            var oConfig = {
+        var oConfig = {
+        
+            element: null,
+            attributes: (p_oAttributes || {})
             
-                element: null,
-                attributes: (p_oAttributes || {})
-                
-            };
-    
+        };
 
-            var sTagName = oSrcElement.tagName.toUpperCase();
+
+        if(Lang.isString(p_oElement)) {
+
+            var me = this;
+
+            Event.onAvailable(p_oElement, function() {
+
+                var sTagName = this.tagName.toUpperCase();
+            
+                if(sTagName == me.TAG_NAME) {
+            
+                    oConfig.attributes.id = this.id;
+            
+                }
+                else if(sTagName == "INPUT" && !oConfig.attributes.id) {
+            
+                    oConfig.attributes.id = Dom.generateId();
+            
+                    YAHOO.log(
+                        "No value specified for the button's \"id\" " +
+                        "attribute. Setting button id to \"" + 
+                        oConfig.attributes.id + "\".",
+                        "warn"
+                    );
+                
+                }
+            
+                me.logger = new YAHOO.widget.LogWriter(
+                                    "Button " + oConfig.attributes.id
+                                        );
+            
+                me.logger.log(
+                        "Building the button using an existing HTML " + 
+                        "element as a source element." 
+                    );
+            
+            
+                oConfig.attributes.srcelement = this;
+            
+                initConfig.call(me, oConfig);
+            
+            
+                if(!oConfig.element) {
+            
+                    me.logger.log(
+                            "Source element could not be used as is.  " +
+                            "Creating a new HTML element for the button."
+                        );
+            
+                    oConfig.element = 
+                        me._createButtonElement(oConfig.attributes.type);
+            
+                }
+            
+                fnSuperClass.call(me, oConfig.element, oConfig.attributes);
+
+            });
+
+        }
+        else {
+
+            var sTagName = p_oElement.tagName.toUpperCase();
 
             if(sTagName == this.TAG_NAME) {
 
-                if(oSrcElement.id) {
+                if(p_oElement.id) {
 
-                    oConfig.attributes.id = oSrcElement.id;
+                    oConfig.attributes.id = p_oElement.id;
                 
                 }
                 else {
@@ -151,12 +208,12 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
 
                 oConfig.attributes.id = Dom.generateId();
 
-                    YAHOO.log(
-                        "No value specified for the button's \"id\" " +
-                        "attribute. Setting button id to \"" + 
-                        oConfig.attributes.id + "\".",
-                        "warn"
-                    );
+                YAHOO.log(
+                    "No value specified for the button's \"id\" " +
+                    "attribute. Setting button id to \"" + 
+                    oConfig.attributes.id + "\".",
+                    "warn"
+                );
             
             }
 
@@ -169,7 +226,7 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
                 );
 
 
-            oConfig.attributes.srcelement = oSrcElement;
+            oConfig.attributes.srcelement = p_oElement;
     
             initConfig.call(this, oConfig);
     
@@ -186,12 +243,7 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
         
             }
         
-        
-            YAHOO.widget.Button.superclass.constructor.call(
-                this,
-                oConfig.element,
-                oConfig.attributes
-            );
+            fnSuperClass.call(this, oConfig.element, oConfig.attributes);
         
         }
 
@@ -229,7 +281,7 @@ function getFirstElement(p_oElement) {
 
             var oNextSibling = oFirstChild.nextSibling;
 
-            if(oNextSibling.nodeType == 1) {
+            if(oNextSibling && oNextSibling.nodeType == 1) {
             
                 return oNextSibling;
             
@@ -2160,7 +2212,7 @@ init: function(p_oElement, p_oAttributes) {
     this.on("mouseover", this._onMouseOver);
     this.on("command", this._onCommand);
     this.on("appendTo", this._onAppendTo);
-
+    
     var oContainer = this.get("container"),
         oElement = this.get("element");
 
@@ -2171,14 +2223,11 @@ init: function(p_oElement, p_oAttributes) {
 
             var me = this;
 
-            function appendToContainer() {
-               
-                me.appendTo(this);
+            Event.onContentReady(oContainer, function() {
 
-            }
-
-
-            Event.onAvailable(oContainer, appendToContainer);
+                me.appendTo(this);            
+            
+            });
 
         }
         else {
