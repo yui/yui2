@@ -432,14 +432,19 @@ var Dom = YAHOO.util.Dom,
     EventPublisher = YAHOO.util.EventPublisher,
     AttributeProvider = YAHOO.util.AttributeProvider;
 
+/*
+ * Element provides an wrapper object to simplify adding
+ * event listeners, using dom methods, and managing attributes. 
+ * @module element
+ * @namespace YAHOO.util
+ * @requires yahoo, dom, event
+ * @beta
+ */
+
 /**
  * Element provides an wrapper object to simplify adding
  * event listeners, using dom methods, and managing attributes. 
- * @module
- * @namespace YAHOO.util
  * @class Element
- * @requires yahoo, dom, event
- * @beta
  * @uses YAHOO.util.AttributeProvider
  * @constructor
  * @param el {HTMLElement | String} The html element that 
