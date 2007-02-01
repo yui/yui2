@@ -1,0 +1,6 @@
+YUI Library - History - Release Notes
+
+2.2.0
+
+  * This is the initial release of the browser history manager.  This component is
+    considered experimental, which [Eric is going to elaborate on here.]
