@@ -633,3 +633,4 @@ YAHOO.util.History = ( function() {
     };
 
 } )();
+YAHOO.register("history", YAHOO.util.History, {version: "@VERSION@", build: "@BUILD@"});
