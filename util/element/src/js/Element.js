@@ -6,10 +6,16 @@ var Dom = YAHOO.util.Dom,
     AttributeProvider = YAHOO.util.AttributeProvider;
 
 /**
+ * @module element
+ *
+ */
+
+/**
  * Element provides an interface to an HTMLElement's attributes and common
  * methods.  Other commonly used attributes are added as well.
  * @namespace YAHOO.util
  * @class Element
+ * @requires yahoo, dom, event
  * @uses YAHOO.util.AttributeProvider
  * @constructor
  * @param el {HTMLElement | String} The html element that 
