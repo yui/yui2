@@ -4,7 +4,7 @@ var Dom = YAHOO.util.Dom,
     EventPublisher = YAHOO.util.EventPublisher,
     AttributeProvider = YAHOO.util.AttributeProvider;
 
-/*
+/**
  * Element provides an wrapper object to simplify adding
  * event listeners, using dom methods, and managing attributes. 
  * @module element
