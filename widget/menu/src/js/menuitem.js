@@ -872,22 +872,29 @@ YAHOO.widget.MenuItem.prototype = {
     * level-one-html.html#ID-58190037">HTMLElement</a>}
     */
     _getFirstElement: function(p_oElement, p_sTagName) {
-
-        var oElement;
-
-        if(p_oElement.firstChild && p_oElement.firstChild.nodeType == 1) {
-
-            oElement = p_oElement.firstChild;
-
-        }
-        else if(
-            p_oElement.firstChild && 
-            p_oElement.firstChild.nextSibling && 
-            p_oElement.firstChild.nextSibling.nodeType == 1
-        ) {
-
-            oElement = p_oElement.firstChild.nextSibling;
-
+    
+        var oFirstChild = p_oElement.firstChild,
+            oElement;
+    
+        if(oFirstChild) {
+    
+            if(oFirstChild.nodeType == 1) {
+    
+                oElement = oFirstChild;
+    
+            }
+            else {
+    
+                var oNextSibling = oFirstChild.nextSibling;
+    
+                if(oNextSibling && oNextSibling.nodeType == 1) {
+                
+                    oElement = oNextSibling;
+                
+                }
+    
+            }
+    
         }
 
 
@@ -897,10 +904,10 @@ YAHOO.widget.MenuItem.prototype = {
                 oElement : false;
 
         }
-
+        
         return oElement;
 
-    },
+    },    
 
 
     /**
@@ -1193,11 +1200,6 @@ YAHOO.widget.MenuItem.prototype = {
             oSubmenuIndicator = this.submenuIndicator;
 
 
-        /**
-        * Adds the "hashelptext" class to the necessary nodes and refires the 
-        * "selected" and "disabled" configuration events.
-        * @private
-        */
         function initHelpText() {
 
             Dom.addClass(aNodes, "hashelptext");
@@ -1217,10 +1219,6 @@ YAHOO.widget.MenuItem.prototype = {
         }
 
 
-        /**
-        * Removes the "hashelptext" class and corresponding DOM element (EM).
-        * @private
-        */
         function removeHelpText() {
 
             Dom.removeClass(aNodes, "hashelptext");
@@ -2054,14 +2052,6 @@ YAHOO.widget.MenuItem.prototype = {
 
             var nGroupIndex = this.groupIndex;
 
-            /**
-            * Finds the next item in an array.
-            * @private
-            * @param {p_aArray} Array to search.
-            * @param {p_nStartIndex} Number indicating the index to 
-            * start searching the array.
-            * @return {Object}
-            */
             function getNextArrayItem(p_aArray, p_nStartIndex) {
     
                 return p_aArray[p_nStartIndex] || 
@@ -2127,14 +2117,6 @@ YAHOO.widget.MenuItem.prototype = {
 
             var nGroupIndex = this.groupIndex;
 
-            /**
-            * Returns the previous item in an array 
-            * @private
-            * @param {p_aArray} Array to search.
-            * @param {p_nStartIndex} Number indicating the index to 
-            * start searching the array.
-            * @return {Object}
-            */
             function getPreviousArrayItem(p_aArray, p_nStartIndex) {
     
                 return p_aArray[p_nStartIndex] || 
@@ -2142,15 +2124,6 @@ YAHOO.widget.MenuItem.prototype = {
     
             }
 
-
-            /**
-            * Get the index of the first item in an array 
-            * @private
-            * @param {p_aArray} Array to search.
-            * @param {p_nStartIndex} Number indicating the index to 
-            * start searching the array.
-            * @return {Object}
-            */    
             function getFirstItemIndex(p_aArray, p_nStartIndex) {
     
                 return p_aArray[p_nStartIndex] ? 
