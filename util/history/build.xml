@@ -7,6 +7,8 @@
     <property environment="env" />
     <property name="srcdir" value="${env.YUI_SRC_DIR}" />
     <property name="builddir" value="${env.YUI_BUILD_DIR}" />
+    <property name="cvs.root" value="${env.CVSROOT}" />
+    <property name="cvs.rsh" value="${env.CVS_RSH}" />
     
     <property file="${buildfile.dir}/build.properties" />
 
@@ -14,7 +16,50 @@
     <import file="${builddir}/targetlib.xml" description="Component Build Targets" />
 
     <target name="examples" description="Component Specific Over-ride">
-        <echo>DOES NOT DO ANYTHING CURRENTLY</echo>
+        <copy todir="${srcdir}/examples/history" preservelastmodified="true">
+            <fileset dir="${component.basedir}/examples">
+                <include name="**/*.html"/>
+                <include name="**/assets/*"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="cvscommit" description="CVS Commit">
+        <input message="Please enter cvs comment:" 
+               addproperty="cvs.msg" defaultvalue="AutoBuild" />
+
+        <cvs cvsroot="${cvs.root}" cvsrsh="${cvs.rsh}" dest="${env.HOME}/dev">
+            <commandline>
+                <argument value="commit"/>
+                <argument value="-m"/>
+                <argument value="${cvs.msg}"/>
+                <!--
+                <argument value="${component.basedir}"/>
+                -->
+                <argument value="yahoo/presentation/2.x/util/history"/>
+            </commandline>
+        </cvs>
+
+        <!--
+
+        <cvs cvsroot="${cvs.root}" cvsrsh="${cvs.rsh}">
+            <commandline>
+                <argument value="commit"/>
+                <argument value="-m"/>
+                <argument value="${cvs.msg}"/>
+                <argument value="${srcdir}/build/history"/>
+            </commandline>
+        </cvs>
+        <cvs cvsroot="${cvs.root}" cvsrsh="${cvs.rsh}">
+            <commandline>
+                <argument value="commit"/>
+                <argument value="-m"/>
+                <argument value="${cvs.msg}"/>
+                <argument value="${srcdir}/examples/history"/>
+            </commandline>
+        </cvs>
+        -->
+
     </target>
 
 </project>
