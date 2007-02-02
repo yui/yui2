@@ -56,13 +56,10 @@ YAHOO.widget.MenuManager = function() {
     
         m_oVisibleMenus = {},
 
-
-        // Logger
-
-        m_oLogger = new YAHOO.widget.LogWriter(this.toString()),
-
-
         me = this;
+
+
+    var m_oLogger = new YAHOO.widget.LogWriter(this.toString());
 
 
     // Private methods
