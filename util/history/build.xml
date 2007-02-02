@@ -28,37 +28,33 @@
         <input message="Please enter cvs comment:" 
                addproperty="cvs.msg" defaultvalue="AutoBuild" />
 
+        <echo message="commit: src" />
         <cvs cvsroot="${cvs.root}" cvsrsh="${cvs.rsh}" dest="${env.HOME}/dev">
             <commandline>
                 <argument value="commit"/>
                 <argument value="-m"/>
                 <argument value="${cvs.msg}"/>
-                <!--
-                <argument value="${component.basedir}"/>
-                -->
                 <argument value="yahoo/presentation/2.x/util/history"/>
             </commandline>
         </cvs>
-
-        <!--
-
-        <cvs cvsroot="${cvs.root}" cvsrsh="${cvs.rsh}">
+        <echo message="commit: build dir" />
+        <cvs cvsroot="${cvs.root}" cvsrsh="${cvs.rsh}" dest="${env.HOME}/dev">
             <commandline>
                 <argument value="commit"/>
                 <argument value="-m"/>
                 <argument value="${cvs.msg}"/>
-                <argument value="${srcdir}/build/history"/>
+                <argument value="yahoo/presentation/2.x/build/history"/>
             </commandline>
         </cvs>
-        <cvs cvsroot="${cvs.root}" cvsrsh="${cvs.rsh}">
+        <echo message="commit: examples dir" />
+        <cvs cvsroot="${cvs.root}" cvsrsh="${cvs.rsh}" dest="${env.HOME}/dev">
             <commandline>
                 <argument value="commit"/>
                 <argument value="-m"/>
                 <argument value="${cvs.msg}"/>
-                <argument value="${srcdir}/examples/history"/>
+                <argument value="yahoo/presentation/2.x/examples/history"/>
             </commandline>
         </cvs>
-        -->
 
     </target>
 

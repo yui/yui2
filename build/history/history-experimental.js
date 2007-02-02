@@ -182,6 +182,7 @@ YAHOO.util.History = ( function() {
         var fqstate = elem ? elem.innerText : null;
 
         setInterval( function() {
+            doc = _iframe.contentWindow.document;
             elem = doc.getElementById( "state" );
             // See my comment above about using innerText instead of innerHTML...
             var newfqstate = elem ? elem.innerText : null;
