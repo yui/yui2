@@ -43,7 +43,7 @@ var formatAttchColumn = function(elCell, oColumn, oRecord, oData) {
 var myColumnHeaders = [
     {key:"Date",type:"date"},
     {key:"To"},
-    {text:"Attchmt",formatter:formatAttchColumn},
+    {text:"Attchmt",abbr:"Attachment",formatter:formatAttchColumn},
     {key:"Subject"}
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
