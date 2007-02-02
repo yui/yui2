@@ -36,7 +36,7 @@ YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 };
 
 
-YAHOO.extend(YAHOO.widget.ContextMenu, YAHOO.widget.Menu, {
+YAHOO.lang.extend(YAHOO.widget.ContextMenu, YAHOO.widget.Menu, {
 
 
 
@@ -367,4 +367,4 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
     
 }
 
-}); // END YAHOO.extend
+}); // END YAHOO.lang.extend

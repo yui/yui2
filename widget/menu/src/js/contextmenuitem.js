@@ -32,7 +32,7 @@ YAHOO.widget.ContextMenuItem = function(p_oObject, p_oConfig) {
 
 };
 
-YAHOO.extend(YAHOO.widget.ContextMenuItem, YAHOO.widget.MenuItem, {
+YAHOO.lang.extend(YAHOO.widget.ContextMenuItem, YAHOO.widget.MenuItem, {
 
 
 /**
@@ -102,4 +102,4 @@ toString: function() {
 
 }
     
-}); // END YAHOO.extend
+}); // END YAHOO.lang.extend

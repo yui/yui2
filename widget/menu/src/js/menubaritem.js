@@ -31,7 +31,7 @@ YAHOO.widget.MenuBarItem = function(p_oObject, p_oConfig) {
 
 };
 
-YAHOO.extend(YAHOO.widget.MenuBarItem, YAHOO.widget.MenuItem, {
+YAHOO.lang.extend(YAHOO.widget.MenuBarItem, YAHOO.widget.MenuItem, {
 
 
 /**
@@ -114,4 +114,4 @@ toString: function() {
 
 }
     
-}); // END YAHOO.extend
+}); // END YAHOO.lang.extend

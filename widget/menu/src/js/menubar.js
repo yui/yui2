@@ -34,7 +34,7 @@ YAHOO.widget.MenuBar = function(p_oElement, p_oConfig) {
 
 };
 
-YAHOO.extend(YAHOO.widget.MenuBar, YAHOO.widget.Menu, {
+YAHOO.lang.extend(YAHOO.widget.MenuBar, YAHOO.widget.Menu, {
 
 /**
 * @method init
@@ -403,4 +403,4 @@ initDefaultConfig: function() {
 
 }
  
-}); // END YAHOO.extend
+}); // END YAHOO.lang.extend
