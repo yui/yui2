@@ -992,16 +992,6 @@ YAHOO.widget.DataTable.prototype._initHeadCell = function(elHeadCell,oColumn,row
         YAHOO.util.Dom.addClass(elHeadCell,oColumn.className);
     }
 
-    var recurseAncestors = function(oParent) {
-        if(oParent) {
-            elHeadCell.headers += oColumn.parent.id + " ";
-            if(oParent.parent) {
-                recurseAncestors(oParent.parent);
-            }
-        }
-    };
-    recurseAncestors(oColumn.parent);
-
     elHeadCell.innerHTML = "";
 
     var elHeadContainer = elHeadCell.appendChild(document.createElement("div"));
@@ -1921,11 +1911,14 @@ YAHOO.widget.DataTable.prototype.addRow = function(oRecord, i) {
 
         // Create TBODY cells
         for(var j=0; j<oColumnSet.keys.length; j++) {
+            var oColumn = oColumnSet.keys[j];
             var elCell = elRow.appendChild(document.createElement("td"));
             elCell.id = this.id+"-bdrow"+i+"-cell"+j;
-            elCell.headers = oColumnSet.keys[j].id;
+            elCell.headers = oColumn.id;
             elCell.columnIndex = j;
-            oColumnSet.keys[j].format(elCell, oRecord);
+            elCell.headers = oColumnSet.headers[j];
+            
+            oColumn.format(elCell, oRecord);
             /*p.abx {word-wrap:break-word;}
     ought to solve the problem for Safari (the long words will wrap in your
     tds, instead of overflowing to the next td.

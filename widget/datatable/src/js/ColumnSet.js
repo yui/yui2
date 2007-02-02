@@ -12,13 +12,15 @@
  */
 YAHOO.widget.ColumnSet = function(aHeaders) {
     this._sName = "instance" + YAHOO.widget.ColumnSet._nCount;
-//TODO: Do we need COL.prevSibling, COL.nextSibling?
-    // Tree representation of all Columns
+
+    // Top-down tree representation of all Columns
     var tree = [];
     // Flat representation of all Columns
     var flat = [];
-    // Flat representation of Columns that display data
+    // Flat representation of only Columns that display data
     var keys = [];
+    // ID index of nested parent heirarchies for HEADERS attribute
+    var headers = [];
 
     var nodelevel = -1;
 
@@ -97,7 +99,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                 //}
             }
 
-            // Add the Column to the tree's row array
+            // Add the Column to the top-down tree
             tree[nodelevel].push(oColumn);
         }
         nodelevel--;
@@ -108,9 +110,24 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
         parseColumns(aHeaders);
     }
 
+    // Store header nesting in an array
+    var recurseAncestors = function(i, oColumn) {
+        headers[i].push(oColumn.id);
+        if(oColumn.parent) {
+            recurseAncestors(i, oColumn.parent);
+        }
+    };
+    for(var i=0; i<keys.length; i++) {
+        headers[i] = [];
+        recurseAncestors(i, keys[i]);
+        headers[i] = headers[i].reverse();
+        headers[i] = headers[i].join(" ");
+    }
+
     this.tree = tree;
     this.flat = flat;
     this.keys = keys;
+    this.headers = headers;
     
     YAHOO.widget.ColumnSet._nCount++;
     YAHOO.log("ColumnSet initialized", "info", this.toString());
@@ -148,7 +165,7 @@ YAHOO.widget.ColumnSet.prototype._sName = null;
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Tree representation of Column hierarchy.
+ * Top-down tree representation of Column hierarchy.
  *
  * @property tree
  * @type YAHOO.widget.Column[]
@@ -173,6 +190,15 @@ YAHOO.widget.ColumnSet.prototype.flat = [];
  * @default []
  */
 YAHOO.widget.ColumnSet.prototype.keys = [];
+
+/**
+ * ID index of nested parent heirarchies for HEADERS accessibility attribute.
+ *
+ * @property headers
+ * @type String[]
+ * @default []
+ */
+YAHOO.widget.ColumnSet.prototype.headers = [];
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -395,31 +421,6 @@ YAHOO.widget.Column.prototype.width = null;
  * @type Number
  */
 YAHOO.widget.Column.prototype.minWidth = null;
-
-/**
- * Column's previous sibling within its ColumnSet's tree hierarchy, or null.
- *
- * @property prevSibling
- * @type YAHOO.widget.Column
- */
-YAHOO.widget.Column.prototype.prevSibling = null;
-
-/**
- * Column's next sibling within its ColumnSet's tree hierarchy, or null.
- *
- * @property nextSibling
- * @type YAHOO.widget.Column
- */
-YAHOO.widget.Column.prototype.nextSibling = null;
-
-/**
- * True if column is last. //TODO: do this programmatically
- *
- * @property isLast
- * @type Boolean
- * @default false
- */
-YAHOO.widget.Column.prototype.isLast = false;
 
 /**
  * True if column is currently sorted in ascending order.
