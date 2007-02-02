@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>API: calendar   Calendar.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css">
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
 
@@ -11,7 +10,7 @@
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>Calendar&nbsp;</h3>
+        <h3>Calendar&nbsp; <span class="subtitle">2.2.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_calendar.html">calendar</a>
@@ -1251,7 +1250,7 @@
 	<span class="k">var</span> <span class="nx">useDate</span><span class="o">,</span><span class="nx">weekNum</span><span class="o">,</span><span class="nx">weekClass</span><span class="o">;</span>
 	<span class="nx">useDate</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;pagedate&quot;</span><span class="o">);</span>
 
-	<span class="nx">html</span><span class="o">[</span><span class="nx">html</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;tbody class=&quot;m&#39;</span> <span class="o">+</span> <span class="o">(</span><span class="nx">useDate</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">()+</span><span class="m">1</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">;</span>
+	<span class="nx">html</span><span class="o">[</span><span class="nx">html</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;tbody class=&quot;m&#39;</span> <span class="o">+</span> <span class="o">(</span><span class="nx">useDate</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">()+</span><span class="m">1</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39; calbody&quot;&gt;&#39;</span><span class="o">;</span>
 	
 	<span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
 
@@ -1531,7 +1530,7 @@
 	<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">domEventMap</span><span class="o">)</span> <span class="o">{</span>
 		<span class="k">var</span> <span class="nx">el</span><span class="o">,</span><span class="nx">elements</span><span class="o">;</span>
 		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">cls</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">domEventMap</span><span class="o">)</span> <span class="o">{</span>	
-			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">domEventMap</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">cls</span><span class="o">))</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">domEventMap</span><span class="o">,</span> <span class="nx">cls</span><span class="o">))</span> <span class="o">{</span>
 				<span class="k">var</span> <span class="nx">items</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">domEventMap</span><span class="o">[</span><span class="nx">cls</span><span class="o">];</span>
 				
 				<span class="k">if</span> <span class="o">(!</span> <span class="o">(</span><span class="nx">items</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="o">))</span> <span class="o">{</span>
@@ -2551,7 +2550,11 @@
 
                                 <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
 
+                                <li class=""><a href="module_element.html">element</a></li>
+
                                 <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
 
                                 <li class=""><a href="module_logger.html">logger</a></li>
 

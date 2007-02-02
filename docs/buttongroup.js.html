@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>API: button   buttongroup.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css">
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
 
@@ -11,7 +10,7 @@
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>Button Library&nbsp;</h3>
+        <h3>Button Library&nbsp; <span class="subtitle">2.2.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_button.html">button</a>
@@ -31,8 +30,8 @@
 <span class="c"></span>
 <span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
     <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
-    <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Lang</span><span class="o">,</span>
-    
+    <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
+    <span class="nx">Button</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Button</span><span class="o">;</span>    
 
     <span class="c">// Private collection of radio buttons</span>
 <span class="c"></span>
@@ -48,8 +47,10 @@
 <span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
 <span class="c">* level-one-html.html#ID-22445964&quot;&gt;HTMLDivElement&lt;/a&gt;} p_oElement Object </span>
 <span class="c">* specifying the &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element of the button group.</span>
+<span class="c">* @param {Object} p_oElement Object literal specifying a set of </span>
+<span class="c">* attributes used to configure the button group.</span>
 <span class="c">* @param {Object} p_oAttributes Optional. Object literal specifying a set of </span>
-<span class="c">* attributes used to configure the button.</span>
+<span class="c">* attributes used to configure the button group.</span>
 <span class="c">* @namespace YAHOO.widget</span>
 <span class="c">* @class ButtonGroup</span>
 <span class="c">* @constructor</span>
@@ -57,54 +58,81 @@
 <span class="c">*/</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ButtonGroup</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">,</span> <span class="nx">p_oAttributes</span><span class="o">)</span> <span class="o">{</span>
 
-    <span class="k">var</span> <span class="nx">oElement</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">fnSuperClass</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ButtonGroup</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">;</span>
 
-    <span class="k">if</span><span class="o">(</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">))</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span>
+        <span class="nx">arguments</span><span class="o">.</span><span class="nx">length</span> <span class="o">==</span> <span class="m">1</span> <span class="o">&amp;&amp;</span> 
+        <span class="o">!</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">)</span> <span class="o">&amp;&amp;</span> 
+        <span class="o">!</span><span class="nx">p_oElement</span><span class="o">.</span><span class="nx">nodeName</span>
+    <span class="o">)</span> <span class="o">{</span>
 
-        <span class="nx">oElement</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">);</span>
+        <span class="k">if</span><span class="o">(!</span><span class="nx">p_oElement</span><span class="o">.</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
 
-        <span class="k">if</span><span class="o">(!</span><span class="nx">oElement</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">sId</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">generateId</span><span class="o">();</span>
 
-            <span class="nx">oElement</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_createGroupElement</span><span class="o">();</span>
+            <span class="nx">p_oElement</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">sId</span><span class="o">;</span>
+
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span>
+                <span class="s2">&quot;No value specified for the button group&#39;s \&quot;id\&quot; attribute. &quot;</span> <span class="o">+</span>
+                <span class="s2">&quot;Setting button group id to \&quot;&quot;</span> <span class="o">+</span> <span class="nx">sId</span> <span class="o">+</span> <span class="s2">&quot;\&quot;.&quot;</span><span class="o">,</span>
+                <span class="s2">&quot;warn&quot;</span>
+            <span class="o">);</span>
 
         <span class="o">}</span>
 
+        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">(</span><span class="s2">&quot;ButtonGroup &quot;</span> <span class="o">+</span> <span class="nx">sId</span><span class="o">);</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span>
+                <span class="s2">&quot;No source HTML element.  &quot;</span>  <span class="o">+</span>
+                <span class="s2">&quot;Building the button group using the set of attributes.&quot;</span>
+            <span class="o">);</span>
+
+        <span class="nx">fnSuperClass</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_createGroupElement</span><span class="o">()),</span> <span class="nx">p_oElement</span><span class="o">);</span>
+
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">))</span> <span class="o">{</span>
+
+        <span class="k">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+
+        <span class="nx">Event</span><span class="o">.</span><span class="nx">onContentReady</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">,</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        
+            <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">()</span> <span class="o">==</span> <span class="nx">me</span><span class="o">.</span><span class="nx">TAG_NAME</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="nx">me</span><span class="o">.</span><span class="nx">logger</span> <span class="o">=</span> 
+                    <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">(</span><span class="s2">&quot;ButtonGroup &quot;</span> <span class="o">+</span> <span class="nx">p_oElement</span><span class="o">);</span>
+        
+                <span class="nx">fnSuperClass</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">me</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">p_oAttributes</span><span class="o">);</span>
+
+            <span class="o">}</span>
+
+        <span class="o">});</span>
+    
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
 
         <span class="k">var</span> <span class="nx">sNodeName</span> <span class="o">=</span> <span class="nx">p_oElement</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">;</span>
 
         <span class="k">if</span><span class="o">(</span><span class="nx">sNodeName</span> <span class="o">&amp;&amp;</span> <span class="nx">sNodeName</span> <span class="o">==</span> <span class="k">this</span><span class="o">.</span><span class="nx">TAG_NAME</span><span class="o">)</span> <span class="o">{</span>
-
-            <span class="nx">oElement</span> <span class="o">=</span> <span class="nx">p_oElement</span><span class="o">;</span>
-
-        <span class="o">}</span>
-
-    <span class="o">}</span>
-
-
-    <span class="k">if</span><span class="o">(</span><span class="nx">oElement</span><span class="o">)</span> <span class="o">{</span>
-
-        <span class="k">if</span><span class="o">(!</span><span class="nx">oElement</span><span class="o">.</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
-
-            <span class="nx">oElement</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">generateId</span><span class="o">();</span>
-
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span>
-                <span class="s2">&quot;No value specified for the button group&#39;s \&quot;id\&quot; &quot;</span> <span class="o">+</span>
-                <span class="s2">&quot;attribute. Setting button group id &quot;</span> <span class="o">+</span>
-                <span class="s2">&quot;to \&quot;&quot;</span> <span class="o">+</span> <span class="nx">oElement</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot;\&quot;.&quot;</span><span class="o">,</span>
-                <span class="s2">&quot;warn&quot;</span>
-            <span class="o">);</span>
+    
+            <span class="k">if</span><span class="o">(!</span><span class="nx">p_oElement</span><span class="o">.</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+    
+                <span class="nx">p_oElement</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">generateId</span><span class="o">();</span>
+    
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span>
+                    <span class="s2">&quot;No value specified for the button group&#39;s \&quot;id\&quot; &quot;</span> <span class="o">+</span>
+                    <span class="s2">&quot;attribute. Setting button group id &quot;</span> <span class="o">+</span>
+                    <span class="s2">&quot;to \&quot;&quot;</span> <span class="o">+</span> <span class="nx">p_oElement</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot;\&quot;.&quot;</span><span class="o">,</span>
+                    <span class="s2">&quot;warn&quot;</span>
+                <span class="o">);</span>
+    
+            <span class="o">}</span>
+    
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span> <span class="o">=</span> 
+                    <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">(</span><span class="s2">&quot;ButtonGroup &quot;</span> <span class="o">+</span> <span class="nx">p_oElement</span><span class="o">.</span><span class="nx">id</span><span class="o">);</span>
+    
+            <span class="nx">fnSuperClass</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">p_oElement</span><span class="o">,</span> <span class="nx">p_oAttributes</span><span class="o">);</span>
 
         <span class="o">}</span>
-
-        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">(</span><span class="s2">&quot;ButtonGroup &quot;</span> <span class="o">+</span> <span class="nx">oElement</span><span class="o">.</span><span class="nx">id</span><span class="o">);</span>
-
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ButtonGroup</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span>
-            <span class="k">this</span><span class="o">,</span>
-            <span class="nx">oElement</span><span class="o">,</span>
-            <span class="nx">p_oAttributes</span>
-        <span class="o">);</span>
 
     <span class="o">}</span>
 
@@ -309,8 +337,10 @@
 <span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
 <span class="c">* level-one-html.html#ID-22445964&quot;&gt;HTMLDivElement&lt;/a&gt;} p_oElement Object </span>
 <span class="c">* specifying the &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element of the button group.</span>
+<span class="c">* @param {Object} p_oElement Object literal specifying a set of </span>
+<span class="c">* attributes used to configure the button group.</span>
 <span class="c">* @param {Object} p_oAttributes Optional. Object literal specifying a set of </span>
-<span class="c">* attributes used to configure the button.</span>
+<span class="c">* attributes used to configure the button group.</span>
 <span class="c">*/</span>
 <span class="nx">init</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">,</span> <span class="nx">p_oAttributes</span><span class="o">)</span> <span class="o">{</span>
 
@@ -369,6 +399,31 @@
 
     <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s2">&quot;keydown&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_onKeyDown</span><span class="o">);</span>
 
+
+    <span class="k">var</span> <span class="nx">oContainer</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;container&quot;</span><span class="o">);</span>
+
+    <span class="k">if</span><span class="o">(</span><span class="nx">oContainer</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">if</span><span class="o">(</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">oContainer</span><span class="o">))</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">onContentReady</span><span class="o">(</span><span class="nx">oContainer</span><span class="o">,</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+                <span class="nx">me</span><span class="o">.</span><span class="nx">appendTo</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>            
+            
+            <span class="o">});</span>
+
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">appendTo</span><span class="o">(</span><span class="nx">oContainer</span><span class="o">);</span>
+
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+
+
     <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Initialization completed.&quot;</span><span class="o">);</span>
 
 <span class="o">},</span>
@@ -400,7 +455,7 @@
 <span class="c">    */</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;name&quot;</span><span class="o">,</span> <span class="o">{</span>
 
-        <span class="nx">value</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="nx">oAttributes</span><span class="o">.</span><span class="nx">name</span><span class="o">,</span>
         <span class="nx">validator</span><span class="o">:</span> <span class="nx">Lang</span><span class="o">.</span><span class="nx">isString</span>
 
     <span class="o">});</span>
@@ -417,7 +472,7 @@
 <span class="c">    */</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;disabled&quot;</span><span class="o">,</span> <span class="o">{</span>
 
-        <span class="nx">value</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="o">(</span><span class="nx">oAttributes</span><span class="o">.</span><span class="nx">disabled</span> <span class="o">||</span> <span class="kc">false</span><span class="o">),</span>
         <span class="nx">validator</span><span class="o">:</span> <span class="nx">Lang</span><span class="o">.</span><span class="nx">isBoolean</span><span class="o">,</span>
         <span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setDisabled</span>
 
@@ -432,7 +487,23 @@
 <span class="c">    */</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;value&quot;</span><span class="o">,</span> <span class="o">{</span>
 
-        <span class="nx">value</span><span class="o">:</span> <span class="kc">null</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="nx">oAttributes</span><span class="o">.</span><span class="nx">value</span>
+
+    <span class="o">});</span>
+
+
+	<span class="c">/**</span>
+<span class="c">	* @config container</span>
+<span class="c">	* @description HTML element reference or string specifying the id </span>
+<span class="c">	* attribute of the HTML element that the button group&#39;s markup should be </span>
+<span class="c">	* rendered into.</span>
+<span class="c">	* @type &lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
+<span class="c">	* level-one-html.html#ID-58190037&quot;&gt;HTMLElement&lt;/a&gt;|String</span>
+<span class="c">	* @default null</span>
+<span class="c">	*/</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;container&quot;</span><span class="o">,</span> <span class="o">{</span>
+
+        <span class="nx">value</span><span class="o">:</span> <span class="nx">oAttributes</span><span class="o">.</span><span class="nx">container</span>
 
     <span class="o">});</span>
 
@@ -462,10 +533,8 @@
 
     <span class="k">var</span> <span class="nx">oButton</span><span class="o">;</span>
 
-    <span class="k">if</span><span class="o">(</span>
-        <span class="nx">p_oButton</span> <span class="k">instanceof</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Button</span> <span class="o">&amp;&amp;</span> 
-        <span class="nx">p_oButton</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;type&quot;</span><span class="o">)</span> <span class="o">==</span> <span class="s2">&quot;radio&quot;</span>
-    <span class="o">)</span> <span class="o">{</span>
+
+    <span class="k">if</span><span class="o">(</span><span class="nx">p_oButton</span> <span class="k">instanceof</span> <span class="nx">Button</span> <span class="o">&amp;&amp;</span> <span class="nx">p_oButton</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;type&quot;</span><span class="o">)</span> <span class="o">==</span> <span class="s2">&quot;radio&quot;</span><span class="o">)</span> <span class="o">{</span>
 
         <span class="nx">oButton</span> <span class="o">=</span> <span class="nx">p_oButton</span><span class="o">;</span>
 
@@ -474,12 +543,12 @@
 
         <span class="nx">p_oButton</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;radio&quot;</span><span class="o">;</span>
 
-        <span class="nx">oButton</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Button</span><span class="o">(</span><span class="nx">p_oButton</span><span class="o">);</span>
+        <span class="nx">oButton</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Button</span><span class="o">(</span><span class="nx">p_oButton</span><span class="o">);</span>
     
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
 
-        <span class="nx">oButton</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Button</span><span class="o">(</span><span class="nx">p_oButton</span><span class="o">,</span> <span class="o">{</span> <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;radio&quot;</span> <span class="o">});</span>
+        <span class="nx">oButton</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Button</span><span class="o">(</span><span class="nx">p_oButton</span><span class="o">,</span> <span class="o">{</span> <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;radio&quot;</span> <span class="o">});</span>
 
     <span class="o">}</span>
 
@@ -638,7 +707,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method getButtons</span>
-<span class="c">* @description Returns an array of the buttons in the group.</span>
+<span class="c">* @description Returns an array of the buttons in the button group.</span>
 <span class="c">* @return {Array}</span>
 <span class="c">*/</span>
 <span class="nx">getButtons</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
@@ -799,7 +868,11 @@
 
                                 <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
 
+                                <li class=""><a href="module_element.html">element</a></li>
+
                                 <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
 
                                 <li class=""><a href="module_logger.html">logger</a></li>
 

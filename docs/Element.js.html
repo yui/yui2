@@ -1,8 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>API: animation   Element.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css">
+	<title>API: element   Element.js  (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
 
@@ -11,10 +10,10 @@
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>animation&nbsp;</h3>
+        <h3>element&nbsp; <span class="subtitle">2.2.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
-            &gt; <a href="./module_animation.html">animation</a>
+            &gt; <a href="./module_element.html">element</a>
                 
                  &gt; Element.js (source view) 
             </p>
@@ -28,14 +27,21 @@
 <div class="highlight" ><pre><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 <span class="c">// internal shorthand</span>
 <span class="c"></span><span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
-    <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Lang</span><span class="o">,</span>
     <span class="nx">EventPublisher</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">EventPublisher</span><span class="o">,</span>
     <span class="nx">AttributeProvider</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AttributeProvider</span><span class="o">;</span>
 
 <span class="c">/**</span>
-<span class="c"> * Element provides an interface to an HTMLElement&#39;s attributes and common</span>
-<span class="c"> * methods.  Other commonly used attributes are added as well.</span>
+<span class="c"> * Element provides an wrapper object to simplify adding</span>
+<span class="c"> * event listeners, using dom methods, and managing attributes. </span>
+<span class="c"> * @module element</span>
 <span class="c"> * @namespace YAHOO.util</span>
+<span class="c"> * @requires yahoo, dom, event</span>
+<span class="c"> * @beta</span>
+<span class="c"> */</span>
+
+<span class="c">/**</span>
+<span class="c"> * Element provides an wrapper object to simplify adding</span>
+<span class="c"> * event listeners, using dom methods, and managing attributes. </span>
 <span class="c"> * @class Element</span>
 <span class="c"> * @uses YAHOO.util.AttributeProvider</span>
 <span class="c"> * @constructor</span>
@@ -331,28 +337,12 @@
             <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;appendTo&#39;</span><span class="o">,</span>
             <span class="nx">target</span><span class="o">:</span> <span class="nx">parent</span>
         <span class="o">});</span>
-        
-        <span class="c">/* TODO: move to TabView or deprecate?</span>
-<span class="c">        var newAddition =  !Dom.inDocument(element);</span>
-<span class="c">        if (!newAddition) {</span>
-<span class="c">            return false; // note return; no refresh if in document</span>
-<span class="c">        }</span>
-<span class="c">        </span>
-<span class="c">        // if a new addition, refresh HTMLElement any applied attributes</span>
-<span class="c">        var keys = this.getAttributeKeys();</span>
-<span class="c">        </span>
-<span class="c">        for (var key in keys) { // only refresh HTMLElement attributes</span>
-<span class="c">            if ( !Lang.isUndefined(element[key]) ) {</span>
-<span class="c">                this.refresh(key);</span>
-<span class="c">            }</span>
-<span class="c">        }</span>
-<span class="c">        */</span>
     <span class="o">},</span>
     
     <span class="nx">get</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">configs</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span> <span class="o">||</span> <span class="o">{};</span>
         <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">configs</span><span class="o">.</span><span class="nx">element</span><span class="o">;</span> <span class="c">// avoid loop due to &#39;element&#39;</span>
-<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">configs</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">value</span><span class="o">[</span><span class="nx">key</span><span class="o">])</span> <span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">configs</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">value</span><span class="o">[</span><span class="nx">key</span><span class="o">])</span> <span class="o">)</span> <span class="o">{</span>
             <span class="k">return</span> <span class="nx">el</span><span class="o">.</span><span class="nx">value</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
         <span class="o">}</span>
 
@@ -371,7 +361,7 @@
         <span class="o">}</span>
         
         <span class="c">// set it on the element if not configured and is an HTML attribute</span>
-<span class="c"></span>        <span class="k">if</span> <span class="o">(</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">el</span><span class="o">[</span><span class="nx">key</span><span class="o">])</span> <span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>        <span class="k">if</span> <span class="o">(</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">el</span><span class="o">[</span><span class="nx">key</span><span class="o">])</span> <span class="o">)</span> <span class="o">{</span>
             <span class="nx">_registerHTMLAttr</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">key</span><span class="o">);</span>
         <span class="o">}</span>
 
@@ -381,7 +371,7 @@
     <span class="nx">setAttributeConfig</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span> <span class="nx">map</span><span class="o">,</span> <span class="nx">init</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">);</span>
 
-        <span class="k">if</span> <span class="o">(</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">el</span><span class="o">[</span><span class="nx">key</span><span class="o">])</span> <span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">el</span><span class="o">[</span><span class="nx">key</span><span class="o">])</span> <span class="o">)</span> <span class="o">{</span>
             <span class="nx">_registerHTMLAttr</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">key</span><span class="o">,</span> <span class="nx">map</span><span class="o">);</span>
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
             <span class="nx">AttributeProvider</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
@@ -431,7 +421,7 @@
             <span class="o">});</span>
         <span class="o">};</span>
 
-        <span class="k">if</span> <span class="o">(</span> <span class="nx">Lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
             <span class="nx">_registerHTMLAttr</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s1">&#39;id&#39;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">el</span> <span class="o">});</span>
             <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">onAvailable</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
                 <span class="nx">attr</span><span class="o">.</span><span class="nx">element</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
@@ -510,7 +500,7 @@
                         <h4>Modules</h4>
                         <ul class="content">
 
-                                <li class="selected"><a href="module_animation.html">animation</a></li>
+                                <li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -526,7 +516,11 @@
 
                                 <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
 
+                                <li class="selected"><a href="module_element.html">element</a></li>
+
                                 <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
 
                                 <li class=""><a href="module_logger.html">logger</a></li>
 
@@ -545,32 +539,18 @@
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li class=""><a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a></li>
-                                <li class=""><a href="YAHOO.util.AnimMgr.html">YAHOO.util.AnimMgr</a></li>
                                 <li class=""><a href="YAHOO.util.Attribute.html">YAHOO.util.Attribute</a></li>
                                 <li class=""><a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a></li>
-                                <li class=""><a href="YAHOO.util.Bezier.html">YAHOO.util.Bezier</a></li>
-                                <li class=""><a href="YAHOO.util.ColorAnim.html">YAHOO.util.ColorAnim</a></li>
-                                <li class=""><a href="YAHOO.util.Easing.html">YAHOO.util.Easing</a></li>
                                 <li class=""><a href="YAHOO.util.Element.html">YAHOO.util.Element</a></li>
-                                <li class=""><a href="YAHOO.util.Motion.html">YAHOO.util.Motion</a></li>
-                                <li class=""><a href="YAHOO.util.Scroll.html">YAHOO.util.Scroll</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li class=""><a href="Anim.js.html">Anim.js</a></li>
-                                <li class=""><a href="AnimMgr.js.html">AnimMgr.js</a></li>
                                 <li class=""><a href="Attribute.js.html">Attribute.js</a></li>
                                 <li class=""><a href="AttributeProvider.js.html">AttributeProvider.js</a></li>
-                                <li class=""><a href="Bezier.js.html">Bezier.js</a></li>
-                                <li class=""><a href="ColorAnim.js.html">ColorAnim.js</a></li>
-                                <li class=""><a href="Easing.js.html">Easing.js</a></li>
                                 <li class="selected"><a href="Element.js.html">Element.js</a></li>
-                                <li class=""><a href="Motion.js.html">Motion.js</a></li>
-                                <li class=""><a href="Scroll.js.html">Scroll.js</a></li>
                         </ul>
                     </div>
 

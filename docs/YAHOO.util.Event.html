@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>API: event  YAHOO.util.Event   (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css">
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
 </head>
 
@@ -11,7 +10,7 @@
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>Event Utility&nbsp;</h3>
+        <h3>Event Utility&nbsp; <span class="subtitle">2.2.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_event.html">event</a>
@@ -171,6 +170,21 @@ webkit property.
                                     <div class="deprecated">
                                         <strong>Deprecated: </strong>&#160;
                                     </div>        
+
+                                    <hr />
+                                    <h4><a name="lastError">lastError</a>
+                                        <code>- Error</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            addListener/removeListener can throw errors in unexpected scenarios.
+These errors are suppressed, the method returns false, and this property
+is set
+                                        </div>
+                                    </div>
+     
+                                        
+
 
                                     <hr />
                                     <h4><a name="legacyEvents">legacyEvents</a>
@@ -2099,7 +2113,11 @@ Safari browsers with a broken preventDefault
 
                                 <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
 
+                                <li class=""><a href="module_element.html">element</a></li>
+
                                 <li class="selected"><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
 
                                 <li class=""><a href="module_logger.html">logger</a></li>
 
@@ -2163,6 +2181,9 @@ DOM element cache</a>
                                         <!--<code>&lt;int&gt;</code>-->
                                 </li>
                                 <li><a href="#isSafari">isSafari</a>
+                                        <!--<code>&lt;int&gt;</code>-->
+                                </li>
+                                <li><a href="#lastError">lastError</a>
                                         <!--<code>&lt;int&gt;</code>-->
                                 </li>
                                 <li><a href="#legacyEvents">legacyEvents</a>
