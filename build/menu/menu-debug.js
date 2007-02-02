@@ -56,13 +56,10 @@ YAHOO.widget.MenuManager = function() {
     
         m_oVisibleMenus = {},
 
-
         me = this;
 
 
-    // Logger
-
-    this.logger = new YAHOO.widget.LogWriter(this.toString());
+    var m_oLogger = new YAHOO.widget.LogWriter(this.toString());
 
 
     // Private methods
@@ -87,7 +84,7 @@ YAHOO.widget.MenuManager = function() {
     
             p_oItem.destroyEvent.subscribe(onItemDestroy, p_oItem);
 
-            this.logger.log("Item: " + 
+            m_oLogger.log("Item: " + 
                 p_oItem.toString() + " successfully registered.");
 
         }
@@ -110,7 +107,7 @@ YAHOO.widget.MenuManager = function() {
 
             delete m_oItems[sYUIId];
 
-            this.logger.log("Item: " + 
+            m_oLogger.log("Item: " + 
                 p_oItem.toString() + " successfully unregistered.");
 
         }
@@ -327,7 +324,7 @@ YAHOO.widget.MenuManager = function() {
 
             delete m_oMenus[p_oMenu.id];
 
-            this.logger.log("Menu: " + 
+            m_oLogger.log("Menu: " + 
                 p_oMenu.toString() + " successfully unregistered.");
 
         }
@@ -377,7 +374,7 @@ YAHOO.widget.MenuManager = function() {
 
             m_oVisibleMenus[p_oMenu.id] = p_oMenu;
             
-            this.logger.log("Menu: " + 
+            m_oLogger.log("Menu: " + 
                 p_oMenu.toString() + 
                 " registered with the collection of visible menus.");
         
@@ -386,7 +383,7 @@ YAHOO.widget.MenuManager = function() {
         
             delete m_oVisibleMenus[p_oMenu.id];
             
-            this.logger.log("Menu: " + 
+            m_oLogger.log("Menu: " + 
                 p_oMenu.toString() + 
                 " unregistered from the collection of visible menus.");
         
@@ -459,7 +456,7 @@ YAHOO.widget.MenuManager = function() {
         
                     m_bInitializedEventHandlers = true;
                     
-                    this.logger.log("DOM event handlers initialized.");
+                    m_oLogger.log("DOM event handlers initialized.");
         
                 }
         
@@ -474,7 +471,7 @@ YAHOO.widget.MenuManager = function() {
                 p_oMenu.itemAddedEvent.subscribe(onItemAdded);
                 p_oMenu.itemRemovedEvent.subscribe(onItemRemoved);
     
-                this.logger.log("Menu: " + 
+                m_oLogger.log("Menu: " + 
                     p_oMenu.toString() + " successfully registered.");
     
             }
@@ -494,7 +491,7 @@ YAHOO.widget.MenuManager = function() {
     
                 delete m_oMenus[p_oMenu.id];
     
-                this.logger.log("Menu: " + 
+                m_oLogger.log("Menu: " + 
                     p_oMenu.toString() + " successfully unregistered.");
     
             }
@@ -579,6 +576,30 @@ YAHOO.widget.MenuManager = function() {
 
 
 
+/**
+* The Menu class creates a container that holds a vertical list representing 
+* a set of options or commands.  Menu is the base class for all 
+* menu containers. 
+* @param {String} p_oElement String specifying the id attribute of the 
+* <code>&#60;div&#62;</code> element of the menu.
+* @param {String} p_oElement String specifying the id attribute of the 
+* <code>&#60;select&#62;</code> element to be used as the data source 
+* for the menu.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+* level-one-html.html#ID-22445964">HTMLDivElement</a>} p_oElement Object 
+* specifying the <code>&#60;div&#62;</code> element of the menu.
+* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+* level-one-html.html#ID-94282980">HTMLSelectElement</a>} p_oElement 
+* Object specifying the <code>&#60;select&#62;</code> element to be used as 
+* the data source for the menu.
+* @param {Object} p_oConfig Optional. Object literal specifying the 
+* configuration for the menu. See configuration class documentation for 
+* more details.
+* @namespace YAHOO.widget
+* @class Menu
+* @constructor
+* @extends YAHOO.widget.Overlay
+*/
 (function() {
 
 var Dom = YAHOO.util.Dom,
@@ -631,30 +652,6 @@ function pointInTriangle(p_aRegion, p_aPoint) {
 var m_aSubmenuRegion = null;
 
 
-/**
-* The Menu class creates a container that holds a vertical list representing 
-* a set of options or commands.  Menu is the base class for all 
-* menu containers. 
-* @param {String} p_oElement String specifying the id attribute of the 
-* <code>&#60;div&#62;</code> element of the menu.
-* @param {String} p_oElement String specifying the id attribute of the 
-* <code>&#60;select&#62;</code> element to be used as the data source 
-* for the menu.
-* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-* level-one-html.html#ID-22445964">HTMLDivElement</a>} p_oElement Object 
-* specifying the <code>&#60;div&#62;</code> element of the menu.
-* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-* level-one-html.html#ID-94282980">HTMLSelectElement</a>} p_oElement 
-* Object specifying the <code>&#60;select&#62;</code> element to be used as 
-* the data source for the menu.
-* @param {Object} p_oConfig Optional. Object literal specifying the 
-* configuration for the menu. See configuration class documentation for 
-* more details.
-* @namespace YAHOO.widget
-* @class Menu
-* @constructor
-* @extends YAHOO.widget.Overlay
-*/
 YAHOO.widget.Menu = function(p_oElement, p_oConfig) {
 
     if(p_oConfig) {
@@ -676,7 +673,7 @@ YAHOO.widget.Menu = function(p_oElement, p_oConfig) {
 
 };
 
-YAHOO.extend(YAHOO.widget.Menu, YAHOO.widget.Overlay, {
+YAHOO.lang.extend(YAHOO.widget.Menu, YAHOO.widget.Overlay, {
 
 
 
@@ -1501,14 +1498,6 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
             var bAppend = (p_nItemIndex >= aGroup.length);            
 
 
-            /**
-            * Returns the previous item in an array 
-            * @private
-            * @param {p_aArray} Array to search.
-            * @param {p_nStartIndex} Number indicating the index to 
-            * start searching the array.
-            * @return {Object}
-            */
             function getPreviousArrayItem(p_aArray, p_nStartIndex) {
     
                 return p_aArray[p_nStartIndex] || 
@@ -1558,15 +1547,6 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
                 }
                 else {
   
-    
-                    /**
-                    * Returns the next sibling of an item in an array.
-                    * @private
-                    * @param {p_aArray} Array to search.
-                    * @param {p_nStartIndex} Number indicating the index to 
-                    * start searching the array.
-                    * @return {Object}
-                    */
                     function getNextItemSibling(p_aArray, p_nStartIndex) {
                 
                             return (
@@ -2539,6 +2519,8 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
             if(oSubmenu.cfg.getProperty("visible")) {
 
                 oSubmenu.hide();
+                
+                oSubmenu.parent.focus();
     
             }
             else {
@@ -3177,6 +3159,9 @@ _onRender: function(p_sType, p_aArgs, p_oMenu) {
 },
 
 
+_originalMaxHeight: -1,
+
+
 /**
 * @method _onBeforeShow
 * @description "beforeshow" event handler for the menu.
@@ -3254,21 +3239,18 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
 
     if(this.cfg.getProperty("position") == "dynamic") {
 
-        var nViewportHeight = Dom.getViewportHeight(),
-            nMaxHeight;
+        var nViewportHeight = Dom.getViewportHeight();
     
         if(this.element.offsetHeight >= nViewportHeight) {
     
-            if(this._originalMaxHeight == -1) {
+            var nMaxHeight = this.cfg.getProperty("maxheight");
 
-                /*
-                    Cache the original value for the "maxheight" configuration  
-                    property so that we can set it back when the menu is hidden.
-                */
-        
-                this._originalMaxHeight = this.cfg.getProperty("maxheight");
-
-            }
+            /*
+                Cache the original value for the "maxheight" configuration  
+                property so that we can set it back when the menu is hidden.
+            */
+    
+            this._originalMaxHeight = nMaxHeight;
 
             this.cfg.setProperty("maxheight", (nViewportHeight - 20));
         
@@ -3284,11 +3266,9 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
                 oBody.scrollTop = 0;
     
             }
-    
-            Dom.addClass(this.header, "disabled");
-    
-            this._bHeaderDisabled = true;
-            this._bFooterDisabled = false;
+
+            this._disableScrollHeader();
+            this._enableScrollFooter();
     
         }
 
@@ -3342,12 +3322,6 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
             oParentMenu.cfg.setProperty("autosubmenudisplay", true);
 
 
-            /**
-            * "click" event handler for the document
-            * @private
-            * @param {Event} p_oEvent Object reference for the DOM event object 
-            * passed back by the event utility (YAHOO.util.Event).
-            */
             function disableAutoSubmenuDisplay(p_oEvent) {
 
                 if(
@@ -3450,6 +3424,8 @@ _onHide: function(p_sType, p_aArgs, p_oMenu) {
     if(this._originalMaxHeight != -1) {
 
         this.cfg.setProperty("maxheight", this._originalMaxHeight);
+
+        this._originalMaxHeight = -1;
 
     }
 
@@ -3588,7 +3564,6 @@ _onSubmenuBeforeShow: function(p_sType, p_aArgs, p_oSubmenu) {
 
 
     var nScrollTop = oParent.parent.body.scrollTop;
-
 
     if(
         (this.browser == "gecko" || this.browser == "safari") 
@@ -4073,6 +4048,11 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
    
             this.element.insertBefore(oHeader, oBody);
             this.element.appendChild(oFooter);
+
+            Event.addListener(oHeader, "mouseover", fnMouseOver, this, true);
+            Event.addListener(oHeader, "mouseout", fnMouseOut, this, true);
+            Event.addListener(oFooter, "mouseover", fnMouseOver, this, true);
+            Event.addListener(oFooter, "mouseout", fnMouseOut, this, true);
         
         }
 
@@ -4085,11 +4065,6 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
 
         Dom.setStyle(oBody, "height", (nHeight + "px"));
         Dom.setStyle(oBody, "overflow", "hidden");
-
-        Event.addListener(oHeader, "mouseover", fnMouseOver, this, true);
-        Event.addListener(oHeader, "mouseout", fnMouseOut, this, true);
-        Event.addListener(oFooter, "mouseover", fnMouseOver, this, true);
-        Event.addListener(oFooter, "mouseout", fnMouseOut, this, true);
 
     }
     else if(oHeader && oFooter) {
@@ -4822,38 +4797,9 @@ initDefaultConfig: function() {
 
 }
 
-}); // END YAHOO.extend
+}); // END YAHOO.lang.extend
 
 })();
-
-
-
-/**
-* The base class for all menuing containers.
-* 
-* @param {String} p_oElement String specifying the id attribute of the 
-* <code>&#60;div&#62;</code> element of the menu module.
-* @param {String} p_oElement String specifying the id attribute of the 
-* <code>&#60;select&#62;</code> element to be used as the data source for the 
-* menu module.
-* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929
-* /level-one-html.html#ID-22445964">HTMLDivElement</a>} p_oElement Object 
-* specifying the <code>&#60;div&#62;</code> element of the menu module.
-* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
-* one-html.html#ID-94282980">HTMLSelectElement</a>} p_oElement Object 
-* specifying the <code>&#60;select&#62;</code> element to be used as the data 
-* source for the menu module.
-* @param {Object} p_oConfig Optional. Object literal specifying the 
-* configuration for the menu module. See configuration class documentation for 
-* more details.
-* @class MenuModule
-* @constructor
-* @extends YAHOO.widget.Overlay
-* @deprecated As of version 0.12, all MenuModule functionality has been 
-* implemented directly in YAHOO.widget.Menu, making YAHOO.widget.Menu the base 
-* class for all menuing containers.
-*/
-YAHOO.widget.MenuModule = YAHOO.widget.Menu;
 
 
 
@@ -4987,33 +4933,35 @@ YAHOO.widget.MenuItem.prototype = {
     * @property COLLAPSED_SUBMENU_INDICATOR_TEXT
     * @description String representing the text for the <code>&#60;em&#62;<code>
     * element used for the submenu arrow indicator.
-    * @default "Collapsed.  Click to expand."
+    * @default "Submenu collapsed.  Click to expand submenu."
     * @final
     * @type String
     */
-    COLLAPSED_SUBMENU_INDICATOR_TEXT: "Collapsed.  Click to expand.",
+    COLLAPSED_SUBMENU_INDICATOR_TEXT: 
+        "Submenu collapsed.  Click to expand submenu.",
 
 
     /**
     * @property EXPANDED_SUBMENU_INDICATOR_TEXT
     * @description String representing the text for the submenu arrow indicator 
     * element (<code>&#60;em&#62;<code>) when the submenu is visible.
-    * @default "Expanded.  Click to collapse."
+    * @default "Submenu expanded.  Click to collapse submenu."
     * @final
     * @type String
     */
-    EXPANDED_SUBMENU_INDICATOR_TEXT: "Expanded.  Click to collapse.",
+    EXPANDED_SUBMENU_INDICATOR_TEXT: 
+        "Submenu expanded.  Click to collapse submenu.",
 
 
     /**
     * @property DISABLED_SUBMENU_INDICATOR_TEXT
     * @description String representing the text for the submenu arrow indicator 
     * element (<code>&#60;em&#62;<code>) when the menu item is disabled.
-    * @default "Disabled."
+    * @default "Submenu collapsed.  (Item disabled.)."
     * @final
     * @type String
     */
-    DISABLED_SUBMENU_INDICATOR_TEXT: "Disabled.",
+    DISABLED_SUBMENU_INDICATOR_TEXT: "Submenu collapsed.  (Item disabled.)",
 
 
     /**
@@ -5087,7 +5035,7 @@ YAHOO.widget.MenuItem.prototype = {
     * @final
     * @type String
     */
-    CHECKED_TEXT: "Checked.",
+    CHECKED_TEXT: "Menu item checked.",
     
     
     /**
@@ -5726,22 +5674,29 @@ YAHOO.widget.MenuItem.prototype = {
     * level-one-html.html#ID-58190037">HTMLElement</a>}
     */
     _getFirstElement: function(p_oElement, p_sTagName) {
-
-        var oElement;
-
-        if(p_oElement.firstChild && p_oElement.firstChild.nodeType == 1) {
-
-            oElement = p_oElement.firstChild;
-
-        }
-        else if(
-            p_oElement.firstChild && 
-            p_oElement.firstChild.nextSibling && 
-            p_oElement.firstChild.nextSibling.nodeType == 1
-        ) {
-
-            oElement = p_oElement.firstChild.nextSibling;
-
+    
+        var oFirstChild = p_oElement.firstChild,
+            oElement;
+    
+        if(oFirstChild) {
+    
+            if(oFirstChild.nodeType == 1) {
+    
+                oElement = oFirstChild;
+    
+            }
+            else {
+    
+                var oNextSibling = oFirstChild.nextSibling;
+    
+                if(oNextSibling && oNextSibling.nodeType == 1) {
+                
+                    oElement = oNextSibling;
+                
+                }
+    
+            }
+    
         }
 
 
@@ -5751,10 +5706,10 @@ YAHOO.widget.MenuItem.prototype = {
                 oElement : false;
 
         }
-
+        
         return oElement;
 
-    },
+    },    
 
 
     /**
@@ -6047,11 +6002,6 @@ YAHOO.widget.MenuItem.prototype = {
             oSubmenuIndicator = this.submenuIndicator;
 
 
-        /**
-        * Adds the "hashelptext" class to the necessary nodes and refires the 
-        * "selected" and "disabled" configuration events.
-        * @private
-        */
         function initHelpText() {
 
             Dom.addClass(aNodes, "hashelptext");
@@ -6071,10 +6021,6 @@ YAHOO.widget.MenuItem.prototype = {
         }
 
 
-        /**
-        * Removes the "hashelptext" class and corresponding DOM element (EM).
-        * @private
-        */
         function removeHelpText() {
 
             Dom.removeClass(aNodes, "hashelptext");
@@ -6908,14 +6854,6 @@ YAHOO.widget.MenuItem.prototype = {
 
             var nGroupIndex = this.groupIndex;
 
-            /**
-            * Finds the next item in an array.
-            * @private
-            * @param {p_aArray} Array to search.
-            * @param {p_nStartIndex} Number indicating the index to 
-            * start searching the array.
-            * @return {Object}
-            */
             function getNextArrayItem(p_aArray, p_nStartIndex) {
     
                 return p_aArray[p_nStartIndex] || 
@@ -6981,14 +6919,6 @@ YAHOO.widget.MenuItem.prototype = {
 
             var nGroupIndex = this.groupIndex;
 
-            /**
-            * Returns the previous item in an array 
-            * @private
-            * @param {p_aArray} Array to search.
-            * @param {p_nStartIndex} Number indicating the index to 
-            * start searching the array.
-            * @return {Object}
-            */
             function getPreviousArrayItem(p_aArray, p_nStartIndex) {
     
                 return p_aArray[p_nStartIndex] || 
@@ -6996,15 +6926,6 @@ YAHOO.widget.MenuItem.prototype = {
     
             }
 
-
-            /**
-            * Get the index of the first item in an array 
-            * @private
-            * @param {p_aArray} Array to search.
-            * @param {p_nStartIndex} Number indicating the index to 
-            * start searching the array.
-            * @return {Object}
-            */    
             function getFirstItemIndex(p_aArray, p_nStartIndex) {
     
                 return p_aArray[p_nStartIndex] ? 
@@ -7219,32 +7140,6 @@ YAHOO.widget.MenuItem.prototype = {
 
 
 /**
-* Creates an item for a menu module.
-* 
-* @param {String} p_oObject String specifying the text of the menu module item.
-* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-
-* html.html#ID-74680021">HTMLLIElement</a>} p_oObject Object specifying the 
-* <code>&#60;li&#62;</code> element of the menu module item.
-* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-
-* html.html#ID-38450247">HTMLOptGroupElement</a>} p_oObject Object specifying 
-* the <code>&#60;optgroup&#62;</code> element of the menu module item.
-* @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-
-* html.html#ID-70901257">HTMLOptionElement</a>} p_oObject Object specifying the 
-* <code>&#60;option&#62;</code> element of the menu module item.
-* @param {Object} p_oConfig Optional. Object literal specifying the 
-* configuration for the menu module item. See configuration class documentation
-* for more details.
-* @class MenuModuleItem
-* @constructor
-* @deprecated As of version 0.12, all MenuModuleItem functionality has been 
-* implemented directly in YAHOO.widget.MenuItem, making YAHOO.widget.MenuItem 
-* the base class for all menu items.
-*/
-YAHOO.widget.MenuModuleItem = YAHOO.widget.MenuItem;
-
-
-
-/**
 * Creates a list of options or commands which are made visible in response to 
 * an HTML element's "contextmenu" event ("mousedown" for Opera).
 *
@@ -7279,7 +7174,7 @@ YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 };
 
 
-YAHOO.extend(YAHOO.widget.ContextMenu, YAHOO.widget.Menu, {
+YAHOO.lang.extend(YAHOO.widget.ContextMenu, YAHOO.widget.Menu, {
 
 
 
@@ -7610,7 +7505,7 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
     
 }
 
-}); // END YAHOO.extend
+}); // END YAHOO.lang.extend
 
 
 
@@ -7645,7 +7540,7 @@ YAHOO.widget.ContextMenuItem = function(p_oObject, p_oConfig) {
 
 };
 
-YAHOO.extend(YAHOO.widget.ContextMenuItem, YAHOO.widget.MenuItem, {
+YAHOO.lang.extend(YAHOO.widget.ContextMenuItem, YAHOO.widget.MenuItem, {
 
 
 /**
@@ -7715,7 +7610,7 @@ toString: function() {
 
 }
     
-}); // END YAHOO.extend
+}); // END YAHOO.lang.extend
 
 
 
@@ -7752,7 +7647,7 @@ YAHOO.widget.MenuBar = function(p_oElement, p_oConfig) {
 
 };
 
-YAHOO.extend(YAHOO.widget.MenuBar, YAHOO.widget.Menu, {
+YAHOO.lang.extend(YAHOO.widget.MenuBar, YAHOO.widget.Menu, {
 
 /**
 * @method init
@@ -8121,7 +8016,7 @@ initDefaultConfig: function() {
 
 }
  
-}); // END YAHOO.extend
+}); // END YAHOO.lang.extend
 
 
 
@@ -8155,7 +8050,7 @@ YAHOO.widget.MenuBarItem = function(p_oObject, p_oConfig) {
 
 };
 
-YAHOO.extend(YAHOO.widget.MenuBarItem, YAHOO.widget.MenuItem, {
+YAHOO.lang.extend(YAHOO.widget.MenuBarItem, YAHOO.widget.MenuItem, {
 
 
 /**
@@ -8238,5 +8133,5 @@ toString: function() {
 
 }
     
-}); // END YAHOO.extend
+}); // END YAHOO.lang.extend
 YAHOO.register("menu", YAHOO.widget.Menu, {version: "@VERSION@", build: "@BUILD@"});
