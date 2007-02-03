@@ -30,52 +30,6 @@
 var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event;
 
-/**
-* @method pointInTriangle
-* @description Returns true if a point is inside the area of a triangle.
-* @private
-* @param {p_aRegion} Array containing the x and y coordinates of each point in
-* the triangle.
-* @param {p_aPoint} Array containing the x and y coordinates of the point.
-* @return {Boolean}
-*/
-function pointInTriangle(p_aRegion, p_aPoint) {
-
-    var nX1 = p_aRegion[0],
-        nY1 = p_aRegion[1],
-        
-        nX2 = p_aRegion[2],
-        nY2 = p_aRegion[3],
-        
-        nX3 = p_aRegion[4],
-        nY3 = p_aRegion[5],
-        
-        nXX = p_aPoint[0],
-        nYY = p_aPoint[1];
-    
-    
-    return (
-        Math.abs(
-            Math.abs((nX1-nXX)*(nY2-nYY)-(nX2-nXX)*(nY1-nYY)) +
-            Math.abs((nX2-nXX)*(nY3-nYY)-(nX3-nXX)*(nY2-nYY)) +
-            Math.abs((nX3-nXX)*(nY1-nYY)-(nX1-nXX)*(nY3-nYY)) -
-            Math.abs((nX2-nX1)*(nY3-nY1)-(nX3-nX1)*(nY2-nY1))
-        ) <= 1/256
-    );
-
-}
-
-
-/**
-* @property m_aSubmenuRegion
-* @description Array of points (x and y coordinates) representing the 
-* triangular region between a menu item and its corresponding submenu.
-* @default null
-* @private
-* @type Array
-*/
-var m_aSubmenuRegion = null;
-
 
 YAHOO.widget.Menu = function(p_oElement, p_oConfig) {
 
@@ -98,8 +52,8 @@ YAHOO.widget.Menu = function(p_oElement, p_oConfig) {
 
 };
 
-YAHOO.lang.extend(YAHOO.widget.Menu, YAHOO.widget.Overlay, {
 
+YAHOO.lang.extend(YAHOO.widget.Menu, YAHOO.widget.Overlay, {
 
 
 // Constants
@@ -189,29 +143,7 @@ _nBodyScrollId: null,
 
 
 /** 
-* @property _bHasMouseMoveHandler
-* @description Boolean indicating if the "mousemove" event handler has 
-* been assigned.
-* @default false
-* @private
-* @type Boolean
-*/
-_bHasMouseMoveHandler: false,
-
-
-/** 
-* @property _bMouseInSubmenuRegion
-* @description Boolean indicating if the mouse is in the triangular region 
-* between a menu item and its corresponding submenu.
-* @default false
-* @private
-* @type Boolean
-*/
-_bMouseInSubmenuRegion: false,
-
-
-/** 
-* @property _hideDelayEventHandlersAssigned
+* @property _bHideDelayEventHandlersAssigned
 * @description Boolean indicating if the "mouseover" and "mouseout" event 
 * handlers used for hiding the menu via a call to "window.setTimeout" have 
 * already been assigned.
@@ -219,7 +151,7 @@ _bMouseInSubmenuRegion: false,
 * @private
 * @type Boolean
 */
-_hideDelayEventHandlersAssigned: false,
+_bHideDelayEventHandlersAssigned: false,
 
 
 /**
@@ -286,11 +218,26 @@ _aItemGroups: null,
 _aListElements: null,
 
 
+/**
+* @property _nCurrentMouseX
+* @description The current x coordinate of the mouse inside the area of 
+* the menu.
+* @default 0
+* @private
+* @type Number
+*/
+_nCurrentMouseX: 0,
 
-// Protected properties
 
-
-_originalMaxHeight: -1,
+/**
+* @property _nMaxHeight
+* @description The original value of the "maxheight" configuration property 
+* as set by the user.
+* @default -1
+* @private
+* @type Number
+*/
+_nMaxHeight: -1,
 
 
 
@@ -1521,50 +1468,33 @@ _execShowDelay: function(p_oMenu) {
 * @private
 * @param {YAHOO.widget.Menu} p_oSubmenu Object specifying the submenu that  
 * should be hidden.
+* @param {Number} p_nMouseX The x coordinate of the mouse when it left 
+* the specified submenu's parent menu item.
 * @param {Number} p_nHideDelay The number of milliseconds that should ellapse
 * before the submenu is hidden.
 */
-_execSubmenuHideDelay: function(p_oSubmenu, p_nHideDelay) {
-
-    if(!this._bHasMouseMoveHandler) {
-
-        Event.addListener(
-                this.element, 
-                "mousemove", 
-                this._onMouseMove, 
-                this, 
-                true
-            );
-
-        this._bHasMouseMoveHandler = true;
-
-    }
-
+_execSubmenuHideDelay: function(p_oSubmenu, p_nMouseX, p_nHideDelay) {
 
     var me = this;
 
-    p_oSubmenu._nSubmenuHideDelayId = 
-    
-                    window.setTimeout(function () {
-            
-                        if(me._bMouseInSubmenuRegion) {
-            
-                            p_oSubmenu._nSubmenuHideDelayId = 
-                            
-                                            window.setTimeout(function () {
-                        
-                                                p_oSubmenu.hide();
-                                
-                                            }, p_nHideDelay);
-            
-                        }
-                        else {
-            
-                            p_oSubmenu.hide();
-                        
-                        }
-            
-                    }, 50);
+    p_oSubmenu._nSubmenuHideDelayId = window.setTimeout(function () {
+
+        if(me._nCurrentMouseX > (p_nMouseX + 10)) {
+
+            p_oSubmenu._nSubmenuHideDelayId = window.setTimeout(function () {
+        
+                p_oSubmenu.hide();
+
+            }, p_nHideDelay);
+
+        }
+        else {
+
+            p_oSubmenu.hide();
+        
+        }
+
+    }, 50);
 
 },
 
@@ -1665,6 +1595,17 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
     ) {
 
         // Menu mouseover logic
+
+        this._nCurrentMouseX = 0;
+
+        Event.addListener(
+                this.element, 
+                "mousemove", 
+                this._onMouseMove, 
+                this, 
+                true
+            );
+
 
         this.clearActiveItem();
 
@@ -1805,6 +1746,7 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
             )
         ) {
 
+            // Menu Item mouseout logic
 
             if(!bMovingToSubmenu) {
 
@@ -1823,25 +1765,9 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
                         nShowDelay >= nSubmenuHideDelay
                     ) {
 
-                        var aSubmenuXY = oSubmenu.cfg.getProperty("xy"),
-                            aPageXY = Event.getXY(oEvent);
-                    
-                        m_aSubmenuRegion = [
-                        
-                                aPageXY[0], 
-                                aPageXY[1],
-                                
-                                aSubmenuXY[0],
-                                aPageXY[1],
-                                
-                                aSubmenuXY[0],
-                                (aSubmenuXY[1] + oSubmenu.element.offsetHeight)
-                    
-                            ];
-
-
                         this._execSubmenuHideDelay(
                                 oSubmenu, 
+                                Event.getPageX(oEvent),
                                 nSubmenuHideDelay
                             );
 
@@ -1852,11 +1778,6 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
 
                     }
 
-                }
-                else {
-
-                    m_aSubmenuRegion = null;
-    
                 }
 
             }
@@ -1881,6 +1802,12 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
         )
     ) {
 
+        // Menu mouseout logic
+
+        Event.removeListener(this.element, "mousemove", this._onMouseMove);
+
+        this._nCurrentMouseX = Event.getPageX(oEvent);
+
         this._bHandledMouseOutEvent = true;
         this._bHandledMouseOverEvent = false;
 
@@ -1900,13 +1827,7 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onMouseMove: function(p_oEvent, p_oMenu) {
 
-    if(m_aSubmenuRegion) {
-        
-        this._bMouseInSubmenuRegion = 
-        
-                pointInTriangle(m_aSubmenuRegion, Event.getXY(p_oEvent));
-
-    }
+    this._nCurrentMouseX = Event.getPageX(p_oEvent);
 
 },
 
@@ -2584,9 +2505,6 @@ _onRender: function(p_sType, p_aArgs, p_oMenu) {
 },
 
 
-_originalMaxHeight: -1,
-
-
 /**
 * @method _onBeforeShow
 * @description "beforeshow" event handler for the menu.
@@ -2675,7 +2593,7 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
                 property so that we can set it back when the menu is hidden.
             */
     
-            this._originalMaxHeight = nMaxHeight;
+            this._nMaxHeight = nMaxHeight;
 
             this.cfg.setProperty("maxheight", (nViewportHeight - 20));
         
@@ -2846,11 +2764,11 @@ _onBeforeHide: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onHide: function(p_sType, p_aArgs, p_oMenu) {
 
-    if(this._originalMaxHeight != -1) {
+    if(this._nMaxHeight != -1) {
 
-        this.cfg.setProperty("maxheight", this._originalMaxHeight);
+        this.cfg.setProperty("maxheight", this._nMaxHeight);
 
-        this._originalMaxHeight = -1;
+        this._nMaxHeight = -1;
 
     }
 
@@ -3390,13 +3308,13 @@ configHideDelay: function(p_sType, p_aArgs, p_oMenu) {
             the value for the hidedelay as many times as they want.
         */
 
-        if(!this._hideDelayEventHandlersAssigned) {
+        if(!this._bHideDelayEventHandlersAssigned) {
 
             oMouseOutEvent.subscribe(this._execHideDelay, true);
             oMouseOverEvent.subscribe(this._cancelHideDelay, this, true);
             oKeyDownEvent.subscribe(this._cancelHideDelay, this, true);
 
-            this._hideDelayEventHandlersAssigned = true;
+            this._bHideDelayEventHandlersAssigned = true;
         
         }
 
@@ -3407,7 +3325,7 @@ configHideDelay: function(p_sType, p_aArgs, p_oMenu) {
         oMouseOverEvent.unsubscribe(this._cancelHideDelay, this);
         oKeyDownEvent.unsubscribe(this._cancelHideDelay, this);
 
-        this._hideDelayEventHandlersAssigned = false;
+        this._bHideDelayEventHandlersAssigned = false;
 
     }
 
