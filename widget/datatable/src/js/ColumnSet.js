@@ -717,7 +717,7 @@ YAHOO.widget.Column.prototype.getEditor = function(elCell, oRecord) {
         oEditor.show(elCell, oRecord, this);
         this.editor = oEditor;
     }
-    else if(oEditor.constructor == YAHOO.widget.ColumnEditor) {
+    else if(oEditor instanceof YAHOO.widget.ColumnEditor) {
         oEditor.show(elCell, oRecord, this);
     }
     return oEditor;

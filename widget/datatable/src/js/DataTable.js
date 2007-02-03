@@ -1000,13 +1000,23 @@ YAHOO.widget.DataTable.prototype._initHeadCell = function(elHeadCell,oColumn,row
     var elHeadContent = elHeadContainer.appendChild(document.createElement("span"));
     elHeadContent.id = this.id+"-hdrow"+row+"-text"+col;
     YAHOO.util.Dom.addClass(elHeadContent,YAHOO.widget.DataTable.CLASS_HEADTEXT);
-    elHeadContent.innerHTML = oColumn.text || oColumn.key || "";
 
     elHeadCell.rowSpan = oColumn.rowspan;
     elHeadCell.colSpan = oColumn.colspan;
 
+    var contentText = oColumn.text || oColumn.key || "";
     if(oColumn.sortable) {
-        YAHOO.util.Dom.addClass(elHeadCell,YAHOO.widget.DataTable.CLASS_SORTABLE);
+        YAHOO.util.Dom.addClass(elHeadContent,YAHOO.widget.DataTable.CLASS_SORTABLE);
+        //TODO: Make hash configurable to be a server link
+        //TODO: Make title configurable
+        //TODO: Separate contentText from an accessibility link that says
+        // Click to sort ascending and push it offscreen
+        elHeadContent.innerHTML = "<a href=\"#\" title=\"Click to sort\">" + contentText + "</a>";
+         //elHeadContent.innerHTML = contentText;
+
+    }
+    else {
+        elHeadContent.innerHTML = contentText;
     }
 };
 
@@ -2299,7 +2309,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
     if(!oColumn) {
         return;
     }
-    if(oColumn.constructor != YAHOO.widget.Column) {
+    if(!oColumn instanceof YAHOO.widget.Column) {
         //TODO: Figure out the column based on TH ref or TH.key
         return;
     }
@@ -2585,6 +2595,8 @@ YAHOO.widget.DataTable.formatSelect = function(elCell, oColumn, oRecord, oData) 
 YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
     var evt = oArgs.event;
     var target = oArgs.target;
+    YAHOO.util.Event.stopEvent(evt);
+    
     //TODO: traverse DOM to find a columnIndex, incl safety net if none exists
     var columnIndex = target.columnIndex;
     if(!isNaN(columnIndex)) {
