@@ -611,14 +611,14 @@ YAHOO.widget.DataTable.CLASS_CURRENTPAGE = "yui-dt-currentpage";
 YAHOO.widget.DataTable.CLASS_PAGESELECT = "yui-dt-pageselect";
 
 /**
- * Class name of pagination container element.
+ * Class name of pagination links container element.
  *
- * @property CLASS_PAGER
+ * @property CLASS_PAGELINKS
  * @type String
  * @static
  * @final
  */
-YAHOO.widget.DataTable.CLASS_PAGER = "yui-dt-pager";
+YAHOO.widget.DataTable.CLASS_PAGELINKS = "yui-dt-pagelinks";
 
 /**
  * Class name of editable column.
@@ -1440,7 +1440,7 @@ YAHOO.widget.DataTable.prototype._onKeyup = function(e, oSelf) {
 };
 
 /**
- * Handles click events on paginator elements.
+ * Handles click events on paginator links.
  *
  * @method _onPagerClick
  * @param e {event} The click event.
@@ -1478,52 +1478,6 @@ YAHOO.widget.DataTable.prototype._onPagerClick = function(e, oSelf) {
                     }
                     knownTag = true;
                     break;
-                case "select":
-                    // How many rows per page
-                    var rowsPerPage = parseInt(elTarget[elTarget.selectedIndex].text,10);
-                    if(rowsPerPage && (rowsPerPage != oSelf.rowsPerPage)) {
-                        oSelf.rowsPerPage = rowsPerPage;
-                    
-                        /*// How many records
-                        var recordsLength = oSelf._oRecordSet.getLength();
-
-                        // First row of this page
-                        var startRecordIndex =
-                                (rowsPerPage > recordsLength ) ? 0: oSelf.startRecordIndex;
-                        this.startRecordIndex = startRecordIndex;
-
-                        // Current page
-                        var pageNumber = (rowsPerPage > recordsLength ) ? 1 :
-                                Math.ceil(startRecordIndex / rowsPerPage) + 1;
-                        oSelf.pageNumber = pageNumber;
-
-                        // How many rows this page
-                        var maxRows =
-                                (rowsPerPage && (rowsPerPage < recordsLength)) ?
-                                rowsPerPage : recordsLength;
-
-                        // How many total pages
-                        var totalPages =
-                                (rowsPerPage > recordsLength) ? 1 :
-                                Math.ceil(recordsLength / maxRows);
-
-                        // First link of this page
-                        if(rowsPerPage > recordsLength) {
-                            oSelf.pageLinksStart = 1;
-                        }
-                        else if (oSelf.pageNumber > (oSelf.pageLinksStart + oSelf.pageLinksLength - 1)) {
-                            oSelf.pageLinksStart = oSelf.pageNumber;
-                        }
-                        else if (oSelf.pageNumber < oSelf.pageLinksStart) {
-                            oSelf.pageLinksStart = oSelf.pageNumber;
-                        }
-                        else if(oSelf.pageNumber > (oSelf.totalPages - oSelf.pageLinksLength))
-                            oSelf.pageLinksStart = oSelf.totalPages - oSelf.pageLinksLength + 1;*/
-
-                        oSelf.paginate();
-                    }
-                    knownTag = true;
-                    break;
                 default:
                     break;
             }
@@ -1538,6 +1492,27 @@ YAHOO.widget.DataTable.prototype._onPagerClick = function(e, oSelf) {
     }
     oSelf.fireEvent("pagerClickEvent",{target:elTarget,event:e});
 };
+
+/**
+ * Handles change events on paginator SELECT.
+ *
+ * @method _onPagerSelect
+ * @param e {event} The change event.
+ * @param oSelf {object} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onPagerSelect = function(e, oSelf) {
+    var elTarget = YAHOO.util.Event.getTarget(e);
+    var elTag = elTarget.nodeName.toLowerCase();
+
+    // How many rows per page
+    var rowsPerPage = parseInt(elTarget[elTarget.selectedIndex].text,10);
+    if(rowsPerPage && (rowsPerPage != oSelf.rowsPerPage)) {
+        oSelf.rowsPerPage = rowsPerPage;
+        oSelf.paginate();
+    }
+
+}
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2244,22 +2219,22 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
         var isLastPage = (this.pageNumber == this.totalPages) ? true : false;
         var firstPageLink = (isFirstPage) ?
                 " <span class=\"" + YAHOO.widget.DataTable.CLASS_FIRSTPAGE + "\">&lt;&lt;</span> " :
-                " <a class=\"" + YAHOO.widget.DataTable.CLASS_FIRSTLINK + "\">&lt;&lt;</a> ";
+                " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_FIRSTLINK + "\">&lt;&lt;</a> ";
         var prevPageLink = (isFirstPage) ?
                 " <span class=\"" + YAHOO.widget.DataTable.CLASS_PREVPAGE + "\">&lt;</span> " :
-                " <a class=\"" + YAHOO.widget.DataTable.CLASS_PREVLINK + "\">&lt;</a> " ;
+                " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PREVLINK + "\">&lt;</a> " ;
         var nextPageLink = (isLastPage) ?
                 " <span class=\"" + YAHOO.widget.DataTable.CLASS_NEXTPAGE + "\">&gt;</span> " :
-                " <a class=\"" + YAHOO.widget.DataTable.CLASS_NEXTLINK + "\">&gt;</a> " ;
+                " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_NEXTLINK + "\">&gt;</a> " ;
         var lastPageLink = (isLastPage) ?
                 " <span class=\"" + YAHOO.widget.DataTable.CLASS_LASTPAGE + "\">&gt;&gt;</span> " :
-                " <a class=\"" + YAHOO.widget.DataTable.CLASS_LASTLINK + "\">&gt;&gt;</a> ";
+                " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_LASTLINK + "\">&gt;&gt;</a> ";
         var markup = firstPageLink + prevPageLink;
         var maxLinks = (this.pageLinksStart+pageLinksLength < this.totalPages) ?
             this.pageLinksStart+pageLinksLength-1 : this.totalPages;
         for(var i=this.pageLinksStart; i<=maxLinks; i++) {
              if(i != this.pageNumber) {
-                markup += " <a class=\"" + YAHOO.widget.DataTable.CLASS_PAGELINK + "\">" + i + "</a> ";
+                markup += " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PAGELINK + "\">" + i + "</a> ";
             }
             else {
                 markup += " <span class=\"" + YAHOO.widget.DataTable.CLASS_CURRENTPAGE + "\">" + i + "</span>";
@@ -2269,32 +2244,55 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
 
         // Markup for rows-per-page dropdown
         if(this.rowsPerPageDropdown && (this.rowsPerPageDropdown.constructor == Array)) {
-            markup+= "<select class=\"" + YAHOO.widget.DataTable.CLASS_PAGESELECT + "\">";
-                for(var i=0; i<this.rowsPerPageDropdown.length; i++) {
-                    var option = this.rowsPerPageDropdown[i];
-                    markup += "<option value=\"" + option + "\"";
-                    if(this.rowsPerPage === option) {
-                        markup += " selected";
-                    }
-                    markup += ">" + option + "</option>";
+            var select1 = document.createElement("select");
+            select1.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
+            var select2 = document.createElement("select");
+            select2.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
+            
+            for(var i=0; i<this.rowsPerPageDropdown.length; i++) {
+                var option1 = document.createElement("option");
+                var option2 = document.createElement("option");
+                option1.value = this.rowsPerPageDropdown[i];
+                option2.value = this.rowsPerPageDropdown[i];
+                option1.innerHTML = this.rowsPerPageDropdown[i];
+                option2.innerHTML = this.rowsPerPageDropdown[i];
+
+                if(this.rowsPerPage === this.rowsPerPageDropdown[i]) {
+                    option1.selected = true;
+                    option2.selected = true;
                 }
-            markup += "</select>";
+                option1 = select1.appendChild(option1);
+                option2 = select2.appendChild(option2);
+            }
         }
 
         // Populate each pager container with markup
         if(!this.pagers || (this.pagers.length == 0)) {
-            var pager1 = document.createElement("div");
-            pager1.className = YAHOO.widget.DataTable.CLASS_PAGER;
-            var pager2 = document.createElement("div");
-            pager2.className = YAHOO.widget.DataTable.CLASS_PAGER;
+            var pager1 = document.createElement("span");
+            pager1.className = YAHOO.widget.DataTable.CLASS_PAGELINKS;
+            
+            var pager2 = document.createElement("span");
+            pager2.className = YAHOO.widget.DataTable.CLASS_PAGELINKS;
+
             pager1 = this._elContainer.insertBefore(pager1, this._elTable);
+            select1 = this._elContainer.insertBefore(select1, this._elTable);
+            select2 = this._elContainer.insertBefore(select2, this._elTable.nextSibling);
             pager2 = this._elContainer.insertBefore(pager2, this._elTable.nextSibling);
-            this.pagers = [pager1,pager2];
+            this.pagers = [
+                {links:pager1,select:select1},
+                {links:pager2,select:select2}
+            ];
         }
+        
+        this.pagers[0].links.innerHTML = markup;
+        this.pagers[1].links.innerHTML = markup;
+
         for(var i=0; i<this.pagers.length; i++) {
-            YAHOO.util.Event.purgeElement(this.pagers[i]);
+            YAHOO.util.Event.purgeElement(this.pagers[i].links);
+            YAHOO.util.Event.purgeElement(this.pagers[i].select);
             this.pagers[i].innerHTML = markup;
-            YAHOO.util.Event.addListener(this.pagers[i],"click",this._onPagerClick,this);
+            YAHOO.util.Event.addListener(this.pagers[i].links,"click",this._onPagerClick,this);
+            YAHOO.util.Event.addListener(this.pagers[i].select,"change",this._onPagerSelect,this);
         }
     }
 };
