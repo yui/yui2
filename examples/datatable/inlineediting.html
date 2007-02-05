@@ -1,0 +1,59 @@
+<!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Example: DataTable - Inline Editing (YUI Library)</title>
+<link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
+<link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
+<link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
+<link type="text/css" rel="stylesheet" href="../../build/datatable/assets/datatable.css">
+<link type="text/css" rel="stylesheet" href="./css/examples.css">
+<link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
+<style type="text/css">
+/* custom css*/
+#editing {margin:1em;}
+#editing table {border-collapse:collapse;}
+#editing th, #editing td {border:1px solid #000;padding:.25em;}
+#editing th {background-color:#696969;color:#fff;}/*dark gray*/
+#editing .yui-dt-odd {background-color:#eee;} /*light gray*/
+</style>
+</head>
+<body>
+<div id="hd">
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Inline Editing</h1>
+</div>
+<div id="bd">
+    <div id="editing"></div>
+</div>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
+<script type="text/javascript" src="./js/data.js"></script>
+<script language="JavaScript">
+var myLogger = new YAHOO.widget.LogReader();
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+var myColumnHeaders = [
+    {key:"SKU"},
+    {key:"Quantity",editor:"textbox"},
+    {key:"Item",editor:"textbox"},
+    {key:"Description",editor:"textbox"}
+];
+
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.inventory);
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+myDataSource.responseSchema = {
+    fields: ["SKU","Quantity","Item","Description"]
+};
+
+var myDataTable = new YAHOO.widget.DataTable("editing", myColumnSet, myDataSource,{caption:"Example: Inline Editing"});
+myDataTable.subscribe("cellClickEvent",myDataTable.onEventEditCell);
+</script>
+</body>
+</html>

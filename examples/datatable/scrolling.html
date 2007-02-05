@@ -1,0 +1,52 @@
+<!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Example: DataTable - Scrolling (YUI Library)</title>
+<link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
+<link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
+<link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
+<link type="text/css" rel="stylesheet" href="../../build/datatable/assets/datatable.css">
+<link type="text/css" rel="stylesheet" href="./css/examples.css">
+<link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
+<style type="text/css">
+/* custom css*/
+#scroll {margin:1em;}
+#scroll table {border-collapse:collapse;}
+#scroll th, #scroll td {border:1px solid #000;}
+#scroll th {background-color:#696969;color:#fff;}/*dark gray*/
+#scroll .yui-dt-odd {background-color:#eee;} /*light gray*/
+</style>
+</head>
+<body>
+<div id="hd">
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Scrolling</h1>
+</div>
+<div id="bd">
+    <div id="scroll"></div>
+</div>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
+<script type="text/javascript" src="./js/data.js"></script>
+<script language="JavaScript">
+var myLogger = new YAHOO.widget.LogReader();
+
+var myColumnHeaders = [
+    {key:"areacode"},
+    {key:"state"}
+];
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+myDataSource.responseSchema = {
+    fields: ["areacode","state"]
+};
+
+var myDataTable = new YAHOO.widget.DataTable("scroll",myColumnSet,myDataSource,{scrollable:true});
+</script>
+</body>
+</html>

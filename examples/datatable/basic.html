@@ -1,0 +1,63 @@
+<!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Example: DataTable - Basic Table (YUI Library)</title>
+<link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
+<link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
+<link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
+<link type="text/css" rel="stylesheet" href="../../build/datatable/assets/datatable.css">
+<link type="text/css" rel="stylesheet" href="./css/examples.css">
+<link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
+<style type="text/css">
+/* custom css*/
+#basic {margin:1em;}
+#basic table {border-collapse:collapse;}
+#basic th, #basic td {border:1px solid #000;padding:.25em;}
+#basic th {background-color:#696969;color:#fff;}/*dark gray*/
+#basic .yui-dt-odd {background-color:#eee;} /*light gray*/
+#basic em {font-style:italic;}
+#basic strong {font-weight:bold;}
+#basic .big {font-size:136%;}
+#basic .small {font-size:77%}
+</style>
+</head>
+<body>
+<div id="hd">
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Basic Table</h1>
+</div>
+<div id="bd">
+    <div id="basic" class="example"></div>
+</div>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
+<script type="text/javascript" src="./js/data.js"></script>
+<script language="JavaScript">
+var myLogger = new YAHOO.widget.LogReader();
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+var myColumnHeaders = [
+    {key:"POID", abbr:"Purchase order ID", sortable:true, resizeable:true},
+    {key:"Date", type:"date", sortable:true, resizeable:true},
+    {key:"Quantity", type:"number", sortable:true, resizeable:true},
+    {key:"Amount", type:"currency", sortable:true, resizeable:true},
+    {key:"Title", type:"html", sortable:true, resizeable:true}
+];
+
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders);
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+myDataSource.responseSchema = {
+    fields: ["POID","Date","Quantity","Amount","Title"]
+};
+var myDataTable = new YAHOO.widget.DataTable("basic", myColumnSet, myDataSource,{caption:"Example: Basic Table"});
+</script>
+</body>
+</html>
