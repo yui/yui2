@@ -895,22 +895,29 @@
 <span class="c">    * level-one-html.html#ID-58190037&quot;&gt;HTMLElement&lt;/a&gt;}</span>
 <span class="c">    */</span>
     <span class="nx">_getFirstElement</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">,</span> <span class="nx">p_sTagName</span><span class="o">)</span> <span class="o">{</span>
-
-        <span class="k">var</span> <span class="nx">oElement</span><span class="o">;</span>
-
-        <span class="k">if</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">.</span><span class="nx">firstChild</span> <span class="o">&amp;&amp;</span> <span class="nx">p_oElement</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">==</span> <span class="m">1</span><span class="o">)</span> <span class="o">{</span>
-
-            <span class="nx">oElement</span> <span class="o">=</span> <span class="nx">p_oElement</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">;</span>
-
-        <span class="o">}</span>
-        <span class="k">else</span> <span class="k">if</span><span class="o">(</span>
-            <span class="nx">p_oElement</span><span class="o">.</span><span class="nx">firstChild</span> <span class="o">&amp;&amp;</span> 
-            <span class="nx">p_oElement</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">.</span><span class="nx">nextSibling</span> <span class="o">&amp;&amp;</span> 
-            <span class="nx">p_oElement</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">.</span><span class="nx">nextSibling</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">==</span> <span class="m">1</span>
-        <span class="o">)</span> <span class="o">{</span>
-
-            <span class="nx">oElement</span> <span class="o">=</span> <span class="nx">p_oElement</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">.</span><span class="nx">nextSibling</span><span class="o">;</span>
-
+    
+        <span class="k">var</span> <span class="nx">oFirstChild</span> <span class="o">=</span> <span class="nx">p_oElement</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">,</span>
+            <span class="nx">oElement</span><span class="o">;</span>
+    
+        <span class="k">if</span><span class="o">(</span><span class="nx">oFirstChild</span><span class="o">)</span> <span class="o">{</span>
+    
+            <span class="k">if</span><span class="o">(</span><span class="nx">oFirstChild</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">==</span> <span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+    
+                <span class="nx">oElement</span> <span class="o">=</span> <span class="nx">oFirstChild</span><span class="o">;</span>
+    
+            <span class="o">}</span>
+            <span class="k">else</span> <span class="o">{</span>
+    
+                <span class="k">var</span> <span class="nx">oNextSibling</span> <span class="o">=</span> <span class="nx">oFirstChild</span><span class="o">.</span><span class="nx">nextSibling</span><span class="o">;</span>
+    
+                <span class="k">if</span><span class="o">(</span><span class="nx">oNextSibling</span> <span class="o">&amp;&amp;</span> <span class="nx">oNextSibling</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">==</span> <span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                
+                    <span class="nx">oElement</span> <span class="o">=</span> <span class="nx">oNextSibling</span><span class="o">;</span>
+                
+                <span class="o">}</span>
+    
+            <span class="o">}</span>
+    
         <span class="o">}</span>
 
 
@@ -920,10 +927,10 @@
                 <span class="nx">oElement</span> <span class="o">:</span> <span class="kc">false</span><span class="o">;</span>
 
         <span class="o">}</span>
-
+        
         <span class="k">return</span> <span class="nx">oElement</span><span class="o">;</span>
 
-    <span class="o">},</span>
+    <span class="o">},</span>    
 
 
     <span class="c">/**</span>
@@ -1216,11 +1223,6 @@
             <span class="nx">oSubmenuIndicator</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">submenuIndicator</span><span class="o">;</span>
 
 
-        <span class="c">/**</span>
-<span class="c">        * Adds the &quot;hashelptext&quot; class to the necessary nodes and refires the </span>
-<span class="c">        * &quot;selected&quot; and &quot;disabled&quot; configuration events.</span>
-<span class="c">        * @private</span>
-<span class="c">        */</span>
         <span class="k">function</span> <span class="nx">initHelpText</span><span class="o">()</span> <span class="o">{</span>
 
             <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">aNodes</span><span class="o">,</span> <span class="s2">&quot;hashelptext&quot;</span><span class="o">);</span>
@@ -1240,10 +1242,6 @@
         <span class="o">}</span>
 
 
-        <span class="c">/**</span>
-<span class="c">        * Removes the &quot;hashelptext&quot; class and corresponding DOM element (EM).</span>
-<span class="c">        * @private</span>
-<span class="c">        */</span>
         <span class="k">function</span> <span class="nx">removeHelpText</span><span class="o">()</span> <span class="o">{</span>
 
             <span class="nx">Dom</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="nx">aNodes</span><span class="o">,</span> <span class="s2">&quot;hashelptext&quot;</span><span class="o">);</span>
@@ -2077,14 +2075,6 @@
 
             <span class="k">var</span> <span class="nx">nGroupIndex</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">groupIndex</span><span class="o">;</span>
 
-            <span class="c">/**</span>
-<span class="c">            * Finds the next item in an array.</span>
-<span class="c">            * @private</span>
-<span class="c">            * @param {p_aArray} Array to search.</span>
-<span class="c">            * @param {p_nStartIndex} Number indicating the index to </span>
-<span class="c">            * start searching the array.</span>
-<span class="c">            * @return {Object}</span>
-<span class="c">            */</span>
             <span class="k">function</span> <span class="nx">getNextArrayItem</span><span class="o">(</span><span class="nx">p_aArray</span><span class="o">,</span> <span class="nx">p_nStartIndex</span><span class="o">)</span> <span class="o">{</span>
     
                 <span class="k">return</span> <span class="nx">p_aArray</span><span class="o">[</span><span class="nx">p_nStartIndex</span><span class="o">]</span> <span class="o">||</span> 
@@ -2150,14 +2140,6 @@
 
             <span class="k">var</span> <span class="nx">nGroupIndex</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">groupIndex</span><span class="o">;</span>
 
-            <span class="c">/**</span>
-<span class="c">            * Returns the previous item in an array </span>
-<span class="c">            * @private</span>
-<span class="c">            * @param {p_aArray} Array to search.</span>
-<span class="c">            * @param {p_nStartIndex} Number indicating the index to </span>
-<span class="c">            * start searching the array.</span>
-<span class="c">            * @return {Object}</span>
-<span class="c">            */</span>
             <span class="k">function</span> <span class="nx">getPreviousArrayItem</span><span class="o">(</span><span class="nx">p_aArray</span><span class="o">,</span> <span class="nx">p_nStartIndex</span><span class="o">)</span> <span class="o">{</span>
     
                 <span class="k">return</span> <span class="nx">p_aArray</span><span class="o">[</span><span class="nx">p_nStartIndex</span><span class="o">]</span> <span class="o">||</span> 
@@ -2165,15 +2147,6 @@
     
             <span class="o">}</span>
 
-
-            <span class="c">/**</span>
-<span class="c">            * Get the index of the first item in an array </span>
-<span class="c">            * @private</span>
-<span class="c">            * @param {p_aArray} Array to search.</span>
-<span class="c">            * @param {p_nStartIndex} Number indicating the index to </span>
-<span class="c">            * start searching the array.</span>
-<span class="c">            * @return {Object}</span>
-<span class="c">            */</span>    
             <span class="k">function</span> <span class="nx">getFirstItemIndex</span><span class="o">(</span><span class="nx">p_aArray</span><span class="o">,</span> <span class="nx">p_nStartIndex</span><span class="o">)</span> <span class="o">{</span>
     
                 <span class="k">return</span> <span class="nx">p_aArray</span><span class="o">[</span><span class="nx">p_nStartIndex</span><span class="o">]</span> <span class="o">?</span> 
@@ -2441,8 +2414,6 @@
                                 <li class=""><a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuManager.html">YAHOO.widget.MenuManager</a></li>
-                                <li class=""><a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></li>
-                                <li class=""><a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></li>
                         </ul>
                     </div>
 
@@ -2456,8 +2427,6 @@
                                 <li class=""><a href="menubaritem.js.html">menubaritem.js</a></li>
                                 <li class="selected"><a href="menuitem.js.html">menuitem.js</a></li>
                                 <li class=""><a href="menumanager.js.html">menumanager.js</a></li>
-                                <li class=""><a href="menumodule.js.html">menumodule.js</a></li>
-                                <li class=""><a href="menumoduleitem.js.html">menumoduleitem.js</a></li>
                         </ul>
                     </div>
 

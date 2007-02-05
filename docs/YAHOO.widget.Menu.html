@@ -459,6 +459,23 @@ object literal.
 
 
                                     <hr />
+                                    <h4><a name="m_aSubmenuRegion">m_aSubmenuRegion</a>
+                                        <code>- private Array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Array of points (x and y coordinates) representing the 
+triangular region between a menu item and its corresponding submenu.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
                                     <h4><a name="parent">parent</a>
                                         <code>- YAHOO.widget.MenuItem</code>
                                     </h4>
@@ -3898,6 +3915,57 @@ the item belongs.
                                     </div>
                                     <hr />
                                     <h4>
+                                        <a name="pointInTriangle">pointInTriangle</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        Boolean
+                                            <strong>pointInTriangle</strong>
+                                           (
+                                                
+                                                        
+                                                         Array
+                                                    
+                                                
+
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns true if a point is inside the area of a triangle.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>Array &lt;p_aRegion&gt;</code>
+                                                             containing the x and y coordinates of each point in
+the triangle.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>Array &lt;p_aPoint&gt;</code>
+                                                             containing the x and y coordinates of the point.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
                                         <a name="removeItem">removeItem</a></h4>
                                     <div class="detail">
                                         <code>
@@ -4780,8 +4848,6 @@ between "block" (true) or "none" (false).
                                 <li class=""><a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuManager.html">YAHOO.widget.MenuManager</a></li>
-                                <li class=""><a href="YAHOO.widget.MenuModule.html">YAHOO.widget.MenuModule</a></li>
-                                <li class=""><a href="YAHOO.widget.MenuModuleItem.html">YAHOO.widget.MenuModuleItem</a></li>
                         </ul>
                     </div>
 
@@ -4795,8 +4861,6 @@ between "block" (true) or "none" (false).
                                 <li class=""><a href="menubaritem.js.html">menubaritem.js</a></li>
                                 <li class=""><a href="menuitem.js.html">menuitem.js</a></li>
                                 <li class=""><a href="menumanager.js.html">menumanager.js</a></li>
-                                <li class=""><a href="menumodule.js.html">menumodule.js</a></li>
-                                <li class=""><a href="menumoduleitem.js.html">menumoduleitem.js</a></li>
                         </ul>
                     </div>
 
@@ -4912,6 +4976,12 @@ href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.
 html#ID-22445964">HTMLDivElement</a>&gt;</code>-->
                                 </li>
                                 <li><a href="#lazyLoad">lazyLoad</a>
+                                        <!--<code>&lt;<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+level-one-html.html#ID-94282980">HTMLSelectElement</a>|<a 
+href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.
+html#ID-22445964">HTMLDivElement</a>&gt;</code>-->
+                                </li>
+                                <li><a href="#m_aSubmenuRegion">m_aSubmenuRegion</a>
                                         <!--<code>&lt;<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
 level-one-html.html#ID-94282980">HTMLSelectElement</a>|<a 
 href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.
@@ -5126,6 +5196,9 @@ html#ID-22445964">HTMLDivElement</a>&gt;</code>-->
                                 </li>
                                 <li><!--<code>YAHOO.widget.MenuItem</code>-->
                                 <a href="#insertItem">insertItem</a>
+                                </li>
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#pointInTriangle">pointInTriangle</a>
                                 </li>
                                 <li><!--<code>YAHOO.widget.MenuItem</code>-->
                                 <a href="#removeItem">removeItem</a>

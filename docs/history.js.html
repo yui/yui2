@@ -208,6 +208,7 @@
 <span class="c"></span>        <span class="k">var</span> <span class="nx">fqstate</span> <span class="o">=</span> <span class="nx">elem</span> <span class="o">?</span> <span class="nx">elem</span><span class="o">.</span><span class="nx">innerText</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
 
         <span class="nx">setInterval</span><span class="o">(</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nx">doc</span> <span class="o">=</span> <span class="nx">_iframe</span><span class="o">.</span><span class="nx">contentWindow</span><span class="o">.</span><span class="nb">document</span><span class="o">;</span>
             <span class="nx">elem</span> <span class="o">=</span> <span class="nx">doc</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span> <span class="s2">&quot;state&quot;</span> <span class="o">);</span>
             <span class="c">// See my comment above about using innerText instead of innerHTML...</span>
 <span class="c"></span>            <span class="k">var</span> <span class="nx">newfqstate</span> <span class="o">=</span> <span class="nx">elem</span> <span class="o">?</span> <span class="nx">elem</span><span class="o">.</span><span class="nx">innerText</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
