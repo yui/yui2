@@ -1,0 +1,88 @@
+<!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Example: DataTable - Integrated Feature Set (YUI Library)</title>
+<link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
+<link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
+<link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
+<link type="text/css" rel="stylesheet" href="../../build/datatable/assets/datatable.css">
+<link type="text/css" rel="stylesheet" href="./css/examples.css">
+<link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
+<style type="text/css">
+/* custom css*/
+#complex {margin:1em;}
+#complex table {border-collapse:collapse;}
+#complex th, #paginated td {border:1px solid #000;width:10em;}
+#complex th {background-color:#696969;color:#fff;}/*dark gray*/
+#complex .yui-dt-odd {background-color:#eee;} /*light gray*/
+#complex .yui-dt-selected {background-color:#97C0A5;} /*green*/
+
+.areacodestyle {text-align:center;}
+.statestyle {padding-left:1em;}
+</style>
+</head>
+<body>
+<div id="hd">
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Integrated Feature Set</h1>
+</div>
+<div id="bd">
+    <div id="complex"></div>
+</div>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
+<script type="text/javascript" src="./js/data.js"></script>
+<script language="JavaScript">
+var myLogger = new YAHOO.widget.LogReader();
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+// Custom sort functionality to sort by areacode within states
+YAHOO.example.sortStatesAsc = function(a, b) {
+    var comp = YAHOO.util.Sort.compareAsc;
+    var compState = comp(a.state, b.state);
+    return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
+};
+YAHOO.example.sortStatesDesc = function(a, b) {
+    var comp = YAHOO.util.Sort.compareDesc;
+    var compState = comp(a.state, b.state);
+    return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
+};
+
+var myColumnHeaders = [
+    {key:"areacode",text:"Area Codes",width:"8em",className:"areacodestyle",sortable:true},
+    {key:"state",text:"States",width:"16em",className:"statestyle",sortable:true,sortOptions:{ascHandler:YAHOO.example.sortStatesAsc,descHandler:YAHOO.example.sortStatesDesc}}
+];
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+myDataSource.responseSchema = {
+    fields: ["areacode","state"]
+};
+
+var myConfigs = {
+    caption:"Example: Integrated Feature Set",
+    sortedBy:"areacode",
+    sortedByDir:"asc",
+    pageNumber: 1,
+    rowsPerPage: 25,
+    startRecordIndex: 1,
+    rowsPerPageDropdown: [10,25,50,100],
+}
+
+var myDataTable = new YAHOO.widget.DataTable("complex",myColumnSet,myDataSource,myConfigs);
+myDataTable.subscribe("cellClickEvent",myDataTable.onEventSelectRow);
+</script>
+</body>
+</html>
+
+
+
+
+
