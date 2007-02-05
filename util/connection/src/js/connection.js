@@ -659,7 +659,7 @@ YAHOO.util.Connect =
 	{
 		if(this._has_default_headers){
 			for(var prop in this._default_headers){
-				if(this._default_headers.hasOwnProperty(prop)){
+				if(YAHOO.lang.hasOwnProperty(this._default_headers,prop)){
 					o.conn.setRequestHeader(prop, this._default_headers[prop]);
 					YAHOO.log('Default HTTP header ' + prop + ' set with value of ' + this._default_headers[prop], 'info', 'Connection');
 				}
@@ -668,7 +668,7 @@ YAHOO.util.Connect =
 
 		if(this._has_http_headers){
 			for(var prop in this._http_headers){
-				if(this._http_headers.hasOwnProperty(prop)){
+				if(YAHOO.lang.hasOwnProperty(this._http_headers,prop)){
 					o.conn.setRequestHeader(prop, this._http_headers[prop]);
 					YAHOO.log('HTTP header ' + prop + ' set with value of ' + this._http_headers[prop], 'info', 'Connection');
 				}
