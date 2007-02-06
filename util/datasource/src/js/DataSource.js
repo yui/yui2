@@ -1,3 +1,13 @@
+/**
+ * The DataSource utility provides a common configurable interface for widgets
+ * to access a variety of data, from JavaScript arrays to online servers over
+ * XHR.
+ *
+ * @module datasource
+ * @requires event
+ * @title DataSource Utility
+ */
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
