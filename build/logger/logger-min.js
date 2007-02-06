@@ -54,4 +54,4 @@ elapsedTime+"ms): "+
 oEntry.source+": "+
 oEntry.msg;console.log(output);}};YAHOO.widget.Logger._onWindowError=function(sMsg,sUrl,sLine){try{YAHOO.widget.Logger.log(sMsg+' ('+sUrl+', line '+sLine+')',"window");if(YAHOO.widget.Logger._origOnWindowError){YAHOO.widget.Logger._origOnWindowError();}}
 catch(e){return false;}};if(window.onerror){YAHOO.widget.Logger._origOnWindowError=window.onerror;}
-window.onerror=YAHOO.widget.Logger._onWindowError;YAHOO.widget.Logger.log("Logger initialized");
+window.onerror=YAHOO.widget.Logger._onWindowError;YAHOO.widget.Logger.log("Logger initialized");YAHOO.register("logger",YAHOO.widget.Logger,{version:"@VERSION@",build:"@BUILD@"});

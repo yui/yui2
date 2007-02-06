@@ -174,4 +174,4 @@ else{this.data=aData;this._init();}};YAHOO.widget.DS_JSArray.prototype=new YAHOO
 for(var i=aData.length-1;i>=0;i--){var aDataset=[];if(aData[i]){if(aData[i].constructor==String){aDataset[0]=aData[i];}
 else if(aData[i].constructor==Array){aDataset=aData[i];}}
 if(aDataset[0]&&(aDataset[0].constructor==String)){var sKeyIndex=(this.queryMatchCase)?encodeURIComponent(aDataset[0]).indexOf(sQuery):encodeURIComponent(aDataset[0]).toLowerCase().indexOf(sQuery);if((!bMatchContains&&(sKeyIndex===0))||(bMatchContains&&(sKeyIndex>-1))){aResults.unshift(aDataset);}}}}
-this.getResultsEvent.fire(this,oParent,sQuery,aResults);oCallbackFn(sQuery,aResults,oParent);};
+this.getResultsEvent.fire(this,oParent,sQuery,aResults);oCallbackFn(sQuery,aResults,oParent);};YAHOO.register("autocomplete",YAHOO.widget.AutoComplete,{version:"@VERSION@",build:"@BUILD@"});

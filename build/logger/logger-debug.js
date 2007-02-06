@@ -65,6 +65,7 @@ YAHOO.widget.LogMsg.prototype.source = null;
  */
 YAHOO.widget.LogMsg.prototype.sourceDetail = null;
 
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -153,6 +154,7 @@ YAHOO.widget.LogWriter.prototype.setSource = function(sSource) {
  * @private
  */
 YAHOO.widget.LogWriter.prototype._source = null;
+
 
 
 
@@ -1227,6 +1229,7 @@ YAHOO.widget.LogReader.prototype._onNewLog = function(sType, aArgs, oSelf) {
 YAHOO.widget.LogReader.prototype._onReset = function(sType, aArgs, oSelf) {
     oSelf._filterLogs();
 };
+
  /**
  * The Logger widget provides a simple way to read or write log messages in
  * JavaScript code. Integration with the YUI Library's debug builds allow
@@ -1584,3 +1587,5 @@ window.onerror = YAHOO.widget.Logger._onWindowError;
 
 YAHOO.widget.Logger.log("Logger initialized");
 
+
+YAHOO.register("logger", YAHOO.widget.Logger, {version: "@VERSION@", build: "@BUILD@"});
