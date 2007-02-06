@@ -1557,7 +1557,15 @@ YAHOO.widget.DataTable.prototype.dataSource = null;
 YAHOO.widget.DataTable.prototype.initialRequest = "";
 
 /**
- * Summary of table data for SUMMARY attribute. Recommended for accessibility.
+ * Defines value of CAPTION attribute.
+ *
+ * @property caption
+ * @type String
+ */
+YAHOO.widget.DataTable.prototype.caption = null;
+
+/**
+ * Defines value of SUMMARY attribute.
  *
  * @property summary
  * @type String
