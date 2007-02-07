@@ -2139,8 +2139,6 @@ _onMenuKeyDown: function(p_sType, p_aArgs, p_oButton) {
 */
 _onMenuRender: function(p_sType, p_aArgs, p_oButton) {
 
-    // subscribe to the command events            
-
     var aItems = this._menu.getItems(),
         nItems = aItems.length,
         oItem;
@@ -2155,9 +2153,9 @@ _onMenuRender: function(p_sType, p_aArgs, p_oButton) {
 
             if(oItem) {
 
-                oItem.cfg.setProperty("command", {
+                oItem.cfg.setProperty("onclick", {
                 
-                    fn: this._onMenuItemCommand,
+                    fn: this._onMenuItemClick,
                     obj: oItem,
                     scope: this
                 
@@ -2174,8 +2172,8 @@ _onMenuRender: function(p_sType, p_aArgs, p_oButton) {
 
 
 /**
-* @method _onMenuItemCommand
-* @description "command" event handler for the items in the button's menu.
+* @method _onMenuItemClick
+* @description "click" event handler for the items in the button's menu.
 * @private
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
@@ -2183,7 +2181,7 @@ _onMenuRender: function(p_sType, p_aArgs, p_oButton) {
 * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item 
 * that fired the event.
 */
-_onMenuItemCommand: function(p_sType, p_aArgs, p_oItem) {
+_onMenuItemClick: function(p_sType, p_aArgs, p_oItem) {
 
     this._menu.srcElement.selectedIndex = p_oItem.index;
 
