@@ -129,17 +129,6 @@ YAHOO.extend(YAHOO.widget.ButtonGroup, YAHOO.util.Element, {
 _buttons: null,
 
 
-/** 
-* @property _checkedButton
-* @description Object reference for the button in the button group that 
-* is checked.
-* @default null
-* @protected
-* @type Boolean
-*/
-_checkedButton: null,
-
-
 
 // Constants
 
@@ -274,7 +263,7 @@ _onKeyDown: function(p_oEvent) {
 _onButtonCheckedChange: function(p_oEvent, p_oButton) {
 
     var bChecked = p_oEvent.newValue,
-        oCheckedButton = this._checkedButton;
+        oCheckedButton = this.get("checkedButton");
 
     if(bChecked && oCheckedButton != p_oButton) {
 
@@ -284,9 +273,7 @@ _onButtonCheckedChange: function(p_oEvent, p_oButton) {
 
         }
 
-
-        this._checkedButton = p_oButton;
-        
+        this.set("checkedButton", p_oButton);
         this.set("value", p_oButton.get("value"));
 
     }
@@ -478,6 +465,20 @@ initAttributes: function(p_oAttributes) {
     this.setAttributeConfig("container", {
 
         value: oAttributes.container
+
+    });
+
+
+	/**
+	* @config checkedButton
+    * @description Reference for the button in the button group that 
+    * is checked.
+	* @type YAHOO.widget.Button
+	* @default null
+	*/
+    this.setAttributeConfig("checkedButton", {
+
+        value: null
 
     });
 
