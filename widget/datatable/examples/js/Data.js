@@ -11,11 +11,11 @@ YAHOO.example.Data = {
         currStorage: 10,
         maxStorage: 200,
         messages: [
-            {XID: "9897",Date:new Date(1981, 2, 24),To:"Joe",From:"Jenny",Attachment:false,Subject:"Check out my new pictures"},
-            {XID: "7899",Date:new Date(1980, 1, 11),To:"Jane",From:"Jenny",Attachment:false,Subject:"Let's have lunch"},
-            {XID: "6789",Date:new Date(1978, 11, 12),To:"Ann",From:"Jenny",Attachment:false,Subject:"Here's the info you requested"},
-            {XID: "4996",Date:new Date(1974, 1, 11),To:"Bob",From:"Jenny",Attachment:true,Subject:"RE: Let's have lunch"},
-            {XID: "4544",Date:new Date(1974, 1, 10),To:"Charlie",From:"Jenny",Attachment:false,Subject:"Birthday party Saturday"}
+            {XID: "9897",Date:new Date(1981, 2, 24),To:"Joe",From:"Jenny",Unread:false,Subject:"Check out my new pictures"},
+            {XID: "7899",Date:new Date(1980, 1, 11),To:"Jane",From:"Jenny",Unread:false,Subject:"Let's have lunch"},
+            {XID: "6789",Date:new Date(1978, 11, 12),To:"Ann",From:"Jenny",Unread:false,Subject:"Here's the info you requested"},
+            {XID: "4996",Date:new Date(1974, 1, 11),To:"Bob",From:"Jenny",Unread:true,Subject:"RE: Let's have lunch"},
+            {XID: "4544",Date:new Date(1974, 1, 10),To:"Charlie",From:"Jenny",Unread:false,Subject:"Birthday party Saturday"}
         ]
     },
 

@@ -35,16 +35,17 @@
 <script type="text/javascript">
 var myLogger = new YAHOO.widget.LogReader();
 
-var formatAttchColumn = function(elCell, oColumn, oRecord, oData) {
-    if(oRecord["Attachment"]) {
+// Define a custom formatter for one of the Columns
+var myFormatter = function(elCell, oColumn, oRecord, oData) {
+    if(oRecord["Unread"]) {
         elCell.innerHTML = "X";
     }
 };
 
 var myColumnHeaders = [
+    {text:"New",formatter:myFormatter},
     {key:"Date",type:"date"},
     {key:"To"},
-    {text:"Attchmt",abbr:"Attachment",formatter:formatAttchColumn},
     {key:"Subject"}
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
@@ -53,10 +54,11 @@ var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
 myDataSource.responseSchema = {
     resultsList: ["messages"],
-    fields: ["Date","To","From","Subject","XID","Date","Attachment"]
+    fields: ["Date","To","From","Subject","XID","Date","Unread"]
 };
 
-YAHOO.widget.DataTable.formatDate = function(elCell, oColumn, oRecord, oData) {
+// Override the built-in Column formatter
+YAHOO.widget.Column.formatDate = function(elCell, oColumn, oRecord, oData) {
     var oDate = oData;
     var sMonth;
     switch(oDate.getMonth()) {
