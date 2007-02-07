@@ -28,8 +28,9 @@
 * </dl>
 * @title Button Library
 * @namespace YAHOO.widget
-* @requires yahoo, dom, event
-* @optional menu
+* @requires yahoo, dom, element, event
+* @optional container, menu
+* @beta
 */
 
 
@@ -561,14 +562,14 @@ _menu: null,
 
 
 /** 
-* @property _command
-* @description Object reference to the button's current value for the "command"
-* attribute.
+* @property _onclick
+* @description Object reference to the button's current value for the "onclick"
+* configuration attribute.
 * @default null
 * @protected
 * @type Object
 */
-_command: null,
+_onclick: null,
 
 
 /** 
@@ -653,7 +654,7 @@ CHECK_ACTIVATION_KEYS: [32],
 /**
 * @property ACTIVATION_KEYS
 * @description Array of numbers representing keys that (when presed) toggle 
-* the button's "active" state and fire the button's "command" event.
+* the button's "active" state.
 * @default [13, 32]
 * @final
 * @type Array
@@ -1026,38 +1027,37 @@ _setChecked: function(p_bChecked) {
 
 
 /**
-* @method _setCommand
-* @description Sets the value of the button's "command" attribute.
+* @method _setOnClick
+* @description Sets the value of the button's "onclick" attribute.
 * @protected
-* @param {Object} p_oCommand Object indicating the value for the button's 
-* "command" attribute.
+* @param {Object} p_oObject Object indicating the value for the button's 
+* "onclick" attribute.
 */
-_setCommand: function(p_oCommand) {
+_setOnClick: function(p_oObject) {
 
     /*
-        Remove any existing listeners if a command has already 
+        Remove any existing listeners if a "click" event handler has already 
         been specified.
     */
 
-    if(this._command && (this._command != p_oCommand)) {
+    if(this._onclick && (this._onclick != p_oObject)) {
 
-        this.removeListener("command", this._command.fn);
+        this.removeListener("click", this._onclick.fn);
 
-        this._command = null;
+        this._onclick = null;
 
     }
 
 
     if(
-        !this._command && 
-        Lang.isObject(p_oCommand) && 
-        ("fn" in p_oCommand) && 
-        Lang.isFunction(p_oCommand.fn)
+        !this._onclick && 
+        Lang.isObject(p_oObject) && 
+        Lang.isFunction(p_oObject.fn)
     ) {
 
-        this.on("command", p_oCommand.fn, p_oCommand.obj, p_oCommand.scope);
+        this.on("click", p_oObject.fn, p_oObject.obj, p_oObject.scope);
 
-        this._command = p_oCommand;
+        this._onclick = p_oObject;
 
     }
 
@@ -1083,59 +1083,89 @@ _setMenu: function(p_oMenu) {
 
     var oMenu;
 
-    if(p_oMenu instanceof YAHOO.widget.Menu) {
-
-        oMenu = p_oMenu;
-
-    }
-    else if(Lang.isArray(p_oMenu)) {
-
-        oMenu = new YAHOO.widget.Menu(
-                                    Dom.generateId(), 
-                                    { lazyload: true, itemdata: p_oMenu }
-                                );
-       
-    }
-    else if(Lang.isString(p_oMenu) || (p_oMenu && p_oMenu.nodeName)) {
-
-        oMenu = new YAHOO.widget.Menu(p_oMenu, { lazyload: true });
+    function initMenu() {
+    
+        if(oMenu) {
+    
+            oMenu.showEvent.subscribe(this._onMenuShow, this, true);
+            oMenu.hideEvent.subscribe(this._onMenuHide, this, true);
+            oMenu.keyDownEvent.subscribe(this._onMenuKeyDown, this, true);
+    
+            var oSrcElement = oMenu.srcElement;
+    
+            if(oSrcElement && oSrcElement.tagName.toUpperCase() == "SELECT") {
+    
+                oSrcElement.style.display = "none";
+    
+                oMenu.renderEvent.subscribe(this._onMenuRender, this, true);
+    
+            }
+    
+            oMenu.cfg.setProperty(
+                        "container", 
+                        (
+                            this.get("container") || 
+                            this.get("srcelement").parentNode || 
+                            document.body
+                        )
+                    );
+    
+            this._menu = oMenu;
+    
+        }
+        else {
+    
+            this._menu.destroy();
+            this._menu = null;
+    
+        }
     
     }
 
 
-    if(oMenu) {
+    if(p_oMenu instanceof YAHOO.widget.Menu) {
 
-        oMenu.showEvent.subscribe(this._onMenuShow, this, true);
-        oMenu.hideEvent.subscribe(this._onMenuHide, this, true);
-        oMenu.keyDownEvent.subscribe(this._onMenuKeyDown, this, true);
-
-        var oSrcElement = oMenu.srcElement;
-
-        if(oSrcElement && oSrcElement.tagName.toUpperCase() == "SELECT") {
-
-            oSrcElement.style.display = "none";
-
-            oMenu.renderEvent.subscribe(this._onMenuRender, this, true);
-
-        }
-
-        oMenu.cfg.setProperty(
-                    "container", 
-                    (
-                        this.get("container") || 
-                        this.get("srcelement").parentNode || 
-                        document.body
-                    )
-                );
-
-        this._menu = oMenu;
+        oMenu = p_oMenu;
+        
+        initMenu.call(this);
 
     }
-    else {
+    else if(Lang.isArray(p_oMenu)) {
 
-        this._menu.destroy();
-        this._menu = null;
+        var me = this;
 
+        this.on("appendTo", function() {
+
+            oMenu = new YAHOO.widget.Menu(
+                                        Dom.generateId(), 
+                                        { lazyload: true, itemdata: p_oMenu }
+                                    );
+    
+            initMenu.call(me);
+        
+        });
+
+       
+    }
+    else if(Lang.isString(p_oMenu)) {
+
+        var me = this;
+
+        Event.onContentReady(p_oMenu, function() {
+
+            oMenu = new YAHOO.widget.Menu(this, { lazyload: true });
+
+            initMenu.call(me);
+        
+        });
+    
+    }
+    else if(p_oMenu && p_oMenu.nodeName) {
+
+        oMenu = new YAHOO.widget.Menu(p_oMenu, { lazyload: true });
+    
+        initMenu.call(this);
+    
     }
 
 },
@@ -1335,24 +1365,6 @@ _submitForm: function() {
 },
 
 
-/**
-* @method _fireCommandEvent
-* @description Fires the button's "command" event.
-* @protected
-* @param {Event} p_oEvent Object representing the DOM event object passed 
-* back by the event utility (YAHOO.util.Event).
-*/
-_fireCommandEvent: function(p_oEvent) {
-
-    if(this.isActive() && this.hasFocus()) {
-    
-        this.fireEvent("command", p_oEvent);
-    
-    }
-
-},
-
-
 
 // Protected event handlers
 
@@ -1445,9 +1457,7 @@ _onDocumentMouseUp: function(p_oEvent, p_oButton) {
 
     if(sType == "menubutton" || sType == "splitbutton") {
 
-        this.removeClass(
-                (sType == "menubutton" ? "active" : "activeoption")
-            );
+        this.removeClass((sType == "menubutton" ? "active" : "activeoption"));
 
         this._hideMenu();
 
@@ -1533,7 +1543,7 @@ _onMouseDown: function(p_oEvent) {
 
 
 
-            if(sType == "splitbuton" || sType == "menubutton") {
+            if(sType == "splitbutton" || sType == "menubutton") {
 
                 var me = this;
 
@@ -1586,8 +1596,6 @@ _onMouseUp: function(p_oEvent) {
         
         }
 
-
-        this._fireCommandEvent(p_oEvent);
 
         this._activationButtonPressed = false;
         
@@ -1780,10 +1788,6 @@ _onKeyUp: function(p_oEvent, p_oButton) {
             
             }
 
-
-
-            this._fireCommandEvent(p_oEvent);
-
             this._activationKeyPressed = false;
 
             if(this.get("type") != "menubutton") {
@@ -1800,13 +1804,13 @@ _onKeyUp: function(p_oEvent, p_oButton) {
 
 
 /**
-* @method _onCommand
-* @description "command" event handler for the button.
+* @method _onClick
+* @description "click" event handler for the button.
 * @protected
 * @param {Event} p_oEvent Object representing the DOM event object passed 
 * back by the event utility (YAHOO.util.Event).
 */
-_onCommand: function(p_oEvent) {
+_onClick: function(p_oEvent) {
 
     var sType = this.get("type");
 
@@ -1863,6 +1867,78 @@ _onAppendTo: function(p_oEvent) {
     if(oForm) {
 
         Event.on(oForm, "reset", this._onFormReset, this, true);
+        Event.on(oForm, "submit", this._onFormSubmit, this, true);
+    
+    }
+
+},
+
+
+/**
+* @method _onFormSubmit
+* @description "submit" event handler for the button's form.
+* @protected
+* @param {Event} p_oEvent Object representing the DOM event object passed 
+* back by the event utility (YAHOO.util.Event).
+* @param {YAHOO.widget.Button} p_oButton Object representing the button.
+*/
+_onFormSubmit: function(p_oEvent, p_oButton) {
+
+    var sType = this.get("type"),
+        oMenu = this.getMenu();
+    
+    
+    if(sType == "radio" || sType == "checkbox") {
+    
+        YAHOO.log("Creating hidden field for button: " + this);
+    
+        this.createHiddenField();
+    
+    }
+    else if(oMenu) {
+    
+        var oSrcElement = oMenu.srcElement;
+    
+        if(
+            !oSrcElement || 
+            (oSrcElement && oSrcElement.tagName.toUpperCase() != "SELECT")
+        ) {
+    
+            var aItems = oMenu.getItems(),
+                nItems = aItems.length,
+                oValue = null,
+                oItem = null;
+            
+        
+            for(var n=0; n<nItems; n++) {
+            
+                oItem = aItems[n];
+                
+                if(oItem.cfg.getProperty("selected")) {
+        
+                    oValue = (!oItem.value || oItem.value === "") ? 
+                                oItem.cfg.getProperty("text") : 
+                                oItem.value;
+    
+                    break;
+                
+                }
+            
+            }
+            
+    
+            if(oValue) {
+    
+                var oField = createInputElement("hidden");
+    
+                oField.name = this.get("name") + "_options";
+                oField.value = oValue;
+    
+                this.getForm().appendChild(oField);
+    
+            }
+    
+        }                
     
     }
 
@@ -2208,9 +2284,8 @@ init: function(p_oElement, p_oAttributes) {
     this.addClass(this.get("type"));
 
     Event.on(this._button, "focus", this._onFocus, this, true);
-
     this.on("mouseover", this._onMouseOver);
-    this.on("command", this._onCommand);
+    this.on("click", this._onClick);
     this.on("appendTo", this._onAppendTo);
     
     var oContainer = this.get("container"),
@@ -2262,6 +2337,22 @@ init: function(p_oElement, p_oAttributes) {
         }
 
     }
+    else if(
+        Dom.inDocument(oElement) && 
+        oSrcElement.tagName.toUpperCase() == "SPAN"
+    ) {
+
+        var oForm = this.getForm();
+        
+        if(oForm) {
+    
+            Event.on(oForm, "reset", this._onFormReset, this, true);
+            Event.on(oForm, "submit", this._onFormSubmit, this, true);
+        
+        }
+
+    }
+
 
     this.logger.log("Initialization completed.");
 
@@ -2284,7 +2375,7 @@ initAttributes: function(p_oAttributes) {
     /**
     * @config type
     * @description String specifying the button's type.  Possible values are: 
-    * "button," "submit," "reset," "checkbox," "radio," "menubutton," 
+    * "button," "link," "submit," "reset," "checkbox," "radio," "menubutton," 
     * and "splitbutton."
     * @default "button"
     * @type String
@@ -2389,20 +2480,6 @@ initAttributes: function(p_oAttributes) {
 
 
     /**
-    * @config accesskey
-    * @description String specifying the accesskey for the button.
-    * @type String
-    */
-    this.setAttributeConfig("accesskey", {
-
-        value: oAttributes.accesskey,
-        validator: Lang.isString,
-        method: this._setAccessKey
-
-    });
-
-
-    /**
     * @config href
     * @description String specifying the href for the button.  Applies only to 
     * buttons of type "link."
@@ -2482,9 +2559,9 @@ initAttributes: function(p_oAttributes) {
 
 
 	/**
-	* @config command
-    * @description Object literal representing the code to be executed in 
-    * response the "keyup" or "mouseup" events.  Format:<br> <code> {<br> 
+	* @config onclick
+    * @description Object literal representing the code to be executed when 
+    * the button is clicked.  Format:<br> <code> {<br> 
     * <strong>fn:</strong> Function,   &#47;&#47; The handler to call when the 
     * event fires.<br> <strong>obj:</strong> Object, &#47;&#47; An object to 
     * pass back to the handler.<br> <strong>scope:</strong> Object &#47;&#47; 
@@ -2492,10 +2569,10 @@ initAttributes: function(p_oAttributes) {
     * @type Object
 	* @default null
 	*/
-    this.setAttributeConfig("command", {
+    this.setAttributeConfig("onclick", {
 
-        value: oAttributes.command,
-        method: this._setCommand
+        value: oAttributes.onclick,
+        method: this._setOnClick
     
     });
 
@@ -2689,65 +2766,70 @@ YAHOO.widget.Button.addHiddenFieldsToForm = function(p_oForm) {
         for(var i=0; i<nButtons; i++) {
 
             oButton = m_oButtons[aButtons[i].id];
-            sType = oButton.get("type");
-            oMenu = oButton.getMenu();
+
+            if(oButton) {
+
+                sType = oButton.get("type");
+                oMenu = oButton.getMenu();
 
 
-            if(sType == "radio" || sType == "checkbox") {
-
-                YAHOO.log("Creating hidden field for button: " + oButton);
-
-                oButton.createHiddenField();
-            
-            }
-            else if(oMenu) {
-
-                var oSrcElement = oMenu.srcElement;
+                if(sType == "radio" || sType == "checkbox") {
     
-                if(
-                    !oSrcElement || 
-                    (
-                        oSrcElement && 
-                        oSrcElement.tagName.toUpperCase() != "SELECT"
-                    )
-                ) {
-
-                    var aItems = oMenu.getItems(),
-                        nItems = aItems.length,
-                        oValue = null,
-                        oItem = null;
-                    
+                    YAHOO.log("Creating hidden field for button: " + oButton);
+    
+                    oButton.createHiddenField();
                 
-                    for(var n=0; n<nItems; n++) {
-                    
-                        oItem = aItems[n];
+                }
+                else if(oMenu) {
+    
+                    var oSrcElement = oMenu.srcElement;
+        
+                    if(
+                        !oSrcElement || 
+                        (
+                            oSrcElement && 
+                            oSrcElement.tagName.toUpperCase() != "SELECT"
+                        )
+                    ) {
+    
+                        var aItems = oMenu.getItems(),
+                            nItems = aItems.length,
+                            oValue = null,
+                            oItem = null;
                         
-                        if(oItem.cfg.getProperty("selected")) {
-                
-                            oValue = (!oItem.value || oItem.value === "") ? 
-                                        oItem.cfg.getProperty("text") : 
-                                        oItem.value;
-
-                            break;
+                    
+                        for(var n=0; n<nItems; n++) {
+                        
+                            oItem = aItems[n];
+                            
+                            if(oItem.cfg.getProperty("selected")) {
+                    
+                                oValue = (!oItem.value || oItem.value === "") ? 
+                                            oItem.cfg.getProperty("text") : 
+                                            oItem.value;
+    
+                                break;
+                            
+                            }
                         
                         }
-                    
-                    }
-                    
-
-                    if(oValue) {
-
-                        var oField = createInputElement("hidden");
+                        
     
-                        oField.name = oButton.get("name") + "_options";
-                        oField.value = oValue;
+                        if(oValue) {
     
-                        oButton.getForm().appendChild(oField);
-
-                    }
-
-                }                
-
+                            var oField = createInputElement("hidden");
+        
+                            oField.name = oButton.get("name") + "_options";
+                            oField.value = oValue;
+        
+                            oButton.getForm().appendChild(oField);
+    
+                        }
+    
+                    }                
+    
+                }
+                
             }
         
         }
@@ -2767,6 +2849,7 @@ YAHOO.widget.Button.addHiddenFieldsToForm = function(p_oForm) {
 * @type YAHOO.util.CustomEvent
 */
 
+
 /**
 * @event blur
 * @description Fires when the menu item loses the input focus.  Passes back a 
@@ -2777,22 +2860,12 @@ YAHOO.widget.Button.addHiddenFieldsToForm = function(p_oForm) {
 * @type YAHOO.util.CustomEvent
 */
 
-/**
-* @event command
-* @description Fires in response to the "keyup" or "mouseup" up event.  Passes 
-* back a single object representing the original DOM event object passed back 
-* by the event utility (YAHOO.util.Event) when the event was fired.  
-* See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> or 
-* "command" configuration attribute for more information on listening for 
-* this event.
-* @type YAHOO.util.CustomEvent
-*/
 
 /**
 * @event option
 * @description Fires when the user invokes the button's option.  Passes back a 
 * single object representing the original DOM event (either "mousedown" or 
-* "keydown") that caused the "command" event to fire.  See <a href="
+* "keydown") that caused the "option" event to fire.  See <a href="
 * YAHOO.util.Element.html#addListener">Element.addListener</a> for more 
 * information on listening for this event.
 * @type YAHOO.util.CustomEvent
