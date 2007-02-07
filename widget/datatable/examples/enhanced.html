@@ -37,7 +37,7 @@ YAHOO.example.enhanceFromMarkup = function() {
     this.columnSet = new YAHOO.widget.ColumnSet(this.columnHeaders);
 
     var markup = YAHOO.util.Dom.get("markup");
-    this.dataTable = new YAHOO.widget.DataTable(markup,this.columnSet,markup,{caption:"Example: Progressively Enhanced Table from Markup"});
+    this.dataTable = new YAHOO.widget.DataTable(markup,this.columnSet,null,{caption:"Example: Progressively Enhanced Table from Markup"});
 };
 
 YAHOO.util.Event.onAvailable("markup",YAHOO.example.enhanceFromMarkup,YAHOO.example.enhanceFromMarkup,true);

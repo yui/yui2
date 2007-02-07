@@ -37,8 +37,13 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     }
 
     // Validate DataSource
-    if(oDataSource && (oDataSource instanceof YAHOO.util.DataSource)) {
-        this.dataSource = oDataSource;
+    if(oDataSource) {
+        if(oDataSource instanceof YAHOO.util.DataSource) {
+            this.dataSource = oDataSource;
+        }
+        else {
+            YAHOO.log("Invalid DataSource", "warn", this.toString());
+        }
     }
 
     // Validate ColumnSet
@@ -69,8 +74,9 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
             }
         }
 
-        // Progressively enhance an existing table from markup
-        if(elTable) {
+        // Progressively enhance an existing table from markup...
+        // while using the markup as the source of data
+        if(elTable && !this.dataSource) {
             // Fill RecordSet with data parsed out of table
             var aRecords = [];
 
@@ -93,20 +99,23 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
                     }
                     aRecords.push(oRecord);
                 }
-
             }
             this._oRecordSet.addRecords(aRecords);
-
             // Then re-do the markup
             this._initTable();
             //TODO: use paginate this.appendRows(this._oRecordSet.getRecords());
             this.paginate();
         }
-        // Create markup from scratch
+        // Create markup from scratch using the provided DataSource
+        else if(this.dataSource) {
+                this._initTable();
+                // Send out for data in an asynchronous request
+                oDataSource.sendRequest(this.initialRequest, this.onDataReturnPaginate, this);
+        }
+        // Else there is no data
         else {
             this._initTable();
-            // Send out for data in an asynchronous request
-            oDataSource.sendRequest(this.initialRequest, this.onDataReturnPaginate, this);
+            this.showEmptyMessage();
         }
     }
     // Container element not found in document
