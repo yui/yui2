@@ -2934,7 +2934,7 @@ _onSubmenuShow: function(p_sType, p_aArgs, p_oSubmenu) {
     
     var oParent = this.parent;
 
-    oParent.submenuIndicator.innerHTML =
+    oParent.submenuIndicator.firstChild.nodeValue = 
         oParent.EXPANDED_SUBMENU_INDICATOR_TEXT;
 
 },
@@ -2954,7 +2954,7 @@ _onSubmenuHide: function(p_sType, p_aArgs, p_oSubmenu) {
     
     var oParent = this.parent;
 
-    oParent.submenuIndicator.innerHTML =
+    oParent.submenuIndicator.firstChild.nodeValue =
         oParent.COLLAPSED_SUBMENU_INDICATOR_TEXT;
 
 },
