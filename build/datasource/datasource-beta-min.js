@@ -24,8 +24,7 @@ else{this.fireEvent("dataErrorEvent",{request:oRequest,callback:oCallback,caller
 oCallback.call(oCaller,oRequest,oParsedResponse);};YAHOO.util.DataSource.prototype.parseArrayData=function(oRequest,oRawResponse){var oParsedResponse=[];var fields=this.responseSchema.fields;for(var i=oRawResponse.length-1;i>-1;i--){var oResult={};for(var j=fields.length;j>-1;j--){oResult[fields[j]]=oRawResponse[i][j]||oRawResponse[i][fields[j]];}
 oParsedResponse.unshift(oResult);}
 return oParsedResponse;};YAHOO.util.DataSource.prototype.parseFlatData=function(oRequest,oRawResponse){var oParsedResponse=[];var recDelim=this.responseSchema.recordDelim;var fieldDelim=this.responseSchema.fieldDelim;var aSchema=this.responseSchema.fields;if(oRawResponse.length>0){var newLength=oRawResponse.length-recDelim.length;if(oRawResponse.substr(newLength)==recDelim){oRawResponse=oRawResponse.substr(0,newLength);}
-var recordsarray=oRawResponse.split(recDelim);for(var i=recordsarray.length-1;i>=1;i--){var dataobject={}
-for(var j=aSchema.length-1;j>=0;j--){var fielddataarray=recordsarray[i].split(fieldDelim);var string=fielddataarray[j];if(string.charAt(0)=="\""){string=string.substr(1);}
+var recordsarray=oRawResponse.split(recDelim);for(var i=recordsarray.length-1;i>=1;i--){var dataobject={};for(var j=aSchema.length-1;j>=0;j--){var fielddataarray=recordsarray[i].split(fieldDelim);var string=fielddataarray[j];if(string.charAt(0)=="\""){string=string.substr(1);}
 if(string.charAt(string.length-1)=="\""){string=string.substr(0,string.length-1);}
 dataobject[aSchema[j]]=string;}
 oParsedResponse.push(dataobject);}}
@@ -36,8 +35,8 @@ else{sValue="";}}
 oResult[field]=sValue;}
 oParsedResponse.unshift(oResult);}}
 if(bError){return null;}
-return oParsedResponse;};YAHOO.util.DataSource.prototype.parseJSONData=function(oRequest,oRawResponse){var bError=false;var oParsedResponse=[];var aSchema=this.responseSchema.fields;var jsonObj,jsonList;if(oRawResponse){if(oRawResponse.constructor==String){if(oRawResponse.parseJSON&&(navigator.userAgent.toLowerCase().indexOf('khtml')==-1)){var jsonObj=oRawResponse.parseJSON();if(!jsonObj){bError=true;}}
-else if(window.JSON&&JSON.parse&&(navigator.userAgent.toLowerCase().indexOf('khtml')==-1)){var jsonObj=JSON.parse(oRawResponse);if(!jsonObj){bError=true;}}
+return oParsedResponse;};YAHOO.util.DataSource.prototype.parseJSONData=function(oRequest,oRawResponse){var bError=false;var oParsedResponse=[];var aSchema=this.responseSchema.fields;var jsonObj,jsonList;if(oRawResponse){if(oRawResponse.constructor==String){if(oRawResponse.parseJSON&&(navigator.userAgent.toLowerCase().indexOf('khtml')==-1)){jsonObj=oRawResponse.parseJSON();if(!jsonObj){bError=true;}}
+else if(window.JSON&&JSON.parse&&(navigator.userAgent.toLowerCase().indexOf('khtml')==-1)){jsonObj=JSON.parse(oRawResponse);if(!jsonObj){bError=true;}}
 else{try{while(oRawResponse.length>0&&(oRawResponse.charAt(0)!="{")&&(oRawResponse.charAt(0)!="[")){oRawResponse=oRawResponse.substring(1,oResponse.length);}
 if(oRawResponse.length>0){var objEnd=Math.max(oRawResponse.lastIndexOf("]"),oRawResponse.lastIndexOf("}"));oRawResponse=oRawResponse.substring(0,objEnd+1);jsonObj=eval("("+oRawResponse+")");if(!jsonObj){bError=true;}}}
 catch(e){bError=true;}}}

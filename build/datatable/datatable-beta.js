@@ -3,7 +3,8 @@
  * displaying tabular data across A-grade browsers.
  *
  * @module datatable
- * @requires datasource
+ * @requires yahoo, dom, event, datasource
+ * @optional dragdrop
  * @title DataTable Widget
  */
 
@@ -366,17 +367,18 @@ else {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Class name of TBODY element that holds data rows.
+ * Class name assigned to TBODY element that holds data rows.
  *
  * @property CLASS_BODY
  * @type String
  * @static
  * @final
+ * @default "yui-dt-body"
  */
 YAHOO.widget.DataTable.CLASS_BODY = "yui-dt-body";
 
 /**
- * Class name of container element within THEAD.
+ * Class name assigned to container element within THEAD.
  *
  * @property CLASS_HEADCONTAINER
  * @type String
@@ -386,335 +388,368 @@ YAHOO.widget.DataTable.CLASS_BODY = "yui-dt-body";
 YAHOO.widget.DataTable.CLASS_HEADCONTAINER = "yui-dt-headcontainer";
 
 /**
- * Class name of resizer handle element within THEAD.
+ * Class name assigned to resizer handle element within THEAD.
  *
  * @property CLASS_HEADRESIZER
  * @type String
  * @static
  * @final
+ * @default "yui-dt-headresizer"
  */
 YAHOO.widget.DataTable.CLASS_HEADRESIZER = "yui-dt-headresizer";
 
 /**
- * Class name of text displayed within THEAD.
+ * Class name assigned to text displayed within THEAD.
  *
  * @property CLASS_HEADTEXT
  * @type String
  * @static
  * @final
+ * @default "yui-dt-headtext"
  */
 YAHOO.widget.DataTable.CLASS_HEADTEXT = "yui-dt-headtext";
 
 /**
- * Class name of even element.
+ * Class name assigned to even TR elements.
  *
  * @property CLASS_EVEN
  * @type String
  * @static
  * @final
+ * @default "yui-dt-even
  */
 YAHOO.widget.DataTable.CLASS_EVEN = "yui-dt-even";
 
 /**
- * Class name of odd element.
+ * Class name assigned to odd TR elements.
  *
  * @property CLASS_ODD
  * @type String
  * @static
  * @final
+ * @default "yui-dt-odd"
  */
 YAHOO.widget.DataTable.CLASS_ODD = "yui-dt-odd";
 
 /**
- * Class name of empty element.
+ * Class name assigned to empty elements.
  *
  * @property CLASS_EMPTY
  * @type String
  * @static
  * @final
+ * @default "yui-dt-empty"
  */
 YAHOO.widget.DataTable.CLASS_EMPTY = "yui-dt-empty";
 
 /**
- * Class name of loading element.
+ * Class name assigned to loading message.
  *
  * @property CLASS_LOADING
  * @type String
  * @static
  * @final
+ * @default "yui-dt-loading"
  */
 YAHOO.widget.DataTable.CLASS_LOADING = "yui-dt-loading";
 
 /**
- * Class name of selected element.
+ * Class name assigned to selected elements.
  *
  * @property CLASS_SELECTED
  * @type String
  * @static
  * @final
+ * @default "yui-dt-selected"
  */
 YAHOO.widget.DataTable.CLASS_SELECTED = "yui-dt-selected";
 
 /**
- * Class name of scrollable TABLE.
+ * Class name assigned to certain elements of a scrollable DataTable.
  *
  * @property CLASS_SCROLLABLE
  * @type String
  * @static
  * @final
+ * @default "yui-dt-scrollable"
  */
 YAHOO.widget.DataTable.CLASS_SCROLLABLE = "yui-dt-scrollable";
 
 /**
- * Class name of sortable column.
+ * Class name assigned to column headers of sortable Columns.
  *
  * @property CLASS_SORTABLE
  * @type String
  * @static
  * @final
+ * @default "yui-dt-sortable"
  */
 YAHOO.widget.DataTable.CLASS_SORTABLE = "yui-dt-sortable";
 
 /**
- * Class name of sorted column in ascending order.
+ * Class name assigned to column headers when sorted in ascending order.
  *
  * @property CLASS_SORTEDBYASC
  * @type String
  * @static
  * @final
+ * @default "yui-dt-sortedbyasc"
  */
 YAHOO.widget.DataTable.CLASS_SORTEDBYASC = "yui-dt-sortedbyasc";
 
 /**
- * Class name of sorted column in descending order.
+ * Class name assigned to column headers when sorted in descending order.
  *
  * @property CLASS_SORTEDBYDESC
  * @type String
  * @static
  * @final
+ * @default "yui-dt-sortedbydesc"
  */
 YAHOO.widget.DataTable.CLASS_SORTEDBYDESC = "yui-dt-sortedbydesc";
 
 /**
- * Class name of pagination link to first page.
+ * Class name assigned to the pagination link "&lt;&lt;".
  *
  * @property CLASS_FIRSTLINK
  * @type String
  * @static
  * @final
+ * @default "yui-dt-firstlink"
  */
 YAHOO.widget.DataTable.CLASS_FIRSTLINK = "yui-dt-firstlink";
 
 /**
- * Class name of pagination non-link to first page.
+ * Class name assigned to the pagination link "&lt;&lt;" when it is disabled.
  *
  * @property CLASS_FIRSTPAGE
  * @type String
  * @static
  * @final
+ * @default "yui-dt-firstpage"
  */
 YAHOO.widget.DataTable.CLASS_FIRSTPAGE = "yui-dt-firstpage";
 
 /**
- * Class name of pagination link to last page.
+ * Class name assigned to the pagination link "&gt;&gt;".
  *
  * @property CLASS_LASTLINK
  * @type String
  * @static
  * @final
+ * @default "yui-dt-lastlink"
  */
 YAHOO.widget.DataTable.CLASS_LASTLINK = "yui-dt-lastlink";
 
 /**
- * Class name of pagination non-link to last page.
+ * Class name assigned to the pagination link "&gt;&gt;" when it is disabled.
  *
  * @property CLASS_LASTPAGE
  * @type String
  * @static
  * @final
+ * @default "yui-dt-lastpage"
  */
 YAHOO.widget.DataTable.CLASS_LASTPAGE = "yui-dt-lastpage";
 
 /**
- * Class name of pagination link to previous page.
+ * Class name assigned to the pagination link "&lt;".
  *
  * @property CLASS_PREVLINK
  * @type String
  * @static
  * @final
+ * @default "yui-dt-prevlink"
  */
 YAHOO.widget.DataTable.CLASS_PREVLINK = "yui-dt-prevlink";
 
 /**
- * Class name of pagination non-link to previous page.
+ * Class name assigned to the pagination link "&lt;" when it is disabled.
  *
  * @property CLASS_PREVPAGE
  * @type String
  * @static
  * @final
+ * @default "yui-dt-prevpage"
  */
 YAHOO.widget.DataTable.CLASS_FIRSTPAGE = "yui-dt-prevpage";
 
 /**
- * Class name of pagination link to next page.
+ * Class name assigned to the pagination link "&gt;".
  *
  * @property CLASS_NEXTLINK
  * @type String
  * @static
  * @final
+ * @default "yui-dt-nextlink"
  */
 YAHOO.widget.DataTable.CLASS_NEXTLINK = "yui-dt-nextlink";
 
 /**
- * Class name of pagination non-link to next page.
+ * Class name assigned to the pagination link "&gt;" when it is disabled.
  *
  * @property CLASS_NEXTPAGE
  * @type String
  * @static
  * @final
+ * @default "yui-dt-nextpage"
  */
 YAHOO.widget.DataTable.CLASS_NEXTPAGE = "yui-dt-nextpage";
 
 
 /**
- * Class name of pagination link to specific page number.
+ * Class name assigned to pagination links to specific page numbers.
  *
  * @property CLASS_PAGELINK
  * @type String
  * @static
  * @final
+ * @default "yui-dt-pagelink"
  */
 YAHOO.widget.DataTable.CLASS_PAGELINK = "yui-dt-pagelink";
 
 /**
- * Class name of pagination non-link to current page number.
+ * Class name assigned to pagination links for specific page numbers that are disabled.
  *
  * @property CLASS_CURRENTPAGE
  * @type String
  * @static
  * @final
+ * @default "yui-dt-currentpage"
  */
 YAHOO.widget.DataTable.CLASS_CURRENTPAGE = "yui-dt-currentpage";
 
 /**
- * Class name of pagination SELECT element.
+ * Class name assigned to the pagination SELECT element.
  *
  * @property CLASS_PAGESELECT
  * @type String
  * @static
  * @final
+ * @default "yui-dt-pageselect"
  */
 YAHOO.widget.DataTable.CLASS_PAGESELECT = "yui-dt-pageselect";
 
 /**
- * Class name of pagination links container element.
+ * Class name assigned to the pagination links container element.
  *
  * @property CLASS_PAGELINKS
  * @type String
  * @static
  * @final
+ * @default "yui-dt-pagelinks"
  */
 YAHOO.widget.DataTable.CLASS_PAGELINKS = "yui-dt-pagelinks";
 
 /**
- * Class name of editable column.
+ * Class name assigned to editable TD elements.
  *
  * @property CLASS_EDITABLE
  * @type String
  * @static
  * @final
+ * @default "yui-dt-editable"
  */
 YAHOO.widget.DataTable.CLASS_EDITABLE = "yui-dt-editable";
 
 /**
- * Class name of cell type checkbox.
+ * Class name assigned to TD elements of type "checkbox".
  *
  * @property CLASS_CHECKBOX
  * @type String
  * @static
  * @final
+ * @default "yui-dt-checkbox"
  */
 YAHOO.widget.DataTable.CLASS_CHECKBOX = "yui-dt-checkbox";
 
 /**
- * Class name of cell type currency.
+ * Class name assigned to TD elements of type "currency".
  *
  * @property CLASS_CURRENCY
  * @type String
  * @static
  * @final
+ * @default "yui-dt-currency"
  */
 YAHOO.widget.DataTable.CLASS_CURRENCY = "yui-dt-currency";
 
 /**
- * Class name of cell type date.
+ * Class name assigned to TD elements of type "date".
  *
  * @property CLASS_DATE
  * @type String
  * @static
  * @final
+ * @default "yui-dt-date"
  */
 YAHOO.widget.DataTable.CLASS_DATE = "yui-dt-date";
 
 /**
- * Class name of cell type EMAIL.
+ * Class name assigned to TD elements of type "email".
  *
  * @property CLASS_EMAIL
  * @type String
  * @static
  * @final
+ * @default "yui-dt-email"
  */
 YAHOO.widget.DataTable.CLASS_EMAIL = "yui-dt-email";
 
 /**
- * Class name of cell type LINK.
+ * Class name assigned to TD elements of type "link".
  *
  * @property CLASS_LINK
  * @type String
  * @static
  * @final
+ * @default "yui-dt-link"
  */
 YAHOO.widget.DataTable.CLASS_LINK = "yui-dt-link";
 
 /**
- * Class name of cell type int.
+ * Class name assigned to TD elements of type "number".
  *
- * @property CLASS_INT
+ * @property CLASS_NUMBER
  * @type String
  * @static
  * @final
+ * @default "yui-dt-number"
  */
 YAHOO.widget.DataTable.CLASS_NUMBER = "yui-dt-number";
 
 /**
- * Class name of cell type string.
+ * Class name assigned to TD elements of type "string".
  *
  * @property CLASS_STRING
  * @type String
  * @static
  * @final
+ * @default "yui-dt-string"
  */
 YAHOO.widget.DataTable.CLASS_STRING = "yui-dt-string";
 
 /**
- * Message to display if table has no data.
+ * Message to display if DataTable has no data.
  *
  * @property MSG_EMPTY
  * @type String
  * @static
  * @final
+ * @default "No records found."
  */
-YAHOO.widget.DataTable.MSG_EMPTY = "Table data has no records.";
+YAHOO.widget.DataTable.MSG_EMPTY = "No records found.";
 
 /**
- * Message to display while table is loading.
+ * Message to display while DataTable is loading data.
  *
  * @property MSG_LOADING
  * @type String
  * @static
  * @final
+ * @default "Loading data..."
  */
-YAHOO.widget.DataTable.MSG_LOADING = "Loading table data...";
+YAHOO.widget.DataTable.MSG_LOADING = "Loading data...";
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -723,10 +758,10 @@ YAHOO.widget.DataTable.MSG_LOADING = "Loading table data...";
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Internal class variable to index multiple data table instances.
+ * Internal class variable to index multiple DataTable instances.
  *
  * @property _nCount
- * @type number
+ * @type Number
  * @private
  * @static
  */
@@ -736,7 +771,7 @@ YAHOO.widget.DataTable._nCount = 0;
  * Instance index.
  *
  * @property _nIndex
- * @type number
+ * @type Number
  * @private
  */
 YAHOO.widget.DataTable.prototype._nIndex = null;
@@ -753,11 +788,11 @@ YAHOO.widget.DataTable.prototype._sName = null;
 //TODO: convert these to public members
 
 /**
- * Container element reference. Is null unless the table is built from scratch into the
+ * Container element reference. Is null unless the TABLE is built from scratch into the
  * provided container.
  *
  * @property _elContainer
- * @type element
+ * @type HTMLElement
  * @private
  */
 YAHOO.widget.DataTable.prototype._elContainer = null;
@@ -781,7 +816,7 @@ YAHOO.widget.DataTable.prototype._elTable = null;
 YAHOO.widget.DataTable.prototype._elBody = null;
 
 /**
- * A ColumnSet instance that describes the Columns of the table.
+ * ColumnSet instance.
  *
  * @property _oColumnSet
  * @type YAHOO.widget.ColumnSet
@@ -790,7 +825,7 @@ YAHOO.widget.DataTable.prototype._elBody = null;
 YAHOO.widget.DataTable.prototype._oColumnSet = null;
 
 /**
- * A RecordSet instance that models the data held in the table.
+ * RecordSet instance.
  *
  * @property _oRecordSet
  * @type YAHOO.widget.RecordSet
@@ -816,6 +851,16 @@ YAHOO.widget.DataTable.prototype._aSelectedRecords = [];
  */
 YAHOO.widget.DataTable.prototype._bFocused = false;
 
+/**
+ * Total number of pages, calculated on the fly.
+ *
+ * @property _totalPages
+ * @type Number
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._totalPages = null;
+
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Private methods
@@ -824,10 +869,8 @@ YAHOO.widget.DataTable.prototype._bFocused = false;
 /**
  * Initializes DataTable's DOM-related row properties once DOM is finalized
  *
- * @method _initRows
- * @private
  */
-YAHOO.widget.DataTable.prototype._initRows = function() {
+/*YAHOO.widget.DataTable.prototype._initRows = function() {
     //TODO: where does this go?
     var topRowCells = this._elBody.rows[0].cells;
     var columns = this._oColumnSet.keys;
@@ -848,12 +891,12 @@ YAHOO.widget.DataTable.prototype._initRows = function() {
             //elHeadRow.cells[j].style.width = setWidth;
         }
     }
-};
+};*/
 
 /**
- * Creates HTML markup: TABLE, THEAD, TBODY.
+ * Creates HTML markup for TABLE, THEAD, TBODY.
  *
- * @method _createTable
+ * @method _initTable
  * @private
  */
 YAHOO.widget.DataTable.prototype._initTable = function() {
@@ -907,7 +950,7 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
 };
 
 /**
- * Populates THEAD element with header cells defined by ColumnSet.
+ * Populates THEAD element with TH cells as defined by ColumnSet.
  *
  * @method _initHead
  * @private
@@ -927,7 +970,7 @@ YAHOO.widget.DataTable.prototype._initHead = function() {
         for(var j=0; j<colTree[i].length; j++) {
             var oColumn = colTree[i][j];
             var elHeadCell = elHeadRow.appendChild(document.createElement("th"));
-            elHeadCell.id = oColumn.id;
+            elHeadCell.id = oColumn.getId();
             this._initHeadCell(elHeadCell,oColumn,i,j);
         }
     }
@@ -940,14 +983,15 @@ YAHOO.widget.DataTable.prototype._initHead = function() {
         var oColumn = this._oColumnSet.keys[k];
         if(oColumn.resizeable && YAHOO.util.DD) {
             //TODO: deal with fixed width tables
+            //TODO: no more oColumn.isLast
             if(!this.fixedWidth || (this.fixedwidth && !oColumn.isLast)) {
                 // TODO: better way to get elHeadContainer
-                var elHeadContainer = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADCONTAINER,"div",YAHOO.util.Dom.get(oColumn.id)))[0];
+                var elHeadContainer = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADCONTAINER,"div",YAHOO.util.Dom.get(oColumn.getId())))[0];
                 var elHeadResizer = elHeadContainer.appendChild(document.createElement("span"));
-                elHeadResizer.id = oColumn.id + "-resizer";
+                elHeadResizer.id = oColumn.getId() + "-resizer";
                 YAHOO.util.Dom.addClass(elHeadResizer,YAHOO.widget.DataTable.CLASS_HEADRESIZER);
                 oColumn.ddResizer = new YAHOO.util.WidthResizer(
-                        this, oColumn.id, elHeadResizer.id, elHeadResizer.id);
+                        this, oColumn.getId(), elHeadResizer.id, elHeadResizer.id);
                 var cancelClick = function(e) {
                     YAHOO.util.Event.stopPropagation(e);
                 };
@@ -996,8 +1040,8 @@ YAHOO.widget.DataTable.prototype._initHeadCell = function(elHeadCell,oColumn,row
     elHeadContent.id = this.id+"-hdrow"+row+"-text"+col;
     YAHOO.util.Dom.addClass(elHeadContent,YAHOO.widget.DataTable.CLASS_HEADTEXT);
 
-    elHeadCell.rowSpan = oColumn.rowspan;
-    elHeadCell.colSpan = oColumn.colspan;
+    elHeadCell.rowSpan = oColumn.getRowSpan();
+    elHeadCell.colSpan = oColumn.getColSpan();
 
     var contentText = oColumn.text || oColumn.key || "";
     if(oColumn.sortable) {
@@ -1016,35 +1060,11 @@ YAHOO.widget.DataTable.prototype._initHeadCell = function(elHeadCell,oColumn,row
 };
 
 /**
- * Enhance existing table's TH cell element markup.
- *
- * @method _enhanceHeadCellMarkup
- * @private
- */
-/*YAHOO.widget.DataTable.prototype._enhanceHeadCell = function() {
-    var oColumnSet = this._oColumnSet;
-    var elHead = this._elTable.tHead;
-    var index = this._nIndex;
-    for(var nodelevel=0; nodelevel<oColumnSet.tree.length; nodelevel++) {
-        var elRow = elHead.rows[nodelevel];
-        elRow.id = this.id+"-hdrow"+nodelevel;
-        var elHeadCellsInRow = elRow.cells;
-        var columnSetRow = oColumnSet.tree[nodelevel];
-        for(var col=0; col< columnSetRow.length; col++) {
-            var oColumn = columnSetRow[col];
-            var elHeadCell = elHeadCellsInRow[col];
-            elHeadCell.id = oColumn.id;
-            this._enhanceHeadCell(elHeadCell,oColumn,nodelevel,col);
-        }
-    }
-    return true;
-};*/
-
-/**
- * Restripes rows with class YAHOO.widget.DataTable.CLASS_EVEN or
+ * Restripes rows by applying class YAHOO.widget.DataTable.CLASS_EVEN or
  * YAHOO.widget.DataTable.CLASS_ODD.
  *
  * @method _restripeRows
+ * @param range {Number} (optional) Range defines a subset of rows to restripe.
  * @private
  */
 YAHOO.widget.DataTable.prototype._restripeRows = function(range) {
@@ -1067,13 +1087,14 @@ YAHOO.widget.DataTable.prototype._restripeRows = function(range) {
 };
 
 /**
- * Changes element CSS to CLASS_SELECTED and fires selectEvent.
+ * Sets elements to selected state. Does not fire any events.
  *
  * @method _select
- * @param aRows {HTMLElement[] | String[]} Array of HTML elements.
+ * @param els {HTMLElement[] | String[]} Array of HTML elements by reference or ID string.
  * @private
  */
 YAHOO.widget.DataTable.prototype._select = function(els) {
+//TODO: put els in an array if it is just one element?
     for(var i=0; i<els.length; i++) {
         // Set the style
         YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
@@ -1082,13 +1103,14 @@ YAHOO.widget.DataTable.prototype._select = function(els) {
 };
 
 /**
- * Sets one or more rows to the unselected.
+ * Sets elements to the unselected state. Does not fire any events.
  *
  * @method _unselect
- * @param aRows {HTMLElement[] | String[]} Array of HTML elements.
+ * @param els {HTMLElement[] | String[]} Array of HTML elements by reference or ID string.
  * @private
  */
 YAHOO.widget.DataTable.prototype._unselect = function(els) {
+//TODO: put els in an array if it is just one element?
     var array = this._aSelectedRecords;
     for(var i=0; i<els.length; i++) {
         // Remove the style
@@ -1100,6 +1122,7 @@ YAHOO.widget.DataTable.prototype._unselect = function(els) {
  * Unselects all selected rows.
  *
  * @method unselectAllRows
+ * @private
  */
 YAHOO.widget.DataTable.prototype._unselectAllRows = function() {
     var selectedRows = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elBody);
@@ -1110,6 +1133,7 @@ YAHOO.widget.DataTable.prototype._unselectAllRows = function() {
  * Unselects all selected cells.
  *
  * @method unselectAllCells
+ * @private
  */
 YAHOO.widget.DataTable.prototype._unselectAllCells = function() {
     var selectedCells = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this._elBody);
@@ -1127,8 +1151,8 @@ YAHOO.widget.DataTable.prototype._unselectAllCells = function() {
  * Handles blur events on the TABLE element.
  *
  * @method _onBlur
- * @param e {event} The mouseover event.
- * @param oSelf {object} DataTable instance.
+ * @param e {HTMLEvent} The mouseover event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
 YAHOO.widget.DataTable.prototype._onBlur = function(e, oSelf) {
@@ -1139,8 +1163,8 @@ YAHOO.widget.DataTable.prototype._onBlur = function(e, oSelf) {
  * Handles mouseover events on the TABLE element.
  *
  * @method _onMouseover
- * @param e {event} The mouseover event.
- * @param oSelf {object} DataTable instance.
+ * @param e {HTMLEvent} The mouseover event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
 YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
@@ -1181,8 +1205,8 @@ YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
  * Handles mousedown events on the TABLE element.
  *
  * @method _onMousedown
- * @param e {event} The mouseover event.
- * @param oSelf {object} DataTable instance.
+ * @param e {HTMLEvent} The mouseover event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
 YAHOO.widget.DataTable.prototype._onMousedown = function(e, oSelf) {
@@ -1224,8 +1248,8 @@ YAHOO.widget.DataTable.prototype._onMousedown = function(e, oSelf) {
  * Handles click events on the TABLE element.
  *
  * @method _onClick
- * @param e {event} The click event.
- * @param oSelf {object} DataTable instance.
+ * @param e {HTMLEvent} The click event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
 YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
@@ -1280,8 +1304,8 @@ YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
  * Handles doubleclick events on the TABLE element.
  *
  * @method _onDoubleclick
- * @param e {event} The doubleclick event.
- * @param oSelf {object} DataTable instance.
+ * @param e {HTMLEvent} The doubleclick event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
 YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
@@ -1326,8 +1350,8 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
  * Handles keydown events on the TABLE.
  *
  * @method _onKeydown
- * @param e {event} The key event.
- * @param oSelf {object} DataTable instance.
+ * @param e {HTMLEvent} The key event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
 YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
@@ -1401,8 +1425,8 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
  * Handles keyup events on the DOCUMENT.
  *
  * @method _onKeyup
- * @param e {event} The key event.
- * @param oSelf {object} DataTable instance.
+ * @param e {HTMLEvent} The key event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
 YAHOO.widget.DataTable.prototype._onKeyup = function(e, oSelf) {
@@ -1438,8 +1462,8 @@ YAHOO.widget.DataTable.prototype._onKeyup = function(e, oSelf) {
  * Handles click events on paginator links.
  *
  * @method _onPagerClick
- * @param e {event} The click event.
- * @param oSelf {object} DataTable instance.
+ * @param e {HTMLEvent} The click event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
 YAHOO.widget.DataTable.prototype._onPagerClick = function(e, oSelf) {
@@ -1462,13 +1486,13 @@ YAHOO.widget.DataTable.prototype._onPagerClick = function(e, oSelf) {
                             oSelf.showPage(1);
                             break;
                         case YAHOO.widget.DataTable.CLASS_LASTLINK:
-                            oSelf.showPage(oSelf.totalPages);
+                            oSelf.showPage(oSelf._totalPages);
                             break;
                         case YAHOO.widget.DataTable.CLASS_PREVLINK:
-                            oSelf.showPage(oSelf.pageNumber-1);
+                            oSelf.showPage(oSelf.pageCurrent-1);
                             break;
                         case YAHOO.widget.DataTable.CLASS_NEXTLINK:
-                            oSelf.showPage(oSelf.pageNumber+1);
+                            oSelf.showPage(oSelf.pageCurrent+1);
                             break;
                     }
                     knownTag = true;
@@ -1492,8 +1516,8 @@ YAHOO.widget.DataTable.prototype._onPagerClick = function(e, oSelf) {
  * Handles change events on paginator SELECT.
  *
  * @method _onPagerSelect
- * @param e {event} The change event.
- * @param oSelf {object} DataTable instance.
+ * @param e {HTMLEvent} The change event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
 YAHOO.widget.DataTable.prototype._onPagerSelect = function(e, oSelf) {
@@ -1519,9 +1543,9 @@ YAHOO.widget.DataTable.prototype._onPagerSelect = function(e, oSelf) {
  * Handles row delete events.
  *
  * @method _onRowDelete
- * @param oArgs.rowIndex {Number || Array} The index(es) of the deleted row(s).
- * @param oArgs.rowId {String || Array} DOM ID(s) of the deleted row(s).
- * @param oArgs.recordId {String || Array} The Record ID(s) of the deleted row(s).
+ * @param oArgs.rowIndex {Number || Number[]} The index(es) of the deleted row(s).
+ * @param oArgs.rowId {String || String[]} DOM ID(s) of the deleted row(s).
+ * @param oArgs.recordId {String || String[]} The Record ID(s) of the deleted row(s).
  * @private
  */
 YAHOO.widget.DataTable.prototype._onRowDelete = function(oArgs) {
@@ -1543,7 +1567,7 @@ YAHOO.widget.DataTable.prototype._onRowDelete = function(oArgs) {
 YAHOO.widget.DataTable.prototype.dataSource = null;
 
 /**
- * Initial request parameters to send to DataSource.
+ * Initial request to send to DataSource.
  *
  * @property initialRequest
  * @type String
@@ -1552,7 +1576,15 @@ YAHOO.widget.DataTable.prototype.dataSource = null;
 YAHOO.widget.DataTable.prototype.initialRequest = "";
 
 /**
- * Summary of table data for SUMMARY attribute. Recommended for accessibility.
+ * Defines value of CAPTION attribute.
+ *
+ * @property caption
+ * @type String
+ */
+YAHOO.widget.DataTable.prototype.caption = null;
+
+/**
+ * Defines value of SUMMARY attribute.
  *
  * @property summary
  * @type String
@@ -1560,7 +1592,7 @@ YAHOO.widget.DataTable.prototype.initialRequest = "";
 YAHOO.widget.DataTable.prototype.summary = null;
 
 /**
- * True if TABLE width is a fixed size.
+ * True if DataTable's width is a fixed size.
  *
  * @property fixedWidth
  * @type Boolean
@@ -1569,7 +1601,7 @@ YAHOO.widget.DataTable.prototype.summary = null;
 YAHOO.widget.DataTable.prototype.fixedWidth = false;
 
 /**
- * True if TBODY scrolls while headers remain fixed.
+ * True if TBODY should scroll while THEAD remains fixed.
  *
  * @property scrollable
  * @type Boolean
@@ -1587,7 +1619,7 @@ YAHOO.widget.DataTable.prototype.scrollable = false;
 YAHOO.widget.DataTable.prototype.singleSelect = false;
 
 /**
- * Context menu.
+ * ContextMenu instance.
  *
  * @property contextMenu
  * @type YAHOO.widget.ContextMenu
@@ -1597,11 +1629,11 @@ YAHOO.widget.DataTable.prototype.contextMenu = null;
 /**
  * Current page number.
  *
- * @property pageNumber
+ * @property pageCurrent
  * @type Number
  * @default 1
  */
-YAHOO.widget.DataTable.prototype.pageNumber = 1;
+YAHOO.widget.DataTable.prototype.pageCurrent = 1;
 
 /**
  * Rows per page.
@@ -1622,16 +1654,17 @@ YAHOO.widget.DataTable.prototype.rowsPerPage = 500;
 YAHOO.widget.DataTable.prototype.startRecordIndex = 1;
 
 /**
- * Maximum number of jump page links to show.
+ * Maximum number of pagination page links to show. Any page links beyond this number are
+ * available through the "&lt;" and "&gt;" links. A negative value will display all page links.
  *
  * @property pageLinksLength
  * @type Number
- * @default 10
+ * @default -1
  */
 YAHOO.widget.DataTable.prototype.pageLinksLength = -1;
 
 /**
- * Array of options to show in the rows-per-page dropdown.
+ * Array of options to show in the rows-per-page pagination dropdown.
  *
  * @property rowsPerPageDropdown
  * @type Number[]
@@ -1639,11 +1672,11 @@ YAHOO.widget.DataTable.prototype.pageLinksLength = -1;
 YAHOO.widget.DataTable.prototype.rowsPerPageDropdown = null;
         
 /**
- * First jump page link to show.
+ * First pagination page link.
  *
  * @property pageLinksStart
  * @type Number
- * @default 10
+ * @default 1
  */
 YAHOO.widget.DataTable.prototype.pageLinksStart = 1;
 
@@ -1656,16 +1689,7 @@ YAHOO.widget.DataTable.prototype.pageLinksStart = 1;
 YAHOO.widget.DataTable.prototype.pagers = null;
 
 /**
- * Total number of pages, calculated on the fly.
- *
- * @property totalPages
- * @type Number
- */
-//TODO: use a getter to make this read only?
-YAHOO.widget.DataTable.prototype.totalPages = null;
-
-/**
- * True if the DataTable is empty of data. False if table is populated with
+ * True if the DataTable is empty of data. False if DataTable is populated with
  * data from RecordSet.
  *
  * @property isEmpty
@@ -2160,7 +2184,7 @@ YAHOO.widget.DataTable.prototype.doKeypress = function(oArgs) {
 YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
 //TODO: much optimization
     // Validate new page number
-    if(isNaN(nPage) || (nPage < 1) || (nPage > this.totalPages)) {
+    if(isNaN(nPage) || (nPage < 1) || (nPage > this._totalPages)) {
         nPage = 1;
     }
     /*if(nPage < this.pageLinksStart){
@@ -2173,7 +2197,7 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
     this.startRecordIndex = (nPage-1) * rowsPerPage;
     var startRecordIndex = this.startRecordIndex;
     var pageRecords = this._oRecordSet.getRecords(startRecordIndex, rowsPerPage);*/
-    this.pageNumber = nPage;
+    this.pageCurrent = nPage;
     this.paginate();
 };
 
@@ -2191,27 +2215,27 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
             this.rowsPerPage : recordsLength;
 
     // How many total pages
-    this.totalPages = Math.ceil(recordsLength / maxRows);
+    this._totalPages = Math.ceil(recordsLength / maxRows);
 
     // First row of this page
-    this.startRecordIndex = (this.pageNumber-1) * this.rowsPerPage;
+    this.startRecordIndex = (this.pageCurrent-1) * this.rowsPerPage;
 
     // How many page links to display
     var pageLinksLength =
-            ((this.pageLinksLength > 0) && (this.pageLinksLength < this.totalPages)) ?
-            this.pageLinksLength : this.totalPages;
+            ((this.pageLinksLength > 0) && (this.pageLinksLength < this._totalPages)) ?
+            this.pageLinksLength : this._totalPages;
 
     // First link of this page
-    this.pageLinksStart = (Math.ceil(this.pageNumber/pageLinksLength-1) * pageLinksLength) + 1;
+    this.pageLinksStart = (Math.ceil(this.pageCurrent/pageLinksLength-1) * pageLinksLength) + 1;
 
-    // Which Records this page
+    // Show Records for this page
     var pageRecords = this._oRecordSet.getRecords(this.startRecordIndex, this.rowsPerPage);
     this.replaceRows(pageRecords);
 
     if(this.rowsPerPage < recordsLength) {
         // Markup for page links
-        var isFirstPage = (this.pageNumber == 1) ? true : false;
-        var isLastPage = (this.pageNumber == this.totalPages) ? true : false;
+        var isFirstPage = (this.pageCurrent == 1) ? true : false;
+        var isLastPage = (this.pageCurrent == this._totalPages) ? true : false;
         var firstPageLink = (isFirstPage) ?
                 " <span class=\"" + YAHOO.widget.DataTable.CLASS_FIRSTPAGE + "\">&lt;&lt;</span> " :
                 " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_FIRSTLINK + "\">&lt;&lt;</a> ";
@@ -2225,10 +2249,10 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
                 " <span class=\"" + YAHOO.widget.DataTable.CLASS_LASTPAGE + "\">&gt;&gt;</span> " :
                 " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_LASTLINK + "\">&gt;&gt;</a> ";
         var markup = firstPageLink + prevPageLink;
-        var maxLinks = (this.pageLinksStart+pageLinksLength < this.totalPages) ?
-            this.pageLinksStart+pageLinksLength-1 : this.totalPages;
+        var maxLinks = (this.pageLinksStart+pageLinksLength < this._totalPages) ?
+            this.pageLinksStart+pageLinksLength-1 : this._totalPages;
         for(var i=this.pageLinksStart; i<=maxLinks; i++) {
-             if(i != this.pageNumber) {
+             if(i != this.pageCurrent) {
                 markup += " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PAGELINK + "\">" + i + "</a> ";
             }
             else {
@@ -2370,7 +2394,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
             this.sortedBy = oColumn.key;
             this.sortedByDir = sortDir;
             var newClass = (sortDir == "asc") ? YAHOO.widget.DataTable.CLASS_SORTEDBYASC : YAHOO.widget.DataTable.CLASS_SORTEDBYDESC;
-            YAHOO.util.Dom.addClass(oColumn.id, newClass);
+            YAHOO.util.Dom.addClass(oColumn.getId(), newClass);
         }
     }
     else {
@@ -2835,22 +2859,23 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
             
             // Assign parent, if applicable
             if(parent) {
-                oColumn.parent = parent;
+                oColumn._parent = parent;
             }
 
             // Start with default values
-            oColumn.rowspan = 1;
-            oColumn.colspan = 1;
+            oColumn._rowspan = 1;
+            oColumn._colspan = 1;
 
             // Column may have children
-            if(oColumn.children) {
-                var children = oColumn.children;
+            if(nodeList[i].children) {
+                var children = nodeList[i].children;
                 // Children increase colspan of the Column
-                oColumn.colspan = children.length;
+                oColumn._colspan = children.length;
 
                 // Children increase colspan of the Column's parent
-                if (parent && parent.colspan) {
-                    parent.colspan += children.length-1;
+                if (parent && parent._colspan) {
+                    parent._colspan += children.length-1;
+                    parent._children.push(oColumn);
                 }
                 
                 // Children must also be parsed
@@ -2864,16 +2889,16 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
             // but other Columns at this level do
             else if(nodeLevelMaxChildren > 0) {
                 // Children of siblings increase the rowspan of the Column
-                oColumn.rowspan += nodeLevelMaxChildren;
+                oColumn._rowspan += nodeLevelMaxChildren;
                 //if(oColumn.key) {
-                    oColumn.index = keys.length;
+                    oColumn._index = keys.length;
                     keys.push(oColumn);
                 //}
             }
             // This entire node level does not have any children
             else {
                 //if(oColumn.key) {
-                    oColumn.index = keys.length;
+                    oColumn._index = keys.length;
                     keys.push(oColumn);
                 //}
             }
@@ -2891,9 +2916,9 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
 
     // Store header nesting in an array
     var recurseAncestors = function(i, oColumn) {
-        headers[i].push(oColumn.id);
-        if(oColumn.parent) {
-            recurseAncestors(i, oColumn.parent);
+        headers[i].push(oColumn._id);
+        if(oColumn._parent) {
+            recurseAncestors(i, oColumn._parent);
         }
     };
     for(var i=0; i<keys.length; i++) {
@@ -3009,7 +3034,7 @@ YAHOO.widget.ColumnSet.prototype.toString = function() {
  */
 YAHOO.widget.Column = function(oConfigs) {
     // Internal variables
-    this.id = "yui-dtcol"+YAHOO.widget.Column._nCount;
+    this._id = "yui-dtcol"+YAHOO.widget.Column._nCount;
     
     // Object literal defines Column attributes
     if(typeof oConfigs == "object") {
@@ -3039,61 +3064,87 @@ YAHOO.widget.Column = function(oConfigs) {
  */
 YAHOO.widget.Column._nCount = 0;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Public member variables
-//
-/////////////////////////////////////////////////////////////////////////////
 
 /**
  * Unique ID, also assigned as DOM ID.
  *
  * @property id
  * @type String
+ * @private
  */
-YAHOO.widget.Column.prototype.id = null;
+YAHOO.widget.Column.prototype._id = null;
 
 /**
  * Reference to Column's index within its ColumnSet's key array, or null if not applicable.
  *
  * @property index
  * @type Number
+ * @private
  */
-YAHOO.widget.Column.prototype.index = null;
+YAHOO.widget.Column.prototype._index = null;
 
 /**
  * Number of table cells the Column spans.
  *
  * @property colspan
  * @type Number
- * @default 1
+ * @private
  */
-YAHOO.widget.Column.prototype.colspan = 1;
+YAHOO.widget.Column.prototype._colspan = 1;
 
 /**
  * Number of table rows the Column spans.
  *
  * @property colspan
  * @type Number
- * @default 1
+ * @private
  */
-YAHOO.widget.Column.prototype.rowspan = 1;
+YAHOO.widget.Column.prototype._rowspan = 1;
 
 /**
  * Column's parent, or null.
  *
  * @property parent
  * @type YAHOO.widget.Column
+ * @private
  */
-YAHOO.widget.Column.prototype.parent = null;
+YAHOO.widget.Column.prototype._parent = null;
 
 /**
  * Array of Column's chilren, or null.
  *
  * @property children
  * @type YAHOO.widget.Column[]
+ * @private
  */
-YAHOO.widget.Column.prototype.children = null;
+YAHOO.widget.Column.prototype._children = [];
+
+//TODO: clean these up
+
+/**
+ * Current offsetWidth of the column (in pixels).
+ *
+ * @property width
+ * @type Number
+ * @private
+ */
+YAHOO.widget.Column.prototype._width = null;
+
+/**
+ * Minimum width the column can support (in pixels). Value is populated only if table
+ * is fixedwidth, null otherwise.
+ *
+ * @property minWidth
+ * @type Number
+ * @private
+ */
+YAHOO.widget.Column.prototype._minWidth = null;
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public member variables
+//
+/////////////////////////////////////////////////////////////////////////////
 
 /**
  * Associated database column, or null.
@@ -3102,6 +3153,14 @@ YAHOO.widget.Column.prototype.children = null;
  * @type String
  */
 YAHOO.widget.Column.prototype.key = null;
+
+/**
+ * Text or HTML for display in the column head cell.
+ *
+ * @property text
+ * @type String
+ */
+YAHOO.widget.Column.prototype.text = null;
 
 /**
  * Data types: "string", "number", "date", "currency", "checkbox", "select",
@@ -3114,20 +3173,20 @@ YAHOO.widget.Column.prototype.key = null;
 YAHOO.widget.Column.prototype.type = "string";
 
 /**
- * Text or HTML for display in the column head cell.
- *
- * @property text
- * @type String
- */
-YAHOO.widget.Column.prototype.text = null;
-
-/**
  * Column head cell ABBR for accessibility.
  *
  * @property abbr
  * @type String
  */
 YAHOO.widget.Column.prototype.abbr = null;
+
+/**
+ * Children.
+ *
+ * @property children
+ * @type Object[]
+ */
+YAHOO.widget.Column.prototype.children = null;
 
 /**
  * Column width.
@@ -3181,29 +3240,12 @@ YAHOO.widget.Column.prototype.sortable = false;
 
 
 
-//TODO: clean these up
 
-/**
- * Current offsetWidth of the column (in pixels).
- *
- * @property width
- * @type Number
- */
-YAHOO.widget.Column.prototype.width = null;
-
-/**
- * Minimum width the column can support (in pixels). Value is populated only if table
- * is fixedwidth, null otherwise.
- *
- * @property minWidth
- * @type Number
- */
-YAHOO.widget.Column.prototype.minWidth = null;
 
 /**
  * True if column is currently sorted in ascending order.
  *
- * @property _currentSortDesc
+ * @property currentlyAsc
  * @type Boolean
  * @default null
  */
@@ -3256,6 +3298,37 @@ YAHOO.widget.Column.prototype.sortAscHandler = null;
 // Public methods
 //
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Public accessor returns Column's ID string.
+ *
+ * @method getId
+ * @return {String} Column's ID string.
+ */
+YAHOO.widget.Column.prototype.getId = function() {
+    return this._id;
+};
+
+/**
+ * Public accessor returns Column's colspan number.
+ *
+ * @method getColSpan
+ * @return {Number} Column's colspan number.
+ */
+YAHOO.widget.Column.prototype.getColSpan = function() {
+    return this._colspan;
+};
+
+/**
+ * Public accessor returns Column's rowspan number.
+ *
+ * @method getRowSpan
+ * @return {Number} Column's rowspan number.
+ */
+YAHOO.widget.Column.prototype.getRowSpan = function() {
+    return this._rowspan;
+};
+
 
 /**
  * Outputs markup into the given TD based on given Record.

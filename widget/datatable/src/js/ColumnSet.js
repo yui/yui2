@@ -56,22 +56,23 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
             
             // Assign parent, if applicable
             if(parent) {
-                oColumn.parent = parent;
+                oColumn._parent = parent;
             }
 
             // Start with default values
-            oColumn.rowspan = 1;
-            oColumn.colspan = 1;
+            oColumn._rowspan = 1;
+            oColumn._colspan = 1;
 
             // Column may have children
-            if(oColumn.children) {
-                var children = oColumn.children;
+            if(nodeList[i].children) {
+                var children = nodeList[i].children;
                 // Children increase colspan of the Column
-                oColumn.colspan = children.length;
+                oColumn._colspan = children.length;
 
                 // Children increase colspan of the Column's parent
-                if (parent && parent.colspan) {
-                    parent.colspan += children.length-1;
+                if (parent && parent._colspan) {
+                    parent._colspan += children.length-1;
+                    parent._children.push(oColumn);
                 }
                 
                 // Children must also be parsed
@@ -85,16 +86,16 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
             // but other Columns at this level do
             else if(nodeLevelMaxChildren > 0) {
                 // Children of siblings increase the rowspan of the Column
-                oColumn.rowspan += nodeLevelMaxChildren;
+                oColumn._rowspan += nodeLevelMaxChildren;
                 //if(oColumn.key) {
-                    oColumn.index = keys.length;
+                    oColumn._index = keys.length;
                     keys.push(oColumn);
                 //}
             }
             // This entire node level does not have any children
             else {
                 //if(oColumn.key) {
-                    oColumn.index = keys.length;
+                    oColumn._index = keys.length;
                     keys.push(oColumn);
                 //}
             }
@@ -112,9 +113,9 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
 
     // Store header nesting in an array
     var recurseAncestors = function(i, oColumn) {
-        headers[i].push(oColumn.id);
-        if(oColumn.parent) {
-            recurseAncestors(i, oColumn.parent);
+        headers[i].push(oColumn._id);
+        if(oColumn._parent) {
+            recurseAncestors(i, oColumn._parent);
         }
     };
     for(var i=0; i<keys.length; i++) {
@@ -231,7 +232,7 @@ YAHOO.widget.ColumnSet.prototype.toString = function() {
  */
 YAHOO.widget.Column = function(oConfigs) {
     // Internal variables
-    this.id = "yui-dtcol"+YAHOO.widget.Column._nCount;
+    this._id = "yui-dtcol"+YAHOO.widget.Column._nCount;
     
     // Object literal defines Column attributes
     if(typeof oConfigs == "object") {
@@ -261,61 +262,87 @@ YAHOO.widget.Column = function(oConfigs) {
  */
 YAHOO.widget.Column._nCount = 0;
 
+
+/**
+ * Unique ID, also assigned as DOM ID.
+ *
+ * @property _id
+ * @type String
+ * @private
+ */
+YAHOO.widget.Column.prototype._id = null;
+
+/**
+ * Reference to Column's index within its ColumnSet's key array, or null if not applicable.
+ *
+ * @property _index
+ * @type Number
+ * @private
+ */
+YAHOO.widget.Column.prototype._index = null;
+
+/**
+ * Number of table cells the Column spans.
+ *
+ * @property _colspan
+ * @type Number
+ * @private
+ */
+YAHOO.widget.Column.prototype._colspan = 1;
+
+/**
+ * Number of table rows the Column spans.
+ *
+ * @property _rowspan
+ * @type Number
+ * @private
+ */
+YAHOO.widget.Column.prototype._rowspan = 1;
+
+/**
+ * Column's parent, or null.
+ *
+ * @property _parent
+ * @type YAHOO.widget.Column
+ * @private
+ */
+YAHOO.widget.Column.prototype._parent = null;
+
+/**
+ * Array of Column's chilren, or null.
+ *
+ * @property _children
+ * @type YAHOO.widget.Column[]
+ * @private
+ */
+YAHOO.widget.Column.prototype._children = [];
+
+//TODO: clean these up
+
+/**
+ * Current offsetWidth of the column (in pixels).
+ *
+ * @property _width
+ * @type Number
+ * @private
+ */
+YAHOO.widget.Column.prototype._width = null;
+
+/**
+ * Minimum width the column can support (in pixels). Value is populated only if table
+ * is fixedwidth, null otherwise.
+ *
+ * @property _minWidth
+ * @type Number
+ * @private
+ */
+YAHOO.widget.Column.prototype._minWidth = null;
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Public member variables
 //
 /////////////////////////////////////////////////////////////////////////////
-
-/**
- * Unique ID, also assigned as DOM ID.
- *
- * @property id
- * @type String
- */
-YAHOO.widget.Column.prototype.id = null;
-
-/**
- * Reference to Column's index within its ColumnSet's key array, or null if not applicable.
- *
- * @property index
- * @type Number
- */
-YAHOO.widget.Column.prototype.index = null;
-
-/**
- * Number of table cells the Column spans.
- *
- * @property colspan
- * @type Number
- * @default 1
- */
-YAHOO.widget.Column.prototype.colspan = 1;
-
-/**
- * Number of table rows the Column spans.
- *
- * @property colspan
- * @type Number
- * @default 1
- */
-YAHOO.widget.Column.prototype.rowspan = 1;
-
-/**
- * Column's parent, or null.
- *
- * @property parent
- * @type YAHOO.widget.Column
- */
-YAHOO.widget.Column.prototype.parent = null;
-
-/**
- * Array of Column's chilren, or null.
- *
- * @property children
- * @type YAHOO.widget.Column[]
- */
-YAHOO.widget.Column.prototype.children = null;
 
 /**
  * Associated database column, or null.
@@ -324,6 +351,14 @@ YAHOO.widget.Column.prototype.children = null;
  * @type String
  */
 YAHOO.widget.Column.prototype.key = null;
+
+/**
+ * Text or HTML for display in the column head cell.
+ *
+ * @property text
+ * @type String
+ */
+YAHOO.widget.Column.prototype.text = null;
 
 /**
  * Data types: "string", "number", "date", "currency", "checkbox", "select",
@@ -336,20 +371,20 @@ YAHOO.widget.Column.prototype.key = null;
 YAHOO.widget.Column.prototype.type = "string";
 
 /**
- * Text or HTML for display in the column head cell.
- *
- * @property text
- * @type String
- */
-YAHOO.widget.Column.prototype.text = null;
-
-/**
  * Column head cell ABBR for accessibility.
  *
  * @property abbr
  * @type String
  */
 YAHOO.widget.Column.prototype.abbr = null;
+
+/**
+ * Array of object literals that define children of a column header.
+ *
+ * @property children
+ * @type Object[]
+ */
+YAHOO.widget.Column.prototype.children = null;
 
 /**
  * Column width.
@@ -392,40 +427,10 @@ YAHOO.widget.Column.prototype.resizeable = false;
  */
 YAHOO.widget.Column.prototype.sortable = false;
 
-
-
-
-
-
-
-
-
-
-
-
-//TODO: clean these up
-
-/**
- * Current offsetWidth of the column (in pixels).
- *
- * @property width
- * @type Number
- */
-YAHOO.widget.Column.prototype.width = null;
-
-/**
- * Minimum width the column can support (in pixels). Value is populated only if table
- * is fixedwidth, null otherwise.
- *
- * @property minWidth
- * @type Number
- */
-YAHOO.widget.Column.prototype.minWidth = null;
-
 /**
  * True if column is currently sorted in ascending order.
  *
- * @property _currentSortDesc
+ * @property currentlyAsc
  * @type Boolean
  * @default null
  */
@@ -478,6 +483,37 @@ YAHOO.widget.Column.prototype.sortAscHandler = null;
 // Public methods
 //
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Public accessor returns Column's ID string.
+ *
+ * @method getId
+ * @return {String} Column's ID string.
+ */
+YAHOO.widget.Column.prototype.getId = function() {
+    return this._id;
+};
+
+/**
+ * Public accessor returns Column's colspan number.
+ *
+ * @method getColSpan
+ * @return {Number} Column's colspan number.
+ */
+YAHOO.widget.Column.prototype.getColSpan = function() {
+    return this._colspan;
+};
+
+/**
+ * Public accessor returns Column's rowspan number.
+ *
+ * @method getRowSpan
+ * @return {Number} Column's rowspan number.
+ */
+YAHOO.widget.Column.prototype.getRowSpan = function() {
+    return this._rowspan;
+};
+
 
 /**
  * Outputs markup into the given TD based on given Record.

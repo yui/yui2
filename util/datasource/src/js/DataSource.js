@@ -260,7 +260,7 @@ YAHOO.util.DataSource.prototype._sName = null;
  * Local cache of data result objects indexed chronologically.
  *
  * @property _aCache
- * @type array
+ * @type Object[]
  * @private
  */
 YAHOO.util.DataSource.prototype._aCache = null;
@@ -661,7 +661,7 @@ YAHOO.util.DataSource.prototype.parseFlatData = function(oRequest, oRawResponse)
         var recordsarray = oRawResponse.split(recDelim);
         // Cycle through each record, except the first which contains header info
         for(var i = recordsarray.length-1; i >= 1; i--) {
-            var dataobject = {}
+            var dataobject = {};
             for(var j=aSchema.length-1; j >= 0; j--) {
                 // Split along field delimter to get each data value
                 var fielddataarray = recordsarray[i].split(fieldDelim);
@@ -755,7 +755,7 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
             // Check for latest JSON lib but divert KHTML clients
             if(oRawResponse.parseJSON && (navigator.userAgent.toLowerCase().indexOf('khtml')== -1)) {
                 // Use the new JSON utility if available
-                var jsonObj = oRawResponse.parseJSON();
+                jsonObj = oRawResponse.parseJSON();
                 if(!jsonObj) {
                     bError = true;
                 }
@@ -763,7 +763,7 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
             // Check for older JSON lib but divert KHTML clients
             else if(window.JSON && JSON.parse && (navigator.userAgent.toLowerCase().indexOf('khtml')== -1)) {
                 // Use the JSON utility if available
-                var jsonObj = JSON.parse(oRawResponse);
+                jsonObj = JSON.parse(oRawResponse);
                 if(!jsonObj) {
                     bError = true;
                 }
