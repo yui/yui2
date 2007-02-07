@@ -4,7 +4,8 @@
  * XHR.
  *
  * @module datasource
- * @requires event
+ * @requires yahoo, event
+ * @optional xhr
  * @title DataSource Utility
  */
 

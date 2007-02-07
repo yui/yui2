@@ -3,7 +3,8 @@
  * displaying tabular data across A-grade browsers.
  *
  * @module datatable
- * @requires datasource
+ * @requires yahoo, dom, event, datasource
+ * @optional dragdrop
  * @title DataTable Widget
  */
 
