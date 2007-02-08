@@ -298,7 +298,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     /**
      * Fired when up-arrow is typed.
      *
-     * @event tableDoubleclickEvent
+     * @event arrowUpEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TABLE element.
      *
@@ -308,7 +308,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     /**
      * Fired when down-arrow is typed.
      *
-     * @event tableDoubleclickEvent
+     * @event arrowDownEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TABLE element.
      *
@@ -880,33 +880,6 @@ YAHOO.widget.DataTable.prototype._totalPages = null;
 // Private methods
 //
 /////////////////////////////////////////////////////////////////////////////
-/**
- * Initializes DataTable's DOM-related row properties once DOM is finalized
- *
- */
-/*YAHOO.widget.DataTable.prototype._initRows = function() {
-    var i;
-    //TODO: where does this go?
-    var topRowCells = this._elBody.rows[0].cells;
-    var columns = this._oColumnSet.keys;
-    for(i=0; i<topRowCells.length; i++) {
-    //TODO: column might not have a key
-        if(columns[i].key) {
-            columns[i].width = topRowCells[i].offsetWidth;
-        }
-        else {
-            //this col has no key
-        }
-    }
-
-    if(this.fixedWidth) {
-        this._elTable.style.tableLayout = "fixed";
-        for(i=0; i<topRowCells.length; i++) {
-            columns[i].width = topRowCells[i].offsetWidth;
-            //elHeadRow.cells[i].style.width = setWidth;
-        }
-    }
-};*/
 
 /**
  * Creates HTML markup for TABLE, THEAD, TBODY.
@@ -1139,7 +1112,7 @@ YAHOO.widget.DataTable.prototype._unselect = function(els) {
 /**
  * Unselects all selected rows.
  *
- * @method unselectAllRows
+ * @method _unselectAllRows
  * @private
  */
 YAHOO.widget.DataTable.prototype._unselectAllRows = function() {
@@ -1150,7 +1123,7 @@ YAHOO.widget.DataTable.prototype._unselectAllRows = function() {
 /**
  * Unselects all selected cells.
  *
- * @method unselectAllCells
+ * @method _unselectAllCells
  * @private
  */
 YAHOO.widget.DataTable.prototype._unselectAllCells = function() {
@@ -1829,7 +1802,7 @@ YAHOO.widget.DataTable.prototype.focusTable = function() {
 /**
  * Add rows to bottom of table body.
  *
- * @method addRow
+ * @method appendRow
  * @param aRecords {YAHOO.widget.Record[]} Array of Records.
  */
 YAHOO.widget.DataTable.prototype.appendRows = function(aRecords) {
