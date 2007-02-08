@@ -25,6 +25,7 @@
  */
 YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     // Internal vars
+    var i;
     this._nIndex = YAHOO.widget.DataTable._nCount;
     this._sName = "instance" + this._nIndex;
     this.id = "yui-dt"+this._nIndex;
@@ -66,7 +67,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
         var elTable = null;
         if(elContainer.hasChildNodes()) {
             var children = elContainer.childNodes;
-            for(var i=0; i<children.length; i++) {
+            for(i=0; i<children.length; i++) {
                 if(children[i].nodeName.toLowerCase() == "table") {
                     elTable = children[i];
                     break;
@@ -81,21 +82,21 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
             var aRecords = [];
 
             // Iterate through each TBODY
-            for(var j=0; j<elTable.tBodies.length; j++) {
-                var elBody = elTable.tBodies[j];
+            for(i=0; i<elTable.tBodies.length; i++) {
+                var elBody = elTable.tBodies[i];
 
                 // Iterate through each TR
-                for(var k=0; k<elBody.rows.length; k++) {
-                    var elRow = elBody.rows[k];
+                for(var j=0; j<elBody.rows.length; j++) {
+                    var elRow = elBody.rows[j];
                     var oRecord = {};
 
                     // Iterate through each TD
-                    for(var l=0; l<elRow.cells.length; l++) {
+                    for(var k=0; k<elRow.cells.length; k++) {
 
                         //var elCell = elRow.cells[l];
                         //elCell.id = this.id+"-bdrow"+k+"-cell"+l;
                         //TODO: can we parse a column with null key?
-                        oRecord[oColumnSet.keys[l].key] = oColumnSet.keys[l].parse(elRow.cells[l].innerHTML);
+                        oRecord[oColumnSet.keys[k].key] = oColumnSet.keys[k].parse(elRow.cells[k].innerHTML);
                     }
                     aRecords.push(oRecord);
                 }
@@ -884,10 +885,11 @@ YAHOO.widget.DataTable.prototype._totalPages = null;
  *
  */
 /*YAHOO.widget.DataTable.prototype._initRows = function() {
+    var i;
     //TODO: where does this go?
     var topRowCells = this._elBody.rows[0].cells;
     var columns = this._oColumnSet.keys;
-    for(var i=0; i<topRowCells.length; i++) {
+    for(i=0; i<topRowCells.length; i++) {
     //TODO: column might not have a key
         if(columns[i].key) {
             columns[i].width = topRowCells[i].offsetWidth;
@@ -899,9 +901,9 @@ YAHOO.widget.DataTable.prototype._totalPages = null;
 
     if(this.fixedWidth) {
         this._elTable.style.tableLayout = "fixed";
-        for(var j=0; j<topRowCells.length; j++) {
-            columns[j].width = topRowCells[j].offsetWidth;
-            //elHeadRow.cells[j].style.width = setWidth;
+        for(i=0; i<topRowCells.length; i++) {
+            columns[i].width = topRowCells[i].offsetWidth;
+            //elHeadRow.cells[i].style.width = setWidth;
         }
     }
 };*/
@@ -969,13 +971,15 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
  * @private
  */
 YAHOO.widget.DataTable.prototype._initHead = function() {
+    var i;
+    
     // Create THEAD
     var elHead = document.createElement("thead");
     elHead.tabIndex = -1;
 
     // Iterate through each row of Column headers...
     var colTree = this._oColumnSet.tree;
-    for(var i=0; i<colTree.length; i++) {
+    for(i=0; i<colTree.length; i++) {
         var elHeadRow = elHead.appendChild(document.createElement("tr"));
         elHeadRow.id = this.id+"-hdrow"+i;
 
@@ -992,8 +996,8 @@ YAHOO.widget.DataTable.prototype._initHead = function() {
     
     // Add Resizer only after DOM has been updated...
     // ...and skip the last column
-    for(var k=0; k<this._oColumnSet.keys.length-1; k++) {
-        var oColumn = this._oColumnSet.keys[k];
+    for(i=0; i<this._oColumnSet.keys.length-1; i++) {
+        var oColumn = this._oColumnSet.keys[i];
         if(oColumn.resizeable && YAHOO.util.DD) {
             //TODO: deal with fixed width tables
             //TODO: no more oColumn.isLast
@@ -1861,6 +1865,8 @@ YAHOO.widget.DataTable.prototype.insertRows = function(aRecords) {
  * @param aRecords {YAHOO.widget.Record[]} Array of Records.
  */
 YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
+    var i;
+    
     if(aRecords && aRecords.length > 0) {
         this.hideTableMessages();
 
@@ -1876,7 +1882,7 @@ YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
             this._unselectAllRows();
         }
         // Format in-place existing rows
-        for(var i=0; i<elRows.length; i++) {
+        for(i=0; i<elRows.length; i++) {
             if(aRecords[i]) {
                 var oRecord = aRecords[i];
                 this.updateRow(oRecord,i);
@@ -1884,16 +1890,16 @@ YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
         }
 
         // Add rows as necessary
-        for(var j=elRows.length; j<aRecords.length; j++) {
-            this.addRow(aRecords[j]);
+        for(i=elRows.length; i<aRecords.length; i++) {
+            this.addRow(aRecords[i]);
         }
         
         // Select any rows as necessary
-        for(var k=0; k<selectedRecords.length; k++) {
+        for(i=0; i<selectedRecords.length; i++) {
             var allRows = elBody.rows;
-            for(var m=0; m<allRows.length; m++) {
-                if(selectedRecords[k] == allRows[m].recordId) {
-                    this._select([allRows[m]]);
+            for(var j=0; j<allRows.length; j++) {
+                if(selectedRecords[i] == allRows[j].recordId) {
+                    this._select([allRows[j]]);
                 }
             }
         }
@@ -1905,23 +1911,23 @@ YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
  *
  * @method addRow
  * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param i {Number} Position at which to add row.
+ * @param index {Number} Position at which to add row.
  */
-YAHOO.widget.DataTable.prototype.addRow = function(oRecord, i) {
+YAHOO.widget.DataTable.prototype.addRow = function(oRecord, index) {
     if(oRecord) {
         this.hideTableMessages();
 
         // Is this an insert or an append?
-        var insert = (isNaN(i)) ? false : true;
+        var insert = (isNaN(index)) ? false : true;
         if(!insert) {
-            i = this._elBody.rows.length;
+            index = this._elBody.rows.length;
         }
 
         var oColumnSet = this._oColumnSet;
         var oRecordSet = this._oRecordSet;
 
-        var elRow = (insert && this._elBody.rows[i]) ?
-            this._elBody.insertBefore(document.createElement("tr"),this._elBody.rows[i]) :
+        var elRow = (insert && this._elBody.rows[index]) ?
+            this._elBody.insertBefore(document.createElement("tr"),this._elBody.rows[index]) :
             this._elBody.appendChild(document.createElement("tr"));
         var recId = oRecord.id;
         elRow.id = this.id+"-bdrow"+recId;
@@ -1931,7 +1937,7 @@ YAHOO.widget.DataTable.prototype.addRow = function(oRecord, i) {
         for(var j=0; j<oColumnSet.keys.length; j++) {
             var oColumn = oColumnSet.keys[j];
             var elCell = elRow.appendChild(document.createElement("td"));
-            elCell.id = this.id+"-bdrow"+i+"-cell"+j;
+            elCell.id = this.id+"-bdrow"+index+"-cell"+j;
             elCell.headers = oColumn.id;
             elCell.columnIndex = j;
             elCell.headers = oColumnSet.headers[j];
@@ -1960,7 +1966,7 @@ YAHOO.widget.DataTable.prototype.addRow = function(oRecord, i) {
 
         // Striping
         if(!insert) {
-            if(i%2) {
+            if(index%2) {
                 YAHOO.util.Dom.addClass(elRow, YAHOO.widget.DataTable.CLASS_ODD);
             }
             else {
@@ -1979,13 +1985,13 @@ YAHOO.widget.DataTable.prototype.addRow = function(oRecord, i) {
  *
  * @method updateRow
  * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param i {Number} Position at which to update row.
+ * @param index {Number} Position at which to update row.
  */
-YAHOO.widget.DataTable.prototype.updateRow = function(oRecord, i) {
+YAHOO.widget.DataTable.prototype.updateRow = function(oRecord, index) {
     if(oRecord) {
         this.hideTableMessages();
 
-        var elRow = this._elBody.rows[i];
+        var elRow = this._elBody.rows[index];
         elRow.recordId = oRecord.id;
 
         var columns = this._oColumnSet.keys;
@@ -2221,6 +2227,8 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
  * @method paginate
  */
 YAHOO.widget.DataTable.prototype.paginate = function() {
+    var i;
+    
     // How many total Records
     var recordsLength = this._oRecordSet.getLength();
     
@@ -2265,7 +2273,7 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
         var markup = firstPageLink + prevPageLink;
         var maxLinks = (this.pageLinksStart+pageLinksLength < this._totalPages) ?
             this.pageLinksStart+pageLinksLength-1 : this._totalPages;
-        for(var i=this.pageLinksStart; i<=maxLinks; i++) {
+        for(i=this.pageLinksStart; i<=maxLinks; i++) {
              if(i != this.pageCurrent) {
                 markup += " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PAGELINK + "\">" + i + "</a> ";
             }
@@ -2282,7 +2290,7 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
             var select2 = document.createElement("select");
             select2.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
             
-            for(var i=0; i<this.rowsPerPageDropdown.length; i++) {
+            for(i=0; i<this.rowsPerPageDropdown.length; i++) {
                 var option1 = document.createElement("option");
                 var option2 = document.createElement("option");
                 option1.value = this.rowsPerPageDropdown[i];
@@ -2320,7 +2328,7 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
         this.pagers[0].links.innerHTML = markup;
         this.pagers[1].links.innerHTML = markup;
 
-        for(var i=0; i<this.pagers.length; i++) {
+        for(i=0; i<this.pagers.length; i++) {
             YAHOO.util.Event.purgeElement(this.pagers[i].links);
             YAHOO.util.Event.purgeElement(this.pagers[i].select);
             this.pagers[i].innerHTML = markup;
@@ -2479,6 +2487,7 @@ YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
+    var i;
     var evt = oArgs.event;
     var target = oArgs.target;
 
@@ -2500,12 +2509,12 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
             if(startRow && this.isSelected(startRow)) {
                 this.unselectAllRows();
                 if(startRow.sectionRowIndex < target.sectionRowIndex) {
-                    for(var i=startRow.sectionRowIndex; i <= target.sectionRowIndex; i++) {
+                    for(i=startRow.sectionRowIndex; i<=target.sectionRowIndex; i++) {
                         this._select(this._elBody.rows[i]);
                     }
                 }
                 else {
-                    for(var i=target.sectionRowIndex; i <= startRow.sectionRowIndex; i++) {
+                    for(i=target.sectionRowIndex; i<=startRow.sectionRowIndex; i++) {
                         this._select(this._elBody.rows[i]);
                     }
                 }

@@ -11,6 +11,7 @@
  * @param aHeaders {Object[]} Array of object literals that define header cells.
  */
 YAHOO.widget.ColumnSet = function(aHeaders) {
+//TODO: break out nested functions into private methods
     this._sName = "instance" + YAHOO.widget.ColumnSet._nCount;
 
     // Top-down tree representation of all Columns
@@ -49,9 +50,9 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
         recurseChildren(nodeList);
 
         // Parse each node for attributes and any children
-        for(var i=0; i<nodeList.length; i++) {
+        for(var j=0; j<nodeList.length; j++) {
             // Instantiate a Column for each node
-            var oColumn = new YAHOO.widget.Column(nodeList[i]);
+            var oColumn = new YAHOO.widget.Column(nodeList[j]);
             flat.push(oColumn);
             
             // Assign parent, if applicable
@@ -64,8 +65,8 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
             oColumn._colspan = 1;
 
             // Column may have children
-            if(nodeList[i].children) {
-                var children = nodeList[i].children;
+            if(nodeList[j].children) {
+                var children = nodeList[j].children;
                 // Children increase colspan of the Column
                 oColumn._colspan = children.length;
 
