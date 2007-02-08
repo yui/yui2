@@ -1995,7 +1995,7 @@ YAHOO.widget.MenuItem.prototype = {
     */
     getPreviousEnabledSibling: function() {
 
-        if(this.parent instanceof Menu) {
+       if(this.parent instanceof Menu) {
 
             var nGroupIndex = this.groupIndex;
 
