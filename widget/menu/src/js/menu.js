@@ -187,16 +187,6 @@ _aGroupTitleElements: null,
 
 
 /**
-* @property _aItems
-* @description Array of items in the menu.
-* @default []
-* @private
-* @type Array
-*/
-_aItems: null,
-
-
-/**
 * @property _aItemGroups
 * @description Multi-dimensional Array representing the menu items as they
 * are grouped in the menu.
@@ -238,6 +228,17 @@ _nCurrentMouseX: 0,
 * @type Number
 */
 _nMaxHeight: -1,
+
+
+/**
+* @property _bStopMouseEventHandlers
+* @description Stops "mouseover," "mouseout," and "mousemove" event handlers 
+* from executing.
+* @default false
+* @private
+* @type Boolean
+*/
+_bStopMouseEventHandlers: false,
 
 
 
@@ -419,7 +420,6 @@ itemRemovedEvent: null,
 */
 init: function(p_oElement, p_oConfig) {
 
-    this._aItems = [];
     this._aItemGroups = [];
     this._aListElements = [];
     this._aGroupTitleElements = [];
@@ -535,7 +535,7 @@ init: function(p_oElement, p_oConfig) {
 
         this.initEvent.subscribe(this._onInit, this, true);
         this.beforeRenderEvent.subscribe(this._onBeforeRender, this, true);
-        this.renderEvent.subscribe(this._onRender, this, true);
+        this.renderEvent.subscribe(this._setWidth, this, true);
         this.beforeShowEvent.subscribe(this._onBeforeShow, this, true);
         this.showEvent.subscribe(this._onShow, this, true);
         this.beforeHideEvent.subscribe(this._onBeforeHide, this, true);
@@ -753,35 +753,22 @@ _initSubTree: function() {
 */
 _getFirstEnabledItem: function() {
 
-    var nGroups = this._aItemGroups.length,
-        oItem,
-        aItemGroup;
-
-    for(var i=0; i<nGroups; i++) {
-
-        aItemGroup = this._aItemGroups[i];
-        
-        if(aItemGroup) {
-
-            var nItems = aItemGroup.length;
-            
-            for(var n=0; n<nItems; n++) {
-            
-                oItem = aItemGroup[n];
-                
-                if(
-                    !oItem.cfg.getProperty("disabled") && 
-                    oItem.element.style.display != "none"
-                ) {
-                
-                    return oItem;
-                
-                }
+    var aItems = this.getItems(),
+        nItems = aItems.length,
+        oItem;
     
-                oItem = null;
-    
-            }
-        
+    for(var i=0; i<nItems; i++) {
+
+        oItem = aItems[i];
+
+        if(
+            oItem && 
+            !oItem.cfg.getProperty("disabled") && 
+            oItem.element.style.display != "none"
+        ) {
+
+            return oItem;
+
         }
     
     }
@@ -854,8 +841,7 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
 
         var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
             aGroup = this._getItemGroup(nGroupIndex),
-            oGroupItem,
-            aItems = this._aItems;
+            oGroupItem;
 
 
         if(!aGroup) {
@@ -870,32 +856,14 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
             var bAppend = (p_nItemIndex >= aGroup.length);            
 
 
-            function getPreviousArrayItem(p_aArray, p_nStartIndex) {
-    
-                return p_aArray[p_nStartIndex] || 
-                    getPreviousArrayItem(p_aArray, (p_nStartIndex-1));
-    
-            }
-
-
-            var nLength = (nGroupIndex === 0) ? 0 : 
-                    getPreviousArrayItem(
-                        this._aItemGroups, (nGroupIndex - 1)
-                    ).length,
-
-                nIndex = nLength + p_nItemIndex;
-
-
             if(aGroup[p_nItemIndex]) {
     
                 aGroup.splice(p_nItemIndex, 0, oItem);
-                aItems.splice(nIndex, 0, oItem);
-
+    
             }
             else {
     
                 aGroup[p_nItemIndex] = oItem;
-                aItems[nIndex] = oItem;
     
             }
 
@@ -979,10 +947,8 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
     
             aGroup[nItemIndex] = oItem;
 
-            aItems[aItems.length] = oItem;
-
             oGroupItem = aGroup[nItemIndex];
-
+    
 
             if(oGroupItem) {
     
@@ -1361,6 +1327,26 @@ _getOffsetWidth: function() {
 
 
 /**
+* @method _setWidth
+* @description Sets the width of the menu's <code>&#60;div&#62;</code> element.
+* @private
+*/
+_setWidth: function() {
+
+    if(this.cfg.getProperty("position") == "dynamic") {
+
+        var sWidth = 
+            this.element.parentNode.tagName.toUpperCase() == "BODY" ? 
+            this.element.offsetWidth : this._getOffsetWidth();
+    
+        this.cfg.setProperty("width", (sWidth + "px"));
+
+    }
+
+},
+
+
+/**
 * @method _cancelHideDelay
 * @description Cancels the call to "hideMenu."
 * @private
@@ -1584,6 +1570,13 @@ _enableScrollFooter: function() {
 */
 _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
 
+    if(this._bStopMouseEventHandlers) {
+    
+        return false;
+    
+    }
+
+
     var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
         oTarget = Event.getTarget(oEvent);
@@ -1710,7 +1703,14 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
 * fired the event.
 */
 _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
+
+    if(this._bStopMouseEventHandlers) {
     
+        return false;
+    
+    }
+
+
     var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
         oRelatedTarget = Event.getRelatedTarget(oEvent),
@@ -1827,6 +1827,12 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
 * fired the event.
 */
 _onMouseMove: function(p_oEvent, p_oMenu) {
+
+    if(this._bStopMouseEventHandlers) {
+    
+        return false;
+    
+    }
 
     this._nCurrentMouseX = Event.getPageX(p_oEvent);
 
@@ -1963,7 +1969,30 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
 
     var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
+        me = this,
         oSubmenu;
+
+
+    /*
+        This function is called to prevent a bug in Firefox.  In Firefox,
+        moving a DOM element into a stationary mouse pointer will cause the 
+        browser to fire mouse events.  This can result in the menu mouse
+        event handlers being called uncessarily, especially when menus are 
+        moved into a stationary mouse pointer as a result of a 
+        key event handler.
+    */
+    function stopMouseEventHandlers() {
+
+        me._bStopMouseEventHandlers = true;
+        
+        window.setTimeout(function() {
+        
+            me._bStopMouseEventHandlers = false;
+        
+        }, 10);
+
+    }
+
 
     if(oItem && !oItem.cfg.getProperty("disabled")) {
 
@@ -2042,6 +2071,8 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
                 }
     
                 Event.preventDefault(oEvent);
+
+                stopMouseEventHandlers();
     
             break;
             
@@ -2095,7 +2126,9 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
     
     
                 Event.preventDefault(oEvent);
-    
+
+                stopMouseEventHandlers();
+
             break;
     
     
@@ -2140,7 +2173,9 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
                 }
     
                 Event.preventDefault(oEvent);
-    
+
+                stopMouseEventHandlers();
+
             break;        
     
         }
@@ -2475,31 +2510,6 @@ _onBeforeRender: function(p_sType, p_aArgs, p_oMenu) {
 
         }
         while(i < nListElements);
-
-    }
-
-},
-
-
-/**
-* @method _onRender
-* @description "render" event handler for the menu.
-* @private
-* @param {String} p_sType String representing the name of the event that 
-* was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
-* fired the event.
-*/
-_onRender: function(p_sType, p_aArgs, p_oMenu) {
-
-    if(this.cfg.getProperty("position") == "dynamic") {
-
-        var sWidth = 
-            this.element.parentNode.tagName.toUpperCase() == "BODY" ? 
-            this.element.offsetWidth : this._getOffsetWidth();
-    
-        this.cfg.setProperty("width", (sWidth + "px"));
 
     }
 
@@ -3382,6 +3392,12 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
 
     if((nMaxHeight > 0) && (oBody.offsetHeight > nMaxHeight)) {
 
+        if(!this.cfg.getProperty("width")) {
+
+            this._setWidth();
+
+        }
+
         if(!oHeader && !oFooter) {
 
             this.setHeader("&#32;");
@@ -3720,7 +3736,11 @@ removeItem: function(p_oObject, p_nGroupIndex) {
 */        
 getItems: function() {
 
-    return this._aItems;
+    var aGroups = this._aItemGroups,
+        nGroups = aGroups.length;
+
+    return aItems = (nGroups == 1) ? 
+                        aGroups[0] : Array.prototype.concat.apply([], aGroups);
 
 },
 
@@ -3791,52 +3811,31 @@ destroy: function() {
 
     YAHOO.widget.Module.textResizeEvent.unsubscribe(this._onTextResize, this);
 
-    var nItemGroups = this._aItemGroups.length,
-        nItems,
-        oItemGroup,
-        oItem,
-        i,
-        n;
-
 
     // Remove all items
 
-    if(nItemGroups > 0) {
+    var aItems = this.getItems(),
+        nItems = aItems.length;
 
-        i = nItemGroups - 1;
+    if(nItems > 0) {
+
+        var i = nItems - 1,
+            oItem;
 
         do {
 
-            oItemGroup = this._aItemGroups[i];
+            oItem = aItems[i];
 
-            if(oItemGroup) {
+            if(oItem) {
 
-                nItems = oItemGroup.length;
-    
-                if(nItems > 0) {
-    
-                    n = nItems - 1;
-        
-                    do {
-
-                        oItem = this._aItemGroups[i][n];
-
-                        if(oItem) {
-        
-                            oItem.destroy();
-                        }
-        
-                    }
-                    while(n--);
-    
-                }
-
+                oItem.destroy();                
+            
             }
-
+        
         }
         while(i--);
 
-    }        
+    }
 
 
     // Continue with the superclass implementation of this method
@@ -3857,7 +3856,7 @@ setInitialFocus: function() {
     var oItem = this._getFirstEnabledItem();
     
     if(oItem) {
-    
+
         oItem.focus();
     }
     
