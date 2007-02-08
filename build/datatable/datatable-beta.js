@@ -25,6 +25,7 @@
  */
 YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     // Internal vars
+    var i;
     this._nIndex = YAHOO.widget.DataTable._nCount;
     this._sName = "instance" + this._nIndex;
     this.id = "yui-dt"+this._nIndex;
@@ -37,8 +38,12 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     }
 
     // Validate DataSource
-    if(oDataSource && (oDataSource instanceof YAHOO.util.DataSource)) {
-        this.dataSource = oDataSource;
+    if(oDataSource) {
+        if(oDataSource instanceof YAHOO.util.DataSource) {
+            this.dataSource = oDataSource;
+        }
+        else {
+        }
     }
 
     // Validate ColumnSet
@@ -60,7 +65,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
         var elTable = null;
         if(elContainer.hasChildNodes()) {
             var children = elContainer.childNodes;
-            for(var i=0; i<children.length; i++) {
+            for(i=0; i<children.length; i++) {
                 if(children[i].nodeName.toLowerCase() == "table") {
                     elTable = children[i];
                     break;
@@ -68,44 +73,48 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
             }
         }
 
-        // Progressively enhance an existing table from markup
-        if(elTable) {
+        // Progressively enhance an existing table from markup...
+        // while using the markup as the source of data
+        if(elTable && !this.dataSource) {
             // Fill RecordSet with data parsed out of table
             var aRecords = [];
 
             // Iterate through each TBODY
-            for(var j=0; j<elTable.tBodies.length; j++) {
-                var elBody = elTable.tBodies[j];
+            for(i=0; i<elTable.tBodies.length; i++) {
+                var elBody = elTable.tBodies[i];
 
                 // Iterate through each TR
-                for(var k=0; k<elBody.rows.length; k++) {
-                    var elRow = elBody.rows[k];
+                for(var j=0; j<elBody.rows.length; j++) {
+                    var elRow = elBody.rows[j];
                     var oRecord = {};
 
                     // Iterate through each TD
-                    for(var l=0; l<elRow.cells.length; l++) {
+                    for(var k=0; k<elRow.cells.length; k++) {
 
                         //var elCell = elRow.cells[l];
                         //elCell.id = this.id+"-bdrow"+k+"-cell"+l;
                         //TODO: can we parse a column with null key?
-                        oRecord[oColumnSet.keys[l].key] = oColumnSet.keys[l].parse(elRow.cells[l].innerHTML);
+                        oRecord[oColumnSet.keys[k].key] = oColumnSet.keys[k].parse(elRow.cells[k].innerHTML);
                     }
                     aRecords.push(oRecord);
                 }
-
             }
             this._oRecordSet.addRecords(aRecords);
-
             // Then re-do the markup
             this._initTable();
             //TODO: use paginate this.appendRows(this._oRecordSet.getRecords());
             this.paginate();
         }
-        // Create markup from scratch
+        // Create markup from scratch using the provided DataSource
+        else if(this.dataSource) {
+                this._initTable();
+                // Send out for data in an asynchronous request
+                oDataSource.sendRequest(this.initialRequest, this.onDataReturnPaginate, this);
+        }
+        // Else there is no data
         else {
             this._initTable();
-            // Send out for data in an asynchronous request
-            oDataSource.sendRequest(this.initialRequest, this.onDataReturnPaginate, this);
+            this.showEmptyMessage();
         }
     }
     // Container element not found in document
@@ -286,7 +295,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     /**
      * Fired when up-arrow is typed.
      *
-     * @event tableDoubleclickEvent
+     * @event arrowUpEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TABLE element.
      *
@@ -296,7 +305,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     /**
      * Fired when down-arrow is typed.
      *
-     * @event tableDoubleclickEvent
+     * @event arrowDownEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TABLE element.
      *
@@ -866,32 +875,6 @@ YAHOO.widget.DataTable.prototype._totalPages = null;
 // Private methods
 //
 /////////////////////////////////////////////////////////////////////////////
-/**
- * Initializes DataTable's DOM-related row properties once DOM is finalized
- *
- */
-/*YAHOO.widget.DataTable.prototype._initRows = function() {
-    //TODO: where does this go?
-    var topRowCells = this._elBody.rows[0].cells;
-    var columns = this._oColumnSet.keys;
-    for(var i=0; i<topRowCells.length; i++) {
-    //TODO: column might not have a key
-        if(columns[i].key) {
-            columns[i].width = topRowCells[i].offsetWidth;
-        }
-        else {
-            //this col has no key
-        }
-    }
-
-    if(this.fixedWidth) {
-        this._elTable.style.tableLayout = "fixed";
-        for(var j=0; j<topRowCells.length; j++) {
-            columns[j].width = topRowCells[j].offsetWidth;
-            //elHeadRow.cells[j].style.width = setWidth;
-        }
-    }
-};*/
 
 /**
  * Creates HTML markup for TABLE, THEAD, TBODY.
@@ -956,13 +939,15 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
  * @private
  */
 YAHOO.widget.DataTable.prototype._initHead = function() {
+    var i;
+    
     // Create THEAD
     var elHead = document.createElement("thead");
     elHead.tabIndex = -1;
 
     // Iterate through each row of Column headers...
     var colTree = this._oColumnSet.tree;
-    for(var i=0; i<colTree.length; i++) {
+    for(i=0; i<colTree.length; i++) {
         var elHeadRow = elHead.appendChild(document.createElement("tr"));
         elHeadRow.id = this.id+"-hdrow"+i;
 
@@ -979,8 +964,8 @@ YAHOO.widget.DataTable.prototype._initHead = function() {
     
     // Add Resizer only after DOM has been updated...
     // ...and skip the last column
-    for(var k=0; k<this._oColumnSet.keys.length-1; k++) {
-        var oColumn = this._oColumnSet.keys[k];
+    for(i=0; i<this._oColumnSet.keys.length-1; i++) {
+        var oColumn = this._oColumnSet.keys[i];
         if(oColumn.resizeable && YAHOO.util.DD) {
             //TODO: deal with fixed width tables
             //TODO: no more oColumn.isLast
@@ -1121,7 +1106,7 @@ YAHOO.widget.DataTable.prototype._unselect = function(els) {
 /**
  * Unselects all selected rows.
  *
- * @method unselectAllRows
+ * @method _unselectAllRows
  * @private
  */
 YAHOO.widget.DataTable.prototype._unselectAllRows = function() {
@@ -1132,7 +1117,7 @@ YAHOO.widget.DataTable.prototype._unselectAllRows = function() {
 /**
  * Unselects all selected cells.
  *
- * @method unselectAllCells
+ * @method _unselectAllCells
  * @private
  */
 YAHOO.widget.DataTable.prototype._unselectAllCells = function() {
@@ -1811,7 +1796,7 @@ YAHOO.widget.DataTable.prototype.focusTable = function() {
 /**
  * Add rows to bottom of table body.
  *
- * @method addRow
+ * @method appendRow
  * @param aRecords {YAHOO.widget.Record[]} Array of Records.
  */
 YAHOO.widget.DataTable.prototype.appendRows = function(aRecords) {
@@ -1847,6 +1832,8 @@ YAHOO.widget.DataTable.prototype.insertRows = function(aRecords) {
  * @param aRecords {YAHOO.widget.Record[]} Array of Records.
  */
 YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
+    var i;
+    
     if(aRecords && aRecords.length > 0) {
         this.hideTableMessages();
 
@@ -1862,7 +1849,7 @@ YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
             this._unselectAllRows();
         }
         // Format in-place existing rows
-        for(var i=0; i<elRows.length; i++) {
+        for(i=0; i<elRows.length; i++) {
             if(aRecords[i]) {
                 var oRecord = aRecords[i];
                 this.updateRow(oRecord,i);
@@ -1870,16 +1857,16 @@ YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
         }
 
         // Add rows as necessary
-        for(var j=elRows.length; j<aRecords.length; j++) {
-            this.addRow(aRecords[j]);
+        for(i=elRows.length; i<aRecords.length; i++) {
+            this.addRow(aRecords[i]);
         }
         
         // Select any rows as necessary
-        for(var k=0; k<selectedRecords.length; k++) {
+        for(i=0; i<selectedRecords.length; i++) {
             var allRows = elBody.rows;
-            for(var m=0; m<allRows.length; m++) {
-                if(selectedRecords[k] == allRows[m].recordId) {
-                    this._select([allRows[m]]);
+            for(var j=0; j<allRows.length; j++) {
+                if(selectedRecords[i] == allRows[j].recordId) {
+                    this._select([allRows[j]]);
                 }
             }
         }
@@ -1891,23 +1878,23 @@ YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
  *
  * @method addRow
  * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param i {Number} Position at which to add row.
+ * @param index {Number} Position at which to add row.
  */
-YAHOO.widget.DataTable.prototype.addRow = function(oRecord, i) {
+YAHOO.widget.DataTable.prototype.addRow = function(oRecord, index) {
     if(oRecord) {
         this.hideTableMessages();
 
         // Is this an insert or an append?
-        var insert = (isNaN(i)) ? false : true;
+        var insert = (isNaN(index)) ? false : true;
         if(!insert) {
-            i = this._elBody.rows.length;
+            index = this._elBody.rows.length;
         }
 
         var oColumnSet = this._oColumnSet;
         var oRecordSet = this._oRecordSet;
 
-        var elRow = (insert && this._elBody.rows[i]) ?
-            this._elBody.insertBefore(document.createElement("tr"),this._elBody.rows[i]) :
+        var elRow = (insert && this._elBody.rows[index]) ?
+            this._elBody.insertBefore(document.createElement("tr"),this._elBody.rows[index]) :
             this._elBody.appendChild(document.createElement("tr"));
         var recId = oRecord.id;
         elRow.id = this.id+"-bdrow"+recId;
@@ -1917,7 +1904,7 @@ YAHOO.widget.DataTable.prototype.addRow = function(oRecord, i) {
         for(var j=0; j<oColumnSet.keys.length; j++) {
             var oColumn = oColumnSet.keys[j];
             var elCell = elRow.appendChild(document.createElement("td"));
-            elCell.id = this.id+"-bdrow"+i+"-cell"+j;
+            elCell.id = this.id+"-bdrow"+index+"-cell"+j;
             elCell.headers = oColumn.id;
             elCell.columnIndex = j;
             elCell.headers = oColumnSet.headers[j];
@@ -1946,7 +1933,7 @@ YAHOO.widget.DataTable.prototype.addRow = function(oRecord, i) {
 
         // Striping
         if(!insert) {
-            if(i%2) {
+            if(index%2) {
                 YAHOO.util.Dom.addClass(elRow, YAHOO.widget.DataTable.CLASS_ODD);
             }
             else {
@@ -1965,13 +1952,13 @@ YAHOO.widget.DataTable.prototype.addRow = function(oRecord, i) {
  *
  * @method updateRow
  * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param i {Number} Position at which to update row.
+ * @param index {Number} Position at which to update row.
  */
-YAHOO.widget.DataTable.prototype.updateRow = function(oRecord, i) {
+YAHOO.widget.DataTable.prototype.updateRow = function(oRecord, index) {
     if(oRecord) {
         this.hideTableMessages();
 
-        var elRow = this._elBody.rows[i];
+        var elRow = this._elBody.rows[index];
         elRow.recordId = oRecord.id;
 
         var columns = this._oColumnSet.keys;
@@ -2207,6 +2194,8 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
  * @method paginate
  */
 YAHOO.widget.DataTable.prototype.paginate = function() {
+    var i;
+    
     // How many total Records
     var recordsLength = this._oRecordSet.getLength();
     
@@ -2251,7 +2240,7 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
         var markup = firstPageLink + prevPageLink;
         var maxLinks = (this.pageLinksStart+pageLinksLength < this._totalPages) ?
             this.pageLinksStart+pageLinksLength-1 : this._totalPages;
-        for(var i=this.pageLinksStart; i<=maxLinks; i++) {
+        for(i=this.pageLinksStart; i<=maxLinks; i++) {
              if(i != this.pageCurrent) {
                 markup += " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PAGELINK + "\">" + i + "</a> ";
             }
@@ -2268,7 +2257,7 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
             var select2 = document.createElement("select");
             select2.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
             
-            for(var i=0; i<this.rowsPerPageDropdown.length; i++) {
+            for(i=0; i<this.rowsPerPageDropdown.length; i++) {
                 var option1 = document.createElement("option");
                 var option2 = document.createElement("option");
                 option1.value = this.rowsPerPageDropdown[i];
@@ -2306,7 +2295,7 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
         this.pagers[0].links.innerHTML = markup;
         this.pagers[1].links.innerHTML = markup;
 
-        for(var i=0; i<this.pagers.length; i++) {
+        for(i=0; i<this.pagers.length; i++) {
             YAHOO.util.Event.purgeElement(this.pagers[i].links);
             YAHOO.util.Event.purgeElement(this.pagers[i].select);
             this.pagers[i].innerHTML = markup;
@@ -2429,170 +2418,6 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell) {
     }
 };
 
-/**
- * Formats cells in columns of type "checkbox".
- *
- * @method formatCheckbox
- * @param elCell {HTMLElement} Table cell element.
- * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param oData {Object} Data value for the cell, or null
- * @static
- */
-YAHOO.widget.DataTable.formatCheckbox = function(elCell, oColumn, oRecord, oData) {
-    var bChecked = oData;
-    bChecked = (bChecked) ? " checked" : "";
-    elCell.innerHTML = "<input type=\"checkbox\"" + bChecked +
-            " class=\"" + YAHOO.widget.DataTable.CLASS_CHECKBOX + "\">";
-};
-
-/**
- * Formats cells in columns of type "currency". Can be overridden for custom formatting.
- *
- * @method formatCurrency
- * @param elCell {HTMLElement} Table cell element.
- * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param oData {Object} Data value for the cell, or null
- * @static
- */
-YAHOO.widget.DataTable.formatCurrency = function(elCell, oColumn, oRecord, oData) {
-    // Make it dollars
-    var nAmount = oData;
-    var markup;
-        if(nAmount) {
-             markup = "$"+nAmount;
-
-            // Normalize to the penny
-            var dotIndex = markup.indexOf(".")
-            if(dotIndex < 0) {
-                markup += ".00";
-            }
-            else {
-                while(dotIndex != markup.length-3) {
-                    markup += "0";
-                }
-            }
-        }
-        else {
-            markup = "";
-        }
-        elCell.innerHTML = markup;
-};
-
-/**
- * Formats cells in columns of type "date".
- *
- * @method formatDate
- * @param elCell {HTMLElement} Table cell element.
- * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param oData {Object} Data value for the cell, or null
- * @static
- */
-YAHOO.widget.DataTable.formatDate = function(elCell, oColumn, oRecord, oData) {
-    var oDate = oData;
-    if(oDate) {
-        elCell.innerHTML = oDate.getMonth() + "/" + oDate.getDate()  + "/" + oDate.getFullYear();
-    }
-    else {
-        elCell.innerHTML = "";
-    }
-};
-
-/**
- * Formats cells in columns of type "email".
- *
- * @method formatEmail
- * @param elCell {HTMLElement} Table cell element.
- * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param oData {Object} Data value for the cell, or null
- * @static
- */
-YAHOO.widget.DataTable.formatEmail = function(elCell, oColumn, oRecord, oData) {
-    var sEmail = oData;
-    if(sEmail) {
-        elCell.innerHTML = "<a href=\"mailto:" + sEmail + "\">" + sEmail + "</a>";
-    }
-    else {
-        elCell.innerHTML = "";
-    }
-};
-
-/**
- * Formats cells in columns of type "link".
- *
- * @method formatLink
- * @param elCell {HTMLElement} Table cell element.
- * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param oData {Object} Data value for the cell, or null
- * @static
- */
-YAHOO.widget.DataTable.formatLink = function(elCell, oColumn, oRecord, oData) {
-    var sLink = oData;
-    if(sLink) {
-        elCell.innerHTML = "<a href=\"" + sLink + "\">" + sLink + "</a>";
-    }
-    else {
-        elCell.innerHTML = "";
-    }
-};
-
-/**
- * Formats cells in columns of type "number".
- *
- * @method formatNumber
- * @param elCell {HTMLElement} Table cell element.
- * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param oData {Object} Data value for the cell, or null
- * @static
- */
-YAHOO.widget.DataTable.formatNumber = function(elCell, oColumn, oRecord, oData) {
-    var nNumber = oData;
-    if(nNumber) {
-        elCell.innerHTML = nNumber.toString();
-    }
-    else {
-        elCell.innerHTML = "";
-    }
-};
-
-/**
- * Formats cells in columns of type "select".
- *
- * @method formatSelect
- * @param elCell {HTMLElement} Table cell element.
- * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param oData {Object} Data value for the cell, or null
- * @static
- */
-YAHOO.widget.DataTable.formatSelect = function(elCell, oColumn, oRecord, oData) {
-    var selectedValue = oData;
-    var options = oColumn.selectOptions;
-
-    var markup = "<select>";
-    if(options) {
-        for(var i=0; i<options.length; i++) {
-            var option = options[i];
-            markup += "<option value=\"" + option + "\"";
-            if(selectedValue === option) {
-                markup += " selected";
-            }
-            markup += ">" + option + "</option>";
-        }
-    }
-    else {
-        if(selectedValue) {
-            markup += "<option value=\"" + selectedValue + "\" selected>" + selectedValue + "</option>";
-        }
-    }
-    markup += "</select>";
-    elCell.innerHTML = markup;
-};
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2627,6 +2452,7 @@ YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
+    var i;
     var evt = oArgs.event;
     var target = oArgs.target;
 
@@ -2648,12 +2474,12 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
             if(startRow && this.isSelected(startRow)) {
                 this.unselectAllRows();
                 if(startRow.sectionRowIndex < target.sectionRowIndex) {
-                    for(var i=startRow.sectionRowIndex; i <= target.sectionRowIndex; i++) {
+                    for(i=startRow.sectionRowIndex; i<=target.sectionRowIndex; i++) {
                         this._select(this._elBody.rows[i]);
                     }
                 }
                 else {
-                    for(var i=target.sectionRowIndex; i <= startRow.sectionRowIndex; i++) {
+                    for(i=target.sectionRowIndex; i<=startRow.sectionRowIndex; i++) {
                         this._select(this._elBody.rows[i]);
                     }
                 }
@@ -2814,6 +2640,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oR
  * @param aHeaders {Object[]} Array of object literals that define header cells.
  */
 YAHOO.widget.ColumnSet = function(aHeaders) {
+//TODO: break out nested functions into private methods
     this._sName = "instance" + YAHOO.widget.ColumnSet._nCount;
 
     // Top-down tree representation of all Columns
@@ -2852,9 +2679,9 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
         recurseChildren(nodeList);
 
         // Parse each node for attributes and any children
-        for(var i=0; i<nodeList.length; i++) {
+        for(var j=0; j<nodeList.length; j++) {
             // Instantiate a Column for each node
-            var oColumn = new YAHOO.widget.Column(nodeList[i]);
+            var oColumn = new YAHOO.widget.Column(nodeList[j]);
             flat.push(oColumn);
             
             // Assign parent, if applicable
@@ -2867,14 +2694,39 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
             oColumn._colspan = 1;
 
             // Column may have children
-            if(nodeList[i].children) {
-                var children = nodeList[i].children;
+            if(nodeList[j].children) {
+                var children = nodeList[j].children;
+                var length = children.length;
+                
+                // Cascade certain properties to children if not defined on their own
+                for(var k=0; k<length; k++) {
+                    var child = children[k];
+                    if(oColumn.className && (child.className === undefined)) {
+                        child.className = oColumn.className;
+                    }
+                    if(oColumn.editor && (child.editor === undefined)) {
+                        child.editor = oColumn.editor;
+                    }
+                    if(oColumn.formatter && (child.formatter === undefined)) {
+                        child.formatter = oColumn.formatter;
+                    }
+                    if(oColumn.resizeable && (child.resizeable === undefined)) {
+                        child.resizeable = oColumn.resizeable;
+                    }
+                    if(oColumn.type && (child.type === undefined)) {
+                        child.type = oColumn.type;
+                    }
+                    if(oColumn.width && (child.width === undefined)) {
+                        child.width = oColumn.width;
+                    }
+                }
+                
                 // Children increase colspan of the Column
-                oColumn._colspan = children.length;
+                oColumn._colspan = length;
 
                 // Children increase colspan of the Column's parent
                 if (parent && parent._colspan) {
-                    parent._colspan += children.length-1;
+                    parent._colspan += length-1;
                     parent._children.push(oColumn);
                 }
                 
@@ -3068,7 +2920,7 @@ YAHOO.widget.Column._nCount = 0;
 /**
  * Unique ID, also assigned as DOM ID.
  *
- * @property id
+ * @property _id
  * @type String
  * @private
  */
@@ -3077,7 +2929,7 @@ YAHOO.widget.Column.prototype._id = null;
 /**
  * Reference to Column's index within its ColumnSet's key array, or null if not applicable.
  *
- * @property index
+ * @property _index
  * @type Number
  * @private
  */
@@ -3086,7 +2938,7 @@ YAHOO.widget.Column.prototype._index = null;
 /**
  * Number of table cells the Column spans.
  *
- * @property colspan
+ * @property _colspan
  * @type Number
  * @private
  */
@@ -3095,7 +2947,7 @@ YAHOO.widget.Column.prototype._colspan = 1;
 /**
  * Number of table rows the Column spans.
  *
- * @property colspan
+ * @property _rowspan
  * @type Number
  * @private
  */
@@ -3104,7 +2956,7 @@ YAHOO.widget.Column.prototype._rowspan = 1;
 /**
  * Column's parent, or null.
  *
- * @property parent
+ * @property _parent
  * @type YAHOO.widget.Column
  * @private
  */
@@ -3113,7 +2965,7 @@ YAHOO.widget.Column.prototype._parent = null;
 /**
  * Array of Column's chilren, or null.
  *
- * @property children
+ * @property _children
  * @type YAHOO.widget.Column[]
  * @private
  */
@@ -3124,7 +2976,7 @@ YAHOO.widget.Column.prototype._children = [];
 /**
  * Current offsetWidth of the column (in pixels).
  *
- * @property width
+ * @property _width
  * @type Number
  * @private
  */
@@ -3134,7 +2986,7 @@ YAHOO.widget.Column.prototype._width = null;
  * Minimum width the column can support (in pixels). Value is populated only if table
  * is fixedwidth, null otherwise.
  *
- * @property minWidth
+ * @property _minWidth
  * @type Number
  * @private
  */
@@ -3181,7 +3033,7 @@ YAHOO.widget.Column.prototype.type = "string";
 YAHOO.widget.Column.prototype.abbr = null;
 
 /**
- * Children.
+ * Array of object literals that define children of a column header.
  *
  * @property children
  * @type Object[]
@@ -3203,6 +3055,15 @@ YAHOO.widget.Column.prototype.width = null;
  * @type String
  */
 YAHOO.widget.Column.prototype.className = null;
+
+/**
+ * Defines a custom format function for Column, otherwise default is used.
+ *
+ * @property formatter
+ * @type HTMLFunction
+ */
+YAHOO.widget.Column.prototype.formatter = null;
+
 /**
  * Defines the type of editor for Column, otherwise Column is not editable.
  *
@@ -3228,19 +3089,6 @@ YAHOO.widget.Column.prototype.resizeable = false;
  * @default false
  */
 YAHOO.widget.Column.prototype.sortable = false;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /**
  * True if column is currently sorted in ascending order.
@@ -3349,35 +3197,31 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
         var classname = "";
         switch(type) {
             case "checkbox":
-                YAHOO.widget.DataTable.formatCheckbox(elCell, this, oRecord, oData);
+                YAHOO.widget.Column.formatCheckbox(elCell, this, oRecord, oData);
                 classname = YAHOO.widget.DataTable.CLASS_CHECKBOX;
                 break;
             case "currency":
-                YAHOO.widget.DataTable.formatCurrency(elCell, this, oRecord, oData);
+                YAHOO.widget.Column.formatCurrency(elCell, this, oRecord, oData);
                 classname = YAHOO.widget.DataTable.CLASS_CURRENCY;
                 break;
             case "date":
-                YAHOO.widget.DataTable.formatDate(elCell, this, oRecord, oData);
+                YAHOO.widget.Column.formatDate(elCell, this, oRecord, oData);
                 classname = YAHOO.widget.DataTable.CLASS_DATE;
                 break;
             case "email":
-                YAHOO.widget.DataTable.formatEmail(elCell, this, oRecord, oData);
+                YAHOO.widget.Column.formatEmail(elCell, this, oRecord, oData);
                 classname = YAHOO.widget.DataTable.CLASS_EMAIL;
                 break;
-            /*case "html":
-                YAHOO.widget.DataTable.formatHTML(elCell, this, oRecord, oData);
-                classname = YAHOO.widget.DataTable.CLASS_HTML;
-                break;*/
             case "link":
-                YAHOO.widget.DataTable.formatLink(elCell, this, oRecord, oData);
+                YAHOO.widget.Column.formatLink(elCell, this, oRecord, oData);
                 classname = YAHOO.widget.DataTable.CLASS_LINK;
                 break;
             case "number":
-                YAHOO.widget.DataTable.formatNumber(elCell, this, oRecord, oData);
+                YAHOO.widget.Column.formatNumber(elCell, this, oRecord, oData);
                 classname = YAHOO.widget.DataTable.CLASS_NUMBER;
                 break;
             case "select":
-                YAHOO.widget.DataTable.formatSelect(elCell, this, oRecord, oData);
+                YAHOO.widget.Column.formatSelect(elCell, this, oRecord, oData);
                 classname = YAHOO.widget.DataTable.CLASS_SELECT;
                 break;
            default:
@@ -3398,6 +3242,171 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
     }
 };
 
+
+/**
+ * Formats cells in Columns of type "checkbox".
+ *
+ * @method formatCheckbox
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oData {Object} Data value for the cell, or null
+ * @static
+ */
+YAHOO.widget.Column.formatCheckbox = function(elCell, oColumn, oRecord, oData) {
+    var bChecked = oData;
+    bChecked = (bChecked) ? " checked" : "";
+    elCell.innerHTML = "<input type=\"checkbox\"" + bChecked +
+            " class=\"" + YAHOO.widget.DataTable.CLASS_CHECKBOX + "\">";
+};
+
+/**
+ * Formats cells in Columns of type "currency". Can be overridden for custom formatting.
+ *
+ * @method formatCurrency
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oData {Object} Data value for the cell, or null
+ * @static
+ */
+YAHOO.widget.Column.formatCurrency = function(elCell, oColumn, oRecord, oData) {
+    // Make it dollars
+    var nAmount = oData;
+    var markup;
+        if(nAmount) {
+             markup = "$"+nAmount;
+
+            // Normalize to the penny
+            var dotIndex = markup.indexOf(".")
+            if(dotIndex < 0) {
+                markup += ".00";
+            }
+            else {
+                while(dotIndex != markup.length-3) {
+                    markup += "0";
+                }
+            }
+        }
+        else {
+            markup = "";
+        }
+        elCell.innerHTML = markup;
+};
+
+/**
+ * Formats cells in Columns of type "date".
+ *
+ * @method formatDate
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oData {Object} Data value for the cell, or null
+ * @static
+ */
+YAHOO.widget.Column.formatDate = function(elCell, oColumn, oRecord, oData) {
+    var oDate = oData;
+    if(oDate) {
+        elCell.innerHTML = oDate.getMonth() + "/" + oDate.getDate()  + "/" + oDate.getFullYear();
+    }
+    else {
+        elCell.innerHTML = "";
+    }
+};
+
+/**
+ * Formats cells in Columns of type "email".
+ *
+ * @method formatEmail
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oData {Object} Data value for the cell, or null
+ * @static
+ */
+YAHOO.widget.Column.formatEmail = function(elCell, oColumn, oRecord, oData) {
+    var sEmail = oData;
+    if(sEmail) {
+        elCell.innerHTML = "<a href=\"mailto:" + sEmail + "\">" + sEmail + "</a>";
+    }
+    else {
+        elCell.innerHTML = "";
+    }
+};
+
+/**
+ * Formats cells in Columns of type "link".
+ *
+ * @method formatLink
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oData {Object} Data value for the cell, or null
+ * @static
+ */
+YAHOO.widget.Column.formatLink = function(elCell, oColumn, oRecord, oData) {
+    var sLink = oData;
+    if(sLink) {
+        elCell.innerHTML = "<a href=\"" + sLink + "\">" + sLink + "</a>";
+    }
+    else {
+        elCell.innerHTML = "";
+    }
+};
+
+/**
+ * Formats cells in Columns of type "number".
+ *
+ * @method formatNumber
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oData {Object} Data value for the cell, or null
+ * @static
+ */
+YAHOO.widget.Column.formatNumber = function(elCell, oColumn, oRecord, oData) {
+    var nNumber = oData;
+    if(nNumber) {
+        elCell.innerHTML = nNumber.toString();
+    }
+    else {
+        elCell.innerHTML = "";
+    }
+};
+
+/**
+ * Formats cells in Columns of type "select".
+ *
+ * @method formatSelect
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oData {Object} Data value for the cell, or null
+ * @static
+ */
+YAHOO.widget.Column.formatSelect = function(elCell, oColumn, oRecord, oData) {
+    var selectedValue = oData;
+    var options = oColumn.selectOptions;
+
+    var markup = "<select>";
+    if(options) {
+        for(var i=0; i<options.length; i++) {
+            var option = options[i];
+            markup += "<option value=\"" + option + "\"";
+            if(selectedValue === option) {
+                markup += " selected";
+            }
+            markup += ">" + option + "</option>";
+        }
+    }
+    else {
+        if(selectedValue) {
+            markup += "<option value=\"" + selectedValue + "\" selected>" + selectedValue + "</option>";
+        }
+    }
+    markup += "</select>";
+    elCell.innerHTML = markup;
+};
 
 
 
@@ -4136,14 +4145,14 @@ YAHOO.widget.RecordSet.prototype.getRecord = function(identifier) {
  * given range. If range is null, entire RecordSet array is returned.
  */
 YAHOO.widget.RecordSet.prototype.getRecords = function(i, range) {
-    if(i == undefined) {
+    if(i === undefined) {
         return this._records;
     }
     i = parseInt(i);
     if(isNaN(i)) {
         return null;
     }
-    if(range == undefined) {
+    if(range === undefined) {
         return this._records.slice(i);
     }
     range = parseInt(range);

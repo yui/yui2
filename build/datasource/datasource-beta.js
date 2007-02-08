@@ -155,6 +155,7 @@ YAHOO.augment(YAHOO.util.DataSource, YAHOO.util.EventProvider);
  * @property TYPE_UNKNOWN
  * @type Number
  * @final
+ * @default -1
  */
 YAHOO.util.DataSource.TYPE_UNKNOWN = -1;
 
@@ -164,6 +165,7 @@ YAHOO.util.DataSource.TYPE_UNKNOWN = -1;
  * @property TYPE_JSARRAY
  * @type Number
  * @final
+ * @default 0
  */
 YAHOO.util.DataSource.TYPE_JSARRAY = 0;
 
@@ -173,6 +175,7 @@ YAHOO.util.DataSource.TYPE_JSARRAY = 0;
  * @property TYPE_JSFUNCTIOn
  * @type Number
  * @final
+ * @default 1
  */
 YAHOO.util.DataSource.TYPE_JSFUNCTION = 1;
 
@@ -182,6 +185,7 @@ YAHOO.util.DataSource.TYPE_JSFUNCTION = 1;
  * @property TYPE_XHR
  * @type Number
  * @final
+ * @default 2
  */
 YAHOO.util.DataSource.TYPE_XHR = 2;
 
@@ -191,6 +195,7 @@ YAHOO.util.DataSource.TYPE_XHR = 2;
  * @property TYPE_JSON
  * @type Number
  * @final
+ * @default 3
  */
 YAHOO.util.DataSource.TYPE_JSON = 3;
 
@@ -200,23 +205,26 @@ YAHOO.util.DataSource.TYPE_JSON = 3;
  * @property TYPE_XML
  * @type Number
  * @final
+ * @default 4
  */
 YAHOO.util.DataSource.TYPE_XML = 4;
 
 /**
- * Type is flat-file text.
+ * Type is plain text.
  *
- * @property TYPE_FLAT
+ * @property TYPE_TEXT
  * @type Number
  * @final
+ * @default 5
  */
-YAHOO.util.DataSource.TYPE_FLAT = 5;
+YAHOO.util.DataSource.TYPE_TEXT = 5;
 /**
  * Error message for invalid data responses.
  *
  * @property ERROR_DATAINVALID
  * @type String
  * @final
+ * @default "Invalid data"
  */
 YAHOO.util.DataSource.ERROR_DATAINVALID = "Invalid data";
 
@@ -226,6 +234,7 @@ YAHOO.util.DataSource.ERROR_DATAINVALID = "Invalid data";
  * @property ERROR_DATANULL
  * @type String
  * @final
+ * @default "Null data"
  */
 YAHOO.util.DataSource.ERROR_DATANULL = "Null data";
 
@@ -584,11 +593,11 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
             }
             oParsedResponse = this.parseXMLData(oRequest, oRawResponse);
             break;
-        case YAHOO.util.DataSource.TYPE_FLAT:
+        case YAHOO.util.DataSource.TYPE_TEXT:
             if(xhr && oRawResponse.responseText) {
                 oRawResponse = oRawResponse.responseText;
             }
-            oParsedResponse = this.parseFlatData(oRequest, oRawResponse);
+            oParsedResponse = this.parseTextData(oRequest, oRawResponse);
             break;
         default:
             //TODO: pass off to custom function
@@ -631,14 +640,14 @@ YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse
 };
 
 /**
- * Overridable method parses raw flat text data into a response object.
+ * Overridable method parses raw plain text data into a response object.
  *
- * @method parseFlatData
+ * @method parseTextData
  * @param oRequest {Object} Request object
  * @param oRawResponse {Object} The raw response from the live database
  * @return {Object} Parsed response object
  */
-YAHOO.util.DataSource.prototype.parseFlatData = function(oRequest, oRawResponse) {
+YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse) {
     var oParsedResponse = [];
     var recDelim = this.responseSchema.recordDelim;
     var fieldDelim = this.responseSchema.fieldDelim;
