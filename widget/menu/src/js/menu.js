@@ -1761,6 +1761,7 @@ _onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
                         nShowDelay = this.cfg.getProperty("showdelay");
 
                     if(
+                        !(this instanceof YAHOO.widget.MenuBar) && 
                         nSubmenuHideDelay > 0 && 
                         nShowDelay >= nSubmenuHideDelay
                     ) {

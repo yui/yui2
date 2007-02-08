@@ -293,16 +293,6 @@ YAHOO.widget.MenuItem.prototype = {
     IMG_ROOT_SSL: "https://a248.e.akamai.net/sec.yimg.com/i/",
 
 
-    /**
-    * @property COMMAND_KEYS
-    * @description Array of key codes that trigger the menu item's 
-    * "command" event.
-    * @default [13, 32]
-    * @type Array
-    */
-    COMMAND_KEYS: [13, 32],
-
-
 
     // Private member variables
     
@@ -1679,7 +1669,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @method configOnClick
-    * @description Event handler for when the "command" configuration property 
+    * @description Event handler for when the "onclick" configuration property 
     * of the menu item changes. 
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
@@ -1692,8 +1682,8 @@ YAHOO.widget.MenuItem.prototype = {
         var oObject = p_aArgs[0];
 
         /*
-            Remove any existing listeners if a command has already 
-            been specified.
+            Remove any existing listeners if a "click" event handler has 
+            already been specified.
         */
 
         if(this._oOnClick && (this._oOnClick != oObject)) {
