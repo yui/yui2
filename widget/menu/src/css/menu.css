@@ -288,8 +288,8 @@ div.yuimenubar li.yuimenubaritem.first-of-type {
 
 /* Styles for the the submenu indicator for menu items */
 
-div.yuimenu li .submenuindicator, 
-div.yuimenubar li .submenuindicator {
+div.yuimenu li em.submenuindicator, 
+div.yuimenubar li em.submenuindicator {
 
     display:-moz-inline-box; /* Mozilla */
     display:inline-block; /* IE, Opera and Safari */
@@ -297,47 +297,46 @@ div.yuimenubar li .submenuindicator {
     height:8px;
     width:8px;
     text-indent:9px;
-    font:200px/200px arial;
+    font:0/0 arial;
     overflow:hidden;
     background-image:url(../img/map.gif);
     background-repeat:no-repeat;
-    margin:0;
 
 }
 
-div.yuimenubar li .submenuindicator {
+div.yuimenubar li em.submenuindicator {
 
     background-position:0 -24px;
     margin:0 0 0 10px;
 
 }
 
-div.yuimenubar li .submenuindicator.selected {
+div.yuimenubar li em.submenuindicator.selected {
 
     background-position:0 -32px;
 
 }
 
-div.yuimenubar li .submenuindicator.disabled {
+div.yuimenubar li em.submenuindicator.disabled {
 
     background-position:0 -40px;
 
 }
 
-div.yuimenu li .submenuindicator {
+div.yuimenu li em.submenuindicator {
 
     background-position:0 0;
     margin:0 -16px 0 10px;
 
 }
 
-div.yuimenu li .submenuindicator.selected {
+div.yuimenu li em.submenuindicator.selected {
 
     background-position:0 -8px;
 
 }
 
-div.yuimenu li .submenuindicator.disabled {
+div.yuimenu li em.submenuindicator.disabled {
 
     background-position:0 -16px;
 
@@ -352,7 +351,7 @@ div.yuimenu li.checked {
 
 }
 
-div.yuimenu li .checkedindicator {
+div.yuimenu li em.checkedindicator {
 
     height:8px;
     width:8px;
@@ -369,13 +368,13 @@ div.yuimenu li .checkedindicator {
 
 }
 
-div.yuimenu li .checkedindicator.selected {
+div.yuimenu li em.checkedindicator.selected {
 
     background-position:0 -56px;
 
 }
 
-div.yuimenu li .checkedindicator.disabled {
+div.yuimenu li em.checkedindicator.disabled {
 
     background-position:0 -64px;
 
