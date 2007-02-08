@@ -3789,6 +3789,8 @@ destroy: function() {
     this.itemAddedEvent.unsubscribeAll();
     this.itemRemovedEvent.unsubscribeAll();
 
+    YAHOO.widget.Module.textResizeEvent.unsubscribe(this._onTextResize, this);
+
     var nItemGroups = this._aItemGroups.length,
         nItems,
         oItemGroup,
