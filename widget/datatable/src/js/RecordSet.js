@@ -137,14 +137,14 @@ YAHOO.widget.RecordSet.prototype.getRecord = function(identifier) {
  * given range. If range is null, entire RecordSet array is returned.
  */
 YAHOO.widget.RecordSet.prototype.getRecords = function(i, range) {
-    if(i == undefined) {
+    if(i === undefined) {
         return this._records;
     }
     i = parseInt(i);
     if(isNaN(i)) {
         return null;
     }
-    if(range == undefined) {
+    if(range === undefined) {
         return this._records.slice(i);
     }
     range = parseInt(range);

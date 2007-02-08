@@ -67,12 +67,37 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
             // Column may have children
             if(nodeList[j].children) {
                 var children = nodeList[j].children;
+                var length = children.length;
+                
+                // Cascade certain properties to children if not defined on their own
+                for(var k=0; k<length; k++) {
+                    var child = children[k];
+                    if(oColumn.className && (child.className === undefined)) {
+                        child.className = oColumn.className;
+                    }
+                    if(oColumn.editor && (child.editor === undefined)) {
+                        child.editor = oColumn.editor;
+                    }
+                    if(oColumn.formatter && (child.formatter === undefined)) {
+                        child.formatter = oColumn.formatter;
+                    }
+                    if(oColumn.resizeable && (child.resizeable === undefined)) {
+                        child.resizeable = oColumn.resizeable;
+                    }
+                    if(oColumn.type && (child.type === undefined)) {
+                        child.type = oColumn.type;
+                    }
+                    if(oColumn.width && (child.width === undefined)) {
+                        child.width = oColumn.width;
+                    }
+                }
+                
                 // Children increase colspan of the Column
-                oColumn._colspan = children.length;
+                oColumn._colspan = length;
 
                 // Children increase colspan of the Column's parent
                 if (parent && parent._colspan) {
-                    parent._colspan += children.length-1;
+                    parent._colspan += length-1;
                     parent._children.push(oColumn);
                 }
                 
@@ -402,6 +427,15 @@ YAHOO.widget.Column.prototype.width = null;
  * @type String
  */
 YAHOO.widget.Column.prototype.className = null;
+
+/**
+ * Defines a custom format function for Column, otherwise default is used.
+ *
+ * @property formatter
+ * @type HTMLFunction
+ */
+YAHOO.widget.Column.prototype.formatter = null;
+
 /**
  * Defines the type of editor for Column, otherwise Column is not editable.
  *
