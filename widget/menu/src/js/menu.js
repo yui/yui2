@@ -2569,7 +2569,7 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
 
         if(this.srcElement) {
 
-            this.render(this.cfg.getProperty("container"));
+            this.render();                
 
         }
         else {
@@ -2880,14 +2880,16 @@ _onParentMenuRender: function(p_sType, p_aArgs, p_oSubmenu) {
 
     if(!this.lazyLoad) {
 
-        if(Dom.inDocument(this.element)) {
+        var oLI = this.parent.element;
+
+        if(this.element.parentNode == oLI) {
     
             this.render();
     
         }
         else {
 
-            this.render(this.parent.element);
+            this.render(oLI);
     
         }
 
@@ -3739,8 +3741,10 @@ getItems: function() {
     var aGroups = this._aItemGroups,
         nGroups = aGroups.length;
 
-    return aItems = (nGroups == 1) ? 
-                        aGroups[0] : Array.prototype.concat.apply([], aGroups);
+    return (
+                (nGroups == 1) ? aGroups[0] : 
+                    (Array.prototype.concat.apply([], aGroups))
+            );
 
 },
 
