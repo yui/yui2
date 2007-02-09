@@ -523,6 +523,7 @@ YAHOO.util.History = ( function() {
                     doc.write( html );
                     doc.close();
                 } catch ( e ) {
+                    return false;
                 }
 
             } else {
