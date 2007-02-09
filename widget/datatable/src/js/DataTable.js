@@ -1655,10 +1655,12 @@ YAHOO.widget.DataTable.prototype.startRecordIndex = 1;
 YAHOO.widget.DataTable.prototype.pageLinksLength = -1;
 
 /**
- * Array of options to show in the rows-per-page pagination dropdown.
+ * Options to show in the rows-per-page pagination dropdown, should be an array
+ * of numbers. Null or an empty array causes no dropdown to be displayed.
  *
  * @property rowsPerPageDropdown
  * @type Number[]
+ * @default []
  */
 YAHOO.widget.DataTable.prototype.rowsPerPageDropdown = null;
         
@@ -2257,21 +2259,22 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
         markup += nextPageLink + lastPageLink;
 
         // Markup for rows-per-page dropdown
-        if(this.rowsPerPageDropdown && (this.rowsPerPageDropdown.constructor == Array)) {
+        var dropdown = this.rowsPerPageDropdown;
+        if(dropdown && (dropdown.constructor == Array) && (dropdown.length > 0)) {
             var select1 = document.createElement("select");
             select1.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
             var select2 = document.createElement("select");
             select2.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
             
-            for(i=0; i<this.rowsPerPageDropdown.length; i++) {
+            for(i=0; i<dropdown.length; i++) {
                 var option1 = document.createElement("option");
                 var option2 = document.createElement("option");
-                option1.value = this.rowsPerPageDropdown[i];
-                option2.value = this.rowsPerPageDropdown[i];
-                option1.innerHTML = this.rowsPerPageDropdown[i];
-                option2.innerHTML = this.rowsPerPageDropdown[i];
+                option1.value = dropdown[i];
+                option2.value = dropdown[i];
+                option1.innerHTML = dropdown[i];
+                option2.innerHTML = dropdown[i];
 
-                if(this.rowsPerPage === this.rowsPerPageDropdown[i]) {
+                if(this.rowsPerPage === dropdown[i]) {
                     option1.selected = true;
                     option2.selected = true;
                 }
