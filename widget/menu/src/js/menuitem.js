@@ -1621,7 +1621,16 @@ YAHOO.widget.MenuItem.prototype = {
                         this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
                     oSubmenuIndicator.className = "submenuindicator";
 
-                    oEl.appendChild(oSubmenuIndicator);
+                    if(oMenu.element.parentNode == oEl) {
+
+                        oEl.insertBefore(oSubmenuIndicator, oMenu.element);
+                
+                    }
+                    else {
+
+                        oEl.appendChild(oSubmenuIndicator);
+                    
+                    }
 
                     this.submenuIndicator = oSubmenuIndicator;
 
