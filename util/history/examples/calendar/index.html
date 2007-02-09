@@ -74,28 +74,28 @@
             <h2>Retrieve the initial state of the calendar module</h2>
 
             <p>
-              Use the <code>YAHOO.util.BHM.getBookmarkedState</code> method
+              Use the <code>YAHOO.util.History.getBookmarkedState</code> method
               and default to the month corresponding to today's date:
             </p>
 
 <textarea name="code" class="JScript" cols="60" rows="1">
 var today = new Date();
 var defaultCalendarState = ( today.getMonth() + 1 ) + "_" + today.getFullYear();
-var bookmarkedCalendarState = YAHOO.util.BHM.getBookmarkedState( "calendar" );
+var bookmarkedCalendarState = YAHOO.util.History.getBookmarkedState( "calendar" );
 var initialCalendarState = bookmarkedCalendarState || defaultCalendarState;
 </textarea>
 
             <h2>Register the calendar module</h2>
 
             <p>
-              Use the <code>YAHOO.util.BHM.register</code> method, passing in
+              Use the <code>YAHOO.util.History.register</code> method, passing in
               the calendar module identifier, the initial state of the calendar
               module, and the callback function that will be called when the
               state of the calendar module has changed:
             </p>
 
 <textarea name="code" class="JScript" cols="60" rows="1">
-YAHOO.util.BHM.register( "calendar", initialCalendarState, function( state ) {
+YAHOO.util.History.register( "calendar", initialCalendarState, function( state ) {
     // Show the right month according to the "state" parameter:
     calendar.cfg.setProperty( "pagedate", state.replace( "_", "/" ) );
     calendar.render();
@@ -115,9 +115,9 @@ YAHOO.util.BHM.register( "calendar", initialCalendarState, function( state ) {
 <textarea name="code" class="JScript" cols="60" rows="1">
 var calendar;
 
-YAHOO.util.BHM.onLoadEvent.subscribe( function() {
+YAHOO.util.History.onLoadEvent.subscribe( function() {
     // Retrieve the current state of the calendar module
-    var currentCalState = YAHOO.util.BHM.getCurrentState( "cal" );
+    var currentCalState = YAHOO.util.History.getCurrentState( "cal" );
     var startDate = { pagedate: currentCalState.replace( "_", "/" ) };
 
     // Instantiate the calendar widget
@@ -141,24 +141,24 @@ function handleCalendarBeforeRender() {
     var calDate = calendar.cfg.getProperty( "pageDate" );
     var pageDate = ( calDate.getMonth() + 1 ) + "_" + calDate.getFullYear();
     // The following test is crucial. Otherwise, we end up circling forever.
-    // Indeed, YAHOO.util.BHM.navigate will call the module onStateChange callback,
+    // Indeed, YAHOO.util.History.navigate will call the module onStateChange callback,
     // which will call createCalendar, which will call calendar.render(), which will
     // end up calling handleCalendarBeforeRender, and it keeps going from here...
-    var currentCalState = YAHOO.util.BHM.getCurrentState( "cal" );
+    var currentCalState = YAHOO.util.History.getCurrentState( "cal" );
     if ( pageDate != currentCalState )
-        YAHOO.util.BHM.navigate( "cal", pageDate );
+        YAHOO.util.History.navigate( "cal", pageDate );
 }
 </textarea>
 
             <h2>Initialize the Browser History Manager</h2>
 
             <p>
-              Simply call <code>YAHOO.util.BHM.initialize</code> from a script
+              Simply call <code>YAHOO.util.History.initialize</code> from a script
               block located right after the opening body tag:
             </p>
 
 <textarea name="code" class="JScript" cols="60" rows="1">
-YAHOO.util.BHM.initialize();
+YAHOO.util.History.initialize();
 </textarea>
 
             <div id="stepnav">

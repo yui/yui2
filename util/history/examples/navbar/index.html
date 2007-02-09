@@ -133,10 +133,10 @@ function loadSection( section ) {
             <h2>Retrieve the initial state of the navigation module</h2>
 
             <p>
-              Use the <code>YAHOO.util.BHM.getBookmarkedState</code> method to find out
+              Use the <code>YAHOO.util.History.getBookmarkedState</code> method to find out
               the initial state of a module according to the URL fragment identifier
               (which is present if the user had previously bookmarked the application).
-              In our example, we also use the <code>YAHOO.util.BHM.getQueryStringParameter</code>
+              In our example, we also use the <code>YAHOO.util.History.getQueryStringParameter</code>
               method to find out the initial state of a module according to the query string
               (which is present if the user reached the page using a search engine, or if
               the user did not have scripting enabled when previously bookmarking the page).
@@ -144,22 +144,22 @@ function loadSection( section ) {
             </p>
 
 <textarea name="code" class="JScript" cols="60" rows="1">
-var bookmarkedSection = YAHOO.util.BHM.getBookmarkedState( "navbar" );
-var querySection = YAHOO.util.BHM.getQueryStringParameter( "section" );
+var bookmarkedSection = YAHOO.util.History.getBookmarkedState( "navbar" );
+var querySection = YAHOO.util.History.getQueryStringParameter( "section" );
 var initialSection = bookmarkedSection || querySection || "home";
 </textarea>
 
             <h2>Register the navigation module</h2>
 
             <p>
-              Use the <code>YAHOO.util.BHM.register</code> method, passing in
+              Use the <code>YAHOO.util.History.register</code> method, passing in
               the navigation module identifier, the initial state of the navigation
               module, and the callback function that will be called when the
               state of the navigation module has changed:
             </p>
 
 <textarea name="code" class="JScript" cols="60" rows="1">
-YAHOO.util.BHM.register( "navbar", initialSection, function( state ) {
+YAHOO.util.History.register( "navbar", initialSection, function( state ) {
     // Load the appropriate section:
     loadSection( state );
 } );
@@ -187,9 +187,9 @@ function initializeNavigationBar() {
         var anchor = anchors[i];
         YAHOO.util.Event.addListener( anchor, "click", function( evt ) {
             var href = this.getAttribute( "href" );
-            var section = YAHOO.util.BHM.getQueryStringParameter( "section", href ) || "home";
+            var section = YAHOO.util.History.getQueryStringParameter( "section", href ) || "home";
             // If the Browser History Manager was not successfuly initialized,
-            // the following call to YAHOO.util.BHM.navigate will throw an
+            // the following call to YAHOO.util.History.navigate will throw an
             // exception. We need to catch it and update the UI. The only
             // problem is that this new state will not be added to the browser
             // history.
@@ -198,7 +198,7 @@ function initializeNavigationBar() {
             // In that case, under normal circumstances, no exception should
             // be thrown here.
             try {
-                YAHOO.util.BHM.navigate( "app", section );
+                YAHOO.util.History.navigate( "app", section );
             } catch ( e ) {
                 loadSection( section );
             }
@@ -211,7 +211,7 @@ function initializeNavigationBar() {
     // actual section that needs to be loaded corresponds to the last section
     // visited before leaving the page, and not the initial section. This can
     // be retrieved using getCurrentState:
-    var currentSection = YAHOO.util.BHM.getCurrentState( "app" );
+    var currentSection = YAHOO.util.History.getCurrentState( "app" );
     if ( location.hash.substr(1).length > 0 ) {
         // If the section requested in the URL fragment is different from
         // the section loaded in index.php, we have an unpleasant refresh
@@ -228,7 +228,7 @@ function initializeNavigationBar() {
             <h2>Subscribe to the Browser History Manager <code>onLoad</code> event</h2>
 
 <textarea name="code" class="JScript" cols="60" rows="1">
-YAHOO.util.BHM.onLoadEvent.subscribe( function() {
+YAHOO.util.History.onLoadEvent.subscribe( function() {
     initializeNavigationBar();
 } );
 </textarea>
@@ -236,20 +236,20 @@ YAHOO.util.BHM.onLoadEvent.subscribe( function() {
             <h2>Initialize the Browser History Manager</h2>
 
             <p>
-              Simply call <code>YAHOO.util.BHM.initialize</code> from a script
+              Simply call <code>YAHOO.util.History.initialize</code> from a script
               block located right after the opening body tag:
             </p>
 
 <textarea name="code" class="JScript" cols="60" rows="1">
 try {
-    YAHOO.util.BHM.initialize();
+    YAHOO.util.History.initialize();
 } catch ( e ) {
     initializeNavigationBar();
 }
 </textarea>
 
             <p>
-              In our example, we wrapped the call to <code>YAHOO.util.BHM.initialize</code>
+              In our example, we wrapped the call to <code>YAHOO.util.History.initialize</code>
               by a <code>try...catch</code> block. Indeed, this method may throw an exception
               if the browser is not an A-grade browser. You may want to catch the exception
               and do something, or test which browser you're on before calling this method.

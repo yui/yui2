@@ -481,12 +481,13 @@ YAHOO.util.History = ( function() {
          * Call this method when you want to store a new entry in the browser's history.
          *
          * @method navigate
-         * @param {string} state Non-empty string representing the application's new state.
+         * @param {string} module Non-empty string representing your module.
+         * @param {string} state String representing the new state of the specified module.
          * @return {boolean} Indicates whether the new state was successfully added to the history.
          * @public
          */
         navigate : function( module, state ) {
-            if ( typeof module != "string" || _trim( module ) === "" || typeof state != "string" ) {
+            if ( typeof module != "string" || typeof state != "string" ) {
                 throw new Error( "Missing or invalid argument passed to YAHOO.util.History.navigate" );
             }
 
@@ -559,7 +560,7 @@ YAHOO.util.History = ( function() {
          * @public
          */
         getCurrentState : function( module ) {
-            if ( typeof module != "string" || _trim( module ) === "" ) {
+            if ( typeof module != "string" ) {
                 throw new Error( "Missing or invalid argument passed to YAHOO.util.History.getCurrentState" );
             }
 
@@ -586,7 +587,7 @@ YAHOO.util.History = ( function() {
          * @public
          */
         getBookmarkedState : function( module ) {
-            if ( typeof module != "string" || _trim( module ) === "" ) {
+            if ( typeof module != "string" ) {
                 throw new Error( "Missing or invalid argument passed to YAHOO.util.History.getBookmarkedState" );
             }
 

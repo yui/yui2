@@ -106,26 +106,26 @@
             <h2>Retrieve the initial state of the TabView module</h2>
             
             <p>
-              Use the <code>YAHOO.util.BHM.getBookmarkedState</code> method
+              Use the <code>YAHOO.util.History.getBookmarkedState</code> method
               and default to the first tab:
             </p>
 
 <textarea name="code" class="JScript" cols="60" rows="1">
-var bookmarkedTabViewState = YAHOO.util.BHM.getBookmarkedState( "tabview" );
+var bookmarkedTabViewState = YAHOO.util.History.getBookmarkedState( "tabview" );
 var initialTabViewState = bookmarkedTabViewState || "tab0";
 </textarea>
 
             <h2>Register the TabView module</h2>
 
             <p>
-              Use the <code>YAHOO.util.BHM.register</code> method, passing in
+              Use the <code>YAHOO.util.History.register</code> method, passing in
               the TabView module identifier, the initial state of the TabView
               module, and the callback function that will be called when the
               state of the TabView module has changed:
             </p>
 
 <textarea name="code" class="JScript" cols="60" rows="1">
-YAHOO.util.BHM.register( "tabview", initialTabViewState, function( state ) {
+YAHOO.util.History.register( "tabview", initialTabViewState, function( state ) {
     // Select the tab according to the "state" parameter:
     tabView.set( "activeIndex", state.substr(3) );
 } );
@@ -144,13 +144,13 @@ YAHOO.util.BHM.register( "tabview", initialTabViewState, function( state ) {
 <textarea name="code" class="JScript" cols="60" rows="1">
 var tabView;
 
-YAHOO.util.BHM.onLoadEvent.subscribe( function() {
+YAHOO.util.History.onLoadEvent.subscribe( function() {
     // Instantiate the TabView widget
     tabView = new YAHOO.widget.TabView( "demo" );
     tabView.addListener( "activeTabChange", handleTabViewActiveTabChange );
 
     // Retrieve the current state of the TabView module and select the appropriate tab
-    var currentTabViewState = YAHOO.util.BHM.getCurrentState( "tabview" );
+    var currentTabViewState = YAHOO.util.History.getCurrentState( "tabview" );
     tabView.set( "activeIndex", currentTabViewState.substr(3) );
 } );
 </textarea>
@@ -166,26 +166,26 @@ YAHOO.util.BHM.onLoadEvent.subscribe( function() {
 
 <textarea name="code" class="JScript" cols="60" rows="1">
 function handleTabViewActiveTabChange( e ) {
-    var currentTabViewState = YAHOO.util.BHM.getCurrentState( "tabview" );
+    var currentTabViewState = YAHOO.util.History.getCurrentState( "tabview" );
     var newTabViewState = "tab" + this.getTabIndex( e.newValue );
     // The following test is crucial. Otherwise, we end up circling forever.
-    // Indeed, YAHOO.util.BHM.navigate will call the module onStateChange callback,
+    // Indeed, YAHOO.util.History.navigate will call the module onStateChange callback,
     // which will call tabView.set, which will call this handler and it keeps
     // going from here...
     if ( newTabViewState != currentTabViewState )
-        YAHOO.util.BHM.navigate( "tabview", newTabViewState );
+        YAHOO.util.History.navigate( "tabview", newTabViewState );
 }
 </textarea>
 
             <h2>Initialize the Browser History Manager</h2>
 
             <p>
-              Simply call <code>YAHOO.util.BHM.initialize</code> from a script
+              Simply call <code>YAHOO.util.History.initialize</code> from a script
               block located right after the opening body tag:
             </p>
 
 <textarea name="code" class="JScript" cols="60" rows="1">
-YAHOO.util.BHM.initialize();
+YAHOO.util.History.initialize();
 </textarea>
 
             <div id="stepnav">
