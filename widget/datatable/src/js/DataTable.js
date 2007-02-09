@@ -1603,11 +1603,11 @@ YAHOO.widget.DataTable.prototype.scrollable = false;
 /**
  * True if only one row may be selected at a time.
  *
- * @property singleSelect
+ * @property rowSingleSelect
  * @type Boolean
  * @default false
  */
-YAHOO.widget.DataTable.prototype.singleSelect = false;
+YAHOO.widget.DataTable.prototype.rowSingleSelect = false;
 
 /**
  * ContextMenu instance.
@@ -2477,7 +2477,7 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
         this.unselect(target);
     }
     else {
-        if(this.singleSelect && !evt.ctrlKey && !evt.shiftKey) {
+        if(this.rowSingleSelect && !evt.ctrlKey && !evt.shiftKey) {
             this.unselectAllRows();
         }
         if(evt.shiftKey) {
@@ -2526,7 +2526,7 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
         this.unselect(target);
     }
     else {
-        if(this.singleSelect && !evt.ctrlKey) {
+        if(this.rowSingleSelect && !evt.ctrlKey) {
             this.unselectAllCells();
         }
         this.select(target);

@@ -51,7 +51,7 @@ myDataSource.responseSchema = {
     fields: ["Date","To","From","Subject","XID","Date","Attachment"]
 };
 
-var myDataTable = new YAHOO.widget.DataTable("rowselect",myColumnSet,myDataSource,{caption:"Example: Row Selection",singleSelect:true});
+var myDataTable = new YAHOO.widget.DataTable("rowselect",myColumnSet,myDataSource,{caption:"Example: Row Selection",rowSingleSelect:true});
 myDataTable.subscribe("cellClickEvent",myDataTable.onEventSelectRow);
 myDataTable.select(myDataTable.getRow(0));
 </script>
