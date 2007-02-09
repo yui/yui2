@@ -2178,21 +2178,10 @@ YAHOO.widget.DataTable.prototype.doKeypress = function(oArgs) {
  * @param nPage {Number} Which page.
  */
 YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
-//TODO: much optimization
-    // Validate new page number
-    if(isNaN(nPage) || (nPage < 1) || (nPage > this._totalPages)) {
+    // Validate input
+    if(!nPage || isNaN(nPage) || (nPage < 1) || (nPage > this._totalPages)) {
         nPage = 1;
     }
-    /*if(nPage < this.pageLinksStart){
-        this.pageLinksStart = nPage;
-    }
-    else if (nPage >= (this.pageLinksStart + this.pageLinksLength)) {
-        this.pageLinksStart = nPage - this.pageLinksLength + 1;
-    }
-    var rowsPerPage = this.rowsPerPage;
-    this.startRecordIndex = (nPage-1) * rowsPerPage;
-    var startRecordIndex = this.startRecordIndex;
-    var pageRecords = this._oRecordSet.getRecords(startRecordIndex, rowsPerPage);*/
     this.pageCurrent = nPage;
     this.paginate();
 };

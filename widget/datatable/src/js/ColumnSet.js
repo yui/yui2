@@ -1184,69 +1184,68 @@ YAHOO.widget.ColumnEditor.prototype.getTextboxEditorValue = function() {
 /****************************************************************************/
 
 /**
- * Sort utility class to support column sorting.
+ * Sort static utility to support column sorting.
  *
  * @class Sort
  * @static
  */
+YAHOO.util.Sort = {
+    /////////////////////////////////////////////////////////////////////////////
+    //
+    // Public methods
+    //
+    /////////////////////////////////////////////////////////////////////////////
 
-YAHOO.util.Sort = {};
+    /**
+     * Comparator function for sort in ascending order. String sorting is case insensitive.
+     *
+     * @method compareAsc
+     * @param a {object} First sort argument.
+     * @param b {object} Second sort argument.
+     */
+    compareAsc: function(a, b) {
+        //TODO: is typeof better or is constructor property better?
+        if(a.constructor == String) {
+            a = a.toLowerCase();
+        }
+        if(b.constructor == String) {
+            b = b.toLowerCase();
+        }
+        if(a < b) {
+            return -1;
+        }
+        else if (a > b) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    },
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Public methods
-//
-/////////////////////////////////////////////////////////////////////////////
-
-/**
- * Comparator function for sort in ascending order. String sorting is case insensitive.
- *
- * @method compareAsc
- * @param a {object} First sort argument.
- * @param b {object} Second sort argument.
- */
-YAHOO.util.Sort.compareAsc = function(a, b) {
-    //TODO: is typeof better or is constructor property better?
-    if(a.constructor == String) {
-        a = a.toLowerCase();
-    }
-    if(b.constructor == String) {
-        b = b.toLowerCase();
-    }
-    if(a < b) {
-        return -1;
-    }
-    else if (a > b) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
-};
-
-/**
- * Comparator function for sort in descending order. String sorting is case insensitive.
- *
- * @method compareDesc
- * @param a {object} First sort argument.
- * @param b {object} Second sort argument.
- */
-YAHOO.util.Sort.compareDesc = function(a, b) {
-    //TODO: is typeof better or is constructor property better?
-    if(a.constructor == String) {
-        a = a.toLowerCase();
-    }
-    if(b.constructor == String) {
-        b = b.toLowerCase();
-    }
-    if(a < b) {
-        return 1;
-    }
-    else if (a > b) {
-        return -1;
-    }
-    else {
-        return 0;
+    /**
+     * Comparator function for sort in descending order. String sorting is case insensitive.
+     *
+     * @method compareDesc
+     * @param a {object} First sort argument.
+     * @param b {object} Second sort argument.
+     */
+    compareDesc: function(a, b) {
+        //TODO: is typeof better or is constructor property better?
+        if(a.constructor == String) {
+            a = a.toLowerCase();
+        }
+        if(b.constructor == String) {
+            b = b.toLowerCase();
+        }
+        if(a < b) {
+            return 1;
+        }
+        else if (a > b) {
+            return -1;
+        }
+        else {
+            return 0;
+        }
     }
 };
 
