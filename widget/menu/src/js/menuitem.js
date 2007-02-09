@@ -1623,7 +1623,25 @@ YAHOO.widget.MenuItem.prototype = {
 
                     if(oMenu.element.parentNode == oEl) {
 
-                        oEl.insertBefore(oSubmenuIndicator, oMenu.element);
+                        if(this.browser == "opera") {
+
+                            oEl.appendChild(oSubmenuIndicator);
+                            
+                            oMenu.renderEvent.subscribe(function() {
+
+                                oSubmenuIndicator.parentNode.insertBefore(
+                                                            oSubmenuIndicator, 
+                                                            oMenu.element
+                                                        );
+                            
+                            });
+                
+                        }
+                        else {
+
+                            oEl.insertBefore(oSubmenuIndicator, oMenu.element);
+                        
+                        }
                 
                     }
                     else {
