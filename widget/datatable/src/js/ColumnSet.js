@@ -98,6 +98,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                 // Children increase colspan of the Column's parent
                 if (parent && parent._colspan) {
                     parent._colspan += length-1;
+                    parent._children = [];
                     parent._children.push(oColumn);
                 }
                 
@@ -196,9 +197,8 @@ YAHOO.widget.ColumnSet.prototype._sName = null;
  *
  * @property tree
  * @type YAHOO.widget.Column[]
- * @default []
  */
-YAHOO.widget.ColumnSet.prototype.tree = [];
+YAHOO.widget.ColumnSet.prototype.tree = null;
 
 /**
  * Flattened representation of all Columns.
@@ -207,7 +207,7 @@ YAHOO.widget.ColumnSet.prototype.tree = [];
  * @type YAHOO.widget.Column[]
  * @default []
  */
-YAHOO.widget.ColumnSet.prototype.flat = [];
+YAHOO.widget.ColumnSet.prototype.flat = null;
 
 /**
  * Array of Columns that map one-to-one to a table column.
@@ -216,7 +216,7 @@ YAHOO.widget.ColumnSet.prototype.flat = [];
  * @type YAHOO.widget.Column[]
  * @default []
  */
-YAHOO.widget.ColumnSet.prototype.keys = [];
+YAHOO.widget.ColumnSet.prototype.keys = null;
 
 /**
  * ID index of nested parent heirarchies for HEADERS accessibility attribute.
@@ -225,7 +225,7 @@ YAHOO.widget.ColumnSet.prototype.keys = [];
  * @type String[]
  * @default []
  */
-YAHOO.widget.ColumnSet.prototype.headers = [];
+YAHOO.widget.ColumnSet.prototype.headers = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -341,7 +341,7 @@ YAHOO.widget.Column.prototype._parent = null;
  * @type YAHOO.widget.Column[]
  * @private
  */
-YAHOO.widget.Column.prototype._children = [];
+YAHOO.widget.Column.prototype._children = null;
 
 //TODO: clean these up
 

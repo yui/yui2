@@ -854,7 +854,7 @@ YAHOO.widget.DataTable.prototype._oRecordSet = null;
  * @type YAHOO.widget.Record[]
  * @private
  */
-YAHOO.widget.DataTable.prototype._aSelectedRecords = [];
+YAHOO.widget.DataTable.prototype._aSelectedRecords = null;
 
 /**
  * Internal variable to track whether widget has focus.
@@ -1078,7 +1078,8 @@ YAHOO.widget.DataTable.prototype._restripeRows = function(range) {
 };
 
 /**
- * Sets elements to selected state. Does not fire any events.
+ * Sets elements to selected state. Does not fire any events. Does not affect
+ * internal tracker.
  *
  * @method _select
  * @param els {HTMLElement[] | String[]} Array of HTML elements by reference or ID string.
@@ -1094,15 +1095,14 @@ YAHOO.widget.DataTable.prototype._select = function(els) {
 };
 
 /**
- * Sets elements to the unselected state. Does not fire any events.
+ * Sets elements to the unselected state. Does not fire any events. Does not
+ * affect internal tracker.
  *
  * @method _unselect
  * @param els {HTMLElement[] | String[]} Array of HTML elements by reference or ID string.
  * @private
  */
 YAHOO.widget.DataTable.prototype._unselect = function(els) {
-//TODO: put els in an array if it is just one element?
-    var array = this._aSelectedRecords;
     for(var i=0; i<els.length; i++) {
         // Remove the style
         YAHOO.util.Dom.removeClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
@@ -1660,7 +1660,6 @@ YAHOO.widget.DataTable.prototype.pageLinksLength = -1;
  *
  * @property rowsPerPageDropdown
  * @type Number[]
- * @default []
  */
 YAHOO.widget.DataTable.prototype.rowsPerPageDropdown = null;
         
@@ -1852,7 +1851,7 @@ YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
             elBody.deleteRow(0);
         }
         // Unselect rows in the UI but keep tracking selected rows
-        var selectedRecords = this.getSelectedRecords();
+        var selectedRecords = this.getSelectedRecordIds();
         if(selectedRecords.length > 0) {
             this._unselectAllRows();
         }
@@ -1905,7 +1904,7 @@ YAHOO.widget.DataTable.prototype.addRow = function(oRecord, index) {
             this._elBody.insertBefore(document.createElement("tr"),this._elBody.rows[index]) :
             this._elBody.appendChild(document.createElement("tr"));
         var recId = oRecord.id;
-        elRow.id = this.id+"-bdrow"+recId;
+        elRow.id = this.id+"-bdrow"+index;
         elRow.recordId = recId;
 
         // Create TBODY cells
@@ -2030,7 +2029,7 @@ YAHOO.widget.DataTable.prototype.select = function(els) {
         }
         this._select(els);
         // Add Record ID to internal tracker
-        var tracker = this._aSelectedRecords;
+        var tracker = this._aSelectedRecords || [];
         for(var i=0; i<els.length; i++) {
             var id = els[i].recordId;
             // Remove if already there
@@ -2040,6 +2039,7 @@ YAHOO.widget.DataTable.prototype.select = function(els) {
             // Add to the end
             tracker.push(id);
         }
+        this._aSelectedRecords = tracker;
         this.fireEvent("selectEvent",{els:els});
     }
 };
@@ -2058,13 +2058,14 @@ YAHOO.widget.DataTable.prototype.unselect = function(els) {
         }
         this._unselect(els);
         // Remove Record ID from internal tracker
-        var tracker = this._aSelectedRecords;
+        var tracker = this._aSelectedRecords || [];
         for(var i=0; i<els.length; i++) {
             var index = tracker.indexOf(els[i].recordId);
             if(index >  -1) {
                 tracker.splice(index,1);
             }
         }
+        this._aSelectedRecords = tracker;
         this.fireEvent("unselectEvent",{els:els});
     }
 };
@@ -2104,11 +2105,11 @@ YAHOO.widget.DataTable.prototype.isSelected = function(el) {
 /**
  * Returns array of selected Record IDs.
  *
- * @method getSelectedRecords
+ * @method getSelectedRecordIds
  * @return {HTMLElement[]} Array of selected TR elements.
  */
-YAHOO.widget.DataTable.prototype.getSelectedRecords = function() {
-    return this._aSelectedRecords;
+YAHOO.widget.DataTable.prototype.getSelectedRecordIds = function() {
+    return this._aSelectedRecords || [];
 };
 
 /**
@@ -2486,17 +2487,17 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
                 this.unselectAllRows();
                 if(startRow.sectionRowIndex < target.sectionRowIndex) {
                     for(i=startRow.sectionRowIndex; i<=target.sectionRowIndex; i++) {
-                        this._select(this._elBody.rows[i]);
+                        this.select(this._elBody.rows[i]);
                     }
                 }
                 else {
                     for(i=target.sectionRowIndex; i<=startRow.sectionRowIndex; i++) {
-                        this._select(this._elBody.rows[i]);
+                        this.select(this._elBody.rows[i]);
                     }
                 }
             }
             else {
-                this._select(target);
+                this.select(target);
             }
         }
         else {
