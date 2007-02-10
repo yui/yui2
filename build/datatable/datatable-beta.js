@@ -102,7 +102,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
             this._oRecordSet.addRecords(aRecords);
             // Then re-do the markup
             this._initTable();
-            //TODO: use paginate this.appendRows(this._oRecordSet.getRecords());
+            this.doBeforeRenderData(this._oRecordSet.getRecords());
             this.paginate();
         }
         // Create markup from scratch using the provided DataSource
@@ -170,6 +170,15 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this.createEvent("cellMouseoverEvent");
 
     /**
+     * Fired when a mouseout occurs on a TD element.
+     *
+     * @event cellMouseoutEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TD element.
+     */
+    this.createEvent("cellMouseoutEvent");
+
+    /**
      * Fired when a TH cell element is mouseover.
      *
      * @event headCellMouseoverEvent
@@ -180,6 +189,16 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this.createEvent("headCellMouseoverEvent");
 
     /**
+     * Fired when a TH cell element is mouseout.
+     *
+     * @event headCellMouseoutEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TH element.
+     *
+     */
+    this.createEvent("headCellMouseoutEvent");
+
+    /**
      * Fired when a TABLE element is mouseover.
      *
      * @event tableMouseoverEvent
@@ -188,6 +207,16 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
      *
      */
     this.createEvent("tableMouseoverEvent");
+
+    /**
+     * Fired when a TABLE element is mouseout.
+     *
+     * @event tableMouseoutEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TABLE element.
+     *
+     */
+    this.createEvent("tableMouseoutEvent");
 
     /**
      * Fired when a mousedown occurs on a TD element.
@@ -472,6 +501,17 @@ YAHOO.widget.DataTable.CLASS_LOADING = "yui-dt-loading";
  * @default "yui-dt-selected"
  */
 YAHOO.widget.DataTable.CLASS_SELECTED = "yui-dt-selected";
+
+/**
+ * Class name assigned to highlighted element.
+ *
+ * @property CLASS_HIGHLIGHT
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-highlight"
+ */
+YAHOO.widget.DataTable.CLASS_HIGHLIGHT = "yui-dt-highlight";
 
 /**
  * Class name assigned to certain elements of a scrollable DataTable.
@@ -849,7 +889,7 @@ YAHOO.widget.DataTable.prototype._oRecordSet = null;
  * @type YAHOO.widget.Record[]
  * @private
  */
-YAHOO.widget.DataTable.prototype._aSelectedRecords = [];
+YAHOO.widget.DataTable.prototype._aSelectedRecords = null;
 
 /**
  * Internal variable to track whether widget has focus.
@@ -1015,6 +1055,16 @@ YAHOO.widget.DataTable.prototype._initHeadCell = function(elHeadCell,oColumn,row
     if(oColumn.className) {
         YAHOO.util.Dom.addClass(elHeadCell,oColumn.className);
     }
+    // Apply CSS for sorted tables
+    if(this.sortedBy && this.sortedBy.colKey) {
+        if(this.sortedBy.colKey == oColumn.key) {
+            var sortClass = (this.sortedBy.dir && (this.sortedBy.dir != "asc")) ?
+                    YAHOO.widget.DataTable.CLASS_SORTEDBYDESC :
+                    YAHOO.widget.DataTable.CLASS_SORTEDBYASC;
+            YAHOO.util.Dom.addClass(elHeadCell,sortClass);
+            this.sortedBy._id = elHeadCell.id;
+        }
+    }
 
     elHeadCell.innerHTML = "";
 
@@ -1072,7 +1122,8 @@ YAHOO.widget.DataTable.prototype._restripeRows = function(range) {
 };
 
 /**
- * Sets elements to selected state. Does not fire any events.
+ * Sets elements to selected state. Does not fire any events. Does not affect
+ * internal tracker.
  *
  * @method _select
  * @param els {HTMLElement[] | String[]} Array of HTML elements by reference or ID string.
@@ -1088,15 +1139,14 @@ YAHOO.widget.DataTable.prototype._select = function(els) {
 };
 
 /**
- * Sets elements to the unselected state. Does not fire any events.
+ * Sets elements to the unselected state. Does not fire any events. Does not
+ * affect internal tracker.
  *
  * @method _unselect
  * @param els {HTMLElement[] | String[]} Array of HTML elements by reference or ID string.
  * @private
  */
 YAHOO.widget.DataTable.prototype._unselect = function(els) {
-//TODO: put els in an array if it is just one element?
-    var array = this._aSelectedRecords;
     for(var i=0; i<els.length; i++) {
         // Remove the style
         YAHOO.util.Dom.removeClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
@@ -1136,7 +1186,7 @@ YAHOO.widget.DataTable.prototype._unselectAllCells = function() {
  * Handles blur events on the TABLE element.
  *
  * @method _onBlur
- * @param e {HTMLEvent} The mouseover event.
+ * @param e {HTMLEvent} The blur event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
@@ -1187,10 +1237,52 @@ YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
 };
 
 /**
+ * Handles mouseout events on the TABLE element.
+ *
+ * @method _onMouseout
+ * @param e {HTMLEvent} The mouseout event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onMouseout = function(e, oSelf) {
+	    var elTarget = YAHOO.util.Event.getTarget(e);
+	    var elTag = elTarget.nodeName.toLowerCase();
+	    var knownTag = false;
+
+        if (elTag != "table") {
+            while(!knownTag) {
+                switch(elTag) {
+                    case "body":
+                        knownTag = true;
+                        break;
+                    case "td":
+    	                oSelf.fireEvent("cellMouseoutEvent",{target:elTarget,event:e});
+    	                knownTag = true;
+    	                break;
+        	        case "th":
+                    	oSelf.fireEvent("headCellMouseoutEvent",{target:elTarget,event:e});
+                    	knownTag = true;
+                    	break;
+                    default:
+                        break;
+                }
+                elTarget = elTarget.parentNode;
+                if(elTarget) {
+                    elTag = elTarget.nodeName.toLowerCase();
+                }
+                else {
+                    break;
+                }
+            }
+        }
+	    oSelf.fireEvent("tableMouseoutEvent",{target:elTarget,event:e});
+};
+
+/**
  * Handles mousedown events on the TABLE element.
  *
  * @method _onMousedown
- * @param e {HTMLEvent} The mouseover event.
+ * @param e {HTMLEvent} The mousedown event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
@@ -1654,7 +1746,6 @@ YAHOO.widget.DataTable.prototype.pageLinksLength = -1;
  *
  * @property rowsPerPageDropdown
  * @type Number[]
- * @default []
  */
 YAHOO.widget.DataTable.prototype.rowsPerPageDropdown = null;
         
@@ -1683,6 +1774,17 @@ YAHOO.widget.DataTable.prototype.pagers = null;
  * @type Boolean
  */
 YAHOO.widget.DataTable.prototype.isEmpty = false;
+
+/**
+ * Object literal holds sort metadata:
+ *  sortedBy.colKey
+ *  sortedBy.dir
+ *
+ *
+ * @property sortedBy
+ * @type Object
+ */
+YAHOO.widget.DataTable.prototype.sortedBy = null;
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1796,6 +1898,18 @@ YAHOO.widget.DataTable.prototype.focusTable = function() {
 };
 
 /**
+ * Abstract overridable method gives implementers a hook to access Records before
+ * they get rendered to the TBODY, such as to perform a RecordSet sort.
+ *
+ * @method doBeforeRenderData
+ * @param newRecords {YAHOO.widget.Record[]} New Records to be rendered.
+ */
+YAHOO.widget.DataTable.prototype.doBeforeRenderData = function(newRecords) {
+//TODO: give better access to initial load -- must be defined in constructor currently
+    /* abstract method */
+};
+
+/**
  * Add rows to bottom of table body.
  *
  * @method appendRow
@@ -1846,7 +1960,7 @@ YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
             elBody.deleteRow(0);
         }
         // Unselect rows in the UI but keep tracking selected rows
-        var selectedRecords = this.getSelectedRecords();
+        var selectedRecords = this.getSelectedRecordIds();
         if(selectedRecords.length > 0) {
             this._unselectAllRows();
         }
@@ -1899,7 +2013,7 @@ YAHOO.widget.DataTable.prototype.addRow = function(oRecord, index) {
             this._elBody.insertBefore(document.createElement("tr"),this._elBody.rows[index]) :
             this._elBody.appendChild(document.createElement("tr"));
         var recId = oRecord.id;
-        elRow.id = this.id+"-bdrow"+recId;
+        elRow.id = this.id+"-bdrow"+index;
         elRow.recordId = recId;
 
         // Create TBODY cells
@@ -2024,7 +2138,7 @@ YAHOO.widget.DataTable.prototype.select = function(els) {
         }
         this._select(els);
         // Add Record ID to internal tracker
-        var tracker = this._aSelectedRecords;
+        var tracker = this._aSelectedRecords || [];
         for(var i=0; i<els.length; i++) {
             var id = els[i].recordId;
             // Remove if already there
@@ -2034,6 +2148,7 @@ YAHOO.widget.DataTable.prototype.select = function(els) {
             // Add to the end
             tracker.push(id);
         }
+        this._aSelectedRecords = tracker;
         this.fireEvent("selectEvent",{els:els});
     }
 };
@@ -2052,13 +2167,14 @@ YAHOO.widget.DataTable.prototype.unselect = function(els) {
         }
         this._unselect(els);
         // Remove Record ID from internal tracker
-        var tracker = this._aSelectedRecords;
+        var tracker = this._aSelectedRecords || [];
         for(var i=0; i<els.length; i++) {
             var index = tracker.indexOf(els[i].recordId);
             if(index >  -1) {
                 tracker.splice(index,1);
             }
         }
+        this._aSelectedRecords = tracker;
         this.fireEvent("unselectEvent",{els:els});
     }
 };
@@ -2098,11 +2214,11 @@ YAHOO.widget.DataTable.prototype.isSelected = function(el) {
 /**
  * Returns array of selected Record IDs.
  *
- * @method getSelectedRecords
+ * @method getSelectedRecordIds
  * @return {HTMLElement[]} Array of selected TR elements.
  */
-YAHOO.widget.DataTable.prototype.getSelectedRecords = function() {
-    return this._aSelectedRecords;
+YAHOO.widget.DataTable.prototype.getSelectedRecordIds = function() {
+    return this._aSelectedRecords || [];
 };
 
 /**
@@ -2171,21 +2287,10 @@ YAHOO.widget.DataTable.prototype.doKeypress = function(oArgs) {
  * @param nPage {Number} Which page.
  */
 YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
-//TODO: much optimization
-    // Validate new page number
-    if(isNaN(nPage) || (nPage < 1) || (nPage > this._totalPages)) {
+    // Validate input
+    if(!nPage || isNaN(nPage) || (nPage < 1) || (nPage > this._totalPages)) {
         nPage = 1;
     }
-    /*if(nPage < this.pageLinksStart){
-        this.pageLinksStart = nPage;
-    }
-    else if (nPage >= (this.pageLinksStart + this.pageLinksLength)) {
-        this.pageLinksStart = nPage - this.pageLinksLength + 1;
-    }
-    var rowsPerPage = this.rowsPerPage;
-    this.startRecordIndex = (nPage-1) * rowsPerPage;
-    var startRecordIndex = this.startRecordIndex;
-    var pageRecords = this._oRecordSet.getRecords(startRecordIndex, rowsPerPage);*/
     this.pageCurrent = nPage;
     this.paginate();
 };
@@ -2327,30 +2432,32 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
         var sortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultOrder) ? oColumn.sortOptions.defaultOrder : "asc";
 
         //TODO: what if column doesn't have key?
-        // Is the column sorted already?
-        if(oColumn.key && (this.sortedBy == oColumn.key)) {
-            if(this.sortedByDir) {
-                sortDir = (this.sortedByDir == "asc") ? "desc" : "asc";
+        // Is this column sorted already?
+        if(oColumn.key && this.sortedBy && (this.sortedBy.colKey == oColumn.key)) {
+            if(this.sortedBy.dir) {
+                sortDir = (this.sortedBy.dir == "asc") ? "desc" : "asc";
             }
             else {
                 sortDir = (sortDir == "asc") ? "desc" : "asc";
             }
         }
+        else if(!this.sortedBy) {
+            this.sortedBy = {};
+        }
 
         // Define the sort handler function based on the direction
         var sortFnc = null;
-        if((sortDir == "desc") && oColumn.sortOptions && oColumn.sortOptions.descHandler) {
-            sortFnc = oColumn.sortOptions.descHandler
+        if((sortDir == "desc") && oColumn.sortOptions && oColumn.sortOptions.descFunction) {
+            sortFnc = oColumn.sortOptions.descFunction
         }
-        else if((sortDir == "asc") && oColumn.sortOptions && oColumn.sortOptions.ascHandler) {
-            sortFnc = oColumn.sortOptions.ascHandler
+        else if((sortDir == "asc") && oColumn.sortOptions && oColumn.sortOptions.ascFunction) {
+            sortFnc = oColumn.sortOptions.ascFunction;
         }
 
-        // One was not provided so use the built-in sort handler functions
+        // Custom function was not provided so use the built-in sorter
         // ONLY IF column key is defined
         // TODO: use diff default functions based on column data type
         // TODO: nested/cumulative/hierarchical sorting
-        // TODO: support server side sorting
         if(!sortFnc && oColumn.key) {
             sortFnc = function(a, b) {
                 if(sortDir == "desc") {
@@ -2377,16 +2484,22 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
         if(sortFnc) {
             // Do the actual sort
             this._oRecordSet.sort(sortFnc);
+
             // Update the UI
             this.paginate();
 
-            // Keep track of currently sorted column
-            YAHOO.util.Dom.removeClass(this.sortedBy,YAHOO.widget.DataTable.CLASS_SORTEDBYASC);
-            YAHOO.util.Dom.removeClass(this.sortedBy,YAHOO.widget.DataTable.CLASS_SORTEDBYDESC);
-            this.sortedBy = oColumn.key;
-            this.sortedByDir = sortDir;
+            // Update classes
+            YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_SORTEDBYASC);
+            YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_SORTEDBYDESC);
             var newClass = (sortDir == "asc") ? YAHOO.widget.DataTable.CLASS_SORTEDBYASC : YAHOO.widget.DataTable.CLASS_SORTEDBYDESC;
             YAHOO.util.Dom.addClass(oColumn.getId(), newClass);
+
+            // Keep track of currently sorted column
+            this.sortedBy.colKey = oColumn.key;
+            this.sortedBy.dir = sortDir;
+            this.sortedBy._id = oColumn.getId();
+
+
         }
     }
     else {
@@ -2478,17 +2591,17 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
                 this.unselectAllRows();
                 if(startRow.sectionRowIndex < target.sectionRowIndex) {
                     for(i=startRow.sectionRowIndex; i<=target.sectionRowIndex; i++) {
-                        this._select(this._elBody.rows[i]);
+                        this.select(this._elBody.rows[i]);
                     }
                 }
                 else {
                     for(i=target.sectionRowIndex; i<=startRow.sectionRowIndex; i++) {
-                        this._select(this._elBody.rows[i]);
+                        this.select(this._elBody.rows[i]);
                     }
                 }
             }
             else {
-                this._select(target);
+                this.select(target);
             }
         }
         else {
@@ -2546,6 +2659,43 @@ YAHOO.widget.DataTable.prototype.onEventFormatCell = function(oArgs) {
 };
 
 /**
+ * Overridable custom event handler to highlight cell.
+ *
+ * @method onEventHighlightCell
+ * @param oArgs.event {HTMLEvent} Event object.
+ * @param oArgs.target {HTMLElement} Target element.
+ */
+YAHOO.widget.DataTable.prototype.onEventHighlightCell = function(oArgs) {
+    var evt = oArgs.event;
+    var target = oArgs.target;
+
+    //TODO: add a safety net in case TD is never reached
+    // Walk up the DOM until we get to the TD
+    while(target.nodeName.toLowerCase() != "td") {
+        target = target.parentNode;
+    }
+    YAHOO.util.Dom.addClass(target,YAHOO.widget.DataTable.CLASS_HIGHLIGHT);
+};
+
+/**
+ * Overridable custom event handler to unhighlight cell.
+ *
+ * @method onEventUnhighlightCell
+ * @param oArgs.event {HTMLEvent} Event object.
+ * @param oArgs.target {HTMLElement} Target element.
+ */
+YAHOO.widget.DataTable.prototype.onEventUnhighlightCell = function(oArgs) {
+    var evt = oArgs.event;
+    var target = oArgs.target;
+
+    //TODO: add a safety net in case TD is never reached
+    // Walk up the DOM until we get to the TD
+    while(target.nodeName.toLowerCase() != "td") {
+        target = target.parentNode;
+    }
+    YAHOO.util.Dom.removeClass(target,YAHOO.widget.DataTable.CLASS_HIGHLIGHT);
+};
+/**
  * Overridable custom event handler to edit cell.
  *
  * @method onEventEditCell
@@ -2577,7 +2727,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnPaginate = function(sRequest, oResp
     var newRecords = this._oRecordSet.append(oResponse);
     if(newRecords) {
         // Update markup
-        //this.appendRows(newRecords);
+        this.doBeforeRenderData(newRecords);
         this.paginate();
     }
 };
@@ -2730,6 +2880,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                 // Children increase colspan of the Column's parent
                 if (parent && parent._colspan) {
                     parent._colspan += length-1;
+                    parent._children = [];
                     parent._children.push(oColumn);
                 }
                 
@@ -2827,9 +2978,8 @@ YAHOO.widget.ColumnSet.prototype._sName = null;
  *
  * @property tree
  * @type YAHOO.widget.Column[]
- * @default []
  */
-YAHOO.widget.ColumnSet.prototype.tree = [];
+YAHOO.widget.ColumnSet.prototype.tree = null;
 
 /**
  * Flattened representation of all Columns.
@@ -2838,7 +2988,7 @@ YAHOO.widget.ColumnSet.prototype.tree = [];
  * @type YAHOO.widget.Column[]
  * @default []
  */
-YAHOO.widget.ColumnSet.prototype.flat = [];
+YAHOO.widget.ColumnSet.prototype.flat = null;
 
 /**
  * Array of Columns that map one-to-one to a table column.
@@ -2847,7 +2997,7 @@ YAHOO.widget.ColumnSet.prototype.flat = [];
  * @type YAHOO.widget.Column[]
  * @default []
  */
-YAHOO.widget.ColumnSet.prototype.keys = [];
+YAHOO.widget.ColumnSet.prototype.keys = null;
 
 /**
  * ID index of nested parent heirarchies for HEADERS accessibility attribute.
@@ -2856,7 +3006,7 @@ YAHOO.widget.ColumnSet.prototype.keys = [];
  * @type String[]
  * @default []
  */
-YAHOO.widget.ColumnSet.prototype.headers = [];
+YAHOO.widget.ColumnSet.prototype.headers = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2972,7 +3122,7 @@ YAHOO.widget.Column.prototype._parent = null;
  * @type YAHOO.widget.Column[]
  * @private
  */
-YAHOO.widget.Column.prototype._children = [];
+YAHOO.widget.Column.prototype._children = null;
 
 //TODO: clean these up
 
@@ -3094,41 +3244,22 @@ YAHOO.widget.Column.prototype.resizeable = false;
 YAHOO.widget.Column.prototype.sortable = false;
 
 /**
- * True if column is currently sorted in ascending order.
- *
- * @property currentlyAsc
- * @type Boolean
- * @default null
- */
-YAHOO.widget.Column.prototype.currentlyAsc = null;
-
-/**
- * True if unsorted column should get arranged in descending order, (i.e., dates that
- * by default should get sorted in reverse chronological order).
- *
- * @property sortDesc
- * @type Boolean
- * @default false
- */
-YAHOO.widget.Column.prototype.sortDesc = false;
-
-/**
  * Custom sort handler to arrange column in descending order.
  *
- * @property sortDescHandler
+ * @property sortOptions.descFunction
  * @type Function
  * @default null
  */
-YAHOO.widget.Column.prototype.sortDescHandler = null;
+YAHOO.widget.Column.prototype.descFunction = null;
 
 /**
  * Custom sort handler to arrange column in ascending order.
  *
- * @property sortAscHandler
+ * @property sortOptions.ascFunction
  * @type Function
  * @default null
  */
-YAHOO.widget.Column.prototype.sortAscHandler = null;
+YAHOO.widget.Column.prototype.ascFunction = null;
 
 
 
@@ -3812,69 +3943,68 @@ YAHOO.widget.ColumnEditor.prototype.getTextboxEditorValue = function() {
 /****************************************************************************/
 
 /**
- * Sort utility class to support column sorting.
+ * Sort static utility to support column sorting.
  *
  * @class Sort
  * @static
  */
+YAHOO.util.Sort = {
+    /////////////////////////////////////////////////////////////////////////////
+    //
+    // Public methods
+    //
+    /////////////////////////////////////////////////////////////////////////////
 
-YAHOO.util.Sort = {};
+    /**
+     * Comparator function for sort in ascending order. String sorting is case insensitive.
+     *
+     * @method compareAsc
+     * @param a {object} First sort argument.
+     * @param b {object} Second sort argument.
+     */
+    compareAsc: function(a, b) {
+        //TODO: is typeof better or is constructor property better?
+        if(a.constructor == String) {
+            a = a.toLowerCase();
+        }
+        if(b.constructor == String) {
+            b = b.toLowerCase();
+        }
+        if(a < b) {
+            return -1;
+        }
+        else if (a > b) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    },
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Public methods
-//
-/////////////////////////////////////////////////////////////////////////////
-
-/**
- * Comparator function for sort in ascending order. String sorting is case insensitive.
- *
- * @method compareAsc
- * @param a {object} First sort argument.
- * @param b {object} Second sort argument.
- */
-YAHOO.util.Sort.compareAsc = function(a, b) {
-    //TODO: is typeof better or is constructor property better?
-    if(a.constructor == String) {
-        a = a.toLowerCase();
-    }
-    if(b.constructor == String) {
-        b = b.toLowerCase();
-    }
-    if(a < b) {
-        return -1;
-    }
-    else if (a > b) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
-};
-
-/**
- * Comparator function for sort in descending order. String sorting is case insensitive.
- *
- * @method compareDesc
- * @param a {object} First sort argument.
- * @param b {object} Second sort argument.
- */
-YAHOO.util.Sort.compareDesc = function(a, b) {
-    //TODO: is typeof better or is constructor property better?
-    if(a.constructor == String) {
-        a = a.toLowerCase();
-    }
-    if(b.constructor == String) {
-        b = b.toLowerCase();
-    }
-    if(a < b) {
-        return 1;
-    }
-    else if (a > b) {
-        return -1;
-    }
-    else {
-        return 0;
+    /**
+     * Comparator function for sort in descending order. String sorting is case insensitive.
+     *
+     * @method compareDesc
+     * @param a {object} First sort argument.
+     * @param b {object} Second sort argument.
+     */
+    compareDesc: function(a, b) {
+        //TODO: is typeof better or is constructor property better?
+        if(a.constructor == String) {
+            a = a.toLowerCase();
+        }
+        if(b.constructor == String) {
+            b = b.toLowerCase();
+        }
+        if(a < b) {
+            return 1;
+        }
+        else if (a > b) {
+            return -1;
+        }
+        else {
+            return 0;
+        }
     }
 };
 
