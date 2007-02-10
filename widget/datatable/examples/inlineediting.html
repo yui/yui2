@@ -15,6 +15,7 @@
 #editing th, #editing td {border:1px solid #000;padding:.25em;}
 #editing th {background-color:#696969;color:#fff;}/*dark gray*/
 #editing .yui-dt-odd {background-color:#eee;} /*light gray*/
+#editing .yui-dt-editable.yui-dt-highlight {background-color:#BEDAFF;} /*light blue*/
 </style>
 </head>
 <body>
@@ -55,6 +56,8 @@ myDataSource.responseSchema = {
 
 var myDataTable = new YAHOO.widget.DataTable("editing", myColumnSet, myDataSource,{caption:"Example: Inline Editing"});
 myDataTable.subscribe("cellClickEvent",myDataTable.onEventEditCell);
+myDataTable.subscribe("cellMouseoverEvent",myDataTable.onEventHighlightCell);
+myDataTable.subscribe("cellMouseoutEvent",myDataTable.onEventUnhighlightCell);
 </script>
 </body>
 </html>

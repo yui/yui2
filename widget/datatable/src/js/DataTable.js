@@ -173,6 +173,15 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this.createEvent("cellMouseoverEvent");
 
     /**
+     * Fired when a mouseout occurs on a TD element.
+     *
+     * @event cellMouseoutEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TD element.
+     */
+    this.createEvent("cellMouseoutEvent");
+
+    /**
      * Fired when a TH cell element is mouseover.
      *
      * @event headCellMouseoverEvent
@@ -183,6 +192,16 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this.createEvent("headCellMouseoverEvent");
 
     /**
+     * Fired when a TH cell element is mouseout.
+     *
+     * @event headCellMouseoutEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TH element.
+     *
+     */
+    this.createEvent("headCellMouseoutEvent");
+
+    /**
      * Fired when a TABLE element is mouseover.
      *
      * @event tableMouseoverEvent
@@ -191,6 +210,16 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
      *
      */
     this.createEvent("tableMouseoverEvent");
+
+    /**
+     * Fired when a TABLE element is mouseout.
+     *
+     * @event tableMouseoutEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TABLE element.
+     *
+     */
+    this.createEvent("tableMouseoutEvent");
 
     /**
      * Fired when a mousedown occurs on a TD element.
@@ -477,6 +506,17 @@ YAHOO.widget.DataTable.CLASS_LOADING = "yui-dt-loading";
  * @default "yui-dt-selected"
  */
 YAHOO.widget.DataTable.CLASS_SELECTED = "yui-dt-selected";
+
+/**
+ * Class name assigned to highlighted element.
+ *
+ * @property CLASS_HIGHLIGHT
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-highlight"
+ */
+YAHOO.widget.DataTable.CLASS_HIGHLIGHT = "yui-dt-highlight";
 
 /**
  * Class name assigned to certain elements of a scrollable DataTable.
@@ -1152,7 +1192,7 @@ YAHOO.widget.DataTable.prototype._unselectAllCells = function() {
  * Handles blur events on the TABLE element.
  *
  * @method _onBlur
- * @param e {HTMLEvent} The mouseover event.
+ * @param e {HTMLEvent} The blur event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
@@ -1203,10 +1243,52 @@ YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
 };
 
 /**
+ * Handles mouseout events on the TABLE element.
+ *
+ * @method _onMouseout
+ * @param e {HTMLEvent} The mouseout event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onMouseout = function(e, oSelf) {
+	    var elTarget = YAHOO.util.Event.getTarget(e);
+	    var elTag = elTarget.nodeName.toLowerCase();
+	    var knownTag = false;
+
+        if (elTag != "table") {
+            while(!knownTag) {
+                switch(elTag) {
+                    case "body":
+                        knownTag = true;
+                        break;
+                    case "td":
+    	                oSelf.fireEvent("cellMouseoutEvent",{target:elTarget,event:e});
+    	                knownTag = true;
+    	                break;
+        	        case "th":
+                    	oSelf.fireEvent("headCellMouseoutEvent",{target:elTarget,event:e});
+                    	knownTag = true;
+                    	break;
+                    default:
+                        break;
+                }
+                elTarget = elTarget.parentNode;
+                if(elTarget) {
+                    elTag = elTarget.nodeName.toLowerCase();
+                }
+                else {
+                    break;
+                }
+            }
+        }
+	    oSelf.fireEvent("tableMouseoutEvent",{target:elTarget,event:e});
+};
+
+/**
  * Handles mousedown events on the TABLE element.
  *
  * @method _onMousedown
- * @param e {HTMLEvent} The mouseover event.
+ * @param e {HTMLEvent} The mousedown event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
@@ -2584,6 +2666,43 @@ YAHOO.widget.DataTable.prototype.onEventFormatCell = function(oArgs) {
     this.formatCell(element);
 };
 
+/**
+ * Overridable custom event handler to highlight cell.
+ *
+ * @method onEventHighlightCell
+ * @param oArgs.event {HTMLEvent} Event object.
+ * @param oArgs.target {HTMLElement} Target element.
+ */
+YAHOO.widget.DataTable.prototype.onEventHighlightCell = function(oArgs) {
+    var evt = oArgs.event;
+    var target = oArgs.target;
+
+    //TODO: add a safety net in case TD is never reached
+    // Walk up the DOM until we get to the TD
+    while(target.nodeName.toLowerCase() != "td") {
+        target = target.parentNode;
+    }
+    YAHOO.util.Dom.addClass(target,YAHOO.widget.DataTable.CLASS_HIGHLIGHT);
+};
+
+/**
+ * Overridable custom event handler to unhighlight cell.
+ *
+ * @method onEventUnhighlightCell
+ * @param oArgs.event {HTMLEvent} Event object.
+ * @param oArgs.target {HTMLElement} Target element.
+ */
+YAHOO.widget.DataTable.prototype.onEventUnhighlightCell = function(oArgs) {
+    var evt = oArgs.event;
+    var target = oArgs.target;
+
+    //TODO: add a safety net in case TD is never reached
+    // Walk up the DOM until we get to the TD
+    while(target.nodeName.toLowerCase() != "td") {
+        target = target.parentNode;
+    }
+    YAHOO.util.Dom.removeClass(target,YAHOO.widget.DataTable.CLASS_HIGHLIGHT);
+};
 /**
  * Overridable custom event handler to edit cell.
  *
