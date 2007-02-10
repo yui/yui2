@@ -463,41 +463,22 @@ YAHOO.widget.Column.prototype.resizeable = false;
 YAHOO.widget.Column.prototype.sortable = false;
 
 /**
- * True if column is currently sorted in ascending order.
- *
- * @property currentlyAsc
- * @type Boolean
- * @default null
- */
-YAHOO.widget.Column.prototype.currentlyAsc = null;
-
-/**
- * True if unsorted column should get arranged in descending order, (i.e., dates that
- * by default should get sorted in reverse chronological order).
- *
- * @property sortDesc
- * @type Boolean
- * @default false
- */
-YAHOO.widget.Column.prototype.sortDesc = false;
-
-/**
  * Custom sort handler to arrange column in descending order.
  *
- * @property sortDescHandler
+ * @property sortOptions.descFunction
  * @type Function
  * @default null
  */
-YAHOO.widget.Column.prototype.sortDescHandler = null;
+YAHOO.widget.Column.prototype.descFunction = null;
 
 /**
  * Custom sort handler to arrange column in ascending order.
  *
- * @property sortAscHandler
+ * @property sortOptions.ascFunction
  * @type Function
  * @default null
  */
-YAHOO.widget.Column.prototype.sortAscHandler = null;
+YAHOO.widget.Column.prototype.ascFunction = null;
 
 
 

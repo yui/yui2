@@ -1021,6 +1021,16 @@ YAHOO.widget.DataTable.prototype._initHeadCell = function(elHeadCell,oColumn,row
     if(oColumn.className) {
         YAHOO.util.Dom.addClass(elHeadCell,oColumn.className);
     }
+    // Apply CSS for sorted tables
+    if(this.sortedBy && this.sortedBy.colKey) {
+        if(this.sortedBy.colKey == oColumn.key) {
+            var sortClass = (this.sortedBy.dir && (this.sortedBy.dir != "asc")) ?
+                    YAHOO.widget.DataTable.CLASS_SORTEDBYDESC :
+                    YAHOO.widget.DataTable.CLASS_SORTEDBYASC;
+            YAHOO.util.Dom.addClass(elHeadCell,sortClass);
+            this.sortedBy._id = elHeadCell.id;
+        }
+    }
 
     elHeadCell.innerHTML = "";
 
@@ -1689,6 +1699,17 @@ YAHOO.widget.DataTable.prototype.pagers = null;
  */
 YAHOO.widget.DataTable.prototype.isEmpty = false;
 
+/**
+ * Object literal holds sort metadata:
+ *  sortedBy.colKey
+ *  sortedBy.dir
+ *
+ *
+ * @property sortedBy
+ * @type Object
+ */
+YAHOO.widget.DataTable.prototype.sortedBy = null;
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2323,30 +2344,32 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
         var sortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultOrder) ? oColumn.sortOptions.defaultOrder : "asc";
 
         //TODO: what if column doesn't have key?
-        // Is the column sorted already?
-        if(oColumn.key && (this.sortedBy == oColumn.key)) {
-            if(this.sortedByDir) {
-                sortDir = (this.sortedByDir == "asc") ? "desc" : "asc";
+        // Is this column sorted already?
+        if(oColumn.key && this.sortedBy && (this.sortedBy.colKey == oColumn.key)) {
+            if(this.sortedBy.dir) {
+                sortDir = (this.sortedBy.dir == "asc") ? "desc" : "asc";
             }
             else {
                 sortDir = (sortDir == "asc") ? "desc" : "asc";
             }
         }
+        else if(!this.sortedBy) {
+            this.sortedBy = {};
+        }
 
         // Define the sort handler function based on the direction
         var sortFnc = null;
-        if((sortDir == "desc") && oColumn.sortOptions && oColumn.sortOptions.descHandler) {
-            sortFnc = oColumn.sortOptions.descHandler
+        if((sortDir == "desc") && oColumn.sortOptions && oColumn.sortOptions.descFunction) {
+            sortFnc = oColumn.sortOptions.descFunction
         }
-        else if((sortDir == "asc") && oColumn.sortOptions && oColumn.sortOptions.ascHandler) {
-            sortFnc = oColumn.sortOptions.ascHandler
+        else if((sortDir == "asc") && oColumn.sortOptions && oColumn.sortOptions.ascFunction) {
+            sortFnc = oColumn.sortOptions.ascFunction;
         }
 
-        // One was not provided so use the built-in sort handler functions
+        // Custom function was not provided so use the built-in sorter
         // ONLY IF column key is defined
         // TODO: use diff default functions based on column data type
         // TODO: nested/cumulative/hierarchical sorting
-        // TODO: support server side sorting
         if(!sortFnc && oColumn.key) {
             sortFnc = function(a, b) {
                 if(sortDir == "desc") {
@@ -2373,16 +2396,22 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
         if(sortFnc) {
             // Do the actual sort
             this._oRecordSet.sort(sortFnc);
+
             // Update the UI
             this.paginate();
 
-            // Keep track of currently sorted column
-            YAHOO.util.Dom.removeClass(this.sortedBy,YAHOO.widget.DataTable.CLASS_SORTEDBYASC);
-            YAHOO.util.Dom.removeClass(this.sortedBy,YAHOO.widget.DataTable.CLASS_SORTEDBYDESC);
-            this.sortedBy = oColumn.key;
-            this.sortedByDir = sortDir;
+            // Update classes
+            YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_SORTEDBYASC);
+            YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_SORTEDBYDESC);
             var newClass = (sortDir == "asc") ? YAHOO.widget.DataTable.CLASS_SORTEDBYASC : YAHOO.widget.DataTable.CLASS_SORTEDBYDESC;
             YAHOO.util.Dom.addClass(oColumn.getId(), newClass);
+
+            // Keep track of currently sorted column
+            this.sortedBy.colKey = oColumn.key;
+            this.sortedBy.dir = sortDir;
+            this.sortedBy._id = oColumn.getId();
+
+
             YAHOO.log("Column \"" + oColumn.key + "\" sorted " + sortDir,"info",this.toString());
         }
     }

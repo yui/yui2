@@ -15,7 +15,13 @@
 #sort th, #sort td {border:1px solid #000;}
 #sort th {background-color:#696969;}/*dark gray*/
 #sort th a {color:#fff;}
-#sort .yui-dt-odd {background-color:#eee;} /*light gray*/
+#sort th .yui-dt-headtext {margin-right:5px;padding-right:15px;} /*room for arrow*/
+#sort .yui-dt-sortedbyasc, #sort .yui-dt-sortedbydesc {background-color:#3F3F3F;}/*dark gray*/
+#sort .yui-dt-sortedbyasc .yui-dt-headtext {background-image: url('img/arrow_up.gif'); background-repeat:no-repeat; background-position:right;}/*arrow up*/
+#sort .yui-dt-sortedbydesc .yui-dt-headtext {background-image: url('img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right;}/*arrow down*/
+#sort .yui-dt-odd {background-color:#eee;} /*light gray zebra stripe*/
+
+
 </style>
 </head>
 <body>
@@ -50,7 +56,7 @@ YAHOO.example.sortStatesDesc = function(a, b) {
 
 var myColumnHeaders = [
     {key:"areacode",text:"Area Codes",sortable:true},
-    {key:"state",text:"States",sortable:true,sortOptions:{ascHandler:YAHOO.example.sortStatesAsc,descHandler:YAHOO.example.sortStatesDesc}}
+    {key:"state",text:"States",sortable:true,sortOptions:{ascFunction:YAHOO.example.sortStatesAsc,descFunction:YAHOO.example.sortStatesDesc}}
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
@@ -60,7 +66,7 @@ myDataSource.responseSchema = {
     fields: ["areacode","state"]
 };
 
-var myDataTable = new YAHOO.widget.DataTable("sort",myColumnSet,myDataSource,{caption:"Example: Custom Sorting",sortedBy:"areacode",sortedByDir:"asc"});
+var myDataTable = new YAHOO.widget.DataTable("sort",myColumnSet,myDataSource,{caption:"Example: Custom Sorting",sortedBy:{colKey:"areacode",dir:"asc"}});
 </script>
 </body>
 </html>
