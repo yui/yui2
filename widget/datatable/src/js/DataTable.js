@@ -104,7 +104,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
             this._oRecordSet.addRecords(aRecords);
             // Then re-do the markup
             this._initTable();
-            //TODO: use paginate this.appendRows(this._oRecordSet.getRecords());
+            this.doBeforeRenderData(this._oRecordSet.getRecords());
             this.paginate();
         }
         // Create markup from scratch using the provided DataSource
@@ -1822,6 +1822,18 @@ YAHOO.widget.DataTable.prototype.focusTable = function() {
 };
 
 /**
+ * Abstract overridable method gives implementers a hook to access Records before
+ * they get rendered to the TBODY, such as to perform a RecordSet sort.
+ *
+ * @method doBeforeRenderData
+ * @param newRecords {YAHOO.widget.Record[]} New Records to be rendered.
+ */
+YAHOO.widget.DataTable.prototype.doBeforeRenderData = function(newRecords) {
+//TODO: give better access to initial load -- must be defined in constructor currently
+    /* abstract method */
+};
+
+/**
  * Add rows to bottom of table body.
  *
  * @method appendRow
@@ -2604,7 +2616,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnPaginate = function(sRequest, oResp
     var newRecords = this._oRecordSet.append(oResponse);
     if(newRecords) {
         // Update markup
-        //this.appendRows(newRecords);
+        this.doBeforeRenderData(newRecords);
         this.paginate();
         YAHOO.log("Data returned for " + newRecords.length + " rows","info",this.toString());
     }
