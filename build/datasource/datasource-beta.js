@@ -305,6 +305,29 @@ YAHOO.util.DataSource.prototype.maxCacheEntries = 0;
  */
 YAHOO.util.DataSource.prototype.liveData = null;
 
+ /**
+ * If data is accessed over XHR via Connection Manager, the connection timeout is
+ * configurable in milliseconds the XHR connection will wait for a server
+ * response. A a value of zero indicates the XHR connection will wait forever.
+ * Any value greater than zero will use the Connection utility's Auto-Abort
+ * feature.
+ *
+ * @property connTimeout
+ * @type Number
+ * @default 0
+ */
+YAHOO.util.DataSource.prototype.connTimeout = null;
+
+ /**
+ * Alias to YUI Connection Manager. Allows implementers to specify their own
+ * subclasses of the YUI Connection Manager utility.
+ *
+ * @property connMgr
+ * @type Object
+ * @default YAHOO.util.Connect
+ */
+YAHOO.util.DataSource.prototype.connMgr = YAHOO.util.Connect || null;
+
 /**
  * Where the live data is held.
  *
@@ -542,17 +565,21 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
             };
 
             //TODO: connTimeout config
-            if(!isNaN(this.connTimeout) && this.connTimeout > 0) {
+            if(this.connTimeout && !isNaN(this.connTimeout) && this.connTimeout > 0) {
                 _xhrCallback.timeout = this.connTimeout;
             }
 
             //TODO: oConn config
-            if(this._oConn) {
-                YAHOO.util.Connect.abort(this._oConn);
+            if(this._oConn && this.connMgr) {
+                this.connMgr.abort(this._oConn);
             }
 
             var sUri = this.liveData+"?"+oRequest;
-            this._oConn = YAHOO.util.Connect.asyncRequest("GET", sUri, _xhrCallback, null);
+            if(this.connMgr) {
+                this._oConn = this.connMgr.asyncRequest("GET", sUri, _xhrCallback, null);
+            }
+            else {
+            }
 
             break;
         default:
