@@ -31,6 +31,7 @@ YAHOO.example.enhanceFromMarkup = function() {
     this.columnHeaders = [
         {key:"due",text:"Due Date",type:"date",sortable:true},
         {key:"account",text:"Account Number",sortable:true},
+        {key:"quantity",text:"Quantity",type:"number",sortable:true},
         {key:"amount",text:"Amount Due",type:"currency",sortable:true}
     ];
     this.columnSet = new YAHOO.widget.ColumnSet(this.columnHeaders);
@@ -52,6 +53,7 @@ YAHOO.util.Event.onAvailable("markup",YAHOO.example.enhanceFromMarkup,YAHOO.exam
             <tr>
                 <th>Due Date</th>
                 <th>Account Number</th>
+                <th>Quantity</th>
                 <th>Amount Due</th>
             </tr>
         </thead>
@@ -59,36 +61,43 @@ YAHOO.util.Event.onAvailable("markup",YAHOO.example.enhanceFromMarkup,YAHOO.exam
             <tr>
                 <td>1/23/1999</td>
                 <td>29e8548592d8c82</td>
+                <td>12</td>
                 <td>$150.00</td>
             </tr>
             <tr>
                 <td>5/19/1999</td>
                 <td>83849</td>
+                <td>8</td>
                 <td>$60.00</td>
             </tr>
             <tr>
                 <td>8/9/1999</td>
                 <td>11348</td>
+                <td>1</td>
                 <td>$34.99</td>
             </tr>
             <tr>
                 <td>1/23/2000</td>
                 <td>29e8548592d8c82</td>
+                <td>10</td>
                 <td>$150.00</td>
             </tr>
             <tr>
                 <td>4/28/2000</td>
                 <td>37892857482836437378273</td>
+                <td>123</td>
                 <td>$33.32</td>
             </tr>
             <tr>
                 <td>1/23/2001</td>
                 <td>83849</td>
+                <td>5</td>
                 <td>$150.00</td>
             </tr>
             <tr>
                 <td>9/30/2001</td>
                 <td>224747</td>
+                <td>14</td>
                 <td>$56.78</td>
             </tr>
         </tbody>

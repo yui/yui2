@@ -25,7 +25,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
 
     var nodelevel = -1;
 
-    // Internal recursive function to parse columns
+    // Internal recursive function to parse Columns out of object literal defs
     var parseColumns = function(nodeList, parent) {
         nodelevel++;
         // A node level is an array of Columns
@@ -80,6 +80,9 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                     }
                     if(oColumn.formatter && (child.formatter === undefined)) {
                         child.formatter = oColumn.formatter;
+                    }
+                    if(oColumn.parser && (child.parser === undefined)) {
+                        child.parser = oColumn.parser;
                     }
                     if(oColumn.resizeable && (child.resizeable === undefined)) {
                         child.resizeable = oColumn.resizeable;
@@ -346,7 +349,7 @@ YAHOO.widget.Column.prototype._children = null;
 //TODO: clean these up
 
 /**
- * Current offsetWidth of the column (in pixels).
+ * Current offsetWidth of the Column (in pixels).
  *
  * @property _width
  * @type Number
@@ -355,7 +358,7 @@ YAHOO.widget.Column.prototype._children = null;
 YAHOO.widget.Column.prototype._width = null;
 
 /**
- * Minimum width the column can support (in pixels). Value is populated only if table
+ * Minimum width the Column can support (in pixels). Value is populated only if table
  * is fixedwidth, null otherwise.
  *
  * @property _minWidth
@@ -371,7 +374,7 @@ YAHOO.widget.Column.prototype._minWidth = null;
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Associated database column, or null.
+ * Associated database field, or null.
  *
  * @property key
  * @type String
@@ -379,7 +382,7 @@ YAHOO.widget.Column.prototype._minWidth = null;
 YAHOO.widget.Column.prototype.key = null;
 
 /**
- * Text or HTML for display in the column head cell.
+ * Text or HTML for display in Column's assocated TH element.
  *
  * @property text
  * @type String
@@ -405,7 +408,7 @@ YAHOO.widget.Column.prototype.type = "string";
 YAHOO.widget.Column.prototype.abbr = null;
 
 /**
- * Array of object literals that define children of a column header.
+ * Array of object literals that define children (nested headers) of a Column.
  *
  * @property children
  * @type Object[]
@@ -429,12 +432,22 @@ YAHOO.widget.Column.prototype.width = null;
 YAHOO.widget.Column.prototype.className = null;
 
 /**
- * Defines a custom format function for Column, otherwise default is used.
+ * Defines a custom format function for Column, otherwise default is used,
+ * according to Column type.
  *
  * @property formatter
  * @type HTMLFunction
  */
 YAHOO.widget.Column.prototype.formatter = null;
+
+/**
+ * Defines a custom parse function for Column, otherwise default is used,
+ * according to Column type.
+ *
+ * @property parser
+ * @type HTMLFunction
+ */
+YAHOO.widget.Column.prototype.parser = null;
 
 /**
  * Defines the type of editor for Column, otherwise Column is not editable.
@@ -445,7 +458,7 @@ YAHOO.widget.Column.prototype.formatter = null;
 YAHOO.widget.Column.prototype.editor = null;
 
 /**
- * True if column is resizeable, false otherwise.
+ * True if Column is resizeable, false otherwise.
  *
  * @property resizeable
  * @type Boolean
@@ -454,7 +467,7 @@ YAHOO.widget.Column.prototype.editor = null;
 YAHOO.widget.Column.prototype.resizeable = false;
 
 /**
- * True if column is sortable, false otherwise.
+ * True if Column is sortable, false otherwise.
  *
  * @property sortable
  * @type Boolean
@@ -463,7 +476,7 @@ YAHOO.widget.Column.prototype.resizeable = false;
 YAHOO.widget.Column.prototype.sortable = false;
 
 /**
- * Custom sort handler to arrange column in descending order.
+ * Custom sort handler to arrange Column in descending order.
  *
  * @property sortOptions.descFunction
  * @type Function
@@ -472,7 +485,7 @@ YAHOO.widget.Column.prototype.sortable = false;
 YAHOO.widget.Column.prototype.descFunction = null;
 
 /**
- * Custom sort handler to arrange column in ascending order.
+ * Custom sort handler to arrange Column in ascending order.
  *
  * @property sortOptions.ascFunction
  * @type Function
@@ -761,15 +774,6 @@ YAHOO.widget.Column.formatSelect = function(elCell, oColumn, oRecord, oData) {
     elCell.innerHTML = markup;
 };
 
-
-
-
-
-
-//TODO: clean these up
-
-
-
 /**
  * Takes innerHTML from TD and parses out data for storage in RecordSet.
  *
@@ -778,87 +782,70 @@ YAHOO.widget.Column.formatSelect = function(elCell, oColumn, oRecord, oData) {
  * @return {Object} Data.
  */
 YAHOO.widget.Column.prototype.parse = function(sMarkup) {
-//TODO: builtin parsers YAHOO.widget.Column.PARSEDATE, PARSEINT, PARSEFLOAT, and custom parsers
-    var data = null;
-    switch(this.type) {
-        case "checkbox":
-            data = YAHOO.widget.Column.checkboxParser(sMarkup);
-            break;
-        case "currency":
-            data = YAHOO.widget.Column.currencyParser(sMarkup);
-            break;
-        case "custom":
-            data = YAHOO.widget.Column.customParser(sMarkup);
-            break;
-        case "date":
-            data = YAHOO.widget.Column.dateParser(sMarkup);
-            break;
-        case "float":
-            data = YAHOO.widget.Column.floatParser(sMarkup);
-            break;
-        case "html":
-            data = YAHOO.widget.Column.htmlParser(sMarkup);
-            break;
-        case "number":
-            data = YAHOO.widget.Column.numberParser(sMarkup);
-            break;
-        case "select":
-            data = YAHOO.widget.Column.selectParser(sMarkup);
-            break;
-       default:
-            if(sMarkup) {
-                data = sMarkup;
-            }
-            break;
+    if(this.parser) {
+        return this.parser(sMarkup);
     }
-    return data;
+    else {
+        var data = null;
+        switch(this.type) {
+            case "checkbox":
+                data = YAHOO.widget.Column.parseCheckbox(sMarkup);
+                break;
+            case "currency":
+                data = YAHOO.widget.Column.parseCurrency(sMarkup);
+                break;
+            case "date":
+                data = YAHOO.widget.Column.parseDate(sMarkup);
+                break;
+            case "number":
+                data = YAHOO.widget.Column.parseNumber(sMarkup);
+                break;
+            case "select":
+                data = YAHOO.widget.Column.parseSelect(sMarkup);
+                break;
+           default:
+                if(sMarkup) {
+                    data = sMarkup;
+                }
+                break;
+        }
+        return data;
+    }
 };
 
 /**
- * Default parser for columns of type "checkbox" takes markup and extracts data.
- * Can be overridden for custom parsing.
+ * Default parse function for Columns of type "checkbox" takes markup and
+ * extracts data. Can be overridden for custom parsing.
  *
- * @method checkboxParser
+ * @method parseCheckbox
  * @param sMarkup
  * @return {bChecked} True if checkbox is checked.
  */
-YAHOO.widget.Column.checkboxParser = function(sMarkup) {
+YAHOO.widget.Column.parseCheckbox = function(sMarkup) {
     return (sMarkup.indexOf("checked") < 0) ? false : true;
 };
 
 /**
- * Default parser for columns of type "currency" takes markup and extracts data.
- * Can be overridden for custom parsing.
+ * Default parse function for Columns of type "currency" takes markup and
+ * extracts data. Can be overridden for custom parsing.
  *
- * @method currencyParser
+ * @method parseCurrency
  * @param sMarkup
  * @return {nAmount} Floating point amount.
  */
-YAHOO.widget.Column.currencyParser = function(sMarkup) {
+YAHOO.widget.Column.parseCurrency = function(sMarkup) {
     return parseFloat(sMarkup.substring(1));
 };
 
 /**
- * Default parser for columns of type "custom" takes markup and extracts data.
- * Should be overridden for custom parsing.
+ * Default parse function for Columns of type "date" takes markup and extracts
+ * data. Can be overridden for custom parsing.
  *
- * @method customParser
- * @param sMarkup
- * @return {oData} Data.
- */
-YAHOO.widget.Column.customParser = function(sMarkup) {
-    return sMarkup;
-};
-
-/**
- * Default parser for columns of type "date" takes markup and extracts data.
- * Can be overridden for custom parsing.
- *
- * @method dateParser
+ * @method parseDate
  * @param sMarkup
  * @return {oDate} Date instance.
  */
-YAHOO.widget.Column.dateParser = function(sMarkup) {
+YAHOO.widget.Column.parseDate = function(sMarkup) {
     var mm = sMarkup.substring(0,sMarkup.indexOf("/"));
     sMarkup = sMarkup.substring(sMarkup.indexOf("/")+1);
     var dd = sMarkup.substring(0,sMarkup.indexOf("/"));
@@ -867,50 +854,26 @@ YAHOO.widget.Column.dateParser = function(sMarkup) {
 };
 
 /**
- * Default parser for columns of type "float" takes markup and extracts data.
- * Can be overridden for custom parsing.
+ * Default parse function for Columns of type "number" takes markup and extracts
+ * data. Can be overridden for custom parsing.
  *
- * @method floatParser
+ * @method parseNumber
  * @param sMarkup
- * @return {nFloat} Float number.
+ * @return {nNumber} Number.
  */
-YAHOO.widget.Column.floatParser = function(sMarkup) {
+YAHOO.widget.Column.parseNumber = function(sMarkup) {
     return parseFloat(sMarkup);
 };
 
 /**
- * Default parser for columns of type "html" takes markup and extracts data.
- * Can be overridden for custom parsing.
+ * Default parse function for Columns of type "select" takes markup and extracts
+ * data. Can be overridden for custom parsing.
  *
- * @method htmlParser
- * @param sMarkup
- * @return {sMarkup} HTML markup.
- */
-YAHOO.widget.Column.htmlParser = function(sMarkup) {
-    return sMarkup;
-};
-
-/**
- * Default parser for columns of type "number" takes markup and extracts data.
- * Can be overridden for custom parsing.
- *
- * @method numberParser
- * @param sMarkup
- * @return {nNumber} Number.
- */
-YAHOO.widget.Column.numberParser = function(sMarkup) {
-    return parseInt(sMarkup);
-};
-
-/**
- * Default parser for columns of type "select" takes markup and extracts data.
- * Can be overridden for custom parsing.
- *
- * @method selectParser
+ * @method parseSelect
  * @param sMarkup
  * @return {sValue} Value of selected option.
  */
-YAHOO.widget.Column.selectParser = function(sMarkup) {
+YAHOO.widget.Column.parseSelect = function(sMarkup) {
     //return (sMarkup.indexOf("checked") < 0) ? false : true;
 };
 
@@ -955,7 +918,7 @@ YAHOO.widget.Column.prototype.getEditor = function(elCell, oRecord) {
 YAHOO.widget.ColumnEditor = function(sType) {
     this.type = sType;
 
-    //TODO: make sure columneditors get destroyed if widget gets destroyed
+    //TODO: make sure ColumnEditors get destroyed if widget gets destroyed
     // Works better to attach ColumnEditor to document.body
     // rather than the DataTable container
     // elTable comes in as a cell. Traverse up DOM to find the table.
@@ -1015,7 +978,7 @@ YAHOO.widget.ColumnEditor._nCount =0;
 YAHOO.widget.ColumnEditor.prototype.container = null;
 
 /**
- * Reference to the Column object for the ColumnEditor.
+ * Reference to the ColumnEditor's Column instance.
  *
  * @property column
  * @type YAHOO.widget.Column
@@ -1165,7 +1128,7 @@ YAHOO.widget.ColumnEditor.prototype.getTextboxEditorValue = function() {
 /****************************************************************************/
 
 /**
- * Sort static utility to support column sorting.
+ * Sort static utility to support Column sorting.
  *
  * @class Sort
  * @static
@@ -1235,12 +1198,12 @@ YAHOO.util.Sort = {
 /****************************************************************************/
 
 /**
- * WidthResizer subclasses DragDrop to support resizeable columns.
+ * WidthResizer subclasses DragDrop to support resizeable Columns.
  *
  * @class WidthResizer
  * @extends YAHOO.util.DragDrop
  * @constructor
- * @param colElId {string} ID of the column element being resized
+ * @param colElId {string} ID of the Column's TH element being resized
  * @param handleElId {string} ID of the handle element that causes the resize
  * @param sGroup {string} Group name of related DragDrop items
  */
@@ -1268,7 +1231,7 @@ if(YAHOO.util.DD) {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Handles mousedown events on the column resizer.
+ * Handles mousedown events on the Column resizer.
  *
  * @method onMouseDown
  * @param e {string} The mousedown event
@@ -1297,7 +1260,7 @@ YAHOO.util.WidthResizer.prototype.onMouseDown = function(e) {
 };
 
 /**
- * Handles mouseup events on the column resizer.
+ * Handles mouseup events on the Column resizer.
  *
  * @method onMouseUp
  * @param e {string} The mouseup event
@@ -1317,12 +1280,12 @@ YAHOO.util.WidthResizer.prototype.onMouseUp = function(e) {
         //cells[i].style.width = "5px";
     //}
 
-    //TODO: set new columnset width values
+    //TODO: set new ColumnSet width values
     this.datatable.fireEvent("columnResizeEvent",{datatable:this.datatable,target:YAHOO.util.Dom.get(this.id)});
 };
 
 /**
- * Handles drag events on the column resizer.
+ * Handles drag events on the Column resizer.
  *
  * @method onDrag
  * @param e {string} The drag event
@@ -1337,14 +1300,14 @@ YAHOO.util.WidthResizer.prototype.onDrag = function(e) {
         newWidth = this.minWidth;
     }
 
-    // Resize the column
+    // Resize the Column
     var oDataTable = this.datatable;
     var elCell = this.cell;
 
     //YAHOO.log("newwidth" + newWidth,"warn");
     //YAHOO.log(newWidth + " AND "+ elColumn.offsetWidth + " AND " + elColumn.id,"warn");
 
-    // Resize the other columns
+    // Resize the other Columns
     if(oDataTable.fixedwidth) {
         // Moving right or left?
         var sib = elCell.nextSibling;
@@ -1354,7 +1317,7 @@ YAHOO.util.WidthResizer.prototype.onDrag = function(e) {
             sibnewwidth = this.sibMinWidth;
         }
 
-        //TODO: how else to cycle through all the columns without having to use an index property?""
+        //TODO: how else to cycle through all the Columns without having to use an index property?
         for(var i=0; i<oDataTable._oColumnSet.length; i++) {
             if((i != elCell.index) &&  (i!=sibIndex)) {
                 YAHOO.util.Dom.get(oDataTable._oColumnSet.keys[i].id).style.width = oDataTable._oColumnSet.keys[i].width + "px";
