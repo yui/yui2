@@ -17,6 +17,9 @@ YUI Library - Event - Release Notes
   * Restored Event.regCE for compatibility with a beta release of the library
     that in use in an external API.
 
+  * unsubscribe in CustomEvent and EventProvider will remove all listeners
+    if the listener is omitted.
+
   * Added unsubscribeAll to EventProvider
 
   * Added Event.lastError which stores the most recent error object if
