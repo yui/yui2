@@ -148,13 +148,23 @@ YAHOO.util.CustomEvent.prototype = {
     },
 
     /**
-     * Unsubscribes the caller from this event
+     * Unsubscribes subscribers.
      * @method unsubscribe
-     * @param {Function} fn  The function to execute
-     * @param {Object}   obj  The custom object passed to subscribe (optional)
+     * @param {Function} fn  The subscribed function to remove, if not supplied
+     *                       all will be removed
+     * @param {Object}   obj  The custom object passed to subscribe.  This is
+     *                        optional, but if supplied will be used to
+     *                        disambiguate multiple listeners that are the same
+     *                        (e.g., you subscribe many object using a function
+     *                        that lives on the prototype)
      * @return {boolean} True if the subscriber was found and detached.
      */
     unsubscribe: function(fn, obj) {
+
+        if (!fn) {
+            return this.unsubscribeAll();
+        }
+
         var found = false;
         for (var i=0, len=this.subscribers.length; i<len; ++i) {
             var s = this.subscribers[i];
@@ -241,11 +251,14 @@ YAHOO.util.CustomEvent.prototype = {
     /**
      * Removes all listeners
      * @method unsubscribeAll
+     * @return {int} The number of listeners unsubscribed
      */
     unsubscribeAll: function() {
         for (var i=0, len=this.subscribers.length; i<len; ++i) {
             this._delete(len - 1 - i);
         }
+
+        return i;
     },
 
     /**
