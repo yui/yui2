@@ -153,7 +153,8 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     //YAHOO.util.Event.addListener(elTable, "mousemove", this._onMousemove, this);
     YAHOO.util.Event.addListener(elTable, "keydown", this._onKeydown, this);
     //YAHOO.util.Event.addListener(elTable, "keypress", this._onKeypress, this);
-    YAHOO.util.Event.addListener(document, "keyup", this._onKeyup, this);
+    YAHOO.util.Event.addListener(document, "keyup", this._onDocumentKeyup, this);
+    YAHOO.util.Event.addListener(elTable, "keyup", this._onKeyup, this);
     //YAHOO.util.Event.addListener(elTable, "focus", this._onFocus, this);
     YAHOO.util.Event.addListener(elTable, "blur", this._onBlur, this);
 
@@ -361,6 +362,14 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
      *
      */
     this.createEvent("pagerClickEvent");
+    
+    /**
+     * Fired when a delete key is pressed.
+     *
+     * @event deleteKeyEvent
+     *
+     */
+    this.createEvent("deleteKeyEvent");
 
     /**
      * Fired when an element is selected.
@@ -984,7 +993,7 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
  * @private
  */
 YAHOO.widget.DataTable.prototype._initHead = function() {
-    var i;
+    var i,oColumn;
     
     // Create THEAD
     var elHead = document.createElement("thead");
@@ -998,7 +1007,7 @@ YAHOO.widget.DataTable.prototype._initHead = function() {
 
         // ...and create THEAD cells
         for(var j=0; j<colTree[i].length; j++) {
-            var oColumn = colTree[i][j];
+            oColumn = colTree[i][j];
             var elHeadCell = elHeadRow.appendChild(document.createElement("th"));
             elHeadCell.id = oColumn.getId();
             this._initHeadCell(elHeadCell,oColumn,i,j);
@@ -1010,7 +1019,7 @@ YAHOO.widget.DataTable.prototype._initHead = function() {
     // Add Resizer only after DOM has been updated...
     // ...and skip the last column
     for(i=0; i<this._oColumnSet.keys.length-1; i++) {
-        var oColumn = this._oColumnSet.keys[i];
+        oColumn = this._oColumnSet.keys[i];
         if(oColumn.resizeable && YAHOO.util.DD) {
             //TODO: deal with fixed width tables
             //TODO: no more oColumn.isLast
@@ -1430,7 +1439,7 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
 };
 
 /**
- * Handles keydown events on the TABLE.
+ * Handles keydown events on the TABLE. Executes arrow selection.
  *
  * @method _onKeydown
  * @param e {HTMLEvent} The key event.
@@ -1505,7 +1514,7 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
 };
 
 /**
- * Handles keyup events on the DOCUMENT.
+ * Handles keyup events on the TABLE. Fires deleteKeyEvent.
  *
  * @method _onKeyup
  * @param e {HTMLEvent} The key event.
@@ -1513,6 +1522,22 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onKeyup = function(e, oSelf) {
+    var key = YAHOO.util.Event.getCharCode(e);
+    // delete
+    if(key == 46) {//TODO: && this.isFocused
+        oSelf.fireEvent("deleteKeyEvent");
+    }
+};
+
+/**
+ * Handles keyup events on the DOCUMENT. Executes interaction with editor.
+ *
+ * @method _onDocumentKeyup
+ * @param e {HTMLEvent} The key event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onDocumentKeyup = function(e, oSelf) {
     // esc Clears active editor
     if((e.keyCode == 27) && (oSelf.activeEditor)) {
         oSelf.activeEditor.hide();
@@ -1613,8 +1638,7 @@ YAHOO.widget.DataTable.prototype._onPagerSelect = function(e, oSelf) {
         oSelf.rowsPerPage = rowsPerPage;
         oSelf.paginate();
     }
-
-}
+};
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2270,23 +2294,6 @@ YAHOO.widget.DataTable.prototype.getRecordSet = function() {
 };
 
 /**
- * Handles tableKeypressEvent.
- *
- * @method doKeypress
- * @param oArgs.event {HTMLEvent} Event object.
- * @param oArgs.target {HTMLElement} Target element.
- */
-YAHOO.widget.DataTable.prototype.doKeypress = function(oArgs) {
-    //TODO: hook this up
-    var key = YAHOO.util.Event.getCharCode(oArgs.event);
-    switch (key) {
-        case 46: // delete
-            this.deleteSelectedRows();
-            break;
-    }
-};
-
-/**
  * Displays a specific page of a paginated DataTable.
  *
  * @method showPage
@@ -2454,7 +2461,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
         // Define the sort handler function based on the direction
         var sortFnc = null;
         if((sortDir == "desc") && oColumn.sortOptions && oColumn.sortOptions.descFunction) {
-            sortFnc = oColumn.sortOptions.descFunction
+            sortFnc = oColumn.sortOptions.descFunction;
         }
         else if((sortDir == "asc") && oColumn.sortOptions && oColumn.sortOptions.ascFunction) {
             sortFnc = oColumn.sortOptions.ascFunction;
