@@ -74,13 +74,11 @@ YAHOO.widget.MenuManager = function() {
     */
     function addItem(p_oItem) {
 
-        var sYUIId = Dom.generateId();
+        var sId = p_oItem.id;
 
-        if(p_oItem && m_oItems[sYUIId] != p_oItem) {
-
-            p_oItem.element.setAttribute("yuiid", sYUIId);
+        if(p_oItem && m_oItems[sId] != p_oItem) {
     
-            m_oItems[sYUIId] = p_oItem;
+            m_oItems[sId] = p_oItem;
     
             p_oItem.destroyEvent.subscribe(onItemDestroy, p_oItem);
 
@@ -101,11 +99,11 @@ YAHOO.widget.MenuManager = function() {
     */
     function removeItem(p_oItem) {
     
-        var sYUIId = p_oItem.element.getAttribute("yuiid");
+        var sId = p_oItem.id;
 
-        if(sYUIId && m_oItems[sYUIId]) {
+        if(sId && m_oItems[sId]) {
 
-            delete m_oItems[sYUIId];
+            delete m_oItems[sId];
 
             m_oLogger.log("Item: " + 
                 p_oItem.toString() + " successfully unregistered.");
@@ -218,11 +216,11 @@ YAHOO.widget.MenuManager = function() {
     
             if(sTagName == "LI") {
         
-                var sYUIId = oElement.getAttribute("yuiid");
+                var sId = oElement.id;
         
-                if(sYUIId) {
+                if(sId && m_oItems[sId]) {
         
-                    oMenuItem = m_oItems[sYUIId];
+                    oMenuItem = m_oItems[sId];
                     oMenu = oMenuItem.parent;
         
                 }
@@ -344,11 +342,11 @@ YAHOO.widget.MenuManager = function() {
     */
     function onItemDestroy(p_sType, p_aArgs, p_oItem) {
 
-        var sYUIId = p_oItem.element.getAttribute("yuiid");
+        var sId = p_oItem.id;
 
-        if(sYUIId) {
+        if(sId && m_oItems[sId]) {
 
-            delete m_oItems[sYUIId];
+            delete m_oItems[sId];
 
         }
 
