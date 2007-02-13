@@ -854,7 +854,11 @@ YAHOO.util.DragDropMgr = function() {
          * @static
          */
         refreshCache: function(groups) {
-            for (var sGroup in groups) {
+
+            // refresh everything if group array is not provided
+            var g = groups || this.ids;
+
+            for (var sGroup in g) {
                 if ("string" != typeof sGroup) {
                     continue;
                 }
@@ -862,15 +866,11 @@ YAHOO.util.DragDropMgr = function() {
                     var oDD = this.ids[sGroup][i];
 
                     if (this.isTypeOfDD(oDD)) {
-                    // if (this.isTypeOfDD(oDD) && oDD.isTarget) {
                         var loc = this.getLocation(oDD);
                         if (loc) {
                             this.locationCache[oDD.id] = loc;
                         } else {
                             delete this.locationCache[oDD.id];
-                            // this will unregister the drag and drop object if
-                            // the element is not in a usable state
-                            // oDD.unreg();
                         }
                     }
                 }
@@ -2069,6 +2069,12 @@ YAHOO.util.DragDrop.prototype = {
             return;
         }
 
+
+
+        // firing the mousedown events prior to calculating positions
+        this.b4MouseDown(e);
+        this.onMouseDown(e);
+
         this.DDM.refreshCache(this.groups);
         // var self = this;
         // setTimeout( function() { self.DDM.refreshCache(self.groups); }, 0);
@@ -2088,11 +2094,11 @@ YAHOO.util.DragDrop.prototype = {
                 // set the initial element position
                 this.setStartPosition();
 
-
-                this.b4MouseDown(e);
-                this.onMouseDown(e);
+                // start tracking mousemove distance and mousedown time to
+                // determine when to start the actual drag
                 this.DDM.handleMouseDown(e, this);
 
+                // this mousedown is mine
                 this.DDM.stopEvent(e);
             } else {
 
@@ -2279,11 +2285,11 @@ YAHOO.util.DragDrop.prototype = {
      * should move iTickSize pixels at a time.
      */
     setXConstraint: function(iLeft, iRight, iTickSize) {
-        this.leftConstraint = iLeft;
-        this.rightConstraint = iRight;
+        this.leftConstraint = parseInt(iLeft, 10);
+        this.rightConstraint = parseInt(iRight, 10);
 
-        this.minX = this.initPageX - iLeft;
-        this.maxX = this.initPageX + iRight;
+        this.minX = this.initPageX - this.leftConstraint;
+        this.maxX = this.initPageX + this.rightConstraint;
         if (iTickSize) { this.setXTicks(this.initPageX, iTickSize); }
 
         this.constrainX = true;
@@ -2322,11 +2328,11 @@ YAHOO.util.DragDrop.prototype = {
      * element should move iTickSize pixels at a time.
      */
     setYConstraint: function(iUp, iDown, iTickSize) {
-        this.topConstraint = iUp;
-        this.bottomConstraint = iDown;
+        this.topConstraint = parseInt(iUp, 10);
+        this.bottomConstraint = parseInt(iDown, 10);
 
-        this.minY = this.initPageY - iUp;
-        this.maxY = this.initPageY + iDown;
+        this.minY = this.initPageY - this.topConstraint;
+        this.maxY = this.initPageY + this.bottomConstraint;
         if (iTickSize) { this.setYTicks(this.initPageY, iTickSize); }
 
         this.constrainY = true;
@@ -2659,6 +2665,7 @@ YAHOO.extend(YAHOO.util.DD, YAHOO.util.DragDrop, {
      * YAHOO.util.DragDrop.
      */
     b4MouseDown: function(e) {
+        this.setStartPosition();
         // this.resetConstraints();
         this.autoOffset(YAHOO.util.Event.getPageX(e), 
                             YAHOO.util.Event.getPageY(e));
@@ -2869,6 +2876,7 @@ YAHOO.extend(YAHOO.util.DDProxy, YAHOO.util.DD, {
 
     // overrides YAHOO.util.DragDrop
     b4MouseDown: function(e) {
+        this.setStartPosition();
         var x = YAHOO.util.Event.getPageX(e);
         var y = YAHOO.util.Event.getPageY(e);
         this.autoOffset(x, y);

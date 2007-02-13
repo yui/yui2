@@ -1,5 +1,13 @@
 Drag and Drop Release Notes
 
+2.2.0
+
+  * onMouseDown event is executed before element positions are calculated
+
+  * refreshCache refreshes everything if groups array is not provided
+
+  * setX/setYConstraint doesn't fail when presented ints cast as strings
+
 0.12.2
 
   * No change
