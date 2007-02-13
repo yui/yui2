@@ -58,7 +58,10 @@ var myColumnHeaders = [
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
+// Show over 1000 records
 var myDataSource = new YAHOO.util.DataSource("./php/data_proxy.php");
+// Show 5000 records -- FireBug must be disabled!
+//var myDataSource = new YAHOO.util.DataSource("./php/data5000_proxy.php");
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
 myDataSource.responseSchema = {
     resultsList: "result",
@@ -71,7 +74,7 @@ var oConfigs = {
         initialRequest:initialRequest,
 
         pageCurrent: 1,
-        rowsPerPage: 50,
+        rowsPerPage: 100,
         startRecordIndex: 1,
         pageLinksLength: 10,
         rowsPerPageDropdown: [25,50,100,500]
