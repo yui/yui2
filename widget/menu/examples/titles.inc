@@ -28,7 +28,9 @@
 
         "Context Menu",
         "OS-Style Programs Menu",
-        "Application Menubar"
+        "Application Menubar",
+        "Adding A Context Menu To A Table",
+        "Adding A Context Menu To A TreeView"
 
     );
 
