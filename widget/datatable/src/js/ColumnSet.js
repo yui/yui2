@@ -556,7 +556,7 @@ YAHOO.widget.Column.prototype.getRowSpan = function() {
 YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
     var oData = (this.key) ? oRecord[this.key] : null;
     if(this.formatter) {
-        this.formatter(elCell, this, oRecord, oData);
+        this.formatter(elCell, oRecord, this, oData);
     }
     else {
         var type = this.type;
@@ -564,31 +564,31 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
         var classname = "";
         switch(type) {
             case "checkbox":
-                YAHOO.widget.Column.formatCheckbox(elCell, this, oRecord, oData);
+                YAHOO.widget.Column.formatCheckbox(elCell, oRecord, this, oData);
                 classname = YAHOO.widget.DataTable.CLASS_CHECKBOX;
                 break;
             case "currency":
-                YAHOO.widget.Column.formatCurrency(elCell, this, oRecord, oData);
+                YAHOO.widget.Column.formatCurrency(elCell, oRecord, this, oData);
                 classname = YAHOO.widget.DataTable.CLASS_CURRENCY;
                 break;
             case "date":
-                YAHOO.widget.Column.formatDate(elCell, this, oRecord, oData);
+                YAHOO.widget.Column.formatDate(elCell, oRecord, this, oData);
                 classname = YAHOO.widget.DataTable.CLASS_DATE;
                 break;
             case "email":
-                YAHOO.widget.Column.formatEmail(elCell, this, oRecord, oData);
+                YAHOO.widget.Column.formatEmail(elCell, oRecord, this, oData);
                 classname = YAHOO.widget.DataTable.CLASS_EMAIL;
                 break;
             case "link":
-                YAHOO.widget.Column.formatLink(elCell, this, oRecord, oData);
+                YAHOO.widget.Column.formatLink(elCell, oRecord, this, oData);
                 classname = YAHOO.widget.DataTable.CLASS_LINK;
                 break;
             case "number":
-                YAHOO.widget.Column.formatNumber(elCell, this, oRecord, oData);
+                YAHOO.widget.Column.formatNumber(elCell, oRecord, this, oData);
                 classname = YAHOO.widget.DataTable.CLASS_NUMBER;
                 break;
             case "select":
-                YAHOO.widget.Column.formatSelect(elCell, this, oRecord, oData);
+                YAHOO.widget.Column.formatSelect(elCell, oRecord, this, oData);
                 classname = YAHOO.widget.DataTable.CLASS_SELECT;
                 break;
            default:
@@ -615,12 +615,12 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
  *
  * @method formatCheckbox
  * @param elCell {HTMLElement} Table cell element.
- * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oData {Object} Data value for the cell, or null
  * @static
  */
-YAHOO.widget.Column.formatCheckbox = function(elCell, oColumn, oRecord, oData) {
+YAHOO.widget.Column.formatCheckbox = function(elCell, oRecord, oColumn, oData) {
     var bChecked = oData;
     bChecked = (bChecked) ? " checked" : "";
     elCell.innerHTML = "<input type=\"checkbox\"" + bChecked +
@@ -632,12 +632,12 @@ YAHOO.widget.Column.formatCheckbox = function(elCell, oColumn, oRecord, oData) {
  *
  * @method formatCurrency
  * @param elCell {HTMLElement} Table cell element.
- * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oData {Object} Data value for the cell, or null
  * @static
  */
-YAHOO.widget.Column.formatCurrency = function(elCell, oColumn, oRecord, oData) {
+YAHOO.widget.Column.formatCurrency = function(elCell, oRecord, oColumn, oData) {
     // Make it dollars
     var nAmount = oData;
     var markup;
@@ -666,12 +666,12 @@ YAHOO.widget.Column.formatCurrency = function(elCell, oColumn, oRecord, oData) {
  *
  * @method formatDate
  * @param elCell {HTMLElement} Table cell element.
- * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oData {Object} Data value for the cell, or null
  * @static
  */
-YAHOO.widget.Column.formatDate = function(elCell, oColumn, oRecord, oData) {
+YAHOO.widget.Column.formatDate = function(elCell, oRecord, oColumn, oData) {
     var oDate = oData;
     if(oDate) {
         elCell.innerHTML = oDate.getMonth() + "/" + oDate.getDate()  + "/" + oDate.getFullYear();
@@ -686,12 +686,12 @@ YAHOO.widget.Column.formatDate = function(elCell, oColumn, oRecord, oData) {
  *
  * @method formatEmail
  * @param elCell {HTMLElement} Table cell element.
- * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oData {Object} Data value for the cell, or null
  * @static
  */
-YAHOO.widget.Column.formatEmail = function(elCell, oColumn, oRecord, oData) {
+YAHOO.widget.Column.formatEmail = function(elCell, oRecord, oColumn, oData) {
     var sEmail = oData;
     if(sEmail) {
         elCell.innerHTML = "<a href=\"mailto:" + sEmail + "\">" + sEmail + "</a>";
@@ -706,12 +706,12 @@ YAHOO.widget.Column.formatEmail = function(elCell, oColumn, oRecord, oData) {
  *
  * @method formatLink
  * @param elCell {HTMLElement} Table cell element.
- * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oData {Object} Data value for the cell, or null
  * @static
  */
-YAHOO.widget.Column.formatLink = function(elCell, oColumn, oRecord, oData) {
+YAHOO.widget.Column.formatLink = function(elCell, oRecord, oColumn, oData) {
     var sLink = oData;
     if(sLink) {
         elCell.innerHTML = "<a href=\"" + sLink + "\">" + sLink + "</a>";
@@ -726,12 +726,12 @@ YAHOO.widget.Column.formatLink = function(elCell, oColumn, oRecord, oData) {
  *
  * @method formatNumber
  * @param elCell {HTMLElement} Table cell element.
- * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oData {Object} Data value for the cell, or null
  * @static
  */
-YAHOO.widget.Column.formatNumber = function(elCell, oColumn, oRecord, oData) {
+YAHOO.widget.Column.formatNumber = function(elCell, oRecord, oColumn, oData) {
     var nNumber = oData;
     if(nNumber) {
         elCell.innerHTML = nNumber.toString();
@@ -746,12 +746,12 @@ YAHOO.widget.Column.formatNumber = function(elCell, oColumn, oRecord, oData) {
  *
  * @method formatSelect
  * @param elCell {HTMLElement} Table cell element.
- * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oData {Object} Data value for the cell, or null
  * @static
  */
-YAHOO.widget.Column.formatSelect = function(elCell, oColumn, oRecord, oData) {
+YAHOO.widget.Column.formatSelect = function(elCell, oRecord, oColumn, oData) {
     var selectedValue = oData;
     var options = oColumn.selectOptions;
 

@@ -36,7 +36,7 @@
 var myLogger = new YAHOO.widget.LogReader();
 
 // Define a custom formatter for one of the Columns
-var myFormatter = function(elCell, oColumn, oRecord, oData) {
+var myFormatter = function(elCell, oRecord, oColumn, oData) {
     if(oRecord["Unread"]) {
         elCell.innerHTML = "X";
     }
@@ -58,7 +58,7 @@ myDataSource.responseSchema = {
 };
 
 // Override the built-in Column formatter
-YAHOO.widget.Column.formatDate = function(elCell, oColumn, oRecord, oData) {
+YAHOO.widget.Column.formatDate = function(elCell, oRecord, oColumn, oData) {
     var oDate = oData;
     var sMonth;
     switch(oDate.getMonth()) {
