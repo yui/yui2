@@ -15,6 +15,7 @@
 #editing th, #editing td {border:1px solid #000;padding:.25em;}
 #editing th {background-color:#696969;color:#fff;}/*dark gray*/
 #editing .yui-dt-odd {background-color:#eee;} /*light gray*/
+#editing .yui-dt-editable.yui-dt-highlight {background-color:#BEDAFF;} /*light blue*/
 </style>
 </head>
 <body>
@@ -29,9 +30,10 @@
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
-<script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
+<script type="text/javascript" src="../../build/datasource/datasource-beta-debug.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
 <script type="text/javascript" src="./js/data.js"></script>
-<script language="JavaScript">
+<script type="text/javascript">
 var myLogger = new YAHOO.widget.LogReader();
 
 /****************************************************************************/
@@ -41,7 +43,7 @@ var myColumnHeaders = [
     {key:"SKU"},
     {key:"Quantity",editor:"textbox"},
     {key:"Item",editor:"textbox"},
-    {key:"Description",editor:"textbox"}
+    {key:"Description",editor:"textarea"}
 ];
 
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
@@ -54,6 +56,15 @@ myDataSource.responseSchema = {
 
 var myDataTable = new YAHOO.widget.DataTable("editing", myColumnSet, myDataSource,{caption:"Example: Inline Editing"});
 myDataTable.subscribe("cellClickEvent",myDataTable.onEventEditCell);
+myDataTable.subscribe("cellMouseoverEvent",myDataTable.onEventHighlightCell);
+myDataTable.subscribe("cellMouseoutEvent",myDataTable.onEventUnhighlightCell);
+
+var onRecordUpdate = function(oArgs) {
+    YAHOO.log("Record \"" + oArgs.record.id + "\" key \"" + oArgs.key +
+            "\" was updated from \"" + oArgs.oldData + "\" to \"" +
+            oArgs.newData + "\"", "info", this.toString());
+}
+myDataTable.subscribe("recordSetUpdateEvent",onRecordUpdate);
 </script>
 </body>
 </html>

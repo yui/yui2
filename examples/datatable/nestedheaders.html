@@ -29,9 +29,10 @@
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
-<script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
+<script type="text/javascript" src="../../build/datasource/datasource-beta-debug.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
 <script type="text/javascript" src="./js/data.js"></script>
-<script language="JavaScript">
+<script type="text/javascript">
 var myLogger = new YAHOO.widget.LogReader();
 
 /****************************************************************************/
@@ -39,8 +40,8 @@ var myLogger = new YAHOO.widget.LogReader();
 /****************************************************************************/
 var myColumnHeaders = [
     {key:"page", text:"Page"},
-    {text:"Statistics", children:[
-        {text:"Visits", type:"number",
+    {text:"Statistics", type:"number", children:[
+        {text:"Visits",
             children: [
                 {key:"visitsmonth", text:"This Month"},
                 {key:"visitsytd", text:"YTD", abbr:"Year to Date"}
@@ -48,8 +49,8 @@ var myColumnHeaders = [
         },
         {text:"Views",
             children: [
-                {key:"viewsmonth", text:"This Month", type:"number"},
-                {key:"viewsytd", text:"YTD", abbr:"Year to Date", type:"number"}
+                {key:"viewsmonth", text:"This Month"},
+                {key:"viewsytd", text:"YTD", abbr:"Year to Date"}
             ]
 
         }

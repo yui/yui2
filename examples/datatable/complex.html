@@ -33,9 +33,10 @@
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
-<script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
+<script type="text/javascript" src="../../build/datasource/datasource-beta-debug.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
 <script type="text/javascript" src="./js/data.js"></script>
-<script language="JavaScript">
+<script type="text/javascript">
 var myLogger = new YAHOO.widget.LogReader();
 
 /****************************************************************************/
@@ -70,7 +71,7 @@ var myConfigs = {
     caption:"Example: Integrated Feature Set",
     sortedBy:"areacode",
     sortedByDir:"asc",
-    pageNumber: 1,
+    pageCurrent: 1,
     rowsPerPage: 25,
     startRecordIndex: 1,
     rowsPerPageDropdown: [10,25,50,100],

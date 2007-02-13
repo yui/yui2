@@ -28,12 +28,11 @@
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
-<script type="text/javascript" src="../../build/element/element.js"></script>
 <script type="text/javascript" src="../../build/connection/connection.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
-<script type="text/javascript" src="http://www.json.org/json.js"></script>
-<script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
-<script language="JavaScript">
+<script type="text/javascript" src="../../build/datasource/datasource-beta-debug.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
+<script type="text/javascript">
 var myLogger = new YAHOO.widget.LogReader();
 myLogger.collapse();
 
@@ -59,7 +58,10 @@ var myColumnHeaders = [
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
+// Show over 1000 records
 var myDataSource = new YAHOO.util.DataSource("./php/data_proxy.php");
+// Show 5000 records -- FireBug must be disabled!
+//var myDataSource = new YAHOO.util.DataSource("./php/data5000_proxy.php");
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
 myDataSource.responseSchema = {
     resultsList: "result",
@@ -71,8 +73,8 @@ var oConfigs = {
         caption:"Example: Paginated Over XHR",
         initialRequest:initialRequest,
 
-        pageNumber: 1,
-        rowsPerPage: 50,
+        pageCurrent: 1,
+        rowsPerPage: 100,
         startRecordIndex: 1,
         pageLinksLength: 10,
         rowsPerPageDropdown: [25,50,100,500]
