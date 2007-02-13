@@ -882,7 +882,11 @@ YAHOO.util.DragDropMgr = function() {
          */
         refreshCache: function(groups) {
             this.logger.log("refreshing element location cache");
-            for (var sGroup in groups) {
+
+            // refresh everything if group array is not provided
+            var g = groups || this.ids;
+
+            for (var sGroup in g) {
                 if ("string" != typeof sGroup) {
                     continue;
                 }
@@ -890,17 +894,12 @@ YAHOO.util.DragDropMgr = function() {
                     var oDD = this.ids[sGroup][i];
 
                     if (this.isTypeOfDD(oDD)) {
-                    // if (this.isTypeOfDD(oDD) && oDD.isTarget) {
                         var loc = this.getLocation(oDD);
                         if (loc) {
                             this.locationCache[oDD.id] = loc;
                         } else {
                             delete this.locationCache[oDD.id];
-                            this.logger.log("Could not get the loc for " + oDD.id,
-                                    "warn");
-                            // this will unregister the drag and drop object if
-                            // the element is not in a usable state
-                            // oDD.unreg();
+this.logger.log("Could not get the loc for " + oDD.id, "warn");
                         }
                     }
                 }

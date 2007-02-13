@@ -165,6 +165,7 @@ YAHOO.extend(YAHOO.util.DDProxy, YAHOO.util.DD, {
 
     // overrides YAHOO.util.DragDrop
     b4MouseDown: function(e) {
+        this.setStartPosition();
         var x = YAHOO.util.Event.getPageX(e);
         var y = YAHOO.util.Event.getPageY(e);
         this.autoOffset(x, y);

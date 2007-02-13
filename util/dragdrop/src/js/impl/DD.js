@@ -254,6 +254,7 @@ YAHOO.extend(YAHOO.util.DD, YAHOO.util.DragDrop, {
      * YAHOO.util.DragDrop.
      */
     b4MouseDown: function(e) {
+        this.setStartPosition();
         // this.resetConstraints();
         this.autoOffset(YAHOO.util.Event.getPageX(e), 
                             YAHOO.util.Event.getPageY(e));

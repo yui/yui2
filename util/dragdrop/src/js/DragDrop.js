@@ -764,6 +764,13 @@ YAHOO.util.DragDrop.prototype = {
         }
 
         this.logger.log("mousedown " + this.id);
+
+        this.logger.log("firing onMouseDown events");
+
+        // firing the mousedown events prior to calculating positions
+        this.b4MouseDown(e);
+        this.onMouseDown(e);
+
         this.DDM.refreshCache(this.groups);
         // var self = this;
         // setTimeout( function() { self.DDM.refreshCache(self.groups); }, 0);
@@ -785,12 +792,11 @@ YAHOO.util.DragDrop.prototype = {
                 // set the initial element position
                 this.setStartPosition();
 
-                this.logger.log("firing onMouseDown events");
-
-                this.b4MouseDown(e);
-                this.onMouseDown(e);
+                // start tracking mousemove distance and mousedown time to
+                // determine when to start the actual drag
                 this.DDM.handleMouseDown(e, this);
 
+                // this mousedown is mine
                 this.DDM.stopEvent(e);
             } else {
 
@@ -985,11 +991,11 @@ this.logger.log("clickValidator returned false, drag not initiated");
      * should move iTickSize pixels at a time.
      */
     setXConstraint: function(iLeft, iRight, iTickSize) {
-        this.leftConstraint = iLeft;
-        this.rightConstraint = iRight;
+        this.leftConstraint = parseInt(iLeft, 10);
+        this.rightConstraint = parseInt(iRight, 10);
 
-        this.minX = this.initPageX - iLeft;
-        this.maxX = this.initPageX + iRight;
+        this.minX = this.initPageX - this.leftConstraint;
+        this.maxX = this.initPageX + this.rightConstraint;
         if (iTickSize) { this.setXTicks(this.initPageX, iTickSize); }
 
         this.constrainX = true;
@@ -1033,11 +1039,11 @@ this.logger.log("clickValidator returned false, drag not initiated");
      */
     setYConstraint: function(iUp, iDown, iTickSize) {
         this.logger.log("setYConstraint: " + iUp + "," + iDown + "," + iTickSize);
-        this.topConstraint = iUp;
-        this.bottomConstraint = iDown;
+        this.topConstraint = parseInt(iUp, 10);
+        this.bottomConstraint = parseInt(iDown, 10);
 
-        this.minY = this.initPageY - iUp;
-        this.maxY = this.initPageY + iDown;
+        this.minY = this.initPageY - this.topConstraint;
+        this.maxY = this.initPageY + this.bottomConstraint;
         if (iTickSize) { this.setYTicks(this.initPageY, iTickSize); }
 
         this.constrainY = true;
