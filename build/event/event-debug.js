@@ -903,8 +903,8 @@ if (!YAHOO.util.Event) {
              * @private
              */
             _isValidCollection: function(o) {
-                // this.logger.debug(o.constructor.toString())
-                // this.logger.debug(typeof o)
+                // this.logger.debug(o.constructor.toString());
+                // this.logger.debug(typeof o);
 
                 return ( o                    && // o is something
                          o.length             && // o is indexed

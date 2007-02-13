@@ -897,6 +897,13 @@ if (!YAHOO.util.Event) {
              */
             _isValidCollection: function(o) {
 
+                return ( o                    && // o is something
+                         o.length             && // o is indexed
+                         typeof o != "string" && // o is not a string
+                         !o.tagName           && // o is not an HTML element
+                         !o.alert             && // o is not a window
+                         typeof o[0] != "undefined" );
+
             },
 
             /**
