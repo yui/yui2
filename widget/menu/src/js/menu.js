@@ -28,7 +28,8 @@
 (function() {
 
 var Dom = YAHOO.util.Dom,
-    Event = YAHOO.util.Event;
+    Event = YAHOO.util.Event,
+    Lang = YAHOO.lang;
 
 
 YAHOO.widget.Menu = function(p_oElement, p_oConfig) {
@@ -36,9 +37,7 @@ YAHOO.widget.Menu = function(p_oElement, p_oConfig) {
     if(p_oConfig) {
 
         this.parent = p_oConfig.parent;
-
         this.lazyLoad = p_oConfig.lazyLoad || p_oConfig.lazyload;
-
         this.itemData = p_oConfig.itemData || p_oConfig.itemdata;
 
     }
@@ -239,6 +238,16 @@ _nMaxHeight: -1,
 * @type Boolean
 */
 _bStopMouseEventHandlers: false,
+
+
+/**
+* @property _sClassName
+* @description The current value of the "classname" configuration attribute.
+* @default null
+* @private
+* @type String
+*/
+_sClassName: null,
 
 
 
@@ -1012,7 +1021,7 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
 * @param {Number} p_nItemIndex Number indicating the index of the menu item 
 * to be removed.
 * @return {YAHOO.widget.MenuItem}
-*/    
+*/
 _removeItemFromGroupByIndex: function(p_nGroupIndex, p_nItemIndex) {
 
     var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
@@ -1328,16 +1337,37 @@ _getOffsetWidth: function() {
 
 /**
 * @method _setWidth
-* @description Sets the width of the menu's <code>&#60;div&#62;</code> element.
+* @description Sets the width of the menu's root <code>&#60;div&#62;</code> 
+* element to its offsetWidth.
 * @private
 */
 _setWidth: function() {
 
     if(this.cfg.getProperty("position") == "dynamic") {
 
-        var sWidth = 
-            this.element.parentNode.tagName.toUpperCase() == "BODY" ? 
-            this.element.offsetWidth : this._getOffsetWidth();
+        var sWidth;
+
+        if(this.element.parentNode.tagName.toUpperCase() == "BODY") {
+
+            if(this.browser == "opera") {
+
+                sWidth = this._getOffsetWidth();
+            
+            }
+            else {
+
+                Dom.setStyle(this.element, "width", "auto");
+                
+                sWidth = this.element.offsetWidth;
+            
+            }
+
+        }
+        else {
+        
+            sWidth = this._getOffsetWidth();
+        
+        }
     
         this.cfg.setProperty("width", (sWidth + "px"));
 
@@ -2724,6 +2754,11 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
         }
 
     }
+    else if(!oParent && this.lazyLoad) {
+
+        this.cfg.refireEvent("xy");
+
+    }
 
 },
 
@@ -2810,6 +2845,7 @@ _onParentMenuConfigChange: function(p_sType, p_aArgs, p_oSubmenu) {
         case "submenuhidedelay":
         case "clicktohide":
         case "effect":
+        case "classname":
 
             p_oSubmenu.cfg.setProperty(sPropertyName, oPropertyValue);
                 
@@ -2842,20 +2878,17 @@ _onParentMenuRender: function(p_sType, p_aArgs, p_oSubmenu) {
 
             xy: [0,0],
                 
-            clicktohide:
-                oParentMenu.cfg.getProperty("clicktohide"),
+            clicktohide: oParentMenu.cfg.getProperty("clicktohide"),
                 
-            effect:
-                oParentMenu.cfg.getProperty("effect"),
+            effect: oParentMenu.cfg.getProperty("effect"),
 
-            showdelay:
-                oParentMenu.cfg.getProperty("showdelay"),
+            showdelay: oParentMenu.cfg.getProperty("showdelay"),
             
-            hidedelay:
-                oParentMenu.cfg.getProperty("hidedelay"),
+            hidedelay: oParentMenu.cfg.getProperty("hidedelay"),
 
-            submenuhidedelay:
-                oParentMenu.cfg.getProperty("submenuhidedelay")
+            submenuhidedelay: oParentMenu.cfg.getProperty("submenuhidedelay"),
+
+            classname: oParentMenu.cfg.getProperty("classname")
 
         };
 
@@ -3073,35 +3106,40 @@ _onMenuItemConfigChange: function(p_sType, p_aArgs, p_oItem) {
 */
 enforceConstraints: function(type, args, obj) {
 
-     var oConfig = this.cfg,
-         pos = args[0],
-    
-         x = pos[0],
-         y = pos[1],
-    
-         offsetHeight = this.element.offsetHeight,
-         offsetWidth = this.element.offsetWidth,
-    
-         viewPortWidth = YAHOO.util.Dom.getViewportWidth(),
-         viewPortHeight = YAHOO.util.Dom.getViewportHeight(),
-    
-         scrollX = Math.max(
-                        document.documentElement.scrollLeft, 
-                        document.body.scrollLeft
-                    ),
-
-         scrollY = Math.max(
-                        document.documentElement.scrollTop, 
-                        document.body.scrollTop
-                    ),
-    
-         topConstraint = scrollY + 10,
-         leftConstraint = scrollX + 10,
-         bottomConstraint = scrollY + viewPortHeight - offsetHeight - 10,
-         rightConstraint = scrollX + viewPortWidth - offsetWidth - 10,
-    
-         aContext = oConfig.getProperty("context"),
-         oContextElement = aContext ? aContext[0] : null;
+    var oConfig = this.cfg,
+        pos = args[0],
+        
+        x = pos[0],
+        y = pos[1],
+        
+        offsetHeight = this.element.offsetHeight,
+        offsetWidth = this.element.offsetWidth,
+        
+        viewPortWidth = YAHOO.util.Dom.getViewportWidth(),
+        viewPortHeight = YAHOO.util.Dom.getViewportHeight(),
+        
+        scrollX = Math.max(
+                document.documentElement.scrollLeft, 
+                document.body.scrollLeft
+            ),
+        
+        scrollY = Math.max(
+                document.documentElement.scrollTop, 
+                document.body.scrollTop
+            ),
+        
+        nPadding = (
+                        this.parent && 
+                        this.parent.parent instanceof YAHOO.widget.MenuBar
+                    ) ? 0 : 10,
+        
+        topConstraint = scrollY + nPadding,
+        leftConstraint = scrollX + nPadding,
+        bottomConstraint = scrollY + viewPortHeight - offsetHeight - nPadding,
+        rightConstraint = scrollX + viewPortWidth - offsetWidth - nPadding,
+        
+        aContext = oConfig.getProperty("context"),
+        oContextElement = aContext ? aContext[0] : null;
 
 
     if (x < 10) {
@@ -3450,6 +3488,30 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
 },
 
 
+/**
+* @method configClassName
+* @description Event handler for when the "classname" configuration property of 
+* a menu changes.
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event was fired.
+* @param {YAHOO.widget.Menu} p_oMenu The Menu instance fired the event.
+*/
+configClassName: function(p_sType, p_aArgs, p_oMenu) {
+
+    var sClassName = p_aArgs[0];
+
+    if(this._sClassName) {
+
+        Dom.removeClass(this.element, this._sClassName);
+
+    }
+
+    Dom.addClass(this.element, sClassName);
+    this._sClassName = sClassName;
+
+},
+
+
 // Public methods
 
 
@@ -3615,14 +3677,7 @@ addItem: function(p_oItem, p_nGroupIndex) {
 */
 addItems: function(p_aItems, p_nGroupIndex) {
 
-    function isArray(p_oValue) {
-    
-        return (typeof p_oValue == "object" && p_oValue.constructor == Array);
-    
-    }
-
-
-    if(isArray(p_aItems)) {
+    if(Lang.isArray(p_aItems)) {
 
         var nItems = p_aItems.length,
             aItems = [],
@@ -3633,7 +3688,7 @@ addItems: function(p_aItems, p_nGroupIndex) {
 
             oItem = p_aItems[i];
 
-            if(isArray(oItem)) {
+            if(Lang.isArray(oItem)) {
 
                 aItems[aItems.length] = this.addItems(oItem, i);
 
@@ -3653,7 +3708,7 @@ addItems: function(p_aItems, p_nGroupIndex) {
             return aItems;
         
         }
-    
+
     }
 
 },
@@ -3789,6 +3844,90 @@ getItem: function(p_nItemIndex, p_nGroupIndex) {
 
 
 /**
+* @method clearContent
+* @description Removes all of the content from the menu, including the menu 
+* items, group titles, header and footer.
+*/
+clearContent: function() {
+
+    var aItems = this.getItems(),
+        nItems = aItems.length,
+        oElement = this.element,
+        oBody = this.body,
+        oHeader = this.header,
+        oFooter = this.footer;
+
+
+    if(nItems > 0) {
+
+        var i = nItems - 1,
+            oItem,
+            oSubmenu;
+
+        do {
+
+            oItem = aItems[i];
+
+            if(oItem) {
+
+                oSubmenu = oItem.cfg.getProperty("submenu");
+
+                if(oSubmenu) {
+
+                    this.cfg.configChangedEvent.unsubscribe(
+                                this._onParentMenuConfigChange, 
+                                oSubmenu
+                            );
+
+                    this.renderEvent.unsubscribe(
+                                        this._onParentMenuRender, 
+                                        oSubmenu
+                                    );
+
+                }
+
+                oItem.destroy();
+
+            }
+        
+        }
+        while(i--);
+
+    }
+
+
+    if(oHeader) {
+
+        Event.purgeElement(oHeader);
+        oElement.removeChild(oHeader);
+
+    }
+    
+
+    if(oFooter) {
+
+        Event.purgeElement(oFooter);
+        oElement.removeChild(oFooter);
+    }
+
+
+    if(oBody) {
+
+        Event.purgeElement(oBody);
+
+        oBody.innerHTML = "";
+
+    }
+
+
+    this._aItemGroups = [];
+    this._aListElements = [];
+    this._aGroupTitleElements = [];
+
+},
+
+
+/**
 * @method destroy
 * @description Removes the menu's <code>&#60;div&#62;</code> element 
 * (and accompanying child nodes) from the document.
@@ -3818,28 +3957,12 @@ destroy: function() {
 
     // Remove all items
 
-    var aItems = this.getItems(),
-        nItems = aItems.length;
+    this.clearContent();
 
-    if(nItems > 0) {
 
-        var i = nItems - 1,
-            oItem;
-
-        do {
-
-            oItem = aItems[i];
-
-            if(oItem) {
-
-                oItem.destroy();                
-            
-            }
-        
-        }
-        while(i--);
-
-    }
+    this._aItemGroups = null;
+    this._aListElements = null;
+    this._aGroupTitleElements = null;
 
 
     // Continue with the superclass implementation of this method
@@ -3938,7 +4061,7 @@ initDefaultConfig: function() {
 
     var oConfig = this.cfg;
 
-	// Add configuration properties
+	// Add configuration attributes
 
     /*
         Change the default value for the "visible" configuration 
@@ -4142,6 +4265,25 @@ initDefaultConfig: function() {
             validator: oConfig.checkNumber, 
             handler: this.configMaxHeight
        } 
+    );
+
+
+    /**
+    * @config classname
+    * @description CSS class to be applied to the menu's root 
+    * <code>&#60;div&#62;</code> element.  The specified class(es) are 
+    * appended in addition to the default class as specified by the menu's
+    * CSS_CLASS_NAME constant.
+    * @default null
+    * @type String
+    */
+    oConfig.addProperty(
+        "classname", 
+        { 
+            value: null, 
+            handler: this.configClassName,
+            validator: this._checkString
+        }
     );
 
 }
