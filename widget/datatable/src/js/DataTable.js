@@ -398,7 +398,17 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this.createEvent("rowDeleteEvent");
     this.subscribe("rowDeleteEvent", this._onRowDelete);
     
-    
+    /**
+     * Fired when a Record is updated in the RecordSet.
+     *
+     * @event recordSetUpdateEvent
+     * @param oArgs.record {YAHOO.widget.Record} The Record instance.
+     * @param oArgs.key {String} The Record key.
+     * @param oArgs.newData {Object} New data.
+     * @param oArgs.oldData {Object} New data.
+     */
+    this.createEvent("recordSetUpdateEvent");
+    this._oRecordSet.subscribe("recordUpdateEvent", this._onRecordUpdate, this, true);
     
     
     YAHOO.widget.DataTable._nCount++;
@@ -1553,16 +1563,22 @@ YAHOO.widget.DataTable.prototype._onDocumentKeyup = function(e, oSelf) {
         var oColumn = oSelf.activeEditor.column;
         var oRecord = oSelf.activeEditor.record;
         var newValue = oSelf.activeEditor.getValue();
+        
+        //Update Record
         //TODO: Column.key may be null!
-        oRecord[oColumn.key] = newValue;
+        oSelf._oRecordSet.updateRecord(oRecord,oColumn.key,newValue);
+
+        //Update cell
         oSelf.formatCell(elCell);
 
+        // Hide editor
         oSelf.activeEditor.hide();
         oSelf.activeEditor = null;
 
         // Editor causes widget to lose focus
         oSelf._bFocused = false;
         oSelf.focusTable();
+        
     }
 };
 
@@ -1657,6 +1673,20 @@ YAHOO.widget.DataTable.prototype._onPagerSelect = function(e, oSelf) {
  */
 YAHOO.widget.DataTable.prototype._onRowDelete = function(oArgs) {
     this._restripeRows();
+};
+
+/**
+ * Passes along recordSetUpdate Event when recordUpdateEvent is caught from RecordSet.
+ *
+ * @event _onRecordUpdate
+ * @param oArgs.record {YAHOO.widget.Record} The Record instance.
+ * @param oArgs.key {String} The Record key.
+ * @param oArgs.newData {Object} New data.
+ * @param oArgs.oldData {Object} New data.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onRecordUpdate = function(oArgs) {
+    this.fireEvent("recordSetUpdateEvent",oArgs);
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2396,7 +2426,7 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
         }
 
         // Populate each pager container with markup
-        if(!this.pagers || (this.pagers.length == 0)) {
+        if(!this.pagers || (this.pagers.length === 0)) {
             var pager1 = document.createElement("span");
             pager1.className = YAHOO.widget.DataTable.CLASS_PAGELINKS;
             
@@ -2472,10 +2502,11 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
         // TODO: use diff default functions based on column data type
         // TODO: nested/cumulative/hierarchical sorting
         if(!sortFnc && oColumn.key) {
+            var sorted;
             sortFnc = function(a, b) {
                 if(sortDir == "desc") {
-                    var sorted = YAHOO.util.Sort.compareDesc(a[oColumn.key],b[oColumn.key]);
-                    if(sorted == 0) {
+                    sorted = YAHOO.util.Sort.compareDesc(a[oColumn.key],b[oColumn.key]);
+                    if(sorted === 0) {
                         return YAHOO.util.Sort.compareDesc(a.id,b.id);
                     }
                     else {
@@ -2483,8 +2514,8 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
                     }
                 }
                 else {
-                    var sorted = YAHOO.util.Sort.compareAsc(a[oColumn.key],b[oColumn.key]);
-                    if(sorted == 0) {
+                    sorted = YAHOO.util.Sort.compareAsc(a[oColumn.key],b[oColumn.key]);
+                    if(sorted === 0) {
                         return YAHOO.util.Sort.compareAsc(a.id,b.id);
                     }
                     else {

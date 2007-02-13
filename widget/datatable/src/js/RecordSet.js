@@ -22,12 +22,30 @@ YAHOO.widget.RecordSet = function(data) {
             this.addRecord(data);
         }
     }
+
+    /**
+     * Fired when a Record is updated with new data.
+     *
+     * @event recordUpdateEvent
+     * @param oArgs.record {YAHOO.widget.Record} The Record instance.
+     * @param oArgs.key {String} The Record key.
+     * @param oArgs.newData {Object} New data.
+     * @param oArgs.oldData {Object} Old data.
+     *
+     */
+    this.createEvent("recordUpdateEvent");
+    
     
     YAHOO.widget.RecordSet._nCount++;
     YAHOO.log("RecordSet initialized", "info", this.toString());
 };
 
-YAHOO.augment(YAHOO.widget.RecordSet, YAHOO.util.EventProvider);
+if(YAHOO.util.EventProvider) {
+    YAHOO.augment(YAHOO.widget.RecordSet, YAHOO.util.EventProvider);
+}
+else {
+    YAHOO.log("Missing dependency: YAHOO.util.EventProvider","error",this.toString());
+}
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -94,16 +112,6 @@ YAHOO.widget.RecordSet.prototype.getLength = function() {
 };
 
 /**
- * Replaces entire RecordSet with given new records.
- *
- * @method replaceAll
- * @param aNewRecords {Array} New array of records
- */
-/*YAHOO.widget.RecordSet.prototype.replaceAllRecords = function(aNewObjectLiteral) {
-    this._init(aNewObjectLiterals);
-};*/
-
-/**
  * Returns record with given name, at the given index, or null.
  *
  * @method getRecord
@@ -140,14 +148,14 @@ YAHOO.widget.RecordSet.prototype.getRecords = function(i, range) {
     if(i === undefined) {
         return this._records;
     }
-    i = parseInt(i);
+    i = parseInt(i,10);
     if(isNaN(i)) {
         return null;
     }
     if(range === undefined) {
         return this._records.slice(i);
     }
-    range = parseInt(range);
+    range = parseInt(range,10);
     if(isNaN(range)) {
         return null;
     }
@@ -188,6 +196,20 @@ YAHOO.widget.RecordSet.prototype.getRecords = function(i, range) {
     return null;
 
 };*/
+
+/**
+ * Updates given Record at given key with given data.
+ *
+ * @method updateRecord
+ * @param oRecord {YAHOO.widget.Record} A Record instance.
+ * @param sKey {String} Key.
+ * @param oData {Object) New data.
+ */
+YAHOO.widget.RecordSet.prototype.updateRecord = function(oRecord, sKey, oData) {
+    var oldData = oRecord[sKey];
+    oRecord[sKey] = oData;
+    this.fireEvent("recordUpdateEvent",{record:oRecord,key:sKey,newData:oData,oldData:oldData});
+};
 
 /**
  * Adds one Record to the RecordSet at the given index. If index is null,

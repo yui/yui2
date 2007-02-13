@@ -7,6 +7,7 @@
  * including nested hierarchies and access to individual Column instances.
  *
  * @class ColumnSet
+ * @uses YAHOO.util.EventProvider
  * @constructor
  * @param aHeaders {Object[]} Array of object literals that define header cells.
  */
@@ -46,7 +47,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                     nodeLevelMaxChildren = tmpMax;
                 }
             }
-        }
+        };
         recurseChildren(nodeList);
 
         // Parse each node for attributes and any children
@@ -599,7 +600,7 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
 
         YAHOO.util.Dom.addClass(elCell, classname);
         if(this.className) {
-            YAHOO.util.Dom.addClass(elCell, this.className)
+            YAHOO.util.Dom.addClass(elCell, this.className);
         }
     }
     
@@ -644,7 +645,7 @@ YAHOO.widget.Column.formatCurrency = function(elCell, oColumn, oRecord, oData) {
              markup = "$"+nAmount;
 
             // Normalize to the penny
-            var dotIndex = markup.indexOf(".")
+            var dotIndex = markup.indexOf(".");
             if(dotIndex < 0) {
                 markup += ".00";
             }
@@ -938,6 +939,9 @@ YAHOO.widget.ColumnEditor = function(sType) {
         case "textbox":
             this.createTextboxEditor();
             break;
+        case "textarea":
+            this.createTextareaEditor();
+            break;
         default:
             break;
     }
@@ -1025,10 +1029,13 @@ YAHOO.widget.ColumnEditor.prototype.show = function(elCell, oRecord, oColumn) {
         case "textbox":
             this.showTextboxEditor(elCell, oRecord, oColumn);
             break;
+        case "textarea":
+            this.showTextareaEditor(elCell, oRecord, oColumn);
+            break;
         default:
             break;
     }
-}
+};
 
 /**
  * Returns ColumnEditor data value.
@@ -1037,13 +1044,18 @@ YAHOO.widget.ColumnEditor.prototype.show = function(elCell, oRecord, oColumn) {
  * @return Object
  */
 YAHOO.widget.ColumnEditor.prototype.getValue = function() {
+    var value;
     switch(this.type) {
         case "textbox":
-            return this.getTextboxEditorValue();
+            value = this.getTextboxEditorValue();
+            break;
+        case "textarea":
+            value = this.getTextareaEditorValue();
             break;
         default:
             break;
     }
+    return value;
 };
 
 /**
@@ -1060,6 +1072,17 @@ YAHOO.widget.ColumnEditor.prototype.createTextboxEditor = function() {
 };
 
 /**
+ * Creates a textarea editor in the DOM.
+ *
+ * @method createTextareaEditor
+ * @return {HTML} ???
+ */
+YAHOO.widget.ColumnEditor.prototype.createTextareaEditor = function() {
+    var elTextarea = this.container.appendChild(document.createElement("textarea"));
+    this.input = elTextarea;
+};
+
+/**
  * Shows ColumnEditor
  *
  * @method showTextboxEditor
@@ -1069,8 +1092,8 @@ YAHOO.widget.ColumnEditor.prototype.createTextboxEditor = function() {
  */
 YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord, oColumn) {
     // Size and value
-    this.input.style.width = (parseInt(elCell.offsetWidth)-7) + "px";
-    this.input.style.height = (parseInt(elCell.offsetHeight)-7) + "px";
+    this.input.style.width = (parseInt(elCell.offsetWidth,10)-7) + "px";
+    this.input.style.height = (parseInt(elCell.offsetHeight,10)-7) + "px";
     this.input.value = elCell.innerHTML;
 
     // Position and show
@@ -1082,18 +1105,56 @@ YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord
         y = elCell.offsetTop;
         while(elCell.offsetParent) {
             x += elCell.offsetParent.offsetLeft;
-            y += elCell.offsetParent.offsetTop
+            y += elCell.offsetParent.offsetTop;
             elCell = elCell.offsetParent;
         }
     }
     else {
         var xy = YAHOO.util.Dom.getXY(elCell);
-        x = parseInt(YAHOO.util.Dom.getX(elCell))//xy[0] + 1;
-        y = parseInt(YAHOO.util.Dom.getY(elCell))//xy[1] + 1;
+        x = parseInt(YAHOO.util.Dom.getX(elCell),10);//xy[0] + 1;
+        y = parseInt(YAHOO.util.Dom.getY(elCell),10);//xy[1] + 1;
     }
-    //YAHOO.log("xy "+xy,"debug",this.toString());
-    //YAHOO.log("x "+x,"debug",this.toString());
-    //YAHOO.log("y "+y,"debug",this.toString());
+    this.container.style.left = x + "px";
+    this.container.style.top = y + "px";
+    this.container.style.display = "block";
+
+    this.input.tabIndex = 0;
+    this.input.focus();
+    this.input.select();
+};
+
+/**
+ * Shows ColumnEditor
+ *
+ * @method showTextareaEditor
+ * @param elCell {HTMLElement} The cell to edit.
+ * @param oRecord {YAHOO.widget.Record} The DataTable Record of the cell.
+ * @param oColumn {YAHOO.widget.Column} The DataTable Column of the cell.
+ */
+YAHOO.widget.ColumnEditor.prototype.showTextareaEditor = function(elCell, oRecord, oColumn) {
+    // Size and value
+    this.input.style.width = (parseInt(elCell.offsetWidth,10)-7) + "px";
+    this.input.style.height = 4*(parseInt(elCell.offsetHeight,10)-7) + "px";
+    this.input.value = elCell.innerHTML;
+
+    // Position and show
+    var x,y;
+
+    // Don't use getXY for Opera
+    if(navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
+        x = elCell.offsetLeft;
+        y = elCell.offsetTop;
+        while(elCell.offsetParent) {
+            x += elCell.offsetParent.offsetLeft;
+            y += elCell.offsetParent.offsetTop;
+            elCell = elCell.offsetParent;
+        }
+    }
+    else {
+        var xy = YAHOO.util.Dom.getXY(elCell);
+        x = parseInt(YAHOO.util.Dom.getX(elCell),10);//xy[0] + 1;
+        y = parseInt(YAHOO.util.Dom.getY(elCell),10);//xy[1] + 1;
+    }
     this.container.style.left = x + "px";
     this.container.style.top = y + "px";
     this.container.style.display = "block";
@@ -1120,6 +1181,16 @@ YAHOO.widget.ColumnEditor.prototype.hide = function() {
  * @return String
  */
 YAHOO.widget.ColumnEditor.prototype.getTextboxEditorValue = function() {
+    return this.input.value;
+};
+
+/**
+ * Returns ColumnEditor value
+ *
+ * @method getTextareaEditorValue
+ * @return String
+ */
+YAHOO.widget.ColumnEditor.prototype.getTextareaEditorValue = function() {
     return this.input.value;
 };
 
