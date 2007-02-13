@@ -5,7 +5,11 @@
 
 var Dom = YAHOO.util.Dom,
     Module = YAHOO.widget.Module,
-    Menu = YAHOO.widget.Menu;
+    Menu = YAHOO.widget.Menu,
+
+    m_oMenuItemElement = null,
+    m_oSubmenuIndicator = null,
+    m_oCheckedIndicator = null;
 
 
 /**
@@ -35,7 +39,8 @@ YAHOO.widget.MenuItem = function(p_oObject, p_oConfig) {
     
             this.parent = p_oConfig.parent;
             this.value = p_oConfig.value;
-            
+            this.id = p_oConfig.id;
+
         }
 
         this.init(p_oObject, p_oConfig);
@@ -348,13 +353,13 @@ YAHOO.widget.MenuItem.prototype = {
     * @private
     * @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
     * one-html.html#ID-17701901">HTMLImageElement</a>
-    * @deprecated Use _checkedIndicator.
+    * @deprecated Use _oCheckedIndicator.
     */
     _checkImage: null,   
 
 
     /**
-    * @property _checkedIndicator
+    * @property _oCheckedIndicator
     * @description Object reference to the menu item's checkmark image.
     * @default <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
     * level-one-html.html#ID-58190037">HTMLElement</a>
@@ -362,7 +367,7 @@ YAHOO.widget.MenuItem.prototype = {
     * @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
     * level-one-html.html#ID-58190037">HTMLElement</a>
     */
-    _checkedIndicator: null,
+    _oCheckedIndicator: null,
 
 
     /** 
@@ -376,8 +381,19 @@ YAHOO.widget.MenuItem.prototype = {
     _oOnClick: null,
 
 
+    /**
+    * @property _sClassName
+    * @description The current value of the "classname" configuration attribute.
+    * @default null
+    * @private
+    * @type String
+    */
+    _sClassName: null,
+
+
 
     // Public properties
+
 
 	/**
     * @property constructor
@@ -497,6 +513,18 @@ YAHOO.widget.MenuItem.prototype = {
 	* @type String
 	*/
 	browser: Module.prototype.browser,
+
+
+    /**
+    * @property id
+    * @description Id of the menu item's root <code>&#60;li&#62;</code> 
+    * element.  This property should be set via the constructor using the 
+    * configuration object literal.  If an id is not specified, then one will 
+    * be created using the "generateId" method of the Dom utility.
+    * @default null
+    * @type String
+    */
+    id: null,
 
 
 
@@ -792,6 +820,18 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(this.element) {
 
+            var sId = this.element.id;
+
+            if(!sId) {
+
+                sId = this.id || Dom.generateId();
+
+                this.element.id = sId;
+
+            }
+
+            this.id = sId;
+
 
             Dom.addClass(this.element, this.CSS_CLASS_NAME);
 
@@ -820,6 +860,9 @@ YAHOO.widget.MenuItem.prototype = {
             }        
 
             oConfig.fireQueue();
+
+
+
 
         }
 
@@ -916,16 +959,18 @@ YAHOO.widget.MenuItem.prototype = {
     */
     _createRootNodeStructure: function () {
 
-        this.element = document.createElement("li");
+        if(!m_oMenuItemElement) {
 
-        this._oText = document.createTextNode("");
+            m_oMenuItemElement = document.createElement("li");
+            m_oMenuItemElement.innerHTML = "<a href=\"#\">s</a>";
 
-        this._oAnchor = document.createElement("a");
-        this._oAnchor.appendChild(this._oText);
-        
-        this.cfg.refireEvent("url");
+        }
 
-        this.element.appendChild(this._oAnchor);            
+        this.element = m_oMenuItemElement.cloneNode(true);
+        this._oAnchor = this.element.firstChild;
+        this._oText = this._oAnchor.firstChild;
+
+        this.element.appendChild(this._oAnchor);
 
     },
 
@@ -1349,9 +1394,15 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(bChecked) {
 
-            oEM = document.createElement("em");
-            oEM.innerHTML = this.CHECKED_TEXT;
-            oEM.className = "checkedindicator";
+            if(!m_oCheckedIndicator) {
+
+                m_oCheckedIndicator = document.createElement("em");
+                m_oCheckedIndicator.innerHTML = this.CHECKED_TEXT;
+                m_oCheckedIndicator.className = "checkedindicator";
+
+            }
+
+            oEM = m_oCheckedIndicator.cloneNode(true);
 
             var oSubmenu = this.cfg.getProperty("submenu");
 
@@ -1369,7 +1420,7 @@ YAHOO.widget.MenuItem.prototype = {
 
             Dom.addClass(oEl, "checked");
 
-            this._checkedIndicator = oEM;
+            this._oCheckedIndicator = oEM;
 
             if(oConfig.getProperty("disabled")) {
 
@@ -1386,7 +1437,7 @@ YAHOO.widget.MenuItem.prototype = {
         }
         else {
 
-            oEM = this._checkedIndicator;
+            oEM = this._oCheckedIndicator;
 
             Dom.removeClass(oEl, "checked");
 
@@ -1396,7 +1447,7 @@ YAHOO.widget.MenuItem.prototype = {
 
             }
 
-            this._checkedIndicator = null;
+            this._oCheckedIndicator = null;
         
         }
 
@@ -1421,7 +1472,7 @@ YAHOO.widget.MenuItem.prototype = {
             oAnchor = this._oAnchor,
             aNodes = [this.element, oAnchor],
             oHelpText = this._oHelpTextEM,
-            oCheckedIndicator = this._checkedIndicator,
+            oCheckedIndicator = this._oCheckedIndicator,
             oSubmenuIndicator = this.submenuIndicator,
             i = 1;
 
@@ -1499,7 +1550,7 @@ YAHOO.widget.MenuItem.prototype = {
             var bSelected = p_aArgs[0],
                 oHelpText = this._oHelpTextEM,
                 oSubmenuIndicator = this.submenuIndicator,
-                oCheckedIndicator = this._checkedIndicator,
+                oCheckedIndicator = this._oCheckedIndicator,
                 aNodes = [this.element, this._oAnchor],
                 i = 1;
 
@@ -1616,10 +1667,19 @@ YAHOO.widget.MenuItem.prototype = {
 
                 if(!oSubmenuIndicator) { 
 
-                    oSubmenuIndicator = document.createElement("em");
-                    oSubmenuIndicator.innerHTML = 
-                        this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
-                    oSubmenuIndicator.className = "submenuindicator";
+
+                    if(!m_oSubmenuIndicator) {
+                    
+                        m_oSubmenuIndicator = document.createElement("em");
+                        m_oSubmenuIndicator.innerHTML = 
+                            this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
+                        m_oSubmenuIndicator.className = "submenuindicator";
+
+                    }
+
+
+                    oSubmenuIndicator = m_oSubmenuIndicator.cloneNode(true);
+
 
                     if(oMenu.element.parentNode == oEl) {
 
@@ -1741,6 +1801,32 @@ YAHOO.widget.MenuItem.prototype = {
     },
 
 
+    /**
+    * @method configClassName
+    * @description Event handler for when the "classname" configuration 
+    * property of a menu item changes.
+    * @param {String} p_sType String representing the name of the event that 
+    * was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item
+    * that fired the event.
+    */
+    configClassName: function(p_sType, p_aArgs, p_oItem) {
+    
+        var sClassName = p_aArgs[0];
+    
+        if(this._sClassName) {
+    
+            Dom.removeClass(this.element, this._sClassName);
+    
+        }
+    
+        Dom.addClass(this.element, sClassName);
+        this._sClassName = sClassName;
+    
+    },
+
+
 
     // Public methods
 
@@ -1755,7 +1841,7 @@ YAHOO.widget.MenuItem.prototype = {
             CheckBoolean = oConfig.checkBoolean;
 
 
-        // Define the config properties
+        // Define the configuration attributes
 
         /**
         * @config text
@@ -1946,6 +2032,25 @@ YAHOO.widget.MenuItem.prototype = {
         * @default null
         */
         oConfig.addProperty("onclick", { handler: this.configOnClick });
+
+
+        /**
+        * @config classname
+        * @description CSS class to be applied to the menu item's root 
+        * <code>&#60;li&#62;</code> element.  The specified class(es) are 
+        * appended in addition to the default class as specified by the menu 
+        * item's CSS_CLASS_NAME constant.
+        * @default null
+        * @type String
+        */
+        oConfig.addProperty(
+            "classname", 
+            { 
+                value: null, 
+                handler: this.configClassName,
+                validator: this._checkString
+            }
+        );
 
 	},
 
