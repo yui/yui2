@@ -61,14 +61,14 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
 
     // Validate HTML Element
     elContainer = YAHOO.util.Dom.get(elContainer);
-    if(elContainer && (elContainer.nodeName.toLowerCase() == "div")) {
+    if(elContainer && elContainer.tagName && (elContainer.tagName.toLowerCase() == "div")) {
         this._elContainer = elContainer;
         // Peek in container child nodes to see if TABLE already exists
         var elTable = null;
         if(elContainer.hasChildNodes()) {
             var children = elContainer.childNodes;
             for(i=0; i<children.length; i++) {
-                if(children[i].nodeName.toLowerCase() == "table") {
+                if(children[i].tagName && children[i].tagName.toLowerCase() == "table") {
                     elTable = children[i];
                     break;
                 }
@@ -300,7 +300,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     /**
      * Fired when a TD element is doubleclicked.
      *
-     * @event cellDoublcickEvent
+     * @event cellDoubleclickEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TD element.
      */
@@ -326,50 +326,12 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this.createEvent("tableDoubleclickEvent");
 
     /**
-     * Fired when up-arrow is typed.
-     *
-     * @event arrowUpEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TABLE element.
-     *
-     */
-    this.createEvent("arrowUpEvent");
-
-    /**
-     * Fired when down-arrow is typed.
-     *
-     * @event arrowDownEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TABLE element.
-     *
-     */
-    this.createEvent("arrowDownEvent");
-
-    /**
      * Fired when a column is resized.
      *
      * @event columnResizeEvent
      * @param oArgs.target {HTMLElement} The TH element.
      */
     this.createEvent("columnResizeEvent");
-
-    /**
-     * Fired when a paginator element is clicked.
-     *
-     * @event pagerClickEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The paginator element.
-     *
-     */
-    this.createEvent("pagerClickEvent");
-    
-    /**
-     * Fired when a delete key is pressed.
-     *
-     * @event deleteKeyEvent
-     *
-     */
-    this.createEvent("deleteKeyEvent");
 
     /**
      * Fired when an element is selected.
@@ -392,8 +354,6 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
      *
      * @event rowDeleteEvent
      * @param oArgs.rowIndex {Number || Array} The index(es) of the deleted row(s).
-     * @param oArgs.rowId {String || Array} DOM ID(s) of the deleted row(s).
-     * @param oArgs.recordId {String || Array} The Record ID(s) of the deleted row(s).
      */
     this.createEvent("rowDeleteEvent");
     this.subscribe("rowDeleteEvent", this._onRowDelete);
@@ -1229,7 +1189,7 @@ YAHOO.widget.DataTable.prototype._onBlur = function(e, oSelf) {
  */
 YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
 	    var elTarget = YAHOO.util.Event.getTarget(e);
-	    var elTag = elTarget.nodeName.toLowerCase();
+	    var elTag = elTarget.tagName.toLowerCase();
 	    var knownTag = false;
 
         if (elTag != "table") {
@@ -1251,7 +1211,7 @@ YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
                 }
                 elTarget = elTarget.parentNode;
                 if(elTarget) {
-                    elTag = elTarget.nodeName.toLowerCase();
+                    elTag = elTarget.tagName.toLowerCase();
                 }
                 else {
                     break;
@@ -1271,7 +1231,7 @@ YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
  */
 YAHOO.widget.DataTable.prototype._onMouseout = function(e, oSelf) {
 	    var elTarget = YAHOO.util.Event.getTarget(e);
-	    var elTag = elTarget.nodeName.toLowerCase();
+	    var elTag = elTarget.tagName.toLowerCase();
 	    var knownTag = false;
 
         if (elTag != "table") {
@@ -1293,7 +1253,7 @@ YAHOO.widget.DataTable.prototype._onMouseout = function(e, oSelf) {
                 }
                 elTarget = elTarget.parentNode;
                 if(elTarget) {
-                    elTag = elTarget.nodeName.toLowerCase();
+                    elTag = elTarget.tagName.toLowerCase();
                 }
                 else {
                     break;
@@ -1314,7 +1274,7 @@ YAHOO.widget.DataTable.prototype._onMouseout = function(e, oSelf) {
 YAHOO.widget.DataTable.prototype._onMousedown = function(e, oSelf) {
         //YAHOO.util.Event.stopEvent(e);
 	    var elTarget = YAHOO.util.Event.getTarget(e);
-	    var elTag = elTarget.nodeName.toLowerCase();
+	    var elTag = elTarget.tagName.toLowerCase();
 	    var knownTag = false;
 
         if (elTag != "table") {
@@ -1336,7 +1296,7 @@ YAHOO.widget.DataTable.prototype._onMousedown = function(e, oSelf) {
                 }
                 elTarget = elTarget.parentNode;
                 if(elTarget) {
-                    elTag = elTarget.nodeName.toLowerCase();
+                    elTag = elTarget.tagName.toLowerCase();
                 }
                 else {
                     break;
@@ -1356,7 +1316,7 @@ YAHOO.widget.DataTable.prototype._onMousedown = function(e, oSelf) {
  */
 YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
-    var elTag = elTarget.nodeName.toLowerCase();
+    var elTag = elTarget.tagName.toLowerCase();
     var knownTag = false; // True if event should stop propagating
 
     if(oSelf.activeEditor) { //&& (oSelf.activeEditor.column != column)
@@ -1395,7 +1355,7 @@ YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
                     break;
             }
             elTarget = elTarget.parentNode;
-            elTag = elTarget.nodeName.toLowerCase();
+            elTag = elTarget.tagName.toLowerCase();
         }
     }
     oSelf.focusTable();
@@ -1412,7 +1372,7 @@ YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
  */
 YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
-    var elTag = elTarget.nodeName.toLowerCase();
+    var elTag = elTarget.tagName.toLowerCase();
     var knownTag = false;
 
     if(oSelf.activeEditor) { //&& (oSelf.activeEditor.column != column)
@@ -1442,7 +1402,7 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
                     break;
             }
             elTarget = elTarget.parentNode;
-            elTag = elTarget.nodeName.toLowerCase();
+            elTag = elTarget.tagName.toLowerCase();
         }
     }
     oSelf.fireEvent("tableDoubleclickEvent",{target:elTarget,event:e});
@@ -1466,7 +1426,7 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
         // arrow down
         if(e.keyCode == 40) {
             // row mode
-            if(oldSelected.nodeName.toLowerCase() == "tr") {
+            if(oldSelected.tagName.toLowerCase() == "tr") {
                 // We have room to move down
                 if(oldSelected.sectionRowIndex+1 < oSelf._elBody.rows.length) {
                             if(!e.shiftKey) {
@@ -1478,7 +1438,7 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
                 }
             }
             // cell mode
-            else if(oldSelected.nodeName.toLowerCase() == "td") {
+            else if(oldSelected.tagName.toLowerCase() == "td") {
                 /*// We have room to move down
                 if(oldSelected.sectionRowIndex+1 < oSelf._elBody.rows.length) {
                             if(!e.shiftKey) {
@@ -1495,7 +1455,7 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
         // arrow up
         else if(e.keyCode == 38) {
             // row mode
-            if(oldSelected.nodeName.toLowerCase() == "tr") {
+            if(oldSelected.tagName.toLowerCase() == "tr") {
                 // We have room to move up
                 if((oldSelected.sectionRowIndex > 0)) {
                             if(!e.shiftKey) {
@@ -1506,7 +1466,7 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
                 }
             }
             // cell mode
-            else if(oldSelected.nodeName.toLowerCase() == "td") {
+            else if(oldSelected.tagName.toLowerCase() == "td") {
                 // We have room to move up
                 if((oldSelected.sectionRowIndex > 0)) {
                             if(!e.shiftKey) {
@@ -1524,7 +1484,7 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
 };
 
 /**
- * Handles keyup events on the TABLE. Fires deleteKeyEvent.
+ * Handles keyup events on the TABLE. Executes deletion
  *
  * @method _onKeyup
  * @param e {HTMLEvent} The key event.
@@ -1535,7 +1495,7 @@ YAHOO.widget.DataTable.prototype._onKeyup = function(e, oSelf) {
     var key = YAHOO.util.Event.getCharCode(e);
     // delete
     if(key == 46) {//TODO: && this.isFocused
-        oSelf.fireEvent("deleteKeyEvent");
+        //TODO: delete row
     }
 };
 
@@ -1592,7 +1552,7 @@ YAHOO.widget.DataTable.prototype._onDocumentKeyup = function(e, oSelf) {
  */
 YAHOO.widget.DataTable.prototype._onPagerClick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
-    var elTag = elTarget.nodeName.toLowerCase();
+    var elTag = elTarget.tagName.toLowerCase();
     var knownTag = false; // True if event should stop propagating
 
     if (elTag != "table") {
@@ -1626,14 +1586,13 @@ YAHOO.widget.DataTable.prototype._onPagerClick = function(e, oSelf) {
             }
             elTarget = elTarget.parentNode;
             if(elTarget) {
-                elTag = elTarget.nodeName.toLowerCase();
+                elTag = elTarget.tagName.toLowerCase();
             }
             else {
                 break;
             }
         }
     }
-    oSelf.fireEvent("pagerClickEvent",{target:elTarget,event:e});
 };
 
 /**
@@ -1646,7 +1605,7 @@ YAHOO.widget.DataTable.prototype._onPagerClick = function(e, oSelf) {
  */
 YAHOO.widget.DataTable.prototype._onPagerSelect = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
-    var elTag = elTarget.nodeName.toLowerCase();
+    var elTag = elTarget.tagName.toLowerCase();
 
     // How many rows per page
     var rowsPerPage = parseInt(elTarget[elTarget.selectedIndex].text,10);
@@ -1865,14 +1824,33 @@ YAHOO.widget.DataTable.prototype.toString = function() {
 };
 
 /**
- * Returns element reference to given TD cell.
+ * Returns element reference to TABLE.
  *
- * @method getCell
- * @param row {Number} Row number.
- * @param col {Number} Column number.
+ * @method getTable
+ * @return {HTMLElement} Reference to TABLE element.
  */
-YAHOO.widget.DataTable.prototype.getCell = function(row, col) {
-    return(this._elBody.rows[row].cells[col]);
+YAHOO.widget.DataTable.prototype.getTable = function() {
+    return(this._elTable);
+};
+
+/**
+ * Returns element reference to THEAD.
+ *
+ * @method getHead
+ * @return {HTMLElement} Reference to THEAD element.
+ */
+YAHOO.widget.DataTable.prototype.getHead = function() {
+    return(this._elHead);
+};
+
+/**
+ * Returns element reference to TBODY.
+ *
+ * @method getBody
+ * @return {HTMLElement} Reference to TBODY element.
+ */
+YAHOO.widget.DataTable.prototype.getBody = function() {
+    return(this._elBody);
 };
 
 /**
@@ -1880,9 +1858,22 @@ YAHOO.widget.DataTable.prototype.getCell = function(row, col) {
  *
  * @method getRow
  * @param index {Number} Row number.
+ * @return {HTMLElement} Reference to TR element.
  */
 YAHOO.widget.DataTable.prototype.getRow = function(index) {
     return(this._elBody.rows[index]);
+};
+
+/**
+ * Returns element reference to given TD cell.
+ *
+ * @method getCell
+ * @param row {Number} Row number.
+ * @param col {Number} Column number.
+ * @return {HTMLElement} Reference to TD element.
+ */
+YAHOO.widget.DataTable.prototype.getCell = function(row, col) {
+    return(this._elBody.rows[row].cells[col]);
 };
 
 /**
@@ -2179,7 +2170,7 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(elRow) {
         if(this._elBody.rows.length === 0) {
             this.showEmptyMessage();
         }
-        this.fireEvent("rowDeleteEvent",{rowIndex: i, rowId: id, recordId: recordId});
+        this.fireEvent("rowDeleteEvent",{rowIndex: i});
     }
 };
 
@@ -2620,7 +2611,7 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
 
     //TODO: add a safety net in case TR is never reached
     // Walk up the DOM until we get to the TR
-    while(target.nodeName.toLowerCase() != "tr") {
+    while(target.tagName.toLowerCase() != "tr") {
         target = target.parentNode;
     }
 
@@ -2669,7 +2660,7 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
 
     //TODO: add a safety net in case TD is never reached
     // Walk up the DOM until we get to the TD
-    while(target.nodeName.toLowerCase() != "td") {
+    while(target.tagName.toLowerCase() != "td") {
         target = target.parentNode;
     }
 
@@ -2697,7 +2688,7 @@ YAHOO.widget.DataTable.prototype.onEventFormatCell = function(oArgs) {
 
     //TODO: add a safety net in case TD is never reached
     // Walk up the DOM until we get to the TD
-    while(element.nodeName.toLowerCase() != "td") {
+    while(element.tagName.toLowerCase() != "td") {
         element = element.parentNode;
     }
 
@@ -2717,7 +2708,7 @@ YAHOO.widget.DataTable.prototype.onEventHighlightCell = function(oArgs) {
 
     //TODO: add a safety net in case TD is never reached
     // Walk up the DOM until we get to the TD
-    while(target.nodeName.toLowerCase() != "td") {
+    while(target.tagName.toLowerCase() != "td") {
         target = target.parentNode;
     }
     YAHOO.util.Dom.addClass(target,YAHOO.widget.DataTable.CLASS_HIGHLIGHT);
@@ -2736,7 +2727,7 @@ YAHOO.widget.DataTable.prototype.onEventUnhighlightCell = function(oArgs) {
 
     //TODO: add a safety net in case TD is never reached
     // Walk up the DOM until we get to the TD
-    while(target.nodeName.toLowerCase() != "td") {
+    while(target.tagName.toLowerCase() != "td") {
         target = target.parentNode;
     }
     YAHOO.util.Dom.removeClass(target,YAHOO.widget.DataTable.CLASS_HIGHLIGHT);
@@ -2754,7 +2745,7 @@ YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
 
     //TODO: add a safety net in case TD is never reached
     // Walk up the DOM until we get to the TD
-    while(element.nodeName.toLowerCase() != "td") {
+    while(element.tagName.toLowerCase() != "td") {
         element = element.parentNode;
     }
 
