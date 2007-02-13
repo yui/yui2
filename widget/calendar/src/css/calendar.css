@@ -42,7 +42,7 @@
 	z-index:1;
 }
 
-.yui-calcontainer .close-icon {
+.yui-calcontainer .close-icon, .yui-calcontainer .calclose {
 	position:absolute;
 	right:3px;
 	top:3px;
@@ -50,7 +50,7 @@
 	z-index:1;
 }
 
-.yui-calcontainer span.close-icon {
+.yui-calcontainer .calclose {
 	background: url("calx.gif") no-repeat;
 	width:17px;
 	height:13px;

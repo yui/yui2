@@ -779,7 +779,7 @@ YAHOO.widget.Calendar = function(id, containerId, config) {
 * The path to be used for images loaded for the Calendar
 * @property YAHOO.widget.Calendar.IMG_ROOT
 * @static
-* @deprecated. You can now customize images by overriding the span.close-icon, calnavleft and calnavright (default) CSS classes in calendar.css
+* @deprecated	You can now customize images by overriding the calclose, calnavleft and calnavright default CSS classes for the close icon, left arrow and right arrow respectively
 * @type String
 */
 YAHOO.widget.Calendar.IMG_ROOT = null;
@@ -1080,7 +1080,7 @@ YAHOO.widget.Calendar.prototype.configClose = function(type, args, obj) {
 			imgClose.className = YAHOO.widget.CalendarGroup.CSS_2UPCLOSE;
 			linkClose.appendChild(imgClose);
 		} else {
-			linkClose.innerHTML = '<span class="' + YAHOO.widget.CalendarGroup.CSS_2UPCLOSE + '"></span>';
+			linkClose.innerHTML = '<span class="' + this.Style.CSS_CLOSE + '"></span>';
 		}
 		
 		this.oDomContainer.appendChild(linkClose);
@@ -1389,7 +1389,7 @@ YAHOO.widget.Calendar.prototype.setupConfig = function() {
 	* The image that should be used for the left navigation arrow.
 	* @config NAV_ARROW_LEFT
 	* @type String
-	* @deprecated You can customize the image by overriding the default CSS class for the left arrow - calnavleft, defined in calendar.css  
+	* @deprecated	You can customize the image by overriding the default CSS class for the left arrow - "calnavleft"  
 	* @default null
 	*/	
 	this.cfg.addProperty("NAV_ARROW_LEFT",	{ value:null, handler:this.configOptions } );
@@ -1398,7 +1398,7 @@ YAHOO.widget.Calendar.prototype.setupConfig = function() {
 	* The image that should be used for the right navigation arrow.
 	* @config NAV_ARROW_RIGHT
 	* @type String
-	* @deprecated You can customize the image by overriding the default CSS class for the right arrow - calnavright, defined in calendar.css
+	* @deprecated	You can customize the image by overriding the default CSS class for the right arrow - "calnavright"
 	* @default null
 	*/	
 	this.cfg.addProperty("NAV_ARROW_RIGHT",	{ value:null, handler:this.configOptions } );
@@ -1743,6 +1743,10 @@ YAHOO.widget.Calendar.prototype.initStyles = function() {
 		*/
 		CSS_HEADER_TEXT : "calhead",
 		/**
+		* @property Style.CSS_BODY
+		*/
+		CSS_BODY : "calbody",
+		/**
 		* @property Style.CSS_WEEKDAY_CELL
 		*/
 		CSS_WEEKDAY_CELL : "calweekdaycell",
@@ -1774,6 +1778,10 @@ YAHOO.widget.Calendar.prototype.initStyles = function() {
 		* @property Style.CSS_NAV_RIGHT
 		*/
 		CSS_NAV_RIGHT : "calnavright",
+		/**
+		* @property Style.CSS_CLOSE
+		*/
+		CSS_CLOSE : "calclose",
 		/**
 		* @property Style.CSS_CELL_TOP
 		*/
@@ -1970,7 +1978,7 @@ YAHOO.widget.Calendar.prototype.renderBody = function(workingDate, html) {
 	var useDate,weekNum,weekClass;
 	useDate = this.cfg.getProperty("pagedate");
 
-	html[html.length] = '<tbody class="m' + (useDate.getMonth()+1) + ' calbody">';
+	html[html.length] = '<tbody class="m' + (useDate.getMonth()+1) + ' ' + this.Style.CSS_BODY + '">';
 	
 	var i = 0;
 
@@ -2857,8 +2865,8 @@ YAHOO.widget.Calendar.prototype.isDateOOM = function(date) {
  * and is parsed into a Date object normalized to the first day of the month. If no value is passed in, the month and year from today's date are used to create the Date object 
  * @method	_parsePageDate
  * @private
- * @param {Date | String} date Pagedate value which needs to be parsed
- * @return {Date} The Date object representing the pagedate
+ * @param {Date|String}	date	Pagedate value which needs to be parsed
+ * @return {Date}	The Date object representing the pagedate
  */
 YAHOO.widget.Calendar.prototype._parsePageDate = function(date) {
 	var parsedDate;
@@ -3481,7 +3489,7 @@ YAHOO.widget.CalendarGroup.prototype.setupConfig = function() {
 	* The image that should be used for the left navigation arrow.
 	* @config NAV_ARROW_LEFT
 	* @type String
-	* @deprecated You can customize the image by overriding the default CSS class for the left arrow - calnavleft, defined in calendar.css
+	* @deprecated	You can customize the image by overriding the default CSS class for the left arrow - "calnavleft"
 	* @default null
 	*/		
 	this.cfg.addProperty("NAV_ARROW_LEFT",	{ value:null, handler:this.delegateConfig } );
@@ -3490,7 +3498,7 @@ YAHOO.widget.CalendarGroup.prototype.setupConfig = function() {
 	* The image that should be used for the right navigation arrow.
 	* @config NAV_ARROW_RIGHT
 	* @type String
-	* @deprecated You can customize the image by overriding the default CSS class for the right arrow - calnavright, defined in calendar.css
+	* @deprecated	You can customize the image by overriding the default CSS class for the right arrow - "calnavright"
 	* @default null
 	*/		
 	this.cfg.addProperty("NAV_ARROW_RIGHT",	{ value:null, handler:this.delegateConfig } );
@@ -4209,7 +4217,7 @@ YAHOO.widget.CalendarGroup.prototype.subtractYears = function(count) {
 
 /**
 * Sets the month on a Date object, taking into account year rollover if the month is less than 0 or greater than 11.
-* The Date object passed in is modified and hence should be cloned before passing in if the original value needs to be maintained
+* The Date object passed in is modified. It should be cloned before passing it into this method if the original value needs to be maintained
 * @method	_setMonthOnDate
 * @private
 * @param	{Date}	date	The Date object on which to set the month index
@@ -4259,6 +4267,8 @@ YAHOO.widget.CalendarGroup.CSS_2UPTITLE = "title";
 * @property YAHOO.widget.CalendarGroup.CSS_2UPCLOSE
 * @static
 * @final
+* @deprecated	Along with Calendar.IMG_ROOT and NAV_ARROW_LEFT, NAV_ARROW_RIGHT configuration properties.
+*					Calendar's <a href="YAHOO.widget.Calendar.html#Style.CSS_CLOSE">Style.CSS_CLOSE</a> property now represents the CSS class used to render the close icon
 * @type String
 */
 YAHOO.widget.CalendarGroup.CSS_2UPCLOSE = "close-icon";

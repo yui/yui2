@@ -235,7 +235,7 @@ YAHOO.widget.CalendarGroup.prototype.setupConfig = function() {
 	* The image that should be used for the left navigation arrow.
 	* @config NAV_ARROW_LEFT
 	* @type String
-	* @deprecated You can customize the image by overriding the default CSS class for the left arrow - calnavleft, defined in calendar.css
+	* @deprecated	You can customize the image by overriding the default CSS class for the left arrow - "calnavleft"
 	* @default null
 	*/		
 	this.cfg.addProperty("NAV_ARROW_LEFT",	{ value:null, handler:this.delegateConfig } );
@@ -244,7 +244,7 @@ YAHOO.widget.CalendarGroup.prototype.setupConfig = function() {
 	* The image that should be used for the right navigation arrow.
 	* @config NAV_ARROW_RIGHT
 	* @type String
-	* @deprecated You can customize the image by overriding the default CSS class for the right arrow - calnavright, defined in calendar.css
+	* @deprecated	You can customize the image by overriding the default CSS class for the right arrow - "calnavright"
 	* @default null
 	*/		
 	this.cfg.addProperty("NAV_ARROW_RIGHT",	{ value:null, handler:this.delegateConfig } );
@@ -963,7 +963,7 @@ YAHOO.widget.CalendarGroup.prototype.subtractYears = function(count) {
 
 /**
 * Sets the month on a Date object, taking into account year rollover if the month is less than 0 or greater than 11.
-* The Date object passed in is modified and hence should be cloned before passing in if the original value needs to be maintained
+* The Date object passed in is modified. It should be cloned before passing it into this method if the original value needs to be maintained
 * @method	_setMonthOnDate
 * @private
 * @param	{Date}	date	The Date object on which to set the month index
@@ -1013,6 +1013,8 @@ YAHOO.widget.CalendarGroup.CSS_2UPTITLE = "title";
 * @property YAHOO.widget.CalendarGroup.CSS_2UPCLOSE
 * @static
 * @final
+* @deprecated	Along with Calendar.IMG_ROOT and NAV_ARROW_LEFT, NAV_ARROW_RIGHT configuration properties.
+*					Calendar's <a href="YAHOO.widget.Calendar.html#Style.CSS_CLOSE">Style.CSS_CLOSE</a> property now represents the CSS class used to render the close icon
 * @type String
 */
 YAHOO.widget.CalendarGroup.CSS_2UPCLOSE = "close-icon";
