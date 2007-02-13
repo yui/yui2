@@ -32,115 +32,73 @@
 
             /* Define a new style for each menu bar */
 
-            div.yuimenubar {
-                
-                border-width:1px 0;
-                border-color:#666;
-                border-style:solid;
-                background-color:#ccc;
-
-            }
+            div#mymenubar.yuimenubar {
             
-            div.yuimenubar div.bd {
-                
-                border-width:1px 0;
-                border-color:#ddd;
-                border-style:solid;
-                
-            }
-
-            div.yuimenubar li.yuimenubaritem {
-
-                border-width:0;
-                border-style:none;
-                padding:4px 12px;
+                background:url(img/menubar_background.gif) left center;
+                border:0px solid #ccc;
+                border-bottom-width:1px;
             
             }
 
-            div.yuimenubar li.yuimenubaritem img {
-              
-                margin:0;
-                border:0;
+            div#mymenubar.yuimenubar li.yuimenubaritem {
+
+                padding:4px 10px;
+                border:none;
+
+            }
+
+            div#mymenubar.yuimenubar li.yuimenubaritem.first-of-type a {
+            
+                text-indent:-6em;
+                background:url(http://us.i1.yimg.com/us.yimg.com/i/us/nt/b/purpley.1.0.gif) center center no-repeat;
+                width:2em;
+                float:left;
+                overflow:hidden;
+
+                _margin-right:1em; /* IE 6 only */
+            
+            }
+
+            div#mymenubar.yuimenubar div#yahoo.yuimenu li.yuimenuitem a {
+
+                float:none;
+            
+            }
+
+            div#mymenubar.yuimenubar .yuimenu {
+            
+                background:#edebeb;
+            
+            }
+
+            div#mymenubar.yuimenubar .yuimenu li.yuimenuitem a {
+            
+                text-indent:0;
+                background:none;
+                width:auto;
+                overflow:visible;
+
+                _margin-right:auto; /* IE 6 only */
+            
+            }            
+
+            div#mymenubar.yuimenubar li em.submenuindicator {
+
                 height:1px;
                 width:1px;
-            
-            }        
-            
-
-            /* Define a new style for each menu */
-
-            div.yuimenu {
-
-                border:solid 1px #666;
-                background-color:#ccc;                
+                margin:0;
             
             }
-
-            div.yuimenu div.bd {
-                
-                border-width:0;
-                border-style:none;
-                
-            }
-
-
-            /* Define a new style for each menu item */
-
-            div.yuimenu li.yuimenuitem {
-
-                padding-top:4px;
-                padding-bottom:4px;
-
-            }
-
-            div.yuimenu li.yuimenuitem img {
             
+            div#mymenubar div.yuimenu li em.submenuindicator {
+
                 height:8px;
                 width:8px;
                 margin:0 -16px 0 10px;
-                border:0;
             
-            }
-
-            div.yuimenu ul {
-            
-                border:solid 1px #666;
-                border-width:1px 0 0 0;
-            
-            }
-
-
-            /* Define a new style for an item's "selected" state */
-
-            div.yuimenu li.selected,
-            div.yuimenubar li.selected {
-            
-                background-color:#039;
-            
-            }
-
-            div.yuimenu li.selected a.selected,
-            div.yuimenubar li.selected a.selected {
-                
-                text-decoration:none;
-                
-            }
-
-
-            /* Define a new style for an item's "disabled" state */
-
-            div.yuimenu li.disabled a.disabled,
-            div.yuimenu li.disabled em.disabled,
-            div.yuimenubar li.disabled a.disabled {
-            
-                color:#666;
-                
             }
         
         </style>
-
-    </head>
-    <body>
 
         <?php
 
@@ -163,43 +121,22 @@
         <!-- Page-specific script -->
         <script type="text/javascript">
 
-            /**
-            * Constant representing the path to the image to be used for the 
-            * submenu arrow indicator.
-            * @final
-            * @type String
-            */
-            YAHOO.widget.MenuBarItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH =
-                "promo/m/irs/blank.gif";
-            
-            
-            /**
-            * Constant representing the path to the image to be used for the 
-            * submenu arrow indicator when a MenuBarItem instance is selected.
-            * @final
-            * @type String
-            */
-            YAHOO.widget.MenuBarItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH =
-                "promo/m/irs/blank.gif";
-            
-            
-            /**
-            * Constant representing the path to the image to be used for the 
-            * submenu arrow indicator when a MenuBarItem instance is disabled.
-            * @final
-            * @type String
-            */
-            YAHOO.widget.MenuBarItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH = 
-                "promo/m/irs/blank.gif";
-
-
             // "load" event handler for the window
 
             YAHOO.example.onWindowLoad = function(p_oEvent) {
 
-
                 var aItemData = [
-                
+
+                    { text: "Yahoo!", submenu: { id:"yahoo", itemdata: [
+                            
+                            "About Yahoo!",
+                            "YUI Team Info",
+                            "Preferences"
+                            
+                        ] }
+                        
+                    },
+
                     { text:"File", submenu:{  id:"filemenu", itemdata:[
 
                             { text:"New File", helptext:"Ctrl + N" },
@@ -256,7 +193,7 @@
                 ];
 
 
-                var oMenuBar = new YAHOO.widget.MenuBar("menubar", { itemdata:aItemData });
+                var oMenuBar = new YAHOO.widget.MenuBar("mymenubar", { lazyload: true, itemdata:aItemData });
 
 
                 // Render the MenuBar instance and corresponding submenus
@@ -282,7 +219,6 @@
               
                 oPanel.show();
 
-
             }
 
 
@@ -292,5 +228,7 @@
 
         </script>
 
+    </head>
+    <body>
     </body>
 </html>
