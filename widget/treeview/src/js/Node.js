@@ -249,9 +249,11 @@ YAHOO.widget.Node.prototype = {
             this.href = "javascript:" + this.getToggleLink();
         }
 
-        if (! this.multiExpand) {
-            this.multiExpand = parentNode.multiExpand;
-        }
+        // @todo why was this put here.  This causes new nodes added at the
+        // root level to lose the menu behavior.
+        // if (! this.multiExpand) {
+            // this.multiExpand = parentNode.multiExpand;
+        // }
 
         this.tree.regNode(this);
         parentNode.childrenRendered = false;
