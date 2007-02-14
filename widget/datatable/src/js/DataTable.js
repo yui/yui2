@@ -2223,8 +2223,17 @@ YAHOO.widget.DataTable.prototype.select = function(els) {
         for(var i=0; i<els.length; i++) {
             var id = els[i].recordId;
             // Remove if already there
-            if(tracker.indexOf(id) >  0) {
+            // Use Array.indexOf if available...
+            if(tracker.indexOf && (tracker.indexOf(id) >  0)) {
                 tracker.splice(indexOf(id),1);
+            }
+            // ...or do it the old-fashioned way
+            else {
+            	for(var j=0; j<tracker.length; j++) {
+            		if(tracker[j] === id){
+                        tracker.splice(j,1);
+            		}
+                }
             }
             // Add to the end
             tracker.push(id);
