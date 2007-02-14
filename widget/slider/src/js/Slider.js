@@ -198,9 +198,15 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
          * destination.  For animated slider, this value can be checked in 
          * the onChange handler to make it possible to execute logic only
          * when the move is complete rather than at all points along the way.
+         * Deprecated because this flag is only useful when the background is
+         * clicked and the slider is animated.  If the user drags the thumb,
+         * the flag is updated when the drag is over ... the final onDrag event
+         * fires before the mouseup the ends the drag, so the implementer will
+         * never see it.
          *
          * @property moveComplete
          * @type Boolean
+         * @deprecated use the slideEnd event instead
          */
         this.moveComplete = true;
 

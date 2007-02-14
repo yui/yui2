@@ -1,5 +1,11 @@
 Slider - Release Notes
 
+2.2.0
+
+   * Added the missing "force" parameter to the signature for setRegionValue
+
+   * deprecated the moveComplete flag
+
 0.12.2
 
    * No change
