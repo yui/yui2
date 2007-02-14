@@ -963,7 +963,7 @@ YAHOO.util.Connect =
 			}
 			catch(e){}
 
-			if(callback.upload){
+			if(callback && callback.upload){
 				if(!callback.scope){
 					callback.upload(obj);
 					YAHOO.log('Upload callback.', 'info', 'Connection');
