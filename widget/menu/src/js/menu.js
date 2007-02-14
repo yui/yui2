@@ -595,7 +595,7 @@ _initSubTree: function() {
 
     var oNode;
 
-    if(this.srcElement.tagName == "DIV") {
+    if(this.srcElement.tagName.toUpperCase() == "DIV") {
 
         /*
             Populate the collection of item groups and item
@@ -2597,9 +2597,29 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
         }
 
 
-        if(this.srcElement) {
+        var oSrcElement = this.srcElement;
 
-            this.render();                
+        if(oSrcElement) {
+
+            if(oSrcElement.tagName.toUpperCase() == "SELECT") {
+
+                if(Dom.inDocument(oSrcElement)) {
+
+                    this.render(oSrcElement.parentNode);
+                
+                }
+                else {
+                
+                    this.render(this.cfg.getProperty("container"));
+                
+                }
+
+            }
+            else {
+
+                this.render();                
+
+            }
 
         }
         else {
