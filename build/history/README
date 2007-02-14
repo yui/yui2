@@ -2,5 +2,10 @@ YUI Library - History - Release Notes
 
 2.2.0
 
-  * This is the initial release of the browser history manager.  This component is
-    considered experimental, which [Eric is going to elaborate on here.]
+  * This is the initial release of the browser history manager.
+    This component is considered experimental.  Experimental components
+	are released for community experimentation and feedback; they
+	are not considered appropriate for implementation in mission-
+	critical applications. Please see the YUI FAQ at
+	http://developer.yahoo.com/yui/articles/faq/#experimental
+	for more information about the "experimental" designation.
