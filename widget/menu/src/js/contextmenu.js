@@ -280,8 +280,6 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
     
         this.cfg.setProperty("xy", Event.getXY(p_oEvent));
 
-        console.log(Event.getXY(p_oEvent));
-
         this.show();
 
     }
