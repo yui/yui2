@@ -1,5 +1,21 @@
 TreeView - Release Notes
 
+2.2.0
+
+  * Node::insertAfter properly nulls the nextSibling attribute when the
+    inserted before the firstChild.
+
+  * TextNode::setUpLabel sets the data.label property as well as the label property.
+
+  * TaskNode example: made the logger optional, and moved the creation of the logger
+    instance to the proper location.
+
+  * TaskNodes added to a node that is in a fully selected state will update the
+    parent to a partially selected state.
+
+  * TaskNode example fixed to propagate the labelClick event
+
+
 0.12.2
 
   * removeChildren will now work properly on the root node.

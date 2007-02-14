@@ -172,6 +172,7 @@
 		}
         
         tree.subscribe("checkClick", onCheckClick);
+        // tree.subscribe("labelClick", onLabelClick);
 		tree.draw();
 	}
 
@@ -209,6 +210,13 @@
             topNodes[i].uncheck();
         }
     }
+
+   function onLabelClick(node) {
+       new YAHOO.widget.TaskNode("new", node, false);
+       node.refresh();
+       return false;
+   }
+
 
 
 

@@ -345,6 +345,7 @@ YAHOO.widget.Node.prototype = {
             this.logger.log(refIndex);
 
             if (!node.nextSibling) {
+                this.nextSibling = null;
                 return this.appendTo(p);
             }
 

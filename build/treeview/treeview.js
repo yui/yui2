@@ -37,7 +37,9 @@ YAHOO.widget.TreeView.prototype = {
     _el: null,
 
      /**
-     * Flat collection of all nodes in this tree
+     * Flat collection of all nodes in this tree.  This is a sparse
+     * array, so the length property can't be relied upon for a
+     * node count for the tree.
      * @property _nodes
      * @type Node[]
      * @private
@@ -568,7 +570,9 @@ YAHOO.widget.TreeView.prototype = {
 YAHOO.augment(YAHOO.widget.TreeView, YAHOO.util.EventProvider);
 
 /**
- * Count of all nodes in all trees
+ * Running count of all nodes created in all trees.  This is 
+ * used to provide unique identifies for all nodes.  Deleting
+ * nodes does not change the nodeCount.
  * @property YAHOO.widget.TreeView.nodeCount
  * @type int
  * @static
@@ -1030,6 +1034,7 @@ YAHOO.widget.Node.prototype = {
             var refIndex = node.isChildOf(p);
 
             if (!node.nextSibling) {
+                this.nextSibling = null;
                 return this.appendTo(p);
             }
 
@@ -1744,6 +1749,7 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
             oData = { label: oData };
         }
         this.label = oData.label;
+        this.data.label = oData.label;
         
         // update the link
         if (oData.href) {

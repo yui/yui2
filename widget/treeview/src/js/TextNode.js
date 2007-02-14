@@ -83,6 +83,7 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
             oData = { label: oData };
         }
         this.label = oData.label;
+        this.data.label = oData.label;
         
         // update the link
         if (oData.href) {

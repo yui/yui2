@@ -15,13 +15,18 @@
  */
 YAHOO.widget.TaskNode = function(oData, oParent, expanded, checked) {
 
+    if (YAHOO.widget.LogWriter) {
+        this.logger = new YAHOO.widget.LogWriter(this.toString());
+    } else {
+        this.logger = YAHOO;
+    }
+
     if (oData) { 
         this.init(oData, oParent, expanded);
         this.setUpLabel(oData);
         this.setUpCheck(checked);
     }
 
-    this.logger = new YAHOO.widget.LogWriter(this.toString());
 };
 
 YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
@@ -41,6 +46,21 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
     checkState: 0,
 
     taskNodeParentChange: function() {
+        //this.updateParent();
+    },
+
+    setUpCheck: function(checked) {
+        // if this node is checked by default, run the check code to update
+        // the parent's display state
+        if (checked && checked === true) {
+            this.check();
+        // otherwise the parent needs to be updated only if its checkstate 
+        // needs to change from fully selected to partially selected
+        } else if (this.parent && 2 == this.parent.checkState) {
+             this.updateParent();
+        }
+
+        // set up the custom event on the tree for checkClick
         /**
          * Custom event that is fired when the check box is clicked.  The
          * custom event is defined on the tree instance, so there is a single
@@ -56,16 +76,6 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
             this.tree.createEvent("checkClick", this.tree);
         }
 
-    },
-
-    setUpCheck: function(checked) {
-
-        if (checked && checked === true) {
-            this.check();
-        }
-
-        // set up the custom event on the tree
-        this.taskNodeParentChange();
         this.subscribe("parentChange", this.taskNodeParentChange);
 
     },
@@ -210,7 +220,11 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
     // Overrides YAHOO.widget.TextNode
     getNodeHtml: function() { 
         this.logger.log("Generating html");
-        var sb = new Array();
+        var sb = [];
+
+        var getNode = 'YAHOO.widget.TreeView.getNode(\'' +
+                        this.tree.id + '\',' + this.index + ')';
+
 
         sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0">';
         sb[sb.length] = '<tr>';
@@ -250,6 +264,7 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
         sb[sb.length] = ' class="' + this.labelStyle + '"';
         sb[sb.length] = ' href="' + this.href + '"';
         sb[sb.length] = ' target="' + this.target + '"';
+        sb[sb.length] = ' onclick="return ' + getNode + '.onLabelClick(' + getNode +')"';
         if (this.hasChildren(true)) {
             sb[sb.length] = ' onmouseover="document.getElementById(\'';
             sb[sb.length] = this.getToggleElId() + '\').className=';
