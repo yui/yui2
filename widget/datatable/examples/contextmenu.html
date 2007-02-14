@@ -1,7 +1,7 @@
 <!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>Example: DataTable - Context Menu (YUI Library)</title>
+<title>Example: DataTable - Integration with ContextMenu (YUI Library)</title>
 <link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
@@ -20,7 +20,7 @@
 </head>
 <body>
 <div id="hd">
-    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Context Menu</h1>
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Integration with ContextMenu</h1>
 </div>
 <div id="bd">
     <div id="contextmenu" class="example"></div>
@@ -56,7 +56,7 @@ myDataSource.responseSchema = {
     fields: ["SKU","Quantity","Item","Description"]
 };
 
-var myDataTable = new YAHOO.widget.DataTable("contextmenu", myColumnSet, myDataSource,{caption:"Example: Context Menu"});
+var myDataTable = new YAHOO.widget.DataTable("contextmenu", myColumnSet, myDataSource,{caption:"Example: Integration with ContextMenu"});
 
 var onRowDelete = function(oArgs) {
     YAHOO.log("Deleted row index " +oArgs.rowIndex);

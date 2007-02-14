@@ -326,6 +326,35 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this.createEvent("tableDoubleclickEvent");
 
     /**
+     * Fired when a column is sorted.
+     *
+     * @event columnSortEvent
+     * @param oArgs.column {YAHOO.widget.Column} The Column instance.
+     * @param oArgs.dir {String} Sort direction "asc" or "desc".
+     */
+    this.createEvent("columnSortEvent");
+
+    /**
+     * Fired when an editor is activated.
+     *
+     * @event editorShowEvent
+     * @param oArgs.target {HTMLElement} The TD element.
+     * @param oArgs.column {YAHOO.widget.Column} The Column instance.
+     */
+    this.createEvent("editorShowEvent");
+
+
+    /**
+     * Fired when a cell is edited.
+     *
+     * @event cellEditEvent
+     * @param oArgs.target {HTMLElement} The TD element.
+     * @param oArgs.newData {Object} New data value.
+     * @param oArgs.oldData {Object} Old data value.
+     */
+    this.createEvent("cellEditEvent");
+
+    /**
      * Fired when a column is resized.
      *
      * @event columnResizeEvent
@@ -1522,6 +1551,7 @@ YAHOO.widget.DataTable.prototype._onDocumentKeyup = function(e, oSelf) {
         var elCell = oSelf.activeEditor.cell;
         var oColumn = oSelf.activeEditor.column;
         var oRecord = oSelf.activeEditor.record;
+        var oldValue = oRecord[oColumn.key];
         var newValue = oSelf.activeEditor.getValue();
         
         //Update Record
@@ -1538,7 +1568,7 @@ YAHOO.widget.DataTable.prototype._onDocumentKeyup = function(e, oSelf) {
         // Editor causes widget to lose focus
         oSelf._bFocused = false;
         oSelf.focusTable();
-        
+        oSelf.fireEvent("cellEditEvent",{target:elCell,oldData:oldValue,newData:newValue});
     }
 };
 
@@ -2534,8 +2564,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
             this.sortedBy.dir = sortDir;
             this.sortedBy._id = oColumn.getId();
 
-
-            YAHOO.log("Column \"" + oColumn.key + "\" sorted " + sortDir,"info",this.toString());
+            this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
         }
     }
     else {
@@ -2556,6 +2585,7 @@ YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
             this.activeEditor = column.getEditor(elCell,this._oRecordSet.getRecord(elCell.parentNode.recordId));
         }
         this._bFocused = true;
+        this.fireEvent("editorShowEvent",{target:elCell,column:column});
     }
 };
 
