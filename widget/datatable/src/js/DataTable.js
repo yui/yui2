@@ -634,7 +634,7 @@ YAHOO.widget.DataTable.CLASS_PREVLINK = "yui-dt-prevlink";
  * @final
  * @default "yui-dt-prevpage"
  */
-YAHOO.widget.DataTable.CLASS_FIRSTPAGE = "yui-dt-prevpage";
+YAHOO.widget.DataTable.CLASS_PREVPAGE = "yui-dt-prevpage";
 
 /**
  * Class name assigned to the pagination link "&gt;".
@@ -2440,12 +2440,13 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
         }
         markup += nextPageLink + lastPageLink;
 
-        // Markup for rows-per-page dropdown
+        // Markup for rows-per-page dropdowns
         var dropdown = this.rowsPerPageDropdown;
+        var select1, select2;
         if(dropdown && (dropdown.constructor == Array) && (dropdown.length > 0)) {
-            var select1 = document.createElement("select");
+            select1 = document.createElement("select");
             select1.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
-            var select2 = document.createElement("select");
+            select2 = document.createElement("select");
             select2.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
             
             for(i=0; i<dropdown.length; i++) {
@@ -2474,24 +2475,27 @@ YAHOO.widget.DataTable.prototype.paginate = function() {
             pager2.className = YAHOO.widget.DataTable.CLASS_PAGELINKS;
 
             pager1 = this._elContainer.insertBefore(pager1, this._elTable);
-            select1 = this._elContainer.insertBefore(select1, this._elTable);
-            select2 = this._elContainer.insertBefore(select2, this._elTable.nextSibling);
+            select1 = (select1 === undefined) ? null :
+                    this._elContainer.insertBefore(select1, this._elTable);
+            select2 = (select2 === undefined) ? null :
+                    this._elContainer.insertBefore(select2, this._elTable.nextSibling);
             pager2 = this._elContainer.insertBefore(pager2, this._elTable.nextSibling);
             this.pagers = [
                 {links:pager1,select:select1},
                 {links:pager2,select:select2}
             ];
         }
-        
-        this.pagers[0].links.innerHTML = markup;
-        this.pagers[1].links.innerHTML = markup;
-
         for(i=0; i<this.pagers.length; i++) {
+            this.pagers[i].links.innerHTML = markup;
             YAHOO.util.Event.purgeElement(this.pagers[i].links);
-            YAHOO.util.Event.purgeElement(this.pagers[i].select);
+            if(this.pagers[i].select) {
+                YAHOO.util.Event.purgeElement(this.pagers[i].select);
+            }
             this.pagers[i].innerHTML = markup;
             YAHOO.util.Event.addListener(this.pagers[i].links,"click",this._onPagerClick,this);
-            YAHOO.util.Event.addListener(this.pagers[i].select,"change",this._onPagerSelect,this);
+            if(this.pagers[i].select) {
+                YAHOO.util.Event.addListener(this.pagers[i].select,"change",this._onPagerSelect,this);
+            }
         }
     }
 };
