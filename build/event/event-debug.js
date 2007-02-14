@@ -903,9 +903,6 @@ if (!YAHOO.util.Event) {
              * @private
              */
             _isValidCollection: function(o) {
-                // this.logger.debug(o.constructor.toString());
-                // this.logger.debug(typeof o);
-
                 return ( o                    && // o is something
                          o.length             && // o is indexed
                          typeof o != "string" && // o is not a string
@@ -1084,24 +1081,35 @@ if (!YAHOO.util.Event) {
              * @static
              */           
             getListeners: function(el, sType) {
-                var elListeners = [];
-                if (listeners && listeners.length > 0) {
-                    for (var i=0,len=listeners.length; i<len ; ++i) {
-                        var l = listeners[i];
-                        if ( l  && l[this.EL] === el && 
-                                (!sType || sType === l[this.TYPE]) ) {
-                            elListeners.push({
-                                type:   l[this.TYPE],
-                                fn:     l[this.FN],
-                                obj:    l[this.OBJ],
-                                adjust: l[this.ADJ_SCOPE],
-                                index:  i
-                            });
+                var results=[], searchLists;
+                if (!sType) {
+                    searchLists = [listeners, unloadListeners];
+                } else if (sType == "unload") {
+                    searchLists = [unloadListeners];
+                } else {
+                    searchLists = [listeners];
+                }
+
+                for (var j=0;j<searchLists.length; ++j) {
+                    var searchList = searchLists[j];
+                    if (searchList && searchList.length > 0) {
+                        for (var i=0,len=searchList.length; i<len ; ++i) {
+                            var l = searchList[i];
+                            if ( l  && l[this.EL] === el && 
+                                    (!sType || sType === l[this.TYPE]) ) {
+                                results.push({
+                                    type:   l[this.TYPE],
+                                    fn:     l[this.FN],
+                                    obj:    l[this.OBJ],
+                                    adjust: l[this.ADJ_SCOPE],
+                                    index:  i
+                                });
+                            }
                         }
                     }
                 }
 
-                return (elListeners.length) ? elListeners : null;
+                return (results.length) ? results : null;
             },
 
             /**

@@ -10,6 +10,8 @@ YUI Library - Event - Release Notes
     The workaround (using DOM0 events for these instead of the normal DOM2
     events) is now only used for releases prior to 2.0.4.
     
+  * getListeners/purgeElement now work correctly with unload listeners
+
   * When legacyEvents are used (Safari<2.0.4 click events), if there was an
     existing DOM0 event that the utility replaced, it is executed along with
     the listeners that were added with the utility.
