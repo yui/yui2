@@ -1217,9 +1217,9 @@ YAHOO.widget.DataTable.prototype._onBlur = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
-	    var elTarget = YAHOO.util.Event.getTarget(e);
-	    var elTag = elTarget.tagName.toLowerCase();
-	    var knownTag = false;
+        var elTarget = YAHOO.util.Event.getTarget(e);
+        var elTag = elTarget.tagName.toLowerCase();
+        var knownTag = false;
 
         if (elTag != "table") {
             while(!knownTag) {
@@ -1228,13 +1228,13 @@ YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
                         knownTag = true;
                         break;
                     case "td":
-    	                oSelf.fireEvent("cellMouseoverEvent",{target:elTarget,event:e});
-    	                knownTag = true;
-    	                break;
-        	        case "th":
-                    	oSelf.fireEvent("headCellMouseoverEvent",{target:elTarget,event:e});
-                    	knownTag = true;
-                    	break;
+                        oSelf.fireEvent("cellMouseoverEvent",{target:elTarget,event:e});
+                        knownTag = true;
+                        break;
+                    case "th":
+                        oSelf.fireEvent("headCellMouseoverEvent",{target:elTarget,event:e});
+                        knownTag = true;
+                        break;
                     default:
                         break;
                 }
@@ -1247,7 +1247,7 @@ YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
                 }
             }
         }
-	    oSelf.fireEvent("tableMouseoverEvent",{target:elTarget,event:e});
+        oSelf.fireEvent("tableMouseoverEvent",{target:elTarget,event:e});
 };
 
 /**
@@ -1259,9 +1259,9 @@ YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onMouseout = function(e, oSelf) {
-	    var elTarget = YAHOO.util.Event.getTarget(e);
-	    var elTag = elTarget.tagName.toLowerCase();
-	    var knownTag = false;
+        var elTarget = YAHOO.util.Event.getTarget(e);
+        var elTag = elTarget.tagName.toLowerCase();
+        var knownTag = false;
 
         if (elTag != "table") {
             while(!knownTag) {
@@ -1270,13 +1270,13 @@ YAHOO.widget.DataTable.prototype._onMouseout = function(e, oSelf) {
                         knownTag = true;
                         break;
                     case "td":
-    	                oSelf.fireEvent("cellMouseoutEvent",{target:elTarget,event:e});
-    	                knownTag = true;
-    	                break;
-        	        case "th":
-                    	oSelf.fireEvent("headCellMouseoutEvent",{target:elTarget,event:e});
-                    	knownTag = true;
-                    	break;
+                        oSelf.fireEvent("cellMouseoutEvent",{target:elTarget,event:e});
+                        knownTag = true;
+                        break;
+                    case "th":
+                        oSelf.fireEvent("headCellMouseoutEvent",{target:elTarget,event:e});
+                        knownTag = true;
+                        break;
                     default:
                         break;
                 }
@@ -1289,7 +1289,7 @@ YAHOO.widget.DataTable.prototype._onMouseout = function(e, oSelf) {
                 }
             }
         }
-	    oSelf.fireEvent("tableMouseoutEvent",{target:elTarget,event:e});
+        oSelf.fireEvent("tableMouseoutEvent",{target:elTarget,event:e});
 };
 
 /**
@@ -1302,9 +1302,9 @@ YAHOO.widget.DataTable.prototype._onMouseout = function(e, oSelf) {
  */
 YAHOO.widget.DataTable.prototype._onMousedown = function(e, oSelf) {
         //YAHOO.util.Event.stopEvent(e);
-	    var elTarget = YAHOO.util.Event.getTarget(e);
-	    var elTag = elTarget.tagName.toLowerCase();
-	    var knownTag = false;
+        var elTarget = YAHOO.util.Event.getTarget(e);
+        var elTag = elTarget.tagName.toLowerCase();
+        var knownTag = false;
 
         if (elTag != "table") {
             while(!knownTag) {
@@ -1313,13 +1313,13 @@ YAHOO.widget.DataTable.prototype._onMousedown = function(e, oSelf) {
                         knownTag = true;
                         break;
                     case "td":
-    	               oSelf.fireEvent("cellMousedownEvent",{target:elTarget,event:e});
-    	               knownTag = true;
-    	               break;
-        	        case "th":
-                    	oSelf.fireEvent("headCellMousedownEvent",{target:elTarget,event:e});
-                    	knownTag = true;
-                    	break;
+                       oSelf.fireEvent("cellMousedownEvent",{target:elTarget,event:e});
+                       knownTag = true;
+                       break;
+                    case "th":
+                        oSelf.fireEvent("headCellMousedownEvent",{target:elTarget,event:e});
+                        knownTag = true;
+                        break;
                     default:
                         break;
                 }
@@ -1332,7 +1332,7 @@ YAHOO.widget.DataTable.prototype._onMousedown = function(e, oSelf) {
                 }
             }
         }
-	    oSelf.fireEvent("tableMousedownEvent",{target:elTarget,event:e});
+        oSelf.fireEvent("tableMousedownEvent",{target:elTarget,event:e});
 };
 
 /**
@@ -1373,13 +1373,13 @@ YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
                     knownTag = true;
                     break;
                 case "td":
-	               oSelf.fireEvent("cellClickEvent",{target:elTarget,event:e});
-	               knownTag = true;
-	               break;
-    	        case "th":
-                	oSelf.fireEvent("headCellClickEvent",{target:elTarget,event:e});
-                	knownTag = true;
-                	break;
+                   oSelf.fireEvent("cellClickEvent",{target:elTarget,event:e});
+                   knownTag = true;
+                   break;
+                case "th":
+                    oSelf.fireEvent("headCellClickEvent",{target:elTarget,event:e});
+                    knownTag = true;
+                    break;
                 default:
                     break;
             }
@@ -1420,13 +1420,13 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
                     knownTag = true;
                     break;
                 case "td":
-	                oSelf.fireEvent("cellDoubleclickEvent",{target:elTarget,event:e});
-	                knownTag = true;
-	                break;
-    	        case "th":
-                	oSelf.fireEvent("headCellDoubleclickEvent",{target:elTarget,event:e});
-                	knownTag = true;
-                	break;
+                    oSelf.fireEvent("cellDoubleclickEvent",{target:elTarget,event:e});
+                    knownTag = true;
+                    break;
+                case "th":
+                    oSelf.fireEvent("headCellDoubleclickEvent",{target:elTarget,event:e});
+                    knownTag = true;
+                    break;
                 default:
                     break;
             }
@@ -2224,15 +2224,15 @@ YAHOO.widget.DataTable.prototype.select = function(els) {
             var id = els[i].recordId;
             // Remove if already there
             // Use Array.indexOf if available...
-            if(tracker.indexOf && (tracker.indexOf(id) >  0)) {
-                tracker.splice(indexOf(id),1);
+            if(tracker.indexOf && (tracker.indexOf(id) >  -1)) {
+                tracker.splice(tracker.indexOf(id),1);
             }
             // ...or do it the old-fashioned way
             else {
-            	for(var j=0; j<tracker.length; j++) {
-            		if(tracker[j] === id){
+                for(var j=0; j<tracker.length; j++) {
+                   if(tracker[j] === id){
                         tracker.splice(j,1);
-            		}
+                    }
                 }
             }
             // Add to the end
@@ -2259,9 +2259,19 @@ YAHOO.widget.DataTable.prototype.unselect = function(els) {
         // Remove Record ID from internal tracker
         var tracker = this._aSelectedRecords || [];
         for(var i=0; i<els.length; i++) {
-            var index = tracker.indexOf(els[i].recordId);
-            if(index >  -1) {
-                tracker.splice(index,1);
+            var id = els[i].recordId;
+        
+            // Use Array.indexOf if available...
+            if(tracker.indexOf && (tracker.indexOf(id) >  -1)) {
+                tracker.splice(tracker.indexOf(id),1);
+            }
+            // ...or do it the old-fashioned way
+            else {
+                for(var j=0; j<tracker.length; j++) {
+                    if(tracker[j] === id){
+                        tracker.splice(j,1);
+                    }
+                }
             }
         }
         this._aSelectedRecords = tracker;
