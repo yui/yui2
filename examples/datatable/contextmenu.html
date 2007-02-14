@@ -1,0 +1,96 @@
+<!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Example: DataTable - Context Menu (YUI Library)</title>
+<link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
+<link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
+<link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
+<link type="text/css" rel="stylesheet" href="../../build/menu/assets/menu.css">
+<link type="text/css" rel="stylesheet" href="../../build/datatable/assets/datatable.css">
+<link type="text/css" rel="stylesheet" href="./css/examples.css">
+<link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
+<style type="text/css">
+/* custom css*/
+#contextmenu {margin:1em;}
+#contextmenu table {border-collapse:collapse;}
+#contextmenu th, #contextmenu td {border:1px solid #000;padding:.25em;}
+#contextmenu th {background-color:#696969;color:#fff;}/*dark gray*/
+#contextmenu .yui-dt-odd {background-color:#eee;} /*light gray*/
+</style>
+</head>
+<body>
+<div id="hd">
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Context Menu</h1>
+</div>
+<div id="bd">
+    <div id="contextmenu" class="example"></div>
+</div>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
+<script type="text/javascript" src="../../build/container/container_core.js"></script>
+<script type="text/javascript" src="../../build/menu/menu.js"></script>
+<script type="text/javascript" src="../../build/datasource/datasource-beta-debug.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
+<script type="text/javascript" src="./js/data.js"></script>
+<script type="text/javascript">
+var myLogger = new YAHOO.widget.LogReader();
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+var myColumnHeaders = [
+    {key:"SKU"},
+    {key:"Quantity"},
+    {key:"Item"},
+    {key:"Description"}
+];
+
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.inventory);
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+myDataSource.responseSchema = {
+    fields: ["SKU","Quantity","Item","Description"]
+};
+
+var myDataTable = new YAHOO.widget.DataTable("contextmenu", myColumnSet, myDataSource,{caption:"Example: Context Menu"});
+
+var onRowDelete = function(oArgs) {
+    YAHOO.log("Deleted row index " +oArgs.rowIndex);
+};
+myDataTable.subscribe("rowDeleteEvent", onRowDelete);
+
+var onContextMenuClick = function(p_sType, p_aArgs, p_oMenu) {
+    var task = p_aArgs[1];
+    if(task) {
+        // Extract which row was context-clicked
+        var row = this.contextEventTarget;
+        while(row.tagName.toLowerCase() != "tr") {
+            row = row.parentNode;
+            if(row.tagName.toLowerCase == "body") {
+                row = null;
+                break;
+            }
+        }
+
+        if(row) {
+            switch(task.index) {
+                case 0:     // Delete Item
+                    YAHOO.log("Deleting item: " + row.cells[2].innerHTML);
+                    myDataTable.deleteRow(row);
+                    break;
+            }
+        }
+    }
+};
+
+var myContextMenu = new YAHOO.widget.ContextMenu("mycontextmenu", { trigger: myDataTable.getBody() } );
+myContextMenu.addItem("Delete Item");
+myContextMenu.render(document.body);
+myContextMenu.clickEvent.subscribe(onContextMenuClick, myContextMenu, true);
+</script>
+</body>
+</html>
