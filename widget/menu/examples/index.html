@@ -6,7 +6,7 @@
         <link rel="stylesheet" type="text/css" media="screen" href="../../docs/assets/examples.css">
         <style type="text/css">
 
-            ul,ol {
+            ul {
                margin:0 40px;
             }
             
@@ -21,10 +21,6 @@
             li a:link {
                color:#666;
             }
-
-            ol, ol li {
-                list-style-type:decimal;
-            }
         
         </style>
     </head>
@@ -36,48 +32,21 @@
             </div>
             <div id="bd">
 
-                <h2>Fundamentals</h2>
-                <ol>
-                    <li><a href="example01.html"><?php echo $g_aTitles[0]; ?></a></li>
-                    <li><a href="example02.html"><?php echo $g_aTitles[1]; ?></a></li>
-                    <li><a href="example03.html"><?php echo $g_aTitles[2]; ?></a></li>
-                    <li><a href="example04.html"><?php echo $g_aTitles[3]; ?></a></li>
-                    <li><a href="example05.html"><?php echo $g_aTitles[4]; ?></a></li>
-                    <li><a href="example06.html"><?php echo $g_aTitles[5]; ?></a></li>
-                    <li><a href="example07.html"><?php echo $g_aTitles[6]; ?></a></li>
-                    <li><a href="example08.html"><?php echo $g_aTitles[7]; ?></a></li>
-                    <li><a href="example09.html"><?php echo $g_aTitles[8]; ?></a></li>
-                    <li><a href="example10.html"><?php echo $g_aTitles[9]; ?></a></li>
-                    <li><a href="example11.html"><?php echo $g_aTitles[10]; ?></a></li>
-                    <li><a href="example12.html"><?php echo $g_aTitles[11]; ?></a></li>
-                    <li><a href="example13.html"><?php echo $g_aTitles[12]; ?></a></li>
-                </ol>
-                
-                <h2>Website Navigation Using Menu</h2>
-                <ul>
+<ul>
+<?php
 
-                    <li><a href="leftnavfrommarkup.html"><?php echo $g_aTitles[13]; ?></a></li>
-                    <li><a href="leftnavfromjs.html"><?php echo $g_aTitles[14]; ?></a></li>
-                    <li><a href="topnavfrommarkup.html"><?php echo $g_aTitles[15]; ?></a></li>
-                    <li><a href="topnavfromjs.html"><?php echo $g_aTitles[16]; ?></a></li>
-                </ul>
+    $sHTML = "";
 
-                <h2>Using Menu With Animation</h2>
-                <ul>
-                    <li><a href="leftnavfrommarkupwithanim.html"><?php echo $g_aTitles[17]; ?></a></li>
-                    <li><a href="leftnavfromjswithanim.html"><?php echo $g_aTitles[18]; ?></a></li>
-                    <li><a href="topnavfrommarkupwithanim.html"><?php echo $g_aTitles[19]; ?></a></li>
-                    <li><a href="topnavfromjswithanim.html"><?php echo $g_aTitles[20]; ?></a></li>
-                </ul>
+    foreach ($g_aTitles as $sKey => $sValue) {
+    
+        $sHTML .= "<li><a href=\"" . $sKey . "\">" . $sValue . "</a></li>\r";
+    
+    }
 
-                <h2>Operating-System-Style Menus</h2>
-                <ul>
-                    <li><a href="contextmenu.html"><?php echo $g_aTitles[21]; ?></a></li>
-                    <li><a href="tablecontextmenu.html"><?php echo $g_aTitles[24]; ?></a></li>
-                    <li><a href="treeviewcontextmenu.html"><?php echo $g_aTitles[25]; ?></a></li>
-                    <li><a href="programsmenu.html"><?php echo $g_aTitles[22]; ?></a></li>
-                    <li><a href="applicationmenubar.html"><?php echo $g_aTitles[23]; ?></a></li>
-                </ul>
+    echo $sHTML;
+
+?>
+</ul>
 
             </div>
         </div>
