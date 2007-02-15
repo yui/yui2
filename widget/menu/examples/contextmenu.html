@@ -178,11 +178,9 @@
     
                 function GetListItemFromEventTarget(p_oNode) {
     
-                    var oLI;
-    
-                    if(p_oNode.tagName == "LI") {
+                    if(p_oNode.tagName.toUpperCase() == "LI") {
                     
-                        oLI = p_oNode;
+                        return p_oNode;
     
                     }
                     else {
@@ -194,11 +192,9 @@
     
                         do {
         
-                            if(p_oNode.tagName == "LI") {
+                            if(p_oNode.tagName.toUpperCase() == "LI") {
     
-                                oLI = p_oNode;                            
-    
-                                break;
+                                return p_oNode;                            
                             
                             }
         
@@ -206,8 +202,6 @@
                         while((p_oNode = p_oNode.parentNode));
                     
                     }
-    
-                    return oLI;
                 
                 }
                 

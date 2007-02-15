@@ -237,23 +237,12 @@
                                 );
 
 
-                // Add a link back to the examples index page
+                oMenu.addItems([
 
-                var oExamples = oMenu.addItem({ text: "Examples", url: "index.html" });
+                    { text: "Examples", url: "index.html", id: "examples" },
+                    { text:"Go to...", id: "goto", onclick: { fn: onGotoClick } }
 
-                oExamples.element.id = "examples";
-
-
-                // Add a "Go to..." item to the root menu
-
-                var oGoTo = oMenu.addItem("Go to...");
-
-                oGoTo.element.id = "goto";
-
-
-                // Add a "click" event handler to the "Go to..." item
-
-                oGoTo.clickEvent.subscribe(onGotoClick);
+                ]);
 
 
                 // Render the root menu and submenus
