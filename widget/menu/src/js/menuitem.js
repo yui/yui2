@@ -371,14 +371,14 @@ YAHOO.widget.MenuItem.prototype = {
 
 
     /** 
-    * @property _oOnClick
+    * @property _oOnclickAttributeValue
     * @description Object reference to the menu item's current value for the 
     * "onclick" configuration attribute.
     * @default null
     * @private
     * @type Object
     */
-    _oOnClick: null,
+    _oOnclickAttributeValue: null,
 
 
     /**
@@ -1773,17 +1773,23 @@ YAHOO.widget.MenuItem.prototype = {
             already been specified.
         */
 
-        if(this._oOnClick && (this._oOnClick != oObject)) {
+        if(
+            this._oOnclickAttributeValue && 
+            (this._oOnclickAttributeValue != oObject)
+        ) {
 
-            this.clickEvent.unsubscribe(this._oOnClick.fn, this._oOnClick.obj);
+            this.clickEvent.unsubscribe(
+                                this._oOnclickAttributeValue.fn, 
+                                this._oOnclickAttributeValue.obj
+                            );
 
-            this._oOnClick = null;
+            this._oOnclickAttributeValue = null;
 
         }
 
 
         if(
-            !this._oOnClick && 
+            !this._oOnclickAttributeValue && 
             typeof oObject == "object" && 
             typeof oObject.fn == "function"
         ) {
@@ -1794,7 +1800,7 @@ YAHOO.widget.MenuItem.prototype = {
                     (oObject.scope || true)
                 );
 
-            this._oOnClick = oObject;
+            this._oOnclickAttributeValue = oObject;
 
         }
     
