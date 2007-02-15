@@ -67,6 +67,13 @@ myDataSource.responseSchema = {
 };
 
 var myDataTable = new YAHOO.widget.DataTable("sort",myColumnSet,myDataSource,{caption:"Example: Custom Sorting",sortedBy:{colKey:"areacode",dir:"asc"}});
+var onColumnSort = function(oArgs) {
+    var column = oArgs.column;
+    var dir = oArgs.dir;
+    YAHOO.log("Column \"" + column.key + "\" sorted " + dir,"info","SortExample");
+};
+myDataTable.subscribe("columnSortEvent",onColumnSort);
+
 </script>
 </body>
 </html>

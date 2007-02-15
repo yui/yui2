@@ -5,3 +5,5 @@ DataTable Release Notes
 * Beta release.
 
 * Caption is not supported when scrolling is enabled.
+
+* Resizeability is not supported for fixed-width DataTables.
