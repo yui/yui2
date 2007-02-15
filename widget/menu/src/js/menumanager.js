@@ -1,9 +1,12 @@
+
+
 /**
 * @module menu
-* @description <p>The Menu Library features a collection of widgets that make 
-* it easy to add menus to your website or web application.  With the Menu 
-* Library you can create website fly-out menus, customized context menus, or 
-* application-style menu bars with just a small amount of scripting.</p>
+* @description <p>The Menu family of components features a collection of 
+* controls that make it easy to add menus to your website or web application.  
+* With the Menu Controls you can create website fly-out menus, customized 
+* context menus, or application-style menu bars with just a small amount of 
+* scripting.</p><p>The Menu family of controls features:</p>
 * <ul>
 *    <li>Screen-reader accessibility.</li>
 *    <li>Keyboard and mouse navigation.</li>
@@ -14,7 +17,7 @@
 *    Enhancement</a>; Menus can be created from simple, 
 *    semantic markup on the page or purely through JavaScript.</li>
 * </ul>
-* @title Menu Library
+* @title Menu
 * @namespace YAHOO.widget
 * @requires Event, Dom, Container
 */
