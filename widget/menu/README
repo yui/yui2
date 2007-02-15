@@ -1,4 +1,138 @@
-Menu Release Notes
+*** version 2.2.0 ***
+
+Added the following features:
+-----------------------------
+
+* Added two new methods to YAHOO.widget.Menu:
+
+    * "getItems" - Returns a flat array of the items in a menu.
+
+    * "clearContent" - Removes all of the content from the menu, including the 
+      menu items, group titles, header and footer.
+
+
+* Added three new configuration attributes to YAHOO.widget.Menu:
+
+    * "submenuhidedelay" - Number indicating the time (in milliseconds) that 
+      should expire before a submenu is hidden when the user mouses out of a 
+      menu item heading in the direction of a submenu. The value must be 
+      greater than or equal to the value specified for the "showdelay" 
+      configuration property.
+
+    * "maxheight" - Defines the maximum height (in pixels) for a menu before 
+      the contents of the body are scrolled. 
+
+    * "classname" - CSS class to be applied to the menu's root <div> element. 
+      The specified class(es) are appended in addition to the default class as 
+      specified by the menu's CSS_CLASS_NAME constant.
+
+
+* Added new constants to YAHOO.widget.MenuItem:
+
+    * COLLAPSED_SUBMENU_INDICATOR_TEXT - String representing the text for the 
+      <em> element used for the submenu arrow indicator.
+
+    * EXPANDED_SUBMENU_INDICATOR_TEXT - String representing the text for the 
+      submenu arrow indicator element (<em>) when the submenu is visible.
+
+    * DISABLED_SUBMENU_INDICATOR_ALT_TEXT - String representing the text for 
+      the submenu arrow indicator element (<em>) when the menu item is disabled.
+
+    * CHECKED_TEXT - String representing the text to be used for the checked 
+      indicator element (<em>).
+
+    * DISABLED_CHECKED_TEXT - String representing the text to be used for the 
+      checked indicator element (<em>) when the menu item is disabled.
+
+
+* Added two new configuration attributes to YAHOO.widget.MenuItem:
+
+    * "onclick" - Object literal representing the code to be executed when the 
+      button is clicked. Format:
+
+        {
+            fn: Function, // The handler to call when the event fires.
+            obj: Object, // An object to pass back to the handler.
+            scope: Object // The object to use for the scope of the handler.
+        }
+    
+    * "classname" - CSS class to be applied to the menu item's root <li> 
+      element. The specified class(es) are appended in addition to the default 
+      class as specified by the menu item's CSS_CLASS_NAME constant.
+
+
+* Added an "id" property to YAHOO.widget.MenuItem that represents the id of
+  the menu item's root <li> node.  Although not a configuration attribute, this
+  property should be set via the object literal of configuration attributes 
+  passed as the second argument to the constructor.  If no value is 
+  specified, then one will be generated using the "generateId" method of the 
+  Dom utility (YAHOO.widget.Dom).
+
+* Added a "trigger context menu event" 
+  (YAHOO.widget.ContextMenu.triggerContextMenuEvent) that fires when the DOM 
+  "contextmenu" event ("mousedown" for Opera) is fired by one of the elemeents
+  defined as a YAHOO.widget.ContextMenu instance's trigger.
+
+* Added a "cancel" method to YAHOO.widget.ContextMenu that can be used to 
+  cancel the display of a YAHOO.widget.ContextMen instance.  This method 
+  should be called within the scope of a "context menu" event handler for 
+  one of the context menu's triggers 
+  (YAHOO.widget.ContextMenu.triggerContextMenuEvent).
+
+
+Fixed the following bugs:
+-------------------------
+
+* Users can now move diagonally from a menu item to its corresponding submenu 
+  without the submenu hiding immediately.
+
+* "destroy" method of YAHOO.widget.Menu now unsubscribes from the "text resize"  
+  event (YAHOO.widget.Module.textResizeEvent).
+
+* Browser progress bar no longer flashes when hovering over checked menu items 
+  or menu items with submenus.
+
+* Menu item submenu indicator image no longer jumps to the next line in 
+  quirks mode.
+
+* Mouse events no longer fire in Firefox if a YAHOO.widget.Menu instance is 
+  moved by script into a stationary mouse pointer.
+
+* Modified "toString" method of YAHOO.widget.ContextMenuItem to return the 
+  correct class name, as it was reporting as YAHOO.widget.MenuBarItem.
+
+
+Changes:
+--------
+
+* Default value for the "showdelay" configuration attribute is now 250
+
+* Modified code so that all Menu images are added via CSS background images.  
+  As a result, the following constants and properties have been deprecated:
+
+    * YAHOO.widget.MenuItem.SUBMENU_INDICATOR_IMAGE_PATH
+    * YAHOO.widget.MenuItem.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH
+    * YAHOO.widget.MenuItem.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH
+    * YAHOO.widget.MenuItem.COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT
+    * YAHOO.widget.MenuItem.EXPANDED_SUBMENU_INDICATOR_ALT_TEXT
+    * YAHOO.widget.MenuItem.DISABLED_SUBMENU_INDICATOR_ALT_TEXT
+    * YAHOO.widget.MenuItem.CHECKED_IMAGE_PATH
+    * YAHOO.widget.MenuItem.SELECTED_CHECKED_IMAGE_PATH
+    * YAHOO.widget.MenuItem.DISABLED_CHECKED_IMAGE_PATH
+    * YAHOO.widget.MenuItem.CHECKED_IMAGE_ALT_TEXT
+    * YAHOO.widget.MenuItem.DISABLED_CHECKED_IMAGE_ALT_TEXT
+    * YAHOO.widget.MenuItem.IMG_ROOT
+    * YAHOO.widget.MenuItem.IMG_ROOT_SSL
+    * YAHOO.widget.MenuItem.imageRoot
+    * YAHOO.widget.MenuItem.isSecure
+
+
+
+*** version 0.12.2 ***
+
+* No changes
+
+
 
 *** version 0.12.1 ***
 
@@ -20,9 +154,9 @@ Fixed the following bugs:
   mouse simultaneously.
 
 * Calling the "destory" method on a menu will now unregister all of the menu's 
-  submenus from the MenuManager.
-  
-  
+  submenus from the MenuManager.  
+
+
 
 *** version 0.12 ***
 
