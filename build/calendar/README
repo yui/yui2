@@ -2,11 +2,12 @@ Calendar Release Notes
 
 *** version 2.2.0 ***
 
-	- Corrected problem with Safari setting Calendar pages to incorrect dates if the pages spanned a year boundary in CalendarGroups with 3 or more pages, due to a bug in Safari's impl of Date setMonth
-	- Corrected problem with CalendarGroup setMonth rendering Calendar pages with incorrect dates in all browsers if current pages spanned years
-	- Images for Close, Left and Right Arrows are now pulled in using CSS defined in calendar.css and by default use relative paths to the images in the same directory as calendar.css. Image customization can now be done through CSS 
-	- As a result IMG_ROOT, NAV_ARROW_LEFT, NAV_ARROW_RIGHT have been deprecated, but will still work if being used in customizations from past releases
-	- Fixed incorrect logging statement in calendar-debug.js
+	- Image customization can now be done through CSS. Images for Close, Left and Right Arrows are now pulled in using CSS defined in calendar.css and by default use relative paths to the images in the same directory as calendar.css. 
+	- Deprecated Calendar.IMG_ROOT and NAV_ARROW_LEFT, NAV_ARROW_RIGHT configuration properties. Customizations based on older releases which set these properties will still function as expected.
+	- Deprecated CalendarGroup.CSS_2UPCLOSE. Calendar's Style.CSS_CLOSE property now represents the new default CSS class (calclose) for the close button. CSS_2UPCLOSE is still applied along with CSS_CLOSE to the new markup for the close button to support existing customizations of the CSS_2UPCLOSE CSS class (close-icon)
+	- Fixed problem with Safari setting Calendar pages to incorrect dates if the pages spanned a year boundary in CalendarGroups with 3 or more pages, due to a bug in Safari's implementation of Date setMonth
+	- Fixed problem with CalendarGroup setMonth rendering Calendar pages with incorrect dates in all browsers if current pages spanned year boundary
+	- Fixed incorrect CalendarGroup logging statement in calendar-debug.js
 	- Fixed domEventMap support for Safari versions prior to 2.0.2, caused by hasOwnProperty not being supported
 	- Removed unused private property : _pageDate from Calendar class
 

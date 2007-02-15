@@ -42,7 +42,7 @@
 	z-index:1;
 }
 
-.yui-calcontainer .close-icon, .yui-calcontainer .calclose {
+.yui-calcontainer .close-icon {
 	position:absolute;
 	right:3px;
 	top:3px;

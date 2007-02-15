@@ -334,7 +334,7 @@ YAHOO.widget.Calendar.prototype.configClose = function(type, args, obj) {
 			imgClose.className = YAHOO.widget.CalendarGroup.CSS_2UPCLOSE;
 			linkClose.appendChild(imgClose);
 		} else {
-			linkClose.innerHTML = '<span class="' + this.Style.CSS_CLOSE + '"></span>';
+			linkClose.innerHTML = '<span class="' + YAHOO.widget.CalendarGroup.CSS_2UPCLOSE + ' ' + this.Style.CSS_CLOSE + '"></span>';
 		}
 		
 		this.oDomContainer.appendChild(linkClose);
