@@ -2,44 +2,47 @@
 
     $g_aTitles = array(
     
-        "Basic Menu From Markup",
-        "Basic Menu From JavaScript",
-        "Grouped Menu Items Using Markup",
-        "Grouped Menu Items Using JavaScript",
-        "Grouped Menu Items With Titles From Markup",
-        "Grouped Menu Items With Titles From JavaScript",
-        "Multi-tiered Menu From Markup",
-        "Multi-tiered Menu From JavaScript",
-        "Handling Menu Click Events",
-        "Listening For Menu Events",
-        "MenuItem Configuration Properties",
-        "Setting Menu Configuration Properties At Runtime",
-        "Customizing Menu Image Paths",
+        "example01.html" => "Basic Menu From Markup",
+        "example02.html" => "Basic Menu From JavaScript",
+        "example03.html" => "Grouped Menu Items Using Markup",
+        "example04.html" => "Grouped Menu Items Using JavaScript",
+        "example05.html" => "Grouped Menu Items With Titles From Markup",
+        "example06.html" => "Grouped Menu Items With Titles From JavaScript",
+        "example07.html" => "Multi-tiered Menu From Markup",
+        "example08.html" => "Multi-tiered Menu From JavaScript",
+        "example09.html" => "Handling Menu Click Events",
+        "example10.html" => "Listening For Menu Events",
+        "example11.html" => "MenuItem Configuration Properties",
+        "example12.html" => "Setting Menu Configuration Properties At Runtime",
 
-        "Website Left Nav With Submenus Built From Markup",
-        "Website Left Nav With Submenus From JavaScript",
-        "Website Top Nav With Submenus Built From Markup",
-        "Website Top Nav With Submenus From JavaScript",
+        "leftnavfrommarkup.html" => "Website Left Nav With Submenus Built From Markup",
+        "leftnavfromjs.html" => "Website Left Nav With Submenus From JavaScript",
+        "topnavfrommarkup.html" => "Website Top Nav With Submenus Built From Markup",
+        "topnavfromjs.html" => "Website Top Nav With Submenus From JavaScript",
 
-        "Website Left Nav Using Animation With Submenus Built From Markup",
-        "Website Left Nav Using Animation With Submenus From JavaScript",
-        "Website Top Nav Using Animation With Submenus Built From Markup",
-        "Website Top Nav Using Animation With Submenus From JavaScript",
+        "leftnavfrommarkupwithanim.html" => "Website Left Nav Using Animation With Submenus Built From Markup",
+        "leftnavfromjswithanim.html" => "Website Left Nav Using Animation With Submenus From JavaScript",
+        "topnavfrommarkupwithanim.html" => "Website Top Nav Using Animation With Submenus Built From Markup",
+        "topnavfromjswithanim.html" => "Website Top Nav Using Animation With Submenus From JavaScript",
 
-        "Context Menu",
-        "OS-Style Programs Menu",
-        "Application Menubar",
-        "Adding A Context Menu To A Table",
-        "Adding A Context Menu To A TreeView"
+        "contextmenu.html" => "Context Menu",
+        "tablecontextmenu.html" => "Adding A Context Menu To A Table",
+        "treeviewcontextmenu.html" => "Adding A Context Menu To A TreeView",
+        "programsmenu.html" => "OS-Style Programs Menu",
+        "applicationmenubar.html" => "Application Menubar"
 
     );
 
 
-    function writeTitle($p_nIndex) {
+    function writeTitle() {
 
         global $g_aTitles;
 
-        echo "Example: " . $g_aTitles[$p_nIndex] . " (YUI Library)";
+        $sFilePath = getenv("PHP_SELF");
+        $aStrings = explode("/", $sFilePath);
+        $sIndex = $aStrings[(count($aStrings) - 1)];
+
+        echo "Example: " . $g_aTitles[$sIndex] . " (YUI Library)";
     
     }
 
