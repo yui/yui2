@@ -539,6 +539,17 @@ _onclickAttributeValue: null,
 
 
 /** 
+* @property _oninitAttributeValue
+* @description Object reference to the button's current value for the "oninit"
+* configuration attribute.
+* @default null
+* @protected
+* @type Object
+*/
+_oninitAttributeValue: null,
+
+
+/** 
 * @property _activationKeyPressed
 * @description Boolean indicating if the key(s) that toggle the button's 
 * "active" state have been pressed.
@@ -982,47 +993,6 @@ _setChecked: function(p_bChecked) {
 
 
 /**
-* @method _setOnClick
-* @description Sets the value of the button's "onclick" attribute.
-* @protected
-* @param {Object} p_oObject Object indicating the value for the button's 
-* "onclick" attribute.
-*/
-_setOnClick: function(p_oObject) {
-
-    /*
-        Remove any existing listeners if a "click" event handler has already 
-        been specified.
-    */
-
-    if(
-        this._onclickAttributeValue && 
-        (this._onclickAttributeValue != p_oObject)
-    ) {
-
-        this.removeListener("click", this._onclickAttributeValue.fn);
-
-        this._onclickAttributeValue = null;
-
-    }
-
-
-    if(
-        !this._onclickAttributeValue && 
-        Lang.isObject(p_oObject) && 
-        Lang.isFunction(p_oObject.fn)
-    ) {
-
-        this.on("click", p_oObject.fn, p_oObject.obj, p_oObject.scope);
-
-        this._onclickAttributeValue = p_oObject;
-
-    }
-
-},
-
-
-/**
 * @method _setMenu
 * @description Sets the value of the button's "menu" attribute.
 * @protected
@@ -1142,6 +1112,87 @@ _setMenu: function(p_oMenu) {
     
         initMenu.call(this);
     
+    }
+
+},
+
+
+/**
+* @method _setOnClick
+* @description Sets the value of the button's "onclick" attribute.
+* @protected
+* @param {Object} p_oObject Object indicating the value for the button's 
+* "onclick" attribute.
+*/
+_setOnClick: function(p_oObject) {
+
+    /*
+        Remove any existing listeners if a "click" event handler has already 
+        been specified.
+    */
+
+    if(
+        this._onclickAttributeValue && 
+        (this._onclickAttributeValue != p_oObject)
+    ) {
+
+        this.removeListener("click", this._onclickAttributeValue.fn);
+
+        this._onclickAttributeValue = null;
+
+    }
+
+
+    if(
+        !this._onclickAttributeValue && 
+        Lang.isObject(p_oObject) && 
+        Lang.isFunction(p_oObject.fn)
+    ) {
+
+        this.on("click", p_oObject.fn, p_oObject.obj, p_oObject.scope);
+
+        this._onclickAttributeValue = p_oObject;
+
+    }
+
+},
+
+/**
+* @method _setOnInit
+* @description Sets the value of the button's "init" attribute.
+* @protected
+* @param {Object} p_oObject Object indicating the value for the button's 
+* "oninit" attribute.
+*/
+_setOnInit: function(p_oObject) {
+
+    /*
+        Remove any existing listeners if a "init" event handler has already 
+        been specified.
+    */
+
+    if(
+        this._oninitAttributeValue && 
+        (this._oninitAttributeValue != p_oObject)
+    ) {
+
+        this.removeListener("init", this._oninitAttributeValue.fn);
+
+        this._oninitAttributeValue = null;
+
+    }
+
+
+    if(
+        !this._oninitAttributeValue && 
+        Lang.isObject(p_oObject) && 
+        Lang.isFunction(p_oObject.fn)
+    ) {
+
+        this.on("init", p_oObject.fn, p_oObject.obj, p_oObject.scope);
+
+        this._oninitAttributeValue = p_oObject;
+
     }
 
 },
@@ -2259,9 +2310,7 @@ createHiddenField: function () {
             oField = createInputElement(
                         (bCheckable ? this.get("type") : "hidden")
                     );
-    
-    
-        oField.id = this.get("id");
+
         oField.name = this.get("name");
         oField.value = this.get("value");
     
@@ -2396,6 +2445,7 @@ init: function(p_oElement, p_oAttributes) {
 
     }
 
+    this.fireEvent("init");
 
 
 },
@@ -2602,25 +2652,6 @@ initAttributes: function(p_oAttributes) {
 
 
 	/**
-	* @config onclick
-    * @description Object literal representing the code to be executed when 
-    * the button is clicked.  Format:<br> <code> {<br> 
-    * <strong>fn:</strong> Function,   &#47;&#47; The handler to call when the 
-    * event fires.<br> <strong>obj:</strong> Object, &#47;&#47; An object to 
-    * pass back to the handler.<br> <strong>scope:</strong> Object &#47;&#47; 
-    * The object to use for the scope of the handler.<br> } </code>
-    * @type Object
-	* @default null
-	*/
-    this.setAttributeConfig("onclick", {
-
-        value: oAttributes.onclick,
-        method: this._setOnClick
-    
-    });
-
-
-	/**
 	* @config menu
     * @description Object specifying the menu for the button.  The value can be
     * one of the following:
@@ -2663,6 +2694,44 @@ initAttributes: function(p_oAttributes) {
     this.setAttributeConfig("selectedMenuItem", {
 
         value: null
+    
+    });
+
+
+	/**
+	* @config onclick
+    * @description Object literal representing the code to be executed when 
+    * the button is clicked.  Format:<br> <code> {<br> 
+    * <strong>fn:</strong> Function,   &#47;&#47; The handler to call when the 
+    * event fires.<br> <strong>obj:</strong> Object, &#47;&#47; An object to 
+    * pass back to the handler.<br> <strong>scope:</strong> Object &#47;&#47; 
+    * The object to use for the scope of the handler.<br> } </code>
+    * @type Object
+	* @default null
+	*/
+    this.setAttributeConfig("onclick", {
+
+        value: oAttributes.onclick,
+        method: this._setOnClick
+    
+    });
+
+
+	/**
+	* @config oninit
+    * @description Object literal representing the code to be executed when 
+    * the button is initialized.  Format:<br> <code> {<br> 
+    * <strong>fn:</strong> Function,   &#47;&#47; The handler to call when the 
+    * event fires.<br> <strong>obj:</strong> Object, &#47;&#47; An object to 
+    * pass back to the handler.<br> <strong>scope:</strong> Object &#47;&#47; 
+    * The object to use for the scope of the handler.<br> } </code>
+    * @type Object
+	* @default null
+	*/
+    this.setAttributeConfig("oninit", {
+
+        value: oAttributes.oninit,
+        method: this._setOnInit
     
     });
 
@@ -2894,6 +2963,10 @@ YAHOO.widget.Button.addHiddenFieldsToForm = function(p_oForm) {
 };
 
 
+
+// Events
+
+
 /**
 * @event focus
 * @description Fires when the menu item receives focus.  Passes back a single 
@@ -2923,6 +2996,18 @@ YAHOO.widget.Button.addHiddenFieldsToForm = function(p_oForm) {
 * "keydown") that caused the "option" event to fire.  See <a href="
 * YAHOO.util.Element.html#addListener">Element.addListener</a> for more 
 * information on listening for this event.
+* @type YAHOO.util.CustomEvent
+*/
+
+
+/**
+* @event init
+* @description Fires when the Button is initialized.  Subscribe to this event
+* by specifying a value for the "oninit" configuration attribute.  Format:<br> 
+* <code> {<br> <strong>fn:</strong> Function,   &#47;&#47; The handler to call  
+* when the event fires.<br> <strong>obj:</strong> Object, &#47;&#47; An object
+* to pass back to the handler.<br> <strong>scope:</strong> Object &#47;&#47; 
+* The object to use for the scope of the handler.<br> } </code>
 * @type YAHOO.util.CustomEvent
 */
 
@@ -3038,6 +3123,17 @@ YAHOO.extend(YAHOO.widget.ButtonGroup, YAHOO.util.Element, {
 _buttons: null,
 
 
+/** 
+* @property _oninitAttributeValue
+* @description Object reference to the button group's current value for the 
+* "oninit" configuration attribute.
+* @default null
+* @protected
+* @type Object
+*/
+_oninitAttributeValue: null,
+
+
 
 // Constants
 
@@ -3116,6 +3212,46 @@ _setDisabled: function(p_bDisabled) {
 },
 
 
+/**
+* @method _setOnInit
+* @description Sets the value of the button group's "init" attribute.
+* @protected
+* @param {Object} p_oObject Object indicating the value for the button's 
+* "oninit" attribute.
+*/
+_setOnInit: function(p_oObject) {
+
+    /*
+        Remove any existing listeners if a "init" event handler has already 
+        been specified.
+    */
+
+    if(
+        this._oninitAttributeValue && 
+        (this._oninitAttributeValue != p_oObject)
+    ) {
+
+        this.removeListener("init", this._oninitAttributeValue.fn);
+
+        this._oninitAttributeValue = null;
+
+    }
+
+
+    if(
+        !this._oninitAttributeValue && 
+        Lang.isObject(p_oObject) && 
+        Lang.isFunction(p_oObject.fn)
+    ) {
+
+        this.on("init", p_oObject.fn, p_oObject.obj, p_oObject.scope);
+
+        this._oninitAttributeValue = p_oObject;
+
+    }
+
+},
+
 
 // Protected event handlers
 
@@ -3160,6 +3296,12 @@ _onKeyDown: function(p_oEvent) {
 },
 
 
+/**
+* @method _onAppendTo
+* @description "appendTo" event handler for the button group.
+* @protected
+* @param {Event} p_oEvent Object representing the event that was fired.
+*/
 _onAppendTo: function(p_oEvent) {
 
     var aButtons = this._buttons,
@@ -3172,7 +3314,6 @@ _onAppendTo: function(p_oEvent) {
     }
 
 },
-
 
 
 /**
@@ -3294,6 +3435,8 @@ init: function(p_oElement, p_oAttributes) {
     }
 
 
+    this.fireEvent("init");
+
 
 },
 
@@ -3388,6 +3531,25 @@ initAttributes: function(p_oAttributes) {
 
         value: null
 
+    });
+
+
+	/**
+	* @config oninit
+    * @description Object literal representing the code to be executed when 
+    * the button group is initialized.  Format:<br> <code> {<br> 
+    * <strong>fn:</strong> Function,   &#47;&#47; The handler to call when the 
+    * event fires.<br> <strong>obj:</strong> Object, &#47;&#47; An object to 
+    * pass back to the handler.<br> <strong>scope:</strong> Object &#47;&#47; 
+    * The object to use for the scope of the handler.<br> } </code>
+    * @type Object
+	* @default null
+	*/
+    this.setAttributeConfig("oninit", {
+
+        value: oAttributes.oninit,
+        method: this._setOnInit
+    
     });
 
 },
@@ -3723,6 +3885,22 @@ toString: function() {
 
 });
 
+
+
+// Events
+
+
+/**
+* @event init
+* @description Fires when the button group is initialized.  Subscribe to this 
+* event by specifying a value for the "oninit" configuration attribute.  
+* Format:<br> <code> {<br> <strong>fn:</strong> Function,   &#47;&#47; The 
+* handler to call when the event fires.<br> <strong>obj:</strong> Object, 
+* &#47;&#47; An object to pass back to the handler.<br> <strong>scope:</strong>
+* Object &#47;&#47; The object to use for the scope of the handler.<br> 
+* } </code>
+* @type YAHOO.util.CustomEvent
+*/
 
 })();
 YAHOO.register("button", YAHOO.widget.Button, {version: "@VERSION@", build: "@BUILD@"});
