@@ -1,6 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-        "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+        "http://www.w3.org/TR/html4/strict.dtd"><html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <title>Example: OS-Style Programs Menu (YUI Library)</title>
@@ -239,23 +238,12 @@
                                 );
 
 
-                // Add a link back to the examples index page
+                oMenu.addItems([
 
-                var oExamples = oMenu.addItem({ text: "Examples", url: "index.html" });
+                    { text: "Examples", url: "index.html", id: "examples" },
+                    { text:"Go to...", id: "goto", onclick: { fn: onGotoClick } }
 
-                oExamples.element.id = "examples";
-
-
-                // Add a "Go to..." item to the root menu
-
-                var oGoTo = oMenu.addItem("Go to...");
-
-                oGoTo.element.id = "goto";
-
-
-                // Add a "click" event handler to the "Go to..." item
-
-                oGoTo.clickEvent.subscribe(onGotoClick);
+                ]);
 
 
                 // Render the root menu and submenus

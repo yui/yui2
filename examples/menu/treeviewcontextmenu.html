@@ -1,0 +1,277 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd"><html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>Example: Adding A Context Menu To A TreeView (YUI Library)</title>
+
+                <!-- Standard reset and fonts -->
+
+        <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
+        <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
+
+            
+
+        <!-- CSS for TreeView -->
+        <link rel="stylesheet" type="text/css" href="../../build/treeview/assets/tree.css">
+
+         
+
+        <!-- CSS for Menu -->
+
+        <link rel="stylesheet" type="text/css" href="../../build/menu/assets/menu.css">
+ 
+
+        <!-- Page-specific styles -->
+
+        <style type="text/css">
+
+            h1 { 
+
+                font-weight:bold; 
+                margin:0 0 1em 0;
+            }
+
+            body {
+            
+                padding:1em;
+            
+            }
+
+            p, ul {
+
+                margin:1em 0;
+
+            }
+
+            h1 em,
+            p em,
+            #operainstructions li em {
+
+                font-weight:bold;
+
+            }
+
+            #operainstructions {
+
+                list-style-type:square;
+                margin-left:2em;
+
+            }
+
+        </style>
+
+                <!-- Namespace source file -->
+
+        <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+
+        <!-- Dependency source files -->
+
+        <script type="text/javascript" src="../../build/event/event.js"></script>
+        <script type="text/javascript" src="../../build/dom/dom.js"></script>
+
+            
+
+        <!-- TreeView source file -->
+
+        <script type="text/javascript" src="../../build/treeview/treeview.js"></script>
+        
+        <!-- Container source file -->
+        <script type="text/javascript" src="../../build/container/container_core.js"></script>
+
+        <!-- Menu source file -->
+        <script type="text/javascript" src="../../build/menu/menu.js"></script>
+
+        <!-- Page-specific script -->
+        <script type="text/javascript">
+
+            // "load" event handler for the "window" object
+
+            YAHOO.example.onTreeViewAvailble = function(p_oEvent) {
+
+                var oTreeView,      // The YAHOO.widget.TreeView instance
+                    oContextMenu,       // The YAHOO.widget.ContextMenu instance
+                    oTextNodeMap = {},      // Hash of YAHOO.widget.TextNode instances in the tree
+                    oCurrentTextNode = null;    // The YAHOO.widget.TextNode instance whose "contextmenu" DOM event triggered the display of the context menu
+            
+
+                function buildRandomTextBranch(p_oNode) {
+
+                    if(p_oNode.depth < 6) {
+
+                        for(var i=0; i<Math.floor(Math.random() * 4); i++) {
+
+                            var oTextNode = new YAHOO.widget.TextNode(p_oNode.label + "-" + i, p_oNode, false);
+
+                            oTextNodeMap[oTextNode.labelElId] = oTextNode;
+                            
+                            buildRandomTextBranch(oTextNode);
+
+                        }
+
+                    }
+
+                }
+
+
+                // Create a tree
+
+                oTreeView = new YAHOO.widget.TreeView("mytreeview");
+
+                for (var i = 0; i < Math.floor((Math.random()*4) + 3); i++) {
+
+                    var oTextNode = new YAHOO.widget.TextNode("label-" + i, oTreeView.getRoot(), false);
+                    
+                    oTextNodeMap[oTextNode.labelElId] = oTextNode;
+                    
+                    buildRandomTextBranch(oTextNode);
+
+                }
+        
+                oTreeView.draw();
+
+
+                function addNode() {
+
+                    var sLabel = window.prompt("Enter a label for the new node:", "");
+
+                    if(sLabel && sLabel.length > 0) {
+                        
+                        var oChildNode = new YAHOO.widget.TextNode(sLabel, oCurrentTextNode, false);
+    
+                        oCurrentTextNode.refresh();
+                        oCurrentTextNode.expand();
+
+                        oTextNodeMap[oChildNode.labelElId] = oChildNode;
+
+                    }
+
+                }
+                
+
+                function editNodeLabel() {
+
+                    var sLabel = window.prompt("Enter a new label for this node:", oCurrentTextNode.getLabelEl().innerHTML);
+    
+                    if(sLabel && sLabel.length > 0) {
+                        
+                        oCurrentTextNode.getLabelEl().innerHTML = sLabel;
+    
+                    }
+
+                }
+                
+
+                function deleteNode() {
+
+                    delete oTextNodeMap[oCurrentTextNode.labelElId];
+
+                    oTreeView.removeNode(oCurrentTextNode);
+                    oTreeView.draw();
+
+                }
+
+
+                /*
+                    "contextmenu" event handler for the element(s) that triggered the display of the context menu
+                */
+                function onTriggerContextMenu(p_oEvent, p_oMenu) {
+
+                    /*
+                         Returns a TextNode instance that corresponds to the DOM
+                         element whose "contextmenu" event triggered the display
+                         of the context menu.
+                    */
+        
+                    function GetTextNodeFromEventTarget(p_oTarget) {
+        
+                        if(p_oTarget.tagName.toUpperCase() == "A" && p_oTarget.className == "ygtvlabel") {
+
+                            return oTextNodeMap[p_oTarget.id];
+        
+                        }
+                        else {
+    
+                            if(p_oTarget.parentNode) {
+    
+                                return GetTextNodeFromEventTarget(p_oTarget.parentNode);
+                            
+                            }
+                        
+                        }
+                    
+                    }
+
+
+                    var oTextNode = GetTextNodeFromEventTarget(this.contextEventTarget);
+
+                    if(oTextNode) {
+
+                        oCurrentTextNode = oTextNode;
+
+                    }
+                    else {
+                    
+                        this.cancel();
+                        
+                    }
+                
+                }
+
+
+                // Create the context menu for the tree
+
+                oContextMenu = new YAHOO.widget.ContextMenu("mytreecontextmenu", 
+                                                                    {
+                                                                        trigger: "mytreeview",
+                                                                        lazyload: true, 
+                                                                        itemdata: [
+                                                                            { text: "Add Child Node", onclick: { fn: addNode } },
+                                                                            { text: "Edit Node Label", onclick: { fn: editNodeLabel } },
+                                                                            { text: "Delete Node", onclick: { fn: deleteNode } }
+                                                                        ] 
+                                                                    }
+                                                                );
+
+
+                oContextMenu.triggerContextMenuEvent.subscribe(onTriggerContextMenu, oContextMenu, true);
+
+            }
+
+
+            // Build the tree view when the "mytreeview" DIV is available in the DOM
+
+            YAHOO.util.Event.onAvailable("mytreeview", YAHOO.example.onTreeViewAvailble);
+                    
+        </script>
+
+    </head>
+    <body>
+        <h1>Example: Adding A Context Menu To A TreeView (YUI Library) <em>[<a href="index.html">Examples Home</a>]</em></h1>
+
+        <p>
+            When adding context menus to large data structures like a 
+            <code>&#60;table&#62;</code> or large list (<code>&#60;ol&#62;</code> 
+            or <code>&#60;ul&#62;</code>), it is recommended to bind a single 
+            YAHOO.widget.ContextMenu instance to the structure's root element, than to a set 
+            of its child nodes (<code>&#60;tr&#62;</code>s or <code>&#60;li&#62;</code>s).
+            
+            Doing so significantly improves the performance of a web page or 
+            application by reducing the number of "contextmenu" event handlers 
+            as well as the number of YAHOO.widget.ContextMenu instances in memory.
+        </p>
+
+        <p>
+            This example demonstrates how to display a context menu when the 
+            user clicks on any of the labels of the nodes in a YAHOO.widget.TreeView instance.
+        </p>
+
+        <p><em>Please Note:</em> Opera users will need to do the following to use this example:</p>
+
+        <ul id="operainstructions">
+            <li><em>Opera for Windows:</em>  Hold down the control key and click with the left mouse button.</li>
+            <li><em>Opera for OS X:</em>  Hold down the command key (&#8984;) and click with the left mouse button.</li>
+        </ul>
+        
+        <div id="mytreeview"></div>
+    </body>
+</html>
