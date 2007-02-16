@@ -57,11 +57,25 @@
         <!-- Page-specific JavaScript -->
         <script type="text/javascript">
 
-            var oButtonGroup1 = new YAHOO.widget.ButtonGroup("buttongroup1");
+            YAHOO.example.onButtonGroupInit = function(p_oEvent) {
 
-            var oButtonGroup2 = new YAHOO.widget.ButtonGroup("buttongroup2");
+                function onCheckedButtonChange(p_oEvent) {
+                
+                    YAHOO.log(p_oEvent.prevValue, "info", "example4");
+                    YAHOO.log(p_oEvent.newValue, "info", "example4");
+                
+                }
 
-            var oButtonGroup3 = new YAHOO.widget.ButtonGroup({ id: "buttongroup3", name: "radiofield3", container:"radiobuttonsfromjavascript" });
+                this.on("checkedButtonChange", onCheckedButtonChange);
+            
+            };
+
+
+            var oButtonGroup1 = new YAHOO.widget.ButtonGroup("buttongroup1", { oninit: { fn: YAHOO.example.onButtonGroupInit } });
+
+            var oButtonGroup2 = new YAHOO.widget.ButtonGroup("buttongroup2", { oninit: { fn: YAHOO.example.onButtonGroupInit } });
+
+            var oButtonGroup3 = new YAHOO.widget.ButtonGroup({ id: "buttongroup3", name: "radiofield3", container:"radiobuttonsfromjavascript", oninit: { fn: YAHOO.example.onButtonGroupInit } });
 
             oButtonGroup3.addButtons([
 
@@ -72,32 +86,14 @@
 
             ]);
 
-            
-            YAHOO.example.onWindowLoad = function(p_oEvent) {
 
-                var oLogs = document.createElement("div");
-                oLogs.id = "logs";
-                
-                document.body.appendChild(oLogs);
+            YAHOO.example.onLogsAvailable = function() {
 
                 var oLogReader = new YAHOO.widget.LogReader("logs");
-
-
-                function onCheckedButtonChange(p_oEvent) {
                 
-                    YAHOO.log(p_oEvent.prevValue, "info", "example9");
-                    YAHOO.log(p_oEvent.newValue, "info", "example9");
-                
-                }
-
-                oButtonGroup1.on("checkedButtonChange", onCheckedButtonChange);
-                oButtonGroup2.on("checkedButtonChange", onCheckedButtonChange);
-                oButtonGroup3.on("checkedButtonChange", onCheckedButtonChange);
-            
             };
 
-            YAHOO.util.Event.on(window, "load", YAHOO.example.onWindowLoad);
-
+            YAHOO.util.Event.onAvailable("logs", YAHOO.example.onLogsAvailable);
 
         </script>
 
@@ -141,6 +137,8 @@
             <input type="submit" name="submitbutton" value="Submit Form">
 
         </form>
+        
+        <div id="logs"></div>
 
     </body>
 </html>
