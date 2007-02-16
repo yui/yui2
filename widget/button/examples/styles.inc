@@ -6,35 +6,21 @@ $g_sBuildType = isset($argv) && $argv[1] == "prod" ? "prod" : "dev";
 if($g_sBuildType == "dev") {
 
     $g_sBasePath = "../../..";
-    $sMenuCSSPath = "../src/css";
+    $sButtonCSSPath = "../src/css";
 
 }
 else if($g_sBuildType == "prod") {
 
     $g_sBasePath = "../..";
-    $sMenuCSSPath = "../../build/menu/assets";
+    $sButtonCSSPath = "../../build/button/assets";
 
 }
 
-
-if((isset($g_bUseGrids) && $g_bUseGrids == true)) {
 ?>
-
-        <!-- Standard reset, fonts and grids -->
-
-        <link rel="stylesheet" type="text/css" href="<?php echo $g_sBasePath; ?>/build/reset-fonts-grids/reset-fonts-grids.css">
-
-<?php
-}
-else {
-?>
-        <!-- Standard reset and fonts -->
-
+<!-- Reset and Fonts -->
         <link rel="stylesheet" type="text/css" href="<?php echo $g_sBasePath; ?>/build/reset/reset.css">
         <link rel="stylesheet" type="text/css" href="<?php echo $g_sBasePath; ?>/build/fonts/fonts.css">
-
 <?php
-}
 
         if(is_callable("include_custom_styles")) {
 
@@ -42,8 +28,6 @@ else {
 
         }
 ?> 
-
-        <!-- CSS for Menu -->
-
-        <link rel="stylesheet" type="text/css" href="<?php echo $sMenuCSSPath; ?>/menu.css">
+        <!-- CSS for Button -->
+        <link rel="stylesheet" type="text/css" href="<?php echo $sButtonCSSPath; ?>/button.css">
  

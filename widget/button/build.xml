@@ -17,5 +17,27 @@
         <echo>DOES NOT DO ANYTHING CURRENTLY</echo>
     </target>
 
+    <target name="customassets" description="Custom work for Button CSS, before it gets copied over to global build dir" >
+        <copy file="${component.srcdir}/css/button.css" tofile="${component.srcdir}/css/temp/button.css" />
+		<replaceregexp 
+			file="${component.srcdir}/css/temp/button.css"
+			byline="true"
+			match="(\.\./img/)"
+			replace=""
+			flags="g">
+		</replaceregexp>
+		<replaceregexp 
+			file="${component.srcdir}/css/temp/button.css"
+			byline="true"
+			match="(\.\./src/img/)"
+			replace="../../build/button/assets/"
+			flags="g">
+		</replaceregexp>
+	</target>
+
+    <target name="deploy" depends="YuiTaskLib.deploy">
+        <delete dir="${component.srcdir}/css/temp/" />
+    </target>
+
 </project>
 
